@@ -733,7 +733,7 @@ class PipelineRunner:
             contract_ok, contract_summary = self.run_enrichment_contract_gate(
                 products,
                 strict_mode=strict_release_gates,
-                report_dir=enriched_dir,
+                report_dir=f"{output_prefix}_enriched",
                 run_id=effective_run_id,
             )
             results["enrichment_contract_gate"] = contract_summary

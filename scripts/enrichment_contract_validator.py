@@ -2606,6 +2606,25 @@ class EnrichmentContractValidator:
             or source_structure == "unsupported_source_structure"
         )
         if is_unsupported:
+            if self.strict_mode:
+                violations.append(ContractViolation(
+                    rule="H.8",
+                    rule_name=(
+                        "Label Ledger Audit Contract - unsupported release block"
+                    ),
+                    severity="error",
+                    message=(
+                        "Unsupported label source structures cannot pass a strict "
+                        "release because label completeness is not verifiable"
+                    ),
+                    product_id=product_id,
+                    field_path="label_ledger_audit.support_status",
+                    expected="supported",
+                    actual=support_status,
+                    evidence={
+                        "audit_code": "unsupported_structure_release_block"
+                    },
+                ))
             if completeness_status != "unavailable" or percentage is not None:
                 violations.append(self._unsupported_completeness_violation(
                     product_id,

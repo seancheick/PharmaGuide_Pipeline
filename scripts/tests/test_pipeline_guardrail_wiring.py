@@ -110,7 +110,7 @@ def test_pipeline_runs_contract_then_coverage_on_same_loaded_products(
     )
 
     def contract_gate(products, strict_mode=False, report_dir=None, run_id=None):
-        calls.append(("contract", products, strict_mode))
+        calls.append(("contract", products, strict_mode, report_dir))
         return True, {"ok": True}
 
     def coverage_gate(
@@ -142,6 +142,7 @@ def test_pipeline_runs_contract_then_coverage_on_same_loaded_products(
     assert calls[1][1] is shared_products
     assert calls[0][2] is True
     assert calls[1][2] is True
+    assert calls[0][3] == str(tmp_path / "output_Test_enriched")
 
 
 def test_strict_release_mode_rejects_gate_bypasses(tmp_path, monkeypatch):

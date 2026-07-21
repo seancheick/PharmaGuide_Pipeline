@@ -1519,6 +1519,53 @@ class TestLabelLedgerReleaseContract:
             for v in violations
         )
 
+    def test_H8_strict_release_blocks_unsupported_source_structure(self):
+        product = {
+            "id": "unsupported-unavailable",
+            "display_ingredients": [],
+            "label_source_rows": [
+                {
+                    "raw_source_path": "label[0]",
+                    "raw_source_text": "Two-column panel",
+                    "source_section": "activeIngredients",
+                }
+            ],
+            "label_ledger_omissions": [
+                {
+                    "raw_source_path": "label[0]",
+                    "raw_source_text": "Two-column panel",
+                    "omission_reason": "unsupported_source_structure",
+                }
+            ],
+            "label_ledger_audit": {
+                "support_status": "unsupported",
+                "source_structure": "unsupported_source_structure",
+                "meaningful_source_rows": 0,
+                "displayed_rows": 0,
+                "omitted_rows": 1,
+                "completeness_percentage": None,
+                "completeness_status": "unavailable",
+            },
+        }
+
+        diagnostic_violations = EnrichmentContractValidator(
+            strict_mode=False
+        ).validate(product)
+        release_violations = EnrichmentContractValidator(
+            strict_mode=True
+        ).validate(product)
+
+        assert not any(
+            v.evidence.get("audit_code") == "unsupported_structure_release_block"
+            for v in diagnostic_violations
+        )
+        assert any(
+            v.severity == "error"
+            and v.evidence.get("audit_code")
+            == "unsupported_structure_release_block"
+            for v in release_violations
+        )
+
     def test_H8_supported_archetype_below_full_completeness_is_error(
         self, validator
     ):

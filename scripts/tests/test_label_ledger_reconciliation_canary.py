@@ -16,6 +16,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from enhanced_normalizer import EnhancedDSLDNormalizer
@@ -133,6 +135,21 @@ def test_179343_cholecalciferol_form_does_not_duplicate_vitamin_d3():
     ), "molecular form 'Cholecalciferol' leaked as a standalone display row"
 
 
+def test_179343_cholecalciferol_form_is_preserved_on_vitamin_d3():
+    """Removing the detached duplicate must not erase the label parenthetical."""
+    cleaned = _cleaned("179343")
+    vitamin_d = next(
+        row
+        for row in cleaned.get("display_ingredients") or []
+        if row.get("canonical_id") == "vitamin_d"
+    )
+    assert vitamin_d.get("label_display_form") == "Cholecalciferol"
+    assert any(
+        component.get("raw_source_text") == "Cholecalciferol"
+        for component in vitamin_d.get("folded_label_components") or []
+    ), "the duplicate form occurrence must fold into the displayed Vitamin D3 row"
+
+
 def test_214224_omega_form_dedup_and_source_order():
     """Nordic Naturals 214224 (omega-3 softgel) — Cholecalciferol must fold into
     the shown Vitamin D3, and recovered rows keep source order (Olive Oil is
@@ -143,10 +160,9 @@ def test_214224_omega_form_dedup_and_source_order():
     assert not any("cholecalciferol" in t for t in texts), (
         "molecular form 'Cholecalciferol' leaked as a standalone display row"
     )
-    if any("olive oil" in t for t in texts) and any("rosemary" in t for t in texts):
-        olive = next(i for i, t in enumerate(texts) if "olive oil" in t)
-        rosemary = next(i for i, t in enumerate(texts) if "rosemary" in t)
-        assert olive < rosemary, "recovered 'Olive Oil' must keep source order"
+    olive = next(i for i, t in enumerate(texts) if "olive oil" in t)
+    rosemary = next(i for i, t in enumerate(texts) if "rosemary" in t)
+    assert olive < rosemary, "recovered 'Olive Oil' must keep source order"
 
 
 # ---------------------------------------------------------------------------
@@ -163,3 +179,141 @@ def test_49495_multivitamin_recovers_real_dropped_botanicals():
     assert any("saw palmetto" in t for t in texts), (
         "real botanical 'Saw Palmetto' missing from the label view"
     )
+
+
+def test_conditional_other_ingredient_container_preserves_qualifier_and_child():
+    """A 'May contain' source group is label meaning, not a decorative header.
+
+    Its possible ingredients must remain children of the conditional container;
+    they must never render as unconditional standalone Other Ingredients.
+    """
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._label_ledger_omissions = []
+    parent_path = "otheringredients.ingredients[0]"
+    source_rows = [
+        {
+            "raw_source_path": parent_path,
+            "raw_source_text": "May contain",
+            "source_section": "inactiveIngredients",
+            "label_order": 0,
+            "nested_depth": 0,
+        },
+        {
+            "raw_source_path": f"{parent_path}.forms[0]",
+            "raw_source_text": "Sodium Chloride",
+            "source_section": "inactiveIngredients",
+            "label_order": 1,
+            "nested_depth": 1,
+            "parent_label": "May contain",
+            "parent_source_path": parent_path,
+        },
+    ]
+
+    rows = normalizer._reconcile_orphan_source_rows([], source_rows)
+    by_text = {row["raw_source_text"]: row for row in rows}
+
+    assert by_text["May contain"]["display_type"] == "structural_container"
+    assert by_text["May contain"]["children"] == ["Sodium Chloride"]
+    assert by_text["Sodium Chloride"]["nested_depth"] == 1
+    assert by_text["Sodium Chloride"]["parent_label"] == "May contain"
+    assert not normalizer._label_ledger_omissions
+
+
+def test_conditional_header_expansion_queues_a_display_parent_not_an_omission():
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._label_ledger_omissions = []
+    normalizer._display_ingredients_buffer = []
+    parent_path = "otheringredients.ingredients[0]"
+    ingredient = {
+        "name": "May contain",
+        "raw_source_path": parent_path,
+        "order": 1,
+        "category": "other",
+        "ingredientGroup": "Header",
+        "forms": [
+            {
+                "name": "Sodium Chloride",
+                "order": 1,
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "Sodium chloride",
+            }
+        ],
+    }
+
+    normalizer._expand_header_forms_for_processing(ingredient, parent_path)
+
+    assert normalizer._label_ledger_omissions == []
+    assert normalizer._display_ingredients_buffer[0]["raw_source_text"] == "May contain"
+    assert normalizer._display_ingredients_buffer[0]["display_type"] == "structural_container"
+    assert normalizer._display_ingredients_buffer[0]["children"] == ["Sodium Chloride"]
+
+
+def test_orphan_identity_resolution_does_not_hide_mapper_failures(monkeypatch):
+    """A mapper regression must block the pipeline, not become an unmapped row."""
+    normalizer = EnhancedDSLDNormalizer()
+
+    def broken_mapper(_text):
+        raise RuntimeError("identity mapper unavailable")
+
+    monkeypatch.setattr(normalizer, "_map_inactive_name_prefer_other", broken_mapper)
+    with pytest.raises(RuntimeError, match="identity mapper unavailable"):
+        normalizer._orphan_canonical_identity("Cholecalciferol")
+
+
+def test_duplicate_parent_routes_form_to_matching_canonical_occurrence():
+    """Shared canonical IDs must not attach a form to the wrong label row."""
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._label_ledger_omissions = []
+    vitamin_a = {
+        "raw_source_path": "ingredientRows[0]",
+        "raw_source_text": "Vitamin A",
+        "label_display_name": "Vitamin A",
+        "canonical_id": "vitamin_a",
+        "score_included": True,
+        "children": [],
+    }
+    beta_carotene = {
+        "raw_source_path": "ingredientRows[1]",
+        "raw_source_text": "Beta-Carotene",
+        "label_display_name": "Beta-Carotene",
+        "canonical_id": "vitamin_a",
+        "score_included": True,
+        "children": [],
+    }
+    parent_path = "otheringredients.ingredients[0]"
+    source_rows = [
+        {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Vitamin A",
+            "source_section": "activeIngredients",
+            "label_order": 0,
+        },
+        {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Beta-Carotene",
+            "source_section": "activeIngredients",
+            "label_order": 1,
+        },
+        {
+            "raw_source_path": parent_path,
+            "raw_source_text": "Vitamin A",
+            "source_section": "inactiveIngredients",
+            "label_order": 2,
+        },
+        {
+            "raw_source_path": f"{parent_path}.forms[0]",
+            "raw_source_text": "Retinyl Palmitate",
+            "source_section": "inactiveIngredients",
+            "label_order": 3,
+            "nested_depth": 1,
+            "parent_label": "Vitamin A",
+            "parent_source_path": parent_path,
+        },
+    ]
+
+    normalizer._reconcile_orphan_source_rows(
+        [vitamin_a, beta_carotene], source_rows
+    )
+
+    assert vitamin_a.get("label_display_form") == "Retinyl Palmitate"
+    assert beta_carotene.get("label_display_form") is None

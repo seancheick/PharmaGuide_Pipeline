@@ -52,7 +52,7 @@ def main() -> int:
     from enrichment_contract_validator import EnrichmentContractValidator
 
     norm = EnhancedDSLDNormalizer()
-    validator = EnrichmentContractValidator(strict_mode=False)
+    validator = EnrichmentContractValidator(strict_mode=True)
     enricher = None
     if args.enrich:
         from enrich_supplements_v3 import SupplementEnricherV3
@@ -61,31 +61,52 @@ def main() -> int:
     rng = random.Random(args.seed)
     total = 0
     total_errors = 0
+    input_errors = 0
     by_brand: dict = {}
     by_rule: Counter = Counter()
 
     for brand in args.brands:
         files = sorted(glob.glob(os.path.join(args.staging, brand, "*.json")))
         if not files:
-            by_brand[brand] = {"products": 0, "errors": 0, "note": "no raw files"}
+            input_errors += 1
+            by_brand[brand] = {
+                "sampled": 0,
+                "products": 0,
+                "unreadable_files": 0,
+                "errors": 0,
+                "status": "missing",
+                "note": "no raw files",
+            }
             continue
         sample = rng.sample(files, min(args.per_brand, len(files)))
         brand_errors = 0
+        brand_products = 0
+        unreadable_files = 0
         for path in sample:
             try:
-                raw = json.load(open(path))
-            except Exception:
+                with open(path, encoding="utf-8") as handle:
+                    raw = json.load(handle)
+            except (OSError, json.JSONDecodeError):
+                unreadable_files += 1
+                input_errors += 1
                 continue
             product = norm.normalize_product(raw)
             if enricher is not None:
                 product, _ = enricher.enrich_product(product)
             errs = [v for v in validator.validate(product) if v.severity == "error"]
             total += 1
+            brand_products += 1
             total_errors += len(errs)
             brand_errors += len(errs)
             for v in errs:
                 by_rule[getattr(v, "rule", "?")] += 1
-        by_brand[brand] = {"products": len(sample), "errors": brand_errors}
+        by_brand[brand] = {
+            "sampled": len(sample),
+            "products": brand_products,
+            "unreadable_files": unreadable_files,
+            "errors": brand_errors,
+            "status": "ok" if unreadable_files == 0 else "input_error",
+        }
 
     result = {
         "mode": "clean+enrich" if args.enrich else "clean",
@@ -93,6 +114,7 @@ def main() -> int:
         "per_brand": args.per_brand,
         "products_checked": total,
         "contract_errors": total_errors,
+        "input_errors": input_errors,
         "errors_by_rule": dict(by_rule.most_common()),
         "by_brand": by_brand,
     }
@@ -101,9 +123,12 @@ def main() -> int:
         with open(args.report, "w") as fh:
             json.dump(result, fh, indent=2)
         print(f"\nreport written: {args.report}")
-    print(f"\n{total} products, {total_errors} contract errors "
-          f"({'CLEAN' if total_errors == 0 else 'FAILURES'})")
-    return 1 if total_errors else 0
+    is_clean = total_errors == 0 and input_errors == 0
+    print(
+        f"\n{total} products, {total_errors} contract errors, "
+        f"{input_errors} input errors ({'CLEAN' if is_clean else 'FAILURES'})"
+    )
+    return 0 if is_clean else 1
 
 
 if __name__ == "__main__":

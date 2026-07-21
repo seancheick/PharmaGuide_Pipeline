@@ -7599,10 +7599,34 @@ class EnhancedDSLDNormalizer:
         expanded: List[Dict[str, Any]] = []
         ingredient_source_path = ingredient.get("raw_source_path") or source_path
         if self._is_label_header(name):
-            self._queue_label_ledger_omission(
-                ingredient,
-                omission_reason="decorative_or_header_text",
-            )
+            if forms and self._is_semantic_label_qualifier(name):
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section=(
+                        "inactiveIngredients"
+                        if self._source_path_is_inactive(ingredient_source_path)
+                        else "activeIngredients"
+                    ),
+                    display_type="structural_container",
+                    score_included=False,
+                    source_row=ingredient,
+                    children=[
+                        str(form.get("name") or "").strip()
+                        if isinstance(form, dict)
+                        else str(form).strip()
+                        for form in forms
+                        if (
+                            str(form.get("name") or "").strip()
+                            if isinstance(form, dict)
+                            else str(form).strip()
+                        )
+                    ],
+                )
+            else:
+                self._queue_label_ledger_omission(
+                    ingredient,
+                    omission_reason="decorative_or_header_text",
+                )
 
         if not forms:
             logger.debug(f"Dropping label header with no forms: {name}")
@@ -9308,13 +9332,25 @@ class EnhancedDSLDNormalizer:
 
         return display_rows
 
-    def _is_total_or_nutrition_rollup(self, text: str) -> bool:
+    def _is_total_or_nutrition_rollup(
+        self,
+        text: str,
+        source: Optional[Dict[str, Any]] = None,
+    ) -> bool:
         """A label rollup/total that aggregates the components listed beneath it
         (e.g. 'Total Omega-3 Fatty Acids', 'Total Lacto Cultures') or a
         nutrition-fact line — not a discrete ingredient to display."""
         if not text:
             return False
-        if self._is_nutrition_fact(text):
+        source = source or {}
+        if source.get("source_section") == "inactiveIngredients":
+            return text.strip().casefold().startswith("total ")
+        if self._is_nutrition_fact(
+            text,
+            ingredient_group=source.get("ingredient_group"),
+            dsld_category=source.get("raw_category"),
+            has_forms=bool(source.get("children")),
+        ):
             return True
         return text.strip().casefold().startswith("total ")
 
@@ -9324,17 +9360,17 @@ class EnhancedDSLDNormalizer:
         ingredient (e.g. 'Cholecalciferol' -> vitamin_d, the form of a shown
         'Vitamin D3') by identity, not raw text. Returns None when unmapped —
         an unmapped orphan is treated as a distinct ingredient (displayed)."""
-        try:
-            std, _mapped, _ = self._map_inactive_name_prefer_other(text)
-            canonical, _src = self._resolve_canonical_identity(
-                std or text, raw_name=text
-            )
-            return canonical
-        except Exception:
-            return None
+        std, _mapped, _ = self._map_inactive_name_prefer_other(text)
+        canonical, _src = self._resolve_canonical_identity(
+            std or text, raw_name=text
+        )
+        return canonical
 
     def _display_only_row_from_source(
-        self, source: Dict[str, Any], has_displayed_parent: bool
+        self,
+        source: Dict[str, Any],
+        has_displayed_parent: bool,
+        display_type: str = "label_only",
     ) -> Dict[str, Any]:
         """Build a contract-complete display row for a label-printed source
         occurrence that the scoring path never surfaced. score_included=False,
@@ -9365,6 +9401,7 @@ class EnhancedDSLDNormalizer:
                 str(parent_label or "").casefold(),
             )
         )
+        is_structural_container = display_type == "structural_container"
         return {
             "raw_source_path": path,
             "raw_source_text": text,
@@ -9374,17 +9411,28 @@ class EnhancedDSLDNormalizer:
             "source_order": source.get("source_order"),
             "nested_depth": nested_depth,
             "source_section": section,
-            "display_type": "label_only",
-            "resolution_type": "label_only_unscored",
+            "display_type": display_type,
+            "resolution_type": (
+                "structural_parent"
+                if is_structural_container
+                else "label_only_unscored"
+            ),
             "score_included": False,
             "is_label_context": True,
             "display_disposition": (
-                "other_ingredient" if section == "inactiveIngredients" else "label_context"
+                "label_context"
+                if is_structural_container
+                else "other_ingredient"
+                if section == "inactiveIngredients"
+                else "label_context"
             ),
             "form_display_state": "not_applicable",
             "identity_integrity_state": "taxonomy_only",
             "parent_label": parent_label,
             "parent_source_path": source.get("parent_source_path"),
+            "children": list(source.get("children") or []),
+            "raw_category": source.get("raw_category"),
+            "ingredient_group": source.get("ingredient_group"),
             "exact_dose_text": exact_dose,
             "ledger_fingerprint": hashlib.sha256(
                 fingerprint_payload.encode("utf-8")
@@ -9422,6 +9470,12 @@ class EnhancedDSLDNormalizer:
         displayed_canonicals = {
             r.get("canonical_id") for r in display_rows if r.get("canonical_id")
         }
+        displayed_by_canonical: Dict[str, List[Dict[str, Any]]] = {}
+        for row in display_rows:
+            canonical_id = row.get("canonical_id")
+            if canonical_id:
+                displayed_by_canonical.setdefault(canonical_id, []).append(row)
+        duplicate_parent_targets: Dict[str, Dict[str, Any]] = {}
         added: List[Dict[str, Any]] = []
         for source in source_rows:
             path = str(source.get("raw_source_path") or "").strip()
@@ -9432,13 +9486,44 @@ class EnhancedDSLDNormalizer:
                 continue  # empty text is omitted at stamp time
             norm = self.matcher.preprocess_text(text)
             canonical = self._orphan_canonical_identity(text)
-            if self._is_total_or_nutrition_rollup(text):
-                self._queue_label_ledger_omission(
-                    source, omission_reason="nutrition_fact_not_applicable"
+            is_structural_header = self._is_label_header(text) or (
+                str(source.get("ingredient_group") or "").casefold() == "header"
+            )
+            has_source_children = bool(source.get("children")) or any(
+                str(candidate.get("parent_source_path") or "").strip() == path
+                for candidate in source_rows
+            )
+            preserves_label_context = self._is_semantic_label_qualifier(text)
+            if (
+                is_structural_header
+                and preserves_label_context
+                and has_source_children
+            ):
+                container_source = dict(source)
+                if not container_source.get("children"):
+                    container_source["children"] = [
+                        str(candidate.get("raw_source_text") or "").strip()
+                        for candidate in source_rows
+                        if str(candidate.get("parent_source_path") or "").strip()
+                        == path
+                        and str(candidate.get("raw_source_text") or "").strip()
+                    ]
+                added.append(
+                    self._display_only_row_from_source(
+                        container_source,
+                        has_displayed_parent=False,
+                        display_type="structural_container",
+                    )
                 )
-            elif self._is_label_header(text):
+                displayed_paths.add(path)
+                displayed_identities.add(norm)
+            elif is_structural_header:
                 self._queue_label_ledger_omission(
                     source, omission_reason="decorative_or_header_text"
+                )
+            elif self._is_total_or_nutrition_rollup(text, source):
+                self._queue_label_ledger_omission(
+                    source, omission_reason="nutrition_fact_not_applicable"
                 )
             elif (norm and norm in displayed_identities) or (
                 canonical and canonical in displayed_canonicals
@@ -9446,6 +9531,69 @@ class EnhancedDSLDNormalizer:
                 # Same identity is already shown (a molecular form / re-disclosure
                 # such as Cholecalciferol under a displayed Vitamin D3). Reconcile
                 # it as a documented duplicate, never a detached standalone row.
+                is_form_occurrence = ".forms[" in path
+                target = duplicate_parent_targets.get(
+                    str(source.get("parent_source_path") or "").strip()
+                )
+                if target is None and canonical:
+                    candidates = displayed_by_canonical.get(canonical, [])
+                    target_name = str(
+                        (
+                            source.get("parent_label")
+                            if is_form_occurrence
+                            else text
+                        )
+                        or ""
+                    ).strip()
+                    target_identity = self.matcher.preprocess_text(target_name)
+                    target = next(
+                        (
+                            candidate
+                            for candidate in candidates
+                            if target_identity
+                            in {
+                                self.matcher.preprocess_text(
+                                    str(candidate.get("raw_source_text") or "")
+                                ),
+                                self.matcher.preprocess_text(
+                                    str(candidate.get("label_display_name") or "")
+                                ),
+                            }
+                        ),
+                        None,
+                    )
+                    if target is None:
+                        target = next(
+                            (
+                                candidate
+                                for candidate in candidates
+                                if candidate.get("score_included")
+                            ),
+                            candidates[0] if candidates else None,
+                        )
+                if target is not None and not is_form_occurrence:
+                    duplicate_parent_targets[path] = target
+                if target is not None and is_form_occurrence:
+                    components = target.setdefault("folded_label_components", [])
+                    if not any(
+                        component.get("raw_source_path") == path
+                        for component in components
+                        if isinstance(component, dict)
+                    ):
+                        components.append({
+                            "label_display_name": text,
+                            "raw_source_text": text,
+                            "raw_source_path": path,
+                            "source_section": source.get("source_section"),
+                            "parent_label": target.get("label_display_name"),
+                            "exact_dose_text": source.get("exact_dose_text") or "",
+                            "omission_reason": "duplicate_source_line",
+                        })
+                    target["label_display_form"] = text
+                    target["form_display_state"] = "listed_not_assessed"
+                    children = target.setdefault("children", [])
+                    if text not in children:
+                        children.append(text)
                 self._queue_label_ledger_omission(
                     source, omission_reason="duplicate_source_line"
                 )
@@ -9460,6 +9608,7 @@ class EnhancedDSLDNormalizer:
                 displayed_identities.add(norm)
                 if canonical:
                     displayed_canonicals.add(canonical)
+                    displayed_by_canonical.setdefault(canonical, []).append(added[-1])
         if not added:
             return display_rows
         # Restore canonical source-label order: recovered rows are placed at
@@ -10338,6 +10487,7 @@ class EnhancedDSLDNormalizer:
             r"^\d+%\s+or\s+less\s+of:?$",
             r"^contains?\s+\d+%\s+or\s+less\s+of:?$",
             r"^may\s+contain\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
+            r"^may(?:\s+also)?\s+contain:?$",
             r"^contains?\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
             r".*\b(shell|capsule)\s+ingredients:?$",
             # 2026-05-15: suffix-less percentage fragments. DSLD occasionally parses
@@ -10358,6 +10508,22 @@ class EnhancedDSLDNormalizer:
                 return True
 
         return False
+
+    def _is_semantic_label_qualifier(self, name: str) -> bool:
+        """Return true for headers whose wording changes child ingredient meaning.
+
+        Conditional/quantity qualifiers such as ``May contain`` and
+        ``Contains less than 2% of`` must remain visible with their children.
+        Capsule/shell headings only describe packaging structure and remain a
+        documented non-ingredient omission.
+        """
+        if not self._is_label_header(name):
+            return False
+        normalized = norm_module.normalize_text(name)
+        return not re.search(
+            r"\b(?:capsule|shell|softgel|soft\s+gel|caplique)\b",
+            normalized,
+        )
 
     def _is_structural_active_container(self, name: str, nested_rows: Optional[List[Dict[str, Any]]]) -> bool:
         """Identify raw-validated active container rows that should unwrap children."""
