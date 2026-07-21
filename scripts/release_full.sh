@@ -509,6 +509,25 @@ else
   skip "Strict gate: scoring snapshot contract already passed before candidate promotion"
 fi
 
+# Validate the complete Flutter import contract before any remote publication.
+# The same script performs the real atomic copy in Step 6; --dry-run exercises
+# schema compatibility, checksums, SQLite integrity, counts, and both embedded
+# manifests without mutating the Flutter bundle. This prevents a catalog from
+# reaching Supabase only to fail at the local import boundary afterward.
+if (( SKIP_FLUTTER == 0 )); then
+  if [[ ! -x "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" ]]; then
+    err "Flutter import script not found or not executable:"
+    err "  $FLUTTER_REPO/scripts/import_catalog_artifact.sh"
+    err "Pass --flutter-repo <path> if your Flutter checkout lives elsewhere"
+    err "or --skip-flutter to bypass this step."
+    exit 1
+  fi
+  run_strict_gate "Flutter import preflight" \
+    "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" "$DIST_DIR" --dry-run
+else
+  skip "Strict gate: Flutter import preflight skipped (--skip-flutter)"
+fi
+
 # ---------------------------------------------------------------------------
 # Step 5: Sync to Supabase (upload only; cleanup is post-bundle)
 #

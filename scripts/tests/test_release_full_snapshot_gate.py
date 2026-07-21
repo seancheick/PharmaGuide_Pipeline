@@ -17,6 +17,17 @@ def test_release_runs_snapshot_contract_before_supabase_sync():
     assert "scripts/tests/test_scoring_snapshot_v1.py" in source
 
 
+def test_release_preflights_flutter_import_before_supabase_sync():
+    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
+
+    flutter_preflight = source.index(
+        '"$FLUTTER_REPO/scripts/import_catalog_artifact.sh" "$DIST_DIR" --dry-run'
+    )
+    supabase_sync = source.index("# Step 5: Sync to Supabase")
+
+    assert flutter_preflight < supabase_sync
+
+
 def test_snapshot_contract_runs_before_candidate_promotion():
     source = SNAPSHOT_SCRIPT.read_text(encoding="utf-8")
 
