@@ -276,3 +276,73 @@ def test_nested_64551_row_restores_omitted_latin_identity(normalizer):
         "original_ingredient_text": "Tropical Almond",
         "corrected_ingredient_text": "Tropical Almond (Terminalia chebula)",
     }
+
+
+def test_explicit_epa_note_repairs_contradictory_dsld_dha_taxonomy(normalizer):
+    """The DSLD omega row must follow its explicit EPA label note, not a
+    contradictory DHA name/identifier tuple supplied by the API."""
+    raw_product = _make_raw_product(180408, [])
+    raw_product["fullName"] = "One Per Day Fish Oil 1200 mg"
+    raw_product["brandName"] = "Nature Made"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row(
+                "Docosahexaenoic Acid Ethyl Ester",
+                category="fatty acid",
+            ),
+            "ingredientId": 285066,
+            "ingredientGroup": "DHA (Docosahexaenoic Acid)",
+            "uniiCode": "7PO7G8PA8M",
+            "alternateNames": ["C22:6n-3", "DHA EE"],
+            "notes": (
+                "EPA (Form: as Ethyl Esters) "
+                "(Alt. Name: Eicosapentaenoic Acid) Note: Omega-3"
+            ),
+            "quantity": [{"quantity": 360, "unit": "mg"}],
+            "nestedRows": [],
+            "forms": [],
+        },
+        {
+            **_make_ingredient_row(
+                "Docosahexaenoic Acid Ethyl Ester",
+                category="fatty acid",
+                order=2,
+            ),
+            "ingredientId": 285066,
+            "ingredientGroup": "DHA (Docosahexaenoic Acid)",
+            "uniiCode": "7PO7G8PA8M",
+            "alternateNames": ["C22:6n-3", "DHA EE"],
+            "notes": (
+                "DHA (Form: as Ethyl Esters) "
+                "(Alt. Name: Docosahexaenoic Acid) Note: Omega-3"
+            ),
+            "quantity": [{"quantity": 300, "unit": "mg"}],
+            "nestedRows": [],
+            "forms": [],
+        },
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+
+    assert [row["canonical_id"] for row in normalized["activeIngredients"]] == [
+        "epa",
+        "dha",
+    ]
+    epa = normalized["activeIngredients"][0]
+    assert epa["raw_source_text"] == "Eicosapentaenoic Acid Ethyl Ester"
+    assert epa["ingredientGroup"] == "EPA (Eicosapentaenoic Acid)"
+    assert epa["uniiCode"] == "6GC8A4PAYH"
+    assert epa["ingredientId"] == 285067
+    assert epa["source_correction"] == {
+        "provenance_tag": "source_taxonomy_contradiction_repair",
+        "original_ingredient_text": "Docosahexaenoic Acid Ethyl Ester",
+        "corrected_ingredient_text": "Eicosapentaenoic Acid Ethyl Ester",
+        "original_unii_code": "7PO7G8PA8M",
+        "corrected_unii_code": "6GC8A4PAYH",
+    }
+
+    ledger_rows = normalized["display_ingredients"]
+    assert [row["label_display_name"] for row in ledger_rows] == [
+        "Eicosapentaenoic Acid Ethyl Ester",
+        "Docosahexaenoic Acid Ethyl Ester",
+    ]

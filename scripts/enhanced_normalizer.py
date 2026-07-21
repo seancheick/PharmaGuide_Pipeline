@@ -4921,6 +4921,65 @@ class EnhancedDSLDNormalizer:
             rewrite(r)
         return ingredient_rows
 
+    def _repair_explicit_epa_note_contradictions(
+        self,
+        ingredient_rows: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        """Repair the reviewed DSLD EPA-ethyl-ester taxonomy contradiction.
+
+        A recurring DSLD source defect emits the complete DHA identity tuple
+        while the same row's label note explicitly says ``EPA`` and names
+        eicosapentaenoic acid.  The gate is intentionally exact: it requires
+        the known contradictory name, group, ingredient id, UNII, and explicit
+        EPA alternate-name note.  Dose is never used as identity evidence.
+        """
+
+        def rewrite(row: Any) -> None:
+            if not isinstance(row, dict):
+                return
+            notes = str(row.get("notes") or "")
+            is_known_contradiction = bool(
+                row.get("name") == "Docosahexaenoic Acid Ethyl Ester"
+                and row.get("ingredientGroup") == "DHA (Docosahexaenoic Acid)"
+                and row.get("ingredientId") == 285066
+                and row.get("uniiCode") == "7PO7G8PA8M"
+                and re.match(r"^\s*EPA\s*\(", notes, flags=re.IGNORECASE)
+                and re.search(
+                    r"Alt\.\s*Name:\s*Eicosapentaenoic Acid\b",
+                    notes,
+                    flags=re.IGNORECASE,
+                )
+            )
+            if is_known_contradiction:
+                row["_pre_correction_name"] = row.get("name")
+                row["_pre_correction_unii"] = row.get("uniiCode")
+                row["_pre_correction_ingredient_group"] = row.get(
+                    "ingredientGroup"
+                )
+                row["_pre_correction_ingredient_id"] = row.get("ingredientId")
+                row["name"] = "Eicosapentaenoic Acid Ethyl Ester"
+                row["ingredientGroup"] = "EPA (Eicosapentaenoic Acid)"
+                row["ingredientId"] = 285067
+                row["uniiCode"] = "6GC8A4PAYH"
+                row["alternateNames"] = ["C20:5n-3", "EPA EE"]
+                row["_label_correction_applied"] = True
+                row["_label_correction_provenance"] = (
+                    "source_taxonomy_contradiction_repair"
+                )
+                logger.info(
+                    "Repaired explicit EPA note contradicted by DSLD DHA "
+                    "taxonomy at %s",
+                    row.get("raw_source_path") or "unstamped source row",
+                )
+
+            for nested_key in ("nestedRows", "forms"):
+                for child in row.get(nested_key) or []:
+                    rewrite(child)
+
+        for ingredient_row in ingredient_rows:
+            rewrite(ingredient_row)
+        return ingredient_rows
+
     def _load_context_canonical_overrides(self) -> Dict[str, Dict[str, Any]]:
         """Public accessor for the reviewer-signed per-product canonical_id
         overrides loaded from product_context_canonical_overrides.json at
@@ -5195,7 +5254,18 @@ class EnhancedDSLDNormalizer:
                 "ingredientRows",
                 "activeIngredients",
             )
+
+            # Capture the immutable DSLD source snapshot first. Reviewed
+            # corrections may change the displayed/resolved identity, while
+            # raw_source_text must retain what the API originally supplied.
             self._stamp_raw_source_paths(raw_ingredients, "ingredientRows")
+
+            # Repair a reviewed, recurring DSLD source contradiction before
+            # flattening so label display identity and scoring identity are
+            # derived from the same corrected row.
+            raw_ingredients = self._repair_explicit_epa_note_contradictions(
+                raw_ingredients
+            )
 
             # RC-5: apply reviewer-signed per-product label-typo corrections
             # BEFORE flattening / ingredient resolution. Scope is strictly
