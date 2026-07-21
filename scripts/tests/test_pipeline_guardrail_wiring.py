@@ -109,7 +109,7 @@ def test_pipeline_runs_contract_then_coverage_on_same_loaded_products(
         lambda *_args, **_kwargs: tmp_path / ".stage_manifest.json",
     )
 
-    def contract_gate(products, strict_mode=False):
+    def contract_gate(products, strict_mode=False, report_dir=None, run_id=None):
         calls.append(("contract", products, strict_mode))
         return True, {"ok": True}
 

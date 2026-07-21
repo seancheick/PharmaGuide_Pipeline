@@ -332,6 +332,7 @@ class PipelineRunner:
         products: List[Dict[str, Any]],
         strict_mode: bool = False,
         report_dir: Optional[str] = None,
+        run_id: Optional[str] = None,
     ) -> Tuple[bool, Dict[str, Any]]:
         """Run the authoritative enrichment contract validator."""
         logger.info("=" * 60)
@@ -376,7 +377,10 @@ class PipelineRunner:
                 )
                 # Make the failure diagnosable at a glance: a rule breakdown,
                 # a few representative violations, and a full JSON report — so a
-                # blocked release never requires re-running the validator by hand.
+                # blocked release never requires re-running the validator by
+                # hand. The returned summary contract is left UNCHANGED (callers
+                # and guardrail tests depend on its exact shape); diagnostics go
+                # to logs and the persisted report only.
                 from collections import Counter
 
                 error_pairs = [
@@ -385,9 +389,11 @@ class PipelineRunner:
                     for v in product_violations
                     if v.severity == "error"
                 ]
-                summary["errors_by_rule"] = dict(
+                errors_by_rule = dict(
                     Counter(getattr(v, "rule", "?") for _, v in error_pairs).most_common()
                 )
+                if errors_by_rule:
+                    logger.error("  errors by rule: %s", errors_by_rule)
                 for pid, v in error_pairs[:10]:
                     logger.error(
                         "  contract violation [%s] %s: %s",
@@ -396,10 +402,9 @@ class PipelineRunner:
                         v.message,
                     )
                 report_path = self._write_contract_gate_report(
-                    report_dir, violations_by_product, summary
+                    report_dir, violations_by_product, summary, errors_by_rule, run_id
                 )
                 if report_path is not None:
-                    summary["report_path"] = str(report_path)
                     logger.error("Full contract-gate report written: %s", report_path)
             return can_proceed, summary
         except Exception as exc:
@@ -414,18 +419,24 @@ class PipelineRunner:
         report_dir: Optional[str],
         violations_by_product: Dict[str, Any],
         summary: Dict[str, Any],
+        errors_by_rule: Dict[str, int],
+        run_id: Optional[str] = None,
     ) -> Optional[Path]:
         """Persist the full enrichment-contract violation set as JSON so a
-        blocked release is immediately diagnosable. Best-effort — never raises
-        into the gate result."""
+        blocked release is immediately diagnosable. Written under a run-specific
+        directory when a run_id is available (matching the enricher's report
+        layout). Best-effort — never raises into the gate result."""
         if not report_dir:
             return None
         try:
             out_dir = Path(report_dir) / "reports"
+            if run_id:
+                out_dir = out_dir / "runs" / str(run_id)
             out_dir.mkdir(parents=True, exist_ok=True)
             path = out_dir / "enrichment_contract_gate_violations.json"
             payload = {
                 "summary": summary,
+                "errors_by_rule": errors_by_rule,
                 "products": {
                     str(pid): [
                         {
@@ -723,6 +734,7 @@ class PipelineRunner:
                 products,
                 strict_mode=strict_release_gates,
                 report_dir=enriched_dir,
+                run_id=effective_run_id,
             )
             results["enrichment_contract_gate"] = contract_summary
             if not contract_ok:

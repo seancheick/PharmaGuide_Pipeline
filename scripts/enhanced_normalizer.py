@@ -9318,13 +9318,29 @@ class EnhancedDSLDNormalizer:
             return True
         return text.strip().casefold().startswith("total ")
 
+    def _orphan_canonical_identity(self, text: str) -> Optional[str]:
+        """Resolve a source-row name to its canonical id so the finalizer can
+        recognize a molecular form / re-disclosure of an ALREADY-displayed
+        ingredient (e.g. 'Cholecalciferol' -> vitamin_d, the form of a shown
+        'Vitamin D3') by identity, not raw text. Returns None when unmapped —
+        an unmapped orphan is treated as a distinct ingredient (displayed)."""
+        try:
+            std, _mapped, _ = self._map_inactive_name_prefer_other(text)
+            canonical, _src = self._resolve_canonical_identity(
+                std or text, raw_name=text
+            )
+            return canonical
+        except Exception:
+            return None
+
     def _display_only_row_from_source(
-        self, source: Dict[str, Any], label_order: int, has_displayed_parent: bool
+        self, source: Dict[str, Any], has_displayed_parent: bool
     ) -> Dict[str, Any]:
         """Build a contract-complete display row for a label-printed source
         occurrence that the scoring path never surfaced. score_included=False,
         so it shows the user the ingredient (label truth) without touching any
-        score. Mirrors the field stamping in _build_display_ingredients."""
+        score. Mirrors the field stamping in _build_display_ingredients.
+        label_order is assigned by the source-order re-sort in the caller."""
         path = str(source.get("raw_source_path") or "").strip()
         text = str(source.get("raw_source_text") or "").strip()
         section = source.get("source_section") or (
@@ -9354,7 +9370,7 @@ class EnhancedDSLDNormalizer:
             "raw_source_text": text,
             "display_name": text,
             "label_display_name": label_name,
-            "label_order": label_order,
+            "label_order": 0,  # placeholder — set by the source-order re-sort
             "source_order": source.get("source_order"),
             "nested_depth": nested_depth,
             "source_section": section,
@@ -9400,7 +9416,12 @@ class EnhancedDSLDNormalizer:
             for r in display_rows
         }
         displayed_identities.discard("")
-        next_order = len(display_rows)
+        # Canonical identities already on the ledger — so a molecular form or
+        # re-disclosure of a shown ingredient is recognized by IDENTITY, not raw
+        # text (Cholecalciferol is Vitamin D3; must fold, not stand alone).
+        displayed_canonicals = {
+            r.get("canonical_id") for r in display_rows if r.get("canonical_id")
+        }
         added: List[Dict[str, Any]] = []
         for source in source_rows:
             path = str(source.get("raw_source_path") or "").strip()
@@ -9410,6 +9431,7 @@ class EnhancedDSLDNormalizer:
             if not text:
                 continue  # empty text is omitted at stamp time
             norm = self.matcher.preprocess_text(text)
+            canonical = self._orphan_canonical_identity(text)
             if self._is_total_or_nutrition_rollup(text):
                 self._queue_label_ledger_omission(
                     source, omission_reason="nutrition_fact_not_applicable"
@@ -9418,7 +9440,12 @@ class EnhancedDSLDNormalizer:
                 self._queue_label_ledger_omission(
                     source, omission_reason="decorative_or_header_text"
                 )
-            elif norm and norm in displayed_identities:
+            elif (norm and norm in displayed_identities) or (
+                canonical and canonical in displayed_canonicals
+            ):
+                # Same identity is already shown (a molecular form / re-disclosure
+                # such as Cholecalciferol under a displayed Vitamin D3). Reconcile
+                # it as a documented duplicate, never a detached standalone row.
                 self._queue_label_ledger_omission(
                     source, omission_reason="duplicate_source_line"
                 )
@@ -9427,14 +9454,30 @@ class EnhancedDSLDNormalizer:
                     str(source.get("parent_source_path") or "").strip() in displayed_paths
                 )
                 added.append(
-                    self._display_only_row_from_source(
-                        source, next_order, has_displayed_parent
-                    )
+                    self._display_only_row_from_source(source, has_displayed_parent)
                 )
                 displayed_paths.add(path)
                 displayed_identities.add(norm)
-                next_order += 1
-        return display_rows + added if added else display_rows
+                if canonical:
+                    displayed_canonicals.add(canonical)
+        if not added:
+            return display_rows
+        # Restore canonical source-label order: recovered rows are placed at
+        # their source-inventory position, never merely appended to the end.
+        combined = display_rows + added
+        order_by_path: Dict[str, int] = {}
+        for idx, source in enumerate(source_rows):
+            p = str(source.get("raw_source_path") or "").strip()
+            if p and p not in order_by_path:
+                order_by_path[p] = self._safe_int(source.get("label_order"), default=idx)
+        combined.sort(
+            key=lambda r: order_by_path.get(
+                str(r.get("raw_source_path") or "").strip(), 10 ** 9
+            )
+        )
+        for index, row in enumerate(combined):
+            row["label_order"] = index
+        return combined
 
     def _extract_storage(self, statements: List[Dict]) -> List[str]:
         """Extract storage instructions from statements"""
