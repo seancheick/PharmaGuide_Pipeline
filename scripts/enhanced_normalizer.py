@@ -6965,13 +6965,14 @@ class EnhancedDSLDNormalizer:
         for ing in ingredients:
             name = ing.get("name", "")
 
-            if self._is_structural_form_container(name, is_active=False):
+            if self._is_inactive_form_container(ing):
                 forms = ing.get("forms", []) or []
                 self._queue_display_ingredient(
                     raw_source_text=name,
                     source_section="inactiveIngredients",
                     display_type="structural_container",
                     score_included=False,
+                    source_row=ing,
                     children=[form.get("name", "") for form in forms if isinstance(form, dict) and form.get("name")],
                 )
                 expanded_ingredients.extend(
@@ -7104,7 +7105,7 @@ class EnhancedDSLDNormalizer:
         """
         name = ingredient_data.get("name", "")
 
-        if self._is_structural_form_container(name, is_active=False):
+        if self._is_inactive_form_container(ingredient_data):
             return (None, None)
 
         # SKIP ENFORCEMENT: Check skip list FIRST before any processing
@@ -7291,13 +7292,14 @@ class EnhancedDSLDNormalizer:
         for ing in ingredients:
             name = ing.get("name", "")
 
-            if self._is_structural_form_container(name, is_active=False):
+            if self._is_inactive_form_container(ing):
                 forms = ing.get("forms", []) or []
                 self._queue_display_ingredient(
                     raw_source_text=name,
                     source_section="inactiveIngredients",
                     display_type="structural_container",
                     score_included=False,
+                    source_row=ing,
                     children=[form.get("name", "") for form in forms if isinstance(form, dict) and form.get("name")],
                 )
                 for form_ing in self._expand_header_forms_for_processing(ing, source_path="inactiveIngredients"):
@@ -8072,6 +8074,14 @@ class EnhancedDSLDNormalizer:
 
             if is_duplicate:
                 duplicates_removed += 1
+                # The ingredient is still shown to the user via its active row,
+                # but this Other-Ingredients source line is being dropped —
+                # record it as a documented duplicate so the label ledger stays
+                # reconciled (every source row is displayed or omitted).
+                self._queue_label_ledger_omission(
+                    ing,
+                    omission_reason="duplicate_source_line",
+                )
                 logger.debug(
                     "Deduped inactive '%s' — raw name matches an active row",
                     name,
@@ -10317,6 +10327,25 @@ class EnhancedDSLDNormalizer:
         if is_active:
             return processed_name in STRUCTURAL_ACTIVE_CONTAINER_NAMES
         return processed_name in STRUCTURAL_OTHER_FORM_CONTAINER_NAMES
+
+    def _is_inactive_form_container(self, ing: Dict[str, Any]) -> bool:
+        """An Other-Ingredients row whose forms[] must be unwrapped into the
+        label ledger. Two triggers, unified here as the single source of truth
+        (used by every inactive-processing path so they cannot drift):
+          1. a recognized structural container name, or
+          2. ANY row carrying nested forms[] — a blend/complex header whose
+             printed components live in forms[] (e.g. a proprietary Other-
+             Ingredients complex). DSLD nests these under one header; the
+             cleaner must reconcile the header + every form or they are
+             inventoried into label_source_rows yet never displayed/omitted.
+        Inactive rows are never scored, so unwrapping them cannot affect scoring
+        or recreate the active-side duplicate-form problem."""
+        if not isinstance(ing, dict):
+            return False
+        if self._is_structural_form_container(ing.get("name", ""), is_active=False):
+            return True
+        forms = ing.get("forms")
+        return isinstance(forms, list) and len(forms) > 0
 
     def _is_active_source_form_wrapper(self, ing: Dict[str, Any]) -> bool:
         """Unwrap source-material active rows when the real declared ingredient lives in forms[]."""

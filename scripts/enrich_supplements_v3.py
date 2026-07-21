@@ -10267,9 +10267,17 @@ class SupplementEnricherV3:
         if synthetic_ingredients:
             # Local-only union for cluster matching
             active_ingredients = list(active_ingredients) + synthetic_ingredients
-            existing_display = product.get('display_ingredients') or []
-            if isinstance(existing_display, list):
-                product['display_ingredients'] = existing_display + synthetic_display_entries
+            # Product-name inference is NOT a printed Supplement Facts row, so it
+            # must never enter the canonical label ledger (display_ingredients)
+            # or its audit — the cleaner exclusively owns that ledger, and an
+            # inferred row would contaminate the user's Label view and break the
+            # reconciliation contract. Keep it in a separate analysis-only
+            # channel for QA/provenance visibility instead.
+            if synthetic_display_entries:
+                provenance = product.get('name_inference_provenance')
+                if not isinstance(provenance, list):
+                    provenance = []
+                product['name_inference_provenance'] = list(provenance) + synthetic_display_entries
 
         # Build ingredient lookup
         ingredient_info = {}
