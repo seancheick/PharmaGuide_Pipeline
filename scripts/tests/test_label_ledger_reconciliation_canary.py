@@ -111,3 +111,25 @@ def test_264116_working_revision_still_reconciles():
     """Same SKU, a revision whose Other Ingredients are already flat. Must
     remain contract-clean after the fix (no regression)."""
     assert _contract_errors(_cleaned("264116")) == []
+
+
+# ---------------------------------------------------------------------------
+# Active-side deep nesting — real actives under a blend must reach the ledger
+# ---------------------------------------------------------------------------
+
+def test_12196_nested_active_ingredients_reach_the_label_view():
+    """Equate 'Glucosamine Chondroitin MSM' lists Chondroitin Sulfate as a
+    nested active row. It was dropped from the ledger entirely (the "bottle
+    shows it, app doesn't" bug). The reconciliation finalizer must surface it
+    (display-only is fine — scoring is untouched) and keep the contract clean."""
+    cleaned = _cleaned("12196")
+    assert _contract_errors(cleaned) == []
+    display_names = {
+        str(r.get("display_name") or r.get("raw_source_text") or "").lower()
+        for r in (cleaned.get("display_ingredients") or [])
+    }
+    assert any("chondroitin" in n for n in display_names), (
+        f"nested active 'Chondroitin' missing from the label view; "
+        f"shown={sorted(display_names)}"
+    )
+

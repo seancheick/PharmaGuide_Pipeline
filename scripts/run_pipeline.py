@@ -331,6 +331,7 @@ class PipelineRunner:
         self,
         products: List[Dict[str, Any]],
         strict_mode: bool = False,
+        report_dir: Optional[str] = None,
     ) -> Tuple[bool, Dict[str, Any]]:
         """Run the authoritative enrichment contract validator."""
         logger.info("=" * 60)
@@ -373,6 +374,33 @@ class PipelineRunner:
                     errors,
                     warnings,
                 )
+                # Make the failure diagnosable at a glance: a rule breakdown,
+                # a few representative violations, and a full JSON report — so a
+                # blocked release never requires re-running the validator by hand.
+                from collections import Counter
+
+                error_pairs = [
+                    (pid, v)
+                    for pid, product_violations in violations_by_product.items()
+                    for v in product_violations
+                    if v.severity == "error"
+                ]
+                summary["errors_by_rule"] = dict(
+                    Counter(getattr(v, "rule", "?") for _, v in error_pairs).most_common()
+                )
+                for pid, v in error_pairs[:10]:
+                    logger.error(
+                        "  contract violation [%s] %s: %s",
+                        pid,
+                        getattr(v, "rule", "?"),
+                        v.message,
+                    )
+                report_path = self._write_contract_gate_report(
+                    report_dir, violations_by_product, summary
+                )
+                if report_path is not None:
+                    summary["report_path"] = str(report_path)
+                    logger.error("Full contract-gate report written: %s", report_path)
             return can_proceed, summary
         except Exception as exc:
             logger.error("Enrichment contract gate failed: %s", exc)
@@ -380,6 +408,44 @@ class PipelineRunner:
                 "error": "gate_execution_failed",
                 "gate": "enrichment_contract",
             }
+
+    def _write_contract_gate_report(
+        self,
+        report_dir: Optional[str],
+        violations_by_product: Dict[str, Any],
+        summary: Dict[str, Any],
+    ) -> Optional[Path]:
+        """Persist the full enrichment-contract violation set as JSON so a
+        blocked release is immediately diagnosable. Best-effort — never raises
+        into the gate result."""
+        if not report_dir:
+            return None
+        try:
+            out_dir = Path(report_dir) / "reports"
+            out_dir.mkdir(parents=True, exist_ok=True)
+            path = out_dir / "enrichment_contract_gate_violations.json"
+            payload = {
+                "summary": summary,
+                "products": {
+                    str(pid): [
+                        {
+                            "rule": getattr(v, "rule", None),
+                            "rule_name": getattr(v, "rule_name", None),
+                            "severity": v.severity,
+                            "message": v.message,
+                            "field_path": getattr(v, "field_path", None),
+                            "evidence": getattr(v, "evidence", None),
+                        }
+                        for v in product_violations
+                    ]
+                    for pid, product_violations in violations_by_product.items()
+                },
+            }
+            path.write_text(json.dumps(payload, indent=2, default=str))
+            return path
+        except Exception as exc:
+            logger.warning("Could not write contract-gate report: %s", exc)
+            return None
 
     def run_coverage_gate(
         self,
@@ -656,6 +722,7 @@ class PipelineRunner:
             contract_ok, contract_summary = self.run_enrichment_contract_gate(
                 products,
                 strict_mode=strict_release_gates,
+                report_dir=enriched_dir,
             )
             results["enrichment_contract_gate"] = contract_summary
             if not contract_ok:

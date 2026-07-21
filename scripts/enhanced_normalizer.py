@@ -6965,14 +6965,13 @@ class EnhancedDSLDNormalizer:
         for ing in ingredients:
             name = ing.get("name", "")
 
-            if self._is_inactive_form_container(ing):
+            if self._is_structural_form_container(name, is_active=False):
                 forms = ing.get("forms", []) or []
                 self._queue_display_ingredient(
                     raw_source_text=name,
                     source_section="inactiveIngredients",
                     display_type="structural_container",
                     score_included=False,
-                    source_row=ing,
                     children=[form.get("name", "") for form in forms if isinstance(form, dict) and form.get("name")],
                 )
                 expanded_ingredients.extend(
@@ -7105,7 +7104,7 @@ class EnhancedDSLDNormalizer:
         """
         name = ingredient_data.get("name", "")
 
-        if self._is_inactive_form_container(ingredient_data):
+        if self._is_structural_form_container(name, is_active=False):
             return (None, None)
 
         # SKIP ENFORCEMENT: Check skip list FIRST before any processing
@@ -7292,14 +7291,13 @@ class EnhancedDSLDNormalizer:
         for ing in ingredients:
             name = ing.get("name", "")
 
-            if self._is_inactive_form_container(ing):
+            if self._is_structural_form_container(name, is_active=False):
                 forms = ing.get("forms", []) or []
                 self._queue_display_ingredient(
                     raw_source_text=name,
                     source_section="inactiveIngredients",
                     display_type="structural_container",
                     score_included=False,
-                    source_row=ing,
                     children=[form.get("name", "") for form in forms if isinstance(form, dict) and form.get("name")],
                 )
                 for form_ing in self._expand_header_forms_for_processing(ing, source_path="inactiveIngredients"):
@@ -9303,7 +9301,140 @@ class EnhancedDSLDNormalizer:
             for index, row in enumerate(display_rows):
                 row["label_order"] = index
 
+        # Reconciliation finalizer (label-truth contract points 4-5): classify
+        # EVERY remaining source occurrence so the ledger is complete for every
+        # structure, not case-by-case. Display-layer only — it never rescore.
+        display_rows = self._reconcile_orphan_source_rows(display_rows, source_rows)
+
         return display_rows
+
+    def _is_total_or_nutrition_rollup(self, text: str) -> bool:
+        """A label rollup/total that aggregates the components listed beneath it
+        (e.g. 'Total Omega-3 Fatty Acids', 'Total Lacto Cultures') or a
+        nutrition-fact line — not a discrete ingredient to display."""
+        if not text:
+            return False
+        if self._is_nutrition_fact(text):
+            return True
+        return text.strip().casefold().startswith("total ")
+
+    def _display_only_row_from_source(
+        self, source: Dict[str, Any], label_order: int, has_displayed_parent: bool
+    ) -> Dict[str, Any]:
+        """Build a contract-complete display row for a label-printed source
+        occurrence that the scoring path never surfaced. score_included=False,
+        so it shows the user the ingredient (label truth) without touching any
+        score. Mirrors the field stamping in _build_display_ingredients."""
+        path = str(source.get("raw_source_path") or "").strip()
+        text = str(source.get("raw_source_text") or "").strip()
+        section = source.get("source_section") or (
+            "inactiveIngredients"
+            if self._source_path_is_inactive(path)
+            else "activeIngredients"
+        )
+        label_name = str(source.get("label_display_name") or text).strip()
+        exact_dose = str(source.get("exact_dose_text") or "").strip()
+        parent_label = source.get("parent_label")
+        nested_depth = self._safe_int(source.get("nested_depth"), default=0)
+        # Do not invent hierarchy the app can't anchor (mirrors the guard in
+        # _build_display_ingredients): a nested row whose parent is not itself a
+        # display row renders standalone.
+        if nested_depth > 0 and not (has_displayed_parent and str(parent_label or "").strip()):
+            nested_depth = 0
+        fingerprint_payload = "|".join(
+            (
+                path,
+                label_name.casefold(),
+                exact_dose.casefold(),
+                str(parent_label or "").casefold(),
+            )
+        )
+        return {
+            "raw_source_path": path,
+            "raw_source_text": text,
+            "display_name": text,
+            "label_display_name": label_name,
+            "label_order": label_order,
+            "source_order": source.get("source_order"),
+            "nested_depth": nested_depth,
+            "source_section": section,
+            "display_type": "label_only",
+            "resolution_type": "label_only_unscored",
+            "score_included": False,
+            "is_label_context": True,
+            "display_disposition": (
+                "other_ingredient" if section == "inactiveIngredients" else "label_context"
+            ),
+            "form_display_state": "not_applicable",
+            "identity_integrity_state": "taxonomy_only",
+            "parent_label": parent_label,
+            "parent_source_path": source.get("parent_source_path"),
+            "exact_dose_text": exact_dose,
+            "ledger_fingerprint": hashlib.sha256(
+                fingerprint_payload.encode("utf-8")
+            ).hexdigest(),
+        }
+
+    def _reconcile_orphan_source_rows(
+        self, display_rows: List[Dict[str, Any]], source_rows: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """Guarantee every inventoried source occurrence is classified. Any
+        source row not already displayed or omitted is resolved here:
+          • totals / nutrition-fact rollups  -> nutrition_fact_not_applicable
+          • decorative / header text         -> decorative_or_header_text
+          • a re-disclosure of an ingredient already shown -> duplicate_source_line
+          • otherwise a real label-printed ingredient the scoring path dropped
+            -> a display-only row (score_included=False) so the Label view
+               matches the bottle.
+        This closes the reconciliation contract for every structure at once and
+        cannot change any score (display-layer only)."""
+        displayed_paths = {
+            str(r.get("raw_source_path") or "").strip() for r in display_rows
+        }
+        omission_paths = {
+            str(o.get("raw_source_path") or "").strip()
+            for o in getattr(self, "_label_ledger_omissions", [])
+        }
+        displayed_identities = {
+            self.matcher.preprocess_text(str(r.get("raw_source_text") or ""))
+            for r in display_rows
+        }
+        displayed_identities.discard("")
+        next_order = len(display_rows)
+        added: List[Dict[str, Any]] = []
+        for source in source_rows:
+            path = str(source.get("raw_source_path") or "").strip()
+            if not path or path in displayed_paths or path in omission_paths:
+                continue
+            text = str(source.get("raw_source_text") or "").strip()
+            if not text:
+                continue  # empty text is omitted at stamp time
+            norm = self.matcher.preprocess_text(text)
+            if self._is_total_or_nutrition_rollup(text):
+                self._queue_label_ledger_omission(
+                    source, omission_reason="nutrition_fact_not_applicable"
+                )
+            elif self._is_label_header(text):
+                self._queue_label_ledger_omission(
+                    source, omission_reason="decorative_or_header_text"
+                )
+            elif norm and norm in displayed_identities:
+                self._queue_label_ledger_omission(
+                    source, omission_reason="duplicate_source_line"
+                )
+            else:
+                has_displayed_parent = (
+                    str(source.get("parent_source_path") or "").strip() in displayed_paths
+                )
+                added.append(
+                    self._display_only_row_from_source(
+                        source, next_order, has_displayed_parent
+                    )
+                )
+                displayed_paths.add(path)
+                displayed_identities.add(norm)
+                next_order += 1
+        return display_rows + added if added else display_rows
 
     def _extract_storage(self, statements: List[Dict]) -> List[str]:
         """Extract storage instructions from statements"""
@@ -10327,25 +10458,6 @@ class EnhancedDSLDNormalizer:
         if is_active:
             return processed_name in STRUCTURAL_ACTIVE_CONTAINER_NAMES
         return processed_name in STRUCTURAL_OTHER_FORM_CONTAINER_NAMES
-
-    def _is_inactive_form_container(self, ing: Dict[str, Any]) -> bool:
-        """An Other-Ingredients row whose forms[] must be unwrapped into the
-        label ledger. Two triggers, unified here as the single source of truth
-        (used by every inactive-processing path so they cannot drift):
-          1. a recognized structural container name, or
-          2. ANY row carrying nested forms[] — a blend/complex header whose
-             printed components live in forms[] (e.g. a proprietary Other-
-             Ingredients complex). DSLD nests these under one header; the
-             cleaner must reconcile the header + every form or they are
-             inventoried into label_source_rows yet never displayed/omitted.
-        Inactive rows are never scored, so unwrapping them cannot affect scoring
-        or recreate the active-side duplicate-form problem."""
-        if not isinstance(ing, dict):
-            return False
-        if self._is_structural_form_container(ing.get("name", ""), is_active=False):
-            return True
-        forms = ing.get("forms")
-        return isinstance(forms, list) and len(forms) > 0
 
     def _is_active_source_form_wrapper(self, ing: Dict[str, Any]) -> bool:
         """Unwrap source-material active rows when the real declared ingredient lives in forms[]."""
