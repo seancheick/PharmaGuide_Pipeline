@@ -2152,21 +2152,62 @@ def test_detail_blob_emits_gluten_free_validated_flag():
     allergen flow. True when the label carries a validated gluten-free
     claim AND no contradicting wheat/gluten ingredient hits.
     """
-    # Note: build_final_db's safe_bool returns int (1/0) for SQLite
-    # interop, not Python True/False. Truthiness is what matters.
+    # Blob flag fields are a JSON contract: real true/false via json_bool,
+    # NOT safe_bool's 0/1 (which is for SQLite core columns).
     enriched = make_enriched()
     enriched["claim_gluten_free_validated"] = True
     blob = build_detail_blob(enriched, make_scored())
-    assert bool(blob["gluten_free_validated"]) is True
+    assert blob["gluten_free_validated"] is True
 
     enriched["claim_gluten_free_validated"] = False
     blob = build_detail_blob(enriched, make_scored())
-    assert bool(blob["gluten_free_validated"]) is False
+    assert blob["gluten_free_validated"] is False
 
     # Missing (older blobs) → defaults to False
     enriched.pop("claim_gluten_free_validated", None)
     blob = build_detail_blob(enriched, make_scored())
-    assert bool(blob["gluten_free_validated"]) is False
+    assert blob["gluten_free_validated"] is False
+
+
+def test_detail_blob_flag_fields_are_real_json_booleans():
+    """Contract: blob flag fields serialize as JSON true/false, never int 0/1.
+
+    Root cause of the Flutter blend/GMP misreads: build_final_db emitted these
+    via safe_bool (0/1). They now go through json_bool. Guard both the Python
+    type (bool, not just int-truthy) and the JSON serialization so the contract
+    can't silently drift back to ints. bool is an int subclass in Python, so
+    `type(x) is bool` is the assertion that actually pins it.
+    """
+    import json as _json
+
+    enriched = make_enriched()
+    enriched["proprietary_data"]["has_proprietary_blends"] = True
+    blob = build_detail_blob(enriched, make_scored())
+
+    cert = blob["certification_detail"]
+    flag_values = {
+        "certification_detail.purity_verified": cert["purity_verified"],
+        "certification_detail.heavy_metal_tested": cert["heavy_metal_tested"],
+        "certification_detail.label_accuracy_verified": cert["label_accuracy_verified"],
+        "manufacturer_detail.is_trusted": blob["manufacturer_detail"]["is_trusted"],
+        "proprietary_blend_detail.has_proprietary_blends": blob[
+            "proprietary_blend_detail"
+        ]["has_proprietary_blends"],
+        "gluten_free_validated": blob["gluten_free_validated"],
+    }
+    # Row-level flags — same field must not ship mixed int/bool across products.
+    for row in blob["ingredients"]:
+        flag_values[f"ingredients[].is_mapped:{row['name']}"] = row["is_mapped"]
+        flag_values[f"ingredients[].mapped:{row['name']}"] = row["mapped"]
+    for row in blob["inactive_ingredients"]:
+        flag_values[f"inactive[].is_additive:{row['name']}"] = row["is_additive"]
+
+    for label, value in flag_values.items():
+        assert type(value) is bool, f"{label} shipped {type(value).__name__}, not bool"
+
+    # Serialization: a positive flag must render as JSON `true`, not `1`.
+    assert '"has_proprietary_blends": true' in _json.dumps(blob)
+    assert blob["proprietary_blend_detail"]["has_proprietary_blends"] is True
 
 
 def test_watchlist_is_exported_as_warning_but_not_blocking_reason():

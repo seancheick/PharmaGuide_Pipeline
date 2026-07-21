@@ -137,8 +137,19 @@ def remote_blob_storage_path(blob_sha256: str) -> str:
 
 
 def safe_bool(value: Any) -> int:
-    """Convert any value to 0/1 integer."""
+    """Convert any value to 0/1 integer (SQLite core INTEGER columns)."""
     return 1 if value else 0
+
+
+def json_bool(value: Any) -> bool:
+    """Coerce to a real JSON boolean for detail-blob flag fields.
+
+    ``safe_bool`` returns 0/1 for SQLite core columns; blob flags are a JSON
+    contract and must serialize as ``true``/``false`` so downstream readers
+    never have to disambiguate a 0/1 int from a bool. Keep flag-like blob
+    fields on this helper, not ``safe_bool``.
+    """
+    return bool(value)
 
 
 def safe_float(value: Any, default: float = None) -> Optional[float]:
@@ -3675,7 +3686,7 @@ def _reconcile_display_source_rows(rows: List[Any]) -> List[Dict[str, Any]]:
             "display_type": "structural_container",
             "resolution_type": structural[0].get("resolution_type"),
             "children": safe_list(structural[0].get("children")),
-            "score_included": safe_bool(
+            "score_included": json_bool(
                 interpretations[0].get("score_included")
             ),
         })
@@ -5761,7 +5772,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         # truth: pipeline emits explicit states, Flutter renders them.
         form_contract = _compute_form_contract(ing, m)
         canonical_id = safe_str(m.get("canonical_id") or ing.get("canonical_id"))
-        is_mapped = safe_bool(m.get("mapped", ing.get("mapped")))
+        # Blob flag → real JSON bool (both the mapped-with-canonical and the
+        # no-canonical branch must be the same type, or the field ships mixed
+        # int/bool across products).
+        is_mapped = json_bool(m.get("mapped", ing.get("mapped")))
         if not canonical_id:
             is_mapped = False
         active_safety_contract = _resolve_active_safety_contract(
@@ -6002,7 +6016,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
             "category": res.category or safe_str(ing.get("category")),
-            "is_additive": res.is_additive or safe_bool(ing.get("isAdditive")),
+            "is_additive": json_bool(res.is_additive or ing.get("isAdditive")),
             "functional_roles": res.functional_roles,
             "standard_name": inactive_standard_name,
             "safety_flags": (
@@ -6650,7 +6664,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         # validated gluten-free claim (compliance_data.gluten_free) AND
         # no contradicting wheat/gluten ingredient hits. Surfaces as a
         # green "Gluten-Free Verified" badge; never as an allergen flag.
-        "gluten_free_validated": safe_bool(
+        "gluten_free_validated": json_bool(
             enriched.get("claim_gluten_free_validated")
         ),
         # Profile-gated subset — see build logic above. Flutter should
@@ -6669,12 +6683,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "certification_detail": {
             "third_party_programs": cd.get("third_party_programs"),
             "gmp": cd.get("gmp"),
-            "purity_verified": safe_bool(cd.get("purity_verified")),
-            "heavy_metal_tested": safe_bool(cd.get("heavy_metal_tested")),
-            "label_accuracy_verified": safe_bool(cd.get("label_accuracy_verified")),
+            "purity_verified": json_bool(cd.get("purity_verified")),
+            "heavy_metal_tested": json_bool(cd.get("heavy_metal_tested")),
+            "label_accuracy_verified": json_bool(cd.get("label_accuracy_verified")),
         },
         "proprietary_blend_detail": {
-            "has_proprietary_blends": safe_bool(safe_dict(enriched.get("proprietary_data")).get("has_proprietary_blends")),
+            "has_proprietary_blends": json_bool(safe_dict(enriched.get("proprietary_data")).get("has_proprietary_blends")),
             "blends": safe_list(safe_dict(enriched.get("proprietary_data")).get("blends")),
         },
         "dietary_sensitivity_detail": {
@@ -6690,7 +6704,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         },
         "manufacturer_detail": {
             "brand_name": safe_str(enriched.get("brand_name") or enriched.get("brandName")),
-            "is_trusted": safe_bool(enriched.get("is_trusted_manufacturer")),
+            "is_trusted": json_bool(enriched.get("is_trusted_manufacturer")),
             "manufacturing_region": safe_str(enriched.get("manufacturing_region")),
             "violations": safe_dict(safe_dict(enriched.get("manufacturer_data")).get("violations")),
         },
@@ -6845,7 +6859,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "benefit_short": safe_str(sc.get("synergy_benefit_short")),
                 "matched_ingredients": matched_names,
                 "match_count": len(matched),
-                "all_adequate": safe_bool(sc.get("all_adequate")),
+                "all_adequate": json_bool(sc.get("all_adequate")),
                 "pmids": safe_list(sc.get("pmids")),
                 # Single-ingredient override signal — true when the cluster
                 # qualified via a lone primary ingredient at adequate dose
@@ -6853,7 +6867,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 # optionally render a "solo ingredient" badge on the detail
                 # card. Defaults to false for standard multi-ingredient
                 # synergy matches.
-                "single_ingredient_match": safe_bool(sc.get("single_ingredient_match")),
+                "single_ingredient_match": json_bool(sc.get("single_ingredient_match")),
             })
 
         tier_bonus_map = {1: 1.0, 2: 0.75, 3: 0.5, 4: 0.25}
@@ -6891,18 +6905,18 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             or delivery_data.get("highest_tier")
         ),
         "delivery_form": safe_str(delivery_data.get("delivery_form")),
-        "absorption_enhancer_paired": safe_bool(
+        "absorption_enhancer_paired": json_bool(
             enriched.get("absorption_enhancer_paired")
             or absorption_data.get("qualifies_for_bonus")
         ),
         "absorption_enhancers": safe_list(absorption_data.get("enhancers_found")),
-        "is_certified_organic": safe_bool(enriched.get("is_certified_organic")),
+        "is_certified_organic": json_bool(enriched.get("is_certified_organic")),
         "organic_verification": safe_str(
             formulation_data.get("organic", {}).get("verification_status")
             if isinstance(formulation_data.get("organic"), dict) else ""
         ),
         "standardized_botanicals": safe_list(formulation_data.get("standardized_botanicals")),
-        "synergy_cluster_qualified": safe_bool(enriched.get("synergy_cluster_qualified")),
+        "synergy_cluster_qualified": json_bool(enriched.get("synergy_cluster_qualified")),
         "claim_non_gmo_verified": bool(non_gmo_audit.get("project_verified")),
         "claim_non_gmo_present": bool(non_gmo_audit.get("claim_present")),
     }
@@ -7051,6 +7065,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     ) or any(safe_str(a.get("canonical_id")) for a in _active_rows)
     _is_opaque = bool(_active_rows) and not _has_active_identity
     _has_blend = bool(safe_bool(safe_dict(enriched.get("proprietary_data")).get("has_proprietary_blends")))
+    # NOTE: top-level `proprietary_blend` is the OPAQUE-blend signal (blend
+    # present AND no active identity resolved) — a stricter, transparency-
+    # penalty flag. It is NOT a duplicate of
+    # `proprietary_blend_detail.has_proprietary_blends` (which is true for ANY
+    # disclosed blend). They legitimately disagree; readers wanting "has a
+    # proprietary blend" must use the detail flag, not this one.
     blob["proprietary_blend"] = bool(_is_opaque and _has_blend)
     blob["unverified_ingredient"] = bool(_is_opaque and not _has_blend)
 
