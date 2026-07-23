@@ -179,39 +179,69 @@ def _iter_cleaned_forms():
                                 yield brand, pid, form
 
 
+@pytest.fixture(scope="module")
+def corpus_form_audit() -> dict:
+    """Scan the cleaned corpus once and share immutable audit results."""
+    missing_names = []
+    invalid_provenance = []
+    incomplete_dsld = []
+    total = 0
+    total_dsld = 0
+
+    for brand, pid, form in _iter_cleaned_forms():
+        total += 1
+        if not form.get("name"):
+            missing_names.append(f"[{brand} {pid}] {form!r}")
+
+        has_dsld_fields = all(
+            key in form for key in ("category", "ingredientGroup", "ingredientId")
+        )
+        has_source_marker = form.get("source") == "name_extraction"
+        if not has_dsld_fields and not has_source_marker:
+            invalid_provenance.append(
+                f"[{brand} {pid}] keys={sorted(form.keys())} form={form.get('name')!r}"
+            )
+
+        if has_dsld_fields:
+            total_dsld += 1
+            missing = [field for field in DSLD_FORMS_FIELDS if field not in form]
+            if missing:
+                incomplete_dsld.append(
+                    f"[{brand} {pid}] missing={missing} form={form.get('name')!r}"
+                )
+
+    return {
+        "total": total,
+        "total_dsld": total_dsld,
+        "missing_names": missing_names,
+        "invalid_provenance": invalid_provenance,
+        "incomplete_dsld": incomplete_dsld,
+    }
+
+
 class TestFormsCorpusInvariants:
     """Every forms[] entry across all brands conforms to one of two shapes."""
 
-    def test_every_form_has_name(self) -> None:
+    def test_every_form_has_name(self, corpus_form_audit: dict) -> None:
         if not PRODUCTS_ROOT.exists():
             pytest.skip("No pipeline output")
-        missing = []
-        total = 0
-        for brand, pid, form in _iter_cleaned_forms():
-            total += 1
-            if not form.get("name"):
-                missing.append(f"[{brand} {pid}] {form!r}")
-        if total == 0:
+        if corpus_form_audit["total"] == 0:
             pytest.skip("No cleaned output yet")
+        missing = corpus_form_audit["missing_names"]
         assert not missing, (
             f"Invariant broken: {len(missing)} forms[] entries without a 'name' field.\n"
             + "\n".join(missing[:5])
         )
 
-    def test_every_form_is_dsld_structured_or_name_extracted(self) -> None:
+    def test_every_form_is_dsld_structured_or_name_extracted(
+        self, corpus_form_audit: dict
+    ) -> None:
         """No partial states — either full DSLD or marked name-extraction."""
         if not PRODUCTS_ROOT.exists():
             pytest.skip("No pipeline output")
-        bad = []
-        total = 0
-        for brand, pid, form in _iter_cleaned_forms():
-            total += 1
-            has_dsld_fields = all(k in form for k in ("category", "ingredientGroup", "ingredientId"))
-            has_source_marker = form.get("source") == "name_extraction"
-            if not has_dsld_fields and not has_source_marker:
-                bad.append(f"[{brand} {pid}] keys={sorted(form.keys())} form={form.get('name')!r}")
-        if total == 0:
+        if corpus_form_audit["total"] == 0:
             pytest.skip("No cleaned output yet")
+        bad = corpus_form_audit["invalid_provenance"]
         assert not bad, (
             f"Invariant broken: {len(bad)} forms[] entries are neither "
             f"DSLD-structured nor marked with source='name_extraction'. "
@@ -219,21 +249,15 @@ class TestFormsCorpusInvariants:
             + "\n".join(bad[:5])
         )
 
-    def test_dsld_structured_forms_preserve_all_fields(self) -> None:
+    def test_dsld_structured_forms_preserve_all_fields(
+        self, corpus_form_audit: dict
+    ) -> None:
         """When category+ingredientGroup+ingredientId present, ALL 8 fields present."""
         if not PRODUCTS_ROOT.exists():
             pytest.skip("No pipeline output")
-        incomplete = []
-        total_dsld = 0
-        for brand, pid, form in _iter_cleaned_forms():
-            if not all(k in form for k in ("category", "ingredientGroup", "ingredientId")):
-                continue  # name-extracted, doesn't apply
-            total_dsld += 1
-            missing = [f for f in DSLD_FORMS_FIELDS if f not in form]
-            if missing:
-                incomplete.append(f"[{brand} {pid}] missing={missing} form={form.get('name')!r}")
-        if total_dsld == 0:
+        if corpus_form_audit["total_dsld"] == 0:
             pytest.skip("No DSLD-structured forms in current output")
+        incomplete = corpus_form_audit["incomplete_dsld"]
         assert not incomplete, (
             f"{len(incomplete)} DSLD-structured forms[] have partial field set:\n"
             + "\n".join(incomplete[:5])

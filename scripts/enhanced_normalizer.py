@@ -4931,7 +4931,9 @@ class EnhancedDSLDNormalizer:
         while the same row's label note explicitly says ``EPA`` and names
         eicosapentaenoic acid.  The gate is intentionally exact: it requires
         the known contradictory name, group, ingredient id, UNII, and explicit
-        EPA alternate-name note.  Dose is never used as identity evidence.
+        EPA alternate-name note.  The same reviewed note pattern supplies the
+        consumer-facing EPA/DHA acronym; the full chemical identity remains in
+        the analysis row.  Dose is never used as identity evidence.
         """
 
         def rewrite(row: Any) -> None:
@@ -4946,6 +4948,18 @@ class EnhancedDSLDNormalizer:
                 and re.match(r"^\s*EPA\s*\(", notes, flags=re.IGNORECASE)
                 and re.search(
                     r"Alt\.\s*Name:\s*Eicosapentaenoic Acid\b",
+                    notes,
+                    flags=re.IGNORECASE,
+                )
+            )
+            is_explicit_dha_label = bool(
+                row.get("name") == "Docosahexaenoic Acid Ethyl Ester"
+                and row.get("ingredientGroup") == "DHA (Docosahexaenoic Acid)"
+                and row.get("ingredientId") == 285066
+                and row.get("uniiCode") == "7PO7G8PA8M"
+                and re.match(r"^\s*DHA\s*\(", notes, flags=re.IGNORECASE)
+                and re.search(
+                    r"Alt\.\s*Name:\s*Docosahexaenoic Acid\b",
                     notes,
                     flags=re.IGNORECASE,
                 )
@@ -4966,11 +4980,14 @@ class EnhancedDSLDNormalizer:
                 row["_label_correction_provenance"] = (
                     "source_taxonomy_contradiction_repair"
                 )
+                row["_label_display_name"] = "EPA"
                 logger.info(
                     "Repaired explicit EPA note contradicted by DSLD DHA "
                     "taxonomy at %s",
                     row.get("raw_source_path") or "unstamped source row",
                 )
+            elif is_explicit_dha_label:
+                row["_label_display_name"] = "DHA"
 
             for nested_key in ("nestedRows", "forms"):
                 for child in row.get(nested_key) or []:
@@ -6901,6 +6918,7 @@ class EnhancedDSLDNormalizer:
             # Label identity is immutable. A verified brand token is separate
             # matching metadata and must never replace the printed name.
             "name": name,
+            "label_display_name": ing.get("_label_display_name"),
             "standardName": standard_name,  # From our database mapping
             "ingredientGroup": ing.get("ingredientGroup"),  # PRESERVE from DSLD (even if wrong)
 
@@ -9139,7 +9157,8 @@ class EnhancedDSLDNormalizer:
                     {
                         "raw_source_text": raw_text,
                         "display_name": raw_text,
-                        "label_display_name": raw_text,
+                        "label_display_name": ing.get("label_display_name")
+                        or raw_text,
                         "source_section": section_name,
                         "display_type": "mapped_ingredient" if score_included else "inactive_ingredient",
                         "resolution_type": self._default_display_resolution_type(

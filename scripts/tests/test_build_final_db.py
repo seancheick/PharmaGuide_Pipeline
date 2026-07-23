@@ -1111,6 +1111,51 @@ def test_inactive_display_label_preserves_label_wording_with_resolved_identity_m
     assert inactive["label_row_disposition"] == "standard"
 
 
+def test_inactive_display_tone_uses_public_scoring_penalty_outcome():
+    enriched = make_enriched()
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Maltodextrin",
+            "raw_source_text": "Maltodextrin",
+            "standardName": "Maltodextrin",
+        }
+    ]
+    scored = make_scored()
+    scored["_v4_inactive_penalty_details"] = [
+        {
+            "matched_rule_id": "ADD_MALTODEXTRIN",
+            "penalty_tier": "low",
+            "penalty_applied": 0.5,
+        }
+    ]
+
+    blob = build_detail_blob(enriched, scored)
+
+    assert blob["inactive_ingredients"][0]["display_tone"] == "light_orange"
+
+
+def test_clean_label_flags_do_not_masquerade_as_inactive_penalties():
+    enriched = make_enriched()
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Maltodextrin",
+            "raw_source_text": "Maltodextrin",
+            "standardName": "Maltodextrin",
+        }
+    ]
+    scored = make_scored()
+    scored["_v4_clean_label_flags"] = [
+        {
+            "matched_rule_id": "ADD_MALTODEXTRIN",
+            "penalty_applied": 3.0,
+        }
+    ]
+
+    blob = build_detail_blob(enriched, scored)
+
+    assert blob["inactive_ingredients"][0]["display_tone"] is None
+
+
 def test_label_descriptor_inactive_row_stays_visible_but_marked_nonstandard():
     enriched = make_enriched()
     enriched["inactiveIngredients"] = [
@@ -4443,6 +4488,22 @@ def test_final_blob_uses_label_ledger_without_promoting_context_into_analysis():
     assert {row["display_label"] for row in blob["ingredients"]} == {"Fish Oil", "EPA", "DHA"}
     assert rows[1]["analysis"] is None
     assert rows[4]["analysis"] is None
+    assert rows[0]["analysis"] == {
+        "canonical_id": "fish_oil",
+        "display_label": "Fish Oil",
+        "form_display_state": "not_disclosed",
+        "identity_integrity_state": "clean",
+        "display_form_label": None,
+        "standard_name": "Fish Oil",
+        "bio_score": 8.0,
+        "quantity": 2400.0,
+        "unit": "mg",
+        "below_clinical_dose": False,
+        "is_safety_concern": False,
+    }
+    assert rows[2]["analysis"]["bio_score"] == 10.0
+    assert rows[2]["analysis"]["quantity"] == 360.0
+    assert rows[3]["analysis"]["quantity"] == 240.0
     assert rows[0].get("label_display_form") is None
     assert rows[0]["form_display_state"] == "not_disclosed"
 

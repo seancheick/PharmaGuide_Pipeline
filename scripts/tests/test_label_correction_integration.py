@@ -343,6 +343,10 @@ def test_explicit_epa_note_repairs_contradictory_dsld_dha_taxonomy(normalizer):
 
     ledger_rows = normalized["display_ingredients"]
     assert [row["label_display_name"] for row in ledger_rows] == [
-        "Eicosapentaenoic Acid Ethyl Ester",
-        "Docosahexaenoic Acid Ethyl Ester",
+        "EPA",
+        "DHA",
+    ]
+    assert [row["exact_dose_text"] for row in ledger_rows] == [
+        "360 mg",
+        "300 mg",
     ]

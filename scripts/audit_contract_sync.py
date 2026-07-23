@@ -6,8 +6,8 @@ defined in scripts/FINAL_EXPORT_SCHEMA_V1.md (v1.5.0) — whether the field is
 actually emitted today, what fraction of records carry it, what fraction are
 null, and (for enums) the value distribution observed.
 
-This is purely a diagnostic. No fixes. The output drives Phase 1 (raw →
-final reconciliation) and Phase 3 (fix plan).
+This is a read-only audit. It never changes product data. The snapshot rebuild
+also uses its non-zero exit status as a strict pre-promotion contract gate.
 
 Status colors:
   GREEN  — field present in ≥95% of records OR (optional-by-contract field
@@ -88,6 +88,10 @@ INACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "display_role_label":  {"required": True,  "type": "string?",  "is_enum": False, "v1_5_0": True},
     "severity_status":     {"required": True,  "type": "enum",     "is_enum": True,  "v1_5_0": True,
                             "values": ["critical", "suppress", "informational", "n/a"]},
+    "display_tone":        {"required": True,  "type": "enum",     "is_enum": True,
+                            "strict_complete": True,
+                            "values": ["green", "light_orange", "dark_orange", "red"],
+                            "note": "penalty-aware Other Ingredient tone from the v4 scorer ledger"},
     "is_safety_concern":   {"required": True,  "type": "bool",     "is_enum": False, "v1_5_0": True},
 }
 
@@ -120,9 +124,17 @@ BLOB_TOP_LEVEL: dict[str, dict[str, Any]] = {
 }
 
 
-def _classify_status(present_pct: float, required: bool, *, deprecated: bool = False) -> str:
+def _classify_status(
+    present_pct: float,
+    required: bool,
+    *,
+    deprecated: bool = False,
+    strict_complete: bool = False,
+) -> str:
     if deprecated:
         return "DEPRECATED"
+    if strict_complete:
+        return "GREEN" if present_pct == 1.0 else "RED"
     if required:
         if present_pct >= 0.95:
             return "GREEN"
@@ -183,6 +195,7 @@ def _audit_ingredient_contract(
                 pct,
                 spec.get("required", False),
                 deprecated=bool(spec.get("deprecated") or spec.get("deprecated_note")),
+                strict_complete=bool(spec.get("strict_complete")),
             ),
         }
         if spec.get("note"):
@@ -196,6 +209,8 @@ def _audit_ingredient_contract(
             extra = set(counts) - set(spec.get("values", []))
             if extra:
                 entry["unexpected_enum_values"] = sorted(extra)
+                if spec.get("strict_complete"):
+                    entry["status"] = "RED"
         result["fields"][field] = entry
     return result
 

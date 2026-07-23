@@ -625,6 +625,7 @@ per concern.
 | `display_label`      | string    | User-visible name. Prefers `standard_name`, falls back to `name`.                                                                                |
 | `display_role_label` | string?   | Prettified excipient role (e.g. `"Anti-caking agent"`). `null` when the ingredient has no excipient role (bare amino acids etc.).               |
 | `severity_status`    | enum      | `"critical"` (always show) \| `"suppress"` (Tradeoffs only — silicon dioxide, MCC) \| `"informational"` (flagged but not hazardous) \| `"n/a"` (non-additive). |
+| `display_tone`       | enum      | Penalty-aware Other Ingredient dot: `"green"` \| `"light_orange"` \| `"dark_orange"` \| `"red"`. Derived from the scorer-owned B1 inactive-penalty ledger after exemptions and de-duplication; regulatory and resolver safety concerns may raise the floor. |
 | `is_safety_concern`  | boolean   | True only when `harmful_severity` is `moderate`/`high`/`critical`. Distinguishes real risks from tracked-for-transparency excipients.            |
 
 **Why `is_harmful` is not enough:** silicon dioxide and microcrystalline cellulose appear in `harmful_additives.json` (so `is_harmful: true`) but with `severity_level: low` because they're *tracked for transparency*, not because they're risks. The contract's `is_safety_concern` flag and `severity_status` enum lift that distinction out of Flutter so consumers read one field instead of cross-computing three.

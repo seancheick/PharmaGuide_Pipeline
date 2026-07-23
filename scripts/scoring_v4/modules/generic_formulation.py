@@ -702,17 +702,20 @@ def _penalty_b0_moderate_watchlist(product: Dict[str, Any]) -> float:
     return _clamp(0.0, B0_CAP, total)
 
 
-def _penalty_b1_harmful_additives(product: Dict[str, Any]) -> float:
-    """Named harmful-additive penalty. Low/moderate active-source rows are
-    suppressed to avoid penalizing active nutrients that share names with
-    excipient entries; high/critical still score."""
+def _b1_harmful_additive_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
+    """Return the B1 total and the exact inactive rows that contributed.
+
+    The per-row ledger follows the same filtering, de-duplication, and point
+    configuration as the numeric B1 deduction. Exporters consume this ledger;
+    they must not reconstruct an applied penalty from resolver severity.
+    """
     contaminant = _safe_dict((product or {}).get("contaminant_data"))
     harmful = _safe_dict(contaminant.get("harmful_additives"))
     additives = _safe_list(harmful.get("additives"))
     if not additives:
         additives = _safe_list((product or {}).get("harmful_additives"))
 
-    best_by_key: dict[str, float] = {}
+    best_by_key: dict[str, Dict[str, Any]] = {}
     for idx, additive in enumerate(additives):
         if not isinstance(additive, dict):
             continue
@@ -723,9 +726,40 @@ def _penalty_b1_harmful_additives(product: Dict[str, Any]) -> float:
         source_section = _norm_text(additive.get("source_section") or additive.get("source"))
         if source_section == "active" and severity in {"low", "moderate"}:
             continue
-        key = str(additive.get("additive_id") or additive.get("id") or f"_anon_{idx}").strip().lower()
-        best_by_key[key] = max(best_by_key.get(key, 0.0), points)
-    return _clamp(0.0, B1_HARMFUL_ADDITIVE_CAP, sum(best_by_key.values()))
+        rule_id = str(additive.get("additive_id") or additive.get("id") or "").strip()
+        key = (rule_id or f"_anon_{idx}").lower()
+        previous = best_by_key.get(key)
+        if previous is None or points > float(previous["penalty_applied"]):
+            best_by_key[key] = {
+                "matched_rule_id": rule_id or None,
+                "source_section": source_section,
+                "penalty_tier": severity,
+                "penalty_applied": float(points),
+            }
+
+    total = _clamp(
+        0.0,
+        B1_HARMFUL_ADDITIVE_CAP,
+        sum(float(item["penalty_applied"]) for item in best_by_key.values()),
+    )
+    inactive_details = [
+        {
+            "matched_rule_id": item["matched_rule_id"],
+            "penalty_tier": item["penalty_tier"],
+            "penalty_applied": item["penalty_applied"],
+        }
+        for item in best_by_key.values()
+        if item["matched_rule_id"] and item["source_section"] != "active"
+    ]
+    return {
+        "penalty": total,
+        "inactive_penalty_details": inactive_details,
+    }
+
+
+def _penalty_b1_harmful_additives(product: Dict[str, Any]) -> float:
+    """Named harmful-additive penalty magnitude used by every v4 module."""
+    return float(_b1_harmful_additive_penalty_detail(product)["penalty"])
 
 
 def shared_formulation_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
@@ -737,14 +771,20 @@ def shared_formulation_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]
     harmful additives, or dietary sugar.
     """
     dietary_sugar_detail = _dietary_sugar_penalty_detail(product)
+    harmful_additive_detail = _b1_harmful_additive_penalty_detail(product)
     return {
         "penalties": {
             "B1_dietary_sugar": round(-float(dietary_sugar_detail["penalty"]), 4),
             "B0_moderate_watchlist": round(-_penalty_b0_moderate_watchlist(product), 4),
-            "B1_harmful_additives": round(-_penalty_b1_harmful_additives(product), 4),
+            "B1_harmful_additives": round(
+                -float(harmful_additive_detail["penalty"]), 4
+            ),
         },
         "metadata": {
             "dietary_sugar": dietary_sugar_detail,
+            "inactive_penalty_details": harmful_additive_detail[
+                "inactive_penalty_details"
+            ],
         },
     }
 

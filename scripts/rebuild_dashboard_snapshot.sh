@@ -72,6 +72,11 @@ echo "◦ Building from ${#ENR[@]} enriched dirs + ${#SCR[@]} scored dirs..."
   --output-dir "$FINAL_CANDIDATE" \
   2>&1 | tail -5
 
+run_strict_gate "detail-blob field completeness" \
+  "$PG_PYTHON" scripts/audit_contract_sync.py \
+    --build-dir "$FINAL_CANDIDATE" \
+    --out "$FINAL_CANDIDATE/contract_sync_report.json"
+
 # 3. Stage the complete release bundle into a candidate, not scripts/dist/.
 #
 # release_catalog_artifact.py is the SINGLE owner of populating dist/:

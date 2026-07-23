@@ -1173,10 +1173,45 @@ def _safety_flags_from_contract(contract: Dict[str, Any]) -> List[Dict[str, Any]
     }]
 
 
+def _inactive_penalty_tones(scored: Dict[str, Any]) -> Dict[str, str]:
+    """Build display tones from the scorer-owned inactive penalty ledger.
+
+    The ledger contains the exact B1 decisions after active-source suppression
+    and duplicate-ID resolution. ``penalty_tier`` owns the severity band;
+    ``penalty_applied`` distinguishes a real deduction from an exempt hit.
+    """
+    details = (
+        scored.get("_v4_inactive_penalty_details")
+        if isinstance(scored, dict)
+        else None
+    )
+    tones: Dict[str, str] = {}
+    for detail in safe_list(details):
+        if not isinstance(detail, dict):
+            continue
+        rule_id = safe_str(detail.get("matched_rule_id"))
+        if not rule_id:
+            continue
+        penalty = safe_float(detail.get("penalty_applied"), 0.0)
+        tier = safe_str(detail.get("penalty_tier")).lower()
+        if penalty <= 0:
+            tone = "green"
+        elif tier == "low":
+            tone = "light_orange"
+        elif tier == "moderate":
+            tone = "dark_orange"
+        elif tier in {"high", "critical"}:
+            tone = "red"
+        else:
+            continue
+        tones[rule_id] = tone
+    return tones
+
+
 def _inactive_display_tone(
     matched_source: Optional[str],
     matched_rule_id: Optional[str],
-    b1_applied_tier: Dict[str, str],
+    penalty_tones: Dict[str, str],
     harmful_severity: Optional[str] = None,
 ) -> str:
     """Penalty-aware dot tone for an 'Other ingredients' row.
@@ -1186,9 +1221,9 @@ def _inactive_display_tone(
     to MCC for display but is never penalized → green, while disclosed
     maltodextrin costs 0.5 → light orange).
 
-    ``b1_applied_tier`` is the scorer's per-additive applied tier keyed by
-    additive id (== ``matched_rule_id`` for harmful rows). The applied tier is
-    authoritative when present. When B1 missed a resolver-only moderate/high
+    ``penalty_tones`` is derived from the scorer's inactive-penalty ledger and
+    keyed by additive id (== ``matched_rule_id`` for harmful rows). The applied
+    penalty is authoritative when present. When B1 missed a resolver-only moderate/high
     concern, ``harmful_severity`` supplies a safety floor so green still means
     "no penalty AND no safety/regulatory concern". Low unpenalized excipients
     remain green. banned_recalled rows floor at red regardless because B0 (not
@@ -1196,13 +1231,9 @@ def _inactive_display_tone(
     """
     if safe_str(matched_source) == "banned_recalled":
         return "red"
-    tier = b1_applied_tier.get(safe_str(matched_rule_id) or "")
-    if tier in ("high", "critical"):
-        return "red"
-    if tier == "moderate":
-        return "dark_orange"
-    if tier == "low":
-        return "light_orange"
+    tone = penalty_tones.get(safe_str(matched_rule_id) or "")
+    if tone in {"red", "dark_orange", "light_orange", "green"}:
+        return tone
     if safe_str(matched_source) == "harmful_additives":
         fallback_tier = safe_str(harmful_severity).lower()
         if fallback_tier in ("high", "critical"):
@@ -4006,6 +4037,19 @@ def _build_canonical_label_ledger(
                     "form_display_state": _ledger_form_state(source, analysis),
                     "identity_integrity_state": identity_state,
                     "display_form_label": analysis.get("display_form_label"),
+                    # Analysis annotations remain namespaced so the label
+                    # ledger stays authoritative for identity, order, and
+                    # exact printed amounts.
+                    "standard_name": analysis.get("standard_name"),
+                    "bio_score": safe_float(analysis.get("bio_score")),
+                    "quantity": safe_float(analysis.get("quantity")),
+                    "unit": safe_str(analysis.get("unit")),
+                    "below_clinical_dose": json_bool(
+                        analysis.get("below_clinical_dose")
+                    ),
+                    "is_safety_concern": json_bool(
+                        analysis.get("is_safety_concern")
+                    ),
                 }
                 if score_included and analysis is not None
                 else None
@@ -5859,6 +5903,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         )
         ingredients.append({
             "raw_source_text": raw,
+            "raw_source_path": (
+                ing.get("raw_source_path") or m.get("raw_source_path")
+            ),
             "name": name,
             "standardName": standard_name,
             "normalized_key": safe_str(ing.get("normalized_key")),
@@ -5876,6 +5923,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "form_match_status": form_contract["form_match_status"],
             "category": safe_str(m.get("category")),
             "bio_score": safe_float(m.get("bio_score")),
+            "below_clinical_dose": json_bool(
+                ing.get("below_clinical_dose")
+                or m.get("below_clinical_dose")
+            ),
             "natural": bool(m.get("natural")),
             "score": safe_float(m.get("score")),
             "notes": safe_str(m.get("notes")),
@@ -5998,16 +6049,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # the full architectural rationale.
     inactive_resolver = _get_shared_inactive_resolver()
     inactive = []
-    # Per-additive B1 applied-penalty tier (post-exemption) stashed by the scorer.
-    # Drives display_tone so the dot reflects the penalty actually applied.
-    # Emit display_tone ONLY when the scorer stash is present: a build over stale
-    # scored output (no stash) would otherwise mis-green real additives (e.g.
-    # titanium dioxide). Absent stash → omit display_tone so Flutter falls back to
-    # severity_status (safe, prior behavior).
-    _has_b1_tier = isinstance(scored, dict) and "_inactive_b1_applied_tier" in scored
-    _b1_applied_tier = scored.get("_inactive_b1_applied_tier") if _has_b1_tier else {}
-    if not isinstance(_b1_applied_tier, dict):
-        _b1_applied_tier = {}
+    # Per-additive penalty outcome from the scorer-owned B1 inactive ledger.
+    # When the field is absent (stale score artifact), leave display_tone null so
+    # Flutter uses its conservative severity fallback instead of guessing green.
+    _has_penalty_contract = (
+        isinstance(scored, dict) and "_v4_inactive_penalty_details" in scored
+    )
+    _penalty_tones = _inactive_penalty_tones(scored)
     # Sprint E1.2.4 reconciliation (2026-05-14):
     # Count entries that were intentionally dropped here via the Phase 4a
     # label-descriptor / active-only filter. The downstream validator
@@ -6105,10 +6153,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 _inactive_display_tone(
                     res.matched_source,
                     res.matched_rule_id,
-                    _b1_applied_tier,
+                    _penalty_tones,
                     harmful_severity=res.harmful_severity,
                 )
-                if _has_b1_tier
+                if _has_penalty_contract
                 else None
             ),
             "is_safety_concern": res.is_safety_concern,

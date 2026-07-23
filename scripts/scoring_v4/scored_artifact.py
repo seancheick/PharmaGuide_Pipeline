@@ -42,6 +42,16 @@ def _config_fingerprint(provenance: Dict[str, Any]) -> str | None:
     return json.dumps(versions, sort_keys=True, ensure_ascii=False)
 
 
+def _inactive_penalty_details(module_breakdown: Any) -> list[Dict[str, Any]]:
+    dimensions = _safe_dict(_safe_dict(module_breakdown).get("dimensions"))
+    formulation = _safe_dict(dimensions.get("formulation"))
+    metadata = _safe_dict(formulation.get("metadata"))
+    raw_details = metadata.get("inactive_penalty_details")
+    if not isinstance(raw_details, list):
+        return []
+    return [dict(item) for item in raw_details if isinstance(item, dict)]
+
+
 def _public_verdict(v4: Dict[str, Any], mapped_coverage: float) -> str:
     """Resolve public verdict precedence, including the data-trust floor."""
     status = str(v4.get("quality_score_status") or "")
@@ -86,6 +96,7 @@ def assemble_scored_artifact(
     safety_gate = _safe_dict(breakdown.get("safety_gate"))
     completeness_gate = _safe_dict(breakdown.get("completeness_gate"))
     provenance = _safe_dict(breakdown.get("provenance"))
+    module_breakdown = breakdown.get("module")
 
     gate_coverage = completeness_gate.get("mapped_coverage")
     try:
@@ -177,7 +188,10 @@ def assemble_scored_artifact(
         "_v4_suppressed_reason": v4.get("quality_score_suppressed_reason"),
         "_v4_raw_score_100": v4.get("raw_score_v4_100"),
         "_v4_module": v4.get("v4_module"),
-        "_v4_module_breakdown": breakdown.get("module"),
+        "_v4_module_breakdown": module_breakdown,
+        "_v4_inactive_penalty_details": _inactive_penalty_details(
+            module_breakdown
+        ),
         "_v4_confidence": v4.get("v4_confidence"),
         "_v4_confidence_detail": breakdown.get("confidence"),
         "_v4_quality_version": v4.get("quality_score_version"),

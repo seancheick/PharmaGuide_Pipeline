@@ -12,6 +12,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 from scoring_v4 import scored_artifact  # noqa: E402
+from scoring_v4.modules import generic_formulation  # noqa: E402
 from build_final_db import validate_export_contract  # noqa: E402
 
 
@@ -137,6 +138,90 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     assert not any("v4 quality_score_status" in issue for issue in issues)
     assert not any("six v4 pillars" in issue for issue in issues)
     assert not any("mapped_coverage" in issue for issue in issues)
+
+
+def test_b1_inactive_penalty_details_follow_the_scoring_decision() -> None:
+    product = {
+        "contaminant_data": {
+            "harmful_additives": {
+                "additives": [
+                    {
+                        "additive_id": "ADD_LOW",
+                        "severity": "low",
+                        "source_section": "inactive",
+                    },
+                    {
+                        "additive_id": "ADD_MODERATE",
+                        "severity": "moderate",
+                        "source_section": "inactive",
+                    },
+                    {
+                        "additive_id": "ADD_MODERATE",
+                        "severity": "low",
+                        "source_section": "inactive",
+                    },
+                    {
+                        "additive_id": "ADD_ACTIVE_LOW",
+                        "severity": "low",
+                        "source_section": "active",
+                    },
+                    {
+                        "additive_id": "ADD_ACTIVE_HIGH",
+                        "severity": "high",
+                        "source_section": "active",
+                    },
+                ]
+            }
+        }
+    }
+
+    detail = generic_formulation.shared_formulation_penalty_detail(product)
+
+    assert detail["penalties"]["B1_harmful_additives"] == -5.5
+    assert detail["metadata"]["inactive_penalty_details"] == [
+        {
+            "matched_rule_id": "ADD_LOW",
+            "penalty_tier": "low",
+            "penalty_applied": 0.5,
+        },
+        {
+            "matched_rule_id": "ADD_MODERATE",
+            "penalty_tier": "moderate",
+            "penalty_applied": 2.0,
+        },
+    ]
+
+
+def test_scored_artifact_exports_inactive_penalty_details(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    v4 = _canned_v4()
+    v4["v4_breakdown"]["module"] = {
+        "dimensions": {
+            "formulation": {
+                "metadata": {
+                    "inactive_penalty_details": [
+                        {
+                            "matched_rule_id": "ADD_MALTODEXTRIN",
+                            "penalty_tier": "low",
+                            "penalty_applied": 0.5,
+                        }
+                    ]
+                }
+            }
+        }
+    }
+    monkeypatch.setattr(scored_artifact, "score_product_v4", lambda _product: v4)
+
+    artifact = scored_artifact.build_scored_artifact(_product())
+
+    assert artifact["_v4_inactive_penalty_details"] == [
+        {
+            "matched_rule_id": "ADD_MALTODEXTRIN",
+            "penalty_tier": "low",
+            "penalty_applied": 0.5,
+        }
+    ]
 
 
 def test_build_scored_artifact_rejects_non_product_input() -> None:

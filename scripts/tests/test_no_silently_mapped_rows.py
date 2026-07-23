@@ -155,6 +155,40 @@ def _iter_cleaned_rows():
                             yield brand, pid, section, ing
 
 
+@pytest.fixture(scope="module")
+def corpus_row_audit() -> dict:
+    """Scan active rows once and share the two contract audit results."""
+    offenders: Dict[str, int] = {}
+    mismatches: List[str] = []
+    total_scanned = 0
+
+    for brand, pid, section, ing in _iter_cleaned_rows():
+        if section != "activeIngredients":
+            continue
+        total_scanned += 1
+
+        if ing.get("mapped") and ing.get("canonical_id") is None:
+            name = ing.get("raw_source_text") or ing.get("name") or "?"
+            offenders[name] = offenders.get(name, 0) + 1
+
+        cid = ing.get("canonical_id")
+        src = ing.get("canonical_source_db")
+        if cid is None and src not in (None, "unmapped"):
+            mismatches.append(
+                f"[{brand} {pid}] cid=None but src={src!r} — row={ing.get('raw_source_text')!r}"
+            )
+        elif cid is not None and src == "unmapped":
+            mismatches.append(
+                f"[{brand} {pid}] cid={cid!r} but src='unmapped' — row={ing.get('raw_source_text')!r}"
+            )
+
+    return {
+        "total_scanned": total_scanned,
+        "offenders": offenders,
+        "mismatches": mismatches,
+    }
+
+
 class TestBrandWideNoSilentlyMappedRows:
     """
     Brand-wide scan. If ANY cleaned row in ANY brand's output has
@@ -175,21 +209,14 @@ class TestBrandWideNoSilentlyMappedRows:
     Skipped entirely when no cleaned output exists.
     """
 
-    def test_zero_silently_mapped_active_rows(self) -> None:
+    def test_zero_silently_mapped_active_rows(self, corpus_row_audit: dict) -> None:
         import os
         enforce = os.environ.get("PG_ENFORCE_CLEANER_CONTRACT") == "1"
         if not PRODUCTS_ROOT.exists():
             pytest.skip("No pipeline output directory present")
 
-        offenders: Dict[str, int] = {}
-        total_scanned = 0
-        for brand, pid, section, ing in _iter_cleaned_rows():
-            if section != "activeIngredients":
-                continue
-            total_scanned += 1
-            if ing.get("mapped") and ing.get("canonical_id") is None:
-                name = ing.get("raw_source_text") or ing.get("name") or "?"
-                offenders[name] = offenders.get(name, 0) + 1
+        offenders = corpus_row_audit["offenders"]
+        total_scanned = corpus_row_audit["total_scanned"]
 
         if total_scanned == 0:
             pytest.skip("No cleaned batches present yet")
@@ -215,7 +242,9 @@ class TestBrandWideNoSilentlyMappedRows:
               "the cleaner (scripts/clean_dsld_data.py) to regenerate cleaned output."
         )
 
-    def test_canonical_source_db_matches_canonical_presence(self) -> None:
+    def test_canonical_source_db_matches_canonical_presence(
+        self, corpus_row_audit: dict
+    ) -> None:
         """
         Secondary invariant: canonical_source_db='unmapped' iff canonical_id is None.
         Catches the inverse mistake (canonical_id set but source='unmapped' or vice versa).
@@ -223,22 +252,8 @@ class TestBrandWideNoSilentlyMappedRows:
         if not PRODUCTS_ROOT.exists():
             pytest.skip("No pipeline output directory present")
 
-        mismatches: List[str] = []
-        total_scanned = 0
-        for brand, pid, section, ing in _iter_cleaned_rows():
-            if section != "activeIngredients":
-                continue
-            total_scanned += 1
-            cid = ing.get("canonical_id")
-            src = ing.get("canonical_source_db")
-            if cid is None and src not in (None, "unmapped"):
-                mismatches.append(
-                    f"[{brand} {pid}] cid=None but src={src!r} — row={ing.get('raw_source_text')!r}"
-                )
-            elif cid is not None and src == "unmapped":
-                mismatches.append(
-                    f"[{brand} {pid}] cid={cid!r} but src='unmapped' — row={ing.get('raw_source_text')!r}"
-                )
+        mismatches = corpus_row_audit["mismatches"]
+        total_scanned = corpus_row_audit["total_scanned"]
 
         if total_scanned == 0:
             pytest.skip("No cleaned batches present yet")

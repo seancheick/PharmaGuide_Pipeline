@@ -79,7 +79,10 @@ def _drug_class_rule(canonical_id, drug_class_id):
 
 
 def test_niacin_statin_warning_requires_lipid_modifying_nicotinic_acid_dose():
-    """Multivitamin-dose niacinamide is not prescription-strength niacin."""
+    """A multivitamin-dose niacinamide row must not inherit the prescription-
+    strength nicotinic-acid/statin warning. FDA labeling places this interaction
+    at >=1 g/day niacin, and the rule's own mechanism is explicitly high-dose.
+    """
     rule = _drug_class_rule("vitamin_b3_niacin", "statins")
     assert rule is not None
     assert rule["materiality"] == "dose_dependent"
