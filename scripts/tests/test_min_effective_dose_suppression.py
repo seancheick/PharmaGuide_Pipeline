@@ -68,6 +68,48 @@ def _condition_floor(canonical_id, condition_id):
     return None
 
 
+def _drug_class_rule(canonical_id, drug_class_id):
+    for rule in RULES:
+        if (rule.get("subject_ref") or {}).get("canonical_id") != canonical_id:
+            continue
+        for drug_rule in rule.get("drug_class_rules") or []:
+            if drug_rule.get("drug_class_id") == drug_class_id:
+                return drug_rule
+    return None
+
+
+def test_niacin_statin_warning_requires_lipid_modifying_nicotinic_acid_dose():
+    """Multivitamin-dose niacinamide is not prescription-strength niacin."""
+    rule = _drug_class_rule("vitamin_b3_niacin", "statins")
+    assert rule is not None
+    assert rule["materiality"] == "dose_dependent"
+    assert rule["alert_body"] == (
+        "High-dose nicotinic acid (1,000 mg/day or more) can increase "
+        "muscle-injury risk with statins. If you take a statin, use it only "
+        "with prescriber guidance and report muscle pain or weakness."
+    )
+    assert rule["min_effective_dose"] == {
+        "value": 1000,
+        "unit": "mg",
+        "basis": "per_day",
+        "form_scope": ["nicotinic acid"],
+        "confidence": "high",
+        "confidence_basis": "regulatory_label_cutoff",
+        "source": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2009/020381s039s041lbl.pdf",
+        "rationale": (
+            "FDA NIASPAN labeling cautions about statin-associated "
+            "myopathy/rhabdomyolysis at niacin doses >=1 g/day. This is a "
+            "lipid-modifying nicotinic-acid interaction, not a presence-only "
+            "warning for multivitamin-dose niacinamide."
+        ),
+        "consumer_disposition_if_met": "review",
+        "consumer_disposition_if_not_met": "suppress",
+        "amount_missing_disposition": "suppress",
+        "unknown_form_disposition": "suppress",
+        "conversion_failure_policy": "release_block",
+    }
+
+
 def test_thyroid_mineral_floors_restore_retired_app_boundaries():
     """Selenium/iodine thyroid gates moved out of Flutter and into the emitted
     pipeline floor contract. Below-floor warnings suppress; missing dose still
@@ -178,11 +220,85 @@ def test_unknown_basis_fails_open():
     assert e._evaluate_min_effective_dose(typo, _ing(9999), 1.0) is None
 
 
+def test_floor_decision_uses_three_axes_and_compact_recomputable_trace():
+    e = SupplementEnricher()
+    floor = {
+        "value": 1000,
+        "unit": "mg",
+        "basis": "per_day",
+        "form_scope": ["nicotinic acid"],
+        "consumer_disposition_if_met": "review",
+        "consumer_disposition_if_not_met": "suppress",
+        "amount_missing_disposition": "suppress",
+        "unknown_form_disposition": "suppress",
+        "conversion_failure_policy": "release_block",
+    }
+
+    decision = e._evaluate_min_effective_dose_decision(
+        floor,
+        _ing(20, "nicotinic acid"),
+        1.0,
+        "caution",
+    )
+
+    assert decision["clinical_severity"] == "caution"
+    assert decision["evaluation_status"] == "below_threshold"
+    assert decision["consumer_disposition"] == "suppress"
+    assert decision["release_blocking"] is False
+    assert decision["dose_evaluation"] == {
+        "observed_amount": 20.0,
+        "observed_unit": "mg",
+        "serving_multiplier": 1.0,
+        "daily_amount": 20.0,
+        "daily_unit": "mg",
+        "converted_amount": 20.0,
+        "threshold": 1000.0,
+        "threshold_unit": "mg",
+        "comparator": ">=",
+        "conversion_method": "identity",
+        "dose_source": "suggested_daily_serving",
+        "form_context": "nicotinic acid",
+    }
+
+
+def test_floor_decision_does_not_turn_unknown_form_into_warning():
+    e = SupplementEnricher()
+    floor = {
+        "value": 1000,
+        "unit": "mg",
+        "basis": "per_day",
+        "form_scope": ["nicotinic acid"],
+        "unknown_form_disposition": "suppress",
+    }
+
+    decision = e._evaluate_min_effective_dose_decision(
+        floor,
+        _ing(20, "niacin", form_id="niacin_unspecified"),
+        1.0,
+        "caution",
+    )
+
+    assert decision["clinical_severity"] == "caution"
+    assert decision["evaluation_status"] == "form_unknown"
+    assert decision["consumer_disposition"] == "suppress"
+    assert decision["dose_evaluation"] is None
+
+
+def test_floor_decision_has_no_result_when_no_floor_rule_applies():
+    e = SupplementEnricher()
+    assert e._evaluate_min_effective_dose_decision(
+        None,
+        _ing(20),
+        1.0,
+        "caution",
+    ) is None
+
+
 # --------------------------------------------------------------------------
 # build_final_db emission of the new axes onto the blob warning
 # --------------------------------------------------------------------------
 
-def _enriched_with_niacin_alert(dose_floor_status):
+def _enriched_with_niacin_alert(dose_floor_status, dose_decision=None):
     return {
         "dsld_id": "TEST_DIAB01",
         "product_name": "Test Multivitamin",
@@ -220,6 +336,7 @@ def _enriched_with_niacin_alert(dose_floor_status):
                             "materiality": "dose_dependent",
                             "min_effective_dose": FLOOR,
                             "dose_floor_status": dose_floor_status,
+                            "dose_decision": dose_decision,
                             "profile_gate": {"gate_type": "condition"},
                         }
                     ],
@@ -285,6 +402,64 @@ def test_blob_floor_status_none_when_unknown():
     w = _niacin_warning(blob)
     assert w is not None
     assert w["dose_floor_status"] is None
+
+
+def test_blob_emits_only_compact_dose_decision_provenance():
+    decision = {
+        "clinical_severity": "caution",
+        "evaluation_status": "below_threshold",
+        "consumer_disposition": "suppress",
+        "release_blocking": False,
+        "decision_rule": {
+            "basis": "per_day",
+            "comparator": ">=",
+            "threshold": 1000.0,
+            "threshold_unit": "mg",
+            "consumer_disposition_if_met": "review",
+            "consumer_disposition_if_not_met": "suppress",
+        },
+        "dose_evaluation": {
+            "observed_amount": 20.0,
+            "observed_unit": "mg",
+            "serving_multiplier": 1.0,
+            "daily_amount": 20.0,
+            "daily_unit": "mg",
+            "converted_amount": 20.0,
+            "threshold": 1000.0,
+            "threshold_unit": "mg",
+            "comparator": ">=",
+            "conversion_method": "identity",
+            "dose_source": "suggested_daily_serving",
+            "form_context": "nicotinic acid",
+        },
+        "thresholds_checked": [{"internal_only": True}],
+    }
+    blob = build_detail_blob(
+        _enriched_with_niacin_alert("below", dose_decision=decision),
+        _scored(),
+    )
+    emitted = _niacin_warning(blob)["dose_decision"]
+
+    assert emitted == {
+        "clinical_severity": "caution",
+        "evaluation_status": "below_threshold",
+        "consumer_disposition": "suppress",
+        "release_blocking": False,
+        "evaluated_daily_amount": 20.0,
+        "evaluated_unit": "mg",
+        "normalized_per_serving_amount": 20.0,
+        "normalized_per_serving_unit": "mg",
+        "evaluated_serving_multiplier": 1.0,
+        "threshold": 1000.0,
+        "threshold_unit": "mg",
+        "comparator": ">=",
+        "conversion_method": "identity",
+        "dose_source": "suggested_daily_serving",
+        "form_context": "nicotinic acid",
+        "decision_rule": decision["decision_rule"],
+    }
+    assert "thresholds_checked" not in emitted
+    assert "dose_evaluation" not in emitted
 
 
 # --------------------------------------------------------------------------

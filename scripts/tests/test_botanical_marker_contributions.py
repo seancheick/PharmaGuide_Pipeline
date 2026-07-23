@@ -30,6 +30,7 @@ REQUIRED_BOTANICALS = {
     "horse_chestnut_seed",
     "japanese_knotweed",
     "marigold",  # Phase 8 — Tagetes erecta source of lutein
+    "green_tea_extract",
 }
 
 EXPECTED_MARKER_MAP = {
@@ -43,6 +44,7 @@ EXPECTED_MARKER_MAP = {
     "horse_chestnut_seed": "aescin",
     "japanese_knotweed": "resveratrol",
     "marigold": "lutein",
+    "green_tea_extract": "egcg",
 }
 
 USDA_FDC_PATTERN = re.compile(r"^USDA_FDC:\d+$")
@@ -58,7 +60,7 @@ def data():
 
 def test_metadata_present(data):
     meta = data.get("_metadata") or {}
-    assert meta.get("schema_version") == "1.0.0"
+    assert meta.get("schema_version") == "1.1.0"
     assert meta.get("total_entries", 0) >= len(REQUIRED_BOTANICALS)
     assert any("USDA" in s for s in meta.get("source_authorities", []))
     assert any("PubMed" in s for s in meta.get("source_authorities", []))
@@ -119,7 +121,7 @@ def test_model_consistency(data, botanical_id):
 
 
 def test_no_orphan_botanicals(data):
-    """Every botanical in data file is one of the 9 in-scope for identity/bioactivity split."""
+    """Every botanical in the data file is pinned by this contract."""
     extras = set(data["botanicals"].keys()) - REQUIRED_BOTANICALS
     assert not extras, (
         f"Unexpected botanical entries: {extras}. If adding new entries, update REQUIRED_BOTANICALS "

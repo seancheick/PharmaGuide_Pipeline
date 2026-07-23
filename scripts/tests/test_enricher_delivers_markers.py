@@ -113,6 +113,35 @@ def test_turmeric_with_95pct_curcuminoids_credits_marker(enricher):
     assert m["estimated_dose_mg"] == pytest.approx(380.0, rel=0.01)
 
 
+def test_green_tea_explicit_egcg_standardization_derives_marker_dose(enricher):
+    """Total extract mass is not EGCG; explicit label math is evaluable."""
+    ing = {
+        "canonical_id": "green_tea_extract",
+        "raw_source_text": "Green Tea Extract standardized to 50% EGCG",
+        "quantity": 800,
+        "unit_normalized": "mg",
+    }
+    markers = enricher._compute_delivers_markers(ing)
+    assert len(markers) == 1
+    marker = markers[0]
+    assert marker["marker_canonical_id"] == "egcg"
+    assert marker["estimation_method"] == "standardization_pct"
+    assert marker["estimated_dose_mg"] == pytest.approx(400.0)
+    assert marker["confidence_scale"] == 1.0
+
+
+def test_green_tea_without_egcg_percentage_never_uses_extract_mass(enricher):
+    ing = {
+        "canonical_id": "green_tea_extract",
+        "raw_source_text": "Green Tea Extract",
+        "quantity": 800,
+        "unit_normalized": "mg",
+    }
+    marker = enricher._compute_delivers_markers(ing)[0]
+    assert marker["estimated_dose_mg"] is None
+    assert marker["estimation_method"] == "none"
+
+
 def test_broccoli_sprout_no_standardization_no_credit(enricher):
     ing = {
         "canonical_id": "broccoli_sprout",

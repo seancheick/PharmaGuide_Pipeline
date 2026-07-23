@@ -1,6 +1,6 @@
 {
   "_metadata": {
-    "schema_version": "1.0.0",
+    "schema_version": "1.1.0",
     "generated_at": "2026-05-11T07:45:38.870845+00:00",
     "generator": "scripts/api_audit/verify_botanical_composition.py --build-baseline",
     "source_authorities": [
@@ -8,7 +8,7 @@
       "PubMed E-utilities (eutils.ncbi.nlm.nih.gov/entrez/eutils)"
     ],
     "policy": "Identity vs Bioactivity Split \u2014 source botanicals only credit marker Section C evidence when (a) label explicitly declares standardization meeting min_standardization_pct_required, or (b) botanical has a default_contribution_mg_per_g with USDA FDC citation.",
-    "total_entries": 10,
+    "total_entries": 11,
     "description": "Maps source-botanical canonicals to the bioactivity markers they may deliver. Used by enricher to compute delivers_markers[] per ingredient when label declares standardization or botanical has a USDA-cited default contribution. Architectural fix for the identity-vs-bioactivity split (canonical_id = label identity, delivers_markers[] = clinical contribution).",
     "purpose": "marker_contribution_reference"
   },
@@ -61,6 +61,30 @@
         }
       ],
       "source_db": "botanical_ingredients"
+    },
+    "green_tea_extract": {
+      "delivers": [
+        {
+          "marker_canonical_id": "egcg",
+          "model": "standardization_required",
+          "min_standardization_pct_required": 0.1,
+          "default_contribution_mg_per_g": null,
+          "evidence_source": "PubMed PMID:23950663 — randomized trial using 800 mg green tea extract explicitly standardized to 45% EGCG.",
+          "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/23950663/",
+          "evidence_id": "PMID:23950663",
+          "evidence_keyword_coverage": 1.0,
+          "fetched_at": "2026-07-22T00:00:00+00:00",
+          "standardization_keywords": [
+            "egcg",
+            "epigallocatechin gallate",
+            "epigallocatechin-3-gallate",
+            "% egcg",
+            "standardized to"
+          ],
+          "notes": "Clinical evaluation may derive EGCG only from a label-declared percentage that clearly applies to the green-tea extract. Total extract mass alone is never treated as EGCG mass."
+        }
+      ],
+      "source_db": "ingredient_quality_map"
     },
     "camu_camu": {
       "delivers": [

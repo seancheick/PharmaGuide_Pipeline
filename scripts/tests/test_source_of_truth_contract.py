@@ -553,6 +553,133 @@ def test_clinical_omega_gate_accepts_taxonomy_scorable_id_evidence(tmp_path):
     assert "PRODUCT_NAME_ONLY_OMEGA3" not in codes
 
 
+def test_clinical_gate_blocks_release_marked_dose_conversion_failure(tmp_path):
+    product_file = tmp_path / "products.json"
+    write_json(
+        product_file,
+        [{
+            "id": "green-tea-marker-canary",
+            "name": "Green Tea Extract 800 mg",
+            "ingredient_quality_data": {"ingredients_scorable": []},
+            "interaction_profile": {
+                "ingredient_alerts": [{
+                    "rule_id": "RULE_EGCG_LIVER",
+                    "ingredient_name": "Green Tea Extract",
+                    "subject_ref": {"canonical_id": "green_tea_extract"},
+                    "condition_hits": [{
+                        "condition_id": "liver_disease",
+                        "dose_decision": {
+                            "clinical_severity": "avoid",
+                            "evaluation_status": "conversion_error",
+                            "consumer_disposition": "suppress",
+                            "release_blocking": True,
+                            "conversion_error": "no_conversion_rule",
+                        },
+                    }],
+                    "drug_class_hits": [],
+                }],
+            },
+        }],
+    )
+    args = argparse.Namespace(
+        enriched_file=[],
+        enriched_dir=[],
+        product_file=[str(product_file)],
+        products_dir=None,
+        dist_dir=None,
+        strict_release=True,
+    )
+
+    findings = audit.audit_clinical(args)
+    blocking = [
+        finding for finding in findings
+        if finding.code == "CLINICAL_DOSE_CONVERSION_RELEASE_BLOCK"
+    ]
+    assert len(blocking) == 1
+    assert "green-tea-marker-canary" in blocking[0].message
+    assert "RULE_EGCG_LIVER" in blocking[0].message
+    assert "no_conversion_rule" in blocking[0].message
+
+
+def test_clinical_gate_rejects_contradictory_dose_decisions(tmp_path):
+    product_file = tmp_path / "products.json"
+    write_json(
+        product_file,
+        [{
+            "id": "dose-contract-canary",
+            "ingredient_quality_data": {"ingredients_scorable": []},
+            "interaction_profile": {
+                "ingredient_alerts": [{
+                    "rule_id": "RULE_CANARY",
+                    "ingredient_name": "Niacin",
+                    "subject_ref": {"canonical_id": "niacin"},
+                    "condition_hits": [{
+                        "condition_id": "heart_disease",
+                        "dose_decision": {
+                            "clinical_severity": "caution",
+                            "evaluation_status": "below_threshold",
+                            "consumer_disposition": "review",
+                            "release_blocking": False,
+                            "decision_rule": {
+                                "consumer_disposition_if_not_met": "suppress",
+                            },
+                        },
+                    }],
+                    "drug_class_hits": [],
+                }],
+            },
+        }],
+    )
+    args = argparse.Namespace(
+        enriched_file=[], enriched_dir=[], product_file=[str(product_file)],
+        products_dir=None, dist_dir=None, strict_release=True,
+    )
+
+    findings = audit.audit_clinical(args)
+    invalid = [
+        finding for finding in findings
+        if finding.code == "CLINICAL_DOSE_DECISION_CONTRACT_INVALID"
+    ]
+    assert len(invalid) == 1
+    assert "below-threshold result cannot use review" in invalid[0].message
+
+
+def test_clinical_gate_requires_explicit_unknown_state_policy(tmp_path):
+    product_file = tmp_path / "products.json"
+    write_json(
+        product_file,
+        [{
+            "id": "unknown-form-canary",
+            "ingredient_quality_data": {"ingredients_scorable": []},
+            "interaction_profile": {
+                "ingredient_alerts": [{
+                    "rule_id": "RULE_FORM_CANARY",
+                    "ingredient_name": "Niacin",
+                    "subject_ref": {"canonical_id": "niacin"},
+                    "condition_hits": [{
+                        "condition_id": "heart_disease",
+                        "dose_decision": {
+                            "clinical_severity": "caution",
+                            "evaluation_status": "form_unknown",
+                            "consumer_disposition": "suppress",
+                            "release_blocking": False,
+                            "decision_rule": {},
+                        },
+                    }],
+                    "drug_class_hits": [],
+                }],
+            },
+        }],
+    )
+    args = argparse.Namespace(
+        enriched_file=[], enriched_dir=[], product_file=[str(product_file)],
+        products_dir=None, dist_dir=None, strict_release=True,
+    )
+
+    codes = {finding.code for finding in audit.audit_clinical(args)}
+    assert "CLINICAL_DOSE_DECISION_CONTRACT_INVALID" in codes
+
+
 def test_shadow_diff_requires_approval_for_taxonomy_verdict_safety_or_coverage_shift(tmp_path):
     old_dir = tmp_path / "old"
     new_dir = tmp_path / "new"

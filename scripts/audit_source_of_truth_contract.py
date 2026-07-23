@@ -934,6 +934,98 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
         for product in products:
             pid = product_identity(product)
 
+            interaction_profile = product.get("interaction_profile")
+            if isinstance(interaction_profile, dict):
+                for alert in interaction_profile.get("ingredient_alerts") or []:
+                    if not isinstance(alert, dict):
+                        continue
+                    rule_id = str(alert.get("rule_id") or "unknown_rule")
+                    ingredient_name = str(
+                        alert.get("ingredient_name") or "unknown ingredient"
+                    )
+                    subject_ref = alert.get("subject_ref")
+                    subject_canonical_id = str(
+                        subject_ref.get("canonical_id")
+                        if isinstance(subject_ref, dict)
+                        else ""
+                    ).strip()
+                    for hit_key in ("condition_hits", "drug_class_hits"):
+                        for hit in alert.get(hit_key) or []:
+                            if not isinstance(hit, dict):
+                                continue
+                            decision = hit.get("dose_decision")
+                            if not isinstance(decision, dict):
+                                continue
+                            target = str(
+                                hit.get("condition_id")
+                                or hit.get("drug_class_id")
+                                or "unknown_target"
+                            )
+                            status = str(decision.get("evaluation_status") or "").strip().lower()
+                            disposition = str(
+                                decision.get("consumer_disposition") or ""
+                            ).strip().lower()
+                            rule = decision.get("decision_rule")
+                            rule = rule if isinstance(rule, dict) else {}
+
+                            contract_error = None
+                            if not subject_canonical_id:
+                                contract_error = (
+                                    "declarative dose result is missing pipeline-owned canonical identity"
+                                )
+                            elif disposition not in {"suppress", "good_to_know", "review", "block"}:
+                                contract_error = f"invalid consumer disposition {disposition or '<missing>'}"
+                            elif status == "below_threshold" and disposition in {"review", "block"}:
+                                contract_error = (
+                                    f"below-threshold result cannot use {disposition} disposition"
+                                )
+                            elif status == "conversion_error" and (
+                                decision.get("release_blocking") is not True
+                                or disposition != "suppress"
+                            ):
+                                contract_error = (
+                                    "conversion error must suppress consumers and block release"
+                                )
+                            elif status == "amount_unknown" and (
+                                str(rule.get("amount_missing_disposition") or "").strip().lower()
+                                != disposition
+                            ):
+                                contract_error = (
+                                    "unknown amount is missing an explicit matching disposition policy"
+                                )
+                            elif status == "form_unknown" and (
+                                str(rule.get("unknown_form_disposition") or "").strip().lower()
+                                != disposition
+                            ):
+                                contract_error = (
+                                    "unknown form is missing an explicit matching disposition policy"
+                                )
+
+                            if contract_error:
+                                findings.append(Finding(
+                                    "CLINICAL_DOSE_DECISION_CONTRACT_INVALID",
+                                    f"{pid}: {rule_id} / {ingredient_name} / {target}: "
+                                    f"{contract_error}.",
+                                    str(file_path),
+                                ))
+
+                            if decision.get("release_blocking") is not True:
+                                continue
+                            error = str(
+                                decision.get("conversion_error")
+                                or decision.get("evaluation_status")
+                                or "unknown_conversion_error"
+                            )
+                            findings.append(Finding(
+                                "CLINICAL_DOSE_CONVERSION_RELEASE_BLOCK",
+                                f"{pid}: {rule_id} cannot evaluate "
+                                f"{ingredient_name} for {target} ({error}); "
+                                "publication is blocked until the pipeline "
+                                "has a deterministic conversion or the rule's "
+                                "unknown-state policy is clinically re-authored.",
+                                str(file_path),
+                            ))
+
             # Strict release mode accepts only the current structured contract.
             # Old artifacts stay readable for inspection (the helpers above fall
             # back explicitly), but they must never satisfy a release gate by

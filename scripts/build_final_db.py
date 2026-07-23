@@ -191,6 +191,47 @@ def safe_dict(value: Any) -> dict:
     return value if isinstance(value, dict) else {}
 
 
+def compact_dose_decision(value: Any) -> Optional[Dict[str, Any]]:
+    """Project an internal dose trace into the shipped decision contract.
+
+    Build artifacts retain evaluator diagnostics such as every attempted
+    threshold and conversion error.  The app receives only the normalized
+    exposure, authored comparison, and the three independent result axes it
+    needs to scale a user's selected quantity without becoming a second
+    clinical or unit-conversion engine.
+    """
+    decision = safe_dict(value)
+    if not decision:
+        return None
+    dose = safe_dict(decision.get("dose_evaluation"))
+    rule = safe_dict(decision.get("decision_rule"))
+    serving_multiplier = safe_float(dose.get("serving_multiplier"))
+    converted_amount = safe_float(dose.get("converted_amount"))
+    per_serving_amount = None
+    if converted_amount is not None and serving_multiplier not in (None, 0):
+        per_serving_amount = converted_amount / serving_multiplier
+
+    compact = {
+        "clinical_severity": safe_str(decision.get("clinical_severity")) or None,
+        "evaluation_status": safe_str(decision.get("evaluation_status")) or None,
+        "consumer_disposition": safe_str(decision.get("consumer_disposition")) or None,
+        "release_blocking": bool(decision.get("release_blocking")),
+        "evaluated_daily_amount": converted_amount,
+        "evaluated_unit": safe_str(dose.get("threshold_unit")) or None,
+        "normalized_per_serving_amount": per_serving_amount,
+        "normalized_per_serving_unit": safe_str(dose.get("threshold_unit")) or None,
+        "evaluated_serving_multiplier": serving_multiplier,
+        "threshold": safe_float(dose.get("threshold")),
+        "threshold_unit": safe_str(dose.get("threshold_unit")) or None,
+        "comparator": safe_str(dose.get("comparator")) or None,
+        "conversion_method": safe_str(dose.get("conversion_method")) or None,
+        "dose_source": safe_str(dose.get("dose_source")) or None,
+        "form_context": safe_str(dose.get("form_context")) or None,
+        "decision_rule": rule or None,
+    }
+    return compact
+
+
 def _first_form_name(forms: Any) -> str:
     """Return the first DSLD-declared form name, e.g. 'Palmitate'.
 
@@ -1900,7 +1941,27 @@ def build_combined_safety_hits(
     combined = []
     for hit in safe_list(base_hits):
         if isinstance(hit, dict):
-            combined.append(hit)
+            projected = dict(hit)
+            # Interaction safety hits are also attached to ingredient rows.
+            # Keep their consumer/audit context, but never duplicate the full
+            # evaluator trace into the shipped blob through this secondary
+            # route. Full traces remain in enriched build artifacts.
+            for bucket_name in ("condition_hits", "drug_class_hits"):
+                compact_hits = []
+                for nested in safe_list(projected.get(bucket_name)):
+                    if not isinstance(nested, dict):
+                        continue
+                    compact_nested = dict(nested)
+                    raw_decision = compact_nested.get("dose_decision")
+                    compact_nested.pop("dose_threshold_evaluation", None)
+                    if raw_decision:
+                        compact_nested["dose_decision"] = compact_dose_decision(
+                            raw_decision
+                        )
+                    compact_hits.append(compact_nested)
+                if bucket_name in projected:
+                    projected[bucket_name] = compact_hits
+            combined.append(projected)
 
     for hit in contaminant_hits:
         combined.append({
@@ -6310,9 +6371,14 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         if not isinstance(alert, dict):
             continue
         ing_name = safe_str(alert.get("ingredient_name"))
+        subject_ref = safe_dict(alert.get("subject_ref"))
+        ingredient_canonical_id = safe_str(subject_ref.get("canonical_id"))
         for ch in safe_list(alert.get("condition_hits")):
             if isinstance(ch, dict):
                 dose_eval = ch.get("dose_threshold_evaluation")
+                dose_decision = compact_dose_decision(
+                    ch.get("dose_decision") or dose_eval
+                )
                 raw_sev = safe_str(ch.get("severity"), "moderate").lower()
                 warning_type = safe_str(ch.get("warning_type"), "interaction").lower()
                 if warning_type not in {"interaction", "diagnostic_interference"}:
@@ -6336,9 +6402,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     "informational_note": ch.get("informational_note"),
                     "condition_id": safe_str(ch.get("condition_id")),
                     "ingredient_name": ing_name,
+                    "ingredient_canonical_id": ingredient_canonical_id or None,
                     "evidence_level": safe_str(ch.get("evidence_level")),
                     "sources": safe_list(ch.get("sources")),
-                    "dose_threshold_evaluation": dose_eval if isinstance(dose_eval, dict) else None,
+                    "dose_threshold_evaluation": None,
+                    "dose_decision": dose_decision,
                     "direction": ch.get("direction"),
                     "materiality": ch.get("materiality"),
                     "min_effective_dose": ch.get("min_effective_dose"),
@@ -6349,6 +6417,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         for dh in safe_list(alert.get("drug_class_hits")):
             if isinstance(dh, dict):
                 dose_eval = dh.get("dose_threshold_evaluation")
+                dose_decision = compact_dose_decision(
+                    dh.get("dose_decision") or dose_eval
+                )
                 raw_sev = safe_str(dh.get("severity"), "moderate").lower()
                 warnings.append({
                     "type": "drug_interaction",
@@ -6367,9 +6438,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     "informational_note": dh.get("informational_note"),
                     "drug_class_id": safe_str(dh.get("drug_class_id")),
                     "ingredient_name": ing_name,
+                    "ingredient_canonical_id": ingredient_canonical_id or None,
                     "evidence_level": safe_str(dh.get("evidence_level")),
                     "sources": safe_list(dh.get("sources")),
-                    "dose_threshold_evaluation": dose_eval if isinstance(dose_eval, dict) else None,
+                    "dose_threshold_evaluation": None,
+                    "dose_decision": dose_decision,
                     "direction": dh.get("direction"),
                     "materiality": dh.get("materiality"),
                     "min_effective_dose": dh.get("min_effective_dose"),

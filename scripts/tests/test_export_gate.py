@@ -29,6 +29,7 @@ from build_final_db import (
     CORE_COLUMN_COUNT,
     EXPORT_REQUIRED_IQD_FIELDS,
     build_core_row,
+    build_combined_safety_hits,
     build_detail_blob,
     build_top_warnings,
     derive_blocking_reason,
@@ -39,6 +40,54 @@ from build_final_db import (
     validate_export_contract,
     write_audit_report,
 )
+
+
+def test_nested_interaction_safety_hits_ship_compact_dose_provenance_only():
+    full_decision = {
+        "clinical_severity": "caution",
+        "evaluation_status": "below_threshold",
+        "consumer_disposition": "suppress",
+        "release_blocking": False,
+        "decision_rule": {
+            "basis": "per_day",
+            "comparator": ">=",
+            "threshold": 1000,
+            "threshold_unit": "mg",
+            "consumer_disposition_if_met": "review",
+            "consumer_disposition_if_not_met": "suppress",
+        },
+        "dose_evaluation": {
+            "observed_amount": 20,
+            "observed_unit": "mg",
+            "serving_multiplier": 1,
+            "converted_amount": 20,
+            "threshold": 1000,
+            "threshold_unit": "mg",
+            "comparator": ">=",
+            "conversion_method": "identity",
+        },
+        "thresholds_checked": [{"internal_only": True}],
+    }
+    hits = build_combined_safety_hits(
+        [{
+            "rule_id": "niacin_statins",
+            "condition_hits": [],
+            "drug_class_hits": [{
+                "drug_class_id": "statins",
+                "dose_threshold_evaluation": {"internal_only": True},
+                "dose_decision": full_decision,
+            }],
+        }],
+        [],
+        [],
+        None,
+    )
+
+    emitted = hits[0]["drug_class_hits"][0]
+    assert "dose_threshold_evaluation" not in emitted
+    assert "thresholds_checked" not in emitted["dose_decision"]
+    assert "dose_evaluation" not in emitted["dose_decision"]
+    assert emitted["dose_decision"]["evaluated_daily_amount"] == 20.0
 
 
 # ─── Fixture Factories ───
@@ -1081,6 +1130,10 @@ class TestInteractionProfileExport:
                 {
                     "ingredient_name": "Vitamin A Palmitate",
                     "standard_name": "Vitamin A",
+                    "subject_ref": {
+                        "db": "ingredient_quality_map",
+                        "canonical_id": "vitamin_a",
+                    },
                     "rule_id": "RULE_VITA_PREGNANCY",
                     "condition_hits": [
                         {
@@ -1105,6 +1158,34 @@ class TestInteractionProfileExport:
                                 }],
                                 "selected_severity": "monitor",
                                 "reason": "dose below threshold",
+                            },
+                            "dose_decision": {
+                                "clinical_severity": "monitor",
+                                "evaluation_status": "below_threshold",
+                                "consumer_disposition": "suppress",
+                                "release_blocking": False,
+                                "decision_rule": {
+                                    "basis": "per_day",
+                                    "comparator": ">",
+                                    "threshold": 3000.0,
+                                    "threshold_unit": "mcg rae",
+                                    "consumer_disposition_if_met": "block",
+                                    "consumer_disposition_if_not_met": "suppress",
+                                },
+                                "dose_evaluation": {
+                                    "observed_amount": 600.0,
+                                    "observed_unit": "mcg rae",
+                                    "serving_multiplier": 1.0,
+                                    "daily_amount": 600.0,
+                                    "daily_unit": "mcg rae",
+                                    "converted_amount": 600.0,
+                                    "threshold": 3000.0,
+                                    "threshold_unit": "mcg rae",
+                                    "comparator": ">",
+                                    "conversion_method": "identity",
+                                    "dose_source": "suggested_daily_serving",
+                                    "form_context": "retinyl palmitate",
+                                },
                             },
                         }
                     ],
@@ -1173,6 +1254,7 @@ class TestInteractionProfileExport:
         assert "pregnancy" in (w.get("condition_ids") or [])
         assert "condition_id" not in w  # legacy key removed
         assert w["ingredient_name"] == "Vitamin A Palmitate"
+        assert w["ingredient_canonical_id"] == "vitamin_a"
         assert w["action"]
 
     def test_interaction_warnings_carry_drug_class_id(self):
@@ -1184,16 +1266,21 @@ class TestInteractionProfileExport:
         assert "retinoids" in (w.get("drug_class_ids") or [])
         assert "drug_class_id" not in w
         assert w["ingredient_name"] == "Vitamin A Palmitate"
+        assert w["ingredient_canonical_id"] == "vitamin_a"
 
-    def test_dose_threshold_evaluation_exported(self):
-        """Dose threshold audit trail must be on interaction warnings."""
+    def test_compact_dose_decision_exported(self):
+        """The app gets the decision contract, not the internal audit trail."""
         blob = build_detail_blob(self._enriched_with_interactions(), _base_scored())
         condition_warnings = [w for w in blob["warnings"] if w["type"] == "interaction"]
         w = condition_warnings[0]
-        assert w["dose_threshold_evaluation"] is not None
-        dte = w["dose_threshold_evaluation"]
-        assert dte["evaluated"] is True
-        assert "thresholds_checked" in dte
+        assert w["dose_threshold_evaluation"] is None
+        decision = w["dose_decision"]
+        assert decision["evaluation_status"] == "below_threshold"
+        assert decision["consumer_disposition"] == "suppress"
+        assert decision["evaluated_daily_amount"] == 600.0
+        assert decision["threshold"] == 3000.0
+        assert decision["threshold_unit"] == "mcg rae"
+        assert "thresholds_checked" not in decision
 
     def test_app_can_filter_warnings_by_user_condition(self):
         """Simulate what the Flutter app does: filter warnings by user conditions."""

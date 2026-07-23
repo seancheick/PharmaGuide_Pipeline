@@ -16607,6 +16607,55 @@ class SupplementEnricherV3:
             }
         return None
 
+    def _derived_marker_interaction_rows(
+        self, ingredient: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """Create analysis-only rows for deterministically quantified markers.
+
+        These rows never enter the label ingredient ledger.  They exist only
+        so a marker-specific clinical rule can evaluate a label-declared
+        standardization (for example, 500 mg turmeric standardized to 95%
+        curcuminoids -> 475 mg curcumin).  Total extract mass, provenance-only
+        markers, keyword-only standardizations, and default-content estimates
+        are deliberately excluded.
+        """
+        source_name = str(
+            ingredient.get("raw_source_text")
+            or ingredient.get("name")
+            or ingredient.get("standard_name")
+            or "source ingredient"
+        ).strip()
+        source_canonical_id = str(ingredient.get("canonical_id") or "").strip()
+        rows: List[Dict[str, Any]] = []
+        for marker in ingredient.get("delivers_markers") or []:
+            if not isinstance(marker, dict):
+                continue
+            if str(marker.get("estimation_method") or "").strip().lower() != "standardization_pct":
+                continue
+            marker_id = str(marker.get("marker_canonical_id") or "").strip()
+            marker_amount = self._to_float_safe(marker.get("estimated_dose_mg"))
+            if not marker_id or marker_amount is None or marker_amount <= 0:
+                continue
+            marker_name = marker_id.replace("_", " ").title()
+            rows.append({
+                "canonical_id": marker_id,
+                "canonical_source_db": "ingredient_quality_map",
+                "raw_source_text": f"{marker_name} (from {source_name})",
+                "name": marker_name,
+                "standard_name": marker_name,
+                "quantity": marker_amount,
+                "unit": "mg",
+                "unit_normalized": "mg",
+                "dose_source": "label_standardization",
+                "marker_derivation": {
+                    "source_canonical_id": source_canonical_id,
+                    "estimation_method": "standardization_pct",
+                    "basis": marker.get("basis"),
+                },
+                "analysis_only": True,
+            })
+        return rows
+
     def _interaction_rule_applies(self, rule: Dict, ingredient: Dict) -> bool:
         form_scope = rule.get("form_scope")
         if form_scope is None:
@@ -16658,15 +16707,28 @@ class SupplementEnricherV3:
 
     def _normalize_threshold_unit(self, unit: Any) -> str:
         raw = str(unit or "").strip()
+        compact = re.sub(r"[\s_]+", "", raw.lower())
+        semantic_unit_map = {
+            "mcgrae": "mcg rae",
+            "mcgdfe": "mcg dfe",
+            "mgdfe": "mg dfe",
+            "mgne": "mg ne",
+        }
+        if compact in semantic_unit_map:
+            return semantic_unit_map[compact]
+        spaced = re.sub(r"[\s_]+", " ", raw.lower()).strip()
+        marker_unit = re.fullmatch(r"(mcg|mg|g)\s+([a-z][a-z0-9 -]*)", spaced)
+        if marker_unit:
+            marker_name = re.sub(r"[\s-]+", " ", marker_unit.group(2)).strip()
+            return f"{marker_unit.group(1)} {marker_name}"
         mass_unit = norm_module.canonicalize_mass_unit(raw)
         if mass_unit in {"mcg", "mg", "g"}:
             return mass_unit
-        text = raw.lower().replace(" ", "").replace("_", "")
         alias_map = {
             "internationalunits": "iu",
             "internationalunit": "iu",
         }
-        return alias_map.get(text, text)
+        return alias_map.get(compact, compact)
 
     def _is_mass_unit(self, unit: str) -> bool:
         return unit in {"mcg", "mg", "g"}
@@ -16712,16 +16774,39 @@ class SupplementEnricherV3:
         ingredient_name: str,
         standard_name: str,
     ) -> Tuple[Optional[float], Optional[str]]:
+        converted, reason, _method = self._convert_amount_to_target_unit_with_evidence(
+            amount=amount,
+            from_unit=from_unit,
+            target_unit=target_unit,
+            ingredient_name=ingredient_name,
+            standard_name=standard_name,
+        )
+        return converted, reason
+
+    def _convert_amount_to_target_unit_with_evidence(
+        self,
+        amount: float,
+        from_unit: str,
+        target_unit: str,
+        ingredient_name: str,
+        standard_name: str,
+    ) -> Tuple[Optional[float], Optional[str], Optional[str]]:
+        """Convert an observed dose into the rule's declared comparison unit.
+
+        The target unit is load-bearing.  Converting only to a nutrient's
+        canonical display unit leaves valid comparisons such as Vitamin D mcg
+        versus an IU threshold unevaluable.
+        """
         src = self._normalize_threshold_unit(from_unit)
         tgt = self._normalize_threshold_unit(target_unit)
         if not src or not tgt:
-            return None, "missing_unit"
+            return None, "missing_unit", None
         if src == tgt:
-            return amount, None
+            return amount, None, "identity"
 
         mass_converted = self._convert_mass(amount, src, tgt)
         if mass_converted is not None:
-            return mass_converted, None
+            return mass_converted, None, "mass_conversion"
 
         # Try nutrient-aware conversion (IU/RAE and nutrient-specific transforms).
         if self.unit_converter:
@@ -16730,17 +16815,26 @@ class SupplementEnricherV3:
                     nutrient=standard_name or ingredient_name,
                     amount=amount,
                     from_unit=src,
-                    ingredient_name=ingredient_name
+                    to_unit=tgt,
+                    ingredient_name=ingredient_name,
                 )
                 conv_value = getattr(conversion, "converted_value", None)
                 conv_unit = self._normalize_threshold_unit(getattr(conversion, "converted_unit", None))
                 conv_success = bool(getattr(conversion, "success", False))
                 if conv_success and conv_value is not None and conv_unit:
                     if conv_unit == tgt:
-                        return float(conv_value), None
+                        return (
+                            float(conv_value),
+                            None,
+                            str(getattr(conversion, "conversion_rule_id", None) or "nutrient_conversion"),
+                        )
                     mass_from_conv = self._convert_mass(float(conv_value), conv_unit, tgt)
                     if mass_from_conv is not None:
-                        return mass_from_conv, None
+                        return (
+                            mass_from_conv,
+                            None,
+                            str(getattr(conversion, "conversion_rule_id", None) or "nutrient_conversion"),
+                        )
             except Exception as e:
                 self.logger.warning(
                     "Dosage conversion exception for ingredient='%s' standard='%s' "
@@ -16752,9 +16846,69 @@ class SupplementEnricherV3:
                     tgt,
                     e,
                 )
-                return None, "conversion_exception"
+                return None, "conversion_exception", None
 
-        return None, "no_conversion_rule"
+        return None, "no_conversion_rule", None
+
+    def _marker_amount_for_threshold_unit(
+        self,
+        ingredient: Dict[str, Any],
+        target_unit: str,
+        serving_multiplier: float,
+    ) -> Tuple[Optional[float], Optional[str]]:
+        """Resolve a semantic marker unit from explicit label evidence only."""
+        match = re.fullmatch(r"(mcg|mg|g)\s+(.+)", target_unit)
+        if not match:
+            return None, None
+        target_mass_unit, marker_name = match.groups()
+        marker_id = re.sub(r"[\s-]+", "_", marker_name.strip().lower())
+        marker_id = {
+            "caffeine_equivalent": "caffeine",
+        }.get(marker_id, marker_id)
+
+        # A label row that is itself the marker is explicit exposure, not an
+        # inferred botanical contribution (for example 120 mg
+        # andrographolide compared with a mg-andrographolide rule).
+        ingredient_id = re.sub(
+            r"[\s-]+",
+            "_",
+            str(ingredient.get("canonical_id") or "").strip().lower(),
+        )
+        if ingredient_id == marker_id:
+            quantity = self._to_float_safe(ingredient.get("quantity"))
+            observed_unit = self._normalize_threshold_unit(ingredient.get("unit"))
+            if quantity is not None and quantity > 0:
+                converted = self._convert_mass(
+                    quantity * serving_multiplier,
+                    observed_unit,
+                    target_mass_unit,
+                )
+                if converted is not None:
+                    return converted, "explicit_marker"
+
+        for marker in ingredient.get("delivers_markers") or []:
+            if not isinstance(marker, dict):
+                continue
+            found_id = re.sub(
+                r"[\s-]+",
+                "_",
+                str(marker.get("marker_canonical_id") or "").strip().lower(),
+            )
+            if found_id != marker_id:
+                continue
+            if str(marker.get("estimation_method") or "").strip().lower() != "standardization_pct":
+                continue
+            estimated_mg = self._to_float_safe(marker.get("estimated_dose_mg"))
+            if estimated_mg is None or estimated_mg <= 0:
+                continue
+            converted = self._convert_mass(
+                estimated_mg * serving_multiplier,
+                "mg",
+                target_mass_unit,
+            )
+            if converted is not None:
+                return converted, "label_standardization"
+        return None, None
 
     def _evaluate_dose_thresholds_for_target(
         self,
@@ -16781,9 +16935,36 @@ class SupplementEnricherV3:
         ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
         standard_name = str(ingredient.get("standard_name") or "")
         if quantity is None or quantity <= 0 or not unit:
+            policy = relevant[0]
             return base_severity, {
                 "evaluated": False,
                 "reason": "missing_or_invalid_dose",
+                "evaluation_status": "amount_unknown",
+                "clinical_severity": base_severity,
+                "consumer_disposition": str(
+                    policy.get("amount_missing_disposition") or "suppress"
+                ).strip().lower(),
+                "release_blocking": False,
+                "dose_evaluation": None,
+                "decision_rule": {
+                    "basis": str(policy.get("basis") or "per_day").strip().lower(),
+                    "comparator": str(policy.get("comparator") or "").strip(),
+                    "threshold": self._to_float_safe(policy.get("value")),
+                    "threshold_unit": self._normalize_threshold_unit(policy.get("unit")),
+                    "consumer_disposition_if_met": str(
+                        policy.get("consumer_disposition_if_met") or "review"
+                    ).strip().lower(),
+                    "consumer_disposition_if_not_met": str(
+                        policy.get("consumer_disposition_if_not_met") or "suppress"
+                    ).strip().lower(),
+                    "amount_missing_disposition": str(
+                        policy.get("amount_missing_disposition") or "suppress"
+                    ).strip().lower(),
+                    "unknown_form_disposition": str(
+                        policy.get("unknown_form_disposition") or "suppress"
+                    ).strip().lower(),
+                    "conversion_failure_policy": "release_block",
+                },
             }
 
         severity_candidate = base_severity
@@ -16792,6 +16973,12 @@ class SupplementEnricherV3:
             "evaluated": False,
             "matched_threshold": False,
             "thresholds_checked": [],
+            "evaluation_status": None,
+            "clinical_severity": base_severity,
+            "consumer_disposition": None,
+            "release_blocking": False,
+            "dose_evaluation": None,
+            "decision_rule": None,
         }
 
         for threshold in relevant:
@@ -16810,14 +16997,35 @@ class SupplementEnricherV3:
                 continue
 
             amount_basis = quantity * (servings_per_day_max if basis == "per_day" else 1.0)
-            converted_amount, convert_reason = self._convert_amount_to_target_unit(
-                amount=amount_basis,
-                from_unit=unit,
-                target_unit=threshold_unit,
-                ingredient_name=ingredient_name,
-                standard_name=standard_name,
+            form_context = str(ingredient.get("matched_form") or "").strip()
+            conversion_name = " ".join(
+                value for value in (ingredient_name, form_context) if value
             )
+            serving_multiplier = (
+                float(servings_per_day_max) if basis == "per_day" else 1.0
+            )
+            converted_amount, conversion_method = self._marker_amount_for_threshold_unit(
+                ingredient,
+                threshold_unit,
+                serving_multiplier,
+            )
+            convert_reason = None
             if converted_amount is None:
+                converted_amount, convert_reason, conversion_method = (
+                    self._convert_amount_to_target_unit_with_evidence(
+                        amount=amount_basis,
+                        from_unit=unit,
+                        target_unit=threshold_unit,
+                        ingredient_name=conversion_name,
+                        standard_name=standard_name,
+                    )
+                )
+            if converted_amount is None:
+                marker_target = re.fullmatch(
+                    r"(mcg|mg|g)\s+(.+)", threshold_unit
+                )
+                if marker_target is not None:
+                    convert_reason = "marker_amount_unknown"
                 details["thresholds_checked"].append({
                     "evaluated": False,
                     "reason": convert_reason or "conversion_failed",
@@ -16853,26 +17061,116 @@ class SupplementEnricherV3:
                 "matched": bool(comparison),
             }
             details["thresholds_checked"].append(checked)
+            details["evaluation_status"] = (
+                "above_threshold" if comparison else "below_threshold"
+            )
+            details["dose_evaluation"] = {
+                "observed_amount": quantity,
+                "observed_unit": unit,
+                "serving_multiplier": float(servings_per_day_max),
+                "daily_amount": quantity * float(servings_per_day_max),
+                "daily_unit": unit,
+                "converted_amount": converted_amount,
+                "threshold": threshold_value,
+                "threshold_unit": threshold_unit,
+                "comparator": comparator,
+                "conversion_method": conversion_method,
+                "dose_source": str(
+                    ingredient.get("dose_source") or "suggested_daily_serving"
+                ),
+                "form_context": form_context or None,
+            }
+            details["decision_rule"] = {
+                "basis": basis,
+                "comparator": comparator,
+                "threshold": threshold_value,
+                "threshold_unit": threshold_unit,
+                "consumer_disposition_if_met": str(
+                    threshold.get("consumer_disposition_if_met") or "review"
+                ).strip().lower(),
+                "consumer_disposition_if_not_met": str(
+                    threshold.get("consumer_disposition_if_not_met") or "suppress"
+                ).strip().lower(),
+                "amount_missing_disposition": str(
+                    threshold.get("amount_missing_disposition") or "suppress"
+                ).strip().lower(),
+                "unknown_form_disposition": str(
+                    threshold.get("unknown_form_disposition") or "suppress"
+                ).strip().lower(),
+                "conversion_failure_policy": "release_block",
+            }
+            details["consumer_disposition"] = str(
+                threshold.get(
+                    "consumer_disposition_if_met"
+                    if comparison
+                    else "consumer_disposition_if_not_met"
+                )
+                or (
+                    "block"
+                    if comparison
+                    and severity_candidate in {"avoid", "contraindicated"}
+                    else "review"
+                    if comparison
+                    else "suppress"
+                )
+            ).strip().lower()
 
             if comparison and severity_if_met:
                 severity_candidate = severity_if_met
                 details["matched_threshold"] = True
                 details["selected_from"] = "severity_if_met"
                 details["selected_severity"] = severity_candidate
+                details["clinical_severity"] = severity_candidate
+                if threshold.get("consumer_disposition_if_met") is None:
+                    details["consumer_disposition"] = (
+                        "block"
+                        if severity_candidate in {"avoid", "contraindicated"}
+                        else "review"
+                    )
                 break
             if (not comparison) and severity_if_not_met:
                 severity_candidate = severity_if_not_met
                 details["selected_from"] = "severity_if_not_met"
                 details["selected_severity"] = severity_candidate
+                details["clinical_severity"] = severity_candidate
 
         details["evaluated"] = evaluated_any
         if not evaluated_any and "selected_severity" not in details:
             details["selected_severity"] = base_severity
             details["selected_from"] = "base_severity"
             details["reason"] = "dose_threshold_not_evaluable"
+            conversion_reasons = [
+                str(item.get("reason") or "")
+                for item in details["thresholds_checked"]
+                if isinstance(item, dict)
+            ]
+            marker_amount_unknown = bool(conversion_reasons) and all(
+                reason == "marker_amount_unknown" for reason in conversion_reasons
+            )
+            details["evaluation_status"] = (
+                "amount_unknown" if marker_amount_unknown else "conversion_error"
+            )
+            details["clinical_severity"] = base_severity
+            details["consumer_disposition"] = "suppress"
+            if marker_amount_unknown:
+                details["reason"] = "specialized_marker_amount_not_disclosed"
+                details["release_blocking"] = False
+            else:
+                details["conversion_error"] = next(
+                    (reason for reason in conversion_reasons if reason),
+                    "conversion_failed",
+                )
+                # A real conversion failure is an engineering/data-contract
+                # defect, not clinical uncertainty. It always blocks release;
+                # specialized-marker non-disclosure is separated above as an
+                # honest amount_unknown state.
+                details["release_blocking"] = True
         elif "selected_severity" not in details:
             details["selected_severity"] = severity_candidate
             details["selected_from"] = "base_severity" if severity_candidate == base_severity else "threshold_not_met_override"
+            details["clinical_severity"] = severity_candidate
+        if details["consumer_disposition"] is None:
+            details["consumer_disposition"] = "suppress"
 
         return severity_candidate, details
 
@@ -16941,6 +17239,146 @@ class SupplementEnricherV3:
         if converted_amount is None:
             return None
         return "below" if converted_amount < floor_value else "at_or_above"
+
+    def _evaluate_min_effective_dose_decision(
+        self,
+        min_effective_dose: Optional[Dict[str, Any]],
+        ingredient: Dict[str, Any],
+        servings_per_day_max: float,
+        clinical_severity: str,
+    ) -> Optional[Dict[str, Any]]:
+        """Return the three-axis consumer decision for an authored dose floor.
+
+        The legacy ``dose_floor_status`` remains available during migration,
+        but it is not allowed to define presentation semantics.  This result
+        keeps clinical severity, evaluation state, and consumer disposition
+        independent and carries the compact inputs Flutter needs to rescale a
+        per-serving exposure without inventing a conversion.
+        """
+        if not isinstance(min_effective_dose, dict) or not min_effective_dose:
+            return None
+
+        severity = str(clinical_severity or "").strip().lower()
+        result: Dict[str, Any] = {
+            "clinical_severity": severity,
+            "evaluation_status": None,
+            "consumer_disposition": None,
+            "release_blocking": False,
+            "dose_evaluation": None,
+            "decision_rule": {
+                "basis": str(min_effective_dose.get("basis") or "per_day").strip().lower(),
+                "comparator": ">=",
+                "threshold": self._to_float_safe(min_effective_dose.get("value")),
+                "threshold_unit": self._normalize_threshold_unit(
+                    min_effective_dose.get("unit")
+                ),
+                "consumer_disposition_if_met": str(
+                    min_effective_dose.get("consumer_disposition_if_met") or "review"
+                ).strip().lower(),
+                "consumer_disposition_if_not_met": str(
+                    min_effective_dose.get("consumer_disposition_if_not_met") or "suppress"
+                ).strip().lower(),
+                "amount_missing_disposition": str(
+                    min_effective_dose.get("amount_missing_disposition") or "suppress"
+                ).strip().lower(),
+                "unknown_form_disposition": str(
+                    min_effective_dose.get("unknown_form_disposition") or "suppress"
+                ).strip().lower(),
+                "conversion_failure_policy": "release_block",
+            },
+        }
+
+        form_scope = min_effective_dose.get("form_scope")
+        if isinstance(form_scope, list) and form_scope:
+            ingredient_form = str(ingredient.get("matched_form") or "").strip().lower()
+            form_id = str(ingredient.get("form_id") or "").strip().lower()
+            form_confirmed = bool(form_id) and "unspecified" not in form_id
+            allowed = {str(value).strip().lower() for value in form_scope if str(value).strip()}
+            if not ingredient_form or not form_confirmed:
+                result["evaluation_status"] = "form_unknown"
+                result["consumer_disposition"] = str(
+                    min_effective_dose.get("unknown_form_disposition") or "suppress"
+                ).strip().lower()
+                return result
+            if ingredient_form not in allowed:
+                result["evaluation_status"] = "excluded_form"
+                result["consumer_disposition"] = "suppress"
+                return result
+
+        quantity = self._to_float_safe(ingredient.get("quantity"))
+        observed_unit = self._normalize_threshold_unit(ingredient.get("unit"))
+        if quantity is None or quantity <= 0 or not observed_unit:
+            result["evaluation_status"] = "amount_unknown"
+            result["consumer_disposition"] = str(
+                min_effective_dose.get("amount_missing_disposition") or "suppress"
+            ).strip().lower()
+            return result
+
+        floor_value = self._to_float_safe(min_effective_dose.get("value"))
+        floor_unit = self._normalize_threshold_unit(min_effective_dose.get("unit"))
+        basis = str(min_effective_dose.get("basis") or "per_day").strip().lower()
+        if floor_value is None or not floor_unit or basis not in {"per_day", "per_serving"}:
+            result["evaluation_status"] = "conversion_error"
+            result["consumer_disposition"] = "suppress"
+            result["release_blocking"] = True
+            result["conversion_error"] = "invalid_floor_definition"
+            return result
+
+        serving_multiplier = float(servings_per_day_max) if basis == "per_day" else 1.0
+        amount_basis = quantity * serving_multiplier
+        ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
+        standard_name = str(ingredient.get("standard_name") or "")
+        converted_amount, reason, conversion_method = (
+            self._convert_amount_to_target_unit_with_evidence(
+                amount=amount_basis,
+                from_unit=observed_unit,
+                target_unit=floor_unit,
+                ingredient_name=ingredient_name,
+                standard_name=standard_name,
+            )
+        )
+        if converted_amount is None:
+            result["evaluation_status"] = "conversion_error"
+            result["consumer_disposition"] = "suppress"
+            result["release_blocking"] = True
+            result["conversion_error"] = reason or "conversion_failed"
+            return result
+
+        threshold_met = converted_amount >= floor_value
+        result["evaluation_status"] = (
+            "above_threshold" if threshold_met else "below_threshold"
+        )
+        result["consumer_disposition"] = str(
+            min_effective_dose.get(
+                "consumer_disposition_if_met"
+                if threshold_met
+                else "consumer_disposition_if_not_met"
+            )
+            or (
+                "block"
+                if threshold_met and severity in {"avoid", "contraindicated"}
+                else "review"
+                if threshold_met
+                else "suppress"
+            )
+        ).strip().lower()
+        result["dose_evaluation"] = {
+            "observed_amount": quantity,
+            "observed_unit": observed_unit,
+            "serving_multiplier": serving_multiplier,
+            "daily_amount": quantity * float(servings_per_day_max),
+            "daily_unit": observed_unit,
+            "converted_amount": converted_amount,
+            "threshold": floor_value,
+            "threshold_unit": floor_unit,
+            "comparator": ">=",
+            "conversion_method": conversion_method,
+            "dose_source": str(
+                ingredient.get("dose_source") or "suggested_daily_serving"
+            ),
+            "form_context": str(ingredient.get("matched_form") or "").strip() or None,
+        }
+        return result
 
     @staticmethod
     def _floor_status_for_emission(
@@ -17044,9 +17482,13 @@ class SupplementEnricherV3:
         for row in ingredients:
             if isinstance(row, dict):
                 all_ingredient_rows.append(("ingredients", row))
+                for marker_row in self._derived_marker_interaction_rows(row):
+                    all_ingredient_rows.append(("derived_marker", marker_row))
         for row in skipped:
             if isinstance(row, dict):
                 all_ingredient_rows.append(("ingredients_skipped", row))
+                for marker_row in self._derived_marker_interaction_rows(row):
+                    all_ingredient_rows.append(("derived_marker", marker_row))
 
         for source_bucket, ingredient in all_ingredient_rows:
             subject = self._derive_interaction_subject_ref(ingredient)
@@ -17095,6 +17537,12 @@ class SupplementEnricherV3:
                         ),
                         severity,
                     )
+                    dose_decision = threshold_eval or self._evaluate_min_effective_dose_decision(
+                        min_effective_dose,
+                        ingredient,
+                        servings_per_day_max,
+                        severity,
+                    )
                     sources = [str(s).strip() for s in (cond_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:
                         source_set.add(src)
@@ -17106,6 +17554,7 @@ class SupplementEnricherV3:
                         "action": cond_rule.get("action"),
                         "sources": sources,
                         "dose_threshold_evaluation": threshold_eval,
+                        "dose_decision": dose_decision,
                         "alert_headline": cond_rule.get("alert_headline"),
                         "alert_body": cond_rule.get("alert_body"),
                         "informational_note": cond_rule.get("informational_note"),
@@ -17167,6 +17616,12 @@ class SupplementEnricherV3:
                         ),
                         severity,
                     )
+                    dose_decision = threshold_eval or self._evaluate_min_effective_dose_decision(
+                        min_effective_dose,
+                        ingredient,
+                        servings_per_day_max,
+                        severity,
+                    )
                     sources = [str(s).strip() for s in (drug_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:
                         source_set.add(src)
@@ -17178,6 +17633,7 @@ class SupplementEnricherV3:
                         "action": drug_rule.get("action"),
                         "sources": sources,
                         "dose_threshold_evaluation": threshold_eval,
+                        "dose_decision": dose_decision,
                         "alert_headline": drug_rule.get("alert_headline"),
                         "alert_body": drug_rule.get("alert_body"),
                         "informational_note": drug_rule.get("informational_note"),
