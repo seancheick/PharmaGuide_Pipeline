@@ -254,6 +254,11 @@ class TestDepletionDataQuality:
         expected = {
             "DEP_ANTICOAGULANTS_VITAMINK": "functional_antagonism",
             "DEP_SSRIS_SODIUM": "monitoring_stability",
+            # fix_sprint_02: no reliable evidence corticosteroids directly
+            # deplete vitamin D (reports are confounded by illness/sun
+            # exposure); the real, guideline-backed signal is bone-health
+            # monitoring during prolonged systemic therapy.
+            "DEP_CORTICOSTEROIDS_VITAMIND": "monitoring_stability",
             "DEP_LEVOTHYROXINE_CALCIUM": "supplement_interaction",
             "DEP_LEVOTHYROXINE_IRON": "supplement_interaction",
             "DEP_STIMULANTS_VITAMINC": "supplement_interaction",
