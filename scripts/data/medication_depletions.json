@@ -96,7 +96,10 @@
       "acknowledgement_note": "You're taking CoQ10 — a common and reasonable addition for people on statins.",
       "monitoring_tip_short": "Consider mentioning any muscle symptoms at your next visit; this often guides next steps.",
       "adequacy_threshold_mg": 100,
-      "food_sources_short": "Dietary CoQ10 is minimal — organ meats and fatty fish contain small amounts, but a supplement is usually the practical route."
+      "food_sources_short": "Dietary CoQ10 is minimal — organ meats and fatty fish contain small amounts, but a supplement is usually the practical route.",
+      "citation_review_status": "verified",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_STATINS_VITAMIND",
@@ -167,7 +170,10 @@
       "acknowledgement_note": "You're taking B12 — a helpful way to support levels while using acid-reducing medication.",
       "monitoring_tip_short": "Consider asking about a B12 check if you've been using these medications long-term.",
       "adequacy_threshold_mcg": 250,
-      "food_sources_short": "Because these medications can limit B12 absorption, food sources may not be enough on their own — a supplement is often more reliable."
+      "food_sources_short": "Because these medications can limit B12 absorption, food sources may not be enough on their own — a supplement is often more reliable.",
+      "citation_review_status": "needs_revision",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_ANTACIDS_MAGNESIUM",
@@ -205,7 +211,10 @@
       "acknowledgement_note": "Good — your magnesium intake supports maintaining levels while using this medication.",
       "monitoring_tip_short": "Consider checking magnesium if you've been on this medication long-term.",
       "adequacy_threshold_mg": 200,
-      "food_sources_short": "Food sources of magnesium include leafy greens, nuts, seeds, whole grains, beans, and dark chocolate."
+      "food_sources_short": "Food sources of magnesium include leafy greens, nuts, seeds, whole grains, beans, and dark chocolate.",
+      "citation_review_status": "needs_revision",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_ANTACIDS_CALCIUM",
@@ -380,7 +389,10 @@
       "acknowledgement_note": "Nice — you're taking B12, which aligns with guidance for long-term metformin use.",
       "monitoring_tip_short": "Consider checking B12 levels every 2-3 years; easy to review at a routine visit.",
       "adequacy_threshold_mcg": 500,
-      "food_sources_short": "Because metformin reduces B12 absorption, food sources may not be enough on their own — a supplement is often more reliable."
+      "food_sources_short": "Because metformin reduces B12 absorption, food sources may not be enough on their own — a supplement is often more reliable.",
+      "citation_review_status": "verified",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_METFORMIN_FOLATE",
@@ -681,7 +693,10 @@
       "alert_body": "Certain diuretics increase potassium loss through urine. With ongoing use over weeks to months, levels may gradually decline.",
       "acknowledgement_note": "Good — potassium is typically monitored closely with these medications, and your care plan helps keep levels on track.",
       "monitoring_tip_short": "Ask about periodic potassium checks; this is a standard part of follow-up.",
-      "food_sources_short": "Food sources of potassium include bananas, oranges, potatoes, beans, yogurt, and tomatoes."
+      "food_sources_short": "Food sources of potassium include bananas, oranges, potatoes, beans, yogurt, and tomatoes.",
+      "citation_review_status": "needs_revision",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_DIURETICS_MAGNESIUM",
@@ -705,8 +720,13 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "Altura BM, Altura BT. New perspectives on the role of magnesium in the pathophysiology of the cardiovascular system. Magnesium. 1985",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/3003511/"
+          "label": "Ellison DH. Divalent cation transport by the distal nephron. Am J Physiol Renal Physiol. 2000;279(4):F616-25",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/10997911/"
+        },
+        {
+          "source_type": "reference",
+          "label": "Dai LJ et al. Cellular mechanisms of chlorothiazide and cellular potassium depletion on Mg2+ uptake in distal convoluted tubule cells. Kidney Int. 1997;51(4):1008-17",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9083264/"
         }
       ],
       "alert_headline": "Can lower magnesium with regular use",
@@ -714,7 +734,10 @@
       "acknowledgement_note": "Good — your magnesium intake supports steady levels while on diuretic therapy.",
       "monitoring_tip_short": "Ask about periodic magnesium checks alongside your potassium tests.",
       "adequacy_threshold_mg": 200,
-      "food_sources_short": "Food sources of magnesium include leafy greens, nuts, seeds, whole grains, beans, and dark chocolate."
+      "food_sources_short": "Food sources of magnesium include leafy greens, nuts, seeds, whole grains, beans, and dark chocolate.",
+      "citation_review_status": "needs_revision",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_DIURETICS_ZINC",
@@ -879,7 +902,10 @@
       "acknowledgement_note": "Good — calcium is part of standard support for long-term corticosteroid use.",
       "monitoring_tip_short": "Consider discussing bone health and screening if use continues over time.",
       "adequacy_threshold_mg": 500,
-      "food_sources_short": "Food sources of calcium include dairy products, fortified plant milks, leafy greens, almonds, and canned sardines or salmon with bones."
+      "food_sources_short": "Food sources of calcium include dairy products, fortified plant milks, leafy greens, almonds, and canned sardines or salmon with bones.",
+      "citation_review_status": "verified",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_CORTICOSTEROIDS_VITAMIND",
@@ -912,7 +938,10 @@
       "acknowledgement_note": "Good — vitamin D intake is part of standard support for long-term corticosteroid use.",
       "monitoring_tip_short": "Consider a 25-OH-vitamin D check; your clinician can guide target levels.",
       "adequacy_threshold_mcg": 25,
-      "food_sources_short": "Food sources of vitamin D include fatty fish, egg yolks, fortified milk and plant milks, and fortified cereals."
+      "food_sources_short": "Food sources of vitamin D include fatty fish, egg yolks, fortified milk and plant milks, and fortified cereals.",
+      "citation_review_status": "needs_revision",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_CORTICOSTEROIDS_POTASSIUM",
@@ -1206,7 +1235,10 @@
       "acknowledgement_note": "Good — vitamin D intake aligns with guidance for long-term seizure-medication use.",
       "monitoring_tip_short": "Consider asking for a 25-OH-D check; your neurologist can guide dosing.",
       "adequacy_threshold_mcg": 25,
-      "food_sources_short": "Food sources of vitamin D include fatty fish, egg yolks, fortified milk and plant milks, and fortified cereals."
+      "food_sources_short": "Food sources of vitamin D include fatty fish, egg yolks, fortified milk and plant milks, and fortified cereals.",
+      "citation_review_status": "needs_revision",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_ANTICONVULSANTS_CALCIUM",
@@ -1691,8 +1723,13 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "Haugen BR. Drugs that suppress TSH or cause central hypothyroidism. Best Pract Res Clin Endocrinol Metab. 2009",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/19174283/"
+          "label": "Singh N et al. Effect of calcium carbonate on the absorption of levothyroxine. JAMA. 2000;283(21):2822-5",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/10838651/"
+        },
+        {
+          "source_type": "reference",
+          "label": "Singh N et al. The acute effect of calcium carbonate on the intestinal absorption of levothyroxine. Thyroid. 2001;11(10):967-71",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11716045/"
         }
       ],
       "alert_headline": "Calcium can reduce thyroid-med absorption",
@@ -1700,7 +1737,10 @@
       "acknowledgement_note": "Good — calcium intake supports bone health; timing separately keeps your thyroid dose steady.",
       "monitoring_tip_short": "Consider taking levothyroxine at least 4 hours apart from calcium-rich meals or supplements.",
       "adequacy_threshold_mg": 500,
-      "food_sources_short": "Food sources of calcium include dairy, fortified plant milks, leafy greens, almonds, and canned sardines or salmon with bones."
+      "food_sources_short": "Food sources of calcium include dairy, fortified plant milks, leafy greens, almonds, and canned sardines or salmon with bones.",
+      "citation_review_status": "needs_revision",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_LEVOTHYROXINE_IRON",
@@ -1733,7 +1773,10 @@
       "acknowledgement_note": "Good — iron intake supports overall balance; timing separately keeps your thyroid dose steady.",
       "monitoring_tip_short": "Consider taking iron at least 4 hours apart from your levothyroxine dose.",
       "adequacy_threshold_mg": 18,
-      "food_sources_short": "Food sources of iron include red meat, poultry, seafood, beans, lentils, tofu, spinach, and fortified cereals."
+      "food_sources_short": "Food sources of iron include red meat, poultry, seafood, beans, lentils, tofu, spinach, and fortified cereals.",
+      "citation_review_status": "needs_revision",
+      "reviewed_at": "2026-07-23",
+      "reviewer": "lead_clinician_audit_2026_07"
     },
     {
       "id": "DEP_ANTIPSYCHOTICS_VITAMIND",
