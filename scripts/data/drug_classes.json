@@ -1,11 +1,11 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "description": "Drug class expansion map for interaction matching (class:X \u2192 RxCUIs)",
+    "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
     "last_updated": "2026-07-24",
-    "total_classes": 37,
-    "total_members": 798,
+    "total_classes": 38,
+    "total_members": 807,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -23,8 +23,8 @@
       "dry_run_command": "python3 scripts/api_audit/seed_drug_classes.py --dry-run",
       "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
     },
-    "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class \u2192 blocks build.",
-    "total_entries": 37
+    "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
+    "total_entries": 38
   },
   "classes": {
     "class:statins": {
@@ -1629,7 +1629,7 @@
         "C08",
         "C09"
       ],
-      "notes": "Superset \u2014 overlaps with class:ace_inhibitors, class:beta_blockers, class:calcium_channel_blockers, class:diuretics"
+      "notes": "Superset — overlaps with class:ace_inhibitors, class:beta_blockers, class:calcium_channel_blockers, class:diuretics"
     },
     "class:b_vitamins": {
       "display_name": "B vitamins",
@@ -1718,12 +1718,12 @@
     },
     "class:fluoroquinolones": {
       "display_name": "Fluoroquinolones",
-      "description": "Fluoroquinolone antibiotics \u2014 ciprofloxacin, levofloxacin, moxifloxacin, etc.",
+      "description": "Fluoroquinolone antibiotics — ciprofloxacin, levofloxacin, moxifloxacin, etc.",
       "member_rxcuis": [
         "2551",
         "82122",
-        "6922",
-        "139462"
+        "139462",
+        "7623"
       ],
       "member_names": [
         "ciprofloxacin",
@@ -1736,12 +1736,44 @@
         "J01MA"
       ]
     },
+    "class:acid_suppressants": {
+      "display_name": "Acid-suppressing medications (PPIs and H2 blockers)",
+      "description": "Drugs that SUPPRESS gastric acid secretion — proton pump inhibitors and H2-receptor antagonists — as opposed to neutralizing antacids. Used where a nutrient effect spans both tiers (e.g. reduced non-heme iron absorption with long-term use; Lam 2017 shows a dose-response for PPIs AND H2 blockers).",
+      "member_rxcuis": [
+        "2541",
+        "283742",
+        "4278",
+        "17128",
+        "42319",
+        "7646",
+        "40790",
+        "114979",
+        "9143"
+      ],
+      "member_names": [
+        "cimetidine",
+        "esomeprazole",
+        "famotidine",
+        "lansoprazole",
+        "nizatidine",
+        "omeprazole",
+        "pantoprazole",
+        "rabeprazole",
+        "ranitidine"
+      ],
+      "rxclass_id": null,
+      "atc_codes": [
+        "A02BA",
+        "A02BC"
+      ],
+      "notes": "Curated composite of acid-SUPPRESSING agents (PPI subclass A02BC + H2-blocker subclass A02BA). All rxcuis content-verified against RxNorm. Distinct from class:antacids (neutralizing salts) and class:proton_pump_inhibitors (PPI-only). Use for depletion signals the evidence supports across both PPI and H2 tiers."
+    },
     "class:proton_pump_inhibitors": {
       "display_name": "Proton Pump Inhibitors",
-      "description": "Gastric acid suppressants \u2014 omeprazole, pantoprazole, esomeprazole, etc.",
+      "description": "Gastric acid suppressants — omeprazole, pantoprazole, esomeprazole, etc.",
       "member_rxcuis": [
         "283742",
-        "112002",
+        "17128",
         "7646",
         "40790",
         "114979"
@@ -1760,12 +1792,12 @@
     },
     "class:bisphosphonates": {
       "display_name": "Bisphosphonates",
-      "description": "Bone resorption inhibitors \u2014 alendronate, risedronate, zoledronic acid, etc.",
+      "description": "Bone resorption inhibitors — alendronate, risedronate, zoledronic acid, etc.",
       "member_rxcuis": [
-        "3009",
-        "42470",
-        "35894",
-        "77634"
+        "46041",
+        "115264",
+        "73056",
+        "77655"
       ],
       "member_names": [
         "alendronate",
@@ -1780,12 +1812,12 @@
     },
     "class:antiplatelet_agents": {
       "display_name": "Antiplatelet Agents",
-      "description": "Platelet aggregation inhibitors \u2014 aspirin, clopidogrel, prasugrel, ticagrelor, etc.",
+      "description": "Platelet aggregation inhibitors — aspirin, clopidogrel, prasugrel, ticagrelor, etc.",
       "member_rxcuis": [
         "1191",
         "32968",
-        "73731",
-        "323455"
+        "613391",
+        "1116632"
       ],
       "member_names": [
         "aspirin",
@@ -1800,7 +1832,7 @@
     },
     "class:thiazide_diuretics": {
       "display_name": "Thiazide diuretics",
-      "description": "Thiazide and thiazide-like diuretics \u2014 distinguished from loop and potassium-sparing diuretics by their calcium-retaining mechanism (relevant for vitamin D + calcium interactions).",
+      "description": "Thiazide and thiazide-like diuretics — distinguished from loop and potassium-sparing diuretics by their calcium-retaining mechanism (relevant for vitamin D + calcium interactions).",
       "member_rxcuis": [
         "1369",
         "2396",

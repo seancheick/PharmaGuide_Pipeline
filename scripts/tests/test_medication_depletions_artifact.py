@@ -158,5 +158,5 @@ def test_real_source_content_hash_is_pinned():
     art = build_artifact(source, content_version="pin")
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:f9022cf67185b745f3ab1acb14d6311052b7d75b5a59e80966165f529c21aeb9"
+        == "sha256:507ebb91d97172084c0b28ccbdd450d2e2529fbb66b700ef575fc98e55db8840"
     )

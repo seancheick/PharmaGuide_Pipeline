@@ -42,6 +42,7 @@ EXPECTED_CLASSES = {
     "class:antipsychotics",
     "class:triptans",
     "class:antacids",
+    "class:acid_suppressants",
     "class:calcium_channel_blockers",
     "class:diuretics",
     "class:oral_contraceptives",
@@ -86,6 +87,8 @@ CANONICAL_ANCHORS = {
     "class:diuretics": ["furosemide", "hydrochlorothiazide"],
     "class:loop_and_thiazide_diuretics": ["furosemide", "hydrochlorothiazide"],
     "class:loop_diuretics": ["furosemide", "bumetanide", "torsemide"],
+    "class:acid_suppressants": ["omeprazole", "famotidine", "cimetidine"],
+    "class:proton_pump_inhibitors": ["omeprazole", "pantoprazole"],
     "class:anticoagulants": ["warfarin"],
     "class:vitamin_k_antagonists": ["warfarin"],
     "class:doacs": ["apixaban", "rivaroxaban"],
@@ -261,6 +264,41 @@ def test_canonical_anchors_present(classes, class_id, expected):
 # it appears. If one rxcui resolves to two different names across classes, at
 # least one class is misaligned.
 # --------------------------------------------------------------------------- #
+
+
+# Nine rxcuis were found stale/swapped in a 2026-07-24 live RxNorm audit and
+# corrected (retired ids → current; a moxifloxacin↔ofloxacin swap fixed, and
+# 6922 = metronidazole was removed). This static guard blocks their return
+# without a live API call; a full live re-validation lives in
+# scripts/api_audit/verify_drug_class_rxcuis.py.
+_KNOWN_STALE_RXCUIS = {"3009", "35894", "42470", "73731", "77634", "112002", "323455", "6922"}
+_CORRECTED_DRUG_RXCUIS = {
+    ("class:bisphosphonates", "alendronate"): "46041",
+    ("class:bisphosphonates", "ibandronate"): "115264",
+    ("class:bisphosphonates", "risedronate"): "73056",
+    ("class:bisphosphonates", "zoledronic acid"): "77655",
+    ("class:antiplatelet_agents", "prasugrel"): "613391",
+    ("class:antiplatelet_agents", "ticagrelor"): "1116632",
+    ("class:proton_pump_inhibitors", "lansoprazole"): "17128",
+    ("class:acid_suppressants", "lansoprazole"): "17128",
+    ("class:fluoroquinolones", "moxifloxacin"): "139462",
+    ("class:fluoroquinolones", "ofloxacin"): "7623",
+}
+
+
+def test_no_known_stale_rxcuis(classes):
+    found = {}
+    for cid, c in classes.items():
+        for rx, nm in zip(c["member_rxcuis"], c["member_names"]):
+            if rx in _KNOWN_STALE_RXCUIS:
+                found.setdefault(rx, []).append(f"{cid}/{nm}")
+    assert not found, f"stale/swapped rxcuis reintroduced (RxNorm-verified retired/wrong): {found}"
+
+
+def test_corrected_drug_rxcuis_present(classes):
+    for (cid, name), rx in _CORRECTED_DRUG_RXCUIS.items():
+        pairs = dict(zip(classes[cid]["member_names"], classes[cid]["member_rxcuis"]))
+        assert pairs.get(name) == rx, f"{cid}/{name} must be rxcui {rx}, got {pairs.get(name)}"
 
 
 def test_rxcui_name_pairing_consistent_across_classes(classes):
