@@ -124,3 +124,51 @@ def test_potassium_recommendation_copy_fixed(depletions):
     assert "potassium-sparing foods" not in rec, (
         "'potassium-sparing foods' is factually wrong (that names a drug class, not foods)"
     )
+
+
+# --------------------------------------------------------------------------- #
+# Step 2 — antacids → PPI (B12, magnesium)
+#
+# class:antacids is direct neutralising products (Ca/Al/Mg salts). PPI-associated
+# B12 malabsorption and hypomagnesemia belong on class:proton_pump_inhibitors.
+# Only the two PPI-mechanism records move; the acid-reduction records
+# (calcium/iron/vitamin C/zinc) stay for a later entry-specific audit.
+# --------------------------------------------------------------------------- #
+
+PPI = "class:proton_pump_inhibitors"
+
+
+@pytest.mark.parametrize("entry_id", ["DEP_ANTACIDS_VITAMINB12", "DEP_ANTACIDS_MAGNESIUM"])
+def test_ppi_records_repointed(depletions, entry_id):
+    assert depletions[entry_id]["drug_ref"]["id"] == PPI, (
+        f"{entry_id} is a PPI-mechanism effect and must point at {PPI}"
+    )
+
+
+@pytest.mark.parametrize("entry_id", ["DEP_ANTACIDS_VITAMINB12", "DEP_ANTACIDS_MAGNESIUM"])
+def test_ppi_record_display_name_not_stale(depletions, entry_id):
+    # Was "PPIs and antacids ..." — stale once the ref is PPI-only.
+    disp = depletions[entry_id]["drug_ref"]["display_name"].lower()
+    assert "antacid" not in disp, f"{entry_id} display_name still names antacids after PPI repoint"
+
+
+@pytest.mark.parametrize(
+    "entry_id",
+    ["DEP_ANTACIDS_CALCIUM", "DEP_ANTACIDS_IRON", "DEP_ANTACIDS_VITAMINC", "DEP_ANTACIDS_ZINC"],
+)
+def test_deferred_antacid_records_untouched(depletions, entry_id):
+    assert depletions[entry_id]["drug_ref"]["id"] == "class:antacids", (
+        f"{entry_id} must NOT be repointed in Sprint 3 (different evidence/scope — see research.md)"
+    )
+
+
+def test_magnesium_misattributed_citation_corrected(depletions):
+    # PMID 22762246 is Hess 2012 (Aliment Pharmacol Ther), not the Danziger 2013
+    # (Kidney Int) label it previously carried. PMID real + on-topic; label fixed.
+    src = next(
+        s for s in depletions["DEP_ANTACIDS_MAGNESIUM"]["sources"]
+        if "22762246" in s.get("url", "")
+    )
+    assert "Hess" in src["label"], "magnesium citation label must be corrected to Hess et al."
+    assert "Danziger" not in src["label"], "stale misattributed 'Danziger' label must be gone"
+    assert "22762246" in src["url"], "the real, on-topic PMID stays"

@@ -153,8 +153,8 @@
       "id": "DEP_ANTACIDS_VITAMINB12",
       "drug_ref": {
         "type": "class",
-        "id": "class:antacids",
-        "display_name": "PPIs and antacids (acid-reducing medications)"
+        "id": "class:proton_pump_inhibitors",
+        "display_name": "Proton pump inhibitors (PPIs)"
       },
       "depleted_nutrient": {
         "standard_name": "Vitamin B12",
@@ -194,8 +194,8 @@
       "id": "DEP_ANTACIDS_MAGNESIUM",
       "drug_ref": {
         "type": "class",
-        "id": "class:antacids",
-        "display_name": "PPIs and antacids (acid-reducing medications)"
+        "id": "class:proton_pump_inhibitors",
+        "display_name": "Proton pump inhibitors (PPIs)"
       },
       "depleted_nutrient": {
         "standard_name": "Magnesium",
@@ -212,7 +212,7 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Danziger J et al. Proton-pump inhibitor use is associated with low serum magnesium concentrations. Kidney Int. 2013",
+          "label": "Hess MW et al. Systematic review: hypomagnesaemia induced by proton pump inhibition. Aliment Pharmacol Ther. 2012",
           "url": "https://pubmed.ncbi.nlm.nih.gov/22762246/"
         },
         {
