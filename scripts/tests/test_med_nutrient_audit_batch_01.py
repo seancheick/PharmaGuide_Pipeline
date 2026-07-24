@@ -13,8 +13,11 @@ import os
 
 EXPECTED_STATUS = {
     "DEP_METFORMIN_VITAMINB12": "verified",
-    "DEP_STATINS_COQ10": "verified",
-    "DEP_CORTICOSTEROIDS_CALCIUM": "verified",
+    # statins→CoQ10 + corticosteroids→calcium: relationship holds but the
+    # user-visible copy overstates (supplementation framing / universal above-ACR
+    # dosing) → needs_revision until the copy is rewritten (2nd-opinion review).
+    "DEP_STATINS_COQ10": "needs_revision",
+    "DEP_CORTICOSTEROIDS_CALCIUM": "needs_revision",
     "DEP_ANTACIDS_VITAMINB12": "needs_revision",
     "DEP_ANTACIDS_MAGNESIUM": "needs_revision",
     "DEP_DIURETICS_POTASSIUM": "needs_revision",
@@ -53,6 +56,14 @@ def test_batch_01_entries_carry_review_metadata():
         e = by[eid]
         assert e.get("reviewed_at"), f"{eid} missing reviewed_at"
         assert e.get("reviewer"), f"{eid} missing reviewer"
+
+
+def test_batch_01_metformin_copy_softened():
+    # The single verified entry's overstated "up to 30% develop deficiency" copy
+    # was softened to an accurate range as a condition of verification.
+    ci = _entries()["DEP_METFORMIN_VITAMINB12"]["clinical_impact"]
+    assert "6-30%" in ci
+    assert "Up to 30% of long-term metformin users develop" not in ci
 
 
 def test_batch_01_no_confirmed_ghost_pmids_remain():

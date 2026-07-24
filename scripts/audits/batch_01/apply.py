@@ -19,8 +19,16 @@ REVIEWER = "lead_clinician_audit_2026_07"
 
 STATUS = {
     "DEP_METFORMIN_VITAMINB12": "verified",
-    "DEP_STATINS_COQ10": "verified",
-    "DEP_CORTICOSTEROIDS_CALCIUM": "verified",
+    # statins→CoQ10 + corticosteroids→calcium were downgraded from verified after
+    # a copy review (2nd opinion): the RELATIONSHIP + citation hold, but the
+    # user-visible copy overstates — statins→CoQ10 promotes routine 100–200 mg
+    # supplementation though RCT symptom-benefit is negative/mixed (Banach 2015,
+    # Taylor 2015); corticosteroids→calcium prescribes universal above-ACR dosing
+    # undifferentiated for inhaled/local steroids. "verified" requires EVERY
+    # user-visible field to be defensible, not just the relationship. The copy
+    # rewrites are the tracked follow-up.
+    "DEP_STATINS_COQ10": "needs_revision",
+    "DEP_CORTICOSTEROIDS_CALCIUM": "needs_revision",
     "DEP_ANTACIDS_VITAMINB12": "needs_revision",
     "DEP_ANTACIDS_MAGNESIUM": "needs_revision",
     "DEP_DIURETICS_POTASSIUM": "needs_revision",
@@ -67,6 +75,22 @@ REPLACEMENTS = {
 }
 
 
+# Small, content-verified copy corrections applied inline. Larger copy rewrites
+# for the needs_revision entries (statin/corticosteroid framing + scope) are the
+# tracked follow-up in research.md.
+COPY_FIXES = {
+    "DEP_METFORMIN_VITAMINB12": {
+        "clinical_impact": (
+            "Roughly 6-30% of long-term metformin users show low or deficient "
+            "B12, depending on how deficiency is defined and how long metformin "
+            "is taken. Low B12 can cause peripheral neuropathy (which may be "
+            "misattributed to diabetic neuropathy), megaloblastic anemia, and "
+            "cognitive changes, and may develop insidiously over years."
+        ),
+    },
+}
+
+
 def main() -> int:
     with open(SOURCE, encoding="utf-8") as f:
         doc = json.load(f)
@@ -81,6 +105,9 @@ def main() -> int:
         e["reviewed_at"] = REVIEWED_AT
         e["reviewer"] = REVIEWER
 
+    for eid, fields in COPY_FIXES.items():
+        by[eid].update(fields)
+
     for eid, repl in REPLACEMENTS.items():
         e = by[eid]
         before = len(e["sources"])
@@ -90,7 +117,7 @@ def main() -> int:
             if not any(g in s.get("url", "") for g in GHOST_URL_FRAGMENTS)
         ]
         removed = before - len(e["sources"])
-        assert removed == 1, f"{eid}: expected to remove exactly 1 ghost, removed {removed}"
+        assert removed <= 1, f"{eid}: removed {removed} ghost sources (expected 0 or 1)"
         # only add replacements the entry doesn't already carry (idempotent)
         have = {s.get("url") for s in e["sources"]}
         e["sources"].extend(s for s in repl if s["url"] not in have)
