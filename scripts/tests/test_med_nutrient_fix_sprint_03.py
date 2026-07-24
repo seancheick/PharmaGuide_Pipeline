@@ -145,14 +145,10 @@ def test_ppi_record_display_name_not_stale(depletions, entry_id):
     assert "antacid" not in disp, f"{entry_id} display_name still names antacids after PPI repoint"
 
 
-@pytest.mark.parametrize(
-    "entry_id",
-    ["DEP_ANTACIDS_CALCIUM", "DEP_ANTACIDS_IRON", "DEP_ANTACIDS_VITAMINC", "DEP_ANTACIDS_ZINC"],
-)
-def test_deferred_antacid_records_untouched(depletions, entry_id):
-    assert depletions[entry_id]["drug_ref"]["id"] == "class:antacids", (
-        f"{entry_id} must NOT be repointed in Sprint 3 (different evidence/scope — see research.md)"
-    )
+# NOTE: the Sprint-3 "deferred antacid records untouched" test was retired once
+# Section 2 (audit/med-nutrient-acid-reduction) completed that family — iron→
+# class:acid_suppressants, calcium→PPI, vitamin C + zinc rejected. Their final
+# state is owned by test_med_nutrient_acid_reduction.py.
 
 
 def test_magnesium_misattributed_citation_corrected(depletions):
