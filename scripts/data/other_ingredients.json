@@ -2355,7 +2355,8 @@
         "cas": "94-62-2",
         "pubchem_cid": 638024
       },
-      "rxcui": "1306935",
+      "rxcui": "259314",
+      "rxcui_note": "Codex live-RxNorm audit 2026-07-24: prior 1306935 = Brazilian pepper (Schinus, wrong genus); corrected to 259314 'black pepper preparation' (Active, content-verified). Non-load-bearing (UNII/CUI are the match keys; rxcui not emitted to blob).",
       "gsrs": {
         "substance_name": "BLACK PEPPER",
         "substance_class": "structurallyDiverse",
@@ -14072,7 +14073,8 @@
         "cas": "112-80-1",
         "pubchem_cid": 445639
       },
-      "rxcui": "32559",
+      "rxcui": "7631",
+      "rxcui_note": "Codex live-RxNorm audit 2026-07-24: prior 32559 = 'osteum' (wrong entity); corrected to 7631 'oleic acid' (Active, content-verified). Non-load-bearing (UNII/CUI are the match keys; rxcui not emitted to blob).",
       "gsrs": {
         "substance_name": "Oleic acid",
         "substance_class": "chemical",

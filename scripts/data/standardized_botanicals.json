@@ -941,7 +941,8 @@
       "external_ids": {
         "unii": "KM66971LVF"
       },
-      "rxcui": "1306935",
+      "rxcui": "259314",
+      "rxcui_note": "Codex live-RxNorm audit 2026-07-24: prior 1306935 = Brazilian pepper (Schinus, wrong genus); corrected to 259314 'black pepper preparation' (Active, content-verified). Non-load-bearing (UNII/CUI are the match keys; rxcui not emitted to blob).",
       "gsrs": {
         "substance_name": "BLACK PEPPER",
         "substance_class": "structurallyDiverse",
@@ -2864,7 +2865,8 @@
       "external_ids": {
         "unii": "ZW3Z11D0JV"
       },
-      "rxcui": "253171",
+      "rxcui": "1372255",
+      "rxcui_note": "Codex live-RxNorm audit 2026-07-24: prior 253171 'golden seal root' is NotCurrent (retired; missed by the Wave 9.F.4b null-out applied elsewhere); corrected to 1372255 'goldenseal extract' (Active, content-verified). Non-load-bearing (UNII/CUI are the match keys; rxcui not emitted to blob).",
       "gsrs": {
         "substance_name": "GOLDENSEAL",
         "substance_class": "structurallyDiverse",

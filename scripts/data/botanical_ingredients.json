@@ -1586,7 +1586,8 @@
       "external_ids": {
         "unii": "KM66971LVF"
       },
-      "rxcui": "1306935",
+      "rxcui": "259314",
+      "rxcui_note": "Codex live-RxNorm audit 2026-07-24: prior 1306935 = Brazilian pepper (Schinus, wrong genus); corrected to 259314 'black pepper preparation' (Active, content-verified). Non-load-bearing (UNII/CUI are the match keys; rxcui not emitted to blob).",
       "gsrs": {
         "substance_name": "BLACK PEPPER",
         "substance_class": "structurallyDiverse",
@@ -13168,7 +13169,8 @@
       "external_ids": {
         "unii": "UFH8805FKA"
       },
-      "rxcui": "1310069",
+      "rxcui": "258326",
+      "rxcui_note": "Codex live-RxNorm audit 2026-07-24: prior 1310069 = 'Hypoxis hemerocallidea root extract' (wrong species); corrected to 258326 'St. John's wort extract' (Active, content-verified). Non-load-bearing (UNII/CUI are the match keys; rxcui not emitted to blob).",
       "gsrs": {
         "substance_name": "ST. JOHN'S WORT",
         "substance_class": "structurallyDiverse",

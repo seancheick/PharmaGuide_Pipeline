@@ -40530,7 +40530,8 @@
         }
       }
     },
-    "rxcui": "1310069",
+    "rxcui": "258326",
+    "rxcui_note": "Codex live-RxNorm audit 2026-07-24: prior 1310069 = 'Hypoxis hemerocallidea root extract' (wrong species); corrected to 258326 'St. John's wort extract' (Active, content-verified). Non-load-bearing (UNII/CUI are the match keys; rxcui not emitted to blob).",
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
