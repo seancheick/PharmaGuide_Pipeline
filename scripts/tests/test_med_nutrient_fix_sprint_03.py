@@ -105,17 +105,10 @@ def test_reviewed_diuretic_records_repointed(depletions, entry_id):
     )
 
 
-@pytest.mark.parametrize(
-    "entry_id",
-    ["DEP_DIURETICS_ZINC", "DEP_DIURETICS_CALCIUM", "DEP_DIURETICS_THIAMINE", "DEP_DIURETICS_FOLATE"],
-)
-def test_deferred_diuretic_records_untouched(depletions, entry_id):
-    # These are drug/subclass-specific (folate=triamterene, calcium=loop,
-    # thiamine=furosemide, zinc=TBD) and are handled in later entry-specific
-    # audits — they must stay on class:diuretics this sprint.
-    assert depletions[entry_id]["drug_ref"]["id"] == "class:diuretics", (
-        f"{entry_id} must NOT be repointed in Step 1 (see fix_sprint_03/research.md)"
-    )
+# NOTE: the Sprint-3 "deferred diuretic records untouched" test was retired once
+# Section 1 (audit/med-nutrient-diuretics-remaining) completed that deferred work
+# — calcium→loop class, thiamine→furosemide, folate→triamterene, zinc→thiazide.
+# Their final state is owned by test_med_nutrient_diuretics_remaining.py.
 
 
 def test_potassium_recommendation_copy_fixed(depletions):
