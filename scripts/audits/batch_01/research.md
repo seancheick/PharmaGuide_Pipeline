@@ -50,8 +50,13 @@ imprecise claim); the scope fix is a tracked follow-up.
 
 ## Status assignment (final — all PMIDs content-verified via PubMed eutils; 2 ghosts confirmed)
 
-**verified (3):** DEP_METFORMIN_VITAMINB12, DEP_STATINS_COQ10, DEP_CORTICOSTEROIDS_CALCIUM.
-**needs_revision (8):** DEP_ANTACIDS_VITAMINB12, DEP_ANTACIDS_MAGNESIUM, DEP_DIURETICS_POTASSIUM, DEP_DIURETICS_MAGNESIUM, DEP_CORTICOSTEROIDS_VITAMIND, DEP_ANTICONVULSANTS_VITAMIND, DEP_LEVOTHYROXINE_CALCIUM, DEP_LEVOTHYROXINE_IRON.
-**rejected (0):** none — every relationship is clinically real; the 8 defects are scope/mechanism/citation, not false claims.
+**verified (1):** DEP_METFORMIN_VITAMINB12 (with its overstated "up to 30% develop deficiency" clinical_impact softened to "6-30% low/deficient depending on definition").
+**needs_revision (10):** DEP_STATINS_COQ10, DEP_CORTICOSTEROIDS_CALCIUM, DEP_ANTACIDS_VITAMINB12, DEP_ANTACIDS_MAGNESIUM, DEP_DIURETICS_POTASSIUM, DEP_DIURETICS_MAGNESIUM, DEP_CORTICOSTEROIDS_VITAMIND, DEP_ANTICONVULSANTS_VITAMIND, DEP_LEVOTHYROXINE_CALCIUM, DEP_LEVOTHYROXINE_IRON.
+**rejected (0):** none — every relationship is clinically real; the 10 defects are scope/mechanism/citation/COPY, not false claims.
+
+**2ND-OPINION CORRECTION (applied):** the first pass verified 3 on the relationship+citation; a copy review downgraded 2 whose consumer copy overstates:
+- **DEP_STATINS_COQ10 → needs_revision:** recommendation promotes routine 100–200 mg CoQ10, but RCT symptom-benefit is negative/mixed (Banach 2015 **PMID 25440725**, Taylor 2015 **PMID 25545331**); "cardiac CoQ10 is particularly affected" is unsupported. Copy must be softened to "Statins can reduce circulating CoQ10; it is uncertain whether this causes muscle symptoms or whether supplementation helps."
+- **DEP_CORTICOSTEROIDS_CALCIUM → needs_revision:** "all patients … should take 1,000–1,500 mg calcium and 800–2,000 IU vitamin D3" is universal + above 2017 ACR (Buckley **PMID 28585373**: 1,000–1,200 mg / 600–800 IU) + undifferentiated for inhaled/local steroids and individual fracture/stone/renal risk.
+**LOCKED RULE:** `verified` requires EVERY user-visible field (relationship, mechanism, clinical_impact, recommendation, consumer copy) to be defensible — not just the relationship.
 
 reviewer = `lead_clinician_audit_2026_07` (Claude-assisted, PubMed-content-verified). This batch MARKS status only; the per-entry FIXES above (scope narrowing incl. `drug_classes.json` `class:loop_diuretics` + `class:enzyme_inducing_anticonvulsants`, 2 ghost-ref removals, corticosteroid-D mechanism rewrite, levothyroxine magnitude softening, copy "potassium-rich foods") are the tracked follow-up. needs_revision entries are SUPPRESSED by the B1.2 publication rule until fixed — the safe outcome.
