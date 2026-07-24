@@ -202,12 +202,15 @@ class TestDepletionDataQuality:
         assert found, "Statins → CoQ10 depletion must be present"
 
     def test_ppi_magnesium_exists(self, depletions):
+        # Sprint 3: PPI-induced hypomagnesemia is a PPI-mechanism effect and now
+        # points at class:proton_pump_inhibitors, not the neutralising-antacid
+        # class it was previously (incorrectly) filed under.
         found = any(
-            d["drug_ref"]["id"] == "class:antacids" and
+            d["drug_ref"]["id"] == "class:proton_pump_inhibitors" and
             "magnesium" in d["depleted_nutrient"]["canonical_id"].lower()
             for d in depletions
         )
-        assert found, "PPIs/Antacids → Magnesium depletion must be present"
+        assert found, "PPI → Magnesium depletion must be present"
 
     def test_high_value_expansion_rows_exist(self, depletions):
         expected = {

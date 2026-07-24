@@ -55,11 +55,13 @@ EXPECTED_CLASSES = {
     "class:bisphosphonates",
     "class:antiplatelet_agents",
     "class:thiazide_diuretics",
+    "class:loop_and_thiazide_diuretics",
     "class:doacs",
     "class:potassium_sparing_diuretics",
     "class:tetracycline_antibiotics",
     "class:serotonergic_medications",
     "class:vitamin_k_antagonists",
+    "class:enzyme_inducing_antiseizure_medications",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
@@ -81,12 +83,14 @@ CANONICAL_ANCHORS = {
     "class:triptans": ["sumatriptan"],
     "class:calcium_channel_blockers": ["amlodipine", "diltiazem"],
     "class:diuretics": ["furosemide", "hydrochlorothiazide"],
+    "class:loop_and_thiazide_diuretics": ["furosemide", "hydrochlorothiazide"],
     "class:anticoagulants": ["warfarin"],
     "class:vitamin_k_antagonists": ["warfarin"],
     "class:doacs": ["apixaban", "rivaroxaban"],
     "class:potassium_sparing_diuretics": ["spironolactone", "triamterene"],
     "class:tetracycline_antibiotics": ["doxycycline", "tetracycline"],
     "class:serotonergic_medications": ["linezolid", "amitriptyline", "tramadol", "buspirone"],
+    "class:enzyme_inducing_antiseizure_medications": ["phenytoin", "carbamazepine", "phenobarbital", "primidone"],
 }
 
 RXCUI_PATTERN = re.compile(r"^\d+$")
@@ -242,3 +246,28 @@ def test_canonical_anchors_present(classes, class_id, expected):
             f"{class_id} is missing canonical anchor {drug!r}; "
             f"RxClass ATC may have changed — re-run seed_drug_classes.py --live"
         )
+
+
+# --------------------------------------------------------------------------- #
+# Cross-class rxcui↔name alignment
+#
+# The per-class shape test only checks len(rxcuis)==len(names), never that
+# rxcui[i] actually corresponds to name[i]. That blind spot let
+# class:thiazide_diuretics ship 3 misaligned rxcuis (its "quinethazone" row
+# carried 9997 = spironolactone, a potassium-sparing agent). A cheap, API-free
+# invariant catches it: a given rxcui must map to the SAME drug name everywhere
+# it appears. If one rxcui resolves to two different names across classes, at
+# least one class is misaligned.
+# --------------------------------------------------------------------------- #
+
+
+def test_rxcui_name_pairing_consistent_across_classes(classes):
+    rxcui_to_names: dict[str, set[str]] = {}
+    for c in classes.values():
+        for rxcui, name in zip(c["member_rxcuis"], c["member_names"]):
+            rxcui_to_names.setdefault(rxcui, set()).add(name)
+    conflicts = {rx: names for rx, names in rxcui_to_names.items() if len(names) > 1}
+    assert not conflicts, (
+        "rxcui mapped to multiple names across classes (a member_rxcuis/"
+        f"member_names misalignment): {conflicts}"
+    )
