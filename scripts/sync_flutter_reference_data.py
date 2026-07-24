@@ -13,6 +13,10 @@ import shutil
 from pathlib import Path
 from typing import Any
 
+from build_medication_depletions_artifact import (
+    _default_content_version,
+    build_artifact as _build_depletions_artifact,
+)
 from reference_data_contract import (
     ReferenceDataContractError,
     assert_semantic_parity,
@@ -24,6 +28,10 @@ DEFAULT_SOURCE = Path(__file__).parent / "data" / "rda_optimal_uls.json"
 DESTINATION_RELATIVE_PATH = Path("assets/reference_data/rda_optimal_uls.json")
 DEFAULT_PRODUCT_TYPE_SOURCE = Path(__file__).parent / "data" / "product_type_vocab.json"
 PRODUCT_TYPE_DESTINATION_RELATIVE_PATH = Path("assets/data/product_type_vocab.json")
+DEFAULT_DEPLETIONS_SOURCE = Path(__file__).parent / "data" / "medication_depletions.json"
+DEPLETIONS_DESTINATION_RELATIVE_PATH = Path(
+    "assets/reference_data/medication_depletions.json"
+)
 
 
 def _load_canonical(*, source_path: Path) -> tuple[Path, dict[str, Any], dict[str, str]]:
@@ -126,6 +134,84 @@ def sync_product_type_vocab(*, source_path: Path, flutter_repo: Path) -> dict[st
     )
 
 
+def sync_medication_depletions(
+    *, source_path: Path, flutter_repo: Path, content_version: str | None = None
+) -> dict[str, Any]:
+    """Generate the versioned medication-depletions artifact from canonical
+    source and write it into Flutter. Unlike the other reference data this asset
+    is GENERATED (validated + stamped), not byte-copied — it is the pipeline's
+    bundled fallback for the app and replaces the manual copy."""
+    source_path = source_path.resolve()
+    if not source_path.is_file():
+        raise FileNotFoundError(
+            f"Canonical medication_depletions not found: {source_path}"
+        )
+    flutter_repo = flutter_repo.resolve()
+    if not flutter_repo.is_dir():
+        raise FileNotFoundError(f"Flutter repository not found: {flutter_repo}")
+    source = json.loads(source_path.read_text(encoding="utf-8"))
+    version = content_version or _default_content_version()
+    artifact = _build_depletions_artifact(source, content_version=version)
+    destination = flutter_repo / DEPLETIONS_DESTINATION_RELATIVE_PATH
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(
+        json.dumps(artifact, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    return validate_flutter_medication_depletions(
+        source_path=source_path, flutter_repo=flutter_repo
+    )
+
+
+def validate_flutter_medication_depletions(
+    *, source_path: Path, flutter_repo: Path
+) -> dict[str, Any]:
+    """Require the Flutter copy to match the pipeline-generated artifact by
+    content (content_hash + entries), ignoring the release stamp, and to carry
+    the full versioned metadata the app validates before activation."""
+    source_path = source_path.resolve()
+    flutter_repo = flutter_repo.resolve()
+    destination = flutter_repo / DEPLETIONS_DESTINATION_RELATIVE_PATH
+    if not destination.is_file():
+        raise FileNotFoundError(
+            f"Flutter medication_depletions artifact not found: {destination}"
+        )
+    source = json.loads(source_path.read_text(encoding="utf-8"))
+    expected = _build_depletions_artifact(source, content_version="validate")
+    copied = json.loads(destination.read_text(encoding="utf-8"))
+    meta = copied.get("_metadata")
+    if not isinstance(meta, dict):
+        raise ValueError("Flutter medication_depletions artifact has no _metadata")
+    for key in (
+        "schema_version",
+        "content_version",
+        "content_hash",
+        "minimum_runtime_contract",
+    ):
+        if key not in meta:
+            raise ValueError(
+                f"Flutter medication_depletions artifact missing _metadata.{key}"
+            )
+    if meta["content_hash"] != expected["_metadata"]["content_hash"]:
+        raise ValueError(
+            "Flutter medication_depletions content_hash differs from canonical "
+            f"(flutter={meta['content_hash']}, "
+            f"canonical={expected['_metadata']['content_hash']})"
+        )
+    if copied.get("depletions") != expected["depletions"]:
+        raise ValueError(
+            "Flutter medication_depletions entries differ from the canonical "
+            "pipeline-generated artifact"
+        )
+    return {
+        "source": source_path,
+        "destination": destination,
+        "schema_version": meta["schema_version"],
+        "content_hash": meta["content_hash"],
+        "minimum_runtime_contract": meta["minimum_runtime_contract"],
+        "total_entries": meta.get("total_entries"),
+    }
+
+
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Sync the canonical pipeline RDA/UL artifact into Flutter.",
@@ -146,6 +232,18 @@ def _parse_args() -> argparse.Namespace:
         help="Canonical product-type vocabulary (default: scripts/data/product_type_vocab.json).",
     )
     parser.add_argument(
+        "--depletions-source",
+        default=str(DEFAULT_DEPLETIONS_SOURCE),
+        help="Canonical medication_depletions.json "
+        "(default: scripts/data/medication_depletions.json).",
+    )
+    parser.add_argument(
+        "--content-version",
+        default=None,
+        help="Release stamp for the generated depletions artifact "
+        "(default: today's UTC date).",
+    )
+    parser.add_argument(
         "--check",
         action="store_true",
         help="Validate semantic parity without writing the Flutter copy.",
@@ -164,6 +262,16 @@ def main() -> int:
         source_path=Path(args.product_type_source),
         flutter_repo=Path(args.flutter_repo),
     )
+    depletion_kwargs: dict[str, Any] = dict(
+        source_path=Path(args.depletions_source),
+        flutter_repo=Path(args.flutter_repo),
+    )
+    if args.check:
+        depletion_result = validate_flutter_medication_depletions(**depletion_kwargs)
+    else:
+        depletion_result = sync_medication_depletions(
+            **depletion_kwargs, content_version=args.content_version
+        )
     verb = "Validated" if args.check else "Synced"
     print(
         f"{verb} RDA/UL reference data: "
@@ -174,6 +282,12 @@ def main() -> int:
         f"{verb} product-type vocabulary: "
         f"schema={product_result['schema_version']} "
         f"entries={product_result['total_entries']}"
+    )
+    print(
+        f"{verb} medication depletions: "
+        f"schema={depletion_result['schema_version']} "
+        f"entries={depletion_result['total_entries']} "
+        f"contract={depletion_result['minimum_runtime_contract']}"
     )
     return 0
 
