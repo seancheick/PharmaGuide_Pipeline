@@ -107,7 +107,7 @@
         }
       ],
       "alert_headline": "May lower circulating CoQ10 levels",
-      "alert_body": "Statins can lower the amount of CoQ10 measured in the blood. Whether that causes symptoms is not established.",
+      "alert_body": "With regular use, statins can lower the amount of CoQ10 measured in the blood. Whether that causes symptoms is not established.",
       "acknowledgement_note": "You're taking CoQ10. Evidence that it improves statin-related muscle symptoms is mixed.",
       "monitoring_tip_short": "Consider mentioning any persistent muscle symptoms at your next visit.",
       "food_sources_short": "Dietary CoQ10 is minimal — organ meats and fatty fish contain small amounts — and the body also makes its own.",
@@ -932,7 +932,7 @@
       ],
       "alert_headline": "Can affect calcium balance with long-term systemic use",
       "alert_body": "Taken systemically over months, corticosteroids can reduce calcium absorption and increase calcium loss, which affects bone strength over time.",
-      "acknowledgement_note": "You're taking calcium. Whether you need it, and how much, depends on your diet and fracture risk — worth confirming with your clinician.",
+      "acknowledgement_note": "You're taking calcium — sensible with long-term steroid use. How much you need depends on your diet and bone health.",
       "monitoring_tip_short": "Consider discussing bone health and fracture-risk screening if systemic use continues.",
       "food_sources_short": "Food sources of calcium include dairy products, fortified plant milks, leafy greens, almonds, and canned sardines or salmon with bones.",
       "citation_review_status": "verified",
