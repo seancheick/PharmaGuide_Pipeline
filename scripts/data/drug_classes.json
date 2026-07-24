@@ -4,8 +4,8 @@
     "description": "Drug class expansion map for interaction matching (class:X \u2192 RxCUIs)",
     "purpose": "interaction_db_class_expansion",
     "last_updated": "2026-07-24",
-    "total_classes": 36,
-    "total_members": 793,
+    "total_classes": 37,
+    "total_members": 798,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -24,7 +24,7 @@
       "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class \u2192 blocks build.",
-    "total_entries": 36
+    "total_entries": 37
   },
   "classes": {
     "class:statins": {
@@ -1889,6 +1889,29 @@
         "C03D"
       ],
       "notes": "Narrow Wave 8 class for potassium supplement and salt-substitute hyperkalemia risk; do not replace the broader diuretics class."
+    },
+    "class:loop_diuretics": {
+      "display_name": "Loop diuretics",
+      "description": "High-ceiling loop diuretics (NKCC2 inhibitors in the thick ascending limb). Unlike thiazides they are CALCIURIC — they increase urinary calcium loss, where thiazides retain calcium — so calcium-related depletion signals are loop-specific.",
+      "member_rxcuis": [
+        "1808",
+        "4109",
+        "4603",
+        "33770",
+        "38413"
+      ],
+      "member_names": [
+        "bumetanide",
+        "ethacrynic acid",
+        "furosemide",
+        "piretanide",
+        "torsemide"
+      ],
+      "rxclass_id": "C03C",
+      "atc_codes": [
+        "C03C"
+      ],
+      "notes": "Curated loop-diuretic subclass. All rxcuis content-verified against RxNorm. Used for loop-specific depletion signals (urinary calcium wasting) that do NOT apply to thiazide or potassium-sparing diuretics."
     },
     "class:loop_and_thiazide_diuretics": {
       "display_name": "Loop & thiazide diuretics",

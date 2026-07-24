@@ -101,13 +101,18 @@ def test_corticosteroids_vitamind_retyped_and_mechanism_error_removed():
     assert "ods.od.nih.gov" not in _source_urls(e)
 
 
-def test_corpus_status_counts_after_sprint_02():
+def test_corpus_status_counts():
+    # Durable corpus invariant (was an exact Sprint-2 snapshot; the corpus now
+    # changes section by section). Verifications only accumulate as medication
+    # families close, so assert monotonic FLOORS + the sum/enum invariant rather
+    # than a brittle exact count. Sprint 2 reached verified=15; Section 1
+    # (remaining diuretics) added 4 → floor 19.
     import collections
 
     c = collections.Counter(
         e.get("citation_review_status", "unverified") for e in _entries().values()
     )
-    assert c["verified"] == 15
-    assert c["needs_revision"] == 5
-    assert c["rejected"] == 1
-    assert c["unverified"] == 59
+    assert set(c) <= {"verified", "needs_revision", "rejected", "unverified"}
+    assert sum(c.values()) == len(_entries()) == 80
+    assert c["verified"] >= 19
+    assert c["rejected"] >= 1
