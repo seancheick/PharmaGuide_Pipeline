@@ -154,6 +154,27 @@ def test_vitamin_d_real_adult_label_math_allows_rounding_drift() -> None:
     assert active["dose_data_quality"]["status"] == "corrected"
 
 
+def test_vitamin_d_np_unit_uses_coherent_daily_value_evidence() -> None:
+    """A numeric nutrient row marked NP can still have a provable missing unit."""
+    raw = _raw_product([
+        {
+            "order": 1,
+            "name": "Vitamin D2",
+            "category": "vitamin",
+            "ingredientGroup": "Vitamin D",
+            "quantity": _quantity(20, "NP", percent_dv=100),
+            "forms": [{"name": "Ergocalciferol", "ingredientGroup": "Vitamin D"}],
+        }
+    ])
+
+    active = _cleaned_active(raw)
+
+    assert active["quantity"] == pytest.approx(20.0)
+    assert active["unit"] == "mcg"
+    assert active["dose_data_quality"]["reason"] == "daily_value_missing_unit"
+    assert active["dose_data_quality"]["raw_unit"] == "NP"
+
+
 def test_nested_folic_acid_unit_uses_parent_dfe_equivalence() -> None:
     """A nested component can prove its unit from its measured DFE parent."""
     raw = _raw_product([

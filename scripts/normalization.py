@@ -25,6 +25,9 @@ _MASS_UNIT_ALIASES = {
     "milligram": "mg",
     "milligrams": "mg",
     "mcg": "mcg",
+    # DSLD contains occasional transposed microgram tokens (for example,
+    # Vitamin D ``25 mgc`` alongside its equivalent ``1,000 IU`` note).
+    "mgc": "mcg",
     "ug": "mcg",
     "µg": "mcg",
     "μg": "mcg",

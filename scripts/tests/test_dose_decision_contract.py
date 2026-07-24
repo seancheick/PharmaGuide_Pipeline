@@ -325,6 +325,137 @@ def test_vitamin_a_reverse_conversion_preserves_rae_semantics_and_form():
     assert result.conversion_rule_id == "vitamin_a_retinol"
 
 
+def test_preformed_vitamin_a_label_mcg_is_interpreted_as_rae():
+    """DSLD can omit ``RAE`` from a preformed-vitamin-A label unit.
+
+    A confirmed retinyl form makes the FDA Nutrition Facts convention
+    unambiguous: bare ``mcg`` represents mcg RAE, not mass of retinyl ester.
+    """
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Vitamin A",
+        amount=3000,
+        from_unit="mcg",
+        to_unit="IU",
+        ingredient_name="Vitamin A as retinyl palmitate",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(9990.0)
+    assert result.converted_unit == "IU"
+    assert result.conversion_rule_id == "vitamin_a_retinol"
+
+
+def test_vitamin_d_generic_name_uses_confirmed_d2_form_for_conversion_trace():
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Vitamin D",
+        amount=20,
+        from_unit="mcg",
+        to_unit="IU",
+        ingredient_name="Vitamin D as ergocalciferol (D2)",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(800.0)
+    assert result.conversion_rule_id == "vitamin_d2"
+
+
+def test_unknown_vitamin_e_form_is_clinical_uncertainty_not_converter_defect():
+    enricher = SupplementEnricherV3()
+    threshold = {
+        "scope": "condition",
+        "target_id": "pregnancy",
+        "basis": "per_day",
+        "comparator": ">",
+        "value": 1000,
+        "unit": "mg",
+        "severity_if_met": "avoid",
+        "severity_if_not_met": "monitor",
+        "consumer_disposition_if_met": "block",
+        "consumer_disposition_if_not_met": "suppress",
+        "amount_missing_disposition": "suppress",
+        "unknown_form_disposition": "suppress",
+        "conversion_failure_policy": "release_block",
+    }
+
+    _severity, decision = enricher._evaluate_dose_thresholds_for_target(
+        [threshold],
+        "condition",
+        "pregnancy",
+        {
+            "quantity": 400,
+            "unit": "IU",
+            "name": "Vitamin E",
+            "standard_name": "Vitamin E",
+        },
+        1.0,
+        "monitor",
+    )
+
+    assert decision["evaluation_status"] == "form_unknown"
+    assert decision["consumer_disposition"] == "suppress"
+    assert decision["release_blocking"] is False
+
+
+def test_vitamin_e_floor_uses_resolved_form_for_iu_conversion():
+    enricher = SupplementEnricherV3()
+    floor = {
+        "value": 180,
+        "unit": "mg",
+        "basis": "per_day",
+        "consumer_disposition_if_met": "review",
+        "consumer_disposition_if_not_met": "suppress",
+        "amount_missing_disposition": "suppress",
+        "unknown_form_disposition": "suppress",
+    }
+
+    decision = enricher._evaluate_min_effective_dose_decision(
+        floor,
+        {
+            "quantity": 400,
+            "unit": "IU",
+            "name": "Vitamin E",
+            "standard_name": "Vitamin E",
+            "matched_form": "dl-alpha-tocopheryl acetate",
+            "form_id": "dl-alpha-tocopheryl acetate",
+        },
+        1.0,
+        "caution",
+    )
+
+    assert decision["evaluation_status"] == "above_threshold"
+    assert decision["release_blocking"] is False
+    assert decision["dose_evaluation"]["converted_amount"] == pytest.approx(180.0)
+    assert decision["dose_evaluation"]["conversion_method"] == "vitamin_e_dl_alpha_tocopherol"
+
+
+def test_conversion_failure_emits_the_threshold_contract():
+    _severity, decision = _evaluate(
+        {
+            "quantity": 20,
+            "unit": "mg NE",
+            "name": "Vitamin D3",
+            "standard_name": "Vitamin D3 (Cholecalciferol)",
+        }
+    )
+
+    assert decision["evaluation_status"] == "conversion_error"
+    assert decision["decision_rule"] == {
+        "basis": "per_day",
+        "comparator": ">",
+        "threshold": 4000.0,
+        "threshold_unit": "iu",
+        "consumer_disposition_if_met": "review",
+        "consumer_disposition_if_not_met": "suppress",
+        "amount_missing_disposition": "good_to_know",
+        "unknown_form_disposition": "suppress",
+        "conversion_failure_policy": "release_block",
+    }
+
+
 def test_semantic_units_are_not_collapsed_into_plain_mass():
     enricher = SupplementEnricherV3()
 
@@ -332,15 +463,48 @@ def test_semantic_units_are_not_collapsed_into_plain_mass():
     assert enricher._normalize_threshold_unit("mcg DFE") == "mcg dfe"
     assert enricher._normalize_threshold_unit("mg NE") == "mg ne"
 
+    # An equivalence unit is bridged by its authored factor, never by dropping
+    # the qualifier: 400 mcg DFE is 235.2 mcg folic acid (1/1.7), not 400.
     converted, reason, _method = enricher._convert_amount_to_target_unit_with_evidence(
+        amount=400,
+        from_unit="mcg DFE",
+        target_unit="mcg",
+        ingredient_name="Folic Acid",
+        standard_name="Folate",
+    )
+    assert reason is None
+    assert converted == pytest.approx(235.2)
+
+    # An equivalence unit carried by the wrong nutrient stays a contract gap.
+    converted, reason, _method = enricher._convert_amount_to_target_unit_with_evidence(
+        amount=20,
+        from_unit="mg NE",
+        target_unit="mg",
+        ingredient_name="Vitamin D3",
+        standard_name="Vitamin D3 (Cholecalciferol)",
+    )
+    assert converted is None
+    assert reason == "no_conversion_rule"
+
+
+def test_niacin_equivalents_bridge_to_mg_through_an_authored_factor():
+    """``mg NE`` -> ``mg`` is data, not a code-level unit collapse.
+
+    unit_conversions.json authors ``mg_ne_to_mg: 1.0`` for niacin (NIH ODS):
+    preformed niacin is 1:1 with its equivalents, and the 60:1 tryptophan
+    factor applies to dietary protein, never to a niacin ingredient row.
+    """
+    enricher = SupplementEnricherV3()
+
+    converted, reason, method = enricher._convert_amount_to_target_unit_with_evidence(
         amount=20,
         from_unit="mg NE",
         target_unit="mg",
         ingredient_name="Niacin",
         standard_name="Niacin (Vitamin B3)",
     )
-    assert converted is None
-    assert reason == "no_conversion_rule"
+    assert (converted, reason) == (20.0, None)
+    assert method == "niacin"
 
 
 def test_specialized_marker_analysis_requires_explicit_standardization_math():

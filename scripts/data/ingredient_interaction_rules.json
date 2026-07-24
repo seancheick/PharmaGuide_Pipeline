@@ -8444,7 +8444,7 @@
           "basis": "per_day",
           "comparator": ">",
           "value": 1000,
-          "unit": "mg",
+          "unit": "mg NE",
           "severity_if_met": "avoid",
           "severity_if_not_met": "monitor",
           "profile_gate": {
@@ -8467,7 +8467,7 @@
               "basis": "per_day",
               "comparator": ">",
               "value": 1000,
-              "unit": "mg",
+              "unit": "mg NE",
               "severity_if_met": "avoid",
               "severity_if_not_met": "monitor"
             }

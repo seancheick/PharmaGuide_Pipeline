@@ -2451,8 +2451,6 @@ class EnhancedDSLDNormalizer:
             return None
 
         source_unit = self._normalize_daily_value_unit(unit)
-        if source_unit != "mg":
-            return None
 
         nutrient_key, record = self._find_daily_value_record(
             canonical_id=canonical_id,
@@ -2481,6 +2479,37 @@ class EnhancedDSLDNormalizer:
 
         expected_amount = (percent_dv / 100.0) * dv_reference_amount
         if expected_amount <= 0:
+            return None
+
+        # ``NP`` normally means "not provided", but a positive numeric
+        # vitamin/mineral row with a coherent FDA %DV proves that only the unit
+        # was lost.  Restore the statutory label unit without changing the
+        # value, and preserve the raw input for downstream auditability.
+        if source_unit == "np":
+            relative_error = abs(amount - expected_amount) / expected_amount
+            if relative_error > 0.25:
+                return None
+            return {
+                "status": "corrected",
+                "reason": "daily_value_missing_unit",
+                "nutrient_key": nutrient_key,
+                "raw_amount": amount,
+                "raw_unit": unit,
+                "corrected_amount": amount,
+                "corrected_unit": target_unit,
+                "percent_daily_value": percent_dv,
+                "daily_value_target_group": target_group,
+                "daily_value_reference_amount": dv_reference_amount,
+                "daily_value_reference_unit": target_unit,
+                "daily_value_expected_amount": expected_amount,
+                "declared_amount_in_reference_unit": None,
+                "mismatch_ratio": None,
+                "correction_factor": 1.0,
+                "relative_error": relative_error,
+                "confidence": "high",
+            }
+
+        if source_unit != "mg":
             return None
 
         declared_amount_in_target_unit = amount * 1000.0

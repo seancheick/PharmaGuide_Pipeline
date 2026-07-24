@@ -16731,27 +16731,74 @@ class SupplementEnricherV3:
             marker_name = re.sub(r"[\s-]+", " ", marker_unit.group(2)).strip()
             return f"{marker_unit.group(1)} {marker_name}"
         mass_unit = norm_module.canonicalize_mass_unit(raw)
-        if mass_unit in {"mcg", "mg", "g"}:
+        if mass_unit in self._MASS_FACTORS_MG:
             return mass_unit
-        alias_map = {
-            "internationalunits": "iu",
-            "internationalunit": "iu",
-        }
-        return alias_map.get(compact, compact)
+        # DSLD prints International Units several ways on the same label —
+        # 66382 carries "Vitamin A 5000 IU" beside "Vitamin D 1000 U", and
+        # 67030 uses the French/Spanish "UI".  They are one unit.
+        return self._IU_UNIT_ALIASES.get(compact.replace(".", ""), compact)
+
+    # Mass ladder used by every dose comparison.  ``ng`` is here because DSLD
+    # labels occasionally record one (46729 Vitamin B6 "40 ng"); the conversion
+    # is exact, and refusing it turned a below-threshold row into a release
+    # block.
+    _MASS_FACTORS_MG = {
+        "ng": 0.000001,
+        "mcg": 0.001,
+        "mg": 1.0,
+        "g": 1000.0,
+    }
+
+    _IU_UNIT_ALIASES = {
+        "u": "iu",
+        "iu": "iu",
+        "ui": "iu",
+        "unit": "iu",
+        "units": "iu",
+        "internationalunit": "iu",
+        "internationalunits": "iu",
+    }
+
+    # "mg AT" qualifies WHICH analyte the milligrams measure (alpha-tocopherol)
+    # rather than applying an equivalence factor, and every Vitamin E threshold
+    # is authored in exactly that analyte — so the token is a spelling of mg.
+    # True equivalence units (``mg NE``, ``mcg RAE``, ``mcg DFE``) are
+    # deliberately absent: they rescale one substance into another, so their
+    # bridges must be authored in unit_conversions.json where a reviewer can
+    # see the factor, never collapsed here.
+    _EQUIVALENT_BASE_MASS_UNITS = {
+        "mg at": "mg",
+    }
 
     def _is_mass_unit(self, unit: str) -> bool:
-        return unit in {"mcg", "mg", "g"}
+        return unit in self._MASS_FACTORS_MG
+
+    def _base_comparison_unit(self, unit: str) -> str:
+        return self._EQUIVALENT_BASE_MASS_UNITS.get(unit, unit)
+
+    def _is_comparable_quantity_unit(self, unit: str) -> bool:
+        """True when the unit expresses how much of the subject is taken.
+
+        Percent DV, standardization ratios (``mcg/g``), enzyme activity units
+        (``GDU``/``FCCPU``/``PU``/``m.c.u.``), DSLD's ``NP`` sentinel and
+        garbled tokens are not amounts — they are an undisclosed dose.
+
+        Semantic units (``mg NE``, ``mcg RAE``, ``mg EGCG``) ARE amounts, so a
+        missing bridge between two of them stays a release-blocking contract
+        gap for someone to author.
+        """
+        base = self._base_comparison_unit(unit)
+        if self._is_mass_unit(base) or base == "iu":
+            return True
+        return re.fullmatch(r"(?:ng|mcg|mg|g)\s+.+", base) is not None
 
     def _convert_mass(self, value: float, from_unit: str, to_unit: str) -> Optional[float]:
+        from_unit = self._base_comparison_unit(from_unit)
+        to_unit = self._base_comparison_unit(to_unit)
         if not (self._is_mass_unit(from_unit) and self._is_mass_unit(to_unit)):
             return None
-        factors_mg = {
-            "mcg": 0.001,
-            "mg": 1.0,
-            "g": 1000.0,
-        }
-        mg_value = value * factors_mg[from_unit]
-        return mg_value / factors_mg[to_unit]
+        mg_value = value * self._MASS_FACTORS_MG[from_unit]
+        return mg_value / self._MASS_FACTORS_MG[to_unit]
 
     def _to_float_safe(self, value: Any) -> Optional[float]:
         try:
@@ -16817,46 +16864,87 @@ class SupplementEnricherV3:
         if mass_converted is not None:
             return mass_converted, None, "mass_conversion"
 
+        # The nutrient rules are authored from each nutrient's FDA label mass
+        # (Vitamin D in mcg, Vitamin E in mg).  A label that records a different
+        # mass — 64433 prints Vitamin D in mg — is still an exact comparison, so
+        # offer the converter each rung of the mass ladder rather than calling
+        # an unauthored source unit a conversion failure.
+        src_base = self._base_comparison_unit(src)
+        attempts = [(amount, src_base)] if self.unit_converter else []
+        if attempts and self._is_mass_unit(src_base):
+            attempts.extend(
+                (self._convert_mass(amount, src_base, bridge), bridge)
+                for bridge in ("mcg", "mg", "g")
+                if bridge != src_base
+            )
+
         # Try nutrient-aware conversion (IU/RAE and nutrient-specific transforms).
-        if self.unit_converter:
+        for attempt_amount, attempt_unit in attempts:
+            if attempt_amount is None:
+                continue
             try:
                 conversion = self.unit_converter.convert_nutrient(
                     nutrient=standard_name or ingredient_name,
-                    amount=amount,
-                    from_unit=src,
+                    amount=attempt_amount,
+                    from_unit=attempt_unit,
                     to_unit=tgt,
                     ingredient_name=ingredient_name,
                 )
-                conv_value = getattr(conversion, "converted_value", None)
-                conv_unit = self._normalize_threshold_unit(getattr(conversion, "converted_unit", None))
-                conv_success = bool(getattr(conversion, "success", False))
-                if conv_success and conv_value is not None and conv_unit:
-                    if conv_unit == tgt:
-                        return (
-                            float(conv_value),
-                            None,
-                            str(getattr(conversion, "conversion_rule_id", None) or "nutrient_conversion"),
-                        )
-                    mass_from_conv = self._convert_mass(float(conv_value), conv_unit, tgt)
-                    if mass_from_conv is not None:
-                        return (
-                            mass_from_conv,
-                            None,
-                            str(getattr(conversion, "conversion_rule_id", None) or "nutrient_conversion"),
-                        )
             except Exception as e:
                 self.logger.warning(
                     "Dosage conversion exception for ingredient='%s' standard='%s' "
                     "amount=%s from_unit='%s' target_unit='%s': %s",
                     ingredient_name,
                     standard_name,
-                    amount,
-                    src,
+                    attempt_amount,
+                    attempt_unit,
                     tgt,
                     e,
                 )
                 return None, "conversion_exception", None
 
+            conv_value = getattr(conversion, "converted_value", None)
+            conv_unit = self._normalize_threshold_unit(getattr(conversion, "converted_unit", None))
+            conv_success = bool(getattr(conversion, "success", False))
+            conversion_rule_id = str(
+                getattr(conversion, "conversion_rule_id", "") or ""
+            )
+            # Form-dependent units (notably Vitamin A and E IU) cannot be
+            # evaluated when the label does not disclose the form.  That is
+            # clinical uncertainty, not a broken conversion implementation;
+            # preserve the explicit form-unknown contract and its authored
+            # consumer policy instead of turning it into a release failure.
+            if (
+                conversion_rule_id in {"vitamin_a_unknown", "vitamin_e_unknown"}
+                and conv_success
+                and conv_unit != tgt
+            ):
+                return None, "form_unknown", conversion_rule_id
+            if conv_success and conv_value is not None and conv_unit:
+                if conv_unit == tgt:
+                    return (
+                        float(conv_value),
+                        None,
+                        conversion_rule_id or "nutrient_conversion",
+                    )
+                mass_from_conv = self._convert_mass(float(conv_value), conv_unit, tgt)
+                if mass_from_conv is not None:
+                    return (
+                        mass_from_conv,
+                        None,
+                        conversion_rule_id or "nutrient_conversion",
+                    )
+
+        # Nothing bridged the two units.  Separate the two clinically distinct
+        # reasons: a unit that is not an amount at all means the label never
+        # disclosed the dose (honest uncertainty, the authored amount_unknown
+        # contract), while two comparable quantities that still cannot be
+        # bridged is a data-contract defect that must keep blocking release.
+        if not (
+            self._is_comparable_quantity_unit(src)
+            and self._is_comparable_quantity_unit(tgt)
+        ):
+            return None, "unit_not_comparable", None
         return None, "no_conversion_rule", None
 
     def _marker_amount_for_threshold_unit(
@@ -16919,6 +17007,28 @@ class SupplementEnricherV3:
                 return converted, "label_standardization"
         return None, None
 
+    def _dose_decision_rule(self, threshold: Dict[str, Any]) -> Dict[str, Any]:
+        """Emit the complete, pipeline-owned policy contract for a threshold."""
+        return {
+            "basis": str(threshold.get("basis") or "per_day").strip().lower(),
+            "comparator": str(threshold.get("comparator") or "").strip(),
+            "threshold": self._to_float_safe(threshold.get("value")),
+            "threshold_unit": self._normalize_threshold_unit(threshold.get("unit")),
+            "consumer_disposition_if_met": str(
+                threshold.get("consumer_disposition_if_met") or "review"
+            ).strip().lower(),
+            "consumer_disposition_if_not_met": str(
+                threshold.get("consumer_disposition_if_not_met") or "suppress"
+            ).strip().lower(),
+            "amount_missing_disposition": str(
+                threshold.get("amount_missing_disposition") or "suppress"
+            ).strip().lower(),
+            "unknown_form_disposition": str(
+                threshold.get("unknown_form_disposition") or "suppress"
+            ).strip().lower(),
+            "conversion_failure_policy": "release_block",
+        }
+
     def _evaluate_dose_thresholds_for_target(
         self,
         thresholds: List[Dict[str, Any]],
@@ -16955,25 +17065,7 @@ class SupplementEnricherV3:
                 ).strip().lower(),
                 "release_blocking": False,
                 "dose_evaluation": None,
-                "decision_rule": {
-                    "basis": str(policy.get("basis") or "per_day").strip().lower(),
-                    "comparator": str(policy.get("comparator") or "").strip(),
-                    "threshold": self._to_float_safe(policy.get("value")),
-                    "threshold_unit": self._normalize_threshold_unit(policy.get("unit")),
-                    "consumer_disposition_if_met": str(
-                        policy.get("consumer_disposition_if_met") or "review"
-                    ).strip().lower(),
-                    "consumer_disposition_if_not_met": str(
-                        policy.get("consumer_disposition_if_not_met") or "suppress"
-                    ).strip().lower(),
-                    "amount_missing_disposition": str(
-                        policy.get("amount_missing_disposition") or "suppress"
-                    ).strip().lower(),
-                    "unknown_form_disposition": str(
-                        policy.get("unknown_form_disposition") or "suppress"
-                    ).strip().lower(),
-                    "conversion_failure_policy": "release_block",
-                },
+                "decision_rule": self._dose_decision_rule(policy),
             }
 
         severity_candidate = base_severity
@@ -17004,6 +17096,11 @@ class SupplementEnricherV3:
                     "threshold": threshold,
                 })
                 continue
+
+            # Keep the source policy attached even if a label cannot be
+            # evaluated.  The release audit and Flutter must never have to
+            # infer a disposition from severity alone.
+            details["decision_rule"] = self._dose_decision_rule(threshold)
 
             amount_basis = quantity * (servings_per_day_max if basis == "per_day" else 1.0)
             form_context = str(ingredient.get("matched_form") or "").strip()
@@ -17089,25 +17186,7 @@ class SupplementEnricherV3:
                 ),
                 "form_context": form_context or None,
             }
-            details["decision_rule"] = {
-                "basis": basis,
-                "comparator": comparator,
-                "threshold": threshold_value,
-                "threshold_unit": threshold_unit,
-                "consumer_disposition_if_met": str(
-                    threshold.get("consumer_disposition_if_met") or "review"
-                ).strip().lower(),
-                "consumer_disposition_if_not_met": str(
-                    threshold.get("consumer_disposition_if_not_met") or "suppress"
-                ).strip().lower(),
-                "amount_missing_disposition": str(
-                    threshold.get("amount_missing_disposition") or "suppress"
-                ).strip().lower(),
-                "unknown_form_disposition": str(
-                    threshold.get("unknown_form_disposition") or "suppress"
-                ).strip().lower(),
-                "conversion_failure_policy": "release_block",
-            }
+            details["decision_rule"] = self._dose_decision_rule(threshold)
             details["consumer_disposition"] = str(
                 threshold.get(
                     "consumer_disposition_if_met"
@@ -17153,16 +17232,46 @@ class SupplementEnricherV3:
                 for item in details["thresholds_checked"]
                 if isinstance(item, dict)
             ]
+            # "marker_amount_unknown" (a specialized marker the label never
+            # quantified) and "unit_not_comparable" (a percent, ratio, activity
+            # unit or sentinel where a dose should be) are both undisclosed
+            # doses, not conversion defects.
             marker_amount_unknown = bool(conversion_reasons) and all(
-                reason == "marker_amount_unknown" for reason in conversion_reasons
+                reason in {"marker_amount_unknown", "unit_not_comparable"}
+                for reason in conversion_reasons
+            )
+            form_unknown = bool(conversion_reasons) and all(
+                reason == "form_unknown" for reason in conversion_reasons
             )
             details["evaluation_status"] = (
-                "amount_unknown" if marker_amount_unknown else "conversion_error"
+                "form_unknown"
+                if form_unknown
+                else "amount_unknown"
+                if marker_amount_unknown
+                else "conversion_error"
             )
             details["clinical_severity"] = base_severity
             details["consumer_disposition"] = "suppress"
-            if marker_amount_unknown:
-                details["reason"] = "specialized_marker_amount_not_disclosed"
+            if form_unknown:
+                details["reason"] = "dose_form_not_disclosed"
+                details["consumer_disposition"] = str(
+                    (details.get("decision_rule") or {}).get(
+                        "unknown_form_disposition"
+                    )
+                    or "suppress"
+                ).strip().lower()
+                details["release_blocking"] = False
+            elif marker_amount_unknown:
+                details["reason"] = "dose_amount_not_disclosed"
+                # The authored amount-missing policy owns the consumer outcome
+                # here exactly as it does for a blank quantity; the contract
+                # audit compares the two.
+                details["consumer_disposition"] = str(
+                    (details.get("decision_rule") or {}).get(
+                        "amount_missing_disposition"
+                    )
+                    or "suppress"
+                ).strip().lower()
                 details["release_blocking"] = False
             else:
                 details["conversion_error"] = next(
@@ -17238,11 +17347,15 @@ class SupplementEnricherV3:
         amount_basis = quantity * (servings_per_day_max if basis == "per_day" else 1.0)
         ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
         standard_name = str(ingredient.get("standard_name") or "")
+        form_context = str(ingredient.get("matched_form") or "").strip()
+        conversion_name = " ".join(
+            value for value in (ingredient_name, form_context) if value
+        )
         converted_amount, _reason = self._convert_amount_to_target_unit(
             amount=amount_basis,
             from_unit=unit,
             target_unit=floor_unit,
-            ingredient_name=ingredient_name,
+            ingredient_name=conversion_name,
             standard_name=standard_name,
         )
         if converted_amount is None:
@@ -17337,16 +17450,36 @@ class SupplementEnricherV3:
         amount_basis = quantity * serving_multiplier
         ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
         standard_name = str(ingredient.get("standard_name") or "")
+        form_context = str(ingredient.get("matched_form") or "").strip()
+        conversion_name = " ".join(
+            value for value in (ingredient_name, form_context) if value
+        )
         converted_amount, reason, conversion_method = (
             self._convert_amount_to_target_unit_with_evidence(
                 amount=amount_basis,
                 from_unit=observed_unit,
                 target_unit=floor_unit,
-                ingredient_name=ingredient_name,
+                ingredient_name=conversion_name,
                 standard_name=standard_name,
             )
         )
         if converted_amount is None:
+            if reason == "form_unknown":
+                result["evaluation_status"] = "form_unknown"
+                result["consumer_disposition"] = str(
+                    min_effective_dose.get("unknown_form_disposition") or "suppress"
+                ).strip().lower()
+                return result
+            if reason == "unit_not_comparable":
+                # The label recorded a percent, a ratio, an activity unit or a
+                # sentinel where a dose belongs — the amount is undisclosed, so
+                # this follows the authored amount-missing policy rather than
+                # blocking publication.
+                result["evaluation_status"] = "amount_unknown"
+                result["consumer_disposition"] = str(
+                    min_effective_dose.get("amount_missing_disposition") or "suppress"
+                ).strip().lower()
+                return result
             result["evaluation_status"] = "conversion_error"
             result["consumer_disposition"] = "suppress"
             result["release_blocking"] = True

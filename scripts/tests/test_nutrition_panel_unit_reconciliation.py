@@ -45,6 +45,7 @@ class TestSodiumUnitReconciliation:
         ("milligrams", 55.0, False),
         ("mcg", 0.1, False),             # round(0.055,1); substring bug → was 55,000 / High
         ("microgram", 0.1, False),
+        ("mgc", 0.1, False),             # DSLD transposition of mcg
         ("g", 55000.0, True),            # control: grams genuinely ×1000
         ("Gram(s)", 55000.0, True),
     ])

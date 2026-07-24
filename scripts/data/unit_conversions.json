@@ -9,7 +9,7 @@
     "statistics": {
       "vitamin_conversions": 22,
       "form_detection_categories": 2,
-      "total_conversion_rules": 44,
+      "total_conversion_rules": 45,
       "mcg_only_nutrients": 7,
       "notes": "Bare folate preserves unknown form lineage; explicit DFE units normalize without assuming folic acid"
     },
@@ -236,10 +236,11 @@
       ],
       "conversions": {
         "mg_to_mg_ne": 1.0,
+        "mg_ne_to_mg": 1.0,
         "tryptophan_mg_to_mg_ne": 0.0167
       },
       "canonical_unit": "mg NE",
-      "notes": "NE = Niacin Equivalents; 60 mg tryptophan = 1 mg NE",
+      "notes": "NE = Niacin Equivalents; 60 mg tryptophan = 1 mg NE. Preformed niacin (nicotinic acid / niacinamide) is 1:1 with NE in both directions, so a label printed in mg NE compares directly against a mg niacin threshold; the 60:1 tryptophan factor applies to dietary protein only, never to a niacin ingredient row.",
       "source": "NIH ODS"
     },
     "vitamin_k1": {

@@ -260,6 +260,14 @@ class UnitConverter:
         canonical_unit = rule_data.get('canonical_unit', 'mcg')
         target_unit = to_unit or canonical_unit
 
+        # DSLD occasionally preserves the FDA Vitamin A quantity but drops the
+        # ``RAE`` qualifier from the unit.  That shorthand is safe to interpret
+        # only after the form detector has positively established preformed
+        # retinol/retinyl ester; never apply it to generic Vitamin A or
+        # beta-carotene.
+        if rule_id == 'vitamin_a_retinol' and from_unit_lower == 'mcg':
+            from_unit_lower = 'mcg rae'
+
         # Get conversion factor
         conversions = rule_data.get('conversions', {})
         if conversions is None:
@@ -444,6 +452,16 @@ class UnitConverter:
         # Folate: folic acid vs methylfolate
         if 'folate' in nutrient_lower or 'folic' in nutrient_lower:
             return self._detect_folate_form(ingredient_lower)
+
+        # Vitamin D2 and D3 share the same IU/mcg factor, but preserving a
+        # label-confirmed form in the conversion trace is still clinically and
+        # operationally important.  A generic parent name must not silently
+        # report D3 when the label says ergocalciferol/D2.
+        if 'vitamin d' in nutrient_lower:
+            if re.search(r'\b(?:ergocalciferol|vitamin\s*d[- ]?2|d[- ]?2)\b', ingredient_lower):
+                return 'vitamin_d2', self.vitamin_conversions.get('vitamin_d2', {})
+            if re.search(r'\b(?:cholecalciferol|vitamin\s*d[- ]?3|d[- ]?3)\b', ingredient_lower):
+                return 'vitamin_d3', self.vitamin_conversions.get('vitamin_d3', {})
 
         # For non-form-dependent vitamins (D, K, B-vitamins, etc.), use direct match
         for rule_id, rule_data in self.vitamin_conversions.items():
