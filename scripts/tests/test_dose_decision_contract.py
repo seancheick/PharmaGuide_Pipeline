@@ -432,6 +432,47 @@ def test_vitamin_e_floor_uses_resolved_form_for_iu_conversion():
     assert decision["dose_evaluation"]["conversion_method"] == "vitamin_e_dl_alpha_tocopherol"
 
 
+@pytest.mark.parametrize("label", ["Mixed Carotenoids", "Carotenoids"])
+def test_generic_carotenoid_mix_is_form_unknown_not_beta_carotene(label):
+    """A carotenoid-family mass label cannot establish Vitamin A activity.
+
+    Do not borrow beta-carotene's conversion factor for a label that does not
+    identify beta-carotene or state RAE/IU.  Pregnancy logic must preserve
+    that uncertainty rather than release-blocking an impossible conversion.
+    """
+    enricher = SupplementEnricherV3()
+    threshold = {
+        "scope": "condition",
+        "target_id": "pregnancy",
+        "basis": "per_day",
+        "comparator": ">",
+        "value": 10_000,
+        "unit": "IU",
+        "severity_if_met": "review",
+        "severity_if_not_met": "monitor",
+        "unknown_form_disposition": "suppress",
+    }
+
+    _severity, decision = enricher._evaluate_dose_thresholds_for_target(
+        [threshold],
+        "condition",
+        "pregnancy",
+        {
+            "quantity": 12,
+            "unit": "mg",
+            "name": label,
+            "raw_source_text": label,
+            "standard_name": "Vitamin A",
+        },
+        1.0,
+        "caution",
+    )
+
+    assert decision["evaluation_status"] == "form_unknown"
+    assert decision["consumer_disposition"] == "suppress"
+    assert decision["release_blocking"] is False
+
+
 def test_conversion_failure_emits_the_threshold_contract():
     _severity, decision = _evaluate(
         {

@@ -405,12 +405,10 @@
         "\\bvitamin\\s+A\\s+(palmitate|acetate)\\b"
       ],
       "beta_carotene_patterns": [
-        "\\bbeta[- ]?carotene\\b",
-        "\\bprovitamin\\s+A\\b",
-        "\\bcarotenoid"
+        "\\bbeta[- ]?carotene\\b"
       ],
       "default_if_unknown": "flag_for_review",
-      "notes": "Do NOT default - flag for review if form unknown (UL implications)"
+      "notes": "Only explicit beta-carotene gets the supplemental beta-carotene factor. Generic carotenoid or provitamin-A labels are form-unknown because their Vitamin A activity is not derivable from mass alone; do not default (UL implications)."
     }
   }
 }
