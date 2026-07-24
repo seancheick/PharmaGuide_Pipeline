@@ -1244,8 +1244,8 @@
       "id": "DEP_ANTICONVULSANTS_VITAMIND",
       "drug_ref": {
         "type": "class",
-        "id": "class:anticonvulsants",
-        "display_name": "Anticonvulsants / antiepileptic drugs"
+        "id": "class:enzyme_inducing_antiseizure_medications",
+        "display_name": "Enzyme-inducing antiseizure medications"
       },
       "depleted_nutrient": {
         "standard_name": "Vitamin D",

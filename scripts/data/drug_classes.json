@@ -4,8 +4,8 @@
     "description": "Drug class expansion map for interaction matching (class:X \u2192 RxCUIs)",
     "purpose": "interaction_db_class_expansion",
     "last_updated": "2026-07-24",
-    "total_classes": 35,
-    "total_members": 789,
+    "total_classes": 36,
+    "total_members": 793,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -1946,6 +1946,29 @@
         "C03C"
       ],
       "notes": "Curated composite of loop + thiazide/thiazide-like diuretics for potassium/magnesium depletion signals. Sourced from the RxNorm-verified master class:diuretics, NOT from class:thiazide_diuretics (whose rxcui list was misaligned as of Sprint 3). Excludes every potassium-sparing agent by design."
+    },
+    "class:enzyme_inducing_antiseizure_medications": {
+      "display_name": "Enzyme-inducing antiseizure medications",
+      "description": "Strong hepatic CYP450 inducers among the antiseizure medications, which accelerate vitamin D catabolism (and lower 25-OH vitamin D). Curated composite — carbamazepine, phenobarbital, phenytoin, primidone. Deliberately EXCLUDES non-inducers, especially valproate (an enzyme inhibitor), and the weaker, dose-dependent inducer oxcarbazepine (evaluate separately).",
+      "member_rxcuis": [
+        "2002",
+        "8134",
+        "8183",
+        "8691"
+      ],
+      "member_names": [
+        "carbamazepine",
+        "phenobarbital",
+        "phenytoin",
+        "primidone"
+      ],
+      "rxclass_id": null,
+      "atc_codes": [
+        "N03AA",
+        "N03AB",
+        "N03AF"
+      ],
+      "notes": "Curated enzyme-inducer subset of class:anticonvulsants for the vitamin D catabolism signal. Valproate and oxcarbazepine are intentionally excluded — valproate is an enzyme inhibitor (its biotin/L-carnitine depletion records stay on class:anticonvulsants); oxcarbazepine is a weaker, dose-dependent inducer pending separate review. All 4 rxcuis content-verified against RxNorm."
     },
     "class:tetracycline_antibiotics": {
       "display_name": "Tetracycline antibiotics",

@@ -172,3 +172,56 @@ def test_magnesium_misattributed_citation_corrected(depletions):
     assert "Hess" in src["label"], "magnesium citation label must be corrected to Hess et al."
     assert "Danziger" not in src["label"], "stale misattributed 'Danziger' label must be gone"
     assert "22762246" in src["url"], "the real, on-topic PMID stays"
+
+
+# --------------------------------------------------------------------------- #
+# Step 3 — enzyme-inducing antiseizure medications → vitamin D
+#
+# Vitamin D catabolism is driven by strong hepatic CYP inducers, not every AED.
+# Only the vitamin D record moves. valproate (an enzyme INHIBITOR — biotin /
+# L-carnitine records) must never enter this class; oxcarbazepine is a weaker,
+# dose-dependent inducer left for separate review.
+# --------------------------------------------------------------------------- #
+
+EIASM = "class:enzyme_inducing_antiseizure_medications"
+EIASM_REQUIRED = {"2002": "carbamazepine", "8134": "phenobarbital", "8183": "phenytoin", "8691": "primidone"}
+EIASM_FORBIDDEN_NAMES = {"valproate", "valproic acid", "divalproex", "oxcarbazepine"}
+EIASM_FORBIDDEN_RXCUIS = {"32624"}  # oxcarbazepine
+
+
+def test_eiasm_class_exists_with_the_four_inducers(classes):
+    assert EIASM in classes, f"{EIASM} not defined"
+    c = classes[EIASM]
+    rx, names = set(c["member_rxcuis"]), set(c["member_names"])
+    for rxcui, name in EIASM_REQUIRED.items():
+        assert rxcui in rx and name in names, f"{EIASM} missing {name} ({rxcui})"
+
+
+def test_eiasm_excludes_valproate_and_oxcarbazepine(classes):
+    c = classes[EIASM]
+    names = {n.lower() for n in c["member_names"]}
+    rx = set(c["member_rxcuis"])
+    assert not (names & EIASM_FORBIDDEN_NAMES), (
+        f"{EIASM} must exclude non-inducers {names & EIASM_FORBIDDEN_NAMES} "
+        "(valproate is an enzyme INHIBITOR; oxcarbazepine pending separate review)"
+    )
+    assert not (rx & EIASM_FORBIDDEN_RXCUIS), f"{EIASM} must exclude rxcui {rx & EIASM_FORBIDDEN_RXCUIS}"
+
+
+def test_vitamin_d_anticonvulsant_repointed(depletions):
+    assert depletions["DEP_ANTICONVULSANTS_VITAMIND"]["drug_ref"]["id"] == EIASM
+
+
+@pytest.mark.parametrize(
+    "entry_id",
+    [
+        "DEP_ANTICONVULSANTS_CALCIUM", "DEP_ANTICONVULSANTS_FOLATE", "DEP_ANTICONVULSANTS_VITAMINB12",
+        "DEP_ANTICONVULSANTS_VITAMINK", "DEP_ANTICONVULSANTS_BIOTIN", "DEP_ANTICONVULSANTS_LCARNITINE",
+    ],
+)
+def test_deferred_anticonvulsant_records_untouched(depletions, entry_id):
+    # Especially BIOTIN + LCARNITINE — valproate-specific, must never ride the
+    # enzyme-inducing class.
+    assert depletions[entry_id]["drug_ref"]["id"] == "class:anticonvulsants", (
+        f"{entry_id} must NOT be repointed in Sprint 3 (see research.md)"
+    )

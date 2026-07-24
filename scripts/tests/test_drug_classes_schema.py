@@ -61,6 +61,7 @@ EXPECTED_CLASSES = {
     "class:tetracycline_antibiotics",
     "class:serotonergic_medications",
     "class:vitamin_k_antagonists",
+    "class:enzyme_inducing_antiseizure_medications",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
@@ -89,6 +90,7 @@ CANONICAL_ANCHORS = {
     "class:potassium_sparing_diuretics": ["spironolactone", "triamterene"],
     "class:tetracycline_antibiotics": ["doxycycline", "tetracycline"],
     "class:serotonergic_medications": ["linezolid", "amitriptyline", "tramadol", "buspirone"],
+    "class:enzyme_inducing_antiseizure_medications": ["phenytoin", "carbamazepine", "phenobarbital", "primidone"],
 }
 
 RXCUI_PATTERN = re.compile(r"^\d+$")
