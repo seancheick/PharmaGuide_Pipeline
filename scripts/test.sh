@@ -223,6 +223,19 @@ run_release_artifact_gates() {
       --flutter-repo "$FLUTTER_REPO" \
       --strict-release
   fi
+  # Live identifier gates (RxNorm / PubMed) — the stated pre-ship gate must
+  # RESOLVE every shipped clinical id, not just check non-empty strings (a batch
+  # of retired/swapped rxcuis shipped undetected in the 2026-07-24 audit for
+  # exactly this reason). Fail-closed; need network + an NCBI key in .env. Set
+  # SKIP_LIVE_IDENTITY_GATES=1 for an intentionally-offline run (you then own the
+  # identifier risk). Mirrors release_full.sh Step 4b.
+  if [[ "${SKIP_LIVE_IDENTITY_GATES:-0}" == "1" ]]; then
+    echo "[test.sh] SKIP live identifier gates (SKIP_LIVE_IDENTITY_GATES=1) — identifier risk UNVERIFIED" >&2
+  else
+    "$PG_PYTHON" scripts/api_audit/verify_drug_class_rxcuis.py
+    "$PG_PYTHON" scripts/api_audit/verify_medication_depletion_identifiers.py
+    "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_pmids.py --live
+  fi
 }
 
 fast_test_files() {

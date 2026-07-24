@@ -1812,7 +1812,11 @@
       "acknowledgement_note": "Nice — a B-complex is a reasonable companion during and after antibiotic treatment.",
       "monitoring_tip_short": "Consider a B-complex and fermented foods during and after a course of antibiotics.",
       "adequacy_threshold_mcg": 250,
-      "food_sources_short": "Food sources of B vitamins include meat, poultry, fish, eggs, dairy, leafy greens, legumes, and fortified grains."
+      "food_sources_short": "Food sources of B vitamins include meat, poultry, fish, eggs, dairy, leafy greens, legumes, and fortified grains.",
+      "citation_review_status": "needs_revision",
+      "citation_review_note": "drug_ref.id 'antibiotics_broadspectrum' is a synthetic non-RxCUI identifier; the app matches medications by numeric RxCUI, so this rule can never fire. Suppressed (needs_revision) pending Section 8 conversion to class:broad_spectrum_antibiotics with real member rxcuis. The mechanism/citation are sound — the defect is the drug identifier, not the evidence.",
+      "reviewer": "identifier-audit-2026-07-24",
+      "reviewed_at": "2026-07-24"
     },
     {
       "id": "DEP_ANTIBIOTICS_VITAMINK",
@@ -1843,7 +1847,11 @@
       "alert_headline": "Can affect vitamin K during a course",
       "alert_body": "Broad-spectrum antibiotics can gradually reduce gut-bacteria vitamin K production during a course. This matters most for people on warfarin and is managed medically.",
       "acknowledgement_note": "Good — vitamin K awareness is helpful during and after antibiotic courses.",
-      "monitoring_tip_short": "If you take warfarin, ask about INR checks during and after an antibiotic course."
+      "monitoring_tip_short": "If you take warfarin, ask about INR checks during and after an antibiotic course.",
+      "citation_review_status": "needs_revision",
+      "citation_review_note": "drug_ref.id 'antibiotics_broadspectrum' is a synthetic non-RxCUI identifier; the app matches medications by numeric RxCUI, so this rule can never fire. Suppressed (needs_revision) pending Section 8 conversion to class:broad_spectrum_antibiotics with real member rxcuis. The mechanism/citation are sound — the defect is the drug identifier, not the evidence.",
+      "reviewer": "identifier-audit-2026-07-24",
+      "reviewed_at": "2026-07-24"
     },
     {
       "id": "DEP_LEVOTHYROXINE_CALCIUM",

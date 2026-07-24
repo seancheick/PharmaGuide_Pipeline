@@ -24,14 +24,23 @@ DRUG_CLASSES = Path(__file__).resolve().parent.parent / "data" / "drug_classes.j
 NAME_URL = "https://rxnav.nlm.nih.gov/REST/rxcui/{}/property.json?propName=RxNorm%20Name"
 
 
-def rxnorm_name(rxcui: str) -> str:
-    try:
-        with urllib.request.urlopen(NAME_URL.format(rxcui), timeout=15) as r:
-            d = json.load(r)
-        p = d.get("propConceptGroup", {}).get("propConcept", [])
-        return p[0]["propValue"] if p else ""
-    except Exception as e:  # noqa: BLE001
-        return f"ERR:{e}"
+def rxnorm_name(rxcui: str, attempts: int = 3) -> str:
+    """Return the current RxNorm Name for an rxcui ("" if none/retired).
+
+    Retries transient failures; a persistent failure returns "ERR:..." which the
+    caller treats as a problem (fail-closed — a network blip must never read as
+    'this rxcui is fine')."""
+    last = ""
+    for attempt in range(attempts):
+        try:
+            with urllib.request.urlopen(NAME_URL.format(rxcui), timeout=15) as r:
+                d = json.load(r)
+            p = d.get("propConceptGroup", {}).get("propConcept", [])
+            return p[0]["propValue"] if p else ""
+        except Exception as e:  # noqa: BLE001
+            last = f"ERR:{e}"
+            time.sleep(1.0 * (2 ** attempt))
+    return last
 
 
 def _norm(s: str) -> str:

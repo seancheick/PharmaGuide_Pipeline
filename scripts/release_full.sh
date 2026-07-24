@@ -471,6 +471,28 @@ else
   skip "Step 4/8: Interaction DB up to date with rule sources — skipping rebuild"
 fi
 
+# ---------------------------------------------------------------------------
+# Step 4b: LIVE identifier gates (RxNorm / PubMed) — added 2026-07-24
+#
+# The contract gates below validate identifier STRINGS structurally; they do NOT
+# resolve them. A batch of retired/swapped rxcuis shipped undetected in the
+# 2026-07-24 audit precisely because "non-empty string" != "correct drug". These
+# three gates hit the live APIs and FAIL CLOSED (a transient failure keeps them
+# red, never green). They need network + an NCBI key in .env. For an
+# intentionally-offline build set SKIP_LIVE_IDENTITY_GATES=1 — you then own the
+# identifier risk for that build.
+# ---------------------------------------------------------------------------
+if [[ "${SKIP_LIVE_IDENTITY_GATES:-0}" == "1" ]]; then
+  skip "Live identifier gates (SKIP_LIVE_IDENTITY_GATES=1) — identifier risk UNVERIFIED for this build"
+else
+  run_strict_gate "drug-class rxcui live identity (RxNorm)" \
+    "$PG_PYTHON" scripts/api_audit/verify_drug_class_rxcuis.py
+  run_strict_gate "medication-depletion drug identity (RxNorm)" \
+    "$PG_PYTHON" scripts/api_audit/verify_medication_depletion_identifiers.py
+  run_strict_gate "depletion/timing PMID existence (PubMed)" \
+    "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_pmids.py --live
+fi
+
 run_strict_gate "cleaner/IQD row contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" cleaner --products-dir "$PRODUCTS_DIR" --strict-release
 run_strict_gate "enrichment/IQD source-of-truth contract" \
