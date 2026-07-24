@@ -24,8 +24,11 @@ EXPECTED_STATUS = {
     "DEP_DIURETICS_MAGNESIUM": "needs_revision",
     "DEP_CORTICOSTEROIDS_VITAMIND": "needs_revision",
     "DEP_ANTICONVULSANTS_VITAMIND": "needs_revision",
-    "DEP_LEVOTHYROXINE_CALCIUM": "needs_revision",
-    "DEP_LEVOTHYROXINE_IRON": "needs_revision",
+    # Both levothyroxine interactions were advanced to verified by fix_sprint_01
+    # (see test_med_nutrient_fix_sprint_01.py): overstated magnitudes corrected,
+    # tangents trimmed, iron placeholder → Campbell 1992 controlled trial.
+    "DEP_LEVOTHYROXINE_CALCIUM": "verified",
+    "DEP_LEVOTHYROXINE_IRON": "verified",
 }
 
 # PubMed-confirmed ghost references (title ≠ the label they were cited under):
