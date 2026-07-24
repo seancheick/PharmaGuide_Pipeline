@@ -695,7 +695,7 @@
       "id": "DEP_DIURETICS_POTASSIUM",
       "drug_ref": {
         "type": "class",
-        "id": "class:diuretics",
+        "id": "class:loop_and_thiazide_diuretics",
         "display_name": "Diuretics (water pills)"
       },
       "depleted_nutrient": {
@@ -706,7 +706,7 @@
       "severity": "significant",
       "mechanism": "Loop diuretics (furosemide, bumetanide) and thiazide diuretics (hydrochlorothiazide, chlorthalidone) increase urine volume and renal potassium wasting. They inhibit sodium reabsorption, which increases tubular flow and potassium secretion in the collecting duct.",
       "clinical_impact": "Hypokalemia causes muscle weakness, leg cramps, fatigue, constipation, and dangerously abnormal heart rhythms (arrhythmias). Particularly serious in patients also taking digoxin, where hypokalemia increases toxicity risk.",
-      "recommendation": "Potassium-sparing foods (bananas, potatoes, spinach) are often recommended, but many patients require potassium supplementation (typically 20–40 mEq/day as prescribed). Regular monitoring is essential.",
+      "recommendation": "Potassium-rich foods (bananas, potatoes, spinach) are often recommended, but many patients require potassium supplementation (typically 20–40 mEq/day as prescribed). Regular monitoring is essential.",
       "onset_timeline": "weeks",
       "evidence_level": "established",
       "monitoring_note": "Check serum potassium at baseline and within 1–2 weeks of starting or dose-changing a diuretic. Ongoing monitoring frequency depends on dose and clinical stability.",
@@ -730,7 +730,7 @@
       "id": "DEP_DIURETICS_MAGNESIUM",
       "drug_ref": {
         "type": "class",
-        "id": "class:diuretics",
+        "id": "class:loop_and_thiazide_diuretics",
         "display_name": "Diuretics (water pills)"
       },
       "depleted_nutrient": {

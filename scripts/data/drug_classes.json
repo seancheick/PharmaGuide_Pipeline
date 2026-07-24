@@ -3,9 +3,9 @@
     "schema_version": "1.0.0",
     "description": "Drug class expansion map for interaction matching (class:X \u2192 RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-07-04",
-    "total_classes": 34,
-    "total_members": 768,
+    "last_updated": "2026-07-24",
+    "total_classes": 35,
+    "total_members": 789,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -1889,6 +1889,63 @@
         "C03D"
       ],
       "notes": "Narrow Wave 8 class for potassium supplement and salt-substitute hyperkalemia risk; do not replace the broader diuretics class."
+    },
+    "class:loop_and_thiazide_diuretics": {
+      "display_name": "Loop & thiazide diuretics",
+      "description": "Loop and thiazide/thiazide-like diuretics — the potassium- and magnesium-wasting diuretics. Curated composite that deliberately EXCLUDES potassium-sparing agents (spironolactone, eplerenone, amiloride, triamterene, canrenone, finerenone), aquaretic vaptans, and obsolete mersalyl, so potassium/magnesium depletion signals never fire for those drugs.",
+      "member_rxcuis": [
+        "1369",
+        "1808",
+        "2396",
+        "2409",
+        "21914",
+        "2603",
+        "3000",
+        "22033",
+        "4603",
+        "5487",
+        "5495",
+        "5764",
+        "6696",
+        "6860",
+        "6916",
+        "33770",
+        "8565",
+        "59743",
+        "38413",
+        "10772",
+        "11371"
+      ],
+      "member_names": [
+        "bendroflumethiazide",
+        "bumetanide",
+        "chlorothiazide",
+        "chlorthalidone",
+        "cicletanine",
+        "clopamide",
+        "cyclopenthiazide",
+        "cyclothiazide",
+        "furosemide",
+        "hydrochlorothiazide",
+        "hydroflumethiazide",
+        "indapamide",
+        "mefruside",
+        "methyclothiazide",
+        "metolazone",
+        "piretanide",
+        "polythiazide",
+        "quinethazone",
+        "torsemide",
+        "trichlormethiazide",
+        "xipamide"
+      ],
+      "rxclass_id": null,
+      "atc_codes": [
+        "C03A",
+        "C03B",
+        "C03C"
+      ],
+      "notes": "Curated composite of loop + thiazide/thiazide-like diuretics for potassium/magnesium depletion signals. Sourced from the RxNorm-verified master class:diuretics, NOT from class:thiazide_diuretics (whose rxcui list was misaligned as of Sprint 3). Excludes every potassium-sparing agent by design."
     },
     "class:tetracycline_antibiotics": {
       "display_name": "Tetracycline antibiotics",
