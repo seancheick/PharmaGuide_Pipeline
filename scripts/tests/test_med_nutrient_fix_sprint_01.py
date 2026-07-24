@@ -83,13 +83,7 @@ def test_ocp_folate_rejected_premise_contradicted():
     assert e.get("citation_review_note")  # rationale recorded in-place
 
 
-def test_corpus_status_counts_after_sprint_01():
-    import collections
-
-    c = collections.Counter(
-        e.get("citation_review_status", "unverified") for e in _entries().values()
-    )
-    assert c["verified"] == 12
-    assert c["needs_revision"] == 8
-    assert c["rejected"] == 1
-    assert c["unverified"] == 59
+# NOTE: the absolute corpus status counts are asserted by the MOST RECENT fix
+# sprint only (currently test_med_nutrient_fix_sprint_02.py). Pinning them in
+# every sprint file would mean each new sprint has to edit every older one. The
+# per-entry assertions above are this sprint's durable contribution.

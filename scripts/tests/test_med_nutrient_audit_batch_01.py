@@ -16,13 +16,17 @@ EXPECTED_STATUS = {
     # statins→CoQ10 + corticosteroids→calcium: relationship holds but the
     # user-visible copy overstates (supplementation framing / universal above-ACR
     # dosing) → needs_revision until the copy is rewritten (2nd-opinion review).
-    "DEP_STATINS_COQ10": "needs_revision",
-    "DEP_CORTICOSTEROIDS_CALCIUM": "needs_revision",
+    # Advanced by fix_sprint_02 (see test_med_nutrient_fix_sprint_02.py):
+    # statins→CoQ10 copy rewritten, corticosteroids→Ca scoped to prolonged
+    # systemic use, corticosteroids→vitD retyped to monitoring_stability.
+    "DEP_STATINS_COQ10": "verified",
+    "DEP_CORTICOSTEROIDS_CALCIUM": "verified",
+    "DEP_CORTICOSTEROIDS_VITAMIND": "verified",
+    # Still suppressed — these need the app-side drug-class resolver (Sprint 3).
     "DEP_ANTACIDS_VITAMINB12": "needs_revision",
     "DEP_ANTACIDS_MAGNESIUM": "needs_revision",
     "DEP_DIURETICS_POTASSIUM": "needs_revision",
     "DEP_DIURETICS_MAGNESIUM": "needs_revision",
-    "DEP_CORTICOSTEROIDS_VITAMIND": "needs_revision",
     "DEP_ANTICONVULSANTS_VITAMIND": "needs_revision",
     # Both levothyroxine interactions were advanced to verified by fix_sprint_01
     # (see test_med_nutrient_fix_sprint_01.py): overstated magnitudes corrected,
