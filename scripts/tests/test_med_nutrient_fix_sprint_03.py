@@ -225,3 +225,40 @@ def test_deferred_anticonvulsant_records_untouched(depletions, entry_id):
     assert depletions[entry_id]["drug_ref"]["id"] == "class:anticonvulsants", (
         f"{entry_id} must NOT be repointed in Sprint 3 (see research.md)"
     )
+
+
+# --------------------------------------------------------------------------- #
+# Permanent regression — no dead / inert class references
+#
+# The PM contract: every class a depletion record points at must exist, have at
+# least one member, and resolve at least one RxCUI. build_interaction_db.py emits
+# one drug_class_map row per drug_classes.json class straight from member_rxcuis,
+# so "exists with ≥1 numeric member_rxcui" is equivalent to "≥1 rxcui reaches
+# drug_class_map" — a dead or empty class would silently disable a signal.
+# (The app-bridge resolution leg is covered by the Flutter parity test.)
+# --------------------------------------------------------------------------- #
+
+
+def test_every_referenced_class_exists_has_members_and_resolves_rxcuis(classes, depletions):
+    dead, empty, unresolved = [], [], []
+    for e in depletions.values():
+        ref = e["drug_ref"]
+        if ref["type"] != "class":
+            continue
+        cid = ref["id"]
+        if cid not in classes:
+            dead.append((e["id"], cid))
+            continue
+        rxcuis = classes[cid].get("member_rxcuis", [])
+        if len(rxcuis) < 1:
+            empty.append((e["id"], cid))
+        elif not any(str(r).isdigit() for r in rxcuis):
+            unresolved.append((e["id"], cid))
+    assert not dead, f"depletion records point at nonexistent classes: {dead}"
+    assert not empty, f"depletion records point at member-less classes: {empty}"
+    assert not unresolved, f"classes resolve no numeric RxCUI: {unresolved}"
+
+
+def test_ppi_class_positively_resolves_omeprazole(classes):
+    # Destination of the Step 2 repoint must really resolve a canonical PPI.
+    assert "7646" in set(classes[PPI]["member_rxcuis"]), "PPI class must resolve omeprazole (7646)"
