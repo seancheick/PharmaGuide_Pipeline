@@ -139,3 +139,24 @@ def test_content_hash_ignores_release_version():
     a = build_artifact(_source([_entry()]), content_version="2026.07.23")
     b = build_artifact(_source([_entry()]), content_version="2026.08.01")
     assert a["_metadata"]["content_hash"] == b["_metadata"]["content_hash"]
+
+
+def test_real_source_content_hash_is_pinned():
+    """Cross-repo parity pin (B1.2 #3): the content_hash of the generated
+    artifact over the REAL canonical source must equal the value the app also
+    pins (test/services/stack/med_nutrient_bundled_parity_test.dart). Two
+    identical pins = the parity contract — a drifted source or a stale app asset
+    fails a pin. Update BOTH when the source legitimately changes."""
+    import json
+    import os
+
+    source_path = os.path.join(
+        os.path.dirname(__file__), os.pardir, "data", "medication_depletions.json"
+    )
+    with open(source_path, encoding="utf-8") as f:
+        source = json.load(f)
+    art = build_artifact(source, content_version="pin")
+    assert (
+        art["_metadata"]["content_hash"]
+        == "sha256:4ec2977791f449c072d75ceffd55fad620e4e132bcd2d1a4dc39475c9afaa28b"
+    )
