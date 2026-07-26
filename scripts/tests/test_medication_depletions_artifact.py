@@ -160,5 +160,5 @@ def test_real_source_content_hash_is_pinned():
     # (dead synthetic drug id, suppressed from display pending Section 8).
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:76a4368377d41cc5a8f3074c0c3ad6f161b13136ad09d7258ef56f191b0f53e4"
+        == "sha256:d883d898bc6e5c476cc49edceecab32e0327ae90658473d19c964276cd6c578e"
     )

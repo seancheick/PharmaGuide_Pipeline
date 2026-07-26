@@ -203,17 +203,21 @@ def test_vitamin_d_anticonvulsant_repointed(depletions):
 
 @pytest.mark.parametrize(
     "entry_id",
-    [
-        "DEP_ANTICONVULSANTS_CALCIUM", "DEP_ANTICONVULSANTS_FOLATE", "DEP_ANTICONVULSANTS_VITAMINB12",
-        "DEP_ANTICONVULSANTS_VITAMINK", "DEP_ANTICONVULSANTS_BIOTIN", "DEP_ANTICONVULSANTS_LCARNITINE",
-    ],
+    ["DEP_ANTICONVULSANTS_BIOTIN", "DEP_ANTICONVULSANTS_LCARNITINE"],
 )
-def test_deferred_anticonvulsant_records_untouched(depletions, entry_id):
-    # Especially BIOTIN + LCARNITINE — valproate-specific, must never ride the
-    # enzyme-inducing class.
-    assert depletions[entry_id]["drug_ref"]["id"] == "class:anticonvulsants", (
-        f"{entry_id} must NOT be repointed in Sprint 3 (see research.md)"
-    )
+def test_valproate_records_never_ride_the_enzyme_inducing_class(depletions, entry_id):
+    """The durable half of Sprint 3's deferral.
+
+    Sprint 3 froze all six remaining DEP_ANTICONVULSANTS_* records on
+    ``class:anticonvulsants`` pending review; Section 3 (2026-07-26) performed
+    that review and re-attributed them — see
+    ``test_med_nutrient_antiseizure.py``.  What survives the freeze is the
+    clinical invariant the freeze existed to protect: biotin and L-carnitine are
+    valproate chemistry (biotinidase inhibition, acylcarnitine conjugation), and
+    valproate INHIBITS CYP450, so these two must never be attributed to the
+    enzyme-inducing class no matter how the taxonomy is reorganised later.
+    """
+    assert depletions[entry_id]["drug_ref"]["id"] != EIASM
 
 
 # --------------------------------------------------------------------------- #
