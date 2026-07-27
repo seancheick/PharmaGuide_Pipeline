@@ -68,11 +68,14 @@ def test_batch_01_entries_carry_review_metadata():
 
 
 def test_batch_01_metformin_copy_softened():
-    # The single verified entry's overstated "up to 30% develop deficiency" copy
-    # was softened to an accurate range as a condition of verification.
-    ci = _entries()["DEP_METFORMIN_VITAMINB12"]["clinical_impact"]
-    assert "6-30%" in ci
-    assert "Up to 30% of long-term metformin users develop" not in ci
+    # Superseded by the final B1 clinical sign-off: current ADA/MHRA guidance
+    # is risk- and duration-based and does not support a universal prevalence
+    # estimate or a prescribed methylcobalamin regimen in consumer copy.
+    entry = _entries()["DEP_METFORMIN_VITAMINB12"]
+    assert "multifactorial" in entry["mechanism"].lower()
+    assert "4–5 years" in entry["recommendation"]
+    assert "sublingual methylcobalamin" not in entry["recommendation"].lower()
+    assert "6-30%" not in entry["clinical_impact"]
 
 
 def test_batch_01_no_confirmed_ghost_pmids_remain():
