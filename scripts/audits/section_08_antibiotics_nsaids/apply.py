@@ -40,9 +40,9 @@ NEUTRAL_COPY = {
     "onset_timeline": "not established",
     "monitoring_note": "No medication-specific nutrient monitoring recommendation is emitted.",
     "alert_headline": "No medication-specific depletion alert",
-    "alert_body": "This record does not establish a medication-caused nutrient depletion warning.",
+    "alert_body": "No medication-caused nutrient depletion has been established over time; no consumer warning is emitted.",
     "acknowledgement_note": "No medication-specific nutrient coverage acknowledgement is emitted.",
-    "monitoring_tip_short": "Follow the monitoring plan set by your treating clinician.",
+    "monitoring_tip_short": "Discuss individual monitoring needs with your treating clinician.",
     "food_sources_short": "Maintain dietary intake appropriate to your individual needs.",
 }
 

@@ -41,9 +41,9 @@
   },
   "canaries": [
     {
-      "dsld_id": "253169",
+      "dsld_id": "202992",
       "brand_name": "Doctor's Best",
-      "product_name": "High Absorption CoQ10 100 mg",
+      "product_name": "High Absorption CoQ10 100 mg with BioPerine",
       "primary_class": "single_nutrient",
       "subclass": "coq10",
       "expected_b5_class": "generic",
@@ -54,7 +54,7 @@
       ],
       "v3_shipped_score": 65.2,
       "v3_shipped_verdict": "SAFE",
-      "notes": "P0.1d provisional +2 (USP label) → 0 once Codex's USP scraper landed (USP is in covered_programs; this SKU not in USP public list)."
+      "notes": "P0.1d provisional +2 (USP label) → 0 once Codex's USP scraper landed (USP is in covered_programs; this SKU not in USP public list). Retained catalog ID 202992 replaces duplicate DSLD ID 253169 for the same UPC 753950001831."
     },
     {
       "dsld_id": "298074",

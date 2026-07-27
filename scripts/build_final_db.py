@@ -250,7 +250,18 @@ def _first_form_name(forms: Any) -> str:
 # matched_form equal to any of these (or carrying an "(unspecified)"
 # parenthetical) means the enricher fell back to the parent canonical
 # and does NOT carry a real label form.
-_FORM_PLACEHOLDER_TOKENS = {"", "standard", "unspecified", "default", "generic"}
+_FORM_PLACEHOLDER_TOKENS = {
+    "",
+    "standard",
+    "unspecified",
+    "default",
+    "generic",
+    # IQM may echo the parent oil identity as matched_form when no delivery
+    # form (triglyceride, ethyl ester, phospholipid) was disclosed. Rendering
+    # "Fish Oil" beneath a Fish Oil row invents no information and falsely
+    # implies that a meaningful form was assessed.
+    "fish oil",
+}
 _FORM_PLACEHOLDER_PARENS = ("(unspecified)", "(unmapped)", "(generic)")
 
 # Common parent-nutrient prefixes stripped from matched_form when
@@ -412,10 +423,14 @@ def _compute_form_contract(
     if label_form and _label_form_repeats_identity(label_form, ingredient, match):
         label_form = ""
     matched = safe_str(match.get("matched_form") or ingredient.get("matched_form"))
-    matched_is_real = (
-        not _is_placeholder_form(matched)
-        and not _label_form_repeats_identity(matched, ingredient, match)
-    )
+    # A resolved IQM form is still meaningful when its canonical text matches
+    # the label identity exactly (for example ``Methylcobalamin`` or
+    # ``Folic Acid``).  The repetition guard belongs to reconstructed
+    # label-form candidates, where it prevents a whole ingredient name from
+    # being misrepresented as a form.  Applying it to trusted ``matched_form``
+    # evidence discarded legitimate one-token chemical forms and left Flutter
+    # with no form disclosure despite a successful IQM resolution.
+    matched_is_real = not _is_placeholder_form(matched)
 
     if label_form:
         return {
@@ -5049,6 +5064,54 @@ def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
     return "safety_block" if verdict in ("BLOCKED", "UNSAFE") else None
 
 
+def project_export_scored_artifact(
+    enriched: Dict,
+    scored: Dict,
+    detail_blob: Optional[Dict] = None,
+) -> Dict:
+    """Apply the final catalog safety projection to a scored artifact.
+
+    Stage 3 cannot see every warning synthesized by the release blob resolver,
+    so the catalog row has one final fail-closed projection.  Keep it in a
+    reusable production seam: the catalog builder, exact-path preview harness,
+    and release-parity tests must not maintain separate approximations of this
+    safety-critical logic.
+    """
+    has_export_banned_signal = (
+        has_banned_substance(enriched)
+        or blob_has_critical_banned_warning(detail_blob)
+    )
+    effective_scored = dict(scored)
+    if has_export_banned_signal:
+        effective_scored = suppress_scored_artifact_for_hard_block(
+            effective_scored, reason="banned_substance"
+        )
+    elif blob_has_profile_gated_hard_safety_warning(detail_blob):
+        verdict_now = safe_str(effective_scored.get("verdict")).upper()
+        safety_now = safe_str(effective_scored.get("safety_verdict")).upper()
+        if verdict_now == "SAFE" or safety_now == "SAFE":
+            effective_scored.update({
+                "verdict": "CAUTION",
+                "safety_verdict": "CAUTION",
+            })
+
+    derived_blocking = derive_blocking_reason(enriched, scored)
+    scored_blocking = safe_str(scored.get("blocking_reason"))
+    stale_safety_blocking = (
+        scored_blocking
+        in {"banned_ingredient", "recalled_ingredient", "high_risk_ingredient"}
+        and derived_blocking is None
+        and not blob_has_safety_blocking_warning(detail_blob)
+    )
+    effective_scored["blocking_reason"] = (
+        "banned_ingredient"
+        if has_export_banned_signal
+        else derived_blocking
+        or (None if stale_safety_blocking or not scored_blocking else scored_blocking)
+    )
+    return effective_scored
+
+
 # ─── Has Recalled Ingredient ───
 
 def has_recalled_ingredient(enriched: Dict) -> bool:
@@ -9041,43 +9104,9 @@ def build_core_row(
             cert_display_programs.append(_prog)
 
     disc_date = safe_str(enriched.get("discontinuedDate"))[:10] or None
-    has_export_banned_signal = (
-        has_banned_substance(enriched)
-        or blob_has_critical_banned_warning(detail_blob)
+    effective_scored = project_export_scored_artifact(
+        enriched, scored, detail_blob
     )
-    effective_scored = dict(scored)
-    if has_export_banned_signal:
-        # The blob resolver can detect a broader hard-block signal than the
-        # scorer. Collapse every public score surface through the same v4-native
-        # artifact boundary so core rows and detail blobs cannot disagree.
-        effective_scored = suppress_scored_artifact_for_hard_block(
-            effective_scored, reason="banned_substance"
-        )
-    elif blob_has_profile_gated_hard_safety_warning(detail_blob):
-        # Release-gate invariant: SAFE on either verdict or safety_verdict is
-        # incompatible with a hard-safety warning (banned/recalled/adulterant/
-        # watchlist always; high_risk_ingredient/contraindicated when severity is
-        # high/critical/contraindicated/avoid). Bitter orange, DHEA, Titanium
-        # Dioxide watchlist, etc. cannot ship as SAFE on the catalog row.
-        #
-        # Two v4-artifact paths to SAFE need to be guarded:
-        #   1. verdict == "SAFE"          → catalog reads SAFE directly.
-        #   2. verdict == "POOR"          → safety_verdict may still be "SAFE"
-        #                                   when the quality drop did not come
-        #                                   from a safety signal. A hard-safety
-        #                                   warning must override that projection
-        #                                   so safety_verdict no longer says SAFE.
-        # In both cases the verdict drops to CAUTION (clear non-SAFE signal
-        # short of a hard block) — keeping POOR-verdict products at POOR would
-        # leave safety_verdict=SAFE under the derivation rule and re-introduce
-        # the contradiction.
-        verdict_now = safe_str(effective_scored.get("verdict")).upper()
-        safety_now = safe_str(effective_scored.get("safety_verdict")).upper()
-        if verdict_now == "SAFE" or safety_now == "SAFE":
-            effective_scored.update({
-                "verdict": "CAUTION",
-                "safety_verdict": "CAUTION",
-            })
 
     score_100 = safe_float(effective_scored.get("score_100_equivalent"))
     ss = safe_dict(effective_scored.get("section_scores"))
@@ -9085,23 +9114,12 @@ def build_core_row(
 
     top_warnings = build_top_warnings(enriched)
 
-    derived_blocking = derive_blocking_reason(enriched, scored)
-    scored_blocking = safe_str(scored.get("blocking_reason"))
     safety_signal_reason = (
         safe_str(effective_scored.get("safety_signal_reason"))
         or safe_str(effective_scored.get("_v4_safety_signal_reason"))
         or None
     )
-    stale_safety_blocking = (
-        scored_blocking in {"banned_ingredient", "recalled_ingredient", "high_risk_ingredient"}
-        and derived_blocking is None
-        and not blob_has_safety_blocking_warning(detail_blob)
-    )
-    blocking = (
-        "banned_ingredient"
-        if has_export_banned_signal
-        else derived_blocking or (None if stale_safety_blocking or not scored_blocking else scored_blocking)
-    )
+    blocking = safe_str(effective_scored.get("blocking_reason")) or None
     interaction_hint = build_interaction_summary_hint(enriched)
     decision_highlights = build_decision_highlights(enriched, effective_scored, blocking)
     _validate_decision_highlights(decision_highlights, safe_str(enriched.get("dsld_id")))

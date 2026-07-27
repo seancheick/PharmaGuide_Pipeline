@@ -16,6 +16,7 @@ DRUG_CLASSES_FILE = DATA_DIR / "drug_classes.json"
 VALID_SEVERITIES = {"significant", "moderate", "mild"}
 VALID_EVIDENCE_LEVELS = {"established", "probable", "possible"}
 VALID_ONSET_TIMELINES = {"weeks", "months", "years"}
+UNKNOWN_ONSET_TIMELINE = "not established"
 VALID_DRUG_REF_TYPES = {"class", "drug"}
 VALID_SOURCE_TYPES = {"pubmed", "reference", "nih_ods", "fda", "nccih"}
 VALID_DEPLETION_TYPES = {
@@ -115,7 +116,17 @@ class TestDepletionSchema:
 
     def test_onset_timeline_valid(self, depletions):
         for d in depletions:
-            assert d["onset_timeline"] in VALID_ONSET_TIMELINES, f"Entry {d['id']} invalid onset_timeline"
+            timeline = d["onset_timeline"]
+            review_status = d.get("citation_review_status")
+            if review_status == "verified":
+                assert timeline in VALID_ONSET_TIMELINES, (
+                    f"Verified entry {d['id']} must use an evidence-backed "
+                    f"onset timeline, got {timeline!r}"
+                )
+            else:
+                assert timeline in VALID_ONSET_TIMELINES | {UNKNOWN_ONSET_TIMELINE}, (
+                    f"Entry {d['id']} invalid onset_timeline"
+                )
 
     def test_depletion_type_valid(self, depletions):
         for d in depletions:
@@ -192,6 +203,18 @@ class TestDepletionDataQuality:
             for d in depletions
         )
         assert found, "Metformin → B12 depletion must be present"
+
+    def test_metformin_rules_use_ingredient_rxcui(self, depletions):
+        """Direct rules must match the IN identity emitted by medication normalization."""
+        metformin = [
+            d for d in depletions
+            if "metformin" in d["drug_ref"]["display_name"].lower()
+        ]
+        assert metformin
+        assert {d["drug_ref"]["id"] for d in metformin} == {"6809"}, (
+            "RxNorm 6809 is the metformin ingredient (IN); product/dose concepts "
+            "such as 860974 create runtime false negatives after normalization"
+        )
 
     def test_statins_coq10_exists(self, depletions):
         found = any(
