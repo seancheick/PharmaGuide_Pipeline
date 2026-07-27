@@ -1,0 +1,43 @@
+{
+  "_metadata": {
+    "schema_version": "5.4.0",
+    "description": "Machine-enforced B1.1 four-candidate proposal and pending licensed-pharmacist delta-review state.",
+    "purpose": "medication_depletion_clinical_change_control",
+    "total_entries": 2,
+    "reviewed_at": "2026-07-27",
+    "candidate_count": 4,
+    "evidence_reviewer": "b1_1_evidence_audit",
+    "reviewer": "",
+    "reviewer_type": "Licensed pharmacist clinical review requested",
+    "licensed_pharmacist_signoff": false,
+    "licensed_pharmacist_signoff_date": null,
+    "release_disposition": "pending_licensed_pharmacist_delta_review",
+    "packet_title": "B1.1 pharmacist delta review packet",
+    "packet_status": "evidence revision complete; licensed pharmacist sign-off requested",
+    "packet_scope": "4 suppressed B1.1 candidates; none are consumer-visible until separately approved. The existing 31-record B1 beta corpus is unchanged."
+  },
+  "records": {
+    "DEP_ANTACIDS_VITAMINB12": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm the PPI-only scope, probable evidence tier, and symptom/risk-based testing language."
+    },
+    "DEP_ANTACIDS_MAGNESIUM": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm the rare but potentially clinically important prolonged-use signal and risk-based monitoring language."
+    },
+    "DEP_DIURETICS_POTASSIUM": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm the loop/thiazide-only scope, variable timing, and the explicit no-self-supplementation safety language."
+    },
+    "DEP_DIURETICS_MAGNESIUM": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm the subclass-aware mechanism, variable timing, and clinician-directed monitoring/correction language."
+    }
+  },
+  "candidate_record_fingerprints": {
+    "DEP_ANTACIDS_VITAMINB12": "sha256:b7a5bdc8da7e19b4e0be41e7146b3c92dcda8e9c1f5b227882ac3add5a50ae7d",
+    "DEP_ANTACIDS_MAGNESIUM": "sha256:a63098ecef2a4ec561f334499dab3c825bba32439d5bb50602ce213d2a6e1e5f",
+    "DEP_DIURETICS_POTASSIUM": "sha256:52253c03d3779ac5557aa455f225555c254725bba87b08a4fc278faf9a33b41c",
+    "DEP_DIURETICS_MAGNESIUM": "sha256:297559501aa11cc19affe8755cb9e0454c21432074601db3bf12e055dd672ad9"
+  }
+}

@@ -165,7 +165,10 @@ def test_real_source_content_hash_is_pinned():
     # supplementation — it names food sources and routes to testing, matching
     # the same record's risk-based recommendation. Its dormant monitoring_note
     # also drops the unverified "every 2-3 years in all patients" interval.
+    # Repinned for the fail-closed B1.1 candidate delta: four suppressed records
+    # received evidence-aligned proposed copy and current sources, but remain
+    # hidden pending a separate licensed-pharmacist review.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:180a7380a03f20066103030d496124ee9a5e1c8e65167da095b627ace36f7f98"
+        == "sha256:a10fc061c2fd89473cb23a9cdd9c9c6b50557552d7b69be285baacabdb86f39c"
     )

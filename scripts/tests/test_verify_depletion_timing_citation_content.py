@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "api_audit"))
 import verify_depletion_timing_citation_content as gate  # noqa: E402
 
 
-def _expectation(**expected):
+def _expectation(*, disposition="verified_for_claim", **expected):
     return {
         "entry_id": "DEP_TEST",
         "pmid": "111",
@@ -22,7 +22,7 @@ def _expectation(**expected):
             "nutrient_terms_any": ["L-carnitine", "carnitine"],
             **expected,
         },
-        "reviewer_disposition": "verified_for_claim",
+        "reviewer_disposition": disposition,
     }
 
 
@@ -105,6 +105,21 @@ def test_contract_requires_verified_entry_and_authored_source():
     errors = gate.validate_contract([_expectation()], [entry])
     assert any("not citation_review_status=verified" in error for error in errors)
     assert any("not an authored source" in error for error in errors)
+
+
+def test_candidate_contract_requires_suppressed_entry_until_pharmacist_review():
+    entry = {
+        "id": "DEP_TEST",
+        "citation_review_status": "needs_revision",
+        "sources": [{"url": "https://pubmed.ncbi.nlm.nih.gov/111/"}],
+    }
+    candidate = _expectation(disposition="candidate_for_pharmacist_review")
+
+    assert gate.validate_contract([candidate], [entry]) == []
+
+    entry["citation_review_status"] = "verified"
+    errors = gate.validate_contract([candidate], [entry])
+    assert any("not citation_review_status=needs_revision" in error for error in errors)
 
 
 def test_reviewed_contract_matches_live_section3_data_after_authoring():

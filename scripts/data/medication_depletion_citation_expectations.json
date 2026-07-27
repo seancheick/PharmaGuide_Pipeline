@@ -4,16 +4,26 @@
     "last_updated": "2026-07-27",
     "description": "Reviewed PubMed content expectations for medication-depletion claims.",
     "purpose": "Reviewed PubMed content expectations for medication-depletion claims",
-    "total_entries": 6
+    "total_entries": 10
   },
   "expectations": [
     {
       "entry_id": "DEP_ANTICONVULSANTS_VITAMIND",
       "pmid": "34847425",
       "expected": {
-        "drug_terms_any": ["carbamazepine", "anti-seizure medications"],
-        "nutrient_terms_any": ["vitamin D", "25-hydroxyvitamin D", "25OHD"],
-        "context_terms_any": ["long-term", "chronic"]
+        "drug_terms_any": [
+          "carbamazepine",
+          "anti-seizure medications"
+        ],
+        "nutrient_terms_any": [
+          "vitamin D",
+          "25-hydroxyvitamin D",
+          "25OHD"
+        ],
+        "context_terms_any": [
+          "long-term",
+          "chronic"
+        ]
       },
       "reviewer_disposition": "verified_for_claim"
     },
@@ -21,9 +31,16 @@
       "entry_id": "DEP_ANTICONVULSANTS_CALCIUM",
       "pmid": "15123011",
       "expected": {
-        "drug_terms_any": ["anticonvulsant"],
-        "nutrient_terms_any": ["calcium"],
-        "context_terms_any": ["bone disease", "bone"]
+        "drug_terms_any": [
+          "anticonvulsant"
+        ],
+        "nutrient_terms_any": [
+          "calcium"
+        ],
+        "context_terms_any": [
+          "bone disease",
+          "bone"
+        ]
       },
       "reviewer_disposition": "verified_for_claim"
     },
@@ -31,9 +48,17 @@
       "entry_id": "DEP_ANTICONVULSANTS_FOLATE",
       "pmid": "6370643",
       "expected": {
-        "drug_terms_any": ["phenytoin"],
-        "nutrient_terms_any": ["folate", "folic acid"],
-        "context_terms_any": ["long-term", "deficiency"]
+        "drug_terms_any": [
+          "phenytoin"
+        ],
+        "nutrient_terms_any": [
+          "folate",
+          "folic acid"
+        ],
+        "context_terms_any": [
+          "long-term",
+          "deficiency"
+        ]
       },
       "reviewer_disposition": "verified_for_claim"
     },
@@ -41,9 +66,18 @@
       "entry_id": "DEP_ANTICONVULSANTS_VITAMINB12",
       "pmid": "30896627",
       "expected": {
-        "drug_terms_any": ["phenytoin", "PHT"],
-        "nutrient_terms_any": ["vitamin B12", "B12"],
-        "context_terms_any": ["monotherapy", "meta-analysis"]
+        "drug_terms_any": [
+          "phenytoin",
+          "PHT"
+        ],
+        "nutrient_terms_any": [
+          "vitamin B12",
+          "B12"
+        ],
+        "context_terms_any": [
+          "monotherapy",
+          "meta-analysis"
+        ]
       },
       "reviewer_disposition": "verified_for_claim"
     },
@@ -51,9 +85,17 @@
       "entry_id": "DEP_ANTICONVULSANTS_LCARNITINE",
       "pmid": "8040784",
       "expected": {
-        "drug_terms_any": ["valproic acid", "valproate"],
-        "nutrient_terms_any": ["carnitine"],
-        "context_terms_any": ["long-term", "children"]
+        "drug_terms_any": [
+          "valproic acid",
+          "valproate"
+        ],
+        "nutrient_terms_any": [
+          "carnitine"
+        ],
+        "context_terms_any": [
+          "long-term",
+          "children"
+        ]
       },
       "reviewer_disposition": "verified_for_claim"
     },
@@ -61,11 +103,96 @@
       "entry_id": "DEP_LEVOTHYROXINE_CALCIUM",
       "pmid": "10838651",
       "expected": {
-        "drug_terms_any": ["levothyroxine", "thyroxine"],
-        "nutrient_terms_any": ["calcium"],
-        "context_terms_any": ["absorption", "interaction"]
+        "drug_terms_any": [
+          "levothyroxine",
+          "thyroxine"
+        ],
+        "nutrient_terms_any": [
+          "calcium"
+        ],
+        "context_terms_any": [
+          "absorption",
+          "interaction"
+        ]
       },
       "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_ANTACIDS_VITAMINB12",
+      "pmid": "24327038",
+      "expected": {
+        "drug_terms_any": [
+          "proton pump inhibitor",
+          "PPIs",
+          "acid-suppressing medication"
+        ],
+        "nutrient_terms_any": [
+          "vitamin B12",
+          "B12"
+        ],
+        "context_terms_any": [
+          "2 or more years",
+          "long-term"
+        ]
+      },
+      "reviewer_disposition": "candidate_for_pharmacist_review"
+    },
+    {
+      "entry_id": "DEP_ANTACIDS_VITAMINB12",
+      "pmid": "37060552",
+      "expected": {
+        "drug_terms_any": [
+          "proton pump inhibitor",
+          "PPI"
+        ],
+        "nutrient_terms_any": [
+          "vitamin B12",
+          "B12"
+        ],
+        "context_terms_any": [
+          "systematic review",
+          "meta-analysis"
+        ]
+      },
+      "reviewer_disposition": "candidate_for_pharmacist_review"
+    },
+    {
+      "entry_id": "DEP_ANTACIDS_MAGNESIUM",
+      "pmid": "22762246",
+      "expected": {
+        "drug_terms_any": [
+          "proton pump inhibitor",
+          "PPIs"
+        ],
+        "nutrient_terms_any": [
+          "hypomagnesaemia",
+          "magnesium"
+        ],
+        "context_terms_any": [
+          "long-term",
+          "drug-class effect"
+        ]
+      },
+      "reviewer_disposition": "candidate_for_pharmacist_review"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_MAGNESIUM",
+      "pmid": "10997911",
+      "expected": {
+        "drug_terms_any": [
+          "loop diuretics",
+          "thiazide diuretics"
+        ],
+        "nutrient_terms_any": [
+          "magnesium",
+          "hypomagnesemia"
+        ],
+        "context_terms_any": [
+          "urinary excretion",
+          "chronic effects"
+        ]
+      },
+      "reviewer_disposition": "candidate_for_pharmacist_review"
     }
   ]
 }
