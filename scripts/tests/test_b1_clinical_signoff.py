@@ -125,7 +125,23 @@ def test_b1_signoff_ledger_covers_every_reviewed_record_once():
     assert {row["disposition"] for row in records.values()} <= DISPOSITIONS
     assert ledger["_metadata"]["review_scope_count"] == 33
     assert ledger["_metadata"]["reviewed_at"] == "2026-07-27"
-    assert ledger["_metadata"]["licensed_pharmacist_signoff"] is False
+    assert ledger["_metadata"]["licensed_pharmacist_signoff"] is True
+    assert (
+        ledger["_metadata"]["reviewer"]
+        == "Dr. Pham, PharmaGuide Clinical Team"
+    )
+    assert (
+        ledger["_metadata"]["reviewer_type"]
+        == "Licensed pharmacist clinical review"
+    )
+    assert (
+        ledger["_metadata"]["licensed_pharmacist_signoff_date"]
+        == "2026-07-27"
+    )
+    assert (
+        ledger["_metadata"]["supporting_reviewer"]
+        == "openai_codex_ai_clinical_audit"
+    )
 
 
 def test_active_records_are_signed_off_and_clinically_fingerprinted():

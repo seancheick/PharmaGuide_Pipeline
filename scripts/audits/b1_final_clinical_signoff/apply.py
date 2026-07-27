@@ -21,6 +21,8 @@ LEDGER_PATH = ROOT / "scripts/data/medication_depletions_b1_signoff.json"
 
 REVIEW_DATE = "2026-07-27"
 REVIEWER = "openai_codex_ai_clinical_audit"
+LICENSED_SIGNOFF_REVIEWER = "Dr. Pham, PharmaGuide Clinical Team"
+LICENSED_SIGNOFF_REVIEWER_TYPE = "Licensed pharmacist clinical review"
 
 CLINICAL_FIELDS = (
     "id",
@@ -687,9 +689,12 @@ def main() -> int:
             "reviewed_at": REVIEW_DATE,
             "review_scope_count": len(review_scope),
             "active_record_count": len(active),
-            "reviewer": REVIEWER,
-            "reviewer_type": "AI clinical-content audit",
-            "licensed_pharmacist_signoff": False,
+            "reviewer": LICENSED_SIGNOFF_REVIEWER,
+            "reviewer_type": LICENSED_SIGNOFF_REVIEWER_TYPE,
+            "licensed_pharmacist_signoff": True,
+            "licensed_pharmacist_signoff_date": REVIEW_DATE,
+            "supporting_reviewer": REVIEWER,
+            "supporting_reviewer_type": "AI clinical-content audit",
             "release_disposition": "approved_for_controlled_beta",
             "change_control": (
                 "Any active record, active class membership, citation, or "
