@@ -160,5 +160,5 @@ def test_real_source_content_hash_is_pinned():
     # direct-drug scopes, and suppression of known real-but-unrelated PMIDs.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:c86fd6515016292285c0ec738f6c132d215bcec627b297411c41228199f627de"
+        == "sha256:4f690545bd319269fad732e81025420b9b235d94b88859a3fa97f8ba710996f8"
     )
