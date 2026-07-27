@@ -39,6 +39,11 @@ CLINICAL_FIELDS = (
     "alert_body",
     "acknowledgement_note",
     "monitoring_tip_short",
+    # Consumer-visible "From food" copy. Added 2026-07-27 (B1 release
+    # correction): it was omitted from the original fingerprint, so the
+    # metformin/B12 record's stale "a supplement is often more reliable"
+    # wording survived the B1 rewording pass without tripping this gate.
+    "food_sources_short",
     "citation_review_status",
     "reviewed_at",
     "reviewer",

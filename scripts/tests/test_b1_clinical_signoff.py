@@ -12,6 +12,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from generate_pharmacist_review_packet import CONSUMER_VISIBLE_FIELD_NAMES
+
 
 DATA_DIR = Path(__file__).parents[1] / "data"
 SOURCE_PATH = DATA_DIR / "medication_depletions.json"
@@ -78,6 +80,8 @@ CLINICAL_FIELDS = (
     "alert_body",
     "acknowledgement_note",
     "monitoring_tip_short",
+    # Consumer-visible "From food" copy — see apply.py for why this was added.
+    "food_sources_short",
     "citation_review_status",
     "reviewed_at",
     "reviewer",
@@ -229,3 +233,19 @@ def test_final_scope_and_safety_copy_locks():
 
     levothyroxine = by_id["DEP_LEVOTHYROXINE_CALCIUM"]
     assert "calcium-rich meals" not in levothyroxine["recommendation"].lower()
+
+
+def test_every_consumer_visible_field_is_inside_the_clinical_fingerprint():
+    """What a user can read must be what the ledger pins.
+
+    The packet's CONSUMER_VISIBLE_FIELDS is the single source of truth for
+    "what a reviewer is approving". Any field in it that is NOT part of the
+    fingerprint could be reworded after sign-off without tripping change
+    control — which is exactly how the metformin/B12 "a supplement is often
+    more reliable" line survived the B1 rewording pass and shipped.
+    """
+    escaped = CONSUMER_VISIBLE_FIELD_NAMES - set(CLINICAL_FIELDS)
+    assert not escaped, (
+        "consumer-visible fields outside the clinical fingerprint: "
+        f"{sorted(escaped)}"
+    )

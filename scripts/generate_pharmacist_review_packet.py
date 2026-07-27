@@ -9,6 +9,33 @@ from pathlib import Path
 from typing import Any
 
 
+# The complete set of record fields the Flutter card renders to consumers,
+# in display order, paired with the on-screen label the user actually sees
+# (`pg_depletion_card.dart`). This is the SINGLE source of truth for "what a
+# reviewer is being asked to approve":
+#   * the packet renders every one of these, so approval covers the whole card;
+#   * `test_generate_pharmacist_review_packet.py` asserts none escapes the packet;
+#   * `test_b1_clinical_signoff.py` asserts every one is inside the ledger's
+#     clinical fingerprint, so none can change without re-review.
+# Added 2026-07-27 after `food_sources_short` reached users while being absent
+# from all three review surfaces (fingerprint, packet, and reviewer golden).
+# NOTE: `monitoring_note` is deliberately NOT here — no Dart code reads it.
+CONSUMER_VISIBLE_FIELDS: tuple[tuple[str, str], ...] = (
+    ("alert_headline", "Headline"),
+    ("alert_body", "Body"),
+    ("monitoring_tip_short", "Monitoring tip"),
+    ("clinical_impact", "What can happen"),
+    ("food_sources_short", "From food"),
+    ("mechanism", "Why"),
+    ("recommendation", "Clinical guidance"),
+    ("acknowledgement_note", "If already supplementing"),
+)
+
+CONSUMER_VISIBLE_FIELD_NAMES = frozenset(
+    name for name, _ in CONSUMER_VISIBLE_FIELDS
+)
+
+
 def _clean(value: Any) -> str:
     return " ".join(str(value or "").split())
 
@@ -94,6 +121,14 @@ def build_packet(
         "",
         "## Review focus",
         "",
+        (
+            "**Approval covers the full card copy shown to the user — all "
+            "eight consumer-visible fields reproduced under each record "
+            "below, not only mechanism, clinical impact, and "
+            "recommendation.** Every line printed under \"Consumer-visible "
+            "card copy\" is text a user can read in the app."
+        ),
+        "",
         "- Confirm the medication scope and nutrient relationship are clinically accurate.",
         "- Confirm the mechanism and clinical impact are supported by the linked evidence.",
         "- Confirm recommendations are calm, actionable, and do not imply universal supplementation.",
@@ -106,13 +141,21 @@ def build_packet(
         "",
         "## App presentation",
         "",
-        "Verified records:",
+        "**These images are layout-regression artifacts, not clinical-review "
+        "evidence.** They are Flutter golden files: text renders as filled "
+        "boxes because no font is registered in the test binding, and the "
+        "verified card is captured in its collapsed state, so the expanded "
+        "detail copy does not appear. Review the card copy from the "
+        "per-record text below, which is the authoritative source. Do not "
+        "base an approval on these screenshots.",
         "",
-        f"![Verified medication-nutrient presentation]({verified_screenshot})",
+        "Verified records (layout only):",
         "",
-        "Unavailable analysis (explicitly not an all-clear):",
+        f"![Verified medication-nutrient layout]({verified_screenshot})",
         "",
-        f"![Unavailable medication-nutrient presentation]({unavailable_screenshot})",
+        "Unavailable analysis, explicitly not an all-clear (layout only):",
+        "",
+        f"![Unavailable medication-nutrient layout]({unavailable_screenshot})",
         "",
         "## Review disposition index",
         "",
@@ -165,9 +208,20 @@ def build_packet(
                 f"- Relationship: `{_clean(row.get('depletion_type'))}`; "
                 f"severity `{_clean(row.get('severity'))}`; "
                 f"onset `{_clean(row.get('onset_timeline'))}`",
-                f"- Mechanism: {_clean(row.get('mechanism'))}",
-                f"- Clinical impact: {_clean(row.get('clinical_impact'))}",
-                f"- Recommendation: {_clean(row.get('recommendation'))}",
+                "",
+                "Consumer-visible card copy (every line below is shown to the "
+                "user — approval covers all of it):",
+                "",
+            ]
+        )
+        for field, label in CONSUMER_VISIBLE_FIELDS:
+            value = _clean(row.get(field))
+            lines.append(
+                f"- {label} (`{field}`): {value if value else '_(not set)_'}"
+            )
+        lines.extend(
+            [
+                "",
                 f"- Evidence: {sources}",
                 "",
                 (
@@ -183,6 +237,10 @@ def build_packet(
                         else "**no**"
                     )
                 ),
+                "",
+                "Reviewer comment (Approved / Approved with wording change / "
+                "Requires evidence revision / Remove from release, plus any "
+                "required change): _______________________________________",
                 "",
             ]
         )
