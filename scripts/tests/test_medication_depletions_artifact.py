@@ -156,9 +156,9 @@ def test_real_source_content_hash_is_pinned():
     with open(source_path, encoding="utf-8") as f:
         source = json.load(f)
     art = build_artifact(source, content_version="pin")
-    # Repinned 2026-07-26: Section 3 content-audited antiseizure citations,
-    # direct-drug scopes, and suppression of known real-but-unrelated PMIDs.
+    # Repinned 2026-07-26: Section 7 suppressed the non-actionable metformin
+    # folate biomarker claim and diabetes-associated magnesium claims.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:9622620bc15df13df46102feef7262dfab484014463c70599a766524de10f5d7"
+        == "sha256:0dc7e81514f7d32a6b5575bc69d069716b118193961789368fff0ee455395c59"
     )
