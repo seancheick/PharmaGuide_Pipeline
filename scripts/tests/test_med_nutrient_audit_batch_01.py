@@ -2,8 +2,8 @@
 
 Pins the per-entry citation_review_status assigned after live-literature content
 verification (research in scripts/audits/batch_01/research.md), and asserts the
-two PubMed-confirmed GHOST references were removed from their entries. 3 verified,
-8 needs_revision, 0 rejected. Every relationship is clinically real; the 8 defects
+two PubMed-confirmed GHOST references were removed from their entries. 4 verified,
+7 needs_revision, 0 rejected. Every relationship is clinically real; the 7 defects
 are scope/mechanism/citation, not false claims — so they are needs_revision
 (SUPPRESSED by the B1.2 publication rule until fixed), never rejected.
 """
@@ -27,7 +27,9 @@ EXPECTED_STATUS = {
     "DEP_ANTACIDS_MAGNESIUM": "needs_revision",
     "DEP_DIURETICS_POTASSIUM": "needs_revision",
     "DEP_DIURETICS_MAGNESIUM": "needs_revision",
-    "DEP_ANTICONVULSANTS_VITAMIND": "needs_revision",
+    # Advanced by Section 3 after live content verification, but only at the
+    # direct carbamazepine scope supported by the meta-analysis.
+    "DEP_ANTICONVULSANTS_VITAMIND": "verified",
     # Both levothyroxine interactions were advanced to verified by fix_sprint_01
     # (see test_med_nutrient_fix_sprint_01.py): overstated magnitudes corrected,
     # tangents trimmed, iron placeholder → Campbell 1992 controlled trial.

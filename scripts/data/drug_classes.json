@@ -3,9 +3,9 @@
     "schema_version": "1.0.0",
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-07-24",
-    "total_classes": 38,
-    "total_members": 814,
+    "last_updated": "2026-07-26",
+    "total_classes": 39,
+    "total_members": 818,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -24,7 +24,7 @@
       "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
-    "total_entries": 38
+    "total_entries": 39
   },
   "classes": {
     "class:statins": {
@@ -2037,7 +2037,7 @@
         "N03AB",
         "N03AF"
       ],
-      "notes": "Curated enzyme-inducer subset of class:anticonvulsants for the vitamin D catabolism signal. Valproate and oxcarbazepine are intentionally excluded — valproate is an enzyme inhibitor (its biotin/L-carnitine depletion records stay on class:anticonvulsants); oxcarbazepine is a weaker, dose-dependent inducer pending separate review. All 4 rxcuis content-verified against RxNorm."
+      "notes": "Curated enzyme-inducer subset of class:anticonvulsants (carbamazepine, phenytoin, phenobarbital, primidone). Carries every induction-driven depletion: calcium and the pregnancy-specific vitamin K record. Direct carbamazepine and phenytoin citations are kept on their individual rxcuis. Valproate is excluded because it INHIBITS CYP450 and its L-carnitine record lives on class:valproate (Section 3, 2026-07-26). Oxcarbazepine remains excluded as a weaker, dose-dependent inducer pending separate review. All 4 rxcuis content-verified against RxNorm."
     },
     "class:tetracycline_antibiotics": {
       "display_name": "Tetracycline antibiotics",
@@ -2145,6 +2145,27 @@
         "B01AA"
       ],
       "notes": "Narrow class for vitamin K supplement warnings; excludes DOACs such as apixaban, rivaroxaban, dabigatran, and edoxaban."
+    },
+    "class:valproate": {
+      "display_name": "Valproate (valproic acid, divalproex / Depakote)",
+      "description": "The valproate moiety across its dispensed salts. Pharmacologically the opposite of the enzyme-inducing antiseizure drugs: valproate INHIBITS CYP450, so it causes none of the induction-driven depletions (vitamin D, vitamin K, calcium, folate) and has its own L-carnitine risk through acylcarnitine conjugation. The biotin signal remains suppressed pending valproate-specific evidence.",
+      "member_rxcuis": [
+        "266856",
+        "9919",
+        "40254",
+        "11118"
+      ],
+      "member_names": [
+        "divalproex sodium",
+        "sodium valproate",
+        "valproate",
+        "valproic acid"
+      ],
+      "rxclass_id": "N03AG01",
+      "atc_codes": [
+        "N03AG01"
+      ],
+      "notes": "Valproate moiety across its dispensed salts (Depakote is divalproex). Deliberately separate from class:enzyme_inducing_antiseizure_medications: valproate INHIBITS CYP450, so it shares none of the induction-driven depletions (vitamin D, vitamin K, calcium, folate). It carries its own L-carnitine risk through acylcarnitine conjugation. The biotin signal is suppressed pending valproate-specific evidence. All 4 rxcuis content-verified against RxNorm 2026-07-26."
     }
   }
 }

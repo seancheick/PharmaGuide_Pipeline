@@ -156,9 +156,9 @@ def test_real_source_content_hash_is_pinned():
     with open(source_path, encoding="utf-8") as f:
         source = json.load(f)
     art = build_artifact(source, content_version="pin")
-    # Repinned 2026-07-24: DEP_ANTIBIOTICS_BVITAMINS/VITAMINK set to needs_revision
-    # (dead synthetic drug id, suppressed from display pending Section 8).
+    # Repinned 2026-07-26: Section 3 content-audited antiseizure citations,
+    # direct-drug scopes, and suppression of known real-but-unrelated PMIDs.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:76a4368377d41cc5a8f3074c0c3ad6f161b13136ad09d7258ef56f191b0f53e4"
+        == "sha256:9189d879db99c2713df799a59f60527647f6901120610def783adf767a846820"
     )

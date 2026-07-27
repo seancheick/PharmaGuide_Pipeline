@@ -4,7 +4,8 @@
 
 PharmaGuide is a 3-stage data pipeline (Clean → Enrich → Score) that processes dietary supplement products from the NIH DSLD database into evidence-based quality scores. The scored output feeds a Flutter mobile app for consumers.
 
-**Repo:** github.com/seancheick/dsld_clean
+**Repo:** github.com/seancheick/PharmaGuide_Pipeline (the local directory is still named
+`dsld_clean`; the remote was renamed — `git fetch` before asserting any commit/branch state)
 **Language:** Python 3.13
 **Test framework:** pytest 9
 
@@ -86,13 +87,13 @@ scripts/
   *.py                        # Core pipeline scripts (~30 files)
   api_audit/                  # External API verification tools (UMLS, FDA, PubMed, ChEMBL, EFSA)
   config/                     # cleaning_config.json, enrichment_config.json, scoring_config.json
-  data/                       # 39 reference JSON databases (schema v5.0-5.3, 6.0 for user_goals)
+  data/                       # Reference JSON databases — see scripts/DATABASE_SCHEMA.md
   data/curated_overrides/     # Manual CUI/PubChem/GSRS policy overrides
-  tests/                      # 580 test files, 5100+ tests (incl. parametrized)
+  tests/                      # pytest suite (count drifts; use `ls scripts/tests/test_*.py | wc -l`)
   logs/                       # Runtime logs
   reports/                    # Generated audit reports
 docs/                         # Technical deep-dives and infographics
-.Codex/skills/fda-weekly-sync/  # Codex skill for FDA regulatory sync
+.claude/skills/fda-weekly-sync/  # Claude Code skill for FDA regulatory sync
 ```
 
 ## Key Scripts
@@ -119,16 +120,20 @@ docs/                         # Technical deep-dives and infographics
 
 | File                               | Purpose                                                         |
 | ---------------------------------- | --------------------------------------------------------------- |
-| `ingredient_quality_map.json`      | Quality scoring for 610 IQM parents (largest file)              |
-| `banned_recalled_ingredients.json` | Regulatory safety disqualifications or penalties (143 entries)  |
-| `harmful_additives.json`           | Penalty scoring for harmful additives (115 entries)             |
-| `backed_clinical_studies.json`     | Clinical evidence bonus points (197 entries, all PMID-backed)    |
+| `ingredient_quality_map.json`      | Quality scoring per IQM parent (largest file)                   |
+| `banned_recalled_ingredients.json` | Regulatory safety disqualifications or penalties                |
+| `harmful_additives.json`           | Penalty scoring for harmful additives                           |
+| `backed_clinical_studies.json`     | Clinical evidence bonus points (all PMID-backed)                |
 | `allergens.json`                   | Allergen classification (Big 8 types)                           |
 | `rda_optimal_uls.json`             | Dosing adequacy benchmarks                                      |
 | `manufacturer_violations.json`     | Brand trust penalties                                           |
 | `synergy_cluster.json`             | Ingredient synergy bonuses                                      |
 
 All data files use the `_metadata` contract with `schema_version`, `last_updated`, `total_entries`.
+
+**Entry counts are deliberately not listed here.** They drift within weeks, and hand-copied
+numbers in this file were wrong by 10-40% (e.g. IQM 610→629, banned 143→168, additives 115→117,
+data files 39→82, tests 580→703). Read `_metadata.total_entries` from the file itself.
 
 ## API Audit Tools (scripts/api_audit/)
 
@@ -180,7 +185,7 @@ scoring configuration.
 
 | File                                | What it covers                                |
 | ----------------------------------- | --------------------------------------------- |
-| `scripts/DATABASE_SCHEMA.md`        | Master schema reference for all 39 data files |
+| `scripts/DATABASE_SCHEMA.md`        | Master schema reference for every data file   |
 | `scripts/SCORING_ENGINE_SPEC.md`    | Detailed scoring formulas and section logic   |
 | `scripts/SCORING_README.md`         | Implementation guide for the scorer           |
 | `scripts/PIPELINE_ARCHITECTURE.md`  | 4-stage pipeline design and contracts         |
@@ -228,7 +233,7 @@ them against `scripts/final_db_output` or a fresh
 
 ## Conventions
 
-- **Data schema version:** 5.0.0 – 5.3.0 (with 6.0.0 for `user_goals_to_clusters.json`) — every JSON data file has a `_metadata` block
+- **Data schema version:** currently 5.4.x (6.0.0 for `user_goals_to_clusters.json`) — every JSON data file has a `_metadata` block; read `schema_version` from the file rather than trusting this line
 - **Score field naming is FROZEN:** use `quality_score_v4_100`, `quality_score_status`, and `quality_pillars_v4`; do not reintroduce `score_quality_80` or `score_display_80`
 - **Safety distinction:** `has_banned_substance` / `has_recalled_ingredient` for ingredient-level. Never use `is_recalled` (implies product-level recall, not supported in v1)
 - **Tests are mandatory:** every data file change, scoring logic change, or enrichment change must have test coverage
@@ -246,6 +251,44 @@ These override speed when they conflict.
 - **Deep modules over shallow ones.** Prefer few large modules with simple interfaces (Ousterhout). When working on the mega-files (`enrich_supplements_v3.py` 13K, `enhanced_normalizer.py` 7K): treat them as gray boxes — design and lock the interface, verify at the boundary with tests.
 - **Watch for cognitive debt and code bloat.** Generating code is nearly free; understanding it isn't. If a change adds volume without removing complexity, push back. If a CLAUDE.md / doc / config grows without being read, slim it.
 - **AI is an amplifier, not a fixer.** Discipline doesn't get optional with AI — it gets more important. Specs-to-code without humans reviewing produces entropy.
+
+## Non-negotiable data rules
+
+Promoted here from the memory bank 2026-07-24. These are standing rules — they were firing only
+when memory recall happened to surface them, which is not acceptable for clinical data. The
+incident that produced each one is still in the named memory file; read it when you need the why.
+
+- **Zero unverified clinical claims.** Every mechanism, severity, or interaction assertion needs a
+  citable authoritative source. (`critical_clinical_data_integrity`)
+- **No bulk API enrichment.** Never bulk-apply API results across entries — verify each entry
+  individually before writing it. (`feedback_no_bulk_api_enrichment`)
+- **Verify chemical identity, never name similarity.** Before adding a new IQM/botanical/probiotic
+  entry, search existing entries and confirm identity via PubChem CID / CAS / InChI. Marketing or
+  name overlap is not proof of same-compound.
+  (`feedback_verify_parent_before_new_entry`, `feedback_user_strict_chemistry_verification`)
+- **Never guess which of two similar data files is canonical.** Check `_metadata.schema_version`,
+  migration history, and what the loader actually reads — not filename or file size.
+  (`feedback_dual_source_file_canonical`)
+- **Verify every shipped identifier, including reused ones,** through a live gate. A green
+  structural test suite does not prove clinical-ID correctness.
+  (`feedback_verify_reused_identifiers_and_full_artifact`)
+- **Changing a structured value means fixing its free text too.** Update every free-text field that
+  references the old value and assert the old phrase is gone.
+  (`feedback_data_field_change_check_freetext`)
+- **A specific clinical lock always beats a generic floor.** Exempt and pin the generic test; never
+  raise a score to satisfy it. (`feedback_unspec_peer_min_exemption`)
+- **Validate routing/scoring fixes on the real enriched corpus** plus a full-corpus diff. Synthetic
+  tests alone hide over-promotion. (`feedback_validate_routing_on_real_corpus`)
+- **Safety copy uses risk-matched action verbs** and is never blanket-rewritten. Under-warning is a
+  worse failure than over-warning. (`feedback_pharmaguide_safety_voice`)
+- **Verify each Codex claim individually against the real file** — Codex mixes fabrications in with
+  genuine catches. If Codex is unavailable for the outside-voice gate, fall back to a fresh-context
+  opus adversarial subagent rather than skipping the gate.
+  (`feedback_codex_verify_each_claim`, `feedback_outside_voice_opus_fallback`)
+- **Claude runs the full test suite as backstop AFTER the pipeline,** never alongside it.
+  (`project_codex_backstop_workflow`)
+- **`git fetch` before asserting any commit or branch state** — this repo has concurrent Codex and
+  Claude sessions plus automated rebuild commits. (`reference_repo_rename_and_fetch_first`)
 
 ## Workflow Patterns
 
@@ -266,46 +309,17 @@ These override speed when they conflict.
 
 ## Dependencies
 
-```
-requests>=2.32,<3    # HTTP client for all API calls
-rapidfuzz>=3.9,<4    # Fuzzy string matching for ingredient resolution
-pytest>=9,<10        # Test framework
-```
-
-Install: `pip install -r requirements-dev.txt`
-
+See `requirements-dev.txt` (install with `pip install -r requirements-dev.txt`).
 ---
 
-# gstack
+# Tooling note
 
-Use the `/browse` skill from gstack for all web browsing. Never use `mcp__claude-in-chrome__*` tools.
+The gstack skill pack was archived 2026-07-24 — `/browse`, `/ship`, `/qa`, `/retro`, `/cso`,
+`/office-hours`, `/autoplan`, `/investigate` and the ~16 others previously listed here no longer
+exist. Do not reference them.
 
-## Available gstack skills
-
-- `/office-hours` — YC-style startup diagnostic and builder brainstorm
-- `/plan-ceo-review` — CEO-level strategy review
-- `/plan-eng-review` — Engineering architecture review
-- `/plan-design-review` — Design audit (report only)
-- `/design-consultation` — Design system from scratch
-- `/review` — PR code review
-- `/ship` — Create PR, run review, prepare for merge
-- `/land-and-deploy` — Merge, deploy, canary verify
-- `/canary` — Post-deploy monitoring loop
-- `/benchmark` — Performance regression detection
-- `/browse` — Headless browser for QA, dogfooding, site testing
-- `/qa` — QA testing with fixes
-- `/qa-only` — QA testing (report only, no fixes)
-- `/design-review` — Visual design audit with fix loop
-- `/setup-browser-cookies` — One-time browser cookie config
-- `/setup-deploy` — One-time deploy config
-- `/retro` — Retrospective
-- `/investigate` — Systematic root-cause debugging
-- `/document-release` — Post-ship documentation updates
-- `/codex` — Multi-AI second opinion via OpenAI Codex CLI
-- `/cso` — OWASP Top 10 + STRIDE security audit
-- `/autoplan` — Auto-review pipeline (CEO, design, eng)
-- `/careful` — Production safety mode
-- `/freeze` — Scoped edit restrictions
-- `/guard` — Production guard rails
-- `/unfreeze` — Remove edit restrictions
-- `/gstack-upgrade` — Upgrade gstack to latest
+- **Web browsing:** built-in Browser pane tools (`mcp__Claude_Browser__*`), or WebFetch/WebSearch
+  inside a subagent so only the summary returns. Never `mcp__claude-in-chrome__*`.
+- **Skills for this repo:** `/catalog-release` (dsld_clean → Flutter release train, wraps
+  `scripts/release_full.sh`), `/data-fix` (one-entry-at-a-time curated-data corrections), plus
+  project skills under `.claude/skills/`.

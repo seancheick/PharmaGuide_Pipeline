@@ -64,6 +64,9 @@ EXPECTED_CLASSES = {
     "class:serotonergic_medications",
     "class:vitamin_k_antagonists",
     "class:enzyme_inducing_antiseizure_medications",
+    # Section 3 (2026-07-26): valproate's salts, kept separate from the inducer
+    # class because valproate INHIBITS CYP450 — see test_med_nutrient_antiseizure.
+    "class:valproate",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
