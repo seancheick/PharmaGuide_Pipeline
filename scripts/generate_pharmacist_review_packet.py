@@ -108,17 +108,33 @@ def build_packet(
         )
     )
 
-    lines = [
-        "# B1 pharmacist review packet",
-        "",
-        f"Status: **{status}**",
-        "",
-        (
+    packet_title = _clean(
+        ledger_metadata.get("packet_title")
+        if signed
+        else "B1 pharmacist review packet"
+    ) or "B1 pharmacist review packet"
+    packet_status = _clean(
+        ledger_metadata.get("packet_status") if signed else status
+    ) or status
+    packet_scope_override = _clean(
+        ledger_metadata.get("packet_scope") if signed else ""
+    )
+    if packet_scope_override:
+        packet_scope_line = f"Scope: **{packet_scope_override}**"
+    else:
+        packet_scope_line = (
             f"Scope: **{len(active)} consumer-visible records** after "
             f"**{len(reviewed)} reviewed records**. "
             f"The {excluded} suppressed/rejected records are intentionally "
             "not consumer-facing."
-        ),
+        )
+
+    lines = [
+        f"# {packet_title}",
+        "",
+        f"Status: **{packet_status}**",
+        "",
+        packet_scope_line,
         "",
         (
             f"Artifact: schema `{_clean(metadata.get('schema_version'))}`, "

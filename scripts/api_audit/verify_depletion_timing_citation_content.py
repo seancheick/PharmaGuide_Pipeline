@@ -36,6 +36,10 @@ DEFAULT_CONTRACT = DATA_DIR / "medication_depletion_citation_expectations.json"
 DEFAULT_DEPLETIONS = DATA_DIR / "medication_depletions.json"
 PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
 SUPPRESSED_STATUSES = {"needs_revision", "rejected"}
+REVIEWER_DISPOSITIONS = {
+    "verified_for_claim": "verified",
+    "candidate_for_pharmacist_review": "needs_revision",
+}
 
 
 def normalize_text(value: str | None) -> str:
@@ -119,16 +123,24 @@ def validate_contract(
         if not entry_id or not pmid.isdigit():
             errors.append(f"malformed expectation: entry_id={entry_id!r}, pmid={pmid!r}")
             continue
-        if item.get("reviewer_disposition") != "verified_for_claim":
-            errors.append(f"{entry_id}/{pmid}: reviewer_disposition must be verified_for_claim")
+        reviewer_disposition = item.get("reviewer_disposition")
+        required_status = REVIEWER_DISPOSITIONS.get(reviewer_disposition)
+        if required_status is None:
+            errors.append(
+                f"{entry_id}/{pmid}: reviewer_disposition must be one of "
+                f"{sorted(REVIEWER_DISPOSITIONS)}"
+            )
         if not expected.get("drug_terms_any") or not expected.get("nutrient_terms_any"):
             errors.append(f"{entry_id}/{pmid}: medication and nutrient expectations are required")
         entry = by_id.get(entry_id)
         if not entry:
             errors.append(f"{entry_id}/{pmid}: referenced entry is absent")
             continue
-        if entry.get("citation_review_status") != "verified":
-            errors.append(f"{entry_id}/{pmid}: entry is not citation_review_status=verified")
+        if required_status is not None and entry.get("citation_review_status") != required_status:
+            errors.append(
+                f"{entry_id}/{pmid}: entry is not "
+                f"citation_review_status={required_status}"
+            )
         if pmid not in _pmids_for_entry(entry):
             errors.append(f"{entry_id}/{pmid}: PMID is not an authored source on the entry")
         covered.add((entry_id, pmid))

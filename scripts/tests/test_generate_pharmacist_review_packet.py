@@ -121,6 +121,53 @@ def test_signed_packet_records_licensed_pharmacist_approval():
     assert "does not claim professional licensure" not in packet
 
 
+def test_delta_packet_uses_ledger_title_status_and_scope_overrides():
+    artifact = {
+        "_metadata": {
+            "schema_version": "5.4.0",
+            "content_version": "v",
+            "content_hash": "sha256:abc",
+        },
+        "depletions": [_row("CANDIDATE", "needs_revision")],
+    }
+    ledger = {
+        "_metadata": {
+            "packet_title": "B1.1 pharmacist delta review packet",
+            "packet_status": (
+                "evidence revision complete; licensed pharmacist sign-off requested"
+            ),
+            "packet_scope": (
+                "4 suppressed candidates; none are consumer-visible until approved."
+            ),
+            "reviewed_at": "2026-07-27",
+            "reviewer": "openai_codex_ai_clinical_audit",
+            "reviewer_type": "AI clinical-content audit",
+            "licensed_pharmacist_signoff": False,
+            "release_disposition": "pending_licensed_pharmacist_delta_review",
+        },
+        "records": {
+            "CANDIDATE": {
+                "disposition": "pending_licensed_pharmacist_review",
+                "note": "Evidence-ready candidate.",
+            },
+        },
+    }
+
+    packet = build_packet(
+        artifact,
+        ledger=ledger,
+        verified_screenshot="verified.png",
+        unavailable_screenshot="unavailable.png",
+    )
+
+    assert packet.startswith("# B1.1 pharmacist delta review packet")
+    assert (
+        "Status: **evidence revision complete; licensed pharmacist sign-off requested**"
+        in packet
+    )
+    assert "Scope: **4 suppressed candidates; none are consumer-visible until approved.**" in packet
+
+
 def test_packet_renders_every_consumer_visible_field():
     """Every field the card shows a user must appear in the review packet.
 

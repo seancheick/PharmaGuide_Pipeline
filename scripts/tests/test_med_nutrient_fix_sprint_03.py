@@ -113,7 +113,12 @@ def test_reviewed_diuretic_records_repointed(depletions, entry_id):
 
 def test_potassium_recommendation_copy_fixed(depletions):
     rec = depletions["DEP_DIURETICS_POTASSIUM"]["recommendation"].lower()
-    assert "potassium-rich foods" in rec, "recommendation must say 'potassium-rich foods'"
+    # B1.1 supersedes the old "potassium-rich foods" requirement. Kidney
+    # disease and concurrent RAAS/potassium-sparing therapy can make an
+    # unqualified increase unsafe, so both diet and supplements now require a
+    # prescriber/lab gate.
+    assert "do not start potassium" in rec
+    assert "kidney function" in rec
     assert "potassium-sparing foods" not in rec, (
         "'potassium-sparing foods' is factually wrong (that names a drug class, not foods)"
     )
