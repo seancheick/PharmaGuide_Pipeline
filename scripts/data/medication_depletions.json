@@ -129,12 +129,12 @@
       },
       "depletion_type": "depletion",
       "severity": "moderate",
-      "mechanism": "Statins may impair hepatic hydroxylation of vitamin D by competing for CYP450 enzymes involved in vitamin D metabolism. Cholesterol is also a substrate for vitamin D synthesis, so its reduction may limit precursor availability.",
-      "clinical_impact": "Suboptimal vitamin D is associated with musculoskeletal pain, immune dysregulation, and increased fracture risk \u2014 symptoms that can overlap with or worsen statin side effects.",
-      "recommendation": "Have your vitamin D (25-OH-D) level checked annually. Supplement with vitamin D3 if levels are below optimal range, typically 1,000\u20132,000 IU daily unless directed otherwise.",
-      "onset_timeline": "months",
-      "evidence_level": "probable",
-      "monitoring_note": "Test serum 25-hydroxyvitamin D annually, especially in winter months or low-sunlight climates.",
+      "mechanism": "No consumer depletion mechanism is asserted pending exact supporting evidence.",
+      "clinical_impact": "No consumer depletion warning is emitted.",
+      "recommendation": "Do not supplement solely because of this medication or condition.",
+      "onset_timeline": "not established",
+      "evidence_level": "possible",
+      "monitoring_note": "No medication-specific nutrient monitoring recommendation is emitted.",
       "sources": [
         {
           "source_type": "reference",
@@ -142,12 +142,15 @@
           "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
         }
       ],
-      "alert_headline": "May affect vitamin D over time",
-      "alert_body": "Long-term statin use may gradually influence how the body processes vitamin D. Levels can drift lower over months, especially through winter.",
-      "acknowledgement_note": "Nice \u2014 vitamin D intake helps support levels while on statin therapy.",
-      "monitoring_tip_short": "Consider asking about a vitamin D check at your annual visit, especially in winter.",
-      "adequacy_threshold_mcg": 25,
-      "food_sources_short": "Food sources of vitamin D include fatty fish, egg yolks, fortified milk and plant milks, and fortified cereals."
+      "alert_headline": "No medication-specific depletion alert",
+      "alert_body": "This record does not establish a medication-caused nutrient depletion warning.",
+      "acknowledgement_note": "No medication-specific nutrient coverage acknowledgement is emitted.",
+      "monitoring_tip_short": "Follow the monitoring plan set by your treating clinician.",
+      "food_sources_short": "Maintain dietary intake appropriate to your individual needs.",
+      "citation_review_status": "needs_revision",
+      "citation_review_note": "B1 closure suppression: this record was unreviewed; no consumer claim may publish pending claim-matched evidence and scope.",
+      "reviewed_at": "2026-07-27",
+      "reviewer": "b1_corpus_closure_audit"
     },
     {
       "id": "DEP_ANTACIDS_VITAMINB12",
@@ -1120,12 +1123,12 @@
       },
       "depletion_type": "depletion",
       "severity": "significant",
-      "mechanism": "Corticosteroids, particularly those with mineralocorticoid activity (prednisone, hydrocortisone), increase sodium retention and potassium excretion in the kidney through activation of aldosterone receptors in the collecting duct.",
-      "clinical_impact": "Hypokalemia causes muscle weakness, fatigue, leg cramps, constipation, and cardiac arrhythmias. Risk is highest with high-dose or long-term therapy and with drugs having significant mineralocorticoid activity.",
-      "recommendation": "Increase dietary potassium (bananas, sweet potatoes, leafy greens). Prescription potassium supplementation may be required for documented hypokalemia. Regular serum potassium monitoring is standard of care.",
-      "onset_timeline": "weeks",
-      "evidence_level": "established",
-      "monitoring_note": "Check serum electrolytes (potassium, sodium) at baseline and periodically during corticosteroid therapy.",
+      "mechanism": "No consumer depletion mechanism is asserted pending exact supporting evidence.",
+      "clinical_impact": "No consumer depletion warning is emitted.",
+      "recommendation": "Do not supplement solely because of this medication or condition.",
+      "onset_timeline": "not established",
+      "evidence_level": "possible",
+      "monitoring_note": "No medication-specific nutrient monitoring recommendation is emitted.",
       "sources": [
         {
           "source_type": "reference",
@@ -1133,11 +1136,15 @@
           "url": "https://accessmedicine.mhmedical.com/content.aspx?bookid=1613&sectionid=102158241"
         }
       ],
-      "alert_headline": "Can lower potassium with regular use",
-      "alert_body": "Corticosteroids can gradually increase potassium loss through the kidneys with regular use over weeks to months. The effect is more noticeable at higher doses.",
-      "acknowledgement_note": "Good \u2014 potassium is typically monitored during corticosteroid therapy, and your care plan helps keep levels steady.",
-      "monitoring_tip_short": "Ask about periodic potassium checks during long-term corticosteroid therapy.",
-      "food_sources_short": "Food sources of potassium include bananas, oranges, potatoes, beans, yogurt, tomatoes, and leafy greens."
+      "alert_headline": "No medication-specific depletion alert",
+      "alert_body": "This record does not establish a medication-caused nutrient depletion warning.",
+      "acknowledgement_note": "No medication-specific nutrient coverage acknowledgement is emitted.",
+      "monitoring_tip_short": "Follow the monitoring plan set by your treating clinician.",
+      "food_sources_short": "Maintain dietary intake appropriate to your individual needs.",
+      "citation_review_status": "needs_revision",
+      "citation_review_note": "B1 closure suppression: this record was unreviewed; no consumer claim may publish pending claim-matched evidence and scope.",
+      "reviewed_at": "2026-07-27",
+      "reviewer": "b1_corpus_closure_audit"
     },
     {
       "id": "DEP_CORTICOSTEROIDS_MAGNESIUM",
@@ -1152,12 +1159,12 @@
       },
       "depletion_type": "depletion",
       "severity": "moderate",
-      "mechanism": "Corticosteroids increase renal magnesium excretion through aldosterone-like effects on tubular transport. Reduced intestinal magnesium absorption has also been documented.",
-      "clinical_impact": "Magnesium depletion worsens muscle weakness, increases muscle cramp frequency, impairs bone metabolism, and can cause refractory hypokalemia by impairing potassium retention.",
-      "recommendation": "Supplement with magnesium glycinate or citrate (200\u2013400 mg/day) during prolonged corticosteroid therapy. Adequate magnesium also supports bone health alongside calcium and vitamin D.",
-      "onset_timeline": "months",
-      "evidence_level": "probable",
-      "monitoring_note": null,
+      "mechanism": "No consumer depletion mechanism is asserted pending exact supporting evidence.",
+      "clinical_impact": "No consumer depletion warning is emitted.",
+      "recommendation": "Do not supplement solely because of this medication or condition.",
+      "onset_timeline": "not established",
+      "evidence_level": "possible",
+      "monitoring_note": "No medication-specific nutrient monitoring recommendation is emitted.",
       "sources": [
         {
           "source_type": "reference",
@@ -1165,12 +1172,15 @@
           "url": "https://www.ncbi.nlm.nih.gov/nlmcatalog/101163369"
         }
       ],
-      "alert_headline": "May lower magnesium with long-term use",
-      "alert_body": "Long-term corticosteroid use can gradually increase magnesium loss through urine over months. Magnesium also supports bone health alongside calcium and vitamin D.",
-      "acknowledgement_note": "Good \u2014 magnesium intake supports bone and muscle balance during long-term corticosteroid use.",
-      "monitoring_tip_short": "Consider asking about magnesium alongside calcium and vitamin D during therapy.",
-      "adequacy_threshold_mg": 200,
-      "food_sources_short": "Food sources of magnesium include leafy greens, nuts, seeds, whole grains, beans, and dark chocolate."
+      "alert_headline": "No medication-specific depletion alert",
+      "alert_body": "This record does not establish a medication-caused nutrient depletion warning.",
+      "acknowledgement_note": "No medication-specific nutrient coverage acknowledgement is emitted.",
+      "monitoring_tip_short": "Follow the monitoring plan set by your treating clinician.",
+      "food_sources_short": "Maintain dietary intake appropriate to your individual needs.",
+      "citation_review_status": "needs_revision",
+      "citation_review_note": "B1 closure suppression: this record was unreviewed; no consumer claim may publish pending claim-matched evidence and scope.",
+      "reviewed_at": "2026-07-27",
+      "reviewer": "b1_corpus_closure_audit"
     },
     {
       "id": "DEP_CORTICOSTEROIDS_VITAMINC",
@@ -1185,12 +1195,12 @@
       },
       "depletion_type": "depletion",
       "severity": "moderate",
-      "mechanism": "Physiological and pharmacological stress states (including corticosteroid use) markedly increase vitamin C utilization. Corticosteroids may also increase vitamin C catabolism and excretion by the adrenal glands, which require vitamin C for cortisol synthesis.",
-      "clinical_impact": "Vitamin C depletion impairs collagen synthesis (worsening skin thinning \u2014 already a side effect of steroids), reduces immune defense, and increases oxidative damage. Wound healing is compromised.",
-      "recommendation": "Supplement with 250\u20131,000 mg vitamin C daily during corticosteroid therapy, particularly if on high doses or long-term therapy.",
-      "onset_timeline": "months",
-      "evidence_level": "probable",
-      "monitoring_note": null,
+      "mechanism": "No consumer depletion mechanism is asserted pending exact supporting evidence.",
+      "clinical_impact": "No consumer depletion warning is emitted.",
+      "recommendation": "Do not supplement solely because of this medication or condition.",
+      "onset_timeline": "not established",
+      "evidence_level": "possible",
+      "monitoring_note": "No medication-specific nutrient monitoring recommendation is emitted.",
       "sources": [
         {
           "source_type": "reference",
@@ -1198,12 +1208,15 @@
           "url": "https://www.ncbi.nlm.nih.gov/nlmcatalog/101163369"
         }
       ],
-      "alert_headline": "May lower vitamin C over time",
-      "alert_body": "With long-term corticosteroid use, the body's vitamin C turnover gradually increases. Some people develop lower levels over months of therapy.",
-      "acknowledgement_note": "Good \u2014 vitamin C intake supports skin and tissue health during long-term corticosteroid use.",
-      "monitoring_tip_short": "Consider daily fruits and vegetables; a supplement is reasonable during therapy.",
-      "adequacy_threshold_mg": 500,
-      "food_sources_short": "Food sources of vitamin C include citrus fruits, strawberries, bell peppers, broccoli, kiwi, and tomatoes."
+      "alert_headline": "No medication-specific depletion alert",
+      "alert_body": "This record does not establish a medication-caused nutrient depletion warning.",
+      "acknowledgement_note": "No medication-specific nutrient coverage acknowledgement is emitted.",
+      "monitoring_tip_short": "Follow the monitoring plan set by your treating clinician.",
+      "food_sources_short": "Maintain dietary intake appropriate to your individual needs.",
+      "citation_review_status": "needs_revision",
+      "citation_review_note": "B1 closure suppression: this record was unreviewed; no consumer claim may publish pending claim-matched evidence and scope.",
+      "reviewed_at": "2026-07-27",
+      "reviewer": "b1_corpus_closure_audit"
     },
     {
       "id": "DEP_CORTICOSTEROIDS_ZINC",
@@ -1218,12 +1231,12 @@
       },
       "depletion_type": "depletion",
       "severity": "moderate",
-      "mechanism": "Corticosteroids increase urinary zinc excretion through mechanisms that include altered zinc transporter expression and reduced tubular reabsorption. They also impair metallothionein-mediated zinc storage.",
-      "clinical_impact": "Zinc depletion impairs wound healing, immune function, and skin integrity. Particularly relevant given that skin thinning and impaired wound healing are already recognized corticosteroid side effects.",
-      "recommendation": "Consider a zinc supplement (10\u201315 mg/day) with long-term corticosteroid use, particularly if wound healing is a concern.",
-      "onset_timeline": "months",
-      "evidence_level": "probable",
-      "monitoring_note": null,
+      "mechanism": "No consumer depletion mechanism is asserted pending exact supporting evidence.",
+      "clinical_impact": "No consumer depletion warning is emitted.",
+      "recommendation": "Do not supplement solely because of this medication or condition.",
+      "onset_timeline": "not established",
+      "evidence_level": "possible",
+      "monitoring_note": "No medication-specific nutrient monitoring recommendation is emitted.",
       "sources": [
         {
           "source_type": "reference",
@@ -1231,12 +1244,15 @@
           "url": "https://www.ncbi.nlm.nih.gov/nlmcatalog/101163369"
         }
       ],
-      "alert_headline": "May lower zinc over time",
-      "alert_body": "Long-term corticosteroid use can gradually increase zinc loss through urine over months, which can slow skin healing in some people.",
-      "acknowledgement_note": "Good \u2014 zinc intake supports skin and immune balance during long-term corticosteroid use.",
-      "monitoring_tip_short": "Consider a multivitamin with zinc if skin healing feels slower than usual.",
-      "adequacy_threshold_mg": 10,
-      "food_sources_short": "Food sources of zinc include meat, poultry, shellfish, beans, lentils, nuts, seeds, and whole grains."
+      "alert_headline": "No medication-specific depletion alert",
+      "alert_body": "This record does not establish a medication-caused nutrient depletion warning.",
+      "acknowledgement_note": "No medication-specific nutrient coverage acknowledgement is emitted.",
+      "monitoring_tip_short": "Follow the monitoring plan set by your treating clinician.",
+      "food_sources_short": "Maintain dietary intake appropriate to your individual needs.",
+      "citation_review_status": "needs_revision",
+      "citation_review_note": "B1 closure suppression: this record was unreviewed; no consumer claim may publish pending claim-matched evidence and scope.",
+      "reviewed_at": "2026-07-27",
+      "reviewer": "b1_corpus_closure_audit"
     },
     {
       "id": "DEP_CORTICOSTEROIDS_VITAMINB6",
@@ -1251,12 +1267,12 @@
       },
       "depletion_type": "depletion",
       "severity": "mild",
-      "mechanism": "Corticosteroids alter tryptophan-kynurenine pathway metabolism in a manner similar to estrogens, increasing demand for vitamin B6 as a cofactor. Increased hepatic tryptophan oxygenase activity depletes pyridoxal phosphate.",
-      "clinical_impact": "B6 deficiency may contribute to mood changes, impaired immune function, and peripheral neuropathy \u2014 all concerns in patients on systemic corticosteroids.",
-      "recommendation": "Ensure adequate B6 intake through diet or a B-complex supplement providing 25\u201350 mg of B6 daily.",
-      "onset_timeline": "months",
-      "evidence_level": "probable",
-      "monitoring_note": null,
+      "mechanism": "No consumer depletion mechanism is asserted pending exact supporting evidence.",
+      "clinical_impact": "No consumer depletion warning is emitted.",
+      "recommendation": "Do not supplement solely because of this medication or condition.",
+      "onset_timeline": "not established",
+      "evidence_level": "possible",
+      "monitoring_note": "No medication-specific nutrient monitoring recommendation is emitted.",
       "sources": [
         {
           "source_type": "reference",
@@ -1264,12 +1280,15 @@
           "url": "https://www.ncbi.nlm.nih.gov/nlmcatalog/101163369"
         }
       ],
-      "alert_headline": "May modestly affect vitamin B6 over time",
-      "alert_body": "With long-term corticosteroid use, the body's demand for vitamin B6 gradually increases. Levels may drift lower over months for some people.",
-      "acknowledgement_note": "Nice \u2014 B6 intake supports levels during long-term corticosteroid therapy.",
-      "monitoring_tip_short": "Consider a B-complex if mood changes are noticeable; discuss with your clinician.",
-      "adequacy_threshold_mg": 25,
-      "food_sources_short": "Food sources of vitamin B6 include poultry, fish, potatoes, chickpeas, bananas, and fortified cereals."
+      "alert_headline": "No medication-specific depletion alert",
+      "alert_body": "This record does not establish a medication-caused nutrient depletion warning.",
+      "acknowledgement_note": "No medication-specific nutrient coverage acknowledgement is emitted.",
+      "monitoring_tip_short": "Follow the monitoring plan set by your treating clinician.",
+      "food_sources_short": "Maintain dietary intake appropriate to your individual needs.",
+      "citation_review_status": "needs_revision",
+      "citation_review_note": "B1 closure suppression: this record was unreviewed; no consumer claim may publish pending claim-matched evidence and scope.",
+      "reviewed_at": "2026-07-27",
+      "reviewer": "b1_corpus_closure_audit"
     },
     {
       "id": "DEP_SSRIS_SODIUM",

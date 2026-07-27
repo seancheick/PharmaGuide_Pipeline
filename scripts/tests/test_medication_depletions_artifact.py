@@ -156,9 +156,9 @@ def test_real_source_content_hash_is_pinned():
     with open(source_path, encoding="utf-8") as f:
         source = json.load(f)
     art = build_artifact(source, content_version="pin")
-    # Repinned 2026-07-26: Section 9 verified direct label-backed fat-soluble
-    # vitamin effects and retained broad specialty-class claims as suppressed.
+    # Repinned 2026-07-27: B1 closure suppressed the last six unreviewed
+    # records so no unreviewed clinical entry can publish.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:9038bd877f9602cbd73129d9bd7db4f6461d866a9b4d58907e9f1d45a383cbfd"
+        == "sha256:bbaa3498dd86609b0e178638981a94937b36da7b0cad74ab909d5242d761c4a6"
     )
