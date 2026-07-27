@@ -90,6 +90,15 @@ COPY_FIXES = {
     },
 }
 
+IDENTITY_FIXES = {
+    # RxNorm live verification 2026-07-27:
+    # 6809 = metformin (IN); 860974 = metformin hydrochloride 500 MG (SCDC).
+    # The app normalizes products/brands to the ingredient identity, so direct
+    # rules must use 6809 or they silently miss ordinary metformin entries.
+    "DEP_METFORMIN_VITAMINB12": "6809",
+    "DEP_METFORMIN_FOLATE": "6809",
+}
+
 
 def main() -> int:
     with open(SOURCE, encoding="utf-8") as f:
@@ -107,6 +116,9 @@ def main() -> int:
 
     for eid, fields in COPY_FIXES.items():
         by[eid].update(fields)
+
+    for eid, rxcui in IDENTITY_FIXES.items():
+        by[eid]["drug_ref"]["id"] = rxcui
 
     for eid, repl in REPLACEMENTS.items():
         e = by[eid]

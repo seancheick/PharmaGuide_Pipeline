@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from build_final_db import (
     build_detail_blob,
     has_banned_substance,
+    project_export_scored_artifact,
     resolve_export_supplement_type,
 )
 from scoring_v4.scored_artifact import suppress_scored_artifact_for_hard_block
@@ -165,20 +166,23 @@ def test_release_export_matches_source_scored_and_resolved_type():
         dsld_id = str(row["dsld_id"])
         enriched = enriched_lookup[dsld_id]
         scored = _expected_export_scored(enriched, scored_lookup[dsld_id])
+        scored = project_export_scored_artifact(
+            enriched, scored, build_detail_blob(enriched, scored)
+        )
         expected_type = resolve_export_supplement_type(enriched, scored)
 
-        assert row["supplement_type"] == expected_type
-        assert row["verdict"] == scored["verdict"]
-        assert row["output_schema_version"] == scored["output_schema_version"]
+        assert row["supplement_type"] == expected_type, dsld_id
+        assert row["verdict"] == scored["verdict"], dsld_id
+        assert row["output_schema_version"] == scored["output_schema_version"], dsld_id
 
         expected_score = scored["score_100_equivalent"]
         if expected_score is None:
-            assert row["score_100_equivalent"] is None
+            assert row["score_100_equivalent"] is None, dsld_id
         else:
-            assert row["score_100_equivalent"] == expected_score
+            assert row["score_100_equivalent"] == expected_score, dsld_id
 
         expected_coverage = round(float(scored["mapped_coverage"]), 4)
-        assert row["mapped_coverage"] == expected_coverage
+        assert row["mapped_coverage"] == expected_coverage, dsld_id
 
 
 @pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)

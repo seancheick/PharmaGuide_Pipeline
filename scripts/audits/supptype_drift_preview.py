@@ -304,7 +304,11 @@ def project_current_taxonomy(product: Dict[str, Any], enricher) -> Dict[str, Any
 
 def preview_scored(projected: Dict[str, Any], strict: bool = True) -> Dict[str, Any]:
     """Run the single production v4 Stage-3 artifact assembly in-process."""
-    from build_final_db import has_banned_substance
+    from build_final_db import (
+        build_detail_blob,
+        has_banned_substance,
+        project_export_scored_artifact,
+    )
     from scoring_v4.scored_artifact import (
         build_scored_artifact,
         suppress_scored_artifact_for_hard_block,
@@ -320,7 +324,8 @@ def preview_scored(projected: Dict[str, Any], strict: bool = True) -> Dict[str, 
         scored = suppress_scored_artifact_for_hard_block(
             scored, reason="banned_substance"
         )
-    return scored
+    detail_blob = build_detail_blob(projected, scored)
+    return project_export_scored_artifact(projected, scored, detail_blob)
 
 
 # ---------------------------------------------------------------------------

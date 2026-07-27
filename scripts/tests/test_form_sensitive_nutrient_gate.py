@@ -88,6 +88,7 @@ def test_placeholder_matched_forms_emit_unknown():
         "vitamin d (unspecified)",
         "magnesium (unspecified)",
         "standard",
+        "fish oil",
         "",
     ):
         ing = {"forms": [], "name": "Vitamin A"}

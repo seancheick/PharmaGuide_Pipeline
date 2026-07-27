@@ -114,8 +114,11 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU + positive Trust path.
     "184730": {
         "label": "Pure Encapsulations Probiotic 123",
-        # Re-baseline 2026-07-19: committed probiotic calibration drift (~-3.4).
-        "score_range": (44.9, 46.3),
+        # Re-baseline 2026-07-27 after the serving-aware label-identity fix:
+        # the pre-fix artifact counted a phantom second blend row, inflating
+        # total CFU from 2.25B to 3.37B and strain count from 3 to 4. The
+        # corrected corpus legitimately lowers the raw dose score 5.9 -> 3.4.
+        "score_range": (42.4, 43.8),
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
