@@ -36,6 +36,8 @@ DATA = Path(__file__).resolve().parent.parent / "data"
 BROAD = "class:anticonvulsants"
 INDUCERS = "class:enzyme_inducing_antiseizure_medications"
 VALPROATE = "class:valproate"
+CARBAMAZEPINE_RXCUI = "2002"
+PHENYTOIN_RXCUI = "8183"
 
 # RxNorm-verified 2026-07-26 (live rxnav lookup).
 VALPROATE_MEMBERS = {
@@ -113,14 +115,11 @@ def test_inducer_class_excludes_valproate_and_non_inducers(classes):
 @pytest.mark.parametrize(
     "entry_id,expected_class",
     [
-        # Induction-driven: the prose already named these four drugs.
-        ("DEP_ANTICONVULSANTS_VITAMIND", INDUCERS),
+        # The broad review supports this inducer subset.
         ("DEP_ANTICONVULSANTS_CALCIUM", INDUCERS),
         ("DEP_ANTICONVULSANTS_VITAMINK", INDUCERS),
-        ("DEP_ANTICONVULSANTS_FOLATE", INDUCERS),
         # Valproate chemistry, not induction.
         ("DEP_ANTICONVULSANTS_LCARNITINE", VALPROATE),
-        ("DEP_ANTICONVULSANTS_BIOTIN", VALPROATE),
     ],
 )
 def test_record_points_at_its_actual_mechanism(depletions, entry_id, expected_class):
@@ -144,9 +143,35 @@ def test_no_displayed_record_still_points_at_the_broad_class(depletions):
 
 
 def test_b12_is_suppressed_pending_a_real_citation(depletions):
-    """Its own mechanism says "may" and its source is a catalog, not a study."""
+    """The broad class was unsafe; content-verified phenytoin evidence is not."""
     entry = depletions["DEP_ANTICONVULSANTS_VITAMINB12"]
-    assert entry["citation_review_status"] == "needs_revision"
+    assert entry["citation_review_status"] == "verified"
+    assert entry["drug_ref"] == {
+        "type": "drug", "id": PHENYTOIN_RXCUI, "display_name": "Phenytoin"
+    }
+
+
+@pytest.mark.parametrize(
+    ("entry_id", "rxcui", "display_name"),
+    [
+        ("DEP_ANTICONVULSANTS_VITAMIND", CARBAMAZEPINE_RXCUI, "Carbamazepine"),
+        ("DEP_ANTICONVULSANTS_FOLATE", PHENYTOIN_RXCUI, "Phenytoin"),
+        ("DEP_ANTICONVULSANTS_VITAMINB12", PHENYTOIN_RXCUI, "Phenytoin"),
+    ],
+)
+def test_single_drug_evidence_is_not_promoted_to_an_inducer_class(
+    depletions, entry_id, rxcui, display_name
+):
+    assert depletions[entry_id]["drug_ref"] == {
+        "type": "drug", "id": rxcui, "display_name": display_name
+    }
+
+
+def test_biotin_is_suppressed_not_shipped_as_a_valproate_claim(depletions):
+    entry = depletions["DEP_ANTICONVULSANTS_BIOTIN"]
+    assert _suppressed(entry)
+    assert entry["drug_ref"]["id"] != VALPROATE
+    assert "valproate" in entry["citation_review_note"].lower()
 
 
 # --------------------------------------------------------------------------- #
@@ -159,8 +184,9 @@ def test_b12_is_suppressed_pending_a_real_citation(depletions):
         "DEP_ANTICONVULSANTS_CALCIUM",
         "DEP_ANTICONVULSANTS_VITAMINK",
         "DEP_ANTICONVULSANTS_FOLATE",
+        "DEP_ANTICONVULSANTS_VITAMINB12",
+        "DEP_ANTICONVULSANTS_VITAMIND",
         "DEP_ANTICONVULSANTS_LCARNITINE",
-        "DEP_ANTICONVULSANTS_BIOTIN",
     ],
 )
 def test_copy_does_not_claim_all_seizure_medications(depletions, entry_id):
@@ -176,7 +202,7 @@ def test_copy_does_not_claim_all_seizure_medications(depletions, entry_id):
 
 
 def test_valproate_records_name_valproate_not_the_class(depletions):
-    for entry_id in ("DEP_ANTICONVULSANTS_LCARNITINE", "DEP_ANTICONVULSANTS_BIOTIN"):
+    for entry_id in ("DEP_ANTICONVULSANTS_LCARNITINE",):
         entry = depletions[entry_id]
         blob = " ".join(
             str(entry.get(f) or "")

@@ -1,85 +1,57 @@
-# Section 3 — Antiseizure medication relationships
+# Section 3 — Antiseizure medication relationships: final disposition
 
-**Date:** 2026-07-26 · **Applier:** `apply.py` (idempotent) · **Tests:** `scripts/tests/test_med_nutrient_antiseizure.py`
+**Completed:** 2026-07-26 · **Authoring script:** `apply.py` (idempotent) ·
+**Runtime artifact:** interaction DB v1.0.3 (published before merge)
 
-## The defect
+## Scope correction
 
-All seven `DEP_ANTICONVULSANTS_*` records were attributed to `class:anticonvulsants`
-— 40 members spanning drugs with **opposite** hepatic pharmacology. Each record's
-own mechanism prose already named the real actors; the attribution never followed
-it. A levetiracetam, lamotrigine or gabapentin patient was therefore warned about
-CYP450-induction effects those drugs do not cause.
+The original seven records used `class:anticonvulsants`, a 40-member umbrella
+that mixes enzyme inducers, the CYP inhibitor valproate, and medicines without
+the relevant mechanism. Section 3 replaces that broad attribution with
+drug-specific or mechanism-specific scopes. A record is shown to users only
+when its citation review is `verified`; `needs_revision` remains intentionally
+suppressed.
 
-`class:anticonvulsants` had no other consumer — no interaction rule references it —
-so the blast radius was exactly these seven records.
-
-## Two mechanisms, two attributions
-
-| Record | Mechanism in its own prose | Was | Now |
+| Record | Final runtime scope | Evidence / citation result | Final disposition |
 |---|---|---|---|
-| VITAMIND | enzyme induction | `enzyme_inducing_…` | unchanged (still `needs_revision`) |
-| CALCIUM | secondary to vitamin D + phenytoin direct | `anticonvulsants` | `enzyme_inducing_…` |
-| VITAMINK | CYP2C9 induction | `anticonvulsants` | `enzyme_inducing_…` |
-| FOLATE | phenytoin / carbamazepine conjugase + DHFR + CYP | `anticonvulsants` | `enzyme_inducing_…` |
-| LCARNITINE | valproate acylcarnitine conjugation | `anticonvulsants` | `class:valproate` |
-| BIOTIN | valproyl β-oxidation, biotinidase inhibition | `anticonvulsants` | `class:valproate` |
-| VITAMINB12 | "may reduce" / "may also increase" | `anticonvulsants` | **suppressed** (`needs_revision`) |
+| Vitamin D | carbamazepine (RxCUI 2002) | Established; PMID 34847425 content-verified | **Verified, carbamazepine-specific.** No class-wide antiseizure inference. |
+| Calcium | enzyme-inducing antiseizure class | Established bone-health context; PMID 15123011 content-verified | **Verified, narrowed.** No universal calcium dose is recommended. |
+| Folate | phenytoin (RxCUI 8183) | Established; PMID 6370643 content-verified | **Verified, phenytoin-specific.** |
+| Vitamin B12 | phenytoin (RxCUI 8183) | Probable; PMID 30896627 content-verified | **Verified, phenytoin-specific.** The mechanism remains uncertainty-preserving. |
+| Vitamin K | enzyme-inducing antiseizure class, pregnancy context only | Possible; PMIDs 16812962 and 8456897 content-verified | **Verified, pregnancy-specific and uncertainty-preserving.** It does not claim routine prophylaxis for all patients. |
+| L-carnitine | `class:valproate` | Probable; PMID 8040784 content-verified | **Verified, valproate-specific.** Copy is limited to chronic/long-term treatment context; it does not extrapolate to all antiseizure medicines. |
+| Biotin | `class:anticonvulsants` labelled “scope under review” | Possible; PMIDs 9371938 and 9523856 do not establish valproate-specific effect | **Suppressed (`needs_revision`).** It cannot ship until an exact, supportable scope is established. |
 
-## `class:valproate` (new)
+`class:valproate` covers the RxNorm-verified dispensed forms divalproex sodium
+(266856), sodium valproate (9919), valproate (40254), and valproic acid
+(11118). It is deliberately separate from
+`class:enzyme_inducing_antiseizure_medications`: none of those four identifiers
+may resolve to the enzyme-inducing class. The runtime release guard and Flutter
+bridge tests assert both positive and negative membership.
 
-One moiety, four dispensed salts — the form on the label must not decide whether
-the patient is warned. All content-verified live against RxNorm on 2026-07-26:
+## Citation-audit containment outside Section 3
 
-| rxcui | name |
-|---|---|
-| 266856 | divalproex sodium (Depakote) |
-| 9919 | sodium valproate |
-| 40254 | valproate |
-| 11118 | valproic acid |
+Eleven unrelated records were suppressed pending their own family audits after
+the content gate found real-but-unrelated PMIDs:
 
-Kept deliberately separate from `class:enzyme_inducing_antiseizure_medications`:
-valproate **inhibits** CYP450, so it shares none of the induction-driven
-depletions. ATC `N03AG01`.
+`DEP_OCP_MAGNESIUM`, `DEP_OCP_ZINC`, `DEP_ANTIPSYCHOTICS_VITAMIND`,
+`DEP_ANTIPSYCHOTICS_COQ10`, `DEP_STIMULANTS_VITAMINC`,
+`DEP_HIVPI_VITAMIND`, `DEP_HIVPI_ZINC`, `DEP_IMMUNOSUPPRESSANTS_MAGNESIUM`,
+`DEP_IMMUNOSUPPRESSANTS_VITAMIND`, `DEP_BENZODIAZEPINES_MELATONIN`, and
+`DEP_BVITAMINS_INTERACTIONS`.
 
-## Decisions and why
+This is a safe containment action, not a verification of the underlying claim.
+The oral-contraceptive magnesium and zinc records are therefore explicitly part
+of Section 4 and must not be reactivated without a record-level content review.
 
-- **B12 suppressed, not deleted.** Its mechanism hedges ("may reduce"), its
-  `evidence_level` is only `probable`, and its sole source is an NLM *catalog*
-  entry rather than a study. Shipping a B12 depletion claim against a whole
-  antiseizure class on that basis over-warns. It returns with a content-verified
-  PMID and a drug-specific scope.
-- **Prose rewritten alongside the attribution.** FOLATE dropped valproate from its
-  mechanism/recommendation; BIOTIN dropped carbamazepine. Repointing a `drug_ref`
-  while leaving text that names out-of-scope drugs is how stale wording reaches
-  the app blob — a dedicated test asserts the copy never claims "all seizure
-  medications".
-- **Carbamazepine–biotin deferred.** Real but far weaker than the valproate
-  evidence, and the two act by different mechanisms, so it does not belong in a
-  valproate-scoped record. Recorded in the inducer class note beside the existing
-  oxcarbazepine deferral.
-- **Sprint 3's freeze lock was narrowed, not deleted.** It said these records
-  "must NOT be repointed *in Sprint 3*", and its stated concern was that biotin
-  and L-carnitine must never ride the enzyme-inducing class. Section 3 performed
-  the review the freeze was waiting on; the durable clinical invariant survives as
-  `test_valproate_records_never_ride_the_enzyme_inducing_class`.
+## Verification record
 
-## Verification
+- Live PubMed content gate: 8 reviewed Section 3 citation expectations matched.
+- Live RxNorm identity gate: direct medication identifiers and referenced classes resolved.
+- Pipeline fast suite: **10,832 passed, 40 skipped**.
+- Flutter artifact parity and focused stack tests: passed before runtime release;
+  the v1.0.3 hydration and real bridge checks are the release prerequisites.
 
-- `verify_drug_class_rxcuis.py` — 818 rxcuis / 39 classes, all resolve to their authored drug
-- `verify_medication_depletion_identifiers.py` — all direct-drug rxcuis + class refs resolve
-- `scripts/test.sh fast` — 10,819 passed, 0 failed
-- App: reference data synced, `med_nutrient_bundled_parity_test` green, 384 stack/interaction tests green
-- Content hash `sha256:76a4368…` → `sha256:d883d89…`, repinned in the pipeline artifact test and the app parity test
-
-## Still open in Section 3
-
-1. **`DEP_ANTICONVULSANTS_VITAMIND` is still suppressed** (`needs_revision`) — the
-   attribution is right but it needs a content-verified PMID to ship.
-2. **B12 needs a real citation** and a drug-specific scope before it can return.
-3. **Citations generally** — five of the seven records still cite NIH ODS fact
-   sheets rather than primary literature. Only VITAMINK carries a PMID (14506311).
-4. **`class:valproate` reaches devices only after the next interaction-DB
-   release** — the bundled SQLite predates it, so the two valproate records do not
-   match yet (fails safe: no match, no warning).
-5. **`class:anticonvulsants` now has one remaining consumer** (the suppressed B12
-   record). Retiring or repurposing the 40-member class is a separate decision.
+No enrichment, scoring, or dashboard rebuild is part of this section: the
+records are reference data consumed by the medication-depletion and interaction
+runtime path, not by the product-score pipeline.

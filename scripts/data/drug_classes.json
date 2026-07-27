@@ -2037,7 +2037,7 @@
         "N03AB",
         "N03AF"
       ],
-      "notes": "Curated enzyme-inducer subset of class:anticonvulsants (carbamazepine, phenytoin, phenobarbital, primidone). Carries every induction-driven depletion: vitamin D, vitamin K, calcium, folate. Valproate is excluded because it INHIBITS CYP450 — its biotin and L-carnitine records live on class:valproate (Section 3, 2026-07-26). Oxcarbazepine remains excluded as a weaker, dose-dependent inducer pending separate review; carbamazepine-biotin is likewise deferred (the valproate evidence is far stronger and the two act by different mechanisms). All 4 rxcuis content-verified against RxNorm."
+      "notes": "Curated enzyme-inducer subset of class:anticonvulsants (carbamazepine, phenytoin, phenobarbital, primidone). Carries every induction-driven depletion: calcium and the pregnancy-specific vitamin K record. Direct carbamazepine and phenytoin citations are kept on their individual rxcuis. Valproate is excluded because it INHIBITS CYP450 and its L-carnitine record lives on class:valproate (Section 3, 2026-07-26). Oxcarbazepine remains excluded as a weaker, dose-dependent inducer pending separate review. All 4 rxcuis content-verified against RxNorm."
     },
     "class:tetracycline_antibiotics": {
       "display_name": "Tetracycline antibiotics",
@@ -2148,7 +2148,7 @@
     },
     "class:valproate": {
       "display_name": "Valproate (valproic acid, divalproex / Depakote)",
-      "description": "The valproate moiety across its dispensed salts. Pharmacologically the opposite of the enzyme-inducing antiseizure drugs: valproate INHIBITS CYP450, so it causes none of the induction-driven depletions (vitamin D, vitamin K, calcium, folate) and instead depletes L-carnitine (acylcarnitine conjugation) and biotin (biotinidase inhibition).",
+      "description": "The valproate moiety across its dispensed salts. Pharmacologically the opposite of the enzyme-inducing antiseizure drugs: valproate INHIBITS CYP450, so it causes none of the induction-driven depletions (vitamin D, vitamin K, calcium, folate) and has its own L-carnitine risk through acylcarnitine conjugation. The biotin signal remains suppressed pending valproate-specific evidence.",
       "member_rxcuis": [
         "266856",
         "9919",
@@ -2165,7 +2165,7 @@
       "atc_codes": [
         "N03AG01"
       ],
-      "notes": "Valproate moiety across its dispensed salts (Depakote is divalproex). Deliberately separate from class:enzyme_inducing_antiseizure_medications: valproate INHIBITS CYP450, so it shares none of the induction-driven depletions (vitamin D, vitamin K, calcium, folate). It carries its own chemistry instead — acylcarnitine conjugation (L-carnitine) and biotinidase inhibition (biotin). All 4 rxcuis content-verified against RxNorm 2026-07-26."
+      "notes": "Valproate moiety across its dispensed salts (Depakote is divalproex). Deliberately separate from class:enzyme_inducing_antiseizure_medications: valproate INHIBITS CYP450, so it shares none of the induction-driven depletions (vitamin D, vitamin K, calcium, folate). It carries its own L-carnitine risk through acylcarnitine conjugation. The biotin signal is suppressed pending valproate-specific evidence. All 4 rxcuis content-verified against RxNorm 2026-07-26."
     }
   }
 }

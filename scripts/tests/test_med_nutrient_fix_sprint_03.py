@@ -167,9 +167,9 @@ def test_magnesium_misattributed_citation_corrected(depletions):
 # Step 3 — enzyme-inducing antiseizure medications → vitamin D
 #
 # Vitamin D catabolism is driven by strong hepatic CYP inducers, not every AED.
-# Only the vitamin D record moves. valproate (an enzyme INHIBITOR — biotin /
-# L-carnitine records) must never enter this class; oxcarbazepine is a weaker,
-# dose-dependent inducer left for separate review.
+# The original class-level routing was later narrowed by Section 3: its reviewed
+# meta-analysis is carbamazepine-specific, so the published record uses the
+# direct RxCUI rather than extrapolating to all inducers.
 # --------------------------------------------------------------------------- #
 
 EIASM = "class:enzyme_inducing_antiseizure_medications"
@@ -198,7 +198,9 @@ def test_eiasm_excludes_valproate_and_oxcarbazepine(classes):
 
 
 def test_vitamin_d_anticonvulsant_repointed(depletions):
-    assert depletions["DEP_ANTICONVULSANTS_VITAMIND"]["drug_ref"]["id"] == EIASM
+    assert depletions["DEP_ANTICONVULSANTS_VITAMIND"]["drug_ref"] == {
+        "type": "drug", "id": "2002", "display_name": "Carbamazepine"
+    }
 
 
 @pytest.mark.parametrize(

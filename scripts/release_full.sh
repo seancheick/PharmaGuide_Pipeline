@@ -491,6 +491,8 @@ else
     "$PG_PYTHON" scripts/api_audit/verify_medication_depletion_identifiers.py
   run_strict_gate "depletion/timing PMID existence (PubMed)" \
     "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_pmids.py --live
+  run_strict_gate "reviewed depletion/timing PMID content (PubMed)" \
+    "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_citation_content.py --live
 fi
 
 run_strict_gate "cleaner/IQD row contract" \
