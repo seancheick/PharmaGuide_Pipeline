@@ -160,7 +160,12 @@ def test_real_source_content_hash_is_pinned():
     # warfarin and prednisone scopes, suppresses the overbroad OCP-B6 record,
     # rejects the pregnancy-only antiseizure-vitamin-K warning, and records
     # evidence-aligned consumer wording plus immutable review dispositions.
+    # Repinned again 2026-07-27 (B1 release correction): the metformin/B12
+    # record's consumer "From food" copy no longer implies universal
+    # supplementation — it names food sources and routes to testing, matching
+    # the same record's risk-based recommendation. Its dormant monitoring_note
+    # also drops the unverified "every 2-3 years in all patients" interval.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:ba86c3941708c059497e661a15cd496a88c59703c231d0cb5ff131d1940ee731"
+        == "sha256:180a7380a03f20066103030d496124ee9a5e1c8e65167da095b627ace36f7f98"
     )
