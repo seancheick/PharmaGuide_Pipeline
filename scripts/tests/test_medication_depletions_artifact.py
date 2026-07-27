@@ -156,11 +156,11 @@ def test_real_source_content_hash_is_pinned():
     with open(source_path, encoding="utf-8") as f:
         source = json.load(f)
     art = build_artifact(source, content_version="pin")
-    # Repinned 2026-07-27: the B1 full-gate repair preserves honest
-    # ``not established`` onset values for non-publishing records, adds
-    # content-mismatch provenance to the four Section 9 ghost citations, and
-    # gives suppressed copy the same calm safety-copy contract as active copy.
+    # Repinned 2026-07-27: the final B1 clinical-content sign-off narrows
+    # warfarin and prednisone scopes, suppresses the overbroad OCP-B6 record,
+    # rejects the pregnancy-only antiseizure-vitamin-K warning, and records
+    # evidence-aligned consumer wording plus immutable review dispositions.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:98259507ef920a503084f748b11c9bbcc1d7ec7fabdadb9d3d7326610bef2753"
+        == "sha256:ba86c3941708c059497e661a15cd496a88c59703c231d0cb5ff131d1940ee731"
     )

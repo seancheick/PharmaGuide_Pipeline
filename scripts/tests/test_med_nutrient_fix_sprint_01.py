@@ -62,9 +62,13 @@ def test_levothyroxine_iron_verified_with_primary_trial():
     assert "thyroperoxidase" not in _all_text(e).lower()  # tangent removed
 
 
-def test_ocp_b6_verified_downgraded_and_ul_safe():
+def test_ocp_b6_suppressed_for_overbroad_runtime_scope_and_ul_safe():
     e = _entries()["DEP_OCP_VITAMINB6"]
-    assert e["citation_review_status"] == "verified"
+    # Final B1 scope audit supersedes the earlier publication decision: the
+    # evidence is estrogen-containing oral pills, while the runtime class also
+    # contains implants, injections, emergency contraception, and megestrol.
+    assert e["citation_review_status"] == "needs_revision"
+    assert e["b1_clinical_review_disposition"] == "requires_evidence_revision"
     assert e["evidence_level"] == "possible"  # weakest tier in the corpus enum
     assert "21967158" in _pmids(e)  # Wilson 2011
     # UL-safe: no above-UL B6 dose survives in any recommendation field
@@ -74,6 +78,7 @@ def test_ocp_b6_verified_downgraded_and_ul_safe():
         assert dose is None or dose <= limit, f"{field}: {dose} {unit} > UL"
     # the high-dose caution is stated
     assert "not recommended" in e["recommendation"].lower()
+    assert "runtime class includes implants" in e["citation_review_note"]
 
 
 def test_ocp_folate_rejected_premise_contradicted():

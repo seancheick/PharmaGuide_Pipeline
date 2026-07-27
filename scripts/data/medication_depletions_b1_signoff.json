@@ -1,0 +1,193 @@
+{
+  "_metadata": {
+    "schema_version": "5.4.0",
+    "description": "Machine-enforced final B1 clinical-content dispositions and active record/class fingerprints.",
+    "purpose": "medication_depletion_clinical_change_control",
+    "total_entries": 3,
+    "reviewed_at": "2026-07-27",
+    "review_scope_count": 33,
+    "active_record_count": 31,
+    "reviewer": "openai_codex_ai_clinical_audit",
+    "reviewer_type": "AI clinical-content audit",
+    "licensed_pharmacist_signoff": false,
+    "release_disposition": "approved_for_controlled_beta",
+    "change_control": "Any active record, active class membership, citation, or promotion change requires evidence review and ledger regeneration."
+  },
+  "records": {
+    "DEP_ANTACIDS_CALCIUM": {
+      "disposition": "approved_with_wording_change",
+      "note": "Reclassified as monitoring rather than body-calcium depletion; retained the bounded carbonate/fracture evidence."
+    },
+    "DEP_ANTACIDS_IRON": {
+      "disposition": "approved_with_wording_change",
+      "note": "Aligned onset and monitoring advice with the >=2-year clinical evidence; removed unsupported dose-separation advice."
+    },
+    "DEP_ANTICOAGULANTS_VITAMINK": {
+      "disposition": "approved_with_wording_change",
+      "note": "Narrowed the overbroad anticoagulant class to warfarin and removed speculative bone/vascular outcomes."
+    },
+    "DEP_ANTICONVULSANTS_CALCIUM": {
+      "disposition": "approved",
+      "note": "Evidence, inducer scope, and bone-health wording align."
+    },
+    "DEP_ANTICONVULSANTS_FOLATE": {
+      "disposition": "approved",
+      "note": "Phenytoin-specific evidence and supplement caution align."
+    },
+    "DEP_ANTICONVULSANTS_LCARNITINE": {
+      "disposition": "approved_with_wording_change",
+      "note": "Downgraded severity and made the small pediatric evidence/routine-supplement uncertainty explicit."
+    },
+    "DEP_ANTICONVULSANTS_VITAMINB12": {
+      "disposition": "approved",
+      "note": "Phenytoin-specific meta-analysis supports the cautious monitoring claim."
+    },
+    "DEP_ANTICONVULSANTS_VITAMIND": {
+      "disposition": "approved",
+      "note": "Carbamazepine-specific meta-analysis supports the bounded claim."
+    },
+    "DEP_ANTICONVULSANTS_VITAMINK": {
+      "disposition": "remove_from_release",
+      "note": "The later review does not support routine antenatal vitamin K, the signal is pregnancy-specific, and the runtime has no pregnancy context. A significant class-wide consumer warning would be a false positive outside pregnancy."
+    },
+    "DEP_CHOLESTYRAMINE_VITAMINA": {
+      "disposition": "approved",
+      "note": "Current prescribing information supports reduced fat-soluble vitamin absorption."
+    },
+    "DEP_CHOLESTYRAMINE_VITAMIND": {
+      "disposition": "approved",
+      "note": "Current prescribing information supports reduced fat-soluble vitamin absorption."
+    },
+    "DEP_CHOLESTYRAMINE_VITAMINE": {
+      "disposition": "approved",
+      "note": "Current prescribing information supports reduced fat-soluble vitamin absorption."
+    },
+    "DEP_CHOLESTYRAMINE_VITAMINK": {
+      "disposition": "approved",
+      "note": "Current prescribing information supports reduced fat-soluble vitamin absorption."
+    },
+    "DEP_COLCHICINE_VITAMINB12": {
+      "disposition": "approved_with_wording_change",
+      "note": "Kept the recognized malabsorption signal but removed any implication of universal periodic screening."
+    },
+    "DEP_CORTICOSTEROIDS_CALCIUM": {
+      "disposition": "approved_with_wording_change",
+      "note": "Narrowed the route-ambiguous class to long-term oral prednisone and retained guideline-directed bone care."
+    },
+    "DEP_CORTICOSTEROIDS_VITAMIND": {
+      "disposition": "approved_with_wording_change",
+      "note": "Narrowed the route-ambiguous class to long-term oral prednisone and retained monitoring-only wording."
+    },
+    "DEP_DIURETICS_CALCIUM": {
+      "disposition": "approved",
+      "note": "Loop-diuretic calciuria and cautious bone-health wording align."
+    },
+    "DEP_DIURETICS_FOLATE": {
+      "disposition": "approved",
+      "note": "Triamterene-specific antifolate evidence and risk-qualified wording align."
+    },
+    "DEP_DIURETICS_THIAMINE": {
+      "disposition": "approved_with_wording_change",
+      "note": "Separated direct urinary loss from heart-failure confounding and removed any routine-supplement implication."
+    },
+    "DEP_DIURETICS_ZINC": {
+      "disposition": "approved_with_wording_change",
+      "note": "Removed an unsupported 10-15 mg/day supplement suggestion; retained the mild thiazide urinary-loss signal."
+    },
+    "DEP_ISONIAZID_VITAMINB6": {
+      "disposition": "approved",
+      "note": "Current label and systematic review support the clinician-directed B6 recommendation."
+    },
+    "DEP_LEVOTHYROXINE_CALCIUM": {
+      "disposition": "approved_with_wording_change",
+      "note": "Limited four-hour separation advice to calcium supplements/products rather than ordinary calcium-rich meals."
+    },
+    "DEP_LEVOTHYROXINE_IRON": {
+      "disposition": "approved",
+      "note": "Direct interaction evidence and four-hour separation advice align."
+    },
+    "DEP_METFORMIN_VITAMINB12": {
+      "disposition": "approved_with_wording_change",
+      "note": "Aligned mechanism, monitoring, and treatment wording with NIH, MHRA, and ADA 2026 guidance."
+    },
+    "DEP_METHOTREXATE_FOLATE": {
+      "disposition": "approved_with_wording_change",
+      "note": "Explicitly separated low-dose inflammatory-disease folate support from oncology/rescue protocols."
+    },
+    "DEP_OCP_VITAMINB6": {
+      "disposition": "requires_evidence_revision",
+      "note": "The source concerns estrogen-containing oral contraceptives, but the runtime class includes implants, injectable progestins, emergency contraception, and non-contraceptive megestrol. Keep suppressed until a reliably normalized combined-oral scope and independent clinical-importance evidence exist."
+    },
+    "DEP_ORLISTAT_VITAMINA": {
+      "disposition": "approved",
+      "note": "Current XENICAL label supports daily ADEK multivitamin separation."
+    },
+    "DEP_ORLISTAT_VITAMIND": {
+      "disposition": "approved",
+      "note": "Current XENICAL label supports daily ADEK multivitamin separation."
+    },
+    "DEP_ORLISTAT_VITAMINE": {
+      "disposition": "approved",
+      "note": "Current XENICAL label supports daily ADEK multivitamin separation."
+    },
+    "DEP_ORLISTAT_VITAMINK": {
+      "disposition": "approved",
+      "note": "Current XENICAL label supports daily ADEK multivitamin separation."
+    },
+    "DEP_SSRIS_SODIUM": {
+      "disposition": "approved_with_wording_change",
+      "note": "Made the SIADH mechanism and monitoring timing appropriately non-categorical."
+    },
+    "DEP_STATINS_COQ10": {
+      "disposition": "approved",
+      "note": "Blood-level reduction is established and the copy preserves uncertain clinical significance."
+    },
+    "DEP_SULFASALAZINE_FOLATE": {
+      "disposition": "approved",
+      "note": "Current label supports impaired folate absorption/metabolism and clinician direction."
+    }
+  },
+  "active_record_fingerprints": {
+    "DEP_ANTACIDS_CALCIUM": "sha256:7fa936f70a9d7df7b9c2ea01f322c9971cd693f0f13d5436febd98a8c1710212",
+    "DEP_ANTACIDS_IRON": "sha256:fcdeea9757b53d4ae4bdeed2c1245e0069a72487a5c7df7384c2b5df826b63e2",
+    "DEP_ANTICOAGULANTS_VITAMINK": "sha256:2ab921b73fc03f469c396894dee7a580451b3f55be1c42e1aaba248778c62a06",
+    "DEP_ANTICONVULSANTS_CALCIUM": "sha256:95fe81f895f2c746bf63595a6db5c96818bf906956bedb5147b0ca132bf3e2da",
+    "DEP_ANTICONVULSANTS_FOLATE": "sha256:c30e03fcf32d6a98ec9376351c47939c16d3e9768b740e8975a980794e17220f",
+    "DEP_ANTICONVULSANTS_LCARNITINE": "sha256:05c117036f7c2302d4f9fbaa8b54a7080b6452dcfe23304276e8bd49adb41680",
+    "DEP_ANTICONVULSANTS_VITAMINB12": "sha256:e1ec99a33b7ed0c7454c5a460d331063a6c82e96ff4b558e103dee6f440d582c",
+    "DEP_ANTICONVULSANTS_VITAMIND": "sha256:16456c179c3b1abe9fd6cb298e394ae10bcf3455c71f487a5d5ab9fffd922bda",
+    "DEP_CHOLESTYRAMINE_VITAMINA": "sha256:20d5972917421c61510e89b8c2c69a61200781c92f4818716a0c262a1e481b39",
+    "DEP_CHOLESTYRAMINE_VITAMIND": "sha256:49005ef892d7edb858f59fd102bbb0f7aa1f016dfb468f73fc7ae58ad2733b3b",
+    "DEP_CHOLESTYRAMINE_VITAMINE": "sha256:8ea10eba577d741d8e5fa4055ac5a139138eb1e3ded60647d2f415e2201b59d7",
+    "DEP_CHOLESTYRAMINE_VITAMINK": "sha256:bd71b2e7503cf8157b5281f7b7c5faf45ebe6f8734274db1b4aa398e7db511f7",
+    "DEP_COLCHICINE_VITAMINB12": "sha256:c9447c54ebf0317090121be1977903da3d91865c5e21a880a992899e4359d1b1",
+    "DEP_CORTICOSTEROIDS_CALCIUM": "sha256:3720fd4c2bd230e5869b0bffc22ddf6de23ec392c83a90bd2b858f0c7b0d0c49",
+    "DEP_CORTICOSTEROIDS_VITAMIND": "sha256:460f2038ab037a3f8a604172b67e1adc0190bbce55d89a8e432edf89490d13da",
+    "DEP_DIURETICS_CALCIUM": "sha256:09a64b7ea61025fe71daca5d71f26afb91a6798d67c1639ea5aa9ea0abc94692",
+    "DEP_DIURETICS_FOLATE": "sha256:db80d4ae36b6d7a49aca591b39591cbac931e365bb8e1ccb71966600ebda7fd7",
+    "DEP_DIURETICS_THIAMINE": "sha256:fa0d2903f20234233034c0f7b6415ac1d72bea1488c3060c12bf885e70d67f48",
+    "DEP_DIURETICS_ZINC": "sha256:748a28ed65b75462ceaeb91f7ca985e580011e0b19013fa81b6e995bd8d793ad",
+    "DEP_ISONIAZID_VITAMINB6": "sha256:3d24f85eac7cea7fff4c06e93f7b9ccf707f11eece614de2e13b98d26b34697a",
+    "DEP_LEVOTHYROXINE_CALCIUM": "sha256:4586e3becd58ab0ff07d35563b80b784401e7e362e84422d8a1de648ac28e497",
+    "DEP_LEVOTHYROXINE_IRON": "sha256:c923072c819464b2de1196d8a37eaa5ba8057cc600b2e0609d9c26cd6f0b81d5",
+    "DEP_METFORMIN_VITAMINB12": "sha256:647c27802b9e111cf8681d1616d906f9ca820fcd05dbe5244a5d326ccd3f6ebc",
+    "DEP_METHOTREXATE_FOLATE": "sha256:5c5b97e6ca69e05808446d5dc7abcbcbeb89e097519cb5888d4e851c1c25d4bc",
+    "DEP_ORLISTAT_VITAMINA": "sha256:b4ae4ceac999452642ab51297355db0269fbdaacb7c6a9791dfd000cffd33513",
+    "DEP_ORLISTAT_VITAMIND": "sha256:0c18beba3074d0eed0f69a69b2873c710cc3cb680f1047b0bb089a5164c395ed",
+    "DEP_ORLISTAT_VITAMINE": "sha256:7f6a7d161b75c819d41b768fc47162da2a97163b87601b02cd257dcb4a8d6f11",
+    "DEP_ORLISTAT_VITAMINK": "sha256:99d72bfdd73d1388e37155d192c2fb98e939167222485ee9bd210d71a1e1e2ce",
+    "DEP_SSRIS_SODIUM": "sha256:2d257778e17350680f27ff7ef97e714f877359f6af1acd9ecc1f5c2146d0beca",
+    "DEP_STATINS_COQ10": "sha256:d5550cc246f5c29d81d69b7ca679409cd10c1b7352ae88d6c1b5d98c2ce8918f",
+    "DEP_SULFASALAZINE_FOLATE": "sha256:8500444bf6c63a8f3be3504429241033c9318eccb34c5649a6a86ef44f802c01"
+  },
+  "active_class_fingerprints": {
+    "class:acid_suppressants": "sha256:09a9505e4ad3341305caccc7cc7d2a1723a0537309cb0a6c5f3b5da5bf05c010",
+    "class:enzyme_inducing_antiseizure_medications": "sha256:80dcd0a78d5c9e9a8006024ceb0e3cf447da06564eace52462d13db272b407cf",
+    "class:loop_diuretics": "sha256:828e02c64bba64c788d4734ed884231c85205fa29912c70622ad2d59d52ca7d8",
+    "class:proton_pump_inhibitors": "sha256:bd0aef5a35062fa7b0681e3cfc9f2639918bdc9d35e11d40604c88017841f061",
+    "class:ssris": "sha256:cb22eb393f0bc0ac4a075b62bb40022708f8428b5546e41b7bfd5afcb2af5f45",
+    "class:statins": "sha256:cc5c883dbf2f127fd3cf145bf2b18139865e5076b494f5f779f27cbaac401d0c",
+    "class:thiazide_diuretics": "sha256:c849a8442b8a02b057353f379d2c6fa2defe8cf69fe7ac17a659564120526327",
+    "class:valproate": "sha256:b0f89badd90071a34d4627ed5ee9290a21df202d5db9de65e8cc04d4e5eef627"
+  }
+}

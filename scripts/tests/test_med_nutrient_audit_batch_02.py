@@ -20,10 +20,10 @@ EXPECTED_STATUS = {
     "DEP_METHOTREXATE_FOLATE": "verified",
     "DEP_ISONIAZID_VITAMINB6": "verified",
     "DEP_SSRIS_SODIUM": "verified",
-    # Both OCP entries were superseded by fix_sprint_01 (see
-    # test_med_nutrient_fix_sprint_01.py): B6 downgraded + dose cut → verified,
-    # folate premise contradicted by Wilson 2011 → rejected.
-    "DEP_OCP_VITAMINB6": "verified",
+    # The final B1 sign-off found that the runtime class contains non-oral and
+    # non-estrogen contraceptives. The estrogen-pill B6 evidence therefore
+    # cannot publish through that overbroad class.
+    "DEP_OCP_VITAMINB6": "needs_revision",
     "DEP_OCP_FOLATE": "rejected",
 }
 
