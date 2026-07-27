@@ -2,8 +2,10 @@
 
 Status: **approved for controlled beta**
 
-This AI clinical-content audit reviewed all 33 records that were
-consumer-visible at the start of the final gate.
+The AI clinical-content audit reviewed all 33 records that were
+consumer-visible at the start of the final gate. Dr. Pham of the PharmaGuide
+Clinical Team subsequently provided licensed-pharmacist approval for the
+bounded controlled-beta corpus on 2026-07-27.
 
 | Disposition | Count | Runtime result |
 |---|---:|---|
@@ -48,5 +50,5 @@ Unreviewed records in the bounded B1 sign-off scope: **0**.
 The release test fails if active copy, citations, active status, or class
 membership changes without a new evidence review and ledger update.
 
-This report records an AI clinical-content sign-off for controlled beta. It
-does not claim a licensed pharmacist credential.
+The machine-readable ledger preserves the AI audit as supporting provenance
+and records Dr. Pham's licensed-pharmacist sign-off as the release authority.

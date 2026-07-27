@@ -95,10 +95,17 @@ def build_packet(
     ]
     excluded = len(rows) - len(active)
     signed = ledger is not None
+    licensed_signoff = bool(
+        signed and ledger_metadata.get("licensed_pharmacist_signoff")
+    )
     status = (
-        "AI clinical-content review complete"
-        if signed
-        else "clinical reviewer sign-off requested"
+        "licensed pharmacist clinical review complete"
+        if licensed_signoff
+        else (
+            "AI clinical-content review complete"
+            if signed
+            else "clinical reviewer sign-off requested"
+        )
     )
 
     lines = [
@@ -246,6 +253,21 @@ def build_packet(
         )
 
     if signed:
+        pharmacist_status = (
+            "**confirmed**"
+            if licensed_signoff
+            else "**not represented by this packet**"
+        )
+        scope_statement = (
+            "This packet records licensed-pharmacist approval of the bounded "
+            "controlled-beta corpus."
+            if licensed_signoff
+            else (
+                "This is a documented AI clinical-content audit and "
+                "controlled-beta sign-off; it does not claim professional "
+                "licensure."
+            )
+        )
         lines.extend(
             [
                 "## Sign-off",
@@ -262,12 +284,10 @@ def build_packet(
                 ),
                 (
                     "- Licensed pharmacist sign-off: "
-                    "**not represented by this packet**"
+                    f"{pharmacist_status}"
                 ),
                 (
-                    "- Scope statement: This is a documented AI "
-                    "clinical-content audit and controlled-beta sign-off; it "
-                    "does not claim professional licensure."
+                    f"- Scope statement: {scope_statement}"
                 ),
                 "",
             ]

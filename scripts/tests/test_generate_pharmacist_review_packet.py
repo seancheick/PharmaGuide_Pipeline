@@ -77,6 +77,50 @@ def test_signed_packet_includes_all_dispositions_without_claiming_licensure():
     assert "Licensed pharmacist sign-off: **not represented by this packet**" in packet
 
 
+def test_signed_packet_records_licensed_pharmacist_approval():
+    artifact = {
+        "_metadata": {
+            "schema_version": "5.4.0",
+            "content_version": "v",
+            "content_hash": "sha256:abc",
+        },
+        "depletions": [_row("APPROVED", "verified")],
+    }
+    ledger = {
+        "_metadata": {
+            "review_scope_count": 1,
+            "active_record_count": 1,
+            "reviewed_at": "2026-07-27",
+            "reviewer": "Dr. Pham, PharmaGuide Clinical Team",
+            "reviewer_type": "Licensed pharmacist clinical review",
+            "licensed_pharmacist_signoff": True,
+            "release_disposition": "approved_for_controlled_beta",
+        },
+        "records": {
+            "APPROVED": {
+                "disposition": "approved",
+                "note": "Claim aligns.",
+            },
+        },
+    }
+
+    packet = build_packet(
+        artifact,
+        ledger=ledger,
+        verified_screenshot="verified.png",
+        unavailable_screenshot="unavailable.png",
+    )
+
+    assert "licensed pharmacist clinical review complete" in packet
+    assert "Dr. Pham, PharmaGuide Clinical Team" in packet
+    assert "Licensed pharmacist sign-off: **confirmed**" in packet
+    assert (
+        "records licensed-pharmacist approval of the bounded "
+        "controlled-beta corpus"
+    ) in packet
+    assert "does not claim professional licensure" not in packet
+
+
 def test_packet_renders_every_consumer_visible_field():
     """Every field the card shows a user must appear in the review packet.
 
