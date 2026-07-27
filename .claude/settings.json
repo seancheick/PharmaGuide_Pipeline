@@ -15,19 +15,12 @@
       "mcp__claude_ai_PubMed__find_related_articles",
       "Bash(git rebase:*)",
       "Bash(timeout 8 streamlit run scripts/dashboard/app.py --server.headless true --server.port 8599)",
-      "Skill(investigate)",
-      "Skill(investigate:*)",
-      "WebFetch(domain:costgoat.com)",
-      "Skill(gsd-debug)",
-      "Skill(gsd-debug:*)"
+      "WebFetch(domain:costgoat.com)"
     ],
     "additionalDirectories": [
       "/Users/seancheick/PharmaGuide ai/ios/Runner.xcodeproj",
       "/Users/seancheick/PharmaGuide ai"
     ]
   },
-  "enabledPlugins": {
-    "fullstack-dev-skills@fullstack-dev-skills": true,
-    "claude-mem@thedotmack": true
-  }
+  "enabledPlugins": {}
 }
