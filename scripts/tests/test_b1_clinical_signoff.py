@@ -249,3 +249,44 @@ def test_every_consumer_visible_field_is_inside_the_clinical_fingerprint():
         "consumer-visible fields outside the clinical fingerprint: "
         f"{sorted(escaped)}"
     )
+
+
+# Copy that clinical review specifically retired: it tells a user that diet is
+# inadequate and a supplement is the better option, with no testing or clinician
+# gate.  That framing contradicts test-first guidance (MHRA/ADA for metformin),
+# and self-starting B12 before a draw makes serum B12 and MMA uninterpretable —
+# it can mask the very deficiency the record exists to surface.
+#
+# This is a regression gate on known-retired wording, NOT a general tone
+# detector.  Clinician- or label-directed supplementation is legitimate and must
+# keep passing: isoniazid/pyridoxine co-therapy, the methotrexate folate
+# schedule, and the orlistat multivitamin timing all say so and are all fine.
+RETIRED_CONSUMER_PHRASES = (
+    "food sources may not be enough",
+    "supplement is often more reliable",
+    "a supplement is more reliable",
+)
+
+
+def test_consumer_visible_records_never_carry_retired_supplementation_copy():
+    """A suppressed record must not smuggle retired copy in on promotion.
+
+    `DEP_ANTACIDS_VITAMINB12` still carries the exact phrasing removed from
+    `DEP_METFORMIN_VITAMINB12`.  It is suppressed today, so no user sees it and
+    this test passes.  The moment it is promoted to `verified` without the copy
+    being rewritten, this fails — which is the point.  Fix the wording as part
+    of that record's evidence revision, not by loosening this gate.
+    """
+    records = _load(SOURCE_PATH)["depletions"]
+    offenders = [
+        (record.get("id"), field, phrase)
+        for record in records
+        if record.get("citation_review_status") == "verified"
+        for field in sorted(CONSUMER_VISIBLE_FIELD_NAMES)
+        for phrase in RETIRED_CONSUMER_PHRASES
+        if phrase in str(record.get(field) or "").lower()
+    ]
+    assert not offenders, (
+        "consumer-visible records carry retired supplementation copy: "
+        f"{offenders}"
+    )
