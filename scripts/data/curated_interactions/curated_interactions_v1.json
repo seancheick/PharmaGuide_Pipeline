@@ -1,8 +1,8 @@
 {
   "_metadata": {
-    "schema_version": "1.2.0",
-    "last_updated": "2026-07-10",
-    "total_entries": 110,
+    "schema_version": "1.2.1",
+    "last_updated": "2026-07-28",
+    "total_entries": 106,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -19,7 +19,8 @@
       "2026-07-02: Phase 2 smart-flagging — authored direction + materiality on all 110 pairwise interactions. materiality authored fresh (NOT from applies_to): Major/Contraindicated + PK/absorption + non-supplement pairs = presence (never suppress, incl. warfarin+vitK); supplement-dose Additive pairs = dose_dependent (floorable, incl. fish-oil+vitamin-E). Advisory-only; score- and (pre-Phase-4) behavior-neutral. Applied via scripts/tools/migrate_phase2_pairwise_direction_materiality.py.",
       "2026-07-02: Phase 3 — authored structured dose_threshold on all 33 dose_dependent pairs (floor value + confidence + verified ODS/NCCIH/PMID source per pair; reuses verified ingredient-rule floors where the same supplement+effect exists). Below-floor = suppressible by the app dose gate; inert until Phase 4. Applied via scripts/tools/author_phase3_pairwise_floors.py.",
       "2026-07-03: Added SSI_5HTP_SAME for 5-HTP + SAMe supplement-supplement serotonin-risk coverage. Also corrected metadata.total_entries to match the interactions array length.",
-      "2026-07-10: Retired SSI_VITD_VITK2 from the safety interaction set because its neutral, synergy-oriented copy was contradictory as a scored alert. Corrected metadata.total_entries to the current 110 interaction rows."
+      "2026-07-10: Retired SSI_VITD_VITK2 from the safety interaction set because its neutral, synergy-oriented copy was contradictory as a scored alert. Corrected metadata.total_entries to the current 110 interaction rows.",
+      "2026-07-28: Live beta canary cleanup. Retired DSI_DM_VITD and DSI_DM_MAGNESIUM because their cited studies concern nutrient supplementation in diabetes, not interactions with diabetes medications. Retired SSI_MAGNESIUM_CALCIUM because the cited NIH source does not support the displayed 2:1 ratio or routine separation advice. Retired SSI_VITE_VITK because low vitamin K status is a risk modifier for high-dose vitamin E, not evidence that vitamin K supplements are an adverse pair. Rewrote DSI_WAR_VITE to preserve the sourced bleeding-risk warning without claiming a universal safe dose or direct INR elevation."
     ]
   },
   "interactions": [
@@ -237,8 +238,8 @@
       "agent2_id": "C0042874",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "High-dose vitamin E (>400 IU/day) inhibits platelet aggregation and interferes with vitamin K-dependent clotting factor synthesis. This adds to warfarin's anticoagulant effect and can elevate INR.",
-      "management": "Doses ≤400 IU/day are generally safe alongside warfarin. Higher doses warrant INR monitoring. Inform prescriber if starting vitamin E supplementation.",
+      "mechanism": "Vitamin E can inhibit platelet aggregation and antagonize vitamin K-dependent clotting factors. NIH notes that large supplemental doses may increase bleeding risk with warfarin, but the amount needed for a clinically significant effect is uncertain.",
+      "management": "Tell your prescriber or anticoagulation clinic before starting, stopping, or changing a vitamin E supplement. Keep supplement use consistent; additional INR monitoring may be appropriate after a change. Do not change warfarin on your own.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/24166490/"
@@ -3066,98 +3067,6 @@
       "materiality": "presence"
     },
     {
-      "id": "SSI_VITE_VITK",
-      "type": "Sup-Sup",
-      "agent1_name": "Vitamin E (high dose)",
-      "agent1_id": "C0042874",
-      "agent2_name": "Vitamin K",
-      "agent2_id": "C0042878",
-      "severity": "Moderate",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "High-dose vitamin E inhibits vitamin K-dependent clotting factor synthesis and antagonizes vitamin K's role in gamma-carboxylation of coagulation proteins. This can impair clotting, especially in individuals with borderline vitamin K status.",
-      "management": "Avoid combining very high-dose vitamin E (>400 IU/day) with low vitamin K intake. Those on anticoagulants are particularly vulnerable. Maintain adequate dietary vitamin K.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/24166490/"
-      ],
-      "source_pmids": [
-        "24166490"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
-      "agent1_canonical_id": "vitamin_e",
-      "agent2_canonical_id": "vitamin_k",
-      "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "vitamin_e",
-        "value": 180,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse+management+unit_normalized",
-        "source": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
-        "rationale": "Reused vitamin E bleeding floor (400 IU/day) normalized to a conservative 180 mg alpha-tocopherol equivalent. NIH ODS lists 1 IU synthetic vitamin E as 0.45 mg alpha-tocopherol and 1 IU natural vitamin E as 0.67 mg; 180 mg is the lower mass equivalent, so below this floor is below 400 IU for either form."
-      }
-    },
-    {
-      "id": "DSI_DM_VITD",
-      "type": "Med-Sup",
-      "agent1_name": "Diabetes medications (class)",
-      "agent1_id": "class:diabetes_meds",
-      "agent2_name": "Vitamin D",
-      "agent2_id": "C0042866",
-      "severity": "Minor",
-      "interaction_effect_type": "Additive",
-      "mechanism": "Vitamin D deficiency is associated with insulin resistance and impaired beta-cell function. Supplementation in deficient patients can modestly improve insulin sensitivity. Combined with diabetes medications, mild additive glucose lowering is possible.",
-      "management": "Vitamin D supplementation is generally beneficial in diabetes management. Monitor blood glucose when starting high-dose vitamin D. Levels >4000 IU/day warrant medical supervision.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/41707752/"
-      ],
-      "source_pmids": [
-        "41707752"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_d",
-      "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "vitamin_d",
-        "value": 4000,
-        "unit": "IU",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "management_stated",
-        "source": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
-        "rationale": "Pair mgmt: high-dose vitamin D >4000 IU/day (the adult UL) warrants supervision; typical repletion doses below."
-      }
-    },
-    {
       "id": "DSI_ANTIHYP_MAGNESIUM",
       "type": "Med-Sup",
       "agent1_name": "Antihypertensives (class)",
@@ -3642,84 +3551,6 @@
         "source": "https://pubmed.ncbi.nlm.nih.gov/22531131/",
         "rationale": "Pair mgmt: curcumin >500 mg/day with anticoagulants; culinary turmeric safe."
       }
-    },
-    {
-      "id": "DSI_DM_MAGNESIUM",
-      "type": "Med-Sup",
-      "agent1_name": "Diabetes medications (class)",
-      "agent1_id": "class:diabetes_meds",
-      "agent2_name": "Magnesium",
-      "agent2_id": "C0024467",
-      "severity": "Minor",
-      "interaction_effect_type": "Additive",
-      "mechanism": "Magnesium is required for insulin receptor signaling. Deficiency impairs insulin sensitivity. Supplementation in deficient patients improves glucose regulation and can mildly enhance medication effects.",
-      "management": "Magnesium is generally beneficial in diabetes management. Monitor blood glucose when starting magnesium. Particularly relevant in patients with hypomagnesemia (common in type 2 diabetes).",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/35045911/"
-      ],
-      "source_pmids": [
-        "35045911"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "magnesium",
-      "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "magnesium",
-        "value": 350,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
-        "rationale": "INFERRED floor at the supplemental-magnesium UL (350 mg); dietary/multivitamin magnesium below is not a meaningful glucose modifier."
-      }
-    },
-    {
-      "id": "SSI_MAGNESIUM_CALCIUM",
-      "type": "Sup-Sup",
-      "agent1_name": "Magnesium",
-      "agent1_id": "C0024467",
-      "agent2_name": "Calcium",
-      "agent2_id": "C0006675",
-      "severity": "Minor",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "Calcium and magnesium compete for absorption at intestinal transport sites. Very high calcium intake can reduce magnesium absorption, and excess magnesium can impair calcium absorption. The effect is dose-dependent and clinically minor at typical supplement doses.",
-      "management": "Take calcium and magnesium at different times for optimal absorption if treating a specific deficiency. A 2:1 Ca:Mg ratio is commonly recommended in combination supplements. Many people take them together without issue.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": false
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
-      "agent1_canonical_id": "magnesium",
-      "agent2_canonical_id": "calcium",
-      "direction": "harmful",
-      "materiality": "presence"
     },
     {
       "id": "DSI_BETABLOCK_MELATONIN",
