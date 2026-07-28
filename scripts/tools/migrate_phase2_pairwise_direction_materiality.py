@@ -19,15 +19,15 @@ direction  harmful | beneficial | neutral | unknown
 materiality  presence | dose_dependent
     Authored FRESH per-pair, NOT mapped from `applies_to` (which is a scope
     descriptor: `applies_to:"dose_dependent"` includes warfarin+vitamin K
-    (DSI_WAR_VITK, Major) — a canonical never-suppress interaction). Rule:
+    (DSI_WAR_VITK) — a canonical never-suppress interaction). Rule:
       - severity in {Major, Contraindicated}                  -> presence
-        (never dose-suppress a serious interaction — warfarin+vitK, MAOI/
-        serotonergic, chelation-treatment-failure, hyperkalemia, etc.)
+        (never dose-suppress a serious interaction — MAOI/serotonergic,
+        chelation-treatment-failure, hyperkalemia, etc.)
       - else, a SUPPLEMENT-dose pair (Med-Sup/Sup-Sup/Sup-Med) whose effect is
         pharmacodynamically Additive                          -> dose_dependent
         (the floorable class: additive bleeding/sedation/BP/glucose — this is
         where DSI_FISHOIL_VITE lands; the floor VALUE is Phase-3 work)
-      - else (Inhibitor/Enhancer PK & absorption, or a Med-Med/Med-Food pair
+      - else (Inhibitor/Enhancer interactions, or a Med-Med/Med-Food pair
         with no supplement dose to floor)                     -> presence
 
 Idempotent: rows already carrying `direction` are skipped. Serialization

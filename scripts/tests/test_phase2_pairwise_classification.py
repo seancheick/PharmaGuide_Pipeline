@@ -53,8 +53,9 @@ def test_major_and_contraindicated_never_dose_suppressed():
 
 
 def test_warfarin_vitamin_k_is_presence_despite_applies_to():
-    """The canonical trap: applies_to='dose_dependent' but this is a Major
-    never-suppress interaction."""
+    """The canonical trap: applies_to='dose_dependent' is a scope label, but
+    this interaction must still fire on presence because sudden changes in
+    either direction can destabilize warfarin control."""
     e = BY_ID["DSI_WAR_VITK"]
     assert e.get("applies_to") == "dose_dependent"   # the scope descriptor
     assert e.get("direction") == "harmful"
