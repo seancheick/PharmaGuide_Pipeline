@@ -1,6 +1,6 @@
 {
   "_metadata": {
-    "schema_version": "1.2.2",
+    "schema_version": "1.2.3",
     "last_updated": "2026-07-28",
     "total_entries": 106,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
@@ -21,7 +21,8 @@
       "2026-07-03: Added SSI_5HTP_SAME for 5-HTP + SAMe supplement-supplement serotonin-risk coverage. Also corrected metadata.total_entries to match the interactions array length.",
       "2026-07-10: Retired SSI_VITD_VITK2 from the safety interaction set because its neutral, synergy-oriented copy was contradictory as a scored alert. Corrected metadata.total_entries to the current 110 interaction rows.",
       "2026-07-28: Live beta canary cleanup. Retired DSI_DM_VITD and DSI_DM_MAGNESIUM because their cited studies concern nutrient supplementation in diabetes, not interactions with diabetes medications. Retired SSI_MAGNESIUM_CALCIUM because the cited NIH source does not support the displayed 2:1 ratio or routine separation advice. Retired SSI_VITE_VITK because low vitamin K status is a risk modifier for high-dose vitamin E, not evidence that vitamin K supplements are an adverse pair. Rewrote DSI_WAR_VITE to preserve the sourced bleeding-risk warning without claiming a universal safe dose or direct INR elevation.",
-      "2026-07-28: Clarified live stack copy. Corrected the direction of the warfarin/vitamin K mechanism, framed vitamin K as a consistency warning rather than a ban, disclosed that the presence-triggered vitamin E alert is not proof of crossing a known dose limit, and identified 200 mcg/day chromium as an authored review threshold rather than a toxicity cutoff."
+      "2026-07-28: Clarified live stack copy. Corrected the direction of the warfarin/vitamin K mechanism, framed vitamin K as a consistency warning rather than a ban, disclosed that the presence-triggered vitamin E alert is not proof of crossing a known dose limit, and identified 200 mcg/day chromium as an authored review threshold rather than a toxicity cutoff.",
+      "2026-07-28: Reclassified DSI_WAR_VITK from Major to Moderate so the app presents the sourced consistency/clinician-review action instead of the categorical Not recommended verdict. The interaction remains harmful, presence-triggered, established, and never dose-suppressed."
     ]
   },
   "interactions": [
@@ -32,7 +33,7 @@
       "agent1_id": "11289",
       "agent2_name": "Vitamin K",
       "agent2_id": "C0042878",
-      "severity": "Major",
+      "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Vitamin K is required to activate clotting factors II, VII, IX, and X. Warfarin reduces vitamin K activity. A sudden increase in vitamin K intake can reduce the anticoagulant effect; a sudden decrease can increase it.",
       "management": "This is a consistency warning, not a ban. Keep vitamin K intake from food and supplements about the same each day. Tell your prescriber or anticoagulation clinic before starting, stopping, or changing any supplement containing vitamin K; INR monitoring may be needed after a change. Do not change warfarin on your own.",

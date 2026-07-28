@@ -56,6 +56,10 @@ def test_warfarin_vitamin_k_copy_describes_direction_and_consistency():
     assert ">100" not in management
     assert "food and supplements" in management
     assert "do not change warfarin" in management
+    assert rule["severity"] == "Moderate", (
+        "A consistency/monitoring interaction must ship in the review tier, "
+        "not the app's categorical 'Not recommended' tier"
+    )
 
 
 def test_chromium_copy_explains_the_authored_screening_threshold():
