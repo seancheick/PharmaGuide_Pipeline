@@ -61,7 +61,7 @@ def test_iqm_unii_uses_owning_canonical_not_umbrella_alias():
     cases = (
         ("Bromelain", "U182GP2CF3", "enzyme", "bromelain"),
         ("Oleic Acid", "2UMI9U37CP", "fatty acid", "oleic_acid"),
-        ("Vitamin K1", "A034SE7857", "vitamin", "vitamin_k"),
+        ("Vitamin K1", "A034SE7857", "vitamin", "vitamin_k1"),
     )
     for name, unii, category, expected_canonical in cases:
         cleaned = normalizer._process_single_ingredient_enhanced(

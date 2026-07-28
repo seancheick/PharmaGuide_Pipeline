@@ -38,10 +38,10 @@
       }
     },
     "statistics": {
-      "total_parents": 629,
-      "total_forms": 1421,
-      "total_form_aliases": 12088,
-      "parents_with_parent_aliases": 115,
+      "total_parents": 631,
+      "total_forms": 1420,
+      "total_form_aliases": 12084,
+      "parents_with_parent_aliases": 117,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -58,10 +58,10 @@
       "other": 25,
       "probiotics": 47,
       "proteins": 16,
-      "vitamins": 23
+      "vitamins": 25
     },
-  "schema_version": "5.4.11",
-    "last_updated": "2026-07-17",
+    "schema_version": "5.4.12",
+    "last_updated": "2026-07-28",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1715,7 +1715,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 629,
+    "total_entries": 631,
     "total_ingredients": 1416,
     "data_quality": {
       "review_status": "stub"
@@ -5893,300 +5893,6 @@
     "cui": "C0042878",
     "cui_note": "Vitamin K is a CLASS (K1/phylloquinone, K2 menaquinones MK-4 through MK-13, K3/menadione). external_ids.unii intentionally omitted at the class level — the Sprint 2 backfill dry-run surfaced A034SE7857 (PHYLLOQUINONE / K1) as a candidate from 678 DSLD products, but tagging the class parent with K1's UNII would mis-anchor every label-disclosed 'Vitamin K' to phylloquinone specifically. Form-level UNIIs should live in forms[] when each form is verified separately. Same governance pattern as prebiotics (class) and collagen (class).",
     "forms": {
-      "menaquinone-7 (MK-7)": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
-        "absorption": "MK-7; long t1/2, accumulates 7-8x vs K1 with prolonged intake (Schurgers 2007)",
-        "notes": "The premier form of vitamin K2 for supplementation. MK-7's long half-life (~72 hours vs ~1-2 hours for MK-4) means it stays active in your bloodstream for days, providing sustained activation of osteocalcin (bone health) and matrix GLA protein (cardiovascular health). Primarily sourced from natto fermentation. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Cited evidence: Schurgers 2007 PMID:17158229.",
-        "aliases": [
-          "MK-7",
-          "menaquinone-7",
-          "vitamin k2 mk7",
-          "natto vitamin k",
-          "mk7 vitamin k2",
-          "long-chain k2",
-          "MK-7 supplement",
-          "menaquinone-7 supplement",
-          "vitamin k2 mk7 supplement",
-          "vit k2 mk7",
-          "natto vitamin k supplement",
-          "natto vit k",
-          "mk7 vitamin k2 supplement",
-          "mk7 vit k2",
-          "long-chain k2 supplement",
-          "Vitamin K2 (MK-7)",
-          "Vitamin K2 (Menaquinone-7)",
-          "Vit. K2",
-          "menaquinone",
-          "menaq7",
-          "menaq7 menaquinone-7",
-          "vitamin k2 menaquinone-7",
-          "vitamin k2 menaquinone 7",
-          "vitamin k2-7",
-          "menaq7 vitamin k2",
-          "mena q7",
-          "trans k2",
-          "trans vitamin k2",
-          "active vitamin k2",
-          "bioactive k2",
-          "all-trans vitamin K2",
-          "trans k2 supplement",
-          "trans vitamin k2 supplement",
-          "trans vit k2",
-          "active vitamin k2 supplement",
-          "active vit k2",
-          "bioactive k2 supplement",
-          "all-trans vitamin K2 supplement",
-          "all-trans vit K2",
-          "menaq7 vitamin k-2"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.7,
-          "range_low": 0.6,
-          "range_high": 0.85,
-          "quality": "good"
-        }
-      },
-      "menaquinone-7 all-trans": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
-        "absorption": "all-trans MK-7; biologically active isomer, superior to cis form",
-        "notes": "The biologically active geometric isomer of MK-7. Only the all-trans configuration properly activates vitamin K-dependent proteins. Some cheap MK-7 supplements contain significant cis-isomer contamination, which is inactive. Look for 'all-trans' or '>99% trans' on the label. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
-        "aliases": [
-          "all-trans MK-7",
-          "trans mk7",
-          "active mk7",
-          "all trans menaquinone-7",
-          "all-trans-Menaquinone-7",
-          "bioactive mk7",
-          "all-trans MK-7 supplement",
-          "trans mk7 supplement",
-          "active mk7 supplement",
-          "all trans menaquinone-7 supplement",
-          "bioactive mk7 supplement",
-          "K2 Vital Delta",
-          "K2VITAL Delta"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.75,
-          "range_low": 0.65,
-          "range_high": 0.9,
-          "quality": "good"
-        }
-      },
-      "menaquinone-4 (MK-4)": {
-        "bio_score": 7,
-        "natural": true,
-        "score": 10,
-        "absorption": "MK-4 at 420 μg nutritional dose: NOT detectable in serum (Sato 2012)",
-        "notes": "The short-chain form of vitamin K2, naturally produced in human tissues from K1. Rapidly absorbed but has a very short half-life (~1-2 hours), requiring multiple daily doses or high single doses (typically 15-45 mg in Japanese studies). Best studied for bone density. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
-        "aliases": [
-          "MK-4",
-          "menaquinone-4",
-          "vitamin k2 mk4",
-          "mk4 vitamin k2",
-          "short-chain k2",
-          "MK-4 supplement",
-          "menaquinone-4 supplement",
-          "vitamin k2 mk4 supplement",
-          "vit k2 mk4",
-          "mk4 vitamin k2 supplement",
-          "mk4 vit k2",
-          "short-chain k2 supplement",
-          "Menatetrenone",
-          "MK4",
-          "menaquinone 4"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.05,
-          "range_low": 0.01,
-          "range_high": 0.15,
-          "quality": "low"
-        }
-      },
-      "vitamin K2 (cis form)": {
-        "bio_score": 4,
-        "natural": true,
-        "score": 7,
-        "absorption": "very_low (cis-MK-7 biologically inactive)",
-        "notes": "The inactive geometric isomer of vitamin K2. Cannot properly activate vitamin K-dependent proteins. Found as a contaminant in low-quality K2 supplements. If your supplement contains significant cis-K2, the effective dose is much lower than the label states. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: cis-MK-7 biologically inactive (PMID:35864383). Ghost catch: Schurgers 2007 claim mismatch.",
-        "aliases": [
-          "cis k2",
-          "cis vitamin k2",
-          "inactive k2",
-          "non-bioactive k2",
-          "cis k2 supplement",
-          "cis vitamin k2 supplement",
-          "cis vit k2",
-          "inactive k2 supplement",
-          "non-bioactive k2 supplement"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.05,
-          "range_low": 0.0,
-          "range_high": 0.1,
-          "quality": "low"
-        }
-      },
-      "phylloquinone (K1)": {
-        "bio_score": 9,
-        "natural": true,
-        "score": 12,
-        "absorption": "K1 from food ~10%, supplements ~15-25%; short t1/2 ~1-2h",
-        "notes": "The plant form of vitamin K found abundantly in leafy greens (kale, spinach, broccoli). Primarily supports blood clotting (coagulation). Has limited conversion to K2 in the body (~5-25%), so it does not fully replace K2 for bone and cardiovascular benefits. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
-        "aliases": [
-          "k1",
-          "plant vitamin k",
-          "leafy green vitamin k",
-          "vitamin k1 supplement",
-          "vit k1",
-          "phylloquinone supplement",
-          "k1 supplement",
-          "plant vitamin k supplement",
-          "plant vit k",
-          "leafy green vitamin k supplement",
-          "leafy green vit k",
-          "phytonadione supplement",
-          "Vitamin K-1"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.15,
-          "range_low": 0.1,
-          "range_high": 0.25,
-          "quality": "low"
-        }
-      },
-      "vitamin K1 synthetic": {
-        "bio_score": 8,
-        "natural": false,
-        "score": 8,
-        "absorption": "synthetic K1; modestly higher F than food-bound, still rapid clearance",
-        "notes": "Synthetic phytonadione (vitamin K1), commonly used in fortified foods and the injectable form given to newborns to prevent hemorrhagic disease. Functionally equivalent to natural K1 for blood clotting support. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
-        "aliases": [
-          "synthetic vitamin k1",
-          "phytonadione synthetic",
-          "vitamin k1 injection",
-          "synthetic vitamin k1 supplement",
-          "synthetic vit k1",
-          "phytonadione synthetic supplement",
-          "vitamin k1 injection supplement",
-          "vit k1 injection"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.2,
-          "range_low": 0.15,
-          "range_high": 0.3,
-          "quality": "low"
-        }
-      },
-      "vitamin K2 from natto": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
-        "absorption": "natto MK-7; ~10x higher serum K2 vs spinach K1 (Schurgers 2000)",
-        "notes": "MK-7 from traditional Japanese fermented soybeans (natto). The original and most studied food source of long-chain vitamin K2. Natto contains the highest natural concentration of MK-7 of any food. A whole-food form with excellent bioavailability. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Cited evidence: Schurgers 2000 PMID:11356998.",
-        "aliases": [
-          "natto vitamin k2",
-          "fermented soy k2",
-          "natto-derived mk7",
-          "japanese k2",
-          "natto vitamin k2 supplement",
-          "natto vit k2",
-          "fermented soy k2 supplement",
-          "natto-derived mk7 supplement",
-          "japanese k2 supplement"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.8,
-          "range_low": 0.7,
-          "range_high": 0.9,
-          "quality": "very_good"
-        }
-      },
-      "vitamin K2 from cheese": {
-        "bio_score": 11,
-        "natural": true,
-        "score": 14,
-        "absorption": "cheese MKs (mainly MK-8/9); food-matrix limited absorption",
-        "notes": "Vitamin K2 from fermented dairy, primarily containing longer-chain menaquinones (MK-8, MK-9, MK-10) produced by bacteria during cheese aging. Gouda and Brie are the richest sources. These longer forms have extended half-lives but less clinical data than MK-7. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
-        "aliases": [
-          "cheese vitamin k2",
-          "dairy k2",
-          "fermented k2",
-          "mk8 mk9 mk10",
-          "vitamin K2 from fermented dairy",
-          "cheese vitamin k2 supplement",
-          "cheese vit k2",
-          "dairy k2 supplement",
-          "fermented k2 supplement",
-          "mk8 mk9 mk10 supplement",
-          "vitamin K2 from fermented dairy supplement",
-          "vit K2 from fermented dairy"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.5,
-          "range_low": 0.4,
-          "range_high": 0.65,
-          "quality": "moderate"
-        }
-      },
-      "vitamin K2 from yeast": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
-        "absorption": "yeast-derived MK; no peer-reviewed PK data — flagged for verification",
-        "notes": "Vitamin K2 from yeast fermentation. A food-based source with naturally co-occurring cofactors. Less clinical data than natto-derived MK-7 but a viable option for people avoiding soy. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
-        "aliases": [
-          "yeast vitamin k2",
-          "natural k2 yeast",
-          "brewer's yeast k2",
-          "yeast vitamin k2 supplement",
-          "yeast vit k2",
-          "natural k2 yeast supplement",
-          "brewer's yeast k2 supplement"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.4,
-          "range_low": 0.3,
-          "range_high": 0.55,
-          "quality": "moderate"
-        }
-      },
-      "menadione (K3)": {
-        "bio_score": 4,
-        "natural": false,
-        "score": 4,
-        "absorption": "non_functional (FDA-banned; hemolytic toxicity)",
-        "notes": "A synthetic vitamin K precursor (menadione) that is NOT approved for human supplementation due to toxicity — can cause hemolytic anemia, liver damage, and jaundice. Banned in over-the-counter supplements in most countries. Used only in animal feed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: K3 FDA-banned, hemolytic; set 0.0.",
-        "aliases": [
-          "vitamin k3",
-          "menadione",
-          "synthetic k3",
-          "non-supplemental k",
-          "vitamin k3 supplement",
-          "vit k3",
-          "menadione supplement",
-          "synthetic k3 supplement"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.0,
-          "range_low": 0.0,
-          "range_high": 0.05,
-          "quality": "poor"
-        }
-      },
       "vitamin K analogs (non-functional)": {
         "bio_score": 3,
         "natural": false,
@@ -6207,8 +5913,8 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": 0.0,
-          "range_low": 0.0,
+          "value": 0,
+          "range_low": 0,
           "range_high": 0.05,
           "quality": "poor"
         }
@@ -6235,14 +5941,16 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": 0.0,
-          "range_low": 0.0,
+          "value": 0,
+          "range_low": 0,
           "range_high": 0.05,
           "quality": "poor"
         }
       },
       "vitamin k (unspecified)": {
-        "same_identity_aliases": ["vitamin k"],
+        "same_identity_aliases": [
+          "vitamin k"
+        ],
         "bio_score": 6,
         "natural": false,
         "score": 6,
@@ -6252,14 +5960,10 @@
           "Vitamin K",
           "vitamin k1/k2",
           "vitamin k1 & k2",
-          "K-2",
-          "Vitamin K-2",
-          "Vitamin K2",
-          "K2",
           "vit k",
           "vitamin k-"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1,
         "absorption_structured": {
           "value": 0.3,
           "range_low": 0.1,
@@ -6277,7 +5981,7 @@
     },
     "category_enum": "vitamins",
     "data_quality": {
-      "completeness": 1.0,
+      "completeness": 1,
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-26",
@@ -35240,16 +34944,33 @@
       "phylloquinone": {
         "bio_score": 9,
         "natural": true,
-        "absorption": "moderate (~60%)",
-        "notes": "Plant-derived vitamin K1 (phylloquinone). The primary dietary form, essential for blood clotting factor synthesis. Absorbed from the GI tract with dietary fat. Only ~5-25% converts to K2 in the body.",
-        "aliases": ["vitamin k1", "phytomenadione", "phytonadione"],
+        "absorption": "K1 from food ~10%, supplements ~15-25%; short t1/2 ~1-2h",
+        "notes": "The plant form of vitamin K found abundantly in leafy greens (kale, spinach, broccoli). Primarily supports blood clotting (coagulation). Has limited conversion to K2 in the body (~5-25%), so it does not fully replace K2 for bone and cardiovascular benefits. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "aliases": [
+          "vitamin k1",
+          "phytomenadione",
+          "phytonadione",
+          "k1",
+          "plant vitamin k",
+          "leafy green vitamin k",
+          "vitamin k1 supplement",
+          "vit k1",
+          "phylloquinone supplement",
+          "k1 supplement",
+          "plant vitamin k supplement",
+          "plant vit k",
+          "leafy green vitamin k supplement",
+          "leafy green vit k",
+          "phytonadione supplement",
+          "Vitamin K-1"
+        ],
         "score": 12,
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": 0.6,
-          "range_low": 0.48,
-          "range_high": 0.72,
-          "quality": "good"
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.25,
+          "quality": "low"
         }
       },
       "micellized k1": {
@@ -35257,14 +34978,41 @@
         "natural": false,
         "absorption": "excellent (~90%)",
         "notes": "K1 processed into water-soluble micelles for significantly enhanced absorption. Standard K1 is poorly absorbed (~10-20% from food); micellization can dramatically improve this. Valuable for people with fat malabsorption or those taking K1 without a fat-containing meal.",
-        "aliases": ["micellized vitamin k1", "micellized phylloquinone"],
+        "aliases": [
+          "micellized vitamin k1",
+          "micellized phylloquinone"
+        ],
         "score": 11,
-        "dosage_importance": 1.0,
+        "dosage_importance": 1,
         "absorption_structured": {
           "value": 0.9,
           "range_low": 0.72,
-          "range_high": 1.0,
+          "range_high": 1,
           "quality": "very_good"
+        }
+      },
+      "vitamin K1 synthetic": {
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
+        "absorption": "synthetic K1; modestly higher F than food-bound, still rapid clearance",
+        "notes": "Synthetic phytonadione (vitamin K1), commonly used in fortified foods and the injectable form given to newborns to prevent hemorrhagic disease. Functionally equivalent to natural K1 for blood clotting support. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "aliases": [
+          "synthetic vitamin k1",
+          "phytonadione synthetic",
+          "vitamin k1 injection",
+          "synthetic vitamin k1 supplement",
+          "synthetic vit k1",
+          "phytonadione synthetic supplement",
+          "vitamin k1 injection supplement",
+          "vit k1 injection"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.2,
+          "range_low": 0.15,
+          "range_high": 0.3,
+          "quality": "low"
         }
       }
     },
@@ -35273,7 +35021,6 @@
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": "vitamin_k",
-      "target_id": "vitamin_k",
       "confidence": "high"
     },
     "category_enum": "vitamins",
@@ -35284,7 +35031,7 @@
       }
     ],
     "data_quality": {
-      "completeness": 1.0,
+      "completeness": 1,
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-26",
@@ -35310,7 +35057,8 @@
         }
       ]
     },
-    "aliases": []
+    "aliases": [],
+    "nutrient_group_id": "vitamin_k"
   },
   "5_htp": {
     "standard_name": "5-HTP",
@@ -62702,5 +62450,306 @@
       "last_reviewed_at": "2026-06-09",
       "research_status": "validated"
     }
+  },
+  "vitamin_k2": {
+    "standard_name": "Vitamin K2",
+    "category": "vitamins",
+    "cui": "C0086605",
+    "cui_note": "C0086605 (vitamin K2, MTH) verified via live UMLS 2026-07-27; RxCUI 42781 verified via RxNorm (tty=IN, suppress=N) — an ingredient concept, not a product. MK-7 additionally has its own verified concepts (CUI C0078382 'vitamin MK7', RxCUI 2001758, tty=IN); recorded here rather than on the form because form-level records carry external_ids (UNII) only, and no form-level cui/rxcui field exists in this schema.",
+    "rxcui": "42781",
+    "forms": {
+      "menaquinone-7 (MK-7)": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "MK-7; long t1/2, accumulates 7-8x vs K1 with prolonged intake (Schurgers 2007)",
+        "notes": "The premier form of vitamin K2 for supplementation. MK-7's long half-life (~72 hours vs ~1-2 hours for MK-4) means it stays active in your bloodstream for days, providing sustained activation of osteocalcin (bone health) and matrix GLA protein (cardiovascular health). Primarily sourced from natto fermentation. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Cited evidence: Schurgers 2007 PMID:17158229.",
+        "aliases": [
+          "MK-7",
+          "menaquinone-7",
+          "vitamin k2 mk7",
+          "natto vitamin k",
+          "mk7 vitamin k2",
+          "long-chain k2",
+          "MK-7 supplement",
+          "menaquinone-7 supplement",
+          "vitamin k2 mk7 supplement",
+          "vit k2 mk7",
+          "natto vitamin k supplement",
+          "natto vit k",
+          "mk7 vitamin k2 supplement",
+          "mk7 vit k2",
+          "long-chain k2 supplement",
+          "Vitamin K2 (MK-7)",
+          "Vitamin K2 (Menaquinone-7)",
+          "Vit. K2",
+          "menaquinone",
+          "menaq7",
+          "menaq7 menaquinone-7",
+          "vitamin k2 menaquinone-7",
+          "vitamin k2 menaquinone 7",
+          "vitamin k2-7",
+          "menaq7 vitamin k2",
+          "mena q7",
+          "trans k2",
+          "trans vitamin k2",
+          "active vitamin k2",
+          "bioactive k2",
+          "all-trans vitamin K2",
+          "trans k2 supplement",
+          "trans vitamin k2 supplement",
+          "trans vit k2",
+          "active vitamin k2 supplement",
+          "active vit k2",
+          "bioactive k2 supplement",
+          "all-trans vitamin K2 supplement",
+          "all-trans vit K2",
+          "menaq7 vitamin k-2"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.7,
+          "range_low": 0.6,
+          "range_high": 0.85,
+          "quality": "good"
+        }
+      },
+      "menaquinone-7 all-trans": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "all-trans MK-7; biologically active isomer, superior to cis form",
+        "notes": "The biologically active geometric isomer of MK-7. Only the all-trans configuration properly activates vitamin K-dependent proteins. Some cheap MK-7 supplements contain significant cis-isomer contamination, which is inactive. Look for 'all-trans' or '>99% trans' on the label. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "aliases": [
+          "all-trans MK-7",
+          "trans mk7",
+          "active mk7",
+          "all trans menaquinone-7",
+          "all-trans-Menaquinone-7",
+          "bioactive mk7",
+          "all-trans MK-7 supplement",
+          "trans mk7 supplement",
+          "active mk7 supplement",
+          "all trans menaquinone-7 supplement",
+          "bioactive mk7 supplement",
+          "K2 Vital Delta",
+          "K2VITAL Delta"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.9,
+          "quality": "good"
+        }
+      },
+      "menaquinone-4 (MK-4)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "MK-4 at 420 μg nutritional dose: NOT detectable in serum (Sato 2012)",
+        "notes": "The short-chain form of vitamin K2, naturally produced in human tissues from K1. Rapidly absorbed but has a very short half-life (~1-2 hours), requiring multiple daily doses or high single doses (typically 15-45 mg in Japanese studies). Best studied for bone density. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "aliases": [
+          "MK-4",
+          "menaquinone-4",
+          "vitamin k2 mk4",
+          "mk4 vitamin k2",
+          "short-chain k2",
+          "MK-4 supplement",
+          "menaquinone-4 supplement",
+          "vitamin k2 mk4 supplement",
+          "vit k2 mk4",
+          "mk4 vitamin k2 supplement",
+          "mk4 vit k2",
+          "short-chain k2 supplement",
+          "Menatetrenone",
+          "MK4",
+          "menaquinone 4"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.15,
+          "quality": "low"
+        }
+      },
+      "vitamin K2 (cis form)": {
+        "bio_score": 4,
+        "natural": true,
+        "score": 7,
+        "absorption": "very_low (cis-MK-7 biologically inactive)",
+        "notes": "The inactive geometric isomer of vitamin K2. Cannot properly activate vitamin K-dependent proteins. Found as a contaminant in low-quality K2 supplements. If your supplement contains significant cis-K2, the effective dose is much lower than the label states. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: cis-MK-7 biologically inactive (PMID:35864383). Ghost catch: Schurgers 2007 claim mismatch.",
+        "aliases": [
+          "cis k2",
+          "cis vitamin k2",
+          "inactive k2",
+          "non-bioactive k2",
+          "cis k2 supplement",
+          "cis vitamin k2 supplement",
+          "cis vit k2",
+          "inactive k2 supplement",
+          "non-bioactive k2 supplement"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0,
+          "range_high": 0.1,
+          "quality": "low"
+        }
+      },
+      "vitamin K2 from natto": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "natto MK-7; ~10x higher serum K2 vs spinach K1 (Schurgers 2000)",
+        "notes": "MK-7 from traditional Japanese fermented soybeans (natto). The original and most studied food source of long-chain vitamin K2. Natto contains the highest natural concentration of MK-7 of any food. A whole-food form with excellent bioavailability. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Cited evidence: Schurgers 2000 PMID:11356998.",
+        "aliases": [
+          "natto vitamin k2",
+          "fermented soy k2",
+          "natto-derived mk7",
+          "japanese k2",
+          "natto vitamin k2 supplement",
+          "natto vit k2",
+          "fermented soy k2 supplement",
+          "natto-derived mk7 supplement",
+          "japanese k2 supplement"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.8,
+          "range_low": 0.7,
+          "range_high": 0.9,
+          "quality": "very_good"
+        }
+      },
+      "vitamin K2 from cheese": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "cheese MKs (mainly MK-8/9); food-matrix limited absorption",
+        "notes": "Vitamin K2 from fermented dairy, primarily containing longer-chain menaquinones (MK-8, MK-9, MK-10) produced by bacteria during cheese aging. Gouda and Brie are the richest sources. These longer forms have extended half-lives but less clinical data than MK-7. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "aliases": [
+          "cheese vitamin k2",
+          "dairy k2",
+          "fermented k2",
+          "mk8 mk9 mk10",
+          "vitamin K2 from fermented dairy",
+          "cheese vitamin k2 supplement",
+          "cheese vit k2",
+          "dairy k2 supplement",
+          "fermented k2 supplement",
+          "mk8 mk9 mk10 supplement",
+          "vitamin K2 from fermented dairy supplement",
+          "vit K2 from fermented dairy"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.65,
+          "quality": "moderate"
+        }
+      },
+      "vitamin K2 from yeast": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "yeast-derived MK; no peer-reviewed PK data — flagged for verification",
+        "notes": "Vitamin K2 from yeast fermentation. A food-based source with naturally co-occurring cofactors. Less clinical data than natto-derived MK-7 but a viable option for people avoiding soy. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "aliases": [
+          "yeast vitamin k2",
+          "natural k2 yeast",
+          "brewer's yeast k2",
+          "yeast vitamin k2 supplement",
+          "yeast vit k2",
+          "natural k2 yeast supplement",
+          "brewer's yeast k2 supplement"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.55,
+          "quality": "moderate"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": "vitamin_k",
+      "confidence": "high"
+    },
+    "category_enum": "vitamins",
+    "data_quality": {
+      "completeness": 1,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-07-27",
+      "research_status": "validated"
+    },
+    "external_ids": {},
+    "aliases": [
+      "vitamin k2",
+      "menaquinone",
+      "vitamin k-2"
+    ],
+    "nutrient_group_id": "vitamin_k"
+  },
+  "vitamin_k3": {
+    "standard_name": "Vitamin K3",
+    "category": "vitamins",
+    "cui": "C0025270",
+    "cui_note": "C0025270 (vitamin K3, MTH) and RxCUI 6728 (vitamin K3, tty=IN, suppress=N) verified via live UMLS/RxNorm 2026-07-27. Menadione is a distinct chemical identity, not a class-neutral form of the vitamin K parent.",
+    "rxcui": "6728",
+    "forms": {
+      "menadione (K3)": {
+        "bio_score": 4,
+        "natural": false,
+        "score": 4,
+        "absorption": "non_functional (FDA-banned; hemolytic toxicity)",
+        "notes": "A synthetic vitamin K precursor (menadione) that is NOT approved for human supplementation due to toxicity — can cause hemolytic anemia, liver damage, and jaundice. Banned in over-the-counter supplements in most countries. Used only in animal feed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: K3 FDA-banned, hemolytic; set 0.0.",
+        "aliases": [
+          "vitamin k3",
+          "menadione",
+          "synthetic k3",
+          "non-supplemental k",
+          "vitamin k3 supplement",
+          "vit k3",
+          "menadione supplement",
+          "synthetic k3 supplement"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0,
+          "range_low": 0,
+          "range_high": 0.05,
+          "quality": "poor"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "confidence": "high"
+    },
+    "category_enum": "vitamins",
+    "data_quality": {
+      "completeness": 1,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-07-27",
+      "research_status": "validated"
+    },
+    "external_ids": {},
+    "aliases": [
+      "vitamin k3",
+      "menadione",
+      "vitamin k-3"
+    ]
   }
 }

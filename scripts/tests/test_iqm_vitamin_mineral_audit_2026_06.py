@@ -39,7 +39,7 @@ SCORE_TARGETS = [
     ("vitamin_b6_pyridoxine", "pyridoxal-5-phosphate (P5P)", 10),     # PLP -> pyridoxal F
     ("vitamin_b5_pantothenic", "pantethine", 12),                     # -> Ca-pantothenate band
     ("vitamin_b3_niacin", "inositol hexanicotinate", 5),              # Keenan 2013: no bioavailability
-    ("vitamin_k", "menaquinone-4 (MK-4)", 7),                         # undetectable serum at nutritional dose
+    ("vitamin_k2", "menaquinone-4 (MK-4)", 7),                        # undetectable serum at nutritional dose
     ("vitamin_e", "tocotrienols", 9),                                 # poor a-TTP retention
     ("vitamin_d", "micellized D3", 12),                               # no proven premium over standard D3
     ("vitamin_d", "liposomal D3", 12),
@@ -136,7 +136,7 @@ def test_methylated_folate_routes_to_5mthf(iqm):
 
 def test_k2vital_delta_routes_to_mk7_alltrans(iqm):
     parent = {a.lower() for a in iqm["vitamin_k"].get("aliases", [])}
-    mk7 = _aliases_lower(iqm, "vitamin_k", "menaquinone-7 all-trans")
+    mk7 = _aliases_lower(iqm, "vitamin_k2", "menaquinone-7 all-trans")
     for a in ["k2 vital delta", "k2vital delta"]:
         assert a not in parent
         assert a in mk7
