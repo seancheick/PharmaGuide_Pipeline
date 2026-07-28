@@ -1,6 +1,6 @@
 {
   "_metadata": {
-    "schema_version": "1.2.1",
+    "schema_version": "1.2.2",
     "last_updated": "2026-07-28",
     "total_entries": 106,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
@@ -20,7 +20,8 @@
       "2026-07-02: Phase 3 — authored structured dose_threshold on all 33 dose_dependent pairs (floor value + confidence + verified ODS/NCCIH/PMID source per pair; reuses verified ingredient-rule floors where the same supplement+effect exists). Below-floor = suppressible by the app dose gate; inert until Phase 4. Applied via scripts/tools/author_phase3_pairwise_floors.py.",
       "2026-07-03: Added SSI_5HTP_SAME for 5-HTP + SAMe supplement-supplement serotonin-risk coverage. Also corrected metadata.total_entries to match the interactions array length.",
       "2026-07-10: Retired SSI_VITD_VITK2 from the safety interaction set because its neutral, synergy-oriented copy was contradictory as a scored alert. Corrected metadata.total_entries to the current 110 interaction rows.",
-      "2026-07-28: Live beta canary cleanup. Retired DSI_DM_VITD and DSI_DM_MAGNESIUM because their cited studies concern nutrient supplementation in diabetes, not interactions with diabetes medications. Retired SSI_MAGNESIUM_CALCIUM because the cited NIH source does not support the displayed 2:1 ratio or routine separation advice. Retired SSI_VITE_VITK because low vitamin K status is a risk modifier for high-dose vitamin E, not evidence that vitamin K supplements are an adverse pair. Rewrote DSI_WAR_VITE to preserve the sourced bleeding-risk warning without claiming a universal safe dose or direct INR elevation."
+      "2026-07-28: Live beta canary cleanup. Retired DSI_DM_VITD and DSI_DM_MAGNESIUM because their cited studies concern nutrient supplementation in diabetes, not interactions with diabetes medications. Retired SSI_MAGNESIUM_CALCIUM because the cited NIH source does not support the displayed 2:1 ratio or routine separation advice. Retired SSI_VITE_VITK because low vitamin K status is a risk modifier for high-dose vitamin E, not evidence that vitamin K supplements are an adverse pair. Rewrote DSI_WAR_VITE to preserve the sourced bleeding-risk warning without claiming a universal safe dose or direct INR elevation.",
+      "2026-07-28: Clarified live stack copy. Corrected the direction of the warfarin/vitamin K mechanism, framed vitamin K as a consistency warning rather than a ban, disclosed that the presence-triggered vitamin E alert is not proof of crossing a known dose limit, and identified 200 mcg/day chromium as an authored review threshold rather than a toxicity cutoff."
     ]
   },
   "interactions": [
@@ -33,8 +34,8 @@
       "agent2_id": "C0042878",
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Vitamin K is the direct cofactor for clotting factor synthesis (II, VII, IX, X). Warfarin acts as a vitamin K antagonist; increasing vitamin K intake directly reverses the anticoagulant effect and raises INR unpredictably.",
-      "management": "Maintain consistent dietary vitamin K intake. Avoid starting high-dose vitamin K supplements while on warfarin. Monitor INR closely if dietary patterns change. Supplement doses >100 mcg/day require physician guidance.",
+      "mechanism": "Vitamin K is required to activate clotting factors II, VII, IX, and X. Warfarin reduces vitamin K activity. A sudden increase in vitamin K intake can reduce the anticoagulant effect; a sudden decrease can increase it.",
+      "management": "This is a consistency warning, not a ban. Keep vitamin K intake from food and supplements about the same each day. Tell your prescriber or anticoagulation clinic before starting, stopping, or changing any supplement containing vitamin K; INR monitoring may be needed after a change. Do not change warfarin on your own.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/",
         "https://www.ncbi.nlm.nih.gov/books/NBK470313/",
@@ -234,12 +235,12 @@
       "type": "Med-Sup",
       "agent1_name": "Warfarin",
       "agent1_id": "11289",
-      "agent2_name": "Vitamin E (high dose)",
+      "agent2_name": "Vitamin E",
       "agent2_id": "C0042874",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
       "mechanism": "Vitamin E can inhibit platelet aggregation and antagonize vitamin K-dependent clotting factors. NIH notes that large supplemental doses may increase bleeding risk with warfarin, but the amount needed for a clinically significant effect is uncertain.",
-      "management": "Tell your prescriber or anticoagulation clinic before starting, stopping, or changing a vitamin E supplement. Keep supplement use consistent; additional INR monitoring may be appropriate after a change. Do not change warfarin on your own.",
+      "management": "This alert is triggered by the presence of vitamin E; it does not mean this product crossed a known dose limit. Tell your prescriber or anticoagulation clinic before starting, stopping, or changing the supplement. Keep use consistent; additional monitoring may be appropriate after a change. Do not change warfarin on your own.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/24166490/"
@@ -1246,7 +1247,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
       "mechanism": "Chromium potentiates insulin action and can lower fasting blood glucose. When combined with insulin or oral hypoglycemics, this additive glucose-lowering effect can cause symptomatic hypoglycemia.",
-      "management": "Monitor blood glucose carefully when starting chromium supplementation with diabetes medications. Have fast-acting glucose available. Dose adjustment may be needed.",
+      "management": "PharmaGuide displays this review when the known supplemental total is at least 200 mcg/day. This is a screening threshold, not a proven toxicity cutoff. Monitor blood glucose when starting or changing chromium with diabetes medication. Ask the clinician managing your diabetes whether monitoring or medication changes are needed; do not change medication on your own.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/15208835/"

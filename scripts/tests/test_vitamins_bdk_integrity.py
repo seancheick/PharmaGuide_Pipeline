@@ -59,14 +59,14 @@ BDK_EVIDENCE_BANDS = [
     ('vitamin_d', 'vitamin D2 (unspecified source)',             0.30, 0.55, 'D2 unspec'),
     ('vitamin_d', 'vitamin D2 from UV-treated mushrooms',        0.30, 0.55, 'mushroom D2'),
     # K (highly variable by form)
-    ('vitamin_k', 'menaquinone-7 (MK-7)',                         0.60, 0.85, 'MK-7 long t½'),
-    ('vitamin_k', 'menaquinone-7 all-trans',                      0.65, 0.90, 'all-trans MK-7'),
-    ('vitamin_k', 'menaquinone-4 (MK-4)',                         0.01, 0.15, 'Sato 2012 undetectable'),
-    ('vitamin_k', 'phylloquinone (K1)',                           0.10, 0.25, 'K1 short t½'),
-    ('vitamin_k', 'vitamin K1 synthetic',                         0.15, 0.30, 'synthetic K1'),
-    ('vitamin_k', 'vitamin K2 from natto',                        0.70, 0.90, 'natto MK-7'),
-    ('vitamin_k', 'vitamin K2 from cheese',                       0.40, 0.65, 'cheese MK-8/9'),
-    ('vitamin_k', 'vitamin K2 from yeast',                        0.30, 0.55, 'yeast MK'),
+    ('vitamin_k2', 'menaquinone-7 (MK-7)',                        0.60, 0.85, 'MK-7 long t½'),
+    ('vitamin_k2', 'menaquinone-7 all-trans',                     0.65, 0.90, 'all-trans MK-7'),
+    ('vitamin_k2', 'menaquinone-4 (MK-4)',                        0.01, 0.15, 'Sato 2012 undetectable'),
+    ('vitamin_k1', 'phylloquinone',                               0.10, 0.25, 'K1 short t½'),
+    ('vitamin_k1', 'vitamin K1 synthetic',                        0.15, 0.30, 'synthetic K1'),
+    ('vitamin_k2', 'vitamin K2 from natto',                       0.70, 0.90, 'natto MK-7'),
+    ('vitamin_k2', 'vitamin K2 from cheese',                      0.40, 0.65, 'cheese MK-8/9'),
+    ('vitamin_k2', 'vitamin K2 from yeast',                       0.30, 0.55, 'yeast MK'),
 ]
 
 
@@ -94,7 +94,14 @@ def test_no_misattributed_pmids_introduced(iqm):
         ('PMID:22516125', 'Qu 2012 iron DFT, NOT Sato'),
         ('PMID:17906277', 'Pearson 2007, NOT Schurgers'),
     ]
-    parents = ('vitamin_b12_cobalamin', 'vitamin_d', 'vitamin_k')
+    parents = (
+        'vitamin_b12_cobalamin',
+        'vitamin_d',
+        'vitamin_k',
+        'vitamin_k1',
+        'vitamin_k2',
+        'vitamin_k3',
+    )
     violations = []
     for pid in parents:
         for fname, form in iqm[pid]['forms'].items():
@@ -155,9 +162,9 @@ def test_verified_pmids_introduced(iqm):
     expected_citations = {
         'PMID:18709891': ('vitamin_b12_cobalamin', 'methylcobalamin'),  # Carmel B12
         'PMID:28187226': ('vitamin_d', 'calcidiol (25-hydroxy D3)'),     # Shieh
-        'PMID:23140417': ('vitamin_k', 'menaquinone-4 (MK-4)'),          # Sato
-        'PMID:17158229': ('vitamin_k', 'menaquinone-7 (MK-7)'),          # Schurgers 2007
-        'PMID:11356998': ('vitamin_k', 'vitamin K2 from natto'),         # Schurgers 2000
+        'PMID:23140417': ('vitamin_k2', 'menaquinone-4 (MK-4)'),         # Sato
+        'PMID:17158229': ('vitamin_k2', 'menaquinone-7 (MK-7)'),         # Schurgers 2007
+        'PMID:11356998': ('vitamin_k2', 'vitamin K2 from natto'),        # Schurgers 2000
         'PMID:37865222': ('vitamin_d', 'ergocalciferol (D2)'),           # van den Heuvel
     }
     for pmid, (pid, fname) in expected_citations.items():
@@ -198,7 +205,7 @@ def test_mk7_dominates_mk4(iqm):
     """Per Sato 2012 (PMID:23140417), MK-7 absorption >> MK-4 at nutritional
     doses. struct.value(MK-7) must be at least 4x struct.value(MK-4).
     """
-    forms = iqm['vitamin_k']['forms']
+    forms = iqm['vitamin_k2']['forms']
     mk7 = (forms['menaquinone-7 (MK-7)'].get('absorption_structured') or {}).get('value')
     mk4 = (forms['menaquinone-4 (MK-4)'].get('absorption_structured') or {}).get('value')
     assert mk7 is not None and mk4 is not None
@@ -213,7 +220,7 @@ def test_natto_k2_top_ranking(iqm):
     """Per Schurgers 2000 (PMID:11356998), natto-derived K2 should rank highest
     among K2 source forms (natto > cheese > yeast).
     """
-    forms = iqm['vitamin_k']['forms']
+    forms = iqm['vitamin_k2']['forms']
     def v(name):
         return (forms[name].get('absorption_structured') or {}).get('value') or 0
     natto = v('vitamin K2 from natto')

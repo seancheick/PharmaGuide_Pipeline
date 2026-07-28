@@ -1872,13 +1872,12 @@ def load_iqm_reference_index() -> Dict[str, Dict]:
 def _nutrient_group_id(source_canonical_id: str) -> Optional[str]:
     """Return the IQM-authored nutrient display group for a matched source id.
 
-    Driven by the IQM ``match_rules.target_id`` redirect (currently only
-    ``vitamin_k1 -> vitamin_k``). The enricher may already emit the target as
-    ``canonical_id`` for interaction/evidence correctness; this field remains a
-    display/dual-read hint for the app's Nutrients tab and should never drive
-    deduplication.
+    Driven by the explicit top-level IQM ``nutrient_group_id`` field. Identity
+    redirects are intentionally not used here: canonical identity determines
+    enrichment and deduplication, while this field is only a presentation
+    roll-up for related forms such as vitamin K1 and K2.
 
-    Returns the redirect target only when it differs from the matched source id;
+    Returns the authored group only when it differs from the source identity;
     otherwise ``None`` (the common case), so the blob stays lean and the app
     falls back to ``canonical_id``.
     """
@@ -1886,9 +1885,9 @@ def _nutrient_group_id(source_canonical_id: str) -> Optional[str]:
         return None
     entry = (IQM_REFERENCE_INDEX or load_iqm_reference_index()).get(source_canonical_id)
     if isinstance(entry, dict):
-        target = safe_str(safe_dict(entry.get("match_rules")).get("target_id"))
-        if target and target != source_canonical_id:
-            return target
+        group_id = safe_str(entry.get("nutrient_group_id"))
+        if group_id and group_id != source_canonical_id:
+            return group_id
     return None
 
 
@@ -6011,11 +6010,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # AND ingredient_quality_data.ingredients[].canonical_id (`m`).
             # Prefer `m` (post-enrichment match) over `ing` (raw label entry).
             "canonical_id": canonical_id,
-            # nutrient_group_id — display/dual-read roll-up of authored
-            # target redirects (e.g. vitamin_k1 -> vitamin_k) so the Nutrients
-            # tab aggregates K1 + K2 as one "Vitamin K". Null unless a
-            # redirect applies; the app groups by `nutrient_group_id ??
-            # canonical_id`. NEVER use this for dedup.
+            # nutrient_group_id — explicit display-only roll-up (for example,
+            # vitamin_k1/vitamin_k2 -> vitamin_k). Canonical identity remains
+            # distinct for enrichment and deduplication. Null when no group is
+            # authored; the app groups by `nutrient_group_id ?? canonical_id`.
             "nutrient_group_id": _nutrient_group_id(
                 safe_str(m.get("canonical_redirect_from") or m.get("matched_entry_id") or canonical_id)
             ),

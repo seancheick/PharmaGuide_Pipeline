@@ -102,8 +102,8 @@ class TestRealLabelCorpus:
         ("Magnolia Bark Extract", "magnolia_bark", True),
 
         # Vitamin forms
-        ("Vitamin K1 (Phylloquinone)", "vitamin_k", True),
-        ("Vitamin K2 (MK-7)", "vitamin_k", True),
+        ("Vitamin K1 (Phylloquinone)", "vitamin_k1", True),
+        ("Vitamin K2 (MK-7)", "vitamin_k2", True),
         ("Methylcobalamin (Vitamin B12)", "vitamin_b12_cobalamin", True),
 
         # Prebiotics
@@ -250,7 +250,7 @@ class TestCollisionAndSubstring:
     # Substring priority tests - specific should win over generic
     PRIORITY_TESTS = [
         # (label, should_match, should_not_match)
-        ("Vitamin K1", "vitamin_k", "vitamin_a"),  # K1 routes to shared Vitamin K canonical
+        ("Vitamin K1", "vitamin_k1", "vitamin_a"),
         ("Nicotinamide Riboside", "nicotinamide_riboside", "vitamin_b3_niacin"),  # NR > B3
         ("Lactobacillus acidophilus", "lactobacillus_acidophilus", "probiotics"),  # Specific > category
         ("Silymarin extract", "milk_thistle", "silymarin"),  # silymarin merged into milk_thistle
@@ -286,11 +286,10 @@ class TestCollisionAndSubstring:
                 f"Both '{should_match}' and '{should_not_match}' matched '{label_text}' - priority issue!"
             )
 
-    def test_vitamin_k1_routes_to_vitamin_k_canonical_with_form_provenance(self, enricher, iqm_data):
-        """K1 should aggregate under Vitamin K while preserving K1/form identity."""
-        assert (
-            iqm_data["vitamin_k1"].get("match_rules", {}).get("target_id") == "vitamin_k"
-        )
+    def test_vitamin_k1_keeps_identity_with_explicit_display_group(self, enricher, iqm_data):
+        """K1 stays canonical K1 and rolls up only through nutrient_group_id."""
+        assert iqm_data["vitamin_k1"].get("nutrient_group_id") == "vitamin_k"
+        assert "target_id" not in iqm_data["vitamin_k1"].get("match_rules", {})
 
         product = {
             "id": "TEST_VITAMIN_K1_TARGET",
@@ -304,12 +303,11 @@ class TestCollisionAndSubstring:
         quality_data = enriched.get("ingredient_quality_data", {})
         scorable = quality_data.get("ingredients_scorable", [])
 
-        k_rows = [row for row in scorable if row.get("canonical_id") == "vitamin_k"]
-        assert len(k_rows) == 1, f"Expected one vitamin_k row, got {scorable}"
+        k_rows = [row for row in scorable if row.get("canonical_id") == "vitamin_k1"]
+        assert len(k_rows) == 1, f"Expected one vitamin_k1 row, got {scorable}"
 
         row = k_rows[0]
-        assert row.get("canonical_redirect_from") == "vitamin_k1"
-        assert row.get("matched_entry_id") == "vitamin_k1"
+        assert row.get("canonical_redirect_from") is None
         assert row.get("standard_name") == "Vitamin K1"
         assert row.get("matched_form") == "phylloquinone"
         assert row.get("quantity") == 100
@@ -329,8 +327,8 @@ class TestCollisionAndSubstring:
         quality_data = enriched.get("ingredient_quality_data", {})
         scorable = quality_data.get("ingredients_scorable", [])
 
-        k_rows = [row for row in scorable if row.get("canonical_id") == "vitamin_k"]
-        assert len(k_rows) == 1, f"Expected one vitamin_k row, got {scorable}"
+        k_rows = [row for row in scorable if row.get("canonical_id") == "vitamin_k2"]
+        assert len(k_rows) == 1, f"Expected one vitamin_k2 row, got {scorable}"
 
         row = k_rows[0]
         assert row.get("matched_form") == "menaquinone-7 (MK-7)"

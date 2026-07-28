@@ -59,7 +59,7 @@ B26_BANDS_PK = [
     ('vitamin_b7_biotin', 'vitamin b7 (unspecified)',         0.50, 0.70, 'biotin class baseline'),
     ('vitamin_c', 'dehydroascorbic acid',                     0.50, 0.80, 'Rivas/Vera 2008 GLUT'),
     ('vitamin_c', 'niacinamide ascorbate',                    0.70, 0.85, 'ascorbate class'),
-    ('vitamin_k', 'vitamin K2 (cis form)',                    0.00, 0.10, 'Lal 2022 cis-inactive'),
+    ('vitamin_k2', 'vitamin K2 (cis form)',                   0.00, 0.10, 'Lal 2022 cis-inactive'),
 ]
 
 B26_BANDS_MECHANICAL = [
@@ -93,7 +93,7 @@ B26_BANDS_MECHANICAL = [
     ('vitamin_e', 'vitamin E analogs (non-functional)',       0.00, 0.05, 'non-functional'),
     ('vitamin_e', 'oxidized vitamin E',                       0.00, 0.10, 'chromanol oxidized'),
     ('vitamin_e', 'vitamin e (unspecified)',                  0.20, 0.50, 'tocopherol variable'),
-    ('vitamin_k', 'menadione (K3)',                           0.00, 0.05, 'FDA-banned'),
+    ('vitamin_k3', 'menadione (K3)',                          0.00, 0.05, 'FDA-banned'),
     ('vitamin_k', 'vitamin K analogs (non-functional)',       0.00, 0.05, 'non-functional'),
     ('vitamin_k', 'oxidized vitamin K',                       0.00, 0.05, 'degraded'),
     ('vitamin_k', 'vitamin k (unspecified)',                  0.10, 0.80, 'K varies 10-80%'),
@@ -185,7 +185,7 @@ def test_cis_mk7_inactive_documented(iqm):
     """Vitamin K2 (cis form) notes must document biological inactivity
     per Lal 2022 (PMID:35864383).
     """
-    form = iqm['vitamin_k']['forms']['vitamin K2 (cis form)']
+    form = iqm['vitamin_k2']['forms']['vitamin K2 (cis form)']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
     text_lower = text.lower()
     flag_phrases = ('all-trans', 'cis isomer', 'biologically inactive',
@@ -236,8 +236,15 @@ def test_class_authority_pmids_introduced_b26(iqm):
         'PMID:35864383': 'Lal 2022 cis-MK-7',
     }
     full_text = ''
-    for pid in ('vitamin_b6_pyridoxine', 'vitamin_b7_biotin', 'vitamin_c',
-                'vitamin_k'):
+    for pid in (
+        'vitamin_b6_pyridoxine',
+        'vitamin_b7_biotin',
+        'vitamin_c',
+        'vitamin_k',
+        'vitamin_k1',
+        'vitamin_k2',
+        'vitamin_k3',
+    ):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
@@ -264,7 +271,7 @@ def test_non_functional_forms_quality_poor(iqm):
         ('vitamin_c', 'vitamin C analogs (non-functional)'),
         ('vitamin_d', 'vitamin D analogs (non-functional)'),
         ('vitamin_e', 'vitamin E analogs (non-functional)'),
-        ('vitamin_k', 'menadione (K3)'),
+        ('vitamin_k3', 'menadione (K3)'),
         ('vitamin_k', 'vitamin K analogs (non-functional)'),
         ('vitamin_k', 'oxidized vitamin K'),
     ]
