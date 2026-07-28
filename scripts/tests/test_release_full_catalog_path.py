@@ -27,8 +27,16 @@ def test_interaction_import_fallback_uses_gated_catalog_path() -> None:
 def test_interaction_rebuild_default_comes_from_tracked_release_config() -> None:
     config = json.loads(INTERACTION_VERSION_CONFIG.read_text())
     source = INTERACTION_SCRIPT.read_text()
+    release_source = SCRIPT.read_text()
 
     assert config["interaction_db_version"] == "1.0.7"
+    assert config["build_time_utc"] == "2026-07-28T18:32:29Z"
     assert 'INTERACTION_VERSION_CONFIG="$SCRIPT_DIR/config/interaction_db_release.json"' in source
     assert "interaction_db_version" in source
+    assert "build_time_utc" in source
+    assert '--build-time "$INTERACTION_BUILD_TIME"' in source
+    assert (
+        '"$REPO_ROOT/scripts/config/interaction_db_release.json"'
+        in release_source
+    )
     assert 'INTERACTION_VERSION="1.0.2"' not in source

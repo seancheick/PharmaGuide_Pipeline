@@ -455,6 +455,7 @@ INTERACTION_INPUTS=(
   "$REPO_ROOT/scripts/data/curated_interactions/med_med_pairs_v1.json"
   "$REPO_ROOT/scripts/data/ingredient_interaction_rules.json"
   "$REPO_ROOT/scripts/data/drug_classes.json"
+  "$REPO_ROOT/scripts/config/interaction_db_release.json"
   "$REPO_ROOT/scripts/interaction_db_output/research_pairs.json"
 )
 
