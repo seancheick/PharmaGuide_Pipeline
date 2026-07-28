@@ -38,21 +38,28 @@ source "$REPO_ROOT/scripts/python_env.sh"
 # ---------------------------------------------------------------------------
 
 INTERACTION_VERSION_CONFIG="$SCRIPT_DIR/config/interaction_db_release.json"
-INTERACTION_VERSION="$("$PG_PYTHON" - "$INTERACTION_VERSION_CONFIG" <<'PY'
+read -r INTERACTION_VERSION INTERACTION_BUILD_TIME < <(
+  "$PG_PYTHON" - "$INTERACTION_VERSION_CONFIG" <<'PY'
 import json
 import re
 import sys
 
 path = sys.argv[1]
 with open(path, encoding="utf-8") as handle:
-    version = str(json.load(handle).get("interaction_db_version", "")).strip()
+    config = json.load(handle)
+version = str(config.get("interaction_db_version", "")).strip()
+build_time = str(config.get("build_time_utc", "")).strip()
 if not re.fullmatch(r"\d+\.\d+\.\d+", version):
     raise SystemExit(
         f"ERROR: {path} must contain a semantic interaction_db_version"
     )
-print(version)
+if not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", build_time):
+    raise SystemExit(
+        f"ERROR: {path} must contain build_time_utc in YYYY-MM-DDTHH:MM:SSZ format"
+    )
+print(version, build_time)
 PY
-)"
+)
 OFFLINE_FLAG=""
 DO_IMPORT=0
 FLUTTER_REPO="/Users/seancheick/PharmaGuide ai"
@@ -130,7 +137,8 @@ info "Step 2/4: Building interaction_db.sqlite..."
   --manifest "$OUTPUT_DIR/interaction_db_manifest.json" \
   --report "$OUTPUT_DIR/build_audit_report.json" \
   --interaction-db-version "$INTERACTION_VERSION" \
-  --pipeline-version "$PIPELINE_VERSION"
+  --pipeline-version "$PIPELINE_VERSION" \
+  --build-time "$INTERACTION_BUILD_TIME"
 
 ok "SQLite built"
 
