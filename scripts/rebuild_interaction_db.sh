@@ -37,7 +37,22 @@ source "$REPO_ROOT/scripts/python_env.sh"
 # Defaults
 # ---------------------------------------------------------------------------
 
-INTERACTION_VERSION="1.0.2"
+INTERACTION_VERSION_CONFIG="$SCRIPT_DIR/config/interaction_db_release.json"
+INTERACTION_VERSION="$("$PG_PYTHON" - "$INTERACTION_VERSION_CONFIG" <<'PY'
+import json
+import re
+import sys
+
+path = sys.argv[1]
+with open(path, encoding="utf-8") as handle:
+    version = str(json.load(handle).get("interaction_db_version", "")).strip()
+if not re.fullmatch(r"\d+\.\d+\.\d+", version):
+    raise SystemExit(
+        f"ERROR: {path} must contain a semantic interaction_db_version"
+    )
+print(version)
+PY
+)"
 OFFLINE_FLAG=""
 DO_IMPORT=0
 FLUTTER_REPO="/Users/seancheick/PharmaGuide ai"

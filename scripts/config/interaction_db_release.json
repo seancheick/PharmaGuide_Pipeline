@@ -1,0 +1,5 @@
+{
+  "interaction_db_version": "1.0.7",
+  "purpose": "Tracked default version for interaction DB builds invoked by the full release workflow.",
+  "updated_at": "2026-07-28"
+}
