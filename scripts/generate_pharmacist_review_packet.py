@@ -28,7 +28,6 @@ CONSUMER_VISIBLE_FIELDS: tuple[tuple[str, str], ...] = (
     ("food_sources_short", "From food"),
     ("mechanism", "Why"),
     ("recommendation", "Clinical guidance"),
-    ("acknowledgement_note", "If already supplementing"),
 )
 
 CONSUMER_VISIBLE_FIELD_NAMES = frozenset(
@@ -146,7 +145,7 @@ def build_packet(
         "",
         (
             "**Approval covers the full card copy shown to the user — all "
-            "eight consumer-visible fields reproduced under each record "
+            "seven consumer-visible fields reproduced under each record "
             "below, not only mechanism, clinical impact, and "
             "recommendation.** Every line printed under \"Consumer-visible "
             "card copy\" is text a user can read in the app."
@@ -279,9 +278,9 @@ def build_packet(
             "controlled-beta corpus."
             if licensed_signoff
             else (
-                "This is a documented AI clinical-content audit and "
-                "controlled-beta sign-off; it does not claim professional "
-                "licensure."
+                "This packet requests licensed-pharmacist review of the "
+                "documented evidence audit; it does not record release "
+                "approval or claim professional licensure."
             )
         )
         lines.extend(

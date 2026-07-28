@@ -19,6 +19,7 @@ DATA_DIR = Path(__file__).parents[1] / "data"
 SOURCE_PATH = DATA_DIR / "medication_depletions.json"
 CLASSES_PATH = DATA_DIR / "drug_classes.json"
 LEDGER_PATH = DATA_DIR / "medication_depletions_b1_signoff.json"
+DELTA_LEDGER_PATH = DATA_DIR / "medication_depletions_b1_delta_signoff.json"
 
 REVIEW_SCOPE = {
     "DEP_ANTACIDS_CALCIUM",
@@ -61,6 +62,19 @@ DISPOSITIONS = {
     "approved_with_wording_change",
     "requires_evidence_revision",
     "remove_from_release",
+}
+
+DELTA_RECORD_IDS = {
+    "DEP_ANTACIDS_IRON",
+    "DEP_ANTICOAGULANTS_VITAMINK",
+    "DEP_CHOLESTYRAMINE_VITAMINA",
+    "DEP_CHOLESTYRAMINE_VITAMIND",
+    "DEP_CHOLESTYRAMINE_VITAMINE",
+    "DEP_CHOLESTYRAMINE_VITAMINK",
+    "DEP_LEVOTHYROXINE_CALCIUM",
+    "DEP_LEVOTHYROXINE_IRON",
+    "DEP_ORLISTAT_VITAMINA",
+    "DEP_SSRIS_SODIUM",
 }
 
 CLINICAL_FIELDS = (
@@ -125,28 +139,36 @@ def test_b1_signoff_ledger_covers_every_reviewed_record_once():
     assert {row["disposition"] for row in records.values()} <= DISPOSITIONS
     assert ledger["_metadata"]["review_scope_count"] == 33
     assert ledger["_metadata"]["reviewed_at"] == "2026-07-27"
-    assert ledger["_metadata"]["licensed_pharmacist_signoff"] is True
+    assert ledger["_metadata"]["licensed_pharmacist_signoff"] is False
     assert (
         ledger["_metadata"]["reviewer"]
-        == "Dr. Pham, PharmaGuide Clinical Team"
+        == ""
     )
     assert (
         ledger["_metadata"]["reviewer_type"]
-        == "Licensed pharmacist clinical review"
+        == "Licensed pharmacist clinical delta review requested"
     )
-    assert (
-        ledger["_metadata"]["licensed_pharmacist_signoff_date"]
-        == "2026-07-27"
+    assert ledger["_metadata"]["licensed_pharmacist_signoff_date"] is None
+    assert ledger["_metadata"]["release_disposition"] == (
+        "hold_pending_licensed_pharmacist_delta_review"
     )
+    assert set(ledger["_metadata"]["delta_record_ids"]) == DELTA_RECORD_IDS
+    assert ledger["_metadata"]["previous_signoff"] == {
+        "reviewer": "Dr. Pham, PharmaGuide Clinical Team",
+        "reviewer_type": "Licensed pharmacist clinical review",
+        "licensed_pharmacist_signoff_date": "2026-07-27",
+        "release_disposition": "approved_for_controlled_beta",
+    }
     assert (
         ledger["_metadata"]["supporting_reviewer"]
         == "openai_codex_ai_clinical_audit"
     )
 
 
-def test_active_records_are_signed_off_and_clinically_fingerprinted():
+def test_active_records_preserve_prior_signoff_and_pin_pending_delta_copy():
     source = _load(SOURCE_PATH)
     ledger = _load(LEDGER_PATH)
+    delta_ledger = _load(DELTA_LEDGER_PATH)
     by_id = {row["id"]: row for row in source["depletions"]}
     active = {
         row["id"]: row
@@ -162,6 +184,10 @@ def test_active_records_are_signed_off_and_clinically_fingerprinted():
     assert set(active) == signed_active
     assert len(active) == 31
     assert set(ledger["active_record_fingerprints"]) == set(active)
+    assert set(delta_ledger["records"]) == DELTA_RECORD_IDS
+    assert set(delta_ledger["delta_record_fingerprints"]) == DELTA_RECORD_IDS
+    assert delta_ledger["_metadata"]["delta_record_count"] == len(DELTA_RECORD_IDS)
+    assert delta_ledger["_metadata"]["licensed_pharmacist_signoff"] is False
 
     for record_id, expected in ledger["active_record_fingerprints"].items():
         record = by_id[record_id]
@@ -171,7 +197,13 @@ def test_active_records_are_signed_off_and_clinically_fingerprinted():
         }
         assert record["b1_clinical_reviewed_at"] == "2026-07-27"
         assert record["b1_clinical_reviewer"] == "openai_codex_ai_clinical_audit"
-        assert _record_fingerprint(record) == expected
+        if record_id not in DELTA_RECORD_IDS:
+            assert _record_fingerprint(record) == expected
+
+    for record_id, expected in delta_ledger[
+        "delta_record_fingerprints"
+    ].items():
+        assert _record_fingerprint(by_id[record_id]) == expected
 
 
 def test_nonapproved_dispositions_fail_closed():

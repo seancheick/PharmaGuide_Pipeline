@@ -7,14 +7,38 @@
     "reviewed_at": "2026-07-27",
     "review_scope_count": 33,
     "active_record_count": 31,
-    "reviewer": "Dr. Pham, PharmaGuide Clinical Team",
-    "reviewer_type": "Licensed pharmacist clinical review",
-    "licensed_pharmacist_signoff": true,
-    "licensed_pharmacist_signoff_date": "2026-07-27",
+    "reviewer": "",
+    "reviewer_type": "Licensed pharmacist clinical delta review requested",
+    "licensed_pharmacist_signoff": false,
+    "licensed_pharmacist_signoff_date": null,
     "supporting_reviewer": "openai_codex_ai_clinical_audit",
     "supporting_reviewer_type": "AI clinical-content audit",
-    "release_disposition": "approved_for_controlled_beta",
-    "change_control": "Any active record, active class membership, citation, or promotion change requires evidence review and ledger regeneration."
+    "release_disposition": "hold_pending_licensed_pharmacist_delta_review",
+    "change_control": "Any active record, active class membership, citation, or promotion change requires evidence review and ledger regeneration.",
+    "delta_opened_at": "2026-07-27",
+    "delta_record_ids": [
+      "DEP_ANTACIDS_IRON",
+      "DEP_ANTICOAGULANTS_VITAMINK",
+      "DEP_CHOLESTYRAMINE_VITAMINA",
+      "DEP_CHOLESTYRAMINE_VITAMIND",
+      "DEP_CHOLESTYRAMINE_VITAMINE",
+      "DEP_CHOLESTYRAMINE_VITAMINK",
+      "DEP_LEVOTHYROXINE_CALCIUM",
+      "DEP_LEVOTHYROXINE_IRON",
+      "DEP_ORLISTAT_VITAMINA",
+      "DEP_SSRIS_SODIUM"
+    ],
+    "delta_reason": "Primary-source recheck found study-design, effect-framing, onset, administration, and vitamin A pregnancy-copy corrections in ten active records.",
+    "delta_ledger": "medication_depletions_b1_delta_signoff.json",
+    "packet_title": "B1 clinical-copy delta review packet",
+    "packet_status": "primary-source corrections complete; licensed pharmacist delta sign-off requested",
+    "packet_scope": "10 corrected active records require delta sign-off; 21 active records and 2 non-active dispositions are unchanged.",
+    "previous_signoff": {
+      "reviewer": "Dr. Pham, PharmaGuide Clinical Team",
+      "reviewer_type": "Licensed pharmacist clinical review",
+      "licensed_pharmacist_signoff_date": "2026-07-27",
+      "release_disposition": "approved_for_controlled_beta"
+    }
   },
   "records": {
     "DEP_ANTACIDS_CALCIUM": {

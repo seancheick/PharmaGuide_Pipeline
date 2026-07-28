@@ -610,7 +610,7 @@ VALID_DEPLETION_TYPES = {
 
 
 ONSET_FRAMING = re.compile(
-    r"(over time|long-term|chronic|gradually|may develop|years|months|"
+    r"(over time|long-term|prolonged|chronic|gradually|may develop|days|weeks|years|months|"
     r"with regular use)",
     re.IGNORECASE,
 )
@@ -841,8 +841,8 @@ def validate_depletion_entry(
         if not ONSET_FRAMING.search(s):
             res.fail(
                 f"{dep_id}: alert_body must include onset framing (over "
-                f"time, long-term, chronic, gradually, may develop, years, "
-                f"months, with regular use) — depletion is chronic, not acute"
+                f"time, long-term, prolonged, chronic, gradually, may develop, "
+                f"days, weeks, years, months, with regular use)"
             )
         _depletion_nocebo_checks("alert_body", s, dep_id, res, is_body=True)
 

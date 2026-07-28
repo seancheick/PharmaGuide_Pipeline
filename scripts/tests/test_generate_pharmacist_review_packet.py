@@ -1,4 +1,5 @@
 from generate_pharmacist_review_packet import (
+    CONSUMER_VISIBLE_FIELD_NAMES,
     CONSUMER_VISIBLE_FIELDS,
     build_packet,
 )
@@ -166,6 +167,8 @@ def test_delta_packet_uses_ledger_title_status_and_scope_overrides():
         in packet
     )
     assert "Scope: **4 suppressed candidates; none are consumer-visible until approved.**" in packet
+    assert "requests licensed-pharmacist review" in packet
+    assert "controlled-beta sign-off" not in packet
 
 
 def test_packet_renders_every_consumer_visible_field():
@@ -210,6 +213,32 @@ def test_packet_renders_every_consumer_visible_field():
     # The on-screen label is what tells the reviewer where the copy appears.
     for _, label in CONSUMER_VISIBLE_FIELDS:
         assert label in packet
+
+
+def test_packet_does_not_claim_nonrendered_acknowledgement_is_on_screen():
+    """Flutter retired acknowledgement rendering from the depletion card."""
+    assert "acknowledgement_note" not in CONSUMER_VISIBLE_FIELD_NAMES
+
+    row = _row("NOACK", "verified")
+    row["acknowledgement_note"] = "DORMANT-ACKNOWLEDGEMENT-SENTINEL"
+    artifact = {
+        "_metadata": {
+            "schema_version": "5.4.0",
+            "content_version": "v",
+            "content_hash": "sha256:abc",
+        },
+        "depletions": [row],
+    }
+
+    packet = build_packet(
+        artifact,
+        ledger=None,
+        verified_screenshot="verified.png",
+        unavailable_screenshot="unavailable.png",
+    )
+
+    assert "DORMANT-ACKNOWLEDGEMENT-SENTINEL" not in packet
+    assert "all seven consumer-visible fields" in packet
 
 
 def test_packet_does_not_present_goldens_as_clinical_evidence():

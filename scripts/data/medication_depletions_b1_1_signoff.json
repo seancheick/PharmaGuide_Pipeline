@@ -14,7 +14,7 @@
     "release_disposition": "pending_licensed_pharmacist_delta_review",
     "packet_title": "B1.1 pharmacist delta review packet",
     "packet_status": "evidence revision complete; licensed pharmacist sign-off requested",
-    "packet_scope": "4 suppressed B1.1 candidates; none are consumer-visible until separately approved. The existing 31-record B1 beta corpus is unchanged."
+    "packet_scope": "4 suppressed B1.1 candidates; none are consumer-visible until separately approved. They are separate from the reopened B1 active-copy delta."
   },
   "records": {
     "DEP_ANTACIDS_VITAMINB12": {
@@ -23,7 +23,7 @@
     },
     "DEP_ANTACIDS_MAGNESIUM": {
       "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm the rare but potentially clinically important prolonged-use signal and risk-based monitoring language."
+      "note": "Confirm the rare but potentially clinically important signal, variable onset, and risk-based monitoring language."
     },
     "DEP_DIURETICS_POTASSIUM": {
       "disposition": "pending_licensed_pharmacist_review",
@@ -36,8 +36,8 @@
   },
   "candidate_record_fingerprints": {
     "DEP_ANTACIDS_VITAMINB12": "sha256:b7a5bdc8da7e19b4e0be41e7146b3c92dcda8e9c1f5b227882ac3add5a50ae7d",
-    "DEP_ANTACIDS_MAGNESIUM": "sha256:a63098ecef2a4ec561f334499dab3c825bba32439d5bb50602ce213d2a6e1e5f",
-    "DEP_DIURETICS_POTASSIUM": "sha256:52253c03d3779ac5557aa455f225555c254725bba87b08a4fc278faf9a33b41c",
+    "DEP_ANTACIDS_MAGNESIUM": "sha256:dff9551d2159b77bd18a0e5c3fe434470618d406502cd8ee5be887e0dd59315c",
+    "DEP_DIURETICS_POTASSIUM": "sha256:c103953cee1e7d0d26adc324f4ce18088b73e25e09cf3d8a63272a464113a526",
     "DEP_DIURETICS_MAGNESIUM": "sha256:297559501aa11cc19affe8755cb9e0454c21432074601db3bf12e055dd672ad9"
   }
 }

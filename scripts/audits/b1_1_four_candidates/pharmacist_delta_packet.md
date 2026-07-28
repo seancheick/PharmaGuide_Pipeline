@@ -2,13 +2,13 @@
 
 Status: **evidence revision complete; licensed pharmacist sign-off requested**
 
-Scope: **4 suppressed B1.1 candidates; none are consumer-visible until separately approved. The existing 31-record B1 beta corpus is unchanged.**
+Scope: **4 suppressed B1.1 candidates; none are consumer-visible until separately approved. They are separate from the reopened B1 active-copy delta.**
 
-Artifact: schema `5.4.0`, content version `2026.07.27-b1.1-candidate.1`, content hash `sha256:a10fc061c2fd89473cb23a9cdd9c9c6b50557552d7b69be285baacabdb86f39c`.
+Artifact: schema `5.4.0`, content version `2026.07.27-b1-clinical-delta.1`, content hash `sha256:dfea094d0a13a390447810d4fa6a7967ddbee4b0f24083ef46cac842ad404f2d`.
 
 ## Review focus
 
-**Approval covers the full card copy shown to the user — all eight consumer-visible fields reproduced under each record below, not only mechanism, clinical impact, and recommendation.** Every line printed under "Consumer-visible card copy" is text a user can read in the app.
+**Approval covers the full card copy shown to the user — all seven consumer-visible fields reproduced under each record below, not only mechanism, clinical impact, and recommendation.** Every line printed under "Consumer-visible card copy" is text a user can read in the app.
 
 - Confirm the medication scope and nutrient relationship are clinically accurate.
 - Confirm the mechanism and clinical impact are supported by the linked evidence.
@@ -54,7 +54,6 @@ Consumer-visible card copy (every line below is shown to the user — approval c
 - From food (`food_sources_short`): Food sources of magnesium include leafy greens, nuts, seeds, whole grains, and beans.
 - Why (`mechanism`): Loop and thiazide diuretics can increase urinary magnesium losses through their effects on renal electrolyte handling. The magnitude and mechanism differ by diuretic subclass and by individual clinical factors.
 - Clinical guidance (`recommendation`): Do not start a routine magnesium dose solely because you take a diuretic. Ask whether magnesium should be included with electrolyte monitoring, especially if potassium is low, symptoms appear, the dose is high, or intake is limited; correction should be clinician-directed.
-- If already supplementing (`acknowledgement_note`): You're already considering magnesium intake; lab results and your treatment plan determine whether changes are needed.
 
 - Evidence: [DailyMed — Furosemide tablets prescribing information](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f3173c0d-2b62-7c7b-e053-2995a90ada05); [DailyMed — Hydrochlorothiazide tablets prescribing information](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8a1de4e2-3aca-a4d3-e053-2995a90a1a41); [Ellison DH. Divalent cation transport by the distal nephron: insights from Bartter's and Gitelman's syndromes. Am J Physiol Renal Physiol. 2000;279(4):F616-25](https://pubmed.ncbi.nlm.nih.gov/10997911/)
 
@@ -79,7 +78,6 @@ Consumer-visible card copy (every line below is shown to the user — approval c
 - From food (`food_sources_short`): Potassium is found in potatoes, beans, fruit, dairy, and vegetables; whether to change intake depends on labs and kidney function.
 - Why (`mechanism`): Loop and thiazide diuretics increase renal sodium delivery and urinary electrolyte losses. This can lower potassium; the likelihood depends on the agent, dose, intake, kidney function, and concurrent medications.
 - Clinical guidance (`recommendation`): Do not start potassium or deliberately increase dietary potassium without checking with your prescriber. Serum potassium should be monitored; any food, supplement, or prescription replacement plan must account for kidney function and other medications.
-- If already supplementing (`acknowledgement_note`): Your potassium plan is already part of medication monitoring; keep it aligned with prescribed doses and lab results.
 
 - Evidence: [DailyMed — Furosemide tablets prescribing information](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f3173c0d-2b62-7c7b-e053-2995a90ada05); [DailyMed — Hydrochlorothiazide tablets prescribing information](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8a1de4e2-3aca-a4d3-e053-2995a90a1a41)
 
@@ -93,23 +91,22 @@ Reviewer comment (Approved / Approved with wording change / Requires evidence re
 
 - Medication / class: Proton pump inhibitors (PPIs) (`class:proton_pump_inhibitors`)
 - Nutrient: Magnesium (`magnesium`)
-- Relationship: `depletion`; severity `significant`; onset `months`
+- Relationship: `depletion`; severity `significant`; onset `variable`
 
 Consumer-visible card copy (every line below is shown to the user — approval covers all of it):
 
 - Headline (`alert_headline`): Rarely, long-term PPIs may lower magnesium
-- Body (`alert_body`): With prolonged use, PPIs can rarely lower magnesium; reports occurred after at least three months and most after a year.
+- Body (`alert_body`): With prolonged use, PPIs can rarely lower magnesium. Most reports follow a year or more of use, but cases have occurred earlier.
 - Monitoring tip (`monitoring_tip_short`): Ask whether magnesium monitoring fits prolonged PPI use, especially with digoxin or a diuretic.
 - What can happen (`clinical_impact`): Low magnesium may be asymptomatic or can contribute to tetany, seizures, or arrhythmias and may accompany low calcium or potassium. FDA labeling notes that some cases required magnesium replacement and stopping the PPI.
 - From food (`food_sources_short`): Food sources of magnesium include leafy greens, nuts, seeds, whole grains, and beans.
 - Why (`mechanism`): Rare PPI-associated hypomagnesemia appears to involve reduced intestinal magnesium absorption, but the precise molecular mechanism is not established. Dechallenge and rechallenge reports support a PPI class effect.
 - Clinical guidance (`recommendation`): Do not start a routine magnesium dose solely because you take a PPI. For prolonged therapy—especially with digoxin, a diuretic, or other risk factors—ask whether baseline and periodic magnesium testing is appropriate. Management of a low result should be clinician-directed.
-- If already supplementing (`acknowledgement_note`): You're already tracking magnesium intake; laboratory results and your treatment plan guide any needed changes.
 
 - Evidence: [Hess MW et al. Systematic review: hypomagnesaemia induced by proton pump inhibition. Aliment Pharmacol Ther. 2012;36(5):405-13](https://pubmed.ncbi.nlm.nih.gov/22762246/); [DailyMed — PRILOSEC (omeprazole) prescribing information, section 5.9](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b6761f84-53ac-4745-a8c8-1e5427d7e179)
 
 Reviewer disposition: **`pending_licensed_pharmacist_review`**
-Review note: Confirm the rare but potentially clinically important prolonged-use signal and risk-based monitoring language.
+Review note: Confirm the rare but potentially clinically important signal, variable onset, and risk-based monitoring language.
 Consumer-visible after review: **no**
 
 Reviewer comment (Approved / Approved with wording change / Requires evidence revision / Remove from release, plus any required change): _______________________________________
@@ -129,7 +126,6 @@ Consumer-visible card copy (every line below is shown to the user — approval c
 - From food (`food_sources_short`): Vitamin B12 is found in animal foods and fortified foods; laboratory assessment helps evaluate absorption and intake.
 - Why (`mechanism`): PPIs reduce gastric acid. With prolonged use, this can impair absorption of food-bound vitamin B12; the degree of effect varies, and observational studies do not show that every user becomes deficient.
 - Clinical guidance (`recommendation`): Do not start high-dose B12 solely because you take a PPI. If use is prolonged or you have anemia, neurologic symptoms, a restricted diet, or other B12 risk factors, ask your clinician whether B12 testing is appropriate; treat confirmed deficiency with an individualized plan.
-- If already supplementing (`acknowledgement_note`): You're already considering B12 intake; testing and individual factors still guide whether treatment is needed.
 
 - Evidence: [NIH ODS — Vitamin B12 Fact Sheet for Health Professionals](https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/); [Lam JR et al. Proton pump inhibitor and histamine 2 receptor antagonist use and vitamin B12 deficiency. JAMA. 2013;310(22):2435-42](https://pubmed.ncbi.nlm.nih.gov/24327038/); [Choudhury A et al. Vitamin B12 deficiency and use of proton pump inhibitors: a systematic review and meta-analysis. Expert Rev Gastroenterol Hepatol. 2023;17(5):479-487](https://pubmed.ncbi.nlm.nih.gov/37060552/); [DailyMed — PRILOSEC (omeprazole) prescribing information, sections 5.8 and 5.9](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b6761f84-53ac-4745-a8c8-1e5427d7e179)
 
@@ -145,4 +141,4 @@ Reviewer comment (Approved / Approved with wording change / Requires evidence re
 - Review date: `2026-07-27`
 - Release disposition: `pending_licensed_pharmacist_delta_review`
 - Licensed pharmacist sign-off: **not represented by this packet**
-- Scope statement: This is a documented AI clinical-content audit and controlled-beta sign-off; it does not claim professional licensure.
+- Scope statement: This packet requests licensed-pharmacist review of the documented evidence audit; it does not record release approval or claim professional licensure.

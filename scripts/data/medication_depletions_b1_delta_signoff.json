@@ -1,0 +1,73 @@
+{
+  "_metadata": {
+    "schema_version": "5.4.0",
+    "description": "Machine-enforced B1 active-copy correction delta and pending licensed-pharmacist review state.",
+    "purpose": "medication_depletion_clinical_change_control",
+    "total_entries": 2,
+    "delta_record_count": 10,
+    "reviewed_at": "2026-07-27",
+    "evidence_reviewer": "b1_clinical_copy_delta_evidence_audit",
+    "reviewer": "",
+    "reviewer_type": "Licensed pharmacist clinical delta review requested",
+    "licensed_pharmacist_signoff": false,
+    "licensed_pharmacist_signoff_date": null,
+    "release_disposition": "pending_licensed_pharmacist_delta_review",
+    "packet_title": "B1 clinical-copy delta review packet",
+    "packet_status": "primary-source corrections complete; licensed pharmacist delta sign-off requested",
+    "packet_scope": "10 corrected active records only. The other 21 active records and 2 non-active B1 dispositions are unchanged. The 4 B1.1 candidates remain separately suppressed."
+  },
+  "records": {
+    "DEP_ANTACIDS_IRON": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm the attenuation-after-discontinuation language and symptom/risk-based testing copy."
+    },
+    "DEP_ANTICOAGULANTS_VITAMINK": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm onset in days and the immediate intended-action framing."
+    },
+    "DEP_CHOLESTYRAMINE_VITAMINA": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm water-miscible-form/timing guidance and preformed-vitamin-A pregnancy safety copy."
+    },
+    "DEP_CHOLESTYRAMINE_VITAMIND": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm the label-specific water-miscible-form and timing guidance."
+    },
+    "DEP_CHOLESTYRAMINE_VITAMINE": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm the label-specific water-miscible-form and timing guidance."
+    },
+    "DEP_CHOLESTYRAMINE_VITAMINK": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm water-miscible-form/timing guidance and the label-supported clotting impact."
+    },
+    "DEP_LEVOTHYROXINE_CALCIUM": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm patient-cohort effect framing and separation limited to calcium products."
+    },
+    "DEP_LEVOTHYROXINE_IRON": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm Campbell 1992 is accurately described as an uncontrolled 14-patient study."
+    },
+    "DEP_ORLISTAT_VITAMINA": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm label-directed multivitamin timing and preformed-vitamin-A pregnancy safety copy."
+    },
+    "DEP_SSRIS_SODIUM": {
+      "disposition": "pending_licensed_pharmacist_review",
+      "note": "Confirm early-treatment timing and the explicit no-self-supplementation wording."
+    }
+  },
+  "delta_record_fingerprints": {
+    "DEP_ANTACIDS_IRON": "sha256:9e8c603b5feebcee59fdab3cc68ce8ac50c12100f5e06b25326e9f8ad1964bfe",
+    "DEP_ANTICOAGULANTS_VITAMINK": "sha256:86a6008bff77f69c7596454a71b6891e05cafe1dd0b3895ddc619af082c79139",
+    "DEP_CHOLESTYRAMINE_VITAMINA": "sha256:b4c3dd15aa752048960ddcc1a6f15b7aa0bd228b30a449476bc95e11d252c8e8",
+    "DEP_CHOLESTYRAMINE_VITAMIND": "sha256:bb28ba32a95cf79cffdf5f4fe837b4f6332b880ec237c45b091d8b70ac49f0e8",
+    "DEP_CHOLESTYRAMINE_VITAMINE": "sha256:df4499ee42f174269102ef6f1affaa8f595d70e9999a1e95011a706795fc0460",
+    "DEP_CHOLESTYRAMINE_VITAMINK": "sha256:6646dbea4642910668b2423a67557798de201f1751eb4bbf3d557265ae5a26e8",
+    "DEP_LEVOTHYROXINE_CALCIUM": "sha256:ace82ea781f0b60449b364216c34528f02ccd403f4954963c474451b1b66306d",
+    "DEP_LEVOTHYROXINE_IRON": "sha256:84de1b6cebd9609f29e988c2568f7e09a1befab744b764f57b4b016a95938cff",
+    "DEP_ORLISTAT_VITAMINA": "sha256:9d688688dfeec80841b98f8addc88e4227ad72c75673e16cab8e15f201aaaa69",
+    "DEP_SSRIS_SODIUM": "sha256:7784a95e60d4e7df4814adf1f1e8147156d5e41e0753d0ed17c1e9a8a25a3079"
+  }
+}

@@ -15,7 +15,7 @@ DRUG_CLASSES_FILE = DATA_DIR / "drug_classes.json"
 
 VALID_SEVERITIES = {"significant", "moderate", "mild"}
 VALID_EVIDENCE_LEVELS = {"established", "probable", "possible"}
-VALID_ONSET_TIMELINES = {"weeks", "months", "years", "variable"}
+VALID_ONSET_TIMELINES = {"days", "weeks", "months", "years", "variable"}
 UNKNOWN_ONSET_TIMELINE = "not established"
 VALID_DRUG_REF_TYPES = {"class", "drug"}
 VALID_SOURCE_TYPES = {"pubmed", "reference", "nih_ods", "fda", "nccih"}
