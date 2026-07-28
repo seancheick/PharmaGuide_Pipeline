@@ -39,6 +39,7 @@ FORBIDDEN_IN_COMBINED = {
 REQUIRED_IN_COMBINED = {
     "4603": "furosemide",
     "1808": "bumetanide",
+    "4109": "ethacrynic acid",
     "38413": "torsemide",
     "5487": "hydrochlorothiazide",
     "2409": "chlorthalidone",

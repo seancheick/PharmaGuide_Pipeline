@@ -53,6 +53,16 @@ def test_levothyroxine_calcium_uses_the_patient_cohort_and_product_scope():
     assert "supplements or calcium-containing medicines" in copy
 
 
+def test_furosemide_thiamine_tip_does_not_presume_specialist_or_nudge_a_dose():
+    record = _records()["DEP_DIURETICS_THIAMINE"]
+    tip = record["monitoring_tip_short"].lower()
+
+    assert "cardiologist" not in tip
+    assert "thiamine supplement" not in tip
+    assert "treating clinician" in tip
+    assert "assessment" in tip
+
+
 def test_acid_suppression_iron_does_not_claim_complete_reversal():
     record = _records()["DEP_ANTACIDS_IRON"]
     copy = " ".join(

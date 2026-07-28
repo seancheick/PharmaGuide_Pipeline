@@ -136,3 +136,36 @@ def test_probiotic_severe_infection_rule_is_not_autoimmune_gated():
     }
     assert "immunocompromised" in condition_ids
     assert "autoimmune" not in condition_ids
+
+
+def test_holy_basil_pregnancy_rule_aligns_severity_scope_and_evidence():
+    rule = next(
+        r for r in RULES if r.get("id") == "RULE_IQM_HOLY_BASIL_PREGNANCY"
+    )
+    pregnancy = next(
+        item
+        for item in rule.get("condition_rules") or []
+        if item.get("condition_id") == "pregnancy"
+    )
+    pregnancy_lactation = rule["pregnancy_lactation"]
+
+    assert pregnancy["severity"] == "caution"
+    assert pregnancy_lactation["pregnancy_category"] == "caution"
+    assert pregnancy["evidence_level"] == "limited"
+    assert pregnancy_lactation["evidence_level"] == "limited"
+    assert "concentrated extract" in pregnancy["action"].lower()
+    assert "culinary" in pregnancy["action"].lower()
+
+    copy = " ".join(
+        (
+            pregnancy["mechanism"],
+            pregnancy["alert_body"],
+            pregnancy_lactation["alert_body"],
+        )
+    ).lower()
+    assert "uterotonic" not in copy
+    assert "human pregnancy" in copy
+    assert "https://pubmed.ncbi.nlm.nih.gov/34315377/" in pregnancy["sources"]
+    assert "https://pubmed.ncbi.nlm.nih.gov/34315377/" in pregnancy_lactation[
+        "sources"
+    ]

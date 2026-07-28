@@ -1,16 +1,19 @@
 {
   "_metadata": {
-    "schema_version": "5.4.0",
+    "schema_version": "5.5.0",
     "description": "Machine-enforced B1.1 four-candidate proposal and pending licensed-pharmacist delta-review state.",
     "purpose": "medication_depletion_clinical_change_control",
-    "total_entries": 2,
+    "total_entries": 3,
     "reviewed_at": "2026-07-27",
     "candidate_count": 4,
     "evidence_reviewer": "b1_1_evidence_audit",
+    "supporting_reviewer": "b1_1_evidence_audit",
+    "supporting_reviewer_type": "AI clinical-content audit",
     "reviewer": "",
     "reviewer_type": "Licensed pharmacist clinical review requested",
     "licensed_pharmacist_signoff": false,
     "licensed_pharmacist_signoff_date": null,
+    "licensed_clinical_approver_organization": "PharmaGuide Clinical Team",
     "release_disposition": "pending_licensed_pharmacist_delta_review",
     "packet_title": "B1.1 pharmacist delta review packet",
     "packet_status": "evidence revision complete; licensed pharmacist sign-off requested",
@@ -39,5 +42,9 @@
     "DEP_ANTACIDS_MAGNESIUM": "sha256:dff9551d2159b77bd18a0e5c3fe434470618d406502cd8ee5be887e0dd59315c",
     "DEP_DIURETICS_POTASSIUM": "sha256:c103953cee1e7d0d26adc324f4ce18088b73e25e09cf3d8a63272a464113a526",
     "DEP_DIURETICS_MAGNESIUM": "sha256:297559501aa11cc19affe8755cb9e0454c21432074601db3bf12e055dd672ad9"
+  },
+  "candidate_class_fingerprints": {
+    "class:loop_and_thiazide_diuretics": "sha256:9bb5533b54036d9eb89f36885589c1063b949b3c2622afaa8bc68930944441b3",
+    "class:proton_pump_inhibitors": "sha256:bd0aef5a35062fa7b0681e3cfc9f2639918bdc9d35e11d40604c88017841f061"
   }
 }
