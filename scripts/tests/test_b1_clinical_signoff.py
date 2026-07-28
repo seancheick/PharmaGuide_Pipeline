@@ -71,6 +71,7 @@ DELTA_RECORD_IDS = {
     "DEP_CHOLESTYRAMINE_VITAMIND",
     "DEP_CHOLESTYRAMINE_VITAMINE",
     "DEP_CHOLESTYRAMINE_VITAMINK",
+    "DEP_DIURETICS_THIAMINE",
     "DEP_LEVOTHYROXINE_CALCIUM",
     "DEP_LEVOTHYROXINE_IRON",
     "DEP_ORLISTAT_VITAMINA",
@@ -102,7 +103,10 @@ CLINICAL_FIELDS = (
     "citation_review_note",
     "b1_clinical_review_disposition",
     "b1_clinical_reviewed_at",
-    "b1_clinical_reviewer",
+    "b1_evidence_auditor",
+    "b1_clinical_approval_status",
+    "b1_clinical_approver",
+    "b1_clinical_approved_at",
     "b1_clinical_review_note",
 )
 
@@ -163,6 +167,10 @@ def test_b1_signoff_ledger_covers_every_reviewed_record_once():
         ledger["_metadata"]["supporting_reviewer"]
         == "openai_codex_ai_clinical_audit"
     )
+    assert (
+        ledger["_metadata"]["licensed_clinical_approver_organization"]
+        == "PharmaGuide Clinical Team"
+    )
 
 
 def test_active_records_preserve_prior_signoff_and_pin_pending_delta_copy():
@@ -188,6 +196,14 @@ def test_active_records_preserve_prior_signoff_and_pin_pending_delta_copy():
     assert set(delta_ledger["delta_record_fingerprints"]) == DELTA_RECORD_IDS
     assert delta_ledger["_metadata"]["delta_record_count"] == len(DELTA_RECORD_IDS)
     assert delta_ledger["_metadata"]["licensed_pharmacist_signoff"] is False
+    assert (
+        delta_ledger["_metadata"]["supporting_reviewer"]
+        == "b1_clinical_copy_delta_evidence_audit"
+    )
+    assert (
+        delta_ledger["_metadata"]["licensed_clinical_approver_organization"]
+        == "PharmaGuide Clinical Team"
+    )
 
     for record_id, expected in ledger["active_record_fingerprints"].items():
         record = by_id[record_id]
@@ -196,7 +212,19 @@ def test_active_records_preserve_prior_signoff_and_pin_pending_delta_copy():
             "approved_with_wording_change",
         }
         assert record["b1_clinical_reviewed_at"] == "2026-07-27"
-        assert record["b1_clinical_reviewer"] == "openai_codex_ai_clinical_audit"
+        assert record["b1_evidence_auditor"] == "openai_codex_ai_clinical_audit"
+        assert "b1_clinical_reviewer" not in record
+        if record_id in DELTA_RECORD_IDS:
+            assert record["b1_clinical_approval_status"] == "pending_delta_review"
+            assert record.get("b1_clinical_approver") is None
+            assert record.get("b1_clinical_approved_at") is None
+        else:
+            assert (
+                record["b1_clinical_approval_status"]
+                == "approved_for_controlled_beta"
+            )
+            assert record["b1_clinical_approver"] == "PharmaGuide Clinical Team"
+            assert record["b1_clinical_approved_at"] == "2026-07-27"
         if record_id not in DELTA_RECORD_IDS:
             assert _record_fingerprint(record) == expected
 
@@ -204,6 +232,24 @@ def test_active_records_preserve_prior_signoff_and_pin_pending_delta_copy():
         "delta_record_fingerprints"
     ].items():
         assert _record_fingerprint(by_id[record_id]) == expected
+
+
+def test_nonconsumer_b1_dispositions_record_the_clinical_approver():
+    source = _load(SOURCE_PATH)
+    ledger = _load(LEDGER_PATH)
+    by_id = {row["id"]: row for row in source["depletions"]}
+
+    for record_id, review in ledger["records"].items():
+        if review["disposition"] not in {
+            "requires_evidence_revision",
+            "remove_from_release",
+        }:
+            continue
+        record = by_id[record_id]
+        assert record["b1_evidence_auditor"] == "openai_codex_ai_clinical_audit"
+        assert record["b1_clinical_approval_status"] == "approved_not_consumer_visible"
+        assert record["b1_clinical_approver"] == "PharmaGuide Clinical Team"
+        assert record["b1_clinical_approved_at"] == "2026-07-27"
 
 
 def test_nonapproved_dispositions_fail_closed():

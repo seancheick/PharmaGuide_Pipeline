@@ -52,7 +52,10 @@ CLINICAL_FIELDS = (
     "citation_review_note",
     "b1_clinical_review_disposition",
     "b1_clinical_reviewed_at",
-    "b1_clinical_reviewer",
+    "b1_evidence_auditor",
+    "b1_clinical_approval_status",
+    "b1_clinical_approver",
+    "b1_clinical_approved_at",
     "b1_clinical_review_note",
 )
 
@@ -630,7 +633,10 @@ def main() -> int:
         disposition = "approved"
         record["b1_clinical_review_disposition"] = disposition
         record["b1_clinical_reviewed_at"] = REVIEW_DATE
-        record["b1_clinical_reviewer"] = REVIEWER
+        record["b1_evidence_auditor"] = REVIEWER
+        record["b1_clinical_approval_status"] = "approved_for_controlled_beta"
+        record["b1_clinical_approver"] = "PharmaGuide Clinical Team"
+        record["b1_clinical_approved_at"] = REVIEW_DATE
         record["b1_clinical_review_note"] = note
         records[record_id] = {"disposition": disposition, "note": note}
 
@@ -639,7 +645,10 @@ def main() -> int:
         disposition = "approved_with_wording_change"
         record["b1_clinical_review_disposition"] = disposition
         record["b1_clinical_reviewed_at"] = REVIEW_DATE
-        record["b1_clinical_reviewer"] = REVIEWER
+        record["b1_evidence_auditor"] = REVIEWER
+        record["b1_clinical_approval_status"] = "approved_for_controlled_beta"
+        record["b1_clinical_approver"] = "PharmaGuide Clinical Team"
+        record["b1_clinical_approved_at"] = REVIEW_DATE
         record["b1_clinical_review_note"] = note
         _touch_citation_review(record, note)
         records[record_id] = {"disposition": disposition, "note": note}
@@ -650,7 +659,10 @@ def main() -> int:
         record["citation_review_status"] = review["status"]
         record["b1_clinical_review_disposition"] = disposition
         record["b1_clinical_reviewed_at"] = REVIEW_DATE
-        record["b1_clinical_reviewer"] = REVIEWER
+        record["b1_evidence_auditor"] = REVIEWER
+        record["b1_clinical_approval_status"] = "approved_not_consumer_visible"
+        record["b1_clinical_approver"] = "PharmaGuide Clinical Team"
+        record["b1_clinical_approved_at"] = REVIEW_DATE
         record["b1_clinical_review_note"] = review["note"]
         _touch_citation_review(record, review["note"])
         records[record_id] = {
@@ -693,6 +705,9 @@ def main() -> int:
             "reviewer_type": LICENSED_SIGNOFF_REVIEWER_TYPE,
             "licensed_pharmacist_signoff": True,
             "licensed_pharmacist_signoff_date": REVIEW_DATE,
+            "licensed_clinical_approver_organization": (
+                "PharmaGuide Clinical Team"
+            ),
             "supporting_reviewer": REVIEWER,
             "supporting_reviewer_type": "AI clinical-content audit",
             "release_disposition": "approved_for_controlled_beta",

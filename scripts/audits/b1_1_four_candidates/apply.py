@@ -17,6 +17,7 @@ from typing import Any
 ROOT = Path(__file__).parents[3]
 DATA = ROOT / "scripts" / "data"
 SOURCE_PATH = DATA / "medication_depletions.json"
+CLASSES_PATH = DATA / "drug_classes.json"
 EXPECTATIONS_PATH = DATA / "medication_depletion_citation_expectations.json"
 LEDGER_PATH = DATA / "medication_depletions_b1_1_signoff.json"
 
@@ -75,6 +76,19 @@ def _source(source_type: str, label: str, url: str) -> dict[str, str]:
 def _proposal_fingerprint(record: dict[str, Any]) -> str:
     payload = json.dumps(
         {field: record.get(field) for field in PROPOSAL_FIELDS},
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return "sha256:" + hashlib.sha256(payload).hexdigest()
+
+
+def _class_fingerprint(drug_class: dict[str, Any]) -> str:
+    payload = json.dumps(
+        {
+            "member_rxcuis": drug_class.get("member_rxcuis", []),
+            "member_names": drug_class.get("member_names", []),
+        },
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
@@ -534,7 +548,10 @@ def _update_expectations(payload: dict[str, Any]) -> None:
     payload["_metadata"]["total_entries"] = len(payload["expectations"])
 
 
-def _build_ledger(by_id: dict[str, dict[str, Any]]) -> dict[str, Any]:
+def _build_ledger(
+    by_id: dict[str, dict[str, Any]],
+    classes: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
     notes = {
         "DEP_ANTACIDS_VITAMINB12": (
             "Confirm the PPI-only scope, probable evidence tier, and "
@@ -555,20 +572,25 @@ def _build_ledger(by_id: dict[str, dict[str, Any]]) -> dict[str, Any]:
     }
     return {
         "_metadata": {
-            "schema_version": "5.4.0",
+            "schema_version": "5.5.0",
             "description": (
                 "Machine-enforced B1.1 four-candidate proposal and pending "
                 "licensed-pharmacist delta-review state."
             ),
             "purpose": "medication_depletion_clinical_change_control",
-            "total_entries": 2,
+            "total_entries": 3,
             "reviewed_at": REVIEW_DATE,
             "candidate_count": len(CANDIDATE_IDS),
             "evidence_reviewer": REVIEWER,
+            "supporting_reviewer": REVIEWER,
+            "supporting_reviewer_type": "AI clinical-content audit",
             "reviewer": "",
             "reviewer_type": "Licensed pharmacist clinical review requested",
             "licensed_pharmacist_signoff": False,
             "licensed_pharmacist_signoff_date": None,
+            "licensed_clinical_approver_organization": (
+                "PharmaGuide Clinical Team"
+            ),
             "release_disposition": "pending_licensed_pharmacist_delta_review",
             "packet_title": "B1.1 pharmacist delta review packet",
             "packet_status": (
@@ -590,6 +612,13 @@ def _build_ledger(by_id: dict[str, dict[str, Any]]) -> dict[str, Any]:
         "candidate_record_fingerprints": {
             entry_id: _proposal_fingerprint(by_id[entry_id])
             for entry_id in CANDIDATE_IDS
+        },
+        "candidate_class_fingerprints": {
+            class_id: _class_fingerprint(classes[class_id])
+            for class_id in (
+                "class:loop_and_thiazide_diuretics",
+                "class:proton_pump_inhibitors",
+            )
         },
     }
 
@@ -615,7 +644,8 @@ def main() -> int:
         encoding="utf-8",
     )
 
-    ledger = _build_ledger(by_id)
+    classes = json.loads(CLASSES_PATH.read_text(encoding="utf-8"))["classes"]
+    ledger = _build_ledger(by_id, classes)
     LEDGER_PATH.write_text(
         json.dumps(ledger, ensure_ascii=True, indent=2) + "\n",
         encoding="utf-8",

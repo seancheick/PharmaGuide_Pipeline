@@ -3,9 +3,9 @@
     "schema_version": "1.0.0",
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-07-26",
+    "last_updated": "2026-07-27",
     "total_classes": 39,
-    "total_members": 818,
+    "total_members": 819,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -1971,6 +1971,7 @@
         "2603",
         "3000",
         "22033",
+        "4109",
         "4603",
         "5487",
         "5495",
@@ -1994,6 +1995,7 @@
         "clopamide",
         "cyclopenthiazide",
         "cyclothiazide",
+        "ethacrynic acid",
         "furosemide",
         "hydrochlorothiazide",
         "hydroflumethiazide",

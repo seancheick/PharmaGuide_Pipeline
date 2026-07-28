@@ -34,6 +34,23 @@ CONSUMER_VISIBLE_FIELD_NAMES = frozenset(
     name for name, _ in CONSUMER_VISIBLE_FIELDS
 )
 
+APP_UNAVAILABLE_TITLE = "Check unavailable"
+APP_UNAVAILABLE_BODY = (
+    "We couldn't load the medication & nutrient checks right now. "
+    "This is not an all-clear — please try again later."
+)
+CLINICIAN_UNAVAILABLE_STATUS = "Unavailable"
+CLINICIAN_UNAVAILABLE_BODY = (
+    "Medication-nutrient analysis was unavailable when this report was "
+    "generated. This is not evidence that no interactions exist - the "
+    "check could not run."
+)
+CLINICIAN_PARTIAL_STATUS = "Partial - fallback artifact"
+CLINICIAN_PARTIAL_BODY = (
+    "Partial medication-nutrient analysis: a fallback reference artifact "
+    "was used. Review these notes in that context."
+)
+
 
 def _clean(value: Any) -> str:
     return " ".join(str(value or "").split())
@@ -179,6 +196,23 @@ def build_packet(
         "",
         f"![Unavailable medication-nutrient layout]({unavailable_screenshot})",
         "",
+        "### Exact unavailable and partial-state copy",
+        "",
+        "App unavailable card:",
+        "",
+        f"- Title: {APP_UNAVAILABLE_TITLE}",
+        f"- Body: {APP_UNAVAILABLE_BODY}",
+        "",
+        "Clinician report unavailable state:",
+        "",
+        f"- Status: {CLINICIAN_UNAVAILABLE_STATUS}",
+        f"- Body: {CLINICIAN_UNAVAILABLE_BODY}",
+        "",
+        "Clinician report partial state:",
+        "",
+        f"- Status: {CLINICIAN_PARTIAL_STATUS}",
+        f"- Body: {CLINICIAN_PARTIAL_BODY}",
+        "",
         "## Review disposition index",
         "",
         "| Record | Medication / class | Nutrient | Relationship | Disposition | Consumer-visible |",
@@ -283,6 +317,22 @@ def build_packet(
                 "approval or claim professional licensure."
             )
         )
+        provenance_lines: list[str] = []
+        evidence_auditor = _clean(ledger_metadata.get("supporting_reviewer"))
+        if evidence_auditor:
+            provenance_lines.append(
+                "- Evidence auditor: "
+                f"`{evidence_auditor}` "
+                f"({_clean(ledger_metadata.get('supporting_reviewer_type'))})"
+            )
+        approver_organization = _clean(
+            ledger_metadata.get("licensed_clinical_approver_organization")
+        )
+        if approver_organization:
+            provenance_lines.append(
+                "- Licensed clinical approver organization: "
+                f"`{approver_organization}`"
+            )
         lines.extend(
             [
                 "## Sign-off",
@@ -297,6 +347,7 @@ def build_packet(
                     "- Release disposition: "
                     f"`{_clean(ledger_metadata.get('release_disposition'))}`"
                 ),
+                *provenance_lines,
                 (
                     "- Licensed pharmacist sign-off: "
                     f"{pharmacist_status}"

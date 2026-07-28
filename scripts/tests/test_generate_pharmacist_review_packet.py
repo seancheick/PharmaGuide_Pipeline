@@ -47,6 +47,11 @@ def test_signed_packet_includes_all_dispositions_without_claiming_licensure():
             "reviewed_at": "2026-07-27",
             "reviewer": "openai_codex_ai_clinical_audit",
             "reviewer_type": "AI clinical-content audit",
+            "supporting_reviewer": "openai_codex_ai_clinical_audit",
+            "supporting_reviewer_type": "AI clinical-content audit",
+            "licensed_clinical_approver_organization": (
+                "PharmaGuide Clinical Team"
+            ),
             "licensed_pharmacist_signoff": False,
             "release_disposition": "approved_for_controlled_beta",
         },
@@ -76,6 +81,14 @@ def test_signed_packet_includes_all_dispositions_without_claiming_licensure():
     assert "`remove_from_release`" in packet
     assert "Scope cannot be represented safely." in packet
     assert "Licensed pharmacist sign-off: **not represented by this packet**" in packet
+    assert (
+        "Evidence auditor: `openai_codex_ai_clinical_audit` "
+        "(AI clinical-content audit)"
+    ) in packet
+    assert (
+        "Licensed clinical approver organization: `PharmaGuide Clinical Team`"
+        in packet
+    )
 
 
 def test_signed_packet_records_licensed_pharmacist_approval():
@@ -264,3 +277,37 @@ def test_packet_does_not_present_goldens_as_clinical_evidence():
 
     assert "layout-regression artifacts, not clinical-review evidence" in packet
     assert "Do not base an approval on these screenshots." in packet
+
+
+def test_packet_reproduces_unavailable_and_partial_state_copy_as_text():
+    artifact = {
+        "_metadata": {
+            "schema_version": "5.4.0",
+            "content_version": "v",
+            "content_hash": "sha256:abc",
+        },
+        "depletions": [_row("APPROVED", "verified")],
+    }
+
+    packet = build_packet(
+        artifact,
+        ledger=None,
+        verified_screenshot="verified.png",
+        unavailable_screenshot="unavailable.png",
+    )
+
+    assert "Check unavailable" in packet
+    assert (
+        "We couldn't load the medication & nutrient checks right now. "
+        "This is not an all-clear — please try again later."
+    ) in packet
+    assert (
+        "Medication-nutrient analysis was unavailable when this report was "
+        "generated. This is not evidence that no interactions exist - the "
+        "check could not run."
+    ) in packet
+    assert "Partial - fallback artifact" in packet
+    assert (
+        "Partial medication-nutrient analysis: a fallback reference artifact "
+        "was used. Review these notes in that context."
+    ) in packet

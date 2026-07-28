@@ -10,6 +10,7 @@ from pathlib import Path
 DATA = Path(__file__).resolve().parent.parent / "data"
 SOURCE_PATH = DATA / "medication_depletions.json"
 LEDGER_PATH = DATA / "medication_depletions_b1_1_signoff.json"
+CLASSES_PATH = DATA / "drug_classes.json"
 
 CANDIDATE_IDS = {
     "DEP_ANTACIDS_VITAMINB12",
@@ -62,6 +63,19 @@ def _fingerprint(record: dict) -> str:
     return "sha256:" + hashlib.sha256(payload).hexdigest()
 
 
+def _class_fingerprint(drug_class: dict) -> str:
+    payload = json.dumps(
+        {
+            "member_rxcuis": drug_class.get("member_rxcuis", []),
+            "member_names": drug_class.get("member_names", []),
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return "sha256:" + hashlib.sha256(payload).hexdigest()
+
+
 def test_b1_1_delta_is_exactly_four_candidates_and_remains_fail_closed():
     ledger = _load(LEDGER_PATH)
     records = _records()
@@ -69,6 +83,11 @@ def test_b1_1_delta_is_exactly_four_candidates_and_remains_fail_closed():
     assert set(ledger["records"]) == CANDIDATE_IDS
     assert ledger["_metadata"]["candidate_count"] == 4
     assert ledger["_metadata"]["licensed_pharmacist_signoff"] is False
+    assert ledger["_metadata"]["supporting_reviewer"] == "b1_1_evidence_audit"
+    assert (
+        ledger["_metadata"]["licensed_clinical_approver_organization"]
+        == "PharmaGuide Clinical Team"
+    )
     assert (
         ledger["_metadata"]["release_disposition"]
         == "pending_licensed_pharmacist_delta_review"
@@ -98,6 +117,25 @@ def test_b1_1_candidates_use_narrow_runtime_scopes():
             "id": "class:loop_and_thiazide_diuretics",
             "display_name": "Loop and thiazide diuretics (water pills)",
         }
+
+
+def test_b1_1_ledger_pins_candidate_class_membership_and_ethacrynic_acid():
+    ledger = _load(LEDGER_PATH)
+    classes = _load(CLASSES_PATH)["classes"]
+    expected_class_ids = {
+        "class:proton_pump_inhibitors",
+        "class:loop_and_thiazide_diuretics",
+    }
+
+    assert set(ledger["candidate_class_fingerprints"]) == expected_class_ids
+    for class_id in expected_class_ids:
+        assert ledger["candidate_class_fingerprints"][class_id] == (
+            _class_fingerprint(classes[class_id])
+        )
+
+    combined = classes["class:loop_and_thiazide_diuretics"]
+    pairs = set(zip(combined["member_names"], combined["member_rxcuis"]))
+    assert ("ethacrynic acid", "4109") in pairs
 
 
 def test_b1_1_candidates_remove_blanket_supplement_doses_and_coverage_thresholds():

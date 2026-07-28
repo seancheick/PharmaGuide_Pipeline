@@ -4,7 +4,7 @@ Status: **evidence revision complete; licensed pharmacist sign-off requested**
 
 Scope: **4 suppressed B1.1 candidates; none are consumer-visible until separately approved. They are separate from the reopened B1 active-copy delta.**
 
-Artifact: schema `5.4.0`, content version `2026.07.27-b1-clinical-delta.1`, content hash `sha256:dfea094d0a13a390447810d4fa6a7967ddbee4b0f24083ef46cac842ad404f2d`.
+Artifact: schema `5.4.0`, content version `2026.07.27-b1-closure.1`, content hash `sha256:c3f95f1d5ea4cbf05a6d26e81f3623e3834dd577d3b70c9f1bbc551a8dd89dee`.
 
 ## Review focus
 
@@ -27,6 +27,23 @@ Verified records (layout only):
 Unavailable analysis, explicitly not an all-clear (layout only):
 
 ![Unavailable medication-nutrient layout](../../../../../PharmaGuide%20ai/test/release_gate/goldens/med_nutrient_unavailable.png)
+
+### Exact unavailable and partial-state copy
+
+App unavailable card:
+
+- Title: Check unavailable
+- Body: We couldn't load the medication & nutrient checks right now. This is not an all-clear — please try again later.
+
+Clinician report unavailable state:
+
+- Status: Unavailable
+- Body: Medication-nutrient analysis was unavailable when this report was generated. This is not evidence that no interactions exist - the check could not run.
+
+Clinician report partial state:
+
+- Status: Partial - fallback artifact
+- Body: Partial medication-nutrient analysis: a fallback reference artifact was used. Review these notes in that context.
 
 ## Review disposition index
 
@@ -140,5 +157,7 @@ Reviewer comment (Approved / Approved with wording change / Requires evidence re
 - Reviewer: `` (Licensed pharmacist clinical review requested)
 - Review date: `2026-07-27`
 - Release disposition: `pending_licensed_pharmacist_delta_review`
+- Evidence auditor: `b1_1_evidence_audit` (AI clinical-content audit)
+- Licensed clinical approver organization: `PharmaGuide Clinical Team`
 - Licensed pharmacist sign-off: **not represented by this packet**
 - Scope statement: This packet requests licensed-pharmacist review of the documented evidence audit; it does not record release approval or claim professional licensure.

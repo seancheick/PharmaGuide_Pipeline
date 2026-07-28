@@ -2,9 +2,9 @@
 
 Status: **primary-source corrections complete; licensed pharmacist delta sign-off requested**
 
-Scope: **10 corrected active records only. The other 21 active records and 2 non-active B1 dispositions are unchanged. The 4 B1.1 candidates remain separately suppressed.**
+Scope: **11 corrected active records only. The other 20 active records and 2 non-active B1 dispositions retain exact-current approval. The 4 B1.1 candidates remain separately suppressed.**
 
-Artifact: schema `5.4.0`, content version `2026.07.27-b1-clinical-delta.1`, content hash `sha256:dfea094d0a13a390447810d4fa6a7967ddbee4b0f24083ef46cac842ad404f2d`.
+Artifact: schema `5.4.0`, content version `2026.07.27-b1-closure.1`, content hash `sha256:c3f95f1d5ea4cbf05a6d26e81f3623e3834dd577d3b70c9f1bbc551a8dd89dee`.
 
 ## Review focus
 
@@ -28,6 +28,23 @@ Unavailable analysis, explicitly not an all-clear (layout only):
 
 ![Unavailable medication-nutrient layout](../../../../../PharmaGuide%20ai/test/release_gate/goldens/med_nutrient_unavailable.png)
 
+### Exact unavailable and partial-state copy
+
+App unavailable card:
+
+- Title: Check unavailable
+- Body: We couldn't load the medication & nutrient checks right now. This is not an all-clear — please try again later.
+
+Clinician report unavailable state:
+
+- Status: Unavailable
+- Body: Medication-nutrient analysis was unavailable when this report was generated. This is not evidence that no interactions exist - the check could not run.
+
+Clinician report partial state:
+
+- Status: Partial - fallback artifact
+- Body: Partial medication-nutrient analysis: a fallback reference artifact was used. Review these notes in that context.
+
 ## Review disposition index
 
 | Record | Medication / class | Nutrient | Relationship | Disposition | Consumer-visible |
@@ -37,6 +54,7 @@ Unavailable analysis, explicitly not an all-clear (layout only):
 | `DEP_CHOLESTYRAMINE_VITAMIND` | Cholestyramine (bile-acid sequestrant) (`2447`) | Vitamin D | `depletion` | `pending_licensed_pharmacist_review` | yes |
 | `DEP_CHOLESTYRAMINE_VITAMINE` | Cholestyramine (bile-acid sequestrant) (`2447`) | Vitamin E | `depletion` | `pending_licensed_pharmacist_review` | yes |
 | `DEP_CHOLESTYRAMINE_VITAMINK` | Cholestyramine (bile-acid sequestrant) (`2447`) | Vitamin K | `depletion` | `pending_licensed_pharmacist_review` | yes |
+| `DEP_DIURETICS_THIAMINE` | Furosemide (Lasix) (`4603`) | Thiamin | `depletion` | `pending_licensed_pharmacist_review` | yes |
 | `DEP_LEVOTHYROXINE_CALCIUM` | Levothyroxine (thyroid hormone replacement) (`10582`) | Calcium | `supplement_interaction` | `pending_licensed_pharmacist_review` | yes |
 | `DEP_LEVOTHYROXINE_IRON` | Levothyroxine (thyroid hormone replacement) (`10582`) | Iron | `supplement_interaction` | `pending_licensed_pharmacist_review` | yes |
 | `DEP_ORLISTAT_VITAMINA` | Orlistat (fat-blocking weight-loss medication) (`37925`) | Vitamin A | `depletion` | `pending_licensed_pharmacist_review` | yes |
@@ -165,7 +183,31 @@ Consumer-visible after review: **yes**
 
 Reviewer comment (Approved / Approved with wording change / Requires evidence revision / Remove from release, plus any required change): _______________________________________
 
-### 6. `DEP_LEVOTHYROXINE_CALCIUM`
+### 6. `DEP_DIURETICS_THIAMINE`
+
+- Medication / class: Furosemide (Lasix) (`drug:4603`)
+- Nutrient: Thiamin (`thiamin`)
+- Relationship: `depletion`; severity `significant`; onset `months`
+
+Consumer-visible card copy (every line below is shown to the user — approval covers all of it):
+
+- Headline (`alert_headline`): Furosemide may lower thiamine over time
+- Body (`alert_body`): Furosemide increases urinary thiamine loss. Clinical relevance is greatest with long-term higher doses and other deficiency risks.
+- Monitoring tip (`monitoring_tip_short`): With long-term higher-dose furosemide, ask your treating clinician whether thiamine assessment fits your care.
+- What can happen (`clinical_impact`): Lower thiamine status is most plausible with chronic, higher-dose furosemide and additional risks such as heart failure or poor intake. The evidence does not establish deficiency in every person taking furosemide.
+- From food (`food_sources_short`): Food sources of thiamine include pork, fish, whole grains, fortified cereals, beans, lentils, and seeds.
+- Why (`mechanism`): Furosemide increases urinary thiamine loss largely by increasing urine flow. Studies in heart failure also report low thiamine status, although illness severity and dietary intake can contribute.
+- Clinical guidance (`recommendation`): With chronic higher-dose furosemide, poor intake, or symptoms compatible with deficiency, ask the treating clinician whether thiamine assessment or supplementation is appropriate. Do not change the diuretic on your own.
+
+- Evidence: [Seligmann H et al. Thiamine deficiency in patients with congestive heart failure receiving long-term furosemide therapy: a pilot study. Am J Med. 1991](https://pubmed.ncbi.nlm.nih.gov/1867241/); [Zenuk C et al. Thiamine deficiency in congestive heart failure patients receiving long term furosemide therapy. Can J Clin Pharmacol. 2003](https://pubmed.ncbi.nlm.nih.gov/14712323/); [Hanninen SA et al. The prevalence of thiamin deficiency in hospitalized patients with congestive heart failure. J Am Coll Cardiol. 2006](https://pubmed.ncbi.nlm.nih.gov/16412860/); [Rieck J et al. Urinary loss of thiamine is increased by low doses of furosemide in healthy volunteers. J Lab Clin Med. 1999](https://pubmed.ncbi.nlm.nih.gov/10482308/)
+
+Reviewer disposition: **`pending_licensed_pharmacist_review`**
+Review note: Confirm the treating-clinician assessment wording, with no presumed cardiology relationship or routine supplement nudge.
+Consumer-visible after review: **yes**
+
+Reviewer comment (Approved / Approved with wording change / Requires evidence revision / Remove from release, plus any required change): _______________________________________
+
+### 7. `DEP_LEVOTHYROXINE_CALCIUM`
 
 - Medication / class: Levothyroxine (thyroid hormone replacement) (`drug:10582`)
 - Nutrient: Calcium (`calcium`)
@@ -189,7 +231,7 @@ Consumer-visible after review: **yes**
 
 Reviewer comment (Approved / Approved with wording change / Requires evidence revision / Remove from release, plus any required change): _______________________________________
 
-### 7. `DEP_LEVOTHYROXINE_IRON`
+### 8. `DEP_LEVOTHYROXINE_IRON`
 
 - Medication / class: Levothyroxine (thyroid hormone replacement) (`drug:10582`)
 - Nutrient: Iron (`iron`)
@@ -213,7 +255,7 @@ Consumer-visible after review: **yes**
 
 Reviewer comment (Approved / Approved with wording change / Requires evidence revision / Remove from release, plus any required change): _______________________________________
 
-### 8. `DEP_ORLISTAT_VITAMINA`
+### 9. `DEP_ORLISTAT_VITAMINA`
 
 - Medication / class: Orlistat (fat-blocking weight-loss medication) (`drug:37925`)
 - Nutrient: Vitamin A (`vitamin_a`)
@@ -237,7 +279,7 @@ Consumer-visible after review: **yes**
 
 Reviewer comment (Approved / Approved with wording change / Requires evidence revision / Remove from release, plus any required change): _______________________________________
 
-### 9. `DEP_SSRIS_SODIUM`
+### 10. `DEP_SSRIS_SODIUM`
 
 - Medication / class: SSRIs (antidepressants) (`class:ssris`)
 - Nutrient: Sodium (`sodium`)
@@ -261,7 +303,7 @@ Consumer-visible after review: **yes**
 
 Reviewer comment (Approved / Approved with wording change / Requires evidence revision / Remove from release, plus any required change): _______________________________________
 
-### 10. `DEP_ANTICOAGULANTS_VITAMINK`
+### 11. `DEP_ANTICOAGULANTS_VITAMINK`
 
 - Medication / class: Warfarin (anticoagulant / blood thinner) (`drug:11289`)
 - Nutrient: Vitamin K (`vitamin_k`)
@@ -290,5 +332,7 @@ Reviewer comment (Approved / Approved with wording change / Requires evidence re
 - Reviewer: `` (Licensed pharmacist clinical delta review requested)
 - Review date: `2026-07-27`
 - Release disposition: `pending_licensed_pharmacist_delta_review`
+- Evidence auditor: `b1_clinical_copy_delta_evidence_audit` (AI clinical-content audit)
+- Licensed clinical approver organization: `PharmaGuide Clinical Team`
 - Licensed pharmacist sign-off: **not represented by this packet**
 - Scope statement: This packet requests licensed-pharmacist review of the documented evidence audit; it does not record release approval or claim professional licensure.
