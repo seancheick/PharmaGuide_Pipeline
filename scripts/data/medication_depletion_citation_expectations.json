@@ -4,7 +4,7 @@
     "last_updated": "2026-07-27",
     "description": "Reviewed PubMed content expectations for medication-depletion claims.",
     "purpose": "Reviewed PubMed content expectations for medication-depletion claims",
-    "total_entries": 10
+    "total_entries": 13
   },
   "expectations": [
     {
@@ -193,6 +193,66 @@
         ]
       },
       "reviewer_disposition": "candidate_for_pharmacist_review"
+    },
+    {
+      "entry_id": "DEP_LEVOTHYROXINE_IRON",
+      "pmid": "1443969",
+      "expected": {
+        "drug_terms_any": [
+          "thyroxine",
+          "levothyroxine"
+        ],
+        "nutrient_terms_any": [
+          "ferrous sulfate",
+          "iron"
+        ],
+        "required_terms_all": [
+          "Uncontrolled clinical trial"
+        ],
+        "context_terms_any": [
+          "Fourteen patients",
+          "14 patients",
+          "12 weeks"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_LEVOTHYROXINE_CALCIUM",
+      "pmid": "11716045",
+      "expected": {
+        "drug_terms_any": [
+          "thyroxine",
+          "levothyroxine"
+        ],
+        "nutrient_terms_any": [
+          "calcium",
+          "calcium carbonate"
+        ],
+        "context_terms_any": [
+          "seven volunteers without thyroid disease"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_ANTACIDS_IRON",
+      "pmid": "27890768",
+      "expected": {
+        "drug_terms_any": [
+          "proton pump inhibitor",
+          "histamine-2 receptor antagonist",
+          "acid-suppressing medication"
+        ],
+        "nutrient_terms_any": [
+          "iron deficiency",
+          "iron"
+        ],
+        "context_terms_any": [
+          "decreased after medication discontinuation"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
     }
   ]
 }

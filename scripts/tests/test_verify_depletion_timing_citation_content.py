@@ -128,3 +128,30 @@ def test_reviewed_contract_matches_live_section3_data_after_authoring():
     entries = json.loads((root / "data" / "medication_depletions.json").read_text())["depletions"]
     errors = gate.validate_contract(contract["expectations"], entries)
     assert errors == []
+
+
+def test_b1_delta_contract_locks_study_design_and_context():
+    root = Path(__file__).resolve().parents[1]
+    contract = json.loads(
+        (
+            root / "data" / "medication_depletion_citation_expectations.json"
+        ).read_text()
+    )
+    by_key = {
+        (item["entry_id"], item["pmid"]): item
+        for item in contract["expectations"]
+    }
+
+    campbell = by_key[("DEP_LEVOTHYROXINE_IRON", "1443969")]["expected"]
+    assert "Uncontrolled clinical trial" in campbell["required_terms_all"]
+    assert "14 patients" in campbell["context_terms_any"]
+
+    calcium = by_key[("DEP_LEVOTHYROXINE_CALCIUM", "11716045")]["expected"]
+    assert "seven volunteers without thyroid disease" in calcium[
+        "context_terms_any"
+    ]
+
+    acid_suppression = by_key[("DEP_ANTACIDS_IRON", "27890768")]["expected"]
+    assert "decreased after medication discontinuation" in acid_suppression[
+        "context_terms_any"
+    ]

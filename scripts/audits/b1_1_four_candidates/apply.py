@@ -214,7 +214,7 @@ def _apply_candidates(by_id: dict[str, dict[str, Any]]) -> None:
                 "periodic magnesium testing is appropriate. Management of a "
                 "low result should be clinician-directed."
             ),
-            "onset_timeline": "months",
+            "onset_timeline": "variable",
             "evidence_level": "established",
             "monitoring_note": (
                 "FDA labeling advises considering magnesium before and "
@@ -242,8 +242,8 @@ def _apply_candidates(by_id: dict[str, dict[str, Any]]) -> None:
             ],
             "alert_headline": "Rarely, long-term PPIs may lower magnesium",
             "alert_body": (
-                "With prolonged use, PPIs can rarely lower magnesium; reports "
-                "occurred after at least three months and most after a year."
+                "With prolonged use, PPIs can rarely lower magnesium. Most "
+                "reports follow a year or more of use, but cases have occurred earlier."
             ),
             "acknowledgement_note": (
                 "You're already tracking magnesium intake; laboratory results "
@@ -262,10 +262,11 @@ def _apply_candidates(by_id: dict[str, dict[str, Any]]) -> None:
             "reviewer": REVIEWER,
             "citation_review_note": (
                 "B1.1 evidence revision completed. The live FDA label and PMID "
-                "22762246 support a rare, prolonged PPI class effect and "
-                "risk-based monitoring. The dead FDA URL and blanket "
-                "200–400 mg/day supplement advice were removed. The record "
-                "remains suppressed pending licensed pharmacist delta review."
+                "22762246 support a rare PPI class effect with a broad reported "
+                "onset range, so the proposal now uses variable onset and "
+                "acknowledges earlier cases. The dead FDA URL and blanket "
+                "200–400 mg/day advice remain removed. The record remains "
+                "suppressed pending licensed pharmacist delta review."
             ),
         }
     )
@@ -330,8 +331,8 @@ def _apply_candidates(by_id: dict[str, dict[str, Any]]) -> None:
                 "laboratory monitoring guides management."
             ),
             "acknowledgement_note": (
-                "Your potassium plan is already part of medication monitoring; "
-                "keep it aligned with prescribed doses and lab results."
+                "Confirm any potassium product\u2014including over-the-counter\u2014"
+                "with your prescriber; the right amount depends on your labs."
             ),
             "monitoring_tip_short": (
                 "Ask how often potassium should be checked based on the "
@@ -471,7 +472,7 @@ def _update_metadata(source: dict[str, Any]) -> None:
     if migration not in completed:
         completed.append(migration)
     metadata["onset_timeline_values"] = (
-        "weeks, months, years, or variable when source labeling does not "
+        "days, weeks, months, years, or variable when source labeling does not "
         "support a single fixed onset."
     )
 
@@ -540,8 +541,8 @@ def _build_ledger(by_id: dict[str, dict[str, Any]]) -> dict[str, Any]:
             "symptom/risk-based testing language."
         ),
         "DEP_ANTACIDS_MAGNESIUM": (
-            "Confirm the rare but potentially clinically important prolonged-"
-            "use signal and risk-based monitoring language."
+            "Confirm the rare but potentially clinically important signal, "
+            "variable onset, and risk-based monitoring language."
         ),
         "DEP_DIURETICS_POTASSIUM": (
             "Confirm the loop/thiazide-only scope, variable timing, and the "
@@ -575,8 +576,8 @@ def _build_ledger(by_id: dict[str, dict[str, Any]]) -> dict[str, Any]:
             ),
             "packet_scope": (
                 "4 suppressed B1.1 candidates; none are consumer-visible "
-                "until separately approved. The existing 31-record B1 beta "
-                "corpus is unchanged."
+                "until separately approved. They are separate from the "
+                "reopened B1 active-copy delta."
             ),
         },
         "records": {
