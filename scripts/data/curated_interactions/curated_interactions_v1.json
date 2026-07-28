@@ -1860,34 +1860,34 @@
     {
       "id": "DSI_ANTICONV_FOLATE",
       "type": "Med-Sup",
-      "agent1_name": "Anticonvulsants (class)",
-      "agent1_id": "class:anticonvulsants",
+      "agent1_name": "Phenytoin",
+      "agent1_id": "8183",
       "agent2_name": "Folate / Folic Acid",
       "agent2_id": "C0016410",
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Anticonvulsants (especially phenytoin, phenobarbital, valproate) deplete folate. However, high-dose folate supplementation may reciprocally reduce serum levels of phenytoin and other AEDs, potentially decreasing seizure control.",
-      "management": "Folate supplementation is recommended for women of childbearing age on AEDs to prevent neural tube defects. However, high-dose folate (>1 mg/day) requires seizure monitoring. Work with your neurologist.",
+      "mechanism": "Long-term phenytoin therapy can lower folate status. Folate supplementation can lower serum phenytoin concentrations in some people, potentially affecting seizure control.",
+      "management": "If you take phenytoin, discuss folate intake and any supplement dose with the prescribing clinician. Do not start high-dose folic acid on your own; phenytoin levels or seizure control may need monitoring.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/9073038/"
+        "https://pubmed.ncbi.nlm.nih.gov/6370643/"
       ],
       "source_pmids": [
-        "9073038"
+        "6370643"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-07-28T00:00:00Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_content_verify_2026_07_28"
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
+      "applies_to": "presence",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "vitamin_b9_folate",
       "direction": "harmful",
