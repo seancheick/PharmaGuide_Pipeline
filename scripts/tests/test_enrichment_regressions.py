@@ -4264,7 +4264,6 @@ class TestCerevisiaeYeastFormInjection:
         ("Vitamin B2", "yeast"),
         ("Vitamin B7", "yeast"),          # biotin alias
         ("Vitamin B9", "yeast"),
-        ("Vitamin K", "yeast"),           # → vitamin K2 from yeast (BUG-11 gap fix)
         ("Vitamin K2", "yeast"),
     ])
     def test_cerevisiae_culture_routes_to_yeast_form(
@@ -4286,6 +4285,26 @@ class TestCerevisiaeYeastFormInjection:
             f"'{ing_name}' with cerevisiae culture → form_id={form_id!r}, "
             f"expected it to contain {expected_form_id_fragment!r}"
         )
+
+    def test_generic_vitamin_k_yeast_source_does_not_infer_k2(self, enricher):
+        """A yeast source alone does not identify an unspecified K row as K2."""
+        import json, os
+        iqm_path = os.path.join(
+            os.path.dirname(__file__), '..', 'data', 'ingredient_quality_map.json'
+        )
+        quality_map = json.load(open(iqm_path))
+        result = enricher._match_quality_map(
+            "Vitamin K",
+            "Vitamin K",
+            quality_map,
+            cleaned_forms=[
+                {"name": "S. cerevisiae culture", "prefix": "from", "order": 1}
+            ],
+        )
+
+        assert result is not None
+        assert result.get("canonical_id") == "vitamin_k"
+        assert "yeast" not in (result.get("form_id") or "").lower()
 
     @pytest.mark.parametrize("ing_name", [
         "Vitamin B6",    # no specific yeast form → should still match (unspecified ok)
