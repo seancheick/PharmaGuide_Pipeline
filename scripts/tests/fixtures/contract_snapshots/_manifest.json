@@ -1,7 +1,7 @@
 {
   "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
   "schema_version": "2.0.0",
-  "frozen_on": "2026-07-20",
+  "frozen_on": "2026-07-29",
   "fixture_schema": {
     "frozen_fields": [
       "dsld_id",
@@ -465,6 +465,22 @@
         "Label identity ledger and scoring-contract deduplication"
       ],
       "notes": "Re-froze Nutricost PRE Pre-Workout Complex after fixing the safety gate's treatment of activeIngredients, display_ingredients, and ingredient_quality_data as additive dose sources. They are mirror contracts for the same label row. The disclosed Caffeine Anhydrous 300 mg row was previously summed two or three times, creating false HIGH_DOSE and UNDISCLOSED_PREWORKOUT flags and an unsupported CAUTION verdict. It now emits one STIMULANT_CAFFEINE_MODERATE_DOSE signal and follows the existing disclosed-caffeine policy (SAFE global verdict). Score remains 69.5. A score-only propagation across all 28 fresh enriched brand outputs completed successfully; no other frozen contract product drifted."
+    },
+    {
+      "date": "2026-07-29",
+      "action": "refrozen_adequacy_ul_separation",
+      "products": [
+        182730,
+        288344,
+        278454,
+        241353,
+        274498
+      ],
+      "sprints_covered": [
+        "Canonical nutrient identity propagation",
+        "Adequacy and upper-limit assessment separation"
+      ],
+      "notes": "Re-froze the complete five-product drift set after a successful fresh 28-brand run. The reviewed enrichment correction now preserves a valid label-based adequacy percentage when the declared unit supports the RDA/AI comparison, while continuing to withhold the UL result when chemical-form lineage is insufficient. This affects Vitamin A reported in mcg RAE, Vitamin E reported in mg, and folate reported in mcg DFE. Unknown Vitamin A/E form and unknown folate lineage still emit indeterminate UL status, pct_ul=null, over_ul=false, and the existing review reason; no safety warning was relaxed. Only the v4 dose pillar changed: 182730 78.8->79.6, 288344 69.1->69.9, 278454 76.8->76.9, 241353 50.8->51.9, and 274498 49.9->50.5. All five retain SAFE verdicts and unchanged non-dose pillars. This is the intended downstream scoring effect of fixing the false 'no reliable intake target' state, not an unreviewed scoring calibration change."
     }
   ]
 }
