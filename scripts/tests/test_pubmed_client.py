@@ -160,3 +160,44 @@ def test_pubmed_client_retries_http_429(monkeypatch, tmp_path):
 
     assert result["esearchresult"]["idlist"] == ["12345"]
     assert calls["count"] == 2
+
+
+def test_pubmed_client_retries_http_200_ncbi_error_payload_without_caching_it(
+    monkeypatch,
+    tmp_path,
+):
+    import api_audit.pubmed_client as pubmed_client
+    from api_audit.pubmed_client import PubMedClient
+
+    calls = {"count": 0}
+    ncbi_error = """\
+<PubmedArticleSet>{
+  "type": "error",
+  "description": "PubOne response processing error: Request to PubOne failed."
+}</PubmedArticleSet>
+"""
+
+    class FakeResponse:
+        status_code = 200
+        headers = {"content-type": "text/xml"}
+
+        def __init__(self, text):
+            self.text = text
+
+        def raise_for_status(self):
+            return None
+
+    def fake_request(method, url, params, timeout):
+        calls["count"] += 1
+        return FakeResponse(ncbi_error if calls["count"] == 1 else SAMPLE_PUBMED_XML)
+
+    monkeypatch.setattr(pubmed_client.requests, "request", fake_request, raising=False)
+    monkeypatch.setattr(pubmed_client.time, "sleep", lambda _: None)
+
+    cache_path = tmp_path / "pubmed_cache.json"
+    client = PubMedClient(rate_limit_delay=0.0, cache_path=cache_path)
+    result = client.efetch(["36849732"])
+
+    assert "36849732" in result
+    assert "PubOne response processing error" not in cache_path.read_text()
+    assert calls["count"] == 2

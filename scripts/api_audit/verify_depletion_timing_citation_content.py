@@ -72,22 +72,36 @@ def classify_article(article: dict[str, Any] | None, expectation: dict[str, Any]
     claim.  A missing abstract is therefore explicitly ``abstract_unavailable``
     and keeps the release gate red rather than silently accepting title overlap.
     """
-    if not article or not str(article.get("abstract") or "").strip():
+    if not article:
+        return {
+            "status": "abstract_unavailable",
+            "reason": "PubMed record is unavailable",
+        }
+
+    expected = expectation.get("expected") or {}
+    abstract = str(article.get("abstract") or "").strip()
+    no_abstract_evidence = expectation.get("no_abstract_evidence")
+    if not abstract and not no_abstract_evidence:
         return {
             "status": "abstract_unavailable",
             "reason": "PubMed record has no usable abstract",
         }
-
-    expected = expectation.get("expected") or {}
     text = normalize_text(
-        f"{article.get('title') or ''} {article.get('abstract') or ''} "
+        f"{article.get('title') or ''} {abstract} "
         f"{' '.join(article.get('mesh_terms') or [])}"
     )
     missing: list[str] = []
     if not _matches_any(text, list(expected.get("drug_terms_any") or [])):
         missing.append("drug_terms_any")
-    if not _matches_any(text, list(expected.get("nutrient_terms_any") or [])):
-        missing.append("nutrient_terms_any")
+    support_term_groups = (
+        "nutrient_terms_any",
+        "outcome_terms_any",
+        "mechanism_terms_any",
+    )
+    for group in support_term_groups:
+        terms = list(expected.get(group) or [])
+        if terms and not _matches_any(text, terms):
+            missing.append(group)
     if not _matches_all(text, list(expected.get("required_terms_all") or [])):
         missing.append("required_terms_all")
     context_terms = list(expected.get("context_terms_any") or [])
@@ -99,7 +113,10 @@ def classify_article(article: dict[str, Any] | None, expectation: dict[str, Any]
 
     if missing:
         return {"status": "content_mismatch", "reason": "; ".join(missing)}
-    return {"status": "content_match", "reason": "all reviewed concepts matched"}
+    reason = "all reviewed concepts matched"
+    if not abstract:
+        reason += " using explicit no-abstract evidence"
+    return {"status": "content_match", "reason": reason}
 
 
 def _pmids_for_entry(entry: dict[str, Any]) -> set[str]:
@@ -130,8 +147,42 @@ def validate_contract(
                 f"{entry_id}/{pmid}: reviewer_disposition must be one of "
                 f"{sorted(REVIEWER_DISPOSITIONS)}"
             )
-        if not expected.get("drug_terms_any") or not expected.get("nutrient_terms_any"):
-            errors.append(f"{entry_id}/{pmid}: medication and nutrient expectations are required")
+        if not expected.get("drug_terms_any"):
+            errors.append(f"{entry_id}/{pmid}: medication expectation is required")
+        if not any(
+            expected.get(group)
+            for group in (
+                "nutrient_terms_any",
+                "outcome_terms_any",
+                "mechanism_terms_any",
+            )
+        ):
+            errors.append(
+                f"{entry_id}/{pmid}: nutrient, outcome, or mechanism expectation is required"
+            )
+        no_abstract_evidence = item.get("no_abstract_evidence")
+        if no_abstract_evidence is not None:
+            if not isinstance(no_abstract_evidence, dict):
+                errors.append(f"{entry_id}/{pmid}: no_abstract_evidence must be an object")
+            else:
+                rationale = str(no_abstract_evidence.get("rationale") or "").strip()
+                backstop_urls = no_abstract_evidence.get("backstop_urls")
+                if not rationale:
+                    errors.append(
+                        f"{entry_id}/{pmid}: no_abstract_evidence.rationale is required"
+                    )
+                if (
+                    not isinstance(backstop_urls, list)
+                    or not backstop_urls
+                    or any(
+                        not isinstance(url, str) or not url.startswith("https://")
+                        for url in backstop_urls
+                    )
+                ):
+                    errors.append(
+                        f"{entry_id}/{pmid}: "
+                        "no_abstract_evidence.backstop_urls requires HTTPS evidence"
+                    )
         entry = by_id.get(entry_id)
         if not entry:
             errors.append(f"{entry_id}/{pmid}: referenced entry is absent")
@@ -163,6 +214,7 @@ def audit_expectations(
     results: list[dict[str, Any]] = []
     for expectation in expectations:
         pmid = str(expectation["pmid"])
+        article: dict[str, Any] | None = None
         try:
             article = fetch_article(pmid)
             outcome = classify_article(article, expectation)
@@ -171,7 +223,7 @@ def audit_expectations(
         results.append({
             "entry_id": expectation["entry_id"],
             "pmid": pmid,
-            "title": (article or {}).get("title", "") if "article" in locals() else "",
+            "title": (article or {}).get("title", ""),
             **outcome,
         })
     return results
@@ -226,7 +278,18 @@ def run(argv: list[str] | None = None) -> int:
             print("No contract expectations match --entry-id.", file=sys.stderr)
             return 1
     entries = json.loads(args.depletions.read_text(encoding="utf-8")).get("depletions") or []
-    contract_errors = validate_contract(expectations, entries, require_coverage=args.require_coverage)
+    validation_entries = entries
+    if args.entry_ids:
+        validation_entries = [
+            entry
+            for entry in entries
+            if entry.get("id") in selected
+        ]
+    contract_errors = validate_contract(
+        expectations,
+        validation_entries,
+        require_coverage=args.require_coverage,
+    )
     if contract_errors:
         print("CONTRACT ERRORS:", file=sys.stderr)
         for error in contract_errors:

@@ -83,12 +83,88 @@ def test_no_abstract_is_not_a_title_only_pass():
     assert result["status"] == "abstract_unavailable"
 
 
+def test_no_abstract_requires_an_explicit_reviewed_exception_and_backstop():
+    expectation = {
+        **_expectation(),
+        "no_abstract_evidence": {
+            "rationale": "PubMed exposes no abstract; title and MeSH are exact.",
+            "backstop_urls": ["https://dailymed.nlm.nih.gov/example"],
+        },
+    }
+    article = {
+        "title": "Valproic acid and carnitine",
+        "abstract": "",
+        "mesh_terms": ["Valproic Acid", "Carnitine"],
+    }
+
+    assert gate.classify_article(article, expectation) == {
+        "status": "content_match",
+        "reason": "all reviewed concepts matched using explicit no-abstract evidence",
+    }
+
+    expectation["no_abstract_evidence"]["backstop_urls"] = []
+    errors = gate.validate_contract(
+        [expectation],
+        [{
+            "id": "DEP_TEST",
+            "citation_review_status": "verified",
+            "sources": [{"url": "https://pubmed.ncbi.nlm.nih.gov/111/"}],
+        }],
+    )
+    assert any("no_abstract_evidence.backstop_urls" in error for error in errors)
+
+
+def test_outcome_source_can_support_a_claim_without_relabeling_it_as_a_nutrient_source():
+    expectation = {
+        "entry_id": "DEP_TEST",
+        "pmid": "111",
+        "expected": {
+            "drug_terms_any": ["proton pump inhibitors", "PPI"],
+            "outcome_terms_any": ["hip fracture"],
+            "context_terms_any": ["observational studies", "meta-analysis"],
+        },
+        "reviewer_disposition": "verified_for_claim",
+    }
+    article = _article(
+        "Proton pump inhibitors and risk of hip fracture",
+        "This meta-analysis of observational studies found an association with hip fracture.",
+    )
+
+    assert gate.classify_article(article, expectation)["status"] == "content_match"
+    assert gate.validate_contract(
+        [expectation],
+        [{
+            "id": "DEP_TEST",
+            "citation_review_status": "verified",
+            "sources": [{"url": "https://pubmed.ncbi.nlm.nih.gov/111/"}],
+        }],
+    ) == []
+
+
 def test_transient_fetch_failure_is_distinct_and_fail_closed():
     result = gate.audit_expectations(
         [_expectation()], lambda _pmid: (_ for _ in ()).throw(RuntimeError("429"))
     )
     assert result[0]["status"] == "transient_api_failure"
     assert gate.decide_exit([], result) == 2
+
+
+def test_transient_fetch_does_not_reuse_the_previous_articles_title():
+    expectations = [
+        _expectation(),
+        {**_expectation(), "pmid": "222"},
+    ]
+
+    def fetch(pmid):
+        if pmid == "111":
+            return _article("Valproate and carnitine", "Valproate can affect carnitine.")
+        raise RuntimeError("429")
+
+    results = gate.audit_expectations(expectations, fetch)
+
+    assert results[0]["title"] == "Valproate and carnitine"
+    assert results[1]["title"] == ""
+    assert results[1]["status"] == "transient_api_failure"
 
 
 def test_mismatch_and_abstract_unavailable_fail_the_gate():
@@ -122,11 +198,15 @@ def test_candidate_contract_requires_suppressed_entry_until_pharmacist_review():
     assert any("not citation_review_status=needs_revision" in error for error in errors)
 
 
-def test_reviewed_contract_matches_live_section3_data_after_authoring():
+def test_reviewed_contract_covers_every_verified_pubmed_source():
     root = Path(__file__).resolve().parents[1]
     contract = json.loads((root / "data" / "medication_depletion_citation_expectations.json").read_text())
     entries = json.loads((root / "data" / "medication_depletions.json").read_text())["depletions"]
-    errors = gate.validate_contract(contract["expectations"], entries)
+    errors = gate.validate_contract(
+        contract["expectations"],
+        entries,
+        require_coverage=True,
+    )
     assert errors == []
 
 

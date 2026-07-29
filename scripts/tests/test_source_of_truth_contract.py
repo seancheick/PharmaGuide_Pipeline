@@ -1160,3 +1160,38 @@ def test_stamp_manifest_accepts_working_build_checksum_field(tmp_path):
     assert manifest["checksum_sha256"] == sha256(db_path)
     assert manifest["pipeline_contract_version"] == "cleaner_first_source_of_truth_v1"
     assert manifest["strict_gate_summary"]["strict_mode"] is True
+
+
+def test_stamp_manifest_refreshes_interaction_provenance_before_export_audit(tmp_path):
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    db_path = dist / "pharmaguide_core.db"
+    _minimal_catalog_db(db_path)
+    write_json(
+        dist / "export_manifest.json",
+        {
+            "schema_version": "1.0.0",
+            "product_count": 1,
+            "checksum_sha256": sha256(db_path),
+            "interaction_db_checksum": "old-checksum",
+            "interaction_db_version": "1.0.9",
+        },
+    )
+    write_json(
+        dist / "interaction_db_manifest.json",
+        {
+            "checksum_sha256": "new-checksum",
+            "interaction_db_version": "1.0.10",
+        },
+    )
+    args = argparse.Namespace(
+        dist_dir=str(dist),
+        matrix=str(MATRIX_PATH),
+        strict_release=True,
+        require_stamped_manifest=False,
+    )
+
+    assert audit.stamp_manifest(args) == []
+    manifest = json.loads((dist / "export_manifest.json").read_text())
+    assert manifest["interaction_db_checksum"] == "new-checksum"
+    assert manifest["interaction_db_version"] == "1.0.10"

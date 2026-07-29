@@ -155,6 +155,27 @@ def parse_ecitmatch_rows(payload: str) -> list[dict[str, str]]:
     return rows
 
 
+def _is_ncbi_error_payload(payload: Any) -> bool:
+    """Detect HTTP-200 error envelopes returned by NCBI/PubOne.
+
+    E-utilities occasionally returns a syntactically valid XML wrapper with an
+    embedded JSON error instead of a PubMed record. Treating that as an empty
+    article would misclassify a transient service failure as missing clinical
+    evidence and, worse, poison the disk cache.
+    """
+    if isinstance(payload, dict):
+        return bool(payload.get("error") or payload.get("errors") or payload.get("type") == "error")
+    if not isinstance(payload, str):
+        return False
+    normalized = " ".join(payload.lower().split())
+    return (
+        "<error>" in normalized
+        or '"type": "error"' in normalized
+        or '"type":"error"' in normalized
+        or "pubone response processing error" in normalized
+    )
+
+
 class PubMedClient:
     """Thin NCBI E-utilities client with retry, rate limit, circuit breaker, and optional disk cache."""
 
@@ -244,11 +265,13 @@ class PubMedClient:
 
         cache_key = json.dumps({"endpoint": endpoint, "method": method, "params": params}, sort_keys=True)
         cached = self._cache_get(cache_key)
-        if cached is not None:
+        if cached is not None and not _is_ncbi_error_payload(cached):
             return cached
+        if cached is not None:
+            self._cache.pop(cache_key, None)
+            self._persist_cache()
 
         url = f"{self.config.base_url.rstrip('/')}/{endpoint}"
-        response = None
         for attempt in range(1, MAX_RETRIES + 1):
             self._sleep_for_rate_limit()
             try:
@@ -264,26 +287,35 @@ class PubMedClient:
                 time.sleep(min(2 ** attempt, 8))
                 continue
 
-            if response.status_code != 429:
-                self._consecutive_failures = 0
-                break
-            time.sleep(min(2 ** attempt, 8))
+            if response.status_code == 429:
+                time.sleep(min(2 ** attempt, 8))
+                continue
 
-        if response is None:
-            self._consecutive_failures += 1
-            if self._consecutive_failures >= self._failure_limit:
-                self.circuit_open = True
-            raise RuntimeError("PubMed request did not return a response")
+            response.raise_for_status()
+            content_type = response.headers.get("content-type", "")
+            if "json" in content_type or params.get("retmode") == "json":
+                payload = response.json()
+            else:
+                payload = response.text
 
-        response.raise_for_status()
+            if _is_ncbi_error_payload(payload):
+                self._consecutive_failures += 1
+                if self._consecutive_failures >= self._failure_limit:
+                    self.circuit_open = True
+                    raise RuntimeError(
+                        "PubMed circuit breaker tripped after repeated HTTP-200 error payloads"
+                    )
+                time.sleep(min(2 ** attempt, 8))
+                continue
 
-        content_type = response.headers.get("content-type", "")
-        if "json" in content_type or params.get("retmode") == "json":
-            payload = response.json()
-        else:
-            payload = response.text
-        self._cache_put(cache_key, payload)
-        return payload
+            self._consecutive_failures = 0
+            self._cache_put(cache_key, payload)
+            return payload
+
+        self._consecutive_failures += 1
+        if self._consecutive_failures >= self._failure_limit:
+            self.circuit_open = True
+        raise RuntimeError("PubMed request did not return a usable response after retries")
 
     def esearch(self, term: str, **params: Any) -> dict[str, Any]:
         merged = {"term": term, "retmode": "json"}

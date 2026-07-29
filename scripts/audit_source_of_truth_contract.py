@@ -1689,11 +1689,25 @@ def stamp_manifest(args: argparse.Namespace) -> list[Finding]:
             manifest["checksum"] = f"sha256:{manifest['checksum_sha256']}"
         write_json(manifest_path, manifest)
 
+    # The interaction DB is released independently of the catalog. Refresh its
+    # provenance before auditing the combined export; otherwise a legitimate
+    # interaction-only release makes stamp-manifest reject the stale fields it
+    # is responsible for updating.
+    interaction_manifest = (
+        load_json(interaction_manifest_path)
+        if interaction_manifest_path.exists()
+        else {}
+    )
+    manifest["interaction_db_checksum"] = interaction_manifest.get("checksum_sha256")
+    manifest["interaction_db_version"] = interaction_manifest.get(
+        "interaction_db_version"
+    )
+    write_json(manifest_path, manifest)
+
     findings = audit_export(args)
     if findings:
         return findings
     matrix = load_json(matrix_path) if matrix_path.exists() else {}
-    interaction_manifest = load_json(interaction_manifest_path) if interaction_manifest_path.exists() else {}
     manifest["pipeline_contract_version"] = "cleaner_first_source_of_truth_v1"
     manifest["source_of_truth_matrix_version"] = (matrix.get("_metadata") or {}).get("schema_version")
     manifest["strict_gate_summary"] = {
@@ -1711,8 +1725,6 @@ def stamp_manifest(args: argparse.Namespace) -> list[Finding]:
         ],
         "stamped_by": "scripts/audit_source_of_truth_contract.py stamp-manifest"
     }
-    manifest["interaction_db_checksum"] = interaction_manifest.get("checksum_sha256")
-    manifest["interaction_db_version"] = interaction_manifest.get("interaction_db_version")
     manifest["artifact_freshness_status"] = "checked_by_release_strict_gate"
     write_json(manifest_path, manifest)
     return []

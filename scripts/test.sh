@@ -235,11 +235,12 @@ run_release_artifact_gates() {
     "$PG_PYTHON" scripts/api_audit/verify_drug_class_rxcuis.py
     "$PG_PYTHON" scripts/api_audit/verify_medication_depletion_identifiers.py
     "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_pmids.py --live
-    # Reviewed citation-content gate. This is intentionally scoped to entries
-    # with an authored expectation contract; --require-coverage is reserved for
-    # the future whole-corpus audit and must not pretend legacy unreviewed PMIDs
-    # have been manually verified.
-    "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_citation_content.py --live
+    # Reviewed citation-content gate. Every PubMed source on an active verified
+    # record must have an authored expectation; suppressed legacy candidates
+    # remain outside the active-release coverage requirement.
+    "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_citation_content.py \
+      --live \
+      --require-coverage
   fi
 }
 

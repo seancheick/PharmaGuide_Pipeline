@@ -1,10 +1,10 @@
 {
   "_metadata": {
     "schema_version": "5.4.0",
-    "last_updated": "2026-07-27",
-    "description": "Reviewed PubMed content expectations for medication-depletion claims.",
-    "purpose": "Reviewed PubMed content expectations for medication-depletion claims",
-    "total_entries": 13
+    "last_updated": "2026-07-29",
+    "description": "Reviewed PubMed content expectations for every active verified medication-depletion claim plus suppressed delta candidates.",
+    "purpose": "Fail-closed live content coverage for active verified medication-depletion citations",
+    "total_entries": 49
   },
   "expectations": [
     {
@@ -253,6 +253,713 @@
         ]
       },
       "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_STATINS_COQ10",
+      "pmid": "26192349",
+      "expected": {
+        "drug_terms_any": [
+          "statin therapy",
+          "statins"
+        ],
+        "nutrient_terms_any": [
+          "coenzyme Q10",
+          "CoQ10",
+          "ubiquinone"
+        ],
+        "context_terms_any": [
+          "plasma",
+          "meta-analysis"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_STATINS_COQ10",
+      "pmid": "8463436",
+      "expected": {
+        "drug_terms_any": [
+          "HMG-CoA reductase inhibitors",
+          "pravastatin",
+          "simvastatin"
+        ],
+        "nutrient_terms_any": [
+          "CoQ10",
+          "ubiquinone"
+        ],
+        "context_terms_any": [
+          "double-blind",
+          "placebo"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_STATINS_COQ10",
+      "pmid": "30371340",
+      "expected": {
+        "drug_terms_any": [
+          "statin-induced myopathy",
+          "statin-associated muscle symptoms"
+        ],
+        "nutrient_terms_any": [
+          "coenzyme Q10",
+          "CoQ10"
+        ],
+        "context_terms_any": [
+          "randomized controlled trials",
+          "muscle symptoms"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_STATINS_COQ10",
+      "pmid": "32179207",
+      "expected": {
+        "drug_terms_any": [
+          "statin-associated myalgia",
+          "statin therapy"
+        ],
+        "nutrient_terms_any": [
+          "coenzyme Q10",
+          "CoQ10"
+        ],
+        "context_terms_any": [
+          "no benefit",
+          "placebo"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_ANTACIDS_CALCIUM",
+      "pmid": "4000241",
+      "expected": {
+        "drug_terms_any": [
+          "achlorhydria"
+        ],
+        "nutrient_terms_any": [
+          "calcium",
+          "calcium carbonate"
+        ],
+        "context_terms_any": [
+          "fasting",
+          "normal breakfast"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "acid-state mechanism context"
+    },
+    {
+      "entry_id": "DEP_ANTACIDS_CALCIUM",
+      "pmid": "17190895",
+      "expected": {
+        "drug_terms_any": [
+          "proton pump inhibitor",
+          "PPI therapy"
+        ],
+        "nutrient_terms_any": [
+          "calcium absorption"
+        ],
+        "outcome_terms_any": [
+          "hip fracture"
+        ],
+        "context_terms_any": [
+          "long-term",
+          "high-dose"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_ANTACIDS_CALCIUM",
+      "pmid": "30539272",
+      "expected": {
+        "drug_terms_any": [
+          "proton pump inhibitors",
+          "PPI therapy"
+        ],
+        "outcome_terms_any": [
+          "hip fracture"
+        ],
+        "context_terms_any": [
+          "meta-analysis",
+          "observational studies"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "clinical-outcome association"
+    },
+    {
+      "entry_id": "DEP_ANTACIDS_CALCIUM",
+      "pmid": "8568113",
+      "expected": {
+        "drug_terms_any": [
+          "omeprazole",
+          "proton pump inhibition"
+        ],
+        "nutrient_terms_any": [
+          "calcium"
+        ],
+        "context_terms_any": [
+          "standard test meal",
+          "short-term"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_ANTACIDS_IRON",
+      "pmid": "17344278",
+      "expected": {
+        "drug_terms_any": [
+          "proton pump inhibitors",
+          "PPI",
+          "omeprazole",
+          "lansoprazole"
+        ],
+        "nutrient_terms_any": [
+          "non-haem iron",
+          "iron"
+        ],
+        "context_terms_any": [
+          "hereditary haemochromatosis",
+          "test meal"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_METFORMIN_VITAMINB12",
+      "pmid": "20488910",
+      "expected": {
+        "drug_terms_any": [
+          "metformin"
+        ],
+        "nutrient_terms_any": [
+          "vitamin B-12",
+          "vitamin B12"
+        ],
+        "context_terms_any": [
+          "4.3 years",
+          "placebo controlled"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_METFORMIN_VITAMINB12",
+      "pmid": "10977010",
+      "expected": {
+        "drug_terms_any": [
+          "metformin"
+        ],
+        "nutrient_terms_any": [
+          "vitamin B12",
+          "B12"
+        ],
+        "context_terms_any": [
+          "calcium-dependent ileal membrane",
+          "intrinsic factor"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_ZINC",
+      "pmid": "7001863",
+      "expected": {
+        "drug_terms_any": [
+          "thiazides",
+          "hydrochlorothiazide",
+          "loop-diuretics"
+        ],
+        "nutrient_terms_any": [
+          "zinc"
+        ],
+        "context_terms_any": [
+          "urinary zinc excretion",
+          "urinary losses"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_ZINC",
+      "pmid": "3595066",
+      "expected": {
+        "drug_terms_any": [
+          "hydrochlorothiazide",
+          "amiloride"
+        ],
+        "nutrient_terms_any": [
+          "zinc"
+        ],
+        "context_terms_any": [
+          "urinary zinc excretion",
+          "serum zinc"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_ZINC",
+      "pmid": "7446206",
+      "expected": {
+        "drug_terms_any": [
+          "diuretic treatment",
+          "diuretics"
+        ],
+        "nutrient_terms_any": [
+          "zinc"
+        ],
+        "context_terms_any": [
+          "tissue zinc",
+          "autopsies"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_ZINC",
+      "pmid": "6152785",
+      "expected": {
+        "drug_terms_any": [
+          "thiazides",
+          "diuretics"
+        ],
+        "nutrient_terms_any": [
+          "zinc"
+        ],
+        "context_terms_any": [
+          "hair zinc",
+          "urinary excretion"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_CALCIUM",
+      "pmid": "16336519",
+      "expected": {
+        "drug_terms_any": [
+          "loop diuretics",
+          "furosemide",
+          "bumetanide"
+        ],
+        "nutrient_terms_any": [
+          "calcium"
+        ],
+        "outcome_terms_any": [
+          "fracture"
+        ],
+        "context_terms_any": [
+          "case-control",
+          "population-based"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_CALCIUM",
+      "pmid": "26589307",
+      "expected": {
+        "drug_terms_any": [
+          "loop diuretics"
+        ],
+        "outcome_terms_any": [
+          "hip fracture"
+        ],
+        "context_terms_any": [
+          "elderly",
+          "population-based"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "clinical-outcome association"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_CALCIUM",
+      "pmid": "7465281",
+      "expected": {
+        "drug_terms_any": [
+          "furosemide"
+        ],
+        "nutrient_terms_any": [
+          "calcium"
+        ],
+        "context_terms_any": [
+          "growing rats",
+          "chronic"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "animal mechanism context"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_THIAMINE",
+      "pmid": "1867241",
+      "expected": {
+        "drug_terms_any": [
+          "furosemide"
+        ],
+        "nutrient_terms_any": [
+          "thiamine"
+        ],
+        "context_terms_any": [
+          "congestive heart failure",
+          "urinary loss"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_THIAMINE",
+      "pmid": "14712323",
+      "expected": {
+        "drug_terms_any": [
+          "furosemide"
+        ],
+        "nutrient_terms_any": [
+          "thiamine"
+        ],
+        "context_terms_any": [
+          "congestive heart failure",
+          "80 mg/day"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_THIAMINE",
+      "pmid": "16412860",
+      "expected": {
+        "drug_terms_any": [
+          "diuretics"
+        ],
+        "nutrient_terms_any": [
+          "thiamin",
+          "thiamine"
+        ],
+        "context_terms_any": [
+          "congestive heart failure",
+          "hospitalized"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "heart-failure status and confounding context"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_THIAMINE",
+      "pmid": "10482308",
+      "expected": {
+        "drug_terms_any": [
+          "furosemide"
+        ],
+        "nutrient_terms_any": [
+          "thiamine"
+        ],
+        "context_terms_any": [
+          "healthy volunteers",
+          "urinary loss"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_FOLATE",
+      "pmid": "2490542",
+      "expected": {
+        "drug_terms_any": [
+          "triamterene",
+          "hydrochlorothiazide"
+        ],
+        "nutrient_terms_any": [
+          "folic acid",
+          "tetrahydrofolic acid"
+        ],
+        "mechanism_terms_any": [
+          "dihydrofolate reductase"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_FOLATE",
+      "pmid": "7286039",
+      "expected": {
+        "drug_terms_any": [
+          "triamterene"
+        ],
+        "nutrient_terms_any": [
+          "folate",
+          "dihydrofolic acid"
+        ],
+        "mechanism_terms_any": [
+          "dihydrofolate reductase"
+        ],
+        "context_terms_any": [
+          "human leucocyte",
+          "long-term"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_DIURETICS_FOLATE",
+      "pmid": "11096168",
+      "expected": {
+        "drug_terms_any": [
+          "triamterene",
+          "folic acid antagonists"
+        ],
+        "nutrient_terms_any": [
+          "folic acid"
+        ],
+        "outcome_terms_any": [
+          "birth defects",
+          "cardiovascular defects",
+          "oral clefts"
+        ],
+        "context_terms_any": [
+          "pregnancy",
+          "pregnant women"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_CORTICOSTEROIDS_CALCIUM",
+      "pmid": "37845798",
+      "expected": {
+        "drug_terms_any": [
+          "glucocorticoids",
+          "GC treatment"
+        ],
+        "outcome_terms_any": [
+          "osteoporosis",
+          "fracture risk"
+        ],
+        "context_terms_any": [
+          "more than 3 months",
+          "2.5 mg daily"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "clinical guideline for bone-risk management",
+      "reviewed_full_text_url": "https://rheumatology.org/glucocorticoid-induced-osteoporosis-guideline"
+    },
+    {
+      "entry_id": "DEP_CORTICOSTEROIDS_CALCIUM",
+      "pmid": "14687590",
+      "expected": {
+        "drug_terms_any": [
+          "glucocorticoid",
+          "cortisol"
+        ],
+        "nutrient_terms_any": [
+          "calcium"
+        ],
+        "context_terms_any": [
+          "bone disease",
+          "renal calcium excretion"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_CORTICOSTEROIDS_VITAMIND",
+      "pmid": "37845798",
+      "expected": {
+        "drug_terms_any": [
+          "glucocorticoids",
+          "GC treatment"
+        ],
+        "outcome_terms_any": [
+          "osteoporosis",
+          "fracture risk"
+        ],
+        "context_terms_any": [
+          "more than 3 months",
+          "2.5 mg daily"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "full guideline supports calcium/vitamin-D bone-health management rather than vitamin-D depletion",
+      "reviewed_full_text_url": "https://rheumatology.org/glucocorticoid-induced-osteoporosis-guideline"
+    },
+    {
+      "entry_id": "DEP_SSRIS_SODIUM",
+      "pmid": "25262043",
+      "expected": {
+        "drug_terms_any": [
+          "selective serotonin reuptake inhibitors",
+          "SSRIs"
+        ],
+        "nutrient_terms_any": [
+          "hyponatremia"
+        ],
+        "context_terms_any": [
+          "older age",
+          "thiazide diuretics"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_ANTICONVULSANTS_LCARNITINE",
+      "pmid": "10852092",
+      "expected": {
+        "drug_terms_any": [
+          "valproic acid",
+          "valproate"
+        ],
+        "nutrient_terms_any": [
+          "carnitine"
+        ],
+        "context_terms_any": [
+          "pediatric",
+          "children at risk"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_ISONIAZID_VITAMINB6",
+      "pmid": "21477422",
+      "expected": {
+        "drug_terms_any": [
+          "isoniazid",
+          "INH"
+        ],
+        "nutrient_terms_any": [
+          "pyridoxine"
+        ],
+        "context_terms_any": [
+          "polyneuropathy",
+          "HIV"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_METHOTREXATE_FOLATE",
+      "pmid": "18020507",
+      "expected": {
+        "drug_terms_any": [
+          "methotrexate"
+        ],
+        "nutrient_terms_any": [
+          "folate",
+          "folic acid",
+          "folinic acid"
+        ],
+        "context_terms_any": [
+          "rheumatoid arthritis",
+          "low doses"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_METHOTREXATE_FOLATE",
+      "pmid": "23728635",
+      "expected": {
+        "drug_terms_any": [
+          "methotrexate",
+          "MTX"
+        ],
+        "nutrient_terms_any": [
+          "folic acid",
+          "folinic acid",
+          "folate"
+        ],
+        "context_terms_any": [
+          "rheumatoid arthritis",
+          "side effects"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_ANTACIDS_CALCIUM",
+      "pmid": "15989913",
+      "expected": {
+        "drug_terms_any": [
+          "proton pump inhibitors",
+          "omeprazole"
+        ],
+        "nutrient_terms_any": [
+          "calcium carbonate",
+          "calcium"
+        ],
+        "context_terms_any": [
+          "randomized crossover trial",
+          "cross-over studies"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "direct calcium-carbonate absorption trial",
+      "no_abstract_evidence": {
+        "rationale": "PubMed provides no abstract; the live title and MeSH identify the exact randomized PPI/calcium-carbonate absorption study, with separate content-verified acid-state and food-absorption sources on the record.",
+        "backstop_urls": [
+          "https://pubmed.ncbi.nlm.nih.gov/4000241/",
+          "https://pubmed.ncbi.nlm.nih.gov/8568113/"
+        ]
+      }
+    },
+    {
+      "entry_id": "DEP_ANTICOAGULANTS_VITAMINK",
+      "pmid": "11157640",
+      "expected": {
+        "drug_terms_any": [
+          "oral anticoagulants",
+          "warfarin",
+          "coumarins"
+        ],
+        "mechanism_terms_any": [
+          "mechanism of action",
+          "drug interactions"
+        ],
+        "context_terms_any": [
+          "optimal therapeutic range",
+          "food"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "warfarin mechanism and therapeutic-range context",
+      "no_abstract_evidence": {
+        "rationale": "PubMed provides no abstract; the live title and MeSH identify warfarin/coumarin mechanism, food interaction, and therapeutic-range scope. The current prescribing label is the direct vitamin-K backstop.",
+        "backstop_urls": [
+          "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=801e4da1-5459-47d2-b67b-009f0a3247cc&type=display"
+        ]
+      }
+    },
+    {
+      "entry_id": "DEP_COLCHICINE_VITAMINB12",
+      "pmid": "5677718",
+      "expected": {
+        "drug_terms_any": [
+          "colchicine"
+        ],
+        "nutrient_terms_any": [
+          "vitamin B12",
+          "vitamin B 12"
+        ],
+        "context_terms_any": [
+          "malabsorption",
+          "intestinal absorption"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "direct B12-malabsorption mechanism study",
+      "no_abstract_evidence": {
+        "rationale": "PubMed provides no abstract; the live title and MeSH identify the exact colchicine/vitamin-B12 malabsorption study. The current cyanocobalamin label is the direct backstop.",
+        "backstop_urls": [
+          "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9172ca9d-6419-41de-829c-4f9a16220b46"
+        ]
+      }
     }
   ]
 }
