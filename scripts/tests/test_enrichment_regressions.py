@@ -641,7 +641,7 @@ class TestRDAULPerDayBasis:
 
 
 class TestUnknownFormSkipsUL:
-    """Unknown vitamin form should skip UL checks."""
+    """Unknown vitamin form should make the form-specific UL indeterminate."""
 
     @pytest.fixture
     def enricher(self):
@@ -669,7 +669,8 @@ class TestUnknownFormSkipsUL:
         adequacy = result['adequacy_results'][0]
         assert adequacy['skip_ul_check'] is True
         assert adequacy['skip_ul_reason'] == 'unknown_vitamin_form'
-        assert adequacy['ul_status'] == 'skipped_unknown_vitamin_form'
+        assert adequacy['ul_status'] == 'indeterminate_unknown_vitamin_form'
+        assert adequacy['ul_assessment_status'] == 'indeterminate'
         assert adequacy['over_ul'] is False
         assert adequacy['pct_ul'] is None
         assert adequacy['scoring_eligible'] is False

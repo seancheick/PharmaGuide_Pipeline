@@ -98,6 +98,22 @@ class TestTimingRuleSchema:
             assert r["ingredient1"] == r["ingredient1"].lower(), f"Rule {r['id']} ingredient1 must be lowercase"
             assert r["ingredient2"] == r["ingredient2"].lower(), f"Rule {r['id']} ingredient2 must be lowercase"
 
+    def test_medication_rules_author_exact_live_rxcuis(self, rules):
+        levothyroxine_rules = [
+            rule for rule in rules
+            if rule["ingredient1"] == "levothyroxine"
+            or rule["ingredient2"] == "levothyroxine"
+        ]
+
+        assert levothyroxine_rules
+        for rule in levothyroxine_rules:
+            if rule["ingredient1"] == "levothyroxine":
+                assert rule.get("ingredient1_rxcuis") == ["10582"], rule["id"]
+                assert "ingredient2_rxcuis" not in rule
+            else:
+                assert rule.get("ingredient2_rxcuis") == ["10582"], rule["id"]
+                assert "ingredient1_rxcuis" not in rule
+
 
 # ── Source quality ─────────────────────────────────────────────────
 
@@ -151,6 +167,14 @@ class TestTimingDataQuality:
         pairs = {(r["ingredient1"], r["ingredient2"]) for r in rules}
         assert ("iron", "calcium") in pairs or ("calcium", "iron") in pairs
 
+    def test_actionable_pairs_are_unique(self, rules):
+        pairs = [
+            tuple(sorted((r["ingredient1"], r["ingredient2"])))
+            for r in rules
+        ]
+        duplicates = sorted({pair for pair in pairs if pairs.count(pair) > 1})
+        assert duplicates == [], f"Duplicate timing pairs: {duplicates}"
+
     def test_psyllium_water_and_med_spacing_rule_exists(self, rules):
         rule = next(
             (r for r in rules if r["id"] == "timing_psyllium_water_med_spacing"),
@@ -164,13 +188,26 @@ class TestTimingDataQuality:
         assert "8 oz" in rule["advice"]
         assert any("medlineplus.gov" in s["url"] for s in rule["sources"])
 
-    def test_vitamin_e_vitamin_k_separation_has_high_dose_floor(self, rules):
+    def test_unsupported_or_misclassified_timing_rules_do_not_ship(self, rules):
+        rejected = {
+            "timing_berberine_b_vitamins_separate",
+            "timing_fiber_minerals_separate",
+            "timing_iron_calcium_zinc_separate",
+            "timing_thyroid_med_minerals_separate",
+            "timing_vitamin_e_vitamin_k_separate",
+            "timing_vitamin_k_anticoagulants_consistency",
+        }
+
+        assert rejected.isdisjoint({r["id"] for r in rules})
+
+    def test_fat_soluble_copy_only_names_the_nutrient_in_the_rule(self, rules):
         rule = next(
-            (r for r in rules if r["id"] == "timing_vitamin_e_vitamin_k_separate"),
-            None,
+            r for r in rules
+            if r["id"] == "timing_fat_soluble_vitamins_with_food"
         )
-        assert rule is not None
-        assert rule.get("min_dose") == {"ingredient": "vitamin e", "mg": 180}
+
+        assert "vitamin a" in rule["advice"].lower()
+        assert "vitamins a, d, e, and k" not in rule["advice"].lower()
 
     def test_advice_is_consumer_friendly(self, rules):
         for r in rules:

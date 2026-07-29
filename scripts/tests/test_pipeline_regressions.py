@@ -1693,7 +1693,7 @@ class TestBatch9StructuralAndBrandedWrappers:
         active_by_name = {ing.get("name"): ing for ing in normalized.get("activeIngredients", [])}
 
         assert "MenaQ7 Natto" not in active_names
-        assert active_by_name["Vitamin K2"]["standardName"] == "Vitamin K"
+        assert active_by_name["Vitamin K2"]["standardName"] == "Vitamin K2"
 
     def test_batch9_active_lanolin_wrapper_drops_parent_and_keeps_vitamin_d3(self, normalizer):
         raw_product = {

@@ -1819,7 +1819,7 @@ def test_raw_validated_punctuation_and_form_variants_map(normalizer, name, expec
         ("Ashwagandha root & leaf extract", "Ashwagandha"),
         ("Shoden Ashwagandha extract", "Ashwagandha"),
         ("Eurycoma Longjack root extract", "Tongkat Ali"),
-        ("K-2", "Vitamin K"),
+        ("K-2", "Vitamin K2"),
         ("Devil's Claw 5% extract", "Devil's Claw"),
         ("Amla 4:1 extract", "Amla"),
         ("Creatine Alpha-Ketoglutarate", "Creatine"),

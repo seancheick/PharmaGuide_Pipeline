@@ -34,7 +34,8 @@ BY_ID = {e["id"]: e for e in PAIRS}
 
 
 def test_every_pair_classified_with_valid_enums():
-    assert len(PAIRS) == 145, f"expected 145 pairs, found {len(PAIRS)}"
+    assert len(PAIRS) == 133, f"expected 133 reviewed pairs, found {len(PAIRS)}"
+    assert len(BY_ID) == len(PAIRS), "pairwise interaction ids must be unique"
     bad = []
     for e in PAIRS:
         d, m = e.get("direction"), e.get("materiality")
@@ -114,8 +115,7 @@ def test_neutral_direction_only_on_neutral_effect_rows():
                 f"{e['id']} neutral direction but effect={e.get('interaction_effect_type')}"
 
 
-def test_coq10_statin_is_neutral():
-    """CoQ10 offsets statin myopathy with no adverse PK interaction — the
-    pairwise mirror of the ingredient-rule (coq10, statins) neutral tag."""
-    assert BY_ID["DSI_STATINS_COQ10"].get("direction") == "neutral"
-    assert BY_ID["DSI_STATINS_COQ10"].get("materiality") == "presence"
+def test_unsupported_coq10_statin_background_pair_is_not_active():
+    """A possible statin-associated CoQ10 biomarker change is not an active
+    medication×supplement safety interaction."""
+    assert "DSI_STATINS_COQ10" not in BY_ID

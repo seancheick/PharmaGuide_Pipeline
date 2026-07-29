@@ -143,27 +143,16 @@ def test_dsi_statins_niacin_has_verified_pmids(curated):
 
 
 # --------------------------------------------------------------------------- #
-# Negative lock: DSI_STATINS_COQ10 is NOT in this batch
+# Retirement lock: unsupported background pair stays out
 # --------------------------------------------------------------------------- #
 
 
-def test_dsi_statins_coq10_is_not_part_of_batch_9a(curated):
-    """Per clinician guardrail (2026-05-27): DSI_STATINS_COQ10 is a Minor-
-    severity background insight, not a user-facing alert. It does not
-    receive PMID backfill in Batch 9.A. That entry belongs in the separate
-    Minor-entry / two-lane policy cleanup, when those are reclassified."""
-    e = _find(curated, "DSI_STATINS_COQ10")
-    # If this still has empty source_pmids, the batch boundary was respected.
-    # If a future batch adds PMIDs here as part of an alert promotion, this
-    # assertion will fail loudly — the maintainer must update the test
-    # consciously and document the severity / two-lane decision.
-    assert (e.get("source_pmids") or []) == [], (
-        "DSI_STATINS_COQ10.source_pmids unexpectedly non-empty. "
-        "Batch 9.A explicitly excluded this entry. If you are promoting "
-        "the CoQ10 interaction to a user-facing alert, do it through the "
-        "two-lane policy cleanup batch and update this test consciously."
-    )
-    assert e.get("severity") == "Minor", (
-        "DSI_STATINS_COQ10.severity unexpectedly changed. Batch 9.A is "
-        "evidence-hardening only and must not alter severity."
+def test_unsupported_dsi_statins_coq10_background_pair_stays_retired(curated):
+    """A statin-associated biomarker hypothesis is not a supplement safety
+    interaction. Reintroducing it requires a new evidence and clinical-review
+    cycle, not a PMID backfill to the retired row."""
+    ids = {entry["id"] for entry in curated["interactions"]}
+    assert "DSI_STATINS_COQ10" not in ids, (
+        "DSI_STATINS_COQ10 was retired after the adversarial clinical audit. "
+        "Do not restore it without a new evidence and review cycle."
     )

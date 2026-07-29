@@ -43,6 +43,8 @@ CRITICAL_DATA_FILES = [
     ("harmful_additives.json", "Safety flags - harmful additives"),
     ("allergens.json", "Allergen detection database"),
     ("rda_optimal_uls.json", "RDA/UL dosage reference"),
+    ("timing_rules.json", "Clinically reviewed timing guidance"),
+    ("medication_depletions.json", "Clinically reviewed medication-nutrient guidance"),
 ]
 
 # Important data files - pipeline works but functionality reduced

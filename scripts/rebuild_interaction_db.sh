@@ -19,7 +19,7 @@
 #
 # Prerequisites:
 #     - .env file at repo root with UMLS_API_KEY (for live CUI verification)
-#     - research_pairs.json already built (run ingest_suppai.py separately)
+#     - supp.ai source dump (override with PHARMAGUIDE_SUPPAI_DIR)
 #     - For --import: catalog DB must be in dist/ (run release_catalog_artifact.py first,
 #       or the script will attempt to stage it from final_db_output/ automatically)
 #
@@ -63,6 +63,7 @@ PY
 OFFLINE_FLAG=""
 DO_IMPORT=0
 FLUTTER_REPO="/Users/seancheick/PharmaGuide ai"
+SUPPAI_DIR="${PHARMAGUIDE_SUPPAI_DIR:-/Users/seancheick/Downloads/Supp ai DB}"
 
 # Single source of truth: pull pipeline version from build_final_db.py
 # (catalog and interaction artifacts must agree on pipeline_version).
@@ -99,16 +100,30 @@ DIST_DIR="scripts/dist"
 mkdir -p "$OUTPUT_DIR" "$DIST_DIR"
 
 # ---------------------------------------------------------------------------
-# Check prerequisites
+# Rebuild the derived research feed
 # ---------------------------------------------------------------------------
 
-if [[ ! -f "$OUTPUT_DIR/research_pairs.json" ]]; then
-  info "research_pairs.json not found — running ingest_suppai.py first..."
-  "$PG_PYTHON" scripts/ingest_suppai.py \
-    --output "$OUTPUT_DIR/research_pairs.json" \
-    --report "$OUTPUT_DIR/ingest_suppai_report.json"
-  ok "supp.ai ingest complete"
-fi
+for required in \
+  cui_metadata.json \
+  interaction_id_dict.json \
+  meta.json \
+  paper_metadata.json \
+  sentence_dict.json; do
+  if [[ ! -f "$SUPPAI_DIR/$required" ]]; then
+    err "Missing supp.ai source file: $SUPPAI_DIR/$required"
+    exit 1
+  fi
+done
+
+info "Regenerating research_pairs.json from the canonical supp.ai dump..."
+"$PG_PYTHON" scripts/ingest_suppai.py \
+  --suppai-dir "$SUPPAI_DIR" \
+  --iqm scripts/data/ingredient_quality_map.json \
+  --drug-classes scripts/data/drug_classes.json \
+  --output "$OUTPUT_DIR/research_pairs.json" \
+  --report "$OUTPUT_DIR/ingest_suppai_report.json" \
+  --build-time "$INTERACTION_BUILD_TIME"
+ok "supp.ai ingest complete"
 
 # ---------------------------------------------------------------------------
 # Step 1: Verify curated interactions

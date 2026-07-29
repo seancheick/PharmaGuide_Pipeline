@@ -42,10 +42,10 @@ def test_presence_pairs_carry_no_floor():
             assert not e.get("dose_threshold"), f"{e['id']} presence pair wrongly floored"
 
 
-def test_exactly_31_floored():
+def test_exactly_32_floored():
     floored = [e["id"] for e in PAIRS if e.get("dose_threshold")]
     dose_dep = [e["id"] for e in PAIRS if e.get("materiality") == "dose_dependent"]
-    assert len(floored) == 31, f"expected 31 floors, found {len(floored)}"
+    assert len(floored) == 32, f"expected 32 floors, found {len(floored)}"
     assert set(floored) == set(dose_dep), "floored set != dose_dependent set"
 
 
@@ -59,6 +59,7 @@ EXPECTED = {
     "DSI_STATINS_NIACIN": (1000, "mg"),     # pharmacologic niacin / statin myopathy
     "DSI_OC_SOY": (100, "mg"),              # soy isoflavones, pair-stated
     "DSI_BENZO_MELATONIN": (5, "mg"),       # melatonin sedation, pair-stated
+    "SSI_ZINC_COPPER": (25, "mg"),           # prolonged supplemental zinc context
 }
 
 

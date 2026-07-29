@@ -99,24 +99,12 @@ def test_management_text_retains_timing_separation(coffee_entry):
     )
 
 
-def test_other_minor_entries_unchanged_by_this_batch(curated):
-    """Batch 9.B.1 is intentionally narrow. No other Minor entry may be
-    promoted, demoted, or have its PMIDs altered in the same commit.
-    This assertion fails loud if a future agent tries to bundle the
-    24-entry Minor cleanup into this batch.
-
-    Specifically: DSI_SSRI_FISHOIL must remain unchanged (it's a Lane C
-    deprecation candidate waiting for the Batch 9.B.2 schema design).
-    """
-    for e in curated["interactions"]:
-        if e["id"] == "DSI_SSRI_FISHOIL":
-            assert e["severity"] == "Minor", (
-                "DSI_SSRI_FISHOIL.severity must remain 'Minor' until "
-                "Batch 9.B.2 defines the background/deprecated routing schema. "
-                "Do not deprecate it in the levothyroxine coffee commit."
-            )
-            return
-    raise AssertionError(
-        "DSI_SSRI_FISHOIL must remain in curated_interactions_v1.json — "
-        "Batch 9.B.1 does not remove or relocate it."
+def test_unsupported_dsi_ssri_fishoil_background_pair_stays_retired(curated):
+    """Disease/physiology association does not establish a consumer-facing
+    SSRI×fish-oil interaction. Keep the retired background row out unless a
+    new evidence and clinical-review cycle supports exact attribution."""
+    ids = {entry["id"] for entry in curated["interactions"]}
+    assert "DSI_SSRI_FISHOIL" not in ids, (
+        "DSI_SSRI_FISHOIL was retired after the adversarial clinical audit. "
+        "Do not restore it as an active pair without new reviewed evidence."
     )

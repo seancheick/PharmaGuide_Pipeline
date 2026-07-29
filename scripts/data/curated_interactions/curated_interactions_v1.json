@@ -1,8 +1,8 @@
 {
   "_metadata": {
-    "schema_version": "1.2.3",
-    "last_updated": "2026-07-28",
-    "total_entries": 106,
+    "schema_version": "1.2.4",
+    "last_updated": "2026-07-29",
+    "total_entries": 94,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -22,7 +22,8 @@
       "2026-07-10: Retired SSI_VITD_VITK2 from the safety interaction set because its neutral, synergy-oriented copy was contradictory as a scored alert. Corrected metadata.total_entries to the current 110 interaction rows.",
       "2026-07-28: Live beta canary cleanup. Retired DSI_DM_VITD and DSI_DM_MAGNESIUM because their cited studies concern nutrient supplementation in diabetes, not interactions with diabetes medications. Retired SSI_MAGNESIUM_CALCIUM because the cited NIH source does not support the displayed 2:1 ratio or routine separation advice. Retired SSI_VITE_VITK because low vitamin K status is a risk modifier for high-dose vitamin E, not evidence that vitamin K supplements are an adverse pair. Rewrote DSI_WAR_VITE to preserve the sourced bleeding-risk warning without claiming a universal safe dose or direct INR elevation.",
       "2026-07-28: Clarified live stack copy. Corrected the direction of the warfarin/vitamin K mechanism, framed vitamin K as a consistency warning rather than a ban, disclosed that the presence-triggered vitamin E alert is not proof of crossing a known dose limit, and identified 200 mcg/day chromium as an authored review threshold rather than a toxicity cutoff.",
-      "2026-07-28: Reclassified DSI_WAR_VITK from Major to Moderate so the app presents the sourced consistency/clinician-review action instead of the categorical Not recommended verdict. The interaction remains harmful, presence-triggered, established, and never dose-suppressed."
+      "2026-07-28: Reclassified DSI_WAR_VITK from Major to Moderate so the app presents the sourced consistency/clinician-review action instead of the categorical Not recommended verdict. The interaction remains harmful, presence-triggered, established, and never dose-suppressed.",
+      "2026-07-29: Retired 12 unsupported, duplicated, or mis-layered consumer rules. Chronic medication-nutrient monitoring now remains solely in the pharmacist-reviewed depletion corpus; neutral benefit hypotheses no longer ship as safety interactions; and the broad high-dose vitamin E/anticoagulant rule was removed rather than implying a safe cutoff. Narrowed calcium/fluoroquinolone to ciprofloxacin RxCUI 2551 because moxifloxacin labeling reports no significant calcium effect; retained the class-wide zinc interaction without a universal timing interval because product labels differ. Also narrowed melatonin to fluvoxamine RxCUI 42355, corrected MAOI washout copy, and made zinc/copper dose-dependent at its explicitly disclosed 25 mg/day review floor."
     ]
   },
   "interactions": [
@@ -303,6 +304,8 @@
     },
     {
       "id": "DSI_WAR_GLUCOSAMINE",
+      "display_layer": "background",
+      "background_rationale": "Minor and uncertain INR signal; retain as background context without gating product fit.",
       "type": "Med-Sup",
       "agent1_name": "Warfarin",
       "agent1_id": "11289",
@@ -449,6 +452,8 @@
     },
     {
       "id": "DSI_WAR_GINGER",
+      "display_layer": "background",
+      "background_rationale": "Minor dose-dependent bleeding signal; culinary and lower supplemental exposure should not gate product fit.",
       "type": "Med-Sup",
       "agent1_name": "Warfarin",
       "agent1_id": "11289",
@@ -686,39 +691,6 @@
       }
     },
     {
-      "id": "DSI_STATINS_COQ10",
-      "type": "Med-Sup",
-      "agent1_name": "Statins (class)",
-      "agent1_id": "class:statins",
-      "agent2_name": "Coenzyme Q10",
-      "agent2_id": "C0041536",
-      "severity": "Minor",
-      "interaction_effect_type": "Neutral",
-      "mechanism": "Statins inhibit HMG-CoA reductase, which also reduces endogenous CoQ10 synthesis. Some patients experience statin-associated muscle symptoms (SAMS). CoQ10 supplementation is studied as mitigation but evidence is mixed — it may help some patients.",
-      "management": "CoQ10 (100–200 mg/day) is widely used to offset statin-related muscle symptoms. It does not interfere with the statin's lipid-lowering effect. Discuss with your doctor if you have muscle pain while on a statin.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Coenzyme10-HealthProfessional/"
-      ],
-      "source_pmids": [],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "coq10",
-      "direction": "neutral",
-      "materiality": "presence"
-    },
-    {
       "id": "DSI_SSRI_SJW",
       "type": "Med-Sup",
       "agent1_name": "SSRIs (class)",
@@ -825,38 +797,6 @@
       "materiality": "presence"
     },
     {
-      "id": "DSI_SSRI_FISHOIL",
-      "type": "Med-Sup",
-      "agent1_name": "SSRIs (class)",
-      "agent1_id": "class:ssris",
-      "agent2_name": "Fish Oil / Omega-3",
-      "agent2_id": "C0016157",
-      "severity": "Minor",
-      "interaction_effect_type": "Neutral",
-      "mechanism": "Omega-3 fatty acids are studied as adjunctive therapy for depression and have no pharmacokinetic interaction with SSRIs. No significant adverse interaction is known. EPA-rich formulations may even have complementary antidepressant effects.",
-      "management": "Fish oil is generally compatible with SSRIs. At doses >3 g/day, minor antiplatelet effects could slightly increase bleeding risk in combination with SSRIs, but this is rarely clinically significant. Discuss with your doctor.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": false
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "fish_oil",
-      "direction": "neutral",
-      "materiality": "presence"
-    },
-    {
       "id": "DSI_SSRI_GINKGO",
       "type": "Med-Sup",
       "agent1_name": "SSRIs (class)",
@@ -903,15 +843,17 @@
     },
     {
       "id": "DSI_SSRI_MELATONIN",
+      "display_layer": "background",
+      "background_rationale": "Drug-specific sedation monitoring signal; keep visible as background context without a categorical product verdict.",
       "type": "Med-Sup",
-      "agent1_name": "SSRIs (class)",
-      "agent1_id": "class:ssris",
+      "agent1_name": "Fluvoxamine",
+      "agent1_id": "42355",
       "agent2_name": "Melatonin",
       "agent2_id": "C0025219",
       "severity": "Minor",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Fluvoxamine (an SSRI) strongly inhibits CYP1A2, the main enzyme metabolizing melatonin. Fluvoxamine + melatonin can cause up to 17-fold increase in melatonin plasma levels, causing excessive sedation. Other SSRIs have minimal effect on melatonin metabolism.",
-      "management": "Avoid melatonin supplements with fluvoxamine specifically. Other SSRIs: use low melatonin doses (0.5–1 mg) for sleep and monitor for excessive drowsiness.",
+      "mechanism": "Fluvoxamine strongly inhibits CYP1A2, the main enzyme metabolizing melatonin. Fluvoxamine with melatonin can substantially increase melatonin exposure and cause excessive sedation.",
+      "management": "Ask the fluvoxamine prescriber before using melatonin. If the combination is approved, use only the dose they recommend and monitor for excessive drowsiness; do not drive or operate machinery if impaired.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/10877005/"
       ],
@@ -930,7 +872,7 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
+      "applies_to": "specific_drug",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "melatonin",
       "direction": "harmful",
@@ -1119,39 +1061,9 @@
       "materiality": "presence"
     },
     {
-      "id": "DSI_ACEI_IRON",
-      "type": "Med-Sup",
-      "agent1_name": "ACE Inhibitors (class)",
-      "agent1_id": "class:ace_inhibitors",
-      "agent2_name": "Iron (supplement)",
-      "agent2_id": "C0302583",
-      "severity": "Minor",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "Iron can chelate ACE inhibitors in the GI tract, reducing their absorption. The clinical significance is generally minor but can be relevant at high iron doses.",
-      "management": "Take iron and ACE inhibitors at least 2 hours apart for optimal absorption of both.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": false
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "iron",
-      "direction": "harmful",
-      "materiality": "presence"
-    },
-    {
       "id": "DSI_ANTIHYP_COQ10",
+      "display_layer": "background",
+      "background_rationale": "Low-confidence modest blood-pressure effect; informational monitoring only.",
       "type": "Med-Sup",
       "agent1_name": "Antihypertensives (class)",
       "agent1_id": "class:antihypertensives",
@@ -1201,7 +1113,7 @@
       "agent1_name": "Diabetes medications (class)",
       "agent1_id": "class:diabetes_meds",
       "agent2_name": "Alpha-lipoic acid",
-      "agent2_id": "C5763195",
+      "agent2_id": "C0023791",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
       "mechanism": "Alpha-lipoic acid (ALA) improves insulin sensitivity and glucose uptake. Combined with metformin or other diabetes medications, it can cause additive blood glucose lowering, potentially resulting in hypoglycemia.",
@@ -1458,6 +1370,8 @@
     },
     {
       "id": "DSI_DM_CINNAMON",
+      "display_layer": "background",
+      "background_rationale": "Minor dose-dependent glucose signal; culinary exposure is outside the alert layer.",
       "type": "Med-Sup",
       "agent1_name": "Diabetes medications (class)",
       "agent1_id": "class:diabetes_meds",
@@ -1897,40 +1811,6 @@
       "materiality": "presence"
     },
     {
-      "id": "DSI_ANTICONV_VITD",
-      "type": "Med-Sup",
-      "agent1_name": "Anticonvulsants (class)",
-      "agent1_id": "class:anticonvulsants",
-      "agent2_name": "Vitamin D",
-      "agent2_id": "C0042866",
-      "severity": "Minor",
-      "interaction_effect_type": "Neutral",
-      "mechanism": "Enzyme-inducing AEDs (phenytoin, carbamazepine, phenobarbital) accelerate vitamin D catabolism, leading to deficiency. Vitamin D supplementation is generally beneficial and does not worsen seizure control.",
-      "management": "Vitamin D supplementation (1000–2000 IU/day) is recommended for patients on long-term AEDs. Monitor 25-OH vitamin D levels periodically. Bone density monitoring is also advised.",
-      "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d5b3c5ca-6064-4bc4-b46f-f45a41f0a4f6",
-        "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
-      ],
-      "source_pmids": [],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_d",
-      "direction": "neutral",
-      "materiality": "presence"
-    },
-    {
       "id": "DSI_ANTICONV_EPO",
       "type": "Med-Sup",
       "agent1_name": "Anticonvulsants (class)",
@@ -2089,7 +1969,7 @@
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
       "mechanism": "5-HTP is the immediate serotonin precursor. With MAO inhibited, 5-HTP-derived serotonin cannot be degraded, causing catastrophic serotonin accumulation and serotonin syndrome.",
-      "management": "Never combine 5-HTP with MAOIs. 5-HTP must not be started until at least 14 days after stopping an MAOI (5 weeks after stopping tranylcypromine).",
+      "management": "Never combine 5-HTP with an MAOI. Do not start 5-HTP after stopping an MAOI until the prescriber confirms the product-specific washout interval has been completed.",
       "source_urls": [
         "https://www.ncbi.nlm.nih.gov/books/NBK482377/"
       ],
@@ -2433,6 +2313,8 @@
     },
     {
       "id": "DSI_BENZO_MELATONIN",
+      "display_layer": "background",
+      "background_rationale": "Minor additive drowsiness signal; background counseling rather than a product-fit gate.",
       "type": "Med-Sup",
       "agent1_name": "Benzodiazepines (class)",
       "agent1_id": "class:benzodiazepines",
@@ -2516,141 +2398,6 @@
       }
     },
     {
-      "id": "DSI_PPI_IRON",
-      "type": "Med-Sup",
-      "agent1_name": "Antacids/PPIs (class)",
-      "agent1_id": "class:antacids",
-      "agent2_name": "Iron (supplement)",
-      "agent2_id": "C0302583",
-      "severity": "Moderate",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "PPIs (and antacids) raise gastric pH, reducing conversion of ferric iron (Fe3+) to the more absorbable ferrous form (Fe2+). This reduces dietary and supplemental iron absorption, worsening iron deficiency over time.",
-      "management": "Take iron supplements 1–2 hours before or 4 hours after PPI/antacid doses. Consider using ferrous bisglycinate, which is absorbed via amino acid transporters and is less pH-dependent. Monitor iron and ferritin levels.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/list-all/",
-        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
-      ],
-      "source_pmids": [],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "iron",
-      "direction": "harmful",
-      "materiality": "presence"
-    },
-    {
-      "id": "DSI_PPI_B12",
-      "type": "Med-Sup",
-      "agent1_name": "Antacids/PPIs (class)",
-      "agent1_id": "class:antacids",
-      "agent2_name": "Vitamin B12",
-      "agent2_id": "C0042845",
-      "severity": "Moderate",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "Dietary B12 requires gastric acid and pepsin for release from food proteins, and intrinsic factor for absorption. Long-term PPI use suppresses gastric acid, impairing B12 release from food and reducing absorption. Supplemental crystalline B12 is less affected.",
-      "management": "Long-term PPI users (>2 years) should have B12 levels checked annually. Supplemental B12 (1000 mcg/day sublingual or oral) is advised for those at risk. Methylcobalamin or hydroxocobalamin are bioavailable forms.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/list-all/",
-        "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
-      ],
-      "source_pmids": [],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_b12_cobalamin",
-      "direction": "harmful",
-      "materiality": "presence"
-    },
-    {
-      "id": "DSI_PPI_MAGNESIUM",
-      "type": "Med-Sup",
-      "agent1_name": "Antacids/PPIs (class)",
-      "agent1_id": "class:antacids",
-      "agent2_name": "Magnesium",
-      "agent2_id": "C0024467",
-      "severity": "Moderate",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "Long-term PPI use (>1 year) can cause hypomagnesemia by impairing magnesium absorption in the intestine. This FDA-recognized interaction can lead to muscle cramps, cardiac arrhythmias, and seizures.",
-      "management": "Check magnesium levels before and periodically during long-term PPI use. Magnesium supplementation may be needed. FDA advises monitoring. Switch to H2 blocker if magnesium cannot be maintained.",
-      "source_urls": [
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-low-magnesium-levels-can-be-associated-prolonged-use-proton-pump",
-        "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": false
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "label_regulatory",
-      "clinical_confidence": "medium",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "magnesium",
-      "direction": "harmful",
-      "materiality": "presence"
-    },
-    {
-      "id": "DSI_PPI_CALCIUM",
-      "type": "Med-Sup",
-      "agent1_name": "Antacids/PPIs (class)",
-      "agent1_id": "class:antacids",
-      "agent2_name": "Calcium",
-      "agent2_id": "C0006675",
-      "severity": "Moderate",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "Calcium carbonate requires gastric acid for dissolution and absorption. PPIs raise gastric pH, reducing calcium carbonate absorption. Long-term PPI use is associated with increased fracture risk due to impaired calcium absorption.",
-      "management": "Patients on long-term PPIs should use calcium citrate (which does not require acid for absorption) instead of calcium carbonate. Ensure adequate dietary calcium and vitamin D intake.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/list-all/",
-        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
-      ],
-      "source_pmids": [],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "calcium",
-      "direction": "harmful",
-      "materiality": "presence"
-    },
-    {
       "id": "DSI_CORTICO_LICORICE",
       "type": "Med-Sup",
       "agent1_name": "Corticosteroids (class)",
@@ -2683,39 +2430,6 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "licorice",
       "direction": "harmful",
-      "materiality": "presence"
-    },
-    {
-      "id": "DSI_CORTICO_CALCIUM_VITD",
-      "type": "Med-Sup",
-      "agent1_name": "Corticosteroids (class)",
-      "agent1_id": "class:corticosteroids",
-      "agent2_name": "Calcium with Vitamin D",
-      "agent2_id": "C0006675",
-      "severity": "Minor",
-      "interaction_effect_type": "Neutral",
-      "mechanism": "Long-term corticosteroid use reduces calcium absorption and increases urinary calcium excretion, leading to bone loss. Calcium and vitamin D supplementation is recommended as a preventive measure against steroid-induced osteoporosis.",
-      "management": "Supplementation with calcium (1000–1200 mg/day) and vitamin D (800–1000 IU/day) is standard practice for patients on long-term corticosteroids. Discuss with your prescriber.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
-      ],
-      "source_pmids": [],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "calcium",
-      "direction": "neutral",
       "materiality": "presence"
     },
     {
@@ -2821,6 +2535,8 @@
     },
     {
       "id": "DSI_OC_SOY",
+      "display_layer": "background",
+      "background_rationale": "Low-confidence high-dose isoflavone signal; dietary soy should not produce an alert.",
       "type": "Med-Sup",
       "agent1_name": "Oral Contraceptives (class)",
       "agent1_id": "class:oral_contraceptives",
@@ -2938,7 +2654,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "High zinc intake induces intestinal metallothionein, a protein that binds copper tightly. Copper bound to metallothionein is not released into circulation and is lost when intestinal cells slough off. Chronic high-dose zinc (>40 mg/day) causes copper deficiency.",
-      "management": "Supplement copper (2 mg/day) alongside zinc supplementation exceeding 25 mg/day. Common in zinc therapy for macular degeneration (AREDS formula includes copper for this reason). Do not take zinc and copper simultaneously — separate by 2+ hours.",
+      "management": "PharmaGuide displays this review when the known zinc total is at least 25 mg/day. This is a conservative screening threshold, not a proven toxicity cutoff. Long-term higher-dose zinc can reduce copper status; ask a clinician whether copper monitoring or a balanced formulation is appropriate.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/10801966/"
@@ -2962,7 +2678,17 @@
       "agent1_canonical_id": "zinc",
       "agent2_canonical_id": "copper",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "zinc",
+        "value": 25,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "management_stated",
+        "source": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/",
+        "rationale": "Conservative review floor for prolonged supplemental zinc use; this is not a toxicity cutoff."
+      }
     },
     {
       "id": "SSI_SJW_5HTP",
@@ -3070,6 +2796,8 @@
     },
     {
       "id": "DSI_ANTIHYP_MAGNESIUM",
+      "display_layer": "background",
+      "background_rationale": "Minor possible additive blood-pressure effect; monitor in the background only.",
       "type": "Med-Sup",
       "agent1_name": "Antihypertensives (class)",
       "agent1_id": "class:antihypertensives",
@@ -3116,6 +2844,8 @@
     },
     {
       "id": "DSI_ANTIPSYCH_MELATONIN",
+      "display_layer": "background",
+      "background_rationale": "Minor additive drowsiness signal; background counseling rather than a product-fit gate.",
       "type": "Med-Sup",
       "agent1_name": "Antipsychotics (class)",
       "agent1_id": "class:antipsychotics",
@@ -3386,6 +3116,8 @@
     },
     {
       "id": "DSI_ANTIHYP_ASHWAGANDHA",
+      "display_layer": "background",
+      "background_rationale": "Low-confidence possible blood-pressure effect; informational monitoring only.",
       "type": "Med-Sup",
       "agent1_name": "Antihypertensives (class)",
       "agent1_id": "class:antihypertensives",
@@ -3431,6 +3163,8 @@
     },
     {
       "id": "DSI_SEDATIVES_ASHWAGANDHA",
+      "display_layer": "background",
+      "background_rationale": "Low-confidence additive sedation signal; background counseling rather than a categorical warning.",
       "type": "Med-Sup",
       "agent1_name": "Sedatives (class)",
       "agent1_id": "class:sedatives",
@@ -3473,41 +3207,6 @@
         "source": "https://www.nccih.nih.gov/health/ashwagandha",
         "rationale": "INFERRED conservative floor at a standardized ashwagandha-extract dose (~300 mg)."
       }
-    },
-    {
-      "id": "DSI_THYROID_TURMERIC",
-      "type": "Med-Sup",
-      "agent1_name": "Levothyroxine",
-      "agent1_id": "10582",
-      "agent2_name": "Turmeric / Curcumin",
-      "agent2_id": "C0077524",
-      "severity": "Minor",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "Curcumin may bind thyroid hormone and reduce its absorption when taken simultaneously. Evidence is limited to in vitro and animal data, but a small clinical effect on levothyroxine absorption is plausible at high doses.",
-      "management": "Take levothyroxine well before curcumin supplements. Separate by at least 4 hours. Monitor TSH if starting high-dose curcumin.",
-      "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/30070343/"
-      ],
-      "source_pmids": [
-        "30070343"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "turmeric",
-      "direction": "harmful",
-      "materiality": "presence"
     },
     {
       "id": "DSI_ANTICOAG_TURMERIC",
@@ -3556,6 +3255,8 @@
     },
     {
       "id": "DSI_BETABLOCK_MELATONIN",
+      "display_layer": "background",
+      "background_rationale": "Minor sleep-related signal with limited actionability; background information only.",
       "type": "Med-Sup",
       "agent1_name": "Beta blockers (class)",
       "agent1_id": "class:beta_blockers",
@@ -3692,6 +3393,8 @@
     },
     {
       "id": "DSI_ANTIHYP_VITD",
+      "display_layer": "background",
+      "background_rationale": "Low-confidence modest blood-pressure signal; informational monitoring only.",
       "type": "Med-Sup",
       "agent1_name": "Antihypertensives (class)",
       "agent1_id": "class:antihypertensives",
@@ -3820,6 +3523,8 @@
     },
     {
       "id": "DSI_MELATONIN_VALERIAN",
+      "display_layer": "background",
+      "background_rationale": "Minor dose-dependent additive drowsiness signal; background counseling only.",
       "type": "Sup-Sup",
       "agent1_name": "Melatonin",
       "agent1_id": "C0025219",
@@ -3859,70 +3564,6 @@
         "source": "https://www.nccih.nih.gov/health/valerian",
         "rationale": "INFERRED conservative floor on valerian (~400 mg) for additive sedation with melatonin."
       }
-    },
-    {
-      "id": "DSI_CALCIUM_FLUOROQUINOLONE",
-      "type": "Med-Sup",
-      "agent1_name": "Fluoroquinolones (class)",
-      "agent1_id": "class:fluoroquinolones",
-      "agent1_canonical_id": null,
-      "agent2_name": "Calcium",
-      "agent2_id": "C0006675",
-      "agent2_canonical_id": "calcium",
-      "severity": "Major",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "Calcium ions form poorly soluble chelate complexes with the fluoroquinolone ring structure, significantly reducing GI absorption and plasma concentrations, risking antibiotic treatment failure.",
-      "management": "Take fluoroquinolone antibiotics at least 2 hours before or 6 hours after calcium supplements.",
-      "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/14655198/"
-      ],
-      "source_pmids": [
-        "14655198"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_with": {
-          "rxnorm": false,
-          "umls": true,
-          "pubmed": true
-        }
-      },
-      "evidence_basis": "rct",
-      "clinical_confidence": "high",
-      "direction": "harmful",
-      "materiality": "presence"
-    },
-    {
-      "id": "DSI_IRON_PPI",
-      "type": "Med-Sup",
-      "agent1_name": "Proton Pump Inhibitors (class)",
-      "agent1_id": "class:proton_pump_inhibitors",
-      "agent1_canonical_id": null,
-      "agent2_name": "Iron (supplement)",
-      "agent2_id": "C0302583",
-      "agent2_canonical_id": "iron",
-      "severity": "Moderate",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "PPIs suppress gastric acid production; acidic pH is required to reduce dietary ferric iron (Fe3+) to absorbable ferrous form (Fe2+), so hypochlorhydria impairs non-heme iron absorption.",
-      "management": "Consider taking iron supplements at a different time than PPI, or use ferrous bisglycinate which is less pH-dependent.",
-      "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/37756627/"
-      ],
-      "source_pmids": [
-        "37756627"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_with": {
-          "rxnorm": false,
-          "umls": true,
-          "pubmed": true
-        }
-      },
-      "evidence_basis": "observational",
-      "clinical_confidence": "moderate",
-      "direction": "harmful",
-      "materiality": "presence"
     },
     {
       "id": "DSI_MAGNESIUM_BISPHOSPHONATE",
@@ -3989,33 +3630,36 @@
       "materiality": "presence"
     },
     {
-      "id": "DSI_VITE_ANTICOAG",
+      "id": "DSI_CALCIUM_CIPROFLOXACIN",
       "type": "Med-Sup",
-      "agent1_name": "Anticoagulants (class)",
-      "agent1_id": "class:anticoagulants",
+      "agent1_name": "Ciprofloxacin",
+      "agent1_id": "2551",
       "agent1_canonical_id": null,
-      "agent2_name": "Vitamin E (high dose)",
-      "agent2_id": "C0042874",
-      "agent2_canonical_id": "vitamin_e",
+      "agent2_name": "Calcium",
+      "agent2_id": "C0006675",
+      "agent2_canonical_id": "calcium",
       "severity": "Major",
-      "interaction_effect_type": "Additive",
-      "mechanism": "High-dose alpha-tocopherol antagonizes vitamin K-dependent clotting factor activation and independently inhibits platelet aggregation; combined with anticoagulants, this produces additive bleeding risk and may elevate INR.",
-      "management": "Limit vitamin E to ≤400 IU/day when taking anticoagulants. Monitor INR more frequently if vitamin E is added or removed.",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Calcium ions can form poorly absorbed complexes with oral ciprofloxacin, reducing ciprofloxacin exposure and risking antibiotic treatment failure.",
+      "management": "Take oral ciprofloxacin at least 2 hours before or 6 hours after calcium-containing supplements, multivitamins, or antacids, as directed by the prescription label.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/40065887/"
+        "https://pubmed.ncbi.nlm.nih.gov/1524699/",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d10f7c93-a08b-4e9c-bfa2-6646e3ea21bd"
       ],
       "source_pmids": [
-        "40065887"
+        "1524699"
       ],
       "verification": {
         "status": "verified",
+        "verified_at": "2026-07-29T00:00:00Z",
         "verified_with": {
-          "rxnorm": false,
+          "rxnorm": true,
           "umls": true,
           "pubmed": true
-        }
+        },
+        "method": "live_api_and_current_label_2026_07_29"
       },
-      "evidence_basis": "review",
+      "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "direction": "harmful",
       "materiality": "presence"
@@ -4031,23 +3675,27 @@
       "agent2_canonical_id": "zinc",
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Zinc ions chelate the 4-oxo and 3-carboxyl groups of fluoroquinolones in the GI lumen, forming insoluble complexes that are not absorbed, reducing antibiotic bioavailability and risking treatment failure.",
-      "management": "Take fluoroquinolone antibiotics at least 2 hours before or 6 hours after zinc supplements.",
+      "mechanism": "Zinc can bind oral fluoroquinolones in the gastrointestinal tract, reducing antibiotic absorption and risking treatment failure.",
+      "management": "Separate oral fluoroquinolones from zinc-containing supplements and multivitamins. The timing interval differs by drug, so follow the prescription label or pharmacist instructions; do not apply one interval to the entire class.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/1524699/"
+        "https://pubmed.ncbi.nlm.nih.gov/1524699/",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d10f7c93-a08b-4e9c-bfa2-6646e3ea21bd",
+        "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=1e6bc886-eec9-4cd8-be78-7563817457f2&type=display"
       ],
       "source_pmids": [
         "1524699"
       ],
       "verification": {
         "status": "verified",
+        "verified_at": "2026-07-29T00:00:00Z",
         "verified_with": {
           "rxnorm": false,
           "umls": true,
           "pubmed": true
-        }
+        },
+        "method": "live_api_and_current_labels_2026_07_29"
       },
-      "evidence_basis": "review",
+      "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "direction": "harmful",
       "materiality": "presence"

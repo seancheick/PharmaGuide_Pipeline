@@ -450,13 +450,20 @@ sync_final_db_output_catalog_from_dist
 # ---------------------------------------------------------------------------
 
 DIST_INTERACTION="$DIST_DIR/interaction_db.sqlite"
+SUPPAI_DIR="${PHARMAGUIDE_SUPPAI_DIR:-/Users/seancheick/Downloads/Supp ai DB}"
 INTERACTION_INPUTS=(
   "$REPO_ROOT/scripts/data/curated_interactions/curated_interactions_v1.json"
   "$REPO_ROOT/scripts/data/curated_interactions/med_med_pairs_v1.json"
   "$REPO_ROOT/scripts/data/ingredient_interaction_rules.json"
   "$REPO_ROOT/scripts/data/drug_classes.json"
+  "$REPO_ROOT/scripts/data/ingredient_quality_map.json"
   "$REPO_ROOT/scripts/config/interaction_db_release.json"
   "$REPO_ROOT/scripts/interaction_db_output/research_pairs.json"
+  "$SUPPAI_DIR/cui_metadata.json"
+  "$SUPPAI_DIR/interaction_id_dict.json"
+  "$SUPPAI_DIR/meta.json"
+  "$SUPPAI_DIR/paper_metadata.json"
+  "$SUPPAI_DIR/sentence_dict.json"
 )
 
 step4_needs_run() {

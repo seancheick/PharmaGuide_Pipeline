@@ -60,6 +60,13 @@ def test_preflight_does_not_require_deleted_temporary_configs() -> None:
     assert all("tmp" not in filename for filename, _ in preflight.CONFIG_FILES)
 
 
+def test_clinical_reference_artifacts_are_fail_closed_inputs() -> None:
+    critical = {filename for filename, _ in preflight.CRITICAL_DATA_FILES}
+
+    assert "timing_rules.json" in critical
+    assert "medication_depletions.json" in critical
+
+
 def test_cleaning_config_uses_portable_stage_root() -> None:
     config = json.loads((preflight.CONFIG_DIR / "cleaning_config.json").read_text())
 
