@@ -39,8 +39,8 @@
     },
     "statistics": {
       "total_parents": 631,
-      "total_forms": 1420,
-      "total_form_aliases": 12084,
+      "total_forms": 1421,
+      "total_form_aliases": 12088,
       "parents_with_parent_aliases": 117,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60,7 +60,7 @@
       "proteins": 16,
       "vitamins": 25
     },
-    "schema_version": "5.4.12",
+    "schema_version": "5.4.13",
     "last_updated": "2026-07-28",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
@@ -62484,6 +62484,7 @@
           "Vitamin K2 (Menaquinone-7)",
           "Vit. K2",
           "menaquinone",
+          "MenaQ7 Menaquinone",
           "menaq7",
           "menaq7 menaquinone-7",
           "vitamin k2 menaquinone-7",
@@ -62572,6 +62573,22 @@
           "range_low": 0.01,
           "range_high": 0.15,
           "quality": "low"
+        }
+      },
+      "vitamin k2 (unspecified subtype)": {
+        "bio_score": 6,
+        "natural": false,
+        "score": 6,
+        "absorption": "form not stated; no subtype-specific absorption assigned",
+        "notes": "The label identifies vitamin K2 but does not state the menaquinone subtype. The exact form cannot be confirmed, so this row receives conservative baseline scoring and must not inherit MK-4, MK-7, cis-isomer, or source-specific properties.",
+        "aliases": [
+          "vitamin k2 unspecified",
+          "unspecified vitamin k2",
+          "menaquinone unspecified"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "quality": "unknown"
         }
       },
       "vitamin K2 (cis form)": {

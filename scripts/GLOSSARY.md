@@ -43,7 +43,7 @@ contract name elsewhere.
 
 | Term | Meaning |
 |---|---|
-| **IQM** | Ingredient Quality Map: `scripts/data/ingredient_quality_map.json`. Current metadata: schema 5.4.11, 629 parents. |
+| **IQM** | Ingredient Quality Map: `scripts/data/ingredient_quality_map.json`. Current metadata: schema 5.4.13, 631 parents. |
 | **Parent** | Canonical ingredient family identified by a stable snake-case key, such as `magnesium`. |
 | **Form** | A specific salt, chelate, extract, strain, source, or delivery form under a parent. |
 | **Canonical ID** | Stable machine identity selected by deterministic exact/canonical/bounded-alias matching. Display text is not identity. |

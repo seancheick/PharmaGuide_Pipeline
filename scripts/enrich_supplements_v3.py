@@ -8163,11 +8163,13 @@ class SupplementEnricherV3:
 
     def _should_keep_from_prefixed_form_as_actual(self, form_name: str) -> bool:
         """
-        Some DSLD rows use prefix='from' for delivery systems rather than source materials.
+        Some DSLD rows use prefix='from' for an actual form rather than source material.
 
         Example: "Coenzyme Q10 (Form: from MicroActive Q10-Cyclodextrin Complex)".
-        Those should remain matchable forms; true provenance rows like "from Pineapple"
-        should continue to be skipped.
+        Branded or explicit vitamer forms such as "from MenaQ7 Menaquinone"
+        follow the same structural pattern. Those should remain matchable;
+        true provenance rows like "from Pineapple" should continue to be
+        skipped.
         """
         if not form_name:
             return False
@@ -8187,6 +8189,18 @@ class SupplementEnricherV3:
             # (e.g. "Chromium (from Brown Rice Chelate)") — the chelate IS the form,
             # not a source material.  Matches "chelate", "chelated", "chelation", etc.
             'chelate',
+            # Vitamin K vitamers/brands are actual chemical-form evidence even
+            # when DSLD serializes them with prefix='from'. Keep this list
+            # specific: bare "menaquinone" is not enough to infer MK-4 vs MK-7.
+            'menaq7',
+            'mena q7',
+            'menaquinone-7',
+            'menaquinone-4',
+            'mk-7',
+            'mk7',
+            'mk-4',
+            'mk4',
+            'phylloquinone',
         )
         return any(token in normalized for token in delivery_tokens)
 

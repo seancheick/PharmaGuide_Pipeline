@@ -195,6 +195,7 @@ _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
     'rhodiola':             8,  # botanicals_06o: < rosavin-standardized extract
     'ginkgo':               8,  # botanicals_06o: < EGb 24% flavone-glycoside extract
     'vanadium':             4,  # minerals/B25: hazardous trace mineral — unknown-form floor (UMLS poison flag, GI tox >1.8 mg/day, ~5% F) kept below the disclosed sodium-vanadate class floor (7); conservative-by-design, and the safety-correct direction
+    'vitamin_k2':           6,  # subtype undisclosed: cannot inherit MK-4, MK-7, cis-isomer, or source-specific properties
 }
 
 

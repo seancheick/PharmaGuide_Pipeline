@@ -858,6 +858,36 @@ def test_explicit_form_validates_specific_child_of_structured_parent():
     assert decision.source_label_form == "Beta-Carotene"
 
 
+def test_prefixed_explicit_form_validates_specific_child_of_structured_parent():
+    canonicals = {
+        "vitamin k": "vitamin_k",
+        "vitamin k (unspecified)": "vitamin_k",
+        "vitamin k1": "vitamin_k1",
+    }
+
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Vitamin K",
+            "ingredientGroup": "Vitamin K (unspecified)",
+            "forms": [{"prefix": "as", "name": "Vitamin K1"}],
+        },
+        supplied_canonical_id="vitamin_k1",
+        resolve_candidate=lambda value: canonicals.get(
+            normalize_label_display(value).casefold()
+        ),
+        canonical_parent_of=lambda parent, child: (
+            parent,
+            child,
+        )
+        == ("vitamin_k", "vitamin_k1"),
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "vitamin_k1"
+    assert decision.source_label_name == "Vitamin K (unspecified)"
+    assert decision.source_label_form == "as Vitamin K1"
+
+
 def test_literal_identity_cannot_resolve_unrelated_structured_conflict():
     canonicals = {
         "epa": "epa",

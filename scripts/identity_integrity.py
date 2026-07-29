@@ -33,6 +33,7 @@ _PARENTHESIZED_IDENTITY_RE = re.compile(r"^(.+?)\s*\(([^()]*)\)\s*$")
 _LITERAL_PARENTHESIZED_IDENTITY_RE = re.compile(
     r"^(.+?)\s*[\(（]([^()（）]*)[\)）]\s*$"
 )
+_FORM_IDENTITY_PREFIX_RE = re.compile(r"^(?:as|from)\s+", re.IGNORECASE)
 
 
 @dataclass(frozen=True, slots=True)
@@ -543,6 +544,16 @@ def _candidate_variants(value: str) -> tuple[str, ...]:
     return tuple(dict.fromkeys(variants))
 
 
+def _form_candidate_variants(value: str) -> tuple[str, ...]:
+    """Return form identity candidates without changing the displayed label text."""
+    variants = list(_candidate_variants(value))
+    display = normalize_label_display(value)
+    unprefixed = _FORM_IDENTITY_PREFIX_RE.sub("", display, count=1).strip()
+    if unprefixed and unprefixed != display:
+        variants.extend(_candidate_variants(unprefixed))
+    return tuple(dict.fromkeys(variants))
+
+
 def _resolved_canonicals(
     evidence: Iterable[LabelEvidence],
     resolve_candidate: CandidateResolver,
@@ -719,7 +730,7 @@ def resolve_identity(
         and any(
             _canonical(resolve_candidate(candidate)) == canonical_before
             for item in form_evidence
-            for candidate in _candidate_variants(item.value)
+            for candidate in _form_candidate_variants(item.value)
         )
     )
     display_canonical = (
