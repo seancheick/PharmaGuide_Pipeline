@@ -18107,6 +18107,64 @@ class SupplementEnricherV3:
         - Full evidence tracking
         """
         active_ingredients = self._primary_active_ingredients_for_enrichment(product)
+        quality_identity_rows = [
+            row
+            for row in (
+                (product.get("ingredient_quality_data") or {}).get("ingredients") or []
+            )
+            if isinstance(row, dict)
+        ]
+        consumed_quality_identity_rows: set[int] = set()
+
+        def _take_quality_identity(source_row: Dict) -> Dict:
+            """Return this label row's already-resolved IQM identity once.
+
+            Ingredient-quality matching runs before RDA/UL collection in the
+            production enrichment path. Reuse that result instead of rematching
+            names independently, which is how explicit Vitamin K1/K2 identities
+            were lost from ``analyzed_ingredients``.
+            """
+            source_path = str(source_row.get("raw_source_path") or "").strip()
+            source_label = self._normalize_text(
+                source_row.get("raw_source_text") or source_row.get("name") or ""
+            )
+            for index, quality_row in enumerate(quality_identity_rows):
+                if index in consumed_quality_identity_rows:
+                    continue
+                quality_path = str(quality_row.get("raw_source_path") or "").strip()
+                if source_path and quality_path and source_path != quality_path:
+                    continue
+                quality_label = self._normalize_text(
+                    quality_row.get("raw_source_text")
+                    or quality_row.get("name")
+                    or quality_row.get("standard_name")
+                    or ""
+                )
+                if source_label and quality_label == source_label:
+                    consumed_quality_identity_rows.add(index)
+                    return quality_row
+            return {}
+
+        def _nutrient_group_id(canonical_id: str) -> Optional[str]:
+            quality_map = self.databases.get("ingredient_quality_map") or {}
+            entry = quality_map.get(canonical_id) if canonical_id else None
+            group_id = (
+                str(entry.get("nutrient_group_id") or "").strip()
+                if isinstance(entry, dict)
+                else ""
+            )
+            return group_id or None
+
+        def _nutrient_group_name(group_id: Optional[str]) -> Optional[str]:
+            quality_map = self.databases.get("ingredient_quality_map") or {}
+            entry = quality_map.get(group_id) if group_id else None
+            group_name = (
+                str(entry.get("standard_name") or "").strip()
+                if isinstance(entry, dict)
+                else ""
+            )
+            return group_name or None
+
         # Dual-declaration dedupe: the compound-weight restatement of a bare
         # elemental row must not contribute to UL totals (60+400=460 mg
         # would falsely breach the 350 mg magnesium UL).
@@ -18151,6 +18209,14 @@ class SupplementEnricherV3:
                 for ingredient in active_ingredients:
                     ing_name = ingredient.get('name', '')
                     std_name = ingredient.get('standardName', '') or ing_name
+                    quality_identity = _take_quality_identity(ingredient)
+                    resolved_canonical_id = str(
+                        quality_identity.get("canonical_id")
+                        or ingredient.get("canonical_id")
+                        or ""
+                    ).strip()
+                    nutrient_group_id = _nutrient_group_id(resolved_canonical_id)
+                    nutrient_group_name = _nutrient_group_name(nutrient_group_id)
                     # P0-1b: dailyValue present ⟹ elemental mass (corpus-validated
                     # across 13,753 mineral rows). Rows without it (e.g. Magtein
                     # 2000 mg magnesium L-threonate, which states COMPOUND mass) are
@@ -18212,7 +18278,7 @@ class SupplementEnricherV3:
                     rule_id = (conversion.conversion_rule_id or '').lower()
                     form_detected = (conversion.form_detected or '').lower()
                     _canonical_for_ul = self._normalize_text(
-                        ingredient.get("canonical_id") or std_name
+                        resolved_canonical_id or std_name
                     )
                     _folate_label_text = self._normalize_text(" ".join(
                         str(value or "")
@@ -18299,6 +18365,13 @@ class SupplementEnricherV3:
                     elif unknown_form:
                         skip_ul_check = True
                         skip_ul_reason = "unknown_vitamin_form"
+                        # Total vitamin activity can remain adequate for an RDA/
+                        # AI comparison even when form lineage is insufficient
+                        # for the form-specific UL. Example: a mixed-form
+                        # Vitamin A label in mcg supports mcg RAE adequacy, but
+                        # its preformed fraction is unknown, so the preformed-A
+                        # UL must remain indeterminate.
+                        ul_only_skip = not conversion_failed
                     elif conversion_failed:
                         skip_ul_check = True
                         skip_ul_reason = "conversion_failed"
@@ -18341,6 +18414,9 @@ class SupplementEnricherV3:
 
                     adequacy_dict = adequacy.to_dict()
                     adequacy_dict.update({
+                        "canonical_id": resolved_canonical_id or None,
+                        "nutrient_group_id": nutrient_group_id,
+                        "nutrient_group_name": nutrient_group_name,
                         "ul": safety.ul,
                         "ul_status": safety.ul_status,
                         "pct_ul": safety.pct_ul,
@@ -18362,6 +18438,10 @@ class SupplementEnricherV3:
                         is_indeterminate_folate = (
                             skip_ul_reason == "unknown_folate_form_lineage"
                         )
+                        is_indeterminate_ul = (
+                            is_indeterminate_folate
+                            or skip_ul_reason == "unknown_vitamin_form"
+                        )
                         potential_pct_ul = (
                             folate_ul_screening.get("potential_pct_ul")
                             if folate_ul_screening
@@ -18374,7 +18454,7 @@ class SupplementEnricherV3:
                             "ul": None,
                             "ul_status": (
                                 f"indeterminate_{skip_ul_reason}"
-                                if is_indeterminate_folate
+                                if is_indeterminate_ul
                                 else f"not_applicable_{skip_ul_reason}"
                             ),
                             "pct_ul": None,
@@ -18392,7 +18472,7 @@ class SupplementEnricherV3:
                             "skip_ul_reason": skip_ul_reason,
                             "ul_assessment_status": (
                                 "indeterminate"
-                                if is_indeterminate_folate
+                                if is_indeterminate_ul
                                 else "not_applicable"
                             ),
                             "potential_ul_concern": potential_ul_concern,
@@ -18479,7 +18559,7 @@ class SupplementEnricherV3:
                     # Don't append directly — we may replace per-row flags
                     # with a single aggregated flag if multiple forms of
                     # the same canonical combine to exceed UL.
-                    _row_canonical = ingredient.get('canonical_id')
+                    _row_canonical = resolved_canonical_id or None
                     if not skip_ul_check and safety.over_ul:
                         pct_ul_val = safety.pct_ul or 0
                         over_ul_amount = safety.over_ul_amount or 0
@@ -18558,6 +18638,9 @@ class SupplementEnricherV3:
                     rda_data.append({
                         "ingredient": ing_name,
                         "standard_name": std_name,
+                        "canonical_id": resolved_canonical_id or None,
+                        "nutrient_group_id": nutrient_group_id,
+                        "nutrient_group_name": nutrient_group_name,
                         "quantity": quantity,
                         "unit": unit,
                         "converted_quantity": converted_amount,
@@ -18582,8 +18665,8 @@ class SupplementEnricherV3:
                             None if skip_ul_check else safety.ul
                         ),
                         "optimal_range": f"{adequacy.optimal_min}-{adequacy.optimal_max}" if adequacy.optimal_min else "",
-                        "pct_rda": None if skip_ul_check else adequacy.pct_rda,
-                        "adequacy_band": "unknown" if skip_ul_check else adequacy.adequacy_band,
+                        "pct_rda": adequacy_dict.get("pct_rda"),
+                        "adequacy_band": adequacy_dict.get("adequacy_band"),
                         "warnings": [] if skip_ul_check else safety.warnings,
                         "data_by_group": list(_nutrient_record.get("data") or []),
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),

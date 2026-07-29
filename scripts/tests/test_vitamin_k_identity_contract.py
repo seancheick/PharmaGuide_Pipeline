@@ -75,6 +75,7 @@ def test_k2_keeps_specific_identity_form_score_and_dose(
     assert rows["Vitamin K"].get("is_compound_duplicate") is not True
     assert rows["Vitamin K2"].get("is_compound_duplicate") is not True
 
+    product["ingredient_quality_data"] = quality
     rda = enricher._collect_rda_ul_data(
         product,
         min_servings_per_day=1,
@@ -88,6 +89,12 @@ def test_k2_keeps_specific_identity_form_score_and_dose(
 
     assert analyzed["Vitamin K"]["per_day_max"] == 300
     assert analyzed["Vitamin K2"]["per_day_max"] == 90
+    assert analyzed["Vitamin K"]["canonical_id"] == "vitamin_k1"
+    assert analyzed["Vitamin K"]["nutrient_group_id"] == "vitamin_k"
+    assert analyzed["Vitamin K"]["nutrient_group_name"] == "Vitamin K"
+    assert analyzed["Vitamin K2"]["canonical_id"] == "vitamin_k2"
+    assert analyzed["Vitamin K2"]["nutrient_group_id"] == "vitamin_k"
+    assert analyzed["Vitamin K2"]["nutrient_group_name"] == "Vitamin K"
     assert analyzed["Vitamin K2"].get("skip_ul_reason") != "compound_duplicate_row"
     assert sum(row["per_day_max"] for row in analyzed.values()) == 390
 
