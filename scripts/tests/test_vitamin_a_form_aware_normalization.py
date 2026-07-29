@@ -41,6 +41,7 @@ if str(ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts"))
 
 from scripts.dosage_normalizer import DosageNormalizer, ServingBasis  # noqa: E402
+from scripts.enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
 from scripts.unit_converter import UnitConverter  # noqa: E402
 
 
@@ -162,6 +163,62 @@ def test_vitamin_a_mcg_label_not_flagged_by_audit() -> None:
         "normalized_value": 600.0,
     }
     assert _audit_check_vitamin_a(blob_ing_mcg) is False
+
+
+def test_unknown_form_mcg_vitamin_a_keeps_adequacy_but_not_ul() -> None:
+    """Total vitamin A in mcg can support RAE adequacy while its UL is unknown.
+
+    The adult Vitamin A target applies to total vitamin A activity, but the
+    3,000 mcg RAE UL applies only to preformed vitamin A. A mixed-form label
+    without an authored preformed fraction must therefore retain the target
+    comparison and fail closed only for the UL comparison.
+    """
+    enricher = SupplementEnricherV3(
+        config_path=str(ROOT / "scripts" / "config" / "enrichment_config.json")
+    )
+    product = {
+        "id": "278011",
+        "fullName": "O.N.E. Multivitamin",
+        "activeIngredients": [
+            {
+                "name": "Vitamin A",
+                "raw_source_text": "Vitamin A",
+                "standardName": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "quantity": 1125,
+                "unit": "mcg",
+                "dailyValue": 125,
+                "matched_form": "vitamin a (unspecified)",
+            }
+        ],
+        "ingredient_quality_data": {
+            "ingredients": [
+                {
+                    "raw_source_text": "Vitamin A",
+                    "canonical_id": "vitamin_a",
+                }
+            ]
+        },
+    }
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    adequacy = result["adequacy_results"][0]
+    analyzed = result["analyzed_ingredients"][0]
+
+    assert adequacy["canonical_id"] == "vitamin_a"
+    assert adequacy["pct_rda"] == pytest.approx(125.0)
+    assert adequacy["ul"] is None
+    assert adequacy["pct_ul"] is None
+    assert adequacy["ul_assessment_status"] == "indeterminate"
+    assert adequacy["skip_ul_reason"] == "unknown_vitamin_form"
+    assert analyzed["canonical_id"] == "vitamin_a"
+    assert analyzed["pct_rda"] == pytest.approx(125.0)
+    assert analyzed["per_day_min"] == pytest.approx(1125.0)
+    assert analyzed["per_day_max"] == pytest.approx(1125.0)
 
 
 def test_vitamin_d_iu_form_independent_passthrough() -> None:
