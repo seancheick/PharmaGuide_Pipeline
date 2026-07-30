@@ -15,6 +15,12 @@ TIMING_FILE = DATA_DIR / "timing_rules.json"
 VALID_RULE_TYPES = {"separate", "take_together", "take_with_food", "take_on_empty_stomach", "time_of_day"}
 VALID_EVIDENCE_LEVELS = {"established", "probable", "possible"}
 VALID_SOURCE_TYPES = {"pubmed", "reference", "nih_ods", "fda", "nccih"}
+VALID_DAILY_SLOTS = {
+    "morning_empty",
+    "with_breakfast",
+    "with_dinner",
+    "bedtime",
+}
 
 
 @pytest.fixture(scope="module")
@@ -113,6 +119,34 @@ class TestTimingRuleSchema:
             else:
                 assert rule.get("ingredient2_rxcuis") == ["10582"], rule["id"]
                 assert "ingredient1_rxcuis" not in rule
+
+    def test_time_of_day_rules_author_machine_readable_daily_slots(self, rules):
+        for rule in rules:
+            daily_slots = rule.get("daily_slots")
+            if rule["rule_type"] == "time_of_day":
+                assert isinstance(daily_slots, list) and daily_slots, rule["id"]
+                assert len(daily_slots) == len(set(daily_slots)), rule["id"]
+                assert set(daily_slots) <= VALID_DAILY_SLOTS, rule["id"]
+            else:
+                assert daily_slots is None, (
+                    f"{rule['id']} authors daily_slots outside time_of_day"
+                )
+
+    def test_daily_plan_eligibility_is_boolean_and_fail_closed_for_context(self, rules):
+        for rule in rules:
+            value = rule.get("daily_plan_eligible", True)
+            assert isinstance(value, bool), rule["id"]
+
+        excluded = {
+            "timing_magnesium_evening",
+            "timing_probiotics_by_formulation",
+            "timing_psyllium_water_med_spacing",
+            "timing_bromelain_timing_by_purpose",
+        }
+        by_id = {rule["id"]: rule for rule in rules}
+        assert excluded <= by_id.keys()
+        for rule_id in excluded:
+            assert by_id[rule_id]["daily_plan_eligible"] is False, rule_id
 
 
 # ── Source quality ─────────────────────────────────────────────────

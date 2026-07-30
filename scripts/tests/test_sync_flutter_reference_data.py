@@ -94,3 +94,35 @@ def test_sync_clinical_taxonomy_uses_pipeline_file_as_only_source(
     assert result["schema_version"] == "5.3.0"
     assert result["conditions"] == 15
     assert result["profile_flags"] == 8
+
+
+def test_sync_timing_rules_uses_pipeline_file_as_only_source(
+    tmp_path: Path,
+) -> None:
+    source = Path(__file__).parent.parent / "data" / "timing_rules.json"
+    flutter_repo = tmp_path / "PharmaGuide-ai"
+    destination = (
+        flutter_repo / "assets" / "reference_data" / "timing_rules.json"
+    )
+    destination.parent.mkdir(parents=True)
+    destination.write_text('{"timing_rules": []}\n')
+
+    with pytest.raises(ValueError, match="timing rules differ"):
+        sync_mod.validate_flutter_timing_rules(
+            source_path=source,
+            flutter_repo=flutter_repo,
+        )
+
+    result = sync_mod.sync_timing_rules(
+        source_path=source,
+        flutter_repo=flutter_repo,
+    )
+
+    assert destination.read_bytes() == source.read_bytes()
+    assert result["destination"] == destination
+    assert result["schema_version"] == "5.3.0"
+    assert result["total_entries"] == 32
+    sync_mod.validate_flutter_timing_rules(
+        source_path=source,
+        flutter_repo=flutter_repo,
+    )

@@ -38,6 +38,10 @@ DEFAULT_CLINICAL_TAXONOMY_SOURCE = (
 CLINICAL_TAXONOMY_DESTINATION_RELATIVE_PATH = Path(
     "assets/reference_data/clinical_risk_taxonomy.json"
 )
+DEFAULT_TIMING_RULES_SOURCE = Path(__file__).parent / "data" / "timing_rules.json"
+TIMING_RULES_DESTINATION_RELATIVE_PATH = Path(
+    "assets/reference_data/timing_rules.json"
+)
 
 
 def _load_canonical(*, source_path: Path) -> tuple[Path, dict[str, Any], dict[str, str]]:
@@ -213,6 +217,64 @@ def sync_clinical_taxonomy(
     )
 
 
+def _load_timing_rules(source_path: Path) -> tuple[Path, dict[str, Any]]:
+    source_path = source_path.resolve()
+    if not source_path.is_file():
+        raise FileNotFoundError(
+            f"Canonical timing rules not found: {source_path}"
+        )
+    payload = json.loads(source_path.read_text(encoding="utf-8"))
+    metadata = payload.get("_metadata")
+    rules = payload.get("timing_rules")
+    if not isinstance(metadata, dict) or not isinstance(rules, list):
+        raise ValueError("canonical timing rules have an invalid shape")
+    if metadata.get("total_entries") != len(rules):
+        raise ValueError("canonical timing-rules metadata is stale")
+    return source_path, payload
+
+
+def validate_flutter_timing_rules(
+    *, source_path: Path, flutter_repo: Path
+) -> dict[str, Any]:
+    """Require the app to bundle the byte-identical pipeline timing rules."""
+    source_path, canonical = _load_timing_rules(source_path)
+    flutter_repo = flutter_repo.resolve()
+    destination = flutter_repo / TIMING_RULES_DESTINATION_RELATIVE_PATH
+    if not flutter_repo.is_dir():
+        raise FileNotFoundError(f"Flutter repository not found: {flutter_repo}")
+    if not destination.is_file():
+        raise FileNotFoundError(f"Flutter timing rules not found: {destination}")
+    if (
+        destination.read_bytes() != source_path.read_bytes()
+        or json.loads(destination.read_text(encoding="utf-8")) != canonical
+    ):
+        raise ValueError("Flutter timing rules differ from canonical pipeline source")
+    metadata = canonical["_metadata"]
+    return {
+        "source": source_path,
+        "destination": destination,
+        "schema_version": metadata["schema_version"],
+        "total_entries": metadata["total_entries"],
+    }
+
+
+def sync_timing_rules(
+    *, source_path: Path, flutter_repo: Path
+) -> dict[str, Any]:
+    """Byte-copy the sole authored timing-rules artifact into Flutter."""
+    source_path, _ = _load_timing_rules(source_path)
+    flutter_repo = flutter_repo.resolve()
+    destination = flutter_repo / TIMING_RULES_DESTINATION_RELATIVE_PATH
+    if not flutter_repo.is_dir():
+        raise FileNotFoundError(f"Flutter repository not found: {flutter_repo}")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source_path, destination)
+    return validate_flutter_timing_rules(
+        source_path=source_path,
+        flutter_repo=flutter_repo,
+    )
+
+
 def sync_medication_depletions(
     *, source_path: Path, flutter_repo: Path, content_version: str | None = None
 ) -> dict[str, Any]:
@@ -323,6 +385,12 @@ def _parse_args() -> argparse.Namespace:
         "(default: scripts/data/clinical_risk_taxonomy.json).",
     )
     parser.add_argument(
+        "--timing-rules-source",
+        default=str(DEFAULT_TIMING_RULES_SOURCE),
+        help="Canonical timing_rules.json "
+        "(default: scripts/data/timing_rules.json).",
+    )
+    parser.add_argument(
         "--content-version",
         default=None,
         help="Release stamp for the generated depletions artifact "
@@ -352,6 +420,13 @@ def main() -> int:
     )
     taxonomy_result = taxonomy_operation(
         source_path=Path(args.clinical_taxonomy_source),
+        flutter_repo=Path(args.flutter_repo),
+    )
+    timing_operation = (
+        validate_flutter_timing_rules if args.check else sync_timing_rules
+    )
+    timing_result = timing_operation(
+        source_path=Path(args.timing_rules_source),
         flutter_repo=Path(args.flutter_repo),
     )
     depletion_kwargs: dict[str, Any] = dict(
@@ -386,6 +461,11 @@ def main() -> int:
         f"schema={taxonomy_result['schema_version']} "
         f"conditions={taxonomy_result['conditions']} "
         f"profile_flags={taxonomy_result['profile_flags']}"
+    )
+    print(
+        f"{verb} timing rules: "
+        f"schema={timing_result['schema_version']} "
+        f"entries={timing_result['total_entries']}"
     )
     return 0
 
