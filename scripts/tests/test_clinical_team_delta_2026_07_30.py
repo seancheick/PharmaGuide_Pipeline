@@ -12,11 +12,41 @@ from pathlib import Path
 
 DATA = Path(__file__).parents[1] / "data"
 MED_MED = DATA / "curated_interactions" / "med_med_pairs_v1.json"
+MEDICATION_DEPLETIONS = DATA / "medication_depletions.json"
+CLINICAL_TEAM_DELTA_IDS = {
+    "DEP_ANTACIDS_IRON",
+    "DEP_DIURETICS_THIAMINE",
+    "DEP_SSRIS_SODIUM",
+    "DEP_LEVOTHYROXINE_CALCIUM",
+    "DEP_LEVOTHYROXINE_IRON",
+    "DEP_ANTICOAGULANTS_VITAMINK",
+    "DEP_ORLISTAT_VITAMINA",
+    "DEP_CHOLESTYRAMINE_VITAMINA",
+    "DEP_CHOLESTYRAMINE_VITAMIND",
+    "DEP_CHOLESTYRAMINE_VITAMINE",
+    "DEP_CHOLESTYRAMINE_VITAMINK",
+}
 
 
 def _med_med_by_id() -> dict[str, dict]:
     payload = json.loads(MED_MED.read_text(encoding="utf-8"))
     return {row["id"]: row for row in payload["interactions"]}
+
+
+def _depletions_by_id() -> dict[str, dict]:
+    payload = json.loads(MEDICATION_DEPLETIONS.read_text(encoding="utf-8"))
+    return {row["id"]: row for row in payload["depletions"]}
+
+
+def test_delta_records_name_the_clinical_reviewer_without_erasing_ai_audit():
+    records = _depletions_by_id()
+    assert CLINICAL_TEAM_DELTA_IDS <= records.keys()
+
+    for record_id in CLINICAL_TEAM_DELTA_IDS:
+        record = records[record_id]
+        assert record["reviewed_at"] == "2026-07-30"
+        assert record["reviewer"] == "PharmaGuide Clinical Team"
+        assert record["b1_evidence_auditor"] == "openai_codex_ai_clinical_audit"
 
 
 def test_cholestyramine_warfarin_is_an_authored_direct_drug_pair():
