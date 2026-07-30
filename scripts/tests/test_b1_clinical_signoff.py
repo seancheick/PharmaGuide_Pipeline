@@ -78,6 +78,26 @@ DELTA_RECORD_IDS = {
     "DEP_SSRIS_SODIUM",
 }
 
+DELTA_APPROVED_AS_WRITTEN = {
+    "DEP_ANTICOAGULANTS_VITAMINK",
+    "DEP_CHOLESTYRAMINE_VITAMINA",
+    "DEP_CHOLESTYRAMINE_VITAMIND",
+    "DEP_CHOLESTYRAMINE_VITAMINE",
+    "DEP_CHOLESTYRAMINE_VITAMINK",
+    "DEP_DIURETICS_THIAMINE",
+    "DEP_LEVOTHYROXINE_IRON",
+}
+
+DELTA_APPROVED_WITH_WORDING_CHANGE = {
+    "DEP_LEVOTHYROXINE_CALCIUM",
+    "DEP_ORLISTAT_VITAMINA",
+}
+
+DELTA_REQUIRES_EVIDENCE_REVISION = {
+    "DEP_ANTACIDS_IRON",
+    "DEP_SSRIS_SODIUM",
+}
+
 CLINICAL_FIELDS = (
     "id",
     "drug_ref",
@@ -142,19 +162,16 @@ def test_b1_signoff_ledger_covers_every_reviewed_record_once():
     assert set(records) == REVIEW_SCOPE
     assert {row["disposition"] for row in records.values()} <= DISPOSITIONS
     assert ledger["_metadata"]["review_scope_count"] == 33
-    assert ledger["_metadata"]["reviewed_at"] == "2026-07-27"
+    assert ledger["_metadata"]["reviewed_at"] == "2026-07-30"
     assert ledger["_metadata"]["licensed_pharmacist_signoff"] is False
-    assert (
-        ledger["_metadata"]["reviewer"]
-        == ""
-    )
+    assert ledger["_metadata"]["reviewer"] == "PharmaGuide Clinical Team"
     assert (
         ledger["_metadata"]["reviewer_type"]
-        == "Licensed pharmacist clinical delta review requested"
+        == "Clinical evidence-QA delta review; final licensed pharmacist sign-off pending"
     )
     assert ledger["_metadata"]["licensed_pharmacist_signoff_date"] is None
     assert ledger["_metadata"]["release_disposition"] == (
-        "hold_pending_licensed_pharmacist_delta_review"
+        "hold_pending_2_record_rereview_and_presentation_review"
     )
     assert set(ledger["_metadata"]["delta_record_ids"]) == DELTA_RECORD_IDS
     assert ledger["_metadata"]["previous_signoff"] == {
@@ -196,14 +213,49 @@ def test_active_records_preserve_prior_signoff_and_pin_pending_delta_copy():
     assert set(delta_ledger["delta_record_fingerprints"]) == DELTA_RECORD_IDS
     assert delta_ledger["_metadata"]["delta_record_count"] == len(DELTA_RECORD_IDS)
     assert delta_ledger["_metadata"]["licensed_pharmacist_signoff"] is False
+    assert delta_ledger["_metadata"]["reviewed_at"] == "2026-07-30"
+    assert delta_ledger["_metadata"]["reviewer"] == "PharmaGuide Clinical Team"
+    assert delta_ledger["_metadata"]["review_disposition_counts"] == {
+        "approved": 7,
+        "approved_with_wording_change": 2,
+        "requires_evidence_revision": 2,
+        "remove_from_release": 0,
+    }
+    assert delta_ledger["_metadata"]["presentation_review_complete"] is False
+    assert delta_ledger["_metadata"]["clinician_pdf_review_complete"] is False
     assert (
         delta_ledger["_metadata"]["supporting_reviewer"]
-        == "b1_clinical_copy_delta_evidence_audit"
+        == "b1_delta_pharmacist_response_evidence_reconciliation"
     )
     assert (
         delta_ledger["_metadata"]["licensed_clinical_approver_organization"]
         == "PharmaGuide Clinical Team"
     )
+    assert {
+        record_id
+        for record_id, review in delta_ledger["records"].items()
+        if review["disposition"] == "approved"
+    } == DELTA_APPROVED_AS_WRITTEN
+    assert {
+        record_id
+        for record_id, review in delta_ledger["records"].items()
+        if review["disposition"] == "approved_with_wording_change"
+    } == DELTA_APPROVED_WITH_WORDING_CHANGE
+    assert {
+        record_id
+        for record_id, review in delta_ledger["records"].items()
+        if review["disposition"] == "requires_evidence_revision"
+    } == DELTA_REQUIRES_EVIDENCE_REVISION
+    for record_id in DELTA_APPROVED_WITH_WORDING_CHANGE:
+        assert (
+            delta_ledger["records"][record_id]["implementation_status"]
+            == "implemented_as_directed"
+        )
+    for record_id in DELTA_REQUIRES_EVIDENCE_REVISION:
+        assert (
+            delta_ledger["records"][record_id]["implementation_status"]
+            == "implemented_pending_exact_current_rereview"
+        )
 
     for record_id, expected in ledger["active_record_fingerprints"].items():
         record = by_id[record_id]

@@ -71,10 +71,17 @@ def test_acid_suppression_iron_does_not_claim_complete_reversal():
     ).lower()
 
     assert "reverses after stopping" not in copy
-    assert "decreased after" in record["mechanism"].lower()
+    assert "became weaker" in record["mechanism"].lower()
+    assert "does not mean" in record["mechanism"].lower()
+    assert "will always reverse" in record["mechanism"].lower()
     assert "annually" not in record["monitoring_note"].lower()
     assert "symptom" in record["monitoring_note"].lower()
     assert "risk" in record["monitoring_note"].lower()
+    assert "do not stop the acid reducer" in record["recommendation"].lower()
+    assert any(
+        "gut.bmj.com/content/70/11/2030" in source["url"]
+        for source in record["sources"]
+    ), "BSG adult IDA diagnostic guideline is not cited"
 
 
 def test_warfarin_vitamin_k_uses_days_and_immediate_mechanism_copy():
@@ -95,6 +102,14 @@ def test_ssri_sodium_copy_does_not_validate_self_supplementation():
     assert "self-supplementing sodium" in record["recommendation"].lower()
     assert "over time" not in record["alert_body"].lower()
     assert "first weeks" in record["alert_body"].lower()
+    for field in ("clinical_impact", "monitoring_note", "alert_body"):
+        assert "increasing" not in record[field].lower()
+    urls = {source["url"] for source in record["sources"]}
+    assert "https://pubmed.ncbi.nlm.nih.gov/27194321/" in urls
+    assert any(
+        "4883ccdf-0e02-579d-e054-00144ff88e88" in url
+        for url in urls
+    )
 
 
 def test_vitamin_a_cards_include_pregnancy_and_preformed_form_safety():
@@ -122,6 +137,11 @@ def test_vitamin_a_cards_include_pregnancy_and_preformed_form_safety():
         )
 
     assert "2 hours" in records["DEP_ORLISTAT_VITAMINA"]["recommendation"]
+    orlistat_action = records["DEP_ORLISTAT_VITAMINA"]["recommendation"]
+    assert "such as at bedtime" in orlistat_action
+    assert "Do not add extra vitamin A" in orlistat_action
+    assert "contraindicated during pregnancy" in orlistat_action
+    assert "contact the prescriber promptly" in orlistat_action
     assert (
         "water-miscible"
         in records["DEP_CHOLESTYRAMINE_VITAMINA"]["recommendation"].lower()
@@ -144,6 +164,14 @@ def test_all_cholestyramine_cards_carry_label_specific_form_and_timing():
         assert "4\u20136 hours after" in recommendation
         assert "timing vitamins apart can help" not in record["alert_body"].lower()
         assert not record["acknowledgement_note"].lower().startswith("good")
+
+
+def test_levothyroxine_calcium_keeps_product_and_meal_timing_distinct():
+    recommendation = _records()["DEP_LEVOTHYROXINE_CALCIUM"]["recommendation"]
+
+    assert "at least 4 hours before or after levothyroxine" in recommendation
+    assert "Continue taking levothyroxine on an empty stomach as directed" in recommendation
+    assert "ordinary foods still follow your usual levothyroxine meal-timing instructions" in recommendation
 
 
 def test_b11_wording_delta_stays_fail_closed():

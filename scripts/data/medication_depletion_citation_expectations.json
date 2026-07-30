@@ -1,10 +1,10 @@
 {
   "_metadata": {
     "schema_version": "5.4.0",
-    "last_updated": "2026-07-29",
+    "last_updated": "2026-07-30",
     "description": "Reviewed PubMed content expectations for every active verified medication-depletion claim plus suppressed delta candidates.",
     "purpose": "Fail-closed live content coverage for active verified medication-depletion citations",
-    "total_entries": 49
+    "total_entries": 50
   },
   "expectations": [
     {
@@ -806,6 +806,25 @@
         ]
       },
       "reviewer_disposition": "verified_for_claim"
+    },
+    {
+      "entry_id": "DEP_SSRIS_SODIUM",
+      "pmid": "27194321",
+      "expected": {
+        "drug_terms_any": [
+          "antidepressants",
+          "antidepressant treatment"
+        ],
+        "nutrient_terms_any": [
+          "hyponatremia"
+        ],
+        "context_terms_any": [
+          "initiation of treatment"
+        ]
+      },
+      "reviewer_disposition": "verified_for_claim",
+      "evidence_role": "full text supports the highest risk during the first 14 days after treatment initiation",
+      "reviewed_full_text_url": "https://bmjopen.bmj.com/content/6/5/e011200"
     },
     {
       "entry_id": "DEP_ANTICONVULSANTS_LCARNITINE",

@@ -1,81 +1,100 @@
 {
   "_metadata": {
-    "schema_version": "5.5.0",
-    "description": "Machine-enforced B1 active-copy correction delta and pending licensed-pharmacist review state.",
+    "schema_version": "5.5.1",
+    "description": "Machine-enforced B1 active-copy correction delta, clinical-team evidence-QA dispositions, and pending final licensed-pharmacist review state.",
     "purpose": "medication_depletion_clinical_change_control",
     "total_entries": 2,
     "delta_record_count": 11,
-    "reviewed_at": "2026-07-27",
-    "evidence_reviewer": "b1_clinical_copy_delta_evidence_audit",
-    "supporting_reviewer": "b1_clinical_copy_delta_evidence_audit",
+    "reviewed_at": "2026-07-30",
+    "evidence_reviewer": "b1_delta_pharmacist_response_evidence_reconciliation",
+    "supporting_reviewer": "b1_delta_pharmacist_response_evidence_reconciliation",
     "supporting_reviewer_type": "AI clinical-content audit",
-    "reviewer": "",
-    "reviewer_type": "Licensed pharmacist clinical delta review requested",
+    "reviewer": "PharmaGuide Clinical Team",
+    "reviewer_type": "Clinical evidence-QA delta review; final licensed pharmacist sign-off pending",
     "licensed_pharmacist_signoff": false,
     "licensed_pharmacist_signoff_date": null,
-    "release_disposition": "pending_licensed_pharmacist_delta_review",
+    "release_disposition": "hold_pending_2_record_rereview_and_presentation_review",
     "packet_title": "B1 clinical-copy delta review packet",
-    "packet_status": "primary-source corrections complete; licensed pharmacist delta sign-off requested",
-    "packet_scope": "11 corrected active records only. The other 20 active records and 2 non-active B1 dispositions retain exact-current approval. The 4 B1.1 candidates remain separately suppressed.",
+    "packet_status": "clinical-team evidence QA returned; requested changes implemented; two records and presentation remain pending exact-current review",
+    "packet_scope": "11 corrected active records: 7 approved as written, 2 exact wording changes implemented as directed, and 2 evidence revisions implemented pending exact-current re-review. App unavailable/partial states and clinician PDF remain unreviewed.",
+    "review_disposition_counts": {
+      "approved": 7,
+      "approved_with_wording_change": 2,
+      "requires_evidence_revision": 2,
+      "remove_from_release": 0
+    },
+    "presentation_review_complete": false,
+    "clinician_pdf_review_complete": false,
     "licensed_clinical_approver_organization": "PharmaGuide Clinical Team"
   },
   "records": {
     "DEP_ANTACIDS_IRON": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm the attenuation-after-discontinuation language and symptom/risk-based testing copy."
+      "disposition": "requires_evidence_revision",
+      "implementation_status": "implemented_pending_exact_current_rereview",
+      "note": "Added the BSG adult IDA diagnostic guideline, the supplied attenuation caveat, and an explicit instruction not to stop the acid reducer independently."
     },
     "DEP_ANTICOAGULANTS_VITAMINK": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm onset in days and the immediate intended-action framing."
+      "disposition": "approved",
+      "implementation_status": "no_change_required",
+      "note": "Approved as written: functional antagonism, days-scale onset, and consistent-intake guidance align."
     },
     "DEP_CHOLESTYRAMINE_VITAMINA": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm water-miscible-form/timing guidance and preformed-vitamin-A pregnancy safety copy."
+      "disposition": "approved",
+      "implementation_status": "no_change_required",
+      "note": "Approved as written: water-miscible-form, timing, and preformed-vitamin-A pregnancy guidance align."
     },
     "DEP_CHOLESTYRAMINE_VITAMIND": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm the label-specific water-miscible-form and timing guidance."
+      "disposition": "approved",
+      "implementation_status": "no_change_required",
+      "note": "Approved as written: label-specific formulation, timing, and individualized monitoring align."
     },
     "DEP_CHOLESTYRAMINE_VITAMINE": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm the label-specific water-miscible-form and timing guidance."
+      "disposition": "approved",
+      "implementation_status": "no_change_required",
+      "note": "Approved as written: label-specific formulation, timing, and individualized monitoring align."
     },
     "DEP_CHOLESTYRAMINE_VITAMINK": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm water-miscible-form/timing guidance and the label-supported clotting impact."
+      "disposition": "approved",
+      "implementation_status": "no_change_required",
+      "note": "Approved as written: formulation, timing, and label-supported hypoprothrombinemia/bleeding framing align."
     },
     "DEP_DIURETICS_THIAMINE": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm the treating-clinician assessment wording, with no presumed cardiology relationship or routine supplement nudge."
+      "disposition": "approved",
+      "implementation_status": "no_change_required",
+      "note": "Approved as written: confounding-aware scope and treating-clinician assessment avoid routine supplementation."
     },
     "DEP_LEVOTHYROXINE_CALCIUM": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm patient-cohort effect framing and separation limited to calcium products."
+      "disposition": "approved_with_wording_change",
+      "implementation_status": "implemented_as_directed",
+      "note": "Applied the exact supplied action copy separating calcium products by four hours while preserving empty-stomach meal-timing instructions."
     },
     "DEP_LEVOTHYROXINE_IRON": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm Campbell 1992 is accurately described as an uncontrolled 14-patient study."
+      "disposition": "approved",
+      "implementation_status": "no_change_required",
+      "note": "Approved as written: Campbell 1992 is accurately described as an uncontrolled 14-patient study."
     },
     "DEP_ORLISTAT_VITAMINA": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm label-directed multivitamin timing and preformed-vitamin-A pregnancy safety copy."
+      "disposition": "approved_with_wording_change",
+      "implementation_status": "implemented_as_directed",
+      "note": "Applied the exact supplied daily-multivitamin, bedtime, no-extra-vitamin-A, and pregnancy-contraindication action copy."
     },
     "DEP_SSRIS_SODIUM": {
-      "disposition": "pending_licensed_pharmacist_review",
-      "note": "Confirm early-treatment timing and the explicit no-self-supplementation wording."
+      "disposition": "requires_evidence_revision",
+      "implementation_status": "implemented_pending_exact_current_rereview",
+      "note": "Added the sertraline label and Leth-Møller 2016; narrowed all onset copy to treatment initiation rather than unsupported class-wide dose increases."
     }
   },
   "delta_record_fingerprints": {
-    "DEP_ANTACIDS_IRON": "sha256:a49ef75262dc6c5055ba9bbf027ec13602fc5e124371f61cf930d37eeecba360",
+    "DEP_ANTACIDS_IRON": "sha256:2df33e95e5e9bcae2f0b48ca81b1c660387f39b3559472fc03f3b5ddb7d1ad58",
     "DEP_ANTICOAGULANTS_VITAMINK": "sha256:aa9a4899cc7a8fe2eed69edee1a46290984af2895b43795a99b084af61966774",
     "DEP_CHOLESTYRAMINE_VITAMINA": "sha256:5553515d721464fb22d6ee702c6be6e06409cf1a2c2712cca4c661e0bdeb3251",
     "DEP_CHOLESTYRAMINE_VITAMIND": "sha256:436e8391945b9610f907656066f2e4b9b4b2c09b02cd5bb079f9e0e2862906fe",
     "DEP_CHOLESTYRAMINE_VITAMINE": "sha256:04181f95299616ab95397272b4158fc88b511f4930aa01ad9e709c31a7ba8414",
     "DEP_CHOLESTYRAMINE_VITAMINK": "sha256:a5f660c8bb53f06a87b5d1a690bcc1cda866264642ed502c3c5b7ebcde06a1a4",
     "DEP_DIURETICS_THIAMINE": "sha256:7ba45ed611928b2f87e298aa83b399545f1b5115ecc7d03f2d78dff92ae625c9",
-    "DEP_LEVOTHYROXINE_CALCIUM": "sha256:94a62235f4b2d73a84da4d7a4ae2dc2dd73f92a4be36c59dc5b3102d75f20d17",
+    "DEP_LEVOTHYROXINE_CALCIUM": "sha256:724d60b710ac7dd973e0ecbe1b3ce248a54b91801e3f4593aabd2fe4f75f8831",
     "DEP_LEVOTHYROXINE_IRON": "sha256:3ea337887713335a927f3e261f139ec0c26a74bacd2395949e4b6c8b95471ae8",
-    "DEP_ORLISTAT_VITAMINA": "sha256:b24badbef727421230dc4089e173982efd51bcea510c1f7639c0a5b423b544f6",
-    "DEP_SSRIS_SODIUM": "sha256:d1a3f7a7e84101539467cb7fea8d3960d90d1ad5ca74a947b4fa4da7a2ae9119"
+    "DEP_ORLISTAT_VITAMINA": "sha256:6849feffbe4d27d048dccb513e88770b61bb99784a523eaa7f941c8efa2a5d52",
+    "DEP_SSRIS_SODIUM": "sha256:70a6bacbb88f7be2e46882d42f519aa8f967f64f355cef865a4cc10d8fbd3cc1"
   }
 }

@@ -172,7 +172,12 @@ def test_real_source_content_hash_is_pinned():
     # exact-copy delta review (including the furosemide/thiamine monitoring
     # tip), and record provenance distinguishes the AI evidence audit from the
     # PharmaGuide Clinical Team's exact-fingerprint approval.
+    # Repinned 2026-07-30 after the Clinical Team's bounded delta response:
+    # exact levothyroxine/calcium and orlistat/vitamin-A wording was applied,
+    # and the acid-suppression/iron plus SSRI/sodium evidence gaps were closed
+    # with reviewed primary guidance/label sources. Final presentation review
+    # remains separately fail-closed in the delta ledger.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:c3f95f1d5ea4cbf05a6d26e81f3623e3834dd577d3b70c9f1bbc551a8dd89dee"
+        == "sha256:ec003d3082bedfcf133a266c101960e6b2892fb6cbc9013e1b55b66556e6423f"
     )
