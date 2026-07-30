@@ -13,14 +13,14 @@
     "reviewer_type": "Clinical evidence-QA delta review; final licensed pharmacist sign-off pending",
     "licensed_pharmacist_signoff": false,
     "licensed_pharmacist_signoff_date": null,
-    "release_disposition": "hold_pending_2_record_rereview_and_presentation_review",
+    "release_disposition": "hold_pending_1_record_rereview_and_presentation_review",
     "packet_title": "B1 clinical-copy delta review packet",
-    "packet_status": "clinical-team evidence QA returned; requested changes implemented; two records and presentation remain pending exact-current review",
-    "packet_scope": "11 corrected active records: 7 approved as written, 2 exact wording changes implemented as directed, and 2 evidence revisions implemented pending exact-current re-review. App unavailable/partial states and clinician PDF remain unreviewed.",
+    "packet_status": "PharmaGuide Clinical Team review returned; requested changes implemented; the revised orlistat fingerprint and presentation remain pending final licensed-pharmacist sign-off",
+    "packet_scope": "11 active records: 3 approved as written, 7 wording changes implemented as directed, and 1 evidence revision implemented pending exact-current fingerprint sign-off. App unavailable/partial states and clinician PDF remain unreviewed.",
     "review_disposition_counts": {
-      "approved": 7,
-      "approved_with_wording_change": 2,
-      "requires_evidence_revision": 2,
+      "approved": 3,
+      "approved_with_wording_change": 7,
+      "requires_evidence_revision": 1,
       "remove_from_release": 0
     },
     "presentation_review_complete": false,
@@ -29,14 +29,14 @@
   },
   "records": {
     "DEP_ANTACIDS_IRON": {
-      "disposition": "requires_evidence_revision",
-      "implementation_status": "implemented_pending_exact_current_rereview",
-      "note": "Added the BSG adult IDA diagnostic guideline, the supplied attenuation caveat, and an explicit instruction not to stop the acid reducer independently."
+      "disposition": "approved_with_wording_change",
+      "implementation_status": "implemented_as_directed",
+      "note": "Qualified the PPI-versus-H2 evidence and labeled Hutchinson 2007 as mechanistic evidence in hereditary haemochromatosis."
     },
     "DEP_ANTICOAGULANTS_VITAMINK": {
-      "disposition": "approved",
-      "implementation_status": "no_change_required",
-      "note": "Approved as written: functional antagonism, days-scale onset, and consistent-intake guidance align."
+      "disposition": "approved_with_wording_change",
+      "implementation_status": "scope_verified_no_copy_change",
+      "note": "Direct warfarin RxCUI scope verified; DOACs do not match. The internal DEP prefix is not rendered."
     },
     "DEP_CHOLESTYRAMINE_VITAMINA": {
       "disposition": "approved",
@@ -54,47 +54,47 @@
       "note": "Approved as written: label-specific formulation, timing, and individualized monitoring align."
     },
     "DEP_CHOLESTYRAMINE_VITAMINK": {
-      "disposition": "approved",
-      "implementation_status": "no_change_required",
-      "note": "Approved as written: formulation, timing, and label-supported hypoprothrombinemia/bleeding framing align."
+      "disposition": "approved_with_wording_change",
+      "implementation_status": "implemented_as_directed",
+      "note": "Named PT/INR in consumer monitoring copy and added a separate direct cholestyramine-warfarin interaction rule."
     },
     "DEP_DIURETICS_THIAMINE": {
-      "disposition": "approved",
-      "implementation_status": "no_change_required",
-      "note": "Approved as written: confounding-aware scope and treating-clinician assessment avoid routine supplementation."
+      "disposition": "approved_with_wording_change",
+      "implementation_status": "scope_verified_no_copy_change",
+      "note": "Direct furosemide RxCUI scope verified; thiazides do not match."
     },
     "DEP_LEVOTHYROXINE_CALCIUM": {
       "disposition": "approved_with_wording_change",
       "implementation_status": "implemented_as_directed",
-      "note": "Applied the exact supplied action copy separating calcium products by four hours while preserving empty-stomach meal-timing instructions."
+      "note": "Kept the four-hour calcium-product rule, stated the label's 30-to-60-minute pre-breakfast instruction, and surfaced thyroid-test follow-up."
     },
     "DEP_LEVOTHYROXINE_IRON": {
-      "disposition": "approved",
-      "implementation_status": "no_change_required",
-      "note": "Approved as written: Campbell 1992 is accurately described as an uncontrolled 14-patient study."
-    },
-    "DEP_ORLISTAT_VITAMINA": {
       "disposition": "approved_with_wording_change",
       "implementation_status": "implemented_as_directed",
-      "note": "Applied the exact supplied daily-multivitamin, bedtime, no-extra-vitamin-A, and pregnancy-contraindication action copy."
+      "note": "Standardized TSH to mIU/L and named the 300 mg ferrous sulfate tablet studied in Campbell 1992."
     },
-    "DEP_SSRIS_SODIUM": {
+    "DEP_ORLISTAT_VITAMINA": {
       "disposition": "requires_evidence_revision",
       "implementation_status": "implemented_pending_exact_current_rereview",
-      "note": "Added the sertraline label and Leth-Møller 2016; narrowed all onset copy to treatment initiation rather than unsupported class-wide dose increases."
+      "note": "Reframed pregnancy as a medication contraindication rather than a vitamin-dose question; retained label-based multivitamin separation."
+    },
+    "DEP_SSRIS_SODIUM": {
+      "disposition": "approved_with_wording_change",
+      "implementation_status": "implemented_as_directed",
+      "note": "Added explicit do-not-self-discontinue wording; the current sertraline label and Leth-Møller 2016 already supply label and primary population evidence."
     }
   },
   "delta_record_fingerprints": {
-    "DEP_ANTACIDS_IRON": "sha256:2df33e95e5e9bcae2f0b48ca81b1c660387f39b3559472fc03f3b5ddb7d1ad58",
-    "DEP_ANTICOAGULANTS_VITAMINK": "sha256:aa9a4899cc7a8fe2eed69edee1a46290984af2895b43795a99b084af61966774",
-    "DEP_CHOLESTYRAMINE_VITAMINA": "sha256:5553515d721464fb22d6ee702c6be6e06409cf1a2c2712cca4c661e0bdeb3251",
-    "DEP_CHOLESTYRAMINE_VITAMIND": "sha256:436e8391945b9610f907656066f2e4b9b4b2c09b02cd5bb079f9e0e2862906fe",
-    "DEP_CHOLESTYRAMINE_VITAMINE": "sha256:04181f95299616ab95397272b4158fc88b511f4930aa01ad9e709c31a7ba8414",
-    "DEP_CHOLESTYRAMINE_VITAMINK": "sha256:a5f660c8bb53f06a87b5d1a690bcc1cda866264642ed502c3c5b7ebcde06a1a4",
-    "DEP_DIURETICS_THIAMINE": "sha256:7ba45ed611928b2f87e298aa83b399545f1b5115ecc7d03f2d78dff92ae625c9",
-    "DEP_LEVOTHYROXINE_CALCIUM": "sha256:724d60b710ac7dd973e0ecbe1b3ce248a54b91801e3f4593aabd2fe4f75f8831",
-    "DEP_LEVOTHYROXINE_IRON": "sha256:3ea337887713335a927f3e261f139ec0c26a74bacd2395949e4b6c8b95471ae8",
-    "DEP_ORLISTAT_VITAMINA": "sha256:6849feffbe4d27d048dccb513e88770b61bb99784a523eaa7f941c8efa2a5d52",
-    "DEP_SSRIS_SODIUM": "sha256:70a6bacbb88f7be2e46882d42f519aa8f967f64f355cef865a4cc10d8fbd3cc1"
+    "DEP_ANTACIDS_IRON": "sha256:6f82edb41ca85155a09428a81be4789993315953910d9e2afd51050912ba632a",
+    "DEP_ANTICOAGULANTS_VITAMINK": "sha256:7f6f1f7270dd73581e1726099cfff7e8e92856a7b36f3411149e3f29e727952c",
+    "DEP_CHOLESTYRAMINE_VITAMINA": "sha256:7c89fdc33d47292e9cdf2ed099125481b0d65a976d263db9b7c860c9b2905d32",
+    "DEP_CHOLESTYRAMINE_VITAMIND": "sha256:968912be7abe5103ff0d5a811ce0ebb00dce591ea0282c39c36cccd741c17ddf",
+    "DEP_CHOLESTYRAMINE_VITAMINE": "sha256:b31901fa6c381d9a6e08a076e50c27a4bb2754c92c028e9978218700a3a8633e",
+    "DEP_CHOLESTYRAMINE_VITAMINK": "sha256:f534c297a03a0ca8e6ed4987b00fd482de2f4495e7b755555b126dde3411f96b",
+    "DEP_DIURETICS_THIAMINE": "sha256:8a0d8ef9623872a679323b2efdb109266afb4a9e5462a40d125ec07e8a2f098d",
+    "DEP_LEVOTHYROXINE_CALCIUM": "sha256:40c554ce77286eaa28ad7330719863fd3368724aa27c3feb5599a1dda45fc4e5",
+    "DEP_LEVOTHYROXINE_IRON": "sha256:c002b420f079ad104790229d80e3f723de91269d5c1734b2ef54b82e2faada2e",
+    "DEP_ORLISTAT_VITAMINA": "sha256:ad6bc6291c41d5fee73dd31486cad4aa1eb510a4929331b64d824ea87958770f",
+    "DEP_SSRIS_SODIUM": "sha256:af035d2436c3ee4dc6ababf4acb06a46e5d576505d2674d29f8c9b7c327c103c"
   }
 }

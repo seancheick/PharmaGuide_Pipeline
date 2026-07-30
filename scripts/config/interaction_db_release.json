@@ -1,6 +1,6 @@
 {
-  "interaction_db_version": "1.0.10",
-  "build_time_utc": "2026-07-29T16:30:00Z",
+  "interaction_db_version": "1.0.11",
+  "build_time_utc": "2026-07-30T16:32:44Z",
   "purpose": "Tracked default version for interaction DB builds invoked by the full release workflow.",
-  "updated_at": "2026-07-29"
+  "updated_at": "2026-07-30"
 }

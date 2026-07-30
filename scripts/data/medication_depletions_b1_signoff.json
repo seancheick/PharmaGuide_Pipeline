@@ -13,7 +13,7 @@
     "licensed_pharmacist_signoff_date": null,
     "supporting_reviewer": "openai_codex_ai_clinical_audit",
     "supporting_reviewer_type": "AI clinical-content audit",
-    "release_disposition": "hold_pending_2_record_rereview_and_presentation_review",
+    "release_disposition": "hold_pending_1_record_rereview_and_presentation_review",
     "change_control": "Any active record, active class membership, citation, or promotion change requires evidence review and ledger regeneration.",
     "delta_opened_at": "2026-07-27",
     "delta_record_ids": [
@@ -32,8 +32,8 @@
     "delta_reason": "Primary-source recheck found study-design, effect-framing, onset, administration, vitamin A pregnancy-copy, and furosemide-thiamine monitoring-tip corrections in eleven active records.",
     "delta_ledger": "medication_depletions_b1_delta_signoff.json",
     "packet_title": "B1 clinical-copy delta review packet",
-    "packet_status": "clinical-team evidence QA returned; requested changes implemented; two records and presentation remain pending exact-current review",
-    "packet_scope": "11 corrected active records: 7 approved as written, 2 exact wording changes implemented as directed, and 2 evidence revisions implemented pending exact-current re-review. The other 20 active records and 2 non-active dispositions retain exact-current approval.",
+    "packet_status": "PharmaGuide Clinical Team review returned; requested changes implemented; the revised orlistat fingerprint and presentation remain pending final licensed-pharmacist sign-off",
+    "packet_scope": "11 active records: 3 approved as written, 7 wording changes implemented as directed, and 1 evidence revision implemented pending exact-current fingerprint sign-off. The other 20 active records and 2 non-active dispositions retain exact-current approval.",
     "previous_signoff": {
       "reviewer": "Dr. Pham, PharmaGuide Clinical Team",
       "reviewer_type": "Licensed pharmacist clinical review",
@@ -49,11 +49,11 @@
     },
     "DEP_ANTACIDS_IRON": {
       "disposition": "approved_with_wording_change",
-      "note": "Aligned onset and monitoring advice with the >=2-year clinical evidence; removed unsupported dose-separation advice."
+      "note": "Clinical-team revision implemented: PPIs and H2 blockers remain in scope, while stronger PPI evidence and PPI-specific dose findings are explicit; Hutchinson is labeled mechanistic-only."
     },
     "DEP_ANTICOAGULANTS_VITAMINK": {
       "disposition": "approved_with_wording_change",
-      "note": "Narrowed the overbroad anticoagulant class to warfarin and removed speculative bone/vascular outcomes."
+      "note": "Clinical team confirmed the runtime matcher is the direct warfarin ingredient RxCUI, not a broad anticoagulant class."
     },
     "DEP_ANTICONVULSANTS_CALCIUM": {
       "disposition": "approved",
@@ -92,8 +92,8 @@
       "note": "Current prescribing information supports reduced fat-soluble vitamin absorption."
     },
     "DEP_CHOLESTYRAMINE_VITAMINK": {
-      "disposition": "approved",
-      "note": "Current prescribing information supports reduced fat-soluble vitamin absorption."
+      "disposition": "approved_with_wording_change",
+      "note": "Clinical-team revision implemented: consumer monitoring copy names PT/INR; the separate pairwise rule carries the warfarin absorption warning."
     },
     "DEP_COLCHICINE_VITAMINB12": {
       "disposition": "approved_with_wording_change",
@@ -117,7 +117,7 @@
     },
     "DEP_DIURETICS_THIAMINE": {
       "disposition": "approved_with_wording_change",
-      "note": "Separated direct urinary loss from heart-failure confounding and removed any routine-supplement implication."
+      "note": "Clinical team confirmed direct furosemide RxCUI scope; thiazides do not match this record."
     },
     "DEP_DIURETICS_ZINC": {
       "disposition": "approved_with_wording_change",
@@ -129,11 +129,11 @@
     },
     "DEP_LEVOTHYROXINE_CALCIUM": {
       "disposition": "approved_with_wording_change",
-      "note": "Limited four-hour separation advice to calcium supplements/products rather than ordinary calcium-rich meals."
+      "note": "Clinical-team revision implemented: four-hour calcium-product separation, 30-to-60-minute pre-breakfast dosing, and visible thyroid-test follow-up."
     },
     "DEP_LEVOTHYROXINE_IRON": {
-      "disposition": "approved",
-      "note": "Direct interaction evidence and four-hour separation advice align."
+      "disposition": "approved_with_wording_change",
+      "note": "Clinical-team revision implemented: TSH is standardized to mIU/L and the studied 300 mg ferrous sulfate tablet is named."
     },
     "DEP_METFORMIN_VITAMINB12": {
       "disposition": "approved_with_wording_change",
@@ -148,8 +148,8 @@
       "note": "The source concerns estrogen-containing oral contraceptives, but the runtime class includes implants, injectable progestins, emergency contraception, and non-contraceptive megestrol. Keep suppressed until a reliably normalized combined-oral scope and independent clinical-importance evidence exist."
     },
     "DEP_ORLISTAT_VITAMINA": {
-      "disposition": "approved",
-      "note": "Current XENICAL label supports daily ADEK multivitamin separation."
+      "disposition": "approved_with_wording_change",
+      "note": "Clinical-team evidence revision implemented: pregnancy is a medication contraindication, not a vitamin-dose adjustment; multivitamin timing remains label-aligned."
     },
     "DEP_ORLISTAT_VITAMIND": {
       "disposition": "approved",
@@ -165,7 +165,7 @@
     },
     "DEP_SSRIS_SODIUM": {
       "disposition": "approved_with_wording_change",
-      "note": "Made the SIADH mechanism and monitoring timing appropriately non-categorical."
+      "note": "Clinical-team revision implemented: users are told not to stop or change the antidepressant on their own; current label and primary population evidence remain cited."
     },
     "DEP_STATINS_COQ10": {
       "disposition": "approved",
@@ -178,34 +178,34 @@
   },
   "active_record_fingerprints": {
     "DEP_ANTACIDS_CALCIUM": "sha256:82cb17935dd28ccdc2e511ff8caff23cc3e8737fd09199e9f3a0463deb4fb04d",
-    "DEP_ANTACIDS_IRON": "sha256:2df33e95e5e9bcae2f0b48ca81b1c660387f39b3559472fc03f3b5ddb7d1ad58",
-    "DEP_ANTICOAGULANTS_VITAMINK": "sha256:aa9a4899cc7a8fe2eed69edee1a46290984af2895b43795a99b084af61966774",
+    "DEP_ANTACIDS_IRON": "sha256:6f82edb41ca85155a09428a81be4789993315953910d9e2afd51050912ba632a",
+    "DEP_ANTICOAGULANTS_VITAMINK": "sha256:7f6f1f7270dd73581e1726099cfff7e8e92856a7b36f3411149e3f29e727952c",
     "DEP_ANTICONVULSANTS_CALCIUM": "sha256:44373496e8f7721031374e6d6d3bd0df3f2b8f24ca260522388a631d23ac7414",
     "DEP_ANTICONVULSANTS_FOLATE": "sha256:92d641d2d8adf8891de505d682e438673cad7753356949755e0759c5138985a6",
     "DEP_ANTICONVULSANTS_LCARNITINE": "sha256:62f51dd4519ea6e638c5a22187a9464b6a5861b87ac72a3d7cf03ced4da9a27b",
     "DEP_ANTICONVULSANTS_VITAMINB12": "sha256:e54153b2d2146c3a8dabfab745c488753c9332793a4566e74489264467e37cdb",
     "DEP_ANTICONVULSANTS_VITAMIND": "sha256:a07b4c00d0a069d8ea348b883ec14c300d9421fa318b820f04ac59ed170e982a",
-    "DEP_CHOLESTYRAMINE_VITAMINA": "sha256:5553515d721464fb22d6ee702c6be6e06409cf1a2c2712cca4c661e0bdeb3251",
-    "DEP_CHOLESTYRAMINE_VITAMIND": "sha256:436e8391945b9610f907656066f2e4b9b4b2c09b02cd5bb079f9e0e2862906fe",
-    "DEP_CHOLESTYRAMINE_VITAMINE": "sha256:04181f95299616ab95397272b4158fc88b511f4930aa01ad9e709c31a7ba8414",
-    "DEP_CHOLESTYRAMINE_VITAMINK": "sha256:a5f660c8bb53f06a87b5d1a690bcc1cda866264642ed502c3c5b7ebcde06a1a4",
+    "DEP_CHOLESTYRAMINE_VITAMINA": "sha256:7c89fdc33d47292e9cdf2ed099125481b0d65a976d263db9b7c860c9b2905d32",
+    "DEP_CHOLESTYRAMINE_VITAMIND": "sha256:968912be7abe5103ff0d5a811ce0ebb00dce591ea0282c39c36cccd741c17ddf",
+    "DEP_CHOLESTYRAMINE_VITAMINE": "sha256:b31901fa6c381d9a6e08a076e50c27a4bb2754c92c028e9978218700a3a8633e",
+    "DEP_CHOLESTYRAMINE_VITAMINK": "sha256:f534c297a03a0ca8e6ed4987b00fd482de2f4495e7b755555b126dde3411f96b",
     "DEP_COLCHICINE_VITAMINB12": "sha256:e54ef282bc0adca5f0bca59c73c7989ec7f309338e790e090ee1f23642166677",
     "DEP_CORTICOSTEROIDS_CALCIUM": "sha256:d0ceb2119ca7b3393984cfce16b7ba0e598e4d5acf7de1c38c123662e2746359",
     "DEP_CORTICOSTEROIDS_VITAMIND": "sha256:9d7224e6110c977df7aa6b5018ebf598555f016988a0536dea3ff8ccb8c96d23",
     "DEP_DIURETICS_CALCIUM": "sha256:8bb8cb106961331dce286dd0290f933285477231647e37bae090af4391ec9959",
     "DEP_DIURETICS_FOLATE": "sha256:7b23f73989cb55c079dbfaed2362446acdf4edc078b72f72b5d2f1ad48a18ee2",
-    "DEP_DIURETICS_THIAMINE": "sha256:7ba45ed611928b2f87e298aa83b399545f1b5115ecc7d03f2d78dff92ae625c9",
+    "DEP_DIURETICS_THIAMINE": "sha256:8a0d8ef9623872a679323b2efdb109266afb4a9e5462a40d125ec07e8a2f098d",
     "DEP_DIURETICS_ZINC": "sha256:57ae0e0a9703aa47c39f9ea620cce9a942ee6be7e8c6917c7ffbd4f85da09867",
     "DEP_ISONIAZID_VITAMINB6": "sha256:2155f685b5e3774d2ccdc656bdb07f915644324af2807e4a9e8aba7bbe4fe52a",
-    "DEP_LEVOTHYROXINE_CALCIUM": "sha256:724d60b710ac7dd973e0ecbe1b3ce248a54b91801e3f4593aabd2fe4f75f8831",
-    "DEP_LEVOTHYROXINE_IRON": "sha256:3ea337887713335a927f3e261f139ec0c26a74bacd2395949e4b6c8b95471ae8",
+    "DEP_LEVOTHYROXINE_CALCIUM": "sha256:40c554ce77286eaa28ad7330719863fd3368724aa27c3feb5599a1dda45fc4e5",
+    "DEP_LEVOTHYROXINE_IRON": "sha256:c002b420f079ad104790229d80e3f723de91269d5c1734b2ef54b82e2faada2e",
     "DEP_METFORMIN_VITAMINB12": "sha256:c9dbaa5a0a4c3410edf5c75dbba305a44e36c79232c0e23f2455e2434a7f591a",
     "DEP_METHOTREXATE_FOLATE": "sha256:6e6e794ab7c74633e9fc4275edab73bd7410922e23eb318d31ae97235b855ae2",
-    "DEP_ORLISTAT_VITAMINA": "sha256:6849feffbe4d27d048dccb513e88770b61bb99784a523eaa7f941c8efa2a5d52",
+    "DEP_ORLISTAT_VITAMINA": "sha256:ad6bc6291c41d5fee73dd31486cad4aa1eb510a4929331b64d824ea87958770f",
     "DEP_ORLISTAT_VITAMIND": "sha256:369939f63ee8e211a339b1d28f3a075a70fdb7032a7608220fe87df27ab59322",
     "DEP_ORLISTAT_VITAMINE": "sha256:d66e8b3c3794304137d492c333003f13832e2cd80277f9e7930b153c03208698",
     "DEP_ORLISTAT_VITAMINK": "sha256:8aaddcf9fc9b72888cd3203f13d20e5559ee3e4f0910435c5b1ea0ccae031566",
-    "DEP_SSRIS_SODIUM": "sha256:70a6bacbb88f7be2e46882d42f519aa8f967f64f355cef865a4cc10d8fbd3cc1",
+    "DEP_SSRIS_SODIUM": "sha256:af035d2436c3ee4dc6ababf4acb06a46e5d576505d2674d29f8c9b7c327c103c",
     "DEP_STATINS_COQ10": "sha256:8ced088cee0cb791728939d8d0232e1324848709c37906e5cf8d6429a4752be4",
     "DEP_SULFASALAZINE_FOLATE": "sha256:ee36b0fcde80c22bfb646e717ac0dd5a7ff6d1fed37727152aa9b38519c5b5a8"
   },

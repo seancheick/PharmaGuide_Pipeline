@@ -79,23 +79,23 @@ DELTA_RECORD_IDS = {
 }
 
 DELTA_APPROVED_AS_WRITTEN = {
-    "DEP_ANTICOAGULANTS_VITAMINK",
     "DEP_CHOLESTYRAMINE_VITAMINA",
     "DEP_CHOLESTYRAMINE_VITAMIND",
     "DEP_CHOLESTYRAMINE_VITAMINE",
-    "DEP_CHOLESTYRAMINE_VITAMINK",
-    "DEP_DIURETICS_THIAMINE",
-    "DEP_LEVOTHYROXINE_IRON",
 }
 
 DELTA_APPROVED_WITH_WORDING_CHANGE = {
+    "DEP_ANTACIDS_IRON",
+    "DEP_ANTICOAGULANTS_VITAMINK",
+    "DEP_CHOLESTYRAMINE_VITAMINK",
+    "DEP_DIURETICS_THIAMINE",
     "DEP_LEVOTHYROXINE_CALCIUM",
-    "DEP_ORLISTAT_VITAMINA",
+    "DEP_LEVOTHYROXINE_IRON",
+    "DEP_SSRIS_SODIUM",
 }
 
 DELTA_REQUIRES_EVIDENCE_REVISION = {
-    "DEP_ANTACIDS_IRON",
-    "DEP_SSRIS_SODIUM",
+    "DEP_ORLISTAT_VITAMINA",
 }
 
 CLINICAL_FIELDS = (
@@ -171,7 +171,7 @@ def test_b1_signoff_ledger_covers_every_reviewed_record_once():
     )
     assert ledger["_metadata"]["licensed_pharmacist_signoff_date"] is None
     assert ledger["_metadata"]["release_disposition"] == (
-        "hold_pending_2_record_rereview_and_presentation_review"
+        "hold_pending_1_record_rereview_and_presentation_review"
     )
     assert set(ledger["_metadata"]["delta_record_ids"]) == DELTA_RECORD_IDS
     assert ledger["_metadata"]["previous_signoff"] == {
@@ -216,9 +216,9 @@ def test_active_records_preserve_prior_signoff_and_pin_pending_delta_copy():
     assert delta_ledger["_metadata"]["reviewed_at"] == "2026-07-30"
     assert delta_ledger["_metadata"]["reviewer"] == "PharmaGuide Clinical Team"
     assert delta_ledger["_metadata"]["review_disposition_counts"] == {
-        "approved": 7,
-        "approved_with_wording_change": 2,
-        "requires_evidence_revision": 2,
+        "approved": 3,
+        "approved_with_wording_change": 7,
+        "requires_evidence_revision": 1,
         "remove_from_release": 0,
     }
     assert delta_ledger["_metadata"]["presentation_review_complete"] is False
@@ -247,10 +247,10 @@ def test_active_records_preserve_prior_signoff_and_pin_pending_delta_copy():
         if review["disposition"] == "requires_evidence_revision"
     } == DELTA_REQUIRES_EVIDENCE_REVISION
     for record_id in DELTA_APPROVED_WITH_WORDING_CHANGE:
-        assert (
-            delta_ledger["records"][record_id]["implementation_status"]
-            == "implemented_as_directed"
-        )
+        assert delta_ledger["records"][record_id]["implementation_status"] in {
+            "implemented_as_directed",
+            "scope_verified_no_copy_change",
+        }
     for record_id in DELTA_REQUIRES_EVIDENCE_REVISION:
         assert (
             delta_ledger["records"][record_id]["implementation_status"]

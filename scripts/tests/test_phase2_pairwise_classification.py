@@ -34,7 +34,7 @@ BY_ID = {e["id"]: e for e in PAIRS}
 
 
 def test_every_pair_classified_with_valid_enums():
-    assert len(PAIRS) == 133, f"expected 133 reviewed pairs, found {len(PAIRS)}"
+    assert len(PAIRS) == 134, f"expected 134 reviewed pairs, found {len(PAIRS)}"
     assert len(BY_ID) == len(PAIRS), "pairwise interaction ids must be unique"
     bad = []
     for e in PAIRS:

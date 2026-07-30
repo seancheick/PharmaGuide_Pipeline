@@ -1,8 +1,8 @@
 {
   "_metadata": {
     "schema_version": "1.1.0",
-    "last_updated": "2026-07-02",
-    "total_entries": 29,
+    "last_updated": "2026-07-30",
+    "total_entries": 30,
     "purpose": "Med-Med interaction pairs for the PharmaGuide interaction database. Harvested from DailyMed SPL drug label 'Drug Interactions' sections and NIH/FDA authoritative sources. Covers the ~30 highest-risk drug-drug pairs for consumer safety alerting.",
     "sources": [
       "DailyMed (dailymed.nlm.nih.gov) — FDA-approved drug labeling",
@@ -13,7 +13,8 @@
     ],
     "notes": "Severities use draft vocabulary (Contraindicated/Major/Moderate/Minor). verify_interactions.py normalizes to Flutter enum (contraindicated/avoid/caution/monitor). All Major+ entries have ≥1 source_url to pass the evidence gate (§6.2 check 9). Cisapride included as withdrawn-drug reference pair due to high educational value. Metformin/contrast and metformin/alcohol entries are procedural/lifestyle warnings, not classic DDI — flagged accordingly in mechanism text.",
     "migration_notes": [
-      "2026-07-02: Phase 2 smart-flagging — authored direction + materiality on all 29 pairwise interactions. materiality authored fresh (NOT from applies_to): Major/Contraindicated + PK/absorption + non-supplement pairs = presence (never suppress, incl. warfarin+vitK); supplement-dose Additive pairs = dose_dependent (floorable, incl. fish-oil+vitamin-E). Advisory-only; score- and (pre-Phase-4) behavior-neutral. Applied via scripts/tools/migrate_phase2_pairwise_direction_materiality.py."
+      "2026-07-02: Phase 2 smart-flagging — authored direction + materiality on all 29 pairwise interactions. materiality authored fresh (NOT from applies_to): Major/Contraindicated + PK/absorption + non-supplement pairs = presence (never suppress, incl. warfarin+vitK); supplement-dose Additive pairs = dose_dependent (floorable, incl. fish-oil+vitamin-E). Advisory-only; score- and (pre-Phase-4) behavior-neutral. Applied via scripts/tools/migrate_phase2_pairwise_direction_materiality.py.",
+      "2026-07-30: Added the direct cholestyramine-warfarin absorption interaction after PharmaGuide Clinical Team review. Both ingredient RxCUIs were verified live and the management text follows the current DailyMed cholestyramine label."
     ]
   },
   "interactions": [
@@ -972,6 +973,40 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "DDI_CHOLESTYRAMINE_WARFARIN",
+      "type": "Med-Med",
+      "agent1_name": "Cholestyramine",
+      "agent1_id": "2447",
+      "agent2_name": "Warfarin",
+      "agent2_id": "11289",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Cholestyramine can bind concomitant oral medicines in the gut and delay or reduce the absorption of warfarin. Starting, stopping, or changing the timing of cholestyramine can therefore change warfarin exposure and anticoagulant control.",
+      "management": "Take warfarin at least 1 hour before or 4 to 6 hours after cholestyramine unless the anticoagulation clinician gives different instructions. Keep the timing consistent and contact the warfarin prescriber or anticoagulation service when starting, stopping, or changing cholestyramine; INR monitoring may be needed. Do not change warfarin on your own.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=09420793-7357-4194-8172-0b1cddb167fe"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-07-30T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": false,
+          "pubmed": false
+        },
+        "method": "live_rxnorm_and_dailymed_label_review_2026_07_30",
+        "notes": "RxNorm live properties verified RxCUI 2447 as cholestyramine resin and RxCUI 11289 as warfarin. DailyMed explicitly names warfarin and gives the asymmetric oral-drug timing interval."
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "evidence_notes": "Current DailyMed cholestyramine labeling states that cholestyramine may delay or reduce warfarin absorption and directs other oral drugs at least one hour before or four to six hours after cholestyramine.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": null,
       "direction": "harmful",

@@ -179,5 +179,5 @@ def test_real_source_content_hash_is_pinned():
     # remains separately fail-closed in the delta ledger.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:ec003d3082bedfcf133a266c101960e6b2892fb6cbc9013e1b55b66556e6423f"
+        == "sha256:dac490bc73da4910f63b248c87f5d98fd4b46601c2efd880a87bda86d0011800"
     )
