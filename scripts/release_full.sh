@@ -8,6 +8,10 @@
 # up-to-date and accurate output without shortcuts.
 #
 # Steps (in order):
+#   0. Import approved submissions  Fetches service-approved records and runs
+#                                  only fresh labels through the same canonical
+#                                  Clean → Enrich → Score pipeline as every
+#                                  other catalog source.
 #   1. Gate, assemble, and promote (rebuild_dashboard_snapshot.sh)
 #                                  AUTO-SKIPS when dist/ catalog is already
 #                                  fresh relative to per-brand outputs.
@@ -62,7 +66,8 @@
 #     - Per-brand pipeline outputs under scripts/products/output_*/ (only
 #       needed if step 1 actually runs; auto-detect handles missing case
 #       only if dist/ already has a catalog from another path).
-#     - .env at repo root: UMLS_API_KEY, SUPABASE_URL, SUPABASE_SERVICE_KEY
+#     - .env at repo root: UMLS_API_KEY, SUPABASE_URL,
+#       SUPABASE_SERVICE_ROLE_KEY
 #     - Flutter repo exists at $FLUTTER_REPO
 #
 # Exit codes:
@@ -127,6 +132,9 @@ PRODUCTS_DIR="$REPO_ROOT/scripts/products"
 SOURCE_OF_TRUTH_AUDIT="$REPO_ROOT/scripts/audit_source_of_truth_contract.py"
 RDA_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/rda_optimal_uls.json"
 IDENTITY_AUDIT_SCRIPT="$REPO_ROOT/scripts/audit_identity_integrity.py"
+SUBMISSION_OUTPUT_DIR="$REPO_ROOT/manual_labels/product_submissions"
+SUBMISSION_PIPELINE_PREFIX="$PRODUCTS_DIR/output_Product_Submissions"
+SUBMISSION_SCORE_MANIFEST="$SUBMISSION_PIPELINE_PREFIX"_scored/scored/.stage_manifest.json
 
 # Code that changes emitted catalog identity, scoring, or explanation fields is
 # a catalog-build input, just like the source product outputs. Without this,
@@ -255,6 +263,55 @@ run_strict_gate() {
 
 run_strict_gate "source-of-truth matrix" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" matrix --strict-release
+
+# ---------------------------------------------------------------------------
+# Step 0: Approved product submissions
+#
+# The service export is not a second publication path. It materializes the
+# already-human-approved label into manual_labels/, then invokes run_pipeline.py
+# exactly as a normal brand source. The existing scorer, gates, snapshot
+# builder, cloud sync, and Flutter bundle remain the only release authority.
+#
+# Local-only and cloud dry-run releases do not mutate the approval inbox.
+# Existing imported labels are still processed when their scored output is
+# absent or stale.
+# ---------------------------------------------------------------------------
+
+submission_labels_exist() {
+  [[ -d "$SUBMISSION_OUTPUT_DIR" ]] || return 1
+  find "$SUBMISSION_OUTPUT_DIR" -maxdepth 1 -type f -name '*.json' \
+    -print -quit 2>/dev/null | grep -q .
+}
+
+submission_pipeline_needs_run() {
+  (( FORCE == 1 )) && return 0
+  [[ ! -f "$SUBMISSION_SCORE_MANIFEST" ]] && return 0
+  find "$SUBMISSION_OUTPUT_DIR" -maxdepth 1 -type f -name '*.json' \
+    -newer "$SUBMISSION_SCORE_MANIFEST" -print -quit 2>/dev/null | grep -q .
+}
+
+if (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
+  info "Product submissions: fetching human-approved records..."
+  "$PG_PYTHON" scripts/product_submission_import.py --fetch \
+    --output-dir "$SUBMISSION_OUTPUT_DIR"
+  ok "Product submissions: approval inbox reconciled"
+else
+  skip "Product submissions: approval fetch skipped (cloud disabled or dry-run)"
+fi
+
+if submission_labels_exist; then
+  if submission_pipeline_needs_run; then
+    info "Product submissions: running fresh labels through Clean → Enrich → Score..."
+    "$PG_PYTHON" scripts/run_pipeline.py --raw-dir "$SUBMISSION_OUTPUT_DIR" \
+      --output-prefix "$SUBMISSION_PIPELINE_PREFIX" \
+      --strict-release-gates
+    ok "Product submissions: canonical pipeline outputs refreshed"
+  else
+    skip "Product submissions: scored outputs are current"
+  fi
+else
+  skip "Product submissions: no approved labels to process"
+fi
 
 # This verifies the already-produced enrichment output before any freshness
 # shortcut can reuse it. A catalog rebuild cannot repair stale enrichment, so
@@ -717,6 +774,23 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   fi
 else
   skip "Bundle commit + aligned cleanup skipped (flutter/supabase disabled or dry-run)"
+fi
+
+# A submission becomes user-visible only after the exact product identity is
+# present in the released catalog database. The adapter verifies that fact
+# before calling the immutable promotion RPC; unprocessed or failed products
+# remain approved-but-unpromoted for the next release.
+SUBMISSION_RECEIPTS="$SUBMISSION_OUTPUT_DIR/.product_submission_import_receipts"
+if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )) \
+    && [[ -f "$SUBMISSION_RECEIPTS" ]]; then
+  info "Closing approved product-submission receipts against the released catalog..."
+  "$PG_PYTHON" scripts/product_submission_import.py --mark-promoted \
+    --output-dir "$SUBMISSION_OUTPUT_DIR" \
+    --catalog-db "$DIST_DIR/pharmaguide_core.db" \
+    --detail-blobs-dir "$DIST_DIR/detail_blobs"
+  ok "Product-submission promotion receipts reconciled"
+else
+  skip "Product-submission promotion skipped (no receipts or release disabled)"
 fi
 
 ELAPSED=$(($(date +%s) - START_TS))

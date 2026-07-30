@@ -1541,8 +1541,24 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         or scored.get("manual_product_provenance")
     )
     if source_type == "external_manual" or provenance:
-        required = ("source_url", "label_verified_at", "review_status", "reviewer")
+        required = ("label_verified_at", "review_status", "reviewer")
         missing = [field for field in required if not safe_str(provenance.get(field))]
+        source_url = safe_str(provenance.get("source_url"))
+        private_source_id = safe_str(provenance.get("source_record_id"))
+        has_private_source = (
+            safe_str(provenance.get("source_kind")).lower()
+            == "private_product_submission"
+            and bool(
+                re.fullmatch(
+                    r"[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-"
+                    r"[89ab][0-9a-f]{3}-[0-9a-f]{12}",
+                    private_source_id,
+                    flags=re.IGNORECASE,
+                )
+            )
+        )
+        if not source_url and not has_private_source:
+            missing.append("source_url_or_private_source_record")
         if missing:
             issues.append(
                 "review_queue: external manual product missing provenance "

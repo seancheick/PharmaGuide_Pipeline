@@ -9,6 +9,7 @@ import json
 import logging
 import os
 import random
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -38,7 +39,6 @@ _PARITY_IGNORE_KEYS = frozenset({"_source", "src"})
 _STATE_VERSION = "1.0"
 _CANONICAL_HASH_EXCLUDE_KEYS = frozenset({"_source", "src"})
 _MANUAL_PROVENANCE_REQUIRED_FIELDS = (
-    "source_url",
     "label_verified_at",
     "review_status",
     "reviewer",
@@ -561,6 +561,21 @@ def _validate_external_manual_label(label: dict) -> None:
         field for field in _MANUAL_PROVENANCE_REQUIRED_FIELDS
         if not str(provenance.get(field) or "").strip()
     ]
+    source_url = str(provenance.get("source_url") or "").strip()
+    private_source_id = str(provenance.get("source_record_id") or "").strip()
+    has_private_source = (
+        provenance.get("source_kind") == "private_product_submission"
+        and bool(
+            re.fullmatch(
+                r"[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-"
+                r"[89ab][0-9a-f]{3}-[0-9a-f]{12}",
+                private_source_id,
+                flags=re.IGNORECASE,
+            )
+        )
+    )
+    if not source_url and not has_private_source:
+        missing.append("source_url_or_private_source_record")
     if missing:
         raise ValueError(
             "external manual label missing provenance field(s): "
