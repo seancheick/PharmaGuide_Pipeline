@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Copy canonical pipeline reference data into the Flutter bundle.
 
-This is the only supported writer for Flutter's ``rda_optimal_uls.json`` and
-``product_type_vocab.json``. It validates canonical parity before success.
+This is the only supported writer for Flutter's canonical reference-data
+copies. It validates parity before success.
 """
 
 from __future__ import annotations
@@ -31,6 +31,12 @@ PRODUCT_TYPE_DESTINATION_RELATIVE_PATH = Path("assets/data/product_type_vocab.js
 DEFAULT_DEPLETIONS_SOURCE = Path(__file__).parent / "data" / "medication_depletions.json"
 DEPLETIONS_DESTINATION_RELATIVE_PATH = Path(
     "assets/reference_data/medication_depletions.json"
+)
+DEFAULT_CLINICAL_TAXONOMY_SOURCE = (
+    Path(__file__).parent / "data" / "clinical_risk_taxonomy.json"
+)
+CLINICAL_TAXONOMY_DESTINATION_RELATIVE_PATH = Path(
+    "assets/reference_data/clinical_risk_taxonomy.json"
 )
 
 
@@ -129,6 +135,79 @@ def sync_product_type_vocab(*, source_path: Path, flutter_repo: Path) -> dict[st
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source_path, destination)
     return validate_flutter_product_type_vocab(
+        source_path=source_path,
+        flutter_repo=flutter_repo,
+    )
+
+
+def _load_clinical_taxonomy(source_path: Path) -> tuple[Path, dict[str, Any]]:
+    source_path = source_path.resolve()
+    if not source_path.is_file():
+        raise FileNotFoundError(
+            f"Canonical clinical-risk taxonomy not found: {source_path}"
+        )
+    payload = json.loads(source_path.read_text(encoding="utf-8"))
+    metadata = payload.get("_metadata")
+    conditions = payload.get("conditions")
+    profile_flags = payload.get("profile_flags")
+    if not all(
+        (
+            isinstance(metadata, dict),
+            isinstance(conditions, list),
+            isinstance(profile_flags, list),
+        )
+    ):
+        raise ValueError("canonical clinical-risk taxonomy has an invalid shape")
+    if metadata.get("total_entries") != sum(
+        len(value)
+        for key, value in payload.items()
+        if key != "_metadata" and isinstance(value, list)
+    ):
+        raise ValueError("canonical clinical-risk taxonomy metadata is stale")
+    return source_path, payload
+
+
+def validate_flutter_clinical_taxonomy(
+    *, source_path: Path, flutter_repo: Path
+) -> dict[str, Any]:
+    """Require Flutter to bundle the canonical pipeline clinical taxonomy."""
+    source_path, canonical = _load_clinical_taxonomy(source_path)
+    flutter_repo = flutter_repo.resolve()
+    destination = flutter_repo / CLINICAL_TAXONOMY_DESTINATION_RELATIVE_PATH
+    if not flutter_repo.is_dir():
+        raise FileNotFoundError(f"Flutter repository not found: {flutter_repo}")
+    if not destination.is_file():
+        raise FileNotFoundError(
+            f"Flutter clinical-risk taxonomy not found: {destination}"
+        )
+    copied = json.loads(destination.read_text(encoding="utf-8"))
+    if copied != canonical or destination.read_bytes() != source_path.read_bytes():
+        raise ValueError(
+            "Flutter clinical-risk taxonomy differs from canonical pipeline source"
+        )
+    metadata = canonical["_metadata"]
+    return {
+        "source": source_path,
+        "destination": destination,
+        "schema_version": metadata["schema_version"],
+        "total_entries": metadata["total_entries"],
+        "conditions": len(canonical["conditions"]),
+        "profile_flags": len(canonical["profile_flags"]),
+    }
+
+
+def sync_clinical_taxonomy(
+    *, source_path: Path, flutter_repo: Path
+) -> dict[str, Any]:
+    """Byte-copy the sole authored clinical-profile taxonomy into Flutter."""
+    source_path, _ = _load_clinical_taxonomy(source_path)
+    flutter_repo = flutter_repo.resolve()
+    destination = flutter_repo / CLINICAL_TAXONOMY_DESTINATION_RELATIVE_PATH
+    if not flutter_repo.is_dir():
+        raise FileNotFoundError(f"Flutter repository not found: {flutter_repo}")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source_path, destination)
+    return validate_flutter_clinical_taxonomy(
         source_path=source_path,
         flutter_repo=flutter_repo,
     )
@@ -238,6 +317,12 @@ def _parse_args() -> argparse.Namespace:
         "(default: scripts/data/medication_depletions.json).",
     )
     parser.add_argument(
+        "--clinical-taxonomy-source",
+        default=str(DEFAULT_CLINICAL_TAXONOMY_SOURCE),
+        help="Canonical clinical_risk_taxonomy.json "
+        "(default: scripts/data/clinical_risk_taxonomy.json).",
+    )
+    parser.add_argument(
         "--content-version",
         default=None,
         help="Release stamp for the generated depletions artifact "
@@ -260,6 +345,13 @@ def main() -> int:
     )
     product_result = product_operation(
         source_path=Path(args.product_type_source),
+        flutter_repo=Path(args.flutter_repo),
+    )
+    taxonomy_operation = (
+        validate_flutter_clinical_taxonomy if args.check else sync_clinical_taxonomy
+    )
+    taxonomy_result = taxonomy_operation(
+        source_path=Path(args.clinical_taxonomy_source),
         flutter_repo=Path(args.flutter_repo),
     )
     depletion_kwargs: dict[str, Any] = dict(
@@ -288,6 +380,12 @@ def main() -> int:
         f"schema={depletion_result['schema_version']} "
         f"entries={depletion_result['total_entries']} "
         f"contract={depletion_result['minimum_runtime_contract']}"
+    )
+    print(
+        f"{verb} clinical-profile taxonomy: "
+        f"schema={taxonomy_result['schema_version']} "
+        f"conditions={taxonomy_result['conditions']} "
+        f"profile_flags={taxonomy_result['profile_flags']}"
     )
     return 0
 

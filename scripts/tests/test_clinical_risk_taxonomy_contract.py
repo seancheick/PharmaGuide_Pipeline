@@ -23,10 +23,12 @@ If you add an entry to ANY array, bump ``total_entries`` by 1.
 
 import json
 from pathlib import Path
+import re
 
 import pytest
 
 PATH = Path(__file__).parent.parent / "data" / "clinical_risk_taxonomy.json"
+DATA_DIR = PATH.parent
 
 REQUIRED_ARRAYS = (
     "conditions",
@@ -73,3 +75,124 @@ def test_serotonergic_medications_drug_class_is_taxonomy_backed(blob):
     assert entry is not None
     assert entry["category"] == "psychiatry"
     assert "Serotonergic" in entry["label"]
+
+
+def test_conditions_are_the_complete_user_profile_contract(blob):
+    conditions = blob["conditions"]
+    assert len(conditions) == 15
+    assert all(condition.get("user_selectable") is True for condition in conditions)
+
+    ids = [condition["id"] for condition in conditions]
+    assert len(ids) == len(set(ids))
+    assert all(re.fullmatch(r"[a-z][a-z0-9_]*", condition_id) for condition_id in ids)
+
+    priorities = [condition["display_priority"] for condition in conditions]
+    assert priorities == sorted(priorities)
+    assert len(priorities) == len(set(priorities))
+
+    for condition in conditions:
+        assert condition["label"].strip()
+        assert condition["description"].strip()
+        assert len(condition["description"]) <= 200
+        assert all(item.strip() for item in condition.get("synonyms", []))
+        for reference in condition.get("icd10", []):
+            assert reference["code"].strip()
+            assert reference["description"].strip()
+
+
+def _collect_profile_flag_references(value, found):
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if key in {"profile_flags_any", "profile_flags_all"} and isinstance(
+                item, list
+            ):
+                found.update(flag for flag in item if isinstance(flag, str))
+            _collect_profile_flag_references(item, found)
+    elif isinstance(value, list):
+        for item in value:
+            _collect_profile_flag_references(item, found)
+
+
+def _collect_condition_references(value, found):
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if key == "condition_id" and isinstance(item, str):
+                found.add(item)
+            elif key in {"conditions_any", "conditions_all"} and isinstance(
+                item, list
+            ):
+                found.update(
+                    condition for condition in item if isinstance(condition, str)
+                )
+            _collect_condition_references(item, found)
+    elif isinstance(value, list):
+        for item in value:
+            _collect_condition_references(item, found)
+
+
+def _active_rule_payloads():
+    for filename in (
+        "ingredient_interaction_rules.json",
+        "medication_profile_gate_rules.json",
+    ):
+        yield json.loads((DATA_DIR / filename).read_text(encoding="utf-8"))
+
+
+def test_every_selectable_condition_has_an_active_rule_consumer(blob):
+    conditions = {entry["id"] for entry in blob["conditions"]}
+    active_references = set()
+    for payload in _active_rule_payloads():
+        _collect_condition_references(payload, active_references)
+
+    assert active_references == conditions, (
+        "selectable condition/rule reachability drift: "
+        f"unused={sorted(conditions - active_references)}, "
+        f"unknown={sorted(active_references - conditions)}"
+    )
+
+
+def test_profile_capture_modes_keep_every_active_rule_reachable(blob):
+    conditions = {entry["id"] for entry in blob["conditions"]}
+    flags = {entry["id"]: entry for entry in blob["profile_flags"]}
+    allowed_modes = {"derived_from_condition", "user_selectable", "reserved"}
+
+    active_references = set()
+    for payload in _active_rule_payloads():
+        _collect_profile_flag_references(payload, active_references)
+
+    for flag_id, entry in flags.items():
+        mode = entry.get("capture_mode")
+        assert mode in allowed_modes, f"{flag_id}: invalid capture_mode={mode!r}"
+        source_condition_id = entry.get("source_condition_id")
+        if mode == "derived_from_condition":
+            assert source_condition_id in conditions, (
+                f"{flag_id}: derived flag needs a real source_condition_id"
+            )
+        else:
+            assert source_condition_id is None, (
+                f"{flag_id}: only derived flags may declare source_condition_id"
+            )
+
+    missing = active_references - flags.keys()
+    assert not missing, f"active rules reference unknown profile flags: {sorted(missing)}"
+
+    unreachable = {
+        flag_id
+        for flag_id in active_references
+        if flags[flag_id]["capture_mode"] == "reserved"
+    }
+    assert not unreachable, (
+        "active rules reference reserved, non-capturable profile flags: "
+        f"{sorted(unreachable)}"
+    )
+
+    stale_selectable = {
+        flag_id
+        for flag_id, entry in flags.items()
+        if entry["capture_mode"] == "user_selectable"
+        and flag_id not in active_references
+    }
+    assert not stale_selectable, (
+        "user-selectable profile flags have no active rule consumer: "
+        f"{sorted(stale_selectable)}"
+    )

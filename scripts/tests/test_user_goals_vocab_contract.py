@@ -135,9 +135,9 @@ def test_ids_match_user_goals_to_clusters(goals):
 # ---------------------------------------------------------------------------
 
 
-def test_related_condition_ids_in_condition_vocab(goals):
+def test_related_condition_ids_in_clinical_taxonomy(goals):
     cond_path = os.path.join(
-        os.path.dirname(__file__), "..", "data", "condition_vocab.json"
+        os.path.dirname(__file__), "..", "data", "clinical_risk_taxonomy.json"
     )
     with open(cond_path, encoding="utf-8") as f:
         cond_ids = {c["id"] for c in json.load(f)["conditions"]}
@@ -145,7 +145,7 @@ def test_related_condition_ids_in_condition_vocab(goals):
     for g in goals:
         for cid in g.get("related_condition_ids", []):
             assert cid in cond_ids, (
-                f"goal {g['id']} references condition {cid!r} not in condition_vocab"
+                f"goal {g['id']} references condition {cid!r} not in clinical taxonomy"
             )
 
 

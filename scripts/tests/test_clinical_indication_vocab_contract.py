@@ -105,11 +105,13 @@ def test_every_clinical_study_category_in_vocab(indications):
     assert not unknown, f"clinical study categories NOT in vocab: {unknown}"
 
 
-def test_related_condition_ids_in_condition_vocab(indications):
+def test_related_condition_ids_in_clinical_taxonomy(indications):
     cond_path = os.path.join(
-        os.path.dirname(__file__), "..", "data", "condition_vocab.json"
+        os.path.dirname(__file__), "..", "data", "clinical_risk_taxonomy.json"
     )
     cond_ids = {c["id"] for c in json.load(open(cond_path))["conditions"]}
     for i in indications:
         for cid in i.get("related_condition_ids", []):
-            assert cid in cond_ids, f"{i['id']} references {cid} not in condition_vocab"
+            assert cid in cond_ids, (
+                f"{i['id']} references {cid} not in clinical taxonomy"
+            )

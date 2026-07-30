@@ -218,14 +218,14 @@ The taxonomy + length + dedupe checks all run; only the disk write is skipped. S
 ### 5) Verify after each batch
 
 ```bash
-python3 -m pytest scripts/tests/test_db_integrity.py \
-                  scripts/tests/test_no_duplicate_drug_class_rules.py \
-                  scripts/tests/test_condition_vocab_contract.py \
-                  scripts/tests/test_drug_class_vocab_contract.py \
-                  scripts/tests/test_evidence_level_vocab_contract.py \
-                  scripts/tests/test_severity_vocab_contract.py \
-                  scripts/tests/test_safety_copy_production.py \
-                  scripts/tests/test_validate_safety_copy.py -q
+scripts/test.sh fast scripts/tests/test_db_integrity.py \
+  scripts/tests/test_no_duplicate_drug_class_rules.py \
+  scripts/tests/test_clinical_risk_taxonomy_contract.py \
+  scripts/tests/test_drug_class_vocab_contract.py \
+  scripts/tests/test_evidence_level_vocab_contract.py \
+  scripts/tests/test_severity_vocab_contract.py \
+  scripts/tests/test_safety_copy_production.py \
+  scripts/tests/test_validate_safety_copy.py
 ```
 
 Catches schema drift, duplicate drug-class rules within a subject, and authored-copy length violations. Run before every commit.

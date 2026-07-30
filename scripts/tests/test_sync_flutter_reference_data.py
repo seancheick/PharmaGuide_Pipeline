@@ -65,3 +65,32 @@ def test_sync_product_type_vocab_uses_pipeline_file_as_only_source(tmp_path: Pat
         source_path=source,
         flutter_repo=flutter_repo,
     )
+
+
+def test_sync_clinical_taxonomy_uses_pipeline_file_as_only_source(
+    tmp_path: Path,
+) -> None:
+    source = Path(__file__).parent.parent / "data" / "clinical_risk_taxonomy.json"
+    flutter_repo = tmp_path / "PharmaGuide-ai"
+    destination = (
+        flutter_repo / "assets" / "reference_data" / "clinical_risk_taxonomy.json"
+    )
+    destination.parent.mkdir(parents=True)
+    destination.write_text('{"conditions": []}\n')
+
+    with pytest.raises(ValueError, match="clinical-risk taxonomy differs"):
+        sync_mod.validate_flutter_clinical_taxonomy(
+            source_path=source,
+            flutter_repo=flutter_repo,
+        )
+
+    result = sync_mod.sync_clinical_taxonomy(
+        source_path=source,
+        flutter_repo=flutter_repo,
+    )
+
+    assert destination.read_bytes() == source.read_bytes()
+    assert result["destination"] == destination
+    assert result["schema_version"] == "5.3.0"
+    assert result["conditions"] == 15
+    assert result["profile_flags"] == 8

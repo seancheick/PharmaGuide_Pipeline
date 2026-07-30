@@ -116,6 +116,7 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 
 | Term | Meaning |
 |---|---|
+| **Profile capture mode** | Taxonomy-owned rule for how a `profile_flags[]` value reaches the evaluator: `derived_from_condition`, `user_selectable`, or `reserved`. Flutter must not maintain a separate selectable list. A `reserved` flag cannot be referenced by an active rule. |
 | **Safety signal** | Canonical identity + applicability + confidence evidence consumed by the v4 safety gate. Raw matcher implementation details do not own verdict policy. |
 | **US applicable** | Whether the regulatory evidence applies to the primary shipped US verdict. Other jurisdictions remain as regional advisories. |
 | **Ingredient-level recall flag** | `has_banned_substance` or `has_recalled_ingredient`. Never use `is_recalled`, which implies an unsupported product-level recall. |

@@ -1390,12 +1390,16 @@ def check_ingredient_interaction_rules(findings: List[Finding], data: Dict[str, 
         findings.append(Finding("error", file, "interaction_rules", "missing_or_non_list", "list", _type_name(raw)))
         return
 
-    # Validation IDs sourced from the controlled vocabularies (locked
-    # 2026-04-30..2026-05-02 per REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md).
-    # Falls back to clinical_risk_taxonomy.json if a vocab file is missing
-    # — that case is surfaced by the per-vocab contract tests under
-    # scripts/tests/test_*_vocab_contract.py.
-    valid_conditions = _load_vocab_ids("condition_vocab.json", "conditions")
+    # Clinical conditions have one authority: clinical_risk_taxonomy.json.
+    # Other dimensions retain their dedicated presentation vocabularies.
+    taxonomy = _load_json(DATA_DIR / "clinical_risk_taxonomy.json")
+    valid_conditions = {
+        str(entry.get("id")).strip().lower()
+        for entry in (
+            taxonomy.get("conditions", []) if isinstance(taxonomy, dict) else []
+        )
+        if isinstance(entry, dict) and entry.get("id")
+    }
     valid_drug_classes = _load_vocab_ids("drug_class_vocab.json", "drug_classes")
     valid_severity = _load_vocab_ids("severity_vocab.json", "severities")
     # interaction_rules.evidence_level uses the strength tier (D2 split):
@@ -1407,13 +1411,6 @@ def check_ingredient_interaction_rules(findings: List[Finding], data: Dict[str, 
     if not (valid_conditions and valid_drug_classes and valid_severity and valid_evidence):
         # Vocab missing — fall back to the legacy taxonomy so the gate
         # still runs. Per-vocab contract tests will catch the missing file.
-        taxonomy = _load_json(DATA_DIR / "clinical_risk_taxonomy.json")
-        if not valid_conditions:
-            valid_conditions = {
-                str(e.get("id")).strip().lower()
-                for e in (taxonomy.get("conditions", []) if isinstance(taxonomy, dict) else [])
-                if isinstance(e, dict) and e.get("id")
-            }
         if not valid_drug_classes:
             valid_drug_classes = {
                 str(e.get("id")).strip().lower()
