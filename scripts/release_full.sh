@@ -275,6 +275,8 @@ run_strict_gate "source-of-truth matrix" \
 # Local-only and cloud dry-run releases do not mutate the approval inbox.
 # Existing imported labels are still processed when their scored output is
 # absent or stale.
+# The release host should prefer SUPABASE_SECRET_KEY (sb_secret_...) and may
+# temporarily fall back to the legacy SUPABASE_SERVICE_ROLE_KEY.
 # ---------------------------------------------------------------------------
 
 submission_labels_exist() {
@@ -743,9 +745,9 @@ INTERACTION_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sy
 # ---------------------------------------------------------------------------
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   if git -C "$FLUTTER_REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    if git -C "$FLUTTER_REPO" status --porcelain -- assets/db assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/data/product_type_vocab.json | grep -q .; then
+    if git -C "$FLUTTER_REPO" status --porcelain -- assets/db assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/data/product_type_vocab.json | grep -q .; then
       info "Committing Flutter bundle and canonical reference data (local) so storage cleanup runs aligned..."
-      git -C "$FLUTTER_REPO" add assets/db/ assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/data/product_type_vocab.json
+      git -C "$FLUTTER_REPO" add assets/db/ assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/data/product_type_vocab.json
       if git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}"; then
         ok "Flutter bundle committed locally (push remains manual)"
       else

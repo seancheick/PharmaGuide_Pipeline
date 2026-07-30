@@ -31,6 +31,7 @@ SCHEMA_VERSION = "manual_label_v1"
 RECEIPT_FILE = ".product_submission_import_receipts"
 REVIEWER_DISPLAY_NAME = "PharmaGuide Clinical Team"
 MAX_CANONICAL_BYTES = 512 * 1024
+MAX_EXPORT_PAGES = 1000
 _ALLOWED_KINDS = frozenset({"label_mismatch", "missing_product"})
 _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
     {
@@ -243,7 +244,6 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
             raise SubmissionImportError("target_dsld_id must be numeric")
         product_id = target_id
         lineage_key = f"dsld:{target_id}"
-        source_record_id = target_id
     else:
         if export_row.get("target_dsld_id") is not None:
             raise SubmissionImportError(
@@ -251,7 +251,6 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
             )
         product_id = "PG_SUB_" + submission_id.replace("-", "").upper()
         lineage_key = f"pharmaguide_submission:{submission_id}"
-        source_record_id = submission_id
 
     return {
         "id": product_id,
@@ -269,7 +268,12 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
         },
         "label_record_metadata": {
             "source_name": "PharmaGuide verified product submission",
-            "source_record_id": source_record_id,
+            # The reviewed submission is the source record for both new
+            # products and corrections. Existing-product identity remains in
+            # ``id``/``lineage_key``; using the old DSLD id here would make a
+            # correction indistinguishable from the label it replaced and
+            # would fail the post-release provenance proof.
+            "source_record_id": submission_id,
             "source_date": verified_date,
             "source_updated_date": verified_date,
             "product_status": "discontinued"
@@ -332,7 +336,10 @@ def materialize_approved_submissions(
     seen_submission_ids: set[str] = set()
     seen_product_ids: set[str] = set()
     upc_owner = {
-        str(value.get("upc")): submission_id
+        str(value.get("upc")): (
+            submission_id,
+            str(value.get("product_id") or ""),
+        )
         for submission_id, value in receipt_rows.items()
         if isinstance(value, dict) and value.get("upc")
     }
@@ -353,11 +360,16 @@ def materialize_approved_submissions(
         upc = str(label["upcSku"])
         if upc:
             existing_upc_owner = upc_owner.get(upc)
-            if existing_upc_owner is not None and existing_upc_owner != submission_id:
+            if (
+                existing_upc_owner is not None
+                and existing_upc_owner[0] != submission_id
+                and existing_upc_owner[1] != product_id
+            ):
                 raise SubmissionImportError(
-                    f"UPC {upc} is already owned by submission {existing_upc_owner}"
+                    f"UPC {upc} is already owned by submission "
+                    f"{existing_upc_owner[0]}"
                 )
-            upc_owner[upc] = submission_id
+            upc_owner[upc] = (submission_id, product_id)
 
         serialized = json.dumps(label, ensure_ascii=False, indent=2) + "\n"
         label_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
@@ -384,13 +396,31 @@ def materialize_approved_submissions(
                     f"existing manual label is unreadable: {output_path.name}"
                 ) from exc
             if existing_label_hash != label_hash:
-                raise SubmissionImportError(
-                    "refusing to overwrite changed manual label "
-                    f"{output_path.name}"
-                )
+                prior_receipts = [
+                    row
+                    for row in receipt_rows.values()
+                    if isinstance(row, dict)
+                    and row.get("product_id") == product_id
+                    and row.get("output_file") == output_path.name
+                    and row.get("label_sha256") == existing_label_hash
+                ]
+                if not prior_receipts:
+                    raise SubmissionImportError(
+                        "refusing to overwrite a manual label without an "
+                        f"import receipt: {output_path.name}"
+                    )
+                if not all(
+                    row.get("promoted_catalog_version") for row in prior_receipts
+                ):
+                    raise SubmissionImportError(
+                        "refusing to replace an unpromoted manual label "
+                        f"{output_path.name}"
+                    )
             # A crash can occur after the atomic label replace but before the
             # receipt replace. Exact bytes prove this is the same approval, so
             # safely recreate the receipt and refresh mtime for the pipeline.
+            # A later correction may also replace the current bytes, but only
+            # after the receipt owning those exact bytes was promoted.
         prepared.append((submission_id, label, serialized, output_path))
 
     imported: list[str] = []
@@ -413,53 +443,137 @@ def materialize_approved_submissions(
     return ImportResult(imported, already_imported, output_paths)
 
 
+def _supabase_admin_headers() -> dict[str, str]:
+    """Build REST headers for current secret keys or legacy service JWTs.
+
+    Opaque ``sb_secret_`` keys are API keys, not JWTs, and must never be sent
+    as bearer tokens. The legacy service-role key remains supported until the
+    project finishes its key migration.
+    """
+    secret_key = os.environ.get("SUPABASE_SECRET_KEY", "").strip()
+    legacy_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "").strip()
+    admin_key = secret_key or legacy_key
+    if not admin_key:
+        raise SubmissionImportError(
+            "SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY is required"
+        )
+    headers = {
+        "apikey": admin_key,
+        "content-type": "application/json",
+    }
+    if not admin_key.startswith("sb_secret_"):
+        headers["authorization"] = f"Bearer {admin_key}"
+    return headers
+
+
+def _export_cursor(
+    row: dict[str, Any],
+) -> tuple[tuple[datetime, int], str, str]:
+    approved_at = _required_string(
+        row.get("approved_at"),
+        "approved export cursor approved_at",
+        max_length=40,
+    )
+    try:
+        parsed_at = datetime.fromisoformat(
+            approved_at[:-1] + "+00:00"
+            if approved_at.endswith("Z")
+            else approved_at
+        )
+    except ValueError as exc:
+        raise SubmissionImportError(
+            "approved export cursor timestamp is invalid"
+        ) from exc
+    if parsed_at.tzinfo is None:
+        raise SubmissionImportError(
+            "approved export cursor timestamp requires a timezone"
+        )
+    submission_id = _required_uuid(
+        row.get("submission_id"),
+        "approved export cursor submission_id",
+    )
+    return (parsed_at, UUID(submission_id).int), approved_at, submission_id
+
+
 def fetch_approved_submissions(*, limit: int = 100) -> list[dict[str, Any]]:
-    """Read the service-only approval export without exposing user evidence."""
+    """Read every approval through a bounded, stable service-only cursor.
+
+    ``limit`` is the page size, not a total cap. Already-materialized approvals
+    remain unpromoted until a release completes, so stopping after the oldest
+    page would permanently starve newer work.
+    """
     if not 1 <= limit <= 500:
         raise SubmissionImportError("fetch limit must be between 1 and 500")
     base_url = os.environ.get("SUPABASE_URL", "").rstrip("/")
-    service_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
-    if not base_url or not service_key:
-        raise SubmissionImportError(
-            "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required"
+    if not base_url:
+        raise SubmissionImportError("SUPABASE_URL is required")
+    rows: list[dict[str, Any]] = []
+    seen_submission_ids: set[str] = set()
+    prior_sort_key: tuple[datetime, int] | None = None
+    after_approved_at: str | None = None
+    after_submission_id: str | None = None
+
+    for _page_number in range(MAX_EXPORT_PAGES):
+        request = urllib.request.Request(
+            f"{base_url}/rest/v1/rpc/export_approved_product_submissions",
+            data=json.dumps(
+                {
+                    "p_after_approved_at": after_approved_at,
+                    "p_after_submission_id": after_submission_id,
+                    "p_limit": limit,
+                }
+            ).encode("utf-8"),
+            headers=_supabase_admin_headers(),
+            method="POST",
         )
-    request = urllib.request.Request(
-        f"{base_url}/rest/v1/rpc/export_approved_product_submissions",
-        data=json.dumps({"p_limit": limit}).encode("utf-8"),
-        headers={
-            "apikey": service_key,
-            "authorization": f"Bearer {service_key}",
-            "content-type": "application/json",
-        },
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(request, timeout=30) as response:
-            decoded = json.loads(response.read())
-    except (OSError, urllib.error.URLError, json.JSONDecodeError) as exc:
-        raise SubmissionImportError("approved submission fetch failed") from exc
-    if not isinstance(decoded, list) or not all(
-        isinstance(row, dict) for row in decoded
-    ):
-        raise SubmissionImportError("approval export response is malformed")
-    return decoded
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                decoded = json.loads(response.read())
+        except (OSError, urllib.error.URLError, json.JSONDecodeError) as exc:
+            raise SubmissionImportError(
+                "approved submission fetch failed"
+            ) from exc
+        if (
+            not isinstance(decoded, list)
+            or len(decoded) > limit
+            or not all(isinstance(row, dict) for row in decoded)
+        ):
+            raise SubmissionImportError("approval export response is malformed")
+        if not decoded:
+            return rows
+
+        for row in decoded:
+            sort_key, cursor_approved_at, cursor_submission_id = _export_cursor(
+                row
+            )
+            if prior_sort_key is not None and sort_key <= prior_sort_key:
+                raise SubmissionImportError(
+                    "approval export cursor did not advance"
+                )
+            if cursor_submission_id in seen_submission_ids:
+                raise SubmissionImportError(
+                    "approval export repeated a submission"
+                )
+            prior_sort_key = sort_key
+            after_approved_at = cursor_approved_at
+            after_submission_id = cursor_submission_id
+            seen_submission_ids.add(cursor_submission_id)
+            rows.append(row)
+
+        if len(decoded) < limit:
+            return rows
+
+    raise SubmissionImportError("approval export exceeded the page safety limit")
 
 
 def _service_rpc(function_name: str, payload: dict[str, object]) -> object:
     base_url = os.environ.get("SUPABASE_URL", "").rstrip("/")
-    service_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
-    if not base_url or not service_key:
-        raise SubmissionImportError(
-            "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required"
-        )
+    if not base_url:
+        raise SubmissionImportError("SUPABASE_URL is required")
     request = urllib.request.Request(
         f"{base_url}/rest/v1/rpc/{function_name}",
         data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "apikey": service_key,
-            "authorization": f"Bearer {service_key}",
-            "content-type": "application/json",
-        },
+        headers=_supabase_admin_headers(),
         method="POST",
     )
     try:

@@ -104,6 +104,120 @@ def row_id(row: dict) -> str:
     return str(row["submission_id"])
 
 
+def test_admin_headers_support_secret_keys_without_fabricating_a_bearer_jwt(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    from product_submission_import import _supabase_admin_headers
+
+    monkeypatch.setenv("SUPABASE_SECRET_KEY", "sb_secret_pipeline_key")
+    monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", "legacy-key")
+
+    headers = _supabase_admin_headers()
+
+    assert headers["apikey"] == "sb_secret_pipeline_key"
+    assert "authorization" not in headers
+
+
+def test_admin_headers_keep_legacy_service_role_compatibility(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    from product_submission_import import _supabase_admin_headers
+
+    monkeypatch.delenv("SUPABASE_SECRET_KEY", raising=False)
+    monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", "eyJlegacy.jwt")
+
+    headers = _supabase_admin_headers()
+
+    assert headers["apikey"] == "eyJlegacy.jwt"
+    assert headers["authorization"] == "Bearer eyJlegacy.jwt"
+
+
+def test_approved_export_uses_stable_cursor_pagination(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    from product_submission_import import fetch_approved_submissions
+
+    first = _export(
+        submission_id="018f4c79-7c7e-4c70-9d62-7fc3b9ce6a11",
+        approved_at="2026-07-30T10:00:00+00:00",
+    )
+    second = _export(
+        submission_id="118f4c79-7c7e-4c70-9d62-7fc3b9ce6a22",
+        approved_at="2026-07-30T10:00:01+00:00",
+    )
+    payloads: list[dict[str, object]] = []
+    pages = [[first, second], []]
+
+    class _Response:
+        def __init__(self, body: list[dict[str, object]]) -> None:
+            self._body = body
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args) -> None:
+            return None
+
+        def read(self) -> bytes:
+            return json.dumps(self._body).encode("utf-8")
+
+    def _urlopen(request, timeout):
+        assert timeout == 30
+        payloads.append(json.loads(request.data))
+        return _Response(pages.pop(0))
+
+    monkeypatch.setenv("SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("SUPABASE_SECRET_KEY", "sb_secret_pipeline_key")
+    monkeypatch.setattr("urllib.request.urlopen", _urlopen)
+
+    rows = fetch_approved_submissions(limit=2)
+
+    assert rows == [first, second]
+    assert payloads == [
+        {
+            "p_after_approved_at": None,
+            "p_after_submission_id": None,
+            "p_limit": 2,
+        },
+        {
+            "p_after_approved_at": second["approved_at"],
+            "p_after_submission_id": second["submission_id"],
+            "p_limit": 2,
+        },
+    ]
+
+
+def test_approved_export_fails_closed_if_cursor_does_not_advance(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    from product_submission_import import (
+        SubmissionImportError,
+        fetch_approved_submissions,
+    )
+
+    row = _export()
+
+    class _Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args) -> None:
+            return None
+
+        def read(self) -> bytes:
+            return json.dumps([row]).encode("utf-8")
+
+    monkeypatch.setenv("SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("SUPABASE_SECRET_KEY", "sb_secret_pipeline_key")
+    monkeypatch.setattr(
+        "urllib.request.urlopen",
+        lambda *_args, **_kwargs: _Response(),
+    )
+
+    with pytest.raises(SubmissionImportError, match="cursor did not advance"):
+        fetch_approved_submissions(limit=1)
+
+
 @pytest.mark.parametrize(
     ("field", "value"),
     [
@@ -204,6 +318,70 @@ def test_materialization_recovers_exact_label_after_receipt_write_interruption(
     assert (tmp_path / ".product_submission_import_receipts").exists()
 
 
+def test_new_correction_replaces_only_a_previously_promoted_correction(
+    tmp_path: Path,
+):
+    from product_submission_import import materialize_approved_submissions
+
+    first = _export(
+        kind="label_mismatch",
+        normalized_upc="050428381397",
+        target_dsld_id="278454",
+    )
+    materialize_approved_submissions([first], output_dir=tmp_path)
+    receipt_path = tmp_path / ".product_submission_import_receipts"
+    receipts = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipts["submissions"][first["submission_id"]][
+        "promoted_catalog_version"
+    ] = "2026.07.30.220000"
+    receipt_path.write_text(json.dumps(receipts), encoding="utf-8")
+
+    second_payload = _payload()
+    second_payload["fullName"] = "Clinically reviewed second correction"
+    second = _export(
+        second_payload,
+        submission_id="028f4c79-7c7e-4c70-9d62-7fc3b9ce6a22",
+        kind="label_mismatch",
+        normalized_upc="050428381397",
+        target_dsld_id="278454",
+    )
+    result = materialize_approved_submissions([second], output_dir=tmp_path)
+
+    assert result.imported_submission_ids == [second["submission_id"]]
+    current = json.loads((tmp_path / "278454.json").read_text(encoding="utf-8"))
+    assert current["fullName"] == "Clinically reviewed second correction"
+    assert (
+        current["label_record_metadata"]["source_record_id"]
+        == second["submission_id"]
+    )
+
+
+def test_new_correction_cannot_replace_an_unpromoted_correction(tmp_path: Path):
+    from product_submission_import import (
+        SubmissionImportError,
+        materialize_approved_submissions,
+    )
+
+    first = _export(
+        kind="label_mismatch",
+        normalized_upc=None,
+        target_dsld_id="278454",
+    )
+    materialize_approved_submissions([first], output_dir=tmp_path)
+    second_payload = _payload()
+    second_payload["fullName"] = "Conflicting correction"
+    second = _export(
+        second_payload,
+        submission_id="028f4c79-7c7e-4c70-9d62-7fc3b9ce6a22",
+        kind="label_mismatch",
+        normalized_upc=None,
+        target_dsld_id="278454",
+    )
+
+    with pytest.raises(SubmissionImportError, match="unpromoted"):
+        materialize_approved_submissions([second], output_dir=tmp_path)
+
+
 def test_materialized_label_enters_existing_import_local_path(tmp_path: Path):
     import dsld_api_sync
     from product_submission_import import materialize_approved_submissions
@@ -247,6 +425,10 @@ def test_label_mismatch_preserves_existing_dsld_identity():
     assert label["id"] == "278454"
     assert label["upcSku"] == ""
     assert label["label_record_metadata"]["lineage_key"] == "dsld:278454"
+    assert (
+        label["label_record_metadata"]["source_record_id"]
+        == row["submission_id"]
+    )
     assert (
         label["manual_product_provenance"]["source_record_id"]
         == row["submission_id"]
