@@ -26,6 +26,32 @@ assert_post_migration_invariants = _mod.assert_post_migration_invariants
 # --- Deterministic mapping unit tests ---
 
 
+def test_derived_condition_mapping_is_loaded_from_clinical_taxonomy(tmp_path):
+    taxonomy_path = tmp_path / "clinical_risk_taxonomy.json"
+    taxonomy_path.write_text(
+        json.dumps(
+            {
+                "profile_flags": [
+                    {
+                        "id": "future_flag",
+                        "capture_mode": "derived_from_condition",
+                        "source_condition_id": "future_condition",
+                    },
+                    {
+                        "id": "history_only",
+                        "capture_mode": "reserved",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert _mod.load_derived_flag_by_condition(taxonomy_path) == {
+        "future_condition": ["future_flag"]
+    }
+
+
 def test_diabetes_condition_rule_gets_condition_gate():
     rule = {
         "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "x"},

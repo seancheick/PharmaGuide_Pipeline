@@ -9340,7 +9340,9 @@ CORE_COLUMN_COUNT = 110  # Must match the tuple above and SCHEMA_SQL (v2.0.0: âˆ
 REFERENCE_FILES = {
     "rda_optimal_uls": "data/rda_optimal_uls.json",
     "interaction_rules": "data/ingredient_interaction_rules.json",
-    "clinical_risk_taxonomy": "data/clinical_risk_taxonomy.json",
+    # clinical_risk_taxonomy is synced to Flutter as an authored asset. Do not
+    # also embed it here: the app never reads that DB row, and the duplicate
+    # previously drifted behind the active asset.
     "medication_profile_gate_rules": "data/medication_profile_gate_rules.json",
     "user_goals_clusters": "data/user_goals_to_clusters.json",
 }

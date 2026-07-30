@@ -20,11 +20,9 @@ Mappings (deterministic, no clinical judgment):
   dose_thresholds[] (no scope / pure dose)          → dose gate
   pregnancy_lactation block                         → profile_flag gate, flags=[pregnant, breastfeeding]
 
-Flutter profile-flag separation (per user clarification 2026-05-05): TTC is a
-SEPARATE Flutter toggle and is never included in the pregnancy/breastfeeding
-union. Pregnancy + Breastfeeding share one Flutter toggle today; Flutter sets
-both flags when enabled. A future split into separate Flutter toggles needs no
-pipeline change — schema is already correct.
+Derived condition → flag mappings are loaded from
+clinical_risk_taxonomy.json. The migration tool does not maintain a second
+mapping table.
 
 The script is idempotent: re-running on already-migrated rules is a no-op
 because it only sets profile_gate when absent.
@@ -43,25 +41,33 @@ from typing import Any
 
 REPO = Path(__file__).resolve().parents[2]
 RULES_PATH = REPO / "scripts" / "data" / "ingredient_interaction_rules.json"
+TAXONOMY_PATH = REPO / "scripts" / "data" / "clinical_risk_taxonomy.json"
 
-# Profile-flag mappings for condition_id values that map to lifecycle/perioperative flags.
-#
-# IMPORTANT — Flutter profile-flag separation (per user clarification 2026-05-05):
-#   * Pregnancy and Breastfeeding share ONE Flutter toggle today, but Flutter
-#     internally sets BOTH "pregnant" and "breastfeeding" flags when the user
-#     enables it. The pregnancy_lactation BLOCK gate uses the union ["pregnant",
-#     "breastfeeding"] so it fires for either flag.
-#   * Trying to Conceive (TTC) is a SEPARATE Flutter toggle and should never be
-#     included in the pregnancy/breastfeeding union — TTC alerts must only fire
-#     when the user explicitly sets the trying_to_conceive flag.
-#   * A condition_id="pregnancy" sub-rule is pregnancy-specific clinical content;
-#     it maps to ["pregnant"] only. TTC users see TTC-specific rules instead.
-PROFILE_FLAG_CONDITION_MAP: dict[str, list[str]] = {
-    "pregnancy":         ["pregnant"],
-    "lactation":         ["breastfeeding"],
-    "ttc":               ["trying_to_conceive"],
-    "surgery_scheduled": ["surgery_scheduled"],
-}
+
+def load_derived_flag_by_condition(taxonomy_path: Path) -> dict[str, list[str]]:
+    """Load the canonical condition → derived-profile-flag mapping."""
+    taxonomy = json.loads(taxonomy_path.read_text(encoding="utf-8"))
+    mapping: dict[str, list[str]] = {}
+    for entry in taxonomy.get("profile_flags", []):
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("capture_mode") != "derived_from_condition":
+            continue
+        condition_id = str(entry.get("source_condition_id") or "").strip().lower()
+        flag_id = str(entry.get("id") or "").strip().lower()
+        if not condition_id or not flag_id:
+            raise ValueError(
+                "derived profile flag requires non-empty id and source_condition_id"
+            )
+        if condition_id in mapping:
+            raise ValueError(
+                f"clinical taxonomy derives multiple flags from {condition_id!r}"
+            )
+        mapping[condition_id] = [flag_id]
+    return mapping
+
+
+DERIVED_FLAG_BY_CONDITION = load_derived_flag_by_condition(TAXONOMY_PATH)
 
 
 def _empty_excludes() -> dict[str, list]:
@@ -79,13 +85,13 @@ def _build_gate_for_condition(condition_id: str, *, rule_id: str = "?") -> dict[
     cid = (condition_id or "").strip().lower()
     if not cid:
         raise ValueError(f"empty condition_id in rule {rule_id}; cannot generate gate")
-    if cid in PROFILE_FLAG_CONDITION_MAP:
+    if cid in DERIVED_FLAG_BY_CONDITION:
         return {
             "gate_type": "profile_flag",
             "requires": {
                 "conditions_any":    [],
                 "drug_classes_any":  [],
-                "profile_flags_any": list(PROFILE_FLAG_CONDITION_MAP[cid]),
+                "profile_flags_any": list(DERIVED_FLAG_BY_CONDITION[cid]),
             },
             "excludes": _empty_excludes(),
             "dose":     None,
@@ -140,13 +146,13 @@ def _build_gate_for_dose_threshold(threshold: dict[str, Any], *, rule_id: str = 
     }
 
     if scope == "condition" and target:
-        if target in PROFILE_FLAG_CONDITION_MAP:
+        if target in DERIVED_FLAG_BY_CONDITION:
             return {
                 "gate_type": "combination",
                 "requires": {
                     "conditions_any":    [],
                     "drug_classes_any":  [],
-                    "profile_flags_any": list(PROFILE_FLAG_CONDITION_MAP[target]),
+                    "profile_flags_any": list(DERIVED_FLAG_BY_CONDITION[target]),
                 },
                 "excludes": _empty_excludes(),
                 "dose":     dose_block,
@@ -196,23 +202,22 @@ def _build_gate_for_dose_threshold(threshold: dict[str, Any], *, rule_id: str = 
 
 
 def _build_gate_for_preg_lac() -> dict[str, Any]:
-    """pregnancy_lactation block → profile_flag gate ["pregnant", "breastfeeding"].
-
-    Flutter currently combines pregnancy + breastfeeding into one toggle that
-    sets BOTH flags. The block's pregnancy_category vs lactation_category fields
-    let Flutter pick the right severity based on which flag matched. TTC is a
-    SEPARATE Flutter toggle and is intentionally NOT included in this union —
-    TTC users see TTC-specific condition_rules entries instead.
-
-    A future Phase will split this block into two distinct condition_rules
-    entries for cleaner severity selection (Option C deferred).
-    """
+    """Build the legacy combined pregnancy/lactation gate from the taxonomy."""
+    try:
+        flags = [
+            *DERIVED_FLAG_BY_CONDITION["pregnancy"],
+            *DERIVED_FLAG_BY_CONDITION["lactation"],
+        ]
+    except KeyError as exc:
+        raise ValueError(
+            f"clinical taxonomy is missing derived mapping for {exc.args[0]!r}"
+        ) from exc
     return {
         "gate_type": "profile_flag",
         "requires": {
             "conditions_any":    [],
             "drug_classes_any":  [],
-            "profile_flags_any": ["pregnant", "breastfeeding"],
+            "profile_flags_any": flags,
         },
         "excludes": _empty_excludes(),
         "dose":     None,

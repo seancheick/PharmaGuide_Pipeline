@@ -17,6 +17,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from build_final_db import (
+    REFERENCE_FILES,
     build_final_db,
     build_core_row,
     build_detail_blob,
@@ -37,6 +38,10 @@ from build_final_db import (
     stage_products_by_id,
     validate_export_contract,
 )
+
+
+def test_core_db_does_not_duplicate_app_owned_clinical_profile_taxonomy():
+    assert "clinical_risk_taxonomy" not in REFERENCE_FILES
 
 
 def test_allergen_summary_reads_enricher_allergen_name_contract():
