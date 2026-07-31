@@ -94,6 +94,77 @@ def test_invalid_authored_review_status_rejected():
         )
 
 
+def test_valid_proposed_watch_threshold_is_preserved_but_not_promoted():
+    entry = _entry(
+        citation_review_status="verified",
+        watch_threshold_days=730,
+        watch_basis="The entry source stratified exposure at two years.",
+        watch_review_status="proposed",
+        watch_approver=None,
+    )
+    art = build_artifact(_source([entry]), content_version="v")
+    emitted = art["depletions"][0]
+    assert emitted["watch_threshold_days"] == 730
+    assert emitted["watch_review_status"] == "proposed"
+    assert emitted["watch_approver"] is None
+
+
+@pytest.mark.parametrize(
+    ("override", "message"),
+    [
+        ({"watch_threshold_days": "730"}, "positive whole number"),
+        ({"watch_threshold_days": 0}, "positive whole number"),
+        ({"watch_basis": ""}, "watch_basis"),
+        ({"watch_review_status": "draft"}, "watch_review_status"),
+    ],
+)
+def test_malformed_watch_threshold_is_rejected(override, message):
+    entry = _entry(
+        citation_review_status="verified",
+        watch_threshold_days=730,
+        watch_basis="Cited basis.",
+        watch_review_status="proposed",
+    )
+    entry.update(override)
+    with pytest.raises(ValueError, match=message):
+        build_artifact(_source([entry]), content_version="v")
+
+
+def test_approved_watch_threshold_requires_attributable_reviewer():
+    entry = _entry(
+        citation_review_status="verified",
+        watch_threshold_days=730,
+        watch_basis="Cited basis.",
+        watch_review_status="approved",
+        watch_approver=None,
+    )
+    with pytest.raises(ValueError, match="watch_approver"):
+        build_artifact(_source([entry]), content_version="v")
+
+
+def test_proposed_watch_threshold_can_await_citation_revision_but_stays_inert():
+    entry = _entry(
+        citation_review_status="needs_revision",
+        watch_threshold_days=730,
+        watch_basis="Cited basis.",
+        watch_review_status="proposed",
+    )
+    art = build_artifact(_source([entry]), content_version="v")
+    assert art["depletions"][0]["watch_review_status"] == "proposed"
+
+
+def test_approved_watch_threshold_requires_verified_citation_content():
+    entry = _entry(
+        citation_review_status="needs_revision",
+        watch_threshold_days=730,
+        watch_basis="Cited basis.",
+        watch_review_status="approved",
+        watch_approver="PharmaGuide Clinical Team",
+    )
+    with pytest.raises(ValueError, match="verified citation"):
+        build_artifact(_source([entry]), content_version="v")
+
+
 def test_missing_id_rejected():
     e = _entry()
     del e["id"]
@@ -179,5 +250,5 @@ def test_real_source_content_hash_is_pinned():
     # remains separately fail-closed in the delta ledger.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:dac490bc73da4910f63b248c87f5d98fd4b46601c2efd880a87bda86d0011800"
+        == "sha256:ed274d0b7828e3b0d511e56137cb832a417a8148b21cc4545f8d8357851a4651"
     )

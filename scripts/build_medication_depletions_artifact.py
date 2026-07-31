@@ -36,6 +36,7 @@ MINIMUM_RUNTIME_CONTRACT = 1
 
 CITATION_REVIEW_STATES = {"unverified", "verified", "needs_revision", "rejected"}
 DEFAULT_REVIEW_STATUS = "unverified"
+WATCH_REVIEW_STATES = {"proposed", "approved", "rejected"}
 
 TOP_LEVEL_KEY = "depletions"
 
@@ -77,12 +78,65 @@ def _validate_and_normalize_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
         f"{entry_id}: citation_review_status {status!r} not in "
         f"{sorted(CITATION_REVIEW_STATES)}",
     )
+    _validate_watch_threshold(entry, entry_id=entry_id, citation_status=status)
 
     out = dict(entry)
     out["citation_review_status"] = status
     out["reviewed_at"] = entry.get("reviewed_at")  # null unless authored
     out["reviewer"] = entry.get("reviewer")  # null unless authored
     return out
+
+
+def _validate_watch_threshold(
+    entry: Dict[str, Any], *, entry_id: str, citation_status: str
+) -> None:
+    """Validate the clinician-owned longitudinal threshold as source data.
+
+    The app still parses this defensively, but the canonical pipeline is the
+    primary gate. A partial or structurally drifted threshold must never make
+    it as far as a Flutter bundle.
+    """
+
+    watch_keys = {
+        "watch_threshold_days",
+        "watch_basis",
+        "watch_review_status",
+        "watch_approver",
+        "watch_proposed_by",
+    }
+    if not any(key in entry for key in watch_keys):
+        return
+
+    threshold = entry.get("watch_threshold_days")
+    _require(
+        isinstance(threshold, int)
+        and not isinstance(threshold, bool)
+        and threshold > 0,
+        f"{entry_id}: watch_threshold_days must be a positive whole number",
+    )
+    basis = entry.get("watch_basis")
+    _require(
+        isinstance(basis, str) and bool(basis.strip()),
+        f"{entry_id}: watch_basis is required",
+    )
+    review_status = entry.get("watch_review_status")
+    _require(
+        isinstance(review_status, str)
+        and review_status.strip().lower() in WATCH_REVIEW_STATES,
+        f"{entry_id}: watch_review_status must be one of "
+        f"{sorted(WATCH_REVIEW_STATES)}",
+    )
+    if review_status.strip().lower() == "approved":
+        _require(
+            citation_status == "verified",
+            f"{entry_id}: an approved watch threshold requires verified "
+            "citation content",
+        )
+        approver = entry.get("watch_approver")
+        _require(
+            isinstance(approver, str) and bool(approver.strip()),
+            f"{entry_id}: an approved watch threshold requires watch_approver",
+        )
 
 
 def _content_hash(entries: List[Dict[str, Any]]) -> str:

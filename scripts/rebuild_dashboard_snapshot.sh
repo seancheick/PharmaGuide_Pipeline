@@ -57,6 +57,26 @@ ENR=(scripts/products/*_enriched/enriched)
 SCR=(scripts/products/*_scored/scored)
 shopt -u nullglob
 
+# A reviewed label correction intentionally keeps the original DSLD identity.
+# The staging tables resolve duplicate identities by last write, so the single
+# approved-submission source must be last on both sides of the join. Keep this
+# precedence here at the catalog assembly boundary instead of teaching every
+# upstream stage a second override model.
+SUBMISSION_ENRICHED_DIR="scripts/products/output_Product_Submissions_enriched/enriched"
+SUBMISSION_SCORED_DIR="scripts/products/output_Product_Submissions_scored/scored"
+BASE_ENR=()
+for directory in "${ENR[@]}"; do
+  [[ "$directory" == "$SUBMISSION_ENRICHED_DIR" ]] || BASE_ENR+=("$directory")
+done
+BASE_SCR=()
+for directory in "${SCR[@]}"; do
+  [[ "$directory" == "$SUBMISSION_SCORED_DIR" ]] || BASE_SCR+=("$directory")
+done
+ENR=("${BASE_ENR[@]}")
+SCR=("${BASE_SCR[@]}")
+[[ -d "$SUBMISSION_ENRICHED_DIR" ]] && ENR+=("$SUBMISSION_ENRICHED_DIR")
+[[ -d "$SUBMISSION_SCORED_DIR" ]] && SCR+=("$SUBMISSION_SCORED_DIR")
+
 if [[ ${#ENR[@]} -eq 0 || ${#SCR[@]} -eq 0 ]]; then
   echo "✗ No enriched/scored outputs found under scripts/products/."
   echo "  Run the pipeline first (scripts/run_pipeline.py <dataset_dir>) before rebuilding the dashboard snapshot."

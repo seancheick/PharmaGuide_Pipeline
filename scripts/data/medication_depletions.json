@@ -1,6 +1,6 @@
 {
   "_metadata": {
-    "description": "Medication-nutrient effects \u2014 true depletions, functional antagonism, monitoring notes, condition-related effects, and supplement interactions",
+    "description": "Medication-nutrient effects — true depletions, functional antagonism, monitoring notes, condition-related effects, and supplement interactions",
     "purpose": "depletion_checker",
     "schema_version": "5.3.0",
     "last_updated": "2026-07-30",
@@ -39,13 +39,13 @@
           "from": "5.3.0",
           "to": "5.3.0",
           "date": "2026-06-08",
-          "summary": "High-value expansion batch: isoniazid\u2192B6, methotrexate\u2192folate, and orlistat\u2192fat-soluble vitamins A/D/E/K after taxonomy cleanup."
+          "summary": "High-value expansion batch: isoniazid→B6, methotrexate→folate, and orlistat→fat-soluble vitamins A/D/E/K after taxonomy cleanup."
         },
         {
           "from": "5.3.0",
           "to": "5.3.0",
           "date": "2026-06-08",
-          "summary": "High-value expansion batch 2: sulfasalazine\u2192folate, colchicine\u2192B12, and cholestyramine\u2192fat-soluble vitamins A/D/E/K."
+          "summary": "High-value expansion batch 2: sulfasalazine→folate, colchicine→B12, and cholestyramine→fat-soluble vitamins A/D/E/K."
         },
         {
           "from": "5.3.0",
@@ -64,10 +64,10 @@
     "v52_added_fields": {
       "alert_headline": "authored string per entry, 20-60 chars, calm voicing (no \"Depleted by X\")",
       "alert_body": "authored string, 60-200 chars, includes onset framing (over time, long-term, gradually)",
-      "acknowledgement_note": "authored string, 40-120 chars, positive validation shown when user's stack already covers the depletion \u2014 MUST NOT contain caution verbs",
-      "monitoring_tip_short": "authored string, 40-120 chars, layperson action tip \u2014 always shown",
+      "acknowledgement_note": "authored string, 40-120 chars, positive validation shown when user's stack already covers the depletion — MUST NOT contain caution verbs",
+      "monitoring_tip_short": "authored string, 40-120 chars, layperson action tip — always shown",
       "adequacy_threshold_mcg / adequacy_threshold_mg": "optional numeric threshold; dose at or above this qualifies as adequate coverage (vs partial)",
-      "food_sources_short": "optional string, 40-160 chars, inclusive framing only. For absorption-blocked depletions (metformin/B12, PPI/B12, statin/CoQ10) name the food sources and state that absorption is reduced, then route to assessment \u2014 e.g. \"<Nutrient> comes from <foods>. <Drug> can reduce absorption, so testing\u2014not diet alone\u2014helps determine whether treatment is needed.\" Never imply universal supplementation; treatment follows a clinician-confirmed result."
+      "food_sources_short": "optional string, 40-160 chars, inclusive framing only. For absorption-blocked depletions (metformin/B12, PPI/B12, statin/CoQ10) name the food sources and state that absorption is reduced, then route to assessment — e.g. \"<Nutrient> comes from <foods>. <Drug> can reduce absorption, so testing—not diet alone—helps determine whether treatment is needed.\" Never imply universal supplementation; treatment follows a clinician-confirmed result."
     },
     "reviewed_by": "Lead Clinician (PharmaGuide)",
     "reviewed_date": "2026-06-08",
@@ -106,7 +106,7 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Banach M et al. Statin therapy and plasma coenzyme Q10 concentrations \u2014 a systematic review and meta-analysis of placebo-controlled trials. Pharmacol Res. 2015;99:329-36",
+          "label": "Banach M et al. Statin therapy and plasma coenzyme Q10 concentrations — a systematic review and meta-analysis of placebo-controlled trials. Pharmacol Res. 2015;99:329-36",
           "url": "https://pubmed.ncbi.nlm.nih.gov/26192349/"
         },
         {
@@ -116,12 +116,12 @@
         },
         {
           "source_type": "pubmed",
-          "label": "Qu H et al. Effects of coenzyme Q10 on statin-induced myopathy: an updated meta-analysis of randomized controlled trials. J Am Heart Assoc. 2018;7(19):e009835 \u2014 reports symptom improvement",
+          "label": "Qu H et al. Effects of coenzyme Q10 on statin-induced myopathy: an updated meta-analysis of randomized controlled trials. J Am Heart Assoc. 2018;7(19):e009835 — reports symptom improvement",
           "url": "https://pubmed.ncbi.nlm.nih.gov/30371340/"
         },
         {
           "source_type": "pubmed",
-          "label": "Kennedy C et al. Effect of coenzyme Q10 on statin-associated myalgia and adherence to statin therapy: a systematic review and meta-analysis. Atherosclerosis. 2020;299:1-8 \u2014 finds no benefit",
+          "label": "Kennedy C et al. Effect of coenzyme Q10 on statin-associated myalgia and adherence to statin therapy: a systematic review and meta-analysis. Atherosclerosis. 2020;299:1-8 — finds no benefit",
           "url": "https://pubmed.ncbi.nlm.nih.gov/32179207/"
         }
       ],
@@ -129,11 +129,11 @@
       "alert_body": "With regular use, statins can lower the amount of CoQ10 measured in the blood. Whether that causes symptoms is not established.",
       "acknowledgement_note": "You're taking CoQ10. Evidence that it improves statin-related muscle symptoms is mixed.",
       "monitoring_tip_short": "Consider mentioning any persistent muscle symptoms at your next visit.",
-      "food_sources_short": "Dietary CoQ10 is minimal \u2014 organ meats and fatty fish contain small amounts \u2014 and the body also makes its own.",
+      "food_sources_short": "Dietary CoQ10 is minimal — organ meats and fatty fish contain small amounts — and the body also makes its own.",
       "citation_review_status": "verified",
       "reviewed_at": "2026-07-23",
       "reviewer": "lead_clinician_fix_sprint_02",
-      "citation_review_note": "Circulating-CoQ10 reduction kept (Banach 2015 meta-analysis, Ghirlanda 1993). Removed causal myopathy claim, unsupported cardiac tissue language, routine 100-200 mg recommendation, non-standard plasma CoQ10 testing, and the 100 mg comparison amount. Supplementation evidence conflicts (Qu 2018 vs Kennedy 2020) \u2014 both cited; severity lowered to mild.",
+      "citation_review_note": "Circulating-CoQ10 reduction kept (Banach 2015 meta-analysis, Ghirlanda 1993). Removed causal myopathy claim, unsupported cardiac tissue language, routine 100-200 mg recommendation, non-standard plasma CoQ10 testing, and the 100 mg comparison amount. Supplementation evidence conflicts (Qu 2018 vs Kennedy 2020) — both cited; severity lowered to mild.",
       "b1_clinical_review_disposition": "approved",
       "b1_clinical_reviewed_at": "2026-07-27",
       "b1_clinical_review_note": "Blood-level reduction is established and the copy preserves uncertain clinical significance.",
@@ -164,7 +164,7 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Vitamin D Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Vitamin D Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
         }
       ],
@@ -200,7 +200,7 @@
       "sources": [
         {
           "source_type": "nih_ods",
-          "label": "NIH ODS \u2014 Vitamin B12 Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Vitamin B12 Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
         },
         {
@@ -215,7 +215,7 @@
         },
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 PRILOSEC (omeprazole) prescribing information, sections 5.8 and 5.9",
+          "label": "DailyMed — PRILOSEC (omeprazole) prescribing information, sections 5.8 and 5.9",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b6761f84-53ac-4745-a8c8-1e5427d7e179"
         }
       ],
@@ -227,7 +227,13 @@
       "citation_review_status": "needs_revision",
       "reviewed_at": "2026-07-27",
       "reviewer": "b1_1_evidence_audit",
-      "citation_review_note": "B1.1 evidence revision completed. PPI-only scope retained; FDA labeling, a large observational study, and a heterogeneous 2023 meta-analysis support cautious long-term B12 wording. Blanket 1,000 mcg/day advice and the retired food-versus-supplement claim were removed. The record remains suppressed pending licensed pharmacist delta review."
+      "citation_review_note": "B1.1 evidence revision completed. PPI-only scope retained; FDA labeling, a large observational study, and a heterogeneous 2023 meta-analysis support cautious long-term B12 wording. Blanket 1,000 mcg/day advice and the retired food-versus-supplement claim were removed. The record remains suppressed pending licensed pharmacist delta review.",
+      "watch_threshold_days": 730,
+      "watch_basis": "Lam 2013 (PMID 24327038, on this entry): a >=2-year supply of PPIs was associated with incident vitamin B12 deficiency (OR 1.65, 95% CI 1.58-1.73); >=2 years of H2RAs OR 1.25 (95% CI 1.17-1.34), across 25,956 cases and 184,199 controls. Threshold set at the 2-year exposure the study stratified on.",
+      "watch_review_status": "proposed",
+      "watch_proposed_by": "claude_research_draft",
+      "watch_proposed_at": "2026-07-30",
+      "watch_approver": null
     },
     {
       "id": "DEP_ANTACIDS_MAGNESIUM",
@@ -244,7 +250,7 @@
       "severity": "significant",
       "mechanism": "Rare PPI-associated hypomagnesemia appears to involve reduced intestinal magnesium absorption, but the precise molecular mechanism is not established. Dechallenge and rechallenge reports support a PPI class effect.",
       "clinical_impact": "Low magnesium may be asymptomatic or can contribute to tetany, seizures, or arrhythmias and may accompany low calcium or potassium. FDA labeling notes that some cases required magnesium replacement and stopping the PPI.",
-      "recommendation": "Do not start a routine magnesium dose solely because you take a PPI. For prolonged therapy\u2014especially with digoxin, a diuretic, or other risk factors\u2014ask whether baseline and periodic magnesium testing is appropriate. Management of a low result should be clinician-directed.",
+      "recommendation": "Do not start a routine magnesium dose solely because you take a PPI. For prolonged therapy—especially with digoxin, a diuretic, or other risk factors—ask whether baseline and periodic magnesium testing is appropriate. Management of a low result should be clinician-directed.",
       "onset_timeline": "variable",
       "evidence_level": "established",
       "monitoring_note": "FDA labeling advises considering magnesium before and periodically during prolonged PPI therapy, especially with digoxin or medicines that can lower magnesium.",
@@ -256,7 +262,7 @@
         },
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 PRILOSEC (omeprazole) prescribing information, section 5.9",
+          "label": "DailyMed — PRILOSEC (omeprazole) prescribing information, section 5.9",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b6761f84-53ac-4745-a8c8-1e5427d7e179"
         }
       ],
@@ -268,7 +274,7 @@
       "citation_review_status": "needs_revision",
       "reviewed_at": "2026-07-27",
       "reviewer": "b1_1_evidence_audit",
-      "citation_review_note": "B1.1 evidence revision completed. The live FDA label and PMID 22762246 support a rare PPI class effect with a broad reported onset range, so the proposal now uses variable onset and acknowledges earlier cases. The dead FDA URL and blanket 200\u2013400 mg/day advice remain removed. The record remains suppressed pending licensed pharmacist delta review."
+      "citation_review_note": "B1.1 evidence revision completed. The live FDA label and PMID 22762246 support a rare PPI class effect with a broad reported onset range, so the proposal now uses variable onset and acknowledges earlier cases. The dead FDA URL and blanket 200–400 mg/day advice remain removed. The record remains suppressed pending licensed pharmacist delta review."
     },
     {
       "id": "DEP_ANTACIDS_CALCIUM",
@@ -371,7 +377,7 @@
       ],
       "alert_headline": "Long-term acid suppression can affect iron status",
       "alert_body": "PPI or H2-blocker use for two years or longer is associated with iron deficiency; the association was stronger for PPIs.",
-      "acknowledgement_note": "You're taking iron \u2014 a thoughtful step while using acid-reducing medication long-term.",
+      "acknowledgement_note": "You're taking iron — a thoughtful step while using acid-reducing medication long-term.",
       "monitoring_tip_short": "Discuss ferritin and blood-count testing if long-term use coincides with symptoms or other iron-deficiency risks.",
       "food_sources_short": "Food sources of iron include red meat, poultry, seafood, beans, lentils, tofu, spinach, and fortified cereals.",
       "citation_review_status": "verified",
@@ -384,7 +390,13 @@
       "b1_evidence_auditor": "openai_codex_ai_clinical_audit",
       "b1_clinical_approval_status": "pending_delta_review",
       "b1_clinical_approver": null,
-      "b1_clinical_approved_at": null
+      "b1_clinical_approved_at": null,
+      "watch_threshold_days": 730,
+      "watch_basis": "Lam 2017 (PMID 27890768, on this entry): acid-suppressant use for >=2 years was associated with subsequent iron deficiency — PPI adjusted OR 2.49 (95% CI 2.35-2.64), H2RA OR 1.58 (95% CI 1.46-1.71). Threshold set at the 2-year exposure the study stratified on.",
+      "watch_review_status": "proposed",
+      "watch_proposed_by": "claude_research_draft",
+      "watch_proposed_at": "2026-07-30",
+      "watch_approver": null
     },
     {
       "id": "DEP_ANTACIDS_VITAMINC",
@@ -419,10 +431,10 @@
       ],
       "alert_headline": "May modestly affect vitamin C over time",
       "alert_body": "Higher stomach pH from acid-reducers can gradually reduce how well vitamin C holds up through digestion. The effect is typically modest with regular use.",
-      "acknowledgement_note": "Nice \u2014 your vitamin C intake supports levels while using acid-reducing medication.",
+      "acknowledgement_note": "Nice — your vitamin C intake supports levels while using acid-reducing medication.",
       "monitoring_tip_short": "Consider taking vitamin C at a different time of day from acid-reducing medication.",
       "food_sources_short": "Food sources of vitamin C include citrus fruits, strawberries, bell peppers, broccoli, kiwi, and tomatoes.",
-      "citation_review_note": "Rejected as a consumer depletion warning (evidence-based, not a data gap). Only one small systemic study (Henry 2005: omeprazole 40 mg x 4 wk \u2192 plasma vitamin C -12.3%, authors state 'clinical significance is unclear', concentrated in H. pylori+/low-baseline). The remaining literature is intragastric gastric-juice ascorbate (an N-nitrosation/cancer mechanism, not body vitamin C status). No clinically meaningful depletion; no H2/antacid data. Retired the Pelton handbook citation.",
+      "citation_review_note": "Rejected as a consumer depletion warning (evidence-based, not a data gap). Only one small systemic study (Henry 2005: omeprazole 40 mg x 4 wk → plasma vitamin C -12.3%, authors state 'clinical significance is unclear', concentrated in H. pylori+/low-baseline). The remaining literature is intragastric gastric-juice ascorbate (an N-nitrosation/cancer mechanism, not body vitamin C status). No clinically meaningful depletion; no H2/antacid data. Retired the Pelton handbook citation.",
       "citation_review_status": "rejected",
       "reviewed_at": "2026-07-24",
       "reviewer": "lead_clinician_acid_reduction"
@@ -442,7 +454,7 @@
       "severity": "mild",
       "mechanism": "Zinc absorption from food is partially dependent on gastric acid solubilization. Elevated gastric pH impairs the release of zinc from food-bound complexes, reducing bioavailability of dietary zinc.",
       "clinical_impact": "Zinc deficiency affects immune function, wound healing, taste and smell, and reproductive health. Long-term marginal zinc depletion is most concerning in elderly patients with already-borderline intake.",
-      "recommendation": "Ensure dietary zinc adequacy. If on long-term antacids, consider a modest zinc supplement (10\u201315 mg/day as zinc glycinate). Avoid taking zinc simultaneously with the acid-reducing medication.",
+      "recommendation": "Ensure dietary zinc adequacy. If on long-term antacids, consider a modest zinc supplement (10–15 mg/day as zinc glycinate). Avoid taking zinc simultaneously with the acid-reducing medication.",
       "onset_timeline": "months",
       "evidence_level": "possible",
       "monitoring_note": null,
@@ -465,10 +477,10 @@
       ],
       "alert_headline": "May slightly lower zinc over time",
       "alert_body": "With long-term use, acid-reducing medications can gradually reduce how well zinc is freed from food and absorbed. The effect is usually mild.",
-      "acknowledgement_note": "Good \u2014 your zinc intake helps support levels while on acid-reducing medication.",
+      "acknowledgement_note": "Good — your zinc intake helps support levels while on acid-reducing medication.",
       "monitoring_tip_short": "Consider taking zinc at a different time of day from acid-reducing medication.",
       "food_sources_short": "Food sources of zinc include oysters, meat, poultry, beans, lentils, nuts, seeds, and whole grains.",
-      "citation_review_note": "Rejected as a consumer depletion warning (evidence-based, not a data gap). Support exists only for reduced acute absorption of a fasting soluble zinc-salt load (H2: Sturniolo 1991; PPI: Ozutemiz 2002) \u2014 a supplement-timing pharmacokinetic effect. A food-based study (Serfaty-Lacrosniere 1995) found NO change in zinc absorption from a meal, and no study shows actual zinc deficiency from acid suppression. Retired the Pelton handbook citation.",
+      "citation_review_note": "Rejected as a consumer depletion warning (evidence-based, not a data gap). Support exists only for reduced acute absorption of a fasting soluble zinc-salt load (H2: Sturniolo 1991; PPI: Ozutemiz 2002) — a supplement-timing pharmacokinetic effect. A food-based study (Serfaty-Lacrosniere 1995) found NO change in zinc absorption from a meal, and no study shows actual zinc deficiency from acid suppression. Retired the Pelton handbook citation.",
       "citation_review_status": "rejected",
       "reviewed_at": "2026-07-24",
       "reviewer": "lead_clinician_acid_reduction"
@@ -486,16 +498,16 @@
       },
       "depletion_type": "depletion",
       "severity": "significant",
-      "mechanism": "Metformin can reduce vitamin B12 absorption through a multifactorial process. Reduced calcium-dependent uptake of the intrinsic-factor\u2013B12 complex in the ileum is one proposed mechanism, but it is not the only established explanation.",
+      "mechanism": "Metformin can reduce vitamin B12 absorption through a multifactorial process. Reduced calcium-dependent uptake of the intrinsic-factor–B12 complex in the ileum is one proposed mechanism, but it is not the only established explanation.",
       "clinical_impact": "The chance of low vitamin B12 rises with higher metformin dose, longer treatment, and other B12 risk factors. Deficiency can cause anemia or neuropathy, which can be mistaken for diabetic neuropathy.",
-      "recommendation": "Periodic vitamin B12 assessment should be considered during long-term metformin therapy, especially after about 4\u20135 years, at higher doses, with other B12 risk factors, or with anemia or neuropathy. Treat a confirmed deficiency using a clinician-directed regimen; do not stop metformin on your own.",
+      "recommendation": "Periodic vitamin B12 assessment should be considered during long-term metformin therapy, especially after about 4–5 years, at higher doses, with other B12 risk factors, or with anemia or neuropathy. Treat a confirmed deficiency using a clinician-directed regimen; do not stop metformin on your own.",
       "onset_timeline": "years",
       "evidence_level": "established",
       "monitoring_note": "Consider periodic vitamin B12 assessment in people taking metformin, particularly with anemia, neuropathy symptoms, higher doses, longer treatment duration, or other deficiency risk factors. Methylmalonic acid is a sensitive functional marker for early deficiency.",
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Vitamin B12 Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Vitamin B12 Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
         },
         {
@@ -510,7 +522,7 @@
         },
         {
           "source_type": "reference",
-          "label": "American Diabetes Association. Standards of Care in Diabetes\u20142026, recommendation 3.10",
+          "label": "American Diabetes Association. Standards of Care in Diabetes—2026, recommendation 3.10",
           "url": "https://diabetesjournals.org/care/article/49/Supplement_1/S50/163924/3-Prevention-or-Delay-of-Diabetes-and-Associated"
         },
         {
@@ -524,7 +536,7 @@
       "acknowledgement_note": "You're addressing B12 thoughtfully; treatment can be tailored to your test results and clinician's plan.",
       "monitoring_tip_short": "Consider B12 testing with long-term use, anemia, neuropathy, or other B12 risk factors.",
       "adequacy_threshold_mcg": 500,
-      "food_sources_short": "B12 comes from animal foods and fortified products. Metformin can reduce absorption, so testing\u2014not diet alone\u2014helps determine whether treatment is needed.",
+      "food_sources_short": "B12 comes from animal foods and fortified products. Metformin can reduce absorption, so testing—not diet alone—helps determine whether treatment is needed.",
       "citation_review_status": "verified",
       "reviewed_at": "2026-07-27",
       "reviewer": "openai_codex_ai_clinical_audit",
@@ -535,7 +547,13 @@
       "b1_evidence_auditor": "openai_codex_ai_clinical_audit",
       "b1_clinical_approval_status": "approved_for_controlled_beta",
       "b1_clinical_approver": "PharmaGuide Clinical Team",
-      "b1_clinical_approved_at": "2026-07-27"
+      "b1_clinical_approved_at": "2026-07-27",
+      "watch_threshold_days": 1460,
+      "watch_basis": "Matches this entry’s own reviewed recommendation (\"especially after about 4–5 years\") and de Jager 2010 (PMID 20488910, on this entry), a 4.3-year randomised placebo-controlled trial in which metformin raised the absolute risk of B12 deficiency by 7.2 percentage points (NNH 13.8 per 4.3 years). Threshold set at the lower bound of the authored window, 4 years. NOTE FOR REVIEW: Ting 2006 (PMID 17030830, NOT currently on this entry) reports an adjusted OR of 2.39 at >=3 years; if the team wants the earlier trigger, add that source first and reduce this to 1095.",
+      "watch_review_status": "proposed",
+      "watch_proposed_by": "claude_research_draft",
+      "watch_proposed_at": "2026-07-30",
+      "watch_approver": null
     },
     {
       "id": "DEP_METFORMIN_FOLATE",
@@ -559,7 +577,7 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Folate Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Folate Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
         },
         {
@@ -593,7 +611,7 @@
       "severity": "moderate",
       "mechanism": "Estrogen-containing oral contraceptives are associated with lower plasma pyridoxal-5'-phosphate (the active form of vitamin B6) in population studies. The effect is modest with today's low-dose formulations and was larger with the higher-estrogen pills of earlier decades.",
       "clinical_impact": "The change in B6 status is usually subclinical. The main practical concern is entering pregnancy with reduced B6 reserves in someone who stops the pill and conceives soon after.",
-      "recommendation": "A normal diet (poultry, fish, potatoes, chickpeas, bananas) or a standard multivitamin typically provides enough B6 \u2014 high-dose B6 supplements are not recommended, because chronic intake well above the daily requirement can cause nerve symptoms. If you are planning pregnancy, discuss B6 and folate with your clinician.",
+      "recommendation": "A normal diet (poultry, fish, potatoes, chickpeas, bananas) or a standard multivitamin typically provides enough B6 — high-dose B6 supplements are not recommended, because chronic intake well above the daily requirement can cause nerve symptoms. If you are planning pregnancy, discuss B6 and folate with your clinician.",
       "onset_timeline": "months",
       "evidence_level": "possible",
       "monitoring_note": null,
@@ -605,13 +623,13 @@
         },
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Vitamin B6 Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Vitamin B6 Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
         }
       ],
       "alert_headline": "May lower vitamin B6 over time",
       "alert_body": "Combined hormonal birth control is linked to modestly lower vitamin B6 (PLP) levels in some people over months of use. Levels usually stay in a range that isn't clinically obvious.",
-      "acknowledgement_note": "Nice \u2014 B6 intake supports levels while using hormonal birth control.",
+      "acknowledgement_note": "Nice — B6 intake supports levels while using hormonal birth control.",
       "monitoring_tip_short": "If you are planning pregnancy, consider discussing B6 and folate adequacy with your clinician.",
       "adequacy_threshold_mg": 2,
       "food_sources_short": "Food sources of vitamin B6 include poultry, fish, potatoes, chickpeas, bananas, and fortified cereals.",
@@ -649,13 +667,13 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Vitamin B12 Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Vitamin B12 Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
         }
       ],
       "alert_headline": "May modestly affect vitamin B12 over time",
       "alert_body": "With regular use, hormonal birth control can shift how vitamin B12 appears in the blood over months, sometimes showing slightly lower levels.",
-      "acknowledgement_note": "Good \u2014 B12 intake helps support levels while using hormonal birth control.",
+      "acknowledgement_note": "Good — B12 intake helps support levels while using hormonal birth control.",
       "monitoring_tip_short": "Consider discussing B12 at a routine visit, especially if planning pregnancy ahead.",
       "adequacy_threshold_mcg": 250,
       "food_sources_short": "Food sources of vitamin B12 include fish, meat, poultry, eggs, dairy, and fortified plant milks and cereals.",
@@ -679,27 +697,27 @@
       "severity": "significant",
       "mechanism": "Estrogen components of OCPs impair folate metabolism and reduce serum folate levels. The mechanism involves altered folate binding protein expression and possibly impaired intestinal folate absorption.",
       "clinical_impact": "Folate depletion increases homocysteine and neural tube defect risk. Women stopping OCPs who become pregnant within months may have insufficient folate stores during critical early fetal development.",
-      "recommendation": "Take a daily multivitamin with 400\u2013800 mcg folate (methylfolate preferred) throughout OCP use. This is especially critical for anyone who may become pregnant after stopping.",
+      "recommendation": "Take a daily multivitamin with 400–800 mcg folate (methylfolate preferred) throughout OCP use. This is especially critical for anyone who may become pregnant after stopping.",
       "onset_timeline": "months",
       "evidence_level": "possible",
       "monitoring_note": "Consider starting 5-methyltetrahydrofolate supplementation at least 3 months before attempting conception after stopping OCPs.",
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Wilson SMC et al. Oral contraceptive use: impact on folate, vitamin B6, and vitamin B12 status. Nutr Rev. 2011;69(10):572-83 \u2014 finds current OCs do not negatively impact folate status",
+          "label": "Wilson SMC et al. Oral contraceptive use: impact on folate, vitamin B6, and vitamin B12 status. Nutr Rev. 2011;69(10):572-83 — finds current OCs do not negatively impact folate status",
           "url": "https://pubmed.ncbi.nlm.nih.gov/21967158/"
         }
       ],
       "alert_headline": "May slightly lower folate over time",
       "alert_body": "With regular use, oral contraceptives can modestly reduce folate levels over time. Most people remain within range, but folate becomes more important when planning for pregnancy.",
-      "acknowledgement_note": "Nice \u2014 maintaining folate intake is a thoughtful step, especially if pregnancy may be a future consideration.",
+      "acknowledgement_note": "Nice — maintaining folate intake is a thoughtful step, especially if pregnancy may be a future consideration.",
       "monitoring_tip_short": "Consider discussing folate intake during routine visits, particularly when planning ahead.",
       "adequacy_threshold_mcg": 400,
       "food_sources_short": "Food sources of folate include leafy greens, lentils, chickpeas, asparagus, avocado, and fortified grains and cereals.",
       "citation_review_status": "rejected",
       "reviewed_at": "2026-07-23",
       "reviewer": "lead_clinician_fix_sprint_01",
-      "citation_review_note": "Rejected: modern low-dose oral contraceptives do not meaningfully deplete folate (Wilson 2011, Nutr Rev \u2014 older depletion evidence was confounded and used higher-estrogen pills). Preconception folate adequacy is standard prenatal guidance independent of OCP use."
+      "citation_review_note": "Rejected: modern low-dose oral contraceptives do not meaningfully deplete folate (Wilson 2011, Nutr Rev — older depletion evidence was confounded and used higher-estrogen pills). Preconception folate adequacy is standard prenatal guidance independent of OCP use."
     },
     {
       "id": "DEP_OCP_MAGNESIUM",
@@ -729,7 +747,7 @@
       ],
       "alert_headline": "May lower magnesium over time",
       "alert_body": "With regular use, hormonal birth control can gradually shift magnesium levels lower. Some people notice muscle tension or headaches with long-term use.",
-      "acknowledgement_note": "Good \u2014 your magnesium intake supports levels while on hormonal birth control.",
+      "acknowledgement_note": "Good — your magnesium intake supports levels while on hormonal birth control.",
       "monitoring_tip_short": "Consider discussing magnesium at a routine visit if you notice frequent headaches.",
       "adequacy_threshold_mg": 200,
       "food_sources_short": "Food sources of magnesium include leafy greens, nuts, seeds, whole grains, beans, and dark chocolate.",
@@ -766,7 +784,7 @@
       ],
       "alert_headline": "May modestly affect zinc over time",
       "alert_body": "Hormonal birth control can gradually shift how zinc is distributed in the body over months. Measured levels sometimes run lower with long-term use.",
-      "acknowledgement_note": "Nice \u2014 zinc intake helps support levels while using hormonal birth control.",
+      "acknowledgement_note": "Nice — zinc intake helps support levels while using hormonal birth control.",
       "monitoring_tip_short": "Consider a balanced multivitamin that includes zinc; discuss with your clinician.",
       "adequacy_threshold_mg": 10,
       "food_sources_short": "Food sources of zinc include meat, poultry, shellfish, beans, lentils, nuts, seeds, and whole grains.",
@@ -803,7 +821,7 @@
       ],
       "alert_headline": "May slightly lower vitamin C over time",
       "alert_body": "With regular use, hormonal birth control can gradually shift vitamin C levels lower. The effect is usually modest in people with a varied diet.",
-      "acknowledgement_note": "Nice \u2014 your vitamin C intake supports levels while on hormonal birth control.",
+      "acknowledgement_note": "Nice — your vitamin C intake supports levels while on hormonal birth control.",
       "monitoring_tip_short": "Consider daily fruit and vegetable variety; a supplement is optional.",
       "adequacy_threshold_mg": 75,
       "food_sources_short": "Food sources of vitamin C include citrus fruits, strawberries, bell peppers, broccoli, kiwi, and tomatoes.",
@@ -840,7 +858,7 @@
       ],
       "alert_headline": "May slightly lower vitamin E over time",
       "alert_body": "With regular use, hormonal birth control can modestly reduce vitamin E levels over months. Most people feel no change; a varied diet usually covers this.",
-      "acknowledgement_note": "Good \u2014 vitamin E intake supports antioxidant balance during long-term use.",
+      "acknowledgement_note": "Good — vitamin E intake supports antioxidant balance during long-term use.",
       "monitoring_tip_short": "Consider variety in nuts, seeds, and vegetable oils in daily meals.",
       "adequacy_threshold_mg": 15,
       "food_sources_short": "Food sources of vitamin E include almonds, sunflower seeds, vegetable oils, avocado, and leafy greens.",
@@ -871,24 +889,24 @@
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 Furosemide tablets prescribing information",
+          "label": "DailyMed — Furosemide tablets prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f3173c0d-2b62-7c7b-e053-2995a90ada05"
         },
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 Hydrochlorothiazide tablets prescribing information",
+          "label": "DailyMed — Hydrochlorothiazide tablets prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8a1de4e2-3aca-a4d3-e053-2995a90a1a41"
         }
       ],
       "alert_headline": "Loop and thiazide diuretics may lower potassium",
       "alert_body": "With regular use or after dose changes, loop and thiazide diuretics can lower potassium. The effect varies and laboratory monitoring guides management.",
-      "acknowledgement_note": "Confirm any potassium product\u2014including over-the-counter\u2014with your prescriber; the right amount depends on your labs.",
+      "acknowledgement_note": "Confirm any potassium product—including over-the-counter—with your prescriber; the right amount depends on your labs.",
       "monitoring_tip_short": "Ask how often potassium should be checked based on the diuretic, dose, kidneys, and other medicines.",
       "food_sources_short": "Potassium is found in potatoes, beans, fruit, dairy, and vegetables; whether to change intake depends on labs and kidney function.",
       "citation_review_status": "needs_revision",
       "reviewed_at": "2026-07-27",
       "reviewer": "b1_1_evidence_audit",
-      "citation_review_note": "B1.1 evidence revision completed. Current furosemide and hydrochlorothiazide labels support hypokalemia and electrolyte monitoring across the existing loop/thiazide-only class. Blanket 20\u201340 mEq/day advice was removed and potassium-sparing agents remain excluded. The record remains suppressed pending licensed pharmacist delta review."
+      "citation_review_note": "B1.1 evidence revision completed. Current furosemide and hydrochlorothiazide labels support hypokalemia and electrolyte monitoring across the existing loop/thiazide-only class. Blanket 20–40 mEq/day advice was removed and potassium-sparing agents remain excluded. The record remains suppressed pending licensed pharmacist delta review."
     },
     {
       "id": "DEP_DIURETICS_MAGNESIUM",
@@ -912,12 +930,12 @@
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 Furosemide tablets prescribing information",
+          "label": "DailyMed — Furosemide tablets prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f3173c0d-2b62-7c7b-e053-2995a90ada05"
         },
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 Hydrochlorothiazide tablets prescribing information",
+          "label": "DailyMed — Hydrochlorothiazide tablets prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8a1de4e2-3aca-a4d3-e053-2995a90a1a41"
         },
         {
@@ -934,7 +952,7 @@
       "citation_review_status": "needs_revision",
       "reviewed_at": "2026-07-27",
       "reviewer": "b1_1_evidence_audit",
-      "citation_review_note": "B1.1 evidence revision completed. Current furosemide and hydrochlorothiazide labels support hypomagnesemia/urinary magnesium loss across the existing loop/thiazide-only class; PMID 10997911 supports the subclass-aware mechanism. The mouse cell PMID 9083264 and blanket 200\u2013400 mg/day advice were removed. The record remains suppressed pending licensed pharmacist delta review."
+      "citation_review_note": "B1.1 evidence revision completed. Current furosemide and hydrochlorothiazide labels support hypomagnesemia/urinary magnesium loss across the existing loop/thiazide-only class; PMID 10997911 supports the subclass-aware mechanism. The mouse cell PMID 9083264 and blanket 200–400 mg/day advice were removed. The record remains suppressed pending licensed pharmacist delta review."
     },
     {
       "id": "DEP_DIURETICS_ZINC",
@@ -950,7 +968,7 @@
       "depletion_type": "depletion",
       "severity": "mild",
       "mechanism": "Thiazide diuretics increase urinary zinc excretion; loop diuretics have a much smaller effect. Over long-term use this can modestly lower tissue zinc, although blood zinc usually remains in the normal range.",
-      "clinical_impact": "A clear zinc deficiency from thiazides has not been established \u2014 blood zinc typically stays normal \u2014 so this is a mild, long-term consideration. It is most relevant for people whose dietary zinc is already low.",
+      "clinical_impact": "A clear zinc deficiency from thiazides has not been established — blood zinc typically stays normal — so this is a mild, long-term consideration. It is most relevant for people whose dietary zinc is already low.",
       "recommendation": "Routine zinc supplementation is not established solely because you take a thiazide. Aim for zinc-rich foods; if you have symptoms or additional deficiency risks, discuss whether testing or supplementation is appropriate.",
       "onset_timeline": "months",
       "evidence_level": "probable",
@@ -1032,7 +1050,7 @@
       ],
       "alert_headline": "Loop diuretics may lower calcium over time",
       "alert_body": "Loop diuretics like furosemide can gradually increase calcium loss in urine with long-term use. This applies to loop diuretics, not thiazides.",
-      "acknowledgement_note": "Good \u2014 calcium intake supports bone health during long-term loop diuretic therapy.",
+      "acknowledgement_note": "Good — calcium intake supports bone health during long-term loop diuretic therapy.",
       "monitoring_tip_short": "Consider discussing bone health screening if on a loop diuretic long-term.",
       "food_sources_short": "Food sources of calcium include dairy, fortified plant milks, leafy greens, almonds, and canned sardines or salmon with bones.",
       "citation_review_status": "verified",
@@ -1089,7 +1107,7 @@
       ],
       "alert_headline": "Furosemide may lower thiamine over time",
       "alert_body": "Furosemide increases urinary thiamine loss. Clinical relevance is greatest with long-term higher doses and other deficiency risks.",
-      "acknowledgement_note": "Nice \u2014 thiamine intake supports levels while on long-term furosemide.",
+      "acknowledgement_note": "Nice — thiamine intake supports levels while on long-term furosemide.",
       "monitoring_tip_short": "With long-term higher-dose furosemide, ask your treating clinician whether thiamine assessment fits your care.",
       "food_sources_short": "Food sources of thiamine include pork, fish, whole grains, fortified cereals, beans, lentils, and seeds.",
       "citation_review_status": "verified",
@@ -1142,7 +1160,7 @@
       ],
       "alert_headline": "Triamterene may lower folate over time",
       "alert_body": "Over long-term use triamterene can mildly interfere with folate, but at usual doses the effect is small for most people. It matters more in pregnancy or if folate is already low.",
-      "acknowledgement_note": "Good \u2014 folate is a sensible thing to cover, especially in pregnancy or if your folate tends to run low.",
+      "acknowledgement_note": "Good — folate is a sensible thing to cover, especially in pregnancy or if your folate tends to run low.",
       "monitoring_tip_short": "Consider discussing folate with your doctor if you are pregnant, planning pregnancy, or also take methotrexate.",
       "food_sources_short": "Food sources of folate include leafy greens, lentils, chickpeas, asparagus, avocado, and fortified grains and cereals.",
       "citation_review_status": "verified",
@@ -1174,7 +1192,7 @@
       "recommendation": "For prednisone expected to continue longer than three months, clinicians assess calcium and vitamin D intake, fracture risk, and whether bone-protective treatment is needed. Care is based on individual risk rather than an automatic supplement dose.",
       "onset_timeline": "months",
       "evidence_level": "established",
-      "monitoring_note": "American College of Rheumatology guidance recommends assessing fracture risk soon after starting long-term glucocorticoids \u2014 clinical fracture assessment, bone mineral density with vertebral fracture assessment, and FRAX scoring for adults 40 and older.",
+      "monitoring_note": "American College of Rheumatology guidance recommends assessing fracture risk soon after starting long-term glucocorticoids — clinical fracture assessment, bone mineral density with vertebral fracture assessment, and FRAX scoring for adults 40 and older.",
       "sources": [
         {
           "source_type": "pubmed",
@@ -1189,7 +1207,7 @@
       ],
       "alert_headline": "Long-term oral prednisone can affect calcium balance",
       "alert_body": "Oral prednisone used for more than three months can affect calcium balance and bone strength.",
-      "acknowledgement_note": "You're taking calcium \u2014 sensible with long-term steroid use. How much you need depends on your diet and bone health.",
+      "acknowledgement_note": "You're taking calcium — sensible with long-term steroid use. How much you need depends on your diet and bone health.",
       "monitoring_tip_short": "Consider discussing bone health and fracture-risk screening if systemic use continues.",
       "food_sources_short": "Food sources of calcium include dairy products, fortified plant milks, leafy greens, almonds, and canned sardines or salmon with bones.",
       "citation_review_status": "verified",
@@ -1501,13 +1519,13 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Calcium Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Calcium Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
         }
       ],
       "alert_headline": "May affect bone calcium over years",
-      "alert_body": "With long-term SSRI use, bone calcium can gradually shift over years, which may influence bone density \u2014 most relevant for older adults.",
-      "acknowledgement_note": "Good \u2014 calcium intake supports bone health during long-term SSRI therapy.",
+      "alert_body": "With long-term SSRI use, bone calcium can gradually shift over years, which may influence bone density — most relevant for older adults.",
+      "acknowledgement_note": "Good — calcium intake supports bone health during long-term SSRI therapy.",
       "monitoring_tip_short": "Consider discussing bone density screening if on an SSRI long-term.",
       "adequacy_threshold_mg": 500,
       "food_sources_short": "Food sources of calcium include dairy, fortified plant milks, leafy greens, almonds, and canned sardines or salmon with bones.",
@@ -1544,7 +1562,7 @@
       ],
       "alert_headline": "May relate to vitamin D over time",
       "alert_body": "Vitamin D often runs lower in people on long-term SSRIs, partly because indoor time tends to increase. Levels can drift lower over months.",
-      "acknowledgement_note": "Good \u2014 vitamin D intake supports overall balance during SSRI therapy.",
+      "acknowledgement_note": "Good — vitamin D intake supports overall balance during SSRI therapy.",
       "monitoring_tip_short": "Consider checking vitamin D at your annual visit, especially in winter months.",
       "adequacy_threshold_mcg": 25,
       "food_sources_short": "Food sources of vitamin D include fatty fish, egg yolks, fortified milk and plant milks, and fortified cereals.",
@@ -1889,13 +1907,13 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Zinc Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Zinc Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
         }
       ],
       "alert_headline": "May lower zinc over time",
       "alert_body": "ACE inhibitors can gradually increase zinc loss through urine with long-term use over months. Some people notice a blunted sense of taste.",
-      "acknowledgement_note": "Good \u2014 zinc intake supports taste and immune balance during long-term therapy.",
+      "acknowledgement_note": "Good — zinc intake supports taste and immune balance during long-term therapy.",
       "monitoring_tip_short": "Consider a modest zinc supplement if taste feels duller than usual.",
       "adequacy_threshold_mg": 10,
       "food_sources_short": "Food sources of zinc include meat, poultry, shellfish, beans, lentils, nuts, seeds, and whole grains.",
@@ -1926,7 +1944,7 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Coenzyme Q10 Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Coenzyme Q10 Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/"
         },
         {
@@ -1937,10 +1955,10 @@
       ],
       "alert_headline": "May lower CoQ10 over time",
       "alert_body": "Beta blockers can gradually reduce how the body produces and uses CoQ10 with long-term use over months. Some people notice lower energy or slower recovery.",
-      "acknowledgement_note": "Nice \u2014 CoQ10 intake supports energy balance during long-term beta-blocker use.",
+      "acknowledgement_note": "Nice — CoQ10 intake supports energy balance during long-term beta-blocker use.",
       "monitoring_tip_short": "Consider discussing CoQ10 with your cardiologist if fatigue feels persistent.",
       "adequacy_threshold_mg": 100,
-      "food_sources_short": "Dietary CoQ10 is minimal \u2014 organ meats and fatty fish contain small amounts, but a supplement is usually the practical route.",
+      "food_sources_short": "Dietary CoQ10 is minimal — organ meats and fatty fish contain small amounts, but a supplement is usually the practical route.",
       "citation_review_status": "needs_revision",
       "citation_review_note": "Suppressed (needs_revision): PMID 12392188 is a content mismatch for the displayed beta-blocker CoQ10 claim; it must not support consumer supplementation.",
       "reviewed_at": "2026-07-26",
@@ -1968,13 +1986,13 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Melatonin Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Melatonin Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/Melatonin-InDepth/"
         }
       ],
       "alert_headline": "Can affect nighttime melatonin over time",
       "alert_body": "Beta blockers can gradually reduce the body's nighttime melatonin release with regular use over weeks. Some people notice changes in sleep onset.",
-      "acknowledgement_note": "Nice \u2014 low-dose melatonin aligns with guidance for people using beta blockers long-term.",
+      "acknowledgement_note": "Nice — low-dose melatonin aligns with guidance for people using beta blockers long-term.",
       "monitoring_tip_short": "Consider discussing low-dose melatonin with your prescriber for sleep support.",
       "citation_review_status": "needs_revision",
       "citation_review_note": "Suppressed (needs_revision): PMIDs 10335905 and 23024438 support selected beta-blocker melatonin effects, not the displayed broad class claim or a universal supplementation recommendation.",
@@ -2058,7 +2076,7 @@
       "drug_ref": {
         "type": "class",
         "id": "class:nsaids",
-        "display_name": "NSAIDs \u2014 aspirin specifically"
+        "display_name": "NSAIDs — aspirin specifically"
       },
       "depleted_nutrient": {
         "standard_name": "Vitamin C",
@@ -2193,13 +2211,13 @@
         },
         {
           "source_type": "reference",
-          "label": "DailyMed \u2014 Levothyroxine Sodium prescribing information (calcium and iron separation)",
+          "label": "DailyMed — Levothyroxine Sodium prescribing information (calcium and iron separation)",
           "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a8db0f7d-8863-9309-e053-2995a90a284a"
         }
       ],
       "alert_headline": "Calcium can reduce thyroid-med absorption",
       "alert_body": "Over time, calcium supplements taken close to levothyroxine can reduce thyroid-medicine absorption.",
-      "acknowledgement_note": "Good \u2014 calcium intake supports bone health; timing separately keeps your thyroid dose steady.",
+      "acknowledgement_note": "Good — calcium intake supports bone health; timing separately keeps your thyroid dose steady.",
       "monitoring_tip_short": "Separate calcium by 4 hours; ask about thyroid testing after starting or stopping regular calcium use.",
       "adequacy_threshold_mg": 500,
       "food_sources_short": "Food sources of calcium include dairy, fortified plant milks, leafy greens, almonds, and canned sardines or salmon with bones.",
@@ -2233,7 +2251,7 @@
       "recommendation": "Take iron supplements at least 4 hours before or after levothyroxine. If you start or stop iron, ask your clinician about rechecking your thyroid levels.",
       "onset_timeline": "weeks",
       "evidence_level": "established",
-      "monitoring_note": "Check TSH within 6\u20138 weeks of starting iron supplementation in levothyroxine-treated patients. Separate administration times by at least 4 hours.",
+      "monitoring_note": "Check TSH within 6–8 weeks of starting iron supplementation in levothyroxine-treated patients. Separate administration times by at least 4 hours.",
       "sources": [
         {
           "source_type": "pubmed",
@@ -2242,13 +2260,13 @@
         },
         {
           "source_type": "reference",
-          "label": "DailyMed \u2014 Levothyroxine Sodium prescribing information (calcium and iron separation)",
+          "label": "DailyMed — Levothyroxine Sodium prescribing information (calcium and iron separation)",
           "url": "https://www.dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=a0dbd009-0a3e-4314-812f-dd372c255bb1&type=display"
         }
       ],
       "alert_headline": "Iron can reduce thyroid-med absorption",
       "alert_body": "Iron taken near your thyroid medication can gradually reduce absorption of the dose over weeks. Separating them by several hours usually solves it.",
-      "acknowledgement_note": "Good \u2014 iron intake supports overall balance; timing separately keeps your thyroid dose steady.",
+      "acknowledgement_note": "Good — iron intake supports overall balance; timing separately keeps your thyroid dose steady.",
       "monitoring_tip_short": "Consider taking iron at least 4 hours apart from your levothyroxine dose.",
       "adequacy_threshold_mg": 18,
       "food_sources_short": "Food sources of iron include red meat, poultry, seafood, beans, lentils, tofu, spinach, and fortified cereals.",
@@ -2292,7 +2310,7 @@
       ],
       "alert_headline": "May lower vitamin D over time",
       "alert_body": "Vitamin D often runs lower with long-term antipsychotic use over months, partly due to less sun exposure and metabolic shifts.",
-      "acknowledgement_note": "Good \u2014 vitamin D intake supports overall balance during long-term therapy.",
+      "acknowledgement_note": "Good — vitamin D intake supports overall balance during long-term therapy.",
       "monitoring_tip_short": "Consider an annual 25-OH-D check during long-term antipsychotic therapy.",
       "adequacy_threshold_mcg": 25,
       "food_sources_short": "Food sources of vitamin D include fatty fish, egg yolks, fortified milk and plant milks, and fortified cereals.",
@@ -2329,10 +2347,10 @@
       ],
       "alert_headline": "May lower CoQ10 over time",
       "alert_body": "Some antipsychotics can gradually affect how cells produce energy from CoQ10 over months. A few people notice lower energy with long-term use.",
-      "acknowledgement_note": "Nice \u2014 CoQ10 intake supports energy balance during long-term therapy.",
+      "acknowledgement_note": "Nice — CoQ10 intake supports energy balance during long-term therapy.",
       "monitoring_tip_short": "Consider discussing CoQ10 with your prescriber if fatigue feels persistent.",
       "adequacy_threshold_mg": 100,
-      "food_sources_short": "Dietary CoQ10 is minimal \u2014 organ meats and fatty fish contain small amounts, but a supplement is usually the practical route.",
+      "food_sources_short": "Dietary CoQ10 is minimal — organ meats and fatty fish contain small amounts, but a supplement is usually the practical route.",
       "citation_review_status": "needs_revision",
       "reviewed_at": "2026-07-26",
       "reviewer": "medication_depletion_section_06_psychiatry_audit",
@@ -2343,7 +2361,7 @@
       "drug_ref": {
         "type": "class",
         "id": "class:stimulants",
-        "display_name": "Stimulants (ADHD medications \u2014 amphetamines, methylphenidate)"
+        "display_name": "Stimulants (ADHD medications — amphetamines, methylphenidate)"
       },
       "depleted_nutrient": {
         "standard_name": "Magnesium",
@@ -2366,7 +2384,7 @@
       ],
       "alert_headline": "May lower magnesium over time",
       "alert_body": "ADHD stimulants can gradually increase magnesium turnover with regular use over months. Reduced appetite from the medication can also trim dietary intake.",
-      "acknowledgement_note": "Good \u2014 magnesium intake supports calm and sleep balance during stimulant therapy.",
+      "acknowledgement_note": "Good — magnesium intake supports calm and sleep balance during stimulant therapy.",
       "monitoring_tip_short": "Consider magnesium in the evening; discuss with your prescriber if sleep is restless.",
       "adequacy_threshold_mg": 200,
       "food_sources_short": "Food sources of magnesium include leafy greens, nuts, seeds, whole grains, beans, and dark chocolate.",
@@ -2380,7 +2398,7 @@
       "drug_ref": {
         "type": "class",
         "id": "class:stimulants",
-        "display_name": "Stimulants (ADHD medications \u2014 amphetamines)"
+        "display_name": "Stimulants (ADHD medications — amphetamines)"
       },
       "depleted_nutrient": {
         "standard_name": "Vitamin C",
@@ -2403,7 +2421,7 @@
       ],
       "alert_headline": "Vitamin C timing can affect stimulant dose",
       "alert_body": "High-dose vitamin C taken near an amphetamine-based stimulant can gradually affect how well the dose works over weeks. Separating them by time usually resolves it.",
-      "acknowledgement_note": "Good \u2014 vitamin C supports overall balance; timing separately keeps your medication steady.",
+      "acknowledgement_note": "Good — vitamin C supports overall balance; timing separately keeps your medication steady.",
       "monitoring_tip_short": "Consider taking high-dose vitamin C at least 1-2 hours apart from stimulant doses.",
       "citation_review_status": "needs_revision",
       "reviewed_at": "2026-07-26",
@@ -2509,7 +2527,7 @@
         },
         {
           "source_type": "reference",
-          "label": "DailyMed \u2014 Warfarin Sodium prescribing information (consistent vitamin K intake)",
+          "label": "DailyMed — Warfarin Sodium prescribing information (consistent vitamin K intake)",
           "url": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=801e4da1-5459-47d2-b67b-009f0a3247cc&type=display"
         }
       ],
@@ -2551,7 +2569,7 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Vitamin B6 Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Vitamin B6 Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
         },
         {
@@ -2562,7 +2580,7 @@
       ],
       "alert_headline": "Phenelzine may lower vitamin B6 over time",
       "alert_body": "Hydrazine-class MAOIs like phenelzine can gradually reduce active vitamin B6 with long-term use over months. Some people notice tingling or skin changes.",
-      "acknowledgement_note": "Nice \u2014 B6 intake aligns with guidance for long-term phenelzine-class MAOI use.",
+      "acknowledgement_note": "Nice — B6 intake aligns with guidance for long-term phenelzine-class MAOI use.",
       "monitoring_tip_short": "Consider discussing a B6 supplement with your prescribing psychiatrist.",
       "adequacy_threshold_mg": 50,
       "food_sources_short": "Food sources of vitamin B6 include poultry, fish, potatoes, chickpeas, bananas, and fortified cereals.",
@@ -2593,12 +2611,12 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Magnesium Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Magnesium Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         },
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Magnesium Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Magnesium Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         }
       ],
@@ -2634,7 +2652,7 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Magnesium Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Magnesium Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         },
         {
@@ -2717,7 +2735,7 @@
       ],
       "alert_headline": "May slightly affect potassium over time",
       "alert_body": "Calcium channel blockers can gradually shift potassium levels with long-term use over months. The effect is usually mild unless combined with other blood-pressure medications.",
-      "acknowledgement_note": "Good \u2014 potassium awareness is helpful, and your care plan tracks levels.",
+      "acknowledgement_note": "Good — potassium awareness is helpful, and your care plan tracks levels.",
       "monitoring_tip_short": "Consider asking for electrolyte checks if you're on combination blood-pressure therapy.",
       "food_sources_short": "Food sources of potassium include bananas, oranges, potatoes, beans, yogurt, and tomatoes.",
       "citation_review_status": "rejected",
@@ -2753,7 +2771,7 @@
       ],
       "alert_headline": "May slightly lower zinc over time",
       "alert_body": "Several blood-pressure medications can gradually increase urinary zinc loss with long-term use over months. Older adults on multi-drug regimens feel this most.",
-      "acknowledgement_note": "Good \u2014 zinc intake supports taste and immune balance during long-term therapy.",
+      "acknowledgement_note": "Good — zinc intake supports taste and immune balance during long-term therapy.",
       "monitoring_tip_short": "Consider a modest zinc supplement; discuss with your prescriber if taste feels duller.",
       "adequacy_threshold_mg": 10,
       "food_sources_short": "Food sources of zinc include meat, poultry, shellfish, beans, lentils, nuts, seeds, and whole grains.",
@@ -2790,10 +2808,10 @@
       ],
       "alert_headline": "Hydralazine may lower CoQ10 over time",
       "alert_body": "Hydralazine-class blood-pressure medications can gradually lower CoQ10 over months of use. Some people notice lower energy or slower exercise recovery.",
-      "acknowledgement_note": "Nice \u2014 CoQ10 intake supports energy balance during long-term therapy.",
+      "acknowledgement_note": "Nice — CoQ10 intake supports energy balance during long-term therapy.",
       "monitoring_tip_short": "Consider discussing CoQ10 with your prescriber if fatigue feels persistent.",
       "adequacy_threshold_mg": 100,
-      "food_sources_short": "Dietary CoQ10 is minimal \u2014 organ meats and fatty fish contain small amounts, but a supplement is usually the practical route.",
+      "food_sources_short": "Dietary CoQ10 is minimal — organ meats and fatty fish contain small amounts, but a supplement is usually the practical route.",
       "citation_review_status": "rejected",
       "citation_review_note": "Rejected: inherited textbook assertion lacks claim-matched clinical evidence for depletion or supplementation.",
       "reviewed_at": "2026-07-26",
@@ -2821,7 +2839,7 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "NIH ODS \u2014 Magnesium Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Magnesium Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         },
         {
@@ -2868,7 +2886,7 @@
       ],
       "alert_headline": "May lower vitamin D over time",
       "alert_body": "With long-term sedative or sleep-medication use, vitamin D can gradually run lower over months, partly from reduced daytime outdoor activity.",
-      "acknowledgement_note": "Good \u2014 vitamin D intake supports bone and muscle balance during long-term therapy.",
+      "acknowledgement_note": "Good — vitamin D intake supports bone and muscle balance during long-term therapy.",
       "monitoring_tip_short": "Consider an annual 25-OH-D check and a daytime walk routine where possible.",
       "adequacy_threshold_mcg": 25,
       "food_sources_short": "Food sources of vitamin D include fatty fish, egg yolks, fortified milk and plant milks, and fortified cereals.",
@@ -2905,7 +2923,7 @@
       ],
       "alert_headline": "Can affect nighttime melatonin over time",
       "alert_body": "Benzodiazepines can gradually disrupt the body's nighttime melatonin rhythm with regular use over weeks. Some people notice less restorative sleep.",
-      "acknowledgement_note": "Nice \u2014 low-dose melatonin aligns with guidance for people using benzodiazepines.",
+      "acknowledgement_note": "Nice — low-dose melatonin aligns with guidance for people using benzodiazepines.",
       "monitoring_tip_short": "Consider discussing low-dose melatonin and sleep strategy with your prescriber.",
       "citation_review_status": "needs_revision",
       "reviewed_at": "2026-07-26",
@@ -2926,7 +2944,7 @@
       "depletion_type": "supplement_interaction",
       "severity": "mild",
       "mechanism": "High-dose folic acid supplementation may compete with zinc for intestinal absorption via shared transport mechanisms. This interaction is most relevant when very high folic acid doses (>5 mg/day) are taken without balanced mineral supplementation.",
-      "clinical_impact": "In populations with already marginal zinc intake (elderly, pregnant women), high folic acid could theoretically reduce zinc absorption enough to impair immune function and growth outcomes. Clinical significance at typical supplement doses (400\u2013800 mcg) is low.",
+      "clinical_impact": "In populations with already marginal zinc intake (elderly, pregnant women), high folic acid could theoretically reduce zinc absorption enough to impair immune function and growth outcomes. Clinical significance at typical supplement doses (400–800 mcg) is low.",
       "recommendation": "At standard supplemental doses, this interaction is not clinically significant. For those taking high-dose folic acid (>5 mg/day), ensure zinc intake from dietary sources or a balanced multivitamin.",
       "onset_timeline": "months",
       "evidence_level": "possible",
@@ -2940,14 +2958,14 @@
       ],
       "alert_headline": "High-dose folate may affect zinc uptake",
       "alert_body": "Taking very high folic acid doses over months may gradually compete with zinc uptake in the gut. At typical multivitamin doses, this effect is minimal.",
-      "acknowledgement_note": "Good \u2014 your zinc intake supports balance alongside regular folate use.",
+      "acknowledgement_note": "Good — your zinc intake supports balance alongside regular folate use.",
       "monitoring_tip_short": "Consider a balanced multivitamin rather than high single-nutrient doses; check with your clinician.",
       "adequacy_threshold_mg": 10,
       "food_sources_short": "Food sources of zinc include meat, poultry, shellfish, beans, lentils, nuts, seeds, and whole grains.",
       "citation_review_status": "needs_revision",
       "reviewed_at": "2026-07-26",
       "reviewer": "medication_depletion_content_audit_2026_07_26",
-      "citation_review_note": "Citation content audit (2026-07-26): PMID 2132402 resolves in PubMed but is a content mismatch \u2014 its live title/abstract does not support this medication-nutrient claim. Suppressed pending a family-specific, reviewed replacement; no clinical conclusion is made from this citation."
+      "citation_review_note": "Citation content audit (2026-07-26): PMID 2132402 resolves in PubMed but is a content mismatch — its live title/abstract does not support this medication-nutrient claim. Suppressed pending a family-specific, reviewed replacement; no clinical conclusion is made from this citation."
     },
     {
       "id": "DEP_ISONIAZID_VITAMINB6",
@@ -2976,13 +2994,13 @@
         },
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 ISONIAZID prescribing information",
+          "label": "DailyMed — ISONIAZID prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=6dab7b7b-a3a9-47ef-b423-134bc6970d8b"
         }
       ],
       "alert_headline": "May lower vitamin B6 over time",
       "alert_body": "Isoniazid can gradually lower active vitamin B6 over months, which is why clinicians often pair it with pyridoxine during TB treatment.",
-      "acknowledgement_note": "Good \u2014 vitamin B6 intake supports balance during isoniazid therapy.",
+      "acknowledgement_note": "Good — vitamin B6 intake supports balance during isoniazid therapy.",
       "monitoring_tip_short": "Consider asking your TB clinician whether pyridoxine is already included in your plan.",
       "adequacy_threshold_mg": 25,
       "citation_review_status": "verified",
@@ -3029,7 +3047,7 @@
       ],
       "alert_headline": "Methotrexate changes folate pathways",
       "alert_body": "With regular use, folate support is common for low-dose methotrexate in inflammatory disease, but oncology regimens differ.",
-      "acknowledgement_note": "Good \u2014 folate intake is worth tracking while your clinician manages methotrexate therapy.",
+      "acknowledgement_note": "Good — folate intake is worth tracking while your clinician manages methotrexate therapy.",
       "monitoring_tip_short": "Consider confirming your exact folic-acid schedule with the clinician who prescribes methotrexate.",
       "citation_review_status": "verified",
       "reviewed_at": "2026-07-27",
@@ -3065,12 +3083,12 @@
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 XENICAL (orlistat) prescribing information",
+          "label": "DailyMed — XENICAL (orlistat) prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=6240792b-9224-2d10-e053-2a91aa0a2c3e"
         },
         {
           "source_type": "nih_ods",
-          "label": "NIH ODS \u2014 Vitamin A Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Vitamin A Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
         }
       ],
@@ -3112,13 +3130,13 @@
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 XENICAL (orlistat) prescribing information",
+          "label": "DailyMed — XENICAL (orlistat) prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=6240792b-9224-2d10-e053-2a91aa0a2c3e"
         }
       ],
       "alert_headline": "May lower vitamin D absorption",
       "alert_body": "Orlistat can gradually reduce absorption of Vitamin D over months because this vitamin depends on dietary fat for uptake. Timing a multivitamin away from the dose helps.",
-      "acknowledgement_note": "Good \u2014 vitamin D intake helps cover the fat-soluble vitamin gap during orlistat use.",
+      "acknowledgement_note": "Good — vitamin D intake helps cover the fat-soluble vitamin gap during orlistat use.",
       "monitoring_tip_short": "Consider taking your multivitamin at least 2 hours apart from orlistat.",
       "citation_review_status": "verified",
       "reviewed_at": "2026-07-26",
@@ -3153,13 +3171,13 @@
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 XENICAL (orlistat) prescribing information",
+          "label": "DailyMed — XENICAL (orlistat) prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=6240792b-9224-2d10-e053-2a91aa0a2c3e"
         }
       ],
       "alert_headline": "May lower vitamin E absorption",
       "alert_body": "Orlistat can gradually reduce absorption of Vitamin E over months because this vitamin depends on dietary fat for uptake. Timing a multivitamin away from the dose helps.",
-      "acknowledgement_note": "Good \u2014 vitamin E intake helps cover the fat-soluble vitamin gap during orlistat use.",
+      "acknowledgement_note": "Good — vitamin E intake helps cover the fat-soluble vitamin gap during orlistat use.",
       "monitoring_tip_short": "Consider taking your multivitamin at least 2 hours apart from orlistat.",
       "citation_review_status": "verified",
       "reviewed_at": "2026-07-26",
@@ -3194,13 +3212,13 @@
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 XENICAL (orlistat) prescribing information",
+          "label": "DailyMed — XENICAL (orlistat) prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=6240792b-9224-2d10-e053-2a91aa0a2c3e"
         }
       ],
       "alert_headline": "May lower vitamin K absorption",
       "alert_body": "Orlistat can gradually reduce absorption of Vitamin K over months because this vitamin depends on dietary fat for uptake. Timing a multivitamin away from the dose helps.",
-      "acknowledgement_note": "Good \u2014 steady vitamin K intake helps keep orlistat-related monitoring clearer.",
+      "acknowledgement_note": "Good — steady vitamin K intake helps keep orlistat-related monitoring clearer.",
       "monitoring_tip_short": "Consider taking your multivitamin at least 2 hours apart from orlistat.",
       "citation_review_status": "verified",
       "reviewed_at": "2026-07-26",
@@ -3235,13 +3253,13 @@
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 SULFASALAZINE prescribing information",
+          "label": "DailyMed — SULFASALAZINE prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=48fbc535-a33a-45ee-85ff-9d1ec9b31d9c"
         }
       ],
       "alert_headline": "May lower folate over time",
       "alert_body": "Sulfasalazine can gradually reduce folate absorption and metabolism over months, so folate support is often worth reviewing during long-term use.",
-      "acknowledgement_note": "Good \u2014 folate intake supports balance during sulfasalazine therapy.",
+      "acknowledgement_note": "Good — folate intake supports balance during sulfasalazine therapy.",
       "monitoring_tip_short": "Consider reviewing folate needs with your clinician, especially before pregnancy.",
       "adequacy_threshold_mcg": 400,
       "citation_review_status": "verified",
@@ -3277,7 +3295,7 @@
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 Cyanocobalamin label, B12 malabsorption causes",
+          "label": "DailyMed — Cyanocobalamin label, B12 malabsorption causes",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9172ca9d-6419-41de-829c-4f9a16220b46"
         },
         {
@@ -3288,7 +3306,7 @@
       ],
       "alert_headline": "May affect B12 absorption over time",
       "alert_body": "Long-term colchicine may reduce B12 absorption in susceptible people; this does not mean every user becomes deficient.",
-      "acknowledgement_note": "Good \u2014 vitamin B12 intake supports balance during long-term colchicine therapy.",
+      "acknowledgement_note": "Good — vitamin B12 intake supports balance during long-term colchicine therapy.",
       "monitoring_tip_short": "Consider asking about B12 testing if colchicine is part of your long-term plan.",
       "adequacy_threshold_mcg": 250,
       "citation_review_status": "verified",
@@ -3318,19 +3336,19 @@
       "severity": "moderate",
       "mechanism": "Cholestyramine binds bile acids in the gut and can interfere with fat digestion and absorption. Because Vitamin A is fat-soluble, long-term bile-acid binding can reduce absorption unless vitamin timing is managed.",
       "clinical_impact": "Long-term cholestyramine use can lower vitamin A absorption. Excess preformed vitamin A can cause birth defects, so pregnancy or possible pregnancy requires clinician review of the vitamin A form and total dose.",
-      "recommendation": "For long-term use, ask whether a water-miscible vitamin A form is appropriate. The label directs other medicines at least 1 hour before or 4\u20136 hours after cholestyramine; confirm how to time the vitamin. If you are pregnant or could become pregnant, have the vitamin A form and total dose reviewed rather than adding extra preformed vitamin A.",
+      "recommendation": "For long-term use, ask whether a water-miscible vitamin A form is appropriate. The label directs other medicines at least 1 hour before or 4–6 hours after cholestyramine; confirm how to time the vitamin. If you are pregnant or could become pregnant, have the vitamin A form and total dose reviewed rather than adding extra preformed vitamin A.",
       "onset_timeline": "months",
       "evidence_level": "established",
       "monitoring_note": "Consider Vitamin A monitoring during long-term or high-dose cholestyramine therapy.",
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 CHOLESTYRAMINE prescribing information",
+          "label": "DailyMed — CHOLESTYRAMINE prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=09420793-7357-4194-8172-0b1cddb167fe"
         },
         {
           "source_type": "nih_ods",
-          "label": "NIH ODS \u2014 Vitamin A Fact Sheet for Health Professionals",
+          "label": "NIH ODS — Vitamin A Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
         }
       ],
@@ -3365,14 +3383,14 @@
       "severity": "moderate",
       "mechanism": "Cholestyramine binds bile acids in the gut and can interfere with fat digestion and absorption. Because Vitamin D is fat-soluble, long-term bile-acid binding can reduce absorption unless vitamin timing is managed.",
       "clinical_impact": "Lower Vitamin D absorption can matter during long-term cholestyramine use, especially when dietary intake is limited or another condition already impairs fat absorption.",
-      "recommendation": "For long-term use, ask whether a water-miscible vitamin D form is appropriate. The label directs other medicines at least 1 hour before or 4\u20136 hours after cholestyramine; confirm how to time the vitamin.",
+      "recommendation": "For long-term use, ask whether a water-miscible vitamin D form is appropriate. The label directs other medicines at least 1 hour before or 4–6 hours after cholestyramine; confirm how to time the vitamin.",
       "onset_timeline": "months",
       "evidence_level": "established",
       "monitoring_note": "Consider Vitamin D monitoring during long-term or high-dose cholestyramine therapy.",
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 CHOLESTYRAMINE prescribing information",
+          "label": "DailyMed — CHOLESTYRAMINE prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=09420793-7357-4194-8172-0b1cddb167fe"
         }
       ],
@@ -3407,14 +3425,14 @@
       "severity": "moderate",
       "mechanism": "Cholestyramine binds bile acids in the gut and can interfere with fat digestion and absorption. Because Vitamin E is fat-soluble, long-term bile-acid binding can reduce absorption unless vitamin timing is managed.",
       "clinical_impact": "Lower Vitamin E absorption can matter during long-term cholestyramine use, especially when dietary intake is limited or another condition already impairs fat absorption.",
-      "recommendation": "For long-term use, ask whether a water-miscible vitamin E form is appropriate. The label directs other medicines at least 1 hour before or 4\u20136 hours after cholestyramine; confirm how to time the vitamin.",
+      "recommendation": "For long-term use, ask whether a water-miscible vitamin E form is appropriate. The label directs other medicines at least 1 hour before or 4–6 hours after cholestyramine; confirm how to time the vitamin.",
       "onset_timeline": "months",
       "evidence_level": "established",
       "monitoring_note": "Consider Vitamin E monitoring during long-term or high-dose cholestyramine therapy.",
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 CHOLESTYRAMINE prescribing information",
+          "label": "DailyMed — CHOLESTYRAMINE prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=09420793-7357-4194-8172-0b1cddb167fe"
         }
       ],
@@ -3449,14 +3467,14 @@
       "severity": "moderate",
       "mechanism": "Cholestyramine binds bile acids in the gut and can interfere with fat digestion and absorption. Because Vitamin K is fat-soluble, long-term bile-acid binding can reduce absorption unless vitamin timing is managed.",
       "clinical_impact": "Lower Vitamin K absorption can impair clotting. The label reports increased bleeding tendency related to low prothrombin in some long-term users, which requires clinician assessment.",
-      "recommendation": "For long-term use, ask whether a water-miscible vitamin K form is appropriate. The label directs other medicines at least 1 hour before or 4\u20136 hours after cholestyramine; confirm how to time the vitamin.",
+      "recommendation": "For long-term use, ask whether a water-miscible vitamin K form is appropriate. The label directs other medicines at least 1 hour before or 4–6 hours after cholestyramine; confirm how to time the vitamin.",
       "onset_timeline": "months",
       "evidence_level": "established",
       "monitoring_note": "Consider Vitamin K monitoring during long-term or high-dose cholestyramine therapy.",
       "sources": [
         {
           "source_type": "fda",
-          "label": "DailyMed \u2014 CHOLESTYRAMINE prescribing information",
+          "label": "DailyMed — CHOLESTYRAMINE prescribing information",
           "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=09420793-7357-4194-8172-0b1cddb167fe"
         }
       ],
