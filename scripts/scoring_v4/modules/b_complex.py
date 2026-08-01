@@ -14,6 +14,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Optional
 
+from scoring_v4.dose_safety import evaluate_dose_safety
 from scoring_v4.modules.generic import GenericModuleResult, _assemble_score, _empty_dimensions
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
@@ -278,14 +279,20 @@ def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
 
 
 def _b7_dose_safety(product: Dict[str, Any]) -> float:
-    total = 0.0
-    for flag in _safe_list(_safe_dict(product.get("rda_ul_data")).get("safety_flags")):
-        if not isinstance(flag, dict):
-            continue
-        pct_ul = _as_float(flag.get("pct_ul"), 0.0) or 0.0
-        if pct_ul >= B7_UL_PCT_THRESHOLD:
-            total += B7_PER_FLAG_PENALTY
-    return _round(_clamp(0.0, B7_CAP, total))
+    """Dose-safety deduction, via the shared evaluator.
+
+    A B-complex declaring folate as a total plus its own form breakdown used to
+    be charged twice here, because the de-duplication rule lived privately in
+    the multivitamin module.
+    """
+    return _round(
+        evaluate_dose_safety(
+            product,
+            threshold=B7_UL_PCT_THRESHOLD,
+            per_flag_penalty=B7_PER_FLAG_PENALTY,
+            cap=B7_CAP,
+        ).penalty
+    )
 
 
 def _score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
