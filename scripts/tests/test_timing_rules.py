@@ -1,5 +1,17 @@
 #!/usr/bin/env python3
-"""Contract and data-quality tests for timing_rules.json."""
+"""Contract and data-quality tests for timing_rules.json (schema 6.x).
+
+Schema 6.0.0 removed the scheduler: there is no `rule_type`, no `daily_slots`,
+and no `daily_plan_eligible`. A rule now carries a structured `timing_relation`
+plus five INDEPENDENT fields — category, actionability, evidence_level,
+source_authority, review_status — so that "well evidenced" can never imply
+"urgent", and a mechanism paper can never present like a drug label.
+
+`review_status` is the publication gate. Only `verified` rules render, and the
+migration deliberately left every rule at `needs_revision` until Section 2
+verifies each one against its source with positive and negative catalog
+canaries.
+"""
 
 import json
 import sys
@@ -11,16 +23,37 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 TIMING_FILE = DATA_DIR / "timing_rules.json"
+REJECTION_LEDGER = DATA_DIR / "timing_rules_rejected.json"
 
-VALID_RULE_TYPES = {"separate", "take_together", "take_with_food", "take_on_empty_stomach", "time_of_day"}
+VALID_RELATION_TYPES = {
+    "separate_from",
+    "separate_from_medications",
+    "with_food",
+    "empty_stomach",
+    "before_event",
+    "after_event",
+    "consistent_relative_to_prescription",
+}
+BINARY_RELATION_TYPES = {"separate_from"}
+VALID_EVENTS = {"intended_sleep", "meal"}
+VALID_CATEGORIES = {"important_separation", "how_to_take", "optional"}
+VALID_APPLIES_TO = {"standalone", "any"}
+VALID_ACTIONABILITY = {"recommended", "optional", "informational"}
+VALID_REVIEW_STATUS = {"verified", "needs_revision", "rejected"}
+VALID_SOURCE_AUTHORITY = {
+    "fda_label",
+    "product_label",
+    "guideline",
+    "systematic_review",
+    "clinical_study",
+    "mechanism",
+    "reference",
+}
 VALID_EVIDENCE_LEVELS = {"established", "probable", "possible"}
 VALID_SOURCE_TYPES = {"pubmed", "reference", "nih_ods", "fda", "nccih"}
-VALID_DAILY_SLOTS = {
-    "morning_empty",
-    "with_breakfast",
-    "with_dinner",
-    "bedtime",
-}
+
+# Fields the scheduler owned. Their return would mean the solver came back.
+FORBIDDEN_LEGACY_FIELDS = {"rule_type", "daily_slots", "daily_plan_eligible"}
 
 
 @pytest.fixture(scope="module")
@@ -45,9 +78,9 @@ class TestTimingMetadata:
         for field in ("description", "purpose", "schema_version", "last_updated", "total_entries"):
             assert field in meta, f"Missing metadata field: {field}"
 
-    def test_schema_version_is_5x(self, timing_data):
+    def test_schema_version_is_6x(self, timing_data):
         ver = timing_data["_metadata"]["schema_version"]
-        assert ver.startswith("5."), f"Expected 5.x schema, got {ver}"
+        assert ver.startswith("6."), f"Expected 6.x schema, got {ver}"
 
     def test_total_entries_matches(self, timing_data, rules):
         declared = timing_data["_metadata"]["total_entries"]
@@ -56,6 +89,19 @@ class TestTimingMetadata:
 
     def test_purpose_is_timing(self, timing_data):
         assert timing_data["_metadata"]["purpose"] == "timing_optimization"
+
+    def test_metadata_reports_the_real_state(self, timing_data, rules):
+        meta = timing_data["_metadata"]
+        assert meta["runtime_policy"] == "verified_only"
+        counts = meta["status_counts"]
+        actual_verified = sum(1 for r in rules if r["review_status"] == "verified")
+        actual_pending = sum(
+            1 for r in rules if r["review_status"] == "needs_revision"
+        )
+        assert counts["verified"] == actual_verified
+        assert counts["needs_revision"] == actual_pending
+        ledger = json.loads(REJECTION_LEDGER.read_text())
+        assert counts["rejected"] == len(ledger["rejected"])
 
 
 # ── Schema contract per rule ───────────────────────────────────────
@@ -70,45 +116,107 @@ class TestTimingRuleSchema:
             assert r["id"].startswith("timing_"), f"ID must start with 'timing_': {r['id']}"
 
     def test_required_fields_present(self, rules):
-        required = {"id", "ingredient1", "ingredient2", "rule_type", "advice", "mechanism",
-                     "separation_hours", "score_impact", "evidence_level", "sources"}
+        required = {
+            "id",
+            "ingredient1",
+            "timing_relation",
+            "category",
+            "applies_to",
+            "actionability",
+            "source_authority",
+            "review_status",
+            "advice",
+            "mechanism",
+            "score_impact",
+            "evidence_level",
+            "sources",
+        }
         for r in rules:
             missing = required - set(r.keys())
             assert not missing, f"Rule {r['id']} missing fields: {missing}"
 
-    def test_rule_type_valid(self, rules):
+    def test_no_scheduler_fields_survive(self, rules):
         for r in rules:
-            assert r["rule_type"] in VALID_RULE_TYPES, f"Rule {r['id']} has invalid rule_type: {r['rule_type']}"
+            present = FORBIDDEN_LEGACY_FIELDS & set(r.keys())
+            assert not present, f"Rule {r['id']} still carries scheduler fields: {present}"
+
+    def test_relation_type_valid(self, rules):
+        for r in rules:
+            relation = r["timing_relation"]
+            assert relation["type"] in VALID_RELATION_TYPES, \
+                f"Rule {r['id']} has invalid relation: {relation['type']}"
+
+    def test_separation_relations_have_positive_hours(self, rules):
+        for r in rules:
+            relation = r["timing_relation"]
+            if relation["type"] in {"separate_from", "separate_from_medications"}:
+                hours = relation.get("minimum_hours")
+                assert isinstance(hours, int) and hours > 0, \
+                    f"Rule {r['id']} needs a positive minimum_hours"
+
+    def test_event_relations_are_user_anchored(self, rules):
+        """An event must be something the user can answer, never a clock time."""
+        for r in rules:
+            relation = r["timing_relation"]
+            if relation["type"] not in {"before_event", "after_event"}:
+                assert "event" not in relation, f"{r['id']} authors a stray event"
+                continue
+            assert relation.get("event") in VALID_EVENTS, r["id"]
+            minimum = relation.get("minimum_minutes")
+            assert isinstance(minimum, int) and minimum > 0, r["id"]
+            maximum = relation.get("maximum_minutes")
+            if maximum is not None:
+                assert maximum >= minimum, r["id"]
+
+    def test_only_binary_relations_carry_a_second_identity(self, rules):
+        for r in rules:
+            is_binary = r["timing_relation"]["type"] in BINARY_RELATION_TYPES
+            has_second = bool(r.get("ingredient2_tags") or r.get("ingredient2_rxcuis"))
+            assert has_second == is_binary, (
+                f"{r['id']}: a second identity is required for a binary relation "
+                f"and forbidden otherwise"
+            )
+
+    def test_every_rule_has_a_first_identity(self, rules):
+        for r in rules:
+            assert r.get("ingredient1_tags") or r.get("ingredient1_rxcuis"), r["id"]
+
+    def test_identity_tags_are_canonical_shape(self, rules):
+        """Tags must look like catalog tags, not free-text ingredient names."""
+        for r in rules:
+            for key in ("ingredient1_tags", "ingredient2_tags"):
+                for tag in r.get(key, []):
+                    assert tag == tag.lower(), f"{r['id']}: {tag} is not lowercase"
+                    assert " " not in tag, f"{r['id']}: {tag} contains a space"
+                    assert "-" not in tag, f"{r['id']}: {tag} contains a hyphen"
+
+    def test_taxonomy_fields_valid(self, rules):
+        for r in rules:
+            assert r["category"] in VALID_CATEGORIES, r["id"]
+            assert r["applies_to"] in VALID_APPLIES_TO, r["id"]
+            assert r["actionability"] in VALID_ACTIONABILITY, r["id"]
+            assert r["review_status"] in VALID_REVIEW_STATUS, r["id"]
+            assert r["source_authority"] in VALID_SOURCE_AUTHORITY, r["id"]
 
     def test_evidence_level_valid(self, rules):
         for r in rules:
-            assert r["evidence_level"] in VALID_EVIDENCE_LEVELS, f"Rule {r['id']} has invalid evidence_level"
+            assert r["evidence_level"] in VALID_EVIDENCE_LEVELS, r["id"]
 
     def test_score_impact_is_int(self, rules):
         for r in rules:
             assert isinstance(r["score_impact"], int), f"Rule {r['id']} score_impact must be int"
 
-    def test_separation_hours_nullable(self, rules):
-        for r in rules:
-            val = r["separation_hours"]
-            assert val is None or isinstance(val, (int, float)), f"Rule {r['id']} separation_hours must be int/float/null"
-
-    def test_separate_rules_have_hours(self, rules):
-        for r in rules:
-            if r["rule_type"] == "separate":
-                assert r["separation_hours"] is not None and r["separation_hours"] > 0, \
-                    f"Separate rule {r['id']} must specify positive separation_hours"
-
     def test_ingredients_lowercase(self, rules):
         for r in rules:
-            assert r["ingredient1"] == r["ingredient1"].lower(), f"Rule {r['id']} ingredient1 must be lowercase"
-            assert r["ingredient2"] == r["ingredient2"].lower(), f"Rule {r['id']} ingredient2 must be lowercase"
+            assert r["ingredient1"] == r["ingredient1"].lower(), r["id"]
+            if "ingredient2" in r:
+                assert r["ingredient2"] == r["ingredient2"].lower(), r["id"]
 
     def test_medication_rules_author_exact_live_rxcuis(self, rules):
         levothyroxine_rules = [
             rule for rule in rules
             if rule["ingredient1"] == "levothyroxine"
-            or rule["ingredient2"] == "levothyroxine"
+            or rule.get("ingredient2") == "levothyroxine"
         ]
 
         assert levothyroxine_rules
@@ -120,33 +228,117 @@ class TestTimingRuleSchema:
                 assert rule.get("ingredient2_rxcuis") == ["10582"], rule["id"]
                 assert "ingredient1_rxcuis" not in rule
 
-    def test_time_of_day_rules_author_machine_readable_daily_slots(self, rules):
-        for rule in rules:
-            daily_slots = rule.get("daily_slots")
-            if rule["rule_type"] == "time_of_day":
-                assert isinstance(daily_slots, list) and daily_slots, rule["id"]
-                assert len(daily_slots) == len(set(daily_slots)), rule["id"]
-                assert set(daily_slots) <= VALID_DAILY_SLOTS, rule["id"]
-            else:
-                assert daily_slots is None, (
-                    f"{rule['id']} authors daily_slots outside time_of_day"
+    def test_optional_category_requires_clinician_approval(self, rules):
+        """Failing to qualify for the other categories is not an argument."""
+        for r in rules:
+            if r["category"] == "optional" and r["review_status"] == "verified":
+                assert r.get("clinician_approved") is True, (
+                    f"{r['id']} is a verified optional rule without explicit "
+                    f"clinician approval"
                 )
 
-    def test_daily_plan_eligibility_is_boolean_and_fail_closed_for_context(self, rules):
-        for rule in rules:
-            value = rule.get("daily_plan_eligible", True)
-            assert isinstance(value, bool), rule["id"]
+    def test_migration_placeholders_can_never_be_verified(self, rules):
+        """A parked relation must be structurally unpublishable.
 
-        excluded = {
-            "timing_magnesium_evening",
-            "timing_probiotics_by_formulation",
-            "timing_psyllium_water_med_spacing",
-            "timing_bromelain_timing_by_purpose",
-        }
-        by_id = {rule["id"]: rule for rule in rules}
-        assert excluded <= by_id.keys()
-        for rule_id in excluded:
-            assert by_id[rule_id]["daily_plan_eligible"] is False, rule_id
+        The schema migration had to give every rule a parseable relation. Where
+        the legacy `take_together` had no equivalent, it parked `with_food` —
+        a value the pipeline never authored. Promoting such a rule would ship a
+        placeholder as clinical guidance.
+        """
+        for r in rules:
+            if r.get("_relation_is_migration_placeholder"):
+                assert r["review_status"] != "verified", (
+                    f"{r['id']} carries a placeholder relation and must be "
+                    f"re-authored from its source before promotion"
+                )
+
+    def test_min_dose_shape(self, rules):
+        """A dose gate either gates, or the artifact is rejected.
+
+        The legacy parser accepted a malformed min_dose by silently dropping the
+        threshold, converting a dose-conditional rule into one that always
+        fires. Nothing tested this on either side of the sync.
+        """
+        for r in rules:
+            if "min_dose" not in r:
+                continue
+            gate = r["min_dose"]
+            assert isinstance(gate, dict), r["id"]
+            assert set(gate) == {"tag", "mg"}, (
+                f"{r['id']}: min_dose must be exactly {{tag, mg}}, got {sorted(gate)}"
+            )
+            assert isinstance(gate["tag"], str) and gate["tag"].strip(), r["id"]
+            assert gate["tag"] == gate["tag"].lower(), r["id"]
+            assert isinstance(gate["mg"], (int, float)) and gate["mg"] > 0, r["id"]
+
+
+# ── Publication gate ───────────────────────────────────────────────
+
+class TestTimingPublication:
+    def test_no_rule_is_verified_without_canonical_identity(self, rules):
+        for r in rules:
+            if r["review_status"] != "verified":
+                continue
+            assert r.get("ingredient1_tags") or r.get("ingredient1_rxcuis"), r["id"]
+
+    def test_rejected_rules_are_not_shipped_in_the_runtime_artifact(self, rules):
+        for r in rules:
+            assert r["review_status"] != "rejected", (
+                f"{r['id']} is rejected and must be moved to the rejection "
+                f"ledger, not left in the runtime artifact"
+            )
+
+    def test_rejection_ledger_records_every_removed_rule(self, rules):
+        """Runtime omission must not erase clinical history.
+
+        Without a ledger the same unsupported rule gets rediscovered and
+        reintroduced later, with the same citation, by someone acting in good
+        faith.
+        """
+        if not REJECTION_LEDGER.exists():
+            pytest.skip("no rules rejected yet")
+        ledger = json.loads(REJECTION_LEDGER.read_text())
+        shipped = {r["id"] for r in rules}
+        for entry in ledger["rejected"]:
+            for field in (
+                "id",
+                "prior_claim",
+                "rejection_reason",
+                "source_reviewed",
+                "reviewer",
+                "reviewed_on",
+            ):
+                assert field in entry, f"{entry.get('id')} missing {field}"
+            assert entry["id"] not in shipped, (
+                f"{entry['id']} is both rejected and shipped"
+            )
+            # A fingerprint makes reintroduction under a different id or
+            # slightly reworded advice detectable instead of invisible.
+            assert entry.get("clinical_fingerprint"), (
+                f"{entry['id']} has no clinical fingerprint"
+            )
+
+    def test_no_shipped_rule_matches_a_rejected_fingerprint(self, rules):
+        """Guard against a rejected claim returning under a new id."""
+        if not REJECTION_LEDGER.exists():
+            pytest.skip("no rules rejected yet")
+        ledger = json.loads(REJECTION_LEDGER.read_text())
+        rejected_pairs = set()
+        for entry in ledger["rejected"]:
+            fp = entry.get("clinical_fingerprint") or {}
+            pair = (fp.get("ingredient1"), fp.get("ingredient2"))
+            if all(pair):
+                rejected_pairs.add(tuple(sorted(str(x) for x in pair)))
+
+        for r in rules:
+            pair = (r["ingredient1"], r.get("ingredient2"))
+            if not all(pair):
+                continue
+            key = tuple(sorted(str(x) for x in pair))
+            assert key not in rejected_pairs, (
+                f"{r['id']} reintroduces a rejected claim ({key}). If this is "
+                f"deliberate, the ledger entry needs a superseding_rule."
+            )
 
 
 # ── Source quality ─────────────────────────────────────────────────
@@ -168,6 +360,25 @@ class TestTimingSources:
                 assert "url" in s and s["url"].startswith("http"), \
                     f"Rule {r['id']} source missing valid URL"
 
+    def test_source_type_matches_the_url(self, rules):
+        """A PubMed URL typed as `reference` lets a primary study masquerade
+        as a general reference — and vice versa — which defeats the whole point
+        of keeping source_authority separate from evidence_level."""
+        for r in rules:
+            for s in r["sources"]:
+                if "pubmed.ncbi.nlm.nih.gov" in s["url"]:
+                    assert s["source_type"] == "pubmed", (
+                        f"{r['id']}: PubMed URL typed as {s['source_type']}"
+                    )
+                if "dailymed.nlm.nih.gov" in s["url"]:
+                    assert s["source_type"] == "fda", (
+                        f"{r['id']}: DailyMed URL typed as {s['source_type']}"
+                    )
+                if "ods.od.nih.gov" in s["url"]:
+                    assert s["source_type"] in {"nih_ods", "reference"}, (
+                        f"{r['id']}: ODS URL typed as {s['source_type']}"
+                    )
+
     def test_pubmed_urls_are_specific(self, rules):
         """PubMed URLs must point to a specific article, not a search query."""
         for r in rules:
@@ -177,48 +388,118 @@ class TestTimingSources:
                     assert "?term=" not in url and "/?term=" not in url, \
                         f"Rule {r['id']} has query-placeholder PubMed URL: {url}"
 
+    def test_authority_matches_at_least_one_cited_source(self, rules):
+        """`source_authority` is a claim about provenance, not a vibe.
+
+        A mechanism paper cannot justify fda_label, and a PubMed citation
+        cannot justify product_label. Each authority must be backed by a
+        source of a compatible type.
+        """
+        compatible = {
+            "fda_label": {"fda"},
+            "product_label": {"fda", "reference"},
+            "guideline": {"reference", "nih_ods", "nccih", "pubmed"},
+            "systematic_review": {"pubmed"},
+            "clinical_study": {"pubmed"},
+            "mechanism": {"pubmed", "reference"},
+            "reference": {"reference", "nih_ods", "nccih", "pubmed", "fda"},
+        }
+        for r in rules:
+            if r["review_status"] != "verified":
+                continue
+            allowed = compatible[r["source_authority"]]
+            types = {s["source_type"] for s in r["sources"]}
+            assert types & allowed, (
+                f"{r['id']} claims source_authority={r['source_authority']} "
+                f"but cites only {sorted(types)}"
+            )
+
+    def test_verified_rules_carry_canaries(self, rules):
+        for r in rules:
+            if r["review_status"] != "verified":
+                continue
+            canaries = r.get("canaries")
+            assert canaries, f"{r['id']} is verified without canaries"
+            assert canaries.get("negative"), (
+                f"{r['id']} has no negative canary — reachability alone does "
+                f"not prove a rule stops firing where it should not"
+            )
+
+    def test_suppressed_rules_record_structured_blockers(self, rules):
+        for r in rules:
+            if r["review_status"] != "needs_revision":
+                continue
+            assert r.get("review_note"), f"{r['id']} suppressed with no reason"
+            assert r.get("review_blockers"), (
+                f"{r['id']} has no structured blockers, so the remaining work "
+                f"is not measurable"
+            )
+
+    def test_fda_authority_is_backed_by_an_fda_source(self, rules):
+        """`source_authority: fda_label` is a claim about provenance.
+
+        It is the strongest authority the app can display, so it must not be
+        assignable to a rule whose only citation is a mechanism paper.
+        """
+        for r in rules:
+            if r["source_authority"] != "fda_label":
+                continue
+            assert any(s["source_type"] == "fda" for s in r["sources"]), (
+                f"{r['id']} claims FDA-label authority without an FDA source"
+            )
+
 
 # ── Data quality ───────────────────────────────────────────────────
 
 class TestTimingDataQuality:
-    def test_minimum_rule_count(self, rules):
-        assert len(rules) >= 30, f"Expected >=30 rules, got {len(rules)}"
+    def test_corpus_does_not_silently_empty(self, rules):
+        """A count floor is the wrong guard now.
 
-    def test_established_conflicts_have_penalty(self, rules):
+        Section 2 shrinks the corpus deliberately — a rule whose source does
+        not support it is removed, and that is the product working, not
+        failing. What must not happen is the file quietly emptying, or rules
+        vanishing without a ledger entry (covered by
+        test_rejection_ledger_records_every_removed_rule).
+        """
+        assert rules, "the timing corpus is empty"
+        verified = [r for r in rules if r["review_status"] == "verified"]
+        assert verified, (
+            "no rule is verified — the feature would render nothing at all"
+        )
+
+    def test_established_separations_have_penalty(self, rules):
         for r in rules:
-            if r["rule_type"] == "separate" and r["evidence_level"] == "established":
+            if (
+                r["timing_relation"]["type"] in {"separate_from", "separate_from_medications"}
+                and r["evidence_level"] == "established"
+            ):
                 assert r["score_impact"] < 0, \
                     f"Established separation rule {r['id']} should have negative score_impact"
 
-    def test_take_together_rules_have_bonus_or_neutral(self, rules):
-        for r in rules:
-            if r["rule_type"] == "take_together":
-                assert r["score_impact"] >= 0, \
-                    f"Take-together rule {r['id']} should have non-negative score_impact"
-
     def test_iron_calcium_separation_exists(self, rules):
-        """The most clinically important timing rule must be present."""
-        pairs = {(r["ingredient1"], r["ingredient2"]) for r in rules}
+        """The most clinically important supplement pair must be present."""
+        pairs = {(r["ingredient1"], r.get("ingredient2")) for r in rules}
         assert ("iron", "calcium") in pairs or ("calcium", "iron") in pairs
 
     def test_actionable_pairs_are_unique(self, rules):
         pairs = [
-            tuple(sorted((r["ingredient1"], r["ingredient2"])))
+            tuple(sorted((r["ingredient1"], r.get("ingredient2") or "")))
             for r in rules
         ]
         duplicates = sorted({pair for pair in pairs if pairs.count(pair) > 1})
         assert duplicates == [], f"Duplicate timing pairs: {duplicates}"
 
-    def test_psyllium_water_and_med_spacing_rule_exists(self, rules):
+    def test_psyllium_med_spacing_rule_exists(self, rules):
         rule = next(
             (r for r in rules if r["id"] == "timing_psyllium_water_med_spacing"),
             None,
         )
         assert rule is not None
         assert rule["ingredient1"] == "psyllium"
-        assert rule["ingredient2"] == "medications"
-        assert rule["rule_type"] == "separate"
-        assert rule["separation_hours"] == 3
+        # No specific second bottle exists here, so the relation must not
+        # invent one.
+        assert rule["timing_relation"]["type"] == "separate_from_medications"
+        assert rule["timing_relation"]["minimum_hours"] == 3
         assert "8 oz" in rule["advice"]
         assert any("medlineplus.gov" in s["url"] for s in rule["sources"])
 
@@ -234,16 +515,53 @@ class TestTimingDataQuality:
 
         assert rejected.isdisjoint({r["id"] for r in rules})
 
-    def test_fat_soluble_copy_only_names_the_nutrient_in_the_rule(self, rules):
-        rule = next(
-            r for r in rules
-            if r["id"] == "timing_fat_soluble_vitamins_with_food"
-        )
-
-        assert "vitamin a" in rule["advice"].lower()
-        assert "vitamins a, d, e, and k" not in rule["advice"].lower()
+    def test_rejected_vitamin_a_rule_does_not_return(self, rules):
+        """timing_fat_soluble_vitamins_with_food was rejected on 2026-08-01:
+        the ODS vitamin A page contains no fat or food guidance at all, and the
+        catalog tags beta-carotene products as `vitamin_a`, so retinol and
+        provitamin carotenoids cannot be told apart by tag."""
+        assert "timing_fat_soluble_vitamins_with_food" not in {
+            r["id"] for r in rules
+        }
 
     def test_advice_is_consumer_friendly(self, rules):
         for r in rules:
             assert len(r["advice"]) >= 20, f"Rule {r['id']} advice too short"
             assert len(r["advice"]) <= 300, f"Rule {r['id']} advice too long for UI"
+
+    def test_advice_voice_stays_calm_advisory(self, rules):
+        """No directives anywhere in consumer-facing copy, not just at the start.
+
+        The project voice is calm-advisory: "Worth a conversation with your
+        doctor", never "Avoid" / "Do not" / "Never". Checking only the opening
+        word let a directive sit mid-sentence, which is where they actually
+        occur. Only VERIFIED rules are gated — a suppressed rule's copy is
+        rewritten as part of its promotion.
+        """
+        banned = (
+            "avoid",
+            "do not ",
+            "don't ",
+            "never ",
+            "must ",
+            "stop ",
+            "should not",
+        )
+        for r in rules:
+            if r["review_status"] != "verified":
+                continue
+            lowered = r["advice"].lower()
+            found = [phrase for phrase in banned if phrase in lowered]
+            assert not found, (
+                f"{r['id']} uses directive voice {found}: {r['advice'][:70]}"
+            )
+
+    def test_no_advice_shouts(self, rules):
+        """All-caps words read as alarm, which the voice rules exclude."""
+        import re as _re
+
+        for r in rules:
+            shouted = _re.findall(r"\b[A-Z]{3,}\b", r["advice"])
+            allowed = {"EGCG", "CoQ10", "DHA", "EPA", "ALA", "IU"}
+            offenders = [w for w in shouted if w not in allowed]
+            assert not offenders, f"{r['id']} shouts: {offenders}"

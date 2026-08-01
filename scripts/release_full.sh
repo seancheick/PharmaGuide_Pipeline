@@ -592,6 +592,12 @@ run_strict_gate "export contract" \
 run_strict_gate "Flutter reference-data parity" \
   "$PG_PYTHON" scripts/sync_flutter_reference_data.py --flutter-repo "$FLUTTER_REPO"
 
+# The sync above WRITES the Flutter copies, so on its own it can only ever
+# agree with itself. Re-run in check mode so the committed state is verified
+# independently and a failed sync cannot pass silently.
+run_strict_gate "Flutter reference-data verified" \
+  "$PG_PYTHON" scripts/sync_flutter_reference_data.py --check --flutter-repo "$FLUTTER_REPO"
+
 # A fresh per-brand rebuild can materialize score changes from reviewed source
 # data that earlier scored artifacts had not incorporated. Block publication
 # until the snapshot baseline records any such reviewed change.
@@ -745,9 +751,9 @@ INTERACTION_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sy
 # ---------------------------------------------------------------------------
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   if git -C "$FLUTTER_REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    if git -C "$FLUTTER_REPO" status --porcelain -- assets/db assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/data/product_type_vocab.json | grep -q .; then
+    if git -C "$FLUTTER_REPO" status --porcelain -- assets/db assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json | grep -q .; then
       info "Committing Flutter bundle and canonical reference data (local) so storage cleanup runs aligned..."
-      git -C "$FLUTTER_REPO" add assets/db/ assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/data/product_type_vocab.json
+      git -C "$FLUTTER_REPO" add assets/db/ assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json
       if git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}"; then
         ok "Flutter bundle committed locally (push remains manual)"
       else
