@@ -44,13 +44,22 @@ def test_scorer_contract_no_longer_advertises_a_display_score():
 
 
 def test_no_production_source_references_the_display_layer():
-    """A deleted concept must not survive as a dangling reference."""
+    """A deleted concept must not survive as a dangling reference.
+
+    Searches TRACKED source only. An earlier version walked the live working
+    tree, which made it order-dependent: other tests write generated artifacts
+    under ``scripts/`` while this one runs, so it passed alone and failed in the
+    full suite. The invariant that actually matters is about committed source,
+    and ``git grep`` answers exactly that — deterministically, and without
+    seeing anything a test happens to be writing at the time.
+    """
     result = subprocess.run(
-        ["grep", "-rl", "-e", "display_calibration", "-e", "v4_display_100",
-         "--include=*.py", "--include=*.json",
-         "--exclude-dir=tests", "--exclude-dir=products", "."],
+        ["git", "grep", "--name-only", "-e", "display_calibration", "-e", "v4_display_100",
+         "--", "*.py", "*.json", ":!:tests/", ":!:products/"],
         cwd=SCRIPTS, capture_output=True, text=True,
     )
+    # git grep exits 1 when there are no matches, which is the passing case.
+    assert result.returncode in (0, 1), f"git grep failed: {result.stderr.strip()}"
     offenders = [line for line in result.stdout.splitlines() if line.strip()]
     assert offenders == [], f"dangling display-calibration references: {offenders}"
 

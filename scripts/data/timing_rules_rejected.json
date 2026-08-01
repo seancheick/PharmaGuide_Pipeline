@@ -1,0 +1,375 @@
+{
+  "_metadata": {
+    "description": "Clinical rejection ledger for timing rules.",
+    "purpose": "timing_optimization_rejections",
+    "schema_version": "1.0.0",
+    "rationale": "Runtime omission must not erase clinical history. Without this ledger the same unsupported rule gets rediscovered and reintroduced later, with the same citation, by someone acting in good faith.",
+    "total_entries": 13
+  },
+  "rejected": [
+    {
+      "id": "timing_magnesium_evening",
+      "prior_claim": "If you take magnesium for sleep, evening is a reasonable time — but mainly as a well-tolerated wind-down habit, not a proven sleep aid.",
+      "rejection_reason": "The rule authored no defensible timing relation. Its own mechanism text conceded 'No trial has compared morning versus evening dosing', and both cited papers confirm that: neither compares evening to morning administration, so neither can support a time-of-day recommendation. Under the schema-6 taxonomy the rule answers none of the three category questions — it is not a separation, it does not say how to take the product, and it is not a supported optimization. With the time_of_day relation removed it had no honest home; the mechanical migration parked it as `with_food`, which the rule never claimed. It already shipped suppressed (daily_plan_eligible: false).",
+      "source_reviewed": [
+        {
+          "pmid": "35184264",
+          "doi": "10.1007/s12011-022-03162-1",
+          "citation": "Arab A, Rafie N, Amani R, Shirani F — The Role of Magnesium in Sleep Health: a Systematic Review of Available Literature. Biol Trace Elem Res. 2022.",
+          "verified_on": "2026-08-01",
+          "finding": "Observational studies suggest an association between magnesium status and sleep quality, but the randomized trials 'showed an uncertain association'. Does not address time of day."
+        },
+        {
+          "pmid": "33865376",
+          "doi": "10.1186/s12906-021-03297-z",
+          "citation": "Mah J, Pitre T — Oral magnesium supplementation for insomnia in older adults: a Systematic Review & Meta-Analysis. BMC Complement Med Ther. 2021.",
+          "verified_on": "2026-08-01",
+          "finding": "Three RCTs, 151 participants, all at moderate-to-high risk of bias; evidence graded low to very low. Reports sleep-onset latency, not administration time. Does not address time of day."
+        },
+        {
+          "reference": "knowledge/timing-rules-research.md section 4 (TIME-OF-DAY) — classifies evening-magnesium as folklore"
+        }
+      ],
+      "reviewer": "engineering — applying the determination already recorded in knowledge/timing-rules-research.md and the rule's own authored mechanism text; no new clinical judgment made",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": "timing_magnesium_with_food",
+      "notes": "Magnesium GI-tolerance guidance is preserved by timing_magnesium_with_food, which is separately pending Section 2 review. If a clinician later wants a sleep-related magnesium note, it belongs in research or education copy, not as a scheduling rule. Citation note: knowledge/timing-rules-research.md previously attributed PMID 35184264 to 'Mah 2022'; content verification on 2026-08-01 confirmed 35184264 is Arab et al. and Mah is 33865376 (2021). The doc has been corrected.",
+      "clinical_fingerprint": {
+        "ingredient1": "magnesium",
+        "ingredient2": "sleep",
+        "ingredient1_tags": [
+          "magnesium"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "legacy_rule_type": "time_of_day",
+          "legacy_daily_slots": [
+            "with_dinner",
+            "bedtime"
+          ]
+        },
+        "mechanism": "Magnesium's effect on sleep is modest and seen mainly in people who are low in magnesium or have insomnia... No trial has compared morning versus evening dosing.",
+        "_reconstructed": "Captured from the pre-rejection artifact; the fingerprint field postdates this entry."
+      }
+    },
+    {
+      "id": "timing_vitamin_b12_folate_together",
+      "prior_claim": "Vitamin B12 and folate work synergistically and can be taken together at any time of day.",
+      "rejection_reason": "The advice is a no-op: it states the two 'can be taken together at any time of day', which is an explicit assertion that timing does not matter — yet it was encoded as a scheduling constraint. Its source is the NIH ODS folate factsheet, a general reference that establishes metabolic interdependence, not co-administration benefit. A shared biological pathway is not evidence for simultaneous dosing. It was also unreachable: it aliased to `vitamin_b12` and `folate`, neither of which the catalog emits (the real tags are vitamin_b12_cobalamin, 1580 products, and vitamin_b9_folate, 1399). Fixing the identity would only make a rule that advises nothing reachable by 2,979 products.",
+      "source_reviewed": [
+        "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "vitamin b12",
+        "ingredient2": "folate",
+        "ingredient1_tags": [
+          "vitamin_b12"
+        ],
+        "ingredient2_tags": [
+          "folate",
+          "vitamin_b9"
+        ],
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "legacy_rule_type": "take_together",
+          "migration_placeholder": "with_food"
+        },
+        "mechanism": "Shared one-carbon metabolism. Neither tag was ever emitted by the catalog (real tags: vitamin_b12_cobalamin, vitamin_b9_folate).",
+        "_reconstructed": "Captured from the pre-rejection artifact; the fingerprint field postdates this entry."
+      }
+    },
+    {
+      "id": "timing_coffee_iron_separate",
+      "prior_claim": "Avoid taking iron with coffee — tannins in coffee can reduce iron absorption by 40% or more.",
+      "rejection_reason": "NO HONEST IDENTITY IN THIS SCHEMA. The science is sound: Morck 1983 (PMID 6402915) measured a 39% reduction in iron absorption from a meal taken with coffee, and found 'No decrease in iron absorption occurred when coffee was consumed 1 h before a meal'. But the actor is coffee the beverage, and the shipped catalog emits no `coffee` tag (nearest: green_coffee_bean 18 products, coffee_fruit 13, chlorogenic_acids 2). Coffee is a dietary exposure, not a stack row. The rule was therefore keyed to `caffeine`, which the app expanded to include `guarana`, so 270 products received advice about a beverage they do not contain. Re-pointing the identity cannot fix this. Rejected rather than suppressed so the false identity cannot be inherited by a future promotion. Reintroduce only when the app can represent dietary exposure; caffeine and guarana are permanently locked as negative canaries.",
+      "source_reviewed": [
+        "https://pubmed.ncbi.nlm.nih.gov/6402915/"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "caffeine",
+        "ingredient2": "iron",
+        "ingredient1_tags": [
+          "caffeine",
+          "guarana"
+        ],
+        "ingredient2_tags": [
+          "iron"
+        ],
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "separate_from",
+          "minimum_hours": 1
+        },
+        "mechanism": "Chlorogenic acid and tannins in coffee bind non-heme iron in the GI lumen forming poorly soluble complexes; the inhibitory effect is dose-dependent and persists for up to one hour after coffee consumption."
+      }
+    },
+    {
+      "id": "timing_thyroid_med_coffee_separate",
+      "prior_claim": "Take levothyroxine at least 60 minutes before coffee — espresso reduces absorption by up to 36%.",
+      "rejection_reason": "NO HONEST IDENTITY IN THIS SCHEMA. Same blocker, and clinically the more important of the two: Benvenga 2008 (PMID 18341376) measured coffee lowering T4 absorption by 27-36%, and Skelin 2017 (PMID 28153426) ranks coffee among the substances with the greatest impact on levothyroxine absorption. The medication side is sound (RxCUI 10582); the coffee side has no catalog identity, and keying it to `caffeine` meant a caffeine tablet triggered advice about espresso and levothyroxine. Rejected rather than suppressed so the identity cannot be inherited. This is the highest-value rule to reinstate once a dietary-exposure surface exists.",
+      "source_reviewed": [
+        "https://pubmed.ncbi.nlm.nih.gov/18341376/"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "levothyroxine",
+        "ingredient2": "caffeine",
+        "ingredient1_tags": null,
+        "ingredient2_tags": [
+          "caffeine",
+          "guarana"
+        ],
+        "ingredient1_rxcuis": [
+          "10582"
+        ],
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "separate_from",
+          "minimum_hours": 1
+        },
+        "mechanism": "Coffee (especially espresso) reduces levothyroxine absorption by 25-36% when taken concurrently. The mechanism involves altered intestinal motility and pH changes from coffee's chlorogenic acids and other compounds that interfere with T4 dissolution and absorption in the proximal small intestine."
+      }
+    },
+    {
+      "id": "timing_iron_vitamin_c_together",
+      "prior_claim": "Take iron and vitamin C together — vitamin C enhances non-heme iron absorption by 2 to 6 times.",
+      "rejection_reason": "CONTRADICTED BY A RANDOMIZED TRIAL. The mechanism is real — Hallberg 1989 (PMID 2507689) supports ascorbate enhancing nonheme iron absorption within a meal — but the clinical question was settled against the rule. Li et al. 2020 (PMID 33136134, JAMA Netw Open, equivalence RCT, 440 adults with iron-deficiency anemia) concluded: 'oral iron supplements alone were equivalent to oral iron supplements plus vitamin C in improving hemoglobin recovery and iron absorption. These findings suggest that on-demand vitamin C supplements are not essential to take along with oral iron supplements for patients with IDA.' A per-meal absorption effect that does not change hemoglobin recovery is not a reason to instruct co-dosing. The rule also never scoped itself to nonheme iron, which is the only form the mechanism applies to.",
+      "source_reviewed": [
+        "https://pubmed.ncbi.nlm.nih.gov/2507689/"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "iron",
+        "ingredient2": "vitamin c",
+        "ingredient1_tags": [
+          "iron"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "with_food"
+        },
+        "mechanism": "Ascorbic acid reduces ferric iron (Fe³⁺) to ferrous iron (Fe²⁺), the form transported by DMT1, and forms a soluble chelate that resists inhibition by phytate and tannins."
+      }
+    },
+    {
+      "id": "timing_curcumin_with_fat_and_pepper",
+      "prior_claim": "Take turmeric or curcumin with a fatty meal and alongside black pepper (piperine) to dramatically increase absorption.",
+      "rejection_reason": "SAFETY, AND THE CITED SOURCE DOES NOT MAKE THE CLAIM. The rule told users to add black pepper / piperine with no reference to their medication list. Verification on 2026-08-01 found NCCIH makes no such claim at all: its turmeric page mentions piperine only as a bioavailability aid, and the words 'cytochrome' and 'P-glycoprotein' do not appear on it or on its herb-drug-interactions page. What IS established, from separate sources that must not be fused: piperine raises exposure to phenytoin (PMID 16767797), propranolol and theophylline (PMID 1815977) and carbamazepine (PMID 19283724) in human PK studies, whose authors attribute the effect to ABSORPTION; and piperine inhibits CYP3A4 and P-glycoprotein in vitro (PMID 12130727, Caco-2 and human liver microsomes). Recommending an extra bioactive substance is not timing guidance. A fat-with-meal rule could be researched separately.",
+      "source_reviewed": [
+        "https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/curcumin"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "turmeric",
+        "ingredient2": null,
+        "ingredient1_tags": [
+          "turmeric",
+          "curcumin"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "with_food"
+        },
+        "mechanism": "Curcumin is hydrophobic with very low oral bioavailability; dietary fat promotes micellar solubilization, while piperine inhibits hepatic and intestinal glucuronidation, together increasing systemic curcumin exposure by up to 2,000%."
+      }
+    },
+    {
+      "id": "timing_fat_soluble_vitamins_with_food",
+      "prior_claim": "Take vitamin A with a meal containing some fat to support absorption.",
+      "rejection_reason": "SOURCE CONTAINS NO SUCH GUIDANCE. Verified 2026-08-01 against https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/ : the page never mentions dietary fat in relation to vitamin A absorption and issues no administration instruction. What it does say cuts the other way — 'The absorption of preformed vitamin A esters from dietary supplements is 70%-90%, and that of beta-carotene ranges from 8.7% to 65%.' Supplements contain preformed esters, which already absorb at 70-90%. The identity is also unusable as scoped: the catalog tags 'Beta Carotene 7,500 mcg' as `vitamin_a`, so retinol and provitamin carotenoids cannot be distinguished by tag.",
+      "source_reviewed": [
+        "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "vitamin a",
+        "ingredient2": null,
+        "ingredient1_tags": [
+          "vitamin_a"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "with_food"
+        },
+        "mechanism": "Vitamin A is incorporated into mixed micelles formed from bile salts and dietary fatty acids before intestinal absorption."
+      }
+    },
+    {
+      "id": "timing_vitamin_k_with_food",
+      "prior_claim": "Take vitamin K with a meal containing fat — it is fat-soluble and absorption is minimal without dietary lipids.",
+      "rejection_reason": "CONTRADICTED BY ITS OWN SOURCE. The rule claimed 'absorption is minimal without dietary lipids'. Verified 2026-08-01 against https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/ , confirmed by raw-HTML grep: 'The absorption rate of phylloquinone in its free form is approximately 80%, but its absorption rate from foods is significantly lower.' The word 'minimal' does not appear on the page. The fat benefit the page describes applies to phylloquinone FROM VEGETABLES, where chloroplast binding is the limiting factor, not to supplements — 'the body absorbs only 4% to 17% as much phylloquinone from spinach as from a tablet'. The rule transplanted a food-matrix finding onto supplements and inverted the magnitude. Identity was separately defective: `vitamin_k` reaches 248 of 802 vitamin-K products; the catalog emits vitamin_k1 (633) and vitamin_k2 (193).",
+      "source_reviewed": [
+        "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "vitamin k",
+        "ingredient2": null,
+        "ingredient1_tags": [
+          "vitamin_k"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "with_food"
+        },
+        "mechanism": "Phylloquinone (K1) and menaquinones (K2) are fat-soluble; co-ingestion with fat significantly increases their micellar incorporation and subsequent chylomicron-mediated absorption from the small intestine."
+      }
+    },
+    {
+      "id": "timing_zinc_with_food",
+      "prior_claim": "Take zinc with a small amount of food to prevent nausea — zinc on an empty stomach commonly causes GI upset.",
+      "rejection_reason": "SOURCE DOES NOT SUPPORT IT, AND OMITS A REAL TRADEOFF. Verified 2026-08-01 against https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/ , confirmed by raw-HTML grep: 'empty stomach' and 'with food' both appear zero times. The page attributes GI symptoms to DOSE, not to an empty stomach — 'High zinc intakes can cause nausea, dizziness, headaches, gastric distress, vomiting, and loss of appetite' — so the rule invented its causal mechanism. With-food dosing also carries an undisclosed cost the page does state: 'Phytates ... bind some minerals such as zinc in the intestine and form an insoluble complex that inhibits zinc absorption.' A dose-scoped tolerability rule could be authored later; this one cannot be repaired by rewording.",
+      "source_reviewed": [
+        "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "zinc",
+        "ingredient2": null,
+        "ingredient1_tags": [
+          "zinc"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "with_food"
+        },
+        "mechanism": "Zinc salts (sulfate, gluconate, bisglycinate) can irritate the gastric mucosa and trigger nausea via local zinc ion-induced prostaglandin release; a small amount of food buffers this effect without significantly impairing overall zinc bioavailability."
+      }
+    },
+    {
+      "id": "timing_omega3_with_meal",
+      "prior_claim": "Take omega-3 fish oil with your largest meal of the day — fat in the meal enhances absorption and reduces fishy burps.",
+      "rejection_reason": "ALL THREE SUB-CLAIMS ABSENT FROM THE SOURCE. Verified 2026-08-01 against https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/ : the page contains no with-meal instruction, no meal-size variable, and no claim that food reduces fishy burps. It confirms the side effects exist ('unpleasant taste, bad breath, heartburn, nausea...') but attributes bioavailability to chemical form, not meals — 're-esterified triglycerides, natural triglycerides, and free fatty acids have somewhat higher bioavailability than ethyl esters'. The 'largest meal' specificity was the most fabricated element.",
+      "source_reviewed": [
+        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "omega-3",
+        "ingredient2": null,
+        "ingredient1_tags": [
+          "omega_3",
+          "fish_oil",
+          "epa",
+          "dha"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "with_food"
+        },
+        "mechanism": "EPA and DHA are long-chain polyunsaturated fatty acids incorporated into chylomicrons during lipid digestion; dietary fat stimulates bile secretion and pancreatic lipase activity, both required for fatty acid emulsification and uptake."
+      }
+    },
+    {
+      "id": "timing_iron_empty_stomach",
+      "prior_claim": "Take iron on an empty stomach for maximum absorption — if it causes stomach upset, take it with a small amount of food (but avoid dairy, tea, or coffee).",
+      "rejection_reason": "THE SOURCE SAYS THE OPPOSITE. Verified 2026-08-01 against https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/ and confirmed by raw-HTML grep: 'empty stomach' x0, 'tea' x0, 'coffee' x0, 'dairy' x0. The page's ONLY administration statement is 'Taking iron supplements with food can help minimize these adverse effects.' The rule led with empty-stomach dosing and named dairy, tea and coffee, none of which the page mentions. Its calcium sentence is also self-hedged: 'Calcium might interfere with the absorption of iron, although this effect has not been definitively established.' Superseded by timing_iron_with_food_gi, authored from the quote above.",
+      "source_reviewed": [
+        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "iron",
+        "ingredient2": null,
+        "ingredient1_tags": [
+          "iron"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "empty_stomach"
+        },
+        "mechanism": "Gastric acid in the fasted state reduces Fe³⁺ to the more soluble Fe²⁺ form; food (especially calcium, phytates, and polyphenols) in the GI lumen significantly inhibits non-heme iron uptake."
+      }
+    },
+    {
+      "id": "timing_ashwagandha_with_food",
+      "prior_claim": "Take ashwagandha with food to minimize gastrointestinal discomfort — most GI side effects occur when taken on an empty stomach.",
+      "rejection_reason": "FABRICATED CAUSALITY, AND IT BURIES A SAFETY SIGNAL. Verified 2026-08-01 against https://www.nccih.nih.gov/health/ashwagandha : 'empty stomach', 'with food' and 'with a meal' each appear ZERO times. The page says only 'In some individuals, ashwagandha preparations may cause drowsiness, stomach upset, diarrhea, and vomiting.' The rule invented both the with-food instruction and the claim that 'most' GI effects occur on an empty stomach. Worse, the same page carries 'Although it is rare, there have been a number of cases that link liver injury to ashwagandha supplements', which the rule omits entirely. Framing nausea and abdominal discomfort as a dosing-technique problem could lead a user to read early drug-induced-liver-injury symptoms as something food will fix. The ashwagandha surface should carry the liver-injury line before it carries any timing tip.",
+      "source_reviewed": [
+        "https://www.nccih.nih.gov/health/ashwagandha"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "ashwagandha",
+        "ingredient2": null,
+        "ingredient1_tags": [
+          "ashwagandha"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "with_food"
+        },
+        "mechanism": "Withanolides and other steroidal lactones in ashwagandha root extract can irritate gastric mucosa in susceptible individuals; food delays gastric emptying, dilutes the extract, and buffers mucosal contact."
+      }
+    },
+    {
+      "id": "timing_magnesium_with_food",
+      "prior_claim": "Take magnesium with food to ease the loose stools or stomach upset it can cause on an empty stomach.",
+      "rejection_reason": "RIGHT HAZARD, WRONG MECHANISM, UNSOURCED FIX. Verified 2026-08-01 against https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/ : 'empty stomach', 'with food' and 'with a meal' each appear ZERO times. The GI effect is real and documented, but the page attributes it to DOSE and SALT FORM, not administration timing: 'The diarrhea and laxative effects of magnesium salts are due to the osmotic activity of unabsorbed salts in the intestine and colon', and 'The forms of magnesium that are most commonly reported to cause diarrhea include magnesium carbonate, chloride, gluconate, and oxide.' Food is not the lever the source identifies - dose and form are. A dose/form rule is authorable from this page; a timing rule is not.",
+      "source_reviewed": [
+        "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+      ],
+      "reviewer": "engineering — source content-verified against PubMed 2026-08-01",
+      "reviewed_on": "2026-08-01",
+      "superseding_rule": null,
+      "clinical_fingerprint": {
+        "ingredient1": "magnesium",
+        "ingredient2": null,
+        "ingredient1_tags": [
+          "magnesium"
+        ],
+        "ingredient2_tags": null,
+        "ingredient1_rxcuis": null,
+        "ingredient2_rxcuis": null,
+        "timing_relation": {
+          "type": "with_food"
+        },
+        "mechanism": "Unabsorbed magnesium salts are osmotically active in the gut and can cause diarrhea, especially in poorly-absorbed forms (oxide, citrate). Taking magnesium with a meal slows transit and eases this without meaningfully reducing absorption."
+      }
+    }
+  ]
+}

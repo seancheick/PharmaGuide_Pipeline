@@ -120,8 +120,13 @@ def test_sync_timing_rules_uses_pipeline_file_as_only_source(
 
     assert destination.read_bytes() == source.read_bytes()
     assert result["destination"] == destination
-    assert result["schema_version"] == "5.3.0"
-    assert result["total_entries"] == 32
+    # Read from the artifact rather than pinned: Section 2 removes rules as
+    # they are rejected, and a hard-coded count turns every clinical decision
+    # into a test failure in an unrelated file.
+    canonical = json.loads(source.read_text(encoding="utf-8"))
+    assert result["schema_version"] == canonical["_metadata"]["schema_version"]
+    assert result["total_entries"] == canonical["_metadata"]["total_entries"]
+    assert result["schema_version"].startswith("6.")
     sync_mod.validate_flutter_timing_rules(
         source_path=source,
         flutter_repo=flutter_repo,
