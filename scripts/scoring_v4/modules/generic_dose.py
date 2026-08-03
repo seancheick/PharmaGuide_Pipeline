@@ -314,13 +314,20 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     """
     if not isinstance(product, dict):
         product = {}
+    b7_evaluation = evaluate_dose_safety(
+        product,
+        threshold=B7_UL_PCT_THRESHOLD,
+        per_flag_penalty=B7_PER_FLAG_PENALTY,
+        cap=B7_CAP,
+    )
+    b7 = b7_evaluation.penalty
+    b7_metadata = b7_evaluation.audit_metadata()
 
     # Phase 7 — Collagen Profile: per-subtype clinical dose range (unit-aware) so an
     # underdosed collagen no longer borrows its co-formulated vitamins' RDA dose.
     # Checked before botanical (mass-dominance makes them mutually exclusive).
     if is_collagen_product(product):
         col = score_collagen_dose(product)
-        b7 = _penalty_b7_dose_safety(product)
         components = {
             "collagen_clinical_dose": round(float(col["score"]), 4),
             "multi_form_bonus": 0.0,
@@ -338,6 +345,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "method": "collagen_clinical_dose_v1",
                 "collagen_dose_band": col["band"],
                 "collagen_dose": col.get("metadata", {}),
+                "B7_safety_evaluation": b7_metadata,
             },
         }
 
@@ -347,7 +355,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     # and the Phase-4 botanical_dose_deferred floor guard is superseded.
     if is_botanical_product(product):
         bot = score_botanical_dose(product)
-        b7 = _penalty_b7_dose_safety(product)
         components = {
             "botanical_clinical_dose": round(float(bot["score"]), 4),
             "multi_form_bonus": 0.0,
@@ -365,12 +372,12 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "method": "botanical_clinical_dose_v1",
                 "botanical_dose_band": bot["band"],
                 "botanical_dose": bot.get("metadata", {}),
+                "B7_safety_evaluation": b7_metadata,
             },
         }
 
     sleep = score_sleep_support_dose(product)
     if sleep is not None:
-        b7 = _penalty_b7_dose_safety(product)
         components = {
             "sleep_support_dose": round(float(sleep["score"]), 4),
             "multi_form_bonus": 0.0,
@@ -387,12 +394,12 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "phase": PHASE_MARKER,
                 "method": "sleep_support_clinical_dose_v1",
                 "sleep_support_dose": sleep,
+                "B7_safety_evaluation": b7_metadata,
             },
         }
 
     immune = score_immune_support_dose(product)
     if immune is not None:
-        b7 = _penalty_b7_dose_safety(product)
         components = dict(immune["components"])
         components["multi_form_bonus"] = 0.0
         penalties = {"B7_dose_safety": round(-b7, 4)}
@@ -407,12 +414,12 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "phase": PHASE_MARKER,
                 "method": "immune_support_daily_dose_v1",
                 "immune_support_dose": immune.get("metadata", {}),
+                "B7_safety_evaluation": b7_metadata,
             },
         }
 
     joint = score_joint_support_dose(product)
     if joint is not None:
-        b7 = _penalty_b7_dose_safety(product)
         components = {
             "joint_support_dose": round(float(joint["score"]), 4),
             "multi_form_bonus": 0.0,
@@ -429,6 +436,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "phase": PHASE_MARKER,
                 "method": "joint_support_clinical_dose_v1",
                 "joint_support_dose": joint,
+                "B7_safety_evaluation": b7_metadata,
             },
         }
 
@@ -439,7 +447,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if no_rda_reference:
         no_reference_credit, no_reference_credit_reason = _score_no_reference_quantified_dose(product)
     multi_form = _score_multi_form_bonus(product)
-    b7 = _penalty_b7_dose_safety(product)
 
     components: Dict[str, float] = {
         "supplemental_window_proxy": round(
@@ -474,6 +481,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "phase": PHASE_MARKER,
         "method": METHOD_MARKER,
         "deferred_data_dependency": DEFERRED_DATA,
+        "B7_safety_evaluation": b7_metadata,
     }
     if window_reason is not None:
         metadata["window_proxy_reason"] = window_reason

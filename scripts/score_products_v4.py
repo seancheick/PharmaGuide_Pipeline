@@ -21,6 +21,7 @@ from scoring_v4.scored_artifact import (
     SCORED_ARTIFACT_SCHEMA_VERSION,
     build_scored_artifact,
 )
+from scoring_v4.dose_safety import dose_safety_contract_issues
 from stage_manifest import select_stage_input_files
 
 
@@ -42,6 +43,14 @@ def _load_batch(path: Path) -> List[Dict[str, Any]]:
     duplicates = sorted(product_id for product_id, count in Counter(ids).items() if count > 1)
     if duplicates:
         raise ValueError(f"enriched batch contains duplicate dsld_id values: {duplicates[:5]}")
+    for product in payload:
+        issues = dose_safety_contract_issues(product)
+        if issues:
+            product_id = str(product.get("dsld_id") or "").strip() or "<missing>"
+            raise ValueError(
+                "enriched batch contains invalid dose-safety contract "
+                f"for dsld_id={product_id}: {issues[:5]}"
+            )
     return payload
 
 

@@ -107,6 +107,25 @@ def test_non_numeric_pct_ul_is_a_conversion_failure_and_never_deducts():
     assert result.conversion_failures == 1
 
 
+def test_non_finite_or_boolean_pct_ul_is_a_conversion_failure():
+    """NaN/Infinity and booleans are accepted by ``float()`` but are not
+    clinically meaningful percentages. They must fail the same contract as an
+    unparseable string rather than becoming confirmed or under-threshold."""
+    for raw in (float("nan"), float("inf"), float("-inf"), True, False):
+        result = _evaluate([{"nutrient": "Vitamin A", "pct_ul": raw}])
+        assert _states(result) == [CONVERSION_FAILED]
+        assert result.penalty == 0.0
+        assert result.conversion_failures == 1
+
+
+def test_negative_pct_ul_is_a_conversion_failure():
+    result = _evaluate([{"nutrient": "Vitamin A", "pct_ul": -1.0}])
+
+    assert _states(result) == [CONVERSION_FAILED]
+    assert result.penalty == 0.0
+    assert result.conversion_failures == 1
+
+
 def test_penalty_is_capped():
     flags = [
         {"nutrient": f"N{i}", "pct_ul": 200.0, "ul_gate_eligible": True}
@@ -187,3 +206,25 @@ def test_ignored_flags_carry_audit_detail():
         "pct_ul": 425.0,
         "reason": "folate_parent_total_plus_form_breakdown_duplicate",
     }]
+
+
+def test_audit_metadata_preserves_unresolved_state_and_reason():
+    result = _evaluate([{
+        "nutrient": "Vitamin B3 (Niacin)",
+        "pct_ul": 2400.0,
+        "ul_gate_eligible": False,
+        "ul_gate_ineligible_reason": "compound_mass_not_elemental",
+    }])
+
+    assert result.audit_metadata() == {
+        "state_counts": {MATERIAL_BUT_UNRESOLVED: 1},
+        "conversion_failures": 0,
+        "flags": [{
+            "state": MATERIAL_BUT_UNRESOLVED,
+            "nutrient": "Vitamin B3 (Niacin)",
+            "canonical_id": None,
+            "pct_ul": 2400.0,
+            "reason": "compound_mass_not_elemental",
+            "penalized": True,
+        }],
+    }

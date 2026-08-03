@@ -23,8 +23,11 @@ import pytest
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from scoring_v4.modules.b_complex import _b7_dose_safety as b_complex_b7
+from scoring_v4.modules.b_complex import _score_dose as score_b_complex_dose
 from scoring_v4.modules.generic_dose import _penalty_b7_dose_safety as generic_b7
+from scoring_v4.modules.generic_dose import score_dose as score_generic_dose
 from scoring_v4.modules.multi_prenatal_dose import _penalty_b7_dose_safety as multi_b7
+from scoring_v4.modules.multi_prenatal_dose import score_dose as score_multi_dose
 
 SCORERS = [
     pytest.param(generic_b7, id="generic"),
@@ -95,3 +98,24 @@ def test_identical_product_scores_identically_across_all_three_modules():
     ])
     results = {scorer.values[0](product) for scorer in SCORERS}
     assert len(results) == 1, f"modules disagree on one contract: {results}"
+
+
+@pytest.mark.parametrize(
+    "scorer",
+    [
+        pytest.param(score_generic_dose, id="generic"),
+        pytest.param(score_multi_dose, id="multi_or_prenatal"),
+        pytest.param(score_b_complex_dose, id="b_complex"),
+    ],
+)
+def test_unresolved_state_is_emitted_in_every_module_audit_metadata(scorer):
+    product = _prod([{
+        "nutrient": "Vitamin B3 (Niacin)",
+        "pct_ul": 2400.0,
+        "ul_gate_eligible": False,
+        "ul_gate_ineligible_reason": "compound_mass_not_elemental",
+    }])
+
+    metadata = scorer(product)["metadata"]["B7_safety_evaluation"]
+    assert metadata["state_counts"] == {"material_but_unresolved": 1}
+    assert metadata["flags"][0]["reason"] == "compound_mass_not_elemental"

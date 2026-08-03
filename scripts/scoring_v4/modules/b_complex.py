@@ -304,8 +304,14 @@ def _score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         avg = 0.0
     rda_ai_coverage = _round(avg * 18.0)
     panel_breadth = _round((len(core_scores) / len(B_CORE)) * 4.0)
-    moderate_dose_fit = 3.0 if _b7_dose_safety(product) == 0.0 and core_scores else 0.0
-    b7 = _b7_dose_safety(product)
+    b7_evaluation = evaluate_dose_safety(
+        product,
+        threshold=B7_UL_PCT_THRESHOLD,
+        per_flag_penalty=B7_PER_FLAG_PENALTY,
+        cap=B7_CAP,
+    )
+    b7 = _round(b7_evaluation.penalty)
+    moderate_dose_fit = 3.0 if b7 == 0.0 and core_scores else 0.0
     score = _round(_clamp(0.0, DOSE_CAP, rda_ai_coverage + panel_breadth + moderate_dose_fit - b7))
     return {
         "score": score,
@@ -321,6 +327,7 @@ def _score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "method": "b_complex_rda_ai_moderate_dose_window",
             "coverage_nutrient_count": len(coverage),
             "coverage_nutrient_scores": dict(sorted(coverage.items())),
+            "B7_safety_evaluation": b7_evaluation.audit_metadata(),
         },
     }
 

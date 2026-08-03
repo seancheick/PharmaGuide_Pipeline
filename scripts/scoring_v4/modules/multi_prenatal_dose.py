@@ -521,7 +521,14 @@ def score_dose(product: Any) -> Dict[str, Any]:
     critical_coverage = _score_critical_coverage(critical_scores)
     prenatal_complement_scores = _prenatal_complement_scores(product)
     prenatal_complement_support = _score_prenatal_complement_support(prenatal_complement_scores)
-    b7, b7_ignored_flags = _b7_dose_safety(product)
+    b7_evaluation = evaluate_dose_safety(
+        product,
+        threshold=B7_UL_PCT_THRESHOLD,
+        per_flag_penalty=B7_PER_FLAG_PENALTY,
+        cap=B7_CAP,
+    )
+    b7 = _round(b7_evaluation.penalty)
+    b7_ignored_flags = b7_evaluation.ignored_flags
 
     components = {
         "rda_ai_coverage": rda_ai_coverage,
@@ -546,6 +553,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "critical_nutrients_missing": critical_missing,
         "prenatal_complement_scores": dict(sorted(prenatal_complement_scores.items())),
         "B7_ignored_safety_flags": b7_ignored_flags,
+        "B7_safety_evaluation": b7_evaluation.audit_metadata(),
     }
     if not coverage_scores:
         metadata["coverage_status"] = "no_rda_reference_data"

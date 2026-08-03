@@ -28,6 +28,8 @@ same thing to a reader:
 
 from __future__ import annotations
 
+import math
+from collections import Counter
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -81,6 +83,24 @@ class DoseSafetyResult:
     ignored_flags: List[Dict[str, Any]] = field(default_factory=list)
     conversion_failures: int = 0
 
+    def audit_metadata(self) -> Dict[str, Any]:
+        """Stable, JSON-ready detail for module breakdowns and corpus audits."""
+        return {
+            "state_counts": dict(Counter(flag.state for flag in self.flags)),
+            "conversion_failures": self.conversion_failures,
+            "flags": [
+                {
+                    "state": flag.state,
+                    "nutrient": flag.nutrient,
+                    "canonical_id": flag.canonical_id,
+                    "pct_ul": flag.pct_ul,
+                    "reason": flag.reason,
+                    "penalized": flag.penalized,
+                }
+                for flag in self.flags
+            ],
+        }
+
 
 def is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
     """True when a folate flag is a declared total plus its own form breakdown.
@@ -132,33 +152,41 @@ def is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
     return abs(parent_amount - form_sum) <= tolerance
 
 
-def _resolve_pct_ul(flag: Dict[str, Any]) -> tuple[Optional[float], bool]:
-    """Return (pct_ul, conversion_failed).
+def _resolve_pct_ul(flag: Dict[str, Any]) -> tuple[Optional[float], Optional[str]]:
+    """Return ``(pct_ul, failure_reason)``.
 
     A magnitude that is absent or explicitly null is unresolved, not broken. A
-    magnitude that is present but unparseable is an engineering defect.
+    magnitude that is present but unparseable, non-finite, boolean, or negative
+    is an engineering defect. Python's ``float()`` accepts all of NaN, Infinity,
+    and booleans; the dose-safety contract must not.
     """
     raw = flag.get("pct_ul")
     if raw is None:
-        return None, False
+        return None, None
+    if isinstance(raw, bool):
+        return None, "pct_ul_boolean"
     value = _as_float(raw, None)
     if value is None:
-        return None, True
-    return value, False
+        return None, "pct_ul_not_numeric"
+    if not math.isfinite(value):
+        return None, "pct_ul_not_finite"
+    if value < 0:
+        return None, "pct_ul_negative"
+    return value, None
 
 
 def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
     nutrient = flag.get("nutrient")
     canonical_id = flag.get("canonical_id")
-    pct_ul, conversion_failed = _resolve_pct_ul(flag)
+    pct_ul, failure_reason = _resolve_pct_ul(flag)
 
-    if conversion_failed:
+    if failure_reason is not None:
         return DoseSafetyFlag(
             state=CONVERSION_FAILED,
             nutrient=nutrient,
             canonical_id=canonical_id,
             pct_ul=flag.get("pct_ul"),
-            reason="pct_ul_not_numeric",
+            reason=failure_reason,
             penalized=False,
         )
 
@@ -214,6 +242,48 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
         pct_ul=pct_ul,
         penalized=True,
     )
+
+
+def dose_safety_contract_issues(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Return fail-closed structural/numeric defects in the enriched B7 input.
+
+    Missing ``pct_ul`` remains a supported unresolved state. Present-but-invalid
+    values are engineering defects and must stop Stage 3 before any artifact is
+    published.
+    """
+    if not isinstance(product, dict):
+        return [{"path": "$", "reason": "product_not_object"}]
+
+    raw_rda_ul = product.get("rda_ul_data")
+    if raw_rda_ul is None:
+        return []
+    if not isinstance(raw_rda_ul, dict):
+        return [{"path": "rda_ul_data", "reason": "rda_ul_data_not_object"}]
+
+    raw_flags = raw_rda_ul.get("safety_flags")
+    if raw_flags is None:
+        return []
+    if not isinstance(raw_flags, list):
+        return [{
+            "path": "rda_ul_data.safety_flags",
+            "reason": "safety_flags_not_array",
+        }]
+
+    issues: List[Dict[str, Any]] = []
+    for index, raw_flag in enumerate(raw_flags):
+        path = f"rda_ul_data.safety_flags[{index}]"
+        if not isinstance(raw_flag, dict):
+            issues.append({"path": path, "reason": "safety_flag_not_object"})
+            continue
+        _, failure_reason = _resolve_pct_ul(raw_flag)
+        if failure_reason is not None:
+            issues.append({
+                "path": f"{path}.pct_ul",
+                "reason": failure_reason,
+                "nutrient": raw_flag.get("nutrient"),
+                "value": raw_flag.get("pct_ul"),
+            })
+    return issues
 
 
 def evaluate_dose_safety(

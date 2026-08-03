@@ -79,3 +79,66 @@ def test_duplicate_ids_across_input_files_fail_before_any_output(tmp_path: Path)
         score_products_v4.score_all(enriched, tmp_path / "output")
 
     assert not (tmp_path / "output" / "scored").exists()
+
+
+@pytest.mark.parametrize("bad_pct_ul", ["not-a-number", float("nan"), float("inf"), True, -1.0])
+def test_invalid_dose_safety_magnitude_blocks_publication(
+    tmp_path: Path,
+    bad_pct_ul,
+) -> None:
+    source = tmp_path / "enriched_batch_1.json"
+    product = _product("bad-dose-safety")
+    product["rda_ul_data"] = {
+        "safety_flags": [{"nutrient": "Vitamin A", "pct_ul": bad_pct_ul}],
+    }
+    source.write_text(json.dumps([product]), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="dose-safety contract"):
+        score_products_v4.score_file(source, tmp_path / "scored")
+
+    assert not (tmp_path / "scored" / "scored_batch_1.json").exists()
+
+
+def test_invalid_dose_safety_contract_in_later_batch_blocks_all_outputs(
+    tmp_path: Path,
+) -> None:
+    enriched = tmp_path / "enriched"
+    enriched.mkdir()
+    (enriched / "enriched_batch_1.json").write_text(
+        json.dumps([_product("valid")]), encoding="utf-8"
+    )
+    invalid = _product("invalid")
+    invalid["rda_ul_data"] = {
+        "safety_flags": [{"nutrient": "Vitamin A", "pct_ul": "not-a-number"}],
+    }
+    (enriched / "enriched_batch_2.json").write_text(
+        json.dumps([invalid]), encoding="utf-8"
+    )
+
+    with pytest.raises(ValueError, match="dose-safety contract"):
+        score_products_v4.score_all(enriched, tmp_path / "output")
+
+    assert not (tmp_path / "output" / "scored").exists()
+
+
+@pytest.mark.parametrize(
+    "bad_rda_ul_data",
+    [
+        "not-an-object",
+        {"safety_flags": "not-an-array"},
+        {"safety_flags": ["not-an-object"]},
+    ],
+)
+def test_malformed_dose_safety_shape_blocks_publication(
+    tmp_path: Path,
+    bad_rda_ul_data,
+) -> None:
+    source = tmp_path / "enriched_batch_1.json"
+    product = _product("malformed-dose-safety")
+    product["rda_ul_data"] = bad_rda_ul_data
+    source.write_text(json.dumps([product]), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="dose-safety contract"):
+        score_products_v4.score_file(source, tmp_path / "scored")
+
+    assert not (tmp_path / "scored" / "scored_batch_1.json").exists()
