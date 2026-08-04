@@ -61,6 +61,47 @@ _FOLATE_FORM_TOKENS = (
     "folinate",
 )
 
+# Folate is stated in two non-interchangeable bases: dietary folate equivalents
+# (mcg DFE) and the mass of the form supplying them. Folic acid converts at
+# 1.7 mcg DFE per mcg, so a numeric match across the two bases is a coincidence,
+# not evidence that the rows describe one exposure.
+_FOLATE_DFE_TOKEN = "dfe"
+_FOLATE_MASS_TO_MCG = {
+    "mcg": 1.0,
+    "ug": 1.0,
+    "µg": 1.0,
+    "μg": 1.0,
+    "microgram": 1.0,
+    "micrograms": 1.0,
+    "mg": 1000.0,
+    "milligram": 1000.0,
+    "milligrams": 1000.0,
+}
+_FOLATE_BASIS_UNSTATED = ""
+_FOLATE_BASIS_DFE = "dfe"
+_FOLATE_BASIS_MASS = "mass"
+
+
+def _folate_dose_basis(value: Any) -> tuple[str, Optional[float]]:
+    """Return ``(basis, multiplier_to_mcg)`` for one contributing-row unit.
+
+    ``multiplier`` is ``None`` when the unit is stated but not a recognised
+    folate mass unit — that row cannot be reconciled against anything, so the
+    caller must decline rather than guess. An unstated unit is reported as the
+    ``unstated`` basis with a neutral multiplier, preserving the behaviour of
+    older artifacts whose contributing rows carry no unit at all.
+    """
+    text = _norm_text(value)
+    if not text:
+        return _FOLATE_BASIS_UNSTATED, 1.0
+
+    parts = text.replace("(s)", " ").replace("/", " ").split()
+    mass_token = next((part for part in parts if part in _FOLATE_MASS_TO_MCG), None)
+    if mass_token is None:
+        return "unknown", None
+    basis = _FOLATE_BASIS_DFE if _FOLATE_DFE_TOKEN in parts else _FOLATE_BASIS_MASS
+    return basis, _FOLATE_MASS_TO_MCG[mass_token]
+
 
 @dataclass(frozen=True)
 class DoseSafetyFlag:
@@ -129,18 +170,32 @@ def is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
         return False
 
     parent_amount: Optional[float] = None
+    parent_basis: Optional[str] = None
     form_amounts: List[float] = []
+    form_bases: List[str] = []
     for row in rows:
         name = _norm_text(row.get("ingredient"))
         amount = _as_float(row.get("amount"), None)
         if amount is None or amount <= 0:
             continue
+        basis, multiplier = _folate_dose_basis(row.get("unit"))
+        if multiplier is None:
+            # A stated unit we cannot interpret. Reconciling against it would be
+            # a guess, and a guess must never suppress an over-limit warning.
+            return False
+        normalized = amount * multiplier
         if name in _FOLATE_PARENT_NAMES or name == nutrient:
-            parent_amount = max(parent_amount or 0.0, amount)
+            if parent_amount is None or normalized > parent_amount:
+                parent_amount = normalized
+                parent_basis = basis
         elif any(token in name for token in _FOLATE_FORM_TOKENS):
-            form_amounts.append(amount)
+            form_amounts.append(normalized)
+            form_bases.append(basis)
 
     if parent_amount is None or not form_amounts:
+        return False
+    # One exposure can only be recognised within a single dose basis.
+    if len({parent_basis, *form_bases}) > 1:
         return False
     form_sum = sum(form_amounts)
     if form_sum <= 0:

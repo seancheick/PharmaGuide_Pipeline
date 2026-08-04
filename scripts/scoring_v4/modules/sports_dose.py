@@ -72,7 +72,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     }
     penalties = {
         "opaque_primary_sports_blend": round(-opaque_penalty, 4),
-        "stimulant_high_caffeine": 0.0,
     }
     score = _clamp(
         0.0,
