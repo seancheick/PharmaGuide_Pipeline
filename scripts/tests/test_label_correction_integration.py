@@ -211,6 +211,130 @@ def test_product_scoped_correction_removes_misattributed_source_unii(normalizer)
     }
 
 
+def test_product_scoped_correction_repairs_verified_quantity_unit(normalizer):
+    raw_product = _make_raw_product(259789, [])
+    raw_product["fullName"] = "GNC Multivitamin Active"
+    raw_product["brandName"] = "GNC"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Iodine", category="mineral"),
+            "ingredientGroup": "Iodine",
+            "uniiCode": "9679TC07X4",
+            "quantity": [
+                {"quantity": 150, "unit": "mg"},
+                {"quantity": 75, "unit": "mg"},
+            ],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+    active = normalized["activeIngredients"][0]
+
+    assert active["quantity"] == 150
+    assert active["unit"] == "mcg"
+    assert [variant["unit"] for variant in active["quantityVariants"]] == [
+        "mcg",
+        "mcg",
+    ]
+    assert active["source_correction"] == {
+        "provenance_tag": "official_label_unit_correction",
+        "original_quantity_unit": "mg",
+        "corrected_quantity_unit": "mcg",
+    }
+
+
+def test_product_scoped_correction_repairs_verified_boron_unit(normalizer):
+    raw_product = _make_raw_product(328117, [])
+    raw_product["fullName"] = (
+        "Alive! Women's 50+ Multivitamin Gummy Mixed Berry Flavored"
+    )
+    raw_product["brandName"] = "Nature's Way"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Boron", category="mineral"),
+            "ingredientGroup": "Boron",
+            "uniiCode": "N9E3X5056Q",
+            "quantity": [{"quantity": 150, "unit": "mg"}],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+    active = normalized["activeIngredients"][0]
+
+    assert active["quantity"] == 150
+    assert active["unit"] == "mcg"
+    assert active["source_correction"] == {
+        "provenance_tag": "official_label_unit_correction",
+        "original_quantity_unit": "mg",
+        "corrected_quantity_unit": "mcg",
+    }
+
+
+def test_product_scoped_correction_repairs_crossed_cognimag_hierarchy(normalizer):
+    raw_product = _make_raw_product(299037, [])
+    raw_product["fullName"] = "CogniMag"
+    raw_product["brandName"] = "Pure Encapsulations"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Magnesium", category="mineral"),
+            "ingredientGroup": "Magnesium",
+            "uniiCode": "I38ZP9992A",
+            "quantity": [{"quantity": 1000, "unit": "mg"}],
+            "nestedRows": [
+                {
+                    **_make_ingredient_row(
+                        "Magtein Magnesium L-Threonate",
+                        category="non-nutrient/non-botanical",
+                    ),
+                    "ingredientGroup": "Magnesium",
+                    "uniiCode": None,
+                    "quantity": [{
+                        "quantity": 72,
+                        "unit": "mg",
+                        "dailyValueTargetGroup": [{"percent": 17}],
+                    }],
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+            "forms": [],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+    source_material, delivered_nutrient = normalized["activeIngredients"]
+
+    assert source_material["name"] == "Magtein Magnesium L-Threonate"
+    assert source_material["quantity"] == 1000
+    assert source_material["uniiCode"] is None
+    assert source_material["source_correction"] == {
+        "provenance_tag": "official_label_hierarchy_correction",
+        "original_ingredient_text": "Magnesium",
+        "corrected_ingredient_text": "Magtein Magnesium L-Threonate",
+        "original_unii_code": "I38ZP9992A",
+        "corrected_unii_code": None,
+    }
+    assert delivered_nutrient["name"] == "Magnesium"
+    assert delivered_nutrient["quantity"] == 72
+    assert delivered_nutrient["dailyValue"] == 17
+    assert delivered_nutrient["parentBlend"] == "Magtein Magnesium L-Threonate"
+    assert delivered_nutrient["source_correction"] == {
+        "provenance_tag": "official_label_hierarchy_correction",
+        "original_ingredient_text": "Magtein Magnesium L-Threonate",
+        "corrected_ingredient_text": "Magnesium",
+    }
+
+    display = normalized["display_ingredients"]
+    assert [(row["display_name"], row["exact_dose_text"]) for row in display] == [
+        ("Magtein Magnesium L-Threonate", "1,000 mg"),
+        ("Magnesium", "72 mg"),
+    ]
+
+
 def test_botanical_latin_parenthetical_resolves_without_replacing_label_name(normalizer):
     raw_product = _make_raw_product(99999997, [])
     raw_product["ingredientRows"] = [

@@ -738,13 +738,18 @@ INTERACTION_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sy
 # Commit the Flutter bundle + run ALIGNED storage cleanup.
 #
 # The orphan-blob cleanup was moved out of Step 5 to here: its bundle_alignment
-# gate needs Flutter main HEAD to equal the just-built dist version. We commit
-# the bundle LOCALLY first (push stays manual), then run the cleanup so the
-# gate passes — fixing the deadlock that let orphan blobs grow to ~84% of
-# storage (0 blobs quarantined across 80 prior release runs).
+# gate needs the committed Flutter manifest to equal the just-built dist
+# version. We commit the bundle LOCALLY first (push stays manual), then verify
+# the exact branch that received that commit. This keeps feature-branch release
+# workspaces from being compared against an unrelated main HEAD.
 # ---------------------------------------------------------------------------
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   if git -C "$FLUTTER_REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    FLUTTER_RELEASE_BRANCH="$(git -C "$FLUTTER_REPO" branch --show-current)"
+    if [[ -z "$FLUTTER_RELEASE_BRANCH" ]]; then
+      die "Flutter repository is in detached HEAD state; refusing aligned storage cleanup"
+    fi
+
     if git -C "$FLUTTER_REPO" status --porcelain -- assets/db assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/data/product_type_vocab.json | grep -q .; then
       info "Committing Flutter bundle and canonical reference data (local) so storage cleanup runs aligned..."
       git -C "$FLUTTER_REPO" add assets/db/ assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/data/product_type_vocab.json
@@ -766,7 +771,8 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
         --execute --cleanup-db --cleanup-orphan-blobs \
         --keep "$KEEP_VERSIONS" \
         --flutter-repo "$FLUTTER_REPO" \
-        --dist-dir "$DIST_DIR"; then
+        --dist-dir "$DIST_DIR" \
+        --branch "$FLUTTER_RELEASE_BRANCH"; then
       ok "Storage cleanup step done"
     else
       warn "Storage cleanup returned non-zero — non-fatal; see reports/release_audit/"

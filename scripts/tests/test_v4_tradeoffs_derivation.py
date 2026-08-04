@@ -32,7 +32,7 @@ for p in (str(ROOT), str(ROOT / "scripts")):
     if p not in sys.path:
         sys.path.insert(0, p)
 
-from scripts.build_final_db import derive_v4_tradeoffs  # noqa: E402
+from scripts.build_final_db import build_top_warnings, derive_v4_tradeoffs  # noqa: E402
 
 
 def _scored_v4(*, form=None, form_pen=None, transp_pen=None, transp_comp=None,
@@ -203,13 +203,64 @@ def test_b1_prefers_reviewed_safety_summary_over_stale_mechanism_copy():
 
 def test_b7_dose_over_ul_detail_preserved():
     enriched = {"rda_ul_data": {"safety_flags": [
-        {"nutrient": "Vitamin B3 (Niacin)", "amount": 1000.0, "ul": 35, "pct_ul": 2857.14},
+        {
+            "nutrient": "Vitamin B3 (Niacin)",
+            "amount": 1000.0,
+            "ul": 35,
+            "pct_ul": 2857.14,
+            "ul_gate_eligible": True,
+        },
     ]}}
     _, penalties = derive_v4_tradeoffs(_scored_v4(), enriched)
     b7 = _by_id(penalties, "B7")
     assert "Vitamin B3 (Niacin)" in b7["label"]
     assert "2857% of UL" in b7["label"]
     assert b7["severity"] == "critical"
+
+
+def test_gate_ineligible_compound_mass_ul_percentage_is_not_consumer_copy():
+    enriched = {"rda_ul_data": {"safety_flags": [{
+        "nutrient": "Potassium Iodide",
+        "amount": 130000,
+        "unit": "mcg",
+        "ul": 1100,
+        "pct_ul": 11818.18,
+        "ul_gate_eligible": False,
+        "ul_exposure_basis": "compound_or_form_mass",
+        "ul_gate_ineligible_reason": "compound_mass_not_elemental",
+    }]}}
+
+    _, penalties = derive_v4_tradeoffs(_scored_v4(), enriched)
+    top_warnings = build_top_warnings(enriched)
+
+    assert "B7" not in _ids(penalties)
+    assert not any("11818" in warning["message"] for warning in top_warnings)
+
+
+def test_potassium_iodide_emergency_use_action_is_consumer_visible():
+    enriched = {"rda_ul_data": {"special_use_flags": [{
+        "code": "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY",
+        "ingredient": "Potassium Iodide",
+        "severity": "high",
+        "action": (
+            "Use only during a radiation emergency when public-health or "
+            "emergency-management officials direct it; do not take it "
+            "routinely or before a radiation exposure."
+        ),
+        "source": "FDA",
+        "source_url": (
+            "https://www.fda.gov/drugs/bioterrorism-and-drug-preparedness/"
+            "frequently-asked-questions-potassium-iodide-ki"
+        ),
+    }]}}
+
+    _, penalties = derive_v4_tradeoffs(_scored_v4(), enriched)
+    warning = _by_id(penalties, "B7_special_use")
+
+    assert warning["label"] == "Emergency-use medicine: Potassium Iodide"
+    assert "do not take it routinely" in warning["detail"]
+    assert warning["source"] == "FDA"
+    assert warning["source_url"].startswith("https://www.fda.gov/")
 
 
 def test_b8_caers_not_surfaced():

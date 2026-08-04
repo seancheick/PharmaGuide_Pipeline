@@ -1396,6 +1396,102 @@ def test_detail_blob_includes_optional_rda_and_evidence_sections_when_present():
     assert blob["evidence_data"]["match_count"] == 1
 
 
+def test_detail_blob_preserves_rda_special_use_flags():
+    enriched = make_enriched()
+    enriched["rda_ul_data"]["safety_flags"] = [{
+        "nutrient": "Potassium Iodide",
+        "pct_ul": 11818,
+        "ul_gate_eligible": False,
+        "ul_gate_ineligible_reason": "compound_mass_not_elemental",
+    }]
+    enriched["rda_ul_data"]["has_over_ul"] = True
+    enriched["rda_ul_data"]["special_use_flags"] = [{
+        "code": "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY",
+        "ingredient": "Potassium Iodide",
+        "severity": "high",
+        "action": "Use only when public-health officials direct it.",
+        "source": "FDA",
+        "source_url": "https://www.fda.gov/example",
+    }]
+
+    blob = build_detail_blob(enriched, make_scored())
+
+    assert blob["rda_ul_data"]["special_use_flags"] == [
+        enriched["rda_ul_data"]["special_use_flags"][0]
+    ]
+    assert blob["rda_ul_data"]["safety_flags"] == []
+    assert blob["rda_ul_data"]["has_over_ul"] is False
+
+
+def test_detail_blob_excludes_gate_ineligible_exposure_rows_from_consumer_rda_surface():
+    enriched = make_enriched()
+    unsupported = {
+        "ingredient": "Potassium Iodide",
+        "standard_name": "Iodine",
+        "pct_ul": 11818,
+        "over_ul": True,
+        "warnings": ["Exceeds UL by 128900 mcg"],
+        "ul_gate_eligible": False,
+        "ul_exposure_basis": "compound_or_form_mass",
+        "ul_gate_ineligible_reason": "compound_mass_not_elemental",
+    }
+    supported = {
+        "ingredient": "Niacin",
+        "standard_name": "Niacin",
+        "pct_ul": 2857,
+        "over_ul": True,
+        "warnings": ["Exceeds UL by 965 mg"],
+        "ul_gate_eligible": True,
+        "ul_exposure_basis": "canonical_parent_substance_amount",
+    }
+    legacy_untyped = {
+        "ingredient": "Legacy unresolved row",
+        "pct_ul": 900,
+        "over_ul": True,
+    }
+    nested_component = {
+        "ingredient": "Niacinamide",
+        "standard_name": "Niacin",
+        "pct_ul": 1857,
+        "over_ul": False,
+        "ul_gate_eligible": True,
+        "ul_exposure_basis": "ul_scoped_form_substance_amount",
+        "dose_role": "form_component",
+        "skip_ul_check": True,
+        "skip_ul_reason": "form_component_of_declared_total",
+    }
+    enriched["rda_ul_data"]["ingredients_with_rda"] = [
+        unsupported,
+        legacy_untyped,
+        nested_component,
+        supported,
+    ]
+    enriched["rda_ul_data"]["analyzed_ingredients"] = [
+        unsupported,
+        legacy_untyped,
+        nested_component,
+        supported,
+    ]
+    enriched["rda_ul_data"]["adequacy_results"] = [
+        unsupported,
+        legacy_untyped,
+        nested_component,
+        supported,
+    ]
+    enriched["rda_ul_data"]["count"] = 4
+
+    blob = build_detail_blob(enriched, make_scored())
+
+    assert blob["rda_ul_data"]["ingredients_with_rda"] == [supported]
+    assert blob["rda_ul_data"]["analyzed_ingredients"] == [
+        {**supported, "below_clinical_dose": False}
+    ]
+    assert blob["rda_ul_data"]["adequacy_results"] == [
+        {**supported, "below_clinical_dose": False}
+    ]
+    assert blob["rda_ul_data"]["count"] == 1
+
+
 def test_detail_blob_preserves_real_upstream_field_names_for_active_ingredients():
     blob = build_detail_blob(make_enriched(), make_scored())
     ingredient = blob["ingredients"][0]
@@ -2348,7 +2444,13 @@ def test_top_warnings_include_rda_ul_safety_flags():
     enriched = make_enriched()
     enriched["rda_ul_data"] = {
         "safety_flags": [
-            {"nutrient": "Vitamin B6", "pct_ul": 588, "severity": "high"},
+            {
+                "nutrient": "Vitamin B6",
+                "pct_ul": 588,
+                "severity": "high",
+                "ul_gate_eligible": True,
+                "ul_exposure_basis": "daily_value_confirmed_nutrient_amount",
+            },
         ]
     }
 
@@ -2364,7 +2466,13 @@ def test_top_warnings_preserve_structured_identity_for_flutter():
     enriched = make_enriched()
     enriched["rda_ul_data"] = {
         "safety_flags": [
-            {"nutrient": "Vitamin B6", "pct_ul": 588, "severity": "high"},
+            {
+                "nutrient": "Vitamin B6",
+                "pct_ul": 588,
+                "severity": "high",
+                "ul_gate_eligible": True,
+                "ul_exposure_basis": "daily_value_confirmed_nutrient_amount",
+            },
         ]
     }
 

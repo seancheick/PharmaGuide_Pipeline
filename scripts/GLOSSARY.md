@@ -106,6 +106,8 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 |---|---|
 | **Adequacy exposure** | Minimum/recommended daily exposure (`per_day_min`) used for adequacy. |
 | **Safety exposure** | Maximum daily exposure (`per_day_max`) used for UL and other safety comparisons. |
+| **UL exposure basis** | Typed evidence describing what a label dose measures for UL comparison: a declared nutrient amount, a compound/form mass, or an unresolved amount. This field owns `ul_gate_eligible`; Daily Value presence is one source of evidence, not a universal proxy. |
+| **UL-scoped form substance amount** | A label amount tied by direct UNII identity to a nutrient form explicitly listed by the reference as subject to that nutrient's UL. Unlisted derivatives and carrier compounds do not qualify. |
 | **Reference profile** | Named adult-neutral compatibility profile emitted alongside `data_by_group`; it is not a claim that one demographic fits everyone. |
 | **Indeterminate UL assessment** | A UL exists but form/source lineage is insufficient for an honest comparison. The pipeline does not guess `over_ul`. |
 | **UL review flag** | Explicit review signal for a clinically material indeterminate UL case; may carry CAUTION without asserting an exceedance. |

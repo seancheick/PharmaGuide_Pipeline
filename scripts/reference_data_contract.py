@@ -78,6 +78,19 @@ def semantic_rda_ul_payload(data: Mapping[str, Any]) -> dict[str, Any]:
                 group["ul"] or "",
             )
         )
+        raw_ul_forms = raw.get("ul_applies_to_forms")
+        if raw_ul_forms is None:
+            ul_forms: list[str] = []
+        elif isinstance(raw_ul_forms, list):
+            ul_forms = sorted(
+                normalized
+                for value in raw_ul_forms
+                if (normalized := _normalized_text(value)) is not None
+            )
+        else:
+            raise ReferenceDataContractError(
+                f"nutrient {raw.get('id')!r} has non-list ul_applies_to_forms"
+            )
         entries.append(
             {
                 "id": _normalized_text(raw.get("id")),
@@ -85,6 +98,9 @@ def semantic_rda_ul_payload(data: Mapping[str, Any]) -> dict[str, Any]:
                 "unit": _normalized_text(raw.get("unit")),
                 "ul_status": _normalized_text(raw.get("ul_status")),
                 "ul_basis": _normalized_text(raw.get("ul_basis")),
+                "ul_note": _normalized_text(raw.get("ul_note")),
+                "ul_applies_to_forms": ul_forms,
+                "ul_scope_source": _normalized_text(raw.get("ul_scope_source")),
                 "data": groups,
             }
         )

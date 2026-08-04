@@ -1110,8 +1110,9 @@ class EnhancedDSLDNormalizer:
         )
         self.ingredient_classification = self._load_json(INGREDIENT_CLASSIFICATION)
 
-        # RC-5: reviewer-signed per-product label-typo corrections. Keyed by
-        # str(dsld_id) → {raw_ingredient_text, corrected_ingredient_text, ...}.
+        # RC-5: reviewer-signed per-product source-row corrections. Keyed by
+        # str(dsld_id) → {raw_ingredient_text, corrected_ingredient_text, ...};
+        # one verified product defect may include additional_row_corrections.
         # Applied in normalize_product() before flattening so the cleaner's
         # ingredient resolution sees corrected text. Missing-file is allowed
         # (cleanly empty dict) so dev environments without the override file
@@ -4895,30 +4896,73 @@ class EnhancedDSLDNormalizer:
         """RC-5: correct a source row where (dsld_id, raw_text) matches.
 
         Walks the possibly nested ingredientRows tree and applies the reviewed
-        text and/or UNII correction. Original values are retained under
-        ``_pre_correction_*`` and the rewrite is tagged for downstream audit.
+        text, UNII, and/or quantity-unit correction. A product entry may carry
+        ``additional_row_corrections`` when one verified label defect crosses
+        multiple source rows. Original values are retained under
+        ``_pre_correction_*`` and every rewrite is tagged for downstream audit.
 
         Scope is strictly the requested product_id — no global aliasing.
         Case-sensitive on raw_ingredient_text by design (the override file
         documents this).
         """
-        entry = self._label_corrections_by_dsld_id.get(str(product_id))
-        if not entry:
+        product_entry = self._label_corrections_by_dsld_id.get(str(product_id))
+        if not isinstance(product_entry, dict):
             return ingredient_rows
-        raw_target = entry.get("raw_ingredient_text")
-        corrected = entry.get("corrected_ingredient_text")
-        has_unii_correction = (
-            "raw_unii_code" in entry and "corrected_unii_code" in entry
+        correction_entries = [product_entry]
+        correction_entries.extend(
+            entry
+            for entry in product_entry.get("additional_row_corrections") or []
+            if isinstance(entry, dict)
         )
-        if not raw_target or (not corrected and not has_unii_correction):
+        corrections_by_raw_text = {
+            entry.get("raw_ingredient_text"): entry
+            for entry in correction_entries
+            if isinstance(entry.get("raw_ingredient_text"), str)
+            and entry.get("raw_ingredient_text")
+        }
+        if not corrections_by_raw_text:
             return ingredient_rows
-        provenance_tag = entry.get("provenance_tag") or "label_correction"
+
+        def rewrite_quantity_units(row, entry):
+            raw_unit = entry.get("raw_quantity_unit")
+            corrected_unit = entry.get("corrected_quantity_unit")
+            changed = False
+
+            if row.get("unit") == raw_unit:
+                row["unit"] = corrected_unit
+                changed = True
+
+            quantity_data = row.get("quantity")
+            quantities = (
+                quantity_data
+                if isinstance(quantity_data, list)
+                else [quantity_data] if isinstance(quantity_data, dict) else []
+            )
+            for quantity in quantities:
+                if not isinstance(quantity, dict):
+                    continue
+                if quantity.get("unit") == raw_unit:
+                    quantity["unit"] = corrected_unit
+                    changed = True
+
+            if changed:
+                row["_pre_correction_quantity_unit"] = raw_unit
+            return changed
 
         def rewrite(row):
             if not isinstance(row, dict):
                 return row
             name = row.get("name")
-            if isinstance(name, str) and name == raw_target:
+            entry = corrections_by_raw_text.get(name)
+            if entry:
+                corrected = entry.get("corrected_ingredient_text")
+                has_unii_correction = (
+                    "raw_unii_code" in entry and "corrected_unii_code" in entry
+                )
+                has_quantity_unit_correction = (
+                    bool(entry.get("raw_quantity_unit"))
+                    and bool(entry.get("corrected_quantity_unit"))
+                )
                 correction_applied = False
                 if corrected and corrected != name:
                     row["_pre_correction_name"] = name
@@ -4931,12 +4975,22 @@ class EnhancedDSLDNormalizer:
                     row["_pre_correction_unii"] = row.get("uniiCode")
                     row["uniiCode"] = entry.get("corrected_unii_code")
                     correction_applied = True
+                if (
+                    has_quantity_unit_correction
+                    and rewrite_quantity_units(row, entry)
+                ):
+                    correction_applied = True
                 if correction_applied:
                     row["_label_correction_applied"] = True
+                    provenance_tag = (
+                        entry.get("provenance_tag")
+                        or product_entry.get("provenance_tag")
+                        or "label_correction"
+                    )
                     row["_label_correction_provenance"] = provenance_tag
                     logger.info(
                         "RC-5 source-row correction applied: pid=%s '%s' (tag=%s)",
-                        product_id, raw_target, provenance_tag,
+                        product_id, name, provenance_tag,
                     )
             # Recurse into known nested-row keys
             for nested_key in ("nestedRows", "forms"):
@@ -7002,6 +7056,11 @@ class EnhancedDSLDNormalizer:
                     "_pre_correction_unii"
                 )
                 source_correction["corrected_unii_code"] = ing.get("uniiCode")
+            if "_pre_correction_quantity_unit" in ing:
+                source_correction["original_quantity_unit"] = ing.get(
+                    "_pre_correction_quantity_unit"
+                )
+                source_correction["corrected_quantity_unit"] = unit
             result["source_correction"] = source_correction
 
         # Add additive metadata flag (for enrichment phase to use)

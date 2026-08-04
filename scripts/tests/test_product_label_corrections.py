@@ -116,6 +116,7 @@ REQUIRED_ENTRY_FIELDS = (
     "product_name",
     "raw_ingredient_text",
     "corrected_ingredient_text",
+    "correction_fields",
     "evidence",
     "sources",
     "reviewer",
@@ -175,6 +176,59 @@ def test_gnc_69734_insulin_correction_present(overrides):
         f"evidence must cite Insulin's regulatory status as a hormone "
         f"biologic that cannot legally appear on a US supplement label. "
         f"Got: {entry.get('evidence')!r}"
+    )
+
+
+def test_gnc_259789_iodine_unit_correction_present(overrides):
+    """The live DSLD JSON says mg, but the official DSLD label PDF says mcg."""
+    entry = (overrides.get("corrections") or {}).get("259789")
+
+    assert entry, "correction for GNC pid=259789 iodine unit is missing"
+    assert entry["raw_ingredient_text"] == "Iodine"
+    assert entry["corrected_ingredient_text"] == "Iodine"
+    assert entry["raw_quantity_unit"] == "mg"
+    assert entry["corrected_quantity_unit"] == "mcg"
+    assert "quantity.unit" in entry["correction_fields"]
+    assert (
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/259789.pdf"
+        in entry["sources"]
+    )
+
+
+def test_natures_way_328117_boron_unit_correction_present(overrides):
+    """The live DSLD JSON says mg, but the official DSLD label PDF says mcg."""
+    entry = (overrides.get("corrections") or {}).get("328117")
+
+    assert entry, "correction for Nature's Way pid=328117 boron unit is missing"
+    assert entry["raw_ingredient_text"] == "Boron"
+    assert entry["corrected_ingredient_text"] == "Boron"
+    assert entry["raw_quantity_unit"] == "mg"
+    assert entry["corrected_quantity_unit"] == "mcg"
+    assert "quantity.unit" in entry["correction_fields"]
+    assert (
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/328117.pdf"
+        in entry["sources"]
+    )
+
+
+def test_cognimag_299037_crossed_hierarchy_names_are_corrected(overrides):
+    """The API crosses the printed nutrient and source-material row names."""
+    entry = (overrides.get("corrections") or {}).get("299037")
+
+    assert entry, "correction for CogniMag pid=299037 is missing"
+    assert entry["raw_ingredient_text"] == "Magnesium"
+    assert entry["corrected_ingredient_text"] == "Magtein Magnesium L-Threonate"
+    assert entry["raw_unii_code"] == "I38ZP9992A"
+    assert entry["corrected_unii_code"] is None
+    additional = entry.get("additional_row_corrections") or []
+    assert additional == [{
+        "raw_ingredient_text": "Magtein Magnesium L-Threonate",
+        "corrected_ingredient_text": "Magnesium",
+        "correction_fields": ["name"],
+    }]
+    assert (
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/299037.pdf"
+        in entry["sources"]
     )
 
 
