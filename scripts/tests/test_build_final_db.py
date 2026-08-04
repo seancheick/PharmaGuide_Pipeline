@@ -3139,7 +3139,6 @@ def _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong",
         "v4_verdict": verdict,
         "v4_confidence": "high",
         "v4_anchored": False,
-        "v4_display_100": 92.0,  # experimental — must be IGNORED
         "v4_breakdown": {
             "provenance": {
                 "scoring_engine_version": "4.0.0",

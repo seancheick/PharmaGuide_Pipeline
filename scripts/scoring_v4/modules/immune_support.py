@@ -25,6 +25,10 @@ _CM = _cfg_block("category_magnitudes", "immune_support")["immune_support"]
 
 
 IMMUNE_FORMULATION_BONUS_CAP = _CM["formulation_bonus_cap"]
+# Ceiling applied to every immune product's evidence dimension. Distinct from
+# the floor cap below, which bounds the lift a well-formed immune panel earns —
+# the two are different controls and are not expected to share a value.
+IMMUNE_EVIDENCE_CAP = _CM["evidence_cap"]
 IMMUNE_EVIDENCE_FLOOR_CAP = _CM["evidence_floor_cap"]
 
 _ALIASES = {
@@ -197,7 +201,7 @@ def immune_support_evidence_floor(product: Dict[str, Any]) -> Optional[Dict[str,
 
 def immune_support_evidence_cap(product: Dict[str, Any]) -> Optional[float]:
     if is_immune_support_product(product):
-        return 17.0
+        return IMMUNE_EVIDENCE_CAP
     return None
 
 

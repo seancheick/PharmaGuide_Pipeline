@@ -41,7 +41,10 @@ ORIGINAL = {
     "probiotic": {"dimension_caps": ROUTER_DC},
     "b_complex": {"formulation_cap": 30.0, "dose_cap": 25.0, "evidence_cap": 20.0,
                   "b7_ul_pct_threshold": 150.0, "b7_per_flag_penalty": 2.0, "b7_cap": 3.0},
-    "immune_support": {"formulation_bonus_cap": 12.0, "evidence_floor_cap": 16.5},
+    # evidence_cap hoisted from immune_support.immune_support_evidence_cap's
+    # hardcoded 17.0 — same value, now a reviewable magnitude. It is a ceiling
+    # on the evidence dimension and is deliberately distinct from the floor cap.
+    "immune_support": {"formulation_bonus_cap": 12.0, "evidence_cap": 17.0, "evidence_floor_cap": 16.5},
     "joint_support": {"evidence_cap": 14.0,
                       "target_dose_mg": {"glucosamine": 1500.0, "chondroitin": 1200.0, "msm": 1500.0,
                                          "uc_ii": 40.0, "hyaluronic_acid": 120.0}},

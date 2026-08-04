@@ -64,7 +64,6 @@ from scoring_v4.modules.omega import score_omega
 from scoring_v4.modules.probiotic import score_probiotic
 from scoring_v4.modules.sports import score_sports
 from scoring_v4.router import class_for_product
-from scoring_v4.display_calibration import calibrate_display
 from scoring_v4.quality_score import assemble_quality_score
 
 
@@ -77,9 +76,6 @@ V4_SCORER_KEYS = (
     "v4_confidence",
     "v4_breakdown",
     "v4_anchored",
-    # Display-layer top-band calibration (raw is never mutated; this is the
-    # consumer-facing score). breakdown["display_calibration"] carries provenance.
-    "v4_display_100",
 )
 
 # Scoring-engine provenance (Phase 0 config-driven calibration). Stamped into
@@ -435,19 +431,15 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def score_product_v4(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
-    """Public v4 scorer. Runs the core pipeline, then the two display/score
-    finalizers on EVERY return path (including early BLOCKED / NOT_SCORED returns),
-    so the public contract fields are always present:
+    """Public v4 scorer. Runs the core pipeline, then the public score assembler
+    on EVERY return path (including early BLOCKED / NOT_SCORED returns), so the
+    public contract fields are always present:
 
-      - Layer 5 (display calibration, superseded): v4_display_100.
-        raw is never modified; gated; no-op for null/blocked. Experimental, removed
-        at the app switch once the quality score is cohort-validated.
-      - Layer 6 (public six-pillar Quality Score): quality_score_v4_100 +
-        quality_pillars_v4 + quality_tier + quality_score_status + version, projected
-        from the module breakdown (Phase-1 linear map). raw never modified;
+      - Public six-pillar Quality Score: quality_score_v4_100 +
+        quality_pillars_v4 + quality_tier + quality_score_status + version,
+        projected from the module breakdown. raw is never modified;
         BLOCKED/UNSAFE suppress the public number; NOT_SCORED yields not_scored.
     """
     result = _score_v4_core(enriched_product)
-    result = calibrate_display(result)
     result = assemble_quality_score(result)
     return result

@@ -312,7 +312,7 @@
       "formulation_cap": 30.0, "dose_cap": 25.0, "evidence_cap": 20.0,
       "b7_ul_pct_threshold": 150.0, "b7_per_flag_penalty": 2.0, "b7_cap": 3.0
     },
-    "immune_support": { "formulation_bonus_cap": 12.0, "evidence_floor_cap": 16.5 },
+    "immune_support": { "formulation_bonus_cap": 12.0, "evidence_cap": 17.0, "evidence_floor_cap": 16.5 },
     "joint_support": {
       "evidence_cap": 14.0,
       "target_dose_mg": { "glucosamine": 1500.0, "chondroitin": 1200.0, "msm": 1500.0, "uc_ii": 40.0, "hyaluronic_acid": 120.0 }
