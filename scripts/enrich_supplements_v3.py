@@ -17993,6 +17993,204 @@ class SupplementEnricherV3:
         unit = self._normalize_text(ingredient.get("unit") or "unknown")
         return f"label:{canonical}:{label_name}:{quantity_key}:{unit}"
 
+    @staticmethod
+    def _ul_scope_form_name_keys(value: Any) -> set[str]:
+        """Return explicit identity keys from one reference form label."""
+        if not isinstance(value, str) or not value.strip():
+            return set()
+
+        candidates = [value, re.sub(r"\([^)]*\)", " ", value)]
+        candidates.extend(re.findall(r"\(([^)]*)\)", value))
+        keys = set()
+        for candidate in candidates:
+            for part in re.split(r"\s+(?:or|and)\s+|[/,;]", candidate):
+                key = norm_module.make_normalized_key(part.strip())
+                if key:
+                    keys.add(key)
+        return keys
+
+    def _ul_scoped_form_uniis(
+        self,
+        parent: Dict[str, Any],
+        *,
+        standard_name: str,
+    ) -> set[str]:
+        """Resolve direct UNIIs for forms explicitly covered by a nutrient UL.
+
+        The clinical reference owns the list of covered form names; the IQM
+        owns their chemical identifiers. Both must agree before a form amount
+        can participate in the verdict gate.
+        """
+        if not self.rda_calculator:
+            return set()
+        nutrient_reference = (
+            self.rda_calculator._find_nutrient(standard_name) or {}
+        )
+        allowed_forms = nutrient_reference.get("ul_applies_to_forms")
+        if not isinstance(allowed_forms, list) or not allowed_forms:
+            return set()
+
+        allowed_keys = set()
+        for allowed_form in allowed_forms:
+            allowed_keys.update(self._ul_scope_form_name_keys(allowed_form))
+
+        scoped_uniis = set()
+        forms = parent.get("forms")
+        if not isinstance(forms, dict):
+            return scoped_uniis
+        for form_id, form in forms.items():
+            if not isinstance(form, dict):
+                continue
+            form_keys = self._ul_scope_form_name_keys(form_id)
+            for alias in form.get("aliases") or []:
+                form_keys.update(self._ul_scope_form_name_keys(alias))
+            if form_keys.isdisjoint(allowed_keys):
+                continue
+            scoped_uniis.update(
+                self._identity_unii_values(form, include_forms=False)
+            )
+        return scoped_uniis
+
+    def _ul_exposure_basis(
+        self,
+        ingredient: Dict[str, Any],
+        *,
+        canonical_id: str,
+        standard_name: str,
+    ) -> Dict[str, Any]:
+        """Classify whether a label dose is valid for a nutrient UL comparison.
+
+        A Daily Value anchors the row to a nutrient declaration. When DV is
+        absent, an exact source-UNII match to the canonical IQM parent proves
+        that the amount measures the parent substance itself. A direct UNII
+        match to an IQM form is also accepted when the nutrient reference
+        explicitly lists that form inside the UL scope. Other form/compound
+        identities remain conservative because their labelled mass is not
+        necessarily the nutrient-equivalent mass.
+        """
+        daily_value = ingredient.get("dailyValue")
+        daily_value_is_valid = bool(
+            isinstance(daily_value, (int, float))
+            and not isinstance(daily_value, bool)
+            and math.isfinite(float(daily_value))
+            and float(daily_value) >= 0
+        )
+        if daily_value_is_valid:
+            return {
+                "ul_gate_eligible": True,
+                "ul_exposure_basis": "daily_value_confirmed_nutrient_amount",
+                "ul_gate_ineligible_reason": None,
+            }
+
+        quality_map = self.databases.get("ingredient_quality_map") or {}
+        parent = quality_map.get(canonical_id) if canonical_id else None
+        parent_external_ids = (
+            parent.get("external_ids")
+            if isinstance(parent, dict)
+            and isinstance(parent.get("external_ids"), dict)
+            else {}
+        )
+        parent_unii = _normalize_unii(parent_external_ids.get("unii"))
+        source_uniis = self._identity_unii_values(
+            ingredient,
+            include_forms=False,
+        )
+        if parent_unii and parent_unii in source_uniis:
+            return {
+                "ul_gate_eligible": True,
+                "ul_exposure_basis": "canonical_parent_substance_amount",
+                "ul_gate_ineligible_reason": None,
+            }
+        scoped_form_uniis = (
+            self._ul_scoped_form_uniis(
+                parent,
+                standard_name=standard_name,
+            )
+            if isinstance(parent, dict)
+            else set()
+        )
+        if source_uniis & scoped_form_uniis:
+            return {
+                "ul_gate_eligible": True,
+                "ul_exposure_basis": "ul_scoped_form_substance_amount",
+                "ul_gate_ineligible_reason": None,
+            }
+
+        ingredient_name = self._normalize_text(ingredient.get("name") or "")
+        normalized_standard = self._normalize_text(standard_name or "")
+        is_compound_or_form = bool(
+            ingredient_name
+            and normalized_standard
+            and ingredient_name != normalized_standard
+        )
+        return {
+            "ul_gate_eligible": False,
+            "ul_exposure_basis": (
+                "compound_or_form_mass"
+                if is_compound_or_form
+                else "unresolved_no_daily_value"
+            ),
+            "ul_gate_ineligible_reason": (
+                "compound_mass_not_elemental"
+                if is_compound_or_form
+                else "no_daily_value_anchor"
+            ),
+        }
+
+    def _collect_special_use_flags(
+        self, active_ingredients: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """Return source-backed warnings for therapeutic/emergency-use doses."""
+        highest_ki_dose_mg: Optional[float] = None
+        for ingredient in active_ingredients:
+            identity_text = " ".join(
+                self._normalize_text(ingredient.get(field) or "")
+                for field in (
+                    "name",
+                    "raw_source_text",
+                    "matched_form",
+                    "form_name",
+                )
+            )
+            if "potassium iodide" not in identity_text:
+                continue
+            try:
+                quantity = float(ingredient.get("quantity") or 0)
+            except (TypeError, ValueError):
+                continue
+            unit_key = _rda_mass_unit_key(ingredient.get("unit"))
+            if quantity <= 0 or not unit_key:
+                continue
+            dose_mg = (
+                quantity * 1000.0
+                if unit_key == "g"
+                else quantity / 1000.0
+                if unit_key == "mcg"
+                else quantity
+            )
+            if dose_mg >= 65.0:
+                highest_ki_dose_mg = max(highest_ki_dose_mg or 0.0, dose_mg)
+
+        if highest_ki_dose_mg is None:
+            return []
+        return [{
+            "code": "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY",
+            "ingredient": "Potassium Iodide",
+            "amount": highest_ki_dose_mg,
+            "unit": "mg",
+            "severity": "high",
+            "action": (
+                "Use only during a radiation emergency when public-health or "
+                "emergency-management officials direct it; do not take it "
+                "routinely or before a radiation exposure."
+            ),
+            "source": "FDA",
+            "source_url": (
+                "https://www.fda.gov/drugs/bioterrorism-and-drug-preparedness/"
+                "frequently-asked-questions-potassium-iodide-ki"
+            ),
+        }]
+
     def _declared_folate_dfe_totals(
         self, active_ingredients: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
@@ -18031,6 +18229,176 @@ class SupplementEnricherV3:
                 )
         return totals
 
+    def _declared_same_identity_totals(
+        self, active_ingredients: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """Find top-level nutrient rows that own nested form detail."""
+        totals: List[Dict[str, Any]] = []
+        for ingredient in active_ingredients:
+            if ingredient.get("isNestedIngredient") or ingredient.get("parentBlend"):
+                continue
+            canonical = self._normalize_text(
+                ingredient.get("canonical_id")
+                or ingredient.get("standardName")
+                or ingredient.get("name")
+                or ""
+            )
+            if not canonical or canonical in {"folate", "vitamin b9 folate"}:
+                continue
+            try:
+                quantity = float(ingredient.get("quantity") or 0)
+            except (TypeError, ValueError):
+                continue
+            if quantity <= 0:
+                continue
+            totals.append({
+                "canonical": canonical,
+                "label_name": self._normalize_text(
+                    ingredient.get("raw_source_text")
+                    or ingredient.get("name")
+                    or ""
+                ),
+                "source_label_key": self._rda_source_label_key(ingredient),
+                "quantity": quantity,
+                "unit": self._normalize_text(ingredient.get("unit") or ""),
+                "component_source_label_keys": set(),
+            })
+
+        # A label may split one declared nutrient total into multiple nested
+        # forms (for example, Niacin 38 mg = niacinamide 30 mg + nicotinic
+        # acid 8 mg). Require exact parent linkage, canonical identity,
+        # compatible units, and a sum that reconciles to the declared total
+        # before treating those rows as form detail rather than extra dose.
+        for declared in totals:
+            component_keys = set()
+            component_total = 0.0
+            for ingredient in active_ingredients:
+                if (
+                    not ingredient.get("isNestedIngredient")
+                    or not ingredient.get("parentBlend")
+                ):
+                    continue
+                canonical = self._normalize_text(
+                    ingredient.get("canonical_id")
+                    or ingredient.get("standardName")
+                    or ingredient.get("name")
+                    or ""
+                )
+                parent_name = self._normalize_text(
+                    ingredient.get("parentBlend") or ""
+                )
+                unit = self._normalize_text(ingredient.get("unit") or "")
+                try:
+                    quantity = float(ingredient.get("quantity") or 0)
+                except (TypeError, ValueError):
+                    continue
+                if (
+                    canonical != declared["canonical"]
+                    or parent_name != declared["label_name"]
+                    or quantity <= 0
+                    or self._same_identity_unit_key(unit)
+                    != self._same_identity_unit_key(declared["unit"])
+                ):
+                    continue
+                component_total += quantity
+                component_keys.add(self._rda_source_label_key(ingredient))
+
+            tolerance = max(0.001, float(declared["quantity"]) * 0.001)
+            if (
+                component_keys
+                and abs(component_total - float(declared["quantity"])) <= tolerance
+            ):
+                declared["component_source_label_keys"] = component_keys
+        return totals
+
+    def _nested_daily_value_nutrient_owners(
+        self, active_ingredients: List[Dict[str, Any]]
+    ) -> Dict[str, str]:
+        """Map a source-compound parent row to its DV-confirmed nutrient child.
+
+        Some DSLD labels encode a source material as the top-level row and the
+        delivered elemental nutrient as a nested row. For example, label
+        299037 carries a 1000 mg magnesium L-threonate source mass above a
+        nested 72 mg Magnesium row with 17% DV. The nested Daily Value is the
+        decisive label evidence: its amount owns adequacy and UL assessment,
+        while the larger parent mass is retained only as form context.
+        """
+        top_level_rows: List[Dict[str, Any]] = [
+            ingredient
+            for ingredient in active_ingredients
+            if isinstance(ingredient, dict)
+            and not ingredient.get("isNestedIngredient")
+            and not ingredient.get("parentBlend")
+        ]
+        owner_links: Dict[str, str] = {}
+        for child in active_ingredients:
+            if (
+                not isinstance(child, dict)
+                or not child.get("isNestedIngredient")
+                or not child.get("parentBlend")
+            ):
+                continue
+            try:
+                daily_value = float(child.get("dailyValue"))
+                child_quantity = float(child.get("quantity") or 0)
+            except (TypeError, ValueError):
+                continue
+            if daily_value <= 0 or child_quantity <= 0:
+                continue
+            child_canonical = self._normalize_text(
+                child.get("canonical_id")
+                or child.get("standardName")
+                or child.get("name")
+                or ""
+            )
+            parent_name = self._normalize_text(child.get("parentBlend") or "")
+            child_unit = self._same_identity_unit_key(child.get("unit"))
+            if not child_canonical or not parent_name or not child_unit:
+                continue
+
+            for parent in top_level_rows:
+                parent_canonical = self._normalize_text(
+                    parent.get("canonical_id")
+                    or parent.get("standardName")
+                    or parent.get("name")
+                    or ""
+                )
+                parent_label = self._normalize_text(
+                    parent.get("raw_source_text")
+                    or parent.get("name")
+                    or ""
+                )
+                try:
+                    parent_quantity = float(parent.get("quantity") or 0)
+                except (TypeError, ValueError):
+                    continue
+                if (
+                    parent_canonical != child_canonical
+                    or parent_label != parent_name
+                    or parent.get("dailyValue") is not None
+                    or parent_quantity <= child_quantity
+                    or self._same_identity_unit_key(parent.get("unit"))
+                    != child_unit
+                ):
+                    continue
+                owner_links[self._rda_source_label_key(parent)] = (
+                    self._rda_source_label_key(child)
+                )
+                break
+        return owner_links
+
+    @staticmethod
+    def _same_identity_unit_key(value: Any) -> str:
+        """Normalize nutrient-equivalent suffixes for label-lineage matching."""
+        unit = str(value or "").strip().lower().replace("µ", "u").replace("μ", "u")
+        compact = "".join(unit.split())
+        equivalents = {
+            "mgne": "mg",
+            "milligramne": "mg",
+            "milligramsne": "mg",
+        }
+        return equivalents.get(compact, compact)
+
     def _rda_dose_lineage(
         self,
         ingredient: Dict[str, Any],
@@ -18039,6 +18407,8 @@ class SupplementEnricherV3:
         converted_unit: str,
         conversion_evidence: Dict[str, Any],
         declared_folate_totals: List[Dict[str, Any]],
+        declared_same_identity_totals: List[Dict[str, Any]],
+        nested_daily_value_owners: Dict[str, str],
     ) -> Dict[str, Optional[str]]:
         """Classify an emitted RDA/UL row as a total or label sub-component."""
         source_label_key = self._rda_source_label_key(ingredient)
@@ -18047,7 +18417,13 @@ class SupplementEnricherV3:
             "dose_role": "declared_total",
             "parent_label_key": None,
         }
-        if not declared_folate_totals:
+
+        # A nested same-identity row with an explicit Daily Value is the
+        # delivered nutrient declaration. The larger source-material parent
+        # remains useful form context but is not a second nutrient exposure.
+        if source_label_key in nested_daily_value_owners:
+            lineage["dose_role"] = "form_component"
+            lineage["parent_label_key"] = nested_daily_value_owners[source_label_key]
             return lineage
 
         canonical = self._normalize_text(
@@ -18058,6 +18434,39 @@ class SupplementEnricherV3:
         )
         label_name = self._normalize_text(ingredient.get("name") or "")
         original_unit = self._normalize_text(ingredient.get("unit") or "")
+
+        # DSLD can expose one nutrient declaration twice: a top-level total and
+        # a nested same-identity restatement in an equivalent-specific unit
+        # (e.g. Vitamin B3 500 mg → Niacin 500 mg NE). Exact parent linkage,
+        # canonical identity, amount, and compatible units are all required.
+        if ingredient.get("isNestedIngredient") and ingredient.get("parentBlend"):
+            parent_name = self._normalize_text(ingredient.get("parentBlend"))
+            try:
+                raw_quantity = float(ingredient.get("quantity") or 0)
+            except (TypeError, ValueError):
+                raw_quantity = 0.0
+            for declared in declared_same_identity_totals:
+                if source_label_key in declared.get(
+                    "component_source_label_keys", set()
+                ):
+                    lineage["dose_role"] = "form_component"
+                    lineage["parent_label_key"] = declared["source_label_key"]
+                    return lineage
+                if (
+                    canonical == declared["canonical"]
+                    and parent_name == declared["label_name"]
+                    and self._same_identity_unit_key(original_unit)
+                    == self._same_identity_unit_key(declared["unit"])
+                ):
+                    tolerance = max(0.001, float(declared["quantity"]) * 0.001)
+                    if abs(raw_quantity - float(declared["quantity"])) <= tolerance:
+                        lineage["dose_role"] = "form_component"
+                        lineage["parent_label_key"] = declared["source_label_key"]
+                        return lineage
+
+        if not declared_folate_totals:
+            return lineage
+
         converted_unit_key = self._normalize_text(converted_unit)
         factor = conversion_evidence.get("conversion_factor")
         try:
@@ -18107,6 +18516,7 @@ class SupplementEnricherV3:
         - Full evidence tracking
         """
         active_ingredients = self._primary_active_ingredients_for_enrichment(product)
+        special_use_flags = self._collect_special_use_flags(active_ingredients)
         quality_identity_rows = [
             row
             for row in (
@@ -18170,6 +18580,13 @@ class SupplementEnricherV3:
         # would falsely breach the 350 mg magnesium UL).
         mark_compound_duplicate_rows(active_ingredients)
         declared_folate_totals = self._declared_folate_dfe_totals(active_ingredients)
+        declared_same_identity_totals = self._declared_same_identity_totals(
+            active_ingredients
+        )
+        nested_daily_value_owners = self._nested_daily_value_nutrient_owners(
+            active_ingredients
+        )
+        nested_daily_value_owner_keys = set(nested_daily_value_owners.values())
         rda_data = []
         adequacy_results = []
         safety_flags = []
@@ -18217,12 +18634,11 @@ class SupplementEnricherV3:
                     ).strip()
                     nutrient_group_id = _nutrient_group_id(resolved_canonical_id)
                     nutrient_group_name = _nutrient_group_name(nutrient_group_id)
-                    # P0-1b: dailyValue present ⟹ elemental mass (corpus-validated
-                    # across 13,753 mineral rows). Rows without it (e.g. Magtein
-                    # 2000 mg magnesium L-threonate, which states COMPOUND mass) are
-                    # NOT eligible for the UL VERDICT gate — comparing compound mass
-                    # to an elemental UL yields a false over-UL.
-                    _dv_present = ingredient.get('dailyValue') is not None
+                    ul_exposure = self._ul_exposure_basis(
+                        ingredient,
+                        canonical_id=resolved_canonical_id,
+                        standard_name=std_name,
+                    )
                     quantity = ingredient.get('quantity', 0)
                     unit = ingredient.get('unit', '')
 
@@ -18334,6 +18750,8 @@ class SupplementEnricherV3:
                         converted_unit=converted_unit,
                         conversion_evidence=conv_evidence,
                         declared_folate_totals=declared_folate_totals,
+                        declared_same_identity_totals=declared_same_identity_totals,
+                        nested_daily_value_owners=nested_daily_value_owners,
                     )
                     conv_evidence.update(dose_lineage)
                     skip_ul_check = False
@@ -18345,7 +18763,11 @@ class SupplementEnricherV3:
                         # not create a second UL or stack dose.
                         skip_ul_check = True
                         skip_ul_reason = "form_component_of_declared_total"
-                    elif ingredient.get('is_compound_duplicate'):
+                    elif (
+                        ingredient.get('is_compound_duplicate')
+                        and dose_lineage["source_label_key"]
+                        not in nested_daily_value_owner_keys
+                    ):
                         # The bare elemental sibling row carries the true
                         # dose; checking/summing this row double-counts.
                         skip_ul_check = True
@@ -18546,6 +18968,7 @@ class SupplementEnricherV3:
                     adequacy_dict["original_unit"] = unit
                     adequacy_dict["conversion_applied"] = conversion.success
                     adequacy_dict.update(dose_lineage)
+                    adequacy_dict.update(ul_exposure)
                     adequacy_dict["per_day_min"] = per_day_min
                     adequacy_dict["per_day_max"] = per_day_max
                     adequacy_dict["servings_per_day_min"] = servings_min
@@ -18574,13 +18997,7 @@ class SupplementEnricherV3:
                                 "over_amount": over_ul_amount,
                                 "warning": f"Exceeds UL by {over_ul_amount:.1f}",
                                 "severity": "critical" if pct_ul_val >= 200 else "warning",
-                                "ul_gate_eligible": _dv_present,
-                                "ul_gate_ineligible_reason": (
-                                    None if _dv_present
-                                    else ("compound_mass_not_elemental"
-                                          if self._normalize_text(ing_name) != self._normalize_text(std_name)
-                                          else "no_daily_value_anchor")
-                                ),
+                                **ul_exposure,
                             }
                         ))
 
@@ -18614,7 +19031,11 @@ class SupplementEnricherV3:
                                 "amount": amount_for_ul,
                                 "unit": converted_unit,
                                 "pct_ul_individual": safety.pct_ul,
-                                "dv_present": _dv_present,
+                                "ul_gate_eligible": ul_exposure["ul_gate_eligible"],
+                                "ul_exposure_basis": ul_exposure["ul_exposure_basis"],
+                                "ul_gate_ineligible_reason": ul_exposure[
+                                    "ul_gate_ineligible_reason"
+                                ],
                             })
 
                     # Sprint E1.5.X-4 — ALWAYS emit `highest_ul` from the RDA
@@ -18645,6 +19066,7 @@ class SupplementEnricherV3:
                         "unit": unit,
                         "converted_quantity": converted_amount,
                         "converted_unit": converted_unit,
+                        **ul_exposure,
                         **dose_lineage,
                         "per_day_min": per_day_min,
                         "per_day_max": per_day_max,
@@ -18715,9 +19137,30 @@ class SupplementEnricherV3:
                     if agg_adequacy.over_ul:
                         pct_ul_val = agg_adequacy.pct_ul or 0.0
                         over_ul_amount = agg_adequacy.over_ul_amount or 0.0
-                        # Aggregated flag is gate-eligible only if EVERY contributing
-                        # row is elemental-confirmed (has a dailyValue).
-                        _agg_dv = all(r.get("dv_present") for r in group["rows"])
+                        # Aggregated exposure is gate-eligible only if every
+                        # contributing row has independently valid UL lineage.
+                        _agg_eligible = all(
+                            row.get("ul_gate_eligible") is True
+                            for row in group["rows"]
+                        )
+                        _agg_bases = {
+                            row.get("ul_exposure_basis")
+                            for row in group["rows"]
+                            if row.get("ul_exposure_basis")
+                        }
+                        _agg_basis = (
+                            next(iter(_agg_bases))
+                            if len(_agg_bases) == 1
+                            else "mixed_contributing_rows"
+                        )
+                        _agg_ineligible_reason = next(
+                            (
+                                row.get("ul_gate_ineligible_reason")
+                                for row in group["rows"]
+                                if row.get("ul_gate_eligible") is not True
+                            ),
+                            None,
+                        )
                         safety_flags.append({
                             "nutrient": group["std_name"],
                             "amount": group["total_amount"],
@@ -18734,8 +19177,13 @@ class SupplementEnricherV3:
                             "aggregation": "canonical_sum",
                             "canonical_id": cid,
                             "contributing_rows": group["rows"],
-                            "ul_gate_eligible": _agg_dv,
-                            "ul_gate_ineligible_reason": (None if _agg_dv else "compound_mass_not_elemental"),
+                            "ul_gate_eligible": _agg_eligible,
+                            "ul_exposure_basis": _agg_basis,
+                            "ul_gate_ineligible_reason": (
+                                None
+                                if _agg_eligible
+                                else _agg_ineligible_reason or "unresolved_ul_exposure_basis"
+                            ),
                         })
                         _aggregated_canonicals.add(cid)
 
@@ -18758,7 +19206,12 @@ class SupplementEnricherV3:
                     "conversion_evidence": conversion_evidence,
                     "safety_flags": safety_flags,
                     "ul_review_flags": ul_review_flags,
-                    "has_over_ul": len(safety_flags) > 0,
+                    "special_use_flags": special_use_flags,
+                    "has_over_ul": any(
+                        flag.get("ul_gate_eligible") is True
+                        for flag in safety_flags
+                        if isinstance(flag, dict)
+                    ),
                     "is_servings_estimated": servings_estimated,
                     "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                 }
@@ -18828,6 +19281,7 @@ class SupplementEnricherV3:
             "count": len(rda_data),
             "safety_flags": [],
             "ul_review_flags": [],
+            "special_use_flags": special_use_flags,
             "has_over_ul": False,
             "is_servings_estimated": servings_estimated,
             "reference_profile": dict(_RDA_REFERENCE_PROFILE),

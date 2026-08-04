@@ -2621,6 +2621,8 @@ def derive_v4_tradeoffs(
     for ev in safe_list(safe_dict(enriched.get("rda_ul_data")).get("safety_flags")):
         if not isinstance(ev, dict):
             continue
+        if ev.get("ul_gate_eligible") is not True:
+            continue
         nutrient = safe_str(ev.get("nutrient")) or "unknown"
         pct = safe_float(ev.get("pct_ul"), 0)
         penalties.append({
@@ -2628,6 +2630,24 @@ def derive_v4_tradeoffs(
             "label": f"Exceeds safe dose limit: {nutrient} at {pct:.0f}% of UL",
             "severity": "critical" if pct >= 200 else "warning",
             "reason": f"{nutrient}: {ev.get('amount')} vs UL {ev.get('ul')}",
+        })
+    for flag in safe_list(
+        safe_dict(enriched.get("rda_ul_data")).get("special_use_flags")
+    ):
+        if (
+            not isinstance(flag, dict)
+            or safe_str(flag.get("code"))
+            != "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY"
+        ):
+            continue
+        ingredient = safe_str(flag.get("ingredient"), "Potassium Iodide")
+        penalties.append({
+            "id": "B7_special_use",
+            "label": f"Emergency-use medicine: {ingredient}",
+            "severity": safe_str(flag.get("severity"), "high"),
+            "detail": safe_str(flag.get("action")),
+            "source": safe_str(flag.get("source")),
+            "source_url": safe_str(flag.get("source_url")),
         })
     # B8 CAERS is intentionally NOT surfaced: it has been dead in production
     # (the v3 scorer read a non-existent active key, so 0 shipped blobs carry
@@ -4876,6 +4896,8 @@ def build_top_warnings(enriched: Dict) -> List[Dict]:
     for flag in safe_list(safe_dict(enriched.get("rda_ul_data")).get("safety_flags")):
         if not isinstance(flag, dict):
             continue
+        if flag.get("ul_gate_eligible") is not True:
+            continue
         nutrient = safe_str(flag.get("nutrient") or flag.get("standard_name") or flag.get("canonical_id"))
         if not nutrient:
             continue
@@ -4888,6 +4910,21 @@ def build_top_warnings(enriched: Dict) -> List[Dict]:
         else:
             message = f"Upper-limit warning: {nutrient}"
         add_warning("dose_safety", sev, message)
+
+    for flag in safe_list(
+        safe_dict(enriched.get("rda_ul_data")).get("special_use_flags")
+    ):
+        if (
+            not isinstance(flag, dict)
+            or safe_str(flag.get("code"))
+            != "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY"
+        ):
+            continue
+        add_warning(
+            "special_use",
+            safe_str(flag.get("severity"), "high"),
+            safe_str(flag.get("action")),
+        )
 
     # Interaction alerts
     for alert in safe_list(safe_dict(enriched.get("interaction_profile")).get("ingredient_alerts")):
@@ -6965,23 +7002,55 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 out.append(marked)
             return out
 
+        def _consumer_supported_exposure_rows(rows):
+            """Do not ship unsupported compound/form-mass comparisons as nutrition facts."""
+            if not isinstance(rows, list):
+                return rows
+            return [
+                row
+                for row in rows
+                if isinstance(row, dict)
+                and row.get("ul_gate_eligible") is True
+                and row.get("dose_role") != "form_component"
+            ]
+
+        exported_ingredients_with_rda = _consumer_supported_exposure_rows(
+            rda_ul_data.get("ingredients_with_rda")
+        )
+        exported_analyzed_ingredients = _flag_below_clinical(
+            _consumer_supported_exposure_rows(
+                rda_ul_data.get("analyzed_ingredients")
+            )
+        )
+        exported_adequacy_results = _flag_below_clinical(
+            _consumer_supported_exposure_rows(
+                safe_list(rda_ul_data.get("adequacy_results"))
+            )
+        )
+        exported_safety_flags = [
+            flag
+            for flag in safe_list(rda_ul_data.get("safety_flags"))
+            if isinstance(flag, dict)
+            and flag.get("ul_gate_eligible") is True
+        ]
         blob["rda_ul_data"] = {
             "collection_enabled": rda_ul_data.get("collection_enabled"),
             "collection_reason": rda_ul_data.get("collection_reason"),
             "reference_data_version": rda_ul_data.get("reference_data_version"),
             "reference_data_fingerprint": rda_ul_data.get("reference_data_fingerprint"),
-            "ingredients_with_rda": rda_ul_data.get("ingredients_with_rda"),
-            "analyzed_ingredients": _flag_below_clinical(
-                rda_ul_data.get("analyzed_ingredients")
+            "ingredients_with_rda": exported_ingredients_with_rda,
+            "analyzed_ingredients": exported_analyzed_ingredients,
+            "count": (
+                len(exported_adequacy_results)
+                if isinstance(exported_adequacy_results, list)
+                else rda_ul_data.get("count")
             ),
-            "count": rda_ul_data.get("count"),
-            "adequacy_results": _flag_below_clinical(
-                safe_list(rda_ul_data.get("adequacy_results"))
-            ),
+            "adequacy_results": exported_adequacy_results,
             "conversion_evidence": safe_list(rda_ul_data.get("conversion_evidence")),
-            "safety_flags": safe_list(rda_ul_data.get("safety_flags")),
+            "safety_flags": exported_safety_flags,
             "ul_review_flags": safe_list(rda_ul_data.get("ul_review_flags")),
-            "has_over_ul": rda_ul_data.get("has_over_ul"),
+            "special_use_flags": safe_list(rda_ul_data.get("special_use_flags")),
+            "has_over_ul": bool(exported_safety_flags),
         }
 
     # Probiotic detail — strains, CFU, clinical matches

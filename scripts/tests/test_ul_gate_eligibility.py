@@ -1,15 +1,9 @@
-"""
-P0-1b step 1 — `ul_gate_eligible` on rda_ul_data safety_flags.
+"""UL verdict eligibility must follow typed dose evidence, not a DV shortcut.
 
-Corpus finding (13,753 mineral rows): DSLD names mineral rows by the ELEMENT and
-states the ELEMENTAL mass; `dailyValue` present ⟹ elemental (validated by %DV
-reconstruction). Compound-mass rows (e.g. Magtein "2000 mg" magnesium
-L-threonate) carry `dailyValue: None` and compare their COMPOUND mass to the
-elemental UL — a false over-UL.
-
-So the UL verdict gate must only fire on flags whose mass is confirmed elemental.
-A safety_flag is `ul_gate_eligible` iff the source row has a `dailyValue`; else it
-is excluded (reason `compound_mass_not_elemental` for compound-named rows).
+Daily Value remains high-confidence evidence that a row declares the nutrient
+amount. A source UNII that exactly matches the canonical IQM parent's UNII is
+also direct-identity evidence. Compound/form rows without either anchor remain
+conservatively ineligible.
 """
 
 from __future__ import annotations
@@ -45,6 +39,8 @@ def test_compound_mass_row_flag_is_gate_ineligible(enricher):
     assert flags, "expected an over-UL flag for 200 mg zinc vs a 40 mg UL"
     assert flags[0].get("ul_gate_eligible") is False
     assert flags[0].get("ul_gate_ineligible_reason") == "compound_mass_not_elemental"
+    assert flags[0].get("ul_exposure_basis") == "compound_or_form_mass"
+    assert result["has_over_ul"] is False
 
 
 def test_elemental_dv_row_flag_is_gate_eligible(enricher):
@@ -58,3 +54,362 @@ def test_elemental_dv_row_flag_is_gate_eligible(enricher):
     flags = [f for f in result["safety_flags"] if "zinc" in (f.get("nutrient") or "").lower()]
     assert flags, "expected an over-UL flag for 200 mg zinc"
     assert flags[0].get("ul_gate_eligible") is True
+    assert flags[0].get("ul_exposure_basis") == "daily_value_confirmed_nutrient_amount"
+
+
+@pytest.mark.parametrize("daily_value", [True, "1818", -1, float("nan"), float("inf")])
+def test_malformed_daily_value_does_not_establish_ul_exposure(enricher, daily_value):
+    product = _mag([
+        {
+            "name": "Zinc Picolinate",
+            "standardName": "Zinc",
+            "canonical_id": "zinc",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 200,
+            "unit": "mg",
+            "dailyValue": daily_value,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    flag = next(
+        flag
+        for flag in result["safety_flags"]
+        if "zinc" in (flag.get("nutrient") or "").lower()
+    )
+
+    assert flag["ul_gate_eligible"] is False
+    assert flag["ul_exposure_basis"] == "compound_or_form_mass"
+
+
+def test_parent_unii_row_without_daily_value_is_gate_eligible(enricher):
+    # Live DSLD 13460 is one plain Niacin row with the canonical-parent UNII,
+    # 1000 mg, and no DV. Its labelled amount is niacin itself, not a carrier
+    # compound, so absence of DV must not suppress the clinical gate.
+    product = _mag([
+        {
+            "name": "Niacin",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "uniiCode": "2679MF687A",
+            "quantity": 1000,
+            "unit": "mg",
+            "dailyValue": None,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    flags = [
+        flag
+        for flag in result["safety_flags"]
+        if "niacin" in (flag.get("nutrient") or "").lower()
+    ]
+
+    assert flags, "expected an over-UL flag for 1000 mg niacin vs 35 mg UL"
+    assert flags[0]["ul_gate_eligible"] is True
+    assert flags[0]["ul_gate_ineligible_reason"] is None
+    assert flags[0]["ul_exposure_basis"] == "canonical_parent_substance_amount"
+    assert result["has_over_ul"] is True
+
+
+def test_reference_scoped_form_unii_without_daily_value_is_gate_eligible(enricher):
+    # NIH applies the supplemental-niacin UL to nicotinamide/niacinamide.
+    # A direct form-UNII match therefore establishes that a standalone
+    # niacinamide amount measures an in-scope substance even without a DV.
+    product = _mag([
+        {
+            "name": "Niacinamide",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "uniiCode": "25X51I8RD4",
+            "quantity": 650,
+            "unit": "mg NE",
+            "dailyValue": None,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    flag = next(
+        flag
+        for flag in result["safety_flags"]
+        if "niacin" in (flag.get("nutrient") or "").lower()
+    )
+
+    assert flag["ul_gate_eligible"] is True
+    assert flag["ul_gate_ineligible_reason"] is None
+    assert flag["ul_exposure_basis"] == "ul_scoped_form_substance_amount"
+    assert result["has_over_ul"] is True
+
+
+def test_unlisted_niacin_derivative_without_daily_value_stays_ineligible(enricher):
+    # Inositol hexanicotinate is not one of the two forms to which the NIH
+    # supplemental-niacin UL applies. Its compound mass must not be treated as
+    # a direct niacin amount merely because it belongs to the niacin parent.
+    product = _mag([
+        {
+            "name": "Inositol Hexanicotinate",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 1500,
+            "unit": "mg NE",
+            "dailyValue": None,
+        },
+    ])
+
+    basis = enricher._ul_exposure_basis(
+        product["activeIngredients"][0],
+        canonical_id="vitamin_b3_niacin",
+        standard_name="Vitamin B3 (Niacin)",
+    )
+
+    assert basis["ul_gate_eligible"] is False
+    assert basis["ul_gate_ineligible_reason"] == "compound_mass_not_elemental"
+    assert basis["ul_exposure_basis"] == "compound_or_form_mass"
+
+
+def test_nested_form_components_that_sum_to_parent_are_not_double_counted(enricher):
+    # Live Thorne labels declare one Niacin total and then split that total
+    # into nested niacinamide + nicotinic-acid components. The components sum
+    # to the parent; they are lineage detail, not additional exposure.
+    product = _mag([
+        {
+            "name": "Niacin",
+            "raw_source_text": "Niacin",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "uniiCode": "2679MF687A",
+            "quantity": 38,
+            "unit": "mg",
+            "dailyValue": 238,
+            "isNestedIngredient": False,
+        },
+        {
+            "name": "Niacinamide",
+            "raw_source_text": "Niacinamide",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "uniiCode": "25X51I8RD4",
+            "quantity": 30,
+            "unit": "mg",
+            "dailyValue": None,
+            "isNestedIngredient": True,
+            "parentBlend": "Niacin",
+        },
+        {
+            "name": "Niacin",
+            "raw_source_text": "Niacin",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "uniiCode": "2679MF687A",
+            "quantity": 8,
+            "unit": "mg",
+            "dailyValue": None,
+            "isNestedIngredient": True,
+            "parentBlend": "Niacin",
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    analyzed = [
+        row
+        for row in result["analyzed_ingredients"]
+        if "niacin" in (row.get("ingredient") or "").lower()
+    ]
+    flags = [
+        flag
+        for flag in result["safety_flags"]
+        if "niacin" in (flag.get("nutrient") or "").lower()
+    ]
+
+    assert len(analyzed) == 3
+    assert analyzed[0]["dose_role"] == "declared_total"
+    assert all(row["dose_role"] == "form_component" for row in analyzed[1:])
+    assert all(row["skip_ul_check"] is True for row in analyzed[1:])
+    assert len(flags) == 1
+    assert flags[0]["amount"] == pytest.approx(38)
+    assert flags[0]["pct_ul"] == pytest.approx(38 / 35 * 100)
+    assert flags[0]["ul_gate_eligible"] is True
+
+
+def test_nested_same_identity_amount_is_label_restatement_not_second_exposure(enricher):
+    # Live DSLD 312939 declares Vitamin B3 500 mg and nests "Niacin
+    # 500 mg NE" beneath that row. These are two representations of one
+    # label dose, not 1000 mg of exposure.
+    product = _mag([
+        {
+            "name": "Vitamin B3",
+            "raw_source_text": "Vitamin B3",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "uniiCode": "2679MF687A",
+            "quantity": 500,
+            "unit": "mg",
+            "dailyValue": 3125,
+            "isNestedIngredient": False,
+        },
+        {
+            "name": "Niacin",
+            "raw_source_text": "Niacin",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 500,
+            "unit": "mg NE",
+            "dailyValue": None,
+            "isNestedIngredient": True,
+            "parentBlend": "Vitamin B3",
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    analyzed = result["analyzed_ingredients"]
+    nested = next(row for row in analyzed if row["ingredient"] == "Niacin")
+    flags = [
+        flag
+        for flag in result["safety_flags"]
+        if "niacin" in (flag.get("nutrient") or "").lower()
+        or "vitamin b3" in (flag.get("nutrient") or "").lower()
+    ]
+
+    assert nested["dose_role"] == "form_component"
+    assert nested["skip_ul_check"] is True
+    assert nested["skip_ul_reason"] == "form_component_of_declared_total"
+    assert len(flags) == 1
+    assert flags[0]["amount"] == pytest.approx(500)
+    assert flags[0]["ul_gate_eligible"] is True
+
+
+def test_nested_daily_value_row_owns_exposure_over_larger_source_compound_mass(enricher):
+    # Live DSLD 299037 represents Magtein source mass as a 1000 mg parent and
+    # the delivered Magnesium amount as a nested 72 mg row carrying 17% DV.
+    # The DV-confirmed child is the nutrient exposure; the larger parent mass
+    # must not be compared with the elemental magnesium UL.
+    product = _mag([
+        {
+            "name": "Magnesium",
+            "raw_source_text": "Magnesium",
+            "standardName": "Magnesium",
+            "canonical_id": "magnesium",
+            "canonical_source_db": "ingredient_quality_map",
+            "uniiCode": "I38ZP9992A",
+            "quantity": 1000,
+            "unit": "mg",
+            "dailyValue": None,
+            "isNestedIngredient": False,
+        },
+        {
+            "name": "Magtein Magnesium L-Threonate",
+            "raw_source_text": "Magtein Magnesium L-Threonate",
+            "standardName": "Magnesium",
+            "canonical_id": "magnesium",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 72,
+            "unit": "mg",
+            "dailyValue": 17,
+            "isNestedIngredient": True,
+            "parentBlend": "Magnesium",
+            "is_compound_duplicate": True,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=2,
+        max_servings_per_day=2,
+    )
+    analyzed = result["analyzed_ingredients"]
+    source_mass = next(row for row in analyzed if row["ingredient"] == "Magnesium")
+    delivered = next(
+        row
+        for row in analyzed
+        if row["ingredient"] == "Magtein Magnesium L-Threonate"
+    )
+
+    assert source_mass["dose_role"] == "form_component"
+    assert source_mass["skip_ul_check"] is True
+    assert source_mass["skip_ul_reason"] == "form_component_of_declared_total"
+    assert delivered["dose_role"] == "declared_total"
+    assert delivered["skip_ul_check"] is False
+    assert delivered["ul_exposure_basis"] == "daily_value_confirmed_nutrient_amount"
+    assert [
+        flag
+        for flag in result["safety_flags"]
+        if "magnesium" in (flag.get("nutrient") or "").lower()
+    ] == []
+
+
+def test_emergency_strength_potassium_iodide_emits_special_use_flag(enricher):
+    product = _mag([
+        {
+            "name": "Potassium Iodide",
+            "raw_source_text": "Potassium Iodide",
+            "standardName": "Iodine",
+            "canonical_id": "iodine",
+            "quantity": 130,
+            "unit": "mg",
+            "dailyValue": None,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(product)
+
+    assert result["special_use_flags"] == [{
+        "code": "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY",
+        "ingredient": "Potassium Iodide",
+        "amount": 130.0,
+        "unit": "mg",
+        "severity": "high",
+        "action": (
+            "Use only during a radiation emergency when public-health or "
+            "emergency-management officials direct it; do not take it "
+            "routinely or before a radiation exposure."
+        ),
+        "source": "FDA",
+        "source_url": (
+            "https://www.fda.gov/drugs/bioterrorism-and-drug-preparedness/"
+            "frequently-asked-questions-potassium-iodide-ki"
+        ),
+    }]
+
+
+def test_nutritional_potassium_iodide_dose_does_not_emit_emergency_flag(enricher):
+    product = _mag([
+        {
+            "name": "Potassium Iodide",
+            "standardName": "Iodine",
+            "canonical_id": "iodine",
+            "quantity": 225,
+            "unit": "mcg",
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(product)
+
+    assert result["special_use_flags"] == []

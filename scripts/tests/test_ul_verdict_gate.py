@@ -77,3 +77,22 @@ def test_indeterminate_folate_at_possible_ul_forces_review_caution():
     assert result.verdict == "CAUTION"
     assert result.needs_review is True
     assert "FOLATE_UL_FORM_REVIEW" in result.safety_signals
+
+
+def test_emergency_use_potassium_iodide_cannot_ship_safe():
+    product = {
+        "rda_ul_data": {
+            "safety_flags": [],
+            "special_use_flags": [{
+                "code": "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY",
+                "ingredient": "Potassium Iodide",
+                "amount": 130,
+                "unit": "mg",
+            }],
+        }
+    }
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict == "CAUTION"
+    assert "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY" in result.safety_signals

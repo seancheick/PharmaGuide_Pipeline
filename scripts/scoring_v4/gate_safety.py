@@ -606,6 +606,19 @@ def _apply_ul_review_policy(result: SafetyResult, product: Dict[str, Any]) -> No
         _append_signal(result, signal)
 
 
+def _apply_special_use_policy(result: SafetyResult, product: Dict[str, Any]) -> None:
+    """Prevent emergency-use medicines from receiving an ordinary SAFE verdict."""
+    rda_ul = _safe_dict(product.get("rda_ul_data"))
+    for flag in _safe_list(rda_ul.get("special_use_flags")):
+        if not isinstance(flag, dict):
+            continue
+        code = str(flag.get("code") or "").strip()
+        if code != "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY":
+            continue
+        result.verdict = _max_verdict(result.verdict, "CAUTION")
+        _append_signal(result, code)
+
+
 def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
     """Evaluate the v4 Layer 1 safety gate on an enriched product.
 
@@ -632,6 +645,7 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
     _apply_stimulant_policy(result, product)
     _apply_ul_dose_policy(result, product)
     _apply_ul_review_policy(result, product)
+    _apply_special_use_policy(result, product)
 
     # Disease claims → CAUTION. v3 routes this through B6 marketing
     # penalty + verdict adjustment; v4 surfaces it as a Layer 1 signal.

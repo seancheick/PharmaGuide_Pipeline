@@ -72,6 +72,30 @@ def test_semantic_parity_rejects_rda_ul_or_unit_drift() -> None:
         assert_semantic_parity(canonical, changed)
 
 
+def test_semantic_fingerprint_covers_ul_form_scope_and_clinical_note() -> None:
+    canonical = _rda_data()
+    canonical["nutrient_recommendations"][0].update({
+        "ul_note": "UL applies to both verified forms.",
+        "ul_applies_to_forms": ["form a", "form b"],
+    })
+
+    changed_note = copy.deepcopy(canonical)
+    changed_note["nutrient_recommendations"][0]["ul_note"] = (
+        "UL applies only to form a."
+    )
+    assert semantic_rda_ul_fingerprint(
+        canonical
+    ) != semantic_rda_ul_fingerprint(changed_note)
+
+    changed_scope = copy.deepcopy(canonical)
+    changed_scope["nutrient_recommendations"][0]["ul_applies_to_forms"] = [
+        "form a"
+    ]
+    assert semantic_rda_ul_fingerprint(
+        canonical
+    ) != semantic_rda_ul_fingerprint(changed_scope)
+
+
 def test_canonical_reference_stamp_matches_its_semantic_fingerprint() -> None:
     path = Path(__file__).parent.parent / "data" / "rda_optimal_uls.json"
     data = json.loads(path.read_text())

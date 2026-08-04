@@ -63,3 +63,18 @@ def test_identity_contract_gate_runs_even_when_catalog_is_fresh():
         "scripts/scoring_v4/pillar_explanations.py",
     ):
         assert path in source
+
+
+def test_storage_cleanup_verifies_the_branch_that_received_the_bundle_commit():
+    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
+
+    branch_resolution = source.index(
+        'FLUTTER_RELEASE_BRANCH="$(git -C "$FLUTTER_REPO" branch --show-current)"'
+    )
+    bundle_commit = source.index(
+        'git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog'
+    )
+    cleanup = source.index('"$PG_PYTHON" scripts/cleanup_old_versions.py')
+
+    assert branch_resolution < bundle_commit < cleanup
+    assert '--branch "$FLUTTER_RELEASE_BRANCH"' in source

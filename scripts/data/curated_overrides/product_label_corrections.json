@@ -1,13 +1,13 @@
 {
   "_metadata": {
-    "schema_version": "1.0.0",
-    "description": "Reviewer-signed corrections for DSLD product rows where label text or a source identifier contains a verified transcription or attribution defect.",
-    "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, or both. Global aliases and global identifier suppression are not supported.",
+    "schema_version": "1.1.0",
+    "description": "Reviewer-signed corrections for DSLD product rows where label text, a source identifier, or a quantity unit contains a verified transcription or attribution defect.",
+    "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, a verified quantity unit, or a combination of those fields. Global aliases and global identifier suppression are not supported.",
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
-    "review_policy": "Every entry must carry: dsld_id, brand, product_name (for human-readable audit trail), raw_ingredient_text (the label-printed text being corrected), corrected_ingredient_text (the canonical text the cleaner should see instead), evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer (signed by a clinician with the date), review_date (ISO 8601 YYYY-MM-DD).",
+    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity-unit changes require exact raw_quantity_unit and corrected_quantity_unit values and must be supported by the official label image.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-07-13",
-    "total_entries": 3,
+    "last_updated": "2026-08-03",
+    "total_entries": 6,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -16,6 +16,9 @@
       "product_name": "GNC Women's Ultra Mega Active Vanilla",
       "raw_ingredient_text": "Insulin",
       "corrected_ingredient_text": "Inulin",
+      "correction_fields": [
+        "name"
+      ],
       "evidence": "Label printing/transcription error. Sibling ingredients in the same fiber-blend cell (Inositol, Fructooligosaccharides (FOS), Gum Acacia, Cellulose Gum, MCT Oil) make the fiber context unambiguous; 'Insulin' is the dictionary-nearest misprint of 'Inulin' (fructan fiber, FDA-recognized dietary fiber). Insulin itself is a hormone biologic regulated under FDA's Biologics Price Competition and Innovation Act (BPCIA, post-2020 transition from new-drug applications to biologic-license applications) and cannot legally appear on a US dietary-supplement label. Independent online cross-check confirms the same product is listed elsewhere with 'Inulin' rather than 'Insulin'.",
       "sources": [
         "https://www.fda.gov/drugs/therapeutic-biologics-applications-bla/biosimilars",
@@ -25,6 +28,77 @@
       "review_date": "2026-05-22",
       "scope": "dsld_id_only",
       "provenance_tag": "label_typo_correction"
+    },
+    "259789": {
+      "brand": "GNC",
+      "product_name": "GNC Multivitamin Active",
+      "raw_ingredient_text": "Iodine",
+      "corrected_ingredient_text": "Iodine",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The live DSLD JSON API reports the Iodine quantities as 150 mg and 75 mg, but the official DSLD label PDF prints 150 mcg per two-caplet serving and 75 mcg per one-caplet serving. This product-scoped correction repairs the API transcription unit before dose conversion; the numeric quantities and nutrient identity are unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/259789",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/259789.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "299037": {
+      "brand": "Pure Encapsulations",
+      "product_name": "CogniMag",
+      "raw_ingredient_text": "Magnesium",
+      "corrected_ingredient_text": "Magtein Magnesium L-Threonate",
+      "raw_unii_code": "I38ZP9992A",
+      "corrected_unii_code": null,
+      "correction_fields": [
+        "name",
+        "uniiCode"
+      ],
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "Magtein Magnesium L-Threonate",
+          "corrected_ingredient_text": "Magnesium",
+          "correction_fields": [
+            "name"
+          ]
+        }
+      ],
+      "evidence": "The live DSLD JSON API crosses the two names in this label hierarchy: it assigns the 1000 mg source-material amount and elemental-magnesium UNII to a row named Magnesium, then assigns the 72 mg amount with 17% Daily Value to a nested row named Magtein Magnesium L-Threonate. The official DSLD label PDF prints Magnesium 72 mg (17% DV) from 1000 mg Magtein magnesium L-threonate. These exact product-row corrections restore the printed hierarchy before identity resolution; the unsupported elemental UNII is removed from the source-material row rather than transferred by inference.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/299037",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/299037.pdf",
+        "https://precision.fda.gov/uniisearch/srs/unii/I38ZP9992A"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_hierarchy_correction"
+    },
+    "328117": {
+      "brand": "Nature's Way",
+      "product_name": "Alive! Women's 50+ Multivitamin Gummy Mixed Berry Flavored",
+      "raw_ingredient_text": "Boron",
+      "corrected_ingredient_text": "Boron",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The live DSLD JSON API reports Boron as 150 mg, but the official DSLD label PDF prints Boron (as sodium borate) at 150 mcg per two-gummy serving. This product-scoped correction repairs the API transcription unit before dose conversion; the numeric quantity and nutrient identity are unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/328117",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/328117.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
     },
     "59047": {
       "brand": "Life_Extension",
