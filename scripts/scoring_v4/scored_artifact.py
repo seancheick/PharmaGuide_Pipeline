@@ -95,9 +95,9 @@ def _product_safety_status(
 
 def _quality_assessment_status(quality_score_status: str) -> str:
     """Report whether the independent quality assessment completed."""
-    if quality_score_status == "scored":
+    if quality_score_status in {"scored", "suppressed_safety"}:
         return "complete"
-    if quality_score_status == "suppressed_safety":
+    if quality_score_status == "not_scored":
         return "partial"
     return "failed"
 
@@ -293,7 +293,7 @@ def suppress_scored_artifact_for_hard_block(
         "quality_score_v4_100": None,
         "quality_score_status": "suppressed_safety",
         "product_safety_status": "blocked",
-        "quality_assessment_status": "partial",
+        "quality_assessment_status": "complete",
         "quality_tier": None,
         "quality_score_suppressed_reason": (
             blocked.get("quality_score_suppressed_reason") or reason
@@ -317,7 +317,7 @@ def suppress_scored_artifact_for_hard_block(
     metadata.update({
         "scoring_status": "suppressed_safety",
         "product_safety_status": "blocked",
-        "quality_assessment_status": "partial",
+        "quality_assessment_status": "complete",
         "verdict": "BLOCKED",
         "blocking_reason": blocked["blocking_reason"],
     })

@@ -343,8 +343,8 @@ def test_missing_safety_gate_is_not_reported_as_no_known_concern() -> None:
     ("quality_status", "expected"),
     [
         ("scored", "complete"),
-        ("suppressed_safety", "partial"),
-        ("not_scored", "failed"),
+        ("suppressed_safety", "complete"),
+        ("not_scored", "partial"),
         ("unexpected", "failed"),
     ],
 )
@@ -377,7 +377,7 @@ def test_hard_block_suppresses_every_public_score_surface(
     assert blocked["quality_score_v4_100"] is None
     assert blocked["quality_score_status"] == "suppressed_safety"
     assert blocked["product_safety_status"] == "blocked"
-    assert blocked["quality_assessment_status"] == "partial"
+    assert blocked["quality_assessment_status"] == "complete"
     assert blocked["score_100_equivalent"] is None
     assert blocked["display_100"] == "N/A"
     assert blocked["_v4_quality_score_100"] is None
