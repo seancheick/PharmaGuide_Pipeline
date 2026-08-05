@@ -3,8 +3,8 @@
 Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
 (probiotic per-class rubric line-by-line):
 
-    Dimension          Cap     Subsequent slice that fills it
-    -----------------  ----    -------------------------------
+    Core dimension      Cap     Subsequent slice that fills it
+    ------------------  ----    -------------------------------
     Formulation         25     P2.1 — total CFU 4 + ≥10B 4 + appropriate
                                diversity 4 + clinical strains 5 + delivery 5
                                + prebiotic 3
@@ -13,23 +13,26 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
     Evidence            20     P2.3 — strain-clinical credit (multiplicative
                                pipeline, cap_per_ingredient 7) + indication
                                relevance 8
-    Testing & Trust     15     P2.4 — B4a SKU + B4b GMP + B4c traceability;
-                               hard-clamp 15 (reuses generic_trust)
     Transparency        15     P2.5 — strain identities 8 + per-strain CFU 7;
                                minus B2 allergen + B5 opacity (class-aware
                                probiotic 0.4x) + B6 marketing; B3 claims +4
-    Total class score  100
+    Core subtotal       85
 
-Plus two SEPARATE adjustments (§6 line 390):
+Plus separate adjustments before the raw-score clamp:
 
+    Verification Bonus         0 to +8    (P2.4 B4a/B4b/B4c signals, rescaled
+                                          from the former 0-15 Trust dimension)
     Manufacturer Trust         0 to +5    (D1+D2+rollup; reuses generic)
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; reuses generic)
+    Safety Hygiene Base        0 to +4    (catalog safety-signal absence)
 
-P2.6 state: the probiotic module is complete. All five dimensions,
-manufacturer adjustments, and final rubric-score assembly are populated.
-The shape is intentionally identical to the generic module breakdown so
-downstream tooling can read both classes uniformly.
+P2.6 state: the probiotic module is complete. All four core dimensions,
+the additive verification/manufacturer/safety adjustments, and final raw
+rubric-score assembly are populated. The public six-pillar score is assembled
+separately by `scoring_v4.quality_score`. The breakdown shape is intentionally
+identical to the generic module so downstream tooling can read both classes
+uniformly.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). Shared infrastructure (DimensionResult,
@@ -131,7 +134,7 @@ class ProbioticModuleResult:
 
 
 def _empty_dimensions() -> Dict[str, DimensionResult]:
-    """Build the 5-dimension skeleton with caps locked from DIMENSION_CAPS.
+    """Build the 4-dimension skeleton with caps locked from DIMENSION_CAPS.
     Insertion order matches rendering order in audit / UI."""
     return {name: DimensionResult(max=float(cap)) for name, cap in DIMENSION_CAPS}
 
@@ -178,9 +181,9 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     evidence_dim.penalties = evidence_payload["penalties"]
     evidence_dim.metadata = evidence_payload.get("metadata", {})
 
-    # P2.4 — Trust dimension reuses the generic B4a/B4b/B4c logic.
-    # Probiotic Trust 15 has the same caps and sub-rubrics as generic Trust
-    # 15 per §6 line 292-295. No probiotic-specific cert programs exist in
+    # P2.4 — the additive verification bonus reuses the generic B4a/B4b/B4c
+    # source logic, rescaled from its historical 0-15 audit range to 0-8.
+    # No probiotic-specific cert programs exist in
     # the catalog today (NSF/USP/Informed are class-agnostic; IFOS is gated
     # marine-only via _is_omega_like and correctly filtered for probiotics).
     # The cross-module `brand_only` / `needs_review` scope policy question

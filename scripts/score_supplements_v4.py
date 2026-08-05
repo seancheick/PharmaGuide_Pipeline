@@ -20,7 +20,7 @@ Current P3.6 / P2.6 / P1.6.6 state:
     populated dimensions plus manufacturer trust / violations and final 0-100
     rubric scores.
   - raw_score_v4_100 mirrors the module result for complete products in
-    all four online modules.
+    every online module.
   - v4_confidence = top-level typed confidence band for
     complete scoreable rows; blocked_by_* for gate failures.
   - v4_breakdown.confidence contains typed sub-category
@@ -36,7 +36,8 @@ Subsequent phases (per §19 P1.x slices):
            + excellence + single-ingredient + enzyme; B0/B1 penalties).
   P1.3.2 — Dose 25 (supplemental window + multi-form; B7 penalty).
   P1.3.3 — Evidence 20 (multiplicative pipeline).
-  P1.3.4 — Testing & Trust 15 (B4a SKU + B4b GMP + B4c traceability).
+  P1.3.4 — B4a/B4b/B4c verification signals, now rescaled into the
+           additive 0-8 Verification Bonus rather than a fifth core dimension.
   P1.3.5 — Transparency 10 (B3 claims; B2/B5/B6 penalties).
   P1.3.6 — Manufacturer Trust +5 + Manufacturer Violations -25
            + penalty roll-up + final 100-pt assembly + verdict reconciliation.
@@ -298,7 +299,7 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         result["v4_breakdown"]["confidence"] = confidence
         result["v4_confidence"] = confidence["band"]
     elif module == "probiotic":
-        # P2.6: full probiotic pipeline online — all 5 dimensions populate,
+        # P2.6: full probiotic pipeline online — all 4 core dimensions populate,
         # manufacturer trust/violations apply, and score_100 is the rubric
         # production score with verdict + typed confidence band.
         probiotic_result = score_probiotic(enriched_product)
@@ -321,7 +322,7 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         result["v4_breakdown"]["confidence"] = confidence
         result["v4_confidence"] = confidence["band"]
     elif module == "multi_or_prenatal":
-        # P3.6: full multi/prenatal pipeline online — all 5 dimensions
+        # P3.6: full multi/prenatal pipeline online — all 4 core dimensions
         # populate, manufacturer trust/violations apply, and score_100 is
         # the rubric production score with verdict + typed confidence.
         multi_result = score_multi_prenatal(enriched_product)
@@ -364,7 +365,7 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         result["v4_breakdown"]["confidence"] = confidence
         result["v4_confidence"] = confidence["band"]
     elif module == "omega":
-        # P1.6.6: full omega pipeline online — all 5 dimensions populate,
+        # P1.6.6: full omega pipeline online — all 4 core dimensions populate,
         # manufacturer trust/violations apply, and score_100 is the rubric
         # production score with verdict + typed confidence.
         omega_result = score_omega(enriched_product)

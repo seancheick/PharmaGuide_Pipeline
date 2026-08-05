@@ -3,8 +3,8 @@
 Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
 (per-class rubric line-by-line):
 
-    Dimension          Cap     Subsequent slice that fills it
-    -----------------  ----    -------------------------------
+    Core dimension      Cap     Subsequent slice that fills it
+    ------------------  ----    -------------------------------
     Formulation         30     P1.3.1 — bio_score 15 + premium 4 + delivery 3
                                + absorption 3 + excellence 4 + single-ingredient 1
                                + enzyme 2; minus B0 (moderate/watchlist) + B1
@@ -15,25 +15,26 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
                                * evidence_level * effect_direction * enrollment
                                * dose_guard * top_N + depth_bonus); cap per
                                ingredient = 7
-    Testing & Trust     15     P1.3.4 — B4a SKU-verified (scope-aware, config
-                               cap 12 with 8/4/2 SKU rungs) + B4b GMP up to 4
-                               + B4c traceability up to 1; sub-components are
-                               hard-clamped to the 15-point dimension cap
     Transparency        10     P1.3.5 — clear-single base + B3 claim_compliance
                                up to +4; minus B2 allergen + B5 opacity
                                (class-aware) + B6 marketing
-    Total class score  100
+    Core subtotal       85
 
-Plus two SEPARATE adjustments (§6 line 390):
+Plus separate adjustments before the raw-score clamp:
 
+    Verification Bonus         0 to +8    (former 0-15 Testing & Trust signals,
+                                          rescaled by verification_bonus)
     Manufacturer Trust         0 to +5    (D1+D2+rollup; P1.3.6)
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; P1.3.6)
+    Safety Hygiene Base        0 to +4    (catalog safety-signal absence)
 
 Phase 9 state: Formulation, Dose, Evidence, Transparency, Manufacturer
 Trust / Violations, verification bonus, safety hygiene, and final score
 assembly are online. Production `score_100` is the raw rubric score. The
-retired P1.5 affine (`25 + 0.75 * raw_score_100`) is retained only as an
+public six-pillar 20/20/20/15/15/10 score is assembled separately by
+`scoring_v4.quality_score`; Testing & Trust is not a fifth core dimension.
+The retired P1.5 affine (`25 + 0.75 * raw_score_100`) is retained only as an
 audit field for v3-history comparisons. Dose uses an RDA/UL proxy where no
 class-specific clinical dose adapter exists; the dose dimension's
 `metadata` carries explicit proxy markers so downstream tooling never
@@ -181,9 +182,11 @@ class ManufacturerTrustResult:
 
 @dataclass
 class ManufacturerViolationsResult:
-    """Separate 0 to -25 adjustment (§6 line 401). NOT inside the +15
-    Trust cap — it's an independent dimension at the -25 scale. Populated
-    by P1.3.6 from `manufacturer_violations.json` rules."""
+    """Separate 0 to -25 adjustment (§6 line 401).
+
+    It is independent of the additive verification bonus and is populated by
+    P1.3.6 from `manufacturer_violations.json` rules.
+    """
 
     score: Optional[float] = None
     floor: float = MANUFACTURER_VIOLATIONS_FLOOR
@@ -417,7 +420,7 @@ def score_generic(product: Any) -> GenericModuleResult:
 
     # Separate manufacturer dimensions (P1.3.6). Manufacturer Trust is a
     # small positive adjustment; Manufacturer Violations is a separate
-    # negative adjustment and never burns the +15 Testing & Trust cap.
+    # negative adjustment and is independent of the additive verification bonus.
     manufacturer_trust_payload = score_manufacturer_trust(product)
     result.manufacturer_trust.score = manufacturer_trust_payload["score"]
     result.manufacturer_trust.max = manufacturer_trust_payload["max"]

@@ -4,23 +4,29 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4, broad multivitamin and
 prenatal products use a different weight profile from generic
 single-ingredient products:
 
-    Dimension          Cap     Subsequent slice that fills it
-    -----------------  ----    -------------------------------
+    Core dimension      Cap     Subsequent slice that fills it
+    ------------------  ----    -------------------------------
     Formulation         25     P3.1 — panel form quality, prenatal-critical
                                nutrient form checks, gummy/formulation limits
     Dose                25     P3.2 — RDA/AI coverage, UL safety, prenatal
                                critical nutrient adequacy floors
     Evidence            20     P3.3 — nutrient-outcome support and class
                                evidence
-    Testing & Trust     15     P3.4 — B4a SKU + B4b GMP + B4c traceability
     Transparency        15     P3.5 — panel disclosure, blend opacity, claims,
                                allergens, marketing penalties
-    Total class score  100
+    Core subtotal       85
 
-P3.6 state: the multi/prenatal module is complete. All five dimensions,
-manufacturer adjustments, and final rubric-score assembly are populated.
-The shape is intentionally identical to the generic and probiotic module
-breakdowns so downstream tooling can read all scored classes uniformly.
+Plus separate adjustments before the raw-score clamp: a 0-to-8 verification
+bonus (P3.4 B4a/B4b/B4c signals rescaled from the former 0-to-15 Trust
+dimension), manufacturer trust 0-to-5, manufacturer violations from 0 down to
+-25, and the safety-hygiene base 0-to-4.
+
+P3.6 state: the multi/prenatal module is complete. All four core dimensions,
+the additive verification/manufacturer/safety adjustments, and final raw
+rubric-score assembly are populated. The public six-pillar score is assembled
+separately by `scoring_v4.quality_score`. The breakdown shape is intentionally
+identical to the generic and probiotic modules so downstream tooling can read
+all scored classes uniformly.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). It reuses the shared v4 breakdown dataclasses
@@ -74,8 +80,8 @@ class MultiPrenatalModuleResult:
 
     Mirrors GenericModuleResult / ProbioticModuleResult shape so consumers
     can read `v4_breakdown["module"]` uniformly regardless of
-    class. P3.6 populates all five dimensions, manufacturer adjustments,
-    and final score math.
+    class. P3.6 populates all four core dimensions, additive adjustments, and
+    final raw-score math.
     """
 
     module: str = "multi_or_prenatal"

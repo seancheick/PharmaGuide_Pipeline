@@ -1,0 +1,31 @@
+{
+  "_metadata": {
+    "report": "v4_melatonin_gummy_alignment_corpus_diff",
+    "schema_version": "1.0.0",
+    "generated_at": "2026-08-05T06:06:40.710173+00:00",
+    "input_file_count": 48,
+    "input_fingerprint_sha256": "e069121e8e70952b74e90393ca13966f19272e378279f7d0251f63866023c0e4"
+  },
+  "behavior_change": {
+    "before": "Sleep-support melatonin gummy detection used form_factor_canonical or form_factor only.",
+    "after": "Detection also uses product_name when the structured form-factor fields are missing.",
+    "unchanged_guards": [
+      "supplement_taxonomy.primary_type must be sleep_support",
+      "a confirmed melatonin active must be present"
+    ]
+  },
+  "corpus_result": {
+    "products_scanned": 14193,
+    "newly_matched_products": 0,
+    "quality_score_changes": 0,
+    "quality_tier_changes": 0,
+    "verdict_changes": 0,
+    "affected_products": []
+  },
+  "expected_change_record": {
+    "current_corpus_movement": "none",
+    "future_behavior": "A sleep-support product with confirmed melatonin and gummy wording only in product_name receives the configured -2.0 formulation penalty.",
+    "calibration_changed": false,
+    "configured_penalty_changed": false
+  }
+}
