@@ -7,7 +7,7 @@ import json
 import os
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable, List, Sequence
+from typing import Iterable, List, Mapping, Sequence
 
 from run_artifacts import ensure_run_id
 
@@ -18,6 +18,25 @@ SCHEMA_VERSION = "1.0.0"
 
 class StageManifestError(ValueError):
     """A stage directory cannot prove ownership of its materialized files."""
+
+
+def _validated_input_fingerprints(
+    input_fingerprints: Mapping[str, str],
+) -> dict[str, str]:
+    normalized: dict[str, str] = {}
+    for key, value in input_fingerprints.items():
+        if not isinstance(key, str) or not key.strip():
+            raise StageManifestError("Stage input fingerprint key is invalid")
+        if (
+            not isinstance(value, str)
+            or len(value) != 64
+            or any(char not in "0123456789abcdef" for char in value)
+        ):
+            raise StageManifestError(
+                f"Stage input fingerprint is not lowercase SHA-256: {key!r}"
+            )
+        normalized[key] = value
+    return dict(sorted(normalized.items()))
 
 
 def _sha256(path: Path) -> str:
@@ -31,6 +50,7 @@ def write_stage_manifest(
     *,
     processing_complete: bool = True,
     run_id: str | None = None,
+    input_fingerprints: Mapping[str, str] | None = None,
 ) -> Path:
     """Atomically record the exact files produced by one stage run."""
     stage_dir = Path(stage_dir).resolve()
@@ -57,6 +77,10 @@ def write_stage_manifest(
     }
     if run_id is not None:
         manifest["run_id"] = ensure_run_id(run_id)
+    if input_fingerprints is not None:
+        manifest["input_fingerprints"] = _validated_input_fingerprints(
+            input_fingerprints
+        )
     manifest_path = stage_dir / MANIFEST_NAME
     temp_path = stage_dir / f"{MANIFEST_NAME}.tmp"
     with open(temp_path, "w", encoding="utf-8") as handle:
@@ -73,6 +97,7 @@ def write_stage_manifest_from_directory(
     *,
     patterns: Sequence[str] = ("*.json",),
     run_id: str | None = None,
+    input_fingerprints: Mapping[str, str] | None = None,
 ) -> Path:
     """Write ownership for the materialized top-level outputs of a stage."""
     stage_dir = Path(stage_dir).resolve()
@@ -87,7 +112,13 @@ def write_stage_manifest_from_directory(
     ) if stage_dir.is_dir() else []
     if not owned:
         raise StageManifestError(f"Stage produced no owned files: {stage_dir}")
-    return write_stage_manifest(stage_dir, stage, owned, run_id=run_id)
+    return write_stage_manifest(
+        stage_dir,
+        stage,
+        owned,
+        run_id=run_id,
+        input_fingerprints=input_fingerprints,
+    )
 
 
 def quarantine_stage_outputs(
