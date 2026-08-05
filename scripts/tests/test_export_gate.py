@@ -189,6 +189,8 @@ def _base_scored(**overrides):
         "output_schema_version": "4.0.0",
         "quality_score_v4_100": 62.5,
         "quality_score_status": "scored",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_assessment_status": "complete",
         "quality_pillars_v4": pillars,
         "_score_model_version": "v4",
         "_v4_quality_score_100": 62.5,
@@ -247,7 +249,15 @@ def test_expected_review_queue_exclusions_are_reported_as_quarantines(
         0,
         "EG001",
         _base_enriched(),
-        _base_scored(verdict="NOT_SCORED", score_100_equivalent=None),
+        _base_scored(
+            verdict="NOT_SCORED",
+            score_100_equivalent=None,
+            quality_score_v4_100=None,
+            quality_score_status="not_scored",
+            quality_assessment_status="partial",
+            _v4_quality_score_100=None,
+            _v4_quality_status="not_scored",
+        ),
     )
 
     result = write_audit_report(
@@ -312,8 +322,9 @@ COLUMNS = [
     "score_display_100_equivalent",
     "score_100_equivalent", "grade", "verdict", "safety_verdict", "mapped_coverage",
     # v2.0.0 V4 scoring contract (dropped legacy score_quality_80, score_display_80)
-    "quality_score_v4_100", "quality_score_status", "quality_tier",
-    "quality_score_suppressed_reason", "raw_score_v4_100", "v4_module", "v4_confidence",
+    "quality_score_v4_100", "quality_score_status", "product_safety_status",
+    "quality_assessment_status", "quality_tier",
+    "quality_score_suppressed_reason", "v4_module", "v4_confidence",
     "score_model_version", "quality_score_version", "scoring_engine_version",
     "classification_schema_version", "v4_config_fingerprint",
     # V4 six-pillar component scores (schema v2.0.0) — must match SCHEMA_SQL /
@@ -857,8 +868,12 @@ class TestMedicalSafetyDefaults:
         assert row["blocking_reason"] is None
 
     def test_not_scored_verdict_exports_cleanly(self):
-        s = _base_scored(verdict="NOT_SCORED", score_80=None, display=None, display_100=None,
-                         score_100_equivalent=None, grade=None)
+        s = _base_scored(
+            verdict="NOT_SCORED", score_80=None, display=None, display_100=None,
+            score_100_equivalent=None, quality_score_v4_100=None,
+            quality_score_status="not_scored", quality_assessment_status="partial",
+            _v4_quality_score_100=None, _v4_quality_status="not_scored", grade=None,
+        )
         row = _row_dict(_base_enriched(), s)
         assert row["verdict"] == "NOT_SCORED"
         assert row["score_100_equivalent"] is None
@@ -951,8 +966,12 @@ class TestGoldenProducts:
         e = _base_enriched(dsld_id="GOLDEN_UNMAPPED")
         e["ingredient_quality_data"]["ingredients"] = []
         e["activeIngredients"] = []
-        s = _base_scored(verdict="NOT_SCORED", score_80=None, score_100_equivalent=None,
-                         mapped_coverage=0.0)
+        s = _base_scored(
+            verdict="NOT_SCORED", score_80=None, score_100_equivalent=None,
+            quality_score_v4_100=None, quality_score_status="not_scored",
+            quality_assessment_status="partial", _v4_quality_score_100=None,
+            _v4_quality_status="not_scored", mapped_coverage=0.0,
+        )
         # No IQD ingredients means contract validator won't flag (empty list is valid)
         issues = validate_export_contract(e, s)
         assert not any("ingredient_quality_data" in i for i in issues)

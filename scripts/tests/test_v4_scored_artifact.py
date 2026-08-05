@@ -66,9 +66,20 @@ def _product(
 
 
 def _canned_v4(
-    *, status: str = "scored", verdict: str = "SAFE", mapped_coverage: float = 1.0
+    *,
+    status: str = "scored",
+    verdict: str = "SAFE",
+    safety_verdict: str | None = None,
+    mapped_coverage: float = 1.0,
+    include_safety_gate: bool = True,
 ) -> dict:
     score = 82.0 if status == "scored" else None
+    safety_gate = {
+        "verdict": safety_verdict,
+        "blocking_reason": None,
+        "safety_signals": [],
+        "clean_label_hits": [],
+    }
     return {
         "quality_score_v4_100": score,
         "quality_score_status": status,
@@ -92,12 +103,7 @@ def _canned_v4(
         "v4_breakdown": {
             "module": {},
             "confidence": {},
-            "safety_gate": {
-                "verdict": verdict,
-                "blocking_reason": None,
-                "safety_signals": [],
-                "clean_label_hits": [],
-            },
+            **({"safety_gate": safety_gate} if include_safety_gate else {}),
             "completeness_gate": {
                 "mapped_coverage": mapped_coverage,
                 "is_live_eligible": status == "scored",
@@ -120,7 +126,10 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     artifact = scored_artifact.build_scored_artifact(_product())
 
     assert artifact["quality_score_v4_100"] == 82.0
+    assert artifact["output_schema_version"] == "4.1.0"
     assert artifact["quality_score_status"] == "scored"
+    assert artifact["product_safety_status"] == "no_known_catalog_concern"
+    assert artifact["quality_assessment_status"] == "complete"
     assert artifact["quality_pillars_v4"]
     assert artifact["mapped_coverage"] == 1.0
     assert artifact["strict_scoring_contract"]["passed"] is True
@@ -288,6 +297,79 @@ def test_low_coverage_trust_floor_downgrades_safe_verdict(
     assert artifact["quality_score_status"] == "scored"
     assert artifact["verdict"] == "CAUTION"
     assert artifact["safety_signal_reason"] == "low_mapped_coverage"
+    assert artifact["product_safety_status"] == "no_known_catalog_concern"
+    assert artifact["quality_assessment_status"] == "complete"
+
+
+@pytest.mark.parametrize(
+    ("status", "verdict", "safety_verdict", "expected"),
+    [
+        ("suppressed_safety", "BLOCKED", "BLOCKED", "blocked"),
+        ("suppressed_safety", "UNSAFE", "UNSAFE", "unsafe"),
+        ("scored", "CAUTION", "CAUTION", "caution"),
+        ("scored", "SAFE", None, "no_known_catalog_concern"),
+        # POOR is a quality band, not a catalog safety finding.
+        ("scored", "POOR", None, "no_known_catalog_concern"),
+    ],
+)
+def test_product_safety_status_comes_only_from_the_safety_gate(
+    status: str,
+    verdict: str,
+    safety_verdict: str | None,
+    expected: str,
+) -> None:
+    artifact = scored_artifact.assemble_scored_artifact(
+        _product(),
+        _canned_v4(
+            status=status,
+            verdict=verdict,
+            safety_verdict=safety_verdict,
+        ),
+    )
+
+    assert artifact["product_safety_status"] == expected
+
+
+def test_display_score_uses_consumer_half_up_rounding() -> None:
+    result = _canned_v4(status="scored", verdict="SAFE")
+    result["quality_score_v4_100"] = 88.5
+    result["raw_score_v4_100"] = 88.5
+    artifact = scored_artifact.assemble_scored_artifact(
+        _product(),
+        result,
+    )
+
+    assert artifact["display_100"] == "89/100"
+
+
+def test_missing_safety_gate_is_not_reported_as_no_known_concern() -> None:
+    artifact = scored_artifact.assemble_scored_artifact(
+        _product(),
+        _canned_v4(include_safety_gate=False),
+    )
+
+    assert artifact["product_safety_status"] == "not_assessed"
+
+
+@pytest.mark.parametrize(
+    ("quality_status", "expected"),
+    [
+        ("scored", "complete"),
+        ("suppressed_safety", "complete"),
+        ("not_scored", "partial"),
+        ("unexpected", "failed"),
+    ],
+)
+def test_quality_assessment_status_is_independent_of_score_band(
+    quality_status: str,
+    expected: str,
+) -> None:
+    artifact = scored_artifact.assemble_scored_artifact(
+        _product(),
+        _canned_v4(status=quality_status, verdict="POOR"),
+    )
+
+    assert artifact["quality_assessment_status"] == expected
 
 
 def test_hard_block_suppresses_every_public_score_surface(
@@ -306,6 +388,8 @@ def test_hard_block_suppresses_every_public_score_surface(
     assert blocked["safety_verdict"] == "BLOCKED"
     assert blocked["quality_score_v4_100"] is None
     assert blocked["quality_score_status"] == "suppressed_safety"
+    assert blocked["product_safety_status"] == "blocked"
+    assert blocked["quality_assessment_status"] == "complete"
     assert blocked["score_100_equivalent"] is None
     assert blocked["display_100"] == "N/A"
     assert blocked["_v4_quality_score_100"] is None

@@ -42,7 +42,7 @@ fields and must not return.
 | Evidence | 20 | Verified human evidence and category fit |
 | Transparency | 15 | Amount disclosure, proprietary blend opacity, completeness |
 | Verification | 15 | Verified third-party testing, COA, GMP, certifications |
-| Safety/Hygiene | 10 | Product safety hygiene and bounded clean-label concerns |
+| Formula & quality checks (`safety_hygiene`) | 10 | Catalog-level recalls, dose-limit findings, additives, and formulation concerns; not personalized safety |
 
 The score is the bounded sum of the six category-aware pillars. Pillar
 adapters normalize against what each product archetype can honestly achieve;

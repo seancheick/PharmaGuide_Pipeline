@@ -88,9 +88,11 @@ contract name elsewhere.
 | **V4 quality score** | The only shipped public score. Produced during Stage 3 by `score_products_v4.py`/`scoring_v4/` and exported unchanged as `quality_score_v4_100`. |
 | **Scored artifact** | The sole Stage-3 output produced by `build_scored_artifact()`: v4 score/status/pillars, shared coverage and strict diagnostics, safety/verdict state, provenance, and compatibility mirrors. |
 | **Quality score status** | `scored`, `suppressed_safety`, or `not_scored`. Status controls whether a public number is allowed. |
+| **Product safety status** | Catalog-level safety-gate outcome exported as `product_safety_status`: `blocked`, `unsafe`, `caution`, `no_known_catalog_concern`, or `not_assessed`. It is independent of quality tier, score, mapped coverage, and personalized interaction risk. |
+| **Quality assessment status** | Whether the catalog assessment completed: `complete` for scored or safety-suppressed results, `partial` when incomplete identity/payload prevented a quality score, or `failed` when assessment itself was unavailable or invalid. Exported as `quality_assessment_status`. |
 | **Raw v4 score** | `raw_score_v4_100`; audit math only. It is never substituted for a suppressed public score. |
 | **Compatibility mirrors** | `score_100_equivalent` and `score_display_100_equivalent`; exact /100 mirrors of the v4 public score, not a legacy /80 conversion. |
-| **Quality pillars** | Formulation 20, Dose 20, Evidence 20, Transparency 15, Verification 15, Safety/Hygiene 10. |
+| **Quality pillars** | Formulation 20, Dose 20, Evidence 20, Transparency 15, Verification 15, Formula & quality checks 10 (internal key: `safety_hygiene`). |
 | **V4 module** | One category-aware scoring route: `generic`, `probiotic`, `multi_or_prenatal`, `b_complex`, `sports`, `fiber_digestive`, or `omega`. |
 | **Router** | `scoring_v4/router.py`, the sole authority for v4 module dispatch. |
 | **Safety suppression** | BLOCKED/UNSAFE products retain verdict/evidence but ship a null public score with `quality_score_status=suppressed_safety`. |
