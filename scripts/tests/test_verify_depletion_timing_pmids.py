@@ -7,7 +7,10 @@ clean. No network — `_fetch_esummary` is monkeypatched.
 """
 
 import os
+import ssl
 import sys
+import urllib.error
+import urllib.request
 
 import pytest
 
@@ -92,3 +95,27 @@ def test_live_gate_fails_closed_on_all_transient(monkeypatch):
         lambda ids_str, api_key, attempts=4: (_ for _ in ()).throw(vd.TransientVerifyError("429")),
     )
     assert vd.run(["--live"]) == 2
+
+
+def test_certificate_failure_uses_verified_system_trust(monkeypatch):
+    """macOS Python may miss Keychain roots that the system curl trusts."""
+    monkeypatch.setattr(
+        urllib.request,
+        "urlopen",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            urllib.error.URLError(
+                ssl.SSLCertVerificationError("self-signed certificate in chain")
+            )
+        ),
+    )
+    monkeypatch.setattr(vd.time, "sleep", lambda _: None)
+    monkeypatch.setattr(
+        vd,
+        "fetch_text_with_system_trust",
+        lambda **kwargs: "<eSummaryResult></eSummaryResult>",
+        raising=False,
+    )
+
+    assert vd._fetch_esummary("123", "secret", attempts=1) == (
+        "<eSummaryResult></eSummaryResult>"
+    )

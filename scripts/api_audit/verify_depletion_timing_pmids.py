@@ -42,6 +42,10 @@ sys.path.insert(0, str(SCRIPTS_ROOT))
 sys.path.insert(0, str(SCRIPT_DIR))
 
 import env_loader  # noqa: E402,F401 — loads .env into os.environ on import
+from system_trust_http import (  # noqa: E402
+    SystemTrustHTTPError,
+    fetch_text_with_system_trust,
+)
 
 PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
 
@@ -107,6 +111,30 @@ class TransientVerifyError(Exception):
     """A retryable failure (HTTP 429, network, timeout) — NOT a verdict."""
 
 
+def _is_certificate_verification_error(exc: BaseException) -> bool:
+    import ssl
+    import urllib.error
+
+    pending: list[BaseException] = [exc]
+    seen: set[int] = set()
+    while pending:
+        current = pending.pop()
+        if id(current) in seen:
+            continue
+        seen.add(id(current))
+        if isinstance(current, ssl.SSLCertVerificationError):
+            return True
+        if isinstance(current, urllib.error.URLError) and isinstance(
+            current.reason, BaseException
+        ):
+            pending.append(current.reason)
+        if current.__cause__ is not None:
+            pending.append(current.__cause__)
+        if current.__context__ is not None:
+            pending.append(current.__context__)
+    return False
+
+
 def _fetch_esummary(ids_str: str, api_key: str, attempts: int = 4) -> str:
     """Fetch esummary XML for a comma-joined id batch, retrying transient errors.
 
@@ -118,14 +146,13 @@ def _fetch_esummary(ids_str: str, api_key: str, attempts: int = 4) -> str:
     import urllib.error
     import urllib.request
 
-    try:
-        ctx = ssl.create_default_context()
-    except ssl.SSLError:
-        ctx = ssl._create_unverified_context()
-
-    url = f"{ESUMMARY_URL}?db=pubmed&id={ids_str}&retmode=xml"
+    ctx = ssl.create_default_context()
+    params = {"db": "pubmed", "id": ids_str, "retmode": "xml"}
     if api_key:
-        url += f"&api_key={api_key}"
+        params["api_key"] = api_key
+    from urllib.parse import urlencode
+
+    url = f"{ESUMMARY_URL}?{urlencode(params)}"
 
     last_err: Exception | None = None
     for attempt in range(attempts):
@@ -148,6 +175,18 @@ def _fetch_esummary(ids_str: str, api_key: str, attempts: int = 4) -> str:
                 continue
             raise TransientVerifyError(f"HTTP {e.code}") from e
         except Exception as e:  # URLError, socket timeout, SSL, ET issues on read
+            if _is_certificate_verification_error(e):
+                try:
+                    return fetch_text_with_system_trust(
+                        url=ESUMMARY_URL,
+                        params=params,
+                        timeout_seconds=20,
+                        user_agent="pharmaguide-audit/1.0",
+                    )
+                except SystemTrustHTTPError as fallback_error:
+                    last_err = fallback_error
+                    time.sleep(1.0 * (2 ** attempt))
+                    continue
             last_err = e
             time.sleep(1.0 * (2 ** attempt))
             continue

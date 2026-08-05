@@ -201,3 +201,65 @@ def test_pubmed_client_retries_http_200_ncbi_error_payload_without_caching_it(
     assert "36849732" in result
     assert "PubOne response processing error" not in cache_path.read_text()
     assert calls["count"] == 2
+
+
+def test_pubmed_client_certificate_failure_uses_verified_system_trust(
+    monkeypatch,
+    tmp_path,
+):
+    import requests
+
+    import api_audit.pubmed_client as pubmed_client
+    from api_audit.pubmed_client import PubMedClient
+
+    monkeypatch.setattr(
+        pubmed_client.requests,
+        "request",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            requests.exceptions.SSLError(
+                "self-signed certificate in certificate chain"
+            )
+        ),
+    )
+    monkeypatch.setattr(
+        pubmed_client,
+        "fetch_text_with_system_trust",
+        lambda **kwargs: SAMPLE_PUBMED_XML,
+        raising=False,
+    )
+
+    client = PubMedClient(
+        rate_limit_delay=0.0,
+        cache_path=tmp_path / "pubmed_cache.json",
+    )
+
+    assert "36849732" in client.efetch(["36849732"])
+
+
+def test_system_trust_fallback_keeps_credentials_out_of_process_arguments(
+    monkeypatch,
+):
+    from types import SimpleNamespace
+
+    import api_audit.system_trust_http as system_trust_http
+
+    captured = {}
+
+    def fake_run(args, **kwargs):
+        captured["args"] = args
+        captured["input"] = kwargs["input"]
+        return SimpleNamespace(returncode=0, stdout="ok", stderr="")
+
+    monkeypatch.setattr(system_trust_http.shutil, "which", lambda _: "/usr/bin/curl")
+    monkeypatch.setattr(system_trust_http.subprocess, "run", fake_run)
+
+    result = system_trust_http.fetch_text_with_system_trust(
+        url="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi",
+        params={"db": "pubmed", "api_key": "private-key"},
+    )
+
+    assert result == "ok"
+    assert "private-key" not in " ".join(captured["args"])
+    assert "private-key" in captured["input"]
+    assert "-k" not in captured["args"]
+    assert "insecure" not in captured["input"]
