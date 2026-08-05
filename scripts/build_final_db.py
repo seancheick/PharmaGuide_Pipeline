@@ -2086,22 +2086,21 @@ CREATE TABLE IF NOT EXISTS products_core (
     supplement_type               TEXT,
 
     score_display_100_equivalent  TEXT,
-    score_100_equivalent          REAL,
+    score_100_equivalent          INTEGER,
     grade                         TEXT,
     verdict                       TEXT,
     safety_verdict                TEXT,
     mapped_coverage               REAL,
 
     -- V4 SCORING (export schema v2.0.0) — canonical /100 six-pillar contract.
-    -- quality_score_v4_100 is the shipped score; score_100_equivalent mirrors it.
-    -- raw_score_v4_100 is audit/debug only and is NEVER the shipped score.
-    quality_score_v4_100            REAL,
+    -- quality_score_v4_100 is the whole-number shipped score;
+    -- score_100_equivalent mirrors it.
+    quality_score_v4_100            INTEGER,
     quality_score_status            TEXT,
     product_safety_status           TEXT,
     quality_assessment_status       TEXT,
     quality_tier                    TEXT,
     quality_score_suppressed_reason TEXT,
-    raw_score_v4_100                REAL,
     v4_module                       TEXT,
     v4_confidence                   TEXT,
     score_model_version             TEXT,
@@ -7345,8 +7344,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
 
     # ── v4 detail-blob fields ────────────────────────────────────────────────
     # The export adapter stashes the public v4 contract under _v4_* keys. Surface
-    # the six pillars (with reasons), clean-label flags, the audit raw score, the
-    # gate breakdowns, and a provenance/explanation trail ("why did this score X?").
+    # the six pillars (with reasons), clean-label flags, gate breakdowns, and a
+    # provenance/explanation trail ("why did this score X?"). The internal raw
+    # score deliberately does not cross the public export boundary.
     if scored.get("_v4_quality_status") is not None:
         blob["product_safety_status"] = scored.get("product_safety_status")
         blob["quality_assessment_status"] = scored.get("quality_assessment_status")
@@ -7354,7 +7354,6 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         blob["quality_pillars_v4"] = pillars
         blob["quality_score_cap_v4"] = scored.get("_v4_quality_score_cap")
         blob["clean_label_flags_v4"] = scored.get("_v4_clean_label_flags")
-        blob["raw_score_v4_100"] = scored.get("_v4_raw_score_100")
         blob["v4_safety_gate"] = scored.get("_v4_safety_gate")
         blob["v4_completeness_gate"] = scored.get("_v4_completeness_gate")
         blob["v4_confidence_detail"] = scored.get("_v4_confidence_detail")
@@ -9197,7 +9196,17 @@ def build_core_row(
         enriched, scored, detail_blob
     )
 
-    score_100 = safe_float(effective_scored.get("score_100_equivalent"))
+    score_100_raw = safe_float(effective_scored.get("_v4_quality_score_100"))
+    if (
+        score_100_raw is None
+        and not safe_str(effective_scored.get("_v4_quality_status"))
+    ):
+        score_100_raw = safe_float(effective_scored.get("score_100_equivalent"))
+    score_100 = (
+        int(_math.floor(score_100_raw + 0.5))
+        if score_100_raw is not None
+        else None
+    )
     ss = safe_dict(effective_scored.get("section_scores"))
     v4_pillars = safe_dict(effective_scored.get("_v4_pillars"))
 
@@ -9307,13 +9316,12 @@ def build_core_row(
         safe_str(effective_scored.get("safety_verdict")),
         safe_float(effective_scored.get("mapped_coverage")),
         # V4 scoring contract — populated by the Stage-3 artifact assembler.
-        safe_float(effective_scored.get("_v4_quality_score_100")),
+        score_100,
         safe_str(effective_scored.get("_v4_quality_status")) or None,
         safe_str(effective_scored.get("product_safety_status")) or None,
         safe_str(effective_scored.get("quality_assessment_status")) or None,
         safe_str(effective_scored.get("_v4_quality_tier")) or None,
         safe_str(effective_scored.get("_v4_suppressed_reason")) or None,
-        safe_float(effective_scored.get("_v4_raw_score_100")),
         safe_str(effective_scored.get("_v4_module")) or None,
         safe_str(effective_scored.get("_v4_confidence")) or None,
         safe_str(effective_scored.get("_score_model_version")) or None,
@@ -9425,7 +9433,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 112  # Must match the tuple above and SCHEMA_SQL (v2.2.0 adds two independent consumer-semantics fields)
+CORE_COLUMN_COUNT = 111  # Must match the tuple above and SCHEMA_SQL (v2.2.0 omits the internal raw score)
 
 
 # ─── Reference Data Loader ───

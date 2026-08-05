@@ -101,7 +101,6 @@ PRODUCTS_CORE_COLUMNS = [
     "quality_assessment_status",
     "quality_tier",
     "quality_score_suppressed_reason",
-    "raw_score_v4_100",
     "v4_module",
     "v4_confidence",
     "score_model_version",
@@ -2828,7 +2827,7 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
     assert row["net_contents_unit"] == "oz."
 
 
-def test_final_db_has_110_columns():
+def test_final_db_has_111_columns():
     # Tuple emitted by build_core_row must match the 112-column schema
     # (v2.0.0 + 6 v4 pillar component columns + safety_signal_reason
     # + goal_matches_underdosed).
@@ -2847,8 +2846,8 @@ def test_final_db_has_110_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 112
-    assert len(PRODUCTS_CORE_COLUMNS) == 112
+    assert len(row) == 111
+    assert len(PRODUCTS_CORE_COLUMNS) == 111
 
 
 def test_products_core_exports_production_v4_columns():
@@ -3055,8 +3054,8 @@ class TestDetailBlobNutritionAndUnmapped:
 
     def test_core_row_column_count_is_112(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 112
-        assert CORE_COLUMN_COUNT == 112
+        assert len(row) == 111
+        assert CORE_COLUMN_COUNT == 111
 
     def test_schema_version_bumped_for_independent_consumer_semantics(self):
         assert EXPORT_SCHEMA_VERSION == "2.2.0"
@@ -3238,7 +3237,7 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
     e3 = make_enriched(); e3["dsld_id"] = "777"; e3["product_name"] = "NotScored P"
     # Distinct UPCs so the three are not collapsed by UPC dedup.
     e1["upcSku"] = "111111111111"; e2["upcSku"] = "222222222222"; e3["upcSku"] = "333333333333"
-    scored_live = _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong")
+    scored_live = _canned_v4(status="scored", quality_100=88.5, verdict="SAFE", tier="Strong")
     scored_live["quality_score_cap_v4"] = {
         "id": "generic_astaxanthin_single",
         "cap": 85.0,
@@ -3259,22 +3258,21 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         cols = ["dsld_id", "quality_score_v4_100", "quality_score_status",
                 "product_safety_status", "quality_assessment_status", "quality_tier",
                 "score_model_version", "verdict", "score_100_equivalent",
-                "scoring_engine_version", "raw_score_v4_100"]
+                "scoring_engine_version"]
         rows = _core_rows(out, cols)
 
         # NOT_SCORED is quarantined; SAFE (scored) and BLOCKED (reason is the data) ship.
         assert set(rows) == {"999", "888"}
 
         scored = rows["999"]
-        assert scored["quality_score_v4_100"] == 88.0
+        assert scored["quality_score_v4_100"] == 89
         assert scored["quality_score_status"] == "scored"
         assert scored["product_safety_status"] == "no_known_catalog_concern"
         assert scored["quality_assessment_status"] == "complete"
         assert scored["quality_tier"] == "Strong"
         assert scored["score_model_version"] == "v4"
-        assert scored["score_100_equivalent"] == 88.0  # /100 compat mirror
+        assert scored["score_100_equivalent"] == 89  # whole-number /100 mirror
         assert scored["scoring_engine_version"] == "4.0.0"
-        assert scored["raw_score_v4_100"] == 88.0
         # a profile-gated hard-safety warning may flip SAFE→CAUTION; both are non-suppressed.
         assert scored["verdict"] in {"SAFE", "CAUTION"}
 
@@ -3300,7 +3298,7 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         assert blob["v4_confidence_detail"]["score_uncertainty_pts"] == 1
         assert blob["quality_score_cap_v4"]["id"] == "generic_astaxanthin_single"
         assert "v4_score_explanation" in blob
-        assert blob["raw_score_v4_100"] == 88.0
+        assert "raw_score_v4_100" not in blob
 
 
 def test_v4_pillar_columns_projected_for_scored_and_null_for_suppressed(monkeypatch):
@@ -3455,7 +3453,7 @@ def test_v4_banned_substance_suppresses_score_even_when_v4_gate_scored(monkeypat
         _result, out = _run_build(tmp, [e], [s])
         rows = _core_rows(out, ["dsld_id", "quality_score_v4_100", "quality_score_status",
                                 "quality_tier", "verdict", "score_100_equivalent",
-                                "has_banned_substance", "raw_score_v4_100"])
+                                "has_banned_substance"])
         r = rows["999"]
         assert r["has_banned_substance"] == 1
         assert r["verdict"] == "BLOCKED"
@@ -3465,12 +3463,10 @@ def test_v4_banned_substance_suppresses_score_even_when_v4_gate_scored(monkeypat
         assert r["quality_score_status"] == "suppressed_safety"
         assert r["quality_tier"] is None
         assert r["score_100_equivalent"] is None
-        # raw_score_v4_100 stays as an audit trail (never the shipped score).
-        assert r["raw_score_v4_100"] == 70.5
-
         # The detail BLOB must agree — no "scored" v4 breakdown for a banned product.
         blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))
         assert blob["v4_score_provenance"]["quality_score_status"] == "suppressed_safety"
+        assert "raw_score_v4_100" not in blob
 
 
 def test_registry_verified_certs_drive_third_party_display_columns(monkeypatch):

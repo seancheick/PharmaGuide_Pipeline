@@ -92,7 +92,7 @@ contract name elsewhere.
 | **Quality assessment status** | Whether the catalog assessment completed: `complete` for scored or safety-suppressed results, `partial` when incomplete identity/payload prevented a quality score, or `failed` when assessment itself was unavailable or invalid. Exported as `quality_assessment_status`. |
 | **Raw v4 score** | `raw_score_v4_100`; audit math only. It is never substituted for a suppressed public score. |
 | **Compatibility mirrors** | `score_100_equivalent` and `score_display_100_equivalent`; exact /100 mirrors of the v4 public score, not a legacy /80 conversion. |
-| **Quality pillars** | Formulation 20, Dose 20, Evidence 20, Transparency 15, Verification 15, Safety/Hygiene 10. |
+| **Quality pillars** | Formulation 20, Dose 20, Evidence 20, Transparency 15, Verification 15, Formula & quality checks 10 (internal key: `safety_hygiene`). |
 | **V4 module** | One category-aware scoring route: `generic`, `probiotic`, `multi_or_prenatal`, `b_complex`, `sports`, `fiber_digestive`, or `omega`. |
 | **Router** | `scoring_v4/router.py`, the sole authority for v4 module dispatch. |
 | **Safety suppression** | BLOCKED/UNSAFE products retain verdict/evidence but ship a null public score with `quality_score_status=suppressed_safety`. |

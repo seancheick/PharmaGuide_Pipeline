@@ -188,7 +188,7 @@ not in the router or exporter.
 | Evidence | 20 |
 | Transparency | 15 |
 | Verification | 15 |
-| Safety/Hygiene | 10 |
+| Formula & quality checks (`safety_hygiene`) | 10 |
 
 For a scoreable product:
 
@@ -201,7 +201,7 @@ scale. Public quality caps may proportionally reduce pillar scores when a
 module supplies a tested cap with provenance. Caps never raise a score.
 
 Clean-label flags remain orthogonal to regulatory verdicts: they may produce a
-small bounded Safety/Hygiene deduction and consumer explanation without
+small bounded Formula & quality checks deduction and consumer explanation without
 claiming that a legal additive is a banned ingredient.
 
 ### 9.1 Tiers

@@ -330,6 +330,18 @@ def test_product_safety_status_comes_only_from_the_safety_gate(
     assert artifact["product_safety_status"] == expected
 
 
+def test_display_score_uses_consumer_half_up_rounding() -> None:
+    result = _canned_v4(status="scored", verdict="SAFE")
+    result["quality_score_v4_100"] = 88.5
+    result["raw_score_v4_100"] = 88.5
+    artifact = scored_artifact.assemble_scored_artifact(
+        _product(),
+        result,
+    )
+
+    assert artifact["display_100"] == "89/100"
+
+
 def test_missing_safety_gate_is_not_reported_as_no_known_concern() -> None:
     artifact = scored_artifact.assemble_scored_artifact(
         _product(),

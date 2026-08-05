@@ -10,6 +10,7 @@ provenance. It never invokes or copies the retired /80 scorer.
 from __future__ import annotations
 
 import json
+import math
 from datetime import datetime, timezone
 from typing import Any, Dict
 
@@ -30,7 +31,10 @@ def _display_score(value: Any, status: Any) -> str:
     if status != "scored":
         return "N/A"
     try:
-        return f"{round(float(value))}/100"
+        score = float(value)
+        if not math.isfinite(score):
+            return "N/A"
+        return f"{math.floor(score + 0.5)}/100"
     except (TypeError, ValueError):
         return "N/A"
 
