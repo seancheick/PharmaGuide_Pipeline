@@ -2,8 +2,8 @@
 
 > Production scoring engine: **4.1.0**
 > V4 quality configuration: **1.0.4-sports-subtypes**
-> Export schema: **2.0.0** / **110 core columns**
-> Stage-3 artifact schema: **4.0.0**
+> Export schema: **2.2.0** / **112 core columns**
+> Stage-3 artifact schema: **4.1.0**
 > Last verified against code: **2026-07-16**
 
 ## 1. Scope
@@ -284,7 +284,8 @@ enriched product into one scored product artifact. It:
 2. obtains coverage and strict diagnostics from `scoring_input_contract.py`
 3. verifies completeness coverage agrees with that shared result
 4. applies public verdict precedence, including the `<0.3` trust floor
-5. emits the v4 score, six pillars, status, provenance, and compatibility mirrors
+5. emits the v4 score, six pillars, independent product-safety and
+   quality-assessment states, provenance, and compatibility mirrors
 6. contains hard-block suppression so every public/reserved surface agrees
 
 `score_products_v4.py` owns only batch discovery, validation, atomic writes,
@@ -295,8 +296,8 @@ it does not rescore or overlay another result.
 
 `build_final_db.py` owns final schema validation and quarantine.
 
-- Export schema is `2.0.0`.
-- `products_core` currently has 110 columns.
+- Export schema is `2.2.0`.
+- `products_core` currently has 112 columns.
 - Ranking and dedup use `quality_score_v4_100` only for status `scored`.
 - Suppressed safety rows may ship with null score and visible verdict/evidence.
 - NOT_SCORED rows are quarantined.

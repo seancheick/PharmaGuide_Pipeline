@@ -12,7 +12,7 @@ if _scripts_dir not in sys.path:
 
 
 def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
-    from build_final_db import CORE_COLUMN_COUNT, SCHEMA_SQL
+    from build_final_db import SCHEMA_SQL
 
     pair_dir = root / name
     pair_dir.mkdir(parents=True, exist_ok=True)
@@ -23,36 +23,30 @@ def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
     conn = sqlite3.connect(db_path)
     try:
         conn.executescript(SCHEMA_SQL)
+        row = {
+            "dsld_id": dsld_id,
+            "product_name": product_name,
+            "brand_name": "Brand",
+            "product_status": "active",
+            "form_factor": "capsule",
+            "supplement_type": "targeted",
+            "quality_score_v4_100": 88.0,
+            "quality_score_status": "scored",
+            "product_safety_status": "no_known_catalog_concern",
+            "quality_assessment_status": "complete",
+            "quality_tier": "Strong",
+            "verdict": "SAFE",
+            "safety_verdict": "SAFE",
+            "score_100_equivalent": 88.0,
+            "score_display_100_equivalent": "88/100",
+            "export_version": "2.2.0",
+            "exported_at": "2026-03-29T00:00:00Z",
+        }
+        columns = list(row)
         conn.execute(
-            "INSERT INTO products_core VALUES ({})".format(",".join(["?"] * CORE_COLUMN_COUNT)),
-            (
-                dsld_id, product_name, "Brand", None, None, 0, None, None, '{"has_any": false, "highest_severity": "", "condition_ids": [], "drug_class_ids": []}', '{"positive": "", "caution": "", "trust": ""}',
-                "active", None, "capsule", "targeted",
-                "88/100", 88.0, "Good", "SAFE", "SAFE", 1.0,
-                # v4 scoring contract (export schema v2.0.0; legacy /80 cols dropped)
-                88.0, "scored", "Strong", None, 88.0, "generic", "high", "v4", "1.0.0", "4.0.0", "5.3.0", None,
-                # V4 six-pillar component scores (schema v2.0.0): formulation, dose,
-                # evidence, transparency, verification, safety_hygiene (sum = 88).
-                18.0, 18.0, 16.0, 13.0, 13.0, 10.0,
-                20.0, 25.0, 20.0, 30.0, 15.0, 20.0, 4.0, 5.0,
-                90.0, 10.0, "targeted_capsule", "Top 10%", 100,
-                1, 0, 0, 0, 1, 0, 0,
-                0, 0, 0, 0, None, None,
-                0, 0, 0, 0, 0,
-                1, 1, 1,
-                "[]", "[]", "[]", "[]",
-                # v1.1.0+ additions (22 columns)
-                '{}', '[]', 0, 0, 0,  # fingerprint, key_nutrients, stimulants, sedatives, blood_thinners
-                None, None, '[]', None,  # share_title, share_description, share_highlights, share_og_image_url
-                None, '[]', 0, 0, 0, 0, 0, '[]',  # primary_category, secondary_categories, contains_* flags, key_ingredient_tags
-                None,  # ingredients_text (v1.6.x, column 76 — FTS-indexed aggregate)
-                '[]', None, '[]',  # goal_matches, goal_match_confidence, goal_matches_underdosed
-                None, None, None, None,  # dosing_summary, servings_per_container, net_contents_quantity, net_contents_unit
-                None,  # allergen_summary
-                None,  # calories_per_serving (v1.3.2)
-                None,  # image_thumbnail_url (v1.4.0)
-                "3.4.0", "5.0.0", "3.4.0", "2026-03-29T00:00:00Z", "1.3.2", "2026-03-29T00:00:00Z",
-            ),
+            f"INSERT INTO products_core ({','.join(columns)}) "
+            f"VALUES ({','.join(['?'] * len(columns))})",
+            tuple(row[column] for column in columns),
         )
         conn.execute(
             "INSERT INTO reference_data VALUES (?,?,?,?)",

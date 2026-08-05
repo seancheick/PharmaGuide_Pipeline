@@ -97,6 +97,8 @@ PRODUCTS_CORE_COLUMNS = [
     # v2.0.0 v4 scoring contract.
     "quality_score_v4_100",
     "quality_score_status",
+    "product_safety_status",
+    "quality_assessment_status",
     "quality_tier",
     "quality_score_suppressed_reason",
     "raw_score_v4_100",
@@ -2827,7 +2829,7 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
 
 
 def test_final_db_has_110_columns():
-    # Tuple emitted by build_core_row must match the 110-column schema
+    # Tuple emitted by build_core_row must match the 112-column schema
     # (v2.0.0 + 6 v4 pillar component columns + safety_signal_reason
     # + goal_matches_underdosed).
     enriched = make_enriched()
@@ -2845,13 +2847,15 @@ def test_final_db_has_110_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 110
-    assert len(PRODUCTS_CORE_COLUMNS) == 110
+    assert len(row) == 112
+    assert len(PRODUCTS_CORE_COLUMNS) == 112
 
 
 def test_products_core_exports_production_v4_columns():
     assert "quality_score_v4_100" in PRODUCTS_CORE_COLUMNS
     assert "quality_score_status" in PRODUCTS_CORE_COLUMNS
+    assert "product_safety_status" in PRODUCTS_CORE_COLUMNS
+    assert "quality_assessment_status" in PRODUCTS_CORE_COLUMNS
     assert "v4_module" in PRODUCTS_CORE_COLUMNS
     assert "v4_confidence" in PRODUCTS_CORE_COLUMNS
     assert not any(col.startswith("shadow_") for col in PRODUCTS_CORE_COLUMNS)
@@ -3049,13 +3053,13 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_110(self):
+    def test_core_row_column_count_is_112(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 110
-        assert CORE_COLUMN_COUNT == 110
+        assert len(row) == 112
+        assert CORE_COLUMN_COUNT == 112
 
-    def test_schema_version_bumped_to_200(self):
-        assert EXPORT_SCHEMA_VERSION == "2.1.0"
+    def test_schema_version_bumped_for_independent_consumer_semantics(self):
+        assert EXPORT_SCHEMA_VERSION == "2.2.0"
 
     def test_detail_blob_emits_demoted_absorption_enhancers(self):
         """Sprint E1.23 follow-up (2026-05-09): the enricher produces
@@ -3252,7 +3256,8 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
     )
     with tempfile.TemporaryDirectory() as tmp:
         _result, out = _run_build(tmp, [e1, e2, e3], [s1, s2, s3])
-        cols = ["dsld_id", "quality_score_v4_100", "quality_score_status", "quality_tier",
+        cols = ["dsld_id", "quality_score_v4_100", "quality_score_status",
+                "product_safety_status", "quality_assessment_status", "quality_tier",
                 "score_model_version", "verdict", "score_100_equivalent",
                 "scoring_engine_version", "raw_score_v4_100"]
         rows = _core_rows(out, cols)
@@ -3263,6 +3268,8 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         scored = rows["999"]
         assert scored["quality_score_v4_100"] == 88.0
         assert scored["quality_score_status"] == "scored"
+        assert scored["product_safety_status"] == "no_known_catalog_concern"
+        assert scored["quality_assessment_status"] == "complete"
         assert scored["quality_tier"] == "Strong"
         assert scored["score_model_version"] == "v4"
         assert scored["score_100_equivalent"] == 88.0  # /100 compat mirror
@@ -3274,6 +3281,8 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         blocked = rows["888"]
         assert blocked["quality_score_v4_100"] is None
         assert blocked["quality_score_status"] == "suppressed_safety"
+        assert blocked["product_safety_status"] == "blocked"
+        assert blocked["quality_assessment_status"] == "partial"
         assert blocked["verdict"] == "BLOCKED"
         assert blocked["score_100_equivalent"] is None
 
@@ -3281,6 +3290,12 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))
         assert blob["quality_pillars_v4"]
         assert blob["v4_score_provenance"]["score_model_version"] == "v4"
+        assert blob["product_safety_status"] == "no_known_catalog_concern"
+        assert blob["quality_assessment_status"] == "complete"
+        assert (
+            blob["v4_score_provenance"]["product_safety_status"]
+            == "no_known_catalog_concern"
+        )
         assert blob["v4_confidence_detail"]["band"] == "high"
         assert blob["v4_confidence_detail"]["score_uncertainty_pts"] == 1
         assert blob["quality_score_cap_v4"]["id"] == "generic_astaxanthin_single"

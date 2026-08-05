@@ -189,6 +189,8 @@ def _base_scored(**overrides):
         "output_schema_version": "4.0.0",
         "quality_score_v4_100": 62.5,
         "quality_score_status": "scored",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_assessment_status": "complete",
         "quality_pillars_v4": pillars,
         "_score_model_version": "v4",
         "_v4_quality_score_100": 62.5,
@@ -312,7 +314,8 @@ COLUMNS = [
     "score_display_100_equivalent",
     "score_100_equivalent", "grade", "verdict", "safety_verdict", "mapped_coverage",
     # v2.0.0 V4 scoring contract (dropped legacy score_quality_80, score_display_80)
-    "quality_score_v4_100", "quality_score_status", "quality_tier",
+    "quality_score_v4_100", "quality_score_status", "product_safety_status",
+    "quality_assessment_status", "quality_tier",
     "quality_score_suppressed_reason", "raw_score_v4_100", "v4_module", "v4_confidence",
     "score_model_version", "quality_score_version", "scoring_engine_version",
     "classification_schema_version", "v4_config_fingerprint",

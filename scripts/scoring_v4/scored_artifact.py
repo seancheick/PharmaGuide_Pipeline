@@ -18,7 +18,7 @@ from scoring_input_contract import get_scoring_ingredients, scoring_input_scope
 from supplement_taxonomy import percentile_label_for
 
 
-SCORED_ARTIFACT_SCHEMA_VERSION = "4.0.0"
+SCORED_ARTIFACT_SCHEMA_VERSION = "4.1.0"
 LOW_COVERAGE_TRUST_FLOOR = 0.3
 
 
@@ -69,6 +69,39 @@ def _public_verdict(v4: Dict[str, Any], mapped_coverage: float) -> str:
     return "SAFE"
 
 
+def _product_safety_status(
+    safety_gate: Dict[str, Any],
+    *,
+    was_assessed: bool,
+) -> str:
+    """Project only catalog safety-gate policy into the consumer safety state.
+
+    Legacy verdict also carries quality and coverage policy (POOR and the
+    low-coverage CAUTION), so it must never be the source for this field.
+    """
+    if not was_assessed:
+        return "not_assessed"
+    verdict = str(safety_gate.get("verdict") or "").upper()
+    if verdict == "BLOCKED":
+        return "blocked"
+    if verdict == "UNSAFE":
+        return "unsafe"
+    if verdict == "CAUTION":
+        return "caution"
+    if verdict in {"", "SAFE"}:
+        return "no_known_catalog_concern"
+    return "not_assessed"
+
+
+def _quality_assessment_status(quality_score_status: str) -> str:
+    """Report whether the independent quality assessment completed."""
+    if quality_score_status == "scored":
+        return "complete"
+    if quality_score_status == "suppressed_safety":
+        return "partial"
+    return "failed"
+
+
 def assemble_scored_artifact(
     enriched_product: Dict[str, Any],
     v4: Dict[str, Any],
@@ -93,7 +126,11 @@ def assemble_scored_artifact(
     mapped_coverage = float(scoring_input.mapped_coverage or 0.0)
 
     breakdown = _safe_dict(v4.get("v4_breakdown"))
-    safety_gate = _safe_dict(breakdown.get("safety_gate"))
+    raw_safety_gate = breakdown.get("safety_gate")
+    safety_gate = _safe_dict(raw_safety_gate)
+    safety_was_assessed = (
+        isinstance(raw_safety_gate, dict) and "verdict" in raw_safety_gate
+    )
     completeness_gate = _safe_dict(breakdown.get("completeness_gate"))
     provenance = _safe_dict(breakdown.get("provenance"))
     module_breakdown = breakdown.get("module")
@@ -109,6 +146,11 @@ def assemble_scored_artifact(
         )
 
     status = str(v4.get("quality_score_status") or "not_scored")
+    product_safety_status = _product_safety_status(
+        safety_gate,
+        was_assessed=safety_was_assessed,
+    )
+    quality_assessment_status = _quality_assessment_status(status)
     quality_score = v4.get("quality_score_v4_100")
     verdict = _public_verdict(v4, mapped_coverage)
     safety_verdict = str(safety_gate.get("verdict") or "SAFE").upper()
@@ -159,6 +201,8 @@ def assemble_scored_artifact(
         "badges": [],
         "quality_score_v4_100": quality_score,
         "quality_score_status": status,
+        "product_safety_status": product_safety_status,
+        "quality_assessment_status": quality_assessment_status,
         "quality_tier": v4.get("quality_tier"),
         "quality_score_suppressed_reason": v4.get("quality_score_suppressed_reason"),
         "raw_score_v4_100": v4.get("raw_score_v4_100"),
@@ -171,6 +215,8 @@ def assemble_scored_artifact(
             "output_schema_version": SCORED_ARTIFACT_SCHEMA_VERSION,
             "scored_date": scored_at,
             "scoring_status": status,
+            "product_safety_status": product_safety_status,
+            "quality_assessment_status": quality_assessment_status,
             "score_basis": "v4_six_pillar",
             "scoring_ingredients_source": scoring_input.source,
             "strict_scoring_contract": strict_contract,
@@ -246,6 +292,8 @@ def suppress_scored_artifact_for_hard_block(
         "safety_verdict": "BLOCKED",
         "quality_score_v4_100": None,
         "quality_score_status": "suppressed_safety",
+        "product_safety_status": "blocked",
+        "quality_assessment_status": "partial",
         "quality_tier": None,
         "quality_score_suppressed_reason": (
             blocked.get("quality_score_suppressed_reason") or reason
@@ -268,6 +316,8 @@ def suppress_scored_artifact_for_hard_block(
     metadata = dict(_safe_dict(blocked.get("scoring_metadata")))
     metadata.update({
         "scoring_status": "suppressed_safety",
+        "product_safety_status": "blocked",
+        "quality_assessment_status": "partial",
         "verdict": "BLOCKED",
         "blocking_reason": blocked["blocking_reason"],
     })

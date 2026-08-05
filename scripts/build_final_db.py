@@ -85,7 +85,7 @@ from scoring_v4.scored_artifact import (
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "2.1.0"  # v4 /100 contract; v2.1 structures core top_warnings for offline consumers
+EXPORT_SCHEMA_VERSION = "2.2.0"  # independent product-safety and quality-assessment states
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -2097,6 +2097,8 @@ CREATE TABLE IF NOT EXISTS products_core (
     -- raw_score_v4_100 is audit/debug only and is NEVER the shipped score.
     quality_score_v4_100            REAL,
     quality_score_status            TEXT,
+    product_safety_status           TEXT,
+    quality_assessment_status       TEXT,
     quality_tier                    TEXT,
     quality_score_suppressed_reason TEXT,
     raw_score_v4_100                REAL,
@@ -7346,6 +7348,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # the six pillars (with reasons), clean-label flags, the audit raw score, the
     # gate breakdowns, and a provenance/explanation trail ("why did this score X?").
     if scored.get("_v4_quality_status") is not None:
+        blob["product_safety_status"] = scored.get("product_safety_status")
+        blob["quality_assessment_status"] = scored.get("quality_assessment_status")
         pillars = scored.get("_v4_pillars")
         blob["quality_pillars_v4"] = pillars
         blob["quality_score_cap_v4"] = scored.get("_v4_quality_score_cap")
@@ -7357,6 +7361,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         blob["v4_score_provenance"] = {
             "score_model_version": scored.get("_score_model_version"),
             "quality_score_status": scored.get("_v4_quality_status"),
+            "product_safety_status": scored.get("product_safety_status"),
+            "quality_assessment_status": scored.get("quality_assessment_status"),
             "quality_tier": scored.get("_v4_quality_tier"),
             "quality_score_version": scored.get("_v4_quality_version"),
             "scoring_engine_version": scored.get("_v4_scoring_engine_version"),
@@ -9303,6 +9309,8 @@ def build_core_row(
         # V4 scoring contract — populated by the Stage-3 artifact assembler.
         safe_float(effective_scored.get("_v4_quality_score_100")),
         safe_str(effective_scored.get("_v4_quality_status")) or None,
+        safe_str(effective_scored.get("product_safety_status")) or None,
+        safe_str(effective_scored.get("quality_assessment_status")) or None,
         safe_str(effective_scored.get("_v4_quality_tier")) or None,
         safe_str(effective_scored.get("_v4_suppressed_reason")) or None,
         safe_float(effective_scored.get("_v4_raw_score_100")),
@@ -9417,7 +9425,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 110  # Must match the tuple above and SCHEMA_SQL (v2.0.0: −2 legacy /80 cols, +12 v4 cols, +6 v4 pillar cols, + safety signal reason, + goal_matches_underdosed)
+CORE_COLUMN_COUNT = 112  # Must match the tuple above and SCHEMA_SQL (v2.2.0 adds two independent consumer-semantics fields)
 
 
 # ─── Reference Data Loader ───

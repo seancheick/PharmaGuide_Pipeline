@@ -1,7 +1,7 @@
 # PharmaGuide Pipeline Architecture
 
 > Last verified: 2026-07-16
-> Export schema: 2.0.0 | Core columns: 110 | Pipeline manifest: 3.4.0
+> Export schema: 2.2.0 | Core columns: 112 | Pipeline manifest: 3.4.0
 
 ## 1. System boundary
 
