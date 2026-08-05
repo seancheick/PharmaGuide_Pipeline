@@ -491,6 +491,292 @@
           "transparency": 9.0
         }
       }
+    },
+    {
+      "id": "immune_support__ideal",
+      "archetype": "immune_support",
+      "variant": "ideal",
+      "product": {
+        "dsld_id": "synthetic-immune-ideal",
+        "product_name": "Benchmark Daily Immune Formula",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "primary_type": "immune_support",
+        "form_factor": "capsule",
+        "form_factor_canonical": "capsule",
+        "supplement_taxonomy": {
+          "primary_type": "immune_support",
+          "percentile_category": "immune_support"
+        },
+        "ingredient_quality_data": {
+          "ingredients_scorable": [
+            {"canonical_id": "vitamin_c", "name": "Vitamin C as calcium ascorbate", "standard_name": "Vitamin C", "quantity": 500, "dose": 500, "unit": "mg", "category": "vitamin", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_d3", "name": "Vitamin D3", "standard_name": "Vitamin D3", "quantity": 25, "dose": 25, "unit": "mcg", "category": "vitamin", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "mass"},
+            {"canonical_id": "zinc", "name": "Zinc Bisglycinate", "standard_name": "Zinc", "quantity": 15, "dose": 15, "unit": "mg", "category": "mineral", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "mass"},
+            {"canonical_id": "copper", "name": "Copper Bisglycinate", "standard_name": "Copper", "quantity": 1, "dose": 1, "unit": "mg", "category": "mineral", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[3]", "dose_class": "mass"},
+            {"canonical_id": "selenium", "name": "Selenium Selenomethionine", "standard_name": "Selenium", "quantity": 55, "dose": 55, "unit": "mcg", "category": "mineral", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[4]", "dose_class": "mass"},
+            {"canonical_id": "beta_glucan", "name": "Yeast Beta-Glucan 1,3/1,6", "standard_name": "Beta Glucan", "quantity": 250, "dose": 250, "unit": "mg", "category": "other", "bio_score": 11, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[5]", "dose_class": "mass"},
+            {"canonical_id": "quercetin", "name": "Quercetin Phytosome", "standard_name": "Quercetin", "quantity": 500, "dose": 500, "unit": "mg", "category": "botanical", "bio_score": 12, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[6]", "dose_class": "mass"},
+            {"canonical_id": "elderberry", "name": "Elderberry Extract", "standard_name": "Elderberry", "quantity": 300, "dose": 300, "unit": "mg", "category": "botanical", "bio_score": 10, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[7]", "dose_class": "mass"}
+          ]
+        },
+        "rda_ul_data": {
+          "adequacy_results": [
+            {"nutrient": "Vitamin C", "pct_rda": 555, "pct_ul": 25, "scoring_eligible": true},
+            {"nutrient": "Vitamin D3", "pct_rda": 125, "pct_ul": 25, "scoring_eligible": true},
+            {"nutrient": "Zinc", "pct_rda": 136, "pct_ul": 37.5, "scoring_eligible": true},
+            {"nutrient": "Copper", "pct_rda": 111, "pct_ul": 10, "scoring_eligible": true},
+            {"nutrient": "Selenium", "pct_rda": 100, "pct_ul": 12.2, "scoring_eligible": true}
+          ],
+          "safety_flags": []
+        },
+        "evidence_data": {
+          "clinical_matches": [
+            {"id": "FIXTURE_IMMUNE_C", "ingredient": "Vitamin C", "standard_name": "Vitamin C", "canonical_id": "vitamin_c", "study_type": "systematic_review_meta", "evidence_level": "ingredient-human", "effect_direction": "positive_weak", "total_enrollment": 1000, "min_clinical_dose": 200, "dose_unit": "mg"},
+            {"id": "FIXTURE_IMMUNE_D", "ingredient": "Vitamin D3", "standard_name": "Vitamin D3", "canonical_id": "vitamin_d3", "study_type": "systematic_review_meta", "evidence_level": "ingredient-human", "effect_direction": "positive_weak", "total_enrollment": 1000, "min_clinical_dose": 15, "dose_unit": "mcg"},
+            {"id": "FIXTURE_IMMUNE_ZINC", "ingredient": "Zinc", "standard_name": "Zinc", "canonical_id": "zinc", "study_type": "systematic_review_meta", "evidence_level": "ingredient-human", "effect_direction": "positive_weak", "total_enrollment": 500, "min_clinical_dose": 10, "dose_unit": "mg"}
+          ]
+        },
+        "verified_cert_programs": [
+          {"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}
+        ],
+        "dietary_sensitivity_data": {
+          "sugar": {"level": "sugar_free", "contains_sugar": false, "has_added_sugar": false, "amount_g": 0, "sugar_sources": []},
+          "sweeteners": {"high_glycemic": []}
+        }
+      },
+      "expected": {
+        "v4_module": "generic",
+        "archetype": "immune_support",
+        "quality_score_status": "scored",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_score_v4_100": 86.4,
+        "quality_tier": "Strong",
+        "v4_confidence": "moderate",
+        "normalization_references": {
+          "formulation": 30.0,
+          "dose": 25.0,
+          "evidence": 20.0
+        },
+        "pillars": {
+          "formulation": 17.8,
+          "dose": 17.6,
+          "evidence": 16.5,
+          "transparency": 13.5,
+          "verification": 11.0,
+          "safety_hygiene": 10.0
+        },
+        "raw_dimensions": {
+          "formulation": 26.75,
+          "dose": 22.0,
+          "evidence": 16.5,
+          "transparency": 9.0
+        }
+      }
+    },
+    {
+      "id": "immune_support__failure",
+      "archetype": "immune_support",
+      "variant": "failure",
+      "product": {
+        "dsld_id": "synthetic-immune-failure",
+        "product_name": "Benchmark Emergency Immune Gummies",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "gummy",
+        "form_factor_canonical": "gummy",
+        "supplement_taxonomy": {
+          "primary_type": "immune_support",
+          "percentile_category": "immune_support"
+        },
+        "ingredient_quality_data": {
+          "ingredients_scorable": [
+            {"canonical_id": "vitamin_c", "name": "Vitamin C", "standard_name": "Vitamin C", "quantity": 1000, "dose": 1000, "unit": "mg", "bio_score": 8, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_d3", "name": "Vitamin D3", "standard_name": "Vitamin D3", "quantity": 100, "dose": 100, "unit": "mcg", "bio_score": 10, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "mass"},
+            {"canonical_id": "zinc", "name": "Zinc Oxide", "standard_name": "Zinc", "quantity": 50, "dose": 50, "unit": "mg", "bio_score": 4, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "mass"},
+            {"canonical_id": "elderberry", "name": "Elderberry Syrup Concentrate", "standard_name": "Elderberry", "quantity": 100, "dose": 100, "unit": "mg", "bio_score": 6, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[3]", "dose_class": "mass"}
+          ]
+        },
+        "rda_ul_data": {
+          "adequacy_results": [
+            {"nutrient": "Vitamin C", "pct_rda": 1110, "pct_ul": 50, "scoring_eligible": true},
+            {"nutrient": "Vitamin D3", "pct_rda": 500, "pct_ul": 100, "scoring_eligible": true},
+            {"nutrient": "Zinc", "pct_rda": 455, "pct_ul": 125, "scoring_eligible": true}
+          ],
+          "safety_flags": [
+            {"nutrient": "Zinc", "canonical_id": "zinc", "pct_ul": 200, "severity": "high", "ul_gate_eligible": true}
+          ]
+        },
+        "evidence_data": {"clinical_matches": []},
+        "verified_cert_programs": [],
+        "dietary_sensitivity_data": {
+          "sugar": {"level": "high", "contains_sugar": true, "has_added_sugar": true, "amount_g": 8, "sugar_sources": ["glucose syrup"]},
+          "sweeteners": {"high_glycemic": ["glucose syrup"]}
+        }
+      },
+      "expected": {
+        "v4_module": "generic",
+        "archetype": "immune_support",
+        "quality_score_status": "scored",
+        "product_safety_status": "caution",
+        "quality_score_v4_100": 40.8,
+        "quality_tier": "Poor",
+        "v4_confidence": "moderate",
+        "normalization_references": {
+          "formulation": 30.0,
+          "dose": 25.0,
+          "evidence": 20.0
+        },
+        "pillars": {
+          "formulation": 3.3,
+          "dose": 4.0,
+          "evidence": 10.0,
+          "transparency": 13.5,
+          "verification": 6.0,
+          "safety_hygiene": 4.0
+        },
+        "raw_dimensions": {
+          "formulation": 5.0,
+          "dose": 5.0,
+          "evidence": 10.0,
+          "transparency": 9.0
+        }
+      }
+    },
+    {
+      "id": "fiber_digestive__ideal",
+      "archetype": "fiber_digestive",
+      "variant": "ideal",
+      "product": {
+        "dsld_id": "synthetic-fiber-ideal",
+        "product_name": "Benchmark Psyllium Fiber Powder",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "powder",
+        "form_factor_canonical": "powder",
+        "supplement_taxonomy": {
+          "primary_type": "fiber_digestive",
+          "percentile_category": "fiber_digestive"
+        },
+        "ingredient_quality_data": {
+          "ingredients_scorable": [
+            {"canonical_id": "psyllium", "name": "Psyllium Husk", "standard_name": "Psyllium", "quantity": 8, "dose": 8, "unit": "Gram(s)", "unit_normalized": "gram", "bio_score": 12, "matched_form": "psyllium husk", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"}
+          ]
+        },
+        "nutrition_summary": {"dietary_fiber_g": 8, "total_sugars_g": 0},
+        "nutrition_detail": {"dietary_fiber_g": 8, "total_sugars_g": 0},
+        "dietary_sensitivity_data": {
+          "sugar": {"amount_g": 0, "level": "sugar_free", "contains_sugar": false, "has_added_sugar": false, "sugar_sources": []},
+          "sweeteners": {"artificial": [], "high_glycemic": [], "sugar_alcohols": [], "safer_alternatives": []}
+        },
+        "contaminant_data": {
+          "harmful_additives": {"found": false, "additives": []},
+          "banned_substances": {"found": false, "substances": []}
+        },
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 1},
+        "evidence_data": {
+          "clinical_matches": [
+            {"id": "FIXTURE_FIBER_PSYLLIUM", "ingredient": "Psyllium", "standard_name": "Psyllium", "canonical_id": "psyllium", "study_type": "rct_multiple", "evidence_level": "ingredient-human", "effect_direction": "positive_strong", "total_enrollment": 500}
+          ]
+        }
+      },
+      "expected": {
+        "v4_module": "fiber_digestive",
+        "archetype": "fiber_digestive",
+        "quality_score_status": "scored",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_score_v4_100": 88.4,
+        "quality_tier": "Strong",
+        "v4_confidence": "moderate",
+        "normalization_references": {
+          "formulation": 28.0,
+          "dose": 25.0,
+          "evidence": 19.0
+        },
+        "pillars": {
+          "formulation": 20.0,
+          "dose": 20.0,
+          "evidence": 18.9,
+          "transparency": 13.5,
+          "verification": 6.0,
+          "safety_hygiene": 10.0
+        },
+        "raw_dimensions": {
+          "formulation": 30.0,
+          "dose": 25.0,
+          "evidence": 18.0,
+          "transparency": 9.0
+        }
+      }
+    },
+    {
+      "id": "fiber_digestive__failure",
+      "archetype": "fiber_digestive",
+      "variant": "failure",
+      "product": {
+        "dsld_id": "synthetic-fiber-failure",
+        "product_name": "Benchmark Fiber Candy Gummies",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "gummy",
+        "form_factor_canonical": "gummy",
+        "supplement_taxonomy": {
+          "primary_type": "fiber_digestive",
+          "percentile_category": "fiber_digestive"
+        },
+        "ingredient_quality_data": {
+          "ingredients_scorable": [
+            {"canonical_id": "fiber", "name": "Soluble Corn Fiber", "standard_name": "Fiber", "quantity": 0.8, "dose": 0.8, "unit": "Gram(s)", "unit_normalized": "gram", "bio_score": 6, "matched_form": "soluble corn fiber", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"}
+          ]
+        },
+        "nutrition_summary": {"dietary_fiber_g": 0.8, "total_sugars_g": 6},
+        "nutrition_detail": {"dietary_fiber_g": 0.8, "total_sugars_g": 6},
+        "dietary_sensitivity_data": {
+          "sugar": {"amount_g": 6, "level": "high", "contains_sugar": true, "has_added_sugar": true, "sugar_sources": ["glucose syrup"]},
+          "sweeteners": {"artificial": ["sucralose"], "high_glycemic": ["glucose syrup"], "sugar_alcohols": ["maltitol"], "safer_alternatives": []}
+        },
+        "contaminant_data": {
+          "harmful_additives": {
+            "found": true,
+            "additives": [
+              {"additive_id": "ADD_RED_40", "severity_level": "moderate", "source_section": "inactive"}
+            ]
+          },
+          "banned_substances": {"found": false, "substances": []}
+        },
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 1},
+        "evidence_data": {"clinical_matches": []}
+      },
+      "expected": {
+        "v4_module": "fiber_digestive",
+        "archetype": "fiber_digestive",
+        "quality_score_status": "scored",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_score_v4_100": 36.5,
+        "quality_tier": "Poor",
+        "v4_confidence": "low",
+        "normalization_references": {
+          "formulation": 28.0,
+          "dose": 25.0,
+          "evidence": 19.0
+        },
+        "pillars": {
+          "formulation": 6.8,
+          "dose": 4.2,
+          "evidence": 0.0,
+          "transparency": 13.5,
+          "verification": 6.0,
+          "safety_hygiene": 6.0
+        },
+        "raw_dimensions": {
+          "formulation": 9.5,
+          "dose": 5.2,
+          "evidence": 0.0,
+          "transparency": 9.0
+        }
+      }
     }
   ]
 }

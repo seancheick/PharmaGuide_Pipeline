@@ -34,6 +34,8 @@ def test_decision_fixture_suite_has_reviewed_ideal_and_failure_pairs() -> None:
     assert fixtures.archetypes == {
         "generic_single_molecule",
         "b_complex",
+        "immune_support",
+        "fiber_digestive",
     }
     for archetype in fixtures.archetypes:
         variants = {
@@ -51,6 +53,10 @@ def test_decision_fixture_suite_has_reviewed_ideal_and_failure_pairs() -> None:
         "generic_single_molecule__failure",
         "b_complex__ideal",
         "b_complex__failure",
+        "immune_support__ideal",
+        "immune_support__failure",
+        "fiber_digestive__ideal",
+        "fiber_digestive__failure",
     ],
 )
 def test_decision_fixture_matches_locked_production_outcome(case_id: str) -> None:
@@ -65,6 +71,8 @@ def test_decision_fixture_matches_locked_production_outcome(case_id: str) -> Non
     [
         ("generic_single_molecule__ideal", "generic_single_molecule__failure"),
         ("b_complex__ideal", "b_complex__failure"),
+        ("immune_support__ideal", "immune_support__failure"),
+        ("fiber_digestive__ideal", "fiber_digestive__failure"),
     ],
 )
 def test_failure_fixture_scores_below_its_ideal_pair(
