@@ -8,6 +8,7 @@ copies. It validates parity before success.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -42,6 +43,81 @@ DEFAULT_TIMING_RULES_SOURCE = Path(__file__).parent / "data" / "timing_rules.jso
 TIMING_RULES_DESTINATION_RELATIVE_PATH = Path(
     "assets/reference_data/timing_rules.json"
 )
+MANIFEST_DESTINATION_RELATIVE_PATH = Path(
+    "assets/reference_data/reference_data_manifest.json"
+)
+
+# Every artifact this script owns. The manifest below records a SHA-256 for each
+# so the FLUTTER repo can detect drift on its own.
+#
+# Before this existed, parity was enforced only here: running the sync overwrote
+# the Flutter copy and then compared it to the source it had just written, which
+# always agreed. A hand-edit to the app's copy vanished with no signal, and the
+# Flutter repo had no way to notice — it has SHA-256 release gates for the
+# catalog and interaction DBs, but none for reference data.
+MANIFESTED_ARTIFACTS = (
+    DESTINATION_RELATIVE_PATH,
+    PRODUCT_TYPE_DESTINATION_RELATIVE_PATH,
+    DEPLETIONS_DESTINATION_RELATIVE_PATH,
+    CLINICAL_TAXONOMY_DESTINATION_RELATIVE_PATH,
+    TIMING_RULES_DESTINATION_RELATIVE_PATH,
+)
+
+
+def _sha256_of(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def write_reference_data_manifest(*, flutter_repo: Path) -> dict[str, Any]:
+    """Record a SHA-256 for every synced artifact, for the Flutter-side gate."""
+    flutter_repo = flutter_repo.resolve()
+    entries = {}
+    for relative in MANIFESTED_ARTIFACTS:
+        target = flutter_repo / relative
+        if not target.is_file():
+            raise FileNotFoundError(f"Synced artifact missing: {target}")
+        entries[relative.as_posix()] = _sha256_of(target)
+    manifest = {
+        "_comment": (
+            "Written by scripts/sync_flutter_reference_data.py. Hand edits to "
+            "any listed asset will fail the Flutter reference-data release "
+            "gate until the pipeline regenerates this manifest."
+        ),
+        "artifacts": entries,
+    }
+    destination = flutter_repo / MANIFEST_DESTINATION_RELATIVE_PATH
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    return manifest
+
+
+def validate_reference_data_manifest(*, flutter_repo: Path) -> dict[str, Any]:
+    """Fail when a synced artifact no longer matches its recorded hash."""
+    flutter_repo = flutter_repo.resolve()
+    destination = flutter_repo / MANIFEST_DESTINATION_RELATIVE_PATH
+    if not destination.is_file():
+        raise FileNotFoundError(f"Reference-data manifest not found: {destination}")
+    manifest = json.loads(destination.read_text(encoding="utf-8"))
+    recorded = manifest.get("artifacts")
+    if not isinstance(recorded, dict):
+        raise ValueError("Reference-data manifest has no artifacts map")
+    expected_keys = {relative.as_posix() for relative in MANIFESTED_ARTIFACTS}
+    if set(recorded) != expected_keys:
+        missing = sorted(expected_keys - set(recorded))
+        extra = sorted(set(recorded) - expected_keys)
+        raise ValueError(
+            f"Reference-data manifest key drift (missing={missing}, extra={extra})"
+        )
+    for relative, expected_hash in sorted(recorded.items()):
+        actual = _sha256_of(flutter_repo / relative)
+        if actual != expected_hash:
+            raise ValueError(
+                f"{relative} does not match its recorded hash "
+                f"(expected {expected_hash}, found {actual})"
+            )
+    return manifest
 
 
 def _load_canonical(*, source_path: Path) -> tuple[Path, dict[str, Any], dict[str, str]]:
@@ -439,6 +515,11 @@ def main() -> int:
         depletion_result = sync_medication_depletions(
             **depletion_kwargs, content_version=args.content_version
         )
+    if args.check:
+        manifest = validate_reference_data_manifest(flutter_repo=Path(args.flutter_repo))
+    else:
+        manifest = write_reference_data_manifest(flutter_repo=Path(args.flutter_repo))
+
     verb = "Validated" if args.check else "Synced"
     print(
         f"{verb} RDA/UL reference data: "
@@ -467,6 +548,7 @@ def main() -> int:
         f"schema={timing_result['schema_version']} "
         f"entries={timing_result['total_entries']}"
     )
+    print(f"{verb} reference-data manifest: artifacts={len(manifest['artifacts'])}")
     return 0
 
 
