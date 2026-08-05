@@ -349,13 +349,66 @@ def test_b7_over_ul_penalty_reduces_public_safety_pillar() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     bd = _module_bd(hygiene=4)
     bd["dimensions"]["dose"]["penalties"] = {"B7_dose_safety": -2.0}
+    bd["dimensions"]["dose"]["metadata"] = {
+        "B7_safety_evaluation": {
+            "state_counts": {"confirmed_over_threshold": 1},
+        }
+    }
 
     out = assemble_quality_score(_shadow(module="generic", bd=bd))
     pillar = out["quality_pillars_v4"]["safety_hygiene"]
 
     assert pillar["score"] == 8.0
     assert pillar["components"]["over_ul_penalty"] == 2.0
-    assert "above established upper limits" in pillar["reason"]
+    assert "exceed an established upper limit" in pillar["reason"]
+
+
+def test_b7_unresolved_only_explains_incomplete_check_without_claiming_excess() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    bd = _module_bd(hygiene=4)
+    bd["dimensions"]["dose"]["penalties"] = {"B7_dose_safety": -2.0}
+    bd["dimensions"]["dose"]["metadata"] = {
+        "B7_safety_evaluation": {
+            "state_counts": {"material_but_unresolved": 1},
+        }
+    }
+
+    out = assemble_quality_score(_shadow(module="generic", bd=bd))
+    pillar = out["quality_pillars_v4"]["safety_hygiene"]
+
+    assert pillar["score"] == 8.0
+    assert pillar["components"]["over_ul_penalty"] == 2.0
+    assert pillar["components"]["dose_safety_state_counts"] == {
+        "material_but_unresolved": 1,
+    }
+    assert (
+        "dose-safety checks could not be completed because the amount, form, "
+        "or comparison basis was unresolved"
+    ) in pillar["reason"]
+    assert "above established upper limits" not in pillar["reason"]
+
+
+def test_b7_mixed_state_explains_confirmed_excess_and_unresolved_checks() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    bd = _module_bd(hygiene=4)
+    bd["dimensions"]["dose"]["penalties"] = {"B7_dose_safety": -3.0}
+    bd["dimensions"]["dose"]["metadata"] = {
+        "B7_safety_evaluation": {
+            "state_counts": {
+                "confirmed_over_threshold": 1,
+                "material_but_unresolved": 1,
+            },
+        }
+    }
+
+    out = assemble_quality_score(_shadow(module="generic", bd=bd))
+    pillar = out["quality_pillars_v4"]["safety_hygiene"]
+
+    assert pillar["score"] == 7.0
+    assert "exceed an established upper limit" in pillar["reason"]
+    assert "additional dose-safety checks remain unresolved" in pillar["reason"]
 
 
 def test_verification_pillar_reads_lowercase_v4_component_keys() -> None:

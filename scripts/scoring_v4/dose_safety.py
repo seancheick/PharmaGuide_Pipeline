@@ -31,7 +31,7 @@ from __future__ import annotations
 import math
 from collections import Counter
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Mapping, Optional
 
 from scoring_v4.modules.generic_helpers import _as_float, _norm_text, _safe_list
 
@@ -141,6 +141,39 @@ class DoseSafetyResult:
                 for flag in self.flags
             ],
         }
+
+
+def dose_safety_consumer_explanation(
+    state_counts: Mapping[str, Any] | None,
+) -> Optional[str]:
+    """Return honest consumer copy for one typed dose-safety summary.
+
+    The penalty magnitude cannot distinguish confirmed excess from an
+    unresolved comparison. Consumer language must therefore use the typed
+    states emitted by :meth:`DoseSafetyResult.audit_metadata`.
+    """
+
+    counts = state_counts if isinstance(state_counts, Mapping) else {}
+
+    def present(state: str) -> bool:
+        value = counts.get(state, 0)
+        return isinstance(value, (int, float)) and not isinstance(value, bool) and value > 0
+
+    confirmed = present(CONFIRMED_OVER_THRESHOLD)
+    unresolved = present(MATERIAL_BUT_UNRESOLVED)
+    if confirmed and unresolved:
+        return (
+            "one or more supplemental amounts exceed an established upper "
+            "limit, and additional dose-safety checks remain unresolved"
+        )
+    if confirmed:
+        return "one or more supplemental amounts exceed an established upper limit"
+    if unresolved:
+        return (
+            "one or more dose-safety checks could not be completed because "
+            "the amount, form, or comparison basis was unresolved"
+        )
+    return None
 
 
 def is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
