@@ -2,7 +2,7 @@
 
 Locks the breakdown contract for the probiotic module before any
 probiotic-specific scoring math lands. Subsequent slices (P2.1
-Formulation, P2.2 Dose, P2.3 Evidence, P2.4 Trust, P2.5 Transparency,
+Formulation, P2.2 Dose, P2.3 Evidence, P2.4 verification, P2.5 Transparency,
 P2.6 Manufacturer + final assembly) fill the `components` / `penalties`
 sub-dicts and the dimension `score` fields in-place.
 
@@ -13,14 +13,15 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 + §6 (probiotic rubric):
     | Formulation        |    25     |
     | Dose               |    25     |
     | Evidence           |    20     |
-    | Testing & Trust    |    15     |
     | Transparency       |    15     |
-    | (5-dimension sum)  |   100     |
+    | (4-dimension sum)  |    85     |
 
-Plus two SEPARATE adjustments (§6 line 390):
+Plus separate adjustments:
 
+    | Verification Bonus         |  0 to +8 |
     | Manufacturer Trust         | +5  |
     | Manufacturer Violations    |  0 to -25 |
+    | Safety Hygiene Base        |  0 to +4 |
 
 Shared contract with generic module — same `dimensions` / `components` /
 `penalties` / `metadata` / `manufacturer_trust` / `manufacturer_violations`
@@ -125,7 +126,7 @@ def test_probiotic_dimensions_share_stable_contract() -> None:
         assert "components" in dim
         assert "penalties" in dim
         assert "metadata" in dim
-        # P2.0-P2.5: all 5 dimensions populated
+        # P2.0-P2.5: all 4 core dimensions populated
         assert dim["score"] is not None, f"{name}.score should be populated through P2.5"
         assert dim["components"], f"{name}.components should be populated through P2.5"
 

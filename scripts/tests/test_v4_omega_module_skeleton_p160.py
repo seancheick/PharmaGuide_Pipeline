@@ -2,7 +2,7 @@
 
 Originally created at P1.6.0 to lock the breakdown contract before scoring
 math landed. Now also protects the complete P1.6.6 omega module contract:
-all dimensions populate, manufacturer adjustments apply, and final score
+all four core dimensions populate, additive adjustments apply, and final score
 assembly is online.
 
 Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 + §9 (Omega / fish-oil policy)
@@ -13,20 +13,21 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 + §9 (Omega / fish-oil policy)
     | Formulation        |   25  |
     | Dose               |   25  |
     | Evidence           |   20  |
-    | Testing & Trust    |   15  |
     | Transparency       |   15  |
-    | (5-dimension sum)  |  100  |
+    | (4-dimension sum)  |   85  |
 
-Plus two SEPARATE adjustments (§6 line 390, module-agnostic):
+Plus separate adjustments:
 
+    | Verification Bonus         |  0 to +8 |
     | Manufacturer Trust         | +5  |
     | Manufacturer Violations    |  0 to -25 |
+    | Safety Hygiene Base        |  0 to +4 |
 
 Shared contract with generic and probiotic modules — same `dimensions` /
 `components` / `penalties` / `metadata` / `manufacturer_trust` /
 `manufacturer_violations` shape. Different dimension caps and different
 per-dimension sub-rubrics (omega Formulation is form/source/sustainability
-centric; Dose is EPA+DHA band; Trust is IFOS scope-aware verified-only).
+centric; Dose is EPA+DHA band; verification is IFOS scope-aware).
 """
 
 from __future__ import annotations
@@ -131,7 +132,7 @@ def test_omega_dimensions_share_stable_contract() -> None:
         assert "penalties" in dim
         assert "metadata" in dim
 
-    # P1.6.6: all 5 dimensions populate.
+    # P1.6.6: all 4 core dimensions populate.
     for populated in ("formulation", "dose", "evidence", "transparency"):
         assert breakdown["dimensions"][populated]["score"] is not None, (
             f"omega.{populated}.score should be populated through P1.6.5"

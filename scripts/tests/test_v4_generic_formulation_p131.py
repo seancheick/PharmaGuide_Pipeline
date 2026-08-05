@@ -985,6 +985,30 @@ def test_sleep_melatonin_gummy_gets_format_safety_penalty() -> None:
     assert payload["metadata"]["sleep_support"]["melatonin_gummy_penalty"] == 2.0
 
 
+def test_sleep_melatonin_gummy_name_gets_penalty_when_form_factor_missing() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            product_name="Kids Sleep Gummies Berry Flavor",
+            form_factor="",
+            supplement_taxonomy={"primary_type": "sleep_support"},
+            ingredients=[
+                _ingredient(
+                    name="Melatonin",
+                    canonical_id="melatonin",
+                    bio_score=9,
+                    quantity=3,
+                    unit="mg",
+                )
+            ],
+        )
+    )
+
+    assert payload["penalties"]["B1_sleep_melatonin_gummy"] == -2.0
+    assert payload["metadata"]["sleep_support"]["melatonin_gummy_penalty"] == 2.0
+
+
 # --- P1.3.1b formulation-excellence components ---------------------------
 
 

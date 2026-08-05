@@ -3,8 +3,8 @@
 Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §9
 (Omega / fish oil policy):
 
-    Dimension          Cap     Subsequent slice that fills it
-    -----------------  ----    -------------------------------
+    Core dimension      Cap     Subsequent slice that fills it
+    ------------------  ----    -------------------------------
     Formulation         25     P1.6.1 — form_tier (TG 8 / PL 7 / rTG 6 /
                                EE 4 / undefined 2) + source_disclosed 4
                                + premium_form_a2_carry 5 + sustainability_cert 4
@@ -15,24 +15,25 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §9
     Evidence            20     P1.6.3 — generic evidence pipeline with
                                omega-specific canonicals (EPA/DHA/EPA+DHA)
                                + indication_relevance (+5 at AHA CVD dose)
-    Testing & Trust     15     P1.6.4 — IFOS scope-aware verified ONLY policy:
-                               sku/product_line score 10; needs_review and
-                               brand_only stay 0 (per Sean 2026-05-20).
-                               + B4b GMP up to 4 + B4c traceability up to 1
     Transparency        15     P1.6.5 — EPA/DHA disclosed 5 + form disclosed 3
                                + source disclosed 3 + oxidation disclosed 2
                                + B3 claim_compliance (cap 4) minus B2/B5/B6
-    Total class score  100
+    Core subtotal       85
 
-Plus two SEPARATE adjustments (§6 line 390, module-agnostic):
+Plus separate adjustments before the raw-score clamp:
 
+    Verification Bonus         0 to +8    (P1.6.4 IFOS/GMP/traceability signals,
+                                          rescaled from the former 0-15 Trust dimension)
     Manufacturer Trust         0 to +5    (D1+D2+rollup; reuses generic)
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; reuses generic)
+    Safety Hygiene Base        0 to +4    (catalog safety-signal absence)
 
-P1.6.6 state: all 5 dimensions, manufacturer adjustments, and final
-rubric-score assembly are online. Router, completeness gate, and the v4
-scorer dispatch the omega class into a complete module result.
+P1.6.6 state: all four core dimensions, the additive verification/manufacturer/
+safety adjustments, and final raw rubric-score assembly are online. The public
+six-pillar score is assembled separately by `scoring_v4.quality_score`.
+Router, completeness gate, and the v4 scorer dispatch the omega class into a
+complete module result.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). Shared infrastructure (DimensionResult,
@@ -138,7 +139,7 @@ class OmegaModuleResult:
 
 
 def _empty_dimensions() -> Dict[str, DimensionResult]:
-    """Build the 5-dimension skeleton with caps locked from DIMENSION_CAPS.
+    """Build the 4-dimension skeleton with caps locked from DIMENSION_CAPS.
     Insertion order matches rendering order in audit / UI."""
     return {name: DimensionResult(max=float(cap)) for name, cap in DIMENSION_CAPS}
 
@@ -146,7 +147,7 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_omega(product: Any) -> OmegaModuleResult:
     """Score an omega-class product against the v4 omega rubric.
 
-    P1.6.6 state: returns a fully-instantiated result with all 5 dimensions,
+    P1.6.6 state: returns a fully-instantiated result with all 4 core dimensions,
     manufacturer trust / violations, raw score, production score, and module
     metadata populated.
 

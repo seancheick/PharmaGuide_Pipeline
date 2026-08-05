@@ -45,10 +45,12 @@ def has_sleep_active(product: Dict[str, Any], canonicals: Iterable[str]) -> bool
 def has_melatonin_gummy_format(product: Dict[str, Any]) -> bool:
     if not is_sleep_support_product(product):
         return False
-    form_factor = _norm_text(
-        product.get("form_factor_canonical") or product.get("form_factor")
+    form_text = _norm_text(
+        f"{product.get('form_factor_canonical') or ''} "
+        f"{product.get('form_factor') or ''} "
+        f"{product.get('product_name') or ''}"
     )
-    if "gummy" not in form_factor and "gummies" not in form_factor:
+    if "gummy" not in form_text and "gummies" not in form_text:
         return False
     return has_sleep_active(product, MELATONIN_CANONICALS)
 

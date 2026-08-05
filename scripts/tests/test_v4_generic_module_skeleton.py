@@ -2,8 +2,8 @@
 
 Locks the breakdown contract for the generic module before any scoring
 math lands. Subsequent slices (P1.3.1 Formulation, P1.3.2 Dose, P1.3.3
-Evidence, P1.3.4 Trust, P1.3.5 Transparency, P1.3.6 Manufacturer + final
-assembly) fill the `components` / `penalties` sub-dicts and the dimension
+Evidence, P1.3.4 verification signals, P1.3.5 Transparency, P1.3.6
+Manufacturer + final assembly) fill the `components` / `penalties` sub-dicts and the dimension
 `score` fields in-place. The dimension keys, caps, and nesting shape are
 the public contract — changing them is a breaking change to the audit /
 score-delta / Flutter consumers.
@@ -15,14 +15,15 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights):
     | Formulation        |   30    |
     | Dose               |   25    |
     | Evidence           |   20    |
-    | Testing & Trust    |   15    |
     | Transparency       |   10    |
-    | (5-dimension sum)  |  100    |
+    | (4-dimension sum)  |   85    |
 
-Plus two *separate* adjustments (§6 line 390):
+Plus separate adjustments:
 
+    | Verification Bonus         |  0 to +8 |
     | Manufacturer Trust         | +5  |
     | Manufacturer Violations    |  0 to -25 |
+    | Safety Hygiene Base        |  0 to +4 |
 """
 
 from __future__ import annotations

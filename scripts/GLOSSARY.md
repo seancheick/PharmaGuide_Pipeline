@@ -132,8 +132,8 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 
 | Contract | Current code value |
 |---|---|
-| Export schema | `2.0.0` (`build_final_db.py`) |
-| Export core columns | `110` (`build_final_db.py`) |
+| Export schema | `2.2.0` (`build_final_db.py`) |
+| Export core columns | `111` (`build_final_db.py`) |
 | Pipeline manifest version | `3.4.0` (`build_final_db.py`) |
 | Enrichment version | `3.1.0` (`enrich_supplements_v3.py`) |
 | V4 scoring engine | `4.1.0` (`score_supplements_v4.py`) |

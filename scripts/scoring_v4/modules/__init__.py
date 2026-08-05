@@ -1,7 +1,10 @@
 """v4 per-class scoring modules.
 
 Per `docs/plans/SCORING_V4_PROPOSAL.md` §6, each product class has its
-own rubric, weighted across the shared 5-dimension spine:
+own rubric across four core dimensions (Formulation, Dose, Evidence, and
+Transparency), plus additive Verification, manufacturer, and catalog-safety
+adjustments. `scoring_v4.quality_score` projects that internal breakdown into
+the public six-pillar score:
 
   - generic (P1.3)          — single-nutrient, simple stacks, botanicals
   - probiotic (P2)          — supplement_type=probiotic

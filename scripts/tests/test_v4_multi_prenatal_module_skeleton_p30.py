@@ -12,9 +12,11 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4:
     | Formulation        |             25 |
     | Dose               |             25 |
     | Evidence           |             20 |
-    | Testing & Trust    |             15 |
     | Transparency       |             15 |
-    | (5-dimension sum)  |            100 |
+    | (4-dimension sum)  |             85 |
+
+The former Testing & Trust signals feed the separate 0-to-8 Verification
+Bonus. Manufacturer and safety-hygiene adjustments are also separate.
 """
 
 from __future__ import annotations
@@ -156,7 +158,7 @@ def test_multi_prenatal_dimensions_share_stable_contract() -> None:
         dim = breakdown["dimensions"][name]
         assert set(dim.keys()) == {"score", "max", "components", "penalties", "metadata"}
 
-    # P3.5: all five dimensions are populated; P3.6 still owns final
+    # P3.5: all four core dimensions are populated; P3.6 still owns final
     # assembly, manufacturer adjustments, verdict, and confidence.
     for name in EXPECTED_DIMENSION_CAPS:
         assert breakdown["dimensions"][name]["score"] is not None
