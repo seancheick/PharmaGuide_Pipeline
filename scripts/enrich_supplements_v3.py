@@ -11735,8 +11735,7 @@ class SupplementEnricherV3:
         # invariant explicit instead.
         #
         # Each gate is also recorded into `conflicts` if not already
-        # there, so downstream scoring (`score_supplements.py:1934`)
-        # sees the disagreement.
+        # there, so downstream scoring sees the disagreement.
         def _record_conflict(msg: str) -> None:
             if msg not in conflicts:
                 conflicts.append(msg)
@@ -14537,9 +14536,7 @@ class SupplementEnricherV3:
     ]
 
     # P0.5 — fallback prebiotic vocabulary used when scoring_config.json is
-    # unavailable. Must stay byte-equal to the scorer's fallback in
-    # score_supplements.py _compute_probiotic_category_bonus so the two paths
-    # agree even without config. The authoritative list lives in
+    # unavailable. The authoritative list lives in
     # scoring_config.section_A_ingredient_quality.probiotic_bonus.prebiotic_terms;
     # _get_prebiotic_terms() prefers config and falls back here.
     _PREBIOTIC_TERMS_FALLBACK = [

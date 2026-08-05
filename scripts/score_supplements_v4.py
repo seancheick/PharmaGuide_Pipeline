@@ -1,19 +1,13 @@
-"""v4 production scorer entry point.
+"""Production v4 scorer entry point.
 
-Per the architecture lock in `docs/plans/SCORING_V4_PROPOSAL.md` §13:
-this is a separate scoring entry point from the legacy `score_supplements.py`
-scaffolding. The shipped catalog contract is v4: this module emits the
-production v4 scorer result and the final DB export projects it to
-`quality_score_v4_100` plus the six-pillar quality metadata.
-
-Shared with v3: the enriched input contract from `enrich_supplements_v3.py`,
-plus stable shared helpers (cert_resolver, enhanced_normalizer lookups).
-NOT shared: the scoring policy itself — `scoring_v4/` owns rubrics,
-gates, modules, and confidence rules independently.
+This module emits the sole production scorer result. Final export projects it
+to ``quality_score_v4_100`` plus the six-pillar quality metadata. Scoring policy
+lives under ``scoring_v4/`` and consumes the enriched input contract from
+``enrich_supplements_v3.py``.
 
 Current P3.6 / P2.6 / P1.6.6 state:
-  - Router runs and decides the module (generic / probiotic / omega /
-    multi_or_prenatal / b_complex).
+  - Router selects generic, probiotic, omega, multi/prenatal, b-complex,
+    sports, or fiber/digestive.
   - Safety gate short-circuits BLOCKED / UNSAFE and carries CAUTION forward.
   - Completeness gate marks unscoreable rows NOT_SCORED for archive / QA.
   - Generic, probiotic, omega, sports, b_complex, and multi_or_prenatal modules emit

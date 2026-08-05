@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """ScoringClassification v1 route-consistency release gate.
 
-Read-only audit. It proves the compatibility classification contract preserves
-current v4 routing, tracks verdict flips, runs pinned route-precedence canaries,
-and reports route/confidence distribution drift for scale monitoring.
+Read-only audit. It compares the native classification stamped by enrichment
+with a fresh recomputation by the same canonical contract, runs pinned
+route-precedence canaries, and reports route/confidence distribution drift.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ for _p in (str(SCRIPTS_ROOT), str(SCRIPTS_ROOT / "api_audit")):
         sys.path.insert(0, _p)
 
 from scoring_input_contract import build_scoring_classification  # noqa: E402
-from scoring_v4.router import _legacy_class_for_product, class_for_product  # noqa: E402
+from scoring_v4.router import class_for_product  # noqa: E402
 from score_supplements_v4 import score_product_v4  # noqa: E402
 import v4_canary_report as canary  # noqa: E402
 
@@ -176,31 +176,40 @@ def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for product in products:
         dsld_id = canary._dsld_id(product)
-        old_route = _legacy_class_for_product(product)
-        contract = build_scoring_classification(product)
+        stamped = canary._safe_dict(product.get("product_scoring_classification"))
+        stamped_route = stamped.get("route_module")
+        contract = build_scoring_classification(
+            product,
+            classification_origin="native_enrichment",
+        )
+        recomputed_route = contract.get("route_module")
         public_route = class_for_product(product)
         verdict, score = _score_verdict(product)
-        failure_overrode_old_route = bool(
+        failure_overrode_stamped_route = bool(
             contract.get("classification_failed")
-            and old_route != "generic"
-            and contract.get("route_module") == "generic"
+            and stamped_route not in {None, "generic"}
+            and recomputed_route == "generic"
         )
         rows.append({
             "dsld_id": dsld_id,
             "brand_name": product.get("brand_name"),
             "product_name": product.get("product_name") or product.get("fullName"),
             "primary_type": product.get("primary_type") or canary._safe_dict(product.get("supplement_taxonomy")).get("primary_type"),
-            "old_route": old_route,
-            "contract_route": contract.get("route_module"),
+            "stamped_route": stamped_route,
+            "recomputed_route": recomputed_route,
             "public_route": public_route,
             "route_confidence": contract.get("route_confidence"),
             "classification_failed": contract.get("classification_failed"),
             "classification_failure_reason": contract.get("classification_failure_reason"),
-            "failure_overrode_old_route": failure_overrode_old_route,
+            "failure_overrode_stamped_route": failure_overrode_stamped_route,
             "classification_origin": contract.get("classification_origin"),
             "v4_verdict": verdict,
             "v4_score": score,
-            "route_diverged": old_route != contract.get("route_module") or public_route != contract.get("route_module"),
+            "route_diverged": (
+                stamped_route is None
+                or stamped_route != recomputed_route
+                or public_route != recomputed_route
+            ),
         })
     return rows
 
@@ -217,7 +226,9 @@ def summarize(
     unsigned_divergences = [row for row in route_divergences if not _allowlist_signed(row, allowlist)]
     canary_failures = [row for row in canary_rows if not row.get("passed")]
     failed_rows = [row for row in rows if row.get("classification_failed")]
-    failure_overrides = [row for row in rows if row.get("failure_overrode_old_route")]
+    failure_overrides = [
+        row for row in rows if row.get("failure_overrode_stamped_route")
+    ]
     ms_per_product = round((elapsed_seconds * 1000.0 / len(rows)), 4) if rows else None
     performance_budget_exceeded = (
         ms_per_product is not None
@@ -227,11 +238,13 @@ def summarize(
     return {
         "generated": datetime.now(timezone.utc).isoformat(),
         "total_products": len(rows),
-        "route_counts": dict(Counter(str(row.get("contract_route")) for row in rows).most_common()),
+        "route_counts": dict(
+            Counter(str(row.get("recomputed_route")) for row in rows).most_common()
+        ),
         "route_confidence_counts": dict(Counter(str(row.get("route_confidence")) for row in rows).most_common()),
         "verdict_counts": dict(Counter(str(row.get("v4_verdict")) for row in rows).most_common()),
         "classification_failed_count": len(failed_rows),
-        "failure_overrode_old_route_count": len(failure_overrides),
+        "failure_overrode_stamped_route_count": len(failure_overrides),
         "not_scored_count": sum(1 for row in rows if str(row.get("v4_verdict") or "").upper() == "NOT_SCORED"),
         "route_divergence_count": len(route_divergences),
         "unsigned_route_divergence_count": len(unsigned_divergences),
@@ -294,9 +307,9 @@ def main() -> int:
         args.out_dir / "route_divergences.csv",
         [
             "dsld_id", "brand_name", "product_name", "primary_type",
-            "old_route", "contract_route", "public_route", "route_confidence",
+            "stamped_route", "recomputed_route", "public_route", "route_confidence",
             "v4_verdict", "v4_score", "classification_failed",
-            "classification_failure_reason", "failure_overrode_old_route",
+            "classification_failure_reason", "failure_overrode_stamped_route",
         ],
     )
     _write_csv(
@@ -304,9 +317,9 @@ def main() -> int:
         args.out_dir / "frozen_route_baseline.csv",
         [
             "dsld_id", "brand_name", "product_name", "primary_type",
-            "old_route", "contract_route", "public_route", "route_confidence",
+            "stamped_route", "recomputed_route", "public_route", "route_confidence",
             "classification_origin", "classification_failed",
-            "classification_failure_reason", "failure_overrode_old_route",
+            "classification_failure_reason", "failure_overrode_stamped_route",
             "v4_verdict", "v4_score",
         ],
     )
@@ -320,9 +333,9 @@ def main() -> int:
         args.out_dir / "route_distribution.csv",
         [
             "dsld_id", "brand_name", "product_name", "primary_type",
-            "old_route", "contract_route", "public_route", "route_confidence",
+            "stamped_route", "recomputed_route", "public_route", "route_confidence",
             "v4_verdict", "v4_score", "classification_failed",
-            "classification_failure_reason", "failure_overrode_old_route",
+            "classification_failure_reason", "failure_overrode_stamped_route",
         ],
     )
     print(json.dumps(summary, indent=2))

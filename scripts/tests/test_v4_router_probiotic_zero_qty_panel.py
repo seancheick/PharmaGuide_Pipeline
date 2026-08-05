@@ -1,9 +1,8 @@
 """V4 probiotic route fix — zero-quantity (phantom) non-probiotic panel.
 
 Regression (found 2026-06-15 in the pre-250K route audit): the non-probiotic
-panel counters (`scoring_input_contract._route_non_probiotic_scorable_count` and
-the parity mirror `scoring_v4.router._non_probiotic_scorable_count`) count EVERY
-non-probiotic scorable row regardless of disclosed amount. An *undisclosed*
+panel counter counts EVERY non-probiotic scorable row regardless of disclosed
+amount. An *undisclosed*
 (quantity == 0) blend therefore inflates the panel and demotes a genuine
 probiotic to ``generic``:
 
@@ -28,9 +27,8 @@ load-bearing and pinned below:
   "Magnesium with Pre & Probiotics" / "Digestive Enzymes With Probiotics" combos
     must STAY non-probiotic — the non-probiotic hero precedes the probiotic token.
 
-Both routing brains (the live ``scoring_input_contract`` path behind
-``class_for_product`` and the ``scoring_v4.router`` parity baseline
-``_legacy_class_for_product``) must agree, so every case asserts both.
+``scoring_input_contract`` is the sole routing authority behind
+``class_for_product``.
 """
 from __future__ import annotations
 
@@ -42,11 +40,7 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 from scoring_input_contract import _route_non_probiotic_scorable_count  # noqa: E402
-from scoring_v4.router import (  # noqa: E402
-    class_for_product,
-    _legacy_class_for_product,
-    _non_probiotic_scorable_count,
-)
+from scoring_v4.router import class_for_product  # noqa: E402
 
 
 def _prod(name, primary_type, scorable, *, strains, billion, is_prob=True):
@@ -69,11 +63,7 @@ def _row(name, canonical, qty, unit="mg"):
 
 
 def _route(product):
-    """Assert the live and legacy routers agree, and return the agreed route."""
-    live = class_for_product(product)
-    legacy = _legacy_class_for_product(product)
-    assert live == legacy, f"router parity drift: live={live} legacy={legacy}"
-    return live
+    return class_for_product(product)
 
 
 # --------------------------------------------------------------------------- #
@@ -188,7 +178,7 @@ def test_disclosed_enzyme_dominant_single_strain_stays_non_probiotic():
 
 # --------------------------------------------------------------------------- #
 # Counter contract: disclosed count excludes quantity==0 rows; full count keeps
-# them. Pinned on BOTH the live and parity counters.
+# them.
 # --------------------------------------------------------------------------- #
 
 def test_live_counter_full_includes_zero_qty_disclosed_excludes():
@@ -197,15 +187,7 @@ def test_live_counter_full_includes_zero_qty_disclosed_excludes():
     assert _route_non_probiotic_scorable_count(kids, require_disclosed=True) == 0
 
 
-def test_parity_counter_full_includes_zero_qty_disclosed_excludes():
-    kids = _kids_5b()
-    assert _non_probiotic_scorable_count(kids) == 6
-    assert _non_probiotic_scorable_count(kids, require_disclosed=True) == 0
-
-
 def test_probiotic_gx_disclosed_panel_is_one_full_is_four():
     gx = _probiotic_gx()
     assert _route_non_probiotic_scorable_count(gx) == 4
     assert _route_non_probiotic_scorable_count(gx, require_disclosed=True) == 1
-    assert _non_probiotic_scorable_count(gx) == 4
-    assert _non_probiotic_scorable_count(gx, require_disclosed=True) == 1

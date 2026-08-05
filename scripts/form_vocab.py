@@ -2,8 +2,7 @@
 
 Single source of truth for every form-keyword regex used across the
 pipeline. Replaces the 3-5 hardcoded keyword lists previously scattered
-across enhanced_normalizer.py, score_supplements.py, enrich_supplements_v3.py,
-and constants.py.
+across the normalizer, enricher, scorer, and constants modules.
 
 Loaded once at import time; regexes compiled once. Pure functions on a
 frozen module-level singleton — no mutable state.
@@ -16,7 +15,7 @@ Three consumer surfaces:
 
   matches_premium_omega3_form(haystack)
       Scorer usage. Boolean — does the text disclose a premium omega-3
-      molecular form? Used to gate the A2 bonus in score_supplements.
+      molecular form?
 
   matches_probiotic_delivery(text)
   matches_postbiotic(text)
