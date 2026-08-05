@@ -8,9 +8,10 @@ from typing import Any
 
 _SEMVER_RE = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 
-# Version 1 owns vocabularies and small control artifacts. Version 6 owns the
-# interaction/certification/goal contracts. All other top-level reference
-# databases remain in the enrichment schema namespace (version 5).
+# Version 1 owns vocabularies, small control artifacts, and rejection ledgers.
+# Version 6 owns interaction/certification/goal contracts plus the typed timing
+# rule runtime contract. All other top-level reference databases remain in the
+# enrichment schema namespace (version 5).
 _SCHEMA_V1_FILES = frozenset(
     {
         "botanical_marker_contributions.json",
@@ -26,6 +27,7 @@ _SCHEMA_V1_FILES = frozenset(
         "medication_profile_gate_rules.json",
         "omega_rubric.json",
         "profile_gate_test_cases.json",
+        "timing_rules_rejected.json",
         "unii_exoneration_allowlist.json",
     }
 )
@@ -34,6 +36,7 @@ _SCHEMA_V6_FILES = frozenset(
         "cert_registry.json",
         "high_dose_rule_exemptions.json",
         "ingredient_interaction_rules.json",
+        "timing_rules.json",
         "user_goals_to_clusters.json",
     }
 )

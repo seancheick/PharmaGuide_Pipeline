@@ -177,6 +177,10 @@ class TestDatabaseSchemaIntegrity:
             ("ingredient_quality_map.json", "1.0.0", False),
             ("ingredient_interaction_rules.json", "6.2.3", True),
             ("ingredient_interaction_rules.json", "7.0.0", False),
+            ("timing_rules.json", "6.0.0", True),
+            ("timing_rules.json", "5.3.0", False),
+            ("timing_rules_rejected.json", "1.0.0", True),
+            ("timing_rules_rejected.json", "5.0.0", False),
             ("severity_vocab.json", "1.1", False),
         ],
     )
