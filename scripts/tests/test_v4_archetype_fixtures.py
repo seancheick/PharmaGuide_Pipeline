@@ -36,6 +36,9 @@ def test_decision_fixture_suite_has_reviewed_ideal_and_failure_pairs() -> None:
         "b_complex",
         "immune_support",
         "fiber_digestive",
+        "probiotic",
+        "omega",
+        "prenatal_multi",
     }
     for archetype in fixtures.archetypes:
         variants = {
@@ -57,6 +60,12 @@ def test_decision_fixture_suite_has_reviewed_ideal_and_failure_pairs() -> None:
         "immune_support__failure",
         "fiber_digestive__ideal",
         "fiber_digestive__failure",
+        "probiotic__ideal",
+        "probiotic__failure",
+        "omega__ideal",
+        "omega__failure",
+        "prenatal_multi__ideal",
+        "prenatal_multi__failure",
     ],
 )
 def test_decision_fixture_matches_locked_production_outcome(case_id: str) -> None:
@@ -73,6 +82,9 @@ def test_decision_fixture_matches_locked_production_outcome(case_id: str) -> Non
         ("b_complex__ideal", "b_complex__failure"),
         ("immune_support__ideal", "immune_support__failure"),
         ("fiber_digestive__ideal", "fiber_digestive__failure"),
+        ("probiotic__ideal", "probiotic__failure"),
+        ("omega__ideal", "omega__failure"),
+        ("prenatal_multi__ideal", "prenatal_multi__failure"),
     ],
 )
 def test_failure_fixture_scores_below_its_ideal_pair(
@@ -103,3 +115,21 @@ def test_decision_fixtures_expose_d4_d5_reference_mismatches_without_recalibrati
     assert generic["normalization_references"]["evidence"] == 19.0
     assert b_complex["raw_dimensions"]["evidence"] == 15.0
     assert b_complex["normalization_references"]["evidence"] == 14.0
+
+
+def test_category_fixtures_expose_reference_mismatches_without_recalibrating() -> None:
+    validation = _validation_module()
+    suite = validation.load_fixture_suite()
+
+    probiotic = validation.evaluate_fixture(suite.by_id("probiotic__ideal")).actual
+    omega = validation.evaluate_fixture(suite.by_id("omega__ideal")).actual
+    prenatal = validation.evaluate_fixture(
+        suite.by_id("prenatal_multi__ideal")
+    ).actual
+
+    assert probiotic["raw_dimensions"]["dose"] == 25.0
+    assert probiotic["normalization_references"]["dose"] == 22.0
+    assert omega["raw_dimensions"]["dose"] == 25.0
+    assert omega["normalization_references"]["dose"] == 23.0
+    assert prenatal["raw_dimensions"]["evidence"] == 18.0
+    assert prenatal["normalization_references"]["evidence"] == 20.0
