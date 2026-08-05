@@ -39,6 +39,11 @@ def test_decision_fixture_suite_has_reviewed_ideal_and_failure_pairs() -> None:
         "probiotic",
         "omega",
         "prenatal_multi",
+        "generic_botanical_branded",
+        "sports_single",
+        "sports_pre_workout",
+        "sports_protein",
+        "sports_bcaa_eaa",
     }
     for archetype in fixtures.archetypes:
         variants = {
@@ -66,6 +71,16 @@ def test_decision_fixture_suite_has_reviewed_ideal_and_failure_pairs() -> None:
         "omega__failure",
         "prenatal_multi__ideal",
         "prenatal_multi__failure",
+        "generic_botanical_branded__ideal",
+        "generic_botanical_branded__failure",
+        "sports_single__ideal",
+        "sports_single__failure",
+        "sports_pre_workout__ideal",
+        "sports_pre_workout__failure",
+        "sports_protein__ideal",
+        "sports_protein__failure",
+        "sports_bcaa_eaa__ideal",
+        "sports_bcaa_eaa__failure",
     ],
 )
 def test_decision_fixture_matches_locked_production_outcome(case_id: str) -> None:
@@ -85,6 +100,11 @@ def test_decision_fixture_matches_locked_production_outcome(case_id: str) -> Non
         ("probiotic__ideal", "probiotic__failure"),
         ("omega__ideal", "omega__failure"),
         ("prenatal_multi__ideal", "prenatal_multi__failure"),
+        ("generic_botanical_branded__ideal", "generic_botanical_branded__failure"),
+        ("sports_single__ideal", "sports_single__failure"),
+        ("sports_pre_workout__ideal", "sports_pre_workout__failure"),
+        ("sports_protein__ideal", "sports_protein__failure"),
+        ("sports_bcaa_eaa__ideal", "sports_bcaa_eaa__failure"),
     ],
 )
 def test_failure_fixture_scores_below_its_ideal_pair(

@@ -1241,6 +1241,282 @@
           "transparency": 11.0
         }
       }
+    },
+    {
+      "id": "generic_botanical_branded__ideal",
+      "archetype": "generic_botanical_branded",
+      "variant": "ideal",
+      "product": {
+        "dsld_id": "synthetic-botanical-ideal",
+        "product_name": "Benchmark KSM-66 Ashwagandha 600 mg",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "capsule",
+        "form_factor_canonical": "capsule",
+        "primary_type": "herbal_botanical",
+        "supplement_taxonomy": {"primary_type": "herbal_botanical", "percentile_category": "single_botanical", "is_single_scorable_active": true, "scorable_active_count": 1},
+        "ingredient_quality_data": {
+          "total_active": 1,
+          "ingredients_scorable": [
+            {"name": "KSM-66 Ashwagandha", "standard_name": "Ashwagandha", "canonical_id": "ashwagandha", "quantity": 600, "dose": 600, "unit": "mg", "bio_score": 11, "matched_form": "KSM-66 ashwagandha", "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Ashwagandha", "forms": [{"name": "Ashwagandha Root Extract"}]}, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"}
+          ]
+        },
+        "formulation_data": {
+          "standardized_botanicals": [
+            {"name": "KSM-66", "botanical_id": "ashwagandha", "standard_name": "Ashwagandha", "markers": ["withanolides"], "percentage_found": 5.0, "min_threshold": 2.5, "meets_threshold": true}
+          ]
+        },
+        "rda_ul_data": {"adequacy_results": [{"nutrient": "Ashwagandha", "pct_rda": null, "pct_ul": null, "scoring_eligible": true}], "safety_flags": []},
+        "evidence_data": {"clinical_matches": [{"id": "FIXTURE_BOTANICAL_PRODUCT_EVIDENCE", "ingredient": "KSM-66 Ashwagandha", "standard_name": "KSM-66 Ashwagandha", "canonical_id": "ashwagandha", "study_type": "rct_multiple", "evidence_level": "branded-rct", "effect_direction": "positive_strong", "total_enrollment": 500, "min_clinical_dose": 300, "dose_unit": "mg"}]},
+        "verified_cert_programs": [{"program": "NSF", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
+        "has_batch_coa": true,
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 1}
+      },
+      "expected": {"v4_module": "generic", "archetype": "generic_botanical_branded", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 91.7, "quality_tier": "Excellent", "v4_confidence": "high", "normalization_references": {"formulation": 25.0, "dose": 22.0, "evidence": 19.0}, "pillars": {"formulation": 19.2, "dose": 19.1, "evidence": 18.9, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 24.0, "dose": 21.0, "evidence": 18.0, "transparency": 9.0}}
+    },
+    {
+      "id": "generic_botanical_branded__failure",
+      "archetype": "generic_botanical_branded",
+      "variant": "failure",
+      "product": {
+        "dsld_id": "synthetic-botanical-failure",
+        "product_name": "Benchmark Ashwagandha Gummies 50 mg",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "gummy",
+        "form_factor_canonical": "gummy",
+        "primary_type": "herbal_botanical",
+        "supplement_taxonomy": {"primary_type": "herbal_botanical", "percentile_category": "single_botanical", "is_single_scorable_active": true, "scorable_active_count": 1},
+        "ingredient_quality_data": {
+          "total_active": 1,
+          "ingredients_scorable": [
+            {"name": "Ashwagandha Powder", "standard_name": "Ashwagandha", "canonical_id": "ashwagandha", "quantity": 50, "dose": 50, "unit": "mg", "bio_score": 4, "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Ashwagandha"}, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"}
+          ]
+        },
+        "formulation_data": {"standardized_botanicals": []},
+        "rda_ul_data": {"adequacy_results": [{"nutrient": "Ashwagandha", "pct_rda": null, "pct_ul": null, "scoring_eligible": true}], "safety_flags": []},
+        "evidence_data": {"clinical_matches": []},
+        "verified_cert_programs": [],
+        "dietary_sensitivity_data": {"sugar": {"level": "high", "contains_sugar": true, "has_added_sugar": true, "amount_g": 6, "sugar_sources": ["glucose syrup"]}},
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 1}
+      },
+      "expected": {"v4_module": "generic", "archetype": "generic_botanical_branded", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 58.3, "quality_tier": "Weak", "v4_confidence": "moderate", "normalization_references": {"formulation": 25.0, "dose": 22.0, "evidence": 19.0}, "pillars": {"formulation": 7.2, "dose": 10.9, "evidence": 14.7, "transparency": 13.5, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 9.0, "dose": 12.0, "evidence": 14.0, "transparency": 9.0}}
+    },
+    {
+      "id": "sports_single__ideal",
+      "archetype": "sports_single",
+      "variant": "ideal",
+      "product": {
+        "dsld_id": "synthetic-sports-single-ideal",
+        "product_name": "Benchmark Creatine Monohydrate 5 g",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "powder",
+        "form_factor_canonical": "powder",
+        "primary_type": "amino_acid",
+        "supplement_taxonomy": {"primary_type": "amino_acid", "percentile_category": "sports_nutrition"},
+        "ingredient_quality_data": {"total_active": 1, "ingredients_scorable": [{"name": "Creatine Monohydrate", "standard_name": "Creatine Monohydrate", "canonical_id": "creatine_monohydrate", "quantity": 5, "dose": 5, "unit": "g", "bio_score": 14, "matched_form": "creatine monohydrate", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"}]},
+        "evidence_data": {"clinical_matches": [{"id": "FIXTURE_CREATINE_PRODUCT_EVIDENCE", "ingredient": "Creatine Monohydrate", "standard_name": "Creatine Monohydrate", "canonical_id": "creatine_monohydrate", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000, "published_studies_count": 40}]},
+        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
+        "has_batch_coa": true,
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 1}
+      },
+      "expected": {"v4_module": "sports", "archetype": "sports_single", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 84.6, "quality_tier": "Strong", "v4_confidence": "high", "normalization_references": {"formulation": 25.0, "dose": 25.0, "evidence": 19.0}, "pillars": {"formulation": 11.2, "dose": 20.0, "evidence": 18.9, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 14.0, "dose": 25.0, "evidence": 18.0, "transparency": 9.0}}
+    },
+    {
+      "id": "sports_single__failure",
+      "archetype": "sports_single",
+      "variant": "failure",
+      "product": {
+        "dsld_id": "synthetic-sports-single-failure",
+        "product_name": "Benchmark Creatine Gummies 500 mg",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "gummy",
+        "form_factor_canonical": "gummy",
+        "primary_type": "amino_acid",
+        "supplement_taxonomy": {"primary_type": "amino_acid", "percentile_category": "sports_nutrition"},
+        "ingredient_quality_data": {"total_active": 1, "ingredients_scorable": [{"name": "Creatine Monohydrate", "standard_name": "Creatine Monohydrate", "canonical_id": "creatine_monohydrate", "quantity": 500, "dose": 500, "unit": "mg", "bio_score": 8, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"}]},
+        "evidence_data": {"clinical_matches": []},
+        "verified_cert_programs": [],
+        "dietary_sensitivity_data": {"sugar": {"level": "high", "contains_sugar": true, "has_added_sugar": true, "amount_g": 7, "sugar_sources": ["glucose syrup"]}},
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 1}
+      },
+      "expected": {"v4_module": "sports", "archetype": "sports_single", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 54.0, "quality_tier": "Poor", "v4_confidence": "moderate", "normalization_references": {"formulation": 25.0, "dose": 25.0, "evidence": 19.0}, "pillars": {"formulation": 3.2, "dose": 6.4, "evidence": 18.9, "transparency": 13.5, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 4.0, "dose": 8.0, "evidence": 18.0, "transparency": 9.0}}
+    },
+    {
+      "id": "sports_pre_workout__ideal",
+      "archetype": "sports_pre_workout",
+      "variant": "ideal",
+      "product": {
+        "dsld_id": "synthetic-preworkout-ideal",
+        "product_name": "Benchmark Transparent Pre-Workout",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "powder",
+        "form_factor_canonical": "powder",
+        "primary_type": "pre_workout",
+        "supplement_taxonomy": {"primary_type": "pre_workout", "percentile_category": "pre_workout"},
+        "ingredient_quality_data": {"total_active": 4, "ingredients_scorable": [
+          {"name": "L-Citrulline", "standard_name": "L-Citrulline", "canonical_id": "l_citrulline", "quantity": 8, "dose": 8, "unit": "g", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"},
+          {"name": "Beta-Alanine", "standard_name": "Beta-Alanine", "canonical_id": "beta-alanine", "quantity": 4, "dose": 4, "unit": "g", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "therapeutic_mass"},
+          {"name": "Creatine Monohydrate", "standard_name": "Creatine Monohydrate", "canonical_id": "creatine_monohydrate", "quantity": 5, "dose": 5, "unit": "g", "bio_score": 14, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "therapeutic_mass"},
+          {"name": "Caffeine Anhydrous", "standard_name": "Caffeine", "canonical_id": "caffeine", "quantity": 200, "dose": 200, "unit": "mg", "bio_score": 12, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[3]", "dose_class": "therapeutic_mass"}
+        ]},
+        "evidence_data": {"clinical_matches": [
+          {"id": "FIXTURE_PREWORKOUT_CITRULLINE_EVIDENCE", "ingredient": "L-Citrulline", "standard_name": "L-Citrulline", "canonical_id": "l_citrulline", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000},
+          {"id": "FIXTURE_PREWORKOUT_BETA_ALANINE_EVIDENCE", "ingredient": "Beta-Alanine", "standard_name": "Beta-Alanine", "canonical_id": "beta-alanine", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000},
+          {"id": "FIXTURE_PREWORKOUT_CREATINE_EVIDENCE", "ingredient": "Creatine Monohydrate", "standard_name": "Creatine Monohydrate", "canonical_id": "creatine_monohydrate", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000}
+        ]},
+        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
+        "has_batch_coa": true,
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 4}
+      },
+      "expected": {"v4_module": "sports", "archetype": "sports_pre_workout", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 79.8, "quality_tier": "Acceptable", "v4_confidence": "high", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 9.7, "dose": 17.6, "evidence": 18.0, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 14.5, "dose": 22.0, "evidence": 18.0, "transparency": 9.0}}
+    },
+    {
+      "id": "sports_pre_workout__failure",
+      "archetype": "sports_pre_workout",
+      "variant": "failure",
+      "product": {
+        "dsld_id": "synthetic-preworkout-failure",
+        "product_name": "Benchmark Pre-Workout Proprietary Energy Blend",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "powder",
+        "form_factor_canonical": "powder",
+        "primary_type": "pre_workout",
+        "supplement_taxonomy": {"primary_type": "pre_workout", "percentile_category": "pre_workout"},
+        "ingredient_quality_data": {"total_active": 2, "ingredients_scorable": [
+          {"name": "Beta-Alanine", "standard_name": "Beta-Alanine", "canonical_id": "beta-alanine", "quantity": 500, "dose": 500, "unit": "mg", "bio_score": 6, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"},
+          {"name": "Caffeine", "standard_name": "Caffeine", "canonical_id": "caffeine", "quantity": 50, "dose": 50, "unit": "mg", "bio_score": 6, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "therapeutic_mass"}
+        ]},
+        "evidence_data": {"clinical_matches": []},
+        "verified_cert_programs": [],
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 2}
+      },
+      "expected": {"v4_module": "sports", "archetype": "sports_pre_workout", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 39.9, "quality_tier": "Poor", "v4_confidence": "low", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 4.0, "dose": 6.4, "evidence": 0.0, "transparency": 13.5, "verification": 6.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 6.0, "dose": 8.0, "evidence": 0.0, "transparency": 9.0}}
+    },
+    {
+      "id": "sports_protein__ideal",
+      "archetype": "sports_protein",
+      "variant": "ideal",
+      "product": {
+        "dsld_id": "synthetic-protein-ideal",
+        "product_name": "Benchmark Whey Protein Isolate",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "powder",
+        "form_factor_canonical": "powder",
+        "primary_type": "protein_powder",
+        "supplement_taxonomy": {"primary_type": "protein_powder", "percentile_category": "protein_powder"},
+        "ingredient_quality_data": {"total_active": 4, "ingredients_scorable": [
+          {"name": "Whey Protein Isolate", "standard_name": "Whey Protein", "canonical_id": "whey_protein", "quantity": 27, "dose": 27, "unit": "g", "bio_score": 13, "matched_form": "whey protein isolate", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"},
+          {"name": "L-Leucine", "standard_name": "L-Leucine", "canonical_id": "l_leucine", "quantity": 2.7, "dose": 2.7, "unit": "g", "bio_score": 12, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "therapeutic_mass"},
+          {"name": "L-Isoleucine", "standard_name": "L-Isoleucine", "canonical_id": "l_isoleucine", "quantity": 1.7, "dose": 1.7, "unit": "g", "bio_score": 12, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "therapeutic_mass"},
+          {"name": "L-Valine", "standard_name": "L-Valine", "canonical_id": "l_valine", "quantity": 1.6, "dose": 1.6, "unit": "g", "bio_score": 12, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[3]", "dose_class": "therapeutic_mass"}
+        ]},
+        "evidence_data": {"clinical_matches": [{"id": "FIXTURE_PROTEIN_PRODUCT_EVIDENCE", "ingredient": "Whey Protein Isolate", "standard_name": "Whey Protein Isolate", "canonical_id": "whey_protein", "study_type": "rct_multiple", "evidence_level": "branded-rct", "effect_direction": "positive_strong", "total_enrollment": 500, "min_clinical_dose": 20, "dose_unit": "g"}]},
+        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
+        "has_batch_coa": true,
+        "dietary_sensitivity_data": {"sugar": {"level": "sugar_free", "contains_sugar": false, "has_added_sugar": false, "amount_g": 0, "sugar_sources": []}, "sweeteners": {"artificial": [], "high_glycemic": [], "sugar_alcohols": [], "safer_alternatives": []}},
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 4}
+      },
+      "expected": {"v4_module": "sports", "archetype": "sports_protein", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 91.2, "quality_tier": "Excellent", "v4_confidence": "high", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 18.7, "dose": 20.0, "evidence": 18.0, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 28.0, "dose": 25.0, "evidence": 18.0, "transparency": 9.0}}
+    },
+    {
+      "id": "sports_protein__failure",
+      "archetype": "sports_protein",
+      "variant": "failure",
+      "product": {
+        "dsld_id": "synthetic-protein-failure",
+        "product_name": "Benchmark Proprietary Protein Matrix",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "powder",
+        "form_factor_canonical": "powder",
+        "primary_type": "protein_powder",
+        "supplement_taxonomy": {"primary_type": "protein_powder", "percentile_category": "protein_powder"},
+        "ingredient_quality_data": {"total_active": 3, "ingredients_scorable": [
+          {"name": "Proprietary Protein Matrix", "standard_name": "Protein", "canonical_id": "protein", "quantity": 10, "dose": 10, "unit": "g", "bio_score": 5, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass", "is_proprietary_blend": true},
+          {"name": "Glycine", "standard_name": "Glycine", "canonical_id": "l_glycine", "quantity": 2, "dose": 2, "unit": "g", "bio_score": 5, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "therapeutic_mass"},
+          {"name": "Taurine", "standard_name": "Taurine", "canonical_id": "taurine", "quantity": 1, "dose": 1, "unit": "g", "bio_score": 5, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "therapeutic_mass"}
+        ]},
+        "evidence_data": {"clinical_matches": []},
+        "verified_cert_programs": [],
+        "dietary_sensitivity_data": {"sugar": {"level": "high", "contains_sugar": true, "has_added_sugar": true, "amount_g": 10, "sugar_sources": ["glucose syrup"]}, "sweeteners": {"artificial": ["sucralose"], "high_glycemic": [], "sugar_alcohols": [], "safer_alternatives": []}},
+        "proprietary_blends": [{"name": "Proprietary Protein Matrix", "disclosure_level": "partial"}],
+        "proprietary_data": {"blends": [{"name": "Proprietary Protein Matrix", "disclosure_level": "partial"}], "total_active_ingredients": 3}
+      },
+      "expected": {"v4_module": "sports", "archetype": "sports_protein", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 26.8, "quality_tier": "Poor", "v4_confidence": "low", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 0.0, "dose": 8.0, "evidence": 0.0, "transparency": 6.8, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 0.0, "dose": 10.0, "evidence": 0.0, "transparency": 4.5}}
+    },
+    {
+      "id": "sports_bcaa_eaa__ideal",
+      "archetype": "sports_bcaa_eaa",
+      "variant": "ideal",
+      "product": {
+        "dsld_id": "synthetic-bcaa-ideal",
+        "product_name": "Benchmark BCAA 2:1:1",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "powder",
+        "form_factor_canonical": "powder",
+        "primary_type": "amino_acid",
+        "supplement_taxonomy": {"primary_type": "amino_acid", "percentile_category": "sports_nutrition"},
+        "ingredient_quality_data": {"total_active": 3, "ingredients_scorable": [
+          {"name": "L-Leucine", "standard_name": "L-Leucine", "canonical_id": "l_leucine", "quantity": 4, "dose": 4, "unit": "g", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"},
+          {"name": "L-Isoleucine", "standard_name": "L-Isoleucine", "canonical_id": "l_isoleucine", "quantity": 2, "dose": 2, "unit": "g", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "therapeutic_mass"},
+          {"name": "L-Valine", "standard_name": "L-Valine", "canonical_id": "l_valine", "quantity": 2, "dose": 2, "unit": "g", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "therapeutic_mass"}
+        ]},
+        "evidence_data": {"clinical_matches": [
+          {"id": "FIXTURE_BCAA_LEUCINE_EVIDENCE", "ingredient": "L-Leucine", "standard_name": "L-Leucine", "canonical_id": "l_leucine", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000},
+          {"id": "FIXTURE_BCAA_ISOLEUCINE_EVIDENCE", "ingredient": "L-Isoleucine", "standard_name": "L-Isoleucine", "canonical_id": "l_isoleucine", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000},
+          {"id": "FIXTURE_BCAA_VALINE_EVIDENCE", "ingredient": "L-Valine", "standard_name": "L-Valine", "canonical_id": "l_valine", "study_type": "systematic_review_meta", "evidence_level": "product-human", "effect_direction": "positive_strong", "total_enrollment": 1000}
+        ]},
+        "verified_cert_programs": [{"program": "NSF Sport", "scope": "sku", "recency_status": "fresh", "brand_matched": true}],
+        "certification_data": {"gmp": {"gmp_certified_or_compliant": true}},
+        "has_batch_coa": true,
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 3}
+      },
+      "expected": {"v4_module": "sports", "archetype": "sports_bcaa_eaa", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 77.9, "quality_tier": "Acceptable", "v4_confidence": "high", "normalization_references": {"formulation": 25.0, "dose": 25.0, "evidence": 19.0}, "pillars": {"formulation": 11.2, "dose": 16.0, "evidence": 16.2, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 14.0, "dose": 20.0, "evidence": 15.4, "transparency": 9.0}}
+    },
+    {
+      "id": "sports_bcaa_eaa__failure",
+      "archetype": "sports_bcaa_eaa",
+      "variant": "failure",
+      "product": {
+        "dsld_id": "synthetic-bcaa-failure",
+        "product_name": "Benchmark BCAA Gummies",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "gummy",
+        "form_factor_canonical": "gummy",
+        "primary_type": "amino_acid",
+        "supplement_taxonomy": {"primary_type": "amino_acid", "percentile_category": "sports_nutrition"},
+        "ingredient_quality_data": {"total_active": 3, "ingredients_scorable": [
+          {"name": "L-Leucine", "standard_name": "L-Leucine", "canonical_id": "l_leucine", "quantity": 500, "dose": 500, "unit": "mg", "bio_score": 6, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"},
+          {"name": "L-Isoleucine", "standard_name": "L-Isoleucine", "canonical_id": "l_isoleucine", "quantity": 250, "dose": 250, "unit": "mg", "bio_score": 6, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "therapeutic_mass"},
+          {"name": "L-Valine", "standard_name": "L-Valine", "canonical_id": "l_valine", "quantity": 250, "dose": 250, "unit": "mg", "bio_score": 6, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "therapeutic_mass"}
+        ]},
+        "evidence_data": {"clinical_matches": []},
+        "verified_cert_programs": [],
+        "dietary_sensitivity_data": {"sugar": {"level": "high", "contains_sugar": true, "has_added_sugar": true, "amount_g": 7, "sugar_sources": ["glucose syrup"]}},
+        "proprietary_blends": [],
+        "proprietary_data": {"blends": [], "total_active_ingredients": 3}
+      },
+      "expected": {"v4_module": "sports", "archetype": "sports_bcaa_eaa", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 31.9, "quality_tier": "Poor", "v4_confidence": "low", "normalization_references": {"formulation": 25.0, "dose": 25.0, "evidence": 19.0}, "pillars": {"formulation": 1.6, "dose": 4.8, "evidence": 0.0, "transparency": 13.5, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 2.0, "dose": 6.0, "evidence": 0.0, "transparency": 9.0}}
     }
   ]
 }
