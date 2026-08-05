@@ -2,12 +2,11 @@
 an actionable staleness preflight check.
 
 The preflight detects 4 stale-pipeline layers and emits a clear "fix:"
-command for each, then exits non-zero. This prevents the failure mode
-the user hit before: editing data/*.json, running test.sh release,
-seeing only a technical FRESHNESS_PRODUCTS_NEWER_THAN_DIST finding (easy
-to miss), then shipping a stale Flutter bundle.
+command for each, then exits non-zero. Layer 1 compares the content fingerprint
+stamped by enrichment, so an iCloud/git mtime change cannot falsely block a
+release; layers 2-4 retain their downstream artifact timestamp checks.
 
-Tests use synthetic tmpdir layouts with controlled mtimes — no real
+Tests use synthetic tmpdir layouts with controlled content and mtimes — no real
 artifact is touched.
 """
 
@@ -23,21 +22,46 @@ import pytest
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+SCRIPTS_DIR = REPO_ROOT / "scripts"
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+
+from pipeline_freshness import (
+    REFERENCE_FINGERPRINT_KEY,
+    enrichment_reference_fingerprint,
+)
+from stage_manifest import write_stage_manifest
+
+
+def _stamp_reference_inputs(repo_dir: Path) -> None:
+    fingerprint = enrichment_reference_fingerprint(repo_dir)
+    for output in repo_dir.glob(
+        "scripts/products/output_*_enriched/enriched/*.json"
+    ):
+        manifest = output.parent / ".stage_manifest.json"
+        if manifest.exists():
+            continue
+        write_stage_manifest(
+            output.parent,
+            "enrich",
+            [output],
+            input_fingerprints={REFERENCE_FINGERPRINT_KEY: fingerprint},
+        )
 
 
 def _run_preflight(repo_dir: Path, flutter_dir: Path) -> tuple[int, str, str]:
-    """Invoke the preflight Python inline (mirrors scripts/test.sh exactly).
+    """Invoke the preflight logic (mirrors scripts/test.sh).
     Returns (exit_code, stdout, stderr)."""
-    preflight_script = REPO_ROOT / "scripts/test.sh"
-    # Extract the inline Python from the bash function by reading the script
-    # and running just the Python heredoc with the same env vars.
-    # Easier: re-implement the same Python check (kept identical to test.sh).
+    _stamp_reference_inputs(repo_dir)
     py = r'''
 import sys, os, glob
 from pathlib import Path
 
 REPO = Path(os.environ.get("REPO_ROOT", "."))
 FLUTTER = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
+sys.path.insert(0, os.environ["PIPELINE_SCRIPTS"])
+
+from pipeline_freshness import enrichment_reference_freshness_issues
 
 def newest(paths):
     mtimes = [Path(p).stat().st_mtime for p in paths if Path(p).exists()]
@@ -45,12 +69,10 @@ def newest(paths):
 
 stale = []
 
-data_files = glob.glob(str(REPO / "scripts/data/*.json")) + glob.glob(str(REPO / "scripts/data/curated_overrides/*.json"))
 enriched = glob.glob(str(REPO / "scripts/products/output_*_enriched/enriched/*.json"))
-if data_files and enriched:
-    if newest(data_files) > newest(enriched):
-        print("STALE: data_vs_enriched", file=sys.stderr)
-        stale.append("data_vs_enriched")
+if enrichment_reference_freshness_issues(REPO):
+    print("STALE: data_vs_enriched", file=sys.stderr)
+    stale.append("data_vs_enriched")
 
 scored = glob.glob(str(REPO / "scripts/products/output_*_scored/scored/*.json"))
 if enriched and scored:
@@ -78,6 +100,7 @@ sys.exit(0)
     env = os.environ.copy()
     env["REPO_ROOT"] = str(repo_dir)
     env["FLUTTER_REPO"] = str(flutter_dir)
+    env["PIPELINE_SCRIPTS"] = str(SCRIPTS_DIR)
     r = subprocess.run(
         [sys.executable, "-c", py],
         env=env, capture_output=True, text=True,
@@ -117,17 +140,37 @@ def test_all_in_sync_returns_zero(tmplayout):
     assert "OK" in err
 
 
-def test_data_newer_than_enriched_flags_layer1(tmplayout):
+def test_data_content_change_after_enrichment_flags_layer1(tmplayout):
     repo, flutter = tmplayout
     t = 1000000.0
-    _touch(repo / "scripts/data/x.json", t + 100)  # newer than enriched
+    _touch(repo / "scripts/data/x.json", t)
     _touch(repo / "scripts/products/output_Test_enriched/enriched/y.json", t)
+    _stamp_reference_inputs(repo)
+    _touch(repo / "scripts/data/x.json", t + 100)
+    (repo / "scripts/data/x.json").write_text('{"changed": true}')
     _touch(repo / "scripts/products/output_Test_scored/scored/z.json", t)
     _touch(repo / "scripts/dist/pharmaguide_core.db", t)
     _touch(flutter / "assets/db/pharmaguide_core.db", t)
     code, _, err = _run_preflight(repo, flutter)
     assert code == 1
     assert "data_vs_enriched" in err
+
+
+def test_data_mtime_only_change_does_not_flag_layer1(tmplayout):
+    repo, flutter = tmplayout
+    t = 1000000.0
+    data_file = repo / "scripts/data/x.json"
+    _touch(data_file, t)
+    _touch(repo / "scripts/products/output_Test_enriched/enriched/y.json", t + 10)
+    _stamp_reference_inputs(repo)
+    os.utime(data_file, (t + 100, t + 100))
+    _touch(repo / "scripts/products/output_Test_scored/scored/z.json", t + 20)
+    _touch(repo / "scripts/dist/pharmaguide_core.db", t + 30)
+    _touch(flutter / "assets/db/pharmaguide_core.db", t + 40)
+
+    code, _, err = _run_preflight(repo, flutter)
+
+    assert code == 0, f"mtime-only changes must not look stale; stderr:\n{err}"
 
 
 def test_enriched_newer_than_scored_flags_layer2(tmplayout):
@@ -173,8 +216,11 @@ def test_multiple_stale_layers_reported_together(tmplayout):
     repo, flutter = tmplayout
     t = 1000000.0
     # Layers 1, 2, 3 all stale simultaneously
-    _touch(repo / "scripts/data/x.json", t + 100)
+    _touch(repo / "scripts/data/x.json", t)
     _touch(repo / "scripts/products/output_Test_enriched/enriched/y.json", t + 50)
+    _stamp_reference_inputs(repo)
+    (repo / "scripts/data/x.json").write_text('{"changed": true}')
+    os.utime(repo / "scripts/data/x.json", (t + 100, t + 100))
     _touch(repo / "scripts/products/output_Test_scored/scored/z.json", t)
     _touch(repo / "scripts/dist/pharmaguide_core.db", t)
     _touch(flutter / "assets/db/pharmaguide_core.db", t + 200)

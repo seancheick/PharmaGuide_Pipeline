@@ -126,6 +126,9 @@ from pathlib import Path
 
 REPO = Path(os.environ.get("REPO_ROOT", "."))
 FLUTTER = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
+sys.path.insert(0, str(REPO / "scripts"))
+
+from pipeline_freshness import enrichment_reference_freshness_issues
 
 
 def newest(paths):
@@ -146,19 +149,25 @@ def warn(layer, action, command):
 
 stale = []
 
-# Layer 1: scripts/data/*.json vs per-brand enriched
-data_files = glob.glob(str(REPO / "scripts/data/*.json")) + glob.glob(str(REPO / "scripts/data/curated_overrides/*.json"))
+# Layer 1: scripts/data content vs the input fingerprint stamped by enrichment.
+# Filesystem timestamps are deliberately irrelevant: git checkout, iCloud, and
+# `touch` can change mtime without changing the bytes that produced the output.
 enriched = glob.glob(str(REPO / "scripts/products/output_*_enriched/enriched/*.json"))
-if data_files and enriched:
-    newest_data = newest(data_files)
-    newest_enriched = newest(enriched)
-    if newest_data > newest_enriched:
-        warn(
-            "data files newer than per-brand enriched outputs",
-            "scripts/data/ JSON changes have not propagated through the pipeline",
-            "bash batch_run_all_datasets.sh   # full clean+enrich+score across 27 brands",
+reference_issues = enrichment_reference_freshness_issues(REPO)
+if reference_issues:
+    warn(
+        "reference-data contents differ from per-brand enrichment inputs",
+        "scripts/data/ JSON content has not propagated through every enriched output",
+        "bash batch_run_all_datasets.sh --stages enrich,score   # refresh all brands",
+    )
+    for issue in reference_issues[:10]:
+        print(f"  manifest: {issue}", file=sys.stderr)
+    if len(reference_issues) > 10:
+        print(
+            f"  ... and {len(reference_issues) - 10} more manifest(s)",
+            file=sys.stderr,
         )
-        stale.append("data_vs_enriched")
+    stale.append("data_vs_enriched")
 
 # Layer 2: enriched vs scored
 scored = glob.glob(str(REPO / "scripts/products/output_*_scored/scored/*.json"))

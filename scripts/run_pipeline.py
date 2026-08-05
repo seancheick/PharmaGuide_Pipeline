@@ -46,6 +46,10 @@ from stage_manifest import (
     select_stage_input_files,
     write_stage_manifest_from_directory,
 )
+from pipeline_freshness import (
+    REFERENCE_FINGERPRINT_KEY,
+    enrichment_reference_fingerprint,
+)
 from run_artifacts import ensure_run_id
 
 # Setup logging
@@ -673,6 +677,7 @@ class PipelineRunner:
         if "enrich" in stages:
             # Use cleaned output from stage 1 as input
             enrich_input = cleaned_dir
+            enrich_reference_fingerprint = None
             # Validate input directory exists (skip if clean just ran or dry_run)
             if not dry_run and "clean" not in results["stages_completed"]:
                 if not self._validate_input_dir(enrich_input, "ENRICH"):
@@ -692,6 +697,20 @@ class PipelineRunner:
                     logger.error("Cleaning ownership manifest failed: %s", exc)
                     return results
             if not dry_run:
+                try:
+                    enrich_reference_fingerprint = (
+                        enrichment_reference_fingerprint(
+                            self.script_dir.parent
+                        )
+                    )
+                except (OSError, ValueError) as exc:
+                    results["stages_failed"].append("enrich")
+                    logger.error(
+                        "Pipeline stopped: could not fingerprint enrichment "
+                        "reference inputs: %s",
+                        exc,
+                    )
+                    return results
                 quarantine_stage_outputs(Path(enriched_dir))
             success = self.run_enrich(
                 enrich_input,
@@ -701,15 +720,48 @@ class PipelineRunner:
             )
             if success and not dry_run:
                 try:
-                    write_stage_manifest_from_directory(
-                        Path(enriched_dir),
-                        "enrich",
-                        patterns=("*.json",),
-                        run_id=effective_run_id,
+                    current_reference_fingerprint = (
+                        enrichment_reference_fingerprint(
+                            self.script_dir.parent
+                        )
                     )
-                except StageManifestError as exc:
-                    logger.error("Enrichment ownership manifest failed: %s", exc)
+                except (OSError, ValueError) as exc:
+                    logger.error(
+                        "Could not re-check enrichment reference inputs after "
+                        "the stage: %s",
+                        exc,
+                    )
                     success = False
+                else:
+                    if (
+                        current_reference_fingerprint
+                        != enrich_reference_fingerprint
+                    ):
+                        logger.error(
+                            "Enrichment reference inputs changed during the "
+                            "stage; refusing to publish a mixed-reference "
+                            "manifest"
+                        )
+                        success = False
+                    else:
+                        try:
+                            write_stage_manifest_from_directory(
+                                Path(enriched_dir),
+                                "enrich",
+                                patterns=("*.json",),
+                                run_id=effective_run_id,
+                                input_fingerprints={
+                                    REFERENCE_FINGERPRINT_KEY: (
+                                        enrich_reference_fingerprint
+                                    ),
+                                },
+                            )
+                        except StageManifestError as exc:
+                            logger.error(
+                                "Enrichment ownership manifest failed: %s",
+                                exc,
+                            )
+                            success = False
             if success:
                 results["stages_completed"].append("enrich")
             else:
