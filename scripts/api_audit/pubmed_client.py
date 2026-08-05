@@ -21,6 +21,10 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 import env_loader  # noqa: F401
+from api_audit.system_trust_http import (
+    SystemTrustHTTPError,
+    fetch_text_with_system_trust,
+)
 
 
 DEFAULT_BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
@@ -274,9 +278,35 @@ class PubMedClient:
         url = f"{self.config.base_url.rstrip('/')}/{endpoint}"
         for attempt in range(1, MAX_RETRIES + 1):
             self._sleep_for_rate_limit()
+            fallback_payload: Any | None = None
             try:
                 response = requests.request(method, url, params=params, timeout=self.config.timeout_seconds)
                 self._last_request_at = time.time()
+            except requests.exceptions.SSLError as exc:
+                try:
+                    fallback_text = fetch_text_with_system_trust(
+                        url=url,
+                        params=params,
+                        method=method,
+                        timeout_seconds=self.config.timeout_seconds,
+                        user_agent=self.config.tool or "pharmaguide-audit",
+                    )
+                    self._last_request_at = time.time()
+                    fallback_payload = (
+                        json.loads(fallback_text)
+                        if params.get("retmode") == "json"
+                        else fallback_text
+                    )
+                except (SystemTrustHTTPError, json.JSONDecodeError) as fallback_exc:
+                    self._consecutive_failures += 1
+                    if self._consecutive_failures >= self._failure_limit:
+                        self.circuit_open = True
+                        raise RuntimeError(
+                            "PubMed circuit breaker tripped after repeated "
+                            "certificate-verification failures"
+                        ) from fallback_exc
+                    time.sleep(min(2 ** attempt, 8))
+                    continue
             except (requests.ConnectionError, requests.Timeout, OSError) as exc:
                 self._consecutive_failures += 1
                 if self._consecutive_failures >= self._failure_limit:
@@ -287,16 +317,19 @@ class PubMedClient:
                 time.sleep(min(2 ** attempt, 8))
                 continue
 
-            if response.status_code == 429:
-                time.sleep(min(2 ** attempt, 8))
-                continue
-
-            response.raise_for_status()
-            content_type = response.headers.get("content-type", "")
-            if "json" in content_type or params.get("retmode") == "json":
-                payload = response.json()
+            if fallback_payload is not None:
+                payload = fallback_payload
             else:
-                payload = response.text
+                if response.status_code == 429:
+                    time.sleep(min(2 ** attempt, 8))
+                    continue
+
+                response.raise_for_status()
+                content_type = response.headers.get("content-type", "")
+                if "json" in content_type or params.get("retmode") == "json":
+                    payload = response.json()
+                else:
+                    payload = response.text
 
             if _is_ncbi_error_payload(payload):
                 self._consecutive_failures += 1

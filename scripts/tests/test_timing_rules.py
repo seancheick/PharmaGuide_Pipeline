@@ -524,6 +524,55 @@ class TestTimingDataQuality:
             r["id"] for r in rules
         }
 
+    def test_lipoic_acid_does_not_invent_a_meal_interval(self, rules):
+        """The cited LPI page supports fasting, but not a 30-minute window."""
+        rule = next(r for r in rules if r["id"] == "timing_ala_empty_stomach")
+
+        assert rule["review_status"] == "verified"
+        assert rule["timing_relation"] == {"type": "empty_stomach"}
+        assert "30 min" not in rule["advice"].lower()
+
+    def test_brewed_tea_trial_is_not_published_for_extract_capsules(self, rules):
+        """A beverage/meal trial cannot verify supplement-form spacing."""
+        rule = next(r for r in rules if r["id"] == "timing_egcg_iron_separate")
+
+        assert rule["review_status"] == "needs_revision"
+        assert "form_specific_evidence_missing" in rule["review_blockers"]
+
+    def test_vitamin_e_rule_cites_direct_meal_absorption_evidence(self, rules):
+        rule = next(r for r in rules if r["id"] == "timing_vitamin_e_with_food")
+        urls = {source["url"] for source in rule["sources"]}
+
+        assert "https://pubmed.ncbi.nlm.nih.gov/15522126/" in urls
+
+    def test_calcium_thyroid_copy_stays_within_its_citations(self, rules):
+        rule = next(
+            r for r in rules
+            if r["id"] == "timing_calcium_iron_thyroid_separate"
+        )
+        mechanism = rule["mechanism"].lower()
+
+        assert "physiologic ph" not in mechanism
+        assert "calcium citrate" not in mechanism
+
+    def test_levothyroxine_rules_do_not_generalize_to_all_thyroid_drugs(
+        self, rules
+    ):
+        scoped = [
+            rule for rule in rules
+            if rule["review_status"] == "verified"
+            and "10582" in (
+                rule.get("ingredient1_rxcuis", [])
+                + rule.get("ingredient2_rxcuis", [])
+            )
+        ]
+
+        assert scoped
+        for rule in scoped:
+            advice = rule["advice"].lower()
+            assert "levothyroxine" in advice, rule["id"]
+            assert "thyroid medication" not in advice, rule["id"]
+
     def test_advice_is_consumer_friendly(self, rules):
         for r in rules:
             assert len(r["advice"]) >= 20, f"Rule {r['id']} advice too short"
