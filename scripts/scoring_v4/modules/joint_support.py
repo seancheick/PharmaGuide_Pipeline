@@ -8,6 +8,11 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, Optional
 
+from collagen_taxonomy import (
+    UNDENATURED_TYPE_II,
+    UNSPECIFIED,
+    classify_collagen_subtype_strict,
+)
 from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     primary_type_of,
@@ -30,7 +35,6 @@ _JOINT_ALIASES = {
     "glucosamine": ("glucosamine",),
     "chondroitin": ("chondroitin",),
     "msm": ("msm", "methylsulfonylmethane"),
-    "uc_ii": ("uc-ii", "uc ii", "undenatured type ii collagen", "type ii collagen"),
     "hyaluronic_acid": ("hyaluronic acid", "hyaluronan"),
 }
 
@@ -107,15 +111,45 @@ def _joint_active_id(row: Dict[str, Any]) -> Optional[str]:
         row.get("matched_form"),
         row.get("raw_source_text"),
     )
-    keys = {_norm_text(value) for value in fields if _norm_text(value)}
-    keys |= {key.replace("_", " ") for key in keys}
-    text = " ".join(key.replace("_", " ") for key in keys)
+    keys = tuple(
+        dict.fromkeys(
+            normalized
+            for value in fields
+            for normalized in (
+                _norm_text(value),
+                _norm_text(value).replace("_", " "),
+            )
+            if normalized
+        )
+    )
+    if _is_undenatured_type_ii(row, keys):
+        return "uc_ii"
     for active, aliases in _JOINT_ALIASES.items():
         if active in keys or active.replace("_", " ") in keys:
             return active
-        if _any_alias_matches(aliases, text):
+        if any(_any_alias_matches(aliases, key) for key in keys):
             return active
     return None
+
+
+def _is_undenatured_type_ii(
+    row: Dict[str, Any],
+    normalized_fields: Iterable[str],
+) -> bool:
+    """Use the shared collagen taxonomy for the 40 mg UC-II identity.
+
+    Hydrolyzed Type II collagen has a different clinical dose range. The
+    enricher's explicit subtype is authoritative when present; older artifacts
+    fall back to row-local classification, never concatenated cross-field text.
+    """
+
+    stamped = _norm_text(row.get("collagen_subtype")).replace(" ", "_")
+    if stamped and stamped != UNSPECIFIED:
+        return stamped == UNDENATURED_TYPE_II
+    return any(
+        classify_collagen_subtype_strict(field) == UNDENATURED_TYPE_II
+        for field in normalized_fields
+    )
 
 
 def _any_alias_matches(aliases: Iterable[str], text: str) -> bool:

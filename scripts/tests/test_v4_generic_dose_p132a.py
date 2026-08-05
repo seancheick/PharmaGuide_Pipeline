@@ -21,6 +21,8 @@ mistakes the proxy band for final NIH/NHANES supplemental-window math.
 
 from __future__ import annotations
 
+import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -238,6 +240,65 @@ def test_joint_glucosamine_gram_units_do_not_fall_through_to_rda_proxy() -> None
 
     assert payload["components"]["joint_support_dose"] == 20.0
     assert payload["metadata"]["joint_support_dose"]["actives"][0]["daily_mg"] == 2000.0
+
+
+def test_joint_hydrolyzed_type_ii_is_not_undenatured_uc_ii() -> None:
+    from scoring_v4.modules.joint_support import _joint_active_id
+
+    row = _ingredient(
+        name="Hydrolyzed Type II Collagen",
+        standard_name="Collagen",
+        canonical_id="collagen",
+        matched_form="hydrolyzed collagen peptides",
+        raw_source_text="Hydrolyzed Type II Collagen",
+        quantity=600,
+    )
+
+    assert _joint_active_id(row) is None
+
+
+def test_joint_undenatured_uc_ii_remains_recognized() -> None:
+    from scoring_v4.modules.joint_support import _joint_active_id
+
+    row = _ingredient(
+        name="UC-II Undenatured Type II Collagen",
+        standard_name="Collagen",
+        canonical_id="collagen",
+        matched_form="undenatured type ii collagen",
+        raw_source_text="UC-II Undenatured Type II Collagen",
+        quantity=40,
+    )
+
+    assert _joint_active_id(row) == "uc_ii"
+
+
+def test_joint_active_routing_is_stable_across_python_hash_seeds() -> None:
+    row = {
+        "name": "Hydrolyzed Collagen Type II",
+        "standard_name": "Collagen",
+        "canonical_id": "collagen",
+        "matched_form": "hydrolyzed collagen peptides",
+        "raw_source_text": "Hydrolyzed Collagen Type II",
+    }
+    statement = (
+        "import sys; "
+        f"sys.path.insert(0, {str(SCRIPTS_ROOT)!r}); "
+        "from scoring_v4.modules.joint_support import _joint_active_id; "
+        f"print(_joint_active_id({row!r}))"
+    )
+
+    outputs = []
+    for seed in range(8):
+        result = subprocess.run(
+            [sys.executable, "-c", statement],
+            check=True,
+            capture_output=True,
+            text=True,
+            env={**os.environ, "PYTHONHASHSEED": str(seed)},
+        )
+        outputs.append(result.stdout.strip())
+
+    assert outputs == ["None"] * 8
 
 
 # --- Supplemental-window proxy: in-window cases --------------------------
