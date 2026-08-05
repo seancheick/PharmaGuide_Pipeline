@@ -3,13 +3,13 @@
     "description": "Supplement timing and absorption interaction rules for optimal nutrient uptake",
     "purpose": "timing_optimization",
     "schema_version": "6.0.0",
-    "last_updated": "2026-08-01",
+    "last_updated": "2026-08-05",
     "total_entries": 20,
-    "clinical_review_version": "timing-section-2",
+    "clinical_review_version": "timing-section-2-adversarial",
     "runtime_policy": "verified_only",
     "status_counts": {
-      "verified": 8,
-      "needs_revision": 12,
+      "verified": 7,
+      "needs_revision": 13,
       "rejected": 13
     }
   },
@@ -318,7 +318,7 @@
       "applies_to": "any",
       "actionability": "optional",
       "source_authority": "clinical_study",
-      "review_status": "verified",
+      "review_status": "needs_revision",
       "advice": "Green tea can reduce how much iron your body absorbs. Leaving about an hour between them may help - in a trial, tea taken an hour after an iron-rich meal roughly halved the effect rather than removing it.",
       "mechanism": "Tea polyphenols bind nonheme iron in the gut lumen and form complexes that are not absorbed. Ahmad Fuzi 2017 measured fractional iron absorption of 5.7% with water, 3.6% with tea taken simultaneously, and 5.7% with tea taken one hour after the meal; the inhibitory effect fell from 37.2% to 18.1%. The trial used brewed tea in 12 iron-replete women, so applying it to tea supplements is an extrapolation on form, and the effect is attenuated rather than eliminated by the interval.",
       "score_impact": -2,
@@ -343,7 +343,12 @@
         "negative": [
           "180249"
         ]
-      }
+      },
+      "review_note": "FORM EXTRAPOLATION. PMID 29046302 directly tested brewed tea consumed with or one hour after an iron-containing meal in 12 iron-replete women. The catalog identities are tea extracts and leaf supplements, not the brewed beverage/meal exposure studied. Polyphenol content alone does not verify that the same one-hour interval applies to capsules. Suppressed until a form-specific source or a dietary-exposure model supports the instruction.",
+      "reviewed_on": "2026-08-05",
+      "review_blockers": [
+        "form_specific_evidence_missing"
+      ]
     },
     {
       "id": "timing_thyroid_med_iron_separate",
@@ -364,8 +369,8 @@
       "actionability": "recommended",
       "source_authority": "fda_label",
       "review_status": "verified",
-      "advice": "Keep iron supplements at least 4 hours away from thyroid medication — iron markedly reduces thyroid hormone absorption.",
-      "mechanism": "Ferrous iron directly binds levothyroxine in the GI lumen, forming insoluble ferrous-levothyroxine complexes that are not absorbed; this interaction is clinically significant even at standard supplement doses.",
+      "advice": "Keep iron supplements at least 4 hours away from levothyroxine — iron can reduce levothyroxine absorption.",
+      "mechanism": "Iron supplements can bind or adsorb levothyroxine in the digestive tract and reduce the amount absorbed. Current Synthroid labeling applies a 4-hour separation to iron supplements.",
       "score_impact": -2,
       "evidence_level": "established",
       "sources": [
@@ -433,17 +438,15 @@
         "alpha_lipoic_acid"
       ],
       "timing_relation": {
-        "type": "before_event",
-        "event": "meal",
-        "minimum_minutes": 30
+        "type": "empty_stomach"
       },
       "category": "how_to_take",
       "applies_to": "standalone",
       "actionability": "optional",
       "source_authority": "reference",
       "review_status": "verified",
-      "advice": "Alpha-lipoic acid is better absorbed on an empty stomach - it is generally taken about 30 minutes before a meal. Taking it with food lowers peak blood levels by roughly 30 percent.",
-      "mechanism": "ALA is absorbed via active sodium-dependent transporter (SMVT); food in the GI tract slows gastric emptying and competes for transporter capacity, reducing Cmax by approximately 30–40% compared to fasted dosing.",
+      "advice": "Alpha-lipoic acid is better absorbed on an empty stomach. Taking it with food lowers peak blood levels by roughly 30 percent.",
+      "mechanism": "The cited reference reports that food lowered peak plasma lipoic acid by about 30 percent and total plasma exposure by about 20 percent compared with fasting. It does not establish a specific number of minutes before a meal.",
       "score_impact": -1,
       "evidence_level": "probable",
       "sources": [
@@ -571,10 +574,10 @@
       "category": "how_to_take",
       "applies_to": "standalone",
       "actionability": "optional",
-      "source_authority": "reference",
+      "source_authority": "clinical_study",
       "review_status": "verified",
       "advice": "Vitamin E is fat-soluble and the digestive tract needs fat to absorb it, so pairing it with a meal containing some fat is sensible.",
-      "mechanism": "Alpha-tocopherol is incorporated into mixed micelles in the GI lumen alongside dietary fatty acids and bile salts; micellar solubilization is the rate-limiting step for its lymphatic uptake.",
+      "mechanism": "In a randomized four-way crossover study of eight healthy adults, a vitamin E capsule produced higher measured alpha-tocopherol concentrations with higher-fat meals than with a low-fat meal or water. NIH ODS also notes that the digestive tract requires fat to absorb vitamin E.",
       "score_impact": -1,
       "evidence_level": "possible",
       "sources": [
@@ -582,6 +585,11 @@
           "source_type": "reference",
           "label": "NIH Office of Dietary Supplements — Vitamin E Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
+        },
+        {
+          "source_type": "pubmed",
+          "label": "Jeanes YM et al. — The absorption of vitamin E is influenced by the amount of fat in a meal and the food matrix",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15522126/"
         }
       ],
       "canaries": {
@@ -612,8 +620,8 @@
       "actionability": "recommended",
       "source_authority": "fda_label",
       "review_status": "verified",
-      "advice": "Take calcium supplements at least 4 hours away from thyroid medication — calcium chelates thyroid hormone and reduces its absorption.",
-      "mechanism": "Calcium carbonate and calcium citrate both form insoluble complexes with levothyroxine in the stomach at physiologic pH; this interaction is well-documented in pharmacokinetic studies and is included in official FDA prescribing information.",
+      "advice": "Keep calcium supplements at least 4 hours away from levothyroxine — calcium can reduce levothyroxine absorption.",
+      "mechanism": "Calcium supplements can reduce levothyroxine absorption. Calcium carbonate did so in a seven-person pharmacokinetic study, and current Synthroid labeling applies a 4-hour separation to calcium supplements.",
       "score_impact": -2,
       "evidence_level": "established",
       "sources": [
