@@ -1,0 +1,496 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "purpose": "Phase 4.2 reviewed synthetic inputs for calibration decisions",
+    "production_entry_point": "scoring_v4.scored_artifact.build_scored_artifact",
+    "scoring_formulas_embedded": false,
+    "external_identifiers": "none; FIXTURE_* values are synthetic case labels, not clinical references",
+    "review_status": "initial D4/D5 decision set"
+  },
+  "fixtures": [
+    {
+      "id": "generic_single_molecule__ideal",
+      "archetype": "generic_single_molecule",
+      "variant": "ideal",
+      "product": {
+        "dsld_id": "synthetic-generic-ideal",
+        "product_name": "Benchmark Magnesium L-Threonate",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "capsule",
+        "form_factor_canonical": "capsule",
+        "supplement_taxonomy": {
+          "primary_type": "single_mineral",
+          "percentile_category": "single_mineral",
+          "is_single_scorable_active": true,
+          "scorable_active_count": 1
+        },
+        "ingredient_quality_data": {
+          "total_active": 1,
+          "ingredients_scorable": [
+            {
+              "name": "Magnesium L-Threonate",
+              "standard_name": "Magnesium",
+              "canonical_id": "magnesium",
+              "quantity": 2000,
+              "dose": 2000,
+              "unit": "mg",
+              "unit_normalized": "mg",
+              "bio_score": 14,
+              "matched_form": "magnesium l-threonate",
+              "mapped": true,
+              "mapped_identity": true,
+              "scoreable_identity": true,
+              "score_eligible_by_cleaner": true,
+              "cleaner_row_role": "active_scorable",
+              "role_classification": "active_scorable",
+              "source_section": "activeIngredients",
+              "raw_source_path": "activeIngredients[0]",
+              "dose_class": "therapeutic_mass"
+            }
+          ],
+          "ingredients": [
+            {
+              "name": "Magnesium L-Threonate",
+              "standard_name": "Magnesium",
+              "canonical_id": "magnesium",
+              "quantity": 2000,
+              "dose": 2000,
+              "unit": "mg",
+              "unit_normalized": "mg",
+              "bio_score": 14,
+              "matched_form": "magnesium l-threonate",
+              "mapped": true,
+              "mapped_identity": true,
+              "scoreable_identity": true,
+              "score_eligible_by_cleaner": true,
+              "cleaner_row_role": "active_scorable",
+              "role_classification": "active_scorable",
+              "source_section": "activeIngredients",
+              "raw_source_path": "activeIngredients[0]",
+              "dose_class": "therapeutic_mass"
+            }
+          ]
+        },
+        "rda_ul_data": {
+          "adequacy_results": [
+            {
+              "nutrient": "Magnesium",
+              "standard_name": "Magnesium",
+              "pct_rda": 100,
+              "pct_ul": 80,
+              "scoring_eligible": true
+            }
+          ],
+          "safety_flags": []
+        },
+        "evidence_data": {
+          "clinical_matches": [
+            {
+              "id": "SYNTHETIC_REVIEWED_MAGNESIUM_REFERENCE",
+              "ingredient": "Magnesium L-Threonate",
+              "standard_name": "Magnesium L-Threonate",
+              "canonical_id": "magnesium",
+              "study_type": "rct_multiple",
+              "evidence_level": "branded-rct",
+              "effect_direction": "positive_strong",
+              "total_enrollment": 500,
+              "min_clinical_dose": 1000,
+              "dose_unit": "mg"
+            }
+          ]
+        },
+        "verified_cert_programs": [
+          {
+            "program": "NSF Certified for Sport",
+            "scope": "sku",
+            "recency_status": "fresh",
+            "brand_matched": true
+          }
+        ],
+        "certification_data": {
+          "gmp": {
+            "gmp_certified_or_compliant": true
+          }
+        },
+        "has_batch_coa": true
+      },
+      "expected": {
+        "v4_module": "generic",
+        "archetype": "generic_single_molecule",
+        "quality_score_status": "scored",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_score_v4_100": 92.6,
+        "quality_tier": "Excellent",
+        "v4_confidence": "high",
+        "normalization_references": {
+          "formulation": 25.0,
+          "dose": 22.0,
+          "evidence": 19.0
+        },
+        "pillars": {
+          "formulation": 19.2,
+          "dose": 20.0,
+          "evidence": 18.9,
+          "transparency": 13.5,
+          "verification": 11.0,
+          "safety_hygiene": 10.0
+        },
+        "raw_dimensions": {
+          "formulation": 24.0,
+          "dose": 22.0,
+          "evidence": 18.0,
+          "transparency": 9.0
+        }
+      }
+    },
+    {
+      "id": "generic_single_molecule__failure",
+      "archetype": "generic_single_molecule",
+      "variant": "failure",
+      "product": {
+        "dsld_id": "synthetic-generic-failure",
+        "product_name": "Benchmark Low-Dose Magnesium Oxide Gummy",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "gummy",
+        "form_factor_canonical": "gummy",
+        "supplement_taxonomy": {
+          "primary_type": "single_mineral",
+          "percentile_category": "single_mineral",
+          "is_single_scorable_active": true,
+          "scorable_active_count": 1
+        },
+        "ingredient_quality_data": {
+          "total_active": 1,
+          "ingredients_scorable": [
+            {
+              "name": "Magnesium Oxide",
+              "standard_name": "Magnesium",
+              "canonical_id": "magnesium",
+              "quantity": 50,
+              "dose": 50,
+              "unit": "mg",
+              "unit_normalized": "mg",
+              "bio_score": 4,
+              "matched_form": "magnesium oxide",
+              "mapped": true,
+              "mapped_identity": true,
+              "scoreable_identity": true,
+              "score_eligible_by_cleaner": true,
+              "cleaner_row_role": "active_scorable",
+              "role_classification": "active_scorable",
+              "source_section": "activeIngredients",
+              "raw_source_path": "activeIngredients[0]",
+              "dose_class": "therapeutic_mass"
+            }
+          ],
+          "ingredients": [
+            {
+              "name": "Magnesium Oxide",
+              "standard_name": "Magnesium",
+              "canonical_id": "magnesium",
+              "quantity": 50,
+              "dose": 50,
+              "unit": "mg",
+              "unit_normalized": "mg",
+              "bio_score": 4,
+              "matched_form": "magnesium oxide",
+              "mapped": true,
+              "mapped_identity": true,
+              "scoreable_identity": true,
+              "score_eligible_by_cleaner": true,
+              "cleaner_row_role": "active_scorable",
+              "role_classification": "active_scorable",
+              "source_section": "activeIngredients",
+              "raw_source_path": "activeIngredients[0]",
+              "dose_class": "therapeutic_mass"
+            }
+          ]
+        },
+        "rda_ul_data": {
+          "adequacy_results": [
+            {
+              "nutrient": "Magnesium",
+              "standard_name": "Magnesium",
+              "pct_rda": 12,
+              "pct_ul": 15,
+              "scoring_eligible": true
+            }
+          ],
+          "safety_flags": []
+        },
+        "evidence_data": {
+          "clinical_matches": []
+        },
+        "dietary_sensitivity_data": {
+          "sugar": {
+            "level": "high",
+            "contains_sugar": true,
+            "has_added_sugar": true,
+            "amount_g": 8,
+            "sugar_sources": [
+              "glucose syrup"
+            ]
+          },
+          "sweeteners": {
+            "high_glycemic": [
+              "glucose syrup"
+            ]
+          }
+        },
+        "verified_cert_programs": []
+      },
+      "expected": {
+        "v4_module": "generic",
+        "archetype": "generic_single_molecule",
+        "quality_score_status": "scored",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_score_v4_100": 47.2,
+        "quality_tier": "Poor",
+        "v4_confidence": "moderate",
+        "normalization_references": {
+          "formulation": 25.0,
+          "dose": 22.0,
+          "evidence": 19.0
+        },
+        "pillars": {
+          "formulation": 1.6,
+          "dose": 9.6,
+          "evidence": 10.5,
+          "transparency": 13.5,
+          "verification": 6.0,
+          "safety_hygiene": 6.0
+        },
+        "raw_dimensions": {
+          "formulation": 2.0,
+          "dose": 10.56,
+          "evidence": 10.0,
+          "transparency": 9.0
+        }
+      }
+    },
+    {
+      "id": "b_complex__ideal",
+      "archetype": "b_complex",
+      "variant": "ideal",
+      "product": {
+        "dsld_id": "synthetic-b-complex-ideal",
+        "product_name": "Benchmark Active B-Complex Capsule",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "capsule",
+        "form_factor_canonical": "capsule",
+        "supplement_taxonomy": {
+          "primary_type": "b_complex",
+          "percentile_category": "b_complex"
+        },
+        "ingredient_quality_data": {
+          "ingredients_scorable": [
+            {"canonical_id": "vitamin_b1_thiamine", "name": "Thiamin", "standard_name": "Thiamin", "quantity": 10, "dose": 10, "unit": "mg", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b2_riboflavin", "name": "Riboflavin-5-Phosphate", "standard_name": "Riboflavin", "quantity": 10, "dose": 10, "unit": "mg", "bio_score": 13, "matched_form": "riboflavin-5-phosphate", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b3_niacin", "name": "Niacinamide", "standard_name": "Niacin", "quantity": 20, "dose": 20, "unit": "mg", "bio_score": 13, "matched_form": "niacinamide", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b5_pantothenic", "name": "Pantothenic Acid", "standard_name": "Pantothenic Acid", "quantity": 25, "dose": 25, "unit": "mg", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[3]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b6_pyridoxine", "name": "P5P", "standard_name": "Vitamin B6", "quantity": 10, "dose": 10, "unit": "mg", "bio_score": 13, "matched_form": "pyridoxal-5-phosphate", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[4]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b9_folate", "name": "L-5-MTHF", "standard_name": "Folate", "quantity": 400, "dose": 400, "unit": "mcg DFE", "bio_score": 13, "matched_form": "l-5-mthf", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[5]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b12_cobalamin", "name": "Methylcobalamin", "standard_name": "Vitamin B12", "quantity": 500, "dose": 500, "unit": "mcg", "bio_score": 13, "matched_form": "methylcobalamin", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[6]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b7_biotin", "name": "Biotin", "standard_name": "Biotin", "quantity": 100, "dose": 100, "unit": "mcg", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[7]", "dose_class": "mass"},
+            {"canonical_id": "choline", "name": "Choline", "standard_name": "Choline", "quantity": 250, "dose": 250, "unit": "mg", "bio_score": 13, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[8]", "dose_class": "mass"}
+          ]
+        },
+        "rda_ul_data": {
+          "adequacy_results": [
+            {"nutrient": "Vitamin B1", "pct_rda": 833, "scoring_eligible": true},
+            {"nutrient": "Vitamin B2", "pct_rda": 769, "scoring_eligible": true},
+            {"nutrient": "Niacin", "pct_rda": 125, "pct_ul": 57, "scoring_eligible": true},
+            {"nutrient": "Pantothenic Acid", "pct_rda": 500, "scoring_eligible": true},
+            {"nutrient": "Vitamin B6", "pct_rda": 588, "pct_ul": 59, "scoring_eligible": true},
+            {"nutrient": "Folate", "pct_rda": 100, "pct_ul": 40, "scoring_eligible": true},
+            {"nutrient": "Vitamin B12", "pct_rda": 20833, "scoring_eligible": true},
+            {"nutrient": "Biotin", "pct_rda": 333, "scoring_eligible": true},
+            {"nutrient": "Choline", "pct_rda": 45, "scoring_eligible": true}
+          ],
+          "safety_flags": []
+        },
+        "evidence_data": {
+          "clinical_matches": [
+            {
+              "id": "FIXTURE_B1_EVIDENCE",
+              "ingredient": "Thiamin",
+              "standard_name": "Thiamin",
+              "canonical_id": "vitamin_b1_thiamine",
+              "study_type": "systematic_review_meta",
+              "evidence_level": "ingredient-human",
+              "effect_direction": "positive_strong",
+              "total_enrollment": 1000
+            },
+            {
+              "id": "FIXTURE_B6_EVIDENCE",
+              "ingredient": "Vitamin B6",
+              "standard_name": "Vitamin B6",
+              "canonical_id": "vitamin_b6_pyridoxine",
+              "study_type": "systematic_review_meta",
+              "evidence_level": "ingredient-human",
+              "effect_direction": "positive_strong",
+              "total_enrollment": 1000
+            },
+            {
+              "id": "FIXTURE_B9_EVIDENCE",
+              "ingredient": "Folate",
+              "standard_name": "Folate",
+              "canonical_id": "vitamin_b9_folate",
+              "study_type": "systematic_review_meta",
+              "evidence_level": "ingredient-human",
+              "effect_direction": "positive_strong",
+              "total_enrollment": 1000
+            },
+            {
+              "id": "FIXTURE_B12_EVIDENCE",
+              "ingredient": "Vitamin B12",
+              "standard_name": "Vitamin B12",
+              "canonical_id": "vitamin_b12_cobalamin",
+              "study_type": "systematic_review_meta",
+              "evidence_level": "ingredient-human",
+              "effect_direction": "positive_strong",
+              "total_enrollment": 1000
+            }
+          ]
+        },
+        "verified_cert_programs": [
+          {
+            "program": "NSF Certified for Sport",
+            "scope": "sku",
+            "recency_status": "fresh",
+            "brand_matched": true
+          }
+        ],
+        "certification_data": {
+          "gmp": {
+            "gmp_certified_or_compliant": true
+          }
+        },
+        "has_batch_coa": true
+      },
+      "expected": {
+        "v4_module": "b_complex",
+        "archetype": "b_complex",
+        "quality_score_status": "scored",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_score_v4_100": 92.9,
+        "quality_tier": "Excellent",
+        "v4_confidence": "moderate",
+        "normalization_references": {
+          "formulation": 30.0,
+          "dose": 25.0,
+          "evidence": 14.0
+        },
+        "pillars": {
+          "formulation": 19.3,
+          "dose": 19.1,
+          "evidence": 20.0,
+          "transparency": 13.5,
+          "verification": 11.0,
+          "safety_hygiene": 10.0
+        },
+        "raw_dimensions": {
+          "formulation": 28.9333,
+          "dose": 23.875,
+          "evidence": 15.0,
+          "transparency": 9.0
+        }
+      }
+    },
+    {
+      "id": "b_complex__failure",
+      "archetype": "b_complex",
+      "variant": "failure",
+      "product": {
+        "dsld_id": "synthetic-b-complex-failure",
+        "product_name": "Benchmark Mega B-Complex Gummies",
+        "brand_name": "PharmaGuide Benchmark",
+        "status": "active",
+        "form_factor": "gummy",
+        "form_factor_canonical": "gummy",
+        "supplement_taxonomy": {
+          "primary_type": "b_complex",
+          "percentile_category": "b_complex"
+        },
+        "ingredient_quality_data": {
+          "ingredients_scorable": [
+            {"canonical_id": "vitamin_b1_thiamine", "name": "Thiamin", "standard_name": "Thiamin", "quantity": 100, "dose": 100, "unit": "mg", "bio_score": 5, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b2_riboflavin", "name": "Riboflavin", "standard_name": "Riboflavin", "quantity": 100, "dose": 100, "unit": "mg", "bio_score": 5, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[1]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b3_niacin", "name": "Niacin", "standard_name": "Niacin", "quantity": 100, "dose": 100, "unit": "mg", "bio_score": 5, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[2]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b5_pantothenic", "name": "Pantothenic Acid", "standard_name": "Pantothenic Acid", "quantity": 100, "dose": 100, "unit": "mg", "bio_score": 5, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[3]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b6_pyridoxine", "name": "Pyridoxine HCl", "standard_name": "Vitamin B6", "quantity": 100, "dose": 100, "unit": "mg", "bio_score": 5, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[4]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b9_folate", "name": "Folic Acid", "standard_name": "Folate", "quantity": 1200, "dose": 1200, "unit": "mcg DFE", "bio_score": 5, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[5]", "dose_class": "mass"},
+            {"canonical_id": "vitamin_b12_cobalamin", "name": "Cyanocobalamin", "standard_name": "Vitamin B12", "quantity": 1000, "dose": 1000, "unit": "mcg", "bio_score": 5, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[6]", "dose_class": "mass"}
+          ]
+        },
+        "rda_ul_data": {
+          "adequacy_results": [
+            {"nutrient": "Vitamin B1", "pct_rda": 8333, "scoring_eligible": true},
+            {"nutrient": "Vitamin B2", "pct_rda": 7692, "scoring_eligible": true},
+            {"nutrient": "Niacin", "pct_rda": 625, "pct_ul": 286, "scoring_eligible": true},
+            {"nutrient": "Pantothenic Acid", "pct_rda": 2000, "scoring_eligible": true},
+            {"nutrient": "Vitamin B6", "pct_rda": 5882, "pct_ul": 588, "scoring_eligible": true},
+            {"nutrient": "Folate", "pct_rda": 300, "pct_ul": 120, "scoring_eligible": true},
+            {"nutrient": "Vitamin B12", "pct_rda": 41667, "scoring_eligible": true}
+          ],
+          "safety_flags": [
+            {"nutrient": "Niacin", "canonical_id": "vitamin_b3_niacin", "pct_ul": 286, "severity": "high", "ul_gate_eligible": true},
+            {"nutrient": "Vitamin B6", "canonical_id": "vitamin_b6_pyridoxine", "pct_ul": 588, "severity": "high", "ul_gate_eligible": true},
+            {"nutrient": "Folate", "canonical_id": "vitamin_b9_folate", "pct_ul": 120, "severity": "moderate", "ul_gate_eligible": true}
+          ]
+        },
+        "evidence_data": {
+          "clinical_matches": []
+        },
+        "dietary_sensitivity_data": {
+          "sugar": {
+            "level": "high",
+            "contains_sugar": true,
+            "has_added_sugar": true,
+            "amount_g": 8,
+            "sugar_sources": [
+              "glucose syrup"
+            ]
+          },
+          "sweeteners": {
+            "high_glycemic": [
+              "glucose syrup"
+            ]
+          }
+        },
+        "verified_cert_programs": []
+      },
+      "expected": {
+        "v4_module": "b_complex",
+        "archetype": "b_complex",
+        "quality_score_status": "scored",
+        "product_safety_status": "caution",
+        "quality_score_v4_100": 53.8,
+        "quality_tier": "Poor",
+        "v4_confidence": "low",
+        "normalization_references": {
+          "formulation": 30.0,
+          "dose": 25.0,
+          "evidence": 14.0
+        },
+        "pillars": {
+          "formulation": 8.3,
+          "dose": 6.9,
+          "evidence": 16.1,
+          "transparency": 13.5,
+          "verification": 6.0,
+          "safety_hygiene": 3.0
+        },
+        "raw_dimensions": {
+          "formulation": 12.4167,
+          "dose": 8.6,
+          "evidence": 11.25,
+          "transparency": 9.0
+        }
+      }
+    }
+  ]
+}

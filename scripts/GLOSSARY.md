@@ -94,6 +94,8 @@ contract name elsewhere.
 | **Compatibility mirrors** | `score_100_equivalent` and `score_display_100_equivalent`; exact /100 mirrors of the v4 public score, not a legacy /80 conversion. |
 | **Quality pillars** | Formulation 20, Dose 20, Evidence 20, Transparency 15, Verification 15, Formula & quality checks 10 (internal key: `safety_hygiene`). |
 | **V4 module** | One category-aware scoring route: `generic`, `probiotic`, `multi_or_prenatal`, `b_complex`, `sports`, `fiber_digestive`, or `omega`. |
+| **V4 scoring archetype** | The purpose-fit normalization profile selected inside the six-pillar assembler after module routing, such as `generic_single_molecule`, `b_complex`, or `sports_pre_workout`. It is not a second product taxonomy or routing system. |
+| **Synthetic archetype fixture** | A reviewed enriched-product input with a locked production-scoring outcome used to validate one V4 scoring archetype. Fixtures call `build_scored_artifact()` and contain no copied scoring formulas. |
 | **Router** | `scoring_v4/router.py`, the sole authority for v4 module dispatch. |
 | **Safety suppression** | BLOCKED/UNSAFE products retain verdict/evidence but ship a null public score with `quality_score_status=suppressed_safety`. |
 | **Completeness exclusion** | Products without usable identity/payload become `NOT_SCORED` and are quarantined from the live catalog. Missing disclosure can instead remain scoreable as explicit soft debt. |
