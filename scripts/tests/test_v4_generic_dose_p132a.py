@@ -26,6 +26,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
@@ -266,6 +268,22 @@ def test_joint_undenatured_uc_ii_remains_recognized() -> None:
         canonical_id="collagen",
         matched_form="undenatured type ii collagen",
         raw_source_text="UC-II Undenatured Type II Collagen",
+        quantity=40,
+    )
+
+    assert _joint_active_id(row) == "uc_ii"
+
+
+@pytest.mark.parametrize("label", ["UC II", "uc_ii", "UCII"])
+def test_joint_undenatured_uc_ii_aliases_remain_recognized(label: str) -> None:
+    from scoring_v4.modules.joint_support import _joint_active_id
+
+    row = _ingredient(
+        name=label,
+        standard_name=label,
+        canonical_id=label,
+        matched_form=label,
+        raw_source_text=label,
         quantity=40,
     )
 

@@ -112,7 +112,7 @@ def test_v3_blocked_release_products_remain_v4_blocked() -> None:
 
 
 def test_excipient_acceptable_watchlist_warning_does_not_disqualify_safe() -> None:
-    from build_final_db import blob_has_profile_gated_hard_safety_warning
+    from build_final_db import profile_gated_hard_safety_signal
 
     blob = {
         "warnings": [{
@@ -124,11 +124,11 @@ def test_excipient_acceptable_watchlist_warning_does_not_disqualify_safe() -> No
         }]
     }
 
-    assert blob_has_profile_gated_hard_safety_warning(blob) is False
+    assert profile_gated_hard_safety_signal(blob) is None
 
 
 def test_active_watchlist_warning_still_disqualifies_safe() -> None:
-    from build_final_db import blob_has_profile_gated_hard_safety_warning
+    from build_final_db import profile_gated_hard_safety_signal
 
     blob = {
         "warnings": [{
@@ -140,7 +140,7 @@ def test_active_watchlist_warning_still_disqualifies_safe() -> None:
         }]
     }
 
-    assert blob_has_profile_gated_hard_safety_warning(blob) is True
+    assert profile_gated_hard_safety_signal(blob) == "watchlist_substance"
 
 
 # --------------------------------------------------------------------------- #

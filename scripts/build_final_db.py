@@ -78,9 +78,6 @@ from scoring_v4.scored_artifact import (
     SCORING_ENGINE_VERSION,
     suppress_scored_artifact_for_hard_block,
 )
-# supplement_type_utils is no longer called directly — taxonomy is the
-# single source of truth for classification in the final DB export.
-# The import remains available for backward-compat callers but is unused.
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -5056,8 +5053,10 @@ _HARD_SAFETY_SEVERITIES = frozenset({
 })
 
 
-def blob_has_profile_gated_hard_safety_warning(detail_blob: Optional[Dict]) -> bool:
-    """True when a detail blob carries a hard-safety warning that disqualifies SAFE.
+def profile_gated_hard_safety_signal(
+    detail_blob: Optional[Dict],
+) -> Optional[str]:
+    """Return the first hard-safety warning type that disqualifies SAFE.
 
     Scans BOTH warnings[] and warnings_profile_gated[] (the per-user-condition
     list and the general list — a hard-safety signal in either disqualifies the
@@ -5065,7 +5064,7 @@ def blob_has_profile_gated_hard_safety_warning(detail_blob: Optional[Dict]) -> b
     _HARD_SAFETY_TYPES_SEVERITY_GATED for the tier rules.
     """
     if not isinstance(detail_blob, dict):
-        return False
+        return None
     for list_key in ("warnings", "warnings_profile_gated"):
         for warning in safe_list(detail_blob.get(list_key)):
             if not isinstance(warning, dict):
@@ -5079,12 +5078,12 @@ def blob_has_profile_gated_hard_safety_warning(detail_blob: Optional[Dict]) -> b
             ):
                 continue
             if warning_type in _HARD_SAFETY_TYPES_ALWAYS_DISQUALIFY:
-                return True
+                return warning_type
             if warning_type in _HARD_SAFETY_TYPES_SEVERITY_GATED:
                 severity = safe_str(warning.get("severity")).lower()
                 if severity in _HARD_SAFETY_SEVERITIES:
-                    return True
-    return False
+                    return warning_type
+    return None
 
 
 def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
@@ -5139,17 +5138,31 @@ def project_export_scored_artifact(
         effective_scored = suppress_scored_artifact_for_hard_block(
             effective_scored, reason="banned_substance"
         )
-    elif blob_has_profile_gated_hard_safety_warning(detail_blob):
+    else:
+        profile_safety_signal = profile_gated_hard_safety_signal(detail_blob)
         verdict_now = safe_str(effective_scored.get("verdict")).upper()
         safety_now = safe_str(effective_scored.get("safety_verdict")).upper()
-        if verdict_now == "SAFE" or safety_now == "SAFE":
+        profile_caution_applied = (
+            profile_safety_signal is not None
+            and (verdict_now == "SAFE" or safety_now == "SAFE")
+        )
+        if profile_caution_applied:
             effective_scored.update({
                 "verdict": "CAUTION",
                 "safety_verdict": "CAUTION",
+                "product_safety_status": "caution",
+                "safety_signal_reason": (
+                    effective_scored.get("safety_signal_reason")
+                    or profile_safety_signal
+                ),
+                "_v4_safety_signal_reason": (
+                    effective_scored.get("_v4_safety_signal_reason")
+                    or profile_safety_signal
+                ),
             })
 
-    derived_blocking = derive_blocking_reason(enriched, scored)
-    scored_blocking = safe_str(scored.get("blocking_reason"))
+    derived_blocking = derive_blocking_reason(enriched, effective_scored)
+    scored_blocking = safe_str(effective_scored.get("blocking_reason"))
     stale_safety_blocking = (
         scored_blocking
         in {"banned_ingredient", "recalled_ingredient", "high_risk_ingredient"}
@@ -5162,6 +5175,29 @@ def project_export_scored_artifact(
         else derived_blocking
         or (None if stale_safety_blocking or not scored_blocking else scored_blocking)
     )
+
+    if not has_export_banned_signal and profile_caution_applied:
+        metadata = dict(safe_dict(effective_scored.get("scoring_metadata")))
+        metadata.update({
+            "verdict": "CAUTION",
+            "product_safety_status": "caution",
+            "quality_assessment_status": effective_scored.get(
+                "quality_assessment_status"
+            ),
+            "blocking_reason": effective_scored["blocking_reason"],
+        })
+        effective_scored["scoring_metadata"] = metadata
+
+        safety_gate = dict(safe_dict(effective_scored.get("_v4_safety_gate")))
+        safety_signals = list(safe_list(safety_gate.get("safety_signals")))
+        if profile_safety_signal not in safety_signals:
+            safety_signals.append(profile_safety_signal)
+        safety_gate.update({
+            "verdict": "CAUTION",
+            "blocking_reason": effective_scored["blocking_reason"],
+            "safety_signals": safety_signals,
+        })
+        effective_scored["_v4_safety_gate"] = safety_gate
     return effective_scored
 
 
@@ -9502,9 +9538,14 @@ def update_audit_state(
     pid: str,
     enriched: Dict,
     scored: Dict,
-) -> tuple[int, int]:
+    contract_issues: Optional[List[str]] = None,
+) -> tuple[int, int, int]:
     """Update audit counters incrementally for a matched enriched/scored product."""
-    issues = validate_export_contract(enriched, scored)
+    issues = (
+        contract_issues
+        if contract_issues is not None
+        else validate_export_contract(enriched, scored)
+    )
     if issues:
         entry = {"dsld_id": pid, "issues": issues[:5]}
         if _classify_export_error("; ".join(issues)) == "excluded_by_gate":
@@ -9744,30 +9785,37 @@ def build_final_db(
                 )
 
             mark_staged_product_matched(stage_conn, "scored_stage", pid)
-            (
-                products_with_warnings_count,
-                contract_quarantine_count,
-                contract_failure_count,
-            ) = update_audit_state(
-                audit_counts,
-                products_with_warnings_sample,
-                contract_quarantines,
-                contract_failures,
-                products_with_warnings_count,
-                contract_quarantine_count,
-                contract_failure_count,
-                pid,
-                enriched,
-                scored,
-            )
 
             blob_path = os.path.join(detail_dir, f"{pid}.json")
             tmp_blob_path = f"{blob_path}.tmp"
             try:
+                blob = build_detail_blob(enriched, scored)
+                effective_scored = project_export_scored_artifact(
+                    enriched, scored, blob
+                )
+                if effective_scored != scored:
+                    scored = effective_scored
+                    blob = build_detail_blob(enriched, scored)
                 contract_issues = validate_export_contract(enriched, scored)
+                (
+                    products_with_warnings_count,
+                    contract_quarantine_count,
+                    contract_failure_count,
+                ) = update_audit_state(
+                    audit_counts,
+                    products_with_warnings_sample,
+                    contract_quarantines,
+                    contract_failures,
+                    products_with_warnings_count,
+                    contract_quarantine_count,
+                    contract_failure_count,
+                    pid,
+                    enriched,
+                    scored,
+                    contract_issues=contract_issues,
+                )
                 if contract_issues:
                     raise ValueError("; ".join(contract_issues[:10]))
-                blob = build_detail_blob(enriched, scored)
                 blob_json = json.dumps(blob, ensure_ascii=False, separators=(",", ":"))
                 blob_sha256 = hashlib.sha256(blob_json.encode("utf-8")).hexdigest()
                 row = build_core_row(
