@@ -525,6 +525,8 @@ def _recover_verified_primary_ingredient_matches(
             entry_id = _entry_id(entry)
             if entry_id in existing_ids:
                 continue
+            if _entry_excludes_recovery_context(entry, row, product):
+                continue
             entry_keys = _entry_identity_keys(entry)
             matched_keys = row_keys & entry_keys
             if not matched_keys:
@@ -688,6 +690,80 @@ def _entry_identity_keys(entry: Dict[str, Any]) -> set[str]:
         if key:
             keys.add(key)
     return keys
+
+
+def _entry_excludes_recovery_context(
+    entry: Dict[str, Any],
+    row: Dict[str, Any],
+    product: Dict[str, Any],
+) -> bool:
+    """Honor the enrichment deny-list during scoring-contract recovery.
+
+    Recovery may see both a broad parent identity (for example
+    ``standard_name=L-Carnitine``) and a specific raw/form identity (for
+    example ``L-Carnitine Fumarate``). An exact excluded form must win over the
+    broad parent match, just as it does in the enrichment matcher. Product
+    identity is also checked because older enriched rows sometimes retained
+    only the broad parent while the product name preserved the specific salt.
+    """
+    excluded = {
+        _canonical_text(value)
+        for value in _safe_list(entry.get("exclude_aliases"))
+        if _canonical_text(value)
+    }
+    if not excluded:
+        return False
+    row_identities = {
+        _canonical_text(row.get(field))
+        for field in (
+            "raw_source_text",
+            "name",
+            "matched_form",
+            "standard_name",
+            "canonical_id",
+            "scoring_parent_id",
+            "evidence_canonical_id",
+        )
+        if _canonical_text(row.get(field))
+    }
+    if any(
+        _excluded_identity_matches(entry, candidate, excluded)
+        for candidate in row_identities
+    ):
+        return True
+
+    product_identity = _canonical_text(
+        " ".join(
+            str(product.get(field) or "")
+            for field in (
+                "product_name",
+                "fullName",
+                "full_name",
+                "name",
+            )
+        )
+    )
+    return _excluded_identity_matches(
+        entry,
+        product_identity,
+        excluded,
+    )
+
+
+def _excluded_identity_matches(
+    entry: Dict[str, Any],
+    candidate: str,
+    excluded: set[str],
+) -> bool:
+    if entry.get("exclude_alias_match_mode") != "bounded_phrase":
+        return candidate in excluded
+    return any(
+        re.search(
+            rf"(?<![a-z0-9]){re.escape(excluded_identity)}(?![a-z0-9])",
+            candidate,
+        )
+        for excluded_identity in excluded
+    )
 
 
 def _existing_match_identity_keys(matches: List[Any]) -> set[str]:
@@ -1025,7 +1101,12 @@ def _entry_id(entry: Dict[str, Any]) -> str:
 
 
 def _canonical_from_entry(entry: Dict[str, Any]) -> str:
-    return _canonical_text(entry.get("standard_name") or entry.get("study_name") or entry.get("ingredient"))
+    return _canonical_text(
+        entry.get("evidence_group_id")
+        or entry.get("standard_name")
+        or entry.get("study_name")
+        or entry.get("ingredient")
+    )
 
 
 def _canonical_text(value: Any) -> str:

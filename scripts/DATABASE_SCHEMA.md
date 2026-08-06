@@ -173,11 +173,13 @@ Primary key: `backed_clinical_studies` (array)
 | `notes` | string | NO | Clinical context — auto-populated for discovered entries, manually curated for legacy |
 | `last_updated` | string | NO | ISO date |
 | `exclude_aliases` | string[] | NO | Explicitly denied aliases for matching safety |
+| `exclude_alias_match_mode` | string | NO | Optional deny-list matching mode. `bounded_phrase` blocks an excluded identity embedded in a longer branded/form label; omitted means exact alias matching. |
+| `evidence_group_id` | string | NO | Shared scoring identity for multiple evidence records about the same active ingredient; prevents brand and generic records from creating false multi-ingredient breadth. |
 
 Clinical evidence notes:
-- All 197 entries have PMID-backed `key_endpoints` — no empty endpoints remain.
+- Clinical entries require source-backed `key_endpoints`; read `_metadata.total_entries` rather than copying a drifting count into documentation.
 - `references_structured` supports three reference types: `clinical_trial` (NCT ID), `pubmed` (PMID/DOI), and `chembl` (ChEMBL ID + max_phase).
-- `effect_direction` is classified for all entries: 128 positive_strong, 40 positive_weak, 25 mixed, 4 null.
+- `effect_direction` is required on every entry; read the live file when distribution counts are needed.
 - `published_studies_count` is the dedicated numeric field for Section C depth bonus. Entries without a reliable count omit it; scoring does not infer counts from the human-readable `published_studies` tags.
 - `registry_completed_trials_count` is discovery/enrichment metadata, not a substitute for published study counts. Keep it separate from `published_studies_count`.
 - `effect_direction_rationale`, `effect_direction_confidence`, and `endpoint_relevance_tags` are auditability fields. They improve reviewability and operator trust; they are not direct scoring inputs in the current model.

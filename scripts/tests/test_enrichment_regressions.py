@@ -618,7 +618,11 @@ class TestRDAULPerDayBasis:
                     'name': standard_name,
                     'standardName': standard_name,
                     'quantity': per_serving,
-                    'unit': unit
+                    'unit': unit,
+                    # This test isolates serving multiplication, not the
+                    # fail-closed no-anchor contract covered in
+                    # test_ul_gate_eligibility.py.
+                    'dailyValue': (per_serving / 90.0) * 100.0,
                 }
             ]
         }
@@ -637,6 +641,7 @@ class TestRDAULPerDayBasis:
             per_serving * max_servings
         )
         assert result['has_over_ul'] is True
+        assert result['safety_flags'][0]['ul_gate_eligible'] is True
         assert result['safety_flags'][0]['amount'] == pytest.approx(per_serving * max_servings)
 
 

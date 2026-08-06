@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.1",
+    "schema_version": "5.3.2",
     "last_updated": "2026-08-06",
-    "total_entries": 197,
+    "total_entries": 198,
     "changelog": [
+      "5.3.2 (2026-08-06): Added form- and dose-scoped mixed human evidence for L-carnitine base/tartrate from three content-verified systematic reviews; explicitly excluded fumarate, hydrochloride, acetyl-, propionyl-, D-, and DL-carnitine identities. Corrected BRAND_CARNIPURE from 224 participants/five trials/strong energy-heart claims to its two cited small crossover recovery-marker trials (28 total participants, positive_weak, 2 g/day), and grouped its evidence with generic L-carnitine so the same active cannot create false ingredient breadth.",
       "5.3.1 (2026-08-06): Corrected the stale PRECLIN_ALCAR record to INGR_ACETYL_L_CARNITINE; constrained linkage to acetyl-L-carnitine/base and hydrochloride identities; classified conflicting, condition-specific human reviews as mixed; added dose scope and three limiting PubMed reviews; removed unrelated registry/enrollment/endpoint claims; synchronized the documented evidence multipliers with the production scorer.",
       "auto (2026-04-02): backfill-auditability updated 47 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
       "auto (2026-04-02): backfill-auditability updated 50 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
@@ -2093,28 +2094,33 @@
     {
       "id": "BRAND_CARNIPURE",
       "standard_name": "Carnipure L-Carnitine",
+      "evidence_group_id": "l_carnitine",
       "aliases": [
         "carnipure",
-        "lonza l-carnitine"
+        "lonza l-carnitine",
+        "carnipure tartrate",
+        "carnipure l-carnitine tartrate"
       ],
-      "category": "metabolic_blood_sugar",
+      "category": "sports_performance",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "exercise performance ↑",
-        "heart health ↑"
+        "post-exercise muscle-disruption biomarkers",
+        "post-exercise soreness and recovery markers"
       ],
       "health_goals_supported": [
-        "Increase Energy",
-        "Cardiovascular/Heart Health"
+        "Muscle Growth & Recovery"
       ],
-      "notes": "Pharmaceutical-grade L-carnitine tartrate with branded randomized evidence for exercise recovery markers; direct performance gains are less consistent than recovery endpoints.",
+      "notes": "Two small double-blind crossover trials evaluated 2 g/day L-carnitine L-tartrate for post-exercise recovery markers (10 resistance-trained men and 18 healthy middle-aged adults). They support a cautious recovery-biomarker signal, not broad energy, performance, cardiovascular, or muscle-growth efficacy.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Volek et al. (2002, PMID 11788381) placebo-controlled crossover trial found 2 g/day L-carnitine L-tartrate reduced biochemical markers of muscle disruption after squat exercise. Ho et al. (2010, PMID 20045157) reported improved recovery markers after 5 weeks of Carnipure tartrate in middle-aged men and women.",
+      "last_updated": "2026-08-06",
+      "notable_studies": "Volek et al. (2002, PMID 11788381) used a balanced crossover design in 10 resistance-trained men after 3 weeks of 2 g/day L-carnitine L-tartrate. Ho et al. (2010, PMID 20045157) explicitly used Carnipure tartrate in a double-blind crossover study of 18 healthy middle-aged adults after 3 weeks and 3 days of supplementation. Both emphasized biochemical or tissue-disruption recovery markers rather than direct durable performance outcomes.",
+      "min_clinical_dose": 2000,
+      "max_studied_clinical_dose": 2000,
+      "dose_unit": "mg",
       "references_structured": [
         {
           "type": "pubmed",
@@ -2198,16 +2204,183 @@
         }
       ],
       "external_ids": {
-        "unii": "0G389FZZ9M"
+        "unii": "4D8F2Q45LQ"
       },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Increase Energy",
-      "total_enrollment": 224,
-      "registry_completed_trials_count": 5,
+      "effect_direction": "positive_weak",
+      "primary_outcome": "Muscle Growth & Recovery",
+      "total_enrollment": 28,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Increase Energy; published_tags=RCT; registry_completed_trials_count=5; total_enrollment=224; endpoint_tags=muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Positive_weak is a high-confidence characterization of two small crossover trials with favorable post-exercise recovery biomarkers. PubMed E-utilities verified both cited records and their combined enrollment (10 plus 18) on 2026-08-06. The evidence does not establish broad energy, heart-health, muscle-growth, or durable exercise-performance benefit.",
       "endpoint_relevance_tags": [
         "muscle_recovery"
+      ]
+    },
+    {
+      "id": "INGR_L_CARNITINE",
+      "standard_name": "L-Carnitine",
+      "evidence_group_id": "l_carnitine",
+      "aliases": [
+        "levocarnitine",
+        "l-carnitine base",
+        "l carnitine base",
+        "l-carnitine l-tartrate",
+        "l carnitine l tartrate",
+        "l-carnitine tartrate",
+        "l carnitine tartrate",
+        "levocarnitine tartrate",
+        "lclt"
+      ],
+      "exclude_aliases": [
+        "l-carnitine fumarate",
+        "levocarnitine fumarate",
+        "l-carnitine hcl",
+        "l carnitine hcl",
+        "l-carnitine hydrochloride",
+        "levocarnitine hydrochloride",
+        "acetyl-l-carnitine",
+        "acetyl l carnitine",
+        "acetyl-l-carnitine hcl",
+        "acetyl-l-carnitine hydrochloride",
+        "propionyl-l-carnitine",
+        "propionyl l carnitine",
+        "glycine propionyl l-carnitine hydrochloride",
+        "glycine propionyl l carnitine hydrochloride",
+        "d-carnitine",
+        "dl-carnitine"
+      ],
+      "exclude_alias_match_mode": "bounded_phrase",
+      "category": "sports_performance",
+      "evidence_level": "ingredient-human",
+      "study_type": "systematic_review_meta",
+      "published_studies": [
+        "systematic_review",
+        "meta-analysis",
+        "RCT"
+      ],
+      "score_contribution": "tier_1",
+      "key_endpoints": [
+        "exercise-induced muscle soreness and recovery markers",
+        "modest body-weight change in adults with overweight or obesity",
+        "mixed physical-performance outcomes in healthy adults"
+      ],
+      "health_goals_supported": [
+        "Muscle Growth & Recovery",
+        "Weight Management"
+      ],
+      "notes": "Human evidence exists but is endpoint-, population-, form-, and dose-specific. A seven-RCT meta-analysis reported less post-exercise soreness and short-lived improvement in muscle-damage markers, especially in resistance-training and untrained groups. A 37-RCT meta-analysis reported a modest average body-weight effect, strongest in adults with overweight or obesity and around 2 g/day. A separate systematic review of prolonged use in healthy adults found effects only under specific conditions and raised unresolved long-term TMAO questions. This record is not broad proof of energy, cardiovascular, fat-burning, or athletic-performance efficacy.",
+      "last_updated": "2026-08-06",
+      "notable_studies": "PMID 32154768 pooled seven randomized trials of exercise-induced muscle damage and reported improvements in soreness and some 24-hour biomarkers, while calling for further research. PMID 32359762 pooled 37 randomized trials (2,292 participants) and found modest weight and BMI changes, particularly in adults with overweight or obesity; its dose-response analysis suggested the largest body-weight effect near 2 g/day. PMID 32958033 reviewed 11 prolonged-supplementation studies in healthy adults using 1-4 g/day for 12-24 weeks and concluded that physical-performance effects occur only in specific conditions.",
+      "min_clinical_dose": 1000,
+      "max_studied_clinical_dose": 4000,
+      "dose_unit": "mg",
+      "dose_range": "1,000-4,000 mg/day in prolonged healthy-adult studies; body-weight dose-response peaked near 2,000 mg/day",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "32958033",
+          "doi": "10.1186/s12970-020-00377-2",
+          "title": "The bright and the dark sides of L-carnitine supplementation: a systematic review.",
+          "citation": "Journal of the International Society of Sports Nutrition (2020-09-21)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32958033/",
+          "published_date": "2020-09-21",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review"
+          ],
+          "mesh_terms": [
+            "Body Composition",
+            "Carnitine",
+            "Dietary Supplements",
+            "Exercise",
+            "Exercise Tolerance",
+            "Humans",
+            "Muscle Strength",
+            "Muscle, Skeletal"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [
+            "Prolonged 1-4 g/day L-carnitine may affect performance only in specific conditions; long-term TMAO implications remain unresolved"
+          ],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "32154768",
+          "doi": "10.1080/07315724.2019.1661804",
+          "title": "The Effect of L-Carnitine Supplementation on Exercise-Induced Muscle Damage: A Systematic Review and Meta-Analysis of Randomized Clinical Trials.",
+          "citation": "Journal of the American College of Nutrition (2020-07-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32154768/",
+          "published_date": "2020-07-01",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis",
+            "Systematic Review"
+          ],
+          "mesh_terms": [
+            "Carnitine",
+            "Dietary Supplements",
+            "Exercise",
+            "Humans",
+            "Muscle, Skeletal",
+            "Myalgia",
+            "Randomized Controlled Trials as Topic"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "meta_analysis",
+          "retracted": false,
+          "supports_claims": [
+            "Seven randomized trials supported reduced soreness and selected short-term muscle-damage markers, with further research needed"
+          ],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "32359762",
+          "doi": "10.1016/j.clnesp.2020.03.008",
+          "title": "Effects of l-carnitine supplementation on weight loss and body composition: A systematic review and meta-analysis of 37 randomized controlled clinical trials with dose-response analysis.",
+          "citation": "Clinical Nutrition ESPEN (2020-06-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32359762/",
+          "published_date": "2020-06-01",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis",
+            "Research Support, Non-U.S. Gov't",
+            "Systematic Review"
+          ],
+          "mesh_terms": [
+            "Adult",
+            "Body Composition",
+            "Body Weight",
+            "Carnitine",
+            "Dietary Supplements",
+            "Humans",
+            "Randomized Controlled Trials as Topic",
+            "Weight Loss"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "meta_analysis",
+          "retracted": false,
+          "supports_claims": [
+            "Modest average weight and BMI effects, especially in adults with overweight or obesity; largest body-weight effect near 2 g/day"
+          ],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "external_ids": {
+        "unii": "0G389FZZ9M"
+      },
+      "effect_direction": "mixed",
+      "primary_outcome": "Muscle Growth & Recovery",
+      "effect_direction_confidence": "high",
+      "effect_direction_rationale": "Mixed is a high-confidence classification of content-verified, outcome-specific systematic reviews. Recovery and modest weight outcomes were favorable, but physical-performance findings were conditional and inconsistent, study populations differed, and long-term TMAO implications remain unresolved. The classification must not be presented as universal energy, cardiovascular, weight-loss, or sports-performance efficacy.",
+      "endpoint_relevance_tags": [
+        "muscle_recovery",
+        "weight_management"
       ]
     },
     {
