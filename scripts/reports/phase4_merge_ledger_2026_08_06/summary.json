@@ -1,0 +1,207 @@
+{
+ "pins": {
+  "main": "e69abdd1",
+  "branch": "ae451d17"
+ },
+ "method": "score_and_export_on_fixed_enriched_snapshot",
+ "not_measured": [
+  "re_enrichment_identity_matching"
+ ],
+ "method_note": "B7/module/archetype read from the pre-projection artifact; score/tier/safety/verdict read from the projected export row. Real detail blobs passed so the export blob-warning path is exercised.",
+ "products_compared": 14193,
+ "only_in_main": 0,
+ "only_in_branch": 0,
+ "products_changed": 256,
+ "score_moved": 160,
+ "score_up": 135,
+ "score_down": 25,
+ "tier_moved": 45,
+ "safety_status_moved": 89,
+ "assessment_moved": 10,
+ "score_status_moved": 0,
+ "b7_moved": 19,
+ "b7_confirmed_new": 10,
+ "b7_removed": 8,
+ "double_b7_suspects": 0,
+ "unexpected": 0,
+ "by_change_class": {
+  "evidence_scope_carnitine": 137,
+  "export_safety_projection": 81,
+  "penalty_registry_mirror": 18,
+  "universal_b7_confirmed": 10,
+  "unresolved_no_deduction": 8,
+  "unresolved_caution": 2
+ },
+ "module_x_change_class": {
+  "fiber_digestive": {
+   "universal_b7_confirmed": 6,
+   "evidence_scope_carnitine": 3,
+   "export_safety_projection": 3,
+   "unresolved_caution": 1
+  },
+  "generic": {
+   "unresolved_no_deduction": 7,
+   "evidence_scope_carnitine": 118,
+   "export_safety_projection": 65,
+   "penalty_registry_mirror": 8,
+   "unresolved_caution": 1
+  },
+  "multi_or_prenatal": {
+   "export_safety_projection": 12,
+   "unresolved_no_deduction": 1
+  },
+  "sports": {
+   "universal_b7_confirmed": 4,
+   "penalty_registry_mirror": 10,
+   "export_safety_projection": 1,
+   "evidence_scope_carnitine": 16
+  }
+ },
+ "top20_abs_delta": [
+  {
+   "dsld_id": "33684",
+   "name": "Carnitine 500",
+   "module": "generic",
+   "delta": -13.0,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "251622",
+   "name": "L-Carnitine 500 mg",
+   "module": "generic",
+   "delta": 11.1,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "252617",
+   "name": "L-Carnitine",
+   "module": "generic",
+   "delta": 11.1,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "254133",
+   "name": "L-Carnitine",
+   "module": "generic",
+   "delta": 11.1,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "254135",
+   "name": "L-Carnitine",
+   "module": "generic",
+   "delta": 11.1,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "254137",
+   "name": "L-Carnitine",
+   "module": "generic",
+   "delta": 11.1,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "239103",
+   "name": "L-Carnitine 500 mg",
+   "module": "generic",
+   "delta": 9.5,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "252576",
+   "name": "L-Carnitine L-Tartrate",
+   "module": "generic",
+   "delta": 9.5,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "253858",
+   "name": "L-Carnitine L-Tartrate",
+   "module": "generic",
+   "delta": 9.5,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "253864",
+   "name": "L-Carnitine L-Tartrate",
+   "module": "generic",
+   "delta": 9.5,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "253873",
+   "name": "L-Carnitine L-Tartrate",
+   "module": "generic",
+   "delta": 9.5,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "293992",
+   "name": "L-Carnitine",
+   "module": "generic",
+   "delta": 9.5,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "296190",
+   "name": "L-Carnitine",
+   "module": "generic",
+   "delta": 9.5,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "307635",
+   "name": "L-Carnitine 500 mg",
+   "module": "generic",
+   "delta": 9.1,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "307636",
+   "name": "L-Carnitine 500 mg",
+   "module": "generic",
+   "delta": 9.1,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "67304",
+   "name": "Carnitine 1000 + BCAA Orange Cream",
+   "module": "sports",
+   "delta": 8.8,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "212977",
+   "name": "Cognitive Focus",
+   "module": "generic",
+   "delta": -7.9,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "213878",
+   "name": "Acetyl L-Carnitine 500 mg",
+   "module": "generic",
+   "delta": 7.9,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "213912",
+   "name": "Advanced Acetyl-L-Carnitine",
+   "module": "generic",
+   "delta": -7.9,
+   "class": "evidence_scope_carnitine"
+  },
+  {
+   "dsld_id": "232618",
+   "name": "Acetyl-L-Carnitine Arginate",
+   "module": "generic",
+   "delta": -7.9,
+   "class": "evidence_scope_carnitine"
+  }
+ ],
+ "gates": {
+  "unexpected_is_zero": true,
+  "no_double_b7_on_old_modules": true,
+  "both_sides_full_corpus": true
+ }
+}
