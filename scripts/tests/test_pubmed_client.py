@@ -60,6 +60,45 @@ SAMPLE_PUBMED_XML = """\
 """
 
 
+# Real PubMed records wrap species names in <i> and trademarks in <sup>.
+# ElementTree's findtext()/node.text stop at the first child element, which
+# silently truncated 28 shipped citation titles (e.g. PMID 36558392 stored as
+# "A Magtein"). Only 19 were visible to a word-overlap heuristic; the other 9
+# needed byte-exact stored-vs-live comparison -- two of them differed by a
+# single trailing period, so their word sets were identical.
+# Shape copied from the live records for 36558392 / 32059116.
+MARKUP_PUBMED_XML = """\
+<PubmedArticleSet>
+  <PubmedArticle>
+    <MedlineCitation>
+      <PMID>36558392</PMID>
+      <Article>
+        <ArticleTitle>A Magtein<sup>&#174;</sup>, Magnesium L-Threonate, -Based Formula Improves Brain Cognitive Functions in Healthy Chinese Adults</ArticleTitle>
+        <Abstract>
+          <AbstractText>Supplementation with <i>Bifidobacterium animalis</i> subsp. <i>lactis</i> BB-12<sup>&#174;</sup> improved outcomes.</AbstractText>
+        </Abstract>
+        <Journal>
+          <Title>Nutrients</Title>
+          <JournalIssue>
+            <PubDate>
+              <Year>2022</Year>
+              <Month>12</Month>
+              <Day>08</Day>
+            </PubDate>
+          </JournalIssue>
+        </Journal>
+      </Article>
+    </MedlineCitation>
+    <PubmedData>
+      <ArticleIdList>
+        <ArticleId IdType="pubmed">36558392</ArticleId>
+      </ArticleIdList>
+    </PubmedData>
+  </PubmedArticle>
+</PubmedArticleSet>
+"""
+
+
 def test_load_pubmed_config_prefers_ncbi_api_key(monkeypatch):
     monkeypatch.setenv("PUBMED_API_KEY", "pubmed-key")
     monkeypatch.setenv("NCBI_API_KEY", "ncbi-key")
@@ -91,6 +130,28 @@ def test_parse_pubmed_article_xml_extracts_quality_metadata():
     assert article["has_erratum"] is True
     assert "Observational Study" in article["publication_types"]
     assert "Erythritol" in article["mesh_terms"]
+
+
+def test_parse_pubmed_article_xml_keeps_title_text_after_inline_markup():
+    from api_audit.pubmed_client import parse_pubmed_article_xml
+
+    article = parse_pubmed_article_xml(MARKUP_PUBMED_XML)[0]
+
+    assert article["title"] == (
+        "A Magtein®, Magnesium L-Threonate, -Based Formula Improves "
+        "Brain Cognitive Functions in Healthy Chinese Adults"
+    )
+
+
+def test_parse_pubmed_article_xml_keeps_abstract_text_after_inline_markup():
+    from api_audit.pubmed_client import parse_pubmed_article_xml
+
+    article = parse_pubmed_article_xml(MARKUP_PUBMED_XML)[0]
+
+    assert article["abstract"] == (
+        "Supplementation with Bifidobacterium animalis subsp. lactis "
+        "BB-12® improved outcomes."
+    )
 
 
 def test_parse_ecitmatch_rows_extracts_pmid_by_local_key():
