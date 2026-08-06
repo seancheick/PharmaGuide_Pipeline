@@ -85,7 +85,7 @@ contract name elsewhere.
 
 | Term | Meaning |
 |---|---|
-| **V4 quality score** | The only shipped public score. Produced during Stage 3 by `score_products_v4.py`/`scoring_v4/` and exported unchanged as `quality_score_v4_100`. |
+| **V4 quality score** | The only shipped public score. Stage 3 produces the auditable one-decimal value; final export projects it half-up to a whole number under the canonical `quality_score_v4_100` field. |
 | **Scored artifact** | The sole Stage-3 output produced by `build_scored_artifact()`: v4 score/status/pillars, shared coverage and strict diagnostics, safety/verdict state, provenance, and compatibility mirrors. |
 | **Quality score status** | `scored`, `suppressed_safety`, or `not_scored`. Status controls whether a public number is allowed. |
 | **Product safety status** | Catalog-level safety-gate outcome exported as `product_safety_status`: `blocked`, `unsafe`, `caution`, `no_known_catalog_concern`, or `not_assessed`. It is independent of quality tier, score, mapped coverage, and personalized interaction risk. |

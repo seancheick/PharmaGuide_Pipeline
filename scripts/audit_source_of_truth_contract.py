@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import re
 import sqlite3
 import subprocess
@@ -1159,10 +1160,12 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
 
 # V4 six-pillar contract. Maxes: formulation/dose/evidence 20, transparency/
 # verification 15, safety_hygiene 10 (= 100). Every scored product must carry all
-# six (populated, in-range, summing to quality_score_v4_100); suppressed products
-# carry none. Gating the shipped DB here closes the 2026-06-14 hole, where a DB
-# built before the pillar-projection commit shipped with the columns absent and
-# the checksum/freshness gates (which compare hashes/timestamps) didn't notice.
+# six (populated and in-range). Their decimal sum must reconcile through the
+# export's half-up whole-number projection, including any reviewed explicit cap
+# adjustment stored in the matching detail blob. Suppressed products carry none.
+# Gating the shipped DB here closes the 2026-06-14 hole, where a DB built before
+# the pillar-projection commit shipped with the columns absent and the
+# checksum/freshness gates (which compare hashes/timestamps) didn't notice.
 V4_PILLAR_MAXES = {
     "pillar_formulation_v4": 20.0,
     "pillar_dose_v4": 20.0,
@@ -1171,12 +1174,67 @@ V4_PILLAR_MAXES = {
     "pillar_verification_v4": 15.0,
     "pillar_safety_hygiene_v4": 10.0,
 }
-V4_PILLAR_RECON_TOLERANCE = 0.1
 
 
-def check_v4_pillar_contract(db_path: str | Path) -> list[Finding]:
+def _cap_adjusted_public_total(
+    detail_blobs_dir: Path | None,
+    dsld_id: object,
+    pillar_total: float,
+) -> int | None:
+    """Return the half-up capped total when the public cap contract is valid."""
+    if detail_blobs_dir is None:
+        return None
+    detail_path = detail_blobs_dir / f"{dsld_id}.json"
+    try:
+        detail = load_json(detail_path)
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return None
+    cap = detail.get("quality_score_cap_v4")
+    if not isinstance(cap, dict):
+        return None
+    numeric_fields = (
+        "cap",
+        "score_before_cap",
+        "score_after_cap",
+        "adjustment",
+    )
+    values: dict[str, float] = {}
+    for field in numeric_fields:
+        value = cap.get(field)
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            return None
+        values[field] = float(value)
+    if not all(math.isfinite(value) for value in values.values()):
+        return None
+    before = values["score_before_cap"]
+    after = values["score_after_cap"]
+    adjustment = values["adjustment"]
+    if (
+        cap.get("applied") is not True
+        or cap.get("presentation") != "explicit_adjustment"
+        or not isinstance(cap.get("id"), str)
+        or not cap["id"].strip()
+        or not isinstance(cap.get("reason"), str)
+        or not cap["reason"].strip()
+        or abs(before - pillar_total) > 0.011
+        or abs((before + adjustment) - after) > 0.011
+        or abs(values["cap"] - after) > 0.011
+        or adjustment > 0.0
+    ):
+        return None
+    return int(after + 0.5)
+
+
+def check_v4_pillar_contract(
+    db_path: str | Path,
+    *,
+    detail_blobs_dir: str | Path | None = None,
+) -> list[Finding]:
     """Assert products_core honors the V4 six-pillar contract; one Finding per breach."""
     findings: list[Finding] = []
+    resolved_detail_dir = (
+        Path(detail_blobs_dir) if detail_blobs_dir is not None else None
+    )
     pillar_cols = list(V4_PILLAR_MAXES)
     try:
         with sqlite3.connect(str(db_path)) as conn:
@@ -1220,11 +1278,31 @@ def check_v4_pillar_contract(db_path: str | Path) -> list[Finding]:
                 findings.append(Finding(
                     "EXPORT_V4_TOTAL_OUT_OF_RANGE",
                     f"quality_score_v4_100={total} outside [0, 100] on scored product", ref))
-            elif abs(sum(pillars.values()) - total) > V4_PILLAR_RECON_TOLERANCE:
+            elif not float(total).is_integer():
                 findings.append(Finding(
-                    "EXPORT_V4_PILLAR_RECON_MISMATCH",
-                    f"sum(pillars)={round(sum(pillars.values()), 3)} != "
-                    f"quality_score_v4_100={total}", ref))
+                    "EXPORT_V4_TOTAL_NOT_WHOLE_NUMBER",
+                    f"quality_score_v4_100={total} is not a whole-number "
+                    "public score",
+                    ref,
+                ))
+            else:
+                pillar_total = sum(pillars.values())
+                expected_total = int(pillar_total + 0.5)
+                if int(total) != expected_total:
+                    capped_total = _cap_adjusted_public_total(
+                        resolved_detail_dir,
+                        dsld_id,
+                        pillar_total,
+                    )
+                    if int(total) != capped_total:
+                        findings.append(Finding(
+                            "EXPORT_V4_PILLAR_RECON_MISMATCH",
+                            f"sum(pillars)={round(pillar_total, 3)} rounds "
+                            f"half-up to {expected_total}, with no valid "
+                            "explicit cap adjustment reconciling "
+                            f"quality_score_v4_100={total}",
+                            ref,
+                        ))
         else:  # suppressed / not v4-scored — pillars must be NULL
             populated = [c for c, v in pillars.items() if v is not None]
             if populated:
@@ -1274,7 +1352,10 @@ def audit_export(args: argparse.Namespace) -> list[Finding]:
                 findings.append(Finding("EXPORT_MANIFEST_CONTRACT_FIELD", f"stamped export manifest missing {key}", str(manifest_path)))
 
     # V4 six-pillar contract on the actual shipped DB (schema + per-row).
-    findings.extend(check_v4_pillar_contract(db_path))
+    findings.extend(check_v4_pillar_contract(
+        db_path,
+        detail_blobs_dir=dist_dir / "detail_blobs",
+    ))
     return findings
 
 

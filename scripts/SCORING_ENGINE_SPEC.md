@@ -193,12 +193,17 @@ not in the router or exporter.
 For a scoreable product:
 
 ```text
-quality_score_v4_100 = clamp(0, 100, round(sum(pillar.score), 1))
+stage3_quality_score_v4_100 = clamp(0, 100, round(sum(pillar.score), 1))
+exported_quality_score_v4_100 = floor(stage3_quality_score_v4_100 + 0.5)
 ```
 
 Category adapters map module evidence to an achievable, purpose-fit pillar
-scale. Public quality caps may proportionally reduce pillar scores when a
-module supplies a tested cap with provenance. Caps never raise a score.
+scale. A reviewed public quality cap leaves the analytical pillars unchanged
+and emits `quality_score_cap_v4` as an explicit negative adjustment with the
+before-cap score, after-cap score, and rationale. Caps never raise a score.
+Stage 3 retains one decimal for auditability and tier derivation; final export
+ships the canonical public score as a half-up whole number and keeps the
+decimal analytical value out of the public database.
 
 Clean-label flags remain orthogonal to regulatory verdicts: they may produce a
 small bounded Formula & quality checks deduction and consumer explanation without
