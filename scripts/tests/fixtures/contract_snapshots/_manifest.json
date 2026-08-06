@@ -1,7 +1,7 @@
 {
   "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
   "schema_version": "2.0.0",
-  "frozen_on": "2026-07-29",
+  "frozen_on": "2026-08-06",
   "fixture_schema": {
     "frozen_fields": [
       "dsld_id",
@@ -193,6 +193,12 @@
     }
   ],
   "changelog": [
+    {
+      "date": "2026-08-06",
+      "action": "refrozen_v4_2_typed_safety_contract",
+      "products": "all 30",
+      "notes": "Commit 8b63fd0f intentionally advanced the Stage-3 artifact contract to 4.2.0 while centralizing typed dose-safety and penalty policy. The artifact added dose_safety_evaluation and partial quality-assessment semantics, and the export contract advanced to 2.3.0. The fresh full-corpus run changed only output_schema_version (4.0.0->4.2.0) across these 30 frozen snapshots; quality_score_v4_100, verdict, safety_verdict, flags, grades, coverage, and every other frozen field remained unchanged. Re-frozen all 30 after reviewing the complete diff."
+    },
     {
       "date": "2026-07-17",
       "action": "refrozen_v3_to_v4_scoring_cutover",
