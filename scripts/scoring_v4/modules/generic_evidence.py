@@ -1041,10 +1041,12 @@ def _enrollment_multiplier(enrollment: float) -> float:
 
 def _dose_map(product: Dict[str, Any]) -> Dict[str, Tuple[float, str]]:
     doses: Dict[str, Tuple[float, str]] = {}
+    daily_multiplier = _daily_serving_multiplier(product)
     for ing in get_active_ingredients(product):
         quantity = _as_float(ing.get("quantity"), None)
         if quantity is None:
             continue
+        quantity *= daily_multiplier
         unit = _norm_text(ing.get("unit_normalized") or ing.get("unit"))
         for name in (
             ing.get("standard_name"),
@@ -1060,22 +1062,66 @@ def _dose_map(product: Dict[str, Any]) -> Dict[str, Tuple[float, str]]:
     return doses
 
 
+def _daily_serving_multiplier(product: Dict[str, Any]) -> float:
+    """Return the label-directed daily serving count.
+
+    Scoring rows carry the amount per canonical label serving, while clinical
+    evidence minima and maxima are daily doses.  Prefer the label's maximum
+    directed daily use, matching the dose and safety modules; fall back to the
+    minimum and then one serving when the contract is absent.
+    """
+    serving_basis = _safe_dict(product.get("serving_basis"))
+    parsed_from_directions = serving_basis.get("parsed_from_directions") is True
+    for key in ("max_servings_per_day", "min_servings_per_day"):
+        raw = serving_basis.get(key)
+        if isinstance(raw, bool):
+            continue
+        value = _as_float(raw, None)
+        if value is not None and value >= 1.0:
+            return value
+        if value is not None and value > 0.0 and parsed_from_directions:
+            return value
+    return 1.0
+
+
 def _converted_product_dose(
     entry: Dict[str, Any],
     dose_map: Dict[str, Tuple[float, str]],
 ) -> tuple[Optional[float], str]:
-    lookup_name = entry.get("standard_name") or entry.get("study_name") or entry.get("ingredient") or ""
-    lookup_key = _canonical_text(lookup_name)
-    product_dose = dose_map.get(lookup_key)
+    # The evidence record's standard name can be less form-specific than the
+    # exact label row that enrichment matched.  Resolve the exact match
+    # provenance first (e.g. acetyl-L-carnitine hydrochloride), then fall back
+    # through structured canonical and study identities.
+    lookup_keys: List[str] = []
+    for lookup_name in (
+        entry.get("matched_term"),
+        entry.get("ingredient"),
+        entry.get("matched_canonical_id"),
+        entry.get("canonical_id"),
+        entry.get("ingredient_canonical_id"),
+        entry.get("standard_name"),
+        entry.get("study_name"),
+    ):
+        lookup_key = _canonical_text(lookup_name)
+        if lookup_key and lookup_key not in lookup_keys:
+            lookup_keys.append(lookup_key)
+
+    product_dose = None
+    resolved_key = lookup_keys[0] if lookup_keys else ""
+    for lookup_key in lookup_keys:
+        product_dose = dose_map.get(lookup_key)
+        if product_dose is not None:
+            resolved_key = lookup_key
+            break
     if product_dose is None:
-        return None, lookup_key
+        return None, resolved_key
     dose_unit = _norm_text(entry.get("dose_unit") or "mg")
     converted = _convert_unit(product_dose[0], product_dose[1], dose_unit)
     if converted is None and _is_vitamin_d_evidence_entry(entry):
         converted = _convert_vitamin_d_evidence_unit(
             product_dose[0], product_dose[1], dose_unit
         )
-    return converted, lookup_key
+    return converted, resolved_key
 
 
 def _is_vitamin_d_evidence_entry(entry: Dict[str, Any]) -> bool:

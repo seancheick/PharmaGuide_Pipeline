@@ -234,6 +234,103 @@ def test_subclinical_dose_guard_applies_when_product_dose_below_minimum() -> Non
     assert payload["metadata"]["sub_clinical_canonicals"] == ["magnesium"]
 
 
+def test_subclinical_guard_uses_the_exact_matched_label_identity() -> None:
+    """The study name and label row can describe the same ingredient at
+    different form specificity.
+
+    ALCAR is the real regression: the evidence entry says
+    ``Acetyl-L-Carnitine`` while the label row and enriched match say
+    ``Acetyl-L-Carnitine Hydrochloride``.  Dose lookup must use the matched
+    ingredient identity before falling back to the study's standard name.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence(
+        _product(
+            ingredients=[
+                _ingredient(
+                    name="Acetyl-L-Carnitine Hydrochloride",
+                    standard_name="L-Carnitine",
+                    canonical_id="l_carnitine",
+                    quantity=500,
+                    unit="mg",
+                )
+            ],
+            matches=[
+                _match(
+                    id="INGR_ACETYL_L_CARNITINE",
+                    ingredient="Acetyl-L-Carnitine Hydrochloride",
+                    standard_name="Acetyl-L-Carnitine",
+                    effect_direction="mixed",
+                    total_enrollment=None,
+                    min_clinical_dose=1000,
+                    dose_unit="mg",
+                )
+            ],
+        )
+    )
+
+    assert payload["metadata"]["flags"] == ["SUB_CLINICAL_DOSE_DETECTED"]
+    assert payload["metadata"]["sub_clinical_canonicals"] == [
+        "acetyl l carnitine"
+    ]
+
+
+def test_clinical_dose_guard_compares_against_label_directed_daily_dose() -> None:
+    """Clinical minima are per day, while the row quantity is per serving."""
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence(
+        _product(
+            ingredients=[
+                _ingredient(
+                    name="Acetyl-L-Carnitine Hydrochloride",
+                    standard_name="L-Carnitine",
+                    canonical_id="l_carnitine",
+                    quantity=500,
+                    unit="mg",
+                )
+            ],
+            matches=[
+                _match(
+                    id="INGR_ACETYL_L_CARNITINE",
+                    ingredient="Acetyl-L-Carnitine Hydrochloride",
+                    standard_name="Acetyl-L-Carnitine",
+                    effect_direction="mixed",
+                    total_enrollment=None,
+                    min_clinical_dose=1000,
+                    dose_unit="mg",
+                )
+            ],
+            serving_basis={
+                "min_servings_per_day": 2,
+                "max_servings_per_day": 2,
+            },
+        )
+    )
+
+    assert "SUB_CLINICAL_DOSE_DETECTED" not in payload["metadata"]["flags"]
+
+
+def test_unparsed_fractional_serving_inference_cannot_shrink_label_dose() -> None:
+    """Net-contents inference can emit a fractional daily serving even when
+    no directions were parsed.  A clinical comparator must never turn one
+    labeled serving into less than one on that unverified basis.
+    """
+    from scoring_v4.modules.generic_evidence import _daily_serving_multiplier
+
+    assert _daily_serving_multiplier(
+        {
+            "serving_basis": {
+                "min_servings_per_day": 0.1,
+                "max_servings_per_day": 0.1,
+                "parsed_from_directions": False,
+                "servings_per_day_source": "servingSizes",
+            }
+        }
+    ) == 1.0
+
+
 def test_supra_clinical_dose_records_flag_without_penalty() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 

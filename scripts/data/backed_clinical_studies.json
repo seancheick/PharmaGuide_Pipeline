@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.0",
-    "last_updated": "2026-06-08",
+    "schema_version": "5.3.1",
+    "last_updated": "2026-08-06",
     "total_entries": 197,
     "changelog": [
+      "5.3.1 (2026-08-06): Corrected the stale PRECLIN_ALCAR record to INGR_ACETYL_L_CARNITINE; constrained linkage to acetyl-L-carnitine/base and hydrochloride identities; classified conflicting, condition-specific human reviews as mixed; added dose scope and three limiting PubMed reviews; removed unrelated registry/enrollment/endpoint claims; synchronized the documented evidence multipliers with the production scorer.",
       "auto (2026-04-02): backfill-auditability updated 47 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
       "auto (2026-04-02): backfill-auditability updated 50 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
       "auto (2026-04-02): backfill-auditability updated 50 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
@@ -27,9 +28,9 @@
     "evidence_level_values": {
       "product-human": "Exact product tested in human RCTs (1.0x multiplier)",
       "product-rct": "Alias for product-human",
-      "branded-rct": "Branded ingredient with own RCTs (0.8x multiplier) - e.g., KSM-66, Meriva",
-      "ingredient-human": "Generic ingredient human studies (0.65x multiplier)",
-      "strain-clinical": "Probiotic strain-specific evidence (0.6x multiplier)",
+      "branded-rct": "Branded ingredient with own RCTs (0.9x multiplier) - e.g., KSM-66, Meriva",
+      "ingredient-human": "Generic ingredient human studies (0.9x multiplier)",
+      "strain-clinical": "Probiotic strain-specific evidence (0.65x multiplier)",
       "preclinical": "Animal/in vitro only (0.3x multiplier)"
     },
     "study_type_values": {
@@ -44,13 +45,13 @@
     "_scoring_formula": "score = study_type_base_points × evidence_level_multiplier (computed live by scorer, not stored)",
     "_scoring_fields_used": {
       "study_type": "Determines base points: systematic_review_meta=6, rct_multiple=5, rct_single=4, clinical_strain=4, observational=2, animal_study=2, in_vitro=1",
-      "evidence_level": "Determines multiplier: product-human=1.0, branded-rct=0.8, ingredient-human=0.65, strain-clinical=0.6, preclinical=0.3",
+      "evidence_level": "Determines multiplier: product-human=1.0, branded-rct=0.9, ingredient-human=0.9, strain-clinical=0.65, preclinical=0.3",
       "score_contribution": "Metadata label (tier_1/tier_2/tier_3) reflecting computed score bracket. Not used by scorer."
     },
     "_score_examples": {
-      "Meriva (branded-rct × rct_multiple)": "5 × 0.8 = 4.0 pts → tier_1",
-      "Garlic (ingredient-human × systematic_review_meta)": "6 × 0.65 = 3.9 pts → tier_1",
-      "LGG (strain-clinical × clinical_strain)": "4 × 0.6 = 2.4 pts → tier_2",
+      "Meriva (branded-rct × rct_multiple)": "5 × 0.9 = 4.5 pts → tier_1",
+      "Garlic (ingredient-human × systematic_review_meta)": "6 × 0.9 = 5.4 pts → tier_1",
+      "LGG (strain-clinical × clinical_strain)": "4 × 0.65 = 2.6 pts → tier_2",
       "Fisetin (preclinical × animal_study)": "2 × 0.3 = 0.6 pts → tier_3"
     },
     "flutter_top_level_key": "backed_clinical_studies"
@@ -13298,33 +13299,47 @@
       ]
     },
     {
-      "id": "PRECLIN_ALCAR",
+      "id": "INGR_ACETYL_L_CARNITINE",
       "standard_name": "Acetyl-L-Carnitine",
       "aliases": [
         "alcar",
-        "acetyl carnitine"
+        "alcar hcl",
+        "acetyl carnitine",
+        "acetyl-l-carnitine hcl",
+        "acetyl l-carnitine hcl",
+        "acetyl l carnitine hcl",
+        "acetyl-l-carnitine hydrochloride",
+        "acetyl l-carnitine hydrochloride",
+        "acetyl l carnitine hydrochloride",
+        "n-acetyl-l-carnitine hcl",
+        "n-acetyl l-carnitine hcl",
+        "n-acetyl-l-carnitine hydrochloride",
+        "n-acetyl l-carnitine hydrochloride",
+        "levacecarnine hydrochloride"
       ],
       "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_2",
       "key_endpoints": [
-        "mitochondrial function ↑",
-        "neuroprotection ↑"
+        "pain in diabetic or HIV-associated peripheral neuropathy",
+        "cognition in mild cognitive impairment or dementia"
       ],
       "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Healthy Aging/Longevity",
-        "Increase Energy"
+        "Focus & Mental Clarity"
       ],
-      "notes": "Cochrane review and meta-analyses confirm acetyl-L-carnitine efficacy for peripheral neuropathic pain (20.2% reduction vs placebo). Established mitochondrial support mechanism. 6-12 month treatment duration needed. Previously misclassified as preclinical.",
+      "notes": "Human evidence is real but mixed and condition-specific. A 2019 Cochrane review found very-low-certainty evidence for diabetic peripheral-neuropathy pain and could not establish safety, while another 2019 review reported a pain reduction across diabetic and HIV-associated neuropathy trials. Cognitive reviews conflict: a positive meta-analysis in mild cognitive impairment or early Alzheimer disease contrasts with a Cochrane dementia review that found no objective cognitive or functional benefit. A separate Cochrane review found insufficient, very-low-quality evidence for cognitive enhancement in healthy adults. This record must not be presented as broad focus, energy, or neuroprotection efficacy.",
       "study_type": "systematic_review_meta",
       "published_studies": [
         "systematic_review",
         "meta-analysis",
         "RCT"
       ],
-      "last_updated": "2026-03-23",
-      "notable_studies": "A 2019 systematic review/meta-analysis (PMID 31201734) supported acetyl-L-carnitine for diabetic peripheral neuropathy, while a separate 2019 systematic review (PMID 31118753) concluded that painful peripheral neuropathy is the main evidence-backed clinical context rather than a broad pan-neurologic claim.",
+      "last_updated": "2026-08-06",
+      "notable_studies": "The highest-quality recent neuropathy source is a 2019 Cochrane review (PMID 31201734): four studies, 907 participants, typically 1,500-3,000 mg/day, with very-low-certainty pain evidence. A separate review (PMID 31118753) reported a positive pain estimate. For cognition, a positive MCI/early-Alzheimer meta-analysis (PMID 12598816) conflicts with limiting Cochrane reviews in dementia (PMID 12804452) and healthy adults (PMID 28349514). These are condition-specific populations, not evidence of general cognitive enhancement.",
+      "min_clinical_dose": 1000,
+      "max_studied_clinical_dose": 3000,
+      "dose_unit": "mg",
+      "dose_range": "1,000-3,000 mg/day in cognitive reviews; 1,500-3,000 mg/day in diabetic peripheral-neuropathy trials",
       "references_structured": [
         {
           "type": "pubmed",
@@ -13384,23 +13399,84 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "28349514",
+          "doi": "10.1002/14651858.CD009374.pub3",
+          "title": "L-carnitine for cognitive enhancement in people without cognitive impairment.",
+          "citation": "The Cochrane database of systematic reviews (2017-03-26)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28349514/",
+          "published_date": "2017-03-26",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis",
+            "Systematic Review"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [
+            "Insufficient very-low-quality evidence for cognitive enhancement in healthy adults"
+          ],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "12804452",
+          "doi": "10.1002/14651858.CD003158",
+          "title": "Acetyl-L-carnitine for dementia.",
+          "citation": "The Cochrane database of systematic reviews (2003-01-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/12804452/",
+          "published_date": "2003-01-01",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [
+            "No objective cognitive, functional, or dementia-severity benefit established"
+          ],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "12598816",
+          "doi": "10.1097/00004850-200303000-00001",
+          "title": "Meta-analysis of double blind randomized controlled clinical trials of acetyl-L-carnitine versus placebo in the treatment of mild cognitive impairment and mild Alzheimer's disease.",
+          "citation": "International clinical psychopharmacology (2003-03-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/12598816/",
+          "published_date": "2003-03-01",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "meta_analysis",
+          "retracted": false,
+          "supports_claims": [
+            "Positive estimate in mild cognitive impairment or early Alzheimer disease at 1,500-3,000 mg/day"
+          ],
+          "verification_source": "pubmed_eutils"
         }
       ],
       "external_ids": {
         "unii": "6DH1W9VH8Q"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Focus & Mental Clarity",
-      "total_enrollment": 431,
-      "registry_completed_trials_count": 43,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Focus & Mental Clarity; published_tags=systematic_review,meta-analysis,RCT; registry_completed_trials_count=43; total_enrollment=431; endpoint_tags=stress_mood,focus_memory,cardiovascular,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Mixed is a high-confidence classification of conflicting, condition-specific systematic reviews, not a claim of moderate universal benefit. PubMed E-utilities verified all five references on 2026-08-06. The 2019 Cochrane diabetic-neuropathy review judged pain evidence very low certainty; another neuropathy review reported benefit. A positive MCI/early-Alzheimer meta-analysis conflicts with Cochrane reviews finding no objective dementia benefit and insufficient evidence in healthy adults.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "focus_memory",
-        "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
+        "focus_memory"
       ]
     },
     {

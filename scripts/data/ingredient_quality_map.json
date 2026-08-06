@@ -60,8 +60,8 @@
       "proteins": 16,
       "vitamins": 25
     },
-    "schema_version": "5.4.14",
-    "last_updated": "2026-07-29",
+    "schema_version": "5.4.15",
+    "last_updated": "2026-08-06",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -15895,8 +15895,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "low-moderate (likely higher than L-carnitine base ~14-18%, but no published oral bioavailability for ALCAR specifically)",
-        "notes": "Acetylated form that crosses the blood-brain barrier. Well-studied for cognitive function, memory, and neuroprotection. Preferred form for brain health. Oral bioavailability not formally measured for ALCAR but likely modestly above L-carnitine base (~14-18%). The BBB-crossing property is the key differentiator. B42 structural merge 2026-06-06: exact acetyl-L-carnitine/ALCAR aliases and existing ALCAR UNII moved here from deprecated acetyl_l_carnitine parent so new labels route through the canonical l_carnitine parent.",
+        "absorption": "low-moderate class estimate; direct oral bioavailability for ALCAR has not been established",
+        "notes": "Acetylated L-carnitine identity. Direct oral bioavailability for ALCAR has not been established; L-carnitine supplement bioavailability and plasma acetylcarnitine after oral L-carnitine must not be presented as an ALCAR head-to-head absorption result (PMID 15591001; PMID 19178874). The numerical absorption band is a low-confidence class estimate retained to avoid an unreviewed formulation-calibration change. Clinical outcome evidence is mixed and condition-specific; it is curated separately in backed_clinical_studies.json. B42 structural merge 2026-06-06: exact acetyl-L-carnitine/ALCAR aliases and existing ALCAR UNII moved here from deprecated acetyl_l_carnitine parent so new labels route through the canonical l_carnitine parent.",
         "aliases": [
           "ALC",
           "n-acetyl-l-carnitine",
@@ -15935,7 +15935,8 @@
           "value": 0.2,
           "range_low": 0.14,
           "range_high": 0.25,
-          "quality": "low"
+          "quality": "low",
+          "notes": "Low-confidence class estimate, not directly measured ALCAR oral bioavailability."
         },
         "external_ids": {
           "unii": "6DH1W9VH8Q"
@@ -35148,8 +35149,8 @@
       "alcar": {
         "bio_score": 10,
         "natural": false,
-        "absorption": "poor (~10-20% oral F; similar to L-carnitine supplements)",
-        "notes": "Acetylated L-carnitine with improved BBB penetration over L-carnitine. However, oral bioavailability is only 10-20% (comparable to L-carnitine at 14-18%, Rebouche 2004, PMID 15591001). ALCAR actually showed 7.7x lower delta-AUC than L-carnitine in head-to-head PK study (PMID 19178874). Despite low F, clinically effective for cognitive support and neuropathy at 1500-3000 mg/day, likely due to sufficient carnitine pool loading at high oral doses. B42 structural merge 2026-06-06: deprecated compatibility form; scoring aligned to canonical l_carnitine::acetyl-l-carnitine (alcar), and real routing aliases moved to the canonical parent.",
+        "absorption": "low-confidence class estimate; direct oral bioavailability for ALCAR has not been established",
+        "notes": "This is a deprecated compatibility form only. Direct oral bioavailability for ALCAR has not been established; PMID 19178874 measured acetylcarnitine after oral L-carnitine rather than comparing oral ALCAR with oral L-carnitine. Clinical outcome evidence is mixed and condition-specific and belongs in backed_clinical_studies.json. B42 structural merge 2026-06-06: scoring aligned to canonical l_carnitine::acetyl-l-carnitine (alcar), and real routing aliases moved to the canonical parent.",
         "aliases": ["deprecated acetyl_l_carnitine alcar compat only"],
         "score": 10,
         "dosage_importance": 1.0,
@@ -35157,7 +35158,8 @@
           "value": 0.15,
           "range_low": 0.1,
           "range_high": 0.2,
-          "quality": "poor"
+          "quality": "poor",
+          "notes": "Low-confidence class estimate, not directly measured ALCAR oral bioavailability."
         }
       },
       "acetyl-l-carnitine (unspecified)": {
