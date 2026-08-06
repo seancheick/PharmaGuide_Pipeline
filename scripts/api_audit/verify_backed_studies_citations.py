@@ -6,9 +6,14 @@ backbone and is NOT covered by verify_all_citations_content.py. Each
 references_structured[] item stores the PMID *and the title recorded when it was
 added*, which gives two independent checks per PMID:
 
-  1. STORED-vs-LIVE title: fetch the live PubMed title and compare to the stored
-     title. A mismatch means the PMID number is wrong / was corrupted / the
-     stored title was fabricated.
+  1. STORED-vs-LIVE title, at two sensitivities:
+       TITLE-MISMATCH (<0.30 word overlap) -- the stored title barely resembles
+         the live record: the PMID is probably wrong or the title fabricated.
+       TITLE-DRIFT (unequal but recognisable) -- right paper, wrong string.
+         Exact equality is the only sound test here; the overlap gate alone was
+         blind to nine live defects on 2026-08-06, including a 125-char markup
+         truncation and a "healthy adolescents" / "healthy adults" population
+         error, both of which ship to users through detail_blobs.
   2. INGREDIENT content: does the live title+abstract+MeSH share a topic word
      with the entry's ingredient (standard_name / aliases / category /
      key_endpoints)? No overlap => a possible wrong-topic ("ghost") reference.
@@ -105,14 +110,14 @@ def main() -> int:
     print(f"Fetching {len(pmids)} PMIDs live from PubMed efetch...\n")
     arts = fetch_articles(pmids)
 
-    ok, ghosts, mismatches, notfound = 0, [], [], []
+    ok, ghosts, mismatches, drifts, notfound = 0, [], [], [], []
     for p in pmids:
         c = claims[p]
         a = arts.get(p)
         if not a:
             notfound.append((p, c["eid"]))
             continue
-        live_title = a.get("title", "")
+        live_title = (a.get("title") or "").strip()
         text = words(live_title) | words(a.get("abstract"))
         text |= {m.lower() for m in (a.get("mesh_terms") or [])}
         text |= words(*(a.get("mesh_terms") or []))
@@ -124,20 +129,41 @@ def main() -> int:
             if best < 0.30:  # stored title barely resembles the live title
                 stored_bad = (sorted(c["stored"])[0][:70], live_title[:70], round(best, 2))
 
+        # check 1b: EXACT stored-vs-live title.
+        # The 0.30 overlap gate above only catches a title that barely
+        # resembles the live record. It is blind to the two defects that
+        # actually occur: (a) truncation at inline markup -- findtext()
+        # stops at the first <i>/<sup>, so "...elevates NAD" scores ~0.8
+        # and passes; and (b) a single wrong word -- "healthy adolescents"
+        # vs "healthy adults" scores ~0.9 and passes. Both ship to users
+        # via detail_blobs. 2026-08-06: nine such defects were live while
+        # this script reported TITLE-MISMATCH=0. Exact equality is the
+        # only sound test; anything unequal but recognisable is DRIFT.
+        stored_drift = []
+        if not stored_bad:
+            stored_drift = sorted(s for s in c["stored"] if s.strip() != live_title)
+
         # check 2: ingredient content overlap
         ingredient_overlap = bool(c["tw"] & text)
 
         if stored_bad:
             mismatches.append((p, c["eid"], *stored_bad))
+        elif stored_drift:
+            drifts.append((p, c["eid"], stored_drift[0], live_title))
         elif not ingredient_overlap and c["tw"]:
             ghosts.append((p, c["eid"], live_title[:75], sorted(c["tw"])[:6]))
         else:
             ok += 1
 
     print(f"RESULT: ok={ok}  TITLE-MISMATCH={len(mismatches)}  "
+          f"TITLE-DRIFT={len(drifts)}  "
           f"GHOST-SUSPECT={len(ghosts)}  not-found={len(notfound)}\n")
     if notfound:
         print("=== NOT FOUND (PMID did not resolve) ===")
+        print("  WARNING: fetch_articles() swallows per-batch network errors, so a")
+        print("  timeout or DNS failure is indistinguishable here from a PMID that")
+        print("  genuinely does not exist. Re-run before treating any of these as a")
+        print("  hallucinated identifier.")
         for p, eid in notfound:
             print(f"  {p}  ({eid})")
         print()
@@ -148,6 +174,16 @@ def main() -> int:
             print(f"    stored: {stored}")
             print(f"    live  : {live}")
         print()
+    if drifts:
+        print("=== TITLE DRIFT (right paper, stored title != live byte-for-byte) ===")
+        print("  Usually markup truncation (<i> species name, <sup>®/+</sup>) or a")
+        print("  single wrong word. The PMID is correct; the stored string is not,")
+        print("  and it ships to users in detail_blobs. Repair from the live title.")
+        for p, eid, stored, live in drifts:
+            print(f"\n  PMID {p}  ({eid})   missing {len(live) - len(stored)} chars")
+            print(f"    stored: {stored!r}")
+            print(f"    live  : {live!r}")
+        print()
     if ghosts:
         print("=== GHOST-SUSPECT (live title shares no ingredient word — MANUAL REVIEW) ===")
         for p, eid, title, tw in ghosts:
@@ -155,8 +191,9 @@ def main() -> int:
             print(f"    live title : {title}")
             print(f"    ingredient : {tw}")
         print()
-    if not (mismatches or ghosts or notfound):
-        print("Every cited PMID resolves, matches its stored title, and shares an ingredient word.")
+    if not (mismatches or drifts or ghosts or notfound):
+        print("Every cited PMID resolves, matches its stored title EXACTLY, and "
+              "shares an ingredient word.")
     return 0
 
 

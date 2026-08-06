@@ -21,6 +21,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 import env_loader  # noqa: F401
+from api_audit.pubmed_xml import clean_text as _clean_text, element_text
 from api_audit.system_trust_http import (
     SystemTrustHTTPError,
     fetch_text_with_system_trust,
@@ -68,12 +69,6 @@ def load_pubmed_config(env: Mapping[str, str] | None = None) -> PubMedConfig:
     )
 
 
-def _clean_text(text: str | None) -> str:
-    if not text:
-        return ""
-    return " ".join(text.split())
-
-
 def _parse_pub_date(node: ET.Element | None) -> str | None:
     if node is None:
         return None
@@ -118,9 +113,13 @@ def parse_pubmed_article_xml(xml_text: str) -> list[dict[str, Any]]:
         parsed = {
             "pmid": pmid,
             "doi": doi or None,
-            "title": _clean_text(article.findtext(".//ArticleTitle")),
+            "title": element_text(article.find(".//ArticleTitle")),
             "abstract": " ".join(
-                _clean_text(node.text) for node in article.findall(".//Abstract/AbstractText") if _clean_text(node.text)
+                text
+                for text in (
+                    element_text(node) for node in article.findall(".//Abstract/AbstractText")
+                )
+                if text
             ),
             "journal": _clean_text(article.findtext(".//Journal/Title")),
             "published_date": _parse_pub_date(article.find(".//JournalIssue/PubDate")),
@@ -387,6 +386,7 @@ __all__ = [
     "DEFAULT_TOOL",
     "PubMedClient",
     "PubMedConfig",
+    "element_text",
     "load_pubmed_config",
     "parse_ecitmatch_rows",
     "parse_pubmed_article_xml",

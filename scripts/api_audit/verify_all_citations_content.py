@@ -33,6 +33,11 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 SCRIPTS_ROOT = SCRIPT_DIR.parent
 DATA_DIR = SCRIPTS_ROOT / "data"
 
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
+
+from api_audit.pubmed_xml import element_text  # noqa: E402
+
 PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
 RATE_LIMIT = 0.35  # seconds between API calls
 
@@ -170,13 +175,12 @@ def fetch_articles(pmids: list[str]) -> dict[str, dict]:
                     continue
                 pmid = pmid_el.text.strip()
 
-                title_el = article.find(".//ArticleTitle")
-                title = "".join(title_el.itertext()) if title_el is not None else ""
+                title = element_text(article.find(".//ArticleTitle"))
 
                 # Collect all abstract sections
                 abstract_parts = []
                 for abs_el in article.findall(".//AbstractText"):
-                    text = "".join(abs_el.itertext()).strip()
+                    text = element_text(abs_el)
                     if text:
                         abstract_parts.append(text)
                 abstract = " ".join(abstract_parts)

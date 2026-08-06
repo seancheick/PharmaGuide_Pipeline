@@ -54,6 +54,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 import env_loader  # noqa: F401  (side-effect: loads .env into os.environ)
 from api_audit.pubmed_client import PubMedClient, load_pubmed_config
+from api_audit.pubmed_xml import element_text
 
 REPO_ROOT = SCRIPTS_ROOT.parent
 DATA_PATH = SCRIPTS_ROOT / "data" / "botanical_marker_contributions.json"
@@ -272,12 +273,14 @@ def pubmed_fetch_summary(client: PubMedClient, pmid: str) -> dict | None:
     article = root.find(".//Article")
     if article is None:
         return None
-    title = (article.findtext("ArticleTitle") or "").strip()
+    title = element_text(article.find("ArticleTitle"))
     abstract_node = article.find("Abstract")
     abstract = ""
     if abstract_node is not None:
         abstract = " ".join(
-            (t.text or "").strip() for t in abstract_node.findall("AbstractText") if t.text
+            text
+            for text in (element_text(t) for t in abstract_node.findall("AbstractText"))
+            if text
         )
     return {"title": title, "abstract": abstract, "pmid": pmid}
 
