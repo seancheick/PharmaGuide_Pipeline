@@ -49,17 +49,25 @@ from __future__ import annotations
 from typing import Any, Dict
 
 from scoring_v4.confidence import evaluate_confidence
+from scoring_v4.dose_safety import (
+    DoseSafetyResult,
+    dose_safety_contract_issues,
+    dose_safety_scope,
+    evaluate_dose_safety,
+)
 from scoring_v4.gate_completeness import evaluate_completeness_gate
 from scoring_v4.gate_safety import evaluate_safety_gate
 from scoring_v4.modules.b_complex import score_b_complex
 from scoring_v4.modules.fiber_digestive import score_fiber_digestive
-from scoring_v4.modules.generic import score_generic
+from scoring_v4.modules.generic import _assemble_score, score_generic
 from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 from scoring_v4.modules.omega import score_omega
 from scoring_v4.modules.probiotic import score_probiotic
 from scoring_v4.modules.sports import score_sports
+from scoring_v4.penalty_registry import apply_penalty_registry
 from scoring_v4.router import class_for_product
 from scoring_v4.quality_score import assemble_quality_score
+from scoring_v4.quality_score_config import block as _quality_config_block
 
 
 # Schema lock — these are the v4 scorer result fields consumed by the single
@@ -79,7 +87,7 @@ V4_SCORER_KEYS = (
 # classification-schema version, and the version+fingerprint of every config
 # rubric consumed. Bump SCORING_ENGINE_VERSION on a material ALGORITHM change;
 # config-value changes are captured by the per-rubric fingerprints, not here.
-SCORING_ENGINE_VERSION = "4.1.0"
+SCORING_ENGINE_VERSION = "4.2.0"
 SCORING_MODE = "production"
 
 
@@ -193,11 +201,53 @@ def _carried_verdict_with_completeness_policy(result: Dict[str, Any], completene
     return carried
 
 
+def apply_universal_dose_safety(
+    module_result: Any,
+    dose_safety: DoseSafetyResult,
+) -> None:
+    """Guarantee one typed B7 result is represented in every module.
+
+    The three historical B7-aware modules still consume the scoped result
+    internally because B-complex uses it while calculating dose-fit credit.
+    This adapter validates that representation and fills the missing seam for
+    all other routes. An existing penalty is never subtracted twice.
+    """
+    dimensions = getattr(module_result, "dimensions", None)
+    if not isinstance(dimensions, dict) or "dose" not in dimensions:
+        raise RuntimeError("v4 module result has no dose dimension")
+    dose = dimensions["dose"]
+    penalties = getattr(dose, "penalties", None)
+    metadata = getattr(dose, "metadata", None)
+    if not isinstance(penalties, dict) or not isinstance(metadata, dict):
+        raise RuntimeError("v4 dose dimension has no penalty/metadata contract")
+
+    expected = round(float(dose_safety.penalty), 4)
+    existing_raw = penalties.get("B7_dose_safety")
+    existing = abs(float(existing_raw or 0.0))
+    if existing_raw is not None and abs(existing - expected) > 0.0001:
+        raise RuntimeError(
+            "module B7 dose-safety penalty diverged from the shared evaluation"
+        )
+
+    changed = False
+    if existing_raw is None:
+        penalties["B7_dose_safety"] = -expected
+        if expected > 0:
+            current = float(getattr(dose, "score", 0.0) or 0.0)
+            dose.score = round(max(0.0, current - expected), 4)
+            changed = True
+    metadata["B7_safety_evaluation"] = dose_safety.audit_metadata()
+
+    if changed:
+        _assemble_score(module_result)
+
+
 def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     """Score an enriched product against the v4 scorer.
 
-    Returns a dict of the six v4 result fields. Never raises on malformed
-    input — robustly falls back to the generic module + skeleton shape.
+    Returns a dict of the six v4 result fields. Product incompleteness is typed;
+    corrupt dose-safety magnitudes raise so Stage 3 cannot publish a guessed
+    clinical result.
 
     Pipeline (per §4 of SCORING_V4_PROPOSAL.md):
       1. Router decides module (generic / probiotic / omega /
@@ -238,8 +288,20 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     # artifacts carry the same engine+config fingerprint as fully scored ones.
     result["v4_breakdown"]["provenance"] = _provenance_block(module)
 
+    issues = dose_safety_contract_issues(enriched_product)
+    if issues:
+        raise ValueError(f"dose-safety contract failed: {issues}")
+    dose_policy = _quality_config_block("dose_safety_policy", "ul_pct_threshold")
+    dose_safety = evaluate_dose_safety(
+        enriched_product,
+        threshold=float(dose_policy["ul_pct_threshold"]),
+        per_flag_penalty=float(dose_policy["per_flag_penalty"]),
+        cap=float(dose_policy["cap"]),
+    )
+    result["v4_breakdown"]["dose_safety"] = dose_safety.audit_metadata()
+
     # Layer 1 — Safety Gate.
-    safety = evaluate_safety_gate(enriched_product)
+    safety = evaluate_safety_gate(enriched_product, dose_safety=dose_safety)
     result["v4_breakdown"]["safety_gate"] = _safety_gate_breakdown(safety)
 
     if safety.short_circuits_scoring:
@@ -269,158 +331,45 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         result["v4_confidence"] = "blocked_by_completeness_gate"
         return result
 
-    # Layer 3 — Per-class module dispatch. Generic, probiotic, omega,
-    # sports, fiber_digestive, b_complex, and multi_or_prenatal are wired as complete
-    # score-producing modules.
-    if module == "generic":
-        module_result = score_generic(enriched_product)
-        result["v4_breakdown"]["module"] = module_result.to_breakdown()
-        result["raw_score_v4_100"] = _score_after_completeness_policy(
-            module_result.score_100,
-            completeness,
-        )
-        result["v4_verdict"] = _verdict_from_score(
-            result["raw_score_v4_100"],
-            _carried_verdict_with_completeness_policy(result, completeness),
-            module_result.raw_score_100,
-        )
-        confidence = evaluate_confidence(
-            enriched_product,
-            module_breakdown=result["v4_breakdown"]["module"],
-            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
-        )
-        result["v4_breakdown"]["confidence"] = confidence
-        result["v4_confidence"] = confidence["band"]
-    elif module == "probiotic":
-        # P2.6: full probiotic pipeline online — all 4 core dimensions populate,
-        # manufacturer trust/violations apply, and score_100 is the rubric
-        # production score with verdict + typed confidence band.
-        probiotic_result = score_probiotic(enriched_product)
-        result["v4_breakdown"]["module"] = probiotic_result.to_breakdown()
-        result["raw_score_v4_100"] = _score_after_completeness_policy(
-            probiotic_result.score_100,
-            completeness,
-        )
-        result["v4_verdict"] = _verdict_from_score(
-            result["raw_score_v4_100"],
-            _carried_verdict_with_completeness_policy(result, completeness),
-            probiotic_result.raw_score_100,
-        )
-        confidence = evaluate_confidence(
-            enriched_product,
-            module_breakdown=result["v4_breakdown"]["module"],
-            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
-        )
-        result["v4_breakdown"]["confidence"] = confidence
-        result["v4_confidence"] = confidence["band"]
-    elif module == "multi_or_prenatal":
-        # P3.6: full multi/prenatal pipeline online — all 4 core dimensions
-        # populate, manufacturer trust/violations apply, and score_100 is
-        # the rubric production score with verdict + typed confidence.
-        multi_result = score_multi_prenatal(enriched_product)
-        result["v4_breakdown"]["module"] = multi_result.to_breakdown()
-        result["raw_score_v4_100"] = _score_after_completeness_policy(
-            multi_result.score_100,
-            completeness,
-        )
-        result["v4_verdict"] = _verdict_from_score(
-            result["raw_score_v4_100"],
-            _carried_verdict_with_completeness_policy(result, completeness),
-            multi_result.raw_score_100,
-        )
-        confidence = evaluate_confidence(
-            enriched_product,
-            module_breakdown=result["v4_breakdown"]["module"],
-            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
-        )
-        result["v4_breakdown"]["confidence"] = confidence
-        result["v4_confidence"] = confidence["band"]
-    elif module == "b_complex":
-        b_complex_result = score_b_complex(enriched_product)
-        result["v4_breakdown"]["module"] = b_complex_result.to_breakdown()
-        result["raw_score_v4_100"] = _score_after_completeness_policy(
-            b_complex_result.score_100,
-            completeness,
-        )
-        result["v4_verdict"] = _verdict_from_score(
-            result["raw_score_v4_100"],
-            _carried_verdict_with_completeness_policy(result, completeness),
-            b_complex_result.raw_score_100,
-        )
-        confidence = evaluate_confidence(
-            enriched_product,
-            module_breakdown=result["v4_breakdown"]["module"],
-            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
-        )
-        result["v4_breakdown"]["confidence"] = confidence
-        result["v4_confidence"] = confidence["band"]
-    elif module == "omega":
-        # P1.6.6: full omega pipeline online — all 4 core dimensions populate,
-        # manufacturer trust/violations apply, and score_100 is the rubric
-        # production score with verdict + typed confidence.
-        omega_result = score_omega(enriched_product)
-        result["v4_breakdown"]["module"] = omega_result.to_breakdown()
-        result["raw_score_v4_100"] = _score_after_completeness_policy(
-            omega_result.score_100,
-            completeness,
-        )
-        result["v4_verdict"] = _verdict_from_score(
-            result["raw_score_v4_100"],
-            _carried_verdict_with_completeness_policy(result, completeness),
-            omega_result.raw_score_100,
-        )
-        confidence = evaluate_confidence(
-            enriched_product,
-            module_breakdown=result["v4_breakdown"]["module"],
-            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
-        )
-        result["v4_breakdown"]["confidence"] = confidence
-        result["v4_confidence"] = confidence["band"]
-    elif module == "sports":
-        sports_result = score_sports(enriched_product)
-        result["v4_breakdown"]["module"] = sports_result.to_breakdown()
-        result["raw_score_v4_100"] = _score_after_completeness_policy(
-            sports_result.score_100,
-            completeness,
-        )
-        result["v4_verdict"] = _verdict_from_score(
-            result["raw_score_v4_100"],
-            _carried_verdict_with_completeness_policy(result, completeness),
-            sports_result.raw_score_100,
-        )
-        confidence = evaluate_confidence(
-            enriched_product,
-            module_breakdown=result["v4_breakdown"]["module"],
-            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
-        )
-        result["v4_breakdown"]["confidence"] = confidence
-        result["v4_confidence"] = confidence["band"]
-    elif module == "fiber_digestive":
-        fiber_result = score_fiber_digestive(enriched_product)
-        result["v4_breakdown"]["module"] = fiber_result.to_breakdown()
-        result["raw_score_v4_100"] = _score_after_completeness_policy(
-            fiber_result.score_100,
-            completeness,
-        )
-        result["v4_verdict"] = _verdict_from_score(
-            result["raw_score_v4_100"],
-            _carried_verdict_with_completeness_policy(result, completeness),
-            fiber_result.raw_score_100,
-        )
-        confidence = evaluate_confidence(
-            enriched_product,
-            module_breakdown=result["v4_breakdown"]["module"],
-            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
-        )
-        result["v4_breakdown"]["confidence"] = confidence
-        result["v4_confidence"] = confidence["band"]
+    # Layer 3 — one dispatch/assembly seam for every routed module. The former
+    # seven copy-pasted branches were behaviorally identical and made it easy
+    # for cross-cutting safety or confidence policy to miss one route.
+    scorers = {
+        "generic": score_generic,
+        "probiotic": score_probiotic,
+        "multi_or_prenatal": score_multi_prenatal,
+        "b_complex": score_b_complex,
+        "omega": score_omega,
+        "sports": score_sports,
+        "fiber_digestive": score_fiber_digestive,
+    }
+    scorer = scorers.get(module)
+    if scorer is None:
+        raise RuntimeError(f"no v4 scorer registered for module route {module!r}")
+    with dose_safety_scope(dose_safety):
+        module_result = scorer(enriched_product)
+    apply_universal_dose_safety(module_result, dose_safety)
+    if apply_penalty_registry(module_result):
+        _assemble_score(module_result)
+
+    result["v4_breakdown"]["module"] = module_result.to_breakdown()
+    result["raw_score_v4_100"] = _score_after_completeness_policy(
+        module_result.score_100,
+        completeness,
+    )
+    result["v4_verdict"] = _verdict_from_score(
+        result["raw_score_v4_100"],
+        _carried_verdict_with_completeness_policy(result, completeness),
+        module_result.raw_score_100,
+    )
+    confidence = evaluate_confidence(
+        enriched_product,
+        module_breakdown=result["v4_breakdown"]["module"],
+        safety_gate=result["v4_breakdown"].get("safety_gate", {}),
+        completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
+    )
+    result["v4_breakdown"]["confidence"] = confidence
+    result["v4_confidence"] = confidence["band"]
 
     return result
 

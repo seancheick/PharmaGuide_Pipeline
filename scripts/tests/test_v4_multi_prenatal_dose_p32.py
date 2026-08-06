@@ -151,8 +151,8 @@ def test_b7_penalty_caps_at_three_and_zeroes_over_150_ul_coverage() -> None:
             _adequacy("Iron", pct_rda=300, pct_ul=220),
         ],
         safety_flags=[
-            {"nutrient": "Niacin", "pct_ul": 180},
-            {"nutrient": "Iron", "pct_ul": 220},
+            {"nutrient": "Niacin", "pct_ul": 180, "ul_gate_eligible": True},
+            {"nutrient": "Iron", "pct_ul": 220, "ul_gate_eligible": True},
         ],
     ))
 

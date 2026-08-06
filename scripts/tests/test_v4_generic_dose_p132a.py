@@ -626,7 +626,13 @@ def test_multi_form_bonus_case_insensitive_nutrient_match() -> None:
 def test_b7_penalty_single_over_150_ul_returns_minus_2() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
-    payload = score_dose(_product(safety_flags=[{"nutrient": "Vit B6", "pct_ul": 200, "ul": 100, "amount": 200}]))
+    payload = score_dose(_product(safety_flags=[{
+        "nutrient": "Vit B6",
+        "pct_ul": 200,
+        "ul": 100,
+        "amount": 200,
+        "ul_gate_eligible": True,
+    }]))
     assert payload["penalties"]["B7_dose_safety"] == -2.0
 
 
@@ -637,8 +643,8 @@ def test_b7_penalty_two_over_ul_caps_at_minus_3() -> None:
     payload = score_dose(
         _product(
             safety_flags=[
-                {"nutrient": "A", "pct_ul": 180},
-                {"nutrient": "B", "pct_ul": 200},
+                {"nutrient": "A", "pct_ul": 180, "ul_gate_eligible": True},
+                {"nutrient": "B", "pct_ul": 200, "ul_gate_eligible": True},
             ]
         )
     )

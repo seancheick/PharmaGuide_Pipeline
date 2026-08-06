@@ -1,10 +1,10 @@
 # PharmaGuide Scoring Engine Specification
 
-> Production scoring engine: **4.1.0**
-> V4 quality configuration: **1.0.4-sports-subtypes**
-> Export schema: **2.2.0** / **112 core columns**
-> Stage-3 artifact schema: **4.1.0**
-> Last verified against code: **2026-07-16**
+> Production scoring engine: **4.2.0**
+> V4 quality configuration: **1.0.5-b7-single-source**
+> Export schema: **2.3.0** / **111 core columns**
+> Stage-3 artifact schema: **4.2.0**
+> Last verified against code: **2026-08-05**
 
 ## 1. Scope
 
@@ -296,13 +296,13 @@ it does not rescore or overlay another result.
 
 `build_final_db.py` owns final schema validation and quarantine.
 
-- Export schema is `2.2.0`.
-- `products_core` currently has 112 columns.
+- Export schema is `2.3.0`.
+- `products_core` currently has 111 columns.
 - Ranking and dedup use `quality_score_v4_100` only for status `scored`.
 - Suppressed safety rows may ship with null score and visible verdict/evidence.
 - NOT_SCORED rows are quarantined.
-- Detail blobs emit `quality_pillars_v4`, score status, provenance, safety,
-  confidence, and category explanations.
+- Detail blobs emit `quality_pillars_v4`, score status, provenance, typed
+  `v4_dose_safety`, safety-gate state, confidence, and category explanations.
 - Deprecated `/80` export columns are forbidden.
 
 ## 15. Change control

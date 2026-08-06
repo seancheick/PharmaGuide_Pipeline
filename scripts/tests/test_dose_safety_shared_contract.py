@@ -70,23 +70,21 @@ def test_flag_below_threshold_is_none_and_not_penalized():
     assert result.penalty == 0.0
 
 
-def test_missing_pct_ul_is_unresolved_not_confirmed_and_still_penalizes():
-    """The fail-safe: an emitted flag means an over-UL row, so a missing
-    magnitude must never read as under-UL. It must also never be *labelled*
-    as a confirmed exceedance — the check was incomplete, not passed."""
+def test_missing_pct_ul_is_unresolved_review_only_not_a_deduction():
+    """An incomplete comparison must not read as under-UL or as a confirmed
+    exceedance. The gate routes it to review; B7 cannot deduct an unproven fact."""
     result = _evaluate([{"nutrient": "Vitamin A"}])
     assert _states(result) == [MATERIAL_BUT_UNRESOLVED]
-    assert result.penalty == PER_FLAG
+    assert result.penalty == 0.0
 
     explicit_none = _evaluate([{"nutrient": "Vitamin A", "pct_ul": None}])
     assert _states(explicit_none) == [MATERIAL_BUT_UNRESOLVED]
-    assert explicit_none.penalty == PER_FLAG
+    assert explicit_none.penalty == 0.0
 
 
 def test_gate_ineligible_flag_is_unresolved_not_confirmed():
     """The enricher marks compound-mass and no-anchor rows ineligible for the
-    UL verdict gate. Scoring keeps its conservative deduction for now, but the
-    state must say the exposure is unresolved rather than confirmed."""
+    UL verdict gate. The state routes to review without an over-limit deduction."""
     result = _evaluate([{
         "nutrient": "Vitamin B3 (Niacin)",
         "pct_ul": 2400.0,
@@ -95,7 +93,7 @@ def test_gate_ineligible_flag_is_unresolved_not_confirmed():
     }])
     assert _states(result) == [MATERIAL_BUT_UNRESOLVED]
     assert result.flags[0].reason == "compound_mass_not_elemental"
-    assert result.penalty == PER_FLAG
+    assert result.penalty == 0.0
 
 
 def test_non_numeric_pct_ul_is_a_conversion_failure_and_never_deducts():
@@ -225,6 +223,6 @@ def test_audit_metadata_preserves_unresolved_state_and_reason():
             "canonical_id": None,
             "pct_ul": 2400.0,
             "reason": "compound_mass_not_elemental",
-            "penalized": True,
+            "penalized": False,
         }],
     }

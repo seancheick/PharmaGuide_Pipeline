@@ -557,7 +557,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"].startswith("1.0.4")  # versioned public contract
+    assert out["quality_score_version"].startswith("1.0.5")  # versioned public contract
 
 
 def test_public_quality_cap_limits_score_without_changing_raw() -> None:
@@ -578,7 +578,11 @@ def test_public_quality_cap_limits_score_without_changing_raw() -> None:
     assert out["quality_score_v4_100"] == 85.0
     assert out["quality_score_cap_v4"]["id"] == "generic_astaxanthin_single"
     assert out["quality_score_cap_v4"]["score_before_cap"] > 85.0
-    assert round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1) == 85.0
+    assert out["quality_score_cap_v4"]["adjustment"] < 0
+    assert out["quality_score_cap_v4"]["presentation"] == "explicit_adjustment"
+    assert round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1) == (
+        out["quality_score_cap_v4"]["score_before_cap"]
+    )
 
 
 def test_sports_preworkout_public_cap_limits_score_below_creatine_ceiling() -> None:
@@ -599,7 +603,12 @@ def test_sports_preworkout_public_cap_limits_score_below_creatine_ceiling() -> N
     assert out["quality_score_v4_100"] == 88.0
     assert out["raw_score_v4_100"] == 94.0
     assert out["quality_score_cap_v4"]["id"] == "sports_pre_workout"
-    assert round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1) == 88.0
+    assert out["quality_score_cap_v4"]["adjustment"] == (
+        88.0 - out["quality_score_cap_v4"]["score_before_cap"]
+    )
+    assert round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1) == (
+        out["quality_score_cap_v4"]["score_before_cap"]
+    )
 
 
 # ---- PR2 verification pillar (saturate-subset + fail-open neutral) ----------

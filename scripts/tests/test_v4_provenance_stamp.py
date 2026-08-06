@@ -43,10 +43,11 @@ def test_scored_product_has_provenance_block():
     assert prov["mode"] == "production"
     assert prov["scoring_engine_version"]
     assert prov["classification_schema_version"]
-    # config fingerprint present + 16-hex
-    omega = prov["config_versions"]["omega"]
-    assert len(omega["fingerprint"]) == 16
-    assert omega["schema_version"]
+    # Every scoring config is stamped, not only the omega rubric.
+    assert set(prov["config_versions"]) == {"omega", "quality_score"}
+    for config in prov["config_versions"].values():
+        assert len(config["fingerprint"]) == 16
+        assert config["version"]
 
 
 def test_empty_product_still_carries_provenance():

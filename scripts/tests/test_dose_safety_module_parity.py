@@ -3,8 +3,8 @@
 ``generic_dose``, ``multi_prenatal_dose`` and ``b_complex`` each read
 ``rda_ul_data.safety_flags`` and each reached a different conclusion:
 
-  * a flag with a missing ``pct_ul`` was penalized by generic (the P0-2
-    fail-safe) and silently skipped by the other two;
+  * a flag with a missing ``pct_ul`` was historically interpreted differently
+    across modules; it is now review-only everywhere;
   * a folate parent-total plus its own form breakdown was de-duplicated by
     multi/prenatal and charged twice by the other two.
 
@@ -55,11 +55,10 @@ _FOLATE_PARENT_PLUS_FORMS = {
 
 
 @pytest.mark.parametrize("scorer", SCORERS)
-def test_missing_pct_ul_penalizes_in_every_module(scorer):
-    """An emitted flag is an over-UL signal. A missing magnitude must never be
-    read as "under the limit" by any rubric."""
-    assert scorer(_prod([{"nutrient": "Vitamin A"}])) > 0
-    assert scorer(_prod([{"nutrient": "Vitamin A", "pct_ul": None}])) > 0
+def test_missing_pct_ul_is_review_only_in_every_module(scorer):
+    """A missing magnitude cannot justify an over-limit deduction."""
+    assert scorer(_prod([{"nutrient": "Vitamin A"}])) == 0
+    assert scorer(_prod([{"nutrient": "Vitamin A", "pct_ul": None}])) == 0
 
 
 @pytest.mark.parametrize("scorer", SCORERS)

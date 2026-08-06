@@ -99,6 +99,74 @@ def test_core_db_does_not_duplicate_app_owned_clinical_profile_taxonomy():
     assert "clinical_risk_taxonomy" not in REFERENCE_FILES
 
 
+def test_export_contract_reconciles_explicit_category_cap_adjustment() -> None:
+    scored = {
+        "verdict": "SAFE",
+        "mapped_coverage": 1.0,
+        "_v4_quality_status": "scored",
+        "_v4_quality_score_100": 85.0,
+        "_v4_pillars": {
+            "formulation": {"score": 20.0},
+            "dose": {"score": 20.0},
+            "evidence": {"score": 18.0},
+            "transparency": {"score": 14.0},
+            "verification": {"score": 13.0},
+            "safety_hygiene": {"score": 10.0},
+        },
+        "_v4_quality_score_cap": {
+            "id": "generic_astaxanthin_single",
+            "cap": 85.0,
+            "applied": True,
+            "score_before_cap": 95.0,
+            "score_after_cap": 85.0,
+            "adjustment": -10.0,
+            "presentation": "explicit_adjustment",
+        },
+        "strict_scoring_contract": {"passed": True},
+        "iqd_contract_diagnostics": {
+            "strict_scoring_contract": {"passed": True},
+            "scoring_fallbacks_used": [],
+        },
+    }
+
+    issues = validate_export_contract({}, scored)
+
+    assert not any("pillars" in issue or "explicit adjustment" in issue for issue in issues)
+
+
+def test_export_contract_rejects_malformed_category_cap_adjustment() -> None:
+    scored = {
+        "verdict": "SAFE",
+        "mapped_coverage": 1.0,
+        "_v4_quality_status": "scored",
+        "_v4_quality_score_100": 85.0,
+        "_v4_pillars": {
+            "formulation": {"score": 20.0},
+            "dose": {"score": 20.0},
+            "evidence": {"score": 18.0},
+            "transparency": {"score": 14.0},
+            "verification": {"score": 13.0},
+            "safety_hygiene": {"score": 10.0},
+        },
+        "_v4_quality_score_cap": {
+            "applied": True,
+            "score_before_cap": 94.0,
+            "score_after_cap": 85.0,
+            "adjustment": -9.0,
+            "presentation": "explicit_adjustment",
+        },
+        "strict_scoring_contract": {"passed": True},
+        "iqd_contract_diagnostics": {
+            "strict_scoring_contract": {"passed": True},
+            "scoring_fallbacks_used": [],
+        },
+    }
+
+    issues = validate_export_contract({}, scored)
+
+    assert any("explicit adjustment" in issue for issue in issues)
+
+
 def test_allergen_summary_reads_enricher_allergen_name_contract():
     enriched = {
         "allergen_hits": [
@@ -357,7 +425,7 @@ def test_build_final_db_streaming_path_preserves_last_write_wins_duplicates(monk
         assert manifest["detail_blob_count"] == 1
         assert manifest["detail_blob_unique_count"] == 1
         assert manifest["detail_index_checksum"].startswith("sha256:")
-        assert manifest["scoring_version"] == "4.1.0"
+        assert manifest["scoring_version"] == "4.2.0"
         assert manifest["quality_score_config_checksum"].startswith("sha256:")
         assert "scoring_config_checksum" not in manifest
         assert "scoring_config_checksum" not in manifest["integrity"]
@@ -1791,6 +1859,34 @@ def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
     assert categories["key_ingredient_tags"] == ["potassium", "magnesium"]
 
 
+def test_secondary_categories_preserve_deterministic_policy_order():
+    enriched = make_enriched()
+    enriched["supplement_taxonomy"] = {
+        "primary_type": "botanical",
+        "secondary_type": "stress-support",
+    }
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "standard_name": "Ashwagandha",
+            "canonical_id": "ashwagandha",
+            "category": "botanical",
+        },
+        {
+            "standard_name": "Ginkgo",
+            "canonical_id": "ginkgo",
+            "category": "botanical",
+        },
+    ]
+
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert categories["secondary_categories"] == [
+        "stress-support",
+        "adaptogen",
+        "nootropic",
+    ]
+
+
 def test_export_uses_strict_scoring_rows_not_flattened_blend_children():
     enriched = make_enriched()
     enriched["product_name"] = "Vitamin D3 + K2"
@@ -2293,6 +2389,28 @@ def test_ingredient_fingerprint_uses_canonical_ids_and_singular_categories():
     assert fingerprint["herbs"] == ["ashwagandha"]
     assert "mineral" in fingerprint["categories"]
     assert "botanical" in fingerprint["categories"]
+
+
+def test_ingredient_fingerprint_categories_have_deterministic_order():
+    enriched = make_enriched()
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "standard_name": "Ashwagandha",
+            "canonical_id": "ashwagandha",
+            "category": "botanical",
+        },
+        {
+            "standard_name": "Potassium",
+            "canonical_id": "potassium",
+            "category": "mineral",
+            "quantity": 99,
+            "unit": "mg",
+        },
+    ]
+
+    fingerprint = generate_ingredient_fingerprint(enriched)
+
+    assert fingerprint["categories"] == ["botanical", "mineral"]
 
 
 def test_ingredient_fingerprint_sums_same_unit_forms_with_one_canonical_id():
@@ -3113,7 +3231,7 @@ class TestDetailBlobNutritionAndUnmapped:
         assert CORE_COLUMN_COUNT == 111
 
     def test_schema_version_bumped_for_independent_consumer_semantics(self):
-        assert EXPORT_SCHEMA_VERSION == "2.2.0"
+        assert EXPORT_SCHEMA_VERSION == "2.3.0"
 
     def test_detail_blob_emits_demoted_absorption_enhancers(self):
         """Sprint E1.23 follow-up (2026-05-09): the enricher produces
@@ -3295,8 +3413,12 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
     scored_live = _canned_v4(status="scored", quality_100=88.5, verdict="SAFE", tier="Strong")
     scored_live["quality_score_cap_v4"] = {
         "id": "generic_astaxanthin_single",
-        "cap": 85.0,
+        "cap": 88.5,
         "applied": True,
+        "score_before_cap": 88.5,
+        "score_after_cap": 88.5,
+        "adjustment": 0.0,
+        "presentation": "explicit_adjustment",
     }
     s1 = _artifact_from_canned("999", scored_live)
     s2 = _artifact_from_canned(

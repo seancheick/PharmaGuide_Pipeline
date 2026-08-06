@@ -1,7 +1,7 @@
 # PharmaGuide Pipeline Architecture
 
-> Last verified: 2026-07-16
-> Export schema: 2.2.0 | Core columns: 112 | Pipeline manifest: 3.4.0
+> Last verified: 2026-08-05
+> Export schema: 2.3.0 | Core columns: 111 | Pipeline manifest: 3.4.0
 
 ## 1. System boundary
 
@@ -119,7 +119,7 @@ Authority:
 
 - `score_products_v4.py`
 - `scoring_v4/scored_artifact.py`
-- `score_supplements_v4.py` (engine 4.1.0)
+- `score_supplements_v4.py` (engine 4.2.0)
 - `scoring_v4/`
 - `scoring_v4/config/quality_score.json`
 

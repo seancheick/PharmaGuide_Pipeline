@@ -82,7 +82,7 @@ from scoring_v4.scored_artifact import (
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "2.2.0"  # independent product-safety and quality-assessment states
+EXPORT_SCHEMA_VERSION = "2.3.0"  # adds typed v4 dose-safety detail-blob summary
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -1697,10 +1697,36 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
                 continue
             pillar_scores.append(number)
         if q_ok and len(pillar_scores) == len(pillar_keys):
-            if abs(sum(pillar_scores) - float(q)) > 0.011:
+            pillar_total = sum(pillar_scores)
+            cap = safe_dict(scored.get("_v4_quality_score_cap"))
+            adjustment = 0.0
+            if cap:
+                try:
+                    before = float(cap.get("score_before_cap"))
+                    after = float(cap.get("score_after_cap"))
+                    adjustment = float(cap.get("adjustment"))
+                    cap_valid = (
+                        cap.get("applied") is True
+                        and cap.get("presentation") == "explicit_adjustment"
+                        and all(math.isfinite(value) for value in (
+                            before, after, adjustment
+                        ))
+                        and abs(before - pillar_total) <= 0.011
+                        and abs(after - float(q)) <= 0.011
+                        and abs((before + adjustment) - after) <= 0.011
+                        and adjustment <= 0.0
+                    )
+                except (TypeError, ValueError):
+                    cap_valid = False
+                if not cap_valid:
+                    issues.append(
+                        "review_queue: quality_score_cap_v4 explicit adjustment "
+                        "is malformed or does not reconcile."
+                    )
+            if abs((pillar_total + adjustment) - float(q)) > 0.011:
                 issues.append(
-                    "review_queue: six v4 pillars do not reconcile to "
-                    "quality_score_v4_100."
+                    "review_queue: six v4 pillars plus explicit adjustments do "
+                    "not reconcile to quality_score_v4_100."
                 )
 
     coverage = scored.get("mapped_coverage")
@@ -7391,6 +7417,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         blob["quality_score_cap_v4"] = scored.get("_v4_quality_score_cap")
         blob["clean_label_flags_v4"] = scored.get("_v4_clean_label_flags")
         blob["v4_safety_gate"] = scored.get("_v4_safety_gate")
+        blob["v4_dose_safety"] = scored.get("_v4_dose_safety")
         blob["v4_completeness_gate"] = scored.get("_v4_completeness_gate")
         blob["v4_confidence_detail"] = scored.get("_v4_confidence_detail")
         blob["v4_score_provenance"] = {
@@ -7502,8 +7529,9 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
     fingerprint["pharmacological_flags"]["blood_thinner"] = bool(all_ingredient_names & blood_thinners)
     fingerprint["pharmacological_flags"]["hormone_modulator"] = bool(all_ingredient_names & hormone_modulators)
 
-    # Convert set to list for JSON serialization
-    fingerprint["categories"] = list(fingerprint["categories"])
+    # Stable order prevents semantically identical fingerprints from changing
+    # across Python processes because of hash randomization.
+    fingerprint["categories"] = sorted(fingerprint["categories"])
 
     return fingerprint
 
@@ -7796,7 +7824,8 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
 
     return {
         "primary_category": primary_category,
-        "secondary_categories": list(set(secondary_categories)),
+        # Preserve policy priority while deduplicating deterministically.
+        "secondary_categories": list(dict.fromkeys(secondary_categories)),
         "contains_omega3": contains_omega3,
         "contains_probiotics": contains_probiotics,
         "contains_collagen": contains_collagen,
@@ -9469,7 +9498,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 111  # Must match the tuple above and SCHEMA_SQL (v2.2.0 omits the internal raw score)
+CORE_COLUMN_COUNT = 111  # Must match the tuple above and SCHEMA_SQL (v2.3.0 omits the internal raw score)
 
 
 # ─── Reference Data Loader ───

@@ -72,7 +72,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
-from scoring_v4.dose_safety import evaluate_dose_safety
+from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.modules.immune_support import score_immune_support_dose
 from scoring_v4.modules.joint_support import score_joint_support_dose
 from scoring_v4.modules.sleep_support import score_sleep_support_dose
@@ -83,6 +83,7 @@ from scoring_v4.modules.sleep_support import score_sleep_support_dose
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _DM = _cfg_block("dose_magnitudes", "generic")["generic"]
+_B7 = _cfg_block("dose_safety_policy", "ul_pct_threshold")
 
 
 CAP_SUPPLEMENTAL_WINDOW = _DM["cap_supplemental_window"]
@@ -92,7 +93,7 @@ DIMENSION_CAP = _DM["dimension_cap"]
 # Proxy band cutoffs.
 WINDOW_RDA_THRESHOLD = _DM["window_rda_threshold"]      # pct_rda below this is sub-clinical
 WINDOW_UL_PARTIAL_BAND = _DM["window_ul_partial_band"]   # above this and below 150 → half credit
-B7_UL_PCT_THRESHOLD = _DM["b7_ul_pct_threshold"]      # at/above this triggers B7 + zeroes window
+B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]      # at/above this triggers B7 + zeroes window
 WINDOW_OVERDOSE_CREDIT = _DM["window_overdose_credit"]    # 100% < pct_ul < 150% credit (half of 22)
 NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT = _DM["no_reference_individual_dose_credit"]
 NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT = _DM["no_reference_product_evidence_credit"]
@@ -102,8 +103,8 @@ MULTI_FORM_PREMIUM_BIO_THRESHOLD = _DM["multi_form_premium_bio_threshold"]
 MULTI_FORM_MIN_GROUP_COUNT = _DM["multi_form_min_group_count"]
 
 # B7 penalty.
-B7_PER_FLAG_PENALTY = _DM["b7_per_flag_penalty"]
-B7_CAP = _DM["b7_cap"]
+B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
+B7_CAP = _B7["cap"]
 
 PHASE_MARKER = "P1.3.2a_dose_proxy"
 METHOD_MARKER = "rda_ul_proxy_until_dietary_intake_table"
@@ -270,7 +271,7 @@ def _penalty_b7_dose_safety(product: Dict[str, Any]) -> float:
     one enriched contract cannot mean three different things. Magnitudes stay
     module-owned and config-driven.
     """
-    return evaluate_dose_safety(
+    return resolve_dose_safety(
         product or {},
         threshold=B7_UL_PCT_THRESHOLD,
         per_flag_penalty=B7_PER_FLAG_PENALTY,
@@ -314,7 +315,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     """
     if not isinstance(product, dict):
         product = {}
-    b7_evaluation = evaluate_dose_safety(
+    b7_evaluation = resolve_dose_safety(
         product,
         threshold=B7_UL_PCT_THRESHOLD,
         per_flag_penalty=B7_PER_FLAG_PENALTY,

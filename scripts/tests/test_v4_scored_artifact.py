@@ -126,7 +126,7 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     artifact = scored_artifact.build_scored_artifact(_product())
 
     assert artifact["quality_score_v4_100"] == 82.0
-    assert artifact["output_schema_version"] == "4.1.0"
+    assert artifact["output_schema_version"] == "4.2.0"
     assert artifact["quality_score_status"] == "scored"
     assert artifact["product_safety_status"] == "no_known_catalog_concern"
     assert artifact["quality_assessment_status"] == "complete"
@@ -147,6 +147,31 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     assert not any("v4 quality_score_status" in issue for issue in issues)
     assert not any("six v4 pillars" in issue for issue in issues)
     assert not any("mapped_coverage" in issue for issue in issues)
+
+
+def test_unresolved_dose_safety_exports_typed_summary_and_partial_assessment() -> None:
+    v4 = _canned_v4(safety_verdict="CAUTION")
+    v4["v4_breakdown"]["dose_safety"] = {
+        "state_counts": {"material_but_unresolved": 1},
+        "conversion_failures": 0,
+        "flags": [
+            {
+                "state": "material_but_unresolved",
+                "nutrient": "Magnesium Hydroxide",
+                "canonical_id": "magnesium",
+                "pct_ul": 571.0,
+                "reason": "compound_mass_not_elemental",
+                "penalized": False,
+            }
+        ],
+    }
+
+    artifact = scored_artifact.assemble_scored_artifact(_product(), v4)
+
+    assert artifact["product_safety_status"] == "caution"
+    assert artifact["quality_assessment_status"] == "partial"
+    assert artifact["dose_safety_evaluation"] == v4["v4_breakdown"]["dose_safety"]
+    assert artifact["_v4_dose_safety"] == v4["v4_breakdown"]["dose_safety"]
 
 
 def test_b1_inactive_penalty_details_follow_the_scoring_decision() -> None:

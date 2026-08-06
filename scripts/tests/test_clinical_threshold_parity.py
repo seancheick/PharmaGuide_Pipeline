@@ -6,8 +6,8 @@ The Flutter app's PipelineUlVerdict.exceedsUl
 `pctUl >= 150.0` to judge a nutrient "over UL" WHEN the pipeline emitted a
 percentage but no definitive `over_ul` bool. That 150 mirrors THIS repo's B7
 threshold:
-  - scripts/scoring_v4/config/quality_score.json  -> b7_ul_pct_threshold
-  - scripts/config/scoring_config.json            -> B7_dose_safety.threshold_pct
+  - scripts/scoring_v4/config/quality_score.json
+    -> dose_safety_policy.ul_pct_threshold
 
 If they diverge, the app silently applies stale clinical policy for whether a
 nutrient reads as over its Upper Limit.
@@ -53,23 +53,20 @@ def _find_all(obj, key):
 
 def test_quality_score_b7_thresholds_match_pin():
     data = json.loads(QUALITY_SCORE.read_text())
-    values = _find_all(data, "b7_ul_pct_threshold")
-    assert values, "no b7_ul_pct_threshold found in quality_score.json"
-    for v in values:
-        assert float(v) == PINNED_B7_UL_PCT_THRESHOLD, (
-            f"b7_ul_pct_threshold={v} != pinned {PINNED_B7_UL_PCT_THRESHOLD}.\n"
-            "If B7 changed, update this pin AND the app pin "
-            "(test/safety_invariants/clinical_threshold_parity_test.dart)."
-        )
+    value = data["dose_safety_policy"]["ul_pct_threshold"]
+    assert float(value) == PINNED_B7_UL_PCT_THRESHOLD, (
+        f"dose_safety_policy.ul_pct_threshold={value} != pinned "
+        f"{PINNED_B7_UL_PCT_THRESHOLD}.\n"
+        "If B7 changed, update this pin AND the app pin "
+        "(test/safety_invariants/clinical_threshold_parity_test.dart)."
+    )
 
 
-def test_scoring_config_b7_threshold_pct_matches_pin():
+def test_legacy_scoring_config_cannot_redeclare_b7_policy():
+    """The retired /80 config may supply enrichment vocabulary, not v4 B7."""
     data = json.loads(SCORING_CONFIG.read_text())
     blocks = _find_all(data, "B7_dose_safety")
-    assert blocks, "no B7_dose_safety block found in scoring_config.json"
-    for blk in blocks:
-        pct = blk.get("threshold_pct") if isinstance(blk, dict) else None
-        assert pct is not None and float(pct) == PINNED_B7_UL_PCT_THRESHOLD, (
-            f"B7_dose_safety.threshold_pct={pct} != pinned "
-            f"{PINNED_B7_UL_PCT_THRESHOLD}"
-        )
+    assert blocks == [], (
+        "legacy scoring_config.json redeclared live B7 policy; "
+        "quality_score.json must remain the only owner"
+    )

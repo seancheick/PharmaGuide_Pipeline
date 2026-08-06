@@ -1,9 +1,9 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.0.4-sports-subtypes",
+    "version": "1.0.5-b7-single-source",
     "schema_version": "1.0.0",
-    "last_updated": "2026-06-08",
+    "last_updated": "2026-08-05",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Generic single-bioactive caps prevent clean narrow products from implying elite clinical-formula evidence. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
     "phase": "generic_public_caps"
   },
@@ -126,6 +126,11 @@
     "dietary_sugar_high_penalty": 4.0,
     "dietary_sugar_cap": 4.0
   },
+  "dose_safety_policy": {
+    "ul_pct_threshold": 150.0,
+    "per_flag_penalty": 2.0,
+    "cap": 3.0
+  },
   "dose_magnitudes": {
     "_doc": "Dose-dimension caps, windows, thresholds and penalties per category module — hoisted from the score_dose modules 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score_dose diff on a real-product sample). Each module reads its sub-block via scoring_v4.quality_score_config. Structural constants stay in code. Drift-guarded by test_v4_dose_magnitudes_config.",
     "generic": {
@@ -134,14 +139,11 @@
       "dimension_cap": 25.0,
       "window_rda_threshold": 25.0,
       "window_ul_partial_band": 100.0,
-      "b7_ul_pct_threshold": 150.0,
       "window_overdose_credit": 11.0,
       "no_reference_individual_dose_credit": 16.0,
       "no_reference_product_evidence_credit": 12.0,
       "multi_form_premium_bio_threshold": 12.0,
-      "multi_form_min_group_count": 2,
-      "b7_per_flag_penalty": 2.0,
-      "b7_cap": 3.0
+      "multi_form_min_group_count": 2
     },
     "multi_prenatal": {
       "dimension_cap": 25.0,
@@ -149,9 +151,6 @@
       "cap_panel_breadth": 3.0,
       "cap_critical_nutrient_coverage": 5.0,
       "cap_prenatal_complement_support": 2.0,
-      "b7_ul_pct_threshold": 150.0,
-      "b7_per_flag_penalty": 2.0,
-      "b7_cap": 3.0,
       "panel_breadth_full_count": 18,
       "prenatal_dha_full_mg": 200.0,
       "prenatal_dha_partial_mg": 100.0,
@@ -309,8 +308,7 @@
     "omega": { "dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
     "probiotic": { "dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
     "b_complex": {
-      "formulation_cap": 30.0, "dose_cap": 25.0, "evidence_cap": 20.0,
-      "b7_ul_pct_threshold": 150.0, "b7_per_flag_penalty": 2.0, "b7_cap": 3.0
+      "formulation_cap": 30.0, "dose_cap": 25.0, "evidence_cap": 20.0
     },
     "immune_support": { "formulation_bonus_cap": 12.0, "evidence_cap": 17.0, "evidence_floor_cap": 16.5 },
     "joint_support": {
