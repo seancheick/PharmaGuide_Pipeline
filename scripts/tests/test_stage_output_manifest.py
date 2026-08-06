@@ -59,6 +59,79 @@ def test_stage_manifest_lists_only_current_materialized_outputs(tmp_path: Path) 
     assert manifest_path.name == ".stage_manifest.json"
 
 
+def test_successful_stage_manifest_discards_completed_run_quarantine(
+    tmp_path: Path,
+) -> None:
+    stage_dir = tmp_path / "enriched"
+    stage_dir.mkdir()
+    current = stage_dir / "enriched_batch_1.json"
+    current.write_text(json.dumps([{"id": "current"}]), encoding="utf-8")
+    stale = (
+        stage_dir
+        / "quarantine"
+        / "stale_outputs"
+        / "20260806T000000000000Z"
+        / "enriched_batch_1.json"
+    )
+    stale.parent.mkdir(parents=True)
+    stale.write_text(json.dumps([{"id": "previous"}]), encoding="utf-8")
+
+    write_stage_manifest(stage_dir, "enrich", [current])
+
+    assert current.exists()
+    assert not (stage_dir / "quarantine" / "stale_outputs").exists()
+
+
+def test_successful_clean_manifest_discards_parent_run_quarantine(
+    tmp_path: Path,
+) -> None:
+    processor = BatchProcessor(_config(tmp_path))
+    current = processor.output_dir / "cleaned" / "cleaned_batch_1.json"
+    current.write_text(json.dumps([{"id": "current"}]), encoding="utf-8")
+    stale = (
+        processor.output_dir
+        / "quarantine"
+        / "stale_outputs"
+        / "20260806T000000000000Z"
+        / "cleaned"
+        / "cleaned_batch_1.json"
+    )
+    stale.parent.mkdir(parents=True)
+    stale.write_text(json.dumps([{"id": "previous"}]), encoding="utf-8")
+
+    processor._write_stage_manifest({"processing_complete": True})
+
+    assert current.exists()
+    assert not (processor.output_dir / "quarantine" / "stale_outputs").exists()
+
+
+def test_incomplete_stage_manifest_retains_rollback_quarantine(
+    tmp_path: Path,
+) -> None:
+    stage_dir = tmp_path / "scored"
+    stage_dir.mkdir()
+    current = stage_dir / "scored_batch_1.json"
+    current.write_text(json.dumps([{"id": "partial"}]), encoding="utf-8")
+    stale = (
+        stage_dir
+        / "quarantine"
+        / "stale_outputs"
+        / "20260806T000000000000Z"
+        / "scored_batch_1.json"
+    )
+    stale.parent.mkdir(parents=True)
+    stale.write_text(json.dumps([{"id": "previous"}]), encoding="utf-8")
+
+    write_stage_manifest(
+        stage_dir,
+        "score",
+        [current],
+        processing_complete=False,
+    )
+
+    assert stale.exists()
+
+
 def test_manifest_is_the_only_authority_for_stage_inputs(tmp_path: Path) -> None:
     stage_dir = tmp_path / "enriched"
     stage_dir.mkdir()
