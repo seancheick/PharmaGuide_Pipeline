@@ -96,6 +96,10 @@ contract name elsewhere.
 | **V4 module** | One category-aware scoring route: `generic`, `probiotic`, `multi_or_prenatal`, `b_complex`, `sports`, `fiber_digestive`, or `omega`. |
 | **V4 scoring archetype** | The purpose-fit normalization profile selected inside the six-pillar assembler after module routing, such as `generic_single_molecule`, `b_complex`, or `sports_pre_workout`. It is not a second product taxonomy or routing system. |
 | **Synthetic archetype fixture** | A reviewed enriched-product input with a locked production-scoring outcome used to validate one V4 scoring archetype. Fixtures call `build_scored_artifact()` and contain no copied scoring formulas. |
+| **Blinded reviewer benchmark** | A version-locked comparison in which qualified human reviewers assess a frozen product sample without access to the engine score, tier, pillars, verdict, or other reviewers' ratings. |
+| **Benchmark freeze** | The immutable sample, label-fact inputs, engine/config provenance, baseline outputs, reviewer instructions, and analysis plan recorded before reviews begin or score-changing data is merged. |
+| **Reviewer packet** | The shareable benchmark artifact containing product label facts and blank review fields. It excludes every engine output used in the comparison. |
+| **Benchmark baseline key** | The held-back mapping from benchmark IDs to DSLD IDs and frozen engine outputs. It is not distributed to reviewers and is opened only after ratings are locked. |
 | **Router** | `scoring_v4/router.py`, the sole authority for v4 module dispatch. |
 | **Safety suppression** | BLOCKED/UNSAFE products retain verdict/evidence but ship a null public score with `quality_score_status=suppressed_safety`. |
 | **Completeness exclusion** | Products without usable identity/payload become `NOT_SCORED` and are quarantined from the live catalog. Missing disclosure can instead remain scoreable as explicit soft debt. |

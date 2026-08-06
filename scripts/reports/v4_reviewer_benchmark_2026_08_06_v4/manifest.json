@@ -1,0 +1,150 @@
+{
+  "artifacts": {
+    "PROTOCOL.md": {
+      "sha256": "32d55e22d9483f40c9f44de7a38f94ea8a2568953f0eaa75f0fc41adba9cccd7"
+    },
+    "SEALED_HOLDOUT_KEY.csv": {
+      "sha256": "2fdb10772ac654b41b2cd30d09d2d2ea03bd5b192318abcf30c77b01d36aa36c"
+    },
+    "development_baseline_key.csv": {
+      "sha256": "33cf93e93100a1a7322d3b9510fa6e559a70a3f61034ead252e57150a18bd12b"
+    },
+    "reviewer_packet.csv": {
+      "sha256": "4f0d913caa18114931f399f6f9e68e28a3b85a3da4437ec84ef2dbb5f2c4e28e"
+    },
+    "reviewer_response_template.csv": {
+      "sha256": "53df794e4cb806e90bfa4c7082ccf94f7ec7c31383888aa3b648baec6f3d41c7"
+    }
+  },
+  "blinding": {
+    "baseline_key_distribution": "hold both keys back from reviewers; restrict the sealed holdout key from the calibration analyst until candidates and analysis code are locked",
+    "holdout_opening": "after calibration candidates and analysis code are locked",
+    "reviewer_packet_forbidden_fields": [
+      "analysis_split",
+      "archetype",
+      "challenge_flags",
+      "dsld_id",
+      "pillar_dose_v4",
+      "pillar_evidence_v4",
+      "pillar_formulation_v4",
+      "pillar_safety_hygiene_v4",
+      "pillar_transparency_v4",
+      "pillar_verification_v4",
+      "product_safety_status",
+      "quality_assessment_status",
+      "quality_score_status",
+      "quality_score_v4_100",
+      "quality_tier",
+      "safety_verdict",
+      "sample_cohort",
+      "v4_confidence",
+      "v4_module",
+      "verdict"
+    ]
+  },
+  "engine_contract": {
+    "classification_schema_version": [
+      "1.1.4"
+    ],
+    "quality_score_version": [
+      "1.0.5-b7-single-source"
+    ],
+    "score_model_version": [
+      "v4"
+    ],
+    "scoring_engine_version": [
+      "4.2.0"
+    ],
+    "v4_config_fingerprint": [
+      "{\"omega\": {\"fingerprint\": \"9185bc5eed37cb0a\", \"version\": \"1.0.0\"}, \"quality_score\": {\"fingerprint\": \"2c007207652c7765\", \"version\": \"1.0.5-b7-single-source\"}}"
+    ]
+  },
+  "freeze_id": "2026-08-06-v4",
+  "frozen_on": "2026-08-06",
+  "inputs": {
+    "catalog_db": {
+      "path": "scripts/dist/pharmaguide_core.db",
+      "sha256": "6ef4760f5316467991d437471102ca6e9027e08a0db472e0c03efdbf11b232fc"
+    },
+    "release_manifest": {
+      "path": "scripts/dist/export_manifest.json",
+      "sha256": "2335a313094a98d8ab691f1eca47c85cf1d09f797c32980cec1cc56f775e51d7"
+    },
+    "scored_artifacts": {
+      "aggregate_sha256": "47008a6d0bc555be9325cb2754e34585044dfc298f9914ad5d5563db44d029e1",
+      "file_count": 48
+    },
+    "scoring_config": {
+      "path": "scripts/scoring_v4/config/quality_score.json",
+      "sha256": "2c007207652c776594ca5d44f973aa32e6e0e6f9e758a2bad9974b2be790aa43"
+    },
+    "selected_detail_blobs": {
+      "aggregate_sha256": "f8937138d6a14c2f4adac55eaab0064a29ac934df25ab60eea81ae0b0692042b",
+      "file_count": 120
+    }
+  },
+  "release": {
+    "db_version": "2026.08.06.092521",
+    "generated_at": "2026-08-06T09:25:21.218694+00:00",
+    "product_count": 13271,
+    "schema_version": "2.3.0"
+  },
+  "schema_version": "1.0.0",
+  "selection": {
+    "analysis_split_counts": {
+      "development": 96,
+      "holdout": 24
+    },
+    "archetype_counts": {
+      "b_complex": 10,
+      "fiber_digestive": 10,
+      "generic_botanical_branded": 10,
+      "generic_single_molecule": 10,
+      "immune_support": 10,
+      "omega": 10,
+      "prenatal_multi": 10,
+      "probiotic": 10,
+      "sports_bcaa_eaa": 10,
+      "sports_pre_workout": 10,
+      "sports_protein": 10,
+      "sports_single": 10
+    },
+    "challenge_per_archetype": 4,
+    "cohort_counts": {
+      "challenge": 48,
+      "core": 72
+    },
+    "confidence_counts": {
+      "high": 5,
+      "low": 46,
+      "moderate": 69
+    },
+    "core_per_archetype": 6,
+    "evidence_band_counts": {
+      "nonzero": 95,
+      "zero": 25
+    },
+    "per_archetype": 10,
+    "required_reviews": 360,
+    "reviewers_per_product": 3,
+    "safety_counts": {
+      "caution": 19,
+      "no_known_catalog_concern": 101
+    },
+    "sample_size": 120,
+    "seed": "pharmaguide-v4-reviewer-benchmark-2026-08-06-v4",
+    "tier_counts": {
+      "Acceptable": 24,
+      "Elite": 1,
+      "Excellent": 6,
+      "Poor": 32,
+      "Strong": 14,
+      "Weak": 43
+    }
+  },
+  "source_revision": {
+    "basis": "last committed revision preceding release generation; content fingerprints are authoritative if the release worktree contained uncommitted changes",
+    "commit": "b2a80914"
+  },
+  "status": "sample_and_protocol_frozen_reviewers_not_yet_registered"
+}
