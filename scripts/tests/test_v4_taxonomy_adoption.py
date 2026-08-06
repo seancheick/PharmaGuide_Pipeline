@@ -115,18 +115,18 @@ def test_sp2_inventory_doc_exists():
     )
 
 
-def test_sp2_router_has_no_legacy_type_read_and_keeps_physical_panel_gate():
-    """Themed multis use disclosed panel evidence, never a legacy type."""
+def test_sp2_router_is_thin_and_contract_owns_physical_panel_gate():
+    """Themed-multi policy lives only in the classification contract."""
     import pathlib
-    router = pathlib.Path(__file__).resolve().parents[1] / "scoring_v4" / "router.py"
-    src = router.read_text()
-    primary_type_idx = src.find("_read_primary_type(product)")
-    assert primary_type_idx != -1, "Router must call _read_primary_type"
-    assert "_read_legacy_supp_type(product)" not in src
-    assert src.count('get("supplement_type")') == 0
-    assert "_has_broad_multivitamin_panel" in src
-    assert "_has_broad_legacy_multivitamin_panel" not in src
-    assert 'get("primary_category")' not in src
+    scripts_root = pathlib.Path(__file__).resolve().parents[1]
+    router_src = (scripts_root / "scoring_v4" / "router.py").read_text()
+    contract_src = (scripts_root / "scoring_input_contract.py").read_text()
+
+    assert "build_scoring_classification(product)" in router_src
+    assert "_read_legacy_supp_type" not in router_src
+    assert 'get("supplement_type")' not in router_src
+    assert "_route_has_broad_multivitamin_panel" in contract_src
+    assert "_route_has_broad_legacy_multivitamin_panel" not in contract_src
 
 
 def test_sp2_shadow_scorer_delegates_to_router():

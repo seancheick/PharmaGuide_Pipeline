@@ -26,6 +26,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
@@ -266,6 +268,22 @@ def test_joint_undenatured_uc_ii_remains_recognized() -> None:
         canonical_id="collagen",
         matched_form="undenatured type ii collagen",
         raw_source_text="UC-II Undenatured Type II Collagen",
+        quantity=40,
+    )
+
+    assert _joint_active_id(row) == "uc_ii"
+
+
+@pytest.mark.parametrize("label", ["UC II", "uc_ii", "UCII"])
+def test_joint_undenatured_uc_ii_aliases_remain_recognized(label: str) -> None:
+    from scoring_v4.modules.joint_support import _joint_active_id
+
+    row = _ingredient(
+        name=label,
+        standard_name=label,
+        canonical_id=label,
+        matched_form=label,
+        raw_source_text=label,
         quantity=40,
     )
 
@@ -608,7 +626,13 @@ def test_multi_form_bonus_case_insensitive_nutrient_match() -> None:
 def test_b7_penalty_single_over_150_ul_returns_minus_2() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
-    payload = score_dose(_product(safety_flags=[{"nutrient": "Vit B6", "pct_ul": 200, "ul": 100, "amount": 200}]))
+    payload = score_dose(_product(safety_flags=[{
+        "nutrient": "Vit B6",
+        "pct_ul": 200,
+        "ul": 100,
+        "amount": 200,
+        "ul_gate_eligible": True,
+    }]))
     assert payload["penalties"]["B7_dose_safety"] == -2.0
 
 
@@ -619,8 +643,8 @@ def test_b7_penalty_two_over_ul_caps_at_minus_3() -> None:
     payload = score_dose(
         _product(
             safety_flags=[
-                {"nutrient": "A", "pct_ul": 180},
-                {"nutrient": "B", "pct_ul": 200},
+                {"nutrient": "A", "pct_ul": 180, "ul_gate_eligible": True},
+                {"nutrient": "B", "pct_ul": 200, "ul_gate_eligible": True},
             ]
         )
     )

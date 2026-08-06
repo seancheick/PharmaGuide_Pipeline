@@ -6,7 +6,7 @@
   "flags": [],
   "grade": "Weak",
   "mapped_coverage": 1.0,
-  "output_schema_version": "4.0.0",
+  "output_schema_version": "4.2.0",
   "product_name": "Joint Health",
   "quality_score_status": "scored",
   "quality_score_v4_100": 57.9,

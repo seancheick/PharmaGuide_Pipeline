@@ -125,9 +125,9 @@ def _row(name: str, qty_mg: float, *, category: str = None,
     return row
 
 
-# Synthetic raw DSLD shape mirroring the actual file at
-# /Users/seancheick/Documents/DataSetDsld/staging/brands/Sports_Research/317006.json
-# (verified 2026-05-25). The 500mg parent + 475mg Curcuminoids child shape
+# Synthetic raw DSLD shape mirroring product 317006 in the local
+# Sports_Research brand dataset (verified 2026-05-25). The 500mg parent +
+# 475mg Curcuminoids child shape
 # is the standardized 95%-curcuminoid disclosure pattern.
 RAW_317006 = {
     "id": 317006,

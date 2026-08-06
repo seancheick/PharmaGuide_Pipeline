@@ -7,7 +7,7 @@ of a hard UL could still ship SAFE. Policy (user-specified):
       - 150–199% → CAUTION
       - >= 200%  → CAUTION + a critical dose signal
   - NEVER BLOCKED/UNSAFE for dose excess (those stay for banned/recalled/adulterated)
-  - gate-INELIGIBLE flags (compound_mass_not_elemental, e.g. Magtein) are excluded
+  - gate-INELIGIBLE/material flags route to review without exceedance language
 """
 
 from __future__ import annotations
@@ -35,10 +35,14 @@ def test_severe_over_ul_emits_critical_dose_signal():
     assert any("CRITICAL" in s.upper() for s in r.safety_signals), r.safety_signals
 
 
-def test_gate_ineligible_compound_mass_does_not_force_caution():
-    # Magtein-class compound-mass false over-UL — excluded from the gate.
+def test_gate_ineligible_compound_mass_forces_review_not_exceedance():
+    # Compound mass is not a confirmed exceedance, but the unresolved material
+    # comparison cannot ship as a clean safety assessment.
     r = evaluate_safety_gate(_prod([{"nutrient": "Magtein", "pct_ul": 571, "ul_gate_eligible": False}]))
-    assert r.verdict != "CAUTION"
+    assert r.verdict == "CAUTION"
+    assert r.needs_review is True
+    assert "DOSE_SAFETY_UNRESOLVED_REVIEW" in r.safety_signals
+    assert not any(signal.startswith("DOSE_OVER_UL") for signal in r.safety_signals)
 
 
 def test_below_150_does_not_force_caution():
@@ -51,11 +55,13 @@ def test_ul_dose_never_blocks_or_unsafe():
     assert r.verdict == "CAUTION"  # dose excess never escalates past CAUTION
 
 
-def test_missing_eligibility_does_not_force_caution_until_reenriched():
-    # Older enriched output has no ul_gate_eligible key. Do not let stale flags
-    # drive the new verdict gate; a fresh enrich must explicitly mark eligibility.
+def test_missing_eligibility_routes_stale_flag_to_review():
+    # Older enriched output has no typed eligibility. It cannot assert an
+    # exceedance, but it also cannot silently look like a complete clean check.
     r = evaluate_safety_gate(_prod([{"nutrient": "X", "pct_ul": 200}]))
-    assert r.verdict != "CAUTION"
+    assert r.verdict == "CAUTION"
+    assert r.needs_review is True
+    assert r.safety_signals == ["DOSE_SAFETY_UNRESOLVED_REVIEW"]
 
 
 def test_indeterminate_folate_at_possible_ul_forces_review_caution():

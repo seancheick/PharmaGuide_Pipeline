@@ -130,7 +130,7 @@ pip install -r requirements-dev.txt
 bash batch_run_all_datasets.sh
 bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score  # pipeline only
 bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score --release
-bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands"
+bash batch_run_all_datasets.sh --root "$HOME/Downloads/PharmaGuide_Datasets/staging/brands"
 
 # Rebuild the catalog/dashboard snapshot from existing brand outputs
 bash scripts/rebuild_dashboard_snapshot.sh

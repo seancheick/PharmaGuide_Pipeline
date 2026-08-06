@@ -25,6 +25,8 @@ import random
 import sys
 from collections import Counter
 
+from dataset_paths import brand_dataset_root
+
 # The 20 brands the 2026-07-20 full-corpus run failed at the enrichment gate.
 DEFAULT_BRANDS = [
     "BulkSupplements", "CVS", "Doctors_Best", "Double_Wood_Supplements", "Equate",
@@ -32,7 +34,7 @@ DEFAULT_BRANDS = [
     "Natures_Bounty", "Natures_Way", "Nutricost", "Pure_Encapsulations", "Solgar",
     "Sports_Research", "Spring_Valley", "Thorne", "Vitafusion", "nordic-naturals",
 ]
-DEFAULT_STAGING = "/Users/seancheick/Documents/DataSetDsld/staging/brands"
+DEFAULT_STAGING = str(brand_dataset_root())
 
 
 def main() -> int:

@@ -130,9 +130,24 @@ def _megadose_b_complex() -> dict:
             _rda("Biotin", 33333),
         ],
         "safety_flags": [
-            {"nutrient": "Niacin", "pct_ul": 286, "severity": "high"},
-            {"nutrient": "Vitamin B6", "pct_ul": 588, "severity": "high"},
-            {"nutrient": "Folate", "pct_ul": 120, "severity": "moderate"},
+            {
+                "nutrient": "Niacin",
+                "pct_ul": 286,
+                "severity": "high",
+                "ul_gate_eligible": True,
+            },
+            {
+                "nutrient": "Vitamin B6",
+                "pct_ul": 588,
+                "severity": "high",
+                "ul_gate_eligible": True,
+            },
+            {
+                "nutrient": "Folate",
+                "pct_ul": 120,
+                "severity": "moderate",
+                "ul_gate_eligible": True,
+            },
         ],
     }
     product["harmful_additives"] = [

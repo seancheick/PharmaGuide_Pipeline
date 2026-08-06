@@ -78,14 +78,11 @@ from scoring_v4.scored_artifact import (
     SCORING_ENGINE_VERSION,
     suppress_scored_artifact_for_hard_block,
 )
-# supplement_type_utils is no longer called directly — taxonomy is the
-# single source of truth for classification in the final DB export.
-# The import remains available for backward-compat callers but is unused.
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "2.2.0"  # independent product-safety and quality-assessment states
+EXPORT_SCHEMA_VERSION = "2.3.0"  # adds typed v4 dose-safety detail-blob summary
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -1700,10 +1697,36 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
                 continue
             pillar_scores.append(number)
         if q_ok and len(pillar_scores) == len(pillar_keys):
-            if abs(sum(pillar_scores) - float(q)) > 0.011:
+            pillar_total = sum(pillar_scores)
+            cap = safe_dict(scored.get("_v4_quality_score_cap"))
+            adjustment = 0.0
+            if cap:
+                try:
+                    before = float(cap.get("score_before_cap"))
+                    after = float(cap.get("score_after_cap"))
+                    adjustment = float(cap.get("adjustment"))
+                    cap_valid = (
+                        cap.get("applied") is True
+                        and cap.get("presentation") == "explicit_adjustment"
+                        and all(math.isfinite(value) for value in (
+                            before, after, adjustment
+                        ))
+                        and abs(before - pillar_total) <= 0.011
+                        and abs(after - float(q)) <= 0.011
+                        and abs((before + adjustment) - after) <= 0.011
+                        and adjustment <= 0.0
+                    )
+                except (TypeError, ValueError):
+                    cap_valid = False
+                if not cap_valid:
+                    issues.append(
+                        "review_queue: quality_score_cap_v4 explicit adjustment "
+                        "is malformed or does not reconcile."
+                    )
+            if abs((pillar_total + adjustment) - float(q)) > 0.011:
                 issues.append(
-                    "review_queue: six v4 pillars do not reconcile to "
-                    "quality_score_v4_100."
+                    "review_queue: six v4 pillars plus explicit adjustments do "
+                    "not reconcile to quality_score_v4_100."
                 )
 
     coverage = scored.get("mapped_coverage")
@@ -2255,10 +2278,8 @@ CREATE TABLE IF NOT EXISTS export_manifest (
 """
 
 CORE_INDEX_SQL = """
-CREATE INDEX IF NOT EXISTS idx_core_upc ON products_core(upc_sku);
 CREATE INDEX IF NOT EXISTS idx_core_name ON products_core(product_name);
 CREATE INDEX IF NOT EXISTS idx_core_brand ON products_core(brand_name);
-CREATE INDEX IF NOT EXISTS idx_core_verdict ON products_core(verdict);
 CREATE INDEX IF NOT EXISTS idx_core_score ON products_core(quality_score_v4_100);
 CREATE INDEX IF NOT EXISTS idx_core_status ON products_core(product_status);
 CREATE INDEX IF NOT EXISTS idx_core_type ON products_core(supplement_type);
@@ -5056,8 +5077,10 @@ _HARD_SAFETY_SEVERITIES = frozenset({
 })
 
 
-def blob_has_profile_gated_hard_safety_warning(detail_blob: Optional[Dict]) -> bool:
-    """True when a detail blob carries a hard-safety warning that disqualifies SAFE.
+def profile_gated_hard_safety_signal(
+    detail_blob: Optional[Dict],
+) -> Optional[str]:
+    """Return the first hard-safety warning type that disqualifies SAFE.
 
     Scans BOTH warnings[] and warnings_profile_gated[] (the per-user-condition
     list and the general list — a hard-safety signal in either disqualifies the
@@ -5065,7 +5088,7 @@ def blob_has_profile_gated_hard_safety_warning(detail_blob: Optional[Dict]) -> b
     _HARD_SAFETY_TYPES_SEVERITY_GATED for the tier rules.
     """
     if not isinstance(detail_blob, dict):
-        return False
+        return None
     for list_key in ("warnings", "warnings_profile_gated"):
         for warning in safe_list(detail_blob.get(list_key)):
             if not isinstance(warning, dict):
@@ -5079,12 +5102,12 @@ def blob_has_profile_gated_hard_safety_warning(detail_blob: Optional[Dict]) -> b
             ):
                 continue
             if warning_type in _HARD_SAFETY_TYPES_ALWAYS_DISQUALIFY:
-                return True
+                return warning_type
             if warning_type in _HARD_SAFETY_TYPES_SEVERITY_GATED:
                 severity = safe_str(warning.get("severity")).lower()
                 if severity in _HARD_SAFETY_SEVERITIES:
-                    return True
-    return False
+                    return warning_type
+    return None
 
 
 def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
@@ -5139,17 +5162,31 @@ def project_export_scored_artifact(
         effective_scored = suppress_scored_artifact_for_hard_block(
             effective_scored, reason="banned_substance"
         )
-    elif blob_has_profile_gated_hard_safety_warning(detail_blob):
+    else:
+        profile_safety_signal = profile_gated_hard_safety_signal(detail_blob)
         verdict_now = safe_str(effective_scored.get("verdict")).upper()
         safety_now = safe_str(effective_scored.get("safety_verdict")).upper()
-        if verdict_now == "SAFE" or safety_now == "SAFE":
+        profile_caution_applied = (
+            profile_safety_signal is not None
+            and (verdict_now == "SAFE" or safety_now == "SAFE")
+        )
+        if profile_caution_applied:
             effective_scored.update({
                 "verdict": "CAUTION",
                 "safety_verdict": "CAUTION",
+                "product_safety_status": "caution",
+                "safety_signal_reason": (
+                    effective_scored.get("safety_signal_reason")
+                    or profile_safety_signal
+                ),
+                "_v4_safety_signal_reason": (
+                    effective_scored.get("_v4_safety_signal_reason")
+                    or profile_safety_signal
+                ),
             })
 
-    derived_blocking = derive_blocking_reason(enriched, scored)
-    scored_blocking = safe_str(scored.get("blocking_reason"))
+    derived_blocking = derive_blocking_reason(enriched, effective_scored)
+    scored_blocking = safe_str(effective_scored.get("blocking_reason"))
     stale_safety_blocking = (
         scored_blocking
         in {"banned_ingredient", "recalled_ingredient", "high_risk_ingredient"}
@@ -5162,6 +5199,29 @@ def project_export_scored_artifact(
         else derived_blocking
         or (None if stale_safety_blocking or not scored_blocking else scored_blocking)
     )
+
+    if not has_export_banned_signal and profile_caution_applied:
+        metadata = dict(safe_dict(effective_scored.get("scoring_metadata")))
+        metadata.update({
+            "verdict": "CAUTION",
+            "product_safety_status": "caution",
+            "quality_assessment_status": effective_scored.get(
+                "quality_assessment_status"
+            ),
+            "blocking_reason": effective_scored["blocking_reason"],
+        })
+        effective_scored["scoring_metadata"] = metadata
+
+        safety_gate = dict(safe_dict(effective_scored.get("_v4_safety_gate")))
+        safety_signals = list(safe_list(safety_gate.get("safety_signals")))
+        if profile_safety_signal not in safety_signals:
+            safety_signals.append(profile_safety_signal)
+        safety_gate.update({
+            "verdict": "CAUTION",
+            "blocking_reason": effective_scored["blocking_reason"],
+            "safety_signals": safety_signals,
+        })
+        effective_scored["_v4_safety_gate"] = safety_gate
     return effective_scored
 
 
@@ -7355,6 +7415,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         blob["quality_score_cap_v4"] = scored.get("_v4_quality_score_cap")
         blob["clean_label_flags_v4"] = scored.get("_v4_clean_label_flags")
         blob["v4_safety_gate"] = scored.get("_v4_safety_gate")
+        blob["v4_dose_safety"] = scored.get("_v4_dose_safety")
         blob["v4_completeness_gate"] = scored.get("_v4_completeness_gate")
         blob["v4_confidence_detail"] = scored.get("_v4_confidence_detail")
         blob["v4_score_provenance"] = {
@@ -7466,8 +7527,9 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
     fingerprint["pharmacological_flags"]["blood_thinner"] = bool(all_ingredient_names & blood_thinners)
     fingerprint["pharmacological_flags"]["hormone_modulator"] = bool(all_ingredient_names & hormone_modulators)
 
-    # Convert set to list for JSON serialization
-    fingerprint["categories"] = list(fingerprint["categories"])
+    # Stable order prevents semantically identical fingerprints from changing
+    # across Python processes because of hash randomization.
+    fingerprint["categories"] = sorted(fingerprint["categories"])
 
     return fingerprint
 
@@ -7760,7 +7822,8 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
 
     return {
         "primary_category": primary_category,
-        "secondary_categories": list(set(secondary_categories)),
+        # Preserve policy priority while deduplicating deterministically.
+        "secondary_categories": list(dict.fromkeys(secondary_categories)),
         "contains_omega3": contains_omega3,
         "contains_probiotics": contains_probiotics,
         "contains_collagen": contains_collagen,
@@ -9433,7 +9496,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 111  # Must match the tuple above and SCHEMA_SQL (v2.2.0 omits the internal raw score)
+CORE_COLUMN_COUNT = 111  # Must match the tuple above and SCHEMA_SQL (v2.3.0 omits the internal raw score)
 
 
 # ─── Reference Data Loader ───
@@ -9502,9 +9565,14 @@ def update_audit_state(
     pid: str,
     enriched: Dict,
     scored: Dict,
-) -> tuple[int, int]:
+    contract_issues: Optional[List[str]] = None,
+) -> tuple[int, int, int]:
     """Update audit counters incrementally for a matched enriched/scored product."""
-    issues = validate_export_contract(enriched, scored)
+    issues = (
+        contract_issues
+        if contract_issues is not None
+        else validate_export_contract(enriched, scored)
+    )
     if issues:
         entry = {"dsld_id": pid, "issues": issues[:5]}
         if _classify_export_error("; ".join(issues)) == "excluded_by_gate":
@@ -9744,30 +9812,37 @@ def build_final_db(
                 )
 
             mark_staged_product_matched(stage_conn, "scored_stage", pid)
-            (
-                products_with_warnings_count,
-                contract_quarantine_count,
-                contract_failure_count,
-            ) = update_audit_state(
-                audit_counts,
-                products_with_warnings_sample,
-                contract_quarantines,
-                contract_failures,
-                products_with_warnings_count,
-                contract_quarantine_count,
-                contract_failure_count,
-                pid,
-                enriched,
-                scored,
-            )
 
             blob_path = os.path.join(detail_dir, f"{pid}.json")
             tmp_blob_path = f"{blob_path}.tmp"
             try:
+                blob = build_detail_blob(enriched, scored)
+                effective_scored = project_export_scored_artifact(
+                    enriched, scored, blob
+                )
+                if effective_scored != scored:
+                    scored = effective_scored
+                    blob = build_detail_blob(enriched, scored)
                 contract_issues = validate_export_contract(enriched, scored)
+                (
+                    products_with_warnings_count,
+                    contract_quarantine_count,
+                    contract_failure_count,
+                ) = update_audit_state(
+                    audit_counts,
+                    products_with_warnings_sample,
+                    contract_quarantines,
+                    contract_failures,
+                    products_with_warnings_count,
+                    contract_quarantine_count,
+                    contract_failure_count,
+                    pid,
+                    enriched,
+                    scored,
+                    contract_issues=contract_issues,
+                )
                 if contract_issues:
                     raise ValueError("; ".join(contract_issues[:10]))
-                blob = build_detail_blob(enriched, scored)
                 blob_json = json.dumps(blob, ensure_ascii=False, separators=(",", ":"))
                 blob_sha256 = hashlib.sha256(blob_json.encode("utf-8")).hexdigest()
                 row = build_core_row(
@@ -10034,6 +10109,10 @@ def build_final_db(
     )
 
     conn.commit()
+    # Bulk inserts, deduplication, FTS rebuilds, and percentile backfills leave
+    # reclaimable pages. Compact before computing the immutable distribution
+    # checksum so the shipped artifact does not carry build-time fragmentation.
+    conn.execute("VACUUM")
     conn.close()
 
     db_checksum = compute_file_sha256(db_path)

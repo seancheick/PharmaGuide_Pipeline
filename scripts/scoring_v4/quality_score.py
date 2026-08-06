@@ -23,6 +23,11 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from scoring_v4.dose_safety import dose_safety_consumer_explanation
+from scoring_v4.penalty_registry import (
+    DOSE_LIMIT_MIRROR,
+    FORMULA_QUALITY_MIRROR,
+    mirrored_penalty_magnitude,
+)
 from scoring_v4.pillar_explanations import attach_pillar_explanations
 
 _CONFIG_PATH = Path(__file__).resolve().parent / "config" / "quality_score.json"
@@ -344,17 +349,7 @@ def _formulation_additive_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[st
     separate, capped deduction prevents the public Safety Hygiene pillar from
     claiming 10/10 when the product carries additive or glycemic-sweetener flags.
     """
-    formulation = ((module_bd.get("dimensions") or {}).get("formulation") or {})
-    penalties = formulation.get("penalties") or {}
-    raw = 0.0
-    for key in (
-        "B1_harmful_additives",
-        "B1_dietary_sugar",
-        "B1_sleep_melatonin_gummy",
-    ):
-        value = _num(penalties.get(key))
-        if value < 0:
-            raw += abs(value)
+    raw = mirrored_penalty_magnitude(module_bd, FORMULA_QUALITY_MIRROR)
     sub = cfg.get("safety_hygiene_subscale") or {}
     cap = _num(sub.get("additive_or_sweetener_max_penalty"), 4.0)
     return round(min(raw, cap), 1) if raw > 0 else 0.0
@@ -367,12 +362,7 @@ def _dose_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> floa
     deduction only prevents Safety Hygiene from displaying 10/10 when the same
     product carries an explicit B7 dose-safety flag.
     """
-    dose = ((module_bd.get("dimensions") or {}).get("dose") or {})
-    penalties = dose.get("penalties") or {}
-    raw = 0.0
-    value = _num(penalties.get("B7_dose_safety"))
-    if value < 0:
-        raw += abs(value)
+    raw = mirrored_penalty_magnitude(module_bd, DOSE_LIMIT_MIRROR)
     sub = cfg.get("safety_hygiene_subscale") or {}
     cap = _num(sub.get("over_ul_max_penalty"), 3.0)
     return round(min(raw, cap), 1) if raw > 0 else 0.0
@@ -713,77 +703,6 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
     return pillars
 
 
-def _apply_public_cap_to_pillars(
-    pillars: Dict[str, Any],
-    *,
-    capped_total: float,
-    cap: Dict[str, Any],
-) -> Dict[str, Any]:
-    """Scale shipped pillar scores so the public breakdown reconciles to a cap.
-
-    Public caps are cross-pillar calibration ceilings, not raw-score math. Keep
-    the uncapped total in ``quality_score_cap_v4.score_before_cap`` and annotate
-    each pillar with its pre-cap contribution, but ship a visible breakdown that
-    sums to the visible headline score.
-    """
-    current_tenths = sum(
-        max(0, int(round(_num(pillar.get("score")) * 10)))
-        for pillar in pillars.values()
-        if isinstance(pillar, dict)
-    )
-    target_tenths = max(0, int(round(capped_total * 10)))
-    if current_tenths <= 0 or target_tenths >= current_tenths:
-        return pillars
-
-    allocations: List[Dict[str, Any]] = []
-    base_sum = 0
-    for index, (name, pillar) in enumerate(pillars.items()):
-        if not isinstance(pillar, dict):
-            continue
-        score_tenths = max(0, int(round(_num(pillar.get("score")) * 10)))
-        numerator = score_tenths * target_tenths
-        base = numerator // current_tenths
-        remainder = numerator % current_tenths
-        allocations.append({
-            "name": name,
-            "base": base,
-            "remainder": remainder,
-            "original": score_tenths,
-            "index": index,
-        })
-        base_sum += base
-
-    remaining = target_tenths - base_sum
-    for item in sorted(
-        allocations,
-        key=lambda alloc: (alloc["remainder"], alloc["original"], -alloc["index"]),
-        reverse=True,
-    ):
-        if remaining <= 0:
-            break
-        if item["base"] < item["original"]:
-            item["base"] += 1
-            remaining -= 1
-
-    adjusted = copy.deepcopy(pillars)
-    for item in allocations:
-        name = item["name"]
-        pillar = adjusted.get(name)
-        if not isinstance(pillar, dict):
-            continue
-        before = round(item["original"] / 10.0, 1)
-        after = round(item["base"] / 10.0, 1)
-        pillar["score"] = after
-        components = pillar.get("components")
-        if not isinstance(components, dict):
-            components = {}
-        components["score_before_public_cap"] = before
-        components["public_cap_delta"] = round(before - after, 1)
-        components["public_cap_id"] = cap.get("id")
-        pillar["components"] = components
-    return adjusted
-
-
 def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     """Add public six-pillar quality fields. Mutates & returns ``result``.
     ``raw_score_v4_100`` (raw) is never modified."""
@@ -831,17 +750,14 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     cap = _public_quality_cap(module_bd)
     if cap is not None and total > cap["cap"]:
         score_before_cap = total
-        pillars = _apply_public_cap_to_pillars(
-            pillars,
-            capped_total=cap["cap"],
-            cap=cap,
-        )
-        total = round(sum(p["score"] for p in pillars.values()), 1)
+        total = cap["cap"]
         result["quality_score_cap_v4"] = {
             **cap,
             "applied": True,
             "score_before_cap": score_before_cap,
             "score_after_cap": total,
+            "adjustment": round(total - score_before_cap, 1),
+            "presentation": "explicit_adjustment",
         }
 
     # Attach optional, versioned explanation facts sourced from the module

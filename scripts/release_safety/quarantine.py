@@ -71,6 +71,7 @@ from __future__ import annotations
 
 import os
 import re
+import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import List, Optional, Tuple
@@ -85,6 +86,18 @@ ACTIVE_PREFIX = "shared/details/sha256"
 QUARANTINE_PREFIX = "shared/quarantine"
 STORAGE_OPERATION_TIMEOUT_SECONDS = int(
     os.environ.get("PG_STORAGE_OPERATION_TIMEOUT_SECONDS", "30")
+)
+
+# A COPY can succeed while the object briefly fails to appear in a list()
+# of its parent. Treating the first negative listing as failure strands a
+# blob that was in fact copied: the caller reports an error, skips the
+# DELETE, and the blob is left duplicated. Poll instead, and only give up
+# after the object has stayed invisible across every attempt.
+QUARANTINE_VISIBILITY_ATTEMPTS = int(
+    os.environ.get("PG_QUARANTINE_VISIBILITY_ATTEMPTS", "5")
+)
+QUARANTINE_VISIBILITY_BACKOFF_SECONDS = float(
+    os.environ.get("PG_QUARANTINE_VISIBILITY_BACKOFF_SECONDS", "0.5")
 )
 
 # Active blob path: shared/details/sha256/{2-char shard}/{64-hex hash}.json
@@ -290,6 +303,40 @@ def _object_exists(client, bucket: str, path: str) -> bool:
     return False
 
 
+def _wait_for_object_visible(
+    client,
+    bucket: str,
+    path: str,
+    *,
+    attempts: int = None,
+    backoff_seconds: float = None,
+) -> bool:
+    """Poll until ``path`` is listable, or the attempt budget is exhausted.
+
+    Storage listings are eventually consistent: a COPY that has already
+    durably landed can still be missing from the next list() of its parent,
+    and concurrent writers to the same shard make that window wider. A
+    single check therefore conflates "the copy failed" with "the copy is
+    not visible yet" — and only the first justifies preserving the source.
+
+    Returns True as soon as the object appears. Sleeps between attempts but
+    never after the last one, so the failure path costs no extra wall time.
+    """
+    total = QUARANTINE_VISIBILITY_ATTEMPTS if attempts is None else int(attempts)
+    total = max(1, total)
+    delay = (
+        QUARANTINE_VISIBILITY_BACKOFF_SECONDS
+        if backoff_seconds is None
+        else float(backoff_seconds)
+    )
+    for attempt in range(1, total + 1):
+        if _object_exists(client, bucket, path):
+            return True
+        if attempt < total:
+            time.sleep(delay * attempt)
+    return False
+
+
 # ---------------------------------------------------------------------------
 # quarantine_blob — move-to-quarantine with COPY + verify + DELETE pattern
 # ---------------------------------------------------------------------------
@@ -362,10 +409,11 @@ def quarantine_blob(
                 f"COPY {source_path} -> {target_path} failed: {err}; "
                 "source preserved."
             )
-        if not _object_exists(client, bucket, target_path):
+        if not _wait_for_object_visible(client, bucket, target_path):
             return False, (
-                f"COPY reported success but {target_path} not visible after; "
-                "source preserved. Inspect storage state."
+                f"COPY reported success but {target_path} did not become "
+                f"visible within {QUARANTINE_VISIBILITY_ATTEMPTS} listing "
+                "attempts; source preserved. Inspect storage state."
             )
 
     ok, err = _remove_storage_object(client, bucket, source_path)

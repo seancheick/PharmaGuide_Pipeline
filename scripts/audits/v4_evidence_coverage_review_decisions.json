@@ -1,0 +1,25 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "purpose": "Source-backed clinical decisions for the Phase 5 zero-Evidence triage",
+    "policy": "A decision may resolve a pending product group only after a reviewer verifies the cited source content. The audit ignores incomplete, unverified, or source-free decisions.",
+    "allowed_buckets": [
+      "evidence_truly_absent",
+      "evidence_exists_identity_or_linkage_failed",
+      "evidence_exists_knowledge_base_missing",
+      "evidence_exists_product_not_comparable",
+      "reference_or_mechanism_only"
+    ],
+    "required_fields": [
+      "id",
+      "identity_keys",
+      "bucket",
+      "review_status=verified",
+      "reviewed_by",
+      "reviewed_on",
+      "sources[].verification=content_verified"
+    ],
+    "calibration_frozen": true
+  },
+  "decisions": []
+}

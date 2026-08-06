@@ -228,7 +228,7 @@ def _profile_state(product: Dict[str, Any], profile: str, route: str, contract: 
         product,
         profile,
         contract,
-        old_eligible=old_eligible,
+        existing_eligible=old_eligible,
         contract_eligible=contract_eligible,
         evidence=evidence,
     )

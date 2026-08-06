@@ -495,8 +495,10 @@ class BatchProcessor:
             raise RuntimeError(
                 f"Input dataset contains {len(dataless_files)} file(s) that are not "
                 "downloaded on this Mac (macOS 'dataless' cloud placeholders). "
-                "The pipeline would block while opening them. In Finder, right-click "
-                f"the dataset folder and choose 'Download Now', then rerun.\n{examples}{suffix}"
+                "The pipeline would block while opening them. Use the local dataset "
+                "root under ~/Downloads/PharmaGuide_Datasets. For a one-time recovery, "
+                "right-click the cloud folder in Finder, choose 'Download Now', copy "
+                f"it to that local root, then rerun.\n{examples}{suffix}"
             )
         
         logger.info(f"Found {len(files)} input files")

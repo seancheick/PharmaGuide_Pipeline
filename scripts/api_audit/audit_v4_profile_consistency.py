@@ -32,7 +32,7 @@ for _p in (str(SCRIPTS_ROOT), str(SCRIPTS_ROOT / "api_audit")):
 from scoring_input_contract import build_scoring_classification  # noqa: E402
 from scoring_v4.modules.botanical_profile import is_botanical_product  # noqa: E402
 from scoring_v4.modules.collagen_profile import is_collagen_product  # noqa: E402
-from scoring_v4.router import _legacy_class_for_product, class_for_product  # noqa: E402
+from scoring_v4.router import class_for_product  # noqa: E402
 from score_supplements_v4 import score_product_v4  # noqa: E402
 import v4_canary_report as canary  # noqa: E402
 
@@ -166,13 +166,17 @@ def _contract_profile(contract: Dict[str, Any], profile: str) -> bool:
     return isinstance(profile_payload, dict) and profile_payload.get("eligible") is True
 
 
-def _old_profile_eligibility(product: Dict[str, Any], profile: str, old_route: str) -> bool:
+def _existing_profile_eligibility(
+    product: Dict[str, Any],
+    profile: str,
+    existing_route: str,
+) -> bool:
     if profile == "botanical":
-        return old_route == "generic" and bool(is_botanical_product(product))
+        return existing_route == "generic" and bool(is_botanical_product(product))
     if profile == "collagen":
-        return old_route == "generic" and bool(is_collagen_product(product))
+        return existing_route == "generic" and bool(is_collagen_product(product))
     if profile in {"omega", "probiotic", "sports"}:
-        return old_route == profile
+        return existing_route == profile
     return False
 
 
@@ -218,8 +222,11 @@ def _contract_row_count(contract: Dict[str, Any]) -> int:
     return len(rows) if isinstance(rows, list) else 0
 
 
-def _profile_divergence_direction(old_eligible: bool, contract_eligible: bool) -> str:
-    if old_eligible == contract_eligible:
+def _profile_divergence_direction(
+    existing_eligible: bool,
+    contract_eligible: bool,
+) -> str:
+    if existing_eligible == contract_eligible:
         return "aligned"
     return "contract_grants" if contract_eligible else "contract_revokes"
 
@@ -229,14 +236,17 @@ def _profile_divergence_reason(
     profile: str,
     contract: Dict[str, Any],
     *,
-    old_eligible: bool,
+    existing_eligible: bool,
     contract_eligible: bool,
     evidence: str,
 ) -> str:
-    if old_eligible == contract_eligible:
+    if existing_eligible == contract_eligible:
         return "aligned"
 
-    direction = _profile_divergence_direction(old_eligible, contract_eligible)
+    direction = _profile_divergence_direction(
+        existing_eligible,
+        contract_eligible,
+    )
     active_count = _active_row_count(product)
     contract_count = _contract_row_count(contract)
     eligible_count = _profile_eligible_row_count(contract, profile)
@@ -271,33 +281,40 @@ def _profile_row(
     profile: str,
     contract: Dict[str, Any],
     *,
-    old_route: str,
+    existing_route: str,
     public_route: str,
     verdict: str | None,
     score: float | None,
 ) -> Dict[str, Any]:
-    old_eligible = _old_profile_eligibility(product, profile, old_route)
+    existing_eligible = _existing_profile_eligibility(
+        product,
+        profile,
+        existing_route,
+    )
     contract_eligible = _contract_profile(contract, profile)
     classification_failed = bool(contract.get("classification_failed"))
     evidence = _profile_evidence(contract, profile)
-    direction = _profile_divergence_direction(old_eligible, contract_eligible)
+    direction = _profile_divergence_direction(
+        existing_eligible,
+        contract_eligible,
+    )
     return {
         "dsld_id": canary._dsld_id(product),
         "brand_name": product.get("brand_name"),
         "product_name": product.get("product_name") or product.get("fullName"),
         "primary_type": product.get("primary_type") or canary._safe_dict(product.get("supplement_taxonomy")).get("primary_type"),
         "profile": profile,
-        "old_route": old_route,
+        "existing_route": existing_route,
         "public_route": public_route,
-        "old_profile_eligible": old_eligible,
+        "existing_profile_eligible": existing_eligible,
         "contract_profile_eligible": contract_eligible,
-        "profile_diverged": old_eligible != contract_eligible,
+        "profile_diverged": existing_eligible != contract_eligible,
         "profile_divergence_direction": direction,
         "profile_divergence_reason": _profile_divergence_reason(
             product,
             profile,
             contract,
-            old_eligible=old_eligible,
+            existing_eligible=existing_eligible,
             contract_eligible=contract_eligible,
             evidence=evidence,
         ),
@@ -306,8 +323,16 @@ def _profile_row(
         "contract_eligible_row_count": _profile_eligible_row_count(contract, profile),
         "classification_failed": classification_failed,
         "classification_failure_reason": contract.get("classification_failure_reason"),
-        "failure_granted_profile": classification_failed and not old_eligible and contract_eligible,
-        "failure_revoked_profile": classification_failed and old_eligible and not contract_eligible,
+        "failure_granted_profile": (
+            classification_failed
+            and not existing_eligible
+            and contract_eligible
+        ),
+        "failure_revoked_profile": (
+            classification_failed
+            and existing_eligible
+            and not contract_eligible
+        ),
         "route_confidence": contract.get("route_confidence"),
         "profile_evidence": evidence,
         "v4_verdict": verdict,
@@ -318,7 +343,6 @@ def _profile_row(
 def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for product in products:
-        old_route = _legacy_class_for_product(product)
         public_route = class_for_product(product)
         contract = build_scoring_classification(product)
         verdict, score = _score_verdict(product)
@@ -327,7 +351,7 @@ def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 product,
                 profile,
                 contract,
-                old_route=old_route,
+                existing_route=public_route,
                 public_route=public_route,
                 verdict=verdict,
                 score=score,
@@ -340,14 +364,14 @@ def run_canaries() -> List[Dict[str, Any]]:
     for item in PINNED_CANARIES:
         product = item["product"]
         profile = item["profile"]
-        old_route = _legacy_class_for_product(product)
+        public_route = class_for_product(product)
         contract = build_scoring_classification(product)
         row = _profile_row(
             product,
             profile,
             contract,
-            old_route=old_route,
-            public_route=class_for_product(product),
+            existing_route=public_route,
+            public_route=public_route,
             verdict=None,
             score=None,
         )
@@ -375,7 +399,9 @@ def summarize(
     by_profile_reason = defaultdict(Counter)
     for row in rows:
         profile = str(row.get("profile"))
-        by_profile[profile]["old_true"] += bool(row.get("old_profile_eligible"))
+        by_profile[profile]["existing_true"] += bool(
+            row.get("existing_profile_eligible")
+        )
         by_profile[profile]["contract_true"] += bool(row.get("contract_profile_eligible"))
         by_profile[profile]["diverged"] += bool(row.get("profile_diverged"))
         if row.get("profile_diverged"):
@@ -462,9 +488,9 @@ FIELDS = [
     "product_name",
     "primary_type",
     "profile",
-    "old_route",
+    "existing_route",
     "public_route",
-    "old_profile_eligible",
+    "existing_profile_eligible",
     "contract_profile_eligible",
     "profile_diverged",
     "profile_divergence_direction",

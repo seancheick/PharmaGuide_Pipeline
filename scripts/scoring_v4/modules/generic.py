@@ -462,6 +462,13 @@ def _assemble_score(result: GenericModuleResult) -> None:
     until Phase 6's dose adapter lands (so missing reference data still doesn't
     punish quality in the interim).
     """
+    # Cross-cutting orchestration may reassemble after relocating a registered
+    # penalty. Preserve that audit record; the native module assembly metadata
+    # below is otherwise rebuilt deterministically from current dimension state.
+    penalty_relocations = list(
+        (result.metadata or {}).get("penalty_relocations") or []
+    )
+
     # Phase 4: the core dimensions are summed on their NATIVE scale (max 85).
     # There is NO renormalization to 100 — the former `(sum/evaluable_max)*100`
     # branch is deliberately gone (it would have silently inflated 85→100, the
@@ -545,3 +552,5 @@ def _assemble_score(result: GenericModuleResult) -> None:
         "production_score_before_clamp": round(raw_score_100, 4),
         "production_score_clamped": False,
     }
+    if penalty_relocations:
+        result.metadata["penalty_relocations"] = penalty_relocations

@@ -19,7 +19,8 @@ same thing to a reader:
     confirmed_over_threshold   resolved, at/over the threshold, gate-eligible
     material_but_unresolved    exposure is material but the check is incomplete
                                (magnitude absent, or the enricher marked the row
-                               ineligible for the UL gate). Deducts conservatively.
+                               ineligible for the UL gate). Routes to review;
+                               never claims or deducts an unproven exceedance.
     not_applicable             not a distinct exposure (a declared total plus its
                                own disclosed form breakdown). Never deducts.
     conversion_failed          a magnitude was supplied that cannot be parsed.
@@ -30,8 +31,10 @@ from __future__ import annotations
 
 import math
 from collections import Counter
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Mapping, Optional
+from typing import Any, Dict, Iterator, List, Mapping, Optional
 
 from scoring_v4.modules.generic_helpers import _as_float, _norm_text, _safe_list
 
@@ -141,6 +144,46 @@ class DoseSafetyResult:
                 for flag in self.flags
             ],
         }
+
+
+_ACTIVE_RESULT: ContextVar[Optional[DoseSafetyResult]] = ContextVar(
+    "v4_active_dose_safety_result",
+    default=None,
+)
+
+
+@contextmanager
+def dose_safety_scope(result: DoseSafetyResult) -> Iterator[None]:
+    """Share one immutable evaluation across the gate and routed module.
+
+    Direct module tests may still call :func:`resolve_dose_safety` without a
+    scope; production scoring opens this scope once per product so no module can
+    quietly become a second interpreter of the same enriched safety flags.
+    """
+    token = _ACTIVE_RESULT.set(result)
+    try:
+        yield
+    finally:
+        _ACTIVE_RESULT.reset(token)
+
+
+def resolve_dose_safety(
+    product: Dict[str, Any],
+    *,
+    threshold: float,
+    per_flag_penalty: float,
+    cap: float,
+) -> DoseSafetyResult:
+    """Return the production-scoped result, or evaluate for a direct caller."""
+    active = _ACTIVE_RESULT.get()
+    if active is not None:
+        return active
+    return evaluate_dose_safety(
+        product,
+        threshold=threshold,
+        per_flag_penalty=per_flag_penalty,
+        cap=cap,
+    )
 
 
 def dose_safety_consumer_explanation(
@@ -306,13 +349,13 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
             canonical_id=canonical_id,
             pct_ul=None,
             reason=REASON_PCT_UL_NOT_RESOLVED,
-            penalized=True,
+            penalized=False,
         )
 
     # Same eligibility contract the safety gate applies to the UL verdict. An
     # ineligible row (compound mass rather than elemental, or no daily-value
-    # anchor) is not a confirmed exceedance. Scoring keeps the conservative
-    # deduction for now; the state stops it claiming to be confirmed.
+    # anchor) is not a confirmed exceedance. It routes to review but cannot
+    # incur an over-limit deduction: the comparison has not been established.
     if flag.get("ul_gate_eligible") is not True:
         return DoseSafetyFlag(
             state=MATERIAL_BUT_UNRESOLVED,
@@ -320,7 +363,7 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
             canonical_id=canonical_id,
             pct_ul=pct_ul,
             reason=_norm_text(flag.get("ul_gate_ineligible_reason")) or "ul_gate_not_eligible",
-            penalized=True,
+            penalized=False,
         )
 
     return DoseSafetyFlag(

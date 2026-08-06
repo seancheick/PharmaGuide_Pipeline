@@ -1,12 +1,8 @@
-"""
-P0-2 — a dose safety_flag with a missing/None ``pct_ul`` must fail SAFE.
+"""A missing/None ``pct_ul`` must fail clean assessment without false scoring.
 
-``rda_ul_data.safety_flags[]`` are emitted ONLY for over-UL rows. The B7 dose
-penalty read ``pct_ul = _as_float(flag.get("pct_ul"), 0.0) or 0.0`` — so a flag
-whose ``pct_ul`` is missing/None defaulted to 0.0, fell below the 150% threshold,
-and applied NO penalty: "UL unknown" was read as "under UL / safe", the wrong
-direction for a clinical product. A present flag is an over-UL signal and must be
-penalized even when its magnitude field is absent.
+The old fallback treated a missing magnitude as under-UL. The typed contract now
+routes that uncertainty to CAUTION/review while withholding the numeric B7
+deduction until an exceedance is actually established.
 """
 
 from __future__ import annotations
@@ -23,13 +19,15 @@ def _prod(flags):
     return {"rda_ul_data": {"safety_flags": flags}}
 
 
-def test_flag_with_missing_pct_ul_still_penalizes():
-    assert _penalty_b7_dose_safety(_prod([{"nutrient": "X"}])) > 0
-    assert _penalty_b7_dose_safety(_prod([{"nutrient": "X", "pct_ul": None}])) > 0
+def test_flag_with_missing_pct_ul_does_not_apply_unproven_penalty():
+    assert _penalty_b7_dose_safety(_prod([{"nutrient": "X"}])) == 0
+    assert _penalty_b7_dose_safety(_prod([{"nutrient": "X", "pct_ul": None}])) == 0
 
 
 def test_real_over_ul_flag_penalizes():
-    assert _penalty_b7_dose_safety(_prod([{"nutrient": "X", "pct_ul": 200}])) > 0
+    assert _penalty_b7_dose_safety(_prod([
+        {"nutrient": "X", "pct_ul": 200, "ul_gate_eligible": True}
+    ])) > 0
 
 
 def test_no_flags_no_penalty():

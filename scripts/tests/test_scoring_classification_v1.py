@@ -18,7 +18,7 @@ from scoring_input_contract import (  # noqa: E402
     build_scoring_classification,
     derive_product_scoring_evidence,
 )
-from scoring_v4.router import _legacy_class_for_product, class_for_product  # noqa: E402
+from scoring_v4.router import class_for_product  # noqa: E402
 
 
 def _row(canonical: str, name: str, quantity: float = 100, unit: str = "mg", **extra):
@@ -100,9 +100,11 @@ def test_classification_builder_is_total_and_schema_valid(payload):
         ),
     ],
 )
-def test_router_public_api_matches_legacy_parity_baseline(product):
-    assert class_for_product(product) == _legacy_class_for_product(product)
-    assert build_scoring_classification(product)["route_module"] == _legacy_class_for_product(product)
+def test_router_public_api_delegates_to_classification_contract(product):
+    assert (
+        class_for_product(product)
+        == build_scoring_classification(product)["route_module"]
+    )
 
 
 def test_route_classification_reuses_scoring_rows(monkeypatch):
@@ -159,7 +161,6 @@ def test_multivitamin_taxonomy_thin_panel_routes_generic():
         primary_type="multivitamin",
     )
     assert build_scoring_classification(p)["route_module"] == "generic"
-    assert _legacy_class_for_product(p) == "generic"  # parity: both brains agree
 
 
 def test_targeted_beauty_formula_with_four_micronutrients_routes_generic():
@@ -178,7 +179,6 @@ def test_targeted_beauty_formula_with_four_micronutrients_routes_generic():
         primary_type="multivitamin",
     )
     assert build_scoring_classification(p)["route_module"] == "generic"
-    assert _legacy_class_for_product(p) == "generic"
 
 
 def test_multivitamin_real_broad_panel_routes_multi():
@@ -197,7 +197,6 @@ def test_multivitamin_real_broad_panel_routes_multi():
         primary_type="multivitamin",
     )
     assert build_scoring_classification(p)["route_module"] == "multi_or_prenatal"
-    assert _legacy_class_for_product(p) == "multi_or_prenatal"
 
 
 def test_multivitamin_with_fiber_adjunct_routes_multi_not_fiber():
@@ -220,7 +219,6 @@ def test_multivitamin_with_fiber_adjunct_routes_multi_not_fiber():
         primary_type="multivitamin",
     )
     assert build_scoring_classification(p)["route_module"] == "multi_or_prenatal"
-    assert _legacy_class_for_product(p) == "multi_or_prenatal"
 
 
 @pytest.mark.parametrize("primary_type", ["immune_support", "sleep_support", "herbal_botanical"])
@@ -241,7 +239,6 @@ def test_themed_multivitamin_with_broad_panel_routes_multi(primary_type):
         primary_type=primary_type,
     )
     assert build_scoring_classification(p)["route_module"] == "multi_or_prenatal"
-    assert _legacy_class_for_product(p) == "multi_or_prenatal"
 
 
 def test_themed_product_without_broad_panel_stays_generic():
@@ -256,7 +253,6 @@ def test_themed_product_without_broad_panel_stays_generic():
         primary_type="sleep_support",
     )
     assert build_scoring_classification(p)["route_module"] == "generic"
-    assert _legacy_class_for_product(p) == "generic"
 
 
 def test_targeted_formula_with_four_nutrients_stays_generic():
@@ -277,7 +273,6 @@ def test_targeted_formula_with_four_nutrients_stays_generic():
         primary_type="general_supplement",
     )
     assert build_scoring_classification(p)["route_module"] == "generic"
-    assert _legacy_class_for_product(p) == "generic"
 
 
 def test_greens_collagen_identity_stays_generic_despite_micronutrient_panel():
@@ -300,7 +295,6 @@ def test_greens_collagen_identity_stays_generic_despite_micronutrient_panel():
         primary_type="greens_powder",
     )
     assert build_scoring_classification(p)["route_module"] == "generic"
-    assert _legacy_class_for_product(p) == "generic"
 
 
 def test_multivitamin_name_override_routes_multi_even_thin():
@@ -313,7 +307,6 @@ def test_multivitamin_name_override_routes_multi_even_thin():
         primary_type="multivitamin",
     )
     assert build_scoring_classification(p)["route_module"] == "multi_or_prenatal"
-    assert _legacy_class_for_product(p) == "multi_or_prenatal"
 
 
 def test_public_router_does_not_seed_contract_route():
@@ -879,19 +872,19 @@ def test_enrichment_validator_rejects_failed_nongeneric_classification():
     assert any(v.rule == "J.6" for v in violations)
 
 
-def test_route_audit_not_ready_when_failure_overrides_specialized_route():
+def test_route_audit_not_ready_when_failure_overrides_stamped_specialized_route():
     from api_audit.audit_v4_route_consistency import summarize
 
     summary = summarize(
         rows=[
             {
                 "dsld_id": "x",
-                "old_route": "omega",
-                "contract_route": "generic",
+                "stamped_route": "omega",
+                "recomputed_route": "generic",
                 "public_route": "generic",
                 "route_confidence": "failed",
                 "classification_failed": True,
-                "failure_overrode_old_route": True,
+                "failure_overrode_stamped_route": True,
                 "route_diverged": True,
                 "v4_verdict": "SAFE",
             }
@@ -901,7 +894,7 @@ def test_route_audit_not_ready_when_failure_overrides_specialized_route():
         elapsed_seconds=0.01,
     )
     assert summary["classification_failed_count"] == 1
-    assert summary["failure_overrode_old_route_count"] == 1
+    assert summary["failure_overrode_stamped_route_count"] == 1
     assert summary["ready"] is False
 
 
@@ -912,12 +905,12 @@ def test_route_audit_not_ready_when_performance_budget_is_exceeded():
         rows=[
             {
                 "dsld_id": "x",
-                "old_route": "generic",
-                "contract_route": "generic",
+                "stamped_route": "generic",
+                "recomputed_route": "generic",
                 "public_route": "generic",
                 "route_confidence": "medium",
                 "classification_failed": False,
-                "failure_overrode_old_route": False,
+                "failure_overrode_stamped_route": False,
                 "route_diverged": False,
                 "v4_verdict": "SAFE",
             }
@@ -1017,7 +1010,7 @@ def test_profile_audit_not_ready_on_unsigned_profile_divergence():
             {
                 "dsld_id": "x",
                 "profile": "botanical",
-                "old_profile_eligible": False,
+                "existing_profile_eligible": False,
                 "contract_profile_eligible": True,
                 "profile_diverged": True,
                 "classification_failed": False,
@@ -1043,7 +1036,7 @@ def test_profile_audit_not_ready_when_failure_changes_profile():
             {
                 "dsld_id": "x",
                 "profile": "collagen",
-                "old_profile_eligible": True,
+                "existing_profile_eligible": True,
                 "contract_profile_eligible": False,
                 "profile_diverged": True,
                 "classification_failed": True,
@@ -1069,7 +1062,7 @@ def test_profile_audit_reports_divergence_reason_buckets():
             {
                 "dsld_id": "x",
                 "profile": "botanical",
-                "old_profile_eligible": False,
+                "existing_profile_eligible": False,
                 "contract_profile_eligible": True,
                 "profile_diverged": True,
                 "profile_divergence_reason": "contract_grants_recovered_botanical_rows",
@@ -1081,7 +1074,7 @@ def test_profile_audit_reports_divergence_reason_buckets():
             {
                 "dsld_id": "y",
                 "profile": "collagen",
-                "old_profile_eligible": True,
+                "existing_profile_eligible": True,
                 "contract_profile_eligible": False,
                 "profile_diverged": True,
                 "profile_divergence_reason": "contract_revokes_collagen_mass_or_product_intent",

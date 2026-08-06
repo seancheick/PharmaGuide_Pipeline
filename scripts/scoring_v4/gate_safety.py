@@ -48,6 +48,13 @@ from identity.safety import (
 )
 from rda_ul_calculator import get_actionable_ul_review_signals
 from scoring_input_contract import get_scoring_ingredients
+from scoring_v4.dose_safety import (
+    CONFIRMED_OVER_THRESHOLD,
+    MATERIAL_BUT_UNRESOLVED,
+    DoseSafetyResult,
+    resolve_dose_safety,
+)
+from scoring_v4.quality_score_config import block as _quality_config_block
 
 
 # Verdict precedence — index = severity rank.
@@ -560,38 +567,41 @@ def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
         _append_signal(result, f"B0_STATUS_{status.upper()}")
 
 
-def _apply_ul_dose_policy(result: SafetyResult, product: Dict[str, Any]) -> None:
-    """UL dose severity → verdict (P0-1b).
+def _apply_typed_dose_safety_policy(
+    result: SafetyResult,
+    dose_safety: DoseSafetyResult,
+) -> None:
+    """Apply verdict policy to the same typed B7 result used by scoring.
 
-    A GATE-ELIGIBLE over-UL flag (``pct_ul >= 150``) cannot ship SAFE:
+    A confirmed over-threshold flag cannot ship SAFE:
       - 150–199% → CAUTION
       - >= 200%  → CAUTION + a critical dose signal
-    Dose excess NEVER escalates past CAUTION — BLOCKED/UNSAFE stay for
-    banned/recalled/adulterated substances.
-
-    Only flags explicitly marked ``ul_gate_eligible: True`` can drive the verdict
-    gate. Older enriched output lacks that field and may contain compound-mass
-    false positives, so stale flags must be re-enriched before they can affect
-    the verdict. ``pct_ul is None`` is not evaluable and never treated as over.
+    An unresolved material exposure routes to CAUTION/review without claiming an
+    established exceedance. Dose policy never escalates past CAUTION.
     """
-    rda_ul = _safe_dict(product.get("rda_ul_data"))
     max_pct = 0.0
-    for flag in _safe_list(rda_ul.get("safety_flags")):
-        if not isinstance(flag, dict):
+    unresolved = False
+    for flag in dose_safety.flags:
+        if flag.state == MATERIAL_BUT_UNRESOLVED:
+            unresolved = True
             continue
-        if flag.get("ul_gate_eligible") is not True:
+        if flag.state != CONFIRMED_OVER_THRESHOLD:
             continue
-        pct = _as_float(flag.get("pct_ul"))
+        pct = _as_float(flag.pct_ul)
         if pct is None:
             continue
-        if pct >= 150.0 and pct > max_pct:
+        if pct > max_pct:
             max_pct = pct
-    if max_pct >= 150.0:
+    if max_pct > 0.0:
         result.verdict = _max_verdict(result.verdict, "CAUTION")
         _append_signal(
             result,
             "DOSE_OVER_UL_CRITICAL" if max_pct >= 200.0 else "DOSE_OVER_UL_CAUTION",
         )
+    if unresolved:
+        result.verdict = _max_verdict(result.verdict, "CAUTION")
+        result.needs_review = True
+        _append_signal(result, "DOSE_SAFETY_UNRESOLVED_REVIEW")
 
 
 def _apply_ul_review_policy(result: SafetyResult, product: Dict[str, Any]) -> None:
@@ -619,17 +629,29 @@ def _apply_special_use_policy(result: SafetyResult, product: Dict[str, Any]) -> 
         _append_signal(result, code)
 
 
-def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
+def evaluate_safety_gate(
+    product: Dict[str, Any],
+    *,
+    dose_safety: Optional[DoseSafetyResult] = None,
+) -> SafetyResult:
     """Evaluate the v4 Layer 1 safety gate on an enriched product.
 
-    Never raises. Resilient to missing / malformed fields. Returns a
-    SafetyResult — the caller (v4 entry point) decides how to apply
-    the verdict and short-circuit logic.
+    Resilient to missing non-safety fields. The production entry point validates
+    the dose-safety numeric contract before calling this gate; direct calls use
+    the same typed evaluator. Returns a SafetyResult for verdict reconciliation.
     """
     if not isinstance(product, dict):
         return SafetyResult()
 
     result = SafetyResult()
+    if dose_safety is None:
+        policy = _quality_config_block("dose_safety_policy", "ul_pct_threshold")
+        dose_safety = resolve_dose_safety(
+            product,
+            threshold=float(policy["ul_pct_threshold"]),
+            per_flag_penalty=float(policy["per_flag_penalty"]),
+            cap=float(policy["cap"]),
+        )
 
     # Consume the canonical SafetySignal[] contract. The kernel
     # (identity/safety.py) owns ALL matcher-internal knowledge and emits a
@@ -643,7 +665,7 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
         _apply_signal_policy(result, sig)
 
     _apply_stimulant_policy(result, product)
-    _apply_ul_dose_policy(result, product)
+    _apply_typed_dose_safety_policy(result, dose_safety)
     _apply_ul_review_policy(result, product)
     _apply_special_use_policy(result, product)
 

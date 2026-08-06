@@ -1,24 +1,10 @@
-"""v4 scoring package.
+"""Production v4 scoring package.
 
-Companion to `score_supplements.py` (v3, production truth). Per the
-architecture lock in `docs/plans/SCORING_V4_PROPOSAL.md` §13:
-
-  - v4 ships as a SEPARATE scorer at `scripts/score_supplements_v4.py`.
-  - This package owns the v4 scoring policy (router, gates, modules,
-    rubrics, confidence). v3 is untouched.
-  - Both scorers consume the same enriched input contract from
-    `enrich_supplements_v3.py`. Stable shared helpers (cert_resolver,
-    enhanced_normalizer lookups) are imported by both.
-  - v4 emits `v4_*` columns side-by-side with v3 columns;
-    v3 stays authoritative through the v4 build.
-
-Phased migration (§19):
-  P1   — router + gates + generic module (this is what's online).
-  P1.5 — omega decision gate.
-  P2   — probiotic module.
-  P3   — multi_or_prenatal module.
-  P4   — AI panel rank-order check + API ground truth.
-  P5   — Flutter cutover.
+The operational Stage-3 entry point is ``score_products_v4.py``. It invokes
+``score_supplements_v4.py`` once per enriched product and emits the canonical
+six-pillar artifact consumed by final export. This package owns v4 gates,
+modules, rubrics, confidence, and the thin public route adapter; the actual
+routing policy has one source of truth in ``scoring_input_contract.py``.
 """
 
 __all__ = ["router", "gate_safety", "gate_completeness", "confidence", "modules"]

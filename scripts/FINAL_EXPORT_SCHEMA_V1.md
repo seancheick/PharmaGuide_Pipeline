@@ -1,15 +1,15 @@
 # FINAL EXPORT SCHEMA V1
 
-> Version: 2.2.0 — 2026-08-04
+> Version: 2.3.0 — 2026-08-05
 > Consumes: v4-native Stage-3 artifacts from `score_products_v4.py` +
 > `scoring_v4/scored_artifact.py`; enrichment schema v5.1.0+. Final export does
 > not rescore or overlay another scoring engine.
-> Status: ACTIVE — **v2.2.0:** adds independent `product_safety_status` and `quality_assessment_status` columns and detail-blob fields. Legacy `verdict` remains temporarily for compatibility, but consumer safety behavior must use `product_safety_status`; `POOR` and low-coverage `CAUTION` are not safety findings. **v2.0.0 BREAKING:** the production catalog is v4 only. The legacy /80 columns `score_quality_80` + `score_display_80` are **DROPPED**; the canonical shipped score is `quality_score_v4_100` (/100), with `score_100_equivalent` / `score_display_100_equivalent` as honest /100 compat mirrors.
+> Status: ACTIVE — **v2.3.0:** adds the typed `v4_dose_safety` detail-blob summary and preserves v2.2.0's independent `product_safety_status` / `quality_assessment_status` fields. Legacy `verdict` remains temporarily for compatibility, but consumer safety behavior must use `product_safety_status`; `POOR` and low-coverage `CAUTION` are not safety findings. **v2.0.0 BREAKING:** the production catalog is v4 only. The legacy /80 columns `score_quality_80` + `score_display_80` are **DROPPED**; the canonical shipped score is `quality_score_v4_100` (/100), with `score_100_equivalent` / `score_display_100_equivalent` as honest /100 compat mirrors.
 >
 > Status (v1 history): v1.6.1 landed the unified inactive-ingredient resolver + Vitamin A IU→mcg RAE form-aware conversion + canonical_id / delivers_markers propagation.
 > Updated: **v1.6.1 adds (2026-05-12): (a) unified inactive-ingredient resolver via `scripts/inactive_ingredient_resolver.py` — consults `banned_recalled_ingredients.json`, `harmful_additives.json`, `other_ingredients.json` in priority order with strict standard_name+aliases-only matching; (b) four new fields on every inactive blob entry: `is_banned`, `safety_reason`, `matched_source`, `matched_rule_id` — closes the TiO2/Talc silent-ship gap (1,178+311 occurrences now correctly flagged is_safety_concern=true / severity_status=critical); (c) `canonical_id` + `delivers_markers` now emitted on every active blob entry — was 0% emit pre-fix, 100% post-fix on mapped actives. Foundational for interaction rules, stack-checking, evidence routing, biomarker scoring; (d) `display_label` for branded botanicals now preserves brand + species + plant-part + form (e.g. "Capsimax(TM) Capsicum Fruit Extract" → "Capsimax Capsicum Fruit Extract", trademark stripped); (e) Vitamin A IU labels now normalize form-aware to mcg RAE (β-carotene factor 0.1, retinol 0.3) — pregnancy UL gate now evaluable. v1.6.0 added `profile_gate` passthrough on `interaction` / `drug_interaction` warning entries. v1.5.0 introduced the canonical active + inactive ingredient contract (`display_form_label` / `form_status` / `form_match_status` / `dose_status` on actives; `display_label` / `display_role_label` / `severity_status` / `is_safety_concern` on inactives). Legacy fields (`form`, `is_harmful`) kept for back-compat and documented as deprecated. v1.4.0 adds `image_thumbnail_url` TEXT column and `normalize_upc` field. v1.3.4 added CAERS B8 penalty scoring (159 adverse event signals) and offline UNII cache (172K substances). v1.3.3 expanded interaction rules to 129 (now 145 per `scripts/data/interaction_rules.json` schema 6.1.0). v1.3.2 adds `calories_per_serving` REAL column and two new detail_blob subkeys: `nutrition_detail` (all five macros) and `unmapped_actives` (transparency panel). v1.3.1 bugfixes `dosing_summary`/`servings_per_container` and adds `net_contents_quantity` + `net_contents_unit` for refill-reminder features. `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
 >
-> **Score visibility gate (v2.2.0):** `quality_score_status` controls whether Flutter may show a quality score. `scored` rows expose a whole-number `quality_score_v4_100`; `suppressed_safety` rows ship with a null display score plus a hard safety verdict; `not_scored` rows ship without a product-quality score. The decimal `raw_score_v4_100` remains internal to Stage 3 and is excluded from both `products_core` and public detail blobs. `unmapped_actives` remains present in detail blobs as a coverage/provenance surface; final export and route-readiness gates decide score visibility rather than blindly treating every unmapped active as a shipped score.
+> **Score visibility gate (v2.3.0):** `quality_score_status` controls whether Flutter may show a quality score. `scored` rows expose a whole-number `quality_score_v4_100`; `suppressed_safety` rows ship with a null display score plus a hard safety verdict; `not_scored` rows ship without a product-quality score. The decimal `raw_score_v4_100` remains internal to Stage 3 and is excluded from both `products_core` and public detail blobs. `unmapped_actives` and typed `v4_dose_safety` remain present in detail blobs as coverage/safety provenance surfaces; final export and route-readiness gates decide score visibility rather than blindly treating every unmapped active as a shipped score.
 >
 > Previous updates: scoring v3.4 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, and Flutter convenience fields (`detail_blob_sha256`, `image_is_pdf`, `interaction_summary_hint`, `decision_highlights`)
 
@@ -383,11 +383,11 @@ Required rows:
 | ------------------ | ---------------------- |
 | `db_version`       | `2026.03.29.232343`    |
 | `pipeline_version` | `3.4.0`                |
-| `scoring_version`  | `4.1.0`                |
+| `scoring_version`  | `4.2.0`                |
 | `generated_at`     | `2026-03-29T22:33:24Z` |
 | `product_count`    | `180423`               |
 | `min_app_version`  | `1.0.0`                |
-| `schema_version`   | `2.0.0`                |
+| `schema_version`   | `2.3.0`                |
 
 `db_version` is generated from the UTC build timestamp as `YYYY.MM.DD.HHMMSS`.
 The SQLite `export_manifest` table intentionally omits `checksum`, because the
@@ -827,6 +827,10 @@ ambiguity.
   material but indeterminate UL assessment (currently unknown-form folate at or above the
   possible synthetic-folic-acid threshold). It routes the catalog verdict to `CAUTION` and
   review without asserting `over_ul=true` or applying an over-UL score penalty.
+- `v4_dose_safety` is the scorer-owned typed summary. Its states distinguish confirmed
+  over-threshold exposure from material-but-unresolved comparison, non-applicable duplicate
+  lineage, and conversion defects. Unresolved rows route to partial review without an
+  exceedance deduction or exceedance language.
 - `warnings` include banned/recalled/high-risk/watchlist ingredient hits, allergens, harmful
   additives, interaction warnings, drug interaction warnings, dietary warnings, and product
   status warnings. Each warning type carries specific provenance fields (see examples above).

@@ -2475,6 +2475,26 @@ class SupplementEnricherV3:
             return None
         if excluded_keys and any(key in excluded_keys for _, _, key in candidate_pairs):
             return None
+        if study.get("exclude_alias_match_mode") == "bounded_phrase":
+            candidate_identity_texts = [
+                " ".join(key.replace("_", " ").split())
+                for _, _, key in candidate_pairs
+                if key
+            ]
+            excluded_identity_texts = [
+                " ".join(key.replace("_", " ").split())
+                for key in excluded_keys
+                if key
+            ]
+            if any(
+                re.search(
+                    rf"(?<![a-z0-9]){re.escape(excluded)}(?![a-z0-9])",
+                    candidate,
+                )
+                for candidate in candidate_identity_texts
+                for excluded in excluded_identity_texts
+            ):
+                return None
 
         target_norm = self._normalize_text(study_name)
         target_key = norm_module.make_normalized_key(study_name)
@@ -7696,7 +7716,12 @@ class SupplementEnricherV3:
             # tagged them with prefix="from". Don't short-circuit those.
             _is_delivery_tech_from_prefix = (
                 _dsld_prefix == 'from'
-                and self._should_keep_from_prefixed_form_as_actual(raw_form_text)
+                and (
+                    form_data.get("keep_from_prefixed_form") is True
+                    or self._should_keep_from_prefixed_form_as_actual(
+                        raw_form_text
+                    )
+                )
             )
             if (
                 (
@@ -7931,6 +7956,21 @@ class SupplementEnricherV3:
         # resolve the biologically-active compound rather than the salt/carrier.
         _FROM_PREFIXES = frozenset({'from', 'From', 'from '})
 
+        def _keep_from_prefixed_form(form_name: str) -> bool:
+            """Keep reviewed same-identity compounds serialized as sources."""
+            if self._should_keep_from_prefixed_form_as_actual(form_name):
+                return True
+            ingredient_key = norm_module.make_normalized_key(ing_name)
+            form_key = norm_module.make_normalized_key(form_name)
+            return (
+                ingredient_key == "l_carnitine"
+                and form_key in {
+                    "l_carnitine_tartrate",
+                    "l_carnitine_l_tartrate",
+                    "levocarnitine_tartrate",
+                }
+            )
+
         # Biological origin/culture prefixes: these describe the fermentation or
         # growth substrate (e.g. "Lactobacillus bulgaricus" with prefix
         # "from culture of").  They must be skipped entirely — do NOT promote
@@ -7997,7 +8037,7 @@ class SupplementEnricherV3:
         from_source_map: Dict[int, str] = {}  # index → source name
         for i, form in enumerate(cleaned_forms):
             prefix = (form.get('prefix') or '').strip()
-            keep_as_form = self._should_keep_from_prefixed_form_as_actual(form.get('name', ''))
+            keep_as_form = _keep_from_prefixed_form(form.get('name', ''))
             if prefix in _FROM_PREFIXES and i > 0 and not keep_as_form:
                 src = (form.get('name') or '').strip()
                 if src:
@@ -8008,7 +8048,7 @@ class SupplementEnricherV3:
             prefix = (form.get('prefix') or '').strip()
             keep_from_prefixed_form = (
                 prefix in _FROM_PREFIXES
-                and self._should_keep_from_prefixed_form_as_actual(form.get('name', ''))
+                and _keep_from_prefixed_form(form.get('name', ''))
             )
             # Skip biological culture/origin descriptors entirely — these name
             # the fermentation substrate or organism, not the ingredient's form.
@@ -8136,6 +8176,7 @@ class SupplementEnricherV3:
                 'dsld_prefix': form.get('prefix'),
                 'dsld_ingredient_group': form.get('ingredientGroup'),
                 'dsld_unii_code': form.get('uniiCode'),
+                'keep_from_prefixed_form': keep_from_prefixed_form,
             })
 
         if not extracted_forms:
@@ -11735,8 +11776,7 @@ class SupplementEnricherV3:
         # invariant explicit instead.
         #
         # Each gate is also recorded into `conflicts` if not already
-        # there, so downstream scoring (`score_supplements.py:1934`)
-        # sees the disagreement.
+        # there, so downstream scoring sees the disagreement.
         def _record_conflict(msg: str) -> None:
             if msg not in conflicts:
                 conflicts.append(msg)
@@ -13879,6 +13919,7 @@ class SupplementEnricherV3:
                             out.append(value)
             return out
 
+        seen_study_ids = set()
         for ingredient in active_ingredients:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
@@ -13897,8 +13938,6 @@ class SupplementEnricherV3:
             )
             if branded_token:
                 candidate_names.append(branded_token)
-            seen_study_ids = set()
-
             for study in self._candidate_clinical_studies(candidate_names, studies):
                 study_name = study.get('standard_name', '')
                 study_aliases = self._collect_clinical_aliases(study)
@@ -13970,6 +14009,7 @@ class SupplementEnricherV3:
                         "registry_completed_trials_count",
                         "primary_outcome",
                         "endpoint_relevance_tags",
+                        "evidence_group_id",
                         "notes",
                         "notable_studies",
                         "references_structured",
@@ -14061,7 +14101,8 @@ class SupplementEnricherV3:
                         "total_enrollment", "published_studies", "published_studies_count",
                         "published_rct_count", "published_meta_review_count",
                         "registry_completed_trials_count", "primary_outcome",
-                        "endpoint_relevance_tags", "notes", "notable_studies",
+                        "endpoint_relevance_tags", "evidence_group_id",
+                        "notes", "notable_studies",
                         "references_structured",
                     ]
                     for field in optional_fields:
@@ -14537,9 +14578,7 @@ class SupplementEnricherV3:
     ]
 
     # P0.5 — fallback prebiotic vocabulary used when scoring_config.json is
-    # unavailable. Must stay byte-equal to the scorer's fallback in
-    # score_supplements.py _compute_probiotic_category_bonus so the two paths
-    # agree even without config. The authoritative list lives in
+    # unavailable. The authoritative list lives in
     # scoring_config.section_A_ingredient_quality.probiotic_bonus.prebiotic_terms;
     # _get_prebiotic_terms() prefers config and falls back here.
     _PREBIOTIC_TERMS_FALLBACK = [

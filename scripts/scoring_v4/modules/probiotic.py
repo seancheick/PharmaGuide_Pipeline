@@ -149,9 +149,7 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     handles real input validation upstream in the v4 pipeline.
 
     Args:
-        product: Enriched product dict (same contract as v3 consumes).
-            Currently unused — present for forward compatibility so
-            subsequent slices don't change the signature.
+        product: Enriched product dict consumed by all four dimension scorers.
 
     Returns:
         ProbioticModuleResult with the locked breakdown shape.

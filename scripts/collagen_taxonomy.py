@@ -41,7 +41,9 @@ SUBTYPE_TO_DOSING_ALIAS = {
     PEPTIDES_I_III: "collagen",
 }
 
-_UC2_RE = re.compile(r"\buc-?ii\b|undenatured|\bnt2\b|native\s+type\s*(ii|2)\b")
+_UC2_RE = re.compile(
+    r"\buc[-_\s]?ii\b|undenatured|\bnt2\b|native\s+type\s*(ii|2)\b"
+)
 # chicken sternum / sternal cartilage is the Type-II collagen source.
 _HYDROLYZED_TYPE2_RE = re.compile(r"\bbiocell\b|hydrolyzed\s+type\s*(ii|2)\b|stern(al|um)")
 _TYPE2_RE = re.compile(r"type\s*(ii|2)\b")

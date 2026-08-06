@@ -1,11 +1,12 @@
 {
   "_documentation": {
-    "version": "3.6.0",
-    "description": "PharmaGuide scoring configuration — modular category bonus architecture",
+    "version": "3.6.1",
+    "description": "Legacy enrichment vocabulary and dashboard audit reference. Production v4 score policy lives in scoring_v4/config/quality_score.json.",
     "total_points": "80 calculated server-side (A+B+C+D), 20 fit score computed on device",
-    "last_updated": "2026-05-04",
+    "last_updated": "2026-08-05",
     "author": "PharmaGuide Team",
     "changelog": [
+      "3.6.1: Removed the dead B7_dose_safety scoring block. Production B7 policy is owned solely by scoring_v4/config/quality_score.json; this file remains loaded only for legacy enrichment vocabulary and dashboard audit references.",
       "3.6.0: bio_score/score honesty pass. A1 reads pure bio_score (0-15, form quality only) — no more natural-source bonus inflating per-ingredient form claims. A1.max stays 18; (avg_bio_score / 15) * 18 rescale preserves the per-product budget. A2 threshold 14→12 and reads bio_score (was 'score' which double-counted natural premium forms). A5.max 3→4 with new A5e_natural_source +1 — sourcing signal lives where it belongs (alongside organic, standardized, non-GMO). A6 tiers recalibrated to bio_score scale (>=14/12/10 → 3/2/1). Empirical impact (250-product sample): synthetic-premium products gain ~2-3pt in Section A (deserved); natural-mid products lose ~0.5-1pt (corrected — they weren't actually premium); natural-premium unchanged.",
       "3.5.1: Metadata sync — bumped version + last_updated to reflect 2026-05-02 clinician decisions already present in body (omega3_dose_bonus.max=2.0 cap, redistributed bands, opacity flag for partial-disclosure omega-3 blends). No body changes.",
       "3.4.0: Section C evidence scoring overhaul — Top-N diminishing returns aggregation (configurable weights, default [1.0, 0.5, 0.25]) to prevent multivitamin inflation. Added effect_direction multipliers (positive_strong/positive_weak/mixed/null/negative) to distinguish well-studied-effective from well-studied-ineffective.",
@@ -422,11 +423,6 @@
     },
     "B6_marketing_penalty": {
       "penalty": 5
-    },
-    "B7_dose_safety": {
-      "threshold_pct": 150,
-      "single_penalty": 2.0,
-      "cap": 3.0
     }
   },
   "section_C_evidence_research": {

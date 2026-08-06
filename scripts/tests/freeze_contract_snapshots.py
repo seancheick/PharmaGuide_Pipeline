@@ -95,10 +95,17 @@ def freeze_one(
     fixture_path = FIXTURE_DIR / f"{dsld_id}.json"
 
     if dry_run:
-        return True, f"[{dsld_id:>7}] {label[:50]:50s} -> would write {fixture_path.name} (score_80={frozen.get('score_80')})"
+        return True, (
+            f"[{dsld_id:>7}] {label[:50]:50s} -> would write "
+            f"{fixture_path.name} "
+            f"(quality_score_v4_100={frozen.get('quality_score_v4_100')})"
+        )
 
     fixture_path.write_text(json.dumps(frozen, indent=2, sort_keys=True) + "\n")
-    return True, f"[{dsld_id:>7}] {label[:50]:50s} -> wrote {fixture_path.name} (score_80={frozen.get('score_80')})"
+    return True, (
+        f"[{dsld_id:>7}] {label[:50]:50s} -> wrote {fixture_path.name} "
+        f"(quality_score_v4_100={frozen.get('quality_score_v4_100')})"
+    )
 
 
 def main() -> int:

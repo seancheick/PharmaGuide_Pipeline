@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Iterable, List, Optional
 
-from scoring_v4.dose_safety import evaluate_dose_safety
+from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     has_usable_individual_dose,
@@ -35,6 +35,7 @@ _BIO_WEIGHT_FLOOR = 0.75
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _DM = _cfg_block("dose_magnitudes", "multi_prenatal")["multi_prenatal"]
+_B7 = _cfg_block("dose_safety_policy", "ul_pct_threshold")
 
 
 DIMENSION_CAP = _DM["dimension_cap"]
@@ -43,9 +44,9 @@ CAP_PANEL_BREADTH = _DM["cap_panel_breadth"]
 CAP_CRITICAL_NUTRIENT_COVERAGE = _DM["cap_critical_nutrient_coverage"]
 CAP_PRENATAL_COMPLEMENT_SUPPORT = _DM["cap_prenatal_complement_support"]
 
-B7_UL_PCT_THRESHOLD = _DM["b7_ul_pct_threshold"]
-B7_PER_FLAG_PENALTY = _DM["b7_per_flag_penalty"]
-B7_CAP = _DM["b7_cap"]
+B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]
+B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
+B7_CAP = _B7["cap"]
 
 PANEL_BREADTH_FULL_COUNT = _DM["panel_breadth_full_count"]
 PRENATAL_DHA_FULL_MG = _DM["prenatal_dha_full_mg"]
@@ -496,7 +497,7 @@ def _b7_dose_safety(product: Dict[str, Any]) -> tuple[float, List[Dict[str, Any]
     parent-total/form-breakdown rule that used to live here privately, which is
     why a B-complex carrying the identical declaration was charged twice.
     """
-    result = evaluate_dose_safety(
+    result = resolve_dose_safety(
         product,
         threshold=B7_UL_PCT_THRESHOLD,
         per_flag_penalty=B7_PER_FLAG_PENALTY,
@@ -521,7 +522,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
     critical_coverage = _score_critical_coverage(critical_scores)
     prenatal_complement_scores = _prenatal_complement_scores(product)
     prenatal_complement_support = _score_prenatal_complement_support(prenatal_complement_scores)
-    b7_evaluation = evaluate_dose_safety(
+    b7_evaluation = resolve_dose_safety(
         product,
         threshold=B7_UL_PCT_THRESHOLD,
         per_flag_penalty=B7_PER_FLAG_PENALTY,

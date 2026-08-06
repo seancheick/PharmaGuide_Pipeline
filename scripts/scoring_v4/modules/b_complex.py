@@ -14,7 +14,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Optional
 
-from scoring_v4.dose_safety import evaluate_dose_safety
+from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.modules.generic import GenericModuleResult, _assemble_score, _empty_dimensions
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
@@ -53,14 +53,15 @@ B_OPTIONAL_SUPPORT = {"choline", "inositol"}
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _CM = _cfg_block("category_magnitudes", "b_complex")["b_complex"]
+_B7 = _cfg_block("dose_safety_policy", "ul_pct_threshold")
 
 
 FORMULATION_CAP = _CM["formulation_cap"]
 DOSE_CAP = _CM["dose_cap"]
 EVIDENCE_CAP = _CM["evidence_cap"]
-B7_UL_PCT_THRESHOLD = _CM["b7_ul_pct_threshold"]
-B7_PER_FLAG_PENALTY = _CM["b7_per_flag_penalty"]
-B7_CAP = _CM["b7_cap"]
+B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]
+B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
+B7_CAP = _B7["cap"]
 
 PREFERRED_FORM_PATTERNS = {
     "vitamin_b2_riboflavin": re.compile(r"\b(riboflavin[-\s]?5[-\s]?phosphate|r5p)\b", re.IGNORECASE),
@@ -286,7 +287,7 @@ def _b7_dose_safety(product: Dict[str, Any]) -> float:
     the multivitamin module.
     """
     return _round(
-        evaluate_dose_safety(
+        resolve_dose_safety(
             product,
             threshold=B7_UL_PCT_THRESHOLD,
             per_flag_penalty=B7_PER_FLAG_PENALTY,
@@ -304,7 +305,7 @@ def _score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         avg = 0.0
     rda_ai_coverage = _round(avg * 18.0)
     panel_breadth = _round((len(core_scores) / len(B_CORE)) * 4.0)
-    b7_evaluation = evaluate_dose_safety(
+    b7_evaluation = resolve_dose_safety(
         product,
         threshold=B7_UL_PCT_THRESHOLD,
         per_flag_penalty=B7_PER_FLAG_PENALTY,

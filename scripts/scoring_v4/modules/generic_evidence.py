@@ -525,6 +525,8 @@ def _recover_verified_primary_ingredient_matches(
             entry_id = _entry_id(entry)
             if entry_id in existing_ids:
                 continue
+            if _entry_excludes_recovery_context(entry, row, product):
+                continue
             entry_keys = _entry_identity_keys(entry)
             matched_keys = row_keys & entry_keys
             if not matched_keys:
@@ -688,6 +690,80 @@ def _entry_identity_keys(entry: Dict[str, Any]) -> set[str]:
         if key:
             keys.add(key)
     return keys
+
+
+def _entry_excludes_recovery_context(
+    entry: Dict[str, Any],
+    row: Dict[str, Any],
+    product: Dict[str, Any],
+) -> bool:
+    """Honor the enrichment deny-list during scoring-contract recovery.
+
+    Recovery may see both a broad parent identity (for example
+    ``standard_name=L-Carnitine``) and a specific raw/form identity (for
+    example ``L-Carnitine Fumarate``). An exact excluded form must win over the
+    broad parent match, just as it does in the enrichment matcher. Product
+    identity is also checked because older enriched rows sometimes retained
+    only the broad parent while the product name preserved the specific salt.
+    """
+    excluded = {
+        _canonical_text(value)
+        for value in _safe_list(entry.get("exclude_aliases"))
+        if _canonical_text(value)
+    }
+    if not excluded:
+        return False
+    row_identities = {
+        _canonical_text(row.get(field))
+        for field in (
+            "raw_source_text",
+            "name",
+            "matched_form",
+            "standard_name",
+            "canonical_id",
+            "scoring_parent_id",
+            "evidence_canonical_id",
+        )
+        if _canonical_text(row.get(field))
+    }
+    if any(
+        _excluded_identity_matches(entry, candidate, excluded)
+        for candidate in row_identities
+    ):
+        return True
+
+    product_identity = _canonical_text(
+        " ".join(
+            str(product.get(field) or "")
+            for field in (
+                "product_name",
+                "fullName",
+                "full_name",
+                "name",
+            )
+        )
+    )
+    return _excluded_identity_matches(
+        entry,
+        product_identity,
+        excluded,
+    )
+
+
+def _excluded_identity_matches(
+    entry: Dict[str, Any],
+    candidate: str,
+    excluded: set[str],
+) -> bool:
+    if entry.get("exclude_alias_match_mode") != "bounded_phrase":
+        return candidate in excluded
+    return any(
+        re.search(
+            rf"(?<![a-z0-9]){re.escape(excluded_identity)}(?![a-z0-9])",
+            candidate,
+        )
+        for excluded_identity in excluded
+    )
 
 
 def _existing_match_identity_keys(matches: List[Any]) -> set[str]:
@@ -1025,7 +1101,12 @@ def _entry_id(entry: Dict[str, Any]) -> str:
 
 
 def _canonical_from_entry(entry: Dict[str, Any]) -> str:
-    return _canonical_text(entry.get("standard_name") or entry.get("study_name") or entry.get("ingredient"))
+    return _canonical_text(
+        entry.get("evidence_group_id")
+        or entry.get("standard_name")
+        or entry.get("study_name")
+        or entry.get("ingredient")
+    )
 
 
 def _canonical_text(value: Any) -> str:
@@ -1041,10 +1122,12 @@ def _enrollment_multiplier(enrollment: float) -> float:
 
 def _dose_map(product: Dict[str, Any]) -> Dict[str, Tuple[float, str]]:
     doses: Dict[str, Tuple[float, str]] = {}
+    daily_multiplier = _daily_serving_multiplier(product)
     for ing in get_active_ingredients(product):
         quantity = _as_float(ing.get("quantity"), None)
         if quantity is None:
             continue
+        quantity *= daily_multiplier
         unit = _norm_text(ing.get("unit_normalized") or ing.get("unit"))
         for name in (
             ing.get("standard_name"),
@@ -1060,22 +1143,66 @@ def _dose_map(product: Dict[str, Any]) -> Dict[str, Tuple[float, str]]:
     return doses
 
 
+def _daily_serving_multiplier(product: Dict[str, Any]) -> float:
+    """Return the label-directed daily serving count.
+
+    Scoring rows carry the amount per canonical label serving, while clinical
+    evidence minima and maxima are daily doses.  Prefer the label's maximum
+    directed daily use, matching the dose and safety modules; fall back to the
+    minimum and then one serving when the contract is absent.
+    """
+    serving_basis = _safe_dict(product.get("serving_basis"))
+    parsed_from_directions = serving_basis.get("parsed_from_directions") is True
+    for key in ("max_servings_per_day", "min_servings_per_day"):
+        raw = serving_basis.get(key)
+        if isinstance(raw, bool):
+            continue
+        value = _as_float(raw, None)
+        if value is not None and value >= 1.0:
+            return value
+        if value is not None and value > 0.0 and parsed_from_directions:
+            return value
+    return 1.0
+
+
 def _converted_product_dose(
     entry: Dict[str, Any],
     dose_map: Dict[str, Tuple[float, str]],
 ) -> tuple[Optional[float], str]:
-    lookup_name = entry.get("standard_name") or entry.get("study_name") or entry.get("ingredient") or ""
-    lookup_key = _canonical_text(lookup_name)
-    product_dose = dose_map.get(lookup_key)
+    # The evidence record's standard name can be less form-specific than the
+    # exact label row that enrichment matched.  Resolve the exact match
+    # provenance first (e.g. acetyl-L-carnitine hydrochloride), then fall back
+    # through structured canonical and study identities.
+    lookup_keys: List[str] = []
+    for lookup_name in (
+        entry.get("matched_term"),
+        entry.get("ingredient"),
+        entry.get("matched_canonical_id"),
+        entry.get("canonical_id"),
+        entry.get("ingredient_canonical_id"),
+        entry.get("standard_name"),
+        entry.get("study_name"),
+    ):
+        lookup_key = _canonical_text(lookup_name)
+        if lookup_key and lookup_key not in lookup_keys:
+            lookup_keys.append(lookup_key)
+
+    product_dose = None
+    resolved_key = lookup_keys[0] if lookup_keys else ""
+    for lookup_key in lookup_keys:
+        product_dose = dose_map.get(lookup_key)
+        if product_dose is not None:
+            resolved_key = lookup_key
+            break
     if product_dose is None:
-        return None, lookup_key
+        return None, resolved_key
     dose_unit = _norm_text(entry.get("dose_unit") or "mg")
     converted = _convert_unit(product_dose[0], product_dose[1], dose_unit)
     if converted is None and _is_vitamin_d_evidence_entry(entry):
         converted = _convert_vitamin_d_evidence_unit(
             product_dose[0], product_dose[1], dose_unit
         )
-    return converted, lookup_key
+    return converted, resolved_key
 
 
 def _is_vitamin_d_evidence_entry(entry: Dict[str, Any]) -> bool:

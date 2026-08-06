@@ -28,6 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from enhanced_normalizer import EnhancedDSLDNormalizer  # noqa: E402
+from dataset_paths import brand_dataset_root  # noqa: E402
 
 
 # Curated sample list spanning: single-ingredient, small multi, large multi,
@@ -60,9 +61,11 @@ SAMPLES: List[Tuple[str, str, str]] = [
 
 
 def find_raw(pid: str) -> Optional[str]:
+    brands_root = brand_dataset_root()
+    forms_root = brands_root.parent.parent / "forms"
     for cand in [
-        f"/Users/seancheick/Documents/DataSetDsld/staging/brands/*/{pid}.json",
-        f"/Users/seancheick/Documents/DataSetDsld/forms/*/{pid}.json",
+        str(brands_root / "*" / f"{pid}.json"),
+        str(forms_root / "*" / f"{pid}.json"),
     ]:
         hits = glob(cand)
         if hits:

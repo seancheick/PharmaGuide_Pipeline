@@ -39,8 +39,7 @@ ORIGINAL = {
     "multi_prenatal": {"dimension_caps": ROUTER_DC},
     "omega": {"dimension_caps": ROUTER_DC},
     "probiotic": {"dimension_caps": ROUTER_DC},
-    "b_complex": {"formulation_cap": 30.0, "dose_cap": 25.0, "evidence_cap": 20.0,
-                  "b7_ul_pct_threshold": 150.0, "b7_per_flag_penalty": 2.0, "b7_cap": 3.0},
+    "b_complex": {"formulation_cap": 30.0, "dose_cap": 25.0, "evidence_cap": 20.0},
     # evidence_cap hoisted from immune_support.immune_support_evidence_cap's
     # hardcoded 17.0 — same value, now a reviewable magnitude. It is a ceiling
     # on the evidence dimension and is deliberately distinct from the floor cap.

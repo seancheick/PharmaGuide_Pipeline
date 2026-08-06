@@ -2,12 +2,14 @@
 
 check_v4_pillar_contract inspects the shipped products_core and fails the
 release if the six pillar columns are absent, NULL on a scored product, out of
-range, fail to reconcile with the total, or populated on a suppressed product.
+range, fail to reconcile through whole-number projection and any explicit cap
+adjustment, or are populated on a suppressed product.
 
 Closes the 2026-06-14 stale-DB hole: a DB built before the pillar-projection
 commit shipped with the six columns absent, and the freshness/checksum gates
 didn't catch it because they compare timestamps/hashes, not schema/population.
 """
+import json
 import os
 import sqlite3
 import sys
@@ -27,7 +29,7 @@ PILLAR_COLS = [
 def _make_db(rows, with_pillars=True):
     tmp = tempfile.mkdtemp()
     db = Path(tmp) / "pharmaguide_core.db"
-    cols = "dsld_id TEXT, quality_score_status TEXT, quality_score_v4_100 REAL"
+    cols = "dsld_id TEXT, quality_score_status TEXT, quality_score_v4_100 INTEGER"
     if with_pillars:
         cols += ", " + ", ".join(f"{c} REAL" for c in PILLAR_COLS)
     ncol = 3 + (len(PILLAR_COLS) if with_pillars else 0)
@@ -52,12 +54,102 @@ def _codes(findings):
 
 
 def test_clean_scored_and_suppressed_db_passes():
-    # 11.2+20+18.9+15+6+10 = 81.1 (reconciles); suppressed row all NULL.
+    # 11.2+20+18.9+15+6+10 = 81.1, exported half-up as 81.
+    # The suppressed row carries no public score or pillars.
     db = _make_db([
-        _scored("1", 81.1, 11.2, 20.0, 18.9, 15.0, 6.0, 10.0),
+        _scored("1", 81, 11.2, 20.0, 18.9, 15.0, 6.0, 10.0),
         _suppressed("2"),
     ])
     assert check_v4_pillar_contract(db) == []
+
+
+def test_whole_number_total_uses_half_up_pillar_reconciliation():
+    # Export intentionally ships a whole-number public score while retaining
+    # one-decimal analytical pillar values: 81.4 must reconcile to 81.
+    db = _make_db([
+        _scored("1", 81, 11.5, 20.0, 18.9, 15.0, 6.0, 10.0),
+    ])
+
+    assert check_v4_pillar_contract(db) == []
+
+
+def test_whole_number_total_rounds_half_points_up():
+    # Python's built-in round() is bankers rounding. The export contract is
+    # explicit half-up, so 80.5 must reconcile to 81 rather than 80.
+    db = _make_db([
+        _scored("1", 81, 10.6, 20.0, 18.9, 15.0, 6.0, 10.0),
+    ])
+
+    assert check_v4_pillar_contract(db) == []
+
+
+def test_fractional_public_total_flags():
+    db = _make_db([
+        _scored("1", 81.1, 11.2, 20.0, 18.9, 15.0, 6.0, 10.0),
+    ])
+
+    assert "EXPORT_V4_TOTAL_NOT_WHOLE_NUMBER" in _codes(
+        check_v4_pillar_contract(db)
+    )
+
+
+def test_explicit_detail_blob_cap_adjustment_reconciles_public_total(tmp_path):
+    db = _make_db([
+        _scored("1", 85, 20.0, 20.0, 18.8, 15.0, 7.0, 10.0),
+    ])
+    details = tmp_path / "detail_blobs"
+    details.mkdir()
+    (details / "1.json").write_text(
+        json.dumps(
+            {
+                "quality_score_cap_v4": {
+                    "id": "reviewed_cap",
+                    "cap": 85.0,
+                    "reason": "Reviewed category ceiling.",
+                    "applied": True,
+                    "score_before_cap": 90.8,
+                    "score_after_cap": 85.0,
+                    "adjustment": -5.8,
+                    "presentation": "explicit_adjustment",
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert check_v4_pillar_contract(
+        db,
+        detail_blobs_dir=details,
+    ) == []
+
+
+def test_nonfinite_explicit_cap_flags_instead_of_crashing(tmp_path):
+    db = _make_db([
+        _scored("1", 85, 20.0, 20.0, 18.8, 15.0, 7.0, 10.0),
+    ])
+    details = tmp_path / "detail_blobs"
+    details.mkdir()
+    (details / "1.json").write_text(
+        json.dumps(
+            {
+                "quality_score_cap_v4": {
+                    "id": "reviewed_cap",
+                    "cap": 85.0,
+                    "reason": "Reviewed category ceiling.",
+                    "applied": True,
+                    "score_before_cap": 90.8,
+                    "score_after_cap": float("nan"),
+                    "adjustment": float("nan"),
+                    "presentation": "explicit_adjustment",
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert "EXPORT_V4_PILLAR_RECON_MISMATCH" in _codes(
+        check_v4_pillar_contract(db, detail_blobs_dir=details)
+    )
 
 
 def test_missing_pillar_columns_flags():

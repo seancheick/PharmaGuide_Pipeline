@@ -22,20 +22,21 @@ from scoring_v4.modules import (   # noqa: E402
     omega_dose, sports_dose, fiber_digestive_dose,
 )
 
-DM = json.loads((SCRIPTS_ROOT / "scoring_v4" / "config" / "quality_score.json").read_text())["dose_magnitudes"]
+CFG = json.loads((SCRIPTS_ROOT / "scoring_v4" / "config" / "quality_score.json").read_text())
+DM = CFG["dose_magnitudes"]
+DOSE_SAFETY = CFG["dose_safety_policy"]
 
 ORIGINAL = {
     "generic": {
         "cap_supplemental_window": 22.0, "cap_multi_form_bonus": 3.0, "dimension_cap": 25.0,
-        "window_rda_threshold": 25.0, "window_ul_partial_band": 100.0, "b7_ul_pct_threshold": 150.0,
+        "window_rda_threshold": 25.0, "window_ul_partial_band": 100.0,
         "window_overdose_credit": 11.0, "no_reference_individual_dose_credit": 16.0,
         "no_reference_product_evidence_credit": 12.0, "multi_form_premium_bio_threshold": 12.0,
-        "multi_form_min_group_count": 2, "b7_per_flag_penalty": 2.0, "b7_cap": 3.0,
+        "multi_form_min_group_count": 2,
     },
     "multi_prenatal": {
         "dimension_cap": 25.0, "cap_rda_ai_coverage": 15.0, "cap_panel_breadth": 3.0,
         "cap_critical_nutrient_coverage": 5.0, "cap_prenatal_complement_support": 2.0,
-        "b7_ul_pct_threshold": 150.0, "b7_per_flag_penalty": 2.0, "b7_cap": 3.0,
         "panel_breadth_full_count": 18, "prenatal_dha_full_mg": 200.0, "prenatal_dha_partial_mg": 100.0,
         "targeted_multi_selected_anchors": 5,
         "critical_min_pct_rda": {"folate": 50.0, "iron": 50.0, "iodine": 50.0,
@@ -60,9 +61,25 @@ def test_config_matches_pre_hoist_values():
         assert DM[mod] == vals, f"dose_magnitudes.{mod} drifted from pre-hoist values"
 
 
+def test_b7_policy_has_one_config_owner():
+    assert DOSE_SAFETY == {
+        "ul_pct_threshold": 150.0,
+        "per_flag_penalty": 2.0,
+        "cap": 3.0,
+    }
+    serialized_nested_blocks = json.dumps({
+        "dose_magnitudes": DM,
+        "category_magnitudes": CFG["category_magnitudes"],
+    })
+    assert "b7_ul_pct_threshold" not in serialized_nested_blocks
+    assert "b7_per_flag_penalty" not in serialized_nested_blocks
+    assert '"b7_cap"' not in serialized_nested_blocks
+
+
 def test_runtime_constants_read_from_config_no_drift():
     assert generic_dose.CAP_SUPPLEMENTAL_WINDOW == DM["generic"]["cap_supplemental_window"] == 22.0
-    assert generic_dose.B7_CAP == DM["generic"]["b7_cap"] == 3.0
+    assert generic_dose.B7_CAP == DOSE_SAFETY["cap"] == 3.0
+    assert multi_prenatal_dose.B7_CAP == DOSE_SAFETY["cap"]
     assert generic_dose.MULTI_FORM_MIN_GROUP_COUNT == DM["generic"]["multi_form_min_group_count"] == 2
     assert multi_prenatal_dose.DIMENSION_CAP == DM["multi_prenatal"]["dimension_cap"] == 25.0
     assert multi_prenatal_dose.CRITICAL_MIN_PCT_RDA == DM["multi_prenatal"]["critical_min_pct_rda"]

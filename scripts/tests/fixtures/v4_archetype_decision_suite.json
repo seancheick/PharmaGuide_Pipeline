@@ -619,7 +619,7 @@
         "archetype": "immune_support",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 40.8,
+        "quality_score_v4_100": 39.6,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
@@ -628,16 +628,16 @@
           "evidence": 20.0
         },
         "pillars": {
-          "formulation": 3.3,
-          "dose": 4.0,
+          "formulation": 4.7,
+          "dose": 2.4,
           "evidence": 10.0,
           "transparency": 13.5,
           "verification": 6.0,
-          "safety_hygiene": 4.0
+          "safety_hygiene": 3.0
         },
         "raw_dimensions": {
-          "formulation": 5.0,
-          "dose": 5.0,
+          "formulation": 7.0,
+          "dose": 3.0,
           "evidence": 10.0,
           "transparency": 9.0
         }

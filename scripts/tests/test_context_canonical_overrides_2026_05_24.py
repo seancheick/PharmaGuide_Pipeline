@@ -23,6 +23,8 @@ from pathlib import Path
 
 import pytest
 
+from dataset_paths import brand_dataset_root
+
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = REPO_ROOT / "data"
@@ -774,14 +776,14 @@ def test_enricher_returns_none_when_override_is_parent_only(enricher_with_iqm, i
 # Tier 3: live raw DSLD JSON → cleaner → enricher integration tests.
 # Loads the actual raw DSLD product JSONs from the local staging dataset
 # and runs them through the real cleaner + enricher. Skips when the
-# staging dataset is not mounted (CI environments without /Users/...).
+# staging dataset is not mounted (for example, CI environments).
 # Verified locally 2026-05-24 via /tmp/verify_context_routing_live.py;
 # these tests lock the same behavior in pytest CI when the dataset is
 # available.
 # ---------------------------------------------------------------------------
 
 
-RAW_DSLD_STAGING_ROOT = Path("/Users/seancheick/Documents/DataSetDsld/staging/brands")
+RAW_DSLD_STAGING_ROOT = brand_dataset_root()
 
 
 def _load_raw_dsld(brand: str, dsld_id: str):

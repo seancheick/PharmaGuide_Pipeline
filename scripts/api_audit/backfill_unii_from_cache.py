@@ -10,8 +10,8 @@ sources:
 
   1. FDA UNII cache (`scripts/data/fda_unii_cache.json`) — the offline FDA
      OpenFDA bulk snapshot. The canonical name→UNII map (172K+ entries).
-  2. DSLD consensus — walking raw DSLD label JSON in
-     `/Users/seancheick/Documents/DataSetDsld/staging/brands/*/` to count
+  2. DSLD consensus — walking raw DSLD label JSON in the local PharmaGuide
+     brand dataset root to count
      `(ingredient_name, uniiCode) → product_count`. When ≥5 distinct
      products consistently tag the same ingredient name with the same UNII
      across multiple brands, that's strong corroboration.
@@ -68,6 +68,9 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 # loading, and the SAME_UNII_DIFFERENT_NAMES finder used by the pre-apply guard.
 _THIS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(_THIS_DIR))
+sys.path.insert(0, str(_THIS_DIR.parent))
+from dataset_paths import brand_dataset_root  # noqa: E402
+
 from audit_unii_data_quality import (  # noqa: E402
     REFERENCE_FILES,
     _normalize_unii,
@@ -85,7 +88,7 @@ from audit_unii_data_quality import (  # noqa: E402
 # ---------------------------------------------------------------------------
 # DSLD raw-label staging
 # ---------------------------------------------------------------------------
-DSLD_STAGING_ROOT = Path("/Users/seancheick/Documents/DataSetDsld/staging/brands")
+DSLD_STAGING_ROOT = brand_dataset_root()
 
 # Entries with explicit cui_status='governed_null' are intentional no-UNII
 # (polymer classes, blend descriptors). Skip them — they're not bugs.

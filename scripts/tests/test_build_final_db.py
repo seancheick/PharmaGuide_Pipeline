@@ -32,6 +32,7 @@ from build_final_db import (
     has_banned_substance,
     iter_json_products,
     mark_staged_product_matched,
+    project_export_scored_artifact,
     remote_blob_storage_path,
     resolve_other_ingredient_reference,
     resolve_export_supplement_type,
@@ -40,8 +41,130 @@ from build_final_db import (
 )
 
 
+def test_profile_gated_hard_safety_projection_updates_every_status_surface():
+    scored = {
+        "verdict": "SAFE",
+        "safety_verdict": "SAFE",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_assessment_status": "complete",
+        "blocking_reason": None,
+        "safety_signal_reason": None,
+        "_v4_safety_signal_reason": None,
+        "_v4_safety_gate": {
+            "verdict": "SAFE",
+            "blocking_reason": None,
+            "safety_signals": [],
+        },
+        "scoring_metadata": {
+            "verdict": "SAFE",
+            "product_safety_status": "no_known_catalog_concern",
+            "quality_assessment_status": "complete",
+            "blocking_reason": None,
+        },
+    }
+    detail_blob = {
+        "warnings_profile_gated": [
+            {
+                "type": "high_risk_ingredient",
+                "severity": "avoid",
+            }
+        ]
+    }
+
+    projected = project_export_scored_artifact({}, scored, detail_blob)
+
+    assert projected["verdict"] == "CAUTION"
+    assert projected["safety_verdict"] == "CAUTION"
+    assert projected["product_safety_status"] == "caution"
+    assert projected["quality_assessment_status"] == "complete"
+    assert projected["blocking_reason"] is None
+    assert projected["safety_signal_reason"] == "high_risk_ingredient"
+    assert projected["_v4_safety_signal_reason"] == "high_risk_ingredient"
+    assert projected["_v4_safety_gate"] == {
+        "verdict": "CAUTION",
+        "blocking_reason": None,
+        "safety_signals": ["high_risk_ingredient"],
+    }
+    assert projected["scoring_metadata"] == {
+        "verdict": "CAUTION",
+        "product_safety_status": "caution",
+        "quality_assessment_status": "complete",
+        "blocking_reason": None,
+    }
+    assert scored["product_safety_status"] == "no_known_catalog_concern"
+    assert scored["_v4_safety_gate"]["safety_signals"] == []
+
+
 def test_core_db_does_not_duplicate_app_owned_clinical_profile_taxonomy():
     assert "clinical_risk_taxonomy" not in REFERENCE_FILES
+
+
+def test_export_contract_reconciles_explicit_category_cap_adjustment() -> None:
+    scored = {
+        "verdict": "SAFE",
+        "mapped_coverage": 1.0,
+        "_v4_quality_status": "scored",
+        "_v4_quality_score_100": 85.0,
+        "_v4_pillars": {
+            "formulation": {"score": 20.0},
+            "dose": {"score": 20.0},
+            "evidence": {"score": 18.0},
+            "transparency": {"score": 14.0},
+            "verification": {"score": 13.0},
+            "safety_hygiene": {"score": 10.0},
+        },
+        "_v4_quality_score_cap": {
+            "id": "generic_astaxanthin_single",
+            "cap": 85.0,
+            "applied": True,
+            "score_before_cap": 95.0,
+            "score_after_cap": 85.0,
+            "adjustment": -10.0,
+            "presentation": "explicit_adjustment",
+        },
+        "strict_scoring_contract": {"passed": True},
+        "iqd_contract_diagnostics": {
+            "strict_scoring_contract": {"passed": True},
+            "scoring_fallbacks_used": [],
+        },
+    }
+
+    issues = validate_export_contract({}, scored)
+
+    assert not any("pillars" in issue or "explicit adjustment" in issue for issue in issues)
+
+
+def test_export_contract_rejects_malformed_category_cap_adjustment() -> None:
+    scored = {
+        "verdict": "SAFE",
+        "mapped_coverage": 1.0,
+        "_v4_quality_status": "scored",
+        "_v4_quality_score_100": 85.0,
+        "_v4_pillars": {
+            "formulation": {"score": 20.0},
+            "dose": {"score": 20.0},
+            "evidence": {"score": 18.0},
+            "transparency": {"score": 14.0},
+            "verification": {"score": 13.0},
+            "safety_hygiene": {"score": 10.0},
+        },
+        "_v4_quality_score_cap": {
+            "applied": True,
+            "score_before_cap": 94.0,
+            "score_after_cap": 85.0,
+            "adjustment": -9.0,
+            "presentation": "explicit_adjustment",
+        },
+        "strict_scoring_contract": {"passed": True},
+        "iqd_contract_diagnostics": {
+            "strict_scoring_contract": {"passed": True},
+            "scoring_fallbacks_used": [],
+        },
+    }
+
+    issues = validate_export_contract({}, scored)
+
+    assert any("explicit adjustment" in issue for issue in issues)
 
 
 def test_allergen_summary_reads_enricher_allergen_name_contract():
@@ -302,7 +425,7 @@ def test_build_final_db_streaming_path_preserves_last_write_wins_duplicates(monk
         assert manifest["detail_blob_count"] == 1
         assert manifest["detail_blob_unique_count"] == 1
         assert manifest["detail_index_checksum"].startswith("sha256:")
-        assert manifest["scoring_version"] == "4.1.0"
+        assert manifest["scoring_version"] == "4.2.0"
         assert manifest["quality_score_config_checksum"].startswith("sha256:")
         assert "scoring_config_checksum" not in manifest
         assert "scoring_config_checksum" not in manifest["integrity"]
@@ -1736,6 +1859,34 @@ def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
     assert categories["key_ingredient_tags"] == ["potassium", "magnesium"]
 
 
+def test_secondary_categories_preserve_deterministic_policy_order():
+    enriched = make_enriched()
+    enriched["supplement_taxonomy"] = {
+        "primary_type": "botanical",
+        "secondary_type": "stress-support",
+    }
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "standard_name": "Ashwagandha",
+            "canonical_id": "ashwagandha",
+            "category": "botanical",
+        },
+        {
+            "standard_name": "Ginkgo",
+            "canonical_id": "ginkgo",
+            "category": "botanical",
+        },
+    ]
+
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert categories["secondary_categories"] == [
+        "stress-support",
+        "adaptogen",
+        "nootropic",
+    ]
+
+
 def test_export_uses_strict_scoring_rows_not_flattened_blend_children():
     enriched = make_enriched()
     enriched["product_name"] = "Vitamin D3 + K2"
@@ -2238,6 +2389,28 @@ def test_ingredient_fingerprint_uses_canonical_ids_and_singular_categories():
     assert fingerprint["herbs"] == ["ashwagandha"]
     assert "mineral" in fingerprint["categories"]
     assert "botanical" in fingerprint["categories"]
+
+
+def test_ingredient_fingerprint_categories_have_deterministic_order():
+    enriched = make_enriched()
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "standard_name": "Ashwagandha",
+            "canonical_id": "ashwagandha",
+            "category": "botanical",
+        },
+        {
+            "standard_name": "Potassium",
+            "canonical_id": "potassium",
+            "category": "mineral",
+            "quantity": 99,
+            "unit": "mg",
+        },
+    ]
+
+    fingerprint = generate_ingredient_fingerprint(enriched)
+
+    assert fingerprint["categories"] == ["botanical", "mineral"]
 
 
 def test_ingredient_fingerprint_sums_same_unit_forms_with_one_canonical_id():
@@ -3058,7 +3231,7 @@ class TestDetailBlobNutritionAndUnmapped:
         assert CORE_COLUMN_COUNT == 111
 
     def test_schema_version_bumped_for_independent_consumer_semantics(self):
-        assert EXPORT_SCHEMA_VERSION == "2.2.0"
+        assert EXPORT_SCHEMA_VERSION == "2.3.0"
 
     def test_detail_blob_emits_demoted_absorption_enhancers(self):
         """Sprint E1.23 follow-up (2026-05-09): the enricher produces
@@ -3240,8 +3413,12 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
     scored_live = _canned_v4(status="scored", quality_100=88.5, verdict="SAFE", tier="Strong")
     scored_live["quality_score_cap_v4"] = {
         "id": "generic_astaxanthin_single",
-        "cap": 85.0,
+        "cap": 88.5,
         "applied": True,
+        "score_before_cap": 88.5,
+        "score_after_cap": 88.5,
+        "adjustment": 0.0,
+        "presentation": "explicit_adjustment",
     }
     s1 = _artifact_from_canned("999", scored_live)
     s2 = _artifact_from_canned(
@@ -3253,11 +3430,29 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
     s3 = _artifact_from_canned(
         "777", _canned_v4(status="not_scored", quality_100=None, verdict="NOT_SCORED", tier=None)
     )
+
+    real_build_detail_blob = build_detail_blob
+
+    def _build_blob_with_profile_gated_hard_warning(enriched, scored):
+        blob = real_build_detail_blob(enriched, scored)
+        if str(enriched.get("dsld_id")) == "999":
+            blob.setdefault("warnings_profile_gated", []).append({
+                "type": "high_risk_ingredient",
+                "severity": "avoid",
+            })
+        return blob
+
+    monkeypatch.setattr(
+        "build_final_db.build_detail_blob",
+        _build_blob_with_profile_gated_hard_warning,
+    )
+
     with tempfile.TemporaryDirectory() as tmp:
         _result, out = _run_build(tmp, [e1, e2, e3], [s1, s2, s3])
         cols = ["dsld_id", "quality_score_v4_100", "quality_score_status",
                 "product_safety_status", "quality_assessment_status", "quality_tier",
-                "score_model_version", "verdict", "score_100_equivalent",
+                "score_model_version", "verdict", "safety_verdict",
+                "score_100_equivalent",
                 "scoring_engine_version"]
         rows = _core_rows(out, cols)
 
@@ -3267,14 +3462,14 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         scored = rows["999"]
         assert scored["quality_score_v4_100"] == 89
         assert scored["quality_score_status"] == "scored"
-        assert scored["product_safety_status"] == "no_known_catalog_concern"
+        assert scored["product_safety_status"] == "caution"
         assert scored["quality_assessment_status"] == "complete"
         assert scored["quality_tier"] == "Strong"
         assert scored["score_model_version"] == "v4"
         assert scored["score_100_equivalent"] == 89  # whole-number /100 mirror
         assert scored["scoring_engine_version"] == "4.0.0"
-        # a profile-gated hard-safety warning may flip SAFE→CAUTION; both are non-suppressed.
-        assert scored["verdict"] in {"SAFE", "CAUTION"}
+        assert scored["verdict"] == "CAUTION"
+        assert scored["safety_verdict"] == "CAUTION"
 
         blocked = rows["888"]
         assert blocked["quality_score_v4_100"] is None
@@ -3288,17 +3483,22 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))
         assert blob["quality_pillars_v4"]
         assert blob["v4_score_provenance"]["score_model_version"] == "v4"
-        assert blob["product_safety_status"] == "no_known_catalog_concern"
+        assert blob["product_safety_status"] == "caution"
         assert blob["quality_assessment_status"] == "complete"
         assert (
             blob["v4_score_provenance"]["product_safety_status"]
-            == "no_known_catalog_concern"
+            == "caution"
         )
         assert blob["v4_confidence_detail"]["band"] == "high"
         assert blob["v4_confidence_detail"]["score_uncertainty_pts"] == 1
         assert blob["quality_score_cap_v4"]["id"] == "generic_astaxanthin_single"
         assert "v4_score_explanation" in blob
         assert "raw_score_v4_100" not in blob
+
+        audit = json.loads(
+            (out / "export_audit_report.json").read_text(encoding="utf-8")
+        )
+        assert audit["counts"]["verdict_caution"] == 1
 
 
 def test_v4_pillar_columns_projected_for_scored_and_null_for_suppressed(monkeypatch):

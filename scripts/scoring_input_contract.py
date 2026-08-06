@@ -3402,12 +3402,7 @@ def _route_is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
 
 
 def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]]:
-    """Independent ScoringClassification v1 route decision.
-
-    This mirrors the current v4 route semantics so migration can prove parity,
-    but lives in the classification contract. The legacy router remains only as
-    an audit comparison target.
-    """
+    """Canonical ScoringClassification v1 route decision."""
     primary_type = _primary_type(product)
     name_text = _route_name_text(product)
 
@@ -4181,7 +4176,7 @@ def build_scoring_classification(
 
     Total function: never raises, always returns a schema-valid dict. In
     compatibility mode the route is derived from the current enriched blob by
-    this contract. The legacy router is kept as an audit-only parity target.
+    this contract unless a valid native-enrichment stamp can be reused.
     """
     product = product if isinstance(product, dict) else {}
     if route_module is None and classification_origin == "compatibility_derived":

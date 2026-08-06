@@ -48,23 +48,39 @@ def test_unknown_rubric_raises():
 def test_config_fingerprint_is_stable_hex():
     from scoring_v4.config_registry import config_fingerprint
 
-    fp = config_fingerprint("omega")
-    assert isinstance(fp, str) and len(fp) == 16
-    int(fp, 16)  # valid hex
-    assert config_fingerprint("omega") == fp  # stable across calls
+    for name in ("omega", "quality_score"):
+        fp = config_fingerprint(name)
+        assert isinstance(fp, str) and len(fp) == 16
+        int(fp, 16)  # valid hex
+        assert config_fingerprint(name) == fp  # stable across calls
 
 
 def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
-    v = config_version("omega")
-    assert isinstance(v, str) and v != "" and v != "unknown"
+    assert config_version("omega") == "1.0.0"
+    assert config_version("quality_score") == "1.0.5-b7-single-source"
 
 
 def test_all_config_provenance_shape():
     from scoring_v4.config_registry import all_config_provenance
 
     prov = all_config_provenance()
-    assert "omega" in prov
-    assert set(prov["omega"].keys()) == {"schema_version", "fingerprint"}
-    assert len(prov["omega"]["fingerprint"]) == 16
+    assert set(prov) == {"omega", "quality_score"}
+    for item in prov.values():
+        assert set(item) == {"version", "fingerprint"}
+        assert item["version"]
+        assert len(item["fingerprint"]) == 16
+
+
+def test_config_fingerprint_history_pins_each_version():
+    """A config-byte change must not silently retain its old version."""
+    from scoring_v4.config_registry import (
+        all_config_provenance,
+        config_fingerprint_history,
+    )
+
+    provenance = all_config_provenance()
+    history = config_fingerprint_history()
+    for name, current in provenance.items():
+        assert history[name][current["version"]] == current["fingerprint"]

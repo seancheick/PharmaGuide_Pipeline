@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, List, Mapping, Sequence
@@ -88,6 +89,13 @@ def write_stage_manifest(
         handle.flush()
         os.fsync(handle.fileno())
     os.replace(temp_path, manifest_path)
+    if processing_complete:
+        stale_roots = [stage_dir / "quarantine" / "stale_outputs"]
+        if stage == "clean" and stage_dir.name == "cleaned":
+            stale_roots.append(stage_dir.parent / "quarantine" / "stale_outputs")
+        for stale_root in stale_roots:
+            if stale_root.exists():
+                shutil.rmtree(stale_root)
     return manifest_path
 
 

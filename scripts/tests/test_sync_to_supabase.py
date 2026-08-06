@@ -43,9 +43,9 @@ def _write_minimal_catalog_db(db_path):
             "pillar_formulation_v4 REAL, pillar_dose_v4 REAL, pillar_evidence_v4 REAL, "
             "pillar_transparency_v4 REAL, pillar_verification_v4 REAL, pillar_safety_hygiene_v4 REAL)"
         )
-        # 11.2+20+18.9+15+6+10 = 81.1 reconciles with the total.
+        # 11.2+20+18.9+15+6+10 = 81.1, exported half-up as 81.
         conn.execute(
-            "INSERT INTO products_core VALUES ('1', 'scored', 81.1, 11.2, 20.0, 18.9, 15.0, 6.0, 10.0)"
+            "INSERT INTO products_core VALUES ('1', 'scored', 81, 11.2, 20.0, 18.9, 15.0, 6.0, 10.0)"
         )
         conn.commit()
     finally:
@@ -158,6 +158,102 @@ def test_needs_update_true_when_forced():
     assert needs_update(local, remote, force=True) is True
 
 
+def test_validate_bucket_upload_capacity_rejects_oversized_catalog():
+    """Fail before upload when the core DB exceeds the bucket policy."""
+    from sync_to_supabase import validate_bucket_upload_capacity
+
+    class Storage:
+        @staticmethod
+        def get_bucket(_bucket):
+            return type("Bucket", (), {"file_size_limit": 50 * 1024 * 1024})()
+
+    client = type("Client", (), {"storage": Storage()})()
+
+    with pytest.raises(ValueError, match=r"50\.5 MiB.*50\.0 MiB"):
+        validate_bucket_upload_capacity(
+            client,
+            bucket="pharmaguide",
+            object_size_bytes=52_920_320,
+        )
+
+
+def test_validate_bucket_upload_capacity_accepts_unlimited_or_larger_bucket():
+    """No bucket limit, or a limit above the object size, is upload-safe."""
+    from sync_to_supabase import validate_bucket_upload_capacity
+
+    class Storage:
+        file_size_limit = None
+
+        def get_bucket(self, _bucket):
+            return type(
+                "Bucket",
+                (),
+                {"file_size_limit": self.file_size_limit},
+            )()
+
+    storage = Storage()
+    client = type("Client", (), {"storage": storage})()
+
+    validate_bucket_upload_capacity(
+        client,
+        bucket="pharmaguide",
+        object_size_bytes=52_920_320,
+    )
+    storage.file_size_limit = 100 * 1024 * 1024
+    validate_bucket_upload_capacity(
+        client,
+        bucket="pharmaguide",
+        object_size_bytes=52_920_320,
+    )
+
+
+def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
+    tmp_path,
+    monkeypatch,
+):
+    """A no-op sync must not fail a policy that applies only to new uploads."""
+    import supabase_client
+    import sync_to_supabase
+
+    _make_build_output(str(tmp_path), product_count=3)
+    local = sync_to_supabase.load_local_manifest(str(tmp_path))
+    client = object()
+
+    monkeypatch.setattr(supabase_client, "get_supabase_client", lambda: client)
+    monkeypatch.setattr(
+        supabase_client,
+        "fetch_current_manifest",
+        lambda _client: {
+            "db_version": local["db_version"],
+            "checksum": local["checksum"],
+        },
+    )
+    monkeypatch.setattr(
+        sync_to_supabase,
+        "validate_bucket_upload_capacity",
+        lambda *_args, **_kwargs: pytest.fail(
+            "capacity check ran even though no upload was needed"
+        ),
+    )
+    monkeypatch.setattr(
+        sync_to_supabase,
+        "_ensure_registry_validating",
+        lambda *_args, **_kwargs: None,
+    )
+    monkeypatch.setattr(
+        sync_to_supabase,
+        "_promote_registry_release",
+        lambda *_args, **_kwargs: None,
+    )
+
+    result = sync_to_supabase.sync(str(tmp_path))
+
+    assert result == {
+        "status": "up_to_date",
+        "version": local["db_version"],
+    }
+
+
 def test_detail_index_blob_paths_extracts_storage_paths():
     """detail_index_blob_paths returns the content-addressed blob paths."""
     from sync_to_supabase import detail_index_blob_paths
@@ -224,6 +320,68 @@ def test_validate_build_output_accepts_matching_manifest():
         stats = validate_build_output(tmp, manifest)
         assert stats["blob_count"] == 3
         assert os.path.basename(stats["db_path"]) == "pharmaguide_core.db"
+
+
+def test_validate_build_output_reconciles_explicit_cap_from_detail_blob():
+    """The upload preflight must validate reviewed score caps through the same
+    detail-blob adjustment contract as the release export gate."""
+    from sync_to_supabase import load_local_manifest, validate_build_output
+
+    with tempfile.TemporaryDirectory() as tmp:
+        _make_build_output(tmp, product_count=3)
+        db_path = os.path.join(tmp, "pharmaguide_core.db")
+        with sqlite3.connect(db_path) as conn:
+            conn.execute(
+                "UPDATE products_core SET quality_score_v4_100 = 85, "
+                "pillar_formulation_v4 = 20, pillar_dose_v4 = 20, "
+                "pillar_evidence_v4 = 18.8, pillar_transparency_v4 = 15, "
+                "pillar_verification_v4 = 7, pillar_safety_hygiene_v4 = 10 "
+                "WHERE dsld_id = '1'"
+            )
+            conn.execute("UPDATE products_core SET dsld_id = '1000' WHERE dsld_id = '1'")
+
+        cap_detail = {
+            "quality_score_cap_v4": {
+                "id": "reviewed_cap",
+                "cap": 85.0,
+                "reason": "Reviewed category ceiling.",
+                "applied": True,
+                "score_before_cap": 90.8,
+                "score_after_cap": 85.0,
+                "adjustment": -5.8,
+                "presentation": "explicit_adjustment",
+            }
+        }
+        with open(os.path.join(tmp, "detail_blobs", "1000.json"), "w") as f:
+            json.dump(cap_detail, f)
+
+        detail_index_path = os.path.join(tmp, "detail_index.json")
+        with open(detail_index_path) as f:
+            detail_index = json.load(f)
+        cap_sha = hashlib.sha256(
+            json.dumps(cap_detail).encode("utf-8")
+        ).hexdigest()
+        detail_index["1000"].update(
+            {
+                "blob_sha256": cap_sha,
+                "storage_path": (
+                    f"shared/details/sha256/{cap_sha[:2]}/{cap_sha}.json"
+                ),
+            }
+        )
+        with open(detail_index_path, "w") as f:
+            json.dump(detail_index, f)
+
+        manifest = load_local_manifest(tmp)
+        with open(db_path, "rb") as f:
+            manifest["checksum"] = "sha256:" + hashlib.sha256(f.read()).hexdigest()
+        with open(detail_index_path, "rb") as f:
+            manifest["detail_index_checksum"] = (
+                "sha256:" + hashlib.sha256(f.read()).hexdigest()
+            )
+
+        stats = validate_build_output(tmp, manifest)
+        assert stats["blob_count"] == 3
 
 
 def test_validate_build_output_rejects_pillar_contract_violation():
