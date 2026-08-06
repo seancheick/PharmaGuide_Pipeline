@@ -43,7 +43,7 @@ contract name elsewhere.
 
 | Term | Meaning |
 |---|---|
-| **IQM** | Ingredient Quality Map: `scripts/data/ingredient_quality_map.json`. Current metadata: schema 5.4.13, 631 parents. |
+| **IQM** | Ingredient Quality Map: `scripts/data/ingredient_quality_map.json`. Read the live `_metadata` block for its schema version and parent count; do not copy those drifting values into documentation. |
 | **Parent** | Canonical ingredient family identified by a stable snake-case key, such as `magnesium`. |
 | **Form** | A specific salt, chelate, extract, strain, source, or delivery form under a parent. |
 | **Canonical ID** | Stable machine identity selected by deterministic exact/canonical/bounded-alias matching. Display text is not identity. |
@@ -100,6 +100,10 @@ contract name elsewhere.
 | **Benchmark freeze** | The immutable sample, label-fact inputs, engine/config provenance, baseline outputs, reviewer instructions, and analysis plan recorded before reviews begin or score-changing data is merged. |
 | **Reviewer packet** | The shareable benchmark artifact containing product label facts and blank review fields. It excludes every engine output used in the comparison. |
 | **Benchmark baseline key** | The held-back mapping from benchmark IDs to DSLD IDs and frozen engine outputs. It is not distributed to reviewers and is opened only after ratings are locked. |
+| **Fixed reviewer panel** | The same three independently registered reviewers rating every frozen benchmark product under stable reviewer slots. This complete target-by-rater design is required for the primary two-way random-effects ICC. |
+| **Reviewer registry** | The access-controlled record of reviewer identity, fixed slot, credentials, license verification, experience, conflicts, training, and attestations. Reviewer identities never enter the shareable product packet. |
+| **Response lock** | A content-hashed declaration that the reviewer registry and append-only response file are complete before the development baseline key may be opened. |
+| **Candidate lock** | The statistician- and clinical-owner-approved, content-hashed list of calibration candidates, mechanistic rationale, and expected direction frozen before the sealed holdout may be opened. |
 | **Router** | `scoring_v4/router.py`, the sole authority for v4 module dispatch. |
 | **Safety suppression** | BLOCKED/UNSAFE products retain verdict/evidence but ship a null public score with `quality_score_status=suppressed_safety`. |
 | **Completeness exclusion** | Products without usable identity/payload become `NOT_SCORED` and are quarantined from the live catalog. Missing disclosure can instead remain scoreable as explicit soft debt. |

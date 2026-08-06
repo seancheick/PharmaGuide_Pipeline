@@ -94,6 +94,25 @@ BASELINE_FIELDS = (
     "classification_schema_version",
     "v4_config_fingerprint",
 )
+REVIEWER_REGISTRY_FIELDS = (
+    "reviewer_slot",
+    "reviewer_id",
+    "panel_role",
+    "credential_type",
+    "credential_detail",
+    "license_jurisdiction",
+    "license_status",
+    "license_verification_source",
+    "supplement_experience_years",
+    "evidence_appraisal_experience_years",
+    "conflicts_json",
+    "training_completed_on",
+    "training_assessment_score",
+    "protocol_version",
+    "independence_attested_on",
+    "data_use_attested_on",
+    "registered_on",
+)
 
 
 def build_benchmark_freeze(
@@ -777,16 +796,32 @@ def safe_csv_cell(value: Any) -> Any:
 def _response_template_rows(
     reviewer_packet: list[dict[str, Any]],
     reviewers_per_product: int,
+    *,
+    seed: str,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    for product in reviewer_packet:
-        for reviewer_slot in range(1, reviewers_per_product + 1):
+    for reviewer_slot in range(1, reviewers_per_product + 1):
+        reviewer_products = sorted(
+            reviewer_packet,
+            key=lambda product: _stable_hash(
+                seed,
+                "reviewer-order",
+                str(reviewer_slot),
+                str(product["benchmark_id"]),
+            ),
+        )
+        for reviewer_order, product in enumerate(
+            reviewer_products,
+            start=1,
+        ):
             rows.append({
                 "benchmark_id": product["benchmark_id"],
                 "review_sequence": product["review_sequence"],
                 "reviewer_slot": reviewer_slot,
                 "reviewer_id": "",
+                "reviewer_order": reviewer_order,
                 "review_round": 1,
+                "correction_reason": "",
                 "formulation_0_20": "",
                 "dose_0_20": "",
                 "evidence_0_20": "",
@@ -795,6 +830,7 @@ def _response_template_rows(
                 "formula_quality_checks_0_10": "",
                 "overall_0_100": "",
                 "product_safety_status": "",
+                "safety_concern_driver": "",
                 "assessment_confidence": "",
                 "label_facts_sufficient": "",
                 "source_citations_json": "[]",
@@ -878,6 +914,8 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--scoring-config", required=True, type=Path)
     parser.add_argument("--release-manifest", required=True, type=Path)
     parser.add_argument("--protocol", required=True, type=Path)
+    parser.add_argument("--analysis-spec", required=True, type=Path)
+    parser.add_argument("--analysis-script", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--freeze-id", required=True)
     parser.add_argument("--frozen-on", required=True)
@@ -902,6 +940,22 @@ def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
     if args.reviewers_per_product < 3:
         raise ValueError("at least three independent reviewers are required")
+    analysis_spec = json.loads(
+        args.analysis_spec.read_text(encoding="utf-8")
+    )
+    if not isinstance(analysis_spec, dict):
+        raise ValueError("analysis spec is not a JSON object")
+    if analysis_spec.get("freeze_id") != args.freeze_id:
+        raise ValueError(
+            "analysis spec freeze_id does not match requested freeze"
+        )
+    if (
+        analysis_spec.get("primary_design", {}).get("panel_size")
+        != args.reviewers_per_product
+    ):
+        raise ValueError(
+            "analysis spec panel size does not match reviewer count"
+        )
 
     catalog = _load_catalog_products(args.catalog_db)
     released_ids = {_dsld_id(row) for row in catalog}
@@ -930,6 +984,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     baseline = freeze["baseline_key"]
     reviewer_packet = freeze["reviewer_packet"]
+    expected_reviews = len(baseline) * args.reviewers_per_product
+    if (
+        analysis_spec.get("primary_design", {}).get("required_ratings")
+        != expected_reviews
+    ):
+        raise ValueError(
+            "analysis spec required_ratings does not match frozen sample"
+        )
     _validate_baseline_reconciliation(baseline)
     selected_detail_files = [
         args.detail_blobs_dir / f"{row['dsld_id']}.json"
@@ -971,6 +1033,7 @@ def main(argv: list[str] | None = None) -> int:
     response_rows = _response_template_rows(
         reviewer_packet,
         args.reviewers_per_product,
+        seed=args.seed,
     )
     response_fields = tuple(response_rows[0])
     _write_csv(
@@ -978,9 +1041,19 @@ def main(argv: list[str] | None = None) -> int:
         response_rows,
         response_fields,
     )
+    _write_csv(
+        args.output_dir / "reviewer_registry_template.csv",
+        [],
+        REVIEWER_REGISTRY_FIELDS,
+    )
     protocol_target = args.output_dir / "PROTOCOL.md"
     protocol_target.write_text(
         args.protocol.read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    analysis_spec_target = args.output_dir / "ANALYSIS_SPEC.json"
+    analysis_spec_target.write_text(
+        args.analysis_spec.read_text(encoding="utf-8"),
         encoding="utf-8",
     )
 
@@ -989,7 +1062,9 @@ def main(argv: list[str] | None = None) -> int:
         args.output_dir / "development_baseline_key.csv",
         args.output_dir / "SEALED_HOLDOUT_KEY.csv",
         args.output_dir / "reviewer_response_template.csv",
+        args.output_dir / "reviewer_registry_template.csv",
         protocol_target,
+        analysis_spec_target,
     )
     manifest = {
         "schema_version": "1.0.0",
@@ -1018,9 +1093,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.per_archetype - args.core_per_archetype
             ),
             "reviewers_per_product": args.reviewers_per_product,
-            "required_reviews": (
-                len(baseline) * args.reviewers_per_product
-            ),
+            "required_reviews": expected_reviews,
             "archetype_counts": _count_by(baseline, "archetype"),
             "cohort_counts": _count_by(baseline, "sample_cohort"),
             "analysis_split_counts": _count_by(
@@ -1077,6 +1150,20 @@ def main(argv: list[str] | None = None) -> int:
                 "sha256": _sha256(args.release_manifest),
             },
         },
+        "analysis_contract": {
+            "analysis_version": analysis_spec.get("analysis_version"),
+            "protocol_version": analysis_spec.get("protocol_version"),
+            "analysis_spec_sha256": _sha256(args.analysis_spec),
+            "analysis_script_path": str(args.analysis_script),
+            "analysis_script_sha256": _sha256(args.analysis_script),
+            "development_key_opening": (
+                "only after reviewer registry and append-only responses "
+                "are content-locked"
+            ),
+            "holdout_key_opening": (
+                "only after candidate lock and unchanged analysis hashes"
+            ),
+        },
         "artifacts": {
             path.name: {"sha256": _sha256(path)}
             for path in artifact_paths
@@ -1095,7 +1182,7 @@ def main(argv: list[str] | None = None) -> int:
             ),
         },
         "status": (
-            "sample_and_protocol_frozen_reviewers_not_yet_registered"
+            "sample_protocol_and_analysis_frozen_reviewers_not_yet_registered"
         ),
     }
     (args.output_dir / "manifest.json").write_text(

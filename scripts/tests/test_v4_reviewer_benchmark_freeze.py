@@ -11,6 +11,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from audits.v4_reviewer_benchmark_freeze import (  # noqa: E402
     FORBIDDEN_REVIEWER_FIELDS,
+    REVIEWER_REGISTRY_FIELDS,
+    _response_template_rows,
     _select_core,
     build_benchmark_freeze,
     prepare_benchmark_output_dir,
@@ -293,6 +295,67 @@ def test_spreadsheet_formula_payloads_are_rendered_inert():
     assert safe_csv_cell("\n=1+1") == "'\n=1+1"
     assert safe_csv_cell("5-HTP") == "5-HTP"
     assert safe_csv_cell(-8.9) == -8.9
+
+
+def test_response_template_is_append_only_correction_ready():
+    rows = _response_template_rows(
+        [
+            {"benchmark_id": f"PG-TEST-{index}", "review_sequence": index}
+            for index in range(1, 9)
+        ],
+        reviewers_per_product=3,
+        seed="reviewer-order-fixture",
+    )
+
+    assert len(rows) == 24
+    assert all(row["review_round"] == 1 for row in rows)
+    assert all(row["correction_reason"] == "" for row in rows)
+    assert all(row["safety_concern_driver"] == "" for row in rows)
+    orderings = []
+    for reviewer_slot in (1, 2, 3):
+        reviewer_rows = [
+            row for row in rows
+            if row["reviewer_slot"] == reviewer_slot
+        ]
+        assert [row["reviewer_order"] for row in reviewer_rows] == list(
+            range(1, 9)
+        )
+        orderings.append(tuple(
+            row["benchmark_id"] for row in reviewer_rows
+        ))
+    assert len(set(orderings)) == 3
+
+    repeated = _response_template_rows(
+        [
+            {"benchmark_id": f"PG-TEST-{index}", "review_sequence": index}
+            for index in range(1, 9)
+        ],
+        reviewers_per_product=3,
+        seed="reviewer-order-fixture",
+    )
+    assert repeated == rows
+
+
+def test_reviewer_registry_contract_captures_primary_panel_eligibility():
+    assert REVIEWER_REGISTRY_FIELDS == (
+        "reviewer_slot",
+        "reviewer_id",
+        "panel_role",
+        "credential_type",
+        "credential_detail",
+        "license_jurisdiction",
+        "license_status",
+        "license_verification_source",
+        "supplement_experience_years",
+        "evidence_appraisal_experience_years",
+        "conflicts_json",
+        "training_completed_on",
+        "training_assessment_score",
+        "protocol_version",
+        "independence_attested_on",
+        "data_use_attested_on",
+        "registered_on",
+    )
 
 
 def test_core_includes_rare_high_confidence_when_available():

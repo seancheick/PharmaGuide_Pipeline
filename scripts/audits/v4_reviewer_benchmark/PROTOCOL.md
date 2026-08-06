@@ -1,10 +1,10 @@
 # PharmaGuide V4 blinded reviewer benchmark protocol
 
-Status: sample and protocol frozen; reviewers not yet registered
+Status: sample, protocol, and analysis contract frozen; reviewers not yet registered
 
-Protocol version: 1.0.0
+Protocol version: 1.1.0
 
-Freeze ID: `2026-08-06-v4`
+Freeze ID: `2026-08-06-v6`
 
 ## Purpose and context of use
 
@@ -45,7 +45,8 @@ Reviewers receive only:
 
 1. this protocol;
 2. `reviewer_packet.csv`; and
-3. an individually assigned copy of `reviewer_response_template.csv`.
+3. their reviewer-slot rows from `reviewer_response_template.csv`, joined to
+   the packet by `benchmark_id` and sorted by `reviewer_order`.
 
 Reviewers must not receive or inspect:
 
@@ -72,19 +73,31 @@ The baseline key is opened in two stages:
 
 ## Reviewer eligibility and independence
 
-Use at least three independent reviewers per product. Before assignment,
-record reviewer ID, credentials, supplement-evaluation experience, conflicts
-of interest, and protocol training completion in a separate reviewer registry.
+Use one fixed primary panel of exactly three independent reviewers. Each
+primary reviewer rates every frozen product and keeps the same reviewer slot
+throughout the study. This complete target-by-rater design is required for the
+pre-specified two-way random-effects ICC. A substitute or rotating reviewer is
+not treated as the same rater and is excluded from the primary ICC analysis.
 
-At least two of the three assigned reviewers for every product must be a
+Before assignment, record reviewer ID, fixed reviewer slot, credentials,
+supplement-evaluation experience, conflicts of interest, and protocol training
+completion in `reviewer_registry.csv`, using the frozen
+`reviewer_registry_template.csv` contract.
+
+At least two of the three primary-panel reviewers must be a
 licensed pharmacist, physician, or registered dietitian with relevant
 supplement or evidence-appraisal experience. No reviewer may evaluate a
 product or brand for which they have a financial, employment, consulting, or
-research conflict.
+research conflict. Because the same panel rates every product, a primary-panel
+reviewer must be conflict-free across the complete frozen sample.
 
 Reviewers complete a training exercise on products outside the frozen sample.
 Training explains the concepts and data-entry rules but never discloses V4
 scores, thresholds, denominators, penalties, or sample assignments.
+Each reviewer receives the products in an independently randomized order.
+The three deterministic assignments are frozen in
+`reviewer_response_template.csv`; `review_sequence` is the hidden master join
+key, while `reviewer_order` is the only order used for reviewer distribution.
 
 ## Independent review procedure
 
@@ -98,9 +111,11 @@ For each assigned benchmark ID:
 4. Score each pillar independently using the anchors below.
 5. Enter `overall_0_100` as the exact sum of the six pillar ratings.
 6. Assign the independent product safety status.
-7. Record confidence, whether the supplied label facts were sufficient, and a
+7. For `caution`, `unsafe`, or `blocked`, identify the substance, dose, or
+   product-level event in `safety_concern_driver`.
+8. Record confidence, whether the supplied label facts were sufficient, and a
    short rationale.
-8. Do not discuss the product with another reviewer until all responses lock.
+9. Do not discuss the product with another reviewer until all responses lock.
 
 The review is product-level, not personalized. Drug/condition interactions are
 considered only where they establish a catalog-level concern; they do not
@@ -138,15 +153,21 @@ or product-level event that drives the rating.
 
 ## Locked analysis plan
 
-Primary analysis uses only responses that pass the protocol and arithmetic
-gates. No imputation is performed for missing ratings.
+Primary analysis uses only products whose three responses pass the arithmetic
+gates and contain no protocol deviation. If any reviewer records a deviation,
+that whole product is excluded from the complete-panel primary analysis and
+retained in the all-locked-responses sensitivity analysis. No imputation is
+performed for missing ratings.
 
 1. Require three eligible, blinded ratings per product.
 2. Verify each reviewer overall equals the six-pillar sum.
-3. Use the median of the three reviewer ratings as product consensus.
+3. Use the median of the three fixed-panel reviewer ratings as product
+   consensus.
 4. Report inter-rater absolute agreement for overall and each pillar with
-   confidence intervals; use a two-way random-effects, absolute-agreement ICC
-   for continuous ratings.
+   confidence intervals; use ICC(A,1), the two-way random-effects,
+   absolute-agreement, single-rater coefficient. Also report ICC(A,3) for the
+   reliability of the three-reviewer mean. Confidence intervals use the
+   deterministic product-level bootstrap frozen in `ANALYSIS_SPEC.json`.
 5. Compare engine versus consensus with signed error, absolute error,
    Spearman rank correlation, exact tier agreement, and within-one-tier
    agreement.
@@ -162,6 +183,15 @@ gates. No imputation is performed for missing ratings.
    24-product holdout. The holdout is reported once; failed candidates are not
    retuned against it.
 
+The fixed tier thresholds, safety severity order, bootstrap seed and
+iterations, arithmetic tolerance, exclusion rules, and metric direction are
+machine-readable in `ANALYSIS_SPEC.json`. The manifest fingerprints that file
+and the analysis implementation. Any change creates a new benchmark freeze.
+The development analyzer rejects the sealed holdout by filename and split
+before reading its rows. Holdout analysis additionally requires an approved,
+content-locked candidate record containing the frozen analysis hashes and
+expected direction.
+
 This protocol does not invent a pass/fail accuracy threshold before a
 statistician and clinical owner sign it. Lack of a threshold cannot be used to
 justify a score change: calibration remains frozen until the reviewer
@@ -170,7 +200,7 @@ registry, analysis implementation, and decision thresholds are version-locked.
 ## Deviations, exclusions, and audit trail
 
 - Never overwrite a rating. Corrections append a new row with a new
-  `review_round` and reason.
+  `review_round` and `correction_reason`.
 - Record unblinding, conflict discovery, missing label facts, source-access
   failure, and reviewer substitution.
 - Exclusions are decided without viewing engine output.
