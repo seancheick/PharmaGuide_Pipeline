@@ -22,7 +22,7 @@ every heavy test — ~1 hour instead of ~4 minutes. See the ⚠️ section in AG
 
 ## Claude-Code specifics
 
-- **Project skills** live in `.claude/skills/` — e.g. `fda-weekly-sync`, `v4-phase`, `verify-data`.
+- **Project skills** live in `.claude/skills/` — e.g. `fda-weekly-sync`, `verify-data`, `diagnose`. (18 generic/stale ones incl. `v4-phase` archived to `~/claude-attic/2026-08-06/` in the 2026-08-06 de-noising.)
   (AGENTS.md's `.Codex/skills/` path is wrong; that directory does not exist.)
 - **Web browsing:** use the built-in Browser pane tools (`mcp__Claude_Browser__*`), or
   WebFetch/WebSearch inside a subagent so only the summary returns. Never
