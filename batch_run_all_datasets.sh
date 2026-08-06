@@ -19,9 +19,9 @@
 #   bash batch_run_all_datasets.sh --targets Thorne,Olly --release  # Explicit catalog + release
 #   bash batch_run_all_datasets.sh --pipeline-only          # All brands, no snapshot/release
 #   bash batch_run_all_datasets.sh --stages score --targets Nature_Made
-#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/forms"
-#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
-#   bash batch_run_all_datasets.sh --root "/Users/seancheick/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne,Pure,CVS,Nature,Goli,Hum,Legion,Ora,Ritual,Transparent,Vitafusion
+#   bash batch_run_all_datasets.sh --root "$HOME/Downloads/PharmaGuide_Datasets/staging/forms"
+#   bash batch_run_all_datasets.sh --root "$HOME/Downloads/PharmaGuide_Datasets/delta/olly"
+#   bash batch_run_all_datasets.sh --root "$HOME/Downloads/PharmaGuide_Datasets/staging/brands" --targets Olly,Thorne,Pure,CVS,Nature,Goli,Hum,Legion,Ora,Ritual,Transparent,Vitafusion
 #
 # Release-stage flags (apply after pipeline + strict snapshot gates succeed):
 #   --release                 Explicitly release after a targeted run
@@ -35,6 +35,7 @@
 #
 # Environment:
 #   PYTHON=python3.13 bash batch_run_all_datasets.sh        # Use specific python
+#   PHARMAGUIDE_DATASET_ROOT=/local/path bash batch_run_all_datasets.sh
 #   SKIP_SNAPSHOT=1 bash batch_run_all_datasets.sh          # Skip snapshot+release (legacy)
 #   SKIP_RELEASE=1  bash batch_run_all_datasets.sh          # Snapshot only, skip full release
 #
@@ -52,7 +53,10 @@
 set -e -o pipefail  # Exit on error and fail pipelines when any segment fails
 
 # Configuration
-DATASET_ROOT="$HOME/Documents/DataSetDsld/staging/brands"
+# Keep operational inputs outside iCloud-synced Desktop/Documents. macOS may
+# replace those files with `dataless` placeholders, which cannot support a
+# deterministic multi-hour pipeline run.
+DATASET_ROOT="${PHARMAGUIDE_DATASET_ROOT:-$HOME/Downloads/PharmaGuide_Datasets/staging/brands}"
 SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/scripts" && pwd)"
 STAGES="clean,enrich,score"  # Default: full pipeline
 TARGET_DATASETS=""  # Empty = all datasets
@@ -142,6 +146,16 @@ NC='\033[0m'  # No Color
 
 # Validate paths
 if [ ! -d "$DATASET_ROOT" ]; then
+    HYDRATING_ROOT="$HOME/Downloads/PharmaGuide_Datasets/.hydrating/brands"
+    if [ -z "${PHARMAGUIDE_DATASET_ROOT:-}" ] && [ -d "$HYDRATING_ROOT" ]; then
+        HYDRATED_COUNT=$(find "$HYDRATING_ROOT" -type f -name '*.json' | wc -l | tr -d ' ')
+        echo -e "${YELLOW}Local dataset hydration is still in progress.${NC}"
+        echo "  $HYDRATED_COUNT JSON file(s) copied so far."
+        echo "  Wait for the verified copy to be promoted to:"
+        echo "  $DATASET_ROOT"
+        echo "  Then rerun this same command."
+        exit 1
+    fi
     echo -e "${RED}ERROR: Dataset root not found: $DATASET_ROOT${NC}"
     exit 1
 fi

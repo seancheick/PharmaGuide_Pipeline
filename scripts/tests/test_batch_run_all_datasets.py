@@ -8,6 +8,78 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_PATH = REPO_ROOT / "batch_run_all_datasets.sh"
 
 
+def test_batch_runner_defaults_to_local_non_icloud_dataset_root(tmp_path):
+    fake_home = tmp_path / "home"
+    dataset_root = (
+        fake_home
+        / "Downloads"
+        / "PharmaGuide_Datasets"
+        / "staging"
+        / "brands"
+    )
+    (dataset_root / "ExampleBrand").mkdir(parents=True)
+
+    scripts_dir = tmp_path / "scripts"
+    (scripts_dir / "products" / "reports").mkdir(parents=True)
+    (scripts_dir / "run_pipeline.py").write_text(
+        "import sys\n"
+        "print('local-root-runner-reached')\n"
+        "sys.exit(3)\n",
+        encoding="utf-8",
+    )
+
+    copied_script = tmp_path / "batch_run_all_datasets.sh"
+    copied_script.write_text(SCRIPT_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    copied_script.chmod(copied_script.stat().st_mode | stat.S_IXUSR)
+
+    result = subprocess.run(
+        ["bash", str(copied_script), "--pipeline-only"],
+        capture_output=True,
+        text=True,
+        env={
+            **os.environ,
+            "HOME": str(fake_home),
+            "PYTHONUNBUFFERED": "1",
+        },
+    )
+
+    combined_output = result.stdout + result.stderr
+    assert str(dataset_root) in combined_output
+    assert "local-root-runner-reached" in combined_output
+    assert result.returncode == 1, combined_output
+
+
+def test_batch_runner_reports_local_dataset_hydration_in_progress(tmp_path):
+    fake_home = tmp_path / "home"
+    hydrating_root = (
+        fake_home
+        / "Downloads"
+        / "PharmaGuide_Datasets"
+        / ".hydrating"
+        / "brands"
+        / "ExampleBrand"
+    )
+    hydrating_root.mkdir(parents=True)
+    (hydrating_root / "1.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "scripts").mkdir()
+
+    copied_script = tmp_path / "batch_run_all_datasets.sh"
+    copied_script.write_text(SCRIPT_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    copied_script.chmod(copied_script.stat().st_mode | stat.S_IXUSR)
+
+    result = subprocess.run(
+        ["bash", str(copied_script), "--pipeline-only"],
+        capture_output=True,
+        text=True,
+        env={**os.environ, "HOME": str(fake_home)},
+    )
+
+    combined_output = result.stdout + result.stderr
+    assert result.returncode == 1
+    assert "Local dataset hydration is still in progress" in combined_output
+    assert "1 JSON file(s) copied so far" in combined_output
+
+
 def test_batch_runner_propagates_run_pipeline_failures(tmp_path):
     dataset_root = tmp_path / "datasets"
     dataset_dir = dataset_root / "ExampleBrand"

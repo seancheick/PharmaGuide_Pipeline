@@ -42,7 +42,7 @@ scripts/test.sh full                 # full suite (pre-ship / CI)
 # Canonical operational runs
 bash batch_run_all_datasets.sh
 bash batch_run_all_datasets.sh --targets Brand --stages enrich,score
-bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands"
+bash batch_run_all_datasets.sh --root "$HOME/Downloads/PharmaGuide_Datasets/staging/brands"
 
 # Rebuild dashboard/catalog snapshot from existing brand outputs
 bash scripts/rebuild_dashboard_snapshot.sh

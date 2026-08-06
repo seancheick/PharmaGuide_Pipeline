@@ -4,9 +4,8 @@ These tests pin the cleaner's treatment of two distinct shapes that
 appear in the four Natures_Bounty Flex-A-Min products
 (pid 65963, 17471, 17536, 17539) and are the trigger for RC-4.
 
-The actual raw DSLD shape (verified against
-/Users/seancheick/Documents/DataSetDsld/staging/brands/Natures_Bounty/*.json)
-is:
+The actual raw DSLD shape (verified against the local brand dataset's
+Natures_Bounty products) is:
 
   Proprietary Blend (1239-1750 mg total)            ← outer header
   ├── Chondroitin Sulfate Complex (1139-1210 mg)    ← inner sub-blend marketing name
@@ -79,6 +78,8 @@ import pytest
 
 _ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 sys.path.insert(0, os.path.join(_ROOT, "scripts"))
+
+from dataset_paths import brand_dataset_root  # noqa: E402
 
 try:
     from enhanced_normalizer import EnhancedDSLDNormalizer  # type: ignore
@@ -393,7 +394,7 @@ def test_synthetic_inputs_mirror_real_dsld_shape():
     field-by-field. Otherwise, skip (the rest of the suite uses
     self-contained synthetic data anyway)."""
     import json
-    staging = "/Users/seancheick/Documents/DataSetDsld/staging/brands/Natures_Bounty"
+    staging = str(brand_dataset_root() / "Natures_Bounty")
     if not os.path.isdir(staging):
         pytest.skip("Staging dir not available on this machine")
     for pid, synth in RAW_PRODUCTS.items():

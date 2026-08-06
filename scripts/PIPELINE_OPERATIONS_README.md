@@ -31,7 +31,8 @@ the script performs this exact sequence.
 
 ### 2.1 Dataset discovery
 
-- Root defaults to `$HOME/Documents/DataSetDsld/staging/brands`.
+- Root defaults to `$HOME/Downloads/PharmaGuide_Datasets/staging/brands`
+  so iCloud cannot evict inputs during a long run.
 - Each eligible child directory is treated as one dataset/brand.
 - Hidden/infrastructure directories are excluded.
 - Brand directories run sequentially in filesystem lexical order.
@@ -175,7 +176,7 @@ Custom dataset root:
 
 ```bash
 bash batch_run_all_datasets.sh \
-  --root "$HOME/Documents/DataSetDsld/staging/brands" \
+  --root "$HOME/Downloads/PharmaGuide_Datasets/staging/brands" \
   --pipeline-only
 ```
 

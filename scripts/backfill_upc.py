@@ -29,12 +29,11 @@ import urllib.error
 from pathlib import Path
 from difflib import SequenceMatcher
 
+from dataset_paths import brand_dataset_root
+
 # ── Config ────────────────────────────────────────────────────────────────────
 
-STAGING_DIR = Path(__file__).parent.parent / "../../Documents/DataSetDsld/staging/brands"
-# Resolve relative path — adjust if needed
-if not STAGING_DIR.exists():
-    STAGING_DIR = Path.home() / "Documents/DataSetDsld/staging/brands"
+STAGING_DIR = brand_dataset_root()
 
 TRIAL_URL = "https://api.upcitemdb.com/prod/trial/search"
 PAID_URL = "https://api.upcitemdb.com/prod/v1/search"
