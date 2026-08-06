@@ -1,4 +1,5 @@
 import json
+import math
 import sqlite3
 import sys
 from pathlib import Path
@@ -9,11 +10,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from build_final_db import (
     build_detail_blob,
-    has_banned_substance,
     project_export_scored_artifact,
     resolve_export_supplement_type,
 )
-from scoring_v4.scored_artifact import suppress_scored_artifact_for_hard_block
 from stage_manifest import select_stage_input_files
 
 
@@ -132,13 +131,49 @@ def test_release_export_counts_and_index_parity():
     )
 
 
-def _expected_export_scored(enriched: dict, scored: dict) -> dict:
-    expected = dict(scored)
-    if has_banned_substance(enriched):
-        expected = suppress_scored_artifact_for_hard_block(
-            expected, reason="banned_substance"
-        )
-    return expected
+def _production_export(enriched: dict, scored: dict) -> tuple[dict, dict]:
+    """Reproduce the catalog builder's export step exactly.
+
+    This helper used to re-implement a *subset* of the projection — banned
+    suppression only — which meant the parity tests compared the shipped
+    artifact against a weaker contract than production applies. A product
+    elevated to CAUTION by a blob-borne high-risk warning (Garcinia, say)
+    would show as a parity failure even though the shipped artifact was
+    correct, because `expected` never ran the projection at all.
+
+    `project_export_scored_artifact` already performs the banned suppression
+    internally, so delegating to it removes the duplicate rather than adding
+    a second call. Its own docstring is explicit that the release-parity
+    tests must not maintain a separate approximation of this safety-critical
+    logic.
+
+    Mirrors build_final_db's two-pass sequence: build a provisional blob from
+    the raw artifact, project with it, and rebuild the blob from the projected
+    artifact when the projection changed anything.
+
+    Returns ``(effective_scored, detail_blob)``.
+    """
+    blob = build_detail_blob(enriched, scored)
+    effective = project_export_scored_artifact(enriched, scored, blob)
+    if effective != scored:
+        blob = build_detail_blob(enriched, effective)
+    return effective, blob
+
+
+def _expected_export_score_100(effective_scored: dict):
+    """The score the export actually writes: half-up rounded to a whole number.
+
+    build_final_db reads ``_v4_quality_score_100`` (falling back to
+    ``score_100_equivalent`` only when there is no v4 status) and stores
+    ``int(floor(x + 0.5))``. Comparing the INTEGER column against the source
+    FLOAT fails for every product whose score is not already whole.
+    """
+    raw = effective_scored.get("_v4_quality_score_100")
+    if raw is None and not str(effective_scored.get("_v4_quality_status") or ""):
+        raw = effective_scored.get("score_100_equivalent")
+    if raw is None:
+        return None
+    return int(math.floor(float(raw) + 0.5))
 
 
 @pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
@@ -165,17 +200,14 @@ def test_release_export_matches_source_scored_and_resolved_type():
     for row in rows:
         dsld_id = str(row["dsld_id"])
         enriched = enriched_lookup[dsld_id]
-        scored = _expected_export_scored(enriched, scored_lookup[dsld_id])
-        scored = project_export_scored_artifact(
-            enriched, scored, build_detail_blob(enriched, scored)
-        )
+        scored, _blob = _production_export(enriched, scored_lookup[dsld_id])
         expected_type = resolve_export_supplement_type(enriched, scored)
 
         assert row["supplement_type"] == expected_type, dsld_id
         assert row["verdict"] == scored["verdict"], dsld_id
         assert row["output_schema_version"] == scored["output_schema_version"], dsld_id
 
-        expected_score = scored["score_100_equivalent"]
+        expected_score = _expected_export_score_100(scored)
         if expected_score is None:
             assert row["score_100_equivalent"] is None, dsld_id
         else:
@@ -198,11 +230,8 @@ def test_release_detail_blobs_match_recomputed_export_contract():
     for path in blob_paths:
         actual = json.loads(path.read_text())
         dsld_id = str(actual["dsld_id"])
-        expected = build_detail_blob(
-            enriched_lookup[dsld_id],
-            _expected_export_scored(
-                enriched_lookup[dsld_id], scored_lookup[dsld_id]
-            ),
+        _scored, expected = _production_export(
+            enriched_lookup[dsld_id], scored_lookup[dsld_id]
         )
 
         assert actual == expected, dsld_id
