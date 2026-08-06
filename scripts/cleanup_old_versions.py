@@ -12,8 +12,11 @@ Usage:
 """
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from collections import defaultdict
 import sys
 import os
+import threading
 import time
 
 # Ensure scripts/ is on the path for sibling imports (supabase_client, env_loader)
@@ -21,7 +24,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
 
 from supabase_client import get_supabase_client  # noqa: E402
-from release_safety import sweep_quarantine  # noqa: E402
+from release_safety import quarantine_blob, sweep_quarantine  # noqa: E402
 
 BUCKET = "pharmaguide"
 
@@ -41,6 +44,9 @@ SUPABASE_TABLE_MAX_RETRIES = int(
 )
 QUARANTINE_PROGRESS_EVERY_BLOBS = int(
     os.environ.get("PG_QUARANTINE_PROGRESS_EVERY_BLOBS", "1000")
+)
+QUARANTINE_MAX_WORKERS = int(
+    os.environ.get("PG_QUARANTINE_MAX_WORKERS", "4")
 )
 ORPHAN_DELETE_BATCH_SIZE = int(
     os.environ.get("PG_ORPHAN_DELETE_BATCH_SIZE", "500")
@@ -251,6 +257,121 @@ def delete_orphan_blob_batch(client, blob_hashes):
     return deleted, failed, failed_paths
 
 
+def quarantine_orphan_blob_batch(
+    client,
+    blob_hashes,
+    *,
+    run_date,
+    max_workers=None,
+    client_factory=None,
+):
+    """Move reviewed orphan hashes with shard-safe bounded concurrency.
+
+    Hashes within one storage shard are processed serially. Different shards
+    may overlap, but every executor thread owns a separate Supabase client
+    created by ``client_factory``. This avoids sharing an HTTP/2 transport
+    across threads and prevents same-shard copy/list/delete races.
+
+    When ``client_factory`` is omitted (the test/in-memory seam), the supplied
+    client is used serially. Production callers must pass
+    ``get_supabase_client``.
+    """
+    hashes = sorted(blob_hashes)
+    total = len(hashes)
+    if total == 0:
+        return 0, 0, []
+
+    hashes_by_shard = defaultdict(list)
+    for blob_hash in hashes:
+        hashes_by_shard[blob_hash[:2]].append(blob_hash)
+
+    workers = QUARANTINE_MAX_WORKERS if max_workers is None else int(max_workers)
+    if client_factory is None:
+        workers = 1
+    workers = max(1, min(workers, len(hashes_by_shard)))
+    thread_local = threading.local()
+
+    def _worker_client():
+        if client_factory is None:
+            return client
+        if not hasattr(thread_local, "client"):
+            thread_local.client = client_factory()
+        return thread_local.client
+
+    def _quarantine_shard(shard_hashes):
+        worker_client = _worker_client()
+        outcomes = []
+        for blob_hash in shard_hashes:
+            path = f"{BLOB_STORAGE_PREFIX}/{blob_hash[:2]}/{blob_hash}.json"
+            try:
+                ok, err = quarantine_blob(
+                    worker_client,
+                    path,
+                    run_date=run_date,
+                )
+            except Exception as exc:  # noqa: BLE001 — count + continue.
+                ok = False
+                err = f"{type(exc).__name__}: {exc}"
+            outcomes.append((path, ok, err))
+        return outcomes
+
+    quarantined = 0
+    failed = 0
+    failed_paths = []
+    processed = 0
+    next_progress_at = QUARANTINE_PROGRESS_EVERY_BLOBS
+    with ThreadPoolExecutor(
+        max_workers=workers,
+        thread_name_prefix="orphan-quarantine",
+    ) as executor:
+        future_to_shard = {
+            executor.submit(_quarantine_shard, shard_hashes): (
+                shard,
+                shard_hashes,
+            )
+            for shard, shard_hashes in sorted(hashes_by_shard.items())
+        }
+        for future in as_completed(future_to_shard):
+            shard, shard_hashes = future_to_shard[future]
+            try:
+                outcomes = future.result()
+            except Exception as exc:  # noqa: BLE001 — count + continue.
+                err = f"{type(exc).__name__}: {exc}"
+                outcomes = [
+                    (
+                        f"{BLOB_STORAGE_PREFIX}/{shard}/{blob_hash}.json",
+                        False,
+                        err,
+                    )
+                    for blob_hash in shard_hashes
+                ]
+            for path, ok, err in outcomes:
+                if ok:
+                    quarantined += 1
+                else:
+                    failed += 1
+                    failed_paths.append(path)
+                    print(
+                        f"  [ERROR] Failed to quarantine orphan {path}: {err}"
+                    )
+            processed += len(outcomes)
+            # Report on threshold CROSSING, not exact multiples. Results
+            # arrive one whole shard at a time (~50 blobs at catalog scale),
+            # so `processed % EVERY == 0` almost never holds and a long run
+            # prints nothing until it finishes — indistinguishable from a
+            # hang for the operator watching it.
+            if processed == total or processed >= next_progress_at:
+                print(
+                    f"  Quarantine progress: {processed}/{total} processed; "
+                    f"{quarantined} moved/idempotent, {failed} failed "
+                    f"(workers={workers})."
+                )
+                while next_progress_at <= processed:
+                    next_progress_at += QUARANTINE_PROGRESS_EVERY_BLOBS
+
+    return quarantined, failed, failed_paths
+
+
 # ---------------------------------------------------------------------------
 # Orphan blob detection
 # ---------------------------------------------------------------------------
@@ -446,6 +567,7 @@ def cleanup_orphan_blobs_with_gates(
     run_date=None,
     retained_versions=(),
     orphan_action="quarantine",
+    quarantine_client_factory=None,
 ):
     """Run release-safety gates THEN move orphaned detail blobs to quarantine.
 
@@ -510,7 +632,6 @@ def cleanup_orphan_blobs_with_gates(
         GateMode,
         GateOverrides,
         validate_detail_index,
-        quarantine_blob,
         DEFAULT_QUARANTINE_TTL_DAYS,
     )
     from datetime import datetime as _datetime, timezone as _timezone
@@ -646,31 +767,12 @@ def cleanup_orphan_blobs_with_gates(
         f"Recoverable for {DEFAULT_QUARANTINE_TTL_DAYS} days."
     )
 
-    quarantined = 0
-    failed = 0
-    failed_paths: list = []
-    actual_orphan_count = len(actual_orphans)
-    for idx, blob_hash in enumerate(sorted(actual_orphans), start=1):
-        shard = blob_hash[:2]
-        path = f"shared/details/sha256/{shard}/{blob_hash}.json"
-        ok, err = quarantine_blob(client, path, run_date=run_date)
-        if ok:
-            quarantined += 1
-        else:
-            # P2.2 sign-off: per-blob failures DO NOT abort the cleanup.
-            # Count + report; continue across remaining candidates.
-            print(f"  [ERROR] Failed to quarantine orphan {path}: {err}")
-            failed += 1
-            failed_paths.append(path)
-        if (
-            idx == 1
-            or idx == actual_orphan_count
-            or idx % QUARANTINE_PROGRESS_EVERY_BLOBS == 0
-        ):
-            print(
-                f"  Quarantine progress: {idx}/{actual_orphan_count} "
-                f"processed; {quarantined} moved/idempotent, {failed} failed."
-            )
+    quarantined, failed, failed_paths = quarantine_orphan_blob_batch(
+        client,
+        actual_orphans,
+        run_date=run_date,
+        client_factory=quarantine_client_factory,
+    )
 
     print(
         f"\n[release-safety] Quarantine complete: "
@@ -931,6 +1033,7 @@ def main(argv=None):
                                 if r.get("db_version")
                             ),
                             orphan_action=args.orphan_blob_action,
+                            quarantine_client_factory=get_supabase_client,
                         )
                     )
                 except Exception as exc:

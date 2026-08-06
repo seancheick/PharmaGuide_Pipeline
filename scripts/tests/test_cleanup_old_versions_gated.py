@@ -25,6 +25,8 @@ import os
 import sqlite3
 import subprocess
 import sys
+import threading
+import time
 from pathlib import Path
 from typing import Set
 import pytest
@@ -42,6 +44,11 @@ if _scripts_dir not in sys.path:
 def _h(idx: int) -> str:
     """Deterministic 64-char lowercase hex hash."""
     return f"{idx:064x}"
+
+
+def _sharded_h(shard: int, idx: int) -> str:
+    """Deterministic hash whose first byte selects a storage shard."""
+    return f"{shard:02x}{idx:062x}"
 
 
 def _git_init(repo_path: Path) -> None:
@@ -231,6 +238,78 @@ def _active_path(blob_hash: str) -> str:
 
 def _quarantine_path(date_str: str, blob_hash: str) -> str:
     return f"shared/quarantine/{date_str}/{blob_hash[:2]}/{blob_hash}.json"
+
+
+def test_quarantine_batch_is_parallel_across_shards_and_serial_within_shard(
+    monkeypatch,
+) -> None:
+    import cleanup_old_versions as cov
+
+    lock = threading.Lock()
+    active_total = 0
+    max_active_total = 0
+    active_by_shard: dict[str, int] = {}
+    max_active_by_shard: dict[str, int] = {}
+    client_ids_by_thread: dict[int, set[int]] = {}
+    created_client_ids: list[int] = []
+
+    class WorkerClient:
+        pass
+
+    def client_factory():
+        client = WorkerClient()
+        with lock:
+            created_client_ids.append(id(client))
+        return client
+
+    def fake_quarantine(client, path, *, run_date):
+        nonlocal active_total, max_active_total
+        blob_hash = path.rsplit("/", 1)[-1].removesuffix(".json")
+        shard = blob_hash[:2]
+        thread_id = threading.get_ident()
+        with lock:
+            active_total += 1
+            max_active_total = max(max_active_total, active_total)
+            active_by_shard[shard] = active_by_shard.get(shard, 0) + 1
+            max_active_by_shard[shard] = max(
+                max_active_by_shard.get(shard, 0),
+                active_by_shard[shard],
+            )
+            client_ids_by_thread.setdefault(thread_id, set()).add(id(client))
+        try:
+            time.sleep(0.02)
+            if blob_hash == _sharded_h(2, 1):
+                return False, "simulated copy failure"
+            if blob_hash == _sharded_h(3, 2):
+                raise RuntimeError("simulated worker exception")
+            return True, None
+        finally:
+            with lock:
+                active_total -= 1
+                active_by_shard[shard] -= 1
+
+    monkeypatch.setattr(cov, "quarantine_blob", fake_quarantine, raising=False)
+    hashes = {
+        _sharded_h(shard, idx)
+        for shard in range(4)
+        for idx in range(3)
+    }
+
+    quarantined, failed, failed_paths = cov.quarantine_orphan_blob_batch(
+        client=object(),
+        blob_hashes=hashes,
+        run_date="2026-08-06",
+        max_workers=4,
+        client_factory=client_factory,
+    )
+
+    assert quarantined == 10
+    assert failed == 2
+    assert len(failed_paths) == 2
+    assert 1 < max_active_total <= 4
+    assert set(max_active_by_shard.values()) == {1}
+    assert 1 < len(created_client_ids) <= 4
+    assert all(len(client_ids) == 1 for client_ids in client_ids_by_thread.values())
 
 
 # ===========================================================================

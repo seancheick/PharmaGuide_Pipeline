@@ -181,6 +181,52 @@ def test_p2_1a_quarantine_blob_happy_path(monkeypatch):
     assert bucket.objects[target] == b"blob bytes"
 
 
+def test_p2_1a_quarantine_blob_waits_for_copied_target_visibility(monkeypatch):
+    """Storage listings may lag a successful COPY briefly.
+
+    The source must remain until the target becomes visible, but a transient
+    listing delay must not strand a safe cleanup as a false failure.
+    """
+    import release_safety.quarantine as quarantine_module
+
+    client = MockSupabaseClient()
+    bucket = client.storage.from_("pharmaguide")
+    blob_hash = _h(43)
+    src = _active_path(blob_hash)
+    target = _quarantine_path("2026-05-12", blob_hash)
+    bucket.objects[src] = b"blob bytes"
+    target_checks = 0
+
+    real_object_exists = quarantine_module._object_exists
+
+    def delayed_target_visibility(client_arg, bucket_name, path):
+        nonlocal target_checks
+        if path == target:
+            target_checks += 1
+            if target_checks < 4:
+                return False
+        return real_object_exists(client_arg, bucket_name, path)
+
+    monkeypatch.setattr(
+        quarantine_module,
+        "_object_exists",
+        delayed_target_visibility,
+    )
+    monkeypatch.setattr(quarantine_module.time, "sleep", lambda _seconds: None)
+
+    ok, err = quarantine_module.quarantine_blob(
+        client,
+        src,
+        run_date="2026-05-12",
+    )
+
+    assert ok is True
+    assert err is None
+    assert target_checks == 4
+    assert src not in bucket.objects
+    assert target in bucket.objects
+
+
 # ---------------------------------------------------------------------------
 # Test 3 — quarantine_blob idempotent: source missing + target present
 # ---------------------------------------------------------------------------
