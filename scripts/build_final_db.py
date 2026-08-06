@@ -2278,10 +2278,8 @@ CREATE TABLE IF NOT EXISTS export_manifest (
 """
 
 CORE_INDEX_SQL = """
-CREATE INDEX IF NOT EXISTS idx_core_upc ON products_core(upc_sku);
 CREATE INDEX IF NOT EXISTS idx_core_name ON products_core(product_name);
 CREATE INDEX IF NOT EXISTS idx_core_brand ON products_core(brand_name);
-CREATE INDEX IF NOT EXISTS idx_core_verdict ON products_core(verdict);
 CREATE INDEX IF NOT EXISTS idx_core_score ON products_core(quality_score_v4_100);
 CREATE INDEX IF NOT EXISTS idx_core_status ON products_core(product_status);
 CREATE INDEX IF NOT EXISTS idx_core_type ON products_core(supplement_type);
@@ -10111,6 +10109,10 @@ def build_final_db(
     )
 
     conn.commit()
+    # Bulk inserts, deduplication, FTS rebuilds, and percentile backfills leave
+    # reclaimable pages. Compact before computing the immutable distribution
+    # checksum so the shipped artifact does not carry build-time fragmentation.
+    conn.execute("VACUUM")
     conn.close()
 
     db_checksum = compute_file_sha256(db_path)

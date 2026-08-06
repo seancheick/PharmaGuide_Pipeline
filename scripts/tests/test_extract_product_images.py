@@ -82,6 +82,32 @@ def test_backfill_image_thumbnail_urls_skips_missing_files(tmp_path):
     assert not os.path.exists(image_dir / "1000.webp")
 
 
+def test_backfill_compacts_db_before_manifest_checksum(tmp_path):
+    db_path = tmp_path / "pharmaguide_core.db"
+    image_dir = tmp_path / "product_images"
+    image_dir.mkdir()
+
+    with sqlite3.connect(db_path) as conn:
+        conn.execute(
+            "CREATE TABLE products_core "
+            "(dsld_id TEXT PRIMARY KEY, image_thumbnail_url TEXT)"
+        )
+        conn.execute("CREATE TABLE build_padding (payload TEXT)")
+        conn.executemany(
+            "INSERT INTO build_padding VALUES (?)",
+            [("x" * 4000,) for _ in range(200)],
+        )
+        conn.execute("DELETE FROM build_padding")
+        conn.commit()
+
+    size_before = db_path.stat().st_size
+    backfill_image_thumbnail_urls(str(db_path), str(image_dir), {})
+
+    assert db_path.stat().st_size < size_before
+    with sqlite3.connect(db_path) as conn:
+        assert conn.execute("PRAGMA freelist_count").fetchone()[0] == 0
+
+
 def test_refresh_export_manifest_checksum_updates_manifest_next_to_db(tmp_path):
     db_path = tmp_path / "pharmaguide_core.db"
     db_path.write_bytes(b"new-db-bytes")

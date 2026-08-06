@@ -46,6 +46,18 @@ def test_core_ddl_ships_upc_normalized_and_cat_score_indexes():
     assert "idx_core_cat_score" in names
 
 
+def test_core_ddl_omits_redundant_legacy_indexes():
+    conn = sqlite3.connect(":memory:")
+    _apply_core_schema(conn)
+    names = _index_names(conn, "products_core")
+
+    # Barcode lookup uses idx_core_upc_normalized; no app query uses a direct
+    # upc_sku equality predicate. Legacy verdict is read only after a row has
+    # already been selected and is never a catalog filter.
+    assert "idx_core_upc" not in names
+    assert "idx_core_verdict" not in names
+
+
 def test_upc_normalized_index_serves_app_query_plan():
     conn = sqlite3.connect(":memory:")
     _apply_core_schema(conn)

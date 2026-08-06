@@ -224,6 +224,30 @@ def needs_update(local_manifest, remote_manifest, force=False):
     return False
 
 
+def validate_bucket_upload_capacity(client, *, bucket, object_size_bytes):
+    """Fail before upload when a Storage bucket policy rejects the core DB."""
+    bucket_config = client.storage.get_bucket(bucket)
+    if isinstance(bucket_config, dict):
+        file_size_limit = bucket_config.get("file_size_limit")
+    else:
+        file_size_limit = getattr(bucket_config, "file_size_limit", None)
+
+    if file_size_limit is None:
+        return
+
+    limit_bytes = int(file_size_limit)
+    if object_size_bytes <= limit_bytes:
+        return
+
+    object_mib = object_size_bytes / (1024 * 1024)
+    limit_mib = limit_bytes / (1024 * 1024)
+    raise ValueError(
+        f"Core catalog upload is {object_mib:.1f} MiB, which exceeds "
+        f"Supabase bucket {bucket!r} file_size_limit {limit_mib:.1f} MiB. "
+        "Raise the bucket limit before release; no upload was attempted."
+    )
+
+
 def detail_index_blob_paths(detail_index):
     """Return content-addressed blob storage paths referenced by a detail index."""
     paths = set()
@@ -668,7 +692,12 @@ def validate_build_output(build_dir, manifest):
     # V4 six-pillar contract on the checksum-verified DB. Defense-in-depth for the
     # 2026-06-14 stale-DB incident: blocks a sync of a dist built before the
     # pillar-projection commit even if it never went through the rebuild gate.
-    pillar_findings = check_v4_pillar_contract(db_path)
+    # Reviewed category caps remain explicit detail-blob adjustments, so this
+    # caller must provide the same reconciliation surface as the export gate.
+    pillar_findings = check_v4_pillar_contract(
+        db_path,
+        detail_blobs_dir=os.path.join(build_dir, "detail_blobs"),
+    )
     if pillar_findings:
         raise ValueError(
             "Build output violates the V4 pillar contract; refusing to sync: "
@@ -924,6 +953,7 @@ def sync(
         return {"status": "dry_run", "version": version, "blob_count": build_stats["blob_count"]}
 
     client = get_supabase_client()
+    bucket = "pharmaguide"
     print("Checking Supabase for current version...")
     remote = fetch_current_manifest(client)
 
@@ -944,7 +974,12 @@ def sync(
         print("Already up to date. Nothing to upload.")
         return {"status": "up_to_date", "version": version}
 
-    bucket = "pharmaguide"
+    validate_bucket_upload_capacity(
+        client,
+        bucket=bucket,
+        object_size_bytes=os.path.getsize(build_stats["db_path"]),
+    )
+
     active_remote_blob_paths = set()
     active_index_time = 0.0
     remote_version = remote.get("db_version") if remote else None

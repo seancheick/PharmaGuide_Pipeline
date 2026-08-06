@@ -445,6 +445,10 @@ def backfill_image_thumbnail_urls(db_path: str, image_dir: str, index: dict) -> 
             )
             updated += 1
         conn.commit()
+        # Backfilling every thumbnail rewrites most catalog rows. Compact the
+        # release DB before refresh_export_manifest_checksum() hashes it so
+        # build-time page fragmentation is never uploaded.
+        conn.execute("VACUUM")
     finally:
         conn.close()
     return {"updated": updated, "missing": len(index) - updated}
