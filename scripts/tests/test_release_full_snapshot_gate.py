@@ -1,10 +1,28 @@
 """Release orchestration must reject unreviewed scoring-snapshot drift."""
 
+import subprocess
 from pathlib import Path
 
 
 RELEASE_SCRIPT = Path(__file__).parent.parent / "release_full.sh"
 SNAPSHOT_SCRIPT = Path(__file__).parent.parent / "rebuild_dashboard_snapshot.sh"
+
+
+def test_release_script_is_valid_bash_without_merge_markers():
+    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
+
+    marker_lines = [
+        line
+        for line in source.splitlines()
+        if line.startswith(("<<<<<<<", "=======", ">>>>>>>"))
+    ]
+    assert marker_lines == []
+    result = subprocess.run(
+        ["bash", "-n", str(RELEASE_SCRIPT)],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
 
 
 def test_release_runs_snapshot_contract_before_supabase_sync():

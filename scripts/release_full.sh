@@ -751,16 +751,12 @@ INTERACTION_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sy
 # ---------------------------------------------------------------------------
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   if git -C "$FLUTTER_REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-<<<<<<< HEAD
     FLUTTER_RELEASE_BRANCH="$(git -C "$FLUTTER_REPO" branch --show-current)"
     if [[ -z "$FLUTTER_RELEASE_BRANCH" ]]; then
       die "Flutter repository is in detached HEAD state; refusing aligned storage cleanup"
     fi
 
-    if git -C "$FLUTTER_REPO" status --porcelain -- assets/db assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/data/product_type_vocab.json | grep -q .; then
-=======
     if git -C "$FLUTTER_REPO" status --porcelain -- assets/db assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json | grep -q .; then
->>>>>>> 692994e2 (feat(timing): schema 6.0.0 — verified-only publication, no scheduler)
       info "Committing Flutter bundle and canonical reference data (local) so storage cleanup runs aligned..."
       git -C "$FLUTTER_REPO" add assets/db/ assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json
       if git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}"; then
