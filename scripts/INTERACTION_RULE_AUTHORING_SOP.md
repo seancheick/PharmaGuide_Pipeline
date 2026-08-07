@@ -3,7 +3,9 @@
 > Last updated: 2026-03-18 | Schema 5.1.0 | 45 rules, 14 conditions, 9 drug classes
 
 ## Scope
+
 This SOP governs how to add or update contraindication/interaction alerts in:
+
 - `scripts/data/clinical_risk_taxonomy.json` — controlled enums
 - `scripts/data/ingredient_interaction_rules.json` — rule store
 
@@ -14,7 +16,9 @@ The interaction layer produces **warnings in the final DB detail blob** and powe
 ## Why These Files Exist
 
 ### `clinical_risk_taxonomy.json`
+
 Controlled enums for:
+
 - `conditions` (14): pregnancy, lactation, ttc, surgery_scheduled, hypertension, heart_disease, diabetes, bleeding_disorders, kidney_disease, liver_disease, thyroid_disorder, autoimmune, seizure_disorder, high_cholesterol
 - `drug_classes` (9): anticoagulants, antiplatelets, nsaids, antihypertensives, hypoglycemics, thyroid_medications, sedatives, immunosuppressants, statins
 - `severity_levels` (5): contraindicated, avoid, caution, monitor, info
@@ -23,13 +27,16 @@ Controlled enums for:
 Each condition/drug class has: `id`, `label`, `description`, `app_category`, `sort_order`.
 
 Purpose:
+
 - deterministic behavior
 - no free-text drift
 - consistent UI/API labels
 - app profile matching (user selects conditions → app matches against condition_id)
 
 ### `ingredient_interaction_rules.json`
+
 Rule store keyed by canonical identity:
+
 - `subject_ref: {db, canonical_id}`
 - `condition_rules[]`
 - `drug_class_rules[]`
@@ -38,11 +45,13 @@ Rule store keyed by canonical identity:
 - provenance (`sources`, `last_reviewed`, `review_owner`)
 
 Purpose:
+
 - exact, reproducible safety lookups from enrichment output
 - condition_summary and drug_class_summary in export detail blob
 - dose-dependent severity escalation
 
 ### Supported `subject_ref.db` values:
+
 - `ingredient_quality_map`
 - `other_ingredients`
 - `harmful_additives`
@@ -115,6 +124,7 @@ Rules without solid sources should be deferred.
 ## Rule Writing Standards
 
 Each rule must include:
+
 - `id` — stable, unique (e.g., `RULE_INGREDIENT_CAFFEINE`, `RULE_BANNED_YOHIMBE_CONTRA`)
 - `subject_ref` — exact canonical target `{db, canonical_id}`
 - at least one of: `condition_rules[]`, `drug_class_rules[]`, `pregnancy_lactation`
@@ -122,6 +132,7 @@ Each rule must include:
 - `review_owner` — always `"pharmaguide_clinical_team"`
 
 Each condition/drug rule must include:
+
 - target id (`condition_id` or `drug_class_id`) — from taxonomy
 - `severity` — from taxonomy severity_levels
 - `evidence_level` — from taxonomy evidence_levels
@@ -136,6 +147,7 @@ Each condition/drug rule must include:
 Use `dose_thresholds[]` only when you have a defensible numeric cutoff from authoritative guidance (e.g., ACOG 200mg caffeine/day pregnancy limit).
 
 Required fields:
+
 - `scope`: `condition` or `drug_class`
 - `target_id`
 - `basis`: `per_day` or `per_serving`
@@ -152,6 +164,7 @@ If dose conversion is not possible at runtime, the base severity is retained.
 ## Current Coverage Status
 
 ### Conditions with rules:
+
 - `pregnancy`: 19 rules
 - `hypertension`: 13 rules
 - `diabetes`: 13 rules
@@ -159,9 +172,11 @@ If dose conversion is not possible at runtime, the base severity is retained.
 - `kidney_disease`: 2 rules
 
 ### Conditions needing rules:
+
 - `lactation`, `ttc`, `heart_disease`, `bleeding_disorders`, `liver_disease`, `thyroid_disorder`, `autoimmune`, `seizure_disorder`, `high_cholesterol`
 
 ### Drug classes with thin coverage:
+
 - `nsaids`: 0 rules
 - `antiplatelets`: 1 rule
 - `thyroid_medications`: 1 rule
