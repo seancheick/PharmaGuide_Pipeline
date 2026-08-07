@@ -1,0 +1,4 @@
+reviewer_slot,reviewer_id,panel_role,credential_type,credential_detail,license_jurisdiction,license_status,license_verification_source,supplement_experience_years,evidence_appraisal_experience_years,conflicts_json,training_completed_on,training_assessment_score,protocol_version,independence_attested_on,data_use_attested_on,registered_on
+1,PHAM,primary,PharmD,,,,,,,,,,1.1.0,,,
+2,,primary,,,,,,,,,,,1.1.0,,,
+3,,primary,,,,,,,,,,,1.1.0,,,
