@@ -11171,6 +11171,7 @@
       "standard_name": "Silicon Dioxide (E551)",
       "aliases": [
         "silicon dioxide",
+        "silica",
         "E551",
         "colloidal silicon dioxide",
         "amorphous silica",
@@ -16412,6 +16413,7 @@
         "DBHT",
         "antioxidant 321",
         "2,6-di-tert-butyl-p-cresol",
+        "butylated hydroxytoluene",
         "butylated hydroxytoluene (bht)"
       ],
       "category": "preservative",

@@ -96,7 +96,13 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
             "sports_protein_profile_applied": True,
             "protein_source_class": source_class,
             "protein_rows_evaluated": len(protein_rows),
-            "dietary_sugar": shared["metadata"].get("dietary_sugar"),
+            # Spread the WHOLE shared metadata rather than cherry-picking
+            # one key. Picking only "dietary_sugar" silently dropped
+            # "inactive_penalty_details" -- the ledger build_final_db needs
+            # to colour "Other ingredients" dots. 5,116 products carried a
+            # real B1 harmful-additive charge while shipping an empty
+            # ledger, so every one of their additive dots rendered green.
+            **shared["metadata"],
         },
     }
 

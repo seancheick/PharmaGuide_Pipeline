@@ -19,7 +19,11 @@ import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from build_final_db import _inactive_display_tone, _inactive_penalty_tones
+from build_final_db import (
+    _inactive_display_tone,
+    _inactive_penalty_tones,
+    _inactive_penalty_tones_by_label,
+)
 from audit_contract_sync import INACTIVE_CONTRACT, _audit_ingredient_contract
 
 
@@ -82,6 +86,84 @@ def test_penalty_tones_are_derived_from_inactive_penalty_ledger() -> None:
         "HIGH": "red",
         "EXEMPT": "green",
     }
+
+
+def test_label_join_colours_a_charge_the_rule_id_join_cannot_see() -> None:
+    """A charged row must colour even when the two matchers disagree on the id.
+
+    The enricher's harmful matcher and the display resolver are two matchers over
+    one label string. Measured on the real corpus 2026-08-07: 95 charged rows
+    across 89 products land on different ids, so the rule-id join silently misses
+    and the dot falls through to green. The largest classes are the FD&C colour
+    lakes (charged ADD_YELLOW6/BLUE1/BLUE2/RED40, resolved to the benign
+    NHA_ARTIFICIAL_COLORS) and dl-alpha-tocopherol (charged ADD_SYNTHETIC_VITAMINS,
+    resolved to OI_TOCOPHEROL_PRESERVATIVE). Artificial colours reading green is
+    exactly the surface a user checks, so this must not regress.
+    """
+    scored = {
+        "_v4_inactive_penalty_details": [
+            {
+                "matched_rule_id": "ADD_YELLOW6",
+                "penalty_tier": "moderate",
+                "penalty_applied": 2.0,
+                "matched_labels": ["fd&c yellow 6 lake"],
+            }
+        ]
+    }
+    label_tones = _inactive_penalty_tones_by_label(scored)
+    assert label_tones == {"fd&c yellow 6 lake": "dark_orange"}
+
+    # The id join cannot hit: the resolver assigned a different, benign id.
+    assert (
+        _inactive_display_tone(
+            "other_ingredients",
+            "NHA_ARTIFICIAL_COLORS",
+            _inactive_penalty_tones(scored),
+            label_tones=label_tones,
+            row_labels=("FD&C Yellow 6 Lake", "FD&C Yellow 6 Lake"),
+        )
+        == "dark_orange"
+    )
+
+    # An uncharged row on the same product must stay green — the label join must
+    # not leak a tone onto rows the scorer never charged.
+    assert (
+        _inactive_display_tone(
+            "other_ingredients",
+            "PII_HPMC",
+            _inactive_penalty_tones(scored),
+            label_tones=label_tones,
+            row_labels=("Hypromellose", "Hypromellose"),
+        )
+        == "green"
+    )
+
+
+def test_ledger_rows_carry_the_labels_the_scorer_charged() -> None:
+    """The scorer must emit matched_labels or the label join has nothing to use."""
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))
+    from scoring_v4.modules.generic_formulation import (
+        _b1_harmful_additive_penalty_detail,
+    )
+
+    detail = _b1_harmful_additive_penalty_detail(
+        {
+            "harmful_additives": [
+                {
+                    "additive_id": "ADD_YELLOW6",
+                    "severity": "moderate",
+                    "source_section": "inactive",
+                    "raw_source_text": "FD&C Yellow 6 Lake",
+                }
+            ]
+        }
+    )
+    rows = detail["inactive_penalty_details"]
+    assert len(rows) == 1, rows
+    assert rows[0]["matched_labels"] == ["fd&c yellow 6 lake"], rows[0]
 
 
 @pytest.mark.parametrize(

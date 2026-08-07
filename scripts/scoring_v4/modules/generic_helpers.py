@@ -350,3 +350,13 @@ def primary_type_of(product: Any) -> str:
         if isinstance(nested, str):
             return _norm_text(nested)
     return ""
+
+
+# Re-exported from the data layer so scoring asks the additive-class question in
+# exactly one place. Defined in inactive_ingredient_resolver (which owns the
+# additive files) rather than here, because scoring already depends on that
+# module (scoring_v4/gate_safety.py imports it) and the reverse edge would be a
+# cycle. See its docstring for why the class is not an additive-safety concern.
+from inactive_ingredient_resolver import (  # noqa: E402,F401
+    is_nutrient_form_quality_signal,
+)

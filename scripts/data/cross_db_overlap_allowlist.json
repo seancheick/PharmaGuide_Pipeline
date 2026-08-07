@@ -4,8 +4,8 @@
     "schema_version": "5.1.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
-    "last_updated": "2026-06-15",
-    "total_entries": 49,
+    "last_updated": "2026-08-07",
+    "total_entries": 50,
     "routing_policy": "Context-aware since v5.0.0: the enricher tags each harmful additive match with source_section (active/inactive). The scorer suppresses low/moderate penalties for active-source matches \u2014 the IQM quality score is the correct signal for Supplement Facts ingredients. High/critical severity fires regardless of source. This allowlist now serves as documentation of known overlaps, not as a scoring router.",
     "reviewed_at": "2026-04-14"
   },
@@ -121,6 +121,13 @@
         "harmful:iqm"
       ],
       "reason": "Active glycosides in senna; same dual-listing rationale as senna."
+    },
+    {
+      "term_normalized": "silica",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Common name of silicon dioxide — verified same compound (PubChem CID 24261, InChIKey VYPSYNLAJGMNEJ-UHFFFAOYSA-N, O2Si). Carries the identical dual-listing rationale as the 'silicon dioxide' entry below; registered separately because labels print the short form and the bare alias was missing from ADD_SILICON_DIOXIDE."
     },
     {
       "term_normalized": "silicon dioxide",

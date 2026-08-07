@@ -69,6 +69,7 @@ from identity.safety import (
     safety_flag_from_banned_match,
     safety_flag_from_harmful_additive,
 )
+from normalization import make_normalized_key
 
 _REPO_ROOT = Path(__file__).resolve().parent
 _DEFAULT_DATA_DIR = _REPO_ROOT / "data"
@@ -101,6 +102,34 @@ _ACTIVE_FORM_TERM_STOPLIST = frozenset({
     "fiber", "fibre", "acid", "salt", "natural", "organic", "water", "starch",
     "gum", "wax", "gel", "juice", "syrup", "flour", "protein",
 })
+
+
+# Additive classes in harmful_additives.json that describe the quality of a
+# nutrient being SUPPLIED rather than the safety of an excipient.
+_NUTRIENT_FORM_QUALITY_CLASSES = frozenset({"nutrient_synthetic"})
+
+
+def is_nutrient_form_quality_signal(additive: Any) -> bool:
+    """True when a harmful-additive entry/hit is a nutrient-form quality signal.
+
+    These are not additive-safety concerns and must not be charged against, or
+    colour, an "Other ingredients" row. harmful_additives.json says so in its own
+    words -- ADD_SYNTHETIC_VITAMINS.mechanism_of_harm: "quality signal for
+    non-premium forms, not a safety hazard at recommended doses" -- and the
+    curators already applied the principle by hand to the sibling entry
+    (ADD_SYNTHETIC_B_VITAMINS: "Do not penalize nutrient identities like
+    cyanocobalamin/pyridoxine by default"). Measured 2026-08-07: 63 products were
+    charged 2.0 because dl-alpha-tocopherol appeared as a trace
+    antioxidant/preservative, where the bioavailability-vs-natural concern does
+    not apply.
+
+    Defined in this module because it owns the additive data files and scoring
+    already depends on it (scoring_v4/gate_safety.py imports from here), so the
+    B1 ledger and this resolver can share one definition without a cycle.
+    """
+    if not isinstance(additive, dict):
+        return False
+    return str(additive.get("category") or "").strip().lower() in _NUTRIENT_FORM_QUALITY_CLASSES
 
 
 def _normalize(text: Any) -> str:
@@ -259,6 +288,18 @@ class InactiveIngredientResolver:
         self._banned_index: dict[str, dict] = {}
         self._harmful_index: dict[str, dict] = {}
         self._other_index: dict[str, dict] = {}
+        # Punctuation-insensitive twins of the three indexes above, keyed by the
+        # pipeline's canonical ``make_normalized_key``. ``_normalize`` only strips
+        # SURROUNDING punctuation, so internal "-", "#", "," and "&" survive and a
+        # label escapes the safety index into a generic benign bucket -- while the
+        # enricher, which already uses make_normalized_key, charges it. That is
+        # the same-string/two-matchers split behind every punctuation mismatch
+        # measured 2026-08-07 (dl-alpha-tocopherol vs "dl-alpha tocopherol",
+        # "fd&c yellow 6 lake" vs "FD&C Yellow #6 Lake", "cellulose, powder" vs
+        # "cellulose powder"). One normalizer, one identity.
+        self._banned_key_index: dict[str, dict] = {}
+        self._harmful_key_index: dict[str, dict] = {}
+        self._other_key_index: dict[str, dict] = {}
         # term -> [{"parent": iqm_parent_key, "parents": [equivalent ids], ...}]
         # This is a lookup helper only. resolve() must not consume it directly
         # because active-form-duplicate tagging requires product context.
@@ -281,15 +322,27 @@ class InactiveIngredientResolver:
             for term in _entry_terms(e):
                 # First-match wins; later entries don't shadow earlier ones.
                 self._banned_index.setdefault(term, e)
+                self._banned_key_index.setdefault(make_normalized_key(term), e)
 
-        # harmful_additives — accept all entries
+        # harmful_additives — accept all entries EXCEPT the nutrient_synthetic
+        # class. This resolver only ever classifies "Other ingredients" rows, and
+        # a nutrient-form quality signal says nothing about an excipient: the file
+        # itself calls ADD_SYNTHETIC_VITAMINS a "quality signal for non-premium
+        # forms, not a safety hazard". Admitting it here would floor 47 trace
+        # antioxidant rows at dark_orange via the resolver-only safety fallback,
+        # re-creating in the display exactly the category error the B1 gate in
+        # generic_formulation._b1_harmful_additive_penalty_detail removes. One
+        # principle, applied on both sides of the seam.
         ha = _load_json(self._harmful_path).get("harmful_additives") or []
         for e in ha:
             if not isinstance(e, dict):
                 continue
             self._harmful_entries.append(e)
+            if is_nutrient_form_quality_signal(e):
+                continue
             for term in _entry_terms(e):
                 self._harmful_index.setdefault(term, e)
+                self._harmful_key_index.setdefault(make_normalized_key(term), e)
 
         # other_ingredients — accept all entries
         oi = _load_json(self._other_path).get("other_ingredients") or []
@@ -299,6 +352,7 @@ class InactiveIngredientResolver:
             self._other_entries.append(e)
             for term in _entry_terms(e):
                 self._other_index.setdefault(term, e)
+                self._other_key_index.setdefault(make_normalized_key(term), e)
 
         # active-form index — IQM active nutrient forms. This intentionally
         # DOES NOT participate in resolve(); product-aware build code decides
@@ -394,6 +448,22 @@ class InactiveIngredientResolver:
             if entry:
                 return self._from_harmful(raw_name, entry)
 
+        # 2b. Same two files, punctuation-insensitive. A label that differs from
+        # an authored alias only by "-", "#", "," or "&" is the same substance,
+        # and the enricher already charges it as such. Safety-bearing sources are
+        # retried here BEFORE other_ingredients so a punctuation variant can no
+        # longer fall through into a generic benign bucket.
+        for t in terms:
+            key = make_normalized_key(t)
+            if not key:
+                continue
+            entry = self._banned_key_index.get(key)
+            if entry:
+                return self._from_banned(raw_name, entry)
+            entry = self._harmful_key_index.get(key)
+            if entry:
+                return self._from_harmful(raw_name, entry)
+
         # Some DSLD rows join multiple independently authored additives with
         # a slash (for example ``BHA/BHT``). Resolve that narrow structural
         # shape only when *every* component is an exact safety-database term;
@@ -406,6 +476,15 @@ class InactiveIngredientResolver:
         # 3. other_ingredients
         for t in terms:
             entry = self._other_index.get(t)
+            if entry:
+                return self._from_other(raw_name, entry)
+
+        # 3b. other_ingredients, punctuation-insensitive.
+        for t in terms:
+            key = make_normalized_key(t)
+            if not key:
+                continue
+            entry = self._other_key_index.get(key)
             if entry:
                 return self._from_other(raw_name, entry)
 

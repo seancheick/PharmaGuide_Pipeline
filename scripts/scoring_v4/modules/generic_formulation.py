@@ -64,6 +64,7 @@ from scoring_v4.modules.generic_helpers import (
     canonical_key,
     get_active_ingredients,
     is_scorable,
+    is_nutrient_form_quality_signal,
     scorable_ingredients,
     is_single_scorable_active_of,
     _as_float,
@@ -716,6 +717,14 @@ def _b1_harmful_additive_penalty_detail(product: Dict[str, Any]) -> Dict[str, An
         additives = _safe_list((product or {}).get("harmful_additives"))
 
     best_by_key: dict[str, Dict[str, Any]] = {}
+    # Label text of every non-active row that contributed to a key. The rule id
+    # alone is not a sufficient join key for exporters: the enricher's harmful
+    # matcher and the display resolver can land the same label on DIFFERENT ids
+    # (measured 2026-08-07: 95 charged rows across 89 products, e.g. the label
+    # "FD&C Yellow 6 Lake" is charged ADD_YELLOW6 but resolves to the benign
+    # NHA_ARTIFICIAL_COLORS). Carrying the label lets the exporter mirror the
+    # charge on the exact row instead of re-deriving it.
+    labels_by_key: dict[str, list[str]] = {}
     for idx, additive in enumerate(additives):
         if not isinstance(additive, dict):
             continue
@@ -726,8 +735,30 @@ def _b1_harmful_additive_penalty_detail(product: Dict[str, Any]) -> Dict[str, An
         source_section = _norm_text(additive.get("source_section") or additive.get("source"))
         if source_section == "active" and severity in {"low", "moderate"}:
             continue
+        # A nutrient-form quality signal is not an additive concern. B1 charges
+        # "harmful additives"; the nutrient_synthetic class describes the quality
+        # of a nutrient being SUPPLIED, and harmful_additives.json says so itself
+        # -- ADD_SYNTHETIC_VITAMINS.mechanism_of_harm: "quality signal for
+        # non-premium forms, not a safety hazard at recommended doses."
+        # Applied to an "Other ingredients" row it is a category error: 47
+        # products were charged 2.0 because dl-alpha-tocopherol appeared as a
+        # trace antioxidant/preservative, where the bioavailability-vs-natural
+        # concern does not apply. The curators already set this precedent on the
+        # sibling entry (ADD_SYNTHETIC_B_VITAMINS: "Do not penalize nutrient
+        # identities ... only matches explicit synthetic-blend labeling"); this
+        # gate generalizes it to the whole class instead of per-alias edits.
+        if source_section != "active" and is_nutrient_form_quality_signal(additive):
+            continue
         rule_id = str(additive.get("additive_id") or additive.get("id") or "").strip()
         key = (rule_id or f"_anon_{idx}").lower()
+        if source_section != "active":
+            label = _norm_text(
+                additive.get("raw_source_text") or additive.get("ingredient")
+            )
+            if label:
+                bucket = labels_by_key.setdefault(key, [])
+                if label not in bucket:
+                    bucket.append(label)
         previous = best_by_key.get(key)
         if previous is None or points > float(previous["penalty_applied"]):
             best_by_key[key] = {
@@ -747,8 +778,9 @@ def _b1_harmful_additive_penalty_detail(product: Dict[str, Any]) -> Dict[str, An
             "matched_rule_id": item["matched_rule_id"],
             "penalty_tier": item["penalty_tier"],
             "penalty_applied": item["penalty_applied"],
+            "matched_labels": labels_by_key.get(key, []),
         }
-        for item in best_by_key.values()
+        for key, item in best_by_key.items()
         if item["matched_rule_id"] and item["source_section"] != "active"
     ]
     return {
@@ -978,7 +1010,13 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
             },
             "sleep_support": sleep_support_metadata,
             "immune_support": immune_support_metadata,
-            "dietary_sugar": shared_penalty_detail["metadata"]["dietary_sugar"],
+            # Spread the WHOLE shared metadata rather than cherry-picking
+            # one key. Picking only "dietary_sugar" silently dropped
+            # "inactive_penalty_details" -- the ledger build_final_db needs
+            # to colour "Other ingredients" dots. 5,116 products carried a
+            # real B1 harmful-additive charge while shipping an empty
+            # ledger, so every one of their additive dots rendered green.
+            **shared_penalty_detail["metadata"],
         },
     }
 

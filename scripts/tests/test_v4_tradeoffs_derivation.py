@@ -179,7 +179,13 @@ def test_b1_harmful_additive_from_enriched():
     ]}
     _, penalties = derive_v4_tradeoffs(_scored_v4(), enriched)
     b1 = _by_id(penalties, "B1")
-    assert b1["label"] == "Harmful additive: Disodium EDTA"
+    # "Additive:", not "Harmful additive:" (2026-08-07). The penalty column
+    # already implies concern and "harmful" over-states a 0.5-point excipient.
+    # The app had been rewriting this string at display time; the copy is now
+    # authored here so there is one owner. Flutter still normalizes the legacy
+    # form for catalogs built before this change.
+    assert b1["label"] == "Additive: Disodium EDTA"
+    assert "harmful" not in b1["label"].lower()
 
 
 def test_b1_prefers_reviewed_safety_summary_over_stale_mechanism_copy():

@@ -44,7 +44,7 @@ import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 from urllib.parse import urlparse
 
 from audit_evidence_utils import (
@@ -1220,11 +1220,46 @@ def _inactive_penalty_tones(scored: Dict[str, Any]) -> Dict[str, str]:
     return tones
 
 
+def _inactive_penalty_tones_by_label(scored: Dict[str, Any]) -> Dict[str, str]:
+    """Same ledger, indexed by the label text the scorer actually charged.
+
+    The rule id is not a sufficient join key. The enricher's harmful matcher and
+    the display resolver are two matchers over one label string and they can
+    disagree on which entry it belongs to — measured 2026-08-07, 95 charged rows
+    across 89 products, the largest classes being "FD&C <colour> Lake" (charged
+    ADD_YELLOW6/BLUE1/RED40, resolved to the benign NHA_ARTIFICIAL_COLORS) and
+    dl-alpha-tocopherol (charged ADD_SYNTHETIC_VITAMINS, resolved to
+    OI_TOCOPHEROL_PRESERVATIVE). Joining on the label makes the dot mirror the
+    scorer's decision for that exact row rather than re-deriving it, which is
+    what keeps one brain: the scorer owns the charge, the exporter reflects it.
+    """
+    details = (
+        scored.get("_v4_inactive_penalty_details")
+        if isinstance(scored, dict)
+        else None
+    )
+    rule_tones = _inactive_penalty_tones(scored)
+    tones: Dict[str, str] = {}
+    for detail in safe_list(details):
+        if not isinstance(detail, dict):
+            continue
+        tone = rule_tones.get(safe_str(detail.get("matched_rule_id")))
+        if not tone:
+            continue
+        for label in safe_list(detail.get("matched_labels")):
+            key = normalize_text(label)
+            if key:
+                tones[key] = tone
+    return tones
+
+
 def _inactive_display_tone(
     matched_source: Optional[str],
     matched_rule_id: Optional[str],
     penalty_tones: Dict[str, str],
     harmful_severity: Optional[str] = None,
+    label_tones: Optional[Dict[str, str]] = None,
+    row_labels: Optional[Iterable[str]] = None,
 ) -> str:
     """Penalty-aware dot tone for an 'Other ingredients' row.
 
@@ -1246,6 +1281,16 @@ def _inactive_display_tone(
     tone = penalty_tones.get(safe_str(matched_rule_id) or "")
     if tone in {"red", "dark_orange", "light_orange", "green"}:
         return tone
+    # The scorer charged this exact label but under a different rule id than the
+    # display resolver assigned, so the id join above could never hit. Mirror the
+    # charge rather than falling through to green. See
+    # _inactive_penalty_tones_by_label for why the two ids diverge.
+    # The scorer charges on raw_source_text OR ingredient, so try every label the
+    # row can present rather than guessing which one the enricher recorded.
+    for candidate in row_labels or ():
+        tone = (label_tones or {}).get(normalize_text(candidate))
+        if tone in {"red", "dark_orange", "light_orange", "green"}:
+            return tone
     if safe_str(matched_source) == "harmful_additives":
         fallback_tier = safe_str(harmful_severity).lower()
         if fallback_tier in ("high", "critical"):
@@ -2585,7 +2630,13 @@ def derive_v4_tradeoffs(
             harmful_ref = resolve_harmful_reference(h)
             penalties.append({
                 "id": "B1",
-                "label": f"Harmful additive: {safe_str(h.get('additive_name') or h.get('ingredient'))}",
+                # "Additive:", not "Harmful additive:". The penalty column already
+                # implies concern, and "harmful" over-states a 0.5-point excipient
+                # like silicon dioxide. Flutter had been rewriting this string at
+                # display time since 2026-05-16 with an explicit "pipeline stays
+                # unchanged until a future cleanup" note -- this is that cleanup,
+                # so the copy is authored once here instead of patched downstream.
+                "label": f"Additive: {safe_str(h.get('additive_name') or h.get('ingredient'))}",
                 "severity": safe_str(h.get("severity_level")),
                 "reason": safe_str(
                     harmful_ref.get("safety_summary_one_liner")
@@ -6231,6 +6282,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         isinstance(scored, dict) and "_v4_inactive_penalty_details" in scored
     )
     _penalty_tones = _inactive_penalty_tones(scored)
+    _penalty_label_tones = _inactive_penalty_tones_by_label(scored)
     # Sprint E1.2.4 reconciliation (2026-05-14):
     # Count entries that were intentionally dropped here via the Phase 4a
     # label-descriptor / active-only filter. The downstream validator
@@ -6330,6 +6382,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     res.matched_rule_id,
                     _penalty_tones,
                     harmful_severity=res.harmful_severity,
+                    label_tones=_penalty_label_tones,
+                    row_labels=(raw, name),
                 )
                 if _has_penalty_contract
                 else None

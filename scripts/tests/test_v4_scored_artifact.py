@@ -183,26 +183,31 @@ def test_b1_inactive_penalty_details_follow_the_scoring_decision() -> None:
                         "additive_id": "ADD_LOW",
                         "severity": "low",
                         "source_section": "inactive",
+                        "raw_source_text": "Low Additive",
                     },
                     {
                         "additive_id": "ADD_MODERATE",
                         "severity": "moderate",
                         "source_section": "inactive",
+                        "raw_source_text": "Moderate Additive",
                     },
                     {
                         "additive_id": "ADD_MODERATE",
                         "severity": "low",
                         "source_section": "inactive",
+                        "raw_source_text": "Moderate Additive Alias",
                     },
                     {
                         "additive_id": "ADD_ACTIVE_LOW",
                         "severity": "low",
                         "source_section": "active",
+                        "raw_source_text": "Active Low",
                     },
                     {
                         "additive_id": "ADD_ACTIVE_HIGH",
                         "severity": "high",
                         "source_section": "active",
+                        "raw_source_text": "Active High",
                     },
                 ]
             }
@@ -212,16 +217,23 @@ def test_b1_inactive_penalty_details_follow_the_scoring_decision() -> None:
     detail = generic_formulation.shared_formulation_penalty_detail(product)
 
     assert detail["penalties"]["B1_harmful_additives"] == -5.5
+    # matched_labels carries EVERY non-active label that contributed to the id,
+    # not just the winning row's: exporters join on it when the display resolver
+    # assigns the same label a different rule id (see
+    # build_final_db._inactive_penalty_tones_by_label). Active-section rows must
+    # contribute no label — they have no "Other ingredients" row to colour.
     assert detail["metadata"]["inactive_penalty_details"] == [
         {
             "matched_rule_id": "ADD_LOW",
             "penalty_tier": "low",
             "penalty_applied": 0.5,
+            "matched_labels": ["low additive"],
         },
         {
             "matched_rule_id": "ADD_MODERATE",
             "penalty_tier": "moderate",
             "penalty_applied": 2.0,
+            "matched_labels": ["moderate additive", "moderate additive alias"],
         },
     ]
 

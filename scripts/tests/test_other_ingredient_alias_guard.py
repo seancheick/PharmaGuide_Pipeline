@@ -175,6 +175,12 @@ BASELINE_ALIAS_DUPLICATES = {
     "red beet powder",
     "rice extract",
     "rice hulls",
+    # Same compound as the already-baselined "silicon dioxide" / "silica gel" /
+    # "synthetic amorphous silica" (PubChem CID 24261, verified live 2026-08-07).
+    # Labels print the bare short form, and it was the one family member missing
+    # from ADD_SILICON_DIOXIDE, so a "Silica" row with no standardName escaped the
+    # safety index into the benign bucket and rendered green while being charged.
+    "silica",
     "silica gel",
     "silicified microcrystalline cellulose",
     "silicon dioxide",
