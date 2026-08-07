@@ -16015,14 +16015,15 @@ class SupplementEnricherV3:
                     basis_count = derived_basis_count
                     canonical_serving_size_qty = derived_basis_count
                     basis_reason = "net_contents_servings_per_container"
-                    if min_servings_per_day is not None:
-                        min_servings_per_day = self._serving_units_to_servings(
-                            min_servings_per_day, basis_count
-                        )
-                    if max_servings_per_day is not None:
-                        max_servings_per_day = self._serving_units_to_servings(
-                            max_servings_per_day, basis_count
-                        )
+                    # min/max_servings_per_day came from the label's
+                    # minDailyServings/maxDailyServings — already a count of
+                    # servings per day. Re-deriving basis_count from net
+                    # contents changes the serving *size*, not how many
+                    # servings a day the label directs, so these are left
+                    # alone. Running them through _serving_units_to_servings()
+                    # here divided a servings-per-day count by grams (or
+                    # capsules) per serving and shipped the reciprocal of the
+                    # serving size: 22.7 g became "0.044 servings per day".
 
         # Parse directions for min/max recommended
         min_recommended = None

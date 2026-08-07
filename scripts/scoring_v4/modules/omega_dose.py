@@ -39,7 +39,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from scoring_v4.modules.generic_helpers import get_active_ingredients
+from scoring_v4.modules.generic_helpers import daily_serving_range, get_active_ingredients
 
 
 PHASE_MARKER = "P1.6.2_omega_dose"
@@ -253,50 +253,12 @@ def _sum_epa_dha_per_serving(product: Dict[str, Any]) -> Tuple[float, float, flo
 def _extract_daily_servings(product: Dict[str, Any]) -> Tuple[float, float, bool]:
     """Return (min_daily_servings, max_daily_servings, was_defaulted).
 
-    Pulls from servingSizes[0].minDailyServings/maxDailyServings (the
-    cleaner's standardized fields). When missing or invalid, defaults
-    to (1, 1) — the safe baseline that avoids inflating dose by
-    assuming multi-serving regimens.
+    Delegates to the shared v4 resolver so omega, sleep, immune and joint all
+    read one daily-serving policy. This used to take `servingSizes[0]`, which
+    is the *child* row on a product that declares both a child and an adult
+    serving, and it had no sanity bound on the values it accepted.
     """
-    sizes = _safe_list(product.get("servingSizes"))
-    for entry in sizes:
-        if not isinstance(entry, dict):
-            continue
-        mn = entry.get("minDailyServings") or entry.get("min_daily_servings")
-        mx = entry.get("maxDailyServings") or entry.get("max_daily_servings")
-        try:
-            mn_f = float(mn) if mn is not None else None
-            mx_f = float(mx) if mx is not None else None
-        except (TypeError, ValueError):
-            continue
-        if mn_f is None or mn_f <= 0:
-            continue
-        if mx_f is None or mx_f <= 0:
-            mx_f = mn_f
-        return mn_f, mx_f, False
-    # Fallback paths
-    for key in ("servings_per_day_min", "servings_per_day_max"):
-        value = product.get(key)
-        if value is not None:
-            try:
-                f = float(value)
-                if f > 0:
-                    return f, f, False
-            except (TypeError, ValueError):
-                continue
-    serving_info = _safe_dict(product.get("serving_info"))
-    mn = serving_info.get("min_servings_per_day")
-    mx = serving_info.get("max_servings_per_day")
-    try:
-        mn_f = float(mn) if mn is not None else None
-        mx_f = float(mx) if mx is not None else None
-    except (TypeError, ValueError):
-        mn_f = mx_f = None
-    if mn_f is not None and mn_f > 0:
-        if mx_f is None or mx_f <= 0:
-            mx_f = mn_f
-        return mn_f, mx_f, False
-    return 1.0, 1.0, True
+    return daily_serving_range(product)
 
 
 def _band_score(per_day_mg: float, bands: List[Dict[str, Any]]) -> Tuple[float, str, Optional[str]]:

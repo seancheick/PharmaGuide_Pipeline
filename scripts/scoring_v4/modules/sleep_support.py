@@ -10,11 +10,11 @@ from __future__ import annotations
 from typing import Any, Dict, Iterable, Optional
 
 from scoring_v4.modules.generic_helpers import (
+    daily_serving_multiplier,
     get_active_ingredients,
     primary_type_of,
     _as_float,
     _norm_text,
-    _safe_dict,
 )
 
 
@@ -179,9 +179,4 @@ def _row_quantity_mg(row: Dict[str, Any]) -> Optional[float]:
 
 
 def _daily_serving_multiplier(product: Dict[str, Any]) -> float:
-    serving_basis = _safe_dict(product.get("serving_basis"))
-    for key in ("max_servings_per_day", "min_servings_per_day"):
-        value = _as_float(serving_basis.get(key), None)
-        if value is not None and value > 0:
-            return value
-    return 1.0
+    return daily_serving_multiplier(product)
