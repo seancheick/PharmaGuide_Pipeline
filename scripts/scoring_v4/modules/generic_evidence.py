@@ -26,6 +26,7 @@ from scoring_v4.modules.generic_helpers import (
     _norm_text,
     _safe_dict,
     _safe_list,
+    daily_serving_multiplier,
     get_active_ingredients,
     is_scorable,
 )
@@ -1147,22 +1148,15 @@ def _daily_serving_multiplier(product: Dict[str, Any]) -> float:
     """Return the label-directed daily serving count.
 
     Scoring rows carry the amount per canonical label serving, while clinical
-    evidence minima and maxima are daily doses.  Prefer the label's maximum
-    directed daily use, matching the dose and safety modules; fall back to the
-    minimum and then one serving when the contract is absent.
+    evidence minima and maxima are daily doses. Delegates to the shared v4
+    resolver so this reads the same policy as the dose and safety modules.
+
+    This used to read `serving_basis` alone, which never consulted the label's
+    own `servingSizes`, and licensed below-one values on
+    `parsed_from_directions` — a flag the enricher sets whenever it parsed the
+    directions text at all, not one that says where these values came from.
     """
-    serving_basis = _safe_dict(product.get("serving_basis"))
-    parsed_from_directions = serving_basis.get("parsed_from_directions") is True
-    for key in ("max_servings_per_day", "min_servings_per_day"):
-        raw = serving_basis.get(key)
-        if isinstance(raw, bool):
-            continue
-        value = _as_float(raw, None)
-        if value is not None and value >= 1.0:
-            return value
-        if value is not None and value > 0.0 and parsed_from_directions:
-            return value
-    return 1.0
+    return daily_serving_multiplier(product)
 
 
 def _converted_product_dose(

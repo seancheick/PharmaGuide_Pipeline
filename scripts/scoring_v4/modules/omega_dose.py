@@ -17,10 +17,13 @@ Per Sean's 'do not invent fields' rule:
   AND quantity > 0 AND unit is a recognized mg/g/mcg variant. Bare
   fish_oil parent mass is NOT included (per §9: '3000 mg fish oil is
   not the same as 3000 mg EPA+DHA').
-- Servings-per-day comes from `servingSizes[0].minDailyServings/
-  maxDailyServings` (label-asserted). When missing, defaults to 1
-  serving/day (the safe baseline — products labeled without daily-
-  serving guidance can't be over-credited as multi-serving regimens).
+- Servings-per-day comes from `generic_helpers.daily_serving_range()`, the
+  single v4 resolver shared with the sleep/immune/joint/evidence modules. It
+  reads the label's canonical serving row (highest quantity, matching the
+  enricher's `_select_canonical_serving`) and falls back to `serving_basis`
+  only when the label declares no daily servings. When nothing is declared it
+  defaults to 1 serving/day (the safe baseline — products labeled without
+  daily-serving guidance can't be over-credited as multi-serving regimens).
 
 Per §13 architecture lock, this module does not import score_supplements (v3).
 The v3 omega3_dose_bonus math is independently reimplemented in policy

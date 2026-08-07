@@ -36,6 +36,7 @@ from scoring_v4.modules.generic_helpers import (  # noqa: E402
     daily_serving_multiplier,
     daily_serving_range,
 )
+from scoring_v4.modules.generic_evidence import _dose_map  # noqa: E402
 from scoring_v4.modules.omega_dose import _extract_daily_servings  # noqa: E402
 from scoring_v4.modules.immune_support import immune_active_doses  # noqa: E402
 from scoring_v4.modules.joint_support import joint_active_doses  # noqa: E402
@@ -107,6 +108,39 @@ def test_joint_dose_ignores_impossible_serving_basis() -> None:
 
     doses = {d["active"]: d for d in joint_active_doses(product)}
     assert doses["glucosamine"]["daily_mg"] == pytest.approx(1500.0)
+
+
+def test_generic_evidence_dose_map_ignores_a_label_sourced_fraction() -> None:
+    """generic_evidence used `parsed_from_directions` as its escape hatch.
+
+    DSLD 243667's shape: the label declares 1 serving a day, the flag is set
+    because directions text parsed, and the stored value is the divided one.
+    Evidence minima are daily doses, so a 0.199 multiplier compares a 500 mg
+    ingredient as 99 mg against the literature.
+    """
+    product = _product(
+        _row("Vitamin C", "vitamin_c", 500.0, "mg"),
+        servingSizes=[{"minDailyServings": 1, "maxDailyServings": 1}],
+        serving_basis={
+            "min_servings_per_day": 0.19873150105708243,
+            "max_servings_per_day": 0.19873150105708243,
+            "servings_per_day_source": "servingSizes",
+            "parsed_from_directions": True,
+            "basis_reason": "net_contents_servings_per_container",
+        },
+    )
+
+    assert _dose_map(product)["vitamin c"][0] == pytest.approx(500.0)
+
+
+def test_generic_evidence_dose_map_scales_by_a_real_multi_serving_label() -> None:
+    """A genuine 2-servings-a-day label still doubles the daily dose."""
+    product = _product(
+        _row("Vitamin C", "vitamin_c", 500.0, "mg"),
+        servingSizes=[{"minDailyServings": 2, "maxDailyServings": 2}],
+    )
+
+    assert _dose_map(product)["vitamin c"][0] == pytest.approx(1000.0)
 
 
 def test_sleep_dose_still_scales_by_a_real_multi_serving_regimen() -> None:
