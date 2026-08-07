@@ -6397,20 +6397,18 @@
       "score_contribution": "tier_1",
       "key_endpoints": [
         "glutathione ↑",
-        "liver support ↑",
         "respiratory health ↑",
         "oxidative stress ↓",
         "mental health support ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
-        "Healthy Aging/Longevity",
-        "Liver & Detox"
+        "Healthy Aging/Longevity"
       ],
-      "notes": "Systematic-review evidence supports NAC most clearly for chronic respiratory indications and as a glutathione precursor, with growing but more heterogeneous psychiatric-adjunct data.",
-      "notable_studies": "The clearest current synthesis for NAC is condition-specific. A major review of mucolytic agents in chronic bronchitis/COPD (PMID 31107966) supports benefit in respiratory settings, and a 2018 systematic review/meta-analysis (PMID 29457216) found psychiatric-adjunct evidence that is promising but heterogeneous across diagnoses.",
+      "notes": "Human evidence supports NAC as a glutathione precursor that measurably lowers oxidative-stress markers, and a randomized trial supports attenuation of influenza-like illness in older adults. Respiratory (mucolytic) and psychiatric-adjunct evidence is real but condition-specific and more heterogeneous.",
+      "notable_studies": "A 6-month randomized, double-blind, 20-centre trial (PMID 9230243, n=262, NAC 600 mg twice daily, 78% aged 65+) significantly reduced the frequency and severity of influenza-like episodes and shifted cell-mediated immunity from anergy toward normoergy; notably it did not prevent A/H1N1 infection, but only 25% of infected participants on NAC developed symptomatic illness versus 79% on placebo. A 2024 systematic review/meta-analysis of 20 supplementation studies (PMID 39632267) found significantly increased glutathione and reduced TBARS and IL-6, with no significant effect on TNF-alpha, creatine kinase or GSSG. A major review of mucolytic agents in chronic bronchitis/COPD (PMID 31107966) supports benefit in respiratory settings, and a 2018 systematic review/meta-analysis (PMID 29457216) found psychiatric-adjunct evidence that is promising but heterogeneous across diagnoses.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-08-07",
       "references_structured": [
         {
           "type": "pubmed",
@@ -6465,6 +6463,80 @@
             "Humans",
             "Randomized Controlled Trials as Topic",
             "Schizophrenia"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "9230243",
+          "doi": "10.1183/09031936.97.10071535",
+          "title": "Attenuation of influenza-like symptomatology and improvement of cell-mediated immunity with long-term N-acetylcysteine treatment.",
+          "citation": "The European respiratory journal (1997-07-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9230243/",
+          "published_date": "1997-07-01",
+          "publication_types": [
+            "Clinical Trial",
+            "Journal Article",
+            "Multicenter Study",
+            "Randomized Controlled Trial"
+          ],
+          "mesh_terms": [
+            "Acetylcysteine",
+            "Administration, Oral",
+            "Aged",
+            "Antiviral Agents",
+            "Drug Administration Schedule",
+            "Female",
+            "Humans",
+            "Immunity, Cellular",
+            "Incidence",
+            "Influenza A virus",
+            "Influenza, Human",
+            "Italy",
+            "Male",
+            "Seasons",
+            "Time Factors"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "39632267",
+          "doi": "10.1111/jcmm.70198",
+          "title": "The impact of N-acetylcysteine on lactate, biomarkers of oxidative stress, immune response, and muscle damage: A systematic review and meta-analysis.",
+          "citation": "Journal of cellular and molecular medicine (2024-12-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39632267/",
+          "published_date": "2024-12-01",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review",
+            "Meta-Analysis",
+            "Research Support, Non-U.S. Gov't"
+          ],
+          "mesh_terms": [
+            "Acetylcysteine",
+            "Biomarkers",
+            "Humans",
+            "Oxidative Stress",
+            "Lactic Acid",
+            "Glutathione",
+            "Muscle, Skeletal",
+            "Dietary Supplements",
+            "Myalgia",
+            "Tumor Necrosis Factor-alpha",
+            "Exercise",
+            "Immunity",
+            "Interleukin-6"
           ],
           "supplementary_concepts": [],
           "evidence_grade": "systematic_review",
