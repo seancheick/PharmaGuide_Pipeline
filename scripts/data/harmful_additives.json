@@ -5728,11 +5728,10 @@
       "aliases": [
         "hydrogenated starch hydrolysate",
         "hsh",
-        "hydrogenated glucose syrup",
-        "maltitol syrup"
+        "hydrogenated glucose syrup"
       ],
       "category": "sweetener_sugar_alcohol",
-      "notes": "A mixture of sugar alcohols (sorbitol, maltitol, hydrogenated oligosaccharides) produced by partial hydrolysis and hydrogenation of starch. Used as a sugar-free sweetener in supplements and foods. GI effects (bloating, gas, diarrhea) are the primary concern, consistent with all sugar alcohols. Low severity because effects are dose-dependent, self-limiting, and well-characterized.",
+      "notes": "A mixture of sugar alcohols (sorbitol, maltitol, hydrogenated oligosaccharides) produced by partial hydrolysis and hydrogenation of starch. Used as a sugar-free sweetener in supplements and foods. GI effects (bloating, gas, diarrhea) are the primary concern, consistent with all sugar alcohols. Low severity because effects are dose-dependent, self-limiting, and well-characterized. BOUNDARY vs ADD_MALTITOL_MALITOL (2026-08-07): 'maltitol syrup' was previously an alias here as well as on ADD_MALTITOL_MALITOL, so which entry matched a label was an artifact of index insertion order. It now belongs to ADD_MALTITOL_MALITOL, because FDA's substance registry files the syrup/solution names under the Maltitol record (UNII D65DG142WK: 'DRIED MALTITOL SYRUP', 'MALTITOL SYRUP POWDER', 'MALTITOL SOLUTION [NF]', 'HYDROGENATED HIGH MALTOSE-CONTENT GLUCOSE SYRUP'), while this mixture's own record (UNII 27F77DSJ5V) carries only 'HYDROGENATED STARCH HYDROLYSATE'. Clinically the split matters: maltitol's laxative threshold is ~10 g SINGLE DOSE versus ~20-30 g/day for a general HSH, so a maltitol-dominant syrup routed here would be judged against a threshold 2-3x too permissive. Keep this entry for HSH/hydrogenated glucose syrup that is NOT declared as maltitol.",
       "last_updated": "2026-03-27",
       "mechanism_of_harm": "Mixture of sugar alcohols (sorbitol, maltitol, hydrogenated oligosaccharides) that are incompletely absorbed in the small intestine. Unabsorbed portion causes osmotic water retention and bacterial fermentation in the colon, producing gas, bloating, and diarrhea. Laxative threshold ~20-30g/day depending on individual tolerance.",
       "regulatory_status": {
@@ -5854,6 +5853,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 4: CUI C4026203 verified. Added CAS 68425-17-2 and PubChem CID 91932559. Corrected regulatory_status (removed wrong 21 CFR 184.1835 — that's sorbitol, not HSH). Added maltitol syrup alias. Replaced placeholder population warnings. Upgraded confidence medium->high (well-characterized polyol class). Populated dose_thresholds with laxative threshold. All identifiers API-verified.",
             "reason": "harmful_additives_deep_audit_batch4"
+          },
+          {
+            "date": "2026-08-07",
+            "change": "Removed the 'maltitol syrup' alias added by batch 4, which collided with the identical alias already on ADD_MALTITOL_MALITOL — 18 rows across real products matched here while the enricher charged ADD_MALTITOL_MALITOL, decided only by index insertion order. Ownership assigned to ADD_MALTITOL_MALITOL on FDA substance-registry evidence, re-verified live: UNII D65DG142WK (Maltitol, class 'chemical') registers DRIED MALTITOL SYRUP / MALTITOL SYRUP POWDER / MALTITOL SOLUTION [NF] / HYDROGENATED HIGH MALTOSE-CONTENT GLUCOSE SYRUP, while this entry's own UNII 27F77DSJ5V (class 'mixture') registers only HYDROGENATED STARCH HYDROLYSATE [+ II]. Also the more protective route — maltitol carries a ~10 g single-dose laxative threshold vs the 20 g/day stored here. 'hydrogenated glucose syrup' and 'hsh' remain here for syrups not declared as maltitol; the 2 corpus rows labelled 'hydrogenated starch hydrolysate' are unaffected.",
+            "reason": "alias_ownership_collision_resolution"
           }
         ]
       },
@@ -6550,7 +6554,7 @@
         "malitol syrup"
       ],
       "category": "sweetener_sugar_alcohol",
-      "notes": "Sugar alcohol sweetener (E965) with ~40% small intestine absorption. Higher glycemic index than most sugar alcohols (GI 35-52). Laxative effects documented at >10 g single dose — roughly half the threshold of sorbitol. Low severity: the GI-tolerance and glycemic effects are a nutritional/tolerance concern rather than a toxicological hazard, matching other sugar-alcohol fillers. ID note: entry ID contains legacy typo 'MALITOL'; standard_name is correct.",
+      "notes": "Sugar alcohol sweetener (E965) with ~40% small intestine absorption. Higher glycemic index than most sugar alcohols (GI 35-52). Laxative effects documented at >10 g single dose — roughly half the threshold of sorbitol. Low severity: the GI-tolerance and glycemic effects are a nutritional/tolerance concern rather than a toxicological hazard, matching other sugar-alcohol fillers. ID note: entry ID contains legacy typo 'MALITOL'; standard_name is correct. OWNS the syrup/solution label forms (2026-08-07): 'maltitol syrup' was formerly aliased on BOTH this entry and ADD_HYDROGENATED_STARCH_HYDROLYSATE, making the match an artifact of index insertion order; it is now exclusive to this entry. FDA's substance registry files these names under the Maltitol record (UNII D65DG142WK: 'DRIED MALTITOL SYRUP', 'MALTITOL SYRUP POWDER', 'MALTITOL SOLUTION [NF]'), whereas the HSH mixture record (UNII 27F77DSJ5V) carries no maltitol name. This is also the more protective route: the ~10 g single-dose laxative threshold here is 2-3x stricter than the ~20-30 g/day used for a general HSH. A label declaring a hydrogenated glucose syrup WITHOUT naming maltitol still belongs to ADD_HYDROGENATED_STARCH_HYDROLYSATE.",
       "last_updated": "2026-03-27",
       "mechanism_of_harm": "Sugar alcohol (E965) partially absorbed in the small intestine (~40%). Unabsorbed portion fermented by colonic bacteria causing osmotic diarrhea. Higher glycemic index than most sugar alcohols (GI ~35-52 depending on form). Laxative effects documented at >10g single dose. JECFA ADI \"not specified\" (safe at typical use).",
       "regulatory_status": {

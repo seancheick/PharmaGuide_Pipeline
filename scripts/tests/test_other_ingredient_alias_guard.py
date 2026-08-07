@@ -110,7 +110,11 @@ BASELINE_ALIAS_DUPLICATES = {
     "mag stearate",
     "magnesium stearate",
     "maize oil",
-    "maltitol syrup",
+    # "maltitol syrup" removed 2026-08-07: the duplicate it baselined is gone.
+    # It was aliased on BOTH ADD_MALTITOL_MALITOL and
+    # ADD_HYDROGENATED_STARCH_HYDROLYSATE, so which entry matched was decided by
+    # index insertion order. ADD_MALTITOL_MALITOL now owns it exclusively. Left
+    # in place, this line would silently re-permit the collision.
     "maltose syrup",
     "manioc starch",
     "mcc",
