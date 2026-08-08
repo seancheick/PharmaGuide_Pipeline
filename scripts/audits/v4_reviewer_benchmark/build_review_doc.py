@@ -117,11 +117,14 @@ Don't treat a missing fact as good or bad. If a label doesn't state third-party
 testing, that's neither proof it happened nor that it didn't — put the
 uncertainty in the score and lower your confidence.
 
-**Totals vs. their constituent forms.** Where a nutrient total is followed by
-amounts for the forms that make it up, **the first amount is the total — do not
-add the components to it.** Example: `Magnesium 135 mg` followed by `55 mg` and
-`80 mg` is 135 mg per serving, not 270 mg. Affected products carry a
-`⚠ DATA NOTE`.
+**Totals and the rows printed underneath them.** Where the label itself prints
+rows *underneath* an ingredient — its chemical forms, or the components of a
+named blend — **the first amount is the total; do not add those rows to it.**
+Example: `Magnesium 135 mg` printed above `55 mg` and `80 mg` of two magnesium
+forms is 135 mg per serving, not 270 mg. Affected products carry a
+`⚠ DATA NOTE` **naming the exact rows** we mean. Where you see no such note,
+treat every row as its own separate ingredient and add them up normally —
+several ingredients whose amounts happen to sum to another are not related.
 
 ## Our known data gaps — not your problem, don't report them
 
@@ -209,6 +212,35 @@ def amt(a, u):
     return f"{a} {'unit not stated' if u in ('NP', 'unspecified', '') else u}"
 
 
+def rollup(act):
+    """Render the total-vs-forms relationship the freeze already resolved.
+
+    This does NOT decide which rows are constituent forms of which -- that is
+    settled once, from the label's own row nesting, by
+    `v4_reviewer_benchmark_freeze._resolve_constituent_rollups`. Deciding it a
+    second time here is what produced the defect: this file used to infer the
+    relationship from arithmetic alone ("do the next 2-3 amounts add up to this
+    one?"), with no identity signal whatsoever. On the shipped corpus that fired
+    on 806 products, 79% of them chemically unrelated -- `Leucine 3000 ==
+    Isoleucine 1500 + Valine 1500` (three separate BCAAs, and the
+    industry-standard 2:1:1 ratio *guarantees* the sum matches), `GABA 200 ==
+    Theanine 100 + Rhodiola 100`, `Folate 400mcg == B12 50mcg + Biotin 300mcg +
+    Pantothenic Acid 50mg`.
+
+    Fails closed: a packet frozen without the resolved relationship yields no
+    note. A missing note costs the reviewer nothing (they read the rows as
+    printed); a wrong one tells a pharmacist to score against half the dose.
+    """
+    for a in act:
+        kids = a.get("constituent_child_indexes")
+        if not kids:
+            continue
+        if any(not isinstance(i, int) or not 0 <= i < len(act) for i in kids):
+            continue
+        return a, [act[i] for i in kids]
+    return None
+
+
 def facts(row):
     L, notes = [], []
     s = jload(row.get("serving_info_json"), {})
@@ -243,21 +275,18 @@ def facts(row):
         notes.append(f"{z} ingredient(s) show quantity 0 — our extraction gap, treat as undisclosed")
     if nu:
         notes.append(f"{nu} ingredient(s) have no unit — our extraction gap, treat as undisclosed")
-    for i, a in enumerate(act):
-        q = a.get("quantity")
-        if not isinstance(q, (int, float)) or q <= 0:
-            continue
-        for w in (2, 3):
-            nxt = act[i + 1:i + 1 + w]
-            qs = [x.get("quantity") for x in nxt]
-            if len(nxt) >= 2 and all(isinstance(v, (int, float)) for v in qs) \
-                    and abs(sum(qs) - q) < 1e-6:
-                notes.append(f"**{a.get('name')} {q}** is the TOTAL; the entries after it "
-                             "are its constituent forms. Do NOT add them to it")
-                break
-        else:
-            continue
-        break
+    roll = rollup(act)
+    if roll:
+        parent, kids = roll
+        forms = ", ".join(f"{k.get('name')} {k.get('quantity')}" for k in kids)
+        # "already included in" rather than "are forms of": ~20 of these are a
+        # blend total over its components (Turmeric Blend = turmeric + ginger +
+        # black pepper), not one substance broken into its forms. The dose
+        # instruction is identical either way; the chemical claim is not.
+        notes.append(f"**{parent.get('name')} {parent.get('quantity')} "
+                     f"{parent.get('unit')}** is the TOTAL, and the rows the label "
+                     f"nests under it ({forms}) are already included in that total. "
+                     "Do NOT add them to it")
     L.append("\n**Actives:**")
     L += [f"- {a.get('name')} — {amt(a.get('quantity'), a.get('unit'))}"
           + (f" ({a['daily_value_percent']}% DV)" if a.get("daily_value_percent") not in (None, "") else "")
@@ -307,6 +336,7 @@ def main() -> int:
     assert len(resp) == 120, len(resp)
 
     blocks, st = [], {"zero": 0, "nounit": 0, "sub1": 0}
+    rollups = 0
     for i, r in enumerate(resp, 1):
         row = packet[r["benchmark_id"]]
         f, notes = facts(row)
@@ -317,6 +347,8 @@ def main() -> int:
                 st["nounit"] += 1
             elif "below 1" in n:
                 st["sub1"] += 1
+            elif "is the TOTAL" in n:
+                rollups += 1
         nt = ("\n\n> **⚠ DATA NOTE** — " + "; ".join(notes)) if notes else ""
         blocks.append(BLOCK.format(n=i, name=row["product_name"], brand=row["brand_name"],
                                    facts=f, notes=nt, bid=r["benchmark_id"]))
@@ -331,7 +363,11 @@ def main() -> int:
     (a.out / f".slotmap_{a.reviewer_id}.json").write_text(json.dumps(
         {"slot": a.slot, "reviewer_id": a.reviewer_id,
          "order": {r["benchmark_id"]: r["reviewer_order"] for r in resp}}, indent=1))
-    print(f"{out}  ({len(resp)} products, {len(doc)//1024} KB, data notes: {st})")
+    # A packet frozen before `parent_index` existed carries no nesting evidence,
+    # so total-vs-forms notes correctly drop to 0. Print it rather than let a
+    # silent zero read as "no such products in this slot".
+    print(f"{out}  ({len(resp)} products, {len(doc)//1024} KB, data notes: {st}, "
+          f"total-vs-forms: {rollups})")
     return 0
 
 
