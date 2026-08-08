@@ -14,7 +14,7 @@ separately-versioned artifact next to the catalog. Same contract, deliberately:
 
 Resolution
 ----------
-`resolved_dsld_ids` is the SIGNED, publication-time applicability set — not
+`resolved_dsld_ids` is the frozen, publication-time applicability set — not
 merely push targeting. A device may hold a catalog snapshot older than the
 alert, in which case its local identities cannot resolve the newly banned
 substance at all and canonical matching would silently miss it. Resolving here,
@@ -247,7 +247,9 @@ def stage(records: List[Dict[str, Any]], today: str, dist_dir: Path = DIST_DIR) 
 
     manifest = {
         "schema_version": SCHEMA_VERSION,
-        "feed_version": today,
+        # A calendar date cannot identify two corrected releases published on
+        # the same day. The immutable content digest is the release version.
+        "feed_version": f"sha256:{digest}",
         "checksum": f"sha256:{digest}",
         "alert_count": feed["alert_count"],
         # Every alert carries the snapshot it was resolved against.  Derive the

@@ -26,7 +26,7 @@ safe".
 
 Why `resolved_dsld_ids` is not merely push targeting
 ----------------------------------------------------
-It is the SIGNED, publication-time applicability set. A device may hold a
+It is the frozen, publication-time applicability set. A device may hold a
 catalog snapshot older than the alert, in which case its local ingredient
 identities cannot resolve the newly banned substance at all — canonical
 matching alone would silently miss. The resolved set is authoritative for
@@ -46,6 +46,7 @@ SCHEMA_VERSION = "1.0.0"
 
 EVENT_TYPES = frozenset({"ingredient_ban", "product_recall"})
 STATUSES = frozenset({"draft", "published", "retracted"})
+CONSUMER_DISPOSITIONS = frozenset({"block", "review"})
 # FDA recall classifications. Deliberately NOT required — see `fda_class` below.
 FDA_CLASSES = frozenset({"I", "II", "III"})
 
@@ -68,6 +69,7 @@ REQUIRED_FIELDS: Tuple[str, ...] = (
     "headline",
     "body",
     "action",
+    "consumer_disposition",
     "retracted",
 )
 
@@ -120,6 +122,12 @@ def validate_alert(record: Any) -> Dict[str, Any]:
     for field in ("authority", "source_url", "jurisdiction", "headline", "body", "action"):
         if not _nonempty_str(record.get(field)):
             errors.append(f"{field} must be a non-empty string")
+
+    if record.get("consumer_disposition") not in CONSUMER_DISPOSITIONS:
+        errors.append(
+            "consumer_disposition must be one of "
+            f"{sorted(CONSUMER_DISPOSITIONS)}, got {record.get('consumer_disposition')!r}"
+        )
 
     source_url = record.get("source_url")
     if _nonempty_str(source_url) and not str(source_url).startswith("https://"):
@@ -204,7 +212,7 @@ def _validate_scope(record: Dict[str, Any], event_type: Any) -> List[str]:
 
 
 def _validate_resolution(record: Dict[str, Any]) -> List[str]:
-    """The signed applicability set must be present and pinned to a snapshot."""
+    """The frozen applicability set must be present and pinned to a snapshot."""
     errors: List[str] = []
     resolved = record.get("resolved_dsld_ids")
     if not isinstance(resolved, list) or not all(_nonempty_str(x) for x in resolved):

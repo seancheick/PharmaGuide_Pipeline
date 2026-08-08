@@ -1,5 +1,5 @@
 {
-  "_comment": "Copy to SA_YYYY_NNNN.json and fill in. Files starting with _ are ignored by the publisher. See README.md — especially: records are immutable per (alert_id, revision), fda_class is conditional, lots are display-only, and resolved_dsld_ids is the signed applicability set, not just push targeting.",
+  "_comment": "Copy to SA_YYYY_NNNN.json and fill in. Files starting with _ are ignored by the publisher. See README.md — especially: records are immutable per (alert_id, revision), fda_class is conditional, lots are display-only, and resolved_dsld_ids is the frozen applicability set, not just push targeting.",
 
   "alert_id": "SA_2026_0000",
   "revision": 1,
@@ -28,6 +28,7 @@
   "headline": "",
   "body": "",
   "action": "",
+  "consumer_disposition": "review",
 
   "expires_at": null,
   "retracted": false

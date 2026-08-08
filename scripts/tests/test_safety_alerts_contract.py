@@ -44,6 +44,7 @@ def _alert(**overrides):
         "headline": "Tianeptine is prohibited in dietary supplements",
         "body": "FDA has determined tianeptine is not a lawful dietary ingredient.",
         "action": "Stop taking this product and contact your clinician.",
+        "consumer_disposition": "block",
         "expires_at": None,
         "retracted": False,
     }
@@ -61,6 +62,7 @@ def test_the_template_record_is_valid():
     "alert_id", "revision", "event_type", "status", "authority", "source_url",
     "evidence_verified_at", "jurisdiction", "effective_date", "scope",
     "resolved_dsld_ids", "catalog_snapshot_version", "headline", "body", "action",
+    "consumer_disposition",
 ])
 def test_every_required_field_is_actually_required(field):
     record = _alert()
@@ -95,6 +97,12 @@ def test_fda_class_is_conditional_not_required():
     flagged = validate_alert(_alert(fda_class="II"))
     assert flagged["ok"]
     assert any("ingredient_ban" in w for w in flagged["warnings"])
+
+
+def test_human_approval_must_choose_the_consumer_disposition():
+    assert not validate_alert(_alert(consumer_disposition=""))["ok"]
+    assert not validate_alert(_alert(consumer_disposition="good_to_know"))["ok"]
+    assert validate_alert(_alert(consumer_disposition="review"))["ok"]
 
 
 def test_brand_scope_is_rejected_in_v1():

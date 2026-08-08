@@ -50,7 +50,7 @@ What *is* required on every record: `authority`, `source_url` (https, the offici
 recall. **Brand scope is not supported in v1** — without an exact normalized brand identity it
 degrades into runtime fuzzy matching, which is how an alert condemns the wrong product.
 
-**`resolved_dsld_ids` is not just push targeting.** It is the signed, publication-time applicability
+**`resolved_dsld_ids` is not just push targeting.** It is the frozen, publication-time applicability
 set, resolved against `catalog_snapshot_version`. A user's device may hold an older catalog that
 cannot resolve the newly banned substance at all — canonical matching alone would silently miss them.
 The resolved set is authoritative; ingredient matching is a second confirmation. This is what lets a
@@ -61,6 +61,10 @@ lot-scoped alert lists the affected lots and says *"check your bottle"* — it m
 Nothing in the matcher reads this field.
 
 **`jurisdiction` is not decoration.** A ban in one market is not a universal consumer instruction.
+
+**`consumer_disposition` is authored, never inferred by the app.** A reviewer selects `block` or
+`review` alongside the source-backed copy. That prevents a client release from silently upgrading or
+downgrading the meaning of a regulatory event.
 
 **`effective_date` vs `published_at`.** `effective_date` is when the regulatory action took effect
 (from the official record); `published_at` is when we shipped the alert. An alert whose

@@ -67,6 +67,7 @@ def _alert(**overrides):
         "headline": "Tianeptine is prohibited",
         "body": "FDA has determined tianeptine is not a lawful dietary ingredient.",
         "action": "Stop taking this product.",
+        "consumer_disposition": "block",
         "expires_at": None,
         "retracted": False,
     }
