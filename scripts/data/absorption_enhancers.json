@@ -63,7 +63,8 @@
       "standard_name": "Black Pepper",
       "non_scorable_when_sub_threshold": {
         "threshold_mg": 10,
-        "rationale": "Piperine ≤10 mg is bioavailability-aid dosing (the standard BioPerine usage pattern). Above 10 mg it appears in thermogenic/metabolic blends where it is dosed as a therapeutic active and should remain scorable."
+        "threshold_basis": "classification_convention",
+        "rationale": "Piperine ≤10 mg is bioavailability-aid dosing (the standard BioPerine usage pattern). Above 10 mg it appears in thermogenic/metabolic blends where it is dosed as a therapeutic active and should remain scorable. IMPORTANT — 10 mg is a PharmaGuide CLASSIFICATION CONVENTION drawn from observed label usage, not a clinically established boundary. No study shows piperine ceasing to act as a bioavailability aid at that dose; the cutoff separates two dosing INTENTIONS that happen to sit either side of it in practice. The enhancer role demonstrably persists on BOTH sides of it: PMID 10715596 studied 5 mg piperine as a CoQ10 bioavailability enhancer in humans, and PMID 9619120 studied 20 mg piperine as a curcumin bioavailability enhancer in human volunteers (its 20 mg/kg figure is the animal arm). Both content-verified against PubMed 2026-08-07, title and dose. Treat this as tunable product policy: do not cite it as clinical evidence, and revisit it if label usage patterns shift."
       }
     },
     {

@@ -188,6 +188,48 @@ def test_b1_harmful_additive_from_enriched():
     assert "harmful" not in b1["label"].lower()
 
 
+def test_b1_names_the_additive_the_way_the_bottle_does():
+    """Label first, canonical in parentheses — never a name absent from the label.
+
+    The advisory used the canonical name while the "Other ingredients" row on
+    the same screen used the label's wording, so a bottle reading "Silica" was
+    advised about "Silicon Dioxide (E551)" and the user could not tell they were
+    the same substance — or whether we had found something not on their label.
+    """
+    enriched = {"harmful_additives": [
+        {"additive_name": "Silicon Dioxide (E551)", "ingredient": "Silica",
+         "raw_source_text": "Silica", "severity_level": "low"},
+    ]}
+    _, penalties = derive_v4_tradeoffs(_scored_v4(), enriched)
+    assert _by_id(penalties, "B1")["label"] == "Additive: Silica (silicon dioxide)"
+
+
+def test_b1_additive_name_never_says_the_same_thing_twice():
+    """No "Maltitol syrup (maltitol)" and no nested parentheses.
+
+    Redundancy is the failure mode a naive label+canonical concatenation
+    produces, and it reads worse than the mismatch it replaced.
+    """
+    cases = [
+        # canonical adds only an E-number -> canonical alone carries more
+        ({"additive_name": "Magnesium Stearate", "raw_source_text": "Magnesium Stearate"},
+         "Additive: Magnesium Stearate"),
+        # label is the more specific form of the same substance -> label alone
+        ({"additive_name": "Maltitol", "raw_source_text": "Maltitol syrup"},
+         "Additive: Maltitol syrup"),
+        ({"additive_name": "Yellow 6 (Sunset Yellow FCF)", "raw_source_text": "FD&C Yellow 6 Lake"},
+         "Additive: FD&C Yellow 6 Lake"),
+        # no label text at all -> canonical, unchanged
+        ({"additive_name": "Titanium Dioxide (E171)"}, "Additive: Titanium Dioxide (E171)"),
+    ]
+    for hit, expected in cases:
+        hit = {**hit, "severity_level": "low"}
+        _, penalties = derive_v4_tradeoffs(_scored_v4(), {"harmful_additives": [hit]})
+        label = _by_id(penalties, "B1")["label"]
+        assert label == expected, f"{hit} -> {label!r}, expected {expected!r}"
+        assert label.count("(") <= 1, f"nested parentheses in {label!r}"
+
+
 def test_b1_prefers_reviewed_safety_summary_over_stale_mechanism_copy():
     enriched = {"harmful_additives": [
         {

@@ -1186,6 +1186,48 @@ def _safety_flags_from_contract(contract: Dict[str, Any]) -> List[Dict[str, Any]
     }]
 
 
+def _additive_display_name(hit: Dict[str, Any]) -> str:
+    """Name an additive the way the bottle does, then teach the canonical term.
+
+    The advisory used the canonical name while the "Other ingredients" row a few
+    inches up the same screen used the label's own wording. A user reading
+    "Additive: Silicon Dioxide (E551)" against a row that says "Silica" cannot
+    tell they are the same thing, and reasonably wonders whether we found an
+    ingredient that is not on their label.
+
+    Label first, canonical in parentheses -> "Silica (silicon dioxide)". When the
+    two agree, or either is missing, emit the single name unchanged rather than
+    printing it twice.
+    """
+    label = safe_str(hit.get("raw_source_text") or hit.get("ingredient"))
+    canonical = safe_str(hit.get("additive_name") or hit.get("canonical_name"))
+    if not label:
+        return canonical
+    if not canonical:
+        return label
+
+    # Drop the canonical's own parenthetical ("(E551)", "(Sunset Yellow FCF)")
+    # before nesting it inside one -- "Silica (silicon Dioxide (E551))" is worse
+    # than the problem it set out to fix.
+    canonical_core = canonical.split("(")[0].strip() or canonical
+
+    def _key(value: str) -> str:
+        # Letters+digits only, so "Silicon Dioxide (E551)" and "silicon dioxide"
+        # collapse and punctuation differences never read as two substances.
+        return "".join(ch for ch in value.lower() if ch.isalnum())
+
+    label_key, core_key = _key(label), _key(canonical_core)
+    if label_key == core_key:
+        # Same name -- prefer the canonical, which carries the E-number.
+        return canonical
+    if core_key and core_key in label_key:
+        # The label is the more specific form of the same thing ("FD&C Yellow 6
+        # Lake" vs "Yellow 6", "Maltitol syrup" vs "Maltitol"). Adding the
+        # generic in parentheses would only take space.
+        return label
+    return f"{label} ({canonical_core.lower()})"
+
+
 def _inactive_penalty_tones(scored: Dict[str, Any]) -> Dict[str, str]:
     """Build display tones from the scorer-owned inactive penalty ledger.
 
@@ -2637,7 +2679,7 @@ def derive_v4_tradeoffs(
                 # display time since 2026-05-16 with an explicit "pipeline stays
                 # unchanged until a future cleanup" note -- this is that cleanup,
                 # so the copy is authored once here instead of patched downstream.
-                "label": f"Additive: {safe_str(h.get('additive_name') or h.get('ingredient'))}",
+                "label": f"Additive: {_additive_display_name(h)}",
                 "severity": safe_str(h.get("severity_level")),
                 "reason": safe_str(
                     harmful_ref.get("safety_summary_one_liner")
