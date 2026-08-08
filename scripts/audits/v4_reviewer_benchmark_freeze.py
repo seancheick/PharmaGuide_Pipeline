@@ -63,6 +63,23 @@ FORBIDDEN_REVIEWER_FIELDS = frozenset({
     "analysis_split",
     "challenge_flags",
 })
+# Reviewer-packet schema note, for defending the study later. These two fields
+# are NOT peer sources of truth -- one is observed, one is derived from it:
+#
+#   parent_index
+#       SOURCE FACT. The label's own row nesting (`raw_source_path`), nothing
+#       else. If the source and this field disagree, the source wins.
+#
+#   constituent_child_indexes
+#       BENCHMARK-ONLY DERIVED ANNOTATION, computed from parent_index plus the
+#       unit / positive-amount / sum checks in _resolve_constituent_rollups.
+#       Never author it directly and never infer it downstream: re-deriving this
+#       relationship in a second place, from arithmetic, is exactly what put 23
+#       false dose instructions into the v6 packets.
+#
+# Neither carries scoring, safety, evidence, dose-adequacy or any other
+# engine-derived judgment, so both are label provenance rather than blinded
+# engine output — which is why they may sit in a blinded reviewer packet.
 BASELINE_FIELDS = (
     "benchmark_id",
     "review_sequence",
@@ -488,18 +505,115 @@ def _challenge_flags(
     return flags
 
 
+def _direct_child_path(child_path: str, parent_path: str) -> bool:
+    """True iff child_path is a DIRECT nested row of parent_path on the label.
+
+    The label's own row nesting -- e.g. `Omega-3` carrying `nestedRows[EPA, DHA]`
+    -- is the only trustworthy declaration that one row is a constituent form of
+    another. Grandchildren are excluded: they are parts-of-parts and would double
+    count against the parent total.
+    """
+    if not child_path or not parent_path:
+        return False
+    prefix = f"{parent_path}.nestedRows["
+    if not child_path.startswith(prefix):
+        return False
+    return ".nestedRows[" not in child_path[len(prefix):]
+
+
+_ROLLUP_UNIT_ALIAS = {
+    "gram(s)": "g", "grams": "g", "gram": "g",
+    "milligram(s)": "mg", "microgram(s)": "mcg",
+    "mcg dfe": "mcg", "mcg rae": "mcg", "mcg ne": "mcg", "ug": "mcg",
+    "np": "", "unspecified": "",
+}
+
+
+def _rollup_unit(unit: Any) -> str:
+    key = str(unit or "").strip().lower()
+    return _ROLLUP_UNIT_ALIAS.get(key, key)
+
+
+def _positive_amount(row: Mapping[str, Any]) -> bool:
+    quantity = row.get("quantity")
+    return (
+        isinstance(quantity, (int, float))
+        and not isinstance(quantity, bool)
+        and quantity > 0
+    )
+
+
+def _resolve_constituent_rollups(actives: list[dict[str, Any]]) -> None:
+    """Mark every row the label declares as a total over its own nested forms.
+
+    Resolved here, once, so the reviewer document only has to *render* the
+    relationship. It previously re-derived one, and derived it from arithmetic
+    coincidence -- "do the next 2-3 amounts sum to this one?" -- which on the
+    shipped corpus paired Leucine with Isoleucine+Valine (a 2:1:1 BCAA ratio
+    makes the sum match by construction) and GABA with Theanine+Rhodiola.
+
+    A parent must account for **all** of its direct children, not a positional
+    window over some of them. That is what makes the claim checkable rather than
+    cherry-picked, and it fails closed exactly where the source hierarchy is
+    itself unreliable: four products nest an unrelated row under a nutrient
+    (`Vitamin B12 300mcg` under `Vitamin K`), and there the totals no longer
+    reconcile, so no claim is made.
+    """
+    for index, parent in enumerate(actives):
+        unit = _rollup_unit(parent.get("unit"))
+        if not unit or not _positive_amount(parent):
+            continue
+        children = [
+            position for position, row in enumerate(actives)
+            if row.get("parent_index") == index
+        ]
+        if len(children) < 2:
+            continue
+        rows = [actives[position] for position in children]
+        if not all(_positive_amount(row) for row in rows):
+            continue
+        if any(_rollup_unit(row.get("unit")) != unit for row in rows):
+            continue
+        if not math.isclose(
+            sum(row["quantity"] for row in rows),
+            parent["quantity"],
+            rel_tol=1e-9,
+            abs_tol=1e-6,
+        ):
+            continue
+        parent["constituent_child_indexes"] = children
+
+
 def _reviewer_packet_row(
     benchmark_id: str,
     sequence: int,
     detail: dict[str, Any],
 ) -> dict[str, Any]:
-    active_ingredients = []
+    active_rows = []
     for ingredient in detail.get("ingredients") or []:
         if not isinstance(ingredient, dict):
             continue
         role = str(ingredient.get("role") or "").strip().lower()
         if role and role != "active":
             continue
+        active_rows.append(ingredient)
+    # Carry the label's structural parent/child nesting into the packet. It is a
+    # label fact, not an engine output, and it is the only evidence a downstream
+    # reader has for "this row is a constituent form of that one". Dropping it
+    # forced build_review_doc.py to infer the relationship from arithmetic
+    # coincidence, which paired Leucine with Isoleucine+Valine (a 2:1:1 BCAA
+    # ratio makes the sum match) and GABA with Theanine+Rhodiola.
+    paths = [str(row.get("raw_source_path") or "") for row in active_rows]
+    active_ingredients = []
+    for index, ingredient in enumerate(active_rows):
+        parent_index = next(
+            (
+                other
+                for other, parent_path in enumerate(paths)
+                if other != index and _direct_child_path(paths[index], parent_path)
+            ),
+            None,
+        )
         active_ingredients.append({
             "name": (
                 ingredient.get("source_label_name")
@@ -509,7 +623,9 @@ def _reviewer_packet_row(
             "quantity": ingredient.get("quantity"),
             "unit": ingredient.get("unit"),
             "daily_value_percent": ingredient.get("dailyValue"),
+            "parent_index": parent_index,
         })
+    _resolve_constituent_rollups(active_ingredients)
     inactive_ingredients = [
         ingredient.get("name")
         for ingredient in detail.get("inactive_ingredients") or []

@@ -26,6 +26,21 @@ so the v6 freeze stays byte-intact for audit.
    all still match), so only the catalog fingerprint drifted — but a baseline
    pinned to a deleted release is not defensible.
 
+4. **The v6 packets carry 23 false dose instructions.** `build_review_doc.py`
+   inferred "X is the TOTAL; do NOT add the entries after it" from arithmetic
+   coincidence — whether the next 2-3 amounts happened to sum — with no identity
+   evidence, so it paired `Leucine` with `Isoleucine + Valine` (a 2:1:1 ratio
+   guarantees the sum) and `GABA` with `Theanine + Rhodiola`. 30 notes reached
+   every reviewer; 23 were false. Fixed 2026-08-07: the freeze now resolves the
+   relationship from the label's own row nesting and the document only renders
+   it. **v7 must be cut with the fixed freeze** — the packet gains
+   `parent_index` / `constituent_child_indexes`, and without them the note
+   correctly falls to zero (check the `total-vs-forms:` count that
+   `build_review_doc.py` prints). Per-reviewer, per-product manifest:
+   `../CONTAMINATION_v6_rollup_notes.csv`. PHAM's returned answers include 23
+   rows exposed to a false note; how they are treated is a protocol decision for
+   the statistician and clinical owner, not a code change.
+
 ## Cut v7 as late as possible
 
 Freeze immediately before distribution, not before recruitment. Cutting now and
