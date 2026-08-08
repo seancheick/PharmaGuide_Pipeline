@@ -176,7 +176,7 @@
       "id": "immunosuppressants",
       "name": "Immunosuppressants",
       "group_label": "Immune-suppressing medications",
-      "commonly_used_for": "Commonly used to help calm an overactive immune system, such as after an organ transplant or in autoimmune conditions.",
+      "commonly_used_for": "Commonly used to reduce immune-system activity, such as to prevent organ transplant rejection or manage autoimmune conditions.",
       "notes": "Suppress immune response after transplant or for autoimmune disease. Echinacea, astragalus, and other immune-stimulating herbs may counteract effect.",
       "examples": [
         "tacrolimus",

@@ -20,9 +20,9 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 VOCAB = REPO_ROOT / "scripts/data/drug_class_vocab.json"
 OUTPUT = Path(__file__).resolve().parent / "pharmacist_review_packet.md"
 
-# Dr Pham's dispositions, review round 1 (2026-08-08). Entries absent from this
-# map were dispositioned `approved` as authored.
-REVISED = {
+# Dr Pham's dispositions. Round 1 (2026-08-08): entries absent from this map
+# were dispositioned `approved` as authored.
+ROUND1_REVISED = {
     "hypoglycemics_high_risk": "insulin spans type 1 + type 2; sulfonylureas are type 2 drugs",
     "hypoglycemics_lower_risk": "GLP-1 agents are also used for weight management, not merely 'support'",
     "thyroid_medications": "examples are replacement hormones, not agents that 'balance' thyroid function",
@@ -39,12 +39,21 @@ REVISED = {
     "fluoroquinolones": "drops sinusitis, which implied first-line status",
 }
 
+# Round 2 (2026-08-08): 29 entries approved at current wording; one reworded.
+ROUND2_REVISED = {
+    "immunosuppressants": (
+        "transplant use prevents rejection of the transplanted organ "
+        "(MedlinePlus framing); 'overactive immune system' fit only the "
+        "autoimmune half"
+    ),
+}
+
 
 def build(vocab: dict, digest: str) -> str:
     classes = vocab["drug_classes"]
     review = vocab["_metadata"]["consumer_copy_review"]
-    revised_n = len(REVISED)
-    approved_n = len(classes) - revised_n
+    round2_n = len(ROUND2_REVISED)
+    round2_ok = len(classes) - round2_n
 
     approved = review["status"] == "approved"
     reviewer = review["reviewer"]
@@ -52,8 +61,8 @@ def build(vocab: dict, digest: str) -> str:
     lines = [
         "# Drug-class consumer-copy review packet (vocab v1.1.0)",
         "",
-        "Revision: **2 — clinician wording changes applied"
-        + (", signed**" if approved else ", awaiting sign-off on this revised copy**"),
+        "Revision: **3 — round-2 correction applied (immunosuppressants)"
+        + (", signed**" if approved else ", awaiting sign-off at the hash below**"),
         "",
         f"Status: **{review['status']}** — "
         + (
@@ -62,9 +71,10 @@ def build(vocab: dict, digest: str) -> str:
             "`group_label` or `commonly_used_for` invalidates the sign-off: reset the status and "
             "regenerate this packet before repinning the Flutter asset."
             if approved
-            else f"the {revised_n} revised strings below are the wording {reviewer} specified in "
-            "review round 1 (2026-08-08). Nothing ships to the app until this revision is signed "
-            "and `_metadata.consumer_copy_review.status` is set to `approved`."
+            else f"round 2 (2026-08-08) dispositioned {round2_ok} entries approved at current wording "
+            f"and {round2_n} approved_with_wording_change by {reviewer} (applied below). Nothing ships "
+            "to the app until this revision is signed and `_metadata.consumer_copy_review.status` is "
+            "set to `approved`."
         ),
         "",
         "Scope: **two sheet-facing fields on all 30 drug-class entries: `group_label` + `commonly_used_for`.** "
@@ -75,8 +85,9 @@ def build(vocab: dict, digest: str) -> str:
         f"content hash `sha256:{digest}`. Regenerate this packet (`regenerate_packet.py`) if the file "
         "hash changes again before signing.",
         "",
-        f"Round-1 outcome: **{approved_n} approved as authored, {revised_n} approved_with_wording_change "
-        "(all applied), 0 requires_revision.**",
+        f"Review history: **round 1 — {len(classes) - len(ROUND1_REVISED)} approved as authored, "
+        f"{len(ROUND1_REVISED)} approved_with_wording_change (all applied). Round 2 — {round2_ok} approved "
+        f"at current wording, {round2_n} approved_with_wording_change (applied). 0 requires_revision.**",
         "",
         "## Why these fields exist",
         "",
@@ -97,8 +108,8 @@ def build(vocab: dict, digest: str) -> str:
         "- `group_label` is deliberately not unique — related classes share a consumer bucket (all four "
         'anticoagulant-family classes read "Blood thinners", retained at review).',
         "",
-        "- Entries marked **REVISED** below carry round-1 wording changes; the rationale is recorded inline. "
-        "Entries marked *approved as authored* were signed off unchanged.",
+        "- The entry marked **REVISED round 2** carries the round-2 wording change; entries reworded in "
+        "round 1 keep their round-1 rationale inline for provenance.",
         "",
         "## Entries",
         "",
@@ -110,8 +121,8 @@ def build(vocab: dict, digest: str) -> str:
             if entry["user_selectable"]
             else "rule-only (assigned by classification, not picked by user)"
         )
-        revised = entry["id"] in REVISED
-        lines.append(f"### {i}. `{entry['id']}` — {tier}")
+        eid = entry["id"]
+        lines.append(f"### {i}. `{eid}` — {tier}")
         lines.append("")
         lines.append(f"- Checklist name (existing, unchanged): {entry['name']}")
         lines.append(f"- **group_label:** {entry['group_label']}")
@@ -119,13 +130,18 @@ def build(vocab: dict, digest: str) -> str:
         lines.append(
             f"- Example drugs (for source lookup): {', '.join(entry['examples'][:3])}"
         )
-        if revised:
+        if eid in ROUND2_REVISED:
             lines.append(
-                f"- Disposition: **approved_with_wording_change — REVISED, applied.** "
-                f"Rationale: {REVISED[entry['id']]}."
+                f"- Disposition: **approved_with_wording_change — REVISED round 2, applied.** "
+                f"Rationale: {ROUND2_REVISED[eid]}."
+            )
+        elif eid in ROUND1_REVISED:
+            lines.append(
+                f"- Disposition: approved at current wording (round 2; wording set in round 1 — "
+                f"{ROUND1_REVISED[eid]})"
             )
         else:
-            lines.append("- Disposition: approved as authored (round 1)")
+            lines.append("- Disposition: approved at current wording (round 2)")
         lines.append("")
 
     lines.extend(["---", "", "## Sign-off", ""])
@@ -174,7 +190,8 @@ def main() -> int:
     vocab = json.loads(raw.decode("utf-8"))
 
     missing = sorted(
-        set(REVISED) - {d["id"] for d in vocab["drug_classes"]}
+        (set(ROUND1_REVISED) | set(ROUND2_REVISED))
+        - {d["id"] for d in vocab["drug_classes"]}
     )
     if missing:
         raise SystemExit(f"dispositioned ids absent from vocab: {missing}")
