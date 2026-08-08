@@ -8,9 +8,20 @@ DATA = (
     / "curated_interactions"
     / "curated_interactions_v1.json"
 )
-BY_ID = {
-    row["id"]: row for row in json.loads(DATA.read_text())["interactions"]
-}
+PAYLOAD = json.loads(DATA.read_text())
+BY_ID = {row["id"]: row for row in PAYLOAD["interactions"]}
+
+
+def test_latest_interaction_copy_edit_is_recorded_in_metadata():
+    metadata = PAYLOAD["_metadata"]
+
+    assert metadata["last_updated"] == "2026-08-08"
+    assert any(
+        note.startswith("2026-08-08:")
+        and "vitamin E/warfarin" in note
+        and "chromium/diabetes-medication" in note
+        for note in metadata["migration_notes"]
+    )
 
 
 def test_disease_or_nutrient_associations_do_not_ship_as_interactions():
@@ -120,6 +131,7 @@ def test_warfarin_vitamin_e_guidance_does_not_claim_a_safe_cutoff():
     assert "anticoagulation" in management
     assert "does not mean" in management
     assert "known dose limit" in management
+    assert management.startswith("contains vitamin e, which can increase bleeding risk")
 
 
 def test_warfarin_vitamin_k_copy_describes_direction_and_consistency():
@@ -150,3 +162,4 @@ def test_chromium_copy_explains_the_authored_screening_threshold():
     assert "screening threshold" in management
     assert "not a proven toxicity cutoff" in management
     assert "do not change" in management
+    assert management.startswith("chromium can lower blood glucose")

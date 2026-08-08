@@ -26,6 +26,22 @@ FILES = {
     "other_ingredients": ROOT / "data" / "other_ingredients.json",
     "harmful_additives": ROOT / "data" / "harmful_additives.json",
 }
+OVERLAP_ALLOWLIST = ROOT / "data" / "cross_db_overlap_allowlist.json"
+
+
+def test_silica_overlap_records_the_current_identity_review():
+    payload = json.loads(OVERLAP_ALLOWLIST.read_text())
+    metadata = payload["_metadata"]
+    silica = next(
+        row
+        for row in payload["allowed_overlaps"]
+        if row["term_normalized"] == "silica"
+    )
+
+    assert metadata["last_updated"] == "2026-08-07"
+    assert metadata["reviewed_at"] == "2026-08-07"
+    assert "PubChem CID 24261" in silica["reason"]
+    assert "VYPSYNLAJGMNEJ-UHFFFAOYSA-N" in silica["reason"]
 
 
 # Baseline exact alias collisions present as of 2026-05-02.

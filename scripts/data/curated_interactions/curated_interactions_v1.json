@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.2.4",
-    "last_updated": "2026-07-29",
+    "last_updated": "2026-08-08",
     "total_entries": 94,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
@@ -23,7 +23,8 @@
       "2026-07-28: Live beta canary cleanup. Retired DSI_DM_VITD and DSI_DM_MAGNESIUM because their cited studies concern nutrient supplementation in diabetes, not interactions with diabetes medications. Retired SSI_MAGNESIUM_CALCIUM because the cited NIH source does not support the displayed 2:1 ratio or routine separation advice. Retired SSI_VITE_VITK because low vitamin K status is a risk modifier for high-dose vitamin E, not evidence that vitamin K supplements are an adverse pair. Rewrote DSI_WAR_VITE to preserve the sourced bleeding-risk warning without claiming a universal safe dose or direct INR elevation.",
       "2026-07-28: Clarified live stack copy. Corrected the direction of the warfarin/vitamin K mechanism, framed vitamin K as a consistency warning rather than a ban, disclosed that the presence-triggered vitamin E alert is not proof of crossing a known dose limit, and identified 200 mcg/day chromium as an authored review threshold rather than a toxicity cutoff.",
       "2026-07-28: Reclassified DSI_WAR_VITK from Major to Moderate so the app presents the sourced consistency/clinician-review action instead of the categorical Not recommended verdict. The interaction remains harmful, presence-triggered, established, and never dose-suppressed.",
-      "2026-07-29: Retired 12 unsupported, duplicated, or mis-layered consumer rules. Chronic medication-nutrient monitoring now remains solely in the pharmacist-reviewed depletion corpus; neutral benefit hypotheses no longer ship as safety interactions; and the broad high-dose vitamin E/anticoagulant rule was removed rather than implying a safe cutoff. Narrowed calcium/fluoroquinolone to ciprofloxacin RxCUI 2551 because moxifloxacin labeling reports no significant calcium effect; retained the class-wide zinc interaction without a universal timing interval because product labels differ. Also narrowed melatonin to fluvoxamine RxCUI 42355, corrected MAOI washout copy, and made zinc/copper dose-dependent at its explicitly disclosed 25 mg/day review floor."
+      "2026-07-29: Retired 12 unsupported, duplicated, or mis-layered consumer rules. Chronic medication-nutrient monitoring now remains solely in the pharmacist-reviewed depletion corpus; neutral benefit hypotheses no longer ship as safety interactions; and the broad high-dose vitamin E/anticoagulant rule was removed rather than implying a safe cutoff. Narrowed calcium/fluoroquinolone to ciprofloxacin RxCUI 2551 because moxifloxacin labeling reports no significant calcium effect; retained the class-wide zinc interaction without a universal timing interval because product labels differ. Also narrowed melatonin to fluvoxamine RxCUI 42355, corrected MAOI washout copy, and made zinc/copper dose-dependent at its explicitly disclosed 25 mg/day review floor.",
+      "2026-08-08: Reordered the vitamin E/warfarin and chromium/diabetes-medication management copy so the user action appears first while preserving the authored trigger disclosures: presence is not proof of crossing a vitamin E dose limit, and 200 mcg/day chromium is a screening threshold rather than a toxicity cutoff. Clinical severity, materiality, identifiers, and thresholds are unchanged."
     ]
   },
   "interactions": [

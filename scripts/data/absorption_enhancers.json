@@ -2,9 +2,12 @@
   "_metadata": {
     "description": "Absorption enhancers that improve nutrient bioavailability",
     "purpose": "bioavailability_bonuses",
-    "schema_version": "5.1.0",
-    "last_updated": "2026-04-24",
+    "schema_version": "5.1.1",
+    "last_updated": "2026-08-08",
     "total_entries": 23,
+    "changelog": [
+      "5.1.1 (2026-08-08): Documented that the 10 mg piperine demotion boundary is a product-classification convention, not a clinical cutoff; content-verified PMID 10715596 (5 mg piperine with CoQ10 in humans) and PMID 9619120 (20 mg piperine with curcumin in humans; 20 mg/kg only in the animal arm)."
+    ],
     "schema_notes": {
       "non_scorable_when_sub_threshold": "OPTIONAL per-enhancer field added in v5.1.0. When present, the enricher will demote the ingredient to role_classification='recognized_non_scorable' and score_included=false IF its dose is at or below threshold_mg. This ensures a pure bioavailability aid (e.g. BioPerine 5 mg) does not (a) drag down the A1 ingredient-quality average and (b) bump a single-nutrient product into the 'targeted' supp_type bucket (which would then miss the A6 single-ingredient efficiency bonus). The ingredient REMAINS in activeIngredients so synergy-cluster matching and interaction-rule analysis are unchanged. Only use on enhancers with no independent nutritional value — never on Vitamin C, Vitamin D, MK7, amino acids, digestive enzymes, probiotics, prebiotics, garlic, aloe vera, etc. which are therapeutic in their own right."
     }

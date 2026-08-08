@@ -15,6 +15,7 @@ Pins the contract that:
      ``non_scorable_when_sub_threshold`` field in absorption_enhancers.json.
 """
 
+import json
 import sys
 from pathlib import Path
 
@@ -24,6 +25,28 @@ SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
+
+
+DATA_PATH = SCRIPTS_DIR / "data" / "absorption_enhancers.json"
+
+
+def test_piperine_threshold_is_explicitly_governed_as_product_policy():
+    payload = json.loads(DATA_PATH.read_text())
+    entry = next(
+        row
+        for row in payload["absorption_enhancers"]
+        if row["id"] == "ENHANCER_BLACK_PEPPER"
+    )
+    policy = entry["non_scorable_when_sub_threshold"]
+
+    assert payload["_metadata"]["schema_version"] == "5.1.1"
+    assert payload["_metadata"]["last_updated"] == "2026-08-08"
+    assert policy["threshold_basis"] == "classification_convention"
+    rationale = policy["rationale"].lower()
+    assert "not a clinically established boundary" in rationale
+    assert "pmid 10715596" in rationale
+    assert "pmid 9619120" in rationale
+    assert "20 mg/kg" in rationale and "animal arm" in rationale
 
 
 @pytest.fixture(scope="module")
