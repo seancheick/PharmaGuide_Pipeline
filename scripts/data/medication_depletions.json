@@ -547,13 +547,7 @@
       "b1_evidence_auditor": "openai_codex_ai_clinical_audit",
       "b1_clinical_approval_status": "approved_for_controlled_beta",
       "b1_clinical_approver": "PharmaGuide Clinical Team",
-      "b1_clinical_approved_at": "2026-07-27",
-      "watch_threshold_days": 1460,
-      "watch_basis": "Matches this entry’s own reviewed recommendation (\"especially after about 4–5 years\") and de Jager 2010 (PMID 20488910, on this entry), a 4.3-year randomised placebo-controlled trial in which metformin raised the absolute risk of B12 deficiency by 7.2 percentage points (NNH 13.8 per 4.3 years). Threshold set at the lower bound of the authored window, 4 years. NOTE FOR REVIEW: Ting 2006 (PMID 17030830, NOT currently on this entry) reports an adjusted OR of 2.39 at >=3 years; if the team wants the earlier trigger, add that source first and reduce this to 1095.",
-      "watch_review_status": "proposed",
-      "watch_proposed_by": "claude_research_draft",
-      "watch_proposed_at": "2026-07-30",
-      "watch_approver": null
+      "b1_clinical_approved_at": "2026-07-27"
     },
     {
       "id": "DEP_METFORMIN_FOLATE",
