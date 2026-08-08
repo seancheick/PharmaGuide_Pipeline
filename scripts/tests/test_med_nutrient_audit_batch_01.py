@@ -73,7 +73,11 @@ def test_batch_01_metformin_copy_softened():
     # estimate or a prescribed methylcobalamin regimen in consumer copy.
     entry = _entries()["DEP_METFORMIN_VITAMINB12"]
     assert "multifactorial" in entry["mechanism"].lower()
+    # Batch-01's softened recommendation is parked pending a B1 delta
+    # re-review; until the sign-off ledger is re-pinned, the approved
+    # "4–5 years" copy stays exact. The watch-block removal stands.
     assert "4–5 years" in entry["recommendation"]
+    assert "watch_threshold_days" not in entry
     assert "sublingual methylcobalamin" not in entry["recommendation"].lower()
     assert "6-30%" not in entry["clinical_impact"]
 

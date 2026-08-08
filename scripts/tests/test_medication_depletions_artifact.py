@@ -248,7 +248,12 @@ def test_real_source_content_hash_is_pinned():
     # and the acid-suppression/iron plus SSRI/sodium evidence gaps were closed
     # with reviewed primary guidance/label sources. Final presentation review
     # remains separately fail-closed in the delta ledger.
+    # Repinned 2026-08-08: the clinician-pinned metformin recommendation and
+    # warfarin/vitamin-K alert copy are restored over the batch-01 softening,
+    # which lacked a B1 delta re-review (sign-off ledger untouched). The
+    # batch-01 watch-block removal stands. The app-side parity pin still holds
+    # the pre-batch value until the batch-01 release repins both together.
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:ed274d0b7828e3b0d511e56137cb832a417a8148b21cc4545f8d8357851a4651"
+        == "sha256:365502ccbdc944c78a07ac2af45b05f58a0bef0635fa4456215045a718fc218e"
     )
