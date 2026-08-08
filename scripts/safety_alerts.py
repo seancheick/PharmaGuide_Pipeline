@@ -217,8 +217,20 @@ def _validate_resolution(record: Dict[str, Any]) -> List[str]:
     resolved = record.get("resolved_dsld_ids")
     if not isinstance(resolved, list) or not all(_nonempty_str(x) for x in resolved):
         errors.append("resolved_dsld_ids must be a list of non-empty strings")
-    if not _nonempty_str(record.get("catalog_snapshot_version")):
+
+    # The snapshot pins the resolution, so the two travel together: a record
+    # that HAS resolved ids must name the catalog they were resolved against,
+    # and an unresolved draft legitimately has neither yet. Requiring the
+    # snapshot unconditionally contradicted the draft allowance directly below
+    # and made an authored, not-yet-resolved draft unrepresentable.
+    snapshot_given = _nonempty_str(record.get("catalog_snapshot_version"))
+    if isinstance(resolved, list) and resolved and not snapshot_given:
         errors.append("catalog_snapshot_version must name the catalog the scope was resolved against")
+    elif not snapshot_given and record.get("status") != "draft":
+        errors.append(
+            "catalog_snapshot_version must name the catalog the scope was resolved against "
+            "(only a draft may be unpinned)"
+        )
 
     # A published alert that resolves to nothing would notify nobody and match
     # nothing — almost always an authoring or resolution error, so it is an
