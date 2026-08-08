@@ -140,6 +140,17 @@ class TestFeed:
         assert feed["alerts"][0]["revision"] == 2
         assert feed["alerts"][0]["headline"] == "corrected"
 
+    def test_draft_revision_cannot_hide_the_current_published_alert(self):
+        feed = build_feed(
+            [
+                _alert(revision=1),
+                _alert(revision=2, status="draft", headline="unapproved edit"),
+            ],
+            "2026-08-08",
+        )
+        assert feed["alert_count"] == 1
+        assert feed["alerts"][0]["revision"] == 1
+
     def test_retracted_and_expired_are_dropped(self):
         records = [
             _alert(alert_id="SA_2026_0001"),
@@ -172,11 +183,41 @@ class TestManifestContract:
         actual = hashlib.sha256((tmp_path / "safety_alerts.json").read_bytes()).hexdigest()
         assert staged["checksum"] == f"sha256:{actual}"
 
+    def test_manifest_reports_only_snapshots_pinned_in_approved_records(self, tmp_path):
+        staged = stage(
+            [
+                _alert(catalog_snapshot_version="2026.08.01.010203"),
+                _alert(
+                    alert_id="SA_2026_0002",
+                    catalog_snapshot_version="2026.08.02.010203",
+                ),
+            ],
+            "2026-08-08",
+            dist_dir=tmp_path,
+        )
+        assert staged["catalog_snapshot_versions"] == [
+            "2026.08.01.010203",
+            "2026.08.02.010203",
+        ]
+
     def test_manifest_publishes_the_latest_revision_map(self, tmp_path):
         """Clients ignore a revision they have applied and never apply a lower
         one — the map lets them decide without parsing the whole feed."""
         staged = stage([_alert(revision=1), _alert(revision=4)], "2026-08-08", dist_dir=tmp_path)
         assert staged["latest_revisions"] == {"SA_2026_0001": 4}
+
+    def test_manifest_retains_a_retraction_revision_as_a_tombstone(self, tmp_path):
+        """A client must distinguish an intentional retraction from omission."""
+        staged = stage(
+            [
+                _alert(revision=1),
+                _alert(revision=2, status="retracted", retracted=True),
+            ],
+            "2026-08-08",
+            dist_dir=tmp_path,
+        )
+        assert staged["latest_revisions"] == {"SA_2026_0001": 2}
+        assert staged["retired_alerts"] == {"SA_2026_0001": 2}
 
     def test_no_temp_file_is_left_behind(self, tmp_path):
         stage([_alert()], "2026-08-08", dist_dir=tmp_path)
@@ -188,3 +229,39 @@ class TestManifestContract:
         first = stage([_alert()], "2026-08-08", dist_dir=tmp_path)["checksum"]
         second = stage([_alert()], "2026-08-08", dist_dir=tmp_path)["checksum"]
         assert first == second
+
+    def test_changed_same_day_feed_gets_a_new_release_version(self, tmp_path):
+        first = stage([_alert()], "2026-08-08", dist_dir=tmp_path)
+        second = stage(
+            [_alert(headline="Corrected safety notice")],
+            "2026-08-08",
+            dist_dir=tmp_path,
+        )
+        assert first["feed_version"] != second["feed_version"]
+
+
+class TestStageImmutability:
+    def test_resolution_does_not_mutate_a_published_record(self, tmp_path, monkeypatch):
+        """Approval freezes the exact applicability set under its revision."""
+        import build_safety_alerts as publisher
+
+        dist_dir = tmp_path / "dist"
+        blobs_dir = dist_dir / "detail_blobs"
+        blobs_dir.mkdir(parents=True)
+        (dist_dir / "export_manifest.json").write_text(
+            json.dumps({"db_version": "2026.08.08.010203"}),
+        )
+        (blobs_dir / "999999.json").write_text(
+            json.dumps(_blob("999999", ["tianeptine"])),
+        )
+        record = _alert(
+            resolved_dsld_ids=["111111"],
+            catalog_snapshot_version="2026.08.01.010203",
+        )
+        monkeypatch.setattr(publisher, "BLOBS_DIR", blobs_dir)
+        monkeypatch.setattr(publisher, "CATALOG_MANIFEST", dist_dir / "export_manifest.json")
+
+        outcome = publisher.resolve_all([record], write=False)
+        assert outcome["ok"]
+        assert record["resolved_dsld_ids"] == ["111111"]
+        assert record["catalog_snapshot_version"] == "2026.08.01.010203"

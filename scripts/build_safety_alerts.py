@@ -145,7 +145,12 @@ def resolve_scope(
 
 
 def resolve_all(records: List[Dict[str, Any]], *, write: bool) -> Dict[str, Any]:
-    """Resolve every record's scope against the current catalog snapshot."""
+    """Resolve draft records against the current catalog snapshot.
+
+    Resolution is an authoring operation.  A published record's applicability
+    set is immutable under its revision, so staging must never recompute it
+    against whichever catalog happens to be in ``dist/``.
+    """
     snapshot = catalog_snapshot_version()
     if not snapshot:
         return {"ok": False, "errors": [f"no catalog manifest at {CATALOG_MANIFEST}"], "warnings": []}
@@ -155,14 +160,21 @@ def resolve_all(records: List[Dict[str, Any]], *, write: bool) -> Dict[str, Any]
     index = build_ingredient_index()
     known = {str(p.stem) for p in BLOBS_DIR.glob("*.json")}
     warnings: List[str] = []
+    errors: List[str] = []
 
     for record in records:
+        if write and record.get("status") != "draft":
+            errors.append(
+                f"{record.get('alert_id')}: only draft records may be resolved; "
+                "publish a higher revision for a changed applicability set"
+            )
+            continue
         resolved, record_warnings = resolve_scope(record, index, known)
         warnings.extend(f"{record.get('alert_id')}: {w}" for w in record_warnings)
-        record["resolved_dsld_ids"] = resolved
-        record["catalog_snapshot_version"] = snapshot
 
         if write:
+            record["resolved_dsld_ids"] = resolved
+            record["catalog_snapshot_version"] = snapshot
             path = record.get("_source_path")
             if not path:
                 continue
@@ -172,8 +184,8 @@ def resolve_all(records: List[Dict[str, Any]], *, write: bool) -> Dict[str, Any]
                 handle.write("\n")
 
     return {
-        "ok": True,
-        "errors": [],
+        "ok": not errors,
+        "errors": errors,
         "warnings": warnings,
         "snapshot": snapshot,
         "indexed_ingredients": len(index),
@@ -188,7 +200,13 @@ def build_feed(records: List[Dict[str, Any]], today: str) -> Dict[str, Any]:
     alert's own signal. It must never clear a catalog BLOCKED verdict; the two
     lanes do not clear each other.
     """
-    latest = latest_revisions(records)
+    # A human may prepare a newer draft while the current published revision is
+    # still live. Drafts are not delivery state and must never hide that record.
+    latest = latest_revisions(
+        record
+        for record in records
+        if record.get("status") in {"published", "retracted"}
+    )
     published = [
         {k: v for k, v in record.items() if not k.startswith("_")}
         for record in latest.values()
@@ -216,24 +234,51 @@ def stage(records: List[Dict[str, Any]], today: str, dist_dir: Path = DIST_DIR) 
     # Atomic: write beside, then replace. A partially written feed must never be
     # readable, because a client that reads one would fail its checksum and drop
     # back to last-known-good for no reason.
-    tmp = feed_path.with_suffix(".json.tmp")
-    tmp.write_text(payload, encoding="utf-8")
-    tmp.replace(feed_path)
+    latest = latest_revisions(
+        record
+        for record in records
+        if record.get("status") in {"published", "retracted"}
+    )
+    retired_alerts = {
+        alert_id: record["revision"]
+        for alert_id, record in latest.items()
+        if record.get("status") == "retracted" or not is_active(record, today)
+    }
 
     manifest = {
         "schema_version": SCHEMA_VERSION,
         "feed_version": today,
         "checksum": f"sha256:{digest}",
         "alert_count": feed["alert_count"],
-        "catalog_snapshot_version": catalog_snapshot_version(),
-        # Clients ignore a revision they have already applied, and never apply a
-        # lower one. Shipping the map lets them decide without parsing the feed.
-        "latest_revisions": {a["alert_id"]: a["revision"] for a in feed["alerts"]},
+        # Every alert carries the snapshot it was resolved against.  Derive the
+        # manifest summary from those frozen records rather than rereading a
+        # mutable dist/export_manifest.json during staging.
+        "catalog_snapshot_versions": sorted(
+            {
+                str(record["catalog_snapshot_version"])
+                for record in latest.values()
+            }
+        ),
+        # Clients ignore revisions they have already applied and never apply a
+        # lower one. Retractions/expiry remain visible here as tombstones, even
+        # though their authored copy is absent from the active feed.
+        "latest_revisions": {
+            alert_id: record["revision"] for alert_id, record in latest.items()
+        },
+        "retired_alerts": retired_alerts,
     }
-    manifest_path.write_text(
+    feed_tmp = feed_path.with_suffix(".json.tmp")
+    manifest_tmp = manifest_path.with_suffix(".json.tmp")
+    feed_tmp.write_text(payload, encoding="utf-8")
+    manifest_tmp.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
         encoding="utf-8",
     )
+    # Publish the manifest last. A client that sees the new feed with the old
+    # manifest rejects it and retains last-known-good; it can never accept a
+    # partial feed under the new checksum.
+    feed_tmp.replace(feed_path)
+    manifest_tmp.replace(manifest_path)
     return {"feed": str(feed_path), "manifest": str(manifest_path), **manifest}
 
 
@@ -251,7 +296,7 @@ def main() -> int:
     records = load_alert_records()
     print(f"[safety-alerts] {len(records)} record(s) in {ALERTS_DIR}")
 
-    if args.resolve or args.stage:
+    if args.resolve:
         outcome = resolve_all(records, write=args.resolve)
         if not outcome["ok"]:
             for message in outcome["errors"]:
@@ -287,7 +332,10 @@ def main() -> int:
         print(f"[safety-alerts] staged -> {staged['feed']}")
         print(f"[safety-alerts]   alerts   = {staged['alert_count']}")
         print(f"[safety-alerts]   checksum = {staged['checksum']}")
-        print(f"[safety-alerts]   catalog  = {staged['catalog_snapshot_version']}")
+        print(
+            "[safety-alerts]   catalogs = "
+            f"{', '.join(staged['catalog_snapshot_versions'])}"
+        )
 
     return 0
 
