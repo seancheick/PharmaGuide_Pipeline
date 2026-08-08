@@ -1029,6 +1029,57 @@ def _fetch_all_sources(date_start: str, date_end: str,
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
+def _propose_alert_drafts(records: list, db: dict) -> dict:
+    """Prepare DRAFT fast-lane alerts from classified records.
+
+    Identity is verified against the SHIPPED catalog, never guessed. When no
+    canonical id resolves, the event surfaces as a candidate for a human rather
+    than a draft that would apply to zero products while looking complete.
+    """
+    from datetime import datetime as _dt
+
+    try:
+        from build_safety_alerts import BLOBS_DIR, build_ingredient_index, load_alert_records
+        from fda_alert_drafts import index_banned_entries, propose_drafts
+    except ImportError as exc:  # pragma: no cover - defensive
+        return {"error": f"alert drafting unavailable: {exc}"}
+
+    if not BLOBS_DIR.exists():
+        # Without a built catalog there is nothing to verify identities against,
+        # and proposing unverified scopes is exactly what this must not do.
+        return {
+            "error": (
+                f"no catalog blobs at {BLOBS_DIR} — build the catalog first; "
+                "identities cannot be verified without one"
+            )
+        }
+
+    catalog_index = build_ingredient_index()
+    banned_index = index_banned_entries(db.get("ingredients", []))
+    existing_ids = [r.get("alert_id") for r in load_alert_records()]
+    today = _dt.now().strftime("%Y-%m-%d")
+
+    out = propose_drafts(
+        records,
+        catalog_index,
+        banned_index,
+        existing_alert_ids=existing_ids,
+        today=today,
+        year=_dt.now().year,
+    )
+    out["catalog_identities_indexed"] = len(catalog_index)
+    out["instructions"] = (
+        "DRAFTS ARE NOT PUBLISHED. Copy a draft into scripts/data/safety_alerts/"
+        "SA_YYYY_NNNN.json, verify identity and scope against the primary source, "
+        "replace the placeholder headline/body/action with consumer copy, then run "
+        "build_safety_alerts.py --resolve. Entries under "
+        "candidates_needing_identity have NO catalog identity yet — supply a "
+        "canonical id the catalog actually uses (see display_ingredients[]."
+        "canonical_id on an affected product). Never scope on a name."
+    )
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="FDA Weekly Sync - generates a multi-source regulatory review report"
@@ -1039,6 +1090,9 @@ def main():
                         help="Output report path")
     parser.add_argument("--api-key", type=str, default=OPENFDA_API_KEY,
                         help="openFDA API key (or set OPENFDA_API_KEY)")
+    parser.add_argument("--draft-alerts", action="store_true",
+                        help="propose DRAFT safety alerts for the fast lane "
+                             "(report only — never writes alert records)")
     args = parser.parse_args()
 
     today_str = datetime.now().strftime("%Y%m%d")
@@ -1076,6 +1130,14 @@ def main():
     )
     stale_recalls = check_stale_recalls(db)
 
+    # ── 4b. Propose DRAFT safety alerts (opt-in) ─────────────────────────────
+    # Report only. Like every other output of this script, it authorizes no
+    # write: a human copies a draft into scripts/data/safety_alerts/ after
+    # verifying identity and writing consumer copy.
+    alert_drafts: dict = {}
+    if args.draft_alerts:
+        alert_drafts = _propose_alert_drafts(new_records + tracked_records, db)
+
     # ── 5. Build report ───────────────────────────────────────────────────────
 
     report = {
@@ -1106,6 +1168,9 @@ def main():
         "new_records_requiring_review": new_records,
         "records_for_tracked_substances": tracked_records,
         "stale_recalls_to_verify": stale_recalls,
+        # Present only with --draft-alerts. Proposals, not records: nothing here
+        # is published, and nothing here has been written to disk.
+        "proposed_safety_alerts": alert_drafts,
         "review_instructions": (
             "Review 'new_records_requiring_review'. Each entry has a 'primary_category' that maps "
             "to a source_category in banned_recalled_ingredients.json and 'signal_categories' listing "
@@ -1135,6 +1200,14 @@ def main():
             print(f"    {cat:<40} {count}")
     if source_counts.get("duplicates_removed"):
         print(f"  Duplicates removed       : {source_counts['duplicates_removed']}")
+    if args.draft_alerts:
+        if alert_drafts.get("error"):
+            print(f"  ⚠️  Alert drafting       : {alert_drafts['error']}")
+        else:
+            drafts = alert_drafts.get("drafts") or []
+            candidates = alert_drafts.get("candidates_needing_identity") or []
+            print(f"  Draft alerts proposed    : {len(drafts)} (NOT published, NOT written)")
+            print(f"  Needing a canonical id   : {len(candidates)}")
     print(f"  Report saved             : {output_path}")
     wada_warning = check_wada_staleness()
     if wada_warning:
