@@ -1,0 +1,34 @@
+{
+  "_comment": "Copy to SA_YYYY_NNNN.json and fill in. Files starting with _ are ignored by the publisher. See README.md — especially: records are immutable per (alert_id, revision), fda_class is conditional, lots are display-only, and resolved_dsld_ids is the signed applicability set, not just push targeting.",
+
+  "alert_id": "SA_2026_0000",
+  "revision": 1,
+  "event_type": "ingredient_ban",
+  "status": "draft",
+
+  "authority": "FDA",
+  "source_url": "https://www.fda.gov/...",
+  "evidence_verified_at": "YYYY-MM-DD",
+  "fda_class": null,
+
+  "jurisdiction": "US",
+  "effective_date": "YYYY-MM-DD",
+  "published_at": null,
+
+  "scope": {
+    "ingredient_canonical_ids": [],
+    "dsld_ids": []
+  },
+
+  "resolved_dsld_ids": [],
+  "catalog_snapshot_version": null,
+
+  "lots": null,
+
+  "headline": "",
+  "body": "",
+  "action": "",
+
+  "expires_at": null,
+  "retracted": false
+}

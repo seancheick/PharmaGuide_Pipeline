@@ -288,16 +288,53 @@ The cap is applied in [scripts/score_supplements.py](../../scripts/score_supplem
 - Set to `null` for new entries. After adding, run `python scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply` to populate CUIs automatically via the UMLS API.
 
 #### `status` → B0 scoring impact
-| status | B0 outcome | Penalty |
-|--------|-----------|---------|
-| `banned` | `UNSAFE` — product disqualified | FAIL |
-| `recalled` | `BLOCKED` — product disqualified | FAIL |
-| `high_risk` | `CAUTION` | -10 pts |
-| `watchlist` | `CAUTION` | -5 pts |
+
+Verified against [scripts/scoring_v4/gate_safety.py](../../scripts/scoring_v4/gate_safety.py)
+`:540-565` on 2026-08-08. **The verdict also depends on match confidence** — a `token_bounded`
+(`likely`) match never hard-blocks, because a substring hit is not proof of identity.
+
+| status | confirmed match (exact/alias) | likely match (token_bounded) |
+|--------|-------------------------------|------------------------------|
+| `banned` | **`BLOCKED`** — score suppressed entirely, `blocking_reason="banned_ingredient"` | `CAUTION` + `needs_review`, signal `B0_LIKELY_BANNED_REVIEW` |
+| `recalled` | **`UNSAFE`** — score suppressed, `blocking_reason="recalled_ingredient"` | `CAUTION` + `needs_review`, signal `B0_LIKELY_RECALLED_REVIEW` |
+| `high_risk` | `CAUTION`, signal `B0_HIGH_RISK_SUBSTANCE` | same |
+| `watchlist` | `CAUTION`, signal `B0_WATCHLIST_SUBSTANCE` | same |
+
+**There is no numeric penalty for any of these.** `banned`/`recalled` null the score outright
+(`quality_score_status="suppressed_safety"`); `high_risk`/`watchlist` raise the verdict to CAUTION
+and emit a signal, costing zero points. An earlier version of this table claimed `banned → UNSAFE`,
+`recalled → BLOCKED` and −10/−5 point penalties — all three were wrong, and a curator following it
+would have mis-authored severity. `banned` is the *stronger* verdict, not the weaker one.
 
 #### `recall_scope`
+
+**It is an object, not a string.** All 30 populated entries carry the same six keys (verified
+2026-08-08). An earlier version of this doc described it as `"<Brand> <Product Name>"`; authoring a
+bare string breaks the product matcher in
+[scripts/enrich_supplements_v3.py](../../scripts/enrich_supplements_v3.py) `:10861`, which reads it
+as a dict.
+
 - `null` → ingredient-level ban (applies to ALL products containing this substance)
-- `"<Brand> <Product Name>"` → product-specific recall (ONLY that product is flagged)
+- object → product-specific recall, ONLY matching products are flagged:
+
+```json
+"recall_scope": {
+  "brand": "GE Labs Ykarine",
+  "formulations": null,
+  "lots": null,
+  "effective_from": "2025-12-02",
+  "effective_to": null,
+  "note": "FDA warning-letter enforcement for ... undeclared trendione."
+}
+```
+
+When `recall_scope` is set, the enricher disables the brand fallback and token-bounded matching so
+the entry matches product identity only — deliberately narrow, to avoid blocking a whole brand over
+one product.
+
+⚠️ **`lots` and `formulations` have ZERO code consumers today** — a grep across `scripts/**/*.py`
+returns none, and only 1 of 30 entries populates `lots`. They are documentation-only fields. Do not
+assume authoring a lot number causes any product to be matched or excluded by lot.
 
 #### `regulatory_date`
 Use the recall's `recall_initiation_date`, NOT today's date. Convert from YYYYMMDD → YYYY-MM-DD.
@@ -363,26 +400,66 @@ For each entry in `stale_recalls_to_verify`:
 
 ---
 
-### Step 9 — Post-Sync Verification
+### Step 9 — Does this need a user alert? (the fast lane)
 
-After writing all changes, prefer the repo virtualenv when present:
+Step 8 fed the **slow lane**: the catalog will carry the BLOCKED verdict, score
+suppression and search exclusion at its next rebuild. That is the right home for
+"this substance is prohibited" — but it does nothing for a user who already has
+the bottle, because the catalog is rebuilt weekly-to-monthly.
+
+If the event means *"a person holding this product should stop taking it"*, also
+draft a safety alert. See `scripts/data/safety_alerts/README.md` for the full
+contract; the essentials:
+
+1. Copy `_TEMPLATE.json` to `SA_YYYY_NNNN.json` and fill it in. Leave
+   `status: "draft"` — **you may never publish one from this workflow.**
+2. `event_type` is `ingredient_ban` or `product_recall`. They answer different
+   questions and must not share copy: a ban says *"this product contains a
+   prohibited substance"*; a recall says *"this bottle may be affected — check
+   your lot against the list."* Never *"your lot matched"* — we do not know the
+   user's lot, and `lots[]` is display-only.
+3. Scope on **verified canonical identity**, never a name. Use the ids the
+   catalog resolver already produces (`display_ingredients[].canonical_id`).
+4. Leave `resolved_dsld_ids` empty. Resolution happens at publication:
 
 ```bash
-PYTHON=.venv/bin/python
-[ -x "$PYTHON" ] || PYTHON=python
-
-# 1. Run schema tests
-"$PYTHON" -m pytest scripts/tests/test_banned_schema_v3.py -v
-
-# 2. Run cross-db overlap guard
-"$PYTHON" -m pytest scripts/tests/test_cross_db_overlap_guard.py -v
-
-# 3. Populate CUIs for new entries
-"$PYTHON" scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply
-
-# 4. Full test suite (run when environment dependencies are installed)
-"$PYTHON" -m pytest scripts/tests/ -q
+python3 scripts/build_safety_alerts.py --check     # validate the record
+python3 scripts/build_safety_alerts.py --resolve   # resolve scope against the catalog
 ```
+
+**Class I raises priority and review urgency — it does not bypass review.** FDA
+does not publish every recall to its public alert page, so automated collection
+is not sufficient publication authority. A human verifies identity, scope,
+wording and source before anything reaches a user.
+
+**Retraction does not un-block.** Retracting an alert clears only that alert's
+own signal. A catalog BLOCKED verdict survives until
+`banned_recalled_ingredients.json` changes and the catalog rebuilds.
+
+---
+
+### Step 10 — Post-Sync Verification
+
+Use `scripts/test.sh` — **never raw `pytest`.** It picks the wrong interpreter
+(macOS 3.9 rather than pyenv 3.13.3) *and* runs every heavy test, turning a
+~4-minute check into ~1 hour.
+
+```bash
+# 1. Targeted while iterating
+bash scripts/test.sh fast -k "banned or overlap or safety_alerts"
+
+# 2. Populate CUIs for new entries
+python3 scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply
+
+# 3. Full fast tier before handing off
+bash scripts/test.sh fast
+```
+
+⚠️ **Editing `banned_recalled_ingredients.json` does not by itself change the
+shipped catalog.** Confirm the release actually rebuilds — historically
+`release_full.sh` did not watch this file, so a plain run reported "safe to skip"
+and shipped the previous catalog with the ban absent. Verify the rebuild ran, or
+force it, rather than assuming the edit propagated.
 
 ---
 
@@ -416,6 +493,15 @@ PYTHON=.venv/bin/python
 - Add an entry without at least 1 `references_structured` item with a real URL
 - Permanently remove entries — only set `match_mode: historical` or `status: watchlist`
 - Guess CUI values — leave as null, let verify_cui.py populate them
+- **Publish a safety alert.** Draft only (`status: "draft"`). Publication requires a
+  human to verify identity, scope, wording and source. Class I is no exception —
+  it raises urgency, not authority
+- **Scope an alert on an ingredient name.** Only verified canonical ids the catalog
+  resolver already produces. A substring hit is not proof of identity, and an alert
+  naming the wrong product is worse than one arriving a day later
+- **Claim a lot match.** `lots[]` is display-only — we do not know which lot the user
+  holds. Say "check your bottle against these lots", never "your lot is affected"
+- Use raw `pytest` — always `bash scripts/test.sh` (wrong interpreter + the heavy suite)
 
 ---
 
