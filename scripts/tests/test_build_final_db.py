@@ -956,6 +956,21 @@ def make_enriched():
     }
 
 
+def test_detail_blob_preserves_serving_frequency_provenance():
+    enriched = make_enriched()
+    enriched["serving_basis"].update({
+        "min_servings_per_day": 1 / 7,
+        "max_servings_per_day": 1 / 7,
+        "servings_per_day_source": "directions",
+        "basis_reason": "directions_frequency",
+    })
+
+    serving_info = build_detail_blob(enriched, make_scored())["serving_info"]
+
+    assert serving_info["servings_per_day_source"] == "directions"
+    assert serving_info["basis_reason"] == "directions_frequency"
+
+
 def make_scored(verdict="SAFE"):
     pillars = {
         "formulation": {"score": 15.0, "max": 20.0},

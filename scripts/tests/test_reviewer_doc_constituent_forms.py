@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "audits" / "v4_reviewer_benchmark"))
 sys.path.insert(0, str(ROOT / "audits"))
 
-from build_review_doc import rollup  # noqa: E402
+from build_review_doc import facts, rollup  # noqa: E402
 from v4_reviewer_benchmark_freeze import (  # noqa: E402
     _direct_child_path,
     _reviewer_packet_row,
@@ -136,10 +136,32 @@ def test_float_sum_tolerance_is_unit_aware_not_absolute():
 
 def test_unit_aliases_do_not_silently_merge_distinct_scales():
     assert _rollup_unit("Gram(s)") == _rollup_unit("g") == "g"
-    assert _rollup_unit("mcg DFE") == "mcg"
+    assert _rollup_unit("microgram(s)") == _rollup_unit("mcg") == "mcg"
+    assert _rollup_unit("mcg DFE") == "mcg dfe"
+    assert _rollup_unit("mcg RAE") == "mcg rae"
+    assert _rollup_unit("mg NE") == "mg ne"
+    assert _rollup_unit("mcg DFE") != _rollup_unit("mcg")
+    assert _rollup_unit("mcg RAE") != _rollup_unit("mcg")
     assert _rollup_unit("mg") != _rollup_unit("mcg")
     # unusable units normalise to empty and disqualify a parent outright
     assert _rollup_unit("NP") == "" and _rollup_unit("unspecified") == ""
+
+
+def test_semantic_dose_bases_never_reconcile_with_plain_mass():
+    """Folate DFE and vitamin-A RAE are not aliases for literal micrograms."""
+    folate = _resolved(
+        _row("Folate", 400.0, "mcg DFE"),
+        _row("Folic acid", 200.0, "mcg", parent_index=0),
+        _row("Methylfolate", 200.0, "mcg", parent_index=0),
+    )
+    vitamin_a = _resolved(
+        _row("Vitamin A", 900.0, "mcg RAE"),
+        _row("Retinol", 450.0, "mcg", parent_index=0),
+        _row("Beta-carotene", 450.0, "mcg", parent_index=0),
+    )
+
+    assert rollup(folate) is None
+    assert rollup(vitamin_a) is None
 
 
 def test_grandchildren_are_not_counted_as_direct_parts():
@@ -171,6 +193,51 @@ def test_doc_builder_rejects_out_of_range_child_indexes():
     act = [_row("Magnesium", 135.0, "mg"), _row("Magnesium", 135.0, "mg", 0)]
     act[0]["constituent_child_indexes"] = [1, 99]
     assert rollup(act) is None
+
+
+def _reviewer_row(serving_info):
+    return {
+        "serving_info_json": json.dumps(serving_info),
+        "active_ingredients_json": "[]",
+        "inactive_ingredients_json": "[]",
+        "certification_facts_json": "{}",
+        "proprietary_blend_facts_json": "{}",
+    }
+
+
+def test_reviewer_doc_accepts_a_direction_sourced_weekly_regimen():
+    rendered, notes = facts(_reviewer_row({
+        "min_servings_per_day": 1 / 7,
+        "max_servings_per_day": 1 / 7,
+        "servings_per_day_source": "directions",
+    }))
+
+    assert "**Servings/day:** 0.143" in rendered
+    assert not any("defect" in note or "implausible" in note for note in notes)
+
+
+def test_reviewer_doc_does_not_override_a_high_label_frequency():
+    rendered, notes = facts(_reviewer_row({
+        "min_servings_per_day": 6,
+        "max_servings_per_day": 6,
+        "servings_per_day_source": "directions",
+    }))
+
+    assert "**Servings/day:** 6" in rendered
+    assert not any("implausible" in note for note in notes)
+
+
+def test_reviewer_doc_fails_closed_on_an_untrusted_fraction():
+    rendered, notes = facts(_reviewer_row({
+        "min_servings_per_day": 0.044,
+        "max_servings_per_day": 0.044,
+        "servings_per_day_source": "servingSizes",
+    }))
+
+    assert "**Servings/day:** 1" in rendered
+    assert notes == [
+        "servings-per-day provenance is not trustworthy — verify the labeled directions"
+    ]
 
 
 # --- the real corpus --------------------------------------------------------

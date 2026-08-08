@@ -54,7 +54,13 @@ def _records() -> Iterator[Tuple[str, Dict[str, Any]]]:
 
 
 def _threshold_key(
-    dsld_id: str, rule_id: Any, ingredient: Any, condition: Any, threshold: Dict[str, Any]
+    dsld_id: str,
+    rule_id: Any,
+    ingredient: Any,
+    condition: Any,
+    threshold: Dict[str, Any],
+    *,
+    ingredient_row_id: Any,
 ) -> str:
     """Stable identity for one evaluated threshold.
 
@@ -73,6 +79,7 @@ def _threshold_key(
             threshold.get("comparator"),
             threshold.get("threshold_value"),
             threshold.get("threshold_unit"),
+            ingredient_row_id,
         )
     )
 
@@ -80,7 +87,6 @@ def _threshold_key(
 def capture(out_path: str) -> None:
     products: Dict[str, Any] = {}
     thresholds: Dict[str, Any] = {}
-    contaminated: List[str] = []
     seen_paths: Dict[str, float] = {}
 
     for path, record in _records():
@@ -103,12 +109,18 @@ def capture(out_path: str) -> None:
             "batch": os.path.relpath(path, SCRIPTS_DIR),
         }
 
-        for ingredient in (record.get("ingredient_quality_data") or {}).get(
+        ingredient_rows = (record.get("ingredient_quality_data") or {}).get(
             "ingredients"
-        ) or []:
+        ) or []
+        for ingredient_index, ingredient in enumerate(ingredient_rows):
             if not isinstance(ingredient, dict):
                 continue
             name = ingredient.get("canonical_id") or ingredient.get("name")
+            row_id = (
+                ingredient.get("raw_source_path")
+                or ingredient.get("source_label_key")
+                or f"ingredient_index:{ingredient_index}"
+            )
             for hit in ingredient.get("safety_hits") or []:
                 if not isinstance(hit, dict):
                     continue
@@ -126,10 +138,12 @@ def capture(out_path: str) -> None:
                             name,
                             condition_hit.get("condition_id"),
                             threshold,
+                            ingredient_row_id=row_id,
                         )
-                        # Same key twice = the same evaluation reached by two
-                        # paths. Keep one; that is the whole point of keying.
-                        thresholds[key] = {
+                        # An identical duplicate is harmless; a conflicting one
+                        # means the identity surface is still incomplete and a
+                        # before/after comparison would be unsafe.
+                        payload = {
                             "evaluated": threshold.get("evaluated"),
                             "amount": threshold.get("computed_amount"),
                             "unit": threshold.get("computed_unit"),
@@ -139,6 +153,13 @@ def capture(out_path: str) -> None:
                             "if_met": rule.get("consumer_disposition_if_met"),
                             "if_not_met": rule.get("consumer_disposition_if_not_met"),
                         }
+                        prior = thresholds.get(key)
+                        if prior is not None and prior != payload:
+                            raise RuntimeError(
+                                "serving-frequency audit key collision for "
+                                f"{key!r}; distinct evaluations cannot be compared safely"
+                            )
+                        thresholds[key] = payload
 
     snapshot = {
         "_meta": {

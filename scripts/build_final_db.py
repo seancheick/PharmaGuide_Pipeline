@@ -65,7 +65,10 @@ from identity.interaction import (
     normalize_catalog_interaction_tag,
 )
 from scoring_input_contract import get_scoring_ingredients
-from serving_frequency import resolve_daily_serving_multiplier
+from serving_frequency import (
+    format_daily_frequency,
+    resolve_daily_serving_multiplier,
+)
 from identity_integrity import is_identity_scoreable
 from label_record_contract import build_label_record_contract
 from scoring_v4.modules.fiber_digestive_helpers import (
@@ -7094,6 +7097,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "basis_unit": serving.get("basis_unit"),
             "min_servings_per_day": serving.get("min_servings_per_day"),
             "max_servings_per_day": serving.get("max_servings_per_day"),
+            "servings_per_day_source": serving.get("servings_per_day_source"),
+            "basis_reason": serving.get("basis_reason"),
         },
         "manufacturer_detail": {
             "brand_name": safe_str(enriched.get("brand_name") or enriched.get("brandName")),
@@ -9037,25 +9042,6 @@ def _derive_serving_verb_and_noun(unit: str, form_factor: str) -> tuple[str, str
     return ("Take", "serving", "servings")
 
 
-def _frequency_phrase(max_daily: Optional[int]) -> str:
-    """Map maxDailyServings to a human cadence."""
-    if max_daily is None:
-        return "daily"
-    try:
-        n = int(max_daily)
-    except (TypeError, ValueError):
-        return "daily"
-    if n <= 1:
-        return "daily"
-    if n == 2:
-        return "twice daily"
-    if n == 3:
-        return "three times daily"
-    if n == 4:
-        return "four times daily"
-    return f"{n} times daily"
-
-
 def generate_dosing_summary(enriched: Dict) -> Dict:
     """Generate user-friendly dosing summary and servings per container.
 
@@ -9119,12 +9105,12 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
         elif min_qty == max_qty:
             qty_text = _format_quantity(min_qty)
             noun = noun_singular if min_qty == 1 else noun_plural
-            cadence = _frequency_phrase(max_daily)
+            cadence = format_daily_frequency(max_daily)
             summary = f"{verb} {qty_text} {noun} {cadence}".strip()
         else:
             qty_text = f"{_format_quantity(min_qty)}-{_format_quantity(max_qty)}"
             noun = noun_plural
-            cadence = _frequency_phrase(max_daily)
+            cadence = format_daily_frequency(max_daily)
             summary = f"{verb} {qty_text} {noun} {cadence}".strip()
 
     # Limit length defensively.

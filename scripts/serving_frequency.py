@@ -5,6 +5,8 @@ pipeline stages:
 
   enrich_supplements_v3._collect_interaction_profile  (per-day dose thresholds)
   scoring_v4.modules.generic_helpers.daily_serving_range  (v4 dimension scorers)
+  build_final_db.generate_dosing_summary  (consumer cadence copy)
+  audits/v4_reviewer_benchmark/build_review_doc.py  (reviewer dose facts)
 
 This is a leaf: it imports nothing from either stage, so enrichment does not
 depend on scoring and the dependency arrow stays pointed the way the pipeline
@@ -22,9 +24,14 @@ them removes the drift surface, not just the defect.
 
 from __future__ import annotations
 
+import math
 from typing import Any, Dict, Optional, Tuple
 
-__all__ = ["resolve_daily_serving_range", "resolve_daily_serving_multiplier"]
+__all__ = [
+    "format_daily_frequency",
+    "resolve_daily_serving_range",
+    "resolve_daily_serving_multiplier",
+]
 
 # Provenance values the enricher writes into serving_basis.servings_per_day_source.
 SOURCE_DIRECTIONS = "directions"
@@ -38,7 +45,7 @@ def _positive_float(value: Any) -> Optional[float]:
         number = float(value)
     except (TypeError, ValueError):
         return None
-    return number if number > 0 else None
+    return number if math.isfinite(number) and number > 0 else None
 
 
 def _ordered_pair(low: Any, high: Any) -> Optional[Tuple[float, float]]:
@@ -147,3 +154,30 @@ def resolve_daily_serving_multiplier(record: Dict[str, Any]) -> float:
     against.
     """
     return resolve_daily_serving_range(record)[1]
+
+
+def format_daily_frequency(servings_per_day: Any) -> str:
+    """Render a resolved daily frequency without flattening fractional regimens."""
+    count = _positive_float(servings_per_day)
+    if count is None:
+        return "daily"
+    if math.isclose(count, 1.0):
+        return "daily"
+    if count < 1.0:
+        interval = 1.0 / count
+        rounded_interval = round(interval)
+        if math.isclose(interval, rounded_interval, rel_tol=1e-6, abs_tol=1e-6):
+            if rounded_interval == 2:
+                return "every other day"
+            if rounded_interval == 7:
+                return "weekly"
+            return f"every {rounded_interval} days"
+        return "on the labeled schedule"
+    if math.isclose(count, 2.0):
+        return "twice daily"
+    if math.isclose(count, 3.0):
+        return "three times daily"
+    if math.isclose(count, 4.0):
+        return "four times daily"
+    formatted = f"{count:g}"
+    return f"{formatted} times daily"

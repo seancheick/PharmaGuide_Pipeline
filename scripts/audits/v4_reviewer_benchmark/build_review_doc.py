@@ -21,6 +21,12 @@ import argparse
 import csv
 import json
 from pathlib import Path
+import sys
+
+SCRIPTS_DIR = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(SCRIPTS_DIR))
+
+from serving_frequency import resolve_daily_serving_range  # noqa: E402
 
 FREEZE = (Path(__file__).resolve().parents[2]
           / "reports" / "v4_reviewer_benchmark_2026_08_06_v6")
@@ -131,16 +137,17 @@ several ingredients whose amounts happen to sum to another are not related.
 Our extraction is imperfect. Where a product is affected you'll see a
 **`⚠ DATA NOTE`** right in its block. Across your {n} products: **{zero} have an
 ingredient quantity of 0**, **{nounit} have an ingredient with no unit**, and
-**{sub1} show a servings-per-day below 1** (one is 0.044 — plainly wrong).
+**{serving_untrusted} have a serving frequency whose provenance is not
+trustworthy enough to use**.
 
 For any of these: set `LABEL ENOUGH?: no`, mention it in `WHY:` if you like, and
 move on. **Don't put them in `ODD:`** — that field excludes the product from the
 analysis, and these are our defects, not protocol breaches.
 
 **Which serving to dose against:** normally the **maximum** labeled daily
-serving. But for the {sub1} products flagged with a broken frequency, **assume
-1 serving per day** and set confidence `low` — that rule wins even if the
-product also shows a range.
+serving. For products whose frequency is flagged as untrusted, verify the
+directions yourself; if you cannot, assume 1 serving per day and set confidence
+`low`.
 
 ## Conflicts of interest
 
@@ -246,13 +253,15 @@ def facts(row):
     s = jload(row.get("serving_info_json"), {})
     mn, mx = s.get("min_servings_per_day"), s.get("max_servings_per_day")
     if mn is not None or mx is not None:
+        resolved_min, resolved_max, defaulted = resolve_daily_serving_range(
+            {"serving_info": s}
+        )
         cl = lambda v: None if v is None else (int(v) if float(v) == int(float(v)) else round(float(v), 3))
-        a, b = cl(mn), cl(mx)
-        if any(v is not None and v < 1 for v in (a, b)):
-            notes.append("servings-per-day below 1 is our defect — assume **1 serving/day**")
-        elif any(v is not None and v > 4 for v in (a, b)):
-            notes.append(f"servings-per-day of {b} looks implausible and may be our "
-                         "extraction defect — sanity-check against the labeled directions")
+        a, b = cl(resolved_min), cl(resolved_max)
+        if defaulted:
+            notes.append(
+                "servings-per-day provenance is not trustworthy — verify the labeled directions"
+            )
         L.append(f"**Servings/day:** {a if a == b else f'{a}–{b}'}")
 
     act = jload(row.get("active_ingredients_json"), [])
@@ -335,7 +344,7 @@ def main() -> int:
                    if r["reviewer_slot"] == a.slot), key=lambda r: int(r["reviewer_order"]))
     assert len(resp) == 120, len(resp)
 
-    blocks, st = [], {"zero": 0, "nounit": 0, "sub1": 0}
+    blocks, st = [], {"zero": 0, "nounit": 0, "serving_untrusted": 0}
     rollups = 0
     for i, r in enumerate(resp, 1):
         row = packet[r["benchmark_id"]]
@@ -345,8 +354,8 @@ def main() -> int:
                 st["zero"] += 1
             elif "no unit" in n:
                 st["nounit"] += 1
-            elif "below 1" in n:
-                st["sub1"] += 1
+            elif "servings-per-day provenance" in n:
+                st["serving_untrusted"] += 1
             elif "is the TOTAL" in n:
                 rollups += 1
         nt = ("\n\n> **⚠ DATA NOTE** — " + "; ".join(notes)) if notes else ""

@@ -38,6 +38,7 @@ from scoring_v4.modules.generic_helpers import (  # noqa: E402
 )
 from scoring_v4.modules.generic_evidence import _dose_map  # noqa: E402
 from scoring_v4.modules.omega_dose import _extract_daily_servings  # noqa: E402
+from serving_frequency import format_daily_frequency  # noqa: E402
 from scoring_v4.modules.immune_support import immune_active_doses  # noqa: E402
 from scoring_v4.modules.joint_support import joint_active_doses  # noqa: E402
 from scoring_v4.modules.sleep_support import (  # noqa: E402
@@ -367,8 +368,42 @@ def test_non_numeric_values_never_become_a_multiplier(bad: Any) -> None:
     assert daily_serving_multiplier(product) == pytest.approx(1.0)
 
 
+@pytest.mark.parametrize(
+    "bad",
+    [float("nan"), float("inf"), float("-inf"), "nan", "inf", "-inf", "1e10000"],
+)
+def test_non_finite_values_never_become_a_multiplier(bad: Any) -> None:
+    """JSON-adjacent numeric input must never propagate NaN or infinity."""
+    product = {
+        "serving_basis": {
+            "max_servings_per_day": bad,
+            "min_servings_per_day": bad,
+            "servings_per_day_source": "directions",
+        }
+    }
+
+    assert daily_serving_multiplier(product) == pytest.approx(1.0)
+
+
 def test_numeric_strings_are_coerced() -> None:
     """Enriched JSON carries some quantities as strings; they are still counts."""
     product = {"serving_basis": {"max_servings_per_day": "2", "min_servings_per_day": "2"}}
 
     assert daily_serving_multiplier(product) == pytest.approx(2.0)
+
+
+@pytest.mark.parametrize(
+    ("servings_per_day", "expected"),
+    [
+        (0.5, "every other day"),
+        (1 / 3, "every 3 days"),
+        (1 / 7, "weekly"),
+        (1.0, "daily"),
+        (2.0, "twice daily"),
+    ],
+)
+def test_daily_frequency_copy_preserves_fractional_regimens(
+    servings_per_day: float,
+    expected: str,
+) -> None:
+    assert format_daily_frequency(servings_per_day) == expected

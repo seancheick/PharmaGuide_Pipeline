@@ -523,8 +523,9 @@ def _direct_child_path(child_path: str, parent_path: str) -> bool:
 
 _ROLLUP_UNIT_ALIAS = {
     "gram(s)": "g", "grams": "g", "gram": "g",
-    "milligram(s)": "mg", "microgram(s)": "mcg",
-    "mcg dfe": "mcg", "mcg rae": "mcg", "mcg ne": "mcg", "ug": "mcg",
+    "milligram(s)": "mg", "milligrams": "mg", "milligram": "mg",
+    "microgram(s)": "mcg",
+    "micrograms": "mcg", "microgram": "mcg", "ug": "mcg", "µg": "mcg",
     "np": "", "unspecified": "",
 }
 
