@@ -81,20 +81,31 @@ def load_alert_records(alerts_dir: Path = ALERTS_DIR) -> List[Dict[str, Any]]:
     return records
 
 
-def catalog_snapshot_version(manifest_path: Path = CATALOG_MANIFEST) -> Optional[str]:
-    """The db_version the resolution is pinned to."""
+def catalog_snapshot_version(manifest_path: Optional[Path] = None) -> Optional[str]:
+    """The db_version the resolution is pinned to.
+
+    The default is resolved at CALL time, not bound at import. A default of
+    ``= CATALOG_MANIFEST`` captures the path when the module loads, which
+    silently defeats ``monkeypatch.setattr(publisher, "CATALOG_MANIFEST", ...)``
+    — the immutability test then read the real scripts/dist and passed only
+    because one happened to exist, rather than because the code was correct.
+    """
+    manifest_path = manifest_path or CATALOG_MANIFEST
     if not manifest_path.exists():
         return None
     with open(manifest_path, "r", encoding="utf-8") as handle:
         return json.load(handle).get("db_version")
 
 
-def build_ingredient_index(blobs_dir: Path = BLOBS_DIR) -> Dict[str, Set[str]]:
+def build_ingredient_index(blobs_dir: Optional[Path] = None) -> Dict[str, Set[str]]:
     """canonical_id -> {dsld_id}, from the shipped blobs' complete ingredient list.
 
     Reads `display_ingredients` rather than `ingredients`, because the latter
     excludes demoted rows. See the module docstring.
+
+    Late-bound default, for the same reason as `catalog_snapshot_version`.
     """
+    blobs_dir = blobs_dir or BLOBS_DIR
     index: Dict[str, Set[str]] = defaultdict(set)
     for path in blobs_dir.glob("*.json"):
         try:
