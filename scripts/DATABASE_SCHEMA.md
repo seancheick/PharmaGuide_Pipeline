@@ -142,7 +142,7 @@ Primary key: `allergens` (array)
 ---
 
 ### 3. backed_clinical_studies.json
-**Purpose:** `evidence_scoring` | **Entries:** 197
+**Purpose:** `evidence_scoring` | **Entries:** read `_metadata.total_entries`
 
 Primary key: `backed_clinical_studies` (array)
 
@@ -159,6 +159,9 @@ Primary key: `backed_clinical_studies` (array)
 | `published_rct_count` | int | NO | Curated count of published randomized human trials when known |
 | `published_meta_review_count` | int | NO | Curated count of published systematic reviews / meta-analyses when known |
 | `registry_completed_trials_count` | int | NO | ClinicalTrials.gov completed-trial count captured by discovery/enrichment tooling |
+| `min_clinical_dose` | number | NO | Lowest reviewed daily dose used for dose-scope assessment; meaningful only with `dose_unit` |
+| `max_studied_clinical_dose` | number | NO | Highest reviewed daily dose used for supra-clinical audit flags; meaningful only with `dose_unit` |
+| `dose_unit` | string | NO | Unit shared by the reviewed clinical-dose bounds |
 | `score_contribution` | string | YES | Scoring tier: `tier_1` (≥3.0 pts), `tier_2` (≥1.5 pts), `tier_3` (<1.5 pts) |
 | `key_endpoints` | string[] | YES | Primary measured outcomes with PMID citations (e.g., `"Reduced LDL by 15% (PMID: 12345678)"`) |
 | `health_goals_supported` | string[] | YES | Mapped health goals |
@@ -175,6 +178,7 @@ Primary key: `backed_clinical_studies` (array)
 | `exclude_aliases` | string[] | NO | Explicitly denied aliases for matching safety |
 | `exclude_alias_match_mode` | string | NO | Optional deny-list matching mode. `bounded_phrase` blocks an excluded identity embedded in a longer branded/form label; omitted means exact alias matching. |
 | `evidence_group_id` | string | NO | Shared scoring identity for multiple evidence records about the same active ingredient; prevents brand and generic records from creating false multi-ingredient breadth. |
+| `aggregate_canonical_ids` | string[] | NO | Complete set of disclosed canonical ingredient identities required for one aggregate evidence record. Enrichment emits the record once only when the full set is present; scoring sums their convertible daily doses and declines dose-scope credit when any required component is missing. |
 
 Clinical evidence notes:
 - Clinical entries require source-backed `key_endpoints`; read `_metadata.total_entries` rather than copying a drifting count into documentation.
@@ -183,6 +187,7 @@ Clinical evidence notes:
 - `published_studies_count` is the dedicated numeric field for Section C depth bonus. Entries without a reliable count omit it; scoring does not infer counts from the human-readable `published_studies` tags.
 - `registry_completed_trials_count` is discovery/enrichment metadata, not a substitute for published study counts. Keep it separate from `published_studies_count`.
 - `effect_direction_rationale`, `effect_direction_confidence`, and `endpoint_relevance_tags` are auditability fields. They improve reviewability and operator trust; they are not direct scoring inputs in the current model.
+- `aggregate_canonical_ids` is a narrow mixture-evidence contract, not an alias list. A standalone component must never borrow evidence for the required mixture, and broader formulas require their own reviewed routing rule.
 - Auto-discovery (`discover_clinical_evidence.py discover --apply`) now auto-populates `key_endpoints` from ClinicalTrials.gov primary outcome measures with PubMed PMID cross-references via E-utilities.
 - `study_type` should use repo-native buckets: `rct_single`, `rct_multiple`, `systematic_review_meta`, `observational`, `clinical_strain`, `animal_study`, `in_vitro`.
 - `score_contribution` tier is computed from `study_base_points(study_type) * evidence_multiplier(evidence_level)`: tier_1 ≥ 3.0, tier_2 ≥ 1.5, tier_3 < 1.5.

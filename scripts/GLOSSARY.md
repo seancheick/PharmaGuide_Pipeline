@@ -1,6 +1,6 @@
 # PharmaGuide Glossary
 
-> Last verified against executable code: 2026-07-16
+> Last verified against executable code: 2026-08-08
 
 This is the canonical vocabulary for pipeline, enrichment, scoring, release,
 tests, and operator communication. Add a term here before introducing a new
@@ -104,6 +104,7 @@ contract name elsewhere.
 | **Reviewer registry** | The access-controlled record of reviewer identity, fixed slot, credentials, license verification, experience, conflicts, training, and attestations. Reviewer identities never enter the shareable product packet. |
 | **Response lock** | A content-hashed declaration that the reviewer registry and append-only response file are complete before the development baseline key may be opened. |
 | **Candidate lock** | The statistician- and clinical-owner-approved, content-hashed list of calibration candidates, mechanistic rationale, and expected direction frozen before the sealed holdout may be opened. |
+| **Aggregate clinical evidence identity** | One clinical-evidence record scoped to a required set of disclosed canonical ingredients rather than any one component. Enrichment emits it once only when the complete identity set is present; scoring sums convertible daily component doses and fails closed when a required component or unit is missing. |
 | **Router** | `scoring_v4/router.py`, the sole authority for v4 module dispatch. |
 | **Safety suppression** | BLOCKED/UNSAFE products retain verdict/evidence but ship a null public score with `quality_score_status=suppressed_safety`. |
 | **Completeness exclusion** | Products without usable identity/payload become `NOT_SCORED` and are quarantined from the live catalog. Missing disclosure can instead remain scoreable as explicit soft debt. |
@@ -118,6 +119,7 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 |---|---|
 | **Adequacy exposure** | Minimum/recommended daily exposure (`per_day_min`) used for adequacy. |
 | **Safety exposure** | Maximum daily exposure (`per_day_max`) used for UL and other safety comparisons. |
+| **Daily serving resolver** | `serving_frequency.py`, the sole policy for converting label serving directions and their provenance into a daily range. Scoring, interaction thresholds, reviewer facts, audits, and consumer cadence copy delegate to it. |
 | **UL exposure basis** | Typed evidence describing what a label dose measures for UL comparison: a declared nutrient amount, a compound/form mass, or an unresolved amount. This field owns `ul_gate_eligible`; Daily Value presence is one source of evidence, not a universal proxy. |
 | **UL-scoped form substance amount** | A label amount tied by direct UNII identity to a nutrient form explicitly listed by the reference as subject to that nutrient's UL. Unlisted derivatives and carrier compounds do not qualify. |
 | **Reference profile** | Named adult-neutral compatibility profile emitted alongside `data_by_group`; it is not a claim that one demographic fits everyone. |
