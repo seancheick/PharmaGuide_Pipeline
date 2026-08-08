@@ -21,11 +21,13 @@
     },
     "consumer_copy_review": {
       "fields": ["group_label", "commonly_used_for"],
-      "status": "pending_clinician_review",
+      "status": "approved",
       "reviewer": "Dr Pham",
       "authored": "2026-08-08",
+      "approved": "2026-08-08",
+      "review_outcome": "Round 1 (2026-08-08): 16 approved as authored, 14 approved_with_wording_change, 0 requires_revision. The 14 wording changes were applied and the packet regenerated; approval is against that revised copy.",
       "review_sources": "MedlinePlus consumer monographs; FDA Established Pharmacologic Class labels",
-      "note": "Do NOT repin the Flutter asset (assets/data/drug_class_vocab.json) until status=approved. These strings render verbatim in the medication details sheet."
+      "note": "APPROVED — these strings render verbatim in the medication details sheet. Any later edit to group_label or commonly_used_for invalidates this sign-off: reset status to pending_clinician_review and regenerate the packet (scripts/audits/drug_class_consumer_copy_v1_1/regenerate_packet.py) before repinning the Flutter asset again."
     },
     "char_limit_notes": 200
   },

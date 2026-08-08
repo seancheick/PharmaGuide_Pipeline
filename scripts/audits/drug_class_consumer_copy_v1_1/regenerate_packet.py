@@ -46,14 +46,26 @@ def build(vocab: dict, digest: str) -> str:
     revised_n = len(REVISED)
     approved_n = len(classes) - revised_n
 
+    approved = review["status"] == "approved"
+    reviewer = review["reviewer"]
+
     lines = [
         "# Drug-class consumer-copy review packet (vocab v1.1.0)",
         "",
-        "Revision: **2 — clinician wording changes applied, awaiting sign-off on this revised copy**",
+        "Revision: **2 — clinician wording changes applied"
+        + (", signed**" if approved else ", awaiting sign-off on this revised copy**"),
         "",
-        f"Status: **{review['status']}** — the {revised_n} revised strings below are the wording Dr Pham "
-        "specified in review round 1 (2026-08-08). Nothing ships to the app until this revision is signed "
-        "and `_metadata.consumer_copy_review.status` is set to `approved`.",
+        f"Status: **{review['status']}** — "
+        + (
+            f"{reviewer} approved this revised copy on {review.get('approved', 'n/a')}. "
+            "The strings below are cleared to render verbatim in the app. Any later edit to "
+            "`group_label` or `commonly_used_for` invalidates the sign-off: reset the status and "
+            "regenerate this packet before repinning the Flutter asset."
+            if approved
+            else f"the {revised_n} revised strings below are the wording {reviewer} specified in "
+            "review round 1 (2026-08-08). Nothing ships to the app until this revision is signed "
+            "and `_metadata.consumer_copy_review.status` is set to `approved`."
+        ),
         "",
         "Scope: **two sheet-facing fields on all 30 drug-class entries: `group_label` + `commonly_used_for`.** "
         "Existing `name`/`notes`/`examples` copy is NOT part of this review (unchanged, previously approved "
@@ -116,25 +128,38 @@ def build(vocab: dict, digest: str) -> str:
             lines.append("- Disposition: approved as authored (round 1)")
         lines.append("")
 
-    lines.extend(
-        [
-            "---",
-            "",
-            "## Sign-off",
-            "",
-            "Reviewer: ______________________  Date: ____________",
-            "",
-            "By signing, the `group_label` + `commonly_used_for` layer at the content hash above is approved "
-            "to render verbatim in the app.",
-            "",
-            "After sign-off: set `_metadata.consumer_copy_review.status` to `approved` in "
-            "`scripts/data/drug_class_vocab.json`, then repin the Flutter asset "
-            "(`assets/data/drug_class_vocab.json`) and update the app drift-test metadata lock in the same "
-            "commit. The app parser already tolerates the fields' absence, so the app render slot stays "
-            "dormant until the repin.",
-            "",
-        ]
-    )
+    lines.extend(["---", "", "## Sign-off", ""])
+    if approved:
+        lines.extend(
+            [
+                f"Reviewer: **{reviewer}**  Date: **{review.get('approved', 'n/a')}**",
+                "",
+                "The `group_label` + `commonly_used_for` layer at the content hash above is approved to "
+                "render verbatim in the app. Recorded in `_metadata.consumer_copy_review` "
+                "(`status: approved`).",
+                "",
+                "Downstream: the Flutter asset `assets/data/drug_class_vocab.json` is repinned from this "
+                "artifact, the app drift-test metadata lock moves with it in the same commit, and the "
+                "medication details sheet renders `group_label` + `commonly_used_for` from the bundled "
+                "asset only.",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                "Reviewer: ______________________  Date: ____________",
+                "",
+                "By signing, the `group_label` + `commonly_used_for` layer at the content hash above is "
+                "approved to render verbatim in the app.",
+                "",
+                "After sign-off: set `_metadata.consumer_copy_review.status` to `approved` in "
+                "`scripts/data/drug_class_vocab.json`, then repin the Flutter asset "
+                "(`assets/data/drug_class_vocab.json`) and update the app drift-test metadata lock in the "
+                "same commit. The app parser already tolerates the fields' absence, so the app render slot "
+                "stays dormant until the repin.",
+            ]
+        )
+    lines.append("")
     return "\n".join(lines)
 
 

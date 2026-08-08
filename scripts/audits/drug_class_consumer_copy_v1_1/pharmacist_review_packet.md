@@ -1,12 +1,12 @@
 # Drug-class consumer-copy review packet (vocab v1.1.0)
 
-Revision: **2 — clinician wording changes applied, awaiting sign-off on this revised copy**
+Revision: **2 — clinician wording changes applied, signed**
 
-Status: **pending_clinician_review** — the 14 revised strings below are the wording Dr Pham specified in review round 1 (2026-08-08). Nothing ships to the app until this revision is signed and `_metadata.consumer_copy_review.status` is set to `approved`.
+Status: **approved** — Dr Pham approved this revised copy on 2026-08-08. The strings below are cleared to render verbatim in the app. Any later edit to `group_label` or `commonly_used_for` invalidates the sign-off: reset the status and regenerate this packet before repinning the Flutter asset.
 
 Scope: **two sheet-facing fields on all 30 drug-class entries: `group_label` + `commonly_used_for`.** Existing `name`/`notes`/`examples` copy is NOT part of this review (unchanged, previously approved for the profile checklist).
 
-Artifact: `scripts/data/drug_class_vocab.json`, schema `1.1.0`, content hash `sha256:b0a62a68763f89d956875d8efc443aef39687f544d387d1ed11f614fb2b31f78`. Regenerate this packet (`regenerate_packet.py`) if the file hash changes again before signing.
+Artifact: `scripts/data/drug_class_vocab.json`, schema `1.1.0`, content hash `sha256:bea5612e8f56001378e914729f00a5f9aecec0fefeca0319ebb59a94c22770ad`. Regenerate this packet (`regenerate_packet.py`) if the file hash changes again before signing.
 
 Round-1 outcome: **16 approved as authored, 14 approved_with_wording_change (all applied), 0 requires_revision.**
 
@@ -270,8 +270,8 @@ The Flutter medication details sheet (`lib/features/stack/v2/widgets/medication_
 
 ## Sign-off
 
-Reviewer: ______________________  Date: ____________
+Reviewer: **Dr Pham**  Date: **2026-08-08**
 
-By signing, the `group_label` + `commonly_used_for` layer at the content hash above is approved to render verbatim in the app.
+The `group_label` + `commonly_used_for` layer at the content hash above is approved to render verbatim in the app. Recorded in `_metadata.consumer_copy_review` (`status: approved`).
 
-After sign-off: set `_metadata.consumer_copy_review.status` to `approved` in `scripts/data/drug_class_vocab.json`, then repin the Flutter asset (`assets/data/drug_class_vocab.json`) and update the app drift-test metadata lock in the same commit. The app parser already tolerates the fields' absence, so the app render slot stays dormant until the repin.
+Downstream: the Flutter asset `assets/data/drug_class_vocab.json` is repinned from this artifact, the app drift-test metadata lock moves with it in the same commit, and the medication details sheet renders `group_label` + `commonly_used_for` from the bundled asset only.
