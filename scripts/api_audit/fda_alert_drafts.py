@@ -146,6 +146,32 @@ def _disposition_for(record: Dict[str, Any], event_type: str) -> str:
     return "block" if _is_class_i(record) else "review"
 
 
+def _candidate_for_human(
+    record: Dict[str, Any],
+    *,
+    reason: str,
+    considered: Iterable[str],
+) -> Dict[str, Any]:
+    """Return a report-only candidate; never a deliverable alert record."""
+    return {
+        "reason": reason,
+        "recall_number": record.get("recall_number"),
+        "classification": record.get("classification"),
+        "recalling_firm": record.get("recalling_firm") or "",
+        "product_description": (record.get("product_description") or "")[:300],
+        "reason_for_recall": (record.get("reason_for_recall") or "")[:300],
+        "extracted_substances": record.get("extracted_substances") or [],
+        "substances_already_tracked": record.get("substances_already_tracked") or [],
+        "identity_candidates_considered": list(dict.fromkeys(considered)),
+        "fda_source_url": record.get("fda_source_url") or "",
+        "what_a_curator_must_supply": (
+            "an exact affected product identity (DSLD id) for a product recall, or "
+            "an authoritative ingredient-level regulatory action with a catalog canonical id. Do NOT expand a "
+            "product recall to every product containing an ingredient."
+        ),
+    }
+
+
 def draft_from_record(
     record: Dict[str, Any],
     catalog_index: Dict[str, Set[str]],
@@ -173,29 +199,29 @@ def draft_from_record(
     # Preserve order, drop repeats.
     verified = list(dict.fromkeys(verified))
 
+    # The FDA enforcement and RSS feeds describe product/batch recalls. The
+    # current sync has no verified link from those records to a DSLD product or
+    # lot, so an ingredient hit cannot be expanded into a product-wide ban.
+    # Only a separately identified ingredient-level regulatory action (today,
+    # the DEA Federal Register source) may propose an ingredient-ban draft.
+    if record.get("_source_type") != "dea_federal_register":
+        return None, _candidate_for_human(
+            record,
+            reason="product recall has no verified affected product identity",
+            considered=considered,
+        )
+
     source_url = record.get("fda_source_url") or ""
     substances = record.get("extracted_substances") or []
     firm = record.get("recalling_firm") or ""
     description = record.get("product_description") or ""
 
     if not verified:
-        return None, {
-            "reason": "no catalog identity resolved for any extracted substance",
-            "recall_number": record.get("recall_number"),
-            "classification": record.get("classification"),
-            "recalling_firm": firm,
-            "product_description": description[:300],
-            "reason_for_recall": (record.get("reason_for_recall") or "")[:300],
-            "extracted_substances": substances,
-            "substances_already_tracked": record.get("substances_already_tracked") or [],
-            "identity_candidates_considered": list(dict.fromkeys(considered)),
-            "fda_source_url": source_url,
-            "what_a_curator_must_supply": (
-                "a canonical id the catalog actually uses for this substance — check "
-                "display_ingredients[].canonical_id on an affected product. Do NOT scope "
-                "on a name."
-            ),
-        }
+        return None, _candidate_for_human(
+            record,
+            reason="no catalog identity resolved for any extracted substance",
+            considered=considered,
+        )
 
     event_type = "ingredient_ban"
     disposition = _disposition_for(record, event_type)

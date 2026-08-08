@@ -59,6 +59,7 @@ def _record(**overrides):
         "extracted_substances": ["vinpocetine"],
         "substances_already_tracked": ["Vinpocetine"],
         "fda_source_url": "https://www.accessdata.fda.gov/example",
+        "_source_type": "dea_federal_register",
     }
     record.update(overrides)
     return record
@@ -175,6 +176,21 @@ class TestDisposition:
             CATALOG_INDEX, BANNED_INDEX, alert_id="SA_2026_0001", today=TODAY,
         )
         assert draft["consumer_disposition"] == "block"
+
+    def test_product_recall_never_becomes_an_ingredient_wide_ban(self):
+        """A recall applies to a product/batch, not every product sharing an
+        ingredient. Without an exact affected product identity, it must remain
+        a curator candidate even when the ingredient is catalog-resolvable.
+        """
+        draft, candidate = draft_from_record(
+            _record(_source_type="openfda_enforcement"),
+            CATALOG_INDEX,
+            BANNED_INDEX,
+            alert_id="SA_2026_0001",
+            today=TODAY,
+        )
+        assert draft is None
+        assert candidate["reason"] == "product recall has no verified affected product identity"
 
 
 class TestDraftsAreNeverPublishable:

@@ -83,6 +83,17 @@ def test_identity_contract_gate_runs_even_when_catalog_is_fresh():
         assert path in source
 
 
+def test_banned_recalled_reference_change_forces_catalog_rebuild():
+    """A safety-data edit cannot be skipped by auto-smart release freshness."""
+    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
+
+    assert 'BANNED_RECALLED_REFERENCE_SOURCE=' in source
+    assert 'scripts/data/banned_recalled_ingredients.json' in source
+    freshness_check = source.index('if is_path_newer_than "$BANNED_RECALLED_REFERENCE_SOURCE"')
+    skip_branch = source.index('return 1  # safe to skip')
+    assert freshness_check < skip_branch
+
+
 def test_storage_cleanup_verifies_the_branch_that_received_the_bundle_commit():
     source = RELEASE_SCRIPT.read_text(encoding="utf-8")
 

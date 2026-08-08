@@ -131,6 +131,7 @@ DIST_PRODUCT_IMAGE_INDEX="$DIST_PRODUCT_IMAGES_DIR/product_image_index.json"
 PRODUCTS_DIR="$REPO_ROOT/scripts/products"
 SOURCE_OF_TRUTH_AUDIT="$REPO_ROOT/scripts/audit_source_of_truth_contract.py"
 RDA_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/rda_optimal_uls.json"
+BANNED_RECALLED_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/banned_recalled_ingredients.json"
 IDENTITY_AUDIT_SCRIPT="$REPO_ROOT/scripts/audit_identity_integrity.py"
 SUBMISSION_OUTPUT_DIR="$REPO_ROOT/manual_labels/product_submissions"
 SUBMISSION_PIPELINE_PREFIX="$PRODUCTS_DIR/output_Product_Submissions"
@@ -370,6 +371,11 @@ step1_needs_run() {
   # change product UL outcomes, so it requires a catalog rebuild even when no
   # source label changed.
   if is_path_newer_than "$RDA_REFERENCE_SOURCE" "$newest_output"; then
+    return 0
+  fi
+  # A safety-reference edit can change exported product safety state without
+  # changing a source label. Never reuse a catalog built before it.
+  if is_path_newer_than "$BANNED_RECALLED_REFERENCE_SOURCE" "$newest_output"; then
     return 0
   fi
   if any_newer_input "$newest_output" "${CATALOG_BUILD_SOURCES[@]}"; then
