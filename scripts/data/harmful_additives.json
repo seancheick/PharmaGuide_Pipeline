@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-07-04",
+    "last_updated": "2026-08-07",
     "total_entries": 117,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -56,7 +56,7 @@
       "California Prop 65",
       "PubMed peer-reviewed studies (DOIs/PMIDs per entry)"
     ],
-    "last_audit": "2026-03-24",
+    "last_audit": "2026-08-07",
     "audit_notes": "Full audit session 2026-03-22. Schema v5.1: removed top-level CUI→cui, removed label_tokens/regex/exposure_context/entity_type(ingredient)/class_tags, normalized external_ids casing, standardized references_structured fields, fixed jurisdictional status_codes. Removed critical severity tier (use banned_recalled for immediate hazards). Renamed 8 BANNED_ADD_ entries to ADD_. Fixed scoring_rule to match code. 18 verified audit fixes (P0-P2): Nickel TDI, Yellow 6 mechanism, Antimony IARC 2A, Advantame CFR, Blue 1 Southampton, Erythritol EFSA ADI, sulfites ADI withdrawal, methylparaben ratio, Ace-K ADI, Tin attribution, Neotame ref, MSG EFSA ADI, nitrites IARC qualifier, hydrogenated coconut oil name, Potassium Hydroxide/Sorbitol severity. 27 wrong aliases removed (MSG nucleotides, metal stearates, polysorbate cross-matching, glycerol softgel false positives, aspartame methyl ester). 16 placeholder mechanisms replaced with verified pathways. Chromium VI migrated to banned_recalled_ingredients.json. Categories normalized from 43 to 20. All changes verified against FDA/EFSA/IARC/JECFA/NTP primary sources. 2678/2678 tests passing. 2026-03-23 harmful_additives CUI hardening: added local audit runbook/CUI policy metadata, corrected live-verified wrong CUIs, split nitrites into parent+atomic children, converted synthetic antioxidants to disabled routing parent, and annotated intentional null-CUI umbrella/proprietary entries. 2026-03-23 GSRS/UNII hardening: added local verify_unii runbook/policy metadata, curated botanical alias coverage for canola oil, and governed-null GSRS handling for proprietary or non-exact registry matches so UNII runs stay deterministic.",
     "category_enum": [
       "colorant",
@@ -5732,7 +5732,7 @@
       ],
       "category": "sweetener_sugar_alcohol",
       "notes": "A mixture of sugar alcohols (sorbitol, maltitol, hydrogenated oligosaccharides) produced by partial hydrolysis and hydrogenation of starch. Used as a sugar-free sweetener in supplements and foods. GI effects (bloating, gas, diarrhea) are the primary concern, consistent with all sugar alcohols. Low severity because effects are dose-dependent, self-limiting, and well-characterized. BOUNDARY vs ADD_MALTITOL_MALITOL (2026-08-07): 'maltitol syrup' was previously an alias here as well as on ADD_MALTITOL_MALITOL, so which entry matched a label was an artifact of index insertion order. It now belongs to ADD_MALTITOL_MALITOL, because FDA's substance registry files the syrup/solution names under the Maltitol record (UNII D65DG142WK: 'DRIED MALTITOL SYRUP', 'MALTITOL SYRUP POWDER', 'MALTITOL SOLUTION [NF]', 'HYDROGENATED HIGH MALTOSE-CONTENT GLUCOSE SYRUP'), while this mixture's own record (UNII 27F77DSJ5V) carries only 'HYDROGENATED STARCH HYDROLYSATE'. Clinically the split matters: maltitol's laxative threshold is ~10 g SINGLE DOSE versus ~20-30 g/day for a general HSH, so a maltitol-dominant syrup routed here would be judged against a threshold 2-3x too permissive. Keep this entry for HSH/hydrogenated glucose syrup that is NOT declared as maltitol.",
-      "last_updated": "2026-03-27",
+      "last_updated": "2026-08-07",
       "mechanism_of_harm": "Mixture of sugar alcohols (sorbitol, maltitol, hydrogenated oligosaccharides) that are incompletely absorbed in the small intestine. Unabsorbed portion causes osmotic water retention and bacterial fermentation in the colon, producing gas, bloating, and diarrhea. Laxative threshold ~20-30g/day depending on individual tolerance.",
       "regulatory_status": {
         "US": "FDA: GRAS for use as a sugar substitute in foods. No specific 21 CFR section for HSH (mixture classified under polyols). Requires laxative effect advisory labeling when consumption may exceed GI tolerance threshold.",
@@ -5794,9 +5794,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-27",
-        "reviewed_by": "harmful_additives_deep_audit_batch4",
-        "next_review_due": "2026-09-27",
+        "last_reviewed_at": "2026-08-07",
+        "reviewed_by": "additive_identity_routing_audit_2026_08_07",
+        "next_review_due": "2027-02-07",
         "change_log": [
           {
             "date": "2025-09-21",
@@ -6555,7 +6555,7 @@
       ],
       "category": "sweetener_sugar_alcohol",
       "notes": "Sugar alcohol sweetener (E965) with ~40% small intestine absorption. Higher glycemic index than most sugar alcohols (GI 35-52). Laxative effects documented at >10 g single dose — roughly half the threshold of sorbitol. Low severity: the GI-tolerance and glycemic effects are a nutritional/tolerance concern rather than a toxicological hazard, matching other sugar-alcohol fillers. ID note: entry ID contains legacy typo 'MALITOL'; standard_name is correct. OWNS the syrup/solution label forms (2026-08-07): 'maltitol syrup' was formerly aliased on BOTH this entry and ADD_HYDROGENATED_STARCH_HYDROLYSATE, making the match an artifact of index insertion order; it is now exclusive to this entry. FDA's substance registry files these names under the Maltitol record (UNII D65DG142WK: 'DRIED MALTITOL SYRUP', 'MALTITOL SYRUP POWDER', 'MALTITOL SOLUTION [NF]'), whereas the HSH mixture record (UNII 27F77DSJ5V) carries no maltitol name. This is also the more protective route: the ~10 g single-dose laxative threshold here is 2-3x stricter than the ~20-30 g/day used for a general HSH. A label declaring a hydrogenated glucose syrup WITHOUT naming maltitol still belongs to ADD_HYDROGENATED_STARCH_HYDROLYSATE.",
-      "last_updated": "2026-03-27",
+      "last_updated": "2026-08-07",
       "mechanism_of_harm": "Sugar alcohol (E965) partially absorbed in the small intestine (~40%). Unabsorbed portion fermented by colonic bacteria causing osmotic diarrhea. Higher glycemic index than most sugar alcohols (GI ~35-52 depending on form). Laxative effects documented at >10g single dose. JECFA ADI \"not specified\" (safe at typical use).",
       "regulatory_status": {
         "US": "FDA: GRAS for use as sugar substitute. No specific 21 CFR section for maltitol (self-affirmed GRAS). Must carry laxative advisory on label when product likely to cause laxative effects.",
@@ -6617,9 +6617,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-27",
-        "reviewed_by": "harmful_additives_deep_audit_batch4",
-        "next_review_due": "2026-09-27",
+        "last_reviewed_at": "2026-08-07",
+        "reviewed_by": "additive_identity_routing_audit_2026_08_07",
+        "next_review_due": "2027-02-07",
         "change_log": [
           {
             "date": "2025-12-04",
@@ -6676,6 +6676,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 4: CUI C0065600 verified. GSRS Maltitol (UNII D65DG142WK, CAS 585-88-6) verified. PubChem 493591 verified. Corrected regulatory_status (removed wrong 21 CFR 184.1835 — that's sorbitol). Replaced placeholder population warnings. Upgraded confidence medium->high. Populated dose_thresholds (10g/serving laxative threshold). Fixed preferred_alias. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch4"
+          },
+          {
+            "date": "2026-08-07",
+            "change": "Confirmed exclusive ownership of maltitol syrup/solution label forms against live FDA GSRS Maltitol UNII D65DG142WK; removed the competing HSH route and documented the stricter single-dose tolerance boundary.",
+            "reason": "alias_ownership_collision_resolution"
           }
         ]
       },
@@ -11203,7 +11208,7 @@
         "DOI: 10.1016/j.fct.2020.111617 - Nanoparticle toxicity",
         "DOI: 10.3390/nano12030457 - Gut microbiome effects 2024"
       ],
-      "last_updated": "2026-03-27",
+      "last_updated": "2026-08-07",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -11292,9 +11297,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-27",
-        "reviewed_by": "harmful_additives_deep_audit_batch7",
-        "next_review_due": "2026-09-27",
+        "last_reviewed_at": "2026-08-07",
+        "reviewed_by": "additive_identity_routing_audit_2026_08_07",
+        "next_review_due": "2027-02-07",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -11325,6 +11330,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 7: CUI C0037098 verified. CAS 7631-86-9 pre-verified. Upgraded confidence medium->high. Corrected mechanism (EFSA 2018 was data gap, not harm finding; removed overstated nanoparticle claims). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch7"
+          },
+          {
+            "date": "2026-08-07",
+            "change": "Added the exact label alias 'silica' after confirming PubChem CID 24261 and the existing silicon-dioxide identity; this aligns enrichment routing with bottle wording without creating a second additive identity.",
+            "reason": "label_alias_identity_alignment"
           }
         ]
       },

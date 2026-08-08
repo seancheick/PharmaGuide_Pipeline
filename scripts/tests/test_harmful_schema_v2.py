@@ -31,6 +31,27 @@ def test_review_metadata():
         assert review.get("reviewed_by"), f"{entry['id']} review missing reviewer"
 
 
+def test_recent_identity_routing_edits_have_current_review_metadata():
+    payload = json.loads(DATA_PATH.read_text())
+    assert payload["_metadata"]["last_updated"] >= "2026-08-07"
+    assert payload["_metadata"]["last_audit"] >= "2026-08-07"
+
+    entries = {entry["id"]: entry for entry in payload["harmful_additives"]}
+    audited_ids = {
+        "ADD_HYDROGENATED_STARCH_HYDROLYSATE",
+        "ADD_MALTITOL_MALITOL",
+        "ADD_SILICON_DIOXIDE",
+    }
+    for entry_id in audited_ids:
+        entry = entries[entry_id]
+        assert entry["last_updated"] == "2026-08-07"
+        assert entry["review"]["last_reviewed_at"] == "2026-08-07"
+        assert any(
+            change.get("date") == "2026-08-07"
+            for change in entry["review"]["change_log"]
+        ), f"{entry_id} has no durable record of its 2026-08-07 identity audit"
+
+
 def test_jurisdiction_status_codes():
     allowed = {"approved", "permitted_with_limit", "restricted", "warning_issued", "banned", "not_evaluated"}
     for entry in load_entries():
