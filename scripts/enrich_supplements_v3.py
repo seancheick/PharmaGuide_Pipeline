@@ -97,6 +97,10 @@ from run_artifacts import ensure_run_id, report_run_directory
 from supplement_type_utils import mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement, percentile_label_for
 from form_factor_normalizer import canonicalize_form_factor
+from serving_frequency import (
+    resolve_daily_serving_multiplier,
+    resolve_daily_serving_range,
+)
 from scoring_input_contract import (
     build_scoring_classification,
     derive_product_scoring_evidence,
@@ -17644,12 +17648,16 @@ class SupplementEnricherV3:
             for item in evidence_defs if isinstance(item, dict) and item.get("id")
         }
         severity_weights = self._interaction_severity_weight_map(taxonomy_db)
-        serving_basis = enriched.get("serving_basis", {}) if isinstance(enriched, dict) else {}
-        servings_per_day_max = self._to_float_safe((serving_basis or {}).get("max_servings_per_day"))
-        if servings_per_day_max is None or servings_per_day_max <= 0:
-            servings_per_day_max = self._to_float_safe((serving_basis or {}).get("min_servings_per_day"))
-        if servings_per_day_max is None or servings_per_day_max <= 0:
-            servings_per_day_max = 1.0
+        # Canonical daily-serving policy, shared with the v4 scorers so a dose
+        # threshold and a score can never disagree about how many servings a day
+        # a label directs. This used to re-read serving_basis here
+        # (max -> min -> 1.0), which trusted a derived value over the label and
+        # never consulted servingSizes at all — a 3-servings-a-day label scored
+        # as 1. Every dose threshold in ingredient_interaction_rules.json is
+        # per_day, so this multiplier decides whether a warning fires.
+        servings_per_day_max = resolve_daily_serving_multiplier(
+            enriched if isinstance(enriched, dict) else {}
+        )
 
         raw_rules = rules_db.get("interaction_rules", []) if isinstance(rules_db, dict) else []
         if not isinstance(raw_rules, list) or not raw_rules:
@@ -19457,8 +19465,10 @@ class SupplementEnricherV3:
             # Section E: User Profile Data (for device-side scoring)
             collect_rda_ul_data = self.config.get("processing_config", {}).get("collect_rda_ul_data", True)
             if collect_rda_ul_data:
-                servings_min = serving_data["serving_basis"].get("min_servings_per_day")
-                servings_max = serving_data["serving_basis"].get("max_servings_per_day")
+                # Same canonical policy as the interaction thresholds. %RDA and
+                # UL comparisons are per-day, so a derived serving frequency
+                # would misreport tolerable-upper-limit proximity.
+                servings_min, servings_max, _ = resolve_daily_serving_range(enriched)
                 enriched["rda_ul_data"] = self._collect_rda_ul_data(
                     enriched,
                     min_servings_per_day=servings_min,

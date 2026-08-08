@@ -65,6 +65,7 @@ from identity.interaction import (
     normalize_catalog_interaction_tag,
 )
 from scoring_input_contract import get_scoring_ingredients
+from serving_frequency import resolve_daily_serving_multiplier
 from identity_integrity import is_identity_scoreable
 from label_record_contract import build_label_record_contract
 from scoring_v4.modules.fiber_digestive_helpers import (
@@ -9031,13 +9032,19 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
         else safe_str(enriched.get("form_factor")).lower()
     )
 
-    # Primary source: serving_basis (enricher-computed, scorer-aligned)
+    # How many servings a day is a separate axis from how big a serving is, and
+    # it has one owner pipeline-wide. Deriving it here from servingSizes[0]
+    # printed the child regimen on products that declare both a child and an
+    # adult serving row.
+    max_daily = resolve_daily_serving_multiplier(enriched)
+
+    # Serving *size* still prefers serving_basis (enricher-computed,
+    # scorer-aligned) over the raw cleaner rows.
     sb = safe_dict(enriched.get("serving_basis"))
     if sb.get("basis_count") is not None:
         min_qty_raw = sb.get("basis_count")
         max_qty_raw = sb.get("basis_count")
         unit = safe_str(sb.get("basis_unit"))
-        max_daily = sb.get("max_servings_per_day")
     else:
         # Fallback: raw servingSizes from cleaner
         serving_sizes = safe_list(enriched.get("servingSizes"))
@@ -9045,7 +9052,6 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
         min_qty_raw = serving.get("minQuantity")
         max_qty_raw = serving.get("maxQuantity")
         unit = safe_str(serving.get("unit"))
-        max_daily = serving.get("maxDailyServings")
 
     min_qty = safe_float(min_qty_raw)
     max_qty = safe_float(max_qty_raw)

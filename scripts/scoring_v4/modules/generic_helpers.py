@@ -16,6 +16,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Tuple
 
 from scoring_input_contract import get_scoring_ingredients
+from serving_frequency import resolve_daily_serving_range
 
 
 _DOSE_UNIT_WHITELIST = frozenset(
@@ -63,115 +64,22 @@ def _safe_dict(value: Any) -> Dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
-def _positive_float(value: Any) -> Optional[float]:
-    """Coerce to a positive float, rejecting bools (which are ints in Python)."""
-    if isinstance(value, bool):
-        return None
-    number = _as_float(value, None)
-    if number is None or number <= 0:
-        return None
-    return number
-
-
-def _ordered_pair(low: Any, high: Any) -> Optional[Tuple[float, float]]:
-    """Coerce a (min, max) pair to positive floats, tolerating either being absent."""
-    lo = _positive_float(low)
-    hi = _positive_float(high)
-    if lo is None and hi is None:
-        return None
-    if lo is None:
-        lo = hi
-    if hi is None:
-        hi = lo
-    return (hi, lo) if lo > hi else (lo, hi)
-
-
-def _label_declared_daily_range(product: Dict[str, Any]) -> Optional[Tuple[float, float]]:
-    """The canonical serving row's declared daily-serving range.
-
-    Products can declare several serving rows (e.g. a 5 mL child serving and a
-    10 mL adult serving). This mirrors the enricher's `_select_canonical_serving`
-    by taking the row with the highest serving quantity — the adult default —
-    rather than `servingSizes[0]`, which is the child row on such products.
-    """
-    best: Optional[Tuple[float, float]] = None
-    best_quantity = -1.0
-    for entry in _safe_list(product.get("servingSizes")):
-        if not isinstance(entry, dict):
-            continue
-        pair = _ordered_pair(
-            entry.get("minDailyServings") or entry.get("min_daily_servings"),
-            entry.get("maxDailyServings") or entry.get("max_daily_servings"),
-        )
-        if pair is None:
-            continue
-        quantity = 0.0
-        for key in ("quantity", "servingSizeQuantity", "maxQuantity", "minQuantity"):
-            number = _positive_float(entry.get(key))
-            if number is not None:
-                quantity = number
-                break
-        if best is None or quantity > best_quantity:
-            best, best_quantity = pair, quantity
-    return best
-
-
 def daily_serving_range(product: Dict[str, Any]) -> Tuple[float, float, bool]:
     """Return (min_servings_per_day, max_servings_per_day, was_defaulted).
 
-    The single source of daily-serving policy for v4. `daily_serving_multiplier`
-    is the top of this range; omega scores its midpoint.
-
-    The label's own declaration wins. `serving_basis` is only consulted when the
-    label declares no daily servings, because a 2026-08-06 enricher bug divided
-    the label's count by the serving size before storing it there — deflating
-    records (0.044 = 1/22.7 g) and inflating others whose serving is under one
-    unit (33.3 = 1/0.03 mL, on infant vitamin D). Those values are wrong even
-    when they land somewhere believable: DSLD 183945 declares 2 servings a day
-    and stored 1.0.
-
-    When the label is silent, `serving_basis` is guarded. A below-one value is
-    only believed when `servings_per_day_source` is "directions" — the one place
-    a genuine every-other-day regimen originates. `parsed_from_directions` is
-    NOT that signal: the enricher sets it whenever it parsed the directions text
-    at all, so 346 of the corrupted records carry it.
+    Delegates to the pipeline-wide policy in `serving_frequency` so the v4
+    scorers and the enricher's per-day interaction thresholds resolve the same
+    number by construction rather than by agreement.
     """
-    label = _label_declared_daily_range(product)
-    if label is not None:
-        return label[0], label[1], False
-
-    pair = _ordered_pair(
-        product.get("servings_per_day_min"), product.get("servings_per_day_max")
-    )
-    if pair is not None:
-        return pair[0], pair[1], False
-
-    for container_key in ("serving_basis", "serving_info"):
-        container = _safe_dict(product.get(container_key))
-        if not container:
-            continue
-        pair = _ordered_pair(
-            container.get("min_servings_per_day"),
-            container.get("max_servings_per_day"),
-        )
-        if pair is None:
-            continue
-        if pair[1] < 1.0 and _norm_text(
-            container.get("servings_per_day_source")
-        ) != "directions":
-            continue
-        return pair[0], pair[1], False
-
-    return 1.0, 1.0, True
+    return resolve_daily_serving_range(product)
 
 
 def daily_serving_multiplier(product: Dict[str, Any]) -> float:
     """Servings per day to scale a per-serving amount by.
 
-    The top of `daily_serving_range` — the maximum directed daily use, matching
-    `generic_evidence`.
+    The top of `daily_serving_range` — the maximum directed daily use.
     """
-    return daily_serving_range(product)[1]
+    return resolve_daily_serving_range(product)[1]
 
 
 def get_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
