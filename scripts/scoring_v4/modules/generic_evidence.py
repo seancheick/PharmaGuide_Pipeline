@@ -1188,15 +1188,40 @@ def _converted_product_dose(
         if product_dose is not None:
             resolved_key = lookup_key
             break
-    if product_dose is None:
-        return None, resolved_key
     dose_unit = _norm_text(entry.get("dose_unit") or "mg")
-    converted = _convert_unit(product_dose[0], product_dose[1], dose_unit)
-    if converted is None and _is_vitamin_d_evidence_entry(entry):
-        converted = _convert_vitamin_d_evidence_unit(
-            product_dose[0], product_dose[1], dose_unit
+    if product_dose is not None:
+        converted = _convert_unit(product_dose[0], product_dose[1], dose_unit)
+        if converted is None and _is_vitamin_d_evidence_entry(entry):
+            converted = _convert_vitamin_d_evidence_unit(
+                product_dose[0], product_dose[1], dose_unit
+            )
+        return converted, resolved_key
+
+    aggregate_ids = [
+        _canonical_text(value)
+        for value in _safe_list(entry.get("aggregate_canonical_ids"))
+        if _canonical_text(value)
+    ]
+    if aggregate_ids:
+        aggregate_dose = 0.0
+        for canonical_id in aggregate_ids:
+            component_dose = dose_map.get(canonical_id)
+            if component_dose is None:
+                return None, resolved_key
+            converted_component = _convert_unit(
+                component_dose[0], component_dose[1], dose_unit
+            )
+            if converted_component is None:
+                return None, resolved_key
+            aggregate_dose += converted_component
+        return (
+            aggregate_dose,
+            _canonical_text(entry.get("evidence_group_id"))
+            or _canonical_text(entry.get("standard_name"))
+            or resolved_key,
         )
-    return converted, resolved_key
+
+    return None, resolved_key
 
 
 def _is_vitamin_d_evidence_entry(entry: Dict[str, Any]) -> bool:

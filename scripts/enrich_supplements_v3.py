@@ -612,6 +612,9 @@ class SupplementEnricherV3:
 
     VERSION = "3.1.0"
     COMPATIBLE_SCORING_VERSIONS = ["3.0.0", "3.0.1", "3.1.0", "3.2.0", "3.3.0"]
+    _BCAA_EVIDENCE_CANONICALS = frozenset(
+        {"l_leucine", "l_isoleucine", "l_valine"}
+    )
     # Allowlist/denylist patterns for banned matching are loaded from config.
 
     # Required fields for product validation
@@ -13795,6 +13798,84 @@ class SupplementEnricherV3:
             return "ingredient"
         return "indirect"
 
+    @classmethod
+    def _has_bcaa_mixture_evidence_identity(
+        cls,
+        product: Dict,
+        active_ingredients: List[Dict],
+    ) -> bool:
+        """Require a complete disclosed BCAA triad and reject broader EAA routing."""
+        canonical_ids = set()
+        for row in active_ingredients:
+            if not isinstance(row, dict):
+                continue
+            canonical_id = str(
+                row.get("canonical_id")
+                or row.get("parent_key")
+                or row.get("normalized_key")
+                or ""
+            ).strip().lower()
+            if not canonical_id:
+                canonical_id = norm_module.make_normalized_key(
+                    str(
+                        row.get("standardName")
+                        or row.get("standard_name")
+                        or row.get("name")
+                        or ""
+                    )
+                )
+            if canonical_id:
+                canonical_ids.add(canonical_id)
+        if not cls._BCAA_EVIDENCE_CANONICALS.issubset(canonical_ids):
+            return False
+
+        product_text = " ".join(
+            str(product.get(field) or "")
+            for field in ("fullName", "product_name", "name")
+        ).lower()
+        product_text = re.sub(r"[-_/]+", " ", product_text)
+        if re.search(r"(?<![a-z0-9])eaa(?:s)?(?![a-z0-9])", product_text):
+            return False
+        if re.search(
+            r"(?<![a-z0-9])essential\s+amino\s+acids?(?![a-z0-9])",
+            product_text,
+        ):
+            return False
+
+        explicit_bcaa = bool(
+            re.search(
+                r"(?<![a-z0-9])bcaa(?:s)?(?![a-z0-9])"
+                r"|(?<![a-z0-9])branched\s+chain\s+amino\s+acids?(?![a-z0-9])",
+                product_text,
+            )
+        )
+        if explicit_bcaa:
+            return True
+
+        amino_acid_canonicals = set()
+        has_unidentified_amino_acid = False
+        for row in active_ingredients:
+            if not isinstance(row, dict):
+                continue
+            raw_category = str(row.get("raw_category") or "").lower()
+            ingredient_group = str(row.get("ingredientGroup") or "").lower()
+            if "amino acid" not in raw_category and "amino acid" not in ingredient_group:
+                continue
+            canonical_id = str(
+                row.get("canonical_id")
+                or row.get("parent_key")
+                or row.get("normalized_key")
+                or ""
+            ).strip().lower()
+            if canonical_id:
+                amino_acid_canonicals.add(canonical_id)
+            else:
+                has_unidentified_amino_acid = True
+        return (
+            not has_unidentified_amino_acid
+            and amino_acid_canonicals == cls._BCAA_EVIDENCE_CANONICALS
+        )
+
     def _collect_evidence_data(
         self, product: Dict, ingredient_quality_data: Optional[Dict] = None
     ) -> Dict:
@@ -13924,6 +14005,11 @@ class SupplementEnricherV3:
             return out
 
         seen_study_ids = set()
+        has_bcaa_mixture = self._has_bcaa_mixture_evidence_identity(
+            product,
+            active_ingredients,
+        )
+        bcaa_aggregate_candidate_added = False
         for ingredient in active_ingredients:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
@@ -13942,7 +14028,26 @@ class SupplementEnricherV3:
             )
             if branded_token:
                 candidate_names.append(branded_token)
+            ingredient_canonical_id = str(
+                ingredient.get("canonical_id")
+                or ingredient.get("parent_key")
+                or ingredient.get("normalized_key")
+                or ""
+            ).strip().lower()
+            if (
+                has_bcaa_mixture
+                and not bcaa_aggregate_candidate_added
+                and ingredient_canonical_id in self._BCAA_EVIDENCE_CANONICALS
+            ):
+                candidate_names.append("Branched Chain Amino Acids")
+                bcaa_aggregate_candidate_added = True
             for study in self._candidate_clinical_studies(candidate_names, studies):
+                if (
+                    study.get("id") == "INGR_BRANCHED_CHAIN_AMINO_ACIDS"
+                    and study.get("aggregate_canonical_ids")
+                    and not has_bcaa_mixture
+                ):
+                    continue
                 study_name = study.get('standard_name', '')
                 study_aliases = self._collect_clinical_aliases(study)
                 matched = self._clinical_study_match(candidate_names, study)
@@ -13977,8 +14082,11 @@ class SupplementEnricherV3:
                     seen_study_ids.add(study_id)
 
                     evidence_level = study.get('evidence_level', 'ingredient-human')
+                    is_aggregate_evidence = bool(
+                        study.get("aggregate_canonical_ids")
+                    )
                     match_payload = {
-                        "ingredient": ing_name,
+                        "ingredient": study_name if is_aggregate_evidence else ing_name,
                         "standard_name": study_name,
                         "id": study_id,
                         "study_id": study_id,
@@ -13992,10 +14100,17 @@ class SupplementEnricherV3:
                         "health_goals_supported": study.get('health_goals_supported', []),
                         "key_endpoints": study.get('key_endpoints', [])
                     }
+                    if is_aggregate_evidence:
+                        match_payload["matched_canonical_id"] = (
+                            study.get("evidence_group_id") or study_name
+                        )
 
                     # Optional schema extensions (forward-compatible passthrough).
                     optional_fields = [
                         "min_clinical_dose",
+                        "max_studied_clinical_dose",
+                        "max_clinical_dose",
+                        "max_studied_dose",
                         "dose_unit",
                         "typical_effective_dose",
                         "dose_range",
@@ -14014,6 +14129,7 @@ class SupplementEnricherV3:
                         "primary_outcome",
                         "endpoint_relevance_tags",
                         "evidence_group_id",
+                        "aggregate_canonical_ids",
                         "notes",
                         "notable_studies",
                         "references_structured",
@@ -14099,13 +14215,16 @@ class SupplementEnricherV3:
                         "marker_evidence_id": marker_entry.get("evidence_id"),
                     }
                     optional_fields = [
-                        "min_clinical_dose", "dose_unit", "typical_effective_dose", "dose_range",
+                        "min_clinical_dose", "max_studied_clinical_dose",
+                        "max_clinical_dose", "max_studied_dose", "dose_unit",
+                        "typical_effective_dose", "dose_range",
                         "base_points", "multiplier", "computed_score", "effect_direction",
                         "effect_direction_rationale", "effect_direction_confidence",
                         "total_enrollment", "published_studies", "published_studies_count",
                         "published_rct_count", "published_meta_review_count",
                         "registry_completed_trials_count", "primary_outcome",
                         "endpoint_relevance_tags", "evidence_group_id",
+                        "aggregate_canonical_ids",
                         "notes", "notable_studies",
                         "references_structured",
                     ]

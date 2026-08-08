@@ -615,7 +615,9 @@ def test_exact_single_active_recovers_verified_ingredient_human_evidence() -> No
 
     assert payload["metadata"]["recovered_matches"] == ["INGR_NAC"]
     assert payload["metadata"]["matched_entries"] == 1
-    assert payload["components"]["clinical_evidence_pipeline"] == 3.888
+    # The NAC record no longer carries the untraceable 2,810-participant
+    # aggregate that incorrectly triggered the enrollment multiplier.
+    assert payload["components"]["clinical_evidence_pipeline"] == 3.24
     assert payload["components"]["primary_evidence_floor"] == 8.4
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "n acetylcysteine"
     assert payload["score"] == 8.4

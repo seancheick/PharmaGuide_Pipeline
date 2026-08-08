@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.2",
-    "last_updated": "2026-08-06",
+    "schema_version": "5.3.3",
+    "last_updated": "2026-08-08",
     "total_entries": 198,
     "changelog": [
+      "5.3.3 (2026-08-08): Replaced the corrupt BCAA auto-discovery record with three content-verified systematic reviews and a complete leucine+isoleucine+valine identity/dose contract; removed unrelated registry trials and the impossible 18,820-study count. Narrowed NAC consumer routing to Immune Support, removed untraceable aggregate counts and the unsupported longevity route, and tied each verified reference to explicit supported claims.",
       "5.3.2 (2026-08-06): Added form- and dose-scoped mixed human evidence for L-carnitine base/tartrate from three content-verified systematic reviews; explicitly excluded fumarate, hydrochloride, acetyl-, propionyl-, D-, and DL-carnitine identities. Corrected BRAND_CARNIPURE from 224 participants/five trials/strong energy-heart claims to its two cited small crossover recovery-marker trials (28 total participants, positive_weak, 2 g/day), and grouped its evidence with generic L-carnitine so the same active cannot create false ingredient breadth.",
       "5.3.1 (2026-08-06): Corrected the stale PRECLIN_ALCAR record to INGR_ACETYL_L_CARNITINE; constrained linkage to acetyl-L-carnitine/base and hydrochloride identities; classified conflicting, condition-specific human reviews as mixed; added dose scope and three limiting PubMed reviews; removed unrelated registry/enrollment/endpoint claims; synchronized the documented evidence multipliers with the production scorer.",
       "auto (2026-04-02): backfill-auditability updated 47 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
@@ -6397,18 +6398,18 @@
       "score_contribution": "tier_1",
       "key_endpoints": [
         "glutathione ↑",
-        "respiratory health ↑",
-        "oxidative stress ↓",
-        "mental health support ↑"
+        "influenza-like symptom burden ↓ (not infection prevention)",
+        "chronic bronchitis/COPD mucolytic outcomes ↑",
+        "exercise oxidative-stress biomarkers ↓",
+        "condition-specific psychiatric adjunct outcomes: mixed"
       ],
       "health_goals_supported": [
-        "Immune Support",
-        "Healthy Aging/Longevity"
+        "Immune Support"
       ],
       "notes": "Human evidence supports NAC as a glutathione precursor that measurably lowers oxidative-stress markers, and a randomized trial supports attenuation of influenza-like illness in older adults. Respiratory (mucolytic) and psychiatric-adjunct evidence is real but condition-specific and more heterogeneous.",
       "notable_studies": "A 6-month randomized, double-blind, 20-centre trial (PMID 9230243, n=262, NAC 600 mg twice daily, 78% aged 65+) significantly reduced the frequency and severity of influenza-like episodes and shifted cell-mediated immunity from anergy toward normoergy; notably it did not prevent A/H1N1 infection, but only 25% of infected participants on NAC developed symptomatic illness versus 79% on placebo. A 2024 systematic review/meta-analysis of 20 supplementation studies (PMID 39632267) found significantly increased glutathione and reduced TBARS and IL-6, with no significant effect on TNF-alpha, creatine kinase or GSSG. A major review of mucolytic agents in chronic bronchitis/COPD (PMID 31107966) supports benefit in respiratory settings, and a 2018 systematic review/meta-analysis (PMID 29457216) found psychiatric-adjunct evidence that is promising but heterogeneous across diagnoses.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-08-07",
+      "last_updated": "2026-08-08",
       "references_structured": [
         {
           "type": "pubmed",
@@ -6437,7 +6438,9 @@
           "supplementary_concepts": [],
           "evidence_grade": "systematic_review",
           "retracted": false,
-          "supports_claims": [],
+          "supports_claims": [
+            "chronic_bronchitis_copd_mucolytic_outcomes"
+          ],
           "verification_source": "pubmed_eutils"
         },
         {
@@ -6467,7 +6470,9 @@
           "supplementary_concepts": [],
           "evidence_grade": "systematic_review",
           "retracted": false,
-          "supports_claims": [],
+          "supports_claims": [
+            "condition_specific_psychiatric_adjunct_outcomes"
+          ],
           "verification_source": "pubmed_eutils"
         },
         {
@@ -6505,7 +6510,11 @@
           "supplementary_concepts": [],
           "evidence_grade": "rct",
           "retracted": false,
-          "supports_claims": [],
+          "supports_claims": [
+            "influenza_like_symptom_attenuation",
+            "cell_mediated_immunity",
+            "not_infection_prevention"
+          ],
           "verification_source": "pubmed_eutils"
         },
         {
@@ -6541,7 +6550,11 @@
           "supplementary_concepts": [],
           "evidence_grade": "systematic_review",
           "retracted": false,
-          "supports_claims": [],
+          "supports_claims": [
+            "glutathione",
+            "oxidative_stress_biomarkers",
+            "exercise_recovery_biomarkers"
+          ],
           "verification_source": "pubmed_eutils"
         }
       ],
@@ -6550,11 +6563,13 @@
       },
       "effect_direction": "mixed",
       "primary_outcome": "Immune Support",
-      "total_enrollment": 2810,
-      "registry_completed_trials_count": 367,
+      "published_rct_count": 1,
+      "published_meta_review_count": 3,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=367; total_enrollment=2810; endpoint_tags=stress_mood; notes/citations include mixed-evidence language.",
+      "effect_direction_rationale": "Classified mixed because content-verified human evidence supports a narrow influenza-like symptom and cellular-immunity signal, respiratory mucolytic outcomes, and several exercise oxidative-stress biomarkers, while psychiatric-adjunct findings are condition-specific and heterogeneous. None of the cited studies measured a longevity endpoint, so no longevity outcome or consumer route is claimed.",
       "endpoint_relevance_tags": [
+        "immune_support",
+        "muscle_recovery",
         "stress_mood"
       ]
     },
@@ -21067,64 +21082,119 @@
       "id": "INGR_BRANCHED_CHAIN_AMINO_ACIDS",
       "standard_name": "Branched Chain Amino Acids",
       "aliases": [
-        "branched chain amino acids"
+        "branched chain amino acids",
+        "branched-chain amino acids",
+        "bcaa",
+        "bcaas"
       ],
-      "category": "cognitive_neurological",
+      "category": "sports_performance",
       "evidence_level": "ingredient-human",
-      "study_type": "rct_multiple",
+      "study_type": "systematic_review_meta",
       "published_studies": [
-        "RCT"
+        "systematic review",
+        "meta-analysis"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "Reduced DOMS severity at 24h, 48h, and 72h post-exercise (all p<0.001) in meta-analysis of 18 RCTs (PMID: 38625669)",
-        "Increased lean muscle mass by 0.4 kg vs -0.2 kg placebo after 12 weeks of leucine-enriched BCAA (4.5g leucine/day) in elderly patients (PMID: 40381110)",
-        "Reduced creatine kinase efflux and accelerated maximal voluntary contraction recovery after exercise in resistance-trained males (PMID: 22569039)",
-        "Improved liver frailty index with 36% frailty reversion rate vs 0% control after 16 weeks in compensated cirrhosis patients (PMID: 37189033)"
+        "An 18-study meta-analysis found lower delayed-onset muscle soreness 24–96 hours after exercise-induced muscle damage and lower creatine kinase immediately and at 72 hours, but no effect on lactate dehydrogenase (PMID: 38625669)",
+        "An overview of 11 systematic reviews found small effects on muscle soreness and medium effects on creatine kinase, with no effect on muscle performance recovery (PMID: 38241335)",
+        "A 24-study athlete systematic review found negligible performance and body-composition benefits; soreness findings favored resistance-exercise settings but were inconsistent in endurance settings (PMID: 36235655)"
       ],
       "health_goals_supported": [
         "Muscle Growth & Recovery"
       ],
       "primary_outcome": "Muscle Growth & Recovery",
-      "effect_direction": "positive_strong",
-      "total_enrollment": 429,
-      "notes": "BCAAs have strong meta-analytic evidence for DOMS reduction post-exercise (PMID: 38625669, 30938579). Lean mass gains demonstrated in specific populations. The DOMS attenuation effect is the most robust and supplement-relevant endpoint.",
-      "last_updated": "2026-04-02",
-      "notable_studies": "NCT00426751 (n=429): Efficacy Of Eptifibatide Compared To Abciximab In Primary Percutaneous Coronary Intervention (PCI) For Acute ST Elevation Myocardial Infarction (STEMI). NCT00288600 (n=92): Efficacy of High-dose Intravenous Immunoglobulin Therapy for Hyperbilirubinemia Due Rh Hemolytic Disease. NCT03705429 (n=51): A Study Comparing Two Standard of Care Adjuvant Chemotherapy Regimens for Lower Risk HER-2 Positive Breast Cancer.",
+      "effect_direction": "positive_weak",
+      "min_clinical_dose": 5000,
+      "max_studied_clinical_dose": 29300,
+      "dose_unit": "mg",
+      "aggregate_canonical_ids": [
+        "l_leucine",
+        "l_isoleucine",
+        "l_valine"
+      ],
+      "evidence_group_id": "bcaa",
+      "notes": "Evidence is limited to complete BCAA mixtures containing leucine, isoleucine, and valine. The most defensible consumer-relevant outcome is a modest reduction in post-exercise muscle soreness and some creatine-kinase measurements. Reviews do not support broad claims of improved athletic performance, superior muscle growth, or body-composition benefit over adequate high-quality protein. The 2024 meta-analysis used 3.15–29.3 g/day; effects tended to be larger above 5 g/day and with longer supplementation.",
+      "last_updated": "2026-08-08",
+      "notable_studies": "Salem et al. (2024, PMID 38625669) meta-analyzed 18 randomized studies of exercise-induced muscle damage. Salem et al. (2024, PMID 38241335) reviewed 11 systematic reviews and found no muscle-performance recovery effect. Martinho et al. (2022, PMID 36235655) reviewed 24 athlete studies and found negligible performance and body-composition benefits.",
       "references_structured": [
         {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
           "pmid": "38625669",
+          "doi": "10.1186/s40798-024-00686-9",
+          "title": "Attenuating Muscle Damage Biomarkers and Muscle Soreness After an Exercise-Induced Muscle Damage with Branched-Chain Amino Acid (BCAA) Supplementation: A Systematic Review and Meta-analysis with Meta-regression.",
+          "citation": "Sports Medicine - Open (2024)",
           "url": "https://pubmed.ncbi.nlm.nih.gov/38625669/",
-          "source": "PubMed",
+          "published_date": "2024-04-16",
+          "publication_types": [
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "evidence_grade": "systematic_review_meta",
+          "retracted": false,
+          "supports_claims": [
+            "muscle_soreness",
+            "creatine_kinase",
+            "dose_response"
+          ],
+          "verification_source": "pubmed_eutils",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "content_verified": true
         },
         {
-          "pmid": "40381110",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/40381110/",
-          "source": "PubMed",
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "38241335",
+          "doi": "10.1080/27697061.2023.2297899",
+          "title": "Branched-Chain Amino Acids Supplementation and Post-Exercise Recovery: An Overview of Systematic Reviews.",
+          "citation": "Journal of the American Nutrition Association (2024)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38241335/",
+          "published_date": "2024-05-01",
+          "publication_types": [
+            "Review",
+            "Journal Article"
+          ],
+          "evidence_grade": "systematic_review_overview",
+          "retracted": false,
+          "supports_claims": [
+            "muscle_soreness",
+            "creatine_kinase",
+            "no_muscle_performance_recovery"
+          ],
+          "verification_source": "pubmed_eutils",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "content_verified": true
         },
         {
-          "pmid": "22569039",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/22569039/",
-          "source": "PubMed",
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "36235655",
+          "doi": "10.3390/nu14194002",
+          "title": "Oral Branched-Chain Amino Acids Supplementation in Athletes: A Systematic Review.",
+          "citation": "Nutrients (2022)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36235655/",
+          "published_date": "2022-09-27",
+          "publication_types": [
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [
+            "limited_performance_evidence",
+            "limited_body_composition_evidence",
+            "muscle_soreness"
+          ],
+          "verification_source": "pubmed_eutils",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
-        },
-        {
-          "pmid": "37189033",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/37189033/",
-          "source": "PubMed",
-          "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "content_verified": true
         }
       ],
-      "published_studies_count": 18820,
-      "registry_completed_trials_count": 18820,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Muscle Growth & Recovery; published_tags=RCT; published_studies_count=18820; registry_completed_trials_count=18820; total_enrollment=429; endpoint_tags=muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "published_studies_count": 18,
+      "published_meta_review_count": 3,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Classified positive_weak because systematic reviews consistently support a narrow soreness/creatine-kinase recovery signal but do not support broad performance, muscle-growth, or body-composition claims. Higher doses and longer use appear more favorable, while protocols and protein-intake reporting vary substantially.",
       "endpoint_relevance_tags": [
         "muscle_recovery"
       ]
