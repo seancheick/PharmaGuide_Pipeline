@@ -132,6 +132,9 @@ PRODUCTS_DIR="$REPO_ROOT/scripts/products"
 SOURCE_OF_TRUTH_AUDIT="$REPO_ROOT/scripts/audit_source_of_truth_contract.py"
 RDA_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/rda_optimal_uls.json"
 BANNED_RECALLED_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/banned_recalled_ingredients.json"
+HARMFUL_ADDITIVES_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/harmful_additives.json"
+OTHER_INGREDIENTS_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/other_ingredients.json"
+ABSORPTION_ENHANCERS_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/absorption_enhancers.json"
 IDENTITY_AUDIT_SCRIPT="$REPO_ROOT/scripts/audit_identity_integrity.py"
 SUBMISSION_OUTPUT_DIR="$REPO_ROOT/manual_labels/product_submissions"
 SUBMISSION_PIPELINE_PREFIX="$PRODUCTS_DIR/output_Product_Submissions"
@@ -376,6 +379,18 @@ step1_needs_run() {
   # A safety-reference edit can change exported product safety state without
   # changing a source label. Never reuse a catalog built before it.
   if is_path_newer_than "$BANNED_RECALLED_REFERENCE_SOURCE" "$newest_output"; then
+    return 0
+  fi
+  # These references shape emitted safety flags, excipient explanations, and
+  # absorption-enhancer treatment. They must not be able to change underneath
+  # a catalog that auto-smart release considers current.
+  if is_path_newer_than "$HARMFUL_ADDITIVES_REFERENCE_SOURCE" "$newest_output"; then
+    return 0
+  fi
+  if is_path_newer_than "$OTHER_INGREDIENTS_REFERENCE_SOURCE" "$newest_output"; then
+    return 0
+  fi
+  if is_path_newer_than "$ABSORPTION_ENHANCERS_REFERENCE_SOURCE" "$newest_output"; then
     return 0
   fi
   if any_newer_input "$newest_output" "${CATALOG_BUILD_SOURCES[@]}"; then

@@ -94,6 +94,22 @@ def test_banned_recalled_reference_change_forces_catalog_rebuild():
     assert freshness_check < skip_branch
 
 
+def test_safety_and_formulation_reference_changes_force_catalog_rebuild():
+    """The assembled catalog embeds all three reference sources."""
+    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
+    skip_branch = source.index('return 1  # safe to skip')
+
+    for variable, path in (
+        ("HARMFUL_ADDITIVES_REFERENCE_SOURCE", "scripts/data/harmful_additives.json"),
+        ("OTHER_INGREDIENTS_REFERENCE_SOURCE", "scripts/data/other_ingredients.json"),
+        ("ABSORPTION_ENHANCERS_REFERENCE_SOURCE", "scripts/data/absorption_enhancers.json"),
+    ):
+        assert f'{variable}=' in source
+        assert path in source
+        freshness_check = source.index(f'if is_path_newer_than "${variable}"')
+        assert freshness_check < skip_branch
+
+
 def test_storage_cleanup_verifies_the_branch_that_received_the_bundle_commit():
     source = RELEASE_SCRIPT.read_text(encoding="utf-8")
 
