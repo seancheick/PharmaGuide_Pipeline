@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Contract tests for `data/drug_class_vocab.json` (locked v1.0.0, updated 2026-05-26).
+Contract tests for `data/drug_class_vocab.json` (locked v1.1.0, updated 2026-08-08).
 
 Single source of truth for drug-class labels migrated from the hardcoded
 `drugClassLabels` map in `lib/core/constants/schema_ids.dart` (15 user-
@@ -10,6 +10,9 @@ rules but not surfaced as profile picks (CYP substrates, narrow families).
 Locked decisions:
   - Exactly 30 drug classes (16 user_selectable + 14 rule-only)
   - Lean schema + extras: id, name, notes, examples, rx_status, user_selectable
+  - v1.1.0 sheet-facing consumer fields: group_label (clean noun bucket) +
+    commonly_used_for (one sentence, "commonly used" phrasing, never "treats");
+    clinician (Dr Pham) sign-off tracked in _metadata.consumer_copy_review
   - All IDs lowercase snake_case
   - rx_status enum: rx_only | otc | mixed
   - Cross-data: every drug_class_id in interaction_rules must be in vocab
@@ -39,7 +42,7 @@ def drug_classes(vocab):
 
 def test_metadata_block_present(vocab):
     md = vocab["_metadata"]
-    assert md["schema_version"] == "1.0.0"
+    assert md["schema_version"] == "1.1.0"
     assert md["total_entries"] == 30
     assert md["user_selectable_count"] == 16
     assert md["rule_only_count"] == 14
@@ -57,7 +60,10 @@ def test_user_selectable_split_correct(drug_classes):
     assert len(rule_only) == 14, f"expected 14 rule-only; got {len(rule_only)}"
 
 
-REQUIRED_FIELDS = {"id", "name", "notes", "examples", "rx_status", "user_selectable"}
+REQUIRED_FIELDS = {
+    "id", "name", "group_label", "commonly_used_for",
+    "notes", "examples", "rx_status", "user_selectable",
+}
 ID_PATTERN = re.compile(r"^[a-z][a-z0-9_]*$")
 ALLOWED_RX_STATUS = {"rx_only", "otc", "mixed"}
 
@@ -130,6 +136,65 @@ def test_user_selectable_is_bool(drug_classes):
         assert isinstance(d["user_selectable"], bool), (
             f"{d['id']} user_selectable not bool"
         )
+
+
+# ---------------------------------------------------------------------------
+# v1.1.0 sheet-facing consumer fields (medication details sheet)
+# ---------------------------------------------------------------------------
+
+TREAT_PATTERN = re.compile(r"\btreat(s|ed|ing|ment|ments)?\b", re.IGNORECASE)
+
+
+def test_group_label_is_clean_consumer_noun(drug_classes):
+    for d in drug_classes:
+        label = d["group_label"]
+        assert isinstance(label, str) and label.strip(), (
+            f"{d['id']}: empty group_label"
+        )
+        assert label == label.strip(), f"{d['id']}: group_label stray whitespace"
+        assert len(label) <= 60, f"{d['id']}: group_label >60 chars ({len(label)})"
+        assert not label.endswith((".", "!", "?")), (
+            f"{d['id']}: group_label ends with punctuation"
+        )
+        assert label[0].isupper(), f"{d['id']}: group_label not capitalized"
+        assert not TREAT_PATTERN.search(label), (
+            f"{d['id']}: group_label uses 'treat' phrasing"
+        )
+
+
+def test_commonly_used_for_phrasing_contract(drug_classes):
+    """Off-label reality: 'commonly used', never 'treats' (amitriptyline is
+    used for migraine, propranolol for anxiety). One plain sentence, shown
+    verbatim in the app's medication details sheet."""
+    for d in drug_classes:
+        s = d["commonly_used_for"]
+        assert isinstance(s, str) and s.strip(), (
+            f"{d['id']}: empty commonly_used_for"
+        )
+        assert s == s.strip(), f"{d['id']}: commonly_used_for stray whitespace"
+        assert s.startswith("Commonly used"), (
+            f"{d['id']}: must start with 'Commonly used': {s!r}"
+        )
+        assert s.endswith("."), f"{d['id']}: must end with a period: {s!r}"
+        assert ". " not in s, f"{d['id']}: must be a single sentence: {s!r}"
+        assert len(s) <= 200, (
+            f"{d['id']}: commonly_used_for >200 chars ({len(s)})"
+        )
+        assert not TREAT_PATTERN.search(s), (
+            f"{d['id']}: uses 'treat' phrasing: {s!r}"
+        )
+
+
+def test_consumer_copy_review_block(vocab):
+    """Every consumer string needs clinician sign-off before the Flutter
+    asset is repinned; the gate lives in metadata, not tribal memory."""
+    md = vocab["_metadata"]
+    review = md["consumer_copy_review"]
+    assert review["fields"] == ["group_label", "commonly_used_for"]
+    assert review["status"] in {"pending_clinician_review", "approved"}
+    assert review["reviewer"].strip()
+    for field in ("group_label", "commonly_used_for"):
+        assert field in md["field_contract"], f"field_contract missing {field}"
 
 
 # ---------------------------------------------------------------------------
