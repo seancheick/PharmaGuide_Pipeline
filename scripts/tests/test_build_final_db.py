@@ -4838,6 +4838,10 @@ def test_final_blob_uses_label_ledger_without_promoting_context_into_analysis():
         "unit": "mg",
         "below_clinical_dose": False,
         "is_safety_concern": False,
+        # Null unless the scoring form carries a reviewed consumer_note.
+        # See test_iqm_form_note.py for the emit path.
+        "form_note": None,
+        "form_note_preview": None,
     }
     assert rows[2]["analysis"]["bio_score"] == 10.0
     assert rows[2]["analysis"]["quantity"] == 360.0

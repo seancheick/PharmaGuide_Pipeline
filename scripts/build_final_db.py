@@ -42,7 +42,7 @@ import re
 import sqlite3
 import sys
 import tempfile
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 from urllib.parse import urlparse
@@ -1995,6 +1995,10 @@ def load_iqm_reference_index() -> Dict[str, Dict]:
             index[key] = entry
     except Exception as exc:
         logger.warning("Failed to load ingredient_quality_map reference data: %s", exc)
+    # Gate A. Raises before any product is built, so a defective consumer_note
+    # fails the build loudly instead of being swallowed by the per-product
+    # quarantine handler in the export loop.
+    validate_iqm_consumer_notes(index)
     IQM_REFERENCE_INDEX = index
     return IQM_REFERENCE_INDEX
 
@@ -3678,6 +3682,185 @@ def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
     return None
 
 
+# --- Consumer-facing form note -------------------------------------------
+#
+# IQM `notes` is a curation workspace, not display copy: 71% of entries carry
+# audit prose (PMIDs, "Clinician recalibration 2026-06-02", repo paths). It is
+# still exported verbatim on the legacy ingredients[] row for other consumers.
+#
+# Only a reviewed `consumer_note` is allowed to reach a user. Splitting `notes`
+# automatically was evaluated and rejected: for 21% of forms the head sentences
+# are marketing prose or claims the audit trailer later corrected — e.g.
+# coenzymated_complex leads with "enhanced bioavailability … pre-converted forms
+# ready for immediate use" while its own trailer records the Batch 12
+# dephosphorylation finding that disproves it. A blacklist can prove text
+# unsafe; it can never prove it correct.
+
+# Defence-in-depth only. These do NOT establish safety — `consumer_note_review`
+# does. They catch a reviewer pasting from the wrong field.
+_FORM_NOTE_INTERNAL_RE = re.compile(
+    r"(Evidence update|Cited evidence:|API evidence trail:|CLASS-FINDING"
+    r"|Misattribution|Clinician recalibration|Dr Pham|sign-off|B\d+ audit"
+    r"|Batch \d+|bio_score|PMID|scripts/|UNII|UMLS|GSRS|Live API)",
+    re.IGNORECASE,
+)
+# Safety belongs in the warnings lane with a severity and evidence level.
+_FORM_NOTE_SAFETY_RE = re.compile(
+    r"\b(avoid|do not|don't|stop using|never|toxic|contraindicat"
+    r"\w*|not recommended|harmful|risk of|warning)\b",
+    re.IGNORECASE,
+)
+_FORM_NOTE_MARKETING_RE = re.compile(
+    r"(enhanced bioavailability|ready for immediate use|pre-converted"
+    r"|superior absorption|maximum absorption|optimal absorption"
+    r"|superior form)",
+    re.IGNORECASE,
+)
+_FORM_NOTE_MAX_CHARS = 600
+_FORM_NOTE_SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
+
+
+class FormNoteProvenanceError(ValueError):
+    """Gate A: a `consumer_note` lacks complete review provenance."""
+
+
+def _resolve_scoring_form(
+    m: Dict[str, Any], iqm_index: Dict[str, Dict]
+) -> Optional[Dict[str, Any]]:
+    """The single IQM form that supplied this row's ``bio_score``.
+
+    Returns ``None`` when no single form did. ``bio_score`` on a row is a
+    ``percent_share``-weighted blend across ``matched_forms``; ``matched_form``
+    (singular) is only the first entry. Real example: a calcium row matching
+    carbonate (8) + citrate (14) + bis-glycinate (14) at 1/3 share each blends
+    to 12.0 ("Excellent form") while ``matched_form`` names only carbonate.
+    Attaching carbonate's note there would contradict the badge.
+
+    The ``bio_score`` equality check is what makes desync structurally
+    impossible — if anything downstream re-weighted the score, no form matches
+    and the note is suppressed.
+    """
+    matched_forms = m.get("matched_forms")
+    if isinstance(matched_forms, list) and matched_forms:
+        keys = {
+            f.get("form_key") for f in matched_forms if isinstance(f, dict)
+        }
+        if len(keys) > 1:
+            return None
+
+    form_key = safe_str(m.get("matched_form"))
+    parent_key = safe_str(m.get("canonical_id"))
+    if not form_key or not parent_key:
+        return None
+
+    parent = iqm_index.get(parent_key)
+    if not isinstance(parent, dict):
+        return None
+    form = (parent.get("forms") or {}).get(form_key)
+    if not isinstance(form, dict):
+        return None
+
+    row_score = safe_float(m.get("bio_score"))
+    if row_score is None or safe_float(form.get("bio_score")) != row_score:
+        return None
+    return form
+
+
+def _consumer_note_defect(form: Dict[str, Any]) -> Optional[str]:
+    """Why ``form``'s ``consumer_note`` may not ship, or ``None`` if it may.
+
+    ``None`` is also returned when there is simply no ``consumer_note`` — the
+    caller distinguishes "nothing to say" from "something wrong" by checking
+    the field first.
+    """
+    note = form.get("consumer_note")
+    if not isinstance(note, str) or not note.strip():
+        return None
+    note = note.strip()
+
+    # Provenance. An emitted blob cannot carry review metadata, so this layer
+    # is the only place that can prove a human approved the text.
+    review = form.get("consumer_note_review")
+    if not isinstance(review, dict):
+        return "consumer_note without consumer_note_review"
+    reviewer = review.get("by")
+    if not isinstance(reviewer, str) or not reviewer.strip():
+        return "consumer_note_review.by is missing or empty"
+    try:
+        date.fromisoformat(str(review.get("date")))
+    except (TypeError, ValueError):
+        return "consumer_note_review.date is not an ISO date"
+
+    # Content. Defence-in-depth against a reviewer pasting the wrong field.
+    if len(note) > _FORM_NOTE_MAX_CHARS:
+        return f"consumer_note exceeds {_FORM_NOTE_MAX_CHARS} chars"
+    for label, pattern in (
+        ("internal audit text", _FORM_NOTE_INTERNAL_RE),
+        ("safety language", _FORM_NOTE_SAFETY_RE),
+        ("marketing language", _FORM_NOTE_MARKETING_RE),
+    ):
+        if pattern.search(note):
+            return f"consumer_note contains {label}"
+    return None
+
+
+def validate_iqm_consumer_notes(iqm_index: Dict[str, Dict]) -> None:
+    """Gate A — every ``consumer_note`` in the IQM is reviewed and clean.
+
+    Runs once at load over the whole map rather than per product. The export
+    loop wraps each product in ``except Exception`` and *quarantines* on error,
+    so raising from inside the per-ingredient path would silently drop products
+    from the catalog instead of failing the build. Validating here makes that
+    impossible to bypass.
+    """
+    defects: List[str] = []
+    for parent_key, parent in iqm_index.items():
+        if not isinstance(parent, dict):
+            continue
+        for form_key, form in (parent.get("forms") or {}).items():
+            if not isinstance(form, dict):
+                continue
+            defect = _consumer_note_defect(form)
+            if defect:
+                defects.append(f"{parent_key}/{form_key}: {defect}")
+    if defects:
+        raise FormNoteProvenanceError(
+            f"{len(defects)} invalid consumer_note entr"
+            f"{'y' if len(defects) == 1 else 'ies'} in ingredient_quality_map.json:\n  "
+            + "\n  ".join(sorted(defects))
+        )
+
+
+def _derive_form_note(
+    m: Dict[str, Any], iqm_index: Dict[str, Dict]
+) -> Tuple[Optional[str], Optional[str]]:
+    """``(form_note, form_note_preview)`` for a matched active ingredient.
+
+    Returns ``(None, None)`` unless the row resolves to a single scoring form
+    carrying a reviewed ``consumer_note``. Fail-closed: the app falls back to
+    its generic tier line rather than showing unreviewed prose.
+
+    Never raises. :func:`validate_iqm_consumer_notes` is the loud gate and has
+    already rejected defective notes at load time; the re-check here is a belt
+    so that no unreviewed text can leak even if the loader is bypassed.
+    """
+    form = _resolve_scoring_form(m, iqm_index)
+    if form is None:
+        return None, None
+
+    note = form.get("consumer_note")
+    if not isinstance(note, str) or not note.strip():
+        return None, None
+    if _consumer_note_defect(form) is not None:
+        return None, None
+    note = note.strip()
+
+    # Split here, never in the app — the client must render approved strings
+    # only and make no editorial decision.
+    preview = _FORM_NOTE_SENTENCE_RE.split(note)[0].strip() or note
+    return note, preview
+
+
 # Sprint E1.2.2.b — display_dose_label.
 # Three allowed output classes (external-dev medical-honesty rule):
 #   "600 mg"               — individually disclosed
@@ -4219,6 +4402,12 @@ def _build_canonical_label_ledger(
                     "is_safety_concern": json_bool(
                         analysis.get("is_safety_concern")
                     ),
+                    # Reviewed consumer copy for the scoring form. Null unless
+                    # the form has an approved consumer_note; the app falls
+                    # back to its generic tier line. Preview is split here so
+                    # the client renders approved strings only.
+                    "form_note": analysis.get("form_note"),
+                    "form_note_preview": analysis.get("form_note_preview"),
                 }
                 if score_included and analysis is not None
                 else None
@@ -6174,6 +6363,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             or safe_dict(m.get("dose_data_quality"))
             or safe_dict(safe_dict(ne.get("conversion_evidence")).get("dose_data_quality"))
         )
+        form_note, form_note_preview = _derive_form_note(m, iqm_index)
         ingredients.append({
             "raw_source_text": raw,
             "raw_source_path": (
@@ -6202,7 +6392,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             ),
             "natural": bool(m.get("natural")),
             "score": safe_float(m.get("score")),
+            # Curation workspace — audit prose expected. Never rendered.
             "notes": safe_str(m.get("notes")),
+            # Reviewed consumer copy, or None. See _derive_form_note.
+            "form_note": form_note,
+            "form_note_preview": form_note_preview,
             "mapped": is_mapped,
             "safety_hits": combined_safety_hits,
             "safety_flags": projected_safety_flags,
