@@ -242,7 +242,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
       "mechanism": "Vitamin E can inhibit platelet aggregation and antagonize vitamin K-dependent clotting factors. NIH notes that large supplemental doses may increase bleeding risk with warfarin, but the amount needed for a clinically significant effect is uncertain.",
-      "management": "This alert is triggered by the presence of vitamin E; it does not mean this product crossed a known dose limit. Tell your prescriber or anticoagulation clinic before starting, stopping, or changing the supplement. Keep use consistent; additional monitoring may be appropriate after a change. Do not change warfarin on your own.",
+      "management": "Contains vitamin E, which can increase bleeding risk with warfarin. Tell your prescriber or anticoagulation clinic before starting, stopping, or changing this supplement, and keep your use consistent — extra monitoring may be appropriate after a change. Do not change warfarin on your own. This alert reflects the presence of vitamin E; it does not mean a known dose limit was crossed.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/24166490/"
@@ -1160,7 +1160,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
       "mechanism": "Chromium potentiates insulin action and can lower fasting blood glucose. When combined with insulin or oral hypoglycemics, this additive glucose-lowering effect can cause symptomatic hypoglycemia.",
-      "management": "PharmaGuide displays this review when the known supplemental total is at least 200 mcg/day. This is a screening threshold, not a proven toxicity cutoff. Monitor blood glucose when starting or changing chromium with diabetes medication. Ask the clinician managing your diabetes whether monitoring or medication changes are needed; do not change medication on your own.",
+      "management": "Chromium can lower blood glucose, which may add to your diabetes medication's effect. Monitor your glucose more closely when starting or changing chromium, and ask the clinician managing your diabetes whether any monitoring or medication change is needed — do not change medication on your own. Shown when the supplemental total is at least 200 mcg/day: a screening threshold, not a proven toxicity cutoff.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/15208835/"
