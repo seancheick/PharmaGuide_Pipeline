@@ -94,6 +94,17 @@ def test_banned_recalled_reference_change_forces_catalog_rebuild():
     assert freshness_check < skip_branch
 
 
+def test_iqm_reference_change_forces_catalog_rebuild():
+    """Form-note source changes must not reuse an older exported catalog."""
+    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
+
+    assert 'IQM_REFERENCE_SOURCE=' in source
+    assert 'scripts/data/ingredient_quality_map.json' in source
+    freshness_check = source.index('if is_path_newer_than "$IQM_REFERENCE_SOURCE"')
+    skip_branch = source.index('return 1  # safe to skip')
+    assert freshness_check < skip_branch
+
+
 def test_safety_and_formulation_reference_changes_force_catalog_rebuild():
     """The assembled catalog embeds all three reference sources."""
     source = RELEASE_SCRIPT.read_text(encoding="utf-8")

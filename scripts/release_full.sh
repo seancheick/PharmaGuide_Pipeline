@@ -135,6 +135,7 @@ BANNED_RECALLED_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/banned_recalled_ingred
 HARMFUL_ADDITIVES_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/harmful_additives.json"
 OTHER_INGREDIENTS_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/other_ingredients.json"
 ABSORPTION_ENHANCERS_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/absorption_enhancers.json"
+IQM_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/ingredient_quality_map.json"
 IDENTITY_AUDIT_SCRIPT="$REPO_ROOT/scripts/audit_identity_integrity.py"
 SUBMISSION_OUTPUT_DIR="$REPO_ROOT/manual_labels/product_submissions"
 SUBMISSION_PIPELINE_PREFIX="$PRODUCTS_DIR/output_Product_Submissions"
@@ -393,6 +394,10 @@ step1_needs_run() {
   if is_path_newer_than "$ABSORPTION_ENHANCERS_REFERENCE_SOURCE" "$newest_output"; then
     return 0
   fi
+  # IQM changes can alter exported form notes even when source labels are unchanged.
+  if is_path_newer_than "$IQM_REFERENCE_SOURCE" "$newest_output"; then
+    return 0
+  fi
   if any_newer_input "$newest_output" "${CATALOG_BUILD_SOURCES[@]}"; then
     return 0
   fi
@@ -448,6 +453,11 @@ if step2_needs_run; then
 else
   skip "Step 2/8: dist/ catalog already current — skipping stage"
 fi
+
+# Gate B inspects the emitted blob contract after the candidate has been
+# promoted to dist and before any publication step can run.
+run_strict_gate "form-note export artifact" \
+  "$PG_PYTHON" scripts/validate_form_notes_export.py --blobs-dir "$DIST_DIR/detail_blobs"
 
 # ---------------------------------------------------------------------------
 # Step 3: Extract/backfill DSLD product images into dist/

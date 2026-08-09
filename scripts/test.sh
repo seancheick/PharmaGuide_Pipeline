@@ -220,6 +220,7 @@ PY
 }
 
 run_release_artifact_gates() {
+  "$PG_PYTHON" scripts/validate_form_notes_export.py --blobs-dir scripts/dist/detail_blobs
   "$PG_PYTHON" scripts/coverage_gate_functional_roles.py
   "$PG_PYTHON" scripts/audit_source_of_truth_contract.py freshness \
     --dist-dir scripts/dist \

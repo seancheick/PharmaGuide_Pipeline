@@ -114,6 +114,8 @@ run_strict_gate "detail-blob field completeness" \
   2>&1 | tail -5
 
 # 4. Gate both candidates completely before the promotion step below.
+run_strict_gate "form-note export artifact" \
+  "$PG_PYTHON" scripts/validate_form_notes_export.py --blobs-dir "$DIST_CANDIDATE/detail_blobs"
 run_strict_gate "stamp dist candidate export manifest contract metadata" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" stamp-manifest --dist-dir "$DIST_CANDIDATE" --strict-release
 run_strict_gate "stamp final candidate export manifest contract metadata" \

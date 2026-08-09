@@ -59,7 +59,7 @@ MARKETING_RE = re.compile(
     re.IGNORECASE,
 )
 SAFETY_RE = re.compile(
-    r"\b(avoid|do not|don't|stop using|never|toxic|contraindicat"
+    r"\b(avoid|do not|don't|stop using|never|toxic|contraindicat\w*"
     r"|not recommended|harmful|risk of|warning)\b",
     re.IGNORECASE,
 )
@@ -92,24 +92,40 @@ def form_tier(bio_score: Optional[float]) -> str:
 
 
 def product_reach(blobs_dir: Path) -> Counter:
-    """Products per IQM form, over tap-able scored canonical rows."""
+    """Products per form that is eligible to render a form note.
+
+    A canonical ID is a nutrient identity, not a form identity: one product can
+    contain several rows that resolve to different forms. Match the final
+    display row to its legacy scoring row through ``raw_source_path``, the same
+    linkage used by the payload builder. Rows without an assessed display form
+    cannot render a note and do not belong in the curation priority queue.
+    """
     reach: Counter = Counter()
     for path in sorted(blobs_dir.glob("*.json")):
         try:
             blob = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
-        legacy: Dict[str, Dict[str, Any]] = {}
+        legacy_by_source_path: Dict[str, Dict[str, Any]] = {}
         for row in blob.get("ingredients") or []:
-            key = str(row.get("canonical_id") or "").strip()
-            if key and key not in legacy:
-                legacy[key] = row
+            if not isinstance(row, dict):
+                continue
+            source_path = str(row.get("raw_source_path") or "").strip()
+            if source_path:
+                legacy_by_source_path[source_path] = row
         seen = set()
         for row in blob.get("display_ingredients") or []:
-            analysis = row.get("analysis") or {}
-            if not row.get("score_included") or analysis.get("bio_score") is None:
+            if not isinstance(row, dict):
                 continue
-            source = legacy.get(str(analysis.get("canonical_id") or "").strip())
+            analysis = row.get("analysis") or {}
+            if (
+                not row.get("score_included")
+                or analysis.get("bio_score") is None
+                or analysis.get("form_display_state") != "assessed"
+            ):
+                continue
+            source_path = str(row.get("raw_source_path") or "").strip()
+            source = legacy_by_source_path.get(source_path)
             if not source:
                 continue
             form_key = str(source.get("matched_form") or "").strip()
