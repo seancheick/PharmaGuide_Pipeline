@@ -96,6 +96,35 @@ def test_semantic_fingerprint_covers_ul_form_scope_and_clinical_note() -> None:
     ) != semantic_rda_ul_fingerprint(changed_scope)
 
 
+def test_semantic_fingerprint_covers_consumer_ul_warning_copy() -> None:
+    canonical = _rda_data()
+    canonical["consumer_ul_warnings"] = {
+        "folate": {
+            "message": "Too much folic acid can hide a vitamin B12 deficiency.",
+            "source_url": "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/",
+        }
+    }
+    changed = copy.deepcopy(canonical)
+    changed["consumer_ul_warnings"]["folate"]["message"] = (
+        "Different consumer conclusion"
+    )
+
+    assert semantic_rda_ul_fingerprint(
+        canonical
+    ) != semantic_rda_ul_fingerprint(changed)
+
+
+def test_v5_1_contract_rejects_established_ul_without_consumer_copy() -> None:
+    canonical = _rda_data()
+    canonical["_metadata"]["schema_version"] = "5.1.0"
+    canonical["_metadata"]["reference_data_contract"]["semantic_fingerprint"] = (
+        semantic_rda_ul_fingerprint(canonical)
+    )
+
+    with pytest.raises(ReferenceDataContractError, match="consumer UL warning"):
+        validate_declared_reference_stamp(canonical)
+
+
 def test_canonical_reference_stamp_matches_its_semantic_fingerprint() -> None:
     path = Path(__file__).parent.parent / "data" / "rda_optimal_uls.json"
     data = json.loads(path.read_text())

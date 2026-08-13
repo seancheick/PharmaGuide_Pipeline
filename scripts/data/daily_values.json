@@ -3,8 +3,8 @@
     "description": "FDA labeling Daily Values used for Supplement Facts %DV cross-checks",
     "purpose": "daily_value_unit_plausibility",
     "schema_version": "1.0.0",
-    "last_updated": "2026-05-28",
-    "verified_date": "2026-05-28",
+    "last_updated": "2026-08-13",
+    "verified_date": "2026-08-13",
     "sources": [
       {
         "label": "21 CFR 101.9(c)(8)(iv) RDI table",
@@ -15,7 +15,7 @@
         "url": "https://www.fda.gov/files/food/published/DV-Percent-DV-Nutrition-Facts-Label_09072023.pdf"
       }
     ],
-    "total_entries": 10
+    "total_entries": 11
   },
   "nutrients": {
     "vitamin_d": {
@@ -27,6 +27,17 @@
         "infants": 10,
         "children_1_3": 15,
         "pregnant_lactating": 15
+      }
+    },
+    "folate": {
+      "standard_name": "Folate",
+      "aliases": ["Folic Acid", "Vitamin B9", "Methylfolate", "5-MTHF"],
+      "unit": "mcg DFE",
+      "target_groups": {
+        "adult_4_plus": 400,
+        "infants": 80,
+        "children_1_3": 150,
+        "pregnant_lactating": 600
       }
     },
     "iodine": {

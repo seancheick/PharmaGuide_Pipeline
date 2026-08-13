@@ -240,6 +240,79 @@ def test_iodine_adult_dv_corrects_mg_to_mcg() -> None:
     assert active["dose_data_quality"]["daily_value_target_group"] == "adult_4_plus"
 
 
+def test_folate_mg_dfe_source_typo_preserves_dfe_while_correcting_scale() -> None:
+    """DSLD 259791: 1,360 mg DFE at 340% DV is really 1,360 mcg DFE.
+
+    The semantic DFE qualifier is part of the label identity and must survive
+    the DV-proven mg->mcg repair. Treating the whole unit string as a bare
+    mass token previously left this 1,000x source typo uncorrected.
+    """
+    raw = _raw_product([
+        {
+            "order": 1,
+            "name": "Folate",
+            "category": "vitamin",
+            "ingredientGroup": "Folate",
+            "quantity": _quantity(1360, "mg DFE", percent_dv=340),
+        }
+    ])
+
+    active = _cleaned_active(raw)
+
+    assert active["quantity"] == pytest.approx(1360.0)
+    assert active["unit"] == "mcg DFE"
+    assert active["dose_data_quality"]["status"] == "corrected"
+    assert active["dose_data_quality"]["raw_unit"] == "mg DFE"
+    assert active["dose_data_quality"]["corrected_unit"] == "mcg DFE"
+
+
+def test_folate_total_and_folic_acid_child_emit_separate_intake_and_ul_roles() -> None:
+    """The label total owns intake; its folic-acid child owns the scoped UL.
+
+    These are two views of one declaration, not two nutrient doses. The
+    emitted lineage lets the client count 1,360 mcg DFE once while comparing
+    the explicit 800 mcg folic-acid contribution to the synthetic-folate UL.
+    """
+    raw = _raw_product([
+        {
+            "order": 1,
+            "name": "Folate",
+            "category": "vitamin",
+            "ingredientGroup": "Folate",
+            "quantity": _quantity(1360, "mg DFE", percent_dv=340),
+            "nestedRows": [
+                {
+                    "order": 2,
+                    "name": "Folic Acid",
+                    "category": "vitamin",
+                    "ingredientGroup": "Folate",
+                    "quantity": _quantity(800, "mcg"),
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+        }
+    ])
+
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, warnings = SupplementEnricherV3().enrich_product(cleaned)
+    assert not warnings
+    rows = [
+        row for row in enriched["rda_ul_data"]["analyzed_ingredients"]
+        if row.get("canonical_id") == "vitamin_b9_folate"
+    ]
+    assert len(rows) == 2
+    parent = next(row for row in rows if row["ingredient"] == "Folate")
+    child = next(row for row in rows if row["ingredient"] == "Folic Acid")
+
+    assert parent["dose_role"] == "declared_total"
+    assert parent["per_day_max"] == pytest.approx(1360.0)
+    assert child["dose_role"] == "ul_scoped_component"
+    assert child["parent_label_key"] == parent["source_label_key"]
+    assert child["skip_ul_check"] is False
+    assert child["per_day_max"] == pytest.approx(1360.0)
+
+
 @pytest.mark.parametrize(
     "name,category,ingredient_group,amount,unit,percent_dv",
     [

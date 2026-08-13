@@ -18642,15 +18642,28 @@ class SupplementEnricherV3:
             factor_value = 0.0
 
         # Require an actual form-derived conversion rather than another DFE
-        # line. The named MTHF guard prevents unrelated folate forms from
-        # being discarded merely because their converted doses are similar.
+        # line. A matching form row is one component view of the declared DFE
+        # total, never a second intake dose. Folic acid is special: it owns the
+        # synthetic-folate UL comparison even though the parent owns adequacy
+        # and label-total display. Other identified folate forms remain context
+        # only because they are outside that UL's scope.
+        folate_form = norm_module.classify_folate_form(
+            " ".join(
+                str(value or "")
+                for value in (
+                    ingredient.get("name"),
+                    ingredient.get("matched_form"),
+                    ingredient.get("raw_source_text"),
+                )
+            )
+        )
         if (
             canonical not in {"folate", "vitamin_b9_folate"}
             or label_name == "folate"
             or "dfe" in original_unit
             or "dfe" not in converted_unit_key
             or factor_value <= 1.0
-            or not ("mthf" in label_name or "methylfolate" in label_name)
+            or folate_form == norm_module.FOLATE_FORM_UNKNOWN
         ):
             return lineage
 
@@ -18658,7 +18671,11 @@ class SupplementEnricherV3:
             declared_amount = float(declared["quantity"])
             tolerance = max(0.5, declared_amount * 0.025)
             if abs(converted_amount - declared_amount) <= tolerance:
-                lineage["dose_role"] = "form_component"
+                lineage["dose_role"] = (
+                    "ul_scoped_component"
+                    if folate_form == norm_module.FOLATE_FORM_FOLIC_ACID
+                    else "form_component"
+                )
                 lineage["parent_label_key"] = declared["source_label_key"]
                 return lineage
         return lineage

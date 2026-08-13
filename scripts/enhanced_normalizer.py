@@ -2462,8 +2462,21 @@ class EnhancedDSLDNormalizer:
             return None
 
         target_unit = self._normalize_daily_value_unit(record.get("unit"))
-        if target_unit != "mcg":
+        source_parts = source_unit.split()
+        target_parts = target_unit.split()
+        source_mass_unit = source_parts[0] if source_parts else source_unit
+        target_mass_unit = target_parts[0] if target_parts else target_unit
+        source_qualifier = " ".join(source_parts[1:])
+        target_qualifier = " ".join(target_parts[1:])
+        if target_mass_unit != "mcg":
             return None
+        # DFE/RAE/NE are semantic label units, not decorative suffixes. A
+        # DV-backed scale repair may change mg -> mcg only when the qualifier
+        # is unchanged. This prevents a folate DFE amount from being silently
+        # reinterpreted as bare folic-acid mass (or vice versa).
+        if source_unit != "np" and source_qualifier != target_qualifier:
+            return None
+        corrected_unit = str(record.get("unit") or target_unit).strip()
 
         target_group = self._daily_value_target_group_from_variants(quantity_variants)
         if not target_group:
@@ -2497,11 +2510,11 @@ class EnhancedDSLDNormalizer:
                 "raw_amount": amount,
                 "raw_unit": unit,
                 "corrected_amount": amount,
-                "corrected_unit": target_unit,
+                "corrected_unit": corrected_unit,
                 "percent_daily_value": percent_dv,
                 "daily_value_target_group": target_group,
                 "daily_value_reference_amount": dv_reference_amount,
-                "daily_value_reference_unit": target_unit,
+                "daily_value_reference_unit": corrected_unit,
                 "daily_value_expected_amount": expected_amount,
                 "declared_amount_in_reference_unit": None,
                 "mismatch_ratio": None,
@@ -2510,7 +2523,7 @@ class EnhancedDSLDNormalizer:
                 "confidence": "high",
             }
 
-        if source_unit != "mg":
+        if source_mass_unit != "mg":
             return None
 
         declared_amount_in_target_unit = amount * 1000.0
@@ -2533,11 +2546,11 @@ class EnhancedDSLDNormalizer:
             "raw_amount": amount,
             "raw_unit": unit,
             "corrected_amount": reinterpreted_amount,
-            "corrected_unit": target_unit,
+            "corrected_unit": corrected_unit,
             "percent_daily_value": percent_dv,
             "daily_value_target_group": target_group,
             "daily_value_reference_amount": dv_reference_amount,
-            "daily_value_reference_unit": target_unit,
+            "daily_value_reference_unit": corrected_unit,
             "daily_value_expected_amount": expected_amount,
             "declared_amount_in_reference_unit": declared_amount_in_target_unit,
             "mismatch_ratio": mismatch_ratio,
@@ -6904,7 +6917,10 @@ class EnhancedDSLDNormalizer:
                 if not isinstance(variant, dict):
                     continue
                 if (
-                    self._normalize_daily_value_unit(variant.get("unit")) == "mg"
+                    self._normalize_daily_value_unit(variant.get("unit"))
+                    == self._normalize_daily_value_unit(
+                        dose_data_quality.get("raw_unit")
+                    )
                     and variant.get("daily_value") == daily_value
                 ):
                     variant.setdefault("raw_quantity", variant.get("quantity"))

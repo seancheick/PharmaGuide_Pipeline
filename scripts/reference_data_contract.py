@@ -106,7 +106,28 @@ def semantic_rda_ul_payload(data: Mapping[str, Any]) -> dict[str, Any]:
         )
 
     entries.sort(key=lambda entry: (entry["id"] or "", entry["standard_name"] or ""))
-    return {"nutrient_recommendations": entries}
+
+    raw_consumer_warnings = data.get("consumer_ul_warnings", {})
+    if not isinstance(raw_consumer_warnings, Mapping):
+        raise ReferenceDataContractError("consumer_ul_warnings must be an object")
+    consumer_warnings: dict[str, dict[str, str | None]] = {}
+    for raw_id, raw_warning in raw_consumer_warnings.items():
+        if not isinstance(raw_warning, Mapping):
+            raise ReferenceDataContractError(
+                f"consumer UL warning {raw_id!r} must be an object"
+            )
+        warning_id = _normalized_text(raw_id)
+        if not warning_id:
+            raise ReferenceDataContractError("consumer UL warning has an empty id")
+        consumer_warnings[warning_id] = {
+            "message": _normalized_text(raw_warning.get("message")),
+            "source_url": str(raw_warning.get("source_url") or "").strip() or None,
+        }
+
+    return {
+        "nutrient_recommendations": entries,
+        "consumer_ul_warnings": dict(sorted(consumer_warnings.items())),
+    }
 
 
 def semantic_rda_ul_fingerprint(data: Mapping[str, Any]) -> str:
@@ -140,9 +161,53 @@ def reference_stamp(data: Mapping[str, Any]) -> dict[str, str]:
 
 def validate_declared_reference_stamp(data: Mapping[str, Any]) -> dict[str, str]:
     """Validate that the stored canonical stamp represents this exact data."""
-    stamp = reference_stamp(data)
     metadata = data.get("_metadata")
     metadata = metadata if isinstance(metadata, Mapping) else {}
+    schema_text = str(metadata.get("schema_version") or "0.0")
+    try:
+        schema_parts = tuple(int(part) for part in schema_text.split(".")[:2])
+    except ValueError:
+        schema_parts = (0, 0)
+    if schema_parts >= (5, 1):
+        recommendations = data.get("nutrient_recommendations")
+        warnings = data.get("consumer_ul_warnings")
+        if not isinstance(recommendations, list) or not isinstance(warnings, Mapping):
+            raise ReferenceDataContractError(
+                "v5.1 reference data requires consumer UL warning records"
+            )
+        established_ids = {
+            str(entry.get("id") or "").strip()
+            for entry in recommendations
+            if isinstance(entry, Mapping)
+            and entry.get("nutrient_class") != "floor"
+            and any(
+                isinstance(group, Mapping) and group.get("ul") is not None
+                for group in (entry.get("data") or [])
+            )
+        }
+        missing = sorted(nutrient_id for nutrient_id in established_ids if nutrient_id not in warnings)
+        if missing:
+            raise ReferenceDataContractError(
+                f"established nutrients are missing consumer UL warning copy: {missing}"
+            )
+        for nutrient_id in sorted(established_ids):
+            record = warnings[nutrient_id]
+            if not isinstance(record, Mapping):
+                raise ReferenceDataContractError(
+                    f"consumer UL warning {nutrient_id!r} must be an object"
+                )
+            message = str(record.get("message") or "").strip()
+            source_url = str(record.get("source_url") or "").strip()
+            if not 25 <= len(message) <= 140:
+                raise ReferenceDataContractError(
+                    f"consumer UL warning {nutrient_id!r} must be 25-140 characters"
+                )
+            if not source_url.startswith("https://"):
+                raise ReferenceDataContractError(
+                    f"consumer UL warning {nutrient_id!r} needs an HTTPS source URL"
+                )
+
+    stamp = reference_stamp(data)
     contract = metadata.get("reference_data_contract")
     contract = contract if isinstance(contract, Mapping) else {}
     declared = contract.get("semantic_fingerprint")
