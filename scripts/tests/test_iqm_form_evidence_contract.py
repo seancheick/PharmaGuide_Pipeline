@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 import json
 from pathlib import Path
 
@@ -26,6 +27,12 @@ from iqm_form_evidence import (
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 IQM_PATH = SCRIPTS_DIR / "data" / "ingredient_quality_map.json"
 BACKLOG_PATH = SCRIPTS_DIR / "data" / "iqm_excellent_evidence_backlog.json"
+ADJUDICATION_REPORT_PATH = (
+    SCRIPTS_DIR / "audits" / "form_evidence_20260813" / "adjudication_report.json"
+)
+CLINICAL_REVIEW_QUEUE_PATH = (
+    SCRIPTS_DIR / "audits" / "form_evidence_20260813" / "clinical_review_queue.csv"
+)
 
 
 def _reference(*, pmid: str = "14596323") -> dict:
@@ -509,3 +516,69 @@ def test_pubmed_collection_is_sorted_and_deduplicated():
     )
 
     assert collect_pubmed_pmids(iqm) == ["14596323"]
+
+
+def test_iqm_form_evidence_audit_summary_matches_adjudication_report():
+    iqm = json.loads(IQM_PATH.read_text(encoding="utf-8"))
+    report = json.loads(ADJUDICATION_REPORT_PATH.read_text(encoding="utf-8"))
+    summary = " ".join(
+        iqm["_metadata"]["schema_updates"]["5.5.0"]["changes"]
+    )
+
+    assert f"Live-verified {report['live_pmids_verified']} PubMed records" in summary
+    assert f"retained {report['excellent_retained']} Excellent forms" in summary
+    assert (
+        f"Recalibrated {report['recalibrated_to_good']} unsupported Excellent forms"
+        in summary
+    )
+
+
+def test_clinical_review_queue_is_complete_provisional_and_axis_aware():
+    iqm = json.loads(IQM_PATH.read_text(encoding="utf-8"))
+    report = json.loads(ADJUDICATION_REPORT_PATH.read_text(encoding="utf-8"))
+    with CLINICAL_REVIEW_QUEUE_PATH.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    report_keys = {entry["key"] for entry in report["lowered"]}
+    queue_keys = {f"{row['ingredient']}::{row['form']}" for row in rows}
+    assert len(rows) == report["recalibrated_to_good"]
+    assert queue_keys == report_keys
+    assert {row["review_status"] for row in rows} == {
+        "not_clinically_approved"
+    }
+    assert all(not row["clinician_decision"] for row in rows)
+    assert all(not row["clinician_approved_score"] for row in rows)
+    assert all(not row["clinician_notes"] for row in rows)
+
+    expected_priority_pmids = {
+        "vitamin_d::calcidiol (25-hydroxy D3)": "28187226|29713796",
+        "vitamin_b9_folate::metafolin": "33255787",
+        "fish_oil::triglyceride (rTG) form": "20638827",
+        "quercetin::isoquercetin (EMIQ)": "20638359",
+    }
+    by_key = {f"{row['ingredient']}::{row['form']}": row for row in rows}
+    for key, pmids in expected_priority_pmids.items():
+        assert by_key[key]["review_bucket"] == "priority_evidence_recheck"
+        assert by_key[key]["proposed_axis"] == "systemic_bioavailability"
+        assert by_key[key]["candidate_pmids"] == pmids
+
+    for row in rows:
+        category = iqm[row["ingredient"]]["category"]
+        if category == "probiotics":
+            assert row["proposed_axis"] == "organism_survivability"
+            assert row["review_bucket"] == "local_delivery_recheck"
+
+    local_ingredients = {
+        "alpha_amylase",
+        "digestive_enzymes",
+        "immunoglobulin",
+        "inulin",
+        "manuka_honey",
+        "prebiotics",
+        "psyllium",
+        "slippery_elm",
+    }
+    for row in rows:
+        if row["ingredient"] in local_ingredients:
+            assert row["proposed_axis"] == "delivery_to_site"
+            assert row["review_bucket"] == "local_delivery_recheck"

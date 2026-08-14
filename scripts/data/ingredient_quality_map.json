@@ -1679,8 +1679,8 @@
         "audit": "form_evidence_20260813",
         "changes": [
           "Added reviewed form_evidence contract with claim-scoped structured references.",
-          "Live-verified 80 PubMed records and retained 69 Excellent forms with moderate/strong support.",
-          "Recalibrated 202 unsupported Excellent forms to bio_score 11 (Good) instead of forcing citations.",
+          "Live-verified 90 PubMed records and retained 89 Excellent forms with moderate/strong support.",
+          "Recalibrated 182 unsupported Excellent forms to bio_score 11 (Good) instead of forcing citations.",
           "Exported compact form evidence to canonical and legacy ingredient rows without exposing internal audit rationale."
         ]
       }
