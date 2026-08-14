@@ -118,17 +118,19 @@ def test_share_index_is_canonical_and_preserves_blocked_disposition(tmp_path):
     assert count == 3
 
     def entry(dsld_id):
-        shard = hashlib.sha256(dsld_id.encode()).hexdigest()[0]
+        shard = hashlib.sha256(dsld_id.encode()).hexdigest()[:2]
         payload = json.loads((out_dir / f"{shard}.json").read_text())
-        assert payload["schemaVersion"] == 1
+        assert payload["schemaVersion"] == 2
+        assert payload["shardPrefixLength"] == 2
         assert payload["catalogVersion"] == "2026.08.13.204005"
         return payload["products"][dsld_id]
 
     assert sorted(path.name for path in out_dir.glob("*.json")) == [
-        f"{shard}.json" for shard in "0123456789abcdef"
+        f"{shard:02x}.json" for shard in range(256)
     ]
     payload = json.loads(next(out_dir.glob("*.json")).read_text())
-    assert payload["schemaVersion"] == 1
+    assert payload["schemaVersion"] == 2
+    assert payload["shardPrefixLength"] == 2
     assert payload["catalogVersion"] == "2026.08.13.204005"
 
     scored = entry("1001")

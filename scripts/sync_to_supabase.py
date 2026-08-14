@@ -40,8 +40,9 @@ from audit_source_of_truth_contract import check_v4_pillar_contract
 
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 SHARE_INDEX_DIRNAME = "share_index"
-SHARE_INDEX_SCHEMA_VERSION = 1
-SHARE_INDEX_SHARDS = tuple("0123456789abcdef")
+SHARE_INDEX_SCHEMA_VERSION = 2
+SHARE_INDEX_SHARD_PREFIX_LENGTH = 2
+SHARE_INDEX_SHARDS = tuple(f"{value:02x}" for value in range(256))
 SHARE_TIER_IDS = {"elite", "excellent", "strong", "acceptable", "weak", "poor"}
 SHARE_HIGHLIGHT_COLUMNS = (
     ("has_third_party_testing", "Third-Party Tested"),
@@ -137,7 +138,9 @@ def write_share_index(*, db_path, output_dir, catalog_version):
                 if row[column] == 1
             ][:3]
 
-        shard = hashlib.sha256(dsld_id.encode("utf-8")).hexdigest()[0]
+        shard = hashlib.sha256(dsld_id.encode("utf-8")).hexdigest()[
+            :SHARE_INDEX_SHARD_PREFIX_LENGTH
+        ]
         products_by_shard[shard][dsld_id] = {
             "productName": product_name,
             "brandName": brand_name,
@@ -152,6 +155,7 @@ def write_share_index(*, db_path, output_dir, catalog_version):
     for shard, products in products_by_shard.items():
         payload = {
             "schemaVersion": SHARE_INDEX_SCHEMA_VERSION,
+            "shardPrefixLength": SHARE_INDEX_SHARD_PREFIX_LENGTH,
             "catalogVersion": str(catalog_version),
             "products": products,
         }

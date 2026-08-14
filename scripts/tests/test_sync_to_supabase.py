@@ -276,7 +276,7 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
     }
     assert uploaded_paths == [
         f"v{local['db_version']}/share_index/{shard}.json"
-        for shard in "0123456789abcdef"
+        for shard in (f"{value:02x}" for value in range(256))
     ]
 
 
