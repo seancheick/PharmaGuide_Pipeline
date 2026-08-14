@@ -20,6 +20,7 @@ import glob
 import hashlib
 import json
 import os
+import sqlite3
 import sys
 import threading
 import time
@@ -38,6 +39,128 @@ from supabase_client import CACHE_CONTROL_IMMUTABLE
 from audit_source_of_truth_contract import check_v4_pillar_contract
 
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
+SHARE_INDEX_DIRNAME = "share_index"
+SHARE_INDEX_SCHEMA_VERSION = 1
+SHARE_INDEX_SHARDS = tuple("0123456789abcdef")
+SHARE_TIER_IDS = {"elite", "excellent", "strong", "acceptable", "weak", "poor"}
+SHARE_HIGHLIGHT_COLUMNS = (
+    ("has_third_party_testing", "Third-Party Tested"),
+    ("is_trusted_manufacturer", "Trusted Manufacturer"),
+    ("is_vegan", "Vegan"),
+    ("is_gluten_free", "Gluten-Free"),
+    ("is_dairy_free", "Dairy-Free"),
+    ("is_soy_free", "Soy-Free"),
+    ("is_organic", "Organic"),
+    ("is_non_gmo", "Non-GMO"),
+)
+
+
+def _share_disposition(row):
+    safety = (row["product_safety_status"] or "").strip().lower()
+    if safety in {"blocked", "unsafe"}:
+        return "blocked"
+
+    assessment = (row["quality_assessment_status"] or "").strip().lower()
+    score_status = (row["quality_score_status"] or "").strip().lower()
+    if (
+        assessment != "complete"
+        or score_status != "scored"
+        or row["quality_score_v4_100"] is None
+    ):
+        return "not_scored"
+    return "scored"
+
+
+def write_share_index(*, db_path, output_dir, catalog_version):
+    """Write the server-owned public-share projection for one catalog release.
+
+    The checksum-verified SQLite catalog remains the source of truth. The
+    website reads this compact, immutable projection instead of accepting a
+    product name, score, safety disposition, or trust claim from the app.
+    """
+    columns = [
+        "dsld_id",
+        "product_name",
+        "brand_name",
+        "product_safety_status",
+        "quality_assessment_status",
+        "quality_score_status",
+        "quality_score_v4_100",
+        "quality_tier",
+        "v4_confidence",
+        *(column for column, _ in SHARE_HIGHLIGHT_COLUMNS),
+    ]
+    conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+    conn.row_factory = sqlite3.Row
+    try:
+        rows = conn.execute(
+            f"SELECT {', '.join(columns)} FROM products_core ORDER BY dsld_id"
+        ).fetchall()
+    finally:
+        conn.close()
+
+    products_by_shard = {shard: {} for shard in SHARE_INDEX_SHARDS}
+    for row in rows:
+        dsld_id = str(row["dsld_id"] or "").strip()
+        product_name = str(row["product_name"] or "").strip()
+        brand_name = str(row["brand_name"] or "").strip() or None
+        if not dsld_id or len(dsld_id) > 64:
+            raise ValueError(f"Invalid share dsld_id: {dsld_id!r}")
+        if not product_name or len(product_name) > 200:
+            raise ValueError(f"Invalid share product_name for {dsld_id!r}")
+        if brand_name is not None and len(brand_name) > 200:
+            raise ValueError(f"Invalid share brand_name for {dsld_id!r}")
+
+        disposition = _share_disposition(row)
+        quality_score = None
+        quality_tier = None
+        confidence = None
+        highlights = []
+
+        if disposition == "scored":
+            quality_score = int(round(float(row["quality_score_v4_100"])))
+            if quality_score < 0 or quality_score > 100:
+                raise ValueError(f"Invalid share score for {dsld_id!r}: {quality_score}")
+            quality_tier = str(row["quality_tier"] or "").strip().lower()
+            if quality_tier not in SHARE_TIER_IDS:
+                raise ValueError(
+                    f"Invalid share quality_tier for {dsld_id!r}: {quality_tier!r}"
+                )
+            raw_confidence = str(row["v4_confidence"] or "").strip().lower()
+            if raw_confidence and raw_confidence not in {"high", "moderate", "medium"}:
+                confidence = "Limited"
+
+        if disposition != "blocked":
+            highlights = [
+                label
+                for column, label in SHARE_HIGHLIGHT_COLUMNS
+                if row[column] == 1
+            ][:3]
+
+        shard = hashlib.sha256(dsld_id.encode("utf-8")).hexdigest()[0]
+        products_by_shard[shard][dsld_id] = {
+            "productName": product_name,
+            "brandName": brand_name,
+            "catalogDisposition": disposition,
+            "qualityScore": quality_score,
+            "qualityTier": quality_tier,
+            "confidence": confidence,
+            "highlights": highlights,
+        }
+
+    os.makedirs(output_dir, exist_ok=True)
+    for shard, products in products_by_shard.items():
+        payload = {
+            "schemaVersion": SHARE_INDEX_SCHEMA_VERSION,
+            "catalogVersion": str(catalog_version),
+            "products": products,
+        }
+        output_path = os.path.join(output_dir, f"{shard}.json")
+        temp_path = f"{output_path}.tmp"
+        with open(temp_path, "w", encoding="utf-8") as handle:
+            json.dump(payload, handle, separators=(",", ":"), sort_keys=True)
+        os.replace(temp_path, output_path)
+    return sum(len(products) for products in products_by_shard.values())
 
 
 # ---------------------------------------------------------------------------
@@ -936,6 +1059,18 @@ def sync(
     product_count = local["product_count"]
     checksum = local["checksum"]
     build_stats = validate_build_output(build_dir, local)
+    share_index_dir = os.path.join(build_dir, SHARE_INDEX_DIRNAME)
+    share_product_count = write_share_index(
+        db_path=build_stats["db_path"],
+        output_dir=share_index_dir,
+        catalog_version=version,
+    )
+    if share_product_count != int(product_count):
+        raise ValueError(
+            "Share index product count mismatch: "
+            f"manifest={product_count}, share_index={share_product_count}"
+        )
+    build_stats["share_index_dir"] = share_index_dir
 
     print(f"  Version:  {version}")
     print(f"  Products: {product_count}")
@@ -945,6 +1080,7 @@ def sync(
         print(f"\n[DRY RUN] Would upload:")
         print(f"  - pharmaguide_core.db ({build_stats['db_size_mb']:.1f} MB)")
         print(f"  - detail_index.json")
+        print(f"  - {len(SHARE_INDEX_SHARDS)} canonical share-index shards")
         print(f"  - {build_stats['unique_blob_count']} unique detail blobs ({build_stats['blob_count']} product mappings)")
         img_index, _ = load_product_image_index(build_dir)
         if img_index:
@@ -963,6 +1099,16 @@ def sync(
         print("  No remote version found (first push)")
 
     if not needs_update(local, remote, force=force):
+        print(f"Uploading canonical share-index shards for {version}...")
+        for shard in SHARE_INDEX_SHARDS:
+            upload_file(
+                client,
+                bucket,
+                f"v{version}/{SHARE_INDEX_DIRNAME}/{shard}.json",
+                os.path.join(build_stats["share_index_dir"], f"{shard}.json"),
+                content_type="application/json",
+                cache_control=CACHE_CONTROL_IMMUTABLE,
+            )
         print("Already up to date. Verifying registry state...")
         remote_detail_index_path = f"v{version}/detail_index.json"
         _ensure_registry_validating(
@@ -1025,6 +1171,20 @@ def sync(
                 content_type="application/json", cache_control=CACHE_CONTROL_IMMUTABLE)
     detail_index_time = time.time() - start
     print(f"  Done ({detail_index_time:.1f}s)")
+
+    print(f"\nUploading canonical share-index shards for {version}...")
+    start = time.time()
+    for shard in SHARE_INDEX_SHARDS:
+        upload_file(
+            client,
+            bucket,
+            f"v{version}/{SHARE_INDEX_DIRNAME}/{shard}.json",
+            os.path.join(build_stats["share_index_dir"], f"{shard}.json"),
+            content_type="application/json",
+            cache_control=CACHE_CONTROL_IMMUTABLE,
+        )
+    share_index_time = time.time() - start
+    print(f"  Done ({share_index_time:.1f}s)")
 
     # Upload unique detail blobs with bounded concurrency, retry logic, and remote dedupe.
     uploads = build_stats["unique_blob_uploads"]

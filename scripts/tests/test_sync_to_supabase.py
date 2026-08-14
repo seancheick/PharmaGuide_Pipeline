@@ -32,20 +32,33 @@ def _make_manifest(tmp_dir, db_version="2026.03.27.5", product_count=100, checks
     return path
 
 
-def _write_minimal_catalog_db(db_path):
+def _write_minimal_catalog_db(db_path, product_count=1):
     """Write a tiny valid, clean products_core honoring the V4 pillar contract,
     so validate_build_output's pillar preflight passes on a realistic catalog."""
     conn = sqlite3.connect(db_path)
     try:
         conn.execute(
             "CREATE TABLE products_core ("
-            "dsld_id TEXT, quality_score_status TEXT, quality_score_v4_100 REAL, "
+            "dsld_id TEXT, product_name TEXT, brand_name TEXT, "
+            "product_safety_status TEXT, quality_assessment_status TEXT, "
+            "quality_score_status TEXT, quality_score_v4_100 REAL, quality_tier TEXT, "
+            "v4_confidence TEXT, has_third_party_testing INTEGER, "
+            "is_trusted_manufacturer INTEGER, is_vegan INTEGER, "
+            "is_gluten_free INTEGER, is_dairy_free INTEGER, is_soy_free INTEGER, "
+            "is_organic INTEGER, is_non_gmo INTEGER, "
             "pillar_formulation_v4 REAL, pillar_dose_v4 REAL, pillar_evidence_v4 REAL, "
             "pillar_transparency_v4 REAL, pillar_verification_v4 REAL, pillar_safety_hygiene_v4 REAL)"
         )
         # 11.2+20+18.9+15+6+10 = 81.1, exported half-up as 81.
-        conn.execute(
-            "INSERT INTO products_core VALUES ('1', 'scored', 81, 11.2, 20.0, 18.9, 15.0, 6.0, 10.0)"
+        conn.executemany(
+            "INSERT INTO products_core VALUES "
+            "(?, ?, 'Example', 'no_known_catalog_concern', 'complete', "
+            "'scored', 81, 'Strong', 'high', 1, 1, 0, 1, 0, 0, 0, 0, "
+            "11.2, 20.0, 18.9, 15.0, 6.0, 10.0)",
+            [
+                (str(index), f"Product {index}")
+                for index in range(1, product_count + 1)
+            ],
         )
         conn.commit()
     finally:
@@ -55,7 +68,7 @@ def _write_minimal_catalog_db(db_path):
 def _make_build_output(tmp_dir, db_version="2026.03.27.5", product_count=3):
     """Helper: create a fake build output directory with manifest, db, and blobs."""
     db_path = os.path.join(tmp_dir, "pharmaguide_core.db")
-    _write_minimal_catalog_db(db_path)
+    _write_minimal_catalog_db(db_path, product_count=product_count)
 
     # Fake detail blobs
     detail_dir = os.path.join(tmp_dir, "detail_blobs")
@@ -211,13 +224,17 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
     tmp_path,
     monkeypatch,
 ):
-    """A no-op sync must not fail a policy that applies only to new uploads."""
+    """An up-to-date sync repairs the share index without re-uploading the DB."""
     import supabase_client
     import sync_to_supabase
 
     _make_build_output(str(tmp_path), product_count=3)
     local = sync_to_supabase.load_local_manifest(str(tmp_path))
     client = object()
+    uploaded_paths = []
+
+    def capture_upload(_client, _bucket, remote_path, *_args, **_kwargs):
+        uploaded_paths.append(remote_path)
 
     monkeypatch.setattr(supabase_client, "get_supabase_client", lambda: client)
     monkeypatch.setattr(
@@ -227,6 +244,11 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
             "db_version": local["db_version"],
             "checksum": local["checksum"],
         },
+    )
+    monkeypatch.setattr(
+        supabase_client,
+        "upload_file",
+        capture_upload,
     )
     monkeypatch.setattr(
         sync_to_supabase,
@@ -252,6 +274,10 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
         "status": "up_to_date",
         "version": local["db_version"],
     }
+    assert uploaded_paths == [
+        f"v{local['db_version']}/share_index/{shard}.json"
+        for shard in "0123456789abcdef"
+    ]
 
 
 def test_detail_index_blob_paths_extracts_storage_paths():
