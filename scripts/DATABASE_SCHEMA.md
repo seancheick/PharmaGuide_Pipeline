@@ -512,7 +512,7 @@ Supported `subject_ref.db` values: `ingredient_quality_map`, `other_ingredients`
 ---
 
 ### 18. ingredient_quality_map.json
-**Purpose:** `quality_scoring` | **588 ingredient parents** | **588 total entries**
+**Purpose:** `quality_scoring` | **631 ingredient parents** | **1,421 scored forms**
 
 Structure: Object keyed by ingredient slug (e.g., `vitamin_a`, `omega_3`, `ashwagandha`)
 
@@ -540,6 +540,13 @@ Each **form** within `forms`:
 | `notes` | string | NO | Form-specific notes |
 | `aliases` | string[] | YES | Form aliases for matching |
 | `dosage_importance` | float | NO | Weight for scoring |
+| `form_evidence` | object | Required when `bio_score >= 12` | Reviewed evidence contract: scoring axis, evidence level, score-support decision, internal rationale/review receipt, and claim-scoped `references_structured`. Excellent forms require moderate or strong support. |
+
+`form_evidence.references_structured` reuses the shared citation shape. PubMed
+references must resolve live, match the stored title/DOI, be explicitly
+non-retracted, and declare `supports_claims`. Authoritative guidance references
+must use an official HTTPS source. Internal rationale and reviewer fields do not
+ship to the app.
 
 ---
 

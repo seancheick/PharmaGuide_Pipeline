@@ -33,7 +33,9 @@ def iqm():
 
 @pytest.mark.parametrize('pid,fname,expected_bio', [
     # C2 — B12
-    ('vitamin_b12_cobalamin', 'methylcobalamin sublingual',  12),
+    # Human data support sublingual delivery, but not an Excellent
+    # methylcobalamin-specific absorption advantage.
+    ('vitamin_b12_cobalamin', 'methylcobalamin sublingual',  11),
     ('vitamin_b12_cobalamin', 'methylcobalamin',              8),
     ('vitamin_b12_cobalamin', 'adenosylcobalamin',            8),
     ('vitamin_b12_cobalamin', 'hydroxocobalamin',             8),
@@ -83,7 +85,9 @@ def iqm():
     # C8 — Iron (bisglycinate retained at 12 per modify)
     ('iron', 'iron bisglycinate',                             13),
     ('iron', 'iron protein succinylate',                      10),
-    ('iron', 'heme iron polypeptide',                         15),
+    # Form-specific human evidence supports Excellent, but not the former
+    # maximum score or a clinical advantage over conventional iron.
+    ('iron', 'heme iron polypeptide',                         13),
     ('iron', 'iron amino acid chelate',                       11),
     ('iron', 'ferrous ascorbate',                             13),
     # C9 — Probiotics → 7 placeholder

@@ -27,6 +27,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import build_final_db  # noqa: E402
 from build_final_db import (  # noqa: E402
     FormNoteProvenanceError,
+    _derive_form_evidence,
     _derive_form_note,
     build_detail_blob,
     validate_iqm_consumer_notes,
@@ -39,6 +40,35 @@ NOTE = (
     "taken up about as well as standard riboflavin."
 )
 PREVIEW = "The active coenzyme form of B2, also called FMN."
+FORM_EVIDENCE = {
+    "schema_version": "1.0.0",
+    "axis": "class_equivalence",
+    "evidence_level": "moderate",
+    "score_supported": True,
+    "rationale": "Human evidence supports class-equivalent oral absorption.",
+    "review": {
+        "status": "source_verified",
+        "by": "PharmaGuide evidence audit",
+        "date": "2026-08-13",
+    },
+    "references_structured": [
+        {
+            "type": "pubmed",
+            "authority": "NCBI PubMed",
+            "pmid": "8604671",
+            "doi": None,
+            "title": "Intestinal absorption of vitamin B2 compounds.",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/8604671/",
+            "published_date": "1995-01-01",
+            "publication_types": ["Journal Article"],
+            "evidence_grade": "journal_article",
+            "retracted": False,
+            "supports_claims": ["class_equivalence"],
+            "verification_source": "pubmed_eutils",
+            "verified_on": "2026-08-13",
+        }
+    ],
+}
 
 
 def _iqm(**form_overrides):
@@ -73,6 +103,27 @@ def test_raw_notes_are_never_used_as_the_consumer_note():
 def test_reviewed_consumer_note_is_emitted_with_preview():
     iqm = _iqm(consumer_note=NOTE, consumer_note_review=REVIEW)
     assert _derive_form_note(_match(), iqm) == (NOTE, PREVIEW)
+
+
+def test_structured_form_evidence_follows_the_same_single_form_guard():
+    iqm = _iqm(form_evidence=FORM_EVIDENCE)
+
+    assert _derive_form_evidence(_match(), iqm) == {
+        "evidence_level": "moderate",
+        "references_structured": FORM_EVIDENCE["references_structured"],
+    }
+
+
+def test_structured_form_evidence_suppresses_on_a_blended_score():
+    iqm = _iqm(form_evidence=FORM_EVIDENCE)
+    blended = _match(
+        matched_forms=[
+            {"form_key": "riboflavin-5-phosphate", "bio_score": 10.0},
+            {"form_key": "riboflavin", "bio_score": 10.0},
+        ]
+    )
+
+    assert _derive_form_evidence(blended, iqm) is None
 
 
 def test_preview_is_the_first_sentence_split_pipeline_side():
@@ -357,7 +408,11 @@ def _scored():
 @pytest.fixture
 def curated_iqm(monkeypatch):
     """Install a curated IQM without touching the real map on disk."""
-    index = _iqm(consumer_note=NOTE, consumer_note_review=REVIEW)
+    index = _iqm(
+        consumer_note=NOTE,
+        consumer_note_review=REVIEW,
+        form_evidence=FORM_EVIDENCE,
+    )
     monkeypatch.setattr(build_final_db, "IQM_REFERENCE_INDEX", index)
     monkeypatch.setattr(build_final_db, "load_iqm_reference_index", lambda: index)
     return index
@@ -379,6 +434,17 @@ def test_note_reaches_the_canonical_analysis_payload(curated_iqm):
     assert analysis["form_note"] == NOTE
     assert analysis["form_note_preview"] == PREVIEW
     assert analysis["bio_score"] == 10.0
+
+
+def test_form_evidence_reaches_canonical_and_legacy_payloads(curated_iqm):
+    blob = build_detail_blob(_enriched(), _scored())
+    expected = {
+        "evidence_level": "moderate",
+        "references_structured": FORM_EVIDENCE["references_structured"],
+    }
+
+    assert _riboflavin_row(blob)["analysis"]["form_evidence"] == expected
+    assert blob["ingredients"][0]["form_evidence"] == expected
 
 
 def test_legacy_notes_field_still_carries_the_workspace_prose(curated_iqm):

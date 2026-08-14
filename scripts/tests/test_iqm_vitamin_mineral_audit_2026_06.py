@@ -41,8 +41,8 @@ SCORE_TARGETS = [
     ("vitamin_b3_niacin", "inositol hexanicotinate", 5),              # Keenan 2013: no bioavailability
     ("vitamin_k2", "menaquinone-4 (MK-4)", 7),                        # undetectable serum at nutritional dose
     ("vitamin_e", "tocotrienols", 9),                                 # poor a-TTP retention
-    ("vitamin_d", "micellized D3", 12),                               # no proven premium over standard D3
-    ("vitamin_d", "liposomal D3", 12),
+    ("vitamin_d", "micellized D3", 11),                               # no exact-form human PK support
+    ("vitamin_d", "liposomal D3", 11),
 ]
 
 

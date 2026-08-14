@@ -58,7 +58,7 @@ class TestCommonFormCoverage:
         ("Calcium",   "Calcium Carbonate",     "calcium",   "carbonate",   8),
         ("Calcium",   "Calcium Citrate",       "calcium",   "citrate",     12),
         ("Calcium",   "Calcium Malate",        "calcium",   "malate",      10),
-        ("Calcium",   "Calcium Bisglycinate",  "calcium",   "glycinate",   12),
+        ("Calcium",   "Calcium Bisglycinate",  "calcium",   "glycinate",   11),
         # Iron forms
         ("Iron",      "Ferrous Sulfate",       "iron",      "ferrous sulfate", 6),
         ("Iron",      "Ferrous Fumarate",      "iron",      "fumarate",    10),

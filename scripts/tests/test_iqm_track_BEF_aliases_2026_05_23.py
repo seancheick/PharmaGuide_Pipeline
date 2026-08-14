@@ -83,12 +83,12 @@ def test_citrus_bergamot_unspecified_form_includes_risso_aliases(iqm, expected_a
 
 def test_citrus_bergamot_unspecified_form_bio_score_pinned(iqm):
     """Pin the conservative bio_score on the unspecified form. Adding the
-    Risso alias must NOT touch the existing 12 bio_score (unspecified extract
-    is intentionally lower than BPF=14 / standardized extract=12)."""
+    Risso alias must not bypass the evidence contract: the unspecified extract
+    remains below BPF and standardized forms without exact-form support."""
     form = iqm["citrus_bergamot"]["forms"]["bergamot (unspecified)"]
-    assert form["bio_score"] == 12, (
-        f"bergamot (unspecified) bio_score changed from 12 to {form['bio_score']} — "
-        f"alias-add must not modify bio_score."
+    assert form["bio_score"] == 11, (
+        f"bergamot (unspecified) bio_score changed from 11 to {form['bio_score']} — "
+        f"reconcile against the form-evidence contract."
     )
 
 

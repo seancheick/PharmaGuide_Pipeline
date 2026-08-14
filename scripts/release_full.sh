@@ -268,6 +268,8 @@ run_strict_gate() {
 
 run_strict_gate "source-of-truth matrix" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" matrix --strict-release
+run_strict_gate "IQM form-evidence contract" \
+  "$PG_PYTHON" scripts/iqm_form_evidence.py audit
 
 # ---------------------------------------------------------------------------
 # Step 0: Approved product submissions
@@ -593,6 +595,8 @@ else
     "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_citation_content.py \
       --live \
       --require-coverage
+  run_strict_gate "IQM form-evidence PMID content (PubMed)" \
+    "$PG_PYTHON" scripts/iqm_form_evidence.py verify-live
 fi
 
 run_strict_gate "cleaner/IQD row contract" \

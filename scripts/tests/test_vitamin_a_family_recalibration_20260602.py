@@ -31,8 +31,8 @@ def test_vitamin_a_direct_forms_use_absorption_only_scores() -> None:
         "retinyl palmitate": 14,
         "retinyl acetate": 14,
         "vitamin A from cod liver oil": 11,
-        "micellized vitamin A": 12,
-        "liposomal vitamin A": 12,
+        "micellized vitamin A": 11,
+        "liposomal vitamin A": 11,
         "beta-carotene synthetic": 6,
         "beta-carotene from mixed carotenoids": 7,
         "vitamin a (unspecified)": 6,
@@ -50,7 +50,7 @@ def test_delivery_tech_forms_are_evidence_thin_not_top_tier() -> None:
 
     for form_name in ("micellized vitamin A", "liposomal vitamin A"):
         form = forms[form_name]
-        assert form["bio_score"] == 12
+        assert form["bio_score"] == 11
         notes = form.get("notes", "").lower()
         assert "evidence-thin" in notes
         assert "mechanistic" in notes

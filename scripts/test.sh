@@ -220,6 +220,7 @@ PY
 }
 
 run_release_artifact_gates() {
+  "$PG_PYTHON" scripts/iqm_form_evidence.py audit
   "$PG_PYTHON" scripts/validate_form_notes_export.py --blobs-dir scripts/dist/detail_blobs
   "$PG_PYTHON" scripts/coverage_gate_functional_roles.py
   "$PG_PYTHON" scripts/audit_source_of_truth_contract.py freshness \
@@ -251,6 +252,7 @@ run_release_artifact_gates() {
     "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_citation_content.py \
       --live \
       --require-coverage
+    "$PG_PYTHON" scripts/iqm_form_evidence.py verify-live
   fi
 }
 

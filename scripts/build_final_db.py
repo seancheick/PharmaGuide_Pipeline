@@ -33,6 +33,7 @@ Follows: FINAL_EXPORT_SCHEMA_V1.md (v1.1.0)
 """
 
 import argparse
+import copy
 import hashlib
 import json
 import logging
@@ -54,6 +55,7 @@ from audit_evidence_utils import (
 )
 from audit_identity_integrity import audit_product
 from inactive_ingredient_resolver import InactiveIngredientResolver
+from iqm_form_evidence import validate_form_evidence
 from identity.safety import (
     has_explicit_form_evidence,
     normalize_safety_source,
@@ -3861,6 +3863,36 @@ def _derive_form_note(
     return note, preview
 
 
+def _derive_form_evidence(
+    m: Dict[str, Any], iqm_index: Dict[str, Dict]
+) -> Optional[Dict[str, Any]]:
+    """Consumer-safe structured sources for the one form that set the score.
+
+    This deliberately reuses :func:`_resolve_scoring_form`, so a blended or
+    downstream-adjusted score cannot borrow citations from whichever form was
+    serialized first. Internal assessment rationale and reviewer metadata stay
+    in IQM; the device receives only the evidence level and verified sources.
+    """
+    form = _resolve_scoring_form(m, iqm_index)
+    if not form:
+        return None
+    evidence = form.get("form_evidence")
+    bio_score = safe_float(form.get("bio_score"))
+    excellent = bio_score is not None and bio_score >= 12
+    if validate_form_evidence(
+        evidence,
+        label="form_evidence",
+        excellent=excellent,
+    ):
+        return None
+    return {
+        "evidence_level": safe_str(evidence.get("evidence_level")),
+        "references_structured": copy.deepcopy(
+            safe_list(evidence.get("references_structured"))
+        ),
+    }
+
+
 # Sprint E1.2.2.b — display_dose_label.
 # Three allowed output classes (external-dev medical-honesty rule):
 #   "600 mg"               — individually disclosed
@@ -4408,6 +4440,11 @@ def _build_canonical_label_ledger(
                     # the client renders approved strings only.
                     "form_note": analysis.get("form_note"),
                     "form_note_preview": analysis.get("form_note_preview"),
+                    **(
+                        {"form_evidence": analysis.get("form_evidence")}
+                        if analysis.get("form_evidence") is not None
+                        else {}
+                    ),
                 }
                 if score_included and analysis is not None
                 else None
@@ -6364,6 +6401,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             or safe_dict(safe_dict(ne.get("conversion_evidence")).get("dose_data_quality"))
         )
         form_note, form_note_preview = _derive_form_note(m, iqm_index)
+        form_evidence = _derive_form_evidence(m, iqm_index)
         ingredients.append({
             "raw_source_text": raw,
             "raw_source_path": (
@@ -6397,6 +6435,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # Reviewed consumer copy, or None. See _derive_form_note.
             "form_note": form_note,
             "form_note_preview": form_note_preview,
+            **(
+                {"form_evidence": form_evidence}
+                if form_evidence is not None
+                else {}
+            ),
             "mapped": is_mapped,
             "safety_hits": combined_safety_hits,
             "safety_flags": projected_safety_flags,

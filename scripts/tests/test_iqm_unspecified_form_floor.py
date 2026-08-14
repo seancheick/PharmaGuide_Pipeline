@@ -229,8 +229,15 @@ def test_no_unspec_form_scores_below_peer_min(iqm):
             if not isinstance(ff, dict) or 'unspecified' not in fk.lower():
                 continue
             s = ff.get('score')
-            if isinstance(s, (int, float)) and s < peer_min:
-                violations.append((parent_key, fk, s, peer_min))
+            # The 2026-08-13 evidence contract supersedes the old assumption
+            # that a peer-min floor may silently promote an undisclosed form
+            # into the public Excellent tier. Keep the honest-middle floor,
+            # but cap unsupported unspecified forms at bio_score 11 plus the
+            # existing natural-source bonus.
+            evidence_ceiling = 11 + (3 if ff.get('natural') else 0)
+            required_floor = min(peer_min, evidence_ceiling)
+            if isinstance(s, (int, float)) and s < required_floor:
+                violations.append((parent_key, fk, s, required_floor))
 
     assert not violations, (
         f"Found {len(violations)} '(unspecified)' forms below peer-min "
@@ -280,7 +287,7 @@ def test_recalibrated_high_impact_entries(iqm):
     """Spot-check the highest-impact recalibrations from the audit."""
     expected = {
         # parent: minimum acceptable unspec score (peer-min from audit)
-        'maca': 12,
+        'maca': 11,
         'ashwagandha': 7,
         # rhodiola/pygeum/atp/phosphatidylserine were lowered to their later
         # audit-locked unspecified scores (botanicals_06o / botanicals_actives_06c /
@@ -294,8 +301,8 @@ def test_recalibrated_high_impact_entries(iqm):
         'resveratrol': 11,
         'phosphatidylserine': 10,
         'collagen': 10,
-        'psyllium': 12,
-        'holy_basil': 13,
+        'psyllium': 11,
+        'holy_basil': 11,
         'sulforaphane': 10,
     }
     for parent, min_score in expected.items():

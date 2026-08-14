@@ -286,7 +286,7 @@ def test_m63_resolves_to_its_own_reviewed_identity_and_evidence(enricher) -> Non
     assert match is not None
     assert match["canonical_id"] == "bifidobacterium_longum"
     assert match["form_id"] == "bifidobacterium longum infantis m-63"
-    assert match["bio_score"] == 12
+    assert match["bio_score"] == 11
 
 
 def test_seed_ds01_sd_strain_codes_resolve_to_exact_formula_backed_strains(enricher) -> None:

@@ -34,7 +34,7 @@ SCORE_TARGETS = [
     ("copper", "copper picolinate", 10),            # no human PK
     ("manganese", "manganese bisglycinate", 11),    # val 0.08; ODS: 1-5%, no form data
     ("manganese", "manganese amino acid chelate", 11),
-    ("molybdenum", "molybdenum glycinate", 12),     # = sodium molybdate (the evidence form)
+    ("molybdenum", "molybdenum glycinate", 11),     # no form-specific human comparison
     ("potassium", "potassium glycinate", 11),       # was top with lowest value
     # NOTE: CoQ10 ubiquinol crystal-free left at 15 — Dr Pham "C1 sign-off
     # (pd-respect): bio_score=15 retained for clinical-utility reasons despite

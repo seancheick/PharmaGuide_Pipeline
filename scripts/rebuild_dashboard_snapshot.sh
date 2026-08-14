@@ -38,6 +38,8 @@ run_strict_gate() {
 
 run_strict_gate "source-of-truth matrix" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" matrix --strict-release
+run_strict_gate "IQM form-evidence contract" \
+  "$PG_PYTHON" scripts/iqm_form_evidence.py audit
 run_strict_gate "cleaner/IQD row contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" cleaner --products-dir scripts/products --strict-release
 run_strict_gate "enrichment/IQD source-of-truth contract" \

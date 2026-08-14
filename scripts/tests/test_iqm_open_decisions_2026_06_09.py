@@ -94,11 +94,15 @@ def test_curcumin_hydrocurc_and_bcm95_are_capped_to_signed_ladder() -> None:
     _assert_score_formula(bcm95)
 
 
-def test_bovine_brain_phosphatidylserine_is_watchlist_safety_not_bio_penalty() -> None:
+def test_bovine_brain_phosphatidylserine_keeps_safety_in_watchlist_lane() -> None:
     iqm = _iqm()
     ps_form = _form(iqm, "phosphatidylserine", "bovine phosphatidylserine")
-    assert ps_form["bio_score"] == 12
-    assert "safety risk is not a bioavailability penalty" in ps_form["notes"].lower()
+    # The evidence audit removed an unsupported public Excellent tier; this
+    # recalibration is independent of the bovine-source safety disposition.
+    assert ps_form["bio_score"] == 11
+    notes = ps_form["notes"].lower()
+    assert "safety watchlist" in notes
+    assert "not used as a bioavailability penalty" in notes
 
     entry = next(
         (item for item in _banned_entries() if item.get("id") == "WATCH_BOVINE_BRAIN_PHOSPHATIDYLSERINE"),

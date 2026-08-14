@@ -1,0 +1,1947 @@
+{
+  "schema_version": "1.0.0",
+  "review_date": "2026-08-13",
+  "excellent_before": 271,
+  "excellent_retained": 89,
+  "recalibrated_to_good": 182,
+  "score_magnitude_recalibrations": [
+    {
+      "key": "iron::heme iron polypeptide",
+      "old_bio_score": 15,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "25953602"
+      ]
+    }
+  ],
+  "live_pmids_verified": 90,
+  "retained": [
+    {
+      "key": "algae_oil::algae oil (dha)",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "41096614"
+      ]
+    },
+    {
+      "key": "alpha_lipoic_acid::sodium r-lipoate",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "18069903"
+      ]
+    },
+    {
+      "key": "ashwagandha::Shoden ashwagandha extract",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "32540634",
+        "31517876",
+        "39286132"
+      ]
+    },
+    {
+      "key": "astaxanthin::natural astaxanthin (haematococcus pluvialis)",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "12885395",
+        "11120445"
+      ]
+    },
+    {
+      "key": "bacillus_coagulans::bacillus coagulans gbi-30",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "40707016"
+      ]
+    },
+    {
+      "key": "beta-alanine::beta-alanine powder",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "16554972"
+      ]
+    },
+    {
+      "key": "beta-alanine::carnosyn beta-alanine",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "16554972"
+      ]
+    },
+    {
+      "key": "beta-alanine::sr carnosyn beta-alanine",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "class_equivalence",
+      "sources": [
+        "22139410"
+      ]
+    },
+    {
+      "key": "bifidobacterium_lactis::bifidobacterium lactis bb-12",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "31797399",
+        "32059116"
+      ]
+    },
+    {
+      "key": "bifidobacterium_lactis::bifidobacterium lactis hn019",
+      "old_bio_score": 15,
+      "new_bio_score": 15,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "23922468",
+        "29227175"
+      ]
+    },
+    {
+      "key": "caffeine::caffeine (natural source)",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "6832208"
+      ]
+    },
+    {
+      "key": "caffeine::caffeine anhydrous",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "6832208"
+      ]
+    },
+    {
+      "key": "calcium::calcium citrate",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
+      ]
+    },
+    {
+      "key": "choline::CDP-choline (citicoline)",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "6412727"
+      ]
+    },
+    {
+      "key": "choline::alpha-GPC",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "34287673"
+      ]
+    },
+    {
+      "key": "collagen::collagen tripeptides",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "27573716"
+      ]
+    },
+    {
+      "key": "coq10::ubiquinol",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "32380795"
+      ]
+    },
+    {
+      "key": "coq10::ubiquinol crystal-free",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "16919858"
+      ]
+    },
+    {
+      "key": "coq10::ubiquinone crystal-dispersed",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "30153575"
+      ]
+    },
+    {
+      "key": "creatine_monohydrate::buffered creatine monohydrate",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "class_equivalence",
+      "sources": [
+        "22971354"
+      ]
+    },
+    {
+      "key": "creatine_monohydrate::creatine citrate",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "class_equivalence",
+      "sources": [
+        "17997838"
+      ]
+    },
+    {
+      "key": "creatine_monohydrate::creatine monohydrate",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "22971354"
+      ]
+    },
+    {
+      "key": "d_ribose::d-ribose powder",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "24272966"
+      ]
+    },
+    {
+      "key": "dha::DHA fish oil rTG",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "20638827"
+      ]
+    },
+    {
+      "key": "dha::algal triglyceride",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "41096614"
+      ]
+    },
+    {
+      "key": "epa::EPA fish oil rTG",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "20638827"
+      ]
+    },
+    {
+      "key": "fish_oil::natural triglyceride",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "20638827"
+      ]
+    },
+    {
+      "key": "ginseng::fermented red ginseng",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "27516803",
+        "33884767"
+      ]
+    },
+    {
+      "key": "hmb::hmb calcium salt (hmb-ca)",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "24599749",
+        "35911112",
+        "41305674"
+      ]
+    },
+    {
+      "key": "hmb::hmb free acid (hmb-fa)",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "24599749",
+        "35911112",
+        "41305674"
+      ]
+    },
+    {
+      "key": "iodine::potassium iodide",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/"
+      ]
+    },
+    {
+      "key": "iron::ferrous ascorbate",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "9202099"
+      ]
+    },
+    {
+      "key": "iron::ferrous fumarate",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "34726703"
+      ]
+    },
+    {
+      "key": "iron::heme iron polypeptide",
+      "old_bio_score": 15,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "25953602"
+      ]
+    },
+    {
+      "key": "iron::iron bisglycinate",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "36728680"
+      ]
+    },
+    {
+      "key": "l_arginine::nitrosigine (arginine silicate inositol)",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "27869715",
+        "32093766",
+        "34959823"
+      ]
+    },
+    {
+      "key": "l_citrulline::l-citrulline malate",
+      "old_bio_score": 15,
+      "new_bio_score": 15,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "17662090"
+      ]
+    },
+    {
+      "key": "l_citrulline::l-citrulline powder",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "17662090"
+      ]
+    },
+    {
+      "key": "l_glutamine::l-alanyl-l-glutamine",
+      "old_bio_score": 15,
+      "new_bio_score": 15,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "22575040"
+      ]
+    },
+    {
+      "key": "l_isoleucine::l-isoleucine powder",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "34642762"
+      ]
+    },
+    {
+      "key": "l_leucine::l-leucine powder",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "34642762"
+      ]
+    },
+    {
+      "key": "l_ornithine::l-ornithine l-aspartate (lola)",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "30706424"
+      ]
+    },
+    {
+      "key": "l_theanine::suntheanine (Taiyo)",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "31623400",
+        "22214254"
+      ]
+    },
+    {
+      "key": "l_valine::l-valine powder",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "34642762"
+      ]
+    },
+    {
+      "key": "lactobacillus_reuteri::lactobacillus reuteri DSM 17938",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "42485904"
+      ]
+    },
+    {
+      "key": "lactobacillus_rhamnosus::lactobacillus rhamnosus gg",
+      "old_bio_score": 15,
+      "new_bio_score": 15,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "26365389",
+        "26756877"
+      ]
+    },
+    {
+      "key": "magnesium::magnesium aspartate",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "11794633"
+      ]
+    },
+    {
+      "key": "magnesium::magnesium chloride",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "11794633"
+      ]
+    },
+    {
+      "key": "magnesium::magnesium citrate",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "14596323",
+        "11794633"
+      ]
+    },
+    {
+      "key": "magnesium::magnesium glycinate",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "22909270"
+      ]
+    },
+    {
+      "key": "magnesium::magnesium lactate",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "11794633"
+      ]
+    },
+    {
+      "key": "milk_thistle::micellar silymarin",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "40733088"
+      ]
+    },
+    {
+      "key": "milk_thistle::silymarin phytosome",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "2088770"
+      ]
+    },
+    {
+      "key": "nicotinamide_riboside::niagen (nicotinamide riboside chloride)",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "29599478",
+        "29992272"
+      ]
+    },
+    {
+      "key": "phosphatidylserine::soy-derived phosphatidylserine",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "20523044",
+        "21103034"
+      ]
+    },
+    {
+      "key": "pqq::disodium PQQ",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "34415830",
+        "38908296"
+      ]
+    },
+    {
+      "key": "pterostilbene::trans-pterostilbene",
+      "old_bio_score": 15,
+      "new_bio_score": 15,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "25057276",
+        "23431291"
+      ]
+    },
+    {
+      "key": "resveratrol::trans-resveratrol",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "39872318",
+        "35905799",
+        "36145131"
+      ]
+    },
+    {
+      "key": "saccharomyces_boulardii::saccharomyces boulardii cncm i-745",
+      "old_bio_score": 15,
+      "new_bio_score": 15,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "40535538"
+      ]
+    },
+    {
+      "key": "selenium::selenized yeast",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
+      ]
+    },
+    {
+      "key": "selenium::selenomethionine",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
+      ]
+    },
+    {
+      "key": "st_johns_wort::st john's wort standardized extract",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "8878586"
+      ]
+    },
+    {
+      "key": "streptococcus_salivarius::streptococcus salivarius k12",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "21722694"
+      ]
+    },
+    {
+      "key": "taurine::taurine (generic)",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "32871172",
+        "41275513"
+      ]
+    },
+    {
+      "key": "tmg_betaine::betaine anhydrous",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "30064450",
+        "37409757"
+      ]
+    },
+    {
+      "key": "valerian::valerian standardized extract",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "20878691"
+      ]
+    },
+    {
+      "key": "vitamin_a::retinol",
+      "old_bio_score": 15,
+      "new_bio_score": 15,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "24036530"
+      ]
+    },
+    {
+      "key": "vitamin_a::retinyl acetate",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+      ]
+    },
+    {
+      "key": "vitamin_a::retinyl palmitate",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+      ]
+    },
+    {
+      "key": "vitamin_b1_thiamine::benfotiamine",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "8929745"
+      ]
+    },
+    {
+      "key": "vitamin_b5_pantothenic::pantethine",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "class_equivalence",
+      "sources": [
+        "4056044"
+      ]
+    },
+    {
+      "key": "vitamin_b7_biotin::d-biotin",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "10075337",
+        "19056639"
+      ]
+    },
+    {
+      "key": "vitamin_b9_folate::5-methyltetrahydrofolate (5-MTHF)",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "19917061"
+      ]
+    },
+    {
+      "key": "vitamin_c::ascorbic acid",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
+      ]
+    },
+    {
+      "key": "vitamin_c::calcium ascorbate",
+      "old_bio_score": 14,
+      "new_bio_score": 14,
+      "basis": "class_equivalence",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
+      ]
+    },
+    {
+      "key": "vitamin_d::cholecalciferol (D3)",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "37865222",
+        "28187226"
+      ]
+    },
+    {
+      "key": "vitamin_e::d-alpha-tocopherol",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "9537614",
+        "9199513"
+      ]
+    },
+    {
+      "key": "vitamin_k2::menaquinone-7 (MK-7)",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "23140417",
+        "17158229"
+      ]
+    },
+    {
+      "key": "vitamin_k2::menaquinone-7 all-trans",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "23140417",
+        "17158229"
+      ]
+    },
+    {
+      "key": "vitamin_k2::vitamin K2 from natto",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "17158229"
+      ]
+    },
+    {
+      "key": "whey_protein::hydrolyzed whey protein",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "28698222",
+        "39303495"
+      ]
+    },
+    {
+      "key": "whey_protein::whey protein isolate",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "form_quality_confidence",
+      "sources": [
+        "28698222",
+        "39303495"
+      ]
+    },
+    {
+      "key": "zinc::zinc acetate",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "8577018"
+      ]
+    },
+    {
+      "key": "zinc::zinc aspartate",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "37111104"
+      ]
+    },
+    {
+      "key": "zinc::zinc bisglycinate",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "18271278"
+      ]
+    },
+    {
+      "key": "zinc::zinc citrate",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "24259556"
+      ]
+    },
+    {
+      "key": "zinc::zinc gluconate",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "24259556",
+        "37111104"
+      ]
+    },
+    {
+      "key": "zinc::zinc monomethionine",
+      "old_bio_score": 12,
+      "new_bio_score": 12,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "17012778"
+      ]
+    },
+    {
+      "key": "zinc::zinc picolinate",
+      "old_bio_score": 13,
+      "new_bio_score": 13,
+      "basis": "systemic_bioavailability",
+      "sources": [
+        "3630857"
+      ]
+    }
+  ],
+  "lowered": [
+    {
+      "key": "5_htp::5-htp (unspecified)",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "algae_oil::algae oil (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "alpha_amylase::alpha-amylase enzyme",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "astaxanthin::synthetic astaxanthin",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bacillus_clausii::bacillus clausii (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bacillus_coagulans::bacillus coagulans (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bacillus_coagulans::bacillus coagulans mtcc 5856",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bacillus_coagulans::bacillus coagulans snz 1969",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bacillus_coagulans::bacillus coagulans unique is-2",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bacillus_indicus::bacillus indicus (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bacillus_subtilis::bacillus subtilis (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bacillus_subtilis::bacillus subtilis de111",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_bifidum::bifidobacterium bifidum (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_bifidum::bifidobacterium bifidum bb-06",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_bifidum::bifidobacterium bifidum r0071",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_breve::bifidobacterium breve m-16v",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_lactis::bifidobacterium animalis subsp. lactis",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_lactis::bifidobacterium lactis bi-07",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_lactis::bifidobacterium lactis bl-04",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_longum::bifidobacterium longum (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_longum::bifidobacterium longum 35624",
+      "old_bio_score": 15,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_longum::bifidobacterium longum bb536",
+      "old_bio_score": 15,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_longum::bifidobacterium longum infantis m-63",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bifidobacterium_longum::bifidobacterium longum subsp. infantis",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "bioflavonoids::hesperidin-rich",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "black_cohosh::black cohosh standardized extract",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "black_seed_oil::cold-pressed black seed oil",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "black_seed_oil::thymoquinone standardized",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "borage_seed_oil::borage seed oil (unspecified)",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "boron::calcium fructoborate",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "branched_chain_amino_acids::bcaa 2:1:1",
+      "old_bio_score": 15,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "branched_chain_amino_acids::bcaa 4:1:1",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "branched_chain_amino_acids::bcaa peptides",
+      "old_bio_score": 15,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "branched_chain_amino_acids::instantized bcaas",
+      "old_bio_score": 15,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "calamari_oil::calamari oil (unspecified)",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "calamari_oil::calamari oil phospholipid",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "calamari_oil::calamari oil triglyceride",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "calcium::calcium amino acid chelate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "calcium::calcium bis-glycinate",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "calcium::calcium citrate malate",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "calcium::calcium malate",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "ceramides::phytoceramides (plant)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "chinese_skullcap::chinese skullcap (unspecified)",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "citrus_bergamot::bergamot (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "citrus_bergamot::bergamot bpf",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "citrus_bergamot::bergamot standardized extract",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "cla::clarinol",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "cla::tonalin",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "cod_liver_oil::fermented",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "cod_liver_oil::virgin/cold-processed",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "coenzymated_complex::coenzymated",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "coenzymated_complex::coenzymated complex (unspecified)",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "creatine_monohydrate::creatine hydrochloride",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "creatine_monohydrate::creatine magnesium chelate",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "creatine_monohydrate::creatine nitrate",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "creatine_monohydrate::dicreatine malate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "dha::DHA krill phospholipid",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "digestive_enzymes::enteric-coated enzymes",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "epa::EPA krill phospholipid",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "ergothioneine::l-ergothioneine",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "fenugreek::fenugreek standardized extract",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "fenugreek::testosurge extract",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "fish_oil::emulsified",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "fish_oil::fish oil phospholipid",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "fish_oil::triglyceride (rTG) form",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "garlic::aged garlic extract",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "hemp_seed_oil::cold-pressed",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "hemp_seed_oil::cold-pressed organic",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "herring_roe_extract::herring roe extract",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "herring_roe_extract::herring roe extract (unspecified)",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "holy_basil::holy basil (unspecified)",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "huperzine_a::huperzine a (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "immunoglobulin::immunoglobulin (unspecified)",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "inulin::inulin (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "krill_oil::Neptune Krill Oil (NKO)",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "krill_oil::Superba Krill (Aker BioMarine)",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "krill_oil::standard krill oil",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "l_arginine::l-arginine hcl",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "l_glycine::l-glycine powder",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "l_histidine::l-histidine standard",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "l_lysine::l-lysine base",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "l_lysine::l-lysine hcl",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "l_proline::l-proline powder",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "l_threonine::l-threonine powder",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "l_tyrosine::l-tyrosine powder",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus dds-1",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus la-02",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus la-14",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus la-5",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus ncfm",
+      "old_bio_score": 15,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_casei::lactobacillus casei lc-11",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_casei::lactobacillus casei shirota",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_helveticus::lactobacillus helveticus (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_paracasei::lactobacillus paracasei l.casei 431",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_paracasei::lactobacillus paracasei lpc-37",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_plantarum::lactobacillus plantarum dr7",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_plantarum::lactobacillus plantarum lp299v",
+      "old_bio_score": 15,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_reuteri::lactobacillus reuteri ATCC PTA 5289",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_reuteri::lactobacillus reuteri rc-14",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_rhamnosus::lactobacillus rhamnosus gr-1",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_rhamnosus::lactobacillus rhamnosus hn001",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "lactobacillus_rhamnosus::lactobacillus rhamnosus lr-04",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "maca::gelatinized maca",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "maca::maca (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "magnesium::magnesium citrate-malate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "manuka_honey::umf 10+ / mgo 263+",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "manuka_honey::umf 15+ / mgo 514+",
+      "old_bio_score": 15,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "mct_oil::c10 mct oil (capric acid)",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "mct_oil::c8 mct oil (pure caprylic)",
+      "old_bio_score": 15,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "mct_oil::mct oil c8/c10",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "molybdenum::molybdenum aspartate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "molybdenum::molybdenum glycinate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "molybdenum::molybdenum picolinate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "molybdenum::sodium molybdate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "mullein::standardized mullein (verbascoside)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "nad_precursors::nicotinamide riboside (NR)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "nicotinamide_riboside::nicotinamide riboside (unspecified)",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "nmn::beta-nicotinamide mononucleotide",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "nmn::nicotinamide mononucleotide (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "oregano::oregano (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "organ_extracts::freeze-dried",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "organ_extracts::grass-fed desiccated",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "paba::paba (para-aminobenzoic acid) (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "paba::paba powder",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "phosphatidylserine::bovine phosphatidylserine",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "phosphatidylserine::liposomal phosphatidylserine",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "phosphatidylserine::sharp-ps gold (PS-DHA conjugate)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "phosphatidylserine::sunflower phosphatidylserine",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "pine_bark_extract::pine bark extract (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "potassium::potassium chloride",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "potassium::potassium citrate",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "potassium::potassium gluconate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "prebiotics::fructooligosaccharides (FOS)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "prebiotics::galactooligosaccharides (GOS)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "prebiotics::human milk oligosaccharides (HMO)",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "probiotics::enteric coated",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "probiotics::freeze-dried with prebiotics",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "probiotics::liposomal probiotics",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "probiotics::liquid probiotics",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "probiotics::spore-based",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "psyllium::psyllium (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "quercetin::isoquercetin (EMIQ)",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "red_wine_extract::red wine extract (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "rosemary::rosemary (unspecified)",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "saccharomyces_boulardii::saccharomyces boulardii (unspecified)",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "sea_buckthorn::sea buckthorn berry oil",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "sea_buckthorn::sea buckthorn seed oil",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "selenium::selenium glycinate",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "selenium::selenium-methyl L-selenocysteine",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "selenium::selenocysteine",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "shilajit::purified shilajit extract",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "silk_amino_acids::silk peptides",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "slippery_elm::inner bark powder",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "slippery_elm::standardized extract (mucilage)",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "streptococcus_salivarius::streptococcus salivarius m18",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "sulforaphane::stabilized sulforaphane",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "taurine::liposomal taurine",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "taurine::magnesium taurate (as taurine source)",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "tmg_betaine::liposomal tmg",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "tuna_oil::tuna oil triglyceride",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_a::liposomal vitamin A",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_a::micellized vitamin A",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_b12_cobalamin::methylcobalamin sublingual",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_b1_thiamine::thiamine tetrahydrofurfuryl disulfide (TTFD)",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_b5_pantothenic::calcium pantothenate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_b9_folate::calcium folinate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_b9_folate::metafolin",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_b9_folate::quatrefolic",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_c::ester-C (calcium ascorbate)",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_c::liposomal vitamin C",
+      "old_bio_score": 15,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_c::magnesium ascorbate",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_c::potassium ascorbate",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_c::sodium ascorbate",
+      "old_bio_score": 13,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_c::vitamin C with bioflavonoids",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_c::zinc ascorbate",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_d::calcidiol (25-hydroxy D3)",
+      "old_bio_score": 14,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_d::liposomal D3",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_d::micellized D3",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_d::vitamin D3 from lichen",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "vitamin_e::mixed tocopherols",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    },
+    {
+      "key": "zinc::zinc amino acid chelate",
+      "old_bio_score": 12,
+      "new_bio_score": 11,
+      "reason": "No exact-form, exact-strain, or reviewed class-equivalence source met the Excellent evidence contract."
+    }
+  ]
+}

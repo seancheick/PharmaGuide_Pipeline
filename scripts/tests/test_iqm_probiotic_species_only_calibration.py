@@ -22,16 +22,16 @@ def _iqm() -> dict:
 def test_used_species_only_probiotic_forms_are_not_premium_strain_tier() -> None:
     data = _iqm()
     species_only = [
-        ("saccharomyces_boulardii", "saccharomyces boulardii (unspecified)", 12),
+        ("saccharomyces_boulardii", "saccharomyces boulardii (unspecified)", 11),
         ("streptococcus_salivarius", "streptococcus salivarius (unspecified)", 10),
         ("lactobacillus_reuteri", "lactobacillus reuteri (unspecified)", 10),
         ("lactobacillus_casei", "lactobacillus casei (unspecified)", 10),
         ("lactobacillus_paracasei", "lactobacillus paracasei (unspecified)", 10),
         ("lactobacillus_gasseri", "lactobacillus gasseri (unspecified)", 10),
         ("bifidobacterium_breve", "bifidobacterium breve (unspecified)", 10),
-        ("bacillus_coagulans", "bacillus coagulans (unspecified)", 12),
-        ("bacillus_subtilis", "bacillus subtilis (unspecified)", 12),
-        ("bacillus_clausii", "bacillus clausii (unspecified)", 12),
+        ("bacillus_coagulans", "bacillus coagulans (unspecified)", 11),
+        ("bacillus_subtilis", "bacillus subtilis (unspecified)", 11),
+        ("bacillus_clausii", "bacillus clausii (unspecified)", 11),
     ]
 
     for parent, form_name, expected_bio in species_only:
@@ -41,19 +41,20 @@ def test_used_species_only_probiotic_forms_are_not_premium_strain_tier() -> None
         assert form["absorption_structured"]["value"] < 0.8
 
 
-def test_named_probiotic_strains_can_remain_premium() -> None:
+def test_only_evidence_backed_named_probiotic_strains_remain_premium() -> None:
     data = _iqm()
-    named_strains = [
-        ("saccharomyces_boulardii", "saccharomyces boulardii cncm i-745"),
-        ("streptococcus_salivarius", "streptococcus salivarius k12"),
-        ("lactobacillus_reuteri", "lactobacillus reuteri DSM 17938"),
-        ("bacillus_coagulans", "bacillus coagulans gbi-30"),
-        ("bacillus_subtilis", "bacillus subtilis de111"),
-    ]
+    named_strains = {
+        ("saccharomyces_boulardii", "saccharomyces boulardii cncm i-745"): 15,
+        ("streptococcus_salivarius", "streptococcus salivarius k12"): 14,
+        ("lactobacillus_reuteri", "lactobacillus reuteri DSM 17938"): 14,
+        ("bacillus_coagulans", "bacillus coagulans gbi-30"): 14,
+        # A specific name alone is not evidence for the former premium score.
+        ("bacillus_subtilis", "bacillus subtilis de111"): 11,
+    }
 
-    for parent, form_name in named_strains:
+    for (parent, form_name), expected_bio in named_strains.items():
         form = data[parent]["forms"][form_name]
-        assert form["bio_score"] >= 14
+        assert form["bio_score"] == expected_bio
 
 
 def test_exact_l_reuteri_dsm17938_aliases_do_not_live_on_unspecified_row() -> None:

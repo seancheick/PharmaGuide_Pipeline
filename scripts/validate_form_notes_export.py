@@ -47,6 +47,7 @@ from build_final_db import (  # noqa: E402
     _FORM_NOTE_SAFETY_RE,
     _FORM_NOTE_SENTENCE_RE,
 )
+from iqm_form_evidence import validate_exported_form_evidence  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BLOBS_DIR = REPO_ROOT / "scripts" / "dist" / "detail_blobs"
@@ -100,6 +101,11 @@ def check_row(row: Dict[str, Any]) -> List[str]:
     preview = analysis.get("form_note_preview")
     label = analysis.get("display_form_label") or row.get("display_name") or "?"
     problems = _check_form_note(note, preview, label)
+    evidence = analysis.get("form_evidence")
+    if evidence is not None:
+        problems.extend(
+            validate_exported_form_evidence(evidence, label=f"{label}.form_evidence")
+        )
     if not isinstance(note, str) or not note.strip():
         return problems
 
@@ -114,9 +120,15 @@ def check_row(row: Dict[str, Any]) -> List[str]:
 def check_legacy_ingredient(ingredient: Dict[str, Any]) -> List[str]:
     """Validate copied form-note fields on the legacy ingredient array."""
     label = ingredient.get("display_label") or ingredient.get("name") or "?"
-    return _check_form_note(
+    problems = _check_form_note(
         ingredient.get("form_note"), ingredient.get("form_note_preview"), label
     )
+    evidence = ingredient.get("form_evidence")
+    if evidence is not None:
+        problems.extend(
+            validate_exported_form_evidence(evidence, label=f"{label}.form_evidence")
+        )
+    return problems
 
 
 def scan(blobs_dir: Path, limit: int | None) -> Tuple[int, int, List[str]]:

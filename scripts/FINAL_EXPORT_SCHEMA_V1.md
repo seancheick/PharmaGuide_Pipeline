@@ -532,6 +532,18 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
   "bio_score": 14,
   "natural": false,
   "score": 14,
+  "form_evidence": {
+    "evidence_level": "moderate",
+    "references_structured": [{
+      "type": "authoritative_guidance",
+      "authority": "NIH Office of Dietary Supplements",
+      "title": "Vitamin A and Carotenoids — Health Professional Fact Sheet",
+      "url": "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+      "supports_claims": ["preformed_vitamin_a_ester_absorption"],
+      "verification_source": "official_source_review",
+      "verified_on": "2026-08-13"
+    }]
+  },
   "_score_note": "v3.6.0+: `score` is a deprecated alias of `bio_score` (no natural-source bonus). Pre-v3.6.0 blobs had `score = bio_score + 3*natural` (range 0-18). New consumers should read `bio_score` directly (range 0-15, pure form quality). Sourcing signal lives in section_breakdown.ingredient_quality.sub.A5e.",
   "notes": "The most common preformed Vitamin A in supplements...",
   "mapped": true,
@@ -571,6 +583,7 @@ per concern.
 | `display_dose_label`  | string    | Pre-formatted: `"600 mcg"` / `"Amount not disclosed"` (blend member) / `"—"` (missing)           |
 | `dose_status`         | enum      | `"disclosed"` \| `"not_disclosed_blend"` \| `"missing"`                                          |
 | `is_safety_concern`   | boolean   | True only when `harmful_severity` is `moderate`/`high`/`critical`. Distinct from `is_harmful`.   |
+| `form_evidence`       | object?   | Compact reviewed evidence for the single IQM form that supplied `bio_score`; contains only `evidence_level` and claim-scoped `references_structured`. Omitted for blended/desynchronized scores and forms without an approved evidence object. |
 
 **Resolution order for `display_form_label`:**
 1. Cleaner `forms[0].name` if present (label-disclosed form).

@@ -32,11 +32,11 @@ def _al(iqm, parent, form):
 #       CEE is genuinely poor (degrades to creatinine) ──────────────────────────
 SCORE_TARGETS = [
     ("creatine_monohydrate", "buffered creatine monohydrate", 13),
-    ("creatine_monohydrate", "creatine nitrate", 13),
-    ("creatine_monohydrate", "creatine hydrochloride", 13),
+    ("creatine_monohydrate", "creatine nitrate", 11),
+    ("creatine_monohydrate", "creatine hydrochloride", 11),
     ("creatine_monohydrate", "creatine citrate", 13),
-    ("creatine_monohydrate", "creatine magnesium chelate", 13),
-    ("creatine_monohydrate", "dicreatine malate", 12),       # F-plausible, no human PK
+    ("creatine_monohydrate", "creatine magnesium chelate", 11),
+    ("creatine_monohydrate", "dicreatine malate", 11),       # F-plausible, no exact human PK
     ("creatine_monohydrate", "creatine ethyl ester", 4),     # degrades to creatinine
     ("astaxanthin", "unspecified astaxanthin", 10),          # unknown matrix -> below disclosed
     ("hmb", "hmb free acid (hmb-fa)", 13),                   # equal total F to HMB-Ca (kinetics only)

@@ -227,3 +227,13 @@ def test_class_authority_pmids_introduced(iqm):
     assert not missing, (
         f'Verified class-authority PMIDs missing from magnesium notes: {missing}'
     )
+
+
+def test_magnesium_oxide_copy_matches_structured_absorption(iqm):
+    form = iqm['magnesium']['forms']['magnesium oxide']
+    text = f"{form.get('absorption', '')} {form.get('notes', '')}".lower()
+
+    assert '4-15%' not in text
+    assert '4%' in text
+    assert 'pmid:11794633' in text
+    assert 'firoz 2001 pmid:16548135' not in text

@@ -33,6 +33,20 @@ def test_gate_b_requires_score_included_for_a_form_note():
     assert any("score_included" in problem for problem in problems)
 
 
+def test_gate_b_rejects_internal_form_evidence_fields():
+    row = _row(
+        form_evidence={
+            "evidence_level": "moderate",
+            "rationale": "Internal only",
+            "references_structured": [],
+        }
+    )
+
+    problems = check_row(row)
+
+    assert any("internal field rationale" in problem for problem in problems)
+
+
 def test_gate_b_validates_legacy_form_note_preview(tmp_path):
     from validate_form_notes_export import scan
 
