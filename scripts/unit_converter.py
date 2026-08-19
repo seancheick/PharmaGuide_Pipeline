@@ -259,12 +259,30 @@ class UnitConverter:
         # Get target unit
         canonical_unit = rule_data.get('canonical_unit', 'mcg')
         target_unit = to_unit or canonical_unit
+        conversions = rule_data.get('conversions', {})
 
-        # DSLD uses ``U`` and ``UI`` as label spellings of International Units
-        # for Vitamin D. Scope the aliases to Vitamin D so enzyme activity
-        # units (for example lysozyme ``U``) are never reinterpreted as IU.
-        if rule_id in {'vitamin_d2', 'vitamin_d3'} and from_unit_lower in {'u', 'ui'}:
+        # DSLD uses ``U`` and ``UI`` as label spellings of International Units.
+        # Apply the alias only when the selected nutrient rule explicitly
+        # declares an IU conversion. Enzyme rules such as lysozyme have no
+        # ``iu_to_*`` conversion and therefore remain activity units.
+        supports_iu = isinstance(conversions, dict) and any(
+            str(key).startswith('iu_to_') for key in conversions
+        )
+        if supports_iu and from_unit_lower in {'u', 'ui'}:
             from_unit_lower = 'iu'
+
+        # FDA Vitamin E reference amounts are expressed as milligrams of
+        # alpha-tocopherol. DSLD's ``mg AT`` spelling is therefore the same
+        # mass basis, but only after the form detector has selected a known
+        # alpha-tocopherol rule.
+        if (
+            rule_id in {
+                'vitamin_e_d_alpha_tocopherol',
+                'vitamin_e_dl_alpha_tocopherol',
+            }
+            and from_unit_lower == 'mg at'
+        ):
+            from_unit_lower = 'mg'
 
         # DSLD occasionally preserves the FDA Vitamin A quantity but drops the
         # ``RAE`` qualifier from the unit.  That shorthand is safe to interpret
@@ -285,7 +303,6 @@ class UnitConverter:
             from_unit_lower = 'mcg rae'
 
         # Get conversion factor
-        conversions = rule_data.get('conversions', {})
         if conversions is None:
             warnings = []
             if rule_data.get('warnings'):

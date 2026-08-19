@@ -74,6 +74,64 @@ def test_vitamin_d_international_unit_aliases_are_scoped(label_unit: str) -> Non
     assert result.converted_unit == "mcg"
 
 
+def test_vitamin_a_u_alias_uses_its_declared_iu_conversion() -> None:
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Vitamin A",
+        amount=5000,
+        from_unit="U",
+        ingredient_name="Vitamin A Retinyl Acetate",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(1500)
+    assert result.converted_unit == "mcg RAE"
+
+
+def test_natural_vitamin_e_ui_alias_uses_its_declared_iu_conversion() -> None:
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Vitamin E",
+        amount=100,
+        from_unit="UI",
+        ingredient_name="Vitamin E D-Alpha-Tocopherol",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(67)
+    assert result.converted_unit == "mg"
+
+
+def test_vitamin_e_mg_at_is_alpha_tocopherol_mass() -> None:
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Vitamin E",
+        amount=83.76,
+        from_unit="mg AT",
+        ingredient_name="Vitamin E D-Alpha-Tocopheryl Acetate",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(83.76)
+    assert result.converted_unit == "mg"
+
+
+def test_enzyme_u_does_not_inherit_an_iu_alias() -> None:
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Lysozyme",
+        amount=100,
+        from_unit="U",
+        ingredient_name="Lysozyme",
+    )
+
+    assert result.success is False
+
+
 def test_bare_folate_dfe_preserves_unknown_form_lineage() -> None:
     converter = UnitConverter()
 

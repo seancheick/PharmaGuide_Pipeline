@@ -274,6 +274,34 @@ def test_product_scoped_correction_repairs_verified_boron_unit(normalizer):
     }
 
 
+@pytest.mark.parametrize(
+    ("dsld_id", "ingredient", "raw_unit"),
+    [
+        (243029, "Caffeine Anhydrous", "mmg"),
+        (66883, "Glycine", "Jar(s)"),
+    ],
+)
+def test_product_scoped_correction_repairs_verified_mass_unit_typos(
+    normalizer, dsld_id, ingredient, raw_unit
+):
+    rows = [
+        {
+            **_make_ingredient_row(ingredient),
+            "quantity": [{"quantity": 250, "unit": raw_unit}],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    corrected = normalizer._apply_label_corrections(rows, str(dsld_id))
+
+    assert corrected[0]["quantity"][0]["unit"] == "mg"
+    assert corrected[0]["_pre_correction_quantity_unit"] == raw_unit
+    assert corrected[0]["_label_correction_provenance"] == (
+        "official_label_unit_correction"
+    )
+
+
 def test_product_scoped_correction_repairs_crossed_cognimag_hierarchy(normalizer):
     raw_product = _make_raw_product(299037, [])
     raw_product["fullName"] = "CogniMag"

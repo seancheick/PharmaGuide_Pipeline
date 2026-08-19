@@ -212,22 +212,25 @@ def test_natures_way_328117_boron_unit_correction_present(overrides):
 
 
 @pytest.mark.parametrize(
-    ("dsld_id", "ingredient", "raw_unit", "corrected_unit"),
+    ("dsld_id", "product_name", "ingredient", "raw_unit", "corrected_unit"),
     [
-        ("66380", "Niacin", "ng", "mg"),
-        ("46729", "Vitamin B6", "ng", "mg"),
-        ("69455", "Niacin", "Gram(s)", "mg"),
-        ("254204", "Biotin", "m.c.u.", "mcg"),
-        ("311874", "Vitamin B12", "mcg DFE", "mcg"),
-        ("308222", "Docosahexaenoic Acid", "ng", "mg"),
+        ("66380", "Multi Vitamin", "Niacin", "ng", "mg"),
+        ("46729", "Alive! Once Daily Men's 50+", "Vitamin B6", "ng", "mg"),
+        ("69455", "Amplified Wheybolic Extreme 60 Ripped Strawberries & Cream", "Niacin", "Gram(s)", "mg"),
+        ("254204", "Women's Multi", "Biotin", "m.c.u.", "mcg"),
+        ("311874", "PRE Fruit Punch", "Vitamin B12", "mcg DFE", "mcg"),
+        ("308222", "Healthy Mom Prenatal Multi", "Docosahexaenoic Acid", "ng", "mg"),
+        ("243029", "Beyond Raw Orange Mango", "Caffeine Anhydrous", "mmg", "mg"),
+        ("66883", "Creatine Plus 5950 Unflavored", "Glycine", "Jar(s)", "mg"),
     ],
 )
 def test_verified_source_unit_corrections_are_product_scoped(
-    overrides, dsld_id, ingredient, raw_unit, corrected_unit
+    overrides, dsld_id, product_name, ingredient, raw_unit, corrected_unit
 ):
     entry = (overrides.get("corrections") or {}).get(dsld_id)
 
     assert entry, f"correction for DSLD {dsld_id} is missing"
+    assert entry["product_name"] == product_name
     assert entry["raw_ingredient_text"] == ingredient
     assert entry["corrected_ingredient_text"] == ingredient
     assert entry["raw_quantity_unit"] == raw_unit

@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity-unit changes require exact raw_quantity_unit and corrected_quantity_unit values and must be supported by the official label image.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-08-19",
-    "total_entries": 12,
+    "total_entries": 14,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -230,6 +230,46 @@
       "sources": [
         "https://api.ods.od.nih.gov/dsld/v9/label/311874",
         "https://api.ods.od.nih.gov/dsld/s3/pdf/311874.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-19",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "243029": {
+      "brand": "GNC",
+      "product_name": "Beyond Raw Orange Mango",
+      "raw_ingredient_text": "Caffeine Anhydrous",
+      "corrected_ingredient_text": "Caffeine Anhydrous",
+      "raw_quantity_unit": "mmg",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Caffeine Anhydrous as 250 mmg. The official DSLD label PDF prints Caffeine Anhydrous at 250 mg and separately states that the product contains 250 mg of caffeine. This product-scoped correction restores the printed mass unit without changing the quantity or ingredient identity.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/243029",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/243029.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-19",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "66883": {
+      "brand": "GNC Pro Performance",
+      "product_name": "Creatine Plus 5950 Unflavored",
+      "raw_ingredient_text": "Glycine",
+      "corrected_ingredient_text": "Glycine",
+      "raw_quantity_unit": "Jar(s)",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Glycine as 250 Jar(s). The official DSLD label PDF prints Glycine at 250 mg. This product-scoped correction restores the printed mass unit without changing the quantity or ingredient identity.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/66883",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/66883.pdf"
       ],
       "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
       "review_date": "2026-08-19",

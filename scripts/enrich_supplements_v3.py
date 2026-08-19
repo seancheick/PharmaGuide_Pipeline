@@ -168,6 +168,34 @@ _RDA_REFERENCE_PROFILE = {
 # These values only SCREEN an unknown-form row for review. They never establish
 # that the product is over UL.
 _FOLIC_ACID_ADULT_UL_MCG = 1000.0
+
+# Units that quantify activity, viable-organism count, source volume, or a
+# source concentration rather than a mass exposure comparable with a nutrient
+# RDA/UL. These remain valid label quantities; they are not conversion errors.
+_NON_UL_ACTIVITY_UNITS = {
+    "agu", "alu", "bgu", "cu", "dp", "du", "endo-pg", "fccpu", "fip",
+    "fu", "gaiu", "galu", "gdu", "hcu", "hut", "pc", "pu", "sapu", "su",
+    "unit(s)", "usp", "usp unit(s)",
+}
+_ACTIVITY_UNIT_CANONICALS = {
+    "alpha_amylase",
+    "blend_general",
+    "bromelain",
+    "digestive_enzymes",
+    "lysozyme",
+    "nattokinase",
+    "superoxide dismutase",
+    "superoxide_dismutase",
+}
+_NON_UL_PROBIOTIC_QUANTITY_UNITS = {"cfu", "{organisms}"}
+_NON_UL_BOTANICAL_QUANTITY_UNITS = {"ml", "mcg/g"}
+_NON_UL_BOTANICAL_CANONICALS = {
+    "garlic",
+    "peppermint",
+    "pomegranate",
+    "rosemary",
+    "thyme",
+}
 _FOLIC_ACID_LABEL_DFE_FACTOR = 1.7
 _FOLATE_DAILY_VALUE_DFE_MCG = 400.0
 
@@ -19169,16 +19197,17 @@ class SupplementEnricherV3:
                         if raw_unit_key == "np":
                             skip_ul_reason = "amount_not_declared"
                         elif (
-                            raw_unit_key in {
-                                "gdu", "fccpu", "pu", "fu",
-                            }
+                            raw_unit_key in _NON_UL_PROBIOTIC_QUANTITY_UNITS
                             or (
-                                raw_canonical_key in {
-                                    "bromelain", "nattokinase", "lysozyme",
-                                    "superoxide dismutase",
-                                    "superoxide_dismutase",
-                                }
-                                and raw_unit_key in {"u", "iu"}
+                                raw_canonical_key
+                                in _NON_UL_BOTANICAL_CANONICALS
+                                and raw_unit_key
+                                in _NON_UL_BOTANICAL_QUANTITY_UNITS
+                            )
+                            or (
+                                raw_canonical_key in _ACTIVITY_UNIT_CANONICALS
+                                and raw_unit_key
+                                in _NON_UL_ACTIVITY_UNITS | {"u", "iu"}
                             )
                         ):
                             skip_ul_reason = "not_ul_applicable"

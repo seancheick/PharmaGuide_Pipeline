@@ -549,6 +549,83 @@ def test_mcu_on_a_vitamin_remains_a_data_defect_until_source_corrected(enricher)
     assert row["ul_assessment_status"] == "indeterminate"
 
 
+@pytest.mark.parametrize(
+    ("canonical", "name", "unit"),
+    [
+        ("digestive_enzymes", "Protease", "HUT"),
+        ("alpha_amylase", "Glucoamylase", "AGU"),
+        ("lactobacillus_acidophilus", "Lactobacillus acidophilus", "CFU"),
+        ("bifidobacterium_bifidum", "Bifidobacterium bifidum", "{Organisms}"),
+        ("peppermint", "Peppermint Oil", "mL"),
+        ("garlic", "Allicin", "mcg/g"),
+    ],
+)
+def test_domain_units_outside_ul_scope_are_not_conversion_defects(
+    enricher, canonical, name, unit
+):
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": name,
+                "standardName": name,
+                "canonical_id": canonical,
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 100,
+                "unit": unit,
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    row = result["analyzed_ingredients"][0]
+    assert row["skip_ul_reason"] == "not_ul_applicable"
+    assert row["ul_assessment_status"] == "not_applicable"
+
+
+@pytest.mark.parametrize("unit", ["mmg", "Jar(s)"])
+def test_invalid_source_units_remain_conversion_defects(enricher, unit):
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": "Test Ingredient",
+                "standardName": "Test Ingredient",
+                "canonical_id": "test_ingredient",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 250,
+                "unit": unit,
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    row = result["analyzed_ingredients"][0]
+    assert row["skip_ul_reason"] == "conversion_failed"
+    assert row["ul_assessment_status"] == "indeterminate"
+
+
+def test_botanical_volume_unit_does_not_hide_a_vitamin_conversion_defect(enricher):
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": "Vitamin A (as Retinyl Acetate)",
+                "standardName": "Vitamin A (as Retinyl Acetate)",
+                "canonical_id": "vitamin_a",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 1,
+                "unit": "mL",
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    row = result["analyzed_ingredients"][0]
+    assert row["skip_ul_reason"] == "conversion_failed"
+    assert row["ul_assessment_status"] == "indeterminate"
+
+
 def test_nested_daily_value_row_owns_exposure_over_larger_source_compound_mass(enricher):
     # Live DSLD 299037 represents Magtein source mass as a 1000 mg parent and
     # the delivered Magnesium amount as a nested 72 mg row carrying 17% DV.
