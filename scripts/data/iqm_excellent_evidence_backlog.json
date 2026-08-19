@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "5.0.0",
     "created_on": "2026-08-13",
-    "last_updated": "2026-08-18",
+    "last_updated": "2026-08-19",
     "description": "Frozen governance ledger for pre-existing curated Excellent IQM forms. remaining_forms are permitted legacy scores whose supporting form evidence has not been source-verified; they are not evidence of inferior quality and are not exported as consumer warnings.",
     "purpose": "form_evidence_release_governance",
     "total_entries": 271,
@@ -335,7 +335,6 @@
     "cod_liver_oil::virgin/cold-processed",
     "coenzymated_complex::coenzymated",
     "coenzymated_complex::coenzymated complex (unspecified)",
-    "coq10::ubiquinol",
     "coq10::ubiquinol crystal-free",
     "d_ribose::d-ribose powder",
     "dha::DHA krill phospholipid",

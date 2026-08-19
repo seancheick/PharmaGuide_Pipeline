@@ -22,6 +22,17 @@ REPLACEMENTS = {
     ("hmb", "hmb calcium salt (hmb-ca)"): {"21134325"},
     ("hmb", "hmb free acid (hmb-fa)"): {"21134325"},
     ("collagen", "collagen tripeptides"): {"26934933"},
+    # 2026-08-19. PMID 32188111 (Nutrients 2020) is a randomized three-period
+    # crossover in 21 adults aged 65-74 comparing ubiquinol vs ubiquinone
+    # capsules head to head. Ubiquinol was NOT significantly more bioavailable
+    # (1.7-fold, 95% CI 0.9-3.1, p = 0.129), which is what makes it valid here:
+    # `ubiquinol` and `ubiquinone crystal-dispersed` are both scored 13, and the
+    # study supports that parity rather than a redox-form premium.
+    #
+    # Deliberately NOT applied to `coq10::ubiquinol crystal-free`: that study
+    # dosed plain ubiquinol capsules, not a crystal-free formulation, so it does
+    # not answer the crystal-free claim. That form stays in the backlog.
+    ("coq10", "ubiquinol"): {"32188111"},
 }
 
 

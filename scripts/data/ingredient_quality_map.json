@@ -16855,6 +16855,53 @@
         },
         "external_ids": {
           "unii": "M9NL0C577Y"
+        },
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Randomized three-period crossover in 21 healthy adults aged 65-74 comparing ubiquinol capsules against ubiquinone capsules head to head. Ubiquinol was NOT significantly more bioavailable than ubiquinone (1.7-fold, 95% CI 0.9-3.1, p = 0.129), and plasma CoQ10 appeared mostly as ubiquinol even when consumed as ubiquinone. This supports the parity encoded here: ubiquinol and ubiquinone crystal-dispersed both sit at 13. The study's one significant result was for a water-soluble syrup formulation (2.4-fold), i.e. a solubilization effect rather than a redox-form premium.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-19"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "32188111",
+              "doi": "10.3390/nu12030784",
+              "title": "Comparative Bioavailability of Different Coenzyme Q10 Formulations in Healthy Elderly Individuals.",
+              "citation": "Nutrients (2020-03-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/32188111/",
+              "published_date": "2020-03-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "mesh_terms": [
+                "Aged",
+                "Biological Availability",
+                "Dietary Supplements",
+                "Drug Compounding",
+                "Female",
+                "Humans",
+                "Male",
+                "Ubiquinone"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "journal_article",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-19"
+            }
+          ]
         }
       },
       "ubiquinone crystal-dispersed": {
