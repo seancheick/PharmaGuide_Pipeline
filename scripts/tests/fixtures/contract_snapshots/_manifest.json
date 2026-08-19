@@ -501,6 +501,20 @@
         "full 28-brand re-enrichment 2026-08-07"
       ],
       "notes": "quality_score_v4_100 / score_100_equivalent 69.9 -> 69.5. ONLY these two fields moved: grade (Weak), verdict (SAFE), safety_verdict, mapped_coverage (1.0), quality_score_status, route (multi_or_prenatal / prenatal_multi) and every other fixture field are byte-identical, and the other 31 snapshots showed zero drift. CAUSE NOT ATTRIBUTED \u2014 recorded honestly rather than guessed. Two candidates were tested and RULED OUT: (1) the serving_basis daily-servings fix \u2014 this product is in that cohort (basis_reason=net_contents_servings_per_container, stored value corrected 0.5 -> 2/day), but re-scoring the current record at BOTH multipliers yields 69.5, so the multiplier is not the driver; (2) PR #53's scoring change \u2014 288344 does not appear in changed_products.csv of the Phase-4 merge ledger. The prior fixture was frozen 2026-07-15 and spans two merged PRs plus a full re-enrichment; the enriched snapshot from that date no longer exists, so a definitive diff is not recoverable. Most likely enrichment-layer drift, which the merge ledger explicitly did not measure (not_measured: re_enrichment_identity_matching). Accepted because the movement is 0.4 points with no tier, safety, verdict, coverage or status change, and is isolated to 1 of 32 fixtures. If this product drifts again, treat the repeat as signal and investigate the enrichment layer rather than re-freezing a second time."
+    },
+    {
+      "date": "2026-08-19",
+      "action": "refrozen_reviewed_vitamin_iu_adequacy_conversions",
+      "products": [
+        12012,
+        18141,
+        274498
+      ],
+      "sprints_covered": [
+        "Nutrient-unit and Vitamin A lineage reconciliation",
+        "Form-aware Vitamin A and Vitamin E adequacy conversion"
+      ],
+      "notes": "Re-froze the complete three-product drift set after the fresh 28-brand rebuild. Only the v4 Dose pillar and its two score mirrors changed; formulation, evidence, transparency, verification, safety/hygiene, grade, SAFE verdict, mapped coverage, and flags are unchanged. CVS Spectravite (12012) now evaluates its label-declared mixed Vitamin A total (3500 IU beta-carotene + vitamin A acetate) as 1050 mcg RAE for adequacy while correctly keeping the preformed-only UL indeterminate, and converts explicit synthetic dl-alpha Vitamin E 30 IU to 13.5 mg; Dose 15.9->16.7 and score 62.1->62.9. CVS Omega-3 (18141) now evaluates explicit preformed Vitamin A 500 IU as 150 mcg RAE and natural d-alpha Vitamin E 3 IU as 2.01 mg; Dose 9.3->10.4 and score 64.9->66.0. Garden of Life Plant Collagen Builder (274498) now evaluates supplemental beta-carotene 2000 IU as 600 mcg RAE while retaining beta_carotene_no_established_ul; Dose 9.1->10.2 and score 50.5->51.6. These are intended adequacy corrections from verified unit/form lineage, not safety relaxations or scoring calibration changes."
     }
   ]
 }
