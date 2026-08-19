@@ -388,20 +388,42 @@ def test_mixed_vitamin_a_total_does_not_assume_all_preformed(enricher):
                     {"name": "Retinyl Acetate"},
                 ],
                 "isNestedIngredient": False,
+            },
+            {
+                "name": "Beta-Carotene",
+                "raw_source_text": "Beta-Carotene",
+                "standardName": "Beta-Carotene",
+                "canonical_id": "beta_carotene",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 5625,
+                "unit": "mcg",
+                "dailyValue": None,
+                "isNestedIngredient": True,
+                "parentBlend": "Vitamin A",
             }
         ]),
         min_servings_per_day=1,
         max_servings_per_day=1,
     )
 
-    row = result["analyzed_ingredients"][0]
-    assert row["per_day_min"] == pytest.approx(4500)
-    assert row["pct_rda"] == pytest.approx(500)
-    assert row["skip_ul_reason"] == (
+    parent = next(
+        row for row in result["analyzed_ingredients"]
+        if row["ingredient"] == "Vitamin A"
+    )
+    beta = next(
+        row for row in result["analyzed_ingredients"]
+        if row["ingredient"] == "Beta-Carotene"
+    )
+    assert parent["per_day_min"] == pytest.approx(4500)
+    assert parent["pct_rda"] == pytest.approx(500)
+    assert parent["skip_ul_reason"] == (
         "mixed_vitamin_a_preformed_fraction_unknown"
     )
-    assert row["ul_assessment_status"] == "indeterminate"
-    assert row["ul_for_default_profile"] is None
+    assert parent["ul_assessment_status"] == "indeterminate"
+    assert parent["ul_for_default_profile"] is None
+    assert beta["dose_role"] == "form_component"
+    assert beta["parent_label_key"] == parent["source_label_key"]
+    assert beta["pct_rda"] is None
     assert result["safety_flags"] == []
 
 

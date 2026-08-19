@@ -18502,18 +18502,24 @@ class SupplementEnricherV3:
             except (TypeError, ValueError):
                 continue
             unit = _rda_mass_unit_key(row.get("unit"))
-            if quantity <= 0 or unit not in {"mcg", "mg"}:
+            if quantity <= 0:
                 continue
             parents.append({
                 "label": label,
                 "source_label_key": self._rda_source_label_key(row),
-                "quantity_mcg_rae": quantity * (1000.0 if unit == "mg" else 1.0),
+                "quantity_mcg_rae": (
+                    quantity * (1000.0 if unit == "mg" else 1.0)
+                    if unit in {"mcg", "mg"}
+                    else None
+                ),
             })
 
         links: Dict[str, Dict[str, Any]] = {}
         for parent in parents:
-            children = []
+            classified_children = []
             total_mcg = 0.0
+            all_children_mass_based = True
+            all_children_classified = True
             for row in active_ingredients:
                 if (
                     not row.get("isNestedIngredient")
@@ -18521,24 +18527,8 @@ class SupplementEnricherV3:
                     != parent["label"]
                 ):
                     continue
-                try:
-                    quantity = float(row.get("quantity") or 0)
-                except (TypeError, ValueError):
-                    continue
-                unit = _rda_mass_unit_key(row.get("unit"))
-                if quantity <= 0 or unit not in {"mcg", "mg"}:
-                    continue
-                total_mcg += quantity * (1000.0 if unit == "mg" else 1.0)
-                children.append(row)
-
-            tolerance = max(0.5, float(parent["quantity_mcg_rae"]) * 0.01)
-            if not children or abs(total_mcg - float(parent["quantity_mcg_rae"])) > tolerance:
-                continue
-
-            classified_children = []
-            for child in children:
                 identity_text = " ".join(
-                    str(child.get(field) or "")
+                    str(row.get(field) or "")
                     for field in (
                         "canonical_id",
                         "name",
@@ -18549,27 +18539,45 @@ class SupplementEnricherV3:
                 vitamin_a_rule, _ = self.unit_converter._detect_vitamin_a_form(
                     identity_text.lower()
                 )
-                if vitamin_a_rule not in {
-                    "vitamin_a_retinol",
-                    "vitamin_a_beta_carotene_supplement",
-                }:
-                    classified_children = []
-                    break
-                classified_children.append((child, vitamin_a_rule))
+                if vitamin_a_rule == "vitamin_a_retinol":
+                    role = "ul_scoped_component"
+                elif (
+                    vitamin_a_rule == "vitamin_a_beta_carotene_supplement"
+                    or "carotene" in self._normalize_text(identity_text)
+                ):
+                    role = "form_component"
+                else:
+                    all_children_classified = False
+                    continue
+
+                classified_children.append((row, role))
+                try:
+                    quantity = float(row.get("quantity") or 0)
+                except (TypeError, ValueError):
+                    quantity = 0.0
+                unit = _rda_mass_unit_key(row.get("unit"))
+                if quantity <= 0 or unit not in {"mcg", "mg"}:
+                    all_children_mass_based = False
+                else:
+                    total_mcg += quantity * (1000.0 if unit == "mg" else 1.0)
+
             if not classified_children:
                 continue
 
-            links[parent["source_label_key"]] = {
-                "parent_label_key": None,
-                "dose_role": "declared_total",
-                "ul_owned_by_components": True,
-            }
-            for child, vitamin_a_rule in classified_children:
-                role = (
-                    "ul_scoped_component"
-                    if vitamin_a_rule == "vitamin_a_retinol"
-                    else "form_component"
-                )
+            parent_total = parent["quantity_mcg_rae"]
+            if (
+                parent_total is not None
+                and all_children_classified
+                and all_children_mass_based
+                and abs(total_mcg - float(parent_total))
+                <= max(0.5, float(parent_total) * 0.01)
+            ):
+                links[parent["source_label_key"]] = {
+                    "parent_label_key": None,
+                    "dose_role": "declared_total",
+                    "ul_owned_by_components": True,
+                }
+            for child, role in classified_children:
                 links[self._rda_source_label_key(child)] = {
                     "parent_label_key": parent["source_label_key"],
                     "dose_role": role,
