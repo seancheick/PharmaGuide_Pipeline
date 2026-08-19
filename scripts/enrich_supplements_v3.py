@@ -19170,13 +19170,16 @@ class SupplementEnricherV3:
                             skip_ul_reason = "amount_not_declared"
                         elif (
                             raw_unit_key in {
-                                "gdu", "fccpu", "pu", "fu", "mcu",
+                                "gdu", "fccpu", "pu", "fu",
                             }
-                            or raw_canonical_key in {
-                                "bromelain", "nattokinase", "lysozyme",
-                                "superoxide dismutase", "superoxide_dismutase",
-                            }
-                            and raw_unit_key in {"u", "iu"}
+                            or (
+                                raw_canonical_key in {
+                                    "bromelain", "nattokinase", "lysozyme",
+                                    "superoxide dismutase",
+                                    "superoxide_dismutase",
+                                }
+                                and raw_unit_key in {"u", "iu"}
+                            )
                         ):
                             skip_ul_reason = "not_ul_applicable"
                         elif raw_unit_key in {"%", "percent", "percent dv", "%dv"}:

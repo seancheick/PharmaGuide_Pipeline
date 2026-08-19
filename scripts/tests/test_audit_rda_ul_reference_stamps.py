@@ -107,3 +107,71 @@ def test_audit_rejects_stale_emitted_stamp(tmp_path: Path) -> None:
     assert checked == 1
     assert len(failures) == 1
     assert "stale" in failures[0]
+
+
+def test_audit_rejects_conversion_failure_for_nutrient_with_ul(tmp_path: Path) -> None:
+    reference = _reference()
+    reference_path = tmp_path / "rda.json"
+    reference_path.write_text(json.dumps(reference))
+    _write_batch(
+        tmp_path / "products",
+        [
+            {
+                "id": "unsafe-conversion-gap",
+                "rda_ul_data": {
+                    **reference_stamp(reference),
+                    "analyzed_ingredients": [
+                        {
+                            "ingredient": "Niacin",
+                            "unit": "ng",
+                            "skip_ul_reason": "conversion_failed",
+                            "highest_ul": 35,
+                        }
+                    ],
+                },
+            }
+        ],
+    )
+
+    checked, failures = audit_emitted_stamps(
+        products_dir=tmp_path / "products", reference_path=reference_path
+    )
+
+    assert checked == 1
+    assert len(failures) == 1
+    assert "unsafe-conversion-gap" in failures[0]
+    assert "Niacin" in failures[0]
+    assert "conversion_failed" in failures[0]
+
+
+def test_audit_allows_conversion_failure_when_no_ul_exists(tmp_path: Path) -> None:
+    reference = _reference()
+    reference_path = tmp_path / "rda.json"
+    reference_path.write_text(json.dumps(reference))
+    _write_batch(
+        tmp_path / "products",
+        [
+            {
+                "id": "no-ul",
+                "rda_ul_data": {
+                    **reference_stamp(reference),
+                    "analyzed_ingredients": [
+                        {
+                            "ingredient": "DHA",
+                            "unit": "ng",
+                            "skip_ul_reason": "conversion_failed",
+                            "highest_ul": None,
+                            "ul_for_default_profile": None,
+                        }
+                    ],
+                },
+            }
+        ],
+    )
+
+    checked, failures = audit_emitted_stamps(
+        products_dir=tmp_path / "products", reference_path=reference_path
+    )
+
+    assert checked == 1
+    assert failures == []

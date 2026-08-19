@@ -528,6 +528,27 @@ def test_non_mass_label_states_do_not_masquerade_as_conversion_failures(
     assert row["ul_assessment_status"] == expected_status
 
 
+def test_mcu_on_a_vitamin_remains_a_data_defect_until_source_corrected(enricher):
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": "Biotin",
+                "standardName": "Biotin",
+                "canonical_id": "biotin",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 1500,
+                "unit": "m.c.u.",
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    row = result["analyzed_ingredients"][0]
+    assert row["skip_ul_reason"] == "conversion_failed"
+    assert row["ul_assessment_status"] == "indeterminate"
+
+
 def test_nested_daily_value_row_owns_exposure_over_larger_source_compound_mass(enricher):
     # Live DSLD 299037 represents Magtein source mass as a 1000 mg parent and
     # the delivered Magnesium amount as a nested 72 mg row carrying 17% DV.

@@ -25,7 +25,7 @@ def _enriched_files(products_dir: Path) -> Iterator[Path]:
 
 
 def audit_emitted_stamps(*, products_dir: Path, reference_path: Path) -> tuple[int, list[str]]:
-    """Return the number of emitted blocks audited and capped mismatch details."""
+    """Audit reference stamps and block unsafe unresolved UL conversions."""
     reference = json.loads(reference_path.read_text(encoding="utf-8"))
     expected = validate_declared_reference_stamp(reference)
     checked = 0
@@ -42,12 +42,41 @@ def audit_emitted_stamps(*, products_dir: Path, reference_path: Path) -> tuple[i
             if not isinstance(rda_ul_data, dict):
                 continue
             checked += 1
+            product_id = product.get("dsld_id") or product.get("id") or "unknown"
             try:
                 assert_emitted_reference_stamp(rda_ul_data, expected)
             except ReferenceDataContractError as error:
-                product_id = product.get("dsld_id") or product.get("id") or "unknown"
                 if len(failures) < 20:
                     failures.append(f"{path.name}:{product_id}: {error}")
+
+            rows = (
+                rda_ul_data.get("analyzed_ingredients")
+                or rda_ul_data.get("ingredients_with_rda")
+                or []
+            )
+            for row in rows:
+                if not isinstance(row, dict):
+                    continue
+                if row.get("skip_ul_reason") != "conversion_failed":
+                    continue
+                ul_values = (
+                    row.get("ul_for_default_profile"),
+                    row.get("highest_ul"),
+                )
+                has_ul = False
+                for value in ul_values:
+                    try:
+                        has_ul = float(value) > 0
+                    except (TypeError, ValueError):
+                        has_ul = False
+                    if has_ul:
+                        break
+                if has_ul and len(failures) < 20:
+                    ingredient = row.get("ingredient") or row.get("standard_name") or "unknown"
+                    failures.append(
+                        f"{path.name}:{product_id}: {ingredient}: "
+                        "conversion_failed for nutrient with established UL"
+                    )
 
     return checked, failures
 
@@ -66,7 +95,10 @@ def main() -> int:
         print("RDA/UL emitted-reference stamp gate failed:")
         print("\n".join(failures))
         return 1
-    print(f"RDA/UL emitted-reference stamp gate passed for {checked} product blocks.")
+    print(
+        "RDA/UL emitted-reference and conversion-safety gate passed "
+        f"for {checked} product blocks."
+    )
     return 0
 
 
