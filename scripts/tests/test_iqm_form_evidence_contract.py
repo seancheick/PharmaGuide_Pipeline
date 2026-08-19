@@ -232,6 +232,42 @@ def test_manifest_apply_is_atomic_when_any_precondition_is_stale(tmp_path: Path)
     assert json.loads(iqm_path.read_text()) == original
 
 
+def test_manifest_apply_can_atomically_remove_stale_form_evidence(tmp_path: Path):
+    iqm_path = tmp_path / "ingredient_quality_map.json"
+    manifest_path = tmp_path / "manifest.json"
+    original = _iqm(
+        {
+            "bio_score": 14,
+            "score": 14,
+            "natural": False,
+            "form_evidence": _approved_evidence(),
+        }
+    )
+    form = original["magnesium"]["forms"]["magnesium citrate"]
+    iqm_path.write_text(json.dumps(original, indent=2) + "\n")
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0.0",
+                "changes": [
+                    {
+                        "ingredient_key": "magnesium",
+                        "form_key": "magnesium citrate",
+                        "expected_form_sha256": form_digest(form),
+                        "unset": ["form_evidence"],
+                    }
+                ],
+            }
+        )
+    )
+
+    result = apply_manifest_file(iqm_path, manifest_path)
+    updated = json.loads(iqm_path.read_text())
+
+    assert result == {"expected": 1, "applied": 1, "unchanged": 0}
+    assert "form_evidence" not in updated["magnesium"]["forms"]["magnesium citrate"]
+
+
 def test_manifest_apply_updates_all_entries_and_reports_exact_counts(tmp_path: Path):
     iqm_path = tmp_path / "ingredient_quality_map.json"
     manifest_path = tmp_path / "manifest.json"

@@ -554,7 +554,9 @@ def apply_manifest_file(iqm_path: Path, manifest_path: Path) -> dict[str, int]:
         raise ManifestError("manifest changes must be a non-empty list")
 
     # Validate every precondition before mutating the in-memory candidate.
-    resolved: list[tuple[dict[str, Any], dict[str, Any], str]] = []
+    resolved: list[
+        tuple[dict[str, Any], dict[str, Any], tuple[str, ...], str]
+    ] = []
     seen: set[str] = set()
     for index, change in enumerate(changes):
         if not isinstance(change, dict):
@@ -569,24 +571,45 @@ def apply_manifest_file(iqm_path: Path, manifest_path: Path) -> dict[str, int]:
         expected_digest = str(change.get("expected_form_sha256") or "").strip()
         if form_digest(form) != expected_digest:
             raise ManifestError(f"{key}: form precondition digest is stale")
-        set_values = change.get("set")
-        if not isinstance(set_values, dict) or not set_values:
-            raise ManifestError(f"{key}: set must be a non-empty object")
-        resolved.append((form, set_values, key))
+        set_values = change.get("set", {})
+        unset_values = change.get("unset", [])
+        if not isinstance(set_values, dict):
+            raise ManifestError(f"{key}: set must be an object")
+        if not isinstance(unset_values, list) or not all(
+            _non_empty_string(field) for field in unset_values
+        ):
+            raise ManifestError(f"{key}: unset must be a string list")
+        unset_fields = tuple(str(field).strip() for field in unset_values)
+        if len(unset_fields) != len(set(unset_fields)):
+            raise ManifestError(f"{key}: unset must not contain duplicates")
+        overlap = sorted(set(set_values) & set(unset_fields))
+        if overlap:
+            raise ManifestError(f"{key}: cannot set and unset {overlap[0]}")
+        if not set_values and not unset_fields:
+            raise ManifestError(f"{key}: set or unset must contain a change")
+        resolved.append((form, set_values, unset_fields, key))
 
     candidate = copy.deepcopy(iqm)
     applied = 0
     unchanged = 0
-    for change, (_, set_values, _) in zip(changes, resolved, strict=True):
+    for change, (_, set_values, unset_fields, _) in zip(
+        changes, resolved, strict=True
+    ):
         form = _resolve_manifest_form(
             candidate,
             str(change["ingredient_key"]),
             str(change["form_key"]),
         )
-        if all(form.get(field) == value for field, value in set_values.items()):
+        set_unchanged = all(
+            form.get(field) == value for field, value in set_values.items()
+        )
+        unset_unchanged = all(field not in form for field in unset_fields)
+        if set_unchanged and unset_unchanged:
             unchanged += 1
             continue
         form.update(copy.deepcopy(set_values))
+        for field in unset_fields:
+            form.pop(field, None)
         applied += 1
 
     # Validate evidence entries touched by the manifest before any write.

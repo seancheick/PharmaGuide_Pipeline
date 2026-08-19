@@ -1,0 +1,1085 @@
+[
+ {
+  "key": "vitamin_a::retinyl palmitate",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "ODS sheet only lists it as a common supplement form; no absorption premium stated.",
+  "pmids": [],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "vitamin_a::retinyl acetate",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "Same ODS sheet, same sentence; no comparative data.",
+  "pmids": [],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "vitamin_a::retinol",
+  "bio_score": 15,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "24036530 is a mechanism review of enterocyte transport proteins. No form comparison, no human outcome. Supports bio_score 15.",
+  "pmids": [
+   "24036530"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "vitamin_b1_thiamine::benfotiamine",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "8929745 states benfotiamine bioavailability is ~3.6x thiamine HCl. Directly on-claim.",
+  "pmids": [
+   "8929745"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "vitamin_b5_pantothenic::pantethine",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "4056044 = 4 cystinotic children, rare-disease metabolic study, no pantothenic-acid comparator arm.",
+  "pmids": [
+   "4056044"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "vitamin_b7_biotin::d-biotin",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "10075337 oral vs IV crossover shows ~100% oral bioavailability. 19056639 is a mechanism review adding nothing.",
+  "pmids": [
+   "10075337",
+   "19056639"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "vitamin_b9_folate::5-methyltetrahydrofolate (5-MTHF)",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "19917061 randomized crossover, 5-MTHF vs folic acid, human. Textbook on-claim.",
+  "pmids": [
+   "19917061"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "vitamin_c::calcium ascorbate",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "FAIL-CONTRADICTS",
+  "finding": "Cited ODS sheet says no bioavailability difference among ascorbic acid, Ester-C and ascorbate-with-bioflavonoids, and that plain ascorbic acid is the preferred source. Calcium ascorbate is scored 14 vs ascorbic acid 13 - the source argues the opposite direction.",
+  "pmids": [],
+  "classification": "REMOVE",
+  "reason_class": "contradicts_encoded_score"
+ },
+ {
+  "key": "vitamin_c::ascorbic acid",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "Same ODS sheet actively supports ascorbic acid.",
+  "pmids": [],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "vitamin_d::cholecalciferol (D3)",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "PASS",
+  "finding": "37865222 is a D2-vs-D3 meta-analysis favouring D3. 28187226 adds the calcifediol comparison.",
+  "pmids": [
+   "37865222",
+   "28187226"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "vitamin_e::d-alpha-tocopherol",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "9537614 deuterium-labelled natural vs synthetic in humans. 9199513 is in vitro support.",
+  "pmids": [
+   "9537614",
+   "9199513"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "calcium::calcium citrate",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "ODS calcium sheet explicitly compares carbonate vs citrate and notes citrate absorption in low stomach acid.",
+  "pmids": [],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "magnesium::magnesium glycinate",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "22909270 is a pregnancy leg-cramp efficacy RCT. Right material, wrong question.",
+  "pmids": [
+   "22909270"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "magnesium::magnesium citrate",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "14596323 directly titled Mg citrate more bioavailable than other Mg preparations.",
+  "pmids": [
+   "14596323",
+   "11794633"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "magnesium::magnesium chloride",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "11794633 measured it against MgO.",
+  "pmids": [
+   "11794633"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "magnesium::magnesium lactate",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "11794633 measured it against MgO.",
+  "pmids": [
+   "11794633"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "magnesium::magnesium aspartate",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "FAIL-CONTRADICTS",
+  "finding": "11794633 concluded chloride, lactate and aspartate have EQUIVALENT bioavailability. Aspartate is scored 14 while chloride and lactate are 13, all citing this one study.",
+  "pmids": [
+   "11794633"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "contradicts_encoded_score"
+ },
+ {
+  "key": "iron::iron bisglycinate",
+  "bio_score": 13,
+  "evidence_level": "strong",
+  "verdict": "PASS",
+  "finding": "36728680 meta-analysis of bisglycinate vs other iron supplements on Hb/ferritin and GI adverse events.",
+  "pmids": [
+   "36728680"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "iron::heme iron polypeptide",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "25953602 is a CKD-management review, not a supplement-form absorption comparison.",
+  "pmids": [
+   "25953602"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "iron::ferrous fumarate",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "34726703 studies FeFum with vs without galacto-oligosaccharides, not FeFum vs other iron forms.",
+  "pmids": [
+   "34726703"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "iron::ferrous ascorbate",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "9202099 includes a ferrous-ascorbate arm (29.9% vs 34.6% bisglycinate, NS). Legitimate comparator data.",
+  "pmids": [
+   "9202099"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "zinc::zinc picolinate",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "3630857 picolinate vs citrate vs gluconate, human crossover.",
+  "pmids": [
+   "3630857"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "zinc::zinc bisglycinate",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "18271278 bis-glycinate vs gluconate, human crossover.",
+  "pmids": [
+   "18271278"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "zinc::zinc acetate",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "8577018 acetate vs oxide across gastric pH.",
+  "pmids": [
+   "8577018"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "zinc::zinc citrate",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "24259556 citrate vs gluconate vs oxide, stable isotope.",
+  "pmids": [
+   "24259556"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "zinc::zinc gluconate",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "24259556 + 37111104 both include gluconate arms.",
+  "pmids": [
+   "24259556",
+   "37111104"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "zinc::zinc monomethionine",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "17012778 is a Biofactors review, largely animal; no human head-to-head.",
+  "pmids": [
+   "17012778"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "zinc::zinc aspartate",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "37111104 found fractional absorption significantly higher for Zn-aspartate.",
+  "pmids": [
+   "37111104"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "selenium::selenomethionine",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "ODS selenium sheet states ~90% absorption from these forms.",
+  "pmids": [],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "selenium::selenized yeast",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "ODS sheet notes selenized yeast is predominantly selenomethionine.",
+  "pmids": [],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "astaxanthin::natural astaxanthin (haematococcus pluvialis)",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "12885395 compares lipid-based FORMULATIONS; 11120445 is a 3-subject single-arm isomer PK. Neither compares natural haematococcus vs synthetic astaxanthin, which is the claim.",
+  "pmids": [
+   "12885395",
+   "11120445"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "creatine_monohydrate::creatine monohydrate",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "22971354 CrM vs buffered CrM head-to-head; supports the 14 vs 13 split.",
+  "pmids": [
+   "22971354"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "creatine_monohydrate::buffered creatine monohydrate",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "Same study, correctly used as the losing arm.",
+  "pmids": [
+   "22971354"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "creatine_monohydrate::creatine citrate",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "17997838 CrM vs tri-creatine citrate vs pyruvate PK.",
+  "pmids": [
+   "17997838"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "hmb::hmb calcium salt (hmb-ca)",
+  "bio_score": 13,
+  "evidence_level": "strong",
+  "verdict": "FAIL",
+  "finding": "All 3 refs are muscle-strength efficacy studies, and all 3 are attached identically to HMB-FA. Cannot discriminate the two forms.",
+  "pmids": [
+   "24599749",
+   "35911112",
+   "41305674"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "hmb::hmb free acid (hmb-fa)",
+  "bio_score": 13,
+  "evidence_level": "strong",
+  "verdict": "FAIL",
+  "finding": "Same 3 refs as HMB-Ca. 24599749 studies HMB-FA vs placebo, not vs HMB-Ca.",
+  "pmids": [
+   "24599749",
+   "35911112",
+   "41305674"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "d_ribose::d-ribose powder",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "24272966 is dose-proportionality and food-effect PK of a single form. No comparator.",
+  "pmids": [
+   "24272966"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "whey_protein::whey protein isolate",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "FAIL",
+  "finding": "28698222 and 39303495 are generic protein-supplementation efficacy meta-analyses, attached identically to hydrolyzed whey.",
+  "pmids": [
+   "28698222",
+   "39303495"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "whey_protein::hydrolyzed whey protein",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "FAIL",
+  "finding": "Same two generic meta-analyses. Nothing distinguishes hydrolysate from isolate.",
+  "pmids": [
+   "28698222",
+   "39303495"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "resveratrol::trans-resveratrol",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "FAIL",
+  "finding": "All 3 refs are inflammation/lipid outcome meta-analyses. evidence_level is 'strong'. No trans- vs cis- or delivery comparison.",
+  "pmids": [
+   "39872318",
+   "35905799",
+   "36145131"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "iodine::potassium iodide",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "ODS iodine sheet cites 96.4% absorption of potassium iodide.",
+  "pmids": [],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "coq10::ubiquinol crystal-free",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "16919858 is single-arm safety/bioavailability of Kaneka QH; no ubiquinone comparator.",
+  "pmids": [
+   "16919858"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "coq10::ubiquinol",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "32380795 is a narrative review; it does discuss ubiquinone vs ubiquinol but supplies no primary comparison.",
+  "pmids": [
+   "32380795"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "coq10::ubiquinone crystal-dispersed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "30153575 compared 7 formulations in a crossover and isolates crystal dispersion as the driver.",
+  "pmids": [
+   "30153575"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "pqq::disodium PQQ",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "34415830 is a cognition efficacy RCT; 38908296 tests a dihydrogen+PQQ combination product, i.e. the wrong material.",
+  "pmids": [
+   "34415830",
+   "38908296"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "choline::alpha-GPC",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "34287673 compared choline chloride vs bitartrate vs alpha-GPC vs egg-PC in a crossover.",
+  "pmids": [
+   "34287673"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "choline::CDP-choline (citicoline)",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "6412727 is a 1983 single-arm 14C PK study, n=6, no comparator.",
+  "pmids": [
+   "6412727"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "phosphatidylserine::soy-derived phosphatidylserine",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "20523044 tests PS-DHA (a different material); 21103034 is a memory-outcome trial. Neither addresses soy-PS vs bovine-PS form quality.",
+  "pmids": [
+   "20523044",
+   "21103034"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "taurine::taurine (generic)",
+  "bio_score": 14,
+  "evidence_level": "strong",
+  "verdict": "FAIL",
+  "finding": "Both refs are cardiometabolic outcome meta-analyses. evidence_level 'strong'. No form question exists or is answered.",
+  "pmids": [
+   "32871172",
+   "41275513"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "tmg_betaine::betaine anhydrous",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "30064450 body-composition RCT and 37409757 CrossFit performance RCT. Pure efficacy.",
+  "pmids": [
+   "30064450",
+   "37409757"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "l_glutamine::l-alanyl-l-glutamine",
+  "bio_score": 15,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "22575040 AlaGln vs free L-Gln vs hydrolyzed wheat protein. Directly on-claim.",
+  "pmids": [
+   "22575040"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "l_arginine::nitrosigine (arginine silicate inositol)",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "Two cognition RCTs plus a vasodilation trial against citrulline malate. Cross-ingredient efficacy, not arginine form quality.",
+  "pmids": [
+   "27869715",
+   "32093766",
+   "34959823"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "l_ornithine::l-ornithine l-aspartate (lola)",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "30706424 is a hepatic-encephalopathy PK/PD review, not a supplement-form comparison.",
+  "pmids": [
+   "30706424"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "beta-alanine::carnosyn beta-alanine",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "16554972 characterises absorption of the exact material and carnosine loading.",
+  "pmids": [
+   "16554972"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "beta-alanine::sr carnosyn beta-alanine",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "22139410 slow-release tablet vs pure solution, head-to-head kinetics and paresthesia.",
+  "pmids": [
+   "22139410"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "beta-alanine::beta-alanine powder",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "Same 16554972; score matches CarnoSyn, so no unsupported differential.",
+  "pmids": [
+   "16554972"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "alpha_lipoic_acid::sodium r-lipoate",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "18069903 characterises NaRLA PK but has no in-study rac-LA comparator arm.",
+  "pmids": [
+   "18069903"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "ashwagandha::Shoden ashwagandha extract",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "POLICY",
+  "finding": "3 RCTs on the exact branded extract (Shoden). Efficacy, not absorption - defensible only if branded-material evidence is declared a form axis.",
+  "pmids": [
+   "32540634",
+   "31517876",
+   "39286132"
+  ],
+  "classification": "HOLD",
+  "reason_class": "branded_or_strain_policy_decision"
+ },
+ {
+  "key": "milk_thistle::silymarin phytosome",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "2088770 IdB 1016 phytosome vs silymarin in humans.",
+  "pmids": [
+   "2088770"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "milk_thistle::micellar silymarin",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "40733088 micellar vs standard formulation, randomized crossover, n=16.",
+  "pmids": [
+   "40733088"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "l_theanine::suntheanine (Taiyo)",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "POLICY",
+  "finding": "22214254 uses Suntheanine in ADHD boys; 31623400 is generic L-theanine. Efficacy, and one ref is not the branded material.",
+  "pmids": [
+   "31623400",
+   "22214254"
+  ],
+  "classification": "HOLD",
+  "reason_class": "branded_or_strain_policy_decision"
+ },
+ {
+  "key": "collagen::collagen tripeptides",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "27573716 is rat and Caco-2 monolayer data. Not human.",
+  "pmids": [
+   "27573716"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "ginseng::fermented red ginseng",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "27516803 and 33884767 both compare fermented product vs red ginseng extract in humans (compound K 80-115x).",
+  "pmids": [
+   "27516803",
+   "33884767"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "l_leucine::l-leucine powder",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "34642762 compares free amino acids vs intact milk protein, and found no MPS difference. Not a leucine form comparison.",
+  "pmids": [
+   "34642762"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "l_valine::l-valine powder",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "Same study, same problem.",
+  "pmids": [
+   "34642762"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "l_isoleucine::l-isoleucine powder",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "Same study, same problem.",
+  "pmids": [
+   "34642762"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "l_citrulline::l-citrulline malate",
+  "bio_score": 15,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "17662090 dosed L-citrulline, not citrulline malate. It cannot support malate at 15 vs plain powder at 14.",
+  "pmids": [
+   "17662090"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "l_citrulline::l-citrulline powder",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "17662090 is exactly this material.",
+  "pmids": [
+   "17662090"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "caffeine::caffeine anhydrous",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "6832208 oral vs IV, ~100% bioavailability. Both caffeine forms share the score, so no unsupported differential.",
+  "pmids": [
+   "6832208"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "caffeine::caffeine (natural source)",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "Same study, same score.",
+  "pmids": [
+   "6832208"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "nicotinamide_riboside::niagen (nicotinamide riboside chloride)",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "POLICY",
+  "finding": "Both RCTs use the branded material and show NAD+ elevation, but neither compares NR against another NAD+ precursor form.",
+  "pmids": [
+   "29599478",
+   "29992272"
+  ],
+  "classification": "HOLD",
+  "reason_class": "branded_or_strain_policy_decision"
+ },
+ {
+  "key": "pterostilbene::trans-pterostilbene",
+  "bio_score": 15,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "23431291 is a safety analysis; 25057276 is a metabolic RCT in which pterostilbene RAISED LDL by 17.1 mg/dL. Cited as support for a 15/15 form rating.",
+  "pmids": [
+   "25057276",
+   "23431291"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "bifidobacterium_lactis::bifidobacterium lactis hn019",
+  "bio_score": 15,
+  "evidence_level": "strong",
+  "verdict": "FAIL",
+  "finding": "23922468 is a generic probiotic transit-time meta-analysis, not strain-specific. 29227175 explicitly reports NO significant difference in primary or secondary outcomes. A null trial supporting bio_score 15.",
+  "pmids": [
+   "23922468",
+   "29227175"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "bifidobacterium_lactis::bifidobacterium lactis bb-12",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "POLICY",
+  "finding": "31797399 infant-colic RCT and 32059116 narrative review, both strain-specific.",
+  "pmids": [
+   "31797399",
+   "32059116"
+  ],
+  "classification": "HOLD",
+  "reason_class": "branded_or_strain_policy_decision"
+ },
+ {
+  "key": "lactobacillus_rhamnosus::lactobacillus rhamnosus gg",
+  "bio_score": 15,
+  "evidence_level": "strong",
+  "verdict": "POLICY",
+  "finding": "26365389 is explicitly strain-specific and opens by stating probiotic effects are strain specific. Strongest case in the probiotic set.",
+  "pmids": [
+   "26365389",
+   "26756877"
+  ],
+  "classification": "HOLD",
+  "reason_class": "branded_or_strain_policy_decision"
+ },
+ {
+  "key": "saccharomyces_boulardii::saccharomyces boulardii cncm i-745",
+  "bio_score": 15,
+  "evidence_level": "strong",
+  "verdict": "POLICY",
+  "finding": "40535538 strain-specific meta-analysis, though restricted to trials conducted in China.",
+  "pmids": [
+   "40535538"
+  ],
+  "classification": "HOLD",
+  "reason_class": "branded_or_strain_policy_decision"
+ },
+ {
+  "key": "st_johns_wort::st john's wort standardized extract",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "8878586 is single-arm hypericin PK from LI 160. No non-standardized comparator.",
+  "pmids": [
+   "8878586"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "valerian::valerian standardized extract",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "WEAK",
+  "finding": "20878691 is single-arm valerenic acid PK in older women; found no single-vs-multiple dose difference.",
+  "pmids": [
+   "20878691"
+  ],
+  "classification": "HOLD",
+  "reason_class": "no_comparator"
+ },
+ {
+  "key": "dha::algal triglyceride",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "41096614 microalgal vs fish oil equivalence trial, n=74.",
+  "pmids": [
+   "41096614"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "dha::DHA fish oil rTG",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "20638827 Dyerberg ranks rTG above natural TG and EE.",
+  "pmids": [
+   "20638827"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "epa::EPA fish oil rTG",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "Same study.",
+  "pmids": [
+   "20638827"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "fish_oil::natural triglyceride",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "20638827 sets natural TG as the 100% reference and above ethyl ester at 73%.",
+  "pmids": [
+   "20638827"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "algae_oil::algae oil (dha)",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "41096614 non-inferiority vs fish oil.",
+  "pmids": [
+   "41096614"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "streptococcus_salivarius::streptococcus salivarius k12",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "FAIL",
+  "finding": "21722694 is a safety and tolerance study. It reports no differences vs placebo on any clinical chemistry endpoint. It establishes nothing about quality.",
+  "pmids": [
+   "21722694"
+  ],
+  "classification": "REMOVE",
+  "reason_class": "off_axis"
+ },
+ {
+  "key": "lactobacillus_reuteri::lactobacillus reuteri DSM 17938",
+  "bio_score": 14,
+  "evidence_level": "strong",
+  "verdict": "POLICY",
+  "finding": "42485904 strain-specific meta-analysis in colic and preterm infants.",
+  "pmids": [
+   "42485904"
+  ],
+  "classification": "HOLD",
+  "reason_class": "branded_or_strain_policy_decision"
+ },
+ {
+  "key": "bacillus_coagulans::bacillus coagulans gbi-30",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "POLICY",
+  "finding": "40707016 strain-specific RCT, n=111.",
+  "pmids": [
+   "40707016"
+  ],
+  "classification": "HOLD",
+  "reason_class": "branded_or_strain_policy_decision"
+ },
+ {
+  "key": "vitamin_k2::menaquinone-7 (MK-7)",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "23140417 MK-4 vs MK-7 and 17158229 K1 vs MK-7, both human.",
+  "pmids": [
+   "23140417",
+   "17158229"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "vitamin_k2::menaquinone-7 all-trans",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "Same two head-to-head studies.",
+  "pmids": [
+   "23140417",
+   "17158229"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ },
+ {
+  "key": "vitamin_k2::vitamin K2 from natto",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "PASS",
+  "finding": "17158229 is specifically natto-derived MK-7 vs synthetic K1.",
+  "pmids": [
+   "17158229"
+  ],
+  "classification": "RETAIN",
+  "reason_class": "on_axis_human_comparative"
+ }
+]

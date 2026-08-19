@@ -1,0 +1,3013 @@
+{
+  "schema_version": "1.0.0",
+  "review_date": "2026-08-18",
+  "policy": "Keep only reference-level sources adjudicated as form-quality evidence. Clinical-only and off-axis sources leave IQM; unresolved legacy Excellent scores return to the frozen backlog.",
+  "summary": {
+    "audited_forms": 89,
+    "forms_with_verified_evidence": 49,
+    "forms_returned_to_legacy_backlog": 40,
+    "score_corrections": 5
+  },
+  "changes": [
+    {
+      "ingredient_key": "algae_oil",
+      "form_key": "algae oil (dha)",
+      "expected_form_sha256": "b67d2ba6c661ede58bd87e3ae08382e8ac70f49e35695af33a3981f02da708f1",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "41096614",
+              "doi": "10.3390/ijms26199343",
+              "title": "Comparative Bioavailability of DHA and EPA from Microalgal and Fish Oil in Adults.",
+              "citation": "International journal of molecular sciences (2025-09-24)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41096614/",
+              "published_date": "2025-09-24",
+              "publication_types": [
+                "Equivalence Trial",
+                "Journal Article"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Female",
+                "Humans",
+                "Male",
+                "Middle Aged",
+                "Biological Availability",
+                "Dietary Supplements",
+                "Docosahexaenoic Acids",
+                "Double-Blind Method",
+                "Eicosapentaenoic Acid",
+                "Fish Oils",
+                "Microalgae",
+                "Phospholipids"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "journal_article",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "alpha_lipoic_acid",
+      "form_key": "sodium r-lipoate",
+      "expected_form_sha256": "a435d0e9fbd18d094c4620e6789ea2a7c09b78c4b44e75f49eb811ac44226aaf",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "ashwagandha",
+      "form_key": "Shoden ashwagandha extract",
+      "expected_form_sha256": "0952998bf783a71984f16583186a8f104e578cde6f038e087cd8bcaec733c1bc",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "astaxanthin",
+      "form_key": "natural astaxanthin (haematococcus pluvialis)",
+      "expected_form_sha256": "323188e5eeafef4f1086d3a142d79465dc9c3dc9348ac1045d967145c5f97e36",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "bacillus_coagulans",
+      "form_key": "bacillus coagulans gbi-30",
+      "expected_form_sha256": "23003ff9bf5a059708e224f3b706813a2c523106044cb2df99082d97b2583a90",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "beta-alanine",
+      "form_key": "beta-alanine powder",
+      "expected_form_sha256": "f6c9a8d445fde63fb3e73e259b44491b9840400e2c03212ea8c3faf1e5eb47b7",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "16554972",
+              "doi": "10.1007/s00726-006-0299-9",
+              "title": "The absorption of orally supplied beta-alanine and its effect on muscle carnosine synthesis in human vastus lateralis.",
+              "citation": "Amino acids (2006-05-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/16554972/",
+              "published_date": "2006-05-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Comparative Study",
+                "Journal Article",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Aged",
+                "Aged, 80 and over",
+                "Carnosine",
+                "Dietary Supplements",
+                "Dipeptides",
+                "Humans",
+                "Male",
+                "Quadriceps Muscle",
+                "Taurine",
+                "beta-Alanine"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "beta-alanine",
+      "form_key": "carnosyn beta-alanine",
+      "expected_form_sha256": "23f7b79587783a189f39f95bf4dc44ee1a71270918aa314451a1c6c6ee5e580e",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "The live-verified human pharmacokinetic study explicitly administered CarnoSyn beta-alanine and measured plasma and urinary disposition.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "16554972",
+              "doi": "10.1007/s00726-006-0299-9",
+              "title": "The absorption of orally supplied beta-alanine and its effect on muscle carnosine synthesis in human vastus lateralis.",
+              "citation": "Amino acids (2006-05-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/16554972/",
+              "published_date": "2006-05-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Comparative Study",
+                "Journal Article",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Aged",
+                "Aged, 80 and over",
+                "Carnosine",
+                "Dietary Supplements",
+                "Dipeptides",
+                "Humans",
+                "Male",
+                "Quadriceps Muscle",
+                "Taurine",
+                "beta-Alanine"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "clinical_trial",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "beta-alanine",
+      "form_key": "sr carnosyn beta-alanine",
+      "expected_form_sha256": "332e2202a8e657e29116ee0205c9030daec6cc443c982c5e8300363d2510dc61",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "class_equivalence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A live-verified randomized human trial found slow-release beta-alanine had unchanged exposure, higher retention, and lower peak concentration than immediate release.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "22139410",
+              "doi": "10.1007/s00726-011-1169-7",
+              "title": "Effect of slow-release β-alanine tablets on absorption kinetics and paresthesia.",
+              "citation": "Amino acids (2012-07-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/22139410/",
+              "published_date": "2012-07-01",
+              "publication_types": [
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Absorption",
+                "Administration, Oral",
+                "Adult",
+                "Biological Availability",
+                "Carnosine",
+                "Delayed-Action Preparations",
+                "Female",
+                "Humans",
+                "Male",
+                "Muscle, Skeletal",
+                "Nociception",
+                "Paresthesia",
+                "Single-Blind Method",
+                "Surveys and Questionnaires",
+                "beta-Alanine"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "slow_release_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_lactis",
+      "form_key": "bifidobacterium lactis bb-12",
+      "expected_form_sha256": "1f9ddbfe344d856c56f4d1ef3de9cc331bb6c9170fcf53093680bfafbc14550f",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "bifidobacterium_lactis",
+      "form_key": "bifidobacterium lactis hn019",
+      "expected_form_sha256": "85d1e62fcaf8038590e9a4c429379ef849c8f2a011d82c378710e912874a2a33",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "caffeine",
+      "form_key": "caffeine (natural source)",
+      "expected_form_sha256": "1c894f48c349b3a07b5762aab1ab15acf22a7ff2140eb34c5ffa1381ff37fcd2",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "6832208",
+              "doi": "10.1007/BF00613933",
+              "title": "The absolute bioavailability of caffeine in man.",
+              "citation": "European journal of clinical pharmacology (1983-01-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/6832208/",
+              "published_date": "1983-01-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, U.S. Gov't, P.H.S."
+              ],
+              "mesh_terms": [
+                "Administration, Oral",
+                "Adult",
+                "Biological Availability",
+                "Caffeine",
+                "Humans",
+                "Infusions, Parenteral",
+                "Kinetics",
+                "Male",
+                "Random Allocation"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "caffeine",
+      "form_key": "caffeine anhydrous",
+      "expected_form_sha256": "5804259b36620cefffd648368cc6bbc53ef6548395c5564dd7e0af51ed929662",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "6832208",
+              "doi": "10.1007/BF00613933",
+              "title": "The absolute bioavailability of caffeine in man.",
+              "citation": "European journal of clinical pharmacology (1983-01-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/6832208/",
+              "published_date": "1983-01-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, U.S. Gov't, P.H.S."
+              ],
+              "mesh_terms": [
+                "Administration, Oral",
+                "Adult",
+                "Biological Availability",
+                "Caffeine",
+                "Humans",
+                "Infusions, Parenteral",
+                "Kinetics",
+                "Male",
+                "Random Allocation"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "calcium",
+      "form_key": "calcium citrate",
+      "expected_form_sha256": "6e048f24f1fcad371227ef87e03f20d72c3711226b56c5e2ecb26d506c5ae2b1",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "form_quality_confidence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS directly describes the named supplement form and the calcium citrate absorption context context supporting this tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Calcium — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
+              "supports_claims": [
+                "calcium_citrate_absorption_context"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "choline",
+      "form_key": "CDP-choline (citicoline)",
+      "expected_form_sha256": "324d4a820f6ad4f5fe952a9c1edfdb341552655904499c7cd21daa11ca8719e7",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "choline",
+      "form_key": "alpha-GPC",
+      "expected_form_sha256": "ad2168ddd72d2abdb1a9e876c6fd46300515b1dfb2a7cd024b010372f3c2f760",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "34287673",
+              "doi": "10.1007/s00394-021-02637-6",
+              "title": "Differential metabolism of choline supplements in adult volunteers.",
+              "citation": "European journal of nutrition (2022-02-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/34287673/",
+              "published_date": "2022-02-01",
+              "publication_types": [
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Betaine",
+                "Choline",
+                "Dietary Supplements",
+                "Humans",
+                "Male",
+                "Prospective Studies",
+                "Volunteers"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "collagen",
+      "form_key": "collagen tripeptides",
+      "expected_form_sha256": "84613898eb8facae2bf0060ea4e0a7735ada1a4b7aba2580fcd57d504751f1da",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A human comparison measured higher post-dose collagen-derived di- and tripeptides after tripeptide-rich preparations than after a collagen peptide without tripeptides.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "26934933",
+              "doi": "10.1248/bpb.b15-00624",
+              "title": "Absorption and Urinary Excretion of Peptides after Collagen Tripeptide Ingestion in Humans.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/26934933/",
+              "published_date": "2016-01-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Journal Article",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "collagen_tripeptide_absorption"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "coq10",
+      "form_key": "ubiquinol",
+      "expected_form_sha256": "dff5356ff80dd561b4e42f3bd97362be32f34076bd8799c6c442e35054b998da",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "coq10",
+      "form_key": "ubiquinol crystal-free",
+      "expected_form_sha256": "b6c64e9bf457730b796bb929ef54be5f25428558d41351be8066a388022ec924",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "coq10",
+      "form_key": "ubiquinone crystal-dispersed",
+      "expected_form_sha256": "20497dde9546e3919d16992675857ce010d57df4e18b83e3df68cfe8621af045",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "30153575",
+              "doi": "10.1016/j.nut.2018.05.020",
+              "title": "Bioavailability of coenzyme Q10 supplements depends on carrier lipids and solubilization.",
+              "citation": "Nutrition (Burbank, Los Angeles County, Calif.) (2019-01-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/30153575/",
+              "published_date": "2019-01-01",
+              "publication_types": [
+                "Journal Article",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Administration, Oral",
+                "Adolescent",
+                "Adult",
+                "Area Under Curve",
+                "Biological Availability",
+                "Capsules",
+                "Cross-Over Studies",
+                "Dietary Supplements",
+                "Double-Blind Method",
+                "Drug Carriers",
+                "Female",
+                "Humans",
+                "Lipids",
+                "Male",
+                "Solubility",
+                "Ubiquinone",
+                "Young Adult"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "journal_article",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "creatine_monohydrate",
+      "form_key": "buffered creatine monohydrate",
+      "expected_form_sha256": "36c64a833f609ea7b42906c8822ec8b645616f0d8441984285f6b8db41b46151",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "class_equivalence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A direct randomized comparison found buffered creatine did not outperform creatine monohydrate but produced comparable form-level exposure and training outcomes at equivalent dosing.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "22971354",
+              "doi": "10.1186/1550-2783-9-43",
+              "title": "A buffered form of creatine does not promote greater changes in muscle creatine content, body composition, or training adaptations than creatine monohydrate.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/22971354/",
+              "published_date": "2012-09-13",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "class_equivalence"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "creatine_monohydrate",
+      "form_key": "creatine citrate",
+      "expected_form_sha256": "d7a3201b51c37bd43dcbf88d4628b6e1c5e3d4ff48ab1f56b1cbf2ce66081df0",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "class_equivalence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A human crossover pharmacokinetic comparison found tri-creatine citrate produced plasma creatine exposure comparable with creatine monohydrate.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "17997838",
+              "doi": "10.1186/1550-2783-4-17",
+              "title": "Comparison of new forms of creatine in raising plasma creatine levels.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/17997838/",
+              "published_date": "2007-11-12",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "class_equivalence"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "creatine_monohydrate",
+      "form_key": "creatine monohydrate",
+      "expected_form_sha256": "f3b8c27665e8a1f54d14381f4a557c80ed06cd82da391cb31f514804cfacb22c",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "22971354",
+              "doi": "10.1186/1550-2783-9-43",
+              "title": "A buffered form of creatine does not promote greater changes in muscle creatine content, body composition, or training adaptations than creatine monohydrate.",
+              "citation": "Journal of the International Society of Sports Nutrition (2012-09-13)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/22971354/",
+              "published_date": "2012-09-13",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "mesh_terms": [],
+              "supplementary_concepts": [],
+              "evidence_grade": "journal_article",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "d_ribose",
+      "form_key": "d-ribose powder",
+      "expected_form_sha256": "3d87d8b60ad6d87745b32c9c4880464c2ed78d5af1d5ccd4af0a74fee0f6d845",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "dha",
+      "form_key": "DHA fish oil rTG",
+      "expected_form_sha256": "375b4c8f6b3708e07cd6122d475ef88110fd3a4dd025f6a4df1d7f6650b65291",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "20638827",
+              "doi": "10.1016/j.plefa.2010.06.007",
+              "title": "Bioavailability of marine n-3 fatty acid formulations.",
+              "citation": "Prostaglandins, leukotrienes, and essential fatty acids (2010-09-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/20638827/",
+              "published_date": "2010-09-01",
+              "publication_types": [
+                "Controlled Clinical Trial",
+                "Journal Article"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Biological Availability",
+                "Cholesterol",
+                "Docosahexaenoic Acids",
+                "Double-Blind Method",
+                "Eicosapentaenoic Acid",
+                "Fatty Acids, Omega-3",
+                "Female",
+                "Humans",
+                "Male",
+                "Middle Aged",
+                "Triglycerides"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        },
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "dha",
+      "form_key": "algal triglyceride",
+      "expected_form_sha256": "2f7a53b41d06e9f6e5dd614f040f1860b6fedbe60054503037636860bd152201",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "41096614",
+              "doi": "10.3390/ijms26199343",
+              "title": "Comparative Bioavailability of DHA and EPA from Microalgal and Fish Oil in Adults.",
+              "citation": "International journal of molecular sciences (2025-09-24)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41096614/",
+              "published_date": "2025-09-24",
+              "publication_types": [
+                "Equivalence Trial",
+                "Journal Article"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Female",
+                "Humans",
+                "Male",
+                "Middle Aged",
+                "Biological Availability",
+                "Dietary Supplements",
+                "Docosahexaenoic Acids",
+                "Double-Blind Method",
+                "Eicosapentaenoic Acid",
+                "Fish Oils",
+                "Microalgae",
+                "Phospholipids"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "journal_article",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "epa",
+      "form_key": "EPA fish oil rTG",
+      "expected_form_sha256": "b91e6a20b212713ea0c953107a0253f3b4e429faab1710af3ae3acdda0a7c12e",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "20638827",
+              "doi": "10.1016/j.plefa.2010.06.007",
+              "title": "Bioavailability of marine n-3 fatty acid formulations.",
+              "citation": "Prostaglandins, leukotrienes, and essential fatty acids (2010-09-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/20638827/",
+              "published_date": "2010-09-01",
+              "publication_types": [
+                "Controlled Clinical Trial",
+                "Journal Article"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Biological Availability",
+                "Cholesterol",
+                "Docosahexaenoic Acids",
+                "Double-Blind Method",
+                "Eicosapentaenoic Acid",
+                "Fatty Acids, Omega-3",
+                "Female",
+                "Humans",
+                "Male",
+                "Middle Aged",
+                "Triglycerides"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        },
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "fish_oil",
+      "form_key": "natural triglyceride",
+      "expected_form_sha256": "2833082959890313a5f22a2595589e411f3b88f79b415650527051630c4b31c2",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "20638827",
+              "doi": "10.1016/j.plefa.2010.06.007",
+              "title": "Bioavailability of marine n-3 fatty acid formulations.",
+              "citation": "Prostaglandins, leukotrienes, and essential fatty acids (2010-09-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/20638827/",
+              "published_date": "2010-09-01",
+              "publication_types": [
+                "Controlled Clinical Trial",
+                "Journal Article"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Biological Availability",
+                "Cholesterol",
+                "Docosahexaenoic Acids",
+                "Double-Blind Method",
+                "Eicosapentaenoic Acid",
+                "Fatty Acids, Omega-3",
+                "Female",
+                "Humans",
+                "Male",
+                "Middle Aged",
+                "Triglycerides"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "ginseng",
+      "form_key": "fermented red ginseng",
+      "expected_form_sha256": "a0dbc6f4570a621a5c554795f7748771fb73bfd783c1227a2e4730025b5f596f",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "27516803",
+              "doi": "10.1155/2016/3908142",
+              "title": "Enhanced Absorption Study of Ginsenoside Compound K (20-O-β-(D-Glucopyranosyl)-20(S)-protopanaxadiol) after Oral Administration of Fermented Red Ginseng Extract (HYFRG™) in Healthy Korean Volunteers and Rats.",
+              "citation": "Evidence-based complementary and alternative medicine : eCAM (2016-01-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/27516803/",
+              "published_date": "2016-01-01",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "mesh_terms": [],
+              "supplementary_concepts": [],
+              "evidence_grade": "journal_article",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            },
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "33884767",
+              "doi": "10.1002/cpdd.949",
+              "title": "Pharmacokinetics of Ginsenoside Compound K From a Compound K Fermentation Product, CK-30, and From Red Ginseng Extract in Healthy Korean Subjects.",
+              "citation": "Clinical pharmacology in drug development (2021-11-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/33884767/",
+              "published_date": "2021-11-01",
+              "publication_types": [
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Biological Availability",
+                "Cross-Over Studies",
+                "Extracellular Vesicles",
+                "Fermentation",
+                "Gastrointestinal Microbiome",
+                "Ginsenosides",
+                "Healthy Volunteers",
+                "Humans",
+                "Male",
+                "Metagenomics",
+                "Microbiota",
+                "Panax",
+                "Plant Extracts",
+                "Republic of Korea",
+                "Young Adult"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "hmb",
+      "form_key": "hmb calcium salt (hmb-ca)",
+      "expected_form_sha256": "eca095c4eaa19afefab7d0c8ebb8c025cbd2ae945437bbd7c721fc08656a7b6f",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A randomized human crossover directly compared calcium HMB with HMB free acid, establishing calcium HMB as the reference form while showing higher exposure for the free-acid form.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "21134325",
+              "doi": "10.1017/S0007114510003582",
+              "title": "Free acid gel form of β-hydroxy-β-methylbutyrate (HMB) improves HMB clearance from plasma in human subjects compared with the calcium HMB salt.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/21134325/",
+              "published_date": "2011-02-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_oral_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "hmb",
+      "form_key": "hmb free acid (hmb-fa)",
+      "expected_form_sha256": "ab23cf0e89be3d679f822d8dd7b24e1332ad7a5d0c58fd0ce5b3235cdd670db6",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A randomized human crossover found a faster peak and nearly double the exposure for HMB free acid versus calcium HMB, supporting the higher form-quality score.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "21134325",
+              "doi": "10.1017/S0007114510003582",
+              "title": "Free acid gel form of β-hydroxy-β-methylbutyrate (HMB) improves HMB clearance from plasma in human subjects compared with the calcium HMB salt.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/21134325/",
+              "published_date": "2011-02-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_oral_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
+        },
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "iodine",
+      "form_key": "potassium iodide",
+      "expected_form_sha256": "857ff43d29817053bb703ed68ff3980d887d7b32571eca2f853b32ecd2e9ff87",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "form_quality_confidence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS directly describes the named supplement form and the potassium iodide guideline use context supporting this tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Iodine — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/",
+              "supports_claims": [
+                "potassium_iodide_guideline_use"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "iron",
+      "form_key": "ferrous ascorbate",
+      "expected_form_sha256": "2711bf30855c28e62dcc9c919659d3bb162c7a6d7f7569e630a38337589b54f6",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A human double-isotope study directly measured ferrous ascorbate absorption and found bioavailability comparable with ferrous bisglycinate in water.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "9202099",
+              "doi": "10.1093/jn/127.7.1407",
+              "title": "Milk inhibits and ascorbic acid favors ferrous bis-glycine chelate bioavailability in humans.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/9202099/",
+              "published_date": "1997-07-01",
+              "publication_types": [
+                "Journal Article",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "systemic_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "iron",
+      "form_key": "ferrous fumarate",
+      "expected_form_sha256": "c4d43ceb5166ff189e29efc4810789a1ad7653ece42535a44cdab2efaa29bd2e",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "iron",
+      "form_key": "heme iron polypeptide",
+      "expected_form_sha256": "20857a916eb9b0ad50847fb71c7dec68fbe9f1ad12e9cbf662cfbb3a4c192146",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "iron",
+      "form_key": "iron bisglycinate",
+      "expected_form_sha256": "8fd53a5686c55a1a8a2114c2b2a29302106f957825f6aba5861625c070d22f2a",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "form_quality_confidence",
+          "evidence_level": "strong",
+          "score_supported": true,
+          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "36728680",
+              "doi": "10.1093/nutrit/nuac106",
+              "title": "The effects of oral ferrous bisglycinate supplementation on hemoglobin and ferritin concentrations in adults and children: a systematic review and meta-analysis of randomized controlled trials.",
+              "citation": "Nutrition reviews (2023-07-10)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/36728680/",
+              "published_date": "2023-07-10",
+              "publication_types": [
+                "Journal Article",
+                "Meta-Analysis",
+                "Research Support, Non-U.S. Gov't",
+                "Systematic Review"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Child",
+                "Female",
+                "Humans",
+                "Male",
+                "Pregnancy",
+                "Anemia, Iron-Deficiency",
+                "Dietary Supplements",
+                "Ferritins",
+                "Hemoglobins",
+                "Iron",
+                "Iron Deficiencies",
+                "Randomized Controlled Trials as Topic",
+                "Salts",
+                "Ferrous Compounds",
+                "Glycine"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "systematic_review",
+              "retracted": false,
+              "supports_claims": [
+                "exact_form_human_evidence"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "l_arginine",
+      "form_key": "nitrosigine (arginine silicate inositol)",
+      "expected_form_sha256": "5e130d36b4e06b87b9c23eda42377841f4edacc240fbf36750187db3bc31feb0",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "l_citrulline",
+      "form_key": "l-citrulline malate",
+      "expected_form_sha256": "37c43cf93e9291b59e4ce1b115558a3269dc21c4097efdb5c444916f7809605c",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "l_citrulline",
+      "form_key": "l-citrulline powder",
+      "expected_form_sha256": "36793b8ffb2a4e7c4ed79371beeaf77b39e6151595f5e72b01d0583488c67159",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "17662090",
+              "doi": "10.1111/j.1365-2125.2007.02990.x",
+              "title": "Pharmacokinetic and pharmacodynamic properties of oral L-citrulline and L-arginine: impact on nitric oxide metabolism.",
+              "citation": "British journal of clinical pharmacology (2008-01-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/17662090/",
+              "published_date": "2008-01-01",
+              "publication_types": [
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Administration, Oral",
+                "Arginine",
+                "Citrulline",
+                "Cross-Over Studies",
+                "Dose-Response Relationship, Drug",
+                "Double-Blind Method",
+                "Female",
+                "Humans",
+                "Male",
+                "Middle Aged",
+                "Nitric Oxide",
+                "Nitric Oxide Synthase",
+                "Placebos",
+                "Vasodilation"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "l_glutamine",
+      "form_key": "l-alanyl-l-glutamine",
+      "expected_form_sha256": "89c57dae91f3b15b7b0eaa40c50a3ca9b30d5ee118c0c2b97fd3dd44616f905a",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A randomized human crossover study directly found greater plasma glutamine exposure after L-alanyl-L-glutamine than after an equivalent free L-glutamine dose.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "22575040",
+              "doi": "10.1016/j.nutres.2012.02.003",
+              "title": "L-glutamine absorption is enhanced after ingestion of L-alanylglutamine compared with the free amino acid or wheat protein.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/22575040/",
+              "published_date": "2012-04-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "systemic_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "l_isoleucine",
+      "form_key": "l-isoleucine powder",
+      "expected_form_sha256": "a413a209e126ef81bc2359505b3c511358332b500e3a7d84f08af22f5b215197",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "l_leucine",
+      "form_key": "l-leucine powder",
+      "expected_form_sha256": "69be0e15f32710ca287302781446dcc3c4cc3ffe792877620874d3e0bf7cdc7c",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "l_ornithine",
+      "form_key": "l-ornithine l-aspartate (lola)",
+      "expected_form_sha256": "1c2188505ab9ce0ebd465879f8c68c869bcb53dae8229a1a720c2f8bed612925",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "l_theanine",
+      "form_key": "suntheanine (Taiyo)",
+      "expected_form_sha256": "9f63116247153f549561d6ac082649d0bb84f08405937acce7826088705b2650",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "l_valine",
+      "form_key": "l-valine powder",
+      "expected_form_sha256": "50e92e1dbffc62e1ab374e55f94654f4479850bcd31b9f7ad84a001343c1d999",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "lactobacillus_reuteri",
+      "form_key": "lactobacillus reuteri DSM 17938",
+      "expected_form_sha256": "6ff0073383e9d1b8e315d20cf5b2d88c442fe5ee6e429a08528f69f2ce101e0b",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "lactobacillus_rhamnosus",
+      "form_key": "lactobacillus rhamnosus gg",
+      "expected_form_sha256": "e70e8689b9416251ba83bc2d099739e43bcf5cdd77343c11b60a1ffcfde0d5f3",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "magnesium",
+      "form_key": "magnesium aspartate",
+      "expected_form_sha256": "6be25b55a6077d12b9bc58fb74d95e954971280cb5db60cecb438d7a0fbcf95c",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A direct human comparison found magnesium aspartate comparable with other well-absorbed salts rather than superior, supporting alignment with the magnesium chloride and lactate tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "11794633",
+              "doi": null,
+              "title": "Bioavailability of US commercial magnesium preparations.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/11794633/",
+              "published_date": "2001-12-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "systemic_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        },
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "magnesium",
+      "form_key": "magnesium chloride",
+      "expected_form_sha256": "d6041935d24701f5be2461c823d0478c52a917432f3c870b9459c26895f3677f",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A direct human comparison found magnesium chloride more bioavailable than magnesium oxide and comparable with the other well-absorbed salts tested.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "11794633",
+              "doi": null,
+              "title": "Bioavailability of US commercial magnesium preparations.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/11794633/",
+              "published_date": "2001-12-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "systemic_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "magnesium",
+      "form_key": "magnesium citrate",
+      "expected_form_sha256": "6295fcc01d69b892a10e3839a2f1de7dc85a6120aadcf36ba97fe9868c91e8f1",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "14596323",
+              "doi": null,
+              "title": "Mg citrate found more bioavailable than other Mg preparations in a randomised, double-blind study.",
+              "citation": "Magnesium research (2003-09-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/14596323/",
+              "published_date": "2003-09-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Biological Availability",
+                "Chelating Agents",
+                "Citric Acid",
+                "Double-Blind Method",
+                "Female",
+                "Humans",
+                "Liver",
+                "Magnesium",
+                "Magnesium Oxide",
+                "Male",
+                "Organometallic Compounds",
+                "Saliva"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "magnesium",
+      "form_key": "magnesium glycinate",
+      "expected_form_sha256": "faf307bc03538c5f242c1046539cc51b638437961ef904d712fb42ce8389ab20",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "magnesium",
+      "form_key": "magnesium lactate",
+      "expected_form_sha256": "74133895b9628f70e31756d99714fa55394f219c392b714fa89e8d3542dd852b",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A direct human comparison found magnesium lactate more bioavailable than magnesium oxide and comparable with the other well-absorbed salts tested.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "11794633",
+              "doi": null,
+              "title": "Bioavailability of US commercial magnesium preparations.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/11794633/",
+              "published_date": "2001-12-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "systemic_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "milk_thistle",
+      "form_key": "micellar silymarin",
+      "expected_form_sha256": "92151147d58e97d7282a04ea7b981a69271335f793c3ba214c0d7f1b5ce7f36b",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "40733088",
+              "doi": "10.3390/pharmaceutics17070880",
+              "title": "Novel Micellar Formulation of Silymarin (Milk Thistle) with Enhanced Bioavailability in a Double-Blind, Randomized, Crossover Human Trial.",
+              "citation": "Pharmaceutics (2025-07-04)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40733088/",
+              "published_date": "2025-07-04",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "mesh_terms": [],
+              "supplementary_concepts": [],
+              "evidence_grade": "journal_article",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "milk_thistle",
+      "form_key": "silymarin phytosome",
+      "expected_form_sha256": "6f20aa90b08ca46b392ebb6b8e82da65e93973d87d7b8f922fd9ef76158a314f",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "2088770",
+              "doi": "10.1007/BF03190223",
+              "title": "Pharmacokinetic studies on IdB 1016, a silybin- phosphatidylcholine complex, in healthy human subjects.",
+              "citation": "European journal of drug metabolism and pharmacokinetics (1990-01-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/2088770/",
+              "published_date": "1990-01-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "mesh_terms": [
+                "Administration, Oral",
+                "Adult",
+                "Biological Availability",
+                "Drug Administration Schedule",
+                "Half-Life",
+                "Humans",
+                "Male",
+                "Phosphatidylcholines",
+                "Silymarin"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "nicotinamide_riboside",
+      "form_key": "niagen (nicotinamide riboside chloride)",
+      "expected_form_sha256": "12fb319b4356f9889250ea9ced63b3b0f76637a89f53c14022511351ae54bfd6",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "phosphatidylserine",
+      "form_key": "soy-derived phosphatidylserine",
+      "expected_form_sha256": "7f372a8cc33d5c83aee040884a6c750e1496c34f854539a059abb78fed1617ea",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "pqq",
+      "form_key": "disodium PQQ",
+      "expected_form_sha256": "103c55cc3587d8c3ae712b53e739010dd0a1a91adb61e8631adc2b95e30c1fb4",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "pterostilbene",
+      "form_key": "trans-pterostilbene",
+      "expected_form_sha256": "1d6505c66ccacc8192548740848f713222c53114d28b28dca5b5fd3603ad9714",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "resveratrol",
+      "form_key": "trans-resveratrol",
+      "expected_form_sha256": "b2e2e91e4fcc2d07ac74f957de01e81fe15f2e2dd280be86fc822023157e88d6",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "saccharomyces_boulardii",
+      "form_key": "saccharomyces boulardii cncm i-745",
+      "expected_form_sha256": "184470dc329fd1d5e473c1e1e9c8c7bd45472bdf913ac011d579288b1b13785d",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "selenium",
+      "form_key": "selenized yeast",
+      "expected_form_sha256": "9bdd0a5068a6e2e8a70ce744bf2ae1d03269666c783d79cb82d13ed0105624e8",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "form_quality_confidence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS directly describes the named supplement form and the selenized yeast absorption context supporting this tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Selenium — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/",
+              "supports_claims": [
+                "selenized_yeast_absorption"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "selenium",
+      "form_key": "selenomethionine",
+      "expected_form_sha256": "baa3702066fd5bf9e3c8e95de39270b69684f5e76a6d973e9c49d25e8e2d1e47",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "form_quality_confidence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS directly describes the named supplement form and the selenomethionine absorption context supporting this tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Selenium — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/",
+              "supports_claims": [
+                "selenomethionine_absorption"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "st_johns_wort",
+      "form_key": "st john's wort standardized extract",
+      "expected_form_sha256": "6e23d183109807a4046b0d9b75323e075f73f38aadcb6f14abceaa9bd12aa664",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "streptococcus_salivarius",
+      "form_key": "streptococcus salivarius k12",
+      "expected_form_sha256": "600519a5f3d37c8dbee35de33b205eb618965a8546006b01fbb498adec2e4e30",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "taurine",
+      "form_key": "taurine (generic)",
+      "expected_form_sha256": "9c6a35830a4abcc3f8fc6347f43e5062da31c9511d4d385bea3385bdcab5154f",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "tmg_betaine",
+      "form_key": "betaine anhydrous",
+      "expected_form_sha256": "e9bbcda84c6fe023fb4182673352c0145f88de3d1d58082c15ff9f4767d916c1",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "valerian",
+      "form_key": "valerian standardized extract",
+      "expected_form_sha256": "d1ebd1b0d3157b8443908b438191d133ff42a3c99ff1f0a96079f9488bf6d8a7",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "vitamin_a",
+      "form_key": "retinol",
+      "expected_form_sha256": "2f13dd82b2b361637455d8768ae5fedf854ccf50cbfad069d0a92fc2b9ad2cd3",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "vitamin_a",
+      "form_key": "retinyl acetate",
+      "expected_form_sha256": "54698c8b366689b8433b441fe4e8ccb8fe397a824c34e8e6f1de8f2e2222a0db",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "vitamin_a",
+      "form_key": "retinyl palmitate",
+      "expected_form_sha256": "4a98a134240acbcd022c9e0d268f36f0c83f8a9e2db87f8622e6fbc18801afa9",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "vitamin_b1_thiamine",
+      "form_key": "benfotiamine",
+      "expected_form_sha256": "5d0fbb7e3f8159d795495b4b1b2f7d2c1efb92a3cf78fe2ae5e0fcf16946d262",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "8929745",
+              "doi": null,
+              "title": "Pharmacokinetics of thiamine derivatives especially of benfotiamine.",
+              "citation": "International journal of clinical pharmacology and therapeutics (1996-02-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/8929745/",
+              "published_date": "1996-02-01",
+              "publication_types": [
+                "Journal Article",
+                "Review"
+              ],
+              "mesh_terms": [
+                "Absorption",
+                "Adjuvants, Immunologic",
+                "Administration, Oral",
+                "Animals",
+                "Biological Availability",
+                "Chelating Agents",
+                "Half-Life",
+                "Humans",
+                "Nerve Fibers",
+                "Thiamine"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "journal_article",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "vitamin_b5_pantothenic",
+      "form_key": "pantethine",
+      "expected_form_sha256": "21bed868653e2e28a0d36705d51da4016a5aa48e955a790707515f9f4ebc856b",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "vitamin_b7_biotin",
+      "form_key": "d-biotin",
+      "expected_form_sha256": "8f6530fee28ab52a58da3253a1070cc1f00e3ed775059971c111147262a9437b",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "10075337",
+              "doi": "10.1093/ajcn/69.3.504",
+              "title": "Bioavailability of biotin given orally to humans in pharmacologic doses.",
+              "citation": "The American journal of clinical nutrition (1999-03-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/10075337/",
+              "published_date": "1999-03-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, U.S. Gov't, P.H.S."
+              ],
+              "mesh_terms": [
+                "Administration, Oral",
+                "Adult",
+                "Analysis of Variance",
+                "Biological Availability",
+                "Biotin",
+                "Cross-Over Studies",
+                "Dose-Response Relationship, Drug",
+                "Female",
+                "Humans",
+                "Injections, Intravenous",
+                "Male",
+                "Micronutrients",
+                "Multiple Carboxylase Deficiency"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "vitamin_b9_folate",
+      "form_key": "5-methyltetrahydrofolate (5-MTHF)",
+      "expected_form_sha256": "e14b202cd528283cc7f8cd4a92f9f089af0fb141dca0e4023e631f63b1ff59ca",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "19917061",
+              "doi": "10.1111/j.1476-5381.2009.00492.x",
+              "title": "[6S]-5-methyltetrahydrofolate increases plasma folate more effectively than folic acid in women with the homozygous or wild-type 677C-->T polymorphism of methylenetetrahydrofolate reductase.",
+              "citation": "British journal of pharmacology (2009-12-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/19917061/",
+              "published_date": "2009-12-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Area Under Curve",
+                "Cross-Over Studies",
+                "Double-Blind Method",
+                "Female",
+                "Folic Acid",
+                "Genotype",
+                "Humans",
+                "Methylenetetrahydrofolate Reductase (NADPH2)",
+                "Mutation",
+                "Polymorphism, Genetic",
+                "Tetrahydrofolates",
+                "Vitamin B Complex"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "vitamin_c",
+      "form_key": "ascorbic acid",
+      "expected_form_sha256": "8ba826454d5244abb6d89303c004e8ebd5432a4968a55b6758b5a7196b282c2e",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "form_quality_confidence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS directly describes the named supplement form and the ascorbic acid bioavailability context supporting this tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Vitamin C — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+              "supports_claims": [
+                "ascorbic_acid_bioavailability"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "vitamin_c",
+      "form_key": "calcium ascorbate",
+      "expected_form_sha256": "6bb949bccea5bd1328e1877c041ecaca2098e4153e06dfbf170b960533d82572",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "class_equivalence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "NIH ODS reports no consistent bioavailability advantage among common vitamin C forms. Calcium ascorbate therefore aligns with the well-absorbed ascorbic-acid tier without a superiority bonus.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "authoritative_guidance",
+              "authority": "NIH Office of Dietary Supplements",
+              "title": "Vitamin C — Health Professional Fact Sheet",
+              "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+              "supports_claims": [
+                "class_equivalence"
+              ],
+              "verification_source": "official_source_review",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        },
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "vitamin_d",
+      "form_key": "cholecalciferol (D3)",
+      "expected_form_sha256": "6a6dd42d7ca2ac376743b1100a8f2b7842bb74ee6aa6e9ccb6712166befe4d80",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "strong",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "37865222",
+              "doi": "10.1016/j.advnut.2023.09.016",
+              "title": "Comparison of the Effect of Daily Vitamin D2 and Vitamin D3 Supplementation on Serum 25-Hydroxyvitamin D Concentration (Total 25(OH)D, 25(OH)D2, and 25(OH)D3) and Importance of Body Mass Index: A Systematic Review and Meta-Analysis.",
+              "citation": "Advances in nutrition (Bethesda, Md.) (2024-01-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/37865222/",
+              "published_date": "2024-01-01",
+              "publication_types": [
+                "Meta-Analysis",
+                "Systematic Review",
+                "Journal Article"
+              ],
+              "mesh_terms": [
+                "Humans",
+                "Body Mass Index",
+                "Cholecalciferol",
+                "Dietary Supplements",
+                "Ergocalciferols",
+                "Vitamin D",
+                "Vitamin D Deficiency"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "systematic_review",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            },
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "28187226",
+              "doi": "10.1210/jc.2016-3919",
+              "title": "Effects of Cholecalciferol vs Calcifediol on Total and Free 25-Hydroxyvitamin D and Parathyroid Hormone.",
+              "citation": "The Journal of clinical endocrinology and metabolism (2017-04-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/28187226/",
+              "published_date": "2017-04-01",
+              "publication_types": [
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Calcifediol",
+                "Calcium",
+                "Cholecalciferol",
+                "Female",
+                "Humans",
+                "Male",
+                "Middle Aged",
+                "Parathyroid Hormone",
+                "Vitamin D",
+                "Vitamin D Deficiency",
+                "Young Adult"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "vitamin_e",
+      "form_key": "d-alpha-tocopherol",
+      "expected_form_sha256": "0d3510733754b81520d3446b5d1ccaa1b473624b1f9c29109d3adeb20324fece",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "9537614",
+              "doi": "10.1093/ajcn/67.4.669",
+              "title": "Human plasma and tissue alpha-tocopherol concentrations in response to supplementation with deuterated natural and synthetic vitamin E.",
+              "citation": "The American journal of clinical nutrition (1998-04-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/9537614/",
+              "published_date": "1998-04-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Deuterium",
+                "Elective Surgical Procedures",
+                "Humans",
+                "Kinetics",
+                "Middle Aged",
+                "Organ Specificity",
+                "Stereoisomerism",
+                "Terminally Ill",
+                "Tocopherols",
+                "Vitamin E",
+                "alpha-Tocopherol"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "journal_article",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "vitamin_k2",
+      "form_key": "menaquinone-7 (MK-7)",
+      "expected_form_sha256": "c330ce4322e6499371b26b7ae9a2e04964f1cd6682f97d5d38e7e4c376a39b7b",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "23140417",
+              "doi": "10.1186/1475-2891-11-93",
+              "title": "Comparison of menaquinone-4 and menaquinone-7 bioavailability in healthy women.",
+              "citation": "Nutrition journal (2012-11-12)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/23140417/",
+              "published_date": "2012-11-12",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Bone Density Conservation Agents",
+                "Breakfast",
+                "Cardiovascular Agents",
+                "Chromatography, High Pressure Liquid",
+                "Dietary Supplements",
+                "Female",
+                "Food, Fortified",
+                "Humans",
+                "Intestinal Absorption",
+                "Kinetics",
+                "Limit of Detection",
+                "Nutritive Value",
+                "Spectrometry, Fluorescence",
+                "Vitamin K 2",
+                "Young Adult"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            },
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "17158229",
+              "doi": "10.1182/blood-2006-08-040709",
+              "title": "Vitamin K-containing dietary supplements: comparison of synthetic vitamin K1 and natto-derived menaquinone-7.",
+              "citation": "Blood (2007-04-15)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/17158229/",
+              "published_date": "2007-04-15",
+              "publication_types": [
+                "Clinical Trial",
+                "Comparative Study",
+                "Journal Article",
+                "Multicenter Study",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Absorption",
+                "Adult",
+                "Blood Coagulation Factors",
+                "Bone and Bones",
+                "Cartilage",
+                "Coenzymes",
+                "Dietary Supplements",
+                "Female",
+                "Humans",
+                "Liver",
+                "Male",
+                "Osteocalcin",
+                "Time Factors",
+                "Vitamin K 1",
+                "Vitamin K 2",
+                "Vitamins"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "vitamin_k2",
+      "form_key": "menaquinone-7 all-trans",
+      "expected_form_sha256": "7e17360202ba0d2bd69ec083d66579cc34f9a88eef2c654799e77a3e8d3b524b",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "23140417",
+              "doi": "10.1186/1475-2891-11-93",
+              "title": "Comparison of menaquinone-4 and menaquinone-7 bioavailability in healthy women.",
+              "citation": "Nutrition journal (2012-11-12)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/23140417/",
+              "published_date": "2012-11-12",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "mesh_terms": [
+                "Adult",
+                "Bone Density Conservation Agents",
+                "Breakfast",
+                "Cardiovascular Agents",
+                "Chromatography, High Pressure Liquid",
+                "Dietary Supplements",
+                "Female",
+                "Food, Fortified",
+                "Humans",
+                "Intestinal Absorption",
+                "Kinetics",
+                "Limit of Detection",
+                "Nutritive Value",
+                "Spectrometry, Fluorescence",
+                "Vitamin K 2",
+                "Young Adult"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            },
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "17158229",
+              "doi": "10.1182/blood-2006-08-040709",
+              "title": "Vitamin K-containing dietary supplements: comparison of synthetic vitamin K1 and natto-derived menaquinone-7.",
+              "citation": "Blood (2007-04-15)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/17158229/",
+              "published_date": "2007-04-15",
+              "publication_types": [
+                "Clinical Trial",
+                "Comparative Study",
+                "Journal Article",
+                "Multicenter Study",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Absorption",
+                "Adult",
+                "Blood Coagulation Factors",
+                "Bone and Bones",
+                "Cartilage",
+                "Coenzymes",
+                "Dietary Supplements",
+                "Female",
+                "Humans",
+                "Liver",
+                "Male",
+                "Osteocalcin",
+                "Time Factors",
+                "Vitamin K 1",
+                "Vitamin K 2",
+                "Vitamins"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "vitamin_k2",
+      "form_key": "vitamin K2 from natto",
+      "expected_form_sha256": "813d67048404a4bdcecfebedf4c0d1faa47af92d8b930ba3576f88b9d3fa4757",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "17158229",
+              "doi": "10.1182/blood-2006-08-040709",
+              "title": "Vitamin K-containing dietary supplements: comparison of synthetic vitamin K1 and natto-derived menaquinone-7.",
+              "citation": "Blood (2007-04-15)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/17158229/",
+              "published_date": "2007-04-15",
+              "publication_types": [
+                "Clinical Trial",
+                "Comparative Study",
+                "Journal Article",
+                "Multicenter Study",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Absorption",
+                "Adult",
+                "Blood Coagulation Factors",
+                "Bone and Bones",
+                "Cartilage",
+                "Coenzymes",
+                "Dietary Supplements",
+                "Female",
+                "Humans",
+                "Liver",
+                "Male",
+                "Osteocalcin",
+                "Time Factors",
+                "Vitamin K 1",
+                "Vitamin K 2",
+                "Vitamins"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "whey_protein",
+      "form_key": "hydrolyzed whey protein",
+      "expected_form_sha256": "4efc4e567b558ff6d9ba2db9fc27ce89912f2b0146c962d8ca3b7a0c3213f3db",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "whey_protein",
+      "form_key": "whey protein isolate",
+      "expected_form_sha256": "1f0e9c8a1f9cba45d1e0a56086360ee5424c0e7163ba0a6390f8f55f4665859d",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "zinc",
+      "form_key": "zinc acetate",
+      "expected_form_sha256": "67068fbbc445f52556e274d16c0661556ef2d85d22e3f3174fd06ea7d43c4540",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A human crossover study directly measured oral zinc acetate absorption and found substantially higher exposure than zinc oxide under the tested conditions.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "8577018",
+              "doi": "10.1177/0148607195019005393",
+              "title": "Effect of intragastric pH on the absorption of oral zinc acetate and zinc oxide in young healthy volunteers.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/8577018/",
+              "published_date": "1995-01-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't",
+                "Research Support, U.S. Gov't, P.H.S."
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "systemic_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "zinc",
+      "form_key": "zinc aspartate",
+      "expected_form_sha256": "37496627bf633f3942cecb924c65d9291082d05b555202cf2a73db605fe9ecc5",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "37111104",
+              "doi": "10.3390/nu15081885",
+              "title": "Preliminary Comparison of Fractional Absorption of Zinc Sulphate, Zinc Gluconate, and Zinc Aspartate after Oral Supple-Mentation in Healthy Human Volunteers.",
+              "citation": "Nutrients (2023-04-13)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/37111104/",
+              "published_date": "2023-04-13",
+              "publication_types": [
+                "Randomized Controlled Trial",
+                "Journal Article"
+              ],
+              "mesh_terms": [
+                "Humans",
+                "Aged",
+                "Zinc Sulfate",
+                "Healthy Volunteers",
+                "Aspartic Acid",
+                "Intestinal Absorption",
+                "Zinc",
+                "Gluconates",
+                "Zinc Compounds"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "zinc",
+      "form_key": "zinc bisglycinate",
+      "expected_form_sha256": "c307d31923af63b38fe57096541c85dd7f52522ce3f90719277f8ca7afe0f34f",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A randomized human crossover study directly found higher oral zinc bioavailability from zinc bisglycinate than zinc gluconate.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "18271278",
+              "doi": "10.1024/0300-9831.77.4.243",
+              "title": "A bioavailability study comparing two oral formulations containing zinc (Zn bis-glycinate vs. Zn gluconate) after a single administration to twelve healthy female volunteers.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/18271278/",
+              "published_date": "2007-07-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "systemic_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "zinc",
+      "form_key": "zinc citrate",
+      "expected_form_sha256": "125a6c70fa3a80645850177e868efbed6247e42f3a965d258648ac39b0f2c45d",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "24259556",
+              "doi": "10.3945/jn.113.181487",
+              "title": "Zinc absorption by young adults from supplemental zinc citrate is comparable with that from zinc gluconate and higher than from zinc oxide.",
+              "citation": "The Journal of nutrition (2014-02-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/24259556/",
+              "published_date": "2014-02-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Adolescent",
+                "Adult",
+                "Biological Availability",
+                "Citrates",
+                "Cross-Over Studies",
+                "Deficiency Diseases",
+                "Diarrhea",
+                "Dietary Supplements",
+                "Double-Blind Method",
+                "Female",
+                "Gluconates",
+                "Humans",
+                "Intestinal Absorption",
+                "Male",
+                "Middle Aged",
+                "Young Adult",
+                "Zinc",
+                "Zinc Isotopes",
+                "Zinc Oxide"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "zinc",
+      "form_key": "zinc gluconate",
+      "expected_form_sha256": "d3072d015c7d057ec5d46df77459c6579014550d6b9313d13d0c38ea10b959ae",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "24259556",
+              "doi": "10.3945/jn.113.181487",
+              "title": "Zinc absorption by young adults from supplemental zinc citrate is comparable with that from zinc gluconate and higher than from zinc oxide.",
+              "citation": "The Journal of nutrition (2014-02-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/24259556/",
+              "published_date": "2014-02-01",
+              "publication_types": [
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Adolescent",
+                "Adult",
+                "Biological Availability",
+                "Citrates",
+                "Cross-Over Studies",
+                "Deficiency Diseases",
+                "Diarrhea",
+                "Dietary Supplements",
+                "Double-Blind Method",
+                "Female",
+                "Gluconates",
+                "Humans",
+                "Intestinal Absorption",
+                "Male",
+                "Middle Aged",
+                "Young Adult",
+                "Zinc",
+                "Zinc Isotopes",
+                "Zinc Oxide"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            },
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "37111104",
+              "doi": "10.3390/nu15081885",
+              "title": "Preliminary Comparison of Fractional Absorption of Zinc Sulphate, Zinc Gluconate, and Zinc Aspartate after Oral Supple-Mentation in Healthy Human Volunteers.",
+              "citation": "Nutrients (2023-04-13)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/37111104/",
+              "published_date": "2023-04-13",
+              "publication_types": [
+                "Randomized Controlled Trial",
+                "Journal Article"
+              ],
+              "mesh_terms": [
+                "Humans",
+                "Aged",
+                "Zinc Sulfate",
+                "Healthy Volunteers",
+                "Aspartic Acid",
+                "Intestinal Absorption",
+                "Zinc",
+                "Gluconates",
+                "Zinc Compounds"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "zinc",
+      "form_key": "zinc monomethionine",
+      "expected_form_sha256": "73b906898d274b0673664b8526108285cfe48b3de04313bca5e5098b5165f896",
+      "unset": [
+        "form_evidence"
+      ]
+    },
+    {
+      "ingredient_key": "zinc",
+      "form_key": "zinc picolinate",
+      "expected_form_sha256": "501e3fe6e60af94a38042f165b9c7e79292e7a80da06d37edc8458a5acecc6e6",
+      "set": {
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "3630857",
+              "doi": "10.1007/BF01974946",
+              "title": "Comparative absorption of zinc picolinate, zinc citrate and zinc gluconate in humans.",
+              "citation": "Agents and actions (1987-06-01)",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/3630857/",
+              "published_date": "1987-06-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Comparative Study",
+                "Journal Article",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "mesh_terms": [
+                "Administration, Oral",
+                "Adult",
+                "Citrates",
+                "Citric Acid",
+                "Double-Blind Method",
+                "Erythrocytes",
+                "Gluconates",
+                "Hair",
+                "Humans",
+                "Intestinal Absorption",
+                "Picolinic Acids",
+                "Random Allocation",
+                "Tissue Distribution",
+                "Urine",
+                "Zinc"
+              ],
+              "supplementary_concepts": [],
+              "evidence_grade": "rct",
+              "retracted": false,
+              "supports_claims": [
+                "direct_form_or_class_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-13"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

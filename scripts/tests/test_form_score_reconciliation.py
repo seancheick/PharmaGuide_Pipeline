@@ -69,7 +69,11 @@ def test_legacy_excellent_forms_are_frozen_without_weakening_new_score_gate():
         and row["final_score"] >= 12
     }
 
-    assert backlog == legacy_keys
+    # Reference reconciliation can return previously cited legacy forms to the
+    # frozen backlog when a citation is found to be clinical-only or off-axis.
+    # Every original legacy form must remain protected, while newly unsupported
+    # Excellent forms are still rejected below.
+    assert legacy_keys <= backlog
     assert validate_iqm_form_evidence(iqm, backlog=backlog) == []
 
     # A newly introduced unsupported Excellent form is not grandfathered.

@@ -14,7 +14,7 @@
 # Usage:
 #   bash batch_run_all_datasets.sh                          # Full pipeline → snapshot → full release
 #   bash batch_run_all_datasets.sh score                    # Score-only on all brands
-#   bash batch_run_all_datasets.sh --stages enrich,score    # Enrich + score only
+#   bash batch_run_all_datasets.sh --stages enrich,score    # Enrich + score, then snapshot + full release
 #   bash batch_run_all_datasets.sh --targets Thorne,Olly    # Specific brands, pipeline only (safe default)
 #   bash batch_run_all_datasets.sh --targets Thorne,Olly --release  # Explicit catalog + release
 #   bash batch_run_all_datasets.sh --pipeline-only          # All brands, no snapshot/release

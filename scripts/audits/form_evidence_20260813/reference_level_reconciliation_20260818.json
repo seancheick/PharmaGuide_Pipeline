@@ -1,0 +1,1202 @@
+[
+ {
+  "ingredient": "vitamin_a",
+  "form": "retinyl palmitate",
+  "ref": "ODS",
+  "type": "authoritative_guidance",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "ODS sheet names it as a common supplement form; no absorption claim."
+ },
+ {
+  "ingredient": "vitamin_a",
+  "form": "retinyl acetate",
+  "ref": "ODS",
+  "type": "authoritative_guidance",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Same sentence, same sheet."
+ },
+ {
+  "ingredient": "vitamin_a",
+  "form": "retinol",
+  "ref": "24036530",
+  "type": "pubmed",
+  "bio_score": 15,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Enterocyte transport-protein review. Mechanism, not form comparison."
+ },
+ {
+  "ingredient": "vitamin_b1_thiamine",
+  "form": "benfotiamine",
+  "ref": "8929745",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "States ~3.6x bioavailability vs thiamine HCl."
+ },
+ {
+  "ingredient": "vitamin_b5_pantothenic",
+  "form": "pantethine",
+  "ref": "4056044",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "4 cystinotic children; no pantothenic-acid comparator."
+ },
+ {
+  "ingredient": "vitamin_b7_biotin",
+  "form": "d-biotin",
+  "ref": "10075337",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Oral vs IV crossover, ~100% oral bioavailability."
+ },
+ {
+  "ingredient": "vitamin_b7_biotin",
+  "form": "d-biotin",
+  "ref": "19056639",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "hSMVT mechanism review. Adds no form data. [mixed block]"
+ },
+ {
+  "ingredient": "vitamin_b9_folate",
+  "form": "5-methyltetrahydrofolate (5-MTHF)",
+  "ref": "19917061",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "5-MTHF vs folic acid randomized crossover."
+ },
+ {
+  "ingredient": "vitamin_c",
+  "form": "calcium ascorbate",
+  "ref": "ODS",
+  "type": "authoritative_guidance",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "ON-AXIS but CONTRADICTS: sheet finds no form difference and prefers ascorbic acid. Keep source, correct score 14->13."
+ },
+ {
+  "ingredient": "vitamin_c",
+  "form": "ascorbic acid",
+  "ref": "ODS",
+  "type": "authoritative_guidance",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Sheet actively supports ascorbic acid."
+ },
+ {
+  "ingredient": "vitamin_d",
+  "form": "cholecalciferol (D3)",
+  "ref": "37865222",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "D2 vs D3 meta-analysis."
+ },
+ {
+  "ingredient": "vitamin_d",
+  "form": "cholecalciferol (D3)",
+  "ref": "28187226",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "D3 vs calcifediol RCT."
+ },
+ {
+  "ingredient": "vitamin_e",
+  "form": "d-alpha-tocopherol",
+  "ref": "9537614",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Deuterated natural vs synthetic in humans."
+ },
+ {
+  "ingredient": "vitamin_e",
+  "form": "d-alpha-tocopherol",
+  "ref": "9199513",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "In vitro alphaTTP affinity. Not human. [mixed block]"
+ },
+ {
+  "ingredient": "calcium",
+  "form": "calcium citrate",
+  "ref": "ODS",
+  "type": "authoritative_guidance",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Sheet compares carbonate vs citrate absorption."
+ },
+ {
+  "ingredient": "magnesium",
+  "form": "magnesium glycinate",
+  "ref": "22909270",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Correct material, clinical leg-cramp outcome. Belongs in clinical evidence."
+ },
+ {
+  "ingredient": "magnesium",
+  "form": "magnesium citrate",
+  "ref": "14596323",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Mg citrate vs chelate vs oxide."
+ },
+ {
+  "ingredient": "magnesium",
+  "form": "magnesium citrate",
+  "ref": "11794633",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "That study tested oxide/chloride/lactate/aspartate. Citrate was NOT an arm. [surfaced only at reference level]"
+ },
+ {
+  "ingredient": "magnesium",
+  "form": "magnesium chloride",
+  "ref": "11794633",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Chloride was an arm."
+ },
+ {
+  "ingredient": "magnesium",
+  "form": "magnesium lactate",
+  "ref": "11794633",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Lactate was an arm."
+ },
+ {
+  "ingredient": "magnesium",
+  "form": "magnesium aspartate",
+  "ref": "11794633",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "ON-AXIS but CONTRADICTS: study found chloride=lactate=aspartate. Keep source, correct score 14->13."
+ },
+ {
+  "ingredient": "iron",
+  "form": "iron bisglycinate",
+  "ref": "36728680",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "strong",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Bisglycinate vs other iron supplements, Hb/ferritin + GI AEs."
+ },
+ {
+  "ingredient": "iron",
+  "form": "heme iron polypeptide",
+  "ref": "25953602",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "CKD management review. Seek a HIP vs non-heme absorption study."
+ },
+ {
+  "ingredient": "iron",
+  "form": "ferrous fumarate",
+  "ref": "34726703",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "FeFum with vs without GOS. Not a form comparison."
+ },
+ {
+  "ingredient": "iron",
+  "form": "ferrous ascorbate",
+  "ref": "9202099",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Carries a ferrous-ascorbate arm, 29.9% vs 34.6% bisglycinate (NS)."
+ },
+ {
+  "ingredient": "zinc",
+  "form": "zinc picolinate",
+  "ref": "3630857",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Picolinate vs citrate vs gluconate."
+ },
+ {
+  "ingredient": "zinc",
+  "form": "zinc bisglycinate",
+  "ref": "18271278",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Bis-glycinate vs gluconate."
+ },
+ {
+  "ingredient": "zinc",
+  "form": "zinc acetate",
+  "ref": "8577018",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Acetate vs oxide across gastric pH."
+ },
+ {
+  "ingredient": "zinc",
+  "form": "zinc citrate",
+  "ref": "24259556",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Citrate vs gluconate vs oxide, stable isotope."
+ },
+ {
+  "ingredient": "zinc",
+  "form": "zinc gluconate",
+  "ref": "24259556",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Gluconate arm."
+ },
+ {
+  "ingredient": "zinc",
+  "form": "zinc gluconate",
+  "ref": "37111104",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Gluconate arm."
+ },
+ {
+  "ingredient": "zinc",
+  "form": "zinc monomethionine",
+  "ref": "17012778",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Review, largely animal. Seek human head-to-head."
+ },
+ {
+  "ingredient": "zinc",
+  "form": "zinc aspartate",
+  "ref": "37111104",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Fractional absorption significantly higher for Zn-aspartate."
+ },
+ {
+  "ingredient": "selenium",
+  "form": "selenomethionine",
+  "ref": "ODS",
+  "type": "authoritative_guidance",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "~90% absorption from these forms."
+ },
+ {
+  "ingredient": "selenium",
+  "form": "selenized yeast",
+  "ref": "ODS",
+  "type": "authoritative_guidance",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Selenized yeast is predominantly selenomethionine."
+ },
+ {
+  "ingredient": "astaxanthin",
+  "form": "natural astaxanthin (haematococcus pluvialis)",
+  "ref": "12885395",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Lipid formulation comparison, not natural vs synthetic."
+ },
+ {
+  "ingredient": "astaxanthin",
+  "form": "natural astaxanthin (haematococcus pluvialis)",
+  "ref": "11120445",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "n=3 single-arm isomer PK."
+ },
+ {
+  "ingredient": "creatine_monohydrate",
+  "form": "creatine monohydrate",
+  "ref": "22971354",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "CrM vs buffered CrM head-to-head."
+ },
+ {
+  "ingredient": "creatine_monohydrate",
+  "form": "buffered creatine monohydrate",
+  "ref": "22971354",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Correctly used as the losing arm."
+ },
+ {
+  "ingredient": "creatine_monohydrate",
+  "form": "creatine citrate",
+  "ref": "17997838",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "CrM vs tri-creatine citrate vs pyruvate PK."
+ },
+ {
+  "ingredient": "hmb",
+  "form": "hmb calcium salt (hmb-ca)",
+  "ref": "24599749",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "strong",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Replace with PMID 21134325 (CaHMB vs HMB free acid, human crossover PK)."
+ },
+ {
+  "ingredient": "hmb",
+  "form": "hmb calcium salt (hmb-ca)",
+  "ref": "35911112",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "strong",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Same."
+ },
+ {
+  "ingredient": "hmb",
+  "form": "hmb calcium salt (hmb-ca)",
+  "ref": "41305674",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "strong",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Same."
+ },
+ {
+  "ingredient": "hmb",
+  "form": "hmb free acid (hmb-fa)",
+  "ref": "24599749",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "strong",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Replace with PMID 21134325."
+ },
+ {
+  "ingredient": "hmb",
+  "form": "hmb free acid (hmb-fa)",
+  "ref": "35911112",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "strong",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Same."
+ },
+ {
+  "ingredient": "hmb",
+  "form": "hmb free acid (hmb-fa)",
+  "ref": "41305674",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "strong",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Same."
+ },
+ {
+  "ingredient": "d_ribose",
+  "form": "d-ribose powder",
+  "ref": "24272966",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Dose-proportionality/food-effect PK of one form. No comparator."
+ },
+ {
+  "ingredient": "whey_protein",
+  "form": "whey protein isolate",
+  "ref": "28698222",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Generic protein efficacy meta-analysis."
+ },
+ {
+  "ingredient": "whey_protein",
+  "form": "whey protein isolate",
+  "ref": "39303495",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Generic protein efficacy meta-analysis."
+ },
+ {
+  "ingredient": "whey_protein",
+  "form": "hydrolyzed whey protein",
+  "ref": "28698222",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Same, identical to isolate."
+ },
+ {
+  "ingredient": "whey_protein",
+  "form": "hydrolyzed whey protein",
+  "ref": "39303495",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Same, identical to isolate."
+ },
+ {
+  "ingredient": "resveratrol",
+  "form": "trans-resveratrol",
+  "ref": "39872318",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Inflammation outcome meta-analysis."
+ },
+ {
+  "ingredient": "resveratrol",
+  "form": "trans-resveratrol",
+  "ref": "35905799",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Inflammation outcome meta-analysis."
+ },
+ {
+  "ingredient": "resveratrol",
+  "form": "trans-resveratrol",
+  "ref": "36145131",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Lipid outcome meta-analysis."
+ },
+ {
+  "ingredient": "iodine",
+  "form": "potassium iodide",
+  "ref": "ODS",
+  "type": "authoritative_guidance",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "96.4% absorption of potassium iodide."
+ },
+ {
+  "ingredient": "coq10",
+  "form": "ubiquinol crystal-free",
+  "ref": "16919858",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Single-arm Kaneka QH safety/PK. Seek ubiquinol vs ubiquinone head-to-head."
+ },
+ {
+  "ingredient": "coq10",
+  "form": "ubiquinol",
+  "ref": "32380795",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Narrative review. Seek primary comparison."
+ },
+ {
+  "ingredient": "coq10",
+  "form": "ubiquinone crystal-dispersed",
+  "ref": "30153575",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "7 formulations compared; isolates crystal dispersion."
+ },
+ {
+  "ingredient": "pqq",
+  "form": "disodium PQQ",
+  "ref": "34415830",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Cognition efficacy RCT on the disodium salt."
+ },
+ {
+  "ingredient": "pqq",
+  "form": "disodium PQQ",
+  "ref": "38908296",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Dihydrogen+PQQ combination product. Wrong material."
+ },
+ {
+  "ingredient": "choline",
+  "form": "alpha-GPC",
+  "ref": "34287673",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Chloride vs bitartrate vs alpha-GPC vs egg-PC crossover."
+ },
+ {
+  "ingredient": "choline",
+  "form": "CDP-choline (citicoline)",
+  "ref": "6412727",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "1983 single-arm 14C PK, n=6. Note 34287673 did not include CDP-choline."
+ },
+ {
+  "ingredient": "phosphatidylserine",
+  "form": "soy-derived phosphatidylserine",
+  "ref": "20523044",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Tests PS-DHA, a different material."
+ },
+ {
+  "ingredient": "phosphatidylserine",
+  "form": "soy-derived phosphatidylserine",
+  "ref": "21103034",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Soy-PS memory outcome trial."
+ },
+ {
+  "ingredient": "taurine",
+  "form": "taurine (generic)",
+  "ref": "32871172",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Cardiometabolic outcome meta-analysis."
+ },
+ {
+  "ingredient": "taurine",
+  "form": "taurine (generic)",
+  "ref": "41275513",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Cardiometabolic outcome meta-analysis."
+ },
+ {
+  "ingredient": "tmg_betaine",
+  "form": "betaine anhydrous",
+  "ref": "30064450",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Body-composition RCT."
+ },
+ {
+  "ingredient": "tmg_betaine",
+  "form": "betaine anhydrous",
+  "ref": "37409757",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "CrossFit performance RCT."
+ },
+ {
+  "ingredient": "l_glutamine",
+  "form": "l-alanyl-l-glutamine",
+  "ref": "22575040",
+  "type": "pubmed",
+  "bio_score": 15,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "AlaGln vs free L-Gln vs hydrolyzed wheat protein."
+ },
+ {
+  "ingredient": "l_arginine",
+  "form": "nitrosigine (arginine silicate inositol)",
+  "ref": "27869715",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Branded cognition RCT -> branded-rct."
+ },
+ {
+  "ingredient": "l_arginine",
+  "form": "nitrosigine (arginine silicate inositol)",
+  "ref": "32093766",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Nitrosigine vs citrulline malate vasodilation -> branded-rct."
+ },
+ {
+  "ingredient": "l_arginine",
+  "form": "nitrosigine (arginine silicate inositol)",
+  "ref": "34959823",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Branded cognition RCT -> branded-rct."
+ },
+ {
+  "ingredient": "l_ornithine",
+  "form": "l-ornithine l-aspartate (lola)",
+  "ref": "30706424",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Hepatic-encephalopathy PK/PD review."
+ },
+ {
+  "ingredient": "beta-alanine",
+  "form": "carnosyn beta-alanine",
+  "ref": "16554972",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Absorption of the exact material plus carnosine loading."
+ },
+ {
+  "ingredient": "beta-alanine",
+  "form": "sr carnosyn beta-alanine",
+  "ref": "22139410",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Slow-release tablet vs pure solution, head-to-head."
+ },
+ {
+  "ingredient": "beta-alanine",
+  "form": "beta-alanine powder",
+  "ref": "16554972",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Same study; score matches CarnoSyn, no unsupported differential."
+ },
+ {
+  "ingredient": "alpha_lipoic_acid",
+  "form": "sodium r-lipoate",
+  "ref": "18069903",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "NaRLA PK with no in-study rac-LA arm."
+ },
+ {
+  "ingredient": "ashwagandha",
+  "form": "Shoden ashwagandha extract",
+  "ref": "32540634",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Branded extract sleep RCT -> branded-rct."
+ },
+ {
+  "ingredient": "ashwagandha",
+  "form": "Shoden ashwagandha extract",
+  "ref": "31517876",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Branded extract stress RCT -> branded-rct."
+ },
+ {
+  "ingredient": "ashwagandha",
+  "form": "Shoden ashwagandha extract",
+  "ref": "39286132",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Branded extract anxiety RCT -> branded-rct."
+ },
+ {
+  "ingredient": "milk_thistle",
+  "form": "silymarin phytosome",
+  "ref": "2088770",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "IdB 1016 phytosome vs silymarin, human PK."
+ },
+ {
+  "ingredient": "milk_thistle",
+  "form": "micellar silymarin",
+  "ref": "40733088",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Micellar vs standard, randomized crossover n=16."
+ },
+ {
+  "ingredient": "l_theanine",
+  "form": "suntheanine (Taiyo)",
+  "ref": "31623400",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Generic L-theanine, not the branded material."
+ },
+ {
+  "ingredient": "l_theanine",
+  "form": "suntheanine (Taiyo)",
+  "ref": "22214254",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Suntheanine sleep RCT in ADHD boys -> branded-rct."
+ },
+ {
+  "ingredient": "collagen",
+  "form": "collagen tripeptides",
+  "ref": "27573716",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Rat + Caco-2. Seek a human CTP absorption study."
+ },
+ {
+  "ingredient": "ginseng",
+  "form": "fermented red ginseng",
+  "ref": "27516803",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Fermented vs red ginseng extract, human, compound K 80-115x."
+ },
+ {
+  "ingredient": "ginseng",
+  "form": "fermented red ginseng",
+  "ref": "33884767",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "CK-30 vs red ginseng extract crossover."
+ },
+ {
+  "ingredient": "l_leucine",
+  "form": "l-leucine powder",
+  "ref": "34642762",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Free AA vs intact milk protein; no leucine form comparison, MPS unchanged."
+ },
+ {
+  "ingredient": "l_valine",
+  "form": "l-valine powder",
+  "ref": "34642762",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Same study, same problem."
+ },
+ {
+  "ingredient": "l_isoleucine",
+  "form": "l-isoleucine powder",
+  "ref": "34642762",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Same study, same problem."
+ },
+ {
+  "ingredient": "l_citrulline",
+  "form": "l-citrulline malate",
+  "ref": "17662090",
+  "type": "pubmed",
+  "bio_score": 15,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Study dosed plain L-citrulline, not malate."
+ },
+ {
+  "ingredient": "l_citrulline",
+  "form": "l-citrulline powder",
+  "ref": "17662090",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Exactly this material."
+ },
+ {
+  "ingredient": "caffeine",
+  "form": "caffeine anhydrous",
+  "ref": "6832208",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Oral vs IV, ~100% bioavailability; both caffeine forms share the score."
+ },
+ {
+  "ingredient": "caffeine",
+  "form": "caffeine (natural source)",
+  "ref": "6832208",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Same study, same score."
+ },
+ {
+  "ingredient": "nicotinamide_riboside",
+  "form": "niagen (nicotinamide riboside chloride)",
+  "ref": "29599478",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Branded NR NAD+ elevation -> branded-rct."
+ },
+ {
+  "ingredient": "nicotinamide_riboside",
+  "form": "niagen (nicotinamide riboside chloride)",
+  "ref": "29992272",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Branded NR safety/insulin -> branded-rct."
+ },
+ {
+  "ingredient": "pterostilbene",
+  "form": "trans-pterostilbene",
+  "ref": "25057276",
+  "type": "pubmed",
+  "bio_score": 15,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Metabolic RCT; pterostilbene RAISED LDL 17.1 mg/dL. Flag on transfer."
+ },
+ {
+  "ingredient": "pterostilbene",
+  "form": "trans-pterostilbene",
+  "ref": "23431291",
+  "type": "pubmed",
+  "bio_score": 15,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Safety analysis."
+ },
+ {
+  "ingredient": "bifidobacterium_lactis",
+  "form": "bifidobacterium lactis hn019",
+  "ref": "23922468",
+  "type": "pubmed",
+  "bio_score": 15,
+  "evidence_level": "strong",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Generic probiotic transit meta-analysis, not strain-specific."
+ },
+ {
+  "ingredient": "bifidobacterium_lactis",
+  "form": "bifidobacterium lactis hn019",
+  "ref": "29227175",
+  "type": "pubmed",
+  "bio_score": 15,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "NULL primary+secondary; favourable result is post-hoc. Flag on transfer."
+ },
+ {
+  "ingredient": "bifidobacterium_lactis",
+  "form": "bifidobacterium lactis bb-12",
+  "ref": "31797399",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Strain-specific colic RCT -> strain-clinical."
+ },
+ {
+  "ingredient": "bifidobacterium_lactis",
+  "form": "bifidobacterium lactis bb-12",
+  "ref": "32059116",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Strain narrative review -> strain-clinical."
+ },
+ {
+  "ingredient": "lactobacillus_rhamnosus",
+  "form": "lactobacillus rhamnosus gg",
+  "ref": "26365389",
+  "type": "pubmed",
+  "bio_score": 15,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Strain-specific AAD meta-analysis -> strain-clinical."
+ },
+ {
+  "ingredient": "lactobacillus_rhamnosus",
+  "form": "lactobacillus rhamnosus gg",
+  "ref": "26756877",
+  "type": "pubmed",
+  "bio_score": 15,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "ESPGHAN strain-specified guidance -> strain-clinical."
+ },
+ {
+  "ingredient": "saccharomyces_boulardii",
+  "form": "saccharomyces boulardii cncm i-745",
+  "ref": "40535538",
+  "type": "pubmed",
+  "bio_score": 15,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Strain-specific meta-analysis -> strain-clinical."
+ },
+ {
+  "ingredient": "st_johns_wort",
+  "form": "st john's wort standardized extract",
+  "ref": "8878586",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Single-arm hypericin PK from LI 160; no non-standardized comparator."
+ },
+ {
+  "ingredient": "valerian",
+  "form": "valerian standardized extract",
+  "ref": "20878691",
+  "type": "pubmed",
+  "bio_score": 13,
+  "evidence_level": "moderate",
+  "verdict": "REPLACE_WITH_BETTER_SOURCE",
+  "finding": "Single-arm valerenic acid PK; no comparator."
+ },
+ {
+  "ingredient": "dha",
+  "form": "algal triglyceride",
+  "ref": "41096614",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Microalgal vs fish oil equivalence, n=74."
+ },
+ {
+  "ingredient": "dha",
+  "form": "DHA fish oil rTG",
+  "ref": "20638827",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Dyerberg ranks rTG above natural TG and EE."
+ },
+ {
+  "ingredient": "epa",
+  "form": "EPA fish oil rTG",
+  "ref": "20638827",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Same."
+ },
+ {
+  "ingredient": "fish_oil",
+  "form": "natural triglyceride",
+  "ref": "20638827",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Sets natural TG as 100% reference, above EE at 73%."
+ },
+ {
+  "ingredient": "algae_oil",
+  "form": "algae oil (dha)",
+  "ref": "41096614",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Non-inferiority vs fish oil."
+ },
+ {
+  "ingredient": "streptococcus_salivarius",
+  "form": "streptococcus salivarius k12",
+  "ref": "21722694",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "REMOVE_OFF_AXIS",
+  "finding": "Safety/tolerance only; no efficacy or form finding to move."
+ },
+ {
+  "ingredient": "lactobacillus_reuteri",
+  "form": "lactobacillus reuteri DSM 17938",
+  "ref": "42485904",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "strong",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Strain-specific meta-analysis -> strain-clinical."
+ },
+ {
+  "ingredient": "bacillus_coagulans",
+  "form": "bacillus coagulans gbi-30",
+  "ref": "40707016",
+  "type": "pubmed",
+  "bio_score": 14,
+  "evidence_level": "moderate",
+  "verdict": "MOVE_TO_CLINICAL_EVIDENCE",
+  "finding": "Strain-specific RCT n=111 -> strain-clinical."
+ },
+ {
+  "ingredient": "vitamin_k2",
+  "form": "menaquinone-7 (MK-7)",
+  "ref": "23140417",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "MK-4 vs MK-7, human."
+ },
+ {
+  "ingredient": "vitamin_k2",
+  "form": "menaquinone-7 (MK-7)",
+  "ref": "17158229",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "K1 vs natto MK-7, human."
+ },
+ {
+  "ingredient": "vitamin_k2",
+  "form": "menaquinone-7 all-trans",
+  "ref": "23140417",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "MK-4 vs MK-7."
+ },
+ {
+  "ingredient": "vitamin_k2",
+  "form": "menaquinone-7 all-trans",
+  "ref": "17158229",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "K1 vs natto MK-7."
+ },
+ {
+  "ingredient": "vitamin_k2",
+  "form": "vitamin K2 from natto",
+  "ref": "17158229",
+  "type": "pubmed",
+  "bio_score": 12,
+  "evidence_level": "moderate",
+  "verdict": "KEEP_FORM_SOURCE",
+  "finding": "Natto-derived MK-7 vs synthetic K1."
+ }
+]

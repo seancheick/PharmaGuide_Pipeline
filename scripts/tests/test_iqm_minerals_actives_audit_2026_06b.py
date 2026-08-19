@@ -39,7 +39,7 @@ SCORE_TARGETS = [
     ("creatine_monohydrate", "dicreatine malate", 11),       # F-plausible, no exact human PK
     ("creatine_monohydrate", "creatine ethyl ester", 4),     # degrades to creatinine
     ("astaxanthin", "unspecified astaxanthin", 10),          # unknown matrix -> below disclosed
-    ("hmb", "hmb free acid (hmb-fa)", 13),                   # equal total F to HMB-Ca (kinetics only)
+    ("hmb", "hmb free acid (hmb-fa)", 14),                   # faster/higher exposure in human crossover PK (PMID 21134325)
 ]
 
 

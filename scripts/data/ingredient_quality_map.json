@@ -1872,31 +1872,6 @@
         },
         "external_ids": {
           "unii": "1D1K0N0VVC"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "NIH ODS directly describes the named supplement form and the preformed vitamin a ester absorption context supporting this tier.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "authoritative_guidance",
-              "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin A and Carotenoids — Health Professional Fact Sheet",
-              "url": "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
-              "supports_claims": [
-                "preformed_vitamin_a_ester_absorption"
-              ],
-              "verification_source": "official_source_review",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "retinyl acetate": {
@@ -1928,31 +1903,6 @@
         },
         "external_ids": {
           "unii": "3LE3D9D6OY"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "NIH ODS directly describes the named supplement form and the preformed vitamin a ester absorption context supporting this tier.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "authoritative_guidance",
-              "authority": "NIH Office of Dietary Supplements",
-              "title": "Vitamin A and Carotenoids — Health Professional Fact Sheet",
-              "url": "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
-              "supports_claims": [
-                "preformed_vitamin_a_ester_absorption"
-              ],
-              "verification_source": "official_source_review",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "beta-carotene synthetic": {
@@ -2011,40 +1961,6 @@
         },
         "external_ids": {
           "unii": "G2SH0XKK91"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "A human-focused review describes intestinal absorption and transport of preformed retinol, supporting its direct preformed-vitamin-A form tier.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "24036530",
-              "doi": "10.3390/nu5093563",
-              "title": "Absorption of vitamin A and carotenoids by the enterocyte: focus on transport proteins.",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/24036530/",
-              "published_date": "2013-09-12",
-              "publication_types": [
-                "Journal Article",
-                "Review"
-              ],
-              "evidence_grade": "human_comparative",
-              "retracted": false,
-              "supports_claims": [
-                "systemic_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "vitamin A from cod liver oil": {
@@ -2385,7 +2301,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -3533,40 +3449,6 @@
         },
         "external_ids": {
           "unii": "7K81IL792L"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "class_equivalence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Human metabolism evidence shows pantethine is hydrolyzed to pantothenate-related products, supporting class-equivalent B5 delivery rather than a superior active-form claim.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "4056044",
-              "doi": "10.1172/JCI112152",
-              "title": "Metabolism of pantethine in cystinosis.",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/4056044/",
-              "published_date": "1985-10-01",
-              "publication_types": [
-                "Journal Article",
-                "Research Support, U.S. Gov't, P.H.S."
-              ],
-              "evidence_grade": "human_comparative",
-              "retracted": false,
-              "supports_claims": [
-                "class_equivalence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "pantothenic acid": {
@@ -4166,7 +4048,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -4201,41 +4083,6 @@
               ],
               "supplementary_concepts": [],
               "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "19056639",
-              "doi": "10.3945/jn.108.092023",
-              "title": "Cell and molecular aspects of human intestinal biotin absorption.",
-              "citation": "The Journal of nutrition (2009-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/19056639/",
-              "published_date": "2009-01-01",
-              "publication_types": [
-                "Journal Article",
-                "Research Support, N.I.H., Extramural",
-                "Research Support, U.S. Gov't, Non-P.H.S."
-              ],
-              "mesh_terms": [
-                "Biological Transport, Active",
-                "Biotin",
-                "Epithelial Cells",
-                "Gene Expression Regulation",
-                "Humans",
-                "Intestinal Mucosa",
-                "Intestines",
-                "Kruppel-Like Factor 4",
-                "Molecular Structure",
-                "Vitamin B Complex"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
               "retracted": false,
               "supports_claims": [
                 "direct_form_or_class_bioavailability"
@@ -4545,7 +4392,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -5318,9 +5165,9 @@
         }
       },
       "calcium ascorbate": {
-        "bio_score": 14,
+        "bio_score": 13,
         "natural": false,
-        "score": 14,
+        "score": 13,
         "absorption": "80%",
         "consumer_note": "Calcium ascorbate is a vitamin C salt that also provides calcium. It is a buffered alternative to plain ascorbic acid.",
         "consumer_note_review": {
@@ -5355,11 +5202,11 @@
           "axis": "class_equivalence",
           "evidence_level": "moderate",
           "score_supported": true,
-          "rationale": "NIH ODS lists calcium ascorbate among common supplemental forms and reports no consistent plasma-bioavailability advantage among the vitamin C forms reviewed.",
+          "rationale": "NIH ODS reports no consistent bioavailability advantage among common vitamin C forms. Calcium ascorbate therefore aligns with the well-absorbed ascorbic-acid tier without a superiority bonus.",
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -5499,7 +5346,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -6012,7 +5859,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -6650,7 +6497,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -6680,41 +6527,6 @@
                 "Tocopherols",
                 "Vitamin E",
                 "alpha-Tocopherol"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "9199513",
-              "doi": "10.1016/s0014-5793(97)00499-7",
-              "title": "Affinity for alpha-tocopherol transfer protein as a determinant of the biological activities of vitamin E analogs.",
-              "citation": "FEBS letters (1997-06-02)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/9199513/",
-              "published_date": "1997-06-02",
-              "publication_types": [
-                "Journal Article"
-              ],
-              "mesh_terms": [
-                "Animals",
-                "Antioxidants",
-                "Carrier Proteins",
-                "Lipoproteins, VLDL",
-                "Liposomes",
-                "Liver",
-                "Male",
-                "Protein Binding",
-                "Rats",
-                "Rats, Sprague-Dawley",
-                "Stereoisomerism",
-                "Vitamin E"
               ],
               "supplementary_concepts": [],
               "evidence_grade": "journal_article",
@@ -7296,7 +7108,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -8090,57 +7902,6 @@
         },
         "external_ids": {
           "unii": "IFN18A4Y6B"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "22909270",
-              "doi": "10.1111/j.1740-8709.2012.00440.x",
-              "title": "Oral magnesium for relief in pregnancy-induced leg cramps: a randomised controlled trial.",
-              "citation": "Maternal & child nutrition (2015-04-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/22909270/",
-              "published_date": "2015-04-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "mesh_terms": [
-                "Administration, Oral",
-                "Adult",
-                "Double-Blind Method",
-                "Female",
-                "Humans",
-                "Leg",
-                "Magnesium",
-                "Muscle Cramp",
-                "Pregnancy",
-                "Pregnancy Complications",
-                "Treatment Outcome",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "magnesium brown rice chelate": {
@@ -8328,7 +8089,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -8362,42 +8123,6 @@
               ],
               "supplementary_concepts": [],
               "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "11794633",
-              "doi": null,
-              "title": "Bioavailability of US commercial magnesium preparations.",
-              "citation": "Magnesium research (2001-12-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/11794633/",
-              "published_date": "2001-12-01",
-              "publication_types": [
-                "Comparative Study",
-                "Journal Article"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Aspartic Acid",
-                "Biological Availability",
-                "Dietary Supplements",
-                "Female",
-                "Humans",
-                "Magnesium Chloride",
-                "Magnesium Compounds",
-                "Magnesium Oxide",
-                "Male",
-                "Middle Aged",
-                "United States"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
               "retracted": false,
               "supports_claims": [
                 "direct_form_or_class_bioavailability"
@@ -8473,7 +8198,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -8533,7 +8258,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -8586,9 +8311,9 @@
         }
       },
       "magnesium aspartate": {
-        "bio_score": 14,
+        "bio_score": 13,
         "natural": false,
-        "score": 14,
+        "score": 13,
         "absorption": "F equivalent to chloride/lactate in humans; > oxide (Firoz 2001)",
         "consumer_note": "Magnesium aspartate is magnesium combined with aspartic acid. The named aspartate ligand distinguishes it from citrate, glycinate, oxide, and other magnesium forms.",
         "consumer_note_review": {
@@ -8615,11 +8340,11 @@
           "axis": "systemic_bioavailability",
           "evidence_level": "moderate",
           "score_supported": true,
-          "rationale": "A direct human comparison found magnesium aspartate more bioavailable than magnesium oxide and comparable with the other well-absorbed salts tested.",
+          "rationale": "A direct human comparison found magnesium aspartate comparable with other well-absorbed salts rather than superior, supporting alignment with the magnesium chloride and lactate tier.",
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -9104,7 +8829,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -9233,41 +8958,6 @@
         },
         "external_ids": {
           "unii": "31VDO12CJY"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "A form-specific review of human trials supports heme iron polypeptide as an orally bioavailable form, while also showing that clinical advantages over conventional iron are not established.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "25953602",
-              "doi": "10.1111/jcpt.12281",
-              "title": "Heme iron polypeptide for the management of anaemia of chronic kidney disease.",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/25953602/",
-              "published_date": "2015-08-01",
-              "publication_types": [
-                "Comparative Study",
-                "Journal Article",
-                "Review"
-              ],
-              "evidence_grade": "human_comparative",
-              "retracted": false,
-              "supports_claims": [
-                "systemic_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "ferrous fumarate": {
@@ -9296,41 +8986,6 @@
         },
         "external_ids": {
           "unii": "R5L488RY0Q"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "A human stable-isotope crossover study directly characterized oral absorption kinetics and fractional absorption from ferrous fumarate.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "34726703",
-              "doi": "10.1093/ajcn/nqab361",
-              "title": "Kinetics of iron absorption from ferrous fumarate with and without galacto-oligosaccharides determined from stable isotope appearance curves in women.",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/34726703/",
-              "published_date": "2022-03-04",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "evidence_grade": "human_comparative",
-              "retracted": false,
-              "supports_claims": [
-                "systemic_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "ferrous gluconate": {
@@ -9664,7 +9319,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -9912,7 +9567,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -10004,7 +9659,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -10065,7 +9720,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -10128,7 +9783,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -10214,7 +9869,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -10324,40 +9979,6 @@
           "range_low": 0.4,
           "range_high": 0.7,
           "quality": "good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "A form-specific review supports zinc methionine as a bioavailable zinc source; the evidence supports a solid tier without claiming superiority to all zinc forms.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "17012778",
-              "doi": "10.1002/biof.5520270120",
-              "title": "Bioavailability, antioxidant and immune-enhancing properties of zinc methionine.",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/17012778/",
-              "published_date": "2006-01-01",
-              "publication_types": [
-                "Journal Article",
-                "Review"
-              ],
-              "evidence_grade": "human_comparative",
-              "retracted": false,
-              "supports_claims": [
-                "systemic_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "zinc orotate": {
@@ -10500,7 +10121,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -11104,7 +10725,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -11195,7 +10816,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -11747,77 +11368,6 @@
           "range_low": 0.1,
           "range_high": 0.5,
           "quality": "variable"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "12885395",
-              "doi": "10.1016/s0928-0987(03)00135-0",
-              "title": "Oral bioavailability of the antioxidant astaxanthin in humans is enhanced by incorporation of lipid based formulations.",
-              "citation": "European journal of pharmaceutical sciences : official journal of the European Federation for Pharmaceutical Sciences (2003-07-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/12885395/",
-              "published_date": "2003-07-01",
-              "publication_types": [
-                "Comparative Study",
-                "Journal Article"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Antioxidants",
-                "Biological Availability",
-                "Chemistry, Pharmaceutical",
-                "Humans",
-                "Kinetics",
-                "Male",
-                "Metabolic Clearance Rate",
-                "Middle Aged",
-                "Xanthophylls",
-                "beta Carotene"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "11120445",
-              "doi": "10.1016/s0955-2863(00)00104-2",
-              "title": "Plasma appearance and distribution of astaxanthin E/Z and R/S isomers in plasma lipoproteins of men after single dose administration of astaxanthin.",
-              "citation": "The Journal of nutritional biochemistry (2000-10-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/11120445/",
-              "published_date": "2000-10-01",
-              "publication_types": [
-                "Journal Article"
-              ],
-              "mesh_terms": [],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "synthetic astaxanthin": {
@@ -12161,7 +11711,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -12224,7 +11774,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -12373,7 +11923,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -12617,118 +12167,45 @@
         },
         "form_evidence": {
           "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "strong",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
           "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
+          "rationale": "A randomized human crossover directly compared calcium HMB with HMB free acid, establishing calcium HMB as the reference form while showing higher exposure for the free-acid form.",
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
               "type": "pubmed",
               "authority": "NCBI PubMed",
-              "pmid": "24599749",
-              "doi": "10.1007/s00421-014-2854-5",
-              "title": "The effects of 12 weeks of beta-hydroxy-beta-methylbutyrate free acid supplementation on muscle mass, strength, and power in resistance-trained individuals: a randomized, double-blind, placebo-controlled study.",
-              "citation": "European journal of applied physiology (2014-06-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/24599749/",
-              "published_date": "2014-06-01",
+              "pmid": "21134325",
+              "doi": "10.1017/S0007114510003582",
+              "title": "Free acid gel form of β-hydroxy-β-methylbutyrate (HMB) improves HMB clearance from plasma in human subjects compared with the calcium HMB salt.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/21134325/",
+              "published_date": "2011-02-01",
               "publication_types": [
+                "Comparative Study",
                 "Journal Article",
                 "Randomized Controlled Trial",
                 "Research Support, Non-U.S. Gov't"
               ],
-              "mesh_terms": [
-                "Dietary Supplements",
-                "Double-Blind Method",
-                "Humans",
-                "Male",
-                "Muscle Strength",
-                "Muscle, Skeletal",
-                "Resistance Training",
-                "Valerates",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
               "evidence_grade": "rct",
               "retracted": false,
               "supports_claims": [
-                "exact_form_human_evidence"
+                "comparative_oral_bioavailability"
               ],
               "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "35911112",
-              "doi": "10.3389/fnut.2022.914866",
-              "title": "Effect of β-hydroxy-β-methylbutyrate (HMB) on the Muscle Strength in the Elderly Population: A Meta-Analysis.",
-              "citation": "Frontiers in nutrition (2022-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/35911112/",
-              "published_date": "2022-01-01",
-              "publication_types": [
-                "Systematic Review",
-                "Journal Article"
-              ],
-              "mesh_terms": [],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "41305674",
-              "doi": "10.3390/nu17223624",
-              "title": "The Role of HMB Supplementation in Enhancing the Effects of Resistance Training in Older Adults: A Systematic Review and Meta-Analysis on Muscle Quality, Body Composition, and Physical Function.",
-              "citation": "Nutrients (2025-11-20)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/41305674/",
-              "published_date": "2025-11-20",
-              "publication_types": [
-                "Journal Article",
-                "Systematic Review",
-                "Meta-Analysis"
-              ],
-              "mesh_terms": [
-                "Humans",
-                "Resistance Training",
-                "Valerates",
-                "Body Composition",
-                "Dietary Supplements",
-                "Aged",
-                "Muscle Strength",
-                "Muscle, Skeletal",
-                "Physical Functional Performance",
-                "Male",
-                "Female",
-                "Randomized Controlled Trials as Topic",
-                "Hand Strength"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
+              "verified_on": "2026-08-18"
             }
           ]
         }
       },
       "hmb free acid (hmb-fa)": {
-        "bio_score": 13,
+        "bio_score": 14,
         "natural": false,
-        "score": 13,
+        "score": 14,
         "absorption": "excellent (~90-95%)",
         "consumer_note": "HMB free acid is the acid form of beta-hydroxy beta-methylbutyrate without calcium as the counterion. It is chemically distinct from HMB calcium salt.",
         "consumer_note_review": {
@@ -12779,110 +12256,37 @@
         },
         "form_evidence": {
           "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "strong",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
           "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
+          "rationale": "A randomized human crossover found a faster peak and nearly double the exposure for HMB free acid versus calcium HMB, supporting the higher form-quality score.",
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
               "type": "pubmed",
               "authority": "NCBI PubMed",
-              "pmid": "24599749",
-              "doi": "10.1007/s00421-014-2854-5",
-              "title": "The effects of 12 weeks of beta-hydroxy-beta-methylbutyrate free acid supplementation on muscle mass, strength, and power in resistance-trained individuals: a randomized, double-blind, placebo-controlled study.",
-              "citation": "European journal of applied physiology (2014-06-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/24599749/",
-              "published_date": "2014-06-01",
+              "pmid": "21134325",
+              "doi": "10.1017/S0007114510003582",
+              "title": "Free acid gel form of β-hydroxy-β-methylbutyrate (HMB) improves HMB clearance from plasma in human subjects compared with the calcium HMB salt.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/21134325/",
+              "published_date": "2011-02-01",
               "publication_types": [
+                "Comparative Study",
                 "Journal Article",
                 "Randomized Controlled Trial",
                 "Research Support, Non-U.S. Gov't"
               ],
-              "mesh_terms": [
-                "Dietary Supplements",
-                "Double-Blind Method",
-                "Humans",
-                "Male",
-                "Muscle Strength",
-                "Muscle, Skeletal",
-                "Resistance Training",
-                "Valerates",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
               "evidence_grade": "rct",
               "retracted": false,
               "supports_claims": [
-                "exact_form_human_evidence"
+                "comparative_oral_bioavailability"
               ],
               "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "35911112",
-              "doi": "10.3389/fnut.2022.914866",
-              "title": "Effect of β-hydroxy-β-methylbutyrate (HMB) on the Muscle Strength in the Elderly Population: A Meta-Analysis.",
-              "citation": "Frontiers in nutrition (2022-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/35911112/",
-              "published_date": "2022-01-01",
-              "publication_types": [
-                "Systematic Review",
-                "Journal Article"
-              ],
-              "mesh_terms": [],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "41305674",
-              "doi": "10.3390/nu17223624",
-              "title": "The Role of HMB Supplementation in Enhancing the Effects of Resistance Training in Older Adults: A Systematic Review and Meta-Analysis on Muscle Quality, Body Composition, and Physical Function.",
-              "citation": "Nutrients (2025-11-20)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/41305674/",
-              "published_date": "2025-11-20",
-              "publication_types": [
-                "Journal Article",
-                "Systematic Review",
-                "Meta-Analysis"
-              ],
-              "mesh_terms": [
-                "Humans",
-                "Resistance Training",
-                "Valerates",
-                "Body Composition",
-                "Dietary Supplements",
-                "Aged",
-                "Muscle Strength",
-                "Muscle, Skeletal",
-                "Physical Functional Performance",
-                "Male",
-                "Female",
-                "Randomized Controlled Trials as Topic",
-                "Hand Strength"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
+              "verified_on": "2026-08-18"
             }
           ]
         }
@@ -12958,63 +12362,6 @@
           "range_low": 0.76,
           "range_high": 1.0,
           "quality": "excellent"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "24272966",
-              "doi": "10.1002/jcph.241",
-              "title": "Evaluation of D-ribose pharmacokinetics, dose proportionality, food effect, and pharmacodynamics after oral solution administration in healthy male and female subjects.",
-              "citation": "Journal of clinical pharmacology (2014-05-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/24272966/",
-              "published_date": "2014-05-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Administration, Oral",
-                "Adult",
-                "Blood Glucose",
-                "Cross-Over Studies",
-                "Dietary Carbohydrates",
-                "Dietary Fats",
-                "Double-Blind Method",
-                "Fasting",
-                "Female",
-                "Food-Drug Interactions",
-                "Healthy Volunteers",
-                "Humans",
-                "Insulin",
-                "Male",
-                "Middle Aged",
-                "Ribose",
-                "Solutions",
-                "Uric Acid",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       }
     },
@@ -13209,92 +12556,6 @@
           "range_low": 0.85,
           "range_high": 0.95,
           "quality": "excellent"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "strong",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "28698222",
-              "doi": "10.1136/bjsports-2017-097608",
-              "title": "A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults.",
-              "citation": "British journal of sports medicine (2018-03-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/28698222/",
-              "published_date": "2018-03-01",
-              "publication_types": [
-                "Journal Article",
-                "Meta-Analysis",
-                "Systematic Review"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Dietary Proteins",
-                "Dietary Supplements",
-                "Humans",
-                "Muscle Strength",
-                "Muscle, Skeletal",
-                "Randomized Controlled Trials as Topic",
-                "Regression Analysis",
-                "Resistance Training"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "39303495",
-              "doi": "10.1016/j.clnu.2024.08.033",
-              "title": "Effectiveness of whey protein supplementation on muscle strength and physical performance of older adults: A systematic review and meta-analysis of randomized clinical trials.",
-              "citation": "Clinical nutrition (Edinburgh, Scotland) (2024-10-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/39303495/",
-              "published_date": "2024-10-01",
-              "publication_types": [
-                "Systematic Review",
-                "Journal Article",
-                "Meta-Analysis",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "mesh_terms": [
-                "Aged",
-                "Female",
-                "Humans",
-                "Male",
-                "Middle Aged",
-                "Body Composition",
-                "Dietary Supplements",
-                "Muscle Strength",
-                "Muscle, Skeletal",
-                "Physical Functional Performance",
-                "Randomized Controlled Trials as Topic",
-                "Whey Proteins"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "hydrolyzed whey protein": {
@@ -13322,92 +12583,6 @@
           "range_low": 0.88,
           "range_high": 0.97,
           "quality": "excellent"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "strong",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "28698222",
-              "doi": "10.1136/bjsports-2017-097608",
-              "title": "A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults.",
-              "citation": "British journal of sports medicine (2018-03-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/28698222/",
-              "published_date": "2018-03-01",
-              "publication_types": [
-                "Journal Article",
-                "Meta-Analysis",
-                "Systematic Review"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Dietary Proteins",
-                "Dietary Supplements",
-                "Humans",
-                "Muscle Strength",
-                "Muscle, Skeletal",
-                "Randomized Controlled Trials as Topic",
-                "Regression Analysis",
-                "Resistance Training"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "39303495",
-              "doi": "10.1016/j.clnu.2024.08.033",
-              "title": "Effectiveness of whey protein supplementation on muscle strength and physical performance of older adults: A systematic review and meta-analysis of randomized clinical trials.",
-              "citation": "Clinical nutrition (Edinburgh, Scotland) (2024-10-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/39303495/",
-              "published_date": "2024-10-01",
-              "publication_types": [
-                "Systematic Review",
-                "Journal Article",
-                "Meta-Analysis",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "mesh_terms": [
-                "Aged",
-                "Female",
-                "Humans",
-                "Male",
-                "Middle Aged",
-                "Body Composition",
-                "Dietary Supplements",
-                "Muscle Strength",
-                "Muscle, Skeletal",
-                "Physical Functional Performance",
-                "Randomized Controlled Trials as Topic",
-                "Whey Proteins"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "whey protein concentrate": {
@@ -14291,120 +13466,6 @@
           "range_low": 0.2,
           "range_high": 0.3,
           "quality": "low"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "strong",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "39872318",
-              "doi": "10.3389/fendo.2024.1463027",
-              "title": "The efficacy of resveratrol supplementation on inflammation and oxidative stress in type-2 diabetes mellitus patients: randomized double-blind placebo meta-analysis.",
-              "citation": "Frontiers in endocrinology (2024-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/39872318/",
-              "published_date": "2024-01-01",
-              "publication_types": [
-                "Journal Article",
-                "Meta-Analysis"
-              ],
-              "mesh_terms": [
-                "Humans",
-                "Antioxidants",
-                "Diabetes Mellitus, Type 2",
-                "Dietary Supplements",
-                "Double-Blind Method",
-                "Inflammation",
-                "Oxidative Stress",
-                "Randomized Controlled Trials as Topic",
-                "Resveratrol"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "meta_analysis",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "35905799",
-              "doi": "10.1016/j.ctim.2022.102863",
-              "title": "Anti-inflammatory effects of resveratrol in patients with cardiovascular disease: A systematic review and meta-analysis of randomized controlled trials.",
-              "citation": "Complementary therapies in medicine (2022-11-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/35905799/",
-              "published_date": "2022-11-01",
-              "publication_types": [
-                "Journal Article",
-                "Meta-Analysis",
-                "Systematic Review"
-              ],
-              "mesh_terms": [
-                "Anti-Inflammatory Agents",
-                "Biomarkers",
-                "Cardiovascular Diseases",
-                "Dietary Supplements",
-                "Humans",
-                "Inflammation",
-                "Interleukin-6",
-                "Randomized Controlled Trials as Topic",
-                "Resveratrol",
-                "Tumor Necrosis Factor-alpha"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "36145131",
-              "doi": "10.3390/nu14183755",
-              "title": "The Effect of Resveratrol on Blood Lipid Profile: A Dose-Response Meta-Analysis of Randomized Controlled Trials.",
-              "citation": "Nutrients (2022-09-11)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/36145131/",
-              "published_date": "2022-09-11",
-              "publication_types": [
-                "Journal Article",
-                "Meta-Analysis",
-                "Review"
-              ],
-              "mesh_terms": [
-                "Cholesterol, HDL",
-                "Cholesterol, LDL",
-                "Humans",
-                "Lipids",
-                "Randomized Controlled Trials as Topic",
-                "Resveratrol",
-                "Triglycerides"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "meta_analysis",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "resveratrol (unspecified)": {
@@ -16082,7 +15143,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -17738,56 +16799,6 @@
           "range_low": 0.04,
           "range_high": 0.1,
           "quality": "very_good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "16919858",
-              "doi": "10.1016/j.yrtph.2006.07.001",
-              "title": "Study on safety and bioavailability of ubiquinol (Kaneka QH) after single and 4-week multiple oral administration to healthy volunteers.",
-              "citation": "Regulatory toxicology and pharmacology : RTP (2007-02-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/16919858/",
-              "published_date": "2007-02-01",
-              "publication_types": [
-                "Clinical Trial",
-                "Journal Article"
-              ],
-              "mesh_terms": [
-                "Administration, Oral",
-                "Adult",
-                "Area Under Curve",
-                "Biological Availability",
-                "Dietary Supplements",
-                "Female",
-                "Humans",
-                "Intestinal Absorption",
-                "Male",
-                "Single-Blind Method",
-                "Toxicity Tests, Acute",
-                "Ubiquinone"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "ubiquinol": {
@@ -17837,43 +16848,6 @@
         },
         "external_ids": {
           "unii": "M9NL0C577Y"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "32380795",
-              "doi": "10.3390/antiox9050386",
-              "title": "Bioavailability of Coenzyme Q10: An Overview of the Absorption Process and Subsequent Metabolism.",
-              "citation": "Antioxidants (Basel, Switzerland) (2020-05-05)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/32380795/",
-              "published_date": "2020-05-05",
-              "publication_types": [
-                "Journal Article",
-                "Review"
-              ],
-              "mesh_terms": [],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "ubiquinone crystal-dispersed": {
@@ -17927,7 +16901,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -18201,95 +17175,6 @@
           "range_low": 0.496,
           "range_high": 0.744,
           "quality": "good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "34415830",
-              "doi": "10.1080/07315724.2021.1962770",
-              "title": "Effect of Dietary Pyrroloquinoline Quinone Disodium Salt on Cognitive Function in Healthy Volunteers: A Randomized, Double-Blind, Placebo-Controlled, Parallel-Group Study.",
-              "citation": "Journal of the American Nutrition Association (2022-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/34415830/",
-              "published_date": "2022-01-01",
-              "publication_types": [
-                "Randomized Controlled Trial",
-                "Journal Article",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "mesh_terms": [
-                "Humans",
-                "Aged",
-                "Middle Aged",
-                "Male",
-                "Female",
-                "Adult",
-                "PQQ Cofactor",
-                "Dietary Supplements",
-                "Amyloid beta-Peptides",
-                "Cognition",
-                "Antioxidants",
-                "Sodium Chloride, Dietary"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "38908296",
-              "doi": "10.1016/j.jnha.2024.100287",
-              "title": "The impact of six-week dihydrogen-pyrroloquinoline quinone supplementation on mitochondrial biomarkers, brain metabolism, and cognition in elderly individuals with mild cognitive impairment: a randomized controlled trial.",
-              "citation": "The journal of nutrition, health & aging (2024-08-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/38908296/",
-              "published_date": "2024-08-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "mesh_terms": [
-                "Humans",
-                "Female",
-                "Aged",
-                "Male",
-                "Cognitive Dysfunction",
-                "Double-Blind Method",
-                "PQQ Cofactor",
-                "Cognition",
-                "Biomarkers",
-                "Brain",
-                "Dietary Supplements",
-                "Brain-Derived Neurotrophic Factor",
-                "Mitochondria"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "microactive PQQ": {
@@ -19920,7 +18805,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -19989,54 +18874,6 @@
           "range_low": 0.9,
           "range_high": 0.99,
           "quality": "excellent"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "6412727",
-              "doi": null,
-              "title": "Pharmacokinetics of 14C CDP-choline.",
-              "citation": "Arzneimittel-Forschung (1983-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/6412727/",
-              "published_date": "1983-01-01",
-              "publication_types": [
-                "Journal Article"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Breath Tests",
-                "Carbon Dioxide",
-                "Choline",
-                "Cytidine Diphosphate Choline",
-                "Diet",
-                "Feces",
-                "Humans",
-                "Kinetics",
-                "Male",
-                "Time Factors"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "phosphatidylcholine": {
@@ -20419,83 +19256,6 @@
           "range_low": 0.7,
           "range_high": 0.9,
           "quality": "very_good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "20523044",
-              "doi": "10.1159/000310330",
-              "title": "Phosphatidylserine containing omega-3 fatty acids may improve memory abilities in non-demented elderly with memory complaints: a double-blind placebo-controlled trial.",
-              "citation": "Dementia and geriatric cognitive disorders (2010-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/20523044/",
-              "published_date": "2010-01-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Aged",
-                "Aged, 80 and over",
-                "Cohort Studies",
-                "Double-Blind Method",
-                "Education",
-                "Fatty Acids, Omega-3",
-                "Female",
-                "Humans",
-                "Male",
-                "Memory",
-                "Memory Disorders",
-                "Mental Recall",
-                "Middle Aged",
-                "Neuropsychological Tests",
-                "Phosphatidylserines",
-                "Treatment Outcome",
-                "Verbal Learning"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "21103034",
-              "doi": "10.3164/jcbn.10-62",
-              "title": "Soybean-derived phosphatidylserine improves memory function of the elderly Japanese subjects with memory complaints.",
-              "citation": "Journal of clinical biochemistry and nutrition (2010-11-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/21103034/",
-              "published_date": "2010-11-01",
-              "publication_types": [
-                "Journal Article"
-              ],
-              "mesh_terms": [],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "bovine phosphatidylserine": {
@@ -20727,75 +19487,6 @@
           "range_low": 0.95,
           "range_high": 1.0,
           "quality": "excellent"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "strong",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "32871172",
-              "doi": "10.1016/j.ejphar.2020.173533",
-              "title": "The effects of taurine supplementation on obesity, blood pressure and lipid profile: A meta-analysis of randomized controlled trials.",
-              "citation": "European journal of pharmacology (2020-10-15)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/32871172/",
-              "published_date": "2020-10-15",
-              "publication_types": [
-                "Journal Article",
-                "Meta-Analysis",
-                "Systematic Review"
-              ],
-              "mesh_terms": [
-                "Blood Pressure",
-                "Dietary Supplements",
-                "Humans",
-                "Lipid Metabolism",
-                "Liver",
-                "Obesity",
-                "Randomized Controlled Trials as Topic",
-                "Taurine"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "41275513",
-              "doi": "10.1093/nutrit/nuaf220",
-              "title": "Effects of Oral Taurine Supplementation on Cardiometabolic Risk Factors: A Meta-analysis and Systematic Review of Randomized Clinical Trials.",
-              "citation": "Nutrition reviews (2025-11-23)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/41275513/",
-              "published_date": "2025-11-23",
-              "publication_types": [
-                "Journal Article"
-              ],
-              "mesh_terms": [],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "liposomal taurine": {
@@ -21355,86 +20046,6 @@
           "range_low": 0.9,
           "range_high": 1.0,
           "quality": "excellent"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "30064450",
-              "doi": "10.1186/s12970-018-0243-x",
-              "title": "The effects of chronic betaine supplementation on body composition and performance in collegiate females: a double-blind, randomized, placebo controlled trial.",
-              "citation": "Journal of the International Society of Sports Nutrition (2018-07-31)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/30064450/",
-              "published_date": "2018-07-31",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Adaptation, Physiological",
-                "Betaine",
-                "Body Composition",
-                "Dietary Supplements",
-                "Double-Blind Method",
-                "Female",
-                "Humans",
-                "Muscle Strength",
-                "Muscle, Skeletal",
-                "Resistance Training",
-                "Sports Nutritional Physiological Phenomena",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "37409757",
-              "doi": "10.1080/15502783.2023.2231411",
-              "title": "Betaine supplementation improves CrossFit performance and increases testosterone levels, but has no influence on Wingate power: randomized crossover trial.",
-              "citation": "Journal of the International Society of Sports Nutrition (2023-12-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/37409757/",
-              "published_date": "2023-12-01",
-              "publication_types": [
-                "Randomized Controlled Trial",
-                "Journal Article"
-              ],
-              "mesh_terms": [
-                "Humans",
-                "Betaine",
-                "Cross-Over Studies",
-                "Double-Blind Method",
-                "Testosterone",
-                "Dietary Supplements"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "liposomal tmg": {
@@ -21665,7 +20276,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -21904,144 +20515,7 @@
           "arginine silicate inositol",
           "nooLVL",
           "arginine inositol silicate"
-        ],
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "27869715",
-              "doi": "10.3390/nu8110736",
-              "title": "Randomized Prospective Double-Blind Studies to Evaluate the Cognitive Effects of Inositol-Stabilized Arginine Silicate in Healthy Physically Active Adults.",
-              "citation": "Nutrients (2016-11-18)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/27869715/",
-              "published_date": "2016-11-18",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Arginine",
-                "Attention",
-                "Cognition",
-                "Double-Blind Method",
-                "Drug Combinations",
-                "Executive Function",
-                "Exercise",
-                "Healthy Lifestyle",
-                "Humans",
-                "Inositol",
-                "Male",
-                "Nootropic Agents",
-                "Prospective Studies",
-                "Silicates",
-                "Time Factors",
-                "Trail Making Test",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "32093766",
-              "doi": "10.1186/s12970-020-00343-y",
-              "title": "Acute effects of Nitrosigine® and citrulline malate on vasodilation in young adults.",
-              "citation": "Journal of the International Society of Sports Nutrition (2020-02-24)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/32093766/",
-              "published_date": "2020-02-24",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Adolescent",
-                "Adult",
-                "Arginine",
-                "Citrulline",
-                "Cross-Over Studies",
-                "Dietary Supplements",
-                "Double-Blind Method",
-                "Drug Combinations",
-                "Female",
-                "Healthy Volunteers",
-                "Humans",
-                "Inositol",
-                "Malates",
-                "Male",
-                "Silicates",
-                "Ultrasonography",
-                "Vasodilation",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "34959823",
-              "doi": "10.3390/nu13124272",
-              "title": "Acute Inositol-Stabilized Arginine Silicate Improves Cognitive Outcomes in Healthy Adults.",
-              "citation": "Nutrients (2021-11-26)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/34959823/",
-              "published_date": "2021-11-26",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Arginine",
-                "Cognition",
-                "Cross-Over Studies",
-                "Dietary Supplements",
-                "Double-Blind Method",
-                "Drug Combinations",
-                "Female",
-                "Healthy Volunteers",
-                "Humans",
-                "Inositol",
-                "Male",
-                "Memory, Short-Term",
-                "Neuropsychological Tests",
-                "Silicates",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
-        }
+        ]
       }
     },
     "match_rules": {
@@ -23354,57 +21828,6 @@
         "external_ids": {
           "pubchem_cid": "10220941",
           "cas": "3230-94-2"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "30706424",
-              "doi": "10.1007/s40265-018-1023-2",
-              "title": "Pharmacokinetic and Pharmacodynamic Properties of L-Ornithine L-Aspartate (LOLA) in Hepatic Encephalopathy.",
-              "citation": "Drugs (2019-02-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/30706424/",
-              "published_date": "2019-02-01",
-              "publication_types": [
-                "Journal Article",
-                "Review"
-              ],
-              "mesh_terms": [
-                "Ammonia",
-                "Animals",
-                "Brain",
-                "Dipeptides",
-                "Glutamic Acid",
-                "Glutamine",
-                "Hepatic Encephalopathy",
-                "Humans",
-                "Liver",
-                "Liver Cirrhosis",
-                "Muscles",
-                "Rats",
-                "Signal Transduction"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       }
     },
@@ -23858,7 +22281,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -23934,7 +22357,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -24016,7 +22439,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -25318,51 +23741,6 @@
           "range_low": 0.45,
           "range_high": 0.65,
           "quality": "moderate"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "18069903",
-              "doi": null,
-              "title": "The plasma pharmacokinetics of R-(+)-lipoic acid administered as sodium R-(+)-lipoate to healthy human subjects.",
-              "citation": "Alternative medicine review : a journal of clinical therapeutic (2007-12-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/18069903/",
-              "published_date": "2007-12-01",
-              "publication_types": [
-                "Journal Article"
-              ],
-              "mesh_terms": [
-                "Area Under Curve",
-                "Biological Availability",
-                "Female",
-                "Humans",
-                "Isomerism",
-                "Male",
-                "Middle Aged",
-                "Thioctic Acid"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "liposomal alpha-lipoic acid": {
@@ -25771,112 +24149,6 @@
           "range_low": 0.2,
           "range_high": 0.5,
           "quality": "moderate"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "32540634",
-              "doi": "10.1016/j.sleep.2020.03.012",
-              "title": "A randomized, double blind, placebo controlled study to evaluate the effects of ashwagandha (Withania somnifera) extract on sleep quality in healthy adults.",
-              "citation": "Sleep medicine (2020-08-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/32540634/",
-              "published_date": "2020-08-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Double-Blind Method",
-                "Humans",
-                "India",
-                "Plant Extracts",
-                "Quality of Life",
-                "Sleep",
-                "Withania"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "31517876",
-              "doi": "10.1097/MD.0000000000017186",
-              "title": "An investigation into the stress-relieving and pharmacological actions of an ashwagandha (Withania somnifera) extract: A randomized, double-blind, placebo-controlled study.",
-              "citation": "Medicine (2019-09-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/31517876/",
-              "published_date": "2019-09-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Anti-Anxiety Agents",
-                "Anxiety",
-                "Dehydroepiandrosterone Sulfate",
-                "Double-Blind Method",
-                "Female",
-                "Humans",
-                "Hydrocortisone",
-                "Male",
-                "Phytotherapy",
-                "Plant Extracts",
-                "Stress, Psychological",
-                "Testosterone",
-                "Treatment Outcome"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "39286132",
-              "doi": "10.1016/j.heliyon.2024.e36885",
-              "title": "Shoden promotes Relief from stress and anxiety: A randomized, double-blind, placebo-controlled study on healthy subjects with high stress levels.",
-              "citation": "Heliyon (2024-09-15)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/39286132/",
-              "published_date": "2024-09-15",
-              "publication_types": [
-                "Journal Article"
-              ],
-              "mesh_terms": [],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "liposomal ashwagandha": {
@@ -26490,7 +24762,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -26564,7 +24836,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -26840,95 +25112,6 @@
           "range_low": 0.65,
           "range_high": 0.74,
           "quality": "good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "31623400",
-              "doi": "10.3390/nu11102362",
-              "title": "Effects of L-Theanine Administration on Stress-Related Symptoms and Cognitive Functions in Healthy Adults: A Randomized Controlled Trial.",
-              "citation": "Nutrients (2019-10-03)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/31623400/",
-              "published_date": "2019-10-03",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Anxiety",
-                "Body Mass Index",
-                "Cognition",
-                "Cross-Over Studies",
-                "Depression",
-                "Double-Blind Method",
-                "Female",
-                "Glutamates",
-                "Humans",
-                "Male",
-                "Middle Aged",
-                "Placebos",
-                "Sleep Wake Disorders",
-                "Stress, Psychological"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "22214254",
-              "doi": null,
-              "title": "The effects of L-theanine (Suntheanine®) on objective sleep quality in boys with attention deficit hyperactivity disorder (ADHD): a randomized, double-blind, placebo-controlled clinical trial.",
-              "citation": "Alternative medicine review : a journal of clinical therapeutic (2011-12-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/22214254/",
-              "published_date": "2011-12-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Actigraphy",
-                "Administration, Oral",
-                "Attention Deficit Disorder with Hyperactivity",
-                "Child",
-                "Complementary Therapies",
-                "Double-Blind Method",
-                "Glutamates",
-                "Humans",
-                "Male",
-                "Sleep Wake Disorders",
-                "Surveys and Questionnaires",
-                "Treatment Outcome"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "l-theanine powder": {
@@ -27056,53 +25239,33 @@
           "axis": "systemic_bioavailability",
           "evidence_level": "moderate",
           "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
+          "rationale": "A human comparison measured higher post-dose collagen-derived di- and tripeptides after tripeptide-rich preparations than after a collagen peptide without tripeptides.",
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
               "type": "pubmed",
               "authority": "NCBI PubMed",
-              "pmid": "27573716",
-              "doi": "10.1021/acs.jafc.6b02955",
-              "title": "Orally Available Collagen Tripeptide: Enzymatic Stability, Intestinal Permeability, and Absorption of Gly-Pro-Hyp and Pro-Hyp.",
-              "citation": "Journal of agricultural and food chemistry (2016-09-28)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/27573716/",
-              "published_date": "2016-09-28",
+              "pmid": "26934933",
+              "doi": "10.1248/bpb.b15-00624",
+              "title": "Absorption and Urinary Excretion of Peptides after Collagen Tripeptide Ingestion in Humans.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/26934933/",
+              "published_date": "2016-01-01",
               "publication_types": [
-                "Journal Article"
+                "Clinical Trial",
+                "Journal Article",
+                "Research Support, Non-U.S. Gov't"
               ],
-              "mesh_terms": [
-                "Animals",
-                "Bacillus",
-                "Biological Availability",
-                "Caco-2 Cells",
-                "Collagen",
-                "Collagenases",
-                "Enzyme Stability",
-                "Humans",
-                "Intestinal Absorption",
-                "Intestinal Mucosa",
-                "Intestines",
-                "Male",
-                "Molecular Weight",
-                "Oligopeptides",
-                "Peptides",
-                "Permeability",
-                "Rats",
-                "Rats, Sprague-Dawley"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
+              "evidence_grade": "human_comparative",
               "retracted": false,
               "supports_claims": [
-                "direct_form_or_class_bioavailability"
+                "collagen_tripeptide_absorption"
               ],
               "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
+              "verified_on": "2026-08-18"
             }
           ]
         }
@@ -28574,7 +26737,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -31315,55 +29478,6 @@
           "range_low": 0.9,
           "range_high": 0.95,
           "quality": "very_good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "34642762",
-              "doi": "10.1093/jn/nxab305",
-              "title": "Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial.",
-              "citation": "The Journal of nutrition (2022-01-11)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/34642762/",
-              "published_date": "2022-01-11",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Amino Acids",
-                "Dietary Proteins",
-                "Eating",
-                "Female",
-                "Humans",
-                "Male",
-                "Muscle Proteins",
-                "Muscle, Skeletal",
-                "Postprandial Period",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       }
     },
@@ -31454,55 +29568,6 @@
           "range_low": 0.9,
           "range_high": 0.95,
           "quality": "very_good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "34642762",
-              "doi": "10.1093/jn/nxab305",
-              "title": "Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial.",
-              "citation": "The Journal of nutrition (2022-01-11)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/34642762/",
-              "published_date": "2022-01-11",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Amino Acids",
-                "Dietary Proteins",
-                "Eating",
-                "Female",
-                "Humans",
-                "Male",
-                "Muscle Proteins",
-                "Muscle, Skeletal",
-                "Postprandial Period",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       }
     },
@@ -31588,55 +29653,6 @@
           "range_low": 0.9,
           "range_high": 0.95,
           "quality": "very_good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "34642762",
-              "doi": "10.1093/jn/nxab305",
-              "title": "Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial.",
-              "citation": "The Journal of nutrition (2022-01-11)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/34642762/",
-              "published_date": "2022-01-11",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Amino Acids",
-                "Dietary Proteins",
-                "Eating",
-                "Female",
-                "Humans",
-                "Male",
-                "Muscle Proteins",
-                "Muscle, Skeletal",
-                "Postprandial Period",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       }
     },
@@ -31781,59 +29797,6 @@
           "range_low": 0.76,
           "range_high": 1.0,
           "quality": "excellent"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "17662090",
-              "doi": "10.1111/j.1365-2125.2007.02990.x",
-              "title": "Pharmacokinetic and pharmacodynamic properties of oral L-citrulline and L-arginine: impact on nitric oxide metabolism.",
-              "citation": "British journal of clinical pharmacology (2008-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/17662090/",
-              "published_date": "2008-01-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "mesh_terms": [
-                "Administration, Oral",
-                "Arginine",
-                "Citrulline",
-                "Cross-Over Studies",
-                "Dose-Response Relationship, Drug",
-                "Double-Blind Method",
-                "Female",
-                "Humans",
-                "Male",
-                "Middle Aged",
-                "Nitric Oxide",
-                "Nitric Oxide Synthase",
-                "Placebos",
-                "Vasodilation"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "l-citrulline powder": {
@@ -31875,7 +29838,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -35604,7 +33567,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -35683,7 +33646,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -41830,96 +39793,6 @@
           "range_low": 0.35,
           "range_high": 0.65,
           "quality": "variable"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "29599478",
-              "doi": "10.1038/s41467-018-03421-7",
-              "title": "Chronic nicotinamide riboside supplementation is well-tolerated and elevates NAD+ in healthy middle-aged and older adults.",
-              "citation": "Nature communications (2018-03-29)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/29599478/",
-              "published_date": "2018-03-29",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial",
-                "Research Support, N.I.H., Extramural"
-              ],
-              "mesh_terms": [
-                "Aged",
-                "Blood Pressure",
-                "Caloric Restriction",
-                "Double-Blind Method",
-                "Female",
-                "Humans",
-                "Male",
-                "Middle Aged",
-                "NAD",
-                "Niacinamide",
-                "Pyridinium Compounds",
-                "Vascular Stiffness"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "29992272",
-              "doi": "10.1093/ajcn/nqy132",
-              "title": "A randomized placebo-controlled clinical trial of nicotinamide riboside in obese men: safety, insulin-sensitivity, and lipid-mobilizing effects.",
-              "citation": "The American journal of clinical nutrition (2018-08-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/29992272/",
-              "published_date": "2018-08-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Aged",
-                "Body Composition",
-                "Dietary Supplements",
-                "Double-Blind Method",
-                "Glucose",
-                "Humans",
-                "Insulin Resistance",
-                "Lipid Metabolism",
-                "Male",
-                "Middle Aged",
-                "Niacinamide",
-                "Obesity",
-                "Pyridinium Compounds"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "nicotinamide riboside (unspecified)": {
@@ -42128,64 +40001,6 @@
           "range_low": 0.8,
           "range_high": 0.95,
           "quality": "very_good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "25057276",
-              "doi": "10.1155/2014/459165",
-              "title": "Pterostilbene on metabolic parameters: a randomized, double-blind, and placebo-controlled trial.",
-              "citation": "Evidence-based complementary and alternative medicine : eCAM (2014-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/25057276/",
-              "published_date": "2014-01-01",
-              "publication_types": [
-                "Journal Article"
-              ],
-              "mesh_terms": [],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "23431291",
-              "doi": "10.1155/2013/463595",
-              "title": "Analysis of safety from a human clinical trial with pterostilbene.",
-              "citation": "Journal of toxicology (2013-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/23431291/",
-              "published_date": "2013-01-01",
-              "publication_types": [
-                "Journal Article"
-              ],
-              "mesh_terms": [],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       }
     },
@@ -46155,101 +43970,6 @@
           "range_low": 0.85,
           "range_high": 0.95,
           "quality": "very_good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "strong",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "23922468",
-              "doi": "10.3748/wjg.v19.i29.4718",
-              "title": "Probiotic supplementation decreases intestinal transit time: meta-analysis of randomized controlled trials.",
-              "citation": "World journal of gastroenterology (2013-08-07)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/23922468/",
-              "published_date": "2013-08-07",
-              "publication_types": [
-                "Journal Article",
-                "Meta-Analysis",
-                "Systematic Review"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Age Factors",
-                "Constipation",
-                "Defecation",
-                "Female",
-                "Gastrointestinal Transit",
-                "Humans",
-                "Intestines",
-                "Male",
-                "Middle Aged",
-                "Probiotics",
-                "Randomized Controlled Trials as Topic",
-                "Time Factors",
-                "Treatment Outcome",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "29227175",
-              "doi": "10.1080/19490976.2017.1412908",
-              "title": "Effects of 28-day Bifidobacterium animalis subsp. lactis HN019 supplementation on colonic transit time and gastrointestinal symptoms in adults with functional constipation: A double-blind, randomized, placebo-controlled, and dose-ranging trial.",
-              "citation": "Gut microbes (2018-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/29227175/",
-              "published_date": "2018-01-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "mesh_terms": [
-                "Adolescent",
-                "Adult",
-                "Aged",
-                "Bifidobacterium animalis",
-                "Constipation",
-                "Double-Blind Method",
-                "Female",
-                "Gastrointestinal Transit",
-                "Humans",
-                "Male",
-                "Middle Aged",
-                "Placebos",
-                "Probiotics",
-                "Quality of Life",
-                "Treatment Outcome",
-                "Young Adult"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "bifidobacterium lactis bl-04": {
@@ -46412,101 +44132,6 @@
           "range_low": 0.65,
           "range_high": 0.85,
           "quality": "good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "31797399",
-              "doi": "10.1111/apt.15561",
-              "title": "The therapeutic efficacy of Bifidobacterium animalis subsp. lactis BB-12® in infant colic: A randomised, double blind, placebo-controlled trial.",
-              "citation": "Alimentary pharmacology & therapeutics (2020-01-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/31797399/",
-              "published_date": "2020-01-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "mesh_terms": [
-                "Bifidobacterium animalis",
-                "Breast Feeding",
-                "Colic",
-                "Crying",
-                "Defecation",
-                "Double-Blind Method",
-                "Feces",
-                "Female",
-                "Gastrointestinal Microbiome",
-                "Humans",
-                "Infant",
-                "Infant Care",
-                "Male",
-                "Placebos",
-                "Probiotics",
-                "Treatment Outcome"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "32059116",
-              "doi": "10.1080/00325481.2020.1731214",
-              "title": "Health benefits of Lactobacillus rhamnosus GG and Bifidobacterium animalis subspecies lactis BB-12 in children.",
-              "citation": "Postgraduate medicine (2020-06-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/32059116/",
-              "published_date": "2020-06-01",
-              "publication_types": [
-                "Journal Article",
-                "Review"
-              ],
-              "mesh_terms": [
-                "Bifidobacterium animalis",
-                "Child",
-                "Child Health",
-                "Child, Preschool",
-                "Cross Infection",
-                "Drug Therapy, Combination",
-                "Gastrointestinal Diseases",
-                "Humans",
-                "Infant",
-                "Infant Health",
-                "Lacticaseibacillus rhamnosus",
-                "Meta-Analysis as Topic",
-                "Probiotics",
-                "Randomized Controlled Trials as Topic",
-                "Respiratory Tract Infections",
-                "Systematic Reviews as Topic"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "bifidobacterium animalis subsp. lactis": {
@@ -46599,89 +44224,6 @@
           "range_low": 0.9,
           "range_high": 0.98,
           "quality": "excellent"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "strong",
-          "score_supported": true,
-          "rationale": "The existing reviewed evidence library contains live-verified human evidence for this exact named form or strain; this supports form confidence, not universal clinical benefit.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "26365389",
-              "doi": "10.1111/apt.13404",
-              "title": "Systematic review with meta-analysis: Lactobacillus rhamnosus GG in the prevention of antibiotic-associated diarrhoea in children and adults.",
-              "citation": "Alimentary pharmacology & therapeutics (2015-11-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/26365389/",
-              "published_date": "2015-11-01",
-              "publication_types": [
-                "Journal Article",
-                "Meta-Analysis",
-                "Research Support, Non-U.S. Gov't",
-                "Systematic Review"
-              ],
-              "mesh_terms": [
-                "Adult",
-                "Anti-Bacterial Agents",
-                "Child",
-                "Diarrhea",
-                "Humans",
-                "Lacticaseibacillus rhamnosus",
-                "Probiotics",
-                "Randomized Controlled Trials as Topic"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            },
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "26756877",
-              "doi": "10.1097/MPG.0000000000001081",
-              "title": "Probiotics for the Prevention of Antibiotic-Associated Diarrhea in Children.",
-              "citation": "Journal of pediatric gastroenterology and nutrition (2016-03-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/26756877/",
-              "published_date": "2016-03-01",
-              "publication_types": [
-                "Journal Article",
-                "Meta-Analysis",
-                "Research Support, Non-U.S. Gov't",
-                "Systematic Review"
-              ],
-              "mesh_terms": [
-                "Anti-Bacterial Agents",
-                "Child",
-                "Child, Preschool",
-                "Diarrhea",
-                "Guidelines as Topic",
-                "Humans",
-                "Infant",
-                "Probiotics",
-                "Risk Factors"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "exact_form_human_evidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "lactobacillus rhamnosus hn001": {
@@ -47585,41 +45127,6 @@
           "range_low": 0.85,
           "range_high": 0.95,
           "quality": "very_good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "strong",
-          "score_supported": true,
-          "rationale": "A strain-specific systematic review and meta-analysis identifies CNCM I-745 and supports its high-confidence named-strain tier.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "40535538",
-              "doi": "10.3389/fcimb.2025.1587792",
-              "title": "Efficacy and safety of Saccharomyces boulardii CNCM I-745 for the treatment of pediatric acute diarrhea in China: a systematic review and meta-analysis.",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/40535538/",
-              "published_date": "2025-01-01",
-              "publication_types": [
-                "Journal Article",
-                "Systematic Review",
-                "Meta-Analysis"
-              ],
-              "evidence_grade": "systematic_review",
-              "retracted": false,
-              "supports_claims": [
-                "form_quality_confidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "saccharomyces boulardii (unspecified)": {
@@ -50204,60 +47711,6 @@
           "range_low": 0.3,
           "range_high": 0.5,
           "quality": "moderate"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "8878586",
-              "doi": "10.1128/AAC.40.9.2087",
-              "title": "Single-dose and steady-state pharmacokinetics of hypericin and pseudohypericin.",
-              "citation": "Antimicrobial agents and chemotherapy (1996-09-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/8878586/",
-              "published_date": "1996-09-01",
-              "publication_types": [
-                "Clinical Trial",
-                "Comparative Study",
-                "Journal Article",
-                "Randomized Controlled Trial",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "mesh_terms": [
-                "Administration, Oral",
-                "Adult",
-                "Anthracenes",
-                "Antiviral Agents",
-                "Area Under Curve",
-                "Body Weight",
-                "Chromatography, High Pressure Liquid",
-                "Double-Blind Method",
-                "Half-Life",
-                "Humans",
-                "Injections, Intravenous",
-                "Male",
-                "Perylene"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "rct",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "st john's wort powder": {
@@ -50386,59 +47839,6 @@
           "range_low": 0.3,
           "range_high": 0.5,
           "quality": "moderate"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "systemic_bioavailability",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "Live-verified literature directly evaluates the named form or a clearly applicable form class for absorption or pharmacokinetics.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "20878691",
-              "doi": "10.1002/ptr.3151",
-              "title": "Pharmacokinetics of valerenic acid after single and multiple doses of valerian in older women.",
-              "citation": "Phytotherapy research : PTR (2010-10-01)",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/20878691/",
-              "published_date": "2010-10-01",
-              "publication_types": [
-                "Journal Article",
-                "Research Support, N.I.H., Extramural"
-              ],
-              "mesh_terms": [
-                "Aged",
-                "Aged, 80 and over",
-                "Area Under Curve",
-                "Body Weight",
-                "Female",
-                "Half-Life",
-                "Humans",
-                "Hypnotics and Sedatives",
-                "Indenes",
-                "Middle Aged",
-                "Oils, Volatile",
-                "Phytotherapy",
-                "Sesquiterpenes",
-                "Sleep Initiation and Maintenance Disorders",
-                "Valerian"
-              ],
-              "supplementary_concepts": [],
-              "evidence_grade": "journal_article",
-              "retracted": false,
-              "supports_claims": [
-                "direct_form_or_class_bioavailability"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "valerian root powder": {
@@ -50943,7 +48343,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -51085,9 +48485,9 @@
         }
       },
       "DHA fish oil rTG": {
-        "bio_score": 12,
+        "bio_score": 14,
         "natural": true,
-        "score": 15,
+        "score": 17,
         "absorption": "very high; rTG concentrated DHA, +24% plasma rise vs CLO reference (Dyerberg 2010)",
         "consumer_note": "DHA fish-oil rTG supplies DHA in re-esterified triglycerides derived from fish oil.",
         "consumer_note_review": {
@@ -51116,7 +48516,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -51316,9 +48716,9 @@
         }
       },
       "EPA fish oil rTG": {
-        "bio_score": 12,
+        "bio_score": 14,
         "natural": true,
-        "score": 15,
+        "score": 17,
         "absorption": "very high; rTG concentrated EPA, +24% plasma rise vs CLO (Dyerberg 2010)",
         "consumer_note": "EPA fish-oil rTG supplies EPA in re-esterified triglycerides derived from fish oil.",
         "consumer_note_review": {
@@ -51346,7 +48746,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -52817,7 +50217,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -59474,7 +56874,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -68634,41 +66034,6 @@
           "range_low": 0.6,
           "range_high": 0.8,
           "quality": "good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "A randomized human study directly evaluated the named K12 strain and supports high confidence in the disclosed strain identity.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "21722694",
-              "doi": "10.1016/j.fct.2011.06.038",
-              "title": "Evaluation of safety and human tolerance of the oral probiotic Streptococcus salivarius K12: a randomized, placebo-controlled, double-blind study.",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/21722694/",
-              "published_date": "2011-09-01",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial",
-                "Research Support, Non-U.S. Gov't"
-              ],
-              "evidence_grade": "human_comparative",
-              "retracted": false,
-              "supports_claims": [
-                "form_quality_confidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "streptococcus salivarius m18": {
@@ -68838,39 +66203,6 @@
           "range_low": 0.7,
           "range_high": 0.9,
           "quality": "very_good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "strong",
-          "score_supported": true,
-          "rationale": "A strain-specific systematic review and meta-analysis directly evaluates DSM 17938, supporting its high-confidence named-strain tier.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "42485904",
-              "doi": "10.1016/j.nut.2026.113327",
-              "title": "Efficacy of Lactobacillus reuteri DSM 17938 in preterm newborns and infants with colic: a systematic review and meta-analysis of randomized controlled trials.",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/42485904/",
-              "published_date": "2026-07-22",
-              "publication_types": [
-                "Journal Article"
-              ],
-              "evidence_grade": "human_comparative",
-              "retracted": false,
-              "supports_claims": [
-                "form_quality_confidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "lactobacillus reuteri rc-14": {
@@ -69283,40 +66615,6 @@
           "range_low": 0.85,
           "range_high": 0.95,
           "quality": "very_good"
-        },
-        "form_evidence": {
-          "schema_version": "1.0.0",
-          "axis": "form_quality_confidence",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "A randomized human trial directly evaluated the disclosed GBI-30 strain, supporting its high-confidence named-strain tier.",
-          "review": {
-            "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
-          },
-          "references_structured": [
-            {
-              "type": "pubmed",
-              "authority": "NCBI PubMed",
-              "pmid": "40707016",
-              "doi": "10.1163/18762891-bja00084",
-              "title": "Impact of Heyndrickxia (Bacillus) coagulans GBI-30, 6086 (BC30) probiotic on gastrointestinal function in healthy adults: a randomised controlled trial.",
-              "url": "https://pubmed.ncbi.nlm.nih.gov/40707016/",
-              "published_date": "2025-07-22",
-              "publication_types": [
-                "Journal Article",
-                "Randomized Controlled Trial"
-              ],
-              "evidence_grade": "human_comparative",
-              "retracted": false,
-              "supports_claims": [
-                "form_quality_confidence"
-              ],
-              "verification_source": "pubmed_eutils",
-              "verified_on": "2026-08-13"
-            }
-          ]
         }
       },
       "bacillus coagulans mtcc 5856": {
@@ -75810,7 +73108,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -75942,7 +73240,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {
@@ -76157,7 +73455,7 @@
           "review": {
             "status": "source_verified",
             "by": "PharmaGuide evidence audit",
-            "date": "2026-08-13"
+            "date": "2026-08-18"
           },
           "references_structured": [
             {

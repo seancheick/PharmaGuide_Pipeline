@@ -22,7 +22,7 @@ def iqm():
 EXPECTED_BIO_SCORES = {
     "magnesium": {
         "magnesium citrate": 14,
-        "magnesium aspartate": 14,
+        "magnesium aspartate": 13,
         "magnesium lactate": 13,
         "magnesium chloride": 13,
         "magnesium glycinate": 12,

@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.3",
-    "last_updated": "2026-08-08",
-    "total_entries": 198,
+    "schema_version": "5.3.4",
+    "last_updated": "2026-08-18",
+    "total_entries": 200,
     "changelog": [
+      "5.3.4 (2026-08-18): Added exact-strain clinical records for Bacillus coagulans GBI-30, 6086 and Limosilactobacillus reuteri DSM 17938; added a current CNCM I-745 meta-analysis to Saccharomyces boulardii; corrected HN019 and pterostilbene effect summaries; separated product-brand aliases from exact strain identities.",
       "5.3.3 (2026-08-08): Replaced the corrupt BCAA auto-discovery record with three content-verified systematic reviews and a complete leucine+isoleucine+valine identity/dose contract; removed unrelated registry trials and the impossible 18,820-study count. Narrowed NAC consumer routing to Immune Support, removed untraceable aggregate counts and the unsupported longevity route, and tied each verified reference to explicit supported claims.",
       "5.3.2 (2026-08-06): Added form- and dose-scoped mixed human evidence for L-carnitine base/tartrate from three content-verified systematic reviews; explicitly excluded fumarate, hydrochloride, acetyl-, propionyl-, D-, and DL-carnitine identities. Corrected BRAND_CARNIPURE from 224 participants/five trials/strong energy-heart claims to its two cited small crossover recovery-marker trials (28 total participants, positive_weak, 2 g/day), and grouped its evidence with generic L-carnitine so the same active cannot create false ingredient breadth.",
       "5.3.1 (2026-08-06): Corrected the stale PRECLIN_ALCAR record to INGR_ACETYL_L_CARNITINE; constrained linkage to acetyl-L-carnitine/base and hydrochloride identities; classified conflicting, condition-specific human reviews as mixed; added dose scope and three limiting PubMed reviews; removed unrelated registry/enrollment/endpoint claims; synchronized the documented evidence multipliers with the production scorer.",
@@ -996,8 +997,7 @@
       "id": "BRAND_FLORASTOR",
       "standard_name": "Florastor",
       "aliases": [
-        "florastor",
-        "saccharomyces boulardii cncm i-745"
+        "florastor"
       ],
       "category": "probiotics",
       "evidence_level": "branded-rct",
@@ -12091,7 +12091,7 @@
         "rodent",
         "RCT"
       ],
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-08-18",
       "notable_studies": "In a randomized placebo-controlled trial in hypercholesterolemic adults, pterostilbene lowered systolic and diastolic blood pressure in some analyses but increased LDL in the monotherapy arm (PMID 25057276). A companion safety analysis from the same clinical program found doses up to 250 mg/day generally well tolerated over 6-8 weeks (PMID 23431291).",
       "references_structured": [
         {
@@ -12136,12 +12136,12 @@
       "external_ids": {
         "unii": "26R60S6A5I"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Focus & Mental Clarity",
       "total_enrollment": 120,
       "registry_completed_trials_count": 10,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Focus & Mental Clarity; published_tags=mechanistic,rodent,RCT; registry_completed_trials_count=10; total_enrollment=120; endpoint_tags=cardiovascular,digestive_health,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The randomized program reported possible blood-pressure benefit but also an LDL increase with pterostilbene monotherapy, so the human result is mixed rather than strongly positive.",
       "endpoint_relevance_tags": [
         "cardiovascular",
         "digestive_health",
@@ -14600,9 +14600,7 @@
         "biogaia prodentis",
         "prodentis",
         "l. reuteri atcc pta 5289",
-        "l. reuteri dsm 17938",
-        "limosilactobacillus reuteri atcc pta 5289",
-        "limosilactobacillus reuteri dsm 17938"
+        "limosilactobacillus reuteri atcc pta 5289"
       ],
       "category": "probiotics",
       "evidence_level": "strain-clinical",
@@ -19529,59 +19527,20 @@
       "evidence_level": "strain-clinical",
       "study_type": "clinical_strain",
       "published_studies": [
-        "RCT",
-        "systematic_review"
+        "RCT"
       ],
-      "score_contribution": "tier_2",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "colonic transit time ↓",
-        "bowel movement frequency ↑",
-        "GI comfort scores ↑"
+        "prespecified constipation outcomes ↔",
+        "post-hoc bowel-frequency subgroup ↑"
       ],
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "HN019 has human strain-specific evidence, particularly for bowel function and transit outcomes in constipation-prone groups.",
-      "last_updated": "2026-03-23",
-      "notable_studies": "Meta-analysis and randomized trials support HN019-related improvements in bowel-function outcomes. The transit-time meta-analysis is indexed as PMID 23922468, and a dose-ranging double-blind placebo-controlled constipation trial is indexed as PMID 29227175.",
+      "notes": "HN019 has a strain-specific randomized constipation trial, but its prespecified primary and secondary comparisons were not significant. A favorable bowel-frequency result came from a post-hoc subgroup analysis and should not be presented as a confirmed overall benefit.",
+      "last_updated": "2026-08-18",
+      "notable_studies": "The dose-ranging placebo-controlled trial (PMID 29227175) found no significant differences on its prespecified primary or secondary outcomes; the favorable bowel-frequency signal was post-hoc.",
       "references_structured": [
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "23922468",
-          "doi": "10.3748/wjg.v19.i29.4718",
-          "title": "Probiotic supplementation decreases intestinal transit time: meta-analysis of randomized controlled trials.",
-          "citation": "World journal of gastroenterology (2013-08-07)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/23922468/",
-          "published_date": "2013-08-07",
-          "publication_types": [
-            "Journal Article",
-            "Meta-Analysis",
-            "Systematic Review"
-          ],
-          "mesh_terms": [
-            "Adult",
-            "Age Factors",
-            "Constipation",
-            "Defecation",
-            "Female",
-            "Gastrointestinal Transit",
-            "Humans",
-            "Intestines",
-            "Male",
-            "Middle Aged",
-            "Probiotics",
-            "Randomized Controlled Trials as Topic",
-            "Time Factors",
-            "Treatment Outcome",
-            "Young Adult"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "systematic_review",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
         {
           "type": "pubmed",
           "authority": "NCBI PubMed",
@@ -19624,12 +19583,12 @@
       "external_ids": {
         "unii": "5307V7XW8I"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Digestive Health",
       "total_enrollment": 100,
       "registry_completed_trials_count": 4,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=clinical_strain; evidence_level=strain-clinical; primary_outcome=Digestive Health; published_tags=RCT,systematic_review; registry_completed_trials_count=4; total_enrollment=100; endpoint_tags=immune_support,digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The exact-strain RCT was null on prespecified primary and secondary comparisons; a favorable result was limited to a post-hoc subgroup, so the record is mixed rather than strongly positive.",
       "endpoint_relevance_tags": [
         "immune_support",
         "digestive_health"
@@ -20168,6 +20127,140 @@
       ]
     },
     {
+      "id": "STRAIN_BC30",
+      "standard_name": "Bacillus coagulans GBI-30, 6086",
+      "aliases": [
+        "bacillus coagulans gbi-30",
+        "bacillus coagulans gbi-30 6086",
+        "bacillus coagulans gbi-30, 6086",
+        "gbi-30 6086",
+        "bc30",
+        "ganedenbc30"
+      ],
+      "category": "probiotics",
+      "evidence_level": "strain-clinical",
+      "study_type": "clinical_strain",
+      "published_studies": [
+        "RCT"
+      ],
+      "score_contribution": "tier_2",
+      "key_endpoints": [
+        "bowel movement frequency ↑",
+        "stool consistency improved",
+        "functional constipation prevalence ↓"
+      ],
+      "health_goals_supported": [
+        "Digestive Health"
+      ],
+      "notes": "One strain-specific randomized trial in healthy adults with functional gastrointestinal complaints reported improvements in bowel frequency, stool consistency, and constipation prevalence. The finding should not be generalized to other B. coagulans strains.",
+      "last_updated": "2026-08-18",
+      "notable_studies": "A four-week double-blind randomized trial of BC30 at 1 billion CFU/day in 111 adults reported improved functional GI outcomes versus placebo (PMID 40707016).",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "40707016",
+          "doi": "10.1163/18762891-bja00084",
+          "title": "Impact of Heyndrickxia (Bacillus) coagulans GBI-30, 6086 (BC30) probiotic on gastrointestinal function in healthy adults: a randomised controlled trial.",
+          "citation": "Beneficial microbes (2025-07-22)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40707016/",
+          "published_date": "2025-07-22",
+          "publication_types": [
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "mesh_terms": [
+            "Humans",
+            "Adult",
+            "Probiotics",
+            "Gastrointestinal Microbiome",
+            "Double-Blind Method",
+            "Bacillus coagulans",
+            "Healthy Volunteers",
+            "Gastrointestinal Diseases"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "external_ids": {},
+      "effect_direction": "positive_weak",
+      "primary_outcome": "Digestive Health",
+      "total_enrollment": 111,
+      "registry_completed_trials_count": 1,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "A single exact-strain randomized trial reported positive GI outcomes; one trial is supportive but not enough for a broad strong-effect claim.",
+      "endpoint_relevance_tags": [
+        "digestive_health"
+      ]
+    },
+    {
+      "id": "STRAIN_REUTERI_DSM17938",
+      "standard_name": "Limosilactobacillus reuteri DSM 17938",
+      "aliases": [
+        "lactobacillus reuteri dsm 17938",
+        "lactobacillus reuteri dsm-17938",
+        "limosilactobacillus reuteri dsm 17938",
+        "limosilactobacillus reuteri dsm-17938",
+        "l reuteri dsm 17938",
+        "dsm 17938"
+      ],
+      "category": "probiotics",
+      "evidence_level": "strain-clinical",
+      "study_type": "systematic_review_meta",
+      "published_studies": [
+        "RCT",
+        "systematic_review",
+        "meta-analysis"
+      ],
+      "score_contribution": "tier_2",
+      "key_endpoints": [
+        "infant colic treatment response ↑",
+        "feeding intolerance in preterm infants ↓",
+        "necrotizing enterocolitis in preterm infants ↓"
+      ],
+      "health_goals_supported": [
+        "Digestive Health"
+      ],
+      "notes": "The evidence summarized here is strain-specific and limited to newborn and infant populations; it must not be presented as a general adult digestive-health benefit or transferred to other L. reuteri strains.",
+      "last_updated": "2026-08-18",
+      "notable_studies": "A 2026 systematic review and meta-analysis of randomized trials reported benefits for colic response and selected preterm-infant gastrointestinal outcomes, with no significant sepsis effect (PMID 42485904).",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "42485904",
+          "doi": "10.1016/j.nut.2026.113327",
+          "title": "Efficacy of Lactobacillus reuteri DSM 17938 in preterm newborns and infants with colic: a systematic review and meta-analysis of randomized controlled trials.",
+          "citation": "Nutrition (2026-07-22)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42485904/",
+          "published_date": "2026-07-22",
+          "publication_types": [
+            "Journal Article"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "external_ids": {},
+      "effect_direction": "positive_strong",
+      "primary_outcome": "Digestive Health",
+      "total_enrollment": 2259,
+      "registry_completed_trials_count": 19,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "A strain-specific meta-analysis of randomized trials reported positive colic and preterm-infant GI outcomes, while also identifying a null sepsis outcome and a need for further trials.",
+      "endpoint_relevance_tags": [
+        "digestive_health"
+      ]
+    },
+    {
       "id": "STRAIN_SBOULARDII",
       "standard_name": "Saccharomyces boulardii",
       "aliases": [
@@ -20194,9 +20287,9 @@
         "Digestive Health",
         "Immune Support"
       ],
-      "notes": "Strain-level yeast probiotic evidence is strongest for prevention of antibiotic-associated diarrhea, with additional supportive evidence in selected GI contexts.",
-      "last_updated": "2026-02-20",
-      "notable_studies": "Updated systematic review/meta-analysis across 21 randomized trials found reduced antibiotic-associated diarrhea risk with S. boulardii (PMID: 26216624).",
+      "notes": "Strain-level yeast probiotic evidence is strongest for prevention of antibiotic-associated diarrhea, with additional CNCM I-745 evidence for treatment of pediatric acute diarrhea. Population and treatment context remain important.",
+      "last_updated": "2026-08-18",
+      "notable_studies": "A systematic review/meta-analysis found reduced antibiotic-associated diarrhea risk with S. boulardii (PMID 26216624). A separate CNCM I-745 meta-analysis of Chinese pediatric trials reported shorter acute-diarrhea duration (PMID 40535538).",
       "references_structured": [
         {
           "type": "pubmed",
@@ -20223,6 +20316,37 @@
             "Probiotics",
             "Randomized Controlled Trials as Topic",
             "Saccharomyces"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "40535538",
+          "doi": "10.3389/fcimb.2025.1587792",
+          "title": "Efficacy and safety of Saccharomyces boulardii CNCM I-745 for the treatment of pediatric acute diarrhea in China: a systematic review and meta-analysis.",
+          "citation": "Frontiers in cellular and infection microbiology (2025-01-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40535538/",
+          "published_date": "2025-01-01",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review",
+            "Meta-Analysis"
+          ],
+          "mesh_terms": [
+            "Humans",
+            "Saccharomyces boulardii",
+            "Probiotics",
+            "China",
+            "Diarrhea",
+            "Child",
+            "Infant",
+            "Gastroenteritis",
+            "Acute Disease"
           ],
           "supplementary_concepts": [],
           "evidence_grade": "systematic_review",
