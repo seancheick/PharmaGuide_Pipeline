@@ -10231,6 +10231,17 @@ class EnhancedDSLDNormalizer:
         # The unit-based {Calories}/{Gram(s)} check below still runs because
         # those units are unambiguous label-panel indicators.
         _cat_lower = (dsld_category or "").lower().strip()
+        _unit_lower = str(unit or "").strip().lower().strip("{}")
+        if (
+            _cat_lower == "mineral"
+            and _unit_lower in {"%", "percent", "percent dv", "%dv"}
+            and not has_forms
+        ):
+            # Legacy protein-food labels sometimes expose calcium/iron only
+            # as percent Daily Value. That is a Nutrition Facts disclosure,
+            # not a measured supplement dose. Preserve it in the label ledger
+            # while keeping it out of active-ingredient dose math.
+            return True
         _SUPPLEMENT_INGREDIENT_CATEGORIES = {
             "vitamin",
             "mineral",

@@ -25,6 +25,55 @@ from constants import UNIT_CONVERSIONS_DB
 from unit_converter import UnitConverter
 
 
+def test_standalone_beta_carotene_mass_converts_to_vitamin_a_rae() -> None:
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Beta-Carotene",
+        amount=2250,
+        from_unit="mcg",
+        ingredient_name="Beta-Carotene",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(1125)
+    assert result.converted_unit == "mcg RAE"
+    assert result.conversion_factor == pytest.approx(0.5)
+
+
+def test_vitamin_a_declaration_with_beta_carotene_form_is_already_rae() -> None:
+    """A Vitamin A label total is RAE; its named source does not halve it again."""
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Beta-Carotene",
+        amount=1200,
+        from_unit="mcg",
+        ingredient_name="Vitamin A (as Beta-Carotene)",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(1200)
+    assert result.converted_unit == "mcg RAE"
+    assert result.conversion_factor == pytest.approx(1.0)
+
+
+@pytest.mark.parametrize("label_unit", ["U", "UI"])
+def test_vitamin_d_international_unit_aliases_are_scoped(label_unit: str) -> None:
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Vitamin D",
+        amount=2000,
+        from_unit=label_unit,
+        ingredient_name="Vitamin D3 (Cholecalciferol)",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(50)
+    assert result.converted_unit == "mcg"
+
+
 def test_bare_folate_dfe_preserves_unknown_form_lineage() -> None:
     converter = UnitConverter()
 

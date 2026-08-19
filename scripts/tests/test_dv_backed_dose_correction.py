@@ -313,6 +313,42 @@ def test_folate_total_and_folic_acid_child_emit_separate_intake_and_ul_roles() -
     assert child["per_day_max"] == pytest.approx(1360.0)
 
 
+def test_percent_only_panel_mineral_routes_to_nutrition_not_active() -> None:
+    """Legacy protein labels can expose only %DV for panel calcium/iron."""
+    raw = _raw_product(
+        [
+            {
+                "order": 1,
+                "name": "Calcium",
+                "category": "mineral",
+                "ingredientGroup": "Calcium",
+                "quantity": _quantity(6, "%"),
+            },
+            {
+                "order": 2,
+                "name": "Iron",
+                "category": "mineral",
+                "ingredientGroup": "Iron",
+                "quantity": _quantity(8, "%"),
+            },
+        ],
+        name="Whey Protein Powder",
+    )
+
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+
+    assert cleaned["activeIngredients"] == []
+    nutrition_rows = [
+        row
+        for row in cleaned["display_ingredients"]
+        if row.get("display_type") == "nutrition_fact"
+    ]
+    assert [(row["label_display_name"], row["exact_dose_text"]) for row in nutrition_rows] == [
+        ("Calcium", "6 %"),
+        ("Iron", "8 %"),
+    ]
+
+
 @pytest.mark.parametrize(
     "name,category,ingredient_group,amount,unit,percent_dv",
     [

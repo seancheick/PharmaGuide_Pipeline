@@ -260,12 +260,28 @@ class UnitConverter:
         canonical_unit = rule_data.get('canonical_unit', 'mcg')
         target_unit = to_unit or canonical_unit
 
+        # DSLD uses ``U`` and ``UI`` as label spellings of International Units
+        # for Vitamin D. Scope the aliases to Vitamin D so enzyme activity
+        # units (for example lysozyme ``U``) are never reinterpreted as IU.
+        if rule_id in {'vitamin_d2', 'vitamin_d3'} and from_unit_lower in {'u', 'ui'}:
+            from_unit_lower = 'iu'
+
         # DSLD occasionally preserves the FDA Vitamin A quantity but drops the
         # ``RAE`` qualifier from the unit.  That shorthand is safe to interpret
         # only after the form detector has positively established preformed
         # retinol/retinyl ester; never apply it to generic Vitamin A or
         # beta-carotene.
         if rule_id == 'vitamin_a_retinol' and from_unit_lower == 'mcg':
+            from_unit_lower = 'mcg rae'
+
+        # A row headed "Vitamin A" declares vitamin-A activity in RAE even
+        # when its source is beta-carotene. Only a standalone Beta-Carotene
+        # mass receives the 0.5 supplemental conversion factor.
+        if (
+            rule_id == 'vitamin_a_beta_carotene_supplement'
+            and from_unit_lower == 'mcg'
+            and re.match(r'^vitamin\s+a\b', ingredient_text, re.IGNORECASE)
+        ):
             from_unit_lower = 'mcg rae'
 
         # Get conversion factor
@@ -352,6 +368,18 @@ class UnitConverter:
         # Determine conversion key
         conversion_key = self._get_conversion_key(from_unit_lower, target_unit.lower())
         factor = conversions.get(conversion_key)
+
+        from_key = canonicalize_mass_unit(from_unit_lower).replace(' ', '_')
+        target_key = canonicalize_mass_unit(target_unit).replace(' ', '_')
+        if factor is None and from_key == target_key:
+            factor = 1.0
+        if (
+            factor is None
+            and rule_id == 'vitamin_a_beta_carotene_supplement'
+            and from_key == 'mcg'
+            and target_key == 'mcg_rae'
+        ):
+            factor = conversions.get('mcg_beta_carotene_to_mcg_rae')
 
         if factor is None:
             # Try mass conversion as fallback

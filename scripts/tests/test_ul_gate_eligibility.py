@@ -306,6 +306,206 @@ def test_nested_same_identity_amount_is_label_restatement_not_second_exposure(en
     assert flags[0]["ul_gate_eligible"] is True
 
 
+def test_vitamin_a_total_owns_adequacy_while_preformed_child_owns_ul(enricher):
+    """A mixed Vitamin A label is one intake total plus an UL-scoped breakdown."""
+    product = _mag([
+        {
+            "name": "Vitamin A",
+            "raw_source_text": "Vitamin A",
+            "standardName": "Vitamin A",
+            "canonical_id": "vitamin_a",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 1.05,
+            "unit": "mg",
+            "dailyValue": 117.0,
+            "isNestedIngredient": False,
+        },
+        {
+            "name": "Beta-Carotene",
+            "raw_source_text": "Beta-Carotene",
+            "standardName": "Beta-Carotene",
+            "canonical_id": "beta_carotene",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 450,
+            "unit": "mcg",
+            "dailyValue": None,
+            "isNestedIngredient": True,
+            "parentBlend": "Vitamin A",
+        },
+        {
+            "name": "Vitamin A Palmitate",
+            "raw_source_text": "Vitamin A Palmitate",
+            "standardName": "Vitamin A",
+            "canonical_id": "vitamin_a",
+            "canonical_source_db": "ingredient_quality_map",
+            "matched_form": "retinyl palmitate",
+            "quantity": 600,
+            "unit": "mcg",
+            "dailyValue": None,
+            "isNestedIngredient": True,
+            "parentBlend": "Vitamin A",
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    rows = result["analyzed_ingredients"]
+    parent = next(row for row in rows if row["ingredient"] == "Vitamin A")
+    beta = next(row for row in rows if row["ingredient"] == "Beta-Carotene")
+    retinyl = next(row for row in rows if row["ingredient"] == "Vitamin A Palmitate")
+
+    assert parent["dose_role"] == "declared_total"
+    assert parent["pct_rda"] == pytest.approx(1050 / 900 * 100)
+    assert parent["skip_ul_reason"] == "vitamin_a_components_own_ul"
+    assert parent["ul_assessment_status"] == "not_applicable"
+    assert beta["dose_role"] == "form_component"
+    assert beta["parent_label_key"] == parent["source_label_key"]
+    assert beta["skip_ul_reason"] == "form_component_of_declared_total"
+    assert retinyl["dose_role"] == "ul_scoped_component"
+    assert retinyl["parent_label_key"] == parent["source_label_key"]
+    assert retinyl["skip_ul_check"] is False
+    assert retinyl["per_day_max"] == pytest.approx(600)
+    assert result["safety_flags"] == []
+
+
+def test_mixed_vitamin_a_total_does_not_assume_all_preformed(enricher):
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": "Vitamin A",
+                "raw_source_text": "Vitamin A",
+                "standardName": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 15000,
+                "unit": "IU",
+                "dailyValue": 300,
+                "forms": [
+                    {"name": "Beta-Carotene"},
+                    {"name": "Retinyl Acetate"},
+                ],
+                "isNestedIngredient": False,
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    row = result["analyzed_ingredients"][0]
+    assert row["per_day_min"] == pytest.approx(4500)
+    assert row["pct_rda"] == pytest.approx(500)
+    assert row["skip_ul_reason"] == (
+        "mixed_vitamin_a_preformed_fraction_unknown"
+    )
+    assert row["ul_assessment_status"] == "indeterminate"
+    assert row["ul_for_default_profile"] is None
+    assert result["safety_flags"] == []
+
+
+def test_unidentified_vitamin_a_child_does_not_claim_ul_ownership(enricher):
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": "Vitamin A",
+                "raw_source_text": "Vitamin A",
+                "standardName": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 1000,
+                "unit": "mcg",
+                "dailyValue": 111,
+                "isNestedIngredient": False,
+            },
+            {
+                "name": "Vitamin A Source",
+                "raw_source_text": "Vitamin A Source",
+                "standardName": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 1000,
+                "unit": "mcg",
+                "dailyValue": None,
+                "isNestedIngredient": True,
+                "parentBlend": "Vitamin A",
+            },
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    parent = next(
+        row for row in result["analyzed_ingredients"]
+        if row["ingredient"] == "Vitamin A"
+    )
+    assert parent["skip_ul_reason"] == "unknown_vitamin_form"
+    assert parent["ul_assessment_status"] == "indeterminate"
+
+
+def test_standalone_beta_carotene_counts_for_adequacy_without_preformed_a_ul(enricher):
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": "Beta-Carotene",
+                "raw_source_text": "Beta-Carotene",
+                "standardName": "Beta-Carotene",
+                "canonical_id": "beta_carotene",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 2250,
+                "unit": "mcg",
+                "dailyValue": None,
+                "isNestedIngredient": False,
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    row = result["analyzed_ingredients"][0]
+    assert row["nutrient_group_id"] == "vitamin_a"
+    assert row["per_day_min"] == pytest.approx(1125)
+    assert row["pct_rda"] == pytest.approx(1125 / 900 * 100)
+    assert row["skip_ul_reason"] == "beta_carotene_no_established_ul"
+    assert row["ul_assessment_status"] == "not_applicable"
+    assert row["ul_for_default_profile"] is None
+    assert result["safety_flags"] == []
+
+
+@pytest.mark.parametrize(
+    ("unit", "expected_reason", "expected_status"),
+    [
+        ("NP", "amount_not_declared", "indeterminate"),
+        ("GDU", "not_ul_applicable", "not_applicable"),
+        ("FU", "not_ul_applicable", "not_applicable"),
+        ("U", "not_ul_applicable", "not_applicable"),
+    ],
+)
+def test_non_mass_label_states_do_not_masquerade_as_conversion_failures(
+    enricher, unit, expected_reason, expected_status
+):
+    canonical = "bromelain" if unit == "GDU" else "nattokinase" if unit == "FU" else "lysozyme"
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": canonical.title(),
+                "standardName": canonical.title(),
+                "canonical_id": canonical,
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 100,
+                "unit": unit,
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    row = result["analyzed_ingredients"][0]
+
+    assert row["skip_ul_reason"] == expected_reason
+    assert row["ul_assessment_status"] == expected_status
+
+
 def test_nested_daily_value_row_owns_exposure_over_larger_source_compound_mass(enricher):
     # Live DSLD 299037 represents Magtein source mass as a 1000 mg parent and
     # the delivered Magnesium amount as a nested 72 mg row carrying 17% DV.

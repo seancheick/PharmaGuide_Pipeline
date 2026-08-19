@@ -211,6 +211,31 @@ def test_natures_way_328117_boron_unit_correction_present(overrides):
     )
 
 
+@pytest.mark.parametrize(
+    ("dsld_id", "ingredient", "raw_unit", "corrected_unit"),
+    [
+        ("66380", "Niacin", "ng", "mg"),
+        ("46729", "Vitamin B6", "ng", "mg"),
+        ("69455", "Niacin", "Gram(s)", "mg"),
+        ("254204", "Biotin", "m.c.u.", "mcg"),
+        ("311874", "Vitamin B12", "mcg DFE", "mcg"),
+        ("308222", "Docosahexaenoic Acid", "ng", "mg"),
+    ],
+)
+def test_verified_source_unit_corrections_are_product_scoped(
+    overrides, dsld_id, ingredient, raw_unit, corrected_unit
+):
+    entry = (overrides.get("corrections") or {}).get(dsld_id)
+
+    assert entry, f"correction for DSLD {dsld_id} is missing"
+    assert entry["raw_ingredient_text"] == ingredient
+    assert entry["corrected_ingredient_text"] == ingredient
+    assert entry["raw_quantity_unit"] == raw_unit
+    assert entry["corrected_quantity_unit"] == corrected_unit
+    assert "quantity.unit" in entry["correction_fields"]
+    assert f"https://api.ods.od.nih.gov/dsld/s3/pdf/{dsld_id}.pdf" in entry["sources"]
+
+
 def test_cognimag_299037_crossed_hierarchy_names_are_corrected(overrides):
     """The API crosses the printed nutrient and source-material row names."""
     entry = (overrides.get("corrections") or {}).get("299037")

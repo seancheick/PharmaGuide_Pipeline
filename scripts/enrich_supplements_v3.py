@@ -18478,6 +18478,104 @@ class SupplementEnricherV3:
                 declared["component_source_label_keys"] = component_keys
         return totals
 
+    def _declared_vitamin_a_components(
+        self, active_ingredients: List[Dict[str, Any]]
+    ) -> Dict[str, Dict[str, Any]]:
+        """Map reconciled Vitamin A breakdown rows to their declared total.
+
+        Modern labels may print one Vitamin A RAE total followed by nested
+        beta-carotene and retinyl amounts whose numeric sum equals that total.
+        Those children describe the total; they are not extra intake. The
+        preformed child alone remains eligible for the preformed-Vitamin-A UL.
+        """
+        parents: List[Dict[str, Any]] = []
+        for row in active_ingredients:
+            if row.get("isNestedIngredient") or row.get("parentBlend"):
+                continue
+            label = self._normalize_text(
+                row.get("raw_source_text") or row.get("name") or ""
+            )
+            if label != "vitamin a":
+                continue
+            try:
+                quantity = float(row.get("quantity") or 0)
+            except (TypeError, ValueError):
+                continue
+            unit = _rda_mass_unit_key(row.get("unit"))
+            if quantity <= 0 or unit not in {"mcg", "mg"}:
+                continue
+            parents.append({
+                "label": label,
+                "source_label_key": self._rda_source_label_key(row),
+                "quantity_mcg_rae": quantity * (1000.0 if unit == "mg" else 1.0),
+            })
+
+        links: Dict[str, Dict[str, Any]] = {}
+        for parent in parents:
+            children = []
+            total_mcg = 0.0
+            for row in active_ingredients:
+                if (
+                    not row.get("isNestedIngredient")
+                    or self._normalize_text(row.get("parentBlend") or "")
+                    != parent["label"]
+                ):
+                    continue
+                try:
+                    quantity = float(row.get("quantity") or 0)
+                except (TypeError, ValueError):
+                    continue
+                unit = _rda_mass_unit_key(row.get("unit"))
+                if quantity <= 0 or unit not in {"mcg", "mg"}:
+                    continue
+                total_mcg += quantity * (1000.0 if unit == "mg" else 1.0)
+                children.append(row)
+
+            tolerance = max(0.5, float(parent["quantity_mcg_rae"]) * 0.01)
+            if not children or abs(total_mcg - float(parent["quantity_mcg_rae"])) > tolerance:
+                continue
+
+            classified_children = []
+            for child in children:
+                identity_text = " ".join(
+                    str(child.get(field) or "")
+                    for field in (
+                        "canonical_id",
+                        "name",
+                        "raw_source_text",
+                        "matched_form",
+                    )
+                )
+                vitamin_a_rule, _ = self.unit_converter._detect_vitamin_a_form(
+                    identity_text.lower()
+                )
+                if vitamin_a_rule not in {
+                    "vitamin_a_retinol",
+                    "vitamin_a_beta_carotene_supplement",
+                }:
+                    classified_children = []
+                    break
+                classified_children.append((child, vitamin_a_rule))
+            if not classified_children:
+                continue
+
+            links[parent["source_label_key"]] = {
+                "parent_label_key": None,
+                "dose_role": "declared_total",
+                "ul_owned_by_components": True,
+            }
+            for child, vitamin_a_rule in classified_children:
+                role = (
+                    "ul_scoped_component"
+                    if vitamin_a_rule == "vitamin_a_retinol"
+                    else "form_component"
+                )
+                links[self._rda_source_label_key(child)] = {
+                    "parent_label_key": parent["source_label_key"],
+                    "dose_role": role,
+                }
+        return links
+
     def _nested_daily_value_nutrient_owners(
         self, active_ingredients: List[Dict[str, Any]]
     ) -> Dict[str, str]:
@@ -18575,15 +18673,21 @@ class SupplementEnricherV3:
         conversion_evidence: Dict[str, Any],
         declared_folate_totals: List[Dict[str, Any]],
         declared_same_identity_totals: List[Dict[str, Any]],
+        declared_vitamin_a_components: Dict[str, Dict[str, Any]],
         nested_daily_value_owners: Dict[str, str],
-    ) -> Dict[str, Optional[str]]:
+    ) -> Dict[str, Any]:
         """Classify an emitted RDA/UL row as a total or label sub-component."""
         source_label_key = self._rda_source_label_key(ingredient)
-        lineage: Dict[str, Optional[str]] = {
+        lineage: Dict[str, Any] = {
             "source_label_key": source_label_key,
             "dose_role": "declared_total",
             "parent_label_key": None,
         }
+
+        vitamin_a_component = declared_vitamin_a_components.get(source_label_key)
+        if vitamin_a_component:
+            lineage.update(vitamin_a_component)
+            return lineage
 
         # A nested same-identity row with an explicit Daily Value is the
         # delivered nutrient declaration. The larger source-material parent
@@ -18767,6 +18871,9 @@ class SupplementEnricherV3:
         declared_same_identity_totals = self._declared_same_identity_totals(
             active_ingredients
         )
+        declared_vitamin_a_components = self._declared_vitamin_a_components(
+            active_ingredients
+        )
         nested_daily_value_owners = self._nested_daily_value_nutrient_owners(
             active_ingredients
         )
@@ -18818,6 +18925,7 @@ class SupplementEnricherV3:
                     ).strip()
                     nutrient_group_id = _nutrient_group_id(resolved_canonical_id)
                     nutrient_group_name = _nutrient_group_name(nutrient_group_id)
+                    reference_nutrient_name = nutrient_group_name or std_name
                     ul_exposure = self._ul_exposure_basis(
                         ingredient,
                         canonical_id=resolved_canonical_id,
@@ -18861,11 +18969,32 @@ class SupplementEnricherV3:
                     )
 
                     # Step 1: Convert units with form detection
+                    disclosed_forms = " ".join(
+                        str(form.get("name") or "")
+                        for form in (ingredient.get("forms") or [])
+                        if isinstance(form, dict)
+                    )
+                    disclosed_vitamin_a_rules = {
+                        self.unit_converter._detect_vitamin_a_form(
+                            str(form.get("name") or "").lower()
+                        )[0]
+                        for form in (ingredient.get("forms") or [])
+                        if isinstance(form, dict) and form.get("name")
+                    }
+                    has_mixed_vitamin_a_forms = bool(
+                        "vitamin_a_retinol" in disclosed_vitamin_a_rules
+                        and "vitamin_a_beta_carotene_supplement"
+                        in disclosed_vitamin_a_rules
+                    )
                     conversion = self.unit_converter.convert_nutrient(
                         nutrient=std_name,
                         amount=quantity_float,
                         from_unit=unit,
-                        ingredient_name=form_hint_name
+                        ingredient_name=" ".join(
+                            value
+                            for value in (form_hint_name, disclosed_forms)
+                            if value
+                        ),
                     )
 
                     conv_evidence = conversion.to_dict()
@@ -18911,7 +19040,7 @@ class SupplementEnricherV3:
                         conversion.converted_unit is None
                     )
                     _nutrient_record = (
-                        self.rda_calculator._find_nutrient(std_name) or {}
+                        self.rda_calculator._find_nutrient(reference_nutrient_name) or {}
                     )
                     if conversion_failed:
                         unit_key = _rda_mass_unit_key(unit)
@@ -18935,8 +19064,24 @@ class SupplementEnricherV3:
                         conversion_evidence=conv_evidence,
                         declared_folate_totals=declared_folate_totals,
                         declared_same_identity_totals=declared_same_identity_totals,
+                        declared_vitamin_a_components=declared_vitamin_a_components,
                         nested_daily_value_owners=nested_daily_value_owners,
                     )
+                    if (
+                        conversion_failed
+                        and dose_lineage["dose_role"] == "form_component"
+                    ):
+                        # This is a source-label breakdown that never owns a
+                        # second dose comparison. Its conversion is therefore
+                        # not required, and must not masquerade as a release
+                        # defect.
+                        conversion_failed = False
+                        if conv_evidence.get("error"):
+                            conv_evidence["original_error"] = conv_evidence.pop("error")
+                        conv_evidence["confidence"] = "not_applicable"
+                        conv_evidence["nonfatal_reason"] = (
+                            "form_component_of_declared_total"
+                        )
                     conv_evidence.update(dose_lineage)
                     skip_ul_check = False
                     skip_ul_reason = None
@@ -18949,6 +19094,7 @@ class SupplementEnricherV3:
                         skip_ul_reason = "form_component_of_declared_total"
                     elif (
                         ingredient.get('is_compound_duplicate')
+                        and dose_lineage["dose_role"] != "ul_scoped_component"
                         and dose_lineage["source_label_key"]
                         not in nested_daily_value_owner_keys
                     ):
@@ -18968,6 +19114,34 @@ class SupplementEnricherV3:
                             if _explicit_non_folic_folate
                             else "unknown_folate_form_lineage"
                         )
+                    elif rule_id == "vitamin_a_beta_carotene_supplement":
+                        # Supplemental beta-carotene contributes vitamin A
+                        # activity after conversion to mcg RAE, but the adult
+                        # Vitamin A UL applies only to preformed vitamin A.
+                        # Keep the adequacy contribution while explicitly
+                        # excluding this exposure from the UL assessment.
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = "beta_carotene_no_established_ul"
+                    elif dose_lineage.get("ul_owned_by_components"):
+                        # The declared Vitamin A total owns adequacy while its
+                        # reconciled child rows fully own form-specific UL
+                        # assessment. Checking the total again would treat
+                        # beta-carotene as preformed vitamin A.
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = "vitamin_a_components_own_ul"
+                    elif has_mixed_vitamin_a_forms:
+                        # A mixed retinyl + beta-carotene total is valid for
+                        # vitamin-A adequacy, but the total cannot be compared
+                        # with the preformed-A UL unless the retinyl fraction
+                        # is explicitly quantified. Never assume the full
+                        # declared total is preformed vitamin A.
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = (
+                            "mixed_vitamin_a_preformed_fraction_unknown"
+                        )
                     elif unknown_form:
                         skip_ul_check = True
                         skip_ul_reason = "unknown_vitamin_form"
@@ -18980,7 +19154,27 @@ class SupplementEnricherV3:
                         ul_only_skip = not conversion_failed
                     elif conversion_failed:
                         skip_ul_check = True
-                        skip_ul_reason = "conversion_failed"
+                        raw_unit_key = self._normalize_text(unit).replace(".", "")
+                        raw_canonical_key = self._normalize_text(
+                            resolved_canonical_id or std_name
+                        )
+                        if raw_unit_key == "np":
+                            skip_ul_reason = "amount_not_declared"
+                        elif (
+                            raw_unit_key in {
+                                "gdu", "fccpu", "pu", "fu", "mcu",
+                            }
+                            or raw_canonical_key in {
+                                "bromelain", "nattokinase", "lysozyme",
+                                "superoxide dismutase", "superoxide_dismutase",
+                            }
+                            and raw_unit_key in {"u", "iu"}
+                        ):
+                            skip_ul_reason = "not_ul_applicable"
+                        elif raw_unit_key in {"%", "percent", "percent dv", "%dv"}:
+                            skip_ul_reason = "unit_unrecognized"
+                        else:
+                            skip_ul_reason = "conversion_failed"
 
                     per_day_min = converted_amount * servings_min
                     per_day_max = converted_amount * servings_max
@@ -19004,14 +19198,14 @@ class SupplementEnricherV3:
                                 * 100.0
                             )
                     adequacy = self.rda_calculator.compute_nutrient_adequacy(
-                        nutrient=std_name,
+                        nutrient=reference_nutrient_name,
                         amount=per_day_min or converted_amount,
                         unit=converted_unit,
                         age_group=_RDA_REFERENCE_PROFILE["age_range"],
                         sex="adult_neutral",
                     )
                     safety = self.rda_calculator.compute_nutrient_adequacy(
-                        nutrient=std_name,
+                        nutrient=reference_nutrient_name,
                         amount=amount_for_ul,
                         unit=converted_unit,
                         age_group=_RDA_REFERENCE_PROFILE["age_range"],
@@ -19047,6 +19241,8 @@ class SupplementEnricherV3:
                         is_indeterminate_ul = (
                             is_indeterminate_folate
                             or skip_ul_reason == "unknown_vitamin_form"
+                            or skip_ul_reason
+                            == "mixed_vitamin_a_preformed_fraction_unknown"
                         )
                         potential_pct_ul = (
                             folate_ul_screening.get("potential_pct_ul")
@@ -19127,6 +19323,15 @@ class SupplementEnricherV3:
                                 "review_required": True,
                             })
                     elif skip_ul_check:
+                        ul_assessment_status = (
+                            "not_applicable"
+                            if skip_ul_reason in {
+                                "form_component_of_declared_total",
+                                "compound_duplicate_row",
+                                "not_ul_applicable",
+                            }
+                            else "indeterminate"
+                        )
                         adequacy_dict.update({
                             "rda_ai": None,
                             "rda_ai_source": "unknown",
@@ -19144,6 +19349,7 @@ class SupplementEnricherV3:
                         })
                         adequacy_dict["skip_ul_check"] = True
                         adequacy_dict["skip_ul_reason"] = skip_ul_reason
+                        adequacy_dict["ul_assessment_status"] = ul_assessment_status
                         if skip_ul_reason == "unknown_vitamin_form":
                             adequacy_dict["form_confidence"] = "LOW"
                     else:
@@ -19258,6 +19464,10 @@ class SupplementEnricherV3:
                         "servings_per_day_max": servings_max,
                         "skip_ul_check": skip_ul_check,
                         "skip_ul_reason": skip_ul_reason,
+                        "ul_assessment_status": (
+                            adequacy_dict.get("ul_assessment_status")
+                            or ("evaluated" if not skip_ul_check else "indeterminate")
+                        ),
                         "nutrient_unit": adequacy.unit,
                         # Sprint E1.5.X-4: always populated from the RDA file
                         # — never None when the nutrient exists in the table.

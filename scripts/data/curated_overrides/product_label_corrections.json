@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity-unit changes require exact raw_quantity_unit and corrected_quantity_unit values and must be supported by the official label image.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-08-03",
-    "total_entries": 6,
+    "last_updated": "2026-08-19",
+    "total_entries": 12,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -135,6 +135,126 @@
       "review_date": "2026-07-13",
       "scope": "dsld_id_only",
       "provenance_tag": "source_label_omission_correction"
+    },
+    "66380": {
+      "brand": "Nature's Way",
+      "product_name": "Multi Vitamin",
+      "raw_ingredient_text": "Niacin",
+      "corrected_ingredient_text": "Niacin",
+      "raw_quantity_unit": "ng",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Niacin as 37 ng at 185% Daily Value. The official DSLD label image prints the same 37 amount as mg; the API unit is a transcription defect. The correction changes only the unit and preserves every serving-size variant and the original source value for audit.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/66380",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/66380.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-19",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "46729": {
+      "brand": "Nature's Way",
+      "product_name": "Alive! Once Daily Men's 50+",
+      "raw_ingredient_text": "Vitamin B6",
+      "corrected_ingredient_text": "Vitamin B6",
+      "raw_quantity_unit": "ng",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Vitamin B6 as 40 ng at 2000% Daily Value. The official DSLD label image prints Vitamin B6 (as pyridoxine HCl) at 40 mg. The correction is product-scoped and changes only the mistranscribed unit.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/46729",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/46729.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-19",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "69455": {
+      "brand": "GNC Pro Performance AMP",
+      "product_name": "Amplified Wheybolic Extreme 60 Ripped Strawberries & Cream",
+      "raw_ingredient_text": "Niacin",
+      "corrected_ingredient_text": "Niacin",
+      "raw_quantity_unit": "Gram(s)",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API assigns Gram(s) to all three Niacin serving variants (13.3 at 67% DV, 20 at 100% DV, and 6.6 at 33% DV). The official DSLD label image and the coherent label percentages identify those quantities as milligrams. The correction updates the unit on every matching variant without changing its number.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/69455",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/69455.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-19",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "254204": {
+      "brand": "Nature's Bounty",
+      "product_name": "Women's Multi",
+      "raw_ingredient_text": "Biotin",
+      "corrected_ingredient_text": "Biotin",
+      "raw_quantity_unit": "m.c.u.",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Biotin as 1500 m.c.u. at 5000% Daily Value. The official DSLD label image prints 1,500 mcg of biotin. The activity-like API token is a transcription defect, so this product-scoped correction restores the printed mass unit.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/254204",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/254204.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-19",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "311874": {
+      "brand": "Nutricost Women",
+      "product_name": "PRE Fruit Punch",
+      "raw_ingredient_text": "Vitamin B12",
+      "corrected_ingredient_text": "Vitamin B12",
+      "raw_quantity_unit": "mcg DFE",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Vitamin B12 as 125 mcg DFE at 5210% Daily Value. DFE is a folate-only equivalence and the official DSLD label image prints Vitamin B12 as 125 mcg. This correction removes only the invalid DFE qualifier.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/311874",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/311874.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-19",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "308222": {
+      "brand": "Nature's Bounty Optimal Solutions",
+      "product_name": "Healthy Mom Prenatal Multi",
+      "raw_ingredient_text": "Docosahexaenoic Acid",
+      "corrected_ingredient_text": "Docosahexaenoic Acid",
+      "raw_quantity_unit": "ng",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports the prenatal's algal DHA as 200 ng. The official DSLD label image prints Docosahexaenoic Acid (DHA) at 200 mg from DHA-rich algal oil. This product-scoped correction restores the printed unit and leaves the quantity and identity unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/308222",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/308222.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-19",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
     }
   }
 }
