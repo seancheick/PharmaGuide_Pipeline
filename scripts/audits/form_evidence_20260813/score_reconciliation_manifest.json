@@ -1,0 +1,3841 @@
+{
+  "schema_version": "1.0.0",
+  "review_date": "2026-08-18",
+  "supersedes": "migration_manifest.json score recalibrations only; verified evidence additions remain preserved",
+  "policy": "Restore pre-migration curated scores unless affirmative evidence supports a correction. Missing attached evidence is not evidence of inferior form quality. Legacy unsupported Excellent scores are frozen in iqm_excellent_evidence_backlog.json; new or increased Excellent scores require approved structured evidence.",
+  "summary": {
+    "total_rows": 182,
+    "scores_restored": 161,
+    "affirmative_corrections_preserved": 21,
+    "restore_legacy": 158,
+    "taxonomy_fix": 7,
+    "keep_correction": 17,
+    "source_verified": 5,
+    "legacy_curated_unvalidated": 156,
+    "clinician_reviewed_correction": 3,
+    "audit_locked_correction": 18
+  },
+  "changes": [
+    {
+      "ingredient_key": "molybdenum",
+      "form_key": "sodium molybdate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "e18077774bf0c5845dd8ef2453d1891fd3f145dd62f1126fb7d26097adab9d74",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "potassium",
+      "form_key": "potassium chloride",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "620ab909c5a9a246786b35672441668bcc11880ea0193bffe287c1093338776a",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "potassium",
+      "form_key": "potassium citrate",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "7689f1b88cb83c743794e61c08083f1789298eb80395ba982f177e7cdc794d83",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "l_tyrosine",
+      "form_key": "l-tyrosine powder",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "98c488a0a3c4df09175f68c9aab66632c68967605565dadb5f2497b8a2aaccda",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "zinc",
+      "form_key": "zinc amino acid chelate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "KEEP_CORRECTION",
+      "rationale": "Preserve the clinician-reviewed mineral ladder because a generic amino-acid-chelate label does not identify an exact form with comparative human absorption evidence.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "clinician_reviewed_correction",
+      "expected_form_sha256": "836dc13daf84e324a1f8d0b9af23a017e250d416da163213280d2e0164e69c28",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "huperzine_a",
+      "form_key": "huperzine a (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "420c8450f08a36d899d024363420d3452f485c5692d90f81d84772342c7f1310",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "molybdenum",
+      "form_key": "molybdenum glycinate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "KEEP_CORRECTION",
+      "rationale": "NIH-class mineral evidence does not establish a form-specific human absorption advantage for molybdenum glycinate; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "235036e8fbb6c863c57910a47939c038fc33fac53ec14a0bfba17ef28f4ec032",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "paba",
+      "form_key": "paba powder",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "4e41bf3d2e52ad9044a964ca17b21bcaef6bd47cb149b7354f97f531e0bcda00",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "l_lysine",
+      "form_key": "l-lysine hcl",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "85e8f5a1dfa4be71efce92e27b9eda96a5e66554a7e7c430a5aab21f1d5db20b",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "selenium",
+      "form_key": "selenium-methyl L-selenocysteine",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "c7a9be0c32b0a52ce7caf0c3421eef3d5c3171d234663a22a6843233fd85d2c1",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "vitamin_c",
+      "form_key": "ester-C (calcium ascorbate)",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "093b883227836e9001d46b6ad624406a3a44233bc9d70119d30246cda0d44eca",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "inulin",
+      "form_key": "inulin (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "d499391f592754c782f5003e6cef4ecb89c52035fb1c5be4988366e36dcc9c66",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "vitamin_c",
+      "form_key": "sodium ascorbate",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "a31e4e90277ed67773b6ad73c549f8e2d187b8ddfa6fa55194885fcf89ca999c",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "l_histidine",
+      "form_key": "l-histidine standard",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "3718cf3605b7ed09ca460fc32056d24bf5f515666b25e5d5d3eb223d7ca066cc",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "l_threonine",
+      "form_key": "l-threonine powder",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "85841082cd936f2459e3a34c8076d2272878c3e68eaa3da2e4577f0bef0ce890",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "calcium",
+      "form_key": "calcium citrate malate",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "A direct human absorption comparison evaluated calcium citrate-malate against comparator calcium sources and supports retention of its existing Excellent form tier.",
+      "citation_ids": [
+        "PMID:3124946"
+      ],
+      "taxonomy_change": "",
+      "provenance_status": "source_verified",
+      "expected_form_sha256": "cc07cb485ece42a62f46eca5026c8487ba4bd70f80ce2300ede9f85b086de3be",
+      "set": {
+        "bio_score": 14,
+        "score": 14,
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A direct human absorption comparison evaluated calcium citrate-malate against comparator calcium sources and supports retention of its existing Excellent form tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "3124946",
+              "doi": "10.1007/BF02556676",
+              "title": "Calcium absorption from a new calcium delivery system (CCM).",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/3124946/",
+              "published_date": "1987-12-01",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_calcium_absorption"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "l_proline",
+      "form_key": "l-proline powder",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "4fc68af5798d8175a915623ed62062cb67f9425db303425b7eca9483f6e68a4e",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "krill_oil",
+      "form_key": "standard krill oil",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "e106581afd482b9840cc9d051df6a0a30af4c2a83e74188aa53718cdf51ca69a",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "molybdenum",
+      "form_key": "molybdenum aspartate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "dbbe2f7ac83cb266c30e7b876c4792b3b901107ce5faab3a1f0c27875447972d",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "5_htp",
+      "form_key": "5-htp (unspecified)",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "e2c8e26d6cd97efce04b191b7e3cd1567f8996cb5d3f14bf23bbbe81994ca9b7",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "bacillus_coagulans",
+      "form_key": "bacillus coagulans (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 11,
+      "final_total_score": 14,
+      "action": "KEEP_CORRECTION",
+      "rationale": "A species-only probiotic identity does not establish the survivability or clinical evidence of a named strain; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "5b4a6dac1f2c5cce2c00a4c3b78bb0c8afe1c9bbe28933739bb73c056da34954",
+      "set": {
+        "bio_score": 11,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "calcium",
+      "form_key": "calcium malate",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "2167784852c0a1655d858492f42d66792f2e0310e89fcd11ef84981d418392f2",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "calcium",
+      "form_key": "calcium amino acid chelate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "60cbd177a3400d04f7307397b2e4d6498dc23ddb62e4454e1114414a52cea40d",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "calcium",
+      "form_key": "calcium bis-glycinate",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "881ee46d426feeadc4df8efcce10c550d793d6b258fa450c7c23bdebe009b842",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus la-14",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "53187762e41896b5f81bea79928336a3cf319df222cfe8b554bf605a71ae4df3",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "potassium",
+      "form_key": "potassium gluconate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "1ffdf6506ebcc0c3300b798cdcd066711d6774cf8e8bbdd446fea01ac0016a57",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "l_arginine",
+      "form_key": "l-arginine hcl",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "0c459619c2bab00d3478812f62ba47bee5215bd9202483fdc5399fa00ef8de61",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "vitamin_e",
+      "form_key": "mixed tocopherols",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "3de9952c4201d870841617df15f3d4e99d6bf2f5dfa01c3db057b3f05243c804",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "psyllium",
+      "form_key": "psyllium (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "12d2f44d7e1dd36af7ea78f53864ca40b5d282c4d4242b2e466650f51f3d02ff",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "rosemary",
+      "form_key": "rosemary (unspecified)",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "6f23f089717c788dbcd002d7f4484d504225a0b397f7ecb891ca90c95a03667e",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "saccharomyces_boulardii",
+      "form_key": "saccharomyces boulardii (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 11,
+      "final_total_score": 14,
+      "action": "KEEP_CORRECTION",
+      "rationale": "A species-only probiotic identity does not establish the survivability or clinical evidence of a named strain; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "edc98775fe13eee3a02cc36d080901aa37ff5fda12ad90c5cea6fab71cae5124",
+      "set": {
+        "bio_score": 11,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "boron",
+      "form_key": "calcium fructoborate",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "00f93730bb25d469a4af0c2e82b5383b7f5cfa8f83525b1b02b99031ce4fa17e",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "l_lysine",
+      "form_key": "l-lysine base",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "1d762927534e12763986668f679645c055d2dc3ebf24af32c3f80b6b839edad3",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "maca",
+      "form_key": "maca (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "aa1322670bad0d750de454df402e812096b377976eabb0fa720df7e3e3456c48",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "holy_basil",
+      "form_key": "holy basil (unspecified)",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "13f2118244359720c2004b8756bde2d2497f210505f140b3bc220ea75ac32cf9",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "bacillus_subtilis",
+      "form_key": "bacillus subtilis (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 11,
+      "final_total_score": 14,
+      "action": "KEEP_CORRECTION",
+      "rationale": "A species-only probiotic identity does not establish the survivability or clinical evidence of a named strain; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "19968069f02d416e6ba552595a88e3b82ee30511597bdea11fd6b10359387e8b",
+      "set": {
+        "bio_score": 11,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "red_wine_extract",
+      "form_key": "red wine extract (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "22c3545571efe5128897aef9224ee8c88535143128a7d62a240c6f8833c77bff",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "l_glycine",
+      "form_key": "l-glycine powder",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "54118e6d159ac684d24f10db811a839cccf2cd222b6f1c079a61ccd9d3cac14f",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "mct_oil",
+      "form_key": "mct oil c8/c10",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "a3f8920d38bbeee5c16f1d9e0d380c42070a40ecb2a6a4727e4528c2509943e5",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "vitamin_d",
+      "form_key": "vitamin D3 from lichen",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "TAXONOMY_FIX",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "Treat lichen as source provenance for cholecalciferol, not as a distinct vitamin D molecule or an automatic quality premium.",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "e18d46d99bf63554c4408c79039972dbd87bff118618f9b1b7e3a6e87488e1e3",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "mct_oil",
+      "form_key": "c10 mct oil (capric acid)",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "59db24d14b5608b8ac43fbde282318cb19c2851d08f2a8df2423766a07b57e6e",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "vitamin_c",
+      "form_key": "liposomal vitamin C",
+      "pre_migration_score": 15,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 15,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "f438ef3c53c87840d10a1de626f11e90eaecfb7a2a7365637d6a18253a1b106c",
+      "set": {
+        "bio_score": 15,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "selenium",
+      "form_key": "selenium glycinate",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "cb8a3088cf291c373d23902a7ad347f7fd8e94ac29a1e7b33f064470ccd814ef",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "pine_bark_extract",
+      "form_key": "pine bark extract (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "c0607a906c9e429e72c49a23d64cce0c5b9981cddead194b77be2ba0c8620102",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "cla",
+      "form_key": "clarinol",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "c8baa3d02a3b15df86574a6399d5d40ee5781705fccf305f9f4920c0a6a9b352",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "nicotinamide_riboside",
+      "form_key": "nicotinamide riboside (unspecified)",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "6e78374a74b0a144fa195e0b84c3b3cc03003d42a299c3f48dce40beeb63c711",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "vitamin_c",
+      "form_key": "potassium ascorbate",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "0f65f3859561d15e503e805bd5afa01bbe92521d5b671caef9445a040332ef95",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "alpha_amylase",
+      "form_key": "alpha-amylase enzyme",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "38b9b72e0b4ba8bbb286cd18b4c8ec5e1593f4300bb508c90ba04a63610e0a34",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_bifidum",
+      "form_key": "bifidobacterium bifidum (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "0845b2e8840de25bf26a2032363a3f36fbe0e538ed21da64cf25c44f66901111",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_longum",
+      "form_key": "bifidobacterium longum (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "1daca36350efbf2d3e8980888d40cf435672d41b6f303de34c7fde9cfe5e2c66",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "phosphatidylserine",
+      "form_key": "sunflower phosphatidylserine",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "a14bf996af6533e68716a4a7579078d4cb59aff8f837718a2de98d993dd6f558",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_longum",
+      "form_key": "bifidobacterium longum 35624",
+      "pre_migration_score": 15,
+      "pre_migration_total_score": 18,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 15,
+      "final_total_score": 18,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "55c9b73d82e7dbd8fce9f0eb5692b56b777a210c0397e9694ee8236cc672ce40",
+      "set": {
+        "bio_score": 15,
+        "score": 18
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_longum",
+      "form_key": "bifidobacterium longum bb536",
+      "pre_migration_score": 15,
+      "pre_migration_total_score": 18,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 15,
+      "final_total_score": 18,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "26d4e35c90071ea6c78e6364c8a16be85118c411ca4bcbe8bddb66df34a02b04",
+      "set": {
+        "bio_score": 15,
+        "score": 18
+      }
+    },
+    {
+      "ingredient_key": "branched_chain_amino_acids",
+      "form_key": "bcaa 2:1:1",
+      "pre_migration_score": 15,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 15,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "9bfd14c736d5b6c28bed5cee86d05372aaae2e4faeccf90f77f51907687bd33e",
+      "set": {
+        "bio_score": 15,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "branched_chain_amino_acids",
+      "form_key": "bcaa peptides",
+      "pre_migration_score": 15,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 15,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "3cc1be76c2c4119de68e5222ca8023806bdae71587a3e74b2451079dab746d0b",
+      "set": {
+        "bio_score": 15,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "branched_chain_amino_acids",
+      "form_key": "instantized bcaas",
+      "pre_migration_score": 15,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 15,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "208f9e3d7093c31fed6a0898c94baa10cb224763ba6ce1359e05c84edbe7e55e",
+      "set": {
+        "bio_score": 15,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus ncfm",
+      "pre_migration_score": 15,
+      "pre_migration_total_score": 18,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 15,
+      "final_total_score": 18,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "7a6c18a49eef4d75dba8015313ed658dc7cba32214be0c232319409c80ccc030",
+      "set": {
+        "bio_score": 15,
+        "score": 18
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_plantarum",
+      "form_key": "lactobacillus plantarum lp299v",
+      "pre_migration_score": 15,
+      "pre_migration_total_score": 18,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 15,
+      "final_total_score": 18,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "60dffa98378c251d4b77bf0bed09fdb4b7bdf1101ea51033b550bc97364922eb",
+      "set": {
+        "bio_score": 15,
+        "score": 18
+      }
+    },
+    {
+      "ingredient_key": "manuka_honey",
+      "form_key": "umf 15+ / mgo 514+",
+      "pre_migration_score": 15,
+      "pre_migration_total_score": 18,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 15,
+      "final_total_score": 18,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "3f9d232ec62186362db87f1ab26b82fe4311860dd96cf33fd5390adb7e9ec6bb",
+      "set": {
+        "bio_score": 15,
+        "score": 18
+      }
+    },
+    {
+      "ingredient_key": "mct_oil",
+      "form_key": "c8 mct oil (pure caprylic)",
+      "pre_migration_score": 15,
+      "pre_migration_total_score": 18,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 15,
+      "final_total_score": 18,
+      "action": "RESTORE_LEGACY",
+      "rationale": "A human crossover study isolated tricaprylin and found a greater plasma ketone response than coconut oil and the tested MCT comparators, supporting the existing top-tier position for pure C8.",
+      "citation_ids": [
+        "PMID:29955698"
+      ],
+      "taxonomy_change": "",
+      "provenance_status": "source_verified",
+      "expected_form_sha256": "97896b62da6abbcf3cb9e498e6bfe46401d5ae2157f2684f69bd35f1958006ae",
+      "set": {
+        "bio_score": 15,
+        "score": 18,
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "form_quality_confidence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A human crossover study isolated tricaprylin and found a greater plasma ketone response than coconut oil and the tested MCT comparators, supporting the existing top-tier position for pure C8.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "29955698",
+              "doi": "10.3945/cdn.116.000257",
+              "title": "Tricaprylin Alone Increases Plasma Ketone Response More Than Coconut Oil or Other Medium-Chain Triglycerides: An Acute Crossover Study in Healthy Adults.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/29955698/",
+              "published_date": "2017-04-01",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_c8_ketone_response"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "bacillus_coagulans",
+      "form_key": "bacillus coagulans mtcc 5856",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "0c4c554d74cb212f1a7527ccce5150121661433dd5ede713a5332f79c7e3b633",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "bacillus_subtilis",
+      "form_key": "bacillus subtilis de111",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 11,
+      "final_total_score": 14,
+      "action": "KEEP_CORRECTION",
+      "rationale": "The reviewed DE111 citation does not establish the premium survivability/form-quality claim required for an Excellent tier; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "b4597f35873e62f4b814bb760024c23234e20ef04fc33534eaf702f71dbc6b7e",
+      "set": {
+        "bio_score": 11,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_breve",
+      "form_key": "bifidobacterium breve m-16v",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "ded4ebf807883ab91922dbd42e7151b6d2c4e777319ba28c0949d79857e0d3f2",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "black_seed_oil",
+      "form_key": "thymoquinone standardized",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "f2570e9031cb7bece4fe66eabeeeb40876cd4f18f4440296f625e7629c05550c",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "borage_seed_oil",
+      "form_key": "borage seed oil (unspecified)",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "6c48ea84517dcfee4e01999611ee02c43f30f6159768cc598e43728598a60401",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "branched_chain_amino_acids",
+      "form_key": "bcaa 4:1:1",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "560032218bc176d7bc17ec6ec4bb790b5893e42b4e7741767a16ba5180520588",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "calamari_oil",
+      "form_key": "calamari oil phospholipid",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "b959fa0bd459d89ffa54159410b9f73865a75aa26fb11c6edc2b4751c1979561",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "citrus_bergamot",
+      "form_key": "bergamot bpf",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "d3ef4bc249587b0caefa25cd4df25af5cd402c8f411c5bb4264ae507d4649722",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "cod_liver_oil",
+      "form_key": "fermented",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "bf894106613985d075c533b23cea5e6f483a182b56a89949bc502e0c92e8cb17",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "coenzymated_complex",
+      "form_key": "coenzymated",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "c70fd59ee4c737b5014265a654ee1da446a6a4113ea5d116009f629f21786170",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "coenzymated_complex",
+      "form_key": "coenzymated complex (unspecified)",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "b4a119e4b995768e740dc64287b20aff696570f35212255036b64709edefa6f8",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "fish_oil",
+      "form_key": "triglyceride (rTG) form",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "A controlled human comparison found higher relative EPA and DHA bioavailability for re-esterified triglycerides than the natural triglyceride and ethyl-ester comparators, supporting the existing Excellent tier.",
+      "citation_ids": [
+        "PMID:20638827"
+      ],
+      "taxonomy_change": "",
+      "provenance_status": "source_verified",
+      "expected_form_sha256": "fea46fdb9ed4e63a9ea2aa33647e58cddab14a513094fc206da1ec7b21038842",
+      "set": {
+        "bio_score": 14,
+        "score": 17,
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A controlled human comparison found higher relative EPA and DHA bioavailability for re-esterified triglycerides than the natural triglyceride and ethyl-ester comparators, supporting the existing Excellent tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "20638827",
+              "doi": "10.1016/j.plefa.2010.06.007",
+              "title": "Bioavailability of marine n-3 fatty acid formulations.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/20638827/",
+              "published_date": "2010-09-01",
+              "publication_types": [
+                "Controlled Clinical Trial",
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_epa_dha_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "immunoglobulin",
+      "form_key": "immunoglobulin (unspecified)",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "7a97497cab47cde90e1f75b8e665407086bc893554b176c8a84b5490e7617070",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "krill_oil",
+      "form_key": "Neptune Krill Oil (NKO)",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "11d9de1c667a15541ead67bbd81bc09fe6ca2aafd62d81e313a1943da34f91df",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "krill_oil",
+      "form_key": "Superba Krill (Aker BioMarine)",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "8e0b0c1b16bce1399e7a5636ef91e59321224fce42305bb4bca64857f3ef12b6",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus la-5",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "939cdd43a7f7b73821f6e92bb8bccf7ed7f8f856794e4635f4ad3408b1bc39a8",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_reuteri",
+      "form_key": "lactobacillus reuteri ATCC PTA 5289",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "9d0e9faba2bfc60dd82f6e9baf4f77c42939d6594142f0bdd8988de2d76ddcc9",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_reuteri",
+      "form_key": "lactobacillus reuteri rc-14",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "63a6edd1d72fa47d64cc6c9e5214c30d087ff33714dcd2189f2dfcc3e7331774",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_rhamnosus",
+      "form_key": "lactobacillus rhamnosus gr-1",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "2af0ed7f812c9c54d8a167d1a0ec1cdf4e1b6865bdd382c56188b0cf29f9e9a3",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_rhamnosus",
+      "form_key": "lactobacillus rhamnosus hn001",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "639f56221834bac58aac1e1e71ef61268e1f82cf9e3d7666fd93cd51dd72e8d7",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "probiotics",
+      "form_key": "enteric coated",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "635c6f7138543195acdc898b5ac507999e25e83ca30dc3e3b8ef5cf0e3a6b052",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "probiotics",
+      "form_key": "spore-based",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "c1cca70ebd2d4b073c46c2ea98565be443c4f7d7f00f148f89ba5fd95035ecaa",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "slippery_elm",
+      "form_key": "standardized extract (mucilage)",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "aa32c61dbfb782e351be346278e3e74d2aaee88e43c0011cf8405f7a0dacc5a6",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "streptococcus_salivarius",
+      "form_key": "streptococcus salivarius m18",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 17,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 14,
+      "final_total_score": 17,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "08c9c25f710a82ffa0dbd051c708258e28d9cd9f837922d9e721df66e61502ce",
+      "set": {
+        "bio_score": 14,
+        "score": 17
+      }
+    },
+    {
+      "ingredient_key": "vitamin_b1_thiamine",
+      "form_key": "thiamine tetrahydrofurfuryl disulfide (TTFD)",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "62f5bde2b972eab6b1207419900697c41d6a27d9eaf9ef3199e390568b043b16",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "vitamin_c",
+      "form_key": "zinc ascorbate",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "19cf47edfb016c273c44db0845aa5a218f20ee4c2ce1147ae896312226b56aa7",
+      "set": {
+        "bio_score": 14,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "vitamin_d",
+      "form_key": "calcidiol (25-hydroxy D3)",
+      "pre_migration_score": 14,
+      "pre_migration_total_score": 14,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 14,
+      "final_total_score": 14,
+      "action": "RESTORE_LEGACY",
+      "rationale": "A randomized human comparison found calcifediol more effective than cholecalciferol at improving vitamin D status, supporting retention of the existing Excellent form tier.",
+      "citation_ids": [
+        "PMID:34101900"
+      ],
+      "taxonomy_change": "",
+      "provenance_status": "source_verified",
+      "expected_form_sha256": "0b2543626fa621b1e1e9a7ab6402c2e5c036d01863da43f6163cf7794c658add",
+      "set": {
+        "bio_score": 14,
+        "score": 14,
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "form_quality_confidence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A randomized human comparison found calcifediol more effective than cholecalciferol at improving vitamin D status, supporting retention of the existing Excellent form tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "34101900",
+              "doi": "10.1002/jbmr.4387",
+              "title": "Calcifediol is superior to cholecalciferol in improving vitamin D status in postmenopausal women: a randomized trial.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/34101900/",
+              "published_date": "2021-10-01",
+              "publication_types": [
+                "Journal Article",
+                "Multicenter Study",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_vitamin_d_status_response"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "bacillus_coagulans",
+      "form_key": "bacillus coagulans snz 1969",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "b1a9867d89a2c438efcde04f704e73975fd8650134dbb1303904b7056c4d13ac",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "bacillus_coagulans",
+      "form_key": "bacillus coagulans unique is-2",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "7a43df8c1ee94d11c67c9db04589066dde02cf08dc509a24920c4ab5e706ac79",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_bifidum",
+      "form_key": "bifidobacterium bifidum bb-06",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "89b558f632e78d089b64027dc177c513bec5de07de84f864a33f8b7a8976e975",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_bifidum",
+      "form_key": "bifidobacterium bifidum r0071",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "b271043ac8121325576627ce33bf376ccb0b7932e5a022ec2ab1904ae401a1c7",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_lactis",
+      "form_key": "bifidobacterium lactis bi-07",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "790c21d835e99b7c096a3130437eb302cad9224690c69ce28a94a5cc29c74285",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_lactis",
+      "form_key": "bifidobacterium lactis bl-04",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "86b2975631b2ac3adedde146ebc35179b01b0e9dd13a9b02906f999c2f8876cd",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "calamari_oil",
+      "form_key": "calamari oil (unspecified)",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "55129e2b5817f82a655ce24c2295f08cc7c6ce6c4ae3407eeccb3dd15b5d456b",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "calamari_oil",
+      "form_key": "calamari oil triglyceride",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "7659dd9241cd8f54a994c72abd7f52dec1fbef5bb2b1ce9ad107b3c5506f9baf",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "chinese_skullcap",
+      "form_key": "chinese skullcap (unspecified)",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "2d58bc6ba9c272a3bb5a619766ce04d2627feef5ddba3876a9e283a8ff024ee8",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "cla",
+      "form_key": "tonalin",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "338f51981b9daa08a156dcc8e2969974f24137effc6849fcfd8194d62d83ded5",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "cod_liver_oil",
+      "form_key": "virgin/cold-processed",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "6d9f0c1b225ab733b609b4a5a35875570d0803d7ec83fdeab1fb620c6fe4e077",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "creatine_monohydrate",
+      "form_key": "creatine hydrochloride",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "TAXONOMY_FIX",
+      "rationale": "Creatine hydrochloride is a sibling creatine salt without a demonstrated human absorption advantage over monohydrate; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "Place hydrochloride as a sibling creatine form under the consumer-facing Creatine parent; retain the canonical key for compatibility.",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "276ed0988efd3b0bc1aeff0ab4374cb60cee89fb294883930734176057dd19c7",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "creatine_monohydrate",
+      "form_key": "creatine magnesium chelate",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "TAXONOMY_FIX",
+      "rationale": "Magnesium creatine chelate is a sibling creatine salt without exact human pharmacokinetic evidence supporting an Excellent premium; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "Place magnesium chelate as a sibling creatine form under the consumer-facing Creatine parent; retain the canonical key for compatibility.",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "3a79909d231d47777120b3c9d55c64e1152e88a14bb0b6fc2c7b6b7de8e8fecb",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "creatine_monohydrate",
+      "form_key": "creatine nitrate",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "TAXONOMY_FIX",
+      "rationale": "Creatine salts dissociate to the creatine ion, but the nitrate label has no demonstrated absorption advantage over monohydrate; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "Place nitrate as a sibling creatine form under the consumer-facing Creatine parent; retain the canonical key for compatibility.",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "2cda187ba20095c8142f57b77183eaa78bb8aa5c4c52a5be1bacaad41e279a27",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "dha",
+      "form_key": "DHA krill phospholipid",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "de2a8e4b18cceddbc1b1311ba63eb9e7e9bb63ad8a8f88c0001c8f53604c965b",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "epa",
+      "form_key": "EPA krill phospholipid",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "50425463f33d61da944705e72432edd135c88c50fb7f76dbf49059a155c24e9f",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "fish_oil",
+      "form_key": "emulsified",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "6c36beaccbda619d7efa255b54295ccfc110db2a8a7f98ceeaddfc77d25d5806",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "fish_oil",
+      "form_key": "fish oil phospholipid",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "6e3b9fe2eda09b5fd85565cfa6f7d4e94b163be2ad43369425dd16a047505431",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "hemp_seed_oil",
+      "form_key": "cold-pressed organic",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "08a86cdb6b124279948561f8140bfc53fe81a083d972c1ed1fd08691997b59f4",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "herring_roe_extract",
+      "form_key": "herring roe extract",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "237fbc5b750d2ed569fea99964e132b2114fba720adcdc2a9b4f76421ecdfd84",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "herring_roe_extract",
+      "form_key": "herring roe extract (unspecified)",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "36ebe0385ccdfa79e2f216643eba180f19dc4c4b460f938b4cbd308faf5bdb78",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus dds-1",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "10efcef131b6048ba154f4f70796d32b05f33a1078f0fc9ad693c65ed2fdfb08",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_casei",
+      "form_key": "lactobacillus casei lc-11",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "e0e5ff10b95aad1c49d90e563f8c89e4cc0a256b2ad3f81d4653b7394ffe1349",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_casei",
+      "form_key": "lactobacillus casei shirota",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "eeab31ffb1de9a61a1b3eadc55d3bb334ce454d6f86d279384ef419e00840167",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_paracasei",
+      "form_key": "lactobacillus paracasei l.casei 431",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "f5ff640bd9dfe36f4a9c4da5fcb4e64902011a10eb4fe48d70d7c8bb4b4f4353",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_paracasei",
+      "form_key": "lactobacillus paracasei lpc-37",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "e745b423a30e92598f9efaaf2f0c248b8aac0e90a3ddf563e801d55e7cdd033a",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_plantarum",
+      "form_key": "lactobacillus plantarum dr7",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "ec36b51835f7cc3b25652a8de999de52f3af6634f66928d9d6c02d08b6941b06",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "maca",
+      "form_key": "gelatinized maca",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "75ae9ad73a843cb7035735ef1d8d32102a0a2fea767f7d749d4481f18d61161f",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "manuka_honey",
+      "form_key": "umf 10+ / mgo 263+",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "b144b442ac2fda5787afa824dd5f2cf867b584e12faca21e6d0dfe544f994860",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "organ_extracts",
+      "form_key": "grass-fed desiccated",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "82108efac363535177b5bb9cdeaeda42750350e567990a77960ddc5ef5aa9c33",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "prebiotics",
+      "form_key": "human milk oligosaccharides (HMO)",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "67a4b4f7c90b93ad8f68f95499a2cad2ae71fe3bdf3efd708e5c000eb9237ae6",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "probiotics",
+      "form_key": "liposomal probiotics",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "04da89e8e7058ccbc3956d7461e9cf10510eb1dab8d74d686b1c71edb785d32c",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "quercetin",
+      "form_key": "isoquercetin (EMIQ)",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "A human pharmacokinetic comparison found enhanced quercetin bioavailability after alpha-oligoglucosylation, directly supporting the existing Excellent tier for EMIQ.",
+      "citation_ids": [
+        "PMID:20638359"
+      ],
+      "taxonomy_change": "",
+      "provenance_status": "source_verified",
+      "expected_form_sha256": "5dfb6f172b82a970589e6eb61e5757183f335eb4a2811937f08f6e35feecba00",
+      "set": {
+        "bio_score": 13,
+        "score": 13,
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A human pharmacokinetic comparison found enhanced quercetin bioavailability after alpha-oligoglucosylation, directly supporting the existing Excellent tier for EMIQ.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "20638359",
+              "doi": "10.1016/j.abb.2010.06.036",
+              "title": "alpha-Oligoglucosylation of a sugar moiety enhances the bioavailability of quercetin glucosides in humans.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/20638359/",
+              "published_date": "2010-09-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Journal Article",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_quercetin_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ingredient_key": "sea_buckthorn",
+      "form_key": "sea buckthorn seed oil",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 16,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 13,
+      "final_total_score": 16,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "dd0048c44c0636efc8d5d9a9d1d57e1485970ab26f03953044d9080dfc7f32bc",
+      "set": {
+        "bio_score": 13,
+        "score": 16
+      }
+    },
+    {
+      "ingredient_key": "sulforaphane",
+      "form_key": "stabilized sulforaphane",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "99fcab6fa219d5ca93e40847c67651cac092d3f5c1d774964d7aeea683ba63a1",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "taurine",
+      "form_key": "magnesium taurate (as taurine source)",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "TAXONOMY_FIX",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "Preserve magnesium taurate as the primary magnesium identity and its existing cross-reference when it is also described as a taurine source.",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "0f04e9b7e10080821bff532d87bbe281df1699d5436120a10e42f2974f4d960f",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "tmg_betaine",
+      "form_key": "liposomal tmg",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "effab230eeee77fca41bd6d3146da67ed484bf9b7cc51407d24fb3240c84947c",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "vitamin_b9_folate",
+      "form_key": "metafolin",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "577595ca215889ff6360d34e36ddc55d38522b04f0ffb01581c8a2baabb60cb0",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "vitamin_b9_folate",
+      "form_key": "quatrefolic",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "c2d70f1bb1e3396a8cae5d12d246743b0b2f7dc6d76cc27ae0718ba16285d635",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "vitamin_c",
+      "form_key": "magnesium ascorbate",
+      "pre_migration_score": 13,
+      "pre_migration_total_score": 13,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 13,
+      "final_total_score": 13,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "92e27344d38387cea9841a60ed6bcfc11c77fb5352dc3091752b369518aa2c78",
+      "set": {
+        "bio_score": 13,
+        "score": 13
+      }
+    },
+    {
+      "ingredient_key": "algae_oil",
+      "form_key": "algae oil (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "9d3adb6a86a6b47fc1a6a62a2dca2cf706c83bca940b934f0f6bcaf4a7a94d19",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "astaxanthin",
+      "form_key": "synthetic astaxanthin",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "c0e581e2bff0cc5660d34ac7b9411c22ad2aab30a1f90e59c456531f2c04a9ab",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "bacillus_clausii",
+      "form_key": "bacillus clausii (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 11,
+      "final_total_score": 14,
+      "action": "KEEP_CORRECTION",
+      "rationale": "A species-only probiotic identity does not establish the survivability or clinical evidence of a named strain; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "956cdb7814b4e5b9af95ffd2f1cf04966b1f29360f174988e4b6a3f09bc4a198",
+      "set": {
+        "bio_score": 11,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "bacillus_indicus",
+      "form_key": "bacillus indicus (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "1fd2a6af2ab114931c474dbec3cfa5c35d95a2e5c8e440fd27f68e268bf36189",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_lactis",
+      "form_key": "bifidobacterium animalis subsp. lactis",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "7338c86753662e50301ecbf9390950380c85842c2317cc9bd8fce06770536be6",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_longum",
+      "form_key": "bifidobacterium longum infantis m-63",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 11,
+      "final_total_score": 14,
+      "action": "KEEP_CORRECTION",
+      "rationale": "Clinical outcome evidence for M-63 does not by itself establish a premium organism-survivability/form-quality tier; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "150fa8e04995299777dced30bf556e69698d7cdd2a77e32297f8a6cebb28b5a1",
+      "set": {
+        "bio_score": 11,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "bifidobacterium_longum",
+      "form_key": "bifidobacterium longum subsp. infantis",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "df9f8adf6bb59f8575ba0290ff1d6bb55c094f6725f07a360941a03856a637e8",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "bioflavonoids",
+      "form_key": "hesperidin-rich",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "b6b901bdf0eb3ee8cc185a77dc7a0cc1ad48f02079abed19ed46e581ee457182",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "black_cohosh",
+      "form_key": "black cohosh standardized extract",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "9621abf3b5fa60ab252215a36604d4ebb6dc33f30e8e1f86469ae49a7d952016",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "black_seed_oil",
+      "form_key": "cold-pressed black seed oil",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "5c340577761a33b923fa29b7fc87121764f5eac11e25aeb576cd4af70daa0ac7",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "ceramides",
+      "form_key": "phytoceramides (plant)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "d9b2328c31f3d4e3ffaaf4cb1665630ebe242182588f0025f96824403733b485",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "citrus_bergamot",
+      "form_key": "bergamot (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 11,
+      "final_total_score": 14,
+      "action": "KEEP_CORRECTION",
+      "rationale": "An unspecified bergamot extract cannot inherit the form-quality premium of a standardized preparation; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "415fc12d7b0814bb81f305b6578828d77b63653e3232efb63375c5d0257a2e56",
+      "set": {
+        "bio_score": 11,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "citrus_bergamot",
+      "form_key": "bergamot standardized extract",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "20793503c89277c6634bd3ff93529a55ebc32f5b310b3ad812762e56dbf533c3",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "creatine_monohydrate",
+      "form_key": "dicreatine malate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "TAXONOMY_FIX",
+      "rationale": "Dicreatine malate is a sibling creatine salt with plausible dissociation but no exact human pharmacokinetic evidence supporting an Excellent premium; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "Place dicreatine malate as a sibling creatine form under the consumer-facing Creatine parent; retain the canonical key for compatibility.",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "403c4caa07c828ebc20305d513dc67d0c941f82e07d8b6475348c8753b1f0f21",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "digestive_enzymes",
+      "form_key": "enteric-coated enzymes",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "e84e72469883537da854269eee2ca76f3ab02e73b59cc4bea79568c9ef703caa",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "ergothioneine",
+      "form_key": "l-ergothioneine",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "f856f267fbcb6194f81015339a47348256331262df75bfd3231a937dc470b370",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "fenugreek",
+      "form_key": "fenugreek standardized extract",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "eafd4687c8256d24351a39e2e93fdbe387bbcae00d575bc17ae4aa699b4fd2bf",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "fenugreek",
+      "form_key": "testosurge extract",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "9c1981e2e36a3c555ad837f539df2def9a25cfac9a1fb2672d4d987486ba35b6",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "garlic",
+      "form_key": "aged garlic extract",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "dea91517a358c2fbbe0adf54df8deac8683fac4e1f2c70702383542936ce88c4",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "hemp_seed_oil",
+      "form_key": "cold-pressed",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "d7b768ad38535d8fb6defb1372b7b26d42a1b8269760f699403646d020e7b84a",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "ea26a586f03bea869eb71b94d1b77c63157f9903d2cda791638a759311cdc853",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus la-02",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "b9787d55049998effd81a8346827b8ea537b526c72729b9e0a4470ed8174398c",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_helveticus",
+      "form_key": "lactobacillus helveticus (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "3b46b9f84db73f3e42aae39928adcbe8dd12c6b5988be63bc93ebac0950b23f8",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "lactobacillus_rhamnosus",
+      "form_key": "lactobacillus rhamnosus lr-04",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "56c98c8156d349ddfe74399e394a53dc6b9a22a83b14a722fdbd7d4803179628",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "magnesium",
+      "form_key": "magnesium citrate-malate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "KEEP_CORRECTION",
+      "rationale": "Preserve the clinician-reviewed mineral absorption ladder: evidence does not establish an Excellent advantage over the better-supported citrate form.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "clinician_reviewed_correction",
+      "expected_form_sha256": "247d56e0ba20f2b56c64e4b1cc0911b86defe93b531b0f4247866241e631f2c5",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "molybdenum",
+      "form_key": "molybdenum picolinate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "79e35de7060ca002e660f9960712d47ba5611f0398908c405199157ff3da589e",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "mullein",
+      "form_key": "standardized mullein (verbascoside)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "024ff0933374dce9788a3cf62dee751bec649b71017e408e09345f2a94a483a0",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "nad_precursors",
+      "form_key": "nicotinamide riboside (NR)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "8a9ce3773027672dd5316411092e0dc840117e5c1aadc9623805b7669319cce0",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "nmn",
+      "form_key": "beta-nicotinamide mononucleotide",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "3aed97f3905604612aaf0566d48fd371d4d36e6d8945cf452ec3f189724b4ac2",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "nmn",
+      "form_key": "nicotinamide mononucleotide (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "ef09eb0fe930ac8e925a0f211d9377065a898b491d9e2011a6f8bd184a557be0",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "oregano",
+      "form_key": "oregano (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "abc756cff842fbd8280efd32552383d627a48fed63a4af19f6218c3005a1a0c3",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "organ_extracts",
+      "form_key": "freeze-dried",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "04b799d4b65a228ab33ba61dc6563e5aeecf451e9b5ef5bd672f054beb4e6d48",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "paba",
+      "form_key": "paba (para-aminobenzoic acid) (unspecified)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "a8fffae462d79f6be968b08fe6b3cfddabf9b2679afa567d023c81b5c8e25506",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "phosphatidylserine",
+      "form_key": "bovine phosphatidylserine",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 11,
+      "final_total_score": 14,
+      "action": "KEEP_CORRECTION",
+      "rationale": "The prior public Excellent tier was unsupported; preserve the audited Good score while keeping bovine-source safety in its separate safety lane.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "6962af164b95b1b6df10969601b08c6ece12ffd5dd2ca04e9856753f25a405d8",
+      "set": {
+        "bio_score": 11,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "phosphatidylserine",
+      "form_key": "liposomal phosphatidylserine",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "KEEP_CORRECTION",
+      "rationale": "The liposomal delivery claim lacks a proven human pharmacokinetic advantage for phosphatidylserine; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "54a51de41271205d7c087437eeb988110b19c2067a98c031d2f5008e6bafec65",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "phosphatidylserine",
+      "form_key": "sharp-ps gold (PS-DHA conjugate)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "f11a3714ed5ddfc3c003434894a7c87ddb4f94daafe7fe6dcd7912a6303822c0",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "prebiotics",
+      "form_key": "fructooligosaccharides (FOS)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "4ec61043e8b19b1a8654bc2371c4bdcd6b9190fda6841a97f1d04e4636f2abf5",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "prebiotics",
+      "form_key": "galactooligosaccharides (GOS)",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "f1c357c47519ce1756cead18ba249bedd569821929a8e14d9a90211e7cc8287c",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "probiotics",
+      "form_key": "freeze-dried with prebiotics",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "e0357e887688de4eb74bdfca7625483b99e84a258791c88a107fa995c319ca5a",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "probiotics",
+      "form_key": "liquid probiotics",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "374b7afd050afe34f6708d3f19b650938b318ce8040e8ed1035c2494a9262851",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "sea_buckthorn",
+      "form_key": "sea buckthorn berry oil",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "2af73d7999195661546f4d259672a004f39d44185ab6c9264257940a30fec925",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "selenium",
+      "form_key": "selenocysteine",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "9f4952565fd759dfb7db5dccc5aa7556849665e7c35b0fa4faba55a50ed5e646",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "shilajit",
+      "form_key": "purified shilajit extract",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "4c7ad92ad0acb44105737f67ccd9e594f243f624f0bb76658944c86da115ee73",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "silk_amino_acids",
+      "form_key": "silk peptides",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "af748c1064a535b56a80594c0804c4b6abe408f38f8ab842ebda17ff94b4cf1a",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "slippery_elm",
+      "form_key": "inner bark powder",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "f1a315c62165f8720b1aecce93dadc2377ae02ec5186303c14d58586690237c1",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "taurine",
+      "form_key": "liposomal taurine",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "17f4b4fe61a2cb28f247109b30e5488895811e72292dc4b46c27df70164610ed",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "tuna_oil",
+      "form_key": "tuna oil triglyceride",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "ad3feff8243a08a7c4aedbd9b734e9744e0cc96ef5a5e14eab51788a0a79cb2d",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "vitamin_a",
+      "form_key": "liposomal vitamin A",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "KEEP_CORRECTION",
+      "rationale": "The delivery-format claim is mechanistic and lacks direct human evidence supporting an Excellent form-quality premium; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "0909cf6a1fc51f94060d9e8e600e8c508f0ed63f8312cb62bc1cd92febc60d32",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "vitamin_a",
+      "form_key": "micellized vitamin A",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "KEEP_CORRECTION",
+      "rationale": "The delivery-format claim is mechanistic and lacks direct human evidence supporting an Excellent form-quality premium; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "a8e3ab40a65e45a4583a13dd43a7af976103c018bfab178d2b94ab8f1b100212",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "vitamin_b12_cobalamin",
+      "form_key": "methylcobalamin sublingual",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 11,
+      "final_total_score": 14,
+      "action": "KEEP_CORRECTION",
+      "rationale": "Human data support sublingual delivery but not an Excellent methylcobalamin-specific absorption advantage; preserve the clinician-reviewed Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "clinician_reviewed_correction",
+      "expected_form_sha256": "77d24a85e1f2935989461b9e2447e9efaea4c09116fadd66ba12db9bc3009a26",
+      "set": {
+        "bio_score": 11,
+        "score": 14
+      }
+    },
+    {
+      "ingredient_key": "vitamin_b5_pantothenic",
+      "form_key": "calcium pantothenate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "ef532be8897558e6d0ed712def33d2e07166b2aef10b038df4cf25df3a04232b",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "vitamin_b9_folate",
+      "form_key": "calcium folinate",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 12,
+      "final_total_score": 12,
+      "action": "RESTORE_LEGACY",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "64e08fef6fbf9e5909effd949589f5c49db1a09e52f8d451259a8667741d6767",
+      "set": {
+        "bio_score": 12,
+        "score": 12
+      }
+    },
+    {
+      "ingredient_key": "vitamin_c",
+      "form_key": "vitamin C with bioflavonoids",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 15,
+      "current_score": 11,
+      "current_total_score": 14,
+      "final_score": 12,
+      "final_total_score": 15,
+      "action": "TAXONOMY_FIX",
+      "rationale": "Restored the pre-migration curated score. The 2026-08-13 change was based on a missing-evidence gate; absence of an attached verified source is not affirmative evidence that the form is inferior. The frozen legacy contract permits this exact existing score while continuing to block unsupported new Excellent ratings.",
+      "citation_ids": [],
+      "taxonomy_change": "Treat bioflavonoids as a composition attribute around the labeled vitamin C, not as a separate vitamin C molecule or proof of superior absorption.",
+      "provenance_status": "legacy_curated_unvalidated",
+      "expected_form_sha256": "f6731a570bd7c2de4a642d4138d3dcc2d9cc6141daffe32d5343fdc612c34f1a",
+      "set": {
+        "bio_score": 12,
+        "score": 15
+      }
+    },
+    {
+      "ingredient_key": "vitamin_d",
+      "form_key": "liposomal D3",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "KEEP_CORRECTION",
+      "rationale": "The delivery-format claim lacks exact-form human pharmacokinetic evidence supporting an Excellent premium; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "ecd857d8e5104eafd87788f86205bea4eb5fe5690e304224261d00a1edfd9150",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    },
+    {
+      "ingredient_key": "vitamin_d",
+      "form_key": "micellized D3",
+      "pre_migration_score": 12,
+      "pre_migration_total_score": 12,
+      "current_score": 11,
+      "current_total_score": 11,
+      "final_score": 11,
+      "final_total_score": 11,
+      "action": "KEEP_CORRECTION",
+      "rationale": "The delivery-format claim lacks exact-form human pharmacokinetic evidence supporting an Excellent premium; preserve the audited Good score.",
+      "citation_ids": [],
+      "taxonomy_change": "",
+      "provenance_status": "audit_locked_correction",
+      "expected_form_sha256": "927925d24472b52ee89315c4a69ec6d678a8ad37154d3bbee2d6a3abeae681d3",
+      "set": {
+        "bio_score": 11,
+        "score": 11
+      }
+    }
+  ]
+}

@@ -60,8 +60,8 @@
       "proteins": 16,
       "vitamins": 25
     },
-    "schema_version": "5.5.0",
-    "last_updated": "2026-08-13",
+    "schema_version": "5.5.1",
+    "last_updated": "2026-08-18",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1683,6 +1683,18 @@
           "Recalibrated 182 unsupported Excellent forms to bio_score 11 (Good) instead of forcing citations.",
           "Exported compact form evidence to canonical and legacy ingredient rows without exposing internal audit rationale."
         ]
+      },
+      "5.5.1": {
+        "date": "2026-08-18",
+        "audit": "form_evidence_20260813/score_reconciliation_manifest.json",
+        "changes": [
+          "Reconciled the 182-row evidence-gap migration: missing attached evidence is not affirmative evidence of inferior form quality.",
+          "Restored 161 forms to their exact pre-migration bio_score and natural-bonus total score under the frozen legacy backlog contract.",
+          "Preserved 21 earlier clinician-reviewed or audit-locked Good-tier corrections where the Excellent premium had an affirmative form-quality problem.",
+          "Added live-PubMed-verified form-axis evidence for rTG fish oil, pure C8 MCT, calcifediol, EMIQ, and calcium citrate-malate.",
+          "Changed the consumer-facing creatine parent name to Creatine so monohydrate, hydrochloride, nitrate, chelate, citrate, and malate remain sibling forms without changing the stable canonical key.",
+          "Preserved source/composition and cross-reference boundaries for lichen D3, magnesium taurate, and vitamin C with bioflavonoids."
+        ]
       }
     },
     "category_enum": [
@@ -2568,9 +2580,9 @@
         }
       },
       "thiamine tetrahydrofurfuryl disulfide (TTFD)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "lipophilic; bypasses thiamine transporter; orally < benfotiamine (Greb 1998)",
         "consumer_note": "TTFD is a disulfide thiamine derivative, also called fursultiamine. Its tetrahydrofurfuryl group distinguishes it from simple thiamine salts.",
         "consumer_note_review": {
@@ -3450,9 +3462,9 @@
     "rxcui": "7891",
     "forms": {
       "calcium pantothenate": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "saturable SMVT transport; F ~40-60% at supplement doses",
         "notes": "The most common B5 supplement form — calcium salt of pantothenic acid. Very shelf-stable, well-absorbed, and widely used in multivitamins and B-complex formulas. Provides ~92% pantothenic acid by weight. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "consumer_note": "Calcium pantothenate is the form of pantothenic acid most commonly used in supplements.",
@@ -4579,9 +4591,9 @@
         }
       },
       "calcium folinate": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "reduced folate; bypasses DHFR; F similar to 5-MTHF",
         "consumer_note": "Calcium folinate is a calcium salt of folinic acid, also called leucovorin. It is chemically distinct from folic acid and 5-MTHF.",
         "consumer_note_review": {
@@ -4621,9 +4633,9 @@
         }
       },
       "quatrefolic": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "glucosamine salt of (6S)-5-MTHF; superior PK shown in rats only",
         "consumer_note": "Quatrefolic is a branded glucosamine salt of L-5-methyltetrahydrofolate. It provides the same active folate form as other L-5-MTHF products.",
         "consumer_note_review": {
@@ -4672,9 +4684,9 @@
         }
       },
       "metafolin": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "calcium salt of L-5-MTHF; AUC ~2× folic acid in humans",
         "consumer_note": "Metafolin is a branded calcium salt of L-5-methyltetrahydrofolate. It provides the same folate form as generic 5-MTHF.",
         "consumer_note_review": {
@@ -5234,9 +5246,9 @@
     "rxcui": "1370460",
     "forms": {
       "liposomal vitamin C": {
-        "bio_score": 11,
+        "bio_score": 15,
         "natural": false,
-        "score": 11,
+        "score": 15,
         "absorption": "90-95%",
         "consumer_note": "Liposomal vitamin C is vitamin C formulated with phospholipids into liposome-like particles. The liposomal description identifies the delivery format rather than a different vitamin C molecule.",
         "consumer_note_review": {
@@ -5271,9 +5283,9 @@
         }
       },
       "ester-C (calcium ascorbate)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "80%",
         "consumer_note": "Ester-C is a branded buffered vitamin C preparation based on calcium ascorbate. It is distinct from plain ascorbic acid and also supplies a small amount of calcium.",
         "consumer_note_review": {
@@ -5365,9 +5377,9 @@
         }
       },
       "sodium ascorbate": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "78%",
         "consumer_note": "Sodium ascorbate is a buffered vitamin C salt that also supplies sodium. It is a less acidic alternative to plain ascorbic acid.",
         "consumer_note_review": {
@@ -5410,9 +5422,9 @@
         }
       },
       "magnesium ascorbate": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "78%",
         "consumer_note": "Magnesium ascorbate pairs vitamin C ascorbate with magnesium. The magnesium portion is part of the named salt and distinguishes it from other vitamin C forms.",
         "consumer_note_review": {
@@ -5539,9 +5551,9 @@
         }
       },
       "vitamin C with bioflavonoids": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "75%",
         "consumer_note": "This combines vitamin C with citrus bioflavonoid material. The combined label identifies an added plant-compound component rather than a different vitamin C molecule.",
         "consumer_note_review": {
@@ -5576,9 +5588,9 @@
         }
       },
       "potassium ascorbate": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "buffered ascorbate salt; dissociates to ascorbate ion, F equivalent to ascorbic acid",
         "consumer_note": "Potassium ascorbate pairs vitamin C ascorbate with potassium. The potassium portion is part of the named salt and distinguishes it from sodium, calcium, or plain ascorbic acid forms.",
         "consumer_note_review": {
@@ -5606,9 +5618,9 @@
         }
       },
       "zinc ascorbate": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "mineral ascorbate; ascorbate ion F equivalent to ascorbic acid; co-delivers zinc",
         "consumer_note": "Zinc ascorbate pairs vitamin C ascorbate with zinc. The zinc portion is part of the named compound and distinguishes it from other vitamin C forms.",
         "consumer_note_review": {
@@ -6075,9 +6087,9 @@
         }
       },
       "calcidiol (25-hydroxy D3)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "pre-hydroxylated; raises total 25(OH)D ~1.85x more than equivalent D3 (Shieh 2017)",
         "consumer_note": "Calcidiol, also called 25-hydroxy vitamin D3, is a hydroxylated form of vitamin D3. It is chemically distinct from cholecalciferol, the unhydroxylated D3 form.",
         "consumer_note_review": {
@@ -6105,6 +6117,42 @@
           "range_low": 0.65,
           "range_high": 0.9,
           "quality": "good"
+        },
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "form_quality_confidence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A randomized human comparison found calcifediol more effective than cholecalciferol at improving vitamin D status, supporting retention of the existing Excellent form tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "34101900",
+              "doi": "10.1002/jbmr.4387",
+              "title": "Calcifediol is superior to cholecalciferol in improving vitamin D status in postmenopausal women: a randomized trial.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/34101900/",
+              "published_date": "2021-10-01",
+              "publication_types": [
+                "Journal Article",
+                "Multicenter Study",
+                "Randomized Controlled Trial",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_vitamin_d_status_response"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
         }
       },
       "micellized D3": {
@@ -6202,9 +6250,9 @@
         }
       },
       "vitamin D3 from lichen": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "vegan D3; equivalent to animal-derived D3 in 25(OH)D response",
         "consumer_note": "Vitamin D3 from lichen is cholecalciferol sourced from lichen. It is the same vitamin D3 molecule as other cholecalciferol sources.",
         "consumer_note_review": {
@@ -6498,9 +6546,9 @@
     "cui": "C0042874",
     "forms": {
       "mixed tocopherols": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "full-spectrum natural; α-form retained via α-TTP, β/γ/δ absorbed but rapidly metabolized",
         "consumer_note": "Mixed tocopherols include alpha, beta, gamma, and delta forms of vitamin E. Alpha-tocopherol is the form recognized to meet human vitamin E requirements.",
         "consumer_note_review": {
@@ -7266,9 +7314,9 @@
         }
       },
       "calcium malate": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "40%",
         "consumer_note": "Calcium malate is calcium paired with malic acid. It is a distinct calcium salt, and labels may use the name dicalcium malate for the same type of material.",
         "consumer_note_review": {
@@ -7303,9 +7351,9 @@
         }
       },
       "calcium bis-glycinate": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "40%",
         "consumer_note": "Calcium bis-glycinate is calcium chelated to two glycine molecules. The named glycine ligand distinguishes it from calcium salts and from unspecified amino-acid chelates.",
         "consumer_note_review": {
@@ -7619,9 +7667,9 @@
         }
       },
       "calcium citrate malate": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "42%",
         "consumer_note": "Calcium citrate malate is a calcium salt containing citrate and malate. It is distinct from calcium carbonate, citrate, and phosphate forms.",
         "consumer_note_review": {
@@ -7647,6 +7695,39 @@
         },
         "external_ids": {
           "unii": "4BBS3A53GJ"
+        },
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A direct human absorption comparison evaluated calcium citrate-malate against comparator calcium sources and supports retention of its existing Excellent form tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "3124946",
+              "doi": "10.1007/BF02556676",
+              "title": "Calcium absorption from a new calcium delivery system (CCM).",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/3124946/",
+              "published_date": "1987-12-01",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_calcium_absorption"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
         }
       },
       "calcium orotate": {
@@ -7762,9 +7843,9 @@
         }
       },
       "calcium amino acid chelate": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "moderate (class-equiv bisglycinate; PK uncertain)",
         "consumer_note": "The label identifies calcium bound to amino acids but does not name the exact amino acid carrier. That leaves form-specific comparisons less certain than for a named calcium salt.",
         "consumer_note_review": {
@@ -10814,9 +10895,9 @@
     "cui": "C0330532",
     "forms": {
       "inner bark powder": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "efficacy": "excellent",
         "consumer_note": "Inner bark powder identifies the softer inner layer of slippery elm bark. The inner-bark designation distinguishes it from the more woody outer bark.",
         "consumer_note_review": {
@@ -10844,9 +10925,9 @@
         }
       },
       "standardized extract (mucilage)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "efficacy": "superior",
         "consumer_note": "This is a slippery elm extract characterized for mucilage, the water-binding polysaccharide material naturally present in the bark. The mucilage designation distinguishes it from a simple bark powder.",
         "consumer_note_review": {
@@ -11041,9 +11122,9 @@
         }
       },
       "selenium-methyl L-selenocysteine": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "organic Se; absorption comparable to selenomethionine, retained as MeSeCys pool",
         "consumer_note": "Methyl L-selenocysteine is an organic selenium compound. It is distinct from selenomethionine and from inorganic selenium salts such as selenite.",
         "consumer_note_review": {
@@ -11132,9 +11213,9 @@
         }
       },
       "selenocysteine": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "organic Se; high F, channels into selenoprotein synthesis",
         "consumer_note": "Selenocysteine is selenium incorporated into the amino acid cysteine. It is chemically distinct from selenomethionine and inorganic selenium salts.",
         "consumer_note_review": {
@@ -11364,9 +11445,9 @@
         }
       },
       "selenium glycinate": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "Albion-patented Se chelate; no published human comparator PK",
         "consumer_note": "Selenium glycinate is selenium paired with glycine. It is a named selenium compound and is distinct from selenium amino acids with other ligands and from inorganic selenium salts.",
         "consumer_note_review": {
@@ -11740,9 +11821,9 @@
         }
       },
       "synthetic astaxanthin": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "variable; equivalent F to natural form when fat-matrixed (no human head-to-head PK)",
         "consumer_note": "Synthetic astaxanthin is manufactured rather than extracted from algae or another biological source. It identifies the same carotenoid molecule by a non-biological production route.",
         "consumer_note_review": {
@@ -12026,7 +12107,7 @@
     "aliases": []
   },
   "creatine_monohydrate": {
-    "standard_name": "Creatine Monohydrate",
+    "standard_name": "Creatine",
     "category": "amino_acids",
     "cui": "C0873188",
     "rxcui": "1310467",
@@ -16674,9 +16755,9 @@
         }
       },
       "sodium molybdate": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "88-93%",
         "consumer_note": "Sodium molybdate is an inorganic molybdenum salt commonly used in multivitamin supplements.",
         "consumer_note_review": {
@@ -16753,9 +16834,9 @@
         }
       },
       "molybdenum picolinate": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "no dedicated PK; class F 88-93%, picolinate offers no Mo advantage",
         "consumer_note": "Molybdenum picolinate pairs molybdenum with picolinic acid, distinguishing it from other molybdenum compounds.",
         "consumer_note_review": {
@@ -16808,9 +16889,9 @@
         }
       },
       "molybdenum aspartate": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "88-93% (estimated; high bioavailability class for soluble Mo chelates)",
         "consumer_note": "Molybdenum aspartate is a chelated source of the trace mineral molybdenum, paired with the amino acid aspartate. It is chemically distinct from other molybdenum salts on supplement labels.",
         "consumer_note_review": {
@@ -16895,9 +16976,9 @@
     "rda_ul_ref": "Boron",
     "forms": {
       "calcium fructoborate": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "excellent (>98%)",
         "consumer_note": "Calcium fructoborate is a complex containing boron, calcium, and fructose. It is a distinct boron-containing ingredient rather than a simple inorganic boron salt.",
         "consumer_note_review": {
@@ -17122,9 +17203,9 @@
     "rda_ul_ref": "Potassium",
     "forms": {
       "potassium citrate": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "~90-94%",
         "consumer_note": "Potassium citrate is one of several potassium forms used in dietary supplements.",
         "consumer_note_review": {
@@ -17152,9 +17233,9 @@
         }
       },
       "potassium chloride": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "~90%",
         "consumer_note": "Potassium chloride is a common potassium salt used in supplements and salt substitutes. It provides both potassium and chloride.",
         "consumer_note_review": {
@@ -17185,9 +17266,9 @@
         }
       },
       "potassium gluconate": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "~90%",
         "consumer_note": "Potassium gluconate is potassium paired with gluconic acid. Because the gluconate portion adds weight, the compound contains less elemental potassium per gram than the label's total salt weight.",
         "consumer_note_review": {
@@ -18778,9 +18859,9 @@
         }
       },
       "isoquercetin (EMIQ)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "EMIQ enzymatically-modified isoquercitrin; SGLT1-mediated; genuinely better F than rutin",
         "consumer_note": "EMIQ is an enzymatically modified isoquercitrin ingredient, distinct from plain quercetin.",
         "consumer_note_review": {
@@ -18801,6 +18882,41 @@
           "range_low": 0.1,
           "range_high": 0.35,
           "quality": "low"
+        },
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A human pharmacokinetic comparison found enhanced quercetin bioavailability after alpha-oligoglucosylation, directly supporting the existing Excellent tier for EMIQ.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "20638359",
+              "doi": "10.1016/j.abb.2010.06.036",
+              "title": "alpha-Oligoglucosylation of a sugar moiety enhances the bioavailability of quercetin glucosides in humans.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/20638359/",
+              "published_date": "2010-09-01",
+              "publication_types": [
+                "Clinical Trial",
+                "Journal Article",
+                "Research Support, Non-U.S. Gov't"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_quercetin_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
         }
       },
       "quercetin dihydrate": {
@@ -19117,9 +19233,9 @@
     "cui": "C0525033",
     "forms": {
       "enteric coated": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "90%+ survival",
         "consumer_note": "Enteric-coated probiotics use a coating intended to remain intact until later in the digestive tract.",
         "consumer_note_review": {
@@ -19148,9 +19264,9 @@
         }
       },
       "spore-based": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "excellent survival",
         "consumer_note": "Spore-based probiotics contain spore-forming microorganisms rather than conventional non-spore bacterial cultures.",
         "consumer_note_review": {
@@ -19174,9 +19290,9 @@
         }
       },
       "liposomal probiotics": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "enhanced",
         "consumer_note": "Liposomal probiotics are marketed in a phospholipid-based delivery format; the strain identity still determines the organism.",
         "consumer_note_review": {
@@ -19199,9 +19315,9 @@
         }
       },
       "liquid probiotics": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "good (rapid uptake)",
         "consumer_note": "Liquid probiotics suspend microbial cultures in a liquid carrier rather than a dry capsule or powder.",
         "consumer_note_review": {
@@ -19223,9 +19339,9 @@
         }
       },
       "freeze-dried with prebiotics": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "good",
         "consumer_note": "This form combines freeze-dried microbial cultures with added prebiotic carbohydrate material.",
         "consumer_note_review": {
@@ -19447,9 +19563,9 @@
     "forms": {
       "fructooligosaccharides (FOS)": {
         "alias_identity_scope": "same_identity",
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "excellent fermentation",
         "consumer_note": "Fructooligosaccharides, or FOS, are short chains of fructose-containing carbohydrates. FOS is a defined prebiotic fiber type rather than a broad mixed-fiber ingredient.",
         "consumer_note_review": {
@@ -19484,9 +19600,9 @@
         }
       },
       "galactooligosaccharides (GOS)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "excellent fermentation",
         "consumer_note": "Galactooligosaccharides, or GOS, are short chains of galactose-containing carbohydrates. GOS is a defined prebiotic fiber type rather than a broad mixed-fiber ingredient.",
         "consumer_note_review": {
@@ -19549,9 +19665,9 @@
         }
       },
       "human milk oligosaccharides (HMO)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "excellent fermentation",
         "consumer_note": "HMOs are structurally defined oligosaccharides modeled on carbohydrates naturally present in human milk.",
         "consumer_note_review": {
@@ -20236,9 +20352,9 @@
     "cui": "C0301704",
     "forms": {
       "sunflower phosphatidylserine": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "good to excellent (well-absorbed; crosses BBB)",
         "consumer_note": "Sunflower phosphatidylserine is phosphatidylserine sourced from sunflower rather than soy. The source identifies the phospholipid material used in the product.",
         "consumer_note_review": {
@@ -20482,8 +20598,8 @@
         }
       },
       "sharp-ps gold (PS-DHA conjugate)": {
-        "bio_score": 11,
-        "score": 11,
+        "bio_score": 12,
+        "score": 12,
         "natural": false,
         "absorption": "PS-DHA conjugate; DHA carrier may aid lipid absorption; PS still hydrolyzed",
         "consumer_note": "Sharp-PS Gold combines phosphatidylserine with DHA in a branded phospholipid formulation.",
@@ -20683,9 +20799,9 @@
         }
       },
       "liposomal taurine": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "very good",
         "consumer_note": "Liposomal taurine is taurine formulated with phospholipids into liposome-like particles.",
         "consumer_note_review": {
@@ -20705,9 +20821,9 @@
         }
       },
       "magnesium taurate (as taurine source)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "excellent",
         "consumer_note": "Magnesium taurate combines taurine with magnesium, so the compound supplies both components.",
         "consumer_note_review": {
@@ -20806,9 +20922,9 @@
     "rxcui": "1314350",
     "forms": {
       "l-ergothioneine": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "high (active OCTN1-mediated uptake; low urinary excretion; no formal bioavailability measurement)",
         "consumer_note": "L-ergothioneine is the L stereoisomer of ergothioneine, a sulfur-containing amino-acid derivative. The L designation identifies the molecule's specific configuration.",
         "consumer_note_review": {
@@ -21322,7 +21438,7 @@
         }
       },
       "liposomal tmg": {
-        "score": 11,
+        "score": 13,
         "natural": false,
         "absorption": "excellent (TMG already has near-complete oral bioavailability; liposomal adds no demonstrated benefit)",
         "consumer_note": "Liposomal TMG is trimethylglycine formulated with phospholipids into liposome-like particles.",
@@ -21342,7 +21458,7 @@
           "nano-encapsulated TMG"
         ],
         "dosage_importance": 1.0,
-        "bio_score": 11,
+        "bio_score": 13,
         "absorption_structured": {
           "value": 0.95,
           "range_low": 0.9,
@@ -21678,9 +21794,9 @@
         }
       },
       "l-arginine hcl": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "~50-70% at 3-6g doses; ~20% at 10g+ (Tangphao 1999)",
         "consumer_note": "L-arginine hydrochloride is the hydrochloride salt of L-arginine. Once dissolved, it provides the same L-arginine molecule as free-form L-arginine.",
         "consumer_note_review": {
@@ -22100,9 +22216,9 @@
     "rxcui": "6536",
     "forms": {
       "l-lysine hcl": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "~60-80% systemic (20-40% first-pass splanchnic)",
         "consumer_note": "L-lysine hydrochloride is the common hydrochloride salt of the essential amino acid L-lysine. Once dissolved, it provides L-lysine.",
         "consumer_note_review": {
@@ -22130,9 +22246,9 @@
         }
       },
       "l-lysine base": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "~60-80% systemic (same as HCl once dissolved)",
         "consumer_note": "L-lysine base is the free, unbound form of L-lysine. It is distinct from lysine salts, which include an added counterion in the named compound.",
         "consumer_note_review": {
@@ -22376,9 +22492,9 @@
         }
       },
       "l-tyrosine powder": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "very good (~75-90% via LNAA transporter)",
         "consumer_note": "L-tyrosine powder is the free L-form of the amino acid tyrosine. This describes the unbound amino-acid ingredient rather than an acetylated derivative or a combined compound.",
         "consumer_note_review": {
@@ -22590,9 +22706,9 @@
     "rxcui": "8737",
     "forms": {
       "l-proline powder": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "~55-70% systemic (40% mucosal catabolism)",
         "consumer_note": "L-proline powder is the free L-form of proline rather than a peptide or modified derivative.",
         "consumer_note_review": {
@@ -22702,9 +22818,9 @@
     "cui": "C0017890",
     "forms": {
       "l-glycine powder": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "~60-85% (dose-dependent hepatic extraction)",
         "consumer_note": "L-glycine powder is the free L-form of the amino acid glycine. This describes the unbound amino-acid ingredient rather than a peptide or a combined compound.",
         "consumer_note_review": {
@@ -22831,9 +22947,9 @@
     "rxcui": "5340",
     "forms": {
       "l-histidine standard": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "excellent (~90%)",
         "consumer_note": "L-histidine is the L-form of the amino acid histidine. This standard entry identifies the free amino-acid ingredient rather than a specialized salt or delivery form.",
         "consumer_note_review": {
@@ -24197,9 +24313,9 @@
     "rxcui_note": "Wave 6.Y Batch 3 (2026-05-27): prior rxcui '1116060' returns no record in RxNav (/REST/rxcui/1116060/properties.json → 404). Deprecated or withdrawn from RxNorm. Cleared to null.",
     "forms": {
       "stabilized sulforaphane": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "good-to-excellent (~60-80% urinary excretion of metabolites)",
         "consumer_note": "Stabilized sulforaphane is preformed sulforaphane held in a formulation intended to limit breakdown.",
         "consumer_note_review": {
@@ -28223,9 +28339,9 @@
         }
       },
       "red wine extract (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "unknown",
         "consumer_note": "This label names red-wine extract without identifying marker compounds, standardization, or extract ratio.",
         "consumer_note_review": {
@@ -28356,9 +28472,9 @@
         }
       },
       "pine bark extract (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "poor (OPC/proanthocyanidin class-poor; <5% F)",
         "consumer_note": "This label names pine-bark extract without identifying pine species, brand, or procyanidin standardization.",
         "consumer_note_review": {
@@ -29168,9 +29284,9 @@
     "rxcui": "265647",
     "forms": {
       "aged garlic extract": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "very good (~70–80%)",
         "consumer_note": "Aged garlic extract is produced by aging garlic under controlled conditions. This preparation is distinct from raw garlic powder or garlic oil and has its own characteristic sulfur-compound profile.",
         "consumer_note_review": {
@@ -30217,9 +30333,9 @@
         ]
       },
       "enteric-coated enzymes": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "category_error (local action; activity-units metric)",
         "consumer_note": "Enteric-coated enzymes use a coating intended to remain intact until later in the digestive tract.",
         "consumer_note_review": {
@@ -30680,9 +30796,9 @@
     "category": "vitamins",
     "forms": {
       "nicotinamide riboside (NR)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "moderate-good (effectively doubles NAD+; most converted to NA by gut microbiota)",
         "consumer_note": "Nicotinamide riboside is a vitamin B3-related molecule composed of nicotinamide and ribose.",
         "consumer_note_review": {
@@ -31036,9 +31152,9 @@
     "rxcui": "74",
     "forms": {
       "paba powder": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "good (~70-80%)",
         "consumer_note": "PABA powder is free para-aminobenzoic acid rather than a named salt or combined formulation.",
         "consumer_note_review": {
@@ -31069,9 +31185,9 @@
         }
       },
       "paba (para-aminobenzoic acid) (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "unknown",
         "consumer_note": "This label names para-aminobenzoic acid without identifying source, salt, purity, or delivery formulation.",
         "consumer_note_review": {
@@ -31570,9 +31686,9 @@
     "rxcui": "10524",
     "forms": {
       "l-threonine powder": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "good (~80-90%; significant first-pass gut mucosal utilization)",
         "consumer_note": "L-threonine powder is the free L stereoisomer rather than a salt, peptide, or modified derivative.",
         "consumer_note_review": {
@@ -37894,9 +38010,9 @@
     "dosage_importance": 1.0,
     "forms": {
       "huperzine a (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "~96% absolute oral bioavailability in humans (PMID 9421157)",
         "consumer_note": "Huperzine A is a defined alkaloid associated with Huperzia serrata.",
         "consumer_note_review": {
@@ -38122,9 +38238,9 @@
     "dosage_importance": 0.1,
     "forms": {
       "inulin (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "non-digestible β(2→1) fructan; colonic fermentation to SCFA; not systemically absorbed intact",
         "consumer_note": "Inulin is a fructan fiber made of fructose chains; source and chain length are unspecified.",
         "consumer_note_review": {
@@ -41807,9 +41923,9 @@
         }
       },
       "nicotinamide riboside (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "unknown",
         "consumer_note": "This label names nicotinamide riboside without identifying its salt, brand, or delivery formulation.",
         "consumer_note_review": {
@@ -41882,9 +41998,9 @@
     "rxcui": "2262276",
     "forms": {
       "beta-nicotinamide mononucleotide": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "Variable",
         "consumer_note": "Beta-NMN is beta-nicotinamide mononucleotide, a nucleotide made from nicotinamide, ribose, and phosphate. The beta designation identifies its specific molecular configuration.",
         "consumer_note_review": {
@@ -41912,9 +42028,9 @@
         }
       },
       "nicotinamide mononucleotide (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "unknown",
         "consumer_note": "This label names NMN without identifying stereochemistry, salt, brand, purity, or delivery formulation.",
         "consumer_note_review": {
@@ -42138,9 +42254,9 @@
         }
       },
       "standardized mullein (verbascoside)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "low (verbascoside P-gp/BCRP/MRP2 efflux substrate)",
         "consumer_note": "This mullein extract is standardized to verbascoside, which identifies a defined marker level.",
         "consumer_note_review": {
@@ -43270,9 +43386,9 @@
         "same_identity_aliases": [
           "alpha-amylase"
         ],
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "excellent",
         "consumer_note": "Alpha-amylase is an enzyme that breaks internal alpha-1,4 bonds in starch.",
         "consumer_note_review": {
@@ -43492,9 +43608,9 @@
     "category": "vitamins",
     "forms": {
       "coenzymated": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "coenzymated B-vitamin complex; active forms dephosphorylated pre-absorption",
         "consumer_note": "“Coenzymated” is a category label for one or more coenzyme-form nutrients, not one defined compound.",
         "consumer_note_review": {
@@ -43517,9 +43633,9 @@
         }
       },
       "coenzymated complex (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "unknown",
         "consumer_note": "This label names a coenzymated complex without identifying the individual vitamin compounds or their amounts.",
         "consumer_note_review": {
@@ -43729,9 +43845,9 @@
         }
       },
       "5-htp (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "aromatic AA decarboxylase substrate; oral F mean 69.2% (Magnussen 1980)",
         "consumer_note": "5-HTP is the abbreviated name for 5-hydroxytryptophan. It may be listed as an isolated ingredient or as part of a Griffonia seed extract; this form entry does not specify the source.",
         "consumer_note_review": {
@@ -45213,7 +45329,7 @@
     "cui": "C0872905",
     "forms": {
       "gelatinized maca": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "good (~60-75%; gelatinization removes starch, concentrating bioactives and improving digestibility)",
         "consumer_note": "Gelatinized maca is maca root processed with heat and water to remove much of its starch.",
@@ -45229,7 +45345,7 @@
           "maca macamides standardized",
           "n-benzylalkylamides maca"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.675,
@@ -45269,9 +45385,9 @@
         }
       },
       "maca (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "good (macamide + glucosinolate class)",
         "consumer_note": "This label names maca without identifying powder, gelatinization, extract ratio, color type, or standardization.",
         "consumer_note_review": {
@@ -45328,7 +45444,7 @@
     "cui": "C0361633",
     "forms": {
       "mct oil c8/c10": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "excellent (~95%)",
         "consumer_note": "C8/C10 MCT oil is a blend of medium-chain triglycerides made from caprylic acid (C8) and capric acid (C10). The C8/C10 description tells you which fatty-acid chain lengths the oil contains.",
@@ -45347,7 +45463,7 @@
           "Coconut MCT Oil",
           "Coconut"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.95,
@@ -45357,7 +45473,7 @@
         }
       },
       "c8 mct oil (pure caprylic)": {
-        "bio_score": 11,
+        "bio_score": 15,
         "natural": true,
         "absorption": "excellent (~98%)",
         "consumer_note": "C8 MCT oil contains triglycerides made from caprylic acid, an eight-carbon fatty acid. The C8 designation distinguishes it from MCT blends that also contain C10 capric acid.",
@@ -45379,17 +45495,50 @@
           "c8:0 - caprylic acid",
           "c8:0 caprylic acid"
         ],
-        "score": 14,
+        "score": 18,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.98,
           "range_low": 0.784,
           "range_high": 1.0,
           "quality": "excellent"
+        },
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "form_quality_confidence",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A human crossover study isolated tricaprylin and found a greater plasma ketone response than coconut oil and the tested MCT comparators, supporting the existing top-tier position for pure C8.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "29955698",
+              "doi": "10.3945/cdn.116.000257",
+              "title": "Tricaprylin Alone Increases Plasma Ketone Response More Than Coconut Oil or Other Medium-Chain Triglycerides: An Acute Crossover Study in Healthy Adults.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/29955698/",
+              "published_date": "2017-04-01",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_c8_ketone_response"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
         }
       },
       "c10 mct oil (capric acid)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "excellent (~95%)",
         "consumer_note": "C10 MCT oil is composed mainly of capric acid triglycerides. It differs from C8 MCT oil, which is composed mainly of caprylic acid triglycerides.",
@@ -45407,7 +45556,7 @@
           "c10:0 - capric acid",
           "c10:0 capric acid"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.95,
@@ -45472,7 +45621,7 @@
         }
       },
       "clarinol": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
         "absorption": "excellent (~85%)",
         "consumer_note": "Clarinol is a branded conjugated linoleic acid (CLA) ingredient. Its specification identifies a defined mixture of CLA fatty-acid isomers rather than ordinary linoleic acid.",
@@ -45490,7 +45639,7 @@
           "conjugated linoleic acid isomers",
           "clarinol(r) cla isomers"
         ],
-        "score": 11,
+        "score": 13,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
@@ -45500,7 +45649,7 @@
         }
       },
       "tonalin": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
         "absorption": "excellent (~85%)",
         "consumer_note": "Tonalin is a branded conjugated linoleic acid ingredient. The brand identifies a defined mixture of CLA fatty-acid isomers rather than ordinary linoleic acid.",
@@ -45524,7 +45673,7 @@
           "tonalin cla complex",
           "tonalin-cla"
         ],
-        "score": 11,
+        "score": 13,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
@@ -45621,9 +45770,9 @@
         }
       },
       "psyllium (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "category_error (soluble fiber; not systemically absorbed)",
         "consumer_note": "This label names psyllium without identifying whole seed, husk, powder, or processing format.",
         "consumer_note_review": {
@@ -45753,7 +45902,7 @@
     "rxcui": "6205",
     "forms": {
       "lactobacillus acidophilus la-14": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "high colonization (~80%)",
         "consumer_note": "Lactobacillus acidophilus LA-14 identifies a defined strain; LA-14 is part of its identity.",
@@ -45770,7 +45919,7 @@
           "acidophilus LA-14",
           "acidophilus LA14"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.8,
@@ -45783,7 +45932,7 @@
         }
       },
       "lactobacillus acidophilus ncfm": {
-        "bio_score": 11,
+        "bio_score": 15,
         "natural": true,
         "absorption": "excellent colonization (~90%)",
         "consumer_note": "Lactobacillus acidophilus NCFM identifies a defined strain; NCFM is part of its identity.",
@@ -45798,7 +45947,7 @@
           "NCFM",
           "NCFM supplement"
         ],
-        "score": 14,
+        "score": 18,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.9,
@@ -45811,9 +45960,9 @@
         }
       },
       "lactobacillus acidophilus dds-1": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "good colonization (~80%)",
         "consumer_note": "Lactobacillus acidophilus DDS-1 identifies a defined strain; DDS-1 is part of its identity.",
         "consumer_note_review": {
@@ -45845,9 +45994,9 @@
         }
       },
       "lactobacillus acidophilus (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "low (live organism class; B18 framework)",
         "consumer_note": "This label identifies L. acidophilus at species level without a strain code.",
         "consumer_note_review": {
@@ -45886,9 +46035,9 @@
         }
       },
       "lactobacillus acidophilus la-5": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "excellent",
         "consumer_note": "Lactobacillus acidophilus LA-5 identifies a specific microbial strain. The LA-5 strain designation is part of the ingredient identity and distinguishes it from other L. acidophilus strains.",
         "consumer_note_review": {
@@ -45913,9 +46062,9 @@
         }
       },
       "lactobacillus acidophilus la-02": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "very good",
         "consumer_note": "Lactobacillus acidophilus LA-02 identifies a defined strain; LA-02 is part of its identity.",
         "consumer_note_review": {
@@ -46104,7 +46253,7 @@
         }
       },
       "bifidobacterium lactis bl-04": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "high colonization (~85%)",
         "consumer_note": "Bifidobacterium lactis Bl-04 identifies a defined strain; Bl-04 is part of its identity.",
@@ -46128,7 +46277,7 @@
           "bifidobacterium lactis strain bl-04",
           "bifidobacterium lactis bl04"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
@@ -46138,9 +46287,9 @@
         }
       },
       "bifidobacterium lactis bi-07": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "very good",
         "consumer_note": "Bifidobacterium lactis Bi-07 identifies a defined strain; Bi-07 is part of its identity.",
         "consumer_note_review": {
@@ -46361,9 +46510,9 @@
         }
       },
       "bifidobacterium animalis subsp. lactis": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "very good",
         "consumer_note": "This identifies the lactis subspecies of Bifidobacterium animalis without a strain code.",
         "consumer_note_review": {
@@ -46536,9 +46685,9 @@
         }
       },
       "lactobacillus rhamnosus hn001": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "excellent",
         "consumer_note": "Lactobacillus rhamnosus HN001 identifies a defined strain; HN001 is part of its identity.",
         "consumer_note_review": {
@@ -46604,9 +46753,9 @@
         }
       },
       "lactobacillus rhamnosus lr-04": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "very good",
         "consumer_note": "Lactobacillus rhamnosus Lr-04 identifies a defined strain; Lr-04 is part of its identity.",
         "consumer_note_review": {
@@ -46632,9 +46781,9 @@
         }
       },
       "lactobacillus rhamnosus gr-1": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "excellent",
         "consumer_note": "Lactobacillus rhamnosus GR-1 identifies a defined strain; GR-1 is part of its identity.",
         "consumer_note_review": {
@@ -46720,7 +46869,7 @@
     "rxcui": "1673942",
     "forms": {
       "lactobacillus plantarum lp299v": {
-        "bio_score": 11,
+        "bio_score": 15,
         "natural": true,
         "absorption": "excellent colonization (~90%)",
         "consumer_note": "Lactobacillus plantarum LP299V identifies a defined strain; LP299V is part of its identity.",
@@ -46734,7 +46883,7 @@
           "lactobacillus plantarum rosell-a",
           "l. plantarum rosell-a"
         ],
-        "score": 14,
+        "score": 18,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.9,
@@ -46744,7 +46893,7 @@
         }
       },
       "lactobacillus plantarum dr7": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "high colonization (~85%)",
         "consumer_note": "Lactobacillus plantarum DR7 identifies a defined strain; DR7 is part of its identity.",
@@ -46758,7 +46907,7 @@
           "dr7",
           "plantarum dr7"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
@@ -46878,7 +47027,7 @@
     "rxcui": "1150096",
     "forms": {
       "bifidobacterium longum bb536": {
-        "bio_score": 11,
+        "bio_score": 15,
         "natural": true,
         "absorption": "excellent colonization (~90%)",
         "consumer_note": "Bifidobacterium longum BB536 identifies a defined strain; BB536 is part of its identity.",
@@ -46892,7 +47041,7 @@
           "B. longum BB536",
           "Morinaga BB536"
         ],
-        "score": 14,
+        "score": 18,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.9,
@@ -46905,7 +47054,7 @@
         }
       },
       "bifidobacterium longum 35624": {
-        "bio_score": 11,
+        "bio_score": 15,
         "natural": true,
         "absorption": "excellent colonization (~90%)",
         "consumer_note": "Bifidobacterium longum 35624 identifies a defined strain; 35624 is part of its identity.",
@@ -46918,7 +47067,7 @@
           "align probiotic",
           "Bifidobacterium longum longum 35624"
         ],
-        "score": 14,
+        "score": 18,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.9,
@@ -46928,9 +47077,9 @@
         }
       },
       "bifidobacterium longum (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "very good",
         "consumer_note": "This label identifies B. longum at species level without a strain code.",
         "consumer_note_review": {
@@ -46960,9 +47109,9 @@
         }
       },
       "bifidobacterium longum subsp. infantis": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "very good",
         "consumer_note": "This identifies the infantis subspecies of Bifidobacterium longum without a strain code.",
         "consumer_note_review": {
@@ -47148,7 +47297,7 @@
     "rxcui": "1592255",
     "forms": {
       "lactobacillus casei lc-11": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "high colonization (~80%)",
         "consumer_note": "Lactobacillus casei Lc-11 identifies a defined strain; Lc-11 is part of its identity.",
@@ -47162,7 +47311,7 @@
           "lc-11",
           "casei lc11"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.8,
@@ -47172,7 +47321,7 @@
         }
       },
       "lactobacillus casei shirota": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "high colonization (~85%)",
         "consumer_note": "Lactobacillus casei Shirota identifies a defined strain; Shirota is part of its identity.",
@@ -47186,7 +47335,7 @@
           "shirota strain",
           "yakult"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
@@ -47263,7 +47412,7 @@
     "rxcui": "236855",
     "forms": {
       "bifidobacterium bifidum bb-06": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "high colonization (~80%)",
         "consumer_note": "Bifidobacterium bifidum BB-06 identifies a defined strain; BB-06 is part of its identity.",
@@ -47277,7 +47426,7 @@
           "B. bifidum Bb-06",
           "DuPont Bb-06"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.8,
@@ -47290,7 +47439,7 @@
         }
       },
       "bifidobacterium bifidum r0071": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "high colonization (~85%)",
         "consumer_note": "Bifidobacterium bifidum R0071 identifies a defined strain; R0071 is part of its identity.",
@@ -47303,7 +47452,7 @@
           "b. bifidum r0071",
           "rosell-71"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
@@ -47316,9 +47465,9 @@
         }
       },
       "bifidobacterium bifidum (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "very good",
         "consumer_note": "This label identifies B. bifidum at species level without a strain code.",
         "consumer_note_review": {
@@ -47530,7 +47679,7 @@
     "rxcui": "2375526",
     "forms": {
       "lactobacillus paracasei lpc-37": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
         "absorption": "high colonization (~85%)",
         "consumer_note": "Lactobacillus paracasei Lpc-37 identifies a defined strain; Lpc-37 is part of its identity.",
@@ -47544,7 +47693,7 @@
           "lpc-37",
           "paracasei lpc37"
         ],
-        "score": 14,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
@@ -47578,9 +47727,9 @@
         }
       },
       "lactobacillus paracasei l.casei 431": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "very good",
         "consumer_note": "Lactobacillus paracasei 431 identifies a specifically labeled commercial strain.",
         "consumer_note_review": {
@@ -48314,9 +48463,9 @@
     "cui": "C0002521",
     "forms": {
       "bcaa 2:1:1": {
-        "bio_score": 11,
+        "bio_score": 15,
         "natural": false,
-        "score": 11,
+        "score": 15,
         "absorption": "excellent",
         "consumer_note": "BCAA 2:1:1 contains leucine, isoleucine, and valine in a 2-to-1-to-1 ratio.",
         "consumer_note_review": {
@@ -48347,9 +48496,9 @@
         }
       },
       "bcaa 4:1:1": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "excellent",
         "consumer_note": "BCAA 4:1:1 contains leucine, isoleucine, and valine in a 4-to-1-to-1 ratio.",
         "consumer_note_review": {
@@ -48375,9 +48524,9 @@
         }
       },
       "instantized bcaas": {
-        "bio_score": 11,
+        "bio_score": 15,
         "natural": false,
-        "score": 11,
+        "score": 15,
         "absorption": "excellent (enhanced solubility)",
         "consumer_note": "Instantized BCAAs are processed with a dispersing aid to mix more readily in liquid.",
         "consumer_note_review": {
@@ -48404,9 +48553,9 @@
         }
       },
       "bcaa peptides": {
-        "bio_score": 11,
+        "bio_score": 15,
         "natural": false,
-        "score": 11,
+        "score": 15,
         "absorption": "superior (faster uptake)",
         "consumer_note": "BCAA peptides contain branched-chain amino acids within short peptide fragments rather than solely as free amino acids.",
         "consumer_note_review": {
@@ -49202,9 +49351,9 @@
     "cui": "C2733644",
     "forms": {
       "thymoquinone standardized": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "thymoquinone lipophilic; no human PK published; animal F ~5-15%",
         "consumer_note": "This black-seed preparation is standardized to thymoquinone, which identifies a defined marker level.",
         "consumer_note_review": {
@@ -49229,9 +49378,9 @@
         }
       },
       "cold-pressed black seed oil": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "cold-pressed; lipid matrix may aid slightly; class-poor TQ F",
         "consumer_note": "Cold-pressed black seed oil is expressed from Nigella sativa seeds without high-heat refining. It is an oil form carrying the seed's fatty-acid and other oil-soluble components.",
         "consumer_note_review": {
@@ -49386,9 +49535,9 @@
     "cui": "C3254859",
     "forms": {
       "sea buckthorn seed oil": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "ALA/LA TG class; ~70-90% F with dietary fat",
         "consumer_note": "Sea-buckthorn seed oil is pressed or extracted from the seed, distinct from oil derived from the berry pulp.",
         "consumer_note_review": {
@@ -49418,9 +49567,9 @@
         }
       },
       "sea buckthorn berry oil": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "palmitoleic-rich oil; plasma 16:1n-7 unchanged at 5g/d (Johansson 2000)",
         "consumer_note": "Sea-buckthorn berry oil is derived from the fruit pulp, distinct from seed oil.",
         "consumer_note_review": {
@@ -49562,9 +49711,9 @@
         }
       },
       "purified shilajit extract": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "purified extract; class-equivalent to PrimaVie; no human PK",
         "consumer_note": "Purified shilajit extract is a refined preparation from shilajit resin. The purified designation distinguishes it from raw shilajit resin and identifies a processed extract material.",
         "consumer_note_review": {
@@ -49745,9 +49894,9 @@
         }
       },
       "fenugreek standardized extract": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "concentrated saponins still poor F (~1-5%); deglycosylation in gut needed",
         "consumer_note": "This is a standardized extract from Trigonella foenum-graecum, commonly called fenugreek. A listed marker constituent identifies the composition of the specific extract.",
         "consumer_note_review": {
@@ -49821,9 +49970,9 @@
         }
       },
       "testosurge extract": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "branded saponin extract; no PK data; class F ~1-5%",
         "consumer_note": "Testosurge is a branded fenugreek-seed extract with a specified extract identity.",
         "consumer_note_review": {
@@ -49900,9 +50049,9 @@
         }
       },
       "black cohosh standardized extract": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "low (triterpene standardized; PD-not-PK Crominex pattern)",
         "consumer_note": "This is a standardized extract from black cohosh root and rhizome, also called Actaea racemosa or Cimicifuga racemosa. The label's triterpene-glycoside percentage describes the extract's standardization.",
         "consumer_note_review": {
@@ -50513,9 +50662,9 @@
     "cui": "C0725330",
     "forms": {
       "bergamot bpf": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "Bergamot Polyphenolic Fraction; flavonoid class-poor F; clinical lipid RCTs only",
         "consumer_note": "Bergamot BPF is a standardized bergamot polyphenolic fraction. It is a more defined preparation than a general citrus or bergamot extract.",
         "consumer_note_review": {
@@ -50542,9 +50691,9 @@
         }
       },
       "bergamot standardized extract": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "standardized bergamot flavonoids; class-poor F per Batch 19",
         "consumer_note": "Bergamot standardized extract is made from Citrus bergamia material. A stated flavonoid percentage or marker profile helps identify the composition of the specific extract.",
         "consumer_note_review": {
@@ -50890,9 +51039,9 @@
         }
       },
       "DHA krill phospholipid": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "high; krill PL with marginal AUC advantage vs DHA-TG at equal dose",
         "consumer_note": "DHA krill phospholipid supplies DHA within phospholipids derived from krill.",
         "consumer_note_review": {
@@ -51120,9 +51269,9 @@
         }
       },
       "EPA krill phospholipid": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "high; krill PL with marginal AUC advantage vs EPA-TG at equal dose",
         "consumer_note": "EPA krill phospholipid supplies EPA within phospholipids derived from krill.",
         "consumer_note_review": {
@@ -51305,9 +51454,9 @@
     ],
     "forms": {
       "phytoceramides (plant)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "low (<5%); intact ceramide hydrolyzed to sphingoid bases pre-absorption",
         "consumer_note": "Plant phytoceramides are ceramide lipids sourced from plants. They are distinct from ceramides derived from wheat or animal materials.",
         "consumer_note_review": {
@@ -51459,9 +51608,9 @@
         }
       },
       "hesperidin-rich": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "hesperidin urinary recovery 4.1-7.9% in humans (Manach 2003)",
         "consumer_note": "Hesperidin-rich bioflavonoids are a citrus-derived mixture characterized by a high hesperidin proportion.",
         "consumer_note_review": {
@@ -51583,9 +51732,9 @@
         }
       },
       "silk peptides": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "high (~95% as amino acids); \"peptide\" marketing — no human PK advantage vs hydrolysate",
         "consumer_note": "Silk peptides are short protein fragments produced from silk proteins.",
         "consumer_note_review": {
@@ -51688,9 +51837,9 @@
     ],
     "forms": {
       "grass-fed desiccated": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "composite food; per-nutrient F (heme Fe ~25%, B12 ~50%); score = nutrient density",
         "consumer_note": "Grass-fed desiccated organ material is dried animal-organ tissue sourced from grass-fed animals.",
         "consumer_note_review": {
@@ -51710,9 +51859,9 @@
         }
       },
       "freeze-dried": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "composite food; lyophilization preserves heat-sensitive nutrients vs heat drying",
         "consumer_note": "Freeze-dried organ material is dehydrated at low temperature under vacuum to preserve the tissue matrix.",
         "consumer_note_review": {
@@ -51869,9 +52018,9 @@
     ],
     "forms": {
       "cold-pressed organic": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "TG hydrolysis by lipase; LA/GLA/ALA F ~80-95% with fat",
         "consumer_note": "Cold-pressed organic hemp-seed oil is mechanically expressed from certified-organic seed without high-heat refining.",
         "consumer_note_review": {
@@ -51891,9 +52040,9 @@
         }
       },
       "cold-pressed": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "same TG profile as organic; F equivalent ~80-95%",
         "consumer_note": "Cold-pressed hemp-seed oil is mechanically expressed from seed without high-heat refining.",
         "consumer_note_review": {
@@ -52006,9 +52155,9 @@
     ],
     "forms": {
       "calamari oil phospholipid": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "calamari PL: DHA-rich; class-equivalent to krill PL; no squid-specific PK",
         "consumer_note": "Calamari-oil phospholipid supplies fatty acids within phospholipids derived from squid material.",
         "consumer_note_review": {
@@ -52028,9 +52177,9 @@
         }
       },
       "calamari oil triglyceride": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "calamari TG: DHA-rich squid TG; class-equivalent to fish-TG",
         "consumer_note": "Calamari-oil triglyceride supplies fatty acids within triglycerides derived from squid oil.",
         "consumer_note_review": {
@@ -52053,9 +52202,9 @@
         }
       },
       "calamari oil (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "form unspecified; default to general marine TG/PL class",
         "consumer_note": "This listing identifies oil from calamari without stating its fatty-acid profile or processing format. The label does not provide enough form detail to distinguish among calamari-oil preparations.",
         "consumer_note_review": {
@@ -52128,9 +52277,9 @@
         }
       },
       "tuna oil triglyceride": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "tuna TG: same fish-TG class chemistry; species variant only",
         "consumer_note": "Tuna-oil triglyceride supplies its fatty acids within triglyceride molecules.",
         "consumer_note_review": {
@@ -52207,9 +52356,9 @@
     ],
     "forms": {
       "fermented": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "TG-class assumed (no human PK); oxidation/rancidity concerns flagged",
         "consumer_note": "Fermented cod-liver oil is cod-liver material processed through a fermentation step.",
         "consumer_note_review": {
@@ -52229,9 +52378,9 @@
         }
       },
       "virgin/cold-processed": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "high; TG-class CLO with low oxidation; preserves natural vitamins A/D",
         "consumer_note": "Virgin or cold-processed cod-liver oil is extracted with limited heat and refining.",
         "consumer_note_review": {
@@ -52370,9 +52519,9 @@
     ],
     "forms": {
       "umf 15+ / mgo 514+": {
-        "bio_score": 11,
+        "bio_score": 15,
         "natural": true,
-        "score": 14,
+        "score": 18,
         "absorption": "manuka MGO acts locally (oral/GI/wound); not systemically absorbed; grade ≠ F",
         "consumer_note": "UMF 15+ and MGO 514+ identify a high graded Manuka-honey specification using UMF and methylglyoxal measures.",
         "consumer_note_review": {
@@ -52393,9 +52542,9 @@
         }
       },
       "umf 10+ / mgo 263+": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "manuka MGO acts locally (oral/GI/wound); grade ≠ F",
         "consumer_note": "UMF 10+ and MGO 263+ identify a graded Manuka-honey specification using UMF and methylglyoxal measures.",
         "consumer_note_review": {
@@ -52532,9 +52681,9 @@
     ],
     "forms": {
       "triglyceride (rTG) form": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "very high; +24% plasma EPA+DHA rise vs CLO reference (Dyerberg 2010)",
         "consumer_note": "Re-esterified triglyceride fish oil has fatty acids reattached to a glycerol backbone after processing.",
         "consumer_note_review": {
@@ -52562,6 +52711,40 @@
           "quality": "very_good",
           "range_low": 0.85,
           "range_high": 0.97
+        },
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "axis": "systemic_bioavailability",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "A controlled human comparison found higher relative EPA and DHA bioavailability for re-esterified triglycerides than the natural triglyceride and ethyl-ester comparators, supporting the existing Excellent tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-08-18"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "20638827",
+              "doi": "10.1016/j.plefa.2010.06.007",
+              "title": "Bioavailability of marine n-3 fatty acid formulations.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/20638827/",
+              "published_date": "2010-09-01",
+              "publication_types": [
+                "Controlled Clinical Trial",
+                "Journal Article"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "comparative_epa_dha_bioavailability"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-08-18"
+            }
+          ]
         }
       },
       "natural triglyceride": {
@@ -52799,9 +52982,9 @@
         }
       },
       "fish oil phospholipid": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "high; phospholipid-bound omega-3 with marginal AUC advantage vs TG (Schuchardt 2011)",
         "consumer_note": "Fish-oil phospholipid supplies fatty acids within phospholipid molecules rather than only triglycerides.",
         "consumer_note_review": {
@@ -52904,9 +53087,9 @@
         }
       },
       "emulsified": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "very_good (emulsified premium; bypasses lipase needs)",
         "consumer_note": "Emulsified fish oil is dispersed into small oil droplets within a water-compatible mixture.",
         "consumer_note_review": {
@@ -53795,9 +53978,9 @@
         }
       },
       "oregano (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": false,
-        "score": 11,
+        "score": 12,
         "absorption": "good (carvacrol + thymol class baseline)",
         "consumer_note": "This label names oregano without identifying leaf powder, extract, essential oil, species, or carvacrol standardization.",
         "consumer_note_review": {
@@ -55153,9 +55336,9 @@
         }
       },
       "immunoglobulin (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "unknown",
         "consumer_note": "This label names immunoglobulin without identifying source, antibody class, concentration, or processing.",
         "consumer_note_review": {
@@ -55232,9 +55415,9 @@
         }
       },
       "borage seed oil (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "unknown",
         "consumer_note": "This label names borage-seed oil without identifying pressing, refining, or gamma-linolenic-acid concentration.",
         "consumer_note_review": {
@@ -55291,9 +55474,9 @@
     "category": "fatty_acids",
     "forms": {
       "herring roe extract": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "Excellent phospholipid-bound omega-3 absorption. DHA/EPA in phospholipid form shows superior bioavailability compared to triglyceride fish oil. 40-60% higher plasma incorporation.",
         "consumer_note": "Herring-roe extract is a concentrated preparation from herring eggs, containing roe-derived lipid and protein material.",
         "consumer_note_review": {
@@ -55319,9 +55502,9 @@
         }
       },
       "herring roe extract (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "unknown",
         "consumer_note": "This label names herring-roe extract without identifying concentration, lipid structure, or standardization.",
         "consumer_note_review": {
@@ -58434,9 +58617,9 @@
         }
       },
       "rosemary (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "good (rosmarinic + carnosic acid class)",
         "consumer_note": "This label names rosemary without identifying leaf powder, extract, essential oil, or marker standardization.",
         "consumer_note_review": {
@@ -58582,9 +58765,9 @@
         }
       },
       "holy basil (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "good (eugenol + ursolic acid class)",
         "consumer_note": "This listing identifies holy basil without stating the plant part, extract ratio, or standardization. The label does not provide enough form detail to distinguish among holy basil materials.",
         "consumer_note_review": {
@@ -58693,9 +58876,9 @@
         }
       },
       "chinese skullcap (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "good (baicalein/baicalin class baseline)",
         "consumer_note": "This label names Chinese skullcap without identifying root versus herb, powder versus extract, or standardization.",
         "consumer_note_review": {
@@ -59335,8 +59518,8 @@
         }
       },
       "algae oil (unspecified)": {
-        "bio_score": 11,
-        "score": 14,
+        "bio_score": 12,
+        "score": 15,
         "natural": true,
         "absorption": "very_good (algal omega-3 class baseline)",
         "absorption_structured": {
@@ -68489,9 +68672,9 @@
         }
       },
       "streptococcus salivarius m18": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "good",
         "consumer_note": "Streptococcus salivarius M18 identifies a defined strain; M18 is part of its identity.",
         "consumer_note_review": {
@@ -68605,9 +68788,9 @@
         }
       },
       "lactobacillus reuteri ATCC PTA 5289": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "excellent",
         "consumer_note": "Lactobacillus reuteri ATCC PTA 5289 identifies a defined deposited strain; the code is part of its identity.",
         "consumer_note_review": {
@@ -68691,9 +68874,9 @@
         }
       },
       "lactobacillus reuteri rc-14": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "excellent",
         "consumer_note": "Lactobacillus reuteri RC-14 identifies a defined strain; RC-14 is part of its identity.",
         "consumer_note_review": {
@@ -68817,9 +69000,9 @@
     "rxcui": "1310845",
     "forms": {
       "lactobacillus helveticus (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "good",
         "consumer_note": "This label identifies L. helveticus at species level without a strain code.",
         "consumer_note_review": {
@@ -68948,9 +69131,9 @@
     "rxcui": "2110011",
     "forms": {
       "bifidobacterium breve m-16v": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "excellent",
         "consumer_note": "Bifidobacterium breve M-16V identifies a defined strain; M-16V is part of its identity.",
         "consumer_note_review": {
@@ -69137,9 +69320,9 @@
         }
       },
       "bacillus coagulans mtcc 5856": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "excellent survival",
         "consumer_note": "Bacillus coagulans MTCC 5856 identifies a specific microbial strain. The strain code is part of the ingredient identity and distinguishes it from other B. coagulans strains.",
         "consumer_note_review": {
@@ -69163,9 +69346,9 @@
         }
       },
       "bacillus coagulans unique is-2": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "excellent survival",
         "consumer_note": "Bacillus coagulans Unique IS-2 identifies a defined strain; Unique IS-2 is part of its identity.",
         "consumer_note_review": {
@@ -69189,9 +69372,9 @@
         }
       },
       "bacillus coagulans snz 1969": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "excellent survival",
         "consumer_note": "Bacillus coagulans SNZ 1969 identifies a defined strain; SNZ 1969 is part of its identity.",
         "consumer_note_review": {
@@ -69410,9 +69593,9 @@
     "cui": "C1468787",
     "forms": {
       "bacillus indicus (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 12,
         "natural": true,
-        "score": 14,
+        "score": 15,
         "absorption": "very good",
         "consumer_note": "This label identifies B. indicus at species level without a strain code.",
         "consumer_note_review": {
@@ -70460,9 +70643,9 @@
     },
     "forms": {
       "standard krill oil": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "krill PL: F~0.7-0.97 with fat; equivalent to fish-TG at matched dose (Yurko-Mauro 2015)",
         "epa_percent": 0.12,
         "dha_percent": 0.07,
@@ -70517,9 +70700,9 @@
         }
       },
       "Neptune Krill Oil (NKO)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "NKO branded: same PL chemistry; F equivalent to fish-TG (Yurko-Mauro 2015)",
         "epa_percent": 0.12,
         "dha_percent": 0.07,
@@ -70546,9 +70729,9 @@
         }
       },
       "Superba Krill (Aker BioMarine)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": true,
-        "score": 14,
+        "score": 17,
         "absorption": "Superba branded: GRAS status ≠ better F; class-equivalent to fish-TG",
         "epa_percent": 0.13,
         "dha_percent": 0.07,
