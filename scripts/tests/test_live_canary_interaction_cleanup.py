@@ -131,7 +131,7 @@ def test_warfarin_vitamin_e_guidance_does_not_claim_a_safe_cutoff():
     assert "anticoagulation" in management
     assert "does not mean" in management
     assert "known dose limit" in management
-    assert management.startswith("contains vitamin e, which can increase bleeding risk")
+    assert management.startswith("contains vitamin e. large supplemental doses")
 
 
 def test_warfarin_vitamin_k_copy_describes_direction_and_consistency():
@@ -155,11 +155,17 @@ def test_warfarin_vitamin_k_copy_describes_direction_and_consistency():
 def test_chromium_copy_explains_the_authored_screening_threshold():
     rule = BY_ID["DSI_DM_CHROMIUM"]
     management = rule["management"].lower()
+    threshold = rule["dose_threshold"]
 
-    assert rule["dose_threshold"]["value"] == 200
-    assert rule["dose_threshold"]["unit"] == "mcg"
+    assert rule["severity"] == "Minor"
+    assert rule["display_layer"] == "background"
+    assert rule["background_rationale"].strip()
+    assert threshold["value"] == 200
+    assert threshold["unit"] == "mcg"
+    assert threshold["confidence_basis"] == "inferred_from_dose_range"
+    assert "not a guideline cutoff" in threshold["rationale"].lower()
     assert "at least 200 mcg/day" in management
     assert "screening threshold" in management
     assert "not a proven toxicity cutoff" in management
     assert "do not change" in management
-    assert management.startswith("chromium can lower blood glucose")
+    assert management.startswith("chromium may lower blood glucose")

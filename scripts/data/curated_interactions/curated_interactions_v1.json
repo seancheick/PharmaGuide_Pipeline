@@ -24,7 +24,7 @@
       "2026-07-28: Clarified live stack copy. Corrected the direction of the warfarin/vitamin K mechanism, framed vitamin K as a consistency warning rather than a ban, disclosed that the presence-triggered vitamin E alert is not proof of crossing a known dose limit, and identified 200 mcg/day chromium as an authored review threshold rather than a toxicity cutoff.",
       "2026-07-28: Reclassified DSI_WAR_VITK from Major to Moderate so the app presents the sourced consistency/clinician-review action instead of the categorical Not recommended verdict. The interaction remains harmful, presence-triggered, established, and never dose-suppressed.",
       "2026-07-29: Retired 12 unsupported, duplicated, or mis-layered consumer rules. Chronic medication-nutrient monitoring now remains solely in the pharmacist-reviewed depletion corpus; neutral benefit hypotheses no longer ship as safety interactions; and the broad high-dose vitamin E/anticoagulant rule was removed rather than implying a safe cutoff. Narrowed calcium/fluoroquinolone to ciprofloxacin RxCUI 2551 because moxifloxacin labeling reports no significant calcium effect; retained the class-wide zinc interaction without a universal timing interval because product labels differ. Also narrowed melatonin to fluvoxamine RxCUI 42355, corrected MAOI washout copy, and made zinc/copper dose-dependent at its explicitly disclosed 25 mg/day review floor.",
-      "2026-08-08: Reordered the vitamin E/warfarin and chromium/diabetes-medication management copy so the user action appears first while preserving the authored trigger disclosures: presence is not proof of crossing a vitamin E dose limit, and 200 mcg/day chromium is a screening threshold rather than a toxicity cutoff. Clinical severity, materiality, identifiers, and thresholds are unchanged."
+      "2026-08-08: Corrected the vitamin E/warfarin and chromium/diabetes-medication guidance. Vitamin E copy now limits the bleeding-risk statement to large supplemental doses and preserves the uncertain clinically significant amount. Chromium is reclassified from Moderate to Minor/background monitoring, and its 200 mcg/day screening threshold is explicitly documented as inferred from studied dose ranges rather than a guideline cutoff."
     ]
   },
   "interactions": [
@@ -243,7 +243,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
       "mechanism": "Vitamin E can inhibit platelet aggregation and antagonize vitamin K-dependent clotting factors. NIH notes that large supplemental doses may increase bleeding risk with warfarin, but the amount needed for a clinically significant effect is uncertain.",
-      "management": "Contains vitamin E, which can increase bleeding risk with warfarin. Tell your prescriber or anticoagulation clinic before starting, stopping, or changing this supplement, and keep your use consistent — extra monitoring may be appropriate after a change. Do not change warfarin on your own. This alert reflects the presence of vitamin E; it does not mean a known dose limit was crossed.",
+      "management": "Contains vitamin E. Large supplemental doses may increase bleeding risk with warfarin, but the amount that causes a clinically significant effect is uncertain. Tell your prescriber or anticoagulation clinic before starting, stopping, or changing this supplement, and keep your use consistent — extra monitoring may be appropriate after a change. Do not change warfarin on your own. This alert reflects the presence of vitamin E; it does not mean a known dose limit was crossed.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/24166490/"
@@ -1158,10 +1158,10 @@
       "agent1_id": "class:diabetes_meds",
       "agent2_name": "Chromium",
       "agent2_id": "C0008574",
-      "severity": "Moderate",
+      "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Chromium potentiates insulin action and can lower fasting blood glucose. When combined with insulin or oral hypoglycemics, this additive glucose-lowering effect can cause symptomatic hypoglycemia.",
-      "management": "Chromium can lower blood glucose, which may add to your diabetes medication's effect. Monitor your glucose more closely when starting or changing chromium, and ask the clinician managing your diabetes whether any monitoring or medication change is needed — do not change medication on your own. Shown when the supplemental total is at least 200 mcg/day: a screening threshold, not a proven toxicity cutoff.",
+      "mechanism": "Chromium might lower blood glucose. With insulin or other diabetes medications, the additive effect could increase the risk of low blood glucose.",
+      "management": "Chromium may lower blood glucose, which may add to your diabetes medication's effect. Monitor your glucose more closely when starting or changing chromium, and ask the clinician managing your diabetes whether any monitoring or medication change is needed — do not change medication on your own. Shown when the supplemental total is at least 200 mcg/day: a screening threshold inferred from studied dose ranges, not a proven toxicity cutoff or guideline cutoff.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/15208835/"
@@ -1186,15 +1186,17 @@
       "agent2_canonical_id": "chromium",
       "direction": "harmful",
       "materiality": "dose_dependent",
+      "display_layer": "background",
+      "background_rationale": "Potential additive glucose lowering supports monitoring, not a categorical product-level caution.",
       "dose_threshold": {
         "agent_canonical_id": "chromium",
         "value": 200,
         "unit": "mcg",
         "basis": "per_day",
         "confidence": "medium",
-        "confidence_basis": "reuse",
+        "confidence_basis": "inferred_from_dose_range",
         "source": "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/",
-        "rationale": "Reused chromium glucose floor (200 mcg; top of multivitamin range, trace below)."
+        "rationale": "Authored screening floor inferred from studied supplemental dose ranges; 200 mcg/day is not a guideline cutoff or proven toxicity threshold."
       }
     },
     {
