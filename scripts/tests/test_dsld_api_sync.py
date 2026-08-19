@@ -116,6 +116,21 @@ def test_build_parser_has_expected_subcommands():
     assert args.output_dir == "/tmp/out"
 
 
+def test_sync_brand_defaults_to_on_market_only():
+    from dsld_api_sync import build_parser
+
+    parser = build_parser()
+    args = parser.parse_args([
+        "sync-brand",
+        "--brand",
+        "Brand",
+        "--output-dir",
+        "/tmp/out",
+    ])
+
+    assert args.status == 1
+
+
 def test_check_version_returns_failure_when_client_raises(monkeypatch, capsys):
     import dsld_api_sync
 
@@ -425,6 +440,28 @@ def test_discover_filter_ids_honors_limit_across_pages():
     ids = dsld_api_sync._discover_filter_ids(client, limit=3, supplement_form="e0161")
 
     assert ids == [101, 202, 303]
+
+
+def test_discover_brand_ids_defaults_to_on_market_filter():
+    import dsld_api_sync
+
+    class FakeClient:
+        def __init__(self):
+            self.filters = []
+
+        def search_filter(self, *, size=1000, from_=0, **filters):
+            self.filters.append(filters)
+            return {"hits": []}
+
+        def search_brand(self, brand_name, *, size=1000, from_=0):
+            raise AssertionError("Unfiltered brand endpoint must not be the default")
+
+    client = FakeClient()
+
+    ids = dsld_api_sync._discover_brand_ids(client, "Brand")
+
+    assert ids == []
+    assert client.filters == [{"brand": "Brand", "status": 1}]
 
 
 def test_sync_brand_paginates_brand_discovery(monkeypatch, tmp_path):

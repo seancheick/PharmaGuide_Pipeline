@@ -504,9 +504,22 @@ def _discover_filter_ids(client: DSLDApiClient, *, limit: int | None = None, **f
     )
 
 
-def _discover_brand_ids(client: DSLDApiClient, brand: str, *, limit: int | None = None) -> list[int]:
-    return _discover_ids_paginated(
-        lambda *, size, from_: client.search_brand(brand, size=size, from_=from_),
+def _discover_brand_ids(
+    client: DSLDApiClient,
+    brand: str,
+    *,
+    status: int = 1,
+    limit: int | None = None,
+) -> list[int]:
+    if status == 2:
+        return _discover_ids_paginated(
+            lambda *, size, from_: client.search_brand(brand, size=size, from_=from_),
+            limit=limit,
+        )
+    return _discover_filter_ids(
+        client,
+        brand=brand,
+        status=status,
         limit=limit,
     )
 
@@ -801,15 +814,12 @@ def _cmd_sync_brand(args: argparse.Namespace) -> int:
     client = DSLDApiClient()
     limit_text = args.limit if args.limit is not None else "all"
     print(f"Searching brand: {args.brand} (limit={limit_text}) ...")
-    if args.status != 2:
-        ids = _discover_filter_ids(
-            client,
-            brand=args.brand,
-            status=args.status,
-            limit=args.limit,
-        )
-    else:
-        ids = _discover_brand_ids(client, args.brand, limit=args.limit)
+    ids = _discover_brand_ids(
+        client,
+        args.brand,
+        status=args.status,
+        limit=args.limit,
+    )
     if not ids:
         print("No labels found for that brand.")
         return 0
@@ -1164,7 +1174,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_brand.add_argument("--output-dir", help="Directory to write flat staging labels")
     p_brand.add_argument("--canonical-root", help="Canonical raw root to route labels by form")
     p_brand.add_argument("--state-file", help="Shared DSLD sync state file")
-    p_brand.add_argument("--status", type=int, choices=[0, 1, 2], default=2, help="Market status filter (default 2=all)")
+    p_brand.add_argument("--status", type=int, choices=[0, 1, 2], default=1, help="Market status filter (default 1=on market)")
     p_brand.add_argument("--limit", type=int, default=None, help="Max discovery results (default all)")
     p_brand.add_argument("--snapshot", action="store_true", help="Write to timestamped snapshot subdir")
 
