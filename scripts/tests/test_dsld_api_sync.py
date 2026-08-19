@@ -131,6 +131,150 @@ def test_sync_brand_defaults_to_on_market_only():
     assert args.status == 1
 
 
+def test_sync_brands_defaults_to_on_market_only():
+    from dsld_api_sync import build_parser
+
+    parser = build_parser()
+    args = parser.parse_args([
+        "sync-brands",
+        "--brand",
+        "Centrum=Centrum",
+        "--output-root",
+        "/tmp/brands",
+        "--manifest-output",
+        "/tmp/wave.json",
+    ])
+
+    assert args.status == 1
+
+
+def test_sync_brands_writes_complete_identity_manifest(monkeypatch, tmp_path):
+    import dsld_api_sync
+
+    class FakeClient:
+        instances = []
+
+        def __init__(self):
+            self.filters = []
+            self.instances.append(self)
+
+        def search_filter(self, *, size=1000, from_=0, **filters):
+            self.filters.append(filters)
+            if from_:
+                return {"hits": []}
+            return {
+                "hits": [{
+                    "_id": "101",
+                    "_source": {
+                        "brandName": "Bayer One A Day",
+                        "entryDate": "2026-08-01",
+                        "offMarket": 0,
+                    },
+                }]
+            }
+
+        def fetch_label(self, dsld_id):
+            assert dsld_id == 101
+            return {
+                "id": 101,
+                "fullName": "One A Day Test",
+                "brandName": "Bayer One A Day",
+                "productVersionCode": "v2",
+                "entryDate": "2026-08-01",
+                "offMarket": 0,
+                "upcSku": [{"upc": "012345678905"}],
+                "labelRelationships": [{"labelId": 99, "relationshipType": "Previous label"}],
+                "netContents": [{"quantity": 60, "unit": "Tablet(s)"}],
+                "physicalState": {"langualCode": "E0155", "langualCodeDescription": "Tablet or Pill"},
+                "ingredientRows": [],
+            }
+
+    monkeypatch.setattr(dsld_api_sync, "DSLDApiClient", FakeClient)
+    output_root = tmp_path / "brands"
+    manifest_path = tmp_path / "wave.json"
+    args = type(
+        "Args",
+        (),
+        {
+            "brand": ["One A Day=One_A_Day"],
+            "output_root": str(output_root),
+            "manifest_output": str(manifest_path),
+            "status": 1,
+            "limit": None,
+        },
+    )()
+
+    assert dsld_api_sync._cmd_sync_brands(args) == 0
+    assert FakeClient.instances[0].filters
+    assert all(
+        filters == {"brand": "One A Day", "status": 1}
+        for filters in FakeClient.instances[0].filters
+    )
+    assert (output_root / "One_A_Day" / "101.json").exists()
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["status_filter"] == 1
+    assert manifest["total_labels"] == 1
+    assert manifest["brands"] == {"One A Day": {"folder": "One_A_Day", "label_count": 1}}
+    row = manifest["labels"][0]
+    assert row["query_brand"] == "One A Day"
+    assert row["brand_name_raw"] == "Bayer One A Day"
+    assert row["product_name_raw"] == "One A Day Test"
+    assert row["dsld_id"] == 101
+    assert row["off_market"] is False
+    assert row["upc_sku"] == [{"upc": "012345678905"}]
+    assert row["product_version_code"] == "v2"
+    assert row["label_relationships"] == [{"labelId": 99, "relationshipType": "Previous label"}]
+    assert row["net_contents"] == [{"quantity": 60, "unit": "Tablet(s)"}]
+    assert row["physical_state"]["langualCode"] == "E0155"
+    assert len(row["payload_sha256"]) == 64
+
+
+def test_sync_brands_rejects_off_market_label_from_on_market_discovery(monkeypatch, tmp_path):
+    import dsld_api_sync
+
+    class FakeClient:
+        def search_filter(self, *, size=1000, from_=0, **filters):
+            return {"hits": []} if from_ else {"hits": [{"_source": {"id": 101}}]}
+
+        def fetch_label(self, dsld_id):
+            return {"id": dsld_id, "brandName": "Brand", "offMarket": 1}
+
+    monkeypatch.setattr(dsld_api_sync, "DSLDApiClient", FakeClient)
+    args = type(
+        "Args",
+        (),
+        {
+            "brand": ["Brand=Brand"],
+            "output_root": str(tmp_path / "brands"),
+            "manifest_output": str(tmp_path / "wave.json"),
+            "status": 1,
+            "limit": None,
+        },
+    )()
+
+    assert dsld_api_sync._cmd_sync_brands(args) == 1
+    assert not (tmp_path / "wave.json").exists()
+
+
+def test_sync_brands_does_not_offer_an_all_market_override():
+    from dsld_api_sync import build_parser
+
+    parser = build_parser()
+    with pytest.raises(SystemExit):
+        parser.parse_args([
+            "sync-brands",
+            "--brand",
+            "Centrum=Centrum",
+            "--output-root",
+            "/tmp/brands",
+            "--manifest-output",
+            "/tmp/wave.json",
+            "--status",
+            "2",
+        ])
+
+
 def test_check_version_returns_failure_when_client_raises(monkeypatch, capsys):
     import dsld_api_sync
 

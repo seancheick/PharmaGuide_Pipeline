@@ -25,6 +25,7 @@ from dsld_api_client import (
     load_dsld_config,
     normalize_api_label,
 )  # noqa: F401
+from run_artifacts import atomic_write_json
 
 logger = logging.getLogger(__name__)
 
@@ -524,6 +525,61 @@ def _discover_brand_ids(
     )
 
 
+def _parse_brand_spec(spec: str) -> tuple[str, str]:
+    """Parse ``QUERY=FOLDER`` without allowing path traversal."""
+    query_brand, separator, folder = spec.partition("=")
+    query_brand = query_brand.strip()
+    folder = folder.strip()
+    if not separator or not query_brand or not folder:
+        raise ValueError("--brand must use QUERY=FOLDER (for example Centrum=Centrum)")
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", folder):
+        raise ValueError(f"Unsafe brand folder {folder!r}; use letters, numbers, '_' or '-'")
+    return query_brand, folder
+
+
+def _off_market(value: Any) -> bool:
+    if isinstance(value, str):
+        return value.strip().lower() not in {"", "0", "false", "no", "none"}
+    return bool(value)
+
+
+def _wave_manifest_row(
+    label: dict[str, Any],
+    *,
+    query_brand: str,
+    brand_folder: str,
+) -> dict[str, Any]:
+    """Project immutable label identity into the Wave manifest."""
+    return {
+        "query_brand": query_brand,
+        "brand_folder": brand_folder,
+        "brand_name_raw": label.get("brandName"),
+        "product_name_raw": label.get("fullName"),
+        "dsld_id": label.get("id"),
+        "off_market": _off_market(label.get("offMarket")),
+        "upc_sku": label.get("upcSku") or [],
+        "entry_date": label.get("entryDate"),
+        "product_version_code": label.get("productVersionCode"),
+        "label_relationships": label.get("labelRelationships") or [],
+        "physical_state": label.get("physicalState") or {},
+        "net_contents": label.get("netContents") or [],
+        "source_path": f"{brand_folder}/{label.get('id')}.json",
+        "payload_sha256": canonical_payload_sha256(label),
+    }
+
+
+def _write_wave_raw_label(label: dict[str, Any], output_dir: Path) -> None:
+    """Write a raw label while snapshotting an existing changed payload."""
+    dsld_id = label.get("id")
+    existing_path = output_dir / f"{dsld_id}.json"
+    if existing_path.exists():
+        existing = json.loads(existing_path.read_text(encoding="utf-8"))
+        if canonical_payload_sha256(existing) == canonical_payload_sha256(label):
+            return
+        write_raw_label(existing, output_dir, snapshot=True)
+    write_raw_label(label, output_dir)
+
+
 def _normalize_local_label(raw_label: dict, *, source_path: Path, input_root: Path) -> dict:
     """Normalize a local manual/raw JSON label into canonical raw-label shape."""
     if not isinstance(raw_label, dict):
@@ -837,6 +893,81 @@ def _cmd_sync_brand(args: argparse.Namespace) -> int:
     )
     destination = args.canonical_root or args.output_dir
     print(f"\nDone. Wrote {counts['written']} artifacts for {len(ids)} labels to {destination}")
+    return 0
+
+
+def _cmd_sync_brands(args: argparse.Namespace) -> int:
+    """Download reviewed on-market brands and atomically write one manifest."""
+    try:
+        brand_specs = [_parse_brand_spec(spec) for spec in args.brand]
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+
+    client = DSLDApiClient()
+    output_root = Path(args.output_root)
+    manifest_rows: list[dict[str, Any]] = []
+    brand_summary: dict[str, dict[str, Any]] = {}
+    seen_ids: dict[int, str] = {}
+
+    try:
+        for query_brand, brand_folder in brand_specs:
+            ids = _discover_brand_ids(
+                client,
+                query_brand,
+                status=args.status,
+                limit=args.limit,
+            )
+            brand_summary[query_brand] = {
+                "folder": brand_folder,
+                "label_count": len(ids),
+            }
+            destination = output_root / brand_folder
+            for dsld_id in ids:
+                previous_query = seen_ids.get(dsld_id)
+                if previous_query is not None:
+                    raise ValueError(
+                        f"DSLD ID {dsld_id} appeared in both {previous_query!r} "
+                        f"and {query_brand!r}"
+                    )
+                seen_ids[dsld_id] = query_brand
+
+                label = client.fetch_label(dsld_id)
+                if label.get("id") != dsld_id:
+                    raise ValueError(
+                        f"DSLD ID mismatch: discovered {dsld_id}, fetched {label.get('id')!r}"
+                    )
+                if args.status == 1 and _off_market(label.get("offMarket")):
+                    raise ValueError(
+                        f"DSLD ID {dsld_id} was returned by on-market discovery "
+                        "but its full label is off-market"
+                    )
+
+                _write_wave_raw_label(label, destination)
+                manifest_rows.append(
+                    _wave_manifest_row(
+                        label,
+                        query_brand=query_brand,
+                        brand_folder=brand_folder,
+                    )
+                )
+    except Exception as exc:
+        print(f"ERROR: Wave sync stopped: {exc}", file=sys.stderr)
+        return 1
+
+    manifest = {
+        "schema_version": "1.0.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "status_filter": args.status,
+        "total_labels": len(manifest_rows),
+        "brands": brand_summary,
+        "labels": manifest_rows,
+    }
+    atomic_write_json(Path(args.manifest_output), manifest)
+    print(
+        f"Done. Wrote {len(manifest_rows)} labels across {len(brand_specs)} brands; "
+        f"manifest: {args.manifest_output}"
+    )
     return 0
 
 
@@ -1178,6 +1309,23 @@ def build_parser() -> argparse.ArgumentParser:
     p_brand.add_argument("--limit", type=int, default=None, help="Max discovery results (default all)")
     p_brand.add_argument("--snapshot", action="store_true", help="Write to timestamped snapshot subdir")
 
+    # -- sync-brands ---------------------------------------------------------
+    p_brands = subparsers.add_parser(
+        "sync-brands",
+        help="Sync multiple reviewed brands and write a complete identity manifest",
+    )
+    p_brands.add_argument(
+        "--brand",
+        action="append",
+        required=True,
+        metavar="QUERY=FOLDER",
+        help="Repeatable DSLD query brand and destination folder mapping",
+    )
+    p_brands.add_argument("--output-root", required=True, help="Root directory for brand label folders")
+    p_brands.add_argument("--manifest-output", required=True, help="Atomic JSON manifest destination")
+    p_brands.set_defaults(status=1)
+    p_brands.add_argument("--limit", type=int, default=None, help="Optional per-brand discovery limit")
+
     # -- refresh-ids ---------------------------------------------------------
     p_refresh = subparsers.add_parser("refresh-ids", help="Re-fetch specific label IDs")
     p_refresh.add_argument("--ids", required=True, nargs="+", type=int, help="DSLD label IDs to fetch")
@@ -1265,6 +1413,7 @@ def main(argv: list[str] | None = None) -> int:
     handlers = {
         "probe": _cmd_probe,
         "sync-brand": _cmd_sync_brand,
+        "sync-brands": _cmd_sync_brands,
         "refresh-ids": _cmd_refresh_ids,
         "verify-db": _cmd_verify_db,
         "sync-query": _cmd_sync_query,
