@@ -95,6 +95,101 @@ def test_strict_rows_come_only_from_ingredients_scorable():
     assert result.strict_contract_passed is True
 
 
+def test_legacy_identity_reason_keeps_unmapped_active_in_coverage_denominator():
+    mapped = _row(raw_source_path="ingredientRows[0]")
+    unresolved = _row(
+        name="Unknown Active",
+        canonical_id=None,
+        raw_source_path="ingredientRows[1]",
+        mapped=False,
+        mapped_identity=False,
+        scoreable_identity=False,
+        identity_disposition="unresolved",
+        role_classification="active_unmapped",
+        identity_decision_reason="no_quality_map_match",
+        score_exclusion_reason=None,
+    )
+    product = _product(
+        [mapped],
+        ingredient_quality_data={
+            "ingredients_scorable": [mapped],
+            "ingredients_skipped": [unresolved],
+            "ingredients": [mapped, unresolved],
+        },
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.mapped_count == 1
+    assert result.unmapped_count == 1
+    assert result.mapped_coverage == 0.5
+
+
+def test_canonical_exclusion_reason_wins_over_conflicting_legacy_keys():
+    mapped = _row(raw_source_path="ingredientRows[0]")
+    intentionally_excluded = _row(
+        name="Nutrition row",
+        canonical_id=None,
+        raw_source_path="ingredientRows[1]",
+        mapped=False,
+        mapped_identity=False,
+        scoreable_identity=False,
+        identity_disposition="unresolved",
+        role_classification="active_unmapped",
+        score_exclusion_reason="recognized_non_scorable",
+        skip_reason="no_quality_map_match",
+        identity_decision_reason="no_quality_map_match",
+    )
+    product = _product(
+        [mapped],
+        ingredient_quality_data={
+            "ingredients_scorable": [mapped],
+            "ingredients_skipped": [intentionally_excluded],
+            "ingredients": [mapped, intentionally_excluded],
+        },
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.unmapped_count == 0
+    assert result.mapped_coverage == 1.0
+
+
+def test_product_level_evidence_never_inflates_label_mapping_coverage():
+    mapped = _row(raw_source_path="ingredientRows[0]")
+    product = _product(
+        [mapped],
+        product_scoring_evidence=[
+            {
+                "evidence_type": "sports_primary_dose",
+                "clean_identity_id": "magnesium",
+                "scoring_parent_id": "sports_primary_dose",
+                "evidence_canonical_id": "sports_primary_dose",
+                "canonical_source_db": "product_scoring_evidence",
+                "evidence_origin": "native_enrichment",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "dose_value": 200,
+                "dose_unit": "mg",
+                "source": "ingredientRows[0]",
+                "raw_source_path": "ingredientRows[0]",
+                "evidence_scope": "row_level",
+                "linked_rows": ["ingredientRows[0]"],
+                "confidence": "high",
+                "reason": "fixture",
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert len(result.rows) == 2
+    assert result.mapped_count == 1
+    assert result.mapped_coverage == 1.0
+
+
 def test_strict_mode_does_not_fallback_to_legacy_iqd_ingredients():
     result = get_scoring_ingredients(_product([]), strict=True)
 

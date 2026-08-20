@@ -243,6 +243,27 @@ def _norm(value: Any) -> str:
     return str(value).strip().lower()
 
 
+def score_exclusion_reason(row: Dict[str, Any]) -> str:
+    """Read the canonical reason with narrow schema-2.3 compatibility.
+
+    New enrichment writes ``score_exclusion_reason``. ``skip_reason`` is the
+    former scoring-specific alias. One historical unmatched-identity path
+    wrote only ``identity_decision_reason=no_quality_map_match``; accept that
+    exact value at this migration boundary and no other identity rationale.
+    """
+
+    canonical = _norm(row.get("score_exclusion_reason"))
+    if canonical:
+        return canonical
+    legacy_skip = _norm(row.get("skip_reason"))
+    if legacy_skip:
+        return legacy_skip
+    legacy_identity = _norm(row.get("identity_decision_reason"))
+    if legacy_identity == "no_quality_map_match":
+        return legacy_identity
+    return ""
+
+
 def _as_float(value: Any, default: Optional[float] = None) -> Optional[float]:
     if value is None:
         return default
@@ -1993,7 +2014,7 @@ def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
         return False
     if _norm(row.get("role_classification")) != "active_unmapped":
         return False
-    if _norm(row.get("skip_reason") or row.get("score_exclusion_reason")) != "no_quality_map_match":
+    if score_exclusion_reason(row) != "no_quality_map_match":
         return False
     if bool(row.get("is_excipient")):
         return False
@@ -2120,22 +2141,28 @@ def _build_scoring_ingredients(
     # actives that are unresolved specifically because no quality-map identity
     # exists must remain in the denominator. They never enter ``rows`` and
     # therefore cannot influence any score, route, adequacy, or safety lookup.
+    mapped_coverage_keys = {
+        _classification_row_key(row, index)
+        for index, row in enumerate(rows)
+        if _norm(row.get("scoring_input_kind")) != "product_level_evidence"
+    }
     unresolved_coverage_keys = {
         _classification_row_key(item.row, index)
         for index, item in enumerate(rejected)
         if item.reason == "missing_scoring_identity"
-    }
+        and _norm(item.row.get("scoring_input_kind")) != "product_level_evidence"
+    } - mapped_coverage_keys
     for index, row in enumerate(_safe_list(iqd.get("ingredients"))):
         if not isinstance(row, dict) or not _is_genuine_unresolved_label_active(row):
             continue
         key = _classification_row_key(row, index)
-        if key in unresolved_coverage_keys:
+        if key in mapped_coverage_keys or key in unresolved_coverage_keys:
             continue
         rejected.append(RejectedScoringRow(row=row, reason="missing_scoring_identity"))
         unresolved_coverage_keys.add(key)
 
-    unmapped_count = sum(1 for item in rejected if item.reason == "missing_scoring_identity")
-    mapped_count = len(rows)
+    unmapped_count = len(unresolved_coverage_keys)
+    mapped_count = len(mapped_coverage_keys)
     denominator = mapped_count + unmapped_count
     mapped_coverage = (mapped_count / denominator) if denominator else 0.0
 

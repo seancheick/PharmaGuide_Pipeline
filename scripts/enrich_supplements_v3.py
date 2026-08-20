@@ -5571,7 +5571,8 @@ class SupplementEnricherV3:
         row["scoreable_identity"] = False
         row.setdefault("score_included", False)
         row["skip_reason"] = skip_reason
-        row.setdefault("score_exclusion_reason", skip_reason)
+        if not row.get("score_exclusion_reason"):
+            row["score_exclusion_reason"] = skip_reason
         row.setdefault("fallback_class", "clinical_fail_safe")
         row.setdefault("fallback_reason", skip_reason)
         row.setdefault("mapped", bool(row.get("mapped_identity") or row.get("canonical_id")))

@@ -860,6 +860,7 @@ class TestScorableClassificationPass1:
         assert skipped_dict['Sorbitol']['skip_reason'] in (
             SKIP_REASON_ADDITIVE, SKIP_REASON_RECOGNIZED_NON_SCORABLE
         )
+        assert skipped_dict['Sorbitol']['score_exclusion_reason']
 
     def test_blend_header_without_dose_is_skipped(self, enricher, fixture_product_with_additives):
         """Header rows like 'Proprietary Blend' without dose should be skipped."""
