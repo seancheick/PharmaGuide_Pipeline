@@ -1196,7 +1196,7 @@ def test_inactive_tetraborate_source_echo_does_not_block_active_boron():
     assert has_banned_substance(enriched) is False
 
 
-def test_inactive_tetraborate_without_active_boron_still_blocks_export():
+def test_inactive_tetraborate_without_active_boron_has_no_retired_policy_block():
     enriched = make_enriched()
     enriched["activeIngredients"] = []
     enriched["inactiveIngredients"] = [
@@ -1207,7 +1207,7 @@ def test_inactive_tetraborate_without_active_boron_still_blocks_export():
         }
     ]
 
-    assert has_banned_substance(enriched) is True
+    assert has_banned_substance(enriched) is False
 
 
 def test_critical_banned_blob_warning_cannot_coexist_with_safe_core_verdict():

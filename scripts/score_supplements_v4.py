@@ -136,6 +136,13 @@ def _safety_gate_breakdown(safety_result) -> Dict[str, Any]:
         "needs_review": safety_result.needs_review,
         "short_circuits_scoring": safety_result.short_circuits_scoring,
         "safety_decision": decision.to_dict() if decision is not None else None,
+        "quarantine_required": bool(
+            getattr(safety_result, "quarantine_required", False)
+        ),
+        "quarantine_reason": getattr(safety_result, "quarantine_reason", None),
+        "review_records": list(
+            getattr(safety_result, "review_records", []) or []
+        ),
         # Clean-label additive flags (e.g. titanium dioxide). Verdict-independent;
         # consumed by quality_score for the graduated safety_hygiene penalty +
         # clean_label_flags_v4 emit. Empty for the vast majority of products.
@@ -318,6 +325,17 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         # (`safety_gate.short_circuits_scoring`) + the confidence value.
         result["v4_verdict"] = safety.verdict
         result["score_unavailable_reason"] = "blocked_by_safety_gate"
+        return result
+
+    if safety.quarantine_required:
+        # A confirmed safety identity without a complete US policy basis is
+        # neither an ordinary score nor a legally supportable hard verdict.
+        # Preserve the actionable review record in the Stage-3 artifact and
+        # keep the row out of the live catalog.
+        result["v4_verdict"] = "NOT_SCORED"
+        result["score_unavailable_reason"] = (
+            safety.quarantine_reason or "safety_policy_review_required"
+        )
         return result
 
     if safety.verdict == "CAUTION":

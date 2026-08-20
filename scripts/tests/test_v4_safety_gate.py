@@ -65,6 +65,35 @@ def _with_scorable_caffeine(product: dict, *, name: str, quantity: float | None)
     return result
 
 
+def _install_verified_recall(monkeypatch):
+    """Install a source-complete recalled rule for UNSAFE contract tests."""
+    import scoring_v4.gate_safety as gate
+
+    entry = {
+        "id": "TEST_VERIFIED_RECALL",
+        "standard_name": "Test Recalled Substance",
+        "aliases": ["test recalled substance"],
+        "status": "recalled",
+        "legal_status_enum": "banned_federal",
+        "policy_verification_status": "verified",
+        "policy_verified_at": "2026-08-20",
+        "hard_verdict_roles": ["active"],
+        "jurisdictions": [{"region": "US", "status": "recalled", "jurisdiction_code": "US"}],
+        "references_structured": [{
+            "type": "fda_recall",
+            "title": "Synthetic recall fixture",
+            "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts",
+            "supports_claims": ["regulatory_action"],
+        }],
+    }
+    by_id, by_alias = gate._safety_rule_indexes()
+    patched_ids = {**by_id, entry["id"]: entry}
+    patched_aliases = {key: list(value) for key, value in by_alias.items()}
+    patched_aliases["test recalled substance"] = [entry]
+    monkeypatch.setattr(gate, "_safety_rule_indexes", lambda: (patched_ids, patched_aliases))
+    return gate
+
+
 # --- Direct gate contract -------------------------------------------------
 
 
@@ -75,9 +104,12 @@ def test_banned_substance_in_contaminant_data_returns_blocked() -> None:
             "banned_substances": {
                 "substances": [
                     {
-                        "banned_name": "Vinpocetine",
+                        "banned_id": "BANNED_CBD_US",
+                        "banned_name": "CBD (Cannabidiol)",
+                        "ingredient": "Cannabidiol",
                         "status": "banned",
                         "match_type": "exact",
+                        "source_section": "active",
                     }
                 ]
             }
@@ -87,12 +119,12 @@ def test_banned_substance_in_contaminant_data_returns_blocked() -> None:
     assert result.verdict == "BLOCKED"
     assert result.short_circuits_scoring is True
     assert result.blocking_reason == "banned_ingredient"
-    assert "Vinpocetine" in (result.matched_substance or "")
+    assert "Cannabidiol" in (result.matched_substance or "")
     assert result.safety_decision is not None
     decision = result.safety_decision.to_dict()
     assert decision["verdict"] == "BLOCKED"
-    assert decision["winning_rule"] == "NOOTROPIC_VINPOCETINE"
-    assert decision["substance"] == "Vinpocetine"
+    assert decision["winning_rule"] == "BANNED_CBD_US"
+    assert decision["substance"] == "CBD (Cannabidiol)"
     assert decision["matched_role"] == "active"
     assert decision["match_resolution"] == "confirmed"
     assert decision["reason_code"] == "banned_ingredient"
@@ -109,13 +141,13 @@ def test_canonical_safety_flag_returns_blocked() -> None:
                 "substances": [],
                 "safety_flags": [
                     {
-                        "entry_id": "BANNED_VINPOCETINE",
+                        "entry_id": "BANNED_CBD_US",
                         "source_db": "banned_recalled_ingredients",
                         "status": "banned",
                         "severity": "critical",
                         "match_type": "exact",
-                        "matched_variant": "Vinpocetine",
-                        "evidence_text": "Vinpocetine",
+                        "matched_variant": "Cannabidiol",
+                        "evidence_text": "Cannabidiol",
                         "confidence": "high",
                     }
                 ],
@@ -126,19 +158,11 @@ def test_canonical_safety_flag_returns_blocked() -> None:
     assert result.verdict == "BLOCKED"
     assert result.short_circuits_scoring is True
     assert result.blocking_reason == "banned_ingredient"
-    assert "Vinpocetine" in (result.matched_substance or "")
+    assert "Cannabidiol" in (result.matched_substance or "")
 
 
-def test_canonical_token_bounded_safety_flag_caution_review_not_blocked() -> None:
-    """A likely-banned hit (token_bounded → resolution 'likely') must force
-    CAUTION + needs_review — NEVER a hard BLOCK, and NEVER allowed to score SAFE.
-
-    Behavior change (2026-05-30, authorized): previously likely-banned yielded
-    verdict=None (review-only), which let products like Red Yeast Rice (banned
-    monacolin-K source matched via token_bounded) score SAFE — a shipped safety
-    downgrade vs v3 CAUTION. Now likely-banned forces CAUTION. Hard BLOCK still
-    requires a CONFIRMED match (exact/alias).
-    """
+def test_canonical_token_bounded_hard_signal_quarantines_for_review() -> None:
+    """A likely hard signal cannot ship without confirmed identity and policy."""
     from scoring_v4.gate_safety import evaluate_safety_gate
     product = {
         "contaminant_data": {
@@ -160,29 +184,32 @@ def test_canonical_token_bounded_safety_flag_caution_review_not_blocked() -> Non
         }
     }
     result = evaluate_safety_gate(product)
-    assert result.verdict == "CAUTION"          # forced — must not score SAFE
-    assert result.verdict != "BLOCKED"          # likely ≠ confirmed; no hard block
+    assert result.verdict is None
     assert result.short_circuits_scoring is False
     assert result.needs_review is True
-    assert "B0_LIKELY_BANNED_REVIEW" in result.safety_signals
+    assert result.quarantine_required is True
+    assert "B0_US_POLICY_REVIEW_REQUIRED" in result.safety_signals
 
 
-def test_recalled_ingredient_returns_unsafe() -> None:
-    from scoring_v4.gate_safety import evaluate_safety_gate
+def test_source_complete_recalled_ingredient_returns_unsafe(monkeypatch) -> None:
+    gate = _install_verified_recall(monkeypatch)
     product = {
         "contaminant_data": {
             "banned_substances": {
                 "substances": [
                     {
-                        "banned_name": "DMAA",
+                        "banned_id": "TEST_VERIFIED_RECALL",
+                        "banned_name": "Test Recalled Substance",
+                        "ingredient": "Test Recalled Substance",
                         "status": "recalled",
                         "match_type": "exact",
+                        "source_section": "active",
                     }
                 ]
             }
         }
     }
-    result = evaluate_safety_gate(product)
+    result = gate.evaluate_safety_gate(product)
     assert result.verdict == "UNSAFE"
     assert result.short_circuits_scoring is True
     assert result.blocking_reason == "recalled_ingredient"
@@ -346,7 +373,13 @@ def test_blocked_beats_unsafe() -> None:
             "banned_substances": {
                 "substances": [
                     {"name": "X", "status": "recalled", "match_type": "exact"},
-                    {"name": "Y", "status": "banned", "match_type": "exact"},
+                    {
+                        "banned_id": "BANNED_CBD_US",
+                        "ingredient": "Cannabidiol",
+                        "status": "banned",
+                        "match_type": "exact",
+                        "source_section": "active",
+                    },
                 ]
             }
         }
@@ -355,19 +388,25 @@ def test_blocked_beats_unsafe() -> None:
     assert result.verdict == "BLOCKED"
 
 
-def test_unsafe_beats_caution() -> None:
-    from scoring_v4.gate_safety import evaluate_safety_gate
+def test_unsafe_beats_caution(monkeypatch) -> None:
+    gate = _install_verified_recall(monkeypatch)
     product = {
         "contaminant_data": {
             "banned_substances": {
                 "substances": [
                     {"name": "X", "status": "high_risk", "match_type": "exact"},
-                    {"name": "Y", "status": "recalled", "match_type": "exact"},
+                    {
+                        "banned_id": "TEST_VERIFIED_RECALL",
+                        "ingredient": "Test Recalled Substance",
+                        "status": "recalled",
+                        "match_type": "exact",
+                        "source_section": "active",
+                    },
                 ]
             }
         }
     }
-    result = evaluate_safety_gate(product)
+    result = gate.evaluate_safety_gate(product)
     assert result.verdict == "UNSAFE"
 
 
@@ -403,7 +442,12 @@ def test_non_exact_match_does_not_trigger_verdict_change() -> None:
         "contaminant_data": {
             "banned_substances": {
                 "substances": [
-                    {"name": "Vinpocetine", "status": "banned", "match_type": "fuzzy"}
+                    {
+                        "banned_id": "BANNED_CBD_US",
+                        "ingredient": "Cannabidiol",
+                        "status": "banned",
+                        "match_type": "fuzzy",
+                    }
                 ]
             }
         }
@@ -421,7 +465,13 @@ def test_alias_match_does_trigger_blocked() -> None:
         "contaminant_data": {
             "banned_substances": {
                 "substances": [
-                    {"name": "Vinca minor extract", "status": "banned", "match_type": "alias"}
+                    {
+                        "banned_id": "BANNED_CBD_US",
+                        "ingredient": "pure cannabidiol",
+                        "status": "banned",
+                        "match_type": "alias",
+                        "source_section": "active",
+                    }
                 ]
             }
         }
@@ -433,20 +483,21 @@ def test_alias_match_does_trigger_blocked() -> None:
 # --- Top-level fallback signals -------------------------------------------
 
 
-def test_top_level_has_banned_substance_flag_returns_blocked() -> None:
-    """Defense in depth: if contaminant_data is missing but the enricher
-    set the top-level boolean, still produce BLOCKED."""
+def test_top_level_has_banned_substance_flag_requires_policy_review() -> None:
+    """A legacy boolean alone cannot support a source-complete hard verdict."""
     from scoring_v4.gate_safety import evaluate_safety_gate
     product = {"has_banned_substance": True}
     result = evaluate_safety_gate(product)
-    assert result.verdict == "BLOCKED"
+    assert result.verdict is None
+    assert result.quarantine_required is True
 
 
-def test_top_level_has_recalled_ingredient_flag_returns_unsafe() -> None:
+def test_top_level_has_recalled_ingredient_flag_requires_policy_review() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
     product = {"has_recalled_ingredient": True}
     result = evaluate_safety_gate(product)
-    assert result.verdict == "UNSAFE"
+    assert result.verdict is None
+    assert result.quarantine_required is True
 
 
 @pytest.mark.parametrize(
@@ -554,7 +605,13 @@ def test_shadow_entry_point_short_circuits_on_blocked() -> None:
         "contaminant_data": {
             "banned_substances": {
                 "substances": [
-                    {"name": "Vinpocetine", "status": "banned", "match_type": "exact"}
+                    {
+                        "banned_id": "BANNED_CBD_US",
+                        "ingredient": "Cannabidiol",
+                        "status": "banned",
+                        "match_type": "exact",
+                        "source_section": "active",
+                    }
                 ]
             }
         },
@@ -575,17 +632,24 @@ def test_shadow_entry_point_short_circuits_on_blocked() -> None:
     assert bd["safety_gate"]["short_circuits_scoring"] is True
 
 
-def test_shadow_entry_point_short_circuits_on_unsafe() -> None:
+def test_shadow_entry_point_short_circuits_on_unsafe(monkeypatch) -> None:
     """Same anchored=False rule as BLOCKED — safety-gate finality is
     represented by score_unavailable_reason='blocked_by_safety_gate' plus
     breakdown short_circuits_scoring=True, not by anchored."""
+    _install_verified_recall(monkeypatch)
     from score_supplements_v4 import score_product_v4
     product = {
         "supplement_type": {"type": "single_nutrient"},
         "contaminant_data": {
             "banned_substances": {
                 "substances": [
-                    {"name": "DMAA", "status": "recalled", "match_type": "exact"}
+                    {
+                        "banned_id": "TEST_VERIFIED_RECALL",
+                        "ingredient": "Test Recalled Substance",
+                        "status": "recalled",
+                        "match_type": "exact",
+                        "source_section": "active",
+                    }
                 ]
             }
         },
@@ -634,7 +698,13 @@ def test_anchored_stays_false_until_canary_membership_lands() -> None:
             "contaminant_data": {
                 "banned_substances": {
                     "substances": [
-                        {"name": "Vinpocetine", "status": "banned", "match_type": "exact"}
+                        {
+                            "banned_id": "BANNED_CBD_US",
+                            "ingredient": "Cannabidiol",
+                            "status": "banned",
+                            "match_type": "exact",
+                            "source_section": "active",
+                        }
                     ]
                 }
             },

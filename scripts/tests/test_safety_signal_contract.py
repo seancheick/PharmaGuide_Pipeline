@@ -183,10 +183,33 @@ def test_dedupe_keeps_strongest_resolution_not_first_seen():
     )
 
 
-def test_strength_dedupe_drives_blocked_at_the_gate():
+def test_strength_dedupe_drives_blocked_at_the_gate(monkeypatch):
     """End-to-end: the same likely-then-confirmed BANNED shape must gate to
     BLOCKED, not review-only."""
-    from scoring_v4.gate_safety import evaluate_safety_gate
+    import scoring_v4.gate_safety as gate
+
+    entry = {
+        "id": "BANNED_X",
+        "standard_name": "Substance X",
+        "aliases": ["substance x"],
+        "status": "banned",
+        "legal_status_enum": "banned_federal",
+        "policy_verification_status": "verified",
+        "policy_verified_at": "2026-08-20",
+        "hard_verdict_roles": ["active"],
+        "jurisdictions": [{"region": "US", "status": "banned", "jurisdiction_code": "US"}],
+        "references_structured": [{
+            "type": "fda_action",
+            "title": "Synthetic policy fixture",
+            "url": "https://www.fda.gov/food/dietary-supplements",
+            "supports_claims": ["regulatory_status"],
+        }],
+    }
+    monkeypatch.setattr(
+        gate,
+        "_safety_rule_indexes",
+        lambda: ({entry["id"]: entry}, {"substance x": [entry]}),
+    )
 
     product = {
         "contaminant_data": {
@@ -204,7 +227,7 @@ def test_strength_dedupe_drives_blocked_at_the_gate():
             }
         }
     }
-    result = evaluate_safety_gate(product)
+    result = gate.evaluate_safety_gate(product)
     assert result.verdict == "BLOCKED", (
         f"confirmed banned (via stronger flag) must BLOCK; got {result.verdict!r}"
     )

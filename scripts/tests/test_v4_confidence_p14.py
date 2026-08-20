@@ -353,7 +353,7 @@ def test_blocked_paths_separate_gate_reason_from_score_confidence() -> None:
         contaminant_data={
             "banned_substances": {
                 "substances": [
-                    {"name": "Vinpocetine", "status": "banned", "match_type": "exact"}
+                    {"banned_id": "BANNED_CBD_US", "ingredient": "Cannabidiol", "status": "banned", "match_type": "exact", "source_section": "active"}
                 ]
             }
         }

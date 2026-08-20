@@ -233,7 +233,7 @@ def test_shadow_does_not_wire_probiotic_module_when_safety_short_circuits() -> N
         "contaminant_data": {
             "banned_substances": {
                 "substances": [
-                    {"name": "Vinpocetine", "status": "banned", "match_type": "exact"}
+                    {"banned_id": "BANNED_CBD_US", "ingredient": "Cannabidiol", "status": "banned", "match_type": "exact", "source_section": "active"}
                 ]
             }
         },

@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
-    "schema_version": "5.4.2",
+    "schema_version": "5.5.0",
     "last_updated": "2026-08-20",
     "total_entries": 169,
     "data_source_metadata": {
@@ -2644,7 +2644,7 @@
         "brominated vegetable oil",
         "brominated oil"
       ],
-      "reason": "Brominated vegetable oil (BVO) is a food additive formerly used to stabilize citrus-flavored drinks. In July 2024, FDA revoked its authorization for use as a food ingredient, citing animal studies demonstrating accumulation of bromine in the thyroid and fat tissue and potential for thyroid hormone disruption and reproductive toxicity. BVO is now prohibited in US food. Several major beverage companies had already reformulated before the ban. Any supplement or food product still listing BVO as an ingredient is non-compliant following the effective date of FDA's final rule.",
+      "reason": "FDA revoked the food-additive authorization for brominated vegetable oil (BVO) after concluding that its intended use in food was no longer safe. The final rule became effective August 2, 2024. A dietary supplement that declares BVO as an ingredient is therefore not eligible for the US live catalog.",
       "status": "banned",
       "class_tags": [
         "permanently_banned",
@@ -2659,90 +2659,42 @@
         "negative_match_terms": []
       },
       "legal_status_enum": "banned_federal",
-      "clinical_risk_enum": "critical",
+      "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-08-20",
+      "hard_verdict_roles": [
+        "active",
+        "inactive"
+      ],
       "jurisdictions": [
         {
           "region": "US",
           "level": "federal",
           "status": "banned",
-          "effective_date": "2024-07-03",
+          "effective_date": "2024-08-02",
           "source": {
-            "type": "fda_action",
-            "citation": "FDA revoked authorization July 2, 2024. Effective July 3, 2024. Compliance deadline August 2, 2025.",
-            "accessed_date": "2026-01-08"
+            "type": "fda_final_rule",
+            "citation": "FDA final rule revoking the authorization for brominated vegetable oil in food.",
+            "url": "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?id=89FR55040&set=FinalRules",
+            "accessed_date": "2026-08-20"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "state",
-          "name": "California",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "state_statute",
-            "citation": "Banned under 2024 Food Safety Act",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "state",
-          "jurisdiction_code": "US-CA",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "Japan",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "state_statute",
-            "citation": "Banned",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "India",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "state_statute",
-            "citation": "Banned",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-08-20"
         }
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/j.fct.2024.114567",
-          "title": "BVO toxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.fct.2024.114567",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "BVO toxicity"
-        },
-        {
-          "type": "fda_advisory",
-          "title": "Federal Register: July 2, 2024 - FDA ban order",
+          "type": "fda_action",
+          "title": "FDA final rule revoking authorization for brominated vegetable oil",
           "evidence_grade": "R",
-          "date": "2024",
+          "date": "2024-07-03",
+          "url": "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?id=89FR55040&set=FinalRules",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "regulatory_status"
           ],
-          "evidence_summary": "Federal Register: July 2, 2024 - FDA ban order"
+          "evidence_summary": "FDA revoked the food-additive authorization for BVO; the rule became effective August 2, 2024."
         }
       ],
       "source_category": "permanently_banned",
@@ -2760,14 +2712,14 @@
           }
         ]
       },
-      "regulatory_date": "2024-07-02",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2024-08-02",
+      "regulatory_date_label": "FDA final rule effective",
       "match_mode": "active",
       "cui": "C1654882",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "A food additive formerly used to stabilize citrus flavor. FDA revoked its authorization in 2024 after reviews linked it to thyroid and nervous-system concerns. Avoid products still containing it.",
-      "safety_warning_one_liner": "Food additive revoked by FDA in 2024. Avoid."
+      "safety_warning": "FDA revoked BVO's authorization for use in food in 2024 after concluding that its intended use was no longer safe. Avoid a supplement that still lists it.",
+      "safety_warning_one_liner": "FDA authorization revoked in 2024. Avoid."
     },
     {
       "id": "BANNED_CBD_US",
@@ -2839,6 +2791,11 @@
       },
       "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-08-20",
+      "hard_verdict_roles": [
+        "active"
+      ],
       "jurisdictions": [
         {
           "region": "US",
@@ -2847,96 +2804,16 @@
           "effective_date": "2018-12-20",
           "source": {
             "type": "fda_action",
-            "citation": "FDA prohibits CBD in dietary supplements and food due to drug exclusion rule (2018). Approved only a",
-            "accessed_date": "2026-01-08"
+            "citation": "FDA states that products containing CBD are excluded from the dietary supplement definition under the FD&C Act drug-exclusion provision.",
+            "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+            "accessed_date": "2026-08-20"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "Congress Nov 2025",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "state_statute",
-            "citation": "FY2026 Appropriations Act (H.R. 5371, November 12, 2025) banned intoxicating hemp-derived cannabinoi",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "Executive Order Dec 2025",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "state_statute",
-            "citation": "December 18, 2025 Executive Order directs new federal regulatory framework for hemp-derived cannabin",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US (multiple states)",
-          "level": "state",
-          "name": "State Laws",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "national_regulation",
-            "citation": "Legal in many states for non-supplement uses, creating regulatory conflict",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "state",
-          "jurisdiction_code": "US-MULTI",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-08-20"
         }
       ],
       "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1002/hep.30525",
-          "title": "CBD hepatotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1002/hep.30525",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "CBD hepatotoxicity"
-        },
-        {
-          "type": "fda_advisory",
-          "title": "FDA: December 2018 - Drug exclusion determination",
-          "evidence_grade": "R",
-          "date": "2018",
-          "supports_claims": [
-            "regulatory_action"
-          ],
-          "evidence_summary": "FDA: December 2018 - Drug exclusion determination"
-        },
-        {
-          "type": "other",
-          "title": "H.R. 5371 (FY2026 Appropriations Act): November 12, 2025 - Hemp product restrictions",
-          "evidence_grade": "R",
-          "supports_claims": [],
-          "evidence_summary": "H.R. 5371 (FY2026 Appropriations Act): November 12, 2025 - Hemp product restrictions"
-        },
-        {
-          "type": "other",
-          "title": "Executive Order: December 18, 2025 - Marijuana rescheduling and hemp framework",
-          "evidence_grade": "R",
-          "supports_claims": [],
-          "evidence_summary": "Executive Order: December 18, 2025 - Marijuana rescheduling and hemp framework"
-        },
         {
           "type": "fda_guidance",
           "title": "FDA Regulation of Cannabis and Cannabis-Derived Products, Including CBD",
@@ -2964,7 +2841,7 @@
         ]
       },
       "regulatory_date": "2018-12-20",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date_label": "FDA drug-exclusion status",
       "match_mode": "active",
       "cui": "C4704022",
       "external_ids": {
@@ -5204,7 +5081,7 @@
         "artificial trans fats",
         "partially hydrogenated oils (phos)"
       ],
-      "reason": "Partially hydrogenated oils (PHOs) are the primary dietary source of industrially produced trans fatty acids (iTFA). iTFAs raise LDL cholesterol, lower HDL cholesterol, and promote systemic inflammation — mechanisms linked to cardiovascular disease, sudden cardiac death, and stroke. FDA determined in 2015 that PHOs are not Generally Recognized as Safe (GRAS) and mandated their removal from the food supply, with full compliance required by June 18 2018. PHOs are now federally banned as food ingredients in the United States. Any current supplement product listing PHOs as an ingredient is non-compliant.",
+      "reason": "FDA determined that partially hydrogenated oils (PHOs) are no longer generally recognized as safe for any use in human food. The final compliance dates have passed, and FDA revoked the remaining prior sanctions in 2023. A dietary supplement that still declares a PHO as an ingredient is not eligible for the US live catalog.",
       "status": "banned",
       "class_tags": [
         "permanently_banned",
@@ -5222,60 +5099,42 @@
         ]
       },
       "legal_status_enum": "banned_federal",
-      "clinical_risk_enum": "critical",
+      "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-08-20",
+      "hard_verdict_roles": [
+        "active",
+        "inactive"
+      ],
       "jurisdictions": [
         {
           "region": "US",
           "level": "federal",
           "status": "banned",
-          "effective_date": "2018-06-18",
+          "effective_date": "2021-01-01",
           "source": {
-            "type": "fda_action",
-            "citation": "FDA determined PHOs not Generally Recognized as Safe (GRAS) on June 16, 2015. Compliance deadline Ju",
-            "accessed_date": "2026-01-08"
+            "type": "fda_final_rule",
+            "citation": "FDA determined that PHOs are no longer GRAS for any use in human food; the extended compliance period expired January 1, 2021.",
+            "url": "https://www.fda.gov/media/178185/download",
+            "accessed_date": "2026-08-20"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "WHO",
-          "level": "international",
-          "name": "WHO",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "national_regulation",
-            "citation": "Recommends elimination of industrial trans fats globally by 2023",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "agency_scope",
-          "jurisdiction_code": "WHO",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-08-20"
         }
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1161/CIR.0000000000000510",
-          "title": "AHA trans fat statement",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1161/CIR.0000000000000510",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "AHA trans fat statement"
-        },
-        {
-          "type": "fda_advisory",
-          "title": "Federal Register: June 17, 2015 - FDA PHO ban",
+          "type": "fda_action",
+          "title": "FDA PHO compliance and revocation history",
           "evidence_grade": "R",
-          "date": "2015",
+          "date": "2023-08-09",
+          "url": "https://www.fda.gov/media/178185/download",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "regulatory_status"
           ],
-          "evidence_summary": "Federal Register: June 17, 2015 - FDA PHO ban"
+          "evidence_summary": "FDA explains that PHOs are no longer GRAS for any use in human food and that the extended compliance period has expired."
         }
       ],
       "source_category": "permanently_banned",
@@ -5293,15 +5152,15 @@
           }
         ]
       },
-      "regulatory_date": "2015-06-16",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date": "2021-01-01",
+      "regulatory_date_label": "Final FDA compliance deadline",
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Partially hydrogenated oils are a class entry and the PHO abbreviation is ambiguous; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "Partially hydrogenated oils — the primary source of industrial trans fats. FDA removed their GRAS status in 2018 after clear evidence of cardiovascular risk. Avoid products still listing them.",
-      "safety_warning_one_liner": "FDA-banned trans-fat source with established cardiovascular risk. Avoid."
+      "safety_warning": "FDA no longer recognizes partially hydrogenated oils as safe for use in human food, and the final compliance dates have passed. Avoid a supplement that still lists one.",
+      "safety_warning_one_liner": "No longer recognized as safe for use in US food. Avoid."
     },
     {
       "id": "BANNED_PICAMILON",
@@ -5449,6 +5308,11 @@
       ],
       "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-08-20",
+      "hard_verdict_roles": [
+        "active"
+      ],
       "jurisdictions": [
         {
           "region": "US",
@@ -5457,62 +5321,43 @@
           "effective_date": "1998-05-20",
           "source": {
             "type": "fda_action",
-            "citation": "FDA considers RYR with monacolin K an unapproved drug",
-            "accessed_date": "2026-02-18"
+            "citation": "FDA distinguishes traditional red yeast rice from products with enhanced or added lovastatin, which cannot be marketed as dietary supplements.",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/dr-sam-robbins-inc-dba-hfl-solutions-llc-608729-08282020",
+            "accessed_date": "2026-08-20"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-02-18"
-        },
-        {
-          "region": "Australia",
-          "level": "federal",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "regulatory_action",
-            "citation": "TGA S4 controlled substance classification",
-            "accessed_date": "2026-02-18"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "AU",
-          "last_verified_date": "2026-02-18"
-        },
-        {
-          "region": "Switzerland",
-          "level": "federal",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "regulatory_action",
-            "citation": "Swiss ban on red yeast rice sales",
-            "accessed_date": "2026-02-18"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "CH",
-          "last_verified_date": "2026-02-18"
+          "last_verified_date": "2026-08-20"
         }
       ],
       "references_structured": [
         {
-          "type": "monograph",
-          "authority": "EFSA",
-          "citation": "EFSA Scientific Opinion on Monacolins from Red Yeast Rice",
-          "url": "https://doi.org/10.2903/j.efsa.2025.9276",
-          "published_date": "2025-01-29",
-          "evidence_grade": "A",
+          "type": "fda_action",
+          "authority": "FDA",
+          "citation": "Dr. Sam Robbins, Inc. warning letter",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/dr-sam-robbins-inc-dba-hfl-solutions-llc-608729-08282020",
+          "published_date": "2020-08-28",
+          "evidence_grade": "R",
           "confidence": "high",
-          "title": "EFSA Scientific Opinion on Monacolins from Red Yeast Rice"
+          "supports_claims": [
+            "regulatory_action",
+            "regulatory_status"
+          ],
+          "title": "FDA warning letter on red yeast rice with enhanced or added lovastatin",
+          "evidence_summary": "FDA states that red yeast rice products with enhanced or added lovastatin cannot be marketed as dietary supplements."
         },
         {
-          "type": "case_report",
-          "authority": "NIH",
-          "citation": "LiverTox: Red Yeast Rice",
-          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548168/",
-          "published_date": null,
-          "evidence_grade": "B",
+          "type": "regulatory",
+          "authority": "NIH NCCIH",
+          "citation": "Red Yeast Rice: What You Need To Know",
+          "url": "https://www.nccih.nih.gov/health/red-yeast-rice",
+          "evidence_grade": "R",
           "confidence": "high",
-          "title": "LiverTox: Red Yeast Rice"
+          "supports_claims": [
+            "regulatory_status"
+          ],
+          "title": "NIH NCCIH red yeast rice regulatory summary",
+          "evidence_summary": "NCCIH distinguishes ordinary red yeast rice from products with enhanced or added lovastatin."
         }
       ],
       "source_category": "unapproved_drug",
@@ -5531,7 +5376,7 @@
         ]
       },
       "regulatory_date": "1998-05-20",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date_label": "FDA drug-exclusion determination",
       "match_mode": "active",
       "external_ids": {},
       "ban_context": "substance",
@@ -8651,7 +8496,7 @@
         "sulbutiamine",
         "enerion"
       ],
-      "reason": "Sulbutiamine is a synthetic thiamine (vitamin B1) analog developed in Japan. Despite its structural relation to B1, FDA does not consider it a dietary ingredient — it is a synthetic modification not present in conventional foods and not covered by any NDI notification. In the EU it is classified as a prescription drug (Arcalion) for asthenia. US supplement products containing sulbutiamine are adulterated. At high doses it carries dependence and stimulant abuse potential; it is not covered by the safety record of ordinary B1 supplementation.",
+      "reason": "In an April 15, 2025 warning letter, FDA stated that sulbutiamine, when declared as a dietary ingredient, is not a dietary ingredient within the meaning of the FD&C Act. The letter did not decide whether sulbutiamine could lawfully be used as a non-dietary ingredient. This rule therefore applies only when the label declares sulbutiamine as an active dietary ingredient.",
       "status": "banned",
       "class_tags": [
         "nootropic_banned",
@@ -8666,7 +8511,12 @@
         "negative_match_terms": []
       },
       "legal_status_enum": "not_lawful_as_supplement",
-      "clinical_risk_enum": "critical",
+      "clinical_risk_enum": "moderate",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-08-20",
+      "hard_verdict_roles": [
+        "active"
+      ],
       "jurisdictions": [
         {
           "region": "US",
@@ -8674,67 +8524,28 @@
           "status": "banned",
           "effective_date": "2025-04-15",
           "source": {
-            "type": "fda_action",
-            "citation": "FDA warning letter April 15, 2025 to Gluten Free Remedies LLC. Not a dietary ingredient.",
-            "accessed_date": "2026-01-08"
+            "type": "warning_letter",
+            "citation": "FDA warning letter to Gluten Free Remedies LLC states that sulbutiamine is not a dietary ingredient when declared as such.",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/gluten-free-remedies-llc-687832-04152025",
+            "accessed_date": "2026-08-20"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "Russia",
-          "level": "national",
-          "name": "France",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "national_regulation",
-            "citation": "Approved pharmaceutical (Arcalion)",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "RU",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "Russia",
-          "level": "national",
-          "name": "Japan",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "national_regulation",
-            "citation": "Approved pharmaceutical (Enerion)",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "RU",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-08-20"
         }
       ],
       "references_structured": [
         {
-          "type": "fda_advisory",
-          "title": "FDA Warning Letter: April 15, 2025",
+          "type": "fda_warning_letter",
+          "title": "FDA warning letter to Gluten Free Remedies LLC",
           "evidence_grade": "R",
-          "date": "2025",
+          "date": "2025-04-15",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/gluten-free-remedies-llc-687832-04152025",
           "supports_claims": [
-            "regulatory_action"
+            "regulatory_action",
+            "regulatory_status"
           ],
-          "evidence_summary": "FDA Warning Letter: April 15, 2025"
-        },
-        {
-          "type": "doi",
-          "id": "10.1007/BF00426588",
-          "title": "Sulbutiamine pharmacology",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1007/BF00426588",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Sulbutiamine pharmacology"
+          "evidence_summary": "FDA states that sulbutiamine is not a dietary ingredient when declared as one; the letter does not decide non-dietary-ingredient use."
         }
       ],
       "source_category": "nootropic_banned",
@@ -8753,7 +8564,7 @@
         ]
       },
       "regulatory_date": "2025-04-15",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date_label": "FDA warning letter",
       "match_mode": "active",
       "cui": "C0075501",
       "external_ids": {
@@ -8772,8 +8583,8 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A synthetic thiamine analog that FDA does not recognize as a dietary ingredient. Long-term safety and dose thresholds are not established. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Synthetic drug sold as supplement. Stop using and talk to your doctor."
+      "safety_warning": "FDA has stated that sulbutiamine is not a dietary ingredient when a supplement declares it as an active ingredient. Stop using the product and talk to your doctor.",
+      "safety_warning_one_liner": "Not recognized by FDA as a dietary ingredient. Stop and ask your doctor."
     },
     {
       "id": "NOOTROPIC_VINPOCETINE",
@@ -8784,8 +8595,8 @@
         "vinpocetine",
         "ethyl apovincaminate"
       ],
-      "reason": "Vinpocetine is a synthetic derivative of the alkaloid vincamine, used as a prescription drug in Europe and Japan. In 2019 FDA issued a statement concluding that vinpocetine does not qualify as a dietary ingredient and cannot lawfully be included in dietary supplements — it was investigated as a drug before any supplement marketing. FDA additionally flagged potential fetal harm: animal studies showed decreased fetal weight and miscarriage, prompting the agency to warn that pregnant women and women of childbearing age should avoid it.",
-      "status": "banned",
+      "reason": "FDA opened an administrative proceeding in 2016 to evaluate whether vinpocetine is excluded from the dietary supplement definition. FDA's current page still describes that conclusion as tentative. FDA separately warns pregnant women and women who could become pregnant not to use vinpocetine because animal data suggest miscarriage or fetal harm. The exact US legal classification remains under review, so matched products require policy review instead of an asserted hard block.",
+      "status": "high_risk",
       "class_tags": [
         "nootropic_banned",
         "nootropic"
@@ -8798,91 +8609,44 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "legal_status_enum": "not_lawful_as_supplement",
-      "clinical_risk_enum": "critical",
+      "legal_status_enum": "under_review",
+      "clinical_risk_enum": "high",
+      "policy_verification_status": "review_required",
+      "policy_verified_at": "2026-08-20",
+      "policy_review_reason": "FDA's current vinpocetine page describes the dietary-ingredient conclusion as tentative; a final US legal determination was not verified.",
+      "hard_verdict_roles": [
+        "active"
+      ],
       "jurisdictions": [
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2019-10-11",
+          "status": "under_review",
+          "effective_date": "2016-09-07",
           "source": {
             "type": "fda_action",
-            "citation": "FDA determined not a dietary ingredient (October 11, 2019). Warning for women of childbearing age. I",
-            "accessed_date": "2026-01-08"
+            "citation": "FDA opened an administrative proceeding on vinpocetine and continues to describe its dietary-ingredient conclusion as tentative; FDA also warns of reproductive risk.",
+            "url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/vinpocetine-dietary-supplements",
+            "accessed_date": "2026-08-20"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "Germany",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "state_statute",
-            "citation": "Prescription drug (Cavinton)",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "Russia",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "state_statute",
-            "citation": "Prescription drug",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "China",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "state_statute",
-            "citation": "Prescription drug",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-08-20"
         }
       ],
       "references_structured": [
         {
           "type": "fda_advisory",
-          "title": "FDA: October 11, 2019 - Not a dietary ingredient determination",
+          "title": "FDA information on vinpocetine in dietary supplements",
           "evidence_grade": "R",
-          "date": "2019",
+          "date": "2019-06-03",
+          "url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/vinpocetine-dietary-supplements",
           "supports_claims": [
-            "regulatory_action"
-          ],
-          "evidence_summary": "FDA: October 11, 2019 - Not a dietary ingredient determination"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.reprotox.2008.09.007",
-          "title": "Vinpocetine reproductive toxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.reprotox.2008.09.007",
-          "supports_claims": [
-            "mechanism_of_harm",
+            "regulatory_action",
+            "regulatory_status",
             "clinical_outcomes"
           ],
-          "evidence_summary": "Vinpocetine reproductive toxicity"
+          "evidence_summary": "FDA describes the legal conclusion as tentative and advises pregnant women and women who could become pregnant not to use vinpocetine."
         }
       ],
       "source_category": "nootropic_banned",
@@ -8901,7 +8665,7 @@
         ]
       },
       "regulatory_date": "2016-09-07",
-      "regulatory_date_label": "FDA ban effective",
+      "regulatory_date_label": "FDA administrative review opened",
       "match_mode": "active",
       "cui": "C0059752",
       "external_ids": {
@@ -8932,8 +8696,8 @@
         ]
       },
       "ban_context": "substance",
-      "safety_warning": "An FDA statement in 2019 concluded vinpocetine is not a lawful supplement ingredient, and it is associated with miscarriage risk in pregnancy. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not a lawful US supplement, pregnancy risk. Stop using and talk to your doctor."
+      "safety_warning": "FDA warns pregnant women and women who could become pregnant to avoid vinpocetine because of potential miscarriage or fetal harm. Its exact US supplement status remains under review.",
+      "safety_warning_one_liner": "Avoid in pregnancy. US supplement status remains under review."
     },
     {
       "id": "PEPTIDE_BPC157",
@@ -13064,8 +12828,8 @@
         "17a-ethyl-estr-5(6)-ene-3b-diol",
         "norethandriol"
       ],
-      "reason": "Anabolic-androgenic steroids (AAS) are DEA Schedule III controlled substances when synthetic. When found undeclared in dietary supplements — typically muscle-building, bodybuilding, or prohormone products — users are unknowingly consuming controlled drugs without prescription. Known risks include liver damage (peliosis hepatis, cholestatic jaundice), cardiovascular effects (left ventricular hypertrophy, dyslipidemia), endocrine suppression (testicular atrophy, infertility), and psychiatric effects. FDA and DEA actively pursue supplement products found to contain undeclared AAS.",
-      "status": "banned",
+      "reason": "FDA warns that some bodybuilding products marketed as dietary supplements illegally contain anabolic steroids or steroid-like substances and can cause serious harm. This class record contains many chemical and marketing aliases, but the exact identity and federal legal status of each declared compound have not been verified individually. A class match therefore requires identity and policy review instead of an automatic hard block.",
+      "status": "high_risk",
       "class_tags": [
         "illegal_spiking_agents",
         "steroid_anabolic"
@@ -13087,45 +12851,43 @@
           "7-keto dhea"
         ]
       },
-      "legal_status_enum": "adulterant",
-      "clinical_risk_enum": "critical",
+      "legal_status_enum": "under_review",
+      "clinical_risk_enum": "high",
+      "policy_verification_status": "review_required",
+      "policy_verified_at": "2026-08-20",
+      "policy_review_reason": "FDA supports the bodybuilding-steroid class warning, but the exact identity and US legal status of each declared alias require individual verification.",
+      "hard_verdict_roles": [
+        "active"
+      ],
       "jurisdictions": [
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "fda_action",
-            "citation": "DEA Schedule III controlled substances. Illegal in supplements. Found in 26% of tested bodybuilding ",
-            "accessed_date": "2026-01-08"
+            "citation": "FDA warns that certain bodybuilding products may illegally contain anabolic steroids or steroid-like substances.",
+            "url": "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky",
+            "accessed_date": "2026-08-20"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-08-20"
         }
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1002/hep.29466",
-          "title": "Anabolic steroid hepatotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1002/hep.29466",
+          "type": "fda_advisory",
+          "title": "FDA: Caution—Bodybuilding Products Can Be Risky",
+          "evidence_grade": "R",
+          "url": "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky",
           "supports_claims": [
-            "mechanism_of_harm",
+            "regulatory_action",
+            "regulatory_status",
             "clinical_outcomes"
           ],
-          "evidence_summary": "Anabolic steroid hepatotoxicity"
-        },
-        {
-          "type": "fda_advisory",
-          "title": "FDA: Tainted Bodybuilding Products",
-          "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
-          "evidence_summary": "FDA: Tainted Bodybuilding Products"
+          "evidence_summary": "FDA warns that some bodybuilding products contain illegal steroids or steroid-like substances; this does not verify every alias in the class record."
         }
       ],
       "source_category": "illegal_spiking_agents",
@@ -13143,17 +12905,17 @@
           }
         ]
       },
-      "regulatory_date": "1990-11-29",
-      "regulatory_date_label": "Federal ban effective",
+      "regulatory_date": null,
+      "regulatory_date_label": "Exact compound policy review required",
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Policy watchlist spans many synthetic anabolic steroids; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {
         "unii": "77P0LYX19T"
       },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "Designer anabolic-androgenic steroids found undeclared in bodybuilding supplements — linked to liver injury, cardiovascular risk, and hormone suppression. Stop the product and consult a doctor.",
-      "safety_warning_one_liner": "Hidden anabolic steroids in supplements. Stop using and talk to your doctor."
+      "ban_context": "watchlist",
+      "safety_warning": "FDA warns that some bodybuilding products contain illegal steroids or steroid-like substances. Avoid use until this exact declared compound receives identity and policy review.",
+      "safety_warning_one_liner": "Steroid-like compound requires exact identity and policy review."
     },
     {
       "id": "SPIKE_CHLOROPRETADALAFIL",
@@ -16466,13 +16228,17 @@
         "borax decahydrate"
       ],
       "entity_type": "ingredient",
-      "match_mode": "active",
+      "match_mode": "disabled",
       "active_nutrient_parent": "boron",
-      "status": "banned",
-      "reason": "Borax (sodium tetraborate) is an EU-banned food additive classified as a reproductive toxicant (CMR 1B). Despite folk remedy claims, no dietary supplement use is warranted. ECHA SVHC listing under REACH since 2010. NOTE: 'Sodium Borate' removed from aliases to avoid false positives — DSLD labels use 'Sodium Borate' as a trace boron mineral source in multivitamins, not as borax food additive.",
-      "legal_status_enum": "not_lawful_as_supplement",
-      "clinical_risk_enum": "high",
-      "source_category": "banned_food_additive",
+      "status": "watchlist",
+      "reason": "Retired US hard-block rule. NIH ODS lists sodium borate and sodium tetraborate among boron forms used in dietary supplements and explains that Supplement Facts labels declare elemental boron rather than compound mass. Food-additive or EU chemical classifications do not establish a US dietary-supplement ban. Boron dose safety is assessed from the declared elemental amount through the typed dose/UL path.",
+      "legal_status_enum": "lawful",
+      "clinical_risk_enum": "dose_dependent",
+      "policy_verification_status": "retired",
+      "policy_verified_at": "2026-08-20",
+      "policy_review_reason": "Retired after NIH ODS verification showed sodium tetraborate is a recognized supplemental boron form and no US supplement prohibition was established.",
+      "hard_verdict_roles": [],
+      "source_category": "supplemental_boron_form",
       "class_tags": [],
       "match_rules": {
         "regex": null,
@@ -16492,23 +16258,18 @@
       "references_structured": [
         {
           "type": "regulatory",
-          "authority": "EFSA",
-          "citation": "EFSA Journal 2013;11(10):3407 — Scientific Opinion on boron compounds",
-          "url": "https://doi.org/10.2903/j.efsa.2013.3407",
-          "published_date": "2013-10-08",
-          "evidence_grade": "A",
-          "confidence": "high",
-          "title": "EFSA Journal 2013;11(10):3407 — Scientific Opinion on boron compounds"
-        },
-        {
-          "type": "regulatory",
-          "authority": "ECHA",
-          "citation": "ECHA SVHC identification ED/61/2010 — Sodium tetraborate decahydrate (borax)",
-          "url": "https://echa.europa.eu/substance-information/-/substanceinfo/100.028.801",
-          "published_date": "2010-06-18",
+          "authority": "NIH Office of Dietary Supplements",
+          "citation": "Boron: Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Boron-HealthProfessional/",
+          "published_date": null,
           "evidence_grade": "R",
           "confidence": "high",
-          "title": "ECHA SVHC identification ED/61/2010 — Sodium tetraborate decahydrate (borax)"
+          "supports_claims": [
+            "supplement_form",
+            "dose_labeling"
+          ],
+          "title": "NIH ODS boron fact sheet",
+          "evidence_summary": "NIH ODS lists sodium borate and sodium tetraborate as supplemental boron forms and states that labels declare elemental boron."
         }
       ],
       "review": {
@@ -16545,9 +16306,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "ban_context": "substance",
-      "safety_warning": "Borax — an EU-banned food additive classified as a reproductive toxicant. Folk remedy claims do not justify its use; it is not a lawful supplement. Stop and consult a doctor.",
-      "safety_warning_one_liner": "EU-banned reproductive toxicant. Stop using and talk to your doctor."
+      "ban_context": "watchlist",
+      "safety_warning": "Sodium tetraborate is used as a supplemental boron source. Dose-related risk is assessed from the elemental boron amount shown on the label.",
+      "safety_warning_one_liner": "Assess using the label's elemental boron amount."
     },
     {
       "id": "ADD_THYROGEN",
@@ -16635,8 +16396,8 @@
       "entity_type": "ingredient",
       "match_mode": "active",
       "status": "watchlist",
-      "reason": "Simethicone is an OTC drug active ingredient under FDA monograph. As an active supplement ingredient it signals regulatory non-compliance, but it is generally low clinical risk and not absorbed systemically. Inactive silicone antifoaming excipient use is warning-only.",
-      "legal_status_enum": "not_lawful_as_supplement",
+      "reason": "FDA OTC Monograph M002 identifies simethicone as an antiflatulent drug active ingredient with a maximum daily dose of 500 mg. That establishes a US regulatory watchlist signal when a supplement declares simethicone as an active, but it does not by itself establish a final dietary-supplement exclusion. Inactive silicone antifoaming use remains warning-only.",
+      "legal_status_enum": "under_review",
       "clinical_risk_enum": "low",
       "source_category": "otc_drug_ingredient",
       "inactive_policy": "excipient_acceptable",
@@ -16650,17 +16411,36 @@
         "preferred_alias": "Simethicone",
         "negative_match_terms": []
       },
-      "jurisdictions": [],
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "watchlist",
+          "effective_date": "2021-09-20",
+          "source": {
+            "type": "fda_action",
+            "citation": "FDA OTC Monograph M002 lists simethicone as an antiflatulent active ingredient.",
+            "url": "https://www.accessdata.fda.gov/drugsatfda_docs/omuf/monographs/OTCMonograph_M002-AntiflatulentProductsforOTCHumanUse_09202021.pdf",
+            "accessed_date": "2026-08-20"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-08-20"
+        }
+      ],
       "references_structured": [
         {
           "type": "regulatory",
           "authority": "FDA",
-          "citation": "21 CFR 332.10 — OTC antiflatulent drug products, simethicone monograph",
-          "url": "https://www.accessdata.fda.gov/scripts/cder/omuf/index.cfm?event=monographsearch&val=Simethicone",
-          "published_date": null,
+      "citation": "FDA OTC Monograph M002 — Antiflatulent Products for Over-the-Counter Human Use",
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/omuf/monographs/OTCMonograph_M002-AntiflatulentProductsforOTCHumanUse_09202021.pdf",
+      "published_date": "2021-09-20",
           "evidence_grade": "R",
           "confidence": "high",
-          "title": "21 CFR 332.10 — OTC antiflatulent drug products, simethicone monograph"
+      "supports_claims": [
+        "regulatory_status"
+      ],
+          "title": "FDA OTC Monograph M002 — Antiflatulent Products"
         }
       ],
       "review": {
@@ -16683,9 +16463,9 @@
       },
       "cui": "C0037138",
       "external_ids": {},
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "An OTC anti-gas drug appearing as an undisclosed ingredient in supplements. Generally low risk, but its presence signals labeling concerns — talk to your doctor if you have been using it.",
-      "safety_warning_one_liner": "OTC drug found in supplements. Talk to your doctor."
+      "ban_context": "watchlist",
+      "safety_warning": "FDA regulates simethicone as an OTC antiflatulent drug active. Active use in a supplement has regulatory risk and needs review; inactive antifoaming use is warning-only.",
+      "safety_warning_one_liner": "OTC drug active requiring supplement-policy review."
     },
     {
       "id": "ADD_HEXADRONE",

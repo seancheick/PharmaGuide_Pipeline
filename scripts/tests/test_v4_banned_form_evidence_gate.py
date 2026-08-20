@@ -1,4 +1,4 @@
-"""v4 safety gate — banned substance carried in form / raw_source_text evidence.
+"""v4 safety gate — policy-relevant form / raw_source_text evidence.
 
 Regression for the export↔v4 divergence found on a full-corpus shadow build:
 8 products that the EXPORT hard-blocks via ``has_banned_substance`` were scored
@@ -20,9 +20,10 @@ resolver's ``_banned_index``) are built from the SAME filtered entries with the
 SAME normalizer, so feeding the gate's resolver the SAME evidence terms yields
 parity — the gate now BLOCKs natively, no longer depending on the export net.
 
-Substance classes covered (one block per class):
-  1. Boron — banned salt form ``Sodium Tetraborate`` (dsld 221112, 26631).
-  2. Partially Hydrogenated Oils / PHOs (dsld 33212).
+Current policy outcomes covered:
+  1. Sodium tetraborate is a recognized supplemental boron form and must not
+     inherit the retired food-additive hard block.
+  2. Partially Hydrogenated Oils / PHOs remain a verified US block.
 
 Each product below is a faithful reconstruction of the real blob shape: a
 generic, non-banned ``name``/``standardName`` with the banned substance living
@@ -52,13 +53,12 @@ def _clean_contaminant_data() -> dict:
 
 
 # --------------------------------------------------------------------------- #
-# Substance class 1 — Boron salt form (Sodium Tetraborate)
+# Supplemental boron forms — Sodium Tetraborate
 # --------------------------------------------------------------------------- #
 
 
-def test_boron_with_sodium_tetraborate_form_blocks() -> None:
-    """dsld 221112 'Infinite Test' shape: active 'Boron' (NOT banned) whose
-    banned salt form 'Sodium Tetraborate' lives in forms[]. Must BLOCK."""
+def test_boron_with_sodium_tetraborate_form_does_not_block() -> None:
+    """NIH ODS identifies sodium tetraborate as a supplemental boron form."""
     from scoring_v4.gate_safety import evaluate_safety_gate
 
     product = {
@@ -77,17 +77,14 @@ def test_boron_with_sodium_tetraborate_form_blocks() -> None:
         "inactiveIngredients": [],
     }
     result = evaluate_safety_gate(product)
-    assert result.verdict == "BLOCKED", (
-        f"banned salt form in forms[] must hard-block; got {result.verdict!r}"
-    )
-    assert result.short_circuits_scoring is True
-    assert result.blocking_reason == "banned_ingredient"
-    assert "Tetraborate" in (result.matched_substance or "")
+    assert result.verdict not in {"BLOCKED", "UNSAFE"}
+    assert result.short_circuits_scoring is False
+    assert result.blocking_reason is None
+    assert result.quarantine_required is False
 
 
-def test_boron_with_tetraborate_decahydrate_form_blocks() -> None:
-    """dsld 26631 shape (glucosamine/chondroitin + Boron): banned form
-    'Sodium Tetraborate Decahydrate' carried in forms[]. Must BLOCK."""
+def test_boron_with_tetraborate_decahydrate_form_does_not_block() -> None:
+    """The decahydrate form follows the same supplemental-boron policy."""
     from scoring_v4.gate_safety import evaluate_safety_gate
 
     product = {
@@ -108,15 +105,14 @@ def test_boron_with_tetraborate_decahydrate_form_blocks() -> None:
         "inactiveIngredients": [],
     }
     result = evaluate_safety_gate(product)
-    assert result.verdict == "BLOCKED"
-    assert result.short_circuits_scoring is True
-    assert result.blocking_reason == "banned_ingredient"
+    assert result.verdict not in {"BLOCKED", "UNSAFE"}
+    assert result.short_circuits_scoring is False
+    assert result.blocking_reason is None
+    assert result.quarantine_required is False
 
 
 def test_bare_boron_without_banned_form_does_not_block() -> None:
-    """Precision guard: elemental Boron itself is NOT banned — only the
-    Sodium Tetraborate salt is. A boron product with a benign form (boron
-    citrate) must NOT be hard-blocked by the broadened evidence terms."""
+    """Elemental boron and boron citrate must not be hard-blocked."""
     from scoring_v4.gate_safety import evaluate_safety_gate
 
     product = {
@@ -167,7 +163,7 @@ def test_inactive_tetraborate_duplicate_of_active_boron_does_not_block() -> None
     assert result.verdict != "BLOCKED"
 
 
-def test_inactive_tetraborate_without_active_boron_still_blocks() -> None:
+def test_inactive_tetraborate_without_active_boron_has_no_unverified_us_block() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
 
     product = {
@@ -183,7 +179,9 @@ def test_inactive_tetraborate_without_active_boron_still_blocks() -> None:
 
     result = evaluate_safety_gate(product)
 
-    assert result.verdict == "BLOCKED"
+    assert result.verdict not in {"BLOCKED", "UNSAFE"}
+    assert result.blocking_reason is None
+    assert result.quarantine_required is False
 
 
 # --------------------------------------------------------------------------- #
@@ -267,23 +265,15 @@ def test_malformed_forms_do_not_crash(ingredient: dict) -> None:
         "activeIngredients": [ingredient],
         "inactiveIngredients": [],
     }
-    # Must not raise; verdict may be BLOCKED (last case) or None.
+    # Must not raise; the retired tetraborate rule must not hard-block.
     evaluate_safety_gate(product)
 
 
 # --------------------------------------------------------------------------- #
-# Full-corpus guard (corpus-gated; skips when the enriched corpus is absent)
-#
-# The existing test_v4_safety_parity_release keys off the v3 *scorer* verdict,
-# which these export-banned products do NOT carry (the export overrides the
-# verdict in build_final_db). So that test cannot catch this class. This guard
-# closes the loop the task asks for: every corpus product whose active Boron
-# salt / PHO banned substance lives in name / raw_source_text / forms must
-# produce a v4-NATIVE BLOCKED. An inactive salt row that only repeats a
-# declared active Boron source is excluded by the shared source-form contract.
+# Full-corpus PHO guard (corpus-gated; skips when the enriched corpus is absent).
 # --------------------------------------------------------------------------- #
 
-_TARGET_BANNED_RULE_IDS = {"ADD_SODIUM_TETRABORATE", "BANNED_PHO"}
+_TARGET_BANNED_RULE_IDS = {"BANNED_PHO"}
 
 
 def _load_enriched_corpus() -> dict:
@@ -301,7 +291,7 @@ def _load_enriched_corpus() -> dict:
 
 
 def _target_banned_rule(product: dict, resolver) -> str | None:
-    """Return the target rule_id (Sodium Tetraborate / PHO) if any ingredient
+    """Return the PHO rule_id if any ingredient
     of the product carries it in name / raw_source_text / forms; else None.
 
     Re-derives detection independently of the gate so this is a genuine
@@ -342,7 +332,7 @@ def _target_banned_rule(product: dict, resolver) -> str | None:
     return None
 
 
-def test_corpus_standalone_boron_and_pho_products_are_v4_native_blocked() -> None:
+def test_corpus_pho_products_are_v4_native_blocked() -> None:
     enriched = _load_enriched_corpus()
     if not enriched:
         pytest.skip("enriched corpus not present (scripts/products/*_enriched/)")
@@ -367,10 +357,9 @@ def test_corpus_standalone_boron_and_pho_products_are_v4_native_blocked() -> Non
             )
 
     assert matched > 0, (
-        "corpus present but no Sodium-Tetraborate / PHO products found — "
-        "expected the known canaries (e.g. 221112, 33212, 26631)"
+        "corpus present but no PHO products found — expected canary 33212"
     )
     assert failures == [], (
-        f"{len(failures)} Boron/PHO product(s) did not reach v4-native BLOCKED: "
+        f"{len(failures)} PHO product(s) did not reach v4-native BLOCKED: "
         + json.dumps(failures[:10], default=str)
     )

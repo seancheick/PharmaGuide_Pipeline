@@ -35,10 +35,11 @@ The signal SOURCE is shared with v3, but the verdict policy here is v4-owned.
 from __future__ import annotations
 
 import json
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from urllib.parse import urlparse
 
 from inactive_ingredient_resolver import (
     InactiveIngredientResolver,
@@ -47,10 +48,13 @@ from inactive_ingredient_resolver import (
 )
 from identity.safety import (
     SafetySignal,
+    has_explicit_form_evidence,
     is_resolved_safety_rule_id,
     normalize_safety_signals,
     safety_normalize_text,
+    safety_jurisdiction_projection,
     safety_rule_id_or_unresolved,
+    safety_severity_for_status,
 )
 from rda_ul_calculator import get_actionable_ul_review_signals
 from scoring_input_contract import get_scoring_ingredients
@@ -69,6 +73,18 @@ _SAFETY_RULES_PATH = (
     Path(__file__).resolve().parents[1]
     / "data"
     / "banned_recalled_ingredients.json"
+)
+_POLICY_VERIFIED = "verified"
+_POLICY_REVIEW_REQUIRED = "review_required"
+_POLICY_RETIRED = "retired"
+_SAFETY_POLICY_REVIEW_REASON = "safety_policy_review_required"
+_AUTHORITATIVE_US_POLICY_HOSTS = (
+    "fda.gov",
+    "federalregister.gov",
+    "govinfo.gov",
+    "nih.gov",
+    "uscode.house.gov",
+    "deadiversion.usdoj.gov",
 )
 
 
@@ -150,6 +166,9 @@ class SafetyResult:
     needs_review: bool = False
     clean_label_hits: List[Dict[str, Any]] = field(default_factory=list)
     safety_decision: Optional[SafetyDecision] = None
+    quarantine_required: bool = False
+    quarantine_reason: Optional[str] = None
+    review_records: List[Dict[str, Any]] = field(default_factory=list)
 
 
 # NOTE: match-type → trust mapping moved to the SafetySignal v1 kernel
@@ -229,6 +248,9 @@ def _verified_policy_sources(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "date",
                 "evidence_grade",
                 "evidence_summary",
+                "authority",
+                "citation",
+                "supports_claims",
             )
             if reference.get(key) not in (None, "")
         })
@@ -260,6 +282,188 @@ def _verified_policy_sources(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
     return deduped
 
 
+def _is_authoritative_us_policy_url(value: Any) -> bool:
+    try:
+        host = (urlparse(str(value or "")).hostname or "").lower()
+    except ValueError:
+        return False
+    return any(
+        host == suffix or host.endswith(f".{suffix}")
+        for suffix in _AUTHORITATIVE_US_POLICY_HOSTS
+    )
+
+
+def _authoritative_us_policy_sources(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Return source-complete US policy evidence for a hard decision.
+
+    Scientific papers can support clinical risk, but they cannot establish a
+    US legal or regulatory verdict.  The exported decision therefore includes
+    only authoritative government policy URLs in ``verified_sources``.
+    """
+    sources = []
+    for source in _verified_policy_sources(entry):
+        url = source.get("url")
+        source_type = _norm(source.get("type"))
+        claims = {_norm(value) for value in _safe_list(source.get("supports_claims"))}
+        is_policy_source = bool(
+            claims & {"regulatory_action", "regulatory_status", "policy_basis"}
+        ) or source_type in {
+            "fda_action",
+            "fda_advisory",
+            "fda_guidance",
+            "fda_final_rule",
+            "federal_register",
+            "statute",
+            "regulatory",
+            "warning_letter",
+        }
+        if is_policy_source and _is_authoritative_us_policy_url(url):
+            sources.append(source)
+    return sources
+
+
+def _explicit_us_jurisdictions(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
+    return [
+        dict(item)
+        for item in _safe_list(entry.get("jurisdictions"))
+        if isinstance(item, dict)
+        and (
+            str(item.get("jurisdiction_code") or "").strip().upper() == "US"
+            or str(item.get("jurisdiction_code") or "").strip().upper().startswith("US-")
+        )
+    ]
+
+
+def _policy_role_is_supported(entry: Dict[str, Any], signal: SafetySignal) -> bool:
+    roles = {
+        _norm(value)
+        for value in _safe_list(entry.get("hard_verdict_roles"))
+        if _norm(value)
+    }
+    return not roles or signal.subject_role in roles
+
+
+def _hard_policy_missing_requirements(
+    entry: Dict[str, Any],
+    signal: SafetySignal,
+) -> List[str]:
+    missing: List[str] = []
+    if _norm(entry.get("policy_verification_status")) != _POLICY_VERIFIED:
+        missing.append("policy_verification_status")
+    if not _explicit_us_jurisdictions(entry):
+        missing.append("explicit_us_jurisdiction")
+    if not _authoritative_us_policy_sources(entry):
+        missing.append("verified_authoritative_us_source")
+    if not entry.get("legal_status_enum"):
+        missing.append("legal_status")
+    if not _policy_role_is_supported(entry, signal):
+        missing.append("role_applicability")
+    return missing
+
+
+def _product_policy_evidence(product: Dict[str, Any], signal: SafetySignal) -> List[Any]:
+    values: List[Any] = [signal.evidence_text]
+    section_names = {
+        "active": ("activeIngredients",),
+        "inactive": ("inactiveIngredients",),
+        "unknown": ("activeIngredients", "inactiveIngredients"),
+    }.get(signal.subject_role, ("activeIngredients", "inactiveIngredients"))
+    for section_name in section_names:
+        for row in _safe_list(product.get(section_name)):
+            if not isinstance(row, dict):
+                continue
+            values.extend(
+                row.get(key)
+                for key in ("name", "standardName", "standard_name", "raw_source_text")
+            )
+            for form in _safe_list(row.get("forms")):
+                if isinstance(form, dict):
+                    values.extend((form.get("name"), form.get("prefix")))
+                else:
+                    values.append(form)
+    return values
+
+
+def _signal_has_required_form_evidence(
+    product: Dict[str, Any],
+    signal: SafetySignal,
+    entry: Dict[str, Any],
+) -> bool:
+    if not entry.get("requires_explicit_form_evidence"):
+        return True
+    return bool(
+        has_explicit_form_evidence(
+            _product_policy_evidence(product, signal),
+            _safe_list(entry.get("form_evidence_patterns")),
+        )
+    )
+
+
+def _current_policy_signal(
+    signal: SafetySignal,
+    entry: Dict[str, Any],
+) -> SafetySignal:
+    """Apply current rule status/jurisdiction at the migration boundary.
+
+    Enriched files can carry a safety snapshot created by an older rule set.
+    Identity evidence is retained, while mutable policy fields come from the
+    current registry so a retired or corrected rule cannot keep blocking from
+    a stale embedded copy.
+    """
+    projection = safety_jurisdiction_projection(entry)
+    current_status = _norm(entry.get("status")) or signal.status
+    return replace(
+        signal,
+        status=current_status,
+        severity=safety_severity_for_status(current_status, signal.severity),
+        us_applicable=projection["us_applicable"],
+        jurisdictions=projection["jurisdictions"],
+        regional_advisories=projection["regional_advisories"],
+    )
+
+
+def _append_policy_review(
+    result: SafetyResult,
+    signal: SafetySignal,
+    entry: Dict[str, Any],
+    missing_requirements: List[str],
+) -> None:
+    rule_id = safety_rule_id_or_unresolved(entry.get("id"), signal.entry_id)
+    substance = str(
+        entry.get("standard_name")
+        or signal.evidence_text
+        or signal.entry_id
+        or "unknown"
+    )
+    record = {
+        "rule_id": rule_id,
+        "substance": substance,
+        "candidate_status": signal.status or None,
+        "candidate_verdict": (
+            "BLOCKED" if signal.status == "banned"
+            else "UNSAFE" if signal.status == "recalled"
+            else None
+        ),
+        "matched_role": signal.subject_role,
+        "matched_form": str(signal.evidence_text or substance),
+        "match_resolution": signal.match_resolution,
+        "jurisdictions": list(signal.jurisdictions),
+        "available_sources": _verified_policy_sources(entry),
+        "missing_requirements": list(dict.fromkeys(missing_requirements)),
+        "review_reason": entry.get("policy_review_reason") or _SAFETY_POLICY_REVIEW_REASON,
+    }
+    identity = (record["rule_id"], record["matched_role"], record["matched_form"])
+    if not any(
+        (item.get("rule_id"), item.get("matched_role"), item.get("matched_form")) == identity
+        for item in result.review_records
+    ):
+        result.review_records.append(record)
+    result.quarantine_required = True
+    result.quarantine_reason = _SAFETY_POLICY_REVIEW_REASON
+    result.needs_review = True
+    _append_signal(result, "B0_US_POLICY_REVIEW_REQUIRED")
+
+
 def _decision_for_signal(
     signal: SafetySignal,
     *,
@@ -274,7 +478,7 @@ def _decision_for_signal(
     ]
     jurisdiction = "US" if any(
         code == "US" or code.startswith("US-") for code in jurisdictions
-    ) or (not jurisdictions and signal.us_applicable) else ",".join(
+    ) else ",".join(
         code for code in jurisdictions if code
     )
     policy_basis = {
@@ -284,6 +488,8 @@ def _decision_for_signal(
             "legal_status": entry.get("legal_status_enum"),
             "ban_context": entry.get("ban_context"),
             "clinical_risk": entry.get("clinical_risk_enum"),
+            "policy_verification_status": entry.get("policy_verification_status"),
+            "policy_verified_at": entry.get("policy_verified_at"),
         }.items()
         if value not in (None, "")
     }
@@ -306,7 +512,7 @@ def _decision_for_signal(
         policy_basis=policy_basis,
         jurisdiction=jurisdiction or "unknown",
         reason_code=reason_code,
-        verified_sources=_verified_policy_sources(entry),
+        verified_sources=_authoritative_us_policy_sources(entry),
         source_db=signal.source_db,
     )
 
@@ -460,6 +666,12 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "inactive_policy": resolution.inactive_policy,
                 "role": role,
                 "matched_rule_id": resolution.matched_rule_id,
+                **safety_jurisdiction_projection(
+                    _safety_rule_indexes()[0].get(
+                        str(resolution.matched_rule_id or ""),
+                        {},
+                    )
+                ),
             })
     return hits
 
@@ -878,8 +1090,51 @@ def evaluate_safety_gate(
         product,
         resolver_hits=_iter_resolver_safety_hits(product),
     )
-    for sig in signals:
-        _apply_signal_policy(result, sig)
+    for raw_signal in signals:
+        entry = _rule_for_signal(raw_signal)
+        signal = _current_policy_signal(raw_signal, entry) if entry else raw_signal
+
+        policy_status = _norm(entry.get("policy_verification_status")) if entry else ""
+        match_mode = _norm(entry.get("match_mode")) if entry else ""
+        if policy_status == _POLICY_RETIRED or match_mode in {"disabled", "historical"}:
+            _append_signal(result, "B0_RETIRED_POLICY_SIGNAL_IGNORED")
+            continue
+
+        if entry and not _signal_has_required_form_evidence(product, signal, entry):
+            _append_signal(result, "B0_STALE_POLICY_SIGNAL_IGNORED")
+            continue
+
+        if not signal.us_applicable and signal.jurisdictions:
+            _apply_signal_policy(result, signal)
+            continue
+
+        if policy_status == _POLICY_REVIEW_REQUIRED and signal.policy_eligible:
+            _append_policy_review(
+                result,
+                signal,
+                entry,
+                ["completed_us_policy_review"],
+            )
+            # Keep the risk lane visible while withholding a live score.
+            if signal.status in {"high_risk", "watchlist"}:
+                _apply_signal_policy(result, signal)
+            continue
+
+        if signal.status in {"banned", "recalled"} and signal.policy_eligible:
+            if signal.match_resolution != "confirmed":
+                _append_policy_review(
+                    result,
+                    signal,
+                    entry,
+                    ["confirmed_identity_match"],
+                )
+                continue
+            missing = _hard_policy_missing_requirements(entry, signal)
+            if missing:
+                _append_policy_review(result, signal, entry, missing)
+                continue
+
+        _apply_signal_policy(result, signal)
 
     _apply_stimulant_policy(result, product)
     _apply_typed_dose_safety_policy(result, dose_safety)
@@ -914,7 +1169,13 @@ def evaluate_safety_gate(
 
     # short_circuits_scoring is purely a function of verdict severity.
     result.short_circuits_scoring = result.verdict in {"BLOCKED", "UNSAFE"}
-    if not result.short_circuits_scoring:
+    if result.short_circuits_scoring:
+        # One complete hard decision is sufficient to suppress the numeric
+        # score safely. Additional review records remain auditable but do not
+        # quarantine an already safety-suppressed product.
+        result.quarantine_required = False
+        result.quarantine_reason = None
+    else:
         result.blocking_reason = None
         result.matched_substance = None
         result.safety_decision = None

@@ -265,9 +265,11 @@ def test_shadow_scorer_safety_short_circuits_before_p3_module() -> None:
         "banned_substances": {
             "substances": [
                 {
-                    "name": "DMAA",
+                    "banned_id": "BANNED_CBD_US",
+                    "ingredient": "Cannabidiol",
                     "status": "banned",
                     "match_type": "exact",
+                    "source_section": "active",
                 }
             ]
         }

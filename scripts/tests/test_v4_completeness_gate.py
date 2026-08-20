@@ -764,7 +764,7 @@ def test_shadow_entry_point_preserves_safety_short_circuit_before_completeness()
     product["contaminant_data"] = {
         "banned_substances": {
             "substances": [
-                {"name": "Vinpocetine", "status": "banned", "match_type": "exact"}
+                {"banned_id": "BANNED_CBD_US", "ingredient": "Cannabidiol", "status": "banned", "match_type": "exact", "source_section": "active"}
             ]
         }
     }

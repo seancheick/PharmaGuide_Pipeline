@@ -34,8 +34,8 @@ def test_eu_banned_additive_is_safety_concern_as_inactive(name: str) -> None:
 
 
 @pytest.mark.parametrize("name", EU_BANNED)
-def test_eu_banned_additive_drives_caution(name: str) -> None:
-    """A product carrying the additive (active or inactive) must reach CAUTION."""
+def test_eu_only_additive_is_advisory_without_a_us_verdict(name: str) -> None:
+    """EU-only policy must remain visible without becoming a US verdict."""
     from scoring_v4.gate_safety import evaluate_safety_gate
 
     product = {
@@ -44,16 +44,20 @@ def test_eu_banned_additive_drives_caution(name: str) -> None:
         "inactiveIngredients": [{"name": name}],
     }
     result = evaluate_safety_gate(product)
-    assert result.verdict == "CAUTION", f"{name} as inactive should drive CAUTION, got {result.verdict}"
+    assert result.verdict is None
+    assert result.short_circuits_scoring is False
+    assert "B0_REGIONAL_ADVISORY" in result.safety_signals
 
 
 @pytest.mark.parametrize("label", ["Propyl Paraben", "Propyl Parabens", "Green 3", "FD&C Green No. 3"])
-def test_eu_banned_real_world_label_variants_drive_caution(label: str) -> None:
-    """Real DSLD label spellings (incl. plural 'Propyl Parabens', dsld 315319) must fire."""
+def test_eu_banned_real_world_label_variants_remain_regional_advisories(label: str) -> None:
+    """Real label spellings must retain EU metadata without a US verdict."""
     from scoring_v4.gate_safety import evaluate_safety_gate
 
     product = {"dsld_id": "TEST", "fullName": "x", "inactiveIngredients": [{"name": label}]}
-    assert evaluate_safety_gate(product).verdict == "CAUTION", f"{label!r} should drive CAUTION"
+    result = evaluate_safety_gate(product)
+    assert result.verdict is None
+    assert "B0_REGIONAL_ADVISORY" in result.safety_signals
 
 
 def test_eu_banned_entries_present_with_eu_citation() -> None:

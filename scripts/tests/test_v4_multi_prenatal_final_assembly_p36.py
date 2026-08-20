@@ -278,7 +278,7 @@ def test_shadow_blocked_safety_short_circuits_before_p36() -> None:
     product["contaminant_data"] = {
         "banned_substances": {
             "substances": [
-                {"name": "DMAA", "status": "banned", "match_type": "exact"},
+                {"banned_id": "BANNED_CBD_US", "ingredient": "Cannabidiol", "status": "banned", "match_type": "exact", "source_section": "active"},
             ]
         }
     }

@@ -103,9 +103,9 @@ def test_gate_no_clean_label_hit_when_absent() -> None:
     assert result.clean_label_hits == []
 
 
-def test_gate_eu_banned_active_still_caution_without_clean_label_hit() -> None:
-    # propylparaben (penalize_anyway high_risk, NO clean_label block) → CAUTION,
-    # and it is NOT a clean-label hit. The two lanes are independent.
+def test_gate_eu_only_policy_stays_advisory_without_clean_label_hit() -> None:
+    # Regional policy and clean-label policy are independent. An EU-only rule
+    # is retained as an advisory and does not become a US CAUTION verdict.
     from scoring_v4.gate_safety import evaluate_safety_gate
 
     product = {
@@ -114,7 +114,8 @@ def test_gate_eu_banned_active_still_caution_without_clean_label_hit() -> None:
         "inactiveIngredients": [{"name": "propylparaben"}],
     }
     result = evaluate_safety_gate(product)
-    assert result.verdict == "CAUTION"
+    assert result.verdict is None
+    assert "B0_REGIONAL_ADVISORY" in result.safety_signals
     assert result.clean_label_hits == []
 
 

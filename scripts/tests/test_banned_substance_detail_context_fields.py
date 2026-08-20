@@ -76,30 +76,29 @@ def _enriched_with_banned() -> dict:
 
 def _full_warning() -> dict:
     """A banned_substance warning with every field populated, matching the
-    real shape emitted by build_warnings_list for a Vinpocetine product."""
+    real shape emitted by build_warnings_list for a BVO product."""
     return {
         "type": "banned_substance",
         "severity": "critical",
         "clinical_risk": "critical",
         "display_mode_default": "critical",
-        "title": "Banned substance: Vinpocetine",
-        "safety_warning_one_liner": "Not a lawful US supplement with pregnancy risk. Stop.",
+        "title": "Banned substance: Brominated Vegetable Oil",
+        "safety_warning_one_liner": "FDA authorization revoked in 2024. Avoid.",
         "safety_warning": (
-            "An FDA statement in 2019 concluded vinpocetine is not a lawful "
-            "supplement ingredient, and it is associated with miscarriage risk "
-            "in pregnancy. Stop using and consult a clinician."
+            "FDA revoked BVO's authorization for use in food in 2024 after "
+            "concluding that its intended use was no longer safe. Avoid a "
+            "supplement that still lists it."
         ),
         "ban_context": "substance",
         "detail": (
-            "Vinpocetine is a synthetic derivative of the alkaloid vincamine, "
-            "used as a prescription drug in Europe and Japan. In 2019 the FDA "
-            "concluded it does not meet the statutory definition of a dietary "
-            "ingredient."
+            "FDA revoked the food-additive authorization for brominated "
+            "vegetable oil after concluding that its intended use in food was "
+            "no longer safe."
         ),
-        "regulatory_date_label": "FDA ban effective",
-        "date": "2016-09-07",
+        "regulatory_date_label": "FDA final rule effective",
+        "date": "2024-08-02",
         "source_urls": [
-            "https://www.fda.gov/food/cfsan-constituent-updates/fda-determines-vinpocetine-not-dietary-ingredient"
+            "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?id=89FR55040&set=FinalRules"
         ],
         "source": "banned_recalled_ingredients",
         "condition_ids": [],
@@ -130,15 +129,15 @@ def test_bsd_forwards_detail_paragraph_when_present() -> None:
     bsd = build_banned_substance_detail(_enriched_with_banned(), [_full_warning()])
     assert bsd is not None
     assert "detail" in bsd
-    assert "Vinpocetine is a synthetic derivative" in bsd["detail"]
+    assert "FDA revoked the food-additive authorization" in bsd["detail"]
 
 
 def test_bsd_forwards_regulatory_date_label_and_date_when_present() -> None:
     from scripts.build_final_db import build_banned_substance_detail
     bsd = build_banned_substance_detail(_enriched_with_banned(), [_full_warning()])
     assert bsd is not None
-    assert bsd["regulatory_date_label"] == "FDA ban effective"
-    assert bsd["date"] == "2016-09-07"
+    assert bsd["regulatory_date_label"] == "FDA final rule effective"
+    assert bsd["date"] == "2024-08-02"
 
 
 def test_bsd_forwards_source_urls_list_when_present() -> None:
@@ -147,7 +146,7 @@ def test_bsd_forwards_source_urls_list_when_present() -> None:
     assert bsd is not None
     assert isinstance(bsd["source_urls"], list)
     assert len(bsd["source_urls"]) == 1
-    assert bsd["source_urls"][0].startswith("https://www.fda.gov/")
+    assert "fda.gov/" in bsd["source_urls"][0]
 
 
 def test_bsd_full_shape_matches_widened_contract() -> None:
@@ -271,4 +270,4 @@ def test_bsd_substance_name_extracted_from_title() -> None:
     from scripts.build_final_db import build_banned_substance_detail
     bsd = build_banned_substance_detail(_enriched_with_banned(), [_full_warning()])
     assert bsd is not None
-    assert bsd["substance_name"] == "Vinpocetine"
+    assert bsd["substance_name"] == "Brominated Vegetable Oil"

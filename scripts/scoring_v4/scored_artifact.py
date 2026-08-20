@@ -184,6 +184,7 @@ def assemble_scored_artifact(
     verdict = _public_verdict(v4, mapped_coverage)
     safety_verdict = str(safety_gate.get("verdict") or "SAFE").upper()
     safety_decision = _safe_dict(safety_gate.get("safety_decision"))
+    safety_review_records = list(safety_gate.get("review_records") or [])
     decision_reason = safety_decision.get("reason_code")
     blocking_reason = (
         decision_reason or safety_gate.get("blocking_reason")
@@ -209,7 +210,12 @@ def assemble_scored_artifact(
         "score_basis": "v4_six_pillar",
         "scoring_status": status,
         "not_scorable_reason": (
-            completeness_gate.get("reason") if status == "not_scored" else None
+            (
+                completeness_gate.get("reason")
+                or score_unavailable_reason
+            )
+            if status == "not_scored"
+            else None
         ),
         "supplement_taxonomy": taxonomy,
         "primary_type": taxonomy.get("primary_type"),
@@ -234,6 +240,7 @@ def assemble_scored_artifact(
             safety_signals[0] if safety_signals else None
         ),
         "safety_decision": safety_decision or None,
+        "safety_review_records": safety_review_records,
         "flags": safety_signals,
         "badges": [],
         "quality_score_v4_100": quality_score,
@@ -291,6 +298,7 @@ def assemble_scored_artifact(
             safety_signals[0] if safety_signals else None
         ),
         "_v4_safety_decision": safety_decision or None,
+        "_v4_safety_review_records": safety_review_records,
         "_v4_completeness_gate": completeness_gate,
         "_v4_provenance": provenance,
         "_v4_scoring_engine_version": provenance.get("scoring_engine_version"),

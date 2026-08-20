@@ -5,6 +5,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from enrich_supplements_v3 import SupplementEnricherV3
@@ -12,7 +14,7 @@ from scoring_v4.gate_safety import evaluate_safety_gate
 
 
 def _entry(code: str) -> dict:
-    return {
+    entry = {
         "id": f"BAN_{code}",
         "standard_name": "Regional Test Substance",
         "aliases": ["regional test substance"],
@@ -28,6 +30,19 @@ def _entry(code: str) -> dict:
             "status": "banned",
         }],
     }
+    if code == "US":
+        entry.update({
+            "policy_verification_status": "verified",
+            "policy_verified_at": "2026-08-20",
+            "hard_verdict_roles": ["active"],
+            "references_structured": [{
+                "type": "fda_action",
+                "title": "Synthetic jurisdiction test policy",
+                "url": "https://www.fda.gov/food/dietary-supplements",
+                "supports_claims": ["regulatory_status"],
+            }],
+        })
+    return entry
 
 
 def _enriched_hit(code: str) -> dict:
@@ -58,13 +73,21 @@ def test_non_us_ban_is_retained_as_advisory_but_does_not_block_us_verdict() -> N
     assert "B0_REGIONAL_ADVISORY" in result.safety_signals
 
 
-def test_us_ban_remains_a_confirmed_block() -> None:
+def test_us_ban_remains_a_confirmed_block(monkeypatch: pytest.MonkeyPatch) -> None:
+    import scoring_v4.gate_safety as gate
+
+    entry = _entry("US")
+    monkeypatch.setattr(
+        gate,
+        "_safety_rule_indexes",
+        lambda: ({entry["id"]: entry}, {"regional test substance": [entry]}),
+    )
     product = _enriched_hit("US")
     hit = product["contaminant_data"]["banned_substances"]["substances"][0]
 
     assert hit["us_applicable"] is True
     assert hit["regional_advisories"] == []
 
-    result = evaluate_safety_gate(product)
+    result = gate.evaluate_safety_gate(product)
     assert result.verdict == "BLOCKED"
     assert result.short_circuits_scoring is True

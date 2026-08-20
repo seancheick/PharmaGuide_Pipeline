@@ -283,7 +283,7 @@ def test_shadow_blocked_safety_short_circuits_before_p26() -> None:
     product = _probiotic_product()
     product["contaminant_data"] = {
         "banned_substances": {"substances": [
-            {"name": "Vinpocetine", "status": "banned", "match_type": "exact"}
+            {"banned_id": "BANNED_CBD_US", "ingredient": "Cannabidiol", "status": "banned", "match_type": "exact", "source_section": "active"}
         ]}
     }
     out = score_product_v4(product)

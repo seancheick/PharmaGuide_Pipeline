@@ -62,7 +62,6 @@ def resolver():
         # FD&C Red #3 moved to status=high_risk (CAUTION, is_banned=False) 2026-06-08
         # — no longer a hard-banned blocker; CAUTION behavior covered by
         # test_v4_safety_gate::test_red3_high_risk_drives_caution_not_blocked.
-        ("Sodium Tetraborate",       "Sodium Tetraborate"),
         # Simethicone / Polydimethylsiloxane moved to status=watchlist with
         # inactive_policy=excipient_acceptable (warning-only, is_banned=False)
         # 2026-06-09 — ubiquitous low-risk antifoam excipient; the "OTC drug
@@ -213,7 +212,6 @@ def _make_synthetic_enriched(
         # FD&C Red #3 → high_risk/CAUTION 2026-06-08 (no longer is_banned)
         # Simethicone → watchlist/excipient_acceptable 2026-06-09 (no longer
         # is_banned; warning-only path, not a banned_substance warning)
-        ("Sodium Tetraborate",       "Sodium Tetraborate"),
     ],
 )
 def test_emitter_writes_banned_substance_warning_with_authored_copy(
@@ -321,7 +319,7 @@ def test_emitter_writes_banned_substance_warning_with_authored_copy(
     # Simethicone removed 2026-06-09 → status=watchlist/excipient_acceptable,
     # no longer is_banned (warning-only; resolver copy lock lives in
     # test_resolver_watchlist_excipient_still_carries_authored_copy)
-    ["Brominated Vegetable Oil", "Sodium Tetraborate"],
+    ["Brominated Vegetable Oil"],
 )
 def test_build_banned_substance_detail_finds_authored_copy_for_resolver_hit(
     ingredient_name,

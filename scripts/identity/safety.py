@@ -103,10 +103,11 @@ def safety_jurisdiction_projection(
 ) -> Dict[str, Any]:
     """Project one safety rule into market applicability plus advisories.
 
-    Legacy rules without structured jurisdictions retain their historic US
-    applicability. Once jurisdictions are declared, only matching country or
-    subdivision codes may drive the market verdict; all others remain visible
-    as regional advisories.
+    Only an explicitly authored country or subdivision code may drive a market
+    verdict.  A missing jurisdiction is unresolved policy evidence, not an
+    implicit US authorization to hard-block a product.  Callers may quarantine
+    that unresolved rule for review; they must not silently reinterpret it as
+    US-applicable.
     """
     jurisdictions = [
         dict(item)
@@ -123,7 +124,7 @@ def safety_jurisdiction_projection(
     regional = [item for item in jurisdictions if not _applies(item)]
     return {
         "jurisdictions": jurisdictions,
-        "us_applicable": bool(applicable) if jurisdictions else True,
+        "us_applicable": bool(applicable),
         "regional_advisories": regional,
     }
 
@@ -400,7 +401,17 @@ def normalize_safety_signals(
             confidence=s.get("confidence"),
             severity=s.get("severity_level") or s.get("severity"),
             subject_role=s.get("source_section") or s.get("role") or "active",
-            evidence_text=(s.get("banned_name") or s.get("ingredient") or s.get("name") or ""),
+            # Prefer label evidence over the registry's display name. This is
+            # essential when a stale hard-rule snapshot must be revalidated
+            # against an explicit form qualifier (for example generic red
+            # yeast rice versus declared monacolin K/lovastatin).
+            evidence_text=(
+                s.get("ingredient")
+                or s.get("matched_variant")
+                or s.get("name")
+                or s.get("banned_name")
+                or ""
+            ),
             us_applicable=s.get("us_applicable", True),
             jurisdictions=s.get("jurisdictions"),
             regional_advisories=s.get("regional_advisories"),
@@ -441,15 +452,22 @@ def normalize_safety_signals(
             subject_role=hit.get("role") or "unknown",
             inactive_policy=hit.get("inactive_policy") or "",
             evidence_text=hit.get("name") or "",
+            us_applicable=hit.get("us_applicable", False),
+            jurisdictions=hit.get("jurisdictions"),
+            regional_advisories=hit.get("regional_advisories"),
         ))
 
     # 4. top-level booleans (defense in depth; confirmed by construction)
-    if product.get("has_banned_substance"):
+    if product.get("has_banned_substance") and not any(
+        signal.status == "banned" for signal in signals
+    ):
         _add(build_safety_signal(
             entry_id="", source_db="banned_recalled_ingredients", status="banned",
             match_type="exact", evidence_text="has_banned_substance_flag",
         ))
-    if product.get("has_recalled_ingredient"):
+    if product.get("has_recalled_ingredient") and not any(
+        signal.status == "recalled" for signal in signals
+    ):
         _add(build_safety_signal(
             entry_id="", source_db="banned_recalled_ingredients", status="recalled",
             match_type="exact", evidence_text="has_recalled_ingredient_flag",
