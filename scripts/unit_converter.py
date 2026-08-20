@@ -544,7 +544,8 @@ class UnitConverter:
         # Check beta-carotene patterns
         for pattern in patterns.get('beta_carotene_patterns', []):
             if re.search(pattern, ingredient_text, re.IGNORECASE):
-                # Default to supplement form (more common in supplements)
+                # DSLD is a dietary-supplement label source. A food-matrix
+                # factor would require a separately typed source contract.
                 return 'vitamin_a_beta_carotene_supplement', \
                        self.vitamin_conversions.get('vitamin_a_beta_carotene_supplement', {})
 

@@ -47,3 +47,16 @@ def test_static_config_sections_are_present(blob):
         assert required in blob, f"missing required section {required!r}"
         assert isinstance(blob[required], dict)
         assert blob[required], f"{required!r} cannot be empty"
+
+
+def test_beta_carotene_conversion_contract_is_supplement_only(blob):
+    """DSLD labels dietary supplements, so food-matrix factors are invalid here."""
+    conversions = blob["vitamin_conversions"]
+
+    assert "vitamin_a_beta_carotene_food" not in conversions
+    supplement = conversions["vitamin_a_beta_carotene_supplement"]
+    assert supplement["conversions"]["iu_to_mcg_rae"] == pytest.approx(0.3)
+    assert (
+        supplement["conversions"]["mcg_beta_carotene_to_mcg_rae"]
+        == pytest.approx(0.5)
+    )

@@ -2,18 +2,18 @@
   "_metadata": {
     "description": "Unit conversion factors for supplement dosing normalization",
     "purpose": "dosing_normalization",
-    "schema_version": "5.0.0",
+    "schema_version": "5.1.0",
     "contract_test": "scripts/tests/test_unit_conversions_contract.py",
-    "last_updated": "2026-07-14",
-    "version": "1.0.0",
+    "last_updated": "2026-08-20",
+    "version": "1.1.0",
     "statistics": {
-      "vitamin_conversions": 22,
+      "vitamin_conversions": 21,
       "form_detection_categories": 2,
-      "total_conversion_rules": 45,
+      "total_conversion_rules": 42,
       "mcg_only_nutrients": 7,
-      "notes": "Bare folate preserves unknown form lineage; explicit DFE units normalize without assuming folic acid"
+      "notes": "DSLD is supplement-only: beta-carotene uses the supplemental rule; bare folate preserves unknown form lineage; explicit DFE units normalize without assuming folic acid"
     },
-    "total_entries": 22,
+    "total_entries": 21,
     "total_entries_note": "Count of vitamin_conversions rules; mass_conversions has 6 rules, probiotic_conversions is 1 section, form_detection_patterns has 2 vitamin patterns"
   },
   "vitamin_conversions": {
@@ -122,19 +122,6 @@
       "canonical_unit": "mcg RAE",
       "ul_applies": false,
       "notes": "Beta-carotene from supplements has no established UL; body regulates conversion",
-      "source": "NIH ODS"
-    },
-    "vitamin_a_beta_carotene_food": {
-      "id": "CONV_VITAMIN_A_BETA_CAROTENE_FOOD",
-      "standard_name": "Vitamin A (Beta-carotene from food)",
-      "aliases": [],
-      "conversions": {
-        "iu_to_mcg_rae": 0.05,
-        "mcg_rae_to_iu": 20,
-        "mcg_beta_carotene_to_mcg_rae": 0.083
-      },
-      "canonical_unit": "mcg RAE",
-      "notes": "Food-source beta-carotene has lower conversion efficiency than supplements",
       "source": "NIH ODS"
     },
     "vitamin_a_unknown": {

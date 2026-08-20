@@ -748,7 +748,7 @@ Primary key: `top_manufacturers` (array)
 ---
 
 ### 31. unit_conversions.json
-**Purpose:** `dosing_normalization` | **Entries:** 20
+**Purpose:** `dosing_normalization` | **Entries:** read `_metadata.total_entries`
 
 Primary keys: `vitamin_conversions`, `mass_conversions`, `probiotic_conversions`, `form_detection_patterns`
 

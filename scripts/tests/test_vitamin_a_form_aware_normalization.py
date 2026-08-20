@@ -8,8 +8,8 @@ converter's form detection scans ``ingredient_name`` for tokens like
 "beta-carotene" / "retinyl palmitate"; the bare name never contains a
 form, so detection routed to ``vitamin_a_unknown`` (factor 1.0) and the
 IU value was kept as-is. Result: 5000 IU Vitamin A stayed at "5000 IU"
-in the blob instead of converting to 500 mcg RAE (β-carotene) or
-1500 mcg RAE (retinol). The pregnancy UL gate (3000 mcg RAE) and other
+in the blob instead of converting to 1500 mcg RAE for either supplemental
+β-carotene or retinol. The pregnancy UL gate (3000 mcg RAE) and other
 mcg-RAE thresholds therefore could not fire correctly.
 
 Fix: dosage_normalizer.py joins ``ingredient['forms'][*].name`` onto the
@@ -17,7 +17,7 @@ ingredient_name passed to the converter, so β-Carotene / Retinyl
 Palmitate tokens are visible to form detection.
 
 Tests cover:
-  - β-Carotene supplement form (factor 0.1 → 500 mcg RAE from 5000 IU)
+  - β-Carotene supplement form (factor 0.3 → 1500 mcg RAE from 5000 IU)
   - Retinyl Palmitate / retinol form (factor 0.3 → 1500 mcg RAE)
   - Unknown form (no forms[] data) — still converts safely (factor 1.0,
     flagged for manual review)

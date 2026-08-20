@@ -668,12 +668,14 @@ def _check_well_dosed_on_undisclosed(rec: ProductRecord, blob: dict) -> None:
 
 
 def _check_unsafe_unit_conversion(rec: ProductRecord, blob: dict) -> None:
-    """Vitamin A IU → mcg RAE conversion factor is form-dependent
-    (retinol = 1 mcg RAE / 3.33 IU; beta-carotene = 1 mcg RAE / 20 IU).
-    If a Vitamin A active has unit IU but no form-aware normalization,
-    that's a BLOCKER.  Vitamin D IU ↔ mcg is form-agnostic (40 IU/mcg) so we
-    don't flag it. Vitamin E IU↔mg differs by tocopherol form (alpha vs
-    mixed) and is similarly form-dependent — flag it.
+    """Vitamin A IU normalization requires explicit form lineage.
+
+    NIH ODS uses 0.3 mcg RAE/IU for both preformed retinol and supplemental
+    beta-carotene, but only preformed retinol participates in the Vitamin A UL.
+    If a Vitamin A active has unit IU but no form-aware normalization, that's a
+    BLOCKER. Vitamin D IU ↔ mcg is form-agnostic (40 IU/mcg) so we don't flag
+    it. Vitamin E IU↔mg differs by tocopherol form (alpha vs mixed) and is
+    similarly form-dependent — flag it.
     """
     def has_explicit_unknown_vitamin_a_evidence(ing: dict) -> bool:
         ev = ing.get("conversion_evidence")

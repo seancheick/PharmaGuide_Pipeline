@@ -352,31 +352,31 @@ class UnitConversionTester:
             f"Got {ret_result:.0f} mcg RAE"
         )
 
-        # Beta-carotene supplement: 10000 IU = 1000 mcg RAE
+        # Beta-carotene supplement: 10000 IU = 3000 mcg RAE
         bc_supp = vit_convs.get('vitamin_a_beta_carotene_supplement', {})
         bc_supp_factor = bc_supp.get('conversions', {}).get('iu_to_mcg_rae', 0)
         bc_supp_result = test_iu * bc_supp_factor
         self._record_result(
-            abs(bc_supp_result - 1000) < 1,
-            f"10000 IU Beta-carotene (supp) = 1000 mcg RAE",
+            abs(bc_supp_result - 3000) < 1,
+            f"10000 IU Beta-carotene (supp) = 3000 mcg RAE",
             f"Got {bc_supp_result:.0f} mcg RAE"
         )
 
-        # Beta-carotene food: 10000 IU = 500 mcg RAE
-        bc_food = vit_convs.get('vitamin_a_beta_carotene_food', {})
-        bc_food_factor = bc_food.get('conversions', {}).get('iu_to_mcg_rae', 0)
-        bc_food_result = test_iu * bc_food_factor
+        # This is a DSLD supplement pipeline. A food-matrix rule would require
+        # a separately typed food-label source and must not be authored here.
         self._record_result(
-            abs(bc_food_result - 500) < 1,
-            f"10000 IU Beta-carotene (food) = 500 mcg RAE",
-            f"Got {bc_food_result:.0f} mcg RAE"
+            'vitamin_a_beta_carotene_food' not in vit_convs,
+            "Food beta-carotene rule is absent from supplement configuration",
+            "Found unreachable food-matrix conversion rule"
         )
 
-        # CRITICAL: Verify retinol gives highest mcg RAE (most conservative for UL)
+        # NIH ODS uses 0.3 mcg RAE/IU for both retinol and supplemental
+        # beta-carotene. The separate preformed-retinol UL policy is carried by
+        # ul_applies, not by changing this conversion.
         self._record_result(
-            ret_result > bc_supp_result > bc_food_result,
-            "Retinol > BC supplement > BC food (correct ordering)",
-            f"Retinol: {ret_result}, BC supp: {bc_supp_result}, BC food: {bc_food_result}"
+            ret_result == bc_supp_result,
+            "Retinol and supplemental beta-carotene share the IU factor",
+            f"Retinol: {ret_result}, BC supplement: {bc_supp_result}"
         )
 
         # Test unknown form handling
