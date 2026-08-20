@@ -443,6 +443,26 @@ def _check_raw_actives_present_in_blob(
             v = ing.get(k)
             if v:
                 blob_names.add(_normalize_name(str(v)))
+    # Non-scoring label rows remain valid destinations. Count both displayed
+    # rows and explicit ledger omissions; neither should have to masquerade as
+    # a scored or inactive ingredient merely to reconcile its source line.
+    for collection in (
+        "display_ingredients",
+        "label_ledger_omissions",
+        "row_ledger",
+    ):
+        for row in blob.get(collection) or []:
+            if not isinstance(row, dict):
+                continue
+            for key in (
+                "raw_source_text",
+                "source_label",
+                "label_display_name",
+                "display_name",
+            ):
+                value = row.get(key)
+                if value:
+                    blob_names.add(_normalize_name(str(value)))
     pbd = blob.get("proprietary_blend_detail") or {}
     for blnd in pbd.get("blends") or []:
         if isinstance(blnd, dict):
@@ -461,8 +481,6 @@ def _check_raw_actives_present_in_blob(
     for n in (blob.get("unmapped_actives") or {}).get("names") or []:
         blob_names.add(_normalize_name(n))
 
-    reasons = set(blob.get("ingredients_dropped_reasons") or [])
-
     for raw_name in raw_names:
         nk = _normalize_name(raw_name)
         if not nk:
@@ -472,13 +490,9 @@ def _check_raw_actives_present_in_blob(
         # cheaper substring fallback — handles "Vitamin A Palmitate" ↔ "Retinyl Palmitate"
         if any(nk in bn or bn in nk for bn in blob_names if len(bn) >= 4):
             continue
-        # If the cleaner emitted *some* drop reason, this raw might be one of them.
-        # We can't pinpoint which, so we log a LOW-severity informational note
-        # only when there are *zero* drop reasons.
-        if not reasons:
-            rec.add("RAW_ACTIVE_MISSING_FROM_BLOB",
-                    f"raw label name {raw_name!r} appears nowhere in blob",
-                    ingredient=raw_name)
+        rec.add("RAW_ACTIVE_MISSING_FROM_BLOB",
+                f"raw label name {raw_name!r} appears nowhere in blob or row ledger",
+                ingredient=raw_name)
 
 
 def _check_raw_inactives_present_in_blob(
