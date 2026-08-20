@@ -1076,7 +1076,7 @@ def make_scored(verdict="SAFE"):
     }
 
 
-def test_high_risk_exact_match_sets_caution_blocking_reason_without_banned_flag():
+def test_high_risk_exact_match_keeps_caution_blocking_reason_null():
     enriched = make_enriched()
     enriched["contaminant_data"]["banned_substances"]["substances"] = [
         {
@@ -1092,7 +1092,7 @@ def test_high_risk_exact_match_sets_caution_blocking_reason_without_banned_flag(
 
     assert row["has_banned_substance"] == 0
     assert row["has_recalled_ingredient"] == 0
-    assert row["blocking_reason"] == "high_risk_ingredient"
+    assert row["blocking_reason"] is None
 
 
 def test_dietary_sugar_penalty_exports_to_tradeoffs():
@@ -1546,7 +1546,7 @@ def test_iso_phos_acronym_flag_is_not_banned_evidence():
     assert ingredient["safety_flags"] == []
 
 
-def test_core_row_honors_scorer_emitted_high_risk_blocking_reason():
+def test_core_row_clears_stale_high_risk_blocking_reason_on_caution():
     enriched = make_enriched()
     enriched["inactiveIngredients"] = [
         {
@@ -1570,7 +1570,7 @@ def test_core_row_honors_scorer_emitted_high_risk_blocking_reason():
 
     assert row["verdict"] == "CAUTION"
     assert row["safety_verdict"] == "CAUTION"
-    assert row["blocking_reason"] == "high_risk_ingredient"
+    assert row["blocking_reason"] is None
     assert any(
         w.get("type") == "high_risk_ingredient"
         and w.get("severity") == "high"

@@ -34,8 +34,10 @@ The signal SOURCE is shared with v3, but the verdict policy here is v4-owned.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+import json
+from dataclasses import asdict, dataclass, field
 from functools import lru_cache
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from inactive_ingredient_resolver import (
@@ -46,6 +48,7 @@ from inactive_ingredient_resolver import (
 from identity.safety import (
     SafetySignal,
     normalize_safety_signals,
+    safety_normalize_text,
 )
 from rda_ul_calculator import get_actionable_ul_review_signals
 from scoring_input_contract import get_scoring_ingredients
@@ -60,6 +63,11 @@ from scoring_v4.quality_score_config import block as _quality_config_block
 
 # Verdict precedence — index = severity rank.
 _VERDICT_PRECEDENCE = ("BLOCKED", "UNSAFE", "CAUTION")
+_SAFETY_RULES_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "data"
+    / "banned_recalled_ingredients.json"
+)
 
 
 def _verdict_rank(v: Optional[str]) -> int:
@@ -77,6 +85,26 @@ def _max_verdict(a: Optional[str], b: Optional[str]) -> Optional[str]:
     if _verdict_rank(a) <= _verdict_rank(b):
         return a
     return b
+
+
+@dataclass
+class SafetyDecision:
+    """The single policy decision responsible for a hard safety verdict."""
+
+    verdict: str
+    winning_rule: str
+    substance: str
+    matched_role: str
+    matched_form: str
+    match_resolution: str
+    policy_basis: Dict[str, Any]
+    jurisdiction: str
+    reason_code: str
+    verified_sources: List[Dict[str, Any]]
+    source_db: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
 
 
 @dataclass
@@ -119,6 +147,7 @@ class SafetyResult:
     safety_signals: List[str] = field(default_factory=list)
     needs_review: bool = False
     clean_label_hits: List[Dict[str, Any]] = field(default_factory=list)
+    safety_decision: Optional[SafetyDecision] = None
 
 
 # NOTE: match-type → trust mapping moved to the SafetySignal v1 kernel
@@ -140,6 +169,176 @@ def _norm(value: Any) -> str:
     if value is None:
         return ""
     return str(value).strip().lower()
+
+
+@lru_cache(maxsize=1)
+def _safety_rule_indexes() -> tuple[
+    Dict[str, Dict[str, Any]],
+    Dict[str, List[Dict[str, Any]]],
+]:
+    payload = json.loads(_SAFETY_RULES_PATH.read_text(encoding="utf-8"))
+    entries = [
+        entry
+        for entry in payload.get("ingredients", [])
+        if isinstance(entry, dict)
+    ]
+    by_id: Dict[str, Dict[str, Any]] = {}
+    by_term: Dict[str, List[Dict[str, Any]]] = {}
+    for entry in entries:
+        entry_id = str(entry.get("id") or "").strip()
+        if entry_id:
+            by_id[entry_id] = entry
+        for value in [entry.get("standard_name"), *(entry.get("aliases") or [])]:
+            term = safety_normalize_text(value)
+            if term:
+                by_term.setdefault(term, []).append(entry)
+    return by_id, by_term
+
+
+def _rule_for_signal(signal: SafetySignal) -> Dict[str, Any]:
+    try:
+        by_id, by_term = _safety_rule_indexes()
+    except (OSError, json.JSONDecodeError):
+        return {}
+    direct = by_id.get(str(signal.entry_id or "").strip())
+    if direct is not None:
+        return direct
+    candidates = by_term.get(safety_normalize_text(signal.evidence_text), [])
+    same_status = [
+        entry
+        for entry in candidates
+        if _norm(entry.get("status")) == signal.status
+    ]
+    pool = same_status or candidates
+    return sorted(pool, key=lambda entry: str(entry.get("id") or ""))[0] if pool else {}
+
+
+def _verified_policy_sources(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
+    sources: List[Dict[str, Any]] = []
+    for reference in _safe_list(entry.get("references_structured")):
+        if not isinstance(reference, dict):
+            continue
+        sources.append({
+            key: reference.get(key)
+            for key in (
+                "type",
+                "title",
+                "url",
+                "date",
+                "evidence_grade",
+                "evidence_summary",
+            )
+            if reference.get(key) not in (None, "")
+        })
+    for jurisdiction in _safe_list(entry.get("jurisdictions")):
+        if not isinstance(jurisdiction, dict):
+            continue
+        source = jurisdiction.get("source")
+        if not isinstance(source, dict):
+            continue
+        projected = {
+            "jurisdiction": jurisdiction.get("jurisdiction_code"),
+            "last_verified_date": jurisdiction.get("last_verified_date"),
+            **{
+                key: source.get(key)
+                for key in ("type", "citation", "url", "accessed_date")
+                if source.get(key) not in (None, "")
+            },
+        }
+        sources.append({key: value for key, value in projected.items() if value})
+    deduped: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+    for source in sources:
+        if not source:
+            continue
+        key = json.dumps(source, sort_keys=True, ensure_ascii=False)
+        if key not in seen:
+            seen.add(key)
+            deduped.append(source)
+    return deduped
+
+
+def _decision_for_signal(
+    signal: SafetySignal,
+    *,
+    verdict: str,
+    reason_code: str,
+) -> SafetyDecision:
+    entry = _rule_for_signal(signal)
+    jurisdictions = [
+        str(item.get("jurisdiction_code") or "").strip().upper()
+        for item in _safe_list(entry.get("jurisdictions"))
+        if isinstance(item, dict)
+    ]
+    jurisdiction = "US" if any(
+        code == "US" or code.startswith("US-") for code in jurisdictions
+    ) or (not jurisdictions and signal.us_applicable) else ",".join(
+        code for code in jurisdictions if code
+    )
+    policy_basis = {
+        key: value
+        for key, value in {
+            "status": signal.status,
+            "legal_status": entry.get("legal_status_enum"),
+            "ban_context": entry.get("ban_context"),
+            "clinical_risk": entry.get("clinical_risk_enum"),
+        }.items()
+        if value not in (None, "")
+    }
+    substance = str(
+        entry.get("standard_name")
+        or signal.evidence_text
+        or signal.entry_id
+        or "unknown"
+    )
+    return SafetyDecision(
+        verdict=verdict,
+        winning_rule=str(entry.get("id") or signal.entry_id or "legacy_projection"),
+        substance=substance,
+        matched_role=signal.subject_role,
+        matched_form=str(signal.evidence_text or substance),
+        match_resolution=signal.match_resolution,
+        policy_basis=policy_basis,
+        jurisdiction=jurisdiction or "unknown",
+        reason_code=reason_code,
+        verified_sources=_verified_policy_sources(entry),
+        source_db=signal.source_db,
+    )
+
+
+def _decision_quality(decision: SafetyDecision) -> tuple[int, int, int, str, str]:
+    return (
+        1 if decision.verified_sources else 0,
+        1 if decision.policy_basis else 0,
+        1 if decision.winning_rule != "legacy_projection" else 0,
+        decision.winning_rule,
+        decision.substance,
+    )
+
+
+def _apply_hard_decision(
+    result: SafetyResult,
+    signal: SafetySignal,
+    *,
+    verdict: str,
+    reason_code: str,
+) -> None:
+    candidate = _decision_for_signal(
+        signal,
+        verdict=verdict,
+        reason_code=reason_code,
+    )
+    should_replace = _verdict_rank(verdict) < _verdict_rank(result.verdict)
+    if _verdict_rank(verdict) == _verdict_rank(result.verdict):
+        should_replace = (
+            result.safety_decision is None
+            or _decision_quality(candidate) > _decision_quality(result.safety_decision)
+        )
+    result.verdict = _max_verdict(result.verdict, verdict)
+    if should_replace:
+        result.safety_decision = candidate
+        result.blocking_reason = candidate.reason_code
+        result.matched_substance = candidate.substance
 
 
 def _as_float(value: Any) -> Optional[float]:
@@ -547,20 +746,24 @@ def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
     #   - high_risk/watchlist accept `likely` → CAUTION (the DHEA/Kava fix).
     if status == "banned":
         if sig.match_resolution == "confirmed":
-            if _verdict_rank("BLOCKED") < _verdict_rank(result.verdict):
-                result.verdict = "BLOCKED"
-                result.blocking_reason = "banned_ingredient"
-                result.matched_substance = sig.evidence_text or sig.entry_id
+            _apply_hard_decision(
+                result,
+                sig,
+                verdict="BLOCKED",
+                reason_code="banned_ingredient",
+            )
         else:  # likely-banned: force CAUTION + review, never hard-block, never SAFE
             result.verdict = _max_verdict(result.verdict, "CAUTION")
             result.needs_review = True
             _append_signal(result, "B0_LIKELY_BANNED_REVIEW")
     elif status == "recalled":
         if sig.match_resolution == "confirmed":
-            if _verdict_rank("UNSAFE") < _verdict_rank(result.verdict):
-                result.verdict = "UNSAFE"
-                result.blocking_reason = "recalled_ingredient"
-                result.matched_substance = sig.evidence_text or sig.entry_id
+            _apply_hard_decision(
+                result,
+                sig,
+                verdict="UNSAFE",
+                reason_code="recalled_ingredient",
+            )
         else:  # likely-recalled: force CAUTION + review, never hard-block, never SAFE
             result.verdict = _max_verdict(result.verdict, "CAUTION")
             result.needs_review = True
@@ -706,4 +909,8 @@ def evaluate_safety_gate(
 
     # short_circuits_scoring is purely a function of verdict severity.
     result.short_circuits_scoring = result.verdict in {"BLOCKED", "UNSAFE"}
+    if not result.short_circuits_scoring:
+        result.blocking_reason = None
+        result.matched_substance = None
+        result.safety_decision = None
     return result

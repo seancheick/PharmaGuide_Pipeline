@@ -127,6 +127,7 @@ def _empty_v4_result(module: str) -> Dict[str, Any]:
 def _safety_gate_breakdown(safety_result) -> Dict[str, Any]:
     """Render the safety-gate result into the v4 breakdown dict.
     Carries explainability fields for the Flutter UI + audit reports."""
+    decision = getattr(safety_result, "safety_decision", None)
     return {
         "verdict": safety_result.verdict,
         "blocking_reason": safety_result.blocking_reason,
@@ -134,6 +135,7 @@ def _safety_gate_breakdown(safety_result) -> Dict[str, Any]:
         "safety_signals": list(safety_result.safety_signals),
         "needs_review": safety_result.needs_review,
         "short_circuits_scoring": safety_result.short_circuits_scoring,
+        "safety_decision": decision.to_dict() if decision is not None else None,
         # Clean-label additive flags (e.g. titanium dioxide). Verdict-independent;
         # consumed by quality_score for the graduated safety_hygiene penalty +
         # clean_label_flags_v4 emit. Empty for the vast majority of products.

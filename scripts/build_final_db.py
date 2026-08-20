@@ -5336,13 +5336,21 @@ def profile_gated_hard_safety_signal(
 
 
 def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
-    """Derive blocking_reason from B0 gate results."""
+    """Return the hard-verdict reason; CAUTION/POOR/SAFE never block."""
+    verdict = safe_str(scored.get("verdict")).upper()
+    if verdict not in ("BLOCKED", "UNSAFE"):
+        return None
+
+    decision = safe_dict(
+        scored.get("safety_decision")
+        or safe_dict(scored.get("_v4_safety_gate")).get("safety_decision")
+    )
+    decision_reason = safe_str(decision.get("reason_code"))
+    if decision_reason:
+        return decision_reason
+
     if has_banned_substance(enriched):
         return "banned_ingredient"
-
-    verdict = safe_str(scored.get("verdict"))
-    if verdict not in ("BLOCKED", "UNSAFE", "CAUTION"):
-        return None
 
     for sub in contaminant_matches(enriched):
         status = safe_str(sub.get("status")).lower()
@@ -5350,19 +5358,14 @@ def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
             return "banned_ingredient"
         if status == "recalled":
             return "recalled_ingredient"
-        if status == "high_risk":
-            return "high_risk_ingredient"
 
-    for flag in safety_flag_status_matches(enriched, "banned", "recalled", "high_risk"):
+    for flag in safety_flag_status_matches(enriched, "banned", "recalled"):
         status = safe_str(flag.get("status")).lower()
         if status == "banned":
             return "banned_ingredient"
         if status == "recalled":
             return "recalled_ingredient"
-        if status == "high_risk":
-            return "high_risk_ingredient"
-
-    return "safety_block" if verdict in ("BLOCKED", "UNSAFE") else None
+    return "safety_block"
 
 
 def project_export_scored_artifact(
@@ -5412,17 +5415,18 @@ def project_export_scored_artifact(
 
     derived_blocking = derive_blocking_reason(enriched, effective_scored)
     scored_blocking = safe_str(effective_scored.get("blocking_reason"))
-    stale_safety_blocking = (
-        scored_blocking
-        in {"banned_ingredient", "recalled_ingredient", "high_risk_ingredient"}
-        and derived_blocking is None
-        and not blob_has_safety_blocking_warning(detail_blob)
-    )
+    hard_verdict = safe_str(effective_scored.get("verdict")).upper() in {
+        "BLOCKED",
+        "UNSAFE",
+    }
     effective_scored["blocking_reason"] = (
-        "banned_ingredient"
-        if has_export_banned_signal
-        else derived_blocking
-        or (None if stale_safety_blocking or not scored_blocking else scored_blocking)
+        (
+            "banned_ingredient"
+            if has_export_banned_signal
+            else derived_blocking or scored_blocking or "safety_block"
+        )
+        if hard_verdict
+        else None
     )
 
     if not has_export_banned_signal and profile_caution_applied:

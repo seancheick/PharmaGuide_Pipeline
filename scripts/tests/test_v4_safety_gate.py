@@ -88,6 +88,17 @@ def test_banned_substance_in_contaminant_data_returns_blocked() -> None:
     assert result.short_circuits_scoring is True
     assert result.blocking_reason == "banned_ingredient"
     assert "Vinpocetine" in (result.matched_substance or "")
+    assert result.safety_decision is not None
+    decision = result.safety_decision.to_dict()
+    assert decision["verdict"] == "BLOCKED"
+    assert decision["winning_rule"] == "NOOTROPIC_VINPOCETINE"
+    assert decision["substance"] == "Vinpocetine"
+    assert decision["matched_role"] == "active"
+    assert decision["match_resolution"] == "confirmed"
+    assert decision["reason_code"] == "banned_ingredient"
+    assert decision["jurisdiction"] == "US"
+    assert decision["policy_basis"]
+    assert decision["verified_sources"]
 
 
 def test_canonical_safety_flag_returns_blocked() -> None:
@@ -191,6 +202,8 @@ def test_high_risk_substance_returns_caution() -> None:
         }
     }
     result = evaluate_safety_gate(product)
+    assert result.blocking_reason is None
+    assert result.safety_decision is None
     assert result.verdict == "CAUTION"
     assert result.short_circuits_scoring is False
     assert "B0_HIGH_RISK_SUBSTANCE" in result.safety_signals

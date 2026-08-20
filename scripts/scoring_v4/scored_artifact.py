@@ -183,7 +183,13 @@ def assemble_scored_artifact(
     quality_score = v4.get("quality_score_v4_100")
     verdict = _public_verdict(v4, mapped_coverage)
     safety_verdict = str(safety_gate.get("verdict") or "SAFE").upper()
-    blocking_reason = safety_gate.get("blocking_reason")
+    safety_decision = _safe_dict(safety_gate.get("safety_decision"))
+    decision_reason = safety_decision.get("reason_code")
+    blocking_reason = (
+        decision_reason or safety_gate.get("blocking_reason")
+        if safety_verdict in {"BLOCKED", "UNSAFE"}
+        else None
+    )
     safety_signals = list(safety_gate.get("safety_signals") or [])
     if verdict == "CAUTION" and mapped_coverage < LOW_COVERAGE_TRUST_FLOOR:
         safety_signals = list(dict.fromkeys(safety_signals + ["low_mapped_coverage"]))
@@ -224,7 +230,10 @@ def assemble_scored_artifact(
         "verdict": verdict,
         "safety_verdict": safety_verdict,
         "blocking_reason": blocking_reason,
-        "safety_signal_reason": safety_signals[0] if safety_signals else None,
+        "safety_signal_reason": decision_reason or (
+            safety_signals[0] if safety_signals else None
+        ),
+        "safety_decision": safety_decision or None,
         "flags": safety_signals,
         "badges": [],
         "quality_score_v4_100": quality_score,
@@ -278,7 +287,10 @@ def assemble_scored_artifact(
         "_v4_clean_label_flags": v4.get("clean_label_flags_v4"),
         "_v4_safety_gate": safety_gate,
         "_v4_dose_safety": dose_safety,
-        "_v4_safety_signal_reason": safety_signals[0] if safety_signals else None,
+        "_v4_safety_signal_reason": decision_reason or (
+            safety_signals[0] if safety_signals else None
+        ),
+        "_v4_safety_decision": safety_decision or None,
         "_v4_completeness_gate": completeness_gate,
         "_v4_provenance": provenance,
         "_v4_scoring_engine_version": provenance.get("scoring_engine_version"),
@@ -326,6 +338,8 @@ def suppress_scored_artifact_for_hard_block(
         "safety_verdict": "BLOCKED",
         "quality_score_v4_100": None,
         "quality_score_status": "suppressed_safety",
+        "quality_score_confidence": None,
+        "score_unavailable_reason": "blocked_by_safety_gate",
         "product_safety_status": "blocked",
         "quality_assessment_status": "complete",
         "quality_tier": None,
@@ -340,6 +354,8 @@ def suppress_scored_artifact_for_hard_block(
         "safety_signal_reason": blocked.get("safety_signal_reason") or reason,
         "_v4_quality_score_100": None,
         "_v4_quality_status": "suppressed_safety",
+        "_v4_confidence": None,
+        "_v4_score_unavailable_reason": "blocked_by_safety_gate",
         "_v4_quality_tier": None,
         "_v4_suppressed_reason": blocked.get("_v4_suppressed_reason") or reason,
         "_v4_safety_signal_reason": (
@@ -352,6 +368,8 @@ def suppress_scored_artifact_for_hard_block(
         "scoring_status": "suppressed_safety",
         "product_safety_status": "blocked",
         "quality_assessment_status": "complete",
+        "quality_score_confidence": None,
+        "score_unavailable_reason": "blocked_by_safety_gate",
         "verdict": "BLOCKED",
         "blocking_reason": blocked["blocking_reason"],
     })

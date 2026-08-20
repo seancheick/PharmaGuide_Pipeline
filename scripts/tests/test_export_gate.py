@@ -582,7 +582,7 @@ class TestSafetyCategoryRouting:
     @pytest.mark.parametrize("status,expect_banned,expect_recalled,expect_blocking", [
         ("banned", True, False, "banned_ingredient"),
         ("recalled", False, True, "recalled_ingredient"),
-        ("high_risk", False, False, "high_risk_ingredient"),
+        ("high_risk", False, False, None),
         ("watchlist", False, False, None),
     ])
     def test_contaminant_status_routes_correctly(self, status, expect_banned, expect_recalled, expect_blocking):
@@ -601,7 +601,7 @@ class TestSafetyCategoryRouting:
     @pytest.mark.parametrize("status,expect_banned,expect_recalled,expect_blocking", [
         ("banned", True, False, "banned_ingredient"),
         ("recalled", False, True, "recalled_ingredient"),
-        ("high_risk", False, False, "high_risk_ingredient"),
+        ("high_risk", False, False, None),
         ("watchlist", False, False, None),
     ])
     def test_canonical_contaminant_safety_flags_route_correctly(
@@ -951,7 +951,7 @@ class TestGoldenProducts:
         assert blob["allergens"][0]["allergen_id"] == "MILK"
 
     def test_golden_high_risk_product(self):
-        """High-risk: sets blocking_reason but NOT has_banned_substance."""
+        """High-risk CAUTION warns but never populates blocking_reason."""
         e = _base_enriched(dsld_id="GOLDEN_HIGH_RISK")
         e["contaminant_data"]["banned_substances"]["substances"] = [
             {"ingredient": "Kava", "banned_name": "Kava Kava", "status": "high_risk",
@@ -960,7 +960,7 @@ class TestGoldenProducts:
         s = _base_scored(verdict="CAUTION")
         row = _row_dict(e, s)
         assert row["has_banned_substance"] == 0
-        assert row["blocking_reason"] == "high_risk_ingredient"
+        assert row["blocking_reason"] is None
 
     def test_golden_unmapped_product(self):
         """Product where IQD has no scored ingredients: exports with NULL scores."""

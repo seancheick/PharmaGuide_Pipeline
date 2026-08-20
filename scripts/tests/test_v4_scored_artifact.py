@@ -181,6 +181,36 @@ def test_unresolved_dose_safety_exports_typed_summary_and_partial_assessment() -
     assert artifact["_v4_dose_safety"] == v4["v4_breakdown"]["dose_safety"]
 
 
+def test_primary_safety_reason_comes_from_winning_decision_not_signal_order() -> None:
+    v4 = _canned_v4(
+        status="suppressed_safety",
+        verdict="BLOCKED",
+        safety_verdict="BLOCKED",
+    )
+    decision = {
+        "verdict": "BLOCKED",
+        "winning_rule": "NOOTROPIC_VINPOCETINE",
+        "substance": "Vinpocetine",
+        "matched_role": "active",
+        "matched_form": "Vinpocetine",
+        "match_resolution": "confirmed",
+        "policy_basis": {"legal_status": "not_lawful_as_supplement"},
+        "jurisdiction": "US",
+        "reason_code": "banned_ingredient",
+        "verified_sources": [{"title": "FDA vinpocetine advisory"}],
+    }
+    gate = v4["v4_breakdown"]["safety_gate"]
+    gate["blocking_reason"] = "banned_ingredient"
+    gate["safety_signals"] = ["UNRELATED_EARLIER_SIGNAL"]
+    gate["safety_decision"] = decision
+
+    artifact = scored_artifact.assemble_scored_artifact(_product(), v4)
+
+    assert artifact["safety_signal_reason"] == "banned_ingredient"
+    assert artifact["blocking_reason"] == "banned_ingredient"
+    assert artifact["safety_decision"] == decision
+
+
 def test_b1_inactive_penalty_details_follow_the_scoring_decision() -> None:
     product = {
         "contaminant_data": {
