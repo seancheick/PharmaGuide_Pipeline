@@ -105,6 +105,11 @@ def _canned_v4(
         "v4_breakdown": {
             "module": {},
             "confidence": {},
+            "assessment_readiness": {
+                "schema_version": "1.0.0",
+                "is_live_ready": status == "scored",
+                "unavailable_reasons": [],
+            },
             **({"safety_gate": safety_gate} if include_safety_gate else {}),
             "completeness_gate": {
                 "mapped_coverage": mapped_coverage,
@@ -134,6 +139,8 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     assert artifact["score_unavailable_reason"] is None
     assert artifact["product_safety_status"] == "no_known_catalog_concern"
     assert artifact["quality_assessment_status"] == "complete"
+    assert artifact["assessment_readiness"]["is_live_ready"] is True
+    assert artifact["_v4_assessment_readiness"] == artifact["assessment_readiness"]
     assert artifact["quality_pillars_v4"]
     assert artifact["mapped_coverage"] == 1.0
     assert "mapped_coverage_applicable" not in artifact

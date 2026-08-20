@@ -49,6 +49,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
+from assessment_readiness import evaluate_assessment_readiness
 from scoring_v4.confidence import evaluate_confidence
 from scoring_v4.dose_safety import (
     DoseSafetyResult,
@@ -301,6 +302,11 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     # Provenance stamped before any early return, so BLOCKED / NOT_SCORED
     # artifacts carry the same engine+config fingerprint as fully scored ones.
     result["v4_breakdown"]["provenance"] = _provenance_block(module)
+    assessment_readiness = evaluate_assessment_readiness(
+        enriched_product,
+        module=module,
+    )
+    result["v4_breakdown"]["assessment_readiness"] = assessment_readiness
 
     issues = dose_safety_contract_issues(enriched_product)
     if issues:
@@ -345,7 +351,11 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         result["v4_verdict"] = "CAUTION"
 
     # Layer 2 — Completeness Gate.
-    completeness = evaluate_completeness_gate(enriched_product, module)
+    completeness = evaluate_completeness_gate(
+        enriched_product,
+        module,
+        assessment_readiness=assessment_readiness,
+    )
     result["v4_breakdown"]["completeness_gate"] = (
         _completeness_gate_breakdown(completeness)
     )

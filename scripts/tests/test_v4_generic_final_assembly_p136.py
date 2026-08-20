@@ -342,7 +342,8 @@ def test_shadow_caution_verdict_overrides_safe_score_band() -> None:
 def test_shadow_poor_threshold_is_40_on_v4_100_scale() -> None:
     from score_supplements_v4 import score_product_v4
 
-    # Use a NON-essential filler with no backed clinical evidence. The default
+    # Use a NON-essential filler with an explicitly reviewed negative evidence
+    # result. The default
     # magnesium is a DRI-essential nutrient and ashwagandha now recovers verified
     # ingredient-human evidence, either of which would lift this contrived
     # -25-violation product above the 40-line.
@@ -356,6 +357,19 @@ def test_shadow_poor_threshold_is_40_on_v4_100_scale() -> None:
     )
     product["manufacturer_data"] = {
         "violations": {"total_deduction_applied": -25.0, "violations": []}
+    }
+    product["evidence_data"] = {
+        "clinical_matches": [
+            {
+                "id": "fixture-reviewed-negative",
+                "matched_canonical_id": "unverified_filler",
+                "ingredient": "Unverified Filler",
+                "standard_name": "Unverified Filler",
+                "study_type": "systematic_review_meta",
+                "evidence_level": "ingredient-human",
+                "effect_direction": "negative",
+            }
+        ]
     }
 
     out = score_product_v4(product)

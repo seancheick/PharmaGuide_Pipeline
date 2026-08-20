@@ -51,6 +51,33 @@ def _premium_omega() -> dict:
             {"name": "DHA", "canonical_id": "dha",
              "quantity": 500, "unit": "mg"},
         ]},
+        "rda_ul_data": {
+            "collection_status": "complete",
+            "dose_assessments": [
+                {
+                    "source_row_ref": f"ingredientRows[{index}]",
+                    "canonical_id": canonical_id,
+                    "material": True,
+                    "conversion_status": "not_required",
+                    "ul_assessment_status": "no_ul_applicable",
+                    "readiness": "not_applicable",
+                }
+                for index, canonical_id in enumerate(("fish_oil", "epa", "dha"))
+            ],
+        },
+        "evidence_data": {
+            "clinical_matches": [
+                {
+                    "id": "fixture-omega-review",
+                    "ingredient": "EPA and DHA",
+                    "standard_name": "EPA and DHA",
+                    "aggregate_canonical_ids": ["fish_oil", "epa", "dha"],
+                    "study_type": "systematic_review_meta",
+                    "evidence_level": "ingredient-human",
+                    "effect_direction": "positive_strong",
+                }
+            ]
+        },
         "verified_cert_programs": [
             {"program": "IFOS", "scope": "sku"},
         ],

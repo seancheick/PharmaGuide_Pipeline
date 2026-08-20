@@ -30,6 +30,16 @@ def _write(path: Path, product: dict) -> None:
 
 
 def _scored(**overrides) -> dict:
+    assessment_readiness = {
+        "enforcement_mode": "enforced",
+        "is_live_ready": True,
+        "unavailable_reasons": [],
+        "identity": {"readiness": "complete", "migration_inference": False},
+        "dose": {"readiness": "complete", "migration_inference": False},
+        "evidence": {"readiness": "complete", "migration_inference": False},
+        "verification": {"readiness": "complete", "migration_inference": False},
+        "route": {"readiness": "complete", "migration_inference": False},
+    }
     product = {
         "dsld_id": "P1",
         "product_name": "Strict Product",
@@ -45,6 +55,8 @@ def _scored(**overrides) -> dict:
             "is_live_eligible": True,
             "verdict": None,
         },
+        "assessment_readiness": assessment_readiness,
+        "_v4_assessment_readiness": assessment_readiness,
         "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
         "scoring_fallbacks_used": [],
         "strict_scoring_contract": {"passed": True, "findings": []},
@@ -136,6 +148,65 @@ def test_scoring_audit_rejects_safe_below_mapping_threshold(tmp_path: Path) -> N
 
     codes = {finding.code for finding in audit_scoring(_args(path))}
     assert "SCORING_SAFE_LOW_COVERAGE" in codes
+
+
+def test_scoring_audit_requires_full_mapping_for_scored_product(tmp_path: Path) -> None:
+    path = tmp_path / "scored.json"
+    _write(path, _scored(mapped_coverage=0.9999))
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_LIVE_MAPPING_INCOMPLETE" in codes
+
+
+def test_scoring_audit_requires_typed_readiness_for_scored_product(tmp_path: Path) -> None:
+    path = tmp_path / "scored.json"
+    product = _scored()
+    product.pop("assessment_readiness")
+    product.pop("_v4_assessment_readiness")
+    _write(path, product)
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_ASSESSMENT_READINESS_MISSING" in codes
+
+
+def test_scoring_audit_rejects_legacy_readiness_inference(tmp_path: Path) -> None:
+    path = tmp_path / "scored.json"
+    product = _scored()
+    product["assessment_readiness"]["dose"]["migration_inference"] = True
+    _write(path, product)
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_ASSESSMENT_MIGRATION_INFERENCE" in codes
+
+
+def test_scoring_audit_rejects_shadow_mode_readiness(tmp_path: Path) -> None:
+    path = tmp_path / "scored.json"
+    product = _scored()
+    product["assessment_readiness"]["enforcement_mode"] = "shadow"
+    _write(path, product)
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_ASSESSMENT_READINESS_NOT_ENFORCED" in codes
+
+
+def test_scoring_audit_rejects_unresolved_dose_on_safety_suppressed_product(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "scored.json"
+    product = _scored(
+        verdict="BLOCKED",
+        quality_score_status="suppressed_safety",
+        scoring_status="suppressed_safety",
+    )
+    product["assessment_readiness"]["is_live_ready"] = False
+    product["assessment_readiness"]["unavailable_reasons"] = [
+        "dose_assessment_readiness"
+    ]
+    product["assessment_readiness"]["dose"]["readiness"] = "incomplete"
+    _write(path, product)
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" in codes
 
 
 def test_scoring_audit_rejects_retired_nutrition_only_verdict(tmp_path: Path) -> None:

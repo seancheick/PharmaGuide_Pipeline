@@ -239,6 +239,7 @@ REQUIRED_V4_SCORER_KEYS = {
 COMPLETE_GENERIC_PRODUCT = {
     "status": "active",
     "form_factor": "capsule",
+    "product_name": "Magnesium",
     "supplement_taxonomy": {"primary_type": "single_mineral"},
     "ingredient_quality_data": {
         "total_active": 1,
@@ -251,6 +252,27 @@ COMPLETE_GENERIC_PRODUCT = {
                 "unit": "mg",
             }
         ],
+    },
+    "rda_ul_data": {
+        "collection_status": "complete",
+        "dose_assessments": [
+            {
+                "source_row_ref": "ingredientRows[0]",
+                "canonical_id": "magnesium",
+                "material": True,
+                "conversion_status": "not_required",
+                "ul_assessment_status": "assessed_within_limit",
+                "readiness": "complete",
+            }
+        ],
+    },
+    "certification_data": {
+        "verification_assessment": {
+            "state": "verified_absent",
+            "readiness": "complete",
+            "reason_code": "registry_evaluated_no_match",
+            "matched_programs": [],
+        }
     },
 }
 

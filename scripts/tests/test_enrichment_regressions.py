@@ -3048,6 +3048,86 @@ class TestEvidenceMultiMatch:
         ids = [m['id'] for m in result['clinical_matches']]
         assert len(ids) == len(set(ids)), "Duplicate study IDs found for the same ingredient"
 
+    def test_deduped_evidence_match_tracks_every_supported_active(self, enricher):
+        """One omega review can support EPA and DHA without scoring it twice."""
+        study = {
+            "id": "INGR_OMEGA_FIXTURE",
+            "standard_name": "Omega-3 Fatty Acids",
+            "aliases": ["eicosapentaenoic acid", "docosahexaenoic acid"],
+            "evidence_level": "ingredient-human",
+            "study_type": "systematic_review_meta",
+            "effect_direction": "positive_strong",
+            "score_contribution": "tier_1",
+            "health_goals_supported": ["cardiovascular"],
+            "key_endpoints": [],
+        }
+        original_db = enricher.databases.get("backed_clinical_studies", {})
+        enricher.databases["backed_clinical_studies"] = {
+            "backed_clinical_studies": [study]
+        }
+        product = {
+            "id": "omega-evidence-ownership",
+            "statements": [],
+            "activeIngredients": [
+                {
+                    "name": "Eicosapentaenoic Acid",
+                    "standardName": "EPA",
+                    "canonical_id": "epa",
+                },
+                {
+                    "name": "Docosahexaenoic Acid",
+                    "standardName": "DHA",
+                    "canonical_id": "dha",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_evidence_data(product)
+        enricher.databases["backed_clinical_studies"] = original_db
+
+        assert result["match_count"] == 1
+        assert result["clinical_matches"][0]["matched_canonical_ids"] == [
+            "epa",
+            "dha",
+        ]
+
+    def test_generic_standard_name_suffix_does_not_hide_reviewed_evidence(self, enricher):
+        study = {
+            "id": "INGR_GENERIC_SUFFIX_FIXTURE",
+            "standard_name": "Ashwagandha (Generic)",
+            "aliases": [],
+            "evidence_level": "ingredient-human",
+            "study_type": "systematic_review_meta",
+            "effect_direction": "positive_strong",
+            "score_contribution": "tier_1",
+            "health_goals_supported": ["stress"],
+            "key_endpoints": [],
+        }
+        original_db = enricher.databases.get("backed_clinical_studies", {})
+        enricher.databases["backed_clinical_studies"] = {
+            "backed_clinical_studies": [study]
+        }
+        product = {
+            "id": "generic-suffix-evidence",
+            "statements": [],
+            "activeIngredients": [
+                {
+                    "name": "Ashwagandha",
+                    "standardName": "Ashwagandha",
+                    "canonical_id": "ashwagandha",
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_evidence_data(product)
+        enricher.databases["backed_clinical_studies"] = original_db
+
+        assert [row["id"] for row in result["clinical_matches"]] == [
+            "INGR_GENERIC_SUFFIX_FIXTURE"
+        ]
+
 
 class TestProbioticClassificationHijack:
     """T8: Probiotic name-signal hijacking regression tests"""
@@ -3913,6 +3993,8 @@ class TestEnricherDropsDeadPassthroughFields:
         consumed downstream."""
         cleaned = normalizer.normalize_product(minimal_raw_product)
         enriched, _issues = enricher.enrich_product(cleaned)
+
+        assert enriched["assessment_readiness_contract_version"] == "1.0.0"
 
         missing_active = [f for f in self.ACTIVE_FIELDS if f not in enriched]
         assert not missing_active, (

@@ -147,6 +147,7 @@ def assemble_scored_artifact(
         isinstance(raw_safety_gate, dict) and "verdict" in raw_safety_gate
     )
     completeness_gate = _safe_dict(breakdown.get("completeness_gate"))
+    assessment_readiness = _safe_dict(breakdown.get("assessment_readiness"))
     dose_safety = _safe_dict(breakdown.get("dose_safety"))
     provenance = _safe_dict(breakdown.get("provenance"))
     module_breakdown = breakdown.get("module")
@@ -249,6 +250,7 @@ def assemble_scored_artifact(
         "score_unavailable_reason": score_unavailable_reason,
         "product_safety_status": product_safety_status,
         "quality_assessment_status": quality_assessment_status,
+        "assessment_readiness": assessment_readiness,
         "dose_safety_evaluation": dose_safety,
         "quality_tier": v4.get("quality_tier"),
         "quality_score_suppressed_reason": v4.get("quality_score_suppressed_reason"),
@@ -264,6 +266,9 @@ def assemble_scored_artifact(
             "scoring_status": status,
             "product_safety_status": product_safety_status,
             "quality_assessment_status": quality_assessment_status,
+            "assessment_readiness_complete": bool(
+                assessment_readiness.get("is_live_ready")
+            ),
             "quality_score_confidence": score_confidence,
             "score_unavailable_reason": score_unavailable_reason,
             "score_basis": "v4_six_pillar",
@@ -300,6 +305,7 @@ def assemble_scored_artifact(
         "_v4_safety_decision": safety_decision or None,
         "_v4_safety_review_records": safety_review_records,
         "_v4_completeness_gate": completeness_gate,
+        "_v4_assessment_readiness": assessment_readiness,
         "_v4_provenance": provenance,
         "_v4_scoring_engine_version": provenance.get("scoring_engine_version"),
         "_v4_classification_schema_version": provenance.get("classification_schema_version"),

@@ -150,6 +150,8 @@ run_strict_gate "active identity integrity" \
   "$PG_PYTHON" scripts/audit_identity_integrity.py --products-dir scripts/products
 run_strict_gate "RDA/UL emitted-reference stamp parity" \
   "$PG_PYTHON" scripts/audit_rda_ul_reference_stamps.py --products-dir scripts/products
+run_strict_gate "scoring assessment readiness" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring --products-dir scripts/products --strict-release
 run_strict_gate "scoring snapshot contract" \
   bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
 

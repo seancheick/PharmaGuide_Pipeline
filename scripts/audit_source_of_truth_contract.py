@@ -790,6 +790,87 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                             f"quality_score_status={quality_status!r}, verdict={verdict!r}",
                             str(file_path),
                         ))
+
+            # Schema-2.4 candidate contract. A public numeric score is valid
+            # only after every assessment dimension is explicitly complete.
+            # QA-only ``not_scored`` rows may remain in the stage ledger, and
+            # BLOCKED/UNSAFE rows retain their separate safety suppression
+            # path, but neither exception permits an incomplete numeric score.
+            if quality_status == "scored":
+                if coverage is None or abs(coverage - 1.0) > 0.000001:
+                    findings.append(Finding(
+                        "SCORING_LIVE_MAPPING_INCOMPLETE",
+                        f"{pid}: scored product must have mapped_coverage=1.0, got {coverage!r}",
+                        str(file_path),
+                    ))
+                readiness = product.get("assessment_readiness")
+                if not isinstance(readiness, dict):
+                    readiness = product.get("_v4_assessment_readiness")
+                if not isinstance(readiness, dict):
+                    findings.append(Finding(
+                        "SCORING_ASSESSMENT_READINESS_MISSING",
+                        f"{pid}: scored product is missing typed assessment_readiness",
+                        str(file_path),
+                    ))
+                else:
+                    if readiness.get("enforcement_mode") != "enforced":
+                        findings.append(Finding(
+                            "SCORING_ASSESSMENT_READINESS_NOT_ENFORCED",
+                            f"{pid}: candidate score still uses "
+                            f"assessment_readiness.enforcement_mode="
+                            f"{readiness.get('enforcement_mode')!r}",
+                            str(file_path),
+                        ))
+                    if readiness.get("is_live_ready") is not True:
+                        findings.append(Finding(
+                            "SCORING_ASSESSMENT_READINESS_INCOMPLETE",
+                            f"{pid}: scored product is not live-ready: "
+                            f"{readiness.get('unavailable_reasons') or []}",
+                            str(file_path),
+                        ))
+                    for dimension in (
+                        "identity", "dose", "evidence", "verification", "route"
+                    ):
+                        payload = _safe_dict(readiness.get(dimension))
+                        if payload.get("readiness") not in {"complete", "not_applicable"}:
+                            findings.append(Finding(
+                                "SCORING_ASSESSMENT_DIMENSION_INCOMPLETE",
+                                f"{pid}: {dimension} readiness is "
+                                f"{payload.get('readiness')!r}",
+                                str(file_path),
+                            ))
+                        if payload.get("migration_inference") is True:
+                            findings.append(Finding(
+                                "SCORING_ASSESSMENT_MIGRATION_INFERENCE",
+                                f"{pid}: {dimension} readiness relies on schema-2.x "
+                                "migration inference",
+                                str(file_path),
+                            ))
+            elif safety_suppressed:
+                readiness = product.get("assessment_readiness")
+                if not isinstance(readiness, dict):
+                    readiness = product.get("_v4_assessment_readiness")
+                if not isinstance(readiness, dict):
+                    findings.append(Finding(
+                        "SCORING_ASSESSMENT_READINESS_MISSING",
+                        f"{pid}: safety-suppressed product is missing typed "
+                        "assessment_readiness",
+                        str(file_path),
+                    ))
+                else:
+                    dose_readiness = _safe_dict(readiness.get("dose"))
+                    if (
+                        readiness.get("enforcement_mode") != "enforced"
+                        or dose_readiness.get("readiness")
+                        not in {"complete", "not_applicable"}
+                        or dose_readiness.get("migration_inference") is True
+                    ):
+                        findings.append(Finding(
+                            "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE",
+                            f"{pid}: safety-suppressed product has unresolved or "
+                            "legacy-inferred material dose assessment",
+                            str(file_path),
+                        ))
     return findings
 
 

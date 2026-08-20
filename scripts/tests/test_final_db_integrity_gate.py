@@ -146,6 +146,50 @@ def test_failed_strict_scoring_contract_is_quarantined():
     assert issues, "SAFE verdict with a failed strict_scoring_contract must be rejected"
 
 
+def test_scored_product_with_incomplete_assessment_readiness_is_quarantined():
+    scored = make_scored("SAFE")
+    scored["assessment_readiness"] = {
+        "enforcement_mode": "enforced",
+        "is_live_ready": False,
+        "unavailable_reasons": ["evidence_assessment_readiness"],
+        "evidence": {"status": "incomplete", "migration_inference": False},
+    }
+
+    issues = validate_export_contract(make_enriched(), scored)
+
+    assert any("assessment readiness" in issue.lower() for issue in issues)
+
+
+def test_scored_product_with_migration_inference_is_quarantined():
+    scored = make_scored("SAFE")
+    scored["assessment_readiness"] = {
+        "enforcement_mode": "enforced",
+        "is_live_ready": True,
+        "unavailable_reasons": [],
+        "dose": {"status": "complete", "migration_inference": True},
+    }
+
+    issues = validate_export_contract(make_enriched(), scored)
+
+    assert any("migration inference" in issue.lower() for issue in issues)
+
+
+def test_safety_suppressed_product_with_unresolved_dose_is_quarantined():
+    scored = make_scored("BLOCKED")
+    scored["_v4_quality_status"] = "suppressed_safety"
+    scored["quality_score_status"] = "suppressed_safety"
+    scored["assessment_readiness"] = {
+        "enforcement_mode": "enforced",
+        "is_live_ready": False,
+        "unavailable_reasons": ["dose_assessment_readiness"],
+        "dose": {"readiness": "incomplete", "migration_inference": False},
+    }
+
+    issues = validate_export_contract(make_enriched(), scored)
+
+    assert any("suppressed safety" in issue.lower() for issue in issues)
+
+
 def test_missing_strict_scoring_contract_is_quarantined():
     """The v4 gate also rejects a scored product missing its scoring contract."""
     scored = make_scored("SAFE")

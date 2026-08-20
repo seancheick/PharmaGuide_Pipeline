@@ -527,12 +527,37 @@ def _soft_policy_from_scoring_evidence(
     return soft_missing, score_cap, verdict_ceiling
 
 
-def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> CompletenessResult:
+def evaluate_completeness_gate(
+    product: Dict[str, Any],
+    module: str,
+    *,
+    assessment_readiness: Optional[Dict[str, Any]] = None,
+) -> CompletenessResult:
     """Evaluate the v4 Layer 2 live-catalog eligibility gate.
 
     Never raises. Missing or malformed product data fails closed to
     NOT_SCORED, except missing legacy `status` which remains eligible
     until the separate active-only catalog gate lands.
+    """
+    return evaluate_completeness_gate_with_readiness(
+        product,
+        module,
+        assessment_readiness=assessment_readiness,
+    )
+
+
+def evaluate_completeness_gate_with_readiness(
+    product: Dict[str, Any],
+    module: str,
+    *,
+    assessment_readiness: Optional[Dict[str, Any]] = None,
+) -> CompletenessResult:
+    """Evaluate completeness with an optional precomputed readiness result.
+
+    The scorer passes the single canonical result so evidence, verification,
+    route, identity, and dose are not recomputed by separate gate code.  The
+    optional argument remains available to focused gate callers during the
+    schema-2.4 bridge.
     """
     if not isinstance(product, dict):
         return CompletenessResult(
@@ -544,6 +569,12 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
     module = module if module in {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"} else "generic"
     ingredients = _active_ingredients(product)
     missing, coverage = _base_checks(product, ingredients)
+    readiness = assessment_readiness if isinstance(assessment_readiness, dict) else {}
+    if readiness.get("enforcement_mode") == "enforced":
+        for name in ("identity", "dose", "evidence", "verification", "route"):
+            state = _norm(_safe_dict(readiness.get(name)).get("readiness"))
+            if state and state not in {"complete", "not_applicable"}:
+                missing.append(f"{name}_assessment_readiness")
     if _has_missing_micronutrient_amount_panel(ingredients):
         missing.append("micronutrient_amounts_missing_from_source")
     # Phase 3: role-aware caps. Classify the already-derived rows (no second
@@ -567,6 +598,10 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
         "mapped_coverage",
         "micronutrient_source_amounts",
         "dose_assessment_readiness",
+        "identity_assessment_readiness",
+        "evidence_assessment_readiness",
+        "verification_assessment_readiness",
+        "route_assessment_readiness",
     ]
     if not _status_is_active(product):
         soft_missing.append("product_status_not_active")

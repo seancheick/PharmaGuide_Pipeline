@@ -28,6 +28,7 @@ def test_source_gates_run_before_catalog_build() -> None:
         'run_strict_gate "clinical drift contract"',
         'run_strict_gate "active identity integrity"',
         'run_strict_gate "RDA/UL emitted-reference stamp parity"',
+        'run_strict_gate "scoring assessment readiness"',
     ):
         assert source.index(label) < build
 

@@ -1763,6 +1763,55 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
                     "not reconcile to quality_score_v4_100."
                 )
 
+        # The 2.4 scorer exports one canonical readiness result. Keep legacy
+        # fixture compatibility by validating it when present; the candidate
+        # source audit separately requires presence on every freshly scored
+        # product. This export boundary prevents a malformed result from ever
+        # reaching products_core even if a caller bypasses the normal release
+        # script.
+        readiness_value = scored.get("assessment_readiness")
+        if not isinstance(readiness_value, dict):
+            readiness_value = scored.get("_v4_assessment_readiness")
+        if (
+            isinstance(readiness_value, dict)
+            and readiness_value.get("enforcement_mode") == "enforced"
+        ):
+            if readiness_value.get("is_live_ready") is not True:
+                issues.append(
+                    "review_queue: scored product assessment readiness is "
+                    "incomplete."
+                )
+            inferred_dimensions = [
+                dimension
+                for dimension in ("identity", "dose", "evidence", "verification", "route")
+                if safe_dict(readiness_value.get(dimension)).get("migration_inference") is True
+            ]
+            if inferred_dimensions:
+                issues.append(
+                    "review_queue: scored product assessment readiness uses "
+                    "schema-2.x migration inference for "
+                    f"{', '.join(inferred_dimensions)}."
+                )
+
+    if v4_status == "suppressed_safety":
+        readiness_value = scored.get("assessment_readiness")
+        if not isinstance(readiness_value, dict):
+            readiness_value = scored.get("_v4_assessment_readiness")
+        if (
+            isinstance(readiness_value, dict)
+            and readiness_value.get("enforcement_mode") == "enforced"
+        ):
+            dose_readiness = safe_dict(readiness_value.get("dose"))
+            if (
+                dose_readiness.get("readiness")
+                not in {"complete", "not_applicable"}
+                or dose_readiness.get("migration_inference") is True
+            ):
+                issues.append(
+                    "review_queue: suppressed safety product has unresolved "
+                    "material dose assessment."
+                )
+
     coverage = scored.get("mapped_coverage")
     try:
         coverage_number = float(coverage)

@@ -150,7 +150,7 @@ _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
 # UL-only / non-essential bioactives (boron, CoQ10, etc.) so they stay evidence-
 # light, and excludes anything not in this set.
 NUTRITION_AUTHORITY_FLOOR = _EM["nutrition_authority_floor"]
-_DRI_ESSENTIAL_NUTRIENTS = frozenset({
+DRI_ESSENTIAL_NUTRIENTS = frozenset({
     # essential minerals / electrolytes with established RDA or AI
     "copper", "zinc", "selenium", "iodine", "chromium", "molybdenum", "manganese",
     "iron", "calcium", "magnesium", "potassium", "phosphorus", "chloride", "sodium",
@@ -233,10 +233,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     if not isinstance(product, dict):
         product = {}
 
-    matches = list(_safe_list(_safe_dict(product.get("evidence_data")).get("clinical_matches")))
-    recovered_matches = _recover_contract_evidence_matches(product, matches)
-    if recovered_matches:
-        matches.extend(recovered_matches)
+    matches, recovered_matches = resolved_clinical_matches(product)
     dose_map = _dose_map(product)
     ingredient_points: Dict[str, float] = defaultdict(float)
     matched_entry_ids: set[str] = set()
@@ -385,6 +382,30 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             "flags": flags,
         },
     }
+
+
+def resolved_clinical_matches(
+    product: Dict[str, Any],
+) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Return the exact reviewed evidence rows consumed by v4 scoring.
+
+    Readiness and score math must not maintain separate matching rules.  This
+    public seam resolves enrichment-owned clinical matches plus the scorer's
+    deliberately narrow contract recoveries once, returning
+    ``(all_matches, recovered_matches)`` for provenance.
+    """
+    product = product if isinstance(product, dict) else {}
+    matches = [
+        entry
+        for entry in _safe_list(
+            _safe_dict(product.get("evidence_data")).get("clinical_matches")
+        )
+        if isinstance(entry, dict)
+    ]
+    recovered_matches = _recover_contract_evidence_matches(product, matches)
+    if recovered_matches:
+        matches.extend(recovered_matches)
+    return matches, recovered_matches
 
 
 def _recover_contract_evidence_matches(
@@ -804,7 +825,7 @@ def _is_clear_primary_recovery_row(product: Dict[str, Any], row_keys: set[str]) 
 def _dri_essential_identity_keys() -> frozenset[str]:
     return frozenset(
         _canonical_text(canonical.replace("_", " "))
-        for canonical in _DRI_ESSENTIAL_NUTRIENTS
+        for canonical in DRI_ESSENTIAL_NUTRIENTS
     )
 
 
@@ -984,7 +1005,7 @@ def _mass_dominant_essential_canonical(product: Dict[str, Any]) -> Optional[str]
         if mass > best_mass:
             best_mass = mass
             best_cid = str(row.get("canonical_id") or "").strip().lower()
-    if best_mass > 0 and best_cid in _DRI_ESSENTIAL_NUTRIENTS:
+    if best_mass > 0 and best_cid in DRI_ESSENTIAL_NUTRIENTS:
         return best_cid
     return None
 

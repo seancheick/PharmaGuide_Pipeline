@@ -66,6 +66,7 @@ def _probiotic_product(
     product = {
         "status": "active",
         "form_factor": "capsule",
+        "product_name": "Daily Probiotic",
         "supplement_taxonomy": {"primary_type": "probiotic"},
         "supplement_type": {"type": "probiotic"},
         "ingredient_quality_data": {

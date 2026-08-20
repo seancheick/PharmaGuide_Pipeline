@@ -123,6 +123,50 @@ def test_nsf_contents_certified_resolves_against_existing_nsf_173_registry_name(
     assert normalize_program("NSF Contents Certified") == "NSF Certified"
 
 
+def test_verification_assessment_is_not_evaluated_without_registry_sources() -> None:
+    certification = _certification_from_label("")
+
+    assert certification["verification_assessment"] == {
+        "state": "not_evaluated",
+        "readiness": "incomplete",
+        "reason_code": "cert_registry_sources_unavailable",
+        "matched_programs": [],
+        "registry_schema_version": None,
+        "registry_source_count": 0,
+    }
+
+
+def test_verification_assessment_distinguishes_completed_absence_and_presence() -> None:
+    enricher = _enricher()
+    registry = CertRegistry(
+        metadata={"schema_version": "fixture-registry"},
+        recency_by_program={
+            "NSF Sport": {
+                "status": "fresh",
+                "snapshot_date": "2026-08-01",
+                "age_days": 19,
+            }
+        },
+    )
+    enricher._cert_registry_cache = registry
+
+    absent = enricher._build_verification_assessment([])
+    present = enricher._build_verification_assessment([
+        {
+            "program": "NSF Sport",
+            "scope": "sku",
+            "record_id": "fixture-record",
+            "recency_status": "fresh",
+        }
+    ])
+
+    assert absent["state"] == "verified_absent"
+    assert absent["readiness"] == "complete"
+    assert absent["reason_code"] == "registry_evaluated_no_match"
+    assert present["state"] == "verified_present"
+    assert present["matched_programs"] == ["NSF Sport"]
+
+
 @pytest.mark.parametrize(
     ("label_text", "expected_programs", "expected_flags"),
     [

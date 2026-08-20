@@ -95,6 +95,7 @@ from constants import (
 from stage_manifest import select_stage_input_files
 from run_artifacts import ensure_run_id, report_run_directory
 from dose_assessment import build_dose_assessment
+from assessment_readiness import ASSESSMENT_READINESS_SCHEMA_VERSION
 from supplement_type_utils import mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement, percentile_label_for
 from form_factor_normalizer import canonicalize_form_factor
@@ -2459,6 +2460,15 @@ class SupplementEnricherV3:
     def _collect_clinical_aliases(self, study: Dict) -> List[str]:
         """Collect alias variants from clinical-study records."""
         aliases: List[str] = []
+        standard_name = str(study.get("standard_name") or "").strip()
+        generic_base = re.sub(
+            r"\s*\(generic\)\s*$",
+            "",
+            standard_name,
+            flags=re.IGNORECASE,
+        ).strip()
+        if generic_base and generic_base != standard_name:
+            aliases.append(generic_base)
         for field in ("aliases", "aliases_normalized"):
             value = study.get(field)
             if isinstance(value, list):
@@ -12498,6 +12508,9 @@ class SupplementEnricherV3:
             third_party_programs=third_party,
             manufacturer_signals=manufacturer_cert_signals,
         )
+        verification_assessment = self._build_verification_assessment(
+            verified_cert_programs
+        )
 
         # Derive safety flags from certifications (uses claimed set — display
         # signals like "tested for heavy metals" still come from the regex/
@@ -12512,6 +12525,7 @@ class SupplementEnricherV3:
             # v4 three-tier cert split (P0.1b)
             "manufacturer_cert_signals": manufacturer_cert_signals,
             "verified_cert_programs": verified_cert_programs,
+            "verification_assessment": verification_assessment,
             # Safety verification flags for app display
             "purity_verified": safety_flags["purity_verified"],
             "heavy_metal_tested": safety_flags["heavy_metal_tested"],
@@ -12524,6 +12538,89 @@ class SupplementEnricherV3:
                 "batch_traceability": batch_evidence,
                 "rules_db_version": self.reference_versions.get('cert_claim_rules', {}).get('version', 'unknown')
             }
+        }
+
+    def _build_verification_assessment(
+        self,
+        verified_cert_programs: List[Dict],
+    ) -> Dict:
+        """Return the typed result of the product-cert registry evaluation.
+
+        An empty match list is only a completed ``verified_absent`` result when
+        the registry has at least one current source.  A missing, empty, stale,
+        or otherwise unusable registry is ``not_evaluated``; it must never be
+        converted into a zero verification score by omission.
+        """
+        registry = getattr(self, "_cert_registry_cache", None)
+        metadata = getattr(registry, "metadata", {}) if registry is not None else {}
+        metadata = metadata if isinstance(metadata, dict) else {}
+        recency = (
+            getattr(registry, "recency_by_program", {})
+            if registry is not None
+            else {}
+        )
+        recency = recency if isinstance(recency, dict) else {}
+        source_count = len(recency)
+        schema_version = metadata.get("schema_version")
+
+        verified = []
+        for entry in verified_cert_programs or []:
+            if not isinstance(entry, dict):
+                continue
+            if entry.get("scope") not in {"sku", "product_line"}:
+                continue
+            if entry.get("scoring_blocked_reason"):
+                continue
+            program = str(entry.get("program") or "").strip()
+            if program:
+                verified.append(program)
+        matched_programs = sorted(set(verified))
+
+        if matched_programs:
+            return {
+                "state": "verified_present",
+                "readiness": "complete",
+                "reason_code": "registry_verified_product_match",
+                "matched_programs": matched_programs,
+                "registry_schema_version": schema_version,
+                "registry_source_count": source_count,
+            }
+
+        if not recency:
+            return {
+                "state": "not_evaluated",
+                "readiness": "incomplete",
+                "reason_code": "cert_registry_sources_unavailable",
+                "matched_programs": [],
+                "registry_schema_version": schema_version,
+                "registry_source_count": 0,
+            }
+
+        current_statuses = {"fresh", "warn"}
+        unusable_sources = sorted(
+            str(program)
+            for program, status in recency.items()
+            if not isinstance(status, dict)
+            or str(status.get("status") or "unknown") not in current_statuses
+        )
+        if unusable_sources:
+            return {
+                "state": "not_evaluated",
+                "readiness": "incomplete",
+                "reason_code": "cert_registry_sources_not_current",
+                "matched_programs": [],
+                "registry_schema_version": schema_version,
+                "registry_source_count": source_count,
+                "unusable_sources": unusable_sources,
+            }
+
+        return {
+            "state": "verified_absent",
+            "readiness": "complete",
+            "reason_code": "registry_evaluated_no_match",
+            "matched_programs": [],
+            "registry_schema_version": schema_version,
+            "registry_source_count": source_count,
         }
 
     def _merge_evidence_third_party_programs(self, third_party: Dict, evidence_list: List[Dict]) -> Dict:
@@ -14200,6 +14297,7 @@ class SupplementEnricherV3:
             return out
 
         seen_study_ids = set()
+        matches_by_study_id: Dict[str, Dict] = {}
         has_bcaa_mixture = self._has_bcaa_mixture_evidence_identity(
             product,
             active_ingredients,
@@ -14283,6 +14381,14 @@ class SupplementEnricherV3:
                             continue
 
                     if study_id in seen_study_ids:
+                        existing_match = matches_by_study_id.get(study_id)
+                        if existing_match is not None and ingredient_canonical_id:
+                            matched_canonicals = existing_match.setdefault(
+                                "matched_canonical_ids",
+                                [],
+                            )
+                            if ingredient_canonical_id not in matched_canonicals:
+                                matched_canonicals.append(ingredient_canonical_id)
                         continue
                     seen_study_ids.add(study_id)
 
@@ -14309,6 +14415,10 @@ class SupplementEnricherV3:
                         match_payload["matched_canonical_id"] = (
                             study.get("evidence_group_id") or study_name
                         )
+                    if ingredient_canonical_id:
+                        match_payload["matched_canonical_ids"] = [
+                            ingredient_canonical_id
+                        ]
 
                     # Optional schema extensions (forward-compatible passthrough).
                     optional_fields = [
@@ -14344,6 +14454,7 @@ class SupplementEnricherV3:
                             match_payload[field] = study.get(field)
 
                     matches.append(match_payload)
+                    matches_by_study_id[study_id] = match_payload
 
         # =====================================================================
         # Identity vs Bioactivity Split — secondary marker matches
@@ -20167,6 +20278,9 @@ class SupplementEnricherV3:
 
             # Add enrichment metadata
             enriched["enrichment_version"] = self.VERSION
+            enriched["assessment_readiness_contract_version"] = (
+                ASSESSMENT_READINESS_SCHEMA_VERSION
+            )
             enriched["compatible_scoring_versions"] = self.COMPATIBLE_SCORING_VERSIONS
             enriched["enriched_date"] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
             enriched["reference_versions"] = self.reference_versions  # Track data file versions for auditability

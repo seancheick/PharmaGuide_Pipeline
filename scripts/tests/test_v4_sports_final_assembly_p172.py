@@ -32,8 +32,10 @@ def _row(canonical_id: str, quantity: float, unit: str, *, name: str | None = No
 
 
 def _sports_product() -> dict:
+    row = _row("creatine_monohydrate", 3, "Gram(s)", name="Creatine Monohydrate")
     return {
         "id": 269425,
+        "assessment_readiness_contract_version": "1.0.0",
         "fullName": "Creatine Monohydrate 3 g",
         "product_name": "Creatine Monohydrate 3 g",
         "brandName": "Nutricost",
@@ -41,9 +43,39 @@ def _sports_product() -> dict:
         "supplement_taxonomy": {"primary_type": "amino_acid"},
         "form_factor_canonical": "powder",
         "ingredient_quality_data": {
-            "ingredients_scorable": [
-                _row("creatine_monohydrate", 3, "Gram(s)", name="Creatine Monohydrate"),
-            ]
+            "ingredients_scorable": [row]
+        },
+        # This fixture exercises final assembly, so it explicitly models a
+        # completed (limited/negative is still reviewed) evidence assessment
+        # and typed enrichment-owned dose/verification collection.
+        "evidence_data": {
+            "clinical_matches": [{
+                "id": "FIXTURE_CREATINE_REVIEWED",
+                "ingredient": "Creatine Monohydrate",
+                "matched_canonical_id": "creatine_monohydrate",
+                "study_type": "systematic_review_meta",
+                "evidence_level": "ingredient-human",
+                "effect_direction": "mixed",
+            }]
+        },
+        "certification_data": {
+            "verification_assessment": {
+                "state": "verified_absent",
+                "readiness": "complete",
+                "reason_code": "registry_evaluated_no_match",
+                "matched_programs": [],
+            }
+        },
+        "rda_ul_data": {
+            "collection_status": "complete",
+            "dose_assessments": [{
+                "source_row_ref": row["raw_source_path"],
+                "canonical_id": "creatine_monohydrate",
+                "material": True,
+                "conversion_status": "converted",
+                "ul_assessment_status": "no_ul_applicable",
+                "readiness": "not_applicable",
+            }],
         },
     }
 
