@@ -3568,9 +3568,8 @@ class TestBrandedEnhancersFromDataFile:
 class TestEnricherDropsDeadPassthroughFields:
     """
     Regression: the enricher begins with `enriched = dict(product)` (shallow
-    copy of cleaned input). A 2026-04 audit identified 14 cleaner fields that
-    have zero downstream consumers — they inflate the serialized record size
-    without adding signal.
+    copy of cleaned input). Fields with no downstream consumer are removed,
+    while label-version identity remains available to the final resolver.
 
     This test locks the drop list so the fields cannot silently sneak back in.
     If a future change starts consuming one of these fields downstream, this
@@ -3582,18 +3581,18 @@ class TestEnricherDropsDeadPassthroughFields:
     servingsPerContainer, netContents, statements, claims, targetGroups,
     userGroups, physicalState, nutritionalInfo, form_factor, status,
     discontinuedDate, imageUrl, upcSku, display_ingredients (enricher
-    overwrites this, but does NOT pop it).
+    overwrites this, but does NOT pop it), productVersionCode, entryDate,
+    updatedDate, and labelRelationships.
 
-    Dropped fields: src, nhanesId, brandIpSymbol, productVersionCode, pdf,
+    Dropped fields: src, nhanesId, brandIpSymbol, pdf,
     thumbnail, percentDvFootnote, hasOuterCarton, upcValid, productType,
-    events, labelRelationships, metadata, images.
+    events, metadata, images.
     """
 
     DEAD_FIELDS = [
         "src",
         "nhanesId",
         "brandIpSymbol",
-        "productVersionCode",
         "pdf",
         "thumbnail",
         "percentDvFootnote",
@@ -3601,7 +3600,6 @@ class TestEnricherDropsDeadPassthroughFields:
         "upcValid",
         "productType",
         "events",
-        "labelRelationships",
         "metadata",
         "images",
     ]
@@ -3619,6 +3617,10 @@ class TestEnricherDropsDeadPassthroughFields:
         "status",
         "upcSku",
         "display_ingredients",
+        "productVersionCode",
+        "entryDate",
+        "updatedDate",
+        "labelRelationships",
     ]
 
     @pytest.fixture
@@ -3644,6 +3646,8 @@ class TestEnricherDropsDeadPassthroughFields:
             "brandName": "Test Brand",
             "upcSku": "123456789012",
             "productVersionCode": "1",
+            "entryDate": "2024-01-02",
+            "updatedDate": "2025-03-04",
             "productType": {
                 "langualCode": "A0815",
                 "langualCodeDescription": "Dietary Supplement Product"
@@ -3682,7 +3686,9 @@ class TestEnricherDropsDeadPassthroughFields:
             "percentDvFootnote": "%DV footnote text",
             "hasOuterCarton": True,
             "events": [{"type": "Date entered", "date": "2020-01-01"}],
-            "labelRelationships": [],
+            "labelRelationships": [
+                {"type": "Image difference, same product", "labelId": 42}
+            ],
             "images": [{"url": "http://example.com/img.jpg", "type": "front"}],
             "contacts": [{"name": "Test Co", "phone": "555-0000"}],
         }

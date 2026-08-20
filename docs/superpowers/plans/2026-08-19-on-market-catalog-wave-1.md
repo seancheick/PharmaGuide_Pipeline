@@ -73,8 +73,7 @@ Create:
 
 Modify:
 
-- `scripts/dsld_api_sync.py` — emit a Wave 1 discovery manifest while retaining explicit `status=1` on every production query.
-- `scripts/tests/test_dsld_api_sync.py` — lock on-market discovery, per-brand counts, pagination, and raw-identity preservation.
+- Keep the existing `scripts/dsld_api_sync.py sync-brand` operational path unchanged. It already supports `--status 0/1/2` and writes directly into the chosen `staging/brands/<brand>` folder.
 - `scripts/build_final_db.py` — apply display-brand projection, retain source brand/version lineage, and replace destructive score-based UPC deduplication.
 - `scripts/tests/test_dedup_by_upc.py` — remove score-winner expectations; retain only provably equivalent consolidation cases.
 - `scripts/tests/test_build_final_db.py` — lock core/detail identity lineage and manifest counts.
@@ -114,20 +113,15 @@ This is a separate evidence correction, not part of catalog identity. Keep it is
 
 Expected result: one verified source is added, no form score changes, and the remaining-form backlog decreases by one.
 
-## Task 1: Freeze the Wave 1 Discovery Manifest
+## Task 1: Confirm the Existing Brand-Staging Operation
 
-**Files:** `scripts/dsld_api_sync.py`, `scripts/tests/test_dsld_api_sync.py`, generated report under `scripts/reports/catalog_expansion_wave_1/`.
+**Files:** existing `scripts/dsld_api_sync.py`; generated report under `scripts/reports/catalog_expansion_wave_1/`.
 
-- [ ] Write a failing test requiring Wave 1 discovery to use `search-filter` with `status=1` for every brand.
-- [ ] Run the focused sync tests and confirm the new test fails for the intended missing manifest behavior.
-- [ ] Add manifest output containing query brand, observed raw brand, DSLD ID, `offMarket`, UPC, `entryDate`, `productVersionCode`, relationship IDs, form, package quantity/unit, and a source payload hash.
-- [ ] Run discovery without downloading or modifying current raw labels.
-- [ ] Confirm all 1,220 discovered rows have `offMarket=0`.
-- [ ] Reconcile observed counts and raw brand variants against the table above.
-- [ ] Treat unexplained count drift, duplicate IDs across brand queries, malformed UPCs, or missing source identity as review findings—not silent exclusions.
-- [ ] Run `scripts/test.sh fast scripts/tests/test_dsld_api_sync.py scripts/tests/test_dsld_api_client.py`.
-
-Commit: `feat(catalog): freeze on-market Wave 1 manifest`
+- [x] Confirm `sync-brand` accepts `--status 0/1/2`, defaults to `1`, and writes flat raw labels to the selected staging folder.
+- [x] Confirm this wave will use `--status 1` and preserve the full API label unchanged.
+- [ ] Download each reviewed brand once through `sync-brand`; do not introduce a second bulk downloader.
+- [ ] After download, derive the identity/hash manifest from the staged raw files so no label is fetched twice.
+- [ ] Reconcile counts, raw brand variants, duplicate IDs, malformed UPCs, and source identity from that derived manifest.
 
 ## Task 2: Add One Brand-Identity Contract for Existing + New Catalog
 
@@ -186,7 +180,7 @@ Commit: `fix(identity): resolve UPCs by bottle version`
 
 Commit: `fix(scan): confirm ambiguous product versions`
 
-## Task 5: Download Wave 1 Raw Labels Once
+## Task 5: Download Wave 1 Raw Labels Once Through `sync-brand`
 
 **Destination folders:**
 
@@ -200,9 +194,10 @@ Commit: `fix(scan): confirm ambiguous product versions`
 - `Kirkland_Signature`
 - `MegaFood`
 
-- [ ] Download only IDs frozen in the reviewed manifest.
-- [ ] Preserve the full normalized API label plus source provenance and source hash.
-- [ ] Verify file count per brand against the manifest.
+- [ ] Run the existing command once per brand with `--status 1 --output-dir <staging/brands/folder>`.
+- [ ] Preserve the full normalized API label in the existing staging layout.
+- [ ] Generate the source-hash/identity manifest from the completed staging folders.
+- [ ] Verify file count per brand against the post-download manifest and expected live count.
 - [ ] Verify every file has the expected ID and `offMarket=0`.
 - [ ] Verify no current raw file was overwritten with a different payload without a snapshot/version record.
 - [ ] Verify raw brand variants still match DSLD; do not rewrite them in staging.
@@ -308,4 +303,3 @@ Do not publish if any of the following occurs:
 - The online experience provides the complete label, evidence, citations, images, and detailed scoring.
 - Actual size, speed, cache, and TestFlight measurements are recorded and accepted.
 - The full release suite passes and the catalog is published through the existing gated release path.
-

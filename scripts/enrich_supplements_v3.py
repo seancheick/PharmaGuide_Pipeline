@@ -19775,7 +19775,6 @@ class SupplementEnricherV3:
             enriched.pop("src", None)
             enriched.pop("nhanesId", None)
             enriched.pop("brandIpSymbol", None)
-            enriched.pop("productVersionCode", None)
             enriched.pop("pdf", None)  # redundant with imageUrl (image_is_pdf flag)
             enriched.pop("thumbnail", None)  # redundant with imageUrl
             enriched.pop("percentDvFootnote", None)
@@ -19787,7 +19786,6 @@ class SupplementEnricherV3:
                 enriched["dsld_product_type_raw"] = _raw_pt
             enriched.pop("productType", None)
             enriched.pop("events", None)  # only "Off Market"/"Date entered", no safety signal
-            enriched.pop("labelRelationships", None)
             enriched.pop("metadata", None)  # mappingStats/transparencyMetrics recomputed via match_ledger
             enriched.pop("images", None)  # imageUrl is the consumed field
 

@@ -3611,7 +3611,7 @@ def test_v4_pillar_columns_projected_for_scored_and_null_for_suppressed(monkeypa
             assert blocked[col] is None, f"suppressed product should have NULL {col}, got {blocked[col]}"
 
 
-def test_v4_dedup_keeps_scored_over_blocked_same_upc(monkeypatch):
+def test_shared_upc_retains_scored_and_blocked_formula_candidates(monkeypatch):
     e_scored = make_enriched()  # 999
     e_blocked = make_enriched(); e_blocked["dsld_id"] = "888"
     upc = "012345678905"
@@ -3627,8 +3627,9 @@ def test_v4_dedup_keeps_scored_over_blocked_same_upc(monkeypatch):
     with tempfile.TemporaryDirectory() as tmp:
         _result, out = _run_build(tmp, [e_scored, e_blocked], [s1, s2])
         rows = _core_rows(out, ["dsld_id"])
-        # The scored product wins the UPC group; the BLOCKED twin is deduped away.
-        assert set(rows) == {"999"}
+        # Identity cannot be inferred from score or safety. Both labels remain
+        # available so the app can ask which physical bottle was scanned.
+        assert set(rows) == {"888", "999"}
 
 
 def test_build_always_stamps_v4_score_model(monkeypatch):

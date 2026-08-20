@@ -5905,6 +5905,8 @@ class EnhancedDSLDNormalizer:
                 "bundleName": raw_data.get("bundleName"),
                 "brandIpSymbol": raw_data.get("brandIpSymbol"),
                 "productVersionCode": raw_data.get("productVersionCode"),
+                "entryDate": raw_data.get("entryDate"),
+                "updatedDate": raw_data.get("updatedDate"),
                 "pdf": raw_data.get("pdf"),
                 "thumbnail": raw_data.get("thumbnail"),
                 "percentDvFootnote": raw_data.get("percentDvFootnote"),
