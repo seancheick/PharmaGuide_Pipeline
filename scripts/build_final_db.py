@@ -2690,6 +2690,24 @@ def derive_v4_tradeoffs(
     return bonuses, penalties
 
 
+def v4_sub_clinical_canonicals(scored: Dict[str, Any]) -> set[str]:
+    """Return low-dose identities from the canonical v4 evidence result.
+
+    The retired scorer wrote this signal under ``breakdown.C``. Stage 3 now
+    exports the production module result as ``_v4_module_breakdown``; final
+    export must not revive or merge the legacy source.
+    """
+    module = safe_dict(scored.get("_v4_module_breakdown"))
+    dimensions = safe_dict(module.get("dimensions"))
+    evidence = safe_dict(dimensions.get("evidence"))
+    metadata = safe_dict(evidence.get("metadata"))
+    return {
+        canonical.strip()
+        for canonical in safe_list(metadata.get("sub_clinical_canonicals"))
+        if isinstance(canonical, str) and canonical.strip()
+    }
+
+
 def build_decision_highlights(
     enriched: Dict, scored: Dict, blocking_reason: Optional[str]
 ) -> Dict[str, Any]:
@@ -7280,18 +7298,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         or rda_ul_data.get("adequacy_results")
         or rda_ul_data.get("count")
     ):
-        # T7A: scorer surfaces sub_clinical_canonicals at
-        # scored.breakdown.C.sub_clinical_canonicals — the canonical
-        # ingredient IDs that fell below the min_clinical_dose threshold.
+        # T7A: the v4 evidence dimension surfaces the canonical ingredient IDs
+        # that fell below the minimum clinical-dose threshold.
         # Mark the matching analyzed_ingredients / adequacy_results rows
         # so Flutter can render the per-ingredient "Low dose" chip
         # without re-running the dose check client-side.
-        sub_clinical_set = set(
-            safe_list(
-                safe_dict(safe_dict(scored.get("breakdown")).get("C"))
-                .get("sub_clinical_canonicals")
-            )
-        )
+        sub_clinical_set = v4_sub_clinical_canonicals(scored)
 
         def _flag_below_clinical(rows):
             if not isinstance(rows, list):

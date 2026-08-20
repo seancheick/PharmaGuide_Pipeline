@@ -11,11 +11,10 @@ Sprint task T7A (docs/sprints/product_detail_page_sprint.md):
   occurrence) — the per-ingredient flag identifies WHICH ingredient is
   low so Flutter can target the right row.
 
-Test plumbing: build_final_db consumes scored output. We exercise the
-chain by feeding a synthetic scored dict that includes
-breakdown.C.sub_clinical_canonicals and verifying analyzed_ingredients
-+ adequacy_results in the resulting blob carry below_clinical_dose
-correctly.
+Test plumbing: build_final_db consumes the v4 scored artifact. We exercise the
+chain by feeding a synthetic artifact whose canonical evidence metadata
+includes ``sub_clinical_canonicals`` and verifying analyzed_ingredients +
+adequacy_results in the resulting blob carry below_clinical_dose correctly.
 """
 import sys
 from pathlib import Path
@@ -96,23 +95,27 @@ def _enriched_with_rda_data():
 
 def _scored_with_sub_clinical(canonicals):
     return {
-        "score_80": 50.0, "display": "50/80", "display_100": "62/100",
-        "score_100_equivalent": 62.0, "grade": "Fair", "verdict": "SAFE",
+        "quality_score_v4_100": 62.0,
+        "quality_score_status": "scored",
+        "quality_pillars_v4": {},
+        "score_100_equivalent": 62.0,
+        "display_100": "62/100",
+        "grade": "Fair",
+        "verdict": "SAFE",
         "safety_verdict": "SAFE", "mapped_coverage": 1.0,
         "badges": [], "flags": ["SUB_CLINICAL_DOSE_DETECTED"] if canonicals else [],
-        "section_scores": {},
         "summary": {},
         "supp_type": "specialty",
         "unmapped_actives": [],
-        "breakdown": {
-            "C": {
-                "score": 5.0,
-                "max": 20.0,
-                "ingredient_points": {},
-                "matched_entries": 1,
-                "top_n_applied": 1,
-                "depth_bonus": 0.0,
-                "sub_clinical_canonicals": canonicals,
+        "_v4_module": "generic",
+        "_v4_module_breakdown": {
+            "module": "generic",
+            "dimensions": {
+                "evidence": {
+                    "metadata": {
+                        "sub_clinical_canonicals": canonicals,
+                    }
+                }
             },
         },
     }
@@ -154,3 +157,20 @@ def test_below_clinical_dose_handles_multiple_canonicals():
 
     for row in blob.get("rda_ul_data", {}).get("adequacy_results", []):
         assert row["below_clinical_dose"] is True
+
+
+def test_retired_v3_breakdown_cannot_override_v4_evidence_metadata():
+    enriched = _enriched_with_rda_data()
+    scored = _scored_with_sub_clinical(["vitamin_c"])
+    scored["breakdown"] = {
+        "C": {"sub_clinical_canonicals": ["magnesium"]}
+    }
+
+    blob = build_detail_blob(enriched, scored)
+
+    by_canon = {
+        row.get("canonical_id"): row
+        for row in blob.get("rda_ul_data", {}).get("adequacy_results", [])
+    }
+    assert by_canon["vitamin_c"]["below_clinical_dose"] is True
+    assert by_canon["magnesium"]["below_clinical_dose"] is False
