@@ -342,7 +342,81 @@ Every proposed change must be verified against its linked primary source,
 matched to the correct substance/product and US applicability, tested through
 `scripts/test.sh`, and reviewed before it enters curated data.
 
-## 11. Definition of release complete
+## 11. Brand coverage and freshness audit
+
+Answers two different questions that are easy to confuse:
+
+1. **Completeness** — did we download every on-market DSLD label for the brands
+   we track, or did something get silently skipped?
+2. **Freshness** — is the brand still *filing* with DSLD? A brand can be 100%
+   complete and still fail in a store, because DSLD only holds what a
+   manufacturer submits.
+
+```bash
+source scripts/python_env.sh
+
+# Full check, all brands (one API call per brand, ~30s)
+"$PG_PYTHON" scripts/audit_brand_coverage.py
+
+# Limit to specific brands
+"$PG_PYTHON" scripts/audit_brand_coverage.py --targets CVS,GNC
+
+# Prove SET membership instead of counts (slower, pages every label id)
+"$PG_PYTHON" scripts/audit_brand_coverage.py --ids --targets GNC,BulkSupplements
+```
+
+Output:
+
+```text
+brand                       on disk   LIVE on-mkt   delta       newest  %fresh
+------------------------------------------------------------------------------
+CVS                             240           240      +0   2023-06-22      0%
+GNC                            2214          2214      +0   2025-09-25     16%
+Thorne                          196           196      +0   2025-09-25     60%
+------------------------------------------------------------------------------
+TOTALS  on disk=2,796  live on-mkt=2,796  delta=+0
+brands with any delta: 0
+
+STALE — complete, but no label filed since 2024-01-01. ...
+  - CVS: newest label 2023-06-22
+```
+
+Exit codes: `0` every brand matches, `1` at least one delta, `2` bad usage.
+Freshness is advisory and never changes the exit code.
+
+### Reading the result
+
+- **delta `+N`** — DSLD has labels we do not. Either new products were published
+  since the last download, or the derived brand query is wrong. Check the query
+  before assuming missing data.
+- **delta `-N`** — we hold labels DSLD no longer lists on-market. Usually a
+  product left the market; not an error.
+- **Matching counts are not proof.** One product leaving the market while
+  another appears nets to zero. Use `--ids` on any brand that matters.
+- **STALE** — the brand stopped filing. No amount of downloading fixes it, and
+  scanning current shelf stock for that brand will miss. This is a sourcing
+  problem, not a pipeline problem.
+
+### Brand query derivation
+
+DSLD's `brand` filter matches by prefix, and one folder usually holds several
+sub-brand strings. The query is the longest common **word** prefix of every
+`brandName` in the folder, case-insensitively — so a `CVS` folder holding
+"CVS Health" and "CVS Pharmacy" queries as `CVS` and finds both. Override a
+bad derivation with `--brand-map`.
+
+### When to run it
+
+- Before any catalog publish.
+- Before adding a new brand wave — check the candidates' freshness first, so a
+  brand that stopped filing is not selected for a scan-probability wave.
+- Monthly, as a cheap drift check.
+
+Refreshing is a delta, not a re-download: `scripts/dsld_api_sync.py` brand mode
+defaults to `--status 1` and takes `--state-file`, which classifies every label
+as new / changed / unchanged against the prior run.
+
+## 12. Definition of release complete
 
 A release is complete only when:
 
