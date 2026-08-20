@@ -10471,6 +10471,7 @@
         "Allura Red",
         "Allura Red AC",
         "FD&C Red #40",
+        "FD&C Red #40 Dye",
         "FD&C Red # 40",
         "Red Dye 40",
         "Red 40 Lake",
@@ -14692,7 +14693,9 @@
         "peruvian yacon",
         "yacon syrup extract",
         "blue agave",
-        "brown rice syrup solids"
+        "brown rice syrup solids",
+        "organic rice syrup",
+        "organic tapioca syrup"
       ],
       "category": "sweetener_natural",
       "mechanism_of_harm": "Concentrated liquid sugars with high glycemic index (GI 60-100+). Rapidly absorbed, causing blood glucose spikes. Rice syrup specifically may contain inorganic arsenic from rice cultivation. Used as sweetener/binder in gummies and liquid supplements.",

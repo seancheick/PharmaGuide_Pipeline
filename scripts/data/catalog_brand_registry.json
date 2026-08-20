@@ -3,6 +3,7 @@
     "schema_version": "1.0.0",
     "last_updated": "2026-08-19",
     "description": "Exact source-brand aliases for consumer catalog display. Raw source identity remains immutable.",
+    "purpose": "catalog_brand_identity",
     "total_entries": 37
   },
   "brands": [

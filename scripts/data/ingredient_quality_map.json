@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 631,
       "total_forms": 1421,
-      "total_form_aliases": 12088,
+      "total_form_aliases": 12108,
       "parents_with_parent_aliases": 117,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -3410,7 +3410,9 @@
           "b5 calcium salt supplement",
           "D-Calcium Pantothenate supplement",
           "pantothenate supplement",
-          "d-pantothenic acid calcium salt"
+          "d-pantothenic acid calcium salt",
+          "Dicalcium Pantothenate",
+          "D-Calcium Panthothenate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3819,7 +3821,8 @@
           "standard b6 supplement",
           "pyridoxine supplement",
           "vitamin b6 supplement",
-          "vitamin b-6 supplement"
+          "vitamin b-6 supplement",
+          "Pyridoxine Hydrchloride"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4353,6 +4356,7 @@
           "L-Methylfolate Magnesium",
           "L Methylfolate Magnesium",
           "calcium l-5-methylfolate",
+          "Calcium L-Methylfolate",
           "l-methyfolate",
           "l-5 mthf",
           "folate calcium salt",
@@ -6449,7 +6453,8 @@
           "Gamma-E Mixed Tocopherols",
           "D-Beta & D-Delta Tocopherol",
           "D-Beta & D-Delta Tocopherols",
-          "beta and delta-tocopherols"
+          "beta and delta-tocopherols",
+          "Complete 8 Vitamin E"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -15005,7 +15010,8 @@
           "cromo",
           "Zychrome",
           "Chromium Citrate",
-          "Chromium Aspartate"
+          "Chromium Aspartate",
+          "Chromium Ascorbate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21161,7 +21167,8 @@
           "l-cysteine hydrochloride",
           "L-Cystine",
           "l-cysteine hydrochloride anhydrous",
-          "l-cysteine hcl anhydrous"
+          "l-cysteine hcl anhydrous",
+          "Cysteine Hydrochloride"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26916,7 +26923,8 @@
           "hrg80 red ginseng",
           "panax ginseng 7% extract",
           "korean red panax ginseng extract",
-          "Asian Ginseng root (Panax Ginseng) standardized extract"
+          "Asian Ginseng root (Panax Ginseng) standardized extract",
+          "Ginseng root (Panax ginseng) standardized extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -36362,9 +36370,11 @@
           "Soy Germ Isoflavones Concentrate",
           "Isoflavone Glycosides",
           "Soy Isoflavones",
+          "Soybean Isoflavones",
           "Soy Isoflavone extract",
           "Soy Isoflavone concentrate",
           "Soy Isoflavones extract",
+          "Powdered Soybean Isoflavones Extract",
           "Isomax-30 Soy Germ extract",
           "novasoy soy isoflavone concentrate",
           "novasoy soy isoflavones concentrate",
@@ -43734,7 +43744,8 @@
           "Mushroom Beta Glucan",
           "mushroom beta-glucan",
           "mushroom beta glucans",
-          "wellmune baker's yeast beta glucans"
+          "wellmune baker's yeast beta glucans",
+          "BetaVia"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -44012,6 +44023,7 @@
           "B. lactis HN019",
           "Bifidobacterium animalis HN019",
           "Bifidobacterium animalis lactis HN019",
+          "Bifidobacterium animalis lactis HN-019",
           "HN019",
           "DR10",
           "HOWARU Bifido",
@@ -44143,6 +44155,8 @@
           "ISS Bif Bifidobacterium lactis (SD-5219)",
           "SD-5219",
           "Bifidobacterium lactis SD-5219",
+          "Bifidobacterium animalis lactis SD-5219",
+          "Bifidobacterium lactis B-420",
           "Bifidobacterium animalis sub. lactis",
           "B. animalis sub. lactis",
           "bifidobacterium animalis lactis cul-34",
@@ -44202,7 +44216,8 @@
         "aliases": [
           "B. animalis subsp. lactis",
           "bifido lactis",
-          "Bifidobacterium animalis ssp. lactis B420"
+          "Bifidobacterium animalis ssp. lactis B420",
+          "Bifidobacterium animalis"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -44718,6 +44733,8 @@
         "aliases": [
           "B. infantis",
           "bifidobacterium infantis",
+          "Bifidobacterium infantis SD-5845",
+          "Bifidobacterium longum infantis SD-6720",
           "SD5220"
         ],
         "dosage_importance": 1.0,
@@ -48079,7 +48096,8 @@
           "chastetree fruit extract",
           "chastetree fruit",
           "organic vitex",
-          "Agnusides"
+          "Agnusides",
+          "FoodState Chaste Tree"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -51055,6 +51073,7 @@
           "chamomile",
           "chamomile flower",
           "chamomile flower extract",
+          "German Chamomile flower extract",
           "german chamomile",
           "matricaria chamomilla",
           "matricaria",
@@ -54773,6 +54792,7 @@
           "horsetail (equisetum arvense) 4:1 aerial parts extract",
           "Horsetail Grass",
           "Springtime Horsetail extract",
+          "Spring Horsetail",
           "horsetail"
         ],
         "dosage_importance": 0.8,

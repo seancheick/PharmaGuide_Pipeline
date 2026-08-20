@@ -1303,8 +1303,17 @@ class BatchProcessor:
             result = temp_normalizer.process_and_save_unmapped_tracking(
                 processed_count_override=processed_count_override
             )
-            logger.info(f"Saved enhanced unmapped tracking files: {result['total_count']} total ingredients")
-            logger.info(f"  Active: {result['active_count']}, Inactive: {result['inactive_count']}")
+            logger.info(
+                "Saved enhanced identity-gap tracking: %d true unmapped ingredients",
+                result["total_count"],
+            )
+            logger.info(
+                "  Active: %d, Inactive: %d, Recognized audit-only: %d, Non-scoreable: %d",
+                result["active_count"],
+                result["inactive_count"],
+                result["recognized_count"],
+                result["non_scoreable_count"],
+            )
         except Exception as e:
             logger.error(f"Failed to save enhanced unmapped ingredients: {str(e)}")
             
@@ -1334,6 +1343,19 @@ class BatchProcessor:
             except Exception as fallback_error:
                 logger.error(f"Failed to save fallback unmapped ingredients: {str(fallback_error)}")
     
+    def _true_unmapped_counter(self) -> Counter:
+        """Return only unresolved identity gaps, excluding audit-only rows."""
+        return Counter({
+            name: count
+            for name, count in self.global_unmapped.items()
+            if not self.global_unmapped_details.get(name, {}).get(
+                "recognized_non_identity"
+            )
+            and not self.global_unmapped_details.get(name, {}).get(
+                "non_scoreable_cleaner_row"
+            )
+        })
+
     def _generate_final_summary(self, batch_results: List[Dict], total_time: float) -> Dict[str, Any]:
         """Generate final processing summary with performance metrics"""
         total_processed = sum(r["summary"]["processed"] for r in batch_results)
@@ -1385,7 +1407,7 @@ class BatchProcessor:
                 "total_minutes": total_time / 60,
                 "avg_per_file": total_time / total_processed if total_processed else 0
             },
-            "unmapped_ingredients": len(self.global_unmapped),
+            "unmapped_ingredients": len(self._true_unmapped_counter()),
             "mapped_ingredients": len(self.global_mapped),
             "success_rate": (total_cleaned / total_attempted * 100) if total_attempted else 0
         }
@@ -1440,10 +1462,11 @@ class BatchProcessor:
                     f.write("\nThese are the most frequently appearing mapped ingredients\n\n")
 
                 # D3: Add top unmapped ingredients with deterministic ordering
-                if self.global_unmapped:
+                true_unmapped = self._true_unmapped_counter()
+                if true_unmapped:
                     f.write("Top 10 Unmapped Ingredients (for enrichment planning):\n")
                     for ingredient, count in self._sort_counter_deterministic(
-                        self.global_unmapped, 10
+                        true_unmapped, 10
                     ):
                         f.write(f"  {count:>3}x {ingredient}\n")
                     f.write("\nThese ingredients should be prioritized for database enrichment\n\n")

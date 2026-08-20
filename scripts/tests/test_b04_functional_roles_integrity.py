@@ -77,7 +77,9 @@ def test_aggregate_disposition_counts(by_id):
     # descriptor with no named material stays label_descriptor/[] (fish/algae-generic).
     # 481 after unmapped triage added PII_CORN_BRAN_POWDER and
     # PII_FAVA_BEAN_PROTEIN_ISOLATE as non-IQM source/filler identities.
-    assert populated == 481, f"expected 481 populated entries; got {populated}"
+    # 488 after Wave 1 added six exact inactive identities with known roles.
+    # Keep this exact so accidental role loss remains release-blocking.
+    assert populated == 488, f"expected 488 populated entries; got {populated}"
     assert deferred == len(by_id) - populated, (
         f"expected deferred count to track total-populated; got {deferred}"
     )

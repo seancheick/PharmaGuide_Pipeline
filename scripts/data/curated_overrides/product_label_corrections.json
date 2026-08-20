@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity-unit changes require exact raw_quantity_unit and corrected_quantity_unit values and must be supported by the official label image.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-08-19",
-    "total_entries": 14,
+    "total_entries": 15,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -295,6 +295,25 @@
       "review_date": "2026-08-19",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_unit_correction"
+    },
+    "327590": {
+      "brand": "MegaFood",
+      "product_name": "Women's One Daily Multivitamin",
+      "raw_ingredient_text": "Springtail",
+      "corrected_ingredient_text": "Spring Horsetail",
+      "correction_fields": [
+        "name"
+      ],
+      "evidence": "The DSLD JSON row says 'Springtail', but the same product and UPC are listed with 'Organic Spring Horsetail Leaf' in the market ingredient declaration. The source row is categorized as a botanical and sits among the product's herb-blend children, confirming a product-specific transcription omission rather than an insect ingredient. This correction restores the declared botanical identity only for DSLD label 327590; no global Springtail alias is created.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/327590",
+        "https://dsld.od.nih.gov/label/327590",
+        "https://www.smithsfoodanddrug.com/p/megafood-women-s-one-daily-tablets/0005149410104"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-19",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_text_correction"
     }
   }
 }

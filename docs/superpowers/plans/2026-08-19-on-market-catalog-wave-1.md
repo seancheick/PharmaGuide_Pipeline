@@ -10,6 +10,21 @@
 
 ---
 
+## Execution Status — 2026-08-19
+
+- [x] Use the existing `scripts/dsld_api_sync.py sync-brand --status 1` operation. It remains the only download path and stages one JSON label per DSLD ID directly under `staging/brands/<folder>`.
+- [x] Harden that operation with bounded retry, `Retry-After`, nonzero partial-failure exit, and `--resume`; no replacement ingestion system was created.
+- [x] Stage all nine Wave 1 brands: **1,220 on-market labels**, with exact per-brand counts, unique IDs, filename/ID parity, and `offMarket=0` throughout.
+- [x] Add one central brand registry while preserving every raw brand string.
+- [x] Remove score-based shared-UPC selection. Retain all candidates and ask the user which bottle matches when identity is genuinely ambiguous.
+- [x] Run clean-only mapping audits while remediating aliases. MegaFood finishes **278/278 clean**, with zero active gaps, zero inactive gaps, zero unresolved no-dose children, and zero products requiring review.
+- [ ] User runs the single final Clean → Enrich → Score pipeline after this branch is integrated. Do not start that long run from this plan executor.
+- [ ] After that run passes, assemble/measure the full offline/online candidate and proceed through the existing release gates.
+
+Raw labels remain outside Git in `/Users/seancheick/Documents/DataSetDsld/staging/brands`. Git owns the downloader, identity registry, mappings, corrections, tests, and release contracts—not a duplicate copy of downloaded staging data.
+
+---
+
 ## Decisions Locked for This Wave
 
 - Wave 1 contains the eight mass-market brands plus **MegaFood**.
@@ -62,13 +77,11 @@ Both behaviors confuse **identity** with **evaluation**. A different score may i
 
 ### Pipeline repository
 
-Create:
+Created:
 
 - `scripts/data/catalog_brand_registry.json` — reviewed query/display/family/line mappings and raw aliases.
 - `scripts/brand_identity.py` — exact registry lookup and immutable source/display projection.
 - `scripts/tests/test_brand_identity.py` — registry coverage, typo/case normalization, and no-fuzzy-match tests.
-- `scripts/upc_version_resolver.py` — deterministic label-version comparison and ambiguity classification.
-- `scripts/tests/test_upc_version_resolver.py` — version, date, package, relationship, and ambiguity boundary tests.
 - `scripts/reports/catalog_expansion_wave_1/` — generated manifests and dry-build measurements; reports are not source-of-truth.
 
 Modify:
@@ -180,7 +193,7 @@ Commit: `fix(identity): resolve UPCs by bottle version`
 
 Commit: `fix(scan): confirm ambiguous product versions`
 
-## Task 5: Download Wave 1 Raw Labels Once Through `sync-brand`
+## Task 5: Download Wave 1 Raw Labels Once Through `sync-brand` — Complete
 
 **Destination folders:**
 
@@ -194,20 +207,20 @@ Commit: `fix(scan): confirm ambiguous product versions`
 - `Kirkland_Signature`
 - `MegaFood`
 
-- [ ] Run the existing command once per brand with `--status 1 --output-dir <staging/brands/folder>`.
-- [ ] Preserve the full normalized API label in the existing staging layout.
-- [ ] Generate the source-hash/identity manifest from the completed staging folders.
-- [ ] Verify file count per brand against the post-download manifest and expected live count.
-- [ ] Verify every file has the expected ID and `offMarket=0`.
-- [ ] Verify no current raw file was overwritten with a different payload without a snapshot/version record.
-- [ ] Verify raw brand variants still match DSLD; do not rewrite them in staging.
-- [ ] Run the raw-to-manifest audit before cleaning.
+- [x] Run the existing command once per brand with `--status 1 --output-dir <staging/brands/folder>`.
+- [x] Preserve the full normalized API label in the existing staging layout.
+- [x] Derive source identity directly from the completed staging folders; do not maintain a second downloaded-label manifest as source-of-truth.
+- [x] Verify file count per brand against the expected live count.
+- [x] Verify every filename matches its DSLD ID and `offMarket=0`.
+- [x] Verify there are no duplicate IDs in any Wave 1 folder.
+- [x] Verify raw brand variants still match DSLD; do not rewrite them in staging.
+- [x] Run clean-only identity audits before the final pipeline.
 
-Commit: `data(catalog): add on-market Wave 1 labels`
+No raw-label commit: staging data stays in the existing external staging tree.
 
-## Task 6: Run One Pipeline-Only Wave 1 Build
+## Task 6: Run the Final Wave 1 Pipeline — User-Owned Final Run
 
-Do not run the pipeline after each brand. Finish identity code and raw validation first, then process all nine brands once.
+During mapping, use clean-only targeted audits. Do not run Enrich/Score repeatedly. After this branch is integrated, the user runs the existing final pipeline once across the complete staged corpus.
 
 ```bash
 bash batch_run_all_datasets.sh \
@@ -216,7 +229,8 @@ bash batch_run_all_datasets.sh \
   --pipeline-only
 ```
 
-- [ ] Confirm all nine brand folders pass Clean, Enrich, and Score.
+- [x] Confirm all nine brand folders pass the clean identity audit with no true mapping gaps.
+- [ ] Confirm all nine brand folders pass Enrich and Score in the user's final run.
 - [ ] Produce separate audit slices for the 942 mass-market labels and 278 MegaFood labels.
 - [ ] Review quarantine reasons, unmapped identities, label-ledger repairs, blend hierarchy, nutrition rows, form ratings, dose bands, warning counts, and certification claims.
 - [ ] Compare existing-product scores before/after identity changes; brand normalization alone must produce zero scoring drift.

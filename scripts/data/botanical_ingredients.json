@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-07-16",
+    "last_updated": "2026-08-19",
     "total_entries": 551,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -10211,12 +10211,16 @@
         "Orange Fruit Powder",
         "oranges",
         "whole oranges",
+        "whole orange",
+        "organic whole orange",
+        "Uncle Matt's organic whole Oranges",
+        "Uncle Matt's Organic whole Orange",
         "240 mg whole oranges",
         "Citrus sinensis"
       ],
       "category": "fruit",
       "notes": "Citrus sinensis (Rutaceae) sweet orange fruit. Rich in vitamin C, hesperidin, and naringenin flavonoids. Distinct from bitter orange (Citrus aurantium). Botanical fruit powder.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-08-19",
       "external_ids": {
         "unii": "5EVU04N5QU"
       },

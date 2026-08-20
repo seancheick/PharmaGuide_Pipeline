@@ -430,3 +430,38 @@ def test_failed_write_batch_fails_final_summary(tmp_path):
     assert summary["results"]["cleaned"] == 0
     assert summary["results"]["errors"] == 3
     assert summary["success_rate"] == 0.0
+
+
+def test_final_summary_excludes_recognized_and_non_scoreable_rows_from_unmapped(
+    tmp_path,
+):
+    processor = BatchProcessor(_make_config(tmp_path))
+    processor.global_unmapped.update({
+        "Mannitol": 4,
+        "No-dose Blend Child": 3,
+        "Genuinely Unknown Active": 2,
+    })
+    processor.global_unmapped_details.update({
+        "Mannitol": {"recognized_non_identity": True},
+        "No-dose Blend Child": {"non_scoreable_cleaner_row": True},
+        "Genuinely Unknown Active": {"is_active": True},
+    })
+
+    summary = processor._generate_final_summary(
+        [
+            {
+                "summary": {
+                    "processed": 1,
+                    "cleaned": 1,
+                    "needs_review": 0,
+                    "incomplete": 0,
+                    "errors": 0,
+                    "input_validation_failures": 0,
+                },
+                "write_success": True,
+            }
+        ],
+        total_time=1.0,
+    )
+
+    assert summary["unmapped_ingredients"] == 1

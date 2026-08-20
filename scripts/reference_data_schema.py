@@ -19,6 +19,7 @@ _SCHEMA_V1_FILES = frozenset(
         "caers_adverse_event_signals.json",
         "canary_products.json",
         "canonical_equivalences.json",
+        "catalog_brand_registry.json",
         "cluster_ingredient_aliases.json",
         "daily_values.json",
         "drug_classes.json",

@@ -2223,6 +2223,35 @@ def test_batch33_softgels_active_exact_aliases_and_new_botanicals_map(normalizer
 @pytest.mark.parametrize(
     "name,ingredient_group,expected",
     [
+        ("German Chamomile flower extract", "German Chamomile", "Chamomile"),
+        ("BetaVia", "Euglena gracilis", "Beta-Glucan"),
+        ("Soybean Isoflavones", "isoflavone (unspecified)", "Isoflavones"),
+        (
+            "Bifidobacterium infantis SD-5845",
+            "Bifidobacterium infantis",
+            "Bifidobacterium longum",
+        ),
+    ],
+)
+def test_wave1_mass_market_active_aliases_map(
+    normalizer,
+    name,
+    ingredient_group,
+    expected,
+):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name,
+        [],
+        ingredient_group=ingredient_group,
+    )
+
+    assert mapped is True
+    assert expected.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
         ("D-Alpha-Tocopheryl Polyethylene Glycol 1000 Succinate", "Vitamin E (alpha tocopheryl succinate)", "Tocofersolan"),
         ("Triacylglycerol", "TBD", "Triacylglycerol"),
     ],
@@ -3045,3 +3074,245 @@ def test_2026_06_15_unmapped_active_alias_batch_maps(normalizer, name, expected)
 
     assert mapped is True
     assert expected.lower() in standard_name.lower()
+
+
+def test_dsld_active_header_is_structure_and_preserves_nested_children(normalizer):
+    normalizer._display_ingredients_buffer = []
+    snapshot = normalizer.get_unmapped_snapshot()
+    rows = normalizer._flatten_nested_ingredients([
+        {
+            "name": "FoodState Nutrients",
+            "category": "other",
+            "ingredientGroup": "Header",
+            "quantity": [{"quantity": 0, "unit": "NP"}],
+            "raw_source_path": "ingredientRows[0]",
+            "nestedRows": [
+                {
+                    "name": "Vitamin C",
+                    "category": "vitamin",
+                    "ingredientGroup": "Vitamin C",
+                    "quantity": [{"quantity": 60, "unit": "mg"}],
+                    "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+            "forms": [],
+        }
+    ])
+
+    assert [row["name"] for row in rows] == ["Vitamin C"]
+    assert rows[0]["parentBlend"] == "FoodState Nutrients"
+    assert rows[0]["isNestedIngredient"] is True
+    assert normalizer._display_ingredients_buffer[0]["raw_source_text"] == "FoodState Nutrients"
+    assert normalizer._display_ingredients_buffer[0]["display_type"] == "structural_container"
+    assert normalizer._display_ingredients_buffer[0]["children"] == ["Vitamin C"]
+    assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
+
+
+def test_foodstate_yeast_carrier_uses_single_declared_nutrient_form(normalizer):
+    result = normalizer._process_single_ingredient_enhanced(
+        {
+            "name": "FoodState S. cerevisiae",
+            "category": "other",
+            "ingredientGroup": "Saccharomyces cerevisiae",
+            "quantity": [{"quantity": 6, "unit": "mcg"}],
+            "forms": [
+                {
+                    "name": "Vitamin B12",
+                    "category": "vitamin",
+                    "ingredientGroup": "Vitamin B12",
+                    "uniiCode": "8406EY2OQA",
+                }
+            ],
+        },
+        is_active=True,
+    )
+
+    assert result["mapped"] is True
+    assert result["canonical_id"] == "vitamin_b12_cobalamin"
+    assert result["standardName"] == "Vitamin B12"
+    assert result["raw_source_text"] == "FoodState S. cerevisiae"
+
+
+@pytest.mark.parametrize(
+    "name,expected",
+    [
+        ("Complete 8 Vitamin E", "Vitamin E"),
+        ("FoodState Chaste Tree", "Chasteberry"),
+    ],
+)
+def test_megafood_exact_active_aliases_map(normalizer, name, expected):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+
+    assert mapped is True
+    assert expected.lower() in standard_name.lower()
+
+
+@pytest.mark.parametrize(
+    "name,expected",
+    [
+        ("organic whole Orange", "Orange"),
+        ("whole Orange", "Orange"),
+        ("Uncle Matt's organic whole Oranges", "Orange"),
+        ("Uncle Matt's Organic whole Orange", "Orange"),
+        ("Bifidobacterium animalis lactis SD-5219", "Bifidobacterium Lactis"),
+        ("Bifidobacterium longum infantis SD-6720", "Bifidobacterium Longum"),
+        ("Bifidobacterium animalis lactis HN-019", "Bifidobacterium Lactis"),
+        ("Bifidobacterium lactis B-420", "Bifidobacterium Lactis"),
+    ],
+)
+def test_megafood_no_dose_blend_children_keep_canonical_identity(
+    normalizer, name, expected
+):
+    """No individual dose means no individual score, not no identity."""
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+
+    assert mapped is True
+    assert expected.lower() in standard_name.lower()
+
+
+@pytest.mark.parametrize(
+    "name,expected_canonical",
+    [
+        ("Sulfur", "PII_ELEMENTAL_SULFUR"),
+        ("Kombucha powder", "PII_KOMBUCHA_POWDER"),
+    ],
+)
+def test_megafood_identity_only_actives_are_mapped_without_iqm_scores(
+    normalizer, name, expected_canonical
+):
+    result = normalizer._process_single_ingredient_enhanced(
+        {
+            "name": name,
+            "category": "other",
+            "ingredientGroup": name,
+            "quantity": [{"quantity": 3, "unit": "mg"}],
+            "forms": [],
+        },
+        is_active=True,
+    )
+
+    assert result["mapped"] is True
+    assert result["canonical_id"] == expected_canonical
+    assert result["canonical_source_db"] == "other_ingredients"
+    assert expected_canonical not in normalizer.ingredient_map
+
+
+@pytest.mark.parametrize(
+    "name,expected",
+    [
+        ("autolyzed Yeast extract", "Saccharomyces cerevisiae"),
+        ("autolyed Yeast extract", "Saccharomyces cerevisiae"),
+        ("Autolyzed Yeast", "Saccharomyces cerevisiae"),
+        ("organic Rice syrup", "Sugar Syrups"),
+        ("organic Tapioca Syrup", "Sugar Syrups"),
+        ("Citrus peel extract", "Citrus Peel Extract"),
+    ],
+)
+def test_megafood_inactive_aliases_map(normalizer, name, expected):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(name, [])
+
+    assert mapped is True
+    assert expected.lower() in standard_name.lower()
+
+
+@pytest.mark.parametrize(
+    "name,expected_canonical",
+    [
+        ("Tricalcium Phosphate", "PII_TRICALCIUM_PHOSPHATE"),
+        ("Sodium Starch Glycolate", "PII_SODIUM_STARCH_GLYCOLATE"),
+    ],
+)
+def test_inactive_taxonomy_owns_canonical_identity_when_iqm_alias_is_ambiguous(
+    normalizer, name, expected_canonical
+):
+    result, unmapped = normalizer._process_ingredient_for_other_parallel(
+        {
+            "name": name,
+            "category": "other",
+            "ingredientGroup": name,
+            "forms": [],
+        }
+    )
+
+    assert unmapped is None
+    assert result["mapped"] is True
+    assert result["canonical_id"] == expected_canonical
+    assert result["canonical_source_db"] == "other_ingredients"
+
+
+def test_sequential_inactive_path_uses_same_taxonomy_owner(normalizer):
+    snapshot = normalizer.get_unmapped_snapshot()
+
+    rows = normalizer._process_ingredients_sequential(
+        [
+            {"name": "Tricalcium Phosphate", "forms": []},
+            {"name": "Sodium Starch Glycolate", "forms": []},
+        ]
+    )
+
+    assert [row["canonical_id"] for row in rows] == [
+        "PII_TRICALCIUM_PHOSPHATE",
+        "PII_SODIUM_STARCH_GLYCOLATE",
+    ]
+    assert all(row["mapped"] is True for row in rows)
+    assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
+
+
+def test_may_also_contain_percentage_row_is_structural_header(normalizer):
+    snapshot = normalizer.get_unmapped_snapshot()
+
+    rows = normalizer._process_ingredients_sequential(
+        [{"name": "May also contain <2%:", "forms": []}]
+    )
+
+    assert rows == []
+    assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
+
+
+@pytest.mark.parametrize(
+    "name,expected",
+    [
+        ("Cream", "Cream"),
+        ("Ginseng root (Panax ginseng) standardized extract", "Ginseng"),
+        ("Citric Acid Esters", "Citric Acid Esters"),
+        ("Bifidobacterium animalis", "Bifidobacterium Lactis"),
+        ("Turmeric Oleoresin", "Turmeric Powder"),
+        ("Tumeric Oleoresin", "Turmeric Powder"),
+        ("pregelatinized modified Corn Starch", "Modified Food Starch"),
+        ("pregelatinized modified Starch", "Modified Food Starch"),
+        ("Propyl Alcohol", "1-Propanol"),
+        ("Cysteine Hydrochloride", "L-Cysteine"),
+        ("Chromium Ascorbate", "Chromium"),
+        ("nickel amino acid chelate", "Nickel Amino Acid Chelate"),
+        ("Lemon Juice Solids", "Fruit & Vegetable Juice"),
+        ("Lemon fruit solids", "Fruit & Vegetable Juice"),
+        ("Tangerine juice solids", "Fruit & Vegetable Juice"),
+        ("Cranberry juice solids", "Fruit & Vegetable Juice"),
+        ("dried Orange juice concentrate", "Fruit Juice Concentrates"),
+        ("Peach juice concentrate", "Fruit Juice Concentrates"),
+        ("Tannic Acid", "Tannic Acid"),
+        ("Vegetable Mangesium Stearate", "Magnesium Stearate"),
+        ("Pyridoxine Hydrchloride", "Vitamin B6"),
+        ("Phytol", "Phytol"),
+        ("Carboxymethyl Cellulose Sodium", "Sodium Carboxymethylcellulose"),
+        ("Potassium Oxide", "Potassium Oxide"),
+        ("Dicalcium Pantothenate", "Vitamin B5"),
+        ("D-Calcium Panthothenate", "Vitamin B5"),
+        ("FD&C Red #40 Dye", "FD&C Red No. 40"),
+        ("Powdered Soybean Isoflavones Extract", "Isoflavones"),
+        ("Calcium L-Methylfolate", "Vitamin B9"),
+        ("Polyvinyl Povidone", "Polyvinyl Pyrrolidone"),
+        ("Poloxamer", "Poloxamer"),
+    ],
+)
+def test_wave1_inactive_label_identities_map_to_owned_taxonomy(
+    normalizer, name, expected
+):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, []
+    )
+
+    assert mapped is True
+    assert expected.casefold() in standard_name.casefold()

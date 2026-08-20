@@ -2,9 +2,9 @@
   "_metadata": {
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
-    "schema_version": "5.4.0",
-    "last_updated": "2026-07-17",
-    "total_entries": 716,
+    "schema_version": "5.4.1",
+    "last_updated": "2026-08-19",
+    "total_entries": 727,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -4293,6 +4293,27 @@
       ]
     },
     {
+      "id": "NHA_CITRUS_PEEL_EXTRACT",
+      "standard_name": "Citrus Peel Extract",
+      "aliases": [
+        "citrus peel extract"
+      ],
+      "category": "flavor_natural",
+      "is_additive": true,
+      "additive_type": "flavoring",
+      "allergen": false,
+      "notes": "Generic citrus peel extract disclosure used in inactive sections. Kept distinct from citrus peel oil because the label does not identify an oil preparation.",
+      "common_uses": [
+        "flavoring",
+        "aroma"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [
+        "flavor_natural"
+      ]
+    },
+    {
       "id": "NHA_CITRUS_PEEL_OIL_EXTRACT",
       "standard_name": "Citrus Peel Oil Extract",
       "aliases": [
@@ -7207,6 +7228,8 @@
         "fruit juice",
         "fruit juice sweetener",
         "fruit juice, natural",
+        "Lemon Juice Solids",
+        "Lemon fruit solids",
         "lemon juice",
         "lemon juice powder",
         "orange juice",
@@ -7216,6 +7239,8 @@
         "powdered pomegranate juice concentrate",
         "radish juice concentrate",
         "tomato juice",
+        "Tangerine juice solids",
+        "Cranberry juice solids",
         "veg. juice",
         "vegetable and fruit juice",
         "vegetable juice"
@@ -7299,12 +7324,14 @@
         "blueberry juice concentrate",
         "cherry juice concentrate",
         "chokeberry juice concentrate",
+        "dried Orange juice concentrate",
         "hibiscus juice concentrate",
         "juice concentrates",
         "lime juice concentrate",
         "maqui berry juice concentrate",
         "natural juice concentrates",
         "pear juice concentrate",
+        "Peach juice concentrate",
         "pineapple juice concentrate",
         "pumpkin juice concentrate",
         "raspberry juice concentrate",
@@ -10842,6 +10869,7 @@
         "veg magnesium stearate",
         "veg. magnesium stearate",
         "vegetable magnesium stearate",
+        "Vegetable Mangesium Stearate",
         "vegetable source magnesium stearate",
         "vegetarian magnesium stearate"
       ],
@@ -11904,6 +11932,8 @@
         "modified corn starch",
         "modified food and corn starch",
         "modified food starch",
+        "pregelatinized modified Corn Starch",
+        "pregelatinized modified Starch",
         "modified vegetable starch",
         "non-GMO modified Corn Starch",
         "Non-GMO modified cornstarch",
@@ -15889,6 +15919,7 @@
       "standard_name": "Polyvinyl Pyrrolidone",
       "aliases": [
         "polyvinyl pyrrolidone",
+        "Polyvinyl Povidone",
         "polyvinylpyrrolidone"
       ],
       "category": "binder",
@@ -17017,7 +17048,10 @@
         "baker's yeast",
         "nutritional yeast",
         "yeast extract",
-        "yeast extracts"
+        "yeast extracts",
+        "autolyzed yeast extract",
+        "autolyed yeast extract",
+        "autolyzed yeast"
       ],
       "category": "processing_aid",
       "is_additive": false,
@@ -17805,6 +17839,7 @@
       "standard_name": "Sodium Carboxymethylcellulose",
       "aliases": [
         "carboxymethylcellulose sodium",
+        "Carboxymethyl Cellulose Sodium",
         "cmc sodium",
         "sodium carboxy methylcellulose",
         "sodium carboxymethycellulose",
@@ -20942,6 +20977,206 @@
       "is_label_descriptor": true
     },
     {
+      "id": "PII_ELEMENTAL_SULFUR",
+      "standard_name": "Sulfur",
+      "aliases": [
+        "sulfur",
+        "elemental sulfur"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": "mineral_identity",
+      "allergen": false,
+      "notes": "Active-label identity for elemental sulfur. Kept distinct from Total Sulfur, which is an analytical content descriptor. Identity-only until a reviewed IQM form model exists.",
+      "common_uses": [
+        "active ingredient identity"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "PII_KOMBUCHA_POWDER",
+      "standard_name": "Kombucha Powder",
+      "aliases": [
+        "kombucha powder"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": "fermented_tea_identity",
+      "allergen": false,
+      "notes": "Active-label identity for powdered kombucha or fermented tea material. Identity-only; no form-quality score is inferred from the name alone.",
+      "common_uses": [
+        "active ingredient identity"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "PII_CREAM",
+      "standard_name": "Cream",
+      "aliases": [
+        "cream"
+      ],
+      "category": "flavor_natural",
+      "is_additive": false,
+      "additive_type": "dairy_ingredient",
+      "allergen": true,
+      "notes": "Milk-derived cream listed as an inactive label ingredient.",
+      "common_uses": [
+        "flavoring"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [
+        "flavor_natural"
+      ]
+    },
+    {
+      "id": "PII_CITRIC_ACID_ESTERS",
+      "standard_name": "Citric Acid Esters",
+      "aliases": [
+        "citric acid esters"
+      ],
+      "category": "emulsifier",
+      "is_additive": true,
+      "additive_type": "emulsifier",
+      "allergen": false,
+      "notes": "Citric-acid ester ingredient class used in supplement formulations.",
+      "common_uses": [
+        "emulsifying"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [
+        "emulsifier"
+      ]
+    },
+    {
+      "id": "PII_1_PROPANOL",
+      "standard_name": "1-Propanol",
+      "aliases": [
+        "propyl alcohol",
+        "1-propanol"
+      ],
+      "category": "solvent",
+      "is_additive": true,
+      "additive_type": "processing_solvent",
+      "allergen": false,
+      "notes": "Identity mapping for propyl alcohol; kept distinct from isopropyl alcohol.",
+      "common_uses": [
+        "processing solvent"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [
+        "solvent"
+      ]
+    },
+    {
+      "id": "PII_NICKEL_AMINO_ACID_CHELATE",
+      "standard_name": "Nickel Amino Acid Chelate",
+      "aliases": [
+        "nickel amino acid chelate"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": "mineral_source_identity",
+      "allergen": false,
+      "notes": "Mineral-source identity preserved from the label without inferring a form-quality score.",
+      "common_uses": [
+        "ingredient identity"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "PII_TANNIC_ACID",
+      "standard_name": "Tannic Acid",
+      "aliases": [
+        "tannic acid"
+      ],
+      "category": "antioxidant",
+      "is_additive": false,
+      "additive_type": "plant_compound_identity",
+      "allergen": false,
+      "notes": "Exact tannic-acid identity used in supplement formulations.",
+      "common_uses": [
+        "antioxidant"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [
+        "antioxidant"
+      ]
+    },
+    {
+      "id": "PII_PHYTOL",
+      "standard_name": "Phytol",
+      "aliases": [
+        "phytol"
+      ],
+      "category": "processing_aid",
+      "is_additive": false,
+      "additive_type": "plant_compound_identity",
+      "allergen": false,
+      "notes": "Exact phytol identity retained when listed among possible processing ingredients.",
+      "common_uses": [
+        "processing aid"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [
+        "processing_aid"
+      ]
+    },
+    {
+      "id": "PII_POTASSIUM_OXIDE",
+      "standard_name": "Potassium Oxide",
+      "aliases": [
+        "potassium oxide"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": "mineral_source_identity",
+      "allergen": false,
+      "notes": "Mineral-source identity preserved from the label without inferring a form-quality score.",
+      "common_uses": [
+        "ingredient identity"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "PII_POLOXAMER",
+      "standard_name": "Poloxamer",
+      "aliases": [
+        "poloxamer"
+      ],
+      "category": "surfactant",
+      "is_additive": true,
+      "additive_type": "surfactant",
+      "allergen": false,
+      "notes": "Polymeric surfactant used in some supplement formulations.",
+      "common_uses": [
+        "surfactant",
+        "emulsifying"
+      ],
+      "last_updated": "2026-08-19",
+      "external_ids": {},
+      "functional_roles": [
+        "surfactant",
+        "emulsifier"
+      ]
+    },
+    {
       "id": "NHA_TOTAL_SULFUR",
       "standard_name": "Total Sulfur",
       "aliases": [
@@ -21368,6 +21603,8 @@
         "E100",
         "turmeric color",
         "turmeric extract color",
+        "Turmeric Oleoresin",
+        "Tumeric Oleoresin",
         "turmeric powder"
       ],
       "category": "colorant_natural",

@@ -260,6 +260,19 @@ def test_cognimag_299037_crossed_hierarchy_names_are_corrected(overrides):
     )
 
 
+def test_megafood_327590_springtail_is_product_scoped_horsetail_correction(
+    overrides,
+):
+    entry = (overrides.get("corrections") or {}).get("327590")
+
+    assert entry, "correction for MegaFood pid=327590 is missing"
+    assert entry["raw_ingredient_text"] == "Springtail"
+    assert entry["corrected_ingredient_text"] == "Spring Horsetail"
+    assert entry["correction_fields"] == ["name"]
+    assert entry["scope"] == "dsld_id_only"
+    assert entry["provenance_tag"] == "official_label_text_correction"
+
+
 def test_no_correction_targets_known_drug_token_globally(overrides):
     """No two corrections may share the same raw_ingredient_text
     targeting a known drug token — that would amount to de-facto

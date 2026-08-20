@@ -302,6 +302,28 @@ def test_product_scoped_correction_repairs_verified_mass_unit_typos(
     )
 
 
+def test_product_scoped_correction_restores_megafood_horsetail_label_text(
+    normalizer,
+):
+    rows = [
+        {
+            **_make_ingredient_row("Springtail", category="botanical"),
+            "ingredientGroup": "TBD",
+            "quantity": [{"quantity": 0, "unit": "NP"}],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    corrected = normalizer._apply_label_corrections(rows, "327590")
+
+    assert corrected[0]["name"] == "Spring Horsetail"
+    assert corrected[0]["_pre_correction_name"] == "Springtail"
+    assert corrected[0]["_label_correction_provenance"] == (
+        "official_label_text_correction"
+    )
+
+
 def test_product_scoped_correction_repairs_crossed_cognimag_hierarchy(normalizer):
     raw_product = _make_raw_product(299037, [])
     raw_product["fullName"] = "CogniMag"

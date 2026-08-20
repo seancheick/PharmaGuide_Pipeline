@@ -55,6 +55,41 @@ def test_tracker_routes_recognized_rows_out_of_unmapped_lists(tmp_path):
     assert recognized["metadata"]["total_recognized"] == 1
 
 
+def test_normalizer_tracking_counts_only_true_identity_gaps(tmp_path):
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer.set_output_directory(tmp_path)
+    normalizer.unmapped_ingredients.update({
+        "Mannitol": 4,
+        "No-dose Blend Child": 3,
+        "Genuinely Unknown Active": 2,
+    })
+    normalizer.unmapped_details.update({
+        "Mannitol": {
+            "is_active": False,
+            "recognized_non_identity": True,
+            "recognition_standard_name": "Sugar Alcohols (Polyols)",
+            "recognition_type": "harmful_additive",
+        },
+        "No-dose Blend Child": {
+            "is_active": True,
+            "non_scoreable_cleaner_row": True,
+            "cleaner_row_role": "nested_display_only",
+            "score_exclusion_reason": "nested_display_only",
+        },
+        "Genuinely Unknown Active": {"is_active": True},
+    })
+
+    result = normalizer.process_and_save_unmapped_tracking()
+
+    assert result == {
+        "active_count": 1,
+        "inactive_count": 0,
+        "total_count": 1,
+        "recognized_count": 1,
+        "non_scoreable_count": 1,
+    }
+
+
 def test_tracker_routes_score_excluded_rows_out_of_unmapped_lists(tmp_path):
     tracker = UnmappedIngredientTracker(tmp_path)
     tracker.process_unmapped_ingredients(

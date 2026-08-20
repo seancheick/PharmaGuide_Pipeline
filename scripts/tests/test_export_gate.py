@@ -316,7 +316,8 @@ def test_uncontained_export_contract_issue_remains_a_blocking_failure(
 
 
 COLUMNS = [
-    "dsld_id", "product_name", "brand_name", "upc_sku", "image_url", "image_is_pdf", "thumbnail_key",
+    "dsld_id", "product_name", "brand_name", "brand_name_raw", "brand_family", "product_line",
+    "upc_sku", "image_url", "image_is_pdf", "thumbnail_key",
     "detail_blob_sha256", "interaction_summary_hint", "decision_highlights",
     "product_status", "discontinued_date", "form_factor", "supplement_type",
     "score_display_100_equivalent",

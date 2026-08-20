@@ -3390,6 +3390,53 @@ class EnhancedDSLDNormalizer:
                     return hit
         return (None, None)
 
+    def _single_foodstate_nutrient_form_identity(
+        self, ingredient: Dict[str, Any]
+    ) -> Optional[Tuple[str, str, str]]:
+        """Resolve a nutrient whose printed row name is a FoodState yeast carrier.
+
+        MegaFood reuses ``FoodState S. cerevisiae`` for several nutrients and
+        declares the actual nutrient as one structured vitamin/mineral form.
+        A global carrier alias would collapse those different nutrients, so
+        only one explicitly typed, IQM-backed form may own the identity.
+        """
+        carrier_name = re.sub(
+            r"[^a-z0-9]+",
+            " ",
+            str(ingredient.get("name") or "").casefold(),
+        ).strip()
+        if carrier_name != "foodstate s cerevisiae":
+            return None
+        forms = [
+            form
+            for form in (ingredient.get("forms") or [])
+            if isinstance(form, dict)
+        ]
+        if len(forms) != 1:
+            return None
+        form = forms[0]
+        if str(form.get("category") or "").strip().casefold() not in {
+            "vitamin",
+            "mineral",
+        }:
+            return None
+        form_name = str(form.get("name") or "").strip()
+        if not form_name:
+            return None
+        standard_name, mapped, _ = self._enhanced_ingredient_mapping(
+            form_name,
+            [],
+            ingredient_group=form.get("ingredientGroup"),
+        )
+        if not mapped:
+            return None
+        canonical_id, source_db = self._resolve_canonical_identity(
+            standard_name, raw_name=form_name
+        )
+        if not canonical_id or source_db != "ingredient_quality_map":
+            return None
+        return standard_name, canonical_id, source_db
+
     def _enhanced_ingredient_mapping(
         self,
         name: str,
@@ -4577,6 +4624,51 @@ class EnhancedDSLDNormalizer:
         for ing in ingredient_rows:
             name = ing.get("name", "")
             nested = ing.get("nestedRows", [])
+
+            # DSLD explicitly marks structural section headings with
+            # ingredientGroup="Header". The heading is label context, not an
+            # active ingredient, but every nested/form child must survive.
+            # This is independent of the heading's wording (for example,
+            # MegaFood's "FoodState Nutrients").
+            if str(ing.get("ingredientGroup") or "").strip().casefold() == "header":
+                children = [
+                    child.get("name", "")
+                    for child in nested
+                    if isinstance(child, dict) and child.get("name")
+                ]
+                children.extend(
+                    form.get("name", "")
+                    for form in (ing.get("forms") or [])
+                    if isinstance(form, dict) and form.get("name")
+                )
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="activeIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    source_row=ing,
+                    children=children,
+                )
+                for nested_ing in nested:
+                    if not isinstance(nested_ing, dict):
+                        continue
+                    nested_copy = dict(nested_ing)
+                    nested_copy["parentBlend"] = name or "Header"
+                    nested_copy["parent_source_path"] = ing.get("raw_source_path")
+                    nested_copy["isNestedIngredient"] = True
+                    flattened.extend(
+                        self._flatten_nested_ingredients(
+                            [nested_copy], _depth=_depth + 1
+                        )
+                    )
+                if not nested and ing.get("forms"):
+                    flattened.extend(
+                        self._expand_header_forms_for_processing(
+                            ing,
+                            ing.get("raw_source_path") or "activeIngredients",
+                        )
+                    )
+                continue
 
             # LABEL HEADER CHECK: Must happen BEFORE skip check
             # Label headers like "Less than 2% of:" are in skip_exact but we need to extract their forms first
@@ -6549,8 +6641,24 @@ class EnhancedDSLDNormalizer:
         # Result shape mirrors _enhanced_ingredient_mapping: (std_name, mapped, forms).
         unii_canonical_id = None
         unii_canonical_source_db = None
-        unii_match_result = self._try_unii_match(ing)
-        if unii_match_result is not None:
+        foodstate_nutrient_identity = (
+            self._single_foodstate_nutrient_form_identity(ing)
+            if is_active
+            else None
+        )
+        unii_match_result = (
+            None if foodstate_nutrient_identity else self._try_unii_match(ing)
+        )
+        if foodstate_nutrient_identity is not None:
+            (
+                standard_name,
+                unii_canonical_id,
+                unii_canonical_source_db,
+            ) = foodstate_nutrient_identity
+            mapped = True
+            mapped_forms = forms or []
+            ing["_sprint1_match_method"] = "single_declared_nutrient_form"
+        elif unii_match_result is not None:
             unii_payload, unii_method = unii_match_result
             standard_name = unii_payload.get("standard_name", name)
             unii_canonical_id = unii_payload.get("canonical_id")
@@ -6842,9 +6950,16 @@ class EnhancedDSLDNormalizer:
                 unii_canonical_source_db or "ingredient_quality_map"
             )
         else:
-            canonical_id, canonical_source_db = self._resolve_canonical_identity(
-                standard_name, raw_name=raw_name,
-            )
+            if is_active:
+                canonical_id, canonical_source_db = self._resolve_canonical_identity(
+                    standard_name, raw_name=raw_name,
+                )
+            else:
+                canonical_id, canonical_source_db = (
+                    self._resolve_inactive_canonical_identity(
+                        raw_name, standard_name
+                    )
+                )
         # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
         # Two directions handled atomically:
         #   (a) is_mapped=False → force canonical to None + "unmapped" source.
@@ -7389,8 +7504,8 @@ class EnhancedDSLDNormalizer:
         # Prefer raw_name for the reverse-index lookup — see primary site
         # in the active-ingredient builder for the fish-oil-vs-omega-3
         # rationale.
-        canonical_id, canonical_source_db = self._resolve_canonical_identity(
-            standard_name, raw_name=name,
+        canonical_id, canonical_source_db = (
+            self._resolve_inactive_canonical_identity(name, standard_name)
         )
         # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
         # See primary site in active-ingredient builder for rationale.
@@ -7506,8 +7621,10 @@ class EnhancedDSLDNormalizer:
                         form_allergen_info["is_allergen"] or
                         form_is_proprietary
                     )
-                    form_canonical_id, form_canonical_source_db = self._resolve_canonical_identity(
-                        form_std_name, raw_name=form_name,
+                    form_canonical_id, form_canonical_source_db = (
+                        self._resolve_inactive_canonical_identity(
+                            form_name, form_std_name
+                        )
                     )
 
                     if (
@@ -7549,8 +7666,10 @@ class EnhancedDSLDNormalizer:
                         form_allergen_info["is_allergen"] or
                         form_is_proprietary
                     )
-                    form_canonical_id, form_canonical_source_db = self._resolve_canonical_identity(
-                        form_std_name, raw_name=form_name,
+                    form_canonical_id, form_canonical_source_db = (
+                        self._resolve_inactive_canonical_identity(
+                            form_name, form_std_name
+                        )
                     )
 
                     if (
@@ -7658,8 +7777,8 @@ class EnhancedDSLDNormalizer:
             # CANONICAL IDENTITY + NUTRIENT CONTEXT (Phase 1b/1c, inactive-fallback path).
             # raw_name first so the reverse index recovers specific parents
             # that the fuzzy matcher collapsed (fish_oil vs omega_3 etc.).
-            canonical_id_f, canonical_source_db_f = self._resolve_canonical_identity(
-                standard_name, raw_name=name,
+            canonical_id_f, canonical_source_db_f = (
+                self._resolve_inactive_canonical_identity(name, standard_name)
             )
             # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
             # See primary site in active-ingredient builder for rationale.
@@ -10157,9 +10276,18 @@ class EnhancedDSLDNormalizer:
         self.unmapped_tracker.save_tracking_files()
         
         return {
-            "active_count": len(active_ingredients),
-            "inactive_count": len(unmapped_data) - len(active_ingredients),
-            "total_count": len(unmapped_data)
+            "active_count": len(self.unmapped_tracker.unmapped_active),
+            "inactive_count": len(self.unmapped_tracker.unmapped_inactive),
+            "total_count": (
+                len(self.unmapped_tracker.unmapped_active)
+                + len(self.unmapped_tracker.unmapped_inactive)
+            ),
+            "recognized_count": len(
+                self.unmapped_tracker.recognized_non_identity
+            ),
+            "non_scoreable_count": len(
+                self.unmapped_tracker.non_scoreable_unmapped
+            ),
         }
     
     def _is_nutrition_fact(
@@ -10694,6 +10822,7 @@ class EnhancedDSLDNormalizer:
             r"^contains?\s+\d+%\s+or\s+less\s+of:?$",
             r"^may\s+contain\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
             r"^may(?:\s+also)?\s+contain:?$",
+            r"^may(?:\s+also)?\s+contain\s*<?\s*\d+(?:\.\d+)?%:?$",
             r"^contains?\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
             r".*\b(shell|capsule)\s+ingredients:?$",
             # 2026-05-15: suffix-less percentage fragments. DSLD occasionally parses
@@ -10924,6 +11053,46 @@ class EnhancedDSLDNormalizer:
                 return other_ingredient.get("standard_name", candidate), True, forms or []
 
         return self._enhanced_ingredient_mapping(name, forms, ingredient_group=ingredient_group)
+
+    def _resolve_inactive_canonical_identity(
+        self,
+        raw_name: str,
+        standard_name: str,
+    ) -> Tuple[Optional[str], Optional[str]]:
+        """Resolve inactive identity from its owning taxonomy before IQM.
+
+        Some excipient names are also nutrient-form aliases in IQM. In an
+        inactive label section, ``other_ingredients.json`` owns that identity;
+        using the shared cross-database resolver can otherwise return an
+        ambiguity and incorrectly report a known excipient as unmapped.
+        """
+        candidates = (raw_name, standard_name)
+        for candidate in candidates:
+            exact = self.other_ingredients_exact_lookup.get(
+                str(candidate or "").strip().casefold()
+            )
+            if exact and exact.get("id"):
+                canonical_id, source_db = (
+                    self._canonical_identity_registry.canonicalize(
+                        str(exact["id"]), "other_ingredients"
+                    )
+                )
+                return canonical_id, source_db
+
+        for candidate in candidates:
+            processed = self.matcher.preprocess_text(candidate)
+            entry = self.other_ingredients_lookup.get(processed)
+            if entry and entry.get("id"):
+                canonical_id, source_db = (
+                    self._canonical_identity_registry.canonicalize(
+                        str(entry["id"]), "other_ingredients"
+                    )
+                )
+                return canonical_id, source_db
+
+        return self._resolve_canonical_identity(
+            standard_name, raw_name=raw_name
+        )
     
     def _is_proprietary_blend_name(self, name: str) -> bool:
         """Check if ingredient name contains proprietary blend indicators"""
