@@ -146,6 +146,51 @@ def test_underdosed_single_cluster_hidden_from_synergy_display():
     }
     blob = build_detail_blob(enriched, {})
     detail = blob.get("synergy_detail") or {}
-    ids = [c.get("id") for c in detail.get("clusters", [])]
+    ids = [c.get("cluster_id") for c in detail.get("clusters", [])]
     assert "stress_resilience" in ids, "real synergy must still display"
     assert "sleep_stack" not in ids, "underdosed_single must be suppressed from display"
+
+
+def test_synergy_display_uses_v4_low_dose_status_over_stale_enrichment_flag():
+    enriched = {
+        "formulation_data": {
+            "synergy_clusters": [
+                {
+                    "cluster_id": "stress_resilience",
+                    "cluster_name": "Stress Resilience",
+                    "evidence_tier": 2,
+                    "matched_ingredients": [
+                        {
+                            "ingredient": "Ashwagandha",
+                            "canonical_id": "ashwagandha",
+                            "meets_minimum": True,
+                        },
+                        {
+                            "ingredient": "L-Theanine",
+                            "canonical_id": "l_theanine",
+                            "meets_minimum": True,
+                        },
+                    ],
+                    "match_count": 2,
+                    "all_adequate": True,
+                }
+            ]
+        }
+    }
+    scored = {
+        "_v4_module_breakdown": {
+            "dimensions": {
+                "evidence": {
+                    "metadata": {
+                        "sub_clinical_canonicals": ["l_theanine"],
+                    }
+                }
+            }
+        }
+    }
+
+    blob = build_detail_blob(enriched, scored)
+
+    cluster = blob["synergy_detail"]["clusters"][0]
+    assert cluster["cluster_id"] == "stress_resilience"
+    assert cluster["all_adequate"] is False

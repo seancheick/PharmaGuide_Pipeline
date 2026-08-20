@@ -185,20 +185,21 @@ def test_blob_preserves_indeterminate_ul_review_flags() -> None:
     assert blob["rda_ul_data"]["ul_review_flags"] == [review_flag]
 
 
-def test_discontinued_produces_top_level_product_status_not_warning() -> None:
-    """Discontinued products emit top-level `product_status` dict, not a
+def test_discontinued_produces_status_detail_and_compat_alias_not_warning() -> None:
+    """Discontinued products emit canonical detail plus the 2.4 alias, not a
     warning. Schema: {type, date, display} — `type` (not `status`) for
     forward compatibility with additional non-safety statuses."""
     enriched = _minimal_enriched(status="discontinued", disc_date="2022-12-13")
     blob = build_detail_blob(enriched, _minimal_scored())
 
-    ps = blob.get("product_status")
+    ps = blob.get("product_status_detail")
     assert ps is not None, (
-        "discontinued product must emit top-level product_status dict"
+        "discontinued product must emit top-level product_status_detail dict"
     )
     assert ps["type"] == "discontinued"
     assert ps["date"] == "2022-12-13"
     assert "Discontinued" in ps["display"]
+    assert blob["product_status"] == ps
 
     # And critically: NO warning of type='status' in the warnings list.
     for bucket in ("warnings", "warnings_profile_gated"):
@@ -209,23 +210,25 @@ def test_discontinued_produces_top_level_product_status_not_warning() -> None:
             )
 
 
-def test_off_market_produces_top_level_product_status_not_warning() -> None:
+def test_off_market_produces_status_detail_and_compat_alias_not_warning() -> None:
     enriched = _minimal_enriched(status="off_market")
     blob = build_detail_blob(enriched, _minimal_scored())
 
-    ps = blob.get("product_status")
+    ps = blob.get("product_status_detail")
     assert ps is not None
     assert ps["type"] == "off_market"
     assert "Off-market" in ps["display"]
+    assert blob["product_status"] == ps
 
     for bucket in ("warnings", "warnings_profile_gated"):
         for w in blob.get(bucket, []) or []:
             assert w.get("type") != "status"
 
 
-def test_active_product_emits_null_product_status() -> None:
-    """Active products have product_status = None — Flutter hides the
+def test_active_product_emits_null_status_detail_and_compat_alias() -> None:
+    """Active products have no status detail — Flutter reads core `active` and
     chip entirely for these."""
     enriched = _minimal_enriched(status=None)
     blob = build_detail_blob(enriched, _minimal_scored())
+    assert blob.get("product_status_detail") is None
     assert blob.get("product_status") is None

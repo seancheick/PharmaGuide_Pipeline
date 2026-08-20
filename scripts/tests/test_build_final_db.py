@@ -39,6 +39,7 @@ from build_final_db import (
     stage_products_by_id,
     validate_export_contract,
 )
+from core_export_model import PRODUCTS_CORE_COLUMNS as CANONICAL_CORE_COLUMNS
 
 
 def test_profile_gated_hard_safety_projection_updates_every_status_surface():
@@ -228,6 +229,9 @@ PRODUCTS_CORE_COLUMNS = [
     "quality_tier",
     "quality_score_suppressed_reason",
     "v4_module",
+    "quality_score_confidence",
+    "score_unavailable_reason",
+    "route_confidence",
     "v4_confidence",
     "score_model_version",
     "quality_score_version",
@@ -319,6 +323,10 @@ PRODUCTS_CORE_COLUMNS = [
     "export_version",
     "exported_at",
 ]
+
+# Row helper follows the production-owned export model. The literal list above
+# remains temporarily as a review aid and is removed in the schema-3 cleanup.
+PRODUCTS_CORE_COLUMNS = list(CANONICAL_CORE_COLUMNS)
 
 
 def row_as_dict(row):
@@ -3102,8 +3110,8 @@ def test_final_db_has_114_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 114
-    assert len(PRODUCTS_CORE_COLUMNS) == 114
+    assert len(row) == CORE_COLUMN_COUNT
+    assert len(PRODUCTS_CORE_COLUMNS) == CORE_COLUMN_COUNT
 
 
 def test_products_core_exports_production_v4_columns():
@@ -3112,7 +3120,10 @@ def test_products_core_exports_production_v4_columns():
     assert "product_safety_status" in PRODUCTS_CORE_COLUMNS
     assert "quality_assessment_status" in PRODUCTS_CORE_COLUMNS
     assert "v4_module" in PRODUCTS_CORE_COLUMNS
-    assert "v4_confidence" in PRODUCTS_CORE_COLUMNS
+    assert "quality_score_confidence" in PRODUCTS_CORE_COLUMNS
+    assert "score_unavailable_reason" in PRODUCTS_CORE_COLUMNS
+    assert "route_confidence" in PRODUCTS_CORE_COLUMNS
+    assert "v4_confidence" in PRODUCTS_CORE_COLUMNS  # 2.4 compatibility alias
     assert not any(col.startswith("shadow_") for col in PRODUCTS_CORE_COLUMNS)
 
 
@@ -3308,13 +3319,13 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_114(self):
+    def test_core_row_column_count_matches_export_model(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 114
-        assert CORE_COLUMN_COUNT == 114
+        assert len(row) == CORE_COLUMN_COUNT
+        assert CORE_COLUMN_COUNT == len(PRODUCTS_CORE_COLUMNS)
 
     def test_schema_version_bumped_for_independent_consumer_semantics(self):
-        assert EXPORT_SCHEMA_VERSION == "2.3.0"
+        assert EXPORT_SCHEMA_VERSION == "2.4.0"
 
     def test_detail_blob_emits_demoted_absorption_enhancers(self):
         """Sprint E1.23 follow-up (2026-05-09): the enricher produces

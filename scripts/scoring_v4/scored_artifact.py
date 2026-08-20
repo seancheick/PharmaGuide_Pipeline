@@ -201,6 +201,19 @@ def assemble_scored_artifact(
     strict_contract = dict(diagnostics["strict_scoring_contract"])
     scored_at = datetime.now(timezone.utc).isoformat()
     config_fingerprint = _config_fingerprint(provenance)
+    classification = _safe_dict(
+        enriched_product.get("product_scoring_classification")
+    )
+    route_decision = dict(_safe_dict(classification.get("route_decision")))
+    route_confidence = (
+        route_decision.get("confidence")
+        if route_decision
+        else classification.get("route_confidence")
+    )
+    if route_decision and route_decision.get("module") != v4.get("v4_module"):
+        raise RuntimeError(
+            "canonical route decision diverged from the scoring module"
+        )
 
     artifact: Dict[str, Any] = {
         "dsld_id": enriched_product.get("dsld_id"),
@@ -248,6 +261,8 @@ def assemble_scored_artifact(
         "quality_score_status": status,
         "quality_score_confidence": score_confidence,
         "score_unavailable_reason": score_unavailable_reason,
+        "route_decision": route_decision or None,
+        "route_confidence": route_confidence,
         "product_safety_status": product_safety_status,
         "quality_assessment_status": quality_assessment_status,
         "assessment_readiness": assessment_readiness,
@@ -293,6 +308,7 @@ def assemble_scored_artifact(
         ),
         "_v4_confidence": score_confidence,
         "_v4_score_unavailable_reason": score_unavailable_reason,
+        "_v4_route_decision": route_decision or None,
         "_v4_confidence_detail": breakdown.get("confidence"),
         "_v4_quality_version": v4.get("quality_score_version"),
         "_v4_pillars": v4.get("quality_pillars_v4"),

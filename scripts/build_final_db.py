@@ -56,6 +56,10 @@ from audit_evidence_utils import (
 )
 from audit_identity_integrity import audit_product
 from brand_identity import BrandIdentity, BrandRegistry
+from core_export_model import (
+    PRODUCTS_CORE_COLUMNS,
+    build_projection_manifest,
+)
 from inactive_ingredient_resolver import (
     InactiveIngredientResolver,
     active_form_duplicate_candidate,
@@ -94,7 +98,7 @@ from scoring_v4.scored_artifact import (
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "2.3.0"  # adds typed v4 dose-safety detail-blob summary
+EXPORT_SCHEMA_VERSION = "2.4.0"  # additive score/route/status compatibility bridge
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -2221,6 +2225,10 @@ CREATE TABLE IF NOT EXISTS products_core (
     quality_tier                    TEXT,
     quality_score_suppressed_reason TEXT,
     v4_module                       TEXT,
+    quality_score_confidence        TEXT,
+    score_unavailable_reason        TEXT,
+    route_confidence                TEXT,
+    -- One-release schema-2.4 alias for app builds that still read this name.
     v4_confidence                   TEXT,
     score_model_version             TEXT,
     quality_score_version           TEXT,
@@ -7486,7 +7494,14 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             best_tier = min(best_tier, tier)
             matched = safe_list(sc.get("matched_ingredients"))
             matched_names = [m.get("ingredient", "") for m in matched if isinstance(m, dict)]
+            v4_low_dose = {
+                safe_str(item.get("canonical_id") or item.get("ingredient_canonical"))
+                for item in matched
+                if isinstance(item, dict)
+            } & v4_sub_clinical_canonicals(scored)
             synergy_display.append({
+                "cluster_id": safe_str(sc.get("cluster_id")),
+                # Schema-2.4 compatibility alias. Schema 3 keeps cluster_id only.
                 "id": safe_str(sc.get("cluster_id")),
                 "name": safe_str(sc.get("cluster_name")),
                 "evidence_tier": tier,
@@ -7496,7 +7511,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "benefit_short": safe_str(sc.get("synergy_benefit_short")),
                 "matched_ingredients": matched_names,
                 "match_count": len(matched),
-                "all_adequate": json_bool(sc.get("all_adequate")),
+                "all_adequate": bool(
+                    json_bool(sc.get("all_adequate")) and not v4_low_dose
+                ),
                 "pmids": safe_list(sc.get("pmids")),
                 # Single-ingredient override signal — true when the cluster
                 # qualified via a lone primary ingredient at adequate dose
@@ -7536,17 +7553,31 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # Formulation context — explains A3/A4/A5a/A5b bonus reasons
     delivery_data = safe_dict(enriched.get("delivery_data"))
     absorption_data = safe_dict(enriched.get("absorption_data"))
+    delivery_systems = [
+        system
+        for system in safe_list(delivery_data.get("systems"))
+        if isinstance(system, dict)
+    ]
+    delivery_systems.sort(
+        key=lambda system: (
+            safe_float(system.get("tier"), 999),
+            safe_str(system.get("canonical_name") or system.get("name")),
+        )
+    )
+    primary_delivery = delivery_systems[0] if delivery_systems else {}
     blob["formulation_detail"] = {
         "delivery_tier": safe_str(
             enriched.get("delivery_tier")
             or delivery_data.get("highest_tier")
         ),
-        "delivery_form": safe_str(delivery_data.get("delivery_form")),
+        "delivery_form": safe_str(
+            primary_delivery.get("canonical_name") or primary_delivery.get("name")
+        ),
         "absorption_enhancer_paired": json_bool(
             enriched.get("absorption_enhancer_paired")
             or absorption_data.get("qualifies_for_bonus")
         ),
-        "absorption_enhancers": safe_list(absorption_data.get("enhancers_found")),
+        "absorption_enhancers": safe_list(absorption_data.get("enhancers")),
         "is_certified_organic": json_bool(enriched.get("is_certified_organic")),
         "organic_verification": safe_str(
             formulation_data.get("organic", {}).get("verification_status")
@@ -7666,7 +7697,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     _raw_status = normalize_text(enriched.get("status"))
     if _raw_status in ("discontinued", "off_market"):
         _disc_date = safe_str(enriched.get("discontinuedDate"))[:10] or None
-        blob["product_status"] = {
+        product_status_detail = {
             "type": _raw_status,
             "date": _disc_date,
             "display": (
@@ -7675,7 +7706,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 else "Off-market"
             ),
         }
+        blob["product_status_detail"] = product_status_detail
+        # Additive 2.4 alias for older app builds. Schema 3 removes this copy.
+        blob["product_status"] = product_status_detail
     else:
+        blob["product_status_detail"] = None
         blob["product_status"] = None
 
     # Opaque-product flags: split by WHY the active is unidentifiable so Flutter
@@ -7738,6 +7773,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "classification_schema_version": scored.get("_v4_classification_schema_version"),
             "module": scored.get("_v4_module"),
             "confidence": scored.get("_v4_confidence"),
+            "score_unavailable_reason": scored.get("_v4_score_unavailable_reason"),
+            "route_decision": scored.get("_v4_route_decision"),
+            "route_confidence": scored.get("route_confidence"),
             "config_fingerprint": scored.get("_v4_config_fingerprint"),
             "suppressed_reason": scored.get("_v4_suppressed_reason"),
             "safety_signal_reason": scored.get("_v4_safety_signal_reason"),
@@ -9687,6 +9725,10 @@ def build_core_row(
         safe_str(effective_scored.get("_v4_quality_tier")) or None,
         safe_str(effective_scored.get("_v4_suppressed_reason")) or None,
         safe_str(effective_scored.get("_v4_module")) or None,
+        safe_str(effective_scored.get("quality_score_confidence")) or None,
+        safe_str(effective_scored.get("score_unavailable_reason")) or None,
+        safe_str(effective_scored.get("route_confidence")) or None,
+        # Schema-2.4 compatibility alias.
         safe_str(effective_scored.get("_v4_confidence")) or None,
         safe_str(effective_scored.get("_score_model_version")) or None,
         safe_str(effective_scored.get("_v4_quality_version")) or None,
@@ -9797,7 +9839,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 114  # Must match the tuple above and SCHEMA_SQL (v2.3.0 omits the internal raw score)
+CORE_COLUMN_COUNT = len(PRODUCTS_CORE_COLUMNS)
 
 
 # ─── Reference Data Loader ───
@@ -10421,6 +10463,18 @@ def build_final_db(
         json.dump(detail_index, f, indent=2, sort_keys=True)
     detail_index_checksum = compute_file_sha256(detail_index_path)
 
+    projection_manifest = build_projection_manifest(
+        export_schema_version=EXPORT_SCHEMA_VERSION
+    )
+    projection_manifest_path = os.path.join(
+        output_dir, "core_projection_manifest.json"
+    )
+    with open(projection_manifest_path, "w", encoding="utf-8") as f:
+        json.dump(projection_manifest, f, indent=2, sort_keys=True)
+    projection_manifest_checksum = compute_file_sha256(
+        projection_manifest_path
+    )
+
     # Also write manifest as standalone JSON
     manifest_dict = {
         "db_version": db_version,
@@ -10439,6 +10493,18 @@ def build_final_db(
             entry["blob_sha256"] for entry in detail_index.values()
         }),
         "detail_index_checksum": f"sha256:{detail_index_checksum}",
+        "core_projection_manifest": {
+            "path": "core_projection_manifest.json",
+            "checksum": f"sha256:{projection_manifest_checksum}",
+            "model_version": projection_manifest["model_version"],
+            "model_sha256": projection_manifest["model_sha256"],
+            "app_core_column_count": projection_manifest["app_core"][
+                "column_count"
+            ],
+            "server_core_column_count": projection_manifest["server_core"][
+                "column_count"
+            ],
+        },
         "min_app_version": MIN_APP_VERSION,
         "schema_version": EXPORT_SCHEMA_VERSION,
         "score_model": score_model,

@@ -163,6 +163,28 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     assert not any("mapped_coverage" in issue for issue in issues)
 
 
+def test_scored_artifact_exports_the_canonical_route_decision() -> None:
+    product = _product()
+    product["product_scoring_classification"] = {
+        "route_module": "generic",
+        "route_confidence": "high",
+        "route_evidence": ["single_mineral", "scoring_rows_present"],
+        "route_decision": {
+            "module": "generic",
+            "reason_codes": ["single_mineral", "scoring_rows_present"],
+            "confidence": "high",
+            "classifier_version": "1.1.0",
+        },
+    }
+
+    artifact = scored_artifact.assemble_scored_artifact(product, _canned_v4())
+
+    expected = product["product_scoring_classification"]["route_decision"]
+    assert artifact["route_decision"] == expected
+    assert artifact["route_confidence"] == "high"
+    assert artifact["_v4_route_decision"] == expected
+
+
 def test_unresolved_dose_safety_exports_typed_summary_and_partial_assessment() -> None:
     v4 = _canned_v4(safety_verdict="CAUTION")
     v4["v4_breakdown"]["dose_safety"] = {

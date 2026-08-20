@@ -22,9 +22,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from build_final_db import CORE_COLUMN_COUNT, SCHEMA_SQL  # noqa: E402
-
-# Reuse the canonical column list maintained alongside the row-builder.
-from test_build_final_db import PRODUCTS_CORE_COLUMNS  # noqa: E402
+from core_export_model import PRODUCTS_CORE_COLUMNS  # noqa: E402
 
 
 def _pragma_columns() -> list[str]:

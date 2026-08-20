@@ -40,6 +40,7 @@ from build_final_db import (
     validate_export_contract,
     write_audit_report,
 )
+from core_export_model import PRODUCTS_CORE_COLUMNS
 
 
 def test_nested_interaction_safety_hits_ship_compact_dose_provenance_only():
@@ -363,6 +364,10 @@ COLUMNS = [
     "scoring_version", "output_schema_version", "enrichment_version", "scored_date",
     "export_version", "exported_at",
 ]
+
+# The exporter owns insert order; tests consume the model instead of silently
+# maintaining a fourth schema copy.
+COLUMNS = list(PRODUCTS_CORE_COLUMNS)
 
 
 def _row_dict(enriched, scored):
@@ -1111,6 +1116,36 @@ class TestFormulationDetail:
         assert "standardized_botanicals" in fd
         assert "synergy_cluster_qualified" in fd
         assert "claim_non_gmo_verified" in fd
+
+    def test_formulation_detail_reads_the_enricher_canonical_keys(self):
+        enriched = _base_enriched()
+        enriched["delivery_data"] = {
+            "highest_tier": 1,
+            "systems": [
+                {
+                    "name": "liposomal",
+                    "canonical_name": "liposomal",
+                    "tier": 1,
+                }
+            ],
+        }
+        enriched["absorption_data"] = {
+            "qualifies_for_bonus": True,
+            "enhancers": [
+                {
+                    "name": "Piperine",
+                    "id": "piperine",
+                    "enhances": ["Curcumin"],
+                }
+            ],
+        }
+
+        detail = build_detail_blob(enriched, _base_scored())["formulation_detail"]
+
+        assert detail["delivery_form"] == "liposomal"
+        assert detail["delivery_tier"] == "1"
+        assert detail["absorption_enhancer_paired"] is True
+        assert detail["absorption_enhancers"] == enriched["absorption_data"]["enhancers"]
 
     def test_all_ingredients_always_listed(self):
         """Every active and inactive ingredient must appear in blob."""
