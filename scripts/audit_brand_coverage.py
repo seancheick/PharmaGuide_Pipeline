@@ -64,7 +64,6 @@ from __future__ import annotations
 import argparse
 import collections
 import json
-import os
 import sys
 import time
 from pathlib import Path
@@ -72,8 +71,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from dsld_api_client import DSLDApiClient  # noqa: E402
+from dataset_paths import brand_dataset_root  # noqa: E402
 
-DEFAULT_ROOT = Path.home() / "Downloads" / "PharmaGuide_Datasets" / "staging" / "brands"
+DEFAULT_ROOT = brand_dataset_root()
 
 # Mirrors the infrastructure blocklist in batch_run_all_datasets.sh so this
 # audit sees exactly the folders the pipeline would process.
@@ -91,9 +91,9 @@ SKIP_DIRS = {
 # rate limits aggressively; 3 req/s is the documented ceiling.
 REQUEST_PAUSE_SECONDS = 0.35
 
-# Labels entered on or after this date count as "fresh". A brand whose newest
-# label predates it has stopped filing with DSLD and will not match current
-# shelf stock.
+# Labels loaded on or after this date count as "fresh". A brand whose newest
+# label predates it has not appeared in a recent published DSLD batch. That is
+# an availability warning, not evidence about manufacturer filing behavior.
 DEFAULT_FRESH_SINCE = "2024-01-01"
 
 
@@ -119,7 +119,8 @@ def common_word_prefix(names: list[str]) -> str:
     """Longest shared leading word sequence, compared case-insensitively.
 
     Casing is taken from the first name so the query reads naturally.
-    Falls back to the shortest name when the very first word already differs.
+    Returns an empty string when no safe shared prefix exists; callers must
+    provide an explicit brand-map override instead of guessing.
     """
     if not names:
         return ""
@@ -130,7 +131,7 @@ def common_word_prefix(names: list[str]) -> str:
         if len(distinct) != 1:
             break
         shared.append(token_lists[0][index])
-    return " ".join(shared) if shared else min(names, key=len)
+    return " ".join(shared)
 
 
 def live_count(client: DSLDApiClient, query: str, status: int) -> int | None:
@@ -241,6 +242,17 @@ def main() -> int:
 
         names, dates = scan_folder(folder)
         query = overrides.get(folder.name) or common_word_prefix(list(names))
+        if not query:
+            # The folder is an operator-reviewed brand boundary. Its slug is a
+            # safer fallback than choosing one arbitrary raw sub-brand.
+            query = folder.name.replace("_", " ").replace("-", " ")
+        if not query:
+            print(
+                f"{folder.name:26} {on_disk:>8} {'ERROR':>13}   "
+                "no safe brand query; add --brand-map override"
+            )
+            problems.append(f"{folder.name}: no safe derived brand query")
+            continue
 
         newest = max(dates) if dates else "-"
         fresh_pct = (
@@ -304,8 +316,8 @@ def main() -> int:
 
     if stale_brands:
         print(
-            f"\nSTALE — complete, but no label filed since {args.fresh_since}. "
-            "These will not match current shelf stock however much we download:"
+            f"\nSTALE — complete, but no label appeared in a published DSLD "
+            f"batch since {args.fresh_since}. Newer shelf products may be missing:"
         )
         for stale_brand in stale_brands:
             print(f"  - {stale_brand}")
