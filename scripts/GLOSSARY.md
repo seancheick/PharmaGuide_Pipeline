@@ -19,12 +19,14 @@ contract name elsewhere.
 | **Run ID** | Path-safe identifier shared across enrichment, gates, scoring, and reports for one operational run. |
 | **Snapshot** | The paired catalog artifacts in `scripts/final_db_output/` and `scripts/dist/`, built from all current per-brand Enrich/Score outputs. |
 | **Candidate** | A temporary sibling directory used to build and gate a proposed snapshot without touching the live snapshot. |
+| **Candidate-only build** | A fully gated snapshot build preserved at a new, explicit output path. It stops before live promotion, Supabase upload, Flutter import, cleanup, commit, or push. |
 | **Promotion** | Atomic replacement of both live snapshot directories after every candidate gate passes. Failed candidates are deleted; the last good live snapshot remains. |
 | **Release** | The auto-smart workflow in `scripts/release_full.sh`: ensure the snapshot is current, update images and interactions when needed, run strict gates, then sync Supabase and import the Flutter bundle. |
 | **Auto-smart** | A release step runs only when inputs, checksums, or manifests show that its output is stale. It is not permission to skip gates. |
 | **Contract quarantine** | A product intentionally excluded from the shipped catalog because its output cannot satisfy the export contract, while the build continues and records the exclusion. |
 | **Contract failure** | A systemic or required-contract error that stops candidate promotion or release. |
 | **Scoring snapshot contract** | Per-product regression fixtures checked immediately before Supabase/Flutter publication. Intentional deltas must be reviewed and explicitly re-frozen. |
+| **Scoring integrity snapshot** | A self-hashed, manifest-owned freeze of per-product routes, scores, pillars, statuses, verdicts, exclusions, artifact hashes, and payload byte accounting. It is the comparison authority for one integrity candidate; it is not a scoring input. |
 | **Artifact freshness** | Proof that catalog, manifest, interactions, and upstream product outputs describe the same current state. |
 
 ## Canonical stages
