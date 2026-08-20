@@ -21,7 +21,7 @@
 - [ ] User runs the single final Clean → Enrich → Score pipeline after this branch is integrated. Do not start that long run from this plan executor.
 - [ ] After that run passes, assemble/measure the full offline/online candidate and proceed through the existing release gates.
 
-Raw labels remain outside Git in `/Users/seancheick/Documents/DataSetDsld/staging/brands`. Git owns the downloader, identity registry, mappings, corrections, tests, and release contracts—not a duplicate copy of downloaded staging data.
+Raw labels remain outside Git in the canonical non-iCloud staging root at `/Users/seancheick/Downloads/PharmaGuide_Datasets/staging/brands`. Git owns the downloader, identity registry, mappings, corrections, tests, and release contracts. The older `Documents/DataSetDsld` tree is not an operational pipeline root.
 
 ---
 
