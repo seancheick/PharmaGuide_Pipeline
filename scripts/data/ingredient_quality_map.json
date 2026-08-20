@@ -40,8 +40,8 @@
     "statistics": {
       "total_parents": 631,
       "total_forms": 1421,
-      "total_form_aliases": 12108,
-      "parents_with_parent_aliases": 117,
+      "total_form_aliases": 12118,
+      "parents_with_parent_aliases": 119,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -60,8 +60,8 @@
       "proteins": 16,
       "vitamins": 25
     },
-    "schema_version": "5.5.2",
-    "last_updated": "2026-08-19",
+    "schema_version": "5.5.3",
+    "last_updated": "2026-08-20",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1702,6 +1702,16 @@
         "changes": [
           "Linked the standalone beta_carotene canonical to the vitamin_a nutrient group for shared adequacy accounting without inheriting the preformed-Vitamin-A UL."
         ]
+      },
+      "5.5.3": {
+        "date": "2026-08-20",
+        "audit": "wave_one_label_identity_alias_reconciliation",
+        "changes": [
+          "Mapped six exact Wave One label spellings to existing canonical ingredients and disclosed forms without changing any quality score.",
+          "Kept Lactobacillus jensenii LBV 116 and Black Mustard extract at parent identity because those labels do not justify a more specific scored form.",
+          "Added Polydatin as an exact alias of the existing stilbenes (resveratrol-family) form for safe single-form identity recovery."
+        ],
+        "regression_tests": "scripts/tests/test_unmapped_report_recognition_split.py -k wave_one"
       }
     },
     "category_enum": [
@@ -13527,7 +13537,8 @@
           "stilbenes",
           "stilbene complex",
           "grape stilbenes",
-          "polyphenolic stilbenes"
+          "polyphenolic stilbenes",
+          "Polydatin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16200,10 +16211,10 @@
           "boron protein chelate",
           "boron gluconate",
           "boron hydrolyzed vegetable protein",
-          "boron chelate",
-          "boric acid",
-          "sodium borate",
-          "boric acid, sodium borate"
+        "boron chelate",
+        "boric acid",
+        "sodium borate",
+        "boric acid, sodium borate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17594,10 +17605,14 @@
         "aliases": [
           "c3 curcumin",
           "curcumin c3",
+          "curcumin c3 complex turmeric extract",
           "curcumin 95%",
           "curcuminoids 95%",
           "standardized curcumin",
           "sabinsa curcumin"
+        ],
+        "same_identity_aliases": [
+          "curcumin c3 complex turmeric extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -24140,7 +24155,9 @@
           "ksm66 ashwagandha",
           "ashwagandha ksm66",
           "ksm-66 organic ashwagandha root extract",
-          "KSM-66 Full-Spectrum Ashwagandha root extract"
+          "KSM-66 Full-Spectrum Ashwagandha root extract",
+          "KSM66 Ashwagandha root extract",
+          "KSM66 Ashwagandha (Withania somnifera) root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -27868,7 +27885,9 @@
         "notes": "Form not specified on the label. Cranberry products range from standardized PAC extracts (proanthocyanidins) to juice concentrates and whole fruit powders. PAC type (A-type vs B-type) and concentration determine anti-adhesion activity against urinary tract bacteria. Scored conservatively. B32 audit 2026-04-25: PAC/anthocyanin class-poor.",
         "aliases": [
           "cranberry",
-          "vitacran"
+          "vitacran",
+          "Cran-Max",
+          "Cran-Max Cranberry concentrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -28121,7 +28140,6 @@
           "elderberry anthocyanins",
           "sambucol",
           "black elderberry supplement",
-          "elderberries",
           "immune elderberry supplement",
           "sambucol supplement",
           "sambucus black elderberry fruit extract",
@@ -28263,6 +28281,7 @@
         "notes": "Form not specified on the label. Elderberry (Sambucus nigra/canadensis) products range from standardized anthocyanin extracts (Sambucol, ElderCraft) to syrups, powders, and juice concentrates. Anthocyanin content and immune-stimulating potency vary substantially between forms. Scored conservatively. B32 audit 2026-04-25: anthocyanin class-poor.",
         "aliases": [
           "elderberry",
+          "elderberries",
           "sambucus black elderberry",
           "sambucus elderberry",
           "sambucus nigra elderberry",
@@ -42663,7 +42682,8 @@
           "maitake d-fraction supplement",
           "Maitake PD-Fraction powder",
           "maitake mushroom extract",
-          "grifola frondosa mushroom extract"
+          "grifola frondosa mushroom extract",
+          "Maitake Whole Mushroom Extract"
         ],
         "score": 14,
         "dosage_importance": 1.0,
@@ -42894,7 +42914,8 @@
           "turkey tail standardized extract supplement",
           "turkey tail mushroom extract",
           "trametes versicolor mushroom extract",
-          "coriolus versicolor mushroom extract"
+          "coriolus versicolor mushroom extract",
+          "Coriolus versicolor Whole Mushroom Extract"
         ],
         "score": 14,
         "dosage_importance": 1.0,
@@ -46808,7 +46829,8 @@
           "Beta-Boswellic Acids",
           "AKBA, Beta-Boswellic Acids, total organic and Boswellic Acid",
           "AKBAs",
-          "Boswellia serrata, Phospholipid complex"
+          "Boswellia serrata, Phospholipid complex",
+          "Boswellia serrata AKBA standardized extract (wood) resin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -55431,7 +55453,9 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [
+      "Black Mustard extract"
+    ]
   },
   "chia_protein": {
     "standard_name": "Chia Protein",
@@ -59731,7 +59755,8 @@
           "sun mushroom extract",
           "agaricus blazei extract",
           "agaricus fruiting body extract",
-          "agaricus fruiting body hot water extract"
+          "agaricus fruiting body hot water extract",
+          "Agaricus blazei Whole Mushroom Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -72525,7 +72550,9 @@
     "category_enum": "probiotics",
     "external_ids": {},
     "rxcui_note": "Lactobacillus jensenii NCBI taxid 109790; no specific RxNorm concept",
-    "aliases": []
+    "aliases": [
+      "Lactobacillus jensenii LBV 116"
+    ]
   },
   "pediococcus_pentosaceus": {
     "standard_name": "Pediococcus Pentosaceus",

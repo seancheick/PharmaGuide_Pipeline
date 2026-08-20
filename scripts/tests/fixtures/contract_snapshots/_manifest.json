@@ -515,6 +515,31 @@
         "Form-aware Vitamin A and Vitamin E adequacy conversion"
       ],
       "notes": "Re-froze the complete three-product drift set after the fresh 28-brand rebuild. Only the v4 Dose pillar and its two score mirrors changed; formulation, evidence, transparency, verification, safety/hygiene, grade, SAFE verdict, mapped coverage, and flags are unchanged. CVS Spectravite (12012) now evaluates its label-declared mixed Vitamin A total (3500 IU beta-carotene + vitamin A acetate) as 1050 mcg RAE for adequacy while correctly keeping the preformed-only UL indeterminate, and converts explicit synthetic dl-alpha Vitamin E 30 IU to 13.5 mg; Dose 15.9->16.7 and score 62.1->62.9. CVS Omega-3 (18141) now evaluates explicit preformed Vitamin A 500 IU as 150 mcg RAE and natural d-alpha Vitamin E 3 IU as 2.01 mg; Dose 9.3->10.4 and score 64.9->66.0. Garden of Life Plant Collagen Builder (274498) now evaluates supplemental beta-carotene 2000 IU as 600 mcg RAE while retaining beta_carotene_no_established_ul; Dose 9.1->10.2 and score 50.5->51.6. These are intended adequacy corrections from verified unit/form lineage, not safety relaxations or scoring calibration changes."
+    },
+    {
+      "date": "2026-08-20",
+      "action": "refrozen_declared_trace_nutrient_penalty_correction",
+      "products": [
+        12012
+      ],
+      "sprints_covered": [
+        "Declared active trace-nutrient identity reconciliation",
+        "Other-ingredient penalty source-of-truth correction"
+      ],
+      "notes": "CVS Spectravite Advanced Formula score mirrors changed 62.9 -> 68.1 because label-declared active Nickel and Tin are no longer misclassified as harmful contaminant additives. The six-point raw Formulation penalty removal maps to a 5.2-point public score correction. Dose, Evidence, Transparency, Testing & Brand, Safety Hygiene, SAFE verdict, mapped coverage, grade, flags, and all label amounts remain unchanged. This records removal of false penalties from declared nutrients; it does not relax contaminant policy or introduce a new scoring calibration."
+    },
+    {
+      "date": "2026-08-20",
+      "action": "refrozen_identity_and_serving_source_corrections",
+      "products": [
+        245156,
+        288344
+      ],
+      "sprints_covered": [
+        "Wave One exact-form alias reconciliation",
+        "Canonical label-serving selection"
+      ],
+      "notes": "Goli Ashwagandha Gummies (245156) changed 63.5 -> 67.7 after the exact printed KSM-66 Ashwagandha root extract row was restored to the scorable active panel at its disclosed 150 mg dose; the prior released artifact scored only Vitamin D2 and omitted the product's named primary active. The new score reflects the existing IQM KSM-66 form and dose rules, not a new score assignment. Garden of Life Vitamin Code Men (288344) changed 69.5 -> 69.9 because nutrient adequacy now uses one canonical four-capsule Supplement Facts serving per day. The prior artifact multiplied already-per-serving nutrient amounts by two after combining the two-capsule/twice-daily direction with the four-capsule facts basis, turning otherwise optimal amounts into falsely high daily exposure. Its Dose pillar returns 16.7 -> 17.1; all non-dose pillars, SAFE verdict, mapped coverage, grade, and flags remain unchanged."
     }
   ]
 }

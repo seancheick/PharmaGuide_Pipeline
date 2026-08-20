@@ -45,9 +45,10 @@ def test_gate_ineligible_compound_mass_forces_review_not_exceedance():
     assert not any(signal.startswith("DOSE_OVER_UL") for signal in r.safety_signals)
 
 
-def test_below_150_does_not_force_caution():
+def test_confirmed_over_ul_below_b7_penalty_threshold_forces_caution():
     r = evaluate_safety_gate(_prod([{"nutrient": "X", "pct_ul": 120, "ul_gate_eligible": True}]))
-    assert r.verdict != "CAUTION"
+    assert r.verdict == "CAUTION"
+    assert "DOSE_OVER_UL_CAUTION" in r.safety_signals
 
 
 def test_ul_dose_never_blocks_or_unsafe():

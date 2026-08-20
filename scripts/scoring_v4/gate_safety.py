@@ -41,6 +41,7 @@ from typing import Any, Dict, List, Optional
 from inactive_ingredient_resolver import (
     InactiveIngredientResolver,
     SOURCE_BANNED_RECALLED,
+    active_form_duplicate_candidate,
 )
 from identity.safety import (
     SafetySignal,
@@ -229,6 +230,13 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
                 continue
             raw_name, standard_name, extra_terms = _ingredient_safety_terms(ingredient)
             if not raw_name and not extra_terms:
+                continue
+            if role == "inactive" and active_form_duplicate_candidate(
+                resolver,
+                active_ingredients=_safe_list((product or {}).get("activeIngredients")),
+                raw_name=raw_name,
+                additional_terms=extra_terms,
+            ):
                 continue
             try:
                 resolution = resolver.resolve(
@@ -573,8 +581,9 @@ def _apply_typed_dose_safety_policy(
 ) -> None:
     """Apply verdict policy to the same typed B7 result used by scoring.
 
-    A confirmed over-threshold flag cannot ship SAFE:
-      - 150–199% → CAUTION
+    A confirmed exposure above an established UL cannot ship SAFE. The score's
+    B7 penalty remains a separate, deliberately more severe 150% threshold:
+      - 100–199% → CAUTION
       - >= 200%  → CAUTION + a critical dose signal
     An unresolved material exposure routes to CAUTION/review without claiming an
     established exceedance. Dose policy never escalates past CAUTION.

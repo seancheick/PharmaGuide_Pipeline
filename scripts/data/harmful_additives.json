@@ -8033,6 +8033,7 @@
         "nickelous sulphate"
       ],
       "category": "contaminant",
+      "active_source_policy": "declared_trace_nutrient",
       "notes": "Heavy metal contaminant in supplements, primarily from botanical ingredients grown in nickel-rich soil. IARC Group 1 carcinogen (nickel compounds via inhalation — nasal/lung cancer); oral carcinogenicity less established. EFSA 2020 set TDI at 13 ug/kg bw/day. Primary supplement concern is allergic contact dermatitis in the ~15% of the population sensitized to nickel.",
       "last_updated": "2026-03-27",
       "mechanism_of_harm": "Oral nickel is poorly absorbed (1-5%). Absorbed nickel can trigger systemic contact dermatitis in sensitized individuals. Chronic oral exposure at elevated levels may cause gastrointestinal irritation. Nickel compounds are IARC Group 1 carcinogens via inhalation (nasal/lung cancer), but oral carcinogenicity is less established. EFSA 2020 identified benchmark dose for nickel as developmental toxicity endpoint.",
@@ -11194,6 +11195,7 @@
         "fumed Silicon Dioxide"
       ],
       "category": "excipient",
+      "active_source_policy": "declared_trace_nutrient",
       "mechanism_of_harm": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 172.480). Max 2% of food weight as anti-caking agent.",
@@ -15441,6 +15443,7 @@
         "tin(IV) compounds"
       ],
       "category": "contaminant",
+      "active_source_policy": "declared_trace_nutrient",
       "notes": "A heavy metal that can contaminate supplements, particularly those sourced from regions with industrial pollution. Can cause gastrointestinal issues and potentially affect nervous system function.",
       "last_updated": "2026-03-28",
       "mechanism_of_harm": "Inorganic tin (Sn²⁺/Sn⁴⁺) causes acute GI irritation (nausea, vomiting, diarrhea) at >200 mg/kg food. Poorly absorbed orally. Organotin compounds (tributyltin, etc.) are highly neurotoxic and immunotoxic but not relevant to dietary supplement context. JECFA PTWI 14 mg/kg bw (maintained since 1988).",

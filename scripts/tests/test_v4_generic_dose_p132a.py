@@ -85,8 +85,17 @@ def _product(
     return product
 
 
-def _adequacy(*, nutrient: str = "Magnesium", pct_rda: float | None = 50.0, pct_ul: float | None = 57.0) -> dict:
-    return {"nutrient": nutrient, "pct_rda": pct_rda, "pct_ul": pct_ul}
+def _adequacy(
+    *,
+    nutrient: str = "Magnesium",
+    canonical_id: str | None = None,
+    pct_rda: float | None = 50.0,
+    pct_ul: float | None = 57.0,
+) -> dict:
+    row = {"nutrient": nutrient, "pct_rda": pct_rda, "pct_ul": pct_ul}
+    if canonical_id is not None:
+        row["canonical_id"] = canonical_id
+    return row
 
 
 def _sleep_product(
@@ -357,6 +366,33 @@ def test_window_proxy_subclinical_proportional() -> None:
 
     payload = score_dose(_product(adequacy_results=[_adequacy(pct_rda=10.0, pct_ul=2.0)]))
     assert payload["components"]["supplemental_window_proxy"] == 8.8
+
+
+def test_potassium_single_supplement_is_not_scored_against_total_dietary_ai() -> None:
+    """A normal 99 mg potassium supplement must not look nearly empty merely
+    because food supplies most of the 2,600–3,400 mg dietary AI."""
+    from scoring_v4.modules.generic_dose import score_dose
+
+    payload = score_dose(_product(
+        ingredients=[_ingredient(
+            name="Potassium",
+            standard_name="Potassium",
+            canonical_id="potassium",
+            bio_score=8,
+            quantity=99,
+            unit="mg",
+        )],
+        adequacy_results=[_adequacy(
+            nutrient="Potassium",
+            canonical_id="potassium",
+            pct_rda=2.912,
+            pct_ul=None,
+        )],
+    ))
+
+    assert payload["components"]["supplemental_window_proxy"] == 16.0
+    assert payload["metadata"]["window_proxy_reason"] == "dietary_intake_dominant_reference_excluded"
+    assert payload["metadata"]["partial_credit_reason"] == "individual_quantified_dose_no_rda_reference"
 
 
 def test_window_proxy_zero_dose_no_credit() -> None:

@@ -15,9 +15,31 @@
         "url": "https://www.fda.gov/files/food/published/DV-Percent-DV-Nutrition-Facts-Label_09072023.pdf"
       }
     ],
-    "total_entries": 11
+    "total_entries": 13
   },
   "nutrients": {
+    "vitamin_c": {
+      "standard_name": "Vitamin C",
+      "aliases": ["Ascorbic Acid"],
+      "unit": "mg",
+      "target_groups": {
+        "adult_4_plus": 90,
+        "infants": 50,
+        "children_1_3": 15,
+        "pregnant_lactating": 120
+      }
+    },
+    "vitamin_b6": {
+      "standard_name": "Vitamin B6",
+      "aliases": ["Pyridoxine", "Pyridoxal"],
+      "unit": "mg",
+      "target_groups": {
+        "adult_4_plus": 1.7,
+        "infants": 0.3,
+        "children_1_3": 0.5,
+        "pregnant_lactating": 2.0
+      }
+    },
     "vitamin_d": {
       "standard_name": "Vitamin D",
       "aliases": ["Vitamin D2", "Vitamin D3", "Cholecalciferol", "Ergocalciferol"],

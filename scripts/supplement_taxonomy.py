@@ -100,7 +100,7 @@ REASON_CODE_UNRESOLVED_LABEL_ACTIVE = "unresolved_label_active_included"
 
 _PROBIOTIC_IDENTITY_RE = re.compile(
     r"\b("
-    r"probiotic|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
+    r"probiotic|trubiotics|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
     r"bacillus|limosilactobacillus|lacticaseibacillus|lactiplantibacillus|"
     r"lactococcus|acidophilus|reuteri|rhamnosus|plantarum|casei|salivarius|"
     r"coagulans|subtilis|bifidus|cfu|live\s+cultures?|viable\s+cells?"
@@ -638,6 +638,15 @@ def _has_omega_name_signal(product_name: str) -> bool:
     return False
 
 
+def _has_mct_name_signal(product_name: str) -> bool:
+    """Return whether the product name explicitly identifies an MCT product."""
+    return bool(
+        re.search(r"\bmct\b", product_name)
+        or "medium chain triglyceride" in product_name
+        or "medium-chain triglyceride" in product_name
+    )
+
+
 # ============================================================================
 # CORE CLASSIFICATION ENGINE
 # ============================================================================
@@ -932,10 +941,48 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     )
     specialized_panel_identity = _specialized_panel_identity(product_name, cid_set)
     ala_only_signal = bool(cid_set & _ALA_CANONICAL_IDS) and not bool(cid_set & _OMEGA_CANONICAL_IDS)
+    iqd = product.get("ingredient_quality_data") or {}
+    botanical_blend_total = any(
+        isinstance(row, dict)
+        and _normalize_text(row.get("cleaner_row_role")) == "blend_header_total"
+        and not _is_non_quantified(row)
+        and "mg" in _normalize_text(row.get("unit"))
+        and any(
+            token in _normalize_text(value)
+            for value in (
+                row.get("category"),
+                (row.get("raw_taxonomy") or {}).get("category")
+                if isinstance(row.get("raw_taxonomy"), dict)
+                else "",
+                (row.get("raw_taxonomy") or {}).get("ingredientGroup")
+                if isinstance(row.get("raw_taxonomy"), dict)
+                else "",
+            )
+            for token in ("botanical", "herb", "fruit", "vegetable")
+        )
+        for row in (iqd.get("ingredients_skipped") or [])
+    )
 
     # --- Probiotic ---
     probiotic_name_signal = bool(_PROBIOTIC_IDENTITY_RE.search(product_name))
+    explicit_probiotic_name = bool(
+        re.search(r"\b(?:probiotics?|trubiotics)\b", product_name, re.IGNORECASE)
+    ) and not bool(
+        re.search(r"\bwith\s+probiotics?\b", product_name, re.IGNORECASE)
+    )
     probiotic_data = product.get("probiotic_data", {})
+    probiotic_label_identity = any(
+        isinstance(statement, dict)
+        and "statement of identity" in _normalize_text(statement.get("type"))
+        and bool(
+            re.match(
+                r"^probiotic(?: dietary)? supplement\b",
+                str(statement.get("notes") or statement.get("text") or "").strip(),
+                re.IGNORECASE,
+            )
+        )
+        for statement in (product.get("statements") or [])
+    )
     # Require real CFU data — Paradise-style products set is_probiotic_product=True
     # even for Zinc/Quercetin because NP probiotic strains exist in the base.
     probiotic_flag = (
@@ -977,7 +1024,23 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         non_support_active_count == 1
         and probiotic_count == 1
     )
+    explicit_primary_probiotic = (
+        explicit_probiotic_name
+        and probiotic_flag
+        and probiotic_row_identity
+        and not _is_fiber_primary_with_accessory_probiotics(product)
+    )
     if (
+        probiotic_label_identity
+        and bool(probiotic_data.get("is_probiotic_product"))
+        and probiotic_row_identity
+        and active_count <= 1
+    ):
+        primary_type = "probiotic"
+        decision_code = "probiotic_label_identity"
+        confidence = 0.9
+        reasons.append("probiotic statement of identity + enriched strain identity")
+    elif (
         (active_count == 0 or support_only_active)
         and (probiotic_name_signal or probiotic_row_identity)
         and (
@@ -1001,14 +1064,18 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
                 f"probiotic name + non-quantified strain rows: {non_quantified_probiotic_count}"
             )
     elif active_count > 0 and (
-        probiotic_majority
+        explicit_primary_probiotic
+        or probiotic_majority
         or sole_active_is_strain
         or (probiotic_name_signal and (probiotic_flag or probiotic_count > 0) and probiotic_majority)
     ):
         primary_type = "probiotic"
         decision_code = "probiotic_active_identity"
-        confidence = 0.9 if probiotic_majority else 0.7
-        reasons.append(f"probiotic: {probiotic_count}/{active_count} strains")
+        confidence = 0.9 if (explicit_primary_probiotic or probiotic_majority) else 0.7
+        if explicit_primary_probiotic:
+            reasons.append("explicit probiotic name + product-level CFU evidence")
+        else:
+            reasons.append(f"probiotic: {probiotic_count}/{active_count} strains")
 
     # --- Specialized sports/hydration panels (R5) ---
     # Broad vitamin/mineral panels are common in these products, but they do
@@ -1130,14 +1197,15 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif (
         omega_ids
         and not ala_only_signal
-        and not (
-            active_count == 1
-            and dsld_product_type == "fat/fatty acid"
-            and not any(t in product_name for t in ("omega", "fish oil", "krill", "cod liver"))
+        and not _has_mct_name_signal(product_name)
+        and (
+            _has_omega_name_signal(product_name)
+            or len(omega_ids) * 2 >= active_count
+            or (dsld_product_type == "fat/fatty acid" and active_count > 1)
         )
     ):
         omega_signal = len(omega_ids)
-        name_signal = any(t in product_name for t in ("omega", "fish oil", "krill", "cod liver"))
+        name_signal = _has_omega_name_signal(product_name)
         primary_type = "omega_3"
         decision_code = "omega_identity"
         confidence = 0.95 if (omega_signal and name_signal) else 0.8
@@ -1240,6 +1308,29 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         reasons.append(
             f"collagen dominant: {sorted(collagen_ids)} of {active_count} active(s)"
         )
+
+    # A single carrier nutrient must not erase a larger, explicitly declared
+    # botanical blend.  Require both the DSLD product type and a positive-dose
+    # botanical blend row; raw product type alone is not authoritative enough.
+    elif (
+        active_count == 1
+        and dsld_product_type == "botanical with nutrients"
+        and botanical_blend_total
+    ):
+        primary_type = "herbal_botanical"
+        decision_code = "botanical_with_nutrients_blend"
+        confidence = 0.85
+        reasons.append("botanical-with-nutrients label + disclosed botanical blend")
+
+    # An opaque, positive-dose botanical blend still belongs with botanical
+    # peers even when none of its children discloses an individual amount.
+    # This classifies product identity only; it does not assign child doses or
+    # award form-quality credit to undisclosed ingredients.
+    elif active_count == 0 and botanical_blend_total:
+        primary_type = "herbal_botanical"
+        decision_code = "quantified_botanical_blend"
+        confidence = 0.75
+        reasons.append("quantified botanical blend with undisclosed child amounts")
 
     # --- Single nutrient (active_count == 1) ---
     elif active_count == 1:

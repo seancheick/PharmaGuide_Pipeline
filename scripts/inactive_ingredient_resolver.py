@@ -66,8 +66,10 @@ from pathlib import Path
 from typing import Any, Iterable, Iterator, Optional
 
 from identity.safety import (
+    has_explicit_form_evidence,
     safety_flag_from_banned_match,
     safety_flag_from_harmful_additive,
+    safety_status_priority,
 )
 from normalization import make_normalized_key
 
@@ -155,6 +157,127 @@ def _collect_terms(*values: Any) -> list[str]:
             seen.add(n)
             out.append(n)
     return out
+
+
+def _active_identity_terms(active_ingredients: Iterable[Any]) -> set[str]:
+    """Return exact identity terms from one product's active label rows."""
+    terms: set[str] = set()
+
+    def add(value: Any) -> None:
+        text = str(value or "").strip()
+        if not text:
+            return
+        normalized = _normalize(text)
+        if normalized:
+            terms.add(normalized)
+        key = make_normalized_key(text)
+        if key:
+            terms.add(key)
+
+    for ingredient in active_ingredients or []:
+        if not isinstance(ingredient, dict):
+            continue
+        for field in (
+            "canonical_id",
+            "parent_key",
+            "normalized_key",
+            "name",
+            "standardName",
+            "standard_name",
+            "matched_form",
+            "display_form_label",
+        ):
+            add(ingredient.get(field))
+        for form in ingredient.get("forms") or []:
+            if isinstance(form, dict):
+                for field in ("name", "label", "ingredientGroup"):
+                    add(form.get(field))
+            else:
+                add(form)
+        for match in ingredient.get("matched_forms") or []:
+            if isinstance(match, dict):
+                for field in ("form_key", "standard_name", "name"):
+                    add(match.get(field))
+    return terms
+
+
+def active_form_duplicate_candidate(
+    resolver: "InactiveIngredientResolver",
+    *,
+    active_ingredients: Iterable[Any],
+    raw_name: str,
+    additional_terms: Optional[Iterable[str]] = None,
+) -> Optional[dict]:
+    """Return an IQM form candidate only when this product has its parent.
+
+    Some DSLD records repeat an active nutrient's chemical form in
+    ``inactiveIngredients``. A global form match is insufficient because many
+    salts and botanicals can also be genuine excipients. Product-level active
+    identity is therefore required before suppressing inactive safety policy.
+    """
+    active_terms = _active_identity_terms(active_ingredients)
+    if not active_terms:
+        return None
+    for candidate in resolver.active_form_candidates(
+        raw_name=raw_name,
+        additional_terms=additional_terms,
+    ):
+        candidate_terms: set[str] = set()
+        for value in (
+            candidate.get("parent"),
+            candidate.get("standard_name"),
+            *(candidate.get("parents") or []),
+            *(candidate.get("identity_terms") or []),
+        ):
+            normalized = _normalize(value)
+            if normalized:
+                candidate_terms.add(normalized)
+            key = make_normalized_key(str(value or ""))
+            if key:
+                candidate_terms.add(key)
+        if candidate_terms & active_terms:
+            return candidate
+
+    # A small number of substances are prohibited as standalone additives but
+    # also appear in DSLD as the source salt of a declared active nutrient.
+    # That dual role must be explicitly authored in the safety source rather
+    # than achieved by adding banned aliases to IQM (which creates a dangerous
+    # identity/safety collision). Product context is still mandatory.
+    for value in (raw_name, *(additional_terms or [])):
+        entry = resolver._banned_index.get(_normalize(value))
+        if not isinstance(entry, dict):
+            continue
+        parent = entry.get("active_nutrient_parent")
+        parent_terms = {
+            _normalize(parent),
+            make_normalized_key(str(parent or "")),
+        }
+        parent_terms.discard("")
+        if parent_terms & active_terms:
+            return {
+                "parent": parent,
+                "standard_name": entry.get("standard_name"),
+                "source": SOURCE_BANNED_RECALLED,
+                "matched_rule_id": entry.get("id"),
+            }
+    return None
+
+
+def _negative_terms_veto(texts: Iterable[str], items: Iterable[Any]) -> bool:
+    normalized_texts = [_normalize(text) for text in texts if _normalize(text)]
+    for item in items or []:
+        if isinstance(item, dict):
+            term = _normalize(item.get("term"))
+            mode = str(item.get("match_mode") or "substring").strip().lower()
+        else:
+            term = _normalize(item)
+            mode = "substring"
+        if not term:
+            continue
+        for text in normalized_texts:
+            if (mode == "exact" and text == term) or (mode != "exact" and term in text):
+                return True
+    return False
 
 
 # ---------------------------------------------------------------------------
@@ -436,11 +559,48 @@ class InactiveIngredientResolver:
         """
         terms = _collect_terms(raw_name, standard_name, *(additional_terms or []))
 
-        # 1. banned_recalled  (highest authority)
+        # 1. banned_recalled (highest authority). Evaluate every label term
+        # before returning so a generic high-risk identity cannot shadow a
+        # more specific banned form carried in forms[] / additional_terms.
+        banned_candidates: list[tuple[dict, str]] = []
+        seen_banned: set[str] = set()
         for t in terms:
             entry = self._banned_index.get(t)
-            if entry:
-                return self._from_banned(raw_name, entry)
+            entry_id = str((entry or {}).get("id") or "")
+            if entry and entry_id not in seen_banned:
+                banned_candidates.append((entry, t))
+                seen_banned.add(entry_id)
+        for entry in self._banned_entries:
+            entry_id = str(entry.get("id") or "")
+            if entry_id in seen_banned or not entry.get("requires_explicit_form_evidence"):
+                continue
+            evidence = has_explicit_form_evidence(
+                terms,
+                entry.get("form_evidence_patterns") or [],
+            )
+            if evidence:
+                banned_candidates.append((entry, evidence))
+                seen_banned.add(entry_id)
+        banned_candidates = [
+            (entry, matched_term) for entry, matched_term in banned_candidates
+            if not _negative_terms_veto(
+                [matched_term],
+                (entry.get("match_rules") or {}).get("negative_match_terms", []),
+            )
+            and (
+                not entry.get("requires_explicit_form_evidence")
+                or has_explicit_form_evidence(
+                    terms,
+                    entry.get("form_evidence_patterns") or [],
+                )
+            )
+        ]
+        if banned_candidates:
+            entry, _matched_term = min(
+                banned_candidates,
+                key=lambda item: safety_status_priority(item[0].get("status")),
+            )
+            return self._from_banned(raw_name, entry)
 
         # 2. harmful_additives
         for t in terms:
@@ -458,7 +618,16 @@ class InactiveIngredientResolver:
             if not key:
                 continue
             entry = self._banned_key_index.get(key)
-            if entry:
+            if entry and not _negative_terms_veto(
+                [t],
+                (entry.get("match_rules") or {}).get("negative_match_terms", []),
+            ) and (
+                not entry.get("requires_explicit_form_evidence")
+                or has_explicit_form_evidence(
+                    terms,
+                    entry.get("form_evidence_patterns") or [],
+                )
+            ):
                 return self._from_banned(raw_name, entry)
             entry = self._harmful_key_index.get(key)
             if entry:

@@ -54,6 +54,28 @@ def test_probiotic_name_plus_named_strains_routes_to_probiotic_for_gate_block():
     assert class_for_product(product) == "probiotic"
 
 
+def test_trubiotics_brand_routes_to_probiotic_with_immune_support_adjuncts():
+    product = _product(
+        product_name="TruBiotics with Immune Support Advantage",
+        primary_type="probiotic",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 2,
+            "has_cfu": True,
+            "total_cfu": 2_000_000_000,
+            "total_billion_count": 2.0,
+        },
+        activeIngredients=[
+            {"canonical_id": "lactobacillus_acidophilus", "quantity": 1, "unit": "billion CFU"},
+            {"canonical_id": "bifidobacterium_lactis", "quantity": 1, "unit": "billion CFU"},
+            {"canonical_id": "vitamin_c", "quantity": 30, "unit": "mg"},
+            {"canonical_id": "vitamin_e", "quantity": 3, "unit": "mg"},
+        ],
+    )
+
+    assert class_for_product(product) == "probiotic"
+
+
 def test_incidental_non_quantified_probiotic_rows_do_not_promote_without_name_or_cfu():
     product = _product(
         product_name="Whole Food Zinc Quercetin Complex",
@@ -164,6 +186,53 @@ def test_taxonomy_probiotic_single_named_strain_without_cfu_routes_probiotic():
                     "unit": "mg",
                     "category": "probiotics",
                     "raw_taxonomy": {"category": "bacteria"},
+                }
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "probiotic"
+
+
+def test_taxonomy_probiotic_named_strains_with_disclosed_dha_adjunct_routes_probiotic():
+    """A probiotic-with-DHA infant product remains in the probiotic peer class.
+
+    DHA is a disclosed adjunct here, not the product's primary identity. Missing
+    strain-level CFU belongs in probiotic dose/transparency scoring and must not
+    let the single quantified DHA row switch the entire product to omega.
+    """
+    product = _product(
+        product_name="Strong Beginning",
+        primary_type="probiotic",
+        supplement_taxonomy={"primary_type": "probiotic"},
+        probiotic_data={
+            "is_probiotic_product": True,
+            "is_probiotic": True,
+            "total_strain_count": 2,
+            "has_cfu": False,
+            "total_cfu": 0,
+            "total_billion_count": 0,
+            "probiotic_blends": [
+                {
+                    "name": "Lactobacillus rhamnosus GG",
+                    "strain_count": 1,
+                    "strains": ["Lactobacillus rhamnosus GG"],
+                },
+                {
+                    "name": "Bifidobacterium animalis subsp. lactis",
+                    "strain_count": 1,
+                    "strains": ["Bifidobacterium animalis subsp. lactis"],
+                },
+            ],
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {
+                    "name": "Docosahexaenoic Acid",
+                    "canonical_id": "dha",
+                    "quantity": 70,
+                    "unit": "mg",
+                    "category": "fatty_acid",
                 }
             ]
         },

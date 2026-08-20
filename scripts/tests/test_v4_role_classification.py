@@ -72,6 +72,24 @@ def test_botanical_named_in_title_is_claim_prominent():
     assert roles["black_pepper"]["role"] == "adjunct"
 
 
+def test_vitamin_d3_title_alias_prevents_botanical_carrier_from_owning_product():
+    product = _product("D3 Wellness 1000 IU", "herbal_botanical", [
+        _row("vitamin_d", "Vitamin D3", 25, "mcg"),
+        _row(
+            "whole_food_blend",
+            "Organic Whole Food Blend",
+            60,
+            "mg",
+            is_proprietary_blend=True,
+        ),
+    ])
+
+    roles = _by_canonical(product, module="generic")
+
+    assert roles["vitamin_d"]["role"] == "claim_prominent"
+    assert roles["vitamin_d"]["role_reason"] == "named_in_product_title"
+
+
 def test_melatonin_small_mass_is_not_demoted_to_adjunct():
     # The "NOT raw mass first" rule: a 1 mg title-named active outranks a
     # 500 mg non-featured filler. Title (L2) precedes mass (L5).

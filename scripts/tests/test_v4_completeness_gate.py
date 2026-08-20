@@ -140,6 +140,99 @@ def test_generic_missing_dose_is_soft_debt() -> None:
     assert "dose_not_disclosed" in result.soft_missing
 
 
+def test_majority_missing_micronutrient_amounts_fail_closed() -> None:
+    """A %DV-only panel with 0/NP amounts is a source extraction failure.
+
+    Real canaries include Emergen-C 15919/15923.  A partial quality score must
+    not be presented as a genuine Poor verdict when most micronutrient amounts
+    are absent from the source payload.
+    """
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    missing_amount_rows = [
+        {
+            "name": f"Vitamin {index}",
+            "canonical_id": f"vitamin_{index}",
+            "mapped": True,
+            "quantity": 0,
+            "unit": "NP",
+            "dailyValue": 100,
+            "cleaner_row_role": "active_scorable",
+            "raw_taxonomy": {"category": "vitamin"},
+        }
+        for index in range(8)
+    ]
+    product = _product(
+        module="multi_or_prenatal",
+        ingredients=missing_amount_rows + [_ingredient()],
+        activeIngredients=missing_amount_rows + [
+            {
+                "name": "Magnesium",
+                "canonical_id": "magnesium",
+                "mapped": True,
+                "quantity": 200,
+                "unit": "mg",
+                "cleaner_row_role": "active_scorable",
+                "raw_taxonomy": {"category": "mineral"},
+            }
+        ],
+    )
+
+    result = evaluate_completeness_gate(product, module="multi_or_prenatal")
+
+    assert result.is_live_eligible is False
+    assert result.verdict == "NOT_SCORED"
+    assert "micronutrient_amounts_missing_from_source" in result.missing_fields
+
+
+def test_small_number_of_undisclosed_micronutrients_remains_soft_debt() -> None:
+    """One ordinary undisclosed row must not quarantine an otherwise valid label."""
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        module="multi_or_prenatal",
+        ingredients=[
+            {
+                "name": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "mapped": True,
+                "quantity": 0,
+                "unit": "NP",
+                "dailyValue": 100,
+                "cleaner_row_role": "active_scorable",
+                "raw_taxonomy": {"category": "vitamin"},
+            },
+            _ingredient(),
+        ],
+        activeIngredients=[
+            {
+                "name": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "mapped": True,
+                "quantity": 0,
+                "unit": "NP",
+                "dailyValue": 100,
+                "cleaner_row_role": "active_scorable",
+                "raw_taxonomy": {"category": "vitamin"},
+            },
+            {
+                "name": "Magnesium",
+                "canonical_id": "magnesium",
+                "mapped": True,
+                "quantity": 200,
+                "unit": "mg",
+                "cleaner_row_role": "active_scorable",
+                "raw_taxonomy": {"category": "mineral"},
+            },
+        ],
+    )
+
+    result = evaluate_completeness_gate(product, module="multi_or_prenatal")
+
+    assert result.is_live_eligible is True
+    assert "micronutrient_amounts_missing_from_source" not in result.missing_fields
+
+
 def test_generic_enzyme_activity_is_valid_dose_evidence() -> None:
     """Digestive enzymes are dosed by activity units (ALU/PPI/BLGU/...), not
     mass. The enricher marks these rows dose_class='enzyme_activity' with an

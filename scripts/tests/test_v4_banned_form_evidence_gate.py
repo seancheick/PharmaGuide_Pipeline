@@ -140,6 +140,52 @@ def test_bare_boron_without_banned_form_does_not_block() -> None:
     )
 
 
+def test_inactive_tetraborate_duplicate_of_active_boron_does_not_block() -> None:
+    """DSLD sometimes repeats the active Boron source in Other Ingredients.
+    Product context proves that row is a form duplicate, not an excipient."""
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "dsld_id": "MEMBERS_MARK_SHAPE",
+        "fullName": "Glucosamine with Boron",
+        "contaminant_data": _clean_contaminant_data(),
+        "activeIngredients": [{
+            "name": "Boron",
+            "standardName": "Boron",
+            "canonical_id": "boron",
+            "mapped": True,
+        }],
+        "inactiveIngredients": [{
+            "name": "Sodium Tetraborate",
+            "standardName": "Sodium Tetraborate",
+            "raw_source_text": "Sodium Tetraborate",
+        }],
+    }
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict != "BLOCKED"
+
+
+def test_inactive_tetraborate_without_active_boron_still_blocks() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "dsld_id": "TRUE_INACTIVE_TETRABORATE",
+        "fullName": "No Boron Active",
+        "contaminant_data": _clean_contaminant_data(),
+        "activeIngredients": [],
+        "inactiveIngredients": [{
+            "name": "Sodium Tetraborate",
+            "standardName": "Sodium Tetraborate",
+        }],
+    }
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict == "BLOCKED"
+
+
 # --------------------------------------------------------------------------- #
 # Substance class 2 — Partially Hydrogenated Oils (PHOs)
 # --------------------------------------------------------------------------- #
@@ -231,9 +277,10 @@ def test_malformed_forms_do_not_crash(ingredient: dict) -> None:
 # The existing test_v4_safety_parity_release keys off the v3 *scorer* verdict,
 # which these export-banned products do NOT carry (the export overrides the
 # verdict in build_final_db). So that test cannot catch this class. This guard
-# closes the loop the task asks for: every corpus product whose Boron-salt /
-# PHO banned substance lives in name / raw_source_text / forms must produce a
-# v4-NATIVE BLOCKED — no reliance on the export net.
+# closes the loop the task asks for: every corpus product whose active Boron
+# salt / PHO banned substance lives in name / raw_source_text / forms must
+# produce a v4-NATIVE BLOCKED. An inactive salt row that only repeats a
+# declared active Boron source is excluded by the shared source-form contract.
 # --------------------------------------------------------------------------- #
 
 _TARGET_BANNED_RULE_IDS = {"ADD_SODIUM_TETRABORATE", "BANNED_PHO"}
@@ -260,7 +307,10 @@ def _target_banned_rule(product: dict, resolver) -> str | None:
     Re-derives detection independently of the gate so this is a genuine
     end-to-end check, not a tautology against the gate's own term collection.
     """
-    from inactive_ingredient_resolver import SOURCE_BANNED_RECALLED
+    from inactive_ingredient_resolver import (
+        SOURCE_BANNED_RECALLED,
+        active_form_duplicate_candidate,
+    )
 
     for key in ("activeIngredients", "inactiveIngredients"):
         for ing in product.get(key) or []:
@@ -272,6 +322,13 @@ def _target_banned_rule(product: dict, resolver) -> str | None:
                     terms += [form.get("name"), form.get("prefix")]
                 elif form:
                     terms.append(form)
+            if key == "inactiveIngredients" and active_form_duplicate_candidate(
+                resolver,
+                active_ingredients=product.get("activeIngredients") or [],
+                raw_name=str(ing.get("name") or ing.get("raw_source_text") or ""),
+                additional_terms=[str(term) for term in terms if term],
+            ):
+                continue
             for term in terms:
                 if not term:
                     continue
@@ -285,7 +342,7 @@ def _target_banned_rule(product: dict, resolver) -> str | None:
     return None
 
 
-def test_corpus_boron_and_pho_products_are_v4_native_blocked() -> None:
+def test_corpus_standalone_boron_and_pho_products_are_v4_native_blocked() -> None:
     enriched = _load_enriched_corpus()
     if not enriched:
         pytest.skip("enriched corpus not present (scripts/products/*_enriched/)")

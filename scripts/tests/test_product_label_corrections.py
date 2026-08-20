@@ -222,6 +222,16 @@ def test_natures_way_328117_boron_unit_correction_present(overrides):
         ("308222", "Healthy Mom Prenatal Multi", "Docosahexaenoic Acid", "ng", "mg"),
         ("243029", "Beyond Raw Orange Mango", "Caffeine Anhydrous", "mmg", "mg"),
         ("66883", "Creatine Plus 5950 Unflavored", "Glycine", "Jar(s)", "mg"),
+        ("261915", "Airborne Elderberry Effervescent Tablets", "Vitamin A", "mg", "mcg RAE"),
+        ("256977", "Centrum Specialist Energy Multivitamin", "Biotin", "mC Unit(s)", "mcg"),
+        ("257088", "Centrum Men", "Vitamin B12", "mcg DFE", "mcg"),
+        ("205918", "Kidz Vitamin C 250 mg Fruit Punch", "Zinc", "ng", "mg"),
+        ("250997", "Baby & Me 2 Prenatal Multi", "Copper", "m.c.u.", "mg"),
+        ("265207", "Multi for Men", "Vitamin B6", "mg {alpha}-TE", "mg"),
+        ("327573", "Men's 55+ Advanced Multivitamin", "Thiamine", "NP", "mg"),
+        ("46802", "Acidophilus", "active Lactobacillus acidophilus", "{Unit(s)}", "CFU"),
+        ("19916", "Adults' 50+ Multivitamin/Multimineral", "Boron", "mg", "mcg"),
+        ("265197", "Men Over 40 One Daily", "Boron", "mg", "mcg"),
     ],
 )
 def test_verified_source_unit_corrections_are_product_scoped(

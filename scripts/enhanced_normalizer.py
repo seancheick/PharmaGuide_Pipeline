@@ -87,6 +87,7 @@ from unmapped_ingredient_tracker import UnmappedIngredientTracker
 from functional_grouping_handler import FunctionalGroupingHandler
 import normalization as norm_module  # Single-source normalization
 from unit_converter import get_converter
+from serving_frequency import select_canonical_serving
 
 
 # ---------------------------------------------------------------------------
@@ -1241,7 +1242,6 @@ class EnhancedDSLDNormalizer:
         # Track unmapped ingredients with more detail
         self.unmapped_ingredients = Counter()
         self.unmapped_details = {}  # Store more context about unmapped ingredients
-        self._unmapped_keys_order: list = []  # Insertion-ordered unique keys (for O(1) snapshot)
 
         # Initialize the enhanced unmapped ingredient tracker for separate active/inactive files
         self.unmapped_tracker = None  # Will be initialized when output_dir is set
@@ -2107,6 +2107,15 @@ class EnhancedDSLDNormalizer:
                     "mapped": True,
                     "priority": 5,
                 }
+            else:
+                # The text index may return the higher-priority IQM parent for
+                # a branded preparation (for example Cran-Max -> cranberry).
+                # Preserve that canonical payload, but keep this UNII claim at
+                # its actual standardized-botanical source tier. Otherwise a
+                # shared substance UNII is misreported as an IQM same-tier
+                # conflict even though the higher-priority parent already wins.
+                payload = dict(payload)
+                payload["priority"] = 5
             _add(
                 self._identity_unii_to_payload_lookup,
                 _extract_unii(entry),
@@ -2339,6 +2348,7 @@ class EnhancedDSLDNormalizer:
     def _normalize_daily_value_unit(self, value: Any) -> str:
         """Canonicalize units used by FDA labeling DV checks."""
         unit = str(value or "").strip().lower().replace("µg", "mcg").replace("μg", "mcg")
+        unit = re.sub(r"\(s\)", "", unit)
         unit = unit.replace("micrograms", "mcg").replace("microgram", "mcg")
         unit = unit.replace("milligrams", "mg").replace("milligram", "mg")
         unit = unit.replace("grams", "g").replace("gram", "g")
@@ -2435,11 +2445,12 @@ class EnhancedDSLDNormalizer:
         daily_value: Optional[float],
         quantity_variants: List[Dict],
     ) -> Optional[Dict[str, Any]]:
-        """Correct high-confidence DSLD mg->mcg typos proven by %DV math.
+        """Correct high-confidence DSLD mass-unit typos proven by %DV math.
 
-        v1 is intentionally narrow: only mg->mcg corrections where the FDA
-        target-group Daily Value proves a roughly 1000x source-unit mismatch.
-        IU and heuristic-only corrections remain out of scope.
+        Only adjacent 1000x mass-scale repairs are supported (g->mg and
+        mg->mcg), and only when the FDA target-group Daily Value independently
+        proves that the printed number belongs in the target unit. IU and
+        heuristic-only corrections remain out of scope.
         """
         if daily_value is None:
             return None
@@ -2468,10 +2479,8 @@ class EnhancedDSLDNormalizer:
         target_mass_unit = target_parts[0] if target_parts else target_unit
         source_qualifier = " ".join(source_parts[1:])
         target_qualifier = " ".join(target_parts[1:])
-        if target_mass_unit != "mcg":
-            return None
         # DFE/RAE/NE are semantic label units, not decorative suffixes. A
-        # DV-backed scale repair may change mg -> mcg only when the qualifier
+        # DV-backed scale repair may change the mass prefix only when the qualifier
         # is unchanged. This prevents a folate DFE amount from being silently
         # reinterpreted as bare folic-acid mass (or vice versa).
         if source_unit != "np" and source_qualifier != target_qualifier:
@@ -2523,10 +2532,14 @@ class EnhancedDSLDNormalizer:
                 "confidence": "high",
             }
 
-        if source_mass_unit != "mg":
+        scale_factor = {
+            ("g", "mg"): 1000.0,
+            ("mg", "mcg"): 1000.0,
+        }.get((source_mass_unit, target_mass_unit))
+        if scale_factor is None:
             return None
 
-        declared_amount_in_target_unit = amount * 1000.0
+        declared_amount_in_target_unit = amount * scale_factor
         mismatch_ratio = declared_amount_in_target_unit / expected_amount
         if mismatch_ratio < 100.0:
             return None
@@ -2536,7 +2549,7 @@ class EnhancedDSLDNormalizer:
         # DSLD percentages are label-rounded and some products use a target
         # group whose published DV has since changed.  The unit correction is
         # already guarded by a >=100x mismatch, so allow modest DV drift.
-        if relative_error > 0.25:
+        if relative_error > 0.35:
             return None
 
         return {
@@ -2559,6 +2572,98 @@ class EnhancedDSLDNormalizer:
             "confidence": "high",
         }
 
+    def _maybe_restore_folate_dfe_parent_unit(
+        self,
+        *,
+        ingredient_name: str,
+        quantity: Any,
+        unit: str,
+        daily_value: Optional[float],
+        quantity_variants: List[Dict],
+        nested_rows: List[Dict],
+    ) -> Optional[Dict[str, Any]]:
+        """Restore a lost DFE qualifier only from a complete label equation.
+
+        Some modern DSLD API rows expose ``Folate 267 mcg (160 mcg folic
+        acid)`` even though the label prints ``267 mcg DFE``. A bare folate
+        row is not enough to infer DFE, so this requires all three independent
+        signals: the current 400 mcg DFE Daily Value, an explicit folic-acid
+        child, and the statutory ~1.67 parent-to-child conversion ratio.
+        """
+        if (
+            self._normalize_dv_lookup_key(ingredient_name) != "folate"
+            or self._normalize_daily_value_unit(unit) != "mcg"
+            or not isinstance(nested_rows, list)
+        ):
+            return None
+        try:
+            amount = float(quantity)
+            percent_dv = float(daily_value)
+        except (TypeError, ValueError):
+            return None
+        if amount <= 0 or percent_dv <= 0:
+            return None
+
+        target_group = self._daily_value_target_group_from_variants(
+            quantity_variants
+        )
+        if target_group != "adult_4_plus":
+            return None
+        expected_dfe = percent_dv / 100.0 * 400.0
+        dv_relative_error = abs(amount - expected_dfe) / expected_dfe
+        if dv_relative_error > 0.02:
+            return None
+
+        child_amounts: List[float] = []
+        for child in nested_rows:
+            if not isinstance(child, dict):
+                continue
+            if (
+                self._normalize_dv_lookup_key(child.get("name"))
+                != "folic_acid"
+            ):
+                continue
+            child_quantity, child_unit, _, _ = self._process_quantity(
+                child.get("quantity", [])
+            )
+            if self._normalize_daily_value_unit(child_unit).split()[0] not in {
+                "mcg",
+                "mg",
+            }:
+                continue
+            try:
+                child_amount = float(child_quantity)
+            except (TypeError, ValueError):
+                continue
+            if child_amount > 0:
+                child_amounts.append(child_amount)
+        if len(child_amounts) != 1:
+            return None
+        dfe_ratio = amount / child_amounts[0]
+        if not 1.62 <= dfe_ratio <= 1.72:
+            return None
+
+        return {
+            "status": "corrected",
+            "reason": "explicit_folic_acid_child_dfe_total",
+            "nutrient_key": "folate",
+            "raw_amount": amount,
+            "raw_unit": unit,
+            "corrected_amount": amount,
+            "corrected_unit": "mcg DFE",
+            "percent_daily_value": percent_dv,
+            "daily_value_target_group": target_group,
+            "daily_value_reference_amount": 400.0,
+            "daily_value_reference_unit": "mcg DFE",
+            "daily_value_expected_amount": expected_dfe,
+            "declared_folic_acid_amount": child_amounts[0],
+            "declared_folic_acid_unit": "mcg",
+            "dfe_ratio": dfe_ratio,
+            "relative_error": dv_relative_error,
+            "conversion_factor": 1.0,
+            "confidence": "high",
+        }
+
     def _maybe_correct_parent_equivalent_unit(
         self,
         *,
@@ -2570,9 +2675,11 @@ class EnhancedDSLDNormalizer:
         parent_unit: Any,
     ) -> Optional[Dict[str, Any]]:
         """Correct a nested unit when the reference converter proves its parent total."""
+        normalized_unit = self._normalize_daily_value_unit(unit)
+        normalized_parent_unit = self._normalize_daily_value_unit(parent_unit)
         if (
-            self._normalize_daily_value_unit(unit) != "mg"
-            or not self._normalize_daily_value_unit(parent_unit).startswith("mcg")
+            normalized_unit != "mg"
+            or not normalized_parent_unit.startswith("mcg")
             or not str(parent_name or "").strip()
         ):
             return None
@@ -2584,11 +2691,24 @@ class EnhancedDSLDNormalizer:
         if amount <= 0 or parent_amount <= 0:
             return None
 
+        parent_unit_for_conversion = str(parent_unit)
+        if (
+            normalized_parent_unit == "mcg"
+            and self._normalize_dv_lookup_key(parent_name) == "folate"
+            and self._normalize_dv_lookup_key(ingredient_name) == "folic_acid"
+            and 1.62 <= parent_amount / amount <= 1.72
+        ):
+            # A prior flattening pass may have copied the parent's raw bare-mcg
+            # unit before the parent row restored its DFE qualifier. The same
+            # complete 1.67:1 label equation independently proves this child
+            # context, so use the repaired parent unit here as well.
+            parent_unit_for_conversion = "mcg DFE"
+
         conversion = get_converter().convert_nutrient(
             nutrient=str(parent_name),
             amount=amount,
             from_unit="mcg",
-            to_unit=str(parent_unit),
+            to_unit=parent_unit_for_conversion,
             ingredient_name=ingredient_name,
         )
         if (
@@ -2612,7 +2732,8 @@ class EnhancedDSLDNormalizer:
             "corrected_amount": amount,
             "corrected_unit": "mcg",
             "parent_amount": parent_amount,
-            "parent_unit": parent_unit,
+            "parent_unit": parent_unit_for_conversion,
+            "corrected_parent_unit": parent_unit_for_conversion,
             "conversion_factor": conversion.conversion_factor,
             "relative_error": relative_error,
             "confidence": "high",
@@ -3436,6 +3557,126 @@ class EnhancedDSLDNormalizer:
         if not canonical_id or source_db != "ingredient_quality_map":
             return None
         return standard_name, canonical_id, source_db
+
+    def _printed_nutrient_identity(
+        self, ingredient: Dict[str, Any]
+    ) -> Optional[Tuple[str, str, str]]:
+        """Keep the printed nutrient as parent when a source form crosses parents.
+
+        A mineral may be supplied by a vitamin salt (for example ``Sodium`` as
+        ``Sodium Ascorbate``). The form UNII describes the source compound, not
+        the nutrient amount printed on the Supplement Facts row. Exact IQM
+        identity for a vitamin/mineral label row therefore owns the parent;
+        structured forms remain attached for form analysis.
+        """
+        # Vitamin form UNIIs normally refine generic parents (Vitamin K ->
+        # K1/K2, Vitamin A -> retinoid/carotenoid). A form that covers only a
+        # declared percentage cannot own the whole printed nutrient row,
+        # however: "Vitamin A (60% as beta-carotene)" still has a 40% remainder.
+        # Keep the printed parent in that narrow mixed-form case. Elemental
+        # mineral rows continue to keep their parent whenever a source salt
+        # belongs to another IQM identity.
+        category = str(ingredient.get("category") or "").strip().casefold()
+        has_partial_form = any(
+            isinstance(form, dict)
+            and isinstance(form.get("percent"), (int, float))
+            and 0 < float(form["percent"]) < 100
+            for form in (ingredient.get("forms") or [])
+        )
+        if category != "mineral" and not (category == "vitamin" and has_partial_form):
+            return None
+        name = str(ingredient.get("name") or "").strip()
+        if not name:
+            return None
+        standard_name, mapped, _ = self._enhanced_ingredient_mapping(
+            name,
+            [],
+            ingredient_group=ingredient.get("ingredientGroup"),
+        )
+        if not mapped:
+            return None
+        canonical_id, source_db = self._resolve_canonical_identity(
+            standard_name,
+            raw_name=name,
+        )
+        if not canonical_id or source_db != "ingredient_quality_map":
+            return None
+        unii_match = self._try_unii_match(ingredient)
+        if unii_match is None:
+            return None
+        unii_payload, _ = unii_match
+        if unii_payload.get("canonical_id") == canonical_id:
+            return None
+        return standard_name, canonical_id, source_db
+
+    def _contextual_ala_identity(
+        self, ingredient: Dict[str, Any]
+    ) -> Optional[Tuple[str, str, str]]:
+        """Disambiguate label shorthand ALA only from explicit omega context."""
+        name_key = norm_module.normalize_text(ingredient.get("name") or "")
+        if name_key != "ala":
+            return None
+        form_keys = {
+            norm_module.normalize_text(form.get("name") or "")
+            for form in (ingredient.get("forms") or [])
+            if isinstance(form, dict)
+        }
+        parent_key = norm_module.normalize_text(ingredient.get("parentBlend") or "")
+        flax_context = bool(form_keys & {"flaxseed oil", "flax seed oil"})
+        omega_context = "omega" in parent_key and "fatty acid" in parent_key
+        if not (flax_context or omega_context):
+            return None
+        return (
+            "Alpha-Linolenic Acid",
+            "alpha_linolenic_acid",
+            "ingredient_quality_map",
+        )
+
+    def _single_nested_marker_form_identity(
+        self, ingredient: Dict[str, Any]
+    ) -> Optional[Tuple[str, str, str, List[str]]]:
+        """Resolve a generic nested marker from one explicit IQM-backed form.
+
+        Some DSLD blend children use a broad printed row name (for example
+        ``Glycosides``) while the structured form carries the actual identity
+        (``Polydatin``).  This fallback is intentionally narrow: it applies
+        only to nested, display-only marker rows with exactly one declared
+        non-nutrient form that resolves unambiguously to IQM.  It preserves
+        the printed label and does not make the child score-eligible.
+        """
+        if not (
+            ingredient.get("isNestedIngredient")
+            or ingredient.get("parentBlend")
+        ):
+            return None
+        declared_forms = [
+            form
+            for form in (ingredient.get("forms") or [])
+            if isinstance(form, dict)
+            and str(form.get("name") or "").strip()
+        ]
+        if len(declared_forms) != 1:
+            return None
+        form = declared_forms[0]
+        if str(form.get("category") or "").strip().casefold() != (
+            "non-nutrient/non-botanical"
+        ):
+            return None
+        form_name = str(form.get("name") or "").strip()
+        standard_name, mapped, mapped_forms = self._enhanced_ingredient_mapping(
+            form_name,
+            [],
+            ingredient_group=form.get("ingredientGroup"),
+        )
+        if not mapped:
+            return None
+        canonical_id, source_db = self._resolve_canonical_identity(
+            standard_name,
+            raw_name=form_name,
+        )
+        if not canonical_id or source_db != "ingredient_quality_map":
+            return None
+        return standard_name, canonical_id, source_db, mapped_forms or [form_name]
 
     def _enhanced_ingredient_mapping(
         self,
@@ -4610,6 +4851,115 @@ class EnhancedDSLDNormalizer:
             rows.append(source_row)
         return rows
 
+    @staticmethod
+    def _merge_alternate_serving_rows(
+        ingredient_rows: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        """Merge repeated Supplement Facts columns into one analysis row.
+
+        DSLD sometimes emits the same ingredient once per serving/audience
+        column. Those rows are alternatives, not additive ingredients. Merge
+        only exact identity matches with disjoint serving contexts, and leave
+        the immutable display-source ledger untouched so every printed amount
+        remains available to the final Label view.
+        """
+
+        def normalized_text(value: Any) -> str:
+            return re.sub(r"\s+", " ", str(value or "").strip().casefold())
+
+        def quantity_rows(row: Dict[str, Any]) -> List[Dict[str, Any]]:
+            value = row.get("quantity")
+            if isinstance(value, dict):
+                return [value]
+            if isinstance(value, list) and all(
+                isinstance(item, dict) for item in value
+            ):
+                return value
+            return []
+
+        def serving_context(quantity: Dict[str, Any]) -> Optional[tuple]:
+            order = quantity.get("servingSizeOrder")
+            size = quantity.get("servingSizeQuantity")
+            unit = normalized_text(quantity.get("servingSizeUnit"))
+            if order is None and size is None:
+                return None
+            return (order, size, unit)
+
+        def form_signature(row: Dict[str, Any]) -> tuple:
+            return tuple(
+                (
+                    normalized_text(form.get("name")),
+                    form.get("ingredientId"),
+                    normalized_text(form.get("uniiCode")),
+                )
+                for form in row.get("forms") or []
+                if isinstance(form, dict)
+            )
+
+        def identity_key(row: Dict[str, Any]) -> Optional[tuple]:
+            if row.get("nestedRows"):
+                return None
+            name = normalized_text(row.get("name"))
+            if not name:
+                return None
+            return (
+                name,
+                normalized_text(row.get("ingredientGroup")),
+                normalized_text(row.get("category")),
+                row.get("ingredientId"),
+                normalized_text(row.get("uniiCode")),
+                tuple(sorted(normalized_text(v) for v in row.get("alternateNames") or [])),
+                form_signature(row),
+            )
+
+        for row in ingredient_rows:
+            nested = row.get("nestedRows") if isinstance(row, dict) else None
+            if isinstance(nested, list):
+                row["nestedRows"] = EnhancedDSLDNormalizer._merge_alternate_serving_rows(
+                    nested
+                )
+
+        groups: Dict[tuple, List[Dict[str, Any]]] = {}
+        for row in ingredient_rows:
+            if not isinstance(row, dict):
+                continue
+            key = identity_key(row)
+            quantities = quantity_rows(row)
+            contexts = [serving_context(quantity) for quantity in quantities]
+            if (
+                key is None
+                or not quantities
+                or any(context is None for context in contexts)
+            ):
+                continue
+            groups.setdefault(key, []).append(row)
+
+        merged_ids: Set[int] = set()
+        for alternatives in groups.values():
+            if len(alternatives) < 2:
+                continue
+            contexts = [
+                serving_context(quantity)
+                for row in alternatives
+                for quantity in quantity_rows(row)
+            ]
+            if len(contexts) != len(set(contexts)):
+                continue
+            owner = alternatives[0]
+            owner["quantity"] = [
+                quantity
+                for row in alternatives
+                for quantity in quantity_rows(row)
+            ]
+            merged_ids.update(id(row) for row in alternatives[1:])
+            logger.info(
+                "Merged %d alternate serving row(s) for '%s'",
+                len(alternatives),
+                owner.get("name"),
+            )
+
+        return [row for row in ingredient_rows if id(row) not in merged_ids]
+
     def _flatten_nested_ingredients(self, ingredient_rows: List[Dict], _depth: int = 0) -> List[Dict]:
         """Flatten nested ingredients from blends for better scoring, preserving blend structure"""
         MAX_FLATTEN_DEPTH = 5
@@ -5080,6 +5430,20 @@ class EnhancedDSLDNormalizer:
                     row["_pre_correction_unii"] = row.get("uniiCode")
                     row["uniiCode"] = entry.get("corrected_unii_code")
                     correction_applied = True
+                source_field_corrections = (
+                    ("category", "corrected_category"),
+                    ("ingredientGroup", "corrected_ingredient_group"),
+                    ("forms", "corrected_forms"),
+                )
+                for row_field, correction_field in source_field_corrections:
+                    if correction_field not in entry:
+                        continue
+                    corrected_value = entry.get(correction_field)
+                    if row.get(row_field) == corrected_value:
+                        continue
+                    row[f"_pre_correction_{row_field}"] = row.get(row_field)
+                    row[row_field] = corrected_value
+                    correction_applied = True
                 if (
                     has_quantity_unit_correction
                     and rewrite_quantity_units(row, entry)
@@ -5441,6 +5805,9 @@ class EnhancedDSLDNormalizer:
             self._display_ingredients_buffer = []
             self._display_source_rows = []
             self._label_ledger_omissions = []
+            self._canonical_serving_row = select_canonical_serving(
+                raw_data.get("servingSizes")
+            )
             # Extract basic product info
             product_id = str(raw_data.get("id", ""))
             
@@ -5479,6 +5846,8 @@ class EnhancedDSLDNormalizer:
                 raw_ingredients = self._apply_label_corrections(
                     raw_ingredients, product_id
                 )
+
+            raw_ingredients = self._merge_alternate_serving_rows(raw_ingredients)
 
             flattened_ingredients = self._flatten_nested_ingredients(raw_ingredients)
 
@@ -6646,8 +7015,20 @@ class EnhancedDSLDNormalizer:
             if is_active
             else None
         )
+        contextual_ala_identity = (
+            self._contextual_ala_identity(ing) if is_active else None
+        )
+        printed_nutrient_identity = (
+            self._printed_nutrient_identity(ing) if is_active else None
+        )
         unii_match_result = (
-            None if foodstate_nutrient_identity else self._try_unii_match(ing)
+            None
+            if (
+                foodstate_nutrient_identity
+                or contextual_ala_identity
+                or printed_nutrient_identity
+            )
+            else self._try_unii_match(ing)
         )
         if foodstate_nutrient_identity is not None:
             (
@@ -6658,6 +7039,24 @@ class EnhancedDSLDNormalizer:
             mapped = True
             mapped_forms = forms or []
             ing["_sprint1_match_method"] = "single_declared_nutrient_form"
+        elif contextual_ala_identity is not None:
+            (
+                standard_name,
+                unii_canonical_id,
+                unii_canonical_source_db,
+            ) = contextual_ala_identity
+            mapped = True
+            mapped_forms = forms or []
+            ing["_sprint1_match_method"] = "contextual_ala_identity"
+        elif printed_nutrient_identity is not None:
+            (
+                standard_name,
+                unii_canonical_id,
+                unii_canonical_source_db,
+            ) = printed_nutrient_identity
+            mapped = True
+            mapped_forms = forms or []
+            ing["_sprint1_match_method"] = "printed_nutrient_identity"
         elif unii_match_result is not None:
             unii_payload, unii_method = unii_match_result
             standard_name = unii_payload.get("standard_name", name)
@@ -6708,6 +7107,20 @@ class EnhancedDSLDNormalizer:
                             )
                             break
 
+            if not mapped and is_active:
+                marker_identity = self._single_nested_marker_form_identity(ing)
+                if marker_identity is not None:
+                    (
+                        standard_name,
+                        unii_canonical_id,
+                        unii_canonical_source_db,
+                        mapped_forms,
+                    ) = marker_identity
+                    mapped = True
+                    ing["_sprint1_match_method"] = (
+                        "single_declared_marker_form"
+                    )
+
         # Priority-based ingredient classification to handle overlaps
         classification = self._priority_based_classification(name, forms)
         
@@ -6733,6 +7146,17 @@ class EnhancedDSLDNormalizer:
             quantity_data["unit"] = ing.get("unit")
             
         quantity, unit, daily_value, quantity_variants = self._process_quantity(quantity_data)
+        dose_data_quality = self._maybe_restore_folate_dfe_parent_unit(
+            ingredient_name=name,
+            quantity=quantity,
+            unit=unit,
+            daily_value=daily_value,
+            quantity_variants=quantity_variants,
+            nested_rows=ing.get("nestedRows", []),
+        )
+        if dose_data_quality:
+            quantity = dose_data_quality["corrected_amount"]
+            unit = dose_data_quality["corrected_unit"]
         is_structural_active_blend_total = (
             is_active and self._is_dsld_active_blend_total_row(ing)
         )
@@ -6776,9 +7200,27 @@ class EnhancedDSLDNormalizer:
         # Genuine blends either don't resolve, or resolve to a blend-category name
         # ("General Proprietary Blends", "Stimulant Blends"), and keep the flag.
         # The enricher's chemical-identity gate is the authoritative scoring backstop.
+        def _has_disclosed_positive_quantity(nested_row: Any) -> bool:
+            if not isinstance(nested_row, dict):
+                return False
+            mass, nested_unit = self._extract_primary_mass_unit(nested_row)
+            return bool(
+                mass is not None
+                and mass > 0
+                and str(nested_unit or "").strip().lower()
+                not in {"", "np", "n/a", "na", "none"}
+            )
+
+        branded_single_with_marker_rows = bool(
+            nested_rows
+            and all(_has_disclosed_positive_quantity(row) for row in nested_rows)
+            and not is_structural_active_blend_total
+            and (name or "").lower().strip()
+            in getattr(self, "_iqm_branded_form_names", frozenset())
+        )
         if (
             is_proprietary
-            and not nested_rows
+            and (not nested_rows or branded_single_with_marker_rows)
             and mapped
             and standard_name
             and not self._is_proprietary_blend_name(standard_name)
@@ -6807,8 +7249,12 @@ class EnhancedDSLDNormalizer:
                 nested_ing_for_processing.setdefault("parentBlend", name)
                 nested_ing_for_processing.setdefault("isNestedIngredient", True)
                 if _parent_blend_mass is not None:
-                    nested_ing_for_processing.setdefault("parentBlendMass", _parent_blend_mass)
-                    nested_ing_for_processing.setdefault("parentBlendUnit", _parent_blend_unit)
+                    # The parent may have received a DV-proven unit repair
+                    # above (for example Folate mcg -> mcg DFE). Its processed
+                    # context is authoritative over the raw unit copied by the
+                    # earlier flattening pass.
+                    nested_ing_for_processing["parentBlendMass"] = _parent_blend_mass
+                    nested_ing_for_processing["parentBlendUnit"] = _parent_blend_unit
                 nested_processed = self._process_single_ingredient_enhanced(nested_ing_for_processing, is_active)
                 if nested_processed:
                     # Handle list returns (from nested skipped parents with their own nestedRows)
@@ -7009,15 +7455,16 @@ class EnhancedDSLDNormalizer:
         if raw_category in {"vitamin", "mineral"}:
             label_nutrient_context = norm_module.normalize_text(raw_name or name)
 
-        dose_data_quality = self._maybe_correct_dv_backed_unit(
-            ingredient_name=name,
-            standard_name=standard_name,
-            canonical_id=canonical_id,
-            quantity=quantity,
-            unit=unit,
-            daily_value=daily_value,
-            quantity_variants=quantity_variants,
-        )
+        if not dose_data_quality:
+            dose_data_quality = self._maybe_correct_dv_backed_unit(
+                ingredient_name=name,
+                standard_name=standard_name,
+                canonical_id=canonical_id,
+                quantity=quantity,
+                unit=unit,
+                daily_value=daily_value,
+                quantity_variants=quantity_variants,
+            )
         if not dose_data_quality:
             dose_data_quality = self._maybe_correct_parent_equivalent_unit(
                 ingredient_name=name,
@@ -7030,6 +7477,8 @@ class EnhancedDSLDNormalizer:
         if dose_data_quality:
             quantity = dose_data_quality["corrected_amount"]
             unit = dose_data_quality["corrected_unit"]
+            if dose_data_quality.get("corrected_parent_unit"):
+                ing["parentBlendUnit"] = dose_data_quality["corrected_parent_unit"]
             for variant in quantity_variants:
                 if not isinstance(variant, dict):
                     continue
@@ -8740,13 +9189,76 @@ class EnhancedDSLDNormalizer:
                         "index": idx
                     })
 
-            # Take first quantity as canonical (usually standard serving)
-            # P0.3: Enrichment phase will select canonical based on user groups
+            # Prefer the quantity column matching the product's canonical
+            # Supplement Facts serving. DSLD may list a 2-tablet amount before
+            # its 1-tablet amount; multiplying that first value by the label's
+            # two daily tablets would double the true exposure. Preserve the
+            # declared variant ordering, but choose the matching column for
+            # analysis.
+            #
+            # Otherwise keep the declared ordering when it contains a usable
+            # dose. Some
+            # DSLD age-band panels place a ``0 NP`` placeholder first and the
+            # disclosed adult/age-4+ amount second. Selecting that placeholder
+            # erases the whole nutrient panel, so fall forward to the first
+            # quantified variant while preserving every original variant.
             if quantity_variants:
-                first = quantity_variants[0]
-                quantity = first["quantity"]
-                unit = first["unit"]
-                daily_value = first.get("daily_value")
+                primary = quantity_variants[0]
+                canonical_serving = getattr(self, "_canonical_serving_row", None)
+                if isinstance(canonical_serving, dict):
+                    canonical_quantity = next(
+                        (
+                            self._safe_float(canonical_serving.get(key))
+                            for key in (
+                                "quantity",
+                                "servingSizeQuantity",
+                                "maxQuantity",
+                                "minQuantity",
+                                "normalizedServing",
+                            )
+                            if canonical_serving.get(key) is not None
+                        ),
+                        None,
+                    )
+                    if canonical_quantity and canonical_quantity > 0:
+                        matching_variant = next(
+                            (
+                                variant
+                                for variant in quantity_variants
+                                if self._safe_float(
+                                    variant.get("serving_size_quantity")
+                                ) == canonical_quantity
+                            ),
+                            None,
+                        )
+                        if matching_variant is not None:
+                            primary = matching_variant
+                primary_unit = str(primary.get("unit") or "").strip().casefold()
+                if (
+                    not primary.get("quantity_parsed", True)
+                    or primary.get("quantity", 0) <= 0
+                    or primary_unit in {
+                        "", "np", "not provided", "unknown", "n/a", "na",
+                        "unspecified",
+                    }
+                ):
+                    primary = next(
+                        (
+                            variant
+                            for variant in quantity_variants[1:]
+                            if variant.get("quantity_parsed", True)
+                            and variant.get("quantity", 0) > 0
+                            and str(variant.get("unit") or "").strip().casefold()
+                            not in {
+                                "", "np", "not provided", "unknown", "n/a", "na",
+                                "unspecified",
+                            }
+                        ),
+                        primary,
+                    )
+                quantity = primary["quantity"]
+                unit = primary["unit"]
+                daily_value = primary.get("daily_value")
 
                 # NOTE: IU conversion is vitamin-specific and complex:
                 # - Vitamin D: 1 IU = 0.025 mcg
@@ -9366,6 +9878,62 @@ class EnhancedDSLDNormalizer:
 
     def _build_display_ingredients(self, active_ingredients: List[Dict], inactive_ingredients: List[Dict]) -> List[Dict]:
         """Build the ordered source-label ledger without changing scoring inputs."""
+        canonical_serving = getattr(self, "_canonical_serving_row", None)
+        canonical_serving_quantity = None
+        canonical_serving_order = None
+        if isinstance(canonical_serving, dict):
+            canonical_serving_order = canonical_serving.get("order")
+            canonical_serving_quantity = next(
+                (
+                    self._safe_float(canonical_serving.get(key))
+                    for key in (
+                        "quantity",
+                        "servingSizeQuantity",
+                        "maxQuantity",
+                        "minQuantity",
+                        "normalizedServing",
+                    )
+                    if canonical_serving.get(key) is not None
+                ),
+                None,
+            )
+
+        def is_canonical_serving_variant(variant: Dict[str, Any]) -> bool:
+            if not canonical_serving_quantity or canonical_serving_quantity <= 0:
+                return False
+            if (
+                self._safe_float(variant.get("serving_size_quantity"))
+                != canonical_serving_quantity
+            ):
+                return False
+            variant_order = variant.get("serving_size_order")
+            return (
+                canonical_serving_order is None
+                or variant_order is None
+                or self._safe_int(variant_order, default=-1)
+                == self._safe_int(canonical_serving_order, default=-2)
+            )
+
+        def serving_variants_for(row: Dict[str, Any]) -> List[Dict[str, Any]]:
+            variants = row.get("quantityVariants")
+            if not isinstance(variants, list) or len(variants) < 2:
+                return []
+            return [
+                {
+                    "serving_size_order": variant.get("serving_size_order"),
+                    "serving_size_quantity": variant.get("serving_size_quantity"),
+                    "serving_size_unit": self._normalize_label_unit(
+                        variant.get("serving_size_unit")
+                    ),
+                    "exact_dose_text": self._exact_label_dose_text(
+                        {"quantity": variant}
+                    ),
+                    "is_canonical": is_canonical_serving_variant(variant),
+                }
+                for variant in variants
+                if isinstance(variant, dict)
+            ]
+
         candidates: List[Dict[str, Any]] = []
         for section_name, ingredients, score_included in (
             ("activeIngredients", active_ingredients, True),
@@ -9373,6 +9941,21 @@ class EnhancedDSLDNormalizer:
         ):
             for ing in ingredients:
                 raw_text = ing.get("raw_source_text") or ing.get("name") or ""
+                serving_variants = serving_variants_for(ing)
+                is_structural_blend_header = bool(
+                    score_included
+                    and ing.get("cleaner_row_role") == "blend_header_total"
+                )
+                row_score_included = bool(
+                    score_included and not is_structural_blend_header
+                )
+                row_display_type = (
+                    "structural_container"
+                    if is_structural_blend_header
+                    else "mapped_ingredient"
+                    if score_included
+                    else "inactive_ingredient"
+                )
                 first_form = (
                     (ing.get("forms") or [{}])[0].get("name")
                     if isinstance((ing.get("forms") or [{}])[0], dict)
@@ -9385,12 +9968,12 @@ class EnhancedDSLDNormalizer:
                         "label_display_name": ing.get("label_display_name")
                         or raw_text,
                         "source_section": section_name,
-                        "display_type": "mapped_ingredient" if score_included else "inactive_ingredient",
+                        "display_type": row_display_type,
                         "resolution_type": self._default_display_resolution_type(
-                            "mapped_ingredient" if score_included else "inactive_ingredient",
-                            score_included,
+                            row_display_type,
+                            row_score_included,
                         ),
-                        "score_included": score_included,
+                        "score_included": row_score_included,
                         "canonical_id": ing.get("canonical_id"),
                         "label_display_form": first_form
                         if self._label_form_distinct_from_identity(first_form, ing)
@@ -9402,8 +9985,18 @@ class EnhancedDSLDNormalizer:
                         else ing.get("_raw_nested_depth", 0),
                         "parent_label": ing.get("parentBlend"),
                         "parent_source_path": ing.get("parent_source_path"),
-                        "exact_dose_text": self._exact_label_dose_text(ing),
+                        "exact_dose_text": (
+                            "" if serving_variants else self._exact_label_dose_text(ing)
+                        ),
+                        "serving_variants": serving_variants,
+                        "_has_alternate_servings": bool(serving_variants),
                         "dose_data_quality": ing.get("dose_data_quality"),
+                        "_exact_dose_corrected": bool(
+                            isinstance(ing.get("source_correction"), dict)
+                            and ing["source_correction"].get(
+                                "corrected_quantity_unit"
+                            )
+                        ),
                     }
                 )
         candidates.extend(list(getattr(self, "_display_ingredients_buffer", [])))
@@ -9448,8 +10041,14 @@ class EnhancedDSLDNormalizer:
                     continue
                 if (
                     key == "exact_dose_text"
-                    and isinstance(row.get("dose_data_quality"), dict)
-                    and row["dose_data_quality"].get("status") == "corrected"
+                    and (
+                        (
+                            isinstance(row.get("dose_data_quality"), dict)
+                            and row["dose_data_quality"].get("status") == "corrected"
+                        )
+                        or row.get("_exact_dose_corrected") is True
+                        or row.get("_has_alternate_servings") is True
+                    )
                 ):
                     continue
                 if value is not None and value != "":
@@ -9461,6 +10060,8 @@ class EnhancedDSLDNormalizer:
                 row.get("label_display_name") or row.get("display_name") or raw_text
             ).strip()
             row["exact_dose_text"] = str(row.get("exact_dose_text") or "").strip()
+            row.pop("_exact_dose_corrected", None)
+            row.pop("_has_alternate_servings", None)
             row["nested_depth"] = self._safe_int(row.get("nested_depth"), default=0)
             row["score_included"] = bool(row.get("score_included"))
             row["is_label_context"] = not row["score_included"]
@@ -9481,17 +10082,31 @@ class EnhancedDSLDNormalizer:
                 if row["score_included"]
                 else "not_applicable"
             )
-            identity = str(row.get("raw_source_path") or "").strip()
-            if not identity:
-                identity = "|".join(
+            source_path = str(row.get("raw_source_path") or "").strip()
+            # Some legacy/direct-normalizer rows share the section-level path
+            # (for example ``activeIngredients``).  A path alone is therefore
+            # not a safe row identity: it previously collapsed distinct label
+            # rows such as Vitamin K and Vitamin K2.  Include the immutable
+            # label fields while still deduplicating repeated observations of
+            # the same source row.
+            # Indexed source paths identify one immutable label occurrence.
+            # Multiple observations of that occurrence (mapped, structural,
+            # or serving-variant views) must therefore collapse to one row.
+            # Legacy section-level paths such as ``activeIngredients`` are not
+            # unique, so retain the label-field composite for those rows.
+            identity = (
+                source_path
+                if source_path and re.search(r"\[\d+\]", source_path)
+                else "|".join(
                     (
-                        str(row.get("source_section") or ""),
+                        source_path or str(row.get("source_section") or ""),
                         raw_text.casefold(),
                         str(row.get("exact_dose_text") or "").casefold(),
                         str(row.get("nested_depth") or 0),
                         str(row.get("parent_label") or "").casefold(),
                     )
                 )
+            )
             existing = by_identity.get(identity)
             if existing is None:
                 by_identity[identity] = row
@@ -10113,30 +10728,31 @@ class EnhancedDSLDNormalizer:
                         claims.append(claim)
 
         return sorted(set(claims))
-    def get_unmapped_snapshot(self) -> int:
-        """Return a generation counter (count of distinct unmapped names seen so far).
+    def get_unmapped_snapshot(self) -> Dict[str, int]:
+        """Return occurrence counts for per-product unmapped delta tracking."""
+        return dict(self.unmapped_ingredients)
 
-        O(1) — no set allocation.  Pass the returned int to get_unmapped_delta().
-        """
-        return len(self._unmapped_keys_order)
-
-    def get_unmapped_delta(self, previous_snapshot: int) -> Dict[str, Any]:
+    def get_unmapped_delta(self, previous_snapshot: Dict[str, int]) -> Dict[str, Any]:
         """Get unmapped ingredients added since the previous snapshot.
 
         Args:
-            previous_snapshot: int returned by a prior get_unmapped_snapshot() call
+            previous_snapshot: counts returned by get_unmapped_snapshot()
 
         Returns:
             Dict with newly unmapped ingredients and their details
         """
-        new_unmapped = self._unmapped_keys_order[previous_snapshot:]
+        occurrence_deltas = {
+            name: count - previous_snapshot.get(name, 0)
+            for name, count in self.unmapped_ingredients.items()
+            if count > previous_snapshot.get(name, 0)
+        }
 
         unmapped_with_details = []
-        for name in new_unmapped:
+        for name, occurrence_delta in occurrence_deltas.items():
             details = self.unmapped_details.get(name, {})
             unmapped_with_details.append({
                 "name": name,
-                "occurrences": self.unmapped_ingredients[name],
+                "occurrences": occurrence_delta,
                 "processedName": details.get("processed_name", ""),
                 "forms": details.get("forms", []),
                 "variationsTried": details.get("variations_tried", []),
@@ -10151,8 +10767,8 @@ class EnhancedDSLDNormalizer:
         return {
             "unmapped": unmapped_with_details,
             "stats": {
-                "totalUnmapped": len(new_unmapped),
-                "totalOccurrences": sum(self.unmapped_ingredients[name] for name in new_unmapped),
+                "totalUnmapped": len(occurrence_deltas),
+                "totalOccurrences": sum(occurrence_deltas.values()),
                 "enhancedProcessing": True,
                 "fuzzyMatchingEnabled": FUZZY_AVAILABLE
             }
@@ -10234,8 +10850,6 @@ class EnhancedDSLDNormalizer:
         cleaner_row_role: Optional[str] = None,
         score_exclusion_reason: Optional[str] = None,
     ):
-        if name not in self.unmapped_ingredients:
-            self._unmapped_keys_order.append(name)
         self.unmapped_ingredients[name] += 1
         self.unmapped_details[name] = self._build_unmapped_detail(
             name,
@@ -10451,6 +11065,15 @@ class EnhancedDSLDNormalizer:
             )
             for _pat in _STANDARDIZATION_MARKER_PATTERNS:
                 if re.match(_pat, _name_lower):
+                    # A percentage can also lead a genuine botanical ingredient
+                    # declaration (for example, "95% standardized Turmeric
+                    # extract"). Preserve those rows; only descriptor-only
+                    # marker rows belong outside the ingredient ledger.
+                    if _cat_lower == "botanical" and re.search(
+                        r"\b(?:extract|root|leaf|flower|fruit|seed|bark|rhizome|herb|mushroom)\b",
+                        _name_lower,
+                    ):
+                        continue
                     logger.debug(
                         "Excluding standardization marker under category bypass: %s",
                         name,
@@ -10597,6 +11220,8 @@ class EnhancedDSLDNormalizer:
                 # The ingredientGroup gives us a reliable disambiguator.
                 _PANEL_DISCLOSURE_GROUPS = {
                     "sugar alcohol", "sugar alcohols",
+                    "sugar alcohol (unspecified)",
+                    "isomalt",
                 }
                 _group_lower = (ingredient_group or "").lower().strip()
                 if _group_lower in _PANEL_DISCLOSURE_GROUPS:
@@ -10888,13 +11513,25 @@ class EnhancedDSLDNormalizer:
         weak_blend_signal = self._is_proprietary_blend_name(ing.get("name", ""))
         if not (strong_blend_signal or weak_blend_signal):
             return False
+        quantity, unit = self._extract_primary_mass_unit(ing)
+        normalized_name = norm_module.normalize_text(ing.get("name", ""))
+        is_disclosed_epa_dha_child = bool(
+            ing.get("isNestedIngredient")
+            and quantity is not None
+            and str(unit or "").strip().upper() != "NP"
+            and re.fullmatch(r"(?:epa\s*(?:/|\+|and)\s*dha|dha\s*(?:/|\+|and)\s*epa)", normalized_name)
+        )
+        if is_disclosed_epa_dha_child:
+            # DSLD sometimes copies the parent's ``category=blend`` onto a
+            # quantified EPA/DHA child (Up & Up 74302).  The child is a real
+            # disclosed marker dose; only the parent owns the blend total.
+            return False
         # The flatten pass preserves a DSLD blend parent for label fidelity and
         # marks it after extracting its children. At that point the parent is a
         # structural total/header even when its own quantity is absent; the
         # children, not the marketing header, own the scoreable doses.
         if strong_blend_signal and ing.get("_nested_rows_flattened"):
             return True
-        quantity, unit = self._extract_primary_mass_unit(ing)
         if quantity is None or str(unit or "").strip().upper() == "NP":
             # A blend TOTAL is a flat header carrying the aggregate mass. Rows with
             # a more-specific structural identity are NOT totals and own their own

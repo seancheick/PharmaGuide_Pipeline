@@ -188,6 +188,22 @@ def test_banned_recalled_resolution_exposes_policy_and_status(resolver) -> None:
     assert penalized.inactive_policy == "penalize_anyway"
 
 
+def test_red_yeast_rice_requires_explicit_monacolin_evidence_to_block(resolver) -> None:
+    generic = resolver.resolve(raw_name="Red Yeast Rice powder")
+    assert generic.matched_rule_id == "RISK_RED_YEAST_RICE"
+    assert generic.regulatory_status == "high_risk"
+    assert generic.is_safety_concern is True
+    assert generic.is_banned is False
+
+    explicit = resolver.resolve(
+        raw_name="Red Yeast Rice",
+        additional_terms=["standardized to Monacolin K"],
+    )
+    assert explicit.matched_rule_id == "BANNED_RED_YEAST_RICE"
+    assert explicit.regulatory_status == "banned"
+    assert explicit.is_banned is True
+
+
 def test_banned_recalled_resolution_exposes_display_role_label(resolver) -> None:
     """Critical inactive rows still need a pipeline-prepared label for the
     ingredient row UI. The safety posture comes from severity/is_banned; the

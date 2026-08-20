@@ -1175,6 +1175,42 @@ def test_banned_inactive_forces_blocked_core_verdict_when_scorer_says_safe():
     )
 
 
+def test_inactive_tetraborate_source_echo_does_not_block_active_boron():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "Boron",
+            "raw_source_text": "Boron",
+            "standardName": "Boron",
+            "canonical_id": "boron",
+            "mapped": True,
+        }
+    ]
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Sodium Tetraborate",
+            "raw_source_text": "Sodium Tetraborate",
+            "standardName": "Sodium Tetraborate",
+        }
+    ]
+
+    assert has_banned_substance(enriched) is False
+
+
+def test_inactive_tetraborate_without_active_boron_still_blocks_export():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = []
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Sodium Tetraborate",
+            "raw_source_text": "Sodium Tetraborate",
+            "standardName": "Sodium Tetraborate",
+        }
+    ]
+
+    assert has_banned_substance(enriched) is True
+
+
 def test_critical_banned_blob_warning_cannot_coexist_with_safe_core_verdict():
     enriched = make_enriched()
     scored = make_scored(verdict="SAFE")
@@ -4222,6 +4258,48 @@ def test_final_ledger_does_not_fold_same_name_rows_for_one_serving():
     ]
 
 
+def test_final_ledger_folds_two_quantity_columns_for_one_serving_order():
+    from build_final_db import _fold_general_serving_variants
+
+    ledger = [
+        {
+            "label_display_name": "Vitamin D",
+            "raw_source_path": "ingredientRows[0]",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "nested_depth": 0,
+            "label_order": 0,
+            "exact_dose_text": "20 mcg",
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "Tablet(s)",
+        },
+        {
+            "label_display_name": "Vitamin D",
+            "raw_source_path": "ingredientRows[1]",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "nested_depth": 0,
+            "label_order": 1,
+            "exact_dose_text": "40 mcg",
+            "serving_size_order": 1,
+            "serving_size_quantity": 2,
+            "serving_size_unit": "Tablet(s)",
+        },
+    ]
+
+    rows = _fold_general_serving_variants(
+        {"servingSizes": [{"order": 1, "notes": "One or two tablets"}]},
+        ledger,
+    )
+
+    assert len(rows) == 1
+    assert [row["exact_dose_text"] for row in rows[0]["serving_variants"]] == [
+        "20 mcg",
+        "40 mcg",
+    ]
+
+
 def test_label_dose_text_normalizes_dsld_units_and_preserves_enzyme_activity():
     from enhanced_normalizer import EnhancedDSLDNormalizer
 
@@ -4573,6 +4651,73 @@ def test_cleaner_merges_annotations_for_same_group_blend_source_occurrence():
     assert len(wellbody_rows) == 1
     assert wellbody_rows[0]["raw_source_path"] == "ingredientRows[0]"
     assert wellbody_rows[0]["exact_dose_text"] == "500 mg"
+
+
+def test_cleaner_merges_multi_serving_blend_header_by_canonical_source_path():
+    """One DSLD row remains one label row even when it has serving variants.
+
+    The mapped-active and structural-container observations carry different
+    dose presentations, but they still describe the same indexed source row.
+    """
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "PROBIOTIC-MULTI-SERVING-BLEND",
+        "fullName": "Probiotic Gummies",
+        "brandName": "Test Brand",
+        "servingSizes": [
+            {"order": 1, "minQuantity": 1, "maxQuantity": 1, "unit": "Gummy"},
+            {"order": 2, "minQuantity": 2, "maxQuantity": 2, "unit": "Gummy"},
+        ],
+        "ingredientRows": [
+            {
+                "order": 1,
+                "name": "Proprietary Probiotic Blend",
+                "ingredientGroup": "Proprietary Blend",
+                "category": "blend",
+                "quantity": [
+                    {
+                        "quantity": 10,
+                        "unit": "mg",
+                        "servingSizeOrder": 1,
+                        "servingSizeQuantity": 1,
+                        "servingSizeUnit": "Gummy",
+                    },
+                    {
+                        "quantity": 20,
+                        "unit": "mg",
+                        "servingSizeOrder": 2,
+                        "servingSizeQuantity": 2,
+                        "servingSizeUnit": "Gummy",
+                    },
+                ],
+                "nestedRows": [
+                    {
+                        "order": 2,
+                        "name": "Bacillus subtilis DE111",
+                        "ingredientGroup": "Bacillus Subtilis",
+                        "category": "bacteria",
+                        "quantity": [{"quantity": 0, "unit": "NP"}],
+                    },
+                ],
+            },
+        ],
+        "otheringredients": {"ingredients": []},
+    })
+
+    blend_rows = [
+        row
+        for row in normalized["display_ingredients"]
+        if row["raw_source_path"] == "ingredientRows[0]"
+    ]
+    assert len(blend_rows) == 1
+    assert blend_rows[0]["display_type"] == "structural_container"
+    assert blend_rows[0]["score_included"] is False
+    assert blend_rows[0]["children"] == ["Bacillus subtilis DE111"]
+    assert [
+        variant["exact_dose_text"]
+        for variant in blend_rows[0]["serving_variants"]
+    ] == ["10 mg", "20 mg"]
 
 
 def test_cleaner_preserves_distinct_inactive_string_form_siblings():

@@ -316,6 +316,49 @@ class TestCorrectnessChecks:
         assert len(missing) > 0
         assert "Novel Nutrient" in missing[0].details.get("nutrient", "")
 
+    @pytest.mark.parametrize(
+        "skip_reason",
+        [
+            "amount_not_declared",
+            "not_ul_applicable",
+            "unknown_folate_form_lineage",
+        ],
+    )
+    def test_expected_nonconvertible_units_are_not_reported_as_missing(
+        self, gate, skip_reason
+    ):
+        """NP/CFU/activity units are explicit non-dose states, not defects."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {},
+                "summary": {"coverage_percent": 100.0},
+            },
+            "rda_ul_data": {
+                "analyzed_ingredients": [
+                    {
+                        "name": "Lactobacillus or enzyme activity",
+                        "amount": 40,
+                        "unit": "NP",
+                        "skip_ul_reason": skip_reason,
+                        "conversion_evidence": {
+                            "success": False,
+                            "error": "No conversion rule found for explicit non-mass unit",
+                        },
+                    }
+                ]
+            },
+        }
+
+        result = gate.check_product(product)
+
+        missing = [
+            issue
+            for issue in result.correctness_issues
+            if issue.issue_type == "missing_conversion"
+        ]
+        assert missing == []
+
     def test_claim_scope_violation_detection(self, gate):
         """Detect claims that may exceed allowed scope (drug claims)."""
         product = {

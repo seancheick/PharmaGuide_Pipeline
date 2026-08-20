@@ -1851,6 +1851,63 @@ class TestBlendPatternPositiveTests:
             f"therapeutic; got skip_reason={reason!r}"
         )
 
+    def test_disclosed_nested_active_is_scored_without_scoring_parent_total(self, enricher):
+        """Analysis flattens disclosed children while the label keeps hierarchy."""
+        product = {
+            "dsld_id": "20009",
+            "fullName": "Green Tea Complex 400 mg",
+            "activeIngredients": [
+                {
+                    "name": "Green Tea Complex",
+                    "standardName": "Green Tea Extract",
+                    "canonical_id": "green_tea_extract",
+                    "canonical_source_db": "ingredient_quality_map",
+                    "quantity": 400,
+                    "unit": "mg",
+                    "source_section": "active",
+                    "raw_source_path": "ingredientRows[1]",
+                    "cleaner_row_role": "blend_header_total",
+                    "score_eligible_by_cleaner": False,
+                    "score_exclusion_reason": "blend_header_total",
+                    "dose_class": "blend_total_weight",
+                    "raw_taxonomy": {"category": "botanical"},
+                    "nestedIngredients": [
+                        {
+                            "name": "Green Tea Extract",
+                            "standardName": "Green Tea Extract",
+                            "canonical_id": "green_tea_extract",
+                            "canonical_source_db": "ingredient_quality_map",
+                            "quantity": 150,
+                            "unit": "mg",
+                            "source_section": "active",
+                            "raw_source_path": "ingredientRows[1].nestedRows[1]",
+                            "cleaner_row_role": "active_scorable",
+                            "score_eligible_by_cleaner": True,
+                            "score_exclusion_reason": None,
+                            "dose_class": "therapeutic_mass",
+                            "raw_taxonomy": {"category": "botanical"},
+                            "isNestedIngredient": True,
+                            "parentBlend": "Green Tea Complex",
+                            "nestedIngredients": [],
+                        }
+                    ],
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+
+        assert [row["name"] for row in result["ingredients_scorable"]] == [
+            "Green Tea Extract"
+        ]
+        assert result["ingredients_scorable"][0]["raw_source_path"] == (
+            "ingredientRows[1].nestedRows[1]"
+        )
+        assert [row["name"] for row in result["ingredients_skipped"]] == [
+            "Green Tea Complex"
+        ]
+
     def test_branded_complex_without_nested_still_scores(self, enricher):
         """
         Branded names containing 'complex' with NO nestedIngredients must not

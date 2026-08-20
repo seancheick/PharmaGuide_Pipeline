@@ -15,8 +15,10 @@ The typed state exists so that "confirmed over the limit" never gets conflated w
 "we could not resolve this exposure". Both may deduct, but they must not claim the
 same thing to a reader:
 
-    none                       flag present, resolved, under the threshold
-    confirmed_over_threshold   resolved, at/over the threshold, gate-eligible
+    none                       flag present, resolved, at/below the UL
+    confirmed_over_threshold   resolved above the UL and gate-eligible; the
+                               ``penalized`` field records whether it also
+                               crosses the configured B7 scoring threshold
     material_but_unresolved    exposure is material but the check is incomplete
                                (magnitude absent, or the enricher marked the row
                                ineligible for the UL gate). Routes to review;
@@ -83,6 +85,11 @@ _FOLATE_MASS_TO_MCG = {
 _FOLATE_BASIS_UNSTATED = ""
 _FOLATE_BASIS_DFE = "dfe"
 _FOLATE_BASIS_MASS = "mass"
+
+# A UL is the highest daily intake expected to pose no risk for nearly all
+# healthy people. A confirmed exposure above 100% is therefore consumer-
+# actionable even when the separate B7 scoring penalty starts at 150%.
+_CONFIRMED_UL_EXCEEDANCE_PCT = 100.0
 
 
 def _folate_dose_basis(value: Any) -> tuple[str, Optional[float]]:
@@ -321,7 +328,7 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
             penalized=False,
         )
 
-    if pct_ul is not None and pct_ul < threshold:
+    if pct_ul is not None and pct_ul <= _CONFIRMED_UL_EXCEEDANCE_PCT:
         return DoseSafetyFlag(
             state=NONE,
             nutrient=nutrient,
@@ -371,7 +378,7 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
         nutrient=nutrient,
         canonical_id=canonical_id,
         pct_ul=pct_ul,
-        penalized=True,
+        penalized=pct_ul >= threshold,
     )
 
 

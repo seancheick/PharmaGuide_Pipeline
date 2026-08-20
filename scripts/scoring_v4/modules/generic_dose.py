@@ -110,6 +110,13 @@ PHASE_MARKER = "P1.3.2a_dose_proxy"
 METHOD_MARKER = "rda_ul_proxy_until_dietary_intake_table"
 DEFERRED_DATA = "typical_dietary_intake"
 
+# These nutrients are supplied mainly by food, while ordinary standalone
+# supplements intentionally provide only a small fraction of the dietary AI.
+# Comparing a normal label dose directly with the full dietary target makes a
+# market-standard product look defective. Keep the RDA/AI in nutrient tracking;
+# only the generic product-quality proxy excludes it.
+_DIETARY_INTAKE_DOMINANT_CANONICALS = frozenset({"potassium"})
+
 
 # --- Supplemental-window proxy -------------------------------------------
 
@@ -155,8 +162,14 @@ def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Op
     adequacy_results = _safe_list(rda_ul.get("adequacy_results"))
 
     contributions: List[float] = []
+    dietary_reference_exclusions = 0
     for row in adequacy_results:
         if not isinstance(row, dict):
+            continue
+        canonical = _norm_text(row.get("canonical_id"))
+        nutrient = _norm_text(row.get("nutrient"))
+        if canonical in _DIETARY_INTAKE_DOMINANT_CANONICALS or nutrient in _DIETARY_INTAKE_DOMINANT_CANONICALS:
+            dietary_reference_exclusions += 1
             continue
         pct_rda = _as_float(row.get("pct_rda"), None)
         pct_ul = _as_float(row.get("pct_ul"), None)
@@ -166,6 +179,8 @@ def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Op
         contributions.append(credit)
 
     if not contributions:
+        if dietary_reference_exclusions:
+            return 0.0, "dietary_intake_dominant_reference_excluded"
         return 0.0, "no_rda_reference_data"
 
     avg = sum(contributions) / len(contributions)
@@ -442,7 +457,10 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     window_credit, window_reason = _score_supplemental_window_proxy(product)
-    no_rda_reference = window_reason == "no_rda_reference_data"
+    no_rda_reference = window_reason in {
+        "no_rda_reference_data",
+        "dietary_intake_dominant_reference_excluded",
+    }
     no_reference_credit = 0.0
     no_reference_credit_reason: Optional[str] = None
     if no_rda_reference:
@@ -468,7 +486,10 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
 
     positive = components["supplemental_window_proxy"] + components["multi_form_bonus"]
     penalty_total = _sum_penalty_magnitudes(penalties)
-    no_rda_reference = window_reason == "no_rda_reference_data"
+    no_rda_reference = window_reason in {
+        "no_rda_reference_data",
+        "dietary_intake_dominant_reference_excluded",
+    }
     if no_rda_reference and b7 <= 0 and no_reference_credit <= 0:
         # Botanicals / herbal actives can have clinically meaningful mg
         # dosing with no RDA/UL reference. Fail open as "not evaluable by

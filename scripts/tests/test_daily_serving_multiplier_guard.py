@@ -166,6 +166,137 @@ def test_label_serving_sizes_outrank_serving_basis() -> None:
     assert daily_serving_multiplier(product) == pytest.approx(2.0)
 
 
+def test_combo_pack_directions_scale_each_dosage_form_once() -> None:
+    """One tablet + one softgel is not two servings of the tablet panel."""
+    product = {
+        "servingSizes": [
+            {
+                "minQuantity": 1,
+                "maxQuantity": 1,
+                "unit": "Tablet(s)",
+                "minDailyServings": 1,
+                "maxDailyServings": 2,
+            }
+        ],
+        "statements": [
+            {
+                "type": "Suggested/Recommended/Usage/Directions",
+                "notes": "Directions: Adults: One tablet and one softgel daily, with food.",
+            }
+        ],
+    }
+
+    assert daily_serving_range(product)[:2] == pytest.approx((1.0, 1.0))
+    assert daily_serving_multiplier(product) == pytest.approx(1.0)
+
+
+def test_combo_pack_unit_count_is_divided_by_the_facts_serving_size() -> None:
+    """Pure Pack: 9 capsules in one daily packet is one 9-capsule serving."""
+    product = {
+        "servingSizes": [
+            {
+                "minQuantity": 9,
+                "maxQuantity": 9,
+                "unit": "Capsule(s)",
+                "minDailyServings": 1,
+                "maxDailyServings": 1,
+            }
+        ],
+        "statements": [
+            {
+                "type": "Suggested/Recommended/Usage/Directions",
+                "notes": "Take 1 packet daily (9 capsules), with a meal.",
+            }
+        ],
+    }
+
+    assert daily_serving_range(product)[:2] == pytest.approx((1.0, 1.0))
+
+
+def test_split_directions_do_not_double_a_full_daily_facts_panel() -> None:
+    """MegaFood 210684: Facts are for 4 tablets, taken as 2 tablets twice daily.
+
+    DSLD exposes the intake occasion as a 2-tablet serving taken twice daily,
+    while every ingredient quantity explicitly says it is based on 4 tablets.
+    The analysis multiplier must therefore be one full Facts panel per day,
+    not two panels per day.
+    """
+    product = {
+        "servingSizes": [
+            {
+                "minQuantity": 2,
+                "maxQuantity": 2,
+                "unit": "Tablet(s)",
+                "minDailyServings": 2,
+                "maxDailyServings": 2,
+            }
+        ],
+        "serving_basis": {
+            "basis_count": 4,
+            "basis_unit": "tablet",
+            "basis_reason": "net_contents_servings_per_container",
+        },
+        "activeIngredients": [
+            {
+                "name": "Magnesium",
+                "quantity": 300,
+                "unit": "mg",
+                "raw_taxonomy": {
+                    "quantityVariants": [
+                        {
+                            "quantity": 300,
+                            "unit": "mg",
+                            "serving_size_quantity": 4,
+                            "serving_size_unit": "Tablet(s)",
+                        }
+                    ]
+                },
+            }
+        ],
+    }
+
+    assert daily_serving_range(product)[:2] == pytest.approx((1.0, 1.0))
+    assert daily_serving_multiplier(product) == pytest.approx(1.0)
+
+
+def test_implausible_ingredient_serving_basis_does_not_shrink_the_dose() -> None:
+    """GNC 260153: DSLD wrote 30 chews as the per-row serving basis.
+
+    The label directs one chew daily, so a 30-chew ingredient basis exceeds
+    the maximum physical intake and is a source defect, not a scaling signal.
+    """
+    product = {
+        "servingSizes": [
+            {
+                "minQuantity": 1,
+                "maxQuantity": 1,
+                "unit": "Soft Chew(s)",
+                "minDailyServings": 1,
+                "maxDailyServings": 1,
+            }
+        ],
+        "activeIngredients": [
+            {
+                "name": "Vitamin K2",
+                "quantity": 100,
+                "unit": "mcg",
+                "raw_taxonomy": {
+                    "quantityVariants": [
+                        {
+                            "quantity": 100,
+                            "unit": "mcg",
+                            "serving_size_quantity": 30,
+                            "serving_size_unit": "Soft Chew(s)",
+                        }
+                    ]
+                },
+            }
+        ],
+    }
+
+    assert daily_serving_multiplier(product) == pytest.approx(1.0)
+
+
 def test_top_level_servings_per_day_outranks_serving_basis() -> None:
     product = {"servings_per_day_max": 3, **CORRUPT_BASIS}
 

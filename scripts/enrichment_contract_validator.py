@@ -141,6 +141,7 @@ class EnrichmentContractValidator:
         "swirly bear",                 # CVS 25945 "Gummy Swirls"
         "chewable bear",               # Garden_of_life 321386
         "chew", "chews",               # GNC 228076
+        "soft chew", "soft chews",     # MegaFood 250775
         "nordic berry", "nordic berries",  # nordic-naturals 221659
         # Label-declared mass servings (Pure_Encapsulations 278384: the label
         # declares 2.2 Gram(s) == 2 gummies @ 1.1 g, servingQuantitySource="label")

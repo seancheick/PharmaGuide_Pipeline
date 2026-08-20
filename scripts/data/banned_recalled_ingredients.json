@@ -2,9 +2,9 @@
   "_metadata": {
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
-    "schema_version": "5.4.1",
-    "last_updated": "2026-06-09",
-    "total_entries": 168,
+    "schema_version": "5.4.2",
+    "last_updated": "2026-08-20",
+    "total_entries": 169,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -5412,21 +5412,14 @@
       "id": "BANNED_RED_YEAST_RICE",
       "standard_name": "Red Yeast Rice (Monacolin K)",
       "aliases": [
-        "red yeast rice",
-        "monascus purpureus",
         "monacolin K",
-        "monacolin",
-        "red yeast rice extract",
-        "hong qu",
-        "red koji rice",
-        "RYR",
-        "ryr-max",
-        "ryr-va",
-        "ryr-va red yeast rice",
-        "ryr-max red yeast rice powder",
-        "ryr-max red yeast rice"
+        "lovastatin",
+        "red yeast rice with monacolin K",
+        "red yeast rice standardized to monacolin K",
+        "red yeast rice with enhanced lovastatin",
+        "red yeast rice with added lovastatin"
       ],
-      "reason": "Contains monacolin K (chemically identical to lovastatin, a prescription statin drug). FDA considers RYR with significant monacolin K an unapproved new drug. EFSA 2025: no safe daily intake level for monacolins can be established.",
+      "reason": "Explicit monacolin K or enhanced/added lovastatin is chemically identical to the prescription statin lovastatin. FDA states that red yeast rice products with enhanced or added lovastatin cannot be marketed as dietary supplements in the United States.",
       "status": "banned",
       "class_tags": [
         "unapproved_drug",
@@ -5449,6 +5442,11 @@
           "monacolin-free"
         ]
       },
+      "requires_explicit_form_evidence": true,
+      "form_evidence_patterns": [
+        "\\bmonacolin\\s*k\\b",
+        "\\blovastatin\\b"
+      ],
       "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "high",
       "jurisdictions": [
@@ -5535,6 +5533,106 @@
       "regulatory_date": "1998-05-20",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
+      "external_ids": {},
+      "ban_context": "substance",
+      "safety_warning": "Contains monacolin K, chemically identical to the prescription statin lovastatin. FDA treats standardized products as unapproved drugs. Talk to your doctor before using, especially if on a statin.",
+      "safety_warning_one_liner": "Natural statin — talk to your doctor before use."
+    },
+    {
+      "id": "RISK_RED_YEAST_RICE",
+      "standard_name": "Red Yeast Rice",
+      "aliases": [
+        "red yeast rice",
+        "red yeast rice powder",
+        "monascus purpureus",
+        "red yeast rice extract",
+        "hong qu",
+        "red koji rice",
+        "RYR",
+        "ryr-max",
+        "ryr-va",
+        "ryr-va red yeast rice",
+        "ryr-max red yeast rice powder",
+        "ryr-max red yeast rice"
+      ],
+      "reason": "Red yeast rice can contain widely varying amounts of monacolin K, a compound identical to lovastatin, and the amount is usually not stated on the label. Products with meaningful amounts can cause statin-like side effects and drug interactions.",
+      "status": "high_risk",
+      "class_tags": [
+        "high_risk_ingredients",
+        "variable_active_content"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 2,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [
+          "statin-free",
+          "low monacolin",
+          "no monacolin k",
+          "monacolin-free"
+        ]
+      },
+      "legal_status_enum": "lawful",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "high_risk",
+          "effective_date": null,
+          "source": {
+            "type": "fda_action",
+            "citation": "FDA distinguishes traditional red yeast rice from products with enhanced or added lovastatin",
+            "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/dr-sam-robbins-inc-dba-hfl-solutions-llc-608729-08282020",
+            "accessed_date": "2026-08-20"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-08-20"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "government_consumer_guidance",
+          "authority": "NIH NCCIH",
+          "citation": "Red Yeast Rice: What You Need To Know",
+          "url": "https://www.nccih.nih.gov/health/red-yeast-rice",
+          "published_date": null,
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "Red Yeast Rice: What You Need To Know"
+        },
+        {
+          "type": "fda_action",
+          "authority": "FDA",
+          "citation": "Dr. Sam Robbins, Inc. Warning Letter",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/dr-sam-robbins-inc-dba-hfl-solutions-llc-608729-08282020",
+          "published_date": "2020-08-28",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "FDA warning letter distinguishing traditional red yeast rice from enhanced or added lovastatin"
+        }
+      ],
+      "source_category": "high_risk_ingredients",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-08-20",
+        "reviewed_by": "data_pipeline_audit",
+        "next_review_due": "2027-02-20",
+        "change_log": [
+          {
+            "date": "2026-08-20",
+            "change": "Separated generic red yeast rice caution from the explicit monacolin K/lovastatin regulatory block.",
+            "by": "wave_1_pre_release_audit"
+          }
+        ]
+      },
+      "regulatory_date": null,
+      "regulatory_date_label": null,
+      "match_mode": "active",
       "cui": "C0763533",
       "external_ids": {
         "unii": "43CAU2Q6DY"
@@ -5550,9 +5648,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "ban_context": "substance",
-      "safety_warning": "Contains monacolin K, chemically identical to the prescription statin lovastatin. FDA treats standardized products as unapproved drugs. Talk to your doctor before using, especially if on a statin.",
-      "safety_warning_one_liner": "Natural statin — talk to your doctor before use."
+      "ban_context": "watchlist",
+      "safety_warning": "Red yeast rice can contain varying amounts of monacolin K, which acts like a statin. It can cause similar side effects and interactions. Talk to your clinician before use.",
+      "safety_warning_one_liner": "Natural statin content can vary. Talk to your doctor before use."
     },
     {
       "id": "BANNED_S23",
@@ -16369,6 +16467,7 @@
       ],
       "entity_type": "ingredient",
       "match_mode": "active",
+      "active_nutrient_parent": "boron",
       "status": "banned",
       "reason": "Borax (sodium tetraborate) is an EU-banned food additive classified as a reproductive toxicant (CMR 1B). Despite folk remedy claims, no dietary supplement use is warranted. ECHA SVHC listing under REACH since 2010. NOTE: 'Sodium Borate' removed from aliases to avoid false positives — DSLD labels use 'Sodium Borate' as a trace boron mineral source in multivitamins, not as borax food additive.",
       "legal_status_enum": "not_lawful_as_supplement",

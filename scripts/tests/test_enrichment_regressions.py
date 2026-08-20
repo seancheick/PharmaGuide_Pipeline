@@ -202,6 +202,82 @@ class TestNaturalColors:
         if result['additives']:
             assert any('red' in a.get('additive_name', '').lower() for a in result['additives'])
 
+    def test_declared_trace_nutrients_are_not_reclassified_as_contaminants(self, enricher):
+        """Supplement Facts nutrients and their source salts are label identity, not contamination."""
+        ingredients = [
+            {
+                'name': 'Nickel',
+                'standardName': 'Nickel',
+                '_source_section': 'active',
+            },
+            {
+                'name': 'Nickelous Sulfate',
+                'standardName': 'Nickelous Sulfate',
+                '_source_section': 'inactive',
+            },
+            {
+                'name': 'Tin',
+                'standardName': 'Tin',
+                '_source_section': 'active',
+            },
+            {
+                'name': 'Stannous Chloride',
+                'standardName': 'Stannous Chloride',
+                '_source_section': 'inactive',
+            },
+        ]
+
+        result = enricher._check_harmful_additives(ingredients)
+
+        ids = {row.get('additive_id') for row in result.get('additives', [])}
+        assert 'ADD_NICKEL' not in ids
+        assert 'ADD_TIN' not in ids
+
+    def test_standalone_inactive_trace_metal_remains_a_contaminant(self, enricher):
+        result = enricher._check_harmful_additives([
+            {
+                'name': 'Nickelous Sulfate',
+                'standardName': 'Nickelous Sulfate',
+                '_source_section': 'inactive',
+            }
+        ])
+
+        ids = {row.get('additive_id') for row in result.get('additives', [])}
+        assert 'ADD_NICKEL' in ids
+
+    def test_active_nutrient_source_form_is_not_charged_as_an_additive(self, enricher):
+        """A source salt repeated under Other Ingredients belongs to its active nutrient."""
+        result = enricher._check_harmful_additives([
+            {
+                'name': 'Copper',
+                'standardName': 'Copper',
+                'canonical_id': 'copper',
+                '_source_section': 'active',
+            },
+            {
+                'name': 'Copper Sulfate',
+                'standardName': 'Copper',
+                'canonical_id': 'copper',
+                '_source_section': 'inactive',
+            },
+        ])
+
+        ids = {row.get('additive_id') for row in result.get('additives', [])}
+        assert 'ADD_CUPRIC_SULFATE' not in ids
+
+    def test_standalone_inactive_nutrient_salt_keeps_additive_classification(self, enricher):
+        result = enricher._check_harmful_additives([
+            {
+                'name': 'Copper Sulfate',
+                'standardName': 'Copper',
+                'canonical_id': 'copper',
+                '_source_section': 'inactive',
+            },
+        ])
+
+        ids = {row.get('additive_id') for row in result.get('additives', [])}
+        assert 'ADD_CUPRIC_SULFATE' in ids
+
 
 class TestProbioticCFU:
     """P1.1: Viable Cell(s) as CFU-equivalent"""
@@ -555,6 +631,59 @@ class TestQuantityVariants:
         assert variants[1]['serving_size_order'] == 2
         assert variants[1]['serving_size_quantity'] == 0.5
         assert variants[1]['serving_size_unit'] == 'Gram(s)'
+
+    def test_quantity_primary_skips_placeholder_when_later_variant_has_dose(self):
+        """A DSLD age-band placeholder must not erase the disclosed dose."""
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+
+        normalizer = EnhancedDSLDNormalizer()
+        quantities = [
+            {
+                'quantity': 0,
+                'unit': 'NP',
+                'servingSizeOrder': 1,
+                'servingSizeQuantity': 1,
+                'servingSizeUnit': 'Gummy(ies)',
+                'dailyValueTargetGroup': [
+                    {'name': 'Children less than 4 years of age', 'percent': 67}
+                ],
+            },
+            {
+                'quantity': 400,
+                'unit': 'mcg',
+                'servingSizeOrder': 2,
+                'servingSizeQuantity': 2,
+                'servingSizeUnit': 'Gummy(ies)',
+                'dailyValueTargetGroup': [
+                    {
+                        'name': 'Adults and children 4 or more years of age',
+                        'percent': 44,
+                    }
+                ],
+            },
+        ]
+
+        quantity, unit, daily_value, variants = normalizer._process_quantity(quantities)
+
+        assert quantity == 400
+        assert unit == 'mcg'
+        assert daily_value == 44
+        assert len(variants) == 2
+
+    def test_quantity_primary_keeps_first_when_multiple_variants_have_doses(self):
+        """Do not turn variant selection into an implicit maximum-dose rule."""
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+
+        normalizer = EnhancedDSLDNormalizer()
+        quantities = [
+            {'quantity': 10, 'unit': 'mg', 'servingSizeOrder': 1},
+            {'quantity': 20, 'unit': 'mg', 'servingSizeOrder': 2},
+        ]
+
+        quantity, unit, _, _ = normalizer._process_quantity(quantities)
+
+        assert quantity == 10
+        assert unit == 'mg'
 
     def test_single_quantity_no_variants(self):
         """Single quantity returns no variants list"""
@@ -1668,6 +1797,55 @@ class TestStandardizedBotanicalAliasRegression:
         first = standardized_hits[0]
         assert first.get("botanical_id") == "cocoa_flavanol_extract"
         assert first.get("meets_threshold") is False
+
+    def test_disclosed_nested_marker_mass_derives_standardization_percentage(self, enricher):
+        """A quantified marker child may prove the parent's exact standardization."""
+        enricher.databases["standardized_botanicals"] = {
+            "standardized_botanicals": [
+                {
+                    "id": "curcumin",
+                    "standard_name": "Curcumin",
+                    "aliases": ["curcumin c3 complex turmeric extract"],
+                    "markers": ["curcuminoids", "curcumin"],
+                    "min_threshold": 95,
+                    "standardization_unit": "percent",
+                }
+            ]
+        }
+        product = {
+            "activeIngredients": [
+                {
+                    "name": "Curcumin C3 Complex Turmeric Extract",
+                    "standardName": "Curcumin",
+                    "quantity": 0.7,
+                    "unit": "g",
+                    "nestedIngredients": [
+                        {
+                            "name": "Curcuminoids",
+                            "standardName": "Curcumin",
+                            "quantity": 665,
+                            "unit": "mg",
+                        },
+                        {
+                            "name": "Curcumin",
+                            "standardName": "Curcumin",
+                            "quantity": 500,
+                            "unit": "mg",
+                        },
+                    ],
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        standardized_hits = enricher._collect_standardized_botanicals(product)
+
+        assert len(standardized_hits) == 1
+        first = standardized_hits[0]
+        assert first["percentage_found"] == pytest.approx(95.0)
+        assert first["percentage_source"] == "disclosed_marker_ratio"
+        assert first["evidence_source"] == "percentage_disclosed_marker_ratio"
+        assert first["meets_threshold"] is True
 
 
 class TestBotanicalIdentityCoverageRegression:

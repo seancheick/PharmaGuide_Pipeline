@@ -114,3 +114,26 @@ def test_clinical_match_real_ala_evidence_fires(enricher):
         "Real Pure Encapsulations Alpha Lipoic Acid 100mg product must match "
         "the INGR_ALPHA_LIPOIC_ACID evidence record"
     )
+
+
+def test_alpha_linolenic_ala_does_not_borrow_alpha_lipoic_evidence(enricher):
+    """Authoritative ALA context must beat the ambiguous label abbreviation."""
+    product = {
+        "id": "ala-flax-canary",
+        "fullName": "Omega Fatty Acid Blend",
+        "activeIngredients": [{
+            "name": "ALA",
+            "standardName": "Alpha-Linolenic Acid",
+            "raw_source_text": "ALA",
+            "canonical_id": "alpha_linolenic_acid",
+            "quantity": 50,
+            "unit": "mg",
+            "score_eligible_by_cleaner": True,
+            "cleaner_row_role": "active_scorable",
+        }],
+    }
+
+    evidence = enricher._collect_evidence_data(product)
+    ids = {row.get("id") for row in evidence["clinical_matches"]}
+
+    assert "INGR_ALPHA_LIPOIC_ACID" not in ids

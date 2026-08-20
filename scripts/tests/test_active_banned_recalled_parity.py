@@ -133,8 +133,9 @@ def test_red_yeast_rice_active_signals() -> None:
     if pair is None:
         pytest.skip("no Red Yeast Rice active in any reachable build dir")
     _, ing = pair
-    # banned status → both flags
-    assert ing.get("is_banned") is True
+    # Generic RYR is a high-risk review, not an automatic unapproved-drug block.
+    # Only explicit monacolin K / lovastatin evidence is banned.
+    assert ing.get("is_banned") is False
     assert ing.get("is_safety_concern") is True
 
 

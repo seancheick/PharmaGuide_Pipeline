@@ -1536,6 +1536,20 @@ def test_descriptor_rows_are_skip_classified(normalizer, name):
     assert normalizer._is_nutrition_fact(name) is True
 
 
+def test_standardized_botanical_extract_is_preserved_as_ingredient(normalizer):
+    assert normalizer._is_nutrition_fact(
+        "95% standardized Turmeric (Curcuma longa) extract",
+        dsld_category="botanical",
+    ) is False
+
+
+def test_standardization_marker_remains_label_context(normalizer):
+    assert normalizer._is_nutrition_fact(
+        "Standardized to 95% Curcuminoids",
+        dsld_category="non-nutrient/non-botanical",
+    ) is True
+
+
 def test_generic_header_token_is_skip_classified(normalizer):
     assert normalizer._should_skip_ingredient("Ingredients") is True
 
@@ -2958,8 +2972,8 @@ def test_red_yeast_rice_resolves_canonical_identity(normalizer, name):
     UNMAPPED — _resolve_canonical_identity returned (None, None) — quarantining 13
     products at the export contract ('missing required active identity', which
     requires canonical_id). It must now resolve to the red_yeast_rice botanical
-    identity so those products ship and pick up their existing monacolin-K safety
-    handling (banned_recalled_ingredients.json)."""
+    identity so those products ship and pick up their red-yeast-rice safety
+    handling without assuming that monacolin K was explicitly disclosed."""
     canonical_id, source_db = normalizer._resolve_canonical_identity(name, name)
 
     assert canonical_id == "red_yeast_rice"
@@ -3009,6 +3023,35 @@ def test_true_unknown_active_is_still_reported_as_unmapped(normalizer):
     assert result["cleaner_row_role"] == "active_scorable"
     delta = normalizer.get_unmapped_delta(snapshot)["unmapped"]
     assert [row["name"] for row in delta] == ["Unverified Phantom Root"]
+
+
+def test_partial_vitamin_form_keeps_printed_nutrient_parent(normalizer):
+    """A 60% beta-carotene disclosure does not make the total Vitamin A row beta-carotene."""
+    result = normalizer._process_single_ingredient_enhanced(
+        {
+            "name": "Vitamin A",
+            "category": "vitamin",
+            "ingredientGroup": "Vitamin A (unspecified)",
+            "uniiCode": None,
+            "quantity": [{"quantity": 2500, "unit": "IU"}],
+            "forms": [
+                {
+                    "name": "Beta-Carotene",
+                    "category": "vitamin",
+                    "ingredientGroup": "Vitamin A",
+                    "uniiCode": "01YAE03M7J",
+                    "percent": 60,
+                    "prefix": "as",
+                }
+            ],
+        },
+        is_active=True,
+    )
+
+    assert result is not None
+    assert result["canonical_id"] == "vitamin_a"
+    assert result["standardName"] == "Vitamin A"
+    assert result["forms"][0]["name"] == "Beta-Carotene"
 
 
 @pytest.mark.parametrize(

@@ -59,6 +59,11 @@ class TestNutritionFactsPanelExcludedFromActives:
         # Sugar alcohols with Gram(s) panel unit (the top-offending leak)
         ("Sugar Alcohols",  "Sugar Alcohol",  "Gram(s)", "non-nutrient/non-botanical"),
         ("Sugar Alcohol",   "Sugar Alcohol",  "Gram(s)", "non-nutrient/non-botanical"),
+        # Wave-1 Centrum spellings: DSLD uses a generic ``g`` unit and either
+        # an ``(unspecified)`` group suffix or the named sugar alcohol. These
+        # are carbohydrate-panel disclosures, not supplement actives.
+        ("Sugar Alcohol",   "Sugar alcohol (unspecified)", "g", "non-nutrient/non-botanical"),
+        ("Isomalt",         "Isomalt",         "g",       "non-nutrient/non-botanical"),
         # Sugar-category rows (any unit — category alone qualifies)
         ("Dextrose",        "Glucose",        "mg",      "sugar"),
         ("Cane Sugar",      "Sucrose",        "NP",      "sugar"),

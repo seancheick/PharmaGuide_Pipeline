@@ -25,16 +25,30 @@ them removes the drift surface, not just the defect.
 from __future__ import annotations
 
 import math
+import re
 from typing import Any, Dict, Optional, Tuple
 
 __all__ = [
     "format_daily_frequency",
     "resolve_daily_serving_range",
     "resolve_daily_serving_multiplier",
+    "select_canonical_serving",
 ]
 
 # Provenance values the enricher writes into serving_basis.servings_per_day_source.
 SOURCE_DIRECTIONS = "directions"
+
+_COUNT_WORDS = {
+    "one": 1.0,
+    "two": 2.0,
+    "three": 3.0,
+    "four": 4.0,
+}
+_DOSAGE_FORM_PATTERN = re.compile(
+    r"\b(one|two|three|four|\d+(?:\.\d+)?)\s+"
+    r"(tablets?|softgels?|capsules?|caplets?|gummies?|packets?)\b",
+    re.IGNORECASE,
+)
 
 
 def _positive_float(value: Any) -> Optional[float]:
@@ -66,6 +80,190 @@ def _ordered_pair(low: Any, high: Any) -> Optional[Tuple[float, float]]:
     return (hi, lo) if lo > hi else (lo, hi)
 
 
+def _canonical_dosage_form(value: Any) -> str:
+    text = str(value or "").strip().lower()
+    text = re.sub(r"\(s\)", "", text)
+    text = re.sub(r"[^a-z]", "", text)
+    aliases = {"gummie": "gummy"}
+    text = aliases.get(text, text)
+    return text[:-1] if text.endswith("s") else text
+
+
+def _facts_panel_daily_range(record: Dict[str, Any]) -> Optional[Tuple[float, float]]:
+    """Rebase split intake occasions onto the declared Supplement Facts panel.
+
+    Some DSLD labels describe each intake occasion in ``servingSizes`` while
+    the ingredient rows remain expressed for the complete daily Facts panel.
+    Example: 2 tablets twice daily, with every quantity explicitly based on
+    4 tablets.  Scale only when the ingredient-row basis is unanimous and uses
+    the same dosage form; this keeps ordinary multi-serving labels untouched.
+    """
+    serving = select_canonical_serving(record.get("servingSizes"))
+    if not isinstance(serving, dict):
+        return None
+    serving_quantity = next(
+        (
+            number
+            for key in ("quantity", "servingSizeQuantity", "maxQuantity", "minQuantity")
+            if (number := _positive_float(serving.get(key))) is not None
+        ),
+        None,
+    )
+    serving_unit = _canonical_dosage_form(serving.get("unit"))
+    daily_range = _ordered_pair(
+        serving.get("minDailyServings") or serving.get("min_daily_servings"),
+        serving.get("maxDailyServings") or serving.get("max_daily_servings"),
+    )
+    if serving_quantity is None or not serving_unit or daily_range is None:
+        return None
+
+    facts_bases: set[float] = set()
+
+    def visit(rows: Any) -> None:
+        if not isinstance(rows, list):
+            return
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            raw_taxonomy = row.get("raw_taxonomy")
+            variants = (
+                raw_taxonomy.get("quantityVariants")
+                if isinstance(raw_taxonomy, dict)
+                else None
+            )
+            if isinstance(variants, list):
+                for variant in variants:
+                    if not isinstance(variant, dict):
+                        continue
+                    basis = _positive_float(
+                        variant.get("serving_size_quantity")
+                        or variant.get("servingSizeQuantity")
+                    )
+                    basis_unit = _canonical_dosage_form(
+                        variant.get("serving_size_unit")
+                        or variant.get("servingSizeUnit")
+                    )
+                    if basis is not None and basis_unit == serving_unit:
+                        facts_bases.add(basis)
+            visit(row.get("nestedIngredients"))
+
+    visit(record.get("activeIngredients"))
+    if len(facts_bases) != 1:
+        return None
+    facts_basis = next(iter(facts_bases))
+    if facts_basis <= serving_quantity:
+        return None
+    # The facts-panel basis cannot exceed every physical unit the label allows
+    # in a day. Larger values are known DSLD field defects (for example a
+    # 30-count package copied into a one-chew serving row), not dose evidence.
+    if facts_basis > serving_quantity * daily_range[1] * 1.05:
+        return None
+
+    return (
+        serving_quantity * daily_range[0] / facts_basis,
+        serving_quantity * daily_range[1] / facts_basis,
+    )
+
+
+def select_canonical_serving(serving_sizes: Any) -> Optional[Dict[str, Any]]:
+    """Select the label serving row used as the product's analysis basis.
+
+    DSLD commonly emits child and adult serving rows together. The established
+    pipeline policy is to use the row with the largest positive serving
+    quantity (the adult/default column), falling back to the first row when no
+    quantity is usable. Keep that policy here so cleaning and enrichment select
+    the same Supplement Facts column.
+    """
+    if not isinstance(serving_sizes, list) or not serving_sizes:
+        return None
+
+    selected: Optional[Dict[str, Any]] = None
+    selected_quantity = -1.0
+    first_row: Optional[Dict[str, Any]] = None
+    for row in serving_sizes:
+        if not isinstance(row, dict):
+            continue
+        if first_row is None:
+            first_row = row
+        quantity = next(
+            (
+                number
+                for key in (
+                    "quantity",
+                    "servingSizeQuantity",
+                    "maxQuantity",
+                    "minQuantity",
+                    "normalizedServing",
+                )
+                if (number := _positive_float(row.get(key))) is not None
+            ),
+            None,
+        )
+        if quantity is not None and quantity > selected_quantity:
+            selected = row
+            selected_quantity = quantity
+    return selected or first_row
+
+
+def _composite_pack_daily_range(record: Dict[str, Any]) -> Optional[Tuple[float, float]]:
+    """Resolve each form independently in a heterogeneous daily combo pack.
+
+    DSLD can encode ``one tablet and one softgel daily`` as maxDailyServings=2
+    on the tablet Supplement Facts row. That value counts two physical items,
+    not two servings of every tablet nutrient. Only override the declared range
+    when directions explicitly name at least two distinct dosage forms and the
+    current serving row matches one of them.
+    """
+    serving_sizes = record.get("servingSizes")
+    statements = record.get("statements")
+    if not isinstance(serving_sizes, list) or not isinstance(statements, list):
+        return None
+
+    direction_texts = []
+    for statement in statements:
+        if not isinstance(statement, dict):
+            continue
+        statement_type = str(statement.get("type") or "").lower()
+        text = str(statement.get("notes") or statement.get("text") or "").strip()
+        if text and ("direction" in statement_type or "suggest" in statement_type):
+            direction_texts.append(text)
+    directions = " ".join(direction_texts)
+    if "daily" not in directions.lower():
+        return None
+
+    counts_by_form: Dict[str, list[float]] = {}
+    for count_text, form_text in _DOSAGE_FORM_PATTERN.findall(directions):
+        count = _COUNT_WORDS.get(count_text.lower())
+        if count is None:
+            count = _positive_float(count_text)
+        form = _canonical_dosage_form(form_text)
+        if count is not None and form:
+            counts_by_form.setdefault(form, []).append(count)
+    if len(counts_by_form) < 2:
+        return None
+
+    best_quantity = -1.0
+    selected_form = ""
+    for entry in serving_sizes:
+        if not isinstance(entry, dict):
+            continue
+        quantity = next(
+            (
+                number
+                for key in ("quantity", "servingSizeQuantity", "maxQuantity", "minQuantity")
+                if (number := _positive_float(entry.get(key))) is not None
+            ),
+            0.0,
+        )
+        form = _canonical_dosage_form(entry.get("unit"))
+        if quantity > best_quantity:
+            selected_form, best_quantity = form, quantity
+    counts = counts_by_form.get(selected_form) or []
+    if not counts or best_quantity <= 0:
+        return None
+    return min(counts) / best_quantity, max(counts) / best_quantity
+
+
 def _label_declared_daily_range(record: Dict[str, Any]) -> Optional[Tuple[float, float]]:
     """The canonical serving row's declared daily-serving range.
 
@@ -78,26 +276,13 @@ def _label_declared_daily_range(record: Dict[str, Any]) -> Optional[Tuple[float,
     if not isinstance(serving_sizes, list):
         return None
 
-    best: Optional[Tuple[float, float]] = None
-    best_quantity = -1.0
-    for entry in serving_sizes:
-        if not isinstance(entry, dict):
-            continue
-        pair = _ordered_pair(
-            entry.get("minDailyServings") or entry.get("min_daily_servings"),
-            entry.get("maxDailyServings") or entry.get("max_daily_servings"),
-        )
-        if pair is None:
-            continue
-        quantity = 0.0
-        for key in ("quantity", "servingSizeQuantity", "maxQuantity", "minQuantity"):
-            number = _positive_float(entry.get(key))
-            if number is not None:
-                quantity = number
-                break
-        if best is None or quantity > best_quantity:
-            best, best_quantity = pair, quantity
-    return best
+    entry = select_canonical_serving(serving_sizes)
+    if entry is None:
+        return None
+    return _ordered_pair(
+        entry.get("minDailyServings") or entry.get("min_daily_servings"),
+        entry.get("maxDailyServings") or entry.get("max_daily_servings"),
+    )
 
 
 def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, bool]:
@@ -117,6 +302,14 @@ def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, b
 
     Falls back to one serving a day, which neither inflates nor crushes a dose.
     """
+    composite = _composite_pack_daily_range(record)
+    if composite is not None:
+        return composite[0], composite[1], False
+
+    facts_panel = _facts_panel_daily_range(record)
+    if facts_panel is not None:
+        return facts_panel[0], facts_panel[1], False
+
     label = _label_declared_daily_range(record)
     if label is not None:
         return label[0], label[1], False

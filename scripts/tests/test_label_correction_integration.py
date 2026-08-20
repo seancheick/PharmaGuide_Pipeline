@@ -117,6 +117,170 @@ def test_override_rewrites_matching_dsld_id_row(normalizer):
     )
 
 
+def test_verified_unit_correction_is_used_by_label_ledger(normalizer):
+    """The Label view and scoring input must use one corrected unit."""
+    raw = _make_raw_product(dsld_id=19916, ingredient_names=[])
+    raw["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Boron", category="mineral"),
+            "quantity": [{"quantity": 150, "unit": "mg"}],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw)
+
+    assert normalized["activeIngredients"][0]["unit"] == "mcg"
+    assert normalized["display_ingredients"][0]["exact_dose_text"] == "150 mcg"
+
+
+def test_alternate_serving_rows_are_one_scoring_ingredient(normalizer):
+    """Repeated columns are serving alternatives, never additive doses."""
+    raw = _make_raw_product(dsld_id=99999996, ingredient_names=[])
+    raw["servingSizes"] = [
+        {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 2,
+            "maxDailyServings": 2,
+            "unit": "Tablet(s)",
+        }
+    ]
+    raw["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Vitamin D", category="vitamin"),
+            "ingredientGroup": "Vitamin D",
+            "notes": "800 IU",
+            "quantity": [{
+                "servingSizeOrder": 1,
+                "servingSizeQuantity": 1,
+                "servingSizeUnit": "Tablet(s)",
+                "quantity": 20,
+                "unit": "mcg",
+            }],
+            "nestedRows": [],
+            "forms": [],
+        },
+        {
+            **_make_ingredient_row("Vitamin D", category="vitamin", order=2),
+            "ingredientGroup": "Vitamin D",
+            "notes": "1600 IU",
+            "quantity": [{
+                "servingSizeOrder": 1,
+                "servingSizeQuantity": 2,
+                "servingSizeUnit": "Tablet(s)",
+                "quantity": 40,
+                "unit": "mcg",
+            }],
+            "nestedRows": [],
+            "forms": [],
+        },
+    ]
+
+    normalized = normalizer.normalize_product(raw)
+
+    assert len(normalized["activeIngredients"]) == 1
+    vitamin_d = normalized["activeIngredients"][0]
+    assert vitamin_d["quantity"] == 20
+    assert [row["quantity"] for row in vitamin_d["quantityVariants"]] == [20, 40]
+    assert len(normalized["display_ingredients"]) == 1
+    display = normalized["display_ingredients"][0]
+    assert display["exact_dose_text"] == ""
+    assert [row["exact_dose_text"] for row in display["serving_variants"]] == [
+        "20 mcg",
+        "40 mcg",
+    ]
+    assert [row["is_canonical"] for row in display["serving_variants"]] == [
+        True,
+        False,
+    ]
+
+
+def test_primary_quantity_matches_canonical_serving_column(normalizer):
+    """A two-tablet column listed first must not be doubled at daily use."""
+    raw = _make_raw_product(dsld_id=99999994, ingredient_names=[])
+    raw["servingSizes"] = [
+        {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 2,
+            "maxDailyServings": 2,
+            "unit": "Tablet(s)",
+        }
+    ]
+    raw["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Calcium", category="mineral"),
+            "quantity": [
+                {
+                    "servingSizeOrder": 1,
+                    "servingSizeQuantity": 2,
+                    "servingSizeUnit": "Tablet(s)",
+                    "quantity": 1200,
+                    "unit": "mg",
+                },
+                {
+                    "servingSizeOrder": 1,
+                    "servingSizeQuantity": 1,
+                    "servingSizeUnit": "Tablet(s)",
+                    "quantity": 600,
+                    "unit": "mg",
+                },
+            ],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw)
+
+    calcium = normalized["activeIngredients"][0]
+    assert calcium["quantity"] == 600
+    assert [row["quantity"] for row in calcium["quantityVariants"]] == [1200, 600]
+    display = normalized["display_ingredients"][0]
+    assert [row["is_canonical"] for row in display["serving_variants"]] == [
+        False,
+        True,
+    ]
+
+
+def test_same_serving_same_name_rows_remain_distinct(normalizer):
+    raw = _make_raw_product(dsld_id=99999995, ingredient_names=[])
+    raw["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Protease", category="enzyme"),
+            "quantity": [{
+                "servingSizeOrder": 1,
+                "servingSizeQuantity": 1,
+                "servingSizeUnit": "Capsule(s)",
+                "quantity": 3030,
+                "unit": "HUT",
+            }],
+            "nestedRows": [],
+            "forms": [],
+        },
+        {
+            **_make_ingredient_row("Protease", category="enzyme", order=2),
+            "quantity": [{
+                "servingSizeOrder": 1,
+                "servingSizeQuantity": 1,
+                "servingSizeUnit": "Capsule(s)",
+                "quantity": 25,
+                "unit": "SAPU",
+            }],
+            "nestedRows": [],
+            "forms": [],
+        },
+    ]
+
+    normalized = normalizer.normalize_product(raw)
+
+    assert len(normalized["activeIngredients"]) == 2
+
+
 def test_override_does_not_apply_to_non_matching_dsld_id(normalizer):
     """If a hypothetical OTHER product (not in overrides) also
     contains 'Insulin' in a fiber-blend cell, it must NOT be
@@ -243,6 +407,50 @@ def test_product_scoped_correction_repairs_verified_quantity_unit(normalizer):
         "original_quantity_unit": "mg",
         "corrected_quantity_unit": "mcg",
     }
+
+
+def test_product_scoped_correction_repairs_crossed_up_and_up_dha_row(normalizer):
+    """DSLD 19899 has a crossed Dextrose/Glucose structured identity, while
+    its own row note and product statements explicitly identify 200 mg DHA."""
+    raw_product = _make_raw_product(19899, [])
+    raw_product["fullName"] = "DHA Prenatal Supplement"
+    raw_product["brandName"] = "up & up"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Dextrose", category="sugar"),
+            "ingredientGroup": "Glucose",
+            "uniiCode": "IY9XDZ35W2",
+            "notes": "DHA (Form: from Schizochytrium sp. oil) (Alt. Name: Docosahexaenoic Acid)",
+            "quantity": [{"quantity": 200, "unit": "mg"}],
+            "nestedRows": [],
+            "forms": [
+                {
+                    **_make_ingredient_row("Glucose", category="sugar"),
+                    "ingredientGroup": "Glucose",
+                    "uniiCode": "5SL0G7R0OK",
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+
+    assert len(normalized["activeIngredients"]) == 1
+    active = normalized["activeIngredients"][0]
+    assert active["name"] == "DHA"
+    assert active["canonical_id"] == "dha"
+    assert active["quantity"] == 200
+    assert active["unit"] == "mg"
+    assert active["uniiCode"] is None
+    assert active["source_correction"]["provenance_tag"] == (
+        "official_source_identity_correction"
+    )
+    assert all(
+        (row.get("canonical_id") or "").lower() != "nha_glucose_liquid"
+        for row in normalized["activeIngredients"]
+    )
 
 
 def test_product_scoped_correction_repairs_verified_boron_unit(normalizer):

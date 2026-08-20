@@ -145,6 +145,61 @@ def _reason_dose(band: str) -> str:
     }[band]
 
 
+def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
+    """Explain an unverifiable per-strain dose without calling total CFU low."""
+    metadata = dim.get("metadata") if isinstance(dim, dict) else None
+    if not isinstance(metadata, dict):
+        return fallback
+    if metadata.get("window_proxy_reason") == "aggregate_cfu_not_per_strain":
+        return (
+            "Total CFU is disclosed, but without amounts for each strain, "
+            "their doses can't be checked."
+        )
+    return fallback
+
+
+def _undisclosed_component_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
+    """Explain an opaque blend without pretending its components are underdosed."""
+    metadata = dim.get("metadata") if isinstance(dim, dict) else None
+    if not isinstance(metadata, dict):
+        return None
+    if metadata.get("botanical_dose_band") == "blend_total_only":
+        return (
+            "The blend total is disclosed, but individual ingredient amounts aren't."
+        )
+    return None
+
+
+def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
+    """Return safety-limit copy when B7 confirms an actionable excess."""
+    metadata = dim.get("metadata") if isinstance(dim, dict) else None
+    if not isinstance(metadata, dict):
+        return None
+    evaluation = metadata.get("B7_safety_evaluation")
+    if not isinstance(evaluation, dict):
+        return None
+    flags = evaluation.get("flags")
+    if isinstance(flags, list) and flags:
+        is_actionable = any(
+            isinstance(flag, dict)
+            and flag.get("state") == "confirmed_over_threshold"
+            and flag.get("penalized") is not False
+            for flag in flags
+        )
+    else:
+        state_counts = evaluation.get("state_counts")
+        is_actionable = (
+            isinstance(state_counts, dict)
+            and _num(state_counts.get("confirmed_over_threshold")) > 0
+        )
+    if not is_actionable:
+        return None
+    return (
+        "At the label's maximum daily use, one or more nutrients exceed "
+        "established safety limits."
+    )
+
+
 def _reason_evidence(band: str) -> str:
     return {
         "high": "Backed by strong human research.",
@@ -516,10 +571,18 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
     ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
     score = _num(dim.get("score"))
     val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
+    over_limit_reason = _over_limit_dose_reason(dim)
+    reason = over_limit_reason
+    if reason is None:
+        reason = _undisclosed_component_dose_reason(dim)
+    if reason is None:
+        reason = _reason_dose(_band(val, weight))
+    if archetype == "probiotic" and over_limit_reason is None:
+        reason = _probiotic_dose_reason(dim, reason)
     return {
         "score": val,
         "max": weight,
-        "reason": _reason_dose(_band(val, weight)),
+        "reason": reason,
         "components": {"raw_dose": score, "archetype": archetype, "reference": ref},
     }
 

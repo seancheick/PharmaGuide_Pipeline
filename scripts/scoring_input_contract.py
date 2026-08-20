@@ -123,7 +123,7 @@ _SPORTS_PRIMARY_CANONICALS = _PROTEIN_CANONICALS | {
 }
 _PROBIOTIC_IDENTITY_RE = re.compile(
     r"\b("
-    r"probiotic|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
+    r"probiotic|trubiotics|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
     r"bacillus|limosilactobacillus|acidophilus|dophilus|bifidus|cfu"
     r")\b",
     re.IGNORECASE,
@@ -2511,7 +2511,7 @@ _ROUTE_PRENATAL_KEYWORDS = re.compile(
     re.IGNORECASE,
 )
 _ROUTE_PROBIOTIC_NAME_RE = re.compile(
-    r"\b(probiotic|probiotics|synbiotic|synbiotics|acidophilus|lactobacillus|"
+    r"\b(probiotic|probiotics|trubiotics|synbiotic|synbiotics|acidophilus|lactobacillus|"
     r"bifidobacterium|saccharomyces|bacillus)\b",
     re.IGNORECASE,
 )
@@ -3065,8 +3065,38 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     name_signal = bool(_ROUTE_PROBIOTIC_NAME_RE.search(name_text or ""))
     primary_type = _primary_type(product)
 
+    # A cleaner-owned probiotic taxonomy plus real named strain identity owns
+    # the peer class even when the product includes a disclosed adjunct such as
+    # DHA. The strain-text check keeps polluted payloads such as "Casein
+    # Decapeptide" from trusting taxonomy alone, while the title guard preserves
+    # magnesium/enzyme/fiber products whose probiotic is genuinely secondary.
+    has_named_strain_identity = any(
+        isinstance(blend, dict) and _has_probiotic_identity_text(blend)
+        for blend in _safe_list(data.get("probiotic_blends"))
+    )
+    if (
+        primary_type == "probiotic"
+        and is_product
+        and strain_count > 0
+        and has_named_strain_identity
+        and not _route_title_has_non_probiotic_hero(name_text)
+    ):
+        return True
+
     if not is_product or strain_count <= 0:
         return False
+
+    # A strong, explicit product-level probiotic identity owns the peer class
+    # even when the formula carries several disclosed adjuncts. This is narrower
+    # than trusting taxonomy alone: it requires the name, a high viable-organism
+    # count, and no non-probiotic title hero before the probiotic claim.
+    if (
+        primary_type == "probiotic"
+        and name_signal
+        and high_cfu
+        and not _route_title_hero_precedes_probiotic_signal(name_text)
+    ):
+        return True
 
     non_probiotic_panel = _route_non_probiotic_scorable_count(product)
     # Disclosed (positive-quantity) panel for the pure-strain promotion paths and
@@ -4350,6 +4380,7 @@ _ROLE_TITLE_STOPWORDS = {
 # enriched row is canonicalized to vitamin_e / Vitamin E; the role classifier
 # still needs to know the product title is selling that row.
 _ROLE_TITLE_ALIASES_BY_CANONICAL = {
+    "vitamin_d": ("d2", "d3", "cholecalciferol", "ergocalciferol"),
     "vitamin_e": ("tocotrienol", "tocotrienols", "tocopherol", "tocopherols"),
 }
 
@@ -4425,7 +4456,13 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         _norm(row.get("standard_name")),
         canonical.replace("_", " "),
     ]
-    candidates.extend(_ROLE_TITLE_ALIASES_BY_CANONICAL.get(canonical, ()))
+    curated_aliases = _ROLE_TITLE_ALIASES_BY_CANONICAL.get(canonical, ())
+    # Curated identity aliases may be shorter than the generic four-character
+    # title-token floor (notably D2/D3). Their canonical-scoped allowlist is
+    # the precision boundary; arbitrary short ingredient tokens remain barred.
+    if any(_norm(alias) in title_tokens for alias in curated_aliases):
+        return True
+    candidates.extend(curated_aliases)
     for cand in candidates:
         for token in re.split(r"[^a-z0-9]+", cand):
             if len(token) >= 4 and token not in _ROLE_TITLE_STOPWORDS and token in title_tokens:

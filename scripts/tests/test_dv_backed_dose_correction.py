@@ -154,6 +154,41 @@ def test_vitamin_d_real_adult_label_math_allows_rounding_drift() -> None:
     assert active["dose_data_quality"]["status"] == "corrected"
 
 
+@pytest.mark.parametrize(
+    ("ingredient_name", "amount", "raw_unit", "percent_dv", "expected_unit"),
+    [
+        ("Vitamin B6", 1.7, "Gram(s)", 100, "mg"),
+        ("Vitamin C", 250, "Gram(s)", 278, "mg"),
+        ("Selenium", 55, "mg", 79, "mcg"),
+    ],
+)
+def test_dv_math_repairs_plural_mass_units_and_legacy_dv_rounding(
+    ingredient_name: str,
+    amount: float,
+    raw_unit: str,
+    percent_dv: float,
+    expected_unit: str,
+) -> None:
+    """DSLD mass-unit typos are repaired only when statutory %DV proves them."""
+    category = "mineral" if ingredient_name == "Selenium" else "vitamin"
+    raw = _raw_product([
+        {
+            "order": 1,
+            "name": ingredient_name,
+            "category": category,
+            "ingredientGroup": ingredient_name,
+            "quantity": _quantity(amount, raw_unit, percent_dv=percent_dv),
+        }
+    ])
+
+    active = _cleaned_active(raw)
+
+    assert active["quantity"] == pytest.approx(amount)
+    assert active["unit"] == expected_unit
+    assert active["dose_data_quality"]["status"] == "corrected"
+    assert active["dose_data_quality"]["raw_unit"] == raw_unit
+
+
 def test_vitamin_d_np_unit_uses_coherent_daily_value_evidence() -> None:
     """A numeric nutrient row marked NP can still have a provable missing unit."""
     raw = _raw_product([
@@ -220,6 +255,105 @@ def test_nested_folic_acid_unit_uses_parent_dfe_equivalence() -> None:
     assert len(folate_rows) == 1
     assert folate_rows[0]["exact_dose_text"] == "666 mcg DFE"
     assert folate_rows[0]["parenthetical_dose_text"] == "400 mcg folic acid"
+
+
+def test_nested_folic_acid_uses_repaired_bare_mcg_parent_context() -> None:
+    """The parent's restored DFE unit must reach its already-flattened child."""
+    raw = _raw_product([
+        {
+            "order": 1,
+            "name": "Folate",
+            "category": "vitamin",
+            "ingredientGroup": "Folate",
+            "quantity": _quantity(333, "mcg", percent_dv=83),
+            "nestedRows": [
+                {
+                    "order": 2,
+                    "name": "Folic Acid",
+                    "category": "vitamin",
+                    "ingredientGroup": "Folate",
+                    "quantity": _quantity(200, "mg"),
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+        }
+    ])
+
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    folate = next(row for row in cleaned["activeIngredients"] if row["name"] == "Folate")
+    folic_acid = next(
+        row for row in cleaned["activeIngredients"] if row["name"] == "Folic Acid"
+    )
+
+    assert folate["unit"] == "mcg DFE"
+    assert folic_acid["quantity"] == pytest.approx(200.0)
+    assert folic_acid["unit"] == "mcg"
+    assert folic_acid["parentBlendUnit"] == "mcg DFE"
+    assert folic_acid["dose_data_quality"]["reason"] == (
+        "parent_equivalence_unit_mismatch"
+    )
+
+
+def test_folate_parent_with_explicit_folic_acid_child_restores_dfe_unit() -> None:
+    """Modern labels can lose only the DFE qualifier in the DSLD API.
+
+    The 267:160 declaration ratio, current 67% DV, and explicit folic-acid
+    child together identify the parent as the printed DFE total without
+    guessing the form of an otherwise bare legacy folate row.
+    """
+    raw = _raw_product([
+        {
+            "order": 1,
+            "name": "Folate",
+            "category": "vitamin",
+            "ingredientGroup": "Folate",
+            "quantity": _quantity(267, "mcg", percent_dv=67),
+            "nestedRows": [
+                {
+                    "order": 2,
+                    "name": "Folic Acid",
+                    "category": "vitamin",
+                    "ingredientGroup": "Folate",
+                    "quantity": _quantity(160, "mcg"),
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+        }
+    ])
+
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    folate = next(
+        row for row in cleaned["activeIngredients"]
+        if row["name"] == "Folate"
+    )
+
+    assert folate["quantity"] == pytest.approx(267.0)
+    assert folate["unit"] == "mcg DFE"
+    assert folate["dose_data_quality"]["reason"] == (
+        "explicit_folic_acid_child_dfe_total"
+    )
+    assert folate["dose_data_quality"]["raw_unit"] == "mcg"
+
+
+def test_bare_legacy_folate_is_not_reinterpreted_as_dfe() -> None:
+    """A historical bare-mcg folate row lacks enough evidence for DFE."""
+    raw = _raw_product([
+        {
+            "order": 1,
+            "name": "Folate",
+            "category": "vitamin",
+            "ingredientGroup": "Folate",
+            "quantity": _quantity(400, "mcg", percent_dv=100),
+            "nestedRows": [],
+        }
+    ])
+
+    folate = _cleaned_active(raw)
+
+    assert folate["unit"] == "mcg"
+    assert "dose_data_quality" not in folate
 
 
 def test_iodine_adult_dv_corrects_mg_to_mcg() -> None:

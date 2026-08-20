@@ -64,9 +64,10 @@ def test_flag_over_threshold_is_confirmed_and_penalized():
     assert result.penalty == PER_FLAG
 
 
-def test_flag_below_threshold_is_none_and_not_penalized():
+def test_flag_over_ul_below_penalty_threshold_is_confirmed_and_not_penalized():
     result = _evaluate([{"nutrient": "Vitamin A", "pct_ul": 120.0, "ul_gate_eligible": True}])
-    assert _states(result) == [NONE]
+    assert _states(result) == [CONFIRMED_OVER_THRESHOLD]
+    assert result.flags[0].penalized is False
     assert result.penalty == 0.0
 
 

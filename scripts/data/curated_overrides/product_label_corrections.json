@@ -6,11 +6,78 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity-unit changes require exact raw_quantity_unit and corrected_quantity_unit values and must be supported by the official label image.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-08-19",
-    "total_entries": 15,
+    "last_updated": "2026-08-20",
+    "total_entries": 26,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
+    "19916": {
+      "brand": "up&up",
+      "product_name": "Adults' 50+ Multivitamin/Multimineral",
+      "raw_ingredient_text": "Boron",
+      "corrected_ingredient_text": "Boron",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD JSON API reports Boron as 150 mg, but the official DSLD label PDF prints Boron at 150 mcg per one-tablet serving. This product-scoped correction repairs the API transcription unit before dose conversion; the numeric quantity and nutrient identity are unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/19916",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/19916.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "265197": {
+      "brand": "MegaFood",
+      "product_name": "Men Over 40 One Daily",
+      "raw_ingredient_text": "Boron",
+      "corrected_ingredient_text": "Boron",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD JSON API reports Boron as 500 mg, but the official DSLD label PDF prints Boron (mineral bound S. cerevisiae) at 500 mcg per one-tablet serving. This product-scoped correction repairs the API transcription unit before dose conversion; the numeric quantity and nutrient identity are unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/265197",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/265197.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "19899": {
+      "brand": "up & up",
+      "product_name": "DHA Prenatal Supplement",
+      "raw_ingredient_text": "Dextrose",
+      "corrected_ingredient_text": "DHA",
+      "raw_unii_code": "IY9XDZ35W2",
+      "corrected_unii_code": null,
+      "corrected_category": "fat",
+      "corrected_ingredient_group": "DHA",
+      "corrected_forms": [],
+      "correction_fields": [
+        "name",
+        "uniiCode",
+        "category",
+        "ingredientGroup",
+        "forms"
+      ],
+      "evidence": "The official DSLD record is internally crossed: the structured row says Dextrose/Glucose, but the same row note identifies DHA from Schizochytrium sp. oil and Docosahexaenoic Acid, the product is named DHA Prenatal Supplement, the formula statement declares 200 mg plant-pure DHA omega-3 from algal oil, and the suggested use is one softgel daily. This product-scoped correction restores the source row's unambiguous 200 mg DHA identity and removes the unrelated glucose identifier and form without creating a global alias.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/19899",
+        "https://dsld.od.nih.gov/label/19899"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction"
+    },
     "69734": {
       "brand": "GNC",
       "product_name": "GNC Women's Ultra Mega Active Vanilla",
@@ -293,6 +360,166 @@
       ],
       "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
       "review_date": "2026-08-19",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "261915": {
+      "brand": "Airborne",
+      "product_name": "Airborne Elderberry Effervescent Tablets",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg RAE",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Vitamin A (as beta carotene) as 180 mg at 20% Daily Value. The official DSLD label PDF prints 180 mcg; 20% of the adult 900 mcg RAE Daily Value confirms the microgram RAE basis. This product-scoped correction changes only the mistranscribed unit.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/261915",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/261915.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "256977": {
+      "brand": "Centrum",
+      "product_name": "Centrum Specialist Energy Multivitamin",
+      "raw_ingredient_text": "Biotin",
+      "corrected_ingredient_text": "Biotin",
+      "raw_quantity_unit": "mC Unit(s)",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Biotin as 50 mC Unit(s), while the official DSLD label PDF prints Biotin at 50 mcg. This product-scoped correction restores the printed mass unit without changing the quantity or nutrient identity.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/256977",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/256977.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "257088": {
+      "brand": "Centrum",
+      "product_name": "Centrum Men",
+      "raw_ingredient_text": "Vitamin B12",
+      "corrected_ingredient_text": "Vitamin B12",
+      "raw_quantity_unit": "mcg DFE",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Vitamin B12 as 6 mcg DFE, but DFE is a folate-only equivalence. The official DSLD label PDF prints Vitamin B12 at 6 mcg. This product-scoped correction removes only the invalid DFE qualifier.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/257088",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/257088.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "205918": {
+      "brand": "Emergen-C",
+      "product_name": "Kidz Vitamin C 250 mg Fruit Punch",
+      "raw_ingredient_text": "Zinc",
+      "corrected_ingredient_text": "Zinc",
+      "raw_quantity_unit": "ng",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Zinc as 2 ng, while the official DSLD label PDF prints Zinc at 2 mg. This product-scoped correction restores the printed mass unit without changing the quantity or nutrient identity.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/205918",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/205918.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "250997": {
+      "brand": "MegaFood",
+      "product_name": "Baby & Me 2 Prenatal Multi",
+      "raw_ingredient_text": "Copper",
+      "corrected_ingredient_text": "Copper",
+      "raw_quantity_unit": "m.c.u.",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports Copper as 0.2 m.c.u., while the official DSLD label PDF prints Copper at 0.2 mg. This product-scoped correction restores the printed mass unit without changing the quantity or nutrient identity.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/250997",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/250997.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "265207": {
+      "brand": "MegaFood",
+      "product_name": "Multi for Men",
+      "raw_ingredient_text": "Vitamin B6",
+      "corrected_ingredient_text": "Vitamin B6",
+      "raw_quantity_unit": "mg {alpha}-TE",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API incorrectly applies the vitamin-E alpha-tocopherol-equivalent qualifier to Vitamin B6. The official DSLD label PDF prints Vitamin B6 at 6 mg. This product-scoped correction removes the invalid qualifier and preserves the amount.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/265207",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/265207.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "327573": {
+      "brand": "MegaFood",
+      "product_name": "Men's 55+ Advanced Multivitamin",
+      "raw_ingredient_text": "Thiamine",
+      "corrected_ingredient_text": "Thiamine",
+      "raw_quantity_unit": "NP",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API preserves the Thiamine quantity as 2.5 but assigns the no-printed-amount token NP. The official DSLD label PDF prints Thiamin at 2.5 mg. This product-scoped correction restores the printed mass unit without changing the quantity or nutrient identity.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/327573",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/327573.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "46802": {
+      "brand": "Member's Mark",
+      "product_name": "Acidophilus",
+      "raw_ingredient_text": "active Lactobacillus acidophilus",
+      "corrected_ingredient_text": "active Lactobacillus acidophilus",
+      "raw_quantity_unit": "{Unit(s)}",
+      "corrected_quantity_unit": "CFU",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD API reports 2 billion active Lactobacillus acidophilus using the placeholder unit {Unit(s)}. The official DSLD label PDF identifies the same declared amount as active organisms. CFU is the pipeline's semantic unit for declared viable-organism counts, so this product-scoped correction preserves the quantity while restoring the count basis.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/46802",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/46802.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-20",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_unit_correction"
     },

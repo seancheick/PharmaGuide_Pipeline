@@ -229,6 +229,45 @@ def _base_checks(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> 
     return missing, coverage
 
 
+def _has_missing_micronutrient_amount_panel(
+    ingredients: Sequence[Dict[str, Any]],
+) -> bool:
+    """Detect a source payload that lost most micronutrient amounts.
+
+    DSLD occasionally emits a broad vitamin/mineral panel where the percent
+    Daily Value survives but the amount is replaced by ``0 NP``.  This is not
+    ordinary label non-disclosure: the Supplement Facts amount column is
+    missing from the source record.  Scoring the small surviving tail creates
+    a false Poor verdict, so this exact defect fails closed.
+    """
+    micronutrients: List[Dict[str, Any]] = []
+    missing_amounts = 0
+    for row in ingredients:
+        if not isinstance(row, dict):
+            continue
+        raw_taxonomy = _safe_dict(row.get("raw_taxonomy"))
+        category = _norm(
+            raw_taxonomy.get("category")
+            or row.get("raw_category")
+            or row.get("category")
+        )
+        if category not in {"vitamin", "mineral"}:
+            continue
+        micronutrients.append(row)
+        if (
+            _dose_value(row) is None
+            and _daily_value_percent(row) is not None
+            and _norm(row.get("unit")) in {"", "np", "n/a", "na", "none"}
+        ):
+            missing_amounts += 1
+
+    return (
+        len(micronutrients) >= 8
+        and missing_amounts >= 8
+        and missing_amounts * 2 >= len(micronutrients)
+    )
+
+
 def _total_cfu_billion(product: Dict[str, Any]) -> float:
     pdata = _safe_dict(product.get("probiotic_data"))
     total = _as_float(pdata.get("total_billion_count"), None)
@@ -483,6 +522,8 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
     module = module if module in {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"} else "generic"
     ingredients = _active_ingredients(product)
     missing, coverage = _base_checks(product, ingredients)
+    if _has_missing_micronutrient_amount_panel(ingredients):
+        missing.append("micronutrient_amounts_missing_from_source")
     # Phase 3: role-aware caps. Classify the already-derived rows (no second
     # derivation) and let soft-policy caps fire only for cap-eligible roles.
     roles = classify_ingredient_roles(product, module=module, rows=ingredients)
@@ -502,6 +543,7 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
         "form_factor",
         "active_identity",
         "mapped_coverage",
+        "micronutrient_source_amounts",
     ]
     if not _status_is_active(product):
         soft_missing.append("product_status_not_active")

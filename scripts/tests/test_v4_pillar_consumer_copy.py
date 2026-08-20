@@ -248,3 +248,55 @@ def test_probiotic_aggregate_cfu_copy_does_not_claim_every_amount_is_disclosed()
         "for each strain are not."
     )
     assert "every amount is disclosed" not in reason.lower()
+
+
+def test_over_limit_dose_reason_does_not_claim_the_dose_falls_short() -> None:
+    bd = _module_bd(dose=2)
+    bd["dimensions"]["dose"]["metadata"] = {
+        "B7_safety_evaluation": {
+            "state_counts": {"confirmed_over_threshold": 1},
+            "flags": [
+                {
+                    "state": "confirmed_over_threshold",
+                    "nutrient": "Vitamin C",
+                    "penalized": True,
+                }
+            ],
+        }
+    }
+
+    reason = _assemble(_shadow(module="generic", bd=bd))["quality_pillars_v4"]["dose"]["reason"]
+
+    assert reason == (
+        "At the label's maximum daily use, one or more nutrients exceed "
+        "established safety limits."
+    )
+
+
+def test_blend_total_only_dose_reason_does_not_claim_components_fall_short() -> None:
+    bd = _module_bd(dose=10)
+    bd["dimensions"]["dose"]["metadata"] = {
+        "botanical_dose_band": "blend_total_only",
+    }
+
+    reason = _assemble(_shadow(module="generic", bd=bd))["quality_pillars_v4"]["dose"]["reason"]
+
+    assert reason == (
+        "The blend total is disclosed, but individual ingredient amounts aren't."
+    )
+    assert "fall short" not in reason.lower()
+
+
+def test_probiotic_aggregate_cfu_dose_copy_does_not_claim_the_total_is_too_low() -> None:
+    bd = _module_bd(dose=2)
+    bd["dimensions"]["dose"]["metadata"] = {
+        "window_proxy_reason": "aggregate_cfu_not_per_strain",
+    }
+    out = _assemble(_shadow(module="probiotic", bd=bd))
+
+    reason = out["quality_pillars_v4"]["dose"]["reason"]
+    assert reason == (
+        "Total CFU is disclosed, but without amounts for each strain, "
+        "their doses can't be checked."
+    )
+    assert "fall short" not in reason.lower()

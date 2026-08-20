@@ -56,7 +56,10 @@ from audit_evidence_utils import (
 )
 from audit_identity_integrity import audit_product
 from brand_identity import BrandIdentity, BrandRegistry
-from inactive_ingredient_resolver import InactiveIngredientResolver
+from inactive_ingredient_resolver import (
+    InactiveIngredientResolver,
+    active_form_duplicate_candidate,
+)
 from iqm_form_evidence import validate_form_evidence
 from identity.safety import (
     has_explicit_form_evidence,
@@ -802,96 +805,6 @@ def _form_match_terms(forms: Any) -> List[str]:
     return [term for term in terms if term]
 
 
-def _active_duplicate_identity_key(value: Any) -> str:
-    text = safe_str(value).lower()
-    if not text:
-        return ""
-    return re.sub(r"[^a-z0-9]+", "_", text).strip("_")
-
-
-def _add_active_duplicate_term(terms: set[str], value: Any) -> None:
-    text = safe_str(value)
-    if not text:
-        return
-    lowered = " ".join(text.lower().replace("_", " ").split())
-    if lowered:
-        terms.add(lowered)
-    identity_key = _active_duplicate_identity_key(text)
-    if identity_key:
-        terms.add(identity_key)
-
-
-def _active_form_duplicate_terms_for_product(ingredients: List[Dict[str, Any]]) -> set[str]:
-    """Build exact product-active identity terms for inactive form dedup.
-
-    This deliberately uses only the already-exported active rows for this one
-    product. It prevents global IQM matches such as "Leucine" or "Potassium
-    Chloride" from being tagged unless the matching parent is actually present
-    in the same active panel.
-    """
-    terms: set[str] = set()
-    for ing in ingredients:
-        if not isinstance(ing, dict):
-            continue
-        for key in (
-            "canonical_id",
-            "parent_key",
-            "normalized_key",
-            "name",
-            "standardName",
-            "standard_name",
-            "matched_form",
-            "display_form_label",
-        ):
-            _add_active_duplicate_term(terms, ing.get(key))
-        for form in safe_list(ing.get("forms")):
-            if isinstance(form, dict):
-                for key in ("name", "label", "ingredientGroup"):
-                    _add_active_duplicate_term(terms, form.get(key))
-            else:
-                _add_active_duplicate_term(terms, form)
-        for match in safe_list(ing.get("matched_forms")):
-            if isinstance(match, dict):
-                for key in ("form_key", "standard_name", "name"):
-                    _add_active_duplicate_term(terms, match.get(key))
-    return terms
-
-
-def _candidate_matches_product_active(candidate: Dict[str, Any], active_terms: set[str]) -> bool:
-    candidate_terms: set[str] = set()
-    for key in ("parent", "standard_name"):
-        _add_active_duplicate_term(candidate_terms, candidate.get(key))
-    for parent in safe_list(candidate.get("parents")):
-        _add_active_duplicate_term(candidate_terms, parent)
-    for term in safe_list(candidate.get("identity_terms")):
-        _add_active_duplicate_term(candidate_terms, term)
-    return bool(candidate_terms & active_terms)
-
-
-def _product_active_form_duplicate_candidate(
-    *,
-    inactive_resolver: InactiveIngredientResolver,
-    active_terms: set[str],
-    raw_name: str,
-    additional_terms: List[str],
-) -> Optional[Dict[str, Any]]:
-    """Return the IQM candidate only if product context proves the duplicate.
-
-    Upstream inactive ``standardName`` is intentionally not used here. It can
-    already contain broad active normalization ("Leucine" -> "L-Leucine") and
-    would reintroduce the same product-blind bug through a different path.
-    """
-    if not active_terms:
-        return None
-    for candidate in inactive_resolver.active_form_candidates(
-        raw_name=raw_name,
-        additional_terms=additional_terms,
-    ):
-        if _candidate_matches_product_active(candidate, active_terms):
-            return candidate
-    return None
-
-
 def _is_short_acronym_alias(value: Any) -> bool:
     text = safe_str(value)
     compact = re.sub(r"[^A-Za-z0-9]", "", text)
@@ -1090,6 +1003,7 @@ def _resolver_status_in(
     """
     try:
         index = _get_active_banned_recalled_index()
+        inactive_resolver = _get_shared_inactive_resolver()
     except Exception:
         # Defensive fallback — never crash a build because the resolver
         # index couldn't load. Original contaminant_data path still runs.
@@ -1097,6 +1011,25 @@ def _resolver_status_in(
     for src_key in ("activeIngredients", "inactiveIngredients"):
         for ing in safe_list(enriched.get(src_key)):
             if not isinstance(ing, dict):
+                continue
+            terms = _active_banned_recall_evidence_terms(
+                raw_source_text=safe_str(ing.get("raw_source_text")),
+                name=safe_str(ing.get("name")),
+                standard_name=safe_str(ing.get("standardName")),
+                forms=safe_list(ing.get("forms")),
+                identity_mapped=safe_bool(ing.get("mapped")),
+            )
+            if (
+                src_key == "inactiveIngredients"
+                and active_form_duplicate_candidate(
+                    inactive_resolver,
+                    active_ingredients=safe_list(enriched.get("activeIngredients")),
+                    raw_name=safe_str(
+                        ing.get("name") or ing.get("raw_source_text")
+                    ),
+                    additional_terms=terms,
+                )
+            ):
                 continue
             for flag in safe_list(ing.get("safety_flags")):
                 if not isinstance(flag, dict):
@@ -1109,13 +1042,6 @@ def _resolver_status_in(
                     and safety_flag_matches_status(flag, target_statuses)
                 ):
                     return True
-            terms = _active_banned_recall_evidence_terms(
-                raw_source_text=safe_str(ing.get("raw_source_text")),
-                name=safe_str(ing.get("name")),
-                standard_name=safe_str(ing.get("standardName")),
-                forms=safe_list(ing.get("forms")),
-                identity_mapped=safe_bool(ing.get("mapped")),
-            )
             for t in terms:
                 entry = index.get(t)
                 if entry and safety_flag_matches_status(entry, target_statuses):
@@ -4609,7 +4535,7 @@ def _fold_general_serving_variants(
         for row in safe_list(enriched.get("servingSizes"))
         if isinstance(row, dict) and row.get("order") is not None
     }
-    if len(serving_notes) < 2:
+    if not serving_notes:
         return ledger
 
     output = [dict(row) for row in ledger]
@@ -4631,10 +4557,15 @@ def _fold_general_serving_variants(
         groups.setdefault(key, []).append(row)
 
     for alternatives in groups.values():
-        serving_orders = {
-            safe_float(row.get("serving_size_order")) for row in alternatives
+        serving_contexts = {
+            (
+                safe_float(row.get("serving_size_order")),
+                safe_float(row.get("serving_size_quantity")),
+                safe_str(row.get("serving_size_unit")).casefold(),
+            )
+            for row in alternatives
         }
-        if len(alternatives) < 2 or len(serving_orders) < 2:
+        if len(alternatives) < 2 or len(serving_contexts) < 2:
             continue
         selected = min(
             alternatives,
@@ -6498,7 +6429,6 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "display_badge": _compute_display_badge({**ing, "adequacy_tier": _strain_adequacy.get("adequacy_tier")}),
         })
     ingredients = _suppress_zero_dose_duplicate_active_rows(ingredients)
-    active_form_duplicate_terms = _active_form_duplicate_terms_for_product(ingredients)
 
     # Inactive ingredients
     # Inactive ingredients — unified resolver path (2026-05-12).
@@ -6534,25 +6464,25 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         name = safe_str(ing.get("name"), raw)
         std_name_ing = safe_str(ing.get("standardName"))
 
-        # Single resolver call: returns InactiveResolution with all
-        # safety + role fields populated.
-        res = inactive_resolver.resolve(
+        active_form_candidate = active_form_duplicate_candidate(
+            inactive_resolver,
+            active_ingredients=ingredients,
             raw_name=name or raw,
-            standard_name=std_name_ing,
             additional_terms=_form_match_terms(ing.get("forms")),
         )
-        if res.matched_source is None:
-            active_form_candidate = _product_active_form_duplicate_candidate(
-                inactive_resolver=inactive_resolver,
-                active_terms=active_form_duplicate_terms,
+        if active_form_candidate:
+            res = inactive_resolver.active_form_duplicate_resolution(
+                name or raw,
+                active_form_candidate,
+            )
+        else:
+            # A real safety match wins only after product context proves this
+            # is not an active-form duplicate emitted in the inactive section.
+            res = inactive_resolver.resolve(
                 raw_name=name or raw,
+                standard_name=std_name_ing,
                 additional_terms=_form_match_terms(ing.get("forms")),
             )
-            if active_form_candidate:
-                res = inactive_resolver.active_form_duplicate_resolution(
-                    name or raw,
-                    active_form_candidate,
-                )
 
         # Label fidelity contract (2026-06-15): inactive_ingredients[] is
         # the user-visible "Other Ingredients" surface, so resolver flags

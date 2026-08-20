@@ -214,6 +214,37 @@ def test_species_only_probiotic_rows_do_not_get_strain_specific_clinical_ids(enr
     assert "STRAIN_LACTIS_BL04" not in ids
 
 
+def test_suppressed_probiotic_blend_header_keeps_aggregate_cell_count(enricher) -> None:
+    """The label ledger owns a blend total even when only its named children
+    remain in activeIngredients. Preserve aggregate CFU without assigning it to
+    any individual strain."""
+    product = _probiotic_product()
+    for row in product["activeIngredients"]:
+        row["quantity"] = 0
+        row["unit"] = "unspecified"
+    product["display_ingredients"] = [{
+        "display_type": "summary_wrapper",
+        "is_label_context": True,
+        "raw_source_path": "ingredientRows[0]",
+        "exact_dose_text": "1,500,000,000 Cell(s)",
+        "children": [
+            "Lactobacillus rhamnosus",
+            "Bifidobacterium lactis",
+        ],
+    }]
+
+    pd = enricher._collect_probiotic_data(product)
+
+    assert pd["has_cfu"] is True
+    assert pd["total_cfu"] == 1_500_000_000
+    assert pd["total_billion_count"] == pytest.approx(1.5)
+    assert pd["cfu_evidence_scope"] == "blend_total"
+    assert all(
+        not (blend.get("cfu_data") or {}).get("has_cfu")
+        for blend in pd["probiotic_blends"]
+    )
+
+
 def test_distinct_infantis_strain_codes_do_not_cross_match(enricher) -> None:
     """M-63 must never inherit the unrelated 35624 clinical evidence."""
     assert enricher._strain_match(

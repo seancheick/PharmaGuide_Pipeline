@@ -57,9 +57,6 @@ graphify-out/
 scripts/logs/
 
 # Reports (regenerated each run) — but keep Python tool sources tracked
-scripts/reports/*
-!scripts/reports/*.py
-!scripts/reports/__init__.py
 
 # IDE / OS
 .DS_Store
@@ -82,6 +79,10 @@ scripts/data/*.json.bak
 manual_labels/product_submissions/.product_submission_import_receipts
 # Top-level generated reports (distinct from scripts/reports/ already ignored)
 reports/
+!scripts/reports/
+scripts/reports/*
+!scripts/reports/*.py
+!scripts/reports/__init__.py
 
 # Cert / audit generated reports — tool sources are tracked, outputs are regenerable
 scripts/api_audit/reports/

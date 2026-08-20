@@ -228,3 +228,155 @@ def test_normalizer_marks_nested_display_only_unmapped_as_non_scoreable():
     assert detail["non_scoreable_cleaner_row"] is True
     assert detail["cleaner_row_role"] == "nested_display_only"
     assert detail["score_exclusion_reason"] == "nested_display_only"
+
+
+def test_unmapped_delta_counts_a_repeated_name_in_the_next_product():
+    """A worker may process the same missing label in consecutive products."""
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._record_unmapped_ingredient(
+        "Lactobacillus jensenii LBV 116",
+        [],
+        is_active=True,
+        cleaner_row_role="nested_display_only",
+        score_exclusion_reason="nested_display_only",
+    )
+
+    snapshot = normalizer.get_unmapped_snapshot()
+    normalizer._record_unmapped_ingredient(
+        "Lactobacillus jensenii LBV 116",
+        [],
+        is_active=True,
+        cleaner_row_role="nested_display_only",
+        score_exclusion_reason="nested_display_only",
+    )
+
+    delta = normalizer.get_unmapped_delta(snapshot)["unmapped"]
+    assert len(delta) == 1
+    assert delta[0]["name"] == "Lactobacillus jensenii LBV 116"
+    assert delta[0]["occurrences"] == 1
+    assert delta[0]["isActive"] is True
+
+
+@pytest.mark.parametrize(
+    ("label", "expected_canonical_id"),
+    [
+        ("Lactobacillus jensenii LBV 116", "lactobacillus_jensenii"),
+        ("Black Mustard extract", "mustard_seed"),
+        ("Agaricus blazei Whole Mushroom Extract", "royal_sun_blazei"),
+        ("Coriolus versicolor Whole Mushroom Extract", "turkey_tail"),
+        ("Maitake Whole Mushroom Extract", "maitake"),
+        (
+            "Boswellia serrata AKBA standardized extract (wood) resin",
+            "boswellia",
+        ),
+    ],
+)
+def test_wave_one_nested_label_identity_aliases_resolve(
+    label,
+    expected_canonical_id,
+):
+    normalizer = EnhancedDSLDNormalizer()
+
+    row = normalizer._process_single_ingredient_enhanced(
+        {
+            "name": label,
+            "category": "botanical",
+            "quantity": [{"quantity": 0, "unit": "NP"}],
+            "parentBlend": "Wave One Blend",
+            "isNestedIngredient": True,
+        },
+        is_active=True,
+    )
+
+    assert row["mapped"] is True
+    assert row["canonical_id"] == expected_canonical_id
+    assert row["canonical_source_db"] == "ingredient_quality_map"
+
+
+def test_wave_one_single_declared_form_recovers_generic_nested_identity():
+    normalizer = EnhancedDSLDNormalizer()
+
+    row = normalizer._process_single_ingredient_enhanced(
+        {
+            "name": "Glycosides",
+            "category": "non-nutrient/non-botanical",
+            "quantity": [{"quantity": 0, "unit": "NP"}],
+            "forms": [
+                {
+                    "name": "Polydatin",
+                    "category": "non-nutrient/non-botanical",
+                    "ingredientGroup": "Polydatin",
+                }
+            ],
+            "ingredientGroup": "Polydatin",
+            "parentBlend": "Resveratrol Complex",
+            "isNestedIngredient": True,
+        },
+        is_active=True,
+    )
+
+    assert row["name"] == "Glycosides"
+    assert row["mapped"] is True
+    assert row["canonical_id"] == "resveratrol"
+    assert row["canonical_source_db"] == "ingredient_quality_map"
+    assert row["cleaner_row_role"] == "nested_display_only"
+    assert row["score_eligible_by_cleaner"] is False
+    assert row["forms"][0]["name"] == "Polydatin"
+
+
+def test_wave_one_flaxseed_ala_context_beats_ambiguous_ala_alias():
+    """ALA sourced from flaxseed in an omega blend is alpha-linolenic acid."""
+    normalizer = EnhancedDSLDNormalizer()
+
+    row = normalizer._process_single_ingredient_enhanced(
+        {
+            "name": "ALA",
+            "category": "non-nutrient/non-botanical",
+            "ingredientGroup": "Alpha Lipoic Acid",
+            "quantity": [{"quantity": 50, "unit": "mg"}],
+            "forms": [
+                {
+                    "name": "Flaxseed Oil",
+                    "category": "fat",
+                    "ingredientGroup": "Flaxseed Oil",
+                }
+            ],
+            "parentBlend": "Omega Fatty Acid Blend",
+            "isNestedIngredient": True,
+        },
+        is_active=True,
+    )
+
+    assert row["canonical_id"] == "alpha_linolenic_acid"
+    assert row["standardName"] == "Alpha-Linolenic Acid"
+    assert row["cleaner_match_method"] == "contextual_ala_identity"
+    assert row["forms"][0]["name"] == "Flaxseed Oil"
+
+
+def test_printed_nutrient_parent_beats_cross_parent_source_form_unii():
+    """Sodium as sodium ascorbate remains the label nutrient Sodium."""
+    normalizer = EnhancedDSLDNormalizer()
+
+    row = normalizer._process_single_ingredient_enhanced(
+        {
+            "name": "Sodium",
+            "category": "mineral",
+            "ingredientGroup": "Sodium",
+            "uniiCode": "9NEZ333N27",
+            "quantity": [{"quantity": 5, "unit": "mg"}],
+            "forms": [
+                {
+                    "name": "Sodium Ascorbate",
+                    "category": "mineral",
+                    "ingredientGroup": "Sodium",
+                    "uniiCode": "S033EH8359",
+                }
+            ],
+        },
+        is_active=True,
+    )
+
+    assert row["canonical_id"] == "sodium"
+    assert row["standardName"] == "Sodium"
+    assert row["cleaner_match_method"] == "printed_nutrient_identity"
+    assert row["forms"][0]["name"] == "Sodium Ascorbate"

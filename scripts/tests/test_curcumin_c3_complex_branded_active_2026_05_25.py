@@ -202,6 +202,42 @@ def test_curcumin_c3_complex_is_not_structural_blend_total(normalizer):
     )
 
 
+def test_curcumin_c3_turmeric_extract_label_is_not_structural_blend_total(normalizer):
+    """The longer Member's Mark label is the same branded C3 active.
+
+    DSLD supplies both a turmeric source form and quantified curcuminoid marker
+    rows.  Those rows describe the branded extract; they do not turn the C3
+    active itself into a proprietary-blend total.
+    """
+    ing = _row(
+        "Curcumin C3 Complex Turmeric Extract",
+        qty_mg=700,
+        category="botanical",
+        ingredient_group="Turmeric",
+        nested=[
+            _row("Curcuminoids", 665, ingredient_group="Curcuminoids"),
+            _row("Curcumin", 500, ingredient_group="Curcumin"),
+        ],
+    )
+    assert normalizer._is_dsld_active_blend_total_row(ing) is False
+
+    normalized = normalizer.normalize_product({
+        "id": 305921,
+        "fullName": "Extra Strength Turmeric Extract 1400 mg",
+        "brandName": "Member's Mark",
+        "status": "active",
+        "offMarket": 0,
+        "ingredientRows": [ing],
+        "otherIngredients": {"ingredients": []},
+    })
+    rows = []
+    _walk_rows(normalized, rows)
+    c3_row = _find_curcumin_c3_row(rows)
+    assert c3_row is not None
+    assert c3_row.get("cleaner_row_role") == "active_scorable"
+    assert c3_row.get("proprietaryBlend") is False
+
+
 def test_polysaccharide_iron_complex_is_not_structural_blend_total(normalizer):
     """polysaccharide-iron complex is an IQM-known iron form (Niferex shape)
     — same protection as Curcumin C3 Complex."""
@@ -263,6 +299,28 @@ def test_ingredient_group_blend_still_blend_total(normalizer):
         ingredient_group="Proprietary Blend",
     )
     assert normalizer._is_dsld_active_blend_total_row(ing) is True
+
+
+def test_quantified_epa_dha_child_is_not_a_blend_total(normalizer):
+    """A disclosed EPA/DHA dose is a blend component, not another total.
+
+    Real DSLD regression (Up & Up 74302): the child inherits category=blend
+    from the parent ``Omega Fatty Acid Blend``, but its 50 mg quantity belongs
+    to the combined EPA/DHA marker itself.  Treating it as a total hides the
+    disclosed marine omega dose from taxonomy and scoring.
+    """
+    ing = _row(
+        "EPA/DHA",
+        qty_mg=50,
+        category="blend",
+        ingredient_group="Blend (Combination)",
+    )
+    ing.update({
+        "isNestedIngredient": True,
+        "parentBlend": "Omega Fatty Acid Blend",
+    })
+
+    assert normalizer._is_dsld_active_blend_total_row(ing) is False
 
 
 # ---------------------------------------------------------------------------

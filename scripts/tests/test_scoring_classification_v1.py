@@ -1564,7 +1564,7 @@ def test_botanical_eligible_derives_from_owner_type():
     assert _product_botanical_profile_eligible({"product_name": "Boswellia"}, rows, contracts) is True
 
 
-def test_profile_cutover_impact_old_baseline_forces_legacy_selector():
+def test_profile_cutover_impact_d3_title_keeps_lichen_as_source_context():
     from api_audit.audit_v4_profile_cutover_impact import _profile_state
 
     product = _product(
@@ -1578,9 +1578,9 @@ def test_profile_cutover_impact_old_baseline_forces_legacy_selector():
 
     state = _profile_state(product, "botanical", "generic", contract)
 
-    assert state["old"] is True
+    assert state["old"] is False
     assert state["contract"] is False
-    assert state["diverged"] is True
+    assert state["diverged"] is False
 
 
 def test_botanical_scoring_actives_use_composite_row_identity_for_duplicate_refs():

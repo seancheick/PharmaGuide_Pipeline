@@ -1166,6 +1166,7 @@ class TestGummyBasisUnitAcceptsLabelFaithfulUnits:
         "swirly bear",    # CVS 25945 ("Gummy Swirls")
         "chewable bear",  # Garden_of_life 321386
         "chew",           # GNC 228076
+        "soft chew",      # MegaFood 250775
         "nordic berry",   # nordic-naturals 221659 ("Nordic Berries")
         "gram",           # Pure_Encapsulations 278384: label declares 2.2 Gram(s)
         "gummy",          # canonical form must keep passing

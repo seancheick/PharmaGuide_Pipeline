@@ -82,6 +82,30 @@ def test_taxonomy_probiotic_always_routes_probiotic():
     assert class_for_product(p) == "probiotic"
 
 
+def test_explicit_high_cfu_probiotic_with_three_adjuncts_routes_probiotic():
+    """Culturelle 250878: fish oil, omega-3, and vitamin D are adjuncts to
+    a clearly named 10-billion-CFU probiotic, not the product's peer class."""
+    rows = [
+        {"name": "Vitamin D", "canonical_id": "vitamin_d", "mapped": True,
+         "quantity": 1, "unit": "mcg"},
+        {"name": "Fish Oil", "canonical_id": "fish_oil", "mapped": True,
+         "quantity": 240, "unit": "mg"},
+        {"name": "Omega-3 Fatty Acids", "canonical_id": "fish_oil", "mapped": True,
+         "quantity": 70, "unit": "mg"},
+    ]
+    p = _prod(
+        "3-in-1 Complete Probiotic",
+        "probiotic",
+        rows,
+        strains=1,
+        has_cfu=True,
+    )
+    p["probiotic_data"]["total_cfu"] = 10_000_000_000.0
+    p["probiotic_data"]["total_billion_count"] = 10.0
+
+    assert class_for_product(p) == "probiotic"
+
+
 # --- pure-strain products: no CFU, no "probiotic" name, but strains ARE the
 #     only scorable identity (panel==0) -> probiotic (FLORASSIST gap) ---
 

@@ -550,6 +550,16 @@ class CoverageGate:
         for ing in analyzed:
             conversion = ing.get("conversion_evidence", {})
             if conversion and not conversion.get("success", True):
+                # Explicit non-dose states are intentional outcomes, not missing
+                # engineering conversions. NP means the label did not declare an
+                # amount; enzyme activity, CFU, volume, and similar units do not
+                # participate in nutrient RDA/UL mass conversion.
+                if ing.get("skip_ul_reason") in {
+                    "amount_not_declared",
+                    "not_ul_applicable",
+                    "unknown_folate_form_lineage",
+                }:
+                    continue
                 error = conversion.get("error", "Unknown conversion error")
                 if "No conversion rule found" in error or "No conversion" in error:
                     issues.append(CorrectnessIssue(

@@ -97,9 +97,14 @@ from run_artifacts import ensure_run_id, report_run_directory
 from supplement_type_utils import mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement, percentile_label_for
 from form_factor_normalizer import canonicalize_form_factor
+from inactive_ingredient_resolver import (
+    InactiveIngredientResolver,
+    active_form_duplicate_candidate,
+)
 from serving_frequency import (
     resolve_daily_serving_multiplier,
     resolve_daily_serving_range,
+    select_canonical_serving,
 )
 from scoring_input_contract import (
     build_scoring_classification,
@@ -873,6 +878,9 @@ class SupplementEnricherV3:
         self._match_quality_cache: Dict[str, Any] = {}
         self.databases = {}
         self._load_all_databases()
+        self._inactive_ingredient_resolver = InactiveIngredientResolver(
+            data_dir=Path(DATA_DIR)
+        )
         self._rda_reference_stamp = reference_stamp(
             self.databases.get("rda_optimal_uls", {})
         )
@@ -1864,6 +1872,20 @@ class SupplementEnricherV3:
             return False
         source_id, _source_db = source_identity
         resolved_id = match_result.get("canonical_id")
+        canonical_source_id, canonical_source_db = (
+            self._current_canonical_identity_registry().canonicalize(
+                source_id,
+                _source_db,
+            )
+        )
+        if (
+            canonical_source_db == "ingredient_quality_map"
+            and canonical_source_id == resolved_id
+        ):
+            # Reviewed exact equivalences are one substance under two registry
+            # IDs (for example botanical ``elderberries`` -> IQM
+            # ``elderberry``).  They are not source-to-marker substitutions.
+            return False
         if (
             _source_db == "standardized_botanicals"
             and self._standardized_botanical_iqm_parents.get(source_id)
@@ -3928,7 +3950,11 @@ class SupplementEnricherV3:
             literal_label,
             quality_map,
         )
-        if reviewed_label_parent and reviewed_label_parent != supplied_canonical_id:
+        if (
+            reviewed_label_parent
+            and reviewed_label_parent != supplied_canonical_id
+            and not authoritative_context_override
+        ):
             reviewed_match = self._match_quality_map(
                 literal_label,
                 literal_label,
@@ -4151,6 +4177,54 @@ class SupplementEnricherV3:
             }
         )
 
+    @staticmethod
+    def _flatten_active_ingredients_for_analysis(
+        active_ingredients: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        """Project the label tree into one analysis ledger.
+
+        Cleaning owns label identity and hierarchy. Enrichment must evaluate
+        every cleaner-classified active row, including disclosed blend
+        children, without changing the nested label representation. Indexed
+        source paths are stable row identities. Some legacy/direct-normalizer
+        rows only carry the section-level path, so label identity is included
+        to prevent distinct rows from collapsing.
+        """
+        flattened: List[Dict[str, Any]] = []
+        seen: set[tuple[Any, ...]] = set()
+
+        def visit(rows: Any) -> None:
+            if not isinstance(rows, list):
+                return
+            for row in rows:
+                if not isinstance(row, dict):
+                    continue
+                source_path = str(row.get("raw_source_path") or "").strip()
+                label_identity = str(
+                    row.get("raw_source_text")
+                    or row.get("name")
+                    or row.get("standardName")
+                    or ""
+                ).strip().casefold()
+                identity = (
+                    (
+                        "source_path",
+                        source_path,
+                        label_identity,
+                        str(row.get("quantity") or row.get("dose") or ""),
+                    )
+                    if source_path
+                    else ("object", id(row))
+                )
+                if identity in seen:
+                    continue
+                seen.add(identity)
+                flattened.append(row)
+                visit(row.get("nestedIngredients"))
+
+        visit(active_ingredients)
+        return flattened
+
     def _collect_ingredient_quality_data(self, product: Dict) -> Dict:
         """
         Collect ingredient quality data for scoring Section A1-A2.
@@ -4166,7 +4240,10 @@ class SupplementEnricherV3:
         """
         quality_map = self.databases.get('ingredient_quality_map', {})
         botanicals_db = self.databases.get('standardized_botanicals', {})
-        active_ingredients = product.get('activeIngredients', [])
+        active_ingredient_tree = product.get('activeIngredients', [])
+        active_ingredients = self._flatten_active_ingredients_for_analysis(
+            active_ingredient_tree
+        )
         inactive_ingredients = product.get('inactiveIngredients', [])
         structural_parent_total_row_ids = self._structural_parent_total_row_ids(
             active_ingredients
@@ -4389,6 +4466,12 @@ class SupplementEnricherV3:
             # Scorable ingredient - try to match against quality map
             # Pass cleaned forms[] to enable form-aware matching (P0 form-loss fix)
             ingredient_forms = ingredient.get('forms') or []
+            authoritative_cleaner_context = ingredient.get(
+                "cleaner_match_method"
+            ) in {
+                "contextual_ala_identity",
+                "single_declared_nutrient_form",
+            }
             # Phase 3: forward the cleaner's IQM canonical_id as a hard
             # constraint so text-inferred cross-parent matches cannot win.
             # Only passed when the cleaner resolved via IQM — botanical /
@@ -4429,7 +4512,10 @@ class SupplementEnricherV3:
                     )
                 else:
                     match_result = self._match_quality_map(
-                        ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
+                        std_name if authoritative_cleaner_context else ing_name,
+                        std_name,
+                        quality_map,
+                        cleaned_forms=ingredient_forms,
                         branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
                     )
             context_match_reason = pre_context_match_reason
@@ -4465,8 +4551,11 @@ class SupplementEnricherV3:
                     match_result,
                     quality_map,
                     authoritative_context_override=(
-                        context_match_reason == "kelp_fucoidan_marker_context"
-                        and isinstance(match_result, dict)
+                        (
+                            context_match_reason == "kelp_fucoidan_marker_context"
+                            and isinstance(match_result, dict)
+                        )
+                        or authoritative_cleaner_context
                     ),
                 )
             )
@@ -9862,6 +9951,8 @@ class SupplementEnricherV3:
                     # Extract standardization percentage
                     markers = botanical.get('markers', [])
                     min_threshold = botanical.get('min_threshold')
+                    std_unit = (botanical.get("standardization_unit") or "percent").strip().lower()
+                    is_percent_unit = std_unit in ("", "percent", "%")
                     local_text = " ".join([
                         ing_name,
                         std_name,
@@ -9892,6 +9983,13 @@ class SupplementEnricherV3:
                         )
                         if percentage > 0:
                             percentage_source = "context"
+                    if percentage <= 0 and is_percent_unit:
+                        percentage = self._derive_disclosed_marker_percentage(
+                            ingredient,
+                            markers,
+                        )
+                        if percentage > 0:
+                            percentage_source = "disclosed_marker_ratio"
                     marker_text = f"{local_text} {context_text}".strip()
 
                     # Determine if meets threshold
@@ -9899,9 +9997,6 @@ class SupplementEnricherV3:
                     # credit + per-entry bonus_class. min_threshold is only a
                     # PERCENT when standardization_unit is percent/empty; non-percent
                     # thresholds (GDU/g, mg_per_dose) must NOT be compared as "%".
-                    std_unit = (botanical.get("standardization_unit") or "percent").strip().lower()
-                    is_percent_unit = std_unit in ("", "percent", "%")
-
                     # bonus_class: an explicit data `bonus_class` wins (lets the
                     # file honestly mark non-botanicals — e.g. berberine/beta-glucans
                     # as isolated_compound — so category guessing can't grant them
@@ -10107,6 +10202,58 @@ class SupplementEnricherV3:
                 return pct
 
         return 0.0
+
+    def _derive_disclosed_marker_percentage(
+        self,
+        ingredient: Dict,
+        markers: List[str],
+    ) -> float:
+        """Derive marker percentage from explicit parent/child label amounts.
+
+        Some Supplement Facts panels disclose a standardized extract as a
+        parent mass and its marker as a quantified nested child rather than
+        printing a percentage. The ratio is deterministic label math. Use the
+        largest matching marker child instead of summing because marker rows
+        may overlap (for example total curcuminoids plus curcumin).
+        """
+        parent_quantity = self._to_float_safe(ingredient.get("quantity"))
+        parent_mass_mg = _normalize_parent_blend_mg(
+            parent_quantity,
+            ingredient.get("unit"),
+        )
+        if parent_mass_mg is None or not markers:
+            return 0.0
+
+        percentages: List[float] = []
+        nested = ingredient.get("nestedIngredients")
+        for child in nested if isinstance(nested, list) else []:
+            if not isinstance(child, dict):
+                continue
+            child_text = " ".join(
+                str(child.get(field) or "")
+                for field in (
+                    "name",
+                    "standardName",
+                    "raw_source_text",
+                    "rawName",
+                    "ingredientGroup",
+                )
+            )
+            if not self._has_marker_word_match(markers, child_text):
+                continue
+            child_quantity = self._to_float_safe(child.get("quantity"))
+            child_mass_mg = _normalize_parent_blend_mg(
+                child_quantity,
+                child.get("unit"),
+            )
+            if child_mass_mg is None:
+                continue
+            percentage = (child_mass_mg / parent_mass_mg) * 100.0
+            # A tiny allowance covers display rounding, not contradictory data.
+            if 0 < percentage <= 100.5:
+                percentages.append(min(percentage, 100.0))
+
+        return round(max(percentages), 4) if percentages else 0.0
 
     def _has_marker_word_match(self, markers: List[str], text: str) -> bool:
         """
@@ -11341,6 +11488,7 @@ class SupplementEnricherV3:
                         "matched_alias": match_result.get("matched_alias"),  # Which alias if any
                         "severity_level": additive.get('severity_level', 'low'),
                         "category": additive_category,
+                        "active_source_policy": additive.get('active_source_policy'),
                         "is_natural_color": is_natural_color if 'color' in ing_name_lower else None,
                         "classification_evidence": classification_evidence if classification_evidence else None,
                         # Reference data for user-facing display
@@ -11354,6 +11502,45 @@ class SupplementEnricherV3:
                         # because the IQM quality score is the correct signal for actives.
                         "source_section": ingredient.get('_source_section', 'unknown'),
                     })
+
+        # A trace element can be deliberately declared in Supplement Facts
+        # while the same chemical family is also tracked here as a possible
+        # contaminant. Only an authored reference-data policy may disambiguate
+        # those roles. If the active panel declares the nutrient, DSLD may put
+        # its source salt in Other Ingredients; neither row is contamination.
+        # A standalone inactive occurrence remains a contaminant signal.
+        declared_trace_ids = {
+            row.get('additive_id')
+            for row in found
+            if row.get('source_section') == 'active'
+            and row.get('active_source_policy') == 'declared_trace_nutrient'
+            and row.get('additive_id')
+        }
+        if declared_trace_ids:
+            found = [
+                row for row in found
+                if row.get('additive_id') not in declared_trace_ids
+            ]
+
+        # DSLD can repeat an active nutrient's chemical source under Other
+        # Ingredients. The shared inactive resolver already owns the exact,
+        # product-context-aware identity rule used by safety and final export;
+        # enrichment must honor it too or the same label row becomes an active
+        # form in one layer and a harmful additive in another.
+        active_ingredients = [
+            row for row in ingredients
+            if row.get('_source_section') == 'active'
+        ]
+        if active_ingredients:
+            found = [
+                row for row in found
+                if row.get('source_section') != 'inactive'
+                or active_form_duplicate_candidate(
+                    self._inactive_ingredient_resolver,
+                    active_ingredients=active_ingredients,
+                    raw_name=str(row.get('raw_source_text') or row.get('ingredient') or ''),
+                ) is None
+            ]
 
         return {
             "found": len(found) > 0,
@@ -14041,6 +14228,12 @@ class SupplementEnricherV3:
         for ingredient in active_ingredients:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
+            ingredient_canonical_id = str(
+                ingredient.get("canonical_id")
+                or ingredient.get("parent_key")
+                or ingredient.get("normalized_key")
+                or ""
+            ).strip().lower()
             quality_matches = _quality_rows_for_ingredient(ingredient)
             candidate_names = [
                 ing_name,
@@ -14056,12 +14249,16 @@ class SupplementEnricherV3:
             )
             if branded_token:
                 candidate_names.append(branded_token)
-            ingredient_canonical_id = str(
-                ingredient.get("canonical_id")
-                or ingredient.get("parent_key")
-                or ingredient.get("normalized_key")
-                or ""
-            ).strip().lower()
+            if ingredient_canonical_id == "alpha_linolenic_acid":
+                # ``ALA`` is also a common abbreviation for alpha-lipoic acid.
+                # Once label/source context has resolved the row to plant ALA,
+                # the ambiguous literal must not override that authoritative
+                # identity and borrow alpha-lipoic-acid clinical evidence.
+                candidate_names = [
+                    value
+                    for value in candidate_names
+                    if self._normalize_text(value) != "ala"
+                ]
             if (
                 has_bcaa_mixture
                 and not bcaa_aggregate_candidate_added
@@ -14840,6 +15037,55 @@ class SupplementEnricherV3:
                 or 'probiotic' in category
                 or 'bacteria' in category
             )
+
+        # Cleaner deliberately removes a blend header from activeIngredients
+        # when its named children are the scorable identities. The header still
+        # owns the aggregate label dose in display_ingredients. Recover that
+        # product-level CFU evidence without assigning the total to a child.
+        if not product_level_cfu.get("has_cfu"):
+            for display_row in product.get("display_ingredients", []) or []:
+                if not isinstance(display_row, dict):
+                    continue
+                if not display_row.get("is_label_context"):
+                    continue
+                children = display_row.get("children") or []
+                if not any(
+                    _PROBIOTIC_IDENTITY_RE.search(str(child or ""))
+                    for child in children
+                ):
+                    continue
+                dose_text = str(display_row.get("exact_dose_text") or "").strip()
+                match = re.fullmatch(
+                    r"\s*([0-9][0-9,]*(?:\.[0-9]+)?)\s+(.+?)\s*",
+                    dose_text,
+                )
+                if not match:
+                    continue
+                dose_unit = re.sub(r"\s+", " ", match.group(2).strip().lower())
+                # Plain ``Cell(s)`` is ambiguous globally, which is why the
+                # shared unit matcher rejects it. Here the blend's children
+                # already prove probiotic identity, so this label-local use is
+                # deterministic.
+                if not (
+                    self._is_cfu_equivalent_unit(match.group(2))
+                    or dose_unit in {"cell(s)", "cell", "cells"}
+                ):
+                    continue
+                count = float(match.group(1).replace(",", ""))
+                if not math.isfinite(count) or count <= 0:
+                    continue
+                raw_path = str(display_row.get("raw_source_path") or "").strip() or None
+                product_level_cfu = {
+                    "has_cfu": True,
+                    "cfu_count": count,
+                    "billion_count": count / 1e9,
+                    "guarantee_type": None,
+                    "source": "display_ingredients.exact_dose_text",
+                    "raw_source_path": raw_path,
+                    "evidence_scope": "blend_total",
+                    "linked_rows": [raw_path] if raw_path else [],
+                }
+                break
 
         def _is_blend_header_total(ingredient: Dict) -> bool:
             role = str(ingredient.get("cleaner_row_role") or "").lower()
@@ -16310,46 +16556,7 @@ class SupplementEnricherV3:
         2. If no adult group, use highest serving_size_quantity
         3. Default to first serving size
         """
-        if not serving_sizes:
-            return None
-
-        # If we have user groups, try to match adult serving
-        if user_groups:
-            for group in user_groups:
-                if isinstance(group, dict):
-                    group_text = (
-                        group.get('text', '') or
-                        group.get('dailyValueTargetGroupName', '') or
-                        group.get('langualCodeDescription', '') or
-                        group.get('name', '')
-                    )
-                else:
-                    group_text = str(group)
-
-                if 'adult' in group_text.lower():
-                    # Find serving size that matches this group (highest quantity = adult)
-                    # Since cleaned servingSizes don't have targetGroup, use highest quantity
-                    pass  # Fall through to max quantity selection
-
-        # Find the highest serving quantity (adult default)
-        max_serving = None
-        max_qty = 0
-        for serving in serving_sizes:
-            # Handle various field names for quantity
-            qty = (
-                serving.get('quantity') or
-                serving.get('servingSizeQuantity') or
-                serving.get('maxQuantity') or
-                serving.get('minQuantity') or
-                serving.get('normalizedServing') or
-                0
-            )
-            numeric_qty = self._to_float_safe(qty)
-            if numeric_qty is not None and numeric_qty > max_qty:
-                max_qty = numeric_qty
-                max_serving = serving
-
-        return max_serving or (serving_sizes[0] if serving_sizes else None)
+        return select_canonical_serving(serving_sizes)
 
     # Word to number mapping for dosage parsing
     WORD_TO_NUM = {

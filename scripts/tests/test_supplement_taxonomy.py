@@ -582,6 +582,244 @@ def test_real_cfu_probiotic_with_prebiotic_support_row_is_still_probiotic():
     )
 
 
+def test_explicit_probiotic_product_with_cfu_and_adjuncts_stays_probiotic():
+    """A probiotic sold as the primary product is not demoted by adjuncts."""
+    product = {
+        "product_name": "3-in-1 Complete Probiotic",
+        "fullName": "3-in-1 Complete Probiotic",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_cfu": 10_000_000_000,
+            "total_strain_count": 1,
+        },
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Lactobacillus rhamnosus GG",
+                    "canonical_id": "lactobacillus_rhamnosus",
+                    "category": "probiotic",
+                    "quantity": 40,
+                    "unit": "mg",
+                    "score_eligible_by_cleaner": True,
+                    "cleaner_row_role": "active_scorable",
+                },
+                {
+                    "name": "Fish Oil",
+                    "canonical_id": "fish_oil",
+                    "category": "fatty_acid",
+                    "quantity": 240,
+                    "unit": "mg",
+                    "score_eligible_by_cleaner": True,
+                    "cleaner_row_role": "active_scorable",
+                },
+                {
+                    "name": "Vitamin D",
+                    "canonical_id": "vitamin_d",
+                    "category": "vitamin",
+                    "quantity": 1,
+                    "unit": "mcg",
+                    "score_eligible_by_cleaner": True,
+                    "cleaner_row_role": "active_scorable",
+                },
+            ]
+        },
+        "activeIngredients": [
+            {
+                "name": "Lactobacillus rhamnosus GG",
+                "canonical_id": "lactobacillus_rhamnosus",
+                "category": "probiotic",
+                "quantity": 40,
+                "unit": "mg",
+                "score_eligible_by_cleaner": True,
+                "cleaner_row_role": "active_scorable",
+            },
+            {
+                "name": "Fish Oil",
+                "canonical_id": "fish_oil",
+                "category": "fatty_acid",
+                "quantity": 240,
+                "unit": "mg",
+                "score_eligible_by_cleaner": True,
+                "cleaner_row_role": "active_scorable",
+            },
+            {
+                "name": "Vitamin D",
+                "canonical_id": "vitamin_d",
+                "category": "vitamin",
+                "quantity": 1,
+                "unit": "mcg",
+                "score_eligible_by_cleaner": True,
+                "cleaner_row_role": "active_scorable",
+            },
+        ],
+    }
+
+    result = classify_supplement(product)
+
+    assert result["primary_type"] == "probiotic"
+    assert "explicit probiotic name + product-level CFU evidence" in result[
+        "classification_reasons"
+    ]
+
+
+def test_label_identified_probiotic_with_dha_and_undisclosed_cfu_stays_probiotic():
+    """Culturelle 250619: missing CFU affects dose confidence, not identity."""
+    product = {
+        "product_name": "Strong Beginning",
+        "fullName": "Strong Beginning",
+        "statements": [
+            {
+                "type": "FDA Statement of Identity",
+                "notes": "Probiotic Supplement with DHA",
+            }
+        ],
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_cfu": 0,
+            "total_strain_count": 2,
+        },
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Docosahexaenoic Acid",
+                    "canonical_id": "dha",
+                    "category": "fatty_acid",
+                    "quantity": 70,
+                    "unit": "mg",
+                    "score_eligible_by_cleaner": True,
+                    "cleaner_row_role": "active_scorable",
+                }
+            ],
+            "ingredients_skipped": [
+                {
+                    "name": "Probiotic Blend",
+                    "category": "probiotics",
+                    "quantity": 30,
+                    "unit": "mg",
+                    "score_eligible_by_cleaner": False,
+                    "cleaner_row_role": "blend_header_total",
+                }
+            ],
+        },
+    }
+
+    result = classify_supplement(product)
+
+    assert result["primary_type"] == "probiotic"
+    assert "probiotic_label_identity" in result["classification_reason_codes"]
+
+
+def test_quantified_botanical_blend_without_child_amounts_is_herbal():
+    """Members Mark 46707: an opaque 500 mg turmeric blend is still botanical."""
+    product = {
+        "product_name": "High Absorption Turmeric Curcumin Complex",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Biocumin Turmeric/Curcumin Complex",
+                    "category": "herbs",
+                    "quantity": 500,
+                    "unit": "mg",
+                    "cleaner_row_role": "blend_header_total",
+                    "raw_taxonomy": {
+                        "category": "botanical",
+                        "ingredientGroup": "Proprietary Blend (Combination)",
+                    },
+                },
+                {
+                    "name": "95% standardized Turmeric extract",
+                    "canonical_id": "turmeric",
+                    "category": "herbs",
+                    "quantity": 0,
+                    "unit": "NP",
+                    "cleaner_row_role": "nested_display_only",
+                },
+            ],
+        },
+    }
+
+    result = classify_supplement(product)
+
+    assert result["primary_type"] == "herbal_botanical"
+    assert "quantified_botanical_blend" in result["classification_reason_codes"]
+
+
+def test_trubiotics_brand_with_cfu_and_strains_routes_probiotic():
+    """One A Day 178453: TruBiotics is the product identity, while the
+    vitamin panel is adjunct immune support rather than the peer class."""
+    product = {
+        "product_name": "TruBiotics with Immune Support Advantage",
+        "fullName": "TruBiotics with Immune Support Advantage",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_cfu": 2_000_000_000,
+            "total_strain_count": 2,
+        },
+        "activeIngredients": [
+            {
+                "name": "Lactobacillus acidophilus LA-5",
+                "canonical_id": "lactobacillus_acidophilus",
+                "category": "probiotic",
+                "quantity": 1,
+                "unit": "billion CFU",
+            },
+            {
+                "name": "Bifidobacterium animalis BB-12",
+                "canonical_id": "bifidobacterium_lactis",
+                "category": "probiotic",
+                "quantity": 1,
+                "unit": "billion CFU",
+            },
+            {"name": "Vitamin C", "canonical_id": "vitamin_c", "quantity": 30, "unit": "mg"},
+            {"name": "Vitamin E", "canonical_id": "vitamin_e", "quantity": 3, "unit": "mg"},
+        ],
+    }
+
+    result = classify_supplement(product)
+
+    assert result["primary_type"] == "probiotic"
+
+
+def test_eye_formula_with_incidental_omega_panel_stays_general():
+    """Kirkland 239446: EPA/DHA are three of nine actives in an eye-health
+    formula. Without omega intent in the name, the formula is not an omega SKU."""
+    ingredients = [
+        ("Vitamin C", "vitamin_c", "vitamin", 150, "mg"),
+        ("Vitamin E", "vitamin_e", "vitamin", 20.1, "mg"),
+        ("Zinc", "zinc", "mineral", 9, "mg"),
+        ("Copper", "copper", "mineral", 1, "mg"),
+        ("Omega-3 Fatty Acids", "omega_3", "fatty_acid", 250, "mg"),
+        ("EPA", "epa", "fatty_acid", 160, "mg"),
+        ("DHA", "dha", "fatty_acid", 90, "mg"),
+        ("Lutein", "lutein", "antioxidant", 5, "mg"),
+        ("Zeaxanthin", "zeaxanthin", "antioxidant", 1, "mg"),
+    ]
+    product = {
+        "product_name": "Ocusight Adult 50+",
+        "fullName": "Ocusight Adult 50+",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": name,
+                    "canonical_id": canonical_id,
+                    "category": category,
+                    "quantity": quantity,
+                    "unit": unit,
+                    "score_eligible_by_cleaner": True,
+                    "cleaner_row_role": "active_scorable",
+                }
+                for name, canonical_id, category, quantity, unit in ingredients
+            ]
+        },
+        "activeIngredients": [],
+    }
+
+    result = classify_supplement(product)
+
+    assert result["primary_type"] == "general_supplement"
+
+
 def test_fiber_primary_product_with_accessory_probiotics_stays_fiber_digestive():
     """A fiber-primary label with accessory probiotics should not be promoted
     into the probiotic peer class solely because it has product-level CFU."""
@@ -1083,6 +1321,49 @@ def test_digestive_enzyme_with_calcium_carrier_is_fiber_digestive_not_mineral():
     result = classify_supplement(product)
     assert result["primary_type"] == "fiber_digestive"
     assert result["secondary_type"] == "serrapeptase"
+    assert result["primary_type"] != "single_mineral"
+
+
+def test_botanical_with_nutrients_and_disclosed_botanical_blend_is_not_single_mineral():
+    """Centrum 19069: the 380 mg fruit/vegetable blend owns product identity."""
+    product = {
+        "product_name": "Fruit & Veggie",
+        "dsld_product_type_raw": {
+            "langualCodeDescription": "Botanical with Nutrients",
+        },
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Calcium",
+                    "canonical_id": "calcium",
+                    "category": "minerals",
+                    "quantity": 170,
+                    "unit": "mg",
+                    "raw_source_path": "ingredientRows[0]",
+                    "cleaner_row_role": "active_scorable",
+                    "score_eligible_by_cleaner": True,
+                },
+            ],
+            "ingredients_skipped": [
+                {
+                    "name": "Proprietary Fruit & Vegetable Blend",
+                    "quantity": 380,
+                    "unit": "mg",
+                    "cleaner_row_role": "blend_header_total",
+                    "raw_source_path": "ingredientRows[1]",
+                    "raw_taxonomy": {
+                        "category": "blend",
+                        "ingredientGroup": "Proprietary Blend (Herb/Botanical)",
+                    },
+                },
+            ],
+        },
+    }
+
+    result = classify_supplement(product)
+
+    assert result["primary_type"] == "herbal_botanical"
+    assert "botanical_with_nutrients_blend" in result["classification_reason_codes"]
     assert result["primary_type"] != "single_mineral"
 
 

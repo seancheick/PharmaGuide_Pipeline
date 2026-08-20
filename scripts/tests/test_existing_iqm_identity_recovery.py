@@ -79,6 +79,103 @@ def test_structured_alpha_gpc_parent_is_not_downgraded_to_generic_choline(
     assert row["role_classification"] == "active_scorable"
 
 
+def test_contextual_flaxseed_ala_survives_enrichment_alias_resolution(
+    enricher: SupplementEnricherV3,
+) -> None:
+    ala = _active_row(
+        name="ALA",
+        raw_source_text="ALA",
+        standardName="Alpha-Linolenic Acid",
+        canonical_id="alpha_linolenic_acid",
+        cleaner_match_method="contextual_ala_identity",
+        quantity=50.0,
+        ingredientGroup="Alpha Lipoic Acid",
+        forms=[
+            {
+                "name": "Flaxseed Oil",
+                "category": "fat",
+                "ingredientGroup": "Flaxseed Oil",
+            }
+        ],
+        raw_taxonomy={
+            "category": "non-nutrient/non-botanical",
+            "ingredientGroup": "Alpha Lipoic Acid",
+            "forms": [
+                {
+                    "name": "Flaxseed Oil",
+                    "category": "fat",
+                    "ingredientGroup": "Flaxseed Oil",
+                }
+            ],
+        },
+    )
+
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": "74302",
+            "fullName": "Adults' Gummy Omega-3 Vitamin",
+            "activeIngredients": [ala],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert len(result["ingredients_scorable"]) == 1
+    row = result["ingredients_scorable"][0]
+    assert row["canonical_id"] == "alpha_linolenic_acid"
+    assert row["standard_name"] == "Alpha-Linolenic Acid"
+
+
+def test_foodstate_carrier_uses_cleaner_declared_nutrient_identity(
+    enricher: SupplementEnricherV3,
+) -> None:
+    foodstate_b12 = _active_row(
+        name="FoodState S. cerevisiae",
+        raw_source_text="FoodState S. cerevisiae",
+        standardName="Vitamin B12",
+        canonical_id="vitamin_b12_cobalamin",
+        cleaner_match_method="single_declared_nutrient_form",
+        quantity=13.5,
+        unit="mcg",
+        forms=[
+            {
+                "name": "Vitamin B12",
+                "category": "vitamin",
+                "ingredientGroup": "Vitamin B12",
+                "uniiCode": "8406EY2OQA",
+            }
+        ],
+        raw_taxonomy={
+            "category": "other",
+            "ingredientGroup": "Saccharomyces",
+            "forms": [
+                {
+                    "name": "Vitamin B12",
+                    "category": "vitamin",
+                    "ingredientGroup": "Vitamin B12",
+                    "uniiCode": "8406EY2OQA",
+                }
+            ],
+        },
+    )
+
+    before = dict(enricher.unmapped_tracker)
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": "43947",
+            "fullName": "Daily Energy",
+            "activeIngredients": [foodstate_b12],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert len(result["ingredients_scorable"]) == 1
+    row = result["ingredients_scorable"][0]
+    assert row["canonical_id"] == "vitamin_b12_cobalamin"
+    assert row["standard_name"] == "Vitamin B12"
+    assert row["raw_source_text"] == "FoodState S. cerevisiae"
+    assert dict(enricher.unmapped_tracker) == before
+
+
 def test_dosed_omega3_parent_total_is_mapped_but_not_double_scored(
     enricher: SupplementEnricherV3,
 ) -> None:
@@ -210,6 +307,7 @@ def test_algal_source_oil_above_nested_epa_dha_mass_is_parent_total(
         canonical_id="algae_oil",
         cleaner_match_method=None,
         quantity=1400.0,
+        raw_source_path="ingredientRows[1]",
         forms=[
             {
                 "name": "Algal Oil Concentrate",
@@ -226,6 +324,7 @@ def test_algal_source_oil_above_nested_epa_dha_mass_is_parent_total(
         standardName="DHA (Docosahexaenoic Acid)",
         canonical_id="dha",
         quantity=420.0,
+        raw_source_path="ingredientRows[2]",
         forms=[],
         isNestedIngredient=True,
         parentBlend="Total Omega-3 Fatty Acids",
@@ -236,6 +335,7 @@ def test_algal_source_oil_above_nested_epa_dha_mass_is_parent_total(
         standardName="EPA (Eicosapentaenoic Acid)",
         canonical_id="epa",
         quantity=210.0,
+        raw_source_path="ingredientRows[3]",
         forms=[],
         isNestedIngredient=True,
         parentBlend="Total Omega-3 Fatty Acids",
@@ -1276,3 +1376,89 @@ def test_botanical_source_identity_blocks_any_iqm_cross_parent(
         ingredient,
         {"canonical_id": source_id},
     ) is False
+
+
+def test_reviewed_exact_botanical_equivalence_is_not_blocked(
+    enricher: SupplementEnricherV3,
+) -> None:
+    """The elderberries registry ID is reviewed as the same IQM substance."""
+    ingredient = {
+        "canonical_id": "elderberries",
+        "canonical_source_db": "botanical_ingredients",
+        "raw_source_text": "Black Elder (Sambucus nigra) berry juice powder",
+        "forms": [],
+    }
+
+    assert enricher._is_blocked_botanical_source_marker_match(
+        ingredient,
+        {"canonical_id": "elderberry"},
+    ) is False
+
+
+def test_elderberry_juice_powder_does_not_inherit_sambucol_form(
+    enricher: SupplementEnricherV3,
+) -> None:
+    """A generic dried juice label is not evidence of the Sambucol preparation."""
+    match = enricher._match_quality_map(
+        "Black Elder (Sambucus nigra) berry juice powder",
+        "Elderberries",
+        enricher.databases["ingredient_quality_map"],
+        cleaner_canonical_id="elderberry",
+    )
+
+    assert match is not None
+    assert match["canonical_id"] == "elderberry"
+    assert match["form_id"] == "elderberry (unspecified)"
+
+
+@pytest.mark.parametrize(
+    ("source_id", "iqm_parent_id"),
+    [
+        ("echinacea_extract", "echinacea"),
+        ("ksm_66_ashwagandha", "ashwagandha"),
+        ("cran_max", "cranberry"),
+    ],
+)
+def test_reviewed_standardized_botanical_parent_is_not_blocked(
+    enricher: SupplementEnricherV3,
+    source_id: str,
+    iqm_parent_id: str,
+) -> None:
+    ingredient = {
+        "canonical_id": source_id,
+        "canonical_source_db": "standardized_botanicals",
+        "forms": [],
+    }
+
+    assert enricher._is_blocked_botanical_source_marker_match(
+        ingredient,
+        {"canonical_id": iqm_parent_id},
+    ) is False
+
+
+def test_ksm66_printed_label_resolves_to_ksm66_iqm_form(
+    enricher: SupplementEnricherV3,
+) -> None:
+    match = enricher._match_quality_map(
+        "KSM66 Ashwagandha root extract",
+        "KSM-66 Ashwagandha",
+        enricher.databases["ingredient_quality_map"],
+    )
+
+    assert match is not None
+    assert match["canonical_id"] == "ashwagandha"
+    assert match["form_id"] == "KSM-66 ashwagandha"
+
+
+def test_cran_max_printed_label_uses_conservative_cranberry_form(
+    enricher: SupplementEnricherV3,
+) -> None:
+    match = enricher._match_quality_map(
+        "Cran-Max",
+        "Cran-Max",
+        enricher.databases["ingredient_quality_map"],
+    )
+
+    assert match is not None
+    assert match["canonical_id"] == "cranberry"
+    assert match["form_id"] == "cranberry (unspecified)"

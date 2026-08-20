@@ -153,6 +153,23 @@ def test_unii_index_no_placeholder_keys(normalizer_instance):
         assert placeholder not in normalizer_instance._unii_to_payload_lookup
 
 
+def test_shadowed_standardized_botanical_unii_does_not_log_same_tier_conflict(caplog):
+    """Brand preparations sharing cranberry's UNII stay a lower source tier."""
+    import logging
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    caplog.set_level(logging.WARNING, logger="enhanced_normalizer")
+    normalizer = EnhancedDSLDNormalizer()
+
+    payload = normalizer._unii_to_payload_lookup["0MVO31Q3QS"]
+    assert payload["canonical_id"] == "cranberry"
+    assert not any(
+        "0MVO31Q3QS" in record.getMessage()
+        and "same-tier conflict" in record.getMessage()
+        for record in caplog.records
+    )
+
+
 # ============================================================================
 # Section 3 — Positive lookups for known FDA UNIIs
 # ============================================================================
