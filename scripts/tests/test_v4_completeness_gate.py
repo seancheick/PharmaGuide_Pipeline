@@ -91,6 +91,34 @@ def test_generic_complete_single_nutrient_is_live_eligible() -> None:
     assert result.module == "generic"
 
 
+def test_unresolved_material_dose_assessment_is_not_live_eligible() -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        rda_ul_data={
+            "collection_status": "complete",
+            "dose_assessments": [
+                {
+                    "canonical_id": "magnesium",
+                    "source_value": 500,
+                    "source_unit": "mg",
+                    "normalized_value": None,
+                    "normalized_unit": None,
+                    "conversion_status": "failed",
+                    "ul_assessment_status": "unresolved_compound_mass",
+                    "readiness": "incomplete",
+                    "material": True,
+                }
+            ],
+        },
+    )
+
+    result = evaluate_completeness_gate(product, module="generic")
+
+    assert result.is_live_eligible is False
+    assert "dose_assessment_readiness" in result.missing_fields
+
+
 def test_generic_missing_active_identity_is_not_scored() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 

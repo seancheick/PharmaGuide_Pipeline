@@ -26,6 +26,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Set
 
+from dose_assessment import has_incomplete_material_dose_assessment
 from scoring_input_contract import classify_ingredient_roles, get_scoring_ingredients
 
 MULTI_DOSE_COVERAGE_MIN = 0.60
@@ -239,6 +240,14 @@ def _base_checks(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> 
         missing.append("mapped_coverage")
     if not ingredients or not any(_has_active_identity(i) for i in ingredients):
         missing.append("active_identity")
+    rda_ul_data = _safe_dict(product.get("rda_ul_data"))
+    if "dose_assessments" in rda_ul_data:
+        collection_status = _norm(rda_ul_data.get("collection_status"))
+        assessments = _safe_list(rda_ul_data.get("dose_assessments"))
+        if collection_status != "complete":
+            missing.append("dose_assessment_readiness")
+        elif has_incomplete_material_dose_assessment(assessments):
+            missing.append("dose_assessment_readiness")
     return missing, coverage
 
 
@@ -557,6 +566,7 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
         "active_identity",
         "mapped_coverage",
         "micronutrient_source_amounts",
+        "dose_assessment_readiness",
     ]
     if not _status_is_active(product):
         soft_missing.append("product_status_not_active")

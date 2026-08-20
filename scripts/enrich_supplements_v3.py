@@ -94,6 +94,7 @@ from constants import (
 )
 from stage_manifest import select_stage_input_files
 from run_artifacts import ensure_run_id, report_run_directory
+from dose_assessment import build_dose_assessment
 from supplement_type_utils import mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement, percentile_label_for
 from form_factor_normalizer import canonicalize_form_factor
@@ -18343,9 +18344,12 @@ class SupplementEnricherV3:
             "count": 0,
             "adequacy_results": [],
             "conversion_evidence": [],
+            "dose_assessments": [],
+            "dose_assessment_errors": [{"reason": reason}],
+            "collection_status": "failed",
             "safety_flags": [],
             "ul_review_flags": [],
-            "has_over_ul": False,
+            "has_over_ul": None,
             "reference_profile": dict(_RDA_REFERENCE_PROFILE),
             "collection_enabled": False,
             "collection_reason": reason
@@ -18499,6 +18503,17 @@ class SupplementEnricherV3:
 
         ingredient_name = self._normalize_text(ingredient.get("name") or "")
         normalized_standard = self._normalize_text(standard_name or "")
+        if ingredient_name and ingredient_name == normalized_standard:
+            # Supplement Facts parent-nutrient declarations report the
+            # nutrient amount itself. A Daily Value is useful corroboration,
+            # not a prerequisite for treating a plain "Zinc 20 mg" row as
+            # elemental. Only an explicitly named compound/form remains
+            # ineligible without verified stoichiometry.
+            return {
+                "ul_gate_eligible": True,
+                "ul_exposure_basis": "supplement_facts_parent_nutrient_amount",
+                "ul_gate_ineligible_reason": None,
+            }
         is_compound_or_form = bool(
             ingredient_name
             and normalized_standard
@@ -18890,8 +18905,8 @@ class SupplementEnricherV3:
         self,
         ingredient: Dict[str, Any],
         *,
-        converted_amount: float,
-        converted_unit: str,
+        converted_amount: Optional[float],
+        converted_unit: Optional[str],
         conversion_evidence: Dict[str, Any],
         declared_folate_totals: List[Dict[str, Any]],
         declared_same_identity_totals: List[Dict[str, Any]],
@@ -18958,6 +18973,10 @@ class SupplementEnricherV3:
                         return lineage
 
         if not declared_folate_totals:
+            return lineage
+        if converted_amount is None or not converted_unit:
+            # A failed conversion cannot participate in numeric lineage
+            # reconciliation. Raw label amounts are never substituted here.
             return lineage
 
         converted_unit_key = self._normalize_text(converted_unit)
@@ -19105,6 +19124,8 @@ class SupplementEnricherV3:
         safety_flags = []
         ul_review_flags = []
         conversion_evidence = []
+        dose_assessments = []
+        dose_row_errors = []
         try:
             servings_min = float(min_servings_per_day) if min_servings_per_day is not None else None
         except (TypeError, ValueError):
@@ -19208,16 +19229,43 @@ class SupplementEnricherV3:
                         and "vitamin_a_beta_carotene_supplement"
                         in disclosed_vitamin_a_rules
                     )
-                    conversion = self.unit_converter.convert_nutrient(
-                        nutrient=std_name,
-                        amount=quantity_float,
-                        from_unit=unit,
-                        ingredient_name=" ".join(
-                            value
-                            for value in (form_hint_name, disclosed_forms)
-                            if value
-                        ),
-                    )
+                    conversion_exception_occurred = False
+                    try:
+                        conversion = self.unit_converter.convert_nutrient(
+                            nutrient=std_name,
+                            amount=quantity_float,
+                            from_unit=unit,
+                            ingredient_name=" ".join(
+                                value
+                                for value in (form_hint_name, disclosed_forms)
+                                if value
+                            ),
+                        )
+                    except Exception as conversion_error:
+                        conversion_exception_occurred = True
+                        # A malformed row must not erase valid assessments for
+                        # the rest of the product. Preserve the source amount,
+                        # but never substitute it as a normalized value.
+                        dose_row_errors.append({
+                            "source_row_ref": ingredient.get("raw_source_path"),
+                            "ingredient": ing_name,
+                            "reason": "conversion_exception",
+                            "error": str(conversion_error)[:500],
+                        })
+                        conversion = ConversionResult(
+                            success=False,
+                            original_value=quantity_float,
+                            original_unit=unit,
+                            converted_value=None,
+                            converted_unit=None,
+                            conversion_rule_id=None,
+                            conversion_factor=None,
+                            nutrient_detected=std_name,
+                            form_detected=None,
+                            form_detection_source="conversion_exception",
+                            confidence="failed",
+                            error=f"conversion_exception: {conversion_error}",
+                        )
 
                     conv_evidence = conversion.to_dict()
                     conv_evidence["ingredient"] = ing_name
@@ -19264,11 +19312,13 @@ class SupplementEnricherV3:
                     _nutrient_record = (
                         self.rda_calculator._find_nutrient(reference_nutrient_name) or {}
                     )
-                    if conversion_failed:
+                    reference_unit_passthrough = False
+                    if conversion_failed and not conversion_exception_occurred:
                         unit_key = _rda_mass_unit_key(unit)
                         reference_unit_key = _rda_mass_unit_key(_nutrient_record.get("unit"))
                         if unit_key and reference_unit_key and unit_key == reference_unit_key:
                             conversion_failed = False
+                            reference_unit_passthrough = True
                             if conv_evidence.get("error"):
                                 conv_evidence["original_error"] = conv_evidence.pop("error")
                             conv_evidence["confidence"] = "not_applicable"
@@ -19277,8 +19327,21 @@ class SupplementEnricherV3:
                                 if _has_no_official_ul_reference(_nutrient_record)
                                 else "reference_unit_already_normalized"
                             )
-                    converted_amount = conversion.converted_value or float(quantity)
-                    converted_unit = conversion.converted_unit or unit
+                    if reference_unit_passthrough:
+                        converted_amount = quantity_float
+                        converted_unit = unit
+                    elif not conversion_failed:
+                        converted_amount = self._to_float_safe(
+                            conversion.converted_value
+                        )
+                        converted_unit = str(conversion.converted_unit or "").strip() or None
+                    else:
+                        converted_amount = None
+                        converted_unit = None
+                    if converted_amount is None or not converted_unit:
+                        conversion_failed = True
+                        converted_amount = None
+                        converted_unit = None
                     dose_lineage = self._rda_dose_lineage(
                         ingredient,
                         converted_amount=converted_amount,
@@ -19402,9 +19465,23 @@ class SupplementEnricherV3:
                         else:
                             skip_ul_reason = "conversion_failed"
 
-                    per_day_min = converted_amount * servings_min
-                    per_day_max = converted_amount * servings_max
-                    amount_for_ul = per_day_max or per_day_min or converted_amount
+                    per_day_min = (
+                        converted_amount * servings_min
+                        if converted_amount is not None
+                        else None
+                    )
+                    per_day_max = (
+                        converted_amount * servings_max
+                        if converted_amount is not None
+                        else None
+                    )
+                    amount_for_ul = (
+                        per_day_max
+                        if per_day_max is not None
+                        else per_day_min
+                        if per_day_min is not None
+                        else converted_amount
+                    )
                     folate_ul_screening = None
                     if (
                         _is_folate
@@ -19423,32 +19500,98 @@ class SupplementEnricherV3:
                                 / _FOLIC_ACID_ADULT_UL_MCG
                                 * 100.0
                             )
-                    adequacy = self.rda_calculator.compute_nutrient_adequacy(
-                        nutrient=reference_nutrient_name,
-                        amount=per_day_min or converted_amount,
-                        unit=converted_unit,
-                        age_group=_RDA_REFERENCE_PROFILE["age_range"],
-                        sex="adult_neutral",
-                    )
-                    safety = self.rda_calculator.compute_nutrient_adequacy(
-                        nutrient=reference_nutrient_name,
-                        amount=amount_for_ul,
-                        unit=converted_unit,
-                        age_group=_RDA_REFERENCE_PROFILE["age_range"],
-                        sex="adult_neutral",
-                    )
+                    assessment_error = None
+                    adequacy = None
+                    safety = None
+                    if converted_amount is not None and converted_unit:
+                        try:
+                            adequacy = self.rda_calculator.compute_nutrient_adequacy(
+                                nutrient=reference_nutrient_name,
+                                amount=(
+                                    per_day_min
+                                    if per_day_min is not None
+                                    else converted_amount
+                                ),
+                                unit=converted_unit,
+                                age_group=_RDA_REFERENCE_PROFILE["age_range"],
+                                sex="adult_neutral",
+                            )
+                            safety = self.rda_calculator.compute_nutrient_adequacy(
+                                nutrient=reference_nutrient_name,
+                                amount=amount_for_ul,
+                                unit=converted_unit,
+                                age_group=_RDA_REFERENCE_PROFILE["age_range"],
+                                sex="adult_neutral",
+                            )
+                        except Exception as calculation_error:
+                            assessment_error = str(calculation_error)[:500]
+                            dose_row_errors.append({
+                                "source_row_ref": dose_lineage.get("source_label_key"),
+                                "ingredient": ing_name,
+                                "reason": "dose_assessment_exception",
+                                "error": assessment_error,
+                            })
+                            skip_ul_check = True
+                            skip_ul_reason = "assessment_error"
 
-                    adequacy_dict = adequacy.to_dict()
+                    if adequacy is not None and safety is not None:
+                        safety_ul = safety.ul
+                        safety_ul_status = safety.ul_status
+                        safety_pct_ul = safety.pct_ul
+                        safety_over_ul = safety.over_ul
+                        safety_over_ul_amount = safety.over_ul_amount
+                        safety_warnings = list(safety.warnings)
+                        adequacy_unit = adequacy.unit
+                        adequacy_optimal_min = adequacy.optimal_min
+                        adequacy_optimal_max = adequacy.optimal_max
+                        adequacy_dict = adequacy.to_dict()
+                    else:
+                        safety_ul = None
+                        safety_ul_status = "indeterminate"
+                        safety_pct_ul = None
+                        safety_over_ul = False
+                        safety_over_ul_amount = None
+                        safety_warnings = []
+                        adequacy_unit = _nutrient_record.get("unit") or unit
+                        adequacy_optimal_min = None
+                        adequacy_optimal_max = None
+                        adequacy_dict = {
+                            "nutrient": reference_nutrient_name,
+                            "amount": None,
+                            "unit": None,
+                            "rda_ai": None,
+                            "rda_ai_source": "unknown",
+                            "ul": None,
+                            "ul_status": "indeterminate",
+                            "optimal_min": None,
+                            "optimal_max": None,
+                            "pct_rda": None,
+                            "pct_ul": None,
+                            "adequacy_band": "unknown",
+                            "over_ul": False,
+                            "over_ul_amount": None,
+                            "scoring_eligible": False,
+                            "point_recommendation": 0,
+                            "notes": [
+                                "Dose assessment not completed; no raw-value "
+                                "conversion fallback was applied."
+                            ],
+                            "warnings": [],
+                            "age_group": _RDA_REFERENCE_PROFILE["age_range"],
+                            "sex_group": "Adult neutral",
+                            "highest_ul": _nutrient_record.get("highest_ul"),
+                        }
+
                     adequacy_dict.update({
                         "canonical_id": resolved_canonical_id or None,
                         "nutrient_group_id": nutrient_group_id,
                         "nutrient_group_name": nutrient_group_name,
-                        "ul": safety.ul,
-                        "ul_status": safety.ul_status,
-                        "pct_ul": safety.pct_ul,
-                        "over_ul": safety.over_ul,
-                        "over_ul_amount": safety.over_ul_amount,
-                        "warnings": safety.warnings,
+                        "ul": safety_ul,
+                        "ul_status": safety_ul_status,
+                        "pct_ul": safety_pct_ul,
+                        "over_ul": safety_over_ul,
+                        "over_ul_amount": safety_over_ul_amount,
+                        "warnings": safety_warnings,
                         "adequacy_exposure": {
                             "per_day": per_day_min,
                             "unit": converted_unit,
@@ -19594,21 +19737,47 @@ class SupplementEnricherV3:
                         adequacy_dict["dose_data_quality"] = dose_data_quality
                     adequacy_results.append(adequacy_dict)
 
+                    dose_assessment = build_dose_assessment(
+                        source_row_ref=dose_lineage.get("source_label_key"),
+                        owner_row_ref=dose_lineage.get("parent_label_key"),
+                        ingredient=ing_name,
+                        canonical_id=resolved_canonical_id or None,
+                        source_value=quantity_float,
+                        source_unit=unit,
+                        normalized_value=converted_amount,
+                        normalized_unit=converted_unit,
+                        conversion_evidence=conv_evidence,
+                        dose_role=dose_lineage.get("dose_role"),
+                        skip_ul_check=skip_ul_check,
+                        skip_ul_reason=skip_ul_reason,
+                        ul_status=adequacy_dict.get("ul_status"),
+                        ul_value=adequacy_dict.get("ul"),
+                        ul_unit=_nutrient_record.get("unit") or converted_unit,
+                        pct_ul=adequacy_dict.get("pct_ul"),
+                        over_ul=adequacy_dict.get("over_ul") is True,
+                        ul_gate_eligible=ul_exposure.get("ul_gate_eligible"),
+                        ul_gate_ineligible_reason=ul_exposure.get(
+                            "ul_gate_ineligible_reason"
+                        ),
+                        assessment_error=assessment_error,
+                    )
+                    dose_assessments.append(dose_assessment.to_dict())
+
                     # D4.3: STAGE safety flags for later aggregation pass.
                     # Don't append directly — we may replace per-row flags
                     # with a single aggregated flag if multiple forms of
                     # the same canonical combine to exceed UL.
                     _row_canonical = resolved_canonical_id or None
-                    if not skip_ul_check and safety.over_ul:
-                        pct_ul_val = safety.pct_ul or 0
-                        over_ul_amount = safety.over_ul_amount or 0
+                    if not skip_ul_check and safety_over_ul:
+                        pct_ul_val = safety_pct_ul or 0
+                        over_ul_amount = safety_over_ul_amount or 0
                         _staged_row_flags.append((
                             _row_canonical,
                             {
                                 "nutrient": ing_name,
                                 "amount": amount_for_ul,
                                 "unit": converted_unit,
-                                "ul": safety.ul,
+                                "ul": safety_ul,
                                 "pct_ul": pct_ul_val,
                                 "over_amount": over_ul_amount,
                                 "warning": f"Exceeds UL by {over_ul_amount:.1f}",
@@ -19630,7 +19799,7 @@ class SupplementEnricherV3:
                                 "total_amount": 0.0,
                                 "rows": [],
                                 "incompatible_units": False,
-                                "ul": safety.ul,  # from first row; all rows share canonical so UL is same
+                                "ul": safety_ul,  # from first row; all rows share canonical so UL is same
                             },
                         )
                         if group["unit"] != converted_unit:
@@ -19646,7 +19815,7 @@ class SupplementEnricherV3:
                                 "ingredient": ing_name,
                                 "amount": amount_for_ul,
                                 "unit": converted_unit,
-                                "pct_ul_individual": safety.pct_ul,
+                                "pct_ul_individual": safety_pct_ul,
                                 "ul_gate_eligible": ul_exposure["ul_gate_eligible"],
                                 "ul_exposure_basis": ul_exposure["ul_exposure_basis"],
                                 "ul_gate_ineligible_reason": ul_exposure[
@@ -19694,7 +19863,7 @@ class SupplementEnricherV3:
                             adequacy_dict.get("ul_assessment_status")
                             or ("evaluated" if not skip_ul_check else "indeterminate")
                         ),
-                        "nutrient_unit": adequacy.unit,
+                        "nutrient_unit": adequacy_unit,
                         # Sprint E1.5.X-4: always populated from the RDA file
                         # — never None when the nutrient exists in the table.
                         # Flutter's anonymous-user fallback relies on this.
@@ -19704,12 +19873,16 @@ class SupplementEnricherV3:
                         # so consumers can distinguish "profile-specific UL"
                         # from "conservative absolute UL".
                         "ul_for_default_profile": (
-                            None if skip_ul_check else safety.ul
+                            None if skip_ul_check else safety_ul
                         ),
-                        "optimal_range": f"{adequacy.optimal_min}-{adequacy.optimal_max}" if adequacy.optimal_min else "",
+                        "optimal_range": (
+                            f"{adequacy_optimal_min}-{adequacy_optimal_max}"
+                            if adequacy_optimal_min is not None
+                            else ""
+                        ),
                         "pct_rda": adequacy_dict.get("pct_rda"),
                         "adequacy_band": adequacy_dict.get("adequacy_band"),
-                        "warnings": [] if skip_ul_check else safety.warnings,
+                        "warnings": [] if skip_ul_check else safety_warnings,
                         "data_by_group": list(_nutrient_record.get("data") or []),
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "conversion_evidence": conv_evidence,  # Per-item evidence for coverage gate
@@ -19728,12 +19901,17 @@ class SupplementEnricherV3:
                 for cid, group in _per_canonical_totals.items():
                     if group.get("incompatible_units"):
                         # Unit mismatch within canonical — per-row flags
-                        # still emit below; log for audit.
+                        # still emit below, but the combined exposure is not
+                        # fully assessed and therefore cannot enter live scoring.
                         self.logger.debug(
                             "UL aggregation skipped for canonical %r: "
                             "incompatible converted units across rows",
                             cid,
                         )
+                        dose_row_errors.append({
+                            "canonical_id": cid,
+                            "reason": "incompatible_aggregate_units",
+                        })
                         continue
                     if len(group["rows"]) < 2:
                         # Single-row canonical — no aggregation needed, per-row
@@ -19752,6 +19930,11 @@ class SupplementEnricherV3:
                             "UL aggregation re-check failed for %r: %s",
                             cid, agg_err,
                         )
+                        dose_row_errors.append({
+                            "canonical_id": cid,
+                            "reason": "aggregate_assessment_exception",
+                            "error": str(agg_err)[:500],
+                        })
                         continue
 
                     if agg_adequacy.over_ul:
@@ -19824,6 +20007,13 @@ class SupplementEnricherV3:
                     # Enhanced evidence fields
                     "adequacy_results": adequacy_results,
                     "conversion_evidence": conversion_evidence,
+                    "dose_assessments": dose_assessments,
+                    "dose_assessment_errors": dose_row_errors,
+                    "collection_status": (
+                        "complete_with_row_errors"
+                        if dose_row_errors
+                        else "complete"
+                    ),
                     "safety_flags": safety_flags,
                     "ul_review_flags": ul_review_flags,
                     "special_use_flags": special_use_flags,
@@ -19839,70 +20029,62 @@ class SupplementEnricherV3:
             except Exception as e:
                 self._rda_ul_warning_count += 1
                 if self._rda_ul_warning_count <= 3:
-                    self.logger.warning(f"RDA/UL calculation failed, using fallback: {e}")
+                    self.logger.warning(
+                        "RDA/UL collection failed closed; product requires review: %s",
+                        e,
+                    )
                 elif self._rda_ul_warning_count == 4:
                     self.logger.warning(
-                        "RDA/UL fallback warnings are being suppressed after 3 occurrences; "
+                        "RDA/UL failure warnings are being suppressed after 3 occurrences; "
                         "enable DEBUG logs for full detail."
                     )
                 else:
-                    self.logger.debug(f"RDA/UL calculation failed, using fallback: {e}")
+                    self.logger.debug("RDA/UL collection failed closed: %s", e)
+                return {
+                    **self._rda_reference_stamp,
+                    "ingredients_with_rda": rda_data,
+                    "analyzed_ingredients": rda_data,
+                    "count": len(rda_data),
+                    "adequacy_results": adequacy_results,
+                    "conversion_evidence": conversion_evidence,
+                    "dose_assessments": dose_assessments,
+                    "dose_assessment_errors": [
+                        *dose_row_errors,
+                        {
+                            "reason": "dose_collection_exception",
+                            "error": str(e)[:500],
+                        },
+                    ],
+                    "collection_status": "failed",
+                    "collection_error": str(e)[:500],
+                    "safety_flags": safety_flags,
+                    "ul_review_flags": ul_review_flags,
+                    "special_use_flags": special_use_flags,
+                    "has_over_ul": None,
+                    "is_servings_estimated": servings_estimated,
+                    "reference_profile": dict(_RDA_REFERENCE_PROFILE),
+                }
 
-        # Fallback: original logic
-        rda_db = self.databases.get('rda_optimal_uls', {})
-        nutrient_recs = rda_db.get('nutrient_recommendations', [])
-
-        for ingredient in active_ingredients:
-            ing_name = ingredient.get('name', '')
-            std_name = ingredient.get('standardName', '') or ing_name
-            quantity = ingredient.get('quantity', 0)
-            unit = ingredient.get('unit', '')
-
-            for nutrient in nutrient_recs:
-                nutrient_name = nutrient.get('standard_name', '')
-                name_match = (
-                    self._normalize_text(std_name) == self._normalize_text(nutrient_name) or
-                    self._normalize_text(ing_name) == self._normalize_text(nutrient_name)
-                )
-                if name_match:
-                    try:
-                        quantity_float = float(quantity)
-                    except (TypeError, ValueError):
-                        quantity_float = None
-
-                    if quantity_float is None:
-                        per_day_min = quantity
-                        per_day_max = quantity
-                    else:
-                        per_day_min = quantity_float * servings_min
-                        per_day_max = quantity_float * servings_max
-
-                    rda_data.append({
-                        "ingredient": ing_name,
-                        "standard_name": nutrient_name,
-                        "quantity": quantity,
-                        "unit": unit,
-                        "per_day_min": per_day_min,
-                        "per_day_max": per_day_max,
-                        "servings_per_day_min": servings_min,
-                        "servings_per_day_max": servings_max,
-                        "nutrient_unit": nutrient.get('unit', ''),
-                        "highest_ul": nutrient.get('highest_ul', 0),
-                        "optimal_range": nutrient.get('optimal_range', ''),
-                        "warnings": nutrient.get('warnings', []),
-                        "data_by_group": nutrient.get('data', [])
-                    })
-                    break
-
+        # The converter and RDA calculator are mandatory clinical dependencies.
+        # Missing dependencies are an incomplete assessment, never evidence that
+        # the product is within established upper limits.
         return {
             **self._rda_reference_stamp,
-            "ingredients_with_rda": rda_data,
-            "analyzed_ingredients": rda_data,  # AC3: Canonical field name for scoring
-            "count": len(rda_data),
+            "ingredients_with_rda": [],
+            "analyzed_ingredients": [],
+            "count": 0,
+            "adequacy_results": [],
+            "conversion_evidence": [],
+            "dose_assessments": [],
+            "dose_assessment_errors": [{
+                "reason": "dose_dependencies_unavailable",
+            }],
+            "collection_status": "failed",
+            "collection_error": "dose_dependencies_unavailable",
             "safety_flags": [],
             "ul_review_flags": [],
             "special_use_flags": special_use_flags,
-            "has_over_ul": False,
+            "has_over_ul": None,
             "is_servings_estimated": servings_estimated,
             "reference_profile": dict(_RDA_REFERENCE_PROFILE),
         }
