@@ -289,7 +289,8 @@ def test_shadow_blocked_safety_short_circuits_before_p26() -> None:
     out = score_product_v4(product)
     assert out["v4_verdict"] == "BLOCKED"
     assert out["raw_score_v4_100"] is None
-    assert out["v4_confidence"] == "blocked_by_safety_gate"
+    assert out["v4_confidence"] is None
+    assert out["score_unavailable_reason"] == "blocked_by_safety_gate"
 
 
 # --- Confidence wiring ----------------------------------------------------

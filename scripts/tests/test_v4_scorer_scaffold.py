@@ -229,6 +229,8 @@ REQUIRED_V4_SCORER_KEYS = {
     "v4_module",
     "v4_verdict",
     "v4_confidence",
+    "quality_score_confidence",
+    "score_unavailable_reason",
     "v4_breakdown",
     "v4_anchored",
 }
@@ -287,6 +289,8 @@ def test_v4_entry_point_p14_typed_confidence_band() -> None:
     from score_supplements_v4 import score_product_v4
     out = score_product_v4(COMPLETE_GENERIC_PRODUCT)
     assert out["v4_confidence"] in {"high", "moderate", "low"}
+    assert out["quality_score_confidence"] == out["v4_confidence"]
+    assert out["score_unavailable_reason"] is None
     assert out["v4_breakdown"]["confidence"]["band"] == out["v4_confidence"]
 
 
@@ -314,7 +318,9 @@ def test_v4_entry_point_handles_minimal_input() -> None:
     out = score_product_v4({})
     assert out["v4_module"] == "generic"
     assert out["v4_verdict"] == "NOT_SCORED"
-    assert out["v4_confidence"] == "blocked_by_completeness_gate"
+    assert out["v4_confidence"] is None
+    assert out["quality_score_confidence"] is None
+    assert out["score_unavailable_reason"] == "blocked_by_completeness_gate"
 
 
 # --- Architecture lock ----------------------------------------------------

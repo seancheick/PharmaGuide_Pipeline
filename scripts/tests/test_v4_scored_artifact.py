@@ -99,6 +99,8 @@ def _canned_v4(
         "v4_module": "generic",
         "v4_verdict": verdict,
         "v4_confidence": "high",
+        "quality_score_confidence": "high",
+        "score_unavailable_reason": None,
         "clean_label_flags_v4": [],
         "v4_breakdown": {
             "module": {},
@@ -126,8 +128,10 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     artifact = scored_artifact.build_scored_artifact(_product())
 
     assert artifact["quality_score_v4_100"] == 82.0
-    assert artifact["output_schema_version"] == "4.2.0"
+    assert artifact["output_schema_version"] == "4.3.0"
     assert artifact["quality_score_status"] == "scored"
+    assert artifact["quality_score_confidence"] == "high"
+    assert artifact["score_unavailable_reason"] is None
     assert artifact["product_safety_status"] == "no_known_catalog_concern"
     assert artifact["quality_assessment_status"] == "complete"
     assert artifact["quality_pillars_v4"]

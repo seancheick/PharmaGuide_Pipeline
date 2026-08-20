@@ -720,7 +720,9 @@ def test_shadow_entry_point_marks_incomplete_clean_product_not_scored() -> None:
 
     assert out["raw_score_v4_100"] is None
     assert out["v4_verdict"] == "NOT_SCORED"
-    assert out["v4_confidence"] == "blocked_by_completeness_gate"
+    assert out["v4_confidence"] is None
+    assert out["quality_score_confidence"] is None
+    assert out["score_unavailable_reason"] == "blocked_by_completeness_gate"
     assert out["v4_anchored"] is False
     gate = out["v4_breakdown"]["completeness_gate"]
     assert gate["is_live_eligible"] is False
@@ -742,7 +744,9 @@ def test_shadow_entry_point_preserves_safety_short_circuit_before_completeness()
     out = score_product_v4(product)
 
     assert out["v4_verdict"] == "BLOCKED"
-    assert out["v4_confidence"] == "blocked_by_safety_gate"
+    assert out["v4_confidence"] is None
+    assert out["quality_score_confidence"] is None
+    assert out["score_unavailable_reason"] == "blocked_by_safety_gate"
     assert "safety_gate" in out["v4_breakdown"]
     assert "completeness_gate" not in out["v4_breakdown"]
 

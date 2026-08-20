@@ -25,12 +25,13 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 
 V4_CANARIES = {
-    # Safety short-circuit: no module block, confidence uses gate string.
+    # Safety short-circuit: no module block; gate state is not confidence.
     "246324": {
         "label": "vitafusion CBD Mixed Berry",
         "module": "generic",
         "verdict": "BLOCKED",
-        "confidence": "blocked_by_safety_gate",
+        "confidence": None,
+        "score_unavailable_reason": "blocked_by_safety_gate",
         "score": None,
         "safety_short_circuit": True,
     },
@@ -206,6 +207,10 @@ def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict
     assert out["v4_module"] == expected["module"]
     assert out["v4_verdict"] == expected["verdict"]
     assert out["v4_confidence"] == expected["confidence"]
+    assert out["quality_score_confidence"] == expected["confidence"]
+    assert out["score_unavailable_reason"] == expected.get(
+        "score_unavailable_reason"
+    )
 
     if "score" in expected:
         assert out["raw_score_v4_100"] == expected["score"]
@@ -232,9 +237,4 @@ def test_v4_canaries_cover_gate_and_confidence_bands() -> None:
     confidences = {c["confidence"] for c in V4_CANARIES.values()}
 
     assert {"BLOCKED", "CAUTION", "POOR", "SAFE"}.issubset(verdicts)
-    assert {
-        "blocked_by_safety_gate",
-        "high",
-        "moderate",
-        "low",
-    }.issubset(confidences)
+    assert {None, "high", "moderate", "low"}.issubset(confidences)

@@ -276,5 +276,6 @@ def test_shadow_scorer_safety_short_circuits_before_p3_module() -> None:
     shadow = score_product_v4(unsafe)
 
     assert shadow["v4_verdict"] == "BLOCKED"
-    assert shadow["v4_confidence"] == "blocked_by_safety_gate"
+    assert shadow["v4_confidence"] is None
+    assert shadow["score_unavailable_reason"] == "blocked_by_safety_gate"
     assert "module" not in shadow["v4_breakdown"]

@@ -526,7 +526,8 @@ def test_shadow_entry_point_short_circuits_on_blocked() -> None:
     """When safety gate returns BLOCKED, the v4 scorer emits:
       v4_verdict     = 'BLOCKED'
       raw_score_v4_100         = None
-      v4_confidence  = 'blocked_by_safety_gate'
+      v4_confidence  = None
+      score_unavailable_reason = 'blocked_by_safety_gate'
       v4_anchored    = False   (anchored is canary-set
                                              membership per §14, NOT
                                              safety-gate finality)
@@ -548,7 +549,9 @@ def test_shadow_entry_point_short_circuits_on_blocked() -> None:
     out = score_product_v4(product)
     assert out["v4_verdict"] == "BLOCKED"
     assert out["raw_score_v4_100"] is None
-    assert out["v4_confidence"] == "blocked_by_safety_gate"
+    assert out["v4_confidence"] is None
+    assert out["quality_score_confidence"] is None
+    assert out["score_unavailable_reason"] == "blocked_by_safety_gate"
     assert out["v4_anchored"] is False, (
         "anchored is reserved for canary-set membership per §14; "
         "safety-gate finality belongs in the breakdown"
@@ -561,8 +564,8 @@ def test_shadow_entry_point_short_circuits_on_blocked() -> None:
 
 def test_shadow_entry_point_short_circuits_on_unsafe() -> None:
     """Same anchored=False rule as BLOCKED — safety-gate finality is
-    represented by confidence='blocked_by_safety_gate' + breakdown
-    short_circuits_scoring=True, not by anchored."""
+    represented by score_unavailable_reason='blocked_by_safety_gate' plus
+    breakdown short_circuits_scoring=True, not by anchored."""
     from score_supplements_v4 import score_product_v4
     product = {
         "supplement_type": {"type": "single_nutrient"},
@@ -578,7 +581,9 @@ def test_shadow_entry_point_short_circuits_on_unsafe() -> None:
     assert out["v4_verdict"] == "UNSAFE"
     assert out["raw_score_v4_100"] is None
     assert out["v4_anchored"] is False
-    assert out["v4_confidence"] == "blocked_by_safety_gate"
+    assert out["v4_confidence"] is None
+    assert out["quality_score_confidence"] is None
+    assert out["score_unavailable_reason"] == "blocked_by_safety_gate"
     assert out["v4_breakdown"]["safety_gate"]["short_circuits_scoring"] is True
 
 

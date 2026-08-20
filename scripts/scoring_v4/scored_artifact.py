@@ -19,7 +19,7 @@ from scoring_input_contract import get_scoring_ingredients, scoring_input_scope
 from supplement_taxonomy import percentile_label_for
 
 
-SCORED_ARTIFACT_SCHEMA_VERSION = "4.2.0"
+SCORED_ARTIFACT_SCHEMA_VERSION = "4.3.0"
 LOW_COVERAGE_TRUST_FLOOR = 0.3
 
 
@@ -162,6 +162,19 @@ def assemble_scored_artifact(
         )
 
     status = str(v4.get("quality_score_status") or "not_scored")
+    raw_score_confidence = (
+        v4.get("quality_score_confidence")
+        if "quality_score_confidence" in v4
+        else v4.get("v4_confidence")
+    )
+    score_confidence = (
+        str(raw_score_confidence).strip().lower()
+        if raw_score_confidence is not None
+        else None
+    )
+    if score_confidence not in {"high", "moderate", "low"}:
+        score_confidence = None
+    score_unavailable_reason = v4.get("score_unavailable_reason")
     product_safety_status = _product_safety_status(
         safety_gate,
         was_assessed=safety_was_assessed,
@@ -216,6 +229,8 @@ def assemble_scored_artifact(
         "badges": [],
         "quality_score_v4_100": quality_score,
         "quality_score_status": status,
+        "quality_score_confidence": score_confidence,
+        "score_unavailable_reason": score_unavailable_reason,
         "product_safety_status": product_safety_status,
         "quality_assessment_status": quality_assessment_status,
         "dose_safety_evaluation": dose_safety,
@@ -233,6 +248,8 @@ def assemble_scored_artifact(
             "scoring_status": status,
             "product_safety_status": product_safety_status,
             "quality_assessment_status": quality_assessment_status,
+            "quality_score_confidence": score_confidence,
+            "score_unavailable_reason": score_unavailable_reason,
             "score_basis": "v4_six_pillar",
             "scoring_ingredients_source": scoring_input.source,
             "strict_scoring_contract": strict_contract,
@@ -253,7 +270,8 @@ def assemble_scored_artifact(
         "_v4_inactive_penalty_details": _inactive_penalty_details(
             module_breakdown
         ),
-        "_v4_confidence": v4.get("v4_confidence"),
+        "_v4_confidence": score_confidence,
+        "_v4_score_unavailable_reason": score_unavailable_reason,
         "_v4_confidence_detail": breakdown.get("confidence"),
         "_v4_quality_version": v4.get("quality_score_version"),
         "_v4_pillars": v4.get("quality_pillars_v4"),

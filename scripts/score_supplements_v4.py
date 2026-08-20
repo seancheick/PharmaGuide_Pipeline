@@ -15,8 +15,9 @@ Current P3.6 / P2.6 / P1.6.6 state:
     rubric scores.
   - raw_score_v4_100 mirrors the module result for complete products in
     every online module.
-  - v4_confidence = top-level typed confidence band for
-    complete scoreable rows; blocked_by_* for gate failures.
+  - quality_score_confidence = high / moderate / low for completed scores.
+    v4_confidence is a schema-2.x compatibility alias with the same restricted
+    vocabulary; gate failures live in score_unavailable_reason.
   - v4_breakdown.confidence contains typed sub-category
     levels / drivers for evidence, label_completeness, verification, identity.
   - v4_anchored = False (canary-set membership lands later).
@@ -77,6 +78,8 @@ V4_SCORER_KEYS = (
     "v4_module",
     "v4_verdict",
     "v4_confidence",
+    "quality_score_confidence",
+    "score_unavailable_reason",
     "v4_breakdown",
     "v4_anchored",
 )
@@ -87,7 +90,7 @@ V4_SCORER_KEYS = (
 # classification-schema version, and the version+fingerprint of every config
 # rubric consumed. Bump SCORING_ENGINE_VERSION on a material ALGORITHM change;
 # config-value changes are captured by the per-rubric fingerprints, not here.
-SCORING_ENGINE_VERSION = "4.2.0"
+SCORING_ENGINE_VERSION = "4.3.0"
 SCORING_MODE = "production"
 
 
@@ -113,7 +116,9 @@ def _empty_v4_result(module: str) -> Dict[str, Any]:
         "raw_score_v4_100": None,
         "v4_module": module,
         "v4_verdict": None,
-        "v4_confidence": "skeleton",
+        "v4_confidence": None,
+        "quality_score_confidence": None,
+        "score_unavailable_reason": None,
         "v4_breakdown": {},
         "v4_anchored": False,
     }
@@ -310,7 +315,7 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         # membership; safety-gate finality lives in the breakdown
         # (`safety_gate.short_circuits_scoring`) + the confidence value.
         result["v4_verdict"] = safety.verdict
-        result["v4_confidence"] = "blocked_by_safety_gate"
+        result["score_unavailable_reason"] = "blocked_by_safety_gate"
         return result
 
     if safety.verdict == "CAUTION":
@@ -328,7 +333,7 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         # Archive / QA verdict only. Live catalog excludes these rows
         # entirely; safety signals remain available in safety_gate.
         result["v4_verdict"] = "NOT_SCORED"
-        result["v4_confidence"] = "blocked_by_completeness_gate"
+        result["score_unavailable_reason"] = "blocked_by_completeness_gate"
         return result
 
     # Layer 3 — one dispatch/assembly seam for every routed module. The former
@@ -369,7 +374,9 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
     )
     result["v4_breakdown"]["confidence"] = confidence
+    result["quality_score_confidence"] = confidence["band"]
     result["v4_confidence"] = confidence["band"]
+    result["score_unavailable_reason"] = None
 
     return result
 

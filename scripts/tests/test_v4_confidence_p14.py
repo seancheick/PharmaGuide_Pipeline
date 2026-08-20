@@ -346,7 +346,7 @@ def test_conservative_blend_anchor_mass_is_moderate_label_confidence() -> None:
     assert "conservative_blend_anchor_mass" in confidence["label_completeness"]["drivers"]
 
 
-def test_blocked_paths_keep_gate_confidence_string_and_skip_confidence_block() -> None:
+def test_blocked_paths_separate_gate_reason_from_score_confidence() -> None:
     from score_supplements_v4 import score_product_v4
 
     product = _product(
@@ -360,7 +360,9 @@ def test_blocked_paths_keep_gate_confidence_string_and_skip_confidence_block() -
     )
     out = score_product_v4(product)
 
-    assert out["v4_confidence"] == "blocked_by_safety_gate"
+    assert out["quality_score_confidence"] is None
+    assert out["v4_confidence"] is None
+    assert out["score_unavailable_reason"] == "blocked_by_safety_gate"
     assert "confidence" not in out["v4_breakdown"]
 
 
