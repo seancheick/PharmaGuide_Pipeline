@@ -37,13 +37,23 @@ Examples
 
 Freshness
 ---------
-A brand can be 100% complete against DSLD and still fail in a store. DSLD only
-holds what a manufacturer files, and some brands stop filing. CVS's newest
-on-market label is 2023-06-22 with nothing since, so 2024+ bottles on the shelf
-were never submitted and cannot be scanned no matter how much we download.
+A brand can be 100% complete against DSLD and still fail in a store.
 
-The `newest` and `%fresh` columns surface that. A brand whose newest label
-predates the cutoff is flagged STALE: complete, but not shelf-current.
+`entryDate` is DSLD's BATCH-LOAD date, not the manufacturer's filing date. DSLD
+loads monthly (the 20th-25th); across the local corpus there are 156 distinct
+entryDate values, one per month, and they stop at 2025-09-25. So:
+
+  * A brand whose newest label predates the cutoff has not appeared in a recent
+    DSLD batch. Its newer shelf SKUs are not obtainable from DSLD at any price.
+    Example: CVS tops out at 2023-06-22 in EVERY status (on/off/all), so 2024+
+    CVS bottles cannot be scanned however much we download.
+  * This is NOT proof the manufacturer stopped filing. It only means DSLD has
+    not published those labels. Do not infer manufacturer behaviour from it.
+  * DSLD itself has published no batch since 2025-09-25, so EVERY brand is
+    missing roughly the last year of product changes, not just the stale ones.
+
+STALE therefore means "complete, but not shelf-current" — partial coverage, not
+useless coverage. Older SKUs still on shelf continue to scan correctly.
 
 Exit codes: 0 = every brand matches, 1 = at least one delta, 2 = bad usage.
 Freshness never changes the exit code — it is advisory, not a completeness bug.

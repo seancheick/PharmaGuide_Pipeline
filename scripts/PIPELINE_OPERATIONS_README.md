@@ -348,9 +348,9 @@ Answers two different questions that are easy to confuse:
 
 1. **Completeness** — did we download every on-market DSLD label for the brands
    we track, or did something get silently skipped?
-2. **Freshness** — is the brand still *filing* with DSLD? A brand can be 100%
-   complete and still fail in a store, because DSLD only holds what a
-   manufacturer submits.
+2. **Freshness** — does the brand appear in recent DSLD batches? A brand can be
+   100% complete and still fail in a store. `entryDate` is DSLD's monthly
+   **batch-load** date, not the manufacturer's filing date.
 
 ```bash
 source scripts/python_env.sh
@@ -393,9 +393,17 @@ Freshness is advisory and never changes the exit code.
   product left the market; not an error.
 - **Matching counts are not proof.** One product leaving the market while
   another appears nets to zero. Use `--ids` on any brand that matters.
-- **STALE** — the brand stopped filing. No amount of downloading fixes it, and
-  scanning current shelf stock for that brand will miss. This is a sourcing
-  problem, not a pipeline problem.
+- **STALE** — the brand has not appeared in a recent DSLD batch, so its newer
+  SKUs are not obtainable from DSLD at any price. Coverage is partial, not
+  useless: older SKUs still on shelf keep scanning. Do NOT infer that the
+  manufacturer stopped filing — only that DSLD has not published those labels.
+- **DSLD-wide lag.** DSLD loads monthly (20th-25th) but has published no batch
+  since **2025-09-25**. Every brand is therefore missing roughly the last year
+  of product changes. Re-check the leading edge before blaming a single brand:
+
+  ```bash
+  "$PG_PYTHON" scripts/audit_brand_coverage.py --targets Thorne,Nature_Made
+  ```
 
 ### Brand query derivation
 
