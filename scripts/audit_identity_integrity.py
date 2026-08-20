@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Release gate: every active ingredient ships a resolved, label-faithful identity.
+"""Release gate: every score-eligible active ships a resolved identity.
 
 Module-agnostic. The same identity contract is enforced for every v4 scoring
 route (``class_for_product`` over ``VALID_CLASSES``), so a source identity error
@@ -14,8 +14,10 @@ per active row and fails the release for:
 - any label-ledger form, identity, omission, completeness, review-claim, or
   score-publication failure returned by the enrichment release contract.
 
-Disposition vocabulary and scoreability come from ``identity_integrity``; the
-route inventory comes from the v4 router. Neither is duplicated here.
+Rows explicitly excluded by the cleaner remain visible as ``source_excluded``
+records and require a reason, but they do not need a scoring/IQD identity row.
+Disposition vocabulary and scoreability otherwise come from
+``identity_integrity``; the route inventory comes from the v4 router.
 """
 
 from __future__ import annotations
@@ -84,7 +86,30 @@ def _active_identity_pairs(
     if not isinstance(active_value, list):
         return [(None, row, None) for row in identity_rows]
 
-    active_rows = [row for row in active_value if isinstance(row, dict)]
+    active_rows: list[dict[str, Any]] = []
+    seen_paths: set[str] = set()
+    seen_objects: set[int] = set()
+
+    def add_active_tree(row: dict[str, Any]) -> None:
+        source_path = str(row.get("raw_source_path") or "")
+        if source_path:
+            if source_path in seen_paths:
+                return
+            seen_paths.add(source_path)
+        elif id(row) in seen_objects:
+            return
+        seen_objects.add(id(row))
+        active_rows.append(row)
+        for field in ("nestedIngredients", "nested_ingredients"):
+            children = row.get(field)
+            if isinstance(children, list):
+                for child in children:
+                    if isinstance(child, dict):
+                        add_active_tree(child)
+
+    for active in active_value:
+        if isinstance(active, dict):
+            add_active_tree(active)
     used: set[int] = set()
     pairs: list[tuple[Optional[dict[str, Any]], Optional[dict[str, Any]], Optional[str]]] = []
 
@@ -162,8 +187,32 @@ def audit_product(
     product_id = str(product.get("dsld_id") or product.get("id") or "unknown")
     records: list[DispositionRecord] = []
     for active, row, pair_violation in _active_identity_pairs(product):
-        row = row or {}
         active = active or {}
+        if (
+            row is None
+            and pair_violation == "missing_identity_audit_row"
+            and active.get("score_eligible_by_cleaner") is False
+            and str(active.get("score_exclusion_reason") or "").strip()
+        ):
+            records.append(
+                DispositionRecord(
+                    product_id=product_id,
+                    route=route,
+                    source_path=str(active.get("raw_source_path") or source or ""),
+                    label_display_name=(
+                        active.get("raw_source_text") or active.get("name")
+                    ),
+                    label_display_form=None,
+                    supplied_canonical=active.get("canonical_id"),
+                    final_canonical=None,
+                    disposition="source_excluded",
+                    scoreable_identity=False,
+                    rationale=str(active.get("score_exclusion_reason")),
+                    violation=None,
+                )
+            )
+            continue
+        row = row or {}
         records.append(
             DispositionRecord(
                 product_id=product_id,

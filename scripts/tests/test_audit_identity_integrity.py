@@ -156,6 +156,90 @@ def test_audit_fails_when_an_active_row_has_no_identity_audit_row():
     assert records[0].violation == "missing_identity_audit_row"
 
 
+def test_audit_reconciles_nested_active_rows_instead_of_calling_them_orphans():
+    parent_active = {
+        "name": "Turmeric Blend",
+        "raw_source_text": "Turmeric Blend",
+        "raw_source_path": "ingredientRows[0]",
+        "nestedIngredients": [
+            {
+                "name": "Curcuminoids",
+                "raw_source_text": "Curcuminoids",
+                "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                "nestedIngredients": [],
+            }
+        ],
+    }
+    parent_iqd = _active_row(
+        raw_source_path="ingredientRows[0]",
+        source_label_key="label:turmeric:turmeric blend:500:mg",
+        source_label_name="Turmeric Blend",
+        label_display_name="Turmeric Blend",
+        canonical_id_before="turmeric",
+        canonical_id_after="turmeric",
+        canonical_id="turmeric",
+    )
+    child_iqd = _active_row(
+        raw_source_path="ingredientRows[0].nestedRows[0]",
+        source_label_key="label:curcumin:curcuminoids:100:mg",
+        source_label_name="Curcuminoids",
+        label_display_name="Curcuminoids",
+        canonical_id_before="curcumin",
+        canonical_id_after="curcumin",
+        canonical_id="curcumin",
+    )
+    product = {
+        "dsld_id": "NESTED",
+        "activeIngredients": [parent_active],
+        "ingredient_quality_data": {"ingredients": [parent_iqd, child_iqd]},
+    }
+
+    records = audit_product(product, classify=_force("generic"))
+
+    assert len(records) == 2
+    assert [record.source_path for record in records] == [
+        "ingredientRows[0]",
+        "ingredientRows[0].nestedRows[0]",
+    ]
+    assert all(not record.failed for record in records)
+
+
+def test_audit_accepts_explicitly_excluded_display_child_without_iqd_row():
+    parent_active = {
+        "name": "Phytosome Complex",
+        "raw_source_text": "Phytosome Complex",
+        "raw_source_path": "ingredientRows[0]",
+        "nestedIngredients": [
+            {
+                "name": "Phospholipid",
+                "raw_source_text": "Phospholipid",
+                "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                "cleaner_row_role": "nested_display_only",
+                "score_eligible_by_cleaner": False,
+                "score_exclusion_reason": "nested_display_only",
+            }
+        ],
+    }
+    parent_iqd = _active_row(
+        raw_source_path="ingredientRows[0]",
+        source_label_key="label:phytosome:phytosome complex:350:mg",
+        source_label_name="Phytosome Complex",
+        label_display_name="Phytosome Complex",
+    )
+    product = {
+        "dsld_id": "DISPLAY-CHILD",
+        "activeIngredients": [parent_active],
+        "ingredient_quality_data": {"ingredients": [parent_iqd]},
+    }
+
+    records = audit_product(product, classify=_force("generic"))
+
+    assert len(records) == 2
+    assert all(not record.failed for record in records)
+    assert records[1].disposition == "source_excluded"
+    assert records[1].rationale == "nested_display_only"
+
+
 def test_audit_requires_literal_label_identity_and_source_key_for_scorable_rows():
     missing_label = _active_row(source_label_name=None)
     missing_key = _active_row(source_label_key="")
