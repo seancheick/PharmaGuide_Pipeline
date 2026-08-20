@@ -200,6 +200,9 @@ PRODUCTS_CORE_COLUMNS = [
     "dsld_id",
     "product_name",
     "brand_name",
+    "brand_name_raw",
+    "brand_family",
+    "product_line",
     "upc_sku",
     "image_url",
     "image_is_pdf",
@@ -523,6 +526,36 @@ def test_build_core_row_includes_flutter_convenience_fields():
     assert isinstance(decision_highlights["caution"], str)
     assert isinstance(decision_highlights["danger"], list)
     assert isinstance(decision_highlights["trust"], str)
+
+
+def test_catalog_brand_projection_preserves_source_identity_in_core_and_blob():
+    enriched = make_enriched()
+    enriched["brandName"] = "Garden of Life Dr. Fomulated"
+    scored = make_scored()
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-08-19T00:00:00Z"))
+    blob = build_detail_blob(enriched, scored)
+
+    assert row["brand_name"] == "Garden of Life"
+    assert row["brand_name_raw"] == "Garden of Life Dr. Fomulated"
+    assert row["brand_family"] == "Garden of Life"
+    assert row["product_line"] == "Dr. Formulated"
+    assert blob["brand_name"] == "Garden of Life"
+    assert blob["brand_name_raw"] == "Garden of Life Dr. Fomulated"
+    assert blob["brand_family"] == "Garden of Life"
+    assert blob["product_line"] == "Dr. Formulated"
+
+
+def test_unknown_catalog_brand_passes_through_without_affecting_score():
+    enriched = make_enriched()
+    enriched["brandName"] = "Future Brand"
+    scored = make_scored()
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-08-19T00:00:00Z"))
+
+    assert row["brand_name"] == "Future Brand"
+    assert row["brand_name_raw"] == "Future Brand"
+    assert row["quality_score_v4_100"] == scored["quality_score_v4_100"]
 
 
 def test_share_metadata_evidence_copy_uses_grammatical_v4_signal():
@@ -3015,8 +3048,8 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
     assert row["net_contents_unit"] == "oz."
 
 
-def test_final_db_has_111_columns():
-    # Tuple emitted by build_core_row must match the 112-column schema
+def test_final_db_has_114_columns():
+    # Tuple emitted by build_core_row must match the 114-column schema
     # (v2.0.0 + 6 v4 pillar component columns + safety_signal_reason
     # + goal_matches_underdosed).
     enriched = make_enriched()
@@ -3034,8 +3067,8 @@ def test_final_db_has_111_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 111
-    assert len(PRODUCTS_CORE_COLUMNS) == 111
+    assert len(row) == 114
+    assert len(PRODUCTS_CORE_COLUMNS) == 114
 
 
 def test_products_core_exports_production_v4_columns():
@@ -3240,10 +3273,10 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_112(self):
+    def test_core_row_column_count_is_114(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 111
-        assert CORE_COLUMN_COUNT == 111
+        assert len(row) == 114
+        assert CORE_COLUMN_COUNT == 114
 
     def test_schema_version_bumped_for_independent_consumer_semantics(self):
         assert EXPORT_SCHEMA_VERSION == "2.3.0"

@@ -40,6 +40,10 @@ DATA = Path(__file__).parent.parent / "data"
 # total_entries means something file-specific. Each entry MUST cite the
 # bespoke per-file test that pins the semantic (no silent skips).
 INTENTIONAL_EXCEPTIONS: dict[str, str] = {
+    "catalog_brand_registry.json":
+        "total_entries tracks canonical brand-family records; wave_1 is an "
+        "execution manifest, not another brand catalog. Pinned by "
+        "test_brand_identity.py.",
     "ingredient_weights.json":
         "total_entries tracks dosage_weights tier count (4 — therapeutic / "
         "optimal / maintenance / trace), not the sum across multi-section "

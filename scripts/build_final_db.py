@@ -43,6 +43,7 @@ import re
 import sqlite3
 import sys
 import tempfile
+from functools import lru_cache
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
@@ -54,6 +55,7 @@ from audit_evidence_utils import (
     derive_proprietary_blend_audit,
 )
 from audit_identity_integrity import audit_product
+from brand_identity import BrandIdentity, BrandRegistry
 from inactive_ingredient_resolver import InactiveIngredientResolver
 from iqm_form_evidence import validate_form_evidence
 from identity.safety import (
@@ -94,6 +96,7 @@ TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
 EXPORT_COMMIT_EVERY = 2000
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
+CATALOG_BRAND_REGISTRY_PATH = Path(__file__).resolve().parent / "data" / "catalog_brand_registry.json"
 
 # ─── Warning priority for top_warnings ───
 WARNING_PRIORITY = {
@@ -118,6 +121,17 @@ SEVERITY_PRIORITY = {
     "low": 4,
     "info": 5,
 }
+
+
+@lru_cache(maxsize=1)
+def _catalog_brand_registry() -> BrandRegistry:
+    return BrandRegistry.load(CATALOG_BRAND_REGISTRY_PATH)
+
+
+def resolve_catalog_brand(enriched: Dict[str, Any]) -> BrandIdentity:
+    """Resolve display identity without mutating the pipeline source brand."""
+    raw_brand = enriched.get("brandName") or enriched.get("brand_name") or ""
+    return _catalog_brand_registry().resolve(raw_brand)
 
 
 def build_db_version(now: datetime) -> str:
@@ -2192,6 +2206,9 @@ CREATE TABLE IF NOT EXISTS products_core (
     dsld_id                       TEXT PRIMARY KEY,
     product_name                  TEXT NOT NULL,
     brand_name                    TEXT,
+    brand_name_raw                TEXT,
+    brand_family                  TEXT,
+    product_line                  TEXT,
     upc_sku                       TEXT,
     image_url                     TEXT,
     image_is_pdf                  INTEGER DEFAULT 0,
@@ -2400,7 +2417,7 @@ CREATE INDEX IF NOT EXISTS idx_core_cat_score ON products_core (primary_category
 
 FTS_SQL = """
 CREATE VIRTUAL TABLE IF NOT EXISTS products_fts USING fts5(
-    product_name, brand_name, ingredients_text,
+    product_name, brand_name, brand_name_raw, ingredients_text,
     content='products_core', content_rowid='rowid',
     tokenize='porter unicode61'
 );
@@ -6203,6 +6220,7 @@ def _classify_product_role(
 
 def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     """Build the per-product detail blob for caching/Supabase."""
+    brand_identity = resolve_catalog_brand(enriched)
     non_gmo_audit = derive_non_gmo_audit(enriched)
     omega3_audit = derive_omega3_audit(enriched, scored)
     proprietary_blend_audit = derive_proprietary_blend_audit(enriched, scored)
@@ -7269,7 +7287,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     blob = {
         "dsld_id": safe_str(enriched.get("dsld_id")),
         "product_name": safe_str(enriched.get("product_name")),
-        "brand_name": safe_str(enriched.get("brand_name") or enriched.get("brandName")),
+        "brand_name": brand_identity.display_brand,
+        "brand_name_raw": brand_identity.source_brand,
+        "brand_family": brand_identity.family,
+        "product_line": brand_identity.product_line,
         "primary_type": safe_str((enriched.get("supplement_taxonomy") or {}).get("primary_type")),
         "secondary_type": (enriched.get("supplement_taxonomy") or {}).get("secondary_type"),
         "classification_confidence": (enriched.get("supplement_taxonomy") or {}).get("classification_confidence"),
@@ -9566,6 +9587,7 @@ def build_core_row(
     cp = safe_dict(scored.get("category_percentile"))
     st_str = resolve_export_supplement_type(enriched, scored)
     sm = safe_dict(scored.get("scoring_metadata"))
+    brand_identity = resolve_catalog_brand(enriched)
 
     # cert_programs / has_third_party_testing: union of label-named programs
     # and registry-verified (sku/product_line) certs. Label-only sourcing
@@ -9613,7 +9635,9 @@ def build_core_row(
     # ─── v1.1.0 Enhancements ───
     fingerprint = generate_ingredient_fingerprint(enriched)
     key_nutrients = generate_key_nutrients_summary(enriched)
-    share_meta = generate_share_metadata(enriched, effective_scored)
+    share_enriched = dict(enriched)
+    share_enriched["brand_name"] = brand_identity.display_brand
+    share_meta = generate_share_metadata(share_enriched, effective_scored)
     categories = classify_product_categories(enriched, effective_scored)
     goal_data = compute_goal_matches(enriched)
     dosing = generate_dosing_summary(enriched)
@@ -9672,7 +9696,10 @@ def build_core_row(
     return (
         safe_str(enriched.get("dsld_id")),
         safe_str(enriched.get("product_name")),
-        safe_str(enriched.get("brand_name") or enriched.get("brandName")),
+        brand_identity.display_brand,
+        brand_identity.source_brand,
+        brand_identity.family,
+        brand_identity.product_line,
         normalize_upc(enriched.get("upcSku")),
         safe_str(enriched.get("imageUrl")),
         image_url_is_pdf(enriched.get("imageUrl")),
@@ -9821,7 +9848,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 111  # Must match the tuple above and SCHEMA_SQL (v2.3.0 omits the internal raw score)
+CORE_COLUMN_COUNT = 114  # Must match the tuple above and SCHEMA_SQL (v2.3.0 omits the internal raw score)
 
 
 # ─── Reference Data Loader ───

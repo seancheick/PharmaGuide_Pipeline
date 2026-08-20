@@ -1,0 +1,429 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "last_updated": "2026-08-19",
+    "description": "Exact source-brand aliases for consumer catalog display. Raw source identity remains immutable.",
+    "total_entries": 37
+  },
+  "brands": [
+    {
+      "id": "bulk_supplements",
+      "display_name": "BulkSupplements",
+      "family": "BulkSupplements",
+      "aliases": [
+        {"name": "BulkSupplements.com", "product_line": null}
+      ]
+    },
+    {
+      "id": "natures_way",
+      "display_name": "Nature's Way",
+      "family": "Nature's Way",
+      "aliases": [
+        {"name": "Nature's Way", "product_line": null},
+        {"name": "Nature's Way FlexMax", "product_line": "FlexMax"},
+        {"name": "Nature's Way NutraSea hp", "product_line": "NutraSea HP"},
+        {"name": "Nature's Way NutraSea +D", "product_line": "NutraSea +D"},
+        {"name": "Nature's Way EfaGold", "product_line": "EfaGold"},
+        {"name": "Nature's Way Body Essential", "product_line": "Body Essential"},
+        {"name": "Nature's Way NutraVege", "product_line": "NutraVege"},
+        {"name": "Nature's Way Fortify Optima", "product_line": "Fortify Optima"},
+        {"name": "Nature's Way Fatigued to Fantastic!", "product_line": "Fatigued to Fantastic!"}
+      ]
+    },
+    {
+      "id": "life_extension",
+      "display_name": "Life Extension",
+      "family": "Life Extension",
+      "aliases": [
+        {"name": "Life Extension", "product_line": null},
+        {"name": "Life Extension Florassist", "product_line": "FLORASSIST"},
+        {"name": "Life Extension Florassist Probiotic", "product_line": "FLORASSIST Probiotic"},
+        {"name": "Life Extension Wellness Code", "product_line": "Wellness Code"},
+        {"name": "Life Extension Gummy Science", "product_line": "Gummy Science"},
+        {"name": "Life Extension GeroProtect", "product_line": "GeroProtect"}
+      ]
+    },
+    {
+      "id": "pure_encapsulations",
+      "display_name": "Pure Encapsulations",
+      "family": "Pure Encapsulations",
+      "aliases": [
+        {"name": "Pure Encapsulations", "product_line": null}
+      ]
+    },
+    {
+      "id": "solgar",
+      "display_name": "Solgar",
+      "family": "Solgar",
+      "aliases": [
+        {"name": "Solgar", "product_line": null}
+      ]
+    },
+    {
+      "id": "nature_made",
+      "display_name": "Nature Made",
+      "family": "Nature Made",
+      "aliases": [
+        {"name": "Nature Made", "product_line": null},
+        {"name": "Nature Made VitaMelts", "product_line": "VitaMelts"},
+        {"name": "Nature Made Kids First", "product_line": "Kids First"},
+        {"name": "Nature Made Wellblends", "product_line": "Wellblends"},
+        {"name": "Nature Made Solutions", "product_line": "Solutions"},
+        {"name": "Glow by Nature Made", "product_line": "Glow"}
+      ]
+    },
+    {
+      "id": "nutricost",
+      "display_name": "Nutricost",
+      "family": "Nutricost",
+      "aliases": [
+        {"name": "Nutricost", "product_line": null},
+        {"name": "Nutricost Performance", "product_line": "Performance"},
+        {"name": "Nutricost Women", "product_line": "Women"},
+        {"name": "Nutricost Organic", "product_line": "Organic"},
+        {"name": "Nutricost Kids", "product_line": "Kids"}
+      ]
+    },
+    {
+      "id": "natures_bounty",
+      "display_name": "Nature's Bounty",
+      "family": "Nature's Bounty",
+      "aliases": [
+        {"name": "Nature's Bounty", "product_line": null},
+        {"name": "Nature's Bounty Optimal Solutions", "product_line": "Optimal Solutions"},
+        {"name": "Nature's Bounty Platinum", "product_line": "Platinum"},
+        {"name": "Nature's Bounty Prescriptive Formulas", "product_line": "Prescriptive Formulas"}
+      ]
+    },
+    {
+      "id": "doctors_best",
+      "display_name": "Doctor's Best",
+      "family": "Doctor's Best",
+      "aliases": [
+        {"name": "Doctor's Best", "product_line": null},
+        {"name": "Doctor's Best Doc's Kids", "product_line": "Doc's Kids"}
+      ]
+    },
+    {
+      "id": "spring_valley",
+      "display_name": "Spring Valley",
+      "family": "Spring Valley",
+      "aliases": [
+        {"name": "Spring Valley", "product_line": null},
+        {"name": "Spring Valley Natural Foods", "product_line": "Natural Foods"}
+      ]
+    },
+    {
+      "id": "gnc",
+      "display_name": "GNC",
+      "family": "GNC",
+      "aliases": [
+        {"name": "GNC", "product_line": null},
+        {"name": "GNC Pro Performance", "product_line": "Pro Performance"},
+        {"name": "GNC AMP Advanced Muscle Performance", "product_line": "AMP Advanced Muscle Performance"},
+        {"name": "GNC Beyond Raw", "product_line": "Beyond Raw"},
+        {"name": "GNC Mega Men", "product_line": "Mega Men"},
+        {"name": "GNC Pro Performance AMP", "product_line": "Pro Performance AMP"},
+        {"name": "GNC Women's Ultra Mega", "product_line": "Women's Ultra Mega"},
+        {"name": "GNC Women's", "product_line": "Women's"},
+        {"name": "GNC Herbal Plus", "product_line": "Herbal Plus"},
+        {"name": "GNC Preventive Nutrition", "product_line": "Preventive Nutrition"},
+        {"name": "GNC Total Lean", "product_line": "Total Lean"},
+        {"name": "GNC SuperFoods", "product_line": "SuperFoods"},
+        {"name": "GNC Herbal Plus Standardized", "product_line": "Herbal Plus Standardized"},
+        {"name": "GNC Natural Brand", "product_line": "Natural Brand"},
+        {"name": "GNC Triple Strength", "product_line": "Triple Strength"},
+        {"name": "GNC Milestones", "product_line": "Milestones"},
+        {"name": "GNC Men's", "product_line": "Men's"},
+        {"name": "GNC Beyond Raw Chemistry Labs", "product_line": "Beyond Raw Chemistry Labs"},
+        {"name": "GNC Herbal Plus Whole Herb", "product_line": "Herbal Plus Whole Herb"},
+        {"name": "GNC Probiotic Complex", "product_line": "Probiotic Complex"},
+        {"name": "GNC TriFlex", "product_line": "TriFlex"},
+        {"name": "GNC Probiotic Solutions", "product_line": "Probiotic Solutions"},
+        {"name": "GNC Total Lean Advanced", "product_line": "Total Lean Advanced"},
+        {"name": "GNC Select", "product_line": "Select"},
+        {"name": "GNC Pro Performance AMP Advanced Muscle Performance", "product_line": "Pro Performance AMP Advanced Muscle Performance"},
+        {"name": "GNC Probiotics", "product_line": "Probiotics"},
+        {"name": "GNC Herbal Plus Formula", "product_line": "Herbal Plus Formula"},
+        {"name": "GNC BodyDynamix", "product_line": "BodyDynamix"},
+        {"name": "GNC Probiotic", "product_line": "Probiotic"},
+        {"name": "GNC AMP", "product_line": "AMP"},
+        {"name": "GNC Ultra Mega Green", "product_line": "Ultra Mega Green"},
+        {"name": "GNC Amplified", "product_line": "Amplified"},
+        {"name": "GNC Women's Ultra Mega Active", "product_line": "Women's Ultra Mega Active"},
+        {"name": "GNC Mega Men Essentials", "product_line": "Mega Men Essentials"},
+        {"name": "GNC GenetixHD", "product_line": "GenetixHD"},
+        {"name": "GNC Earth Genius", "product_line": "Earth Genius"},
+        {"name": "GNC Ultra Mega", "product_line": "Ultra Mega"},
+        {"name": "GNC SuperFoods Ultra Mega Green", "product_line": "SuperFoods Ultra Mega Green"},
+        {"name": "GNC Prebiotic", "product_line": "Prebiotic"},
+        {"name": "GNC Nature's Fingerprint", "product_line": "Nature's Fingerprint"},
+        {"name": "GNC Ginsa Gold", "product_line": "Ginsa Gold"}
+      ]
+    },
+    {
+      "id": "jarrow_formulas",
+      "display_name": "Jarrow Formulas",
+      "family": "Jarrow Formulas",
+      "aliases": [
+        {"name": "Jarrow Formulas", "product_line": null}
+      ]
+    },
+    {
+      "id": "thorne",
+      "display_name": "Thorne",
+      "family": "Thorne",
+      "aliases": [
+        {"name": "Thorne", "product_line": null},
+        {"name": "Thorne Research", "product_line": null}
+      ]
+    },
+    {
+      "id": "garden_of_life",
+      "display_name": "Garden of Life",
+      "family": "Garden of Life",
+      "aliases": [
+        {"name": "Garden of Life", "product_line": null},
+        {"name": "Garden of Life MyKind Organics", "product_line": "mykind Organics"},
+        {"name": "Garden of Life Dr. Formulated", "product_line": "Dr. Formulated"},
+        {"name": "Garden of Life Vitamin Code", "product_line": "Vitamin Code"},
+        {"name": "Garden of Life Dr. Formulated Probiotics", "product_line": "Dr. Formulated Probiotics"},
+        {"name": "Garden of Life Raw Probiotics", "product_line": "RAW Probiotics"},
+        {"name": "Garden of Life Primal Defense", "product_line": "Primal Defense"},
+        {"name": "Garden of Life Minami", "product_line": "Minami"},
+        {"name": "Garden of Life Wild Rose", "product_line": "Wild Rose"},
+        {"name": "Garden of Life Minami Nutrition", "product_line": "Minami Nutrition"},
+        {"name": "Garden of Life Baby", "product_line": "Baby"},
+        {"name": "Garden of Life Sport", "product_line": "Sport"},
+        {"name": "Garden of Life Herbal Immune Balance", "product_line": "Herbal Immune Balance"},
+        {"name": "Garden of Life Dr. Formulated CBD Probiotics", "product_line": "Dr. Formulated CBD Probiotics"},
+        {"name": "Garden of Life Wobenzym N", "product_line": "Wobenzym N"},
+        {"name": "Garden of Life Dr. Formulated Keto", "product_line": "Dr. Formulated Keto"},
+        {"name": "Garden of Life Dr. Formulated Brain Health", "product_line": "Dr. Formulated Brain Health"},
+        {"name": "Garden of Life Dr. Fomulated", "product_line": "Dr. Formulated"},
+        {"name": "Garden of Life Kids", "product_line": "Kids"},
+        {"name": "Garden of Life Dr. Formulated Enzymes", "product_line": "Dr. Formulated Enzymes"},
+        {"name": "Garden of Life Organics", "product_line": "Organics"},
+        {"name": "OM Original Medicine by Garden of Life", "product_line": "OM Original Medicine"},
+        {"name": "Garden of Life Perfect Food RAW", "product_line": "Perfect Food RAW"},
+        {"name": "Garden of Life Extraordinary Beauty", "product_line": "Extraordinary Beauty"}
+      ]
+    },
+    {
+      "id": "nordic_naturals",
+      "display_name": "Nordic Naturals",
+      "family": "Nordic Naturals",
+      "aliases": [
+        {"name": "Nordic Naturals", "product_line": null}
+      ]
+    },
+    {
+      "id": "vitafusion",
+      "display_name": "vitafusion",
+      "family": "vitafusion",
+      "aliases": [
+        {"name": "vitafusion", "product_line": null},
+        {"name": "vitafusion GOODNESS", "product_line": "GOODNESS"},
+        {"name": "vitafusion Kids", "product_line": "Kids"},
+        {"name": "vitafusion Simply Good", "product_line": "Simply Good"},
+        {"name": "vitaFusion Fiber Well", "product_line": "Fiber Well"}
+      ]
+    },
+    {
+      "id": "double_wood",
+      "display_name": "Double Wood Supplements",
+      "family": "Double Wood Supplements",
+      "aliases": [
+        {"name": "Double Wood Supplements", "product_line": null}
+      ]
+    },
+    {
+      "id": "cvs",
+      "display_name": "CVS Health",
+      "family": "CVS Health",
+      "aliases": [
+        {"name": "CVS Health", "product_line": null},
+        {"name": "CVS Pharmacy", "product_line": null}
+      ]
+    },
+    {
+      "id": "equate",
+      "display_name": "Equate",
+      "family": "Equate",
+      "aliases": [
+        {"name": "Equate", "product_line": null}
+      ]
+    },
+    {
+      "id": "sports_research",
+      "display_name": "Sports Research",
+      "family": "Sports Research",
+      "aliases": [
+        {"name": "Sports Research", "product_line": null},
+        {"name": "SR Sports Research", "product_line": null}
+      ]
+    },
+    {
+      "id": "olly",
+      "display_name": "OLLY",
+      "family": "OLLY",
+      "aliases": [
+        {"name": "OLLY", "product_line": null}
+      ]
+    },
+    {
+      "id": "ora",
+      "display_name": "Ora",
+      "family": "Ora",
+      "aliases": [
+        {"name": "Ora", "product_line": null}
+      ]
+    },
+    {
+      "id": "legion",
+      "display_name": "Legion",
+      "family": "Legion",
+      "aliases": [
+        {"name": "Legion", "product_line": null},
+        {"name": "Iron Legion", "product_line": "Iron Legion"}
+      ]
+    },
+    {
+      "id": "hum",
+      "display_name": "HUM",
+      "family": "HUM",
+      "aliases": [
+        {"name": "HUM", "product_line": null}
+      ]
+    },
+    {
+      "id": "transparent_labs",
+      "display_name": "Transparent Labs",
+      "family": "Transparent Labs",
+      "aliases": [
+        {"name": "Transparent Labs", "product_line": null}
+      ]
+    },
+    {
+      "id": "goli",
+      "display_name": "Goli",
+      "family": "Goli",
+      "aliases": [
+        {"name": "Goli Nutrition", "product_line": null},
+        {"name": "Goli Bites", "product_line": "Bites"}
+      ]
+    },
+    {
+      "id": "ritual",
+      "display_name": "Ritual",
+      "family": "Ritual",
+      "aliases": [
+        {"name": "Ritual", "product_line": null}
+      ]
+    },
+    {
+      "id": "paradise_earths_blend",
+      "display_name": "Paradise Earth's Blend",
+      "family": "Paradise Earth's Blend",
+      "aliases": [
+        {"name": "Paradise Earth's Blend", "product_line": null}
+      ]
+    },
+    {
+      "id": "centrum",
+      "display_name": "Centrum",
+      "family": "Centrum",
+      "aliases": [
+        {"name": "Centrum", "product_line": null},
+        {"name": "Centrum Specialist", "product_line": "Specialist"},
+        {"name": "Pfizer Centrum ProNutrients", "product_line": "ProNutrients"}
+      ]
+    },
+    {
+      "id": "up_and_up",
+      "display_name": "up&up",
+      "family": "up&up",
+      "aliases": [
+        {"name": "up&up", "product_line": null}
+      ]
+    },
+    {
+      "id": "emergen_c",
+      "display_name": "Emergen-C",
+      "family": "Emergen-C",
+      "aliases": [
+        {"name": "Emergen-C", "product_line": null}
+      ]
+    },
+    {
+      "id": "one_a_day",
+      "display_name": "One A Day",
+      "family": "One A Day",
+      "aliases": [
+        {"name": "One A Day", "product_line": null},
+        {"name": "Bayer One A Day", "product_line": null}
+      ]
+    },
+    {
+      "id": "members_mark",
+      "display_name": "Member's Mark",
+      "family": "Member's Mark",
+      "aliases": [
+        {"name": "Member's Mark", "product_line": null}
+      ]
+    },
+    {
+      "id": "airborne",
+      "display_name": "Airborne",
+      "family": "Airborne",
+      "aliases": [
+        {"name": "Airborne", "product_line": null},
+        {"name": "Airborne Advanced", "product_line": "Advanced"},
+        {"name": "Airborne Original", "product_line": "Original"},
+        {"name": "Airborne Kids", "product_line": "Kids"},
+        {"name": "Airborne Plus", "product_line": "Plus"},
+        {"name": "Airborne Everyday", "product_line": "Everyday"}
+      ]
+    },
+    {
+      "id": "culturelle",
+      "display_name": "Culturelle",
+      "family": "Culturelle",
+      "aliases": [
+        {"name": "Culturelle", "product_line": null},
+        {"name": "Culturelle Kids", "product_line": "Kids"},
+        {"name": "Culturelle Baby", "product_line": "Baby"},
+        {"name": "Culturelle Pro-Well", "product_line": "Pro-Well"},
+        {"name": "Culturelle Digestive Health", "product_line": "Digestive Health"}
+      ]
+    },
+    {
+      "id": "kirkland_signature",
+      "display_name": "Kirkland Signature",
+      "family": "Kirkland Signature",
+      "aliases": [
+        {"name": "Kirkland Signature", "product_line": null}
+      ]
+    },
+    {
+      "id": "megafood",
+      "display_name": "MegaFood",
+      "family": "MegaFood",
+      "aliases": [
+        {"name": "MegaFood", "product_line": null},
+        {"name": "Women's Ensemble by MegaFood", "product_line": "Women's Ensemble"}
+      ]
+    }
+  ],
+  "wave_1": [
+    {"query_brand": "Centrum", "folder": "Centrum", "expected_live_labels": 197},
+    {"query_brand": "Up & Up", "folder": "Up_and_Up", "expected_live_labels": 197},
+    {"query_brand": "Emergen-C", "folder": "Emergen_C", "expected_live_labels": 134},
+    {"query_brand": "One A Day", "folder": "One_A_Day", "expected_live_labels": 116},
+    {"query_brand": "Member's Mark", "folder": "Members_Mark", "expected_live_labels": 102},
+    {"query_brand": "Airborne", "folder": "Airborne", "expected_live_labels": 91},
+    {"query_brand": "Culturelle", "folder": "Culturelle", "expected_live_labels": 61},
+    {"query_brand": "Kirkland Signature", "folder": "Kirkland_Signature", "expected_live_labels": 44},
+    {"query_brand": "MegaFood", "folder": "MegaFood", "expected_live_labels": 278}
+  ]
+}
