@@ -995,10 +995,6 @@ def check_unit_conversions(findings: List[Finding], data: Dict[str, Any], file: 
         if not isinstance(rules, dict):
             findings.append(Finding("error", file, "mass_conversions.rules", "type_mismatch", "dict", _type_name(rules)))
 
-    probiotic = data.get("probiotic_conversions")
-    if not isinstance(probiotic, dict):
-        findings.append(Finding("error", file, "probiotic_conversions", "type_mismatch", "dict", _type_name(probiotic)))
-
     form_patterns = data.get("form_detection_patterns")
     if not isinstance(form_patterns, dict):
         findings.append(Finding("error", file, "form_detection_patterns", "type_mismatch", "dict", _type_name(form_patterns)))

@@ -49,9 +49,9 @@ INTENTIONAL_EXCEPTIONS: dict[str, str] = {
         "optimal / maintenance / trace), not the sum across multi-section "
         "payload. Pinned by test_ingredient_weights_contract.py.",
     "unit_conversions.json":
-        "total_entries tracks vitamin_conversions only; mass_conversions, "
-        "probiotic_conversions, and form_detection_patterns are static "
-        "rule config, not vitamin entries. Pinned by "
+        "total_entries tracks vitamin_conversions only; mass_conversions "
+        "and form_detection_patterns are static rule config, not vitamin "
+        "entries. Pinned by "
         "test_unit_conversions_contract.py.",
     "cert_claim_rules.json":
         "total_entries = Σ(non-_-prefixed rule keys across rules.*), "

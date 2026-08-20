@@ -750,7 +750,7 @@ Primary key: `top_manufacturers` (array)
 ### 31. unit_conversions.json
 **Purpose:** `dosing_normalization` | **Entries:** read `_metadata.total_entries`
 
-Primary keys: `vitamin_conversions`, `mass_conversions`, `probiotic_conversions`, `form_detection_patterns`
+Primary keys: `vitamin_conversions`, `mass_conversions`, `form_detection_patterns`
 
 Defines conversion factors for IU→mcg, mg→g, CFU→billion, and vitamin-specific conversions.
 

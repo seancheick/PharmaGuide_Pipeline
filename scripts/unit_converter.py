@@ -10,7 +10,6 @@ Key features:
 - Pattern-based form detection from ingredient names
 - Full evidence output for every conversion
 - Mass unit normalization (g, mg, mcg)
-- CFU normalization for probiotics
 
 Usage:
     from unit_converter import UnitConverter
@@ -82,32 +81,6 @@ class ConversionResult:
         }
 
 
-@dataclass
-class CFUResult:
-    """Result of CFU normalization."""
-    success: bool
-    original_value: float
-    original_unit: str
-    normalized_cfu: Optional[float]
-    display_value: Optional[str]  # e.g., "50 billion CFU"
-    qualifier: Optional[str]  # "at_expiration", "at_manufacture", "unqualified"
-    confidence: str
-    notes: List[str] = field(default_factory=list)
-
-    def to_dict(self) -> Dict:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            "success": self.success,
-            "original_value": self.original_value,
-            "original_unit": self.original_unit,
-            "normalized_cfu": self.normalized_cfu,
-            "display_value": self.display_value,
-            "qualifier": self.qualifier,
-            "confidence": self.confidence,
-            "notes": self.notes
-        }
-
-
 class UnitConverter:
     """
     Unit conversion engine with evidence tracking.
@@ -130,7 +103,6 @@ class UnitConverter:
         self.db = None
         self.vitamin_conversions = {}
         self.mass_rules = {}
-        self.probiotic_rules = {}
         self.form_patterns = {}
         self.version = "unknown"
 
@@ -145,7 +117,6 @@ class UnitConverter:
             self.version = self.db.get('_metadata', {}).get('version', 'unknown')
             self.vitamin_conversions = self.db.get('vitamin_conversions', {})
             self.mass_rules = self.db.get('mass_conversions', {}).get('rules', {})
-            self.probiotic_rules = self.db.get('probiotic_conversions', {})
             self.form_patterns = self.db.get('form_detection_patterns', {})
 
             logger.info("Loaded unit_conversions.json v%s with %d vitamin rules",
@@ -703,164 +674,6 @@ class UnitConverter:
 
         return from_mcg / to_mcg
 
-    # =========================================================================
-    # CFU CONVERSION
-    # =========================================================================
-
-    def normalize_cfu(
-        self,
-        amount: float,
-        unit: str,
-        qualifier_text: Optional[str] = None
-    ) -> CFUResult:
-        """
-        Normalize probiotic CFU values.
-
-        Args:
-            amount: CFU amount
-            unit: Unit string (e.g., "billion CFU", "CFU", "million CFU")
-            qualifier_text: Text to check for "at expiration" etc.
-
-        Returns:
-            CFUResult with normalized value
-        """
-        unit_lower = unit.lower().strip()
-        rules = self.probiotic_rules.get('rules', {})
-
-        # Determine multiplier
-        multiplier = 1
-        if 'billion' in unit_lower:
-            multiplier = rules.get('billion_cfu_to_cfu', 1_000_000_000)
-        elif 'million' in unit_lower:
-            multiplier = rules.get('million_cfu_to_cfu', 1_000_000)
-        elif 'trillion' in unit_lower:
-            multiplier = rules.get('trillion_cfu_to_cfu', 1_000_000_000_000)
-
-        # Handle "viable cells" as CFU
-        if 'viable' in unit_lower or 'live' in unit_lower:
-            # Keep same multiplier
-            pass
-
-        normalized = amount * multiplier
-
-        # Determine qualifier
-        qualifier = "unqualified"
-        confidence = "medium"
-        notes = []
-
-        if qualifier_text:
-            qt_lower = qualifier_text.lower()
-            if 'expir' in qt_lower or 'through expir' in qt_lower or 'at time of expir' in qt_lower:
-                qualifier = "at_expiration"
-                confidence = "high"
-                notes.append("CFU guaranteed at expiration - highest confidence")
-            elif 'manufactur' in qt_lower or 'at time of manufactur' in qt_lower:
-                qualifier = "at_manufacture"
-                confidence = "medium"
-                notes.append("CFU at manufacture - expect some die-off")
-        else:
-            notes.append("No qualifier found - assume conservative estimate")
-
-        # Format display value
-        if normalized >= 1_000_000_000_000:
-            display = f"{normalized / 1_000_000_000_000:.1f} trillion CFU"
-        elif normalized >= 1_000_000_000:
-            display = f"{normalized / 1_000_000_000:.1f} billion CFU"
-        elif normalized >= 1_000_000:
-            display = f"{normalized / 1_000_000:.1f} million CFU"
-        else:
-            display = f"{normalized:,.0f} CFU"
-
-        return CFUResult(
-            success=True,
-            original_value=amount,
-            original_unit=unit,
-            normalized_cfu=normalized,
-            display_value=display,
-            qualifier=qualifier,
-            confidence=confidence,
-            notes=notes
-        )
-
-    # =========================================================================
-    # BATCH CONVERSION
-    # =========================================================================
-
-    def convert_ingredient_list(
-        self,
-        ingredients: List[Dict]
-    ) -> List[Dict]:
-        """
-        Convert all ingredients in a list to canonical units.
-
-        Args:
-            ingredients: List of ingredient dicts with 'name', 'amount', 'unit'
-
-        Returns:
-            List of ingredient dicts with added conversion evidence
-        """
-        results = []
-
-        for ing in ingredients:
-            name = ing.get('name', '')
-            amount = ing.get('amount')
-            unit = ing.get('unit', '')
-
-            # Skip if no amount
-            if amount is None:
-                results.append({
-                    **ing,
-                    'conversion_evidence': {
-                        'success': False,
-                        'reason': 'No amount specified'
-                    }
-                })
-                continue
-
-            # Try to parse amount if string
-            if isinstance(amount, str):
-                try:
-                    amount = float(amount.replace(',', ''))
-                except ValueError:
-                    results.append({
-                        **ing,
-                        'conversion_evidence': {
-                            'success': False,
-                            'reason': f'Cannot parse amount: {amount}'
-                        }
-                    })
-                    continue
-
-            # Check if this is a probiotic
-            if any(x in name.lower() for x in ['probiotic', 'lactobacillus', 'bifidobacterium', 'cfu']):
-                if 'cfu' in unit.lower() or 'viable' in unit.lower():
-                    cfu_result = self.normalize_cfu(amount, unit, name)
-                    results.append({
-                        **ing,
-                        'normalized_amount': cfu_result.normalized_cfu,
-                        'normalized_unit': 'CFU',
-                        'conversion_evidence': cfu_result.to_dict()
-                    })
-                    continue
-
-            # Standard nutrient conversion
-            result = self.convert_nutrient(
-                nutrient=name,
-                amount=amount,
-                from_unit=unit,
-                ingredient_name=name
-            )
-
-            results.append({
-                **ing,
-                'normalized_amount': result.converted_value,
-                'normalized_unit': result.converted_unit,
-                'conversion_evidence': result.to_dict()
-            })
-
-        return results
-
-
 # Module-level convenience functions
 _converter_instance = None
 
@@ -889,12 +702,3 @@ def convert_nutrient(
 def convert_mass(amount: float, from_unit: str, to_unit: str) -> ConversionResult:
     """Convenience function for mass conversion."""
     return get_converter().convert_mass(amount, from_unit, to_unit)
-
-
-def normalize_cfu(
-    amount: float,
-    unit: str,
-    qualifier_text: Optional[str] = None
-) -> CFUResult:
-    """Convenience function for CFU normalization."""
-    return get_converter().normalize_cfu(amount, unit, qualifier_text)

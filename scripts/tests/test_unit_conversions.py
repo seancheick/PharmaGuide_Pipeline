@@ -255,7 +255,6 @@ class UnitConversionTester:
         required_sections = [
             'vitamin_conversions',
             'mass_conversions',
-            'probiotic_conversions',
             'form_detection_patterns'
         ]
 
@@ -449,30 +448,6 @@ class UnitConversionTester:
             abs(mcg_value - direct_mcg) < 0.01,
             f"Chain conversion matches direct: {g_value}g = {mcg_value} mcg",
             f"Chain: {mcg_value}, Direct: {direct_mcg}"
-        )
-
-    def test_probiotic_conversions(self):
-        """Test CFU normalization."""
-        print("\n🦠 Testing Probiotic CFU Conversions...")
-
-        prob = self.db.get('probiotic_conversions', {})
-        rules = prob.get('rules', {})
-
-        # 50 billion CFU
-        billion_factor = rules.get('billion_cfu_to_cfu', 0)
-        result = 50 * billion_factor
-        expected = 50_000_000_000
-        self._record_result(
-            result == expected,
-            f"50 billion CFU = 50,000,000,000 CFU",
-            f"Got {result:,}"
-        )
-
-        # Viable cells = CFU
-        self._record_result(
-            prob.get('viable_cells_equals_cfu') == True,
-            "Viable cells equals CFU",
-            f"Got: {prob.get('viable_cells_equals_cfu')}"
         )
 
     def test_form_detection_patterns(self):
@@ -713,7 +688,6 @@ class UnitConversionTester:
         self.test_vitamin_a_forms()
         self.test_folate_conversions()
         self.test_mass_conversions()
-        self.test_probiotic_conversions()
         self.test_form_detection_patterns()
         self.test_aliases()
         self.test_edge_cases()
