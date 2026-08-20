@@ -823,6 +823,25 @@ def _cmd_sync_brand(args: argparse.Namespace) -> int:
     if not ids:
         print("No labels found for that brand.")
         return 0
+    if bool(getattr(args, "resume", False)):
+        if not args.output_dir or args.canonical_root or args.snapshot:
+            print(
+                "ERROR: --resume requires a flat --output-dir without "
+                "--canonical-root or --snapshot",
+                file=sys.stderr,
+            )
+            return 1
+        output_dir = Path(args.output_dir)
+        pending_ids = [
+            dsld_id
+            for dsld_id in ids
+            if not (output_dir / f"{dsld_id}.json").is_file()
+        ]
+        print(f"Resume: {len(ids) - len(pending_ids)} already staged; {len(pending_ids)} remaining.")
+        ids = pending_ids
+        if not ids:
+            print("All discovered labels are already staged.")
+            return 0
     print(f"Found {len(ids)} label(s). Fetching ...")
     counts = _sync_labels(
         ids,
@@ -836,8 +855,12 @@ def _cmd_sync_brand(args: argparse.Namespace) -> int:
         query_context={"brand": args.brand},
     )
     destination = args.canonical_root or args.output_dir
-    print(f"\nDone. Wrote {counts['written']} artifacts for {len(ids)} labels to {destination}")
-    return 0
+    failures = len(counts["failed_ids"])
+    print(
+        f"\nDone. Wrote {counts['written']} artifacts for {len(ids)} labels "
+        f"to {destination}; failures={failures}"
+    )
+    return 1 if failures else 0
 
 
 def _cmd_refresh_ids(args: argparse.Namespace) -> int:
@@ -1177,6 +1200,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_brand.add_argument("--status", type=int, choices=[0, 1, 2], default=1, help="Market status filter (default 1=on market)")
     p_brand.add_argument("--limit", type=int, default=None, help="Max discovery results (default all)")
     p_brand.add_argument("--snapshot", action="store_true", help="Write to timestamped snapshot subdir")
+    p_brand.add_argument(
+        "--resume",
+        action="store_true",
+        help="For a flat output directory, fetch only labels not already staged",
+    )
 
     # -- refresh-ids ---------------------------------------------------------
     p_refresh = subparsers.add_parser("refresh-ids", help="Re-fetch specific label IDs")

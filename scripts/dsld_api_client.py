@@ -31,9 +31,9 @@ def _load_env():
 
 DEFAULT_BASE_URL = "https://api.ods.od.nih.gov/dsld/v9"
 DEFAULT_TIMEOUT_SECONDS = 30.0
-DEFAULT_RATE_LIMIT_DELAY = 0.15  # ~6.6 req/sec
+DEFAULT_RATE_LIMIT_DELAY = 0.5  # reduce request bursts during bulk sync
 DEFAULT_CACHE_TTL_SECONDS = 60 * 60 * 24 * 7  # 7 days
-MAX_RETRIES = 4
+MAX_RETRIES = 6
 DEFAULT_FAILURE_LIMIT = 3
 
 SUPPLEMENT_FORM_CODE_TO_BUCKET = {
@@ -346,7 +346,19 @@ class DSLDApiClient:
             if response.status_code != 429:
                 self._consecutive_failures = 0
                 break
-            time.sleep(min(2 ** attempt, 8))
+            retry_after = response.headers.get("Retry-After")
+            try:
+                retry_delay = max(float(retry_after), 0.0)
+            except (TypeError, ValueError):
+                retry_delay = min(5 * (2 ** (attempt - 1)), 60)
+            logger.warning(
+                "DSLD rate limited %s; retrying in %.1fs (%d/%d)",
+                endpoint,
+                retry_delay,
+                attempt,
+                MAX_RETRIES,
+            )
+            time.sleep(retry_delay)
 
         if response is None:
             self._consecutive_failures += 1

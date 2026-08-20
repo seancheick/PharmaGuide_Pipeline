@@ -143,14 +143,29 @@ class _FakeResponse:
             raise __import__("requests").HTTPError(response=self)
 
 
-def test_client_retries_on_429():
-    """Verify the retry logic handles 429 status codes.
+def test_client_honors_retry_after_on_429(monkeypatch):
+    import dsld_api_client
 
-    Tests the retry constant and logic structure without instantiating
-    the client (avoids requests module pollution from other test files).
-    """
-    from dsld_api_client import MAX_RETRIES
-    assert MAX_RETRIES >= 3, "Must retry at least 3 times for 429s"
+    responses = iter([
+        _FakeResponse(
+            status_code=429,
+            json_data={"error": "rate limited"},
+            headers={"content-type": "application/json", "Retry-After": "17"},
+        ),
+        _FakeResponse(status_code=200, json_data={"id": 123}),
+    ])
+    sleeps = []
+    monkeypatch.setattr(
+        dsld_api_client.requests,
+        "request",
+        lambda *args, **kwargs: next(responses),
+    )
+    monkeypatch.setattr(dsld_api_client.time, "sleep", sleeps.append)
+
+    client = dsld_api_client.DSLDApiClient(rate_limit_delay=0)
+
+    assert client._request("label/123") == {"id": 123}
+    assert sleeps == [17.0]
 
 
 def test_client_html_detection_logic():

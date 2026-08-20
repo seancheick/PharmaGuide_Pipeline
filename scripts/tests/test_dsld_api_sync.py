@@ -129,6 +129,82 @@ def test_sync_brand_defaults_to_on_market_only():
     ])
 
     assert args.status == 1
+    assert args.resume is False
+
+
+def test_sync_brand_resume_fetches_only_missing_staging_labels(monkeypatch, tmp_path):
+    import dsld_api_sync
+
+    (tmp_path / "101.json").write_text('{"id":101}', encoding="utf-8")
+
+    class FakeClient:
+        fetched = []
+
+        def search_filter(self, *, size=1000, from_=0, **filters):
+            if from_:
+                return {"hits": []}
+            return {"hits": [{"_source": {"id": 101}}, {"_source": {"id": 202}}]}
+
+        def fetch_label(self, dsld_id):
+            self.fetched.append(dsld_id)
+            return {
+                "id": dsld_id,
+                "fullName": f"Brand Product {dsld_id}",
+                "brandName": "Brand",
+                "offMarket": False,
+                "ingredientRows": [],
+            }
+
+    monkeypatch.setattr(dsld_api_sync, "DSLDApiClient", FakeClient)
+    args = type(
+        "Args",
+        (),
+        {
+            "brand": "Brand",
+            "output_dir": str(tmp_path),
+            "canonical_root": None,
+            "state_file": None,
+            "status": 1,
+            "limit": None,
+            "snapshot": False,
+            "resume": True,
+        },
+    )()
+
+    assert dsld_api_sync._cmd_sync_brand(args) == 0
+    assert FakeClient.fetched == [202]
+    assert (tmp_path / "202.json").exists()
+
+
+def test_sync_brand_fails_when_any_label_fetch_fails(monkeypatch, tmp_path):
+    import dsld_api_sync
+
+    class FakeClient:
+        def search_filter(self, *, size=1000, from_=0, **filters):
+            if from_:
+                return {"hits": []}
+            return {"hits": [{"_source": {"id": 101}}]}
+
+        def fetch_label(self, dsld_id):
+            raise RuntimeError("rate limited")
+
+    monkeypatch.setattr(dsld_api_sync, "DSLDApiClient", FakeClient)
+    args = type(
+        "Args",
+        (),
+        {
+            "brand": "Brand",
+            "output_dir": str(tmp_path),
+            "canonical_root": None,
+            "state_file": None,
+            "status": 1,
+            "limit": None,
+            "snapshot": False,
+            "resume": False,
+        },
+    )()
+
+    assert dsld_api_sync._cmd_sync_brand(args) == 1
 
 
 def test_check_version_returns_failure_when_client_raises(monkeypatch, capsys):
