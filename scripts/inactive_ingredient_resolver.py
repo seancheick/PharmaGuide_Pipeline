@@ -67,6 +67,7 @@ from typing import Any, Iterable, Iterator, Optional
 
 from identity.safety import (
     has_explicit_form_evidence,
+    negative_match_terms_veto,
     safety_flag_from_banned_match,
     safety_flag_from_harmful_additive,
     safety_status_priority,
@@ -261,23 +262,6 @@ def active_form_duplicate_candidate(
                 "matched_rule_id": entry.get("id"),
             }
     return None
-
-
-def _negative_terms_veto(texts: Iterable[str], items: Iterable[Any]) -> bool:
-    normalized_texts = [_normalize(text) for text in texts if _normalize(text)]
-    for item in items or []:
-        if isinstance(item, dict):
-            term = _normalize(item.get("term"))
-            mode = str(item.get("match_mode") or "substring").strip().lower()
-        else:
-            term = _normalize(item)
-            mode = "substring"
-        if not term:
-            continue
-        for text in normalized_texts:
-            if (mode == "exact" and text == term) or (mode != "exact" and term in text):
-                return True
-    return False
 
 
 # ---------------------------------------------------------------------------
@@ -583,7 +567,7 @@ class InactiveIngredientResolver:
                 seen_banned.add(entry_id)
         banned_candidates = [
             (entry, matched_term) for entry, matched_term in banned_candidates
-            if not _negative_terms_veto(
+            if not negative_match_terms_veto(
                 [matched_term],
                 (entry.get("match_rules") or {}).get("negative_match_terms", []),
             )
@@ -618,7 +602,7 @@ class InactiveIngredientResolver:
             if not key:
                 continue
             entry = self._banned_key_index.get(key)
-            if entry and not _negative_terms_veto(
+            if entry and not negative_match_terms_veto(
                 [t],
                 (entry.get("match_rules") or {}).get("negative_match_terms", []),
             ) and (

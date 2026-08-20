@@ -49,6 +49,55 @@ def safety_normalize_text(text: Any) -> str:
     return normalized
 
 
+def _normalize_negative_match_text(text: Any) -> str:
+    """Normalize curator-authored negative-match evidence consistently.
+
+    Parentheses and trademark symbols are presentation punctuation on DSLD
+    labels, not safety meaning. Removing the marks while retaining their inner
+    text makes ``orange (peel)`` comparable with ``orange peel`` without using
+    fuzzy matching or erasing form qualifiers such as ``6+``.
+    """
+    normalized = "" if text is None else str(text).lower()
+    normalized = normalized.translate(_SAFETY_PUNCT_TRANSLATION)
+    normalized = re.sub(r"[()\[\]{}]", " ", normalized)
+    normalized = re.sub(r"[\u00ae\u2122\u00a9]", " ", normalized)
+    return re.sub(r"\s+", " ", normalized).strip()
+
+
+def negative_match_terms_veto(
+    texts: Iterable[Any],
+    negative_terms: Iterable[Any],
+) -> bool:
+    """Return whether any authored negative term vetoes the candidate text.
+
+    A plain string uses substring matching. Structured entries may opt into
+    ``match_mode: exact``; every other mode retains the historical substring
+    behavior. Callers choose which evidence fields are policy-relevant, while
+    this function owns matching semantics for active, cleaner, and inactive
+    safety paths.
+    """
+    normalized_texts = [
+        normalized
+        for normalized in (_normalize_negative_match_text(text) for text in texts)
+        if normalized
+    ]
+    for item in negative_terms or []:
+        if isinstance(item, dict):
+            term = _normalize_negative_match_text(item.get("term"))
+            mode = str(item.get("match_mode") or "substring").strip().lower()
+        else:
+            term = _normalize_negative_match_text(item)
+            mode = "substring"
+        if not term:
+            continue
+        for text in normalized_texts:
+            if (mode == "exact" and text == term) or (
+                mode != "exact" and term in text
+            ):
+                return True
+    return False
+
+
 def safety_jurisdiction_projection(
     entry: Dict[str, Any], market_code: str = "US"
 ) -> Dict[str, Any]:

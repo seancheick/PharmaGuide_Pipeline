@@ -157,6 +157,7 @@ from match_ledger import (
 )
 from identity.safety import (
     has_explicit_form_evidence,
+    negative_match_terms_veto,
     safety_flag_from_banned_match,
     safety_jurisdiction_projection,
 )
@@ -11071,10 +11072,10 @@ class SupplementEnricherV3:
                 # P0: Check negative_match_terms (reduces false positives)
                 negative_terms = match_rules.get('negative_match_terms', [])
                 if negative_terms and (
-                    self._has_negative_match_term(candidate_ing_name_lower, negative_terms)
+                    negative_match_terms_veto([candidate_ing_name_lower], negative_terms)
                     or (
                         not banned_item.get("requires_explicit_form_evidence")
-                        and self._has_negative_match_term(candidate_std_name_lower, negative_terms)
+                        and negative_match_terms_veto([candidate_std_name_lower], negative_terms)
                     )
                 ):
                     continue
@@ -11270,29 +11271,6 @@ class SupplementEnricherV3:
             return clinical_risk
 
         return "critical"
-
-    def _has_negative_match_term(self, text: str, negative_terms: List[Any]) -> bool:
-        """Check if text contains any negative match terms (case-insensitive).
-
-        Used to filter out false positives like 'ephedra-free', 'kava-free', etc.
-        """
-        text_lower = (text or "").lower()
-        text_norm = re.sub(r"\s+", " ", text_lower).strip()
-        for item in negative_terms:
-            if isinstance(item, dict):
-                term = str(item.get("term") or "").lower()
-                match_mode = str(item.get("match_mode") or "substring").lower()
-            else:
-                term = str(item or "").lower()
-                match_mode = "substring"
-            term_norm = re.sub(r"\s+", " ", term).strip()
-            if not term_norm:
-                continue
-            if match_mode == "exact" and text_norm == term_norm:
-                return True
-            if match_mode != "exact" and term_norm in text_norm:
-                return True
-        return False
 
     def _is_negated_match_phrase(self, text: str, matched_term: str) -> bool:
         """Detect explicit negation patterns around a matched term."""

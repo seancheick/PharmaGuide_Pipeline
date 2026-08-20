@@ -76,7 +76,11 @@ from constants import (
     PRODUCT_CONTEXT_CANONICAL_OVERRIDES,
     CANONICAL_EQUIVALENCES,
 )
-from identity.safety import has_explicit_form_evidence, safety_normalize_text
+from identity.safety import (
+    has_explicit_form_evidence,
+    negative_match_terms_veto,
+    safety_normalize_text,
+)
 from identity_integrity import build_canonical_identity_registry
 
 # Import the UnmappedIngredientTracker
@@ -4102,42 +4106,14 @@ class EnhancedDSLDNormalizer:
                     negative_terms = (
                         (group_result.get("match_rules", {}) or {}).get("negative_match_terms", [])
                     )
-                    if negative_terms:
-                        # D1.2: normalize before substring check so that
-                        # parentheticals and trademark symbols can't break
-                        # the veto. Example: label text "Essence of organic
-                        # Orange (peel) oil" must match negative term
-                        # "orange peel" — the `(` `)` and spacing shouldn't
-                        # hide the match. Same for ™, ®, punctuation.
-                        def _norm_for_negmatch(s: str) -> str:
-                            s = (s or "").lower()
-                            # Strip parenthetical characters but keep the
-                            # inner content, so "orange (peel) oil" ->
-                            # "orange peel oil".
-                            s = re.sub(r"[()\[\]{}]", " ", s)
-                            # Strip trademark symbols.
-                            s = re.sub(r"[\u00ae\u2122\u00a9]", " ", s)
-                            # Collapse whitespace.
-                            s = re.sub(r"\s+", " ", s).strip()
-                            return s
-
-                        lowered_name = _norm_for_negmatch(name)
-                        veto_hit = next(
-                            (
-                                term for term in negative_terms
-                                if _norm_for_negmatch(str(term)) in lowered_name
-                            ),
-                            None,
+                    if negative_match_terms_veto([name], negative_terms):
+                        logger.debug(
+                            "ingredientGroup fallback vetoed by negative_match_terms: "
+                            "'%s' via '%s'",
+                            name,
+                            ingredient_group,
                         )
-                        if veto_hit:
-                            logger.debug(
-                                "ingredientGroup fallback vetoed by negative_match_terms "
-                                "(term=%r): '%s' via '%s'",
-                                veto_hit,
-                                name,
-                                ingredient_group,
-                            )
-                            return name, False, forms
+                        return name, False, forms
                     result_type = group_result.get("type", "unknown")
                     standard_name = group_result.get("standard_name", ingredient_group)
                     logger.debug(
@@ -4152,36 +4128,14 @@ class EnhancedDSLDNormalizer:
                     negative_terms = (
                         (safety_group_result.get("match_rules", {}) or {}).get("negative_match_terms", [])
                     )
-                    if negative_terms:
-                        def _norm_for_negmatch(s: str) -> str:
-                            s = (s or "").lower()
-                            s = re.sub(r"[()\[\]{}]", " ", s)
-                            s = re.sub(r"[\u00ae\u2122\u00a9]", " ", s)
-                            return re.sub(r"\s+", " ", s).strip()
-
-                        lowered_name = _norm_for_negmatch(name)
-                        veto_hit = None
-                        for item in negative_terms:
-                            if isinstance(item, dict):
-                                term = _norm_for_negmatch(str(item.get("term") or ""))
-                                mode = str(item.get("match_mode") or "substring").lower()
-                            else:
-                                term = _norm_for_negmatch(str(item))
-                                mode = "substring"
-                            if not term:
-                                continue
-                            if (mode == "exact" and lowered_name == term) or (
-                                mode != "exact" and term in lowered_name
-                            ):
-                                veto_hit = item
-                                break
-                        if veto_hit:
-                            logger.debug(
-                                "ingredientGroup safety recognition vetoed by negative_match_terms "
-                                "(term=%r): '%s' via '%s'",
-                                veto_hit, name, ingredient_group,
-                            )
-                            return name, False, forms
+                    if negative_match_terms_veto([name], negative_terms):
+                        logger.debug(
+                            "ingredientGroup safety recognition vetoed by "
+                            "negative_match_terms: '%s' via '%s'",
+                            name,
+                            ingredient_group,
+                        )
+                        return name, False, forms
                     standard_name = safety_group_result.get("standard_name", ingredient_group)
                     logger.debug(
                         "ingredientGroup safety recognition: '%s' via exact group '%s' -> '%s'",
@@ -4526,8 +4480,8 @@ class EnhancedDSLDNormalizer:
             return result
 
         match_rules = result.get("match_rules", {}) or {}
-        if self._negative_terms_veto_safety_classification(
-            name,
+        if negative_match_terms_veto(
+            [name],
             match_rules.get("negative_match_terms", []),
         ):
             return {}
@@ -4538,28 +4492,6 @@ class EnhancedDSLDNormalizer:
             return {}
         return result
 
-    def _negative_terms_veto_safety_classification(
-        self, text: str, negative_terms: List[Any]
-    ) -> bool:
-        text_norm = re.sub(r"\s+", " ", str(text or "").lower()).strip()
-        if not text_norm:
-            return False
-        for item in negative_terms or []:
-            if isinstance(item, dict):
-                term = str(item.get("term") or "").lower()
-                mode = str(item.get("match_mode") or "substring").lower()
-            else:
-                term = str(item or "").lower()
-                mode = "substring"
-            term_norm = re.sub(r"\s+", " ", term).strip()
-            if not term_norm:
-                continue
-            if mode == "exact" and text_norm == term_norm:
-                return True
-            if mode != "exact" and term_norm in text_norm:
-                return True
-        return False
-    
     @staticmethod
     def _extract_primary_mass_unit(raw_ingredient: Dict) -> tuple:
         """Sprint E1.2.1 — extract (mass, unit) from a DSLD-raw ingredient

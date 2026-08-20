@@ -300,13 +300,38 @@ def test_explicit_hexavalent_chromium_still_creates_safety_flag():
 
 
 def test_negative_match_terms_support_exact_mode_objects():
-    from enrich_supplements_v3 import SupplementEnricherV3
+    from identity.safety import negative_match_terms_veto
 
-    enricher = SupplementEnricherV3()
     terms = [{"term": "chromium", "match_mode": "exact"}]
 
-    assert enricher._has_negative_match_term("chromium", terms) is True
-    assert enricher._has_negative_match_term("chromium picolinate", terms) is False
+    assert negative_match_terms_veto(["chromium"], terms) is True
+    assert negative_match_terms_veto(["chromium picolinate"], terms) is False
+
+
+def test_negative_match_terms_share_punctuation_normalization():
+    from identity.safety import negative_match_terms_veto
+
+    assert negative_match_terms_veto(
+        ["Essence of organic Orange (peel) oil™"],
+        ["orange peel"],
+    ) is True
+    assert negative_match_terms_veto(
+        ["Boron (as Sodium Tetraborate)"],
+        [{"term": "boron as sodium tetraborate", "match_mode": "exact"}],
+    ) is True
+
+
+def test_negative_match_veto_has_one_production_owner():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    import inactive_ingredient_resolver
+
+    assert not hasattr(SupplementEnricherV3, "_has_negative_match_term")
+    assert not hasattr(
+        EnhancedDSLDNormalizer,
+        "_negative_terms_veto_safety_classification",
+    )
+    assert not hasattr(inactive_ingredient_resolver, "_negative_terms_veto")
 
 
 def test_safety_precedence_and_strict_index_are_shared():
