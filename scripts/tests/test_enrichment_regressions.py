@@ -491,7 +491,13 @@ class TestServingBasis:
         assert result['max'] == 4
 
     def test_net_contents_serving_size_converts_daily_units_to_servings(self, enricher):
-        """Daily capsule directions must be divided by the Supplement Facts serving."""
+        """Label-declared daily servings stay in servings after basis repair.
+
+        ``minDailyServings``/``maxDailyServings`` are already daily serving
+        counts. The container-derived three-capsule basis must not divide them
+        a second time; directions-parsed capsule counts are the separate path
+        that converts physical units into servings.
+        """
         product = {
             'id': 'garden_raw_prenatal_regression',
             'physicalState': {},
@@ -523,8 +529,8 @@ class TestServingBasis:
         assert serving['canonical_serving_size_quantity'] == 3
         assert serving['min_recommended'] == 3
         assert serving['max_recommended'] == 3
-        assert serving['min_servings_per_day'] == 1
-        assert serving['max_servings_per_day'] == 1
+        assert serving['min_servings_per_day'] == 3
+        assert serving['max_servings_per_day'] == 3
 
     def test_directions_frequency_converts_units_to_servings(self, enricher):
         """Two tablets twice daily with a two-tablet serving is two servings/day."""
