@@ -123,6 +123,25 @@ def test_route_feature_vector_separates_observed_nutrition_fiber_from_context() 
     assert feature["digestive_enzyme_context"] is True
 
 
+def test_category_only_fiber_metadata_does_not_become_material_fiber_identity() -> None:
+    from scoring_v4.route_features import extract_route_features
+
+    feature = extract_route_features(
+        {"dsld_id": "J1", "fullName": "Hyaluronic Acid Joint Support"},
+        [
+            _row("hyaluronic_acid", 100, "mg", category="fibers"),
+            _row("glucosamine", 1500, "mg", category="fibers"),
+        ],
+        {"route_module": "generic", "ingredients": []},
+    )
+
+    assert feature["fiber_canonical_ids"] == []
+    assert feature["fiber_row_count"] == 0
+    assert feature["fiber_category_row_count"] == 2
+    assert feature["fiber_mass_mg"] == 0.0
+    assert feature["fiber_mass_share"] is None
+
+
 def test_canonical_protein_intent_predicate_supports_requested_label_shapes() -> None:
     from scoring_v4.route_features import has_protein_product_intent
 

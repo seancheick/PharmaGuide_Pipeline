@@ -115,10 +115,15 @@ def _product(
         rows = [_probiotic_ingredient()]
         if product_name == "Example Product":
             product_name = "Example Probiotic"
+    elif supp_type == "multivitamin":
+        # A declared multivitamin still needs a real vitamin identity.  The old
+        # magnesium-only fixture accidentally relied on broad-panel route
+        # inference and was not a valid multi/prenatal product.
+        rows = [_ingredient("Vitamin A", "vitamin_a")]
+        if product_name == "Example Product":
+            product_name = "Example Multivitamin"
     else:
         rows = [_ingredient()]
-        if supp_type == "multivitamin" and product_name == "Example Product":
-            product_name = "Example Multivitamin"
     primary_type_by_supp_type = {
         "probiotic": "probiotic",
         "multivitamin": "multivitamin",

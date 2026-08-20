@@ -685,7 +685,7 @@ def test_explicit_b_complex_label_routes_b_complex():
     assert class_for_product(product) == "b_complex"
 
 
-def test_broad_b_complex_panel_routes_b_complex_without_explicit_name():
+def test_broad_b_panel_without_reviewed_label_intent_stays_generic():
     product = {
         "product_name": "Daily Energy Support",
         "primary_type": "b_complex",
@@ -701,7 +701,11 @@ def test_broad_b_complex_panel_routes_b_complex_without_explicit_name():
         },
     }
 
-    assert class_for_product(product) == "b_complex"
+    # Panel dominance alone also matches products whose actual intent is
+    # cardiac, probiotic, adrenal, or general energy support.  The specialized
+    # B route therefore requires a reviewed B-label intent in addition to the
+    # measured panel boundary.
+    assert class_for_product(product) == "generic"
 
 
 def test_stimulant_b_vitamin_stack_does_not_route_b_complex():

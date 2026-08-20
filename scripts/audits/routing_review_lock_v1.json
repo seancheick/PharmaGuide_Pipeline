@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "reviewed_at": "2026-08-20",
+  "baseline_report_sha256": "ebec92bc7a99502a02b9da3f61779f5e611462cc3e674785984207b821c22f19",
+  "candidate_report_sha256": "de5a0af9142f5df2160da739baddbd03a608d8b7efb4c3867b6a1d0b1d4a043f",
+  "expected_changed_count": 496,
+  "expected_transition_counts": {
+    "b_complex->generic": 8,
+    "fiber_digestive->b_complex": 1,
+    "fiber_digestive->generic": 287,
+    "fiber_digestive->sports": 60,
+    "generic->b_complex": 37,
+    "generic->fiber_digestive": 34,
+    "generic->sports": 24,
+    "multi_or_prenatal->b_complex": 28,
+    "multi_or_prenatal->generic": 9,
+    "multi_or_prenatal->sports": 8
+  },
+  "manual_generic_reviews": {
+    "b_complex": [
+      "67031", "68812", "176189", "229804", "232326", "277776",
+      "291788", "308197"
+    ],
+    "multi_or_prenatal": [
+      "13041", "15919", "15923", "178559", "219395", "219403",
+      "235592", "299751", "323080"
+    ]
+  },
+  "threshold_reviews": {
+    "explicit_b_family_share": {
+      "selected_threshold": 0.615385,
+      "eligible_reviewed_count": 144,
+      "expected_specialized_count": 143,
+      "expected_generic_ids": ["219244"],
+      "excluded_by_conflicting_active_ids": ["227958", "243083"]
+    },
+    "material_fiber_mass_share": {
+      "selected_threshold": 0.753769,
+      "expected_specialized_ids": ["259626", "62810", "74840", "74844"]
+    },
+    "inferred_multivitamin": {
+      "selected_threshold": null,
+      "decision": "disabled_no_zero_false_positive_boundary",
+      "reviewed_contrary_ids": ["235592", "299751", "323080"]
+    }
+  }
+}

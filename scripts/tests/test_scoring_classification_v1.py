@@ -222,8 +222,8 @@ def test_multivitamin_with_fiber_adjunct_routes_multi_not_fiber():
 
 
 @pytest.mark.parametrize("primary_type", ["immune_support", "sleep_support", "herbal_botanical"])
-def test_themed_multivitamin_with_broad_panel_routes_multi(primary_type):
-    """A theme plus a broad disclosed panel routes multi without legacy type."""
+def test_themed_formula_with_broad_panel_stays_generic_without_multi_intent(primary_type):
+    """A broad panel supports a declared multi; it does not invent multi intent."""
     p = _product(
         "Daily Pure Pack",
         [
@@ -238,7 +238,37 @@ def test_themed_multivitamin_with_broad_panel_routes_multi(primary_type):
         ],
         primary_type=primary_type,
     )
-    assert build_scoring_classification(p)["route_module"] == "multi_or_prenatal"
+    assert build_scoring_classification(p)["route_module"] == "generic"
+
+
+@pytest.mark.parametrize(
+    "name,primary_type",
+    (
+        ("Organic Plant-Based Recovery", "b_complex"),
+        ("Mitochondria-ATP", "general_supplement"),
+        ("Catalyte Lemon Lime Electrolytes", "electrolyte"),
+    ),
+)
+def test_measured_broad_panel_corpus_boundaries_do_not_infer_multivitamin_intent(
+    name,
+    primary_type,
+):
+    p = _product(
+        name,
+        [
+            _row("vitamin_b1_thiamine", "Vitamin B1", 10, "mg"),
+            _row("vitamin_b2_riboflavin", "Vitamin B2", 10, "mg"),
+            _row("vitamin_b3_niacin", "Vitamin B3", 10, "mg"),
+            _row("vitamin_b5_pantothenic_acid", "Vitamin B5", 10, "mg"),
+            _row("vitamin_b6_pyridoxine", "Vitamin B6", 10, "mg"),
+            _row("vitamin_b12_cobalamin", "Vitamin B12", 100, "mcg"),
+            _row("vitamin_c", "Vitamin C", 90, "mg"),
+            _row("magnesium", "Magnesium", 100, "mg"),
+        ],
+        primary_type=primary_type,
+    )
+
+    assert build_scoring_classification(p)["route_module"] == "generic"
 
 
 def test_themed_product_without_broad_panel_stays_generic():

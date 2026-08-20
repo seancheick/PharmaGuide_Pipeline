@@ -13,7 +13,7 @@ import re
 from typing import Any, Iterable, Mapping, Sequence
 
 
-ROUTE_FEATURE_SCHEMA_VERSION = "1.0.0"
+ROUTE_FEATURE_SCHEMA_VERSION = "1.1.0"
 
 B_VITAMIN_CANONICALS = frozenset({
     "vitamin_b1_thiamine",
@@ -26,6 +26,12 @@ B_VITAMIN_CANONICALS = frozenset({
     "vitamin_b9_folate",
     "vitamin_b12_cobalamin",
     "folate",
+})
+
+B_COFACTOR_CANONICALS = frozenset({
+    "choline",
+    "inositol",
+    "paba",
 })
 
 NON_B_VITAMIN_CANONICALS = frozenset({
@@ -78,6 +84,11 @@ FIBER_CANONICALS = frozenset({
     "prebiotics",
 })
 
+# These identities can define a fiber product when they dominate disclosed
+# comparable active mass.  Generic prebiotic and beta-glucan rows need explicit
+# label intent because they are frequently adjuncts in probiotic/immune formulas.
+MATERIAL_FIBER_CANONICALS = FIBER_CANONICALS - {"prebiotics", "beta_glucan"}
+
 DIGESTIVE_ENZYME_CANONICALS = frozenset({
     "digestive_enzymes",
     "alpha_amylase",
@@ -112,29 +123,61 @@ PROTEIN_CANONICALS = frozenset({
 })
 
 _FIBER_TITLE_RE = re.compile(
-    r"\b(fib(?:er|re)|psyllium|inulin|prebiotic|glucomannan|guar|"
-    r"wheat\s+dextrin|resistant\s+starch|bran)\b",
+    r"\b(fib(?:er|re)(?:mend|con|lax)?|psyllium|inulin|prebiotic|"
+    r"glucomannan|konjac|guar|pectin|wheat\s+dextrin|resistant\s+starch|bran|"
+    r"colon|bowel|intestinal|regularity|regulate|g\.?\s*i\.?)\b",
     re.IGNORECASE,
 )
 _DIGESTIVE_TITLE_RE = re.compile(
-    r"\b(digestive|digestion|digest|gut\s+health|enzyme\s+digestion)\b",
+    r"\b(digestive|digestion|digest|gut\s+health|enzymes|multi[\s-]*enzyme|"
+    r"enzyme\s+(?:blend|formula)|pancrea\w*\s+enzymes?|vegenzymes?|"
+    r"papaya\s+enzyme|lactase|pepsin|betaine\s+hcl|dairy\s+(?:relief|defense|digestant)|"
+    r"beanaid|megazymes?|acid\s+(?:defense|ease)|heartburn|enzyme\s+digestion)\b",
     re.IGNORECASE,
 )
-_B_COMPLEX_TITLE_RE = re.compile(r"\bb[\s-]*complex\b", re.IGNORECASE)
-_MULTIVITAMIN_TITLE_RE = re.compile(
-    r"\b(multi[\s-]*vitamin|multi[\s-]*mineral)\b",
+_EXPLICIT_DIGESTIVE_CONTEXT_RE = re.compile(
+    r"\b(digestive|digestion|digest|gut\s+health|lactase|pepsin|betaine\s+hcl|"
+    r"pancrea\w*|dairy\s+(?:relief|defense|digestant)|beanaid|"
+    r"acid\s+(?:defense|ease)|heartburn)\b",
     re.IGNORECASE,
 )
+_SYSTEMIC_ENZYME_TITLE_RE = re.compile(
+    r"\b(systemic|nattokinase|serrapeptase|serratiopeptidase|lumbrokinase|"
+    r"wobenzym|joint\s+health|inflammation)\b",
+    re.IGNORECASE,
+)
+_B_COMPLEX_TITLE_RE = re.compile(
+    r"(?:\bb[\s-]*complex\b|"
+    r"\b(?:balanced\s+)?b[\s-]?(?:50|100|150)\b|"
+    r"\bb[\s-]*6\s+complex\b|"
+    r"\bb[\s-]*(?:right|unstressed)\b|"
+    r"\bsuper\s+b\s+energy\s+complex\b)",
+    re.IGNORECASE,
+)
+_MULTIVITAMIN_TITLE_RE = re.compile(r"\bmulti[\s-]*vitamin\b", re.IGNORECASE)
+_MULTIMINERAL_TITLE_RE = re.compile(r"\bmulti[\s-]*mineral\b", re.IGNORECASE)
 _PROTEIN_TITLE_RE = re.compile(
     r"\b(?:"
     r"protein|whey|casein|"
-    r"mass[\s-]*gainer|weight[\s-]*gainer"
+    r"mass[\s-]*gainer|weight[\s-]*gainer|gainer|mass|muscle"
     r")\b",
     re.IGNORECASE,
 )
 
 _PRIMARY_ROLES = frozenset({"primary", "claim_prominent"})
 _MATERIAL_ROLES = frozenset({"primary", "claim_prominent", "major"})
+_FIBER_CATEGORY_VALUES = frozenset({"fiber", "fibers"})
+_FIBER_DECLARATION_RE = re.compile(
+    r"\b(fib(?:er|re)|psyllium|inulin|prebiotic|glucomannan|guar|pectin|"
+    r"wheat\s+dextrin|resistant\s+starch|bran)\b",
+    re.IGNORECASE,
+)
+_FIBER_DELIVERY_CARRIER_RE = re.compile(r"\bgalactomannans?\b", re.IGNORECASE)
+_DUAL_USE_ENZYME_NAME_RE = re.compile(r"\b(bromelain|papain)\b", re.IGNORECASE)
+_SYSTEMIC_ENZYME_NAME_RE = re.compile(
+    r"\b(nattokinase|serrapeptase|serratiopeptidase|lumbrokinase)\b",
+    re.IGNORECASE,
+)
 
 
 def normalize_identity(value: Any) -> str:
@@ -144,7 +187,14 @@ def normalize_identity(value: Any) -> str:
 def product_label_text(product: Mapping[str, Any]) -> str:
     return " ".join(
         str(product.get(field) or "")
-        for field in ("product_name", "fullName", "name", "bundleName")
+        for field in (
+            "product_name",
+            "fullName",
+            "name",
+            "bundleName",
+            "brand_name",
+            "brandName",
+        )
     ).strip()
 
 
@@ -214,6 +264,60 @@ def row_canonical(row: Mapping[str, Any]) -> str:
         row.get("canonical_id")
         or row.get("evidence_canonical_id")
         or row.get("scoring_parent_id")
+    )
+
+
+def row_name(row: Mapping[str, Any]) -> str:
+    return str(
+        row.get("name")
+        or row.get("standard_name")
+        or row.get("standardName")
+        or row.get("raw_source_text")
+        or ""
+    ).strip()
+
+
+def row_category(row: Mapping[str, Any]) -> str:
+    return normalize_identity(row.get("category")).replace("_", " ")
+
+
+def is_fiber_row(row: Mapping[str, Any]) -> bool:
+    """Return whether the row has a reviewed canonical fiber identity.
+
+    The upstream ``category`` field is useful audit context but is not an
+    identity contract: the live corpus also labels glucosamine, chondroitin,
+    and hyaluronic acid as ``fibers``.  Category-only rows must therefore not
+    contribute material fiber mass or satisfy fiber routing evidence.
+    """
+    return row_canonical(row) in FIBER_CANONICALS
+
+
+def is_fiber_category_row(row: Mapping[str, Any]) -> bool:
+    """Return the raw upstream category signal for measurement only."""
+    return row_category(row) in _FIBER_CATEGORY_VALUES
+
+
+def is_declared_fiber_blend(row: Mapping[str, Any]) -> bool:
+    """Return whether a non-nutrition structural row declares fiber intent."""
+    disposition = str(row.get("score_exclusion_reason") or "").strip().lower()
+    if disposition == "excluded_nutrition_fact":
+        return False
+    if disposition not in {"blend_header_total", "recognized_non_scorable"}:
+        return False
+    return bool(_FIBER_DECLARATION_RE.search(row_name(row)))
+
+
+def is_dual_use_enzyme_row(row: Mapping[str, Any]) -> bool:
+    return (
+        row_canonical(row) in DUAL_USE_ENZYME_CANONICALS
+        or bool(_DUAL_USE_ENZYME_NAME_RE.search(row_name(row)))
+    )
+
+
+def is_systemic_enzyme_row(row: Mapping[str, Any]) -> bool:
+    return (
+        row_canonical(row) in SYSTEMIC_ENZYME_CANONICALS
+        or bool(_SYSTEMIC_ENZYME_NAME_RE.search(row_name(row)))
     )
 
 
@@ -288,11 +392,16 @@ def extract_route_features(
     by_ref, by_canonical = _classification_role_maps(classification)
 
     positive_rows = [row for row in row_list if positive_number(row) is not None]
+    product_level_rows = [row for row in positive_rows if _is_product_level_evidence(row)]
     label_rows = [row for row in positive_rows if not _is_product_level_evidence(row)]
     mass_rows = [row for row in label_rows if _mass_owner_row(row)]
     canonical_ids = sorted({row_canonical(row) for row in label_rows if row_canonical(row)})
 
-    fiber_rows = [row for row in label_rows if row_canonical(row) in FIBER_CANONICALS]
+    fiber_rows = [row for row in label_rows if is_fiber_row(row)]
+    fiber_category_rows = [
+        row for row in label_rows
+        if is_fiber_category_row(row) and not is_fiber_row(row)
+    ]
     enzyme_rows = [
         row for row in label_rows
         if row_canonical(row) in (
@@ -304,37 +413,65 @@ def extract_route_features(
     digestive_enzyme_rows = [
         row for row in enzyme_rows
         if row_canonical(row) in DIGESTIVE_ENZYME_CANONICALS
+        and not is_dual_use_enzyme_row(row)
+        and not is_systemic_enzyme_row(row)
     ]
     systemic_enzyme_rows = [
         row for row in enzyme_rows
-        if row_canonical(row) in SYSTEMIC_ENZYME_CANONICALS
+        if is_systemic_enzyme_row(row)
     ]
     protein_rows = [row for row in label_rows if row_canonical(row) in PROTEIN_CANONICALS]
 
+    product_level_fiber_rows = [row for row in product_level_rows if is_fiber_row(row)]
+    product_level_protein_rows = [
+        row for row in product_level_rows
+        if row_canonical(row) in PROTEIN_CANONICALS
+    ]
+    product_level_digestive_enzyme_rows = [
+        row for row in product_level_rows
+        if row_canonical(row) in DIGESTIVE_ENZYME_CANONICALS
+        and not is_dual_use_enzyme_row(row)
+        and not is_systemic_enzyme_row(row)
+    ]
+
     observed_fiber_rows = [
         row for row in observed_row_list
-        if row_canonical(row) in FIBER_CANONICALS
+        if is_fiber_row(row)
+    ]
+    observed_fiber_category_rows = [
+        row for row in observed_row_list
+        if is_fiber_category_row(row) and not is_fiber_row(row)
     ]
     observed_digestive_enzyme_rows = [
         row for row in observed_row_list
         if row_canonical(row) in DIGESTIVE_ENZYME_CANONICALS
+        and not is_dual_use_enzyme_row(row)
+        and not is_systemic_enzyme_row(row)
     ]
     observed_dual_use_enzyme_rows = [
         row for row in observed_row_list
-        if row_canonical(row) in DUAL_USE_ENZYME_CANONICALS
+        if is_dual_use_enzyme_row(row)
     ]
     observed_systemic_enzyme_rows = [
         row for row in observed_row_list
-        if row_canonical(row) in SYSTEMIC_ENZYME_CANONICALS
+        if is_systemic_enzyme_row(row)
     ]
     observed_nutrition_fiber_rows = [
         row for row in observed_fiber_rows
         if str(row.get("score_exclusion_reason") or "").strip().lower()
         == "excluded_nutrition_fact"
     ]
+    declared_fiber_blend_rows = [
+        row for row in observed_row_list
+        if is_declared_fiber_blend(row)
+    ]
 
     total_mass = sum(comparable_mass_mg(row) or 0.0 for row in mass_rows)
     fiber_mass = sum(comparable_mass_mg(row) or 0.0 for row in fiber_rows if _mass_owner_row(row))
+    product_level_fiber_mass = max(
+        (comparable_mass_mg(row) or 0.0 for row in product_level_fiber_rows),
+        default=0.0,
+    )
     protein_mass_candidates = [
         comparable_mass_mg(row)
         for row in positive_rows
@@ -351,16 +488,23 @@ def extract_route_features(
         for row in protein_rows
     }
     b_ids = sorted(set(canonical_ids) & B_VITAMIN_CANONICALS)
+    b_cofactor_ids = sorted(set(canonical_ids) & B_COFACTOR_CANONICALS)
     non_b_vitamin_ids = sorted(set(canonical_ids) & NON_B_VITAMIN_CANONICALS)
     adek_ids = sorted(set(canonical_ids) & ADEK_VITAMIN_CANONICALS)
     mineral_ids = sorted(set(canonical_ids) & MINERAL_CANONICALS)
     panel_identity_count = len(set(canonical_ids))
+    b_family_identity_count = len(set(b_ids) | set(b_cofactor_ids))
 
     route_module = str((classification or {}).get("route_module") or "").strip().lower() or None
     title_fiber_intent = bool(_FIBER_TITLE_RE.search(label_text))
     title_digestive_intent = bool(_DIGESTIVE_TITLE_RE.search(label_text))
+    title_explicit_digestive_context = bool(
+        _EXPLICIT_DIGESTIVE_CONTEXT_RE.search(label_text)
+    )
+    title_systemic_enzyme_intent = bool(_SYSTEMIC_ENZYME_TITLE_RE.search(label_text))
     title_b_complex_intent = bool(_B_COMPLEX_TITLE_RE.search(label_text))
     title_multivitamin_intent = bool(_MULTIVITAMIN_TITLE_RE.search(label_text))
+    title_multimineral_intent = bool(_MULTIMINERAL_TITLE_RE.search(label_text))
 
     return {
         "feature_schema_version": ROUTE_FEATURE_SCHEMA_VERSION,
@@ -373,19 +517,32 @@ def extract_route_features(
         "route_confidence": (classification or {}).get("route_confidence"),
         "canonical_ids": canonical_ids,
         "positive_label_row_count": len(label_rows),
+        "product_level_evidence_row_count": len(product_level_rows),
         "panel_identity_count": panel_identity_count,
         "comparable_active_mass_mg": _rounded(total_mass),
         "title_fiber_intent": title_fiber_intent,
         "title_digestive_intent": title_digestive_intent,
+        "title_explicit_digestive_context": title_explicit_digestive_context,
+        "title_systemic_enzyme_intent": title_systemic_enzyme_intent,
         "taxonomy_fiber_digestive": primary_type in {"fiber_digestive", "digestive_enzyme"},
         "fiber_canonical_ids": sorted({row_canonical(row) for row in fiber_rows}),
         "fiber_row_count": len(fiber_rows),
+        "fiber_category_row_count": len(fiber_category_rows),
         "fiber_mass_mg": _rounded(fiber_mass),
+        "product_level_fiber_mass_mg": _rounded(product_level_fiber_mass),
         "fiber_mass_share": _rounded(fiber_mass / total_mass) if total_mass > 0 and fiber_mass > 0 else None,
+        "fiber_delivery_carrier_only": bool(
+            fiber_rows
+            and all(_FIBER_DELIVERY_CARRIER_RE.search(row_name(row)) for row in fiber_rows)
+        ),
         "fiber_primary_role": bool(fiber_roles & _PRIMARY_ROLES),
         "fiber_material_role": bool(fiber_roles & _MATERIAL_ROLES),
         "observed_fiber_row_count": len(observed_fiber_rows),
+        "observed_fiber_category_row_count": len(observed_fiber_category_rows),
         "observed_nutrition_fiber_row_count": len(observed_nutrition_fiber_rows),
+        "declared_fiber_blend_intent": bool(declared_fiber_blend_rows),
+        "declared_fiber_blend_names": sorted({row_name(row) for row in declared_fiber_blend_rows}),
+        "product_level_fiber_row_count": len(product_level_fiber_rows),
         "enzyme_canonical_ids": sorted({row_canonical(row) for row in enzyme_rows}),
         "digestive_enzyme_row_count": len(digestive_enzyme_rows),
         "systemic_enzyme_row_count": len(systemic_enzyme_rows),
@@ -393,14 +550,18 @@ def extract_route_features(
         "observed_digestive_enzyme_row_count": len(observed_digestive_enzyme_rows),
         "observed_dual_use_enzyme_row_count": len(observed_dual_use_enzyme_rows),
         "observed_systemic_enzyme_row_count": len(observed_systemic_enzyme_rows),
+        "product_level_digestive_enzyme_row_count": len(product_level_digestive_enzyme_rows),
         "digestive_enzyme_context": bool(
             title_digestive_intent
             or observed_digestive_enzyme_rows
         ),
         "title_b_complex_intent": title_b_complex_intent,
         "title_multivitamin_intent": title_multivitamin_intent,
+        "title_multimineral_intent": title_multimineral_intent,
         "b_vitamin_ids": b_ids,
         "b_vitamin_count": len(b_ids),
+        "b_cofactor_ids": b_cofactor_ids,
+        "b_cofactor_count": len(b_cofactor_ids),
         "non_b_vitamin_ids": non_b_vitamin_ids,
         "non_b_vitamin_count": len(non_b_vitamin_ids),
         "ade_k_vitamin_ids": adek_ids,
@@ -408,9 +569,11 @@ def extract_route_features(
         "mineral_ids": mineral_ids,
         "mineral_count": len(mineral_ids),
         "b_panel_identity_share": _rounded(len(b_ids) / panel_identity_count) if panel_identity_count else None,
+        "b_family_identity_share": _rounded(b_family_identity_count / panel_identity_count) if panel_identity_count else None,
         "protein_canonical_ids": sorted({row_canonical(row) for row in protein_rows}),
         "protein_row_count": len(protein_rows),
         "protein_mass_mg": _rounded(protein_mass),
+        "product_level_protein_row_count": len(product_level_protein_rows),
         "protein_title_intent": has_protein_product_intent(label_text),
         "protein_primary_role": bool(protein_roles & _PRIMARY_ROLES),
         "protein_material_role": bool(protein_roles & _MATERIAL_ROLES),

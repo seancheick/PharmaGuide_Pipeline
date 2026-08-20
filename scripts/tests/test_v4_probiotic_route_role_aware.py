@@ -21,9 +21,27 @@ from __future__ import annotations
 from scoring_v4.router import class_for_product
 
 
+_MICRONUTRIENT_IDS = (
+    "vitamin_a", "vitamin_c", "vitamin_d", "vitamin_e", "vitamin_k",
+    "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
+    "vitamin_b5_pantothenic_acid", "vitamin_b6_pyridoxine",
+    "vitamin_b7_biotin", "vitamin_b9_folate", "vitamin_b12_cobalamin",
+    "calcium", "magnesium", "zinc", "iron", "iodine", "selenium",
+    "manganese", "copper", "chromium", "molybdenum", "potassium",
+)
+
+
 def _vit_rows(n):
-    return [{"name": f"Vitamin {i}", "canonical_id": f"vit_{i}", "mapped": True,
-             "quantity": 10, "unit": "mg"} for i in range(n)]
+    return [
+        {
+            "name": f"Vitamin/Mineral {i}",
+            "canonical_id": _MICRONUTRIENT_IDS[i % len(_MICRONUTRIENT_IDS)],
+            "mapped": True,
+            "quantity": 10,
+            "unit": "mg",
+        }
+        for i in range(n)
+    ]
 
 
 def _prod(name, primary_type, scorable, *, strains, has_cfu, is_prob=True):

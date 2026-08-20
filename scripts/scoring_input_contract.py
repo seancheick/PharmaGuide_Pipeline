@@ -26,6 +26,13 @@ from scoring_reference_resolver import has_therapeutic_reference, is_known_botan
 # Never copy the disposition list here; the contract must consume the same policy
 # the enricher stamps rows with.
 from identity_integrity import IDENTITY_DISPOSITIONS, is_identity_scoreable
+from scoring_v4.route_features import (
+    B_VITAMIN_CANONICALS,
+    MATERIAL_FIBER_CANONICALS,
+    PROTEIN_CANONICALS as ROUTE_FEATURE_PROTEIN_CANONICALS,
+    extract_route_features,
+    has_protein_product_intent,
+)
 
 
 _DATA_DIR = Path(__file__).resolve().parent / "data"
@@ -45,7 +52,8 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "percent_dv_dose": ["generic_percent_dv_dose"],
 }
 PRODUCT_EVIDENCE_ORIGINS = {"native_enrichment", "compatibility_derived"}
-SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.4"
+SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.2.0"
+ROUTE_CLASSIFIER_VERSION = "1.1.0"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
@@ -58,6 +66,7 @@ SCORING_CLASSIFICATION_REQUIRED_FIELDS = {
     "route_reason",
     "route_confidence",
     "route_evidence",
+    "route_decision",
     "ingredients",
     "profile_eligibility",
 }
@@ -2555,20 +2564,6 @@ _ROUTE_NON_PROBIOTIC_HERO_TITLE_RE = re.compile(
     re.IGNORECASE,
 )
 _ROUTE_SPORTS_PREWORKOUT_RE = re.compile(r"\b(pre[\s-]?workout|preworkout)\b", re.IGNORECASE)
-_ROUTE_SPORTS_PROTEIN_NAME_RE = re.compile(
-    r"\b("
-    r"whey|casein|"
-    r"protein\s+(?:powder|isolate|concentrate|hydrolysate|hydrolyzed|blend|matrix)|"
-    r"mass\s+gainer|gainer"
-    r")\b",
-    re.IGNORECASE,
-)
-_ROUTE_TRUE_PROTEIN_NAME_RE = re.compile(
-    r"\b(whey|casein|pea\s+protein|rice\s+protein|soy\s+protein|plant(?:-based)?\s+protein|"
-    r"protein\s+(?:powder|isolate|concentrate|hydrolysate|hydrolyzed|blend|matrix)|"
-    r"mass\s+gainer|gainer)\b",
-    re.IGNORECASE,
-)
 _ROUTE_COLLAGEN_TITLE_RE = re.compile(r"\b(collagen|gelatin|hyaluronic)\b", re.IGNORECASE)
 _ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE = re.compile(
     r"\b(creatine|beta[\s-]?alanine|citrulline|hmb|bcaa|eaa|essential amino|branched chain)\b",
@@ -2579,12 +2574,8 @@ _ROUTE_SPORTS_NAME_EXCLUSION_RE = re.compile(
     r"digestive|enzyme|enzymes|keratin|lactoferrin|collagen)\b",
     re.IGNORECASE,
 )
-_ROUTE_FIBER_DIGESTIVE_NAME_RE = re.compile(
-    r"\b(fiber|fibre|psyllium|inulin|prebiotic|digestive\s+enzymes?|digestive\s+fiber)\b",
-    re.IGNORECASE,
-)
 _ROUTE_B_COMPLEX_EXCLUSION_RE = re.compile(
-    r"\b(pre[\s-]?workout|fat\s*burn|thermogenic|weight\s*loss|liver|stress|mood)\b",
+    r"\b(pre[\s-]?workout|fat\s*burn|thermogenic|weight\s*loss|recovery|mass\s*gainer)\b",
     re.IGNORECASE,
 )
 _ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS = {
@@ -2623,17 +2614,7 @@ _ROUTE_OMEGA_STANDALONE_RE = re.compile(r"\b(EPA|DHA)\b", re.IGNORECASE)
 _ROUTE_OMEGA_369_RE = re.compile(r"\bomega[\s-]*3[\s-]*[-/]?[\s-]*6[\s-]*[-/]?[\s-]*9\b", re.IGNORECASE)
 _ROUTE_OMEGA_EFA_RE = re.compile(r"\bEFA(?:s)?\b", re.IGNORECASE)
 _ROUTE_OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha"}
-_ROUTE_B_VITAMIN_CANONICALS = {
-    "vitamin_b1_thiamine",
-    "vitamin_b2_riboflavin",
-    "vitamin_b3_niacin",
-    "vitamin_b5_pantothenic_acid",
-    "vitamin_b5_pantothenic",
-    "vitamin_b6_pyridoxine",
-    "vitamin_b7_biotin",
-    "vitamin_b9_folate",
-    "vitamin_b12_cobalamin",
-}
+_ROUTE_B_VITAMIN_CANONICALS = set(B_VITAMIN_CANONICALS)
 _ROUTE_MULTI_PANEL_CANONICALS = _ROUTE_B_VITAMIN_CANONICALS | {
     "vitamin_a",
     "vitamin_c",
@@ -2655,28 +2636,6 @@ _ROUTE_MULTI_PANEL_CANONICALS = _ROUTE_B_VITAMIN_CANONICALS | {
     "chromium",
     "molybdenum",
 }
-_ROUTE_NON_B_VITAMIN_CANONICALS = {
-    "vitamin_a",
-    "vitamin_c",
-    "vitamin_d",
-    "vitamin_e",
-    "vitamin_k",
-    "vitamin_k1",
-    "vitamin_k2",
-}
-_ROUTE_MINERAL_CANONICALS = {
-    "iron",
-    "iodine",
-    "zinc",
-    "magnesium",
-    "calcium",
-    "selenium",
-    "manganese",
-    "copper",
-    "chromium",
-    "molybdenum",
-}
-_ROUTE_MULTI_SUPPORT_CANONICALS = {"choline", "folate"}
 _ROUTE_LEGACY_MULTIVITAMIN_MIN_MULTI_NUTRIENTS = 5
 _ROUTE_PRENATAL_PANEL_ANCHORS = {"folate", "vitamin_b9_folate", "iron", "iodine", "choline", "dha", "epa_dha"}
 _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS = {
@@ -2710,13 +2669,7 @@ _ROUTE_OMEGA_SOFT_ADJUNCT_CANONICALS = {
     "astaxanthin",
 }
 _ROUTE_OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil", "omega_3"}
-_ROUTE_SPORTS_PROTEIN_CANONICALS = {
-    "whey_protein",
-    "casein",
-    "pea_protein",
-    "rice_protein",
-    "soy_protein",
-}
+_ROUTE_SPORTS_PROTEIN_CANONICALS = set(ROUTE_FEATURE_PROTEIN_CANONICALS) - {"protein"}
 _ROUTE_SPORTS_SINGLE_CANONICALS = {
     *_CREATINE_CANONICALS,
     "beta-alanine",
@@ -2760,20 +2713,13 @@ _ROUTE_TAXONOMY_TO_MODULE = {
     "beauty_hair_skin_nails": "generic",
     "general_supplement": "generic",
 }
-_ROUTE_LEGACY_MULTI_FALLBACK_EXCLUDED_PRIMARY_TYPES = {
-    "amino_acid",
-    "collagen",
-    "fiber_digestive",
-    "greens_powder",
-    "omega_3",
-    "pre_workout",
-    "probiotic",
-    "protein_powder",
-}
 _ROUTE_EXPLICIT_MULTIVITAMIN_NAME_RE = re.compile(
     r"\b(multivitamin|multi-vitamin|multi vitamin|multimineral)\b",
     re.IGNORECASE,
 )
+_ROUTE_B_EXPLICIT_MIN_VITAMINS = 3
+_ROUTE_B_EXPLICIT_MIN_FAMILY_SHARE = 0.615385
+_ROUTE_FIBER_MATERIAL_MIN_MASS_SHARE = 0.753769
 
 
 def _valid_classification_origin(origin: Any) -> str:
@@ -2798,6 +2744,17 @@ def _embedded_native_scoring_classification(product: Dict[str, Any]) -> Optional
     if route not in SCORING_ROUTE_MODULES:
         return None
     if confidence not in SCORING_ROUTE_CONFIDENCE:
+        return None
+    route_decision = embedded.get("route_decision")
+    if not isinstance(route_decision, dict):
+        return None
+    if route_decision.get("module") != route:
+        return None
+    if route_decision.get("reason_codes") != embedded.get("route_evidence"):
+        return None
+    if route_decision.get("confidence") != confidence:
+        return None
+    if route_decision.get("classifier_version") != ROUTE_CLASSIFIER_VERSION:
         return None
     if embedded.get("classification_failed") is True and route != "generic":
         return None
@@ -2855,6 +2812,26 @@ def _route_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
             rows.append(row)
             seen.add(id(row))
     return rows
+
+
+def _route_observed_ingredient_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    ingredient_quality_data = (product or {}).get("ingredient_quality_data")
+    if isinstance(ingredient_quality_data, dict):
+        rows = ingredient_quality_data.get("ingredients")
+        if isinstance(rows, list):
+            return [row for row in rows if isinstance(row, dict)]
+    if isinstance(ingredient_quality_data, list):
+        return [row for row in ingredient_quality_data if isinstance(row, dict)]
+    return list(_route_scoring_rows(product))
+
+
+def _route_feature_vector(product: Dict[str, Any]) -> Dict[str, Any]:
+    """Return the shared pre-route facts used by production and shadow audits."""
+    return extract_route_features(
+        product or {},
+        _route_scoring_rows(product),
+        observed_rows=_route_observed_ingredient_rows(product),
+    )
 
 
 def _route_name_text(product: Dict[str, Any]) -> str:
@@ -3233,46 +3210,72 @@ def _route_is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     return bool(_ROUTE_OMEGA_STANDALONE_RE.search(name_text or ""))
 
 
-def _route_is_b_complex_eligible(product: Dict[str, Any], name_text: str) -> bool:
-    lowered = (name_text or "").lower()
+def _route_b_complex_decision(
+    product: Dict[str, Any],
+    name_text: str,
+    *,
+    features: Optional[Dict[str, Any]] = None,
+) -> tuple[bool, str, List[str]]:
+    facts = features or _route_feature_vector(product)
+    canonicals = set(facts.get("canonical_ids") or [])
+    if canonicals & _ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS:
+        return False, "b_complex_disqualifying_active", sorted(
+            canonicals & _ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS
+        )
     if _ROUTE_B_COMPLEX_EXCLUSION_RE.search(name_text or ""):
-        return False
+        return False, "b_complex_conflicting_product_intent", ["conflicting_product_intent"]
+    if facts.get("title_multivitamin_intent"):
+        return False, "explicit_multivitamin_intent", ["explicit_multivitamin_intent"]
 
-    b_vitamins: set[str] = set()
-    non_b_scorable = 0
-    disqualifying_actives: set[str] = set()
-    for row in _route_scoring_rows(product):
-        canonical = _norm(row.get("canonical_id"))
-        if not canonical:
-            continue
-        if canonical in _ROUTE_B_VITAMIN_CANONICALS:
-            b_vitamins.add(canonical)
-        else:
-            non_b_scorable += 1
-            if canonical in _ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS:
-                disqualifying_actives.add(canonical)
-    if disqualifying_actives:
-        return False
-    if "b-complex" in lowered or "b complex" in lowered:
-        return len(b_vitamins) >= 3 and non_b_scorable <= 2
-    return len(b_vitamins) >= 4 and non_b_scorable <= 1
+    b_count = int(facts.get("b_vitamin_count") or 0)
+    family_share = float(facts.get("b_family_identity_share") or 0.0)
+    evidence = ["b_vitamin_panel"]
+    if facts.get("b_cofactor_count"):
+        evidence.append("b_cofactor_panel")
+
+    if facts.get("title_b_complex_intent"):
+        eligible = (
+            b_count >= _ROUTE_B_EXPLICIT_MIN_VITAMINS
+            and family_share >= _ROUTE_B_EXPLICIT_MIN_FAMILY_SHARE
+        )
+        return (
+            eligible,
+            "explicit_b_complex_panel" if eligible else "explicit_b_complex_panel_incomplete",
+            ["b_complex_title", *evidence],
+        )
+
+    if facts.get("title_fiber_intent") or facts.get("title_digestive_intent"):
+        return False, "b_complex_conflicting_product_intent", ["fiber_or_digestive_title_intent"]
+
+    return False, "b_complex_intent_missing", ["no_reviewed_b_complex_title_intent"]
 
 
-def _route_is_multivitamin_eligible(product: Dict[str, Any], name_text: str) -> bool:
+def _route_is_b_complex_eligible(product: Dict[str, Any], name_text: str) -> bool:
+    return _route_b_complex_decision(product, name_text)[0]
+
+
+def _route_is_multivitamin_eligible(
+    product: Dict[str, Any],
+    name_text: str,
+    *,
+    features: Optional[Dict[str, Any]] = None,
+) -> bool:
     """Guard the `multivitamin` taxonomy route the same way omega/sports/b_complex
     are guarded — by content, not the native primary_type alone. A real multivitamin
     has a broad multi-nutrient panel; a thin product mis-tagged `multivitamin` by
     taxonomy drift must not be crushed by the prenatal/multi panel-coverage floors.
     Explicit multi* naming is taken at its word (mirrors the b_complex name override)."""
-    lowered = (name_text or "").lower()
-    if (
-        "multivitamin" in lowered
-        or "multi-vitamin" in lowered
-        or "multi vitamin" in lowered
-        or "multimineral" in lowered
-    ):
-        return True
-    canonicals = _route_positive_canonicals(product)
+    facts = features or _route_feature_vector(product)
+    vitamin_count = int(facts.get("b_vitamin_count") or 0) + int(
+        facts.get("non_b_vitamin_count") or 0
+    )
+    if facts.get("title_multivitamin_intent"):
+        return vitamin_count >= 1
+    if facts.get("title_multimineral_intent") and vitamin_count == 0:
+        return False
+    if vitamin_count == 0:
+        return False
+    canonicals = set(facts.get("canonical_ids") or [])
     if (
         len(canonicals & _ROUTE_MULTI_PANEL_CANONICALS)
         >= _ROUTE_LEGACY_MULTIVITAMIN_MIN_MULTI_NUTRIENTS
@@ -3284,37 +3287,6 @@ def _route_is_multivitamin_eligible(product: Dict[str, Any], name_text: str) -> 
             >= _ROUTE_MULTIVITAMIN_BROAD_PANEL_MIN
         )
     return False
-
-
-def _route_multi_panel_group_count(canonicals: set[str]) -> int:
-    groups = set()
-    if canonicals & _ROUTE_B_VITAMIN_CANONICALS:
-        groups.add("b_vitamins")
-    if canonicals & _ROUTE_NON_B_VITAMIN_CANONICALS:
-        groups.add("vitamins")
-    if canonicals & _ROUTE_MINERAL_CANONICALS:
-        groups.add("minerals")
-    if canonicals & _ROUTE_MULTI_SUPPORT_CANONICALS:
-        groups.add("support_nutrients")
-    return len(groups)
-
-
-def _route_has_broad_multivitamin_panel(product: Dict[str, Any]) -> bool:
-    """Return true for a physically broad multi-nutrient panel.
-
-    This preserves themed multi-pack routing without trusting the retired
-    legacy classifier.  The canonical taxonomy supplies the family/exclusion;
-    disclosed scoring rows supply the positive panel evidence.
-    """
-    if _primary_type(product) in _ROUTE_LEGACY_MULTI_FALLBACK_EXCLUDED_PRIMARY_TYPES:
-        return False
-    canonicals = _route_positive_canonicals(product)
-    multi_nutrients = canonicals & _ROUTE_MULTI_PANEL_CANONICALS
-    return (
-        len(multi_nutrients) >= _ROUTE_LEGACY_MULTIVITAMIN_MIN_MULTI_NUTRIENTS
-        and _route_positive_scorable_row_count(product) >= _ROUTE_MULTIVITAMIN_BROAD_PANEL_MIN
-        and _route_multi_panel_group_count(multi_nutrients) >= 3
-    )
 
 
 def _route_positive_scorable_row_count(product: Dict[str, Any]) -> int:
@@ -3399,7 +3371,7 @@ def _route_has_collagen_primary_identity(product: Dict[str, Any], name_text: str
         return False
     if canonicals & _ROUTE_SPORTS_PROTEIN_CANONICALS:
         return False
-    if _ROUTE_TRUE_PROTEIN_NAME_RE.search(name_text or "") and not has_collagen_title:
+    if has_protein_product_intent(_route_product_label_text(product)) and not has_collagen_title:
         return False
     return True
 
@@ -3430,11 +3402,12 @@ def _route_is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
             return True
 
     canonicals = _route_positive_canonicals(product)
-    if canonicals & _ROUTE_SPORTS_PROTEIN_CANONICALS:
-        return primary_type == "protein_powder" or bool(_ROUTE_SPORTS_PROTEIN_NAME_RE.search(name_text or ""))
-    if _route_has_product_level_protein_mass(product) and _ROUTE_SPORTS_PROTEIN_NAME_RE.search(name_text or ""):
+    protein_identities = canonicals & set(ROUTE_FEATURE_PROTEIN_CANONICALS)
+    protein_intent = has_protein_product_intent(_route_product_label_text(product))
+    has_protein_mass = _route_has_product_level_protein_mass(product)
+    if protein_intent and (protein_identities or has_protein_mass or primary_type == "protein_powder"):
         return True
-    if primary_type == "protein_powder" and _ROUTE_SPORTS_PROTEIN_NAME_RE.search(name_text or ""):
+    if primary_type == "protein_powder" and (protein_identities or has_protein_mass):
         return True
     if _ROUTE_BCAA_CANONICALS.issubset(canonicals) and (
         primary_type in {"amino_acid", "pre_workout"} or _ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE.search(name_text or "")
@@ -3459,6 +3432,7 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
     """Canonical ScoringClassification v1 route decision."""
     primary_type = _primary_type(product)
     name_text = _route_name_text(product)
+    features = _route_feature_vector(product)
 
     if primary_type != "greens_powder" and _route_is_probiotic_class(product, name_text):
         return "probiotic", "profile_content:probiotic", ["probiotic_identity_or_cfu"]
@@ -3472,36 +3446,43 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
     if _route_is_sports_class(product, name_text):
         return "sports", "profile_content:sports", ["sports_identity_or_dose"]
 
+    if primary_type in _OMEGA_PRODUCT_TYPES and _route_is_omega_class(product, name_text):
+        return "omega", "profile_content:omega", ["omega_evidence"]
+
+    b_eligible, b_reason, b_evidence = _route_b_complex_decision(
+        product,
+        name_text,
+        features=features,
+    )
+    if b_eligible:
+        return "b_complex", b_reason, b_evidence
+
     if (
         _ROUTE_EXPLICIT_MULTIVITAMIN_NAME_RE.search(_route_product_label_text(product))
-        and _route_is_multivitamin_eligible(product, name_text)
+        and _route_is_multivitamin_eligible(product, name_text, features=features)
     ):
         return "multi_or_prenatal", "profile_content:explicit_multivitamin", ["explicit_multivitamin_name"]
 
     if (
         primary_type == "multivitamin"
-        and _route_is_multivitamin_eligible(product, name_text)
+        and _route_is_multivitamin_eligible(product, name_text, features=features)
     ):
         return "multi_or_prenatal", "taxonomy:multivitamin", ["taxonomy:multivitamin"]
 
-    if _route_has_broad_multivitamin_panel(product):
-        return (
-            "multi_or_prenatal",
-            "broad_multivitamin_panel",
-            ["broad_multi_panel"],
-        )
-
-    if _route_is_fiber_digestive_class(product, name_text):
-        return "fiber_digestive", "profile_content:fiber_digestive", ["fiber_digestive_identity"]
+    fiber_eligible, fiber_reason, fiber_evidence = _route_fiber_digestive_decision(
+        product,
+        name_text,
+        features=features,
+    )
+    if fiber_eligible:
+        return "fiber_digestive", fiber_reason, fiber_evidence
 
     if primary_type:
         module = _ROUTE_TAXONOMY_TO_MODULE.get(primary_type)
         if module == "b_complex":
-            if _route_is_b_complex_eligible(product, name_text):
-                return "b_complex", f"taxonomy:{primary_type}:b_complex_validated", [f"taxonomy:{primary_type}", "b_complex_panel"]
             return "generic", "b_complex_taxonomy_without_route_eligible_panel", ["taxonomy:b_complex"]
         if module == "multi_or_prenatal":
-            if primary_type == "multivitamin" and not _route_is_multivitamin_eligible(product, name_text):
+            if primary_type == "multivitamin" and not _route_is_multivitamin_eligible(product, name_text, features=features):
                 return "generic", "multivitamin_taxonomy_without_route_eligible_panel", ["taxonomy:multivitamin"]
             return "multi_or_prenatal", f"taxonomy:{primary_type}", [f"taxonomy:{primary_type}"]
         if module == "omega":
@@ -3513,74 +3494,74 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
                 return "sports", f"taxonomy:{primary_type}:sports_validated", [f"taxonomy:{primary_type}", "sports_evidence"]
             return "generic", f"taxonomy:{primary_type}:sports_evidence_missing", [f"taxonomy:{primary_type}"]
         if module == "fiber_digestive":
-            if _route_is_fiber_digestive_class(product, name_text):
-                return "fiber_digestive", f"taxonomy:{primary_type}:fiber_digestive_validated", [f"taxonomy:{primary_type}", "fiber_digestive_identity"]
             return "generic", f"taxonomy:{primary_type}:fiber_digestive_evidence_missing", [f"taxonomy:{primary_type}"]
         if module == "generic":
             if _route_is_omega_class(product, name_text):
                 return "omega", f"taxonomy:{primary_type}:omega_evidence_override", [f"taxonomy:{primary_type}", "omega_evidence"]
-            if _route_has_broad_multivitamin_panel(product):
-                return (
-                    "multi_or_prenatal",
-                    "broad_multivitamin_panel",
-                    ["broad_multi_panel"],
-                )
             return "generic", f"taxonomy:{primary_type}", [f"taxonomy:{primary_type}"]
 
     if _route_is_omega_class(product, name_text):
         return "omega", "profile_content:omega", ["omega_evidence"]
-    if _route_has_broad_multivitamin_panel(product):
-        return (
-            "multi_or_prenatal",
-            "broad_multivitamin_panel",
-            ["broad_multi_panel"],
-        )
     return "generic", "generic_safe_default", ["generic_safe_default"]
 
 
-def _route_is_fiber_digestive_class(product: Dict[str, Any], name_text: str) -> bool:
-    primary_type = _primary_type(product)
-    if _ROUTE_FIBER_DIGESTIVE_NAME_RE.search(name_text or ""):
-        return True
-
-    rows = list(_route_scoring_rows(product))
-    digestive_signal_count = 0
-    row_count = 0
-    for row in rows:
-        if not isinstance(row, dict):
-            continue
-        row_count += 1
-        canonical = _norm(row.get("canonical_id")).replace("-", "_")
-        category = _norm(row.get("category"))
-        source = " ".join(
-            _norm(row.get(key))
-            for key in ("name", "standard_name", "standardName", "raw_source_text")
-        )
-        if canonical in {
-            "fiber",
-            "psyllium",
-            "psyllium_husk",
-            "inulin",
-            "acacia_fiber",
-            "prebiotics",
-        }:
-            return True
-        if category == "fiber" or "psyllium" in source:
-            return True
-        if canonical in {
-            "digestive_enzymes",
-            "pepsin",
-            "protease",
-            "amylase",
-            "lipase",
-            "bromelain",
-            "papain",
-        } or "digestive enzyme" in source:
-            digestive_signal_count += 1
-    return (
-        (primary_type == "fiber_digestive" and digestive_signal_count > 0)
-        or (row_count > 0 and digestive_signal_count > row_count * 0.5)
+def _route_fiber_digestive_decision(
+    product: Dict[str, Any],
+    name_text: str,
+    *,
+    features: Optional[Dict[str, Any]] = None,
+) -> tuple[bool, str, List[str]]:
+    del name_text  # Product-title intent is measured centrally by route_features.
+    facts = features or _route_feature_vector(product)
+    if (
+        facts.get("title_systemic_enzyme_intent")
+        and not facts.get("title_explicit_digestive_context")
+    ):
+        return False, "systemic_enzyme_intent", ["systemic_enzyme_intent"]
+    has_fiber_evidence = bool(
+        int(facts.get("fiber_row_count") or 0)
+        or int(facts.get("product_level_fiber_row_count") or 0)
+        or int(facts.get("observed_fiber_row_count") or 0)
     )
+    if facts.get("title_fiber_intent"):
+        evidence = ["fiber_title_intent"]
+        if has_fiber_evidence:
+            evidence.append("fiber_label_evidence")
+        return True, "fiber_title_intent", evidence
+    if facts.get("title_digestive_intent"):
+        evidence = ["digestive_title_intent"]
+        if int(facts.get("observed_digestive_enzyme_row_count") or 0):
+            evidence.append("dedicated_digestive_enzyme")
+        elif int(facts.get("observed_dual_use_enzyme_row_count") or 0):
+            evidence.append("dual_use_enzyme_with_digestive_context")
+        return True, "digestive_product_intent", evidence
+    if facts.get("declared_fiber_blend_intent"):
+        return True, "declared_fiber_blend_intent", ["declared_fiber_blend_intent"]
+    if facts.get("taxonomy_fiber_digestive") and has_fiber_evidence:
+        return True, "validated_fiber_taxonomy", ["taxonomy:fiber_digestive", "fiber_label_evidence"]
+
+    dedicated_enzyme_count = int(facts.get("observed_digestive_enzyme_row_count") or 0)
+    product_level_enzyme_count = int(
+        facts.get("product_level_digestive_enzyme_row_count") or 0
+    )
+    if facts.get("taxonomy_fiber_digestive") and (
+        dedicated_enzyme_count or product_level_enzyme_count
+    ):
+        return True, "digestive_enzyme_context", ["taxonomy:fiber_digestive", "enzyme_label_evidence"]
+
+    fiber_ids = set(facts.get("fiber_canonical_ids") or [])
+    mass_share = float(facts.get("fiber_mass_share") or 0.0)
+    if (
+        fiber_ids & set(MATERIAL_FIBER_CANONICALS)
+        and not facts.get("fiber_delivery_carrier_only")
+        and mass_share >= _ROUTE_FIBER_MATERIAL_MIN_MASS_SHARE
+    ):
+        return True, "material_fiber_panel", ["material_fiber_mass_share"]
+    return False, "fiber_digestive_intent_missing", ["no_material_fiber_or_digestive_intent"]
+
+
+def _route_is_fiber_digestive_class(product: Dict[str, Any], name_text: str) -> bool:
+    return _route_fiber_digestive_decision(product, name_text)[0]
 
 
 def _classification_identity(row: Dict[str, Any]) -> str:
@@ -4348,6 +4329,12 @@ def build_scoring_classification(
     if forced_generic_reason:
         route_evidence.append(forced_generic_reason)
 
+    route_decision = {
+        "module": route_module,
+        "reason_codes": list(route_evidence),
+        "confidence": confidence,
+        "classifier_version": ROUTE_CLASSIFIER_VERSION,
+    }
     return {
         "classification_schema_version": SCORING_CLASSIFICATION_SCHEMA_VERSION,
         "classification_origin": origin,
@@ -4357,6 +4344,7 @@ def build_scoring_classification(
         "route_reason": forced_generic_reason or route_reason or f"classification_route:{route_module}",
         "route_confidence": confidence,
         "route_evidence": route_evidence,
+        "route_decision": route_decision,
         "ingredients": row_contracts,
         "profile_eligibility": _product_profile_summary(
             product,

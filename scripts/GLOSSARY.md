@@ -28,6 +28,7 @@ contract name elsewhere.
 | **Scoring snapshot contract** | Per-product regression fixtures checked immediately before Supabase/Flutter publication. Intentional deltas must be reviewed and explicitly re-frozen. |
 | **Scoring integrity snapshot** | A self-hashed, manifest-owned freeze of per-product routes, scores, pillars, statuses, verdicts, exclusions, artifact hashes, and payload byte accounting. It is the comparison authority for one integrity candidate; it is not a scoring input. |
 | **Routing feature shadow** | A self-hashed, manifest-owned, measure-only table of label-intent and panel-composition facts recomputed from enriched inputs. It never changes route or catalog eligibility; reviewed gold cases and threshold selection consume it before production predicates change. |
+| **Routing gold review** | A report that binds one exact baseline/candidate routing-shadow hash pair, assigns every changed product to an approved review group, and fails closed on any unreviewed transition or changed corpus. It records route expectations; it is never a classifier input. |
 | **Artifact freshness** | Proof that catalog, manifest, interactions, and upstream product outputs describe the same current state. |
 
 ## Canonical stages

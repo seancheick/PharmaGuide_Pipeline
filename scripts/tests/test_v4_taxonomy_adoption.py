@@ -115,8 +115,8 @@ def test_sp2_inventory_doc_exists():
     )
 
 
-def test_sp2_router_is_thin_and_contract_owns_physical_panel_gate():
-    """Themed-multi policy lives only in the classification contract."""
+def test_sp2_router_is_thin_and_contract_owns_multi_intent_gate():
+    """Declared-multi policy lives only in the classification contract."""
     import pathlib
     scripts_root = pathlib.Path(__file__).resolve().parents[1]
     router_src = (scripts_root / "scoring_v4" / "router.py").read_text()
@@ -125,7 +125,8 @@ def test_sp2_router_is_thin_and_contract_owns_physical_panel_gate():
     assert "build_scoring_classification(product)" in router_src
     assert "_read_legacy_supp_type" not in router_src
     assert 'get("supplement_type")' not in router_src
-    assert "_route_has_broad_multivitamin_panel" in contract_src
+    assert "_route_is_multivitamin_eligible" in contract_src
+    assert "_route_has_broad_multivitamin_panel" not in contract_src
     assert "_route_has_broad_legacy_multivitamin_panel" not in contract_src
 
 

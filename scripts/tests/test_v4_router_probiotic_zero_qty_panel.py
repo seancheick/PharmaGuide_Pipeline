@@ -96,7 +96,18 @@ def _probiotic_gx():
 def _gol_women_50():
     # 24 disclosed vitamins/minerals + 6 quantity==0 phantom rows -> FULL 30,
     # disclosed 24, with 26 strains. Name carries "Probiotics".
-    vits = [_row(f"Vitamin/Mineral {i}", f"micro_{i}", 100) for i in range(24)]
+    micronutrients = (
+        "vitamin_a", "vitamin_c", "vitamin_d", "vitamin_e", "vitamin_k",
+        "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
+        "vitamin_b5_pantothenic_acid", "vitamin_b6_pyridoxine",
+        "vitamin_b7_biotin", "vitamin_b9_folate", "vitamin_b12_cobalamin",
+        "calcium", "magnesium", "zinc", "iron", "iodine", "selenium",
+        "manganese", "copper", "chromium", "molybdenum", "potassium",
+    )
+    vits = [
+        _row(f"Vitamin/Mineral {i}", canonical, 100)
+        for i, canonical in enumerate(micronutrients)
+    ]
     phantom = [_row(n, c, 0) for n, c in [
         ("Bulgarian Yogurt", "lactobacillus_bulgaricus"), ("Green Pea", "pea"),
         ("Carrot", "carrot"), ("Plum", "plum"), ("Cherry", "dark_sweet_cherry"),
