@@ -361,7 +361,11 @@
       "family": "One A Day",
       "aliases": [
         {"name": "One A Day", "product_line": null},
-        {"name": "Bayer One A Day", "product_line": null}
+        {"name": "Bayer One A Day", "product_line": null},
+        {"name": "Bayer One A Day Adult", "product_line": "Adult"},
+        {"name": "Bayer One A Day Kids", "product_line": "Kids"},
+        {"name": "Bayer One A Day for Her", "product_line": "For Her"},
+        {"name": "Bayer One A Day for Him", "product_line": "For Him"}
       ]
     },
     {

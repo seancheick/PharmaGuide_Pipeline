@@ -120,6 +120,10 @@ def test_production_registry_normalizes_known_current_aliases():
         "Thorne Research": ("Thorne", None),
         "CVS pharmacy": ("CVS Health", None),
         "Women's Ensemble by MegaFood": ("MegaFood", "Women's Ensemble"),
+        "Bayer One A Day Adult": ("One A Day", "Adult"),
+        "Bayer One A Day Kids": ("One A Day", "Kids"),
+        "Bayer One A Day for Her": ("One A Day", "For Her"),
+        "Bayer One A Day For Him": ("One A Day", "For Him"),
     }
     for raw_brand, (display, line) in expected.items():
         resolved = registry.resolve(raw_brand)
