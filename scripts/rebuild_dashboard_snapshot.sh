@@ -16,19 +16,119 @@
 #
 # Usage:
 #     bash scripts/rebuild_dashboard_snapshot.sh
+#     bash scripts/rebuild_dashboard_snapshot.sh \
+#       --candidate-only --candidate-root /absolute/path/to/candidate
 #
 # Runtime: ~1 minute on current 20-brand catalog.
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  bash scripts/rebuild_dashboard_snapshot.sh
+  bash scripts/rebuild_dashboard_snapshot.sh \
+    --candidate-only --candidate-root /absolute/path/to/candidate
+
+Options:
+  --candidate-only       Run every gate and preserve the candidate without
+                         replacing scripts/dist or scripts/final_db_output.
+  --candidate-root PATH  New, absolute output directory for candidate-only mode.
+                         The script refuses to overwrite an existing path.
+  -h, --help             Show this help.
+USAGE
+}
+
+CANDIDATE_ONLY=false
+CANDIDATE_ROOT=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --candidate-only)
+      CANDIDATE_ONLY=true
+      shift
+      ;;
+    --candidate-root)
+      if [[ $# -lt 2 ]]; then
+        echo "✗ --candidate-root requires a path." >&2
+        exit 2
+      fi
+      CANDIDATE_ROOT="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "✗ Unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [[ "$CANDIDATE_ONLY" == "true" ]]; then
+  if [[ -z "$CANDIDATE_ROOT" ]]; then
+    echo "✗ --candidate-only requires --candidate-root." >&2
+    exit 2
+  fi
+  if ! [[ "$CANDIDATE_ROOT" = /* ]]; then
+    echo "✗ --candidate-root must be an absolute path." >&2
+    exit 2
+  fi
+  [[ ! -e "$CANDIDATE_ROOT" ]] || {
+    echo "✗ Candidate output already exists; refusing to overwrite: $CANDIDATE_ROOT" >&2
+    exit 2
+  }
+
+  CANDIDATE_PARENT="$(dirname -- "$CANDIDATE_ROOT")"
+  if [[ ! -d "$CANDIDATE_PARENT" ]]; then
+    echo "✗ Candidate parent directory does not exist: $CANDIDATE_PARENT" >&2
+    exit 2
+  fi
+  CANDIDATE_ROOT="$(cd "$CANDIDATE_PARENT" && pwd -P)/$(basename -- "$CANDIDATE_ROOT")"
+  case "$CANDIDATE_ROOT" in
+    /|"$REPO_ROOT"|"$REPO_ROOT/scripts"|"$REPO_ROOT/scripts/"*)
+      echo "✗ Candidate output may not target the repository or live scripts tree." >&2
+      exit 2
+      ;;
+  esac
+elif [[ -n "$CANDIDATE_ROOT" ]]; then
+  echo "✗ --candidate-root is only valid with --candidate-only." >&2
+  exit 2
+fi
+
 cd "$REPO_ROOT"
 source "$REPO_ROOT/scripts/python_env.sh"
 
-FINAL_CANDIDATE="$REPO_ROOT/scripts/.final_db_output.candidate.$$"
-DIST_CANDIDATE="$REPO_ROOT/scripts/.dist.candidate.$$"
+if [[ "$CANDIDATE_ONLY" == "true" ]]; then
+  CANDIDATE_STAGE="${CANDIDATE_ROOT}.staging.$$"
+  [[ ! -e "$CANDIDATE_STAGE" ]] || {
+    echo "✗ Candidate staging path already exists: $CANDIDATE_STAGE" >&2
+    exit 2
+  }
+  mkdir "$CANDIDATE_STAGE"
+  FINAL_CANDIDATE="$CANDIDATE_STAGE/final_db_output"
+  DIST_CANDIDATE="$CANDIDATE_STAGE/dist"
+  CLEANUP_TARGETS=("$CANDIDATE_STAGE")
+else
+  FINAL_CANDIDATE="$REPO_ROOT/scripts/.final_db_output.candidate.$$"
+  DIST_CANDIDATE="$REPO_ROOT/scripts/.dist.candidate.$$"
+  CLEANUP_TARGETS=("$FINAL_CANDIDATE" "$DIST_CANDIDATE" "${DIST_CANDIDATE}.staging")
+fi
 SOURCE_OF_TRUTH_AUDIT="$REPO_ROOT/scripts/audit_source_of_truth_contract.py"
-trap 'rm -rf "$FINAL_CANDIDATE" "$DIST_CANDIDATE" "${DIST_CANDIDATE}.staging"' EXIT
+
+cleanup_candidates() {
+  local target
+  for target in "${CLEANUP_TARGETS[@]}"; do
+    if [[ -n "$target" && -e "$target" ]]; then
+      rm -rf -- "$target"
+    fi
+  done
+}
+trap cleanup_candidates EXIT
 
 run_strict_gate() {
   local label="$1"; shift
@@ -134,7 +234,25 @@ run_strict_gate "catalog artifact freshness" \
     --skip-interaction-inputs \
     --strict-release
 
-# 5. This is the only live mutation. The helper restores both previous live
+# 5a. Candidate-only mode stops after all gates and atomically preserves the
+# verified pair at the caller's explicit destination. It never reaches the live
+# promotion helper below.
+if [[ "$CANDIDATE_ONLY" == "true" ]]; then
+  PRODUCT_COUNT=$("$PG_PYTHON" -c "import sqlite3; print(sqlite3.connect('$DIST_CANDIDATE/pharmaguide_core.db').execute('SELECT COUNT(*) FROM products_core').fetchone()[0])")
+  BLOB_COUNT=$(find "$DIST_CANDIDATE/detail_blobs" -maxdepth 1 -type f | wc -l | tr -d ' ')
+  mv "$CANDIDATE_STAGE" "$CANDIDATE_ROOT"
+  DIST_OUTPUT="$CANDIDATE_ROOT/dist"
+  FINAL_OUTPUT="$CANDIDATE_ROOT/final_db_output"
+
+  echo ""
+  echo "✓ Gated candidate ready (no live artifacts replaced):"
+  echo "  $DIST_OUTPUT/pharmaguide_core.db              $PRODUCT_COUNT products"
+  echo "  $DIST_OUTPUT/detail_blobs/                    $BLOB_COUNT blobs"
+  echo "  $FINAL_OUTPUT/ (working-build mirror, also $PRODUCT_COUNT products)"
+  exit 0
+fi
+
+# 5b. This is the only live mutation. The helper restores both previous live
 # directories if either rename fails.
 "$PG_PYTHON" scripts/promote_release_artifacts.py \
   --dist-candidate "$DIST_CANDIDATE" \

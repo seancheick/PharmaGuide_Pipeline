@@ -30,3 +30,23 @@ def test_source_gates_run_before_catalog_build() -> None:
         'run_strict_gate "RDA/UL emitted-reference stamp parity"',
     ):
         assert source.index(label) < build
+
+
+def test_candidate_only_mode_preserves_gated_artifacts_without_live_promotion() -> None:
+    source = SCRIPT.read_text()
+
+    assert "--candidate-only" in source
+    assert "--candidate-root" in source
+    assert '[[ "$CANDIDATE_ROOT" = /* ]]' in source
+    assert '[[ ! -e "$CANDIDATE_ROOT" ]]' in source
+
+    candidate_branch = source.index(
+        'if [[ "$CANDIDATE_ONLY" == "true" ]]; then',
+        source.index('run_strict_gate "catalog artifact freshness"'),
+    )
+    promotion = source.index('"$PG_PYTHON" scripts/promote_release_artifacts.py')
+
+    assert candidate_branch < promotion
+    assert 'mv "$CANDIDATE_STAGE" "$CANDIDATE_ROOT"' in source
+    assert 'DIST_OUTPUT="$CANDIDATE_ROOT/dist"' in source
+    assert 'FINAL_OUTPUT="$CANDIDATE_ROOT/final_db_output"' in source
