@@ -216,6 +216,26 @@ def resolution_strength(resolution: Any) -> int:
 # Numeric-confidence fallback thresholds when match_type is unknown/absent.
 _CONFIDENCE_CONFIRMED_FLOOR = 0.85
 _CONFIDENCE_LIKELY_FLOOR = 0.5
+_UNRESOLVED_SAFETY_RULE_ID = "unresolved_safety_rule"
+
+
+def safety_rule_id_or_unresolved(*values: Any) -> str:
+    """Return the first stable rule id, or an explicit unresolved sentinel.
+
+    Raw matcher-shape vocabulary remains inside this identity boundary. A
+    scoring gate can rank and export rule provenance without learning how an
+    older signal was projected.
+    """
+    for value in values:
+        normalized = str(value or "").strip()
+        if normalized:
+            return normalized
+    return _UNRESOLVED_SAFETY_RULE_ID
+
+
+def is_resolved_safety_rule_id(value: Any) -> bool:
+    normalized = str(value or "").strip()
+    return bool(normalized and normalized != _UNRESOLVED_SAFETY_RULE_ID)
 
 
 @dataclass(frozen=True)

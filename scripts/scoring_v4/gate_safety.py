@@ -47,8 +47,10 @@ from inactive_ingredient_resolver import (
 )
 from identity.safety import (
     SafetySignal,
+    is_resolved_safety_rule_id,
     normalize_safety_signals,
     safety_normalize_text,
+    safety_rule_id_or_unresolved,
 )
 from rda_ul_calculator import get_actionable_ul_review_signals
 from scoring_input_contract import get_scoring_ingredients
@@ -293,7 +295,10 @@ def _decision_for_signal(
     )
     return SafetyDecision(
         verdict=verdict,
-        winning_rule=str(entry.get("id") or signal.entry_id or "legacy_projection"),
+        winning_rule=safety_rule_id_or_unresolved(
+            entry.get("id"),
+            signal.entry_id,
+        ),
         substance=substance,
         matched_role=signal.subject_role,
         matched_form=str(signal.evidence_text or substance),
@@ -310,7 +315,7 @@ def _decision_quality(decision: SafetyDecision) -> tuple[int, int, int, str, str
     return (
         1 if decision.verified_sources else 0,
         1 if decision.policy_basis else 0,
-        1 if decision.winning_rule != "legacy_projection" else 0,
+        1 if is_resolved_safety_rule_id(decision.winning_rule) else 0,
         decision.winning_rule,
         decision.substance,
     )
