@@ -13,6 +13,34 @@ if str(SCRIPTS_ROOT) not in sys.path:
 from scoring_v4.gate_completeness import evaluate_completeness_gate  # noqa: E402
 
 
+def _scorable_row(
+    name: str,
+    canonical_id: str,
+    quantity: float,
+    unit: str,
+    index: int,
+) -> dict:
+    return {
+        "name": name,
+        "raw_source_text": name,
+        "raw_source_path": f"ingredientRows[{index}]",
+        "canonical_id": canonical_id,
+        "mapped": True,
+        "mapped_identity": True,
+        "scoreable_identity": True,
+        "identity_disposition": "clean",
+        "source_section": "active",
+        "cleaner_row_role": "active_scorable",
+        "score_eligible_by_cleaner": True,
+        "role_classification": "active_scorable",
+        "dose_class": "therapeutic_mass",
+        "quantity": quantity,
+        "unit": unit,
+        "has_dose": True,
+        "score_exclusion_reason": None,
+    }
+
+
 def test_product_level_named_strains_satisfy_probiotic_active_identity() -> None:
     """Ritual/Seed-style labels disclose strains + aggregate CFU at product
     level while top-level scorable rows can be prebiotic/postbiotic support
@@ -42,21 +70,13 @@ def test_product_level_named_strains_satisfy_probiotic_active_identity() -> None
         },
         "ingredient_quality_data": {
             "ingredients_scorable": [
-                {
-                    "name": "PreforPro",
-                    "canonical_id": "bacteriophages",
-                    "mapped": True,
-                    "quantity": 15,
-                    "unit": "mg",
-                },
-                {
-                    "name": "Tributyrin",
-                    "canonical_id": "butyric_acid",
-                    "mapped": True,
-                    "quantity": 300,
-                    "unit": "mg",
-                },
-            ]
+                _scorable_row("PreforPro", "bacteriophages", 15, "mg", 0),
+                _scorable_row("Tributyrin", "butyric_acid", 300, "mg", 1),
+            ],
+            "ingredients": [
+                _scorable_row("PreforPro", "bacteriophages", 15, "mg", 0),
+                _scorable_row("Tributyrin", "butyric_acid", 300, "mg", 1),
+            ],
         },
     }
 
@@ -86,8 +106,9 @@ def test_product_level_cfu_without_named_strain_does_not_satisfy_identity() -> N
         },
         "ingredient_quality_data": {
             "ingredients_scorable": [
-                {"name": "Glucose", "canonical_id": "glucose", "mapped": True, "quantity": 1, "unit": "g"}
-            ]
+                _scorable_row("Glucose", "glucose", 1, "g", 0)
+            ],
+            "ingredients": [_scorable_row("Glucose", "glucose", 1, "g", 0)],
         },
     }
 

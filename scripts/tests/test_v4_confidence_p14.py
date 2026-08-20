@@ -295,7 +295,7 @@ def test_verified_cert_dominates_secondary_claimed_only_cert_confidence() -> Non
     assert out["v4_confidence"] == "high"
 
 
-def test_mapped_coverage_between_gate_and_perfect_is_moderate_identity_confidence() -> None:
+def test_imperfect_mapped_coverage_is_quarantined_before_confidence() -> None:
     from score_supplements_v4 import score_product_v4
 
     rows = [_ingredient(name=f"Nutrient {i}", canonical_id=f"nutrient_{i}") for i in range(9)]
@@ -304,11 +304,11 @@ def test_mapped_coverage_between_gate_and_perfect_is_moderate_identity_confidenc
     product["ingredient_quality_data"]["ingredients_scorable"] = rows
     product["ingredient_quality_data"]["ingredients"] = rows
     out = score_product_v4(product)
-    confidence = out["v4_breakdown"]["confidence"]
 
-    assert confidence["identity"]["level"] == "moderate"
-    assert "mapped_coverage_below_95_percent" in confidence["identity"]["drivers"]
-    assert out["v4_confidence"] == "moderate"
+    assert out["quality_score_status"] == "not_scored"
+    assert out["v4_breakdown"]["completeness_gate"]["mapped_coverage"] == 0.9
+    assert "mapped_coverage" in out["v4_breakdown"]["completeness_gate"]["missing_fields"]
+    assert "confidence" not in out["v4_breakdown"]
 
 
 def test_zero_dose_epa_dha_placeholders_do_not_lower_identity_confidence() -> None:

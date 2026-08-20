@@ -3,9 +3,10 @@
 Decides whether an enriched product has enough structured identity to enter
 the live catalog and score pipeline. This is deliberately narrower than
 quality scoring: only missing usable identity/payload yields NOT_SCORED.
-Missing disclosure such as dose, CFU, EPA/DHA breakdown, form factor, or
-mapped coverage is surfaced as soft debt for module scoring, confidence, and
-user-facing explanation.
+Missing disclosure such as dose, CFU, EPA/DHA breakdown, or form factor is
+surfaced as soft debt for module scoring, confidence, and user-facing
+explanation. Identity contract drift or incomplete mapping is a hard live-
+catalog failure.
 
 Per SCORING_V4_PROPOSAL.md §4 Layer 2:
 
@@ -27,7 +28,6 @@ from typing import Any, Dict, List, Optional, Sequence, Set
 
 from scoring_input_contract import classify_ingredient_roles, get_scoring_ingredients
 
-MAPPED_COVERAGE_MIN = 0.85
 MULTI_DOSE_COVERAGE_MIN = 0.60
 SPORTS_PRIMARY_IDENTITY_CANONICALS = {
     "protein",
@@ -223,7 +223,20 @@ def _status_is_active(product: Dict[str, Any]) -> bool:
 
 def _base_checks(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> tuple[List[str], float]:
     missing: List[str] = []
+    scoring_input = get_scoring_ingredients(product or {}, strict=True)
     coverage = _mapped_coverage(product, ingredients)
+    blocking_contract_findings = [
+        finding
+        for finding in scoring_input.contract_findings
+        if not finding.startswith("missing_required_fields:")
+        and finding != "missing_identity_disposition"
+    ]
+    if blocking_contract_findings:
+        missing.append("strict_scoring_contract")
+    if scoring_input.mapped_count <= 0:
+        missing.append("score_eligible_active_identity")
+    elif scoring_input.unmapped_count > 0 or coverage != 1.0:
+        missing.append("mapped_coverage")
     if not ingredients or not any(_has_active_identity(i) for i in ingredients):
         missing.append("active_identity")
     return missing, coverage
@@ -549,8 +562,6 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
         soft_missing.append("product_status_not_active")
     if not _form_factor(product):
         soft_missing.append("form_factor_not_disclosed")
-    if ingredients and coverage < MAPPED_COVERAGE_MIN:
-        soft_missing.append("low_mapped_coverage")
     dose_cov: Optional[float] = None
 
     if module == "probiotic":

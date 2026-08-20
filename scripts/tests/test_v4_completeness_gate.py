@@ -44,6 +44,25 @@ def _product(*, module: str = "generic", ingredients: list[dict] | None = None, 
         "multi_or_prenatal": "multivitamin",
     }[module]
     rows = ingredients if ingredients is not None else [_ingredient()]
+    for index, row in enumerate(rows):
+        canonical = bool(row.get("canonical_id"))
+        row.setdefault("raw_source_path", f"ingredientRows[{index}]")
+        row.setdefault("raw_source_text", row.get("name"))
+        row.setdefault("source_section", "active")
+        row.setdefault("cleaner_row_role", "active_scorable")
+        row.setdefault("score_eligible_by_cleaner", True)
+        row.setdefault("dose_class", "therapeutic_mass")
+        row.setdefault(
+            "role_classification",
+            "active_scorable" if canonical else "active_unmapped",
+        )
+        row.setdefault("scoreable_identity", canonical)
+        row.setdefault("identity_disposition", "clean" if canonical else "unresolved")
+        row.setdefault(
+            "score_exclusion_reason",
+            None if canonical else "no_quality_map_match",
+        )
+        row.setdefault("has_dose", row.get("dose") is not None)
     product = {
         "status": "active",
         "form_factor": "capsule",
@@ -83,7 +102,7 @@ def test_generic_missing_active_identity_is_not_scored() -> None:
     assert "active_identity" in result.missing_fields
 
 
-def test_generic_low_mapped_coverage_is_soft_debt() -> None:
+def test_generic_low_mapped_coverage_is_not_live_eligible() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = _product(
@@ -94,10 +113,47 @@ def test_generic_low_mapped_coverage_is_soft_debt() -> None:
     )
     result = evaluate_completeness_gate(product, module="generic")
 
-    assert result.is_live_eligible is True
+    assert result.is_live_eligible is False
     assert result.mapped_coverage == 0.5
-    assert result.missing_fields == []
-    assert "low_mapped_coverage" in result.soft_missing
+    assert "mapped_coverage" in result.missing_fields
+    assert "low_mapped_coverage" not in result.soft_missing
+
+
+def test_product_level_evidence_cannot_replace_score_eligible_label_identity() -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        ingredients=[],
+        product_scoring_evidence=[
+            {
+                "evidence_type": "blend_anchor_mass",
+                "clean_identity_id": "licorice_root",
+                "scoring_parent_id": "licorice_root",
+                "evidence_canonical_id": "licorice_root",
+                "canonical_source_db": "ingredient_quality_map",
+                "evidence_origin": "native_enrichment",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "dose_value": 450,
+                "dose_unit": "mg",
+                "source": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "evidence_scope": "row_level",
+                "linked_rows": ["ingredientRows[0]"],
+                "confidence": "medium",
+                "reason": "identity_bearing_active_anchor_mass",
+                "identity_disposition": "taxonomy_only",
+            }
+        ],
+    )
+
+    result = evaluate_completeness_gate(product, module="generic")
+
+    assert result.mapped_coverage == 0.0
+    assert result.is_live_eligible is False
+    assert "score_eligible_active_identity" in result.missing_fields
 
 
 def test_explicit_discontinued_status_is_soft_debt() -> None:
@@ -259,7 +315,7 @@ def test_generic_enzyme_activity_is_valid_dose_evidence() -> None:
     assert result.verdict is None
 
 
-def test_generic_blend_header_with_nested_anchor_is_scored_with_soft_disclosure_debt() -> None:
+def test_generic_blend_anchor_without_score_eligible_owner_is_not_live() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = _product(
@@ -301,10 +357,10 @@ def test_generic_blend_header_with_nested_anchor_is_scored_with_soft_disclosure_
 
     result = evaluate_completeness_gate(product, module="generic")
 
-    assert result.is_live_eligible is True
-    assert result.missing_fields == []
+    assert result.is_live_eligible is False
+    assert "score_eligible_active_identity" in result.missing_fields
     assert "conservative_blend_anchor_mass" in result.soft_missing
-    assert result.verdict is None
+    assert result.verdict == "NOT_SCORED"
 
 
 def test_probiotic_total_cfu_plus_named_strains_passes_without_per_strain_cfu() -> None:
