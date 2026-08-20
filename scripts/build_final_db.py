@@ -78,6 +78,7 @@ from serving_frequency import (
 )
 from identity_integrity import is_identity_scoreable
 from label_record_contract import build_label_record_contract
+from row_ledger import validate_row_ledger
 from scoring_v4.modules.fiber_digestive_helpers import (
     fiber_rows as _fiber_goal_rows,
     has_fiber_context as _has_fiber_goal_context,
@@ -3056,7 +3057,6 @@ _DISPLAY_TYPE_TO_REASON = {
     "nutrition_fact": _DROP_REASON_NUTRITION_FACT,
 }
 
-
 def _compute_ingredients_dropped_reasons(enriched: Dict[str, Any]) -> List[str]:
     """Aggregate per-product drop reason codes from the cleaner's
     display_ingredients trail. Sorted + deduped — stable emission.
@@ -3141,12 +3141,31 @@ def _classify_export_error(msg: str) -> str:
 def _validate_active_count_reconciliation(
     blob: Dict[str, Any], raw_actives_count: int, dsld_id: str
 ) -> None:
-    """Hard stop when raw has actives but blob is empty AND no drop
-    reasons are recorded. Also flags use of the PARSE_ERROR sentinel
-    — that reason is allowed shape-wise but must trend to zero before
-    release."""
+    """Reconcile source actives exactly, with a legacy aggregate fallback."""
     blob_actives = len(blob.get("ingredients") or [])
     reasons = blob.get("ingredients_dropped_reasons") or []
+
+    for reason in reasons:
+        if reason not in _ALLOWED_DROP_REASONS:
+            raise ValueError(
+                f"[{dsld_id}] unknown drop reason {reason!r} in "
+                f"ingredients_dropped_reasons — must be one of "
+                f"{sorted(_ALLOWED_DROP_REASONS)} (Sprint E1.2.5)."
+            )
+    if _DROP_REASON_PARSE_ERROR in reasons:
+        raise ValueError(
+            f"[{dsld_id}] parse-error sentinel {_DROP_REASON_PARSE_ERROR} "
+            "cannot enter a release candidate."
+        )
+
+    if "row_ledger" in blob:
+        issues = validate_row_ledger(blob.get("row_ledger"), raw_actives_count)
+        if issues:
+            first = issues[0]
+            raise ValueError(
+                f"[{dsld_id}] row_ledger {first['code']}: {first['message']}"
+            )
+        return
 
     if raw_actives_count > 0 and blob_actives == 0 and not reasons:
         raise ValueError(
@@ -3156,9 +3175,11 @@ def _validate_active_count_reconciliation(
             f"(Sprint E1.2.5)."
         )
 
-    # E1.6 defense gate: catch the Bucket-B class of bug where 100% of raw
-    # actives become DROPPED_AS_INACTIVE (and nothing else). That pattern
-    # almost always indicates a cleaner classifier mistake — a real active
+    # Compatibility fallback for schema 2.3 artifacts without row_ledger:
+    # catch the Bucket-B class where 100% of raw actives become inactive.
+    # Membership is intentional; a co-occurring aggregate reason cannot hide
+    # the inactive transition. This almost always indicates a cleaner
+    # classifier mistake — a real active
     # is being routed to the inactive bucket because of a category=fat /
     # sugar / carb misclassification (see fix at enhanced_normalizer.py
     # commit 4d05a74). Without this gate, ~186 single-active products
@@ -3168,8 +3189,7 @@ def _validate_active_count_reconciliation(
     if (
         raw_actives_count > 0
         and blob_actives == 0
-        and reasons
-        and set(reasons) == {_DROP_REASON_CLASSIFIED_INACTIVE}
+        and _DROP_REASON_CLASSIFIED_INACTIVE in reasons
     ):
         raise ValueError(
             f"[{dsld_id}] all raw actives reclassified as inactive — "
@@ -3179,13 +3199,6 @@ def _validate_active_count_reconciliation(
             f"product's category/group combo."
         )
 
-    for r in reasons:
-        if r not in _ALLOWED_DROP_REASONS:
-            raise ValueError(
-                f"[{dsld_id}] unknown drop reason {r!r} in "
-                f"ingredients_dropped_reasons — must be one of "
-                f"{sorted(_ALLOWED_DROP_REASONS)} (Sprint E1.2.5)."
-            )
 
 
 # Sprint E1.2.4 — inactive-ingredient preservation invariant.

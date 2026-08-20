@@ -60,6 +60,10 @@ contract name elsewhere.
 | **Scorable row** | An active ingredient row that satisfies cleaner/enrichment eligibility and the shared scoring-input contract. |
 | **Display-only row** | A label-faithful row retained for explanation but excluded from independent score math. |
 | **Mapped coverage** | Fraction of score-eligible active rows with a usable canonical mapping, computed by the shared scoring-input contract. |
+| **Row ledger** | The exact one-record-per-source-row reconciliation contract. Each record owns a stable row reference, source section/role, score eligibility, mapping disposition, reason code, final destination, and optional owner reference. |
+| **Owner row** | The source row that owns a form or nested component. Owned components remain traceable in the row ledger but do not independently inflate mapping coverage unless the cleaner explicitly marks the child score-eligible. |
+| **Source inactive row** | A row printed in the label's Other Ingredients section and preserved as inactive. It is distinct from an active row later reclassified as inactive. |
+| **Active reclassified inactive** | A row originating in Supplement Facts/actives that was deliberately moved to the inactive destination with a row-specific reason. Aggregate `DROPPED_AS_INACTIVE` telemetry is not sufficient evidence of this transition. |
 
 ## IQM form fields
 

@@ -107,11 +107,14 @@ def test_validator_silent_when_blob_non_empty() -> None:
     _validate_active_count_reconciliation(blob, 1, "DSLD-OK")
 
 
-def test_validator_silent_with_reasons_even_if_blob_empty() -> None:
-    """Raw had actives, blob has 0, but reasons explain why. OK."""
+def test_legacy_validator_allows_explicit_non_active_reasons() -> None:
+    """Schema-2.3 compatibility accepts structural/nutrition exclusions."""
     blob = {
         "ingredients": [],
-        "ingredients_dropped_reasons": ["DROPPED_AS_INACTIVE", "DROPPED_NUTRITION_FACT"],
+        "ingredients_dropped_reasons": [
+            "DROPPED_STRUCTURAL_HEADER",
+            "DROPPED_NUTRITION_FACT",
+        ],
     }
     _validate_active_count_reconciliation(blob, 3, "DSLD-EXPLAINED")
 
@@ -138,11 +141,8 @@ def test_validator_raises_when_all_actives_silently_inactive() -> None:
         _validate_active_count_reconciliation(blob, 1, "DSLD-PHOSPHATIDYL")
 
 
-def test_validator_silent_when_inactive_drops_mixed_with_other_reasons() -> None:
-    """If DROPPED_AS_INACTIVE is mixed with another reason (e.g.
-    NUTRITION_FACT or UNMAPPED_ACTIVE), the gate does NOT fire — the
-    drops have a varied story so the bug-pattern signature doesn't match.
-    Behavior must match the existing 'silent with reasons' guarantee."""
+def test_validator_rejects_inactive_drop_even_when_reasons_are_mixed() -> None:
+    """A second aggregate reason cannot hide a 100% inactive reclassification."""
     blob = {
         "ingredients": [],
         "ingredients_dropped_reasons": [
@@ -150,8 +150,73 @@ def test_validator_silent_when_inactive_drops_mixed_with_other_reasons() -> None
             "DROPPED_NUTRITION_FACT",
         ],
     }
-    # Should NOT raise — varied reasons indicate normal cleaner behavior
-    _validate_active_count_reconciliation(blob, 3, "DSLD-MIXED")
+    with pytest.raises(ValueError, match="all raw actives reclassified as inactive"):
+        _validate_active_count_reconciliation(blob, 3, "DSLD-MIXED")
+
+
+def test_validator_rejects_parse_error_sentinel() -> None:
+    blob = {
+        "ingredients": [{"name": "Vitamin C"}],
+        "ingredients_dropped_reasons": ["DROPPED_PARSE_ERROR"],
+    }
+
+    with pytest.raises(ValueError, match="parse-error sentinel"):
+        _validate_active_count_reconciliation(blob, 2, "DSLD-PARSE")
+
+
+def test_row_ledger_replaces_aggregate_heuristics_when_present() -> None:
+    blob = {
+        "ingredients": [],
+        "ingredients_dropped_reasons": [
+            "DROPPED_AS_INACTIVE",
+            "DROPPED_NUTRITION_FACT",
+        ],
+        "row_ledger": [
+            {
+                "row_ref": "ingredientRows[0]",
+                "source_section": "activeIngredients",
+                "source_role": "nutrition_fact",
+                "score_eligible": False,
+                "mapping_disposition": "excluded_non_scorable",
+                "reason_code": "DROPPED_NUTRITION_FACT",
+                "final_destination": "display_ingredients",
+                "owner_row_ref": None,
+            },
+            {
+                "row_ref": "ingredientRows[1]",
+                "source_section": "activeIngredients",
+                "source_role": "active_reclassified_inactive",
+                "score_eligible": False,
+                "mapping_disposition": "active_reclassified_inactive",
+                "reason_code": "ACTIVE_RECLASSIFIED_AS_INACTIVE",
+                "final_destination": "inactive_ingredients",
+                "owner_row_ref": None,
+            },
+        ],
+    }
+
+    _validate_active_count_reconciliation(blob, 2, "DSLD-LEDGER")
+
+
+def test_row_ledger_rejects_duplicate_ownership() -> None:
+    row = {
+        "row_ref": "ingredientRows[0]",
+        "source_section": "activeIngredients",
+        "source_role": "score_active",
+        "score_eligible": True,
+        "mapping_disposition": "mapped_score_active",
+        "reason_code": "MAPPED_CANONICAL_IDENTITY",
+        "final_destination": "ingredients",
+        "owner_row_ref": None,
+    }
+    blob = {
+        "ingredients": [{"name": "Magnesium"}],
+        "ingredients_dropped_reasons": [],
+        "row_ledger": [row, dict(row)],
+    }
+
+    with pytest.raises(ValueError, match="duplicate row_ref"):
+        _validate_active_count_reconciliation(blob, 1, "DSLD-DUP")
 
 
 def test_validator_raises_on_unknown_reason_code() -> None:
@@ -166,7 +231,9 @@ def test_validator_raises_on_unknown_reason_code() -> None:
 def test_all_enum_codes_accepted_by_validator() -> None:
     blob = {
         "ingredients": [{"name": "x"}],
-        "ingredients_dropped_reasons": sorted(_ALLOWED_DROP_REASONS),
+        "ingredients_dropped_reasons": sorted(
+            _ALLOWED_DROP_REASONS - {"DROPPED_PARSE_ERROR"}
+        ),
     }
     _validate_active_count_reconciliation(blob, 1, "DSLD-ENUM")
 
