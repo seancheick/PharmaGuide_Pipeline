@@ -3,7 +3,8 @@ Unified inactive ingredient resolver.
 
 Replaces the scattered safety + role classification logic in build_final_db.py
 with a single, testable, deterministic module. For every inactive label
-entry, the resolver consults three sources of truth IN PRIORITY ORDER:
+entry, the resolver consults three safety/role sources of truth IN PRIORITY
+ORDER:
 
   1. ``banned_recalled_ingredients.json``  (status: banned / high_risk /
      recalled / watchlist). Sourced from FDA enforcement actions, EFSA
@@ -20,6 +21,10 @@ entry, the resolver consults three sources of truth IN PRIORITY ORDER:
   3. ``other_ingredients.json``  (679 excipient role classifications).
      Carrier oils, fillers, colorants, preservative-grade tocopherols,
      etc. The legitimate-excipient lookup.
+
+After that resolution, ``clean_label_policy.json`` is applied as an
+orthogonal informational overlay. It may add consumer copy and a small
+quality-hygiene penalty, but it never changes the safety verdict.
 
 Matching rules
 --------------
@@ -61,7 +66,7 @@ that no match was caused by notes-text bleed-through.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any, Iterable, Iterator, Optional
 
@@ -326,11 +331,9 @@ class InactiveResolution:
     safety_warning_one_liner: Optional[str] = None
     safety_warning: Optional[str] = None
     safety_flags: list[dict] = field(default_factory=list)
-    # Clean-label flag layer (2026-06): EU-banned / flagged additives that should
-    # INFORM + apply a small graduated penalty WITHOUT forcing a CAUTION verdict
-    # (titanium dioxide as a coating, etc.). Populated from the source entry's
-    # optional `clean_label` block. Distinct from the safety contract above —
-    # `is_safety_concern` stays False, so the verdict never changes.
+    # Clean-label flag layer: jurisdiction-explicit preferences that should
+    # INFORM + apply a small graduated penalty WITHOUT forcing a safety verdict.
+    # Populated only by clean_label_policy.json after the safety/role resolution.
     is_clean_label_concern: bool = False
     clean_label_tier: Optional[str] = None        # "elevated" | "informational"
     clean_label_note: Optional[str] = None        # consumer-facing one-liner
@@ -340,6 +343,10 @@ class InactiveResolution:
     clean_label_eu_status: Optional[str] = None       # e.g. "banned_food_additive"
     clean_label_citation: Optional[str] = None        # e.g. "Commission Regulation (EU) 2022/63"
     clean_label_url: Optional[str] = None             # authoritative source URL
+    clean_label_policy_id: Optional[str] = None
+    clean_label_jurisdiction: Optional[str] = None
+    clean_label_jurisdiction_status: Optional[str] = None
+    clean_label_policy_basis: Optional[str] = None
 
 
 # ---------------------------------------------------------------------------
@@ -381,20 +388,24 @@ class InactiveIngredientResolver:
         harmful_additives_path: Optional[Path] = None,
         other_ingredients_path: Optional[Path] = None,
         ingredient_quality_map_path: Optional[Path] = None,
+        clean_label_policy_path: Optional[Path] = None,
     ) -> None:
         d = data_dir or _DEFAULT_DATA_DIR
         self._banned_path = banned_recalled_path or d / "banned_recalled_ingredients.json"
         self._harmful_path = harmful_additives_path or d / "harmful_additives.json"
         self._other_path = other_ingredients_path or d / "other_ingredients.json"
         self._iqm_path = ingredient_quality_map_path or d / "ingredient_quality_map.json"
+        self._clean_label_path = clean_label_policy_path or d / "clean_label_policy.json"
 
         self._banned_entries: list[dict] = []
         self._harmful_entries: list[dict] = []
         self._other_entries: list[dict] = []
+        self._clean_label_entries: list[dict] = []
 
         self._banned_index: dict[str, dict] = {}
         self._harmful_index: dict[str, dict] = {}
         self._other_index: dict[str, dict] = {}
+        self._clean_label_index: dict[str, dict] = {}
         # Punctuation-insensitive twins of the three indexes above, keyed by the
         # pipeline's canonical ``make_normalized_key``. ``_normalize`` only strips
         # SURROUNDING punctuation, so internal "-", "#", "," and "&" survive and a
@@ -407,6 +418,7 @@ class InactiveIngredientResolver:
         self._banned_key_index: dict[str, dict] = {}
         self._harmful_key_index: dict[str, dict] = {}
         self._other_key_index: dict[str, dict] = {}
+        self._clean_label_key_index: dict[str, dict] = {}
         # term -> [{"parent": iqm_parent_key, "parents": [equivalent ids], ...}]
         # This is a lookup helper only. resolve() must not consume it directly
         # because active-form-duplicate tagging requires product context.
@@ -460,6 +472,27 @@ class InactiveIngredientResolver:
             for term in _entry_terms(e):
                 self._other_index.setdefault(term, e)
                 self._other_key_index.setdefault(make_normalized_key(term), e)
+
+        # Clean-label preferences are intentionally separate from all safety
+        # sources. Only source-complete active policies participate; inventory
+        # candidates remain inert until jurisdiction, evidence, penalty, and
+        # consumer copy are individually reviewed.
+        try:
+            clean_label = _load_json(self._clean_label_path).get("policies") or []
+        except (OSError, ValueError):
+            clean_label = []
+        for entry in clean_label:
+            if not isinstance(entry, dict):
+                continue
+            self._clean_label_entries.append(entry)
+            if not self._clean_label_policy_is_active_and_complete(entry):
+                continue
+            for term in _entry_terms(entry):
+                self._clean_label_index.setdefault(term, entry)
+                self._clean_label_key_index.setdefault(
+                    make_normalized_key(term),
+                    entry,
+                )
 
         # active-form index — IQM active nutrient forms. This intentionally
         # DOES NOT participate in resolve(); product-aware build code decides
@@ -543,6 +576,9 @@ class InactiveIngredientResolver:
         """
         terms = _collect_terms(raw_name, standard_name, *(additional_terms or []))
 
+        def finish(result: InactiveResolution) -> InactiveResolution:
+            return self._with_clean_label_policy(result, terms)
+
         # 1. banned_recalled (highest authority). Evaluate every label term
         # before returning so a generic high-risk identity cannot shadow a
         # more specific banned form carried in forms[] / additional_terms.
@@ -584,13 +620,13 @@ class InactiveIngredientResolver:
                 banned_candidates,
                 key=lambda item: safety_status_priority(item[0].get("status")),
             )
-            return self._from_banned(raw_name, entry)
+            return finish(self._from_banned(raw_name, entry))
 
         # 2. harmful_additives
         for t in terms:
             entry = self._harmful_index.get(t)
             if entry:
-                return self._from_harmful(raw_name, entry)
+                return finish(self._from_harmful(raw_name, entry))
 
         # 2b. Same two files, punctuation-insensitive. A label that differs from
         # an authored alias only by "-", "#", "," or "&" is the same substance,
@@ -612,10 +648,10 @@ class InactiveIngredientResolver:
                     entry.get("form_evidence_patterns") or [],
                 )
             ):
-                return self._from_banned(raw_name, entry)
+                return finish(self._from_banned(raw_name, entry))
             entry = self._harmful_key_index.get(key)
             if entry:
-                return self._from_harmful(raw_name, entry)
+                return finish(self._from_harmful(raw_name, entry))
 
         # Some DSLD rows join multiple independently authored additives with
         # a slash (for example ``BHA/BHT``). Resolve that narrow structural
@@ -624,13 +660,13 @@ class InactiveIngredientResolver:
         # deliberately not a general token splitter or fuzzy fallback.
         composite = self._resolve_safety_composite(raw_name, terms)
         if composite is not None:
-            return composite
+            return finish(composite)
 
         # 3. other_ingredients
         for t in terms:
             entry = self._other_index.get(t)
             if entry:
-                return self._from_other(raw_name, entry)
+                return finish(self._from_other(raw_name, entry))
 
         # 3b. other_ingredients, punctuation-insensitive.
         for t in terms:
@@ -639,10 +675,75 @@ class InactiveIngredientResolver:
                 continue
             entry = self._other_key_index.get(key)
             if entry:
-                return self._from_other(raw_name, entry)
+                return finish(self._from_other(raw_name, entry))
 
         # 4. unmatched — well-formed unknown
-        return self._unmatched(raw_name)
+        return finish(self._unmatched(raw_name))
+
+    @staticmethod
+    def _clean_label_policy_is_active_and_complete(entry: dict) -> bool:
+        source = entry.get("authoritative_source")
+        penalty = entry.get("penalty_base")
+        return bool(
+            entry.get("policy_status") == "active"
+            and entry.get("id")
+            and entry.get("jurisdiction")
+            and entry.get("jurisdiction_status")
+            and entry.get("policy_basis")
+            and entry.get("consumer_note")
+            and entry.get("tier")
+            and isinstance(penalty, (int, float))
+            and not isinstance(penalty, bool)
+            and penalty > 0
+            and isinstance(source, dict)
+            and str(source.get("url") or "").startswith("https://")
+            and source.get("citation")
+        )
+
+    def _with_clean_label_policy(
+        self,
+        resolution: InactiveResolution,
+        terms: Iterable[str],
+    ) -> InactiveResolution:
+        entry: Optional[dict] = None
+        for term in terms:
+            candidate = self._clean_label_index.get(term)
+            if candidate and not negative_match_terms_veto(
+                [term],
+                candidate.get("negative_match_terms") or [],
+            ):
+                entry = candidate
+                break
+        if entry is None:
+            for term in terms:
+                key = make_normalized_key(term)
+                candidate = self._clean_label_key_index.get(key) if key else None
+                if candidate and not negative_match_terms_veto(
+                    [term],
+                    candidate.get("negative_match_terms") or [],
+                ):
+                    entry = candidate
+                    break
+        if entry is None:
+            return resolution
+
+        source = entry.get("authoritative_source") or {}
+        return replace(
+            resolution,
+            is_clean_label_concern=True,
+            clean_label_tier=entry.get("tier") or None,
+            clean_label_note=entry.get("consumer_note") or None,
+            clean_label_penalty_base=entry.get("penalty_base"),
+            clean_label_eu_status=entry.get("jurisdiction_status") or None,
+            clean_label_citation=source.get("citation") or None,
+            clean_label_url=source.get("url") or None,
+            clean_label_policy_id=entry.get("id") or None,
+            clean_label_jurisdiction=entry.get("jurisdiction") or None,
+            clean_label_jurisdiction_status=(
+                entry.get("jurisdiction_status") or None
+            ),
+            clean_label_policy_basis=entry.get("policy_basis") or None,
+        )
 
     def _resolve_safety_composite(
         self,
@@ -727,6 +828,9 @@ class InactiveIngredientResolver:
     def iter_other_ingredients_entries_for_audit(self) -> Iterator[dict]:
         yield from self._other_entries
 
+    def iter_clean_label_policy_entries_for_audit(self) -> Iterator[dict]:
+        yield from self._clean_label_entries
+
     # ----- Builders for the four resolution branches -----
 
     @staticmethod
@@ -753,9 +857,6 @@ class InactiveIngredientResolver:
             or entry.get("reason")
             or f"Listed as {status} in banned_recalled_ingredients.json"
         )
-        # Clean-label flag block (inform + small graduated penalty, no CAUTION).
-        clean_label = entry.get("clean_label")
-        clean_label = clean_label if isinstance(clean_label, dict) else {}
         functional_roles = list(entry.get("functional_roles") or [])
         display_role_label = (
             _pretty_role(functional_roles[0]) if functional_roles else None
@@ -811,13 +912,6 @@ class InactiveIngredientResolver:
             references=list(entry.get("references_structured") or []),
             regulatory_status=status or None,
             inactive_policy=entry.get("inactive_policy") or None,
-            is_clean_label_concern=bool(clean_label),
-            clean_label_tier=(clean_label.get("tier") or None),
-            clean_label_note=(clean_label.get("consumer_note") or None),
-            clean_label_penalty_base=clean_label.get("penalty_base"),
-            clean_label_eu_status=(clean_label.get("eu_status") or None),
-            clean_label_citation=(clean_label.get("regulation_citation") or None),
-            clean_label_url=(clean_label.get("regulation_url") or None),
         )
 
     @staticmethod

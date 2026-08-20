@@ -680,12 +680,11 @@ def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, A
     """Collect clean-label additive concerns (e.g. titanium dioxide / E171).
 
     A SEPARATE pass from `_iter_resolver_safety_hits` on purpose: clean-label
-    concerns are orthogonal to the safety verdict. Titanium dioxide as an
-    `excipient_acceptable` coating resolves with `is_safety_concern=True` yet
-    is exempted from CAUTION downstream — but it is ALSO an
-    `is_clean_label_concern`, which this lane surfaces for the six-pillar
-    penalty + the Flutter flag. Keeping this independent guarantees the
-    verdict path (`_iter_resolver_safety_hits`) stays byte-identical.
+    concerns are orthogonal to the safety verdict. A source may independently
+    resolve to a safety disposition and a clean-label preference; this lane
+    surfaces only the latter for the six-pillar penalty + Flutter flag. Keeping
+    it independent prevents a regional clean-label policy from silently
+    changing the verdict path.
 
     Never raises. Returns one hit per flagged additive row with enough fields
     for the graduated safety_hygiene penalty (tier, penalty_base, role) and
@@ -725,6 +724,12 @@ def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, A
                 "penalty_base": resolution.clean_label_penalty_base,
                 "status": resolution.regulatory_status,
                 "matched_rule_id": resolution.matched_rule_id,
+                "policy_id": resolution.clean_label_policy_id,
+                "jurisdiction": resolution.clean_label_jurisdiction,
+                "jurisdiction_status": (
+                    resolution.clean_label_jurisdiction_status
+                ),
+                "policy_basis": resolution.clean_label_policy_basis,
                 # Step 3b: structured citation (surfaced from the entry's verified refs)
                 "eu_status": resolution.clean_label_eu_status,
                 "regulation_citation": resolution.clean_label_citation,

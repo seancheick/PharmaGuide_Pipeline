@@ -16699,14 +16699,7 @@
       "safety_warning_one_liner": "EU-banned white pigment. Avoid when possible.",
       "inactive_policy": "excipient_acceptable",
       "inactive_policy_reason": "FDA-approved white pigment 21 CFR §73.575; EU food ban (E171) does not extend to US supplements",
-      "clean_label": {
-        "tier": "elevated",
-        "consumer_note": "Contains titanium dioxide (E171) — banned as a food additive in the EU (EFSA could not rule out genotoxicity); still permitted in US supplements as a coating/colorant.",
-        "penalty_base": 2.0,
-        "eu_status": "banned_food_additive",
-        "regulation_citation": "Commission Regulation (EU) 2022/63",
-        "regulation_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R0063"
-      }
+      "clean_label_policy_id": "CL_TITANIUM_DIOXIDE_E171"
     },
     {
       "id": "BANNED_ADD_TALC",

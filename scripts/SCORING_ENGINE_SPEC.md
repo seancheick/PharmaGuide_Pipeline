@@ -1,7 +1,7 @@
 # PharmaGuide Scoring Engine Specification
 
 > Production scoring engine: **4.2.0**
-> V4 quality configuration: **1.0.5-b7-single-source**
+> V4 quality configuration: **1.0.6-clean-label-registry**
 > Export schema: **2.3.0** / **111 core columns**
 > Stage-3 artifact schema: **4.2.0**
 > Last verified against code: **2026-08-05**

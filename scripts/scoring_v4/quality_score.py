@@ -341,14 +341,12 @@ def _pillar_from_bonuses(name: str, module_bd: Dict[str, Any],
 def _clean_label_penalty(hits: Any, cfg: Dict[str, Any]) -> tuple[float, List[Dict[str, Any]]]:
     """Graduated clean-label additive penalty + per-hit enrichment.
 
-    penalty = penalty_base (per-additive, from the entry's clean_label.penalty_base;
-    falls back to config tier_base) × role_multiplier[role]. Summed across flagged
+    penalty = penalty_base (per-additive, from clean_label_policy.json; falls
+    back to config tier_base) × role_multiplier[role]. Summed across flagged
     additives and clamped to the per-product cap. Pure function of the gate's
     clean_label_hits + config. Returns (total_penalty, enriched_hits) where each
-    enriched hit carries `penalty_applied` (its own pre-cap contribution) for the flag.
-
-    Magnitudes are config-driven (clean_label_subscale) and PENDING user/advisor
-    sign-off (spec §7). The raw v4 score is never touched by this.
+    enriched hit carries `penalty_applied` (its own pre-cap contribution) for the
+    flag. The raw v4 score is never touched by this.
     """
     sub = cfg.get("clean_label_subscale") or {}
     if not sub or not isinstance(hits, list) or not hits:
@@ -388,6 +386,10 @@ def _build_clean_label_flags(enriched_hits: List[Dict[str, Any]]) -> List[Dict[s
             "status": h.get("status"),
             "penalty_applied": h.get("penalty_applied"),
             "matched_rule_id": h.get("matched_rule_id"),
+            "policy_id": h.get("policy_id"),
+            "jurisdiction": h.get("jurisdiction"),
+            "jurisdiction_status": h.get("jurisdiction_status"),
+            "policy_basis": h.get("policy_basis"),
             # Step 3b: clickable regulation citation (null when the entry has none).
             # Stable keys so Flutter can rely on the contract.
             "eu_status": h.get("eu_status"),

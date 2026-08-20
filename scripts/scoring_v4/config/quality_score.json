@@ -1,9 +1,9 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.0.5-b7-single-source",
+    "version": "1.0.6-clean-label-registry",
     "schema_version": "1.0.0",
-    "last_updated": "2026-08-05",
+    "last_updated": "2026-08-20",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Generic single-bioactive caps prevent clean narrow products from implying elite clinical-formula evidence. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
     "phase": "generic_public_caps"
   },
@@ -22,7 +22,7 @@
     "over_ul_max_penalty": 3.0
   },
   "clean_label_subscale": {
-    "_doc": "STEP 3a: clean-label additive penalty (titanium dioxide / E171 + future EU-banned additives). A flagged additive INFORMS (clean_label_flags_v4) AND takes a SMALL graduated safety_hygiene penalty WITHOUT forcing a CAUTION verdict (CAUTION is the safety gate's lane). penalty = penalty_base (per-additive, from banned_recalled_ingredients.json clean_label.penalty_base) × role_multiplier[role], summed across flagged additives and clamped to max_total_penalty per product. A coating/excipient (role=inactive) is penalized lightly (×0.5); a flagged additive present as an active is penalized harder (×1.5). MAGNITUDES HERE ARE CONSERVATIVE DEFAULTS PENDING USER/ADVISOR SIGN-OFF (spec §7, reports/v4_clean_label_flag_design.md): titanium dioxide as a coating = 2.0 × 0.5 = −1.0 on the /10 pillar. tier_base is a FALLBACK base used only when an entry omits penalty_base.",
+    "_doc": "Clean-label preferences are separate from safety verdicts. An active, source-complete policy INFORMS through clean_label_flags_v4 and may take a small graduated safety_hygiene penalty without forcing CAUTION. penalty = penalty_base (from clean_label_policy.json) × role_multiplier[role], summed across flagged additives and clamped to max_total_penalty per product. A coating/excipient (role=inactive) is penalized lightly (×0.5); an active is penalized harder (×1.5). The titanium-dioxide value is preserved from the pre-registry production policy; calibration is intentionally outside this correctness release. tier_base is a compatibility fallback only.",
     "role_multiplier": { "active": 1.5, "major": 1.5, "claim_prominent": 1.0, "adjunct": 0.5, "inactive": 0.5 },
     "tier_base": { "elevated": 2.0, "informational": 0.5 },
     "max_total_penalty": 5.0

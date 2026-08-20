@@ -59,7 +59,7 @@ def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
     assert config_version("omega") == "1.0.0"
-    assert config_version("quality_score") == "1.0.5-b7-single-source"
+    assert config_version("quality_score") == "1.0.6-clean-label-registry"
 
 
 def test_all_config_provenance_shape():

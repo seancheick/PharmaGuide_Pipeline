@@ -94,6 +94,7 @@ contract name elsewhere.
 | **V4 quality score** | The only shipped public score. Stage 3 produces the auditable one-decimal value; final export projects it half-up to a whole number under the canonical `quality_score_v4_100` field. |
 | **Scored artifact** | The sole Stage-3 output produced by `build_scored_artifact()`: v4 score/status/pillars, shared coverage and strict diagnostics, safety/verdict state, provenance, and compatibility mirrors. |
 | **Quality score status** | `scored`, `suppressed_safety`, or `not_scored`. Status controls whether a public number is allowed. |
+| **Clean-label policy registry** | The non-verdict registry of reviewed additive preferences that may inform consumers and apply a small quality-hygiene penalty. An active policy requires explicit jurisdiction, authoritative evidence, penalty, and consumer copy. Review candidates remain inert and never become safety blocks or score penalties. |
 | **Product safety status** | Catalog-level safety-gate outcome exported as `product_safety_status`: `blocked`, `unsafe`, `caution`, `no_known_catalog_concern`, or `not_assessed`. It is independent of quality tier, score, mapped coverage, and personalized interaction risk. |
 | **Quality assessment status** | Whether the catalog assessment completed: `complete` for scored or safety-suppressed results, `partial` when incomplete identity/payload prevented a quality score, or `failed` when assessment itself was unavailable or invalid. Exported as `quality_assessment_status`. |
 | **Raw v4 score** | `raw_score_v4_100`; audit math only. It is never substituted for a suppressed public score. |
@@ -159,7 +160,7 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 | Pipeline manifest version | `3.4.0` (`build_final_db.py`) |
 | Enrichment version | `3.1.0` (`enrich_supplements_v3.py`) |
 | V4 scoring engine | `4.2.0` (`score_supplements_v4.py`) |
-| V4 quality config | `1.0.5-b7-single-source` (`quality_score.json`) |
+| V4 quality config | `1.0.6-clean-label-registry` (`quality_score.json`) |
 | Legacy scorer config | `3.6.1` (`scoring_config.json`) |
 
 All tests run through `scripts/test.sh`. `fast` is the development profile;

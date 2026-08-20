@@ -21,6 +21,7 @@ _SCHEMA_V1_FILES = frozenset(
         "canonical_equivalences.json",
         "catalog_brand_registry.json",
         "cluster_ingredient_aliases.json",
+        "clean_label_policy.json",
         "daily_values.json",
         "drug_classes.json",
         "fda_unii_cache.json",

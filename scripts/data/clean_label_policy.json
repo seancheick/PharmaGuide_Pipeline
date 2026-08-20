@@ -1,0 +1,150 @@
+{
+  "_metadata": {
+    "description": "Jurisdiction-explicit clean-label preferences kept separate from legal safety verdicts.",
+    "purpose": "consumer_clean_label_information_and_quality_hygiene_penalty",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-08-20",
+    "total_entries": 5,
+    "policy": "Only policy_status=active entries participate in matching. Review-required candidates are inventory records and may not emit copy or penalties.",
+    "field_contract": {
+      "id": "Stable clean-label policy identifier.",
+      "policy_status": "active or review_required.",
+      "jurisdiction": "Explicit jurisdiction owning the policy basis.",
+      "authoritative_source": "Primary-source citation required for active policies.",
+      "penalty_base": "Reviewed quality-hygiene penalty required for active policies.",
+      "consumer_note": "Reviewed jurisdiction-matched copy required for active policies."
+    }
+  },
+  "policies": [
+    {
+      "id": "CL_TITANIUM_DIOXIDE_E171",
+      "standard_name": "Titanium Dioxide (E171)",
+      "aliases": [
+        "titanium dioxide",
+        "titanium dioxide (e171)",
+        "e171",
+        "e 171",
+        "tio2",
+        "ci 77891",
+        "c.i. 77891",
+        "pigment white 6",
+        "anatase",
+        "rutile",
+        "titanium white",
+        "titanium(iv) oxide",
+        "titanium dioxide color",
+        "titanium dioxide colour",
+        "titanium dixoide",
+        "titanium dioxide mineral whitener",
+        "titanium dioxide nanoparticles",
+        "titanium dioxide nanoparticle",
+        "nano titanium dioxide",
+        "nano-tio2"
+      ],
+      "policy_status": "active",
+      "tier": "elevated",
+      "jurisdiction": "EU",
+      "jurisdiction_status": "banned_food_additive",
+      "policy_basis": "Commission Regulation (EU) 2022/63 removed titanium dioxide (E171) from the EU list of permitted food additives.",
+      "consumer_note": "Contains titanium dioxide (E171), which is not permitted as a food additive in the EU.",
+      "penalty_base": 2.0,
+      "penalty_rationale": "Preserves the reviewed pre-registry quality-hygiene penalty; this migration does not recalibrate scoring.",
+      "negative_match_terms": [],
+      "authoritative_source": {
+        "type": "regulation",
+        "title": "Commission Regulation (EU) 2022/63",
+        "citation": "Commission Regulation (EU) 2022/63",
+        "url": "https://eur-lex.europa.eu/eli/reg/2022/63/oj/eng",
+        "accessed_date": "2026-08-20"
+      },
+      "reviewed_at": "2026-08-20",
+      "reviewed_by": "existing_policy_migration"
+    },
+    {
+      "id": "CL_CANDIDATE_ARTIFICIAL_COLORS",
+      "standard_name": "Artificial Colors",
+      "aliases": [
+        "artificial color",
+        "artificial colors",
+        "artificial colour",
+        "artificial colours",
+        "fd&c yellow 6",
+        "fd&c red 40",
+        "fd&c blue 1"
+      ],
+      "policy_status": "review_required",
+      "consumer_note": null,
+      "penalty_base": null,
+      "missing_requirements": [
+        "jurisdiction",
+        "authoritative_evidence",
+        "penalty",
+        "consumer_copy"
+      ],
+      "inventory_reason": "Candidate family requested for one-substance-at-a-time policy review."
+    },
+    {
+      "id": "CL_CANDIDATE_BHA_BHT",
+      "standard_name": "BHA and BHT",
+      "aliases": [
+        "bha",
+        "bht",
+        "bha/bht",
+        "butylated hydroxyanisole",
+        "butylated hydroxytoluene"
+      ],
+      "policy_status": "review_required",
+      "consumer_note": null,
+      "penalty_base": null,
+      "missing_requirements": [
+        "jurisdiction",
+        "authoritative_evidence",
+        "penalty",
+        "consumer_copy"
+      ],
+      "inventory_reason": "Candidate preservative family requested for individual evidence and jurisdiction review."
+    },
+    {
+      "id": "CL_CANDIDATE_PARABENS",
+      "standard_name": "Parabens",
+      "aliases": [
+        "parabens",
+        "propylparaben",
+        "propyl paraben",
+        "methylparaben",
+        "methyl paraben",
+        "butylparaben",
+        "butyl paraben"
+      ],
+      "policy_status": "review_required",
+      "consumer_note": null,
+      "penalty_base": null,
+      "missing_requirements": [
+        "jurisdiction",
+        "authoritative_evidence",
+        "penalty",
+        "consumer_copy"
+      ],
+      "inventory_reason": "Candidate preservative family requested for individual evidence and jurisdiction review."
+    },
+    {
+      "id": "CL_CANDIDATE_AZODICARBONAMIDE",
+      "standard_name": "Azodicarbonamide",
+      "aliases": [
+        "azodicarbonamide",
+        "ada flour treatment agent",
+        "e927a"
+      ],
+      "policy_status": "review_required",
+      "consumer_note": null,
+      "penalty_base": null,
+      "missing_requirements": [
+        "jurisdiction",
+        "authoritative_evidence",
+        "penalty",
+        "consumer_copy"
+      ],
+      "inventory_reason": "Additional candidate retained for explicit US/EU policy separation review."
+    }
+  ]
+}

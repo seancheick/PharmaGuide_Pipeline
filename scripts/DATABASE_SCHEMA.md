@@ -70,6 +70,7 @@ Every database file MUST include a `_metadata` object as its first key:
 | `ingredient_classification` | ingredient_classification.json | Cleaning |
 | `allergen_flagging` | allergens.json | Enrichment |
 | `safety_disqualification_and_regulatory_compliance` | banned_recalled_ingredients.json | Enrichment |
+| `consumer_clean_label_information_and_quality_hygiene_penalty` | clean_label_policy.json | Scoring |
 | `penalty_scoring` | harmful_additives.json | Enrichment |
 | `adverse_event_signals` | caers_adverse_event_signals.json | Scoring (B8) |
 | `match_override` | banned_match_allowlist.json | Enrichment |
@@ -242,6 +243,34 @@ Core fields (always present):
 | `match_rules` | object | Matching configuration (includes `negative_match_terms`) |
 | `reason` | string | Why this ingredient is banned/recalled (shown to user) |
 | `review` | object | Governance metadata |
+
+---
+
+### 5a. clean_label_policy.json
+**Purpose:** `consumer_clean_label_information_and_quality_hygiene_penalty` | **Schema:** 1.0.0
+
+Primary key: `policies` (array)
+
+This registry is separate from the safety databases. A clean-label policy may
+emit consumer information and a small quality-hygiene penalty, but it cannot
+produce `BLOCKED`, `UNSAFE`, or `CAUTION`. Only `policy_status=active` rows with
+an explicit jurisdiction, authoritative source, policy basis, consumer copy,
+and positive penalty participate in matching. `review_required` rows are inert
+inventory records.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | YES | Stable `CL_` policy ID |
+| `standard_name` | string | YES | Canonical display name |
+| `aliases` | string[] | YES | Exact normalized identity terms |
+| `policy_status` | string | YES | `active` or `review_required` |
+| `jurisdiction` | string | active only | Jurisdiction owning the policy |
+| `jurisdiction_status` | string | active only | Machine-readable regional status |
+| `policy_basis` | string | active only | Source-grounded basis for the preference |
+| `authoritative_source` | object | active only | Primary citation and HTTPS URL |
+| `consumer_note` | string | active only | Jurisdiction-matched consumer copy |
+| `penalty_base` | number | active only | Reviewed quality-hygiene penalty |
+| `missing_requirements` | string[] | review only | Work required before activation |
 
 ---
 

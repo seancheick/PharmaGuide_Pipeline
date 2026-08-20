@@ -181,6 +181,8 @@ class TestDatabaseSchemaIntegrity:
             ("timing_rules.json", "5.3.0", False),
             ("timing_rules_rejected.json", "1.0.0", True),
             ("timing_rules_rejected.json", "5.0.0", False),
+            ("clean_label_policy.json", "1.0.0", True),
+            ("clean_label_policy.json", "5.0.0", False),
             ("severity_vocab.json", "1.1", False),
         ],
     )

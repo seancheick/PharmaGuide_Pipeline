@@ -557,7 +557,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"].startswith("1.0.5")  # versioned public contract
+    assert out["quality_score_version"] == "1.0.6-clean-label-registry"
 
 
 def test_public_quality_cap_limits_score_without_changing_raw() -> None:

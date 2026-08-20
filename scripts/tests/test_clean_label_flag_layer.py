@@ -1,15 +1,12 @@
-"""Clean-label flag layer — STEP 1: resolver disposition.
+"""Clean-label policy registry, resolver overlay, and score projection.
 
-The clean-label layer lets EU-banned / flagged additives INFORM + apply a small
-graduated penalty WITHOUT forcing a CAUTION verdict (titanium dioxide as a coating).
-Step 1 wires the resolver to read an optional `clean_label` block on a
-banned_recalled entry and surface it on the resolution, orthogonally to the safety
-contract (the verdict is untouched). Steps 2 (gate collection) + 3 (quality_score
-graduated penalty + clean_label_flags_v4 emit) follow per
-reports/v4_clean_label_flag_design.md.
+The clean-label layer is a separate, jurisdiction-explicit registry. Active,
+source-complete entries may INFORM + apply a small graduated penalty WITHOUT
+forcing a safety verdict. Review-required inventory rows remain inert.
 """
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -17,6 +14,95 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
+
+
+def _clean_label_registry() -> dict:
+    return json.loads(
+        (SCRIPTS_ROOT / "data" / "clean_label_policy.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+
+def test_clean_label_registry_is_separate_and_fail_closed() -> None:
+    registry = _clean_label_registry()
+    policies = registry["policies"]
+    active = [row for row in policies if row.get("policy_status") == "active"]
+    candidates = [
+        row for row in policies if row.get("policy_status") == "review_required"
+    ]
+
+    assert registry["_metadata"]["total_entries"] == len(policies)
+    assert [row["id"] for row in active] == ["CL_TITANIUM_DIOXIDE_E171"]
+    assert {
+        "CL_CANDIDATE_ARTIFICIAL_COLORS",
+        "CL_CANDIDATE_BHA_BHT",
+        "CL_CANDIDATE_PARABENS",
+        "CL_CANDIDATE_AZODICARBONAMIDE",
+    } <= {row["id"] for row in candidates}
+    for row in candidates:
+        assert row.get("consumer_note") is None
+        assert row.get("penalty_base") is None
+        assert set(row.get("missing_requirements") or []) == {
+            "jurisdiction",
+            "authoritative_evidence",
+            "penalty",
+            "consumer_copy",
+        }
+
+
+def test_active_clean_label_policy_is_source_complete() -> None:
+    policy = next(
+        row
+        for row in _clean_label_registry()["policies"]
+        if row["id"] == "CL_TITANIUM_DIOXIDE_E171"
+    )
+
+    assert policy["jurisdiction"] == "EU"
+    assert policy["jurisdiction_status"] == "banned_food_additive"
+    assert policy["consumer_note"]
+    assert policy["penalty_base"] > 0
+    assert policy["penalty_rationale"]
+    assert policy["policy_basis"]
+    assert policy["authoritative_source"]["url"].startswith("https://eur-lex.europa.eu/")
+
+
+def test_banned_registry_no_longer_owns_clean_label_policy() -> None:
+    banned = json.loads(
+        (SCRIPTS_ROOT / "data" / "banned_recalled_ingredients.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    titanium = next(
+        row for row in banned["ingredients"]
+        if row["id"] == "BANNED_ADD_TITANIUM_DIOXIDE"
+    )
+    assert not any("clean_label" in row for row in banned["ingredients"])
+    assert titanium["clean_label_policy_id"] == "CL_TITANIUM_DIOXIDE_E171"
+
+
+def test_incomplete_active_policy_fails_closed(tmp_path: Path) -> None:
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+
+    policy_path = tmp_path / "clean_label_policy.json"
+    policy_path.write_text(json.dumps({
+        "policies": [{
+            "id": "CL_INCOMPLETE",
+            "standard_name": "Microcrystalline Cellulose",
+            "aliases": ["microcrystalline cellulose"],
+            "policy_status": "active",
+            "jurisdiction": "US",
+            "jurisdiction_status": "reviewed",
+            "policy_basis": "Missing source, copy, and penalty on purpose.",
+            "tier": "informational",
+        }],
+    }), encoding="utf-8")
+
+    result = InactiveIngredientResolver(
+        clean_label_policy_path=policy_path,
+    ).resolve("microcrystalline cellulose")
+    assert result.is_clean_label_concern is False
+    assert result.clean_label_policy_id is None
 
 
 def test_titanium_dioxide_carries_clean_label_disposition() -> None:
@@ -27,6 +113,20 @@ def test_titanium_dioxide_carries_clean_label_disposition() -> None:
     assert res.clean_label_tier == "elevated"
     assert res.clean_label_note and "EU" in res.clean_label_note
     assert res.clean_label_penalty_base == 2.0
+    assert res.clean_label_policy_id == "CL_TITANIUM_DIOXIDE_E171"
+    assert res.clean_label_jurisdiction == "EU"
+    assert res.clean_label_jurisdiction_status == "banned_food_additive"
+    assert "2022/63" in (res.clean_label_policy_basis or "")
+
+
+def test_review_candidates_are_inert_until_policy_completion() -> None:
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+
+    resolver = InactiveIngredientResolver()
+    for label in ("BHA", "BHT", "propylparaben", "FD&C Yellow 6"):
+        result = resolver.resolve(label)
+        assert result.is_clean_label_concern is False, label
+        assert result.clean_label_policy_id is None, label
 
 
 def test_clean_label_is_orthogonal_to_safety_contract() -> None:
@@ -75,6 +175,10 @@ def test_gate_collects_titanium_dioxide_clean_label_hit() -> None:
     assert hit["penalty_base"] == 2.0
     assert hit["role"] == "inactive"
     assert hit.get("consumer_note") and "EU" in hit["consumer_note"]
+    assert hit["policy_id"] == "CL_TITANIUM_DIOXIDE_E171"
+    assert hit["jurisdiction"] == "EU"
+    assert hit["jurisdiction_status"] == "banned_food_additive"
+    assert "2022/63" in hit["policy_basis"]
 
 
 def test_gate_clean_label_does_not_force_caution() -> None:
@@ -148,6 +252,10 @@ TI_HIT = {
     "consumer_note": "Contains titanium dioxide (E171) — banned as a food additive in the EU.",
     "penalty_base": 2.0,
     "status": "high_risk",
+    "policy_id": "CL_TITANIUM_DIOXIDE_E171",
+    "jurisdiction": "EU",
+    "jurisdiction_status": "banned_food_additive",
+    "policy_basis": "Commission Regulation (EU) 2022/63 removed E171 from the permitted list.",
 }
 
 
@@ -224,6 +332,10 @@ def test_quality_emits_clean_label_flags() -> None:
     assert f.get("consumer_note") and "EU" in f["consumer_note"]
     assert f["penalty_applied"] == _expected_penalty(TI_HIT)
     assert f["role"] == "inactive"
+    assert f["policy_id"] == "CL_TITANIUM_DIOXIDE_E171"
+    assert f["jurisdiction"] == "EU"
+    assert f["jurisdiction_status"] == "banned_food_additive"
+    assert "2022/63" in f["policy_basis"]
 
 
 def test_quality_clean_label_role_active_penalizes_more() -> None:
@@ -290,7 +402,7 @@ def test_quality_flag_emits_structured_citation() -> None:
     hit = dict(
         TI_HIT,
         regulation_citation="Commission Regulation (EU) 2022/63",
-        regulation_url="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R0063",
+        regulation_url="https://eur-lex.europa.eu/eli/reg/2022/63/oj/eng",
         eu_status="banned_food_additive",
     )
     out = assemble_quality_score(_shadow_for_quality([hit]))
