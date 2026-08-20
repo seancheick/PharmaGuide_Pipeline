@@ -725,7 +725,7 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                 or diag.get("scoring_ingredients_source")
                 or _safe_dict(product.get("scoring_metadata")).get("scoring_ingredients_source")
             )
-            if source not in allowed_sources and verdict not in {"BLOCKED", "UNSAFE", "NUTRITION_ONLY"}:
+            if source not in allowed_sources and verdict not in {"BLOCKED", "UNSAFE"}:
                 findings.append(Finding("SCORING_SOURCE_FORBIDDEN", f"{pid}: scoring source {source!r} is not strict scorable input", str(file_path)))
             if diag.get("iqd_ingredients_fallback_used") is True:
                 findings.append(Finding("SCORING_USED_IQD_FALLBACK", f"{pid}: scoring consumed ingredient_quality_data.ingredients fallback", str(file_path)))
@@ -755,14 +755,41 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
             if verdict == "SAFE" and coverage is not None and coverage < 0.3:
                 findings.append(Finding("SCORING_SAFE_LOW_COVERAGE", f"{pid}: SAFE with mapped_coverage={coverage}", str(file_path)))
             if verdict == "NUTRITION_ONLY":
-                if product.get("scoring_status") != "not_applicable":
-                    findings.append(Finding("SCORING_NUTRITION_STATUS", f"{pid}: NUTRITION_ONLY must use scoring_status=not_applicable", str(file_path)))
-                if product.get("score_basis") != "nutrition_only_food_shape":
-                    findings.append(Finding("SCORING_NUTRITION_BASIS", f"{pid}: NUTRITION_ONLY must use score_basis=nutrition_only_food_shape", str(file_path)))
-                if product.get("quality_score") is not None or product.get("score_80") is not None or product.get("score_100_equivalent") is not None:
-                    findings.append(Finding("SCORING_NUTRITION_SCORE_NULL", f"{pid}: NUTRITION_ONLY must have null score fields", str(file_path)))
-                if product.get("mapped_coverage_applicable") is not False:
-                    findings.append(Finding("SCORING_NUTRITION_COVERAGE_APPLICABILITY", f"{pid}: NUTRITION_ONLY must set mapped_coverage_applicable=false", str(file_path)))
+                findings.append(Finding(
+                    "SCORING_RETIRED_NUTRITION_ONLY",
+                    f"{pid}: NUTRITION_ONLY is retired; emit NOT_SCORED for QA quarantine",
+                    str(file_path),
+                ))
+
+            quality_status = str(
+                product.get("quality_score_status")
+                or product.get("scoring_status")
+                or ""
+            ).lower()
+            safety_suppressed = (
+                quality_status == "suppressed_safety"
+                or verdict in {"BLOCKED", "UNSAFE"}
+            )
+            if not safety_suppressed and verdict != "NUTRITION_ONLY":
+                completeness = _safe_dict(product.get("_v4_completeness_gate"))
+                live_eligible = completeness.get("is_live_eligible")
+                if not isinstance(live_eligible, bool):
+                    findings.append(Finding(
+                        "SCORING_COMPLETENESS_ELIGIBILITY_MISSING",
+                        f"{pid}: _v4_completeness_gate.is_live_eligible must be boolean",
+                        str(file_path),
+                    ))
+                else:
+                    expected_live = not (
+                        quality_status == "not_scored" or verdict == "NOT_SCORED"
+                    )
+                    if live_eligible is not expected_live:
+                        findings.append(Finding(
+                            "SCORING_COMPLETENESS_STATUS_MISMATCH",
+                            f"{pid}: is_live_eligible={live_eligible} conflicts with "
+                            f"quality_score_status={quality_status!r}, verdict={verdict!r}",
+                            str(file_path),
+                        ))
     return findings
 
 

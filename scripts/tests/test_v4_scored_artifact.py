@@ -132,6 +132,9 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     assert artifact["quality_assessment_status"] == "complete"
     assert artifact["quality_pillars_v4"]
     assert artifact["mapped_coverage"] == 1.0
+    assert "mapped_coverage_applicable" not in artifact
+    assert "mapped_coverage_applicable" not in artifact["scoring_metadata"]
+    assert "mapped_coverage_applicable" not in artifact["iqd_contract_diagnostics"]
     assert artifact["strict_scoring_contract"]["passed"] is True
     assert artifact["scoring_metadata"]["score_basis"] == "v4_six_pillar"
     assert artifact["supplement_taxonomy"]["primary_type"] == "single_mineral"

@@ -1536,7 +1536,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     Includes the Batch 3 data-integrity gate:
 
     Products SHIP (verdict appears in app, with reason) for verdicts:
-        SAFE, CAUTION, POOR, BLOCKED, UNSAFE, NUTRITION_ONLY
+        SAFE, CAUTION, POOR, BLOCKED, UNSAFE
 
     Products are QUARANTINED (excluded_by_gate; never reach Flutter) when:
       - verdict == NOT_SCORED  (mapping/dosage gate failure upstream)
@@ -1779,6 +1779,12 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
             "review_queue: NOT_SCORED verdict — mapping/dosage gate "
             "failed upstream; product cannot ship without a coherent "
             "score (Batch 3 data integrity gate)."
+        )
+    elif verdict == "NUTRITION_ONLY":
+        issues.append(
+            "review_queue: NUTRITION_ONLY is retired; food-shaped or otherwise "
+            "non-scoreable products must emit NOT_SCORED and remain in QA "
+            "quarantine."
         )
     # NOTE: a product whose actives carry no canonical identity is OPAQUE, not
     # unscoreable. The scorer rates it POOR/CAUTION via the transparency penalty,
@@ -10272,25 +10278,28 @@ def build_final_db(
     for key, value in local_manifest_rows:
         c.execute("INSERT OR REPLACE INTO export_manifest VALUES (?,?)", (key, value))
 
-    # Defensive sweep: NOT_SCORED products MUST NOT reach products_core per
+    # Defensive sweep: non-live QA verdicts MUST NOT reach products_core per
     # validate_export_contract() review-queue gate (line 389). This sweep
     # cleans any stale rows left from builds that pre-date the gate, in case
     # the source product no longer appears in the current input batch (so
     # the per-product DELETE at line 4341 wouldn't fire). Sweep is logged
     # and counted in the manifest for observability.
-    not_scored_swept = c.execute(
-        "DELETE FROM products_core WHERE verdict = ?",
-        ("NOT_SCORED",),
+    quarantined_verdicts_swept = c.execute(
+        "DELETE FROM products_core WHERE verdict IN (?, ?)",
+        ("NOT_SCORED", "NUTRITION_ONLY"),
     ).rowcount
-    if not_scored_swept > 0:
+    if quarantined_verdicts_swept > 0:
         logger.warning(
-            "Defensive sweep removed %d stale NOT_SCORED rows from products_core "
+            "Defensive sweep removed %d stale QA-only verdict rows from products_core "
             "(per review-queue gate; expected from pre-gate builds)",
-            not_scored_swept,
+            quarantined_verdicts_swept,
         )
         c.execute(
             "INSERT OR REPLACE INTO export_manifest VALUES (?,?)",
-            ("not_scored_swept_count", str(not_scored_swept)),
+            (
+                "quarantined_verdict_swept_count",
+                str(quarantined_verdicts_swept),
+            ),
         )
 
     # ── V4 category percentiles (backfill, ranked over the shipped cohort) ──

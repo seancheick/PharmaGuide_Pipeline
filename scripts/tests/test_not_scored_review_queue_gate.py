@@ -54,31 +54,29 @@ def test_defensive_sweep_removes_not_scored():
     conn.commit()
 
     swept = c.execute(
-        "DELETE FROM products_core WHERE verdict = ?", ("NOT_SCORED",)
+        "DELETE FROM products_core WHERE verdict IN (?, ?)",
+        ("NOT_SCORED", "NUTRITION_ONLY"),
     ).rowcount
-    assert swept == 2
+    assert swept == 3
 
     remaining = c.execute(
         "SELECT verdict, COUNT(*) FROM products_core GROUP BY verdict ORDER BY 1"
     ).fetchall()
-    assert remaining == [("NUTRITION_ONLY", 1), ("SAFE", 1)]
+    assert remaining == [("SAFE", 1)]
     conn.close()
 
 
-def test_nutrition_only_is_not_swept():
-    """NUTRITION_ONLY is a legitimate shipped verdict (food-shape products);
-    the sweep targets only NOT_SCORED."""
-    conn = sqlite3.connect(":memory:")
-    c = conn.cursor()
-    c.execute("CREATE TABLE products_core (dsld_id TEXT PRIMARY KEY, verdict TEXT)")
-    c.execute("INSERT INTO products_core VALUES ('FOOD', 'NUTRITION_ONLY')")
-    conn.commit()
+def test_validate_export_contract_rejects_retired_nutrition_only():
+    enriched = {"dsld_id": "FOOD", "product_name": "Food-shaped product"}
+    scored = {
+        "verdict": "NUTRITION_ONLY",
+        "section_scores": {},
+        "scoring_metadata": {},
+    }
 
-    swept = c.execute(
-        "DELETE FROM products_core WHERE verdict = ?", ("NOT_SCORED",)
-    ).rowcount
-    assert swept == 0
+    issues = validate_export_contract(enriched, scored)
 
-    rows = c.execute("SELECT * FROM products_core").fetchall()
-    assert rows == [("FOOD", "NUTRITION_ONLY")]
-    conn.close()
+    assert any(
+        "NUTRITION_ONLY" in issue and "retired" in issue.lower()
+        for issue in issues
+    )

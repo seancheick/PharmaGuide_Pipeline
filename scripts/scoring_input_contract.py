@@ -1573,7 +1573,6 @@ class ScoringInputResult:
     unmapped_count: int
     mapped_coverage: Optional[float]
     contract_findings: List[str]
-    mapped_coverage_applicable: bool = True
 
     @property
     def unmapped_actives(self) -> List[str]:
@@ -1605,13 +1604,11 @@ class ScoringInputResult:
                 "passed": self.strict_contract_passed,
                 "findings": list(self.contract_findings),
                 "zero_scorable_reason": self.zero_scorable_reason,
-                "mapped_coverage_applicable": self.mapped_coverage_applicable,
             },
             "zero_scorable_reason": self.zero_scorable_reason,
             "mapped_count": self.mapped_count,
             "unmapped_count": self.unmapped_count,
             "mapped_coverage": self.mapped_coverage,
-            "mapped_coverage_applicable": self.mapped_coverage_applicable,
             "contract_findings": list(self.contract_findings),
         }
 

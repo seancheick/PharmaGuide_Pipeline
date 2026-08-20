@@ -7,7 +7,7 @@ Anything that fails the gate is routed to `excluded_by_gate` (the existing
 quarantine bucket) and never reaches Flutter.
 
 What ships (verdict shows in app):
-    SAFE, CAUTION, POOR, BLOCKED, UNSAFE, NUTRITION_ONLY
+    SAFE, CAUTION, POOR, BLOCKED, UNSAFE
 
 What does NOT ship (gate-quarantined):
     NOT_SCORED          — mapping/dosage gate failure; can't claim accuracy
@@ -80,6 +80,18 @@ def test_not_scored_verdict_is_quarantined():
     assert any("NOT_SCORED" in issue or "review_queue" in issue.lower()
                or "gate" in issue.lower() for issue in issues), (
         f"Gate failure message must signal quarantine, got: {issues}"
+    )
+
+
+def test_retired_nutrition_only_verdict_is_quarantined():
+    scored = make_scored("NUTRITION_ONLY")
+    scored["score_100_equivalent"] = None
+
+    issues = validate_export_contract(make_enriched(), scored)
+
+    assert any(
+        "NUTRITION_ONLY" in issue and "retired" in issue.lower()
+        for issue in issues
     )
 
 

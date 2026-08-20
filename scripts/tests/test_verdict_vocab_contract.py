@@ -3,14 +3,14 @@
 Contract tests for `data/verdict_vocab.json` (clinician-locked v1.0.0,
 2026-04-30).
 
-This vocab is the single source of truth for the 6 product-quality verdicts
+This vocab is the single source of truth for the 5 live product-quality verdicts
 shipped to Flutter. It carries the full DISPLAY CONTRACT (name + short_label
 + tone + ui_color + ui_icon + action + notes) per the cross-cutting rule in
 REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md — Flutter is a renderer, not a
 decision-maker for tone/color/icon/action.
 
 Locked decisions captured by these tests:
-  - Exactly 6 shipped verdicts: SAFE, CAUTION, POOR, BLOCKED, UNSAFE, NUTRITION_ONLY
+  - Exactly 5 shipped verdicts: SAFE, CAUTION, POOR, BLOCKED, UNSAFE
   - NOT_SCORED is intentionally excluded (review-queue-only per doc spec)
   - Display contract: 8 required fields per entry
   - tone enum: positive | neutral | info | warning | danger
@@ -19,7 +19,7 @@ Locked decisions captured by these tests:
   - short_label ≤12 chars, action ≤40 chars, notes ≤200 chars
   - All IDs UPPERCASE_SNAKE (verdicts are emitted as uppercase by pipeline)
 
-Adding a 7th verdict requires fresh clinician sign-off and a coordinated
+Adding a 6th verdict requires fresh clinician sign-off and a coordinated
 pipeline + Flutter release — should fail this test, not slip through silently.
 """
 
@@ -53,19 +53,19 @@ def verdicts(vocab):
 def test_metadata_block_present(vocab):
     assert "_metadata" in vocab
     md = vocab["_metadata"]
-    assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 6
+    assert md["schema_version"] == "1.1.0"
+    assert md["total_entries"] == 5
     assert "LOCKED" in md["status"]
     assert md["char_limit_short_label"] == 12
     assert md["char_limit_action"] == 40
     assert md["char_limit_notes"] == 200
 
 
-def test_exactly_6_shipped_verdicts_locked(verdicts):
+def test_exactly_5_shipped_verdicts_locked(verdicts):
     """Adding/removing verdicts requires pipeline + Flutter coordination.
     NOT_SCORED is deliberately excluded per doc spec (review-queue-only)."""
-    assert len(verdicts) == 6, (
-        f"Vocab is locked at 6 shipped verdicts; got {len(verdicts)}. "
+    assert len(verdicts) == 5, (
+        f"Vocab is locked at 5 shipped verdicts; got {len(verdicts)}. "
         "Adding or removing requires a fresh clinician review cycle "
         "AND a coordinated pipeline + Flutter release."
     )
@@ -110,9 +110,9 @@ def test_every_id_unique_and_uppercase_snake(verdicts):
         )
 
 
-def test_canonical_6_shipped_ids_present(verdicts):
+def test_canonical_5_shipped_ids_present(verdicts):
     """The locked canonical set per REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md §1."""
-    expected = {"SAFE", "CAUTION", "POOR", "BLOCKED", "UNSAFE", "NUTRITION_ONLY"}
+    expected = {"SAFE", "CAUTION", "POOR", "BLOCKED", "UNSAFE"}
     actual = {v["id"] for v in verdicts}
     missing = expected - actual
     extra = actual - expected
@@ -132,6 +132,10 @@ def test_not_scored_explicitly_excluded(verdicts):
         "go to the review queue per pipeline contract. Including it here "
         "would be a dead ID."
     )
+
+
+def test_nutrition_only_explicitly_retired(verdicts):
+    assert "NUTRITION_ONLY" not in {verdict["id"] for verdict in verdicts}
 
 
 # ---------------------------------------------------------------------------
@@ -200,7 +204,6 @@ SEED_DISPLAY_CONTRACT = {
     "POOR":    {"tone": "warning",  "ui_color": "orange", "ui_icon": "warning", "short_label": "Poor"},
     "BLOCKED": {"tone": "danger",   "ui_color": "red",    "ui_icon": "block",   "short_label": "Blocked"},
     "UNSAFE":  {"tone": "danger",   "ui_color": "red",    "ui_icon": "alert",   "short_label": "Unsafe"},
-    "NUTRITION_ONLY": {"tone": "info", "ui_color": "gray", "ui_icon": "info", "short_label": "Food"},
 }
 
 

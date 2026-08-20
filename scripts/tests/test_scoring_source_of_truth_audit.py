@@ -38,9 +38,13 @@ def _scored(**overrides) -> dict:
         "score_80": 50.0,
         "score_100_equivalent": 62.5,
         "mapped_coverage": 1.0,
-        "mapped_coverage_applicable": True,
         "scoring_status": "scored",
+        "quality_score_status": "scored",
         "score_basis": "bioactives_scored",
+        "_v4_completeness_gate": {
+            "is_live_eligible": True,
+            "verdict": None,
+        },
         "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
         "scoring_fallbacks_used": [],
         "strict_scoring_contract": {"passed": True, "findings": []},
@@ -134,7 +138,7 @@ def test_scoring_audit_rejects_safe_below_mapping_threshold(tmp_path: Path) -> N
     assert "SCORING_SAFE_LOW_COVERAGE" in codes
 
 
-def test_scoring_audit_allows_nutrition_only_applicability_state(tmp_path: Path) -> None:
+def test_scoring_audit_rejects_retired_nutrition_only_verdict(tmp_path: Path) -> None:
     path = tmp_path / "scored.json"
     _write(
         path,
@@ -144,14 +148,54 @@ def test_scoring_audit_allows_nutrition_only_applicability_state(tmp_path: Path)
             score_80=None,
             score_100_equivalent=None,
             mapped_coverage=None,
-            mapped_coverage_applicable=False,
             scoring_status="not_applicable",
+            quality_score_status="not_scored",
             score_basis="nutrition_only_food_shape",
             scoring_ingredients_source=None,
+            _v4_completeness_gate={
+                "is_live_eligible": False,
+                "verdict": "NOT_SCORED",
+            },
+        ),
+    )
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_RETIRED_NUTRITION_ONLY" in codes
+
+
+def test_scoring_audit_uses_live_eligibility_not_nullable_gate_verdict(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "scored.json"
+    _write(
+        path,
+        _scored(
+            _v4_completeness_gate={
+                "is_live_eligible": True,
+                "verdict": None,
+            }
         ),
     )
 
     assert audit_scoring(_args(path)) == []
+
+
+def test_scoring_audit_rejects_scored_product_that_is_not_live_eligible(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "scored.json"
+    _write(
+        path,
+        _scored(
+            _v4_completeness_gate={
+                "is_live_eligible": False,
+                "verdict": "NOT_SCORED",
+            }
+        ),
+    )
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_COMPLETENESS_STATUS_MISMATCH" in codes
 
 
 def test_static_audit_flags_direct_v4_iqd_fallback(tmp_path: Path) -> None:

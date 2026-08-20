@@ -1065,7 +1065,6 @@ def make_scored(verdict="SAFE"):
             "passed": True,
             "findings": [],
             "zero_scorable_reason": None,
-            "mapped_coverage_applicable": True,
         },
         "breakdown": {
             "A": {"score": 20.0, "max": 25.0, "A1": 5.0},
