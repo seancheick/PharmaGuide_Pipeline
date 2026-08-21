@@ -42,7 +42,7 @@ import sqlite3
 import sys
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Mapping
 
 
 # ---------------------------------------------------------------------------
@@ -261,6 +261,33 @@ def _read_blob(blob_dir: Path, dsld_id: str) -> dict | None:
         return json.loads(p.read_text())
     except Exception:
         return None
+
+
+def _load_excluded_by_gate(build_dir: Path) -> dict[str, list[str]]:
+    """Return exact product quarantine destinations from the candidate.
+
+    A missing live blob is reconciled only when ``export_manifest.json`` names
+    that same product in ``excluded_by_gate``. Aggregate ingredient drop
+    telemetry is deliberately ignored and cannot self-amnesty a source row.
+    """
+    manifest_path = build_dir / "export_manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+    exclusions: dict[str, list[str]] = {}
+    for row in manifest.get("excluded_by_gate") or []:
+        if not isinstance(row, dict):
+            continue
+        dsld_id = str(row.get("dsld_id") or "").strip()
+        reason = str(row.get("error") or "").strip()
+        if not dsld_id or not reason:
+            continue
+        reasons = exclusions.setdefault(dsld_id, [])
+        if reason not in reasons:
+            reasons.append(reason)
+    return exclusions
 
 
 def _read_core_row(db_path: Path, dsld_id: str) -> dict | None:
@@ -826,9 +853,28 @@ def audit_product(
     products_root: Path | None,
     db_path: Path | None,
     stage_index: StageIndex | None,
+    excluded_by_gate: Mapping[str, list[str]] | None = None,
 ) -> ProductRecord:
     blob = _read_blob(blob_dir, dsld_id)
     if blob is None:
+        quarantine_reasons = list((excluded_by_gate or {}).get(dsld_id) or [])
+        if quarantine_reasons:
+            return ProductRecord(
+                dsld_id=dsld_id,
+                archetype=archetype,
+                product_name=None,
+                upc=None,
+                stages={
+                    "final_destination": {
+                        "kind": "quarantined",
+                        "reasons": quarantine_reasons,
+                    }
+                },
+                notes=[
+                    "No live blob expected: export_manifest records an exact "
+                    "excluded_by_gate destination for this product."
+                ],
+            )
         return ProductRecord(
             dsld_id=dsld_id, archetype=archetype, product_name=None, upc=None,
             findings=[Finding(
@@ -957,6 +1003,7 @@ def main() -> int:
     # Index the products_root so we can find cleaned batches quickly
     stage_index = StageIndex(args.products_root)
     stage_index.build(only_ids={did for _, did in targets})
+    excluded_by_gate = _load_excluded_by_gate(args.build_dir)
 
     records: list[ProductRecord] = []
     for archetype, did in targets:
@@ -967,6 +1014,7 @@ def main() -> int:
             products_root=args.products_root,
             db_path=db_path,
             stage_index=stage_index,
+            excluded_by_gate=excluded_by_gate,
         )
         records.append(rec)
         marker = "X" if rec.has_blocker() else ("!" if any(f.severity == SEVERITY_HIGH for f in rec.findings) else ".")

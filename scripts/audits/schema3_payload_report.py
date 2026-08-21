@@ -212,6 +212,7 @@ def build_schema3_payload_report(
     source_bytes = 0
     projected_bytes = 0
     checked_warnings = 0
+    warning_failure_count = 0
     warning_failures: list[dict[str, Any]] = []
     fingerprint = hashlib.sha256()
     fingerprint.update(manifest_bytes)
@@ -253,6 +254,7 @@ def build_schema3_payload_report(
                             "profile-gated warning is not duplicated in canonical warnings"
                         )
         except (TypeError, ValueError) as exc:
+            warning_failure_count += 1
             if len(warning_failures) < 50:
                 warning_failures.append(
                     {"dsld_id": path.stem, "error": str(exc)}
@@ -275,7 +277,7 @@ def build_schema3_payload_report(
         "removed_families": families,
         "warning_equivalence": {
             "checked": checked_warnings,
-            "failures": len(warning_failures),
+            "failures": warning_failure_count,
             "failure_samples": warning_failures,
         },
     }

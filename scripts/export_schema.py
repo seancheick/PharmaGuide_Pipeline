@@ -8,6 +8,8 @@ Flutter bridge can read the canonical replacements.
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
 from typing import Any, Mapping
 
 
@@ -64,7 +66,32 @@ _WARNING_REF_DYNAMIC_FIELDS = (
     "min_effective_dose",
     "dose_floor_status",
     "profile_gate",
+    "source_producers",
+    "evidence_level",
+    "sources",
 )
+
+_WARNING_COPY_FIELDS = (
+    "detail",
+    "action",
+    "alert_headline",
+    "alert_body",
+    "informational_note",
+)
+
+
+def _warning_copy_fingerprint(copy_fields: Mapping[str, Any]) -> str:
+    payload = {
+        field: copy_fields.get(field)
+        for field in _WARNING_COPY_FIELDS
+    }
+    encoded = json.dumps(
+        payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _warning_rule_ref(warning: Mapping[str, Any]) -> dict[str, Any]:
@@ -74,7 +101,10 @@ def _warning_rule_ref(warning: Mapping[str, Any]) -> dict[str, Any]:
             "schema 3 cannot remove interaction warning prose without a "
             "stable source_rule_id"
         )
-    ref: dict[str, Any] = {"rule_id": rule_id}
+    ref: dict[str, Any] = {
+        "rule_id": rule_id,
+        "copy_fingerprint": _warning_copy_fingerprint(warning),
+    }
     for field in _WARNING_REF_DYNAMIC_FIELDS:
         if field in warning:
             ref[field] = copy.deepcopy(warning[field])
@@ -160,11 +190,12 @@ def project_detail_blob(
     return projected
 
 
-def _rule_subentry(
+def _candidate_rule_subentries(
     rule: Mapping[str, Any], ref: Mapping[str, Any]
-) -> Mapping[str, Any]:
+) -> list[tuple[Mapping[str, Any], str]]:
     condition_ids = _normalized_ids(ref.get("condition_ids"))
     drug_class_ids = _normalized_ids(ref.get("drug_class_ids"))
+    candidates: list[tuple[Mapping[str, Any], str]] = []
     if condition_ids:
         condition_id = condition_ids[0]
         for candidate in _safe_list(rule.get("condition_rules")):
@@ -172,7 +203,13 @@ def _rule_subentry(
                 isinstance(candidate, dict)
                 and str(candidate.get("condition_id") or "").strip() == condition_id
             ):
-                return candidate
+                candidates.append((candidate, "condition"))
+        pregnancy_lactation = rule.get("pregnancy_lactation")
+        if (
+            condition_id in {"pregnancy", "lactation"}
+            and isinstance(pregnancy_lactation, Mapping)
+        ):
+            candidates.append((pregnancy_lactation, "pregnancy_lactation"))
     if drug_class_ids:
         drug_class_id = drug_class_ids[0]
         for candidate in _safe_list(rule.get("drug_class_rules")):
@@ -181,16 +218,51 @@ def _rule_subentry(
                 and str(candidate.get("drug_class_id") or "").strip()
                 == drug_class_id
             ):
-                return candidate
+                candidates.append((candidate, "drug_class"))
+    return candidates
+
+
+def _subentry_copy(
+    subentry: Mapping[str, Any], subentry_kind: str
+) -> dict[str, Any]:
+    return {
+        "detail": str(subentry.get("mechanism") or ""),
+        "action": str(
+            subentry.get(
+                "notes" if subentry_kind == "pregnancy_lactation" else "action"
+            )
+            or ""
+        ),
+        "alert_headline": subentry.get("alert_headline"),
+        "alert_body": subentry.get("alert_body"),
+        "informational_note": subentry.get("informational_note"),
+    }
+
+
+def _rule_subentry(
+    rule: Mapping[str, Any], ref: Mapping[str, Any]
+) -> tuple[Mapping[str, Any], str]:
+    copy_fingerprint = str(ref.get("copy_fingerprint") or "").strip()
+    if not copy_fingerprint:
+        raise ValueError(
+            f"warning rule ref {ref.get('rule_id')!r} is missing copy_fingerprint"
+        )
+    candidates = _candidate_rule_subentries(rule, ref)
+    for subentry, subentry_kind in candidates:
+        if (
+            _warning_copy_fingerprint(_subentry_copy(subentry, subentry_kind))
+            == copy_fingerprint
+        ):
+            return subentry, subentry_kind
     raise ValueError(
-        f"warning rule ref {ref.get('rule_id')!r} has no matching condition/drug sub-rule"
+        f"warning rule ref {ref.get('rule_id')!r} has no matching reviewed copy"
     )
 
 
 def _resolved_warning(
     ref: Mapping[str, Any], rule: Mapping[str, Any]
 ) -> dict[str, Any]:
-    subentry = _rule_subentry(rule, ref)
+    subentry, subentry_kind = _rule_subentry(rule, ref)
     condition_ids = _normalized_ids(ref.get("condition_ids"))
     drug_class_ids = _normalized_ids(ref.get("drug_class_ids"))
     ingredient_name = str(ref.get("ingredient_name") or "").strip()
@@ -199,23 +271,28 @@ def _resolved_warning(
     warning_type = ref.get("type") or (
         "drug_interaction" if drug_class_ids else "interaction"
     )
-    return {
+    copy_fields = _subentry_copy(subentry, subentry_kind)
+    resolved = {
         "type": warning_type,
         "severity": severity,
         "severity_contextual": ref.get("severity_contextual"),
         "display_mode_default": ref.get("display_mode_default"),
         "title": f"{ingredient_name} / {scope_id}",
-        "detail": str(subentry.get("mechanism") or ""),
-        "action": str(subentry.get("action") or ""),
-        "alert_headline": subentry.get("alert_headline"),
-        "alert_body": subentry.get("alert_body"),
-        "informational_note": subentry.get("informational_note"),
+        "detail": copy_fields["detail"],
+        "action": copy_fields["action"],
+        "alert_headline": copy_fields["alert_headline"],
+        "alert_body": copy_fields["alert_body"],
+        "informational_note": copy_fields["informational_note"],
         "condition_ids": condition_ids,
         "drug_class_ids": drug_class_ids,
         "ingredient_name": ingredient_name,
         "ingredient_canonical_id": ref.get("ingredient_canonical_id"),
-        "evidence_level": str(subentry.get("evidence_level") or ""),
-        "sources": copy.deepcopy(_safe_list(subentry.get("sources"))),
+        "evidence_level": str(
+            ref.get("evidence_level", subentry.get("evidence_level")) or ""
+        ),
+        "sources": copy.deepcopy(
+            _safe_list(ref.get("sources", subentry.get("sources")))
+        ),
         "dose_threshold_evaluation": None,
         "dose_decision": copy.deepcopy(ref.get("dose_decision")),
         "direction": ref.get("direction", subentry.get("direction")),
@@ -230,6 +307,11 @@ def _resolved_warning(
             ref.get("profile_gate", subentry.get("profile_gate"))
         ),
     }
+    if "source_producers" in ref:
+        resolved["source_producers"] = copy.deepcopy(
+            _safe_list(ref.get("source_producers"))
+        )
+    return resolved
 
 
 def resolve_warning_rule_refs(

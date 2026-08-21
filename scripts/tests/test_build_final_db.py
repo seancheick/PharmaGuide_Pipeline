@@ -96,6 +96,48 @@ def test_profile_gated_hard_safety_projection_updates_every_status_surface():
     assert scored["_v4_safety_gate"]["safety_signals"] == []
 
 
+def test_profile_safety_caution_does_not_override_not_scored_precedence():
+    scored = {
+        "verdict": "NOT_SCORED",
+        "safety_verdict": "SAFE",
+        "quality_score_status": "not_scored",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_assessment_status": "incomplete",
+        "blocking_reason": None,
+        "safety_signal_reason": None,
+        "_v4_quality_status": "not_scored",
+        "_v4_safety_signal_reason": None,
+        "_v4_safety_gate": {
+            "verdict": "SAFE",
+            "blocking_reason": None,
+            "safety_signals": [],
+        },
+        "scoring_metadata": {
+            "verdict": "NOT_SCORED",
+            "product_safety_status": "no_known_catalog_concern",
+            "quality_assessment_status": "incomplete",
+            "blocking_reason": None,
+        },
+    }
+    detail_blob = {
+        "warnings_profile_gated": [
+            {
+                "type": "high_risk_ingredient",
+                "severity": "avoid",
+            }
+        ]
+    }
+
+    projected = project_export_scored_artifact({}, scored, detail_blob)
+
+    assert projected["verdict"] == "NOT_SCORED"
+    assert projected["quality_score_status"] == "not_scored"
+    assert projected["safety_verdict"] == "CAUTION"
+    assert projected["product_safety_status"] == "caution"
+    assert projected["scoring_metadata"]["verdict"] == "NOT_SCORED"
+    assert projected["_v4_safety_gate"]["verdict"] == "CAUTION"
+
+
 def test_core_db_does_not_duplicate_app_owned_clinical_profile_taxonomy():
     assert "clinical_risk_taxonomy" not in REFERENCE_FILES
 

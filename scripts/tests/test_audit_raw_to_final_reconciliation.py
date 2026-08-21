@@ -11,6 +11,7 @@ if str(SCRIPTS) not in sys.path:
 from audit_raw_to_final import (  # noqa: E402
     ProductRecord,
     _check_raw_actives_present_in_blob,
+    audit_product,
 )
 
 
@@ -68,3 +69,25 @@ def test_display_ledger_destination_reconciles_a_non_scoring_source_row() -> Non
     _check_raw_actives_present_in_blob(record, _cleaned(), blob)
 
     assert record.findings == []
+
+
+def test_explicit_gate_quarantine_is_a_reconciled_final_destination(
+    tmp_path: Path,
+) -> None:
+    record = audit_product(
+        dsld_id="quarantined",
+        archetype="fixture",
+        blob_dir=tmp_path / "detail_blobs",
+        products_root=None,
+        db_path=None,
+        stage_index=None,
+        excluded_by_gate={
+            "quarantined": ["review_queue: assessment readiness incomplete"]
+        },
+    )
+
+    assert record.findings == []
+    assert record.stages["final_destination"] == {
+        "kind": "quarantined",
+        "reasons": ["review_queue: assessment readiness incomplete"],
+    }

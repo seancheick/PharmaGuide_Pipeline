@@ -5480,8 +5480,19 @@ def project_export_scored_artifact(
             and (verdict_now == "SAFE" or safety_now == "SAFE")
         )
         if profile_caution_applied:
+            # Safety state and scoring readiness are separate axes. A
+            # profile-scoped caution may upgrade the safety surface, but it
+            # must not outrank BLOCKED/UNSAFE or turn an incomplete
+            # NOT_SCORED assessment into an apparently live CAUTION result.
+            preserve_public_verdict = verdict_now in {
+                "BLOCKED",
+                "UNSAFE",
+                "NOT_SCORED",
+            }
             effective_scored.update({
-                "verdict": "CAUTION",
+                "verdict": (
+                    verdict_now if preserve_public_verdict else "CAUTION"
+                ),
                 "safety_verdict": "CAUTION",
                 "product_safety_status": "caution",
                 "safety_signal_reason": (
@@ -5513,7 +5524,7 @@ def project_export_scored_artifact(
     if not has_export_banned_signal and profile_caution_applied:
         metadata = dict(safe_dict(effective_scored.get("scoring_metadata")))
         metadata.update({
-            "verdict": "CAUTION",
+            "verdict": effective_scored.get("verdict"),
             "product_safety_status": "caution",
             "quality_assessment_status": effective_scored.get(
                 "quality_assessment_status"

@@ -90,6 +90,36 @@ FULL_INTERACTION_WARNING = {
 }
 
 
+PREGNANCY_WARNING = {
+    "type": "interaction",
+    "severity": "no_data",
+    "severity_contextual": "no_data",
+    "display_mode_default": "suppress",
+    "title": "Magnesium / pregnancy",
+    "detail": "",
+    "action": "Discuss magnesium use during pregnancy with your clinician.",
+    "alert_headline": "Pregnancy guidance",
+    "alert_body": "Review magnesium use with your prenatal care team.",
+    "informational_note": "Pregnancy-specific guidance applies.",
+    "condition_ids": ["pregnancy"],
+    "drug_class_ids": [],
+    "ingredient_name": "Magnesium",
+    "ingredient_canonical_id": "magnesium",
+    "evidence_level": "no_data",
+    "sources": [],
+    "dose_threshold_evaluation": None,
+    "dose_decision": None,
+    "direction": "unknown",
+    "materiality": "presence",
+    "min_effective_dose": None,
+    "dose_floor_status": None,
+    "source": "interaction_rules",
+    "source_rule_id": "RULE_TEST_MAGNESIUM_DIABETES",
+    "profile_gate": None,
+    "source_producers": ["interaction_rules"],
+}
+
+
 def _schema2_blob() -> dict:
     return {
         "blob_version": 1,
@@ -203,6 +233,46 @@ def test_schema_3_warning_refs_rehydrate_byte_equivalent_interaction_copy() -> N
         rules_by_id={RULE["id"]: RULE},
     )
     assert resolved == [FULL_INTERACTION_WARNING]
+
+
+def test_schema_3_rehydrates_pregnancy_warning_and_dedup_provenance() -> None:
+    rule = json.loads(json.dumps(RULE))
+    rule["condition_rules"].append(
+        {
+            "condition_id": "pregnancy",
+            "severity": "caution",
+            "evidence_level": "established",
+            "mechanism": "Different explicit pregnancy rule copy.",
+            "action": "Use the explicit condition action.",
+            "sources": ["https://example.com/explicit"],
+            "alert_headline": "Explicit condition copy",
+            "alert_body": "This must not replace the selected aggregate copy.",
+            "informational_note": None,
+            "direction": "harmful",
+            "materiality": "presence",
+        }
+    )
+    rule["pregnancy_lactation"] = {
+        "pregnancy_category": "no_data",
+        "lactation_category": "no_data",
+        "evidence_level": "no_data",
+        "notes": "Discuss magnesium use during pregnancy with your clinician.",
+        "alert_headline": "Pregnancy guidance",
+        "alert_body": "Review magnesium use with your prenatal care team.",
+        "informational_note": "Pregnancy-specific guidance applies.",
+        "direction": "unknown",
+        "materiality": "presence",
+    }
+    blob = _schema2_blob()
+    blob["warnings"] = [PREGNANCY_WARNING]
+
+    projected = project_detail_blob(blob, export_schema_version="3.0.0")
+    resolved = resolve_warning_rule_refs(
+        projected["warning_rule_refs"],
+        rules_by_id={rule["id"]: rule},
+    )
+
+    assert resolved == [PREGNANCY_WARNING]
 
 
 def test_schema_3_rejects_interaction_warning_without_stable_rule_id() -> None:
