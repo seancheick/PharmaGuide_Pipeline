@@ -7,9 +7,11 @@ from pathlib import Path
 
 import pytest
 
+from scripts.release_artifact_paths import final_build_dir
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-BUILD_DIR = REPO_ROOT / "scripts" / "final_db_output"
+BUILD_DIR = final_build_dir()
 CORE_DB = BUILD_DIR / "pharmaguide_core.db"
 BLOB_DIR = BUILD_DIR / "detail_blobs"
 

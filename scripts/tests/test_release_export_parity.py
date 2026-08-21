@@ -14,9 +14,10 @@ from build_final_db import (
     resolve_export_supplement_type,
 )
 from stage_manifest import select_stage_input_files
+from scripts.release_artifact_paths import final_build_dir
 
 
-BUILD_ROOT = Path("scripts/final_db_output")
+BUILD_ROOT = final_build_dir()
 PRODUCTS_ROOT = Path("scripts/products")
 
 _BUILD_EXISTS = BUILD_ROOT.exists() and (BUILD_ROOT / "export_manifest.json").exists()

@@ -25,9 +25,10 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 from cert_resolver import CertRegistry, resolve  # noqa: E402
+from scripts.release_artifact_paths import final_build_dir
 
 REGISTRY_PATH = SCRIPTS_ROOT / "data" / "cert_registry.json"
-CORE_DB = SCRIPTS_ROOT / "final_db_output" / "pharmaguide_core.db"
+CORE_DB = final_build_dir() / "pharmaguide_core.db"
 EXPECTED_LIVE_PROGRAMS = {
     "NSF Sport",
     "NSF Certified",

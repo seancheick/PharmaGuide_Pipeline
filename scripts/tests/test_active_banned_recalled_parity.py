@@ -37,6 +37,8 @@ from pathlib import Path
 
 import pytest
 
+from scripts.release_artifact_paths import catalog_dist_dir
+
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -45,6 +47,7 @@ if str(ROOT / "scripts") not in sys.path:
 
 
 _BUILD_CANDIDATES = (
+    catalog_dist_dir(),
     # 2026-05-13: scripts/dist/ is the canonical current build (produced by
     # rebuild_dashboard_snapshot.sh + release_full.sh). Prefer it so the
     # audit reflects what's actually shipping. The /tmp/* paths below are

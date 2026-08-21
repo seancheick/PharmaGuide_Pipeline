@@ -25,9 +25,12 @@ from pathlib import Path
 
 import pytest
 
+from scripts.release_artifact_paths import final_build_dir
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CANARY_PATH = REPO_ROOT / "scripts" / "data" / "canary_products.json"
-CORE_DB = REPO_ROOT / "scripts" / "final_db_output" / "pharmaguide_core.db"
+CORE_DB = final_build_dir() / "pharmaguide_core.db"
+EXPORT_MANIFEST = final_build_dir() / "export_manifest.json"
 
 REQUIRED_FIELDS = {
     "dsld_id",
@@ -59,6 +62,19 @@ def shipped_dsld_ids() -> set[str]:
     finally:
         con.close()
     return {str(r[0]) for r in rows if r[0] is not None}
+
+
+@pytest.fixture(scope="module")
+def quarantined_dsld_ids() -> dict[str, str]:
+    """Return candidate rows deliberately withheld from the app catalog."""
+    if not EXPORT_MANIFEST.exists():
+        pytest.skip(f"release manifest missing at {EXPORT_MANIFEST}")
+    manifest = json.loads(EXPORT_MANIFEST.read_text(encoding="utf-8"))
+    return {
+        str(row.get("dsld_id")): str(row.get("error") or "")
+        for row in manifest.get("excluded_by_gate") or []
+        if isinstance(row, dict) and row.get("dsld_id") is not None
+    }
 
 
 # --- Schema -----------------------------------------------------------------
@@ -94,18 +110,32 @@ def test_no_duplicate_dsld_ids(canary_doc: dict) -> None:
 # --- Catalog presence -------------------------------------------------------
 
 
-def test_every_canary_exists_in_shipped_catalog(
-    canary_doc: dict, shipped_dsld_ids: set[str]
+def test_every_canary_is_live_or_explicitly_quarantined(
+    canary_doc: dict,
+    shipped_dsld_ids: set[str],
+    quarantined_dsld_ids: dict[str, str],
 ) -> None:
     missing = [
         c["dsld_id"]
         for c in canary_doc["canaries"]
         if c["dsld_id"] not in shipped_dsld_ids
+        and c["dsld_id"] not in quarantined_dsld_ids
     ]
     assert not missing, (
-        f"canaries reference DSLD IDs not in shipped catalog: {missing}. "
-        f"Either the products were removed from the live catalog or the "
-        f"canary entries have stale IDs — fix before merging."
+        f"canaries are absent from both the app catalog and release quarantine: "
+        f"{missing}. Every reviewed canary must have an explicit disposition."
+    )
+
+    overlap = shipped_dsld_ids & set(quarantined_dsld_ids)
+    assert not overlap, f"canaries cannot be both live and quarantined: {sorted(overlap)}"
+
+    withheld_canaries = {
+        c["dsld_id"]: quarantined_dsld_ids[c["dsld_id"]]
+        for c in canary_doc["canaries"]
+        if c["dsld_id"] in quarantined_dsld_ids
+    }
+    assert all(reason.startswith("review_queue:") for reason in withheld_canaries.values()), (
+        f"quarantined canaries need actionable review records: {withheld_canaries}"
     )
 
 

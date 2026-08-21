@@ -15,6 +15,8 @@ from pathlib import Path
 
 import pytest
 
+from scripts.release_artifact_paths import catalog_dist_dir
+
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
@@ -22,7 +24,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 
 def _load_release_ids() -> set[str]:
-    db_path = ROOT / "scripts" / "dist" / "pharmaguide_core.db"
+    db_path = catalog_dist_dir() / "pharmaguide_core.db"
     if not db_path.exists():
         pytest.skip("release DB not present")
     conn = sqlite3.connect(db_path)
