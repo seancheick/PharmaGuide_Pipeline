@@ -147,7 +147,7 @@ def test_generic_low_mapped_coverage_is_not_live_eligible() -> None:
     assert "low_mapped_coverage" not in result.soft_missing
 
 
-def test_product_level_evidence_cannot_replace_score_eligible_label_identity() -> None:
+def test_product_level_evidence_is_a_score_eligible_mapped_exposure() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = _product(
@@ -179,9 +179,47 @@ def test_product_level_evidence_cannot_replace_score_eligible_label_identity() -
 
     result = evaluate_completeness_gate(product, module="generic")
 
-    assert result.mapped_coverage == 0.0
-    assert result.is_live_eligible is False
-    assert "score_eligible_active_identity" in result.missing_fields
+    assert result.mapped_coverage == 1.0
+    assert result.is_live_eligible is True
+    assert "score_eligible_active_identity" not in result.missing_fields
+
+
+def test_enforced_readiness_owns_material_dose_completeness() -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        rda_ul_data={
+            "collection_status": "complete",
+            "dose_assessments": [
+                {
+                    "source_row_ref": "ingredientRows[0]",
+                    "material": True,
+                    "readiness": "complete",
+                },
+                {
+                    "source_row_ref": "ingredientRows[adjunct]",
+                    "material": True,
+                    "readiness": "incomplete",
+                },
+            ],
+        },
+    )
+    readiness = {
+        "enforcement_mode": "enforced",
+        **{
+            name: {"readiness": "complete"}
+            for name in ("identity", "dose", "evidence", "verification", "route")
+        },
+    }
+
+    result = evaluate_completeness_gate(
+        product,
+        module="generic",
+        assessment_readiness=readiness,
+    )
+
+    assert result.is_live_eligible is True
+    assert "dose_assessment_readiness" not in result.missing_fields
 
 
 def test_explicit_discontinued_status_is_soft_debt() -> None:
@@ -343,12 +381,13 @@ def test_generic_enzyme_activity_is_valid_dose_evidence() -> None:
     assert result.verdict is None
 
 
-def test_generic_blend_anchor_without_score_eligible_owner_is_not_live() -> None:
+def test_generic_blend_anchor_linked_to_mapped_child_is_score_eligible() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = _product(
         ingredients=[],
         product_name="Kudzu Root 1,226 mg",
+        assessment_readiness_contract_version="1.0.0",
         ingredient_quality_data={
             "total_active": 2,
             "ingredients_scorable": [],
@@ -385,10 +424,11 @@ def test_generic_blend_anchor_without_score_eligible_owner_is_not_live() -> None
 
     result = evaluate_completeness_gate(product, module="generic")
 
-    assert result.is_live_eligible is False
-    assert "score_eligible_active_identity" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.mapped_coverage == 1.0
+    assert "score_eligible_active_identity" not in result.missing_fields
     assert "conservative_blend_anchor_mass" in result.soft_missing
-    assert result.verdict == "NOT_SCORED"
+    assert result.verdict is None
 
 
 def test_probiotic_total_cfu_plus_named_strains_passes_without_per_strain_cfu() -> None:
@@ -757,7 +797,7 @@ def test_shadow_entry_point_marks_incomplete_clean_product_not_scored() -> None:
     assert "active_identity" in gate["missing_fields"]
 
 
-def test_shadow_entry_point_preserves_safety_short_circuit_before_completeness() -> None:
+def test_shadow_entry_point_preserves_safety_precedence_with_completeness_diagnostics() -> None:
     from score_supplements_v4 import score_product_v4
 
     product = _product(ingredients=[_ingredient(canonical_id="", dose=None, unit=None)])
@@ -776,7 +816,8 @@ def test_shadow_entry_point_preserves_safety_short_circuit_before_completeness()
     assert out["quality_score_confidence"] is None
     assert out["score_unavailable_reason"] == "blocked_by_safety_gate"
     assert "safety_gate" in out["v4_breakdown"]
-    assert "completeness_gate" not in out["v4_breakdown"]
+    completeness = out["v4_breakdown"]["completeness_gate"]
+    assert completeness["is_live_eligible"] is False
 
 
 def test_completeness_fail_overrides_caution_but_keeps_safety_breakdown() -> None:

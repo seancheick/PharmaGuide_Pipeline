@@ -157,6 +157,122 @@ def test_typed_dose_collection_must_cover_every_material_active() -> None:
     assert "dose_assessment_readiness" in result["unavailable_reasons"]
 
 
+def test_product_projection_reuses_typed_source_row_dose_assessment() -> None:
+    """A scoring projection is not a second physical exposure."""
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Fish Oil", "fish_oil", quantity=1200.0)
+    product = _product(row, title="Fish Oil 1200 mg")
+    product["supplement_taxonomy"] = {"primary_type": "omega_3"}
+    product["product_scoring_evidence"] = [
+        {
+            "evidence_type": "omega_epa_dha_aggregate",
+            "scoreable": True,
+            "scoreable_identity": True,
+            "score_eligible_by_cleaner": True,
+            "dose_class": "therapeutic_mass",
+            "dose_value": 1200.0,
+            "dose_unit": "mg",
+            "source": "active",
+            "raw_source_path": "ingredientRows[0]",
+            "evidence_scope": "row_level",
+            "linked_rows": ["ingredientRows[0]"],
+            "confidence": "low",
+            "reason": "omega_epa_dha_aggregate_from_label_row",
+            "name": "Fish Oil",
+            "canonical_id": "epa_dha",
+            "evidence_canonical_id": "epa_dha",
+            "canonical_source_db": "ingredient_quality_map",
+            "evidence_origin": "native_enrichment",
+            "source_section": "product",
+        }
+    ]
+    product["rda_ul_data"]["dose_assessments"][0].update({
+        "source_path": "ingredientRows[0]",
+        "dose_class": "therapeutic_mass",
+        "source_value": 1200.0,
+        "source_unit": "mg",
+    })
+
+    result = evaluate_assessment_readiness(product, module="omega")
+
+    assert result["evidence"]["material_active_count"] == 1
+    assert result["dose"]["material_exposure_count"] == 1
+    assert result["dose"]["material_assessment_count"] == 1
+    assert result["dose"]["assessment_source"] == "typed_dose_assessments"
+    assert result["dose"]["readiness"] == "complete"
+
+
+def test_mapped_product_evidence_is_a_score_eligible_coverage_exposure() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Quercetin", "quercetin")
+    product = _product(row, matches=[_match(row, "mixed")])
+    product["ingredient_quality_data"] = {
+        "ingredients_scorable": [],
+        "ingredients": [],
+        "total_active": 0,
+    }
+    product["product_scoring_evidence"] = [
+        {
+            "evidence_type": "blend_anchor_mass",
+            "scoreable": True,
+            "scoreable_identity": True,
+            "score_eligible_by_cleaner": True,
+            "mapped": True,
+            "dose_class": "therapeutic_mass",
+            "dose_value": 300.0,
+            "dose_unit": "mg",
+            "source": "blend_total",
+            "raw_source_path": "ingredientRows[0]",
+            "evidence_scope": "blend_level",
+            "linked_rows": ["ingredientRows[0]"],
+            "confidence": "high",
+            "reason": "identity_bearing_blend_total",
+            "name": "Quercetin",
+            "canonical_id": "quercetin",
+            "clean_identity_id": "quercetin",
+            "scoring_parent_id": "quercetin",
+            "evidence_canonical_id": "quercetin",
+            "canonical_source_db": "ingredient_quality_map",
+            "evidence_origin": "native_enrichment",
+            "source_section": "product",
+        }
+    ]
+    product["rda_ul_data"]["dose_assessments"][0].update({
+        "source_path": "ingredientRows[0]",
+        "dose_class": "therapeutic_mass",
+        "source_value": 300.0,
+        "source_unit": "mg",
+    })
+
+    result = evaluate_assessment_readiness(product, module="generic")
+
+    assert result["identity"]["mapped_count"] == 1
+    assert result["identity"]["mapped_coverage"] == 1.0
+    assert result["identity"]["mapped_product_evidence_count"] == 1
+    assert result["identity"]["readiness"] == "complete"
+    assert result["is_live_ready"] is True
+
+
+def test_fresh_contract_never_uses_legacy_dose_migration_inference() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Ashwagandha", "ashwagandha")
+    product = _product(row, matches=[_match(row, "mixed")])
+    product["rda_ul_data"] = {
+        "collection_status": "complete",
+        "dose_assessments": [],
+        "adequacy_results": [],
+        "safety_flags": [],
+    }
+
+    result = evaluate_assessment_readiness(product, module="generic")
+
+    assert result["dose"]["readiness"] == "incomplete"
+    assert result["dose"].get("migration_inference") is not True
+
+
 def test_unreviewed_adjunct_is_not_applicable_to_material_readiness() -> None:
     from assessment_readiness import evaluate_assessment_readiness
 
@@ -226,7 +342,7 @@ def test_verification_preserves_present_absent_and_not_evaluated_states() -> Non
     assert missing["readiness"] == "incomplete"
 
 
-def test_probiotic_native_clinical_strain_and_cfu_are_material_assessments() -> None:
+def test_probiotic_native_clinical_strain_and_typed_dose_are_material_assessments() -> None:
     from assessment_readiness import evaluate_assessment_readiness
 
     row = _row("Probiotic Blend", "probiotic_blend", quantity=50, unit="billion CFU")
@@ -244,14 +360,12 @@ def test_probiotic_native_clinical_strain_and_cfu_are_material_assessments() -> 
             }
         ],
     }
-    product.pop("rda_ul_data")
-
     result = evaluate_assessment_readiness(product, module="probiotic")
 
     assessment = result["evidence"]["ingredient_assessments"][0]
     assert assessment["material"] is True
     assert assessment["state"] == "evaluated_supported"
-    assert result["dose"]["assessment_source"] == "probiotic_total_cfu"
+    assert result["dose"]["assessment_source"] == "typed_dose_assessments"
     assert result["is_live_ready"] is True
 
 

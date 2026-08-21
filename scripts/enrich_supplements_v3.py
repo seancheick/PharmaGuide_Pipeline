@@ -112,6 +112,7 @@ from scoring_input_contract import (
     build_scoring_classification,
     derive_product_scoring_evidence,
     get_scoring_ingredients,
+    normalize_product_evidence_scope,
 )
 from identity_integrity import (
     IdentityDecision,
@@ -15840,6 +15841,9 @@ class SupplementEnricherV3:
         else:
             accepted_reason = "product_level_cfu_rejected_by_taxonomy"
 
+        source_evidence_scope = str(
+            probiotic_data.get("cfu_evidence_scope") or "product_level"
+        ).strip()
         base = {
             "evidence_type": "probiotic_cfu",
             "scoreable_identity": identity_proven,
@@ -15849,7 +15853,9 @@ class SupplementEnricherV3:
             "dose_unit": "CFU",
             "source": probiotic_data.get("cfu_source") or "probiotic_data.total_cfu",
             "raw_source_path": raw_source_path,
-            "evidence_scope": probiotic_data.get("cfu_evidence_scope") or "product_level",
+            "evidence_scope": normalize_product_evidence_scope(
+                source_evidence_scope
+            ),
             "linked_rows": linked_rows,
             "confidence": "high" if identity_proven and raw_source_path and linked_rows else "low",
             "reason": accepted_reason,
@@ -15862,6 +15868,8 @@ class SupplementEnricherV3:
             "evidence_origin": "native_enrichment",
             "source_section": "product",
         }
+        if base["evidence_scope"] != source_evidence_scope:
+            base["source_evidence_scope"] = source_evidence_scope
 
         rejection_reason = None
         if has_non_probiotic_strict_active:
@@ -15898,6 +15906,117 @@ class SupplementEnricherV3:
             })
         evidence.append(base)
         return evidence
+
+    @staticmethod
+    def _append_product_evidence_dose_assessments(
+        enriched: Dict[str, Any],
+    ) -> None:
+        """Type score-driving non-UL dose projections at enrichment time.
+
+        A projection with the same source row, value, unit, and dose class as
+        an existing label assessment reuses that exposure. Distinct CFU,
+        enzyme-activity, percent-DV, or title-derived doses receive their own
+        typed result instead of relying on a scoring-time fallback.
+        """
+        rda_ul = enriched.get("rda_ul_data")
+        if not isinstance(rda_ul, dict):
+            return
+        assessments = rda_ul.get("dose_assessments")
+        if not isinstance(assessments, list):
+            return
+
+        def _number(value: Any) -> Optional[float]:
+            try:
+                parsed = float(value)
+            except (TypeError, ValueError):
+                return None
+            return parsed if math.isfinite(parsed) else None
+
+        def _unit(value: Any) -> str:
+            return "".join(str(value or "").strip().lower().split())
+
+        def _key(
+            source_path: Any,
+            dose_class: Any,
+            value: Any,
+            unit: Any,
+        ) -> tuple[Any, ...]:
+            parsed = _number(value)
+            return (
+                str(source_path or "").strip(),
+                str(dose_class or "").strip().lower(),
+                round(parsed, 12) if parsed is not None else None,
+                _unit(unit),
+            )
+
+        existing = {
+            _key(
+                assessment.get("source_path")
+                or assessment.get("source_row_ref"),
+                assessment.get("dose_class"),
+                assessment.get("source_value"),
+                assessment.get("source_unit"),
+            )
+            for assessment in assessments
+            if isinstance(assessment, dict)
+        }
+        for evidence in enriched.get("product_scoring_evidence") or []:
+            if not isinstance(evidence, dict) or evidence.get("scoreable") is not True:
+                continue
+            source_path = str(evidence.get("raw_source_path") or "").strip()
+            dose_value = _number(evidence.get("dose_value"))
+            dose_unit = str(evidence.get("dose_unit") or "").strip()
+            dose_class = str(evidence.get("dose_class") or "").strip()
+            exposure_key = _key(
+                source_path,
+                dose_class,
+                dose_value,
+                dose_unit,
+            )
+            if (
+                not source_path
+                or dose_value is None
+                or dose_value <= 0
+                or not dose_unit
+                or exposure_key in existing
+            ):
+                continue
+            linked_rows = [
+                str(value)
+                for value in (evidence.get("linked_rows") or [])
+                if str(value)
+            ]
+            assessment = build_dose_assessment(
+                source_row_ref=source_path,
+                source_path=source_path,
+                linked_row_refs=linked_rows,
+                owner_row_ref=None,
+                ingredient=evidence.get("name"),
+                canonical_id=evidence.get("canonical_id"),
+                dose_class=dose_class,
+                evidence_type=evidence.get("evidence_type"),
+                source_value=dose_value,
+                source_unit=dose_unit,
+                normalized_value=dose_value,
+                normalized_unit=dose_unit,
+                conversion_evidence={
+                    "success": False,
+                    "conversion_rule_id": "non_ul_identity_passthrough",
+                    "nonfatal_reason": "typed_non_ul_scoring_evidence",
+                },
+                dose_role="declared_total",
+                skip_ul_check=True,
+                skip_ul_reason="not_ul_applicable",
+                ul_status="not_applicable",
+                ul_value=None,
+                ul_unit=None,
+                pct_ul=None,
+                over_ul=False,
+                ul_gate_eligible=False,
+                ul_gate_ineligible_reason="no_established_ul_for_dose_class",
+            )
+            assessments.append(assessment.to_dict())
+            existing.add(exposure_key)
 
     def _collect_product_scoring_classification(self, enriched: Dict[str, Any]) -> Dict[str, Any]:
         """Emit native ScoringClassification v1 using the shared builder."""
@@ -15952,6 +16071,7 @@ class SupplementEnricherV3:
             ),
         }
         enriched["product_scoring_evidence"] = self._collect_product_scoring_evidence(enriched)
+        self._append_product_evidence_dose_assessments(enriched)
         enriched["product_scoring_classification"] = self._collect_product_scoring_classification(enriched)
         return enriched
 
@@ -19575,6 +19695,18 @@ class SupplementEnricherV3:
                             skip_ul_reason = "unit_unrecognized"
                         else:
                             skip_ul_reason = "conversion_failed"
+                    elif not _nutrient_record and nutrient_group_id is None:
+                        # Botanicals, amino acids, oils, enzymes, and other
+                        # non-nutrient actives do not become unresolved
+                        # elemental-mass exposures merely because their label
+                        # name differs from an IQM display name. This branch is
+                        # deliberately after conversion validation: a valid
+                        # non-nutrient dose has no nutrient UL, while NP,
+                        # misspelled units, and packaging units remain typed
+                        # conversion defects. A linked nutrient with no record
+                        # also remains unresolved and therefore fail-closed.
+                        skip_ul_check = True
+                        skip_ul_reason = "not_ul_applicable"
 
                     per_day_min = (
                         converted_amount * servings_min
@@ -19850,9 +19982,13 @@ class SupplementEnricherV3:
 
                     dose_assessment = build_dose_assessment(
                         source_row_ref=dose_lineage.get("source_label_key"),
+                        source_path=ingredient.get("raw_source_path"),
+                        linked_row_refs=[ingredient.get("raw_source_path")],
                         owner_row_ref=dose_lineage.get("parent_label_key"),
                         ingredient=ing_name,
                         canonical_id=resolved_canonical_id or None,
+                        dose_class=ingredient.get("dose_class") or "therapeutic_mass",
+                        evidence_type=None,
                         source_value=quantity_float,
                         source_unit=unit,
                         normalized_value=converted_amount,

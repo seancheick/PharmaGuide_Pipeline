@@ -35,36 +35,31 @@ V4_CANARIES = {
         "score": None,
         "safety_short_circuit": True,
     },
-    # CAUTION carries forward and wins over SAFE/POOR score band.
+    # A safety CAUTION does not bypass evidence readiness. The safety decision
+    # remains audit-visible while the unevaluated material 7-Keto row keeps the
+    # product out of the live catalog.
     "241706": {
         "label": "HUM Ripped Rooster",
         "module": "generic",
-        "verdict": "CAUTION",
-        "confidence": "moderate",
-        # Phase 4 (trust→verification bonus): 58 → 56.3.
-        # Phase 6 (botanical profile): green tea (primary botanical, 100 mg, and
-        # absent from rda_therapeutic_dosing.json so dose band is
-        # disclosed_no_reference) now scores on its real botanical formulation
-        # + clinical dose instead of an inflated vitamin proxy → 49.9. The
-        # canary's point is unchanged: CAUTION carries forward and wins over the
-        # SAFE/POOR score band regardless of where the band lands.
-        # Phase 8 (primary-ingredient evidence floor): green tea (mass-primary) has
-        # a strong study but positive_weak effect -> floor 14*0.85=11.9 -> 52.5.
-        # Verdict stays CAUTION (the canary's invariant: CAUTION wins over band).
-        "score_range": (41.9, 43.3),
+        "verdict": "NOT_SCORED",
+        "confidence": None,
+        "score_unavailable_reason": "blocked_by_completeness_gate",
+        "score": None,
+        "missing": {"evidence_assessment_readiness"},
+        "unevaluated_canonicals": {"banned_7_keto_dhea"},
         "safety_verdict": "CAUTION",
     },
-    # Conservative blend evidence is audit-visible, but does not force a
-    # CAUTION ceiling. Phase 9 makes production score equal raw.
+    # The dedicated digestive route remains correct, but its material enzyme
+    # identities have no reviewed evidence assessment yet.
     "241684": {
         "label": "HUM Flatter Me",
         "module": "fiber_digestive",
-        # Re-baseline 2026-07-10: the dedicated fiber/digestive router correctly
-        # owns this digestive-enzyme + herbal blend. Its undisclosed enzyme
-        # activity and proprietary blends keep transparency/evidence low.
-        "verdict": "POOR",
-        "confidence": "low",
-        "score_range": (35.5, 36.9),
+        "verdict": "NOT_SCORED",
+        "confidence": None,
+        "score_unavailable_reason": "blocked_by_completeness_gate",
+        "score": None,
+        "missing": {"evidence_assessment_readiness"},
+        "unevaluated_canonicals": {"proprietary_enzyme_blend", "digestive_enzymes"},
     },
     # Probiotic with named strains but no total CFU: scoreable with low
     # confidence; dose/transparency dimensions keep it weak without a forced
@@ -91,7 +86,10 @@ V4_CANARIES = {
         "module": "omega",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (58.3, 59.7),
+        # Schema 2.4's canonical EPA/DHA projection proves the parent fish-oil
+        # row is not an undisclosed active, restoring the 1-point disclosure
+        # component without changing any omega pillar.
+        "score_range": (59.3, 60.7),
     },
     # Typed confidence moderate: strong evidence/label/verification, but
     # taxonomy-first identity confidence correctly surfaces that this is a
@@ -103,44 +101,42 @@ V4_CANARIES = {
         "confidence": "moderate",
         "score_range": (82.3, 83.7),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
     },
-    # Boundary case: a well-labeled fiber gummy with no clinical evidence.
-    # Re-baseline 2026-06-08: dose + transparency credit lifted raw ~31 -> 40.0,
-    # landing exactly on the POOR/SAFE cutoff (POOR if raw < 40 else SAFE → SAFE).
-    # SAFE = not dangerous; weak quality is the score (40 = Poor six-pillar tier).
-    # Intentional sensitive tripwire at the 40-line: if a change pushes it back
-    # under 40 the verdict assertion flags it. The robust POOR diversity anchor is
-    # held by 2266 below, not this knife-edge product.
+    # A disclosed fiber dose is not a substitute for a reviewed fiber-evidence
+    # assessment; the route and dose remain testable on the QA record.
     "12932": {
         "label": "vitafusion Fiber Gummies",
         "module": "fiber_digestive",
-        # Re-baseline 2026-07-10: the dedicated fiber module reads the disclosed
-        # 5 g fiber dose while retaining the sugar/additive penalties and zero
-        # clinical-evidence credit.
-        "verdict": "SAFE",
-        "confidence": "low",
-        "score_range": (49.3, 50.7),
+        "verdict": "NOT_SCORED",
+        "confidence": None,
+        "score_unavailable_reason": "blocked_by_completeness_gate",
+        "score": None,
+        "missing": {"evidence_assessment_readiness"},
+        "unevaluated_canonicals": {"fiber"},
     },
-    # Weak generic control: strict scoring now recovers the disclosed 60 mg
-    # chlorophyll blend anchor, while copper remains its only RDA-bearing row.
-    # Evidence stays at zero and formulation remains weak; disclosure and the
-    # in-range copper row lift raw above the old POOR boundary.
+    # The chlorophyll blend anchor reconciles and maps, but material chlorophyll
+    # evidence remains explicitly unreviewed.
     "2266": {
         "label": "Triple Chlorophyll (GNC)",
         "module": "generic",
-        "verdict": "SAFE",
-        "confidence": "low",
-        "score_range": (47.5, 48.9),
+        "verdict": "NOT_SCORED",
+        "confidence": None,
+        "score_unavailable_reason": "blocked_by_completeness_gate",
+        "score": None,
+        "missing": {"evidence_assessment_readiness"},
+        "unevaluated_canonicals": {"chlorophyll"},
     },
-    # Real-catalog guard for the four-micronutrient taxonomy false positive:
-    # a targeted hair formula is generic, not a broad multi/prenatal panel.
+    # Real-catalog guard for the four-micronutrient taxonomy false positive: the
+    # targeted hair formula remains generic, while PABA and Fo-Ti evidence debt
+    # keeps it out of the live catalog.
     "241692": {
         "label": "HUM Hair Sweet Hair Berry",
         "module": "generic",
-        "verdict": "SAFE",
-        "confidence": "moderate",
-        # Re-baseline 2026-07-19: committed formulation calibration after 2026-07-10
-        # (c92cada1) lifted raw 65.2 -> 65.5. Verdict/confidence unchanged.
-        "score_range": (64.8, 66.2),
+        "verdict": "NOT_SCORED",
+        "confidence": None,
+        "score_unavailable_reason": "blocked_by_completeness_gate",
+        "score": None,
+        "missing": {"evidence_assessment_readiness"},
+        "unevaluated_canonicals": {"paba", "fo_ti"},
     },
     # Typed confidence high on the probiotic module.
     "230149": {
@@ -149,6 +145,23 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "high",
         "score_range": (72.6, 74.0),  # Re-baseline 2026-06-15: 2d6b841a sugar/additive penalties -> raw 73.3
+    },
+    # Fully ready verdict-diversity anchors. These replace products that are now
+    # correctly quarantined for material evidence that has not been reviewed.
+    "240870": {
+        "label": "Nature Made Extra Strength D3 5000 IU",
+        "module": "generic",
+        "verdict": "CAUTION",
+        "confidence": "moderate",
+        "score_range": (75.8, 77.2),
+        "safety_verdict": "CAUTION",
+    },
+    "206362": {
+        "label": "GNC Kids Probiotic Fast Stix",
+        "module": "probiotic",
+        "verdict": "POOR",
+        "confidence": "moderate",
+        "score_range": (39.1, 40.0),
     },
 }
 
@@ -225,11 +238,22 @@ def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict
     if "safety_verdict" in expected:
         assert breakdown["safety_gate"]["verdict"] == expected["safety_verdict"]
         assert breakdown["safety_gate"]["short_circuits_scoring"] is False
-        assert "module" in breakdown
+        if "missing" not in expected:
+            assert "module" in breakdown
     if "missing" in expected:
         missing = set(breakdown["completeness_gate"]["missing_fields"])
         assert expected["missing"].issubset(missing)
         assert "module" not in breakdown
+    if "unevaluated_canonicals" in expected:
+        evidence = breakdown["assessment_readiness"]["evidence"]
+        observed = {
+            row.get("canonical_id")
+            for row in evidence["ingredient_assessments"]
+            if row.get("material") is True
+            and row.get("state") == "not_yet_evaluated"
+            and row.get("reason_code") == "no_reviewed_evidence_assessment"
+        }
+        assert expected["unevaluated_canonicals"].issubset(observed)
 
 
 def test_v4_canaries_cover_gate_and_confidence_bands() -> None:

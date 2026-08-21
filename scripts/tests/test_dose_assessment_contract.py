@@ -83,8 +83,31 @@ def test_plain_parent_nutrient_amount_is_elemental_without_daily_value(
     assessment = result["dose_assessments"][0]
     assert exported["ul_gate_eligible"] is True
     assert exported["ul_exposure_basis"] == "supplement_facts_parent_nutrient_amount"
+    assert assessment["source_path"] == "ingredientRows[zinc]"
+    assert assessment["linked_row_refs"] == ["ingredientRows[zinc]"]
     assert assessment["ul_assessment_status"] == "assessed_within_limit"
     assert assessment["readiness"] == "complete"
+
+
+def test_compound_mass_without_established_ul_is_not_applicable(enricher) -> None:
+    result = _collect(
+        enricher,
+        _row(
+            "Green Tea leaf extract",
+            "green_tea_extract",
+            100,
+            "mg",
+            standard_name="Green Tea Extract",
+        ),
+    )
+
+    assessment = result["dose_assessments"][0]
+    assert result["analyzed_ingredients"][0]["ul_gate_ineligible_reason"] == (
+        "compound_mass_not_elemental"
+    )
+    assert assessment["reason_code"] == "not_ul_applicable"
+    assert assessment["ul_assessment_status"] == "no_ul_applicable"
+    assert assessment["readiness"] == "not_applicable"
 
 
 @pytest.mark.parametrize(

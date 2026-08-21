@@ -1324,3 +1324,131 @@ def test_scoring_input_scope_builds_each_contract_variant_once(
     # rows or a mutated result from an earlier scored artifact.
     assert get_scoring_ingredients(product, strict=True) is not first
     assert calls == 3
+
+
+def test_fresh_contract_does_not_recover_explicitly_skipped_identity_row():
+    scorable = _row(
+        name="Curcumin",
+        canonical_id="curcumin",
+        raw_source_path="ingredientRows[0].nestedRows[1]",
+    )
+    skipped = _row(
+        name="Full Spectrum Curcumin liquid extract",
+        canonical_id="curcumin",
+        raw_source_path="ingredientRows[0]",
+        quantity=0.0,
+        unit="NP",
+        has_dose=False,
+        scoreable_identity=False,
+        role_classification="recognized_non_scorable",
+        score_exclusion_reason="recognized_non_scorable",
+        recognized_non_scorable=True,
+    )
+    product = _product(
+        [scorable],
+        assessment_readiness_contract_version="1.0.0",
+        ingredient_quality_data={
+            "ingredients_scorable": [scorable],
+            "ingredients_skipped": [skipped],
+            "ingredients": [scorable, skipped],
+        },
+    )
+
+    result = get_scoring_ingredients(
+        product,
+        strict=True,
+        allow_legacy_fallback=False,
+    )
+
+    assert [row["raw_source_path"] for row in result.rows] == [
+        "ingredientRows[0].nestedRows[1]"
+    ]
+
+
+def test_product_evidence_counts_once_in_mapped_coverage() -> None:
+    evidence = {
+        "evidence_type": "blend_anchor_mass",
+        "scoreable": True,
+        "scoreable_identity": True,
+        "score_eligible_by_cleaner": True,
+        "dose_class": "therapeutic_mass",
+        "dose_value": 300.0,
+        "dose_unit": "mg",
+        "source": "blend_total",
+        "raw_source_path": "ingredientRows[0]",
+        "evidence_scope": "blend_level",
+        "linked_rows": ["ingredientRows[0]"],
+        "confidence": "high",
+        "reason": "identity_bearing_blend_total",
+        "name": "Quercetin",
+        "canonical_id": "quercetin",
+        "clean_identity_id": "quercetin",
+        "scoring_parent_id": "quercetin",
+        "evidence_canonical_id": "quercetin",
+        "canonical_source_db": "ingredient_quality_map",
+        "evidence_origin": "native_enrichment",
+        "source_section": "product",
+    }
+    product = _product(
+        [],
+        assessment_readiness_contract_version="1.0.0",
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [],
+            "ingredients": [],
+        },
+        product_scoring_evidence=[evidence],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.mapped_count == 1
+    assert result.unmapped_count == 0
+    assert result.mapped_coverage == 1.0
+
+
+def test_product_projection_does_not_double_count_its_label_row_in_coverage() -> None:
+    row = _row(
+        name="Fish Oil",
+        canonical_id="fish_oil",
+        raw_source_path="ingredientRows[0]",
+        quantity=1000.0,
+        unit="mg",
+    )
+    evidence = {
+        "evidence_type": "omega_epa_dha_aggregate",
+        "scoreable": True,
+        "scoreable_identity": True,
+        "score_eligible_by_cleaner": True,
+        "dose_class": "therapeutic_mass",
+        "dose_value": 1000.0,
+        "dose_unit": "mg",
+        "source": "active",
+        "raw_source_path": "ingredientRows[0]",
+        "evidence_scope": "row_level",
+        "linked_rows": ["ingredientRows[0]"],
+        "confidence": "low",
+        "reason": "omega_parent_mass",
+        "name": "Fish Oil",
+        "canonical_id": "fish_oil",
+        "clean_identity_id": "fish_oil",
+        "scoring_parent_id": "epa_dha",
+        "evidence_canonical_id": "epa_dha",
+        "canonical_source_db": "ingredient_quality_map",
+        "evidence_origin": "native_enrichment",
+        "source_section": "product",
+    }
+    product = _product(
+        [row],
+        ingredient_quality_data={
+            "ingredients_scorable": [row],
+            "ingredients_skipped": [],
+            "ingredients": [row],
+        },
+        product_scoring_evidence=[evidence],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.mapped_count == 1
+    assert result.mapped_coverage == 1.0

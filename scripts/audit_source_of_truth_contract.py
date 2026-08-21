@@ -780,10 +780,20 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                         str(file_path),
                     ))
                 else:
-                    expected_live = not (
-                        quality_status == "not_scored" or verdict == "NOT_SCORED"
+                    unavailable_reason = str(
+                        product.get("score_unavailable_reason") or ""
                     )
-                    if live_eligible is not expected_live:
+                    expected_live = (
+                        True
+                        if quality_status == "scored"
+                        else False
+                        if unavailable_reason == "blocked_by_completeness_gate"
+                        else None
+                    )
+                    if (
+                        expected_live is not None
+                        and live_eligible is not expected_live
+                    ):
                         findings.append(Finding(
                             "SCORING_COMPLETENESS_STATUS_MISMATCH",
                             f"{pid}: is_live_eligible={live_eligible} conflicts with "

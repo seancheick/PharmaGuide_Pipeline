@@ -67,9 +67,13 @@ def _finite_number(value: Any) -> Optional[float]:
 @dataclass(frozen=True)
 class DoseAssessment:
     source_row_ref: Optional[str]
+    source_path: Optional[str]
+    linked_row_refs: tuple[str, ...]
     owner_row_ref: Optional[str]
     ingredient: str
     canonical_id: Optional[str]
+    dose_class: Optional[str]
+    evidence_type: Optional[str]
     material: bool
     source_value: Optional[float]
     source_unit: Optional[str]
@@ -86,15 +90,21 @@ class DoseAssessment:
     readiness: str
 
     def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        payload = asdict(self)
+        payload["linked_row_refs"] = list(self.linked_row_refs)
+        return payload
 
 
 def build_dose_assessment(
     *,
     source_row_ref: Any,
+    source_path: Any,
+    linked_row_refs: Any,
     owner_row_ref: Any,
     ingredient: Any,
     canonical_id: Any,
+    dose_class: Any,
+    evidence_type: Any,
     source_value: Any,
     source_unit: Any,
     normalized_value: Any,
@@ -157,10 +167,11 @@ def build_dose_assessment(
         if reason in _NOT_DISTINCT_REASONS or role == "form_component":
             assessment_status = NOT_DISTINCT_EXPOSURE
             readiness = READINESS_NOT_APPLICABLE
-        elif reason in _NO_UL_REASONS or normalized_ul_status in {
-            "not_determined",
-            "not_applicable",
-        }:
+        elif (
+            reason in _NO_UL_REASONS
+            or normalized_ul_status.startswith("not_determined")
+            or normalized_ul_status.startswith("not_applicable")
+        ):
             assessment_status = NO_UL_APPLICABLE
             readiness = READINESS_NOT_APPLICABLE
         elif reason in _UNRESOLVED_FORM_REASONS:
@@ -197,9 +208,17 @@ def build_dose_assessment(
 
     return DoseAssessment(
         source_row_ref=str(source_row_ref or "").strip() or None,
+        source_path=str(source_path or "").strip() or None,
+        linked_row_refs=tuple(dict.fromkeys(
+            str(value).strip()
+            for value in (linked_row_refs or [])
+            if str(value).strip()
+        )),
         owner_row_ref=str(owner_row_ref or "").strip() or None,
         ingredient=str(ingredient or "").strip(),
         canonical_id=str(canonical_id or "").strip() or None,
+        dose_class=str(dose_class or "").strip() or None,
+        evidence_type=str(evidence_type or "").strip() or None,
         material=material,
         source_value=source_amount,
         source_unit=str(source_unit or "").strip() or None,

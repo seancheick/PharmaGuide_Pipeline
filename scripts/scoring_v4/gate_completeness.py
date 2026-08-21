@@ -222,7 +222,12 @@ def _status_is_active(product: Dict[str, Any]) -> bool:
     return status in {"active", "on_market", "on market", "marketed", "current"}
 
 
-def _base_checks(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> tuple[List[str], float]:
+def _base_checks(
+    product: Dict[str, Any],
+    ingredients: List[Dict[str, Any]],
+    *,
+    assessment_readiness: Optional[Dict[str, Any]] = None,
+) -> tuple[List[str], float]:
     missing: List[str] = []
     scoring_input = get_scoring_ingredients(product or {}, strict=True)
     coverage = _mapped_coverage(product, ingredients)
@@ -240,8 +245,12 @@ def _base_checks(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> 
         missing.append("mapped_coverage")
     if not ingredients or not any(_has_active_identity(i) for i in ingredients):
         missing.append("active_identity")
+    readiness_enforced = (
+        isinstance(assessment_readiness, dict)
+        and assessment_readiness.get("enforcement_mode") == "enforced"
+    )
     rda_ul_data = _safe_dict(product.get("rda_ul_data"))
-    if "dose_assessments" in rda_ul_data:
+    if not readiness_enforced and "dose_assessments" in rda_ul_data:
         collection_status = _norm(rda_ul_data.get("collection_status"))
         assessments = _safe_list(rda_ul_data.get("dose_assessments"))
         if collection_status != "complete":
@@ -567,9 +576,13 @@ def evaluate_completeness_gate_with_readiness(
         )
 
     module = module if module in {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"} else "generic"
-    ingredients = _active_ingredients(product)
-    missing, coverage = _base_checks(product, ingredients)
     readiness = assessment_readiness if isinstance(assessment_readiness, dict) else {}
+    ingredients = _active_ingredients(product)
+    missing, coverage = _base_checks(
+        product,
+        ingredients,
+        assessment_readiness=readiness,
+    )
     if readiness.get("enforcement_mode") == "enforced":
         for name in ("identity", "dose", "evidence", "verification", "route"):
             state = _norm(_safe_dict(readiness.get(name)).get("readiness"))

@@ -58,6 +58,16 @@ SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
 _ROUTE_SCORING_ROWS_CACHE_KEY = "__scoring_input_contract_route_rows_cache"
+
+
+def normalize_product_evidence_scope(value: Any) -> str:
+    """Project source-specific scope labels into the scoring vocabulary."""
+    scope = _norm(value)
+    return {
+        "blend_total": "blend_level",
+    }.get(scope, scope)
+
+
 SCORING_CLASSIFICATION_REQUIRED_FIELDS = {
     "classification_schema_version",
     "classification_origin",
@@ -886,7 +896,8 @@ def _derive_probiotic_cfu_evidence(product: Dict[str, Any]) -> Optional[Dict[str
     if not raw_source_path or not linked_rows:
         return None
 
-    return _evidence_base(
+    source_scope = _norm(pdata.get("cfu_evidence_scope")) or "product_level"
+    item = _evidence_base(
         row={
             "raw_source_path": raw_source_path,
             "source_section": pdata.get("cfu_source") or "probiotic_data.total_cfu",
@@ -896,7 +907,7 @@ def _derive_probiotic_cfu_evidence(product: Dict[str, Any]) -> Optional[Dict[str
         canonical_id="probiotic_cfu_total",
         dose_value=total_cfu,
         dose_unit="CFU",
-        evidence_scope=_norm(pdata.get("cfu_evidence_scope")) or "product_level",
+        evidence_scope=normalize_product_evidence_scope(source_scope),
         confidence="high",
         reason="product_level_cfu_with_probiotic_identity",
         name="Total Probiotic CFU",
@@ -904,6 +915,9 @@ def _derive_probiotic_cfu_evidence(product: Dict[str, Any]) -> Optional[Dict[str
         clean_identity_id=None,
         scoring_parent_id="probiotic_cfu_total",
     )
+    if item["evidence_scope"] != source_scope:
+        item["source_evidence_scope"] = source_scope
+    return item
 
 
 def _sports_primary_identity_without_dose(row: Dict[str, Any], canonical: str) -> Dict[str, Any]:
@@ -1819,6 +1833,12 @@ def _product_scoring_evidence_rows(
     else:
         native_evidence_rows = _safe_list(evidence)
     native_evidence_rows = [deepcopy(item) for item in native_evidence_rows if isinstance(item, dict)]
+    for item in native_evidence_rows:
+        source_scope = _norm(item.get("evidence_scope"))
+        normalized_scope = normalize_product_evidence_scope(source_scope)
+        if normalized_scope != source_scope:
+            item.setdefault("source_evidence_scope", source_scope)
+            item["evidence_scope"] = normalized_scope
     derived_evidence_rows = derive_product_scoring_evidence(product)
 
     def evidence_key(item: Dict[str, Any]) -> tuple[Any, ...]:
@@ -2070,8 +2090,13 @@ def _build_scoring_ingredients(
         if str(path)
     }
     skipped_candidates = []
+    legacy_skipped_recovery = not bool(
+        str(product.get("assessment_readiness_contract_version") or "").strip()
+    )
     for row in _safe_list(iqd.get("ingredients_skipped")):
         if not isinstance(row, dict):
+            continue
+        if not legacy_skipped_recovery and row.get("scoring_recovery_allowed") is not True:
             continue
         anchor_canonical, _ = _anchor_identity(row)
         if not anchor_canonical:
@@ -2145,15 +2170,16 @@ def _build_scoring_ingredients(
         elif rejection is not None:
             rejected.append(rejection)
 
-    # Coverage is a label-completeness fact, not a count of only the rows that
-    # survived scoring eligibility. Cleaner-approved, dose-bearing label
-    # actives that are unresolved specifically because no quality-map identity
-    # exists must remain in the denominator. They never enter ``rows`` and
-    # therefore cannot influence any score, route, adequacy, or safety lookup.
+    # Coverage counts unique score-eligible source exposures. A typed
+    # product-level projection can join a structural owner dose to a mapped
+    # child identity, so it participates in coverage when no ordinary scoring
+    # row owns that source path. Projections sharing a label path deduplicate
+    # with their owner and never inflate the denominator. Cleaner-approved,
+    # dose-bearing label actives unresolved for identity remain in the
+    # denominator but never enter scoring rows.
     mapped_coverage_keys = {
         _classification_row_key(row, index)
         for index, row in enumerate(rows)
-        if _norm(row.get("scoring_input_kind")) != "product_level_evidence"
     }
     unresolved_coverage_keys = {
         _classification_row_key(item.row, index)
@@ -3544,10 +3570,11 @@ def _route_fiber_digestive_decision(
     product_level_enzyme_count = int(
         facts.get("product_level_digestive_enzyme_row_count") or 0
     )
-    if facts.get("taxonomy_fiber_digestive") and (
-        dedicated_enzyme_count or product_level_enzyme_count
-    ):
-        return True, "digestive_enzyme_context", ["taxonomy:fiber_digestive", "enzyme_label_evidence"]
+    if dedicated_enzyme_count or product_level_enzyme_count:
+        evidence = ["dedicated_digestive_enzyme_identity"]
+        if facts.get("taxonomy_fiber_digestive"):
+            evidence.insert(0, "taxonomy:fiber_digestive")
+        return True, "digestive_enzyme_context", evidence
 
     fiber_ids = set(facts.get("fiber_canonical_ids") or [])
     mass_share = float(facts.get("fiber_mass_share") or 0.0)

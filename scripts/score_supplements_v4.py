@@ -307,6 +307,18 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         module=module,
     )
     result["v4_breakdown"]["assessment_readiness"] = assessment_readiness
+    # Compute readiness eligibility on every path. Safety precedence still
+    # decides the final verdict below, but BLOCKED/UNSAFE and safety-policy
+    # quarantine artifacts must not erase the authoritative completeness
+    # decision from release diagnostics.
+    completeness = evaluate_completeness_gate(
+        enriched_product,
+        module,
+        assessment_readiness=assessment_readiness,
+    )
+    result["v4_breakdown"]["completeness_gate"] = (
+        _completeness_gate_breakdown(completeness)
+    )
 
     issues = dose_safety_contract_issues(enriched_product)
     if issues:
@@ -351,14 +363,6 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         result["v4_verdict"] = "CAUTION"
 
     # Layer 2 — Completeness Gate.
-    completeness = evaluate_completeness_gate(
-        enriched_product,
-        module,
-        assessment_readiness=assessment_readiness,
-    )
-    result["v4_breakdown"]["completeness_gate"] = (
-        _completeness_gate_breakdown(completeness)
-    )
     if not completeness.is_live_eligible:
         # Archive / QA verdict only. Live catalog excludes these rows
         # entirely; safety signals remain available in safety_gate.

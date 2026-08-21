@@ -9,10 +9,10 @@ review remains explicitly incomplete.
 
 from __future__ import annotations
 
+import math
 import re
 from typing import Any, Dict, Iterable, List, Mapping
 
-from dose_assessment import has_incomplete_material_dose_assessment
 from scoring_input_contract import (
     ROLE_ADJUNCT,
     ROLE_CLAIM_PROMINENT,
@@ -246,6 +246,12 @@ def evaluate_evidence_assessment(
             "name": row.get("name") or row.get("standard_name"),
             "role": role_name,
             "material": material,
+            "source_value": row.get("quantity", row.get("dose_value")),
+            "source_unit": row.get("unit") or row.get("dose_unit"),
+            "dose_class": row.get("dose_class"),
+            "linked_rows": list(_safe_list(row.get("linked_rows"))),
+            "scoring_input_kind": row.get("scoring_input_kind"),
+            "evidence_type": row.get("evidence_type"),
             "state": state,
             "reason_code": reason,
             "evidence_ids": evidence_ids,
@@ -358,10 +364,26 @@ def _identity_readiness(product: Mapping[str, Any]) -> Dict[str, Any]:
         if not finding.startswith("missing_required_fields:")
         and finding != "missing_identity_disposition"
     ]
-    complete = (
+    product_evidence_rows = [
+        row
+        for row in scoring_input.rows
+        if row.get("scoring_input_kind") == "product_level_evidence"
+    ]
+    mapped_product_evidence = [
+        row
+        for row in product_evidence_rows
+        if row.get("scoreable_identity") is True
+        and row.get("mapped") is not False
+        and bool(str(row.get("canonical_id") or "").strip())
+    ]
+    source_identity_complete = (
         scoring_input.mapped_count > 0
         and scoring_input.unmapped_count == 0
         and scoring_input.mapped_coverage == 1.0
+        and len(mapped_product_evidence) == len(product_evidence_rows)
+    )
+    complete = (
+        source_identity_complete
         and not blocking_findings
     )
     return {
@@ -369,6 +391,8 @@ def _identity_readiness(product: Mapping[str, Any]) -> Dict[str, Any]:
         "mapped_count": scoring_input.mapped_count,
         "unmapped_count": scoring_input.unmapped_count,
         "mapped_coverage": scoring_input.mapped_coverage,
+        "product_evidence_count": len(product_evidence_rows),
+        "mapped_product_evidence_count": len(mapped_product_evidence),
         "contract_findings": list(scoring_input.contract_findings),
         "blocking_contract_findings": blocking_findings,
     }
@@ -376,29 +400,114 @@ def _identity_readiness(product: Mapping[str, Any]) -> Dict[str, Any]:
 
 def _dose_readiness(
     product: Mapping[str, Any],
-    material_count: int,
+    evidence_assessments: Iterable[Mapping[str, Any]],
     *,
     module: str,
 ) -> Dict[str, Any]:
+    material_rows = [
+        row
+        for row in evidence_assessments
+        if isinstance(row, Mapping) and row.get("material") is True
+    ]
+    material_count = len(material_rows)
     if material_count == 0:
         return {
             "readiness": READINESS_NOT_APPLICABLE,
             "collection_status": None,
             "assessment_count": 0,
+            "material_active_count": 0,
+            "material_exposure_count": 0,
+            "material_assessment_count": 0,
         }
+
+    def _number(value: Any) -> float | None:
+        if isinstance(value, bool):
+            return None
+        try:
+            parsed = float(value)
+        except (TypeError, ValueError):
+            return None
+        return parsed if math.isfinite(parsed) else None
+
+    def _unit(value: Any) -> str:
+        return re.sub(r"\s+", "", str(value or "").strip().lower())
+
+    def _requirement_key(row: Mapping[str, Any]) -> tuple[Any, ...]:
+        value = _number(row.get("source_value"))
+        return (
+            str(row.get("source_row_ref") or "").strip(),
+            _norm(row.get("dose_class")),
+            round(value, 12) if value is not None else None,
+            _unit(row.get("source_unit")),
+        )
+
+    requirements: Dict[tuple[Any, ...], Mapping[str, Any]] = {}
+    for row in material_rows:
+        requirements.setdefault(_requirement_key(row), row)
+
     rda_ul = _safe_dict(product.get("rda_ul_data"))
     assessments = _safe_list(rda_ul.get("dose_assessments"))
     collection_status = str(rda_ul.get("collection_status") or "")
-    material_assessment_count = sum(
-        1
-        for assessment in assessments
-        if isinstance(assessment, dict) and assessment.get("material") is True
-    )
+
+    def _matches(
+        requirement: tuple[Any, ...],
+        assessment: Mapping[str, Any],
+    ) -> bool:
+        source_ref, dose_class, value, unit = requirement
+        assessment_refs = {
+            str(assessment.get("source_path") or "").strip(),
+            str(assessment.get("source_row_ref") or "").strip(),
+            *(
+                str(item).strip()
+                for item in _safe_list(assessment.get("linked_row_refs"))
+            ),
+        }
+        assessment_refs.discard("")
+        if source_ref not in assessment_refs:
+            return False
+        assessment_class = _norm(assessment.get("dose_class"))
+        if dose_class and assessment_class and dose_class != assessment_class:
+            return False
+        assessment_value = _number(assessment.get("source_value"))
+        if value is not None and assessment_value is not None:
+            tolerance = max(1e-9, abs(value) * 1e-9)
+            if abs(value - assessment_value) > tolerance:
+                return False
+        assessment_unit = _unit(assessment.get("source_unit"))
+        if unit and assessment_unit and unit != assessment_unit:
+            return False
+        return True
+
+    matched_assessments: Dict[tuple[Any, ...], Mapping[str, Any]] = {}
+    for requirement in requirements:
+        match = next(
+            (
+                assessment
+                for assessment in assessments
+                if isinstance(assessment, Mapping)
+                and _matches(requirement, assessment)
+            ),
+            None,
+        )
+        if match is not None:
+            matched_assessments[requirement] = match
+
+    incomplete_refs = [
+        requirement[0]
+        for requirement in requirements
+        if requirement not in matched_assessments
+        or matched_assessments[requirement].get("readiness")
+        not in {READINESS_COMPLETE, READINESS_NOT_APPLICABLE}
+    ]
+    material_assessment_count = len(matched_assessments)
     complete = (
         "dose_assessments" in rda_ul
-        and collection_status == READINESS_COMPLETE
-        and material_assessment_count >= material_count
-        and not has_incomplete_material_dose_assessment(assessments)
+        and collection_status in {
+            READINESS_COMPLETE,
+            "complete_with_row_errors",
+        }
+        and material_assessment_count == len(requirements)
+        and not incomplete_refs
     )
     if complete:
         return {
@@ -406,6 +515,7 @@ def _dose_readiness(
             "collection_status": collection_status,
             "assessment_count": len(assessments),
             "material_active_count": material_count,
+            "material_exposure_count": len(requirements),
             "material_assessment_count": material_assessment_count,
             "assessment_source": "typed_dose_assessments",
         }
@@ -414,8 +524,13 @@ def _dose_readiness(
     # can prove that the legacy evaluator ran only when both of its result
     # collections exist.  Candidate-release audits reject this inference; a
     # fresh 2.4 build must carry typed dose_assessments for every material row.
+    is_fresh_contract = (
+        str(product.get("assessment_readiness_contract_version") or "").strip()
+        == ASSESSMENT_READINESS_SCHEMA_VERSION
+    )
     if (
-        "adequacy_results" in rda_ul
+        not is_fresh_contract
+        and "adequacy_results" in rda_ul
         and isinstance(rda_ul.get("adequacy_results"), list)
         and "safety_flags" in rda_ul
         and isinstance(rda_ul.get("safety_flags"), list)
@@ -425,12 +540,13 @@ def _dose_readiness(
             "collection_status": "legacy_complete",
             "assessment_count": len(rda_ul.get("adequacy_results") or []),
             "material_active_count": material_count,
-            "material_assessment_count": material_count,
+            "material_exposure_count": len(requirements),
+            "material_assessment_count": len(requirements),
             "assessment_source": "schema_2x_legacy_migration_inference",
             "migration_inference": True,
         }
 
-    if module == "probiotic":
+    if not is_fresh_contract and module == "probiotic":
         probiotic = _safe_dict(
             product.get("probiotic_data") or product.get("probiotic_detail")
         )
@@ -444,7 +560,8 @@ def _dose_readiness(
                 "collection_status": "module_complete",
                 "assessment_count": 1,
                 "material_active_count": material_count,
-                "material_assessment_count": material_count,
+                "material_exposure_count": len(requirements),
+                "material_assessment_count": len(requirements),
                 "assessment_source": "probiotic_total_cfu",
             }
 
@@ -453,7 +570,9 @@ def _dose_readiness(
         "collection_status": collection_status or None,
         "assessment_count": len(assessments),
         "material_active_count": material_count,
+        "material_exposure_count": len(requirements),
         "material_assessment_count": material_assessment_count,
+        "incomplete_source_row_refs": list(dict.fromkeys(incomplete_refs)),
     }
 
 
@@ -489,7 +608,7 @@ def evaluate_assessment_readiness(
     identity = _identity_readiness(product)
     dose = _dose_readiness(
         product,
-        evidence["material_active_count"],
+        evidence["ingredient_assessments"],
         module=module,
     )
     verification = evaluate_verification_assessment(product)

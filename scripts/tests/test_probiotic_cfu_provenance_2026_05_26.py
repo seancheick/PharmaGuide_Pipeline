@@ -425,6 +425,56 @@ def test_product_cfu_evidence_is_rejected_when_taxonomy_is_not_probiotic(enriche
     assert cfu["rejection_reason"] == "product_taxonomy_not_probiotic"
 
 
+def test_blend_total_cfu_scope_is_normalized_at_scoring_boundary(enricher):
+    enriched = {
+        "activeIngredients": [],
+        "probiotic_data": {
+            **_product_level_probiotic_data(total_cfu=1_500_000_000),
+            "cfu_raw_source_path": "ingredientRows[0]",
+            "cfu_linked_rows": ["ingredientRows[0]"],
+            "cfu_evidence_scope": "blend_total",
+        },
+        "supplement_taxonomy": {"primary_type": "probiotic"},
+        "ingredient_quality_data": {"ingredients_scorable": []},
+    }
+
+    cfu = _cfu_evidence(enricher._collect_product_scoring_evidence(enriched))
+
+    assert cfu["evidence_scope"] == "blend_level"
+    assert cfu["source_evidence_scope"] == "blend_total"
+
+
+def test_product_cfu_gets_one_typed_non_ul_dose_assessment(enricher):
+    enriched = {
+        "product_scoring_evidence": [
+            {
+                "evidence_type": "probiotic_cfu",
+                "scoreable": True,
+                "dose_class": "probiotic_cfu",
+                "dose_value": 1_500_000_000,
+                "dose_unit": "CFU",
+                "raw_source_path": "ingredientRows[0]",
+                "linked_rows": ["ingredientRows[0]"],
+                "name": "Total Probiotic CFU",
+                "canonical_id": "probiotic_cfu_total",
+            }
+        ],
+        "rda_ul_data": {
+            "collection_status": "complete",
+            "dose_assessments": [],
+        },
+    }
+
+    enricher._append_product_evidence_dose_assessments(enriched)
+
+    assessments = enriched["rda_ul_data"]["dose_assessments"]
+    assert len(assessments) == 1
+    assert assessments[0]["source_path"] == "ingredientRows[0]"
+    assert assessments[0]["dose_class"] == "probiotic_cfu"
+    assert assessments[0]["ul_assessment_status"] == "no_ul_applicable"
+    assert assessments[0]["readiness"] == "not_applicable"
+
+
 def test_fiber_primary_product_with_accessory_probiotics_rejects_cfu_evidence(enricher):
     enriched = {
         "product_name": "Clear Mixing Super Fiber With Probiotics",

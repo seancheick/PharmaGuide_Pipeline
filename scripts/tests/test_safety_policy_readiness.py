@@ -189,6 +189,9 @@ def test_safety_policy_quarantine_becomes_not_scored_with_actionable_reason() ->
     gate = result["v4_breakdown"]["safety_gate"]
     assert gate["quarantine_required"] is True
     assert gate["review_records"]
+    completeness = result["v4_breakdown"]["completeness_gate"]
+    assert isinstance(completeness["is_live_eligible"], bool)
+    assert completeness["is_live_eligible"] is True
 
 
 def test_supplemental_sodium_tetraborate_boron_is_not_a_hard_safety_match() -> None:

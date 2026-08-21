@@ -193,6 +193,19 @@ def test_dual_use_bromelain_requires_digestive_context() -> None:
     )
 
 
+def test_dedicated_digestive_enzyme_identity_is_product_context() -> None:
+    product = _product(
+        "Flatter Me",
+        [_row("digestive_enzymes", 249, "mg", category="enzymes")],
+        primary_type="herbal_botanical",
+    )
+
+    decision = _classification(product)
+
+    assert decision["route_module"] == "fiber_digestive"
+    assert decision["route_reason"] == "digestive_enzyme_context"
+
+
 def test_systemic_enzyme_does_not_inherit_digestive_route() -> None:
     product = _product(
         "Nattokinase Enzyme",
