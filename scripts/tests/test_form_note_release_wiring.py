@@ -11,7 +11,10 @@ def test_release_paths_run_form_note_artifact_validator_before_publication():
     snapshot = (REPO_ROOT / "scripts" / "rebuild_dashboard_snapshot.sh").read_text()
 
     assert "validate_form_notes_export.py --blobs-dir \"$DIST_DIR/detail_blobs\"" in release
-    assert "scripts/validate_form_notes_export.py --blobs-dir scripts/dist/detail_blobs" in test_runner
+    assert (
+        'scripts/validate_form_notes_export.py --blobs-dir '
+        '"$RELEASE_DIST_DIR/detail_blobs"'
+    ) in test_runner
     assert release.index("validate_form_notes_export.py") < release.index(
         "scripts/sync_to_supabase.py \"$DIST_DIR\""
     )

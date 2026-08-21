@@ -263,10 +263,12 @@ def _load_canaries(ids):
 # 0828f18b (2026-06-05). These products are unaffected by the pending enricher
 # changes, so the recompute is stable. 239592 (krill + astaxanthin) dropped ~3.3
 # from an evidence-credit recalc — verify it holds at the next full-corpus rebuild.
+# Scoring 4.3 row eligibility removes redundant zero-dose EPA/DHA projections;
+# 288740 therefore earns the already-existing 1-point full-disclosure credit.
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
     ("327776", "Sports Research", 84.9, 85.9),
     ("326270", "Sports Research", 84.9, 85.9),
-    ("288740", "Nordic Naturals", 62.6, 63.6),
+    ("288740", "Nordic Naturals", 63.6, 64.6),
     ("273630", "Garden of Life", 77.1, 78.1),
     ("239592", "CVS Health", 49.4, 50.4),
     ("182968", "Pure Encapsulations",  52.0, 59.0),

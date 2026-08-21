@@ -220,6 +220,7 @@ def test_release_export_matches_source_scored_and_resolved_type():
 
 @pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
 @pytest.mark.skipif(not _build_is_full_corpus(), reason=_FULL_CORPUS_SKIP_MSG)
+@pytest.mark.timeout(1200)
 def test_release_detail_blobs_match_recomputed_export_contract():
     enriched_lookup = _load_products(ENRICHED_DIRS)
     scored_lookup = _load_products(SCORED_DIRS)

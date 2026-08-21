@@ -106,11 +106,10 @@ TRUE_POSITIVE_TARGETS = {
 #     product, disqualified from b_complex); routes generic, not multi.
 # Format: dsld_id → (expected_route, expected_primary_type, label)
 FALSE_POSITIVE_TARGETS = {
-    # R7b (4ab227b4, 2026-07-16) added the honest vitamin_complex class: 174772
-    # discloses 4 distinct vitamins (A, C, D, E), so single_vitamin was wrong.
-    # The critical safety guard is unchanged — it still routes to omega (not
-    # multi_or_prenatal), because omega detection runs upstream of primary_type.
-    "174772": ("omega", "vitamin_complex",
+    # The measured-intent router makes the explicit Omega-3 EPA/DHA identity
+    # authoritative over four secondary vitamin rows. The critical guard is
+    # unchanged: this must route to omega, never multi_or_prenatal.
+    "174772": ("omega", "omega_3",
                "Vitafusion Omega-3 EPA/DHA — CRITICAL: this is the bug "
                "that bypasses the entire omega module"),
     "241676": ("generic", None,
