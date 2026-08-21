@@ -92,6 +92,27 @@ def _seed_build(tmp_path: Path) -> dict[str, Path]:
     ov_path.write_text(
         json.dumps({"_metadata": {"schema_version": "1.0.0"}, "overrides": []})
     )
+    profile_rules_path = work / "ingredient_interaction_rules.json"
+    profile_rules_path.write_text(
+        json.dumps(
+            {
+                "_metadata": {"schema_version": "6.2.4", "total_entries": 1},
+                "interaction_rules": [
+                    {
+                        "id": "RULE_TEST",
+                        "subject_ref": {
+                            "db": "ingredient_quality_map",
+                            "canonical_id": "vitamin_k",
+                        },
+                        "condition_rules": [],
+                        "drug_class_rules": [],
+                        "dose_thresholds": [],
+                        "pregnancy_lactation": {},
+                    }
+                ],
+            }
+        )
+    )
 
     ctx = bid.BuildContext(
         normalized_drafts_path=drafts_path,
@@ -103,6 +124,7 @@ def _seed_build(tmp_path: Path) -> dict[str, Path]:
         report_path=work / "interaction_audit_report.json",
         build_time="2026-04-11T00:00:00Z",
         interaction_db_version="v2026.04.11.000000",
+        profile_warning_rules_path=profile_rules_path,
         pipeline_version="3.4.0",
         min_app_version="1.0.0",
     )

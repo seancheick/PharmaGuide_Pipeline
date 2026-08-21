@@ -173,6 +173,17 @@ def count_drug_classes(db_path: Path) -> int:
     return int(row[0]) if row else 0
 
 
+def count_profile_warning_rules(db_path: Path) -> int:
+    con = _open_ro(db_path)
+    try:
+        row = con.execute("SELECT COUNT(*) FROM profile_warning_rules").fetchone()
+    except sqlite3.OperationalError:
+        return 0
+    finally:
+        con.close()
+    return int(row[0]) if row else 0
+
+
 def research_pair_counts(db_path: Path) -> dict[str, int]:
     con = _open_ro(db_path)
     try:
@@ -244,6 +255,8 @@ REQUIRED_EMBEDDED_KEYS = (
     "source_drafts_count",
     "source_suppai_count",
     "total_interactions",
+    "profile_warning_rules_count",
+    "profile_warning_rules_version",
     "interaction_db_version",
     "pipeline_version",
     "min_app_version",
@@ -260,6 +273,8 @@ REQUIRED_MANIFEST_KEYS = (
     "min_app_version",
     "integrity",
     "interaction_db_version",
+    "profile_warning_rules_count",
+    "profile_warning_rules_version",
 )
 
 
@@ -301,6 +316,13 @@ def validate_release_candidate(
         "M4 medication entry screen cannot resolve RXCUI → class without them.",
     )
 
+    profile_warning_rules_count = count_profile_warning_rules(db_path)
+    _require(
+        profile_warning_rules_count > 0,
+        "Release candidate has zero profile_warning_rules rows. Schema-3 "
+        "catalog warning references would be unresolvable.",
+    )
+
     embedded = read_embedded_metadata(db_path)
     missing_embedded = [k for k in REQUIRED_EMBEDDED_KEYS if k not in embedded]
     _require(
@@ -336,6 +358,21 @@ def validate_release_candidate(
             f"total_interactions mismatch: manifest="
             f"{manifest['total_interactions']}, actual_rows={interactions_count}.",
         )
+    _require(
+        int(embedded["profile_warning_rules_count"])
+        == profile_warning_rules_count,
+        "profile_warning_rules row count disagrees with embedded metadata",
+    )
+    _require(
+        int(manifest["profile_warning_rules_count"])
+        == profile_warning_rules_count,
+        "profile_warning_rules row count disagrees with manifest",
+    )
+    _require(
+        manifest["profile_warning_rules_version"]
+        == embedded["profile_warning_rules_version"],
+        "profile_warning_rules version disagrees between manifest and metadata",
+    )
 
     research_counts = research_pair_counts(db_path)
     source_suppai_count = int(embedded["source_suppai_count"])
@@ -369,6 +406,7 @@ def validate_release_candidate(
         "checksum_sha256": actual_checksum,
         "interactions_count": interactions_count,
         "drug_class_count": class_count,
+        "profile_warning_rules_count": profile_warning_rules_count,
         "research_pair_counts": research_counts,
         "integrity": integrity,
     }
@@ -405,6 +443,8 @@ def build_release_notes(
         f"- total_interactions:     {embedded.get('total_interactions')}\n"
         f"- source_drafts_count:    {embedded.get('source_drafts_count')}\n"
         f"- source_suppai_count:    {embedded.get('source_suppai_count')}\n"
+        f"- profile_warning_rules:  {embedded.get('profile_warning_rules_count')} "
+        f"(v{embedded.get('profile_warning_rules_version')})\n"
         f"- checksum_sha256:        `{checksum_sha256}`\n"
         "\n"
         "This release is an independent asset from `pharmaguide_core.db`\n"
@@ -485,6 +525,9 @@ def stage_release(
         "checksum_sha256": validation["checksum_sha256"],
         "interactions_count": validation["interactions_count"],
         "drug_class_count": validation["drug_class_count"],
+        "profile_warning_rules_count": validation[
+            "profile_warning_rules_count"
+        ],
         "interaction_db_version": validation["manifest"].get("interaction_db_version"),
         "schema_version": validation["manifest"].get("schema_version"),
     }

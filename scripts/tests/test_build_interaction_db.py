@@ -302,6 +302,40 @@ def build_ctx(
     dc_path.write_text(json.dumps(MIN_DRUG_CLASSES))
     ov_path = tmp_path / "interaction_overrides.json"
     ov_path.write_text(json.dumps(empty_overrides))
+    profile_rules_path = tmp_path / "ingredient_interaction_rules.json"
+    profile_rules_path.write_text(
+        json.dumps(
+            {
+                "_metadata": {"schema_version": "6.2.4", "total_entries": 1},
+                "interaction_rules": [
+                    {
+                        "id": "RULE_TEST_MAGNESIUM_DIABETES",
+                        "subject_ref": {
+                            "db": "ingredient_quality_map",
+                            "canonical_id": "magnesium",
+                        },
+                        "condition_rules": [
+                            {
+                                "condition_id": "diabetes",
+                                "severity": "caution",
+                                "evidence_level": "probable",
+                                "mechanism": "Test mechanism",
+                                "action": "Test action",
+                                "sources": ["https://ods.od.nih.gov/"],
+                                "alert_headline": "May affect glucose control",
+                                "alert_body": "Discuss use with your clinician.",
+                                "informational_note": "Relevant to glucose control.",
+                                "profile_gate": {"gate_type": "condition"},
+                            }
+                        ],
+                        "drug_class_rules": [],
+                        "dose_thresholds": [],
+                        "pregnancy_lactation": {},
+                    }
+                ],
+            }
+        )
+    )
     return bid.BuildContext(
         normalized_drafts_path=drafts_path,
         research_pairs_path=rp_path,
@@ -312,6 +346,7 @@ def build_ctx(
         report_path=tmp_path / "interaction_audit_report.json",
         build_time="2026-04-11T00:00:00Z",
         interaction_db_version="v2026.04.11.000000",
+        profile_warning_rules_path=profile_rules_path,
         pipeline_version="3.4.0",
         min_app_version="1.0.0",
     )
@@ -380,6 +415,7 @@ def test_all_core_tables_exist(build_ctx):
         "research_pairs",
         "drug_class_map",
         "interaction_db_metadata",
+        "profile_warning_rules",
         "interactions_fts",
     ):
         assert expected in tables, f"{expected} missing: {sorted(tables)}"
@@ -765,7 +801,29 @@ def test_pragma_integrity_check_ok(build_ctx):
 def test_pragma_user_version_set(build_ctx):
     _build(build_ctx)
     con = _conn(build_ctx.output_db)
-    assert con.execute("PRAGMA user_version").fetchone()[0] == 1
+    assert con.execute("PRAGMA user_version").fetchone()[0] == 2
+
+
+def test_profile_warning_rules_are_versioned_and_queryable(build_ctx):
+    _build(build_ctx)
+    con = _conn(build_ctx.output_db)
+    try:
+        row = con.execute(
+            "SELECT rule_id, canonical_id, source_version, rule_json "
+            "FROM profile_warning_rules"
+        ).fetchone()
+        metadata = dict(
+            con.execute("SELECT key, value FROM interaction_db_metadata").fetchall()
+        )
+    finally:
+        con.close()
+
+    assert row["rule_id"] == "RULE_TEST_MAGNESIUM_DIABETES"
+    assert row["canonical_id"] == "magnesium"
+    assert row["source_version"] == "6.2.4"
+    assert json.loads(row["rule_json"])["id"] == row["rule_id"]
+    assert metadata["profile_warning_rules_count"] == "1"
+    assert metadata["profile_warning_rules_version"] == "6.2.4"
 
 
 def test_metadata_table_has_required_keys(build_ctx):

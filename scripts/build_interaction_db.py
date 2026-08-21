@@ -69,8 +69,11 @@ from api_audit.verify_interactions import (
 )
 from identity.interaction import normalize_interaction_canonical_id
 
-SCHEMA_VERSION = "1.0.0"
-SCHEMA_USER_VERSION = 1
+SCHEMA_VERSION = "2.0.0"
+SCHEMA_USER_VERSION = 2
+DEFAULT_PROFILE_WARNING_RULES = (
+    Path(__file__).parent / "data" / "ingredient_interaction_rules.json"
+)
 
 # Severity rank for the more-cautious-wins resolver. Higher = more cautious.
 SEVERITY_RANK: dict[str, int] = {
@@ -109,6 +112,7 @@ class BuildContext:
     report_path: Path
     build_time: str
     interaction_db_version: str
+    profile_warning_rules_path: Path | None = None
     pipeline_version: str = "0.0.0"
     min_app_version: str = "1.0.0"
     dry_run: bool = False
@@ -124,11 +128,55 @@ def _load_json(path: Path) -> Any:
         return json.load(fh)
 
 
+def _safe_dict(value: Any) -> dict[str, Any]:
+    return value if isinstance(value, dict) else {}
+
+
 def load_drafts(path: Path) -> list[dict[str, Any]]:
     payload = _load_json(path)
     if isinstance(payload, list):
         return payload
     return payload.get("interactions", [])
+
+
+def load_profile_warning_rules(
+    path: Path | None,
+) -> tuple[str, list[dict[str, Any]]]:
+    """Load the authored ingredient/profile warning registry for app lookup."""
+    if path is None:
+        return "not_included", []
+    payload = _load_json(path)
+    if not isinstance(payload, dict):
+        raise ValueError("profile warning rules must be a JSON object")
+    metadata = payload.get("_metadata")
+    rules = payload.get("interaction_rules")
+    if not isinstance(metadata, dict) or not isinstance(rules, list):
+        raise ValueError(
+            "profile warning rules require _metadata and interaction_rules[]"
+        )
+    version = str(metadata.get("schema_version") or "").strip()
+    if not version:
+        raise ValueError("profile warning rules metadata has no schema_version")
+    if metadata.get("total_entries") != len(rules):
+        raise ValueError(
+            "profile warning rules metadata total_entries does not match payload"
+        )
+    ids: list[str] = []
+    for rule in rules:
+        if not isinstance(rule, dict):
+            raise ValueError("profile warning rules contains a non-object row")
+        rule_id = str(rule.get("id") or "").strip()
+        canonical_id = str(
+            _safe_dict(rule.get("subject_ref")).get("canonical_id") or ""
+        ).strip()
+        if not rule_id or not canonical_id:
+            raise ValueError(
+                "profile warning rule requires id and subject_ref.canonical_id"
+            )
+        ids.append(rule_id)
+    if len(ids) != len(set(ids)):
+        raise ValueError("profile warning rule ids must be unique")
+    return version, sorted(rules, key=lambda rule: str(rule["id"]))
 
 
 def load_research_pairs(path: Path) -> list[dict[str, Any]]:
@@ -409,6 +457,16 @@ CREATE INDEX idx_rp_rxcui_b ON research_pairs(rxcui_b) WHERE rxcui_b IS NOT NULL
 CREATE INDEX idx_rp_canon_a_lower ON research_pairs (lower(canonical_id_a));
 CREATE INDEX idx_rp_canon_b_lower ON research_pairs (lower(canonical_id_b));
 
+CREATE TABLE profile_warning_rules (
+    rule_id         TEXT PRIMARY KEY,
+    canonical_id    TEXT NOT NULL,
+    source_version  TEXT NOT NULL,
+    rule_json       TEXT NOT NULL
+);
+
+CREATE INDEX idx_profile_warning_canonical
+    ON profile_warning_rules(canonical_id);
+
 CREATE TABLE interaction_db_metadata (
     key     TEXT PRIMARY KEY,
     value   TEXT NOT NULL
@@ -665,6 +723,8 @@ def _column_order(table: str) -> list[str]:
             "source",
             "last_updated",
         ]
+    if table == "profile_warning_rules":
+        return ["rule_id", "canonical_id", "source_version", "rule_json"]
     raise KeyError(table)
 
 
@@ -707,6 +767,8 @@ class BuildResult:
     total_interactions: int
     source_drafts_count: int
     source_suppai_count: int
+    profile_warning_rules_count: int = 0
+    profile_warning_rules_version: str = "not_included"
     resolved_conflicts: list[dict[str, Any]] = field(default_factory=list)
     dropped_entries: list[dict[str, Any]] = field(default_factory=list)
     override_count: int = 0
@@ -718,6 +780,9 @@ def run_build(ctx: BuildContext) -> BuildResult:
     research_pairs = load_research_pairs(ctx.research_pairs_path)
     drug_classes = load_drug_classes(ctx.drug_classes_path)
     overrides = load_overrides(ctx.overrides_path)
+    profile_rules_version, profile_rules = load_profile_warning_rules(
+        ctx.profile_warning_rules_path
+    )
 
     source_drafts_count = len(drafts)
     source_suppai_count = len(research_pairs)
@@ -779,11 +844,29 @@ def run_build(ctx: BuildContext) -> BuildResult:
         ),
         key=lambda r: r["class_id"],
     )
+    profile_rule_rows = [
+        {
+            "rule_id": str(rule["id"]),
+            "canonical_id": str(
+                _safe_dict(rule.get("subject_ref")).get("canonical_id")
+            ),
+            "source_version": profile_rules_version,
+            "rule_json": json.dumps(
+                rule,
+                ensure_ascii=False,
+                separators=(",", ":"),
+                sort_keys=True,
+            ),
+        }
+        for rule in profile_rules
+    ]
 
     result = BuildResult(
         total_interactions=len(interaction_rows),
         source_drafts_count=source_drafts_count,
         source_suppai_count=source_suppai_count,
+        profile_warning_rules_count=len(profile_rule_rows),
+        profile_warning_rules_version=profile_rules_version,
         resolved_conflicts=resolved_conflicts,
         override_count=override_count,
     )
@@ -804,6 +887,7 @@ def run_build(ctx: BuildContext) -> BuildResult:
         _populate_fts(con, interaction_rows)
         _insert_rows(con, "research_pairs", research_rows)
         _insert_rows(con, "drug_class_map", class_rows)
+        _insert_rows(con, "profile_warning_rules", profile_rule_rows)
 
         # NOTE: sha256_checksum is intentionally NOT stored in the embedded
         # metadata table. Writing the file's own hash back into the file would
@@ -816,6 +900,8 @@ def run_build(ctx: BuildContext) -> BuildResult:
             "source_drafts_count": str(source_drafts_count),
             "source_suppai_count": str(source_suppai_count),
             "total_interactions": str(len(interaction_rows)),
+            "profile_warning_rules_count": str(len(profile_rule_rows)),
+            "profile_warning_rules_version": profile_rules_version,
             "override_count": str(override_count),
             "resolved_conflict_count": str(len(resolved_conflicts)),
             "interaction_db_version": ctx.interaction_db_version,
@@ -860,6 +946,8 @@ def _write_manifest(
         "source_drafts_count": result.source_drafts_count,
         "source_suppai_count": result.source_suppai_count,
         "total_interactions": result.total_interactions,
+        "profile_warning_rules_count": result.profile_warning_rules_count,
+        "profile_warning_rules_version": result.profile_warning_rules_version,
         "integrity": {
             "integrity_check": integrity,
             "user_version": SCHEMA_USER_VERSION,
@@ -875,6 +963,8 @@ def _write_report(ctx: BuildContext, result: BuildResult) -> None:
     report = {
         "build_time": ctx.build_time,
         "total_interactions": result.total_interactions,
+        "profile_warning_rules_count": result.profile_warning_rules_count,
+        "profile_warning_rules_version": result.profile_warning_rules_version,
         "source_drafts_count": result.source_drafts_count,
         "source_suppai_count": result.source_suppai_count,
         "override_count": result.override_count,
@@ -910,6 +1000,15 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--research-pairs", type=Path, required=True)
     parser.add_argument("--drug-classes", type=Path, required=True)
     parser.add_argument("--overrides", type=Path, default=None)
+    parser.add_argument(
+        "--profile-warning-rules",
+        type=Path,
+        default=DEFAULT_PROFILE_WARNING_RULES,
+        help=(
+            "Versioned ingredient/profile warning registry embedded for "
+            "schema-3 compact warning resolution."
+        ),
+    )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
@@ -949,6 +1048,7 @@ def main(argv: list[str] | None = None) -> int:
         report_path=args.report,
         build_time=build_time,
         interaction_db_version=args.interaction_db_version,
+        profile_warning_rules_path=args.profile_warning_rules,
         pipeline_version=args.pipeline_version,
         min_app_version=args.min_app_version,
         dry_run=args.dry_run,
