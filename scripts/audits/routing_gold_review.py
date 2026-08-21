@@ -58,6 +58,38 @@ def _review_group(
     lock: Mapping[str, Any],
 ) -> tuple[str, str]:
     reason = str(feature.get("route_reason") or "")
+    if new_route == "probiotic":
+        reviewed = {
+            str(value) for value in lock.get("manual_probiotic_reviews") or []
+        }
+        if dsld_id not in reviewed:
+            raise RoutingGoldReviewError(
+                f"{dsld_id}: probiotic promotion lacks an explicit manual review"
+            )
+        if (
+            reason != "profile_content:probiotic"
+            or feature.get("probiotic_is_product") is not True
+            or int(feature.get("probiotic_strain_count") or 0) < 1
+            or int(feature.get("probiotic_named_identity_count") or 0) < 1
+        ):
+            raise RoutingGoldReviewError(
+                f"{dsld_id}: probiotic promotion lacks typed strain identity"
+            )
+        if (
+            feature.get("probiotic_has_cfu") is not True
+            or (
+                float(feature.get("probiotic_total_cfu") or 0.0) <= 0
+                and float(feature.get("probiotic_total_billion_count") or 0.0) <= 0
+            )
+        ):
+            raise RoutingGoldReviewError(
+                f"{dsld_id}: probiotic promotion lacks a positive typed CFU total"
+            )
+        return (
+            "typed_probiotic_intent",
+            "Explicitly reviewed probiotic product with named strain identity and a positive typed CFU total.",
+        )
+
     if new_route == "sports":
         if not feature.get("protein_title_intent") or float(
             feature.get("protein_mass_mg") or 0.0
@@ -83,6 +115,7 @@ def _review_group(
         checks = {
             "fiber_title_intent": bool(feature.get("title_fiber_intent")),
             "digestive_product_intent": bool(feature.get("title_digestive_intent")),
+            "digestive_enzyme_context": bool(feature.get("digestive_enzyme_context")),
             "declared_fiber_blend_intent": bool(feature.get("declared_fiber_blend_intent")),
             "material_fiber_panel": float(feature.get("fiber_mass_share") or 0.0) >= 0.753769,
         }

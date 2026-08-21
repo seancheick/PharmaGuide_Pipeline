@@ -163,6 +163,11 @@ _PROTEIN_TITLE_RE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
+_PROBIOTIC_LABEL_RE = re.compile(
+    r"\b(probiotic|probiotics|trubiotics|synbiotic|synbiotics|acidophilus|"
+    r"lactobacillus|bifidobacterium|saccharomyces|bacillus)\b",
+    re.IGNORECASE,
+)
 
 _PRIMARY_ROLES = frozenset({"primary", "claim_prominent"})
 _MATERIAL_ROLES = frozenset({"primary", "claim_prominent", "major"})
@@ -228,6 +233,54 @@ def positive_number(row: Mapping[str, Any]) -> float | None:
         if number > 0:
             return number
     return None
+
+
+def _number(value: Any) -> float:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return 0.0
+    return number if number > 0 else 0.0
+
+
+def _probiotic_features(
+    product: Mapping[str, Any],
+    label_text: str,
+    primary_type: str,
+) -> dict[str, Any]:
+    payload = product.get("probiotic_data") or product.get("probiotic_detail") or {}
+    payload = payload if isinstance(payload, Mapping) else {}
+    blends = [
+        row for row in payload.get("probiotic_blends") or []
+        if isinstance(row, Mapping)
+    ]
+    named_identity_count = sum(
+        1
+        for row in blends
+        if (row.get("strain_identity_texts") or row.get("strains"))
+    )
+    total_cfu = _number(payload.get("total_cfu"))
+    total_billion = _number(payload.get("total_billion_count"))
+    has_cfu = bool(payload.get("has_cfu")) or total_cfu > 0 or total_billion > 0
+    return {
+        "probiotic_label_intent": bool(_PROBIOTIC_LABEL_RE.search(label_text)),
+        "probiotic_primary_type": primary_type == "probiotic",
+        "probiotic_is_product": bool(
+            payload.get("is_probiotic_product") or payload.get("is_probiotic")
+        ),
+        "probiotic_strain_count": int(payload.get("total_strain_count") or 0),
+        "probiotic_named_identity_count": named_identity_count,
+        "probiotic_has_cfu": has_cfu,
+        "probiotic_total_cfu": total_cfu,
+        "probiotic_total_billion_count": total_billion,
+        "probiotic_cfu_source": str(payload.get("cfu_source") or "") or None,
+        "probiotic_blend_count": len(blends),
+        "probiotic_blend_names": sorted({
+            str(row.get("name") or "").strip()
+            for row in blends
+            if str(row.get("name") or "").strip()
+        }),
+    }
 
 
 def comparable_mass_mg(row: Mapping[str, Any]) -> float | None:
@@ -505,6 +558,7 @@ def extract_route_features(
     title_b_complex_intent = bool(_B_COMPLEX_TITLE_RE.search(label_text))
     title_multivitamin_intent = bool(_MULTIVITAMIN_TITLE_RE.search(label_text))
     title_multimineral_intent = bool(_MULTIMINERAL_TITLE_RE.search(label_text))
+    probiotic_features = _probiotic_features(product, label_text, primary_type)
 
     return {
         "feature_schema_version": ROUTE_FEATURE_SCHEMA_VERSION,
@@ -577,4 +631,5 @@ def extract_route_features(
         "protein_title_intent": has_protein_product_intent(label_text),
         "protein_primary_role": bool(protein_roles & _PRIMARY_ROLES),
         "protein_material_role": bool(protein_roles & _MATERIAL_ROLES),
+        **probiotic_features,
     }

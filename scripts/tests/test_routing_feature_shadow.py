@@ -71,6 +71,48 @@ def test_route_feature_vector_measures_label_intent_and_panel_shape() -> None:
     assert feature["mineral_count"] == 1
 
 
+def test_route_feature_vector_exposes_typed_probiotic_intent() -> None:
+    from scoring_v4.route_features import extract_route_features
+
+    feature = extract_route_features(
+        {
+            "dsld_id": "P1",
+            "fullName": "Kids Multi + Probiotic",
+            "brand_name": "Example",
+            "supplement_taxonomy": {"primary_type": "probiotic"},
+            "probiotic_data": {
+                "is_probiotic_product": True,
+                "total_strain_count": 2,
+                "has_cfu": True,
+                "total_cfu": 5_000_000_000,
+                "total_billion_count": 5,
+                "cfu_source": "activeIngredients.notes",
+                "probiotic_blends": [
+                    {
+                        "name": "Lactobacillus acidophilus",
+                        "strain_identity_texts": ["Lactobacillus acidophilus"],
+                    },
+                    {
+                        "name": "Bifidobacterium lactis",
+                        "strain_identity_texts": ["Bifidobacterium lactis"],
+                    },
+                ],
+            },
+        },
+        [_row("vitamin_c", 30, "mg")],
+        {"route_module": "probiotic", "ingredients": []},
+    )
+
+    assert feature["probiotic_label_intent"] is True
+    assert feature["probiotic_is_product"] is True
+    assert feature["probiotic_strain_count"] == 2
+    assert feature["probiotic_named_identity_count"] == 2
+    assert feature["probiotic_has_cfu"] is True
+    assert feature["probiotic_total_cfu"] == 5_000_000_000.0
+    assert feature["probiotic_total_billion_count"] == 5.0
+    assert feature["probiotic_cfu_source"] == "activeIngredients.notes"
+
+
 def test_route_feature_vector_separates_systemic_enzyme_from_digestive_context() -> None:
     from scoring_v4.route_features import extract_route_features
 

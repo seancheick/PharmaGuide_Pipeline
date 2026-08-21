@@ -63,6 +63,91 @@ def test_gold_review_assigns_every_supported_change() -> None:
     assert report["changes"][0]["expected_route"] == "sports"
 
 
+def test_gold_review_accepts_typed_digestive_enzyme_context() -> None:
+    from audits.routing_gold_review import build_gold_review
+
+    baseline = _finish_report([
+        {"dsld_id": "P1", "recomputed_route": "generic"},
+    ])
+    candidate = _finish_report([
+        {
+            "dsld_id": "P1",
+            "product_name": "Digestive Enzyme Formula",
+            "recomputed_route": "fiber_digestive",
+            "route_reason": "digestive_enzyme_context",
+            "digestive_enzyme_context": True,
+        },
+    ])
+
+    report = build_gold_review(
+        baseline,
+        candidate,
+        _lock(baseline, candidate, "generic->fiber_digestive"),
+    )
+
+    assert report["changes"][0]["review_group"] == (
+        "fiber_digestive:digestive_enzyme_context"
+    )
+
+
+def test_gold_review_requires_explicit_review_and_typed_probiotic_evidence() -> None:
+    from audits.routing_gold_review import RoutingGoldReviewError
+    from audits.routing_gold_review import build_gold_review
+
+    baseline = _finish_report([
+        {"dsld_id": "P1", "recomputed_route": "multi_or_prenatal"},
+    ])
+    candidate = _finish_report([
+        {
+            "dsld_id": "P1",
+            "product_name": "Kids Multi + Probiotic",
+            "recomputed_route": "probiotic",
+            "route_reason": "profile_content:probiotic",
+            "probiotic_is_product": True,
+            "probiotic_strain_count": 1,
+            "probiotic_named_identity_count": 1,
+            "probiotic_has_cfu": True,
+            "probiotic_total_cfu": 250_000_000,
+        },
+    ])
+    lock = _lock(baseline, candidate, "multi_or_prenatal->probiotic")
+
+    with pytest.raises(RoutingGoldReviewError, match="explicit manual review"):
+        build_gold_review(baseline, candidate, lock)
+
+    lock["manual_probiotic_reviews"] = ["P1"]
+    report = build_gold_review(baseline, candidate, lock)
+
+    assert report["reviewed_change_count"] == 1
+    assert report["changes"][0]["review_group"] == "typed_probiotic_intent"
+
+
+def test_gold_review_rejects_probiotic_promotion_without_typed_identity() -> None:
+    from audits.routing_gold_review import RoutingGoldReviewError
+    from audits.routing_gold_review import build_gold_review
+
+    baseline = _finish_report([
+        {"dsld_id": "P1", "recomputed_route": "fiber_digestive"},
+    ])
+    candidate = _finish_report([
+        {
+            "dsld_id": "P1",
+            "recomputed_route": "probiotic",
+            "route_reason": "profile_content:probiotic",
+            "probiotic_is_product": True,
+            "probiotic_strain_count": 0,
+            "probiotic_named_identity_count": 0,
+            "probiotic_has_cfu": True,
+            "probiotic_total_cfu": 5_000_000_000,
+        },
+    ])
+    lock = _lock(baseline, candidate, "fiber_digestive->probiotic")
+    lock["manual_probiotic_reviews"] = ["P1"]
+
+    with pytest.raises(RoutingGoldReviewError, match="typed strain identity"):
+        build_gold_review(baseline, candidate, lock)
+
+
 def test_gold_review_rejects_unreviewed_transition() -> None:
     from audits.routing_gold_review import RoutingGoldReviewError
     from audits.routing_gold_review import build_gold_review
