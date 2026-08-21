@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "reviewed_at": "2026-08-20",
-  "baseline_report_sha256": "de1184d07c2c6baa2008ea830e15a12b55c7a089e495c6a1bb295560ad8eb5f1",
-  "candidate_report_sha256": "568803be0c8b0091a50b49411cd3d9f35a4c9d6a89e7137b1329381c73d9dfa5",
+  "baseline_report_sha256": "98a2efcb17a69e63fe8c1151948a5dd979fb4075eaff46e7075ae84fc55bd0af",
+  "candidate_report_sha256": "f19945992f9c334995defcb72385fe1dc8e279345995b4cfdf33001a20f6785f",
   "expected_changed_count": 538,
   "expected_transition_counts": {
     "b_complex->generic": 8,
