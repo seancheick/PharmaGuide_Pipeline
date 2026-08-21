@@ -51,3 +51,11 @@ def test_candidate_only_mode_preserves_gated_artifacts_without_live_promotion() 
     assert 'mv "$CANDIDATE_STAGE" "$CANDIDATE_ROOT"' in source
     assert 'DIST_OUTPUT="$CANDIDATE_ROOT/dist"' in source
     assert 'FINAL_OUTPUT="$CANDIDATE_ROOT/final_db_output"' in source
+
+
+def test_snapshot_build_uses_strict_export_error_gate() -> None:
+    source = SCRIPT.read_text()
+    build_start = source.index('"$PG_PYTHON" scripts/build_final_db.py')
+    build_end = source.index('run_strict_gate "detail-blob field completeness"')
+
+    assert "--strict" in source[build_start:build_end]

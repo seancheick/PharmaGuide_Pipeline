@@ -143,6 +143,7 @@ def test_unresolved_score_eligible_row_is_measured_then_fails_strict_validation(
         "raw_source_path": "ingredientRows[0]",
         "raw_source_text": "Unknown Active",
         "source_section": "activeIngredients",
+        "score_eligible_by_cleaner": True,
     }]
     display = [{
         **source[0],
@@ -172,6 +173,7 @@ def test_mapped_display_only_scoring_row_records_its_real_destination() -> None:
             "raw_source_path": "ingredientRows[0].nestedRows[0]",
             "raw_source_text": "Dietary Fiber",
             "source_section": "activeIngredients",
+            "score_eligible_by_cleaner": True,
         },
     ]
     display = [
@@ -197,6 +199,93 @@ def test_mapped_display_only_scoring_row_records_its_real_destination() -> None:
     assert validate_row_ledger(ledger, raw_actives_count=2) == []
 
 
+def test_display_analysis_flag_does_not_override_cleaner_exclusion() -> None:
+    source = [
+        {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Proprietary Blend",
+            "source_section": "activeIngredients",
+            "score_eligible_by_cleaner": False,
+            "score_exclusion_reason": "blend_header_total",
+        },
+        {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "Unmapped proprietary blend child",
+            "source_section": "activeIngredients",
+            "score_eligible_by_cleaner": False,
+            "score_exclusion_reason": "nested_display_only",
+        },
+    ]
+    display = [
+        {
+            **source[0],
+            "display_type": "structural_container",
+            "score_included": False,
+        },
+        {
+            **source[1],
+            "display_type": "mapped_ingredient",
+            "display_disposition": "scored",
+            # This flag controls the display analysis projection. It is not the
+            # cleaner-owned scoring denominator contract.
+            "score_included": True,
+            "canonical_id": None,
+        },
+    ]
+
+    ledger = build_row_ledger(source, display, [], [], [])
+
+    assert ledger[1]["score_eligible"] is False
+    assert ledger[1]["mapping_disposition"] == "owned_component"
+    assert ledger[1]["reason_code"] == "NESTED_DISPLAY_ONLY"
+    assert ledger[1]["owner_row_ref"] == "ingredientRows[0]"
+    assert validate_row_ledger(ledger, raw_actives_count=2) == []
+
+
+def test_strict_scoring_identity_does_not_make_cleaner_excluded_child_eligible() -> None:
+    source = [
+        {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Probiotic Blend",
+            "source_section": "activeIngredients",
+            "score_eligible_by_cleaner": False,
+            "score_exclusion_reason": "blend_header_total",
+        },
+        {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "Probiotic strain",
+            "source_section": "activeIngredients",
+            "score_eligible_by_cleaner": False,
+            "score_exclusion_reason": "nested_display_only",
+        },
+    ]
+    display = [
+        {
+            **source[0],
+            "display_type": "structural_container",
+            "score_included": False,
+        },
+        {
+            **source[1],
+            "display_type": "mapped_ingredient",
+            "score_included": True,
+        },
+    ]
+    scoring = [{
+        "raw_source_path": "ingredientRows[0].nestedRows[0]",
+        "canonical_id": "probiotic_species",
+        "scoring_input_kind": "product_level_evidence",
+    }]
+
+    ledger = build_row_ledger(
+        source, display, [], [], [], scoring_rows=scoring
+    )
+
+    assert ledger[1]["score_eligible"] is False
+    assert ledger[1]["mapping_disposition"] == "owned_component"
+    assert validate_row_ledger(ledger, raw_actives_count=2) == []
+
+
 def test_strict_scoring_row_supplies_identity_missing_from_display_projection() -> None:
     source = [
         {
@@ -208,6 +297,7 @@ def test_strict_scoring_row_supplies_identity_missing_from_display_projection() 
             "raw_source_path": "ingredientRows[0].nestedRows[0]",
             "raw_source_text": "Protease IV",
             "source_section": "activeIngredients",
+            "score_eligible_by_cleaner": True,
         },
     ]
     display = [

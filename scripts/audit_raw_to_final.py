@@ -390,10 +390,6 @@ PLANT_PART_RE = re.compile(
     r"\b(root|leaf|leaves|seed|bark|rhizome|flower|fruit|stem|aerial)\b",
     re.IGNORECASE,
 )
-STANDARDIZATION_RE = re.compile(
-    r"(standardi[sz]ed to\b|\b\d+(?:\.\d+)?\s*%\b|\bcontains\s+\d)",
-    re.IGNORECASE,
-)
 NP_RE = re.compile(r"\bNP\b")
 
 # v1.5.0 fields the audit reports on every active that's missing them.
@@ -723,21 +719,24 @@ def _check_plant_part(rec: ProductRecord, blob: dict) -> None:
 
 
 def _check_standardization(rec: ProductRecord, blob: dict) -> None:
-    """Invariant #6: standardization note preserved when raw notes carry it."""
+    """Invariant #6: exporter-recognized standardization claims survive.
+
+    The producer deliberately recognizes only reviewed compounds and rejects
+    ranges, generic editorial prose, and unsupported marker names. The audit
+    must recompute that exact contract; a broad ``%``/``standardized`` cue
+    creates false release failures for claims the exporter correctly refused
+    to turn into consumer copy.
+    """
+    from build_final_db import _compute_standardization_note  # type: ignore
+
     for ing in blob.get("ingredients") or []:
-        notes = ing.get("notes")
-        notes_list: list[str] = []
-        if isinstance(notes, str):
-            notes_list = [notes]
-        elif isinstance(notes, list):
-            notes_list = [n for n in notes if isinstance(n, str)]
-        notes_text = " ".join(notes_list)
-        if not STANDARDIZATION_RE.search(notes_text):
+        expected = _compute_standardization_note(ing)
+        if not expected:
             continue
-        note = ing.get("standardization_note")
-        if not note:
+        actual = ing.get("standardization_note")
+        if actual != expected:
             rec.add("STANDARDIZATION_NOTE_DROPPED",
-                    f"raw notes carry standardization but standardization_note empty: notes={notes_text[:120]!r}",
+                    f"expected standardization_note={expected!r}, got {actual!r}",
                     ingredient=ing.get("name"))
 
 

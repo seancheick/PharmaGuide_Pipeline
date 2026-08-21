@@ -15,6 +15,7 @@ from audit_raw_to_final import (  # noqa: E402
     _check_display_label_collapse,
     _check_plant_part,
     _check_raw_actives_present_in_blob,
+    _check_standardization,
     audit_product,
 )
 
@@ -165,6 +166,39 @@ def test_label_fidelity_still_flags_loss_from_the_app_display_surface() -> None:
         "BRANDED_TOKEN_DROPPED",
         "PLANT_PART_DROPPED",
     }
+
+
+def test_standardization_audit_uses_the_exporters_exact_claim_contract() -> None:
+    record = _record()
+    blob = {
+        "ingredients": [
+            {
+                "name": "Saw Palmetto",
+                "notes": (
+                    "Generic listing without specifying the extraction method "
+                    "or standardization level. Could be standardized to "
+                    "85-95% fatty acids depending on the source."
+                ),
+                "standardization_note": None,
+            },
+            {
+                "name": "Cranberry",
+                "notes": "Standardized to 25% A-type proanthocyanidins.",
+                "standardization_note": None,
+            },
+            {
+                "name": "Ashwagandha",
+                "notes": "Root extract standardized to 5% withanolides.",
+                "standardization_note": None,
+            },
+        ]
+    }
+
+    _check_standardization(record, blob)
+
+    assert [(finding.code, finding.ingredient) for finding in record.findings] == [
+        ("STANDARDIZATION_NOTE_DROPPED", "Ashwagandha")
+    ]
 
 
 def test_partial_blend_allows_named_children_without_individual_amounts() -> None:

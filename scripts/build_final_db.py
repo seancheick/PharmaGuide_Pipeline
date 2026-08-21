@@ -4762,10 +4762,15 @@ def _final_label_source_rows(
     enriched: Dict[str, Any],
     display_rows: List[Dict[str, Any]],
     omissions: List[Dict[str, Any]],
-) -> List[Dict[str, str]]:
+) -> List[Dict[str, Any]]:
     """Copy the canonical source inventory, filling only missing stable paths."""
-    source_rows: List[Dict[str, str]] = []
+    source_rows: List[Dict[str, Any]] = []
     seen_paths: set[str] = set()
+    active_by_path = {
+        safe_str(row.get("raw_source_path")): row
+        for row in safe_list(enriched.get("activeIngredients"))
+        if isinstance(row, dict) and safe_str(row.get("raw_source_path"))
+    }
 
     def add(row: Dict[str, Any]) -> None:
         source_path = safe_str(row.get("raw_source_path"))
@@ -4779,13 +4784,33 @@ def _final_label_source_rows(
                 else "activeIngredients"
             )
         raw_source_value = row.get("raw_source_text")
-        source_rows.append({
+        normalized: Dict[str, Any] = {
             "raw_source_path": source_path,
             "raw_source_text": (
                 "" if raw_source_value is None else str(raw_source_value)
             ),
             "source_section": section,
-        })
+        }
+        active = active_by_path.get(source_path)
+        if active is not None and section.lower() in {
+            "active",
+            "activeingredients",
+        }:
+            for key in (
+                "score_eligible_by_cleaner",
+                "score_exclusion_reason",
+                "identity_decision_reason",
+                "skip_reason",
+            ):
+                if key in row:
+                    value = row.get(key)
+                elif key in active:
+                    value = active.get(key)
+                else:
+                    continue
+                if value is not None:
+                    normalized[key] = value
+        source_rows.append(normalized)
         seen_paths.add(source_path)
 
     for source_row in safe_list(enriched.get("label_source_rows")):
@@ -10371,10 +10396,21 @@ def build_final_db(
         total_skipped = enriched_only_count + scored_only_count + errors
         coverage_pct = (inserted / total_input * 100) if total_input else 0
 
-        if strict and (enriched_only_count > 0 or scored_only_count > 0):
+        if strict and (
+            enriched_only_count > 0
+            or scored_only_count > 0
+            or errors > 0
+        ):
+            error_summary = (
+                f", {errors} product export error"
+                f"{'s' if errors != 1 else ''}"
+                if errors
+                else ""
+            )
             raise ValueError(
                 f"Strict mode: pipeline mismatch detected. "
-                f"{enriched_only_count} enriched-only, {scored_only_count} scored-only. "
+                f"{enriched_only_count} enriched-only, {scored_only_count} scored-only"
+                f"{error_summary}. "
                 f"All products must be both enriched AND scored before shipping."
             )
 

@@ -194,6 +194,7 @@ echo "◦ Building from ${#ENR[@]} enriched dirs + ${#SCR[@]} scored dirs..."
   --enriched-dir "${ENR[@]}" \
   --scored-dir "${SCR[@]}" \
   --output-dir "$FINAL_CANDIDATE" \
+  --strict \
   2>&1 | tail -5
 
 run_strict_gate "detail-blob field completeness" \

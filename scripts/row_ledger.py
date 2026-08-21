@@ -181,6 +181,14 @@ def build_row_ledger(
         score_included = (
             display.get("score_included") is True if display else False
         )
+        cleaner_eligibility = source.get("score_eligible_by_cleaner")
+        if not isinstance(cleaner_eligibility, bool):
+            cleaner_eligibility = None
+        cleaner_exclusion = _text(
+            source.get("score_exclusion_reason")
+            or source.get("identity_decision_reason")
+            or source.get("skip_reason")
+        ).upper()
         canonical_id = _canonical_id(ingredient, scoring, display, source)
 
         if is_form:
@@ -188,12 +196,6 @@ def build_row_ledger(
             eligible = False
             disposition = "owned_component"
             reason = "OWNED_FORM_COMPONENT"
-            destination = "owner_row"
-        elif is_nested and not score_included:
-            role = "owned_child"
-            eligible = False
-            disposition = "owned_component"
-            reason = "OWNED_NESTED_COMPONENT"
             destination = "owner_row"
         elif _is_inactive_section(section):
             role = "source_inactive"
@@ -221,7 +223,35 @@ def build_row_ledger(
             disposition = "explicit_omission"
             reason = _omission_reason(omission)
             destination = "label_ledger_omissions"
-        elif _is_active_section(section) and score_included:
+        elif is_nested and cleaner_eligibility is False:
+            # Cleaner eligibility owns the scoring denominator. Display rows
+            # may still carry ``score_included=True`` so the app can render a
+            # mapped blend child with analysis; that presentation flag must
+            # never promote the child into an independent scoring input.
+            role = "owned_child"
+            eligible = False
+            disposition = "owned_component"
+            reason = cleaner_exclusion or "OWNED_NESTED_COMPONENT"
+            destination = (
+                "display_ingredients" if display is not None else "owner_row"
+            )
+        elif is_nested and not score_included:
+            role = "owned_child"
+            eligible = False
+            disposition = "owned_component"
+            reason = "OWNED_NESTED_COMPONENT"
+            destination = "owner_row"
+        elif _is_active_section(section) and cleaner_eligibility is False:
+            role = "excluded_active"
+            eligible = False
+            disposition = "excluded_non_scorable"
+            reason = cleaner_exclusion or "CLEANER_EXCLUDED_ACTIVE"
+            destination = (
+                "display_ingredients"
+                if display is not None
+                else "label_ledger_omissions"
+            )
+        elif _is_active_section(section) and cleaner_eligibility is True:
             role = "score_active"
             eligible = True
             if canonical_id:
@@ -246,7 +276,12 @@ def build_row_ledger(
                 disposition = "unresolved_score_active"
                 reason = "UNRESOLVED_CANONICAL_IDENTITY"
                 destination = "display_ingredients"
-        elif _is_active_section(section) and scoring is not None:
+        elif (
+            _is_active_section(section)
+            and scoring is not None
+            and _text(scoring.get("scoring_input_kind"))
+            != "product_level_evidence"
+        ):
             role = "score_active"
             eligible = True
             if canonical_id:

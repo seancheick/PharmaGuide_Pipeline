@@ -2893,6 +2893,40 @@ def test_build_final_db_strict_mode_raises_on_enriched_scored_mismatch():
             )
 
 
+def test_build_final_db_strict_mode_raises_on_product_export_errors(monkeypatch):
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        enriched_dir = root / "enriched"
+        scored_dir = root / "scored"
+        output_dir = root / "out"
+        enriched_dir.mkdir()
+        scored_dir.mkdir()
+
+        (enriched_dir / "batch.json").write_text(
+            json.dumps([make_enriched()]), encoding="utf-8"
+        )
+        scored = make_scored()
+        scored["dsld_id"] = "999"
+        (scored_dir / "batch.json").write_text(
+            json.dumps([scored]), encoding="utf-8"
+        )
+        monkeypatch.setattr(
+            "build_final_db.build_detail_blob",
+            lambda *_args, **_kwargs: (_ for _ in ()).throw(
+                RuntimeError("synthetic export failure")
+            ),
+        )
+
+        with pytest.raises(ValueError, match="1 product export error"):
+            build_final_db(
+                [str(enriched_dir)],
+                [str(scored_dir)],
+                str(output_dir),
+                str(Path(__file__).parent.parent),
+                strict=True,
+            )
+
+
 def test_build_final_db_default_mode_allows_enriched_scored_mismatch(monkeypatch):
     """Default (non-strict) mode exports matched products without raising."""
     with tempfile.TemporaryDirectory() as tmp:
@@ -5193,6 +5227,40 @@ def test_final_blob_builds_and_summarizes_the_row_ledger() -> None:
     assert blob["row_ledger_summary"]["mapped_coverage"] == 1.0
 
 
+def test_final_source_inventory_preserves_cleaner_scoring_disposition() -> None:
+    from build_final_db import _final_label_source_rows
+
+    enriched = {
+        "activeIngredients": [
+            {
+                "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                "raw_source_text": "Unmapped proprietary blend child",
+                "score_eligible_by_cleaner": False,
+                "score_exclusion_reason": "nested_display_only",
+            }
+        ],
+        "label_source_rows": [
+            {
+                "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                "raw_source_text": "Unmapped proprietary blend child",
+                "source_section": "activeIngredients",
+            }
+        ],
+    }
+
+    rows = _final_label_source_rows(enriched, [], [])
+
+    assert rows == [
+        {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "Unmapped proprietary blend child",
+            "source_section": "activeIngredients",
+            "score_eligible_by_cleaner": False,
+            "score_exclusion_reason": "nested_display_only",
+        }
+    ]
+
+
 def test_final_ledger_uses_unmapped_analysis_over_stale_assessed_form_state():
     from build_final_db import _build_canonical_label_ledger
 
@@ -5435,7 +5503,13 @@ def test_cleaner_and_final_blob_emit_label_source_inventory_and_complete_audit()
     }
 
     blob = build_detail_blob(normalized, make_scored())
-    assert blob["label_source_rows"] == normalized["label_source_rows"]
+    assert blob["label_source_rows"] == [
+        {
+            **normalized["label_source_rows"][0],
+            "score_eligible_by_cleaner": True,
+        },
+        normalized["label_source_rows"][1],
+    ]
     assert blob["label_ledger_audit"] == normalized["label_ledger_audit"]
 
 
