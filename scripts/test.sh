@@ -24,6 +24,9 @@ PROFILE="${1:-fast}"
 shift || true
 
 FLUTTER_REPO="${FLUTTER_REPO:-/Users/seancheick/PharmaGuide ai}"
+RELEASE_CANDIDATE_ROOT="${PG_RELEASE_CANDIDATE_ROOT:-}"
+RELEASE_DIST_DIR=""
+RELEASE_FINAL_DB_DIR=""
 PYTEST_BASE=(scripts/tests -q --tb=line)
 USER_TARGETS=()
 USER_OPTIONS=()
@@ -108,6 +111,42 @@ pytest_args_for_parallel() {
   fi
 }
 
+release_artifact_dirs() {
+  if [[ -z "$RELEASE_CANDIDATE_ROOT" ]]; then
+    RELEASE_DIST_DIR="$REPO_ROOT/scripts/dist"
+    RELEASE_FINAL_DB_DIR="$REPO_ROOT/scripts/final_db_output"
+    return 0
+  fi
+
+  if [[ "$RELEASE_CANDIDATE_ROOT" != /* ]]; then
+    echo "scripts/test.sh release: PG_RELEASE_CANDIDATE_ROOT must be an absolute path" >&2
+    return 2
+  fi
+
+  RELEASE_CANDIDATE_ROOT="${RELEASE_CANDIDATE_ROOT%/}"
+  RELEASE_DIST_DIR="$RELEASE_CANDIDATE_ROOT/dist"
+  RELEASE_FINAL_DB_DIR="$RELEASE_CANDIDATE_ROOT/final_db_output"
+  if [[ ! -d "$RELEASE_DIST_DIR" || ! -d "$RELEASE_FINAL_DB_DIR" ]]; then
+    echo "scripts/test.sh release: candidate dist/final_db_output pair is incomplete: $RELEASE_CANDIDATE_ROOT" >&2
+    return 2
+  fi
+  if [[ ! -f "$RELEASE_DIST_DIR/export_manifest.json" || ! -f "$RELEASE_DIST_DIR/pharmaguide_core.db" ]]; then
+    echo "scripts/test.sh release: candidate dist/final_db_output pair is incomplete: $RELEASE_CANDIDATE_ROOT" >&2
+    return 2
+  fi
+
+  echo "test.sh: release gates target preserved candidate $RELEASE_CANDIDATE_ROOT" >&2
+}
+
+release_preflight_candidate_check() {
+  "$PG_PYTHON" scripts/audit_source_of_truth_contract.py freshness \
+    --dist-dir "$RELEASE_DIST_DIR" \
+    --final-db-dir "$RELEASE_FINAL_DB_DIR" \
+    --products-dir scripts/products \
+    --skip-interaction-inputs \
+    --strict-release
+}
+
 release_preflight_staleness_check() {
   # Wave 6.Z release hardening: emit BIG actionable messages when the
   # pipeline chain is stale. The downstream audits (FRESHNESS_PRODUCTS_NEWER_
@@ -116,6 +155,10 @@ release_preflight_staleness_check() {
   # any pytest runs — so a stale-Flutter-bundle ship never surprises you.
   #
   # Skip with: SKIP_STALENESS_CHECK=1 bash scripts/test.sh release
+  if [[ -n "$RELEASE_CANDIDATE_ROOT" ]]; then
+    release_preflight_candidate_check
+    return 0
+  fi
   if [[ "${SKIP_STALENESS_CHECK:-0}" == "1" ]]; then
     return 0
   fi
@@ -220,17 +263,24 @@ PY
 }
 
 run_release_artifact_gates() {
-  "$PG_PYTHON" scripts/iqm_form_evidence.py audit
-  "$PG_PYTHON" scripts/validate_form_notes_export.py --blobs-dir scripts/dist/detail_blobs
-  "$PG_PYTHON" scripts/coverage_gate_functional_roles.py
-  "$PG_PYTHON" scripts/audit_source_of_truth_contract.py freshness \
-    --dist-dir scripts/dist \
-    --final-db-dir scripts/final_db_output \
-    --products-dir scripts/products \
+  local freshness_args=(
+    freshness
+    --dist-dir "$RELEASE_DIST_DIR"
+    --final-db-dir "$RELEASE_FINAL_DB_DIR"
+    --products-dir scripts/products
     --strict-release
-  if [[ -d "$FLUTTER_REPO" ]]; then
+  )
+  if [[ -n "$RELEASE_CANDIDATE_ROOT" ]]; then
+    freshness_args+=(--skip-interaction-inputs)
+  fi
+
+  "$PG_PYTHON" scripts/iqm_form_evidence.py audit
+  "$PG_PYTHON" scripts/validate_form_notes_export.py --blobs-dir "$RELEASE_DIST_DIR/detail_blobs"
+  "$PG_PYTHON" scripts/coverage_gate_functional_roles.py
+  "$PG_PYTHON" scripts/audit_source_of_truth_contract.py "${freshness_args[@]}"
+  if [[ -z "$RELEASE_CANDIDATE_ROOT" && -d "$FLUTTER_REPO" ]]; then
     "$PG_PYTHON" scripts/audit_source_of_truth_contract.py flutter \
-      --dist-dir scripts/dist \
+      --dist-dir "$RELEASE_DIST_DIR" \
       --flutter-repo "$FLUTTER_REPO" \
       --strict-release
   fi
@@ -300,6 +350,7 @@ case "$PROFILE" in
     # Wave 6.Z release hardening: actionable staleness preflight runs
     # BEFORE pytest so a stale Flutter bundle never sneaks through with
     # only a technical-finding-code warning. Skip via SKIP_STALENESS_CHECK=1.
+    release_artifact_dirs
     REPO_ROOT="$REPO_ROOT" FLUTTER_REPO="$FLUTTER_REPO" \
       release_preflight_staleness_check
     split_user_pytest_args "$@"
