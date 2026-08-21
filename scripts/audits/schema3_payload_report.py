@@ -105,6 +105,7 @@ def _new_family_report() -> dict[str, dict[str, int]]:
             "interaction_warning_prose",
             "warnings_profile_gated_duplicate",
             "legacy_section_breakdown",
+            "row_ledger_diagnostics",
             "audit_diagnostics",
             "product_status_alias",
             "synergy_id_alias",
@@ -171,6 +172,8 @@ def _account_removed_families(
     for key, family in (
         ("warnings_profile_gated", "warnings_profile_gated_duplicate"),
         ("section_breakdown", "legacy_section_breakdown"),
+        ("row_ledger", "row_ledger_diagnostics"),
+        ("row_ledger_summary", "row_ledger_diagnostics"),
         ("product_status", "product_status_alias"),
     ):
         if key in blob:

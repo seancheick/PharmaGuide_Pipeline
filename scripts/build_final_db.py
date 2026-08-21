@@ -88,7 +88,7 @@ from serving_frequency import (
 )
 from identity_integrity import is_identity_scoreable
 from label_record_contract import build_label_record_contract
-from row_ledger import validate_row_ledger
+from row_ledger import build_row_ledger, summarize_row_ledger, validate_row_ledger
 from scoring_v4.modules.fiber_digestive_helpers import (
     fiber_rows as _fiber_goal_rows,
     has_fiber_context as _has_fiber_goal_context,
@@ -1394,8 +1394,15 @@ def _active_export_contract(enriched: Dict) -> Dict[str, Any]:
         result = get_scoring_ingredients(enriched, strict=True, allow_legacy_fallback=False)
     except Exception as exc:  # pragma: no cover - defensive export fallback.
         logger.debug("strict scoring contract unavailable for export: %s", exc)
-        return {"available": False, "source_paths": set(), "terms": set(), "canonical_ids": set()}
+        return {
+            "available": False,
+            "source_paths": set(),
+            "terms": set(),
+            "canonical_ids": set(),
+            "scoring_rows": [],
+        }
 
+    scoring_rows = [row for row in result.rows if isinstance(row, dict)]
     rows = [
         row for row in result.rows
         if (
@@ -1432,6 +1439,7 @@ def _active_export_contract(enriched: Dict) -> Dict[str, Any]:
         "source_paths": source_paths,
         "terms": terms,
         "canonical_ids": canonical_ids,
+        "scoring_rows": scoring_rows,
     }
 
 
@@ -3240,7 +3248,10 @@ def _validate_active_count_reconciliation(
         )
 
     if "row_ledger" in blob:
-        issues = validate_row_ledger(blob.get("row_ledger"), raw_actives_count)
+        # The canonical source inventory is the row authority. The retired
+        # aggregate inconsistently counted forms and alternate serving rows,
+        # so it remains diagnostic only once an exact ledger is present.
+        issues = validate_row_ledger(blob.get("row_ledger"), None)
         if issues:
             first = issues[0]
             raise ValueError(
@@ -7699,6 +7710,23 @@ def build_detail_blob(
         reasons = sorted(set(reasons + [_DROP_REASON_UNMAPPED]))
     blob["raw_actives_count"] = raw_actives_count
     blob["ingredients_dropped_reasons"] = reasons
+    # Fresh enriched artifacts carry a complete stable source inventory. Build
+    # the exact row ledger at the final boundary, after app display and analysis
+    # destinations are known. Legacy fixtures without source rows retain the
+    # aggregate compatibility gate below.
+    if label_source_rows and "raw_actives_count" in enriched:
+        row_ledger = build_row_ledger(
+            label_source_rows,
+            display_ingredients,
+            label_ledger_omissions,
+            ingredients,
+            inactive,
+            scoring_rows=active_export_contract.get("scoring_rows", []),
+        )
+        row_ledger_summary = summarize_row_ledger(row_ledger)
+        row_ledger_summary["legacy_raw_actives_count"] = raw_actives_count
+        blob["row_ledger"] = row_ledger
+        blob["row_ledger_summary"] = row_ledger_summary
     _validate_active_count_reconciliation(blob, raw_actives_count, dsld_id_for_validation)
 
     # Sprint E1.5.X-4 — product availability exposed as a dedicated top-level

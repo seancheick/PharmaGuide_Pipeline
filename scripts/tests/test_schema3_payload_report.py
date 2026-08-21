@@ -89,6 +89,16 @@ def _fixture(tmp_path: Path) -> tuple[Path, Path]:
                 "warnings": [_warning()],
                 "warnings_profile_gated": [_warning()],
                 "section_breakdown": {"legacy": True},
+                "row_ledger": [
+                    {
+                        "row_ref": "ingredientRows[0]",
+                        "mapping_disposition": "mapped_score_active",
+                    }
+                ],
+                "row_ledger_summary": {
+                    "source_row_count": 1,
+                    "mapped_coverage": 1.0,
+                },
                 "rda_ul_data": {
                     "ingredients_with_rda": [{"canonical_id": "magnesium"}],
                     "adequacy_results": [{"canonical_id": "magnesium"}],
@@ -130,6 +140,7 @@ def test_report_accounts_bytes_and_proves_warning_equivalence(tmp_path: Path) ->
     assert report["bytes"]["saved"] > 0
     assert report["removed_families"]["ingredient_safety_hits"]["bytes"] > 0
     assert report["removed_families"]["rda_duplicates"]["bytes"] > 0
+    assert report["removed_families"]["row_ledger_diagnostics"]["bytes"] > 0
     assert len(report["input_fingerprint_sha256"]) == 64
 
 

@@ -112,7 +112,9 @@ def test_row_ledger_reconciles_every_source_and_links_owned_components() -> None
     assert summary["score_eligible_count"] == 1
     assert summary["mapped_score_eligible_count"] == 1
     assert summary["mapped_coverage"] == 1.0
-    assert validate_row_ledger(ledger, raw_actives_count=2) == []
+    # The legacy aggregate includes form rows; forms still do not inflate the
+    # score-eligible denominator because they link to their owner.
+    assert validate_row_ledger(ledger, raw_actives_count=3) == []
 
 
 def test_active_to_inactive_transition_has_a_distinct_disposition() -> None:
@@ -157,6 +159,125 @@ def test_unresolved_score_eligible_row_is_measured_then_fails_strict_validation(
     assert ledger[0]["mapping_disposition"] == "unresolved_score_active"
     assert summary["mapped_coverage"] == 0.0
     assert any(issue["code"] == "UNRESOLVED_SCORE_ACTIVE" for issue in issues)
+
+
+def test_mapped_display_only_scoring_row_records_its_real_destination() -> None:
+    source = [
+        {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Total Carbohydrates",
+            "source_section": "activeIngredients",
+        },
+        {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "Dietary Fiber",
+            "source_section": "activeIngredients",
+        },
+    ]
+    display = [
+        {
+            **source[0],
+            "display_type": "nutrition_fact",
+            "display_disposition": "label_context",
+            "score_included": False,
+        },
+        {
+            **source[1],
+            "display_type": "mapped_ingredient",
+            "display_disposition": "scored",
+            "score_included": True,
+            "canonical_id": "fiber",
+        },
+    ]
+
+    ledger = build_row_ledger(source, display, [], [], [])
+
+    assert ledger[1]["mapping_disposition"] == "mapped_score_active"
+    assert ledger[1]["final_destination"] == "display_ingredients"
+    assert validate_row_ledger(ledger, raw_actives_count=2) == []
+
+
+def test_strict_scoring_row_supplies_identity_missing_from_display_projection() -> None:
+    source = [
+        {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Enzymes",
+            "source_section": "activeIngredients",
+        },
+        {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "Protease IV",
+            "source_section": "activeIngredients",
+        },
+    ]
+    display = [
+        {
+            **source[0],
+            "display_type": "structural_container",
+            "display_disposition": "label_context",
+            "score_included": False,
+        },
+        {
+            **source[1],
+            "display_type": "mapped_ingredient",
+            "display_disposition": "scored",
+            "score_included": True,
+            "canonical_id": None,
+        },
+    ]
+    scoring_rows = [
+        {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "canonical_id": "digestive_enzymes",
+            "scoring_input_kind": "product_level_evidence",
+        }
+    ]
+
+    ledger = build_row_ledger(
+        source,
+        display,
+        [],
+        [],
+        [],
+        scoring_rows=scoring_rows,
+    )
+
+    assert ledger[1]["canonical_id"] == "digestive_enzymes"
+    assert ledger[1]["mapping_disposition"] == "mapped_score_active"
+    assert ledger[1]["final_destination"] == "display_ingredients"
+    assert validate_row_ledger(ledger, raw_actives_count=2) == []
+
+
+def test_canonical_source_inventory_replaces_inconsistent_legacy_count() -> None:
+    ledger = build_row_ledger(
+        [
+            {
+                "raw_source_path": "ingredientRows[0]",
+                "raw_source_text": "Calories",
+                "source_section": "activeIngredients",
+            },
+            {
+                "raw_source_path": "ingredientRows[1]",
+                "raw_source_text": "Calories",
+                "source_section": "activeIngredients",
+            },
+        ],
+        [
+            {
+                "raw_source_path": "ingredientRows[0]",
+                "display_type": "nutrition_fact",
+            },
+            {
+                "raw_source_path": "ingredientRows[1]",
+                "display_type": "nutrition_fact",
+            },
+        ],
+        [],
+        [],
+        [],
+    )
+
+    assert validate_row_ledger(ledger, raw_actives_count=None) == []
 
 
 def test_duplicate_source_reference_is_never_silently_deduplicated() -> None:

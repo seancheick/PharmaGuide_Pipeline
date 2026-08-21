@@ -582,21 +582,90 @@ def _check_canonical_id_on_mapped(rec: ProductRecord, blob: dict) -> None:
                     ingredient=ing.get("name"))
 
 
+def _app_active_rows(blob: dict) -> list[dict[str, Any]]:
+    """Return the rows Flutter actually uses for the active label surface.
+
+    Schema 2.4 renders ``display_ingredients`` whenever that canonical ledger
+    is present. ``ingredients`` is then analysis compatibility data, not the
+    title source of truth. Older blobs without the ledger retain the legacy
+    fallback.
+    """
+    if isinstance(blob.get("display_ingredients"), list):
+        excluded_types = {
+            "inactive_ingredient",
+            "nutrition_fact",
+            "structural_container",
+            "summary_wrapper",
+        }
+        return [
+            row
+            for row in blob["display_ingredients"]
+            if isinstance(row, dict)
+            and str(row.get("display_type") or "").strip() not in excluded_types
+            and str(row.get("source_section") or "").strip().lower()
+            not in {"inactive", "inactiveingredients"}
+        ]
+    return [
+        row for row in (blob.get("ingredients") or []) if isinstance(row, dict)
+    ]
+
+
+def _row_analysis_value(row: Mapping[str, Any], key: str) -> Any:
+    if key in row:
+        return row.get(key)
+    analysis = row.get("analysis")
+    return analysis.get(key) if isinstance(analysis, Mapping) else None
+
+
+def _app_display_label(row: Mapping[str, Any]) -> str:
+    for key in (
+        "label_display_name",
+        "display_label",
+        "standard_name",
+        "name",
+        "raw_source_text",
+    ):
+        value = _row_analysis_value(row, key)
+        if value is not None and str(value).strip():
+            return str(value).strip()
+    return ""
+
+
+def _app_visible_surface(row: Mapping[str, Any]) -> str:
+    """Combine title and separately rendered form detail for fidelity checks."""
+    values: list[str] = [_app_display_label(row)]
+    for key in (
+        "label_display_form",
+        "display_form_label",
+        "form_note_preview",
+        "form_note",
+    ):
+        value = _row_analysis_value(row, key)
+        if value is not None and str(value).strip():
+            values.append(str(value).strip())
+    return " ".join(values).lower()
+
+
 def _check_display_label_collapse(rec: ProductRecord, blob: dict) -> None:
     """Invariant #1 from test_label_fidelity_contract.py."""
-    for ing in blob.get("ingredients") or []:
-        display = (ing.get("display_label") or "").strip()
+    for ing in _app_active_rows(blob):
+        display = _app_display_label(ing)
         canonical = (
-            ing.get("canonical_name")
-            or ing.get("scoring_group_canonical")
-            or ing.get("standard_name")
+            _row_analysis_value(ing, "canonical_name")
+            or _row_analysis_value(ing, "scoring_group_canonical")
+            or _row_analysis_value(ing, "standard_name")
+            or _row_analysis_value(ing, "display_label")
             or ""
-        ).strip()
+        )
+        canonical = str(canonical).strip()
         source = (ing.get("raw_source_text") or ing.get("name") or "").strip()
         if not display or not canonical or not source:
             continue
         if (display.lower() == canonical.lower()
-                and source.lower() != canonical.lower()):
+                and source.lower() != canonical.lower()
+                and _normalize_name(source) not in _normalize_name(
+                    _app_visible_surface(ing)
+                )):
             rec.add("DISPLAY_LABEL_COLLAPSES_TO_CANONICAL",
                     f"display={display!r} canonical={canonical!r} source={source!r}",
                     ingredient=source)
@@ -612,7 +681,7 @@ def _check_branded_tokens(rec: ProductRecord, blob: dict) -> None:
     discusses Ferrochel as a related chelate). That text is editorial context,
     not label content — flagging it as a "dropped branded token" is wrong.
     """
-    for ing in blob.get("ingredients") or []:
+    for ing in _app_active_rows(blob):
         # Only scan LABEL-derived fields.
         label_sources = [
             ing.get("name") or "",
@@ -623,18 +692,18 @@ def _check_branded_tokens(rec: ProductRecord, blob: dict) -> None:
             ),
         ]
         label_blob = " ".join(label_sources).lower()
-        display = (ing.get("display_label") or "").lower()
+        display = _app_visible_surface(ing)
         for tok in BRANDED_TOKENS:
             if tok.lower() in label_blob and tok.lower() not in display:
                 rec.add("BRANDED_TOKEN_DROPPED",
-                        f"branded token {tok!r} in label data but absent from display_label={display!r}",
+                        f"branded token {tok!r} in label data but absent from app display surface={display!r}",
                         ingredient=ing.get("name"))
                 break
 
 
 def _check_plant_part(rec: ProductRecord, blob: dict) -> None:
     """Invariant #5: plant part token preserved in display_label."""
-    for ing in blob.get("ingredients") or []:
+    for ing in _app_active_rows(blob):
         forms = ing.get("forms") or []
         form_blob = " ".join((f.get("name", "") if isinstance(f, dict) else "") for f in forms)
         raw = (ing.get("raw_source_text") or "")
@@ -643,12 +712,12 @@ def _check_plant_part(rec: ProductRecord, blob: dict) -> None:
             if not m:
                 continue
             part = m.group(1).lower()
-            display = (ing.get("display_label") or "").lower()
+            display = _app_visible_surface(ing)
             equivalents = {"leaf": ("leaf", "leaves"), "leaves": ("leaf", "leaves")}
             acceptable = equivalents.get(part, (part,))
             if not any(e in display for e in acceptable):
                 rec.add("PLANT_PART_DROPPED",
-                        f"plant part {part!r} present in source {source_text!r} but absent from display_label",
+                        f"plant part {part!r} present in source {source_text!r} but absent from app display surface",
                         ingredient=ing.get("name"))
                 break  # one finding per ingredient
 
@@ -745,8 +814,9 @@ def _check_blend_children(rec: ProductRecord, blob: dict) -> None:
     BLEND_HEADER, OPAQUE_BLEND, fake-transparency-as-OPAQUE.
 
     Correct behavior per state (disclosure_level field in the blob):
-      - "full" / "partial":   children with names AND individual doses.
-                              Missing dose on any child → MEDIUM finding.
+      - "full":               every named child has an individual dose.
+      - "partial":            blend total and child names are disclosed;
+                              individual child doses may be withheld.
       - "none" (OPAQUE):      children MAY be listed by name without doses
                               (the label says "Antioxidant Blend (2.4 g)
                               consisting of: A, B, C..."). What makes the
@@ -780,23 +850,46 @@ def _check_blend_children(rec: ProductRecord, blob: dict) -> None:
                 continue
 
             # Per-state checks
-            child_qty = child.get("quantity")
-            if disclosure_level in ("full", "partial"):
-                # Children should have doses (or an explicit disclosed flag)
+            child_qty = (
+                child.get("amount")
+                if "amount" in child
+                else child.get("quantity")
+            )
+            has_child_amount = (
+                child_qty is not None
+                and child_qty != ""
+                and not isinstance(child_qty, bool)
+            )
+            if disclosure_level == "full":
+                # Full means every child amount is individually disclosed.
                 disclosed = (
                     child.get("is_disclosed_dose")
                     or child.get("disclosed")
-                    or child_qty is not None
+                    or has_child_amount
                 )
                 if not disclosed:
                     rec.add("BLEND_CHILD_WITHOUT_DOSE_DISCLOSURE",
-                            f"blend {blnd.get('name')!r} ({disclosure_level}) child "
+                            f"blend {blnd.get('name')!r} (full) child "
                             f"{child.get('name')!r} has no dose / disclosure flag",
                             ingredient=child.get("name"))
+            elif disclosure_level == "partial":
+                # Partial is a parent-total contract, not a promise that any
+                # one child's dose is known.
+                blend_total = blnd.get("total_weight")
+                if blend_total is None:
+                    blend_total = blnd.get("blend_total_mg")
+                if not isinstance(blend_total, (int, float)) or blend_total <= 0:
+                    rec.add(
+                        "BLEND_CHILD_WITHOUT_DOSE_DISCLOSURE",
+                        f"blend {blnd.get('name')!r} marked partial but has no "
+                        "positive disclosed blend total",
+                        ingredient=blnd.get("name"),
+                    )
+                    break
             elif disclosure_level == "none":
                 # OPAQUE blend: child names OK, doses MUST be None.
                 # A non-None dose contradicts the parent's classification.
-                if child_qty is not None:
+                if has_child_amount:
                     rec.add("BLEND_CHILD_WITHOUT_DOSE_DISCLOSURE",
                             f"blend {blnd.get('name')!r} marked opaque (disclosure='none') "
                             f"but child {child.get('name')!r} has quantity={child_qty!r} — "

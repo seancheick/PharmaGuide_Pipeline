@@ -162,6 +162,12 @@ def project_detail_blob(
     projected.pop("warnings_profile_gated", None)
 
     projected.pop("section_breakdown", None)
+    # The exact reconciliation ledger is validated during candidate build and
+    # retained in schema 2.4 for the compatibility release. It is operational
+    # evidence, not a mobile rendering dependency, so schema 3 keeps it in the
+    # release report rather than repeating it in every consumer blob.
+    projected.pop("row_ledger", None)
+    projected.pop("row_ledger_summary", None)
     projected.pop("product_status", None)
     if "proprietary_blend" in projected:
         projected["has_opaque_proprietary_blend"] = projected.pop(

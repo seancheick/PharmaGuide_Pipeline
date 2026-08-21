@@ -131,6 +131,8 @@ def build_row_ledger(
     omissions: Iterable[Mapping[str, Any]],
     ingredients: Iterable[Mapping[str, Any]],
     inactive_ingredients: Iterable[Mapping[str, Any]],
+    *,
+    scoring_rows: Iterable[Mapping[str, Any]] = (),
 ) -> list[dict[str, Any]]:
     """Build exactly one reconciliation record per supplied source row.
 
@@ -143,6 +145,7 @@ def build_row_ledger(
     omission_by_ref = _index_by_ref(omissions)
     ingredient_by_ref = _index_by_ref(ingredients)
     inactive_by_ref = _index_by_ref(inactive_ingredients)
+    scoring_by_ref = _index_by_ref(scoring_rows)
     ledger: list[dict[str, Any]] = []
 
     for source in source_rows:
@@ -167,6 +170,7 @@ def build_row_ledger(
         omission = omission_by_ref.get(ref)
         ingredient = ingredient_by_ref.get(ref)
         inactive = inactive_by_ref.get(ref)
+        scoring = scoring_by_ref.get(ref)
         owner = _owner_ref(ref)
         is_form = ".forms[" in ref
         is_nested = ".nestedRows[" in ref
@@ -177,7 +181,7 @@ def build_row_ledger(
         score_included = (
             display.get("score_included") is True if display else False
         )
-        canonical_id = _canonical_id(ingredient, display, source)
+        canonical_id = _canonical_id(ingredient, scoring, display, source)
 
         if is_form:
             role = "owned_form"
@@ -223,7 +227,10 @@ def build_row_ledger(
             if canonical_id:
                 disposition = "mapped_score_active"
                 reason = "MAPPED_CANONICAL_IDENTITY"
-                destination = "ingredients"
+                destination = (
+                    "ingredients" if ingredient is not None
+                    else "display_ingredients"
+                )
             else:
                 disposition = "unresolved_score_active"
                 reason = "UNRESOLVED_CANONICAL_IDENTITY"
@@ -235,6 +242,17 @@ def build_row_ledger(
                 disposition = "mapped_score_active"
                 reason = "MAPPED_CANONICAL_IDENTITY"
                 destination = "ingredients"
+            else:
+                disposition = "unresolved_score_active"
+                reason = "UNRESOLVED_CANONICAL_IDENTITY"
+                destination = "display_ingredients"
+        elif _is_active_section(section) and scoring is not None:
+            role = "score_active"
+            eligible = True
+            if canonical_id:
+                disposition = "mapped_score_active"
+                reason = "MAPPED_CANONICAL_IDENTITY"
+                destination = "display_ingredients"
             else:
                 disposition = "unresolved_score_active"
                 reason = "UNRESOLVED_CANONICAL_IDENTITY"
@@ -296,6 +314,9 @@ def summarize_row_ledger(ledger: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     coverage = len(mapped) / denominator if denominator else None
     return {
         "source_row_count": len(rows),
+        "active_source_row_count": sum(
+            1 for row in rows if _is_active_section(row.get("source_section"))
+        ),
         "score_eligible_count": denominator,
         "mapped_score_eligible_count": len(mapped),
         "mapped_coverage": coverage,
@@ -313,7 +334,7 @@ def summarize_row_ledger(ledger: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
 
 def validate_row_ledger(
     ledger: Any,
-    raw_actives_count: int,
+    raw_actives_count: Optional[int],
 ) -> list[dict[str, Any]]:
     """Return deterministic strict-gate findings without raising."""
 
@@ -355,7 +376,6 @@ def validate_row_ledger(
         if (
             _is_active_section(entry.get("source_section"))
             and ref.startswith("ingredientRows[")
-            and ".forms[" not in ref
         ):
             active_source_rows += 1
 
@@ -373,11 +393,12 @@ def validate_row_ledger(
         elif entry.get("score_eligible") is True and disposition != "mapped_score_active":
             add("UNRESOLVED_SCORE_ACTIVE", f"score-eligible row is {disposition!r}", ref)
         if disposition == "mapped_score_active" and destination != "ingredients":
-            add(
-                "MAPPED_DESTINATION_MISMATCH",
-                f"mapped score row destination is {destination!r}",
-                ref,
-            )
+            if destination != "display_ingredients":
+                add(
+                    "MAPPED_DESTINATION_MISMATCH",
+                    f"mapped score row destination is {destination!r}",
+                    ref,
+                )
         if disposition == "unresolved_source_row":
             add(
                 "UNRESOLVED_SOURCE_ROW",
@@ -398,7 +419,7 @@ def validate_row_ledger(
         if owner_ref == ref or owner_ref not in seen_refs:
             add("INVALID_OWNER_REF", f"invalid owner_row_ref {owner_ref!r}", ref)
 
-    if active_source_rows != raw_actives_count:
+    if raw_actives_count is not None and active_source_rows != raw_actives_count:
         add(
             "ACTIVE_SOURCE_COUNT_MISMATCH",
             f"ledger active count {active_source_rows} != raw_actives_count {raw_actives_count}",

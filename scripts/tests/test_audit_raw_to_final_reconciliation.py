@@ -10,6 +10,10 @@ if str(SCRIPTS) not in sys.path:
 
 from audit_raw_to_final import (  # noqa: E402
     ProductRecord,
+    _check_blend_children,
+    _check_branded_tokens,
+    _check_display_label_collapse,
+    _check_plant_part,
     _check_raw_actives_present_in_blob,
     audit_product,
 )
@@ -91,3 +95,124 @@ def test_explicit_gate_quarantine_is_a_reconciled_final_destination(
         "kind": "quarantined",
         "reasons": ["review_queue: assessment readiness incomplete"],
     }
+
+
+def test_label_fidelity_checks_use_the_app_display_ledger() -> None:
+    record = _record()
+    blob = {
+        # The legacy scoring analysis canonicalizes the title. The app renders
+        # the canonical display ledger whenever it is present.
+        "ingredients": [
+            {
+                "name": "KSM-66",
+                "raw_source_text": "KSM-66",
+                "display_label": "Ashwagandha",
+                "standard_name": "Ashwagandha",
+                "forms": [{"name": "Ashwagandha Root Extract"}],
+            }
+        ],
+        "display_ingredients": [
+            {
+                "raw_source_path": "ingredientRows[0]",
+                "raw_source_text": "KSM-66",
+                "label_display_name": "KSM-66",
+                "label_display_form": "Ashwagandha Root Extract",
+                "display_type": "mapped_ingredient",
+                "score_included": True,
+                "analysis": {
+                    "canonical_id": "ashwagandha",
+                    "display_label": "Ashwagandha",
+                    "standard_name": "Ashwagandha",
+                    "form_note": "KSM-66 is made from ashwagandha root.",
+                },
+            }
+        ],
+    }
+
+    _check_display_label_collapse(record, blob)
+    _check_branded_tokens(record, blob)
+    _check_plant_part(record, blob)
+
+    assert record.findings == []
+
+
+def test_label_fidelity_still_flags_loss_from_the_app_display_surface() -> None:
+    record = _record()
+    blob = {
+        "ingredients": [],
+        "display_ingredients": [
+            {
+                "raw_source_path": "ingredientRows[0]",
+                "raw_source_text": "KSM-66 Ashwagandha root extract",
+                "label_display_name": "Ashwagandha",
+                "display_type": "mapped_ingredient",
+                "score_included": True,
+                "analysis": {
+                    "canonical_id": "ashwagandha",
+                    "display_label": "Ashwagandha",
+                    "standard_name": "Ashwagandha",
+                },
+            }
+        ],
+    }
+
+    _check_display_label_collapse(record, blob)
+    _check_branded_tokens(record, blob)
+    _check_plant_part(record, blob)
+
+    assert {finding.code for finding in record.findings} == {
+        "DISPLAY_LABEL_COLLAPSES_TO_CANONICAL",
+        "BRANDED_TOKEN_DROPPED",
+        "PLANT_PART_DROPPED",
+    }
+
+
+def test_partial_blend_allows_named_children_without_individual_amounts() -> None:
+    record = _record()
+    blob = {
+        "proprietary_blend_detail": {
+            "blends": [
+                {
+                    "name": "Daily Botanical Blend",
+                    "disclosure_level": "partial",
+                    "total_weight": 500,
+                    "unit": "mg",
+                    "hidden_count": 2,
+                    "child_ingredients": [
+                        {"name": "Ashwagandha", "amount": None, "unit": ""},
+                        {"name": "Rhodiola", "amount": None, "unit": ""},
+                    ],
+                }
+            ]
+        }
+    }
+
+    _check_blend_children(record, blob)
+
+    assert record.findings == []
+
+
+def test_full_blend_requires_every_child_amount() -> None:
+    record = _record()
+    blob = {
+        "proprietary_blend_detail": {
+            "blends": [
+                {
+                    "name": "Fully Disclosed Blend",
+                    "disclosure_level": "full",
+                    "total_weight": 500,
+                    "unit": "mg",
+                    "child_ingredients": [
+                        {"name": "Ashwagandha", "amount": 300, "unit": "mg"},
+                        {"name": "Rhodiola", "amount": None, "unit": ""},
+                    ],
+                }
+            ]
+        }
+    }
+
+    _check_blend_children(record, blob)
+
+    assert [finding.code for finding in record.findings] == [
+        "BLEND_CHILD_WITHOUT_DOSE_DISCLOSURE"
+    ]

@@ -5145,6 +5145,54 @@ def test_final_blob_uses_label_ledger_without_promoting_context_into_analysis():
     assert fish_oil["form_status"] == "unknown"
 
 
+def test_final_blob_builds_and_summarizes_the_row_ledger() -> None:
+    enriched = _omega_label_ledger_enriched()
+    enriched["display_ingredients"] = [
+        {
+            "label_display_name": "Fish Oil",
+            "raw_source_text": "Fish Oil",
+            "raw_source_path": "ingredientRows[0]",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "label_order": 0,
+            "score_included": True,
+            "display_disposition": "scored",
+            "canonical_id": "fish_oil",
+        }
+    ]
+    enriched["label_source_rows"] = [
+        {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Fish Oil",
+            "source_section": "activeIngredients",
+        }
+    ]
+    enriched["raw_actives_count"] = 1
+    enriched["activeIngredients"] = [enriched["activeIngredients"][0]]
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        enriched["ingredient_quality_data"]["ingredients"][0]
+    ]
+
+    blob = build_detail_blob(enriched, make_scored())
+
+    assert blob["row_ledger"] == [
+        {
+            "row_ref": "ingredientRows[0]",
+            "source_label": "Fish Oil",
+            "source_section": "activeIngredients",
+            "source_role": "score_active",
+            "score_eligible": True,
+            "mapping_disposition": "mapped_score_active",
+            "reason_code": "MAPPED_CANONICAL_IDENTITY",
+            "final_destination": "ingredients",
+            "owner_row_ref": None,
+            "canonical_id": "fish_oil",
+            "display_disposition": "scored",
+        }
+    ]
+    assert blob["row_ledger_summary"]["mapped_coverage"] == 1.0
+
+
 def test_final_ledger_uses_unmapped_analysis_over_stale_assessed_form_state():
     from build_final_db import _build_canonical_label_ledger
 

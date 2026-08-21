@@ -149,6 +149,20 @@ def _schema2_blob() -> dict:
             }
         ],
         "section_breakdown": {"ingredient_quality": {"score": 10}},
+        "row_ledger": [
+            {
+                "row_ref": "ingredientRows[0]",
+                "source_role": "score_active",
+                "score_eligible": True,
+                "mapping_disposition": "mapped_score_active",
+                "reason_code": "MAPPED_CANONICAL_IDENTITY",
+                "final_destination": "ingredients",
+            }
+        ],
+        "row_ledger_summary": {
+            "source_row_count": 1,
+            "mapped_coverage": 1.0,
+        },
         "rda_ul_data": {
             "ingredients_with_rda": [{"canonical_id": "magnesium"}],
             "adequacy_results": [{"canonical_id": "magnesium"}],
@@ -195,6 +209,8 @@ def test_schema_3_removes_only_redundant_consumer_payloads() -> None:
     assert "section_breakdown" not in projected
     assert "warnings_profile_gated" not in projected
     assert "product_status" not in projected
+    assert "row_ledger" not in projected
+    assert "row_ledger_summary" not in projected
     assert projected["product_status_detail"]["type"] == "discontinued"
     assert projected["synergy_detail"]["clusters"] == [
         {"cluster_id": "sleep_stack"}
