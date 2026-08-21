@@ -1,0 +1,506 @@
+{
+  "report_schema_version": "1.0.0",
+  "report_name": "PharmaGuide Scoring Integrity Unification Candidate",
+  "report_location": "docs/release_candidates/scoring_integrity_candidate_2026_08_21.json",
+  "generated_at": "2026-08-21T10:15:23Z",
+  "candidate_status": "verified_preproduction_candidate",
+  "acceptance_summary": {
+    "implementation_complete": true,
+    "required_verification_complete": true,
+    "candidate_only": true,
+    "production_published": false,
+    "operator_review_required": true,
+    "material_release_change": "The strict readiness contract reduces the app catalog from 13271 baseline products to 6637 candidate products and quarantines 8775 of 15412 source products."
+  },
+  "publication_boundary": {
+    "publication_status": "not_published",
+    "production_actions_performed": [],
+    "explicitly_not_performed": [
+      "Supabase upload",
+      "Flutter bundle import or commit",
+      "remote branch push",
+      "production promotion",
+      "remote-version cleanup"
+    ],
+    "operator_actions_required": [
+      "Review the 8775-product quarantine impact, especially the evidence-assessment backlog.",
+      "Sign off the 12 safety_policy_review_required products and any ambiguous clinical-policy decisions.",
+      "Approve the candidate before a separately authorized production publish."
+    ]
+  },
+  "repositories": {
+    "pipeline": {
+      "worktree": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification",
+      "branch": "codex/scoring-integrity-unification",
+      "head": "9d9768b24acf10ec1e392cc49dbb9ecb0226c086",
+      "merge_base_origin_main": "c31983c4500cc5992ecd476e4b71e7c5b7d55404",
+      "commits_ahead_of_origin_main_before_report_commit": 38
+    },
+    "flutter": {
+      "worktree": "/Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification",
+      "branch": "codex/scoring-integrity-unification",
+      "head": "10d10c8c89b5a10b21e76973fe3a345881f36b3d",
+      "merge_base_origin_main": "9a2700f8f2584f68904039bbf9e17ed4a25cf2ef",
+      "commits_ahead_of_origin_main": 2
+    }
+  },
+  "release_contract": {
+    "baseline": {
+      "export_schema_version": "2.3.0",
+      "scoring_version": "4.2.0",
+      "pipeline_version": "3.4.0",
+      "db_version": "2026.08.19.201500"
+    },
+    "candidate": {
+      "export_schema_version": "2.4.0",
+      "scoring_version": "4.3.0",
+      "pipeline_version": "3.4.0",
+      "db_version": "2026.08.21.063357",
+      "score_model": "v4",
+      "app_core_column_count": 91,
+      "server_core_column_count": 26,
+      "core_projection_checksum": "sha256:18cf782562d54e03a1414859d3978c65804e448fe212d134d2506771ff4c15ec"
+    },
+    "prepared_next_schema": "3.0.0",
+    "calibration_performed": false,
+    "pillar_weights_changed": false
+  },
+  "canonical_contract": {
+    "frozen_score_fields": [
+      "quality_score_v4_100",
+      "quality_score_status",
+      "quality_pillars_v4"
+    ],
+    "single_scoring_engine": "scripts/score_products_v4.py via scripts/scoring_v4/scored_artifact.py",
+    "single_scoring_config": "scripts/scoring_v4/config/quality_score.json",
+    "retired_production_states": [
+      "NUTRITION_ONLY",
+      "mapped_coverage_applicable"
+    ],
+    "retired_or_replaced_behavior": [
+      "food-matrix beta-carotene conversion in the supplement-only pipeline",
+      "retired V3 breakdown.C source for below_clinical_dose",
+      "gate-state values in score confidence",
+      "aggregate exact-set drop heuristics"
+    ],
+    "canonical_product_status_source": "products_core.product_status",
+    "compatibility_alias_lifetime": "one released 2.x app version"
+  },
+  "corpus": {
+    "source_product_count": 15412,
+    "source_stage_count": 37,
+    "manifest_owned_scored_file_count": 57,
+    "duplicate_source_product_count": 0,
+    "baseline": {
+      "exported_product_count": 13271,
+      "excluded_product_count": 14,
+      "quality_status_counts": {
+        "scored": 15307,
+        "suppressed_safety": 84,
+        "not_scored": 21
+      },
+      "verdict_counts": {
+        "SAFE": 11926,
+        "CAUTION": 1231,
+        "POOR": 2150,
+        "BLOCKED": 84,
+        "NOT_SCORED": 21
+      }
+    },
+    "candidate": {
+      "exported_product_count": 6637,
+      "excluded_product_count": 8775,
+      "quality_status_counts": {
+        "scored": 6585,
+        "suppressed_safety": 52,
+        "not_scored": 8775
+      },
+      "verdict_counts": {
+        "SAFE": 6015,
+        "CAUTION": 488,
+        "POOR": 82,
+        "BLOCKED": 52,
+        "NOT_SCORED": 8775
+      },
+      "live_eligibility_counts": {
+        "true": 6592,
+        "false": 8820
+      },
+      "score_unavailable_reason_counts": {
+        "blocked_by_completeness_gate": 8763,
+        "safety_policy_review_required": 12,
+        "blocked_by_safety_gate_on_suppressed_products": 52
+      },
+      "not_scored_products_in_app_catalog": 0
+    }
+  },
+  "mapping_and_row_reconciliation": {
+    "coverage_contract": "mapped score-eligible label actives / all score-eligible label actives",
+    "score_eligible_rows": 84492,
+    "mapped_score_eligible_rows": 84492,
+    "unmapped_score_eligible_rows": 0,
+    "products_below_full_coverage": 0,
+    "products_with_full_coverage": 15319,
+    "products_with_no_score_eligible_rows": 93,
+    "strict_contract_failures": 0,
+    "duplicate_row_ownership_failures": 0,
+    "unexplained_drop_failures": 0,
+    "all_scored_products_have_mapping_coverage_1": true
+  },
+  "assessment_readiness": {
+    "live_ready_products": 6592,
+    "incomplete_products": 8820,
+    "dimension_incomplete_counts": {
+      "identity": 93,
+      "dose": 930,
+      "evidence": 8445,
+      "route": 0,
+      "verification": 0
+    },
+    "material_actives_not_yet_evidence_evaluated": 19671,
+    "evidence_state_counts": {
+      "evaluated_supported": 48369,
+      "evaluated_limited_or_negative": 2681,
+      "not_yet_evaluated": 19671,
+      "not_applicable": 17471
+    },
+    "verification_state_counts": {
+      "verified_present": 1412,
+      "verified_absent": 14000,
+      "not_evaluated": 0
+    }
+  },
+  "safety_and_dose": {
+    "structured_blocked_or_unsafe_decisions": 52,
+    "structured_decision_contract_passed": true,
+    "blocking_reason_outside_blocked_or_unsafe": 0,
+    "untyped_conversion_fallbacks_shipped": 0,
+    "unresolved_material_ul_assessments_shipped": 0,
+    "score_confidence_vocabulary": [
+      "high",
+      "moderate",
+      "low",
+      null
+    ],
+    "gate_state_present_in_score_confidence": false,
+    "supplemental_beta_carotene_mcg_rae_per_iu": 0.3,
+    "calcium_l_5_mthf_max_dfe_factor": 1.7,
+    "clean_label_policy": {
+      "separate_from_safety_blocking": true,
+      "unverified_candidates_promoted": 0,
+      "currently_authored_corpus_hit_family": "titanium_dioxide"
+    },
+    "changed_scored_verdict_summary": {
+      "product_count": 114,
+      "safe_to_caution": 97,
+      "blocked_to_safe": 10,
+      "blocked_to_caution": 1,
+      "other": 6,
+      "primary_correction_counts": {
+        "DOSE_OVER_UL_CAUTION": 59,
+        "B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY": 27,
+        "STIMULANT_CAFFEINE_MODERATE_DOSE": 11
+      }
+    },
+    "safety_policy_review_queue": [
+      {
+        "dsld_id": "33358",
+        "product_name": "Triumphalis Ethyldiazirino",
+        "rule_id": "SPIKE_ANABOLIC_STEROIDS",
+        "substance": "Policy Watchlist: Synthetic Anabolic Steroids"
+      },
+      {
+        "dsld_id": "33360",
+        "product_name": "Mithras Dimethandrostenol",
+        "rule_id": "SPIKE_ANABOLIC_STEROIDS",
+        "substance": "Policy Watchlist: Synthetic Anabolic Steroids"
+      },
+      {
+        "dsld_id": "33361",
+        "product_name": "Legiox Norethandriol",
+        "rule_id": "SPIKE_ANABOLIC_STEROIDS",
+        "substance": "Policy Watchlist: Synthetic Anabolic Steroids"
+      },
+      {
+        "dsld_id": "44121",
+        "product_name": "Oceans 3 Better Brain",
+        "rule_id": "NOOTROPIC_VINPOCETINE",
+        "substance": "Vinpocetine"
+      },
+      {
+        "dsld_id": "59786",
+        "product_name": "Cognitex With Brain Shield",
+        "rule_id": "NOOTROPIC_VINPOCETINE",
+        "substance": "Vinpocetine"
+      },
+      {
+        "dsld_id": "60562",
+        "product_name": "Cognitex With Pregnenolone & Brain Sheild (Gastrodin)",
+        "rule_id": "NOOTROPIC_VINPOCETINE",
+        "substance": "Vinpocetine"
+      },
+      {
+        "dsld_id": "77114",
+        "product_name": "Cognitive Complex",
+        "rule_id": "NOOTROPIC_VINPOCETINE",
+        "substance": "Vinpocetine"
+      },
+      {
+        "dsld_id": "204468",
+        "product_name": "Cognitive Factors",
+        "rule_id": "NOOTROPIC_VINPOCETINE",
+        "substance": "Vinpocetine"
+      },
+      {
+        "dsld_id": "232923",
+        "product_name": "Cognitex Elite Pregnenolone",
+        "rule_id": "NOOTROPIC_VINPOCETINE",
+        "substance": "Vinpocetine"
+      },
+      {
+        "dsld_id": "294063",
+        "product_name": "Vinpocetine 20 mg",
+        "rule_id": "NOOTROPIC_VINPOCETINE",
+        "substance": "Vinpocetine"
+      },
+      {
+        "dsld_id": "295535",
+        "product_name": "Vinpocetine 20 mg",
+        "rule_id": "NOOTROPIC_VINPOCETINE",
+        "substance": "Vinpocetine"
+      },
+      {
+        "dsld_id": "328399",
+        "product_name": "Cognitex Elite",
+        "rule_id": "NOOTROPIC_VINPOCETINE",
+        "substance": "Vinpocetine"
+      }
+    ]
+  },
+  "routing": {
+    "feature_rows": 15412,
+    "stamped_vs_recomputed_mismatches": 0,
+    "route_distribution": {
+      "b_complex": 146,
+      "fiber_digestive": 402,
+      "generic": 10704,
+      "multi_or_prenatal": 2077,
+      "omega": 721,
+      "probiotic": 549,
+      "sports": 813
+    },
+    "changed_routes": 538,
+    "reviewed_changed_routes": 538,
+    "unreviewed_changed_routes": 0,
+    "changed_route_provenance": 15412,
+    "transition_counts": {
+      "b_complex->generic": 8,
+      "fiber_digestive->b_complex": 1,
+      "fiber_digestive->generic": 261,
+      "fiber_digestive->probiotic": 4,
+      "fiber_digestive->sports": 62,
+      "generic->b_complex": 37,
+      "generic->fiber_digestive": 64,
+      "generic->sports": 28,
+      "multi_or_prenatal->b_complex": 31,
+      "multi_or_prenatal->generic": 21,
+      "multi_or_prenatal->probiotic": 11,
+      "multi_or_prenatal->sports": 10
+    }
+  },
+  "baseline_candidate_diff": {
+    "added_source_products": 0,
+    "removed_source_products": 0,
+    "changed_routes": 538,
+    "changed_scores": 8945,
+    "changed_pillars": 9148,
+    "changed_score_components": 9094,
+    "changed_tiers": 8835,
+    "changed_verdicts": 8869,
+    "changed_statuses": 8767,
+    "changed_mapping_coverage": 80,
+    "changed_blocking_reasons": 32,
+    "score_transition_counts": {
+      "numeric_to_null": 8734,
+      "null_to_numeric": 12,
+      "numeric_to_numeric_changed": 199
+    },
+    "numeric_to_numeric_delta": {
+      "count": 199,
+      "minimum": -10.2,
+      "maximum": 14.9,
+      "mean": 2.9326633
+    }
+  },
+  "payload": {
+    "baseline_schema_2_3_detail_blob_bytes": 2085362720,
+    "candidate_schema_2_4_detail_blob_bytes": 891191222,
+    "prepared_schema_3": {
+      "source_product_count": 6637,
+      "detail_blob_bytes": 542876393,
+      "bytes_saved_from_schema_2_4": 348314829,
+      "reduction_percent": 39.0842,
+      "warning_equivalence_checks": 70663,
+      "warning_equivalence_failures": 0
+    }
+  },
+  "audit_results": {
+    "candidate_builder_strict_gates": {
+      "status": "passed",
+      "gates": [
+        "source_of_truth_matrix",
+        "cleaner_contract",
+        "enrichment_contract",
+        "scoring_contract",
+        "export_contract",
+        "clinical_drift",
+        "interaction_db_parity",
+        "artifact_freshness",
+        "flutter_bundle_parity"
+      ]
+    },
+    "raw_to_final": {
+      "products_audited": 15412,
+      "blocker_findings": 0,
+      "high_findings": 0,
+      "medium_findings": {
+        "BLEND_CHILD_WITHOUT_DOSE_DISCLOSURE": 6
+      },
+      "medium_product_ids": [
+        "178848",
+        "232106",
+        "328071",
+        "328817",
+        "59514",
+        "59717"
+      ],
+      "low_findings": {
+        "INACTIVE_V1_5_0_CONTRACT_ABSENT": 516
+      }
+    },
+    "external_identifier_and_citation_gates": {
+      "class_rxcuis_resolved": 819,
+      "direct_drug_rxcuis_resolved": 23,
+      "pubmed_invalid": 0,
+      "pubmed_unresolved": 0,
+      "active_pubmed_content_checks_passed": 39,
+      "unii_cache_substance_count": 172558,
+      "unii_cache_metadata_date": "2026-05-22",
+      "unii_cache_sha256": "be4295b72eda347820e99efd89f3a925384a063ec3c7d8c01525a0e56ce6ba7a"
+    }
+  },
+  "verification": {
+    "required_execution_order": [
+      "full_corpus_pipeline",
+      "release_audits",
+      "release_test_suite",
+      "full_test_suite"
+    ],
+    "order_respected": true,
+    "full_corpus_pipeline": {
+      "status": "passed",
+      "dataset_count": 37,
+      "summary_path": "scripts/products/reports/batch_run_summary_20260821_014344.txt",
+      "summary_sha256": "91dd9f6b0d499ad6e8b3952cfdd9045d68cc67af872d04ba67562c241989e24b"
+    },
+    "pipeline_fast": {
+      "status": "passed",
+      "passed": 11781,
+      "skipped": 123,
+      "duration_seconds": 250.37
+    },
+    "pipeline_release_candidate_targeted": {
+      "status": "passed",
+      "passed": 109,
+      "skipped": 3,
+      "duration_seconds": 807.1
+    },
+    "pipeline_full_candidate_targeted": {
+      "status": "passed",
+      "passed": 14261,
+      "skipped": 169,
+      "expected_failures": 2,
+      "expected_failure_scope": "documented probiotic cases",
+      "duration_seconds": 2905.77
+    },
+    "exhaustive_blob_parity": {
+      "status": "passed",
+      "passed": 1,
+      "duration_seconds": 562.94
+    },
+    "flutter_analyze": {
+      "status": "passed"
+    },
+    "flutter_tests": {
+      "status": "passed",
+      "passed": 3230
+    },
+    "flutter_fixture_versions": [
+      "2.3.0",
+      "2.4.0",
+      "prepared-3.0.0"
+    ],
+    "supabase_sync_dry_run": {
+      "status": "passed",
+      "uploaded": false
+    },
+    "flutter_import_dry_run": {
+      "status": "passed",
+      "files_written": false
+    }
+  },
+  "artifact_hashes": {
+    "baseline_snapshot": {
+      "self_integrity_sha256": "38dd5d8802f1ba86efed072652b31f59c9af85b7d9f96ae1504b253bd0cdd58d",
+      "file_sha256": "96e5269bf9618f0382d495475775f9b5b4532a646c8132ce16bd1cc51c05af14",
+      "core_db_sha256": "f5a85348cbebed85faf56f733b35468fe66e1bb35e9ed6de45bc1838a1cf341b",
+      "detail_blob_tree_sha256": "5480b5d0563f42285eb3182e08bd8b03a4c54d0691e7052b15dd0fa45842b520"
+    },
+    "candidate_snapshot": {
+      "self_integrity_sha256": "ca7f39618133a8b2a0d379efe074d0720d193b242254f3ef232dd74177a3d0ee",
+      "file_sha256": "0fc8913ee68a41dc08956c7926067b87beb0f1d367d07d5a5e0fde2779a64e9d",
+      "core_db_sha256": "0bf69ad811e9541107e46b2aff087196bef49b73544377f8fcfc9f790e874d87",
+      "detail_blob_tree_sha256": "cc743e2d23dad9ae0baaa8e2779fe8df4c9f65374d23f6d84b296f84246197fc",
+      "export_manifest_sha256": "7170930076ddb2398f0c43501f3e9a0e685f51374def71895eaa06837310f4bc",
+      "detail_index_sha256": "23b4e53b1f42b6c5a8574ac1427436e555ff0e6475ea20c2edf092fb48c7b7ca"
+    },
+    "baseline_candidate_diff_file_sha256": "3cc1ff1277c2501168c036645cca5d039a43915e786fc0599131b0e8ad0e2ef1",
+    "routing_feature_shadow": {
+      "self_integrity_sha256": "f19945992f9c334995defcb72385fe1dc8e279345995b4cfdf33001a20f6785f",
+      "file_sha256": "e186c83368dbb3e286cba8f00e657bf81fb373dd8056bbf41663e25f66e8ac30"
+    },
+    "routing_baseline_aligned": {
+      "self_integrity_sha256": "98a2efcb17a69e63fe8c1151948a5dd979fb4075eaff46e7075ae84fc55bd0af",
+      "file_sha256": "069ba33590ac53e59c2553051b011c6dd15b443d868654297ea19ddcaa66646e"
+    },
+    "routing_gold_review": {
+      "self_integrity_sha256": "d2c2ae884055589722d47bc64086ff4fd9eaac356b359ce739a50542f05e1ce9",
+      "file_sha256": "55002c4aaeeb82041624df0861e88a8cbffac89ca682449fc709969d41645089"
+    },
+    "mapping_coverage_shadow": {
+      "self_integrity_sha256": "bdb688cf7ca1e62d3a5231c7369d3fe1d4588685d4666db656f3a32a6fd37b0b",
+      "file_sha256": "803b0560fe05824cb12ceab608111b126f5ce18cffe13d8d7715628961cd761f"
+    },
+    "assessment_readiness_shadow": {
+      "self_integrity_sha256": "e92eca2c73a824b5b32c04797a3362dd1c5c496fef33a2162a0877149d483ec9",
+      "file_sha256": "81374f10bd18c4ecaab6a517d385a098696e43612e3d860351fa7befb84a0cc2"
+    },
+    "raw_to_final_file_sha256": "b3d5e8f427806ec59c70f0b95c5c77e04e86eac4b0459f72265d58a7c8f399bb",
+    "schema3_payload_file_sha256": "e6a6bd95bc543e29663c871438abec0ceb2d2deacbeb124c3f0bf3d818a31e71",
+    "schema3_input_fingerprint_sha256": "c265e3127926b689013c8a0495df372298a5e004b6695d10524b9e5a86348c10"
+  },
+  "open_diagnostics": [
+    "8775 products are quarantined; 8763 are blocked by incomplete readiness and 12 require safety-policy review.",
+    "Evidence readiness is the dominant backlog: 8445 products and 19671 material active rows are not yet fully evaluated.",
+    "Dose readiness remains incomplete on 930 products and identity readiness on 93 products.",
+    "The raw-to-final audit has six non-blocking blend-child dose-disclosure observations and 516 low-severity inactive v1.5 display-contract notices.",
+    "The full suite retains two documented expected-failure probiotic cases.",
+    "The FDA UNII cache is a generated ignored dependency, dated 2026-05-22; its content hash and live release checks are recorded above."
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "scope": "canonical JSON excluding integrity",
+    "signature_type": "self-integrity hash; not an identity signature",
+    "sha256": "b112872e7ad5e58c31beafe33d2e90dcd2ce66c8ad5006dbde123aec0fc11004"
+  }
+}
