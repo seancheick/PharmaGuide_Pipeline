@@ -14,6 +14,7 @@ from core_export_model import (  # noqa: E402
     PRODUCTS_CORE_COLUMNS,
     SERVER_CORE_COLUMNS,
     build_projection_manifest,
+    products_core_columns_for_schema,
 )
 from generate_flutter_core_projection import render_dart_projection  # noqa: E402
 
@@ -53,6 +54,45 @@ def test_projection_manifest_is_deterministic_and_schema_typed() -> None:
     assert first["app_core"]["columns"] == list(APP_CORE_COLUMNS)
     assert first["server_core"]["columns"] == list(SERVER_CORE_COLUMNS)
     assert first["model_sha256"].startswith("sha256:")
+
+
+def test_schema_3_removes_deprecated_and_retired_core_columns() -> None:
+    schema2 = products_core_columns_for_schema("2.4.0")
+    schema3 = products_core_columns_for_schema("3.0.0")
+
+    assert schema2 == PRODUCTS_CORE_COLUMNS
+    assert set(schema2) - set(schema3) == {
+        "score_display_100_equivalent",
+        "score_100_equivalent",
+        "v4_confidence",
+        "score_ingredient_quality",
+        "score_ingredient_quality_max",
+        "score_safety_purity",
+        "score_safety_purity_max",
+        "score_evidence_research",
+        "score_evidence_research_max",
+        "score_brand_trust",
+        "score_brand_trust_max",
+    }
+    assert "quality_score_v4_100" in schema3
+    assert "quality_score_confidence" in schema3
+
+
+def test_app_projection_does_not_read_retired_compat_columns() -> None:
+    retired = {
+        "score_display_100_equivalent",
+        "score_100_equivalent",
+        "v4_confidence",
+        "score_ingredient_quality",
+        "score_ingredient_quality_max",
+        "score_safety_purity",
+        "score_safety_purity_max",
+        "score_evidence_research",
+        "score_evidence_research_max",
+        "score_brand_trust",
+        "score_brand_trust_max",
+    }
+    assert not retired & set(APP_CORE_COLUMNS)
 
 
 def test_flutter_projection_generator_contains_only_the_app_read_set() -> None:

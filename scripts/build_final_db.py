@@ -59,6 +59,12 @@ from brand_identity import BrandIdentity, BrandRegistry
 from core_export_model import (
     PRODUCTS_CORE_COLUMNS,
     build_projection_manifest,
+    products_core_columns_for_schema,
+)
+from export_schema import (
+    SUPPORTED_EXPORT_SCHEMA_VERSIONS,
+    export_schema_major,
+    project_detail_blob,
 )
 from inactive_ingredient_resolver import (
     InactiveIngredientResolver,
@@ -6182,7 +6188,12 @@ def _classify_product_role(
     }
 
 
-def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
+def build_detail_blob(
+    enriched: Dict,
+    scored: Dict,
+    *,
+    export_schema_version: str = EXPORT_SCHEMA_VERSION,
+) -> Dict:
     """Build the per-product detail blob for caching/Supabase."""
     brand_identity = resolve_catalog_brand(enriched)
     non_gmo_audit = derive_non_gmo_audit(enriched)
@@ -6953,6 +6964,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     "min_effective_dose": ch.get("min_effective_dose"),
                     "dose_floor_status": ch.get("dose_floor_status"),
                     "source": "interaction_rules",
+                    "source_rule_id": safe_str(alert.get("rule_id")) or None,
                     "profile_gate": ch.get("profile_gate"),
                 })
         for dh in safe_list(alert.get("drug_class_hits")):
@@ -6989,6 +7001,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     "min_effective_dose": dh.get("min_effective_dose"),
                     "dose_floor_status": dh.get("dose_floor_status"),
                     "source": "interaction_rules",
+                    "source_rule_id": safe_str(alert.get("rule_id")) or None,
                     "profile_gate": dh.get("profile_gate"),
                 })
 
@@ -7782,7 +7795,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         }
         blob["v4_score_explanation"] = _build_v4_score_explanation(pillars)
 
-    return blob
+    return project_detail_blob(
+        blob,
+        export_schema_version=export_schema_version,
+    )
 
 
 # ─── Core Row Builder ───
@@ -9567,6 +9583,7 @@ def build_core_row(
     exported_at: str,
     detail_blob_sha256: Optional[str] = None,
     detail_blob: Optional[Dict] = None,
+    export_schema_version: str = EXPORT_SCHEMA_VERSION,
 ) -> tuple:
     """Build a products_core row tuple from enriched + scored product data."""
     comp = safe_dict(enriched.get("compliance_data"))
@@ -9834,7 +9851,7 @@ def build_core_row(
         safe_str(sm.get("output_schema_version", scored.get("output_schema_version"))),
         safe_str(enriched.get("enrichment_version")),
         safe_str(sm.get("scored_date")),
-        str(EXPORT_SCHEMA_VERSION),
+        str(export_schema_version),
         exported_at,
     )
 
@@ -9986,6 +10003,7 @@ def write_audit_report(
     contract_failure_count: int,
     products_with_warnings_count: int,
     products_with_warnings_sample: List[Dict],
+    export_schema_version: str = EXPORT_SCHEMA_VERSION,
 ) -> Dict:
     """Write the final audit report from incremental state."""
     counts = {
@@ -9995,7 +10013,7 @@ def write_audit_report(
     report = {
         "exported_at": exported_at,
         "pipeline_version": PIPELINE_VERSION,
-        "export_schema_version": EXPORT_SCHEMA_VERSION,
+        "export_schema_version": export_schema_version,
         "counts": counts,
         "contract_failures": contract_failures,
         "contract_quarantines": contract_quarantines,
@@ -10065,9 +10083,14 @@ def build_final_db(
     output_dir: str,
     script_dir: str,
     strict: bool = False,
+    export_schema_version: str = EXPORT_SCHEMA_VERSION,
 ):
+    export_schema_major(export_schema_version)
     score_model = "v4"
-    logger.info("Scoring model for export: v4")
+    logger.info(
+        "Scoring model for export: v4 (schema %s)",
+        export_schema_version,
+    )
 
     os.makedirs(output_dir, exist_ok=True)
     detail_dir = os.path.join(output_dir, "detail_blobs")
@@ -10085,6 +10108,11 @@ def build_final_db(
     apply_sqlite_build_pragmas(conn)
     c = conn.cursor()
     c.executescript(SCHEMA_SQL)
+    core_columns = products_core_columns_for_schema(export_schema_version)
+    if export_schema_major(export_schema_version) >= 3:
+        for column in PRODUCTS_CORE_COLUMNS:
+            if column not in core_columns:
+                c.execute(f'ALTER TABLE products_core DROP COLUMN "{column}"')
 
     stage_fd, stage_db_path = tempfile.mkstemp(prefix="pg_stage_", suffix=".sqlite3", dir=output_dir)
     os.close(stage_fd)
@@ -10106,7 +10134,8 @@ def build_final_db(
             scored_unique,
         )
 
-        placeholders = ",".join(["?"] * CORE_COLUMN_COUNT)
+        expected_core_column_count = len(core_columns)
+        placeholders = ",".join(["?"] * expected_core_column_count)
         insert_sql = f"INSERT OR REPLACE INTO products_core VALUES ({placeholders})"
 
         inserted = 0
@@ -10159,13 +10188,29 @@ def build_final_db(
             blob_path = os.path.join(detail_dir, f"{pid}.json")
             tmp_blob_path = f"{blob_path}.tmp"
             try:
-                blob = build_detail_blob(enriched, scored)
+                blob = (
+                    build_detail_blob(enriched, scored)
+                    if export_schema_version == EXPORT_SCHEMA_VERSION
+                    else build_detail_blob(
+                        enriched,
+                        scored,
+                        export_schema_version=export_schema_version,
+                    )
+                )
                 effective_scored = project_export_scored_artifact(
                     enriched, scored, blob
                 )
                 if effective_scored != scored:
                     scored = effective_scored
-                    blob = build_detail_blob(enriched, scored)
+                    blob = (
+                        build_detail_blob(enriched, scored)
+                        if export_schema_version == EXPORT_SCHEMA_VERSION
+                        else build_detail_blob(
+                            enriched,
+                            scored,
+                            export_schema_version=export_schema_version,
+                        )
+                    )
                 contract_issues = validate_export_contract(enriched, scored)
                 (
                     products_with_warnings_count,
@@ -10188,24 +10233,30 @@ def build_final_db(
                     raise ValueError("; ".join(contract_issues[:10]))
                 blob_json = json.dumps(blob, ensure_ascii=False, separators=(",", ":"))
                 blob_sha256 = hashlib.sha256(blob_json.encode("utf-8")).hexdigest()
-                row = build_core_row(
+                full_row = build_core_row(
                     enriched,
                     scored,
                     exported_at,
                     detail_blob_sha256=blob_sha256,
                     detail_blob=blob,
+                    export_schema_version=export_schema_version,
                 )
-                if len(row) != CORE_COLUMN_COUNT:
+                full_row_by_name = dict(zip(PRODUCTS_CORE_COLUMNS, full_row))
+                row = tuple(full_row_by_name[column] for column in core_columns)
+                if len(row) != expected_core_column_count:
                     logger.error(
                         "Product %s: row has %d columns, expected %d",
                         pid,
                         len(row),
-                        CORE_COLUMN_COUNT,
+                        expected_core_column_count,
                     )
                     errors += 1
                     error_details.append({
                         "dsld_id": str(pid),
-                        "error": f"row has {len(row)} columns, expected {CORE_COLUMN_COUNT}",
+                        "error": (
+                            f"row has {len(row)} columns, expected "
+                            f"{expected_core_column_count}"
+                        ),
                     })
                     continue
                 with open(tmp_blob_path, "w", encoding="utf-8") as f:
@@ -10392,7 +10443,7 @@ def build_final_db(
         ("generated_at", manifest_now.isoformat()),
         ("product_count", str(inserted)),
         ("min_app_version", MIN_APP_VERSION),
-        ("schema_version", str(EXPORT_SCHEMA_VERSION)),
+        ("schema_version", str(export_schema_version)),
         ("score_model", str(score_model)),
     ]
     for key, value in local_manifest_rows:
@@ -10464,7 +10515,7 @@ def build_final_db(
     detail_index_checksum = compute_file_sha256(detail_index_path)
 
     projection_manifest = build_projection_manifest(
-        export_schema_version=EXPORT_SCHEMA_VERSION
+        export_schema_version=export_schema_version
     )
     projection_manifest_path = os.path.join(
         output_dir, "core_projection_manifest.json"
@@ -10506,7 +10557,7 @@ def build_final_db(
             ],
         },
         "min_app_version": MIN_APP_VERSION,
-        "schema_version": EXPORT_SCHEMA_VERSION,
+        "schema_version": export_schema_version,
         "score_model": score_model,
         "quality_score_config_checksum": quality_score_config_checksum,
         # Pipeline integrity signals
@@ -10572,6 +10623,7 @@ def build_final_db(
         contract_failure_count=contract_failure_count,
         products_with_warnings_count=products_with_warnings_count,
         products_with_warnings_sample=products_with_warnings_sample,
+        export_schema_version=export_schema_version,
     )
 
     return {
@@ -10600,6 +10652,15 @@ def main():
                               "writes to /tmp)."))
     parser.add_argument("--strict", action="store_true",
                         help="Fail build if any enriched/scored mismatch (production mode)")
+    parser.add_argument(
+        "--export-schema-version",
+        choices=SUPPORTED_EXPORT_SCHEMA_VERSIONS,
+        default=EXPORT_SCHEMA_VERSION,
+        help=(
+            "Public catalog schema to build. 2.4.0 remains the release default; "
+            "3.0.0 is a prepared local candidate until a compatible app ships."
+        ),
+    )
     args = parser.parse_args()
 
     # 2026-05-14 — emit a loud warning when the legacy default is used.
@@ -10625,6 +10686,7 @@ def main():
     result = build_final_db(
         args.enriched_dir, args.scored_dir, args.output_dir, script_dir,
         strict=args.strict,
+        export_schema_version=args.export_schema_version,
     )
 
     print(f"\nDone. {result['product_count']} products, {result['error_count']} errors.")

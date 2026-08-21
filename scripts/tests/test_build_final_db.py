@@ -3476,15 +3476,22 @@ def _artifact_from_canned(dsld_id: str, v4_result: dict) -> dict:
     return assemble_scored_artifact(product, v4_result)
 
 
-def _run_build(tmp, enriched_list, scored_list):
+def _run_build(
+    tmp, enriched_list, scored_list, *, export_schema_version="2.4.0"
+):
     root = Path(tmp)
     enriched_dir = root / "enriched"; enriched_dir.mkdir()
     scored_dir = root / "scored"; scored_dir.mkdir()
     output_dir = root / "out"
     (enriched_dir / "batch.json").write_text(json.dumps(enriched_list), encoding="utf-8")
     (scored_dir / "batch.json").write_text(json.dumps(scored_list), encoding="utf-8")
-    result = build_final_db([str(enriched_dir)], [str(scored_dir)], str(output_dir),
-                            str(Path(__file__).parent.parent))
+    result = build_final_db(
+        [str(enriched_dir)],
+        [str(scored_dir)],
+        str(output_dir),
+        str(Path(__file__).parent.parent),
+        export_schema_version=export_schema_version,
+    )
     return result, output_dir
 
 
@@ -3496,6 +3503,59 @@ def _core_rows(output_dir, cols):
     finally:
         conn.close()
     return {r[0]: dict(zip(cols, r)) for r in rows}
+
+
+def test_schema3_build_removes_deprecated_physical_columns_and_blob_aliases():
+    enriched = make_enriched()
+    # This test exercises the physical projection, not interaction-rule
+    # compaction (covered by test_export_schema3.py). Fixture alerts predate
+    # stable rule ids and therefore cannot be projected safely.
+    enriched["interaction_profile"] = {"ingredient_alerts": []}
+    scored = _artifact_from_canned(
+        "999", _canned_v4(status="scored", quality_100=88.0)
+    )
+
+    with tempfile.TemporaryDirectory() as tmp:
+        result, out = _run_build(
+            tmp,
+            [enriched],
+            [scored],
+            export_schema_version="3.0.0",
+        )
+
+        assert result["product_count"] == 1
+        manifest = json.loads(
+            (out / "export_manifest.json").read_text(encoding="utf-8")
+        )
+        assert manifest["schema_version"] == "3.0.0"
+
+        conn = sqlite3.connect(out / "pharmaguide_core.db")
+        try:
+            columns = {
+                row[1]
+                for row in conn.execute("PRAGMA table_info(products_core)")
+            }
+        finally:
+            conn.close()
+
+        for removed in (
+            "score_display_100_equivalent",
+            "score_100_equivalent",
+            "v4_confidence",
+            "score_ingredient_quality",
+            "score_brand_trust_max",
+        ):
+            assert removed not in columns
+        assert "quality_score_v4_100" in columns
+        assert "quality_score_confidence" in columns
+
+        blob = json.loads(
+            (out / "detail_blobs" / "999.json").read_text(encoding="utf-8")
+        )
+        assert blob["blob_version"] == 3
+        assert "section_breakdown" not in blob
+        assert "product_status" not in blob
+        assert "has_opaque_proprietary_blend" in blob
 
 
 def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):

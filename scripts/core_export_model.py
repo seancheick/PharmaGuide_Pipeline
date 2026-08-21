@@ -13,7 +13,7 @@ import json
 from typing import Any
 
 
-CORE_EXPORT_MODEL_VERSION = "1.0.0"
+CORE_EXPORT_MODEL_VERSION = "1.1.0"
 
 PRODUCTS_CORE_COLUMNS = (
     "dsld_id",
@@ -137,6 +137,22 @@ PRODUCTS_CORE_COLUMNS = (
 
 # These fields exist for server/reporting work or for the schema-2.4 migration
 # boundary.  Every other physical field is part of the app's exact read set.
+_SCHEMA3_REMOVED_COLUMNS = frozenset(
+    {
+        "score_display_100_equivalent",
+        "score_100_equivalent",
+        "v4_confidence",
+        "score_ingredient_quality",
+        "score_ingredient_quality_max",
+        "score_safety_purity",
+        "score_safety_purity_max",
+        "score_evidence_research",
+        "score_evidence_research_max",
+        "score_brand_trust",
+        "score_brand_trust_max",
+    }
+)
+
 _SERVER_ONLY_COLUMNS = frozenset(
     {
         "brand_name_raw",
@@ -155,6 +171,9 @@ _SERVER_ONLY_COLUMNS = frozenset(
         "pillar_safety_hygiene_v4",
         "safety_signal_reason",
         "ingredients_text",
+        # Kept physically for the schema-2.4 compatibility release, but no
+        # longer read by Flutter. Schema 3 removes these columns entirely.
+        *_SCHEMA3_REMOVED_COLUMNS,
     }
 )
 
@@ -169,13 +188,44 @@ SERVER_CORE_COLUMNS = tuple(
 )
 
 
+def _schema_major(export_schema_version: str) -> int:
+    try:
+        return int(str(export_schema_version).split(".", 1)[0])
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            f"invalid export schema version: {export_schema_version!r}"
+        ) from exc
+
+
+def products_core_columns_for_schema(export_schema_version: str) -> tuple[str, ...]:
+    """Physical products_core columns for one export-schema generation."""
+    if _schema_major(export_schema_version) < 3:
+        return PRODUCTS_CORE_COLUMNS
+    return tuple(
+        name for name in PRODUCTS_CORE_COLUMNS if name not in _SCHEMA3_REMOVED_COLUMNS
+    )
+
+
+def app_core_columns_for_schema(export_schema_version: str) -> tuple[str, ...]:
+    physical = products_core_columns_for_schema(export_schema_version)
+    return tuple(name for name in physical if name not in _SERVER_ONLY_COLUMNS)
+
+
+def server_core_columns_for_schema(export_schema_version: str) -> tuple[str, ...]:
+    physical = products_core_columns_for_schema(export_schema_version)
+    return tuple(name for name in physical if name in _SERVER_ONLY_COLUMNS)
+
+
 def build_projection_manifest(*, export_schema_version: str) -> dict[str, Any]:
     """Return a deterministic, content-addressed projection declaration."""
+    physical_columns = products_core_columns_for_schema(export_schema_version)
+    app_columns = app_core_columns_for_schema(export_schema_version)
+    server_columns = server_core_columns_for_schema(export_schema_version)
     model_payload = {
         "model_version": CORE_EXPORT_MODEL_VERSION,
-        "physical_columns": list(PRODUCTS_CORE_COLUMNS),
-        "app_core_columns": list(APP_CORE_COLUMNS),
-        "server_core_columns": list(SERVER_CORE_COLUMNS),
+        "physical_columns": list(physical_columns),
+        "app_core_columns": list(app_columns),
+        "server_core_columns": list(server_columns),
     }
     encoded = json.dumps(
         model_payload,
@@ -188,15 +238,15 @@ def build_projection_manifest(*, export_schema_version: str) -> dict[str, Any]:
         "export_schema_version": str(export_schema_version),
         "model_sha256": f"sha256:{hashlib.sha256(encoded).hexdigest()}",
         "physical": {
-            "column_count": len(PRODUCTS_CORE_COLUMNS),
-            "columns": list(PRODUCTS_CORE_COLUMNS),
+            "column_count": len(physical_columns),
+            "columns": list(physical_columns),
         },
         "app_core": {
-            "column_count": len(APP_CORE_COLUMNS),
-            "columns": list(APP_CORE_COLUMNS),
+            "column_count": len(app_columns),
+            "columns": list(app_columns),
         },
         "server_core": {
-            "column_count": len(SERVER_CORE_COLUMNS),
-            "columns": list(SERVER_CORE_COLUMNS),
+            "column_count": len(server_columns),
+            "columns": list(server_columns),
         },
     }
