@@ -19,7 +19,8 @@ def render_dart_projection(*, export_schema_version: str) -> str:
 // App projection for export schema {export_schema_version}.
 
 const String appCoreProjectionModelVersion = '{manifest['model_version']}';
-const String appCoreProjectionModelSha256 = '{manifest['model_sha256']}';
+const String appCoreProjectionModelSha256 =
+    '{manifest['model_sha256']}';
 const Set<String> appCoreProjectionColumns = <String>{{
 {columns}
 }};
