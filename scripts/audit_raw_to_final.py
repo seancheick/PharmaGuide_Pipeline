@@ -642,9 +642,70 @@ def _app_visible_surface(row: Mapping[str, Any]) -> str:
     return " ".join(values).lower()
 
 
+def _is_reciprocal_display_remap(
+    row: Mapping[str, Any], rows: list[dict[str, Any]]
+) -> bool:
+    """Recognize an explicit two-row source correction without self-amnesty.
+
+    A reviewed hierarchy correction can swap two DSLD source identities while
+    preserving both original source paths in the display ledger.  Treat that
+    as intentional only when the peer points back, both rows retain the same
+    canonical identity, and their source/display labels are exact reciprocals.
+    A one-way or merely canonical remap must still fail the fidelity check.
+    """
+    own_path = str(row.get("raw_source_path") or "").strip()
+    mapped = row.get("mapped_to")
+    mapped_path = str(
+        mapped.get("raw_source_path") if isinstance(mapped, Mapping) else ""
+    ).strip()
+    if not own_path or not mapped_path or own_path == mapped_path:
+        return False
+
+    source = _normalize_name(
+        str(row.get("raw_source_text") or row.get("name") or "")
+    )
+    display = _normalize_name(_app_display_label(row))
+    canonical_id = str(
+        _row_analysis_value(row, "canonical_id")
+        or row.get("canonical_id")
+        or ""
+    ).strip()
+    if not source or not display or not canonical_id:
+        return False
+
+    for peer in rows:
+        if peer is row:
+            continue
+        if str(peer.get("raw_source_path") or "").strip() != mapped_path:
+            continue
+        peer_mapped = peer.get("mapped_to")
+        peer_mapped_path = str(
+            peer_mapped.get("raw_source_path")
+            if isinstance(peer_mapped, Mapping)
+            else ""
+        ).strip()
+        if peer_mapped_path != own_path:
+            continue
+        peer_canonical_id = str(
+            _row_analysis_value(peer, "canonical_id")
+            or peer.get("canonical_id")
+            or ""
+        ).strip()
+        if peer_canonical_id != canonical_id:
+            continue
+        peer_source = _normalize_name(
+            str(peer.get("raw_source_text") or peer.get("name") or "")
+        )
+        peer_display = _normalize_name(_app_display_label(peer))
+        if source == peer_display and display == peer_source:
+            return True
+    return False
+
+
 def _check_display_label_collapse(rec: ProductRecord, blob: dict) -> None:
     """Invariant #1 from test_label_fidelity_contract.py."""
-    for ing in _app_active_rows(blob):
+    rows = _app_active_rows(blob)
+    for ing in rows:
         display = _app_display_label(ing)
         canonical = (
             _row_analysis_value(ing, "canonical_name")
@@ -661,7 +722,8 @@ def _check_display_label_collapse(rec: ProductRecord, blob: dict) -> None:
                 and source.lower() != canonical.lower()
                 and _normalize_name(source) not in _normalize_name(
                     _app_visible_surface(ing)
-                )):
+                )
+                and not _is_reciprocal_display_remap(ing, rows)):
             rec.add("DISPLAY_LABEL_COLLAPSES_TO_CANONICAL",
                     f"display={display!r} canonical={canonical!r} source={source!r}",
                     ingredient=source)

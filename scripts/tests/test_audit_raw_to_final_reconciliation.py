@@ -168,6 +168,45 @@ def test_label_fidelity_still_flags_loss_from_the_app_display_surface() -> None:
     }
 
 
+def test_display_collapse_allows_an_explicit_reciprocal_source_correction() -> None:
+    record = _record()
+    blob = {
+        "ingredients": [],
+        "display_ingredients": [
+            {
+                "raw_source_path": "ingredientRows[0]",
+                "raw_source_text": "Magnesium",
+                "label_display_name": "Magtein Magnesium L-Threonate",
+                "display_type": "mapped_ingredient",
+                "canonical_id": "magnesium",
+                "mapped_to": {
+                    "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                },
+                "analysis": {
+                    "display_label": "Magtein Magnesium L-Threonate",
+                    "standard_name": "Magnesium",
+                },
+            },
+            {
+                "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                "raw_source_text": "Magtein Magnesium L-Threonate",
+                "label_display_name": "Magnesium",
+                "display_type": "mapped_ingredient",
+                "canonical_id": "magnesium",
+                "mapped_to": {"raw_source_path": "ingredientRows[0]"},
+                "analysis": {
+                    "display_label": "Magnesium",
+                    "standard_name": "Magnesium",
+                },
+            },
+        ],
+    }
+
+    _check_display_label_collapse(record, blob)
+
+    assert record.findings == []
+
+
 def test_standardization_audit_uses_the_exporters_exact_claim_contract() -> None:
     record = _record()
     blob = {
