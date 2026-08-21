@@ -1,7 +1,7 @@
 {
   "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md \u00a7 Phase 0.",
   "schema_version": "2.0.0",
-  "frozen_on": "2026-08-06",
+  "frozen_on": "2026-08-20",
   "fixture_schema": {
     "frozen_fields": [
       "dsld_id",
@@ -193,6 +193,18 @@
     }
   ],
   "changelog": [
+    {
+      "date": "2026-08-20",
+      "action": "refrozen_v4_3_scoring_integrity_readiness",
+      "products": "all 30",
+      "sprints_covered": [
+        "Scoring artifact contract 4.3.0",
+        "Typed assessment-readiness enforcement",
+        "Fail-closed dose/UL state propagation",
+        "Reviewed measured-intent routing rules"
+      ],
+      "notes": "Re-froze all 30 snapshots after the fresh 37-brand corpus rebuild and strict source-of-truth audit passed. Every fixture advances output_schema_version 4.2.0->4.3.0. Thirteen products have no other frozen-field change. Fifteen products (182730, 12012, 288344, 278454, 270831, 180417, 18141, 239600, 204571, 241353, 269278, 274498, 298070, 321405, 327416) now fail closed as quality_score_status=not_scored / verdict=NOT_SCORED because a material dose or evidence assessment is unfinished; their previous numeric scores are removed rather than presented as complete. Two already-present maximum-daily exposure findings now propagate correctly: Athletic Pure Pack's niacin exposure and Pure Encapsulations Calcium Magnesium's 450 mg maximum supplemental magnesium exposure exceed their applicable ULs and emit DOSE_OVER_UL_CAUTION; the latter remains scored at 74.1 with verdict CAUTION, while the former is independently quarantined by readiness. Thorne Catalyte moves 71.8->74.6 because the reviewed routing gold set classifies this explicit electrolyte formulation as generic rather than the former prenatal/multivitamin archetype; SAFE status is unchanged. No pillar weights or calibration targets changed, and no production artifact was promoted."
+    },
     {
       "date": "2026-08-06",
       "action": "refrozen_v4_2_typed_safety_contract",

@@ -3,18 +3,20 @@
   "brand_name": "Pure Encapsulations",
   "dsld_id": "182730",
   "evaluation_stage": "scored_v4",
-  "flags": [],
-  "grade": "Acceptable",
+  "flags": [
+    "DOSE_OVER_UL_CAUTION"
+  ],
+  "grade": null,
   "mapped_coverage": 1.0,
-  "output_schema_version": "4.2.0",
+  "output_schema_version": "4.3.0",
   "product_name": "Athletic Pure Pack",
-  "quality_score_status": "scored",
-  "quality_score_v4_100": 79.6,
-  "safety_verdict": "SAFE",
-  "score_100_equivalent": 79.6,
+  "quality_score_status": "not_scored",
+  "quality_score_v4_100": null,
+  "safety_verdict": "CAUTION",
+  "score_100_equivalent": null,
   "score_basis": "v4_six_pillar",
-  "scoring_status": "scored",
+  "scoring_status": "not_scored",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
-  "verdict": "SAFE"
+  "verdict": "NOT_SCORED"
 }
