@@ -564,6 +564,30 @@ def test_matching_structured_identity_is_clean():
     assert decision.scoreable_identity is True
 
 
+def test_clean_literal_alias_is_displayed_before_matching_structured_parent() -> None:
+    aliases = {
+        "magtein magnesium l-threonate": "magnesium",
+        "magnesium": "magnesium",
+    }
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Magtein Magnesium L-Threonate",
+            "name": "Magtein Magnesium L-Threonate",
+            "ingredientGroup": "Magnesium",
+            "forms": [{"name": "threonate"}],
+        },
+        supplied_canonical_id="magnesium",
+        resolve_candidate=lambda value: aliases.get(
+            normalize_label_display(value).casefold()
+        ),
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "magnesium"
+    assert decision.source_label_name == "Magtein Magnesium L-Threonate"
+    assert decision.label_display_name == "Magtein Magnesium L-Threonate"
+
+
 def test_source_name_stays_literal_while_display_name_is_normalized():
     decision = resolve_identity(
         row={"ingredientGroup": "ＥＰＡ™ (Eicosapentaenoic Acid)"},

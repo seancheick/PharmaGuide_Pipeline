@@ -611,9 +611,26 @@ def _source_name(
     evidence: tuple[LabelEvidence, ...],
     resolved_canonical: str | None,
     resolve_candidate: CandidateResolver,
+    *,
+    prefer_literal_source: bool = True,
 ) -> str | None:
+    sources = [item for item in evidence if item.kind == "source_name"]
     structured = [item for item in evidence if item.kind == "structured_identity"]
     if resolved_canonical:
+        # Prefer the literal ingredient-line wording when it validates the
+        # selected identity. This preserves branded preparations and explicit
+        # source salts (for example, "Magtein Magnesium L-Threonate") instead
+        # of collapsing them to a generic structured parent ("Magnesium"). A
+        # literal that resolves to a conflicting identity is deliberately
+        # skipped so repaired rows such as mislabeled DHA -> EPA retain the
+        # corrected structured display.
+        if prefer_literal_source:
+            for item in sources:
+                if any(
+                    _canonical(resolve_candidate(value)) == resolved_canonical
+                    for value in _candidate_variants(item.value)
+                ):
+                    return item.value
         for item in structured:
             variants = _candidate_variants(item.value)
             matches = (
@@ -639,7 +656,7 @@ def _source_name(
                         return literal_match.group(1).strip()
                 return item.value
 
-    source = next((item.value for item in evidence if item.kind == "source_name"), None)
+    source = next((item.value for item in sources), None)
     if source:
         return source
     return structured[0].value if structured else None
@@ -738,7 +755,16 @@ def resolve_identity(
         if literal_specific_over_structured_parent
         else structured_canonical or raw_canonical
     )
-    source_name = _source_name(evidence, display_canonical, resolve_candidate)
+    source_name = _source_name(
+        evidence,
+        display_canonical,
+        resolve_candidate,
+        # When an explicit form is the only evidence validating a child of a
+        # structured parent (Vitamin A -> beta-carotene, for example), retain
+        # that structured parent as the label base. In ordinary clean/alias
+        # cases the literal source wording remains the authoritative display.
+        prefer_literal_source=not form_validates_specific_over_structured_parent,
+    )
     source_form = next(
         (item.value for item in evidence if item.kind == "source_form"),
         None,
