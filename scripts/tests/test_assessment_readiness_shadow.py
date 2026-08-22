@@ -98,15 +98,22 @@ def test_shadow_measures_readiness_without_changing_catalog_eligibility(
     assert report["mode"] == "measure_only"
     assert report["enforcement_enabled"] is False
     assert report["catalog_eligibility_changed"] is False
+    # Evidence no longer gates eligibility, so both products are live-ready --
+    # but the evidence backlog stays counted and queued for remediation.
     assert report["summary"] == {
         "product_count": 2,
-        "live_ready_product_count": 1,
-        "incomplete_product_count": 1,
+        "live_ready_product_count": 2,
+        "incomplete_product_count": 0,
+        "shadow_incomplete_product_count": 1,
         "not_yet_evaluated_material_active_count": 1,
         "verification_not_evaluated_product_count": 0,
         "legacy_dose_inference_product_count": 0,
         "duplicate_product_id_count": 0,
     }
+    queued = {row["dsld_id"]: row for row in report["remediation_queue"]}
+    assert set(queued) == {"evidence-backlog"}
+    assert queued["evidence-backlog"]["gates_catalog_eligibility"] is False
+    assert queued["evidence-backlog"]["shadow_incomplete_dimensions"] == ["evidence"]
     assert report["dimension_readiness_counts"]["evidence"] == {
         "complete": 1,
         "incomplete": 1,
@@ -117,12 +124,14 @@ def test_shadow_measures_readiness_without_changing_catalog_eligibility(
     }
     assert report["remediation_queue"] == [
         {
+            "gates_catalog_eligibility": False,
+            "shadow_incomplete_dimensions": ["evidence"],
             "dsld_id": "evidence-backlog",
             "product_name": "Unreviewed Botanical",
             "stage_owner": "output_Test_enriched",
             "source_file": "enriched_batch_1.json",
             "module": "generic",
-            "unavailable_reasons": ["evidence_assessment_readiness"],
+            "unavailable_reasons": [],
             "identity_blocking_findings": [],
             "not_yet_evaluated_material_actives": [
                 {

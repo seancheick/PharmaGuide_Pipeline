@@ -128,7 +128,7 @@ def test_mixed_or_null_evidence_is_evaluated_without_becoming_supported() -> Non
     assert result["is_live_ready"] is True
 
 
-def test_unreviewed_material_botanical_is_not_ready() -> None:
+def test_unreviewed_material_botanical_is_measured_but_does_not_gate() -> None:
     from assessment_readiness import evaluate_assessment_readiness
 
     row = _row("Unreviewed Botanical", "unreviewed_botanical")
@@ -138,8 +138,11 @@ def test_unreviewed_material_botanical_is_not_ready() -> None:
     assert assessment["state"] == "not_yet_evaluated"
     assert assessment["reason_code"] == "no_reviewed_evidence_assessment"
     assert result["evidence"]["readiness"] == "incomplete"
-    assert result["is_live_ready"] is False
-    assert "evidence_assessment_readiness" in result["unavailable_reasons"]
+    # Evidence is measured in shadow: an uncurated ingredient is a gap in our
+    # curation, not a defect in the product, so it must not delist it.
+    assert result["is_live_ready"] is True
+    assert "evidence" in result["shadow_incomplete_dimensions"]
+    assert "evidence_assessment_readiness" not in result["unavailable_reasons"]
 
 
 def test_typed_dose_collection_must_cover_every_material_active() -> None:
@@ -369,7 +372,7 @@ def test_probiotic_native_clinical_strain_and_typed_dose_are_material_assessment
     assert result["is_live_ready"] is True
 
 
-def test_completeness_gate_blocks_unfinished_material_evidence() -> None:
+def test_completeness_gate_does_not_block_on_shadow_evidence() -> None:
     from assessment_readiness import evaluate_assessment_readiness
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
@@ -381,24 +384,25 @@ def test_completeness_gate_blocks_unfinished_material_evidence() -> None:
         assessment_readiness=readiness,
     )
 
-    assert result.is_live_eligible is False
-    assert "evidence_assessment_readiness" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert "evidence_assessment_readiness" not in result.missing_fields
     assert "verification_assessment_readiness" not in result.missing_fields
 
 
-def test_v4_scorer_quarantines_unfinished_material_evidence() -> None:
+def test_v4_scorer_scores_and_records_unfinished_material_evidence() -> None:
+    """The backlog is reported on the artifact, not paid for by delisting."""
     from score_supplements_v4 import score_product_v4
 
     product = _product(_row("Unreviewed Botanical", "unreviewed_botanical"))
     result = score_product_v4(product)
 
-    assert result["quality_score_status"] == "not_scored"
-    assert result["v4_verdict"] == "NOT_SCORED"
-    assert result["quality_score_v4_100"] is None
+    assert result["quality_score_status"] == "scored"
+    assert result["quality_score_v4_100"] is not None
     readiness = result["v4_breakdown"]["assessment_readiness"]
-    assert readiness["is_live_ready"] is False
+    assert readiness["is_live_ready"] is True
     assert readiness["evidence"]["not_yet_evaluated_count"] == 1
-    assert "evidence_assessment_readiness" in (
+    assert readiness["shadow_incomplete_dimensions"] == ["evidence"]
+    assert "evidence_assessment_readiness" not in (
         result["v4_breakdown"]["completeness_gate"]["missing_fields"]
     )
 
@@ -413,5 +417,102 @@ def test_schema_2x_input_measures_readiness_without_changing_score_status() -> N
 
     readiness = result["v4_breakdown"]["assessment_readiness"]
     assert readiness["enforcement_mode"] == "shadow"
-    assert readiness["is_live_ready"] is False
+    assert readiness["evidence"]["readiness"] == "incomplete"
     assert result["quality_score_status"] == "scored"
+
+
+def test_module_aggregate_identity_carries_no_individual_evidence_question() -> None:
+    """A protein total is answered by the module, not by a per-ingredient record.
+
+    `protein` denotes "how much protein does this product declare", so demanding
+    a clinical record for it is a category error: no such record exists or could.
+    """
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Protein", "protein", quantity=25.0, unit="g")
+    result = evaluate_assessment_readiness(_product(row), module="sports")
+
+    evidence = result["evidence"]
+    assessment = evidence["ingredient_assessments"][0]
+    assert assessment["evidence_applicability"] == "module_aggregate"
+    assert assessment["state"] == "not_applicable"
+    assert assessment["reason_code"] == "module_scoped_dose_projection"
+    assert evidence["not_yet_evaluated_count"] == 0
+    # Assessed, not inapplicable: the module owns the answer.
+    assert evidence["readiness"] == "complete"
+
+
+def test_uncurated_individual_ingredient_still_reports_incomplete() -> None:
+    """The aggregate carve-out must not swallow genuine curation gaps."""
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Lycopene", "lycopene")
+    evidence = evaluate_assessment_readiness(_product(row), module="generic")["evidence"]
+
+    assessment = evidence["ingredient_assessments"][0]
+    assert assessment["evidence_applicability"] == "individual_ingredient"
+    assert assessment["state"] == "not_yet_evaluated"
+    assert evidence["not_yet_evaluated_count"] == 1
+    assert evidence["readiness"] == "incomplete"
+
+
+def test_dri_nutrient_is_authority_assessed_not_individually_curated() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Zinc", "zinc", quantity=15.0)
+    evidence = evaluate_assessment_readiness(_product(row), module="generic")["evidence"]
+
+    assessment = evidence["ingredient_assessments"][0]
+    assert assessment["evidence_applicability"] == "nutrition_authority"
+    assert assessment["state"] == "evaluated_supported"
+    assert evidence["readiness"] == "complete"
+
+
+def test_applicability_counts_cover_every_assessment() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Lycopene", "lycopene")
+    evidence = evaluate_assessment_readiness(_product(row), module="generic")["evidence"]
+
+    assessments = evidence["ingredient_assessments"]
+    assert sum(evidence["applicability_counts"].values()) == len(assessments)
+    assert evidence["individual_assessment_count"] == evidence[
+        "applicability_counts"
+    ].get("individual_ingredient", 0)
+
+
+def test_evidence_is_measured_but_does_not_gate_live_eligibility() -> None:
+    """Evidence readiness is shadow: an uncurated ingredient is not a defect.
+
+    Enforcing it would quarantine on curation backlog rather than on anything
+    true about the product, so it is reported and excluded from the gate.
+    """
+    from assessment_readiness import (
+        ENFORCED_READINESS_DIMENSIONS,
+        evaluate_assessment_readiness,
+    )
+
+    assert "evidence" not in ENFORCED_READINESS_DIMENSIONS
+    assert ENFORCED_READINESS_DIMENSIONS == {
+        "identity",
+        "dose",
+        "verification",
+        "route",
+    }
+
+    row = _row("Lycopene", "lycopene")
+    result = evaluate_assessment_readiness(_product(row), module="generic")
+
+    assert result["evidence"]["readiness"] == "incomplete"
+    assert result["shadow_incomplete_dimensions"] == ["evidence"]
+    assert "evidence_assessment_readiness" not in result["unavailable_reasons"]
+    assert result["is_live_ready"] is True
+    assert result["enforced_dimensions"] == sorted(ENFORCED_READINESS_DIMENSIONS)
+
+
+def test_aggregate_identities_are_not_also_authority_nutrients() -> None:
+    """The two carve-outs must stay disjoint or branch order would decide."""
+    from scoring_v4.modules.generic_evidence import DRI_ESSENTIAL_NUTRIENTS
+    from scoring_v4.route_features import AGGREGATE_IDENTITY_CANONICALS
+
+    assert not (set(AGGREGATE_IDENTITY_CANONICALS) & set(DRI_ESSENTIAL_NUTRIENTS))

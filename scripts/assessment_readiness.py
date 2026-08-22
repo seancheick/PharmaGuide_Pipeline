@@ -26,6 +26,7 @@ from scoring_v4.modules.generic_evidence import (
     DRI_ESSENTIAL_NUTRIENTS,
     resolved_clinical_matches,
 )
+from scoring_v4.route_features import AGGREGATE_IDENTITY_CANONICALS
 
 
 ASSESSMENT_READINESS_SCHEMA_VERSION = "1.0.0"
@@ -33,6 +34,24 @@ ASSESSMENT_READINESS_SCHEMA_VERSION = "1.0.0"
 READINESS_COMPLETE = "complete"
 READINESS_INCOMPLETE = "incomplete"
 READINESS_NOT_APPLICABLE = "not_applicable"
+
+# Who owns the evidence question for a row. `state` records the answer; this
+# records whether an individual clinical record is the thing that answers it.
+EVIDENCE_APPLICABILITY_INDIVIDUAL = "individual_ingredient"
+EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY = "nutrition_authority"
+EVIDENCE_APPLICABILITY_MODULE_AGGREGATE = "module_aggregate"
+EVIDENCE_APPLICABILITY_NOT_APPLICABLE = "not_applicable"
+
+# Readiness dimensions that gate the live catalog. Evidence is deliberately
+# absent: `not_yet_evaluated` records an uncurated ingredient, not a defective
+# product, and enforcing it would quarantine on curation backlog. It stays fully
+# measured and reported in shadow so the backlog is visible and burnable.
+ENFORCED_READINESS_DIMENSIONS = frozenset({
+    "identity",
+    "dose",
+    "verification",
+    "route",
+})
 
 EVIDENCE_EVALUATED_SUPPORTED = "evaluated_supported"
 EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE = "evaluated_limited_or_negative"
@@ -219,10 +238,17 @@ def evaluate_evidence_assessment(
             if evidence_id
         ))
 
+        applicability = EVIDENCE_APPLICABILITY_INDIVIDUAL
         if not material:
+            applicability = EVIDENCE_APPLICABILITY_NOT_APPLICABLE
             state = EVIDENCE_NOT_APPLICABLE
             reason = "non_material_active"
+        elif canonical_id in AGGREGATE_IDENTITY_CANONICALS:
+            applicability = EVIDENCE_APPLICABILITY_MODULE_AGGREGATE
+            state = EVIDENCE_NOT_APPLICABLE
+            reason = "module_scoped_dose_projection"
         elif canonical_id in DRI_ESSENTIAL_NUTRIENTS:
+            applicability = EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY
             state = EVIDENCE_EVALUATED_SUPPORTED
             reason = "established_dri_nutrition_authority"
         elif any(_is_supportive_human_match(match) for match in linked):
@@ -238,7 +264,10 @@ def evaluate_evidence_assessment(
             state = EVIDENCE_NOT_YET_EVALUATED
             reason = "no_reviewed_evidence_assessment"
 
-        if material and state == EVIDENCE_NOT_YET_EVALUATED:
+        if (
+            applicability == EVIDENCE_APPLICABILITY_INDIVIDUAL
+            and state == EVIDENCE_NOT_YET_EVALUATED
+        ):
             incomplete_refs.append(source_ref)
         assessments.append({
             "source_row_ref": source_ref,
@@ -253,11 +282,19 @@ def evaluate_evidence_assessment(
             "scoring_input_kind": row.get("scoring_input_kind"),
             "evidence_type": row.get("evidence_type"),
             "state": state,
+            "evidence_applicability": applicability,
             "reason_code": reason,
             "evidence_ids": evidence_ids,
         })
 
     material_count = sum(1 for row in assessments if row["material"])
+    applicability_counts: Dict[str, int] = {}
+    for row in assessments:
+        key = str(row["evidence_applicability"])
+        applicability_counts[key] = applicability_counts.get(key, 0) + 1
+    individual_count = applicability_counts.get(
+        EVIDENCE_APPLICABILITY_INDIVIDUAL, 0
+    )
     readiness = (
         READINESS_NOT_APPLICABLE
         if material_count == 0
@@ -268,6 +305,8 @@ def evaluate_evidence_assessment(
     return {
         "readiness": readiness,
         "material_active_count": material_count,
+        "individual_assessment_count": individual_count,
+        "applicability_counts": applicability_counts,
         "not_yet_evaluated_count": len(incomplete_refs),
         "not_yet_evaluated_row_refs": incomplete_refs,
         "ingredient_assessments": assessments,
@@ -623,7 +662,16 @@ def evaluate_assessment_readiness(
     unavailable_reasons = [
         f"{name}_assessment_readiness"
         for name, payload in dimensions.items()
-        if not _is_ready(str(payload.get("readiness") or ""))
+        if name in ENFORCED_READINESS_DIMENSIONS
+        and not _is_ready(str(payload.get("readiness") or ""))
+    ]
+    # Measured but not gating. Kept separate so the backlog stays visible and
+    # countable without deciding the product's live eligibility.
+    shadow_incomplete_dimensions = [
+        name
+        for name, payload in dimensions.items()
+        if name not in ENFORCED_READINESS_DIMENSIONS
+        and not _is_ready(str(payload.get("readiness") or ""))
     ]
     contract_version = str(
         product.get("assessment_readiness_contract_version") or ""
@@ -636,7 +684,9 @@ def evaluate_assessment_readiness(
             else "shadow"
         ),
         "input_contract_version": contract_version or None,
+        "enforced_dimensions": sorted(ENFORCED_READINESS_DIMENSIONS),
         **dimensions,
         "is_live_ready": not unavailable_reasons,
         "unavailable_reasons": unavailable_reasons,
+        "shadow_incomplete_dimensions": shadow_incomplete_dimensions,
     }

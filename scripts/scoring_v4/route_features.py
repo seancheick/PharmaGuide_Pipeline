@@ -26,6 +26,25 @@ B_VITAMIN_CANONICALS = frozenset({
     "vitamin_b12_cobalamin",
 })
 
+# Identities that denote a product-level total rather than a substance. A label
+# row carrying one of these answers "how much protein / fiber / enzyme activity
+# does the product declare", not "which ingredient is this". The owning module
+# assesses them -- the sports archetype for protein, the fiber dose bands for
+# fiber, strain review for CFU -- so no per-ingredient clinical record exists or
+# is required for them.
+#
+# Keyed on identity, not on how the dose reached the row: `protein` arrives both
+# as a sports_primary_dose projection and as a blend_anchor_mass projection, and
+# it denotes the same total either way.
+AGGREGATE_IDENTITY_CANONICALS = frozenset({
+    "protein",
+    "fiber",
+    "digestive_enzymes",
+    "branched_chain_amino_acids",
+    "probiotic_cfu_total",
+    "epa_dha",
+})
+
 BCAA_CANONICALS = frozenset({"l_leucine", "l_isoleucine", "l_valine"})
 
 # The nine essential amino acids, by the canonical id the enricher emits.

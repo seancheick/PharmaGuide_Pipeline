@@ -85,6 +85,9 @@ GOVERNED_ALLOWLISTS: Dict[str, FrozenSet[str]] = {
     ),
     "sports_helpers.SPORTS_PROTEIN_CANONICALS": frozenset(sh.SPORTS_PROTEIN_CANONICALS),
     "sports_helpers.EAA_CANONICALS": frozenset(sh.EAA_CANONICALS),
+    "route_features.AGGREGATE_IDENTITY_CANONICALS": frozenset(
+        rf.AGGREGATE_IDENTITY_CANONICALS
+    ),
 }
 
 

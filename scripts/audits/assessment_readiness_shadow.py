@@ -132,6 +132,7 @@ def build_shadow_report(
     not_evaluated_active_count = 0
     verification_not_evaluated_count = 0
     legacy_dose_inference_count = 0
+    shadow_incomplete_count = 0
 
     for stage_dir in _stage_dirs(products_dir):
         manifest_path = stage_dir / MANIFEST_NAME
@@ -217,11 +218,20 @@ def build_shadow_report(
                 unavailable = list(readiness.get("unavailable_reasons") or [])
                 for reason in unavailable:
                     unavailable_reason_counts[str(reason)] += 1
+                shadow_incomplete = [
+                    str(name)
+                    for name in readiness.get("shadow_incomplete_dimensions") or []
+                ]
+                if shadow_incomplete:
+                    shadow_incomplete_count += 1
                 if readiness.get("is_live_ready") is True:
                     live_ready_count += 1
                 else:
                     incomplete_count += 1
+                if unavailable or shadow_incomplete:
                     remediation_queue.append({
+                        "gates_catalog_eligibility": bool(unavailable),
+                        "shadow_incomplete_dimensions": shadow_incomplete,
                         "dsld_id": dsld_id,
                         "product_name": (
                             product.get("product_name")
@@ -258,6 +268,7 @@ def build_shadow_report(
             "product_count": product_count,
             "live_ready_product_count": live_ready_count,
             "incomplete_product_count": incomplete_count,
+            "shadow_incomplete_product_count": shadow_incomplete_count,
             "not_yet_evaluated_material_active_count": not_evaluated_active_count,
             "verification_not_evaluated_product_count": verification_not_evaluated_count,
             "legacy_dose_inference_product_count": legacy_dose_inference_count,
