@@ -265,13 +265,27 @@ def _norm(value: Any) -> str:
     return str(value).strip().lower()
 
 
+# Reasons the enricher records when a real label active cannot be resolved to a
+# scoring identity. Shared so the producer and this contract cannot drift apart:
+# the previous mismatch left coverage unable to observe an unmapped active at all.
+UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH = "no_quality_map_match"
+UNRESOLVED_IDENTITY_FORM_UNMAPPED = "form_unmapped"
+UNRESOLVED_IDENTITY_REASONS = frozenset({
+    UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH,
+    UNRESOLVED_IDENTITY_FORM_UNMAPPED,
+})
+
 def score_exclusion_reason(row: Dict[str, Any]) -> str:
     """Read the canonical reason with narrow schema-2.3 compatibility.
 
     New enrichment writes ``score_exclusion_reason``. ``skip_reason`` is the
     former scoring-specific alias. One historical unmatched-identity path
-    wrote only ``identity_decision_reason=no_quality_map_match``; accept that
-    exact value at this migration boundary and no other identity rationale.
+    records only ``identity_decision_reason``; accept the unresolved-identity
+    rationales at that migration boundary and no other.
+
+    Precedence is deliberate: an affirmative cleaner exclusion such as
+    ``recognized_non_scorable`` outranks a legacy identity rationale, so a row
+    the cleaner knowingly dropped stays out of the coverage denominator.
     """
 
     canonical = _norm(row.get("score_exclusion_reason"))
@@ -281,9 +295,14 @@ def score_exclusion_reason(row: Dict[str, Any]) -> str:
     if legacy_skip:
         return legacy_skip
     legacy_identity = _norm(row.get("identity_decision_reason"))
-    if legacy_identity == "no_quality_map_match":
+    if legacy_identity in UNRESOLVED_IDENTITY_REASONS:
         return legacy_identity
     return ""
+
+
+def has_unresolved_identity_reason(row: Dict[str, Any]) -> bool:
+    """True when the resolved reason is an unresolved scoring identity."""
+    return score_exclusion_reason(row) in UNRESOLVED_IDENTITY_REASONS
 
 
 def _as_float(value: Any, default: Optional[float] = None) -> Optional[float]:
@@ -2046,7 +2065,7 @@ def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
         return False
     if _norm(row.get("role_classification")) != "active_unmapped":
         return False
-    if score_exclusion_reason(row) != "no_quality_map_match":
+    if not has_unresolved_identity_reason(row):
         return False
     if bool(row.get("is_excipient")):
         return False

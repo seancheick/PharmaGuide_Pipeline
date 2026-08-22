@@ -110,6 +110,8 @@ from serving_frequency import (
 )
 from scoring_input_contract import (
     build_scoring_classification,
+    UNRESOLVED_IDENTITY_FORM_UNMAPPED,
+    UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH,
     derive_product_scoring_evidence,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
@@ -6866,7 +6868,7 @@ class SupplementEnricherV3:
                 "scoreable_identity": False,
                 "role_classification": "active_unmapped",
                 "identity_confidence": 0.0,
-                "identity_decision_reason": "form_unmapped",
+                "identity_decision_reason": UNRESOLVED_IDENTITY_FORM_UNMAPPED,
                 "safety_hits": [],
                 "hierarchyType": hierarchy_type,
                 "source_section": source_section,
@@ -7069,7 +7071,7 @@ class SupplementEnricherV3:
                 "scoreable_identity": False,
                 "role_classification": "active_unmapped",
                 "identity_confidence": 0.0,
-                "identity_decision_reason": "no_quality_map_match",
+                "identity_decision_reason": UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH,
                 "safety_hits": [],
                 "hierarchyType": hierarchy_type,
                 "source_section": source_section,

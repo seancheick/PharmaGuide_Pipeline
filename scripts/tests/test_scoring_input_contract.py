@@ -1452,3 +1452,72 @@ def test_product_projection_does_not_double_count_its_label_row_in_coverage() ->
 
     assert result.mapped_count == 1
     assert result.mapped_coverage == 1.0
+
+
+def test_producer_and_coverage_agree_on_unresolved_identity_reasons() -> None:
+    """Producer-to-consumer canary for the coverage contract.
+
+    The enricher once wrote `identity_decision_reason=no_quality_map_match`
+    while coverage read `skip_reason`/`score_exclusion_reason`, so no unmapped
+    active could ever reach the denominator and `mapped_coverage` was pinned at
+    1.0 for the whole catalog. Assert on the literals the producer actually
+    emits rather than on a fixture that could restate the same mistake.
+    """
+    import re
+
+    from scoring_input_contract import (
+        UNRESOLVED_IDENTITY_REASONS,
+        has_unresolved_identity_reason,
+    )
+
+    producer = (SCRIPTS_ROOT / "enrich_supplements_v3.py").read_text()
+    emitted = set(
+        re.findall(r'"identity_decision_reason":\s*"([a-z0-9_]+)"', producer)
+    ) | set(
+        re.findall(
+            r'"identity_decision_reason":\s*(UNRESOLVED_IDENTITY_[A-Z_]+)', producer
+        )
+    )
+    assert emitted, "no identity_decision_reason producer site found"
+
+    resolved = {
+        getattr(scoring_contract, value)
+        if value.startswith("UNRESOLVED_IDENTITY_")
+        else value
+        for value in emitted
+    }
+    missing = sorted(UNRESOLVED_IDENTITY_REASONS - resolved)
+    assert not missing, (
+        f"the coverage contract recognises {missing} but enrichment no longer "
+        "emits them, so a row carrying the current literal can never enter the "
+        "mapped_coverage denominator."
+    )
+    for reason in UNRESOLVED_IDENTITY_REASONS:
+        assert has_unresolved_identity_reason(
+            {"identity_decision_reason": reason}
+        )
+
+
+def test_affirmative_exclusion_outranks_a_legacy_identity_rationale() -> None:
+    """Precedence is deliberate, and one real row exercises it.
+
+    Perfect Meal Milk Chocolate (calcified Red Algae) carries
+    `identity_decision_reason=no_quality_map_match` together with
+    `skip_reason=no_dose_evidence`. It is a dose gap, not a mapping gap, and
+    must not be counted as unmapped.
+    """
+    from scoring_input_contract import (
+        has_unresolved_identity_reason,
+        score_exclusion_reason,
+    )
+
+    row = {
+        "identity_decision_reason": "no_quality_map_match",
+        "skip_reason": "no_dose_evidence",
+        "score_exclusion_reason": "no_dose_evidence",
+    }
+
+    # The affirmative dose exclusion wins, by design: the row has no dose, so it
+    # is not a coverage gap even though its identity is unresolved.
+    assert has_unresolved_identity_reason(row) is False
+    assert score_exclusion_reason(row) == "no_dose_evidence"

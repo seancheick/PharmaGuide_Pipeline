@@ -19,6 +19,7 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 from scoring_input_contract import (  # noqa: E402
+    UNRESOLVED_IDENTITY_REASONS,
     get_scoring_ingredients,
     score_exclusion_reason,
 )
@@ -95,6 +96,12 @@ def _enriched_stage_dirs(products_dir: Path) -> list[Path]:
     return stage_dirs
 
 
+def _norm_identity_reason(row: Mapping[str, Any]) -> str:
+    """The unresolved-identity rationale, when the row records one."""
+    value = str(row.get("identity_decision_reason") or "").strip().lower()
+    return value if value in UNRESOLVED_IDENTITY_REASONS else ""
+
+
 def _unresolved_rows(result: Any) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -121,6 +128,9 @@ def _unresolved_rows(result: Any) -> list[dict[str, Any]]:
             ),
             "reason_code": score_exclusion_reason(row)
             or "missing_scoring_identity",
+            # Reported separately: a row excluded for dose can still be the
+            # unresolved identity we owe curation.
+            "identity_reason_code": _norm_identity_reason(row),
             "canonical_id": row.get("canonical_id"),
             "quantity": row.get("quantity"),
             "unit": row.get("unit"),
@@ -145,6 +155,7 @@ def build_shadow_report(
     stages: list[dict[str, Any]] = []
     fraction_counts: Counter[str] = Counter()
     reason_counts: Counter[str] = Counter()
+    identity_reason_counts: Counter[str] = Counter()
     no_eligible_reason_counts: Counter[str] = Counter()
     product_id_counts: Counter[str] = Counter()
     remediation_queue: list[dict[str, Any]] = []
@@ -275,6 +286,9 @@ def build_shadow_report(
                 unresolved = _unresolved_rows(result)
                 for row in unresolved:
                     reason_counts[str(row["reason_code"])] += 1
+                    identity_reason = str(row.get("identity_reason_code") or "")
+                    if identity_reason:
+                        identity_reason_counts[identity_reason] += 1
                 if result.unmapped_count:
                     remediation_queue.append({
                         "dsld_id": dsld_id,
@@ -322,6 +336,9 @@ def build_shadow_report(
         },
         "coverage_fraction_counts": dict(sorted(fraction_counts.items())),
         "unresolved_reason_counts": dict(sorted(reason_counts.items())),
+        "unresolved_identity_reason_counts": dict(
+            sorted(identity_reason_counts.items())
+        ),
         "no_score_eligible_reason_counts": dict(
             sorted(no_eligible_reason_counts.items())
         ),

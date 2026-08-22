@@ -122,6 +122,7 @@ def test_shadow_report_measures_real_coverage_without_mutating_eligibility(
                     "raw_source_path": "ingredientRows[1]",
                     "label": "Unknown Active",
                     "reason_code": "no_quality_map_match",
+                    "identity_reason_code": "no_quality_map_match",
                     "canonical_id": None,
                     "quantity": 50,
                     "unit": "mg",
