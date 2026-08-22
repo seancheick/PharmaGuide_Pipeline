@@ -614,10 +614,16 @@ run_strict_gate "artifact freshness" \
     --products-dir "$PRODUCTS_DIR" \
     --strict-release
 run_strict_gate "stamp export manifest contract metadata" \
-  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" stamp-manifest --dist-dir "$DIST_DIR" --strict-release
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" stamp-manifest \
+    --dist-dir "$DIST_DIR" \
+    --interaction-parity-verified \
+    --strict-release
 if [[ -f "$FINAL_DB_DIR/export_manifest.json" ]]; then
   run_strict_gate "stamp final_db_output manifest contract metadata" \
-    "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" stamp-manifest --dist-dir "$FINAL_DB_DIR" --strict-release
+    "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" stamp-manifest \
+      --dist-dir "$FINAL_DB_DIR" \
+      --interaction-parity-verified \
+      --strict-release
 fi
 run_strict_gate "export contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" export --dist-dir "$DIST_DIR" --require-stamped-manifest --strict-release

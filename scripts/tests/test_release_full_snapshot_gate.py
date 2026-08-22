@@ -46,6 +46,22 @@ def test_release_preflights_flutter_import_before_supabase_sync():
     assert flutter_preflight < supabase_sync
 
 
+def test_release_stamp_records_interaction_parity_only_after_its_gate():
+    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
+
+    interaction_gate = source.index('run_strict_gate "interaction DB parity"')
+    manifest_stamp = source.index(
+        'run_strict_gate "stamp export manifest contract metadata"'
+    )
+
+    assert interaction_gate < manifest_stamp
+    assert "--interaction-parity-verified" in source[
+        manifest_stamp : source.index(
+            'run_strict_gate "export contract"', manifest_stamp
+        )
+    ]
+
+
 def test_snapshot_contract_runs_before_candidate_promotion():
     source = SNAPSHOT_SCRIPT.read_text(encoding="utf-8")
 

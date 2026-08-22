@@ -1160,6 +1160,20 @@ def test_stamp_manifest_accepts_working_build_checksum_field(tmp_path):
     assert manifest["checksum_sha256"] == sha256(db_path)
     assert manifest["pipeline_contract_version"] == "cleaner_first_source_of_truth_v1"
     assert manifest["strict_gate_summary"]["strict_mode"] is True
+    assert "flutter_bundle_parity" not in manifest["strict_gate_summary"]["gates"]
+    assert "interaction_db_parity" not in manifest["strict_gate_summary"]["gates"]
+    assert manifest["strict_gate_summary"]["post_candidate_gates"] == [
+        "interaction_db_parity",
+        "flutter_bundle_parity",
+    ]
+
+    args.interaction_parity_verified = True
+    assert audit.stamp_manifest(args) == []
+    manifest = json.loads((dist / "export_manifest.json").read_text())
+    assert "interaction_db_parity" in manifest["strict_gate_summary"]["gates"]
+    assert manifest["strict_gate_summary"]["post_candidate_gates"] == [
+        "flutter_bundle_parity",
+    ]
 
 
 def test_stamp_manifest_refreshes_interaction_provenance_before_export_audit(tmp_path):

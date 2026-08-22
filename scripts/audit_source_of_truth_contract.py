@@ -1935,19 +1935,26 @@ def stamp_manifest(args: argparse.Namespace) -> list[Finding]:
     matrix = load_json(matrix_path) if matrix_path.exists() else {}
     manifest["pipeline_contract_version"] = "cleaner_first_source_of_truth_v1"
     manifest["source_of_truth_matrix_version"] = (matrix.get("_metadata") or {}).get("schema_version")
+    verified_gates = [
+        "source_of_truth_matrix",
+        "cleaner_contract",
+        "enrichment_contract",
+        "scoring_contract",
+        "export_contract",
+        "clinical_drift",
+        "artifact_freshness",
+    ]
+    post_candidate_gates = ["interaction_db_parity", "flutter_bundle_parity"]
+    if getattr(args, "interaction_parity_verified", False):
+        verified_gates.append("interaction_db_parity")
+        post_candidate_gates.remove("interaction_db_parity")
     manifest["strict_gate_summary"] = {
         "strict_mode": bool(args.strict_release),
-        "gates": [
-            "source_of_truth_matrix",
-            "cleaner_contract",
-            "enrichment_contract",
-            "scoring_contract",
-            "export_contract",
-            "clinical_drift",
-            "interaction_db_parity",
-            "artifact_freshness",
-            "flutter_bundle_parity"
-        ],
+        "gates": verified_gates,
+        # Candidate-only builds intentionally stop before interaction and app
+        # bundle release work. Keep those later checks explicit instead of
+        # representing them as completed manifest gates.
+        "post_candidate_gates": post_candidate_gates,
         "stamped_by": "scripts/audit_source_of_truth_contract.py stamp-manifest"
     }
     manifest["artifact_freshness_status"] = "checked_by_release_strict_gate"
@@ -2076,6 +2083,11 @@ def build_parser() -> argparse.ArgumentParser:
     stamp = subparsers.add_parser("stamp-manifest", help="stamp export manifest with contract release metadata")
     add_common(stamp)
     stamp.add_argument("--dist-dir", default="scripts/dist")
+    stamp.add_argument(
+        "--interaction-parity-verified",
+        action="store_true",
+        help="record interaction DB parity only after that release gate passed",
+    )
     stamp.set_defaults(require_stamped_manifest=False)
     stamp.set_defaults(func=stamp_manifest)
 
