@@ -13,7 +13,11 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from sync_to_supabase import is_v4_manifest, parse_args  # noqa: E402
+from sync_to_supabase import (  # noqa: E402
+    is_v4_manifest,
+    parse_args,
+    v4_manifest_sync_message,
+)
 
 
 def test_v4_manifest_detected_by_score_model() -> None:
@@ -29,6 +33,15 @@ def test_v4_manifest_detected_by_score_model() -> None:
 def test_v4_manifest_detected_by_schema_major() -> None:
     manifest = {"schema_version": "2.1.0", "product_count": 1}
     assert is_v4_manifest(manifest) is True
+
+
+def test_v4_sync_message_reports_the_actual_schema_version() -> None:
+    manifest = {"schema_version": "2.4.0", "score_model": "v4"}
+
+    message = v4_manifest_sync_message(manifest)
+
+    assert "schema 2.4.0 build" in message
+    assert "schema 2.0.0 build" not in message
 
 
 def test_legacy_schema_not_detected_as_v4() -> None:

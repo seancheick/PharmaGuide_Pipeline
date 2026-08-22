@@ -1030,6 +1030,15 @@ def is_v4_manifest(manifest):
     return (score_model == "v4") or (major >= 2)
 
 
+def v4_manifest_sync_message(manifest):
+    """Describe the exact export schema being synchronized."""
+    schema = str((manifest or {}).get("schema_version") or "unknown")
+    return (
+        f"  [v4] schema {schema} build — syncing as the production "
+        "catalog contract."
+    )
+
+
 def sync(
     build_dir,
     dry_run=False,
@@ -1058,7 +1067,7 @@ def sync(
     print(f"Loading manifest from {build_dir}...")
     local = load_local_manifest(build_dir)
     if is_v4_manifest(local):
-        print("  [v4] schema 2.0.0 build — syncing as the production catalog contract.")
+        print(v4_manifest_sync_message(local))
     version = local["db_version"]
     product_count = local["product_count"]
     checksum = local["checksum"]
