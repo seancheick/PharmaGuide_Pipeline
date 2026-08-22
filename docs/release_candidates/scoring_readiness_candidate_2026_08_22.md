@@ -150,14 +150,22 @@ the suppression rule, and both products are named canaries with an independent l
 
 ## Verification
 
-- Full corpus enrich + score: **37 / 37 datasets, zero failures**.
-- Pipeline release suite: **111 passed, 1 expected interaction skip, zero failures**, followed by
+Re-run in full after the compound-excipient safety fix, against the rebuilt catalog:
+
+- Full corpus re-score: **37 / 37 datasets, zero failures**, every strict pre-score gate green.
+- Pipeline fast suite: **11,832 passed, 124 skipped, zero failures**.
+- Pipeline release suite: **116 passed, 1 expected interaction skip, zero failures**, followed by
   live RxCUI, direct-drug, PMID existence, and reviewed-content gates with zero unresolved IDs.
-- Pipeline full suite: **14,311 passed, 163 skipped, 2 documented xfailed, zero failures**.
+- Pipeline full suite: **14,321 passed, 163 skipped, 2 documented xfailed, zero failures**.
 - Candidate build: 14,409 live products, 1,003 quarantines, zero export-contract failures, and no
-  red contract-sync findings.
+  red contract-sync findings across 14,409 blobs.
 - Flutter analysis: **no issues**.
-- Flutter full suite: **3,235 passed, zero failures**.
+- Flutter full suite: **3,242 passed, zero failures**.
+
+The release script's closing `dist_vs_flutter` gate reports 5 findings: three that the Flutter
+bundle differs from `dist`, and two that `dist` carries no interaction artifact. Both are the
+unpublished-candidate boundary — the bundle import and the credentialed interaction rebuild are
+the next steps, not regressions.
 - Candidate catalog + interaction importer dry-run: **passed; no app files written**.
 - Supabase sync dry-run: **passed; no upload performed**.
 - Warning equivalence for prepared schema 3: **181,471 checked, zero failures**.
