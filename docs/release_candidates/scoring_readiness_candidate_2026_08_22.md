@@ -3,9 +3,15 @@
 Status: **technically verified preproduction candidate; not approved or published**
 
 This report supersedes the earlier 2026-08-22 readiness report. The earlier report mixed
-aggregate projections with label rows, understated the reviewed route diff, reported stale
-candidate counts, and treated an environment-dependent Red Yeast Rice failure as an open defect.
-Those statements are corrected here from a fresh corpus rebuild and direct candidate queries.
+aggregate projections with label rows and treated an environment-dependent Red Yeast Rice
+failure as an open defect. Those statements are corrected here from a fresh corpus rebuild and
+direct candidate queries.
+
+The product, quarantine, and route-change counts in that earlier report were **not** measurement
+errors and are not corrected here. 14,380 live / 1,032 quarantined / 52 reviewed route changes
+were accurate for the code state they were measured against — the candidate database built at
+that commit contains exactly 14,380 rows. The counts moved because the code moved: row-level
+protein routing and the route readiness dimension landed afterwards. Superseded, not corrected.
 
 No Supabase upload, Flutter bundle import, app asset commit, push, cleanup, or production
 promotion was performed.
@@ -25,17 +31,23 @@ sign-off for 12 US safety-policy holds and a separately authorized production re
 | Scoring version | 4.2.0 | **4.3.0** |
 | Live app products | 13,271 | **14,409** |
 | Quarantined products | 14 | **1,003** |
-| Scored | 13,164 | **14,357** |
-| Safety-suppressed | 107 | **52** |
+| Scored | 13,164 | **14,355** |
+| Safety-suppressed | 107 | **54** |
 | NOT_SCORED in live catalog | 0 | **0** |
 
 Candidate database SHA-256:
-`2cb086d318dc4b68897a8bc29bc989750115686b54219f28be617fc5103d2ea6`
+`855684b0585cde7c20dce83e4ef438eeda03393ccb46b8f234d2bed45d035a82`
 
-The candidate contains 14,409 detail blobs and a 56,569,856-byte core database. On the 12,556
-products shared with the shipped baseline, 568 routes, 1,493 scores, 615 tiers, 568 verdicts,
-46 score statuses, and 276 blocking reasons changed. Mapping coverage changed on zero shared
-products. The candidate adds 1,853 live products and removes 715 prior live products.
+The candidate contains 14,409 detail blobs and a 56,573,952-byte core database. It adds 1,853
+live products and removes 715 prior live products; 12,556 are shared with the shipped baseline.
+On those shared products the columns that exist in both the 2.3 and 2.4 schemas changed as
+follows: 565 verdicts, 274 blocking reasons, 44 score statuses. Mapping coverage changed on zero
+shared products. Route, score, and tier columns were renamed between schemas and are not
+directly comparable.
+
+This supersedes the earlier candidate hash
+`2cb086d318dc4b68897a8bc29bc989750115686b54219f28be617fc5103d2ea6`, which predates the
+compound-excipient safety fix below.
 
 ## What the audit corrected
 
@@ -93,6 +105,49 @@ The 12 policy holds are nine vinpocetine products (`204468`, `232923`, `294063`,
 products (`33358`, `33360`, `33361`). Their matches are confirmed; their final US consumer
 verdict remains an operator clinical-policy decision.
 
+## Safety verdict transitions
+
+Quarantine is the conservative direction and it is the direction this report asked the operator
+to sign off on. The permissive direction was not itemised anywhere, so it is recorded here.
+
+Against the shipped baseline, **46 products lost a BLOCKED verdict and stayed live**. Two of
+those were a defect, now fixed, leaving **44 deliberate policy transitions**:
+
+| Cause | New verdict | Products | Status |
+|---|---|---:|---|
+| Red Yeast Rice, no monacolin/lovastatin declaration | CAUTION | 27 | needs sign-off |
+| Sodium tetraborate as a declared boron source | SAFE | 16 | needs sign-off |
+| Sodium tetraborate as a declared boron source | CAUTION | 1 (`312980`) | needs sign-off |
+| Partially hydrogenated soybean oil | was SAFE | 2 | defect — blocked again |
+
+A further 12 baseline-BLOCKED products left the live catalog into the policy-hold quarantine.
+
+**The 44 Red Yeast Rice and tetraborate transitions are defensible and need sign-off.** NIH ODS
+lists sodium tetraborate as a supplemental boron form, so a declared source salt is not the
+retired food-additive block. NCCIH records monacolin K in red yeast rice ranging from none to
+substantial, and the FDA prohibition addresses products with enhanced or added lovastatin, so
+generic RYR is a high-risk review rather than an automatic unapproved-drug block. Both are
+clinical-policy calls, not defects — and both move a consumer-facing verdict, so both belong in
+the sign-off queue beside the 12 holds.
+
+**The 2 PHO transitions were a defect and are fixed.** `33212` and `33230` declare Partially
+Hydrogenated Soybean Oil inside a `Creamer` row whose `forms[]` is a sub-ingredient list. Because
+a sibling child (Dipotassium Phosphate) duplicated the declared Potassium active, the active-form
+duplicate rule suppressed the whole row and took the banned child with it, in all three callers.
+The resolver identified `BANNED_PHO` correctly; the callers discarded it. FDA removed PHOs from
+GRAS and the compliance period has closed, so this is not a sign-off choice.
+
+Suppression is now scoped to the terms that earned it. Measured over the enriched corpus: 10,344
+of 83,353 inactive rows are suppressed by this rule and exactly 4 carry an independent banned or
+concern identity — the two PHO milkshakes, `178791` (Talc and Titanium Dioxide inside a Film
+Coating row, beside a duplicated Riboflavin active) and `223441` (Carob color inside a Soft Gel
+Capsule row). A full-corpus before/after diff over 15,412 products changes 4 safety-hit sets, all
+gaining a signal, none losing one.
+
+The corpus test that should have caught this repeated the same shortcut in its own oracle, while
+its failure message named `33212` as the canary it expected to cover. The oracle no longer shares
+the suppression rule, and both products are named canaries with an independent label-text check.
+
 ## Verification
 
 - Full corpus enrich + score: **37 / 37 datasets, zero failures**.
@@ -126,7 +181,12 @@ future cleanup, not authorization to ship schema 3 before one compatible 2.4 app
 1. Operator signs off or retains quarantine for the 12 US safety-policy cases, including whether
    confirmed Schedule III synthetic-steroid-class matches may remain CAUTION or must be
    BLOCKED/UNSAFE.
-2. Remediate the enforced review queues: 893 dose, 93 identity, and 7 route products. Keep the
+2. Operator signs off on the 44 permissive transitions in **Safety verdict transitions**: 27 red
+   yeast rice products moving BLOCKED → CAUTION, and 17 sodium tetraborate products losing the
+   blanket ban (16 to SAFE, one to CAUTION). Both are supported by the cited authorities; both
+   change a consumer-facing verdict and neither has been approved. The 2 PHO products are not on
+   this list — they are a fixed defect and stay blocked.
+3. Remediate the enforced review queues: 893 dose, 93 identity, and 7 route products. Keep the
    4,939-product evidence queue visible and curate it one verified ingredient at a time.
 3. Rebuild the production interaction artifact with the configured UMLS credential, then run the
    real interaction-parity gate.
@@ -135,6 +195,23 @@ future cleanup, not authorization to ship schema 3 before one compatible 2.4 app
    are included in this candidate audit.
 5. After one compatible app release, execute schema-3 cleanup. Keep score calibration as a later,
    separately versioned release.
+
+## Open questions this candidate does not answer
+
+1. **Probiotic `formula_only` badges bypass clinician review.** The producer sets
+   `formula_only` before it checks `dr_pham_signoff`, so 148 of the candidate's 1,190 research
+   rows render "Research applies to the formula, not necessarily each strain" without a
+   sign-off. `exact_strain` (242) and `species_level` (787) sum exactly to the 1,029
+   clinician-verified rows, so this is the only affirmative badge that can appear unreviewed.
+   Display policy decision, not a defect.
+2. **The clean-label lane never reads `forms[]`.** `_iter_resolver_clean_label_hits` collects
+   only `name` / `standardName`, so a clean-label additive declared as a sub-ingredient of a
+   compound excipient is invisible to it. `178791` reaches the safety lane through the fix above
+   but its Titanium Dioxide still does not reach the clean-label flag. Pre-existing and
+   independent of the duplicate rule; not changed here.
+3. **`Organic Red Yeast Rice` resolves to no rule at all.** The bare and `Powder` forms resolve
+   to `RISK_RED_YEAST_RICE`; the `Organic` prefix does not. An alias gap, unrelated to the
+   policy question above.
 
 The machine-readable companion report contains the artifact hashes, exact counts, verification
 results, and a canonical-JSON self-integrity hash. That hash detects report changes; it is not an

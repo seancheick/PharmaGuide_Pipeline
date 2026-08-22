@@ -1,9 +1,9 @@
 {
   "report_schema_version": "1.0.0",
   "report_name": "PharmaGuide scoring integrity corrected candidate audit",
-  "generated_at": "2026-08-22T13:40:50Z",
+  "generated_at": "2026-08-22T21:20:00Z",
   "candidate_status": "technically_verified_preproduction_not_approved_for_publish",
-  "supersedes": "docs/release_candidates/scoring_readiness_candidate_2026_08_22.md before corrected audit",
+  "supersedes": "docs/release_candidates/scoring_readiness_candidate_2026_08_22.md before the compound-excipient safety fix",
   "repositories": {
     "pipeline": {
       "branch": "codex/scoring-integrity-unification",
@@ -20,14 +20,14 @@
     "export_schema_version": "2.4.0",
     "scoring_version": "4.3.0",
     "pipeline_version": "3.4.0",
-    "db_version": "2026.08.22.122354",
+    "db_version": "2026.08.22.205555",
     "compatibility_boundary": "one released 2.4-compatible app before schema 3 cleanup"
   },
   "artifact_hashes": {
-    "candidate_database_sha256": "2cb086d318dc4b68897a8bc29bc989750115686b54219f28be617fc5103d2ea6",
-    "export_manifest_sha256": "017339a3dad453ec89e0808c9622b4ec7a62a144b288c74fcbb53a8a6d704c10",
-    "detail_index_sha256": "a7bb63d6fc82a8194f564b099d9ceb7e64141ae87b4fc5685a32d0a737688a15",
-    "export_audit_sha256": "cd1a90bd21ae5cf2e77913797d3bbc6bb4a8214cd6da59daa4d8961dd8832234",
+    "candidate_database_sha256": "855684b0585cde7c20dce83e4ef438eeda03393ccb46b8f234d2bed45d035a82",
+    "export_manifest_sha256": "ad3c3e46b381ccf9e99ba8b358a0881ca2afe8f5f70e3b4f83a609fb304e715d",
+    "detail_index_sha256": "bdd6ffa6b001ea62ccacbc176daaac51fffbe306324d510e6b4bda1c92560641",
+    "export_audit_sha256": "46ba25667b313fba5784f502c589991e862ac7d931b8d7e5055b130713809e65",
     "mapping_shadow_file_sha256": "358605b54d2e04c0fe42ed83623a7feca3d48b17c98076e128d6b124e3dea5a4",
     "readiness_shadow_file_sha256": "e900744101e43a199ac29a90206bec20283ff4f37d2a03d9549f685dbb8e2f38",
     "routing_shadow_file_sha256": "84ebf44ea4819467ed9d61f0aa47327956040fb505ffd9788f0cee290f3b56bb",
@@ -54,10 +54,10 @@
       "not_scored_live": 0
     },
     "verdict_counts": {
-      "BLOCKED": 52,
-      "CAUTION": 1197,
+      "BLOCKED": 54,
+      "CAUTION": 1198,
       "POOR": 2043,
-      "SAFE": 11117
+      "SAFE": 11114
     },
     "tier_counts": {
       "null": 52,
@@ -112,11 +112,27 @@
     "shadow_evidence_incomplete_products": 4939,
     "not_yet_evaluated_material_label_rows": 8935,
     "dimension_counts": {
-      "identity": {"complete": 15319, "incomplete": 93},
-      "dose": {"complete": 14338, "incomplete": 893, "not_applicable": 181},
-      "evidence": {"complete": 10292, "incomplete": 4939, "not_applicable": 181},
-      "verification": {"complete": 15412},
-      "route": {"complete": 15405, "incomplete": 7}
+      "identity": {
+        "complete": 15319,
+        "incomplete": 93
+      },
+      "dose": {
+        "complete": 14338,
+        "incomplete": 893,
+        "not_applicable": 181
+      },
+      "evidence": {
+        "complete": 10292,
+        "incomplete": 4939,
+        "not_applicable": 181
+      },
+      "verification": {
+        "complete": 15412
+      },
+      "route": {
+        "complete": 15405,
+        "incomplete": 7
+      }
     },
     "evidence_state_counts": {
       "evaluated_supported": 45391,
@@ -140,8 +156,22 @@
       "safety_policy_only": 10,
       "safety_policy_and_dose": 2
     },
-    "vinpocetine_product_ids": ["204468", "232923", "294063", "295535", "328399", "44121", "59786", "60562", "77114"],
-    "confirmed_synthetic_steroid_class_product_ids": ["33358", "33360", "33361"]
+    "vinpocetine_product_ids": [
+      "204468",
+      "232923",
+      "294063",
+      "295535",
+      "328399",
+      "44121",
+      "59786",
+      "60562",
+      "77114"
+    ],
+    "confirmed_synthetic_steroid_class_product_ids": [
+      "33358",
+      "33360",
+      "33361"
+    ]
   },
   "routing": {
     "reviewed_change_count": 173,
@@ -152,7 +182,15 @@
       "generic_to_sports": 57,
       "multi_or_prenatal_to_sports": 61
     },
-    "unresolved_route_product_ids": ["228837", "228854", "248514", "259709", "69317", "69599", "69608"],
+    "unresolved_route_product_ids": [
+      "228837",
+      "228854",
+      "248514",
+      "259709",
+      "69317",
+      "69599",
+      "69608"
+    ],
     "baseline_internal_sha256": "72ef2d59de883cd685bf690585705691d88359c526a0ed2c84b96e21ce66dd2f",
     "candidate_internal_sha256": "8786001ed3b6b0b1a667306f584468aba3d19215868a61af25358fe6be8321fa",
     "gold_internal_sha256": "8c2280bb4d418ccf2cfda966571917fc9f227a3308d9b9b7c048100693cdeda1"
@@ -170,15 +208,37 @@
     "input_fingerprint_sha256": "6d6bcc35a1295592b3e1083ce6e4540bafc3692611492d5acab109f52d36eee3"
   },
   "verification": {
-    "full_corpus": {"datasets": 37, "failures": 0},
-    "pipeline_release_suite": {"passed": 111, "skipped": 1, "failures": 0},
-    "pipeline_full_suite": {"passed": 14311, "skipped": 163, "xfailed": 2, "failures": 0},
-    "flutter_analyze": {"issues": 0},
-    "flutter_full_suite": {"passed": 3235, "failures": 0},
+    "full_corpus": {
+      "datasets": 37,
+      "failures": 0
+    },
+    "pipeline_release_suite": {
+      "passed": 111,
+      "skipped": 1,
+      "failures": 0
+    },
+    "pipeline_full_suite": {
+      "passed": 14311,
+      "skipped": 163,
+      "xfailed": 2,
+      "failures": 0
+    },
+    "flutter_analyze": {
+      "issues": 0
+    },
+    "flutter_full_suite": {
+      "passed": 3242,
+      "failures": 0
+    },
     "candidate_importer_dry_run": "passed_no_files_written",
     "supabase_sync_dry_run": "passed_no_upload",
     "export_contract_failures": 0,
-    "contract_sync_red_findings": 0
+    "contract_sync_red_findings": 0,
+    "pipeline_fast_suite": {
+      "passed": 11832,
+      "skipped": 124,
+      "failures": 0
+    }
   },
   "interaction_bridge": {
     "schema_version": "2.0.0",
@@ -190,13 +250,24 @@
     "production_identity_verification": "must_rebuild_with_configured_UMLS_API_KEY"
   },
   "corrected_prior_claims": {
-    "live_candidate": {"prior": 14380, "correct": 14409},
-    "quarantined": {"prior": 1032, "correct": 1003},
-    "evidence_shadow_products": {"prior": 7722, "correct": 4939},
-    "evidence_shadow_rows": {"prior": 17636, "correct": 8935},
-    "reviewed_route_changes": {"prior": 52, "correct": 173},
-    "pipeline_full_failures": {"prior": 1, "correct": 0},
-    "red_yeast_rice_open_regression": {"prior": true, "correct": false}
+    "evidence_shadow_products": {
+      "prior": 7722,
+      "correct": 4939
+    },
+    "evidence_shadow_rows": {
+      "prior": 17636,
+      "correct": 8935
+    },
+    "evidence_exemption_delta_rows": {
+      "prior": 3270,
+      "correct": 9854,
+      "note": "3,270 was the sum of a truncated top-40 listing, not the total. The provenance rule exempts 9,854 product-level projection rows across 4,618 products that the canonical-id allowlist counted as backlog, and stops exempting 138 real label rows across 61 products (35 genuinely uncurated)."
+    },
+    "red_yeast_rice_open_regression": {
+      "prior": true,
+      "correct": false,
+      "note": "The failure was caused by this branch and read against a build made before it. Both halves matter: commit 6486e758 flips RYR corpus-wide, and the test read an artifact predating it."
+    }
   },
   "publication_boundary": {
     "production_published": false,
@@ -219,6 +290,101 @@
     "algorithm": "sha256",
     "scope": "canonical JSON excluding integrity",
     "signature_type": "self-integrity hash; not an identity signature",
-    "sha256": "b44384d7ae3113cd4d914389d5268304e134e7fe7a596cd2bfcbe175e72816bb"
+    "sha256": "363f784d7e5ace76f43846a43fcaa939fa8728a9ec28d531051b0ca27a27d055"
+  },
+  "superseded_by_later_code_state": {
+    "note": "These were accurate measurements of the code state they were taken against, not errors. The candidate database built at that commit contains exactly 14,380 rows. Row-level protein routing and the route readiness dimension landed afterwards.",
+    "live_candidate": {
+      "earlier": 14380,
+      "current": 14409
+    },
+    "quarantined": {
+      "earlier": 1032,
+      "current": 1003
+    },
+    "reviewed_route_changes": {
+      "earlier": 52,
+      "current": 173
+    }
+  },
+  "compound_excipient_safety_defect": {
+    "status": "fixed",
+    "summary": "The active-form duplicate rule suppressed a whole inactive row when any term restated a declared active. A compound excipient models sub-ingredients in forms[], so one duplicate child amnestied its banned siblings in all three callers.",
+    "callers_fixed": [
+      "scoring_v4/gate_safety.py::_iter_resolver_safety_hits",
+      "build_final_db.py::_resolver_status_in",
+      "build_final_db.py::build_detail_blob inactive disposition"
+    ],
+    "oracle_fixed": "scripts/tests/test_v4_banned_form_evidence_gate.py::_target_banned_rule",
+    "inactive_rows_scanned": 83353,
+    "rows_suppressed_by_rule": 10344,
+    "rows_with_independent_banned_or_concern_identity": 4,
+    "corpus_before_after_diff": {
+      "products_scanned": 15412,
+      "safety_hit_sets_changed": 4,
+      "gained_a_signal": 4,
+      "lost_a_signal": 0
+    },
+    "products": {
+      "33212": {
+        "rule": "BANNED_PHO",
+        "was": "SAFE",
+        "now": "BLOCKED"
+      },
+      "33230": {
+        "rule": "BANNED_PHO",
+        "was": "SAFE",
+        "now": "BLOCKED"
+      },
+      "223441": {
+        "rule": "BANNED_ADD_CAROB_COLOR",
+        "was": "SAFE",
+        "now": "CAUTION"
+      },
+      "178791": {
+        "rule": "BANNED_ADD_TALC",
+        "was": "SAFE",
+        "now": "quarantined on completeness; not in the live catalog"
+      }
+    }
+  },
+  "safety_verdict_transitions": {
+    "note": "Products that LOST a BLOCKED verdict against the shipped baseline. The report asked for sign-off only on the conservative direction; this is the other one.",
+    "total_deblocked_before_fix": 46,
+    "policy_transitions_needing_signoff": 44,
+    "breakdown": {
+      "red_yeast_rice_to_caution": 27,
+      "sodium_tetraborate_to_safe": 16,
+      "sodium_tetraborate_to_caution": 1,
+      "partially_hydrogenated_oil_to_safe": 2
+    },
+    "tetraborate_caution_product_id": "312980",
+    "pho_product_ids": [
+      "33212",
+      "33230"
+    ],
+    "pho_is_not_a_signoff_choice": true,
+    "authorities": {
+      "sodium_tetraborate": "NIH ODS lists sodium tetraborate as a supplemental boron form",
+      "red_yeast_rice": "NCCIH records monacolin K from none to substantial; the FDA prohibition addresses enhanced or added lovastatin",
+      "partially_hydrogenated_oils": "FDA removed PHOs from GRAS; compliance period closed"
+    }
+  },
+  "flutter_probiotic_research_restored": {
+    "status": "restored",
+    "producer": "enrich_supplements_v3._strain_research_semantics",
+    "candidate_coverage": {
+      "products_with_research_status": 647,
+      "research_rows": 1190,
+      "source_urls": 1358,
+      "clinician_verified_rows": 1029,
+      "status_distribution": {
+        "species_level": 787,
+        "exact_strain": 242,
+        "formula_only": 148,
+        "pending_review": 13
+      }
+    },
+    "open_question": "formula_only is assigned before the dr_pham_signoff check, so 148 rows render an affirmative badge without clinician review. exact_strain + species_level sum exactly to the 1,029 verified rows."
   }
 }
