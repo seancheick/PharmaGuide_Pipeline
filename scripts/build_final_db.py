@@ -69,6 +69,7 @@ from export_schema import (
 from inactive_ingredient_resolver import (
     InactiveIngredientResolver,
     active_form_duplicate_candidate,
+    safety_terms_without_active_form_duplicates,
 )
 from iqm_form_evidence import validate_form_evidence
 from identity.safety import (
@@ -1030,9 +1031,12 @@ def _resolver_status_in(
                 forms=safe_list(ing.get("forms")),
                 identity_mapped=safe_bool(ing.get("mapped")),
             )
-            if (
-                src_key == "inactiveIngredients"
-                and active_form_duplicate_candidate(
+            if src_key == "inactiveIngredients":
+                # Scope the suppression to the terms that duplicate a declared
+                # active. A compound excipient row ("Creamer", "Film Coating")
+                # lists sub-ingredients in forms[], so dropping the whole row
+                # for one duplicate child also dropped its banned siblings.
+                surviving = safety_terms_without_active_form_duplicates(
                     inactive_resolver,
                     active_ingredients=safe_list(enriched.get("activeIngredients")),
                     raw_name=safe_str(
@@ -1040,8 +1044,10 @@ def _resolver_status_in(
                     ),
                     additional_terms=terms,
                 )
-            ):
-                continue
+                if not surviving:
+                    continue
+                surviving_set = set(surviving)
+                terms = [term for term in terms if term in surviving_set]
             for flag in safe_list(ing.get("safety_flags")):
                 if not isinstance(flag, dict):
                     continue
@@ -6646,11 +6652,27 @@ def build_detail_blob(
         name = safe_str(ing.get("name"), raw)
         std_name_ing = safe_str(ing.get("standardName"))
 
-        active_form_candidate = active_form_duplicate_candidate(
+        form_terms = _form_match_terms(ing.get("forms"))
+        # A row counts as an active-form duplicate only when it restates the
+        # active and nothing else. A compound excipient row lists its
+        # sub-ingredients in forms[], so one duplicate child must not relabel
+        # the whole row and hide its siblings from the Other Ingredients surface.
+        surviving_terms = safety_terms_without_active_form_duplicates(
             inactive_resolver,
             active_ingredients=ingredients,
             raw_name=name or raw,
-            additional_terms=_form_match_terms(ing.get("forms")),
+            standard_name=std_name_ing,
+            additional_terms=form_terms,
+        )
+        active_form_candidate = (
+            active_form_duplicate_candidate(
+                inactive_resolver,
+                active_ingredients=ingredients,
+                raw_name=name or raw,
+                additional_terms=form_terms,
+            )
+            if surviving_terms is None
+            else None
         )
         if active_form_candidate:
             res = inactive_resolver.active_form_duplicate_resolution(
@@ -6660,10 +6682,15 @@ def build_detail_blob(
         else:
             # A real safety match wins only after product context proves this
             # is not an active-form duplicate emitted in the inactive section.
+            # The row keeps its own label identity; only the sub-ingredient
+            # terms that restate a declared active are withheld from matching.
+            surviving_set = set(surviving_terms or ())
             res = inactive_resolver.resolve(
                 raw_name=name or raw,
                 standard_name=std_name_ing,
-                additional_terms=_form_match_terms(ing.get("forms")),
+                additional_terms=[
+                    term for term in form_terms if term in surviving_set
+                ],
             )
 
         # Label fidelity contract (2026-06-15): inactive_ingredients[] is

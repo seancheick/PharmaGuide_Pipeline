@@ -44,7 +44,7 @@ from urllib.parse import urlparse
 from inactive_ingredient_resolver import (
     InactiveIngredientResolver,
     SOURCE_BANNED_RECALLED,
-    active_form_duplicate_candidate,
+    safety_terms_without_active_form_duplicates,
 )
 from identity.safety import (
     SafetySignal,
@@ -641,13 +641,23 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
             raw_name, standard_name, extra_terms = _ingredient_safety_terms(ingredient)
             if not raw_name and not extra_terms:
                 continue
-            if role == "inactive" and active_form_duplicate_candidate(
-                resolver,
-                active_ingredients=_safe_list((product or {}).get("activeIngredients")),
-                raw_name=raw_name,
-                additional_terms=extra_terms,
-            ):
-                continue
+            if role == "inactive":
+                surviving = safety_terms_without_active_form_duplicates(
+                    resolver,
+                    active_ingredients=_safe_list(
+                        (product or {}).get("activeIngredients")
+                    ),
+                    raw_name=raw_name,
+                    standard_name=standard_name,
+                    additional_terms=extra_terms,
+                )
+                if not surviving:
+                    continue
+                raw_name, standard_name, extra_terms = (
+                    surviving[0],
+                    "",
+                    surviving[1:],
+                )
             try:
                 resolution = resolver.resolve(
                     raw_name=raw_name,

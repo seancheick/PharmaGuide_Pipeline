@@ -270,3 +270,73 @@ def test_known_dual_use_or_blend_inactives_resolve_to_excipient_roles(
     assert r.matched_rule_id == expected_rule
     assert r.functional_roles == expected_roles
     assert r.inactive_policy != POLICY
+
+
+# --------------------------------------------------------------------------- #
+# Compound excipient rows: suppression must be scoped to the duplicate term
+# --------------------------------------------------------------------------- #
+#
+# DSLD models a compound excipient ("Creamer", "Film Coating", "Soft Gel
+# Capsule") as ONE label row whose ``forms[]`` is a sub-ingredient list rather
+# than a list of salts for a single substance. The row-level duplicate check
+# therefore fires on one child and drops every sibling with it -- including a
+# banned one. Measured on the enriched corpus: 10,344 inactive rows are
+# suppressed by this rule and exactly 4 of them carry an independent banned or
+# concern identity, all four in this compound shape.
+
+
+_CREAMER_ROW = {
+    "name": "Creamer",
+    "standardName": "Creamer",
+    "raw_source_text": "Creamer",
+    "forms": [
+        {"name": "Corn Syrup, Solids"},
+        {"name": "Dipotassium Phosphate"},
+        {"name": "Partially Hydrogenated Soybean Oil"},
+        {"name": "Sodium Caseinate"},
+    ],
+}
+
+
+def test_compound_row_keeps_banned_sibling_when_one_child_duplicates_an_active(
+    resolver,
+):
+    """The duplicate child must not carry a banned sibling out with it."""
+    from inactive_ingredient_resolver import (
+        safety_terms_without_active_form_duplicates,
+    )
+
+    surviving = safety_terms_without_active_form_duplicates(
+        resolver,
+        active_ingredients=[{"name": "Potassium", "standardName": "Potassium"}],
+        raw_name="Creamer",
+        standard_name="Creamer",
+        additional_terms=[
+            str(form["name"]) for form in _CREAMER_ROW["forms"]
+        ],
+    )
+
+    assert surviving is not None, "a row with a banned sibling must survive"
+    assert "Partially Hydrogenated Soybean Oil" in surviving
+    assert "Dipotassium Phosphate" not in surviving, (
+        "the term that duplicates the declared Potassium active must be dropped"
+    )
+
+
+def test_row_that_is_only_an_active_form_duplicate_stays_suppressed(resolver):
+    """The 10,340 rows the rule exists for must keep their suppression."""
+    from inactive_ingredient_resolver import (
+        safety_terms_without_active_form_duplicates,
+    )
+
+    surviving = safety_terms_without_active_form_duplicates(
+        resolver,
+        active_ingredients=[
+            {"name": "Vitamin B6", "standardName": "Vitamin B6", "canonical_id": "vitamin_b6_pyridoxine"}
+        ],
+        raw_name="Pyridoxine Hydrochloride",
+        standard_name="Pyridoxine HCl",
+        additional_terms=[],
+    )
+
+    assert surviving is None

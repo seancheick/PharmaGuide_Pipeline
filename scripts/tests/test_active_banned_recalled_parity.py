@@ -17,12 +17,13 @@ Silver — all of which live in ``banned_recalled_ingredients.json``,
 not ``harmful_additives.json``.
 
 Tests:
-  - test_yohimbe_active_is_safety_concern        (high_risk → is_safety_concern=true)
-  - test_cannabidiol_active_is_safety_concern    (banned → is_banned=true AND is_safety_concern=true)
-  - test_garcinia_active_is_safety_concern       (high_risk)
-  - test_red_yeast_rice_active_is_safety_concern (banned)
-  - test_safe_active_remains_non_safety_concern  (regression — Vitamin C, etc.)
-  - test_no_banned_recalled_active_ships_with_severity_na
+  - test_banned_recalled_policy_signals
+    (policy from source: banned → both signals, high_risk → concern only,
+     generic Red Yeast Rice → concern only, explicit monacolin/lovastatin →
+     banned, safe nutrients → neither)
+  - test_banned_status_reaches_the_blob_from_source
+    (propagation: source-built blob carries both signals)
+  - test_no_banned_active_ships_with_severity_status_na
     (canary-corpus integration test)
   - test_active_parity_audit_clean
     (gate: scripts/audit_active_banned_recalled_parity.py exit 0)
@@ -67,110 +68,89 @@ def _find_build_dir() -> Path | None:
     return None
 
 
-def _find_active_by_name(name_substring: str) -> tuple[dict, dict] | None:
-    """Walk blobs in the first available build dir; return (blob, ingredient)
-    where ingredient.name contains the given substring (case-insensitive)
-    and the ingredient is an active."""
-    base = _find_build_dir()
-    if base is None:
-        return None
-    needle = name_substring.lower()
-    for p in sorted((base / "detail_blobs").glob("*.json")):
-        try:
-            b = json.loads(p.read_text())
-        except Exception:
-            continue
-        for ing in b.get("ingredients") or []:
-            n = (ing.get("name") or "").lower()
-            rst = (ing.get("raw_source_text") or "").lower()
-            if needle in n or needle in rst:
-                return b, ing
-    return None
+def _resolver():
+    """The safety policy itself — the source these signals are derived from."""
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+
+    return InactiveIngredientResolver()
 
 
 # ---------------------------------------------------------------------------
-# Per-canary tests — the specific gap classes we know about
+# Policy, asserted from source
 # ---------------------------------------------------------------------------
+#
+# These assertions used to read whichever generated build happened to be on
+# disk and take the first matching blob alphabetically. That is not a statement
+# about the code: when generic Red Yeast Rice moved from an automatic
+# unapproved-drug block to a high-risk review, every blob in a fresh build
+# followed and this file still failed against a build made before the change.
+# The policy is deterministic from `banned_recalled_ingredients.json`, so assert
+# it there. Artifact conformance stays with `test_active_parity_audit_clean`,
+# which runs the real audit against a real build.
 
-def test_yohimbe_active_is_safety_concern() -> None:
-    """Yohimbe bark extract (banned_recalled.id=RISK_YOHIMBE, status=high_risk)
-    appears as active in 82 products across the canary corpus. Must
-    surface is_safety_concern=true on each."""
-    pair = _find_active_by_name("Yohimbe")
-    if pair is None:
-        pytest.skip("no Yohimbe active in any reachable build dir")
-    _, ing = pair
-    assert ing.get("is_safety_concern") is True, (
-        f"Yohimbe active is_safety_concern={ing.get('is_safety_concern')!r}; "
-        "high_risk banned_recalled rule must surface as safety concern"
+
+@pytest.mark.parametrize(
+    "label,expect_banned,expect_concern",
+    [
+        # Generic RYR is a high-risk review, not an automatic unapproved-drug
+        # block: monacolin K content ranges from none to substantial, and the
+        # FDA prohibition addresses enhanced or added lovastatin.
+        ("Red Yeast Rice", False, True),
+        ("Red Yeast Rice Powder", False, True),
+        # Explicit statin evidence is what blocks.
+        ("Red Yeast Rice Extract (Monacolin K)", True, True),
+        ("Monacolin K", True, True),
+        ("Lovastatin", True, True),
+        # banned status implies both signals
+        ("Cannabidiol", True, True),
+        # high_risk status implies concern only
+        ("Yohimbe", False, True),
+        ("Garcinia Cambogia", False, True),
+        # regression: safe nutrients must stay unflagged
+        ("Vitamin C", False, False),
+        ("Calcium Carbonate", False, False),
+    ],
+)
+def test_banned_recalled_policy_signals(label, expect_banned, expect_concern) -> None:
+    r = _resolver().resolve(raw_name=label)
+    assert bool(r.is_banned) is expect_banned, (
+        f"{label}: is_banned={r.is_banned!r} via {r.matched_rule_id!r}"
+    )
+    assert bool(r.is_safety_concern) is expect_concern, (
+        f"{label}: is_safety_concern={r.is_safety_concern!r} via {r.matched_rule_id!r}"
     )
 
 
-def test_cannabidiol_active_is_banned_and_safety_concern() -> None:
-    """Cannabidiol (banned_recalled.id=BANNED_CBD_US, status=banned)
-    appears as active in 30 products. Must carry BOTH is_banned=true
-    AND is_safety_concern=true."""
-    pair = _find_active_by_name("Cannabidiol")
-    if pair is None:
-        pytest.skip("no Cannabidiol active in any reachable build dir")
-    _, ing = pair
-    assert ing.get("is_banned") is True, (
-        f"Cannabidiol is_banned={ing.get('is_banned')!r}; banned status must set this"
-    )
-    assert ing.get("is_safety_concern") is True, (
-        f"Cannabidiol is_safety_concern={ing.get('is_safety_concern')!r}; "
-        "banned active must be a safety concern"
+def test_banned_status_reaches_the_blob_from_source() -> None:
+    """Propagation: a banned active must carry both blob signals.
+
+    Built from source rather than discovered on disk, so a stale artifact can
+    neither pass nor fail it.
+    """
+    from build_final_db import build_detail_blob
+    from test_inactive_active_form_duplicate_2026_06 import (
+        _enriched,
+        _scored_minimal,
     )
 
-
-def test_garcinia_cambogia_active_is_safety_concern() -> None:
-    pair = _find_active_by_name("Garcinia Cambogia")
-    if pair is None:
-        pytest.skip("no Garcinia Cambogia active in any reachable build dir")
-    _, ing = pair
-    assert ing.get("is_safety_concern") is True
-
-
-def test_red_yeast_rice_active_signals() -> None:
-    pair = _find_active_by_name("Red Yeast Rice")
-    if pair is None:
-        pytest.skip("no Red Yeast Rice active in any reachable build dir")
-    _, ing = pair
-    # Generic RYR is a high-risk review, not an automatic unapproved-drug block.
-    # Only explicit monacolin K / lovastatin evidence is banned.
-    assert ing.get("is_banned") is False
-    assert ing.get("is_safety_concern") is True
-
-
-# ---------------------------------------------------------------------------
-# Regression: safe actives must remain non-concern
-# ---------------------------------------------------------------------------
-
-def test_safe_active_remains_non_safety_concern() -> None:
-    """Vitamin C (and similar safe nutrients) must NOT be flagged as a
-    safety concern. Guards against the fix accidentally over-promoting
-    every harmful_additives.json low-severity entry."""
-    pair = _find_active_by_name("Vitamin C")
-    if pair is None:
-        pytest.skip("no Vitamin C active in any reachable build dir")
-    _, ing = pair
-    assert ing.get("is_safety_concern") is False, (
-        f"Vitamin C is_safety_concern={ing.get('is_safety_concern')!r}; "
-        "must not be flagged"
+    enriched = _enriched(
+        active=[{
+            "name": "Cannabidiol",
+            "standardName": "Cannabidiol",
+            "canonical_id": "cannabidiol",
+        }],
+        inactive=[],
+        product_name="Banned Active Propagation Canary",
     )
-    assert ing.get("is_banned") is False
+    blob = build_detail_blob(enriched, _scored_minimal())
+    row = next(
+        ing for ing in blob["ingredients"]
+        if "cannabidiol" in str(ing.get("name") or "").lower()
+    )
+    assert row.get("is_banned") is True, row
+    assert row.get("is_safety_concern") is True, row
 
 
-def test_safe_active_calcium_remains_non_safety_concern() -> None:
-    pair = _find_active_by_name("Calcium Carbonate")
-    if pair is None:
-        pytest.skip("no Calcium Carbonate active in any reachable build dir")
-    _, ing = pair
-    assert ing.get("is_safety_concern") is False
-
-
-# ---------------------------------------------------------------------------
-# Integration: the audit script itself reports zero gaps
 # ---------------------------------------------------------------------------
 
 def test_active_parity_audit_clean() -> None:

@@ -269,6 +269,62 @@ def active_form_duplicate_candidate(
     return None
 
 
+def safety_terms_without_active_form_duplicates(
+    resolver: "InactiveIngredientResolver",
+    *,
+    active_ingredients: Iterable[Any],
+    raw_name: str,
+    standard_name: Optional[str] = None,
+    additional_terms: Optional[Iterable[str]] = None,
+) -> Optional[list[str]]:
+    """Return one inactive row's safety terms with active-form duplicates removed.
+
+    ``active_form_duplicate_candidate`` answers a row-level question: does *any*
+    term in this row restate a declared active's chemical form? Suppressing the
+    whole row on that answer is wrong for a compound excipient, whose ``forms[]``
+    is a sub-ingredient list rather than a list of salts for one substance. A
+    ``Creamer`` row carrying both ``Dipotassium Phosphate`` (duplicating a
+    declared Potassium active) and ``Partially Hydrogenated Soybean Oil`` dropped
+    the banned child along with the duplicate.
+
+    Suppression is therefore scoped to the terms that earned it. Returns the
+    surviving terms in label order, or ``None`` when the row carries no
+    independent safety identity and the caller should skip it entirely.
+
+    ``None`` is also returned when the row duplicates an active only in
+    combination, i.e. no single term is itself the duplicate. Whole-row
+    suppression is preserved there rather than guessing which term earned it.
+    """
+    terms = [
+        str(term)
+        for term in (raw_name, standard_name, *(additional_terms or []))
+        if term
+    ]
+    if not terms:
+        return None
+    if not active_form_duplicate_candidate(
+        resolver,
+        active_ingredients=active_ingredients,
+        raw_name=raw_name,
+        additional_terms=additional_terms,
+    ):
+        return terms
+
+    duplicates = {
+        term
+        for term in terms
+        if active_form_duplicate_candidate(
+            resolver,
+            active_ingredients=active_ingredients,
+            raw_name=term,
+        )
+    }
+    if not duplicates:
+        return None
+    surviving = [term for term in terms if term not in duplicates]
+    return surviving or None
+
+
 # ---------------------------------------------------------------------------
 # Data class
 # ---------------------------------------------------------------------------

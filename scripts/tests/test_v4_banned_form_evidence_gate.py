@@ -296,11 +296,15 @@ def _target_banned_rule(product: dict, resolver) -> str | None:
 
     Re-derives detection independently of the gate so this is a genuine
     end-to-end check, not a tautology against the gate's own term collection.
+
+    This oracle deliberately does NOT reuse the active-form duplicate rule.
+    It did once, and that made it blind in exactly the way the gate was blind:
+    a compound excipient row whose forms[] held both a duplicate child and a
+    banned one dropped out of the scanned set entirely, so 33212 and 33230
+    shipped SAFE while this test's own failure message named 33212 as the
+    canary it expected to cover.
     """
-    from inactive_ingredient_resolver import (
-        SOURCE_BANNED_RECALLED,
-        active_form_duplicate_candidate,
-    )
+    from inactive_ingredient_resolver import SOURCE_BANNED_RECALLED
 
     for key in ("activeIngredients", "inactiveIngredients"):
         for ing in product.get(key) or []:
@@ -312,13 +316,6 @@ def _target_banned_rule(product: dict, resolver) -> str | None:
                     terms += [form.get("name"), form.get("prefix")]
                 elif form:
                     terms.append(form)
-            if key == "inactiveIngredients" and active_form_duplicate_candidate(
-                resolver,
-                active_ingredients=product.get("activeIngredients") or [],
-                raw_name=str(ing.get("name") or ing.get("raw_source_text") or ""),
-                additional_terms=[str(term) for term in terms if term],
-            ):
-                continue
             for term in terms:
                 if not term:
                     continue
@@ -362,4 +359,100 @@ def test_corpus_pho_products_are_v4_native_blocked() -> None:
     assert failures == [], (
         f"{len(failures)} PHO product(s) did not reach v4-native BLOCKED: "
         + json.dumps(failures[:10], default=str)
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Compound excipient rows must not carry a banned child out of the gate
+# --------------------------------------------------------------------------- #
+
+
+def test_compound_excipient_row_still_blocks_its_banned_child() -> None:
+    """A duplicate sub-ingredient must not amnesty its banned siblings.
+
+    ``Creamer`` is one label row whose ``forms[]`` is a sub-ingredient list.
+    Because one child (Dipotassium Phosphate) duplicates the declared Potassium
+    active, the row-level duplicate check suppressed the entire row -- taking
+    Partially Hydrogenated Soybean Oil with it. FDA removed PHOs from GRAS and
+    the compliance period has closed, so this must reach a native block.
+    """
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "dsld_id": "33212",
+        "fullName": "Decadent Delight Vanilla Milkshake",
+        "contaminant_data": _clean_contaminant_data(),
+        "activeIngredients": [
+            {"name": "Potassium", "standardName": "Potassium", "mapped": True,
+             "raw_source_text": "Potassium"},
+        ],
+        "inactiveIngredients": [
+            {
+                "name": "Creamer",
+                "standardName": "Creamer",
+                "raw_source_text": "Creamer",
+                "forms": [
+                    {"name": "Corn Syrup, Solids"},
+                    {"name": "Dipotassium Phosphate"},
+                    {"name": "Partially Hydrogenated Soybean Oil"},
+                    {"name": "Sodium Caseinate"},
+                ],
+            }
+        ],
+    }
+    result = evaluate_safety_gate(product)
+    assert result.verdict in {"BLOCKED", "UNSAFE"}, (
+        f"PHO inside a compound excipient row must block; got {result.verdict!r}"
+    )
+    assert result.blocking_reason is not None
+
+
+# Real corpus canaries. Named explicitly so they cannot silently drop out of a
+# derived match set the way they did from `_target_banned_rule`, whose own
+# assertion message named 33212 as its expected canary while the shared
+# duplicate shortcut removed it from the corpus it scanned.
+_PHO_CANARY_IDS = ("33212", "33230")
+
+
+@pytest.mark.parametrize("dsld_id", _PHO_CANARY_IDS)
+def test_corpus_pho_canary_declares_pho_and_blocks(dsld_id: str) -> None:
+    """Independent oracle: read the label text, then require the block.
+
+    Detection here is deliberately naive -- a substring scan over the row's own
+    name / raw_source_text / forms -- so it shares no identity, suppression, or
+    term-collection code with the gate under test.
+    """
+    from score_supplements_v4 import score_product_v4
+
+    enriched = _load_enriched_corpus()
+    if not enriched:
+        pytest.skip("enriched corpus not present (scripts/products/*_enriched/)")
+    product = enriched.get(dsld_id)
+    if product is None:
+        pytest.skip(f"{dsld_id} not present in the enriched corpus")
+
+    declared = []
+    for key in ("activeIngredients", "inactiveIngredients"):
+        for ing in product.get(key) or []:
+            if not isinstance(ing, dict):
+                continue
+            texts = [ing.get("name"), ing.get("standardName"), ing.get("raw_source_text")]
+            for form in ing.get("forms") or []:
+                if isinstance(form, dict):
+                    texts += [form.get("name"), form.get("prefix")]
+                elif form:
+                    texts.append(form)
+            for text in texts:
+                if text and "partially hydrogenated" in str(text).lower():
+                    declared.append(str(text))
+
+    assert declared, (
+        f"{dsld_id} no longer declares a partially hydrogenated oil; "
+        "re-pick the canary rather than deleting this test"
+    )
+
+    out = score_product_v4(product)
+    assert out.get("v4_verdict") == "BLOCKED", (
+        f"{dsld_id} declares {declared[0]!r} but scored "
+        f"{out.get('v4_verdict')!r} at {out.get('raw_score_v4_100')!r}"
     )
