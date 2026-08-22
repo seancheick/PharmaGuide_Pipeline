@@ -35,11 +35,10 @@ V4_CANARIES = {
         "score": None,
         "safety_short_circuit": True,
     },
-    # A safety CAUTION does not bypass evidence readiness. The safety decision
-    # remains audit-visible while the unevaluated material 7-Keto row keeps the
-    # product out of the live catalog.
-    # 7-keto-DHEA carries a safety CAUTION and no reviewed evidence. Evidence
-    # readiness is shadow, so the product scores and the gap stays recorded.
+    # The safety decision remains audit-visible while scoring continues.
+    # 7-keto-DHEA reaches scoring through a product-level dose projection, so
+    # it is owned by the module rather than counted as a second label-active
+    # evidence question.
     "241706": {
         "label": "HUM Ripped Rooster",
         "module": "generic",
@@ -47,11 +46,11 @@ V4_CANARIES = {
         "confidence": "moderate",
         "score_unavailable_reason": None,
         "score": 43.1,
-        "unevaluated_canonicals": {"banned_7_keto_dhea"},
+        "unevaluated_canonicals": set(),
         "safety_verdict": "CAUTION",
     },
-    # The dedicated digestive route remains correct. `digestive_enzymes` is a
-    # module aggregate, so only the proprietary blend is still an open question.
+    # The dedicated digestive route remains correct. Both the activity rows and
+    # proprietary-blend anchor are module-owned product projections.
     "241684": {
         "label": "HUM Flatter Me",
         "module": "fiber_digestive",
@@ -59,7 +58,7 @@ V4_CANARIES = {
         "confidence": "low",
         "score_unavailable_reason": None,
         "score": 36.2,
-        "unevaluated_canonicals": {"proprietary_enzyme_blend"},
+        "unevaluated_canonicals": set(),
     },
     # Probiotic with named strains but no total CFU: scoreable with low
     # confidence; dose/transparency dimensions keep it weak without a forced
@@ -114,8 +113,8 @@ V4_CANARIES = {
         "score": 50.0,
         "unevaluated_canonicals": set(),
     },
-    # The chlorophyll blend anchor reconciles and maps, but material chlorophyll
-    # evidence remains explicitly unreviewed.
+    # The chlorophyll blend anchor reconciles and maps as a module-owned product
+    # projection; the structural blend header is not a second label active.
     "2266": {
         "label": "Triple Chlorophyll (GNC)",
         "module": "generic",
@@ -123,7 +122,7 @@ V4_CANARIES = {
         "confidence": "low",
         "score_unavailable_reason": None,
         "score": 48.2,
-        "unevaluated_canonicals": {"chlorophyll"},
+        "unevaluated_canonicals": set(),
     },
     # Real-catalog guard for the four-micronutrient taxonomy false positive: the
     # targeted hair formula remains generic, while PABA and Fo-Ti evidence debt

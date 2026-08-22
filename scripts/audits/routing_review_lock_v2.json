@@ -1,0 +1,65 @@
+{
+  "schema_version": "2.0.0",
+  "reviewed_at": "2026-08-22",
+  "baseline_commit": "78286190",
+  "baseline_report_sha256": "72ef2d59de883cd685bf690585705691d88359c526a0ed2c84b96e21ce66dd2f",
+  "candidate_report_sha256": "8786001ed3b6b0b1a667306f584468aba3d19215868a61af25358fe6be8321fa",
+  "expected_changed_count": 173,
+  "expected_transition_counts": {
+    "fiber_digestive->generic": 45,
+    "fiber_digestive->sports": 10,
+    "generic->sports": 57,
+    "multi_or_prenatal->sports": 61
+  },
+  "manual_generic_reviews": {},
+  "manual_probiotic_reviews": [],
+  "manual_quarantine_reviews": [
+    "228837",
+    "228854",
+    "248514",
+    "259709",
+    "69317",
+    "69599",
+    "69608"
+  ],
+  "threshold_reviews": {
+    "explicit_b_family_share": {
+      "selected_threshold": 0.615385,
+      "eligible_reviewed_count": 147,
+      "expected_specialized_count": 146,
+      "expected_generic_ids": ["219244"],
+      "excluded_by_conflicting_active_ids": ["227958", "243083"]
+    },
+    "material_fiber_mass_share": {
+      "selected_threshold": 0.753769,
+      "expected_specialized_ids": ["259626", "62810", "74840", "74844"]
+    },
+    "digestive_enzyme_identity_share": {
+      "selected_threshold": 0.5,
+      "review_basis": "positive scoring rows plus typed enzyme projections",
+      "requires_no_non_digestive_claim_prominent_row": true,
+      "expected_specialized_count": 16,
+      "reviewed_demoted_count": 55
+    },
+    "material_row_level_protein_mg": {
+      "selected_threshold": 20000.0,
+      "review_basis": "explicit row-level Protein declarations; blend totals excluded",
+      "eligible_reviewed_count": 130,
+      "expected_changed_to_sports_count": 128,
+      "reviewed_generic_below_boundary_ids": ["28518", "28553"],
+      "collagen_guard_ids_at_18000_mg": [
+        "222902",
+        "274304",
+        "326693",
+        "326694",
+        "327397"
+      ],
+      "contrary_nonprotein_id_at_16000_mg": "222918"
+    },
+    "inferred_multivitamin": {
+      "selected_threshold": null,
+      "decision": "disabled_no_zero_false_positive_boundary",
+      "reviewed_contrary_ids": ["235592", "299751", "323080"]
+    }
+  }
+}

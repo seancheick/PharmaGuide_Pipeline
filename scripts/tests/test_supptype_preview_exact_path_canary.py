@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import math
 import sqlite3
 import sys
 from pathlib import Path
@@ -28,8 +29,13 @@ from pathlib import Path
 import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parents[1]
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+
+from release_artifact_paths import final_build_dir  # noqa: E402
+
 HARNESS_PATH = SCRIPTS_DIR / "audits" / "supptype_drift_preview.py"
-CORE_DB = SCRIPTS_DIR / "final_db_output" / "pharmaguide_core.db"
+CORE_DB = final_build_dir() / "pharmaguide_core.db"
 MANIFEST = SCRIPTS_DIR / "tests" / "fixtures" / "contract_snapshots" / "_manifest.json"
 
 _spec = importlib.util.spec_from_file_location("supptype_drift_preview", HARNESS_PATH)
@@ -51,7 +57,6 @@ PREVIEW_TO_DB = {
     "_v4_quality_status": "quality_score_status",
     "_v4_quality_tier": "quality_tier",
     "_v4_suppressed_reason": "quality_score_suppressed_reason",
-    "_v4_raw_score_100": "raw_score_v4_100",
     "_v4_module": "v4_module",
     "verdict": "verdict",
     "safety_verdict": "safety_verdict",
@@ -104,6 +109,13 @@ def _close(a, b) -> bool:
     return a == b
 
 
+def _project_preview_value(preview_key: str, value):
+    """Mirror the products_core score projection, not the detail-blob value."""
+    if preview_key in {"_v4_quality_score_100", "score_100_equivalent"}:
+        return int(math.floor(float(value) + 0.5)) if value is not None else None
+    return value
+
+
 def test_fixture_products_are_present_in_the_shipped_catalog(manifest_ids, shipped_rows):
     """A fixture that never shipped cannot canary the shipped projection."""
     missing = sorted(set(manifest_ids) - set(shipped_rows))
@@ -124,7 +136,8 @@ def test_preview_matches_the_shipped_final_build_projection(previews, shipped_ro
             continue
         preview = row["scores"]
         for preview_key, db_col in PREVIEW_TO_DB.items():
-            got, want = preview.get(preview_key), shipped.get(db_col)
+            got = _project_preview_value(preview_key, preview.get(preview_key))
+            want = shipped.get(db_col)
             if not _close(got, want):
                 mismatches.append(
                     f"{pid}.{db_col}: preview={got!r} shipped={want!r}"

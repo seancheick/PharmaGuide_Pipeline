@@ -266,7 +266,7 @@ def test_review_lock_matches_production_thresholds() -> None:
     import scoring_input_contract as contract
 
     lock = json.loads(
-        (SCRIPTS_ROOT / "audits" / "routing_review_lock_v1.json").read_text()
+        (SCRIPTS_ROOT / "audits" / "routing_review_lock_v2.json").read_text()
     )
     thresholds = lock["threshold_reviews"]
 
@@ -275,5 +275,11 @@ def test_review_lock_matches_production_thresholds() -> None:
     ]["selected_threshold"]
     assert contract._ROUTE_FIBER_MATERIAL_MIN_MASS_SHARE == thresholds[
         "material_fiber_mass_share"
+    ]["selected_threshold"]
+    assert contract._ROUTE_DIGESTIVE_ENZYME_MIN_IDENTITY_SHARE == thresholds[
+        "digestive_enzyme_identity_share"
+    ]["selected_threshold"]
+    assert contract._ROUTE_PROTEIN_MATERIAL_MIN_MG == thresholds[
+        "material_row_level_protein_mg"
     ]["selected_threshold"]
     assert thresholds["inferred_multivitamin"]["selected_threshold"] is None

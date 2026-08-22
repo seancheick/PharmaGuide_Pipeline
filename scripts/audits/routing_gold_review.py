@@ -266,7 +266,7 @@ def main() -> int:
     parser.add_argument("--candidate", required=True)
     parser.add_argument(
         "--lock",
-        default=str(Path(__file__).with_name("routing_review_lock_v1.json")),
+        default=str(Path(__file__).with_name("routing_review_lock_v2.json")),
     )
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
