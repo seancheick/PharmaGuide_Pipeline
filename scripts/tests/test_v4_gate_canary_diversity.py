@@ -38,28 +38,28 @@ V4_CANARIES = {
     # A safety CAUTION does not bypass evidence readiness. The safety decision
     # remains audit-visible while the unevaluated material 7-Keto row keeps the
     # product out of the live catalog.
+    # 7-keto-DHEA carries a safety CAUTION and no reviewed evidence. Evidence
+    # readiness is shadow, so the product scores and the gap stays recorded.
     "241706": {
         "label": "HUM Ripped Rooster",
         "module": "generic",
-        "verdict": "NOT_SCORED",
-        "confidence": None,
-        "score_unavailable_reason": "blocked_by_completeness_gate",
-        "score": None,
-        "missing": {"evidence_assessment_readiness"},
+        "verdict": "CAUTION",
+        "confidence": "moderate",
+        "score_unavailable_reason": None,
+        "score": 43.1,
         "unevaluated_canonicals": {"banned_7_keto_dhea"},
         "safety_verdict": "CAUTION",
     },
-    # The dedicated digestive route remains correct, but its material enzyme
-    # identities have no reviewed evidence assessment yet.
+    # The dedicated digestive route remains correct. `digestive_enzymes` is a
+    # module aggregate, so only the proprietary blend is still an open question.
     "241684": {
         "label": "HUM Flatter Me",
         "module": "fiber_digestive",
-        "verdict": "NOT_SCORED",
-        "confidence": None,
-        "score_unavailable_reason": "blocked_by_completeness_gate",
-        "score": None,
-        "missing": {"evidence_assessment_readiness"},
-        "unevaluated_canonicals": {"proprietary_enzyme_blend", "digestive_enzymes"},
+        "verdict": "POOR",
+        "confidence": "low",
+        "score_unavailable_reason": None,
+        "score": 36.2,
+        "unevaluated_canonicals": {"proprietary_enzyme_blend"},
     },
     # Probiotic with named strains but no total CFU: scoreable with low
     # confidence; dose/transparency dimensions keep it weak without a forced
@@ -103,26 +103,26 @@ V4_CANARIES = {
     },
     # A disclosed fiber dose is not a substitute for a reviewed fiber-evidence
     # assessment; the route and dose remain testable on the QA record.
+    # `fiber` names the product-level total, which the fiber module assesses,
+    # so this product has no individual evidence question left open.
     "12932": {
         "label": "vitafusion Fiber Gummies",
         "module": "fiber_digestive",
-        "verdict": "NOT_SCORED",
-        "confidence": None,
-        "score_unavailable_reason": "blocked_by_completeness_gate",
-        "score": None,
-        "missing": {"evidence_assessment_readiness"},
-        "unevaluated_canonicals": {"fiber"},
+        "verdict": "SAFE",
+        "confidence": "low",
+        "score_unavailable_reason": None,
+        "score": 50.0,
+        "unevaluated_canonicals": set(),
     },
     # The chlorophyll blend anchor reconciles and maps, but material chlorophyll
     # evidence remains explicitly unreviewed.
     "2266": {
         "label": "Triple Chlorophyll (GNC)",
         "module": "generic",
-        "verdict": "NOT_SCORED",
-        "confidence": None,
-        "score_unavailable_reason": "blocked_by_completeness_gate",
-        "score": None,
-        "missing": {"evidence_assessment_readiness"},
+        "verdict": "SAFE",
+        "confidence": "low",
+        "score_unavailable_reason": None,
+        "score": 48.2,
         "unevaluated_canonicals": {"chlorophyll"},
     },
     # Real-catalog guard for the four-micronutrient taxonomy false positive: the
@@ -131,11 +131,10 @@ V4_CANARIES = {
     "241692": {
         "label": "HUM Hair Sweet Hair Berry",
         "module": "generic",
-        "verdict": "NOT_SCORED",
-        "confidence": None,
-        "score_unavailable_reason": "blocked_by_completeness_gate",
-        "score": None,
-        "missing": {"evidence_assessment_readiness"},
+        "verdict": "SAFE",
+        "confidence": "moderate",
+        "score_unavailable_reason": None,
+        "score": 65.5,
         "unevaluated_canonicals": {"paba", "fo_ti"},
     },
     # Typed confidence high on the probiotic module.

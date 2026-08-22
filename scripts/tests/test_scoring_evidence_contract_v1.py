@@ -34,22 +34,59 @@ def _evidence_rows(product: dict, evidence_type: str) -> list[dict]:
     ]
 
 
-def _assert_evidence_quarantine(out: dict, canonical_id: str) -> None:
-    """A material active without reviewed evidence stays out of the live app."""
-    assert out["v4_verdict"] == "NOT_SCORED"
-    assert out["raw_score_v4_100"] is None
-    assert out["quality_score_confidence"] is None
-    assert out["score_unavailable_reason"] == "blocked_by_completeness_gate"
+def _assert_module_aggregate_evidence(out: dict, canonical_id: str) -> None:
+    """A product-level total is answered by its module, not by a clinical record.
+
+    `protein` and `digestive_enzymes` name how much the product declares, not
+    which ingredient it is, so they raise no individual evidence question and
+    cannot be a curation gap.
+    """
+    assert out["v4_verdict"] != "NOT_SCORED"
+    assert out["raw_score_v4_100"] is not None
+
+    evidence = out["v4_breakdown"]["assessment_readiness"]["evidence"]
+    # Non-material rows short-circuit before the aggregate branch and are
+    # `not_applicable/non_material_active`, which is correct: a row nothing
+    # scores raises no evidence question whatever its identity.
+    rows = [
+        row for row in evidence["ingredient_assessments"]
+        if row.get("canonical_id") == canonical_id and row.get("material") is True
+    ]
+    assert rows, f"{canonical_id} produced no material evidence assessment"
+    assert all(
+        row["evidence_applicability"] == "module_aggregate"
+        and row["state"] == "not_applicable"
+        and row["reason_code"] == "module_scoped_dose_projection"
+        for row in rows
+    )
+
+
+def _assert_evidence_backlog_recorded(out: dict, canonical_id: str) -> None:
+    """An uncurated ingredient is recorded as a gap, and still scores.
+
+    Evidence readiness is measured in shadow: `not_yet_evaluated` says we have
+    not reviewed the ingredient, which is a gap in our curation rather than a
+    defect in the product, so it must not delist it.
+    """
+    assert out["v4_verdict"] != "NOT_SCORED"
+    assert out["raw_score_v4_100"] is not None
+    assert out["score_unavailable_reason"] is None
 
     breakdown = out["v4_breakdown"]
-    completeness = breakdown["completeness_gate"]
-    assert "evidence_assessment_readiness" in completeness["missing_fields"]
-    evidence = breakdown["assessment_readiness"]["evidence"]
+    assert (
+        "evidence_assessment_readiness"
+        not in breakdown["completeness_gate"]["missing_fields"]
+    )
+    readiness = breakdown["assessment_readiness"]
+    assert "evidence" in readiness["shadow_incomplete_dimensions"]
+
+    evidence = readiness["evidence"]
     assert evidence["readiness"] == "incomplete"
     assert evidence["not_yet_evaluated_count"] >= 1
     assert any(
         row.get("canonical_id") == canonical_id
         and row.get("material") is True
+        and row.get("evidence_applicability") == "individual_ingredient"
         and row.get("state") == "not_yet_evaluated"
         and row.get("reason_code") == "no_reviewed_evidence_assessment"
         for row in evidence["ingredient_assessments"]
@@ -64,7 +101,7 @@ def test_protein_macro_reaches_v4_as_sports_primary_dose_evidence() -> None:
     assert max(float(row["quantity"]) for row in rows) >= 19.0
 
     out = score_product_v4(product)
-    _assert_evidence_quarantine(out, "protein")
+    _assert_module_aggregate_evidence(out, "protein")
 
 
 def test_omega_aggregate_and_forms_reach_v4_as_epa_dha_evidence() -> None:
@@ -125,7 +162,7 @@ def test_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
     assert any(str(row.get("unit")).lower() == "ppi" for row in rows)
 
     out = score_product_v4(product)
-    _assert_evidence_quarantine(out, "digestive_enzymes")
+    _assert_module_aggregate_evidence(out, "digestive_enzymes")
 
 
 def test_galu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
@@ -245,7 +282,7 @@ def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> No
     assert float(rows[0]["quantity"]) >= 300.0
 
     out = score_product_v4(product)
-    _assert_evidence_quarantine(out, "quercetin")
+    _assert_evidence_backlog_recorded(out, "quercetin")
     completeness = out["v4_breakdown"]["completeness_gate"]
     assert "conservative_blend_anchor_mass" in completeness["soft_missing"]
     assert completeness["score_cap"] is None
@@ -256,7 +293,7 @@ def test_percent_dv_only_dose_counts_as_conservative_dose_evidence() -> None:
     product = _load_product("76510")
 
     out = score_product_v4(product)
-    _assert_evidence_quarantine(out, "msm")
+    _assert_evidence_backlog_recorded(out, "msm")
 
 
 def test_cod_liver_oil_in_forms_does_not_emit_omega_evidence() -> None:
