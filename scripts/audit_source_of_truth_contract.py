@@ -20,6 +20,8 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
+from assessment_readiness import ENFORCED_READINESS_DIMENSIONS
+
 
 from stage_manifest import select_stage_files
 from supplement_taxonomy import (
@@ -838,11 +840,22 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                             f"{readiness.get('unavailable_reasons') or []}",
                             str(file_path),
                         ))
+                    enforced = readiness.get("enforced_dimensions")
+                    if not isinstance(enforced, list):
+                        enforced = sorted(ENFORCED_READINESS_DIMENSIONS)
                     for dimension in (
                         "identity", "dose", "evidence", "verification", "route"
                     ):
                         payload = _safe_dict(readiness.get(dimension))
-                        if payload.get("readiness") not in {"complete", "not_applicable"}:
+                        incomplete = payload.get("readiness") not in {
+                            "complete",
+                            "not_applicable",
+                        }
+                        # A shadow dimension is measured, not gating: an
+                        # incomplete one is expected state, not a contract
+                        # violation. It is reported by the assessment-readiness
+                        # shadow, which queues it for remediation.
+                        if incomplete and dimension in enforced:
                             findings.append(Finding(
                                 "SCORING_ASSESSMENT_DIMENSION_INCOMPLETE",
                                 f"{pid}: {dimension} readiness is "

@@ -1,5 +1,5 @@
 {
-  "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md \u00a7 Phase 0.",
+  "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
   "schema_version": "2.0.0",
   "frozen_on": "2026-08-20",
   "fixture_schema": {
@@ -44,152 +44,152 @@
     {
       "dsld_id": 182730,
       "brand_source": "Pure_Encapsulations",
-      "label": "Pure Encapsulations Athletic Pure Pack \u2014 Phase 3 phosphorus target"
+      "label": "Pure Encapsulations Athletic Pure Pack — Phase 3 phosphorus target"
     },
     {
       "dsld_id": 12012,
       "brand_source": "CVS",
-      "label": "CVS Spectravite Advanced Formula \u2014 Phase 3 phosphorus target + mainstream multi"
+      "label": "CVS Spectravite Advanced Formula — Phase 3 phosphorus target + mainstream multi"
     },
     {
       "dsld_id": 288344,
       "brand_source": "Garden_of_life",
-      "label": "Garden of Life Vitamin Code Men \u2014 whole-food multi"
+      "label": "Garden of Life Vitamin Code Men — whole-food multi"
     },
     {
       "dsld_id": 245156,
       "brand_source": "Goli",
-      "label": "Goli Ashwagandha Gummies \u2014 branded-token + plant-part"
+      "label": "Goli Ashwagandha Gummies — branded-token + plant-part"
     },
     {
       "dsld_id": 183275,
       "brand_source": "Pure_Encapsulations",
-      "label": "Pure Silymarin \u2014 milk thistle baseline"
+      "label": "Pure Silymarin — milk thistle baseline"
     },
     {
       "dsld_id": 278454,
       "brand_source": "Ritual",
-      "label": "Ritual Essential for Women \u2014 mainstream multivitamin"
+      "label": "Ritual Essential for Women — mainstream multivitamin"
     },
     {
       "dsld_id": 270831,
       "brand_source": "Nutricost",
-      "label": "Nutricost Yohimbe Bark Extract \u2014 banned/recalled trigger"
+      "label": "Nutricost Yohimbe Bark Extract — banned/recalled trigger"
     },
     {
       "dsld_id": 180417,
       "brand_source": "Nature_Made",
-      "label": "Nature Made Ginkgo Biloba 30 mg \u2014 standardized botanical"
+      "label": "Nature Made Ginkgo Biloba 30 mg — standardized botanical"
     },
     {
       "dsld_id": 18141,
       "brand_source": "CVS",
-      "label": "CVS Omega-3 100 mg \u2014 fish oil EPA/DHA"
+      "label": "CVS Omega-3 100 mg — fish oil EPA/DHA"
     },
     {
       "dsld_id": 239600,
       "brand_source": "CVS",
-      "label": "CVS Men's Daily Gummies Multivitamin \u2014 gummy mainstream"
+      "label": "CVS Men's Daily Gummies Multivitamin — gummy mainstream"
     },
     {
       "dsld_id": 204571,
       "brand_source": "Garden_of_life",
-      "label": "Garden of Life Adrenal Daily Balance \u2014 proprietary-blend-heavy"
+      "label": "Garden of Life Adrenal Daily Balance — proprietary-blend-heavy"
     },
     {
       "dsld_id": 223084,
       "brand_source": "Nutricost",
-      "label": "Nutricost Creatine Ethyl Ester 3 g \u2014 creatine form"
+      "label": "Nutricost Creatine Ethyl Ester 3 g — creatine form"
     },
     {
       "dsld_id": 270256,
       "brand_source": "Nutricost",
-      "label": "Nutricost Beta-Alanine 3,400 mg \u2014 sports active"
+      "label": "Nutricost Beta-Alanine 3,400 mg — sports active"
     },
     {
       "dsld_id": 306381,
       "brand_source": "Nutricost",
-      "label": "Nutricost PRE Pre-Workout Complex \u2014 blend-heavy pre-workout"
+      "label": "Nutricost PRE Pre-Workout Complex — blend-heavy pre-workout"
     },
     {
       "dsld_id": 239741,
       "brand_source": "Spring_Valley",
-      "label": "Spring Valley Korean Panax Ginseng 100 mg \u2014 current-shipped standardized extract"
+      "label": "Spring Valley Korean Panax Ginseng 100 mg — current-shipped standardized extract"
     },
     {
       "dsld_id": 241353,
       "brand_source": "Garden_of_life",
-      "label": "Garden of Life Raw Organic Perfect Food Original \u2014 whole-food greens baseline"
+      "label": "Garden of Life Raw Organic Perfect Food Original — whole-food greens baseline"
     },
     {
       "dsld_id": 269278,
       "brand_source": "Nutricost",
-      "label": "Nutricost Arginine AKG 3 g Unflavored \u2014 current-shipped AAKG release"
+      "label": "Nutricost Arginine AKG 3 g Unflavored — current-shipped AAKG release"
     },
     {
       "dsld_id": 274498,
       "brand_source": "Garden_of_life",
-      "label": "Garden of Life MyKind Organics Plant Collagen Builder \u2014 collagen precursor (refresh of 173893)"
+      "label": "Garden of Life MyKind Organics Plant Collagen Builder — collagen precursor (refresh of 173893)"
     },
     {
       "dsld_id": 293924,
       "brand_source": "Pure_Encapsulations",
-      "label": "Pure Encapsulations Calcium Magnesium (Citrate/Malate) \u2014 current-shipped dual-mineral form"
+      "label": "Pure Encapsulations Calcium Magnesium (Citrate/Malate) — current-shipped dual-mineral form"
     },
     {
       "dsld_id": 293943,
       "brand_source": "Pure_Encapsulations",
-      "label": "Pure Encapsulations CoQ10 120 mg \u2014 current-shipped MicroActive delivery"
+      "label": "Pure Encapsulations CoQ10 120 mg — current-shipped MicroActive delivery"
     },
     {
       "dsld_id": 294077,
       "brand_source": "Pure_Encapsulations",
-      "label": "Pure Encapsulations Zinc 15 \u2014 current-shipped single mineral baseline"
+      "label": "Pure Encapsulations Zinc 15 — current-shipped single mineral baseline"
     },
     {
       "dsld_id": 298070,
       "brand_source": "Thorne",
-      "label": "Thorne FloraMend Prime Probiotic \u2014 current-shipped probiotic strain claims"
+      "label": "Thorne FloraMend Prime Probiotic — current-shipped probiotic strain claims"
     },
     {
       "dsld_id": 298102,
       "brand_source": "Thorne",
-      "label": "Thorne Vitamin D \u2014 current-shipped single-ingredient vitamin"
+      "label": "Thorne Vitamin D — current-shipped single-ingredient vitamin"
     },
     {
       "dsld_id": 306237,
       "brand_source": "Nutricost",
-      "label": "Nutricost KSM-66 600 mg \u2014 current-shipped branded ashwagandha"
+      "label": "Nutricost KSM-66 600 mg — current-shipped branded ashwagandha"
     },
     {
       "dsld_id": 321405,
       "brand_source": "Garden_of_life",
-      "label": "Garden of Life Wobenzym N Joint Health \u2014 proteolytic enzyme blend"
+      "label": "Garden of Life Wobenzym N Joint Health — proteolytic enzyme blend"
     },
     {
       "dsld_id": 321969,
       "brand_source": "Thorne",
-      "label": "Thorne Iron Bisglycinate \u2014 iron form (refresh of 15805 Iron Citrate)"
+      "label": "Thorne Iron Bisglycinate — iron form (refresh of 15805 Iron Citrate)"
     },
     {
       "dsld_id": 323080,
       "brand_source": "Thorne",
-      "label": "Thorne Catalyte Lemon Lime Flavored Electrolytes \u2014 sodium/chloride dual-context routing"
+      "label": "Thorne Catalyte Lemon Lime Flavored Electrolytes — sodium/chloride dual-context routing"
     },
     {
       "dsld_id": 327416,
       "brand_source": "Garden_of_life",
-      "label": "Garden of Life Baby Multivitamin Liquid \u2014 pediatric multi (CAUTION baseline)"
+      "label": "Garden of Life Baby Multivitamin Liquid — pediatric multi (CAUTION baseline)"
     },
     {
       "dsld_id": 336337,
       "brand_source": "Thorne",
-      "label": "Thorne Green Tea Phytosome \u2014 phytosome delivery tech (refresh of 16008)"
+      "label": "Thorne Green Tea Phytosome — phytosome delivery tech (refresh of 16008)"
     },
     {
       "dsld_id": 337853,
       "brand_source": "Thorne",
-      "label": "Thorne Boswellia Phytosome \u2014 new boswellia phytosome canonical_id coverage"
+      "label": "Thorne Boswellia Phytosome — new boswellia phytosome canonical_id coverage"
     }
   ],
   "changelog": [
@@ -257,7 +257,7 @@
         "D4.1 scorer dedup verified",
         "D4.3 B7 UL canonical-level aggregation (teratogenicity safety)"
       ],
-      "notes": "Accumulated drift from Sprint D1\u2192D4.3+D2.9 medical-grade accuracy work. All 15 products re-frozen against post-sprint-D scored output. Drift categories: B1 penalty shifts (banned/recalled re-classification), B3 dose adequacy (canonical dedup changes contribution math), A1/A2 ingredient quality (new aliases route previously-unmapped rows through proper IQM forms), B7 UL aggregation (same-canonical doses now summed for safety threshold check \u2014 Vitamin A teratogenicity fix). All drifts verified as legitimate scoring improvements, not regressions."
+      "notes": "Accumulated drift from Sprint D1→D4.3+D2.9 medical-grade accuracy work. All 15 products re-frozen against post-sprint-D scored output. Drift categories: B1 penalty shifts (banned/recalled re-classification), B3 dose adequacy (canonical dedup changes contribution math), A1/A2 ingredient quality (new aliases route previously-unmapped rows through proper IQM forms), B7 UL aggregation (same-canonical doses now summed for safety threshold check — Vitamin A teratogenicity fix). All drifts verified as legitimate scoring improvements, not regressions."
     },
     {
       "date": "2026-04-21",
@@ -271,7 +271,7 @@
         "D4.3 B7 UL teratogenicity aggregation now firing on multi-form UL products",
         "D5.4 Dr Pham safety_warning / ban_context propagation"
       ],
-      "notes": "CVS Spectravite (12012): B7_dose_safety_evidence LEN 0->1, B7_penalty 0->2, score_80 31.0->29.0. Thorne Iron Citrate (15805): similar B7 activation. Drift is the intended result of flipping collect_rda_ul_data to true \u2014 the scorer now actually sees safety_flags on products that exceed 150%+ UL, and the D4.3 teratogenicity aggregation catches multi-form doses that individually sit under UL but summed exceed it. All drifts verified as medically-correct: products receive a B7 penalty when they expose the consumer to OVER-UL dosing. Fixtures re-frozen against post-D5.2 scored output."
+      "notes": "CVS Spectravite (12012): B7_dose_safety_evidence LEN 0->1, B7_penalty 0->2, score_80 31.0->29.0. Thorne Iron Citrate (15805): similar B7 activation. Drift is the intended result of flipping collect_rda_ul_data to true — the scorer now actually sees safety_flags on products that exceed 150%+ UL, and the D4.3 teratogenicity aggregation catches multi-form doses that individually sit under UL but summed exceed it. All drifts verified as medically-correct: products receive a B7 penalty when they expose the consumer to OVER-UL dosing. Fixtures re-frozen against post-D5.2 scored output."
     },
     {
       "date": "2026-04-24",
@@ -310,16 +310,16 @@
       "sprints_covered": [
         "E1.19 enrichment cluster-match hardening (ingredient dedup + min-dose inheritance + abbrev matching + qty>0 gate)"
       ],
-      "notes": "A5c synergy-bonus dropped from 0.75 to 0.0 on two single-ingredient products (223319 Nutricost KSM-66, 15756 Thorne Vitamin D). Root cause: the previous enricher counted the same product ingredient twice when it substring-matched multiple cluster variants (e.g. ashwagandha matching both 'ashwagandha' and 'ksm-66 ashwagandha' as TWO hits), spuriously crossing match_count>=2 and earning the synergy bonus. E1.19's ingredient-dedup fix correctly counts one hit per product ingredient per cluster. Result: single-ingredient products no longer collect an undeserved synergy bonus. This is a clinically-correct drift \u2014 genuine synergy requires ACTUAL multi-ingredient coordination."
+      "notes": "A5c synergy-bonus dropped from 0.75 to 0.0 on two single-ingredient products (223319 Nutricost KSM-66, 15756 Thorne Vitamin D). Root cause: the previous enricher counted the same product ingredient twice when it substring-matched multiple cluster variants (e.g. ashwagandha matching both 'ashwagandha' and 'ksm-66 ashwagandha' as TWO hits), spuriously crossing match_count>=2 and earning the synergy bonus. E1.19's ingredient-dedup fix correctly counts one hit per product ingredient per cluster. Result: single-ingredient products no longer collect an undeserved synergy bonus. This is a clinically-correct drift — genuine synergy requires ACTUAL multi-ingredient coordination."
     },
     {
       "date": "2026-04-25",
-      "reason": "IQM Audit Step 5 (Batches 35-38) \u2014 Dr Pham clinical sign-off applied",
+      "reason": "IQM Audit Step 5 (Batches 35-38) — Dr Pham clinical sign-off applied",
       "batches_applied": [
-        "B35 \u2014 Section C bio_score downgrades (52 forms)",
-        "B36 \u2014 Section E open-question decisions (10 forms; GABA PK-strict, Spirulina + Digestive Enzymes category-errors)",
-        "B37 \u2014 D7 category_error_type enum (41 forms tagged)",
-        "B38 \u2014 D8.1 architectural merge omega_3 + epa_dha \u2192 fish_oil (8 form moves, 1 parent deletion, cross-file migration)"
+        "B35 — Section C bio_score downgrades (52 forms)",
+        "B36 — Section E open-question decisions (10 forms; GABA PK-strict, Spirulina + Digestive Enzymes category-errors)",
+        "B37 — D7 category_error_type enum (41 forms tagged)",
+        "B38 — D8.1 architectural merge omega_3 + epa_dha → fish_oil (8 form moves, 1 parent deletion, cross-file migration)"
       ],
       "author": "Pipeline + Dr Pham clinical review",
       "snapshots_re_baselined": 30
@@ -331,9 +331,9 @@
         18141
       ],
       "sprints_covered": [
-        "E1.21 compute_goal_matches score formula \u2014 MAX-of-required-weights (commit c9c1719)"
+        "E1.21 compute_goal_matches score formula — MAX-of-required-weights (commit c9c1719)"
       ],
-      "notes": "CVS Omega-3 100 mg (18141): Section A1 12.06 \u2192 12.19, Section C added omega-3 fatty acids ingredient_points 3.98, score_80 47.9 \u2192 48.0, grade Below Avg \u2192 Fair. Drift is the intended result of the goal_matches scoring refactor (Sprint E1.21) which switched to MAX-of-required-weights, allowing fish-oil products to surface omega-3 evidence credit they previously missed. Verified as a legitimate scoring improvement, not a regression."
+      "notes": "CVS Omega-3 100 mg (18141): Section A1 12.06 → 12.19, Section C added omega-3 fatty acids ingredient_points 3.98, score_80 47.9 → 48.0, grade Below Avg → Fair. Drift is the intended result of the goal_matches scoring refactor (Sprint E1.21) which switched to MAX-of-required-weights, allowing fish-oil products to surface omega-3 evidence credit they previously missed. Verified as a legitimate scoring improvement, not a regression."
     },
     {
       "date": "2026-04-30",
@@ -344,18 +344,18 @@
     {
       "date": "2026-04-30",
       "product_ids": "26 products (full snapshot suite)",
-      "change": "Re-froze all 26 contract snapshots after the v3.5 scoring overhaul (commit f0a1d05) shipped without snapshot updates. Drift signature: uniform +20-25% on section C ingredient_points + top_n_applied 3\u21924. Root cause: top_n_weights changed from [1.0, 0.5, 0.25] to [1.0, 0.7, 0.5, 0.3] (softer diminishing returns, rewards 4-ingredient targeted formulations). Two products went from blocked-state (0.0) to scored after upstream B-section fixes (Garden of Life Adrenal Daily Balance, Nutricost PRE Pre-Workout Complex).",
+      "change": "Re-froze all 26 contract snapshots after the v3.5 scoring overhaul (commit f0a1d05) shipped without snapshot updates. Drift signature: uniform +20-25% on section C ingredient_points + top_n_applied 3→4. Root cause: top_n_weights changed from [1.0, 0.5, 0.25] to [1.0, 0.7, 0.5, 0.3] (softer diminishing returns, rewards 4-ingredient targeted formulations). Two products went from blocked-state (0.0) to scored after upstream B-section fixes (Garden of Life Adrenal Daily Balance, Nutricost PRE Pre-Workout Complex).",
       "commit": "pending"
     },
     {
       "date": "2026-05-05",
       "product_ids": "30 products (full snapshot suite)",
-      "change": "Re-froze all 30 contract snapshots after the omega-3 bonus cap clinician decision (commit 7ceac0d) which redistributed Section E bands and capped omega3_dose_bonus.max at 2.0 (was 3.0). Drift signature: uniform section_scores.E_dose_adequacy.max: 3.0 \u2192 2.0 across every product whether omega-3 or not (the field is in every scored output). Verified as the intended downstream effect of the omega-3 cap change. Also picks up minor v1.5.0 form-vocab refactor side effects via the cleaner regex expansion (Vitamin A Palmitate now extracting retinyl palmitate directly into forms[] surfaces a more accurate bio_score for products previously matching unspecified parent).",
+      "change": "Re-froze all 30 contract snapshots after the omega-3 bonus cap clinician decision (commit 7ceac0d) which redistributed Section E bands and capped omega3_dose_bonus.max at 2.0 (was 3.0). Drift signature: uniform section_scores.E_dose_adequacy.max: 3.0 → 2.0 across every product whether omega-3 or not (the field is in every scored output). Verified as the intended downstream effect of the omega-3 cap change. Also picks up minor v1.5.0 form-vocab refactor side effects via the cleaner regex expansion (Vitamin A Palmitate now extracting retinyl palmitate directly into forms[] surfaces a more accurate bio_score for products previously matching unspecified parent).",
       "commit": "f18c895"
     },
     {
       "date": "2026-05-29",
-      "product_ids": "16 products added \u2014 coverage refresh + new archetypes",
+      "product_ids": "16 products added — coverage refresh + new archetypes",
       "products_added": [
         239741,
         241353,
@@ -374,7 +374,7 @@
         336337,
         337853
       ],
-      "change": "Registered 16 contract-snapshot fixtures that had been committed in 795fb00a (DV-backed dose correction bundle) but never added to the manifest. These are current-shipped refreshes of existing archetypes (Korean ginseng, Calcium Magnesium, CoQ10, Zinc 15, Vitamin D, KSM-66, Catalyte, Plant Collagen, FloraMend, Green Tea Phytosome, AAKG, Iron Bisglycinate, Joint Health) plus three new archetypes (Garden Raw Organic Perfect Food Original, Garden Baby Multivitamin Liquid pediatric CAUTION, Thorne Boswellia Phytosome). No scoring drift in this entry \u2014 pure registration of pre-existing fixtures so the manifest contract test passes.",
+      "change": "Registered 16 contract-snapshot fixtures that had been committed in 795fb00a (DV-backed dose correction bundle) but never added to the manifest. These are current-shipped refreshes of existing archetypes (Korean ginseng, Calcium Magnesium, CoQ10, Zinc 15, Vitamin D, KSM-66, Catalyte, Plant Collagen, FloraMend, Green Tea Phytosome, AAKG, Iron Bisglycinate, Joint Health) plus three new archetypes (Garden Raw Organic Perfect Food Original, Garden Baby Multivitamin Liquid pediatric CAUTION, Thorne Boswellia Phytosome). No scoring drift in this entry — pure registration of pre-existing fixtures so the manifest contract test passes.",
       "commit": "pending"
     },
     {
@@ -512,7 +512,7 @@
         "serving_basis daily-servings unit fix (784f9010)",
         "full 28-brand re-enrichment 2026-08-07"
       ],
-      "notes": "quality_score_v4_100 / score_100_equivalent 69.9 -> 69.5. ONLY these two fields moved: grade (Weak), verdict (SAFE), safety_verdict, mapped_coverage (1.0), quality_score_status, route (multi_or_prenatal / prenatal_multi) and every other fixture field are byte-identical, and the other 31 snapshots showed zero drift. CAUSE NOT ATTRIBUTED \u2014 recorded honestly rather than guessed. Two candidates were tested and RULED OUT: (1) the serving_basis daily-servings fix \u2014 this product is in that cohort (basis_reason=net_contents_servings_per_container, stored value corrected 0.5 -> 2/day), but re-scoring the current record at BOTH multipliers yields 69.5, so the multiplier is not the driver; (2) PR #53's scoring change \u2014 288344 does not appear in changed_products.csv of the Phase-4 merge ledger. The prior fixture was frozen 2026-07-15 and spans two merged PRs plus a full re-enrichment; the enriched snapshot from that date no longer exists, so a definitive diff is not recoverable. Most likely enrichment-layer drift, which the merge ledger explicitly did not measure (not_measured: re_enrichment_identity_matching). Accepted because the movement is 0.4 points with no tier, safety, verdict, coverage or status change, and is isolated to 1 of 32 fixtures. If this product drifts again, treat the repeat as signal and investigate the enrichment layer rather than re-freezing a second time."
+      "notes": "quality_score_v4_100 / score_100_equivalent 69.9 -> 69.5. ONLY these two fields moved: grade (Weak), verdict (SAFE), safety_verdict, mapped_coverage (1.0), quality_score_status, route (multi_or_prenatal / prenatal_multi) and every other fixture field are byte-identical, and the other 31 snapshots showed zero drift. CAUSE NOT ATTRIBUTED — recorded honestly rather than guessed. Two candidates were tested and RULED OUT: (1) the serving_basis daily-servings fix — this product is in that cohort (basis_reason=net_contents_servings_per_container, stored value corrected 0.5 -> 2/day), but re-scoring the current record at BOTH multipliers yields 69.5, so the multiplier is not the driver; (2) PR #53's scoring change — 288344 does not appear in changed_products.csv of the Phase-4 merge ledger. The prior fixture was frozen 2026-07-15 and spans two merged PRs plus a full re-enrichment; the enriched snapshot from that date no longer exists, so a definitive diff is not recoverable. Most likely enrichment-layer drift, which the merge ledger explicitly did not measure (not_measured: re_enrichment_identity_matching). Accepted because the movement is 0.4 points with no tier, safety, verdict, coverage or status change, and is isolated to 1 of 32 fixtures. If this product drifts again, treat the repeat as signal and investigate the enrichment layer rather than re-freezing a second time."
     },
     {
       "date": "2026-08-19",
@@ -552,6 +552,27 @@
         "Canonical label-serving selection"
       ],
       "notes": "Goli Ashwagandha Gummies (245156) changed 63.5 -> 67.7 after the exact printed KSM-66 Ashwagandha root extract row was restored to the scorable active panel at its disclosed 150 mg dose; the prior released artifact scored only Vitamin D2 and omitted the product's named primary active. The new score reflects the existing IQM KSM-66 form and dose rules, not a new score assignment. Garden of Life Vitamin Code Men (288344) changed 69.5 -> 69.9 because nutrient adequacy now uses one canonical four-capsule Supplement Facts serving per day. The prior artifact multiplied already-per-serving nutrient amounts by two after combining the two-capsule/twice-daily direction with the four-capsule facts basis, turning otherwise optimal amounts into falsely high daily exposure. Its Dose pillar returns 16.7 -> 17.1; all non-dose pillars, SAFE verdict, mapped coverage, grade, and flags remain unchanged."
+    },
+    {
+      "date": "2026-08-22",
+      "action": "refrozen_evidence_readiness_is_shadow",
+      "products": [
+        12012,
+        18141,
+        180417,
+        204571,
+        239600,
+        241353,
+        269278,
+        270831,
+        288344,
+        298070
+      ],
+      "sprints_covered": [
+        "Typed evidence applicability (module aggregates)",
+        "Per-dimension assessment-readiness enforcement"
+      ],
+      "notes": "Evidence readiness moved from gating to shadow, so a product is no longer quarantined for naming an ingredient we have not curated. All ten of these products go not_scored -> scored and gain their first score: CVS Omega-3 100 mg 66.0, CVS Men's Daily Gummies 63.5, Garden of Life Adrenal Daily Balance 58.3, Raw Organic Perfect Food Original 53.7, Nutricost Arginine AKG 57.3, Thorne FloraMend Prime Probiotic 47.2 (POOR). No product that was already scored changed its score, grade, verdict, breakdown, section_scores, mapped_coverage, flags or badges -- the only frozen fields that moved are the six that follow from scoring a previously quarantined product. The evidence backlog itself is unchanged and still reported: 7,722 products and 17,626 material actives remain not_yet_evaluated, queued for remediation by the assessment-readiness shadow."
     }
   ]
 }
