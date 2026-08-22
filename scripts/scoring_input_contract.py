@@ -27,7 +27,10 @@ from scoring_reference_resolver import has_therapeutic_reference, is_known_botan
 # the enricher stamps rows with.
 from identity_integrity import IDENTITY_DISPOSITIONS, is_identity_scoreable
 from scoring_v4.route_features import (
+    B_COMPLEX_DISQUALIFY_CANONICALS,
     B_VITAMIN_CANONICALS,
+    BCAA_CANONICALS,
+    EAA_CANONICALS,
     MATERIAL_FIBER_CANONICALS,
     PROTEIN_CANONICALS as ROUTE_FEATURE_PROTEIN_CANONICALS,
     extract_route_features,
@@ -2604,15 +2607,7 @@ _ROUTE_B_COMPLEX_EXCLUSION_RE = re.compile(
     r"\b(pre[\s-]?workout|fat\s*burn|thermogenic|weight\s*loss|recovery|mass\s*gainer)\b",
     re.IGNORECASE,
 )
-_ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS = {
-    "caffeine",
-    "green_tea_extract",
-    "green_coffee_bean",
-    "garcinia_cambogia",
-    "yohimbe",
-    "yohimbine",
-    "synephrine",
-}
+_ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS = set(B_COMPLEX_DISQUALIFY_CANONICALS)
 _ROUTE_OMEGA_NAME_KEYWORDS = (
     "fish oil",
     "omega-3",
@@ -2649,7 +2644,6 @@ _ROUTE_MULTI_PANEL_CANONICALS = _ROUTE_B_VITAMIN_CANONICALS | {
     "vitamin_k",
     "vitamin_k1",
     "vitamin_k2",
-    "folate",
     "iron",
     "iodine",
     "choline",
@@ -2663,7 +2657,7 @@ _ROUTE_MULTI_PANEL_CANONICALS = _ROUTE_B_VITAMIN_CANONICALS | {
     "molybdenum",
 }
 _ROUTE_LEGACY_MULTIVITAMIN_MIN_MULTI_NUTRIENTS = 5
-_ROUTE_PRENATAL_PANEL_ANCHORS = {"folate", "vitamin_b9_folate", "iron", "iodine", "choline", "dha", "epa_dha"}
+_ROUTE_PRENATAL_PANEL_ANCHORS = {"vitamin_b9_folate", "iron", "iodine", "choline", "dha", "epa_dha"}
 _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "ala",
     "alpha_linolenic_acid",
@@ -2694,7 +2688,7 @@ _ROUTE_OMEGA_SOFT_ADJUNCT_CANONICALS = {
     # DPA 140 + astaxanthin 1.5 mg).
     "astaxanthin",
 }
-_ROUTE_OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil", "omega_3"}
+_ROUTE_OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algae_oil", "omega_3"}
 _ROUTE_SPORTS_PROTEIN_CANONICALS = set(ROUTE_FEATURE_PROTEIN_CANONICALS) - {"protein"}
 _ROUTE_SPORTS_SINGLE_CANONICALS = {
     *_CREATINE_CANONICALS,
@@ -2703,18 +2697,8 @@ _ROUTE_SPORTS_SINGLE_CANONICALS = {
     "l_citrulline",
     "hmb",
 }
-_ROUTE_BCAA_CANONICALS = {"l_leucine", "l_isoleucine", "l_valine"}
-_ROUTE_EAA_CANONICALS = {
-    "l_histidine",
-    "l_isoleucine",
-    "l_leucine",
-    "l_lysine",
-    "l_methionine",
-    "l_phenylalanine",
-    "l_threonine",
-    "l_tryptophan",
-    "l_valine",
-}
+_ROUTE_BCAA_CANONICALS = set(BCAA_CANONICALS)
+_ROUTE_EAA_CANONICALS = set(EAA_CANONICALS)
 _ROUTE_TAXONOMY_TO_MODULE = {
     "probiotic": "probiotic",
     "multivitamin": "multi_or_prenatal",

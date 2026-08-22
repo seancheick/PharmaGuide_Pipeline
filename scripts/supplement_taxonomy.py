@@ -33,6 +33,7 @@ from supplement_type_utils import (
     _safe_list,
     _ingredient_name,
 )
+from scoring_v4.route_features import B_COMPLEX_DISQUALIFY_CANONICALS
 from scoring_input_contract import (
     CLASSIFICATION_INPUT_CONTRACT,
     CLASSIFICATION_INPUT_SOURCE,
@@ -162,7 +163,7 @@ _VITAMIN_CANONICAL_IDS = frozenset({
     "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5",
     "vitamin_b6", "vitamin_b7", "vitamin_b12",
     "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
-    "vitamin_b5_pantothenic_acid", "vitamin_b6_pyridoxine",
+    "vitamin_b5_pantothenic", "vitamin_b6_pyridoxine",
     "vitamin_b7_biotin", "vitamin_b9_folate", "vitamin_b12_cobalamin",
     "folate", "folic_acid", "methylfolate", "niacin", "niacinamide",
     "thiamine", "riboflavin", "pyridoxine", "cobalamin",
@@ -180,7 +181,7 @@ _B_VITAMIN_IDS = frozenset({
     "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5",
     "vitamin_b6", "vitamin_b7", "vitamin_b12",
     "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
-    "vitamin_b5_pantothenic_acid", "vitamin_b6_pyridoxine",
+    "vitamin_b5_pantothenic", "vitamin_b6_pyridoxine",
     "vitamin_b7_biotin", "vitamin_b9_folate", "vitamin_b12_cobalamin",
     "folate", "folic_acid", "methylfolate", "niacin", "niacinamide",
     "thiamine", "riboflavin", "pyridoxine", "cobalamin",
@@ -203,7 +204,7 @@ _AMINO_ACID_IDS = frozenset({
     "bcaa", "beta_alanine", "creatine", "taurine", "glycine",
     "n_acetyl_cysteine", "nac", "glutathione", "acetyl_l_carnitine",
     "gaba", "5_htp", "sam_e",
-    "l_leucine", "l_isoleucine", "l_valine", "l_methionine",
+    "l_leucine", "l_isoleucine", "l_valine", "methionine",
     "l_threonine", "l_phenylalanine",
 })
 
@@ -255,15 +256,7 @@ _AMINO_NAME_TOKENS = {"bcaa", "eaa", "amino acid", "amino acids", "essential ami
 _SLEEP_SINGLE_IDS = frozenset({"melatonin", "5_htp", "gaba"})
 _JOINT_SINGLE_IDS = frozenset({"msm", "glucosamine", "chondroitin", "hyaluronic_acid"})
 _PRE_WORKOUT_IDS = frozenset({"caffeine", "beta_alanine", "creatine", "l_citrulline", "citrulline"})
-_B_COMPLEX_DISQUALIFY_IDS = frozenset({
-    "caffeine",
-    "green_tea_extract",
-    "green_coffee_bean",
-    "garcinia_cambogia",
-    "yohimbe",
-    "yohimbine",
-    "synephrine",
-})
+_B_COMPLEX_DISQUALIFY_IDS = frozenset(B_COMPLEX_DISQUALIFY_CANONICALS)
 _B_COMPLEX_EXCLUSION_RE = re.compile(
     r"\b(pre[\s-]?workout|fat\s*burn|thermogenic|weight\s*loss|liver|stress|mood)\b",
     re.IGNORECASE,

@@ -158,7 +158,7 @@ DRI_ESSENTIAL_NUTRIENTS = frozenset({
     "vitamin_a", "vitamin_c", "vitamin_d", "vitamin_e",
     "vitamin_k", "vitamin_k1", "vitamin_k2",
     "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
-    "vitamin_b5_pantothenic_acid", "vitamin_b6_pyridoxine", "vitamin_b7_biotin",
+    "vitamin_b5_pantothenic", "vitamin_b6_pyridoxine", "vitamin_b7_biotin",
     "vitamin_b9_folate", "vitamin_b12_cobalamin", "choline",
 })
 # Effect-strength weight on the primary floor. Mirrors the pipeline's effect

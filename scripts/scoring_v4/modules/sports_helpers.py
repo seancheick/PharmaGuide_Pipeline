@@ -4,6 +4,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List, Optional, Set
 
+from scoring_v4.route_features import (
+    BCAA_CANONICALS as ROUTE_FEATURE_BCAA_CANONICALS,
+    EAA_CANONICALS as ROUTE_FEATURE_EAA_CANONICALS,
+)
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
@@ -13,7 +17,7 @@ from scoring_v4.modules.generic_helpers import (
 
 
 SPORTS_PROTEIN_CANONICALS = frozenset(
-    {"protein", "whey_protein", "casein", "pea_protein", "rice_protein", "soy_protein"}
+    {"protein", "whey_protein", "casein", "pea_protein", "rice_protein"}
 )
 CREATINE_CANONICALS = frozenset(
     {
@@ -31,20 +35,8 @@ CREATINE_CANONICALS = frozenset(
 BETA_ALANINE_CANONICALS = frozenset({"beta-alanine", "beta_alanine"})
 CITRULLINE_CANONICALS = frozenset({"l_citrulline"})
 HMB_CANONICALS = frozenset({"hmb"})
-BCAA_CANONICALS = frozenset({"l_leucine", "l_isoleucine", "l_valine"})
-EAA_CANONICALS = frozenset(
-    {
-        "l_histidine",
-        "l_isoleucine",
-        "l_leucine",
-        "l_lysine",
-        "l_methionine",
-        "l_phenylalanine",
-        "l_threonine",
-        "l_tryptophan",
-        "l_valine",
-    }
-)
+BCAA_CANONICALS = ROUTE_FEATURE_BCAA_CANONICALS
+EAA_CANONICALS = ROUTE_FEATURE_EAA_CANONICALS
 # Non-classic pre-workout / recovery actives with source-verified dose bands
 # (see sports_dose._score_primary). BCAA_AGGREGATE is the disclosed
 # "branched_chain_amino_acids" total used when the leu/iso/val trio is not split out.

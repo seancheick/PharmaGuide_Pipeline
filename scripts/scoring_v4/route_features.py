@@ -19,13 +19,37 @@ B_VITAMIN_CANONICALS = frozenset({
     "vitamin_b1_thiamine",
     "vitamin_b2_riboflavin",
     "vitamin_b3_niacin",
-    "vitamin_b5_pantothenic_acid",
     "vitamin_b5_pantothenic",
     "vitamin_b6_pyridoxine",
     "vitamin_b7_biotin",
     "vitamin_b9_folate",
     "vitamin_b12_cobalamin",
-    "folate",
+})
+
+BCAA_CANONICALS = frozenset({"l_leucine", "l_isoleucine", "l_valine"})
+
+# The nine essential amino acids, by the canonical id the enricher emits.
+EAA_CANONICALS = frozenset({
+    "l_histidine",
+    "l_isoleucine",
+    "l_leucine",
+    "l_lysine",
+    "methionine",
+    "l_phenylalanine",
+    "l_threonine",
+    "l_tryptophan",
+    "l_valine",
+})
+
+# Stimulant / weight-loss actives that disqualify a B-complex route: their
+# presence means the product is a formula built around them, not a B-complex.
+B_COMPLEX_DISQUALIFY_CANONICALS = frozenset({
+    "caffeine",
+    "green_tea_extract",
+    "green_coffee_bean",
+    "garcinia_cambogia",
+    "yohimbe",
+    "synephrine",
 })
 
 B_COFACTOR_CANONICALS = frozenset({
