@@ -1,104 +1,141 @@
-# Scoring Readiness Candidate — 2026-08-22
+# Scoring Integrity Candidate — Corrected Audit — 2026-08-22
 
-Status: **verified preproduction candidate; not published**
+Status: **technically verified preproduction candidate; not approved or published**
 
-Follow-on to `scoring_integrity_candidate_2026_08_21.md`. That candidate was correct
-engineering with one policy defect: the evidence-readiness gate quarantined a product for
-naming an ingredient we had not curated, which is a gap in our curation rather than a defect
-in the product. It reduced the app catalog from 13,271 to 6,637.
+This report supersedes the earlier 2026-08-22 readiness report. The earlier report mixed
+aggregate projections with label rows, understated the reviewed route diff, reported stale
+candidate counts, and treated an environment-dependent Red Yeast Rice failure as an open defect.
+Those statements are corrected here from a fresh corpus rebuild and direct candidate queries.
 
-No Supabase upload, Flutter import or bundle mutation, push, cleanup, or production promotion
-was performed. `scripts/dist/` was promoted locally only, through the gated candidate path.
+No Supabase upload, Flutter bundle import, app asset commit, push, cleanup, or production
+promotion was performed.
 
-## Release decision
+## Audit verdict
 
-| | baseline (2026-08-19) | prior candidate (08-21) | this candidate |
-|---|---:|---:|---:|
-| app catalog | 13,271 | 6,637 | **14,380** |
-| quarantined | 14 | 8,775 | **1,032** |
+Claude's implementation was directionally strong, but it was not fully correct or ready to
+approve as delivered. The follow-up audit found and fixed pipeline, report, and Flutter consumer
+defects. The corrected code is green at the technical gates. Publication still requires operator
+sign-off for 12 US safety-policy holds and a separately authorized production release.
 
-The remaining 1,032 are data-integrity holds, not curation backlog:
+## Corrected candidate
 
-- **929** unresolved material dose assessment
-- **93** unresolved active identity
-- **52** safety-suppressed (BLOCKED)
-- **12** held for US safety-policy review (9 vinpocetine, 3 designer-steroid class)
+| Measure | Shipped baseline | Corrected candidate |
+|---|---:|---:|
+| Export schema | 2.3.0 | **2.4.0** |
+| Scoring version | 4.2.0 | **4.3.0** |
+| Live app products | 13,271 | **14,409** |
+| Quarantined products | 14 | **1,003** |
+| Scored | 13,164 | **14,357** |
+| Safety-suppressed | 107 | **52** |
+| NOT_SCORED in live catalog | 0 | **0** |
 
-Evidence backlog is unchanged and fully reported: **7,722 products / 17,636 material actives**
-remain `not_yet_evaluated`, queued in the assessment-readiness shadow remediation queue.
+Candidate database SHA-256:
+`2cb086d318dc4b68897a8bc29bc989750115686b54219f28be617fc5103d2ea6`
 
-## What changed
+The candidate contains 14,409 detail blobs and a 56,569,856-byte core database. On the 12,556
+products shared with the shipped baseline, 568 routes, 1,493 scores, 615 tiers, 568 verdicts,
+46 score statuses, and 276 blocking reasons changed. Mapping coverage changed on zero shared
+products. The candidate adds 1,853 live products and removes 715 prior live products.
 
-**Evidence readiness is measured, not gating.** `ENFORCED_READINESS_DIMENSIONS` is the single
-place that decides which dimensions gate the live catalog; identity, dose, verification and
-route still do, evidence does not. `is_live_ready` derives from it and the completeness gate
-and source-of-truth audit both read the producer's declaration instead of repeating the list.
-A product whose only gap is a shadow dimension is live-ready and still queued for remediation,
-labelled `gates_catalog_eligibility: false` so the two states cannot be confused.
+## What the audit corrected
 
-**Rows carry typed evidence applicability.** `protein`, `fiber`, `digestive_enzymes`,
-`branched_chain_amino_acids`, `probiotic_cfu_total` and `epa_dha` name a product-level total,
-not a substance; the owning module answers them and no per-ingredient clinical record exists or
-could. Keyed on identity rather than on how the dose reached the row, because `protein` arrived
-both as a `sports_primary_dose` and as a `blend_anchor_mass` projection and denoted the same
-total either way.
+1. **Evidence applicability now follows row provenance.** Only rows explicitly marked
+   `scoring_input_kind=product_level_evidence` are synthetic aggregates. Protein, fiber, enzyme,
+   and blend identities are not globally exempted merely because their canonical name resembles
+   an aggregate. This fixes the structural root cause without a hand-maintained canonical denylist.
+2. **The real evidence backlog is 4,939 products / 8,935 material label rows**, not
+   7,722 / 17,636. Product-level aggregate projections no longer inflate it. Evidence remains a
+   measured shadow dimension under the approved category-aware policy; identity, dose, route,
+   and verification remain enforced.
+3. **Routing was corrected and reviewed against the enriched corpus.** The final gold set contains
+   173 reviewed changes and zero unreviewed changes: 45 fiber-to-generic, 10 fiber-to-sports,
+   57 generic-to-sports, and 61 multi/prenatal-to-sports. Seven unresolved title-claim protein
+   products are quarantined rather than guessed into a route.
+4. **Readiness audits now fail closed** if a producer and consumer disagree about which dimensions
+   gate catalog eligibility.
+5. **Red Yeast Rice is not an open regression.** The prior failure came from stale test state.
+   Generic Red Yeast Rice remains CAUTION; explicit monacolin/lovastatin matches block. Targeted,
+   release, and full suites all pass in the rebuilt environment.
+6. **Candidate manifests no longer claim gates that were not run.** Interaction-database parity
+   and Flutter-bundle parity are identified as post-candidate gates, not stamped as passed.
+7. **Quarantine records are actionable.** They identify the unavailable reason and incomplete
+   enforced dimensions instead of reporting every case as a generic mapping/dosage failure.
+8. **Supabase dry-run reporting now prints the actual export schema** instead of a hard-coded
+   legacy value.
+9. **Schema-3 warning reconstruction in Flutter is now faithful.** It verifies reviewed-copy
+   fingerprints, resolves pregnancy/lactation aggregate copy, preserves evidence/source
+   provenance, and fails closed on copy drift. Resolved compact warnings now reach product-fit
+   and stack dose calculations, not only product detail display.
+10. **The Flutter importer now binds schema 2.4 to the generated Drift projection**, supports only
+    valid interaction schema/user-version pairs, and verifies the schema-2 warning registry across
+    manifest, embedded metadata, and physical table. Legacy safety gate state is migrated out of
+    score-confidence vocabulary.
 
-**A digestive-enzyme panel must define the product.** The enzyme branch fired on any enzyme row,
-above the fiber mass-share check, so it decided most `fiber_digestive` routes. Garden of Life
-Vitamin Code RAW Vitamin C — one token enzyme in a raw-food base — was scored by the digestive
-module. Routes now require the enzymes to be at least half of what the product discloses,
-counting label rows and enzyme-activity projections together. `digestive_enzyme_context` routes
-drop 72 → 16; `fiber_digestive` 402 → 350.
+## Mapping, readiness, and quarantine
 
-**Canonical allowlists may only name canonicals the vocabulary defines.** Five entries were
-inert. Two were live defects: `DRI_ESSENTIAL_NUTRIENTS` carried only
-`vitamin_b5_pantothenic_acid` so pantothenic acid never received nutrition authority, and
-`supplement_taxonomy` did not recognise it as a B vitamin at all. A new gate reuses the
-production resolvers so it cannot drift from what the enricher can emit.
+- Mapping: **84,492 / 84,492** score-eligible rows mapped; zero products below 1.0; zero strict
+  mapping-contract failures.
+- Readiness corpus: 15,412 products; 14,419 live-ready; 993 incomplete on enforced dimensions.
+- Enforced incomplete dimensions: dose 893, identity 93, route 7, verification 0.
+- Evidence shadow: 4,939 products / 8,935 material label rows not yet evaluated.
+- Verification: 1,412 verified present; 14,000 verified absent; zero not-evaluated defaults.
 
-**The coverage contract is pinned.** The unresolved-identity literals live once and are imported
-by the producer; a canary reads the producer source and asserts every reason the contract
-recognises is still emitted. `identity_reason_code` is now reported alongside `reason_code`.
+The 1,003 exported quarantines are mutually exclusive records:
 
-**Dead code removed.** Five module-level symbols had no reference outside their own definition.
+- 891 completeness/dose
+- 93 completeness/identity
+- 7 completeness/route
+- 10 safety-policy review only
+- 2 safety-policy review plus dose
 
-## Route diff
-
-52 routes changed, all `fiber_digestive → generic`, each reviewed. Every one is a product that
-is not a digestive-enzyme formula: the Vitamin Code RAW line, Perfect Food greens, Ora So Lean,
-GNC Keto Protein and Re-Grow, Hair & Skin, Herbal Immune Balance Sinus. GlycemicPro
-Transglucosidase also moves, correctly: it discloses zero scorable identities, so no content
-evidence supports any route, and identity readiness holds it.
-
-The vocabulary fixes produced no route change on this corpus.
+The 12 policy holds are nine vinpocetine products (`204468`, `232923`, `294063`, `295535`,
+`328399`, `44121`, `59786`, `60562`, `77114`) and three confirmed synthetic-steroid-class
+products (`33358`, `33360`, `33361`). Their matches are confirmed; their final US consumer
+verdict remains an operator clinical-policy decision.
 
 ## Verification
 
-- Full corpus enrich + score: **37/37 datasets, 0 failures**
-- `scripts/test.sh fast`: **11,815 passed**, 124 skipped
-- `scripts/test.sh full`: **14,280 passed**, 178 skipped, 2 xfailed, **1 failed**
-- `scripts/test.sh release`: **111 passed**, 1 skipped (with `SKIP_STALENESS_CHECK=1`; the only
-  stale layer is `dist_vs_flutter`, which is the publish step deliberately not performed)
-- Every strict source-of-truth gate passes: matrix, IQM form-evidence, cleaner, enrichment,
-  clinical, identity integrity, RDA/UL reference parity, assessment readiness, snapshot
-  contract, export contract, freshness
-- Mapping: **84,492 / 84,492** score-eligible rows mapped, 0 products below full coverage,
-  0 strict contract failures
+- Full corpus enrich + score: **37 / 37 datasets, zero failures**.
+- Pipeline release suite: **111 passed, 1 expected interaction skip, zero failures**, followed by
+  live RxCUI, direct-drug, PMID existence, and reviewed-content gates with zero unresolved IDs.
+- Pipeline full suite: **14,311 passed, 163 skipped, 2 documented xfailed, zero failures**.
+- Candidate build: 14,409 live products, 1,003 quarantines, zero export-contract failures, and no
+  red contract-sync findings.
+- Flutter analysis: **no issues**.
+- Flutter full suite: **3,235 passed, zero failures**.
+- Candidate catalog + interaction importer dry-run: **passed; no app files written**.
+- Supabase sync dry-run: **passed; no upload performed**.
+- Warning equivalence for prepared schema 3: **181,471 checked, zero failures**.
 
-The single full-suite failure is `test_red_yeast_rice_active_signals`, which asserts generic Red
-Yeast Rice is not banned. The data has carried `is_banned: true` since before this branch — both
-the 2026-08-19 build in this worktree and the shipped baseline have it — so it is a pre-existing
-banned-rule policy question for the safety-rule audit, not a regression here.
+The structural interaction artifact is schema 2.0.0/user-version 2 with 134 interactions,
+31,690 research pairs, and 145 profile warning rules. Its SHA-256 is
+`c1670111a4c09bc6262e35586a75f5f48d60c1b011077c21eebe531899c9ba67`.
+The build environment did not contain `UMLS_API_KEY`, so this temporary artifact proves the app
+bridge and structural gates, not final production identity verification. The pipeline release
+suite independently passed its live identity gates; the production interaction build must still
+run with the configured key.
 
-## Open work before publication
+## Prepared schema 3
 
-1. **Operator decision on the dose gate.** It is precise per row (Athletic Pure Pack: 41 material
-   actives, 1 unresolved) and unchanged from the prior candidate at 929 vs 930, but it is still
-   all-or-nothing per product, so it correlates with formulation breadth: 2.3% of products with
-   ≤3 material actives are held, against 56.0% of those with more than 30. Whether one unresolved
-   row in 41 should hold a product is a policy call, not a defect.
-2. **Red Yeast Rice banned-rule review**, per above.
-3. **Sign off or retain quarantine** for the 12 US-policy holds.
-4. **Evidence curation backlog**: 1,392 distinct canonicals block 7,722 products; the top 100
-   unblock ~41%, the top 200 ~58%.
-5. Then approve, import to Flutter, and publish as a separately authorised operation.
+Against the 14,409 candidate blobs, the prepared schema-3 projection reduces payload from
+2,278,680,140 to 1,354,118,116 bytes: **924,562,024 bytes / 40.5745% saved**. This is a measured
+future cleanup, not authorization to ship schema 3 before one compatible 2.4 app release.
+
+## What is next
+
+1. Operator signs off or retains quarantine for the 12 US safety-policy cases, including whether
+   confirmed Schedule III synthetic-steroid-class matches may remain CAUTION or must be
+   BLOCKED/UNSAFE.
+2. Remediate the enforced review queues: 893 dose, 93 identity, and 7 route products. Keep the
+   4,939-product evidence queue visible and curate it one verified ingredient at a time.
+3. Rebuild the production interaction artifact with the configured UMLS credential, then run the
+   real interaction-parity gate.
+4. After explicit release approval, import and ship the compatible Flutter 2.4 bridge, run bundle
+   parity, then perform the separately authorized Supabase/app publication. None of those actions
+   are included in this candidate audit.
+5. After one compatible app release, execute schema-3 cleanup. Keep score calibration as a later,
+   separately versioned release.
+
+The machine-readable companion report contains the artifact hashes, exact counts, verification
+results, and a canonical-JSON self-integrity hash. That hash detects report changes; it is not an
+identity signature.
