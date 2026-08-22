@@ -26,7 +26,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Set
 
-from assessment_readiness import ENFORCED_READINESS_DIMENSIONS
+from assessment_readiness import (
+    ENFORCED_READINESS_DIMENSIONS,
+    has_canonical_enforced_dimensions,
+)
 from dose_assessment import has_incomplete_material_dose_assessment
 from scoring_input_contract import classify_ingredient_roles, get_scoring_ingredients
 
@@ -585,10 +588,11 @@ def evaluate_completeness_gate_with_readiness(
         assessment_readiness=readiness,
     )
     if readiness.get("enforcement_mode") == "enforced":
-        enforced = readiness.get("enforced_dimensions")
-        if not isinstance(enforced, list):
-            enforced = sorted(ENFORCED_READINESS_DIMENSIONS)
-        for name in enforced:
+        if not has_canonical_enforced_dimensions(
+            readiness.get("enforced_dimensions")
+        ):
+            missing.append("assessment_readiness_enforced_dimensions")
+        for name in sorted(ENFORCED_READINESS_DIMENSIONS):
             state = _norm(_safe_dict(readiness.get(name)).get("readiness"))
             if state and state not in {"complete", "not_applicable"}:
                 missing.append(f"{name}_assessment_readiness")

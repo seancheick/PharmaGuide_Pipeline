@@ -20,7 +20,10 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
-from assessment_readiness import ENFORCED_READINESS_DIMENSIONS
+from assessment_readiness import (
+    ENFORCED_READINESS_DIMENSIONS,
+    has_canonical_enforced_dimensions,
+)
 
 
 from stage_manifest import select_stage_files
@@ -804,7 +807,7 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                         ))
 
             # Schema-2.4 candidate contract. A public numeric score is valid
-            # only after every assessment dimension is explicitly complete.
+            # only after every enforced assessment dimension is complete.
             # QA-only ``not_scored`` rows may remain in the stage ledger, and
             # BLOCKED/UNSAFE rows retain their separate safety suppression
             # path, but neither exception permits an incomplete numeric score.
@@ -840,9 +843,16 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                             f"{readiness.get('unavailable_reasons') or []}",
                             str(file_path),
                         ))
-                    enforced = readiness.get("enforced_dimensions")
-                    if not isinstance(enforced, list):
-                        enforced = sorted(ENFORCED_READINESS_DIMENSIONS)
+                    if not has_canonical_enforced_dimensions(
+                        readiness.get("enforced_dimensions")
+                    ):
+                        findings.append(Finding(
+                            "SCORING_ASSESSMENT_ENFORCED_DIMENSIONS_MISMATCH",
+                            f"{pid}: enforced_dimensions must exactly match "
+                            f"{sorted(ENFORCED_READINESS_DIMENSIONS)!r}, got "
+                            f"{readiness.get('enforced_dimensions')!r}",
+                            str(file_path),
+                        ))
                     for dimension in (
                         "identity", "dose", "evidence", "verification", "route"
                     ):
@@ -855,7 +865,10 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                         # incomplete one is expected state, not a contract
                         # violation. It is reported by the assessment-readiness
                         # shadow, which queues it for remediation.
-                        if incomplete and dimension in enforced:
+                        if (
+                            incomplete
+                            and dimension in ENFORCED_READINESS_DIMENSIONS
+                        ):
                             findings.append(Finding(
                                 "SCORING_ASSESSMENT_DIMENSION_INCOMPLETE",
                                 f"{pid}: {dimension} readiness is "

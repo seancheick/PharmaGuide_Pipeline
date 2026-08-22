@@ -71,6 +71,37 @@ def test_route_feature_vector_measures_label_intent_and_panel_shape() -> None:
     assert feature["mineral_count"] == 1
 
 
+def test_brand_copy_does_not_become_product_protein_intent() -> None:
+    from scoring_v4.route_features import extract_route_features
+
+    feature = extract_route_features(
+        {
+            "dsld_id": "F-brand",
+            "fullName": "Daily Minerals",
+            "brand_name": "Advanced Muscle Performance",
+            "bundleName": "Metabolism + Muscle Support Program",
+        },
+        [_row("magnesium", 200, "mg")],
+    )
+
+    assert feature["protein_title_intent"] is False
+
+
+def test_nonprotein_label_context_remains_available_to_other_route_features() -> None:
+    from scoring_v4.route_features import extract_route_features
+
+    feature = extract_route_features(
+        {
+            "dsld_id": "F-prebiotic",
+            "fullName": "GOS",
+            "brand_name": "GNC Prebiotic",
+        },
+        [_row("prebiotics", 1370, "mg")],
+    )
+
+    assert feature["title_fiber_intent"] is True
+
+
 def test_route_feature_vector_exposes_typed_probiotic_intent() -> None:
     from scoring_v4.route_features import extract_route_features
 
@@ -196,7 +227,14 @@ def test_canonical_protein_intent_predicate_supports_requested_label_shapes() ->
         "Mass Gainer",
     ):
         assert has_protein_product_intent(title), title
-    assert not has_protein_product_intent("Keratin Hair Support")
+    for title in (
+        "Keratin Hair Support",
+        "Muscle Cramp/Tension Formula",
+        "Muscle Protein Synthesis",
+        "Iron Protein Plus 300 mg",
+        "Joint, Bone & Muscle",
+    ):
+        assert not has_protein_product_intent(title), title
 
 
 def test_shadow_report_reads_only_manifest_owned_enriched_rows(tmp_path: Path) -> None:

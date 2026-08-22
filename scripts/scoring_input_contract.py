@@ -56,7 +56,7 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
 }
 PRODUCT_EVIDENCE_ORIGINS = {"native_enrichment", "compatibility_derived"}
 SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.2.0"
-ROUTE_CLASSIFIER_VERSION = "1.1.0"
+ROUTE_CLASSIFIER_VERSION = "1.2.0"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
@@ -2688,6 +2688,7 @@ _ROUTE_EXPLICIT_MULTIVITAMIN_NAME_RE = re.compile(
 _ROUTE_B_EXPLICIT_MIN_VITAMINS = 3
 _ROUTE_B_EXPLICIT_MIN_FAMILY_SHARE = 0.615385
 _ROUTE_FIBER_MATERIAL_MIN_MASS_SHARE = 0.753769
+_ROUTE_PROTEIN_MATERIAL_MIN_MG = 20_000.0
 # A digestive-enzyme panel defines the product only when it is most of what the
 # label discloses. Reviewed against the observed corpus, genuine enzyme formulas
 # sit at 0.50-1.00 of disclosed identities (CompleteGest 13/13, Flatter Me 15/20,
@@ -2801,9 +2802,25 @@ def _route_observed_ingredient_rows(product: Dict[str, Any]) -> List[Dict[str, A
 
 def _route_feature_vector(product: Dict[str, Any]) -> Dict[str, Any]:
     """Return the shared pre-route facts used by production and shadow audits."""
+    rows = _route_scoring_rows(product)
+    generic_roles = classify_ingredient_roles(
+        product,
+        module="generic",
+        rows=rows,
+    )
+    role_classification = {
+        "ingredients": [
+            {
+                **role,
+                "row_ref": row.get("raw_source_path") or row.get("source"),
+            }
+            for row, role in zip(rows, generic_roles)
+        ]
+    }
     return extract_route_features(
         product or {},
-        _route_scoring_rows(product),
+        rows,
+        role_classification,
         observed_rows=_route_observed_ingredient_rows(product),
     )
 
@@ -3350,11 +3367,17 @@ def _route_has_collagen_primary_identity(product: Dict[str, Any], name_text: str
     return True
 
 
-def _route_is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
+def _route_is_sports_class(
+    product: Dict[str, Any],
+    name_text: str,
+    *,
+    features: Optional[Dict[str, Any]] = None,
+) -> bool:
     primary_type = _primary_type(product)
     sports_intent = primary_type == "pre_workout" or bool(_ROUTE_SPORTS_PREWORKOUT_RE.search(name_text or ""))
     if _route_has_collagen_primary_identity(product, name_text):
         return False
+    facts = features or _route_feature_vector(product)
     if _route_has_sports_primary_dose_evidence(product):
         return True
 
@@ -3377,8 +3400,13 @@ def _route_is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
 
     canonicals = _route_positive_canonicals(product)
     protein_identities = canonicals & set(ROUTE_FEATURE_PROTEIN_CANONICALS)
-    protein_intent = has_protein_product_intent(_route_product_label_text(product))
+    protein_intent = bool(facts.get("protein_title_intent"))
     has_protein_mass = _route_has_product_level_protein_mass(product)
+    if (
+        float(facts.get("row_level_protein_mass_mg") or 0.0)
+        >= _ROUTE_PROTEIN_MATERIAL_MIN_MG
+    ):
+        return True
     if protein_intent and (protein_identities or has_protein_mass or primary_type == "protein_powder"):
         return True
     if primary_type == "protein_powder" and (protein_identities or has_protein_mass):
@@ -3417,8 +3445,19 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
         if _route_is_prenatal_multi_intent(product, name_text):
             return "multi_or_prenatal", "prenatal_multi_intent", ["prenatal_title", "multi_panel_or_taxonomy"]
 
-    if _route_is_sports_class(product, name_text):
+    if _route_is_sports_class(product, name_text, features=features):
         return "sports", "profile_content:sports", ["sports_identity_or_dose"]
+
+    if (
+        features.get("protein_title_intent")
+        and float(features.get("protein_mass_mg") or 0.0) <= 0.0
+        and not _route_has_collagen_primary_identity(product, name_text)
+    ):
+        return (
+            "generic",
+            "protein_intent_evidence_missing",
+            ["protein_title_intent", "protein_identity_or_mass_missing"],
+        )
 
     if primary_type in _OMEGA_PRODUCT_TYPES and _route_is_omega_class(product, name_text):
         return "omega", "profile_content:omega", ["omega_evidence"]
@@ -3524,6 +3563,7 @@ def _route_fiber_digestive_decision(
     enzyme_defines_product = (
         enzyme_share is not None
         and float(enzyme_share) >= _ROUTE_DIGESTIVE_ENZYME_MIN_IDENTITY_SHARE
+        and int(facts.get("non_digestive_claim_prominent_count") or 0) == 0
     )
     if dedicated_enzyme_count and enzyme_defines_product:
         evidence = ["dedicated_digestive_enzyme_identity"]
@@ -4552,5 +4592,3 @@ def classify_ingredient_roles(
         rows = get_scoring_ingredients(product, strict=True).rows
     ctx = _role_context(product, module, rows)
     return [_classify_one(row, ctx) for row in rows]
-
-

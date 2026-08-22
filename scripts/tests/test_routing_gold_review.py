@@ -63,6 +63,62 @@ def test_gold_review_assigns_every_supported_change() -> None:
     assert report["changes"][0]["expected_route"] == "sports"
 
 
+def test_gold_review_accepts_reviewed_row_level_protein_boundary() -> None:
+    from audits.routing_gold_review import build_gold_review
+
+    baseline = _finish_report([
+        {"dsld_id": "P1", "recomputed_route": "multi_or_prenatal"},
+    ])
+    candidate = _finish_report([
+        {
+            "dsld_id": "P1",
+            "product_name": "Reviewed Protein Shake",
+            "recomputed_route": "sports",
+            "route_reason": "profile_content:sports",
+            "protein_title_intent": False,
+            "protein_mass_mg": 25_000,
+            "row_level_protein_mass_mg": 20_000,
+        },
+    ])
+    lock = _lock(baseline, candidate, "multi_or_prenatal->sports")
+    lock["threshold_reviews"] = {
+        "material_row_level_protein_mg": {"selected_threshold": 20_000.0}
+    }
+
+    report = build_gold_review(baseline, candidate, lock)
+
+    assert report["changes"][0]["review_group"] == (
+        "material_row_level_protein"
+    )
+
+
+def test_gold_review_rejects_blend_mass_as_material_protein_boundary() -> None:
+    from audits.routing_gold_review import RoutingGoldReviewError
+    from audits.routing_gold_review import build_gold_review
+
+    baseline = _finish_report([
+        {"dsld_id": "P1", "recomputed_route": "multi_or_prenatal"},
+    ])
+    candidate = _finish_report([
+        {
+            "dsld_id": "P1",
+            "product_name": "Daily Multi Shake",
+            "recomputed_route": "sports",
+            "route_reason": "profile_content:sports",
+            "protein_title_intent": False,
+            "protein_mass_mg": 25_000,
+            "row_level_protein_mass_mg": 0,
+        },
+    ])
+    lock = _lock(baseline, candidate, "multi_or_prenatal->sports")
+    lock["threshold_reviews"] = {
+        "material_row_level_protein_mg": {"selected_threshold": 20_000.0}
+    }
+
+    with pytest.raises(RoutingGoldReviewError, match="protein intent or row-level mass"):
+        build_gold_review(baseline, candidate, lock)
+
+
 def test_gold_review_accepts_typed_digestive_enzyme_context() -> None:
     from audits.routing_gold_review import build_gold_review
 
@@ -87,6 +143,36 @@ def test_gold_review_accepts_typed_digestive_enzyme_context() -> None:
 
     assert report["changes"][0]["review_group"] == (
         "fiber_digestive:digestive_enzyme_context"
+    )
+
+
+def test_gold_review_requires_explicit_review_for_unresolved_protein_intent() -> None:
+    from audits.routing_gold_review import RoutingGoldReviewError
+    from audits.routing_gold_review import build_gold_review
+
+    baseline = _finish_report([
+        {"dsld_id": "P1", "recomputed_route": "fiber_digestive"},
+    ])
+    candidate = _finish_report([
+        {
+            "dsld_id": "P1",
+            "product_name": "Keto Protein",
+            "recomputed_route": "generic",
+            "route_reason": "protein_intent_evidence_missing",
+            "title_fiber_intent": False,
+            "title_digestive_intent": False,
+            "declared_fiber_blend_intent": False,
+        },
+    ])
+    lock = _lock(baseline, candidate, "fiber_digestive->generic")
+
+    with pytest.raises(RoutingGoldReviewError, match="explicit quarantine review"):
+        build_gold_review(baseline, candidate, lock)
+
+    lock["manual_quarantine_reviews"] = ["P1"]
+    report = build_gold_review(baseline, candidate, lock)
+    assert report["changes"][0]["review_group"] == (
+        "quarantine_unresolved_protein_intent"
     )
 
 

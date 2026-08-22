@@ -495,6 +495,72 @@ def test_one_protein_intent_predicate_routes_supported_title_shapes(title: str) 
     assert _classification(product)["route_module"] == "sports"
 
 
+def test_reviewed_material_protein_boundary_routes_a_powder_without_title_tokens() -> None:
+    """A 20 g disclosed protein total defines the product on this corpus.
+
+    This is the lowest observed boundary with zero reviewed false-positive
+    protein routes after excluding collagen products. Lower candidates include
+    brewer's yeast and collagen powders that require different modules.
+    """
+    product = _product(
+        "So Lean & So Clean Chocolate",
+        [],
+        evidence=[
+            _evidence(
+                "protein",
+                20,
+                "g",
+                name="Protein",
+                evidence_scope="row_level",
+            )
+        ],
+    )
+
+    assert _classification(product)["route_module"] == "sports"
+
+
+def test_sub_boundary_protein_total_without_intent_stays_generic() -> None:
+    product = _product(
+        "Brewer's Yeast Powder",
+        [],
+        evidence=[
+            _evidence(
+                "protein",
+                18,
+                "g",
+                name="Protein",
+                evidence_scope="row_level",
+            )
+        ],
+    )
+
+    assert _classification(product)["route_module"] == "generic"
+
+
+def test_bare_isolate_title_with_material_protein_routes_sports() -> None:
+    product = _product(
+        "Pure Isolate Chocolate Frosting",
+        [],
+        evidence=[_evidence("protein", 25, "g", name="Protein")],
+    )
+
+    assert _classification(product)["route_module"] == "sports"
+
+
+def test_explicit_protein_title_without_identity_is_an_unresolved_route() -> None:
+    product = _product(
+        "Keto Protein Chocolate",
+        [_row("calcium", 200, "mg")],
+        primary_type="single_mineral",
+    )
+
+    decision = _classification(product)
+
+    assert decision["route_module"] == "generic"
+    assert decision["route_reason"] == "protein_intent_evidence_missing"
+    assert "protein_identity_or_mass_missing" in decision["route_evidence"]
+
+
 def test_route_decision_is_single_structured_classifier_result() -> None:
     decision = _classification(
         _product("Vitamin C 500 mg", [_row("vitamin_c", 500, "mg")])
@@ -504,7 +570,7 @@ def test_route_decision_is_single_structured_classifier_result() -> None:
         "module": decision["route_module"],
         "reason_codes": decision["route_evidence"],
         "confidence": decision["route_confidence"],
-        "classifier_version": "1.1.0",
+        "classifier_version": "1.2.0",
     }
 
 
@@ -545,6 +611,36 @@ def test_enzyme_dominant_panel_still_routes_digestive() -> None:
 
     assert decision["route_module"] == "fiber_digestive"
     assert decision["route_reason"] == "digestive_enzyme_context"
+
+
+def test_many_adjunct_enzymes_do_not_override_a_claim_prominent_botanical() -> None:
+    """Identity-row breadth is not product intent or materiality.
+
+    Milk Thistle Sport carries a many-child enzyme blend, but milk thistle is
+    the claim-prominent active and every individual enzyme is an adjunct. Row
+    count alone must not hand the product to the digestive scoring module.
+    """
+    rows = [_row("milk_thistle", 200, "mg")]
+    rows.extend(
+        _row(
+            "digestive_enzymes",
+            1,
+            "mg",
+            category="enzymes",
+            raw_source_path=f"ingredientRows[1].nestedRows[{index}]",
+        )
+        for index in range(10)
+    )
+    product = _product(
+        "Milk Thistle Sport",
+        rows,
+        primary_type="herbal_botanical",
+    )
+
+    decision = _classification(product)
+
+    assert decision["route_module"] == "generic"
+    assert decision["route_reason"] == "taxonomy:herbal_botanical"
 
 
 def test_enzyme_activity_projections_count_toward_digestive_dominance() -> None:

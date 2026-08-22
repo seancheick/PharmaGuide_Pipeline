@@ -3,13 +3,14 @@
 
 An allowlist entry that no vocabulary defines can never match a row, so the
 policy it encodes is silently inert -- it reads as active review and behaves as
-a no-op. That failure mode has shipped more than once: ``negative_match_terms``
-were validated for shape but never applied at match time, and
-``DRI_ESSENTIAL_NUTRIENTS`` carried ``vitamin_b5_pantothenic_acid`` while every
-label row canonicalises to ``vitamin_b5_pantothenic``.
+a no-op. That happened when ``DRI_ESSENTIAL_NUTRIENTS`` carried
+``vitamin_b5_pantothenic_acid`` while every label row canonicalised to
+``vitamin_b5_pantothenic``.
 
-The vocabulary sources here are the same files the production resolvers read,
-so this gate cannot drift from what the pipeline can actually emit.
+The governed lists below are canonical-id equality policies, not permissive
+label-alias matchers. Their vocabulary sources are the same files the
+production resolvers read, so these exact-id policies cannot drift from what
+the pipeline can actually emit.
 """
 
 from __future__ import annotations
@@ -85,9 +86,6 @@ GOVERNED_ALLOWLISTS: Dict[str, FrozenSet[str]] = {
     ),
     "sports_helpers.SPORTS_PROTEIN_CANONICALS": frozenset(sh.SPORTS_PROTEIN_CANONICALS),
     "sports_helpers.EAA_CANONICALS": frozenset(sh.EAA_CANONICALS),
-    "route_features.AGGREGATE_IDENTITY_CANONICALS": frozenset(
-        rf.AGGREGATE_IDENTITY_CANONICALS
-    ),
 }
 
 

@@ -206,6 +206,7 @@ def test_enforced_readiness_owns_material_dose_completeness() -> None:
     )
     readiness = {
         "enforcement_mode": "enforced",
+        "enforced_dimensions": ["dose", "identity", "route", "verification"],
         **{
             name: {"readiness": "complete"}
             for name in ("identity", "dose", "evidence", "verification", "route")
@@ -220,6 +221,32 @@ def test_enforced_readiness_owns_material_dose_completeness() -> None:
 
     assert result.is_live_eligible is True
     assert "dose_assessment_readiness" not in result.missing_fields
+
+
+def test_enforced_readiness_cannot_omit_a_canonical_dimension() -> None:
+    """An artifact-provided dimension list must not weaken the release gate."""
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    readiness = {
+        "enforcement_mode": "enforced",
+        "enforced_dimensions": ["identity", "route", "verification"],
+        "identity": {"readiness": "complete"},
+        "dose": {"readiness": "incomplete"},
+        "evidence": {"readiness": "incomplete"},
+        "verification": {"readiness": "complete"},
+        "route": {"readiness": "complete"},
+    }
+
+    result = evaluate_completeness_gate(
+        _product(),
+        module="generic",
+        assessment_readiness=readiness,
+    )
+
+    assert result.is_live_eligible is False
+    assert "assessment_readiness_enforced_dimensions" in result.missing_fields
+    assert "dose_assessment_readiness" in result.missing_fields
+    assert "evidence_assessment_readiness" not in result.missing_fields
 
 
 def test_explicit_discontinued_status_is_soft_debt() -> None:

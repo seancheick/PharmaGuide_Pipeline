@@ -173,7 +173,7 @@ def test_scored_artifact_exports_the_canonical_route_decision() -> None:
             "module": "generic",
             "reason_codes": ["single_mineral", "scoring_rows_present"],
             "confidence": "high",
-            "classifier_version": "1.1.0",
+            "classifier_version": "1.2.0",
         },
     }
 

@@ -421,24 +421,64 @@ def test_schema_2x_input_measures_readiness_without_changing_score_status() -> N
     assert result["quality_score_status"] == "scored"
 
 
-def test_module_aggregate_identity_carries_no_individual_evidence_question() -> None:
-    """A protein total is answered by the module, not by a per-ingredient record.
-
-    `protein` denotes "how much protein does this product declare", so demanding
-    a clinical record for it is a category error: no such record exists or could.
-    """
+def test_real_label_aggregate_identity_keeps_its_individual_evidence_question() -> None:
+    """Canonical vocabulary alone cannot turn a source label row synthetic."""
     from assessment_readiness import evaluate_assessment_readiness
 
-    row = _row("Protein", "protein", quantity=25.0, unit="g")
-    result = evaluate_assessment_readiness(_product(row), module="sports")
+    row = _row("Fiber", "fiber", quantity=25.0)
+    result = evaluate_assessment_readiness(_product(row), module="fiber_digestive")
 
     evidence = result["evidence"]
     assessment = evidence["ingredient_assessments"][0]
+    assert assessment["scoring_input_kind"] != "product_level_evidence"
+    assert assessment["evidence_applicability"] == "individual_ingredient"
+    assert assessment["state"] == "not_yet_evaluated"
+    assert assessment["reason_code"] == "no_reviewed_evidence_assessment"
+    assert evidence["not_yet_evaluated_count"] == 1
+    assert evidence["readiness"] == "incomplete"
+
+
+def test_product_level_projection_carries_no_individual_evidence_question() -> None:
+    """Pipeline projections are module-owned regardless of canonical identity."""
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Quercetin Blend Total", "quercetin")
+    product = _product(row)
+    product["ingredient_quality_data"] = {
+        "ingredients_scorable": [],
+        "ingredients": [],
+        "total_active": 0,
+    }
+    product["product_scoring_evidence"] = [
+        {
+            **row,
+            "scoreable": True,
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_type": "blend_anchor_mass",
+            "evidence_scope": "blend_level",
+            "source": "blend_total",
+            "source_section": "product",
+            "dose_value": row["quantity"],
+            "dose_unit": row["unit"],
+            "linked_rows": [row["source_row_ref"]],
+            "confidence": "high",
+            "reason": "identity_bearing_blend_total",
+            "clean_identity_id": "quercetin",
+            "scoring_parent_id": "quercetin",
+            "evidence_canonical_id": "quercetin",
+            "canonical_source_db": "ingredient_quality_map",
+            "evidence_origin": "native_enrichment",
+        }
+    ]
+
+    evidence = evaluate_assessment_readiness(product, module="generic")["evidence"]
+
+    assessment = evidence["ingredient_assessments"][0]
+    assert assessment["scoring_input_kind"] == "product_level_evidence"
     assert assessment["evidence_applicability"] == "module_aggregate"
     assert assessment["state"] == "not_applicable"
-    assert assessment["reason_code"] == "module_scoped_dose_projection"
+    assert assessment["reason_code"] == "module_scoped_product_projection"
     assert evidence["not_yet_evaluated_count"] == 0
-    # Assessed, not inapplicable: the module owns the answer.
     assert evidence["readiness"] == "complete"
 
 
@@ -510,9 +550,13 @@ def test_evidence_is_measured_but_does_not_gate_live_eligibility() -> None:
     assert result["enforced_dimensions"] == sorted(ENFORCED_READINESS_DIMENSIONS)
 
 
-def test_aggregate_identities_are_not_also_authority_nutrients() -> None:
-    """The two carve-outs must stay disjoint or branch order would decide."""
-    from scoring_v4.modules.generic_evidence import DRI_ESSENTIAL_NUTRIENTS
-    from scoring_v4.route_features import AGGREGATE_IDENTITY_CANONICALS
+def test_unresolved_protein_product_intent_blocks_route_readiness() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
 
-    assert not (set(AGGREGATE_IDENTITY_CANONICALS) & set(DRI_ESSENTIAL_NUTRIENTS))
+    row = _row("Calcium", "calcium", quantity=200.0)
+    product = _product(row, title="Keto Protein Chocolate")
+    result = evaluate_assessment_readiness(product, module="generic")
+
+    assert result["route"]["readiness"] == "incomplete"
+    assert "protein_identity_or_mass_missing" in result["route"]["reason_codes"]
+    assert "route_assessment_readiness" in result["unavailable_reasons"]

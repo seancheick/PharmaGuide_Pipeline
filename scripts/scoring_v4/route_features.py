@@ -13,7 +13,7 @@ import re
 from typing import Any, Iterable, Mapping, Sequence
 
 
-ROUTE_FEATURE_SCHEMA_VERSION = "1.1.0"
+ROUTE_FEATURE_SCHEMA_VERSION = "1.2.0"
 
 B_VITAMIN_CANONICALS = frozenset({
     "vitamin_b1_thiamine",
@@ -24,25 +24,6 @@ B_VITAMIN_CANONICALS = frozenset({
     "vitamin_b7_biotin",
     "vitamin_b9_folate",
     "vitamin_b12_cobalamin",
-})
-
-# Identities that denote a product-level total rather than a substance. A label
-# row carrying one of these answers "how much protein / fiber / enzyme activity
-# does the product declare", not "which ingredient is this". The owning module
-# assesses them -- the sports archetype for protein, the fiber dose bands for
-# fiber, strain review for CFU -- so no per-ingredient clinical record exists or
-# is required for them.
-#
-# Keyed on identity, not on how the dose reached the row: `protein` arrives both
-# as a sports_primary_dose projection and as a blend_anchor_mass projection, and
-# it denotes the same total either way.
-AGGREGATE_IDENTITY_CANONICALS = frozenset({
-    "protein",
-    "fiber",
-    "digestive_enzymes",
-    "branched_chain_amino_acids",
-    "probiotic_cfu_total",
-    "epa_dha",
 })
 
 BCAA_CANONICALS = frozenset({"l_leucine", "l_isoleucine", "l_valine"})
@@ -175,7 +156,8 @@ _DIGESTIVE_TITLE_RE = re.compile(
     r"\b(digestive|digestion|digest|gut\s+health|enzymes|multi[\s-]*enzyme|"
     r"enzyme\s+(?:blend|formula)|pancrea\w*\s+enzymes?|vegenzymes?|"
     r"papaya\s+enzyme|lactase|pepsin|betaine\s+hcl|dairy\s+(?:relief|defense|digestant)|"
-    r"beanaid|megazymes?|acid[\s-]+(?:defense|ease)|heartburn|enzyme\s+digestion)\b",
+    r"beanaid|megazymes?|acid[\s-]+(?:defense|ease)|heartburn|enzyme\s+digestion|"
+    r"enzyme\s*\d+|break\s+it\s+down)\b",
     re.IGNORECASE,
 )
 _EXPLICIT_DIGESTIVE_CONTEXT_RE = re.compile(
@@ -202,8 +184,13 @@ _MULTIMINERAL_TITLE_RE = re.compile(r"\bmulti[\s-]*mineral\b", re.IGNORECASE)
 _PROTEIN_TITLE_RE = re.compile(
     r"\b(?:"
     r"protein|whey|casein|"
-    r"mass[\s-]*gainer|weight[\s-]*gainer|gainer|mass|muscle"
+    r"(?:pure|plant|soy|pea|rice|whey)[\s-]+isolate|wheybolic|"
+    r"mass[\s-]*gainer|weight[\s-]*gainer|gainer"
     r")\b",
+    re.IGNORECASE,
+)
+_NON_PRODUCT_PROTEIN_TITLE_RE = re.compile(
+    r"\b(?:iron\s+protein|protein\s+synthesis)\b",
     re.IGNORECASE,
 )
 _PROBIOTIC_LABEL_RE = re.compile(
@@ -233,6 +220,7 @@ def normalize_identity(value: Any) -> str:
 
 
 def product_label_text(product: Mapping[str, Any]) -> str:
+    """Return all label-owned naming context used by non-protein predicates."""
     return " ".join(
         str(product.get(field) or "")
         for field in (
@@ -246,6 +234,14 @@ def product_label_text(product: Mapping[str, Any]) -> str:
     ).strip()
 
 
+def product_title_text(product: Mapping[str, Any]) -> str:
+    """Return the product title without brand-family or bundle marketing copy."""
+    return " ".join(
+        str(product.get(field) or "")
+        for field in ("product_name", "fullName", "name")
+    ).strip()
+
+
 def has_protein_product_intent(title: Any) -> bool:
     """Return whether product-title text explicitly markets protein/sports mass.
 
@@ -255,7 +251,11 @@ def has_protein_product_intent(title: Any) -> bool:
     protein identity or product-level mass; title text alone never selects a
     specialized route.
     """
-    return bool(_PROTEIN_TITLE_RE.search(str(title or "")))
+    text = str(title or "")
+    return bool(
+        _PROTEIN_TITLE_RE.search(text)
+        and not _NON_PRODUCT_PROTEIN_TITLE_RE.search(text)
+    )
 
 
 def positive_number(row: Mapping[str, Any]) -> float | None:
@@ -523,6 +523,11 @@ def extract_route_features(
         row for row in product_level_rows
         if row_canonical(row) in PROTEIN_CANONICALS
     ]
+    row_level_product_protein_rows = [
+        row
+        for row in product_level_protein_rows
+        if normalize_identity(row.get("evidence_scope")) == "row_level"
+    ]
     product_level_digestive_enzyme_rows = [
         row for row in product_level_rows
         if row_canonical(row) in DIGESTIVE_ENZYME_CANONICALS
@@ -533,6 +538,12 @@ def extract_route_features(
     digestive_enzyme_identity_rows = (
         digestive_enzyme_rows + product_level_digestive_enzyme_rows
     )
+    non_digestive_claim_rows = [
+        row
+        for row in positive_rows
+        if row not in digestive_enzyme_identity_rows
+        and _row_role(row, by_ref, by_canonical) in _PRIMARY_ROLES
+    ]
 
     observed_fiber_rows = [
         row for row in observed_row_list
@@ -578,6 +589,13 @@ def extract_route_features(
         if row_canonical(row) in PROTEIN_CANONICALS
     ]
     protein_mass = max((mass for mass in protein_mass_candidates if mass is not None), default=0.0)
+    row_level_protein_mass = max(
+        (
+            comparable_mass_mg(row) or 0.0
+            for row in row_level_product_protein_rows
+        ),
+        default=0.0,
+    )
 
     fiber_roles = {
         _row_role(row, by_ref, by_canonical)
@@ -649,6 +667,7 @@ def extract_route_features(
         "systemic_enzyme_row_count": len(systemic_enzyme_rows),
         "systemic_enzyme_only": bool(systemic_enzyme_rows and not digestive_enzyme_rows),
         "digestive_enzyme_identity_count": len(digestive_enzyme_identity_rows),
+        "non_digestive_claim_prominent_count": len(non_digestive_claim_rows),
         "digestive_enzyme_identity_share": (
             _rounded(len(digestive_enzyme_identity_rows) / len(positive_rows))
             if positive_rows and digestive_enzyme_identity_rows
@@ -680,8 +699,9 @@ def extract_route_features(
         "protein_canonical_ids": sorted({row_canonical(row) for row in protein_rows}),
         "protein_row_count": len(protein_rows),
         "protein_mass_mg": _rounded(protein_mass),
+        "row_level_protein_mass_mg": _rounded(row_level_protein_mass),
         "product_level_protein_row_count": len(product_level_protein_rows),
-        "protein_title_intent": has_protein_product_intent(label_text),
+        "protein_title_intent": has_protein_product_intent(product_title_text(product)),
         "protein_primary_role": bool(protein_roles & _PRIMARY_ROLES),
         "protein_material_role": bool(protein_roles & _MATERIAL_ROLES),
         **probiotic_features,

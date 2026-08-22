@@ -91,13 +91,29 @@ def _review_group(
         )
 
     if new_route == "sports":
-        if not feature.get("protein_title_intent") or float(
-            feature.get("protein_mass_mg") or 0.0
-        ) <= 0:
-            raise RoutingGoldReviewError(
-                f"{dsld_id}: sports promotion lacks reviewed protein intent and mass"
+        protein_mass = float(feature.get("protein_mass_mg") or 0.0)
+        if feature.get("protein_title_intent") and protein_mass > 0:
+            return "protein_intent_and_mass", "Explicit protein/mass-gainer intent with disclosed protein mass."
+        threshold_review = (
+            (lock.get("threshold_reviews") or {}).get(
+                "material_row_level_protein_mg"
             )
-        return "protein_intent_and_mass", "Explicit protein/mass-gainer intent with disclosed protein mass."
+            or {}
+        )
+        selected_threshold = float(
+            threshold_review.get("selected_threshold") or 0.0
+        )
+        row_level_mass = float(
+            feature.get("row_level_protein_mass_mg") or 0.0
+        )
+        if selected_threshold > 0 and row_level_mass >= selected_threshold:
+            return (
+                "material_row_level_protein",
+                "Reviewed material Protein declaration at the zero-false-positive corpus boundary.",
+            )
+        raise RoutingGoldReviewError(
+            f"{dsld_id}: sports promotion lacks reviewed protein intent or row-level mass"
+        )
 
     if new_route == "b_complex":
         if (
@@ -124,6 +140,19 @@ def _review_group(
                 f"{dsld_id}: fiber/digestive promotion lacks its reviewed intent fact ({reason})"
             )
         return f"fiber_digestive:{reason}", "Explicit label intent, declared blend intent, or reviewed material fiber boundary."
+
+    if new_route == "generic" and reason == "protein_intent_evidence_missing":
+        reviewed = {
+            str(value) for value in lock.get("manual_quarantine_reviews") or []
+        }
+        if dsld_id not in reviewed:
+            raise RoutingGoldReviewError(
+                f"{dsld_id}: unresolved protein intent lacks an explicit quarantine review"
+            )
+        return (
+            "quarantine_unresolved_protein_intent",
+            "Explicit protein or mass-gainer intent has no supporting identity or dose and is quarantined.",
+        )
 
     if new_route == "generic" and old_route == "fiber_digestive":
         if (

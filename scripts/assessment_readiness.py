@@ -26,7 +26,6 @@ from scoring_v4.modules.generic_evidence import (
     DRI_ESSENTIAL_NUTRIENTS,
     resolved_clinical_matches,
 )
-from scoring_v4.route_features import AGGREGATE_IDENTITY_CANONICALS
 
 
 ASSESSMENT_READINESS_SCHEMA_VERSION = "1.0.0"
@@ -52,6 +51,16 @@ ENFORCED_READINESS_DIMENSIONS = frozenset({
     "verification",
     "route",
 })
+
+
+def has_canonical_enforced_dimensions(value: Any) -> bool:
+    """Return whether an artifact declares the exact release-gating contract."""
+    return (
+        isinstance(value, list)
+        and len(value) == len(ENFORCED_READINESS_DIMENSIONS)
+        and all(isinstance(name, str) for name in value)
+        and frozenset(value) == ENFORCED_READINESS_DIMENSIONS
+    )
 
 EVIDENCE_EVALUATED_SUPPORTED = "evaluated_supported"
 EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE = "evaluated_limited_or_negative"
@@ -90,6 +99,9 @@ _NONHUMAN_STUDY_TYPES = frozenset({
     "reference",
     "animal_study",
     "in_vitro",
+})
+_ROUTE_INCOMPLETE_REASON_CODES = frozenset({
+    "protein_identity_or_mass_missing",
 })
 
 
@@ -243,10 +255,10 @@ def evaluate_evidence_assessment(
             applicability = EVIDENCE_APPLICABILITY_NOT_APPLICABLE
             state = EVIDENCE_NOT_APPLICABLE
             reason = "non_material_active"
-        elif canonical_id in AGGREGATE_IDENTITY_CANONICALS:
+        elif row.get("scoring_input_kind") == "product_level_evidence":
             applicability = EVIDENCE_APPLICABILITY_MODULE_AGGREGATE
             state = EVIDENCE_NOT_APPLICABLE
-            reason = "module_scoped_dose_projection"
+            reason = "module_scoped_product_projection"
         elif canonical_id in DRI_ESSENTIAL_NUTRIENTS:
             applicability = EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY
             state = EVIDENCE_EVALUATED_SUPPORTED
@@ -622,11 +634,16 @@ def _route_readiness(product: Mapping[str, Any], module: str) -> Dict[str, Any]:
     )
     decision = _safe_dict(classification.get("route_decision"))
     resolved_module = str(decision.get("module") or classification.get("route_module") or module)
-    complete = resolved_module in _VALID_MODULES and resolved_module == module
+    reason_codes = list(decision.get("reason_codes") or [])
+    complete = (
+        resolved_module in _VALID_MODULES
+        and resolved_module == module
+        and not (_ROUTE_INCOMPLETE_REASON_CODES & set(reason_codes))
+    )
     return {
         "readiness": READINESS_COMPLETE if complete else READINESS_INCOMPLETE,
         "module": resolved_module or None,
-        "reason_codes": list(decision.get("reason_codes") or []),
+        "reason_codes": reason_codes,
         "route_confidence": decision.get("confidence") or classification.get("route_confidence"),
         "classifier_version": decision.get("classifier_version"),
     }

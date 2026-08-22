@@ -32,6 +32,7 @@ def _write(path: Path, product: dict) -> None:
 def _scored(**overrides) -> dict:
     assessment_readiness = {
         "enforcement_mode": "enforced",
+        "enforced_dimensions": ["dose", "identity", "route", "verification"],
         "is_live_ready": True,
         "unavailable_reasons": [],
         "identity": {"readiness": "complete", "migration_inference": False},
@@ -187,6 +188,24 @@ def test_scoring_audit_rejects_shadow_mode_readiness(tmp_path: Path) -> None:
 
     codes = {finding.code for finding in audit_scoring(_args(path))}
     assert "SCORING_ASSESSMENT_READINESS_NOT_ENFORCED" in codes
+
+
+def test_scoring_audit_rejects_a_self_weakened_dimension_contract(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "scored.json"
+    product = _scored()
+    product["assessment_readiness"]["enforced_dimensions"] = [
+        "identity",
+        "route",
+        "verification",
+    ]
+    product["assessment_readiness"]["dose"]["readiness"] = "incomplete"
+    _write(path, product)
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_ASSESSMENT_ENFORCED_DIMENSIONS_MISMATCH" in codes
+    assert "SCORING_ASSESSMENT_DIMENSION_INCOMPLETE" in codes
 
 
 def test_scoring_audit_rejects_unresolved_dose_on_safety_suppressed_product(
