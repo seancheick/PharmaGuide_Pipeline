@@ -1843,10 +1843,36 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         issues.append("review_queue: SAFE verdict is forbidden below mapped_coverage 0.3.")
 
     if verdict == "NOT_SCORED":
+        unavailable_reason = safe_str(
+            scored.get("score_unavailable_reason")
+            or scored.get("_v4_score_unavailable_reason")
+            or scored.get("not_scorable_reason")
+        ).strip() or "unspecified"
+        readiness_value = scored.get("assessment_readiness")
+        if not isinstance(readiness_value, dict):
+            readiness_value = scored.get("_v4_assessment_readiness")
+        incomplete_dimensions: List[str] = []
+        if isinstance(readiness_value, dict):
+            for dimension_value in safe_list(
+                readiness_value.get("enforced_dimensions")
+            ):
+                dimension = safe_str(dimension_value).strip()
+                if not dimension:
+                    continue
+                readiness = safe_str(
+                    safe_dict(readiness_value.get(dimension)).get("readiness")
+                ).strip()
+                if readiness not in {"complete", "not_applicable"}:
+                    incomplete_dimensions.append(dimension)
+        review_details = [f"reason={unavailable_reason}"]
+        if incomplete_dimensions:
+            review_details.append(
+                "incomplete_dimensions=" + ",".join(incomplete_dimensions)
+            )
         issues.append(
-            "review_queue: NOT_SCORED verdict — mapping/dosage gate "
-            "failed upstream; product cannot ship without a coherent "
-            "score (Batch 3 data integrity gate)."
+            "review_queue: NOT_SCORED verdict ("
+            + "; ".join(review_details)
+            + ") — product excluded from the live catalog pending remediation."
         )
     elif verdict == "NUTRITION_ONLY":
         issues.append(

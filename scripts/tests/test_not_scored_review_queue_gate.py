@@ -38,6 +38,37 @@ def test_validate_export_contract_rejects_not_scored():
     )
 
 
+def test_not_scored_review_record_names_reason_and_incomplete_dimensions():
+    enriched = {"dsld_id": "TEST-ROUTE", "product_name": "Claimed Protein"}
+    scored = {
+        "verdict": "NOT_SCORED",
+        "score_unavailable_reason": "blocked_by_completeness_gate",
+        "assessment_readiness": {
+            "enforcement_mode": "enforced",
+            "identity": {"readiness": "complete"},
+            "dose": {"readiness": "complete"},
+            "evidence": {"readiness": "incomplete"},
+            "verification": {"readiness": "complete"},
+            "route": {"readiness": "incomplete"},
+            "enforced_dimensions": [
+                "identity",
+                "dose",
+                "verification",
+                "route",
+            ],
+        },
+        "section_scores": {},
+        "scoring_metadata": {},
+    }
+
+    issues = validate_export_contract(enriched, scored)
+
+    review_record = next(issue for issue in issues if "NOT_SCORED" in issue)
+    assert "reason=blocked_by_completeness_gate" in review_record
+    assert "incomplete_dimensions=route" in review_record
+    assert "evidence" not in review_record
+
+
 def test_defensive_sweep_removes_not_scored():
     """The end-of-build defensive sweep cleans any stale NOT_SCORED rows
     from products_core. This guards against pre-gate builds and against
