@@ -1732,27 +1732,6 @@ def _has_identity(row: Dict[str, Any]) -> bool:
     )
 
 
-def _has_dose_evidence(row: Dict[str, Any]) -> bool:
-    dose_class = _norm(row.get("dose_class"))
-    if dose_class in VALID_NON_MASS_DOSE_CLASSES:
-        return True
-    if row.get("has_dose") is True:
-        return True
-    quantity = _as_float(
-        row.get("quantity", row.get("amount", row.get("dose", row.get("dosage")))),
-        None,
-    )
-    if quantity is None or quantity <= 0:
-        return False
-    unit = _norm(
-        row.get("unit")
-        or row.get("unit_normalized")
-        or row.get("normalized_unit")
-        or row.get("dose_unit")
-    )
-    return unit not in {"", "np", "n/a", "na", "none", "0"}
-
-
 def _missing_product_evidence_fields(item: Dict[str, Any]) -> List[str]:
     missing = [
         field_name
@@ -2430,46 +2409,6 @@ def get_classification_ingredients(product: Dict[str, Any]) -> ClassificationInp
         source="activeIngredients",
         input_contract="raw_label_actives",
         scoring_contract_findings=list(scoring.contract_findings),
-    )
-
-
-def is_nutrition_only_product(product: Dict[str, Any], *, allow_legacy_keyword_fallback: bool = False) -> bool:
-    """Return True only for explicit enrichment/taxonomy nutrition-only facts.
-
-    Keyword fallback is retained for old batches when callers explicitly opt in.
-    """
-    product = product or {}
-    for value in (
-        product.get("product_scoring_class"),
-        _safe_dict(product.get("supplement_taxonomy")).get("product_scoring_class"),
-        _safe_dict(product.get("scoring_contract")).get("product_scoring_class"),
-    ):
-        if _norm(value) == "nutrition_only":
-            return True
-
-    if not allow_legacy_keyword_fallback:
-        return False
-
-    name = _norm(product.get("product_name") or product.get("fullName"))
-    return any(
-        keyword in name
-        for keyword in (
-            "whey",
-            "casein",
-            "pea protein",
-            "soy protein",
-            "rice protein",
-            "hemp protein",
-            "plant protein",
-            "plant-based protein",
-            "protein powder",
-            "protein shake",
-            "protein blend",
-            "meal replacement",
-            "mass gainer",
-            "weight gainer",
-            "smoothie mix",
-        )
     )
 
 
@@ -3603,10 +3542,6 @@ def _route_fiber_digestive_decision(
     return False, "fiber_digestive_intent_missing", ["no_material_fiber_or_digestive_intent"]
 
 
-def _route_is_fiber_digestive_class(product: Dict[str, Any], name_text: str) -> bool:
-    return _route_fiber_digestive_decision(product, name_text)[0]
-
-
 def _classification_identity(row: Dict[str, Any]) -> str:
     return _slug(row.get("canonical_id") or row.get("evidence_canonical_id") or row.get("name"))
 
@@ -4619,22 +4554,3 @@ def classify_ingredient_roles(
     return [_classify_one(row, ctx) for row in rows]
 
 
-def classify_ingredient_role(
-    product: Dict[str, Any],
-    row: Dict[str, Any],
-    *,
-    module: Optional[str] = None,
-) -> Dict[str, Any]:
-    """Classify a single scoring ``row`` within ``product``.
-
-    Convenience wrapper around :func:`classify_ingredient_roles`; builds the
-    same product-level context (module, title, mass denominator).
-
-    NOTE: this rebuilds the full contract + context on every call. For batch
-    use (e.g. classifying every row of a product) call
-    :func:`classify_ingredient_roles` once instead — looping this is O(n^2). (WR-04)
-    """
-    product = product or {}
-    rows = get_scoring_ingredients(product, strict=True).rows
-    ctx = _role_context(product, module, rows)
-    return _classify_one(row, ctx)

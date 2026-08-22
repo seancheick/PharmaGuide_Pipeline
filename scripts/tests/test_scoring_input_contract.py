@@ -18,7 +18,6 @@ from scoring_input_contract import (  # noqa: E402
     build_scoring_classification,
     derive_product_scoring_evidence,
     get_scoring_ingredients,
-    is_nutrition_only_product,
     scoring_input_scope,
 )
 
@@ -1065,15 +1064,6 @@ def test_unmapped_blend_anchor_mass_does_not_get_iqm_form_quality_credit():
     assert row["canonical_id"] == "relora_patented_proprietary_blend"
     assert row.get("bio_score") is None
     assert row["generic_form_quality_credit"] is False
-
-
-def test_nutrition_only_uses_explicit_contract_not_keywords_by_default():
-    assert is_nutrition_only_product({"product_name": "Whey Protein Powder"}) is False
-    assert is_nutrition_only_product({"product_scoring_class": "nutrition_only"}) is True
-    assert is_nutrition_only_product(
-        {"product_name": "Whey Protein Powder"},
-        allow_legacy_keyword_fallback=True,
-    ) is True
 
 
 # --- Task 3: strict scoring-input identity disposition guard ---

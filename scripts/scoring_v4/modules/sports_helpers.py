@@ -102,7 +102,6 @@ STIMULANT_CANONICALS = CAFFEINE_CANONICALS | frozenset(
         "guarana",
     }
 )
-ELECTROLYTE_CANONICALS = frozenset({"sodium", "potassium", "magnesium", "calcium", "chloride"})
 PRE_WORKOUT_GOAL_CLUSTERS = frozenset(
     {"pre_workout_energy", "pre_post_workout", "muscle_building_recovery"}
 )
