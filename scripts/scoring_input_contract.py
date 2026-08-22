@@ -2730,6 +2730,12 @@ _ROUTE_EXPLICIT_MULTIVITAMIN_NAME_RE = re.compile(
 _ROUTE_B_EXPLICIT_MIN_VITAMINS = 3
 _ROUTE_B_EXPLICIT_MIN_FAMILY_SHARE = 0.615385
 _ROUTE_FIBER_MATERIAL_MIN_MASS_SHARE = 0.753769
+# A digestive-enzyme panel defines the product only when it is most of what the
+# label discloses. Reviewed against the observed corpus, genuine enzyme formulas
+# sit at 0.50-1.00 of disclosed identities (CompleteGest 13/13, Flatter Me 15/20,
+# Acid-Ease 4/8) while incidental enzyme rows in a base matrix sit at 0.36 and
+# below (RAW Vitamin C 1/5, Perfect Food 1/18). Nothing observed falls between.
+_ROUTE_DIGESTIVE_ENZYME_MIN_IDENTITY_SHARE = 0.5
 
 
 def _valid_classification_origin(origin: Any) -> str:
@@ -3550,11 +3556,18 @@ def _route_fiber_digestive_decision(
     if facts.get("taxonomy_fiber_digestive") and has_fiber_evidence:
         return True, "validated_fiber_taxonomy", ["taxonomy:fiber_digestive", "fiber_label_evidence"]
 
-    dedicated_enzyme_count = int(facts.get("observed_digestive_enzyme_row_count") or 0)
-    product_level_enzyme_count = int(
-        facts.get("product_level_digestive_enzyme_row_count") or 0
+    # Presence alone routed a RAW Vitamin C with one enzyme in its food-blend
+    # base to the digestive module. Require the enzymes to be most of what the
+    # product discloses, counting label rows and enzyme-activity projections on
+    # the same footing -- the observed row list is the raw pre-drop label, so it
+    # would weigh enzymes against inactives and nutrition facts.
+    dedicated_enzyme_count = int(facts.get("digestive_enzyme_identity_count") or 0)
+    enzyme_share = facts.get("digestive_enzyme_identity_share")
+    enzyme_defines_product = (
+        enzyme_share is not None
+        and float(enzyme_share) >= _ROUTE_DIGESTIVE_ENZYME_MIN_IDENTITY_SHARE
     )
-    if dedicated_enzyme_count or product_level_enzyme_count:
+    if dedicated_enzyme_count and enzyme_defines_product:
         evidence = ["dedicated_digestive_enzyme_identity"]
         if facts.get("taxonomy_fiber_digestive"):
             evidence.insert(0, "taxonomy:fiber_digestive")

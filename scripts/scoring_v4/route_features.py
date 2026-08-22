@@ -175,13 +175,13 @@ _DIGESTIVE_TITLE_RE = re.compile(
     r"\b(digestive|digestion|digest|gut\s+health|enzymes|multi[\s-]*enzyme|"
     r"enzyme\s+(?:blend|formula)|pancrea\w*\s+enzymes?|vegenzymes?|"
     r"papaya\s+enzyme|lactase|pepsin|betaine\s+hcl|dairy\s+(?:relief|defense|digestant)|"
-    r"beanaid|megazymes?|acid\s+(?:defense|ease)|heartburn|enzyme\s+digestion)\b",
+    r"beanaid|megazymes?|acid[\s-]+(?:defense|ease)|heartburn|enzyme\s+digestion)\b",
     re.IGNORECASE,
 )
 _EXPLICIT_DIGESTIVE_CONTEXT_RE = re.compile(
     r"\b(digestive|digestion|digest|gut\s+health|lactase|pepsin|betaine\s+hcl|"
     r"pancrea\w*|dairy\s+(?:relief|defense|digestant)|beanaid|"
-    r"acid\s+(?:defense|ease)|heartburn)\b",
+    r"acid[\s-]+(?:defense|ease)|heartburn)\b",
     re.IGNORECASE,
 )
 _SYSTEMIC_ENZYME_TITLE_RE = re.compile(
@@ -530,6 +530,10 @@ def extract_route_features(
         and not is_systemic_enzyme_row(row)
     ]
 
+    digestive_enzyme_identity_rows = (
+        digestive_enzyme_rows + product_level_digestive_enzyme_rows
+    )
+
     observed_fiber_rows = [
         row for row in observed_row_list
         if is_fiber_row(row)
@@ -644,6 +648,12 @@ def extract_route_features(
         "digestive_enzyme_row_count": len(digestive_enzyme_rows),
         "systemic_enzyme_row_count": len(systemic_enzyme_rows),
         "systemic_enzyme_only": bool(systemic_enzyme_rows and not digestive_enzyme_rows),
+        "digestive_enzyme_identity_count": len(digestive_enzyme_identity_rows),
+        "digestive_enzyme_identity_share": (
+            _rounded(len(digestive_enzyme_identity_rows) / len(positive_rows))
+            if positive_rows and digestive_enzyme_identity_rows
+            else None
+        ),
         "observed_digestive_enzyme_row_count": len(observed_digestive_enzyme_rows),
         "observed_dual_use_enzyme_row_count": len(observed_dual_use_enzyme_rows),
         "observed_systemic_enzyme_row_count": len(observed_systemic_enzyme_rows),

@@ -506,3 +506,82 @@ def test_route_decision_is_single_structured_classifier_result() -> None:
         "confidence": decision["route_confidence"],
         "classifier_version": "1.1.0",
     }
+
+
+def test_trace_enzyme_in_a_base_matrix_does_not_define_a_digestive_product() -> None:
+    """A RAW-style food blend carries a token enzyme row.
+
+    Presence alone routed Garden of Life Vitamin Code RAW Vitamin C -- a vitamin
+    C product -- to the digestive module, where it was scored on fiber and
+    enzyme dose.
+    """
+    product = _product(
+        "Raw Vitamin C 500 mg",
+        [
+            _row("vitamin_c", 500, "mg"),
+            _row("digestive_enzymes", 10, "mg", category="enzymes"),
+            _row("orange", 100, "mg"),
+            _row("broccoli", 100, "mg"),
+            _row("blueberry", 100, "mg"),
+        ],
+        primary_type="single_vitamin",
+    )
+
+    assert _classification(product)["route_module"] == "generic"
+
+
+def test_enzyme_dominant_panel_still_routes_digestive() -> None:
+    """The dominance rule must not cost a genuine enzyme formula its module."""
+    rows = [
+        _row(canonical, 50, "mg", category="enzymes", raw_source_path=f"ingredientRows[{index}]")
+        for index, canonical in enumerate(
+            ("protease", "lipase", "amylase", "cellulase", "lactase")
+        )
+    ]
+    rows.append(_row("ginger_extract", 25, "mg", raw_source_path="ingredientRows[5]"))
+    product = _product("CompleteGest", rows, primary_type="herbal_botanical")
+
+    decision = _classification(product)
+
+    assert decision["route_module"] == "fiber_digestive"
+    assert decision["route_reason"] == "digestive_enzyme_context"
+
+
+def test_enzyme_activity_projections_count_toward_digestive_dominance() -> None:
+    """Acid-Ease and Beat The Bloat disclose enzymes only as activity rollups.
+
+    Weighing label rows alone would rate them non-digestive purely because the
+    enzyme dose arrived as a projection.
+    """
+    product = _product(
+        "Bloat Relief",
+        [_row("dandelion", 50, "mg")],
+        primary_type="herbal_botanical",
+        evidence=[
+            _evidence(
+                "digestive_enzymes",
+                100,
+                "mg",
+                evidence_type="enzyme_activity",
+                raw_source_path=f"product_scoring_evidence.enzyme_activity.{index}",
+            )
+            for index in range(3)
+        ],
+    )
+
+    decision = _classification(product)
+
+    assert decision["route_module"] == "fiber_digestive"
+    assert decision["route_reason"] == "digestive_enzyme_context"
+
+
+def test_hyphenated_acid_ease_title_is_digestive_intent() -> None:
+    """The title vocabulary listed `acid ease` but labels print `Acid-Ease`."""
+    from scoring_v4.route_features import extract_route_features
+
+    facts = extract_route_features(
+        _product("Acid-Ease", [_row("slippery_elm", 200, "mg")]),
+        [_row("slippery_elm", 200, "mg")],
+    )
+
+    assert facts["title_digestive_intent"] is True
