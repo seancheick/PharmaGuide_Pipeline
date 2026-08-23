@@ -1,18 +1,21 @@
 """A safety rule may not relax itself. An operator has to sign it off.
 
-Two US policy re-reads on this branch lower a consumer-facing verdict:
+The mechanism: a rule carrying ``pending_us_policy_signoff`` resolves with
+``previous_fields`` overlaid -- the exact pre-change values from the diff of the
+commit that relaxed it, not a guess at which field the verdict keys on -- until
+``approved`` is true. ``us_applicable`` is a code default rather than a field
+(an unauthored jurisdiction list used to imply US applicability and no longer
+does), so a held rule also gets an explicit US jurisdiction at the held status.
 
-  RISK_RED_YEAST_RICE      banned -> high_risk   27 live products
-  ADD_SODIUM_TETRABORATE   banned -> watchlist   17 live products (rule retired)
+Applied wherever these rules enter the pipeline: the resolver's index (which
+build_final_db's active index reuses) and the enricher's database load, which
+writes the safety_flags the v4 gate turns into a verdict.
 
-Both are well-sourced. Neither is approved. The pipeline must not enact a
-clinical-policy decision by shipping it, so each rule carries a
-``pending_us_policy_signoff`` block and resolves at ``previous_status`` until
-``approved`` is true. Flipping that one field is the entire release action.
-
-The hold is applied at the single point where banned_recalled entries enter the
-resolver, before the ``match_mode`` filter -- a retired rule is ``disabled`` and
-would otherwise never reach an index at all.
+**No rule is currently held.** The two candidates were investigated and neither
+is a policy transition -- see
+``docs/release_candidates/safety_signoff_packet_2026_08_22.md``. The mechanism
+stays because the next real relaxation needs it, and an untested mechanism is
+not a mechanism.
 """
 
 from __future__ import annotations
@@ -31,94 +34,34 @@ for candidate in (ROOT, ROOT / "scripts"):
 from identity.safety import (  # noqa: E402
     PENDING_POLICY_HOLD_KEY,
     apply_pending_policy_hold,
+    hold_unapproved_policy_payload,
 )
-from inactive_ingredient_resolver import InactiveIngredientResolver  # noqa: E402
 
 BANNED_RECALLED = ROOT / "scripts" / "data" / "banned_recalled_ingredients.json"
 
-HELD_RULES = {
-    "RISK_RED_YEAST_RICE": {
-        "previous_status": "banned",
-        "proposed_status": "high_risk",
-        "labels": ["Red Yeast Rice", "Organic Red Yeast Rice",
-                   "Red Yeast Rice powder", "Monascus purpureus"],
-    },
-    "ADD_SODIUM_TETRABORATE": {
-        "previous_status": "banned",
-        "proposed_status": "watchlist",
-        "labels": ["Sodium Tetraborate", "Sodium Tetraborate Decahydrate",
-                   "borax"],
-    },
-}
 
-
-@pytest.fixture(scope="module")
-def resolver():
-    return InactiveIngredientResolver()
-
-
-def _entries():
-    payload = json.loads(BANNED_RECALLED.read_text(encoding="utf-8"))
+def _entry(**hold):
     return {
-        str(e.get("id")): e
-        for e in payload.get("ingredients") or []
-        if isinstance(e, dict)
+        "id": "RULE_X",
+        "status": "watchlist",
+        "match_mode": "disabled",
+        "legal_status_enum": "lawful",
+        "safety_warning_one_liner": "Assess from the label amount.",
+        "jurisdictions": [],
+        PENDING_POLICY_HOLD_KEY: {
+            "previous_status": "banned",
+            "proposed_status": "watchlist",
+            "packet": "docs/release_candidates/safety_signoff_packet_2026_08_22.md",
+            "approved": False,
+            "previous_fields": {
+                "status": "banned",
+                "match_mode": "active",
+                "legal_status_enum": "not_lawful_as_supplement",
+                "safety_warning_one_liner": "Stop using and talk to your doctor.",
+            },
+            **hold,
+        },
     }
-
-
-# --------------------------------------------------------------------------- #
-# The declared holds
-# --------------------------------------------------------------------------- #
-
-
-@pytest.mark.parametrize("rule_id", sorted(HELD_RULES))
-def test_hold_is_declared_and_unapproved(rule_id) -> None:
-    entry = _entries()[rule_id]
-    hold = entry[PENDING_POLICY_HOLD_KEY]
-    want = HELD_RULES[rule_id]
-    assert hold["previous_status"] == want["previous_status"]
-    assert hold["proposed_status"] == want["proposed_status"]
-    assert str(entry.get("status") or "").lower() == want["proposed_status"], (
-        "the entry keeps its proposed status on disk; the hold is applied at "
-        "load time so the sign-off is one field flip"
-    )
-    assert hold["approved"] is False
-    assert hold["approved_by"] is None
-    assert hold["packet"], "a hold must point at the sign-off packet"
-    assert hold["previous_mechanism"], (
-        "a hold must record what actually produced the previous outcome, so a "
-        "reviewer is not left to infer it from the verdict"
-    )
-    assert hold["previous_safety_warning_one_liner"], (
-        "a held status must carry the consumer copy that matched it"
-    )
-    assert (ROOT / hold["packet"]).is_file(), (
-        f"sign-off packet missing: {hold['packet']}"
-    )
-
-
-@pytest.mark.parametrize(
-    "label",
-    [lbl for rule in HELD_RULES.values() for lbl in rule["labels"]],
-)
-def test_held_rules_resolve_at_the_conservative_status(resolver, label) -> None:
-    r = resolver.resolve(raw_name=label)
-    assert r.matched_rule_id in HELD_RULES, (
-        f"{label!r} resolved to {r.matched_rule_id!r}"
-    )
-    assert r.regulatory_status == "banned", (
-        f"{label!r} resolved at {r.regulatory_status!r}; an unapproved policy "
-        "relaxation must not reach a consumer-facing verdict"
-    )
-    assert r.is_banned is True
-    assert r.is_safety_concern is True
-    entry = _entries()[r.matched_rule_id]
-    assert r.safety_warning_one_liner == (
-        entry[PENDING_POLICY_HOLD_KEY]["previous_safety_warning_one_liner"]
-    ), (
-        f"{label!r} shows relaxed copy on a held status; a BLOCKED product must "
-        "not carry the wording written for the lower posture"
-    )
 
 
 # --------------------------------------------------------------------------- #
@@ -126,27 +69,47 @@ def test_held_rules_resolve_at_the_conservative_status(resolver, label) -> None:
 # --------------------------------------------------------------------------- #
 
 
+def test_an_unapproved_hold_restores_every_previous_field() -> None:
+    held = apply_pending_policy_hold(_entry())
+    assert held["status"] == "banned"
+    assert held["match_mode"] == "active", (
+        "a retired rule is `disabled` and would never reach an index"
+    )
+    assert held["legal_status_enum"] == "not_lawful_as_supplement"
+    assert held["safety_warning_one_liner"] == "Stop using and talk to your doctor.", (
+        "a held status must not carry the copy written for the lower posture"
+    )
+    assert held["policy_hold_applied"]["held_status"] == "banned"
+    assert held["policy_hold_applied"]["proposed_status"] == "watchlist"
+
+
+def test_a_held_rule_becomes_us_applicable_at_the_held_status() -> None:
+    """`us_applicable` is a code default, not a field."""
+    held = apply_pending_policy_hold(_entry())
+    us = [j for j in held["jurisdictions"] if j["region"] == "US"]
+    assert len(us) == 1
+    assert us[0]["status"] == "banned"
+    assert us[0]["source"]["type"] == "policy_hold"
+
+
+def test_an_existing_us_jurisdiction_is_restated_not_duplicated() -> None:
+    entry = _entry()
+    entry["jurisdictions"] = [
+        {"region": "US", "level": "federal", "status": "watchlist"},
+        {"region": "EU", "level": "union", "status": "banned"},
+    ]
+    held = apply_pending_policy_hold(entry)
+    us = [j for j in held["jurisdictions"] if j["region"] == "US"]
+    assert len(us) == 1 and us[0]["status"] == "banned"
+    assert [j for j in held["jurisdictions"] if j["region"] == "EU"]
+
+
 def test_approval_releases_the_hold() -> None:
     """Flipping `approved` is the whole release action."""
-    entry = dict(_entries()["RISK_RED_YEAST_RICE"])
-    assert apply_pending_policy_hold(entry)["status"] == "banned"
-
-    approved = dict(entry)
-    approved[PENDING_POLICY_HOLD_KEY] = {
-        **entry[PENDING_POLICY_HOLD_KEY],
-        "approved": True,
-        "approved_by": "operator",
-    }
-    assert apply_pending_policy_hold(approved)["status"] == "high_risk"
-
-
-def test_a_retired_rule_is_put_back_in_the_matcher() -> None:
-    """`match_mode: disabled` would keep a held rule inert."""
-    entry = dict(_entries()["ADD_SODIUM_TETRABORATE"])
-    assert entry["match_mode"] == "disabled"
-    held = apply_pending_policy_hold(entry)
-    assert held["match_mode"] == "exact"
-    assert held["policy_hold_applied"]["held_match_mode"] == "exact"
+    approved = apply_pending_policy_hold(_entry(approved=True))
+    assert approved["status"] == "watchlist"
+    assert approved["match_mode"] == "disabled"
+    assert "policy_hold_applied" not in approved
 
 
 def test_an_entry_without_a_hold_is_returned_unchanged() -> None:
@@ -154,28 +117,55 @@ def test_an_entry_without_a_hold_is_returned_unchanged() -> None:
     assert apply_pending_policy_hold(entry) is entry
 
 
-@pytest.mark.parametrize("hold", [
-    {},                                    # no previous_status
-    {"previous_status": ""},               # blank
-    {"previous_status": "banned", "approved": "yes"},   # not a real bool
+@pytest.mark.parametrize("hold_override", [
+    {"previous_fields": {}},
+    {"previous_fields": None},
+    {"approved": "yes"},
 ])
-def test_a_malformed_hold_fails_closed(hold) -> None:
-    entry = {"id": "X", "status": "watchlist", PENDING_POLICY_HOLD_KEY: hold}
-    result = apply_pending_policy_hold(entry)
-    assert result["status"] in {"banned", "watchlist"}
-    if hold.get("previous_status"):
-        assert result["status"] == "banned", "a non-boolean approval is not approval"
+def test_a_malformed_hold_never_relaxes(hold_override) -> None:
+    held = apply_pending_policy_hold(_entry(**hold_override))
+    if hold_override.get("approved") == "yes":
+        assert held["status"] == "banned", "a non-boolean approval is not approval"
+    else:
+        # Nothing to restore: the entry stands as authored rather than being
+        # rewritten from an empty overlay.
+        assert held["status"] == "watchlist"
 
 
-def test_explicit_statin_evidence_is_unaffected_by_the_hold(resolver) -> None:
-    """The banned RYR rule was already banned; the hold changes nothing there."""
-    r = resolver.resolve(raw_name="Red Yeast Rice Extract (Monacolin K)")
-    assert r.matched_rule_id == "BANNED_RED_YEAST_RICE"
-    assert r.is_banned is True
+def test_the_payload_helper_applies_to_every_entry() -> None:
+    payload = {"ingredients": [_entry(), {"id": "Y", "status": "banned"}]}
+    out = hold_unapproved_policy_payload(payload)
+    assert out["ingredients"][0]["status"] == "banned"
+    assert out["ingredients"][1] == {"id": "Y", "status": "banned"}
+    assert hold_unapproved_policy_payload({"other": 1}) == {"other": 1}
+    assert hold_unapproved_policy_payload(None) is None
 
 
-def test_unrelated_rules_are_untouched(resolver) -> None:
-    for label, expect_banned in (("Cannabidiol", True), ("Yohimbe", False),
-                                 ("Vitamin C", False)):
-        r = resolver.resolve(raw_name=label)
-        assert bool(r.is_banned) is expect_banned, (label, r.matched_rule_id)
+# --------------------------------------------------------------------------- #
+# Current state of the data
+# --------------------------------------------------------------------------- #
+
+
+def test_no_rule_is_currently_held_without_a_packet_entry() -> None:
+    """Any hold that appears must point at a packet that exists.
+
+    Zero holds today. If one is added, it has to name the document that
+    justifies it, so a relaxation cannot be paused silently and forgotten.
+    """
+    payload = json.loads(BANNED_RECALLED.read_text(encoding="utf-8"))
+    for entry in payload.get("ingredients") or []:
+        if not isinstance(entry, dict):
+            continue
+        hold = entry.get(PENDING_POLICY_HOLD_KEY)
+        if not isinstance(hold, dict):
+            continue
+        assert hold.get("packet"), f"{entry.get('id')}: hold names no packet"
+        assert (ROOT / hold["packet"]).is_file(), (
+            f"{entry.get('id')}: packet missing at {hold['packet']}"
+        )
+        assert isinstance(hold.get("previous_fields"), dict) and hold["previous_fields"], (
+            f"{entry.get('id')}: a hold must carry the exact previous field values"
+        )
+        assert hold.get("previous_mechanism"), (
+            f"{entry.get('id')}: a hold must record what produced the previous outcome"
+        )

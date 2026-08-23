@@ -163,6 +163,7 @@ from match_ledger import (
 from identity.safety import (
     has_explicit_form_evidence,
     negative_match_terms_veto,
+    hold_unapproved_policy_payload,
     safety_flag_from_banned_match,
     safety_jurisdiction_projection,
 )
@@ -1294,6 +1295,16 @@ class SupplementEnricherV3:
                 if full_path.exists():
                     with open(full_path, 'r', encoding='utf-8') as f:
                         self.databases[db_name] = json.load(f)
+                    if db_name == "banned_recalled_ingredients":
+                        # The enricher is a second ingestion point for these
+                        # rules and writes the safety_flags the v4 gate turns
+                        # into a verdict, so an unapproved policy relaxation has
+                        # to be held here too. Holding it only in the resolver
+                        # left the flag -- and therefore the consumer-facing
+                        # verdict -- at the relaxed status.
+                        self.databases[db_name] = hold_unapproved_policy_payload(
+                            self.databases[db_name]
+                        )
                     self.logger.info(f"Loaded {db_name}: {_db_entry_count(self.databases[db_name])} entries")
                 else:
                     self.databases[db_name] = {}

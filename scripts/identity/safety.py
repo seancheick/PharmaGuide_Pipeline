@@ -160,22 +160,22 @@ PENDING_POLICY_HOLD_KEY = "pending_us_policy_signoff"
 
 
 def apply_pending_policy_hold(entry: Dict[str, Any]) -> Dict[str, Any]:
-    """Hold a safety rule at its previous status until an operator signs off.
+    """Hold a safety rule at its previous treatment until an operator signs off.
 
-    A US policy re-read can legitimately move a rule to a less restrictive
-    status -- generic red yeast rice from an automatic unapproved-drug block to
-    a high-risk review, sodium tetraborate from a retired food-additive ban to a
-    declared boron source. Those are clinical-policy decisions, and the pipeline
-    must not enact one by shipping it.
+    A US policy re-read can legitimately relax a rule. That is a clinical-policy
+    decision, and the pipeline must not enact one by shipping it. While
+    ``pending_us_policy_signoff.approved`` is false, the entry resolves with
+    ``previous_fields`` overlaid -- the exact pre-change values, taken from the
+    diff of the commit that relaxed it, not a guess at which field the verdict
+    keys on.
 
-    While ``pending_us_policy_signoff.approved`` is false, the entry resolves at
-    ``previous_status`` -- the more conservative consumer-facing treatment --
-    and carries ``policy_hold_applied`` so every downstream lane can report why.
-    Flipping ``approved`` to true is the whole release action; nothing else
-    changes.
+    ``us_applicable`` is a code default rather than a field: an unauthored
+    jurisdiction list used to imply US applicability and no longer does, so a
+    held rule also gets an explicit US jurisdiction at the held status.
 
-    Returns the entry unchanged when no hold is declared. Never raises: a
-    malformed hold block is treated as an active hold, which fails closed.
+    Returns the entry unchanged when no hold is declared or the hold is
+    approved. Never raises: a malformed hold is treated as active, which fails
+    closed.
     """
     if not isinstance(entry, dict):
         return entry
@@ -184,36 +184,65 @@ def apply_pending_policy_hold(entry: Dict[str, Any]) -> Dict[str, Any]:
         return entry
     if hold.get("approved") is True:
         return entry
-    previous = str(hold.get("previous_status") or "").strip().lower()
-    if not previous:
+    previous_fields = hold.get("previous_fields")
+    if not isinstance(previous_fields, dict) or not previous_fields:
         return entry
-    proposed = str(entry.get("status") or "").strip().lower()
-    if previous == proposed and not hold.get("previous_match_mode"):
-        return entry
-    held = dict(entry)
-    held["status"] = previous
-    previous_one_liner = hold.get("previous_safety_warning_one_liner")
-    if previous_one_liner:
-        # Hold the consumer copy with the status. A rule held at `banned` while
-        # carrying the relaxed one-liner would under-warn -- a BLOCKED product
-        # telling the reader to "assess using the label's elemental boron
-        # amount" is worse than either posture on its own.
-        held["safety_warning_one_liner"] = previous_one_liner
-    previous_match_mode = str(hold.get("previous_match_mode") or "").strip().lower()
-    proposed_match_mode = str(entry.get("match_mode") or "").strip().lower()
-    if previous_match_mode:
-        # A retired rule is `match_mode: disabled` and never enters an index at
-        # all, so restoring the status alone would leave it inert. The hold must
-        # put the rule back in the matcher too.
-        held["match_mode"] = previous_match_mode
+
+    held = {**entry, **previous_fields}
+    status = str(held.get("status") or "").strip().lower()
+
+    jurisdictions = [
+        dict(item) for item in (held.get("jurisdictions") or [])
+        if isinstance(item, dict)
+    ]
+    for item in jurisdictions:
+        if str(item.get("region") or "").strip().upper() == "US":
+            item["status"] = status
+    if not any(
+        str(item.get("region") or "").strip().upper() == "US"
+        for item in jurisdictions
+    ):
+        jurisdictions.append({
+            "region": "US",
+            "level": "federal",
+            "status": status,
+            "effective_date": None,
+            "source": {
+                "type": "policy_hold",
+                "citation": (
+                    "Held at the previous US treatment pending operator "
+                    "sign-off; see the packet named in "
+                    "pending_us_policy_signoff."
+                ),
+                "url": None,
+            },
+        })
+    held["jurisdictions"] = jurisdictions
     held["policy_hold_applied"] = {
-        "held_status": previous,
-        "proposed_status": proposed,
-        "held_match_mode": previous_match_mode or None,
-        "proposed_match_mode": proposed_match_mode or None,
+        "held_fields": sorted(previous_fields),
+        "held_status": status,
+        "proposed_status": str(entry.get("status") or "").strip().lower(),
         "packet": hold.get("packet"),
     }
     return held
+
+
+def hold_unapproved_policy_payload(payload: Any) -> Any:
+    """Apply :func:`apply_pending_policy_hold` across a banned_recalled payload.
+
+    The enricher loads this file independently of the resolver and writes the
+    safety_flags the v4 gate turns into a verdict, so the hold has to reach that
+    ingestion point too -- one policy function, applied wherever rules enter.
+    """
+    if not isinstance(payload, dict):
+        return payload
+    entries = payload.get("ingredients")
+    if not isinstance(entries, list):
+        return payload
+    return {
+        **payload,
+        "ingredients": [apply_pending_policy_hold(e) for e in entries],
+    }
 
 
 SAFETY_STATUS_PRIORITY = {

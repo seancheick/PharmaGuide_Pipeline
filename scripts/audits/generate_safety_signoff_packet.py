@@ -28,8 +28,8 @@ RULES = {
     "RISK_RED_YEAST_RICE": {
         "title": "Generic red yeast rice",
         "needles": ("yeast rice", "monascus", "red koji"),
-        "held": "banned",
-        "proposed": "high_risk",
+        "held": "banned (shipped)",
+        "proposed": "high_risk (candidate)",
         "basis": (
             "No US prohibition applies to red yeast rice as such. The FDA "
             "action addresses products with enhanced or added lovastatin; "
@@ -37,13 +37,19 @@ RULES = {
             "substantial and usually undeclared."
         ),
         "previous_mechanism": (
-            "The shipped block did NOT come from this rule. A stale contaminant "
-            "snapshot matched generic 'red yeast rice' to BANNED_RED_YEAST_RICE "
-            "(match_type=alias, matched_variant='red yeast rice') even though "
-            "that rule sets requires_explicit_form_evidence and lists only "
-            "monacolin K / lovastatin variants. Verified on blob 206443 in the "
-            "2026-08-19 build. On the evidence this is a defect fix, not a "
-            "policy relaxation."
+            "RISK_RED_YEAST_RICE is byte-identical across commit 6486e758 — no "
+            "field changed, so no policy transition occurred on this rule. The "
+            "shipped block came from a legacy snapshot matching generic 'red "
+            "yeast rice' to BANNED_RED_YEAST_RICE (match_type=alias, "
+            "matched_variant='red yeast rice') on a rule that sets "
+            "requires_explicit_form_evidence and lists only monacolin K / "
+            "lovastatin variants. Printed from blob 206443 in the 2026-08-19 "
+            "build."
+        ),
+        "verdict": (
+            "Defect fix, not a policy relaxation. Nothing to approve; confirm "
+            "the removal. Explicit monacolin K / lovastatin declarations still "
+            "hard-block via BANNED_RED_YEAST_RICE."
         ),
         "source": "https://www.nccih.nih.gov/health/red-yeast-rice",
         "effect": (
@@ -59,8 +65,8 @@ RULES = {
     "ADD_SODIUM_TETRABORATE": {
         "title": "Sodium tetraborate as a declared boron source",
         "needles": ("tetraborate", "borax"),
-        "held": "banned",
-        "proposed": "watchlist",
+        "held": "banned (shipped)",
+        "proposed": "watchlist (candidate)",
         "basis": (
             "NIH ODS lists sodium borate and sodium tetraborate among the "
             "boron forms used in dietary supplements, and notes Supplement "
@@ -68,13 +74,20 @@ RULES = {
             "No US supplement prohibition was established for this form."
         ),
         "previous_mechanism": (
-            "The shipped block came from an EU food-additive ban driving a US "
-            "market verdict: safety_jurisdiction_projection defaulted "
-            "us_applicable to True for any rule with no declared jurisdiction. "
-            "Two questions are tangled and both need an answer -- whether an EU "
-            "food-additive ban should drive a US supplement verdict at all, and "
-            "whether borax as a declared boron source salt is the same thing as "
-            "borax as a standalone additive."
+            "The shipped flag carried match_type='legacy_projection', "
+            "matched_variant='ADD_SODIUM_TETRABORATE' and the rule's own reason "
+            "prose as its evidence_text — the rule id standing in for a label "
+            "match that never happened. Printed from blob 294795 in the "
+            "2026-08-19 build. The rule was separately retired in 6486e758 "
+            "(status banned -> watchlist, match_mode active -> disabled, "
+            "legal_status_enum not_lawful_as_supplement -> lawful) after NIH ODS "
+            "verification."
+        ),
+        "verdict": (
+            "The block was unevidenced, so restoring it would re-introduce a "
+            "false positive. The severity question is still open and separable: "
+            "whether borax as the declared source salt of a nutritionally-"
+            "relevant boron dose warrants any consumer signal, and if so which."
         ),
         "source": "https://ods.od.nih.gov/factsheets/Boron-HealthProfessional/",
         "effect": (
@@ -158,16 +171,15 @@ def main(argv=None) -> int:
                     corpus[pid] = product
 
     lines = [
-        "# US safety-policy sign-off packet — 2026-08-22",
+        "# Safety verdict decision record — 2026-08-22",
         "",
-        "Status: **awaiting operator clinical-policy sign-off**",
+        "Status: **findings for operator confirmation; no rule is held**",
         "",
-        "Two rules relax a consumer-facing verdict. Both are held at their",
-        "previous status by `pending_us_policy_signoff` in",
-        "`scripts/data/banned_recalled_ingredients.json`, so the shipped",
-        "treatment is unchanged until each is approved. Approving one is a",
-        "single field flip: set `approved: true` and record `approved_by` /",
-        "`approved_at`.",
+        "44 products lose a BLOCKED verdict between the shipped catalog and",
+        "this candidate. They were investigated as policy relaxations awaiting",
+        "approval. They are not: in both cases the shipped block came from a",
+        "legacy projection with no label evidence behind it, and one of the two",
+        "rules did not change at all. The driver for each is printed below.",
         "",
         "Generated by `scripts/audits/generate_safety_signoff_packet.py` from the",
         "held and proposed catalogs — not written by hand.",
@@ -192,15 +204,16 @@ def main(argv=None) -> int:
         lines += [
             f"## {spec['title']} (`{rule_id}`)",
             "",
-            f"- **Held status:** `{spec['held']}` (what ships today)",
-            f"- **Proposed status:** `{spec['proposed']}`",
+            f"- **Shipped status:** `{spec['held']}`",
+            f"- **Candidate status:** `{spec['proposed']}`",
             f"- **Products affected:** {len(affected)}",
             f"- **US jurisdictional basis:** {spec['basis']}",
             f"- **What actually produced the previous verdict:** "
             f"{spec['previous_mechanism']}",
+            f"- **Assessment:** {spec['verdict']}",
             f"- **Authoritative source:** {spec['source']}",
             f"- **Consumer-facing effect:** {spec['effect']}",
-            f"- **Residual risk if approved:** {spec['residual_risk']}",
+            f"- **Residual risk:** {spec['residual_risk']}",
             "",
             "| DSLD | Product | Held | Proposed | Role | Declaring row | Matched text |",
             "|---|---|---|---|---|---|---|",
@@ -217,10 +230,17 @@ def main(argv=None) -> int:
     lines += [
         "## Decision",
         "",
-        f"Total products awaiting sign-off: **{grand_total}**.",
+        f"Total products whose block was removed: **{grand_total}**.",
         "",
-        "- [ ] Approve `RISK_RED_YEAST_RICE` banned → high_risk",
-        "- [ ] Approve `ADD_SODIUM_TETRABORATE` banned → watchlist",
+        "- [ ] Confirm the red yeast rice block removal (defect fix; the rule",
+        "      itself never changed)",
+        "- [ ] Decide whether sodium tetraborate as a declared boron source",
+        "      warrants any consumer signal, and at what severity",
+        "",
+        "No rule is currently held. `pending_us_policy_signoff` exists and is",
+        "tested, so a real relaxation can be paused at its exact previous field",
+        "values, but applying it to either rule here would restore a block that",
+        "no label evidence supports.",
         "",
         "Partially hydrogenated oils are **not** on this list. `33212` and",
         "`33230` were a defect, are blocked again, and are not a policy choice:",

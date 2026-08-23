@@ -5404,18 +5404,6 @@
         "organic red yeast rice extract",
         "monascus purpureus extract"
       ],
-      "pending_us_policy_signoff": {
-        "previous_status": "banned",
-        "proposed_status": "high_risk",
-        "packet": "docs/release_candidates/safety_signoff_packet_2026_08_22.md",
-        "previous_safety_warning_one_liner": "Natural statin \u2014 talk to your doctor before use.",
-        "affected_live_products": 27,
-        "approved": false,
-        "approved_by": null,
-        "approved_at": null,
-        "previous_mechanism": "The shipped BLOCKED verdict did NOT come from this rule. A stale contaminant snapshot matched generic 'red yeast rice' to BANNED_RED_YEAST_RICE (match_type=alias, matched_variant='red yeast rice') even though that rule sets requires_explicit_form_evidence and lists only monacolin K / lovastatin variants. Commit 6486e758 revalidates such snapshots against label evidence, which is why the match stopped. Verified on blob 206443 in the 2026-08-19 build.",
-        "note": "Held so the consumer-facing outcome is unchanged pending sign-off. Evidence says this is a defect fix rather than a policy relaxation: the FDA action concerns lovastatin-containing red yeast rice, and NCCIH records monacolin K ranging from none to substantial. Explicit monacolin K / lovastatin declarations still hard-block via BANNED_RED_YEAST_RICE either way. Approving is expected to be routine; the hold exists so the decision is made, not defaulted."
-      },
       "reason": "Red yeast rice can contain widely varying amounts of monacolin K, a compound identical to lovastatin, and the amount is usually not stated on the label. Products with meaningful amounts can cause statin-like side effects and drug interactions.",
       "status": "high_risk",
       "class_tags": [
@@ -16243,19 +16231,6 @@
         "E285",
         "borax decahydrate"
       ],
-      "pending_us_policy_signoff": {
-        "previous_status": "banned",
-        "proposed_status": "watchlist",
-        "previous_match_mode": "exact",
-        "packet": "docs/release_candidates/safety_signoff_packet_2026_08_22.md",
-        "previous_safety_warning_one_liner": "EU-banned reproductive toxicant. Stop using and talk to your doctor.",
-        "affected_live_products": 17,
-        "approved": false,
-        "approved_by": null,
-        "approved_at": null,
-        "previous_mechanism": "The shipped BLOCKED verdict came from an EU food-additive ban driving a US market verdict: safety_jurisdiction_projection defaulted us_applicable to True for any rule with no declared jurisdictions. Commit 6486e758 made an unauthored jurisdiction unresolved rather than implicitly US-applicable, so the EU rule stopped hard-blocking US supplements.",
-        "note": "Held so the consumer-facing outcome is unchanged pending sign-off. Two questions are tangled here and both need an answer: whether an EU food-additive ban should drive a US supplement verdict at all, and whether borax as the declared source salt of a nutritionally-relevant boron dose is the same thing as borax as a standalone additive. NIH ODS lists sodium borate and tetraborate among supplemental boron forms and notes Supplement Facts declare elemental boron."
-      },
       "entity_type": "ingredient",
       "match_mode": "disabled",
       "active_nutrient_parent": "boron",
@@ -16461,14 +16436,14 @@
         {
           "type": "regulatory",
           "authority": "FDA",
-      "citation": "FDA OTC Monograph M002 — Antiflatulent Products for Over-the-Counter Human Use",
-      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/omuf/monographs/OTCMonograph_M002-AntiflatulentProductsforOTCHumanUse_09202021.pdf",
-      "published_date": "2021-09-20",
+          "citation": "FDA OTC Monograph M002 — Antiflatulent Products for Over-the-Counter Human Use",
+          "url": "https://www.accessdata.fda.gov/drugsatfda_docs/omuf/monographs/OTCMonograph_M002-AntiflatulentProductsforOTCHumanUse_09202021.pdf",
+          "published_date": "2021-09-20",
           "evidence_grade": "R",
           "confidence": "high",
-      "supports_claims": [
-        "regulatory_status"
-      ],
+          "supports_claims": [
+            "regulatory_status"
+          ],
           "title": "FDA OTC Monograph M002 — Antiflatulent Products"
         }
       ],
