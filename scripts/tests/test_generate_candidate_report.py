@@ -18,6 +18,7 @@ from audits.generate_candidate_report import (  # noqa: E402
     REQUIRED_VERIFICATION_GATES,
     _artifact_hashes,
     _validated_verification,
+    render_markdown,
 )
 
 
@@ -83,3 +84,48 @@ def test_artifact_hashes_include_interaction_database_and_manifest(
 
     assert "interaction_database_sha256" in hashes
     assert "interaction_database_manifest_sha256" in hashes
+
+
+def test_markdown_title_uses_artifact_report_date() -> None:
+    report = {
+        "report_date": "2026-08-23",
+        "repositories": {
+            "pipeline": {
+                "branch": "codex/test",
+                "source_head_at_generation": "a" * 40,
+                "dirty": False,
+            }
+        },
+        "candidate": {
+            "live_product_count": 1,
+            "detail_blob_count": 1,
+            "verdict_counts": {"SAFE": 1},
+        },
+        "release_contract": {
+            "export_schema_version": "2.4.0",
+            "scoring_version": "4.3.0",
+            "db_version": "test",
+        },
+        "quarantine": {"total": 0, "groups": {}},
+        "artifact_hashes": {"candidate_database_sha256": "b" * 64},
+        "pending_clinical_signoff": {
+            "us_policy_holds": [],
+            "withheld_clinical_records": {
+                "medication_depletions": {
+                    "published": 1,
+                    "withheld": 0,
+                    "withheld_by_review_status": {},
+                },
+                "timing_rules": {
+                    "published": 1,
+                    "withheld": 0,
+                    "withheld_by_review_status": {},
+                },
+            },
+        },
+        "integrity": {"sha256": "c" * 64},
+    }
+
+    assert render_markdown(report).startswith(
+        "# Scoring integrity 2.4 candidate — 2026-08-23"
+    )

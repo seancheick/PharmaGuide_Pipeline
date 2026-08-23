@@ -234,6 +234,7 @@ def build_report(args) -> dict:
     report = {
         "report_schema_version": "2.0.0",
         "report_name": "PharmaGuide scoring integrity 2.4 candidate",
+        "report_date": str(manifest.get("exported_at") or "")[:10],
         "candidate_status": "technically_verified_preproduction_not_approved_for_publish",
         "generated_by": "scripts/audits/generate_candidate_report.py",
         "repositories": {
@@ -313,7 +314,7 @@ def render_markdown(r: dict) -> str:
     flut = r["repositories"].get("flutter") or {}
     cand = r["candidate"]
     lines = [
-        "# Scoring integrity 2.4 candidate — 2026-08-22",
+        f"# Scoring integrity 2.4 candidate — {r['report_date']}",
         "",
         "Status: **technically verified preproduction candidate; "
         "not approved, not published**",
