@@ -17,6 +17,7 @@ if str(SCRIPTS) not in sys.path:
 from audits.generate_candidate_report import (  # noqa: E402
     REQUIRED_VERIFICATION_GATES,
     _artifact_hashes,
+    _manifest_report_date,
     _validated_verification,
     render_markdown,
 )
@@ -86,6 +87,18 @@ def test_artifact_hashes_include_interaction_database_and_manifest(
     assert "interaction_database_manifest_sha256" in hashes
 
 
+def test_report_date_uses_canonical_generated_at_manifest_field() -> None:
+    assert _manifest_report_date(
+        {"generated_at": "2026-08-23T18:41:26.360840+00:00"}
+    ) == "2026-08-23"
+
+
+def test_report_date_retains_legacy_exported_at_compatibility() -> None:
+    assert _manifest_report_date(
+        {"exported_at": "2026-08-22T00:00:00Z"}
+    ) == "2026-08-22"
+
+
 def test_markdown_title_uses_artifact_report_date() -> None:
     report = {
         "report_date": "2026-08-23",
@@ -106,7 +119,10 @@ def test_markdown_title_uses_artifact_report_date() -> None:
             "scoring_version": "4.3.0",
             "db_version": "test",
         },
-        "quarantine": {"total": 0, "groups": {}},
+        "quarantine": {
+            "total": 12,
+            "groups": {"safety_policy_review_required": 12},
+        },
         "artifact_hashes": {"candidate_database_sha256": "b" * 64},
         "pending_clinical_signoff": {
             "us_policy_holds": [],
@@ -128,4 +144,7 @@ def test_markdown_title_uses_artifact_report_date() -> None:
 
     assert render_markdown(report).startswith(
         "# Scoring integrity 2.4 candidate — 2026-08-23"
+    )
+    assert "12 products remain conservatively quarantined" in render_markdown(
+        report
     )

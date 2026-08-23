@@ -226,6 +226,16 @@ def _withheld_clinical() -> dict:
     }
 
 
+def _manifest_report_date(manifest: dict) -> str:
+    """Return the candidate build date from the canonical manifest timestamp.
+
+    Schema 2.4 manifests publish ``generated_at``.  ``exported_at`` remains a
+    migration-boundary fallback for older candidate artifacts.
+    """
+    timestamp = manifest.get("generated_at") or manifest.get("exported_at")
+    return str(timestamp or "unknown")[:10]
+
+
 def build_report(args) -> dict:
     dist = Path(args.dist)
     db = dist / "pharmaguide_core.db"
@@ -234,7 +244,7 @@ def build_report(args) -> dict:
     report = {
         "report_schema_version": "2.0.0",
         "report_name": "PharmaGuide scoring integrity 2.4 candidate",
-        "report_date": str(manifest.get("exported_at") or "")[:10],
+        "report_date": _manifest_report_date(manifest),
         "candidate_status": "technically_verified_preproduction_not_approved_for_publish",
         "generated_by": "scripts/audits/generate_candidate_report.py",
         "repositories": {
@@ -390,6 +400,17 @@ def render_markdown(r: dict) -> str:
             "transitions, and why neither is one, are in "
             "`safety_signoff_packet_2026_08_22.md`."
         )
+        safety_review_products = sum(
+            count
+            for reason, count in r["quarantine"]["groups"].items()
+            if reason.startswith("safety_policy_review_required")
+        )
+        if safety_review_products:
+            lines.append(
+                f"{safety_review_products} products remain conservatively "
+                "quarantined for an explicit operator policy disposition; "
+                "none are present in the app catalog."
+            )
     withheld = r["pending_clinical_signoff"]["withheld_clinical_records"]
     lines += [
         "",
