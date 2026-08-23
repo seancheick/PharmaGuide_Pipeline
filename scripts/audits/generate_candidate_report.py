@@ -97,7 +97,7 @@ def _artifact_hashes(dist: Path) -> dict:
         "export_manifest_sha256": dist / "export_manifest.json",
         "detail_index_sha256": dist / "detail_index.json",
         "interaction_database_sha256": dist / "interaction_db.sqlite",
-        "interaction_manifest_sha256": dist / "interaction_manifest.json",
+        "interaction_database_manifest_sha256": dist / "interaction_db_manifest.json",
     }
     return {
         name: _sha256(path)

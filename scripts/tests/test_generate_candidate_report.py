@@ -16,6 +16,7 @@ if str(SCRIPTS) not in sys.path:
 
 from audits.generate_candidate_report import (  # noqa: E402
     REQUIRED_VERIFICATION_GATES,
+    _artifact_hashes,
     _validated_verification,
 )
 
@@ -65,3 +66,20 @@ def test_verification_hashes_each_preserved_log(tmp_path: Path) -> None:
         log_bytes = Path(gate["log"]).read_bytes()
         assert gate["log_sha256"] == hashlib.sha256(log_bytes).hexdigest()
 
+
+def test_artifact_hashes_include_interaction_database_and_manifest(
+    tmp_path: Path,
+) -> None:
+    for name in (
+        "pharmaguide_core.db",
+        "export_manifest.json",
+        "detail_index.json",
+        "interaction_db.sqlite",
+        "interaction_db_manifest.json",
+    ):
+        (tmp_path / name).write_bytes(name.encode("utf-8"))
+
+    hashes = _artifact_hashes(tmp_path)
+
+    assert "interaction_database_sha256" in hashes
+    assert "interaction_database_manifest_sha256" in hashes
