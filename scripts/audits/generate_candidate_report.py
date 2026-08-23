@@ -27,6 +27,17 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 
+REQUIRED_VERIFICATION_GATES = (
+    "full_corpus_pipeline",
+    "pipeline_fast_suite",
+    "pipeline_release_suite",
+    "pipeline_full_suite",
+    "flutter_analyze",
+    "flutter_suite",
+    "interaction_parity",
+    "candidate_import_preflight",
+)
+
 
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -44,6 +55,55 @@ def _git(repo: Path, *args: str) -> str:
         ).stdout.strip()
     except Exception:
         return ""
+
+
+def _head_is_pushed(repo: Path) -> bool:
+    return bool(_git(repo, "branch", "-r", "--contains", "HEAD"))
+
+
+def _validated_verification(path: Path) -> dict:
+    """Load command evidence and reject hand-typed green summaries.
+
+    A pytest count alone is not a successful release command: the runner can
+    fail in a later audit, which is exactly what happened in the first 2.4
+    candidate.  Every required gate therefore records the complete command's
+    exit code and a preserved log whose hash is calculated here.
+    """
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    gates = payload.get("gates")
+    if not isinstance(gates, dict):
+        raise ValueError("verification file must contain a gates object")
+    for name in REQUIRED_VERIFICATION_GATES:
+        gate = gates.get(name)
+        if not isinstance(gate, dict):
+            raise ValueError(f"verification missing required gate: {name}")
+        if gate.get("exit_code") != 0:
+            raise ValueError(
+                f"verification gate {name} did not pass: "
+                f"exit_code={gate.get('exit_code')!r}"
+            )
+        log_value = gate.get("log")
+        log_path = Path(str(log_value or ""))
+        if not log_value or not log_path.is_file():
+            raise ValueError(f"verification gate {name} has no preserved log")
+        gate["log_sha256"] = _sha256(log_path)
+    payload["verification_file_sha256"] = _sha256(path)
+    return payload
+
+
+def _artifact_hashes(dist: Path) -> dict:
+    paths = {
+        "candidate_database_sha256": dist / "pharmaguide_core.db",
+        "export_manifest_sha256": dist / "export_manifest.json",
+        "detail_index_sha256": dist / "detail_index.json",
+        "interaction_database_sha256": dist / "interaction_db.sqlite",
+        "interaction_manifest_sha256": dist / "interaction_manifest.json",
+    }
+    return {
+        name: _sha256(path)
+        for name, path in paths.items()
+        if path.is_file()
+    }
 
 
 def _counts(db: Path, column: str) -> dict:
@@ -178,10 +238,11 @@ def build_report(args) -> dict:
         "generated_by": "scripts/audits/generate_candidate_report.py",
         "repositories": {
             "pipeline": {
-                "head": _git(REPO, "rev-parse", "HEAD"),
+                "source_head_at_generation": _git(REPO, "rev-parse", "HEAD"),
                 "branch": _git(REPO, "rev-parse", "--abbrev-ref", "HEAD"),
                 "merge_base_origin_main": _git(REPO, "merge-base", "origin/main", "HEAD"),
                 "dirty": bool(_git(REPO, "status", "--porcelain")),
+                "source_head_pushed": _head_is_pushed(REPO),
             },
         },
         "release_contract": {
@@ -190,11 +251,7 @@ def build_report(args) -> dict:
             "pipeline_version": manifest.get("pipeline_version"),
             "db_version": manifest.get("db_version"),
         },
-        "artifact_hashes": {
-            "candidate_database_sha256": _sha256(db),
-            "export_manifest_sha256": _sha256(dist / "export_manifest.json"),
-            "detail_index_sha256": _sha256(dist / "detail_index.json"),
-        },
+        "artifact_hashes": _artifact_hashes(dist),
         "candidate": {
             "live_product_count": _product_count(db),
             "detail_blob_count": len(list((dist / "detail_blobs").glob("*.json"))),
@@ -211,8 +268,9 @@ def build_report(args) -> dict:
         "publication_boundary": {
             "production_published": False,
             "supabase_uploaded": False,
-            "flutter_bundle_imported": False,
-            "branches_pushed": False,
+            "flutter_candidate_assets_imported": bool(
+                getattr(args, "flutter_candidate_assets_imported", False)
+            ),
             "actual_publish_owner": "operator",
         },
     }
@@ -220,9 +278,10 @@ def build_report(args) -> dict:
     if args.flutter_repo:
         fr = Path(args.flutter_repo)
         report["repositories"]["flutter"] = {
-            "head": _git(fr, "rev-parse", "HEAD"),
+            "source_head_at_generation": _git(fr, "rev-parse", "HEAD"),
             "branch": _git(fr, "rev-parse", "--abbrev-ref", "HEAD"),
             "dirty": bool(_git(fr, "status", "--porcelain")),
+            "source_head_pushed": _head_is_pushed(fr),
         }
     if args.baseline_db:
         baseline = Path(args.baseline_db)
@@ -232,7 +291,7 @@ def build_report(args) -> dict:
         }
         report["baseline_candidate_diff"] = _shared_diff(baseline, db)
     if args.verification:
-        report["verification"] = json.loads(Path(args.verification).read_text())
+        report["verification"] = _validated_verification(Path(args.verification))
 
     body = {k: v for k, v in report.items() if k != "integrity"}
     canon = json.dumps(body, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
@@ -260,16 +319,17 @@ def render_markdown(r: dict) -> str:
         "not approved, not published**",
         "",
         "Generated by `scripts/audits/generate_candidate_report.py` from the built",
-        "artifact and the current git heads. Do not hand-edit: regenerate.",
+        "artifact and the generation-time source heads. The report commit itself",
+        "can be later. Do not hand-edit: regenerate.",
         "",
         "## Heads",
         "",
-        f"- pipeline `{pipe['branch']}` @ `{pipe['head'][:12]}`"
+        f"- pipeline `{pipe['branch']}` @ `{pipe['source_head_at_generation'][:12]}`"
         f"{' (dirty)' if pipe['dirty'] else ''}",
     ]
     if flut:
         lines.append(
-            f"- flutter `{flut['branch']}` @ `{flut['head'][:12]}`"
+            f"- flutter `{flut['branch']}` @ `{flut['source_head_at_generation'][:12]}`"
             f"{' (dirty)' if flut['dirty'] else ''}"
         )
     contract = r["release_contract"]
@@ -369,8 +429,9 @@ def render_markdown(r: dict) -> str:
     lines += [
         "## Publication boundary",
         "",
-        "No Supabase upload, no Flutter bundle import, no app asset commit, no",
-        "branch push, no merge, no remote cleanup. Publication is a separately",
+        "No Supabase upload, no production merge, no store release, and no remote",
+        "cleanup. Candidate branch pushes and local app-asset verification do not",
+        "publish production. Publication is a separately",
         "authorized operator action.",
         "",
         f"Report self-integrity SHA-256: `{r['integrity']['sha256']}`",
@@ -385,6 +446,7 @@ def main(argv=None) -> int:
     ap.add_argument("--baseline-db")
     ap.add_argument("--flutter-repo")
     ap.add_argument("--verification")
+    ap.add_argument("--flutter-candidate-assets-imported", action="store_true")
     ap.add_argument("--out-md", required=True, type=Path)
     ap.add_argument("--out-json", required=True, type=Path)
     args = ap.parse_args(argv)
