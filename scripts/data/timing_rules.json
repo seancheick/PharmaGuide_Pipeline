@@ -3,7 +3,7 @@
     "description": "Supplement timing and absorption interaction rules for optimal nutrient uptake",
     "purpose": "timing_optimization",
     "schema_version": "6.0.0",
-    "last_updated": "2026-08-05",
+    "last_updated": "2026-08-23",
     "total_entries": 20,
     "clinical_review_version": "timing-section-2-adversarial",
     "runtime_policy": "verified_only",
@@ -158,7 +158,7 @@
           "12016"
         ],
         "negative": [
-          "278010"
+          "12928"
         ]
       }
     },
@@ -258,7 +258,7 @@
           "17550"
         ],
         "negative": [
-          "278010"
+          "17473"
         ]
       }
     },
@@ -461,7 +461,7 @@
           "17323"
         ],
         "negative": [
-          "278010"
+          "209443"
         ]
       }
     },
@@ -597,7 +597,7 @@
           "17092"
         ],
         "negative": [
-          "278010"
+          "12178"
         ]
       }
     },
@@ -751,7 +751,7 @@
           "217573"
         ],
         "negative": [
-          "278010"
+          "175429"
         ]
       },
       "reviewed_on": "2026-08-01",
