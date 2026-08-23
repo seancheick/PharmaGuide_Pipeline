@@ -5398,7 +5398,11 @@
         "ryr-va",
         "ryr-va red yeast rice",
         "ryr-max red yeast rice powder",
-        "ryr-max red yeast rice"
+        "ryr-max red yeast rice",
+        "organic red yeast rice",
+        "organic red yeast rice powder",
+        "organic red yeast rice extract",
+        "monascus purpureus extract"
       ],
       "reason": "Red yeast rice can contain widely varying amounts of monacolin K, a compound identical to lovastatin, and the amount is usually not stated on the label. Products with meaningful amounts can cause statin-like side effects and drug interactions.",
       "status": "high_risk",

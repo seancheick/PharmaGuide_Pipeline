@@ -686,6 +686,58 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     return hits
 
 
+def _clean_label_candidate_terms(
+    ingredient: Dict[str, Any],
+    *,
+    role: str,
+    product: Dict[str, Any],
+    resolver: Any,
+) -> List[tuple[str, Optional[str]]]:
+    """Return the identities one label row can present for clean-label review.
+
+    A compound excipient declares its children in ``forms[]`` -- a ``Film
+    Coating`` row lists Polyethylene Glycol, Polyvinyl Alcohol, Riboflavin,
+    Talc and Titanium Dioxide. Reading only ``name`` / ``standardName`` made
+    every one of those children invisible to the clean-label lane.
+
+    Inactive rows reuse the safety lane's term scoping, so a child that merely
+    restates a declared active is not offered for matching.
+    """
+    raw_name, standard_name = _ingredient_name_terms(ingredient)
+    form_terms: List[str] = []
+    for form in _safe_list(ingredient.get("forms")):
+        if isinstance(form, dict):
+            for key in ("name", "prefix"):
+                value = form.get(key)
+                if value:
+                    form_terms.append(str(value))
+        elif form:
+            form_terms.append(str(form))
+
+    if role == "inactive" and form_terms:
+        surviving = safety_terms_without_active_form_duplicates(
+            resolver,
+            active_ingredients=_safe_list((product or {}).get("activeIngredients")),
+            raw_name=raw_name,
+            standard_name=standard_name,
+            additional_terms=form_terms,
+        )
+        if not surviving:
+            return []
+        keep = set(surviving)
+        form_terms = [term for term in form_terms if term in keep]
+
+    terms: List[tuple[str, Optional[str]]] = []
+    if raw_name:
+        terms.append((raw_name, standard_name))
+    seen = {raw_name}
+    for term in form_terms:
+        if term and term not in seen:
+            seen.add(term)
+            terms.append((term, None))
+    return terms
+
+
 def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Collect clean-label additive concerns (e.g. titanium dioxide / E171).
 
@@ -706,6 +758,7 @@ def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, A
         return []
 
     hits: List[Dict[str, Any]] = []
+    seen_rules: set[str] = set()
     for source_key, role in (
         ("activeIngredients", "active"),
         ("inactiveIngredients", "inactive"),
@@ -713,38 +766,50 @@ def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, A
         for ingredient in _safe_list((product or {}).get(source_key)):
             if not isinstance(ingredient, dict):
                 continue
-            raw_name, standard_name = _ingredient_name_terms(ingredient)
-            if not raw_name:
-                continue
-            try:
-                resolution = resolver.resolve(
-                    raw_name=raw_name,
-                    standard_name=standard_name,
-                )
-            except Exception:
-                continue
-            if not resolution.is_clean_label_concern:
-                continue
-            hits.append({
-                "name": resolution.display_label or raw_name,
-                "standard_name": standard_name or resolution.display_label or raw_name,
-                "role": role,
-                "tier": resolution.clean_label_tier,
-                "consumer_note": resolution.clean_label_note,
-                "penalty_base": resolution.clean_label_penalty_base,
-                "status": resolution.regulatory_status,
-                "matched_rule_id": resolution.matched_rule_id,
-                "policy_id": resolution.clean_label_policy_id,
-                "jurisdiction": resolution.clean_label_jurisdiction,
-                "jurisdiction_status": (
-                    resolution.clean_label_jurisdiction_status
-                ),
-                "policy_basis": resolution.clean_label_policy_basis,
-                # Step 3b: structured citation (surfaced from the entry's verified refs)
-                "eu_status": resolution.clean_label_eu_status,
-                "regulation_citation": resolution.clean_label_citation,
-                "regulation_url": resolution.clean_label_url,
-            })
+            for raw_name, standard_name in _clean_label_candidate_terms(
+                ingredient,
+                role=role,
+                product=product,
+                resolver=resolver,
+            ):
+                try:
+                    resolution = resolver.resolve(
+                        raw_name=raw_name,
+                        standard_name=standard_name,
+                    )
+                except Exception:
+                    continue
+                if not resolution.is_clean_label_concern:
+                    continue
+                rule_id = str(resolution.matched_rule_id or "")
+                if rule_id and rule_id in seen_rules:
+                    # The penalty sums per hit, so one additive declared twice
+                    # -- top level and again inside a compound row -- must not
+                    # be charged twice. Zero products carry duplicate rule ids
+                    # today, so this only guards the newly-read form terms.
+                    continue
+                if rule_id:
+                    seen_rules.add(rule_id)
+                hits.append({
+                    "name": resolution.display_label or raw_name,
+                    "standard_name": standard_name or resolution.display_label or raw_name,
+                    "role": role,
+                    "tier": resolution.clean_label_tier,
+                    "consumer_note": resolution.clean_label_note,
+                    "penalty_base": resolution.clean_label_penalty_base,
+                    "status": resolution.regulatory_status,
+                    "matched_rule_id": resolution.matched_rule_id,
+                    "policy_id": resolution.clean_label_policy_id,
+                    "jurisdiction": resolution.clean_label_jurisdiction,
+                    "jurisdiction_status": (
+                        resolution.clean_label_jurisdiction_status
+                    ),
+                    "policy_basis": resolution.clean_label_policy_basis,
+                    # Step 3b: structured citation (surfaced from the entry's verified refs)
+                    "eu_status": resolution.clean_label_eu_status,
+                    "regulation_citation": resolution.clean_label_citation,
+                    "regulation_url": resolution.clean_label_url,
+                })
     return hits
 
 
