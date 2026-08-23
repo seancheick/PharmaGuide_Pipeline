@@ -4299,6 +4299,8 @@ def _build_canonical_label_ledger(
     display_rows: List[Any],
     ingredients: List[Dict[str, Any]],
     inactive_ingredients: List[Dict[str, Any]],
+    *,
+    identity_rows: Optional[List[Dict[str, Any]]] = None,
 ) -> List[Dict[str, Any]]:
     """Merge source-label rows with interpretation while keeping analysis separate."""
     source_rows = [dict(row) for row in display_rows if isinstance(row, dict)]
@@ -4349,6 +4351,11 @@ def _build_canonical_label_ledger(
 
     active_used: set[int] = set()
     inactive_used: set[int] = set()
+    identity_by_path = {
+        safe_str(row.get("raw_source_path")): row
+        for row in safe_list(identity_rows)
+        if isinstance(row, dict) and safe_str(row.get("raw_source_path"))
+    }
 
     def take_match(
         source: Dict[str, Any],
@@ -4390,6 +4397,7 @@ def _build_canonical_label_ledger(
             inactive_ingredients if is_other else ingredients,
             inactive_used if is_other else active_used,
         )
+        identity = identity_by_path.get(safe_str(source.get("raw_source_path")))
         score_included = (
             bool(source.get("score_included"))
             if "score_included" in source
@@ -4432,6 +4440,14 @@ def _build_canonical_label_ledger(
             "identity_integrity_state": identity_state,
             "form_display_state": _ledger_form_state(source, analysis if score_included else None),
             "canonical_id": source.get("canonical_id") or (analysis or {}).get("canonical_id"),
+            # Marker provenance belongs to the complete label ledger, not only
+            # the quality-scored analysis projection. A recognized botanical
+            # can deliver an evidence marker even when it has no IQM score.
+            "delivers_markers": safe_list(
+                source.get("delivers_markers")
+                or (identity or {}).get("delivers_markers")
+                or (analysis or {}).get("delivers_markers")
+            ),
             "analysis": (
                 {
                     "canonical_id": analysis.get("canonical_id"),
@@ -6267,15 +6283,27 @@ def build_detail_blob(
 
     # Active ingredients
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
-    iqd_rows = [
-        row for row in safe_list(iqd.get("ingredients")) if isinstance(row, dict)
-    ]
-    if not iqd_rows:
-        iqd_rows = [
-            row
-            for row in safe_list(iqd.get("ingredients_skipped"))
-            if isinstance(row, dict)
-        ]
+    # Keep one identity row per label source path, preferring the scored IQM
+    # projection and then the recognized/non-scorable projection. The latter
+    # still owns canonical identity and marker provenance for the app ledger.
+    iqd_rows: List[Dict[str, Any]] = []
+    seen_iqd_identity_keys: set[tuple[str, str]] = set()
+    for bucket in (
+        "ingredients",
+        "ingredients_recognized_non_scorable",
+        "ingredients_skipped",
+    ):
+        for row in safe_list(iqd.get(bucket)):
+            if not isinstance(row, dict):
+                continue
+            key = (
+                safe_str(row.get("raw_source_path")),
+                safe_str(row.get("raw_source_text") or row.get("name")),
+            )
+            if key in seen_iqd_identity_keys:
+                continue
+            seen_iqd_identity_keys.add(key)
+            iqd_rows.append(row)
     used_iqd_rows: set[int] = set()
 
     def take_iqd_match(ingredient: Dict[str, Any]) -> Dict[str, Any]:
@@ -6785,6 +6813,7 @@ def build_detail_blob(
         reconciled_display_rows,
         ingredients,
         inactive,
+        identity_rows=iqd_rows,
     )
     display_ingredients = _fold_probiotic_serving_headers(
         enriched,

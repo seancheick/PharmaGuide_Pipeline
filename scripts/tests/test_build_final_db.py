@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from build_final_db import (
     REFERENCE_FILES,
+    _build_canonical_label_ledger,
     build_final_db,
     build_core_row,
     build_detail_blob,
@@ -2247,6 +2248,43 @@ def test_export_uses_strict_scoring_rows_not_flattened_blend_children():
     assert categories["contains_probiotics"] == 0
     assert "QPower" not in row["ingredients_text"]
     assert "Rhodiola" not in row["ingredients_text"]
+
+
+def test_canonical_label_ledger_keeps_markers_for_recognized_label_active():
+    display_rows = [
+        {
+            "raw_source_text": "Camu Camu 4:1 Extract powder",
+            "raw_source_path": "ingredientRows[1]",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "score_included": True,
+            "canonical_id": "camu_camu",
+        }
+    ]
+    identity_rows = [
+        {
+            "raw_source_text": "Camu Camu 4:1 Extract powder",
+            "raw_source_path": "ingredientRows[1]",
+            "canonical_id": "camu_camu",
+            "role_classification": "recognized_non_scorable",
+            "delivers_markers": [
+                {"marker_canonical_id": "vitamin_c", "confidence_scale": 0.0}
+            ],
+        }
+    ]
+
+    rows = _build_canonical_label_ledger(
+        display_rows,
+        [],
+        [],
+        identity_rows=identity_rows,
+    )
+
+    assert rows[0]["canonical_id"] == "camu_camu"
+    assert rows[0]["analysis"] is None
+    assert rows[0]["delivers_markers"] == [
+        {"marker_canonical_id": "vitamin_c", "confidence_scale": 0.0}
+    ]
 
 
 def test_export_empty_strict_primary_contract_does_not_fallback_to_blend_children():

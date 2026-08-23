@@ -127,15 +127,27 @@ def _find_canary_blob(dsld_id: str) -> dict | None:
     return None
 
 
-def _find_ingredient(blob: dict, substring: str) -> dict | None:
-    for ing in blob.get("ingredients") or []:
+def _find_ingredient(
+    blob: dict,
+    substring: str,
+    *,
+    require_markers: bool = False,
+) -> dict | None:
+    # Schema 2.4 makes display_ingredients the complete canonical label ledger.
+    # Legacy ingredients remains an analysis-only projection and can omit a
+    # recognized label identity that deliberately receives no quality score.
+    matches = []
+    for ing in (blob.get("display_ingredients") or []) + (blob.get("ingredients") or []):
         n = (ing.get("name") or "").lower()
         if substring.lower() in n:
-            return ing
+            matches.append(ing)
+            continue
         rs = (ing.get("raw_source_text") or "").lower()
         if substring.lower() in rs:
-            return ing
-    return None
+            matches.append(ing)
+    if require_markers:
+        return next((row for row in matches if row.get("delivers_markers")), None)
+    return next((row for row in matches if row.get("canonical_id")), None)
 
 
 @pytest.mark.parametrize("dsld_id, brand, ing_substr, expected_cid, expects_markers", CANARY_BLOBS)
@@ -174,7 +186,7 @@ def test_canary_active_carries_delivers_markers_field(
     blob = _find_canary_blob(dsld_id)
     if blob is None:
         pytest.skip(f"Canary blob {dsld_id} not present — run targeted rebuild first.")
-    ing = _find_ingredient(blob, ing_substr)
+    ing = _find_ingredient(blob, ing_substr, require_markers=expects_markers)
     assert ing is not None
     # The field must ALWAYS be a list (possibly empty) — never null/missing.
     markers = ing.get("delivers_markers", "__MISSING__")
