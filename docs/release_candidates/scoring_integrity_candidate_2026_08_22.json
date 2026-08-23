@@ -1,391 +1,168 @@
 {
-  "report_schema_version": "1.0.0",
-  "report_name": "PharmaGuide scoring integrity corrected candidate audit",
-  "generated_at": "2026-08-22T21:20:00Z",
+  "report_schema_version": "2.0.0",
+  "report_name": "PharmaGuide scoring integrity 2.4 candidate",
   "candidate_status": "technically_verified_preproduction_not_approved_for_publish",
-  "supersedes": "docs/release_candidates/scoring_readiness_candidate_2026_08_22.md before the compound-excipient safety fix",
+  "generated_by": "scripts/audits/generate_candidate_report.py",
   "repositories": {
     "pipeline": {
+      "head": "31ed56ac3e7bf00f4c3a4515836a95010ceb5110",
       "branch": "codex/scoring-integrity-unification",
-      "implementation_head": "1a6bbf8c5c623507a239b1aaea74996397a80aff",
-      "merge_base_origin_main": "c31983c4500cc5992ecd476e4b71e7c5b7d55404"
+      "merge_base_origin_main": "c31983c4500cc5992ecd476e4b71e7c5b7d55404",
+      "dirty": true
     },
     "flutter": {
+      "head": "e92068757ed0850c643988f12f3a0f59877a484a",
       "branch": "codex/scoring-integrity-unification",
-      "head": "ca60aa6c16db7686eb9049da8253860e25aecca8",
-      "merge_base_origin_main": "9a2700f8f2584f68904039bbf9e17ed4a25cf2ef"
+      "dirty": false
     }
   },
   "release_contract": {
     "export_schema_version": "2.4.0",
     "scoring_version": "4.3.0",
     "pipeline_version": "3.4.0",
-    "db_version": "2026.08.22.205555",
-    "compatibility_boundary": "one released 2.4-compatible app before schema 3 cleanup"
+    "db_version": "2026.08.23.033859"
   },
   "artifact_hashes": {
-    "candidate_database_sha256": "855684b0585cde7c20dce83e4ef438eeda03393ccb46b8f234d2bed45d035a82",
-    "export_manifest_sha256": "ad3c3e46b381ccf9e99ba8b358a0881ca2afe8f5f70e3b4f83a609fb304e715d",
-    "detail_index_sha256": "bdd6ffa6b001ea62ccacbc176daaac51fffbe306324d510e6b4bda1c92560641",
-    "export_audit_sha256": "46ba25667b313fba5784f502c589991e862ac7d931b8d7e5055b130713809e65",
-    "mapping_shadow_file_sha256": "358605b54d2e04c0fe42ed83623a7feca3d48b17c98076e128d6b124e3dea5a4",
-    "readiness_shadow_file_sha256": "e900744101e43a199ac29a90206bec20283ff4f37d2a03d9549f685dbb8e2f38",
-    "routing_shadow_file_sha256": "84ebf44ea4819467ed9d61f0aa47327956040fb505ffd9788f0cee290f3b56bb",
-    "routing_gold_file_sha256": "0693603ae53e4b87f363d4cfa82de3148c8787774b3ba0e7c9649ac043c70edf",
-    "schema3_payload_report_sha256": "1184a8595e1b82a53b0b02843e6f343b39394f06f8ea799a8c317d383b8da258",
-    "interaction_database_sha256": "c1670111a4c09bc6262e35586a75f5f48d60c1b011077c21eebe531899c9ba67"
-  },
-  "baseline": {
-    "schema_version": "2.3.0",
-    "scoring_version": "4.2.0",
-    "product_count": 13271,
-    "database_sha256": "f5a85348cbebed85faf56f733b35468fe66e1bb35e9ed6de45bc1838a1cf341b",
-    "manifest_sha256": "6e05a806f74594ab2d67eaa16434392e3dfdef235de3a9a2f2771e25627ad4f8",
-    "detail_index_sha256": "70bdec6d161bb13643521097c58d569a38b09051555f0db1cf8466ef7fc9cb2a"
+    "candidate_database_sha256": "63b6603d52f9f075969097f4c3d853bc133d7370acabc9513d3d46e98994e910",
+    "export_manifest_sha256": "8822b7e9484ed875909caa3be90c3c964fa49c3814bad35d73a2f15f5f41a701",
+    "detail_index_sha256": "bf8e24783fee85ffbacaf0fa6cf0bed0436a17c5cf22fb6fae66f5611b5039a4"
   },
   "candidate": {
-    "core_database_bytes": 56569856,
     "live_product_count": 14409,
     "detail_blob_count": 14409,
-    "quarantined_product_count": 1003,
-    "score_status_counts": {
-      "scored": 14357,
-      "suppressed_safety": 52,
-      "not_scored_live": 0
-    },
+    "core_database_bytes": 56569856,
     "verdict_counts": {
       "BLOCKED": 54,
       "CAUTION": 1198,
       "POOR": 2043,
       "SAFE": 11114
     },
-    "tier_counts": {
-      "null": 52,
-      "Acceptable": 3337,
-      "Elite": 29,
-      "Excellent": 96,
-      "Poor": 3773,
-      "Strong": 1069,
-      "Weak": 6053
+    "quality_score_status_counts": {
+      "scored": 14355,
+      "suppressed_safety": 54
     },
-    "route_counts": {
-      "b_complex": 139,
-      "fiber_digestive": 331,
-      "generic": 10416,
-      "multi_or_prenatal": 1332,
-      "omega": 712,
-      "probiotic": 545,
-      "sports": 934
-    },
-    "score_confidence_counts": {
-      "null": 52,
-      "high": 17,
-      "low": 4747,
-      "moderate": 9593
-    },
-    "nonblocking_verdicts_with_blocking_reason": 0
-  },
-  "baseline_candidate_diff_on_shared_products": {
-    "shared": 12556,
-    "added_live": 1853,
-    "removed_live": 715,
-    "changed_routes": 568,
-    "changed_scores": 1493,
-    "changed_tiers": 615,
-    "changed_verdicts": 568,
-    "changed_score_statuses": 46,
-    "changed_mapping_coverage": 0,
-    "changed_blocking_reasons": 276
-  },
-  "mapping": {
-    "product_count": 15412,
-    "mapped_score_eligible_rows": 84492,
-    "unmapped_score_eligible_rows": 0,
-    "products_below_one": 0,
-    "strict_contract_failed_products": 0,
-    "report_internal_sha256": "1221b31b3f07403e549dfda7bbe00408aed56e6440823e8ff1a21cfd319d298d"
-  },
-  "assessment_readiness": {
-    "product_count": 15412,
-    "live_ready_products": 14419,
-    "enforced_incomplete_products": 993,
-    "shadow_evidence_incomplete_products": 4939,
-    "not_yet_evaluated_material_label_rows": 8935,
-    "dimension_counts": {
-      "identity": {
-        "complete": 15319,
-        "incomplete": 93
-      },
-      "dose": {
-        "complete": 14338,
-        "incomplete": 893,
-        "not_applicable": 181
-      },
-      "evidence": {
-        "complete": 10292,
-        "incomplete": 4939,
-        "not_applicable": 181
-      },
-      "verification": {
-        "complete": 15412
-      },
-      "route": {
-        "complete": 15405,
-        "incomplete": 7
-      }
-    },
-    "evidence_state_counts": {
-      "evaluated_supported": 45391,
-      "evaluated_limited_or_negative": 2468,
-      "not_yet_evaluated": 8935,
-      "not_applicable": 31398
-    },
-    "verification_state_counts": {
-      "verified_present": 1412,
-      "verified_absent": 14000,
-      "not_evaluated": 0
-    },
-    "report_internal_sha256": "9fe69c8b9cd433d768e7e598effec3b919f75d75fe8bf953fd272b18df49eba0"
+    "product_safety_status_counts": {
+      "blocked": 54,
+      "caution": 1198,
+      "no_known_catalog_concern": 13157
+    }
   },
   "quarantine": {
     "total": 1003,
     "groups": {
-      "completeness_dose": 891,
-      "completeness_identity": 93,
-      "completeness_route": 7,
-      "safety_policy_only": 10,
-      "safety_policy_and_dose": 2
-    },
-    "vinpocetine_product_ids": [
-      "204468",
-      "232923",
-      "294063",
-      "295535",
-      "328399",
-      "44121",
-      "59786",
-      "60562",
-      "77114"
-    ],
-    "confirmed_synthetic_steroid_class_product_ids": [
-      "33358",
-      "33360",
-      "33361"
-    ]
-  },
-  "routing": {
-    "reviewed_change_count": 173,
-    "unreviewed_change_count": 0,
-    "transitions": {
-      "fiber_digestive_to_generic": 45,
-      "fiber_digestive_to_sports": 10,
-      "generic_to_sports": 57,
-      "multi_or_prenatal_to_sports": 61
-    },
-    "unresolved_route_product_ids": [
-      "228837",
-      "228854",
-      "248514",
-      "259709",
-      "69317",
-      "69599",
-      "69608"
-    ],
-    "baseline_internal_sha256": "72ef2d59de883cd685bf690585705691d88359c526a0ed2c84b96e21ce66dd2f",
-    "candidate_internal_sha256": "8786001ed3b6b0b1a667306f584468aba3d19215868a61af25358fe6be8321fa",
-    "gold_internal_sha256": "8c2280bb4d418ccf2cfda966571917fc9f227a3308d9b9b7c048100693cdeda1"
-  },
-  "schema3_preparation": {
-    "source_schema": "2.4.0",
-    "target_schema": "3.0.0",
-    "product_count": 14409,
-    "schema2_bytes": 2278680140,
-    "schema3_bytes": 1354118116,
-    "bytes_saved": 924562024,
-    "reduction_percent": 40.5745,
-    "warning_equivalence_checked": 181471,
-    "warning_equivalence_failures": 0,
-    "input_fingerprint_sha256": "6d6bcc35a1295592b3e1083ce6e4540bafc3692611492d5acab109f52d36eee3"
-  },
-  "verification": {
-    "full_corpus": {
-      "datasets": 37,
-      "failures": 0
-    },
-    "pipeline_release_suite": {
-      "passed": 116,
-      "skipped": 1,
-      "failures": 0,
-      "post_suite_gate": "5 dist_vs_flutter / interaction-artifact findings; these are the unpublished-candidate boundary, not regressions"
-    },
-    "pipeline_full_suite": {
-      "passed": 14321,
-      "skipped": 163,
-      "xfailed": 2,
-      "failures": 0
-    },
-    "flutter_analyze": {
-      "issues": 0
-    },
-    "flutter_full_suite": {
-      "passed": 3242,
-      "failures": 0
-    },
-    "candidate_importer_dry_run": "passed_no_files_written",
-    "supabase_sync_dry_run": "passed_no_upload",
-    "export_contract_failures": 0,
-    "contract_sync_red_findings": 0,
-    "pipeline_fast_suite": {
-      "passed": 11832,
-      "skipped": 124,
-      "failures": 0
+      "blocked_by_completeness_gate:dose": 891,
+      "blocked_by_completeness_gate:identity": 93,
+      "blocked_by_completeness_gate:route": 7,
+      "safety_policy_review_required": 10,
+      "safety_policy_review_required:dose": 2
     }
   },
-  "interaction_bridge": {
-    "schema_version": "2.0.0",
-    "sqlite_user_version": 2,
-    "interaction_count": 134,
-    "research_pair_count": 31690,
-    "profile_warning_rule_count": 145,
-    "structural_verification": "passed",
-    "production_identity_verification": "must_rebuild_with_configured_UMLS_API_KEY"
-  },
-  "corrected_prior_claims": {
-    "evidence_shadow_products": {
-      "prior": 7722,
-      "correct": 4939
-    },
-    "evidence_shadow_rows": {
-      "prior": 17636,
-      "correct": 8935
-    },
-    "evidence_exemption_delta_rows": {
-      "prior": 3270,
-      "correct": 9854,
-      "note": "3,270 was the sum of a truncated top-40 listing, not the total. The provenance rule exempts 9,854 product-level projection rows across 4,618 products that the canonical-id allowlist counted as backlog, and stops exempting 138 real label rows across 61 products (35 genuinely uncurated)."
-    },
-    "red_yeast_rice_open_regression": {
-      "prior": true,
-      "correct": false,
-      "note": "The failure was caused by this branch and read against a build made before it. Both halves matter: commit 6486e758 flips RYR corpus-wide, and the test read an artifact predating it."
+  "pending_clinical_signoff": {
+    "us_policy_holds": [],
+    "withheld_clinical_records": {
+      "medication_depletions": {
+        "published": 31,
+        "withheld": 49,
+        "withheld_by_review_status": {
+          "needs_revision": 29,
+          "rejected": 20
+        }
+      },
+      "timing_rules": {
+        "published": 7,
+        "withheld": 13,
+        "withheld_by_review_status": {
+          "needs_revision": 13
+        }
+      }
     }
   },
   "publication_boundary": {
     "production_published": false,
     "supabase_uploaded": false,
     "flutter_bundle_imported": false,
-    "flutter_assets_committed": false,
     "branches_pushed": false,
-    "remote_versions_cleaned": false,
     "actual_publish_owner": "operator"
   },
-  "open_actions": [
-    "operator clinical-policy sign-off for 9 vinpocetine and 3 confirmed synthetic-steroid-class products",
-    "remediate or retain quarantine for 893 dose, 93 identity, and 7 route products",
-    "continue one-ingredient-at-a-time evidence curation for 4939 shadow-incomplete products",
-    "rebuild the production interaction artifact with configured UMLS credentials and run parity",
-    "after explicit approval, ship the compatible schema-2.4 app before schema-3 cleanup",
-    "keep scoring calibration in a later separately versioned release"
-  ],
+  "baseline": {
+    "database_sha256": "f5a85348cbebed85faf56f733b35468fe66e1bb35e9ed6de45bc1838a1cf341b",
+    "product_count": 13271
+  },
+  "baseline_candidate_diff": {
+    "shared": 12556,
+    "added_live": 1853,
+    "removed_live": 715,
+    "comparable_columns": [
+      "blocking_reason",
+      "quality_score_status",
+      "verdict"
+    ],
+    "changed": {
+      "blocking_reason": 274,
+      "quality_score_status": 44,
+      "verdict": 565
+    }
+  },
+  "verification": {
+    "full_corpus_pipeline": {
+      "stages": "enrich,score",
+      "datasets": 37,
+      "failures": 0,
+      "strict_pre_score_gates": "all passed"
+    },
+    "pipeline_fast_suite": {
+      "passed": 11914,
+      "skipped": 124,
+      "failed": 0
+    },
+    "pipeline_release_suite": {
+      "passed": 122,
+      "failed": 0
+    },
+    "pipeline_full_suite": {
+      "passed": 14411,
+      "skipped": 162,
+      "xfailed": 0,
+      "failed": 0
+    },
+    "flutter_analyze": {
+      "issues": 0
+    },
+    "flutter_suite": {
+      "passed": 3264,
+      "failed": 0
+    },
+    "interaction_db": {
+      "rebuilt_with_umls_credential": true,
+      "umls_live_probe": "C0025598 metformin",
+      "verify_interactions": "total=134 valid=134 warnings=0 errors=0",
+      "orphan_canonical_gate": "passed"
+    },
+    "device_verification": {
+      "simulator": "iPhone 16 Pro (iOS 18.5)",
+      "app_built_and_launched": true,
+      "themes_captured": [
+        "light",
+        "dark"
+      ],
+      "probiotic_card_on_device": "not reachable - detail blobs are fetched from the production blob store, not bundled; covered by goldens instead"
+    },
+    "dist_vs_flutter_gate": {
+      "findings": 6,
+      "all_of_class": "Flutter bundle differs from dist",
+      "interpretation": "the unpublished-candidate boundary; clears only by importing the bundle, which is the publish step"
+    },
+    "publication": {
+      "supabase_uploaded": false,
+      "flutter_bundle_imported": false,
+      "branches_pushed": false,
+      "merged": false
+    }
+  },
   "integrity": {
     "algorithm": "sha256",
     "scope": "canonical JSON excluding integrity",
     "signature_type": "self-integrity hash; not an identity signature",
-    "sha256": "e5e5e5c8d098deb135f98051658ced671cc4b9b933cdebf36169b4fcd1eed3ce"
-  },
-  "superseded_by_later_code_state": {
-    "note": "These were accurate measurements of the code state they were taken against, not errors. The candidate database built at that commit contains exactly 14,380 rows. Row-level protein routing and the route readiness dimension landed afterwards.",
-    "live_candidate": {
-      "earlier": 14380,
-      "current": 14409
-    },
-    "quarantined": {
-      "earlier": 1032,
-      "current": 1003
-    },
-    "reviewed_route_changes": {
-      "earlier": 52,
-      "current": 173
-    }
-  },
-  "compound_excipient_safety_defect": {
-    "status": "fixed",
-    "summary": "The active-form duplicate rule suppressed a whole inactive row when any term restated a declared active. A compound excipient models sub-ingredients in forms[], so one duplicate child amnestied its banned siblings in all three callers.",
-    "callers_fixed": [
-      "scoring_v4/gate_safety.py::_iter_resolver_safety_hits",
-      "build_final_db.py::_resolver_status_in",
-      "build_final_db.py::build_detail_blob inactive disposition"
-    ],
-    "oracle_fixed": "scripts/tests/test_v4_banned_form_evidence_gate.py::_target_banned_rule",
-    "inactive_rows_scanned": 83353,
-    "rows_suppressed_by_rule": 10344,
-    "rows_with_independent_banned_or_concern_identity": 4,
-    "corpus_before_after_diff": {
-      "products_scanned": 15412,
-      "safety_hit_sets_changed": 4,
-      "gained_a_signal": 4,
-      "lost_a_signal": 0
-    },
-    "products": {
-      "33212": {
-        "rule": "BANNED_PHO",
-        "was": "SAFE",
-        "now": "BLOCKED"
-      },
-      "33230": {
-        "rule": "BANNED_PHO",
-        "was": "SAFE",
-        "now": "BLOCKED"
-      },
-      "223441": {
-        "rule": "BANNED_ADD_CAROB_COLOR",
-        "was": "SAFE",
-        "now": "CAUTION"
-      },
-      "178791": {
-        "rule": "BANNED_ADD_TALC",
-        "was": "SAFE",
-        "now": "quarantined on completeness; not in the live catalog"
-      }
-    }
-  },
-  "safety_verdict_transitions": {
-    "note": "Products that LOST a BLOCKED verdict against the shipped baseline. The report asked for sign-off only on the conservative direction; this is the other one.",
-    "total_deblocked_before_fix": 46,
-    "policy_transitions_needing_signoff": 44,
-    "breakdown": {
-      "red_yeast_rice_to_caution": 27,
-      "sodium_tetraborate_to_safe": 16,
-      "sodium_tetraborate_to_caution": 1,
-      "partially_hydrogenated_oil_to_safe": 2
-    },
-    "tetraborate_caution_product_id": "312980",
-    "pho_product_ids": [
-      "33212",
-      "33230"
-    ],
-    "pho_is_not_a_signoff_choice": true,
-    "authorities": {
-      "sodium_tetraborate": "NIH ODS lists sodium tetraborate as a supplemental boron form",
-      "red_yeast_rice": "NCCIH records monacolin K from none to substantial; the FDA prohibition addresses enhanced or added lovastatin",
-      "partially_hydrogenated_oils": "FDA removed PHOs from GRAS; compliance period closed"
-    }
-  },
-  "flutter_probiotic_research_restored": {
-    "status": "restored",
-    "producer": "enrich_supplements_v3._strain_research_semantics",
-    "candidate_coverage": {
-      "products_with_research_status": 647,
-      "research_rows": 1190,
-      "source_urls": 1358,
-      "clinician_verified_rows": 1029,
-      "status_distribution": {
-        "species_level": 787,
-        "exact_strain": 242,
-        "formula_only": 148,
-        "pending_review": 13
-      }
-    },
-    "open_question": "formula_only is assigned before the dr_pham_signoff check, so 148 rows render an affirmative badge without clinician review. exact_strain + species_level sum exactly to the 1,029 verified rows."
+    "sha256": "86728fd435c98bf158065dc3864a1ecf3a6b5e116c4587c4f0b8abd1612c14da"
   }
 }

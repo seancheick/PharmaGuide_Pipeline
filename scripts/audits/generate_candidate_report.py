@@ -245,6 +245,10 @@ def build_report(args) -> dict:
     return report
 
 
+def _counts_text(counts: dict) -> str:
+    return ", ".join(f"{k} {v}" for k, v in sorted(counts.items()))
+
+
 def render_markdown(r: dict) -> str:
     pipe = r["repositories"]["pipeline"]
     flut = r["repositories"].get("flutter") or {}
@@ -319,10 +323,10 @@ def render_markdown(r: dict) -> str:
         "",
         f"- `medication_depletions`: {withheld['medication_depletions']['published']} "
         f"published, {withheld['medication_depletions']['withheld']} withheld "
-        f"({withheld['medication_depletions']['withheld_by_review_status']})",
+        f"({_counts_text(withheld['medication_depletions']['withheld_by_review_status'])})",
         f"- `timing_rules`: {withheld['timing_rules']['published']} published, "
         f"{withheld['timing_rules']['withheld']} withheld "
-        f"({withheld['timing_rules']['withheld_by_review_status']})",
+        f"({_counts_text(withheld['timing_rules']['withheld_by_review_status'])})",
         "",
     ]
 
