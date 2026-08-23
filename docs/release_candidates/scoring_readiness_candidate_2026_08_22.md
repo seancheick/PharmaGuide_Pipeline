@@ -7,7 +7,7 @@ artifact and the current git heads. Do not hand-edit: regenerate.
 
 ## Heads
 
-- pipeline `codex/scoring-integrity-unification` @ `31ed56ac3e7b` (dirty)
+- pipeline `codex/scoring-integrity-unification` @ `52ad9cacfaff`
 - flutter `codex/scoring-integrity-unification` @ `e92068757ed0`
 
 ## Candidate
@@ -52,8 +52,8 @@ remediation backlog, not completed work.
 
 Unreviewed clinical guidance is withheld from the bundle entirely:
 
-- `medication_depletions`: 31 published, 49 withheld ({'needs_revision': 29, 'rejected': 20})
-- `timing_rules`: 7 published, 13 withheld ({'needs_revision': 13})
+- `medication_depletions`: 31 published, 49 withheld (needs_revision 29, rejected 20)
+- `timing_rules`: 7 published, 13 withheld (needs_revision 13)
 
 ## Against the shipped baseline
 
@@ -86,4 +86,4 @@ No Supabase upload, no Flutter bundle import, no app asset commit, no
 branch push, no merge, no remote cleanup. Publication is a separately
 authorized operator action.
 
-Report self-integrity SHA-256: `86728fd435c98bf158065dc3864a1ecf3a6b5e116c4587c4f0b8abd1612c14da`
+Report self-integrity SHA-256: `1b7aa2134b3ea24032dd328de8aea96b44afd66d8950fcba31732a59604a1265`

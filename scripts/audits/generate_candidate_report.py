@@ -307,14 +307,27 @@ def render_markdown(r: dict) -> str:
         "",
         "## Awaiting clinical sign-off",
         "",
-        "| Rule | Held at | Proposed | Live products | Approved |",
-        "|---|---|---|---:|---|",
     ]
-    for hold in r["pending_clinical_signoff"]["us_policy_holds"]:
+    holds = r["pending_clinical_signoff"]["us_policy_holds"]
+    if holds:
+        lines += [
+            "| Rule | Held at | Proposed | Live products | Approved |",
+            "|---|---|---|---:|---|",
+        ]
+        for hold in holds:
+            lines.append(
+                f"| `{hold['rule_id']}` | {hold['held_status']} | "
+                f"{hold['proposed_status']} | {hold['affected_live_products']} | "
+                f"{'yes' if hold['approved'] else '**no**'} |"
+            )
+    else:
+        # An empty table reads as a missing section rather than as "nothing is
+        # held", which is the actual and load-bearing fact.
         lines.append(
-            f"| `{hold['rule_id']}` | {hold['held_status']} | "
-            f"{hold['proposed_status']} | {hold['affected_live_products']} | "
-            f"{'yes' if hold['approved'] else '**no**'} |"
+            "No safety rule is held. `pending_us_policy_signoff` exists and is "
+            "tested; the two findings that were investigated as policy "
+            "transitions, and why neither is one, are in "
+            "`safety_signoff_packet_2026_08_22.md`."
         )
     withheld = r["pending_clinical_signoff"]["withheld_clinical_records"]
     lines += [
