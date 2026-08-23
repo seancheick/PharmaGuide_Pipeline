@@ -33,4 +33,3 @@ def test_shared_pmid_keeps_ingredient_claims_separate() -> None:
     assert "magnesium" in claims[("12345", "INGREDIENT_A")]["tw"]
     assert "curcumin" not in claims[("12345", "INGREDIENT_A")]["tw"]
     assert "curcumin" in claims[("12345", "INGREDIENT_B")]["tw"]
-
