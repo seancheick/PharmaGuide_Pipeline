@@ -20,6 +20,15 @@ INTERACTION_CANONICAL_ALIASES: dict[str, str] = {
     # same product identity.
     "RISK_KAVA": "kavalactones",
     "risk_kava": "kavalactones",
+    # Red yeast rice has two safety rules -- BANNED_RED_YEAST_RICE for declared
+    # monacolin K / lovastatin, RISK_RED_YEAST_RICE for the generic botanical --
+    # and both carry CUI C0763533, so a CUI or name lookup can land on either.
+    # Only the banned id was normalized, so DSI_STATINS_RYR built with
+    # `RISK_RED_YEAST_RICE` as its supplement identity and orphaned itself
+    # against the `red_yeast_rice` allowlist entry that exists for it. The
+    # shipped artifact carries `red_yeast_rice`; this restores that.
+    "RISK_RED_YEAST_RICE": "red_yeast_rice",
+    "risk_red_yeast_rice": "red_yeast_rice",
 }
 
 INTERACTION_TEXT_TAG_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
