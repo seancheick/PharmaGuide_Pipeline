@@ -7,7 +7,7 @@ artifact and the current git heads. Do not hand-edit: regenerate.
 
 ## Heads
 
-- pipeline `codex/scoring-integrity-unification` @ `52ad9cacfaff`
+- pipeline `codex/scoring-integrity-unification` @ `c690b186156c`
 - flutter `codex/scoring-integrity-unification` @ `e92068757ed0`
 
 ## Candidate
@@ -47,8 +47,7 @@ remediation backlog, not completed work.
 
 ## Awaiting clinical sign-off
 
-| Rule | Held at | Proposed | Live products | Approved |
-|---|---|---|---:|---|
+No safety rule is held. `pending_us_policy_signoff` exists and is tested; the two findings that were investigated as policy transitions, and why neither is one, are in `safety_signoff_packet_2026_08_22.md`.
 
 Unreviewed clinical guidance is withheld from the bundle entirely:
 
@@ -86,4 +85,4 @@ No Supabase upload, no Flutter bundle import, no app asset commit, no
 branch push, no merge, no remote cleanup. Publication is a separately
 authorized operator action.
 
-Report self-integrity SHA-256: `1b7aa2134b3ea24032dd328de8aea96b44afd66d8950fcba31732a59604a1265`
+Report self-integrity SHA-256: `acecc96ba9a504a4e329b9ec20169a7a9f8b763bb2d159c72e76f7ec52045115`

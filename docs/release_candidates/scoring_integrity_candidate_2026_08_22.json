@@ -5,7 +5,7 @@
   "generated_by": "scripts/audits/generate_candidate_report.py",
   "repositories": {
     "pipeline": {
-      "head": "52ad9cacfaff34986a3fee6198a33053efb70a11",
+      "head": "c690b186156cb48d0ade07862e2257423950adad",
       "branch": "codex/scoring-integrity-unification",
       "merge_base_origin_main": "c31983c4500cc5992ecd476e4b71e7c5b7d55404",
       "dirty": false
@@ -163,6 +163,6 @@
     "algorithm": "sha256",
     "scope": "canonical JSON excluding integrity",
     "signature_type": "self-integrity hash; not an identity signature",
-    "sha256": "1b7aa2134b3ea24032dd328de8aea96b44afd66d8950fcba31732a59604a1265"
+    "sha256": "acecc96ba9a504a4e329b9ec20169a7a9f8b763bb2d159c72e76f7ec52045115"
   }
 }
