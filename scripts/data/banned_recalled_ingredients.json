@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
-    "schema_version": "5.5.0",
-    "last_updated": "2026-08-20",
+    "schema_version": "5.5.1",
+    "last_updated": "2026-08-23",
     "total_entries": 169,
     "data_source_metadata": {
       "sources": [
@@ -16232,16 +16232,21 @@
         "borax decahydrate"
       ],
       "entity_type": "ingredient",
-      "match_mode": "disabled",
+      "match_mode": "active",
       "active_nutrient_parent": "boron",
       "status": "watchlist",
-      "reason": "Retired US hard-block rule. NIH ODS lists sodium borate and sodium tetraborate among boron forms used in dietary supplements and explains that Supplement Facts labels declare elemental boron rather than compound mass. Food-additive or EU chemical classifications do not establish a US dietary-supplement ban. Boron dose safety is assessed from the declared elemental amount through the typed dose/UL path.",
+      "reason": "Retired US hard-block rule for declared boron source forms. NIH ODS lists sodium borate and sodium tetraborate among boron forms used in dietary supplements and explains that Supplement Facts labels declare elemental boron rather than compound mass. That evidence does not establish direct inactive-excipient authorization. Declared boron source forms are assessed through the typed dose/UL path; standalone inactive use is quarantined pending an intended-use policy review.",
       "legal_status_enum": "lawful",
       "clinical_risk_enum": "dose_dependent",
-      "policy_verification_status": "retired",
+      "policy_verification_status": "review_required",
+      "policy_verification_status_by_role": {
+        "active": "retired",
+        "inactive": "review_required"
+      },
       "policy_verified_at": "2026-08-20",
-      "policy_review_reason": "Retired after NIH ODS verification showed sodium tetraborate is a recognized supplemental boron form and no US supplement prohibition was established.",
+      "policy_review_reason": "NIH ODS verifies sodium tetraborate as a supplemental boron source form, but no authoritative US source has yet verified direct use as an inactive supplement excipient.",
       "hard_verdict_roles": [],
+      "inactive_policy": "review_required",
       "source_category": "supplemental_boron_form",
       "class_tags": [],
       "match_rules": {
@@ -16277,15 +16282,20 @@
         }
       ],
       "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "oi_audit_batch1",
-        "next_review_due": "2026-09-01",
+        "status": "needs_review",
+        "last_reviewed_at": "2026-08-23",
+        "reviewed_by": "codex_scoring_integrity_audit",
+        "next_review_due": "2026-09-23",
         "change_log": [
           {
             "date": "2026-03-01",
             "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
             "by": "other_ingredients_deep_audit"
+          },
+          {
+            "date": "2026-08-23",
+            "change": "Split policy readiness by label role: declared boron source forms remain on elemental dose/UL assessment, while standalone inactive-excipient use is quarantined pending authoritative intended-use verification.",
+            "by": "codex_scoring_integrity_audit"
           }
         ]
       },

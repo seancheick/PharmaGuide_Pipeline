@@ -210,6 +210,30 @@ def test_supplemental_sodium_tetraborate_boron_is_not_a_hard_safety_match() -> N
     assert result.blocking_reason is None
 
 
+def test_inactive_sodium_tetraborate_requires_excipient_policy_review() -> None:
+    """A boron source form is not automatically authorized as an excipient."""
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = _active_product("Glucosamine")
+    product["inactiveIngredients"] = [
+        {
+            "name": "Sodium Tetraborate",
+            "standardName": "Sodium Tetraborate",
+            "source_section": "inactive",
+        }
+    ]
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict not in {"BLOCKED", "UNSAFE"}
+    assert result.blocking_reason is None
+    assert result.quarantine_required is True
+    assert result.quarantine_reason == "safety_policy_review_required"
+    assert result.review_records
+    assert result.review_records[0]["rule_id"] == "ADD_SODIUM_TETRABORATE"
+    assert result.review_records[0]["matched_role"] == "inactive"
+
+
 def test_stale_generic_red_yeast_rice_hard_signal_is_revalidated_and_ignored() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
 

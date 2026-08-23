@@ -422,6 +422,25 @@ def _current_policy_signal(
     )
 
 
+def _policy_verification_status_for_role(
+    entry: Dict[str, Any],
+    signal: SafetySignal,
+) -> str:
+    """Return the authored policy state for this label role.
+
+    One chemical identity can have a settled policy as a declared active form
+    and an unsettled policy as an inactive excipient.  Role-specific states
+    keep identity matching shared without turning either decision into a
+    blanket rule for the other role.
+    """
+    by_role = entry.get("policy_verification_status_by_role")
+    if isinstance(by_role, dict):
+        role_status = _norm(by_role.get(signal.subject_role))
+        if role_status:
+            return role_status
+    return _norm(entry.get("policy_verification_status"))
+
+
 def _append_policy_review(
     result: SafetyResult,
     signal: SafetySignal,
@@ -1174,7 +1193,9 @@ def evaluate_safety_gate(
         entry = _rule_for_signal(raw_signal)
         signal = _current_policy_signal(raw_signal, entry) if entry else raw_signal
 
-        policy_status = _norm(entry.get("policy_verification_status")) if entry else ""
+        policy_status = (
+            _policy_verification_status_for_role(entry, signal) if entry else ""
+        )
         match_mode = _norm(entry.get("match_mode")) if entry else ""
         if policy_status == _POLICY_RETIRED or match_mode in {"disabled", "historical"}:
             _append_signal(result, "B0_RETIRED_POLICY_SIGNAL_IGNORED")
