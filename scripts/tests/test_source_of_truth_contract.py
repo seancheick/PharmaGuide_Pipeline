@@ -22,6 +22,10 @@ sys.modules[spec.name] = audit
 spec.loader.exec_module(audit)
 
 from stage_manifest import write_stage_manifest  # noqa: E402
+from pipeline_freshness import (  # noqa: E402
+    REFERENCE_FINGERPRINT_KEY,
+    enrichment_reference_fingerprint,
+)
 
 
 def write_json(path: Path, payload):
@@ -51,6 +55,50 @@ def test_generic_json_discovery_excludes_hidden_control_files(tmp_path):
     write_json(tmp_path / ".stage_manifest.json", {"stage": "enrich"})
 
     assert list(audit.iter_json_files([tmp_path])) == [batch]
+
+
+def test_candidate_freshness_rejects_reference_data_drift(
+    tmp_path, monkeypatch
+):
+    repo = tmp_path / "repo"
+    data_file = repo / "scripts" / "data" / "reference.json"
+    write_json(data_file, {"value": 1})
+    fingerprint = enrichment_reference_fingerprint(repo)
+
+    stage_dir = (
+        repo / "scripts" / "products" / "output_Test_enriched" / "enriched"
+    )
+    output = stage_dir / "enriched_batch_1.json"
+    write_json(output, [])
+    write_stage_manifest(
+        stage_dir,
+        "enrich",
+        [output],
+        input_fingerprints={REFERENCE_FINGERPRINT_KEY: fingerprint},
+    )
+
+    dist = repo / "candidate" / "dist"
+    final = repo / "candidate" / "final_db_output"
+    dist.mkdir(parents=True)
+    final.mkdir(parents=True)
+    (dist / "pharmaguide_core.db").write_bytes(b"candidate")
+    write_json(dist / "export_manifest.json", {})
+    write_json(data_file, {"value": 2})
+
+    monkeypatch.setattr(audit, "REPO_ROOT", repo)
+    findings = audit.audit_freshness(
+        argparse.Namespace(
+            dist_dir=str(dist),
+            final_db_dir=str(final),
+            products_dir="scripts/products",
+            interaction_input=[],
+            skip_interaction_inputs=True,
+        )
+    )
+
+    assert "FRESHNESS_ENRICHMENT_REFERENCE_MISMATCH" in {
+        finding.code for finding in findings
+    }
 
 
 def test_source_of_truth_matrix_is_complete():
