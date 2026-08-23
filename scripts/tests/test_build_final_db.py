@@ -1230,12 +1230,49 @@ def test_recalled_signal_rejects_inconsistent_safe_scorer_artifact():
         }
     ]
 
+    blob = {
+        "warnings": [
+            {
+                "type": "recalled_ingredient",
+                "severity": "critical",
+                "alert_headline": "Recalled ingredient fixture",
+            }
+        ]
+    }
     with pytest.raises(RuntimeError, match="missed an export-resolved recalled signal"):
         build_core_row(
             enriched,
             make_scored(verdict="SAFE"),
             "2026-03-17T19:00:00Z",
+            detail_blob=blob,
         )
+
+
+def test_regional_ban_metadata_does_not_become_a_second_export_verdict():
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"]["substances"] = [
+        {
+            "ingredient": "Regional advisory fixture",
+            "banned_name": "Regional advisory fixture",
+            "status": "banned",
+            "match_type": "exact",
+            "jurisdictions": [{"jurisdiction_code": "EU"}],
+        }
+    ]
+    scored = make_scored(verdict="SAFE")
+    detail_blob = {
+        "warnings": [
+            {
+                "type": "regional_regulatory_advisory",
+                "severity": "informational",
+            }
+        ]
+    }
+
+    projected = project_export_scored_artifact(enriched, scored, detail_blob)
+
+    assert projected["verdict"] == "SAFE"
+    assert projected["product_safety_status"] == scored["product_safety_status"]
 
 
 def test_banned_inactive_rejects_inconsistent_safe_scorer_artifact():

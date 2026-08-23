@@ -5380,8 +5380,10 @@ def build_top_warnings(enriched: Dict) -> List[Dict]:
 
 # ─── Blocking Reason ───
 
-def blob_has_critical_banned_warning(detail_blob: Optional[Dict]) -> bool:
-    """True when a detail blob carries a critical banned-substance warning."""
+def blob_has_critical_safety_warning(
+    detail_blob: Optional[Dict], warning_type: str,
+) -> bool:
+    """True when the exported blob carries one critical warning of this type."""
     if not isinstance(detail_blob, dict):
         return False
     for list_key in ("warnings", "warnings_profile_gated"):
@@ -5389,11 +5391,21 @@ def blob_has_critical_banned_warning(detail_blob: Optional[Dict]) -> bool:
             if not isinstance(warning, dict):
                 continue
             if (
-                safe_str(warning.get("type")) == "banned_substance"
+                safe_str(warning.get("type")) == warning_type
                 and safe_str(warning.get("severity")).lower() == "critical"
             ):
                 return True
     return False
+
+
+def blob_has_critical_banned_warning(detail_blob: Optional[Dict]) -> bool:
+    """True when a detail blob carries a critical banned-substance warning."""
+    return blob_has_critical_safety_warning(detail_blob, "banned_substance")
+
+
+def blob_has_critical_recalled_warning(detail_blob: Optional[Dict]) -> bool:
+    """True when a detail blob carries a critical recalled-ingredient warning."""
+    return blob_has_critical_safety_warning(detail_blob, "recalled_ingredient")
 
 
 def blob_has_safety_blocking_warning(detail_blob: Optional[Dict]) -> bool:
@@ -5528,11 +5540,13 @@ def project_export_scored_artifact(
     scorer/export contract failure: fail the candidate instead of silently
     rewriting the scored artifact.
     """
-    has_export_banned_signal = (
-        has_banned_substance(enriched)
-        or blob_has_critical_banned_warning(detail_blob)
-    )
-    has_export_recalled_signal = has_recalled_ingredient(enriched)
+    # Validate only the consumer warning surface assembled by this exporter.
+    # Raw enriched status is intentionally not re-resolved here: that lookup is
+    # jurisdiction- and role-sensitive and belongs to Stage 3. Treating a raw
+    # `banned` flag as a US verdict was the second-authority defect this seam is
+    # designed to prevent.
+    has_export_banned_signal = blob_has_critical_banned_warning(detail_blob)
+    has_export_recalled_signal = blob_has_critical_recalled_warning(detail_blob)
     effective_scored = dict(scored)
     verdict = safe_str(effective_scored.get("verdict")).upper()
     safety_verdict = safe_str(effective_scored.get("safety_verdict")).upper()
