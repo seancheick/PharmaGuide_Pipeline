@@ -1,9 +1,10 @@
 {
   "_metadata": {
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict",
-    "policy": "A ghost-suspect blocks the release gate until it is reviewed here with a rationale that states why the live PubMed record does support the entry. Removing an entry from this file re-arms the gate for that citation.",
-    "schema_version": "1.0.0",
-    "last_updated": "2026-08-22"
+    "description": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict. A suspect blocks the release gate until it is reviewed here with a rationale that states why the live PubMed record does support the entry. Removing an entry re-arms the gate for that citation.",
+    "schema_version": "5.0.0",
+    "last_updated": "2026-08-22",
+    "total_entries": 1
   },
   "reviewed": [
     {

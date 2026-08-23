@@ -141,6 +141,27 @@ def test_pending_review_never_emits_positive_exact_strain_status() -> None:
 
 
 def test_formula_level_human_research_is_not_strain_specific() -> None:
+    """A reviewed formula-level match reports its scope, not an exact strain."""
+    result = _probiotic_research_presentation(
+        _clinical_entry(
+            evidence_type="product_formula_rct",
+            strain_explicit="FORMULA_LEVEL",
+            signoff=True,
+        ),
+    )
+
+    assert result["research_match_status"] == "formula_only"
+    assert result["evidence_scope"] == "formula_specific"
+    assert result["human_evidence"] is True
+
+
+def test_unreviewed_formula_level_research_makes_no_claim() -> None:
+    """Scope only chooses which affirmative status a REVIEWED strain earns.
+
+    This fixture used to assert `formula_only` with signoff=False, which is the
+    unreviewed affirmative claim the approval gate removes. `evidence_scope`
+    still reports the underlying study, so the backlog stays visible.
+    """
     result = _probiotic_research_presentation(
         _clinical_entry(
             evidence_type="product_formula_rct",
@@ -149,9 +170,8 @@ def test_formula_level_human_research_is_not_strain_specific() -> None:
         ),
     )
 
-    assert result["research_match_status"] == "formula_only"
+    assert result["research_match_status"] == "pending_review"
     assert result["evidence_scope"] == "formula_specific"
-    assert result["human_evidence"] is True
 
 
 def test_rejected_row_overrides_any_research_metadata() -> None:
