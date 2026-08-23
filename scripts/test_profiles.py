@@ -34,6 +34,7 @@ SLOW_TEST_FILES: FrozenSet[str] = frozenset({
 
 RELEASE_TEST_FILES: FrozenSet[str] = frozenset({
     "test_active_banned_recalled_parity.py",
+    "test_catalog_stamp_parity_release.py",
     "test_cert_audit_canary.py",
     "test_final_db_integrity_gate.py",
     "test_manifest_contract.py",
