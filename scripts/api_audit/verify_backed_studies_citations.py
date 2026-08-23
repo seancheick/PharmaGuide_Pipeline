@@ -106,40 +106,53 @@ def _acknowledged_ghosts() -> dict:
     return out
 
 
+def collect_claims(entries: list[dict]) -> dict[tuple[str, str], dict]:
+    """Return one independent audit claim per PMID and ingredient entry."""
+    claims: dict[tuple[str, str], dict] = {}
+    for entry in entries:
+        entry_id = str(entry.get("id") or "?")
+        topic_words = words(
+            entry.get("standard_name"),
+            " ".join(entry.get("aliases") or []),
+            entry.get("category"),
+            " ".join(str(k) for k in (entry.get("key_endpoints") or [])),
+            " ".join(entry.get("health_goals_supported") or []),
+        )
+        for reference in entry.get("references_structured") or []:
+            pmid = str(reference.get("pmid") or "").strip()
+            if not pmid.isdigit():
+                continue
+            claim = claims.setdefault(
+                (pmid, entry_id),
+                {"eid": entry_id, "tw": set(), "stored": set()},
+            )
+            claim["tw"] |= topic_words
+            if reference.get("title"):
+                claim["stored"].add(reference["title"])
+        for pmid in PMID_INLINE.findall(json.dumps(entry)):
+            claim = claims.setdefault(
+                (pmid, entry_id),
+                {"eid": entry_id, "tw": set(), "stored": set()},
+            )
+            claim["tw"] |= topic_words
+    return claims
+
+
 def main() -> int:
     d = json.loads(DATA.read_text())
     entries = d["backed_clinical_studies"]
 
-    # pmid -> {entry_id, topic_words, stored_titles(set)}
-    claims: dict[str, dict] = {}
-    for e in entries:
-        eid = e.get("id", "?")
-        tw = words(
-            e.get("standard_name"),
-            " ".join(e.get("aliases") or []),
-            e.get("category"),
-            " ".join(str(k) for k in (e.get("key_endpoints") or [])),
-            " ".join(e.get("health_goals_supported") or []),
-        )
-        for rs in (e.get("references_structured") or []):
-            p = str(rs.get("pmid") or "").strip()
-            if p.isdigit():
-                c = claims.setdefault(p, {"eid": eid, "tw": set(), "stored": set()})
-                c["tw"] |= tw
-                if rs.get("title"):
-                    c["stored"].add(rs["title"])
-        for p in PMID_INLINE.findall(json.dumps(e)):
-            c = claims.setdefault(p, {"eid": eid, "tw": set(), "stored": set()})
-            c["tw"] |= tw
-
-    pmids = sorted(claims)
-    print(f"Entries: {len(entries)} | distinct PMIDs: {len(pmids)}\n")
+    claims = collect_claims(entries)
+    pmids = sorted({pmid for pmid, _entry_id in claims})
+    print(
+        f"Entries: {len(entries)} | distinct PMIDs: {len(pmids)} | "
+        f"PMID-entry claims: {len(claims)}\n"
+    )
     print(f"Fetching {len(pmids)} PMIDs live from PubMed efetch...\n")
     arts = fetch_articles(pmids)
 
     ok, ghosts, mismatches, drifts, notfound = 0, [], [], [], []
-    for p in pmids:
-        c = claims[p]
+    for (p, _entry_id), c in sorted(claims.items()):
         a = arts.get(p)
         if not a:
             notfound.append((p, c["eid"]))
