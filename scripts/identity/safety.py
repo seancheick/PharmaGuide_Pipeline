@@ -156,6 +156,59 @@ _STATUS_SEVERITY = {
     "watchlist": "low",
 }
 
+PENDING_POLICY_HOLD_KEY = "pending_us_policy_signoff"
+
+
+def apply_pending_policy_hold(entry: Dict[str, Any]) -> Dict[str, Any]:
+    """Hold a safety rule at its previous status until an operator signs off.
+
+    A US policy re-read can legitimately move a rule to a less restrictive
+    status -- generic red yeast rice from an automatic unapproved-drug block to
+    a high-risk review, sodium tetraborate from a retired food-additive ban to a
+    declared boron source. Those are clinical-policy decisions, and the pipeline
+    must not enact one by shipping it.
+
+    While ``pending_us_policy_signoff.approved`` is false, the entry resolves at
+    ``previous_status`` -- the more conservative consumer-facing treatment --
+    and carries ``policy_hold_applied`` so every downstream lane can report why.
+    Flipping ``approved`` to true is the whole release action; nothing else
+    changes.
+
+    Returns the entry unchanged when no hold is declared. Never raises: a
+    malformed hold block is treated as an active hold, which fails closed.
+    """
+    if not isinstance(entry, dict):
+        return entry
+    hold = entry.get(PENDING_POLICY_HOLD_KEY)
+    if not isinstance(hold, dict):
+        return entry
+    if hold.get("approved") is True:
+        return entry
+    previous = str(hold.get("previous_status") or "").strip().lower()
+    if not previous:
+        return entry
+    proposed = str(entry.get("status") or "").strip().lower()
+    if previous == proposed and not hold.get("previous_match_mode"):
+        return entry
+    held = dict(entry)
+    held["status"] = previous
+    previous_match_mode = str(hold.get("previous_match_mode") or "").strip().lower()
+    proposed_match_mode = str(entry.get("match_mode") or "").strip().lower()
+    if previous_match_mode:
+        # A retired rule is `match_mode: disabled` and never enters an index at
+        # all, so restoring the status alone would leave it inert. The hold must
+        # put the rule back in the matcher too.
+        held["match_mode"] = previous_match_mode
+    held["policy_hold_applied"] = {
+        "held_status": previous,
+        "proposed_status": proposed,
+        "held_match_mode": previous_match_mode or None,
+        "proposed_match_mode": proposed_match_mode or None,
+        "packet": hold.get("packet"),
+    }
+    return held
+
+
 SAFETY_STATUS_PRIORITY = {
     "banned": 0,
     "recalled": 1,

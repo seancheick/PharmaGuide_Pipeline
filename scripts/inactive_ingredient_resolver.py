@@ -71,6 +71,7 @@ from pathlib import Path
 from typing import Any, Iterable, Iterator, Optional
 
 from identity.safety import (
+    apply_pending_policy_hold,
     has_explicit_form_evidence,
     negative_match_terms_veto,
     safety_flag_from_banned_match,
@@ -490,6 +491,14 @@ class InactiveIngredientResolver:
         for e in br:
             if not isinstance(e, dict):
                 continue
+            # A US policy re-read that lowers a rule's status -- or retires it
+            # outright -- stays held at the previous, more conservative
+            # treatment until an operator signs off. Applied BEFORE the
+            # match_mode filter, because a retired rule is `disabled` and would
+            # otherwise never reach an index. This is the single ingestion point
+            # for banned_recalled entries; build_final_db's active index reuses
+            # these same objects, so the hold reaches every lane from here.
+            e = apply_pending_policy_hold(e)
             mm = (e.get("match_mode") or "").strip().lower()
             if mm in {"disabled", "historical"}:
                 continue

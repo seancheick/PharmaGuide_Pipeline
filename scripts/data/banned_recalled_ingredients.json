@@ -5404,6 +5404,16 @@
         "organic red yeast rice extract",
         "monascus purpureus extract"
       ],
+      "pending_us_policy_signoff": {
+        "previous_status": "banned",
+        "proposed_status": "high_risk",
+        "packet": "docs/release_candidates/safety_signoff_packet_2026_08_22.md",
+        "affected_live_products": 27,
+        "approved": false,
+        "approved_by": null,
+        "approved_at": null,
+        "note": "Generic red yeast rice moves from an automatic unapproved-drug block to a high-risk review. Supported by NCCIH (monacolin K ranges from none to substantial; the FDA prohibition addresses enhanced or added lovastatin), but it lowers a consumer-facing verdict on 27 live products and is not yet approved. Until approved=true the rule resolves at previous_status."
+      },
       "reason": "Red yeast rice can contain widely varying amounts of monacolin K, a compound identical to lovastatin, and the amount is usually not stated on the label. Products with meaningful amounts can cause statin-like side effects and drug interactions.",
       "status": "high_risk",
       "class_tags": [
@@ -16231,6 +16241,17 @@
         "E285",
         "borax decahydrate"
       ],
+      "pending_us_policy_signoff": {
+        "previous_status": "banned",
+        "proposed_status": "watchlist",
+        "previous_match_mode": "exact",
+        "packet": "docs/release_candidates/safety_signoff_packet_2026_08_22.md",
+        "affected_live_products": 17,
+        "approved": false,
+        "approved_by": null,
+        "approved_at": null,
+        "note": "Sodium tetraborate retired as a supplement hard block. Supported by NIH ODS (sodium borate/tetraborate are recognized supplemental boron forms and Supplement Facts declare elemental boron), but it lowers a consumer-facing verdict on 17 live products and is not yet approved. Until approved=true the rule is re-enabled at previous_status."
+      },
       "entity_type": "ingredient",
       "match_mode": "disabled",
       "active_nutrient_parent": "boron",

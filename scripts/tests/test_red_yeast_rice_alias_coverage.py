@@ -69,10 +69,10 @@ def test_observed_red_yeast_rice_labels_reach_the_high_risk_rule(resolver, label
         "rice must reach the high-risk review rule"
     )
     assert r.is_safety_concern is True
-    assert r.is_banned is False, (
-        f"{label!r} must not hard-block without explicit monacolin/lovastatin "
-        "evidence"
-    )
+    # Status is deliberately NOT asserted here. The banned -> high_risk move is
+    # an unapproved US policy transition held at its previous status by
+    # pending_us_policy_signoff; test_pending_policy_signoff_hold.py owns that.
+    # This file owns one question only: does every real label string match?
 
 
 @pytest.mark.parametrize(
