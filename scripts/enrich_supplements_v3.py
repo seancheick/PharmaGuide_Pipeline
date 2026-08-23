@@ -595,12 +595,18 @@ def _probiotic_research_presentation(
         if thresholds.get("dr_pham_signoff") is True
         else "pending_review"
     )
+    # Review status gates every affirmative claim; scope only decides which
+    # affirmative claim a reviewed strain earns. `formula_specific` used to be
+    # tested first, so a formula-level match rendered "Research applies to the
+    # formula, not necessarily each strain" with no clinician review behind it.
+    # `evidence_scope` below still reports the underlying scope either way, so
+    # the review backlog stays visible.
     if is_blocked:
         match_status = "rejected"
-    elif evidence_scope == "formula_specific":
-        match_status = "formula_only"
     elif review_status != "clinician_verified":
         match_status = "pending_review"
+    elif evidence_scope == "formula_specific":
+        match_status = "formula_only"
     elif evidence_scope == "strain_specific" and human_evidence:
         match_status = "exact_strain"
     else:
