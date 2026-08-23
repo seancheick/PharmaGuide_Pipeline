@@ -3091,6 +3091,10 @@ _TRADEMARK_PAREN_RE = re.compile(
 )
 _TRADEMARK_SYMBOL_RE = re.compile(r"[™®©℠]")  # ™ ® © ℠
 _WHITESPACE_RE = re.compile(r"\s+")
+_PLANT_PART_RE = re.compile(
+    r"\b(root|leaf|leaves|seed|bark|rhizome|flower|fruit|stem|aerial)\b",
+    re.IGNORECASE,
+)
 
 
 def _strip_trademark_markers(text: str) -> str:
@@ -3131,7 +3135,27 @@ def _compute_display_label(ingredient: Dict[str, Any], match: Optional[Dict[str,
     if label_display_name:
         # Label-native identity: authoritative over the heuristic and over the
         # canonical standard_name. Repaired -> corrected label ("EPA"); clean ->
-        # literal label text (branded tokens and plant parts preserved).
+        # literal label text. A botanical part may live only in forms[].name;
+        # preserve that clinically material label detail when the label-native
+        # name itself does not carry it.
+        forms = ingredient.get("forms") or []
+        first_form_name = (
+            safe_str(forms[0].get("name"))
+            if forms and isinstance(forms[0], dict)
+            else ""
+        )
+        part_match = _PLANT_PART_RE.search(first_form_name)
+        if part_match:
+            part = part_match.group(1).casefold()
+            equivalents = {"leaf": ("leaf", "leaves"), "leaves": ("leaf", "leaves")}
+            acceptable = equivalents.get(part, (part,))
+            if not any(
+                re.search(r"\b" + re.escape(token) + r"\b", label_display_name, re.IGNORECASE)
+                for token in acceptable
+            ):
+                return _strip_trademark_markers(
+                    f"{label_display_name} ({first_form_name})"
+                )
         return label_display_name
     disposition = safe_str(match.get("identity_disposition"))
     if disposition in ("identity_conflict", "missing_display_label"):
@@ -6765,7 +6789,12 @@ def build_detail_blob(
         # the whole row and hide its siblings from the Other Ingredients surface.
         surviving_terms = safety_terms_without_active_form_duplicates(
             inactive_resolver,
-            active_ingredients=ingredients,
+            # Use the complete enriched active panel, not the filtered app
+            # projection. A zero-dose/unscored parent can be omitted from
+            # ingredients[] while still proving that an Other Ingredients row
+            # is its declared source form (for example Boron + Sodium
+            # Tetraborate). The scorer already uses this complete context.
+            active_ingredients=safe_list(enriched.get("activeIngredients")),
             raw_name=name or raw,
             standard_name=std_name_ing,
             additional_terms=form_terms,
@@ -6773,7 +6802,7 @@ def build_detail_blob(
         active_form_candidate = (
             active_form_duplicate_candidate(
                 inactive_resolver,
-                active_ingredients=ingredients,
+                active_ingredients=safe_list(enriched.get("activeIngredients")),
                 raw_name=name or raw,
                 additional_terms=form_terms,
             )

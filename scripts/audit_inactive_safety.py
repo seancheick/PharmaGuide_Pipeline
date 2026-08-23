@@ -116,6 +116,17 @@ def check_banned_in_inactives_have_safety_signal(
                 break
         if not matched_status:
             continue
+        # The cleaner can retain a source-form duplicate in the inactive
+        # projection while explicitly linking it back to its active nutrient.
+        # This is not an excipient and must not be audited as an independently
+        # used inactive substance. Require all three ledger signals so an
+        # arbitrary row cannot self-amnesty with one loose flag.
+        if (
+            ing.get("inactive_policy") == "active_form_duplicate"
+            and ing.get("matched_source") == "active_nutrient_form"
+            and ing.get("is_active_only") is True
+        ):
+            continue
         banned_seen += 1
         # This inactive matches a banned_recalled rule. Verify safety
         # signal is appropriately set.
@@ -123,25 +134,27 @@ def check_banned_in_inactives_have_safety_signal(
         is_sc = bool(ing.get("is_safety_concern"))
         is_banned = bool(ing.get("is_banned"))
         matched_source = ing.get("matched_source")
+        is_regional_advisory = (
+            ing.get("us_applicable") is False
+            and bool(ing.get("jurisdictions"))
+        )
 
         # Expected severity by status:
         if matched_status == "watchlist":
             # Contract fix (2026-06-08, commit 70a20157): watchlist is a NON-BLOCKING
-            # safety/regulatory concern → is_safety_concern=True (it drives CAUTION + a
-            # -5 B0 penalty via the contaminant snapshot), severity_status stays the
-            # soft 'informational' tier, is_banned=False (never hard-BLOCKs). The prior
-            # expectation (is_safety_concern=False) was the very mislabel this fix
-            # corrected — and it contradicted CHECK 1's own principle that every
-            # banned_recalled match must surface a safety signal.
+            # US-applicable safety/regulatory concern -> is_safety_concern=True;
+            # a verified regional-only advisory remains visible through its
+            # jurisdiction metadata without becoming a US CAUTION. The soft
+            # severity tier never hard-BLOCKs.
             expected_severity = "informational"
-            expected_safety_concern = True
+            expected_safety_concern = not is_regional_advisory
         else:
             # banned / high_risk / recalled
             expected_severity = "critical"
-            expected_safety_concern = True
+            expected_safety_concern = not is_regional_advisory
 
         # Banned-flag check: only status=banned should set is_banned=True
-        expected_is_banned = matched_status == "banned"
+        expected_is_banned = matched_status == "banned" and not is_regional_advisory
 
         problems = []
         if severity != expected_severity:

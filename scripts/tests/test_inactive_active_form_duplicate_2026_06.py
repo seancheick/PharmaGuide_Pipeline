@@ -212,6 +212,42 @@ def test_builder_honors_iqm_parent_relationships_for_generic_actives():
     assert row["matched_rule_id"] == "vitamin_k1"
 
 
+def test_builder_keeps_active_form_context_when_zero_dose_parent_is_not_exported():
+    enriched = _enriched(
+        active=[
+            {
+                "name": "Vitamin C",
+                "standardName": "Vitamin C",
+                "canonical_id": "vitamin_c",
+                "parent_key": "vitamin_c",
+                "quantity": 60,
+                "unit": "mg",
+            },
+            {
+                "name": "Boron",
+                "standardName": "Boron",
+                "canonical_id": "boron",
+                "parent_key": "boron",
+                "quantity": None,
+                "unit": None,
+            },
+        ],
+        inactive=[("Sodium Tetraborate", "Sodium Tetraborate")],
+    )
+    enriched["ingredient_quality_data"]["ingredients_scorable"] = [
+        dict(enriched["ingredient_quality_data"]["ingredients"][0])
+    ]
+
+    blob = build_detail_blob(enriched, _scored_minimal())
+    row = _inactive(blob, "Sodium Tetraborate")
+
+    assert not any(item.get("canonical_id") == "boron" for item in blob["ingredients"])
+    assert row["inactive_policy"] == POLICY
+    assert row["matched_source"] == "active_nutrient_form"
+    assert row["matched_rule_id"] == "boron"
+    assert row["is_active_only"] is True
+
+
 @pytest.mark.parametrize(
     "active,inactive_name,inactive_standard",
     [

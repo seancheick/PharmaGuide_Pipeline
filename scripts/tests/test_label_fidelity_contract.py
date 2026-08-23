@@ -31,6 +31,7 @@ cleanly in CI environments without a build artifact.
 from __future__ import annotations
 
 import json
+import os
 import re
 from pathlib import Path
 
@@ -90,10 +91,14 @@ STANDARDIZATION_RE = re.compile(
 
 
 def _find_blob_dir() -> Path | None:
-    candidates = [
+    candidate_root = os.environ.get("PG_RELEASE_CANDIDATE_ROOT", "").strip()
+    candidates = []
+    if candidate_root:
+        candidates.append(Path(candidate_root) / "dist" / "detail_blobs")
+    candidates.extend([
         Path("/tmp/pharmaguide_release_build/detail_blobs"),
         Path("/tmp/pharmaguide_build/detail_blobs"),
-    ]
+    ])
     for c in candidates:
         if c.is_dir() and any(c.glob("*.json")):
             return c
@@ -164,9 +169,10 @@ def test_display_name_never_canonical(sample_blobs) -> None:
 
 def test_label_display_name_drives_display_label(sample_blobs) -> None:
     """Label-native export: when the identity contract resolved a display name
-    from label evidence, the shipped ``display_label`` must equal it exactly and
-    must be normalization-stable (the reversible label-cleanup contract). The
-    canonical ``standard_name`` may never replace it.
+    from label evidence, the shipped ``display_label`` must begin with that
+    identity and may add only a parenthetical authored form. It must remain
+    normalization-stable (the reversible label-cleanup contract). The canonical
+    ``standard_name`` may never replace it.
 
     Activates once the label-native export emits ``label_display_name``.
     """
@@ -187,7 +193,10 @@ def test_label_display_name_drives_display_label(sample_blobs) -> None:
                 continue
             display = (ing.get("display_label") or "").strip()
             standard = (ing.get("standard_name") or ing.get("standardName") or "").strip()
-            if display != label_first:
+            label_with_authored_form = (
+                display.startswith(f"{label_first} (") and display.endswith(")")
+            )
+            if display != label_first and not label_with_authored_form:
                 violations.append((blob.get("dsld_id"), "display!=label", label_first, display))
             elif standard and display == standard and standard != label_first:
                 violations.append((blob.get("dsld_id"), "display==canonical", label_first, display))

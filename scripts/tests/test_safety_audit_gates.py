@@ -23,6 +23,7 @@ turn into a noisy false-positive in a fresh checkout.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -50,7 +51,13 @@ _BUILD_CANDIDATES = (
 
 
 def _first_available_build() -> Path | None:
-    for c in _BUILD_CANDIDATES:
+    candidate_root = os.environ.get("PG_RELEASE_CANDIDATE_ROOT", "").strip()
+    candidates = (
+        (Path(candidate_root) / "dist",) + _BUILD_CANDIDATES
+        if candidate_root
+        else _BUILD_CANDIDATES
+    )
+    for c in candidates:
         if (c / "detail_blobs").is_dir():
             return c
     return None
@@ -97,6 +104,60 @@ def test_audit_inactive_safety_passes_on_current_build() -> None:
         f"  notes-only FPs: {notes_fps}\n"
         f"  full report at: {out}"
     )
+
+
+def test_inactive_audit_accepts_explicit_active_form_duplicate() -> None:
+    from audit_inactive_safety import check_banned_in_inactives_have_safety_signal
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+
+    rows = [{
+        "dsld_id": "46741",
+        "ing": {
+            "name": "Sodium Tetraborate",
+            "raw_source_text": "Sodium Tetraborate",
+            "standard_name": "Sodium Tetraborate (Borax)",
+            "severity_status": "n/a",
+            "is_safety_concern": False,
+            "is_banned": False,
+            "matched_source": "active_nutrient_form",
+            "inactive_policy": "active_form_duplicate",
+            "is_active_only": True,
+        },
+    }]
+
+    violations, seen = check_banned_in_inactives_have_safety_signal(
+        rows, InactiveIngredientResolver()
+    )
+
+    assert violations == []
+    assert seen == 0
+
+
+def test_inactive_audit_keeps_eu_only_rule_out_of_us_safety_concern() -> None:
+    from audit_inactive_safety import check_banned_in_inactives_have_safety_signal
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+
+    rows = [{
+        "dsld_id": "207381",
+        "ing": {
+            "name": "Green 3",
+            "raw_source_text": "Green 3",
+            "standard_name": "Green 3",
+            "severity_status": "critical",
+            "is_safety_concern": False,
+            "is_banned": False,
+            "matched_source": "banned_recalled",
+            "us_applicable": False,
+            "jurisdictions": [{"jurisdiction_code": "EU"}],
+        },
+    }]
+
+    violations, seen = check_banned_in_inactives_have_safety_signal(
+        rows, InactiveIngredientResolver()
+    )
+
+    assert violations == []
+    assert seen == 1
 
 
 def test_audit_active_banned_recalled_parity_passes_on_current_build() -> None:

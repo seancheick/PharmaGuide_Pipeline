@@ -163,7 +163,7 @@ def test_inactive_tetraborate_duplicate_of_active_boron_does_not_block() -> None
     assert result.verdict != "BLOCKED"
 
 
-def test_inactive_tetraborate_without_active_boron_has_no_unverified_us_block() -> None:
+def test_inactive_tetraborate_without_active_boron_requires_policy_review() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
 
     product = {
@@ -181,7 +181,8 @@ def test_inactive_tetraborate_without_active_boron_has_no_unverified_us_block() 
 
     assert result.verdict not in {"BLOCKED", "UNSAFE"}
     assert result.blocking_reason is None
-    assert result.quarantine_required is False
+    assert result.quarantine_required is True
+    assert result.quarantine_reason == "safety_policy_review_required"
 
 
 # --------------------------------------------------------------------------- #

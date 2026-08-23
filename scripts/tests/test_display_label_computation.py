@@ -174,6 +174,21 @@ def test_empty_ingredient_returns_empty_string() -> None:
     assert _compute_display_label({}) == ""
 
 
+def test_label_native_name_keeps_authored_botanical_part_from_form() -> None:
+    ingredient = {
+        "name": "Resveratrol",
+        "forms": [{"name": "Polygonum cuspidatum root extract"}],
+    }
+    match = {
+        "label_display_name": "Resveratrol",
+        "identity_disposition": "clean",
+    }
+
+    assert _compute_display_label(ingredient, match) == (
+        "Resveratrol (Polygonum cuspidatum root extract)"
+    )
+
+
 # ---------------------------------------------------------------------------
 # Case-insensitive brand matching
 # ---------------------------------------------------------------------------
