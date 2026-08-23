@@ -1205,6 +1205,25 @@ def evaluate_safety_gate(
             _append_signal(result, "B0_STALE_POLICY_SIGNAL_IGNORED")
             continue
 
+        if (
+            entry
+            and not signal.us_applicable
+            and not signal.jurisdictions
+            and signal.policy_eligible
+            and signal.status in {"banned", "recalled", "high_risk", "watchlist"}
+        ):
+            # A missing jurisdiction is unresolved policy evidence, not a
+            # regional advisory and not implicit US applicability. Keep the
+            # identity match auditable but withhold the live score until the
+            # market policy has been reviewed explicitly.
+            _append_policy_review(
+                result,
+                signal,
+                entry,
+                ["explicit_us_jurisdiction"],
+            )
+            continue
+
         if not signal.us_applicable and signal.jurisdictions:
             _apply_signal_policy(result, signal)
             continue

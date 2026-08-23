@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from build_final_db import (
     REFERENCE_FILES,
     _build_canonical_label_ledger,
+    _safety_warning_policy_projection,
     build_final_db,
     build_core_row,
     build_detail_blob,
@@ -1276,6 +1277,34 @@ def test_regional_ban_metadata_does_not_become_a_second_export_verdict():
     assert projected["product_safety_status"] == scored["product_safety_status"]
 
 
+@pytest.mark.parametrize(
+    "rule_id",
+    ["BANNED_ADD_GREEN3", "BANNED_ADD_PROPYLPARABEN"],
+)
+def test_regional_only_warning_projection_is_informational(rule_id: str):
+    projection = _safety_warning_policy_projection(rule_id, "high_risk")
+
+    assert projection["us_applicable"] is False
+    assert projection["jurisdiction_scope"] == "regional"
+    assert projection["display_mode_default"] == "informational"
+    assert projection["severity"] == "informational"
+
+
+@pytest.mark.parametrize(
+    "rule_id",
+    [
+        "RISK_GARCINIA_CAMBOGIA",
+        "ADD_CASCARA_SAGRADA",
+        "ADD_COLLOIDAL_SILVER",
+    ],
+)
+def test_reviewed_us_warning_projection_is_not_regional(rule_id: str):
+    projection = _safety_warning_policy_projection(rule_id, "high_risk")
+
+    assert projection["us_applicable"] is True
+    assert projection["jurisdiction_scope"] == "US"
+
+
 def test_banned_inactive_rejects_inconsistent_safe_scorer_artifact():
     enriched = make_enriched()
     enriched["inactiveIngredients"] = [
@@ -1892,6 +1921,7 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
             "banned_name": "Vitamin A Palmitate",
             "status": "banned",
             "match_type": "exact",
+            "jurisdictions": [{"jurisdiction_code": "US", "status": "banned"}],
             # Sprint E1.1.3: realistic fixture matches Dr Pham's 143/143
             # authored-copy coverage; validator requires at least one copy field.
             "reason": "Test regulatory context.",

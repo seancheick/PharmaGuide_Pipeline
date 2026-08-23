@@ -76,6 +76,7 @@ from identity.safety import (
     has_explicit_form_evidence,
     normalize_safety_source,
     safety_flag_matches_status,
+    safety_jurisdiction_projection,
     top_safety_flag as _canonical_top_safety_flag,
 )
 from identity.interaction import (
@@ -549,30 +550,39 @@ def _resolve_active_safety_contract(
         rule_id = safe_str(top_flag.get("entry_id") or top_flag.get("rule_id"))
         reference_hit = _banned_recalled_reference_for_rule_id(
             rule_id,
-            ingredient_hits=ingredient_hits,
             banned_recalled_index=banned_recalled_index,
+        ) or _banned_recalled_reference_for_rule_id(
+            rule_id,
+            ingredient_hits=ingredient_hits,
+        )
+        us_applicable = (
+            bool(safety_jurisdiction_projection(reference_hit).get("us_applicable"))
+            if isinstance(reference_hit, dict)
+            else True
         )
         reason = safe_str(
-            top_flag.get("reason")
+            safe_dict(reference_hit).get("reason")
+            or top_flag.get("reason")
             or top_flag.get("evidence_text")
-            or safe_dict(reference_hit).get("reason")
             or safe_dict(reference_hit).get("safety_warning_one_liner")
         )
         if source == "banned_recalled_ingredients":
             source = "banned_recalled"
         return {
-            "is_safety_concern": status in _ACTIVE_BANNED_RECALLED_SAFETY_STATUSES,
-            "is_banned": status == "banned",
+            "is_safety_concern": (
+                us_applicable and status in _ACTIVE_BANNED_RECALLED_SAFETY_STATUSES
+            ),
+            "is_banned": us_applicable and status == "banned",
             "safety_reason": reason or None,
             "matched_source": source or None,
             "matched_rule_id": rule_id or None,
             "safety_warning_one_liner": safe_str(
-                top_flag.get("safety_warning_one_liner")
-                or safe_dict(reference_hit).get("safety_warning_one_liner")
+                safe_dict(reference_hit).get("safety_warning_one_liner")
+                or top_flag.get("safety_warning_one_liner")
             ) or None,
             "safety_warning": safe_str(
-                top_flag.get("safety_warning")
-                or safe_dict(reference_hit).get("safety_warning")
+                safe_dict(reference_hit).get("safety_warning")
+                or top_flag.get("safety_warning")
             ) or None,
         }
 
@@ -614,34 +624,48 @@ def _resolve_active_safety_contract(
                 watchlist_hit = entry
 
     if banned_hit is not None:
+        current_banned_hit = _banned_recalled_reference_for_rule_id(
+            safe_str(banned_hit.get("id") or banned_hit.get("rule_id")),
+            banned_recalled_index=banned_recalled_index,
+        ) or banned_hit
+        us_applicable = bool(
+            safety_jurisdiction_projection(current_banned_hit).get("us_applicable")
+        )
         return {
-            "is_safety_concern": True,
-            "is_banned": True,
+            "is_safety_concern": us_applicable,
+            "is_banned": us_applicable,
             "safety_reason": safe_str(
-                banned_hit.get("reason")
-                or banned_hit.get("safety_warning_one_liner")
-                or banned_hit.get("safety_warning")
+                current_banned_hit.get("reason")
+                or current_banned_hit.get("safety_warning_one_liner")
+                or current_banned_hit.get("safety_warning")
             ) or None,
             "matched_source": "banned_recalled",
-            "matched_rule_id": safe_str(banned_hit.get("id") or banned_hit.get("rule_id")) or None,
+            "matched_rule_id": safe_str(current_banned_hit.get("id") or current_banned_hit.get("rule_id")) or None,
             # Sprint E1.1.4 / 2026-05-13 — thread Dr Pham authored copy so
             # the active-side warning emitter can populate the preflight
             # banned_substance_detail blob field without re-fetching the
             # source data.
-            "safety_warning_one_liner": safe_str(banned_hit.get("safety_warning_one_liner")) or None,
-            "safety_warning": safe_str(banned_hit.get("safety_warning")) or None,
+            "safety_warning_one_liner": safe_str(current_banned_hit.get("safety_warning_one_liner")) or None,
+            "safety_warning": safe_str(current_banned_hit.get("safety_warning")) or None,
         }
     if elevated_hit is not None:
+        current_elevated_hit = _banned_recalled_reference_for_rule_id(
+            safe_str(elevated_hit.get("id") or elevated_hit.get("rule_id")),
+            banned_recalled_index=banned_recalled_index,
+        ) or elevated_hit
+        us_applicable = bool(
+            safety_jurisdiction_projection(current_elevated_hit).get("us_applicable")
+        )
         return {
-            "is_safety_concern": True,
+            "is_safety_concern": us_applicable,
             "is_banned": False,
             "safety_reason": safe_str(
-                elevated_hit.get("reason")
-                or elevated_hit.get("safety_warning_one_liner")
-                or elevated_hit.get("safety_warning")
+                current_elevated_hit.get("reason")
+                or current_elevated_hit.get("safety_warning_one_liner")
+                or current_elevated_hit.get("safety_warning")
             ) or None,
             "matched_source": "banned_recalled",
-            "matched_rule_id": safe_str(elevated_hit.get("id") or elevated_hit.get("rule_id")) or None,
+            "matched_rule_id": safe_str(current_elevated_hit.get("id") or current_elevated_hit.get("rule_id")) or None,
             # User-facing reason copy: high_risk and recalled hits MUST carry
             # the authored Dr-Pham one-liner + full safety_warning so Flutter
             # can render "why this is high-risk" under the warning title. Prior
@@ -649,8 +673,8 @@ def _resolve_active_safety_contract(
             # garcinia warnings with an empty body (just the title). The source
             # data already authors them on each banned_recalled_ingredients.json
             # entry — no derivation, just thread them through.
-            "safety_warning_one_liner": safe_str(elevated_hit.get("safety_warning_one_liner")) or None,
-            "safety_warning": safe_str(elevated_hit.get("safety_warning")) or None,
+            "safety_warning_one_liner": safe_str(current_elevated_hit.get("safety_warning_one_liner")) or None,
+            "safety_warning": safe_str(current_elevated_hit.get("safety_warning")) or None,
         }
     # 3. — harmful_additives moderate+
     if harmful_hit is not None:
@@ -994,6 +1018,66 @@ def _banned_warning_title_prefix_for_status(status: str) -> str:
         "high_risk": "High-risk ingredient",
         "watchlist": "Watchlist ingredient",
     }.get(status, "Safety issue")
+
+
+def _safety_warning_policy_projection(
+    rule_id: str,
+    fallback_status: str,
+    fallback_entry: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Project a registry safety rule into the US consumer-warning contract.
+
+    Enriched artifacts retain the identity match, but policy fields can be
+    corrected after enrichment. Warning severity, display mode, copy, and
+    jurisdiction therefore come from the current registry entry, matching the
+    scorer's migration-boundary behavior in ``gate_safety``. A regional-only or
+    jurisdiction-unresolved rule is never exported as a universal critical US
+    warning.
+    """
+    entry = _banned_recalled_reference_for_rule_id(
+        rule_id,
+        banned_recalled_index=_get_active_banned_recalled_index(),
+    )
+    if not isinstance(entry, dict):
+        entry = fallback_entry if isinstance(fallback_entry, dict) else {}
+
+    status = normalize_text(entry.get("status") or fallback_status)
+    jurisdiction = safety_jurisdiction_projection(entry)
+    jurisdictions = safe_list(jurisdiction.get("jurisdictions"))
+    us_applicable = bool(jurisdiction.get("us_applicable"))
+    jurisdiction_scope = (
+        "US" if us_applicable else "regional" if jurisdictions else "policy_unresolved"
+    )
+
+    authored_display_mode = normalize_text(entry.get("display_mode_default"))
+    if authored_display_mode not in {"critical", "informational", "suppress"}:
+        authored_display_mode = ""
+    default_display_mode = (
+        "critical" if status in {"banned", "recalled", "high_risk"}
+        else "informational"
+    )
+    display_mode = (
+        authored_display_mode or default_display_mode
+        if us_applicable
+        else "informational"
+    )
+    severity = safe_str(
+        entry.get("severity_level") or entry.get("clinical_risk_enum"),
+        "critical" if status == "banned" else "high" if status in {"recalled", "high_risk"} else "moderate",
+    ).lower()
+    if not us_applicable:
+        severity = "informational"
+
+    return {
+        "entry": entry,
+        "status": status,
+        "severity": severity,
+        "display_mode_default": display_mode,
+        "us_applicable": us_applicable,
+        "jurisdictions": jurisdictions,
+        "regional_advisories": safe_list(jurisdiction.get("regional_advisories")),
+        "jurisdiction_scope": jurisdiction_scope,
+    }
 
 
 def _resolver_status_in(
@@ -6473,6 +6557,12 @@ def build_detail_blob(
             banned_recalled_index=_get_active_banned_recalled_index(),
             safety_flags=safety_flags,
         )
+        active_policy_projection: Dict[str, Any] = {}
+        if active_safety_contract.get("matched_source") == "banned_recalled":
+            active_policy_projection = _safety_warning_policy_projection(
+                safe_str(active_safety_contract.get("matched_rule_id")),
+                "banned" if active_safety_contract.get("is_banned") else "high_risk",
+            )
         projected_safety_flags = safety_flags or _safety_flags_from_contract(active_safety_contract)
         standard_name = _active_identity_name_for_export(
             name=name,
@@ -6568,6 +6658,9 @@ def build_detail_blob(
             "safety_reason": active_safety_contract["safety_reason"],
             "matched_source": active_safety_contract["matched_source"],
             "matched_rule_id": active_safety_contract["matched_rule_id"],
+            "us_applicable": active_policy_projection.get("us_applicable"),
+            "jurisdictions": safe_list(active_policy_projection.get("jurisdictions")),
+            "jurisdiction_scope": active_policy_projection.get("jurisdiction_scope"),
             # Sprint E1.1.4 / 2026-05-13 — pass authored Dr Pham copy
             # through to the warning emitter. None when the safety contract
             # didn't fire on a banned-recalled hit.
@@ -6731,6 +6824,19 @@ def build_detail_blob(
             "matched_source": res.matched_source,
             "matched_rule_id": res.matched_rule_id,
         }
+        inactive_policy_projection: Dict[str, Any] = {}
+        if safe_str(res.matched_source) == "banned_recalled":
+            inactive_policy_projection = _safety_warning_policy_projection(
+                safe_str(res.matched_rule_id),
+                res.regulatory_status,
+            )
+            current_entry = safe_dict(inactive_policy_projection.get("entry"))
+            inactive_contract["safety_reason"] = (
+                safe_str(current_entry.get("reason")) or res.safety_reason
+            )
+            if not inactive_policy_projection.get("us_applicable"):
+                inactive_contract["is_safety_concern"] = False
+                inactive_contract["is_banned"] = False
 
         inactive.append({
             "raw_source_text": raw,
@@ -6776,16 +6882,19 @@ def build_detail_blob(
                 if _has_penalty_contract
                 else None
             ),
-            "is_safety_concern": res.is_safety_concern,
+            "is_safety_concern": inactive_contract["is_safety_concern"],
             "label_row_disposition": label_row_disposition,
             "is_label_descriptor": res.is_label_descriptor,
             "is_active_only": res.is_active_only,
             # v1.6.0+ unified contract additions:
-            "is_banned": res.is_banned,
-            "safety_reason": res.safety_reason,
+            "is_banned": inactive_contract["is_banned"],
+            "safety_reason": inactive_contract["safety_reason"],
             "matched_source": res.matched_source,
             "matched_rule_id": res.matched_rule_id,
             "regulatory_status": res.regulatory_status,
+            "us_applicable": inactive_policy_projection.get("us_applicable"),
+            "jurisdictions": safe_list(inactive_policy_projection.get("jurisdictions")),
+            "jurisdiction_scope": inactive_policy_projection.get("jurisdiction_scope"),
             "inactive_policy": res.inactive_policy,
             "safety_display_name": (
                 safe_str(res.standard_name)
@@ -6867,13 +6976,18 @@ def build_detail_blob(
     # unmatched conditional warnings.
     warnings = []
     for sub in contaminant_matches(enriched):
-        status = normalize_text(sub.get("status"))
-        name = safe_str(sub.get("ingredient") or sub.get("banned_name") or sub.get("name"))
-        reason = safe_str(sub.get("reason"))
-        severity = safe_str(
-            sub.get("severity_level"),
-            "critical" if status == "banned" else "high" if status == "recalled" else "moderate",
+        rule_id = safe_str(sub.get("id") or sub.get("rule_id") or sub.get("banned_id"))
+        policy = _safety_warning_policy_projection(rule_id, sub.get("status"), sub)
+        reference = safe_dict(policy.get("entry"))
+        status = safe_str(policy.get("status"))
+        name = safe_str(
+            sub.get("ingredient")
+            or sub.get("banned_name")
+            or reference.get("standard_name")
+            or sub.get("name")
         )
+        reason = safe_str(reference.get("reason") or sub.get("reason"))
+        severity = safe_str(policy.get("severity"))
         warning_type = {
             "banned": "banned_substance",
             "recalled": "recalled_ingredient",
@@ -6887,7 +7001,7 @@ def build_detail_blob(
             "watchlist": "Watchlist ingredient",
         }.get(status, "Safety issue")
         # Build references list from references_structured (FDA URLs, etc.)
-        refs = sub.get("references_structured")
+        refs = reference.get("references_structured") or sub.get("references_structured")
         source_urls = []
         if isinstance(refs, list):
             for ref in refs:
@@ -6898,54 +7012,63 @@ def build_detail_blob(
                         "type": ref.get("type", ""),
                         "evidence_grade": ref.get("evidence_grade", ""),
                     })
-        # Substance-level banned/recalled/high-risk hazards are always
-        # critical — the user is exposed regardless of their profile.
-        # Watchlist items are informational until a profile rule upgrades
-        # them.
-        ban_ctx = safe_str(sub.get("ban_context"))
-        dm_default = "critical" if status in ("banned", "recalled", "high_risk") else "informational"
+        ban_ctx = safe_str(reference.get("ban_context") or sub.get("ban_context"))
+        dm_default = safe_str(policy.get("display_mode_default"))
+        jurisdiction_scope = safe_str(policy.get("jurisdiction_scope"))
+        if jurisdiction_scope != "US":
+            title_prefix = "Regional advisory" if jurisdiction_scope == "regional" else "Policy review"
         warnings.append({
             "type": warning_type,
             "severity": severity,
             "title": f"{title_prefix}: {name}",
             "detail": reason or safe_str(sub.get("category")),
             "source": "banned_recalled_ingredients",
-            "date": sub.get("regulatory_date"),
-            "regulatory_date_label": safe_str(sub.get("regulatory_date_label")),
-            "clinical_risk": safe_str(sub.get("clinical_risk_enum")),
-            "identifiers": extract_identifiers(sub),
+            "date": reference.get("regulatory_date") or sub.get("regulatory_date"),
+            "regulatory_date_label": safe_str(reference.get("regulatory_date_label") or sub.get("regulatory_date_label")),
+            "clinical_risk": safe_str(reference.get("clinical_risk_enum") or sub.get("clinical_risk_enum")),
+            "identifiers": extract_identifiers(reference or sub),
             "source_urls": source_urls,
             # Path C authored fields (optional during authoring transition).
             "ban_context": ban_ctx or None,
-            "safety_warning": sub.get("safety_warning"),
-            "safety_warning_one_liner": sub.get("safety_warning_one_liner"),
+            "matched_rule_id": rule_id or None,
+            "safety_warning": reference.get("safety_warning") or sub.get("safety_warning"),
+            "safety_warning_one_liner": reference.get("safety_warning_one_liner") or sub.get("safety_warning_one_liner"),
             "display_mode_default": dm_default,
+            "us_applicable": bool(policy.get("us_applicable")),
+            "jurisdictions": safe_list(policy.get("jurisdictions")),
+            "jurisdiction_scope": jurisdiction_scope,
         })
 
     for flag in contaminant_safety_flags(enriched):
         source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
         if source != "banned_recalled_ingredients":
             continue
-        status = normalize_text(flag.get("status"))
-        name = _safety_flag_display_name(flag)
+        rule_id = safe_str(flag.get("entry_id") or flag.get("rule_id"))
+        policy = _safety_warning_policy_projection(rule_id, flag.get("status"), flag)
+        reference = safe_dict(policy.get("entry"))
+        status = safe_str(policy.get("status"))
+        name = safe_str(reference.get("standard_name")) or _safety_flag_display_name(flag)
         warning_type = _banned_warning_type_for_status(status)
         title_prefix = _banned_warning_title_prefix_for_status(status)
-        severity = safe_str(
-            flag.get("severity"),
-            "critical" if status == "banned" else "high" if status == "recalled" else "moderate",
-        )
-        dm_default = "critical" if status in ("banned", "recalled", "high_risk") else "informational"
+        severity = safe_str(policy.get("severity"))
+        dm_default = safe_str(policy.get("display_mode_default"))
+        jurisdiction_scope = safe_str(policy.get("jurisdiction_scope"))
+        if jurisdiction_scope != "US":
+            title_prefix = "Regional advisory" if jurisdiction_scope == "regional" else "Policy review"
         warnings.append({
             "type": warning_type,
             "severity": severity,
             "title": f"{title_prefix}: {name}",
-            "detail": safe_str(flag.get("evidence_text")),
+            "detail": safe_str(reference.get("reason") or flag.get("evidence_text")),
             "source": "banned_recalled_ingredients",
-            "matched_rule_id": safe_str(flag.get("entry_id") or flag.get("rule_id")) or None,
+            "matched_rule_id": rule_id or None,
             "ingredient_name": name,
-            "safety_warning": flag.get("safety_warning"),
-            "safety_warning_one_liner": flag.get("safety_warning_one_liner"),
+            "safety_warning": reference.get("safety_warning") or flag.get("safety_warning"),
+            "safety_warning_one_liner": reference.get("safety_warning_one_liner") or flag.get("safety_warning_one_liner"),
             "display_mode_default": dm_default,
+            "us_applicable": bool(policy.get("us_applicable")),
+            "jurisdictions": safe_list(policy.get("jurisdictions")),
+            "jurisdiction_scope": jurisdiction_scope,
         })
 
     for h in safe_list(enriched.get("harmful_additives")):
@@ -7217,14 +7340,30 @@ def build_detail_blob(
                 or ing.get("raw_source_text")
                 or "Unknown ingredient"
             )
-            if bool(ing.get("is_banned")):
+            rule_id = safe_str(ing.get("matched_rule_id"))
+            policy = _safety_warning_policy_projection(
+                rule_id,
+                ing.get("regulatory_status") or ("banned" if ing.get("is_banned") else "high_risk"),
+            )
+            reference = safe_dict(policy.get("entry"))
+            jurisdiction_scope = safe_str(policy.get("jurisdiction_scope"))
+            if not policy.get("us_applicable"):
+                w_type = "regional_regulatory_advisory"
+                w_severity = "informational"
+                w_title = (
+                    f"Regional advisory: {name}"
+                    if jurisdiction_scope == "regional"
+                    else f"Policy review: {name}"
+                )
+                dm_default = "informational"
+            elif safe_str(policy.get("status")) == "banned":
                 w_type = "banned_substance"
                 w_severity = "critical"
                 w_title = f"Banned substance: {name}"
-                dm_default = "critical"
+                dm_default = safe_str(policy.get("display_mode_default"), "critical")
             else:
                 inactive_policy = normalize_text(ing.get("inactive_policy"))
-                regulatory_status = normalize_text(ing.get("regulatory_status"))
+                regulatory_status = safe_str(policy.get("status"))
                 if regulatory_status == "watchlist" or (
                     role == "inactive" and inactive_policy == "excipient_acceptable"
                 ):
@@ -7235,25 +7374,32 @@ def build_detail_blob(
                         if role == "inactive" and inactive_policy == "excipient_acceptable"
                         else f"Watchlist ingredient: {name}"
                     )
-                    dm_default = "informational"
+                    dm_default = (
+                        "informational"
+                        if role == "inactive" and inactive_policy == "excipient_acceptable"
+                        else safe_str(policy.get("display_mode_default"), "informational")
+                    )
                 else:
                     # high_risk / recalled — both surface as high_risk_ingredient
                     w_type = "high_risk_ingredient"
                     w_severity = "high"
                     w_title = f"High-risk ingredient: {name}"
-                    dm_default = "critical"
+                    dm_default = safe_str(policy.get("display_mode_default"), "critical")
             warning_entry = {
                 "type": w_type,
                 "severity": w_severity,
                 "title": w_title,
-                "detail": safe_str(ing.get("safety_reason")) or "",
+                "detail": safe_str(reference.get("reason") or ing.get("safety_reason")) or "",
                 "ingredient_name": safe_str(ing.get("name") or name),
                 "ingredient_role": role,  # 'active' | 'inactive' — for Flutter routing
-                "matched_rule_id": safe_str(ing.get("matched_rule_id")) or None,
+                "matched_rule_id": rule_id or None,
                 "source": "inactive_ingredient_resolver",
                 "display_mode_default": dm_default,
                 "clinical_risk": safe_str(ing.get("harmful_severity")) or None,
                 "inactive_policy": safe_str(ing.get("inactive_policy")) or None,
+                "us_applicable": bool(policy.get("us_applicable")),
+                "jurisdictions": safe_list(policy.get("jurisdictions")),
+                "jurisdiction_scope": jurisdiction_scope,
             }
             # Sprint E1.1.4 / 2026-05-13 — thread Dr Pham authored preflight
             # copy into warnings emitted for banned-recalled hits. Without
@@ -7267,8 +7413,8 @@ def build_detail_blob(
             # Empty string never returned — None falls through cleanly so
             # build_banned_substance_detail's `isinstance(one, str) and one.strip()`
             # guard skips entries that lack authored copy (e.g. high_risk).
-            one_liner = ing.get("safety_warning_one_liner")
-            safety_warning = ing.get("safety_warning")
+            one_liner = reference.get("safety_warning_one_liner") or ing.get("safety_warning_one_liner")
+            safety_warning = reference.get("safety_warning") or ing.get("safety_warning")
             if one_liner:
                 warning_entry["safety_warning_one_liner"] = one_liner
             if safety_warning:

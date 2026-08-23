@@ -193,7 +193,12 @@ def test_no_safe_core_row_with_profile_gated_critical_safety_warning():
                 continue
             warning_type = str(warning.get("type") or "")
             severity = str(warning.get("severity") or "").lower()
-            if warning_type in hard_safety_types and severity in hard_severities:
+            display_mode = str(warning.get("display_mode_default") or "").lower()
+            if (
+                warning_type in hard_safety_types
+                and severity in hard_severities
+                and display_mode == "critical"
+            ):
                 offenders.append((
                     dsld_id,
                     warning_type,

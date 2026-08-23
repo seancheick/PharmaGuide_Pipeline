@@ -171,7 +171,12 @@ def test_active_banned_beats_watchlist_when_both_present() -> None:
     from scripts.build_final_db import _resolve_active_safety_contract
     fake_hits = [
         {"status": "watchlist", "id": "WATCH_X", "ingredient": "X"},
-        {"status": "banned",    "id": "BAN_Y",   "ingredient": "Y"},
+        {
+            "status": "banned",
+            "id": "BAN_Y",
+            "ingredient": "Y",
+            "jurisdictions": [{"jurisdiction_code": "US", "status": "banned"}],
+        },
     ]
     c = _resolve_active_safety_contract(
         harmful_hit=None, harmful_ref={}, ingredient_hits=fake_hits,
@@ -186,7 +191,12 @@ def test_active_high_risk_beats_watchlist() -> None:
     from scripts.build_final_db import _resolve_active_safety_contract
     fake_hits = [
         {"status": "watchlist", "id": "WATCH_X", "ingredient": "X"},
-        {"status": "high_risk", "id": "HIGH_Y",  "ingredient": "Y"},
+        {
+            "status": "high_risk",
+            "id": "HIGH_Y",
+            "ingredient": "Y",
+            "jurisdictions": [{"jurisdiction_code": "US", "status": "clinical_advisory"}],
+        },
     ]
     c = _resolve_active_safety_contract(
         harmful_hit=None, harmful_ref={}, ingredient_hits=fake_hits,

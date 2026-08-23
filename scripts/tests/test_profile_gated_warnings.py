@@ -209,6 +209,7 @@ def test_banned_substance_is_always_critical():
             "banned_name": "DMAA",
             "status": "banned",
             "match_type": "exact",
+            "jurisdictions": [{"jurisdiction_code": "US", "status": "banned"}],
             "reason": "FDA-banned stimulant.",
         
         "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",

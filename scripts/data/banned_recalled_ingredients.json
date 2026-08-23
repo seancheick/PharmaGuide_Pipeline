@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
-    "schema_version": "5.5.1",
+    "schema_version": "5.5.2",
     "last_updated": "2026-08-23",
     "total_entries": 169,
     "data_source_metadata": {
@@ -4128,7 +4128,7 @@
         "garcinia fruit, rind extract",
         "Garcinia Cambogia fruit extract"
       ],
-      "reason": "Severe hepatotoxicity. 1 death, 9 liver transplants, 200+ adverse liver events documented. FDA recalled Hydroxycut products (2009). France banned all GC supplements (2025). Australia mandated liver harm warnings (2025).",
+      "reason": "NIH LiverTox classifies Garcinia cambogia as a likely rare cause of clinically apparent liver injury; reported cases include acute liver failure, death, and liver transplantation. France suspended supplements containing Garcinia cambogia in 2025, and Australia requires a liver-injury warning.",
       "status": "high_risk",
       "class_tags": [
         "hepatotoxic",
@@ -4151,7 +4151,25 @@
       },
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-08-23",
+      "display_mode_default": "critical",
       "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2019-02-13",
+          "source": {
+            "type": "nih_livertox",
+            "citation": "NIH LiverTox: Garcinia Cambogia",
+            "url": "https://www.ncbi.nlm.nih.gov/books/NBK548087/",
+            "accessed_date": "2026-08-23"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-08-23"
+        },
         {
           "region": "France",
           "level": "federal",
@@ -4183,14 +4201,17 @@
       ],
       "references_structured": [
         {
-          "type": "case_report",
+          "type": "nih_monograph",
           "authority": "NIH",
           "citation": "LiverTox: Garcinia Cambogia",
           "url": "https://www.ncbi.nlm.nih.gov/books/NBK548087/",
           "published_date": null,
           "evidence_grade": "B",
           "confidence": "high",
-          "title": "LiverTox: Garcinia Cambogia"
+          "title": "LiverTox: Garcinia Cambogia",
+          "supports_claims": [
+            "clinical_risk"
+          ]
         },
         {
           "type": "regulatory_action",
@@ -4226,8 +4247,8 @@
         "unii": "8W94T9026R"
       },
       "ban_context": "substance",
-      "safety_warning": "A weight-loss botanical linked to severe liver injury, including deaths and liver transplants. France banned it in 2025; Australia and Japan issued warnings. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Liver-toxic weight-loss botanical. Stop using and talk to your doctor.",
+      "safety_warning": "A weight-loss botanical linked to rare but potentially severe liver injury. Stop using it and consult a clinician if you develop jaundice, dark urine, severe fatigue, nausea, or abdominal pain.",
+      "safety_warning_one_liner": "Rare but potentially severe liver injury risk. Review before use.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Hepatotoxic weight-loss extract — never an excipient"
     },
@@ -15116,9 +15137,12 @@
       "entity_type": "ingredient",
       "match_mode": "active",
       "status": "high_risk",
-      "reason": "FDA explicitly stripped GRASE status in 2002 after industry failed to submit required safety data. Only remains in supplements due to DSHEA regulatory gap, NOT because it was found safe. EFSA 2018/2024: HADs genotoxic and carcinogenic concern. NIH LiverTox documents liver injury cases including acute liver failure with portal hypertension. Stronger regulatory case against it than senna.",
+      "reason": "FDA's 2002 rule applies to OTC drug products labeled for laxative use; it does not establish a blanket US dietary-supplement ban. NIH LiverTox reports that short-term recommended use is generally well tolerated, while longer or high-dose use can cause electrolyte disturbance and rare clinically apparent liver injury. The US catalog therefore treats a confirmed supplement match as a clinical caution, not a legal block.",
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-08-23",
+      "display_mode_default": "informational",
       "source_category": "stimulant_laxative",
       "class_tags": [],
       "match_rules": {
@@ -15136,7 +15160,23 @@
           "coffee fruit"
         ]
       },
-      "jurisdictions": [],
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "2017-01-23",
+          "source": {
+            "type": "nih_livertox",
+            "citation": "NIH LiverTox: Cascara",
+            "url": "https://www.ncbi.nlm.nih.gov/books/NBK548113/",
+            "accessed_date": "2026-08-23"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-08-23"
+        }
+      ],
       "references_structured": [
         {
           "type": "regulatory_action",
@@ -15187,10 +15227,10 @@
         "unii": "3SJ3U7J6V2"
       },
       "ban_context": "watchlist",
-      "safety_warning": "A stimulant laxative whose GRASE status FDA stripped in 2002 after safety data was not provided. Its presence in supplements is associated with regulatory gaps. Avoid long-term use.",
-      "safety_warning_one_liner": "FDA stripped safety status in 2002. Avoid.",
+      "safety_warning": "A stimulant laxative intended only for short-term use. Longer or high-dose use carries risks of cramping, diarrhea, electrolyte imbalance, and rare liver injury. Review duration and dose before use.",
+      "safety_warning_one_liner": "Longer or high-dose use raises safety concerns.",
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "FDA stripped GRASE status 2002 (67 FR 31125); EFSA 2018 HAD genotoxicity/carcinogenicity finding; NIH LiverTox documents acute liver failure. Cascara's active compounds ARE the stimulant-laxative HADs — no plausible trace/excipient use. Coffee Cascara (Coffea arabica fruit) excluded by negative_match_terms.",
+      "inactive_policy_reason": "NIH LiverTox documents duration- and dose-related adverse effects plus rare liver injury. Cascara's active compounds are stimulant-laxative hydroxyanthracene derivatives, so there is no plausible trace-excipient use. Coffee cascara (Coffea arabica fruit) is excluded by negative_match_terms.",
       "inactive_policy_reviewed_on": "2026-05-12"
     },
     {
@@ -15208,9 +15248,12 @@
       "entity_type": "ingredient",
       "match_mode": "active",
       "status": "high_risk",
-      "reason": "CRITICAL SAFETY WARNING: FDA has ruled colloidal silver products are not generally recognized as safe. Can cause permanent argyria (irreversible blue-gray skin discoloration), kidney damage, liver damage, neurological problems, and seizures. NO proven health benefits. AVOID internal use. [normalized_2026-02-16: risk_level critical mapped to high for scorer compatibility]",
+      "reason": "NIH NCCIH reports no evidence supporting health claims for colloidal silver and documents serious risks including usually permanent argyria, drug-absorption interactions, and possible kidney, liver, or nervous-system harm. FDA's final rule separately classifies colloidal-silver OTC drug products offered to treat or prevent disease as nonmonograph.",
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "high",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-08-23",
+      "display_mode_default": "critical",
       "source_category": "heavy_metal",
       "class_tags": [],
       "match_rules": {
@@ -15227,16 +15270,48 @@
           "silver label"
         ]
       },
-      "jurisdictions": [],
+      "jurisdictions": [
+        {
+          "region": "United States",
+          "level": "catalog_policy",
+          "status": "clinical_advisory",
+          "effective_date": "1999-09-16",
+          "source": {
+            "type": "nih_nccih_and_fda_final_rule",
+            "citation": "NIH NCCIH colloidal silver safety review and FDA 64 FR 44653",
+            "url": "https://www.nccih.nih.gov/health/colloidal-silver-what-you-need-to-know",
+            "accessed_date": "2026-08-23"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-08-23"
+        }
+      ],
       "references_structured": [
         {
-          "type": "regulatory_action",
-          "authority": "FDA",
-          "citation": "FDA Consumer Update: Should you use colloidal silver products?",
-          "url": "https://www.fda.gov/consumers/consumer-updates/should-you-use-colloidal-silver-products",
+          "type": "nih_review",
+          "authority": "NIH",
+          "citation": "NCCIH: Colloidal Silver: What You Need To Know",
+          "url": "https://www.nccih.nih.gov/health/colloidal-silver-what-you-need-to-know",
           "evidence_grade": "B",
           "confidence": "high",
-          "title": "FDA Consumer Update: Should you use colloidal silver products?"
+          "title": "Colloidal Silver: What You Need To Know",
+          "supports_claims": [
+            "clinical_risk"
+          ]
+        },
+        {
+          "type": "fda_final_rule",
+          "authority": "FDA",
+          "citation": "64 FR 44653 - OTC Drug Products Containing Colloidal Silver Ingredients or Silver Salts",
+          "url": "https://www.fda.gov/drugs/historical-status-otc-rulemakings/rulemaking-history-otc-colloidal-silver-drug-products",
+          "published_date": "1999-08-17",
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "FDA rulemaking history for OTC colloidal silver drug products",
+          "supports_claims": [
+            "regulatory_scope"
+          ]
         },
         {
           "type": "monograph",
@@ -15317,8 +15392,8 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "FDA has ruled colloidal silver products are not generally recognized as safe. Linked to permanent blue-gray skin discoloration (argyria) and kidney and neurological harm. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not recognized as safe by FDA. Stop using and talk to your doctor.",
+      "safety_warning": "NIH reports serious risks from colloidal silver, including usually permanent argyria and drug interactions, with no proven health benefit. Avoid internal use and talk to a clinician.",
+      "safety_warning_one_liner": "Permanent argyria and interaction risk. Avoid internal use.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "No legitimate excipient use; FDA-banned health claim"
     },
@@ -19730,6 +19805,7 @@
           "last_verified_date": "2026-06-07"
         }
       ],
+      "display_mode_default": "informational",
       "references_structured": [
         {
           "type": "regulation",
@@ -19745,10 +19821,10 @@
       "entity_type": "ingredient",
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "Prohibited for EU food use; precautionary CAUTION even as an excipient/colorant.",
+      "inactive_policy_reason": "Not permitted for EU food use. FDA lists FD&C Green No. 3 for general food use in the United States, so this remains a regional clean-label advisory in the US catalog.",
       "ban_context": "substance",
-      "safety_warning": "EU-banned artificial green dye (E143). Avoid if limiting synthetic dyes.",
-      "safety_warning_one_liner": "Artificial green dye banned for food use in the EU. Avoid synthetic dyes.",
+      "safety_warning": "This artificial green dye is not permitted for food use in the EU. FDA currently lists it for general US food use. Avoid it if you prefer products without synthetic dyes.",
+      "safety_warning_one_liner": "Regional note: not permitted for food use in the EU.",
       "cui": "C0060087",
       "external_ids": {
         "cas": "2353-45-9",
@@ -19820,6 +19896,7 @@
           "last_verified_date": "2026-06-07"
         }
       ],
+      "display_mode_default": "informational",
       "references_structured": [
         {
           "type": "regulation",
@@ -19835,10 +19912,10 @@
       "entity_type": "ingredient",
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "Prohibited for EU food use; precautionary CAUTION even as an excipient/colorant.",
+      "inactive_policy_reason": "Not permitted for EU food use. US 21 CFR 184.1670 permits propylparaben in food up to 0.1 percent under good manufacturing practice, so this remains a regional clean-label advisory in the US catalog.",
       "ban_context": "substance",
-      "safety_warning": "EU-banned preservative (E216) linked to hormone concerns.",
-      "safety_warning_one_liner": "EU-banned preservative linked to hormone concerns. Talk to your doctor.",
+      "safety_warning": "This preservative is not permitted for food use in the EU. US 21 CFR 184.1670 permits it in food up to 0.1 percent. Avoid it if you prefer paraben-free products.",
+      "safety_warning_one_liner": "Regional note: not permitted for food use in the EU.",
       "cui": "C0072238",
       "external_ids": {
         "cas": "94-13-3",
