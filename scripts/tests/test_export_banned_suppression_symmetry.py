@@ -25,11 +25,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))          # scripts/tests (helpers)
 sys.path.insert(0, str(Path(__file__).parent.parent))   # scripts
 
+import pytest
+
 from build_final_db import build_core_row, has_banned_substance
 from test_build_final_db import make_scored, make_enriched, row_as_dict
 
 
-def test_export_banned_via_blob_warning_suppresses_v4_score() -> None:
+def test_export_banned_via_blob_warning_rejects_inconsistent_v4_score() -> None:
     enriched = make_enriched()
     # Precondition: the fixture is NOT banned via has_banned_substance — the
     # ban signal here comes ONLY from the blob critical-warning path.
@@ -51,21 +53,8 @@ def test_export_banned_via_blob_warning_suppresses_v4_score() -> None:
         ]
     }
 
-    row = row_as_dict(
+    with pytest.raises(RuntimeError, match="missed an export-resolved banned signal"):
         build_core_row(enriched, scored, "2026-07-05T00:00:00Z", detail_blob=blob)
-    )
-
-    # The export hard-blocks the product ...
-    assert row["verdict"] == "BLOCKED"
-    # ... so the v4 public contract MUST be suppressed to match — a BLOCKED
-    # product cannot ship a finite, rankable quality_score_v4_100.
-    assert row["quality_score_v4_100"] is None, (
-        f"BLOCKED product shipped a rankable v4 score: {row['quality_score_v4_100']}"
-    )
-    assert row["quality_score_status"] != "scored", (
-        f"BLOCKED product ships quality_score_status={row['quality_score_status']!r} "
-        f"(must not be 'scored' — it would stay in idx_core_cat_score)"
-    )
 
 
 def test_non_banned_product_keeps_its_v4_score() -> None:

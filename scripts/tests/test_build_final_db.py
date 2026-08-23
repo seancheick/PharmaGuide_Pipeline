@@ -42,7 +42,7 @@ from build_final_db import (
 from core_export_model import PRODUCTS_CORE_COLUMNS as CANONICAL_CORE_COLUMNS
 
 
-def test_profile_gated_hard_safety_projection_updates_every_status_surface():
+def test_profile_gated_warning_does_not_rewrite_scorer_owned_statuses():
     scored = {
         "verdict": "SAFE",
         "safety_verdict": "SAFE",
@@ -74,21 +74,21 @@ def test_profile_gated_hard_safety_projection_updates_every_status_surface():
 
     projected = project_export_scored_artifact({}, scored, detail_blob)
 
-    assert projected["verdict"] == "CAUTION"
-    assert projected["safety_verdict"] == "CAUTION"
-    assert projected["product_safety_status"] == "caution"
+    assert projected["verdict"] == "SAFE"
+    assert projected["safety_verdict"] == "SAFE"
+    assert projected["product_safety_status"] == "no_known_catalog_concern"
     assert projected["quality_assessment_status"] == "complete"
     assert projected["blocking_reason"] is None
-    assert projected["safety_signal_reason"] == "high_risk_ingredient"
-    assert projected["_v4_safety_signal_reason"] == "high_risk_ingredient"
+    assert projected["safety_signal_reason"] is None
+    assert projected["_v4_safety_signal_reason"] is None
     assert projected["_v4_safety_gate"] == {
-        "verdict": "CAUTION",
+        "verdict": "SAFE",
         "blocking_reason": None,
-        "safety_signals": ["high_risk_ingredient"],
+        "safety_signals": [],
     }
     assert projected["scoring_metadata"] == {
-        "verdict": "CAUTION",
-        "product_safety_status": "caution",
+        "verdict": "SAFE",
+        "product_safety_status": "no_known_catalog_concern",
         "quality_assessment_status": "complete",
         "blocking_reason": None,
     }
@@ -96,7 +96,7 @@ def test_profile_gated_hard_safety_projection_updates_every_status_surface():
     assert scored["_v4_safety_gate"]["safety_signals"] == []
 
 
-def test_profile_safety_caution_does_not_override_not_scored_precedence():
+def test_profile_warning_does_not_rewrite_not_scored_safety_status():
     scored = {
         "verdict": "NOT_SCORED",
         "safety_verdict": "SAFE",
@@ -132,10 +132,27 @@ def test_profile_safety_caution_does_not_override_not_scored_precedence():
 
     assert projected["verdict"] == "NOT_SCORED"
     assert projected["quality_score_status"] == "not_scored"
-    assert projected["safety_verdict"] == "CAUTION"
-    assert projected["product_safety_status"] == "caution"
+    assert projected["safety_verdict"] == "SAFE"
+    assert projected["product_safety_status"] == "no_known_catalog_concern"
     assert projected["scoring_metadata"]["verdict"] == "NOT_SCORED"
-    assert projected["_v4_safety_gate"]["verdict"] == "CAUTION"
+    assert projected["_v4_safety_gate"]["verdict"] == "SAFE"
+
+
+def test_export_resolved_ban_fails_instead_of_rewriting_stage3() -> None:
+    scored = {
+        "verdict": "SAFE",
+        "safety_verdict": "SAFE",
+        "product_safety_status": "no_known_catalog_concern",
+        "blocking_reason": None,
+    }
+    detail_blob = {
+        "warnings": [{"type": "banned_substance", "severity": "critical"}]
+    }
+
+    with pytest.raises(RuntimeError, match="Stage-3 safety decision missed"):
+        project_export_scored_artifact(
+            {"dsld_id": "TEST_STAGE3_PARITY"}, scored, detail_blob
+        )
 
 
 def test_core_db_does_not_duplicate_app_owned_clinical_profile_taxonomy():
@@ -1063,23 +1080,32 @@ def make_scored(verdict="SAFE"):
         "verification": {"score": 10.0, "max": 15.0},
         "safety_hygiene": {"score": 10.0, "max": 10.0},
     }
+    hard = verdict in {"BLOCKED", "UNSAFE"}
+    blocking_reason = (
+        "banned_ingredient" if verdict == "BLOCKED"
+        else "recalled_ingredient" if verdict == "UNSAFE"
+        else None
+    )
     return {
         "score_80": 60.0,
         "display": "60.0/80",
         "display_100": "75.0/100",
-        "score_100_equivalent": 75.0,
+        "score_100_equivalent": None if hard else 75.0,
         "grade": "Good",
         "verdict": verdict,
         "safety_verdict": verdict,
+        "blocking_reason": blocking_reason,
         "mapped_coverage": 1.0,
         "score_basis": "v4_six_pillar",
         "output_schema_version": "4.0.0",
-        "quality_score_v4_100": 75.0,
-        "quality_score_status": "scored",
+        "quality_score_v4_100": None if hard else 75.0,
+        "quality_score_status": "suppressed_safety" if hard else "scored",
+        "product_safety_status": verdict.lower() if hard else "no_known_catalog_concern",
+        "quality_score_suppressed_reason": blocking_reason,
         "quality_pillars_v4": pillars,
         "_score_model_version": "v4",
-        "_v4_quality_score_100": 75.0,
-        "_v4_quality_status": "scored",
+        "_v4_quality_score_100": None if hard else 75.0,
+        "_v4_quality_status": "suppressed_safety" if hard else "scored",
         "_v4_quality_tier": "Good",
         "_v4_raw_score_100": 75.0,
         "_v4_module": "generic",
@@ -1088,7 +1114,11 @@ def make_scored(verdict="SAFE"):
         "_v4_scoring_engine_version": "4.1.0",
         "_v4_classification_schema_version": "1.2.0",
         "_v4_pillars": pillars,
-        "_v4_safety_gate": {"verdict": verdict, "safety_signals": []},
+        "_v4_safety_gate": {
+            "verdict": verdict,
+            "blocking_reason": blocking_reason,
+            "safety_signals": [],
+        },
         "_v4_completeness_gate": {"mapped_coverage": 1.0},
         "badges": [{"id": "FULL_DISCLOSURE", "label": "Full Disclosure"}],
         "flags": ["TEST_FLAG"],
@@ -1189,7 +1219,26 @@ def test_recalled_exact_match_sets_recalled_flag_but_not_banned_flag():
     assert row["blocking_reason"] == "recalled_ingredient"
 
 
-def test_banned_inactive_forces_blocked_core_verdict_when_scorer_says_safe():
+def test_recalled_signal_rejects_inconsistent_safe_scorer_artifact():
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"]["substances"] = [
+        {
+            "ingredient": "Test recalled substance",
+            "banned_name": "Test recalled substance",
+            "status": "recalled",
+            "match_type": "exact",
+        }
+    ]
+
+    with pytest.raises(RuntimeError, match="missed an export-resolved recalled signal"):
+        build_core_row(
+            enriched,
+            make_scored(verdict="SAFE"),
+            "2026-03-17T19:00:00Z",
+        )
+
+
+def test_banned_inactive_rejects_inconsistent_safe_scorer_artifact():
     enriched = make_enriched()
     enriched["inactiveIngredients"] = [
         {
@@ -1201,23 +1250,13 @@ def test_banned_inactive_forces_blocked_core_verdict_when_scorer_says_safe():
     scored = make_scored(verdict="SAFE")
 
     blob = build_detail_blob(enriched, scored)
-    row = row_as_dict(
+    with pytest.raises(RuntimeError, match="missed an export-resolved banned signal"):
         build_core_row(
             enriched,
             scored,
             "2026-03-17T19:00:00Z",
             detail_blob=blob,
         )
-    )
-
-    assert row["has_banned_substance"] == 1
-    assert row["verdict"] == "BLOCKED"
-    assert row["safety_verdict"] == "BLOCKED"
-    assert row["blocking_reason"] == "banned_ingredient"
-    assert row["score_100_equivalent"] is None
-    assert row["score_display_100_equivalent"] == "N/A"
-    assert row["quality_score_status"] == "suppressed_safety"
-    assert row["quality_score_v4_100"] is None
     assert any(
         w.get("type") == "banned_substance" and w.get("severity") == "critical"
         for w in blob["warnings_profile_gated"]
@@ -1260,7 +1299,7 @@ def test_inactive_tetraborate_without_active_boron_has_no_retired_policy_block()
     assert has_banned_substance(enriched) is False
 
 
-def test_critical_banned_blob_warning_cannot_coexist_with_safe_core_verdict():
+def test_critical_banned_blob_warning_rejects_safe_scorer_artifact():
     enriched = make_enriched()
     scored = make_scored(verdict="SAFE")
     blob = {
@@ -1269,18 +1308,13 @@ def test_critical_banned_blob_warning_cannot_coexist_with_safe_core_verdict():
         ]
     }
 
-    row = row_as_dict(
+    with pytest.raises(RuntimeError, match="missed an export-resolved banned signal"):
         build_core_row(
             enriched,
             scored,
             "2026-03-17T19:00:00Z",
             detail_blob=blob,
         )
-    )
-
-    assert row["verdict"] == "BLOCKED"
-    assert row["safety_verdict"] == "BLOCKED"
-    assert row["blocking_reason"] == "banned_ingredient"
 
 
 def test_excipient_acceptable_inactive_uses_calibrated_warning_posture():
@@ -1596,7 +1630,7 @@ def test_iso_phos_acronym_flag_is_not_banned_evidence():
     assert ingredient["safety_flags"] == []
 
 
-def test_core_row_clears_stale_high_risk_blocking_reason_on_caution():
+def test_core_row_rejects_stale_high_risk_blocking_reason_on_caution():
     enriched = make_enriched()
     enriched["inactiveIngredients"] = [
         {
@@ -1609,18 +1643,13 @@ def test_core_row_clears_stale_high_risk_blocking_reason_on_caution():
     scored["blocking_reason"] = "high_risk_ingredient"
 
     blob = build_detail_blob(enriched, scored)
-    row = row_as_dict(
+    with pytest.raises(RuntimeError, match="non-hard verdict carries a blocking reason"):
         build_core_row(
             enriched,
             scored,
             "2026-03-17T19:00:00Z",
             detail_blob=blob,
         )
-    )
-
-    assert row["verdict"] == "CAUTION"
-    assert row["safety_verdict"] == "CAUTION"
-    assert row["blocking_reason"] is None
     assert any(
         w.get("type") == "high_risk_ingredient"
         and w.get("severity") == "high"
@@ -2428,11 +2457,11 @@ def test_ingredients_text_includes_active_canonicals_when_iqm_is_empty():
     enriched = make_enriched()
     enriched["activeIngredients"] = [
         {
-            "name": "Cannabidiol",
-            "standardName": "CBD (Cannabidiol)",
-            "normalized_key": "cannabidiol",
-            "canonical_id": "BANNED_CBD_US",
-            "raw_source_text": "Cannabidiol",
+            "name": "L-Theanine",
+            "standardName": "L-Theanine",
+            "normalized_key": "l_theanine",
+            "canonical_id": "l_theanine",
+            "raw_source_text": "L-Theanine",
             "quantity": 5,
             "unit": "mg",
         }
@@ -2441,9 +2470,8 @@ def test_ingredients_text_includes_active_canonicals_when_iqm_is_empty():
 
     row = row_as_dict(build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z"))
 
-    assert "Cannabidiol" in row["ingredients_text"]
-    assert "CBD (Cannabidiol)" in row["ingredients_text"]
-    assert "BANNED_CBD_US" in row["ingredients_text"]
+    assert "L-Theanine" in row["ingredients_text"]
+    assert "l_theanine" in row["ingredients_text"]
 
 
 def test_validate_export_contract_ships_unidentified_active_with_flag():
@@ -3692,14 +3720,14 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         scored = rows["999"]
         assert scored["quality_score_v4_100"] == 89
         assert scored["quality_score_status"] == "scored"
-        assert scored["product_safety_status"] == "caution"
+        assert scored["product_safety_status"] == "no_known_catalog_concern"
         assert scored["quality_assessment_status"] == "complete"
         assert scored["quality_tier"] == "Strong"
         assert scored["score_model_version"] == "v4"
         assert scored["score_100_equivalent"] == 89  # whole-number /100 mirror
         assert scored["scoring_engine_version"] == "4.0.0"
-        assert scored["verdict"] == "CAUTION"
-        assert scored["safety_verdict"] == "CAUTION"
+        assert scored["verdict"] == "SAFE"
+        assert scored["safety_verdict"] == "SAFE"
 
         blocked = rows["888"]
         assert blocked["quality_score_v4_100"] is None
@@ -3713,11 +3741,11 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))
         assert blob["quality_pillars_v4"]
         assert blob["v4_score_provenance"]["score_model_version"] == "v4"
-        assert blob["product_safety_status"] == "caution"
+        assert blob["product_safety_status"] == "no_known_catalog_concern"
         assert blob["quality_assessment_status"] == "complete"
         assert (
             blob["v4_score_provenance"]["product_safety_status"]
-            == "caution"
+            == "no_known_catalog_concern"
         )
         assert blob["v4_confidence_detail"]["band"] == "high"
         assert blob["v4_confidence_detail"]["score_uncertainty_pts"] == 1
@@ -3728,7 +3756,7 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         audit = json.loads(
             (out / "export_audit_report.json").read_text(encoding="utf-8")
         )
-        assert audit["counts"]["verdict_caution"] == 1
+        assert audit["counts"]["verdict_caution"] == 0
 
 
 def test_v4_pillar_columns_projected_for_scored_and_null_for_suppressed(monkeypatch):
@@ -3831,20 +3859,8 @@ def test_build_always_stamps_v4_score_model(monkeypatch):
         assert r["verdict"] == "SAFE"
 
 
-def test_v4_banned_substance_suppresses_score_even_when_v4_gate_scored(monkeypatch):
-    """SAFETY INVARIANT (regression for the full-corpus cutover divergence):
-
-    A product the export's banned-substance gate flags (``has_banned_substance``)
-    must NEVER ship a finite v4 consumer score, even when the v4 *scoring* safety
-    gate did not block it (the v4 gate is narrower — e.g. it does not block Boron /
-    partially-hydrogenated-oils that ``banned_recalled_ingredients.json`` flags). The
-    full v3→v4 build leaked 8 such products (Boron/PHO banned, v4-scored 58.9–70.5),
-    which would then rank by ``quality_score_v4_100`` in the catalog index/dedup.
-
-    The export must force these into the v4 ``suppressed_safety`` state — null score,
-    BLOCKED verdict — preserving the v3 invariant that a banned product ships no
-    consumer score. Both the catalog ROW and the detail BLOB must agree.
-    """
+def test_v4_banned_substance_rejects_inconsistent_scored_artifact(monkeypatch):
+    """Export quarantines a product when Stage 3 missed a banned signal."""
     e = make_enriched()  # dsld_id 999
     e["upcSku"] = "111111111111"
     # Real banned-substance fixture (same shape as the active-safety-flag tests):
@@ -3881,23 +3897,12 @@ def test_v4_banned_substance_suppresses_score_even_when_v4_gate_scored(monkeypat
         "999", _canned_v4(status="scored", quality_100=70.5, verdict="SAFE", tier="Acceptable")
     )
     with tempfile.TemporaryDirectory() as tmp:
-        _result, out = _run_build(tmp, [e], [s])
-        rows = _core_rows(out, ["dsld_id", "quality_score_v4_100", "quality_score_status",
-                                "quality_tier", "verdict", "score_100_equivalent",
-                                "has_banned_substance"])
-        r = rows["999"]
-        assert r["has_banned_substance"] == 1
-        assert r["verdict"] == "BLOCKED"
-        # THE INVARIANT — no finite consumer score ships for a banned product:
-        assert r["quality_score_v4_100"] is None, \
-            f"banned product leaked a finite v4 score: {r['quality_score_v4_100']}"
-        assert r["quality_score_status"] == "suppressed_safety"
-        assert r["quality_tier"] is None
-        assert r["score_100_equivalent"] is None
-        # The detail BLOB must agree — no "scored" v4 breakdown for a banned product.
-        blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))
-        assert blob["v4_score_provenance"]["quality_score_status"] == "suppressed_safety"
-        assert "raw_score_v4_100" not in blob
+        result, out = _run_build(tmp, [e], [s])
+        assert result["product_count"] == 0
+        assert result["error_count"] == 1
+        manifest = json.loads((out / "export_manifest.json").read_text())
+        assert manifest["errors"][0]["dsld_id"] == "999"
+        assert "missed an export-resolved banned signal" in manifest["errors"][0]["error"]
 
 
 def test_registry_verified_certs_drive_third_party_display_columns(monkeypatch):

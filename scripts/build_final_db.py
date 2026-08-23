@@ -97,10 +97,7 @@ from scoring_v4.modules.fiber_digestive_helpers import (
     total_fiber_grams as _total_fiber_goal_grams,
 )
 from scoring_v4.modules.generic_formulation import _dietary_sugar_penalty_detail
-from scoring_v4.scored_artifact import (
-    SCORING_ENGINE_VERSION,
-    suppress_scored_artifact_for_hard_block,
-)
+from scoring_v4.scored_artifact import SCORING_ENGINE_VERSION
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -5522,95 +5519,69 @@ def project_export_scored_artifact(
     scored: Dict,
     detail_blob: Optional[Dict] = None,
 ) -> Dict:
-    """Apply the final catalog safety projection to a scored artifact.
+    """Validate Stage-3 safety parity without changing its decision.
 
-    Stage 3 cannot see every warning synthesized by the release blob resolver,
-    so the catalog row has one final fail-closed projection.  Keep it in a
-    reusable production seam: the catalog builder, exact-path preview harness,
-    and release-parity tests must not maintain separate approximations of this
-    safety-critical logic.
+    Stage 3 is the sole producer of catalog verdict and safety status. The
+    exporter may synthesize display warnings, including regional and
+    profile-gated warnings, but those warnings cannot become a second verdict
+    engine. A hard banned signal discovered while assembling the blob is a
+    scorer/export contract failure: fail the candidate instead of silently
+    rewriting the scored artifact.
     """
     has_export_banned_signal = (
         has_banned_substance(enriched)
         or blob_has_critical_banned_warning(detail_blob)
     )
+    has_export_recalled_signal = has_recalled_ingredient(enriched)
     effective_scored = dict(scored)
-    if has_export_banned_signal:
-        effective_scored = suppress_scored_artifact_for_hard_block(
-            effective_scored, reason="banned_substance"
-        )
-    else:
-        profile_safety_signal = profile_gated_hard_safety_signal(detail_blob)
-        verdict_now = safe_str(effective_scored.get("verdict")).upper()
-        safety_now = safe_str(effective_scored.get("safety_verdict")).upper()
-        profile_caution_applied = (
-            profile_safety_signal is not None
-            and (verdict_now == "SAFE" or safety_now == "SAFE")
-        )
-        if profile_caution_applied:
-            # Safety state and scoring readiness are separate axes. A
-            # profile-scoped caution may upgrade the safety surface, but it
-            # must not outrank BLOCKED/UNSAFE or turn an incomplete
-            # NOT_SCORED assessment into an apparently live CAUTION result.
-            preserve_public_verdict = verdict_now in {
-                "BLOCKED",
-                "UNSAFE",
-                "NOT_SCORED",
-            }
-            effective_scored.update({
-                "verdict": (
-                    verdict_now if preserve_public_verdict else "CAUTION"
-                ),
-                "safety_verdict": "CAUTION",
-                "product_safety_status": "caution",
-                "safety_signal_reason": (
-                    effective_scored.get("safety_signal_reason")
-                    or profile_safety_signal
-                ),
-                "_v4_safety_signal_reason": (
-                    effective_scored.get("_v4_safety_signal_reason")
-                    or profile_safety_signal
-                ),
-            })
+    verdict = safe_str(effective_scored.get("verdict")).upper()
+    safety_verdict = safe_str(effective_scored.get("safety_verdict")).upper()
+    product_safety_status = safe_str(
+        effective_scored.get("product_safety_status")
+    ).lower()
+    blocking_reason = safe_str(effective_scored.get("blocking_reason"))
+    hard_verdict = verdict in {"BLOCKED", "UNSAFE"}
 
-    derived_blocking = derive_blocking_reason(enriched, effective_scored)
-    scored_blocking = safe_str(effective_scored.get("blocking_reason"))
-    hard_verdict = safe_str(effective_scored.get("verdict")).upper() in {
-        "BLOCKED",
-        "UNSAFE",
-    }
-    effective_scored["blocking_reason"] = (
-        (
-            "banned_ingredient"
-            if has_export_banned_signal
-            else derived_blocking or scored_blocking or "safety_block"
+    if has_export_banned_signal and not (
+        verdict == "BLOCKED"
+        and safety_verdict == "BLOCKED"
+        and product_safety_status == "blocked"
+        and blocking_reason
+    ):
+        dsld_id = safe_str(enriched.get("dsld_id")) or "unknown"
+        raise RuntimeError(
+            "Stage-3 safety decision missed an export-resolved banned signal "
+            f"for DSLD {dsld_id}: verdict={verdict or None}, "
+            f"safety_verdict={safety_verdict or None}, "
+            f"product_safety_status={product_safety_status or None}, "
+            f"blocking_reason={blocking_reason or None}"
         )
-        if hard_verdict
-        else None
-    )
 
-    if not has_export_banned_signal and profile_caution_applied:
-        metadata = dict(safe_dict(effective_scored.get("scoring_metadata")))
-        metadata.update({
-            "verdict": effective_scored.get("verdict"),
-            "product_safety_status": "caution",
-            "quality_assessment_status": effective_scored.get(
-                "quality_assessment_status"
-            ),
-            "blocking_reason": effective_scored["blocking_reason"],
-        })
-        effective_scored["scoring_metadata"] = metadata
+    if not has_export_banned_signal and has_export_recalled_signal and not (
+        verdict == "UNSAFE"
+        and safety_verdict == "UNSAFE"
+        and product_safety_status == "unsafe"
+        and blocking_reason
+    ):
+        dsld_id = safe_str(enriched.get("dsld_id")) or "unknown"
+        raise RuntimeError(
+            "Stage-3 safety decision missed an export-resolved recalled signal "
+            f"for DSLD {dsld_id}: verdict={verdict or None}, "
+            f"safety_verdict={safety_verdict or None}, "
+            f"product_safety_status={product_safety_status or None}, "
+            f"blocking_reason={blocking_reason or None}"
+        )
 
-        safety_gate = dict(safe_dict(effective_scored.get("_v4_safety_gate")))
-        safety_signals = list(safe_list(safety_gate.get("safety_signals")))
-        if profile_safety_signal not in safety_signals:
-            safety_signals.append(profile_safety_signal)
-        safety_gate.update({
-            "verdict": "CAUTION",
-            "blocking_reason": effective_scored["blocking_reason"],
-            "safety_signals": safety_signals,
-        })
-        effective_scored["_v4_safety_gate"] = safety_gate
+    if hard_verdict and not blocking_reason:
+        dsld_id = safe_str(enriched.get("dsld_id")) or "unknown"
+        raise RuntimeError(
+            f"Stage-3 hard verdict has no blocking reason for DSLD {dsld_id}"
+        )
+    if not hard_verdict and blocking_reason:
+        dsld_id = safe_str(enriched.get("dsld_id")) or "unknown"
+        raise RuntimeError(
+            f"Stage-3 non-hard verdict carries a blocking reason for DSLD {dsld_id}"
+        )
     return effective_scored
 
 
@@ -10286,19 +10257,6 @@ def build_final_db(
                 if len(enriched_only_samples) < 5:
                     enriched_only_samples.append(pid)
                 continue
-
-            # Stage 3 now emits the complete v4-native scored artifact. Final
-            # export consumes it directly and never runs a second scorer.
-            # The export's banned-substance gate is broader than the v4 scoring
-            # safety gate (v4 doesn't block every banned_recalled substance, e.g.
-            # Boron / PHOs). When the export will hard-block a banned product, the
-            # v4 public contract MUST be suppressed to match — else the catalog
-            # ranks a banned product by a finite quality_score_v4_100. Done here,
-            # before build_detail_blob / build_core_row, so both surfaces agree.
-            if has_banned_substance(enriched):
-                scored = suppress_scored_artifact_for_hard_block(
-                    scored, reason="banned_substance"
-                )
 
             mark_staged_product_matched(stage_conn, "scored_stage", pid)
 

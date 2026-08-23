@@ -13,10 +13,9 @@ Two questions, both answered against the built artifact rather than trusted:
    additionally recomputed live from the classifier for a sample so a stamped
    route cannot agree with a stale scored artifact.
 
-   The verdict columns are the exception, and deliberately so: the export runs
-   its own resolver pass as a last-layer safety net, so it may raise a verdict
-   the scorer left lower. That direction is allowed and counted; the reverse is
-   a failure.
+   Verdict and safety-status columns are exact too. If export-time warning
+   synthesis discovers a signal Stage 3 missed, candidate construction fails;
+   the exporter never becomes a second safety-decision producer.
 
 Release-tier: needs a completed build, so it skips when one is absent.
 """
@@ -52,21 +51,6 @@ STAMPED_FIELDS = {
     "quality_tier": "quality_tier",
     "blocking_reason": "blocking_reason",
 }
-# Verdict columns the export may PROMOTE but never demote. build_final_db runs
-# its own resolver pass as a last-layer safety net ("bridges the gap where
-# enriched.contaminant_data didn't catch the hit"), so a high-risk active the
-# scorer's snapshot missed still reaches the consumer. Measured on this build:
-# 100 promotions, 0 demotions. Exact equality would report that net as drift;
-# the invariant that matters is that it only ever tightens.
-SEVERITY_ORDER = {"": 0, "SAFE": 1, "POOR": 2, "CAUTION": 3, "BLOCKED": 4, "UNSAFE": 5}
-PROMOTABLE_COLUMNS = {
-    "verdict": SEVERITY_ORDER,
-    "safety_verdict": SEVERITY_ORDER,
-    "product_safety_status": {
-        "": 0, "no_known_catalog_concern": 1, "caution": 2, "blocked": 3,
-    },
-}
-
 # Columns the export deliberately projects to a whole number. The schema says
 # so in its own words: "quality_score_v4_100 is the whole-number shipped
 # score". Comparing the raw decimal against it would report a documented
@@ -183,7 +167,6 @@ def test_stamped_values_match_the_score_stage() -> None:
     _require_build()
     core, wanted = _core_rows(list(STAMPED_FIELDS.values()) + list(PILLARS))
     compared = 0
-    promotions = 0
     mismatches: list[str] = []
     for pid, scored in _scored_products():
         row = core.get(pid)
@@ -198,22 +181,7 @@ def test_stamped_values_match_the_score_stage() -> None:
                 if produced != stamped:
                     mismatches.append(f"{pid}.{column}: {produced!r} != {stamped!r}")
                 continue
-            if column in PROMOTABLE_COLUMNS:
-                order = PROMOTABLE_COLUMNS[column]
-                rank_produced = order.get(str(produced or ""), None)
-                rank_stamped = order.get(str(stamped or ""), None)
-                if rank_produced is None or rank_stamped is None:
-                    if produced != stamped:
-                        mismatches.append(
-                            f"{pid}.{column}: unrankable {produced!r} vs {stamped!r}"
-                        )
-                elif rank_stamped < rank_produced:
-                    mismatches.append(
-                        f"{pid}.{column}: export DEMOTED {produced!r} -> {stamped!r}"
-                    )
-                else:
-                    promotions += rank_stamped > rank_produced
-            elif column in WHOLE_NUMBER_COLUMNS:
+            if column in WHOLE_NUMBER_COLUMNS:
                 expected = _half_up(float(produced))
                 if int(stamped) != expected:
                     mismatches.append(
@@ -231,8 +199,7 @@ def test_stamped_values_match_the_score_stage() -> None:
     assert compared > 0, "no scored products joined the catalog"
     assert not mismatches, (
         f"{len(mismatches)} stamped value(s) differ from the Score stage "
-        f"(compared {compared} products, {promotions} legitimate safety "
-        "promotions): " + "; ".join(mismatches[:10])
+        f"(compared {compared} products): " + "; ".join(mismatches[:10])
     )
 
 

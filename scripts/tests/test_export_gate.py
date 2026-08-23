@@ -230,6 +230,25 @@ def _base_scored(**overrides):
         },
     }
     data.update(overrides)
+    verdict = str(data.get("verdict") or "").upper()
+    if verdict in {"BLOCKED", "UNSAFE"}:
+        reason = (
+            "banned_ingredient" if verdict == "BLOCKED"
+            else "recalled_ingredient"
+        )
+        derived = {
+            "safety_verdict": verdict,
+            "blocking_reason": reason,
+            "score_100_equivalent": None,
+            "quality_score_v4_100": None,
+            "quality_score_status": "suppressed_safety",
+            "product_safety_status": verdict.lower(),
+            "_v4_quality_score_100": None,
+            "_v4_quality_status": "suppressed_safety",
+        }
+        for key, value in derived.items():
+            if key not in overrides:
+                data[key] = value
     return data
 
 
