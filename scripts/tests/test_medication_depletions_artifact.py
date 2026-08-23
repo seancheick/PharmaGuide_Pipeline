@@ -19,8 +19,17 @@ from build_medication_depletions_artifact import (
 
 
 def _entry(**over):
+    """A publishable fixture by default.
+
+    ``citation_review_status`` defaults to ``verified`` here so the tests that
+    exercise stamping, hashing and validation still have an entry to look at.
+    The withholding gate itself is covered by the tests below and by
+    test_clinical_review_export_gate.py; an unverified entry is deliberately
+    absent from the published artifact.
+    """
     e = {
         "id": "DEP_STATINS_COQ10",
+        "citation_review_status": "verified",
         "drug_ref": {
             "type": "class",
             "id": "class:statins",
@@ -60,12 +69,16 @@ def test_all_states_are_the_locked_enum():
     }
 
 
-def test_review_status_defaults_to_unverified():
-    art = build_artifact(_source([_entry()]), content_version="v")
-    e = art["depletions"][0]
-    assert e["citation_review_status"] == "unverified"
-    assert e["reviewed_at"] is None
-    assert e["reviewer"] is None
+def test_review_status_defaults_to_unverified_and_is_withheld():
+    entry = _entry()
+    entry.pop("citation_review_status")
+    art = build_artifact(_source([entry]), content_version="v")
+    meta = art["_metadata"]
+    assert art["depletions"] == [], (
+        "an entry with no authored review status must not publish"
+    )
+    assert meta["withheld_by_review_status"] == {"unverified": 1}
+    assert meta["withheld_entry_ids"] == ["DEP_STATINS_COQ10"]
 
 
 def test_authored_review_status_preserved():
@@ -142,7 +155,12 @@ def test_approved_watch_threshold_requires_attributable_reviewer():
         build_artifact(_source([entry]), content_version="v")
 
 
-def test_proposed_watch_threshold_can_await_citation_revision_but_stays_inert():
+def test_proposed_watch_threshold_awaiting_citation_revision_is_withheld():
+    """A proposed threshold on an unrevised citation used to publish as inert.
+
+    It is now withheld from the artifact entirely, which is strictly more
+    conservative: the record cannot reach the app in any state.
+    """
     entry = _entry(
         citation_review_status="needs_revision",
         watch_threshold_days=730,
@@ -150,7 +168,8 @@ def test_proposed_watch_threshold_can_await_citation_revision_but_stays_inert():
         watch_review_status="proposed",
     )
     art = build_artifact(_source([entry]), content_version="v")
-    assert art["depletions"][0]["watch_review_status"] == "proposed"
+    assert art["depletions"] == []
+    assert art["_metadata"]["withheld_by_review_status"] == {"needs_revision": 1}
 
 
 def test_approved_watch_threshold_requires_verified_citation_content():
@@ -253,7 +272,57 @@ def test_real_source_content_hash_is_pinned():
     # which lacked a B1 delta re-review (sign-off ledger untouched). The
     # batch-01 watch-block removal stands. The app-side parity pin still holds
     # the pre-batch value until the batch-01 release repins both together.
+    #
+    # Repinned 2026-08-22 for a STRUCTURAL reason, not a content one: the
+    # artifact now withholds every record whose citation is not verified, so
+    # the fingerprint narrows from "all records" to "the approved subset". No
+    # approved record's content changed — the companion test below proves the
+    # published set is exactly the verified subset and that each published
+    # entry is byte-identical to its canonical source record. The Clinical
+    # Team still owes a re-confirmation of this narrowed value; it is recorded
+    # as an open sign-off item rather than treated as approved.
+    PRE_EXPORT_GATE_PIN = (
+        "sha256:365502ccbdc944c78a07ac2af45b05f58a0bef0635fa4456215045a718fc218e"
+    )
+    assert PRE_EXPORT_GATE_PIN  # kept for provenance; see the note above
     assert (
         art["_metadata"]["content_hash"]
-        == "sha256:365502ccbdc944c78a07ac2af45b05f58a0bef0635fa4456215045a718fc218e"
+        == "sha256:f85e11b5937602ae4ef0b9aad5c1eb812401050418749437aa6927763ecb8a14"
     )
+
+
+def test_published_set_is_exactly_the_verified_subset_of_source():
+    """Justify the narrowed fingerprint mechanically.
+
+    The pin above moved because unverified records stopped publishing, not
+    because approved clinical content changed. This asserts both halves: the
+    published ids are exactly the verified ids, and every published entry
+    matches its canonical source record field for field.
+    """
+    import json
+    from pathlib import Path
+
+    from constants import DATA_DIR
+
+    source = json.loads(
+        (Path(DATA_DIR) / "medication_depletions.json").read_text(encoding="utf-8")
+    )
+    art = build_artifact(source, content_version="v")
+
+    verified = {
+        str(e["id"]): e
+        for e in source["depletions"]
+        if str(e.get("citation_review_status") or "").strip().lower() == "verified"
+    }
+    published = {str(e["id"]): e for e in art["depletions"]}
+
+    assert set(published) == set(verified), (
+        "published ids differ from the verified ids: "
+        f"unexpected={sorted(set(published) - set(verified))} "
+        f"missing={sorted(set(verified) - set(published))}"
+    )
+    for eid, entry in published.items():
+        for key, value in verified[eid].items():
+            assert entry.get(key) == value, (
+                f"{eid}.{key} changed between source and artifact"
+            )

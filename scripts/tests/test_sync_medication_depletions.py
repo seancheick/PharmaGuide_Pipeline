@@ -35,6 +35,10 @@ def _source_file(tmp_path):
                         },
                         "depletion_type": "depletion",
                         "severity": "significant",
+                        # Only verified records publish, so the sync fixture is
+                        # verified. Withholding is covered by
+                        # test_clinical_review_export_gate.py.
+                        "citation_review_status": "verified",
                     }
                 ],
             }
@@ -62,7 +66,9 @@ def test_sync_writes_versioned_generated_artifact(tmp_path):
     assert art["_metadata"]["content_hash"].startswith("sha256:")
     assert art["_metadata"]["content_version"] == "2026.07.23"
     assert art["_metadata"]["minimum_runtime_contract"] == 1
-    assert art["depletions"][0]["citation_review_status"] == "unverified"
+    assert art["depletions"][0]["citation_review_status"] == "verified", (
+        "only verified records publish; the fixture is verified so it is here"
+    )
     assert result["minimum_runtime_contract"] == 1
 
 

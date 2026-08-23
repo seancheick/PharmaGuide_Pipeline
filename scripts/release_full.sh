@@ -597,6 +597,8 @@ else
       --require-coverage
   run_strict_gate "IQM form-evidence PMID content (PubMed)" \
     "$PG_PYTHON" scripts/iqm_form_evidence.py verify-live
+  run_strict_gate "backed clinical studies PMID content (PubMed)" \
+    "$PG_PYTHON" scripts/api_audit/verify_backed_studies_citations.py --strict
 fi
 
 run_strict_gate "cleaner/IQD row contract" \

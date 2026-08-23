@@ -23,7 +23,15 @@ title there, so only the ingredient content check applies).
 
 Flagged items are for MANUAL review (both heuristics have false positives).
 
-Usage:  python3 scripts/api_audit/verify_backed_studies_citations.py
+Usage:
+    python3 scripts/api_audit/verify_backed_studies_citations.py
+    python3 scripts/api_audit/verify_backed_studies_citations.py --strict
+
+``--strict`` turns this report into a release gate. TITLE-MISMATCH, TITLE-DRIFT
+and not-found are hard failures. GHOST-SUSPECT is a heuristic with real false
+positives, so a suspect fails the gate only until it is reviewed and recorded in
+``scripts/data/backed_studies_ghost_review.json`` with a rationale -- an
+unreviewed suspect blocks, a reviewed one does not.
 """
 from __future__ import annotations
 
@@ -77,6 +85,25 @@ def title_overlap(a: str, b: str) -> float:
     if not wa or not wb:
         return 0.0
     return len(wa & wb) / len(wa | wb)
+
+
+ACK_PATH = REPO / "scripts" / "data" / "backed_studies_ghost_review.json"
+
+
+def _acknowledged_ghosts() -> dict:
+    """Reviewed ghost-suspects, keyed "PMID:entry_id"."""
+    if not ACK_PATH.is_file():
+        return {}
+    payload = json.loads(ACK_PATH.read_text(encoding="utf-8"))
+    reviewed = payload.get("reviewed") or []
+    out = {}
+    for item in reviewed:
+        if not isinstance(item, dict):
+            continue
+        key = f"{item.get('pmid')}:{item.get('entry_id')}"
+        if item.get("rationale"):
+            out[key] = item
+    return out
 
 
 def main() -> int:
@@ -194,6 +221,29 @@ def main() -> int:
     if not (mismatches or drifts or ghosts or notfound):
         print("Every cited PMID resolves, matches its stored title EXACTLY, and "
               "shares an ingredient word.")
+
+    if "--strict" not in sys.argv:
+        return 0
+
+    acknowledged = _acknowledged_ghosts()
+    unreviewed = [
+        (p, eid) for p, eid, _title, _tw in ghosts
+        if f"{p}:{eid}" not in acknowledged
+    ]
+    hard = len(mismatches) + len(drifts) + len(notfound)
+    if hard or unreviewed:
+        print("STRICT: backed_clinical_studies citation gate FAILED")
+        if hard:
+            print(f"  hard findings: mismatch={len(mismatches)} "
+                  f"drift={len(drifts)} not-found={len(notfound)}")
+        for p, eid in unreviewed:
+            print(f"  unreviewed ghost-suspect: PMID {p} ({eid}) — review it and "
+                  f"record the rationale in {ACK_PATH.relative_to(REPO)}")
+        return 1
+    if ghosts:
+        print(f"STRICT: {len(ghosts)} ghost-suspect(s), all reviewed and "
+              f"recorded in {ACK_PATH.relative_to(REPO)}")
+    print("STRICT: backed_clinical_studies citation gate PASSED")
     return 0
 
 

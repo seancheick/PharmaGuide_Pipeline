@@ -43,6 +43,8 @@ DEFAULT_TIMING_RULES_SOURCE = Path(__file__).parent / "data" / "timing_rules.jso
 TIMING_RULES_DESTINATION_RELATIVE_PATH = Path(
     "assets/reference_data/timing_rules.json"
 )
+# Only clinician-verified timing guidance may reach a production artifact.
+PUBLISHABLE_TIMING_REVIEW_STATES = frozenset({"verified"})
 MANIFEST_DESTINATION_RELATIVE_PATH = Path(
     "assets/reference_data/reference_data_manifest.json"
 )
@@ -309,11 +311,68 @@ def _load_timing_rules(source_path: Path) -> tuple[Path, dict[str, Any]]:
     return source_path, payload
 
 
+def publishable_timing_rules(payload: dict[str, Any]) -> dict[str, Any]:
+    """Return the canonical timing rules with unreviewed guidance withheld.
+
+    ``timing_evaluation_service`` already indexes only ``review_status:
+    verified`` rules, but the asset shipped every rule and relied on the reader
+    to hide them. Clinical guidance nobody has signed off should not be inside
+    the bundle at all.
+
+    Withheld ids are reported in ``_metadata`` so the remediation backlog stays
+    visible rather than vanishing from the artifact.
+    """
+    rules = payload.get("timing_rules")
+    metadata = payload.get("_metadata")
+    if not isinstance(rules, list) or not isinstance(metadata, dict):
+        raise ValueError("canonical timing rules have an invalid shape")
+
+    kept: list[dict[str, Any]] = []
+    withheld_ids: list[str] = []
+    withheld_by_status: dict[str, int] = {}
+    for rule in rules:
+        if not isinstance(rule, dict):
+            raise ValueError("canonical timing rules contain a non-object rule")
+        status = str(rule.get("review_status") or "").strip().lower()
+        if status in PUBLISHABLE_TIMING_REVIEW_STATES:
+            kept.append(rule)
+            continue
+        withheld_ids.append(str(rule.get("id") or rule.get("rule_id")))
+        withheld_by_status[status or "missing"] = (
+            withheld_by_status.get(status or "missing", 0) + 1
+        )
+
+    projected_metadata = dict(metadata)
+    projected_metadata["total_entries"] = len(kept)
+    projected_metadata["withheld_entries"] = len(withheld_ids)
+    projected_metadata["withheld_entry_ids"] = sorted(withheld_ids)
+    projected_metadata["withheld_by_review_status"] = dict(
+        sorted(withheld_by_status.items())
+    )
+    projected_metadata["publishable_review_states"] = sorted(
+        PUBLISHABLE_TIMING_REVIEW_STATES
+    )
+    return {**payload, "_metadata": projected_metadata, "timing_rules": kept}
+
+
+def _timing_rules_bytes(projection: dict[str, Any]) -> bytes:
+    return (
+        json.dumps(projection, indent=2, ensure_ascii=False, sort_keys=False) + "\n"
+    ).encode("utf-8")
+
+
 def validate_flutter_timing_rules(
     *, source_path: Path, flutter_repo: Path
 ) -> dict[str, Any]:
-    """Require the app to bundle the byte-identical pipeline timing rules."""
+    """Require the app to bundle the published timing-rules projection.
+
+    The parity contract is unchanged in strength -- the destination must equal
+    the pipeline's own output byte for byte. What it equals is now the
+    publishable projection rather than the raw canonical file, so unreviewed
+    guidance cannot reach the bundle and still pass parity.
+    """
     source_path, canonical = _load_timing_rules(source_path)
+    projection = publishable_timing_rules(canonical)
     flutter_repo = flutter_repo.resolve()
     destination = flutter_repo / TIMING_RULES_DESTINATION_RELATIVE_PATH
     if not flutter_repo.is_dir():
@@ -321,30 +380,33 @@ def validate_flutter_timing_rules(
     if not destination.is_file():
         raise FileNotFoundError(f"Flutter timing rules not found: {destination}")
     if (
-        destination.read_bytes() != source_path.read_bytes()
-        or json.loads(destination.read_text(encoding="utf-8")) != canonical
+        destination.read_bytes() != _timing_rules_bytes(projection)
+        or json.loads(destination.read_text(encoding="utf-8")) != projection
     ):
-        raise ValueError("Flutter timing rules differ from canonical pipeline source")
-    metadata = canonical["_metadata"]
+        raise ValueError(
+            "Flutter timing rules differ from the published pipeline projection"
+        )
+    metadata = projection["_metadata"]
     return {
         "source": source_path,
         "destination": destination,
         "schema_version": metadata["schema_version"],
         "total_entries": metadata["total_entries"],
+        "withheld_entries": metadata["withheld_entries"],
     }
 
 
 def sync_timing_rules(
     *, source_path: Path, flutter_repo: Path
 ) -> dict[str, Any]:
-    """Byte-copy the sole authored timing-rules artifact into Flutter."""
-    source_path, _ = _load_timing_rules(source_path)
+    """Write the published timing-rules projection into Flutter."""
+    source_path, canonical = _load_timing_rules(source_path)
     flutter_repo = flutter_repo.resolve()
     destination = flutter_repo / TIMING_RULES_DESTINATION_RELATIVE_PATH
     if not flutter_repo.is_dir():
         raise FileNotFoundError(f"Flutter repository not found: {flutter_repo}")
     destination.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(source_path, destination)
+    destination.write_bytes(_timing_rules_bytes(publishable_timing_rules(canonical)))
     return validate_flutter_timing_rules(
         source_path=source_path,
         flutter_repo=flutter_repo,

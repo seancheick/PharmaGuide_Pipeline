@@ -118,14 +118,31 @@ def test_sync_timing_rules_uses_pipeline_file_as_only_source(
         flutter_repo=flutter_repo,
     )
 
-    assert destination.read_bytes() == source.read_bytes()
+    # The destination is the published projection of the pipeline file, not a
+    # byte copy of it: rules whose review_status is not `verified` are withheld
+    # so unreviewed clinical guidance never reaches the bundle. Parity is
+    # unchanged in strength -- the destination must equal the pipeline's own
+    # output byte for byte.
+    canonical = json.loads(source.read_text(encoding="utf-8"))
+    projection = sync_mod.publishable_timing_rules(canonical)
+    assert destination.read_bytes() == sync_mod._timing_rules_bytes(projection)
+    assert json.loads(destination.read_text(encoding="utf-8")) == projection
     assert result["destination"] == destination
     # Read from the artifact rather than pinned: Section 2 removes rules as
     # they are rejected, and a hard-coded count turns every clinical decision
     # into a test failure in an unrelated file.
-    canonical = json.loads(source.read_text(encoding="utf-8"))
     assert result["schema_version"] == canonical["_metadata"]["schema_version"]
-    assert result["total_entries"] == canonical["_metadata"]["total_entries"]
+    assert result["total_entries"] == projection["_metadata"]["total_entries"]
+    withheld = [
+        r for r in canonical["timing_rules"]
+        if str(r.get("review_status") or "").strip().lower()
+        not in sync_mod.PUBLISHABLE_TIMING_REVIEW_STATES
+    ]
+    assert result["withheld_entries"] == len(withheld)
+    published_statuses = {
+        str(r.get("review_status")) for r in projection["timing_rules"]
+    }
+    assert published_statuses <= sync_mod.PUBLISHABLE_TIMING_REVIEW_STATES
     assert result["schema_version"].startswith("6.")
     sync_mod.validate_flutter_timing_rules(
         source_path=source,

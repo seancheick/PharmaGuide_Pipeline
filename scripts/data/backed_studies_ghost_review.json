@@ -1,0 +1,18 @@
+{
+  "_metadata": {
+    "purpose": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict",
+    "policy": "A ghost-suspect blocks the release gate until it is reviewed here with a rationale that states why the live PubMed record does support the entry. Removing an entry from this file re-arms the gate for that citation.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-08-22"
+  },
+  "reviewed": [
+    {
+      "pmid": "21747893",
+      "entry_id": "PRECLIN_DGL",
+      "live_title": "An Extract of Glycyrrhiza glabra (GutGard) Alleviates Symptoms of Functional Dyspepsia",
+      "rationale": "False positive of the word-overlap heuristic, not a wrong-topic citation. The entry is Deglycyrrhizinated Licorice and its own notes cite this PMID for exactly this claim: 'The strongest modern trials are on the standardized GutGard extract for functional dyspepsia'. Glycyrrhiza glabra is licorice; the heuristic compares the live title against the stored ingredient words 'deglycyrrhizinated' and 'glycyrrhizin', which the botanical binomial does not string-match. Topic, extract name and indication all agree.",
+      "reviewed_by": "pipeline citation audit 2026-08-22",
+      "reviewed_at": "2026-08-22"
+    }
+  ]
+}

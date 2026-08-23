@@ -303,6 +303,11 @@ run_release_artifact_gates() {
       --live \
       --require-coverage
     "$PG_PYTHON" scripts/iqm_form_evidence.py verify-live
+    # backed_clinical_studies.json is the evidence-bonus backbone (~438 PMIDs)
+    # and had no gate in any release path: the verifier existed but always
+    # returned 0, so wiring it before --strict would have added a check that
+    # could not fire.
+    "$PG_PYTHON" scripts/api_audit/verify_backed_studies_citations.py --strict
   fi
 }
 

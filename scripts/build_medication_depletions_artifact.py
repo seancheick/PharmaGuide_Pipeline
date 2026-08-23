@@ -36,6 +36,9 @@ MINIMUM_RUNTIME_CONTRACT = 1
 
 CITATION_REVIEW_STATES = {"unverified", "verified", "needs_revision", "rejected"}
 DEFAULT_REVIEW_STATUS = "unverified"
+# Only a content-verified citation may reach a production artifact. Anything
+# else -- unverified, needs_revision, rejected -- is withheld at build time.
+PUBLISHABLE_CITATION_REVIEW_STATES = frozenset({"verified"})
 WATCH_REVIEW_STATES = {"proposed", "approved", "rejected"}
 
 TOP_LEVEL_KEY = "depletions"
@@ -156,11 +159,22 @@ def build_artifact(source: Dict[str, Any], *, content_version: str) -> Dict[str,
 
     seen_ids: set[str] = set()
     out_entries: List[Dict[str, Any]] = []
+    withheld_ids: List[str] = []
+    withheld_by_status: Dict[str, int] = {}
     for entry in entries:
         normalized = _validate_and_normalize_entry(entry)
         eid = str(normalized["id"]).strip()
         _require(eid not in seen_ids, f"duplicate entry id {eid!r}")
         seen_ids.add(eid)
+        status = str(normalized["citation_review_status"])
+        if status not in PUBLISHABLE_CITATION_REVIEW_STATES:
+            # The app already fails closed on review status, but an unverified
+            # clinical claim should not be inside the bundle at all. Withheld
+            # ids are reported so the remediation backlog stays visible rather
+            # than disappearing from the artifact silently.
+            withheld_ids.append(eid)
+            withheld_by_status[status] = withheld_by_status.get(status, 0) + 1
+            continue
         out_entries.append(normalized)
 
     metadata = {
@@ -169,6 +183,12 @@ def build_artifact(source: Dict[str, Any], *, content_version: str) -> Dict[str,
         "content_hash": f"sha256:{_content_hash(out_entries)}",
         "minimum_runtime_contract": MINIMUM_RUNTIME_CONTRACT,
         "total_entries": len(out_entries),
+        "withheld_entries": len(withheld_ids),
+        "withheld_entry_ids": sorted(withheld_ids),
+        "withheld_by_review_status": dict(sorted(withheld_by_status.items())),
+        "publishable_citation_review_states": sorted(
+            PUBLISHABLE_CITATION_REVIEW_STATES
+        ),
         "generated_by": "build_medication_depletions_artifact",
     }
     return {"_metadata": metadata, TOP_LEVEL_KEY: out_entries}
