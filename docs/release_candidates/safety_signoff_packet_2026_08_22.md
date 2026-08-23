@@ -18,6 +18,7 @@ held and proposed catalogs — not written by hand.
 - **Proposed status:** `high_risk`
 - **Products affected:** 27
 - **US jurisdictional basis:** No US prohibition applies to red yeast rice as such. The FDA action addresses products with enhanced or added lovastatin; NCCIH records monacolin K content ranging from none to substantial and usually undeclared.
+- **What actually produced the previous verdict:** The shipped block did NOT come from this rule. A stale contaminant snapshot matched generic 'red yeast rice' to BANNED_RED_YEAST_RICE (match_type=alias, matched_variant='red yeast rice') even though that rule sets requires_explicit_form_evidence and lists only monacolin K / lovastatin variants. Verified on blob 206443 in the 2026-08-19 build. On the evidence this is a defect fix, not a policy relaxation.
 - **Authoritative source:** https://www.nccih.nih.gov/health/red-yeast-rice
 - **Consumer-facing effect:** BLOCKED (hard block, product suppressed from scoring) -> CAUTION (scored, high-risk review surfaced to the consumer).
 - **Residual risk if approved:** A product whose monacolin K happens to be high is treated as a review rather than a block. Explicit monacolin K / lovastatin declarations still hard-block via BANNED_RED_YEAST_RICE.
@@ -57,8 +58,9 @@ held and proposed catalogs — not written by hand.
 
 - **Held status:** `banned` (what ships today)
 - **Proposed status:** `watchlist`
-- **Products affected:** 17
+- **Products affected:** 16
 - **US jurisdictional basis:** NIH ODS lists sodium borate and sodium tetraborate among the boron forms used in dietary supplements, and notes Supplement Facts panels declare elemental boron rather than compound mass. No US supplement prohibition was established for this form.
+- **What actually produced the previous verdict:** The shipped block came from an EU food-additive ban driving a US market verdict: safety_jurisdiction_projection defaulted us_applicable to True for any rule with no declared jurisdiction. Two questions are tangled and both need an answer -- whether an EU food-additive ban should drive a US supplement verdict at all, and whether borax as a declared boron source salt is the same thing as borax as a standalone additive.
 - **Authoritative source:** https://ods.od.nih.gov/factsheets/Boron-HealthProfessional/
 - **Consumer-facing effect:** BLOCKED (hard block) -> SAFE or CAUTION, depending on the rest of the product's safety profile.
 - **Residual risk if approved:** Borax as a standalone additive is a different question from borax as the declared source salt of a nutritionally-relevant boron dose. The retired rule covered both; this releases both.
@@ -81,12 +83,11 @@ held and proposed catalogs — not written by hand.
 | `329942` | Multivitamins for Men - with Fish Oil Softge | BLOCKED | SAFE | active | Boron | Sodium Tetraborate |
 | `63031` | Double Strength Glucosamine Chondroitin | BLOCKED | SAFE | active | Boron | Sodium Tetraborate |
 | `64331` | Glucosamine Chondroitin Double Strength | BLOCKED | SAFE | active | Boron | Sodium Tetraborate |
-| `79573` | Beyond Raw Infinite Test | BLOCKED | SAFE | active | Boron | Sodium Tetraborate Decahydrate |
 
 
 ## Decision
 
-Total products awaiting sign-off: **44**.
+Total products awaiting sign-off: **43**.
 
 - [ ] Approve `RISK_RED_YEAST_RICE` banned → high_risk
 - [ ] Approve `ADD_SODIUM_TETRABORATE` banned → watchlist

@@ -192,6 +192,13 @@ def apply_pending_policy_hold(entry: Dict[str, Any]) -> Dict[str, Any]:
         return entry
     held = dict(entry)
     held["status"] = previous
+    previous_one_liner = hold.get("previous_safety_warning_one_liner")
+    if previous_one_liner:
+        # Hold the consumer copy with the status. A rule held at `banned` while
+        # carrying the relaxed one-liner would under-warn -- a BLOCKED product
+        # telling the reader to "assess using the label's elemental boron
+        # amount" is worse than either posture on its own.
+        held["safety_warning_one_liner"] = previous_one_liner
     previous_match_mode = str(hold.get("previous_match_mode") or "").strip().lower()
     proposed_match_mode = str(entry.get("match_mode") or "").strip().lower()
     if previous_match_mode:

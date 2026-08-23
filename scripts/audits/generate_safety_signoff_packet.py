@@ -36,6 +36,15 @@ RULES = {
             "NCCIH records monacolin K content ranging from none to "
             "substantial and usually undeclared."
         ),
+        "previous_mechanism": (
+            "The shipped block did NOT come from this rule. A stale contaminant "
+            "snapshot matched generic 'red yeast rice' to BANNED_RED_YEAST_RICE "
+            "(match_type=alias, matched_variant='red yeast rice') even though "
+            "that rule sets requires_explicit_form_evidence and lists only "
+            "monacolin K / lovastatin variants. Verified on blob 206443 in the "
+            "2026-08-19 build. On the evidence this is a defect fix, not a "
+            "policy relaxation."
+        ),
         "source": "https://www.nccih.nih.gov/health/red-yeast-rice",
         "effect": (
             "BLOCKED (hard block, product suppressed from scoring) -> CAUTION "
@@ -57,6 +66,15 @@ RULES = {
             "boron forms used in dietary supplements, and notes Supplement "
             "Facts panels declare elemental boron rather than compound mass. "
             "No US supplement prohibition was established for this form."
+        ),
+        "previous_mechanism": (
+            "The shipped block came from an EU food-additive ban driving a US "
+            "market verdict: safety_jurisdiction_projection defaulted "
+            "us_applicable to True for any rule with no declared jurisdiction. "
+            "Two questions are tangled and both need an answer -- whether an EU "
+            "food-additive ban should drive a US supplement verdict at all, and "
+            "whether borax as a declared boron source salt is the same thing as "
+            "borax as a standalone additive."
         ),
         "source": "https://ods.od.nih.gov/factsheets/Boron-HealthProfessional/",
         "effect": (
@@ -178,6 +196,8 @@ def main(argv=None) -> int:
             f"- **Proposed status:** `{spec['proposed']}`",
             f"- **Products affected:** {len(affected)}",
             f"- **US jurisdictional basis:** {spec['basis']}",
+            f"- **What actually produced the previous verdict:** "
+            f"{spec['previous_mechanism']}",
             f"- **Authoritative source:** {spec['source']}",
             f"- **Consumer-facing effect:** {spec['effect']}",
             f"- **Residual risk if approved:** {spec['residual_risk']}",

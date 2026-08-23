@@ -85,6 +85,13 @@ def test_hold_is_declared_and_unapproved(rule_id) -> None:
     assert hold["approved"] is False
     assert hold["approved_by"] is None
     assert hold["packet"], "a hold must point at the sign-off packet"
+    assert hold["previous_mechanism"], (
+        "a hold must record what actually produced the previous outcome, so a "
+        "reviewer is not left to infer it from the verdict"
+    )
+    assert hold["previous_safety_warning_one_liner"], (
+        "a held status must carry the consumer copy that matched it"
+    )
     assert (ROOT / hold["packet"]).is_file(), (
         f"sign-off packet missing: {hold['packet']}"
     )
@@ -105,6 +112,13 @@ def test_held_rules_resolve_at_the_conservative_status(resolver, label) -> None:
     )
     assert r.is_banned is True
     assert r.is_safety_concern is True
+    entry = _entries()[r.matched_rule_id]
+    assert r.safety_warning_one_liner == (
+        entry[PENDING_POLICY_HOLD_KEY]["previous_safety_warning_one_liner"]
+    ), (
+        f"{label!r} shows relaxed copy on a held status; a BLOCKED product must "
+        "not carry the wording written for the lower posture"
+    )
 
 
 # --------------------------------------------------------------------------- #
