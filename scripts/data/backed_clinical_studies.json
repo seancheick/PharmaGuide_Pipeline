@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.4",
-    "last_updated": "2026-08-18",
-    "total_entries": 200,
+    "schema_version": "5.3.5",
+    "last_updated": "2026-08-23",
+    "total_entries": 199,
     "changelog": [
+      "5.3.5 (2026-08-23): Removed the class-wide BRAND_ALBION_MINERALS evidence record. Its magnesium-bisglycinate and ferrous-bisglycinate citations are compound-specific and already live on their canonical ingredient records; they cannot support unrelated Albion salts such as dimagnesium malate.",
       "5.3.4 (2026-08-18): Added exact-strain clinical records for Bacillus coagulans GBI-30, 6086 and Limosilactobacillus reuteri DSM 17938; added a current CNCM I-745 meta-analysis to Saccharomyces boulardii; corrected HN019 and pterostilbene effect summaries; separated product-brand aliases from exact strain identities.",
       "5.3.3 (2026-08-08): Replaced the corrupt BCAA auto-discovery record with three content-verified systematic reviews and a complete leucine+isoleucine+valine identity/dose contract; removed unrelated registry trials and the impossible 18,820-study count. Narrowed NAC consumer routing to Immune Support, removed untraceable aggregate counts and the unsupported longevity route, and tied each verified reference to explicit supported claims.",
       "5.3.2 (2026-08-06): Added form- and dose-scoped mixed human evidence for L-carnitine base/tartrate from three content-verified systematic reviews; explicitly excluded fumarate, hydrochloride, acetyl-, propionyl-, D-, and DL-carnitine identities. Corrected BRAND_CARNIPURE from 224 participants/five trials/strong energy-heart claims to its two cited small crossover recovery-marker trials (28 total participants, positive_weak, 2 g/day), and grouped its evidence with generic L-carnitine so the same active cannot create false ingredient breadth.",
@@ -1618,119 +1619,6 @@
       "endpoint_relevance_tags": [
         "digestive_health",
         "muscle_recovery"
-      ]
-    },
-    {
-      "id": "BRAND_ALBION_MINERALS",
-      "standard_name": "Albion Chelated Minerals",
-      "aliases": [
-        "albion",
-        "traacs",
-        "chelated minerals"
-      ],
-      "category": "mineral_supplement",
-      "evidence_level": "branded-rct",
-      "published_studies": [
-        "RCT",
-        "ingredient",
-        "meta-analysis"
-      ],
-      "score_contribution": "tier_1",
-      "key_endpoints": [
-        "bioavailability ↑",
-        "tolerance ↑"
-      ],
-      "health_goals_supported": [
-        "Increase Energy",
-        "Immune Support"
-      ],
-      "notes": "The human evidence supports amino-acid-chelated mineral forms such as bisglycinates, but the directly indexed literature is mostly ingredient-form evidence rather than clearly Albion-branded finished-product trials.",
-      "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Supakatisant et al. (2015, PMID 22909270) randomized pregnant women and found magnesium bisglycinate reduced leg-cramp frequency and intensity versus placebo. Ferrous bisglycinate also has systematic-review support in randomized trials (PMID 36728680). These findings support chelated mineral forms, but not a uniquely PubMed-indexed Albion product-specific RCT set.",
-      "references_structured": [
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "22909270",
-          "doi": "10.1111/j.1740-8709.2012.00440.x",
-          "title": "Oral magnesium for relief in pregnancy-induced leg cramps: a randomised controlled trial.",
-          "citation": "Maternal & child nutrition (2015-04-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/22909270/",
-          "published_date": "2015-04-01",
-          "publication_types": [
-            "Journal Article",
-            "Randomized Controlled Trial",
-            "Research Support, Non-U.S. Gov't"
-          ],
-          "mesh_terms": [
-            "Administration, Oral",
-            "Adult",
-            "Double-Blind Method",
-            "Female",
-            "Humans",
-            "Leg",
-            "Magnesium",
-            "Muscle Cramp",
-            "Pregnancy",
-            "Pregnancy Complications",
-            "Treatment Outcome",
-            "Young Adult"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "rct",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "36728680",
-          "doi": "10.1093/nutrit/nuac106",
-          "title": "The effects of oral ferrous bisglycinate supplementation on hemoglobin and ferritin concentrations in adults and children: a systematic review and meta-analysis of randomized controlled trials.",
-          "citation": "Nutrition reviews (2023-07-10)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/36728680/",
-          "published_date": "2023-07-10",
-          "publication_types": [
-            "Journal Article",
-            "Meta-Analysis",
-            "Research Support, Non-U.S. Gov't",
-            "Systematic Review"
-          ],
-          "mesh_terms": [
-            "Adult",
-            "Child",
-            "Female",
-            "Humans",
-            "Male",
-            "Pregnancy",
-            "Anemia, Iron-Deficiency",
-            "Dietary Supplements",
-            "Ferritins",
-            "Hemoglobins",
-            "Iron",
-            "Iron Deficiencies",
-            "Randomized Controlled Trials as Topic",
-            "Salts",
-            "Ferrous Compounds",
-            "Glycine"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "systematic_review",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        }
-      ],
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Increase Energy",
-      "total_enrollment": 110,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Increase Energy; published_tags=RCT,ingredient,meta-analysis; total_enrollment=80; notes/citations contain no automated downgrade signals.",
-      "registry_completed_trials_count": 1,
-      "endpoint_relevance_tags": [
-        "energy_metabolism"
       ]
     },
     {

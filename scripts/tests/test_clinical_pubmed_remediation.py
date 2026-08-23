@@ -40,6 +40,11 @@ def test_high_confidence_pubmed_suggestions_promoted_for_unresolved_clinical_ent
     assert any(ref.get("pmid") == "25629804" for ref in entries["INGR_CHONDROITIN_SULFATE"].get("references_structured", []))
 
 
+def test_albion_brand_family_does_not_inherit_unrelated_chelate_evidence():
+    """Compound-specific bisglycinate studies cannot support every Albion salt."""
+    assert "BRAND_ALBION_MINERALS" not in _clinical_map()
+
+
 def test_banned_pho_bad_retracted_doi_reference_is_removed():
     entry = _banned_map()["BANNED_PHO"]
     urls = {ref.get("url") for ref in entry.get("references_structured", [])}

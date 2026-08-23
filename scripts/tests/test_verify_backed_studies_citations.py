@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -33,3 +34,17 @@ def test_shared_pmid_keeps_ingredient_claims_separate() -> None:
     assert "magnesium" in claims[("12345", "INGREDIENT_A")]["tw"]
     assert "curcumin" not in claims[("12345", "INGREDIENT_A")]["tw"]
     assert "curcumin" in claims[("12345", "INGREDIENT_B")]["tw"]
+
+
+def test_bcm95_title_heuristic_false_positive_has_entry_scoped_review() -> None:
+    payload = json.loads(
+        (ROOT / "scripts" / "data" / "backed_studies_ghost_review.json").read_text()
+    )
+    reviewed = {
+        (str(item.get("pmid")), str(item.get("entry_id"))): item
+        for item in payload["reviewed"]
+    }
+
+    item = reviewed[("33516238", "BRAND_LIFE_EXTENSION_SUPER_BIOCURCUMIN")]
+    assert "BCM-95" in item["rationale"]
+    assert "abstract" in item["rationale"].lower()

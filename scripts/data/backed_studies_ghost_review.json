@@ -3,8 +3,8 @@
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict",
     "description": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict. A suspect blocks the release gate until it is reviewed here with a rationale that states why the live PubMed record does support the entry. Removing an entry re-arms the gate for that citation.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-08-22",
-    "total_entries": 1
+    "last_updated": "2026-08-23",
+    "total_entries": 2
   },
   "reviewed": [
     {
@@ -14,6 +14,14 @@
       "rationale": "False positive of the word-overlap heuristic, not a wrong-topic citation. The entry is Deglycyrrhizinated Licorice and its own notes cite this PMID for exactly this claim: 'The strongest modern trials are on the standardized GutGard extract for functional dyspepsia'. Glycyrrhiza glabra is licorice; the heuristic compares the live title against the stored ingredient words 'deglycyrrhizinated' and 'glycyrrhizin', which the botanical binomial does not string-match. Topic, extract name and indication all agree.",
       "reviewed_by": "pipeline citation audit 2026-08-22",
       "reviewed_at": "2026-08-22"
+    },
+    {
+      "pmid": "33516238",
+      "entry_id": "BRAND_LIFE_EXTENSION_SUPER_BIOCURCUMIN",
+      "live_title": "Bioavailable turmeric extract for knee osteoarthritis: a randomized, non-inferiority trial versus paracetamol",
+      "rationale": "False positive of the title-only word-overlap heuristic. The live PubMed abstract's Methods section explicitly identifies the tested intervention as BCM-95 500 mg twice daily. This entry is scoped to the BCM-95/CurcuGreen formulation and explicitly disclaims evidence for the finished Life Extension retail product, so the PMID supports the authored formulation-level claim.",
+      "reviewed_by": "pipeline citation audit 2026-08-23",
+      "reviewed_at": "2026-08-23"
     }
   ]
 }
