@@ -223,6 +223,30 @@ def test_enforced_readiness_owns_material_dose_completeness() -> None:
     assert "dose_assessment_readiness" not in result.missing_fields
 
 
+def test_enforced_readiness_owns_module_relevant_identity() -> None:
+    """The gate must not emit a second identity verdict beside readiness."""
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    readiness = {
+        "enforcement_mode": "enforced",
+        "enforced_dimensions": ["dose", "identity", "route", "verification"],
+        "identity": {"readiness": "incomplete"},
+        "dose": {"readiness": "complete"},
+        "evidence": {"readiness": "complete"},
+        "verification": {"readiness": "complete"},
+        "route": {"readiness": "complete"},
+    }
+
+    result = evaluate_completeness_gate(
+        _product(ingredients=[_ingredient(name="Calcium", canonical_id="calcium")]),
+        module="sports",
+        assessment_readiness=readiness,
+    )
+
+    assert result.is_live_eligible is False
+    assert result.missing_fields == ["identity_assessment_readiness"]
+
+
 def test_enforced_readiness_cannot_omit_a_canonical_dimension() -> None:
     """An artifact-provided dimension list must not weaken the release gate."""
     from scoring_v4.gate_completeness import evaluate_completeness_gate

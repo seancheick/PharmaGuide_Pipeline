@@ -28,30 +28,14 @@ from typing import Any, Dict, List, Optional, Sequence, Set
 
 from assessment_readiness import (
     ENFORCED_READINESS_DIMENSIONS,
+    has_module_relevant_identity,
     has_canonical_enforced_dimensions,
+    has_sports_primary_identity_signal,
 )
 from dose_assessment import has_incomplete_material_dose_assessment
 from scoring_input_contract import classify_ingredient_roles, get_scoring_ingredients
 
 MULTI_DOSE_COVERAGE_MIN = 0.60
-SPORTS_PRIMARY_IDENTITY_CANONICALS = {
-    "protein",
-    "whey_protein",
-    "casein",
-    "pea_protein",
-    "rice_protein",
-    "soy_protein",
-    "creatine_monohydrate",
-    "beta-alanine",
-    "beta_alanine",
-    "l_citrulline",
-    "hmb",
-    "l_leucine",
-    "l_isoleucine",
-    "l_valine",
-}
-
-
 @dataclass
 class CompletenessResult:
     """Outcome of the Layer 2 completeness gate."""
@@ -384,27 +368,7 @@ def _has_product_evidence(ingredients: List[Dict[str, Any]], evidence_type: str)
 
 
 def _has_sports_primary_identity_signal(product: Dict[str, Any]) -> bool:
-    scoring_input = get_scoring_ingredients(product or {}, strict=True)
-    for rejected in scoring_input.rejected_rows:
-        row = rejected.row if isinstance(rejected.row, dict) else {}
-        if rejected.reason not in {
-            "missing_dose_evidence",
-            "product_evidence_not_scoreable:missing_primary_sports_dose",
-        }:
-            continue
-        if _norm(row.get("canonical_id")) in SPORTS_PRIMARY_IDENTITY_CANONICALS:
-            return True
-    return False
-
-
-_PROBIOTIC_IDENTITY_TOKENS = (
-    "probiotic",
-    "lactobacillus",
-    "bifidobacterium",
-    "bacillus_coagulans",
-    "streptococcus_salivarius",
-    "saccharomyces_boulardii",
-)
+    return has_sports_primary_identity_signal(product)
 
 
 def _has_probiotic_relevant_identity(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> bool:
@@ -417,18 +381,7 @@ def _has_probiotic_relevant_identity(product: Dict[str, Any], ingredients: List[
     also valid identity evidence; many disclosed probiotic blends list strains
     under the blend and provide aggregate CFU, so no flat scorable row exists.
     """
-    if _named_strain_count(product) > 0:
-        return True
-    if _has_product_evidence(ingredients, "probiotic_cfu"):
-        return True
-    for ing in ingredients:
-        identity = " ".join(
-            _norm(ing.get(key))
-            for key in ("canonical_id", "name", "standard_name", "standardName")
-        )
-        if any(token in identity for token in _PROBIOTIC_IDENTITY_TOKENS):
-            return True
-    return False
+    return has_module_relevant_identity(product, "probiotic", rows=ingredients)
 
 
 def _has_sports_relevant_identity(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> bool:
@@ -442,11 +395,7 @@ def _has_sports_relevant_identity(product: Dict[str, Any], ingredients: List[Dic
     scores conservatively, instead of forcing NOT_SCORED. Only sports-ROUTED
     products reach this check, so the broader set cannot pull non-sports products in.
     """
-    if _has_product_evidence(ingredients, "sports_primary_dose"):
-        return True
-    if _has_sports_primary_identity_signal(product):
-        return True
-    return any(_norm(ing.get("canonical_id")) in _SPORTS_IDENTITY_CANONICALS for ing in ingredients)
+    return has_module_relevant_identity(product, "sports", rows=ingredients)
 
 
 def _soft_policy_from_scoring_evidence(
@@ -581,6 +530,7 @@ def evaluate_completeness_gate_with_readiness(
 
     module = module if module in {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"} else "generic"
     readiness = assessment_readiness if isinstance(assessment_readiness, dict) else {}
+    readiness_enforced = readiness.get("enforcement_mode") == "enforced"
     ingredients = _active_ingredients(product)
     missing, coverage = _base_checks(
         product,
@@ -633,7 +583,11 @@ def evaluate_completeness_gate_with_readiness(
     if module == "probiotic":
         checked_fields.extend(["total_cfu", "named_strain"])
         strain_count = _named_strain_count(product)
-        if ingredients and not _has_probiotic_relevant_identity(product, ingredients):
+        if (
+            ingredients
+            and not _has_probiotic_relevant_identity(product, ingredients)
+            and not readiness_enforced
+        ):
             missing.append("active_identity")
         elif _total_cfu_billion(product) <= 0:
             if strain_count > 0 or ingredients:
@@ -681,7 +635,11 @@ def evaluate_completeness_gate_with_readiness(
         # pure-DHA products (e.g. algal DHA, prescription-grade pure EPA)
         # DO qualify — the gate is 'at least one', not 'both'.
         checked_fields.append("epa_or_dha_disclosed")
-        if ingredients and not _has_omega_relevant_identity(ingredients):
+        if (
+            ingredients
+            and not _has_omega_relevant_identity(product, ingredients)
+            and not readiness_enforced
+        ):
             missing.append("active_identity")
         elif not _has_epa_or_dha_disclosed(ingredients) and not _has_product_evidence(
             ingredients,
@@ -701,7 +659,11 @@ def evaluate_completeness_gate_with_readiness(
 
     if module == "sports":
         checked_fields.append("sports_active_dose")
-        if ingredients and not _has_sports_relevant_identity(product, ingredients):
+        if (
+            ingredients
+            and not _has_sports_relevant_identity(product, ingredients)
+            and not readiness_enforced
+        ):
             missing.append("active_identity")
         elif not any(_has_sports_active_dose(i) for i in ingredients) and not _has_product_evidence(
             ingredients,
@@ -742,20 +704,10 @@ def evaluate_completeness_gate_with_readiness(
 
 
 _OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha"}
-_OMEGA_PARENT_CANONICALS = {
-    "fish_oil",
-    "krill_oil",
-    "cod_liver_oil",
-    "algal_oil",
-    "algae_oil",
-    "omega_3",
-    "omega3",
-    "omega_3_fatty_acids",
-}
-_OMEGA_RELEVANT_CANONICALS = _OMEGA_INGREDIENT_CANONICALS | _OMEGA_PARENT_CANONICALS
-
-
-def _has_omega_relevant_identity(ingredients: List[Dict[str, Any]]) -> bool:
+def _has_omega_relevant_identity(
+    product: Dict[str, Any],
+    ingredients: List[Dict[str, Any]],
+) -> bool:
     """True when the scoring contract contains usable omega identity.
 
     Name/category routing can identify an intended omega product, but the
@@ -763,12 +715,7 @@ def _has_omega_relevant_identity(ingredients: List[Dict[str, Any]]) -> bool:
     non-omega row such as glucose must not satisfy the active-identity gate for
     an omega module score.
     """
-    for ing in ingredients:
-        if _norm(ing.get("evidence_type")) == "omega_epa_dha_aggregate":
-            return True
-        if _norm(ing.get("canonical_id")) in _OMEGA_RELEVANT_CANONICALS:
-            return True
-    return False
+    return has_module_relevant_identity(product, "omega", rows=ingredients)
 
 
 def _has_epa_or_dha_disclosed(ingredients: List[Dict[str, Any]]) -> bool:
@@ -804,51 +751,6 @@ _SPORTS_ACTIVE_CANONICALS = {
     "l_isoleucine",
     "l_valine",
 }
-
-# Broader identity set (vs the dose-scored _SPORTS_ACTIVE_CANONICALS) used ONLY by
-# the completeness gate to decide eligibility. These pre-workout / recovery actives
-# mark a product as sports nutrition even when the primary-dose rubric scores them
-# conservatively, so the sports gate fails open (soft_missing) like the omega gate
-# instead of forcing NOT_SCORED. Only sports-ROUTED products reach this check, so the
-# broader set cannot pull non-sports products into a sports score. Canonicals here are
-# empirically confirmed against the real catalog (alpha_gpc/atp on Thorne Pre-Workout
-# Elite 323126; l_arginine/l_glutamine on GNC Amplified Creatine 18538;
-# branched_chain_amino_acids on Nutricost BCAA+ 306183/307773; l_carnitine on GNC
-# Carnitine 1000 + BCAA 67304) plus standard ISSN pre-workout actives.
-_SPORTS_IDENTITY_CANONICALS = _SPORTS_ACTIVE_CANONICALS | {
-    # creatine forms (proprietary "creatine matrix" blends often disclose no dose)
-    "creatine",
-    "creatine_hydrochloride",
-    "creatine_hcl",
-    "creatine_nitrate",
-    "creatine_citrate",
-    "buffered_creatine",
-    "magnesium_creatine_chelate",
-    # amino-acid aggregates / EAA
-    "branched_chain_amino_acids",
-    "eaa",
-    "essential_amino_acids",
-    # recovery / nitric-oxide / transport actives
-    "l_arginine",
-    "l_glutamine",
-    "l_carnitine",
-    "acetyl_l_carnitine",
-    # pre-workout ergogenic actives (dose-scored conservatively in the sports rubric)
-    "alpha_gpc",
-    "atp",
-    "adenosine_triphosphate",
-    "betaine",
-    "betaine_anhydrous",
-    "tmg_betaine",
-    "taurine",
-    "l_tyrosine",
-    "tyrosine",
-    "caffeine",
-    "caffeine_anhydrous",
-    "agmatine",
-    "agmatine_sulfate",
-}
-
 
 def _has_sports_active_dose(ingredient: Dict[str, Any]) -> bool:
     return _norm(ingredient.get("canonical_id")) in _SPORTS_ACTIVE_CANONICALS and _has_dose_with_unit(ingredient)

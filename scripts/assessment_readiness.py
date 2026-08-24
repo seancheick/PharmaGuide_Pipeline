@@ -105,6 +105,71 @@ _NONHUMAN_STUDY_TYPES = frozenset({
 _ROUTE_INCOMPLETE_REASON_CODES = frozenset({
     "protein_identity_or_mass_missing",
 })
+_PROBIOTIC_IDENTITY_TOKENS = (
+    "probiotic",
+    "lactobacillus",
+    "bifidobacterium",
+    "bacillus_coagulans",
+    "streptococcus_salivarius",
+    "saccharomyces_boulardii",
+)
+_OMEGA_RELEVANT_CANONICALS = frozenset({
+    "epa",
+    "dha",
+    "epa_dha",
+    "fish_oil",
+    "krill_oil",
+    "cod_liver_oil",
+    "algal_oil",
+    "algae_oil",
+    "omega_3",
+    "omega3",
+    "omega_3_fatty_acids",
+})
+_SPORTS_PRIMARY_IDENTITY_CANONICALS = frozenset({
+    "protein",
+    "whey_protein",
+    "casein",
+    "pea_protein",
+    "rice_protein",
+    "soy_protein",
+    "creatine_monohydrate",
+    "beta_alanine",
+    "l_citrulline",
+    "hmb",
+    "l_leucine",
+    "l_isoleucine",
+    "l_valine",
+})
+_SPORTS_RELEVANT_CANONICALS = _SPORTS_PRIMARY_IDENTITY_CANONICALS | frozenset({
+    "creatine",
+    "creatine_hydrochloride",
+    "creatine_hcl",
+    "creatine_nitrate",
+    "creatine_citrate",
+    "buffered_creatine",
+    "magnesium_creatine_chelate",
+    "branched_chain_amino_acids",
+    "eaa",
+    "essential_amino_acids",
+    "l_arginine",
+    "l_glutamine",
+    "l_carnitine",
+    "acetyl_l_carnitine",
+    "alpha_gpc",
+    "atp",
+    "adenosine_triphosphate",
+    "betaine",
+    "betaine_anhydrous",
+    "tmg_betaine",
+    "taurine",
+    "l_tyrosine",
+    "tyrosine",
+    "caffeine",
+    "caffeine_anhydrous",
+    "agmatine",
+    "agmatine_sulfate",
+})
 
 
 def _safe_dict(value: Any) -> Dict[str, Any]:
@@ -438,7 +503,83 @@ def evaluate_verification_assessment(product: Mapping[str, Any]) -> Dict[str, An
     }
 
 
-def _identity_readiness(product: Mapping[str, Any]) -> Dict[str, Any]:
+def has_sports_primary_identity_signal(product: Mapping[str, Any]) -> bool:
+    """Return whether a rejected row preserves a disclosed sports identity."""
+    scoring_input = get_scoring_ingredients(dict(product), strict=True)
+    for rejected in scoring_input.rejected_rows:
+        row = rejected.row if isinstance(rejected.row, dict) else {}
+        if rejected.reason not in {
+            "missing_dose_evidence",
+            "product_evidence_not_scoreable:missing_primary_sports_dose",
+        }:
+            continue
+        if _norm(row.get("canonical_id")) in _SPORTS_PRIMARY_IDENTITY_CANONICALS:
+            return True
+    return False
+
+
+def has_module_relevant_identity(
+    product: Mapping[str, Any],
+    module: str,
+    *,
+    rows: Iterable[Mapping[str, Any]] | None = None,
+) -> bool:
+    """Return whether identity evidence is relevant to the routed module.
+
+    Generic mapping coverage answers whether rows were identified. Specialized
+    modules additionally need at least one identity that their rubric can
+    interpret; mapped calcium, fiber, or a blend header cannot stand in for a
+    disclosed protein, omega, or probiotic identity.
+    """
+    if module not in {"probiotic", "omega", "sports"}:
+        return True
+    scoring_rows = list(rows) if rows is not None else list(
+        get_scoring_ingredients(
+            dict(product),
+            strict=True,
+            allow_legacy_fallback=False,
+        ).rows
+    )
+    if module == "probiotic":
+        probiotic_data = _safe_dict(product.get("probiotic_data"))
+        try:
+            strain_count = float(probiotic_data.get("total_strain_count") or 0)
+        except (TypeError, ValueError):
+            strain_count = 0.0
+        if math.isfinite(strain_count) and strain_count > 0:
+            return True
+        for blend in _safe_list(probiotic_data.get("probiotic_blends")):
+            if isinstance(blend, Mapping) and any(
+                str(strain).strip() for strain in _safe_list(blend.get("strains"))
+            ):
+                return True
+        if any(_norm(row.get("evidence_type")) == "probiotic_cfu" for row in scoring_rows):
+            return True
+        for row in scoring_rows:
+            identity = " ".join(
+                _norm(row.get(key))
+                for key in ("canonical_id", "name", "standard_name", "standardName")
+            )
+            if any(token in identity for token in _PROBIOTIC_IDENTITY_TOKENS):
+                return True
+        return False
+    if module == "omega":
+        return any(
+            _norm(row.get("evidence_type")) == "omega_epa_dha_aggregate"
+            or _norm(row.get("canonical_id")) in _OMEGA_RELEVANT_CANONICALS
+            for row in scoring_rows
+        )
+    return (
+        any(
+            _norm(row.get("evidence_type")) == "sports_primary_dose"
+            or _norm(row.get("canonical_id")) in _SPORTS_RELEVANT_CANONICALS
+            for row in scoring_rows
+        )
+        or has_sports_primary_identity_signal(product)
+    )
+
+
+def _identity_readiness(product: Mapping[str, Any], module: str) -> Dict[str, Any]:
     scoring_input = get_scoring_ingredients(
         dict(product),
         strict=True,
@@ -506,10 +647,14 @@ def _identity_readiness(product: Mapping[str, Any]) -> Dict[str, Any]:
             if source_identity_complete
             else "scoring_identity_incomplete"
         )
-    complete = (
-        source_identity_complete
-        and not blocking_findings
+    module_identity_complete = has_module_relevant_identity(
+        product,
+        module,
+        rows=scoring_input.rows,
     )
+    if source_identity_complete and not module_identity_complete:
+        reason_code = f"missing_{module}_relevant_identity"
+    complete = source_identity_complete and module_identity_complete and not blocking_findings
     return {
         "readiness": READINESS_COMPLETE if complete else READINESS_INCOMPLETE,
         "reason_code": reason_code,
@@ -525,6 +670,8 @@ def _identity_readiness(product: Mapping[str, Any]) -> Dict[str, Any]:
         "source_unmapped_count": source_unmapped_count,
         "source_mapped_coverage": source_mapped_coverage,
         "zero_scorable_reason": scoring_input.zero_scorable_reason,
+        "module": module,
+        "module_relevant_identity": module_identity_complete,
     }
 
 
@@ -834,7 +981,7 @@ def evaluate_assessment_readiness(
     """Return the canonical aggregate readiness decision for one product."""
     product = product if isinstance(product, Mapping) else {}
     evidence = evaluate_evidence_assessment(product, module=module)
-    identity = _identity_readiness(product)
+    identity = _identity_readiness(product, module)
     dose = _dose_readiness(
         product,
         evidence["ingredient_assessments"],

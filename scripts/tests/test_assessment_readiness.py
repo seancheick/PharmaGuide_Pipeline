@@ -112,6 +112,25 @@ def test_positive_human_evidence_marks_material_active_supported() -> None:
     assert result["is_live_ready"] is True
 
 
+def test_sports_readiness_requires_a_sports_relevant_identity() -> None:
+    """Mapped minerals must not make a sports-routed product identity-ready."""
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Calcium", "calcium")
+    product = _product(row, title="Keto Protein")
+    product["supplement_taxonomy"] = {
+        "primary_type": "sports_nutrition",
+        "classification_contract_version": "1.2.0",
+    }
+
+    result = evaluate_assessment_readiness(product, module="sports")
+
+    assert result["identity"]["readiness"] == "incomplete"
+    assert result["identity"]["reason_code"] == "missing_sports_relevant_identity"
+    assert result["is_live_ready"] is False
+    assert "identity_assessment_readiness" in result["unavailable_reasons"]
+
+
 def test_mixed_or_null_evidence_is_evaluated_without_becoming_supported() -> None:
     from assessment_readiness import evaluate_assessment_readiness
 
