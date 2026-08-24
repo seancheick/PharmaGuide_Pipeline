@@ -185,6 +185,27 @@ def test_mapped_active_without_declared_dose_is_a_dose_not_identity_failure() ->
     assert result["unavailable_reasons"] == ["dose_assessment_readiness"]
 
 
+def test_source_identity_diagnostic_excludes_non_scoring_nutrition_rows() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    active = _row("Magnesium", "magnesium")
+    nutrition = _row("Sodium", "sodium", quantity=25, unit="mg")
+    nutrition.update({
+        "raw_source_path": "ingredientRows[1]",
+        "source_row_ref": "ingredientRows[1]",
+        "mapped_identity": False,
+        "score_exclusion_reason": "excluded_nutrition_fact",
+    })
+    product = _product(active)
+    product["ingredient_quality_data"]["ingredients"] = [active, nutrition]
+
+    result = evaluate_assessment_readiness(product, module="generic")
+
+    assert result["identity"]["source_score_eligible_active_count"] == 1
+    assert result["identity"]["source_unmapped_count"] == 0
+    assert result["identity"]["source_mapped_coverage"] == 1.0
+
+
 def test_product_projection_reuses_typed_source_row_dose_assessment() -> None:
     """A scoring projection is not a second physical exposure."""
     from assessment_readiness import evaluate_assessment_readiness

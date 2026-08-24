@@ -387,6 +387,44 @@ def test_fiber_support_row_does_not_block_probiotic_cfu_product_evidence(enriche
     assert cfu["confidence"] == "high"
 
 
+def test_streptococcus_strain_is_probiotic_not_an_accessory_active(enricher):
+    enriched = {
+        "activeIngredients": [
+            {
+                "name": "BLIS K12 S. salivarius K12",
+                "standardName": "Streptococcus Salivarius",
+                "canonical_id": "streptococcus_salivarius",
+                "quantity": 20,
+                "unit": "mg",
+                "score_eligible_by_cleaner": True,
+                "cleaner_row_role": "active_scorable",
+            }
+        ],
+        "probiotic_data": _product_level_probiotic_data(
+            total_cfu=2_000_000_000
+        ),
+        "supplement_taxonomy": {"primary_type": "probiotic"},
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "BLIS K12 S. salivarius K12",
+                    "standard_name": "Streptococcus Salivarius",
+                    "canonical_id": "streptococcus_salivarius",
+                    "dose_class": "therapeutic_mass",
+                }
+            ]
+        },
+    }
+
+    cfu = _cfu_evidence(
+        enricher._collect_product_scoring_evidence(enriched)
+    )
+
+    assert cfu["scoreable"] is True
+    assert cfu["reason"] == "product_level_cfu_with_probiotic_identity"
+    assert "rejection_reason" not in cfu
+
+
 def test_product_cfu_evidence_is_rejected_when_taxonomy_is_not_probiotic(enricher):
     """Source-of-truth gate requires scoreable CFU evidence to agree with
     supplement_taxonomy.primary_type. Probiotic row identity is diagnostic

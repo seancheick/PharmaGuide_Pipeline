@@ -21,6 +21,8 @@ from scoring_input_contract import (
     build_scoring_classification,
     classify_ingredient_roles,
     get_scoring_ingredients,
+    has_unresolved_identity_reason,
+    score_exclusion_reason,
 )
 from scoring_v4.modules.generic_evidence import (
     DRI_ESSENTIAL_NUTRIENTS,
@@ -368,6 +370,10 @@ def _source_score_eligible_active_rows(
         for row in _safe_list(rows)
         if isinstance(row, Mapping)
         and _norm(row.get("source_section")) != "inactive"
+        and (
+            not score_exclusion_reason(dict(row))
+            or has_unresolved_identity_reason(dict(row))
+        )
         and (
             row.get("score_eligible_by_cleaner") is True
             or _norm(row.get("cleaner_row_role")) == "active_scorable"

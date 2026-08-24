@@ -116,6 +116,56 @@ def test_probiotic_percentage_children_are_composition_not_distinct_exposure(
     assert child_assessment["readiness"] == "not_applicable"
 
 
+def test_rda_collection_uses_disclosed_nested_scorable_dose_not_parent_proxy(
+    enricher,
+) -> None:
+    child = {
+        **_row("Conjugated Linoleic Acid", "cla", 770, "mg"),
+        "raw_source_path": "ingredientRows[0].nestedRows[0]",
+        "isNestedIngredient": True,
+        "parentBlend": "Tonalin Conjugated Linoleic Acid Complex",
+        "cleaner_row_role": "active_scorable",
+        "score_eligible_by_cleaner": True,
+        "role_classification": "active_scorable",
+        "scoreable_identity": True,
+        "mapped_identity": True,
+        "identity_disposition": "clean",
+        "source_section": "active",
+        "dose_class": "therapeutic_mass",
+    }
+    parent = {
+        **_row(
+            "Tonalin Conjugated Linoleic Acid Complex",
+            "cla",
+            1000,
+            "mg",
+        ),
+        "raw_source_path": "ingredientRows[0]",
+        "nestedIngredients": [child],
+    }
+    product = {
+        "activeIngredients": [parent],
+        "inactiveIngredients": [],
+        "ingredient_quality_data": {
+            "ingredients_scorable": [child],
+            "ingredients": [child],
+        },
+    }
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    by_path = {
+        assessment["source_path"]: assessment
+        for assessment in result["dose_assessments"]
+    }
+    assert by_path["ingredientRows[0].nestedRows[0]"]["source_value"] == 770
+    assert by_path["ingredientRows[0].nestedRows[0]"]["source_unit"] == "mg"
+
+
 def test_plain_parent_nutrient_amount_is_elemental_without_daily_value(
     enricher,
 ) -> None:

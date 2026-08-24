@@ -1078,6 +1078,95 @@ class SupplementEnricherV3:
 
         return [self._active_ingredient_from_scoring_row(row) for row in scoring_rows]
 
+    def _dose_active_ingredients_for_enrichment(
+        self,
+        product: Dict,
+    ) -> List[Dict]:
+        """Return exact label rows that own strict scoring-dose exposures.
+
+        RDA/UL collection needs disclosed, dose-bearing nested rows as well as
+        their structural owners.  The general active collector intentionally
+        works from top-level rows, and its canonical-name fallback can select a
+        parent proxy when the strict scoring row is a quantified nested child.
+        This dose-specific projection instead joins by stable source path,
+        retaining owner rows only as lineage context.
+        """
+        active_tree = [
+            row
+            for row in product.get("activeIngredients", [])
+            if isinstance(row, dict)
+        ]
+        flattened = self._flatten_active_ingredients_for_analysis(active_tree)
+        iqd = product.get("ingredient_quality_data")
+        if not isinstance(iqd, dict) or not isinstance(
+            iqd.get("ingredients_scorable"), list
+        ):
+            return flattened
+
+        try:
+            result = get_scoring_ingredients(
+                product,
+                strict=True,
+                allow_legacy_fallback=False,
+            )
+        except Exception as exc:  # pragma: no cover - defensive old artifacts.
+            self.logger.debug(
+                "strict dose projection unavailable for enrichment: %s", exc
+            )
+            return flattened
+
+        scoring_rows = [
+            row
+            for row in result.rows
+            if (
+                str(row.get("scoring_input_kind") or "")
+                != "product_level_evidence"
+                and not self._is_display_only_blend_scoring_row(row)
+            )
+        ]
+        if not scoring_rows:
+            return []
+
+        scoring_by_path = {
+            str(
+                row.get("raw_source_path") or row.get("source_path") or ""
+            ).strip(): row
+            for row in scoring_rows
+            if str(
+                row.get("raw_source_path") or row.get("source_path") or ""
+            ).strip()
+        }
+        selected_paths = set(scoring_by_path)
+
+        # A nested dose may be a component of a disclosed owner total. Keep
+        # each ancestor as lineage context so the existing dose-role logic can
+        # prevent double counting and assign UL ownership correctly.
+        for source_path in tuple(selected_paths):
+            owner_path = source_path
+            while ".nestedRows[" in owner_path:
+                owner_path = re.sub(r"\.nestedRows\[\d+\]$", "", owner_path)
+                if owner_path == source_path:
+                    break
+                selected_paths.add(owner_path)
+
+        selected: List[Dict] = []
+        seen_paths: set[str] = set()
+        for row in flattened:
+            source_path = str(
+                row.get("raw_source_path") or row.get("source_path") or ""
+            ).strip()
+            if source_path not in selected_paths or source_path in seen_paths:
+                continue
+            selected.append(row)
+            seen_paths.add(source_path)
+
+        for source_path, row in scoring_by_path.items():
+            if source_path in seen_paths:
+                continue
+            selected.append(self._active_ingredient_from_scoring_row(row))
+            seen_paths.add(source_path)
+        return selected
+
     def _is_display_only_blend_scoring_row(self, row: Dict) -> bool:
         if str(row.get("scoring_input_kind") or "") != "recovered_active_identity":
             return False
@@ -15830,7 +15919,7 @@ class SupplementEnricherV3:
         has_non_probiotic_strict_active = self._has_non_probiotic_active_for_cfu_evidence(enriched)
         for row in strict_rows:
             row_text = " ".join(str(row.get(key) or "") for key in ("canonical_id", "name", "standard_name")).lower()
-            if any(term in row_text for term in ("probiotic", "lactobacillus", "bifidobacterium", "saccharomyces", "bacillus")):
+            if self._has_probiotic_identity_text(row):
                 continue
             if self._is_probiotic_cfu_support_row(row):
                 continue
@@ -19434,7 +19523,7 @@ class SupplementEnricherV3:
         - Safety flag generation for over-UL nutrients
         - Full evidence tracking
         """
-        active_ingredients = self._primary_active_ingredients_for_enrichment(product)
+        active_ingredients = self._dose_active_ingredients_for_enrichment(product)
         special_use_flags = self._collect_special_use_flags(active_ingredients)
         quality_identity_rows = [
             row
