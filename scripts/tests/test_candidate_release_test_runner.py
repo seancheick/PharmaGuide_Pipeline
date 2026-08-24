@@ -5,6 +5,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RUNNER = REPO_ROOT / "scripts" / "test.sh"
+STAMP_PARITY = REPO_ROOT / "scripts" / "tests" / "test_catalog_stamp_parity_release.py"
 
 
 def _runner_text() -> str:
@@ -33,3 +34,11 @@ def test_candidate_root_must_be_absolute_and_complete() -> None:
 
     assert 'PG_RELEASE_CANDIDATE_ROOT must be an absolute path' in text
     assert 'candidate dist/final_db_output pair is incomplete' in text
+
+
+def test_catalog_stamp_parity_uses_the_shared_release_artifact_resolver() -> None:
+    text = STAMP_PARITY.read_text(encoding="utf-8")
+
+    assert "from scripts.release_artifact_paths import catalog_dist_dir" in text
+    assert "DIST = catalog_dist_dir()" in text
+    assert 'DIST = ROOT / "scripts" / "dist"' not in text

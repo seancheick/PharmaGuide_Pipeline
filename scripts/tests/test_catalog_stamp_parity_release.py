@@ -36,7 +36,9 @@ for candidate in (ROOT, ROOT / "scripts"):
     if str(candidate) not in sys.path:
         sys.path.insert(0, str(candidate))
 
-DIST = ROOT / "scripts" / "dist"
+from scripts.release_artifact_paths import catalog_dist_dir
+
+DIST = catalog_dist_dir()
 CORE_DB = DIST / "pharmaguide_core.db"
 MANIFEST = DIST / "export_manifest.json"
 
@@ -78,7 +80,7 @@ def _half_up(value: float) -> int:
 
 def _require_build():
     if not CORE_DB.is_file() or not MANIFEST.is_file():
-        pytest.skip("no completed build in scripts/dist")
+        pytest.skip(f"no completed build in {DIST}")
 
 
 def _core_rows(columns):
