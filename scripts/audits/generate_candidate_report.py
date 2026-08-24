@@ -61,6 +61,17 @@ def _head_is_pushed(repo: Path) -> bool:
     return bool(_git(repo, "branch", "-r", "--contains", "HEAD"))
 
 
+def _receipt_integrity_sha256(receipt: dict) -> str:
+    body = {key: value for key, value in receipt.items() if key != "receipt_sha256"}
+    encoded = json.dumps(
+        body,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
 def _validated_verification(path: Path) -> dict:
     """Load command evidence and reject hand-typed green summaries.
 
@@ -73,20 +84,53 @@ def _validated_verification(path: Path) -> dict:
     gates = payload.get("gates")
     if not isinstance(gates, dict):
         raise ValueError("verification file must contain a gates object")
+    validated_gates = {}
     for name in REQUIRED_VERIFICATION_GATES:
-        gate = gates.get(name)
-        if not isinstance(gate, dict):
+        declaration = gates.get(name)
+        if not isinstance(declaration, dict):
             raise ValueError(f"verification missing required gate: {name}")
-        if gate.get("exit_code") != 0:
+        receipt_value = declaration.get("receipt")
+        receipt_path = Path(str(receipt_value or ""))
+        if not receipt_value or not receipt_path.is_file():
+            raise ValueError(
+                f"verification gate {name} requires a machine-generated receipt"
+            )
+        try:
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ValueError(
+                f"verification gate {name} receipt is unreadable: {exc}"
+            ) from exc
+        if not isinstance(receipt, dict):
+            raise ValueError(f"verification gate {name} receipt must be an object")
+        if receipt.get("gate_name") != name:
+            raise ValueError(
+                f"verification gate {name} receipt names "
+                f"{receipt.get('gate_name')!r}"
+            )
+        expected_receipt_hash = receipt.get("receipt_sha256")
+        actual_receipt_hash = _receipt_integrity_sha256(receipt)
+        if expected_receipt_hash != actual_receipt_hash:
+            raise ValueError(
+                f"verification gate {name} receipt integrity mismatch"
+            )
+        if receipt.get("exit_code") != 0:
             raise ValueError(
                 f"verification gate {name} did not pass: "
-                f"exit_code={gate.get('exit_code')!r}"
+                f"exit_code={receipt.get('exit_code')!r}"
             )
-        log_value = gate.get("log")
+        log_value = receipt.get("log")
         log_path = Path(str(log_value or ""))
         if not log_value or not log_path.is_file():
             raise ValueError(f"verification gate {name} has no preserved log")
-        gate["log_sha256"] = _sha256(log_path)
+        actual_log_hash = _sha256(log_path)
+        if receipt.get("log_sha256") != actual_log_hash:
+            raise ValueError(f"verification gate {name} log hash mismatch")
+        validated = dict(receipt)
+        validated["receipt"] = str(receipt_path)
+        validated["receipt_file_sha256"] = _sha256(receipt_path)
+        validated_gates[name] = validated
+    payload["gates"] = validated_gates
     payload["verification_file_sha256"] = _sha256(path)
     return payload
 

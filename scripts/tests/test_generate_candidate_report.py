@@ -21,20 +21,23 @@ from audits.generate_candidate_report import (  # noqa: E402
     _validated_verification,
     render_markdown,
 )
+from audits.run_verification_gate import run_gate  # noqa: E402
 
 
 def _payload(tmp_path: Path) -> dict:
     gates = {}
     for name in REQUIRED_VERIFICATION_GATES:
         log = tmp_path / f"{name}.log"
-        log.write_text(f"{name}: passed\n", encoding="utf-8")
-        gates[name] = {
-            "command": f"run {name}",
-            "exit_code": 0,
-            "log": str(log),
-            "summary": "passed",
-        }
-    return {"schema_version": "1.0.0", "gates": gates}
+        receipt = tmp_path / f"{name}.receipt.json"
+        assert run_gate(
+            name=name,
+            command=[sys.executable, "-c", f"print('{name}: passed')"],
+            log_path=log,
+            receipt_path=receipt,
+            cwd=tmp_path,
+        ) == 0
+        gates[name] = {"receipt": str(receipt)}
+    return {"schema_version": "2.0.0", "gates": gates}
 
 
 def test_verification_requires_every_release_gate(tmp_path: Path) -> None:
@@ -49,7 +52,16 @@ def test_verification_requires_every_release_gate(tmp_path: Path) -> None:
 
 def test_verification_rejects_nonzero_exit_code(tmp_path: Path) -> None:
     payload = _payload(tmp_path)
-    payload["gates"][REQUIRED_VERIFICATION_GATES[0]]["exit_code"] = 1
+    name = REQUIRED_VERIFICATION_GATES[0]
+    receipt = tmp_path / f"{name}.failed.receipt.json"
+    assert run_gate(
+        name=name,
+        command=[sys.executable, "-c", "raise SystemExit(1)"],
+        log_path=tmp_path / f"{name}.failed.log",
+        receipt_path=receipt,
+        cwd=tmp_path,
+    ) == 1
+    payload["gates"][name] = {"receipt": str(receipt)}
     path = tmp_path / "verification.json"
     path.write_text(json.dumps(payload), encoding="utf-8")
 
@@ -67,6 +79,37 @@ def test_verification_hashes_each_preserved_log(tmp_path: Path) -> None:
     for gate in verified["gates"].values():
         log_bytes = Path(gate["log"]).read_bytes()
         assert gate["log_sha256"] == hashlib.sha256(log_bytes).hexdigest()
+        assert gate["receipt_file_sha256"]
+
+
+def test_verification_rejects_hand_authored_exit_code_without_receipt(
+    tmp_path: Path,
+) -> None:
+    payload = _payload(tmp_path)
+    name = REQUIRED_VERIFICATION_GATES[0]
+    payload["gates"][name] = {
+        "command": "pretend release passed",
+        "exit_code": 0,
+        "log": str(tmp_path / f"{name}.log"),
+    }
+    path = tmp_path / "verification.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="machine-generated receipt"):
+        _validated_verification(path)
+
+
+def test_verification_rejects_log_changed_after_receipt(tmp_path: Path) -> None:
+    payload = _payload(tmp_path)
+    name = REQUIRED_VERIFICATION_GATES[0]
+    receipt = Path(payload["gates"][name]["receipt"])
+    receipt_payload = json.loads(receipt.read_text(encoding="utf-8"))
+    Path(receipt_payload["log"]).write_text("different output\n", encoding="utf-8")
+    path = tmp_path / "verification.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="log hash mismatch"):
+        _validated_verification(path)
 
 
 def test_artifact_hashes_include_interaction_database_and_manifest(

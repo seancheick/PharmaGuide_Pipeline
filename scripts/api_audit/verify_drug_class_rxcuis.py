@@ -19,6 +19,7 @@ import sys
 import time
 import urllib.request
 from pathlib import Path
+from typing import Any, Callable, Mapping
 
 DRUG_CLASSES = Path(__file__).resolve().parent.parent / "data" / "drug_classes.json"
 NAME_URL = "https://rxnav.nlm.nih.gov/REST/rxcui/{}/property.json?propName=RxNorm%20Name"
@@ -47,22 +48,49 @@ def _norm(s: str) -> str:
     return " ".join(s.lower().split())
 
 
+def audit(
+    classes: Mapping[str, Mapping[str, Any]],
+    *,
+    only: set[str] | None = None,
+    name_fn: Callable[[str], str] = rxnorm_name,
+    request_delay: float = 0.05,
+) -> tuple[list[str], int]:
+    """Return problems and checked count without conflating network and data."""
+    problems: list[str] = []
+    checked = 0
+    for cid, drug_class in classes.items():
+        if only and cid not in only:
+            continue
+        for rxcui, name in zip(
+            drug_class["member_rxcuis"],
+            drug_class["member_names"],
+        ):
+            live = name_fn(str(rxcui))
+            checked += 1
+            if live.startswith("ERR"):
+                problems.append(
+                    f"{cid}/{name} rxcui={rxcui}: RxNorm registry transport "
+                    f"failure [{live}]"
+                )
+            elif not live:
+                problems.append(
+                    f"{cid}/{name} rxcui={rxcui}: no current RxNorm name "
+                    "(retired?)"
+                )
+            elif _norm(live) != _norm(str(name)):
+                problems.append(
+                    f"{cid}/{name} rxcui={rxcui}: RxNorm says '{live}' "
+                    "(WRONG DRUG)"
+                )
+            if request_delay:
+                time.sleep(request_delay)
+    return problems, checked
+
+
 def main(argv: list[str]) -> int:
     classes = json.loads(DRUG_CLASSES.read_text())["classes"]
     only = set(argv[1:]) or None
-    problems: list[str] = []
-    checked = 0
-    for cid, c in classes.items():
-        if only and cid not in only:
-            continue
-        for rxcui, name in zip(c["member_rxcuis"], c["member_names"]):
-            live = rxnorm_name(rxcui)
-            checked += 1
-            if not live or live.startswith("ERR"):
-                problems.append(f"{cid}/{name} rxcui={rxcui}: no current RxNorm name (retired?) [{live}]")
-            elif _norm(live) != _norm(name):
-                problems.append(f"{cid}/{name} rxcui={rxcui}: RxNorm says '{live}' (WRONG DRUG)")
-            time.sleep(0.05)  # be polite to rxnav
+    problems, checked = audit(classes, only=only)
     print(f"checked {checked} rxcuis across {len(only) if only else len(classes)} class(es)")
     if problems:
         print(f"\n{len(problems)} PROBLEM(S):", file=sys.stderr)
