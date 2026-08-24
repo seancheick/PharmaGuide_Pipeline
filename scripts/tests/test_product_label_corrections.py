@@ -229,14 +229,27 @@ def test_natures_way_328117_boron_unit_correction_present(overrides):
 
 
 @pytest.mark.parametrize(
-    ("dsld_id", "product_name"),
+    ("dsld_id", "product_name", "verification_source"),
     [
-        ("259709", "Weight Gainer Strawberries & Cream"),
-        ("69608", "Weight Gainer Strawberries & Cream"),
+        (
+            "259709",
+            "Weight Gainer Strawberries & Cream",
+            "https://www.gnc.com/on/demandware.static/-/Sites-GNC2-Library/default/pdf/369937_lbl.pdf",
+        ),
+        (
+            "69608",
+            "Weight Gainer Strawberries & Cream",
+            "https://www.gnc.com/on/demandware.static/-/Sites-GNC2-Library/default/pdf/369937_lbl.pdf",
+        ),
+        (
+            "69599",
+            "Weight Gainer Vanilla Ice Cream",
+            "https://api.ods.od.nih.gov/dsld/v9/label/69599",
+        ),
     ],
 )
 def test_gnc_weight_gainer_protein_unit_corrections_are_source_verified(
-    overrides, dsld_id, product_name
+    overrides, dsld_id, product_name, verification_source
 ):
     entry = (overrides.get("corrections") or {}).get(dsld_id)
 
@@ -247,7 +260,7 @@ def test_gnc_weight_gainer_protein_unit_corrections_are_source_verified(
     assert entry["raw_quantity_unit"] == "mg"
     assert entry["corrected_quantity_unit"] == "Gram(s)"
     assert entry["correction_fields"] == ["quantity.unit"]
-    assert "https://www.gnc.com/on/demandware.static/-/Sites-GNC2-Library/default/pdf/369937_lbl.pdf" in entry["sources"]
+    assert verification_source in entry["sources"]
 
 
 def test_doctors_best_selenium_quantity_and_unit_are_source_verified(overrides):

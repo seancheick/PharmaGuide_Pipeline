@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-08-24",
-    "total_entries": 31,
+    "total_entries": 32,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -130,6 +130,25 @@
       "sources": [
         "https://api.ods.od.nih.gov/dsld/v9/label/259709",
         "https://www.gnc.com/on/demandware.static/-/Sites-GNC2-Library/default/pdf/369937_lbl.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "69599": {
+      "brand": "GNC Pro Performance",
+      "product_name": "Weight Gainer Vanilla Ice Cream",
+      "raw_ingredient_text": "Protein",
+      "corrected_ingredient_text": "Protein",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "Gram(s)",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD JSON nutrient row reports Protein as 50 mg for a four-scoop 182 g serving, but the same official DSLD label record states both '50G Protein' and 'contains 50 grams of high-quality protein.' The record also identifies the product as code 369936 FRG and repeats the 700-calorie, 116 g carbohydrate panel. This product-scoped correction restores the label-declared gram unit without changing the quantity or nutrient identity.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/69599"
       ],
       "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
       "review_date": "2026-08-24",

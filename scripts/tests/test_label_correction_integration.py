@@ -542,7 +542,7 @@ def test_product_scoped_correction_repairs_verified_mass_unit_typos(
     )
 
 
-@pytest.mark.parametrize("dsld_id", [259709, 69608])
+@pytest.mark.parametrize("dsld_id", [69599, 259709, 69608])
 def test_product_scoped_correction_restores_weight_gainer_protein_grams(
     normalizer, dsld_id
 ):
