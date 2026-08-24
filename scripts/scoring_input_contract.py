@@ -4043,6 +4043,16 @@ def _classify_botanical_owner_type(
     botanical_has_ref = has_therapeutic_reference(
         primary_contract.get("canonical_id"), primary_contract.get("name")
     )
+    botanical_identity_keys = {
+        _norm(primary_contract.get("canonical_id")).replace("_", " "),
+        _norm(primary_contract.get("name")),
+    }
+    botanical_known_identity = is_known_botanical(
+        primary_contract.get("canonical_id"), primary_contract.get("name")
+    ) or any(
+        key and key in _botanical_title_alias_index()
+        for key in botanical_identity_keys
+    )
     owner_refs = [_profile_row_ref(c) for _, c in botanical_pairs]
     blocking_refs = [_profile_row_ref(c) for c in material_blockers]
     support_refs = [_profile_row_ref(c) for _, c in botanical_pairs]
@@ -4128,7 +4138,14 @@ def _classify_botanical_owner_type(
             non_botanical_heroes,
         )
 
-    if micronutrient_deliverables and not botanical_has_ref:
+    if (
+        micronutrient_deliverables
+        and not botanical_has_ref
+        and not (
+            botanical_is_title_head_material
+            and botanical_known_identity
+        )
+    ):
         return not_owner(
             "nutrient_source",
             "nutrient_source_blocks_botanical",
