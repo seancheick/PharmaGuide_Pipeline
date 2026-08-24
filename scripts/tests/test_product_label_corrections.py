@@ -233,6 +233,25 @@ def test_gnc_weight_gainer_protein_unit_corrections_are_source_verified(
     assert "https://www.gnc.com/on/demandware.static/-/Sites-GNC2-Library/default/pdf/369937_lbl.pdf" in entry["sources"]
 
 
+def test_doctors_best_selenium_quantity_and_unit_are_source_verified(overrides):
+    entry = (overrides.get("corrections") or {}).get("302650")
+
+    assert entry, "correction for Doctor's Best 302650 selenium is missing"
+    assert entry["raw_ingredient_text"] == "SelenoExcell "
+    assert entry["corrected_ingredient_text"] == "Selenium"
+    assert entry["raw_quantity_value"] == 640
+    assert entry["raw_quantity_unit"] == "mg"
+    assert entry["corrected_quantity_value"] == 200
+    assert entry["corrected_quantity_unit"] == "mcg"
+    assert "quantity.value" in entry["correction_fields"]
+    assert "quantity.unit" in entry["correction_fields"]
+    assert (
+        "https://www.doctorsbest.com/products/"
+        "doctor-s-best-comprehensive-prostate-formula-120-veggie-caps-25"
+        in entry["sources"]
+    )
+
+
 @pytest.mark.parametrize(
     ("dsld_id", "product_name", "ingredient", "raw_unit", "corrected_unit"),
     [

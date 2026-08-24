@@ -409,6 +409,38 @@ def test_product_scoped_correction_repairs_verified_quantity_unit(normalizer):
     }
 
 
+def test_product_scoped_correction_repairs_verified_quantity_and_unit(normalizer):
+    raw_product = _make_raw_product(302650, [])
+    raw_product["fullName"] = "Comprehensive Prostate Formula"
+    raw_product["brandName"] = "Doctor's Best"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row("SelenoExcell "),
+            "ingredientGroup": "Selenium Yeast",
+            "quantity": [{"quantity": 640, "unit": "mg"}],
+            "nestedRows": [],
+            "forms": [{"name": "Selenium", "ingredientGroup": "Selenium"}],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+    active = normalized["activeIngredients"][0]
+
+    assert active["name"] == "Selenium"
+    assert active["canonical_id"] == "selenium"
+    assert active["quantity"] == 200
+    assert active["unit"] == "mcg"
+    assert active["source_correction"] == {
+        "provenance_tag": "official_label_quantity_correction",
+        "original_ingredient_text": "SelenoExcell ",
+        "corrected_ingredient_text": "Selenium",
+        "original_quantity_value": 640,
+        "corrected_quantity_value": 200,
+        "original_quantity_unit": "mg",
+        "corrected_quantity_unit": "mcg",
+    }
+
+
 def test_product_scoped_correction_repairs_crossed_up_and_up_dha_row(normalizer):
     """DSLD 19899 has a crossed Dextrose/Glucose structured identity, while
     its own row note and product statements explicitly identify 200 mg DHA."""

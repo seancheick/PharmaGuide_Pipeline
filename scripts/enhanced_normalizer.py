@@ -5292,7 +5292,7 @@ class EnhancedDSLDNormalizer:
         """RC-5: correct a source row where (dsld_id, raw_text) matches.
 
         Walks the possibly nested ingredientRows tree and applies the reviewed
-        text, UNII, and/or quantity-unit correction. A product entry may carry
+        text, UNII, and/or quantity-value/unit correction. A product entry may carry
         ``additional_row_corrections`` when one verified label defect crosses
         multiple source rows. Original values are retained under
         ``_pre_correction_*`` and every rewrite is tagged for downstream audit.
@@ -5345,6 +5345,47 @@ class EnhancedDSLDNormalizer:
                 row["_pre_correction_quantity_unit"] = raw_unit
             return changed
 
+        def rewrite_quantity_values(row, entry):
+            raw_value = entry.get("raw_quantity_value")
+            corrected_value = entry.get("corrected_quantity_value")
+            raw_unit = entry.get("raw_quantity_unit")
+            changed = False
+
+            def matches(value, unit):
+                try:
+                    same_value = float(value) == float(raw_value)
+                except (TypeError, ValueError):
+                    return False
+                return same_value and (
+                    raw_unit in (None, "") or unit == raw_unit
+                )
+
+            quantity_data = row.get("quantity")
+            if isinstance(quantity_data, (int, float)) and not isinstance(
+                quantity_data, bool
+            ):
+                if matches(quantity_data, row.get("unit")):
+                    row["quantity"] = corrected_value
+                    changed = True
+            else:
+                quantities = (
+                    quantity_data
+                    if isinstance(quantity_data, list)
+                    else [quantity_data]
+                    if isinstance(quantity_data, dict)
+                    else []
+                )
+                for quantity in quantities:
+                    if not isinstance(quantity, dict):
+                        continue
+                    if matches(quantity.get("quantity"), quantity.get("unit")):
+                        quantity["quantity"] = corrected_value
+                        changed = True
+
+            if changed:
+                row["_pre_correction_quantity_value"] = raw_value
+            return changed
+
         def rewrite(row):
             if not isinstance(row, dict):
                 return row
@@ -5358,6 +5399,10 @@ class EnhancedDSLDNormalizer:
                 has_quantity_unit_correction = (
                     bool(entry.get("raw_quantity_unit"))
                     and bool(entry.get("corrected_quantity_unit"))
+                )
+                has_quantity_value_correction = (
+                    entry.get("raw_quantity_value") is not None
+                    and entry.get("corrected_quantity_value") is not None
                 )
                 correction_applied = False
                 if corrected and corrected != name:
@@ -5384,6 +5429,11 @@ class EnhancedDSLDNormalizer:
                         continue
                     row[f"_pre_correction_{row_field}"] = row.get(row_field)
                     row[row_field] = corrected_value
+                    correction_applied = True
+                if (
+                    has_quantity_value_correction
+                    and rewrite_quantity_values(row, entry)
+                ):
                     correction_applied = True
                 if (
                     has_quantity_unit_correction
@@ -7594,6 +7644,11 @@ class EnhancedDSLDNormalizer:
                     "_pre_correction_quantity_unit"
                 )
                 source_correction["corrected_quantity_unit"] = unit
+            if "_pre_correction_quantity_value" in ing:
+                source_correction["original_quantity_value"] = ing.get(
+                    "_pre_correction_quantity_value"
+                )
+                source_correction["corrected_quantity_value"] = quantity
             result["source_correction"] = source_correction
 
         # Add additive metadata flag (for enrichment phase to use)

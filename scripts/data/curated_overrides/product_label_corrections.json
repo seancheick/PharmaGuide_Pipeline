@@ -1,13 +1,13 @@
 {
   "_metadata": {
-    "schema_version": "1.1.0",
-    "description": "Reviewer-signed corrections for DSLD product rows where label text, a source identifier, or a quantity unit contains a verified transcription or attribution defect.",
-    "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, a verified quantity unit, or a combination of those fields. Global aliases and global identifier suppression are not supported.",
+    "schema_version": "1.2.0",
+    "description": "Reviewer-signed corrections for DSLD product rows where label text, a source identifier, or a quantity value/unit contains a verified transcription or attribution defect.",
+    "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, a verified quantity value/unit, or a combination of those fields. Global aliases and global identifier suppression are not supported.",
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
-    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity-unit changes require exact raw_quantity_unit and corrected_quantity_unit values and must be supported by the official label image.",
+    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-08-24",
-    "total_entries": 28,
+    "total_entries": 29,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -155,6 +155,47 @@
       "review_date": "2026-08-24",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_unit_correction"
+    },
+    "302650": {
+      "brand": "Doctor's Best",
+      "product_name": "Comprehensive Prostate Formula",
+      "raw_ingredient_text": "SelenoExcell ",
+      "corrected_ingredient_text": "Selenium",
+      "raw_quantity_value": 640,
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_value": 200,
+      "corrected_quantity_unit": "mcg",
+      "corrected_category": "mineral",
+      "corrected_ingredient_group": "Selenium",
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 332496,
+          "prefix": "as",
+          "percent": null,
+          "name": "SelenoExcell high selenium yeast (Saccharomyces cerevisiae)",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Selenium Yeast",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "name",
+        "category",
+        "ingredientGroup",
+        "forms",
+        "quantity.value",
+        "quantity.unit"
+      ],
+      "evidence": "The DSLD JSON row reports SelenoExcell at 640 mg without a Daily Value, but the official Doctor's Best label for the same 4-capsule Comprehensive Prostate Formula prints Selenium (as high-selenium yeast, SelenoExcell) at 200 mcg and 364% DV. Every adjacent formula value matches the official label, including Vitamin D3 25 mcg, Vitamin B6 50 mg, Calcium 52 mg, Zinc 15 mg, Copper 1 mg, CardioAid 800 mg, Prosterol saw palmetto 640 mg, nettle 300 mg, Prunera 100 mg, lycopene 15 mg, and mixed tocopherols 8 mg. This exact product-row correction restores the manufacturer-declared nutrient identity and dose; it does not create a global SelenoExcell conversion.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/302650",
+        "https://www.doctorsbest.com/products/doctor-s-best-comprehensive-prostate-formula-120-veggie-caps-25"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_quantity_correction"
     },
     "299037": {
       "brand": "Pure Encapsulations",
