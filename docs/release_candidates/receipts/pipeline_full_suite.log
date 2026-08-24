@@ -1,0 +1,334 @@
+test.sh: running full with 2 parallel worker(s) (RAM-capped; set PG_TEST_WORKERS to override)
+bringing up nodes...
+bringing up nodes...
+
+........................................................................ [  0%]
+........................................................................ [  0%]
+........................................................................ [  1%]
+........................................................................ [  1%]
+........................................................................ [  2%]
+........................................................................ [  2%]
+...................................................s..ss..s............. [  3%]
+.............ssssssss................................................... [  3%]
+........................................................................ [  4%]
+........................................................................ [  4%]
+........................................................................ [  5%]
+....................................s................................... [  5%]
+........................................................................ [  6%]
+........................................................................ [  6%]
+........................................................................ [  7%]
+........................................................................ [  7%]
+........................................................................ [  8%]
+........................................................................ [  8%]
+........................................................................ [  9%]
+........................................................................ [  9%]
+........................................................................ [ 10%]
+........................................................................ [ 10%]
+........................................................................ [ 11%]
+........................................................................ [ 11%]
+................s....................................................... [ 12%]
+........................................................................ [ 12%]
+........s............................................................... [ 13%]
+........................................................................ [ 13%]
+........................................................................ [ 14%]
+........................................................................ [ 14%]
+........................................................................ [ 15%]
+........................................................................ [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 16%]
+........................................................................ [ 17%]
+........................................................................ [ 17%]
+........................................................................ [ 18%]
+........................................................................ [ 18%]
+........................................................................ [ 19%]
+........................................................................ [ 19%]
+........................................................................ [ 20%]
+........................................................................ [ 20%]
+........................................................................ [ 21%]
+........................................................................ [ 21%]
+........................................................................ [ 22%]
+........................................................................ [ 22%]
+........................................................................ [ 23%]
+........................................................................ [ 23%]
+........................................................................ [ 24%]
+........................................................................ [ 24%]
+........................................................................ [ 25%]
+........................................................................ [ 25%]
+........................................................................ [ 26%]
+........................................................................ [ 26%]
+........................................................................ [ 27%]
+........................................................................ [ 27%]
+........................................................................ [ 27%]
+........................................................................ [ 28%]
+........................................................................ [ 28%]
+........................................................................ [ 29%]
+........................................................................ [ 29%]
+........................................................................ [ 30%]
+........................................................................ [ 30%]
+........................................................................ [ 31%]
+........................................................................ [ 31%]
+......................................................................ss [ 32%]
+sssssssssssssssssssssssssssssssssssssssssss............................. [ 32%]
+........................................................................ [ 33%]
+........................................................................ [ 33%]
+........................................................................ [ 34%]
+........................................................................ [ 34%]
+........................................................................ [ 35%]
+...............................s........................................ [ 35%]
+........................................................................ [ 36%]
+........................................................................ [ 36%]
+........................................................................ [ 37%]
+........................................................................ [ 37%]
+........................................................................ [ 38%]
+........................................................................ [ 38%]
+........................................................................ [ 39%]
+........................................................................ [ 39%]
+........................................................................ [ 40%]
+........................................................................ [ 40%]
+........................................................................ [ 41%]
+........................................................................ [ 41%]
+........................................................................ [ 42%]
+........................................................................ [ 42%]
+........................................................................ [ 43%]
+........................................................................ [ 43%]
+........................................................................ [ 44%]
+........................................................................ [ 44%]
+........................................................................ [ 45%]
+..........s......sssss..s...s............s..s..s.....s..s.s.........ss.s [ 45%]
+................s....................................................... [ 46%]
+........................................................................ [ 46%]
+........................................................................ [ 47%]
+........................................................................ [ 47%]
+........................................................................ [ 48%]
+........................................................................ [ 48%]
+........................................................................ [ 49%]
+........................................................................ [ 49%]
+........................................................................ [ 50%]
+........................................................................ [ 50%]
+........................................................................ [ 51%]
+........................................................................ [ 51%]
+........................................................................ [ 52%]
+........................................................................ [ 52%]
+........................................................................ [ 53%]
+........................................................................ [ 53%]
+........................................................................ [ 54%]
+........................................................................ [ 54%]
+........................................................................ [ 55%]
+........................................................................ [ 55%]
+........................................................................ [ 55%]
+.......................................................s................ [ 56%]
+...ss.s................................................................. [ 56%]
+........................................................................ [ 57%]
+........................................................................ [ 57%]
+........................................................................ [ 58%]
+.....................ssss............................................... [ 58%]
+........................................................................ [ 59%]
+...........sssssss...................................................... [ 59%]
+........................................................................ [ 60%]
+........................................................................ [ 60%]
+........................................................................ [ 61%]
+........................................................................ [ 61%]
+........................................................................ [ 62%]
+........................................................................ [ 62%]
+........................................................................ [ 63%]
+........................................................................ [ 63%]
+........................................................................ [ 64%]
+........................................................................ [ 64%]
+........................................................................ [ 65%]
+........................................................................ [ 65%]
+........................................................................ [ 66%]
+........................................................................ [ 66%]
+........................................................................ [ 67%]
+........................................................................ [ 67%]
+...............................................ssssss.ssssssssssss...... [ 68%]
+....................................s..............................ss... [ 68%]
+........................................................................ [ 69%]
+........................................................................ [ 69%]
+........................................................................ [ 70%]
+........................................................................ [ 70%]
+........................................................................ [ 71%]
+........................................................................ [ 71%]
+........................................................................ [ 72%]
+..................................................s..................... [ 72%]
+........................................................................ [ 73%]
+........................................................................ [ 73%]
+........................................................................ [ 74%]
+........................................................................ [ 74%]
+........................................................................ [ 75%]
+........................................................................ [ 75%]
+........................................................................ [ 76%]
+........................................................................ [ 76%]
+........................................................................ [ 77%]
+........................................................................ [ 77%]
+........................................................................ [ 78%]
+........................................................................ [ 78%]
+........................................................................ [ 79%]
+........................................................................ [ 79%]
+..............................s......................................... [ 80%]
+........................................................................ [ 80%]
+........................................................................ [ 81%]
+........................................................................ [ 81%]
+........................................................................ [ 82%]
+........................................................................ [ 82%]
+........................................................................ [ 83%]
+........................................................................ [ 83%]
+........................................................................ [ 83%]
+........................................................................ [ 84%]
+........................................................................ [ 84%]
+........................................................................ [ 85%]
+........................................................................ [ 85%]
+s..s.................................................................... [ 86%]
+........................................................................ [ 86%]
+........................................................................ [ 87%]
+........................................................................ [ 87%]
+........................................................................ [ 88%]
+........................................................................ [ 88%]
+....................................................................s... [ 89%]
+........................................................................ [ 89%]
+....................................................................s.ss [ 90%]
+.....s...............................................s.................. [ 90%]
+........s................................................s....s......... [ 91%]
+......s................................................................. [ 91%]
+........................................................................ [ 92%]
+........................................................................ [ 92%]
+........................................................................ [ 93%]
+....................................................................s... [ 93%]
+........................................................................ [ 94%]
+........................................................................ [ 94%]
+........................................................................ [ 95%]
+........................................................................ [ 95%]
+........................................................................ [ 96%]
+........................................................................ [ 96%]
+.......sssss............................................................ [ 97%]
+........................................................................ [ 97%]
+........................................................................ [ 98%]
+........................................................................ [ 98%]
+........................................................................ [ 99%]
+........................................................................ [ 99%]
+............................................                             [100%]
+=========================== short test summary info ============================
+SKIPPED [1] scripts/tests/test_canonical_id_delivers_markers_emit.py:163: Canary blob 1007 (GNC) not present in any of ['/tmp/pharmaguide_release_build_canonical_id', '/tmp/pharmaguide_release_build_v3', '/tmp/pharmaguide_release_build'] — run targeted rebuild first.
+SKIPPED [1] scripts/tests/test_canonical_id_delivers_markers_emit.py:163: Canary blob 24448 (Doctors_Best) not present in any of ['/tmp/pharmaguide_release_build_canonical_id', '/tmp/pharmaguide_release_build_v3', '/tmp/pharmaguide_release_build'] — run targeted rebuild first.
+SKIPPED [1] scripts/tests/test_canonical_id_delivers_markers_emit.py:188: Canary blob 1007 not present — run targeted rebuild first.
+SKIPPED [1] scripts/tests/test_canonical_id_delivers_markers_emit.py:188: Canary blob 24448 not present — run targeted rebuild first.
+SKIPPED [1] scripts/tests/test_active_count_reconciliation.py:254: 35491 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_active_count_reconciliation.py:254: 306237 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_active_count_reconciliation.py:254: 246324 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_active_count_reconciliation.py:254: 1002 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_active_count_reconciliation.py:254: 19067 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_active_count_reconciliation.py:254: 1036 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_active_count_reconciliation.py:254: 176872 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_active_count_reconciliation.py:281: 35491 canary missing
+SKIPPED [1] scripts/tests/test_b04_functional_roles_integrity.py:139: 'Hypromellose Capsule' not in other_ingredients.json (may live elsewhere)
+SKIPPED [1] scripts/tests/test_capsimax_display_label_fidelity.py:203: DSLD 1181 blob not present in any build dir — run targeted rebuild first
+SKIPPED [1] scripts/tests/test_blend_header_member_dedup.py:113: No scored products
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:105: baseline 35491.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:121: baseline 35491.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:166: baseline 35491.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:206: baseline 35491.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:221: baseline 35491.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:105: baseline 306237.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:121: baseline 306237.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:166: baseline 306237.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:206: baseline 306237.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:221: baseline 306237.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:105: baseline 246324.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:121: baseline 246324.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:166: baseline 246324.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:206: baseline 246324.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:221: baseline 246324.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:105: baseline 1002.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:121: baseline 1002.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:166: baseline 1002.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:206: baseline 1002.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:221: baseline 1002.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:105: baseline 19067.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:121: baseline 19067.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:166: baseline 19067.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:206: baseline 19067.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:221: baseline 19067.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:105: baseline 1036.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:121: baseline 1036.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:166: baseline 1036.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:206: baseline 1036.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:221: baseline 1036.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:105: baseline 176872.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:121: baseline 176872.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:166: baseline 176872.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:206: baseline 176872.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:221: baseline 176872.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:105: baseline 266975.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:121: baseline 266975.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:166: baseline 266975.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:206: baseline 266975.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:221: baseline 266975.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:105: baseline 19055.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:121: baseline 19055.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:166: baseline 19055.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:206: baseline 19055.json missing
+SKIPPED [1] scripts/tests/test_e1_2_2_preflight_invariant.py:221: baseline 19055.json missing
+SKIPPED [1] scripts/tests/test_condition_id_shape_consistency.py:170: 246324 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: banned_match_allowlist.json: total_entries tracks allowlist only; denylist is auxiliary and tracked separately. Pinned by test_banned_match_allowlist_contract.py.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:186: canary_products.json: _metadata has no total_entries field
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:190: canonical_equivalences.json: shape not recognized by universal classifier (needs a bespoke per-file test; add to INTENTIONAL_EXCEPTIONS with a pointer to that test).
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: catalog_brand_registry.json: total_entries tracks canonical brand-family records; wave_1 is an execution manifest, not another brand catalog. Pinned by test_brand_identity.py.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: cert_claim_rules.json: total_entries = Σ(non-_-prefixed rule keys across rules.*), excluding each category's _metadata config sub-key. Pinned by test_cert_claim_rules_contract.py.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:186: cert_registry.json: _metadata has no total_entries field
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: clinical_risk_taxonomy.json: UNIQUE convention — total_entries = SUM of all 7 taxonomy arrays (conditions + drug_classes + severity_levels + evidence_levels + profile_flags + product_forms + sources). Pinned by test_clinical_risk_taxonomy_contract.py.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: color_indicators.json: total_entries tracks natural_indicators only; artificial_indicators + explicit_natural_dyes + explicit_artificial_dyes are auxiliary. Pinned by test_color_indicators_contract.py.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: fda_unii_cache.json: Runtime cache file (name_to_unii + unii_to_name lookups, 170K+ entries each) populated by scripts/api_audit/fda_weekly_sync.py. Size fluctuates with each FDA UNII sync — a static total_entries would be meaningless and forced bumps per sync. Intentionally carries no total_entries; the cache file's freshness is tracked by _metadata.last_updated instead.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: functional_ingredient_groupings.json: total_entries tracks functional_groupings only; vague_terms_to_flag + transparency_bonuses are auxiliary. Pinned by test_functional_ingredient_groupings_contract.py.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:186: high_dose_rule_exemptions.json: _metadata has no total_entries field
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: ingredient_weights.json: total_entries tracks dosage_weights tier count (4 — therapeutic / optimal / maintenance / trace), not the sum across multi-section payload. Pinned by test_ingredient_weights_contract.py.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:190: iqm_excellent_evidence_backlog.json: shape not recognized by universal classifier (needs a bespoke per-file test; add to INTENTIONAL_EXCEPTIONS with a pointer to that test).
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: manufacture_deduction_expl.json: Structural config file (1 scalar total_deduction_cap + 4 nested dicts for violation_categories / modifiers / calculation_rules / score_thresholds). total_entries=5 tracks count of top-level non-_metadata sub-sections — meaningful but not entry-shaped. Pinned by test_manufacture_deduction_expl_contract.py.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: migration_report.json: total_entries tracks alias_collisions_resolved (the headline number of this migration); other arrays/dicts are scaffolding. Pinned by test_migration_report_contract.py.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:186: omega_rubric.json: _metadata has no total_entries field
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: percentile_categories.json: Mixed-shape config (categories dict of 9 + classification_rules dict of 4 — both top-level). The 9 categories are the meaningful entry count; classification_rules are static config the scorer reads alongside. Pinned by test_percentile_categories_contract.py.
+SKIPPED [1] scripts/tests/test_data_file_metadata_contract.py:182: unit_conversions.json: total_entries tracks vitamin_conversions only; mass_conversions and form_detection_patterns are static rule config, not vitamin entries. Pinned by test_unit_conversions_contract.py.
+SKIPPED [2] scripts/tests/test_parent_fallback_final_state_guard.py:61: Product 185102 not found in /Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/scripts/products/output_Pure_Encapsulations/cleaned/cleaned_batch_2.json
+SKIPPED [2] scripts/tests/test_parent_fallback_final_state_guard.py:61: Product 185106 not found in /Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/scripts/products/output_Pure_Encapsulations/cleaned/cleaned_batch_2.json
+SKIPPED [1] scripts/tests/test_pipeline_integrity.py:347: No enriched output directories found; skipping enriched output tests
+SKIPPED [1] scripts/tests/test_pipeline_integrity.py:373: No scored output directories found; skipping scored output tests
+SKIPPED [1] scripts/tests/test_pipeline_integrity.py:399: No enriched output directories found; skipping enrichment version test
+SKIPPED [1] scripts/tests/test_pipeline_integrity.py:425: No enriched output directories found; skipping clinical passthrough test
+SKIPPED [1] scripts/tests/test_inactive_ingredient_preservation.py:102: 35491 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_inactive_ingredient_preservation.py:102: 306237 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_inactive_ingredient_preservation.py:102: 176872 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_inactive_ingredient_preservation.py:102: 1002 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_inactive_ingredient_preservation.py:102: 19067 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_inactive_ingredient_preservation.py:102: 1036 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_inactive_ingredient_preservation.py:102: 246324 canary not rebuilt yet
+SKIPPED [6] scripts/tests/test_plant_part_preservation_closeout.py:43: canary 306237 not rebuilt yet
+SKIPPED [2] scripts/tests/test_plant_part_preservation_closeout.py:43: canary 1036 not rebuilt yet
+SKIPPED [2] scripts/tests/test_plant_part_preservation_closeout.py:43: canary 246324 not rebuilt yet
+SKIPPED [2] scripts/tests/test_plant_part_preservation_closeout.py:43: canary 266975 not rebuilt yet
+SKIPPED [2] scripts/tests/test_plant_part_preservation_closeout.py:43: canary 35491 not rebuilt yet
+SKIPPED [1] scripts/tests/test_plant_part_preservation_closeout.py:43: canary 1002 not rebuilt yet
+SKIPPED [1] scripts/tests/test_plant_part_preservation_closeout.py:43: canary 19067 not rebuilt yet
+SKIPPED [1] scripts/tests/test_plant_part_preservation_closeout.py:43: canary 176872 not rebuilt yet
+SKIPPED [1] scripts/tests/test_plant_part_preservation_closeout.py:43: canary 19055 not rebuilt yet
+SKIPPED [1] scripts/tests/test_probiotic_cfu_adequacy.py:164: 19067 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_probiotic_confidence_hybrid.py:231: 19067 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_probiotic_confidence_hybrid.py:251: 306237 canary not rebuilt yet
+SKIPPED [1] scripts/tests/test_scorer_dedup_audit.py:126: No products to sample
+SKIPPED [1] scripts/tests/test_unii_match_path.py:407: plan file not in repo (may exist only in user's plan store)
+SKIPPED [1] scripts/tests/test_safety_copy_contract.py:164: waiting on E1.1.1 — decision_highlights.danger bucket not yet emitted
+SKIPPED [1] scripts/tests/test_safety_copy_contract.py:288: waiting on E1.1.4 — banned-substance preflight copy not yet propagated to blob
+SKIPPED [1] scripts/tests/test_v4_omega_final_assembly_p166.py:285: canary 182968 not in catalog
+SKIPPED [1] scripts/tests/test_v4_omega_canary_diversity_p161.py:152: canary 1072 (GNC Ultra Omega Krill Oil) not in enriched catalog
+SKIPPED [1] scripts/tests/test_v4_omega_canary_diversity_p161.py:152: canary 223318 (Nutricost Krill Oil 1000 mg) not in enriched catalog
+SKIPPED [1] scripts/tests/test_v4_omega_canary_diversity_p161.py:152: canary 182968 (Pure Encapsulations Krill-Plex) not in enriched catalog
+SKIPPED [1] scripts/tests/test_v4_omega_canary_diversity_p161.py:185: false-positive canary 184571 (Pure Encapsulations Liposomal Glutathione (lecithin carrier)) not in catalog
+SKIPPED [1] scripts/tests/test_v4_omega_dose_p162.py:525: canary 182968 not in enriched catalog
+SKIPPED [1] scripts/tests/test_v4_omega_transparency_p165.py:451: canary 182968 not in catalog
+SKIPPED [1] scripts/tests/test_v4_omega_evidence_p163.py:299: canary 182968 not in catalog
+SKIPPED [1] scripts/tests/test_v4_omega_evidence_p163.py:321: canary 182968 not in catalog
+SKIPPED [1] scripts/tests/test_v4_probiotic_final_assembly_p26.py:374: Spring Valley 50B canary blob not found in enriched dirs
+SKIPPED [1] scripts/tests/test_v4_omega_trust_p164.py:560: canary 182968 not in catalog
+SKIPPED [1] scripts/tests/test_verify_interactions_live.py:33: Live tests gated by PHARMAGUIDE_LIVE_TESTS=1
+SKIPPED [1] scripts/tests/test_verify_interactions_live.py:42: Live tests gated by PHARMAGUIDE_LIVE_TESTS=1
+SKIPPED [1] scripts/tests/test_verify_interactions_live.py:49: Live tests gated by PHARMAGUIDE_LIVE_TESTS=1
+SKIPPED [1] scripts/tests/test_verify_interactions_live.py:54: Live tests gated by PHARMAGUIDE_LIVE_TESTS=1
+SKIPPED [1] scripts/tests/test_verify_interactions_live.py:67: Live tests gated by PHARMAGUIDE_LIVE_TESTS=1
+14525 passed, 135 skipped in 3520.20s (0:58:40)

@@ -1,0 +1,168 @@
+Preflight staleness check: OK (all artifacts in sync)
+........................................................................ [ 58%]
+...................................................                      [100%]
+123 passed in 899.57s (0:14:59)
+IQM form-evidence audit passed
+scanned 15278 blobs; 131909 rows carry a form_note
+PASS: no form_note violations
+================================================================
+Functional Roles Coverage Gate (Phase 5)
+================================================================
+File                              Total   Reqd     OK   Excl   Miss
+✓ harmful_additives                 117    103    103     14      0
+✓ other_ingredients                 727    488    488    239      0
+✓ botanical_ingredients             551      0      0    551      0
+
+Required entries populated: 591 / 591 (100.0%)
+Invalid role-ID drift: 0
+
+✓ GATE PASS — all required entries populated; vocab clean
+OK: freshness source-of-truth audit passed
+OK: flutter source-of-truth audit passed
+checked 819 rxcuis across 39 class(es)
+all rxcuis resolve to their authored drug.
+checked 23 direct-drug rxcuis across 80 depletion entries
+
+49 suppressed (app-hidden, identity not enforced):
+  ~ DEP_STATINS_VITAMIND: suppressed (needs_revision) — identity not enforced
+  ~ DEP_ANTACIDS_VITAMINB12: suppressed (needs_revision) — identity not enforced
+  ~ DEP_ANTACIDS_MAGNESIUM: suppressed (needs_revision) — identity not enforced
+  ~ DEP_ANTACIDS_VITAMINC: suppressed (rejected) — identity not enforced
+  ~ DEP_ANTACIDS_ZINC: suppressed (rejected) — identity not enforced
+  ~ DEP_METFORMIN_FOLATE: suppressed (needs_revision) — identity not enforced
+  ~ DEP_OCP_VITAMINB6: suppressed (needs_revision) — identity not enforced
+  ~ DEP_OCP_VITAMINB12: suppressed (rejected) — identity not enforced
+  ~ DEP_OCP_FOLATE: suppressed (rejected) — identity not enforced
+  ~ DEP_OCP_MAGNESIUM: suppressed (needs_revision) — identity not enforced
+  ~ DEP_OCP_ZINC: suppressed (needs_revision) — identity not enforced
+  ~ DEP_OCP_VITAMINC: suppressed (rejected) — identity not enforced
+  ~ DEP_OCP_VITAMINE: suppressed (rejected) — identity not enforced
+  ~ DEP_DIURETICS_POTASSIUM: suppressed (needs_revision) — identity not enforced
+  ~ DEP_DIURETICS_MAGNESIUM: suppressed (needs_revision) — identity not enforced
+  ~ DEP_CORTICOSTEROIDS_POTASSIUM: suppressed (needs_revision) — identity not enforced
+  ~ DEP_CORTICOSTEROIDS_MAGNESIUM: suppressed (needs_revision) — identity not enforced
+  ~ DEP_CORTICOSTEROIDS_VITAMINC: suppressed (needs_revision) — identity not enforced
+  ~ DEP_CORTICOSTEROIDS_ZINC: suppressed (needs_revision) — identity not enforced
+  ~ DEP_CORTICOSTEROIDS_VITAMINB6: suppressed (needs_revision) — identity not enforced
+  ~ DEP_SSRIS_CALCIUM: suppressed (rejected) — identity not enforced
+  ~ DEP_SSRIS_VITAMIND: suppressed (rejected) — identity not enforced
+  ~ DEP_ANTICONVULSANTS_VITAMINK: suppressed (rejected) — identity not enforced
+  ~ DEP_ANTICONVULSANTS_BIOTIN: suppressed (needs_revision) — identity not enforced
+  ~ DEP_ACEINHIBITORS_ZINC: suppressed (needs_revision) — identity not enforced
+  ~ DEP_BETABLOCKERS_COQ10: suppressed (needs_revision) — identity not enforced
+  ~ DEP_BETABLOCKERS_MELATONIN: suppressed (needs_revision) — identity not enforced
+  ~ DEP_NSAIDS_FOLATE: suppressed (rejected) — identity not enforced
+  ~ DEP_NSAIDS_IRON: suppressed (needs_revision) — identity not enforced
+  ~ DEP_NSAIDS_VITAMINC: suppressed (rejected) — identity not enforced
+  ~ DEP_ANTIBIOTICS_BVITAMINS: suppressed (rejected) — identity not enforced
+  ~ DEP_ANTIBIOTICS_VITAMINK: suppressed (needs_revision) — identity not enforced
+  ~ DEP_ANTIPSYCHOTICS_VITAMIND: suppressed (needs_revision) — identity not enforced
+  ~ DEP_ANTIPSYCHOTICS_COQ10: suppressed (needs_revision) — identity not enforced
+  ~ DEP_STIMULANTS_MAGNESIUM: suppressed (rejected) — identity not enforced
+  ~ DEP_STIMULANTS_VITAMINC: suppressed (needs_revision) — identity not enforced
+  ~ DEP_HIVPI_VITAMIND: suppressed (needs_revision) — identity not enforced
+  ~ DEP_HIVPI_ZINC: suppressed (needs_revision) — identity not enforced
+  ~ DEP_MAOIS_VITAMINB6: suppressed (rejected) — identity not enforced
+  ~ DEP_DIABETESMEDS_MAGNESIUM: suppressed (rejected) — identity not enforced
+  ~ DEP_IMMUNOSUPPRESSANTS_MAGNESIUM: suppressed (needs_revision) — identity not enforced
+  ~ DEP_IMMUNOSUPPRESSANTS_VITAMIND: suppressed (needs_revision) — identity not enforced
+  ~ DEP_CALCIUMCHANNELBLOCKERS_POTASSIUM: suppressed (rejected) — identity not enforced
+  ~ DEP_ANTIHYPERTENSIVES_ZINC: suppressed (rejected) — identity not enforced
+  ~ DEP_ANTIHYPERTENSIVES_COQ10: suppressed (rejected) — identity not enforced
+  ~ DEP_INSULINS_MAGNESIUM: suppressed (rejected) — identity not enforced
+  ~ DEP_SEDATIVES_VITAMIND: suppressed (rejected) — identity not enforced
+  ~ DEP_BENZODIAZEPINES_MELATONIN: suppressed (needs_revision) — identity not enforced
+  ~ DEP_BVITAMINS_INTERACTIONS: suppressed (needs_revision) — identity not enforced
+all direct-drug rxcuis + class refs resolve.
+
+============================================================
+PMID Extraction Summary
+============================================================
+
+  timing_rules.json:
+    PubMed URLs: 16
+    PMIDs extracted: 16
+
+  medication_depletions.json:
+    PubMed URLs: 77
+    PMIDs extracted: 77
+
+  Total PMIDs: 86 unique
+
+============================================================
+Live PubMed Verification (fail-closed)
+============================================================
+Verifying 86 unique PMIDs against PubMed...
+
+  valid: 93   invalid: 0   unresolved: 0
+
+  Report: /Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/scripts/reports/pmid_verification_timing_depletions.json
+
+✅ PASS: all PMIDs verified.
+content_match            DEP_ANTICONVULSANTS_VITAMIND PMID 34847425 — all reviewed concepts matched
+content_match            DEP_ANTICONVULSANTS_CALCIUM PMID 15123011 — all reviewed concepts matched
+content_match            DEP_ANTICONVULSANTS_FOLATE PMID 6370643 — all reviewed concepts matched
+content_match            DEP_ANTICONVULSANTS_VITAMINB12 PMID 30896627 — all reviewed concepts matched
+content_match            DEP_ANTICONVULSANTS_LCARNITINE PMID 8040784 — all reviewed concepts matched
+content_match            DEP_LEVOTHYROXINE_CALCIUM PMID 10838651 — all reviewed concepts matched
+content_match            DEP_ANTACIDS_VITAMINB12 PMID 24327038 — all reviewed concepts matched
+content_match            DEP_ANTACIDS_VITAMINB12 PMID 37060552 — all reviewed concepts matched
+content_match            DEP_ANTACIDS_MAGNESIUM PMID 22762246 — all reviewed concepts matched
+content_match            DEP_DIURETICS_MAGNESIUM PMID 10997911 — all reviewed concepts matched
+content_match            DEP_LEVOTHYROXINE_IRON PMID 1443969 — all reviewed concepts matched
+content_match            DEP_LEVOTHYROXINE_CALCIUM PMID 11716045 — all reviewed concepts matched
+content_match            DEP_ANTACIDS_IRON PMID 27890768 — all reviewed concepts matched
+content_match            DEP_STATINS_COQ10 PMID 26192349 — all reviewed concepts matched
+content_match            DEP_STATINS_COQ10 PMID 8463436 — all reviewed concepts matched
+content_match            DEP_STATINS_COQ10 PMID 30371340 — all reviewed concepts matched
+content_match            DEP_STATINS_COQ10 PMID 32179207 — all reviewed concepts matched
+content_match            DEP_ANTACIDS_CALCIUM PMID 4000241 — all reviewed concepts matched
+content_match            DEP_ANTACIDS_CALCIUM PMID 17190895 — all reviewed concepts matched
+content_match            DEP_ANTACIDS_CALCIUM PMID 30539272 — all reviewed concepts matched
+content_match            DEP_ANTACIDS_CALCIUM PMID 8568113 — all reviewed concepts matched
+content_match            DEP_ANTACIDS_IRON PMID 17344278 — all reviewed concepts matched
+content_match            DEP_METFORMIN_VITAMINB12 PMID 20488910 — all reviewed concepts matched
+content_match            DEP_METFORMIN_VITAMINB12 PMID 10977010 — all reviewed concepts matched
+content_match            DEP_DIURETICS_ZINC PMID 7001863 — all reviewed concepts matched
+content_match            DEP_DIURETICS_ZINC PMID 3595066 — all reviewed concepts matched
+content_match            DEP_DIURETICS_ZINC PMID 7446206 — all reviewed concepts matched
+content_match            DEP_DIURETICS_ZINC PMID 6152785 — all reviewed concepts matched
+content_match            DEP_DIURETICS_CALCIUM PMID 16336519 — all reviewed concepts matched
+content_match            DEP_DIURETICS_CALCIUM PMID 26589307 — all reviewed concepts matched
+content_match            DEP_DIURETICS_CALCIUM PMID 7465281 — all reviewed concepts matched
+content_match            DEP_DIURETICS_THIAMINE PMID 1867241 — all reviewed concepts matched
+content_match            DEP_DIURETICS_THIAMINE PMID 14712323 — all reviewed concepts matched
+content_match            DEP_DIURETICS_THIAMINE PMID 16412860 — all reviewed concepts matched
+content_match            DEP_DIURETICS_THIAMINE PMID 10482308 — all reviewed concepts matched
+content_match            DEP_DIURETICS_FOLATE PMID 2490542 — all reviewed concepts matched
+content_match            DEP_DIURETICS_FOLATE PMID 7286039 — all reviewed concepts matched
+content_match            DEP_DIURETICS_FOLATE PMID 11096168 — all reviewed concepts matched
+content_match            DEP_CORTICOSTEROIDS_CALCIUM PMID 37845798 — all reviewed concepts matched
+content_match            DEP_CORTICOSTEROIDS_CALCIUM PMID 14687590 — all reviewed concepts matched
+content_match            DEP_CORTICOSTEROIDS_VITAMIND PMID 37845798 — all reviewed concepts matched
+content_match            DEP_SSRIS_SODIUM PMID 25262043 — all reviewed concepts matched
+content_match            DEP_SSRIS_SODIUM PMID 27194321 — all reviewed concepts matched
+content_match            DEP_ANTICONVULSANTS_LCARNITINE PMID 10852092 — all reviewed concepts matched
+content_match            DEP_ISONIAZID_VITAMINB6 PMID 21477422 — all reviewed concepts matched
+content_match            DEP_METHOTREXATE_FOLATE PMID 18020507 — all reviewed concepts matched
+content_match            DEP_METHOTREXATE_FOLATE PMID 23728635 — all reviewed concepts matched
+content_match            DEP_ANTACIDS_CALCIUM PMID 15989913 — all reviewed concepts matched using explicit no-abstract evidence
+content_match            DEP_ANTICOAGULANTS_VITAMINK PMID 11157640 — all reviewed concepts matched using explicit no-abstract evidence
+content_match            DEP_COLCHICINE_VITAMINB12 PMID 5677718 — all reviewed concepts matched using explicit no-abstract evidence
+Live PubMed verification passed for 39 PMID(s)
+Entries: 199 | distinct PMIDs: 439 | PMID-entry claims: 454
+
+Fetching 439 PMIDs live from PubMed efetch...
+
+RESULT: ok=452  TITLE-MISMATCH=0  TITLE-DRIFT=0  GHOST-SUSPECT=2  not-found=0
+
+=== GHOST-SUSPECT (live title shares no ingredient word — MANUAL REVIEW) ===
+  PMID 21747893  (PRECLIN_DGL)
+    live title : An Extract of Glycyrrhiza glabra (GutGard) Alleviates Symptoms of Functiona
+    ingredient : ['deglycyrrhizinated', 'digestive', 'free', 'gastric', 'glycyrrhizin', 'healing']
+  PMID 33516238  (BRAND_LIFE_EXTENSION_SUPER_BIOCURCUMIN)
+    live title : Bioavailable turmeric extract for knee osteoarthritis: a randomized, non-in
+    ingredient : ['aging', 'anti', 'curcumin', 'extension', 'healthy', 'inflammation']
+
+STRICT: 2 ghost-suspect(s), all reviewed and recorded in scripts/data/backed_studies_ghost_review.json
+STRICT: backed_clinical_studies citation gate PASSED

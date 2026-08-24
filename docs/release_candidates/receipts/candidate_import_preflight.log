@@ -1,0 +1,26 @@
+[32m[import] OK:[0m found source artifacts in /Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/scripts/dist
+[32m[import] OK:[0m manifest parsed: db_version=2026.08.24.100843 schema=2.4.0 products=15278
+[32m[import] OK:[0m schema_version 2.4.0 is supported
+[32m[import] OK:[0m core projection model matches generated app reader
+[32m[import] OK:[0m SHA-256 matches manifest (07e2e202bb239461348a93ea08fb710bb76315176dda3fb844ce990afeafff5d)
+[32m[import] OK:[0m SQLite integrity_check: ok
+[32m[import] OK:[0m products_core row count: 15278 (min 2000)
+[32m[import] OK:[0m product_count agrees between manifest and DB
+[32m[import] OK:[0m embedded SQLite manifest agrees with JSON manifest
+[32m[import] OK:[0m 15278 rows have export_version populated
+[32m[import] OK:[0m interaction DB artifacts found — running interaction gate chain
+[32m[import] OK:[0m interaction manifest parsed: db_version=1.0.11 schema=2.0.0 rows=134
+[32m[import] OK:[0m interaction schema_version 2.0.0 is supported
+[32m[import] OK:[0m interaction DB SHA-256 matches manifest (cf3bab2f5736881562854ec2b9ba99a3fce517073789c13b8c2e145cc1299891)
+[32m[import] OK:[0m interaction DB SQLite integrity_check: ok
+[32m[import] OK:[0m interaction DB PRAGMA user_version: 2
+[32m[import] OK:[0m interaction DB live row count: 134 (min 1)
+[32m[import] OK:[0m embedded interaction_db_metadata agrees with JSON manifest
+[32m[import] OK:[0m interaction_db_metadata correctly omits sha256_checksum (T7)
+[32m[import] OK:[0m Tier 2 research_pairs are reachable (rows=31690)
+[32m[import] OK:[0m --dry-run: all gates passed, no files written
+[import] would copy:
+[import]   /Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/scripts/dist/pharmaguide_core.db → /Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification/assets/db/pharmaguide_core.db
+[import]   /Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/scripts/dist/export_manifest.json → /Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification/assets/db/export_manifest.json
+[import]   /Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/scripts/dist/interaction_db.sqlite → /Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification/assets/db/interaction_db.sqlite
+[import]   /Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/scripts/dist/interaction_db_manifest.json → /Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification/assets/db/interaction_db_manifest.json

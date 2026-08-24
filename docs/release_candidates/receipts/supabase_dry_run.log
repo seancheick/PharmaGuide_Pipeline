@@ -1,0 +1,14 @@
+Loading manifest from scripts/dist...
+  [v4] schema 2.4.0 build — syncing as the production catalog contract.
+  [info] non-blocking exclusions: excluded_by_gate=134, warnings=0 (see export_manifest.json for per-product detail)
+  Version:  2026.08.24.100843
+  Products: 15278
+  Checksum: sha256:07e2e202bb239...
+
+[DRY RUN] Would upload:
+  - pharmaguide_core.db (59.7 MB)
+  - detail_index.json
+  - 256 canonical share-index shards
+  - 15278 unique detail blobs (15278 product mappings)
+  - 13271 product images to product-images
+  - New manifest row (version 2026.08.24.100843)
