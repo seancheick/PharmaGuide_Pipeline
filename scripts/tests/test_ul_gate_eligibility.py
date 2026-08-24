@@ -652,6 +652,96 @@ def test_nested_source_compound_is_owned_by_declared_nutrient_total(enricher):
     assert niacin_flags[0]["amount"] == pytest.approx(400)
 
 
+def test_misnested_adjacent_form_components_reconcile_to_nutrient_total(enricher):
+    # Live DSLD 64333 attaches two Vitamin B6 form rows to the preceding
+    # Niacin row, then emits their exact 105 mg Vitamin B6 total immediately
+    # after it. Exact path adjacency, canonical identity, unit, and sum prove
+    # an API nesting defect; the components are not another 105 mg exposure.
+    product = _mag([
+        {
+            "name": "Niacin",
+            "raw_source_text": "Niacin",
+            "raw_source_path": "ingredientRows[6]",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 862,
+            "unit": "mg",
+            "dailyValue": 4310,
+            "isNestedIngredient": False,
+        },
+        {
+            "name": "Pyridoxal 5-Phosphate",
+            "raw_source_text": "Pyridoxal 5-Phosphate",
+            "raw_source_path": "ingredientRows[6].nestedRows[0]",
+            "standardName": "Vitamin B6 (Pyridoxine)",
+            "canonical_id": "vitamin_b6_pyridoxine",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 100,
+            "unit": "mg",
+            "dailyValue": None,
+            "isNestedIngredient": True,
+            "parentBlend": "Niacin",
+        },
+        {
+            "name": "Pyridoxine Hydrochloride",
+            "raw_source_text": "Pyridoxine Hydrochloride",
+            "raw_source_path": "ingredientRows[6].nestedRows[1]",
+            "standardName": "Vitamin B6 (Pyridoxine)",
+            "canonical_id": "vitamin_b6_pyridoxine",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 5,
+            "unit": "mg",
+            "dailyValue": None,
+            "isNestedIngredient": True,
+            "parentBlend": "Niacin",
+        },
+        {
+            "name": "Vitamin B6",
+            "raw_source_text": "Vitamin B6",
+            "raw_source_path": "ingredientRows[7]",
+            "standardName": "Vitamin B6 (Pyridoxine)",
+            "canonical_id": "vitamin_b6_pyridoxine",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 105,
+            "unit": "mg",
+            "dailyValue": 5250,
+            "isNestedIngredient": False,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    analyzed = result["analyzed_ingredients"]
+    vitamin_b6 = next(
+        row for row in analyzed if row["ingredient"] == "Vitamin B6"
+    )
+    components = [
+        row
+        for row in analyzed
+        if row["ingredient"]
+        in {"Pyridoxal 5-Phosphate", "Pyridoxine Hydrochloride"}
+    ]
+    b6_flags = [
+        flag
+        for flag in result["safety_flags"]
+        if "vitamin b6" in (flag.get("nutrient") or "").lower()
+    ]
+
+    assert len(components) == 2
+    assert all(row["dose_role"] == "form_component" for row in components)
+    assert all(
+        row["parent_label_key"] == vitamin_b6["source_label_key"]
+        for row in components
+    )
+    assert all(row["skip_ul_check"] is True for row in components)
+    assert len(b6_flags) == 1
+    assert b6_flags[0]["amount"] == pytest.approx(105)
+
+
 def test_vitamin_a_total_owns_adequacy_while_preformed_child_owns_ul(enricher):
     """A mixed Vitamin A label is one intake total plus an UL-scoped breakdown."""
     product = _mag([

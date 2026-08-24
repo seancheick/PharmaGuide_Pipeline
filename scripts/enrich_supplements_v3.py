@@ -19222,6 +19222,7 @@ class SupplementEnricherV3:
                     or ""
                 ),
                 "source_label_key": self._rda_source_label_key(ingredient),
+                "source_path": str(ingredient.get("raw_source_path") or ""),
                 "quantity": quantity,
                 "unit": self._normalize_text(ingredient.get("unit") or ""),
                 "component_source_label_keys": set(),
@@ -19272,6 +19273,70 @@ class SupplementEnricherV3:
                 and abs(component_total - float(declared["quantity"])) <= tolerance
             ):
                 declared["component_source_label_keys"] = component_keys
+
+            if declared["component_source_label_keys"]:
+                continue
+
+            # DSLD occasionally attaches a nutrient's form breakdown to the
+            # immediately preceding top-level row, then emits the nutrient
+            # total as the next row. Repair only the narrow, mechanically
+            # provable shape: at least two adjacent nested rows, one canonical
+            # and unit, and an exact sum equal to the following declared total.
+            declared_path_match = re.fullmatch(
+                r"ingredientRows\[(\d+)\]",
+                declared["source_path"],
+            )
+            if declared_path_match is None:
+                continue
+            preceding_index = int(declared_path_match.group(1)) - 1
+            if preceding_index < 0:
+                continue
+            preceding_prefix = f"ingredientRows[{preceding_index}].nestedRows["
+            adjacent_component_keys = set()
+            adjacent_component_total = 0.0
+            for ingredient in active_ingredients:
+                source_path = str(ingredient.get("raw_source_path") or "")
+                if (
+                    not ingredient.get("isNestedIngredient")
+                    or not source_path.startswith(preceding_prefix)
+                ):
+                    continue
+                canonical = self._normalize_text(
+                    ingredient.get("canonical_id")
+                    or ingredient.get("standardName")
+                    or ingredient.get("name")
+                    or ""
+                )
+                parent_name = self._normalize_text(
+                    ingredient.get("parentBlend") or ""
+                )
+                unit = self._normalize_text(ingredient.get("unit") or "")
+                try:
+                    quantity = float(ingredient.get("quantity") or 0)
+                except (TypeError, ValueError):
+                    continue
+                if (
+                    canonical != declared["canonical"]
+                    or parent_name == declared["label_name"]
+                    or quantity <= 0
+                    or self._same_identity_unit_key(unit)
+                    != self._same_identity_unit_key(declared["unit"])
+                ):
+                    continue
+                adjacent_component_total += quantity
+                adjacent_component_keys.add(
+                    self._rda_source_label_key(ingredient)
+                )
+            if (
+                len(adjacent_component_keys) >= 2
+                and abs(
+                    adjacent_component_total - float(declared["quantity"])
+                )
+                <= tolerance
+            ):
+                declared["component_source_label_keys"] = (
+                    adjacent_component_keys
+                )
         return totals
 
     def _declared_vitamin_a_components(
