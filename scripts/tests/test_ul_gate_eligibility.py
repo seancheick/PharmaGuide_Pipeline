@@ -825,6 +825,36 @@ def test_invalid_mixed_vitamin_a_percentage_remains_unresolved(
     assert assessment["readiness"] == "incomplete"
 
 
+def test_fish_liver_oil_vitamin_a_is_assessed_as_preformed(enricher):
+    """Fish liver oil is a preformed-A source, not an unknown carotenoid mix."""
+    result = enricher._collect_rda_ul_data(
+        _mag([{
+            "name": "Vitamin A",
+            "raw_source_text": "Vitamin A",
+            "standardName": "Vitamin A",
+            "canonical_id": "vitamin_a",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 3000,
+            "unit": "mcg",
+            "dailyValue": 333,
+            "notes": "Vitamin A (Form: as Fish Liver Oil)",
+            "forms": [{"name": "Fish Liver Oil"}],
+            "isNestedIngredient": False,
+            "raw_source_path": "ingredientRows[0]",
+        }]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    assessment = result["dose_assessments"][0]
+    assert assessment["conversion_rule_id"] == "vitamin_a_retinol"
+    assert assessment["normalized_value"] == pytest.approx(3000)
+    assert assessment["normalized_unit"] == "mcg RAE"
+    assert assessment["pct_ul"] == pytest.approx(100)
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
+
+
 def test_mixed_vitamin_a_below_ul_is_safe_under_all_preformed_upper_bound(
     enricher,
 ):

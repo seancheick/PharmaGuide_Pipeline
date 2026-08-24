@@ -5,13 +5,13 @@
     "schema_version": "5.2.0",
     "contract_test": "scripts/tests/test_unit_conversions_contract.py",
     "last_updated": "2026-08-23",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "statistics": {
       "vitamin_conversions": 24,
       "form_detection_categories": 2,
       "total_conversion_rules": 38,
       "mcg_only_nutrients": 7,
-      "notes": "DSLD is supplement-only: beta-carotene uses the supplemental rule; alpha-carotene and beta-cryptoxanthin use the NIH 24:1 RAE factor; choline bitartrate uses its verified 1:1 salt stoichiometry; CFU parsing is owned by enrichment; bare folate preserves unknown form lineage; explicit DFE units normalize without assuming folic acid; parent Vitamin E amounts declared in mg use the FDA alpha-tocopherol label basis"
+      "notes": "DSLD is supplement-only: beta-carotene uses the supplemental rule; alpha-carotene and beta-cryptoxanthin use the NIH 24:1 RAE factor; fish/cod liver oil is recognized as a preformed Vitamin A source; choline bitartrate uses its verified 1:1 salt stoichiometry; CFU parsing is owned by enrichment; bare folate preserves unknown form lineage; explicit DFE units normalize without assuming folic acid; parent Vitamin E amounts declared in mg use the FDA alpha-tocopherol label basis"
     },
     "total_entries": 24,
     "total_entries_note": "Count of vitamin_conversions rules; mass_conversions has 6 rules and form_detection_patterns has 2 vitamin patterns"
@@ -417,7 +417,8 @@
         "\\bretinyl\\s+palmitate",
         "\\bretinyl\\s+acetate",
         "\\bpreformed\\s+(vitamin\\s+)?A\\b",
-        "\\bvitamin\\s+A\\s+(palmitate|acetate)\\b"
+        "\\bvitamin\\s+A\\s+(palmitate|acetate)\\b",
+        "\\b(?:fish|cod)\\s+liver\\s+oil\\b"
       ],
       "beta_carotene_patterns": [
         "\\bbeta[- ]?carotene\\b"
