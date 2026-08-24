@@ -425,6 +425,75 @@ def test_streptococcus_strain_is_probiotic_not_an_accessory_active(enricher):
     assert "rejection_reason" not in cfu
 
 
+def test_probiotic_blend_form_identities_support_owner_cfu_without_dose_inflation(
+    enricher,
+):
+    from supplement_taxonomy import classify_supplement
+
+    enriched = {
+        "product_name": "Probiotic Complex 1",
+        "activeIngredients": [
+            {
+                "name": "Probiotic Complex Blend",
+                "standardName": "Probiotics",
+                "canonical_id": "probiotics",
+                "raw_source_path": "ingredientRows[0]",
+                "quantity": 1_000_000_000,
+                "unit": "Organism(s)",
+                "cleaner_row_role": "blend_header_total",
+                "score_eligible_by_cleaner": False,
+                "score_exclusion_reason": "blend_header_total",
+                "dose_class": "blend_total_weight",
+                "forms": [
+                    {
+                        "name": "B. bifidum",
+                        "category": "bacteria",
+                        "ingredientGroup": "Bifidobacterium bifidum",
+                        "percent": 40,
+                    },
+                    {
+                        "name": "L. acidophilus",
+                        "category": "bacteria",
+                        "ingredientGroup": "Lactobacillus acidophilus",
+                        "percent": 40,
+                    },
+                    {
+                        "name": "L. helveticus",
+                        "category": "bacteria",
+                        "ingredientGroup": "Lactobacillus helveticus",
+                        "percent": 10,
+                    },
+                    {
+                        "name": "S. thermophilus",
+                        "category": "bacteria",
+                        "ingredientGroup": "Streptococcus thermophilus",
+                        "percent": 10,
+                    },
+                ],
+            }
+        ],
+        "inactiveIngredients": [],
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients": [],
+        },
+        "statements": [],
+    }
+
+    enriched["probiotic_data"] = enricher._collect_probiotic_data(enriched)
+    enriched["supplement_taxonomy"] = classify_supplement(enriched)
+    cfu = _cfu_evidence(
+        enricher._collect_product_scoring_evidence(enriched)
+    )
+
+    assert enriched["probiotic_data"]["total_strain_count"] == 4
+    assert enriched["supplement_taxonomy"]["primary_type"] == "probiotic"
+    assert cfu["scoreable"] is True
+    assert cfu["dose_value"] == 1_000_000_000
+    assert cfu["raw_source_path"] == "ingredientRows[0]"
+    assert cfu["linked_rows"] == ["ingredientRows[0]"]
+
+
 def test_product_cfu_evidence_is_rejected_when_taxonomy_is_not_probiotic(enricher):
     """Source-of-truth gate requires scoreable CFU evidence to agree with
     supplement_taxonomy.primary_type. Probiotic row identity is diagnostic

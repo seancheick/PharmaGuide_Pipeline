@@ -15359,9 +15359,22 @@ class SupplementEnricherV3:
                 )
 
                 is_blend_header = _is_blend_header_total(ingredient)
+                # Some DSLD probiotic blends encode their declared species as
+                # structured ``forms[]`` percentages instead of nested label
+                # rows. These forms establish identity for the owner CFU total
+                # but are not separate dose exposures. Restrict the bridge to
+                # explicitly probiotic/bacteria form records so ordinary salt
+                # and source-form arrays keep their existing semantics.
+                form_strains = [
+                    form
+                    for form in (ingredient.get("forms") or [])
+                    if isinstance(form, dict)
+                    and _is_probiotic_identity(form)
+                ] if is_blend_header and not nested else []
+                strain_rows = nested or form_strains
                 strain_names = (
-                    [n.get('name', '') for n in nested]
-                    if nested
+                    [n.get('name', '') for n in strain_rows]
+                    if strain_rows
                     else ([] if is_blend_header else [ingredient.get('name', '')])
                 )
                 strain_identity_texts = [
@@ -15372,6 +15385,7 @@ class SupplementEnricherV3:
                             n.get("standardName", ""),
                             n.get("standard_name", ""),
                             n.get("ingredientGroup", ""),
+                            n.get("category", ""),
                             n.get("notes", ""),
                             " ".join(
                                 str(form.get("name") if isinstance(form, dict) else form).strip()
@@ -15380,8 +15394,8 @@ class SupplementEnricherV3:
                         )
                         if str(piece or "").strip()
                     )
-                    for n in nested
-                ] if nested else ([] if is_blend_header else [ingredient.get('name', '')])
+                    for n in strain_rows
+                ] if strain_rows else ([] if is_blend_header else [ingredient.get('name', '')])
 
                 probiotic_blends.append({
                     "name": ingredient.get('name', ''),
