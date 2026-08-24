@@ -588,6 +588,18 @@
         "Assessment-readiness dose coverage repair"
       ],
       "notes": "Re-froze the complete four-product drift set after the fresh 37-brand rebuild. All four move from not_scored to scored because their material dose assessments now resolve through typed label evidence instead of false unresolved-unit/form states: Athletic Pure Pack 79.5 CAUTION, Ritual Essential for Women 76.9 SAFE, Garden of Life Plant Collagen Builder 54.1 SAFE, and Garden of Life Baby Multivitamin Liquid 66.7 SAFE. Athletic Pure Pack retains DOSE_OVER_UL_CAUTION for its reviewed niacin exposure; no safety warning was removed. Identity, route, verification, mapping coverage, and material dose readiness are complete for all four. Evidence readiness remains the separately reported shadow dimension under the 2026-08-22 policy and does not silently alter these status transitions. The only frozen fields that changed are the six derived from restoring a numeric score to a previously quarantined product."
+    },
+    {
+      "date": "2026-08-24",
+      "action": "refrozen_wobenzym_typed_enzyme_activity_readiness",
+      "products": [
+        321405
+      ],
+      "sprints_covered": [
+        "Typed enzyme-activity dose reconciliation",
+        "Blend-header and material-row ownership review"
+      ],
+      "notes": "Garden of Life Wobenzym N Joint Health moves from not_scored to 60.5 / Weak / SAFE after the fresh 37-brand rebuild. Five real score-eligible active rows map at 100%. Papain and Bromelain use their label-declared FIP activity, Rutoside Trihydrate uses its disclosed 150 mg mass, and every material exposure has a matching typed assessment with no conversion fallback. Pancreatin remains outside the active mapping denominator as a blend-header total; its separately declared 300 mg aggregate and 56,000 USP activity are reconciled as typed product-level projections rather than counted as another label ingredient. Evidence review for Papain and Rutoside remains explicitly shadow-incomplete and receives no invented evidence assessment. The six frozen status/score fields change because enforced identity, dose, route, and verification readiness are complete; no safety rule, pillar weight, or calibration target changed."
     }
   ]
 }
