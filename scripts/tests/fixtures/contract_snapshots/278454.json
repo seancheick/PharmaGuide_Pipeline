@@ -4,17 +4,17 @@
   "dsld_id": "278454",
   "evaluation_stage": "scored_v4",
   "flags": [],
-  "grade": null,
+  "grade": "Acceptable",
   "mapped_coverage": 1.0,
   "output_schema_version": "4.3.0",
   "product_name": "Essential for Women Mint Essenced",
-  "quality_score_status": "not_scored",
-  "quality_score_v4_100": null,
+  "quality_score_status": "scored",
+  "quality_score_v4_100": 76.9,
   "safety_verdict": "SAFE",
-  "score_100_equivalent": null,
+  "score_100_equivalent": 76.9,
   "score_basis": "v4_six_pillar",
-  "scoring_status": "not_scored",
+  "scoring_status": "scored",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
-  "verdict": "NOT_SCORED"
+  "verdict": "SAFE"
 }

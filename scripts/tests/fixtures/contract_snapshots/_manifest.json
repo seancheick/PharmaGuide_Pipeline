@@ -1,7 +1,7 @@
 {
   "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
   "schema_version": "2.0.0",
-  "frozen_on": "2026-08-20",
+  "frozen_on": "2026-08-24",
   "fixture_schema": {
     "frozen_fields": [
       "dsld_id",
@@ -573,6 +573,21 @@
         "Per-dimension assessment-readiness enforcement"
       ],
       "notes": "Evidence readiness moved from gating to shadow, so a product is no longer quarantined for naming an ingredient we have not curated. All ten of these products go not_scored -> scored and gain their first score: CVS Omega-3 100 mg 66.0, CVS Men's Daily Gummies 63.5, Garden of Life Adrenal Daily Balance 58.3, Raw Organic Perfect Food Original 53.7, Nutricost Arginine AKG 57.3, Thorne FloraMend Prime Probiotic 47.2 (POOR). No product that was already scored changed its score, grade, verdict, breakdown, section_scores, mapped_coverage, flags or badges -- the only frozen fields that moved are the six that follow from scoring a previously quarantined product. The evidence backlog itself is unchanged and still reported: 7,722 products and 17,626 material actives remain not_yet_evaluated, queued for remediation by the assessment-readiness shadow."
+    },
+    {
+      "date": "2026-08-24",
+      "action": "refrozen_reviewed_typed_dose_readiness_corrections",
+      "products": [
+        182730,
+        278454,
+        274498,
+        327416
+      ],
+      "sprints_covered": [
+        "Typed nutrient conversion and UL-state reconciliation",
+        "Assessment-readiness dose coverage repair"
+      ],
+      "notes": "Re-froze the complete four-product drift set after the fresh 37-brand rebuild. All four move from not_scored to scored because their material dose assessments now resolve through typed label evidence instead of false unresolved-unit/form states: Athletic Pure Pack 79.5 CAUTION, Ritual Essential for Women 76.9 SAFE, Garden of Life Plant Collagen Builder 54.1 SAFE, and Garden of Life Baby Multivitamin Liquid 66.7 SAFE. Athletic Pure Pack retains DOSE_OVER_UL_CAUTION for its reviewed niacin exposure; no safety warning was removed. Identity, route, verification, mapping coverage, and material dose readiness are complete for all four. Evidence readiness remains the separately reported shadow dimension under the 2026-08-22 policy and does not silently alter these status transitions. The only frozen fields that changed are the six derived from restoring a numeric score to a previously quarantined product."
     }
   ]
 }
