@@ -367,7 +367,17 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         # Archive / QA verdict only. Live catalog excludes these rows
         # entirely; safety signals remain available in safety_gate.
         result["v4_verdict"] = "NOT_SCORED"
-        result["score_unavailable_reason"] = "blocked_by_completeness_gate"
+        catalog_disposition = assessment_readiness.get("catalog_disposition")
+        if (
+            isinstance(catalog_disposition, dict)
+            and catalog_disposition.get("disposition")
+            == "intentional_non_scoreable"
+        ):
+            result["score_unavailable_reason"] = (
+                "intentional_non_scoreable_product"
+            )
+        else:
+            result["score_unavailable_reason"] = "blocked_by_completeness_gate"
         return result
 
     # Layer 3 — one dispatch/assembly seam for every routed module. The former

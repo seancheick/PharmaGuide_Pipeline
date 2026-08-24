@@ -227,12 +227,22 @@ def _base_checks(
     ]
     if blocking_contract_findings:
         missing.append("strict_scoring_contract")
-    if scoring_input.mapped_count <= 0:
-        missing.append("score_eligible_active_identity")
-    elif scoring_input.unmapped_count > 0 or coverage != 1.0:
-        missing.append("mapped_coverage")
-    if not ingredients or not any(_has_active_identity(i) for i in ingredients):
-        missing.append("active_identity")
+    catalog_disposition = _safe_dict(
+        _safe_dict(assessment_readiness).get("catalog_disposition")
+    )
+    intentionally_non_scoreable = (
+        _norm(catalog_disposition.get("disposition"))
+        == "intentional_non_scoreable"
+    )
+    if intentionally_non_scoreable:
+        missing.append("intentional_non_scoreable_product")
+    else:
+        if scoring_input.mapped_count <= 0:
+            missing.append("score_eligible_active_identity")
+        elif scoring_input.unmapped_count > 0 or coverage != 1.0:
+            missing.append("mapped_coverage")
+        if not ingredients or not any(_has_active_identity(i) for i in ingredients):
+            missing.append("active_identity")
     readiness_enforced = (
         isinstance(assessment_readiness, dict)
         and assessment_readiness.get("enforcement_mode") == "enforced"
@@ -537,6 +547,10 @@ def evaluate_completeness_gate_with_readiness(
         ingredients,
         assessment_readiness=readiness,
     )
+    intentionally_non_scoreable = (
+        _norm(_safe_dict(readiness.get("catalog_disposition")).get("disposition"))
+        == "intentional_non_scoreable"
+    )
     if readiness.get("enforcement_mode") == "enforced":
         if not has_canonical_enforced_dimensions(
             readiness.get("enforced_dimensions")
@@ -546,7 +560,10 @@ def evaluate_completeness_gate_with_readiness(
             state = _norm(_safe_dict(readiness.get(name)).get("readiness"))
             if state and state not in {"complete", "not_applicable"}:
                 missing.append(f"{name}_assessment_readiness")
-    if _has_missing_micronutrient_amount_panel(ingredients):
+    if (
+        not intentionally_non_scoreable
+        and _has_missing_micronutrient_amount_panel(ingredients)
+    ):
         missing.append("micronutrient_amounts_missing_from_source")
     # Phase 3: role-aware caps. Classify the already-derived rows (no second
     # derivation) and let soft-policy caps fire only for cap-eligible roles.

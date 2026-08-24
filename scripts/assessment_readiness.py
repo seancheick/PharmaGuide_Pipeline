@@ -54,6 +54,41 @@ ENFORCED_READINESS_DIMENSIONS = frozenset({
     "route",
 })
 
+CATALOG_DISPOSITION_SCORE_CANDIDATE = "score_candidate"
+CATALOG_DISPOSITION_REQUIRES_REMEDIATION = "requires_remediation"
+CATALOG_DISPOSITION_INTENTIONAL_NON_SCOREABLE = "intentional_non_scoreable"
+
+_INTENTIONAL_NON_SCOREABLE_RULES = (
+    (
+        "external_use_only",
+        ("external use only", "not intended for consumption"),
+        "all",
+    ),
+    (
+        "professional_formulation_material",
+        ("not intended for individual use", "qualified professionals only"),
+        "all",
+    ),
+    (
+        "formulation_excipient",
+        (
+            "use as required in the formulation",
+            "use as needed per formula",
+        ),
+        "any",
+    ),
+    (
+        "culinary_sweetener",
+        ("as a sweetener", "substitute for sugar"),
+        "any",
+    ),
+    (
+        "culinary_food",
+        ("for cooking", "cooking or baking", "cooking, baking"),
+        "any",
+    ),
+)
+
 
 def has_canonical_enforced_dimensions(value: Any) -> bool:
     """Return whether an artifact declares the exact release-gating contract."""
@@ -446,6 +481,67 @@ def _source_score_eligible_active_rows(
     ]
 
 
+def evaluate_catalog_disposition(product: Mapping[str, Any]) -> Dict[str, Any]:
+    """Separate explicit QA-only labels from genuine scoring remediation.
+
+    This classifier is deliberately narrow. A product is only called
+    intentionally non-scoreable when the strict scoring contract has no rows,
+    cleaner-owned score-eligible rows are absent, and the label itself states
+    a non-consumer, formulation, sweetener, or culinary use. Ambiguous
+    zero-dose supplements remain in remediation.
+    """
+    scoring_input = get_scoring_ingredients(
+        dict(product),
+        strict=True,
+        allow_legacy_fallback=False,
+    )
+    if scoring_input.rows:
+        return {
+            "disposition": CATALOG_DISPOSITION_SCORE_CANDIDATE,
+            "reason_code": "strict_scoring_rows_present",
+            "evidence_paths": [],
+        }
+    if _source_score_eligible_active_rows(product):
+        return {
+            "disposition": CATALOG_DISPOSITION_REQUIRES_REMEDIATION,
+            "reason_code": "source_active_assessment_required",
+            "evidence_paths": [],
+        }
+
+    statements = _safe_list(product.get("statements"))
+    normalized_statements: list[tuple[str, str]] = []
+    for index, statement in enumerate(statements):
+        if not isinstance(statement, Mapping):
+            continue
+        notes = re.sub(
+            r"\s+",
+            " ",
+            str(statement.get("notes") or "").strip().casefold(),
+        )
+        if notes:
+            normalized_statements.append((f"statements[{index}].notes", notes))
+
+    for reason_code, phrases, match_mode in _INTENTIONAL_NON_SCOREABLE_RULES:
+        matching_paths = []
+        for path, notes in normalized_statements:
+            phrase_matches = [phrase in notes for phrase in phrases]
+            matched = all(phrase_matches) if match_mode == "all" else any(phrase_matches)
+            if matched:
+                matching_paths.append(path)
+        if matching_paths:
+            return {
+                "disposition": CATALOG_DISPOSITION_INTENTIONAL_NON_SCOREABLE,
+                "reason_code": reason_code,
+                "evidence_paths": matching_paths,
+            }
+
+    return {
+        "disposition": CATALOG_DISPOSITION_REQUIRES_REMEDIATION,
+        "reason_code": "no_score_eligible_active_rows",
+        "evidence_paths": [],
+    }
+
+
 def evaluate_verification_assessment(product: Mapping[str, Any]) -> Dict[str, Any]:
     """Preserve verified-present, evaluated-absent, and not-evaluated."""
     cert = product.get("certification_data")
@@ -579,7 +675,12 @@ def has_module_relevant_identity(
     )
 
 
-def _identity_readiness(product: Mapping[str, Any], module: str) -> Dict[str, Any]:
+def _identity_readiness(
+    product: Mapping[str, Any],
+    module: str,
+    *,
+    catalog_disposition: Mapping[str, Any],
+) -> Dict[str, Any]:
     scoring_input = get_scoring_ingredients(
         dict(product),
         strict=True,
@@ -619,7 +720,17 @@ def _identity_readiness(product: Mapping[str, Any], module: str) -> Dict[str, An
         if source_rows
         else None
     )
-    if scoring_input.zero_scorable_reason:
+    intentionally_non_scoreable = (
+        catalog_disposition.get("disposition")
+        == CATALOG_DISPOSITION_INTENTIONAL_NON_SCOREABLE
+    )
+    if intentionally_non_scoreable:
+        source_identity_complete = False
+        reason_code = str(
+            catalog_disposition.get("reason_code")
+            or "intentional_non_scoreable_product"
+        )
+    elif scoring_input.zero_scorable_reason:
         if source_rows:
             source_identity_complete = (
                 source_mapped_count > 0
@@ -656,7 +767,11 @@ def _identity_readiness(product: Mapping[str, Any], module: str) -> Dict[str, An
         reason_code = f"missing_{module}_relevant_identity"
     complete = source_identity_complete and module_identity_complete and not blocking_findings
     return {
-        "readiness": READINESS_COMPLETE if complete else READINESS_INCOMPLETE,
+        "readiness": (
+            READINESS_NOT_APPLICABLE
+            if intentionally_non_scoreable
+            else READINESS_COMPLETE if complete else READINESS_INCOMPLETE
+        ),
         "reason_code": reason_code,
         "mapped_count": scoring_input.mapped_count,
         "unmapped_count": scoring_input.unmapped_count,
@@ -981,7 +1096,12 @@ def evaluate_assessment_readiness(
     """Return the canonical aggregate readiness decision for one product."""
     product = product if isinstance(product, Mapping) else {}
     evidence = evaluate_evidence_assessment(product, module=module)
-    identity = _identity_readiness(product, module)
+    catalog_disposition = evaluate_catalog_disposition(product)
+    identity = _identity_readiness(
+        product,
+        module,
+        catalog_disposition=catalog_disposition,
+    )
     dose = _dose_readiness(
         product,
         evidence["ingredient_assessments"],
@@ -996,12 +1116,18 @@ def evaluate_assessment_readiness(
         "verification": verification,
         "route": route,
     }
-    unavailable_reasons = [
+    unavailable_reasons = []
+    if (
+        catalog_disposition.get("disposition")
+        == CATALOG_DISPOSITION_INTENTIONAL_NON_SCOREABLE
+    ):
+        unavailable_reasons.append("intentional_non_scoreable_product")
+    unavailable_reasons.extend(
         f"{name}_assessment_readiness"
         for name, payload in dimensions.items()
         if name in ENFORCED_READINESS_DIMENSIONS
         and not _is_ready(str(payload.get("readiness") or ""))
-    ]
+    )
     # Measured but not gating. Kept separate so the backlog stays visible and
     # countable without deciding the product's live eligibility.
     shadow_incomplete_dimensions = [
@@ -1022,6 +1148,7 @@ def evaluate_assessment_readiness(
         ),
         "input_contract_version": contract_version or None,
         "enforced_dimensions": sorted(ENFORCED_READINESS_DIMENSIONS),
+        "catalog_disposition": catalog_disposition,
         **dimensions,
         "is_live_ready": not unavailable_reasons,
         "unavailable_reasons": unavailable_reasons,

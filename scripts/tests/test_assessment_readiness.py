@@ -95,6 +95,23 @@ def _match(row: dict, effect_direction: str) -> dict:
     }
 
 
+def _zero_scorable_product(*statement_notes: str) -> dict:
+    row = _row("Label Ingredient", "label_ingredient", quantity=0, unit="NP")
+    row.update({
+        "scoreable_identity": False,
+        "score_eligible": False,
+        "has_dose": False,
+        "score_exclusion_reason": "recognized_non_scorable",
+    })
+    product = _product(row)
+    product["ingredient_quality_data"]["ingredients_scorable"] = []
+    product["statements"] = [
+        {"type": "fixture", "notes": notes}
+        for notes in statement_notes
+    ]
+    return product
+
+
 def test_positive_human_evidence_marks_material_active_supported() -> None:
     from assessment_readiness import evaluate_assessment_readiness
 
@@ -129,6 +146,69 @@ def test_sports_readiness_requires_a_sports_relevant_identity() -> None:
     assert result["identity"]["reason_code"] == "missing_sports_relevant_identity"
     assert result["is_live_ready"] is False
     assert "identity_assessment_readiness" in result["unavailable_reasons"]
+
+
+def test_explicit_non_consumer_label_intent_is_typed_qa_disposition() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    cases = {
+        "For external use only. Not intended for consumption.": "external_use_only",
+        (
+            "Not intended for individual use and should be used by qualified "
+            "professionals only."
+        ): "professional_formulation_material",
+        "Suggested use: As a sweetener, use 4 g or to desired taste.": "culinary_sweetener",
+        "For cooking, baking, or sauteing up to 350 degrees F.": "culinary_food",
+        "This product is not meant to be taken in large doses. Use as required in the formulation.": "formulation_excipient",
+    }
+
+    for statement, expected_reason in cases.items():
+        result = evaluate_assessment_readiness(
+            _zero_scorable_product(statement),
+            module="generic",
+        )
+
+        assert result["catalog_disposition"] == {
+            "disposition": "intentional_non_scoreable",
+            "reason_code": expected_reason,
+            "evidence_paths": ["statements[0].notes"],
+        }
+        assert result["identity"]["readiness"] == "not_applicable"
+        assert result["identity"]["reason_code"] == expected_reason
+        assert result["is_live_ready"] is False
+        assert result["unavailable_reasons"] == [
+            "intentional_non_scoreable_product"
+        ]
+
+
+def test_missing_active_without_explicit_non_scoreable_intent_stays_remediation() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    result = evaluate_assessment_readiness(
+        _zero_scorable_product("Contains 300 mg omega-3s including EPA and DHA."),
+        module="omega",
+    )
+
+    assert result["catalog_disposition"]["disposition"] == "requires_remediation"
+    assert result["catalog_disposition"]["reason_code"] == "no_score_eligible_active_rows"
+    assert result["identity"]["readiness"] == "incomplete"
+    assert result["identity"]["reason_code"] == "no_score_eligible_active_rows"
+    assert "identity_assessment_readiness" in result["unavailable_reasons"]
+
+
+def test_intentional_non_scoreable_product_gets_actionable_not_scored_reason() -> None:
+    from score_supplements_v4 import score_product_v4
+
+    result = score_product_v4(
+        _zero_scorable_product(
+            "For external use only. Not intended for consumption."
+        )
+    )
+
+    assert result["quality_score_status"] == "not_scored"
+    assert result["score_unavailable_reason"] == "intentional_non_scoreable_product"
+    completeness = result["v4_breakdown"]["completeness_gate"]
+    assert completeness["missing_fields"] == ["intentional_non_scoreable_product"]
 
 
 def test_mixed_or_null_evidence_is_evaluated_without_becoming_supported() -> None:
