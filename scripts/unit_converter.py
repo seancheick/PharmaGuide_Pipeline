@@ -483,6 +483,16 @@ class UnitConverter:
             return 'choline_bitartrate_to_choline', self.vitamin_conversions.get(
                 'choline_bitartrate_to_choline', {}
             )
+        if (
+            'magnesium' in nutrient_lower
+            and re.search(r'\bmagnesium\s+hydroxide\b', ingredient_lower)
+        ):
+            return (
+                'magnesium_hydroxide_to_magnesium',
+                self.vitamin_conversions.get(
+                    'magnesium_hydroxide_to_magnesium', {}
+                ),
+            )
 
         # CRITICAL: Form detection MUST run FIRST for form-dependent vitamins
         # Vitamin A: retinol and supplemental beta-carotene both 0.3 mcg RAE/IU; only preformed retinol carries a UL
@@ -512,6 +522,13 @@ class UnitConverter:
 
         # For non-form-dependent vitamins (D, K, B-vitamins, etc.), use direct match
         for rule_id, rule_data in self.vitamin_conversions.items():
+            if rule_id in {
+                'choline_bitartrate_to_choline',
+                'magnesium_hydroxide_to_magnesium',
+            }:
+                # Active-moiety conversions require the exact compound checks
+                # above. Their parent nutrient names must never select them.
+                continue
             # Check standard name
             std_name = rule_data.get('standard_name', '').lower()
             if nutrient_lower in std_name or std_name in nutrient_lower:

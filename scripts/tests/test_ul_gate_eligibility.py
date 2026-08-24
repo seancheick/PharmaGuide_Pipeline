@@ -416,6 +416,43 @@ def test_choline_bitartrate_uses_verified_active_moiety_mass(enricher):
     assert assessment["readiness"] == "complete"
 
 
+def test_magnesium_hydroxide_uses_verified_elemental_mass(enricher):
+    """An exact magnesium-hydroxide mass uses verified stoichiometry."""
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": "Magnesium Hydroxide",
+                "raw_source_text": "Magnesium Hydroxide",
+                "standardName": "Magnesium",
+                "canonical_id": "magnesium",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 2.6,
+                "unit": "g",
+                "dailyValue": None,
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    assessment = result["dose_assessments"][0]
+    adequacy = result["adequacy_results"][0]
+
+    assert assessment["normalized_value"] == pytest.approx(
+        2.6 * 1000 * (24.305 / 58.320)
+    )
+    assert assessment["normalized_unit"] == "mg"
+    assert assessment["conversion_rule_id"] == (
+        "magnesium_hydroxide_to_magnesium"
+    )
+    assert adequacy["ul_exposure_basis"] == (
+        "verified_compound_active_moiety_conversion"
+    )
+    assert assessment["ul_gate_eligible"] is True
+    assert assessment["ul_assessment_status"] == "assessed_over_limit"
+    assert assessment["readiness"] == "complete"
+    assert result["has_over_ul"] is True
+
+
 def test_unlisted_niacin_derivative_without_daily_value_stays_ineligible(enricher):
     # Inositol hexanicotinate is not one of the two forms to which the NIH
     # supplemental-niacin UL applies. Its compound mass must not be treated as

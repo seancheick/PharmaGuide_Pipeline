@@ -25,6 +25,33 @@ from constants import UNIT_CONVERSIONS_DB
 from unit_converter import UnitConverter
 
 
+@pytest.mark.parametrize(
+    ("nutrient", "ingredient", "amount"),
+    [
+        ("Magnesium", "Magnesium", 400),
+        ("Choline", "Choline", 550),
+    ],
+)
+def test_verified_compound_rules_do_not_capture_plain_nutrients(
+    nutrient: str,
+    ingredient: str,
+    amount: float,
+) -> None:
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient=nutrient,
+        amount=amount,
+        from_unit="mg",
+        ingredient_name=ingredient,
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(amount)
+    assert result.converted_unit == "mg"
+    assert result.conversion_rule_id == "identity_mass_passthrough"
+
+
 def test_standalone_beta_carotene_mass_converts_to_vitamin_a_rae() -> None:
     converter = UnitConverter()
 

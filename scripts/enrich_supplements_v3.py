@@ -20299,7 +20299,10 @@ class SupplementEnricherV3:
 
                     # Step 2: Compute adequacy with converted amount
                     rule_id = (conversion.conversion_rule_id or '').lower()
-                    if rule_id == "choline_bitartrate_to_choline":
+                    if rule_id in {
+                        "choline_bitartrate_to_choline",
+                        "magnesium_hydroxide_to_magnesium",
+                    }:
                         ul_exposure = {
                             "ul_gate_eligible": True,
                             "ul_exposure_basis": (
