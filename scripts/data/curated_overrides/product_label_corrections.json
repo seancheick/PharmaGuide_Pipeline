@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-08-24",
-    "total_entries": 36,
+    "total_entries": 40,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -65,6 +65,90 @@
       "evidence": "The structured DSLD panel carries Evening Primrose Oil only as an undosed form under Total Fat, but the same official NIH record states: 'Each softgel capsule delivers 1,300 mg of high-quality EPO' and gives a per-capsule profile of 910 mg linoleic acid, 100 mg GLA, and 290 mg other fatty acids, totaling 1300 mg. This exact form-row correction restores the oil dose without changing the separate 1 g Total Fat nutrition row.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/v9/label/57157"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_statement_dose_correction"
+    },
+    "75189": {
+      "brand": "GNC Women's Ultra Mega",
+      "product_name": "Evening Primrose Oil 1300",
+      "raw_ingredient_text": "Evening Primrose Oil",
+      "corrected_ingredient_text": "Evening Primrose Oil",
+      "raw_quantity_missing": true,
+      "corrected_quantity_value": 1300,
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.missing_to_value"
+      ],
+      "evidence": "The structured DSLD panel carries Evening Primrose Oil only as an undosed form under the rounded Total Fat nutrition row. The official NIH-hosted label image identifies this exact code 330220 KRG component as Evening Primrose Oil 1300 and prints a per-capsule profile of 910 mg linoleic acid, 100 mg GLA, and 290 mg other fatty acids, totaling 1300 mg. This exact form-row correction restores the declared oil dose without changing the separate rounded Total Fat row.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/75189",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/75189.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_statement_dose_correction"
+    },
+    "75256": {
+      "brand": "GNC Women's",
+      "product_name": "Evening Primrose Oil 500",
+      "raw_ingredient_text": "Evening Primrose Oil",
+      "corrected_ingredient_text": "Evening Primrose Oil",
+      "raw_quantity_missing": true,
+      "corrected_quantity_value": 1000,
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.missing_to_value"
+      ],
+      "evidence": "The structured DSLD panel carries Evening Primrose Oil only as an undosed form under Total Fat. The official NIH-hosted label image for exact code 264021 JRG identifies the product as Evening Primrose Oil 500 per capsule, declares a two-softgel serving, and prints Total Fat (as Evening Primrose Oil) at 1 g per serving. The restored source-form dose is therefore 1000 mg per two-softgel serving, not 500 mg; the rounded Total Fat nutrition row is left unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/75256",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/75256.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_statement_dose_correction"
+    },
+    "75261": {
+      "brand": "GNC Women's",
+      "product_name": "Evening Primrose Oil 1300",
+      "raw_ingredient_text": "Evening Primrose Oil",
+      "corrected_ingredient_text": "Evening Primrose Oil",
+      "raw_quantity_missing": true,
+      "corrected_quantity_value": 1300,
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.missing_to_value"
+      ],
+      "evidence": "The structured DSLD panel carries Evening Primrose Oil only as an undosed form under the rounded Total Fat nutrition row. The official NIH-hosted label image for exact code 265620 BRG identifies the product as Evening Primrose Oil 1300 and prints a per-one-capsule profile of 910 mg linoleic acid, 100 mg GLA, and 290 mg other fatty acids, totaling 1300 mg. This exact form-row correction restores the declared oil dose without changing the separate rounded Total Fat row.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/75261",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/75261.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_statement_dose_correction"
+    },
+    "79163": {
+      "brand": "GNC Women's",
+      "product_name": "Evening Primrose Oil 500",
+      "raw_ingredient_text": "Evening Primrose Oil",
+      "corrected_ingredient_text": "Evening Primrose Oil",
+      "raw_quantity_missing": true,
+      "corrected_quantity_value": 500,
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.missing_to_value"
+      ],
+      "evidence": "The structured DSLD panel carries Evening Primrose Oil only as an undosed form under Total Fat. The official NIH-hosted label image for exact code 303911 JRG identifies the component as Evening Primrose Oil 500, declares a one-softgel serving, and prints Total Fat (as Evening Primrose Oil) at 0.5 g per serving. This exact form-row correction restores the equivalent 500 mg oil dose without changing the separate Total Fat row.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/79163",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/79163.pdf"
       ],
       "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
       "review_date": "2026-08-24",

@@ -314,6 +314,10 @@ def test_cvs_25935_crossed_dha_identity_is_source_verified(overrides):
         ("2248", "Flax Seed Oil 1300", "Flax seed Oil", 1300),
         ("17794", "Flax Seed Oil 1000", "Flax seed Oil", 1000),
         ("57157", "Evening Primrose Oil 1300", "Evening Primrose Oil", 1300),
+        ("75189", "Evening Primrose Oil 1300", "Evening Primrose Oil", 1300),
+        ("75256", "Evening Primrose Oil 500", "Evening Primrose Oil", 1000),
+        ("75261", "Evening Primrose Oil 1300", "Evening Primrose Oil", 1300),
+        ("79163", "Evening Primrose Oil 500", "Evening Primrose Oil", 500),
     ],
 )
 def test_statement_backed_missing_form_doses_are_product_scoped(
