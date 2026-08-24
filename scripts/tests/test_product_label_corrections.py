@@ -273,6 +273,7 @@ def test_doctors_best_selenium_quantity_and_unit_are_source_verified(overrides):
         ("46802", "Acidophilus", "active Lactobacillus acidophilus", "{Unit(s)}", "CFU"),
         ("19916", "Adults' 50+ Multivitamin/Multimineral", "Boron", "mg", "mcg"),
         ("265197", "Men Over 40 One Daily", "Boron", "mg", "mcg"),
+        ("76510", "Triple Strength Glucosamine Chondroitin MSM with Vitamin D", "Vitamin D", "NP", "IU"),
     ],
 )
 def test_verified_source_unit_corrections_are_product_scoped(
