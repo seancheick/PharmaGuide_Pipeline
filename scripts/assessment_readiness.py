@@ -346,6 +346,24 @@ def _scores_as_verified(entry: Mapping[str, Any]) -> bool:
     )
 
 
+def _source_score_eligible_active_rows(
+    product: Mapping[str, Any],
+) -> list[Mapping[str, Any]]:
+    """Return cleaner-owned active rows even when dose filtering removes them."""
+    quality = _safe_dict(product.get("ingredient_quality_data"))
+    rows = quality.get("ingredients")
+    return [
+        row
+        for row in _safe_list(rows)
+        if isinstance(row, Mapping)
+        and _norm(row.get("source_section")) != "inactive"
+        and (
+            row.get("score_eligible_by_cleaner") is True
+            or _norm(row.get("cleaner_row_role")) == "active_scorable"
+        )
+    ]
+
+
 def evaluate_verification_assessment(product: Mapping[str, Any]) -> Dict[str, Any]:
     """Preserve verified-present, evaluated-absent, and not-evaluated."""
     cert = product.get("certification_data")
@@ -427,18 +445,57 @@ def _identity_readiness(product: Mapping[str, Any]) -> Dict[str, Any]:
         and row.get("mapped") is not False
         and bool(str(row.get("canonical_id") or "").strip())
     ]
-    source_identity_complete = (
-        scoring_input.mapped_count > 0
-        and scoring_input.unmapped_count == 0
-        and scoring_input.mapped_coverage == 1.0
-        and len(mapped_product_evidence) == len(product_evidence_rows)
+    source_rows = _source_score_eligible_active_rows(product)
+    mapped_source_rows = [
+        row
+        for row in source_rows
+        if row.get("mapped_identity") is not False
+        and bool(str(row.get("canonical_id") or "").strip())
+        and _norm(row.get("identity_disposition"))
+        not in {"unresolved", "rejected", "parse_error"}
+    ]
+    source_mapped_count = len(mapped_source_rows)
+    source_unmapped_count = len(source_rows) - source_mapped_count
+    source_mapped_coverage = (
+        source_mapped_count / len(source_rows)
+        if source_rows
+        else None
     )
+    if scoring_input.zero_scorable_reason:
+        if source_rows:
+            source_identity_complete = (
+                source_mapped_count > 0
+                and source_unmapped_count == 0
+                and source_mapped_coverage == 1.0
+                and len(mapped_product_evidence) == len(product_evidence_rows)
+            )
+            reason_code = (
+                "mapped_source_actives"
+                if source_identity_complete
+                else "unmapped_source_actives"
+            )
+        else:
+            source_identity_complete = False
+            reason_code = "no_score_eligible_active_rows"
+    else:
+        source_identity_complete = (
+            scoring_input.mapped_count > 0
+            and scoring_input.unmapped_count == 0
+            and scoring_input.mapped_coverage == 1.0
+            and len(mapped_product_evidence) == len(product_evidence_rows)
+        )
+        reason_code = (
+            "mapped_scoring_actives"
+            if source_identity_complete
+            else "scoring_identity_incomplete"
+        )
     complete = (
         source_identity_complete
         and not blocking_findings
     )
     return {
         "readiness": READINESS_COMPLETE if complete else READINESS_INCOMPLETE,
+        "reason_code": reason_code,
         "mapped_count": scoring_input.mapped_count,
         "unmapped_count": scoring_input.unmapped_count,
         "mapped_coverage": scoring_input.mapped_coverage,
@@ -446,6 +503,11 @@ def _identity_readiness(product: Mapping[str, Any]) -> Dict[str, Any]:
         "mapped_product_evidence_count": len(mapped_product_evidence),
         "contract_findings": list(scoring_input.contract_findings),
         "blocking_contract_findings": blocking_findings,
+        "source_score_eligible_active_count": len(source_rows),
+        "source_mapped_count": source_mapped_count,
+        "source_unmapped_count": source_unmapped_count,
+        "source_mapped_coverage": source_mapped_coverage,
+        "zero_scorable_reason": scoring_input.zero_scorable_reason,
     }
 
 
@@ -462,8 +524,44 @@ def _dose_readiness(
     ]
     material_count = len(material_rows)
     if material_count == 0:
+        source_rows = _source_score_eligible_active_rows(product)
+        missing_dose_refs = []
+        for index, row in enumerate(source_rows):
+            try:
+                amount = float(row.get("quantity") or row.get("dose") or 0)
+            except (TypeError, ValueError):
+                amount = 0.0
+            unit = _norm(row.get("unit"))
+            if (
+                row.get("has_dose") is False
+                or amount <= 0
+                or unit in {"", "np", "not_provided", "not_applicable"}
+            ):
+                missing_dose_refs.append(_row_ref(row, index))
+        if source_rows:
+            return {
+                "readiness": READINESS_INCOMPLETE,
+                "reason_code": (
+                    "no_scoreable_active_dose"
+                    if len(missing_dose_refs) == len(source_rows)
+                    else "no_strict_dose_candidates"
+                ),
+                "collection_status": _safe_dict(
+                    product.get("rda_ul_data")
+                ).get("collection_status"),
+                "assessment_count": len(_safe_list(
+                    _safe_dict(product.get("rda_ul_data")).get(
+                        "dose_assessments"
+                    )
+                )),
+                "material_active_count": 0,
+                "material_exposure_count": len(source_rows),
+                "material_assessment_count": 0,
+                "incomplete_source_row_refs": missing_dose_refs,
+            }
         return {
             "readiness": READINESS_NOT_APPLICABLE,
+            "reason_code": "no_score_eligible_active_rows",
             "collection_status": None,
             "assessment_count": 0,
             "material_active_count": 0,

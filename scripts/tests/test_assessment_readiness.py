@@ -160,6 +160,31 @@ def test_typed_dose_collection_must_cover_every_material_active() -> None:
     assert "dose_assessment_readiness" in result["unavailable_reasons"]
 
 
+def test_mapped_active_without_declared_dose_is_a_dose_not_identity_failure() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Vitamin B12", "vitamin_b12", quantity=0, unit="NP")
+    row.update({"dose": 0, "has_dose": False})
+    product = _product(row)
+    product["ingredient_quality_data"].update({
+        "ingredients_scorable": [],
+        "ingredients": [row],
+        "total_active": 1,
+    })
+    product["rda_ul_data"] = {
+        "collection_status": "complete",
+        "dose_assessments": [],
+    }
+
+    result = evaluate_assessment_readiness(product, module="generic")
+
+    assert result["identity"]["readiness"] == "complete"
+    assert result["identity"]["reason_code"] == "mapped_source_actives"
+    assert result["dose"]["readiness"] == "incomplete"
+    assert result["dose"]["reason_code"] == "no_scoreable_active_dose"
+    assert result["unavailable_reasons"] == ["dose_assessment_readiness"]
+
+
 def test_product_projection_reuses_typed_source_row_dose_assessment() -> None:
     """A scoring projection is not a second physical exposure."""
     from assessment_readiness import evaluate_assessment_readiness

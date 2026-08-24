@@ -245,6 +245,8 @@ def build_shadow_report(
                         "identity_blocking_findings": list(
                             identity.get("blocking_contract_findings") or []
                         ),
+                        "identity_reason_code": identity.get("reason_code"),
+                        "dose_reason_code": dose.get("reason_code"),
                         "not_yet_evaluated_material_actives": _material_backlog(
                             readiness
                         ),

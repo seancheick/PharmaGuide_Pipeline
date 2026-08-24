@@ -133,6 +133,8 @@ def test_shadow_measures_readiness_without_changing_catalog_eligibility(
             "module": "generic",
             "unavailable_reasons": [],
             "identity_blocking_findings": [],
+            "identity_reason_code": "mapped_scoring_actives",
+            "dose_reason_code": None,
             "not_yet_evaluated_material_actives": [
                 {
                     "source_row_ref": "ingredientRows[0]",
