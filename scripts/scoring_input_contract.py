@@ -200,10 +200,10 @@ _NON_EPA_DHA_SOURCE_RE = re.compile(
 _ENZYME_UNITS = {
     "alu", "ppi", "blgu", "hut", "sapu", "fip", "cu", "gdu", "dppiv", "dpp-iv",
     "lacu", "fccpu", "galu", "au", "skb", "mwu", "pu", "dp", "ckpu", "aju", "usp",
-    "du", "pc", "agu", "bgu", "lu", "phy", "ftu", "su",
+    "du", "pc", "agu", "bgu", "lu", "phy", "ftu", "su", "fu",
 }
 _ENZYME_ACTIVITY_RE = re.compile(
-    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCCPU|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU)(?:\b|$)",
+    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCCPU|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU)(?:\b|$)",
     re.IGNORECASE,
 )
 _TITLE_MASS_RE = re.compile(
@@ -4420,8 +4420,15 @@ _ROLE_TITLE_STOPWORDS = {
 # enriched row is canonicalized to vitamin_e / Vitamin E; the role classifier
 # still needs to know the product title is selling that row.
 _ROLE_TITLE_ALIASES_BY_CANONICAL = {
+    "vitamin_a": ("beta carotene", "beta-carotene", "retinol"),
     "vitamin_d": ("d2", "d3", "cholecalciferol", "ergocalciferol"),
-    "vitamin_e": ("tocotrienol", "tocotrienols", "tocopherol", "tocopherols"),
+    "vitamin_e": (
+        "e",
+        "tocotrienol",
+        "tocotrienols",
+        "tocopherol",
+        "tocopherols",
+    ),
 }
 
 # Fraction of the largest comparable-unit (mass) row a row must reach to count
@@ -4488,8 +4495,18 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         return False
     # Whole-token match, NOT substring: "iron" must not match inside
     # "environmental". (CR-01)
-    title_tokens = {tok for tok in re.split(r"[^a-z0-9]+", title_norm) if tok}
+    ordered_title_tokens = [
+        tok for tok in re.split(r"[^a-z0-9]+", title_norm) if tok
+    ]
+    title_tokens = set(ordered_title_tokens)
     canonical = _norm(row.get("canonical_id"))
+    if (
+        canonical == "vitamin_a"
+        and len(ordered_title_tokens) >= 2
+        and ordered_title_tokens[0] == "a"
+        and ordered_title_tokens[1].isdigit()
+    ):
+        return True
     candidates = [
         _norm(row.get("name")),
         _norm(row.get("standardName")),
@@ -4504,7 +4521,22 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         return True
     candidates.extend(curated_aliases)
     for cand in candidates:
-        for token in re.split(r"[^a-z0-9]+", cand):
+        candidate_tokens = [
+            token for token in re.split(r"[^a-z0-9]+", cand) if token
+        ]
+        if (
+            len(candidate_tokens) >= 2
+            and any(token not in _ROLE_TITLE_STOPWORDS for token in candidate_tokens)
+            and any(
+                ordered_title_tokens[index:index + len(candidate_tokens)]
+                == candidate_tokens
+                for index in range(
+                    len(ordered_title_tokens) - len(candidate_tokens) + 1
+                )
+            )
+        ):
+            return True
+        for token in candidate_tokens:
             if len(token) >= 4 and token not in _ROLE_TITLE_STOPWORDS and token in title_tokens:
                 return True
     return False

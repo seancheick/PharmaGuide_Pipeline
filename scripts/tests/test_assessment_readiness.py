@@ -231,6 +231,41 @@ def test_product_projection_reuses_typed_source_row_dose_assessment() -> None:
     assert result["dose"]["readiness"] == "complete"
 
 
+def test_enzyme_activity_requirement_uses_activity_value_not_carrier_mass() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Natto Extract", "nattokinase", quantity=110, unit="mg")
+    row.update({
+        "dose_class": "enzyme_activity",
+        "activity_quantity": 20_000,
+        "activity_unit": "FU",
+    })
+    product = _product(row, title="Nattokinase 20,000 FU")
+    product["rda_ul_data"]["dose_assessments"] = [
+        {
+            "source_row_ref": "ingredientRows[0]",
+            "source_path": "ingredientRows[0]",
+            "canonical_id": "nattokinase",
+            "dose_class": "enzyme_activity",
+            "source_value": 20_000,
+            "source_unit": "FU",
+            "material": True,
+            "conversion_status": "not_applicable",
+            "ul_assessment_status": "no_ul_applicable",
+            "readiness": "not_applicable",
+        }
+    ]
+
+    result = evaluate_assessment_readiness(product, module="generic")
+
+    ingredient = result["evidence"]["ingredient_assessments"][0]
+    assert ingredient["source_value"] == 20_000
+    assert ingredient["source_unit"] == "FU"
+    assert result["dose"]["material_exposure_count"] == 1
+    assert result["dose"]["material_assessment_count"] == 1
+    assert result["dose"]["readiness"] == "complete"
+
+
 def test_mapped_product_evidence_is_a_score_eligible_coverage_exposure() -> None:
     from assessment_readiness import evaluate_assessment_readiness
 

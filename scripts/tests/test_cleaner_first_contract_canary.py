@@ -429,3 +429,36 @@ def test_iqd_emits_galu_enzyme_activity_dose_from_raw_notes():
     assert enzyme["dose_class"] == "enzyme_activity"
     assert enzyme["activity_quantity"] == 300
     assert enzyme["activity_unit"] == "GALU"
+
+
+def test_iqd_activity_row_gets_a_typed_non_ul_dose_assessment():
+    enriched = {
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Serrapeptase Enzyme",
+                    "canonical_id": "digestive_enzymes",
+                    "raw_source_path": "ingredientRows[1]",
+                    "dose_class": "enzyme_activity",
+                    "activity_quantity": 40_000,
+                    "activity_unit": "SPU",
+                }
+            ]
+        },
+        "product_scoring_evidence": [],
+        "rda_ul_data": {
+            "collection_status": "complete",
+            "dose_assessments": [],
+        },
+    }
+
+    SupplementEnricherV3._append_product_evidence_dose_assessments(enriched)
+
+    assessments = enriched["rda_ul_data"]["dose_assessments"]
+    assert len(assessments) == 1
+    assert assessments[0]["source_path"] == "ingredientRows[1]"
+    assert assessments[0]["dose_class"] == "enzyme_activity"
+    assert assessments[0]["source_value"] == 40_000
+    assert assessments[0]["source_unit"] == "SPU"
+    assert assessments[0]["ul_assessment_status"] == "no_ul_applicable"
+    assert assessments[0]["readiness"] == "not_applicable"

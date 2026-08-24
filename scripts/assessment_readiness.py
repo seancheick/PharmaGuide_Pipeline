@@ -281,14 +281,25 @@ def evaluate_evidence_assessment(
             and state == EVIDENCE_NOT_YET_EVALUATED
         ):
             incomplete_refs.append(source_ref)
+        dose_class = _norm(row.get("dose_class"))
+        source_value = row.get("quantity", row.get("dose_value"))
+        source_unit = row.get("unit") or row.get("dose_unit")
+        if dose_class == "enzyme_activity":
+            activity_value = row.get(
+                "activity_quantity", row.get("activity_value")
+            )
+            activity_unit = row.get("activity_unit")
+            if activity_value not in (None, "") and activity_unit:
+                source_value = activity_value
+                source_unit = activity_unit
         assessments.append({
             "source_row_ref": source_ref,
             "canonical_id": canonical_id,
             "name": row.get("name") or row.get("standard_name"),
             "role": role_name,
             "material": material,
-            "source_value": row.get("quantity", row.get("dose_value")),
-            "source_unit": row.get("unit") or row.get("dose_unit"),
+            "source_value": source_value,
+            "source_unit": source_unit,
             "dose_class": row.get("dose_class"),
             "linked_rows": list(_safe_list(row.get("linked_rows"))),
             "scoring_input_kind": row.get("scoring_input_kind"),

@@ -173,6 +173,47 @@ def test_galu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
     assert rows[0]["dose_class"] == "enzyme_activity"
 
 
+def test_fu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
+    """Fibrinolytic units are a real enzyme-activity dose, not prose."""
+    product = {
+        "product_name": "Nattokinase 20,000 FU",
+        "activeIngredients": [
+            {
+                "name": "Natto Extract",
+                "standardName": "Nattokinase",
+                "canonical_id": "nattokinase",
+                "quantity": 110,
+                "unit": "mg",
+                "notes": "nattokinase activity 20,000 FU (fibrinolytic units)",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+            }
+        ],
+        "ingredient_quality_data": {
+            "ingredients": [
+                {
+                    "name": "Natto Extract",
+                    "canonical_id": "nattokinase",
+                    "raw_source_path": "ingredientRows[0]",
+                    "identity_disposition": "clean",
+                }
+            ],
+            "ingredients_scorable": [],
+        },
+    }
+
+    rows = [
+        row for row in derive_product_scoring_evidence(product)
+        if row.get("evidence_type") == "enzyme_activity"
+    ]
+
+    assert rows
+    assert rows[0]["dose_value"] == 20_000.0
+    assert rows[0]["dose_unit"] == "FU"
+    assert rows[0]["dose_class"] == "enzyme_activity"
+
+
 def test_single_active_title_embedded_mass_reaches_v4_as_low_confidence_dose_evidence() -> None:
     product = {
         "product_name": "Tocotrienols 50 mg",
@@ -259,11 +300,16 @@ def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> No
     assert completeness["verdict_ceiling"] is None
 
 
-def test_percent_dv_only_dose_counts_as_conservative_dose_evidence() -> None:
+def test_blend_anchor_cannot_hide_title_material_unresolved_vitamin_dose() -> None:
     product = _load_product("76510")
 
     out = score_product_v4(product)
-    _assert_module_aggregate_evidence(out, "msm")
+
+    assert out["v4_verdict"] == "NOT_SCORED"
+    readiness = out["v4_breakdown"]["assessment_readiness"]
+    assert readiness["dose"]["readiness"] == "incomplete"
+    assert "ingredientRows[2]" in readiness["dose"]["incomplete_source_row_refs"]
+    assert readiness["unavailable_reasons"] == ["dose_assessment_readiness"]
 
 
 def test_cod_liver_oil_in_forms_does_not_emit_omega_evidence() -> None:

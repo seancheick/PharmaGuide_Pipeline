@@ -15983,7 +15983,41 @@ class SupplementEnricherV3:
             for assessment in assessments
             if isinstance(assessment, dict)
         }
-        for evidence in enriched.get("product_scoring_evidence") or []:
+        typed_scoring_doses: List[Dict[str, Any]] = []
+        iqd = enriched.get("ingredient_quality_data")
+        if isinstance(iqd, dict):
+            for row in iqd.get("ingredients_scorable") or []:
+                if (
+                    not isinstance(row, dict)
+                    or str(row.get("dose_class") or "").strip().lower()
+                    != "enzyme_activity"
+                ):
+                    continue
+                source_path = str(row.get("raw_source_path") or "").strip()
+                activity_value = _number(
+                    row.get("activity_quantity", row.get("activity_value"))
+                )
+                activity_unit = str(row.get("activity_unit") or "").strip()
+                if not source_path or activity_value is None or not activity_unit:
+                    continue
+                typed_scoring_doses.append({
+                    "evidence_type": "enzyme_activity",
+                    "scoreable": True,
+                    "dose_class": "enzyme_activity",
+                    "dose_value": activity_value,
+                    "dose_unit": activity_unit,
+                    "raw_source_path": source_path,
+                    "linked_rows": [source_path],
+                    "name": row.get("name") or row.get("standard_name"),
+                    "canonical_id": row.get("canonical_id"),
+                })
+        typed_scoring_doses.extend(
+            evidence
+            for evidence in enriched.get("product_scoring_evidence") or []
+            if isinstance(evidence, dict)
+        )
+
+        for evidence in typed_scoring_doses:
             if not isinstance(evidence, dict) or evidence.get("scoreable") is not True:
                 continue
             source_path = str(evidence.get("raw_source_path") or "").strip()

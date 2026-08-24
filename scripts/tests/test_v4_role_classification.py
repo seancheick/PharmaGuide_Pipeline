@@ -90,6 +90,43 @@ def test_vitamin_d3_title_alias_prevents_botanical_carrier_from_owning_product()
     assert roles["vitamin_d"]["role_reason"] == "named_in_product_title"
 
 
+def test_full_vitamin_name_with_single_letter_is_claim_prominent():
+    product = _product("Vitamin E Softgel 400 IU", "single_vitamin", [
+        _row("vitamin_e", "Vitamin E", 400, "IU"),
+    ])
+
+    roles = _by_canonical(product, module="generic")
+
+    assert roles["vitamin_e"]["role"] == "claim_prominent"
+    assert roles["vitamin_e"]["role_reason"] == "named_in_product_title"
+
+
+def test_vitamin_title_surfaces_resolve_to_their_canonical_row():
+    fixtures = (
+        ("Beta Carotene 25,000 IU", "vitamin_a", "Vitamin A"),
+        ("A 8,000 IU", "vitamin_a", "Vitamin A"),
+        ("E-400 IU", "vitamin_e", "Vitamin E"),
+    )
+
+    for title, canonical_id, row_name in fixtures:
+        product = _product(title, "single_vitamin", [
+            _row(canonical_id, row_name, 400, "IU"),
+        ])
+        roles = _by_canonical(product, module="generic")
+        assert roles[canonical_id]["role"] == "claim_prominent", title
+
+
+def test_article_a_does_not_promote_a_vitamin_a_adjunct():
+    product = _product("A Better Sleep Formula", "sleep_support", [
+        _row("melatonin", "Melatonin", 3, "mg"),
+        _row("vitamin_a", "Vitamin A", 400, "IU"),
+    ])
+
+    roles = _by_canonical(product, module="generic")
+
+    assert roles["vitamin_a"]["role"] == "adjunct"
+
+
 def test_melatonin_small_mass_is_not_demoted_to_adjunct():
     # The "NOT raw mass first" rule: a 1 mg title-named active outranks a
     # 500 mg non-featured filler. Title (L2) precedes mass (L5).
