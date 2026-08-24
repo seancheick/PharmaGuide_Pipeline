@@ -125,6 +125,8 @@ REQUIRED_ENTRY_FIELDS = (
     "provenance_tag",
 )
 
+ALLOWED_SCORING_DISPOSITIONS = {"source_descriptor"}
+
 
 def test_every_correction_has_reviewer_provenance(overrides):
     corrections = overrides.get("corrections") or {}
@@ -148,6 +150,21 @@ def test_every_correction_has_reviewer_provenance(overrides):
         assert entry["review_date"].count("-") == 2, (
             f"correction[{dsld_id}] review_date must be ISO 8601 "
             f"YYYY-MM-DD. Got: {entry['review_date']!r}"
+        )
+
+
+def test_scoring_dispositions_use_the_reviewed_allowlist(overrides):
+    for dsld_id, entry in (overrides.get("corrections") or {}).items():
+        disposition = entry.get("scoring_disposition")
+        if disposition is None:
+            continue
+        assert disposition in ALLOWED_SCORING_DISPOSITIONS, (
+            f"correction[{dsld_id}] uses unsupported scoring_disposition "
+            f"{disposition!r}"
+        )
+        assert "scoring_disposition" in entry.get("correction_fields", []), (
+            f"correction[{dsld_id}] must declare scoring_disposition in "
+            "correction_fields"
         )
 
 
@@ -308,6 +325,24 @@ def test_cognimag_299037_crossed_hierarchy_names_are_corrected(overrides):
     }]
     assert (
         "https://api.ods.od.nih.gov/dsld/s3/pdf/299037.pdf"
+        in entry["sources"]
+    )
+
+
+def test_life_extension_328300_koact_label_text_is_restored(overrides):
+    entry = (overrides.get("corrections") or {}).get("328300")
+
+    assert entry, "correction for Life Extension 328300 KoAct is missing"
+    assert entry["raw_ingredient_text"] == "KoAct"
+    assert entry["corrected_ingredient_text"] == (
+        "KoAct Calcium Collagen Chelate"
+    )
+    assert entry["correction_fields"] == ["name", "scoring_disposition"]
+    assert entry["scoring_disposition"] == "source_descriptor"
+    assert entry["scope"] == "dsld_id_only"
+    assert entry["provenance_tag"] == "official_label_text_correction"
+    assert (
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/328300.pdf"
         in entry["sources"]
     )
 

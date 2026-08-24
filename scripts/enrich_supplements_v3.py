@@ -19028,6 +19028,65 @@ class SupplementEnricherV3:
                 "ul_exposure_basis": "canonical_parent_substance_amount",
                 "ul_gate_ineligible_reason": None,
             }
+
+        raw_taxonomy = ingredient.get("raw_taxonomy")
+        raw_group = self._normalize_text(
+            (
+                raw_taxonomy.get("ingredientGroup")
+                if isinstance(raw_taxonomy, dict)
+                else None
+            )
+            or ingredient.get("ingredientGroup")
+            or ""
+        )
+        parent_identity_keys = {
+            self._normalize_text(canonical_id or ""),
+            self._normalize_text(standard_name or ""),
+        }
+        parent_identity_keys.discard("")
+        declared_identity_uniis = self._identity_unii_values(
+            ingredient,
+            include_forms=True,
+        )
+        nutrient_reference = (
+            self.rda_calculator._find_nutrient(standard_name) or {}
+            if self.rda_calculator
+            else {}
+        )
+        numeric_ul_values = [
+            nutrient_reference.get("highest_ul"),
+            nutrient_reference.get("ul"),
+            *[
+                group.get("ul")
+                for group in nutrient_reference.get("data") or []
+                if isinstance(group, dict)
+            ],
+        ]
+        has_positive_ul = any(
+            isinstance(value, (int, float))
+            and not isinstance(value, bool)
+            and math.isfinite(float(value))
+            and float(value) > 0
+            for value in numeric_ul_values
+        )
+        if (
+            parent_unii
+            and parent_unii in declared_identity_uniis
+            and raw_group in parent_identity_keys
+            and has_positive_ul
+            and not ingredient.get("isNestedIngredient")
+            and not ingredient.get("parentBlend")
+        ):
+            # DSLD may use a branded source name for a Supplement Facts
+            # nutrient declaration while retaining the nutrient group and an
+            # exact parent-substance form. The amount then belongs to the
+            # declared nutrient (for example, Fruitex B OsteoBoron -> Boron),
+            # not to the branded compound mass.
+            return {
+                "ul_gate_eligible": True,
+                "ul_exposure_basis": "declared_parent_nutrient_form_amount",
+                "ul_gate_ineligible_reason": None,
+            }
         scoped_form_uniis = (
             self._ul_scoped_form_uniis(
                 parent,

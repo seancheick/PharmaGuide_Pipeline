@@ -652,6 +652,92 @@ def test_nested_source_compound_is_owned_by_declared_nutrient_total(enricher):
     assert niacin_flags[0]["amount"] == pytest.approx(400)
 
 
+def test_branded_parent_nutrient_row_uses_declared_parent_form_amount(enricher):
+    # The same official DSLD 328300 label declares "Boron (calcium
+    # fructoborate as patented Fruitex B OsteoBoron) 3 mg". The row name is
+    # branded, but DSLD's nutrient group and exact Boron form prove that the
+    # displayed 3 mg is the nutrient amount rather than compound mass.
+    product = _mag([
+        {
+            "name": "Fruitex B OsteoBoron",
+            "raw_source_text": "Fruitex B OsteoBoron",
+            "standardName": "Boron",
+            "canonical_id": "boron",
+            "canonical_source_db": "ingredient_quality_map",
+            "raw_taxonomy": {
+                "category": "mineral",
+                "ingredientGroup": "Boron",
+                "forms": [
+                    {
+                        "name": "Boron",
+                        "category": "mineral",
+                        "ingredientGroup": "Boron",
+                        "uniiCode": "N9E3X5056Q",
+                    }
+                ],
+            },
+            "quantity": 3,
+            "unit": "mg",
+            "dailyValue": None,
+            "isNestedIngredient": False,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    analyzed = result["analyzed_ingredients"][0]
+    assessment = result["dose_assessments"][0]
+
+    assert analyzed["ul_gate_eligible"] is True
+    assert analyzed["ul_exposure_basis"] == (
+        "declared_parent_nutrient_form_amount"
+    )
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["pct_ul"] == pytest.approx(15.0)
+    assert assessment["readiness"] == "complete"
+
+
+def test_branded_non_ul_substance_does_not_enter_nutrient_ul_lane(enricher):
+    product = _mag([
+        {
+            "name": "CarnoSyn",
+            "raw_source_text": "CarnoSyn",
+            "standardName": "Beta-Alanine",
+            "canonical_id": "beta-alanine",
+            "canonical_source_db": "ingredient_quality_map",
+            "raw_taxonomy": {
+                "category": "amino acid",
+                "ingredientGroup": "Beta-Alanine",
+                "forms": [
+                    {
+                        "name": "Beta-Alanine",
+                        "category": "amino acid",
+                        "ingredientGroup": "Beta-Alanine",
+                        "uniiCode": "11P2JDE17B",
+                    }
+                ],
+            },
+            "quantity": 3200,
+            "unit": "mg",
+            "dailyValue": None,
+            "isNestedIngredient": False,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    analyzed = result["analyzed_ingredients"][0]
+
+    assert analyzed["ul_gate_eligible"] is False
+    assert analyzed["ul_exposure_basis"] == "compound_or_form_mass"
+
+
 def test_misnested_adjacent_form_components_reconcile_to_nutrient_total(enricher):
     # Live DSLD 64333 attaches two Vitamin B6 form rows to the preceding
     # Niacin row, then emits their exact 105 mg Vitamin B6 total immediately

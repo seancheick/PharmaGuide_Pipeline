@@ -116,6 +116,7 @@ def _preprocess_text_module_cached(text: str) -> str:
 # is consistent across the cleaner and enricher.
 # ---------------------------------------------------------------------------
 _UNII_PLACEHOLDERS = frozenset({"", "0", "1"})
+_LABEL_CORRECTION_SCORING_DISPOSITIONS = frozenset({"source_descriptor"})
 
 
 def _normalize_unii(value):
@@ -5292,7 +5293,8 @@ class EnhancedDSLDNormalizer:
         """RC-5: correct a source row where (dsld_id, raw_text) matches.
 
         Walks the possibly nested ingredientRows tree and applies the reviewed
-        text, UNII, and/or quantity-value/unit correction. A product entry may carry
+        text, UNII, quantity-value/unit, and/or reviewed scoring-disposition
+        correction. A product entry may carry
         ``additional_row_corrections`` when one verified label defect crosses
         multiple source rows. Original values are retained under
         ``_pre_correction_*`` and every rewrite is tagged for downstream audit.
@@ -5404,6 +5406,17 @@ class EnhancedDSLDNormalizer:
                     entry.get("raw_quantity_value") is not None
                     and entry.get("corrected_quantity_value") is not None
                 )
+                scoring_disposition = entry.get("scoring_disposition")
+                if (
+                    scoring_disposition is not None
+                    and scoring_disposition
+                    not in _LABEL_CORRECTION_SCORING_DISPOSITIONS
+                ):
+                    raise ValueError(
+                        "Unsupported product-label scoring disposition "
+                        f"{scoring_disposition!r} for DSLD {product_id} row "
+                        f"{name!r}"
+                    )
                 correction_applied = False
                 if corrected and corrected != name:
                     row["_pre_correction_name"] = name
@@ -5439,6 +5452,9 @@ class EnhancedDSLDNormalizer:
                     has_quantity_unit_correction
                     and rewrite_quantity_units(row, entry)
                 ):
+                    correction_applied = True
+                if scoring_disposition:
+                    row["_label_scoring_disposition"] = scoring_disposition
                     correction_applied = True
                 if correction_applied:
                     row["_label_correction_applied"] = True
@@ -7506,7 +7522,15 @@ class EnhancedDSLDNormalizer:
                 or unit_norm_for_contract in {"", "np", "not provided", "unknown", "n/a", "na"}
             )
         )
-        if is_structural_active_blend_total:
+        curated_scoring_disposition = str(
+            ing.get("_label_scoring_disposition") or ""
+        ).strip().lower()
+        if curated_scoring_disposition == "source_descriptor":
+            cleaner_row_role = "source_descriptor"
+            score_eligible_by_cleaner = False
+            score_exclusion_reason = "source_descriptor"
+            dose_class = "source_material_mass"
+        elif is_structural_active_blend_total:
             cleaner_row_role = "blend_header_total"
             score_eligible_by_cleaner = False
             score_exclusion_reason = "blend_header_total"
@@ -7649,6 +7673,10 @@ class EnhancedDSLDNormalizer:
                     "_pre_correction_quantity_value"
                 )
                 source_correction["corrected_quantity_value"] = quantity
+            if ing.get("_label_scoring_disposition"):
+                source_correction["scoring_disposition"] = ing.get(
+                    "_label_scoring_disposition"
+                )
             result["source_correction"] = source_correction
 
         # Add additive metadata flag (for enrichment phase to use)

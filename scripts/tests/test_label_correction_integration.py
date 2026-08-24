@@ -587,6 +587,94 @@ def test_product_scoped_correction_restores_megafood_horsetail_label_text(
     )
 
 
+def test_product_scoped_koact_source_material_is_not_a_second_active(
+    normalizer,
+):
+    raw_product = _make_raw_product(328300, [])
+    raw_product["fullName"] = "Bone Strength Collagen Formula"
+    raw_product["brandName"] = "Life Extension"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Calcium", category="mineral"),
+            "ingredientGroup": "Calcium",
+            "uniiCode": "SY7Q814VUP",
+            "quantity": [{
+                "quantity": 300,
+                "unit": "mg",
+                "dailyValueTargetGroup": [{"percent": 23}],
+            }],
+            "nestedRows": [
+                {
+                    **_make_ingredient_row(
+                        "KoAct",
+                        category="non-nutrient/non-botanical",
+                    ),
+                    "ingredientGroup": "Calcium",
+                    "uniiCode": None,
+                    "quantity": [{"quantity": 3000, "unit": "mg"}],
+                    "nestedRows": [],
+                    "forms": [
+                        {
+                            **_make_ingredient_row(
+                                "Calcium Collagen Chelate",
+                                category="mineral",
+                            ),
+                            "ingredientGroup": "Calcium",
+                            "uniiCode": None,
+                        },
+                        {
+                            **_make_ingredient_row(
+                                "Calcium Fructoborate",
+                                category="mineral",
+                            ),
+                            "ingredientGroup": "Calcium",
+                            "uniiCode": "7EW2EZ38LS",
+                        },
+                    ],
+                }
+            ],
+            "forms": [],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+    source_material = next(
+        row
+        for row in normalized["activeIngredients"]
+        if row.get("raw_source_path") == "ingredientRows[0].nestedRows[0]"
+    )
+
+    assert source_material["name"] == "KoAct Calcium Collagen Chelate"
+    assert source_material["cleaner_row_role"] == "source_descriptor"
+    assert source_material["score_eligible_by_cleaner"] is False
+    assert source_material["score_exclusion_reason"] == "source_descriptor"
+    assert source_material["dose_class"] == "source_material_mass"
+    assert source_material["source_correction"] == {
+        "provenance_tag": "official_label_text_correction",
+        "original_ingredient_text": "KoAct",
+        "corrected_ingredient_text": "KoAct Calcium Collagen Chelate",
+        "scoring_disposition": "source_descriptor",
+    }
+
+
+def test_unknown_product_scoring_disposition_fails_closed(normalizer):
+    normalizer._label_corrections_by_dsld_id["999001"] = {
+        "raw_ingredient_text": "Reviewed Source Material",
+        "corrected_ingredient_text": "Reviewed Source Material",
+        "scoring_disposition": "invented_disposition",
+    }
+    raw_product = _make_raw_product(
+        999001,
+        ["Reviewed Source Material"],
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="Unsupported product-label scoring disposition",
+    ):
+        normalizer.normalize_product(raw_product)
+
+
 def test_product_scoped_correction_repairs_crossed_cognimag_hierarchy(normalizer):
     raw_product = _make_raw_product(299037, [])
     raw_product["fullName"] = "CogniMag"

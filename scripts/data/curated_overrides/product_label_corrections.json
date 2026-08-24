@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-08-24",
-    "total_entries": 30,
+    "total_entries": 31,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -216,6 +216,26 @@
       "review_date": "2026-08-24",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_unit_correction"
+    },
+    "328300": {
+      "brand": "Life Extension",
+      "product_name": "Bone Strength Collagen Formula",
+      "raw_ingredient_text": "KoAct",
+      "corrected_ingredient_text": "KoAct Calcium Collagen Chelate",
+      "correction_fields": [
+        "name",
+        "scoring_disposition"
+      ],
+      "scoring_disposition": "source_descriptor",
+      "evidence": "The DSLD JSON API truncates the nested 3000 mg source-material row to the branded token KoAct, which allows one listed calcium-fructoborate form to misroute the whole row as a 3000 mg boron active. The official NIH-hosted label prints Calcium 300 mg (23% DV) from 3000 mg KoAct Calcium Collagen Chelate and calcium fructoborate, then separately declares Boron 3 mg from patented Fruitex B OsteoBoron. Restoring the printed KoAct Calcium Collagen Chelate descriptor preserves the source-material context without converting it into a second calcium or boron exposure; the existing structured forms remain unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/328300",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/328300.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_text_correction"
     },
     "299037": {
       "brand": "Pure Encapsulations",
