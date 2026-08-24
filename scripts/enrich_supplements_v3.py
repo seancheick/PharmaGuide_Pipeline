@@ -1127,16 +1127,15 @@ class SupplementEnricherV3:
         if not scoring_rows:
             return []
 
-        scoring_by_path = {
-            str(
-                row.get("raw_source_path") or row.get("source_path") or ""
-            ).strip(): row
-            for row in scoring_rows
-            if str(
+        scoring_by_path: Dict[str, List[Dict]] = {}
+        for row in scoring_rows:
+            source_path = str(
                 row.get("raw_source_path") or row.get("source_path") or ""
             ).strip()
-        }
-        selected_paths = set(scoring_by_path)
+            if source_path:
+                scoring_by_path.setdefault(source_path, []).append(row)
+        direct_paths = set(scoring_by_path)
+        selected_paths = set(direct_paths)
 
         # A nested dose may be a component of a disclosed owner total. Keep
         # each ancestor as lineage context so the existing dose-role logic can
@@ -1149,22 +1148,53 @@ class SupplementEnricherV3:
                     break
                 selected_paths.add(owner_path)
 
+        def _row_identity_terms(row: Dict) -> set[str]:
+            return {
+                self._normalize_text(row.get(key) or "")
+                for key in (
+                    "raw_source_text",
+                    "name",
+                    "standardName",
+                    "standard_name",
+                    "display_label",
+                )
+                if self._normalize_text(row.get(key) or "")
+            }
+
         selected: List[Dict] = []
-        seen_paths: set[str] = set()
+        consumed_scoring_rows: set[int] = set()
         for row in flattened:
             source_path = str(
                 row.get("raw_source_path") or row.get("source_path") or ""
             ).strip()
-            if source_path not in selected_paths or source_path in seen_paths:
+            if source_path not in selected_paths:
                 continue
-            selected.append(row)
-            seen_paths.add(source_path)
 
-        for source_path, row in scoring_by_path.items():
-            if source_path in seen_paths:
+            # Ancestors are structural context and need no direct scoring-row
+            # match. Direct paths can legitimately repeat in older/synthetic
+            # inputs, so join those by label identity rather than treating the
+            # path as a unique key.
+            if source_path in direct_paths:
+                source_terms = _row_identity_terms(row)
+                matching_index = next(
+                    (
+                        index
+                        for index, scoring_row in enumerate(scoring_rows)
+                        if index not in consumed_scoring_rows
+                        and scoring_row in scoring_by_path[source_path]
+                        and bool(source_terms & _row_identity_terms(scoring_row))
+                    ),
+                    None,
+                )
+                if matching_index is None:
+                    continue
+                consumed_scoring_rows.add(matching_index)
+            selected.append(row)
+
+        for index, row in enumerate(scoring_rows):
+            if index in consumed_scoring_rows:
                 continue
             selected.append(self._active_ingredient_from_scoring_row(row))
-            seen_paths.add(source_path)
         return selected
 
     def _is_display_only_blend_scoring_row(self, row: Dict) -> bool:
