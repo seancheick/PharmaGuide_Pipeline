@@ -671,6 +671,10 @@ def mark_released_submissions_promoted(
             "mark_product_submission_promoted",
             {
                 "p_catalog_version": catalog_version,
+                # The locally verified released identity: the service stamps
+                # it as resolved_dsld_id on the submission and cascades it to
+                # duplicates, giving submitters a product to open.
+                "p_resolved_dsld_id": product_id,
                 "p_submission_id": submission_id,
             },
         )

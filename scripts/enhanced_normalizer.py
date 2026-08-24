@@ -6399,7 +6399,21 @@ class EnhancedDSLDNormalizer:
                     "transparencyMetrics": self._calculate_transparency_metrics(proprietary_blends, active_ingredients)
                 }
             }
-            
+
+            # Submission lineage travels only on validated external_manual
+            # records: the promotion gate later requires
+            # label_record_metadata.source_record_id to equal the submission
+            # UUID, and a catalog record carrying a stray/forged
+            # label_record_metadata must never acquire submission provenance.
+            lineage_metadata = raw_data.get("label_record_metadata")
+            if (
+                str(raw_data.get("source_type") or "").strip().lower()
+                == "external_manual"
+                and isinstance(raw_data.get("manual_product_provenance"), dict)
+                and isinstance(lineage_metadata, dict)
+            ):
+                cleaned["label_record_metadata"] = dict(lineage_metadata)
+
             return cleaned
             
         except Exception as e:

@@ -202,13 +202,17 @@ def normalize_upc(value: Any) -> str:
     """Normalize a UPC/EAN barcode to digits-only.
 
     Returns empty string for missing, garbage, or invalid-length barcodes.
-    Accepts 12-digit UPC-A and 13-digit EAN-13 only.
+    Accepts the four GTIN widths (EAN-8, UPC-A, EAN-13, GTIN-14) and
+    preserves the digits verbatim — no leading-zero canonicalization, which
+    would silently merge distinct valid GTIN representations. Lookup
+    equivalence (zero-padding) is the reader's job, mirrored between the
+    Flutter findAllByUpc candidate set and the pad-to-14 collision report.
     """
     if value is None:
         return ""
     import re
     digits = re.sub(r"[^0-9]", "", str(value))
-    if len(digits) not in (12, 13):
+    if len(digits) not in (8, 12, 13, 14):
         return ""
     return digits
 
@@ -2582,6 +2586,32 @@ def dedup_by_upc(
         if len(ambiguous_groups) < 20:
             ambiguous_groups.append({"upc": upc_norm, "dsld_ids": dsld_ids})
 
+    # GS1 equivalence collisions: distinct stored widths that zero-pad to
+    # the same GTIN-14 (e.g. a 12-digit UPC-A and its 13-digit EAN form on
+    # two different products). Stored digits stay verbatim; this report is
+    # how a padding-equivalent conflict becomes visible instead of two
+    # products silently answering one barcode scan.
+    pad_rows = c.execute("""
+        SELECT SUBSTR('00000000000000', 1, 14 - LENGTH(REPLACE(upc_sku, ' ', '')))
+                 || REPLACE(upc_sku, ' ', '') AS upc_pad14,
+               GROUP_CONCAT(dsld_id, '|') AS ids,
+               COUNT(*) AS cnt,
+               COUNT(DISTINCT REPLACE(upc_sku, ' ', '')) AS widths
+          FROM products_core
+         WHERE upc_sku IS NOT NULL
+           AND upc_sku != ''
+         GROUP BY upc_pad14
+        HAVING cnt > 1 AND widths > 1
+         ORDER BY upc_pad14
+    """).fetchall()
+    padding_groups = []
+    for upc_pad14, id_csv, _count, _widths in pad_rows:
+        if len(padding_groups) < 20:
+            padding_groups.append({
+                "upc_pad14": upc_pad14,
+                "dsld_ids": sorted(id_csv.split("|")),
+            })
+
     return {
         "upc_groups_deduped": 0,
         "duplicates_removed": 0,
@@ -2590,6 +2620,8 @@ def dedup_by_upc(
         "ambiguous_upc_groups": len(rows),
         "ambiguous_product_count": ambiguous_product_count,
         "ambiguous_groups_sample": ambiguous_groups,
+        "padding_equivalent_upc_groups": len(pad_rows),
+        "padding_equivalent_groups_sample": padding_groups,
     }
 
 

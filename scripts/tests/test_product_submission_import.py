@@ -515,6 +515,7 @@ def test_marks_promoted_only_after_product_exists_in_released_catalog(
             "mark_product_submission_promoted",
             {
                 "p_catalog_version": "2026.07.30.220000",
+                "p_resolved_dsld_id": product_id,
                 "p_submission_id": row["submission_id"],
             },
         )

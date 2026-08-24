@@ -21593,6 +21593,16 @@ class SupplementEnricherV3:
                 enriched["manual_product_provenance"] = dict(product.get("manual_product_provenance") or {})
                 if product.get("src"):
                     enriched["manual_product_provenance"].setdefault("source_path", product.get("src"))
+                # Same spoof gate as the cleaner: submission lineage survives
+                # enrichment only for validated external_manual records. The
+                # label_record contract resolves source_record_id from this
+                # metadata, and the release's promotion gate requires it.
+                if manual_source_type == "external_manual" and isinstance(
+                    product.get("label_record_metadata"), dict
+                ):
+                    enriched["label_record_metadata"] = dict(
+                        product["label_record_metadata"]
+                    )
 
             # Strip PII: contacts contain phone, address, email
             # Manufacturer name is already extracted to manufacturer_data
