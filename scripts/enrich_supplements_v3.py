@@ -180,6 +180,10 @@ _RDA_REFERENCE_PROFILE = {
 # These values only SCREEN an unknown-form row for review. They never establish
 # that the product is over UL.
 _FOLIC_ACID_ADULT_UL_MCG = 1000.0
+_FOLIC_ACID_UNII = "935E97BOY8"
+_VITAMIN_A_PREFORMED_ADULT_UL_MCG_RAE = 3000.0
+_VITAMIN_E_ADULT_UL_MG = 1000.0
+_VITAMIN_E_NATURAL_MG_PER_IU = 0.67
 
 # Units that quantify activity, viable-organism count, source volume, or a
 # source concentration rather than a mass exposure comparable with a nutrient
@@ -18656,18 +18660,9 @@ class SupplementEnricherV3:
         owns their chemical identifiers. Both must agree before a form amount
         can participate in the verdict gate.
         """
-        if not self.rda_calculator:
+        allowed_keys = self._ul_scoped_form_name_keys(standard_name)
+        if not allowed_keys:
             return set()
-        nutrient_reference = (
-            self.rda_calculator._find_nutrient(standard_name) or {}
-        )
-        allowed_forms = nutrient_reference.get("ul_applies_to_forms")
-        if not isinstance(allowed_forms, list) or not allowed_forms:
-            return set()
-
-        allowed_keys = set()
-        for allowed_form in allowed_forms:
-            allowed_keys.update(self._ul_scope_form_name_keys(allowed_form))
 
         scoped_uniis = set()
         forms = parent.get("forms")
@@ -18685,6 +18680,21 @@ class SupplementEnricherV3:
                 self._identity_unii_values(form, include_forms=False)
             )
         return scoped_uniis
+
+    def _ul_scoped_form_name_keys(self, standard_name: str) -> set[str]:
+        """Return exact normalized names explicitly covered by a nutrient UL."""
+        if not self.rda_calculator:
+            return set()
+        nutrient_reference = (
+            self.rda_calculator._find_nutrient(standard_name) or {}
+        )
+        allowed_forms = nutrient_reference.get("ul_applies_to_forms")
+        if not isinstance(allowed_forms, list):
+            return set()
+        keys = set()
+        for allowed_form in allowed_forms:
+            keys.update(self._ul_scope_form_name_keys(allowed_form))
+        return keys
 
     def _ul_exposure_basis(
         self,
@@ -18748,6 +18758,19 @@ class SupplementEnricherV3:
             return {
                 "ul_gate_eligible": True,
                 "ul_exposure_basis": "ul_scoped_form_substance_amount",
+                "ul_gate_ineligible_reason": None,
+            }
+
+        declared_form_keys = set()
+        for value in (
+            ingredient.get("name"),
+            ingredient.get("raw_source_text"),
+        ):
+            declared_form_keys.update(self._ul_scope_form_name_keys(value))
+        if declared_form_keys & self._ul_scoped_form_name_keys(standard_name):
+            return {
+                "ul_gate_eligible": True,
+                "ul_exposure_basis": "ul_scoped_form_named_substance_amount",
                 "ul_gate_ineligible_reason": None,
             }
 
@@ -18857,6 +18880,14 @@ class SupplementEnricherV3:
             )
             label_name = self._normalize_text(ingredient.get("name") or "")
             unit = self._normalize_text(ingredient.get("unit") or "")
+            mass_unit = _rda_mass_unit_key(
+                re.sub(
+                    r"\bdfe\b",
+                    "",
+                    str(ingredient.get("unit") or ""),
+                    flags=re.IGNORECASE,
+                ).strip()
+            )
             try:
                 quantity = float(ingredient.get("quantity") or 0)
             except (TypeError, ValueError):
@@ -18870,7 +18901,11 @@ class SupplementEnricherV3:
                 totals.append(
                     {
                         "source_label_key": self._rda_source_label_key(ingredient),
-                        "quantity": quantity,
+                        "quantity": (
+                            quantity * 1000.0
+                            if mass_unit == "mg"
+                            else quantity
+                        ),
                     }
                 )
         return totals
@@ -19162,6 +19197,7 @@ class SupplementEnricherV3:
         declared_same_identity_totals: List[Dict[str, Any]],
         declared_vitamin_a_components: Dict[str, Dict[str, Any]],
         nested_daily_value_owners: Dict[str, str],
+        composition_share_owners: Dict[str, str],
     ) -> Dict[str, Any]:
         """Classify an emitted RDA/UL row as a total or label sub-component."""
         source_label_key = self._rda_source_label_key(ingredient)
@@ -19182,6 +19218,21 @@ class SupplementEnricherV3:
         if source_label_key in nested_daily_value_owners:
             lineage["dose_role"] = "form_component"
             lineage["parent_label_key"] = nested_daily_value_owners[source_label_key]
+            return lineage
+
+        # A probiotic blend may declare one aggregate CFU total and then
+        # disclose each strain as a percentage of that total. The percentage
+        # is composition detail, not a second exposure and not an unrecognized
+        # clinical-dose unit. Ownership is established only by the exact
+        # parent label plus a positive CFU-equivalent parent declaration.
+        if source_label_key in composition_share_owners:
+            lineage["dose_role"] = "form_component"
+            lineage["parent_label_key"] = composition_share_owners[
+                source_label_key
+            ]
+            lineage["not_distinct_reason"] = (
+                "composition_share_of_declared_total"
+            )
             return lineage
 
         canonical = self._normalize_text(
@@ -19249,6 +19300,11 @@ class SupplementEnricherV3:
                     ingredient.get("name"),
                     ingredient.get("matched_form"),
                     ingredient.get("raw_source_text"),
+                    " ".join(
+                        str(form.get("name") or "")
+                        for form in (ingredient.get("forms") or [])
+                        if isinstance(form, dict)
+                    ),
                 )
             )
         )
@@ -19274,6 +19330,55 @@ class SupplementEnricherV3:
                 lineage["parent_label_key"] = declared["source_label_key"]
                 return lineage
         return lineage
+
+    def _probiotic_composition_share_owners(
+        self,
+        active_ingredients: List[Dict[str, Any]],
+    ) -> Dict[str, str]:
+        """Link percent strain rows to their exact declared CFU blend total."""
+        parents: Dict[str, Dict[str, Any]] = {}
+        for row in active_ingredients:
+            if (
+                not isinstance(row, dict)
+                or row.get("isNestedIngredient")
+                or row.get("parentBlend")
+                or not self._is_cfu_equivalent_unit(str(row.get("unit") or ""))
+            ):
+                continue
+            try:
+                quantity = float(row.get("quantity") or 0)
+            except (TypeError, ValueError):
+                continue
+            if quantity <= 0:
+                continue
+            label = self._normalize_text(
+                row.get("raw_source_text") or row.get("name") or ""
+            )
+            if label:
+                parents[label] = row
+
+        owners: Dict[str, str] = {}
+        for row in active_ingredients:
+            if (
+                not isinstance(row, dict)
+                or row.get("isNestedIngredient") is not True
+                or not row.get("parentBlend")
+            ):
+                continue
+            unit = self._normalize_text(row.get("unit") or "")
+            if unit not in {"%", "percent"}:
+                continue
+            try:
+                share = float(row.get("quantity") or 0)
+            except (TypeError, ValueError):
+                continue
+            parent = parents.get(self._normalize_text(row.get("parentBlend") or ""))
+            if parent is None or not (0 < share <= 100):
+                continue
+            owners[self._rda_source_label_key(row)] = self._rda_source_label_key(
+                parent
+            )
+        return owners
 
     # =========================================================================
     # RDA/UL DATA COLLECTOR (for user profile scoring on device)
@@ -19305,7 +19410,11 @@ class SupplementEnricherV3:
         ]
         consumed_quality_identity_rows: set[int] = set()
 
-        def _take_quality_identity(source_row: Dict) -> Dict:
+        def _take_quality_identity(
+            source_row: Dict,
+            *,
+            consume: bool = True,
+        ) -> Dict:
             """Return this label row's already-resolved IQM identity once.
 
             Ingredient-quality matching runs before RDA/UL collection in the
@@ -19330,7 +19439,8 @@ class SupplementEnricherV3:
                     or ""
                 )
                 if source_label and quality_label == source_label:
-                    consumed_quality_identity_rows.add(index)
+                    if consume:
+                        consumed_quality_identity_rows.add(index)
                     return quality_row
             return {}
 
@@ -19368,6 +19478,31 @@ class SupplementEnricherV3:
         nested_daily_value_owners = self._nested_daily_value_nutrient_owners(
             active_ingredients
         )
+        composition_share_owners = self._probiotic_composition_share_owners(
+            active_ingredients
+        )
+        non_folic_folate_parent_names = set()
+        for active in active_ingredients:
+            parent_name = self._normalize_text(active.get("parentBlend") or "")
+            if not parent_name:
+                continue
+            active_folate_text = " ".join(
+                [
+                    str(active.get("name") or ""),
+                    str(active.get("raw_source_text") or ""),
+                    *[
+                        str(form.get("name") or "")
+                        for form in (active.get("forms") or [])
+                        if isinstance(form, dict)
+                    ],
+                ]
+            )
+            if norm_module.classify_folate_form(active_folate_text) in {
+                norm_module.FOLATE_FORM_METHYLFOLATE,
+                norm_module.FOLATE_FORM_FOLINIC,
+                norm_module.FOLATE_FORM_FOOD,
+            }:
+                non_folic_folate_parent_names.add(parent_name)
         nested_daily_value_owner_keys = set(nested_daily_value_owners.values())
         rda_data = []
         adequacy_results = []
@@ -19403,6 +19538,37 @@ class SupplementEnricherV3:
         # suppressing the per-row flags that would otherwise double-count.
         _staged_row_flags: List[Tuple[Optional[str], Dict[str, Any]]] = []
         _per_canonical_totals: Dict[str, Dict[str, Any]] = {}
+        positive_canonical_row_counts: Dict[str, int] = {}
+        positive_vitamin_e_family_rows = 0
+        for active in active_ingredients:
+            try:
+                active_quantity = float(active.get("quantity") or 0)
+            except (TypeError, ValueError):
+                continue
+            if active_quantity <= 0:
+                continue
+            active_identity = _take_quality_identity(active, consume=False)
+            active_canonical = str(
+                active_identity.get("canonical_id")
+                or active.get("canonical_id")
+                or ""
+            ).strip()
+            if active_canonical:
+                positive_canonical_row_counts[active_canonical] = (
+                    positive_canonical_row_counts.get(active_canonical, 0) + 1
+                )
+            vitamin_e_identity_text = self._normalize_text(" ".join(
+                str(active.get(field) or "")
+                for field in ("name", "standardName", "raw_source_text")
+            ))
+            if (
+                active_canonical
+                in {"vitamin_e", "OI_TOCOPHEROL_PRESERVATIVE"}
+                or "vitamin e" in vitamin_e_identity_text
+                or "tocopherol" in vitamin_e_identity_text
+                or "tocotrienol" in vitamin_e_identity_text
+            ):
+                positive_vitamin_e_family_rows += 1
 
         # Use new modules if available
         if self.unit_converter and self.rda_calculator:
@@ -19455,18 +19621,49 @@ class SupplementEnricherV3:
                     # hit. Skipped when matched_form is empty or the
                     # placeholder default 'standard'.
                     matched_form = (ingredient.get('matched_form') or '').strip()
+                    row_disclosed_forms = " ".join(
+                        str(form.get("name") or "")
+                        for form in (ingredient.get("forms") or [])
+                        if isinstance(form, dict)
+                    )
+                    row_folate_form = norm_module.classify_folate_form(" ".join(
+                        value
+                        for value in (
+                            str(ing_name or ""),
+                            str(ingredient.get("raw_source_text") or ""),
+                            row_disclosed_forms,
+                        )
+                        if value
+                    ))
+                    source_identity_uniis = self._identity_unii_values(
+                        ingredient,
+                        include_forms=False,
+                    )
+                    exact_folic_acid_identity = (
+                        _FOLIC_ACID_UNII in source_identity_uniis
+                        and row_folate_form
+                        not in {
+                            norm_module.FOLATE_FORM_METHYLFOLATE,
+                            norm_module.FOLATE_FORM_FOLINIC,
+                            norm_module.FOLATE_FORM_FOOD,
+                        }
+                        and self._normalize_text(ing_name)
+                        not in non_folic_folate_parent_names
+                    )
                     form_hint_name = (
                         f"{ing_name} {matched_form}"
                         if matched_form and matched_form.lower() != 'standard'
                         else ing_name
                     )
+                    if exact_folic_acid_identity:
+                        # FDA GSRS identifies 935E97BOY8 as folic acid. DSLD
+                        # commonly displays those exact rows as bare "Folate";
+                        # pass the verified substance identity to the converter
+                        # instead of treating the display label as ambiguous.
+                        form_hint_name = f"{form_hint_name} Folic Acid"
 
                     # Step 1: Convert units with form detection
-                    disclosed_forms = " ".join(
-                        str(form.get("name") or "")
-                        for form in (ingredient.get("forms") or [])
-                        if isinstance(form, dict)
-                    )
+                    disclosed_forms = row_disclosed_forms
                     disclosed_vitamin_a_rules = {
                         self.unit_converter._detect_vitamin_a_form(
                             str(form.get("name") or "").lower()
@@ -19525,6 +19722,14 @@ class SupplementEnricherV3:
 
                     # Step 2: Compute adequacy with converted amount
                     rule_id = (conversion.conversion_rule_id or '').lower()
+                    if rule_id == "choline_bitartrate_to_choline":
+                        ul_exposure = {
+                            "ul_gate_eligible": True,
+                            "ul_exposure_basis": (
+                                "verified_compound_active_moiety_conversion"
+                            ),
+                            "ul_gate_ineligible_reason": None,
+                        }
                     form_detected = (conversion.form_detected or '').lower()
                     _canonical_for_ul = self._normalize_text(
                         resolved_canonical_id or std_name
@@ -19535,6 +19740,7 @@ class SupplementEnricherV3:
                             ing_name,
                             matched_form,
                             ingredient.get("raw_source_text"),
+                            disclosed_forms,
                         )
                     ))
                     _is_folate = _canonical_for_ul in {
@@ -19543,12 +19749,16 @@ class SupplementEnricherV3:
                     _folate_form = norm_module.classify_folate_form(_folate_label_text)
                     _explicit_folic_acid = (
                         _folate_form == norm_module.FOLATE_FORM_FOLIC_ACID
+                        or exact_folic_acid_identity
                     )
                     _explicit_non_folic_folate = _folate_form in {
                         norm_module.FOLATE_FORM_METHYLFOLATE,
                         norm_module.FOLATE_FORM_FOLINIC,
                         norm_module.FOLATE_FORM_FOOD,
-                    }
+                    } or (
+                        self._normalize_text(ing_name)
+                        in non_folic_folate_parent_names
+                    )
                     unknown_form = (
                         'unknown' in rule_id or
                         'unknown' in form_detected or
@@ -19601,6 +19811,7 @@ class SupplementEnricherV3:
                         declared_same_identity_totals=declared_same_identity_totals,
                         declared_vitamin_a_components=declared_vitamin_a_components,
                         nested_daily_value_owners=nested_daily_value_owners,
+                        composition_share_owners=composition_share_owners,
                     )
                     if (
                         conversion_failed
@@ -19615,7 +19826,8 @@ class SupplementEnricherV3:
                             conv_evidence["original_error"] = conv_evidence.pop("error")
                         conv_evidence["confidence"] = "not_applicable"
                         conv_evidence["nonfatal_reason"] = (
-                            "form_component_of_declared_total"
+                            dose_lineage.get("not_distinct_reason")
+                            or "form_component_of_declared_total"
                         )
                     conv_evidence.update(dose_lineage)
                     skip_ul_check = False
@@ -19626,7 +19838,10 @@ class SupplementEnricherV3:
                         # conversion. Retain the row for label context but do
                         # not create a second UL or stack dose.
                         skip_ul_check = True
-                        skip_ul_reason = "form_component_of_declared_total"
+                        skip_ul_reason = (
+                            dose_lineage.get("not_distinct_reason")
+                            or "form_component_of_declared_total"
+                        )
                     elif (
                         ingredient.get('is_compound_duplicate')
                         and dose_lineage["dose_role"] != "ul_scoped_component"
@@ -19658,6 +19873,28 @@ class SupplementEnricherV3:
                         skip_ul_check = True
                         ul_only_skip = True
                         skip_ul_reason = "beta_carotene_no_established_ul"
+                    elif rule_id == "vitamin_a_other_provitamin_a_carotenoid":
+                        # These identified carotenoids contribute RAE after
+                        # their explicit 24:1 conversion, but the preformed-A
+                        # UL does not apply to them.
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = (
+                            "provitamin_a_carotenoid_no_established_ul"
+                        )
+                    elif (
+                        "carotenoid" in self._normalize_text(ing_name)
+                        and _canonical_for_ul
+                        in {"vitamin a", "vitamin_a", "beta carotene", "beta_carotene"}
+                    ):
+                        # A carotenoid complex is not preformed vitamin A. Its
+                        # mass cannot be compared with the retinol UL, and no
+                        # unverified RAE conversion is inferred.
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = (
+                            "provitamin_a_carotenoid_no_established_ul"
+                        )
                     elif dose_lineage.get("ul_owned_by_components"):
                         # The declared Vitamin A total owns adequacy while its
                         # reconciled child rows fully own form-specific UL
@@ -19677,7 +19914,16 @@ class SupplementEnricherV3:
                         skip_ul_reason = (
                             "mixed_vitamin_a_preformed_fraction_unknown"
                         )
-                    elif unknown_form:
+                    elif unknown_form and (
+                        _canonical_for_ul
+                        in {
+                            "vitamin a",
+                            "vitamin_a",
+                            "vitamin e",
+                            "vitamin_e",
+                        }
+                        or nutrient_group_id in {"vitamin_a", "vitamin_e"}
+                    ):
                         skip_ul_check = True
                         skip_ul_reason = "unknown_vitamin_form"
                         # Total vitamin activity can remain adequate for an RDA/
@@ -19696,7 +19942,8 @@ class SupplementEnricherV3:
                         if raw_unit_key == "np":
                             skip_ul_reason = "amount_not_declared"
                         elif (
-                            raw_unit_key in _NON_UL_PROBIOTIC_QUANTITY_UNITS
+                            self._is_cfu_equivalent_unit(str(unit or ""))
+                            or raw_unit_key in _NON_UL_PROBIOTIC_QUANTITY_UNITS
                             or (
                                 raw_canonical_key
                                 in _NON_UL_BOTANICAL_CANONICALS
@@ -19865,7 +20112,201 @@ class SupplementEnricherV3:
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "data_by_group": list(_nutrient_record.get("data") or []),
                     })
+                    worst_case_compound_mass_within_ul = bool(
+                        not skip_ul_check
+                        and resolved_canonical_id
+                        and positive_canonical_row_counts.get(
+                            resolved_canonical_id
+                        )
+                        == 1
+                        and ul_exposure.get("ul_gate_eligible") is False
+                        and ul_exposure.get("ul_gate_ineligible_reason")
+                        == "compound_mass_not_elemental"
+                        and safety_ul is not None
+                        and safety_ul > 0
+                        and safety_pct_ul is not None
+                        and 0 <= safety_pct_ul <= 100.0
+                        and per_day_max is not None
+                        and per_day_max >= 0
+                    )
+                    if worst_case_compound_mass_within_ul:
+                        # The mass of an identified compound is a strict upper
+                        # bound on the mass of the nutrient moiety it contains.
+                        # This can prove the product is not over the UL only
+                        # when it is the sole positive row for that canonical.
+                        # It never establishes elemental dose or adequacy.
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = (
+                            "worst_case_compound_mass_within_ul"
+                        )
                     if skip_ul_check and ul_only_skip:
+                        potential_pct_ul = (
+                            folate_ul_screening.get("potential_pct_ul")
+                            if folate_ul_screening
+                            else None
+                        )
+                        potential_ul_concern = bool(
+                            potential_pct_ul is not None and potential_pct_ul >= 100.0
+                        )
+                        worst_case_folic_acid_within_ul = bool(
+                            skip_ul_reason == "unknown_folate_form_lineage"
+                            and folate_ul_screening
+                            and folate_ul_screening.get("screening_basis")
+                            in {
+                                "bare_mass_worst_case",
+                                "label_declared_dfe",
+                                "dfe_inferred_from_daily_value",
+                            }
+                            and potential_pct_ul is not None
+                            and potential_pct_ul < 100.0
+                        )
+                        if worst_case_folic_acid_within_ul:
+                            # FDA's label conversion caps synthetic-folate DFE
+                            # factors at 1.7. If the all-folic-acid upper bound
+                            # is still below the 1,000 mcg adult UL, every
+                            # possible mixture is within that UL even though
+                            # the exact folate form breakdown is absent.
+                            skip_ul_reason = "worst_case_folic_acid_within_ul"
+                        vitamin_a_upper_bound_per_serving = None
+                        normalized_converted_unit = self._normalize_text(
+                            converted_unit
+                        )
+                        if normalized_converted_unit in {"mcg", "mcg rae"}:
+                            vitamin_a_upper_bound_per_serving = per_day_max
+                            if servings_max:
+                                vitamin_a_upper_bound_per_serving = (
+                                    float(per_day_max) / servings_max
+                                )
+                        else:
+                            raw_vitamin_a_unit = _rda_mass_unit_key(unit)
+                            if raw_vitamin_a_unit == "mcg":
+                                vitamin_a_upper_bound_per_serving = quantity_float
+                            elif raw_vitamin_a_unit == "mg":
+                                vitamin_a_upper_bound_per_serving = (
+                                    quantity_float * 1000.0
+                                )
+                            elif self._normalize_text(unit) == "iu":
+                                vitamin_a_upper_bound_per_serving = (
+                                    quantity_float * 0.3
+                                )
+                        vitamin_a_identity_or_mixed_parent = bool(
+                            _canonical_for_ul in {"vitamin a", "vitamin_a"}
+                            or (
+                                has_mixed_vitamin_a_forms
+                                and self._normalize_text(ing_name) == "vitamin a"
+                            )
+                        )
+                        worst_case_preformed_vitamin_a_within_ul = bool(
+                            skip_ul_reason
+                            in {
+                                "mixed_vitamin_a_preformed_fraction_unknown",
+                                "unknown_vitamin_form",
+                            }
+                            and vitamin_a_identity_or_mixed_parent
+                            and vitamin_a_upper_bound_per_serving is not None
+                            and vitamin_a_upper_bound_per_serving
+                            * servings_max
+                            < _VITAMIN_A_PREFORMED_ADULT_UL_MCG_RAE
+                        )
+                        if worst_case_preformed_vitamin_a_within_ul:
+                            # The adult UL applies only to preformed Vitamin A.
+                            # Treating the entire label-declared RAE total as
+                            # preformed is the maximum possible exposure; when
+                            # even that bound is below 3,000 mcg RAE, the
+                            # undisclosed fraction cannot change the verdict.
+                            skip_ul_reason = (
+                                "worst_case_preformed_vitamin_a_within_ul"
+                            )
+                            converted_amount = (
+                                vitamin_a_upper_bound_per_serving
+                            )
+                            converted_unit = "mcg RAE"
+                            per_day_min = converted_amount * servings_min
+                            per_day_max = converted_amount * servings_max
+                            adequacy_dict["adequacy_exposure"] = {
+                                "per_day": per_day_min,
+                                "unit": converted_unit,
+                            }
+                            adequacy_dict["safety_exposure"] = {
+                                "per_day": per_day_max,
+                                "unit": converted_unit,
+                            }
+                        worst_case_natural_vitamin_e_within_ul = bool(
+                            skip_ul_reason == "unknown_vitamin_form"
+                            and _canonical_for_ul
+                            in {"vitamin e", "vitamin_e"}
+                            and self._normalize_text(unit) == "iu"
+                            and quantity_float
+                            * servings_max
+                            * _VITAMIN_E_NATURAL_MG_PER_IU
+                            <= _VITAMIN_E_ADULT_UL_MG
+                        )
+                        if worst_case_natural_vitamin_e_within_ul:
+                            # NIH's larger legacy-IU factor is the natural-form
+                            # factor (0.67 mg/IU versus 0.45 synthetic). Using
+                            # the larger value proves a safety upper bound while
+                            # preserving form ambiguity for adequacy.
+                            skip_ul_reason = (
+                                "worst_case_natural_vitamin_e_within_ul"
+                            )
+                            converted_amount = (
+                                quantity_float
+                                * _VITAMIN_E_NATURAL_MG_PER_IU
+                            )
+                            converted_unit = "mg"
+                            per_day_min = converted_amount * servings_min
+                            per_day_max = converted_amount * servings_max
+                            adequacy_dict["adequacy_exposure"] = {
+                                "per_day": per_day_min,
+                                "unit": converted_unit,
+                            }
+                            adequacy_dict["safety_exposure"] = {
+                                "per_day": per_day_max,
+                                "unit": converted_unit,
+                            }
+                        vitamin_e_mass_upper_bound_mg = None
+                        vitamin_e_source_mass_unit = _rda_mass_unit_key(unit)
+                        if vitamin_e_source_mass_unit == "g":
+                            vitamin_e_mass_upper_bound_mg = quantity_float * 1000.0
+                        elif vitamin_e_source_mass_unit == "mg":
+                            vitamin_e_mass_upper_bound_mg = quantity_float
+                        elif vitamin_e_source_mass_unit == "mcg":
+                            vitamin_e_mass_upper_bound_mg = quantity_float / 1000.0
+                        worst_case_vitamin_e_mass_within_ul = bool(
+                            skip_ul_reason == "unknown_vitamin_form"
+                            and positive_vitamin_e_family_rows == 1
+                            and vitamin_e_mass_upper_bound_mg is not None
+                            and vitamin_e_mass_upper_bound_mg
+                            * servings_max
+                            <= _VITAMIN_E_ADULT_UL_MG
+                            and (
+                                _canonical_for_ul
+                                in {
+                                    "vitamin e",
+                                    "vitamin_e",
+                                    "oi tocopherol preservative",
+                                }
+                                or "tocopherol" in self._normalize_text(ing_name)
+                                or "tocotrienol" in self._normalize_text(ing_name)
+                            )
+                        )
+                        if worst_case_vitamin_e_mass_within_ul:
+                            skip_ul_reason = (
+                                "worst_case_vitamin_e_mass_within_ul"
+                            )
+                            converted_amount = vitamin_e_mass_upper_bound_mg
+                            converted_unit = "mg"
+                            per_day_min = converted_amount * servings_min
+                            per_day_max = converted_amount * servings_max
+                            adequacy_dict["adequacy_exposure"] = {
+                                "per_day": per_day_min,
+                                "unit": converted_unit,
+                            }
+                            adequacy_dict["safety_exposure"] = {
+                                "per_day": per_day_max,
+                                "unit": converted_unit,
+                            }
                         is_indeterminate_folate = (
                             skip_ul_reason == "unknown_folate_form_lineage"
                         )
@@ -19875,50 +20316,169 @@ class SupplementEnricherV3:
                             or skip_ul_reason
                             == "mixed_vitamin_a_preformed_fraction_unknown"
                         )
-                        potential_pct_ul = (
-                            folate_ul_screening.get("potential_pct_ul")
-                            if folate_ul_screening
-                            else None
-                        )
-                        potential_ul_concern = bool(
-                            potential_pct_ul is not None and potential_pct_ul >= 100.0
-                        )
-                        adequacy_dict.update({
-                            "ul": None,
-                            "ul_status": (
-                                f"indeterminate_{skip_ul_reason}"
-                                if is_indeterminate_ul
-                                else f"not_applicable_{skip_ul_reason}"
-                            ),
-                            "pct_ul": None,
-                            "over_ul": False,
-                            "over_ul_amount": None,
-                            "warnings": (
-                                [
-                                    "Folate UL assessment is indeterminate because "
-                                    "the synthetic folic-acid contribution is not identified."
-                                ]
-                                if is_indeterminate_folate
-                                else []
-                            ),
-                            "skip_ul_check": True,
-                            "skip_ul_reason": skip_ul_reason,
-                            "ul_assessment_status": (
-                                "indeterminate"
-                                if is_indeterminate_ul
-                                else "not_applicable"
-                            ),
-                            "potential_ul_concern": potential_ul_concern,
-                        })
                         if (
-                            is_indeterminate_folate
-                            and folate_ul_screening
-                            and folate_ul_screening.get("screening_basis")
-                            == "bare_mass_worst_case"
+                            worst_case_compound_mass_within_ul
+                            or
+                            worst_case_folic_acid_within_ul
+                            or worst_case_natural_vitamin_e_within_ul
+                            or worst_case_preformed_vitamin_a_within_ul
+                            or worst_case_vitamin_e_mass_within_ul
                         ):
+                            if worst_case_compound_mass_within_ul:
+                                bounded_ul = safety_ul
+                                bounded_pct_ul = safety_pct_ul
+                                bounded_status = (
+                                    "assessed_within_limit_worst_case_compound_"
+                                    "mass"
+                                )
+                                bounded_basis = (
+                                    "maximum_possible_active_moiety_exposure"
+                                )
+                                bounded_details = {
+                                    "screening_amount": per_day_max,
+                                    "screening_unit": converted_unit,
+                                    "screening_ul": safety_ul,
+                                    "screening_basis": bounded_basis,
+                                }
+                            elif worst_case_folic_acid_within_ul:
+                                bounded_ul = _FOLIC_ACID_ADULT_UL_MCG
+                                bounded_pct_ul = potential_pct_ul
+                                bounded_status = (
+                                    "assessed_within_limit_worst_case_folic_acid"
+                                )
+                                bounded_basis = (
+                                    "maximum_possible_folic_acid_exposure"
+                                )
+                                bounded_details = dict(folate_ul_screening or {})
+                            elif worst_case_natural_vitamin_e_within_ul:
+                                bounded_ul = _VITAMIN_E_ADULT_UL_MG
+                                bounded_pct_ul = (
+                                    float(per_day_max) / bounded_ul * 100.0
+                                )
+                                bounded_status = (
+                                    "assessed_within_limit_worst_case_natural_"
+                                    "vitamin_e"
+                                )
+                                bounded_basis = (
+                                    "maximum_possible_natural_vitamin_e_"
+                                    "exposure"
+                                )
+                                bounded_details = {
+                                    "screening_amount": per_day_max,
+                                    "screening_unit": "mg",
+                                    "screening_ul": bounded_ul,
+                                    "screening_basis": bounded_basis,
+                                }
+                            elif worst_case_vitamin_e_mass_within_ul:
+                                bounded_ul = _VITAMIN_E_ADULT_UL_MG
+                                bounded_pct_ul = (
+                                    float(per_day_max) / bounded_ul * 100.0
+                                )
+                                bounded_status = (
+                                    "assessed_within_limit_worst_case_vitamin_"
+                                    "e_mass"
+                                )
+                                bounded_basis = (
+                                    "maximum_possible_alpha_tocopherol_"
+                                    "exposure"
+                                )
+                                bounded_details = {
+                                    "screening_amount": per_day_max,
+                                    "screening_unit": "mg",
+                                    "screening_ul": bounded_ul,
+                                    "screening_basis": bounded_basis,
+                                }
+                            else:
+                                bounded_ul = (
+                                    _VITAMIN_A_PREFORMED_ADULT_UL_MCG_RAE
+                                )
+                                bounded_pct_ul = (
+                                    float(per_day_max) / bounded_ul * 100.0
+                                )
+                                bounded_status = (
+                                    "assessed_within_limit_worst_case_preformed_"
+                                    "vitamin_a"
+                                )
+                                bounded_basis = (
+                                    "maximum_possible_preformed_vitamin_a_exposure"
+                                )
+                                bounded_details = {
+                                    "screening_amount": per_day_max,
+                                    "screening_unit": "mcg RAE",
+                                    "screening_ul": bounded_ul,
+                                    "screening_basis": bounded_basis,
+                                }
+                            adequacy_dict.update({
+                                "ul": bounded_ul,
+                                "ul_status": bounded_status,
+                                "pct_ul": bounded_pct_ul,
+                                "over_ul": False,
+                                "over_ul_amount": None,
+                                "warnings": [],
+                                "skip_ul_check": True,
+                                "skip_ul_reason": skip_ul_reason,
+                                "ul_assessment_status": "assessed_within_limit",
+                                "potential_ul_concern": False,
+                                "ul_assessment_basis": bounded_basis,
+                                **bounded_details,
+                            })
+                        else:
+                            adequacy_dict.update({
+                                "ul": None,
+                                "ul_status": (
+                                    f"indeterminate_{skip_ul_reason}"
+                                    if is_indeterminate_ul
+                                    else f"not_applicable_{skip_ul_reason}"
+                                ),
+                                "pct_ul": None,
+                                "over_ul": False,
+                                "over_ul_amount": None,
+                                "warnings": (
+                                    [
+                                        "Folate UL assessment is indeterminate because "
+                                        "the synthetic folic-acid contribution is not identified."
+                                    ]
+                                    if is_indeterminate_folate
+                                    else []
+                                ),
+                                "skip_ul_check": True,
+                                "skip_ul_reason": skip_ul_reason,
+                                "ul_assessment_status": (
+                                    "indeterminate"
+                                    if is_indeterminate_ul
+                                    else "not_applicable"
+                                ),
+                                "potential_ul_concern": potential_ul_concern,
+                            })
+                        if (
+                            worst_case_compound_mass_within_ul
+                            or worst_case_natural_vitamin_e_within_ul
+                            or worst_case_vitamin_e_mass_within_ul
+                            or (
+                                worst_case_preformed_vitamin_a_within_ul
+                                and normalized_converted_unit
+                                not in {"mcg", "mcg rae"}
+                            )
+                        ):
+                            adequacy_dict.update({
+                                "rda_ai": None,
+                                "rda_ai_source": "unknown",
+                                "pct_rda": None,
+                                "adequacy_band": "unknown",
+                                "scoring_eligible": False,
+                                "point_recommendation": 0,
+                                "notes": [
+                                    *list(adequacy_dict.get("notes") or []),
+                                    "Adequacy not assessed: compound mass is "
+                                    "only a conservative upper bound on the "
+                                    "active nutrient moiety.",
+                                ],
+                            })
+                        elif worst_case_folic_acid_within_ul and conversion_failed:
                             # A legacy bare-mass Folate declaration does not say
-                            # whether the mass is total folate or folic acid.
-                            # Do not let the converter's fallback guess adequacy.
+                            # whether the mass is total folate or folic acid. A
+                            # raw-mass or label-DV bound can establish safety,
+                            # but a failed conversion cannot establish adequacy.
                             adequacy_dict.update({
                                 "rda_ai": None,
                                 "rda_ai_source": "unknown",
@@ -19957,6 +20517,7 @@ class SupplementEnricherV3:
                         ul_assessment_status = (
                             "not_applicable"
                             if skip_ul_reason in {
+                                "composition_share_of_declared_total",
                                 "form_component_of_declared_total",
                                 "compound_duplicate_row",
                                 "not_ul_applicable",
@@ -20139,7 +20700,18 @@ class SupplementEnricherV3:
                         # so consumers can distinguish "profile-specific UL"
                         # from "conservative absolute UL".
                         "ul_for_default_profile": (
-                            None if skip_ul_check else safety_ul
+                            adequacy_dict.get("ul")
+                            if skip_ul_reason
+                            in {
+                                "worst_case_compound_mass_within_ul",
+                                "worst_case_folic_acid_within_ul",
+                                "worst_case_natural_vitamin_e_within_ul",
+                                "worst_case_preformed_vitamin_a_within_ul",
+                                "worst_case_vitamin_e_mass_within_ul",
+                            }
+                            else None
+                            if skip_ul_check
+                            else safety_ul
                         ),
                         "optimal_range": (
                             f"{adequacy_optimal_min}-{adequacy_optimal_max}"
@@ -20152,6 +20724,7 @@ class SupplementEnricherV3:
                         "data_by_group": list(_nutrient_record.get("data") or []),
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "conversion_evidence": conv_evidence,  # Per-item evidence for coverage gate
+                        "raw_source_path": ingredient.get("raw_source_path"),
                         "is_servings_estimated": servings_estimated,
                     })
                     if dose_data_quality:
@@ -20202,6 +20775,101 @@ class SupplementEnricherV3:
                             "error": str(agg_err)[:500],
                         })
                         continue
+
+                    aggregate_compound_upper_bound_is_within_ul = bool(
+                        agg_adequacy.ul is not None
+                        and agg_adequacy.ul > 0
+                        and agg_adequacy.pct_ul is not None
+                        and 0 <= agg_adequacy.pct_ul <= 100.0
+                        and any(
+                            row.get("ul_gate_ineligible_reason")
+                            == "compound_mass_not_elemental"
+                            for row in group["rows"]
+                        )
+                        and all(
+                            row.get("ul_gate_eligible") is True
+                            or row.get("ul_gate_ineligible_reason")
+                            == "compound_mass_not_elemental"
+                            for row in group["rows"]
+                        )
+                    )
+                    if aggregate_compound_upper_bound_is_within_ul:
+                        # Exact nutrient rows contribute their declared dose;
+                        # compound rows contribute their entire mass as a
+                        # deliberately high upper bound. If even that sum is
+                        # within the UL, every possible active-moiety exposure
+                        # is within it. Keep compound adequacy unscored.
+                        aggregate_basis = (
+                            "maximum_possible_aggregate_active_moiety_exposure"
+                        )
+                        for assessment in dose_assessments:
+                            if (
+                                assessment.get("canonical_id") == cid
+                                and assessment.get("reason_code")
+                                == "compound_mass_not_elemental"
+                            ):
+                                assessment.update({
+                                    "reason_code": (
+                                        "worst_case_compound_mass_within_ul"
+                                    ),
+                                    "ul_assessment_status": (
+                                        "assessed_within_limit"
+                                    ),
+                                    "readiness": "complete",
+                                })
+                        for adequacy_row in adequacy_results:
+                            if (
+                                adequacy_row.get("canonical_id") == cid
+                                and adequacy_row.get(
+                                    "ul_gate_ineligible_reason"
+                                )
+                                == "compound_mass_not_elemental"
+                            ):
+                                adequacy_row.update({
+                                    "rda_ai": None,
+                                    "rda_ai_source": "unknown",
+                                    "pct_rda": None,
+                                    "adequacy_band": "unknown",
+                                    "scoring_eligible": False,
+                                    "point_recommendation": 0,
+                                    "skip_ul_check": True,
+                                    "skip_ul_reason": (
+                                        "worst_case_compound_mass_within_ul"
+                                    ),
+                                    "ul": agg_adequacy.ul,
+                                    "ul_status": (
+                                        "assessed_within_limit_worst_case_"
+                                        "compound_mass"
+                                    ),
+                                    "ul_assessment_status": (
+                                        "assessed_within_limit"
+                                    ),
+                                    "ul_assessment_basis": aggregate_basis,
+                                    "over_ul": False,
+                                    "over_ul_amount": None,
+                                    "warnings": [],
+                                })
+                        for rda_row in rda_data:
+                            if (
+                                rda_row.get("canonical_id") == cid
+                                and rda_row.get(
+                                    "ul_gate_ineligible_reason"
+                                )
+                                == "compound_mass_not_elemental"
+                            ):
+                                rda_row.update({
+                                    "skip_ul_check": True,
+                                    "skip_ul_reason": (
+                                        "worst_case_compound_mass_within_ul"
+                                    ),
+                                    "ul_assessment_status": (
+                                        "assessed_within_limit"
+                                    ),
+                                    "ul_for_default_profile": agg_adequacy.ul,
+                                    "pct_rda": None,
+                                    "adequacy_band": "unknown",
+                                    "warnings": [],
+                                })
 
                     if agg_adequacy.over_ul:
                         pct_ul_val = agg_adequacy.pct_ul or 0.0
@@ -20264,6 +20932,344 @@ class SupplementEnricherV3:
                     if row_cid and row_cid in _aggregated_canonicals:
                         continue
                     safety_flags.append(row_flag)
+
+                vitamin_e_family_rows = []
+                vitamin_e_family_invalid = False
+                for rda_row in rda_data:
+                    identity_text = self._normalize_text(" ".join(
+                        str(rda_row.get(field) or "")
+                        for field in (
+                            "ingredient",
+                            "standard_name",
+                            "canonical_id",
+                        )
+                    ))
+                    if not (
+                        "vitamin e" in identity_text
+                        or "tocopherol" in identity_text
+                        or "tocotrienol" in identity_text
+                    ):
+                        continue
+                    amount = self._to_float_safe(rda_row.get("per_day_max"))
+                    mass_unit = _rda_mass_unit_key(
+                        rda_row.get("converted_unit")
+                    )
+                    if amount is None or amount < 0 or mass_unit is None:
+                        vitamin_e_family_invalid = True
+                        continue
+                    amount_mg = (
+                        amount * 1000.0
+                        if mass_unit == "g"
+                        else amount / 1000.0
+                        if mass_unit == "mcg"
+                        else amount
+                    )
+                    vitamin_e_family_rows.append((
+                        rda_row,
+                        amount_mg,
+                        str(rda_row.get("raw_source_path") or "").strip(),
+                    ))
+                unknown_vitamin_e_refs = {
+                    row.get("source_row_ref")
+                    for row in dose_assessments
+                    if row.get("reason_code") == "unknown_vitamin_form"
+                    and (
+                        "vitamin e" in self._normalize_text(
+                            row.get("ingredient") or ""
+                        )
+                        or "tocopherol" in self._normalize_text(
+                            row.get("ingredient") or ""
+                        )
+                        or "tocotrienol" in self._normalize_text(
+                            row.get("ingredient") or ""
+                        )
+                        or row.get("canonical_id") == "vitamin_e"
+                    )
+                }
+                # Nested label rows are compositional detail, not additive to
+                # every ancestor. For each source-label tree, the conservative
+                # exposure bound is the larger of a node's own amount or the
+                # sum of its immediate child subtrees. Rows without stable
+                # paths remain independent and are summed normally.
+                family_amount_by_path: Dict[str, float] = {}
+                unlinked_family_amount_mg = 0.0
+                for _, amount_mg, source_path in vitamin_e_family_rows:
+                    if not source_path:
+                        unlinked_family_amount_mg += amount_mg
+                    elif source_path in family_amount_by_path:
+                        vitamin_e_family_invalid = True
+                    else:
+                        family_amount_by_path[source_path] = amount_mg
+                family_children: Dict[str, List[str]] = {}
+                for source_path in family_amount_by_path:
+                    parent_path = (
+                        source_path.rsplit(".nestedRows[", 1)[0]
+                        if ".nestedRows[" in source_path
+                        else ""
+                    )
+                    if parent_path in family_amount_by_path:
+                        family_children.setdefault(parent_path, []).append(
+                            source_path
+                        )
+
+                def _vitamin_e_tree_bound(source_path: str) -> float:
+                    child_total = sum(
+                        _vitamin_e_tree_bound(child_path)
+                        for child_path in family_children.get(source_path, [])
+                    )
+                    return max(
+                        family_amount_by_path[source_path],
+                        child_total,
+                    )
+
+                family_roots = [
+                    source_path
+                    for source_path in family_amount_by_path
+                    if not (
+                        ".nestedRows[" in source_path
+                        and source_path.rsplit(".nestedRows[", 1)[0]
+                        in family_amount_by_path
+                    )
+                ]
+                vitamin_e_family_upper_bound_mg = (
+                    unlinked_family_amount_mg
+                    + sum(_vitamin_e_tree_bound(root) for root in family_roots)
+                )
+                if (
+                    unknown_vitamin_e_refs
+                    and not vitamin_e_family_invalid
+                    and vitamin_e_family_rows
+                    and vitamin_e_family_upper_bound_mg
+                    <= _VITAMIN_E_ADULT_UL_MG
+                ):
+                    aggregate_vitamin_e_basis = (
+                        "maximum_possible_aggregate_alpha_tocopherol_exposure"
+                    )
+                    for assessment in dose_assessments:
+                        if assessment.get("source_row_ref") not in unknown_vitamin_e_refs:
+                            continue
+                        assessment.update({
+                            "reason_code": "worst_case_vitamin_e_mass_within_ul",
+                            "ul_assessment_status": "assessed_within_limit",
+                            "ul_value": _VITAMIN_E_ADULT_UL_MG,
+                            "ul_unit": "mg",
+                            "readiness": "complete",
+                        })
+                    for adequacy_row in adequacy_results:
+                        if adequacy_row.get("source_label_key") not in unknown_vitamin_e_refs:
+                            continue
+                        adequacy_row.update({
+                            "rda_ai": None,
+                            "rda_ai_source": "unknown",
+                            "pct_rda": None,
+                            "adequacy_band": "unknown",
+                            "scoring_eligible": False,
+                            "point_recommendation": 0,
+                            "skip_ul_check": True,
+                            "skip_ul_reason": (
+                                "worst_case_vitamin_e_mass_within_ul"
+                            ),
+                            "ul": _VITAMIN_E_ADULT_UL_MG,
+                            "ul_status": (
+                                "assessed_within_limit_worst_case_vitamin_e_mass"
+                            ),
+                            "ul_assessment_status": "assessed_within_limit",
+                            "ul_assessment_basis": aggregate_vitamin_e_basis,
+                            "over_ul": False,
+                            "over_ul_amount": None,
+                            "warnings": [],
+                        })
+                    for rda_row, _, _ in vitamin_e_family_rows:
+                        if rda_row.get("source_label_key") not in unknown_vitamin_e_refs:
+                            continue
+                        rda_row.update({
+                            "skip_ul_check": True,
+                            "skip_ul_reason": (
+                                "worst_case_vitamin_e_mass_within_ul"
+                            ),
+                            "ul_assessment_status": "assessed_within_limit",
+                            "ul_for_default_profile": _VITAMIN_E_ADULT_UL_MG,
+                            "pct_rda": None,
+                            "adequacy_band": "unknown",
+                            "warnings": [],
+                        })
+
+                component_groups: Dict[
+                    Tuple[str, str], List[Dict[str, Any]]
+                ] = {}
+                for assessment in dose_assessments:
+                    owner_ref = assessment.get("owner_row_ref")
+                    canonical_id = assessment.get("canonical_id")
+                    if owner_ref and canonical_id and assessment.get("material"):
+                        component_groups.setdefault(
+                            (owner_ref, canonical_id), []
+                        ).append(assessment)
+                for (owner_ref, canonical_id), components in component_groups.items():
+                    compound_components = [
+                        row
+                        for row in components
+                        if row.get("reason_code")
+                        == "compound_mass_not_elemental"
+                    ]
+                    if not compound_components:
+                        continue
+                    has_external_exposure = any(
+                        row.get("material") is True
+                        and row.get("canonical_id") == canonical_id
+                        and row.get("source_row_ref") != owner_ref
+                        and row.get("owner_row_ref") != owner_ref
+                        and row.get("readiness") != "not_applicable"
+                        for row in dose_assessments
+                    )
+                    component_units = {
+                        row.get("normalized_unit")
+                        for row in components
+                        if row.get("normalized_unit")
+                    }
+                    component_amounts = [
+                        self._to_float_safe(row.get("normalized_value"))
+                        for row in components
+                    ]
+                    component_uls = [
+                        self._to_float_safe(row.get("ul_value"))
+                        for row in compound_components
+                    ]
+                    if (
+                        has_external_exposure
+                        or len(component_units) != 1
+                        or any(value is None or value < 0 for value in component_amounts)
+                        or any(value is None or value <= 0 for value in component_uls)
+                    ):
+                        continue
+                    component_upper_bound = sum(component_amounts)
+                    component_ul = min(component_uls)
+                    if component_upper_bound > component_ul:
+                        continue
+                    component_basis = (
+                        "maximum_possible_parent_component_active_moiety_"
+                        "exposure"
+                    )
+                    compound_refs = {
+                        row.get("source_row_ref")
+                        for row in compound_components
+                    }
+                    for child in compound_components:
+                        child.update({
+                            "reason_code": (
+                                "worst_case_compound_mass_within_ul"
+                            ),
+                            "ul_assessment_status": "assessed_within_limit",
+                            "readiness": "complete",
+                        })
+                    for adequacy_row in adequacy_results:
+                        if adequacy_row.get("source_label_key") not in compound_refs:
+                            continue
+                        adequacy_row.update({
+                            "rda_ai": None,
+                            "rda_ai_source": "unknown",
+                            "pct_rda": None,
+                            "adequacy_band": "unknown",
+                            "scoring_eligible": False,
+                            "point_recommendation": 0,
+                            "skip_ul_check": True,
+                            "skip_ul_reason": (
+                                "worst_case_compound_mass_within_ul"
+                            ),
+                            "ul": component_ul,
+                            "ul_status": (
+                                "assessed_within_limit_worst_case_compound_mass"
+                            ),
+                            "ul_assessment_status": "assessed_within_limit",
+                            "ul_assessment_basis": component_basis,
+                            "over_ul": False,
+                            "over_ul_amount": None,
+                            "warnings": [],
+                        })
+                    for rda_row in rda_data:
+                        if rda_row.get("source_label_key") not in compound_refs:
+                            continue
+                        rda_row.update({
+                            "skip_ul_check": True,
+                            "skip_ul_reason": (
+                                "worst_case_compound_mass_within_ul"
+                            ),
+                            "ul_assessment_status": "assessed_within_limit",
+                            "ul_for_default_profile": component_ul,
+                            "pct_rda": None,
+                            "adequacy_band": "unknown",
+                            "warnings": [],
+                        })
+
+                assessments_by_ref = {
+                    row.get("source_row_ref"): row
+                    for row in dose_assessments
+                    if row.get("source_row_ref")
+                }
+                for child in dose_assessments:
+                    owner_ref = child.get("owner_row_ref")
+                    owner = assessments_by_ref.get(owner_ref)
+                    if not (
+                        owner
+                        and child.get("reason_code")
+                        == "compound_mass_not_elemental"
+                        and child.get("canonical_id")
+                        == owner.get("canonical_id")
+                        and owner.get("readiness") == "complete"
+                        and owner.get("ul_assessment_status")
+                        == "assessed_within_limit"
+                    ):
+                        continue
+                    # A lineage-linked child describes composition already
+                    # included in the assessed parent total. It is not a
+                    # second exposure and therefore must not independently
+                    # block readiness or earn adequacy credit.
+                    child_ref = child.get("source_row_ref")
+                    child.update({
+                        "reason_code": (
+                            "component_within_assessed_parent_total"
+                        ),
+                        "ul_assessment_status": "not_distinct_exposure",
+                        "readiness": "not_applicable",
+                    })
+                    for adequacy_row in adequacy_results:
+                        if adequacy_row.get("source_label_key") != child_ref:
+                            continue
+                        adequacy_row.update({
+                            "rda_ai": None,
+                            "rda_ai_source": "unknown",
+                            "pct_rda": None,
+                            "adequacy_band": "unknown",
+                            "scoring_eligible": False,
+                            "point_recommendation": 0,
+                            "skip_ul_check": True,
+                            "skip_ul_reason": (
+                                "component_within_assessed_parent_total"
+                            ),
+                            "ul": None,
+                            "ul_status": (
+                                "not_applicable_component_within_assessed_"
+                                "parent_total"
+                            ),
+                            "pct_ul": None,
+                            "ul_assessment_status": "not_distinct_exposure",
+                            "over_ul": False,
+                            "over_ul_amount": None,
+                            "warnings": [],
+                        })
+                    for rda_row in rda_data:
+                        if rda_row.get("source_label_key") != child_ref:
+                            continue
+                        rda_row.update({
+                            "skip_ul_check": True,
+                            "skip_ul_reason": (
+                                "component_within_assessed_parent_total"
+                            ),
+                            "ul_assessment_status": "not_distinct_exposure",
+                            "ul_for_default_profile": None,
+                            "pct_rda": None,
+                            "adequacy_band": "unknown",
+                            "warnings": [],
+                        })
 
                 return {
                     **self._rda_reference_stamp,

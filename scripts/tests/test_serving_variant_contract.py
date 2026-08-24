@@ -157,7 +157,12 @@ def test_non_precaution_commas_preserve_recommended_dose(enricher) -> None:
         ("Folinic Acid", "folinic acid", "mcg DFE", "non_folic_acid_folate_ul_basis"),
         ("Calcium Folinate", "calcium folinate", "mcg DFE", "non_folic_acid_folate_ul_basis"),
         ("Leucovorin", "leucovorin", "mcg DFE", "non_folic_acid_folate_ul_basis"),
-        ("Folate", "standard", "mcg DFE", "unknown_folate_form_lineage"),
+        (
+            "Folate",
+            "standard",
+            "mcg DFE",
+            "worst_case_folic_acid_within_ul",
+        ),
     ],
 )
 def test_non_folic_acid_folate_retains_adequacy_but_suppresses_ul(
@@ -178,8 +183,12 @@ def test_non_folic_acid_folate_retains_adequacy_but_suppresses_ul(
     row = result["adequacy_results"][0]
 
     assert row["rda_ai"] is not None
-    assert row["ul"] is None
-    assert row["pct_ul"] is None
+    if expected_reason == "worst_case_folic_acid_within_ul":
+        assert row["ul"] == pytest.approx(1000)
+        assert row["pct_ul"] == pytest.approx((1200 / 1.7) / 1000 * 100)
+    else:
+        assert row["ul"] is None
+        assert row["pct_ul"] is None
     assert row["over_ul"] is False
     assert row["skip_ul_reason"] == expected_reason
     assert result["has_over_ul"] is False
@@ -294,7 +303,7 @@ def test_unknown_folate_at_possible_synthetic_ul_emits_review_not_over_ul(
     }]
 
 
-def test_unknown_folate_below_possible_synthetic_ul_is_indeterminate_without_review(
+def test_unknown_folate_below_possible_synthetic_ul_is_conservatively_assessed(
     enricher,
 ) -> None:
     result = enricher._collect_rda_ul_data({
@@ -311,9 +320,16 @@ def test_unknown_folate_below_possible_synthetic_ul_is_indeterminate_without_rev
     })
     row = result["adequacy_results"][0]
 
-    assert row["ul_assessment_status"] == "indeterminate"
+    assessment = result["dose_assessments"][0]
+    assert row["ul_assessment_status"] == "assessed_within_limit"
+    assert row["ul_status"] == "assessed_within_limit_worst_case_folic_acid"
+    assert row["skip_ul_reason"] == "worst_case_folic_acid_within_ul"
+    assert row["ul"] == pytest.approx(1000)
+    assert row["pct_ul"] == pytest.approx((400 / 1.7) / 1000 * 100)
     assert row["potential_ul_concern"] is False
     assert result["ul_review_flags"] == []
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
 
 
 def test_unknown_folate_without_declared_dfe_does_not_guess_adequacy(enricher) -> None:
@@ -335,6 +351,156 @@ def test_unknown_folate_without_declared_dfe_does_not_guess_adequacy(enricher) -
     assert row["pct_rda"] is None
     assert row["adequacy_band"] == "unknown"
     assert row["scoring_eligible"] is False
+
+
+def test_legacy_bare_folate_below_ul_completes_safety_without_adequacy_guess(
+    enricher,
+) -> None:
+    result = enricher._collect_rda_ul_data({
+        "activeIngredients": [{
+            "name": "Folate",
+            "standardName": "Folate",
+            "canonical_id": "vitamin_b9_folate",
+            "matched_form": "standard",
+            "quantity": 400,
+            "unit": "mcg",
+            "dailyValue": None,
+        }],
+        "inactiveIngredients": [],
+    })
+    row = result["adequacy_results"][0]
+    assessment = result["dose_assessments"][0]
+
+    assert row["skip_ul_reason"] == "worst_case_folic_acid_within_ul"
+    assert row["ul"] == pytest.approx(1000)
+    assert row["pct_ul"] == pytest.approx(40)
+    assert row["ul_assessment_status"] == "assessed_within_limit"
+    assert row["rda_ai"] is None
+    assert row["pct_rda"] is None
+    assert row["scoring_eligible"] is False
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
+
+
+def test_folate_row_with_exact_folic_acid_unii_uses_verified_identity(enricher) -> None:
+    result = enricher._collect_rda_ul_data(
+        {
+            "activeIngredients": [
+                {
+                    "name": "Folate",
+                    "raw_source_text": "Folate",
+                    "standardName": "Folate (Form Unknown)",
+                    "canonical_id": "vitamin_b9_folate",
+                    "canonical_source_db": "ingredient_quality_map",
+                    "uniiCode": "935E97BOY8",
+                    "quantity": 120,
+                    "unit": "mcg",
+                    "dailyValue": 30,
+                }
+            ],
+            "inactiveIngredients": [],
+        },
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    assessment = result["dose_assessments"][0]
+    row = result["analyzed_ingredients"][0]
+    assert assessment["conversion_rule_id"] == "folate_folic_acid"
+    assert assessment["normalized_value"] == pytest.approx(204)
+    assert assessment["normalized_unit"] == "mcg DFE"
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
+    assert row["skip_ul_check"] is False
+
+
+def test_explicit_methylfolate_form_overrides_generic_parent_unii(enricher) -> None:
+    result = enricher._collect_rda_ul_data(
+        {
+            "activeIngredients": [
+                {
+                    "name": "Folate",
+                    "raw_source_text": "Folate",
+                    "standardName": "Vitamin B9 (Folate)",
+                    "canonical_id": "vitamin_b9_folate",
+                    "canonical_source_db": "ingredient_quality_map",
+                    "uniiCode": "935E97BOY8",
+                    "quantity": 1.7,
+                    "unit": "mg DFE",
+                    "dailyValue": 425,
+                    "raw_source_path": "ingredientRows[0]",
+                },
+                {
+                    "name": "Extrafolate-S",
+                    "raw_source_text": "Extrafolate-S",
+                    "standardName": "Vitamin B9 (Folate)",
+                    "canonical_id": "vitamin_b9_folate",
+                    "canonical_source_db": "ingredient_quality_map",
+                    "quantity": 1,
+                    "unit": "mg",
+                    "dailyValue": None,
+                    "isNestedIngredient": True,
+                    "parentBlend": "Folate",
+                    "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                    "forms": [
+                        {"name": "L-5-Methyltetrahydrofolate"},
+                    ],
+                },
+            ],
+            "inactiveIngredients": [],
+        },
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    parent = next(
+        row
+        for row in result["dose_assessments"]
+        if row["ingredient"] == "Folate"
+    )
+    child = next(
+        row
+        for row in result["dose_assessments"]
+        if row["ingredient"] == "Extrafolate-S"
+    )
+    assert parent["conversion_rule_id"] == "folate_unknown"
+    assert parent["ul_assessment_status"] == "no_ul_applicable"
+    assert parent["readiness"] == "not_applicable"
+    assert child["conversion_rule_id"] == "folate_methylfolate"
+    assert child["ul_assessment_status"] == "not_distinct_exposure"
+    assert child["readiness"] == "not_applicable"
+
+
+@pytest.mark.parametrize(
+    "form_name",
+    [
+        "(6S)-5-Methyltetrahydrofolic Acid",
+        "Organic Food Blend",
+    ],
+)
+def test_explicit_non_folic_folate_forms_are_outside_folic_acid_ul(
+    enricher,
+    form_name,
+) -> None:
+    result = enricher._collect_rda_ul_data(
+        {
+            "activeIngredients": [{
+                "name": "Folate",
+                "raw_source_text": "Folate",
+                "standardName": "Vitamin B9 (Folate)",
+                "canonical_id": "vitamin_b9_folate",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 400,
+                "unit": "mcg",
+                "dailyValue": 100,
+                "forms": [{"name": form_name}],
+            }],
+            "inactiveIngredients": [],
+        }
+    )
+    assessment = result["dose_assessments"][0]
+    assert assessment["ul_assessment_status"] == "no_ul_applicable"
+    assert assessment["readiness"] == "not_applicable"
 
 
 def test_unknown_folate_dfe_inference_uses_per_serving_dv_before_daily_range(
@@ -360,4 +526,31 @@ def test_unknown_folate_dfe_inference_uses_per_serving_dv_before_daily_range(
     flag = result["ul_review_flags"][0]
     assert flag["screening_basis"] == "dfe_inferred_from_daily_value"
     assert flag["screening_amount"] == pytest.approx(1000)
-    assert flag["potential_pct_ul"] == pytest.approx(100)
+
+
+def test_low_bare_folate_with_daily_value_uses_raw_mass_upper_bound(
+    enricher,
+) -> None:
+    result = enricher._collect_rda_ul_data(
+        {
+            "activeIngredients": [{
+                "name": "Folate",
+                "standardName": "Vitamin B9 (Folate)",
+                "canonical_id": "vitamin_b9_folate",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 17,
+                "unit": "mcg",
+                "dailyValue": 4,
+                "forms": [],
+            }],
+            "inactiveIngredients": [],
+        }
+    )
+    row = result["adequacy_results"][0]
+    assessment = result["dose_assessments"][0]
+    assert row["skip_ul_reason"] == "worst_case_folic_acid_within_ul"
+    assert row["pct_rda"] is None
+    assert row["scoring_eligible"] is False
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
+    assert row["potential_pct_ul"] == pytest.approx(1.0)

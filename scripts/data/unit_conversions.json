@@ -4,16 +4,16 @@
     "purpose": "dosing_normalization",
     "schema_version": "5.2.0",
     "contract_test": "scripts/tests/test_unit_conversions_contract.py",
-    "last_updated": "2026-08-20",
-    "version": "1.2.0",
+    "last_updated": "2026-08-23",
+    "version": "1.2.2",
     "statistics": {
-      "vitamin_conversions": 21,
+      "vitamin_conversions": 24,
       "form_detection_categories": 2,
-      "total_conversion_rules": 35,
+      "total_conversion_rules": 38,
       "mcg_only_nutrients": 7,
-      "notes": "DSLD is supplement-only: beta-carotene uses the supplemental rule; CFU parsing is owned by enrichment; bare folate preserves unknown form lineage; explicit DFE units normalize without assuming folic acid"
+      "notes": "DSLD is supplement-only: beta-carotene uses the supplemental rule; alpha-carotene and beta-cryptoxanthin use the NIH 24:1 RAE factor; choline bitartrate uses its verified 1:1 salt stoichiometry; CFU parsing is owned by enrichment; bare folate preserves unknown form lineage; explicit DFE units normalize without assuming folic acid; parent Vitamin E amounts declared in mg use the FDA alpha-tocopherol label basis"
     },
-    "total_entries": 21,
+    "total_entries": 24,
     "total_entries_note": "Count of vitamin_conversions rules; mass_conversions has 6 rules and form_detection_patterns has 2 vitamin patterns"
   },
   "vitamin_conversions": {
@@ -124,6 +124,24 @@
       "notes": "Beta-carotene from supplements has no established UL; body regulates conversion",
       "source": "NIH ODS"
     },
+    "vitamin_a_other_provitamin_a_carotenoid": {
+      "id": "CONV_VITAMIN_A_OTHER_PROVITAMIN_A_CAROTENOID",
+      "standard_name": "Vitamin A (Alpha-carotene or Beta-cryptoxanthin)",
+      "aliases": [
+        "alpha-carotene",
+        "alpha carotene",
+        "beta-cryptoxanthin",
+        "beta cryptoxanthin",
+        "cryptoxanthin"
+      ],
+      "conversions": {
+        "mcg_carotenoid_to_mcg_rae": 0.041666666666666664
+      },
+      "canonical_unit": "mcg RAE",
+      "ul_applies": false,
+      "notes": "NIH defines 24 mcg alpha-carotene or beta-cryptoxanthin as 1 mcg RAE. The preformed-vitamin-A UL does not apply.",
+      "source": "NIH ODS Vitamin A and Carotenoids Fact Sheet for Health Professionals"
+    },
     "vitamin_a_unknown": {
       "id": "CONV_VITAMIN_A_UNKNOWN",
       "standard_name": "Vitamin A (Form Unknown)",
@@ -136,6 +154,22 @@
         "Cannot safely convert without knowing form - retinol vs beta-carotene matters for UL"
       ]
     },
+    "choline_bitartrate_to_choline": {
+      "id": "CONV_CHOLINE_BITARTRATE_TO_CHOLINE",
+      "standard_name": "Choline (from choline bitartrate)",
+      "aliases": [
+        "choline bitartrate",
+        "choline l-bitartrate",
+        "choline dl-bitartrate",
+        "choline tartrate"
+      ],
+      "conversions": {
+        "mg_to_mg": 0.41133267522211253
+      },
+      "canonical_unit": "mg",
+      "notes": "Active-moiety factor is choline molecular weight 104.17 divided by anhydrous 1:1 choline bitartrate molecular weight 253.25.",
+      "source": "FDA GSRS UNII 6K2W7T9V6Y; NIH PubChem CID 6900 and CID 305"
+    },
     "vitamin_e_unknown": {
       "id": "CONV_VITAMIN_E_UNKNOWN",
       "standard_name": "Vitamin E (Form Unknown)",
@@ -147,6 +181,17 @@
       "warnings": [
         "Cannot safely convert without knowing form - natural (d-alpha) 0.67 vs synthetic (dl-alpha) 0.45 mg/IU"
       ]
+    },
+    "vitamin_e_label_mg_alpha_tocopherol": {
+      "id": "CONV_VITAMIN_E_LABEL_MG_ALPHA_TOCOPHEROL",
+      "standard_name": "Vitamin E (label-declared mg alpha-tocopherol)",
+      "aliases": [],
+      "conversions": {
+        "mg_to_mg": 1.0
+      },
+      "canonical_unit": "mg",
+      "notes": "A Supplement Facts parent nutrient amount headed Vitamin E and declared in mg uses the FDA mg alpha-tocopherol label basis. This rule does not apply to legacy IU or standalone mixed-tocopherol/tocotrienol masses.",
+      "source": "FDA guidance: Converting Units of Measure for Folate, Niacin, and Vitamins A, D, and E on Nutrition and Supplement Facts Labels"
     },
     "folate_unknown": {
       "id": "CONV_FOLATE_UNKNOWN",
@@ -377,8 +422,13 @@
       "beta_carotene_patterns": [
         "\\bbeta[- ]?carotene\\b"
       ],
+      "other_provitamin_a_carotenoid_patterns": [
+        "\\balpha[- ]?carotene\\b",
+        "\\bbeta[- ]?cryptoxanthin\\b",
+        "\\bcryptoxanthin\\b"
+      ],
       "default_if_unknown": "flag_for_review",
-      "notes": "Only explicit beta-carotene gets the supplemental beta-carotene factor. Generic carotenoid or provitamin-A labels are form-unknown because their Vitamin A activity is not derivable from mass alone; do not default (UL implications)."
+      "notes": "Explicit beta-carotene gets the supplemental beta-carotene factor. Explicit alpha-carotene and beta-cryptoxanthin use the NIH 24:1 RAE factor. Generic carotenoid or provitamin-A labels remain form-unknown; do not default (UL implications)."
     }
   }
 }

@@ -169,6 +169,19 @@ class UnitConverter:
             nutrient_lower, ingredient_text
         )
 
+        # Since the 2020 Supplement Facts unit transition, a parent row headed
+        # "Vitamin E" and declared in mg is already expressed as mg
+        # alpha-tocopherol. Natural-vs-synthetic form is required only for the
+        # legacy IU conversion. Keep mixed tocopherol/tocotrienol ingredient
+        # masses outside this rule by requiring the parent nutrient heading.
+        if (
+            rule_id == 'vitamin_e_unknown'
+            and from_unit_lower in {'mg', 'mg at'}
+            and re.match(r'^vitamin\s+e\b', ingredient_text, re.IGNORECASE)
+        ):
+            rule_id = 'vitamin_e_label_mg_alpha_tocopherol'
+            rule_data = self.vitamin_conversions.get(rule_id, {})
+
         if rule_id is None:
             # No specific vitamin/mineral conversion rule found.
             # Try mass conversion if a different target unit was requested
@@ -250,6 +263,7 @@ class UnitConverter:
             rule_id in {
                 'vitamin_e_d_alpha_tocopherol',
                 'vitamin_e_dl_alpha_tocopherol',
+                'vitamin_e_label_mg_alpha_tocopherol',
             }
             and from_unit_lower == 'mg at'
         ):
@@ -368,6 +382,13 @@ class UnitConverter:
             and target_key == 'mcg_rae'
         ):
             factor = conversions.get('mcg_beta_carotene_to_mcg_rae')
+        if (
+            factor is None
+            and rule_id == 'vitamin_a_other_provitamin_a_carotenoid'
+            and from_key == 'mcg'
+            and target_key == 'mcg_rae'
+        ):
+            factor = conversions.get('mcg_carotenoid_to_mcg_rae')
 
         if factor is None:
             # Try mass conversion as fallback
@@ -455,10 +476,20 @@ class UnitConverter:
         nutrient_lower = nutrient.lower()
         ingredient_lower = ingredient_text.lower()
 
+        if (
+            'choline' in nutrient_lower
+            and re.search(r'\bcholine\s+(?:l[- ]|dl[- ])?bitartrate\b|\bcholine\s+tartrate\b', ingredient_lower)
+        ):
+            return 'choline_bitartrate_to_choline', self.vitamin_conversions.get(
+                'choline_bitartrate_to_choline', {}
+            )
+
         # CRITICAL: Form detection MUST run FIRST for form-dependent vitamins
         # Vitamin A: retinol and supplemental beta-carotene both 0.3 mcg RAE/IU; only preformed retinol carries a UL
         if 'vitamin a' in nutrient_lower or 'retinol' in nutrient_lower or \
-           'beta-carotene' in nutrient_lower or 'beta carotene' in nutrient_lower:
+           'beta-carotene' in nutrient_lower or 'beta carotene' in nutrient_lower or \
+           'alpha-carotene' in nutrient_lower or 'alpha carotene' in nutrient_lower or \
+           'cryptoxanthin' in nutrient_lower:
             return self._detect_vitamin_a_form(ingredient_lower)
 
         # Vitamin E: natural d-alpha (0.67) vs synthetic dl-alpha (0.45)
@@ -519,6 +550,13 @@ class UnitConverter:
                 # factor would require a separately typed source contract.
                 return 'vitamin_a_beta_carotene_supplement', \
                        self.vitamin_conversions.get('vitamin_a_beta_carotene_supplement', {})
+
+        for pattern in patterns.get('other_provitamin_a_carotenoid_patterns', []):
+            if re.search(pattern, ingredient_text, re.IGNORECASE):
+                return 'vitamin_a_other_provitamin_a_carotenoid', \
+                       self.vitamin_conversions.get(
+                           'vitamin_a_other_provitamin_a_carotenoid', {}
+                       )
 
         # Unknown form is expected on many raw labels; keep logs at debug to avoid noise.
         logger.debug("Vitamin A form not detected from: %s", ingredient_text)

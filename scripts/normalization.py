@@ -158,13 +158,17 @@ def classify_folate_form(raw: str) -> str:
     if re.search(r"\bfolic\s+acid\b", text):
         return FOLATE_FORM_FOLIC_ACID
     if re.search(
-        r"\b(?:methylfolate|methyltetrahydrofolate|5[-\s]?mthf|metafolin|quatrefolic)\b",
+        r"\b(?:methylfolate|methyltetrahydrofolate|"
+        r"methyltetrahydrofolic\s+acid|5[-\s]?mthf|metafolin|quatrefolic)\b",
         text,
     ):
         return FOLATE_FORM_METHYLFOLATE
     if re.search(r"\b(?:folinic(?:\s+acid)?|folinate|leucovorin)\b", text):
         return FOLATE_FORM_FOLINIC
-    if re.search(r"\b(?:food|natural)\s+folate\b", text):
+    if re.search(
+        r"\b(?:(?:food|natural)\s+folate|(?:organic\s+)?food\s+blend)\b",
+        text,
+    ):
         return FOLATE_FORM_FOOD
     return FOLATE_FORM_UNKNOWN
 

@@ -71,6 +71,51 @@ def test_failed_conversion_never_substitutes_raw_value(enricher) -> None:
     assert assessment["readiness"] == "incomplete"
 
 
+def test_probiotic_percentage_children_are_composition_not_distinct_exposure(
+    enricher,
+) -> None:
+    parent = _row(
+        "Probiotic Complex Blend",
+        "probiotic_blend",
+        4_000_000_000,
+        "Organism(s)",
+    )
+    parent["raw_source_path"] = "ingredientRows[0]"
+    child = _row(
+        "Lactobacillus acidophilus",
+        "lactobacillus_acidophilus",
+        40,
+        "%",
+    )
+    child.update({
+        "raw_source_path": "ingredientRows[0].nestedRows[0]",
+        "isNestedIngredient": True,
+        "parentBlend": "Probiotic Complex Blend",
+        "ingredientGroup": "Lactobacillus Acidophilus",
+    })
+
+    result = _collect(enricher, parent, child)
+    by_path = {
+        assessment["source_path"]: assessment
+        for assessment in result["dose_assessments"]
+    }
+
+    parent_assessment = by_path["ingredientRows[0]"]
+    child_assessment = by_path["ingredientRows[0].nestedRows[0]"]
+    assert parent_assessment["reason_code"] == "not_ul_applicable"
+    assert parent_assessment["readiness"] == "not_applicable"
+    assert child_assessment["owner_row_ref"] == parent_assessment["source_row_ref"]
+    assert child_assessment["source_value"] == 40
+    assert child_assessment["source_unit"] == "%"
+    assert child_assessment["normalized_value"] is None
+    assert child_assessment["normalized_unit"] is None
+    assert child_assessment["reason_code"] == (
+        "composition_share_of_declared_total"
+    )
+    assert child_assessment["ul_assessment_status"] == "not_distinct_exposure"
+    assert child_assessment["readiness"] == "not_applicable"
+
+
 def test_plain_parent_nutrient_amount_is_elemental_without_daily_value(
     enricher,
 ) -> None:
@@ -137,7 +182,7 @@ def test_compound_mass_without_established_ul_is_not_applicable(enricher) -> Non
             _row(
                 "Zinc Picolinate",
                 "zinc",
-                20,
+                200,
                 "mg",
                 standard_name="Zinc",
             ),

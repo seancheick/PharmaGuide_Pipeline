@@ -211,10 +211,12 @@ def test_unknown_form_mcg_vitamin_a_keeps_adequacy_but_not_ul() -> None:
 
     assert adequacy["canonical_id"] == "vitamin_a"
     assert adequacy["pct_rda"] == pytest.approx(125.0)
-    assert adequacy["ul"] is None
-    assert adequacy["pct_ul"] is None
-    assert adequacy["ul_assessment_status"] == "indeterminate"
-    assert adequacy["skip_ul_reason"] == "unknown_vitamin_form"
+    assert adequacy["ul"] == pytest.approx(3000.0)
+    assert adequacy["pct_ul"] == pytest.approx(37.5)
+    assert adequacy["ul_assessment_status"] == "assessed_within_limit"
+    assert adequacy["skip_ul_reason"] == (
+        "worst_case_preformed_vitamin_a_within_ul"
+    )
     assert analyzed["canonical_id"] == "vitamin_a"
     assert analyzed["pct_rda"] == pytest.approx(125.0)
     assert analyzed["per_day_min"] == pytest.approx(1125.0)

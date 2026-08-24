@@ -561,6 +561,42 @@ def test_explicit_protein_title_without_identity_is_an_unresolved_route() -> Non
     assert "protein_identity_or_mass_missing" in decision["route_evidence"]
 
 
+def test_explicit_protein_title_uses_declared_nutrition_protein_mass() -> None:
+    product = _product(
+        "Keto Protein Chocolate",
+        [_row("calcium", 20, "mg")],
+        primary_type="single_mineral",
+    )
+    product["nutrition_summary"] = {"protein_g": 8.0}
+
+    decision = _classification(product)
+
+    assert decision["route_module"] == "sports"
+    assert decision["route_reason"] == "profile_content:sports"
+
+
+def test_explicit_protein_title_uses_observed_zero_dose_protein_identity() -> None:
+    calcium = _row("calcium", 250, "mg")
+    observed_whey = _row(
+        "whey_protein",
+        0,
+        "NP",
+        score_eligible_by_cleaner=False,
+        cleaner_row_role="nested_display_only",
+        raw_source_path="ingredientRows[6].nestedRows[0]",
+    )
+    product = _product(
+        "Iso-Peptide Protein Chocolate",
+        [calcium],
+        observed_rows=[calcium, observed_whey],
+    )
+
+    decision = _classification(product)
+
+    assert decision["route_module"] == "sports"
+    assert decision["route_reason"] == "profile_content:sports"
+
+
 def test_route_decision_is_single_structured_classifier_result() -> None:
     decision = _classification(
         _product("Vitamin C 500 mg", [_row("vitamin_c", 500, "mg")])

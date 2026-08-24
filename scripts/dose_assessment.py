@@ -31,6 +31,8 @@ CONVERSION_NOT_APPLICABLE = "not_applicable"
 CONVERSION_FAILED = "failed"
 
 _NOT_DISTINCT_REASONS = {
+    "component_within_assessed_parent_total",
+    "composition_share_of_declared_total",
     "form_component_of_declared_total",
     "compound_duplicate_row",
     "vitamin_a_components_own_ul",
@@ -38,7 +40,15 @@ _NOT_DISTINCT_REASONS = {
 _NO_UL_REASONS = {
     "not_ul_applicable",
     "beta_carotene_no_established_ul",
+    "provitamin_a_carotenoid_no_established_ul",
     "non_folic_acid_folate_ul_basis",
+}
+_BOUNDED_UL_REASONS = {
+    "worst_case_compound_mass_within_ul",
+    "worst_case_folic_acid_within_ul",
+    "worst_case_natural_vitamin_e_within_ul",
+    "worst_case_preformed_vitamin_a_within_ul",
+    "worst_case_vitamin_e_mass_within_ul",
 }
 _UNRESOLVED_FORM_REASONS = {
     "unknown_folate_form_lineage",
@@ -154,7 +164,11 @@ def build_dose_assessment(
             )
         elif evidence.get("nonfatal_reason") and normalized_amount is not None:
             conversion_status = CONVERSION_NOT_REQUIRED
-        elif reason in _NO_UL_REASONS or role == "form_component":
+        elif (
+            reason in _NO_UL_REASONS
+            or reason in _BOUNDED_UL_REASONS
+            or role == "form_component"
+        ):
             conversion_status = (
                 CONVERSION_NOT_APPLICABLE
                 if normalized_amount is None
@@ -177,6 +191,12 @@ def build_dose_assessment(
         elif reason in _UNRESOLVED_FORM_REASONS:
             assessment_status = UNRESOLVED_FORM
             readiness = READINESS_INCOMPLETE
+        elif (
+            reason in _BOUNDED_UL_REASONS
+            and _finite_number(pct_ul) is not None
+        ):
+            assessment_status = ASSESSED_WITHIN_LIMIT
+            readiness = READINESS_COMPLETE
         elif (
             reason == "compound_mass_not_elemental"
             or (

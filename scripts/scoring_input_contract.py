@@ -3399,9 +3399,19 @@ def _route_is_sports_class(
             return True
 
     canonicals = _route_positive_canonicals(product)
-    protein_identities = canonicals & set(ROUTE_FEATURE_PROTEIN_CANONICALS)
+    protein_identities = (
+        canonicals
+        | {
+            _norm(value)
+            for value in facts.get("observed_protein_canonical_ids") or []
+            if _norm(value)
+        }
+    ) & set(ROUTE_FEATURE_PROTEIN_CANONICALS)
     protein_intent = bool(facts.get("protein_title_intent"))
-    has_protein_mass = _route_has_product_level_protein_mass(product)
+    has_protein_mass = bool(
+        _route_has_product_level_protein_mass(product)
+        or float(facts.get("protein_mass_mg") or 0.0) > 0.0
+    )
     if (
         float(facts.get("row_level_protein_mass_mg") or 0.0)
         >= _ROUTE_PROTEIN_MATERIAL_MIN_MG

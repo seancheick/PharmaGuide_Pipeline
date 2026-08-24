@@ -43,6 +43,168 @@ def test_compound_mass_row_flag_is_gate_ineligible(enricher):
     assert result["has_over_ul"] is False
 
 
+@pytest.mark.parametrize(
+    ("row", "expected_pct_ul"),
+    [
+        (
+            {
+                "name": "Pyridoxal 5'-Phosphate",
+                "standardName": "Vitamin B6",
+                "canonical_id": "vitamin_b6_pyridoxine",
+                "canonical_source_db": "ingredient_quality_map",
+                "uniiCode": "F06SGE49M6",
+                "quantity": 50,
+                "unit": "mg",
+                "dailyValue": None,
+            },
+            50.0,
+        ),
+        (
+            {
+                "name": "Boron Glycinate",
+                "standardName": "Boron",
+                "canonical_id": "boron",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 3,
+                "unit": "mg",
+                "dailyValue": None,
+            },
+            15.0,
+        ),
+        (
+            {
+                "name": "Retinyl Acetate",
+                "standardName": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 600,
+                "unit": "mcg",
+                "dailyValue": None,
+            },
+            20.0,
+        ),
+    ],
+)
+def test_single_compound_mass_below_ul_uses_conservative_upper_bound(
+    enricher,
+    row,
+    expected_pct_ul,
+):
+    """A whole compound cannot contain more active moiety than its mass.
+
+    This establishes a safety upper bound only. It must not turn the compound
+    mass into an elemental dose or award adequacy credit.
+    """
+    result = enricher._collect_rda_ul_data(
+        _mag([row]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    assessment = result["dose_assessments"][0]
+    adequacy = result["adequacy_results"][0]
+    assert assessment["reason_code"] == "worst_case_compound_mass_within_ul"
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
+    assert assessment["pct_ul"] == pytest.approx(expected_pct_ul)
+    assert assessment["ul_gate_eligible"] is False
+    assert adequacy["ul_assessment_basis"] == (
+        "maximum_possible_active_moiety_exposure"
+    )
+    assert adequacy["scoring_eligible"] is False
+    assert adequacy["pct_rda"] is None
+    assert result["has_over_ul"] is False
+
+
+def test_multiple_compound_rows_do_not_clear_on_individual_upper_bounds(enricher):
+    product = _mag([
+        {
+            "name": "Zinc Picolinate",
+            "standardName": "Zinc",
+            "canonical_id": "zinc",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 30,
+            "unit": "mg",
+            "dailyValue": None,
+        },
+        {
+            "name": "Zinc Citrate",
+            "standardName": "Zinc",
+            "canonical_id": "zinc",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 30,
+            "unit": "mg",
+            "dailyValue": None,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    assert all(
+        row["ul_assessment_status"] == "unresolved_compound_mass"
+        for row in result["dose_assessments"]
+    )
+    assert all(
+        row["readiness"] == "incomplete"
+        for row in result["dose_assessments"]
+    )
+
+
+def test_compound_row_clears_when_aggregate_upper_bound_is_within_ul(enricher):
+    product = _mag([
+        {
+            "name": "Vitamin B6",
+            "standardName": "Vitamin B6",
+            "canonical_id": "vitamin_b6_pyridoxine",
+            "canonical_source_db": "ingredient_quality_map",
+            "uniiCode": "KV2JZ1BI6Z",
+            "quantity": 75,
+            "unit": "mg",
+            "dailyValue": 4412,
+        },
+        {
+            "name": "Pyridoxal 5-Phosphate",
+            "standardName": "Vitamin B6",
+            "canonical_id": "vitamin_b6_pyridoxine",
+            "canonical_source_db": "ingredient_quality_map",
+            "uniiCode": "F06SGE49M6",
+            "quantity": 6,
+            "unit": "mg",
+            "dailyValue": None,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    compound = next(
+        row
+        for row in result["dose_assessments"]
+        if row["ingredient"] == "Pyridoxal 5-Phosphate"
+    )
+    adequacy = next(
+        row
+        for row in result["adequacy_results"]
+        if row["nutrient"] == "Vitamin B6"
+        and row["ul_gate_eligible"] is False
+    )
+
+    assert compound["reason_code"] == "worst_case_compound_mass_within_ul"
+    assert compound["ul_assessment_status"] == "assessed_within_limit"
+    assert compound["readiness"] == "complete"
+    assert adequacy["ul_assessment_basis"] == (
+        "maximum_possible_aggregate_active_moiety_exposure"
+    )
+    assert adequacy["scoring_eligible"] is False
+    assert adequacy["pct_rda"] is None
+
+
 def test_elemental_dv_row_flag_is_gate_eligible(enricher):
     # Element-named Zinc 200 mg WITH a dailyValue -> elemental -> gate-eligible.
     product = _mag([
@@ -153,6 +315,105 @@ def test_reference_scoped_form_unii_without_daily_value_is_gate_eligible(enriche
     assert flag["ul_gate_ineligible_reason"] is None
     assert flag["ul_exposure_basis"] == "ul_scoped_form_substance_amount"
     assert result["has_over_ul"] is True
+
+
+def test_vitamin_d3_activity_without_daily_value_is_ul_gate_eligible(enricher):
+    """Legacy labels may declare D3 in IU without printing a Daily Value.
+
+    FDA GSRS identifies 1C6V77QF41 as cholecalciferol, one of the two active
+    components of the Vitamin D substance record.  The NIH Vitamin D UL covers
+    total intake from supplements, so a directly identified D3 activity amount
+    must not be mistaken for an unresolved compound mass.
+    """
+    product = _mag([
+        {
+            "name": "Vitamin D3",
+            "standardName": "Vitamin D",
+            "canonical_id": "vitamin_d",
+            "canonical_source_db": "ingredient_quality_map",
+            "uniiCode": "1C6V77QF41",
+            "quantity": 2000,
+            "unit": "IU",
+            "dailyValue": None,
+            "forms": [
+                {
+                    "name": "Cholecalciferol",
+                    "uniiCode": "1C6V77QF41",
+                }
+            ],
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    assessment = result["dose_assessments"][0]
+
+    assert assessment["normalized_value"] == pytest.approx(50)
+    assert assessment["normalized_unit"] == "mcg"
+    assert assessment["ul_gate_eligible"] is True
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
+
+
+def test_explicit_folic_acid_mass_without_daily_value_is_ul_gate_eligible(enricher):
+    """A row named Folic Acid measures the UL-scoped synthetic form itself."""
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": "Folic Acid",
+                "raw_source_text": "Folic Acid",
+                "standardName": "Folate",
+                "canonical_id": "vitamin_b9_folate",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 400,
+                "unit": "mcg",
+                "dailyValue": None,
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    assessment = result["dose_assessments"][0]
+
+    assert assessment["normalized_value"] == pytest.approx(680)
+    assert assessment["normalized_unit"] == "mcg DFE"
+    assert assessment["ul_gate_eligible"] is True
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
+
+
+def test_choline_bitartrate_uses_verified_active_moiety_mass(enricher):
+    """A named salt mass is converted, never treated as elemental by default."""
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": "Choline Bitartrate",
+                "raw_source_text": "Choline Bitartrate",
+                "standardName": "Choline",
+                "canonical_id": "choline",
+                "canonical_source_db": "ingredient_quality_map",
+                "uniiCode": "6K2W7T9V6Y",
+                "quantity": 1000,
+                "unit": "mg",
+                "dailyValue": None,
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    assessment = result["dose_assessments"][0]
+
+    assert assessment["normalized_value"] == pytest.approx(
+        1000 * (104.17 / 253.25)
+    )
+    assert assessment["normalized_unit"] == "mg"
+    assert assessment["conversion_rule_id"] == "choline_bitartrate_to_choline"
+    assert assessment["ul_gate_eligible"] is True
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
 
 
 def test_unlisted_niacin_derivative_without_daily_value_stays_ineligible(enricher):
@@ -345,6 +606,17 @@ def test_vitamin_a_total_owns_adequacy_while_preformed_child_owns_ul(enricher):
             "isNestedIngredient": True,
             "parentBlend": "Vitamin A",
         },
+        {
+            "name": "Mixed Carotenoids",
+            "raw_source_text": "Mixed Carotenoids",
+            "standardName": "Vitamin A",
+            "canonical_id": "vitamin_a",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 46,
+            "unit": "mcg",
+            "dailyValue": None,
+            "isNestedIngredient": False,
+        },
     ])
 
     result = enricher._collect_rda_ul_data(
@@ -366,7 +638,11 @@ def test_vitamin_a_total_owns_adequacy_while_preformed_child_owns_ul(enricher):
     assert beta["skip_ul_reason"] == "form_component_of_declared_total"
     assert retinyl["dose_role"] == "ul_scoped_component"
     assert retinyl["parent_label_key"] == parent["source_label_key"]
-    assert retinyl["skip_ul_check"] is False
+    assert retinyl["skip_ul_check"] is True
+    assert retinyl["skip_ul_reason"] == (
+        "worst_case_compound_mass_within_ul"
+    )
+    assert retinyl["ul_assessment_status"] == "assessed_within_limit"
     assert retinyl["per_day_max"] == pytest.approx(600)
     assert result["safety_flags"] == []
 
@@ -427,6 +703,156 @@ def test_mixed_vitamin_a_total_does_not_assume_all_preformed(enricher):
     assert result["safety_flags"] == []
 
 
+def test_mixed_vitamin_a_below_ul_is_safe_under_all_preformed_upper_bound(
+    enricher,
+):
+    result = enricher._collect_rda_ul_data(
+        _mag([{
+            "name": "Vitamin A",
+            "raw_source_text": "Vitamin A",
+            "standardName": "Vitamin A",
+            "canonical_id": "vitamin_a",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 5000,
+            "unit": "IU",
+            "dailyValue": 100,
+            "forms": [
+                {"name": "Beta-Carotene"},
+                {"name": "Retinyl Acetate"},
+            ],
+            "isNestedIngredient": False,
+        }]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    row = result["analyzed_ingredients"][0]
+    adequacy = result["adequacy_results"][0]
+    assessment = result["dose_assessments"][0]
+    assert row["per_day_max"] == pytest.approx(1500)
+    assert row["skip_ul_reason"] == (
+        "worst_case_preformed_vitamin_a_within_ul"
+    )
+    assert row["ul_for_default_profile"] == pytest.approx(3000)
+    assert adequacy["pct_ul"] == pytest.approx(50)
+    assert row["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
+
+
+def test_mixed_vitamin_a_parent_miscanonicalized_as_beta_still_uses_bound(
+    enricher,
+):
+    result = enricher._collect_rda_ul_data(
+        _mag([{
+            "name": "Vitamin A",
+            "raw_source_text": "Vitamin A",
+            "standardName": "Vitamin A",
+            "canonical_id": "beta_carotene",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 220,
+            "unit": "mcg",
+            "dailyValue": 24,
+            "forms": [
+                {"name": "Beta-Carotene"},
+                {"name": "Retinyl Acetate"},
+            ],
+        }]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    assessment = result["dose_assessments"][0]
+    assert assessment["reason_code"] == (
+        "worst_case_preformed_vitamin_a_within_ul"
+    )
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
+
+
+def test_unknown_vitamin_a_legacy_iu_uses_preformed_upper_bound(enricher):
+    result = enricher._collect_rda_ul_data(
+        _mag([{
+            "name": "Vitamin A",
+            "raw_source_text": "Vitamin A",
+            "standardName": "Vitamin A",
+            "canonical_id": "vitamin_a",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 5000,
+            "unit": "IU",
+            "dailyValue": None,
+            "forms": [],
+        }]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    assessment = result["dose_assessments"][0]
+    adequacy = result["adequacy_results"][0]
+    assert assessment["normalized_value"] == pytest.approx(1500)
+    assert assessment["normalized_unit"] == "mcg RAE"
+    assert assessment["reason_code"] == (
+        "worst_case_preformed_vitamin_a_within_ul"
+    )
+    assert assessment["readiness"] == "complete"
+    assert adequacy["pct_rda"] is None
+    assert adequacy["scoring_eligible"] is False
+
+
+def test_nested_preformed_component_uses_parent_scoped_upper_bound(enricher):
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": "Vitamin A",
+                "raw_source_text": "Vitamin A",
+                "standardName": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 1350,
+                "unit": "mcg",
+                "dailyValue": 150,
+                "forms": [
+                    {"name": "Beta-Carotene"},
+                    {"name": "Retinyl Acetate"},
+                ],
+                "isNestedIngredient": False,
+                "raw_source_path": "ingredientRows[1]",
+            },
+            {
+                "name": "Retinyl Acetate",
+                "raw_source_text": "Retinyl Acetate",
+                "standardName": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 675,
+                "unit": "mcg",
+                "dailyValue": None,
+                "isNestedIngredient": True,
+                "parentBlend": "Vitamin A",
+                "raw_source_path": "ingredientRows[1].nestedRows[1]",
+            },
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    parent = next(
+        row
+        for row in result["dose_assessments"]
+        if row["ingredient"] == "Vitamin A"
+    )
+    child = next(
+        row
+        for row in result["dose_assessments"]
+        if row["ingredient"] == "Retinyl Acetate"
+    )
+
+    assert parent["ul_assessment_status"] == "assessed_within_limit"
+    assert parent["readiness"] == "complete"
+    assert child["reason_code"] == "worst_case_compound_mass_within_ul"
+    assert child["ul_assessment_status"] == "assessed_within_limit"
+    assert child["readiness"] == "complete"
+
+
 def test_unidentified_vitamin_a_child_does_not_claim_ul_ownership(enricher):
     result = enricher._collect_rda_ul_data(
         _mag([
@@ -462,8 +888,10 @@ def test_unidentified_vitamin_a_child_does_not_claim_ul_ownership(enricher):
         row for row in result["analyzed_ingredients"]
         if row["ingredient"] == "Vitamin A"
     )
-    assert parent["skip_ul_reason"] == "unknown_vitamin_form"
-    assert parent["ul_assessment_status"] == "indeterminate"
+    assert parent["skip_ul_reason"] == (
+        "worst_case_preformed_vitamin_a_within_ul"
+    )
+    assert parent["ul_assessment_status"] == "assessed_within_limit"
 
 
 def test_standalone_beta_carotene_counts_for_adequacy_without_preformed_a_ul(enricher):
@@ -493,6 +921,71 @@ def test_standalone_beta_carotene_counts_for_adequacy_without_preformed_a_ul(enr
     assert row["ul_assessment_status"] == "not_applicable"
     assert row["ul_for_default_profile"] is None
     assert result["safety_flags"] == []
+
+
+@pytest.mark.parametrize(
+    ("name", "canonical_id"),
+    [
+        ("Alpha-Carotene", "alpha_carotene"),
+        ("Beta-Cryptoxanthin", "cryptoxanthin"),
+    ],
+)
+def test_other_provitamin_a_carotenoids_convert_without_preformed_a_ul(
+    enricher, name, canonical_id
+):
+    """NIH defines 24 mcg of either carotenoid as 1 mcg RAE.
+
+    The preformed-vitamin-A UL does not apply to these provitamin A
+    carotenoids, so an identified standalone row is complete rather than an
+    unknown Vitamin A form.
+    """
+    result = enricher._collect_rda_ul_data(
+        _mag([
+            {
+                "name": name,
+                "raw_source_text": name,
+                "standardName": "Vitamin A",
+                "canonical_id": canonical_id,
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 240,
+                "unit": "mcg",
+                "dailyValue": None,
+                "isNestedIngredient": False,
+            }
+        ]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    row = result["analyzed_ingredients"][0]
+    assessment = result["dose_assessments"][0]
+    assert row["per_day_min"] == pytest.approx(10)
+    assert row["skip_ul_reason"] == "provitamin_a_carotenoid_no_established_ul"
+    assert row["ul_assessment_status"] == "not_applicable"
+    assert assessment["ul_assessment_status"] == "no_ul_applicable"
+    assert assessment["readiness"] == "not_applicable"
+
+
+def test_mixed_carotenoid_complex_has_no_preformed_vitamin_a_ul(enricher):
+    result = enricher._collect_rda_ul_data(
+        _mag([{
+            "name": "Mixed Carotenoids",
+            "standardName": "Vitamin A",
+            "canonical_id": "vitamin_a",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 12,
+            "unit": "mg",
+            "dailyValue": None,
+        }]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    assessment = result["dose_assessments"][0]
+    assert assessment["reason_code"] == (
+        "provitamin_a_carotenoid_no_established_ul"
+    )
+    assert assessment["ul_assessment_status"] == "no_ul_applicable"
+    assert assessment["readiness"] == "not_applicable"
 
 
 @pytest.mark.parametrize(

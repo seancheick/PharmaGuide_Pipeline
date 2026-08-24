@@ -517,6 +517,11 @@ def extract_route_features(
         if is_systemic_enzyme_row(row)
     ]
     protein_rows = [row for row in label_rows if row_canonical(row) in PROTEIN_CANONICALS]
+    observed_protein_rows = [
+        row
+        for row in observed_row_list
+        if row_canonical(row) in PROTEIN_CANONICALS
+    ]
 
     product_level_fiber_rows = [row for row in product_level_rows if is_fiber_row(row)]
     product_level_protein_rows = [
@@ -588,7 +593,26 @@ def extract_route_features(
         for row in positive_rows
         if row_canonical(row) in PROTEIN_CANONICALS
     ]
-    protein_mass = max((mass for mass in protein_mass_candidates if mass is not None), default=0.0)
+    nutrition_summary = product.get("nutrition_summary")
+    nutrition_summary = (
+        nutrition_summary if isinstance(nutrition_summary, Mapping) else {}
+    )
+    nutrition_protein_g = positive_number({
+        "quantity": nutrition_summary.get("protein_g"),
+        "unit": "g",
+    })
+    nutrition_protein_mass = (
+        float(nutrition_protein_g) * 1000.0
+        if nutrition_protein_g is not None
+        else 0.0
+    )
+    protein_mass = max(
+        [
+            *(mass for mass in protein_mass_candidates if mass is not None),
+            nutrition_protein_mass,
+        ],
+        default=0.0,
+    )
     row_level_protein_mass = max(
         (
             comparable_mass_mg(row) or 0.0
@@ -697,8 +721,12 @@ def extract_route_features(
         "b_panel_identity_share": _rounded(len(b_ids) / panel_identity_count) if panel_identity_count else None,
         "b_family_identity_share": _rounded(b_family_identity_count / panel_identity_count) if panel_identity_count else None,
         "protein_canonical_ids": sorted({row_canonical(row) for row in protein_rows}),
+        "observed_protein_canonical_ids": sorted({
+            row_canonical(row) for row in observed_protein_rows
+        }),
         "protein_row_count": len(protein_rows),
         "protein_mass_mg": _rounded(protein_mass),
+        "nutrition_protein_mass_mg": _rounded(nutrition_protein_mass),
         "row_level_protein_mass_mg": _rounded(row_level_protein_mass),
         "product_level_protein_row_count": len(product_level_protein_rows),
         "protein_title_intent": has_protein_product_intent(product_title_text(product)),
