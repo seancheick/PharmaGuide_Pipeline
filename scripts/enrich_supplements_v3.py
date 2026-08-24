@@ -13577,6 +13577,10 @@ class SupplementEnricherV3:
             for idx, ingredient in enumerate(ingredient_list):
                 is_nested = bool(ingredient.get('isNestedIngredient', False))
                 parent_blend = (ingredient.get('parentBlend', '') or '').strip()
+                parent_source_path = str(
+                    ingredient.get("parent_source_path") or ""
+                ).strip()
+                structurally_nested = is_nested or bool(parent_source_path)
                 is_blend = (
                     ingredient.get('proprietaryBlend', False) or
                     ingredient.get('isProprietaryBlend', False)
@@ -13586,7 +13590,7 @@ class SupplementEnricherV3:
                 # ``proprietaryBlend=False`` and carry the structural relation
                 # through ``isNestedIngredient`` + ``parentBlend`` instead.
                 # Keep those linked children so opacity evidence is not lost.
-                if not is_blend and not (is_nested and parent_blend):
+                if not is_blend and not (structurally_nested and parent_blend):
                     continue
 
                 disclosure = ingredient.get('disclosureLevel', 'none')
@@ -13640,7 +13644,7 @@ class SupplementEnricherV3:
                     continue
 
                 # Roll nested rows under parent blend key when available.
-                if is_nested and parent_blend:
+                if structurally_nested and parent_blend:
                     # Parent aggregates like "Total Cultures"/"Total Omega-3s"
                     # are never proprietary blends — skip them outright.
                     if parent_is_non_proprietary_aggregate:
@@ -13669,7 +13673,7 @@ class SupplementEnricherV3:
                         parent_source_field = (
                             parent_header.get("source_field")
                             if parent_header
-                            else source_field
+                            else parent_source_path or source_field
                         )
                         group = {
                             "name": parent_blend,

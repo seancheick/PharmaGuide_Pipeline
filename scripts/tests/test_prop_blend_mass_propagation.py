@@ -162,6 +162,52 @@ def test_enricher_recovers_children_when_only_parent_header_is_proprietary(enric
     assert blend["source_field"] == "activeIngredients[0]"
 
 
+def test_forms_children_with_parent_path_recover_dropped_blend_owner(enricher) -> None:
+    """DSLD forms are structural children even when ``isNestedIngredient`` is false.
+
+    The cleaner links them to the dropped measured owner through
+    ``parent_source_path``. Enrichment must not turn each form into a separate
+    blend or lose the disclosed parent mass.
+    """
+    product = {
+        "id": "TEST_FORMS_OWNER",
+        "product_name": "Women's Botanical Blend",
+        "activeIngredients": [
+            {
+                "name": name,
+                "quantity": 0,
+                "unit": "NP",
+                "proprietaryBlend": False,
+                "isNestedIngredient": False,
+                "parentBlend": "Proprietary Blend",
+                "parentBlendMass": 860,
+                "parentBlendUnit": "mg",
+                "parent_source_path": "ingredientRows[1]",
+                "raw_source_path": f"ingredientRows[1].forms[{index}]",
+                "nestedIngredients": [],
+            }
+            for index, name in enumerate(("Ginger", "Goldenseal"))
+        ],
+        "inactiveIngredients": [],
+    }
+
+    result = enricher._collect_proprietary_data(product)
+
+    assert result["blend_sources"]["cleaning_raw_count"] == 1
+    blend = next(
+        row for row in result["blends"]
+        if row["name"] == "Proprietary Blend"
+    )
+    assert blend["source_path"] == "ingredientRows[1]"
+    assert blend["total_weight"] == 860.0
+    assert blend["unit"] == "mg"
+    assert blend["blend_total_mg"] == 860.0
+    assert [row["name"] for row in blend["child_ingredients"]] == [
+        "Ginger",
+        "Goldenseal",
+    ]
+
+
 def test_parent_header_owns_full_disclosure_for_dosed_flattened_child(enricher) -> None:
     blend_name = "Flaxseed and Fish Oil Omega Fatty Acid Blend"
     product = {
