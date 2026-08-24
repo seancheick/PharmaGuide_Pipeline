@@ -248,6 +248,40 @@ def test_single_active_title_embedded_mass_reaches_v4_as_low_confidence_dose_evi
     assert rows[0]["confidence"] == "low"
 
 
+def test_single_active_title_mass_matches_compound_word_spacing() -> None:
+    """DSLD alternates between 'Flax Seed' in titles and 'Flaxseed' in rows."""
+    product = {
+        "product_name": "Flax Seed Oil 1000 mg",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Flaxseed Oil",
+                    "canonical_id": "flaxseed",
+                    "mapped": True,
+                    "quantity": 0,
+                    "unit": "NP",
+                    "raw_source_path": "otheringredients.ingredients[0]",
+                    "cleaner_row_role": "active_scorable",
+                    "score_eligible_by_cleaner": True,
+                    "score_exclusion_reason": None,
+                    "identity_disposition": "clean",
+                }
+            ],
+        },
+    }
+
+    rows = [
+        row for row in derive_product_scoring_evidence(product)
+        if row.get("reason") == "single_active_title_embedded_mass"
+    ]
+
+    assert len(rows) == 1
+    assert rows[0]["canonical_id"] == "flaxseed"
+    assert rows[0]["dose_value"] == 1000.0
+    assert rows[0]["dose_unit"].lower() == "mg"
+
+
 def test_title_embedded_mass_does_not_apply_to_multi_identity_oil_titles() -> None:
     product = {
         "product_name": "1300 mg Omega 3-6-9 Fish, Flax, Borage",

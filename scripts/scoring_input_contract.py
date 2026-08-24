@@ -1281,11 +1281,12 @@ def _identity_named_in_product_title(product: Dict[str, Any], row: Dict[str, Any
 
 
 def _loose_identity_named_in_product_title(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+    title = _norm(product.get("product_name") or product.get("fullName"))
     title_tokens = {
         token
         for token in re.split(
             r"[^a-z0-9]+",
-            _norm(product.get("product_name") or product.get("fullName")),
+            title,
         )
         if len(token) >= 4
     }
@@ -1306,7 +1307,40 @@ def _loose_identity_named_in_product_title(product: Dict[str, Any], row: Dict[st
             identity_tokens.add(token)
             if token.endswith("s") and len(token) >= 5:
                 identity_tokens.add(token[:-1])
-    return bool(title_tokens & identity_tokens)
+    if title_tokens & identity_tokens:
+        return True
+
+    # DSLD is inconsistent about closed vs open compounds (for example,
+    # ``Flaxseed Oil`` in the identity row but ``Flax Seed Oil`` in the
+    # product title). Compare compacted *complete identity phrases* as a
+    # fallback. The length floor and generic denylist prevent a broad word
+    # such as "oil", "vitamin", or "blend" from claiming title ownership.
+    title_compact = re.sub(r"[^a-z0-9]+", "", title)
+    generic_compacts = {
+        "blend",
+        "complex",
+        "extract",
+        "mineral",
+        "oil",
+        "powder",
+        "protein",
+        "vitamin",
+    }
+    for value in (
+        row.get("name"),
+        row.get("standardName"),
+        row.get("standard_name"),
+        row.get("raw_source_text"),
+        row.get("canonical_id"),
+    ):
+        identity_compact = re.sub(r"[^a-z0-9]+", "", _norm(value))
+        if (
+            len(identity_compact) >= 6
+            and identity_compact not in generic_compacts
+            and identity_compact in title_compact
+        ):
+            return True
+    return False
 
 
 def _title_embedded_single_active_mass(
