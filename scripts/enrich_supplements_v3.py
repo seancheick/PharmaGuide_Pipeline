@@ -16458,7 +16458,8 @@ class SupplementEnricherV3:
         the Flutter side can distinguish "not declared" from "zero".
 
         This is ADDITIVE — it does not replace dietary_sensitivity_data
-        (sugar/sodium).  Scoring does not consume this field.
+        (sugar/sodium). Routing consumes declared protein mass; score math does
+        not treat the remaining summary fields as active-ingredient doses.
         """
         ni = product.get("nutritionalInfo") or {}
 
@@ -21509,6 +21510,12 @@ class SupplementEnricherV3:
             # Probiotic-specific data
             enriched["probiotic_data"] = self._collect_probiotic_data(enriched)
 
+            # Nutrition amounts are canonical routing inputs for products whose
+            # protein identity is declared only in the Nutrition Facts panel.
+            # Emit this before the native route stamp so enrichment and scoring
+            # classify from the same complete product state.
+            enriched["nutrition_summary"] = self._collect_nutrition_summary(product)
+
             # Canonical taxonomy classification (v2) — NP-filtered, expanded types
             # — plus every field derived from it. MUST run AFTER probiotic_data
             # so the NP exemption gate for probiotic strains (is_probiotic_product)
@@ -21522,9 +21529,6 @@ class SupplementEnricherV3:
 
             # Dietary sensitivity data (sugar/sodium for diabetes/hypertension users)
             enriched["dietary_sensitivity_data"] = self._collect_dietary_sensitivity_data(product)
-
-            # Nutrition summary (all five macros — additive, does not replace sugar/sodium)
-            enriched["nutrition_summary"] = self._collect_nutrition_summary(product)
 
             # Interaction profile (alerts-only, score-neutral)
             interaction_profile = self._collect_interaction_profile(

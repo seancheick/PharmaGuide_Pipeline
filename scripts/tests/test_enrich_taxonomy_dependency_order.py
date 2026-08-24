@@ -39,6 +39,7 @@ SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
+from scoring_v4.scored_artifact import build_scored_artifact  # noqa: E402
 
 
 @pytest.fixture(scope="module")
@@ -140,6 +141,48 @@ def test_taxonomy_runs_after_ingredient_quality_data(monkeypatch, enricher, prod
     enricher.enrich_product(product)
 
     assert seen.get("has_iqd"), "the taxonomy ran before ingredient_quality_data"
+
+
+def test_route_classification_runs_after_nutrition_summary(monkeypatch, enricher, product):
+    """Protein intent may be proven only by the declared nutrition amount.
+
+    The native route stamp and the scoring-time route must see the same inputs;
+    otherwise the final artifact correctly rejects the divergent modules.
+    """
+    seen: Dict[str, Any] = {}
+    real = enricher.apply_taxonomy_projection
+
+    def spy(enriched):
+        seen["nutrition_summary"] = enriched.get("nutrition_summary")
+        return real(enriched)
+
+    monkeypatch.setattr(enricher, "apply_taxonomy_projection", spy)
+    enricher.enrich_product(product)
+
+    assert seen["nutrition_summary"] == {
+        "calories_per_serving": None,
+        "total_carbohydrates_g": None,
+        "total_fat_g": None,
+        "protein_g": None,
+        "dietary_fiber_g": None,
+        "total_sugars_g": None,
+    }
+
+
+def test_nutrition_backed_protein_route_stamp_matches_scorer(enricher):
+    product = _build(
+        "Keto Protein Chocolate",
+        [{"name": "Calcium", "quantity": 20.0, "unit": "mg"}],
+    )
+    product["nutritionalInfo"] = {
+        "protein": {"amount": 8.0, "unit": "g"},
+    }
+
+    enriched, _ = enricher.enrich_product(product)
+    artifact = build_scored_artifact(enriched)
+
+    assert enriched["product_scoring_classification"]["route_module"] == "sports"
+    assert artifact["_v4_module"] == "sports"
 
 
 def test_probiotic_np_exemption_gate_still_fires(enricher):
