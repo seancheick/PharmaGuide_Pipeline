@@ -567,6 +567,91 @@ def test_nested_same_identity_amount_is_label_restatement_not_second_exposure(en
     assert flags[0]["ul_gate_eligible"] is True
 
 
+def test_nested_source_compound_is_owned_by_declared_nutrient_total(enricher):
+    # Live DSLD 201426 decomposes one 500 mg inositol-hexanicotinate source
+    # under two nutrient views: 400 mg Niacin with a DV and 100 mg Inositol.
+    # The two compound rows are the same capsule source material, not another
+    # 1000 mg of niacin exposure on top of the declared 400 mg nutrient total.
+    product = _mag([
+        {
+            "name": "Niacin",
+            "raw_source_text": "Niacin",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 400,
+            "unit": "mg",
+            "dailyValue": 2500,
+            "isNestedIngredient": False,
+        },
+        {
+            "name": "Inositol Hexanicotinate",
+            "raw_source_text": "Inositol Hexanicotinate",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "raw_taxonomy": {"ingredientGroup": "Inositol nicotinate"},
+            "quantity": 500,
+            "unit": "mg",
+            "dailyValue": None,
+            "isNestedIngredient": True,
+            "parentBlend": "Niacin",
+        },
+        {
+            "name": "Inositol",
+            "raw_source_text": "Inositol",
+            "standardName": "Inositol",
+            "canonical_id": "inositol",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 100,
+            "unit": "mg",
+            "dailyValue": None,
+            "isNestedIngredient": False,
+        },
+        {
+            "name": "Inositol Hexaniacinate",
+            "raw_source_text": "Inositol Hexaniacinate",
+            "standardName": "Vitamin B3 (Niacin)",
+            "canonical_id": "vitamin_b3_niacin",
+            "canonical_source_db": "ingredient_quality_map",
+            "raw_taxonomy": {"ingredientGroup": "Inositol nicotinate"},
+            "quantity": 500,
+            "unit": "mg",
+            "dailyValue": None,
+            "isNestedIngredient": True,
+            "parentBlend": "Inositol",
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    analyzed = result["analyzed_ingredients"]
+    niacin_total = next(row for row in analyzed if row["ingredient"] == "Niacin")
+    compounds = [
+        row
+        for row in analyzed
+        if "hexani" in row["ingredient"].lower()
+    ]
+    niacin_flags = [
+        flag
+        for flag in result["safety_flags"]
+        if "niacin" in (flag.get("nutrient") or "").lower()
+    ]
+
+    assert len(compounds) == 2
+    assert all(row["dose_role"] == "form_component" for row in compounds)
+    assert all(row["skip_ul_check"] is True for row in compounds)
+    assert all(
+        row["parent_label_key"] == niacin_total["source_label_key"]
+        for row in compounds
+    )
+    assert len(niacin_flags) == 1
+    assert niacin_flags[0]["amount"] == pytest.approx(400)
+
+
 def test_vitamin_a_total_owns_adequacy_while_preformed_child_owns_ul(enricher):
     """A mixed Vitamin A label is one intake total plus an UL-scoped breakdown."""
     product = _mag([

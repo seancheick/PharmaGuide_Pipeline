@@ -19383,7 +19383,7 @@ class SupplementEnricherV3:
     def _nested_daily_value_nutrient_owners(
         self, active_ingredients: List[Dict[str, Any]]
     ) -> Dict[str, str]:
-        """Map a source-compound parent row to its DV-confirmed nutrient child.
+        """Map source-material detail to its DV-confirmed nutrient owner.
 
         Some DSLD labels encode a source material as the top-level row and the
         delivered elemental nutrient as a nested row. For example, label
@@ -19391,6 +19391,14 @@ class SupplementEnricherV3:
         nested 72 mg Magnesium row with 17% DV. The nested Daily Value is the
         decisive label evidence: its amount owns adequacy and UL assessment,
         while the larger parent mass is retained only as form context.
+
+        DSLD also emits the inverse shape: a DV-confirmed nutrient total above
+        a larger nested source-compound mass. A compound may then be repeated
+        beneath another delivered constituent (for example, one 500 mg
+        inositol-hexanicotinate row under 400 mg Niacin and again under 100 mg
+        Inositol). Exact compound taxonomy, canonical identity, amount, and
+        unit link those repeated views to the same nutrient owner; they are not
+        additional exposures.
         """
         top_level_rows: List[Dict[str, Any]] = [
             ingredient
@@ -19454,6 +19462,119 @@ class SupplementEnricherV3:
                     self._rda_source_label_key(child)
                 )
                 break
+
+        top_level_by_label = {
+            self._normalize_text(
+                row.get("raw_source_text") or row.get("name") or ""
+            ): row
+            for row in top_level_rows
+            if self._normalize_text(
+                row.get("raw_source_text") or row.get("name") or ""
+            )
+        }
+        source_compound_owners: Dict[
+            Tuple[str, str, float, str], str
+        ] = {}
+        for child in active_ingredients:
+            if (
+                not isinstance(child, dict)
+                or not child.get("isNestedIngredient")
+                or not child.get("parentBlend")
+            ):
+                continue
+            parent = top_level_by_label.get(
+                self._normalize_text(child.get("parentBlend") or "")
+            )
+            if parent is None:
+                continue
+            try:
+                parent_daily_value = float(parent.get("dailyValue"))
+                parent_quantity = float(parent.get("quantity") or 0)
+                child_quantity = float(child.get("quantity") or 0)
+            except (TypeError, ValueError):
+                continue
+            parent_canonical = self._normalize_text(
+                parent.get("canonical_id")
+                or parent.get("standardName")
+                or parent.get("name")
+                or ""
+            )
+            child_canonical = self._normalize_text(
+                child.get("canonical_id")
+                or child.get("standardName")
+                or child.get("name")
+                or ""
+            )
+            child_group = self._normalize_text(
+                (
+                    child.get("raw_taxonomy") or {}
+                ).get("ingredientGroup")
+                if isinstance(child.get("raw_taxonomy"), dict)
+                else ""
+            )
+            unit_key = self._same_identity_unit_key(child.get("unit"))
+            if (
+                parent_daily_value <= 0
+                or parent_quantity <= 0
+                or child_quantity < parent_quantity
+                or not parent_canonical
+                or child_canonical != parent_canonical
+                or not child_group
+                or child_group in {
+                    parent_canonical,
+                    self._normalize_text(parent.get("name") or ""),
+                }
+                or not unit_key
+                or unit_key
+                != self._same_identity_unit_key(parent.get("unit"))
+            ):
+                continue
+            child_key = self._rda_source_label_key(child)
+            parent_key = self._rda_source_label_key(parent)
+            owner_links[child_key] = parent_key
+            source_compound_owners[
+                (
+                    child_canonical,
+                    child_group,
+                    round(child_quantity, 8),
+                    unit_key,
+                )
+            ] = parent_key
+
+        if source_compound_owners:
+            for child in active_ingredients:
+                if (
+                    not isinstance(child, dict)
+                    or not child.get("isNestedIngredient")
+                    or not child.get("parentBlend")
+                ):
+                    continue
+                try:
+                    child_quantity = float(child.get("quantity") or 0)
+                except (TypeError, ValueError):
+                    continue
+                child_canonical = self._normalize_text(
+                    child.get("canonical_id")
+                    or child.get("standardName")
+                    or child.get("name")
+                    or ""
+                )
+                child_group = self._normalize_text(
+                    (
+                        child.get("raw_taxonomy") or {}
+                    ).get("ingredientGroup")
+                    if isinstance(child.get("raw_taxonomy"), dict)
+                    else ""
+                )
+                signature = (
+                    child_canonical,
+                    child_group,
+                    round(child_quantity, 8),
+                    self._same_identity_unit_key(child.get("unit")),
+                )
+                owner = source_compound_owners.get(signature)
+                if owner:
+                    owner_links[self._rda_source_label_key(child)] = owner
         return owner_links
 
     @staticmethod
