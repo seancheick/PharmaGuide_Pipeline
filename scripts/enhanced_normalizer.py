@@ -5388,6 +5388,42 @@ class EnhancedDSLDNormalizer:
                 row["_pre_correction_quantity_value"] = raw_value
             return changed
 
+        def insert_reviewed_missing_quantity(row, entry):
+            """Restore a dose absent from a source form, never replace one.
+
+            This path is deliberately separate from ordinary value/unit
+            rewrites. It fires only for an exact product-and-row correction
+            carrying ``raw_quantity_missing=true`` and refuses to overwrite
+            any source quantity representation, including an explicit zero.
+            """
+            if entry.get("raw_quantity_missing") is not True:
+                return False
+            corrected_value = entry.get("corrected_quantity_value")
+            corrected_unit = entry.get("corrected_quantity_unit")
+            try:
+                positive_value = float(corrected_value) > 0
+            except (TypeError, ValueError):
+                positive_value = False
+            if not positive_value or not str(corrected_unit or "").strip():
+                raise ValueError(
+                    "Missing-quantity label correction requires a positive "
+                    f"value and unit for DSLD {product_id} row "
+                    f"{row.get('name')!r}"
+                )
+            if row.get("quantity") not in (None, [], {}):
+                return False
+            if row.get("unit") not in (None, ""):
+                return False
+            row["_pre_correction_quantity_value"] = None
+            row["_pre_correction_quantity_unit"] = None
+            row["quantity"] = [
+                {
+                    "quantity": corrected_value,
+                    "unit": corrected_unit,
+                }
+            ]
+            return True
+
         def rewrite(row):
             if not isinstance(row, dict):
                 return row
@@ -5405,6 +5441,9 @@ class EnhancedDSLDNormalizer:
                 has_quantity_value_correction = (
                     entry.get("raw_quantity_value") is not None
                     and entry.get("corrected_quantity_value") is not None
+                )
+                has_missing_quantity_correction = (
+                    entry.get("raw_quantity_missing") is True
                 )
                 scoring_disposition = entry.get("scoring_disposition")
                 if (
@@ -5446,6 +5485,11 @@ class EnhancedDSLDNormalizer:
                 if (
                     has_quantity_value_correction
                     and rewrite_quantity_values(row, entry)
+                ):
+                    correction_applied = True
+                if (
+                    has_missing_quantity_correction
+                    and insert_reviewed_missing_quantity(row, entry)
                 ):
                     correction_applied = True
                 if (
@@ -8431,6 +8475,33 @@ class EnhancedDSLDNormalizer:
 
         logger.debug(f"Extracting {len(forms)} ingredients from label header: {name}")
         is_active_source = not self._source_path_is_inactive(ingredient_source_path)
+
+        def carry_form_dose_and_correction(
+            row: Dict[str, Any],
+            form: Dict[str, Any],
+            inherited_quantity: Optional[List[Dict[str, Any]]],
+        ) -> None:
+            form_quantity = form.get("quantity")
+            if isinstance(form_quantity, list) and form_quantity:
+                row["quantity"] = [
+                    dict(item) for item in form_quantity if isinstance(item, dict)
+                ]
+            elif isinstance(form_quantity, dict) and form_quantity:
+                row["quantity"] = [dict(form_quantity)]
+            elif inherited_quantity:
+                row["quantity"] = [dict(item) for item in inherited_quantity]
+
+            # The expanded form becomes the scoring row. Preserve the exact
+            # correction markers so source_correction and row-ledger audits
+            # retain the reviewer provenance instead of losing it at expansion.
+            for key, value in form.items():
+                if key.startswith("_pre_correction_") or key in {
+                    "_label_correction_applied",
+                    "_label_correction_provenance",
+                    "_label_scoring_disposition",
+                }:
+                    row[key] = value
+
         for form_index, form in enumerate(forms):
             indexed_form_source_path = f"{ingredient_source_path}.forms[{form_index}]"
             if isinstance(form, dict):
@@ -8475,8 +8546,11 @@ class EnhancedDSLDNormalizer:
                             "_fromLabelHeader": name,
                             "_transparency": "standard",
                         }
-                        if inherited_quantity:
-                            row["quantity"] = inherited_quantity
+                        carry_form_dose_and_correction(
+                            row,
+                            form,
+                            inherited_quantity,
+                        )
                         expanded.append(row)
                     continue
                 if self._is_label_header(form_name) or self._is_structural_form_container(
@@ -8507,8 +8581,11 @@ class EnhancedDSLDNormalizer:
                         "_fromLabelHeader": name,
                         "_transparency": "standard",
                     }
-                    if inherited_quantity:
-                        row["quantity"] = inherited_quantity
+                    carry_form_dose_and_correction(
+                        row,
+                        form,
+                        inherited_quantity,
+                    )
                     expanded.append(row)
             elif isinstance(form, str):
                 expanded_names = self._expand_compound_form_name(form, indexed_form_source_path)

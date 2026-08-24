@@ -309,6 +309,33 @@ def test_cvs_25935_crossed_dha_identity_is_source_verified(overrides):
 
 
 @pytest.mark.parametrize(
+    ("dsld_id", "product_name", "ingredient", "dose_mg"),
+    [
+        ("2248", "Flax Seed Oil 1300", "Flax seed Oil", 1300),
+        ("17794", "Flax Seed Oil 1000", "Flax seed Oil", 1000),
+        ("57157", "Evening Primrose Oil 1300", "Evening Primrose Oil", 1300),
+    ],
+)
+def test_statement_backed_missing_form_doses_are_product_scoped(
+    overrides, dsld_id, product_name, ingredient, dose_mg
+):
+    entry = (overrides.get("corrections") or {}).get(dsld_id)
+
+    assert entry, f"correction for DSLD {dsld_id} missing form dose is absent"
+    assert entry["product_name"] == product_name
+    assert entry["raw_ingredient_text"] == ingredient
+    assert entry["corrected_ingredient_text"] == ingredient
+    assert entry["raw_quantity_missing"] is True
+    assert entry["corrected_quantity_value"] == dose_mg
+    assert entry["corrected_quantity_unit"] == "mg"
+    assert entry["correction_fields"] == ["quantity.missing_to_value"]
+    assert (
+        f"https://api.ods.od.nih.gov/dsld/v9/label/{dsld_id}"
+        in entry["sources"]
+    )
+
+
+@pytest.mark.parametrize(
     ("dsld_id", "product_name", "ingredient", "raw_unit", "corrected_unit"),
     [
         ("66380", "Multi Vitamin", "Niacin", "ng", "mg"),

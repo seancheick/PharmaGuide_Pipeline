@@ -4,13 +4,73 @@
     "description": "Reviewer-signed corrections for DSLD product rows where label text, a source identifier, or a quantity value/unit contains a verified transcription or attribution defect.",
     "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, a verified quantity value/unit, or a combination of those fields. Global aliases and global identifier suppression are not supported.",
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
-    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image.",
+    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-08-24",
-    "total_entries": 33,
+    "total_entries": 36,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
+    "2248": {
+      "brand": "GNC Natural Brand",
+      "product_name": "Flax Seed Oil 1300",
+      "raw_ingredient_text": "Flax seed Oil",
+      "corrected_ingredient_text": "Flax seed Oil",
+      "raw_quantity_missing": true,
+      "corrected_quantity_value": 1300,
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.missing_to_value"
+      ],
+      "evidence": "The structured DSLD panel carries Flax seed Oil only as an undosed form under Total Fat, but the same official NIH record states: 'Each softgel capsule supplies 1300 mg of cold-pressed, unrefined flax seed oil' and separately gives a per-capsule composition totaling 1300 mg. This exact form-row correction restores the record's declared oil dose without rewriting or borrowing the separate 2 g Total Fat nutrition row.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/2248"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_statement_dose_correction"
+    },
+    "17794": {
+      "brand": "GNC Natural Brand",
+      "product_name": "Flax Seed Oil 1000",
+      "raw_ingredient_text": "Flax seed Oil",
+      "corrected_ingredient_text": "Flax seed Oil",
+      "raw_quantity_missing": true,
+      "corrected_quantity_value": 1000,
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.missing_to_value"
+      ],
+      "evidence": "The structured DSLD panel carries Flax seed Oil only as an undosed form under Total Fat, while the same official NIH record states: 'Each softgel capsule supplies 1000 mg of cold-pressed, unrefined flax seed oil' and supplies a per-capsule fatty-acid profile. This exact form-row correction restores the declared oil dose without changing the separate 1 g Total Fat nutrition row.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/17794"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_statement_dose_correction"
+    },
+    "57157": {
+      "brand": "GNC Women's",
+      "product_name": "Evening Primrose Oil 1300",
+      "raw_ingredient_text": "Evening Primrose Oil",
+      "corrected_ingredient_text": "Evening Primrose Oil",
+      "raw_quantity_missing": true,
+      "corrected_quantity_value": 1300,
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "quantity.missing_to_value"
+      ],
+      "evidence": "The structured DSLD panel carries Evening Primrose Oil only as an undosed form under Total Fat, but the same official NIH record states: 'Each softgel capsule delivers 1,300 mg of high-quality EPO' and gives a per-capsule profile of 910 mg linoleic acid, 100 mg GLA, and 290 mg other fatty acids, totaling 1300 mg. This exact form-row correction restores the oil dose without changing the separate 1 g Total Fat nutrition row.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/57157"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_statement_dose_correction"
+    },
     "19916": {
       "brand": "up&up",
       "product_name": "Adults' 50+ Multivitamin/Multimineral",

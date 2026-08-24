@@ -527,6 +527,73 @@ def test_product_scoped_correction_repairs_crossed_cvs_dha_row(normalizer):
     )
 
 
+def test_product_scoped_correction_restores_statement_backed_form_dose(normalizer):
+    """A reviewed form dose is restored without rewriting its Total Fat owner."""
+    raw_product = _make_raw_product(2248, [])
+    raw_product["fullName"] = "Flax Seed Oil 1300"
+    raw_product["brandName"] = "GNC"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Total Fat", category="fat"),
+            "ingredientGroup": "Fat (unspecified)",
+            "quantity": [{"quantity": 2, "unit": "g"}],
+            "nestedRows": [],
+            "forms": [
+                {
+                    **_make_ingredient_row("Flax seed Oil", category="fat"),
+                    "ingredientGroup": "Flaxseed Oil",
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+
+    assert len(normalized["activeIngredients"]) == 1
+    active = normalized["activeIngredients"][0]
+    assert active["canonical_id"] == "flaxseed"
+    assert active["quantity"] == 1300
+    assert active["unit"] == "mg"
+    assert active["raw_source_path"] == "ingredientRows[0].forms[0]"
+    assert active["source_correction"] == {
+        "provenance_tag": "official_statement_dose_correction",
+        "original_quantity_value": None,
+        "corrected_quantity_value": 1300,
+        "original_quantity_unit": None,
+        "corrected_quantity_unit": "mg",
+    }
+
+
+def test_missing_form_dose_is_not_inferred_without_product_override(normalizer):
+    raw_product = _make_raw_product(999999991, [])
+    raw_product["fullName"] = "Flax Seed Oil 1300"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Total Fat", category="fat"),
+            "ingredientGroup": "Fat (unspecified)",
+            "quantity": [{"quantity": 2, "unit": "g"}],
+            "nestedRows": [],
+            "forms": [
+                {
+                    **_make_ingredient_row("Flax seed Oil", category="fat"),
+                    "ingredientGroup": "Flaxseed Oil",
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+    active = normalized["activeIngredients"][0]
+
+    assert active["quantity"] == 0
+    assert active["unit"] == "unspecified"
+    assert "source_correction" not in active
+
+
 def test_product_scoped_correction_repairs_verified_boron_unit(normalizer):
     raw_product = _make_raw_product(328117, [])
     raw_product["fullName"] = (
