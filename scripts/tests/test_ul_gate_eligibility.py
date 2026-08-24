@@ -703,6 +703,128 @@ def test_mixed_vitamin_a_total_does_not_assume_all_preformed(enricher):
     assert result["safety_flags"] == []
 
 
+@pytest.mark.parametrize(
+    ("quantity", "unit", "notes", "expected_total_rae", "expected_preformed"),
+    [
+        (
+            3000,
+            "mcg",
+            "Vitamin A (Form: as 50% Beta-Carotene, and as 50% Retinyl Acetate)",
+            3000,
+            1500,
+        ),
+        (
+            3750,
+            "mcg",
+            "Vitamin A (Form: as Beta Carotene, and as 40% Vitamin A Acetate)",
+            3750,
+            1500,
+        ),
+        (
+            15000,
+            "IU",
+            "Vitamin A (Form: as 67% Beta Carotene, & as Retinyl Acetate)",
+            4500,
+            1485,
+        ),
+    ],
+)
+def test_explicit_mixed_vitamin_a_fraction_assesses_preformed_ul(
+    enricher,
+    quantity,
+    unit,
+    notes,
+    expected_total_rae,
+    expected_preformed,
+):
+    """NIH directs mixed supplements to apply the retinyl percentage to the UL."""
+    result = enricher._collect_rda_ul_data(
+        _mag([{
+            "name": "Vitamin A",
+            "raw_source_text": "Vitamin A",
+            "standardName": "Vitamin A",
+            "canonical_id": "vitamin_a",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": quantity,
+            "unit": unit,
+            "notes": notes,
+            "forms": [
+                {"name": "Beta-Carotene"},
+                {"name": "Retinyl Acetate"},
+            ],
+            "isNestedIngredient": False,
+            "raw_source_path": "ingredientRows[0]",
+        }]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    assessment = result["dose_assessments"][0]
+    adequacy = result["adequacy_results"][0]
+    assert assessment["conversion_rule_id"] == (
+        "vitamin_a_mixed_explicit_preformed_fraction"
+    )
+    assert assessment["normalized_value"] == pytest.approx(expected_total_rae)
+    assert assessment["normalized_unit"] == "mcg RAE"
+    assert assessment["reason_code"] == (
+        "explicit_mixed_vitamin_a_preformed_fraction"
+    )
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["pct_ul"] == pytest.approx(
+        expected_preformed / 3000 * 100
+    )
+    assert assessment["readiness"] == "complete"
+    assert adequacy["adequacy_exposure"]["per_day"] == pytest.approx(
+        expected_total_rae
+    )
+    assert adequacy["safety_exposure"]["per_day"] == pytest.approx(
+        expected_preformed
+    )
+    assert adequacy["preformed_vitamin_a_fraction"] == pytest.approx(
+        expected_preformed / expected_total_rae
+    )
+
+
+@pytest.mark.parametrize(
+    "notes",
+    [
+        "as 120% Beta Carotene and Retinyl Acetate",
+        "as 110% Beta Carotene and as 10% Retinyl Acetate",
+        "as 50% Beta Carotene and as 60% Retinyl Acetate",
+    ],
+)
+def test_invalid_mixed_vitamin_a_percentage_remains_unresolved(
+    enricher,
+    notes,
+):
+    result = enricher._collect_rda_ul_data(
+        _mag([{
+            "name": "Vitamin A",
+            "raw_source_text": "Vitamin A",
+            "standardName": "Vitamin A",
+            "canonical_id": "vitamin_a",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 15000,
+            "unit": "IU",
+            "notes": notes,
+            "forms": [
+                {"name": "Beta-Carotene"},
+                {"name": "Retinyl Acetate"},
+            ],
+            "isNestedIngredient": False,
+        }]),
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+
+    assessment = result["dose_assessments"][0]
+    assert assessment["reason_code"] == (
+        "mixed_vitamin_a_preformed_fraction_unknown"
+    )
+    assert assessment["ul_assessment_status"] == "unresolved_form"
+    assert assessment["readiness"] == "incomplete"
+
+
 def test_mixed_vitamin_a_below_ul_is_safe_under_all_preformed_upper_bound(
     enricher,
 ):

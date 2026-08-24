@@ -357,6 +357,109 @@ def _rda_mass_unit_key(value) -> Optional[str]:
     return None
 
 
+def _explicit_mixed_vitamin_a_preformed_fraction(
+    ingredient: Dict[str, Any],
+) -> Optional[float]:
+    """Return the label-declared preformed share of a mixed Vitamin A row.
+
+    The adult Vitamin A UL applies to preformed Vitamin A, not beta-carotene.
+    A mixed parent row is assessable only when its own label notes quantify
+    one or both of the two disclosed forms. Form order never implies a share.
+    """
+    beta_pattern = r"beta[\s-]*carotene"
+    preformed_pattern = (
+        r"(?:retin(?:yl|ol)\s+(?:acetate|palmitate)"
+        r"|vitamin\s+a\s+(?:acetate|palmitate))"
+    )
+
+    form_kinds = []
+    for form in ingredient.get("forms") or []:
+        if not isinstance(form, dict):
+            continue
+        form_name = str(form.get("name") or "").lower()
+        if re.search(beta_pattern, form_name):
+            form_kinds.append("beta")
+        elif re.search(preformed_pattern, form_name):
+            form_kinds.append("preformed")
+    if form_kinds.count("beta") != 1 or form_kinds.count("preformed") != 1:
+        return None
+
+    notes = str(ingredient.get("notes") or "").lower()
+    if not notes:
+        return None
+
+    def _declared_percentage(
+        form_pattern: str,
+    ) -> Tuple[bool, Optional[float]]:
+        patterns = (
+            # DSLD commonly preserves labels as "53% Beta Carotene".
+            rf"(?P<pct>\d+(?:\.\d+)?)\s*%\s*(?:of\s+)?{form_pattern}",
+            # Also accept an immediately trailing label percentage without
+            # reaching across the other form's clause.
+            rf"{form_pattern}\s*(?:\(\s*)?(?P<pct>\d+(?:\.\d+)?)\s*%\s*\)?",
+        )
+        matches = []
+        for pattern in patterns:
+            matches.extend(
+                float(match.group("pct"))
+                for match in re.finditer(pattern, notes)
+            )
+        unique = {round(value, 8) for value in matches}
+        if not matches:
+            return False, None
+        if len(unique) != 1:
+            return True, None
+        percentage = next(iter(unique))
+        if not math.isfinite(percentage) or not 0 <= percentage <= 100:
+            return True, None
+        return True, percentage
+
+    beta_found, beta_percentage = _declared_percentage(beta_pattern)
+    preformed_found, preformed_percentage = _declared_percentage(
+        preformed_pattern
+    )
+    if (beta_found and beta_percentage is None) or (
+        preformed_found and preformed_percentage is None
+    ):
+        return None
+    if not beta_found and not preformed_found:
+        return None
+    if beta_percentage is not None and preformed_percentage is not None:
+        if abs(beta_percentage + preformed_percentage - 100.0) > 0.5:
+            return None
+        return preformed_percentage / 100.0
+    if preformed_percentage is not None:
+        return preformed_percentage / 100.0
+    return (100.0 - beta_percentage) / 100.0
+
+
+def _mixed_vitamin_a_total_mcg_rae(
+    amount: float,
+    unit: Any,
+) -> Optional[float]:
+    """Normalize an explicitly mixed supplement Vitamin A total to mcg RAE."""
+    if not math.isfinite(amount) or amount < 0:
+        return None
+    mass_unit = _rda_mass_unit_key(unit)
+    if mass_unit == "mcg":
+        return amount
+    if mass_unit == "mg":
+        return amount * 1000.0
+    normalized_unit = str(unit or "").lower().replace(" ", "").strip()
+    if normalized_unit in {"mcgrae", "mcgretinolactivityequivalent"}:
+        return amount
+    if normalized_unit in {
+        "iu",
+        "i.u.",
+        "internationalunit",
+        "internationalunits",
+    }:
+        # NIH ODS and FDA supplement-label guidance use 0.3 mcg RAE/IU
+        # for both supplemental beta-carotene and preformed Vitamin A.
+        return amount * 0.3
+    return None
+
+
 def _has_no_official_ul_reference(nutrient_record: Dict[str, Any]) -> bool:
     if not nutrient_record:
         return False
@@ -19855,46 +19958,92 @@ class SupplementEnricherV3:
                         and "vitamin_a_beta_carotene_supplement"
                         in disclosed_vitamin_a_rules
                     )
+                    explicit_preformed_vitamin_a_fraction = (
+                        _explicit_mixed_vitamin_a_preformed_fraction(ingredient)
+                        if has_mixed_vitamin_a_forms
+                        else None
+                    )
+                    explicit_mixed_vitamin_a_total_rae = (
+                        _mixed_vitamin_a_total_mcg_rae(quantity_float, unit)
+                        if explicit_preformed_vitamin_a_fraction is not None
+                        else None
+                    )
                     conversion_exception_occurred = False
-                    try:
-                        conversion = self.unit_converter.convert_nutrient(
-                            nutrient=std_name,
-                            amount=quantity_float,
-                            from_unit=unit,
-                            ingredient_name=" ".join(
-                                value
-                                for value in (form_hint_name, disclosed_forms)
-                                if value
-                            ),
-                        )
-                    except Exception as conversion_error:
-                        conversion_exception_occurred = True
-                        # A malformed row must not erase valid assessments for
-                        # the rest of the product. Preserve the source amount,
-                        # but never substitute it as a normalized value.
-                        dose_row_errors.append({
-                            "source_row_ref": ingredient.get("raw_source_path"),
-                            "ingredient": ing_name,
-                            "reason": "conversion_exception",
-                            "error": str(conversion_error)[:500],
-                        })
+                    if explicit_mixed_vitamin_a_total_rae is not None:
                         conversion = ConversionResult(
-                            success=False,
+                            success=True,
                             original_value=quantity_float,
                             original_unit=unit,
-                            converted_value=None,
-                            converted_unit=None,
-                            conversion_rule_id=None,
-                            conversion_factor=None,
+                            converted_value=explicit_mixed_vitamin_a_total_rae,
+                            converted_unit="mcg RAE",
+                            conversion_rule_id=(
+                                "vitamin_a_mixed_explicit_preformed_fraction"
+                            ),
+                            conversion_factor=(
+                                explicit_mixed_vitamin_a_total_rae
+                                / quantity_float
+                            ),
                             nutrient_detected=std_name,
-                            form_detected=None,
-                            form_detection_source="conversion_exception",
-                            confidence="failed",
-                            error=f"conversion_exception: {conversion_error}",
+                            form_detected="mixed_explicit_preformed_fraction",
+                            form_detection_source="label_notes_percentage",
+                            confidence="high",
+                            notes=[
+                                "Total Vitamin A normalized to mcg RAE; the "
+                                "label-declared preformed fraction is used "
+                                "only for the preformed Vitamin A UL."
+                            ],
                         )
+                        ul_exposure = {
+                            "ul_gate_eligible": True,
+                            "ul_exposure_basis": (
+                                "explicit_label_preformed_vitamin_a_fraction"
+                            ),
+                            "ul_gate_ineligible_reason": None,
+                        }
+                    else:
+                        try:
+                            conversion = self.unit_converter.convert_nutrient(
+                                nutrient=std_name,
+                                amount=quantity_float,
+                                from_unit=unit,
+                                ingredient_name=" ".join(
+                                    value
+                                    for value in (form_hint_name, disclosed_forms)
+                                    if value
+                                ),
+                            )
+                        except Exception as conversion_error:
+                            conversion_exception_occurred = True
+                            # A malformed row must not erase valid assessments
+                            # for the rest of the product. Preserve the source
+                            # amount, but never substitute it as normalized.
+                            dose_row_errors.append({
+                                "source_row_ref": ingredient.get("raw_source_path"),
+                                "ingredient": ing_name,
+                                "reason": "conversion_exception",
+                                "error": str(conversion_error)[:500],
+                            })
+                            conversion = ConversionResult(
+                                success=False,
+                                original_value=quantity_float,
+                                original_unit=unit,
+                                converted_value=None,
+                                converted_unit=None,
+                                conversion_rule_id=None,
+                                conversion_factor=None,
+                                nutrient_detected=std_name,
+                                form_detected=None,
+                                form_detection_source="conversion_exception",
+                                confidence="failed",
+                                error=f"conversion_exception: {conversion_error}",
+                            )
 
                     conv_evidence = conversion.to_dict()
                     conv_evidence["ingredient"] = ing_name
+                    if explicit_preformed_vitamin_a_fraction is not None:
+                        conv_evidence["preformed_vitamin_a_fraction"] = (
+                            explicit_preformed_vitamin_a_fraction
+                        )
                     if dose_data_quality:
                         conv_evidence["dose_data_quality"] = dose_data_quality
                     conversion_evidence.append(conv_evidence)
@@ -20108,7 +20257,10 @@ class SupplementEnricherV3:
                         skip_ul_check = True
                         ul_only_skip = True
                         skip_ul_reason = "vitamin_a_components_own_ul"
-                    elif has_mixed_vitamin_a_forms:
+                    elif (
+                        has_mixed_vitamin_a_forms
+                        and explicit_preformed_vitamin_a_fraction is None
+                    ):
                         # A mixed retinyl + beta-carotene total is valid for
                         # vitamin-A adequacy, but the total cannot be compared
                         # with the preformed-A UL unless the retinyl fraction
@@ -20196,6 +20348,11 @@ class SupplementEnricherV3:
                         if per_day_min is not None
                         else converted_amount
                     )
+                    if (
+                        explicit_preformed_vitamin_a_fraction is not None
+                        and amount_for_ul is not None
+                    ):
+                        amount_for_ul *= explicit_preformed_vitamin_a_fraction
                     folate_ul_screening = None
                     if (
                         _is_folate
@@ -20311,12 +20468,21 @@ class SupplementEnricherV3:
                             "unit": converted_unit,
                         },
                         "safety_exposure": {
-                            "per_day": per_day_max,
+                            "per_day": amount_for_ul,
                             "unit": converted_unit,
                         },
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "data_by_group": list(_nutrient_record.get("data") or []),
                     })
+                    if explicit_preformed_vitamin_a_fraction is not None:
+                        adequacy_dict.update({
+                            "preformed_vitamin_a_fraction": (
+                                explicit_preformed_vitamin_a_fraction
+                            ),
+                            "ul_assessment_basis": (
+                                "explicit_label_preformed_vitamin_a_fraction"
+                            ),
+                        })
                     worst_case_compound_mass_within_ul = bool(
                         not skip_ul_check
                         and resolved_canonical_id
@@ -20781,7 +20947,12 @@ class SupplementEnricherV3:
                         conversion_evidence=conv_evidence,
                         dose_role=dose_lineage.get("dose_role"),
                         skip_ul_check=skip_ul_check,
-                        skip_ul_reason=skip_ul_reason,
+                        skip_ul_reason=(
+                            "explicit_mixed_vitamin_a_preformed_fraction"
+                            if explicit_preformed_vitamin_a_fraction is not None
+                            and not skip_ul_check
+                            else skip_ul_reason
+                        ),
                         ul_status=adequacy_dict.get("ul_status"),
                         ul_value=adequacy_dict.get("ul"),
                         ul_unit=_nutrient_record.get("unit") or converted_unit,
