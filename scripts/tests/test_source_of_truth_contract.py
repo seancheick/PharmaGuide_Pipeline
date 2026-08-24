@@ -26,6 +26,7 @@ from pipeline_freshness import (  # noqa: E402
     REFERENCE_FINGERPRINT_KEY,
     enrichment_reference_fingerprint,
 )
+from scripts.release_artifact_paths import catalog_dist_dir  # noqa: E402
 
 
 def write_json(path: Path, payload):
@@ -1025,7 +1026,7 @@ def test_live_interaction_db_has_no_orphan_canonicals():
     """
     import pytest
 
-    dist = REPO_ROOT / "scripts" / "dist"
+    dist = catalog_dist_dir()
     if not (dist / "interaction_db.sqlite").exists():
         pytest.skip(
             "no built scripts/dist/interaction_db.sqlite — "

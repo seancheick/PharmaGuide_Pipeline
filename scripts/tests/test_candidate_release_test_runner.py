@@ -6,6 +6,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RUNNER = REPO_ROOT / "scripts" / "test.sh"
 STAMP_PARITY = REPO_ROOT / "scripts" / "tests" / "test_catalog_stamp_parity_release.py"
+SOURCE_OF_TRUTH = REPO_ROOT / "scripts" / "tests" / "test_source_of_truth_contract.py"
 
 
 def _runner_text() -> str:
@@ -42,3 +43,10 @@ def test_catalog_stamp_parity_uses_the_shared_release_artifact_resolver() -> Non
     assert "from scripts.release_artifact_paths import catalog_dist_dir" in text
     assert "DIST = catalog_dist_dir()" in text
     assert 'DIST = ROOT / "scripts" / "dist"' not in text
+
+
+def test_interaction_parity_uses_the_shared_release_artifact_resolver() -> None:
+    text = SOURCE_OF_TRUTH.read_text(encoding="utf-8")
+
+    assert "from scripts.release_artifact_paths import catalog_dist_dir" in text
+    assert "dist = catalog_dist_dir()" in text
