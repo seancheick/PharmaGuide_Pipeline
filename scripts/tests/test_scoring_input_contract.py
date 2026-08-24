@@ -1113,6 +1113,119 @@ def test_explicit_eaa_total_emits_one_verified_sports_aggregate():
     assert result.mapped_coverage == 1.0
 
 
+def test_declared_nutrition_protein_mass_emits_typed_sports_evidence():
+    calcium = _row(
+        name="Calcium",
+        canonical_id="calcium",
+        quantity=20,
+        unit="mg",
+        raw_source_path="ingredientRows[5]",
+    )
+    product = _product(
+        [calcium],
+        product_name="Keto Protein Chocolate",
+        primary_type="mineral_complex",
+        nutrition_summary={"protein_g": 8.0},
+        display_ingredients=[
+            {
+                "raw_source_text": "Protein",
+                "display_name": "Protein",
+                "source_section": "activeIngredients",
+                "display_type": "nutrition_fact",
+                "raw_source_path": "ingredientRows[4]",
+                "exact_dose_text": "8 g",
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    protein = next(
+        row
+        for row in result.rows
+        if row.get("evidence_type") == "sports_primary_dose"
+    )
+    assert protein["canonical_id"] == "protein"
+    assert protein["quantity"] == 8.0
+    assert protein["unit"] == "g"
+    assert protein["raw_source_path"] == "ingredientRows[4]"
+    assert protein["reason"] == "declared_nutrition_protein_mass"
+    assert result.mapped_coverage == 1.0
+
+
+def test_source_corrected_protein_mass_uses_sports_evidence_not_blend_anchor():
+    protein = _row(
+        name="Protein",
+        canonical_id="protein",
+        quantity=50,
+        unit="Gram(s)",
+        raw_source_path="ingredientRows[4]",
+        source_correction={
+            "provenance_tag": "official_label_unit_correction",
+            "original_quantity_unit": "mg",
+            "corrected_quantity_unit": "Gram(s)",
+        },
+    )
+    product = _product(
+        [],
+        product_name="Weight Gainer Strawberries & Cream",
+        primary_type="mineral_complex",
+        nutrition_summary={"protein_g": 50.0},
+        activeIngredients=[protein],
+        display_ingredients=[
+            {
+                "raw_source_text": "Protein",
+                "display_name": "Protein",
+                "source_section": "activeIngredients",
+                "display_type": "mapped_ingredient",
+                "raw_source_path": "ingredientRows[4]",
+                "exact_dose_text": "50 g",
+            }
+        ],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients": [protein],
+            "ingredients_skipped": [
+                {
+                    **protein,
+                    "score_exclusion_reason": "excluded_nutrition_fact",
+                }
+            ],
+        },
+    )
+
+    evidence = derive_product_scoring_evidence(product)
+
+    protein_evidence = [
+        row for row in evidence if row.get("canonical_id") == "protein"
+    ]
+    assert len(protein_evidence) == 1
+    assert protein_evidence[0]["evidence_type"] == "sports_primary_dose"
+    assert protein_evidence[0]["reason"] == "declared_nutrition_protein_mass"
+    assert protein_evidence[0]["dose_value"] == 50.0
+
+
+def test_nutrition_protein_mass_without_product_intent_is_not_sports_evidence():
+    product = _product(
+        [],
+        product_name="Daily Multivitamin",
+        nutrition_summary={"protein_g": 8.0},
+        display_ingredients=[
+            {
+                "raw_source_text": "Protein",
+                "source_section": "activeIngredients",
+                "display_type": "nutrition_fact",
+                "raw_source_path": "ingredientRows[4]",
+                "exact_dose_text": "8 g",
+            }
+        ],
+    )
+
+    evidence = derive_product_scoring_evidence(product)
+
+    assert not any(row.get("evidence_type") == "sports_primary_dose" for row in evidence)
+
+
 def test_generic_amino_blend_total_does_not_become_eaa_aggregate():
     children = [
         _eaa_child(canonical, index)

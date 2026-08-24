@@ -16620,8 +16620,10 @@ class SupplementEnricherV3:
         """
         Extract the five macro-nutrient values from nutritionalInfo for
         transparency surfacing.  Calories are in kcal; carbs/fat/protein/fiber
-        are in grams.  Units are passed through verbatim — the cleaner already
-        normalises them.  Missing or zero-amount fields are emitted as None so
+        are in grams.  Macro values are accepted only when the source unit is
+        explicitly grams.  A malformed source unit must be corrected through
+        the reviewer-signed label-correction registry; it must not be silently
+        relabelled here.  Missing or zero-amount fields are emitted as None so
         the Flutter side can distinguish "not declared" from "zero".
 
         This is ADDITIVE — it does not replace dietary_sensitivity_data
@@ -16643,13 +16645,22 @@ class SupplementEnricherV3:
                 return None
             return fval if fval != 0.0 else None
 
+        def _gram_amount(key: str):
+            entry = ni.get(key)
+            if not isinstance(entry, dict):
+                return None
+            unit = str(entry.get("unit") or "").strip().lower()
+            if unit not in {"g", "gram", "grams", "gram(s)"}:
+                return None
+            return _amount(key)
+
         return {
             "calories_per_serving": _amount("calories"),
-            "total_carbohydrates_g": _amount("totalCarbohydrates"),
-            "total_fat_g": _amount("totalFat"),
-            "protein_g": _amount("protein"),
-            "dietary_fiber_g": _amount("dietaryFiber"),
-            "total_sugars_g": _amount("sugars"),
+            "total_carbohydrates_g": _gram_amount("totalCarbohydrates"),
+            "total_fat_g": _gram_amount("totalFat"),
+            "protein_g": _gram_amount("protein"),
+            "dietary_fiber_g": _gram_amount("dietaryFiber"),
+            "total_sugars_g": _gram_amount("sugars"),
         }
 
     def _normalize_serving_unit_label(self, unit: Any) -> str:

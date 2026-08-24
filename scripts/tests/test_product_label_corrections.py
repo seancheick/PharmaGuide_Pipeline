@@ -212,6 +212,28 @@ def test_natures_way_328117_boron_unit_correction_present(overrides):
 
 
 @pytest.mark.parametrize(
+    ("dsld_id", "product_name"),
+    [
+        ("259709", "Weight Gainer Strawberries & Cream"),
+        ("69608", "Weight Gainer Strawberries & Cream"),
+    ],
+)
+def test_gnc_weight_gainer_protein_unit_corrections_are_source_verified(
+    overrides, dsld_id, product_name
+):
+    entry = (overrides.get("corrections") or {}).get(dsld_id)
+
+    assert entry, f"correction for GNC weight gainer {dsld_id} is missing"
+    assert entry["product_name"] == product_name
+    assert entry["raw_ingredient_text"] == "Protein"
+    assert entry["corrected_ingredient_text"] == "Protein"
+    assert entry["raw_quantity_unit"] == "mg"
+    assert entry["corrected_quantity_unit"] == "Gram(s)"
+    assert entry["correction_fields"] == ["quantity.unit"]
+    assert "https://www.gnc.com/on/demandware.static/-/Sites-GNC2-Library/default/pdf/369937_lbl.pdf" in entry["sources"]
+
+
+@pytest.mark.parametrize(
     ("dsld_id", "product_name", "ingredient", "raw_unit", "corrected_unit"),
     [
         ("66380", "Multi Vitamin", "Niacin", "ng", "mg"),

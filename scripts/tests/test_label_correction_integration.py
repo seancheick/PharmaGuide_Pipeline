@@ -510,6 +510,29 @@ def test_product_scoped_correction_repairs_verified_mass_unit_typos(
     )
 
 
+@pytest.mark.parametrize("dsld_id", [259709, 69608])
+def test_product_scoped_correction_restores_weight_gainer_protein_grams(
+    normalizer, dsld_id
+):
+    rows = [
+        {
+            **_make_ingredient_row("Protein", category="protein"),
+            "quantity": [{"quantity": 50, "unit": "mg"}],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    corrected = normalizer._apply_label_corrections(rows, str(dsld_id))
+
+    assert corrected[0]["quantity"][0]["quantity"] == 50
+    assert corrected[0]["quantity"][0]["unit"] == "Gram(s)"
+    assert corrected[0]["_pre_correction_quantity_unit"] == "mg"
+    assert corrected[0]["_label_correction_provenance"] == (
+        "official_label_unit_correction"
+    )
+
+
 def test_product_scoped_correction_restores_megafood_horsetail_label_text(
     normalizer,
 ):

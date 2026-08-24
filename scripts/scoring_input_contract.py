@@ -946,6 +946,112 @@ def _derive_explicit_eaa_aggregate_evidence(
     return evidence
 
 
+def _derive_declared_nutrition_protein_evidence(
+    product: Dict[str, Any],
+    active_rows: List[Dict[str, Any]],
+    scorable_paths: set[str],
+) -> List[Dict[str, Any]]:
+    """Project a declared Nutrition Facts protein mass for protein products.
+
+    Protein totals are display-only Nutrition Facts rows, so they are correctly
+    absent from ``ingredients_scorable``.  A protein powder or mass gainer still
+    needs that declared mass as typed sports-dose evidence.  The projection is
+    deliberately narrow: product-name intent, a gram-validated nutrition
+    summary, an exact display-ledger Protein row, and no dose-bearing protein
+    active already owned by the scoring contract.
+    """
+    if not has_protein_product_intent(_route_product_label_text(product)):
+        return []
+
+    protein_g = _as_float(
+        _safe_dict(product.get("nutrition_summary")).get("protein_g"),
+        None,
+    )
+    if protein_g is None or protein_g <= 0:
+        return []
+
+    if any(
+        str(row.get("raw_source_path") or "") in scorable_paths
+        and _norm(row.get("canonical_id")) in _PROTEIN_CANONICALS
+        and _positive_quantity(row) is not None
+        and _unit_is_mass(
+            row.get("unit") or row.get("unit_normalized") or row.get("dose_unit")
+        )
+        for row in active_rows
+    ):
+        return []
+
+    corrected_protein_paths = {
+        str(row.get("raw_source_path") or "").strip()
+        for row in active_rows
+        if _norm(row.get("canonical_id")) == "protein"
+        and _norm(
+            _safe_dict(row.get("source_correction")).get("provenance_tag")
+        )
+        == "official_label_unit_correction"
+        and _norm(
+            _safe_dict(row.get("source_correction")).get("corrected_quantity_unit")
+        ).replace(" ", "")
+        in {"g", "gram", "grams", "gram(s)"}
+        and str(row.get("raw_source_path") or "").strip()
+    }
+
+    display_row = next(
+        (
+            row
+            for row in _safe_list(product.get("display_ingredients"))
+            if isinstance(row, dict)
+            and (
+                _norm(row.get("display_type")) == "nutrition_fact"
+                or (
+                    _norm(row.get("display_type")) == "mapped_ingredient"
+                    and str(row.get("raw_source_path") or "").strip()
+                    in corrected_protein_paths
+                )
+            )
+            and _norm(row.get("source_section")) == "activeingredients"
+            and _norm(row.get("raw_source_text") or row.get("display_name"))
+            == "protein"
+            and str(row.get("raw_source_path") or "").strip()
+            and str(row.get("exact_dose_text") or "").strip()
+        ),
+        None,
+    )
+    if display_row is None:
+        return []
+
+    source_row = {
+        "name": "Protein",
+        "raw_source_text": display_row.get("raw_source_text") or "Protein",
+        "raw_source_path": display_row["raw_source_path"],
+        "source_section": "active",
+        "canonical_id": "protein",
+        "canonical_source_db": "cleaner_nutrition_fact",
+        "identity_disposition": "taxonomy_only",
+        "raw_taxonomy": {
+            "category": display_row.get("raw_category") or "protein",
+            "ingredientGroup": display_row.get("ingredient_group")
+            or "Protein (unspecified)",
+            "forms": [],
+        },
+    }
+    return [
+        _evidence_base(
+            row=source_row,
+            evidence_type="sports_primary_dose",
+            canonical_id="protein",
+            clean_identity_id="protein",
+            scoring_parent_id="protein",
+            dose_value=protein_g,
+            dose_unit="g",
+            evidence_scope="row_level",
+            confidence="high",
+            reason="declared_nutrition_protein_mass",
+            name="Protein",
+        )
+    ]
+
+
 def _can_emit_omega_aggregate_evidence(row: Dict[str, Any], canonical: str) -> bool:
     """True when the row identity itself can support EPA/DHA aggregate evidence."""
     if canonical.startswith("vitamin_") or canonical.startswith("mineral_"):
@@ -1537,6 +1643,16 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             evidence.append(item)
 
     for item in _derive_explicit_eaa_aggregate_evidence(active_rows):
+        special_evidence_paths.update(
+            str(path) for path in _safe_list(item.get("linked_rows")) if path
+        )
+        evidence.append(item)
+
+    for item in _derive_declared_nutrition_protein_evidence(
+        product,
+        active_rows,
+        scorable_paths,
+    ):
         special_evidence_paths.update(
             str(path) for path in _safe_list(item.get("linked_rows")) if path
         )

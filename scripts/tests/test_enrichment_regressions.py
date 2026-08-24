@@ -4219,6 +4219,15 @@ class TestNutritionSummaryCollection:
         ns = enriched["nutrition_summary"]
         assert ns["protein_g"] == 5.0, "protein_g must pass through as-is (5.0g → 5.0)"
 
+    def test_nutrition_summary_does_not_relabel_milligrams_as_grams(self, enricher):
+        product = self._make_product({
+            "protein": {"amount": 50.0, "unit": "mg"},
+        })
+
+        enriched, _ = enricher.enrich_product(product)
+
+        assert enriched["nutrition_summary"]["protein_g"] is None
+
     def test_nutrition_summary_preserves_sugar_and_sodium_flow(self, enricher):
         """Adding nutrition_summary must not disturb dietary_sensitivity_data."""
         product = self._make_product({
