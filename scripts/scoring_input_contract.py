@@ -775,6 +775,97 @@ def _is_omega_aggregate_row(row: Dict[str, Any]) -> bool:
     return bool(re.search(r"\b(epa|dha)\b", text))
 
 
+_EXPLICIT_EPA_DHA_AGGREGATE_RE = re.compile(
+    r"\b(?:total|combined)\s+(?:epa\s+(?:and\s+)?dha|dha\s+(?:and\s+)?epa)\b",
+    re.IGNORECASE,
+)
+
+
+def _is_explicit_epa_dha_aggregate_label(value: Any) -> bool:
+    """True only when the label names a combined EPA+DHA dose owner."""
+    normalized = re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
+    return bool(_EXPLICIT_EPA_DHA_AGGREGATE_RE.search(normalized))
+
+
+def _parent_aggregate_mass(row: Dict[str, Any]) -> tuple[Optional[float], Optional[str]]:
+    value = _as_float(row.get("parentBlendMass"), None)
+    unit = row.get("parentBlendUnit")
+    if value is not None and value > 0 and _unit_is_mass(unit):
+        return value, str(unit)
+    normalized_mg = _as_float(row.get("parent_blend_mass_mg"), None)
+    if normalized_mg is not None and normalized_mg > 0:
+        return normalized_mg, "mg"
+    return None, None
+
+
+def _aggregate_parent_source_path(row: Dict[str, Any]) -> str:
+    explicit = str(row.get("parent_source_path") or "").strip()
+    if explicit:
+        return explicit
+    child_path = str(row.get("raw_source_path") or "").strip()
+    return re.sub(r"\.(?:nestedRows|forms)\[\d+\]$", "", child_path)
+
+
+def _derive_explicit_epa_dha_aggregate_evidence(
+    rows: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Project one combined dose without assigning it to either child."""
+    groups: Dict[tuple[str, str, float, str], List[Dict[str, Any]]] = {}
+    for row in rows:
+        canonical = _norm(row.get("canonical_id"))
+        parent_label = row.get("parentBlend") or row.get("parent_blend")
+        if canonical not in {"epa", "dha"}:
+            continue
+        if not _is_explicit_epa_dha_aggregate_label(parent_label):
+            continue
+        mass, unit = _parent_aggregate_mass(row)
+        if mass is None or unit is None:
+            continue
+        parent_path = _aggregate_parent_source_path(row)
+        key = (
+            parent_path,
+            re.sub(r"\s+", " ", str(parent_label).strip().lower()),
+            mass,
+            _norm(unit),
+        )
+        groups.setdefault(key, []).append(row)
+
+    evidence: List[Dict[str, Any]] = []
+    for (parent_path, _label, mass, _unit), children in groups.items():
+        if {_norm(row.get("canonical_id")) for row in children} != {"epa", "dha"}:
+            continue
+        representative = children[0]
+        _, dose_unit = _parent_aggregate_mass(representative)
+        item = _evidence_base(
+            row=representative,
+            evidence_type="omega_epa_dha_aggregate",
+            canonical_id="epa_dha",
+            clean_identity_id=_norm(representative.get("canonical_id")) or None,
+            scoring_parent_id="epa_dha",
+            dose_value=mass,
+            dose_unit=str(dose_unit),
+            evidence_scope="row_level",
+            confidence="high",
+            reason="explicit_epa_dha_aggregate_owner",
+            name=(
+                representative.get("parentBlend")
+                or representative.get("parent_blend")
+                or "Total EPA and DHA"
+            ),
+        )
+        child_paths = sorted({
+            str(row.get("raw_source_path") or "").strip()
+            for row in children
+            if str(row.get("raw_source_path") or "").strip()
+        })
+        item["raw_source_path"] = parent_path or item["raw_source_path"]
+        item["linked_rows"] = list(dict.fromkeys(
+            [item["raw_source_path"], *child_paths]
+        ))
+        evidence.append(item)
+    return evidence
+
+
 def _can_emit_omega_aggregate_evidence(row: Dict[str, Any], canonical: str) -> bool:
     """True when the row identity itself can support EPA/DHA aggregate evidence."""
     if canonical.startswith("vitamin_") or canonical.startswith("mineral_"):
@@ -1357,6 +1448,13 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
     }
     special_evidence_paths: set[str] = set()
     has_explicit_epa_dha_row = any(_trustworthy_epa_dha_row(row) for row in active_rows)
+
+    if not has_explicit_epa_dha_row:
+        for item in _derive_explicit_epa_dha_aggregate_evidence(active_rows):
+            special_evidence_paths.update(
+                str(path) for path in _safe_list(item.get("linked_rows")) if path
+            )
+            evidence.append(item)
 
     for row in active_rows:
         quantity = _positive_quantity(row)

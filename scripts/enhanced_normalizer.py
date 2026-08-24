@@ -7549,6 +7549,8 @@ class EnhancedDSLDNormalizer:
             # Hierarchy classification for scoring (source/summary/component)
             "hierarchyType": "blend_header" if is_structural_active_blend_total else self._classify_hierarchy_type(name)
         }
+        if ing.get("parent_source_path"):
+            result["parent_source_path"] = ing["parent_source_path"]
         if is_active and self._is_dosed_omega_aggregate_owner(
             ing,
             ing.get("raw_source_path") or "activeIngredients",
@@ -8292,6 +8294,7 @@ class EnhancedDSLDNormalizer:
         forms = ingredient.get("forms", []) or []
         expanded: List[Dict[str, Any]] = []
         ingredient_source_path = ingredient.get("raw_source_path") or source_path
+        parent_mass, parent_unit = self._extract_primary_mass_unit(ingredient)
         if self._is_label_header(name):
             if forms and self._is_semantic_label_qualifier(name):
                 self._queue_display_ingredient(
@@ -8455,6 +8458,9 @@ class EnhancedDSLDNormalizer:
             )
             row.setdefault("parentBlend", name)
             row.setdefault("parent_source_path", ingredient_source_path)
+            if parent_mass is not None:
+                row.setdefault("parentBlendMass", parent_mass)
+                row.setdefault("parentBlendUnit", parent_unit)
             self._stamp_expanded_form_cleaner_contract(
                 row,
                 row.get("raw_source_path") or ingredient_source_path,

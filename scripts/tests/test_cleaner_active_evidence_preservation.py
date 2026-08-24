@@ -249,6 +249,18 @@ def test_active_omega_nested_compound_forms_split_to_epa_and_dha():
     canonicals = _active_canonicals(cleaned)
     assert "dha" in canonicals
     assert "epa" in canonicals
+    aggregate_children = [
+        row
+        for row in cleaned["activeIngredients"]
+        if row.get("canonical_id") in {"epa", "dha"}
+    ]
+    assert len(aggregate_children) == 2
+    assert {
+        (row.get("parentBlend"), row.get("parentBlendMass"), row.get("parentBlendUnit"))
+        for row in aggregate_children
+    } == {("Total DHA, EPA", 500, "mg")}
+    assert len({row.get("parent_source_path") for row in aggregate_children}) == 1
+    assert aggregate_children[0].get("parent_source_path")
 
 
 def test_title_matching_otheringredient_oil_rescues_active_identity_when_panel_is_empty():

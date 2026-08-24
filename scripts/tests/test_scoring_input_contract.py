@@ -189,6 +189,92 @@ def test_product_level_evidence_never_inflates_label_mapping_coverage():
     assert result.mapped_coverage == 1.0
 
 
+def _zero_dose_omega_child(
+    canonical_id: str,
+    *,
+    parent_label: str,
+    parent_mass: float = 68.0,
+) -> dict:
+    child_index = 0 if canonical_id == "epa" else 1
+    label_name = (
+        "Eicosapentaenoic Acid"
+        if canonical_id == "epa"
+        else "Docosahexaenoic Acid"
+    )
+    return {
+        "name": label_name,
+        "raw_source_text": label_name,
+        "canonical_id": canonical_id,
+        "mapped": True,
+        "quantity": 0.0,
+        "unit": "NP",
+        "source_section": "active",
+        "raw_source_path": f"ingredientRows[0].nestedRows[{child_index}]",
+        "parent_source_path": "ingredientRows[0]",
+        "parentBlend": parent_label,
+        "parentBlendMass": parent_mass,
+        "parentBlendUnit": "mg",
+        "cleaner_row_role": "nested_display_only",
+        "score_eligible_by_cleaner": False,
+        "score_exclusion_reason": "nested_display_only",
+        "dose_class": "zero_or_np",
+    }
+
+
+def test_explicit_total_epa_and_dha_owner_emits_one_combined_projection() -> None:
+    children = [
+        _zero_dose_omega_child("epa", parent_label="Total EPA and DHA"),
+        _zero_dose_omega_child("dha", parent_label="Total EPA and DHA"),
+    ]
+    product = _product(
+        [],
+        activeIngredients=children,
+        supplement_taxonomy={"primary_type": "general_supplement"},
+    )
+
+    evidence = derive_product_scoring_evidence(product)
+
+    aggregate = [
+        row for row in evidence if row.get("evidence_type") == "omega_epa_dha_aggregate"
+    ]
+    assert len(aggregate) == 1
+    assert aggregate[0]["canonical_id"] == "epa_dha"
+    assert aggregate[0]["dose_value"] == 68.0
+    assert aggregate[0]["dose_unit"] == "mg"
+    assert aggregate[0]["raw_source_path"] == "ingredientRows[0]"
+    assert aggregate[0]["linked_rows"] == [
+        "ingredientRows[0]",
+        "ingredientRows[0].nestedRows[0]",
+        "ingredientRows[0].nestedRows[1]",
+    ]
+    strict = get_scoring_ingredients(product, strict=True)
+    assert len(strict.rows) == 1
+    assert strict.rows[0]["scoring_input_kind"] == "product_level_evidence"
+    assert strict.mapped_count == 1
+    assert strict.unmapped_count == 0
+    assert strict.mapped_coverage == 1.0
+    assert strict.strict_contract_passed is True
+
+
+def test_broad_total_omega_three_owner_does_not_become_epa_dha_dose() -> None:
+    children = [
+        _zero_dose_omega_child("epa", parent_label="Total Omega-3 Fatty Acids", parent_mass=300.0),
+        _zero_dose_omega_child("dha", parent_label="Total Omega-3 Fatty Acids", parent_mass=300.0),
+    ]
+    product = _product(
+        [],
+        activeIngredients=children,
+        supplement_taxonomy={"primary_type": "omega_3"},
+    )
+
+    evidence = derive_product_scoring_evidence(product)
+
+    assert not any(
+        row.get("evidence_type") == "omega_epa_dha_aggregate"
+        for row in evidence
+    )
+
+
 def test_strict_mode_does_not_fallback_to_legacy_iqd_ingredients():
     result = get_scoring_ingredients(_product([]), strict=True)
 
