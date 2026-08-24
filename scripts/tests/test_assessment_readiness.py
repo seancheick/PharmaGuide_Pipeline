@@ -5,6 +5,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_ROOT) not in sys.path:
@@ -233,6 +235,52 @@ def test_missing_active_without_explicit_non_scoreable_intent_stays_remediation(
     assert result["identity"]["readiness"] == "incomplete"
     assert result["identity"]["reason_code"] == "no_score_eligible_active_rows"
     assert "identity_assessment_readiness" in result["unavailable_reasons"]
+
+
+@pytest.mark.parametrize(
+    "title",
+    [
+        "Maltodextrin Powder",
+        "Maltodextrin Powder 30 g",
+        "Dextrose Powder 20 g",
+    ],
+)
+def test_standalone_carbohydrate_powder_is_typed_qa_disposition(title: str) -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    product = _zero_scorable_product(
+        "Suggested use: As a dietary supplement, mix with water or juice."
+    )
+    product["product_name"] = title
+    product["fullName"] = title
+
+    result = evaluate_assessment_readiness(product, module="generic")
+
+    assert result["catalog_disposition"] == {
+        "disposition": "intentional_non_scoreable",
+        "reason_code": "standalone_carbohydrate_powder",
+        "evidence_paths": ["product_name"],
+    }
+    assert result["unavailable_reasons"] == [
+        "intentional_non_scoreable_product"
+    ]
+
+
+def test_mixed_carbohydrate_formula_stays_in_remediation() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    product = _zero_scorable_product()
+    product["product_name"] = "Dextrose + Creatine Powder"
+    product["fullName"] = "Dextrose + Creatine Powder"
+
+    result = evaluate_assessment_readiness(product, module="sports")
+
+    assert result["catalog_disposition"]["disposition"] == (
+        "requires_remediation"
+    )
+    assert result["catalog_disposition"]["reason_code"] == (
+        "no_score_eligible_active_rows"
+    )
 
 
 def test_intentional_non_scoreable_product_gets_actionable_not_scored_reason() -> None:

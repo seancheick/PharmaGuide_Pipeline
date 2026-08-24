@@ -100,6 +100,11 @@ _INTENTIONAL_SPECIAL_USE_RULES = (
     ),
 )
 
+_STANDALONE_CARBOHYDRATE_POWDER_RE = re.compile(
+    r"^(?:maltodextrin|dextrose)\s+powder(?:\s+\d+(?:\.\d+)?\s*g)?$",
+    re.IGNORECASE,
+)
+
 
 def has_canonical_enforced_dimensions(value: Any) -> bool:
     """Return whether an artifact declares the exact release-gating contract."""
@@ -553,6 +558,15 @@ def evaluate_catalog_disposition(product: Mapping[str, Any]) -> Dict[str, Any]:
             "reason_code": "source_active_assessment_required",
             "evidence_paths": [],
         }
+
+    for field in ("product_name", "fullName", "name"):
+        title = re.sub(r"\s+", " ", str(product.get(field) or "").strip())
+        if title and _STANDALONE_CARBOHYDRATE_POWDER_RE.fullmatch(title):
+            return {
+                "disposition": CATALOG_DISPOSITION_INTENTIONAL_NON_SCOREABLE,
+                "reason_code": "standalone_carbohydrate_powder",
+                "evidence_paths": [field],
+            }
 
     for reason_code, phrases, match_mode in _INTENTIONAL_NON_SCOREABLE_RULES:
         matching_paths = []
