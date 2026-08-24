@@ -185,6 +185,70 @@ def test_mapped_active_without_declared_dose_is_a_dose_not_identity_failure() ->
     assert result["unavailable_reasons"] == ["dose_assessment_readiness"]
 
 
+def test_non_material_source_row_reuses_its_typed_disclosed_dose() -> None:
+    from assessment_readiness import _dose_readiness
+
+    row = _row("Niacin", "vitamin_b3_niacin", quantity=500, unit="mg NE")
+    product = _product(row)
+    product["rda_ul_data"]["dose_assessments"][0].update({
+        "source_path": "ingredientRows[0]",
+        "dose_class": "therapeutic_mass",
+        "source_value": 500,
+        "source_unit": "mg NE",
+        "readiness": "complete",
+    })
+
+    result = _dose_readiness(
+        product,
+        [{"material": False}],
+        module="generic",
+    )
+
+    assert result["readiness"] == "complete"
+    assert result["material_exposure_count"] == 1
+    assert result["material_assessment_count"] == 1
+    assert result["assessment_source"] == "typed_source_dose_assessments"
+
+
+def test_non_material_enzyme_activity_reuses_typed_activity_dose() -> None:
+    from assessment_readiness import _dose_readiness
+
+    row = _row(
+        "Alpha-Galactosidase",
+        "digestive_enzymes",
+        quantity=0,
+        unit="NP",
+    )
+    row.update({
+        "dose": 0,
+        "has_dose": False,
+        "dose_class": "enzyme_activity",
+        "activity_quantity": 300,
+        "activity_unit": "GALU",
+    })
+    product = _product(row)
+    product["rda_ul_data"]["dose_assessments"] = [{
+        "source_row_ref": "ingredientRows[0]",
+        "source_path": "ingredientRows[0]",
+        "canonical_id": "digestive_enzymes",
+        "dose_class": "enzyme_activity",
+        "source_value": 300,
+        "source_unit": "GALU",
+        "ul_assessment_status": "no_ul_applicable",
+        "readiness": "not_applicable",
+    }]
+
+    result = _dose_readiness(
+        product,
+        [{"material": False}],
+        module="fiber_digestive",
+    )
+
+    assert result["readiness"] == "complete"
+    assert result["material_exposure_count"] == 1
+    assert result["material_assessment_count"] == 1
+
+
 def test_source_identity_diagnostic_excludes_non_scoring_nutrition_rows() -> None:
     from assessment_readiness import evaluate_assessment_readiness
 

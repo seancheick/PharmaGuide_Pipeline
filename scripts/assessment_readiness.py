@@ -534,58 +534,6 @@ def _dose_readiness(
     *,
     module: str,
 ) -> Dict[str, Any]:
-    material_rows = [
-        row
-        for row in evidence_assessments
-        if isinstance(row, Mapping) and row.get("material") is True
-    ]
-    material_count = len(material_rows)
-    if material_count == 0:
-        source_rows = _source_score_eligible_active_rows(product)
-        missing_dose_refs = []
-        for index, row in enumerate(source_rows):
-            try:
-                amount = float(row.get("quantity") or row.get("dose") or 0)
-            except (TypeError, ValueError):
-                amount = 0.0
-            unit = _norm(row.get("unit"))
-            if (
-                row.get("has_dose") is False
-                or amount <= 0
-                or unit in {"", "np", "not_provided", "not_applicable"}
-            ):
-                missing_dose_refs.append(_row_ref(row, index))
-        if source_rows:
-            return {
-                "readiness": READINESS_INCOMPLETE,
-                "reason_code": (
-                    "no_scoreable_active_dose"
-                    if len(missing_dose_refs) == len(source_rows)
-                    else "no_strict_dose_candidates"
-                ),
-                "collection_status": _safe_dict(
-                    product.get("rda_ul_data")
-                ).get("collection_status"),
-                "assessment_count": len(_safe_list(
-                    _safe_dict(product.get("rda_ul_data")).get(
-                        "dose_assessments"
-                    )
-                )),
-                "material_active_count": 0,
-                "material_exposure_count": len(source_rows),
-                "material_assessment_count": 0,
-                "incomplete_source_row_refs": missing_dose_refs,
-            }
-        return {
-            "readiness": READINESS_NOT_APPLICABLE,
-            "reason_code": "no_score_eligible_active_rows",
-            "collection_status": None,
-            "assessment_count": 0,
-            "material_active_count": 0,
-            "material_exposure_count": 0,
-            "material_assessment_count": 0,
-        }
-
     def _number(value: Any) -> float | None:
         if isinstance(value, bool):
             return None
@@ -597,6 +545,116 @@ def _dose_readiness(
 
     def _unit(value: Any) -> str:
         return re.sub(r"\s+", "", str(value or "").strip().lower())
+
+    material_rows = [
+        row
+        for row in evidence_assessments
+        if isinstance(row, Mapping) and row.get("material") is True
+    ]
+    material_count = len(material_rows)
+    if material_count == 0:
+        source_rows = _source_score_eligible_active_rows(product)
+        rda_ul = _safe_dict(product.get("rda_ul_data"))
+        assessments = [
+            assessment
+            for assessment in _safe_list(rda_ul.get("dose_assessments"))
+            if isinstance(assessment, Mapping)
+        ]
+        collection_status = str(rda_ul.get("collection_status") or "")
+
+        def _ready_typed_source_assessment(
+            source_ref: str,
+        ) -> Mapping[str, Any] | None:
+            for assessment in assessments:
+                assessment_refs = {
+                    str(assessment.get("source_path") or "").strip(),
+                    str(assessment.get("source_row_ref") or "").strip(),
+                    *(
+                        str(item).strip()
+                        for item in _safe_list(
+                            assessment.get("linked_row_refs")
+                        )
+                    ),
+                }
+                if source_ref not in assessment_refs:
+                    continue
+                source_value = _number(assessment.get("source_value"))
+                source_unit = _unit(assessment.get("source_unit"))
+                if (
+                    source_value is not None
+                    and source_value > 0
+                    and source_unit
+                    and assessment.get("readiness")
+                    in {READINESS_COMPLETE, READINESS_NOT_APPLICABLE}
+                ):
+                    return assessment
+            return None
+
+        ready_source_assessments: Dict[str, Mapping[str, Any]] = {}
+        missing_dose_refs = []
+        for index, row in enumerate(source_rows):
+            source_ref = _row_ref(row, index)
+            typed = _ready_typed_source_assessment(source_ref)
+            if typed is not None:
+                ready_source_assessments[source_ref] = typed
+                continue
+            try:
+                amount = float(row.get("quantity") or row.get("dose") or 0)
+            except (TypeError, ValueError):
+                amount = 0.0
+            unit = _norm(row.get("unit"))
+            if (
+                row.get("has_dose") is False
+                or amount <= 0
+                or unit in {"", "np", "not_provided", "not_applicable"}
+            ):
+                missing_dose_refs.append(source_ref)
+            else:
+                # A disclosed amount without a matching typed assessment is
+                # still incomplete; the raw value is never a release fallback.
+                missing_dose_refs.append(source_ref)
+        if source_rows:
+            if (
+                collection_status
+                in {READINESS_COMPLETE, "complete_with_row_errors"}
+                and len(ready_source_assessments) == len(source_rows)
+            ):
+                return {
+                    "readiness": READINESS_COMPLETE,
+                    "collection_status": collection_status,
+                    "assessment_count": len(assessments),
+                    "material_active_count": 0,
+                    "material_exposure_count": len(source_rows),
+                    "material_assessment_count": len(
+                        ready_source_assessments
+                    ),
+                    "assessment_source": "typed_source_dose_assessments",
+                }
+            return {
+                "readiness": READINESS_INCOMPLETE,
+                "reason_code": (
+                    "no_scoreable_active_dose"
+                    if len(missing_dose_refs) == len(source_rows)
+                    else "no_strict_dose_candidates"
+                ),
+                "collection_status": _safe_dict(
+                    product.get("rda_ul_data")
+                ).get("collection_status"),
+                "assessment_count": len(assessments),
+                "material_active_count": 0,
+                "material_exposure_count": len(source_rows),
+                "material_assessment_count": len(ready_source_assessments),
+                "incomplete_source_row_refs": missing_dose_refs,
+            }
+        return {
+            "readiness": READINESS_NOT_APPLICABLE,
+            "reason_code": "no_score_eligible_active_rows",
+            "collection_status": None,
+            "assessment_count": 0,
+            "material_active_count": 0,
+            "material_exposure_count": 0,
+            "material_assessment_count": 0,
+        }
 
     def _requirement_key(row: Mapping[str, Any]) -> tuple[Any, ...]:
         value = _number(row.get("source_value"))

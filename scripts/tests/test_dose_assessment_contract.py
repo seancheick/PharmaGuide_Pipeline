@@ -205,6 +205,25 @@ def test_compound_mass_without_established_ul_is_not_applicable(enricher) -> Non
     assert assessment["readiness"] == "not_applicable"
 
 
+def test_non_nutrient_name_cannot_partially_match_an_rda_nutrient(enricher) -> None:
+    result = _collect(
+        enricher,
+        _row(
+            "Calcium-D-Glucarate",
+            "calcium_d_glucarate",
+            1000,
+            "mg",
+            standard_name="Calcium D-Glucarate",
+        ),
+    )
+
+    assessment = result["dose_assessments"][0]
+    assert assessment["canonical_id"] == "calcium_d_glucarate"
+    assert assessment["reason_code"] == "not_ul_applicable"
+    assert assessment["ul_assessment_status"] == "no_ul_applicable"
+    assert assessment["readiness"] == "not_applicable"
+
+
 @pytest.mark.parametrize(
     "row,expected_status,expected_readiness",
     [

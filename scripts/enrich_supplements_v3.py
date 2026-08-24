@@ -19893,8 +19893,34 @@ class SupplementEnricherV3:
                         conversion.converted_value is None or
                         conversion.converted_unit is None
                     )
+                    quality_map = (
+                        self.databases.get("ingredient_quality_map") or {}
+                    )
+                    quality_parent = (
+                        quality_map.get(resolved_canonical_id)
+                        if resolved_canonical_id
+                        else None
+                    )
+                    quality_category = self._normalize_text(
+                        (
+                            quality_parent.get("category_enum")
+                            or quality_parent.get("category")
+                            or ""
+                        )
+                        if isinstance(quality_parent, dict)
+                        else ""
+                    )
+                    # RDAULCalculator retains a permissive partial-name lookup
+                    # for old nutrition aliases. Do not let that turn a
+                    # canonical IQM `other` compound such as Calcium
+                    # D-Glucarate into the Calcium nutrient merely because its
+                    # display name contains the word "calcium".
                     _nutrient_record = (
-                        self.rda_calculator._find_nutrient(reference_nutrient_name) or {}
+                        {}
+                        if quality_category == "other" and not nutrient_group_id
+                        else self.rda_calculator._find_nutrient(
+                            reference_nutrient_name
+                        ) or {}
                     )
                     reference_unit_passthrough = False
                     if conversion_failed and not conversion_exception_occurred:
