@@ -5732,13 +5732,14 @@ def has_recalled_ingredient(enriched: Dict) -> bool:
     to three distinct surfaces:
       * status='banned'    → has_banned_substance=1
       * status='recalled'  → has_recalled_ingredient=1
-      * status='high_risk' → neither flag; surfaced via warnings[] +
-                             blocking_reason='high_risk_ingredient'
+      * status='high_risk' → neither flag; surfaced via non-blocking warnings[]
 
     So high_risk inactives like Titanium Dioxide and Talc remain visible
     via the warnings synthesizer (see build_detail_blob → warnings loop)
-    rather than co-opting the recalled flag. Falls back to the resolver
-    index for recalled aliases the contaminant_data path missed.
+    rather than co-opting the recalled flag. ``blocking_reason`` is reserved
+    for Stage-3 BLOCKED/UNSAFE verdicts and must remain null for CAUTION.
+    Falls back to the resolver index for recalled aliases the contaminant_data
+    path missed.
     """
     if contaminant_status_matches(enriched, "recalled"):
         return True

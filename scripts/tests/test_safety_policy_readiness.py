@@ -9,6 +9,7 @@ silently becoming either SAFE or a legally unsupported hard block.
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
@@ -111,7 +112,6 @@ def test_verified_us_hard_rules_have_source_complete_decisions(name: str, role: 
 @pytest.mark.parametrize(
     "name",
     [
-        "Vinpocetine",
         "3,3-Azo-17a-Methyl-5a-Androstan-17b-Ol",
         "2, 17a-Dimethyl-17b-Hydroxy-5a-Androst-2-Ene",
         "17a-Ethyl-Estr-5(6)-Ene-3B-Diol",
@@ -132,6 +132,42 @@ def test_confirmed_but_unsettled_us_policy_quarantines_instead_of_hard_blocking(
     assert result.review_records[0]["rule_id"]
     assert result.review_records[0]["substance"]
     assert result.review_records[0]["missing_requirements"]
+
+
+def test_verified_vinpocetine_policy_is_visible_caution_not_quarantine() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    result = evaluate_safety_gate(_active_product("Vinpocetine"))
+
+    assert result.verdict == "CAUTION"
+    assert result.short_circuits_scoring is False
+    assert result.blocking_reason is None
+    assert result.quarantine_required is False
+    assert result.quarantine_reason is None
+    assert result.review_records == []
+    assert "B0_HIGH_RISK_SUBSTANCE" in result.safety_signals
+
+
+def test_vinpocetine_caution_policy_keeps_tentative_legal_status_and_fda_source() -> None:
+    data_path = SCRIPTS_ROOT / "data" / "banned_recalled_ingredients.json"
+    payload = json.loads(data_path.read_text(encoding="utf-8"))
+    entry = next(
+        item
+        for item in payload["ingredients"]
+        if item.get("id") == "NOOTROPIC_VINPOCETINE"
+    )
+
+    assert entry["status"] == "high_risk"
+    assert entry["legal_status_enum"] == "under_review"
+    assert entry["policy_verification_status"] == "verified"
+    assert entry["source_category"] == "high_risk_ingredients"
+    assert "nootropic_banned" not in entry["class_tags"]
+    urls = [
+        source.get("url")
+        for jurisdiction in entry["jurisdictions"]
+        for source in [jurisdiction.get("source", {})]
+    ]
+    assert any(str(url).startswith("https://www.fda.gov/") for url in urls)
 
 
 def test_unverified_hard_signal_defaults_to_quarantine(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -182,7 +218,7 @@ def test_unverified_hard_signal_defaults_to_quarantine(monkeypatch: pytest.Monke
 def test_safety_policy_quarantine_becomes_not_scored_with_actionable_reason() -> None:
     from score_supplements_v4 import score_product_v4
 
-    result = score_product_v4(_active_product("Vinpocetine"))
+    result = score_product_v4(_active_product("3,3-Azo-17a-Methyl-5a-Androstan-17b-Ol"))
 
     assert result["v4_verdict"] == "NOT_SCORED"
     assert result["score_unavailable_reason"] == "safety_policy_review_required"

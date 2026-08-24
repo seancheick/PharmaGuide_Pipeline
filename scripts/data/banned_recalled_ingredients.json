@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
-    "schema_version": "5.5.2",
-    "last_updated": "2026-08-23",
+    "schema_version": "5.5.3",
+    "last_updated": "2026-08-24",
     "total_entries": 169,
     "data_source_metadata": {
       "sources": [
@@ -8620,10 +8620,10 @@
         "vinpocetine",
         "ethyl apovincaminate"
       ],
-      "reason": "FDA opened an administrative proceeding in 2016 to evaluate whether vinpocetine is excluded from the dietary supplement definition. FDA's current page still describes that conclusion as tentative. FDA separately warns pregnant women and women who could become pregnant not to use vinpocetine because animal data suggest miscarriage or fetal harm. The exact US legal classification remains under review, so matched products require policy review instead of an asserted hard block.",
+      "reason": "FDA opened an administrative proceeding in 2016 to evaluate whether vinpocetine is excluded from the dietary supplement definition, and FDA's current page still describes that conclusion as tentative. FDA separately warns pregnant women and women who could become pregnant not to use vinpocetine because animal data suggest miscarriage or fetal harm. PharmaGuide therefore treats a confirmed active-ingredient match as CAUTION with the FDA warning, not as a legal BLOCK or an unresolved-policy quarantine.",
       "status": "high_risk",
       "class_tags": [
-        "nootropic_banned",
+        "nootropic_high_risk",
         "nootropic"
       ],
       "match_rules": {
@@ -8636,9 +8636,9 @@
       },
       "legal_status_enum": "under_review",
       "clinical_risk_enum": "high",
-      "policy_verification_status": "review_required",
-      "policy_verified_at": "2026-08-20",
-      "policy_review_reason": "FDA's current vinpocetine page describes the dietary-ingredient conclusion as tentative; a final US legal determination was not verified.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-08-24",
+      "policy_review_reason": "Completed US policy review: FDA's reproductive-risk advisory supports a visible CAUTION decision, while FDA's still-tentative dietary-ingredient conclusion does not support a hard legal block.",
       "hard_verdict_roles": [
         "active"
       ],
@@ -8652,11 +8652,11 @@
             "type": "fda_action",
             "citation": "FDA opened an administrative proceeding on vinpocetine and continues to describe its dietary-ingredient conclusion as tentative; FDA also warns of reproductive risk.",
             "url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/vinpocetine-dietary-supplements",
-            "accessed_date": "2026-08-20"
+            "accessed_date": "2026-08-24"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-08-20"
+          "last_verified_date": "2026-08-24"
         }
       ],
       "references_structured": [
@@ -8674,14 +8674,19 @@
           "evidence_summary": "FDA describes the legal conclusion as tentative and advises pregnant women and women who could become pregnant not to use vinpocetine."
         }
       ],
-      "source_category": "nootropic_banned",
+      "source_category": "high_risk_ingredients",
       "entity_type": "ingredient",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "last_reviewed_at": "2026-08-24",
+        "next_review_due": "2026-11-24",
+        "reviewed_by": "policy_review",
         "change_log": [
+          {
+            "date": "2026-08-24",
+            "change": "Verified US CAUTION policy from FDA's reproductive-risk advisory while retaining under_review legal status; removed unresolved-policy quarantine and banned taxonomy.",
+            "by": "policy_review"
+          },
           {
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
