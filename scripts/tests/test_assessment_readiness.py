@@ -283,6 +283,37 @@ def test_mixed_carbohydrate_formula_stays_in_remediation() -> None:
     )
 
 
+def test_explicit_nutrition_beverage_is_typed_qa_disposition() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    product = _zero_scorable_product(
+        "Directions: Drink eight ounces per day as a nutritious drink."
+    )
+    product["product_name"] = "Aloe Vera Juice Natural Wild Berry Flavor"
+    product["fullName"] = product["product_name"]
+
+    result = evaluate_assessment_readiness(product, module="generic")
+
+    assert result["catalog_disposition"] == {
+        "disposition": "intentional_non_scoreable",
+        "reason_code": "nutrition_beverage",
+        "evidence_paths": ["statements[0].notes"],
+    }
+
+
+def test_generic_drink_direction_stays_in_remediation() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    result = evaluate_assessment_readiness(
+        _zero_scorable_product("Drink eight ounces daily."),
+        module="generic",
+    )
+
+    assert result["catalog_disposition"]["disposition"] == (
+        "requires_remediation"
+    )
+
+
 def test_intentional_non_scoreable_product_gets_actionable_not_scored_reason() -> None:
     from score_supplements_v4 import score_product_v4
 

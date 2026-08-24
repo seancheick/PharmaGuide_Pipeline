@@ -87,6 +87,11 @@ _INTENTIONAL_NON_SCOREABLE_RULES = (
         ("for cooking", "cooking or baking", "cooking, baking"),
         "any",
     ),
+    (
+        "nutrition_beverage",
+        ("as a nutritious drink",),
+        "any",
+    ),
 )
 
 _INTENTIONAL_SPECIAL_USE_RULES = (
