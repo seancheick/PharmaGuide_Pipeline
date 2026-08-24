@@ -331,36 +331,24 @@ def test_non_drug_token_unmapped_flow_unaffected(normalizer):
     )
 
 
-def test_product_scoped_correction_removes_misattributed_source_unii(normalizer):
-    rows = [
-        {
-            "name": "Transglucosidase",
-            "category": "enzyme",
-            "ingredientGroup": "Transglucosidase",
-            "uniiCode": "DTI67O9503",
-            "nestedRows": [],
-            "forms": [],
-        }
-    ]
-
-    corrected = normalizer._apply_label_corrections(rows, "59047")
-
-    assert corrected[0]["name"] == "Transglucosidase"
-    assert corrected[0]["uniiCode"] is None
-    assert corrected[0]["_pre_correction_unii"] == "DTI67O9503"
-    assert corrected[0]["_label_correction_provenance"] == "source_unii_correction"
-
+def test_product_scoped_correction_restores_transglucosidase_activity_dose(normalizer):
     raw_product = _make_raw_product(59047, [])
-    raw_product["fullName"] = "Digestive Enzymes"
+    raw_product["fullName"] = "GlycemicPro Transglucosidase"
     raw_product["ingredientRows"] = [
         {
             "name": "Transglucosidase",
             "category": "enzyme",
             "ingredientGroup": "Transglucosidase",
             "uniiCode": "DTI67O9503",
-            "quantity": [{"quantity": 450, "unit": "TG"}],
+            "quantity": [{"quantity": 0, "unit": "NP"}],
             "nestedRows": [],
-            "forms": [],
+            "forms": [
+                {
+                    **_make_ingredient_row("Aspergillus niger", category="botanical"),
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
         }
     ]
     normalized = normalizer.normalize_product(raw_product)
@@ -368,10 +356,17 @@ def test_product_scoped_correction_removes_misattributed_source_unii(normalizer)
         row for row in normalized["activeIngredients"]
         if row.get("raw_source_text") == "Transglucosidase"
     )
+    assert active["quantity"] == 450000
+    assert active["unit"] == "TG"
+    assert active["dose_class"] == "enzyme_activity"
     assert active["source_correction"] == {
-        "provenance_tag": "source_unii_correction",
+        "provenance_tag": "official_label_source_and_activity_dose_correction",
         "original_unii_code": "DTI67O9503",
         "corrected_unii_code": None,
+        "original_quantity_unit": "NP",
+        "corrected_quantity_unit": "TG",
+        "original_quantity_value": 0,
+        "corrected_quantity_value": 450000,
     }
 
 

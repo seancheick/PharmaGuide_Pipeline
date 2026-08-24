@@ -71,6 +71,32 @@ def test_failed_conversion_never_substitutes_raw_value(enricher) -> None:
     assert assessment["readiness"] == "incomplete"
 
 
+def test_transglucosidase_tg_is_typed_non_ul_activity_not_conversion_failure(
+    enricher,
+) -> None:
+    row = _row(
+        "Transglucosidase",
+        "digestive_enzymes",
+        450000,
+        "TG",
+        standard_name="Digestive Enzymes",
+    )
+    row["dose_class"] = "enzyme_activity"
+
+    result = _collect(enricher, row)
+
+    exported = result["analyzed_ingredients"][0]
+    assessment = result["dose_assessments"][0]
+    assert exported["skip_ul_reason"] == "not_ul_applicable"
+    assert exported["ul_assessment_status"] == "not_applicable"
+    assert assessment["dose_class"] == "enzyme_activity"
+    assert assessment["source_value"] == 450000
+    assert assessment["source_unit"] == "TG"
+    assert assessment["ul_assessment_status"] == "no_ul_applicable"
+    assert assessment["reason_code"] == "not_ul_applicable"
+    assert assessment["readiness"] == "not_applicable"
+
+
 def test_probiotic_percentage_children_are_composition_not_distinct_exposure(
     enricher,
 ) -> None:

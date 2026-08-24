@@ -427,6 +427,28 @@ def test_cognimag_299037_crossed_hierarchy_names_are_corrected(overrides):
     )
 
 
+def test_transglucosidase_59047_activity_dose_is_restored_from_exact_label(overrides):
+    entry = (overrides.get("corrections") or {}).get("59047")
+
+    assert entry, "correction for DSLD 59047 is missing"
+    assert entry["product_name"] == "GlycemicPro Transglucosidase"
+    assert entry["raw_ingredient_text"] == "Transglucosidase"
+    assert entry["corrected_ingredient_text"] == "Transglucosidase"
+    assert entry["raw_quantity_value"] == 0
+    assert entry["raw_quantity_unit"] == "NP"
+    assert entry["corrected_quantity_value"] == 450000
+    assert entry["corrected_quantity_unit"] == "TG"
+    assert set(entry["correction_fields"]) == {
+        "uniiCode",
+        "quantity.value",
+        "quantity.unit",
+    }
+    assert (
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/59047.pdf"
+        in entry["sources"]
+    )
+
+
 def test_life_extension_328300_koact_label_text_is_restored(overrides):
     entry = (overrides.get("corrections") or {}).get("328300")
 

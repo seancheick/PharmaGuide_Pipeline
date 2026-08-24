@@ -431,6 +431,61 @@ def test_iqd_emits_galu_enzyme_activity_dose_from_raw_notes():
     assert enzyme["activity_unit"] == "GALU"
 
 
+def test_iqd_emits_transglucosidase_tg_activity_from_typed_cleaner_row():
+    product = {
+        "fullName": "GlycemicPro Transglucosidase",
+        "activeIngredients": [
+            {
+                "name": "Transglucosidase",
+                "standardName": "Digestive Enzymes",
+                "canonical_id": "digestive_enzymes",
+                "category": "enzyme",
+                "quantity": 450000,
+                "unit": "TG",
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+                "dose_class": "enzyme_activity",
+            }
+        ],
+    }
+
+    iqd = SupplementEnricherV3()._collect_ingredient_quality_data(product)
+    enzyme = _first_named(iqd["ingredients_scorable"], "Transglucosidase")
+    assert enzyme["has_dose"] is True
+    assert enzyme["dose_class"] == "enzyme_activity"
+    assert enzyme["activity_quantity"] == 450000
+    assert enzyme["activity_unit"] == "TG"
+
+
+def test_tg_unit_without_transglucosidase_identity_is_not_enzyme_activity():
+    product = {
+        "fullName": "Fish Oil Natural Triglyceride",
+        "activeIngredients": [
+            {
+                "name": "Fish Oil",
+                "standardName": "Fish Oil",
+                "canonical_id": "fish_oil",
+                "category": "fat",
+                "quantity": 1000,
+                "unit": "TG",
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+            }
+        ],
+    }
+
+    iqd = SupplementEnricherV3()._collect_ingredient_quality_data(product)
+    fish_oil = _first_named(iqd["ingredients_scorable"], "Fish Oil")
+    assert fish_oil["dose_class"] == "therapeutic_mass"
+    assert "activity_quantity" not in fish_oil
+    assert "activity_unit" not in fish_oil
+
+
 def test_iqd_activity_row_gets_a_typed_non_ul_dose_assessment():
     enriched = {
         "ingredient_quality_data": {
@@ -461,4 +516,59 @@ def test_iqd_activity_row_gets_a_typed_non_ul_dose_assessment():
     assert assessments[0]["source_value"] == 40_000
     assert assessments[0]["source_unit"] == "SPU"
     assert assessments[0]["ul_assessment_status"] == "no_ul_applicable"
+    assert assessments[0]["readiness"] == "not_applicable"
+
+
+def test_iqd_activity_replaces_failed_mass_conversion_for_same_exposure():
+    enriched = {
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Transglucosidase",
+                    "canonical_id": "digestive_enzymes",
+                    "raw_source_path": "ingredientRows[0]",
+                    "dose_class": "enzyme_activity",
+                    "activity_quantity": 450000,
+                    "activity_unit": "TG",
+                }
+            ]
+        },
+        "product_scoring_evidence": [],
+        "rda_ul_data": {
+            "collection_status": "complete",
+            "dose_assessments": [
+                {
+                    "source_row_ref": "label:digestive_enzymes:transglucosidase:450000:tg",
+                    "source_path": "ingredientRows[0]",
+                    "linked_row_refs": ["ingredientRows[0]"],
+                    "ingredient": "Transglucosidase",
+                    "canonical_id": "digestive_enzymes",
+                    "dose_class": "enzyme_activity",
+                    "source_value": 450000,
+                    "source_unit": "TG",
+                    "normalized_value": None,
+                    "normalized_unit": None,
+                    "conversion_status": "failed",
+                    "ul_assessment_status": "unresolved_compound_mass",
+                    "reason_code": "conversion_failed",
+                    "readiness": "incomplete",
+                    "material": True,
+                }
+            ],
+        },
+    }
+
+    SupplementEnricherV3._append_product_evidence_dose_assessments(enriched)
+
+    assessments = enriched["rda_ul_data"]["dose_assessments"]
+    assert len(assessments) == 1
+    assert assessments[0]["source_path"] == "ingredientRows[0]"
+    assert assessments[0]["dose_class"] == "enzyme_activity"
+    assert assessments[0]["source_value"] == 450000
+    assert assessments[0]["source_unit"] == "TG"
+    assert assessments[0]["normalized_value"] == 450000
+    assert assessments[0]["normalized_unit"] == "TG"
+    assert assessments[0]["conversion_status"] == "not_required"
+    assert assessments[0]["ul_assessment_status"] == "no_ul_applicable"
+    assert assessments[0]["reason_code"] == "not_ul_applicable"
     assert assessments[0]["readiness"] == "not_applicable"

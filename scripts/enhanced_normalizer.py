@@ -7555,6 +7555,24 @@ class EnhancedDSLDNormalizer:
                     variant["dose_data_quality"] = dose_data_quality
 
         unit_norm_for_contract = str(unit or "").strip().lower()
+        enzyme_activity_unit = unit_norm_for_contract in {
+            "spu", "hut", "fcc", "su", "du", "alu", "fip", "sapu", "cu"
+        }
+        if unit_norm_for_contract == "tg":
+            enzyme_identity_text = " ".join(
+                str(value or "").strip().lower()
+                for value in (
+                    name,
+                    standard_name,
+                    raw_name,
+                    ing.get("category"),
+                    ing.get("ingredientGroup"),
+                )
+            )
+            enzyme_activity_unit = (
+                str(ing.get("category") or "").strip().lower() == "enzyme"
+                and "transglucosidase" in enzyme_identity_text
+            )
         nested_without_individual_dose = (
             is_active
             and bool(ing.get("isNestedIngredient"))
@@ -7592,7 +7610,9 @@ class EnhancedDSLDNormalizer:
             cleaner_row_role = "active_scorable"
             score_eligible_by_cleaner = True
             score_exclusion_reason = None
-            dose_class = "enzyme_activity" if unit_norm_for_contract in {"spu", "hut", "fcc", "su", "du", "alu", "fip", "sapu", "cu"} else "therapeutic_mass"
+            dose_class = (
+                "enzyme_activity" if enzyme_activity_unit else "therapeutic_mass"
+            )
         else:
             cleaner_row_role = "inactive"
             score_eligible_by_cleaner = False

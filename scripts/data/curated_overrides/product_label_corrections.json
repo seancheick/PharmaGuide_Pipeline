@@ -524,23 +524,31 @@
       "provenance_tag": "official_label_unit_correction"
     },
     "59047": {
-      "brand": "Life_Extension",
-      "product_name": "Digestive Enzymes",
+      "brand": "Life Extension",
+      "product_name": "GlycemicPro Transglucosidase",
       "raw_ingredient_text": "Transglucosidase",
       "corrected_ingredient_text": "Transglucosidase",
       "raw_unii_code": "DTI67O9503",
       "corrected_unii_code": null,
+      "raw_quantity_value": 0,
+      "raw_quantity_unit": "NP",
+      "corrected_quantity_value": 450000,
+      "corrected_quantity_unit": "TG",
       "correction_fields": [
-        "uniiCode"
+        "uniiCode",
+        "quantity.value",
+        "quantity.unit"
       ],
-      "evidence": "FDA Substance Registration System identifies DTI67O9503 as alglucosidase alfa, a distinct human lysosomal alpha-glucosidase biologic. The DSLD row itself names Transglucosidase, classifies it as an enzyme, identifies Aspergillus niger as its source, and reports transglucosidase activity units. The source UNII is therefore misattributed and is removed rather than replaced with an unverified identifier.",
+      "evidence": "FDA Substance Registration System identifies DTI67O9503 as alglucosidase alfa, a distinct human lysosomal alpha-glucosidase biologic, so the source UNII is removed rather than replaced with an unverified identifier. The official NIH-hosted label image for this exact product prints 'Transglucosidase (from Aspergillus niger) 450,000 TG' and defines TG as transglucosidase activity units. The structured DSLD row instead carries 0 NP and renders the comma as a period in its note. This exact product-scoped correction restores the printed activity dose without treating TG as a mass unit or an omega triglyceride form.",
       "sources": [
-        "https://precision.fda.gov/uniisearch/srs?search=DTI67O9503"
+        "https://precision.fda.gov/uniisearch/srs?search=DTI67O9503",
+        "https://api.ods.od.nih.gov/dsld/v9/label/59047",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/59047.pdf"
       ],
       "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
-      "review_date": "2026-07-13",
+      "review_date": "2026-08-24",
       "scope": "dsld_id_only",
-      "provenance_tag": "source_unii_correction"
+      "provenance_tag": "official_label_source_and_activity_dose_correction"
     },
     "64551": {
       "brand": "Nature's Way",

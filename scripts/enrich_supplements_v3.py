@@ -191,7 +191,7 @@ _VITAMIN_E_NATURAL_MG_PER_IU = 0.67
 _NON_UL_ACTIVITY_UNITS = {
     "agu", "alu", "bgu", "cu", "dp", "du", "endo-pg", "fccpu", "fip",
     "fu", "gaiu", "galu", "gdu", "hcu", "hut", "pc", "pu", "sapu", "su",
-    "unit(s)", "usp", "usp unit(s)",
+    "tg", "unit(s)", "usp", "usp unit(s)",
 }
 _ACTIVITY_UNIT_CANONICALS = {
     "alpha_amylase",
@@ -5697,14 +5697,6 @@ class SupplementEnricherV3:
         """Extract enzyme activity dose from unit fields or raw label text."""
         quantity = ingredient.get("quantity")
         unit = self._normalize_unit_for_signal(ingredient.get("unit"))
-        if unit in self._ENZYME_ACTIVITY_UNITS:
-            try:
-                qty = float(str(quantity).replace(",", ""))
-                if qty > 0:
-                    return qty, unit.upper()
-            except (TypeError, ValueError):
-                pass
-
         identity_text = " ".join(
             str(ingredient.get(key) or "").lower()
             for key in (
@@ -5712,6 +5704,19 @@ class SupplementEnricherV3:
                 "ingredientGroup", "canonical_id"
             )
         )
+        is_transglucosidase_tg = (
+            unit == "tg"
+            and "transglucosidase" in identity_text
+            and "enzyme" in identity_text
+        )
+        if unit in self._ENZYME_ACTIVITY_UNITS or is_transglucosidase_tg:
+            try:
+                qty = float(str(quantity).replace(",", ""))
+                if qty > 0:
+                    return qty, unit.upper()
+            except (TypeError, ValueError):
+                pass
+
         if not any(
             token in identity_text
             for token in (
@@ -16212,17 +16217,20 @@ class SupplementEnricherV3:
                 _unit(unit),
             )
 
-        existing = {
-            _key(
-                assessment.get("source_path")
-                or assessment.get("source_row_ref"),
-                assessment.get("dose_class"),
-                assessment.get("source_value"),
-                assessment.get("source_unit"),
+        existing_by_key: Dict[tuple[Any, ...], int] = {}
+        for index, assessment in enumerate(assessments):
+            if not isinstance(assessment, dict):
+                continue
+            existing_by_key.setdefault(
+                _key(
+                    assessment.get("source_path")
+                    or assessment.get("source_row_ref"),
+                    assessment.get("dose_class"),
+                    assessment.get("source_value"),
+                    assessment.get("source_unit"),
+                ),
+                index,
             )
-            for assessment in assessments
-            if isinstance(assessment, dict)
-        }
         typed_scoring_doses: List[Dict[str, Any]] = []
         iqd = enriched.get("ingredient_quality_data")
         if isinstance(iqd, dict):
@@ -16275,7 +16283,6 @@ class SupplementEnricherV3:
                 or dose_value is None
                 or dose_value <= 0
                 or not dose_unit
-                or exposure_key in existing
             ):
                 continue
             linked_rows = [
@@ -16312,8 +16319,19 @@ class SupplementEnricherV3:
                 ul_gate_eligible=False,
                 ul_gate_ineligible_reason="no_established_ul_for_dose_class",
             )
-            assessments.append(assessment.to_dict())
-            existing.add(exposure_key)
+            typed_assessment = assessment.to_dict()
+            existing_index = existing_by_key.get(exposure_key)
+            if existing_index is not None:
+                existing_assessment = assessments[existing_index]
+                if (
+                    not isinstance(existing_assessment, dict)
+                    or existing_assessment.get("readiness")
+                    not in {"complete", "not_applicable"}
+                ):
+                    assessments[existing_index] = typed_assessment
+                continue
+            assessments.append(typed_assessment)
+            existing_by_key[exposure_key] = len(assessments) - 1
 
     def _collect_product_scoring_classification(self, enriched: Dict[str, Any]) -> Dict[str, Any]:
         """Emit native ScoringClassification v1 using the shared builder."""
