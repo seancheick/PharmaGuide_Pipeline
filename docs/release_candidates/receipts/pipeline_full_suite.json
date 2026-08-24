@@ -1,0 +1,16 @@
+{
+  "command": [
+    "scripts/test.sh",
+    "full"
+  ],
+  "completed_at": "2026-08-24T13:58:40.228035Z",
+  "cwd": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification",
+  "duration_seconds": 3521.804,
+  "exit_code": 0,
+  "gate_name": "pipeline_full_suite",
+  "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_full_suite.log",
+  "log_sha256": "5afe8984b4cb353cb091ab13c3dd5dd959647cad56770987fe729ed7b50e8fd8",
+  "receipt_schema_version": "1.0.0",
+  "receipt_sha256": "847dc44948a90b495ba20c77752cfee41cc97bfe6c61e0f0140f80b329f1a15f",
+  "started_at": "2026-08-24T12:59:58.447147Z"
+}

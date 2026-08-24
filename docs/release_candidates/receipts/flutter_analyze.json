@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/Users/seancheick/Development/flutter/bin/flutter",
+    "analyze"
+  ],
+  "completed_at": "2026-08-24T12:57:44.720446Z",
+  "cwd": "/Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification",
+  "duration_seconds": 6.28,
+  "exit_code": 0,
+  "gate_name": "flutter_analyze",
+  "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/flutter_analyze.log",
+  "log_sha256": "19c83428a67a4a7a9fb0869c5cca1a123b391128b75870ffc5d1630e08a5dd3f",
+  "receipt_schema_version": "1.0.0",
+  "receipt_sha256": "87260d7ed38f6fef89c8a35e6734c2afdc7152d1c199bbae129261da7fa308cf",
+  "started_at": "2026-08-24T12:57:38.439553Z"
+}

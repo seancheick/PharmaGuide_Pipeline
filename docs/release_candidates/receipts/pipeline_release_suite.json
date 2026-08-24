@@ -1,0 +1,18 @@
+{
+  "command": [
+    "env",
+    "FLUTTER_REPO=/Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification",
+    "scripts/test.sh",
+    "release"
+  ],
+  "completed_at": "2026-08-24T12:51:53.995584Z",
+  "cwd": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification",
+  "duration_seconds": 1146.068,
+  "exit_code": 0,
+  "gate_name": "pipeline_release_suite",
+  "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_release_suite.log",
+  "log_sha256": "15f51d0678a0aacc618007fd57cf008843418504acae122ecf61155ec6cbdc91",
+  "receipt_schema_version": "1.0.0",
+  "receipt_sha256": "3b54fe0b7c631aca9f78fc75425bf1e8b0b451b7cfa4553b81be4b76d199558d",
+  "started_at": "2026-08-24T12:32:47.929364Z"
+}

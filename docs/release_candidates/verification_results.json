@@ -1,36 +1,40 @@
 {
-  "full_corpus_pipeline": {
-    "stages": "enrich,score",
-    "datasets": 37,
-    "failures": 0,
-    "strict_pre_score_gates": "all passed"
+  "verification_schema_version": "2.0.0",
+  "gates": {
+    "full_corpus_pipeline": {
+      "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/full_corpus_pipeline.json"
+    },
+    "pipeline_fast_suite": {
+      "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_fast_suite.json"
+    },
+    "pipeline_release_suite": {
+      "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_release_suite.json"
+    },
+    "pipeline_full_suite": {
+      "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_full_suite.json"
+    },
+    "flutter_analyze": {
+      "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/flutter_analyze.json"
+    },
+    "flutter_suite": {
+      "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/flutter_suite.json"
+    },
+    "interaction_parity": {
+      "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/interaction_parity.json"
+    },
+    "candidate_import_preflight": {
+      "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/candidate_import_preflight.json"
+    }
   },
-  "pipeline_fast_suite": {"passed": 11914, "skipped": 124, "failed": 0},
-  "pipeline_release_suite": {"passed": 122, "failed": 0},
-  "pipeline_full_suite": {"passed": 14411, "skipped": 162, "xfailed": 0, "failed": 0},
-  "flutter_analyze": {"issues": 0},
-  "flutter_suite": {"passed": 3264, "failed": 0},
-  "interaction_db": {
-    "rebuilt_with_umls_credential": true,
-    "umls_live_probe": "C0025598 metformin",
-    "verify_interactions": "total=134 valid=134 warnings=0 errors=0",
-    "orphan_canonical_gate": "passed"
-  },
-  "device_verification": {
-    "simulator": "iPhone 16 Pro (iOS 18.5)",
-    "app_built_and_launched": true,
-    "themes_captured": ["light", "dark"],
-    "probiotic_card_on_device": "not reachable - detail blobs are fetched from the production blob store, not bundled; covered by goldens instead"
-  },
-  "dist_vs_flutter_gate": {
-    "findings": 6,
-    "all_of_class": "Flutter bundle differs from dist",
-    "interpretation": "the unpublished-candidate boundary; clears only by importing the bundle, which is the publish step"
+  "additional_preproduction_checks": {
+    "supabase_dry_run": {
+      "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/supabase_dry_run.json",
+      "writes_performed": false
+    }
   },
   "publication": {
     "supabase_uploaded": false,
-    "flutter_bundle_imported": false,
-    "branches_pushed": false,
-    "merged": false
+    "production_merged": false,
+    "store_released": false
   }
 }

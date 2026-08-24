@@ -1,0 +1,18 @@
+{
+  "command": [
+    "python3",
+    "scripts/sync_to_supabase.py",
+    "scripts/dist",
+    "--dry-run"
+  ],
+  "completed_at": "2026-08-24T12:59:50.723631Z",
+  "cwd": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification",
+  "duration_seconds": 0.541,
+  "exit_code": 0,
+  "gate_name": "supabase_dry_run",
+  "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/supabase_dry_run.log",
+  "log_sha256": "17557243b462e749b016cc329ab20b47e8ae7422cd797610640c9ffaf273f4b6",
+  "receipt_schema_version": "1.0.0",
+  "receipt_sha256": "2f43cb2ff0f2f9b320b64e4a009934f59e4ccd4c91545584c89f05c5af7ac9a7",
+  "started_at": "2026-08-24T12:59:50.182961Z"
+}

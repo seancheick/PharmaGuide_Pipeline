@@ -1,0 +1,17 @@
+{
+  "command": [
+    "./scripts/import_catalog_artifact.sh",
+    "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/scripts/dist",
+    "--dry-run"
+  ],
+  "completed_at": "2026-08-24T12:59:36.469455Z",
+  "cwd": "/Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification",
+  "duration_seconds": 1.387,
+  "exit_code": 0,
+  "gate_name": "candidate_import_preflight",
+  "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/candidate_import_preflight.log",
+  "log_sha256": "0a33f4762669f8838ce19f9b6695e54e9f2b07e59362ddb87cefd545409b768e",
+  "receipt_schema_version": "1.0.0",
+  "receipt_sha256": "898fc5361b97de732f5f4106e934e5bf482a8b02c1ba90dcf8e53973785c9ec6",
+  "started_at": "2026-08-24T12:59:35.082071Z"
+}

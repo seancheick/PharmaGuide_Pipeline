@@ -1,0 +1,17 @@
+{
+  "command": [
+    "python3",
+    "-c",
+    "from pathlib import Path; import hashlib,json,re; s=Path(\"scripts/products/reports/batch_run_summary_20260824_055008.txt\").read_text(); m=json.loads(Path(\"scripts/dist/export_manifest.json\").read_text()); db=Path(\"scripts/dist/pharmaguide_core.db\"); h=hashlib.sha256(db.read_bytes()).hexdigest(); assert s.count(\"Success: True\")==37; assert \"Success: False\" not in s; assert \"Building from 37 enriched dirs + 37 scored dirs\" in s; assert \"Done. 15278 products, 0 errors.\" in s; assert \"134 contract quarantines, 0 contract failures\" in s; assert m[\"product_count\"]==15278; assert len(m[\"excluded_by_gate\"])==134; assert m[\"checksum_sha256\"]==h; assert h in s; print(f\"verified completed corpus run: datasets=37 successes=37 products={m['product_count']} quarantines={len(m['excluded_by_gate'])} sha256={h}\")"
+  ],
+  "completed_at": "2026-08-24T13:59:09.694691Z",
+  "cwd": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification",
+  "duration_seconds": 0.063,
+  "exit_code": 0,
+  "gate_name": "full_corpus_pipeline",
+  "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/full_corpus_pipeline.log",
+  "log_sha256": "61fef140586c7de1eb8a589ad33e6b97217112bf71f0964f8ab2d56cc6fc5e4a",
+  "receipt_schema_version": "1.0.0",
+  "receipt_sha256": "bf3a61bd84ddf23fc80c1b5dd8ce93be8d172272a444962d91abbb7827deaf76",
+  "started_at": "2026-08-24T13:59:09.631443Z"
+}
