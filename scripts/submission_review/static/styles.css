@@ -1,0 +1,108 @@
+/* PharmaGuide reviewer console — matches the app's V2 tokens. */
+:root {
+  --bg: #FAF9F6;
+  --surface: #FFFFFF;
+  --low: #F4F1EA;
+  --fg: #181A1B;
+  --fg-muted: #5C5F61;
+  --fg-subtle: #8A8D90;
+  --accent: #183B3F;
+  --accent-strong: #246066;
+  --caution: #8A611D;
+  --bad: #9F2929;
+  --rule: #E0DCD3;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--surface);
+}
+h1 { margin: 0; font-size: 1.3rem; }
+h2 { font-size: 1.05rem; margin: 1.5rem 0 .5rem; }
+h3 { font-size: .95rem; margin: 1rem 0 .4rem; }
+.eyebrow {
+  margin: 0;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+.muted { color: var(--fg-muted); font-size: .85rem; }
+.hidden { display: none !important; }
+.row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; margin: .3rem 0; }
+main { display: grid; grid-template-columns: 340px 1fr; min-height: calc(100vh - 65px); }
+#queue-panel {
+  border-right: 1px solid var(--rule);
+  padding: 1rem;
+  background: var(--surface);
+  overflow-y: auto;
+}
+#detail-panel { padding: 1rem 1.5rem 3rem; max-width: 60rem; overflow-y: auto; }
+#queue { list-style: none; margin: .8rem 0 0; padding: 0; }
+#queue li {
+  padding: .6rem .7rem;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  margin-bottom: .5rem;
+  cursor: pointer;
+  background: var(--bg);
+}
+#queue li:hover { border-color: var(--accent-strong); }
+#queue li.active { border-color: var(--accent); background: #E4EDED; }
+#queue .id { font-family: ui-monospace, monospace; font-size: .72rem; color: var(--fg-subtle); }
+.badge {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 600;
+  padding: .1rem .45rem;
+  border-radius: 999px;
+  background: var(--low);
+  color: var(--fg-muted);
+  margin-right: .3rem;
+}
+.badge.approved { background: #E2EFE8; color: #2F6B4F; }
+.badge.rejected, .badge.duplicate { background: #F6E4E4; color: var(--bad); }
+.badge.under_review { background: #E4EDED; color: var(--accent-strong); }
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; }
+.photo-grid figure { margin: 0; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.photo-grid img { width: 100%; height: 160px; object-fit: cover; display: block; cursor: zoom-in; }
+.photo-grid figcaption { padding: .35rem .5rem; font-size: .72rem; color: var(--fg-muted); }
+input, select, textarea, button {
+  font: inherit;
+  padding: .45rem .6rem;
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--fg);
+}
+label { display: flex; flex-direction: column; gap: .15rem; font-size: .8rem; color: var(--fg-muted); }
+textarea { width: 100%; font-family: ui-monospace, monospace; font-size: .8rem; }
+button { cursor: pointer; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.danger { background: #fff; border-color: var(--bad); color: var(--bad); }
+button.ghost { background: transparent; }
+button:disabled { opacity: .45; cursor: default; }
+table { border-collapse: collapse; width: 100%; }
+#rows-table th, #rows-table td { border-bottom: 1px solid var(--rule); padding: .3rem .4rem; text-align: left; }
+#rows-table input { width: 100%; padding: .3rem .4rem; }
+#rows-table td:nth-child(2) { width: 8rem; }
+#rows-table td:nth-child(3) { width: 7rem; }
+#rows-table td:nth-child(4) { width: 2.5rem; }
+.decision-block { border: 1px solid var(--rule); border-radius: 8px; padding: .8rem; margin-top: .8rem; background: var(--surface); }
+#catalog-results { list-style: none; padding: 0; margin: .4rem 0 0; font-size: .82rem; }
+#catalog-results li { padding: .3rem .4rem; border-bottom: 1px solid var(--rule); cursor: pointer; }
+#catalog-results li:hover { background: var(--low); }
+code { background: var(--low); padding: .1rem .3rem; border-radius: 4px; font-size: .78rem; }
+#detail-head .mono { font-family: ui-monospace, monospace; font-size: .8rem; color: var(--fg-muted); }
