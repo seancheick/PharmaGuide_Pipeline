@@ -38,6 +38,9 @@ from pathlib import Path
 import pytest
 
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
 # Branded-identity tokens audit-grade. Expanded as E1.2.2 QA surfaces more
 # branded forms. Match is case-insensitive; hyphens treated as literal.
 BRANDED_TOKENS = (
@@ -96,6 +99,7 @@ def _find_blob_dir() -> Path | None:
     if candidate_root:
         candidates.append(Path(candidate_root) / "dist" / "detail_blobs")
     candidates.extend([
+        REPO_ROOT / "scripts" / "dist" / "detail_blobs",
         Path("/tmp/pharmaguide_release_build/detail_blobs"),
         Path("/tmp/pharmaguide_build/detail_blobs"),
     ])
@@ -110,8 +114,8 @@ def sample_blobs():
     blob_dir = _find_blob_dir()
     if blob_dir is None:
         pytest.skip(
-            "No build artifact found under /tmp/pharmaguide_release_build — "
-            "run build_final_db.py first to exercise this contract test."
+            "No manifest-owned or fallback build artifact found — run the "
+            "snapshot rebuild first to exercise this contract test."
         )
     sample_paths = sorted(blob_dir.glob("*.json"))[:200]
     if not sample_paths:

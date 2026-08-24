@@ -780,14 +780,14 @@ class TestRDAULPerDayBasis:
         assert result['safety_flags'][0]['amount'] == pytest.approx(per_serving * max_servings)
 
 
-class TestUnknownFormSkipsUL:
-    """Unknown vitamin form should make the form-specific UL indeterminate."""
+class TestUnknownVitaminAUsesConservativeULBound:
+    """Unknown Vitamin A form may be cleared only by a worst-case UL bound."""
 
     @pytest.fixture
     def enricher(self):
         return SupplementEnricherV3()
 
-    def test_unknown_vitamin_a_skips_ul(self, enricher):
+    def test_unknown_vitamin_a_uses_preformed_upper_bound(self, enricher):
         product = {
             'id': 'test_unknown_form',
             'activeIngredients': [
@@ -808,11 +808,15 @@ class TestUnknownFormSkipsUL:
 
         adequacy = result['adequacy_results'][0]
         assert adequacy['skip_ul_check'] is True
-        assert adequacy['skip_ul_reason'] == 'unknown_vitamin_form'
-        assert adequacy['ul_status'] == 'indeterminate_unknown_vitamin_form'
-        assert adequacy['ul_assessment_status'] == 'indeterminate'
+        assert adequacy['skip_ul_reason'] == (
+            'worst_case_preformed_vitamin_a_within_ul'
+        )
+        assert adequacy['ul_status'] == (
+            'assessed_within_limit_worst_case_preformed_vitamin_a'
+        )
+        assert adequacy['ul_assessment_status'] == 'assessed_within_limit'
         assert adequacy['over_ul'] is False
-        assert adequacy['pct_ul'] is None
+        assert adequacy['pct_ul'] == pytest.approx(50.0)
         assert adequacy['scoring_eligible'] is False
 
 
