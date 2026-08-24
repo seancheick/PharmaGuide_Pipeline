@@ -282,6 +282,32 @@ def test_doctors_best_selenium_quantity_and_unit_are_source_verified(overrides):
     )
 
 
+def test_cvs_25935_crossed_dha_identity_is_source_verified(overrides):
+    """The live NIH record's own product copy identifies the 200 mg row as DHA."""
+    entry = (overrides.get("corrections") or {}).get("25935")
+
+    assert entry, "correction for CVS pid=25935 crossed DHA row is missing"
+    assert entry["product_name"] == "DHA"
+    assert entry["raw_ingredient_text"] == "Dextrose"
+    assert entry["corrected_ingredient_text"] == "DHA"
+    assert entry["raw_unii_code"] == "IY9XDZ35W2"
+    assert entry["corrected_unii_code"] is None
+    assert entry["corrected_category"] == "fatty acid"
+    assert entry["corrected_ingredient_group"] == "DHA"
+    assert entry["corrected_forms"] == []
+    assert entry["correction_fields"] == [
+        "name",
+        "uniiCode",
+        "category",
+        "ingredientGroup",
+        "forms",
+    ]
+    assert (
+        "https://api.ods.od.nih.gov/dsld/v9/label/25935"
+        in entry["sources"]
+    )
+
+
 @pytest.mark.parametrize(
     ("dsld_id", "product_name", "ingredient", "raw_unit", "corrected_unit"),
     [

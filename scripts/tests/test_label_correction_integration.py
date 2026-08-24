@@ -485,6 +485,48 @@ def test_product_scoped_correction_repairs_crossed_up_and_up_dha_row(normalizer)
     )
 
 
+def test_product_scoped_correction_repairs_crossed_cvs_dha_row(normalizer):
+    """DSLD 25935's own official record declares the crossed 200 mg row as DHA."""
+    raw_product = _make_raw_product(25935, [])
+    raw_product["fullName"] = "DHA"
+    raw_product["brandName"] = "CVS Pharmacy"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Dextrose", category="sugar"),
+            "ingredientGroup": "Glucose",
+            "uniiCode": "IY9XDZ35W2",
+            "quantity": [{"quantity": 200, "unit": "mg"}],
+            "nestedRows": [],
+            "forms": [
+                {
+                    **_make_ingredient_row("Glucose", category="sugar"),
+                    "ingredientGroup": "Glucose",
+                    "uniiCode": "5SL0G7R0OK",
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+
+    assert len(normalized["activeIngredients"]) == 1
+    active = normalized["activeIngredients"][0]
+    assert active["name"] == "DHA"
+    assert active["canonical_id"] == "dha"
+    assert active["quantity"] == 200
+    assert active["unit"] == "mg"
+    assert active["uniiCode"] is None
+    assert active["source_correction"]["provenance_tag"] == (
+        "official_source_identity_correction"
+    )
+    assert all(
+        (row.get("canonical_id") or "").lower() != "nha_glucose_liquid"
+        for row in normalized["activeIngredients"]
+    )
+
+
 def test_product_scoped_correction_repairs_verified_boron_unit(normalizer):
     raw_product = _make_raw_product(328117, [])
     raw_product["fullName"] = (
