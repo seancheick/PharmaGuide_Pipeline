@@ -89,6 +89,17 @@ _INTENTIONAL_NON_SCOREABLE_RULES = (
     ),
 )
 
+_INTENTIONAL_SPECIAL_USE_RULES = (
+    (
+        "emergency_use_only",
+        "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY",
+        (
+            "should only be taken in emergency situations",
+            "short-term use emergency supplement",
+        ),
+    ),
+)
+
 
 def has_canonical_enforced_dimensions(value: Any) -> bool:
     """Return whether an artifact declares the exact release-gating contract."""
@@ -485,11 +496,46 @@ def evaluate_catalog_disposition(product: Mapping[str, Any]) -> Dict[str, Any]:
     """Separate explicit QA-only labels from genuine scoring remediation.
 
     This classifier is deliberately narrow. A product is only called
-    intentionally non-scoreable when the strict scoring contract has no rows,
-    cleaner-owned score-eligible rows are absent, and the label itself states
-    a non-consumer, formulation, sweetener, or culinary use. Ambiguous
-    zero-dose supplements remain in remediation.
+    intentionally non-scoreable when either a verified special-use policy and
+    its label wording agree, or the strict scoring contract has no rows and
+    the label itself states a non-consumer, formulation, sweetener, or culinary
+    use. Ambiguous zero-dose supplements remain in remediation.
     """
+    statements = _safe_list(product.get("statements"))
+    normalized_statements: list[tuple[str, str]] = []
+    for index, statement in enumerate(statements):
+        if not isinstance(statement, Mapping):
+            continue
+        notes = re.sub(
+            r"\s+",
+            " ",
+            str(statement.get("notes") or "").strip().casefold(),
+        )
+        if notes:
+            normalized_statements.append((f"statements[{index}].notes", notes))
+
+    special_use_codes = {
+        str(flag.get("code") or "").strip()
+        for flag in _safe_list(_safe_dict(product.get("rda_ul_data")).get(
+            "special_use_flags"
+        ))
+        if isinstance(flag, Mapping)
+    }
+    for reason_code, required_code, phrases in _INTENTIONAL_SPECIAL_USE_RULES:
+        if required_code not in special_use_codes:
+            continue
+        matching_paths = [
+            path
+            for path, notes in normalized_statements
+            if any(phrase in notes for phrase in phrases)
+        ]
+        if matching_paths:
+            return {
+                "disposition": CATALOG_DISPOSITION_INTENTIONAL_NON_SCOREABLE,
+                "reason_code": reason_code,
+                "evidence_paths": matching_paths,
+            }
+
     scoring_input = get_scoring_ingredients(
         dict(product),
         strict=True,
@@ -507,19 +553,6 @@ def evaluate_catalog_disposition(product: Mapping[str, Any]) -> Dict[str, Any]:
             "reason_code": "source_active_assessment_required",
             "evidence_paths": [],
         }
-
-    statements = _safe_list(product.get("statements"))
-    normalized_statements: list[tuple[str, str]] = []
-    for index, statement in enumerate(statements):
-        if not isinstance(statement, Mapping):
-            continue
-        notes = re.sub(
-            r"\s+",
-            " ",
-            str(statement.get("notes") or "").strip().casefold(),
-        )
-        if notes:
-            normalized_statements.append((f"statements[{index}].notes", notes))
 
     for reason_code, phrases, match_mode in _INTENTIONAL_NON_SCOREABLE_RULES:
         matching_paths = []

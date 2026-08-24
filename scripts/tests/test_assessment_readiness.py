@@ -181,6 +181,45 @@ def test_explicit_non_consumer_label_intent_is_typed_qa_disposition() -> None:
         ]
 
 
+def test_emergency_use_only_product_overrides_score_candidate_disposition() -> None:
+    """Emergency countermeasures must not receive routine supplement scores."""
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Potassium Iodide", "iodine", quantity=130, unit="mg")
+    product = _product(row, title="Potassium Iodide Tablets 130 mg")
+    product["statements"] = [{
+        "type": "Precautions re: All Other",
+        "notes": (
+            "Potassium Iodide should only be taken in emergency situations "
+            "when directed by your physician, state, or local health authorities."
+        ),
+    }]
+    product["rda_ul_data"]["special_use_flags"] = [{
+        "code": "POTASSIUM_IODIDE_EMERGENCY_USE_ONLY",
+        "source": "FDA",
+        "source_url": (
+            "https://www.fda.gov/drugs/bioterrorism-and-drug-preparedness/"
+            "frequently-asked-questions-potassium-iodide-ki"
+        ),
+    }]
+
+    result = evaluate_assessment_readiness(product, module="generic")
+
+    assert result["catalog_disposition"] == {
+        "disposition": "intentional_non_scoreable",
+        "reason_code": "emergency_use_only",
+        "evidence_paths": ["statements[0].notes"],
+    }
+    assert result["is_live_ready"] is False
+    assert "intentional_non_scoreable_product" in result["unavailable_reasons"]
+
+    product["rda_ul_data"]["special_use_flags"] = []
+    without_verified_policy = evaluate_assessment_readiness(product, module="generic")
+    assert without_verified_policy["catalog_disposition"]["disposition"] == (
+        "score_candidate"
+    )
+
+
 def test_missing_active_without_explicit_non_scoreable_intent_stays_remediation() -> None:
     from assessment_readiness import evaluate_assessment_readiness
 
