@@ -1,0 +1,285 @@
+{
+  "report_schema_version": "2.0.0",
+  "report_name": "PharmaGuide scoring integrity 2.4 candidate",
+  "report_date": "2026-08-24",
+  "candidate_status": "technically_verified_preproduction_not_approved_for_publish",
+  "generated_by": "scripts/audits/generate_candidate_report.py",
+  "repositories": {
+    "pipeline": {
+      "source_head_at_generation": "334aa35e14c7984d68843957ba16d0069585647a",
+      "branch": "codex/scoring-integrity-unification",
+      "merge_base_origin_main": "c31983c4500cc5992ecd476e4b71e7c5b7d55404",
+      "dirty": false,
+      "source_head_pushed": false
+    },
+    "flutter": {
+      "source_head_at_generation": "c8ccc7ce2a3da02dd0c06a72e82b45141c390ee3",
+      "branch": "codex/scoring-integrity-unification",
+      "dirty": false,
+      "source_head_pushed": false
+    }
+  },
+  "release_contract": {
+    "export_schema_version": "2.4.0",
+    "scoring_version": "4.3.0",
+    "pipeline_version": "3.4.0",
+    "db_version": "2026.08.24.100843"
+  },
+  "artifact_hashes": {
+    "candidate_database_sha256": "07e2e202bb239461348a93ea08fb710bb76315176dda3fb844ce990afeafff5d",
+    "export_manifest_sha256": "5183763aa328b9f17b43e31a459599e3b56524cd5c8a3d30a4b5aaaf5ae22519",
+    "detail_index_sha256": "4a9f3a53d96c4c2683376ec063deb6ac85f922c023f5c7cb23be06c9d0fe7db0",
+    "interaction_database_sha256": "cf3bab2f5736881562854ec2b9ba99a3fce517073789c13b8c2e145cc1299891",
+    "interaction_database_manifest_sha256": "0321b4a71a923faad2a9441a561226f5e87631c28e0cedca19b25c3625480bf8"
+  },
+  "candidate": {
+    "live_product_count": 15278,
+    "detail_blob_count": 15278,
+    "core_database_bytes": 62599168,
+    "verdict_counts": {
+      "BLOCKED": 54,
+      "CAUTION": 1401,
+      "POOR": 2062,
+      "SAFE": 11761
+    },
+    "quality_score_status_counts": {
+      "scored": 15224,
+      "suppressed_safety": 54
+    },
+    "product_safety_status_counts": {
+      "blocked": 54,
+      "caution": 1401,
+      "no_known_catalog_concern": 13823
+    }
+  },
+  "quarantine": {
+    "total": 134,
+    "groups": {
+      "blocked_by_completeness_gate:dose": 24,
+      "blocked_by_completeness_gate:identity": 98,
+      "safety_policy_review_required": 12
+    }
+  },
+  "pending_clinical_signoff": {
+    "us_policy_holds": [],
+    "withheld_clinical_records": {
+      "medication_depletions": {
+        "published": 31,
+        "withheld": 49,
+        "withheld_by_review_status": {
+          "needs_revision": 29,
+          "rejected": 20
+        }
+      },
+      "timing_rules": {
+        "published": 7,
+        "withheld": 13,
+        "withheld_by_review_status": {
+          "needs_revision": 13
+        }
+      }
+    }
+  },
+  "publication_boundary": {
+    "production_published": false,
+    "supabase_uploaded": false,
+    "flutter_candidate_assets_imported": true,
+    "actual_publish_owner": "operator"
+  },
+  "baseline": {
+    "database_sha256": "f5a85348cbebed85faf56f733b35468fe66e1bb35e9ed6de45bc1838a1cf341b",
+    "product_count": 13271
+  },
+  "baseline_candidate_diff": {
+    "shared": 13151,
+    "added_live": 2127,
+    "removed_live": 120,
+    "comparable_columns": [
+      "blocking_reason",
+      "quality_score_status",
+      "verdict"
+    ],
+    "changed": {
+      "blocking_reason": 291,
+      "quality_score_status": 44,
+      "verdict": 696
+    }
+  },
+  "verification": {
+    "verification_schema_version": "2.0.0",
+    "gates": {
+      "full_corpus_pipeline": {
+        "command": [
+          "python3",
+          "-c",
+          "from pathlib import Path; import hashlib,json,re; s=Path(\"scripts/products/reports/batch_run_summary_20260824_055008.txt\").read_text(); m=json.loads(Path(\"scripts/dist/export_manifest.json\").read_text()); db=Path(\"scripts/dist/pharmaguide_core.db\"); h=hashlib.sha256(db.read_bytes()).hexdigest(); assert s.count(\"Success: True\")==37; assert \"Success: False\" not in s; assert \"Building from 37 enriched dirs + 37 scored dirs\" in s; assert \"Done. 15278 products, 0 errors.\" in s; assert \"134 contract quarantines, 0 contract failures\" in s; assert m[\"product_count\"]==15278; assert len(m[\"excluded_by_gate\"])==134; assert m[\"checksum_sha256\"]==h; assert h in s; print(f\"verified completed corpus run: datasets=37 successes=37 products={m['product_count']} quarantines={len(m['excluded_by_gate'])} sha256={h}\")"
+        ],
+        "completed_at": "2026-08-24T13:59:09.694691Z",
+        "cwd": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification",
+        "duration_seconds": 0.063,
+        "exit_code": 0,
+        "gate_name": "full_corpus_pipeline",
+        "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/full_corpus_pipeline.log",
+        "log_sha256": "61fef140586c7de1eb8a589ad33e6b97217112bf71f0964f8ab2d56cc6fc5e4a",
+        "receipt_schema_version": "1.0.0",
+        "receipt_sha256": "bf3a61bd84ddf23fc80c1b5dd8ce93be8d172272a444962d91abbb7827deaf76",
+        "started_at": "2026-08-24T13:59:09.631443Z",
+        "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/full_corpus_pipeline.json",
+        "receipt_file_sha256": "6c004d61ff5159a570c7dab97f65634f903dc31b3ed8d54a6ad99a827aa8aab9"
+      },
+      "pipeline_fast_suite": {
+        "command": [
+          "scripts/test.sh",
+          "fast"
+        ],
+        "completed_at": "2026-08-24T12:57:32.478469Z",
+        "cwd": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification",
+        "duration_seconds": 296.869,
+        "exit_code": 0,
+        "gate_name": "pipeline_fast_suite",
+        "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_fast_suite.log",
+        "log_sha256": "1b4bef2b9492d000f29601728fec979a87218dd0ace12b2e4adff4278f29d482",
+        "receipt_schema_version": "1.0.0",
+        "receipt_sha256": "fd481acc1c4caf3d31fb975c1f4a4fac9a972922e72838c0b6c793762f177bef",
+        "started_at": "2026-08-24T12:52:35.610354Z",
+        "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_fast_suite.json",
+        "receipt_file_sha256": "e6a2b817294e51bcef61edace614d4e1ae57e9bc65c840cd4350a8e8fd585ea5"
+      },
+      "pipeline_release_suite": {
+        "command": [
+          "env",
+          "FLUTTER_REPO=/Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification",
+          "scripts/test.sh",
+          "release"
+        ],
+        "completed_at": "2026-08-24T12:51:53.995584Z",
+        "cwd": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification",
+        "duration_seconds": 1146.068,
+        "exit_code": 0,
+        "gate_name": "pipeline_release_suite",
+        "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_release_suite.log",
+        "log_sha256": "15f51d0678a0aacc618007fd57cf008843418504acae122ecf61155ec6cbdc91",
+        "receipt_schema_version": "1.0.0",
+        "receipt_sha256": "3b54fe0b7c631aca9f78fc75425bf1e8b0b451b7cfa4553b81be4b76d199558d",
+        "started_at": "2026-08-24T12:32:47.929364Z",
+        "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_release_suite.json",
+        "receipt_file_sha256": "42e9126eb05c0ea6b8bd059ec3014ab1182a9fe200bc094b8c8869a096ddf768"
+      },
+      "pipeline_full_suite": {
+        "command": [
+          "scripts/test.sh",
+          "full"
+        ],
+        "completed_at": "2026-08-24T13:58:40.228035Z",
+        "cwd": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification",
+        "duration_seconds": 3521.804,
+        "exit_code": 0,
+        "gate_name": "pipeline_full_suite",
+        "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_full_suite.log",
+        "log_sha256": "5afe8984b4cb353cb091ab13c3dd5dd959647cad56770987fe729ed7b50e8fd8",
+        "receipt_schema_version": "1.0.0",
+        "receipt_sha256": "847dc44948a90b495ba20c77752cfee41cc97bfe6c61e0f0140f80b329f1a15f",
+        "started_at": "2026-08-24T12:59:58.447147Z",
+        "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/pipeline_full_suite.json",
+        "receipt_file_sha256": "00d4e554d726c33cbb89fddaceb1e5d2ade74bff56ac62917f37827f98061a82"
+      },
+      "flutter_analyze": {
+        "command": [
+          "/Users/seancheick/Development/flutter/bin/flutter",
+          "analyze"
+        ],
+        "completed_at": "2026-08-24T12:57:44.720446Z",
+        "cwd": "/Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification",
+        "duration_seconds": 6.28,
+        "exit_code": 0,
+        "gate_name": "flutter_analyze",
+        "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/flutter_analyze.log",
+        "log_sha256": "19c83428a67a4a7a9fb0869c5cca1a123b391128b75870ffc5d1630e08a5dd3f",
+        "receipt_schema_version": "1.0.0",
+        "receipt_sha256": "87260d7ed38f6fef89c8a35e6734c2afdc7152d1c199bbae129261da7fa308cf",
+        "started_at": "2026-08-24T12:57:38.439553Z",
+        "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/flutter_analyze.json",
+        "receipt_file_sha256": "143a4eca1ea0c92eb80b85c9e2f96eb8c97b41145f2548ad809936076b208f8c"
+      },
+      "flutter_suite": {
+        "command": [
+          "/Users/seancheick/Development/flutter/bin/flutter",
+          "test",
+          "--reporter",
+          "compact"
+        ],
+        "completed_at": "2026-08-24T12:59:17.939798Z",
+        "cwd": "/Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification",
+        "duration_seconds": 85.383,
+        "exit_code": 0,
+        "gate_name": "flutter_suite",
+        "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/flutter_suite.log",
+        "log_sha256": "ea94b2c1e11a408393a24e9b1004dfce4e50a4badbe509f8c76829362c4e215a",
+        "receipt_schema_version": "1.0.0",
+        "receipt_sha256": "06cbec19054f908638087a1ccb265c1d602a102ff1e1184b2920876cf9b4227f",
+        "started_at": "2026-08-24T12:57:52.556642Z",
+        "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/flutter_suite.json",
+        "receipt_file_sha256": "1478da4c235b7efddd6480b9571557fd5ba00aeb39078e46513a4bf141b3e498"
+      },
+      "interaction_parity": {
+        "command": [
+          "python3",
+          "scripts/audit_source_of_truth_contract.py",
+          "interaction",
+          "--strict",
+          "--dist-dir",
+          "scripts/dist"
+        ],
+        "completed_at": "2026-08-24T12:59:29.232994Z",
+        "cwd": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification",
+        "duration_seconds": 0.216,
+        "exit_code": 0,
+        "gate_name": "interaction_parity",
+        "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/interaction_parity.log",
+        "log_sha256": "3d0794cae581169f20281fe4fcda7b3c42979dc4eb4cb136d1db7e39a2b7c13a",
+        "receipt_schema_version": "1.0.0",
+        "receipt_sha256": "db661689ee1835ee739a5b2dca03f1ea6c1102d8040cf95e57983537323a2017",
+        "started_at": "2026-08-24T12:59:29.016925Z",
+        "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/interaction_parity.json",
+        "receipt_file_sha256": "f8387125c94b33026af3bd6015c3368e40f3d255297560b215dd79e833c0af95"
+      },
+      "candidate_import_preflight": {
+        "command": [
+          "./scripts/import_catalog_artifact.sh",
+          "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/scripts/dist",
+          "--dry-run"
+        ],
+        "completed_at": "2026-08-24T12:59:36.469455Z",
+        "cwd": "/Users/seancheick/PharmaGuide ai/.worktrees/codex-scoring-integrity-unification",
+        "duration_seconds": 1.387,
+        "exit_code": 0,
+        "gate_name": "candidate_import_preflight",
+        "log": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/candidate_import_preflight.log",
+        "log_sha256": "0a33f4762669f8838ce19f9b6695e54e9f2b07e59362ddb87cefd545409b768e",
+        "receipt_schema_version": "1.0.0",
+        "receipt_sha256": "898fc5361b97de732f5f4106e934e5bf482a8b02c1ba90dcf8e53973785c9ec6",
+        "started_at": "2026-08-24T12:59:35.082071Z",
+        "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/candidate_import_preflight.json",
+        "receipt_file_sha256": "9d46ee293f6a2aa3a1566ca6dd93884c804c5c804302d49090f5e3a2c03cb3fa"
+      }
+    },
+    "additional_preproduction_checks": {
+      "supabase_dry_run": {
+        "receipt": "/Users/seancheick/Downloads/dsld_clean/worktrees/codex-scoring-integrity-unification/docs/release_candidates/receipts/supabase_dry_run.json",
+        "writes_performed": false
+      }
+    },
+    "publication": {
+      "supabase_uploaded": false,
+      "production_merged": false,
+      "store_released": false
+    },
+    "verification_file_sha256": "c8d60661aa3c3eff9e32cae3e90cd252ffe2c9a02afe9dad2e530b97976d8e4c"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "scope": "canonical JSON excluding integrity",
+    "signature_type": "self-integrity hash; not an identity signature",
+    "sha256": "1232190c9d92ca8179434bc8d116be6ed9679e41bb7251bff913e01a6b21b03f"
+  }
+}
