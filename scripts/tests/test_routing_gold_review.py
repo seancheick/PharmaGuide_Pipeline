@@ -92,6 +92,66 @@ def test_gold_review_accepts_reviewed_row_level_protein_boundary() -> None:
     )
 
 
+def test_gold_review_accepts_explicit_preworkout_with_observed_formula() -> None:
+    from audits.routing_gold_review import build_gold_review
+
+    baseline = _finish_report([
+        {"dsld_id": "P1", "recomputed_route": "generic"},
+    ])
+    candidate = _finish_report([
+        {
+            "dsld_id": "P1",
+            "product_name": "Opaque Brand Fruit Punch",
+            "recomputed_route": "sports",
+            "route_reason": "profile_content:sports",
+            "explicit_preworkout_statement": True,
+            "observed_sports_identity_count": 2,
+            "observed_sports_canonical_ids": [
+                "creatine_monohydrate",
+                "l_citrulline",
+            ],
+        },
+    ])
+
+    report = build_gold_review(
+        baseline,
+        candidate,
+        _lock(baseline, candidate, "generic->sports"),
+    )
+
+    assert report["changes"][0]["review_group"] == (
+        "explicit_preworkout_with_observed_formula"
+    )
+
+
+def test_gold_review_accepts_explicit_omega_with_observed_epa_dha() -> None:
+    from audits.routing_gold_review import build_gold_review
+
+    baseline = _finish_report([
+        {"dsld_id": "P1", "recomputed_route": "generic"},
+    ])
+    candidate = _finish_report([
+        {
+            "dsld_id": "P1",
+            "product_name": "Omega-3 Gummies",
+            "recomputed_route": "omega",
+            "route_reason": "taxonomy:general_supplement:omega_evidence_override",
+            "title_omega_intent": True,
+            "observed_omega_canonical_ids": ["dha", "epa"],
+        },
+    ])
+
+    report = build_gold_review(
+        baseline,
+        candidate,
+        _lock(baseline, candidate, "generic->omega"),
+    )
+
+    assert report["changes"][0]["review_group"] == (
+        "explicit_omega_with_observed_epa_dha"
+    )
+
+
 def test_gold_review_rejects_blend_mass_as_material_protein_boundary() -> None:
     from audits.routing_gold_review import RoutingGoldReviewError
     from audits.routing_gold_review import build_gold_review
@@ -241,7 +301,10 @@ def test_gold_review_rejects_unreviewed_transition() -> None:
     baseline = _finish_report([{"dsld_id": "P1", "recomputed_route": "generic"}])
     candidate = _finish_report([{"dsld_id": "P1", "recomputed_route": "omega"}])
 
-    with pytest.raises(RoutingGoldReviewError, match="unreviewed route transition"):
+    with pytest.raises(
+        RoutingGoldReviewError,
+        match="omega promotion lacks explicit title intent",
+    ):
         build_gold_review(
             baseline,
             candidate,

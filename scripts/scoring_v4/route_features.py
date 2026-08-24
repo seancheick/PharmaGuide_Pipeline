@@ -13,7 +13,7 @@ import re
 from typing import Any, Iterable, Mapping, Sequence
 
 
-ROUTE_FEATURE_SCHEMA_VERSION = "1.2.0"
+ROUTE_FEATURE_SCHEMA_VERSION = "1.3.0"
 
 B_VITAMIN_CANONICALS = frozenset({
     "vitamin_b1_thiamine",
@@ -145,6 +145,37 @@ PROTEIN_CANONICALS = frozenset({
     "rice_protein",
     "soy_protein",
 })
+
+SPORTS_FORMULA_CANONICALS = frozenset({
+    "creatine",
+    "creatine_monohydrate",
+    "creatine_hydrochloride",
+    "creatine_hcl",
+    "creatine_nitrate",
+    "creatine_citrate",
+    "buffered_creatine",
+    "magnesium_creatine_chelate",
+    "beta-alanine",
+    "beta_alanine",
+    "l_citrulline",
+    "hmb",
+}) | BCAA_CANONICALS | EAA_CANONICALS
+
+OMEGA_CANONICALS = frozenset({"epa", "dha"})
+
+_PREWORKOUT_STATEMENT_RE = re.compile(
+    r"\b(?:pre[\s-]?workout|preworkout)\b",
+    re.IGNORECASE,
+)
+_SPORTS_INTENT_STATEMENT_TYPES = frozenset({
+    "formulation re: other",
+    "general statements: all other content",
+    "suggested/recommended/usage/directions",
+})
+_OMEGA_TITLE_RE = re.compile(
+    r"\b(?:omega[\s-]?3|epa|dha|fish\s+oil|krill\s+oil|algal\s+oil)\b",
+    re.IGNORECASE,
+)
 
 _FIBER_TITLE_RE = re.compile(
     r"\b(fib(?:er|re)(?:mend|con|lax)?|psyllium|inulin|prebiotic|"
@@ -522,6 +553,25 @@ def extract_route_features(
         for row in observed_row_list
         if row_canonical(row) in PROTEIN_CANONICALS
     ]
+    observed_sports_ids = sorted({
+        row_canonical(row)
+        for row in observed_row_list
+        if row_canonical(row) in SPORTS_FORMULA_CANONICALS
+    })
+    observed_omega_ids = sorted({
+        row_canonical(row)
+        for row in observed_row_list
+        if row_canonical(row) in OMEGA_CANONICALS
+    })
+    explicit_preworkout_statement = any(
+        isinstance(statement, Mapping)
+        and str(statement.get("type") or "").strip().lower()
+        in _SPORTS_INTENT_STATEMENT_TYPES
+        and _PREWORKOUT_STATEMENT_RE.search(
+            str(statement.get("notes") or "")
+        )
+        for statement in product.get("statements") or []
+    )
 
     product_level_fiber_rows = [row for row in product_level_rows if is_fiber_row(row)]
     product_level_protein_rows = [
@@ -732,5 +782,12 @@ def extract_route_features(
         "protein_title_intent": has_protein_product_intent(product_title_text(product)),
         "protein_primary_role": bool(protein_roles & _PRIMARY_ROLES),
         "protein_material_role": bool(protein_roles & _MATERIAL_ROLES),
+        "explicit_preworkout_statement": explicit_preworkout_statement,
+        "observed_sports_canonical_ids": observed_sports_ids,
+        "observed_sports_identity_count": len(observed_sports_ids),
+        "title_omega_intent": bool(
+            _OMEGA_TITLE_RE.search(product_title_text(product))
+        ),
+        "observed_omega_canonical_ids": observed_omega_ids,
         **probiotic_features,
     }

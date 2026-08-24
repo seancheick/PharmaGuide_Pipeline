@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-08-24",
-    "total_entries": 40,
+    "total_entries": 41,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -154,6 +154,52 @@
       "review_date": "2026-08-24",
       "scope": "dsld_id_only",
       "provenance_tag": "official_statement_dose_correction"
+    },
+    "1179": {
+      "brand": "GNC Beyond Raw",
+      "product_name": "Ravage Fruit Punch",
+      "raw_ingredient_text": "vitamin B",
+      "corrected_ingredient_text": "Anabolic Muscle Primer",
+      "corrected_category": "blend",
+      "corrected_ingredient_group": "Blend (Combination)",
+      "corrected_forms": [
+        {
+          "name": "Betaine Anhydrous"
+        },
+        {
+          "name": "Micronized L-Leucine"
+        },
+        {
+          "name": "Fenugreek Extract (Trigonella foenum) (seed) (standardized for fenuside)"
+        },
+        {
+          "name": "HMB Powder"
+        },
+        {
+          "name": "Saw Palmetto Extract (Serenoa repens) (fruit)"
+        },
+        {
+          "name": "Yohimbe Powder (Pausinystalia yohimbe) (bark)"
+        },
+        {
+          "name": "Wild Yam Extract (Dioscorea villosa) (root)"
+        }
+      ],
+      "correction_fields": [
+        "name",
+        "category",
+        "ingredientGroup",
+        "forms"
+      ],
+      "evidence": "The structured DSLD row incorrectly names the 5.3 g proprietary blend 'vitamin B' and groups it under Vitamin B6. The official NIH-hosted label image for exact product code 826300 HLG prints that row as 'Anabolic Muscle Primer' at 5.3 g, followed by betaine anhydrous, micronized L-leucine, fenugreek extract, and other blend members. The adjacent 3.2 g Muscle Buffering System, 3.2 g N.O. Vasodilation Amplifier, 3.1 g ATP Optimizing Creatine Module, and 603.3 mg Thermo Energy Intensifier values also match the structured record. This product-scoped correction restores the declared blend identity and removes a false 5.3 g Vitamin B6 exposure without assigning doses to any undisclosed blend member.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/1179",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/1179.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-08-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction"
     },
     "19916": {
       "brand": "up&up",

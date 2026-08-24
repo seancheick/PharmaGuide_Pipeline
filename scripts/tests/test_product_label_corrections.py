@@ -308,6 +308,34 @@ def test_cvs_25935_crossed_dha_identity_is_source_verified(overrides):
     )
 
 
+def test_ravage_crossed_vitamin_b_row_is_source_verified(overrides):
+    """The exact NIH label prints the 5.3 g row as Anabolic Muscle Primer."""
+    entry = (overrides.get("corrections") or {}).get("1179")
+
+    assert entry, "correction for Ravage 1179 crossed blend row is missing"
+    assert entry["product_name"] == "Ravage Fruit Punch"
+    assert entry["raw_ingredient_text"] == "vitamin B"
+    assert entry["corrected_ingredient_text"] == "Anabolic Muscle Primer"
+    assert entry["corrected_category"] == "blend"
+    assert entry["corrected_ingredient_group"] == "Blend (Combination)"
+    assert [form["name"] for form in entry["corrected_forms"]] == [
+        "Betaine Anhydrous",
+        "Micronized L-Leucine",
+        "Fenugreek Extract (Trigonella foenum) (seed) (standardized for fenuside)",
+        "HMB Powder",
+        "Saw Palmetto Extract (Serenoa repens) (fruit)",
+        "Yohimbe Powder (Pausinystalia yohimbe) (bark)",
+        "Wild Yam Extract (Dioscorea villosa) (root)",
+    ]
+    assert entry["correction_fields"] == [
+        "name",
+        "category",
+        "ingredientGroup",
+        "forms",
+    ]
+    assert "https://api.ods.od.nih.gov/dsld/s3/pdf/1179.pdf" in entry["sources"]
+
+
 @pytest.mark.parametrize(
     ("dsld_id", "product_name", "ingredient", "dose_mg"),
     [

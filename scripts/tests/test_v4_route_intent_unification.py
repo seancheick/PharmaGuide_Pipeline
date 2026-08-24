@@ -14,6 +14,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 from scoring_input_contract import build_scoring_classification  # noqa: E402
+from scoring_v4.route_features import extract_route_features  # noqa: E402
 
 
 def _row(canonical_id: str, quantity: float, unit: str, **extra) -> dict:
@@ -597,6 +598,81 @@ def test_explicit_protein_title_uses_observed_zero_dose_protein_identity() -> No
     assert decision["route_reason"] == "profile_content:sports"
 
 
+def test_explicit_preworkout_statement_with_observed_sports_formula_routes_sports() -> None:
+    calcium = _row("calcium", 185, "mg")
+    creatine = _row(
+        "creatine_monohydrate",
+        0,
+        "NP",
+        score_eligible_by_cleaner=False,
+        cleaner_row_role="nested_display_only",
+    )
+    citrulline = _row(
+        "l_citrulline",
+        0,
+        "NP",
+        score_eligible_by_cleaner=False,
+        cleaner_row_role="nested_display_only",
+    )
+    product = _product(
+        "Ravage Fruit Punch",
+        [calcium],
+        primary_type="vitamin_mineral_combo",
+        observed_rows=[calcium, creatine, citrulline],
+    )
+    product["statements"] = [{
+        "type": "General Statements: All Other Content",
+        "notes": "Potent, ultra concentrated pre-workout hybrid",
+    }]
+
+    decision = _classification(product)
+
+    assert decision["route_module"] == "sports"
+    assert decision["route_reason"] == "profile_content:sports"
+    assert decision["route_evidence"] == [
+        "sports_identity_or_dose",
+        "scoring_rows_present",
+    ]
+
+
+def test_preworkout_statement_without_formula_cannot_force_sports_route() -> None:
+    calcium = _row("calcium", 185, "mg")
+    creatine = _row(
+        "creatine_monohydrate",
+        0,
+        "NP",
+        score_eligible_by_cleaner=False,
+        cleaner_row_role="nested_display_only",
+    )
+    product = _product(
+        "Daily Energy Formula",
+        [calcium],
+        observed_rows=[calcium, creatine],
+    )
+    product["statements"] = [{
+        "type": "General Statements: All Other Content",
+        "notes": "May be taken pre-workout or with breakfast.",
+    }]
+
+    assert _classification(product)["route_module"] == "generic"
+
+
+def test_omega_brand_name_does_not_count_as_product_title_intent() -> None:
+    epa = _row("epa", 30, "mg")
+    dha = _row("dha", 20, "mg")
+    product = _product("Daily Gummies", [epa, dha])
+    product["brand_name"] = "Omega Wellness"
+
+    features = extract_route_features(
+        product,
+        [epa, dha],
+        _classification(product),
+        observed_rows=[epa, dha],
+    )
+
+    assert features["title_omega_intent"] is False
+
+
 def test_route_decision_is_single_structured_classifier_result() -> None:
     decision = _classification(
         _product("Vitamin C 500 mg", [_row("vitamin_c", 500, "mg")])
@@ -606,7 +682,7 @@ def test_route_decision_is_single_structured_classifier_result() -> None:
         "module": decision["route_module"],
         "reason_codes": decision["route_evidence"],
         "confidence": decision["route_confidence"],
-        "classifier_version": "1.2.0",
+        "classifier_version": "1.3.0",
     }
 
 

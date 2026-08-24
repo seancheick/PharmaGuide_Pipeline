@@ -527,6 +527,48 @@ def test_product_scoped_correction_repairs_crossed_cvs_dha_row(normalizer):
     )
 
 
+def test_product_scoped_correction_removes_ravage_phantom_vitamin_b6(normalizer):
+    raw_product = _make_raw_product(1179, [])
+    raw_product["fullName"] = "Ravage Fruit Punch"
+    raw_product["brandName"] = "GNC Beyond Raw"
+    raw_product["ingredientRows"] = [{
+        "order": 11,
+        "ingredientId": 6177,
+        "name": "vitamin B",
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Vitamin B6 (pyridoxine)",
+        "uniiCode": None,
+        "quantity": [{"quantity": 5.3, "unit": "g"}],
+        "nestedRows": [],
+        "forms": [{
+            "name": "Pyridoxine Hydrochloride",
+            "category": "vitamin",
+            "ingredientGroup": "Vitamin B6",
+            "uniiCode": "68Y4CF58BV",
+        }],
+    }]
+
+    normalized = normalizer.normalize_product(raw_product)
+    owner = next(
+        row
+        for row in normalized["activeIngredients"]
+        if row.get("name") == "Anabolic Muscle Primer"
+    )
+
+    assert owner["canonical_id"] is None
+    assert owner["cleaner_row_role"] == "blend_header_total"
+    assert owner["score_eligible_by_cleaner"] is False
+    assert owner["score_exclusion_reason"] == "blend_header_total"
+    assert "Pyridoxine Hydrochloride" not in {
+        form.get("name") for form in owner["forms"]
+    }
+    assert {form.get("name") for form in owner["forms"]} >= {
+        "Betaine Anhydrous",
+        "Micronized L-Leucine",
+        "HMB Powder",
+    }
+
+
 def test_product_scoped_correction_restores_statement_backed_form_dose(normalizer):
     """A reviewed form dose is restored without rewriting its Total Fat owner."""
     raw_product = _make_raw_product(2248, [])

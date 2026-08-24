@@ -91,6 +91,20 @@ def _review_group(
         )
 
     if new_route == "sports":
+        observed_sports_ids = {
+            str(value).strip()
+            for value in feature.get("observed_sports_canonical_ids") or []
+            if str(value).strip()
+        }
+        if (
+            feature.get("explicit_preworkout_statement") is True
+            and int(feature.get("observed_sports_identity_count") or 0) >= 2
+            and len(observed_sports_ids) >= 2
+        ):
+            return (
+                "explicit_preworkout_with_observed_formula",
+                "Structured label copy explicitly identifies a pre-workout and the observed formula contains multiple resolved sports identities.",
+            )
         protein_mass = float(feature.get("protein_mass_mg") or 0.0)
         if feature.get("protein_title_intent") and protein_mass > 0:
             return "protein_intent_and_mass", "Explicit protein/mass-gainer intent with disclosed protein mass."
@@ -113,6 +127,24 @@ def _review_group(
             )
         raise RoutingGoldReviewError(
             f"{dsld_id}: sports promotion lacks reviewed protein intent or row-level mass"
+        )
+
+    if new_route == "omega":
+        observed_omega_ids = {
+            str(value).strip()
+            for value in feature.get("observed_omega_canonical_ids") or []
+            if str(value).strip()
+        }
+        if (
+            feature.get("title_omega_intent") is True
+            and {"epa", "dha"}.issubset(observed_omega_ids)
+        ):
+            return (
+                "explicit_omega_with_observed_epa_dha",
+                "The product title explicitly identifies omega intent and the observed label contains both EPA and DHA identities.",
+            )
+        raise RoutingGoldReviewError(
+            f"{dsld_id}: omega promotion lacks explicit title intent and observed EPA/DHA identities"
         )
 
     if new_route == "b_complex":

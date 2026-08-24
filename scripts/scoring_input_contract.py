@@ -55,8 +55,8 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "percent_dv_dose": ["generic_percent_dv_dose"],
 }
 PRODUCT_EVIDENCE_ORIGINS = {"native_enrichment", "compatibility_derived"}
-SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.2.0"
-ROUTE_CLASSIFIER_VERSION = "1.2.0"
+SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.3.0"
+ROUTE_CLASSIFIER_VERSION = "1.3.0"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
@@ -3713,6 +3713,18 @@ def _route_is_sports_class(
         return False
     facts = features or _route_feature_vector(product)
     if _route_has_sports_primary_dose_evidence(product):
+        return True
+
+    # Some DSLD titles are opaque brand/flavor names even though structured
+    # label copy explicitly calls the product a pre-workout. Require at least
+    # two independently resolved sports identities from the observed label so
+    # incidental "take pre-workout" directions cannot hijack a generic product.
+    if (
+        not _ROUTE_SPORTS_NAME_EXCLUSION_RE.search(name_text or "")
+        and facts.get("explicit_preworkout_statement")
+        and int(facts.get("observed_sports_identity_count") or 0) >= 2
+        and not _route_is_multivitamin_eligible(product, name_text, features=facts)
+    ):
         return True
 
     # Route by sports IDENTITY, like omega: a confident pre_workout taxonomy, or an
