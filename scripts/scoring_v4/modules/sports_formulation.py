@@ -25,6 +25,7 @@ from scoring_v4.modules.generic_helpers import (
 from scoring_v4.modules.sports_helpers import (
     BCAA_CANONICALS,
     EAA_CANONICALS,
+    EAA_AGGREGATE_CANONICALS,
     SPORTS_PROTEIN_CANONICALS,
     canonical,
     dose_g,
@@ -214,6 +215,17 @@ def _dose_transparency(protein_rows: List[Dict[str, Any]], source_class: str) ->
 def _amino_profile_disclosure(rows: List[Dict[str, Any]]) -> float:
     canons = {canonical(row) for row in rows}
     if EAA_CANONICALS.issubset(canons):
+        return 3.0
+    if any(
+        canonical(row) in EAA_AGGREGATE_CANONICALS
+        and {
+            _norm_text(value)
+            for value in _safe_list(row.get("verified_child_canonicals"))
+            if _norm_text(value)
+        }
+        == set(EAA_CANONICALS)
+        for row in rows
+    ):
         return 3.0
     if BCAA_CANONICALS.issubset(canons):
         return 2.0

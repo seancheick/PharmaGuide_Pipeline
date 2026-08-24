@@ -20,6 +20,7 @@ from scoring_v4.modules.sports_helpers import (
     CITRULLINE_CANONICALS,
     CREATINE_CANONICALS,
     EAA_CANONICALS,
+    EAA_AGGREGATE_CANONICALS,
     HMB_CANONICALS,
     SPORTS_BAND_CANONICALS,
     SPORTS_PROTEIN_CANONICALS,
@@ -240,6 +241,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         grouped = group_eaa(rows)
         count = int(grouped.get("count") or 0)
         total = float(grouped["total_g"])
+        aggregate_total = grouped.get("aggregate_total_g")
         if count < 6:
             return 0.0, "eaa_incomplete_under_6"
         if count < 9:
@@ -251,8 +253,16 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         if total < 5:
             return _partial(total, 5.0, 12.0), "eaa_under_5_g"
         if total < 8:
-            return 14.0, "eaa_5_to_8_g"
-        return 18.0, "eaa_complete_at_least_8_g"
+            return 14.0, (
+                "eaa_complete_aggregate_5_to_8_g"
+                if aggregate_total is not None
+                else "eaa_5_to_8_g"
+            )
+        return 18.0, (
+            "eaa_complete_aggregate_at_least_8_g"
+            if aggregate_total is not None
+            else "eaa_complete_at_least_8_g"
+        )
 
     if identity == "alpha_gpc":
         mg = _max_mg(rows, ALPHA_GPC_CANONICALS)
@@ -390,7 +400,7 @@ def _score_focused_single_completion(
         groups.add("hmb")
     if canons and canons.issubset(BCAA_CANONICALS):
         groups.add("bcaa")
-    elif canons and canons.issubset(EAA_CANONICALS):
+    elif canons and canons.issubset(EAA_CANONICALS | EAA_AGGREGATE_CANONICALS):
         groups.add("eaa")
     return 5.0 if groups == {identity} else 0.0
 

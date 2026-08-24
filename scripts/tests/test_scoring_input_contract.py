@@ -1038,6 +1038,132 @@ def test_blend_header_mass_with_mapped_nested_child_emits_conservative_anchor():
     assert row["evidence_scope"] == "blend_level"
 
 
+def _eaa_child(canonical_id: str, index: int) -> dict:
+    return {
+        "name": canonical_id.replace("_", " ").title(),
+        "canonical_id": canonical_id,
+        "canonical_source_db": "ingredient_quality_map",
+        "quantity": 0,
+        "unit": "NP",
+        "source_section": "active",
+        "raw_source_path": f"ingredientRows[1].nestedRows[{index}]",
+        "cleaner_row_role": "nested_display_only",
+        "score_eligible_by_cleaner": False,
+        "score_exclusion_reason": "nested_display_only",
+        "dose_class": "zero_or_np",
+        "identity_disposition": "clean",
+    }
+
+
+def test_explicit_eaa_total_emits_one_verified_sports_aggregate():
+    eaa_canonicals = [
+        "l_histidine",
+        "l_isoleucine",
+        "l_leucine",
+        "l_lysine",
+        "methionine",
+        "l_phenylalanine",
+        "l_threonine",
+        "l_tryptophan",
+        "l_valine",
+    ]
+    owner = {
+        "name": "Essential Amino Acids",
+        "raw_source_text": "Essential Amino Acids",
+        "canonical_id": "BLEND_GENERAL",
+        "canonical_source_db": "cleaned_active_ingredient",
+        "quantity": 10,
+        "unit": "g",
+        "source_section": "active",
+        "raw_source_path": "ingredientRows[0]",
+        "cleaner_row_role": "blend_header_total",
+        "score_eligible_by_cleaner": False,
+        "score_exclusion_reason": "blend_header_total",
+        "dose_class": "blend_total_weight",
+        "identity_disposition": "clean",
+        "raw_taxonomy": {"category": "blend", "ingredientGroup": "Blend"},
+    }
+    children = [_eaa_child(canonical, index) for index, canonical in enumerate(eaa_canonicals)]
+    product = _product(
+        [],
+        product_name="EAA",
+        primary_type="amino_acid",
+        activeIngredients=[owner, *children],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients": [owner, *children],
+            "ingredients_skipped": [owner, *children],
+        },
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert len(result.rows) == 1
+    row = result.rows[0]
+    assert row["scoring_input_kind"] == "product_level_evidence"
+    assert row["evidence_type"] == "sports_primary_dose"
+    assert row["canonical_id"] == "essential_amino_acids"
+    assert row["quantity"] == 10
+    assert row["unit"] == "g"
+    assert row["verified_child_canonicals"] == sorted(eaa_canonicals)
+    assert row["linked_rows"] == [
+        "ingredientRows[0]",
+        *[f"ingredientRows[1].nestedRows[{index}]" for index in range(9)],
+    ]
+    assert result.mapped_coverage == 1.0
+
+
+def test_generic_amino_blend_total_does_not_become_eaa_aggregate():
+    children = [
+        _eaa_child(canonical, index)
+        for index, canonical in enumerate(
+            [
+                "l_histidine",
+                "l_isoleucine",
+                "l_leucine",
+                "l_lysine",
+                "methionine",
+                "l_phenylalanine",
+                "l_threonine",
+                "l_tryptophan",
+                "l_valine",
+            ]
+        )
+    ]
+    owner = {
+        "name": "Amino Acid Blend",
+        "raw_source_text": "Amino Acid Blend",
+        "canonical_id": "BLEND_GENERAL",
+        "quantity": 10,
+        "unit": "g",
+        "source_section": "active",
+        "raw_source_path": "ingredientRows[0]",
+        "cleaner_row_role": "blend_header_total",
+        "score_eligible_by_cleaner": False,
+        "score_exclusion_reason": "blend_header_total",
+        "dose_class": "blend_total_weight",
+        "identity_disposition": "clean",
+        "raw_taxonomy": {"category": "blend", "ingredientGroup": "Blend"},
+    }
+    product = _product(
+        [],
+        activeIngredients=[owner, *children],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients": [owner, *children],
+            "ingredients_skipped": [owner, *children],
+        },
+    )
+
+    evidence = derive_product_scoring_evidence(product)
+
+    assert not any(
+        row.get("evidence_type") == "sports_primary_dose"
+        and row.get("canonical_id") == "essential_amino_acids"
+        for row in evidence
+    )
+
+
 def test_blend_header_mass_does_not_create_mass_anchor_for_probiotic_strain():
     product = _product(
         [],

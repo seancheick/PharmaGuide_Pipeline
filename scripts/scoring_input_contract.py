@@ -780,6 +780,12 @@ _EXPLICIT_EPA_DHA_AGGREGATE_RE = re.compile(
     re.IGNORECASE,
 )
 
+_EXPLICIT_EAA_AGGREGATE_NAMES = {
+    "essential amino acids",
+    "essential amino acids eaa",
+    "eaa essential amino acids",
+}
+
 
 def _is_explicit_epa_dha_aggregate_label(value: Any) -> bool:
     """True only when the label names a combined EPA+DHA dose owner."""
@@ -862,6 +868,80 @@ def _derive_explicit_epa_dha_aggregate_evidence(
         item["linked_rows"] = list(dict.fromkeys(
             [item["raw_source_path"], *child_paths]
         ))
+        evidence.append(item)
+    return evidence
+
+
+def _derive_explicit_eaa_aggregate_evidence(
+    rows: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Project one explicitly declared complete-EAA dose.
+
+    The aggregate owns the mass.  Its nine verified composition rows prove the
+    EAA profile but do not inherit fractions of that mass.  This avoids both
+    the old false quarantine and the opposite error of counting the same 10 g
+    nine times.
+    """
+    child_rows = [
+        row
+        for row in rows
+        if _norm(row.get("canonical_id")) in EAA_CANONICALS
+    ]
+    verified_children = {
+        _norm(row.get("canonical_id"))
+        for row in child_rows
+        if row.get("identity_disposition") is not None
+        and is_identity_scoreable(row.get("identity_disposition"))
+    }
+    if verified_children != set(EAA_CANONICALS):
+        return []
+    if any(
+        _positive_quantity(row) is not None
+        and _unit_is_mass(row.get("unit") or row.get("unit_normalized") or row.get("dose_unit"))
+        for row in child_rows
+    ):
+        return []
+
+    evidence: List[Dict[str, Any]] = []
+    for owner in rows:
+        owner_name = re.sub(
+            r"[^a-z0-9]+",
+            " ",
+            str(owner.get("raw_source_text") or owner.get("name") or "").lower(),
+        ).strip()
+        if owner_name not in _EXPLICIT_EAA_AGGREGATE_NAMES:
+            continue
+        if _norm(owner.get("cleaner_row_role")) != "blend_header_total":
+            continue
+        mass = _positive_quantity(owner)
+        unit = owner.get("unit") or owner.get("unit_normalized") or owner.get("dose_unit")
+        if mass is None or not _unit_is_mass(unit):
+            continue
+        item = _evidence_base(
+            row=owner,
+            evidence_type="sports_primary_dose",
+            canonical_id="essential_amino_acids",
+            clean_identity_id="essential_amino_acids",
+            scoring_parent_id="essential_amino_acids",
+            dose_value=mass,
+            dose_unit=str(unit),
+            evidence_scope="blend_level",
+            confidence="high",
+            reason="explicit_complete_eaa_aggregate_owner",
+            name=owner.get("raw_source_text") or owner.get("name") or "Essential Amino Acids",
+        )
+        child_paths = [
+            str(row.get("raw_source_path") or "").strip()
+            for row in child_rows
+            if str(row.get("raw_source_path") or "").strip()
+        ]
+        item["linked_rows"] = list(dict.fromkeys([
+            str(item["raw_source_path"]),
+            *child_paths,
+        ]))
+        item["verified_child_canonicals"] = sorted(verified_children)
+        item["profile_disclosure_status"] = "complete_identity_profile_amounts_undisclosed"
+        item["canonical_source_db"] = "verified_label_child_aggregate"
         evidence.append(item)
     return evidence
 
@@ -1455,6 +1535,12 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                 str(path) for path in _safe_list(item.get("linked_rows")) if path
             )
             evidence.append(item)
+
+    for item in _derive_explicit_eaa_aggregate_evidence(active_rows):
+        special_evidence_paths.update(
+            str(path) for path in _safe_list(item.get("linked_rows")) if path
+        )
+        evidence.append(item)
 
     for row in active_rows:
         quantity = _positive_quantity(row)

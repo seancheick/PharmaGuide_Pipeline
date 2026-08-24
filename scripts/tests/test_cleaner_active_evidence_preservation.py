@@ -124,6 +124,37 @@ def test_nested_dsld_blend_header_is_not_promoted_to_scoreable_active():
     assert child["score_eligible_by_cleaner"] is True
 
 
+def test_explicit_eaa_total_is_preserved_as_a_nonscorable_dose_owner():
+    raw = {
+        "id": "fixture-explicit-eaa-total",
+        "fullName": "EAA",
+        "ingredientRows": [
+            {
+                "name": "Essential Amino Acids",
+                "ingredientGroup": "Header",
+                "category": "other",
+                "quantity": [{"quantity": 10, "unit": "Gram(s)"}],
+                "nestedRows": [],
+                "forms": [],
+            }
+        ],
+        "otheringredients": {"ingredients": []},
+    }
+
+    cleaned = _clean(raw)
+
+    owner = next(
+        row
+        for row in cleaned["activeIngredients"]
+        if row.get("raw_source_text") == "Essential Amino Acids"
+    )
+    assert owner["quantity"] == 10
+    assert owner["unit"] == "Gram(s)"
+    assert owner["cleaner_row_role"] == "blend_header_total"
+    assert owner["score_eligible_by_cleaner"] is False
+    assert owner["score_exclusion_reason"] == "blend_header_total"
+
+
 def test_active_omega_rollup_compound_forms_split_to_epa_and_dha():
     raw = {
         "id": "fixture-omega-compound-forms",

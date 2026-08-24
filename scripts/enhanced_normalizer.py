@@ -4912,7 +4912,10 @@ class EnhancedDSLDNormalizer:
             # active ingredient, but every nested/form child must survive.
             # This is independent of the heading's wording (for example,
             # MegaFood's "FoodState Nutrients").
-            if str(ing.get("ingredientGroup") or "").strip().casefold() == "header":
+            if (
+                str(ing.get("ingredientGroup") or "").strip().casefold() == "header"
+                and not self._is_dosed_explicit_eaa_aggregate_owner(ing)
+            ):
                 children = [
                     child.get("name", "")
                     for child in nested
@@ -5060,7 +5063,10 @@ class EnhancedDSLDNormalizer:
                 )
                 continue
 
-            if self._is_structural_active_display_only_leaf(ing):
+            if (
+                self._is_structural_active_display_only_leaf(ing)
+                and not self._is_dosed_explicit_eaa_aggregate_owner(ing)
+            ):
                 logger.debug(f"Skipping structural active display-only leaf: {name}")
                 self._queue_display_ingredient(
                     raw_source_text=name,
@@ -5074,9 +5080,12 @@ class EnhancedDSLDNormalizer:
 
             # SKIP ENFORCEMENT: Skip items from skip list during flattening
             # This runs after label header check so we don't skip headers with forms
-            if self._should_skip_ingredient(name) and not self._is_dosed_omega_aggregate_owner(
-                ing,
-                ing.get("raw_source_path") or "activeIngredients",
+            if self._should_skip_ingredient(name) and not (
+                self._is_dosed_explicit_eaa_aggregate_owner(ing)
+                or self._is_dosed_omega_aggregate_owner(
+                    ing,
+                    ing.get("raw_source_path") or "activeIngredients",
+                )
             ):
                 logger.debug(f"Skipping ingredient during flattening: {name}")
                 is_nutrition_fact = self._is_nutrition_fact(
@@ -6549,7 +6558,11 @@ class EnhancedDSLDNormalizer:
                 )
                 continue
 
-            if is_active and self._is_structural_active_display_only_leaf(ing):
+            if (
+                is_active
+                and self._is_structural_active_display_only_leaf(ing)
+                and not self._is_dosed_explicit_eaa_aggregate_owner(ing)
+            ):
                 self._queue_display_ingredient(
                     raw_source_text=name,
                     source_section="activeIngredients",
@@ -6827,7 +6840,11 @@ class EnhancedDSLDNormalizer:
             )
             return None
 
-        if is_active and self._is_structural_active_display_only_leaf(ing):
+        if (
+            is_active
+            and self._is_structural_active_display_only_leaf(ing)
+            and not self._is_dosed_explicit_eaa_aggregate_owner(ing)
+        ):
             self._queue_display_ingredient(
                 raw_source_text=raw_name,
                 source_section="activeIngredients",
@@ -11447,6 +11464,8 @@ class EnhancedDSLDNormalizer:
 
     def _is_dsld_active_blend_total_row(self, ing: Dict[str, Any]) -> bool:
         """Identify DSLD blend rows whose quantity is a blend total."""
+        if self._is_dosed_explicit_eaa_aggregate_owner(ing):
+            return True
         strong_blend_signal = self._has_dsld_blend_group_signal(ing)
         weak_blend_signal = self._is_proprietary_blend_name(ing.get("name", ""))
         if not (strong_blend_signal or weak_blend_signal):
@@ -11507,6 +11526,34 @@ class EnhancedDSLDNormalizer:
             ):
                 return False
         return True
+
+    def _is_dosed_explicit_eaa_aggregate_owner(self, ing: Dict[str, Any]) -> bool:
+        """Retain an explicitly named EAA total as a structural dose owner.
+
+        DSLD sometimes classifies this row as ``category=other, group=Header``
+        instead of ``blend``.  The row is still not an individual ingredient,
+        but dropping its declared mass makes a complete EAA formula impossible
+        to assess.  Keep only the exact identity-bearing label; generic amino
+        blends remain ordinary structural headers.
+        """
+        normalized_name = norm_module.normalize_text(ing.get("name", ""))
+        if normalized_name not in {
+            "essential amino acids",
+            "essential amino acids eaa",
+            "eaa essential amino acids",
+        }:
+            return False
+        quantity, unit = self._extract_primary_mass_unit(ing)
+        return quantity is not None and str(unit or "").strip().lower() in {
+            "mg",
+            "milligram",
+            "milligrams",
+            "milligram(s)",
+            "g",
+            "gram",
+            "grams",
+            "gram(s)",
+        }
 
     @staticmethod
     def _has_dsld_blend_group_signal(ing: Dict[str, Any]) -> bool:

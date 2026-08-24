@@ -11,6 +11,7 @@ from scoring_v4.route_features import (
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
+    _safe_list,
     get_active_ingredients,
     has_usable_individual_dose,
 )
@@ -37,6 +38,7 @@ CITRULLINE_CANONICALS = frozenset({"l_citrulline"})
 HMB_CANONICALS = frozenset({"hmb"})
 BCAA_CANONICALS = ROUTE_FEATURE_BCAA_CANONICALS
 EAA_CANONICALS = ROUTE_FEATURE_EAA_CANONICALS
+EAA_AGGREGATE_CANONICALS = frozenset({"essential_amino_acids"})
 # Non-classic pre-workout / recovery actives with source-verified dose bands
 # (see sports_dose._score_primary). BCAA_AGGREGATE is the disclosed
 # "branched_chain_amino_acids" total used when the leu/iso/val trio is not split out.
@@ -54,6 +56,7 @@ SPORTS_CANONICALS = (
     | HMB_CANONICALS
     | BCAA_CANONICALS
     | EAA_CANONICALS
+    | EAA_AGGREGATE_CANONICALS
     | ALPHA_GPC_CANONICALS
     | ATP_CANONICALS
     | CAFFEINE_CANONICALS
@@ -74,6 +77,7 @@ SPORTS_BAND_CANONICALS = (
     | HMB_CANONICALS
     | BCAA_CANONICALS
     | EAA_CANONICALS
+    | EAA_AGGREGATE_CANONICALS
     | ALPHA_GPC_CANONICALS
     | ATP_CANONICALS
     | CAFFEINE_CANONICALS
@@ -196,19 +200,38 @@ def group_bcaa(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 def group_eaa(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     values: Dict[str, float] = {}
+    aggregate_total_g: Optional[float] = None
     for row in rows:
         key = canonical(row)
+        if key in EAA_AGGREGATE_CANONICALS:
+            if (
+                _norm_text(row.get("scoring_input_kind")) != "product_level_evidence"
+                or _norm_text(row.get("evidence_type")) != "sports_primary_dose"
+            ):
+                continue
+            verified = {
+                _norm_text(value)
+                for value in _safe_list(row.get("verified_child_canonicals"))
+                if _norm_text(value)
+            }
+            grams = dose_g(row)
+            if verified == set(EAA_CANONICALS) and grams is not None:
+                aggregate_total_g = max(aggregate_total_g or 0.0, grams)
+            continue
         if key not in EAA_CANONICALS:
             continue
         grams = dose_g(row)
         if grams is not None:
             values[key] = grams
+    aggregate_complete = aggregate_total_g is not None and aggregate_total_g > 0
+    individual_complete = len(values) >= len(EAA_CANONICALS)
     return {
-        "complete": len(values) >= len(EAA_CANONICALS),
-        "partial": 6 <= len(values) < len(EAA_CANONICALS),
-        "count": len(values),
+        "complete": individual_complete or aggregate_complete,
+        "partial": not aggregate_complete and 6 <= len(values) < len(EAA_CANONICALS),
+        "count": len(EAA_CANONICALS) if aggregate_complete else len(values),
         "values_g": values,
-        "total_g": sum(values.values()),
+        "total_g": aggregate_total_g if aggregate_complete else sum(values.values()),
+        "aggregate_total_g": aggregate_total_g,
     }
 
 
@@ -258,7 +281,11 @@ def sports_subtype(product: Dict[str, Any]) -> str:
         return "pre_workout"
     if _is_focused_creatine(canons):
         return "creatine"
-    if canons & (BCAA_CANONICALS | EAA_CANONICALS | BCAA_AGGREGATE_CANONICALS):
+    if canons & (
+        BCAA_CANONICALS
+        | EAA_CANONICALS
+        | BCAA_AGGREGATE_CANONICALS
+    ) or group_eaa(rows)["complete"]:
         return "bcaa_eaa"
     if taxonomy == "electrolyte" or any(term in text for term in ("electrolyte", "hydration")):
         return "electrolyte_hydration"

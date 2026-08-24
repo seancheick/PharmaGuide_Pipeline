@@ -412,6 +412,54 @@ def test_eaa_all_nine_with_eight_grams_scores_high_with_completeness_credit() ->
     assert payload["metadata"]["primary_identity"] == "eaa"
 
 
+def test_explicit_complete_eaa_aggregate_scores_one_combined_dose() -> None:
+    aggregate = {
+        **_row("essential_amino_acids", 10, "g", name="Essential Amino Acids"),
+        "scoring_input_kind": "product_level_evidence",
+        "evidence_type": "sports_primary_dose",
+        "verified_child_canonicals": [
+            "l_histidine",
+            "l_isoleucine",
+            "l_leucine",
+            "l_lysine",
+            "methionine",
+            "l_phenylalanine",
+            "l_threonine",
+            "l_tryptophan",
+            "l_valine",
+        ],
+    }
+
+    payload = score_dose(_product(aggregate, name="EAA"))
+
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(18.0)
+    assert payload["components"]["sports_ratio_or_completeness"] == pytest.approx(2.0)
+    assert payload["metadata"]["primary_identity"] == "eaa"
+    assert payload["metadata"]["dose_basis"] == "eaa_complete_aggregate_at_least_8_g"
+
+
+def test_untyped_eaa_aggregate_cannot_bypass_product_evidence_contract() -> None:
+    aggregate = {
+        **_row("essential_amino_acids", 10, "g", name="Essential Amino Acids"),
+        "verified_child_canonicals": [
+            "l_histidine",
+            "l_isoleucine",
+            "l_leucine",
+            "l_lysine",
+            "methionine",
+            "l_phenylalanine",
+            "l_threonine",
+            "l_tryptophan",
+            "l_valine",
+        ],
+    }
+
+    payload = score_dose(_product(aggregate, name="EAA"))
+
+    assert payload["components"]["sports_primary_active_dose"] == 0.0
+    assert payload["metadata"].get("primary_identity") is None
+
+
 def test_opaque_preworkout_without_sports_dose_is_not_evaluable_with_penalty() -> None:
     product = {
         "fullName": "Pre-Workout Elite",
