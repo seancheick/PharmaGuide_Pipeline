@@ -152,6 +152,20 @@ def test_multi_panel_micronutrients_major_tiny_blend_adjunct():
     assert roles["green_tea_extract"]["role"] == "adjunct"
 
 
+def test_multi_nonessential_trace_addons_are_not_material_panel_members():
+    product = _product("Daily Multivitamin", "multivitamin", [
+        _row("vitamin_c", "Vitamin C", 90, "mg"),
+        _row("inositol", "Inositol", 10, "mg"),
+        _row("lycopene", "Lycopene", 0.3, "mg"),
+    ])
+
+    roles = _by_canonical(product, module="multi_or_prenatal")
+
+    assert roles["vitamin_c"]["role"] == "major"
+    assert roles["inositol"]["role"] == "adjunct"
+    assert roles["lycopene"]["role"] == "adjunct"
+
+
 def test_multi_adjunct_probiotic_is_adjunct_not_capping():
     product = _product("Women's Multivitamin", "multivitamin", [
         _row("vitamin_c_ascorbic_acid", "Vitamin C", 90, "mg"),

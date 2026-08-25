@@ -4825,6 +4825,32 @@ _ROLE_TITLE_ALIASES_BY_CANONICAL = {
 # as a "major" formulation component by mass alone (L5).
 _ROLE_MASS_MAJOR_FRACTION = 0.25
 
+_ROLE_MULTI_ESSENTIAL_MINERALS = frozenset({
+    "calcium",
+    "chloride",
+    "chromium",
+    "copper",
+    "iodine",
+    "iron",
+    "magnesium",
+    "manganese",
+    "molybdenum",
+    "phosphorus",
+    "potassium",
+    "selenium",
+    "sodium",
+    "zinc",
+})
+
+
+def _role_is_required_multi_panel_member(canonical: str) -> bool:
+    """Return whether an identity is part of the defining nutrient panel."""
+    return (
+        canonical.startswith("vitamin_")
+        or canonical in _ROLE_MULTI_ESSENTIAL_MINERALS
+        or canonical == "choline"
+    )
+
 def _role_mass_mg(row: Dict[str, Any]) -> Optional[float]:
     """Return the row's mass in mg, or None when not a comparable mass unit.
 
@@ -4985,7 +5011,12 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     # L4 — required for subtype: micronutrient panel members of a multi/prenatal.
     # Panel members are mass-dosed; a CFU probiotic add-on is NOT mass-dosed and
     # so stays adjunct, so Phase 3 won't cap a multi for an adjunct's data gap.
-    if module == "multi_or_prenatal" and mass_mg is not None and not is_blend:
+    if (
+        module == "multi_or_prenatal"
+        and mass_mg is not None
+        and not is_blend
+        and _role_is_required_multi_panel_member(canonical)
+    ):
         return out(ROLE_MAJOR, "multi_panel_member", "module_subtype", "medium")
 
     # L5 — high comparable-unit mass ratio
