@@ -20320,6 +20320,7 @@ class SupplementEnricherV3:
                     if rule_id in {
                         "choline_bitartrate_to_choline",
                         "magnesium_hydroxide_to_magnesium",
+                        "inositol_hexanicotinate_to_niacin_equivalents",
                     }:
                         ul_exposure = {
                             "ul_gate_eligible": True,

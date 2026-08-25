@@ -2,18 +2,18 @@
   "_metadata": {
     "description": "Unit conversion factors for supplement dosing normalization",
     "purpose": "dosing_normalization",
-    "schema_version": "5.2.1",
+    "schema_version": "5.2.2",
     "contract_test": "scripts/tests/test_unit_conversions_contract.py",
-    "last_updated": "2026-08-23",
-    "version": "1.2.4",
+    "last_updated": "2026-08-25",
+    "version": "1.2.5",
     "statistics": {
-      "vitamin_conversions": 25,
+      "vitamin_conversions": 26,
       "form_detection_categories": 2,
-      "total_conversion_rules": 41,
+      "total_conversion_rules": 42,
       "mcg_only_nutrients": 7,
-      "notes": "DSLD is supplement-only: beta-carotene uses the supplemental rule; alpha-carotene and beta-cryptoxanthin use the NIH 24:1 RAE factor; fish/cod liver oil is recognized as a preformed Vitamin A source; choline bitartrate and magnesium hydroxide use verified active-moiety stoichiometry; CFU parsing is owned by enrichment; bare folate preserves unknown form lineage; explicit DFE units normalize without assuming folic acid; parent Vitamin E amounts declared in mg use the FDA alpha-tocopherol label basis"
+      "notes": "DSLD is supplement-only: beta-carotene uses the supplemental rule; alpha-carotene and beta-cryptoxanthin use the NIH 24:1 RAE factor; fish/cod liver oil is recognized as a preformed Vitamin A source; choline bitartrate, magnesium hydroxide, and inositol hexanicotinate use verified active-moiety stoichiometry; CFU parsing is owned by enrichment; bare folate preserves unknown form lineage; explicit DFE units normalize without assuming folic acid; parent Vitamin E amounts declared in mg use the FDA alpha-tocopherol label basis"
     },
-    "total_entries": 25,
+    "total_entries": 26,
     "total_entries_note": "Count of vitamin_conversions rules; mass_conversions has 6 rules and form_detection_patterns has 2 vitamin patterns"
   },
   "vitamin_conversions": {
@@ -185,6 +185,22 @@
       "canonical_unit": "mg",
       "notes": "Active-moiety factor is the PubChem atomic mass of magnesium (24.305) divided by the PubChem molecular weight of anhydrous magnesium hydroxide, Mg(OH)2 (58.320 g/mol). This rule applies only when the label explicitly names magnesium hydroxide as the measured compound.",
       "source": "https://pubchem.ncbi.nlm.nih.gov/compound/73981; https://pubchem.ncbi.nlm.nih.gov/periodic-table/pdf/Periodic_Table_of_Elements_w_Atomic_Mass_PubChem.pdf"
+    },
+    "inositol_hexanicotinate_to_niacin_equivalents": {
+      "id": "CONV_INOSITOL_HEXANICOTINATE_TO_NIACIN_EQUIVALENTS",
+      "standard_name": "Niacin (from inositol hexanicotinate)",
+      "aliases": [
+        "inositol hexanicotinate",
+        "inositol nicotinate",
+        "inositol niacinate",
+        "hexanicotol"
+      ],
+      "conversions": {
+        "mg_to_mg_ne": 0.9111385222647094
+      },
+      "canonical_unit": "mg NE",
+      "notes": "Active-moiety factor is six nicotinic-acid molecular weights (6 x 123.11 g/mol) divided by the PubChem molecular weight of inositol hexanicotinate (810.7 g/mol). The DRI niacin UL applies to all supplemental forms of niacin without a bioavailability adjustment. This exact-identity rule does not apply to plain inositol or generic niacin rows.",
+      "source": "https://pubchem.ncbi.nlm.nih.gov/compound/3720; https://pubchem.ncbi.nlm.nih.gov/compound/938; https://www.ncbi.nlm.nih.gov/books/NBK114304/"
     },
     "vitamin_e_unknown": {
       "id": "CONV_VITAMIN_E_UNKNOWN",

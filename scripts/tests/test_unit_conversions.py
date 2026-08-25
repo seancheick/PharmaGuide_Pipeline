@@ -52,6 +52,27 @@ def test_verified_compound_rules_do_not_capture_plain_nutrients(
     assert result.conversion_rule_id == "identity_mass_passthrough"
 
 
+def test_inositol_hexanicotinate_converts_to_niacin_equivalent_mass() -> None:
+    """One exact ester molecule contains six nicotinic-acid moieties."""
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Vitamin B3 (Niacin)",
+        amount=500,
+        from_unit="mg",
+        ingredient_name="Inositol Hexanicotinate",
+    )
+
+    expected_factor = (6 * 123.11) / 810.7
+    assert result.success is True
+    assert result.converted_value == pytest.approx(500 * expected_factor)
+    assert result.converted_unit == "mg NE"
+    assert result.conversion_rule_id == (
+        "inositol_hexanicotinate_to_niacin_equivalents"
+    )
+    assert result.confidence == "high"
+
+
 def test_standalone_beta_carotene_mass_converts_to_vitamin_a_rae() -> None:
     converter = UnitConverter()
 

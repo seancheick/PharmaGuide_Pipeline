@@ -7,7 +7,7 @@
     "reference_data_contract": {
       "contract_version": "1",
       "reference_version": "5.1.1-2026-08-25",
-      "semantic_fingerprint": "sha256:278f6f1b08aa452bdd2cf8c0b3c8f5cdd1a99c384214c5402356a5bcf6e9bf64"
+      "semantic_fingerprint": "sha256:b6ef7a762e5779e1907871e7ceb2e8317fb5ca83c9014ac1d16b036f474808df"
     },
     "total_entries": 77,
     "data_source": "Institute of Medicine (IOM) Dietary Reference Intakes, National Academies 2019 Sodium/Potassium Update, FDA, USDA, Clinical Research",
@@ -1298,12 +1298,13 @@
     {
       "standard_name": "Niacin",
       "unit": "mg NE",
-      "ul_note": "The supplemental-niacin UL applies to both nicotinic acid and nicotinamide (niacinamide); the forms have different toxicity profiles, and medically supervised use is outside the UL scope.",
+      "ul_note": "The supplemental-niacin UL applies to all added or supplemental forms of niacin without a bioavailability adjustment; the forms have different toxicity profiles, and medically supervised use is outside the UL scope.",
       "ul_applies_to_forms": [
         "nicotinic acid",
-        "nicotinamide (niacinamide)"
+        "nicotinamide (niacinamide)",
+        "inositol hexanicotinate"
       ],
-      "ul_scope_source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+      "ul_scope_source": "https://www.ncbi.nlm.nih.gov/books/NBK114304/",
       "optimal_range": "16-100",
       "highest_ul": 35,
       "warnings": [

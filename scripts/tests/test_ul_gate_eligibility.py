@@ -503,10 +503,10 @@ def test_magnesium_hydroxide_uses_verified_elemental_mass(enricher):
     assert result["has_over_ul"] is True
 
 
-def test_unlisted_niacin_derivative_without_daily_value_stays_ineligible(enricher):
-    # Inositol hexanicotinate is not one of the two forms to which the NIH
-    # supplemental-niacin UL applies. Its compound mass must not be treated as
-    # a direct niacin amount merely because it belongs to the niacin parent.
+def test_inositol_hexanicotinate_uses_verified_niacin_moiety_for_ul(enricher):
+    # The DRI UL applies to all supplemental forms of niacin without a
+    # bioavailability adjustment. This exact compound has six verified
+    # nicotinic-acid moieties; its whole mass is not used as a raw fallback.
     product = _mag([
         {
             "name": "Inositol Hexanicotinate",
@@ -514,7 +514,7 @@ def test_unlisted_niacin_derivative_without_daily_value_stays_ineligible(enriche
             "canonical_id": "vitamin_b3_niacin",
             "canonical_source_db": "ingredient_quality_map",
             "quantity": 1500,
-            "unit": "mg NE",
+            "unit": "mg",
             "dailyValue": None,
         },
     ])
@@ -525,9 +525,31 @@ def test_unlisted_niacin_derivative_without_daily_value_stays_ineligible(enriche
         standard_name="Vitamin B3 (Niacin)",
     )
 
-    assert basis["ul_gate_eligible"] is False
-    assert basis["ul_gate_ineligible_reason"] == "compound_mass_not_elemental"
-    assert basis["ul_exposure_basis"] == "compound_or_form_mass"
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    assessment = result["dose_assessments"][0]
+    adequacy = result["adequacy_results"][0]
+
+    assert basis["ul_gate_eligible"] is True
+    assert basis["ul_exposure_basis"] == (
+        "ul_scoped_form_named_substance_amount"
+    )
+    assert assessment["conversion_rule_id"] == (
+        "inositol_hexanicotinate_to_niacin_equivalents"
+    )
+    assert assessment["normalized_value"] == pytest.approx(
+        1500 * ((6 * 123.11) / 810.7)
+    )
+    assert assessment["ul_gate_eligible"] is True
+    assert assessment["ul_assessment_status"] == "assessed_over_limit"
+    assert assessment["readiness"] == "complete"
+    assert adequacy["ul_exposure_basis"] == (
+        "verified_compound_active_moiety_conversion"
+    )
+    assert result["has_over_ul"] is True
 
 
 def test_nested_form_components_that_sum_to_parent_are_not_double_counted(enricher):

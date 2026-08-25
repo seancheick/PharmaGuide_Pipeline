@@ -493,6 +493,19 @@ class UnitConverter:
                     'magnesium_hydroxide_to_magnesium', {}
                 ),
             )
+        if (
+            ('niacin' in nutrient_lower or 'vitamin b3' in nutrient_lower)
+            and re.search(
+                r'\b(?:inositol\s+(?:hexanicotinate|nicotinate|niacinate)|hexanicotol)\b',
+                ingredient_lower,
+            )
+        ):
+            return (
+                'inositol_hexanicotinate_to_niacin_equivalents',
+                self.vitamin_conversions.get(
+                    'inositol_hexanicotinate_to_niacin_equivalents', {}
+                ),
+            )
 
         # CRITICAL: Form detection MUST run FIRST for form-dependent vitamins
         # Vitamin A: retinol and supplemental beta-carotene both 0.3 mcg RAE/IU; only preformed retinol carries a UL
@@ -525,6 +538,7 @@ class UnitConverter:
             if rule_id in {
                 'choline_bitartrate_to_choline',
                 'magnesium_hydroxide_to_magnesium',
+                'inositol_hexanicotinate_to_niacin_equivalents',
             }:
                 # Active-moiety conversions require the exact compound checks
                 # above. Their parent nutrient names must never select them.
