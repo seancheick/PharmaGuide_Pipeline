@@ -32,6 +32,8 @@ def _payload() -> dict:
             }
         ],
         "offMarket": 0,
+        "otherIngredients": "",
+        "otherIngredientsDisclosure": "declared_none",
         "physicalState": {"langualCode": "", "name": "Capsule"},
         "productType": {
             "langualCode": "",

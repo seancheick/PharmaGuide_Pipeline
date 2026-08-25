@@ -41,6 +41,7 @@ _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
         "nutritionalInfo",
         "offMarket",
         "otherIngredients",
+        "otherIngredientsDisclosure",
         "physicalState",
         "productType",
         "servingSizes",
@@ -48,6 +49,67 @@ _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
         "statements",
     }
 )
+_ALLOWED_INGREDIENT_FIELDS = frozenset(
+    {
+        "alternateNames",
+        "category",
+        "description",
+        "forms",
+        "ingredientGroup",
+        "ingredientId",
+        "name",
+        "nestedRows",
+        "notes",
+        "order",
+        "quantity",
+        "uniiCode",
+    }
+)
+_ALLOWED_QUANTITY_FIELDS = frozenset(
+    {
+        "dailyValueTargetGroup",
+        "operator",
+        "quantity",
+        "servingSizeOrder",
+        "servingSizeQuantity",
+        "servingSizeUnit",
+        "unit",
+    }
+)
+_ALLOWED_FORM_FIELDS = frozenset(
+    {
+        "category",
+        "ingredientGroup",
+        "ingredientId",
+        "name",
+        "order",
+        "percent",
+        "prefix",
+        "uniiCode",
+    }
+)
+_ALLOWED_SERVING_FIELDS = frozenset(
+    {
+        "inSFB",
+        "maxDailyServings",
+        "maxQuantity",
+        "minDailyServings",
+        "minQuantity",
+        "notes",
+        "order",
+        "unit",
+    }
+)
+_ALLOWED_STATEMENT_FIELDS = frozenset({"notes", "type"})
+_ALLOWED_CLASSIFICATION_FIELDS = frozenset(
+    {"langualCode", "langualCodeDescription", "name"}
+)
+_RESOLVED_OTHER_INGREDIENT_DISCLOSURES = frozenset(
+    {"present", "declared_none", "included_on_facts_panel"}
+)
+_MAX_INGREDIENT_DEPTH = 5
+_MAX_TOTAL_INGREDIENT_ROWS = 500
+_POSITIVE_NUMBER_MINIMUM = 2.220446049250313e-16
 _UUID_PATTERN = re.compile(
     r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
     re.IGNORECASE,
@@ -110,6 +172,242 @@ def _is_valid_gtin(value: str) -> bool:
     return (10 - weighted_sum % 10) % 10 == int(value[-1])
 
 
+def _reject_unknown_keys(
+    value: dict[str, Any],
+    allowed: frozenset[str],
+    field: str,
+) -> None:
+    unknown = sorted(set(value) - allowed)
+    if unknown:
+        raise SubmissionImportError(f"{field} contains unknown field {unknown[0]}")
+
+
+def _optional_string(
+    value: object,
+    field: str,
+    *,
+    max_length: int,
+) -> None:
+    if value is None:
+        return
+    if not isinstance(value, str) or len(value) > max_length:
+        raise SubmissionImportError(f"{field} must be a string")
+
+
+def _finite_number(value: object, field: str, *, minimum: float) -> float:
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not float(value) >= minimum
+        or not float("-inf") < float(value) < float("inf")
+    ):
+        raise SubmissionImportError(
+            f"{field} must be a finite number >= {minimum}"
+        )
+    return float(value)
+
+
+def _optional_positive_integer(value: object, field: str) -> None:
+    if value is None:
+        return
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise SubmissionImportError(f"{field} must be a positive integer")
+
+
+def _validate_quantity(value: object, path: str) -> None:
+    if not isinstance(value, dict):
+        raise SubmissionImportError(f"{path} must be an object")
+    _reject_unknown_keys(value, _ALLOWED_QUANTITY_FIELDS, path)
+    _finite_number(value.get("quantity"), f"{path}.quantity", minimum=0)
+    _required_string(value.get("unit"), f"{path}.unit", max_length=80)
+    _optional_positive_integer(
+        value.get("servingSizeOrder"), f"{path}.servingSizeOrder"
+    )
+    if value.get("servingSizeQuantity") is not None:
+        _finite_number(
+            value["servingSizeQuantity"],
+            f"{path}.servingSizeQuantity",
+            minimum=0,
+        )
+    _optional_string(value.get("operator"), f"{path}.operator", max_length=20)
+    _optional_string(
+        value.get("servingSizeUnit"),
+        f"{path}.servingSizeUnit",
+        max_length=80,
+    )
+    targets = value.get("dailyValueTargetGroup")
+    if targets is not None and (not isinstance(targets, list) or len(targets) > 30):
+        raise SubmissionImportError(
+            f"{path}.dailyValueTargetGroup must be an array"
+        )
+
+
+def _validate_form(value: object, path: str) -> None:
+    if not isinstance(value, dict):
+        raise SubmissionImportError(f"{path} must be an object")
+    _reject_unknown_keys(value, _ALLOWED_FORM_FIELDS, path)
+    _required_string(value.get("name"), f"{path}.name", max_length=300)
+    _optional_positive_integer(value.get("order"), f"{path}.order")
+    _optional_positive_integer(value.get("ingredientId"), f"{path}.ingredientId")
+    _optional_string(value.get("prefix"), f"{path}.prefix", max_length=80)
+    _optional_string(value.get("category"), f"{path}.category", max_length=120)
+    _optional_string(
+        value.get("ingredientGroup"), f"{path}.ingredientGroup", max_length=300
+    )
+    _optional_string(value.get("uniiCode"), f"{path}.uniiCode", max_length=80)
+    if value.get("percent") is not None:
+        percent = _finite_number(value["percent"], f"{path}.percent", minimum=0)
+        if percent > 100:
+            raise SubmissionImportError(f"{path}.percent must be <= 100")
+
+
+def _validate_ingredient_row(
+    value: object,
+    path: str,
+    *,
+    depth: int,
+    row_counter: list[int],
+) -> None:
+    if depth > _MAX_INGREDIENT_DEPTH:
+        raise SubmissionImportError(f"{path} exceeds maximum nesting depth")
+    row_counter[0] += 1
+    if row_counter[0] > _MAX_TOTAL_INGREDIENT_ROWS:
+        raise SubmissionImportError("ingredient rows exceed maximum total")
+    if not isinstance(value, dict):
+        raise SubmissionImportError(f"{path} must be an object")
+    _reject_unknown_keys(value, _ALLOWED_INGREDIENT_FIELDS, path)
+    _required_string(value.get("name"), f"{path}.name", max_length=300)
+    _required_string(
+        value.get("ingredientGroup"), f"{path}.ingredientGroup", max_length=300
+    )
+    _optional_positive_integer(value.get("order"), f"{path}.order")
+    _optional_positive_integer(value.get("ingredientId"), f"{path}.ingredientId")
+    _optional_string(value.get("category"), f"{path}.category", max_length=120)
+    _optional_string(
+        value.get("description"), f"{path}.description", max_length=2000
+    )
+    _optional_string(value.get("notes"), f"{path}.notes", max_length=2000)
+    _optional_string(value.get("uniiCode"), f"{path}.uniiCode", max_length=80)
+
+    quantities = value.get("quantity")
+    if not isinstance(quantities, list) or len(quantities) > 20:
+        raise SubmissionImportError(f"{path}.quantity must contain 0..20 rows")
+    for index, quantity in enumerate(quantities):
+        _validate_quantity(quantity, f"{path}.quantity[{index}]")
+
+    forms = value.get("forms")
+    if not isinstance(forms, list) or len(forms) > 20:
+        raise SubmissionImportError(f"{path}.forms must contain 0..20 rows")
+    for index, form in enumerate(forms):
+        _validate_form(form, f"{path}.forms[{index}]")
+
+    nested_rows = value.get("nestedRows")
+    if not isinstance(nested_rows, list) or len(nested_rows) > 100:
+        raise SubmissionImportError(f"{path}.nestedRows must contain 0..100 rows")
+    for index, nested in enumerate(nested_rows):
+        _validate_ingredient_row(
+            nested,
+            f"{path}.nestedRows[{index}]",
+            depth=depth + 1,
+            row_counter=row_counter,
+        )
+
+    alternate_names = value.get("alternateNames")
+    if alternate_names is not None:
+        if not isinstance(alternate_names, list) or len(alternate_names) > 50:
+            raise SubmissionImportError(
+                f"{path}.alternateNames must contain valid strings"
+            )
+        for index, name in enumerate(alternate_names):
+            _required_string(
+                name, f"{path}.alternateNames[{index}]", max_length=300
+            )
+
+
+def _validate_serving_size(value: object, path: str) -> None:
+    if not isinstance(value, dict):
+        raise SubmissionImportError(f"{path} must be an object")
+    _reject_unknown_keys(value, _ALLOWED_SERVING_FIELDS, path)
+    min_quantity = _finite_number(
+        value.get("minQuantity"),
+        f"{path}.minQuantity",
+        minimum=_POSITIVE_NUMBER_MINIMUM,
+    )
+    max_quantity = _finite_number(
+        value.get("maxQuantity"),
+        f"{path}.maxQuantity",
+        minimum=_POSITIVE_NUMBER_MINIMUM,
+    )
+    _required_string(value.get("unit"), f"{path}.unit", max_length=80)
+    _optional_positive_integer(value.get("order"), f"{path}.order")
+    _optional_string(value.get("notes"), f"{path}.notes", max_length=1000)
+    for field in ("minDailyServings", "maxDailyServings"):
+        if value.get(field) is not None:
+            _finite_number(
+                value[field],
+                f"{path}.{field}",
+                minimum=_POSITIVE_NUMBER_MINIMUM,
+            )
+    if value.get("inSFB") is not None and not isinstance(value["inSFB"], bool):
+        raise SubmissionImportError(f"{path}.inSFB must be a boolean")
+    if max_quantity < min_quantity:
+        raise SubmissionImportError(f"{path}.maxQuantity must be >= minQuantity")
+
+
+def _validate_classification(value: object, field: str) -> None:
+    if not isinstance(value, dict):
+        raise SubmissionImportError(f"{field} must be an object")
+    _reject_unknown_keys(value, _ALLOWED_CLASSIFICATION_FIELDS, field)
+    _optional_string(value.get("langualCode"), f"{field}.langualCode", max_length=40)
+    _optional_string(
+        value.get("langualCodeDescription"),
+        f"{field}.langualCodeDescription",
+        max_length=300,
+    )
+    _optional_string(value.get("name"), f"{field}.name", max_length=300)
+    _required_string(
+        value.get("name") or value.get("langualCodeDescription"),
+        f"{field} display name",
+        max_length=300,
+    )
+
+
+def _validate_statements(value: object) -> None:
+    if not isinstance(value, list) or len(value) > 100:
+        raise SubmissionImportError("statements must contain 0..100 rows")
+    for index, statement in enumerate(value):
+        path = f"statements[{index}]"
+        if not isinstance(statement, dict):
+            raise SubmissionImportError(f"{path} must be an object")
+        _reject_unknown_keys(statement, _ALLOWED_STATEMENT_FIELDS, path)
+        _required_string(statement.get("type"), f"{path}.type", max_length=200)
+        _required_string(statement.get("notes"), f"{path}.notes", max_length=5000)
+
+
+def _validate_servings_per_container(value: object) -> None:
+    if isinstance(value, bool):
+        raise SubmissionImportError("servingsPerContainer must be positive")
+    if isinstance(value, (int, float)):
+        _finite_number(
+            value,
+            "servingsPerContainer",
+            minimum=_POSITIVE_NUMBER_MINIMUM,
+        )
+        return
+    text = _required_string(value, "servingsPerContainer", max_length=40)
+    try:
+        parsed = float(text)
+    except ValueError as exc:
+        raise SubmissionImportError(
+            "servingsPerContainer must be positive"
+        ) from exc
+    _finite_number(
+        parsed,
+        "servingsPerContainer",
+        minimum=_POSITIVE_NUMBER_MINIMUM,
+    )
+
+
 def _validate_label_payload(payload: object) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise SubmissionImportError("approved payload must be an object")
@@ -133,25 +431,66 @@ def _validate_label_payload(payload: object) -> dict[str, Any]:
         not isinstance(ingredient_rows, list)
         or not ingredient_rows
         or len(ingredient_rows) > 200
-        or not all(isinstance(row, dict) for row in ingredient_rows)
     ):
         raise SubmissionImportError(
-            "approved payload ingredientRows must contain 1..200 objects"
+            "approved payload ingredientRows must contain 1..200 rows"
+        )
+    row_counter = [0]
+    for index, row in enumerate(ingredient_rows):
+        _validate_ingredient_row(
+            row,
+            f"ingredientRows[{index}]",
+            depth=1,
+            row_counter=row_counter,
         )
     serving_sizes = payload.get("servingSizes")
     if (
         not isinstance(serving_sizes, list)
         or not serving_sizes
         or len(serving_sizes) > 20
-        or not all(isinstance(row, dict) for row in serving_sizes)
     ):
         raise SubmissionImportError(
-            "approved payload servingSizes must contain 1..20 objects"
+            "approved payload servingSizes must contain 1..20 rows"
         )
+    for index, serving_size in enumerate(serving_sizes):
+        _validate_serving_size(serving_size, f"servingSizes[{index}]")
     off_market = payload.get("offMarket", 0)
     if off_market not in {0, 1, False, True}:
         raise SubmissionImportError("approved payload offMarket must be 0 or 1")
     normalized["offMarket"] = int(bool(off_market))
+
+    if payload.get("servingsPerContainer") is not None:
+        _validate_servings_per_container(payload["servingsPerContainer"])
+    if payload.get("physicalState") is not None:
+        _validate_classification(payload["physicalState"], "physicalState")
+    if payload.get("productType") is not None:
+        _validate_classification(payload["productType"], "productType")
+    if payload.get("statements") is not None:
+        _validate_statements(payload["statements"])
+    if payload.get("nutritionalInfo") is not None and not isinstance(
+        payload["nutritionalInfo"], dict
+    ):
+        raise SubmissionImportError("nutritionalInfo must be an object")
+
+    disclosure = _required_string(
+        payload.get("otherIngredientsDisclosure"),
+        "otherIngredientsDisclosure",
+        max_length=40,
+    )
+    if disclosure not in _RESOLVED_OTHER_INGREDIENT_DISCLOSURES:
+        raise SubmissionImportError(
+            "otherIngredientsDisclosure is unresolved or invalid"
+        )
+    other_ingredients = payload.get("otherIngredients", "")
+    if not isinstance(other_ingredients, str) or len(other_ingredients) > 20_000:
+        raise SubmissionImportError("otherIngredients must be a string")
+    normalized_other_ingredients = other_ingredients.strip()
+    if disclosure == "present" and not normalized_other_ingredients:
+        raise SubmissionImportError("present other ingredients require text")
+    if disclosure != "present" and normalized_other_ingredients:
+        raise SubmissionImportError(
+            f"{disclosure} requires empty otherIngredients"
+        )
     return normalized
 
 
