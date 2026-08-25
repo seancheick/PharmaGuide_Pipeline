@@ -756,7 +756,7 @@
         "product_safety_status": "no_known_catalog_concern",
         "quality_score_v4_100": 36.5,
         "quality_tier": "Poor",
-        "v4_confidence": "low",
+        "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 28.0,
           "dose": 25.0,
@@ -1037,7 +1037,7 @@
         "product_safety_status": "no_known_catalog_concern",
         "quality_score_v4_100": 26.0,
         "quality_tier": "Poor",
-        "v4_confidence": "low",
+        "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 23.0,
           "dose": 23.0,
@@ -1404,7 +1404,7 @@
         "proprietary_blends": [],
         "proprietary_data": {"blends": [], "total_active_ingredients": 2}
       },
-      "expected": {"v4_module": "sports", "archetype": "sports_pre_workout", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 39.9, "quality_tier": "Poor", "v4_confidence": "low", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 4.0, "dose": 6.4, "evidence": 0.0, "transparency": 13.5, "verification": 6.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 6.0, "dose": 8.0, "evidence": 0.0, "transparency": 9.0}}
+      "expected": {"v4_module": "sports", "archetype": "sports_pre_workout", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 39.9, "quality_tier": "Poor", "v4_confidence": "moderate", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 4.0, "dose": 6.4, "evidence": 0.0, "transparency": 13.5, "verification": 6.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 6.0, "dose": 8.0, "evidence": 0.0, "transparency": 9.0}}
     },
     {
       "id": "sports_protein__ideal",
@@ -1433,7 +1433,7 @@
         "proprietary_blends": [],
         "proprietary_data": {"blends": [], "total_active_ingredients": 4}
       },
-      "expected": {"v4_module": "sports", "archetype": "sports_protein", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 91.2, "quality_tier": "Excellent", "v4_confidence": "high", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 18.7, "dose": 20.0, "evidence": 18.0, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 28.0, "dose": 25.0, "evidence": 18.0, "transparency": 9.0}}
+      "expected": {"v4_module": "sports", "archetype": "sports_protein", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 91.2, "quality_tier": "Excellent", "v4_confidence": "moderate", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 18.7, "dose": 20.0, "evidence": 18.0, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 28.0, "dose": 25.0, "evidence": 18.0, "transparency": 9.0}}
     },
     {
       "id": "sports_protein__failure",
@@ -1459,7 +1459,7 @@
         "proprietary_blends": [{"name": "Proprietary Protein Matrix", "disclosure_level": "partial"}],
         "proprietary_data": {"blends": [{"name": "Proprietary Protein Matrix", "disclosure_level": "partial"}], "total_active_ingredients": 3}
       },
-      "expected": {"v4_module": "sports", "archetype": "sports_protein", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 26.8, "quality_tier": "Poor", "v4_confidence": "low", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 0.0, "dose": 8.0, "evidence": 0.0, "transparency": 6.8, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 0.0, "dose": 10.0, "evidence": 0.0, "transparency": 4.5}}
+      "expected": {"v4_module": "sports", "archetype": "sports_protein", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 26.8, "quality_tier": "Poor", "v4_confidence": "moderate", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 0.0, "dose": 8.0, "evidence": 0.0, "transparency": 6.8, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 0.0, "dose": 10.0, "evidence": 0.0, "transparency": 4.5}}
     },
     {
       "id": "sports_bcaa_eaa__ideal",
@@ -1516,7 +1516,7 @@
         "proprietary_blends": [],
         "proprietary_data": {"blends": [], "total_active_ingredients": 3}
       },
-      "expected": {"v4_module": "sports", "archetype": "sports_bcaa_eaa", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 31.9, "quality_tier": "Poor", "v4_confidence": "low", "normalization_references": {"formulation": 25.0, "dose": 25.0, "evidence": 19.0}, "pillars": {"formulation": 1.6, "dose": 4.8, "evidence": 0.0, "transparency": 13.5, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 2.0, "dose": 6.0, "evidence": 0.0, "transparency": 9.0}}
+      "expected": {"v4_module": "sports", "archetype": "sports_bcaa_eaa", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 31.9, "quality_tier": "Poor", "v4_confidence": "moderate", "normalization_references": {"formulation": 25.0, "dose": 25.0, "evidence": 19.0}, "pillars": {"formulation": 1.6, "dose": 4.8, "evidence": 0.0, "transparency": 13.5, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 2.0, "dose": 6.0, "evidence": 0.0, "transparency": 9.0}}
     }
   ]
 }

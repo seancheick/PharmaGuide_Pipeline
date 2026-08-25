@@ -64,5 +64,5 @@ def test_declared_folate_dfe_total_marks_matching_mthf_conversion_as_component(
     assert component["parent_label_key"] == declared["source_label_key"]
     assert component["skip_ul_check"] is True
     assert component["skip_ul_reason"] == "form_component_of_declared_total"
-    assert result["reference_data_version"] == "5.1.0-2026-08-23"
+    assert result["reference_data_version"] == "5.1.1-2026-08-25"
     assert result["reference_data_fingerprint"].startswith("sha256:")
