@@ -32,7 +32,8 @@
   <aside id="queue-panel">
     <div class="row">
       <select id="filter-status">
-        <option value="">All open</option>
+        <option value="open" selected>Open</option>
+        <option value="">All statuses</option>
         <option value="submitted">Submitted</option>
         <option value="under_review">Under review</option>
         <option value="approved">Approved</option>
@@ -46,7 +47,9 @@
       </select>
       <button id="reload" type="button">Reload</button>
     </div>
+    <p id="queue-count" class="muted" aria-live="polite"></p>
     <ul id="queue"></ul>
+    <button id="load-more" class="ghost hidden" type="button">Load more</button>
   </aside>
 
   <section id="detail-panel" class="hidden">

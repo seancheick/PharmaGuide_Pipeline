@@ -102,3 +102,16 @@ def test_static_page_never_embeds_service_credentials():
         text = asset.read_text()
         assert "sb_secret" not in text
         assert "SERVICE_ROLE" not in text
+
+
+def test_console_defaults_to_open_queue_and_supports_cursor_pagination():
+    index_html = (REVIEW_DIR / "static" / "index.html").read_text()
+    app_js = (REVIEW_DIR / "static" / "app.js").read_text()
+
+    assert '<option value="open" selected>Open</option>' in index_html
+    assert 'id="queue-count"' in index_html
+    assert 'id="load-more"' in index_html
+    assert "body.after = state.nextAfter" in app_js
+    assert "state.submissions.push(...submissions)" in app_js
+    assert "total_open_count" in app_js
+    assert "next_after" in app_js

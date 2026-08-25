@@ -15,6 +15,9 @@ const state = {
   selected: null,
   payload: null,
   refreshTimer: null,
+  nextAfter: null,
+  totalOpenCount: 0,
+  queueRequestId: 0,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -64,9 +67,10 @@ async function boot() {
     window.location.reload();
   });
 
-  $('reload').addEventListener('click', loadQueue);
-  $('filter-status').addEventListener('change', loadQueue);
-  $('filter-kind').addEventListener('change', loadQueue);
+  $('reload').addEventListener('click', () => loadQueue());
+  $('filter-status').addEventListener('change', () => loadQueue());
+  $('filter-kind').addEventListener('change', () => loadQueue());
+  $('load-more').addEventListener('click', () => loadQueue(true));
   $('add-row').addEventListener('click', () => {
     state.payload.ingredientRows.push(emptyRow());
     renderRows();
@@ -113,17 +117,35 @@ async function edge(body) {
 
 // ---------------------------------------------------------------- queue
 
-async function loadQueue() {
+async function loadQueue(append = false) {
+  if (append && !state.nextAfter) return;
+  const requestId = ++state.queueRequestId;
+  const loadMore = $('load-more');
+  loadMore.disabled = true;
   try {
     const body = { action: 'list', limit: 100 };
     if ($('filter-status').value) body.status = $('filter-status').value;
     if ($('filter-kind').value) body.kind = $('filter-kind').value;
-    const { submissions } = await edge(body);
-    state.submissions = submissions;
+    if (append) body.after = state.nextAfter;
+    const { submissions, total_open_count, next_after } = await edge(body);
+    if (requestId !== state.queueRequestId) return;
+    if (append) {
+      state.submissions.push(...submissions);
+    } else {
+      state.submissions = submissions;
+    }
+    state.totalOpenCount = Number(total_open_count ?? 0);
+    state.nextAfter = next_after ?? null;
     renderQueue();
-    setStatus(`${submissions.length} submission(s).`);
+    $('queue-count').textContent =
+      `${state.totalOpenCount} open · ${state.submissions.length} loaded`;
+    loadMore.classList.toggle('hidden', state.nextAfter === null);
+    setStatus(`${state.submissions.length} submission(s) loaded.`);
   } catch (error) {
+    if (requestId !== state.queueRequestId) return;
     setStatus(String(error.message ?? error), true);
+  } finally {
+    if (requestId === state.queueRequestId) loadMore.disabled = false;
   }
 }
 
