@@ -18,6 +18,8 @@ const state = {
   nextAfter: null,
   totalOpenCount: 0,
   queueRequestId: 0,
+  identityLookup: null,
+  identityRecorded: null,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -83,6 +85,7 @@ async function boot() {
   $('t-reject').addEventListener('click', reject);
   $('t-duplicate').addEventListener('click', markDuplicate);
   $('catalog-go').addEventListener('click', catalogSearch);
+  $('identity-run').addEventListener('click', checkIdentity);
   for (const id of ['p-brand', 'p-name', 'p-servings-count', 'p-serving-qty', 'p-serving-unit']) {
     $(id).addEventListener('input', syncScalarFields);
   }
@@ -175,6 +178,8 @@ function renderQueue() {
 function select(submission) {
   state.selected = submission;
   state.payload = defaultPayload();
+  state.identityLookup = null;
+  state.identityRecorded = null;
   renderQueue();
   renderDetail();
   scheduleUrlRefresh();
@@ -251,6 +256,175 @@ function renderDetail() {
   renderRows();
   syncFieldsFromPayload();
   updateShaPreview();
+  renderIdentityCheck();
+}
+
+// ---------------------------------------------------------------- identity
+
+function canonicalSubmissionGtin14() {
+  const digits = String(state.selected?.normalized_upc ?? '');
+  return /^(?:\d{8}|\d{12}|\d{13}|\d{14})$/.test(digits)
+    ? digits.padStart(14, '0')
+    : null;
+}
+
+async function checkIdentity() {
+  if (state.selected?.kind !== 'missing_product') return;
+  const gtin14 = canonicalSubmissionGtin14();
+  if (!gtin14) return setStatus('This submission has no valid barcode identity.', true);
+  try {
+    setStatus('Checking the released catalog and full DSLD corpus…');
+    const response = await fetch(
+      `/api/identity_lookup?gtin14=${encodeURIComponent(gtin14)}`,
+    );
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error ?? 'identity lookup failed');
+    state.identityLookup = payload;
+    state.identityRecorded = null;
+    renderIdentityCheck();
+    setStatus('Identity check complete.');
+  } catch (error) {
+    setStatus(String(error.message ?? error), true);
+  }
+}
+
+async function recordMatch(outcome, options = {}) {
+  const lookup = state.identityLookup;
+  if (!lookup) throw new Error('Run the identity check first.');
+  const result = await edge({
+    action: 'record_match',
+    submission_id: state.selected.id,
+    outcome,
+    canonical_gtin14: lookup.canonical_gtin14,
+    index_built_at: lookup.index_built_at,
+    ...options,
+  });
+  state.identityRecorded = outcome;
+  renderIdentityCheck();
+  return result;
+}
+
+function identityButton(label, action, className = 'ghost') {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = className;
+  button.textContent = label;
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    try {
+      await action();
+    } catch (error) {
+      setStatus(String(error.message ?? error), true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+  return button;
+}
+
+function renderIdentityCheck() {
+  const section = $('identity-check');
+  const status = $('identity-index-status');
+  const results = $('identity-results');
+  const actions = $('identity-actions');
+  results.textContent = '';
+  actions.textContent = '';
+
+  if (state.selected?.kind !== 'missing_product') {
+    section.classList.add('hidden');
+    return;
+  }
+  section.classList.remove('hidden');
+  const lookup = state.identityLookup;
+  if (!lookup) {
+    status.textContent = 'Required before approval. Exact matches only; no fuzzy lookup.';
+    return;
+  }
+  const built = new Date(lookup.index_built_at).toLocaleString();
+  status.textContent = `Index ${lookup.freshness} · source snapshot ${built}` +
+    (state.identityRecorded ? ` · recorded ${state.identityRecorded}` : '');
+  for (const match of lookup.matches) {
+    const item = document.createElement('li');
+    item.textContent = `${match.source} · ${match.dsld_id} · ` +
+      `${match.brand_name} ${match.product_name}`;
+    results.append(item);
+  }
+
+  const ids = [...new Set(lookup.matches.map((match) => match.dsld_id))];
+  const catalogIds = [...new Set(
+    lookup.matches.filter((match) => match.source === 'catalog')
+      .map((match) => match.dsld_id),
+  )];
+  if (ids.length === 0) {
+    if (lookup.freshness === 'blocked') {
+      status.textContent += ' · blocked: rebuild the corpus before approving';
+      return;
+    }
+    actions.append(identityButton('Record verified no match', async () => {
+      await recordMatch('no_match_verified');
+      setStatus('Verified no match recorded. Transcription may proceed.');
+    }, 'primary'));
+    return;
+  }
+
+  if (catalogIds.length === 1 && ids.length === 1) {
+    actions.append(identityButton('Record and mark catalog duplicate', async () => {
+      await recordMatch('catalog_match', { matched_dsld_id: catalogIds[0] });
+      $('dup-code').value = 'already_in_catalog';
+      $('dup-target').value = catalogIds[0];
+      await markDuplicate();
+    }, 'primary'));
+  } else if (catalogIds.length === 0 && ids.length === 1) {
+    const draftMatch = lookup.matches.find(
+      (match) => match.source === 'corpus' && match.dsld_id === ids[0],
+    );
+    if (draftMatch?.draft_payload) {
+      actions.append(identityButton('Use as draft for label comparison', async () => {
+        state.payload = structuredClone(draftMatch.draft_payload);
+        renderRows();
+        syncFieldsFromPayload();
+        updateShaPreview();
+        setStatus('DSLD label loaded as an editable draft. Human comparison is still required.');
+      }));
+    }
+    actions.append(identityButton('Import DSLD match and mark duplicate', async () => {
+      await recordMatch('dsld_match', { matched_dsld_id: ids[0] });
+      const response = await fetch('/api/dsld_refresh', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${state.session.access_token}`,
+        },
+        body: JSON.stringify({ dsld_id: ids[0] }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error ?? 'DSLD import failed');
+      $('dup-code').value = 'already_in_catalog';
+      $('dup-target').value = ids[0];
+      await markDuplicate();
+    }, 'primary'));
+  } else {
+    actions.append(identityButton('Record ambiguous identity', async () => {
+      await recordMatch('identity_ambiguous', { candidate_dsld_ids: ids });
+      setStatus('Ambiguous exact matches recorded. Select the correct identity before closing.');
+    }));
+  }
+
+  actions.append(identityButton('None of these is this product', async () => {
+    const reason = window.prompt('Why are the exact barcode hits not this product?');
+    if (!reason?.trim()) throw new Error('An audited reason is required.');
+    for (const dsldId of ids) {
+      await recordMatch('not_this_product', {
+        matched_dsld_id: dsldId,
+        reason: reason.trim(),
+      });
+    }
+    if (lookup.freshness === 'blocked') {
+      throw new Error('Overrides recorded, but the index is stale. Rebuild before approval.');
+    }
+    await recordMatch('no_match_verified');
+    setStatus('Wrong hits retained in history; verified no match recorded.');
+  }));
 }
 
 // ---------------------------------------------------------------- payload
@@ -408,6 +582,12 @@ async function transition(fields) {
 }
 
 function approve() {
+  if (
+    state.selected?.kind === 'missing_product' &&
+    state.identityRecorded !== 'no_match_verified'
+  ) {
+    return setStatus('Record a fresh verified no-match identity check first.', true);
+  }
   syncScalarFields();
   return transition({
     to_status: 'approved',

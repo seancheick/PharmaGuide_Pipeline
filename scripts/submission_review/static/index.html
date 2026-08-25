@@ -57,6 +57,18 @@
     <h2>Evidence</h2>
     <div id="photos" class="photo-grid"></div>
 
+    <section id="identity-check">
+      <div class="row">
+        <h2>Identity check</h2>
+        <button id="identity-run" type="button" class="ghost">Check exact barcode</button>
+      </div>
+      <p id="identity-index-status" class="muted" aria-live="polite">
+        Required before a missing product can be approved.
+      </p>
+      <ul id="identity-results"></ul>
+      <div id="identity-actions" class="row"></div>
+    </section>
+
     <h2>Approved label (manual_label_v1)</h2>
     <div class="row">
       <label>Brand <input id="p-brand"></label>

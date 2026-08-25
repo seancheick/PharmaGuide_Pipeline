@@ -9,7 +9,10 @@ supabase-js bundle (pinned version, recorded checksum — no runtime CDN).
 from __future__ import annotations
 
 import hashlib
+import json
+import sqlite3
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 SCRIPTS_DIR = Path(__file__).resolve().parents[1]
@@ -22,6 +25,10 @@ import serve  # noqa: E402
 VENDORED_SUPABASE_JS = REVIEW_DIR / "static" / "vendor" / "supabase.js"
 VENDORED_SUPABASE_SHA256 = (
     "2697f51bb3efa5f10b5b0bca2a39b3772b1b8f810e6885e3bb8d69c3242d5e07"
+)
+GTIN_FIXTURE = REVIEW_DIR / "fixtures" / "gtin_golden.json"
+GTIN_FIXTURE_SHA256 = (
+    "d96e600c74654f813da95246ef1d027c042ba62eac7eb05675bcdf58c728f4dc"
 )
 
 
@@ -45,8 +52,6 @@ def test_proxy_targets_exactly_the_review_function():
 
 
 def test_catalog_search_is_parameterized_and_bounded(tmp_path):
-    import sqlite3
-
     db = tmp_path / "catalog.db"
     with sqlite3.connect(db) as conn:
         conn.execute(
@@ -115,3 +120,134 @@ def test_console_defaults_to_open_queue_and_supports_cursor_pagination():
     assert "state.submissions.push(...submissions)" in app_js
     assert "total_open_count" in app_js
     assert "next_after" in app_js
+
+
+def test_identity_index_gtin_semantics_are_fixture_pinned():
+    assert hashlib.sha256(GTIN_FIXTURE.read_bytes()).hexdigest() == (
+        GTIN_FIXTURE_SHA256
+    )
+    fixture = json.loads(GTIN_FIXTURE.read_text())
+    for vector in fixture["valid_identities"]:
+        assert vector["canonical_gtin14"] in serve.canonical_gtin14_candidates(
+            vector["input"]
+        )
+    for vector in fixture["manual_eight_digit"]:
+        expected = {
+            candidate.rjust(14, "0")
+            for candidate in vector["lookup_candidates"]
+            if len(candidate) in {8, 12, 13, 14}
+        }
+        assert expected.intersection(
+            serve.canonical_gtin14_candidates(vector["input"])
+        )
+    for vector in fixture["invalid_inputs"]:
+        assert not serve.canonical_gtin14_candidates(vector["input"])
+
+
+def test_identity_index_combines_catalog_and_manifest_owned_corpus(tmp_path):
+    catalog = tmp_path / "catalog.db"
+    with sqlite3.connect(catalog) as conn:
+        conn.execute(
+            "create table products_core "
+            "(dsld_id text primary key, product_name text, brand_name text, "
+            "upc_sku text)"
+        )
+        conn.execute(
+            "insert into products_core values (?, ?, ?, ?)",
+            ("278454", "Vitamin D3", "Example Labs", "050428381397"),
+        )
+
+    stage = tmp_path / "products" / "output_Test_enriched" / "enriched"
+    stage.mkdir(parents=True)
+    batch = stage / "enriched_cleaned_batch_1.json"
+    batch.write_text(
+        json.dumps(
+            [
+                {
+                    "dsldId": 278454,
+                    "fullName": "Vitamin D3",
+                    "brandName": "Example Labs",
+                    "upcSku": "050428381397",
+                },
+                {
+                    "dsldId": 900001,
+                    "fullName": "Corpus only",
+                    "brandName": "New Labs",
+                    "upcSku": "4006381333931",
+                },
+                {
+                    "dsldId": 900002,
+                    "fullName": "Second exact version",
+                    "brandName": "New Labs",
+                    "upcSku": "4006381333931",
+                },
+            ]
+        )
+    )
+    manifest = {
+        "schema_version": "1.0.0",
+        "stage": "enrich",
+        "processing_complete": True,
+        "owned_files": [batch.name],
+        "content_sha256": {
+            batch.name: hashlib.sha256(batch.read_bytes()).hexdigest()
+        },
+    }
+    (stage / ".stage_manifest.json").write_text(json.dumps(manifest))
+
+    built_at = datetime(2026, 8, 25, 18, 0, tzinfo=timezone.utc)
+    index = serve.build_identity_index(
+        catalog,
+        tmp_path / "products",
+        built_at=built_at,
+    )
+
+    shipped = index.lookup("00050428381397")
+    assert [(row.source, row.dsld_id) for row in shipped] == [
+        ("catalog", "278454"),
+        ("corpus", "278454"),
+    ]
+    corpus_only = index.lookup("04006381333931")
+    assert [(row.source, row.dsld_id) for row in corpus_only] == [
+        ("corpus", "900001"),
+        ("corpus", "900002"),
+    ]
+    assert index.built_at == built_at
+
+
+def test_identity_index_freshness_has_warn_and_block_boundaries():
+    now = datetime(2026, 8, 25, 18, 0, tzinfo=timezone.utc)
+    assert serve.identity_index_freshness(now - timedelta(days=29), now) == (
+        "fresh"
+    )
+    assert serve.identity_index_freshness(now - timedelta(days=31), now) == (
+        "warning"
+    )
+    assert serve.identity_index_freshness(now - timedelta(days=61), now) == (
+        "blocked"
+    )
+    assert serve.IDENTITY_INDEX_WARN_DAYS == 30
+    assert serve.IDENTITY_INDEX_BLOCK_DAYS == 60
+
+
+def test_console_exposes_fail_closed_identity_actions():
+    index_html = (REVIEW_DIR / "static" / "index.html").read_text()
+    app_js = (REVIEW_DIR / "static" / "app.js").read_text()
+    serve_source = (REVIEW_DIR / "serve.py").read_text()
+
+    assert "/api/identity_lookup?gtin14=" in app_js
+    assert "action: 'record_match'" in app_js
+    assert "Use as draft for label comparison" in app_js
+    assert "/api/dsld_refresh" in app_js
+    for outcome in (
+        "catalog_match",
+        "dsld_match",
+        "identity_ambiguous",
+        "no_match_verified",
+        "not_this_product",
+    ):
+        assert outcome in app_js
+    assert 'id="identity-check"' in index_html
+    assert 'id="identity-index-status"' in index_html
+    assert "IDENTITY_INDEX_WARN_DAYS = 30" in serve_source
+    assert "IDENTITY_INDEX_BLOCK_DAYS = 60" in serve_source
