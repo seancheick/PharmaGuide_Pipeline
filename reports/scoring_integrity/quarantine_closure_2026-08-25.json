@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0.0",
+  "generated_on": "2026-08-25",
+  "scope": "18 actionable scoring-integrity quarantines from the 2026-08-25 pre-change catalog",
+  "status": "implementation_complete_rebuild_required",
+  "summary": {
+    "input_products": 18,
+    "resolved_by_verified_code_or_data": 7,
+    "retained_for_missing_label_dose_or_identity": 8,
+    "retained_for_clinical_policy_signoff": 3,
+    "invented_doses": 0,
+    "compound_aliases_inferred_by_name_similarity": 0
+  },
+  "resolved": [
+    {
+      "dsld_ids": ["180399", "211387"],
+      "products": ["Flush-free Niacin 500 mg", "Flush-Free Niacin 500 mg"],
+      "root_cause": "Inositol hexanicotinate had no exact active-moiety conversion into the supplemental-niacin UL assessment.",
+      "correction": "Use the exact compound-only factor (6 x 123.11) / 810.7 = 0.9111385222647094 mg NE per mg compound and assess the resulting exposure against the supplemental-niacin UL.",
+      "projected_destination": "scored_caution",
+      "sources": [
+        "https://pubchem.ncbi.nlm.nih.gov/compound/3720",
+        "https://pubchem.ncbi.nlm.nih.gov/compound/938",
+        "https://www.ncbi.nlm.nih.gov/books/NBK114304/"
+      ]
+    },
+    {
+      "dsld_ids": ["228317", "231334", "231335", "263865"],
+      "products": ["Formula VM-2000"],
+      "root_cause": "A separately disclosed pyridoxal 5-phosphate row was treated as unrelated unresolved compound mass instead of a vitamin B6 vitamer.",
+      "correction": "Include explicitly declared pyridoxal 5-phosphate in the vitamin B6 exposure assessed by the UL path.",
+      "projected_destination": "scored_caution",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
+      ]
+    },
+    {
+      "dsld_ids": ["1179"],
+      "products": ["Ravage Fruit Punch"],
+      "root_cause": "Label-active projections and synthetic product-level evidence rows were conflated, preventing otherwise complete mapped actives from satisfying readiness.",
+      "correction": "Keep label-active projections matchable and exclude only synthetic product-level aggregates from material evidence readiness.",
+      "projected_destination": "scored",
+      "projected_module": "sports"
+    }
+  ],
+  "retained_missing_label_information": [
+    {
+      "dsld_ids": ["75188", "75291", "243713"],
+      "products": ["Fish Oil", "Fish Oil Lemon"],
+      "final_readiness": "identity_complete_dose_incomplete",
+      "reason": "The labels disclose an omega-3 total and name EPA/DHA without assigning amounts to the child actives. The total cannot be duplicated or allocated across children without label evidence."
+    },
+    {
+      "dsld_ids": ["855"],
+      "products": ["Oil Of Oregano"],
+      "final_readiness": "identity_complete_dose_incomplete",
+      "reason": "The label discloses only a 60 mg proprietary blend total for olive oil and oregano oil, with no child allocation."
+    },
+    {
+      "dsld_ids": ["12300"],
+      "products": ["Fem-Mend Synergistic Blend"],
+      "final_readiness": "identity_complete_dose_incomplete",
+      "reason": "The material botanical children have no usable owned doses."
+    },
+    {
+      "dsld_ids": ["13041"],
+      "products": ["Gummie Multi Vitamin Daily Formula"],
+      "final_readiness": "identity_complete_dose_incomplete",
+      "reason": "The source projection does not provide usable owned doses for the declared material actives."
+    },
+    {
+      "dsld_ids": ["315586"],
+      "products": ["Adrenal Support"],
+      "final_readiness": "identity_incomplete",
+      "reason": "The label provides a 1 mL proprietary blend with ten undosed botanical children; volume cannot be converted into per-ingredient mass or identity ownership."
+    },
+    {
+      "dsld_ids": ["260262"],
+      "products": ["Fish Oil Lemon"],
+      "final_readiness": "identity_incomplete",
+      "reason": "The hierarchy contains non-scorable nested projections without enough source ownership to reconcile a complete scorable-active panel."
+    }
+  ],
+  "retained_policy_review": [
+    {
+      "dsld_id": "33358",
+      "product": "Triumphalis Ethyldiazirino",
+      "declared_active": "3,3-Azo-17a-Methyl-5a-Androstan-17b-Ol",
+      "decision": "retain_quarantine",
+      "reason": "PubChem resolves the exact label string to CID 112500385 (C20H32N2O), which is not mebolazine/dymethazine CID 66847280 (C42H68N2O2). A compound-specific banned-substance alias would be chemically false. FDA class-level bodybuilding guidance supports concern but does not establish the exact compound-specific US verdict required by the production contract.",
+      "sources": [
+        "https://pubchem.ncbi.nlm.nih.gov/compound/3_3-Azo-17alpha-methyl-5alpha-androstan-17beta-ol",
+        "https://pubchem.ncbi.nlm.nih.gov/compound/66847280",
+        "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky"
+      ]
+    },
+    {
+      "dsld_id": "33360",
+      "product": "Mithras Dimethandrostenol",
+      "declared_active": "2, 17a-Dimethyl-17b-Hydroxy-5a-Androst-2-Ene",
+      "decision": "retain_quarantine",
+      "reason": "No authoritative exact-identity record was verified for the label string. Similarity to a known steroid name is not sufficient to assign a compound-specific banned or controlled-substance verdict.",
+      "sources": [
+        "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky"
+      ]
+    },
+    {
+      "dsld_id": "33361",
+      "product": "Legiox Norethandriol",
+      "declared_active": "17a-Ethyl-Estr-5(6)-Ene-3B-Diol",
+      "decision": "retain_quarantine",
+      "reason": "No authoritative exact-identity record was verified for the label string. Similarity to norethandrolone is not sufficient to assign a compound-specific banned or controlled-substance verdict.",
+      "sources": [
+        "https://www.fda.gov/consumers/consumer-updates/caution-bodybuilding-products-can-be-risky"
+      ]
+    }
+  ],
+  "acceptance_note": "Retained products are closed as explicit, safe dispositions rather than unresolved engineering defects. Their catalog eligibility may change only when new source-label data or exact clinical-policy signoff is recorded."
+}

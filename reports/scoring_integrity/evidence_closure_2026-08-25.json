@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0.0",
+  "generated_on": "2026-08-25",
+  "status": "correctness_and_first_priority_batch_complete_rebuild_required",
+  "confidence_contract": {
+    "principle": "Evidence review completeness, evidence strength, and product-score confidence are separate concepts.",
+    "unreviewed_material_active": {
+      "assessment_state": "not_yet_evaluated",
+      "score_confidence_effect": "moderate_provisional",
+      "consumer_copy": "Clinical evidence review is incomplete",
+      "must_not_imply": [
+        "the ingredient has no clinical studies",
+        "the supplement is low quality",
+        "a database miss is negative clinical evidence"
+      ]
+    },
+    "completed_limited_or_negative_review": {
+      "assessment_state": "evaluated_limited_or_negative",
+      "score_confidence_effect": "review_complete",
+      "evidence_pillar_effect": "may_be_low",
+      "explanation": "A low evidence pillar after a completed review is a substantive evidence result, not missing-data uncertainty."
+    },
+    "supported_review": {
+      "assessment_state": "evaluated_supported",
+      "score_confidence_effect": "depends_on_identity_dose_population_outcome_and_product_comparability"
+    }
+  },
+  "clinical_registry": {
+    "records_after_batch": 201,
+    "distinct_verified_pmids": 445,
+    "pmid_entry_claims": 460,
+    "live_citation_gate": {
+      "verified": 458,
+      "not_found": 0,
+      "topic_mismatch": 0,
+      "reviewed_title_terminology_exceptions": 2
+    },
+    "new_reviews": [
+      {
+        "entry_id": "INGR_INOSITOL",
+        "identity_scope": "inositol, myo-inositol, D-chiro-inositol, and explicitly named 40:1 myo/D-chiro blends",
+        "excluded_compounds": [
+          "inositol hexanicotinate",
+          "IP6",
+          "inositol hexaphosphate"
+        ],
+        "verified_pmids": ["38163998", "36703143", "35477841"],
+        "recomputed_product_reach": 641
+      },
+      {
+        "entry_id": "INGR_L_ARGININE",
+        "identity_scope": "free/base/micronized L-arginine",
+        "excluded_compounds": [
+          "arginine alpha-ketoglutarate",
+          "arginine nitrate",
+          "Nitrosigine",
+          "arginine silicate",
+          "arginine hydrochloride",
+          "arginine aspartate"
+        ],
+        "verified_pmids": ["34967840", "22137067", "32370176"],
+        "recomputed_product_reach": 192
+      }
+    ]
+  },
+  "evidence_match_reachability": {
+    "audited_products": 15412,
+    "newly_reachable_match_links": 1333,
+    "affected_products": 1158,
+    "stale_match_links": 0,
+    "unlinked_evidence_records": 0,
+    "recompute_errors": 0,
+    "repaired_canary": {
+      "entry_id": "INGR_GARLIC",
+      "recomputed_product_reach": 80,
+      "root_cause": "A label-active projection was mislabeled as synthetic product-level evidence and skipped by the exact matcher."
+    },
+    "release_gate": "Every stamped clinical match ID and provenance record must equal the exact matcher recomputation from the enriched corpus. Fuzzy study borrowing is prohibited."
+  },
+  "material_review_backlog": {
+    "before_materiality_repair": {
+      "blocking_occurrences": 8953,
+      "products": 4947
+    },
+    "after_materiality_repair": {
+      "blocking_occurrences": 5203,
+      "products": 4143
+    },
+    "interpretation": "The remaining queue is curation work, not evidence that 4,143 products are clinically weak. It includes not-yet-evaluated material actives and must be curated by exact identity one canonical at a time."
+  },
+  "excellent_form_governance": {
+    "initial_frozen_records": 271,
+    "remaining_unverified_records": 195,
+    "remaining_used_in_current_corpus": 118,
+    "remaining_unused_in_current_corpus": 77,
+    "consumer_confidence_effect": "none",
+    "release_policy": "No new or increased Excellent form rating may ship without structured source evidence. Existing frozen entries are governance debt and are not consumer warnings.",
+    "highest_reach_remaining_forms": [
+      {"form": "calcium pantothenate", "products": 1264},
+      {"form": "retinyl acetate", "products": 532},
+      {"form": "L-leucine powder", "products": 382},
+      {"form": "sodium molybdate", "products": 357},
+      {"form": "retinyl palmitate", "products": 331},
+      {"form": "L-isoleucine", "products": 233},
+      {"form": "L-valine", "products": 231},
+      {"form": "betaine anhydrous", "products": 231},
+      {"form": "potassium chloride", "products": 209},
+      {"form": "taurine", "products": 193}
+    ],
+    "closure_state": "governance_enforced_backlog_open",
+    "why_not_bulk_closed": "A bulk approval or downgrade would fabricate form-specific evidence or erase curated distinctions. Each record needs an exact-form source and clinical-owner review."
+  },
+  "benchmark": {
+    "status": "engineering_preparation_complete_external_reviews_required_after_rebuild",
+    "cannot_be_fabricated": [
+      "statistician ratification of Amendment 1.1.1",
+      "clinical-owner ratification",
+      "three fixed reviewer identities with at least two licensed reviewers",
+      "sealed independent ratings"
+    ],
+    "next_engineering_action": "Cut the uncontaminated v7 packet from the final rebuilt correctness candidate, then collect external blinded ratings before any calibration decision."
+  }
+}
