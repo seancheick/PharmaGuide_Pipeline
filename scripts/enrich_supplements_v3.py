@@ -20097,6 +20097,11 @@ class SupplementEnricherV3:
             if active_quantity <= 0:
                 continue
             active_identity = _take_quality_identity(active, consume=False)
+            if active_identity.get("identity_disposition") == "taxonomy_only":
+                # Taxonomy-only rows are recognized source materials, not a
+                # nutrient declaration. They must not inherit a stale cleaner
+                # standardName and vote in nutrient aggregation.
+                continue
             active_canonical = str(
                 active_identity.get("canonical_id")
                 or active.get("canonical_id")
@@ -20126,6 +20131,12 @@ class SupplementEnricherV3:
                     ing_name = ingredient.get('name', '')
                     std_name = ingredient.get('standardName', '') or ing_name
                     quality_identity = _take_quality_identity(ingredient)
+                    if quality_identity.get("identity_disposition") == "taxonomy_only":
+                        # The quality resolver has authoritatively replaced a
+                        # false marker/nutrient identity with source taxonomy.
+                        # Do not run RDA/UL conversion against the stale
+                        # cleaner standardName (for example Lemon -> Folate).
+                        continue
                     resolved_canonical_id = str(
                         quality_identity.get("canonical_id")
                         or ingredient.get("canonical_id")

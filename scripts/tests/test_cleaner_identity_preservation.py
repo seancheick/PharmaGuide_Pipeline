@@ -89,6 +89,10 @@ SOURCE_BOTANICAL_CASES = [
     ("Coleus forskohlii extract standardized to 10% forskolin", "coleus", "quantified marker decorates the coleus source identity"),
     ("ForsLean (Coleus forskohlii) root extract", "coleus", "branded source extract remains Coleus identity"),
     ("Schisandra berry extract",       "schisandra", "schisandra source, not isolated schisandrin"),
+    ("Lemon",                          "lemon", "lemon botanical, not a folate declaration"),
+    ("Lemon powder",                   "lemon", "lemon fruit powder, not a folate declaration"),
+    ("Lemon Extract",                  "lemon", "lemon botanical extract, not a folate declaration"),
+    ("Lemon Peel Extract",             "lemon", "lemon peel source, not a folate declaration"),
 ]
 
 
@@ -187,6 +191,10 @@ MARKER_FORBIDDEN_FOR_SOURCE = [
     ("Coleus forskohlii extract standardized to 10% forskolin", "forskolin"),
     ("ForsLean (Coleus forskohlii) root extract", "forskolin"),
     ("Schisandra berry extract",     "schisandrin"),
+    ("Lemon",                        "folate"),
+    ("Lemon powder",                 "folate"),
+    ("Lemon Extract",                "folate"),
+    ("Lemon Peel Extract",           "folate"),
 ]
 
 
@@ -229,7 +237,8 @@ def test_iqm_no_source_botanical_aliases_remain(normalizer):
                "dnj_1_deoxynojirimycin", "icariin", "beta_glucan",
                "rhaponticin", "apple_polyphenols", "digestive_enzymes",
                "fucoidan", "chondroitin", "chlorogenic_acids",
-               "forskolin", "schisandrin", "red_wine_extract"]
+               "forskolin", "schisandrin", "red_wine_extract",
+               "vitamin_b9_folate"]
     FORBIDDEN_PATTERNS = [
         ("acerola", "acerola"),       # bare acerola anywhere
         ("camu camu", "camu_camu"),
@@ -264,6 +273,8 @@ def test_iqm_no_source_botanical_aliases_remain(normalizer):
         ("green coffee bean", "coffee_bean_plain"),
         ("coleus forskohlii", "coleus_forskohlii_root"),
         ("schisandra berry", "schisandra_berry"),
+        ("lemon extract", "lemon"),
+        ("lemon peel", "lemon"),
     ]
 
     import re
@@ -271,7 +282,7 @@ def test_iqm_no_source_botanical_aliases_remain(normalizer):
     # because the alias text itself encodes standardization (cleaner only
     # matches the alias when the label declares the predicate).
     QUALIFY_PATTERN = re.compile(
-        r"\b\d+\s*%|\bstandardi[sz]ed\b|\bstd\.?\b|\bcurcuminoid|\bcontaining\b|\bextract\s+\d+\s*[:x]\b",
+        r"\b\d+\s*%|\bstandardi[sz]ed\b|\bstd\.?\b|\bcurcuminoid|\bcontaining\b|\bextract\s+\d+\s*[:x]\b|\bfolic\s+acid\b",
         re.I,
     )
 

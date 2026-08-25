@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-08-19",
+    "last_updated": "2026-08-25",
     "total_entries": 551,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -8564,11 +8564,15 @@
       "latin_name": "Citrus limon",
       "aliases": [
         "Lemon fruit powder",
+        "Lemon Extract",
+        "organic Lemon extract",
+        "Lemon Peel Extract",
+        "organic lemon peel extract",
         "Citrus limon"
       ],
       "category": "fruit",
-      "notes": "Citrus limon (Rutaceae) fruit. Rich in citric acid, vitamin C, and limonene. Contains eriocitrin and hesperidin flavonoids in peel. Botanical fruit powder, not standardized.",
-      "last_updated": "2026-03-01",
+      "notes": "Citrus limon (Rutaceae) fruit. Rich in citric acid, vitamin C, and limonene. Contains eriocitrin and hesperidin flavonoids in peel. Botanical fruit powder or simple lemon/peel extract, not a declared folate dose and not standardized.",
+      "last_updated": "2026-08-25",
       "external_ids": {
         "unii": "24RS0A988O"
       },

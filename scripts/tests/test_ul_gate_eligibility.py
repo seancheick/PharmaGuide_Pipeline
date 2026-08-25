@@ -1748,3 +1748,47 @@ def test_nutritional_potassium_iodide_dose_does_not_emit_emergency_flag(enricher
     result = enricher._collect_rda_ul_data(product)
 
     assert result["special_use_flags"] == []
+
+
+def test_taxonomy_only_botanical_cannot_inherit_stale_nutrient_ul(enricher):
+    """A repaired botanical identity must not retain a stale nutrient UL.
+
+    The cleaner previously normalized ``Lemon powder`` to folate.  The
+    ingredient-quality resolver repaired the canonical to the Lemon botanical,
+    but RDA/UL collection still trusted the stale ``standardName`` and emitted
+    a folate conversion failure with a real folate UL.  A taxonomy-only row is
+    explicitly outside nutrient-dose assessment.
+    """
+    product = _mag([
+        {
+            "name": "Lemon powder",
+            "raw_source_text": "Lemon powder",
+            "raw_source_path": "ingredientRows[0]",
+            "standardName": "Vitamin B9 (Folate)",
+            "canonical_id": "vitamin_b9_folate",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 450,
+            "unit": "mg",
+        },
+    ])
+    product["ingredient_quality_data"] = {
+        "ingredients": [
+            {
+                "name": "Lemon powder",
+                "raw_source_text": "Lemon powder",
+                "raw_source_path": "ingredientRows[0]",
+                "standard_name": "Vitamin B9 (Folate)",
+                "canonical_id": "lemon",
+                "canonical_source_db": "botanical_ingredients",
+                "scoreable_identity": False,
+                "identity_disposition": "taxonomy_only",
+            }
+        ]
+    }
+
+    result = enricher._collect_rda_ul_data(product)
+
+    assert result["ingredients_with_rda"] == []
+    assert result["analyzed_ingredients"] == []
+    assert result["dose_assessments"] == []
+    assert result["ul_review_flags"] == []
