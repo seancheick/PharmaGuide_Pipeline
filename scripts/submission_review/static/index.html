@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Submission Review</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+  <div>
+    <p class="eyebrow">PharmaGuide</p>
+    <h1>Submission review</h1>
+  </div>
+  <div id="session-box">
+    <form id="signin-form" class="row">
+      <input id="email" type="email" placeholder="reviewer email" required>
+      <button type="submit">Send code</button>
+    </form>
+    <form id="verify-form" class="row hidden">
+      <input id="otp" inputmode="numeric" placeholder="6-digit code" required>
+      <button type="submit">Sign in</button>
+    </form>
+    <div id="signed-in" class="row hidden">
+      <span id="reviewer-email" class="muted"></span>
+      <button id="signout" type="button" class="ghost">Sign out</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <aside id="queue-panel">
+    <div class="row">
+      <select id="filter-status">
+        <option value="">All open</option>
+        <option value="submitted">Submitted</option>
+        <option value="under_review">Under review</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+        <option value="duplicate">Duplicate</option>
+      </select>
+      <select id="filter-kind">
+        <option value="">Both kinds</option>
+        <option value="missing_product">Missing product</option>
+        <option value="label_mismatch">Correction</option>
+      </select>
+      <button id="reload" type="button">Reload</button>
+    </div>
+    <ul id="queue"></ul>
+  </aside>
+
+  <section id="detail-panel" class="hidden">
+    <div id="detail-head"></div>
+    <h2>Evidence</h2>
+    <div id="photos" class="photo-grid"></div>
+
+    <h2>Approved label (manual_label_v1)</h2>
+    <div class="row">
+      <label>Brand <input id="p-brand"></label>
+      <label>Product name <input id="p-name"></label>
+    </div>
+    <div class="row">
+      <label>Servings/container <input id="p-servings-count" type="number" min="1"></label>
+      <label>Serving size qty <input id="p-serving-qty" type="number" step="any" min="0"></label>
+      <label>Serving unit <input id="p-serving-unit" placeholder="Capsule(s)"></label>
+    </div>
+
+    <h3>Ingredient rows</h3>
+    <table id="rows-table">
+      <thead><tr><th>Name</th><th>Quantity</th><th>Unit</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <button id="add-row" type="button" class="ghost">+ Add row</button>
+
+    <details id="raw-json-box">
+      <summary>Raw payload JSON (advanced)</summary>
+      <textarea id="raw-json" rows="14" spellcheck="false"></textarea>
+      <button id="apply-raw" type="button" class="ghost">Apply raw JSON</button>
+    </details>
+    <p class="muted">
+      Advisory canonical sha256: <code id="payload-sha">—</code>
+      (the server recomputes and enforces its own).
+    </p>
+
+    <h2>Decision</h2>
+    <div class="row">
+      <button id="t-under-review" type="button">Start review</button>
+      <button id="t-approve" type="button" class="primary">Approve</button>
+    </div>
+    <div class="decision-block">
+      <div class="row">
+        <select id="reject-code">
+          <option value="photo_quality">Photos unreadable (retakeable)</option>
+          <option value="missing_panel">Missing panel (retakeable)</option>
+          <option value="label_unreadable">Label unreadable (retakeable)</option>
+          <option value="not_a_supplement">Not a supplement</option>
+          <option value="other">Other (detail required)</option>
+        </select>
+        <input id="reject-detail" placeholder="user-facing detail (≤280)">
+        <button id="t-reject" type="button" class="danger">Reject</button>
+      </div>
+      <div class="row">
+        <select id="dup-code">
+          <option value="already_in_catalog">Already in catalog</option>
+          <option value="duplicate_submission">Duplicate submission</option>
+        </select>
+        <input id="dup-target" placeholder="catalog dsld_id OR submission uuid">
+        <button id="t-duplicate" type="button" class="danger">Mark duplicate</button>
+      </div>
+      <div class="row">
+        <input id="catalog-q" placeholder="search released catalog (name / brand / upc / id)">
+        <button id="catalog-go" type="button" class="ghost">Search</button>
+      </div>
+      <ul id="catalog-results"></ul>
+    </div>
+    <p id="status-line" class="muted" role="status"></p>
+  </section>
+</main>
+
+<script src="/vendor/supabase.js"></script>
+<script src="/canonical.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

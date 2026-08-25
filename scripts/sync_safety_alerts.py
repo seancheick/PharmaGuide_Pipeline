@@ -140,7 +140,22 @@ def _dispatch_release(release_id: str) -> None:
     if response.status_code < 200 or response.status_code >= 300:
         raise RuntimeError(
             "safety-alert dispatch failed after release promotion: "
-            f"HTTP {response.status_code}"
+            f"HTTP {response.status_code}: {response.text[:300]}"
+        )
+    # HTTP 200 alone is not delivery: the dispatcher reports per-device results
+    # in its body, and undelivered rows stay queued for a retry invocation.
+    try:
+        body = response.json()
+    except ValueError as exc:
+        raise RuntimeError(
+            "safety-alert dispatch returned an unreadable body; "
+            "deliveries are unverified"
+        ) from exc
+    if body.get("ok") is not True:
+        raise RuntimeError(
+            "safety-alert dispatch left undelivered pushes queued: "
+            f"sent={body.get('sent')} failed={body.get('failed')} "
+            f"removed={body.get('removed')} — re-run dispatch for this release"
         )
 
 
