@@ -416,6 +416,7 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         module_breakdown=result["v4_breakdown"]["module"],
         safety_gate=result["v4_breakdown"].get("safety_gate", {}),
         completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
+        assessment_readiness=assessment_readiness,
     )
     result["v4_breakdown"]["confidence"] = confidence
     result["quality_score_confidence"] = confidence["band"]

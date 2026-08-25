@@ -1,10 +1,10 @@
 """Typed readiness for identity, dose, evidence, verification, and routing.
 
-The quality score may only describe a live, non-blocked product after every
-material assessment has completed.  This module is the single scoring-time
-producer of that cross-cutting result.  It does not change pillar weights or
-invent evidence: a reviewed negative result is complete, while a missing
-review remains explicitly incomplete.
+Identity, dose, verification, and route readiness protect the live catalog.
+Evidence-review completeness is measured alongside them without equating an
+unfinished curation backlog with weak product quality. This module does not
+change pillar weights or invent evidence: a reviewed negative result is
+complete, while a missing review remains explicitly incomplete.
 """
 
 from __future__ import annotations

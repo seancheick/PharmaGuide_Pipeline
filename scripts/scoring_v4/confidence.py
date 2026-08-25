@@ -45,6 +45,7 @@ def evaluate_confidence(
     module_breakdown: Dict[str, Any],
     safety_gate: Dict[str, Any],
     completeness_gate: Dict[str, Any],
+    assessment_readiness: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Build the typed confidence object for a scoreable v4 row.
 
@@ -64,8 +65,15 @@ def evaluate_confidence(
     module_breakdown = _safe_dict(module_breakdown)
     safety_gate = _safe_dict(safety_gate)
     completeness_gate = _safe_dict(completeness_gate)
+    evidence_assessment = _safe_dict(
+        _safe_dict(assessment_readiness).get("evidence")
+    )
 
-    evidence = _evidence_confidence(product, module_breakdown)
+    evidence = _evidence_confidence(
+        product,
+        module_breakdown,
+        evidence_assessment=evidence_assessment,
+    )
     label = _label_completeness_confidence(module_breakdown, completeness_gate)
     verification = _verification_confidence(product, module_breakdown)
     identity = _identity_confidence(product, safety_gate, completeness_gate)
@@ -79,6 +87,15 @@ def evaluate_confidence(
         "label_completeness": _section(label),
         "verification": _section(verification),
         "identity": _section(identity),
+        "evidence_review": {
+            "readiness": evidence_assessment.get("readiness"),
+            "material_active_count": evidence_assessment.get(
+                "material_active_count"
+            ),
+            "not_yet_evaluated_count": evidence_assessment.get(
+                "not_yet_evaluated_count"
+            ),
+        },
     }
 
 
@@ -87,7 +104,30 @@ def _section(result: Tuple[str, List[str]]) -> Dict[str, Any]:
     return {"level": level, "drivers": sorted(dict.fromkeys(drivers))}
 
 
-def _evidence_confidence(product: Dict[str, Any], module: Dict[str, Any]) -> Tuple[str, List[str]]:
+def _evidence_confidence(
+    product: Dict[str, Any],
+    module: Dict[str, Any],
+    *,
+    evidence_assessment: Dict[str, Any],
+) -> Tuple[str, List[str]]:
+    # Curation coverage is not evidence strength. An incomplete review makes
+    # the evidence component provisional, but must not label the product's
+    # quality score as low-confidence merely because our registry is smaller
+    # than the ingredient universe.
+    if evidence_assessment.get("readiness") == "incomplete":
+        return "moderate", ["evidence_review_incomplete"]
+
+    assessed_states = {
+        str(row.get("state") or "")
+        for row in _safe_list(evidence_assessment.get("ingredient_assessments"))
+        if isinstance(row, dict) and row.get("material") is True
+    }
+    if assessed_states and assessed_states <= {
+        "evaluated_limited_or_negative",
+        "not_applicable",
+    }:
+        return "moderate", ["evidence_review_complete_limited_or_negative"]
+
     evidence_dim = _dimension(module, "evidence")
     metadata = _safe_dict(evidence_dim.get("metadata"))
     score = _as_float(evidence_dim.get("score"), 0.0) or 0.0

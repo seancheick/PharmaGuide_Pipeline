@@ -101,7 +101,7 @@ def test_confidence_high_when_evidence_identity_label_and_verification_are_stron
         assert isinstance(confidence[key]["drivers"], list)
 
 
-def test_confidence_worst_case_rule_lowers_band_for_no_scored_evidence() -> None:
+def test_unreviewed_evidence_is_provisional_not_low_score_confidence() -> None:
     from score_supplements_v4 import score_product_v4
 
     product = _product(
@@ -115,9 +115,51 @@ def test_confidence_worst_case_rule_lowers_band_for_no_scored_evidence() -> None
     out = score_product_v4(product)
     confidence = out["v4_breakdown"]["confidence"]
 
-    assert confidence["evidence"]["level"] == "low"
-    assert "no_clinical_evidence_matched" in confidence["evidence"]["drivers"]
-    assert out["v4_confidence"] == "low"
+    assert confidence["evidence"]["level"] == "moderate"
+    assert confidence["evidence"]["drivers"] == ["evidence_review_incomplete"]
+    assert confidence["evidence_review"] == {
+        "readiness": "incomplete",
+        "material_active_count": 1,
+        "not_yet_evaluated_count": 1,
+    }
+    assert out["v4_confidence"] == "moderate"
+
+
+def test_reviewed_limited_evidence_is_complete_not_missing_review() -> None:
+    from score_supplements_v4 import score_product_v4
+
+    product = _product(
+        ingredient=_ingredient(name="MSM", canonical_id="msm"),
+        evidence_data={
+            "clinical_matches": [
+                {
+                    "id": "reviewed-msm-null",
+                    "ingredient": "MSM",
+                    "matched_canonical_ids": ["msm"],
+                    "study_type": "rct_single",
+                    "evidence_level": "ingredient-human",
+                    "effect_direction": "null",
+                    "total_enrollment": 100,
+                }
+            ]
+        },
+        rda_ul_data={
+            "adequacy_results": [
+                {"nutrient": "MSM", "pct_rda": None, "pct_ul": None}
+            ],
+            "safety_flags": [],
+        },
+    )
+
+    out = score_product_v4(product)
+    confidence = out["v4_breakdown"]["confidence"]
+
+    assert confidence["evidence_review"]["readiness"] == "complete"
+    assert confidence["evidence"]["level"] == "moderate"
+    assert confidence["evidence"]["drivers"] == [
+        "evidence_review_complete_limited_or_negative"
+    ]
+    assert "evidence_review_incomplete" not in confidence["evidence"]["drivers"]
 
 
 def test_module_owned_evidence_floor_is_moderate_not_absent() -> None:
