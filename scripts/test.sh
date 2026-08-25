@@ -277,6 +277,10 @@ run_release_artifact_gates() {
   "$PG_PYTHON" scripts/iqm_form_evidence.py audit
   "$PG_PYTHON" scripts/validate_form_notes_export.py --blobs-dir "$RELEASE_DIST_DIR/detail_blobs"
   "$PG_PYTHON" scripts/coverage_gate_functional_roles.py
+  "$PG_PYTHON" scripts/audits/evidence_match_reachability.py \
+    --products-dir scripts/products \
+    --output scripts/reports/evidence_match_reachability_latest.json \
+    --strict
   "$PG_PYTHON" scripts/audit_source_of_truth_contract.py "${freshness_args[@]}"
   if [[ -z "$RELEASE_CANDIDATE_ROOT" && -d "$FLUTTER_REPO" ]]; then
     "$PG_PYTHON" scripts/audit_source_of_truth_contract.py flutter \

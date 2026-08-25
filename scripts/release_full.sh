@@ -607,6 +607,11 @@ run_strict_gate "enrichment/IQD source-of-truth contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" enrichment --products-dir "$PRODUCTS_DIR" --strict-release
 run_strict_gate "clinical drift contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" clinical --products-dir "$PRODUCTS_DIR" --strict-release
+run_strict_gate "clinical evidence match reachability" \
+  "$PG_PYTHON" scripts/audits/evidence_match_reachability.py \
+    --products-dir "$PRODUCTS_DIR" \
+    --output "$REPO_ROOT/scripts/reports/evidence_match_reachability_latest.json" \
+    --strict
 run_strict_gate "interaction DB parity" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" interaction --dist-dir "$DIST_DIR" --strict-release
 run_strict_gate "artifact freshness" \
