@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.5",
-    "last_updated": "2026-08-23",
-    "total_entries": 199,
+    "schema_version": "5.3.6",
+    "last_updated": "2026-08-25",
+    "total_entries": 201,
     "changelog": [
+      "5.3.6 (2026-08-25): Added content-verified, mixed human systematic-review evidence for myo-/D-chiro-inositol in PCOS and free/base L-arginine for blood pressure and athletic-performance endpoints. Added exact compound/form exclusions so neither record lends evidence to chemically or pharmacologically distinct inositol and arginine forms.",
       "5.3.5 (2026-08-23): Removed the class-wide BRAND_ALBION_MINERALS evidence record. Its magnesium-bisglycinate and ferrous-bisglycinate citations are compound-specific and already live on their canonical ingredient records; they cannot support unrelated Albion salts such as dimagnesium malate.",
       "5.3.4 (2026-08-18): Added exact-strain clinical records for Bacillus coagulans GBI-30, 6086 and Limosilactobacillus reuteri DSM 17938; added a current CNCM I-745 meta-analysis to Saccharomyces boulardii; corrected HN019 and pterostilbene effect summaries; separated product-brand aliases from exact strain identities.",
       "5.3.3 (2026-08-08): Replaced the corrupt BCAA auto-discovery record with three content-verified systematic reviews and a complete leucine+isoleucine+valine identity/dose contract; removed unrelated registry trials and the impossible 18,820-study count. Narrowed NAC consumer routing to Immune Support, removed untraceable aggregate counts and the unsupported longevity route, and tied each verified reference to explicit supported claims.",
@@ -21764,6 +21765,340 @@
       "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT; published_studies_count=26; registry_completed_trials_count=26; total_enrollment=129; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
       "endpoint_relevance_tags": [
         "focus_memory"
+      ]
+    },
+    {
+      "id": "INGR_INOSITOL",
+      "standard_name": "Inositol",
+      "aliases": [
+        "myo-inositol",
+        "myo inositol",
+        "d-chiro-inositol",
+        "d chiro inositol",
+        "chiro-inositol",
+        "40:1 inositol blend",
+        "inositol 40:1"
+      ],
+      "exclude_aliases": [
+        "inositol hexanicotinate",
+        "inositol hexaphosphate",
+        "inositol hexaphosphoric acid",
+        "ip6"
+      ],
+      "exclude_alias_match_mode": "bounded_phrase",
+      "category": "hormonal_endocrine",
+      "evidence_level": "ingredient-human",
+      "study_type": "systematic_review_meta",
+      "published_studies": [
+        "systematic_review",
+        "meta-analysis",
+        "RCT"
+      ],
+      "score_contribution": "tier_1",
+      "key_endpoints": [
+        "menstrual-cycle regularity and reproductive outcomes in PCOS",
+        "selected insulin-resistance and metabolic outcomes in PCOS",
+        "mixed or null findings across anthropometric and endocrine outcomes"
+      ],
+      "health_goals_supported": [
+        "Hormone Balance",
+        "Blood Sugar Support"
+      ],
+      "notes": "Human evidence is condition-specific and conflicting. A 2023 review reported improvement in cycle regularity and selected metabolic outcomes, while a 2022 meta-analysis found no clinically significant improvement across most anthropometric, metabolic, and endocrine outcomes. The systematic review used for the 2023 international PCOS guideline update concluded that evidence was limited and inconclusive. This record is not broad proof for weight loss, fertility, or glucose control outside PCOS.",
+      "last_updated": "2026-08-25",
+      "notable_studies": "PMID 38163998 reviewed 30 trials (2,230 participants) for the international PCOS guideline update and concluded that evidence was limited and inconclusive. PMID 36703143 reviewed 26 RCTs (1,691 participants) and reported benefits for cycle regularity and selected metabolic or hormonal outcomes. PMID 35477841 reviewed 17 RCTs (1,083 participants), found no clinically significant improvement across most measured outcomes, and reported high heterogeneity.",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "38163998",
+          "doi": "10.1210/clinem/dgad762",
+          "title": "Inositol for Polycystic Ovary Syndrome: A Systematic Review and Meta-analysis to Inform the 2023 Update of the International Evidence-based PCOS Guidelines.",
+          "citation": "The Journal of clinical endocrinology and metabolism (2024-05-17)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38163998/",
+          "published_date": "2024-05-17",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review",
+            "Meta-Analysis",
+            "Research Support, Non-U.S. Gov't"
+          ],
+          "mesh_terms": [
+            "Polycystic Ovary Syndrome",
+            "Humans",
+            "Inositol",
+            "Female",
+            "Practice Guidelines as Topic",
+            "Insulin Resistance",
+            "Evidence-Based Medicine"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [
+            "Limited and inconclusive PCOS evidence with possible benefits for selected outcomes"
+          ],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "36703143",
+          "doi": "10.1186/s12958-023-01055-z",
+          "title": "Inositol is an effective and safe treatment in polycystic ovary syndrome: a systematic review and meta-analysis of randomized controlled trials.",
+          "citation": "Reproductive biology and endocrinology : RB&E (2023-01-26)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36703143/",
+          "published_date": "2023-01-26",
+          "publication_types": [
+            "Meta-Analysis",
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "mesh_terms": [
+            "Female",
+            "Humans",
+            "Polycystic Ovary Syndrome",
+            "Inositol",
+            "Hypoglycemic Agents",
+            "Randomized Controlled Trials as Topic",
+            "Metformin",
+            "Testosterone",
+            "Insulins"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [
+            "Cycle regularity and selected metabolic or hormonal outcomes in PCOS"
+          ],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "35477841",
+          "doi": "10.1007/s43032-022-00933-y",
+          "title": "Efficacy of Myo-inositol on Anthropometric, Metabolic, and Endocrine Outcomes in PCOS Patients: a Meta-analysis of Randomized Controlled Trial.",
+          "citation": "Reproductive sciences (Thousand Oaks, Calif.) (2022-08-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35477841/",
+          "published_date": "2022-08-01",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis"
+          ],
+          "mesh_terms": [
+            "Female",
+            "Folic Acid",
+            "Humans",
+            "Inositol",
+            "Insulin",
+            "Insulin Resistance",
+            "Metformin",
+            "Polycystic Ovary Syndrome",
+            "Randomized Controlled Trials as Topic"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "meta_analysis",
+          "retracted": false,
+          "supports_claims": [
+            "No clinically significant improvement across most anthropometric, metabolic, and endocrine outcomes; high heterogeneity"
+          ],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "external_ids": {
+        "unii": "4L6452S749"
+      },
+      "effect_direction": "mixed",
+      "primary_outcome": "Hormone Balance",
+      "effect_direction_confidence": "high",
+      "effect_direction_rationale": "Mixed is a high-confidence classification of three content-verified, condition-specific systematic reviews with materially different conclusions. Some PCOS outcomes were favorable, many were null, heterogeneity was substantial, and the guideline-informing review concluded that the evidence remained limited and inconclusive.",
+      "endpoint_relevance_tags": [
+        "hormone_balance",
+        "glycemic_control"
+      ]
+    },
+    {
+      "id": "INGR_L_ARGININE",
+      "standard_name": "L-Arginine",
+      "aliases": [
+        "l arginine",
+        "arginine",
+        "l-arginine base",
+        "l arginine base",
+        "free-form arginine",
+        "free form arginine",
+        "micronized l-arginine",
+        "micronized l arginine",
+        "l-arginine, micronized"
+      ],
+      "exclude_aliases": [
+        "l-arginine akg",
+        "l arginine akg",
+        "arginine akg",
+        "aakg",
+        "arginine alpha-ketoglutarate",
+        "arginine alpha ketoglutarate",
+        "arginine nitrate",
+        "inositol-stabilized arginine silicate",
+        "inositol stabilized arginine silicate",
+        "arginine silicate",
+        "nitrosigine",
+        "l-arginine hcl",
+        "l arginine hcl",
+        "l-arginine hydrochloride",
+        "arginine hydrochloride",
+        "arginine aspartate",
+        "l-arginine aspartate"
+      ],
+      "exclude_alias_match_mode": "bounded_phrase",
+      "category": "sports_performance",
+      "evidence_level": "ingredient-human",
+      "study_type": "systematic_review_meta",
+      "published_studies": [
+        "systematic_review",
+        "meta-analysis",
+        "RCT"
+      ],
+      "score_contribution": "tier_1",
+      "key_endpoints": [
+        "blood-pressure reduction in adults across randomized trials",
+        "aerobic and anaerobic athletic-performance outcomes",
+        "dose- and endpoint-dependent effects with heterogeneous sports findings"
+      ],
+      "health_goals_supported": [
+        "Cardiovascular/Heart Health",
+        "Muscle Growth & Recovery"
+      ],
+      "notes": "Human evidence is endpoint- and dose-specific. Two meta-analyses reported lower blood pressure with oral L-arginine, while a sports meta-analysis reported positive pooled estimates but substantial heterogeneity for aerobic outcomes and different acute/chronic protocols. This record is restricted to free/base/micronized L-arginine and is not evidence for AAKG, nitrate, silicate, hydrochloride, aspartate, or other named arginine compounds/forms.",
+      "last_updated": "2026-08-25",
+      "notable_studies": "PMID 34967840 reviewed 22 placebo-controlled RCTs and detected an effective systolic-blood-pressure dose at 4 g/day, with subgroup and dose limitations. PMID 22137067 pooled 11 double-blind RCTs (387 participants) using 4-24 g/day and reported lower systolic and diastolic blood pressure. PMID 32370176 reviewed 18 athletic-performance studies (15 meta-analyzed) and described endpoint-specific acute and chronic protocols from 1.5-12 g/day, with high heterogeneity for aerobic outcomes.",
+      "min_clinical_dose": 1500,
+      "max_studied_clinical_dose": 12000,
+      "dose_unit": "mg",
+      "dose_range": "1,500-12,000 mg/day across chronic sports protocols; at least 4,000 mg/day for the systolic-blood-pressure dose-response finding",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "34967840",
+          "doi": "10.1093/advances/nmab155",
+          "title": "Effect of l-Arginine Supplementation on Blood Pressure in Adults: A Systematic Review and Dose-Response Meta-analysis of Randomized Clinical Trials.",
+          "citation": "Advances in nutrition (Bethesda, Md.) (2022-08-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34967840/",
+          "published_date": "2022-08-01",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis",
+            "Systematic Review",
+            "Research Support, Non-U.S. Gov't"
+          ],
+          "mesh_terms": [
+            "Adult",
+            "Arginine",
+            "Blood Pressure",
+            "Dietary Supplements",
+            "Female",
+            "Humans",
+            "Hypertension",
+            "Male",
+            "Obesity",
+            "Randomized Controlled Trials as Topic"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [
+            "Blood-pressure reduction in adults; systolic dose-response threshold detected at 4 g/day"
+          ],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "22137067",
+          "doi": "10.1016/j.ahj.2011.09.012",
+          "title": "Effect of oral L-arginine supplementation on blood pressure: a meta-analysis of randomized, double-blind, placebo-controlled trials.",
+          "citation": "American heart journal (2011-12-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/22137067/",
+          "published_date": "2011-12-01",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis",
+            "Review"
+          ],
+          "mesh_terms": [
+            "Administration, Oral",
+            "Adult",
+            "Aged",
+            "Antihypertensive Agents",
+            "Arginine",
+            "Blood Pressure",
+            "Dietary Supplements",
+            "Double-Blind Method",
+            "Female",
+            "Humans",
+            "Hypertension",
+            "Male",
+            "Middle Aged",
+            "Randomized Controlled Trials as Topic",
+            "Young Adult"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "meta_analysis",
+          "retracted": false,
+          "supports_claims": [
+            "Blood-pressure reduction across 11 double-blind placebo-controlled trials using 4-24 g/day"
+          ],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "32370176",
+          "doi": "10.3390/nu12051300",
+          "title": "Effects of Arginine Supplementation on Athletic Performance Based on Energy Metabolism: A Systematic Review and Meta-Analysis.",
+          "citation": "Nutrients (2020-05-02)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32370176/",
+          "published_date": "2020-05-02",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis",
+            "Systematic Review"
+          ],
+          "mesh_terms": [
+            "Aerobiosis",
+            "Anaerobiosis",
+            "Arginine",
+            "Athletic Performance",
+            "Body Weight",
+            "Dietary Supplements",
+            "Energy Metabolism",
+            "Female",
+            "Humans",
+            "Male",
+            "Nitric Oxide",
+            "Performance-Enhancing Substances"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [
+            "Positive pooled aerobic and anaerobic performance estimates with endpoint-specific protocols and high aerobic heterogeneity"
+          ],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "external_ids": {
+        "unii": "94ZLA3W45F"
+      },
+      "effect_direction": "mixed",
+      "primary_outcome": "Cardiovascular/Heart Health",
+      "effect_direction_confidence": "high",
+      "effect_direction_rationale": "Mixed is a high-confidence classification of content-verified systematic reviews. Blood-pressure effects were favorable, but effective doses and subgroups varied; athletic-performance protocols and outcomes differed, and aerobic findings were highly heterogeneous. The classification is not universal proof of nitric-oxide, cardiovascular, or sports benefit at any label dose.",
+      "endpoint_relevance_tags": [
+        "cardiovascular",
+        "muscle_recovery"
       ]
     }
   ]
