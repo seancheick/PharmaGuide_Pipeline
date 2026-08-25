@@ -2,8 +2,9 @@
 
 Daily Value remains high-confidence evidence that a row declares the nutrient
 amount. A source UNII that exactly matches the canonical IQM parent's UNII is
-also direct-identity evidence. Compound/form rows without either anchor remain
-conservatively ineligible.
+also direct-identity evidence. A form may additionally participate when the
+clinical reference explicitly places that exact form inside the nutrient UL's
+scope; all other compound/form rows remain conservatively ineligible.
 """
 
 from __future__ import annotations
@@ -43,22 +44,71 @@ def test_compound_mass_row_flag_is_gate_ineligible(enricher):
     assert result["has_over_ul"] is False
 
 
+def test_p5p_is_included_in_total_vitamin_b6_ul_exposure(enricher):
+    """P5P is a vitamin B6 vitamer, not an unrelated compound mass.
+
+    NIH ODS defines pyridoxal 5'-phosphate as one of the compounds with
+    vitamin B6 activity and applies the US adult UL to total vitamin B6
+    intake.  A separately disclosed P5P row must therefore add to another
+    vitamin B6 row instead of leaving the product's dose readiness unresolved.
+    """
+    product = _mag([
+        {
+            "name": "Vitamin B6",
+            "standardName": "Vitamin B6",
+            "canonical_id": "vitamin_b6_pyridoxine",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 90,
+            "unit": "mg",
+            "dailyValue": 5294,
+        },
+        {
+            "name": "Pyridoxal 5-Phosphate",
+            "standardName": "Vitamin B6 (Pyridoxine)",
+            "canonical_id": "vitamin_b6_pyridoxine",
+            "canonical_source_db": "ingredient_quality_map",
+            "raw_taxonomy": {"ingredientGroup": "Vitamin B6"},
+            "quantity": 20,
+            "unit": "mg",
+            "dailyValue": None,
+        },
+    ])
+
+    result = enricher._collect_rda_ul_data(
+        product,
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )
+    p5p = next(
+        row
+        for row in result["dose_assessments"]
+        if row["ingredient"] == "Pyridoxal 5-Phosphate"
+    )
+    p5p_adequacy = next(
+        row
+        for row in result["adequacy_results"]
+        if row["nutrient"] == "Vitamin B6 (Pyridoxine)"
+    )
+
+    assert p5p["ul_gate_eligible"] is True
+    assert p5p_adequacy["ul_exposure_basis"] == (
+        "ul_scoped_form_named_substance_amount"
+    )
+    assert p5p["ul_assessment_status"] == "assessed_within_limit"
+    assert p5p["readiness"] == "complete"
+    assert result["has_over_ul"] is True
+    aggregate = next(
+        flag
+        for flag in result["safety_flags"]
+        if flag.get("aggregation") == "canonical_sum"
+    )
+    assert aggregate["canonical_id"] == "vitamin_b6_pyridoxine"
+    assert aggregate["amount"] == pytest.approx(110.0)
+
+
 @pytest.mark.parametrize(
     ("row", "expected_pct_ul"),
     [
-        (
-            {
-                "name": "Pyridoxal 5'-Phosphate",
-                "standardName": "Vitamin B6",
-                "canonical_id": "vitamin_b6_pyridoxine",
-                "canonical_source_db": "ingredient_quality_map",
-                "uniiCode": "F06SGE49M6",
-                "quantity": 50,
-                "unit": "mg",
-                "dailyValue": None,
-            },
-            50.0,
-        ),
         (
             {
                 "name": "Boron Glycinate",
@@ -154,7 +204,7 @@ def test_multiple_compound_rows_do_not_clear_on_individual_upper_bounds(enricher
     )
 
 
-def test_compound_row_clears_when_aggregate_upper_bound_is_within_ul(enricher):
+def test_p5p_form_and_parent_b6_total_within_ul_is_complete(enricher):
     product = _mag([
         {
             "name": "Vitamin B6",
@@ -191,18 +241,18 @@ def test_compound_row_clears_when_aggregate_upper_bound_is_within_ul(enricher):
     adequacy = next(
         row
         for row in result["adequacy_results"]
-        if row["nutrient"] == "Vitamin B6"
-        and row["ul_gate_eligible"] is False
+        if row.get("ul_exposure_basis")
+        == "ul_scoped_form_named_substance_amount"
     )
 
-    assert compound["reason_code"] == "worst_case_compound_mass_within_ul"
     assert compound["ul_assessment_status"] == "assessed_within_limit"
     assert compound["readiness"] == "complete"
-    assert adequacy["ul_assessment_basis"] == (
-        "maximum_possible_aggregate_active_moiety_exposure"
+    assert adequacy["ul_exposure_basis"] == (
+        "ul_scoped_form_named_substance_amount"
     )
-    assert adequacy["scoring_eligible"] is False
-    assert adequacy["pct_rda"] is None
+    assert adequacy["scoring_eligible"] is True
+    assert adequacy["pct_rda"] is not None
+    assert result["has_over_ul"] is False
 
 
 def test_elemental_dv_row_flag_is_gate_eligible(enricher):
