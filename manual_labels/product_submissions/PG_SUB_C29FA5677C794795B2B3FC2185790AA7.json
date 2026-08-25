@@ -1,0 +1,150 @@
+{
+  "id": "PG_SUB_C29FA5677C794795B2B3FC2185790AA7",
+  "brandName": "Youtheory",
+  "fullName": "Ashwagandha + GABA",
+  "ingredientRows": [
+    {
+      "category": "blend",
+      "forms": [],
+      "ingredientGroup": "",
+      "name": "Full Spectrum Ashwagandha Blend",
+      "nestedRows": [
+        {
+          "category": "botanical",
+          "forms": [
+            {
+              "name": "KSM-66"
+            }
+          ],
+          "ingredientGroup": "",
+          "name": "Organic Ashwagandha (root) extract",
+          "nestedRows": [],
+          "quantity": [
+            {
+              "quantity": 600,
+              "unit": "mg"
+            }
+          ]
+        },
+        {
+          "category": "botanical",
+          "forms": [],
+          "ingredientGroup": "",
+          "name": "Organic Ashwagandha (root) powder",
+          "nestedRows": [],
+          "quantity": [
+            {
+              "quantity": 400,
+              "unit": "mg"
+            }
+          ]
+        }
+      ],
+      "quantity": [
+        {
+          "quantity": 1000,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "category": "amino acid",
+      "forms": [
+        {
+          "name": "PharmaGABA"
+        }
+      ],
+      "ingredientGroup": "",
+      "name": "GABA (gamma-aminobutyric acid)",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 100,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "category": "botanical",
+      "forms": [
+        {
+          "name": "Gingever"
+        }
+      ],
+      "ingredientGroup": "",
+      "name": "Ginger (root) extract",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 20,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "offMarket": 0,
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Vegetarian capsule (hypromellose)"
+      },
+      {
+        "name": "Microcrystalline cellulose"
+      },
+      {
+        "name": "Vegetable magnesium stearate"
+      },
+      {
+        "name": "Silicon dioxide"
+      }
+    ]
+  },
+  "physicalState": {
+    "langualCode": "",
+    "name": "Capsule"
+  },
+  "productType": {
+    "langualCode": "",
+    "name": "Combination Dietary Supplement"
+  },
+  "servingSizes": [
+    {
+      "maxDailyServings": 1,
+      "maxQuantity": 2,
+      "minDailyServings": 1,
+      "minQuantity": 2,
+      "unit": "Capsule(s)"
+    }
+  ],
+  "servingsPerContainer": 30,
+  "statements": [
+    {
+      "notes": "(Adults) Take two (2) capsules once daily.",
+      "type": "Suggested Use"
+    },
+    {
+      "notes": "This product is manufactured in a facility that processes fish extracts and eggshells.",
+      "type": "Precautions"
+    }
+  ],
+  "upcSku": "0850021920654",
+  "src": "local/manual_labels/product_submissions/PG_SUB_C29FA5677C794795B2B3FC2185790AA7",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "c29fa567-7c79-4795-b2b3-fc2185790aa7",
+    "label_verified_at": "2026-08-25",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team",
+    "reviewer_record_id": "b735948d-46a7-421b-ae2c-749faff5f51b"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "c29fa567-7c79-4795-b2b3-fc2185790aa7",
+    "source_date": "2026-08-25",
+    "source_updated_date": "2026-08-25",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:c29fa567-7c79-4795-b2b3-fc2185790aa7",
+    "reviewed_at": "2026-08-25T16:09:28.985355+00:00"
+  }
+}
