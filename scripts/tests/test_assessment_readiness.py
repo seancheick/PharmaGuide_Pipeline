@@ -237,6 +237,54 @@ def test_missing_active_without_explicit_non_scoreable_intent_stays_remediation(
     assert "identity_assessment_readiness" in result["unavailable_reasons"]
 
 
+def test_mapped_omega_identity_without_child_dose_blocks_on_dose_not_identity() -> None:
+    """A known EPA label row remains an identity even when its dose is absent."""
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Eicosapentaenoic Acid", "epa", quantity=0, unit="unspecified")
+    row.update({
+        "scoreable_identity": False,
+        "score_eligible": False,
+        "has_dose": False,
+        "role_classification": "recognized_non_scorable",
+        "score_exclusion_reason": "recognized_non_scorable",
+        "identity_decision_reason": "no_dose_evidence",
+    })
+    product = _product(row, title="Fish Oil")
+    product["supplement_taxonomy"] = {
+        "primary_type": "omega_3_fatty_acids",
+        "classification_contract_version": "1.2.0",
+    }
+    product["ingredient_quality_data"]["ingredients_scorable"] = []
+    product["rda_ul_data"] = {
+        "collection_status": "complete",
+        "dose_assessments": [],
+    }
+
+    result = evaluate_assessment_readiness(product, module="omega")
+
+    assert result["identity"]["readiness"] == "complete"
+    assert result["identity"]["reason_code"] == "mapped_source_actives"
+    assert result["dose"]["readiness"] == "incomplete"
+    assert result["dose"]["reason_code"] == "no_scoreable_active_dose"
+    assert result["unavailable_reasons"] == ["dose_assessment_readiness"]
+
+
+def test_true_carrier_oil_does_not_become_a_source_active() -> None:
+    """recognized_non_scorable carriers stay outside the assessment denominator."""
+    from assessment_readiness import evaluate_assessment_readiness
+
+    product = _zero_scorable_product()
+    row = product["ingredient_quality_data"]["ingredients"][0]
+    row["canonical_id"] = "PII_EXTRA_VIRGIN_OLIVE_OIL"
+    row["identity_decision_reason"] = "carrier_oil"
+
+    result = evaluate_assessment_readiness(product, module="generic")
+
+    assert result["identity"]["source_score_eligible_active_count"] == 0
+    assert result["identity"]["readiness"] == "incomplete"
+
+
 @pytest.mark.parametrize(
     "title",
     [

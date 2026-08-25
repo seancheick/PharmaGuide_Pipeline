@@ -494,6 +494,11 @@ def _source_score_eligible_active_rows(
         and (
             not score_exclusion_reason(dict(row))
             or has_unresolved_identity_reason(dict(row))
+            or (
+                score_exclusion_reason(dict(row)) == "recognized_non_scorable"
+                and _norm(row.get("identity_decision_reason"))
+                == "no_dose_evidence"
+            )
         )
         and (
             row.get("score_eligible_by_cleaner") is True
@@ -813,7 +818,12 @@ def _identity_readiness(
     module_identity_complete = has_module_relevant_identity(
         product,
         module,
-        rows=scoring_input.rows,
+        # Identity and dose are separate readiness dimensions. A mapped label
+        # active remains valid module identity when the scorer excludes it only
+        # because its dose is absent. Passing the cleaner-owned source rows here
+        # lets dose readiness name that actual defect without making carrier or
+        # structural rows scoreable.
+        rows=[*scoring_input.rows, *source_rows],
     )
     if source_identity_complete and not module_identity_complete:
         reason_code = f"missing_{module}_relevant_identity"
