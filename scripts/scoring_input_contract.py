@@ -55,6 +55,10 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "percent_dv_dose": ["generic_percent_dv_dose"],
 }
 PRODUCT_EVIDENCE_ORIGINS = {"native_enrichment", "compatibility_derived"}
+_LABEL_ACTIVE_PROJECTION_REASONS = {
+    "identity_bearing_active_anchor_mass",
+    "single_active_title_embedded_mass",
+}
 SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.3.0"
 ROUTE_CLASSIFIER_VERSION = "1.3.0"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
@@ -69,6 +73,27 @@ def normalize_product_evidence_scope(value: Any) -> str:
     return {
         "blend_total": "blend_level",
     }.get(scope, scope)
+
+
+def _scoring_input_kind_for_product_evidence(item: Dict[str, Any]) -> str:
+    """Keep direct label actives distinct from synthetic product aggregates.
+
+    ``blend_anchor_mass`` historically covered two different contracts: a
+    genuine dose-bearing active label row omitted from IQD form scoring, and a
+    structural blend/product total.  Only the latter is product-level
+    evidence.  A row-level active projection retains the exact source-row
+    identity and must remain eligible for clinical-evidence matching,
+    materiality, routing, and assessment readiness.
+    """
+    if (
+        _norm(item.get("evidence_type")) == "blend_anchor_mass"
+        and normalize_product_evidence_scope(item.get("evidence_scope"))
+        == "row_level"
+        and _norm(item.get("reason")) in _LABEL_ACTIVE_PROJECTION_REASONS
+        and bool(str(item.get("raw_source_path") or "").strip())
+    ):
+        return "label_active_projection"
+    return "product_level_evidence"
 
 
 SCORING_CLASSIFICATION_REQUIRED_FIELDS = {
@@ -2269,7 +2294,9 @@ def _product_scoring_evidence_rows(
             "quantity": dose_value,
             "unit": item.get("dose_unit"),
             "source_section": item.get("source_section") or PRODUCT_EVIDENCE_SOURCE,
-            "scoring_input_kind": "product_level_evidence",
+            "scoring_input_kind": _scoring_input_kind_for_product_evidence(
+                item
+            ),
             "section_support": PRODUCT_EVIDENCE_SECTION_SUPPORT[evidence_type],
             "generic_form_quality_credit": bool(item.get("generic_form_quality_credit", False)),
         }
@@ -4797,7 +4824,6 @@ _ROLE_TITLE_ALIASES_BY_CANONICAL = {
 # Fraction of the largest comparable-unit (mass) row a row must reach to count
 # as a "major" formulation component by mass alone (L5).
 _ROLE_MASS_MAJOR_FRACTION = 0.25
-
 
 def _role_mass_mg(row: Dict[str, Any]) -> Optional[float]:
     """Return the row's mass in mg, or None when not a comparable mass unit.

@@ -653,7 +653,9 @@ def test_derived_active_anchor_preserves_botanical_context_for_profile():
     contract = build_scoring_classification(product)
 
     assert result.rows[0]["canonical_id"] == "blessed_thistle"
-    assert result.rows[0]["scoring_input_kind"] == "product_level_evidence"
+    assert result.rows[0]["scoring_input_kind"] == "label_active_projection"
+    assert result.rows[0]["evidence_scope"] == "row_level"
+    assert result.rows[0]["raw_source_path"] == "ingredientRows[0]"
     assert result.rows[0]["raw_taxonomy"]["category"] == "botanical"
     assert contract["ingredients"][0]["botanical_source"]["value"] is True
     assert "raw_taxonomy_botanical" in contract["ingredients"][0]["botanical_source"]["evidence"]
@@ -710,6 +712,7 @@ def test_stale_native_anchor_evidence_is_repaired_with_active_context():
     result = get_scoring_ingredients(product, strict=True)
     contract = build_scoring_classification(product)
 
+    assert result.rows[0]["scoring_input_kind"] == "label_active_projection"
     assert result.rows[0]["raw_taxonomy"]["category"] == "botanical"
     assert result.rows[0]["identity_disposition"] == "clean"
     assert result.rows[0]["identity_contract_required"] is True

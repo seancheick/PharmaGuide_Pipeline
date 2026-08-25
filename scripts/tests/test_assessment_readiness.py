@@ -800,6 +800,35 @@ def test_real_label_aggregate_identity_keeps_its_individual_evidence_question() 
     assert evidence["readiness"] == "incomplete"
 
 
+def test_row_level_active_projection_keeps_its_individual_evidence_question() -> None:
+    """A direct label active is not a synthetic module aggregate.
+
+    Some mapped botanicals are projected from ``activeIngredients`` because
+    their form-quality row is absent from ``ingredients_scorable``.  The
+    projection still owns an exact label row, identity, and dose and therefore
+    must participate in clinical-evidence matching and review readiness.
+    """
+    from assessment_readiness import evaluate_assessment_readiness
+
+    row = _row("Garlic extract", "garlic", quantity=1200.0)
+    product = _product(row, title="Garlic 1200 mg")
+    product["ingredient_quality_data"] = {
+        "ingredients_scorable": [],
+        "ingredients": [row],
+        "total_active": 0,
+    }
+    product["activeIngredients"] = [row]
+
+    evidence = evaluate_assessment_readiness(product, module="generic")["evidence"]
+
+    assessment = evidence["ingredient_assessments"][0]
+    assert assessment["scoring_input_kind"] == "label_active_projection"
+    assert assessment["evidence_applicability"] == "individual_ingredient"
+    assert assessment["state"] == "not_yet_evaluated"
+    assert evidence["not_yet_evaluated_count"] == 1
+    assert evidence["readiness"] == "incomplete"
+
+
 def test_product_level_projection_carries_no_individual_evidence_question() -> None:
     """Pipeline projections are module-owned regardless of canonical identity."""
     from assessment_readiness import evaluate_assessment_readiness

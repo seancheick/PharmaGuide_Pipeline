@@ -1,6 +1,6 @@
 # PharmaGuide Glossary
 
-> Last verified against executable code: 2026-08-08
+> Last verified against executable code: 2026-08-25
 
 This is the canonical vocabulary for pipeline, enrichment, scoring, release,
 tests, and operator communication. Add a term here before introducing a new
@@ -60,6 +60,7 @@ contract name elsewhere.
 | **Blend header** | A declared proprietary/structural blend container. It is not an individually dosed active. |
 | **Blend member** | A child ingredient linked to a blend header by stable parent linkage. A display-only child may remain visible without becoming independently scoreable. |
 | **Scorable row** | An active ingredient row that satisfies cleaner/enrichment eligibility and the shared scoring-input contract. |
+| **Label active projection** | A typed scoring row reconstructed from one exact mapped, dose-bearing source label active when the form-quality list has no ordinary scorable row. It retains the source path and participates in routing, materiality, dose, and evidence matching. It is not synthetic product-level evidence or a blend total. |
 | **Display-only row** | A label-faithful row retained for explanation but excluded from independent score math. |
 | **Mapped coverage** | Fraction of score-eligible active rows with a usable canonical mapping, computed by the shared scoring-input contract. |
 | **Row ledger** | The exact one-record-per-source-row reconciliation contract. Each record owns a stable row reference, source section/role, score eligibility, mapping disposition, reason code, final destination, and optional owner reference. |

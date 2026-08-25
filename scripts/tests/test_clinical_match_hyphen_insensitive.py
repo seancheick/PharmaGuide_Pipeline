@@ -137,3 +137,44 @@ def test_alpha_linolenic_ala_does_not_borrow_alpha_lipoic_evidence(enricher):
     ids = {row.get("id") for row in evidence["clinical_matches"]}
 
     assert "INGR_ALPHA_LIPOIC_ACID" not in ids
+
+
+def test_row_level_active_projection_reaches_exact_generic_evidence(enricher):
+    """Mapped label actives must not disappear behind a synthetic row type."""
+    garlic = {
+        "name": "Garlic extract",
+        "raw_source_text": "Garlic extract",
+        "standardName": "Garlic",
+        "canonical_id": "garlic",
+        "canonical_source_db": "ingredient_quality_map",
+        "quantity": 1200,
+        "unit": "mg",
+        "source_section": "active",
+        "raw_source_path": "ingredientRows[0]",
+        "cleaner_row_role": "active_scorable",
+        "score_eligible_by_cleaner": True,
+        "dose_class": "therapeutic_mass",
+        "identity_disposition": "clean",
+        "raw_taxonomy": {
+            "category": "botanical",
+            "ingredientGroup": "Garlic",
+        },
+    }
+    product = {
+        "id": "garlic-row-level-projection",
+        "fullName": "Garlic 1200 mg",
+        "activeIngredients": [garlic],
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients": [garlic],
+        },
+    }
+
+    evidence = enricher._collect_evidence_data(product)
+    matches = {
+        match.get("id"): match
+        for match in evidence["clinical_matches"]
+    }
+
+    assert "INGR_GARLIC" in matches
+    assert matches["INGR_GARLIC"]["matched_canonical_ids"] == ["garlic"]
