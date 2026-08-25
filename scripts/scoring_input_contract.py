@@ -3142,11 +3142,16 @@ def _route_raw_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def _route_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     rows = _route_scoring_rows(product)
-    seen = {id(row) for row in rows}
     for row in _route_raw_rows(product):
-        if id(row) not in seen:
-            rows.append(row)
-            seen.add(id(row))
+        # Native enrichment may share one dict between ``ingredients_scorable``
+        # and ``ingredients``. JSON persistence necessarily breaks that object
+        # identity while preserving the row value. Deduplicate by value so a
+        # label row cannot gain an extra routing vote merely by crossing the
+        # Stage-2/Stage-3 serialization boundary. Distinct projections retain
+        # their typed fields and therefore remain separate rows.
+        if any(row is existing or row == existing for existing in rows):
+            continue
+        rows.append(row)
     return rows
 
 

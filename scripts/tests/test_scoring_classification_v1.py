@@ -801,6 +801,50 @@ def test_classification_is_deterministic():
     assert build_scoring_classification(product) == build_scoring_classification(product)
 
 
+def test_route_is_stable_after_json_round_trip_when_iqd_surfaces_share_rows():
+    """JSON serialization must not turn shared IQD rows into route votes.
+
+    Native enrichment keeps the same row objects in ``ingredients_scorable``
+    and ``ingredients``.  Once written to JSON and loaded by Stage 3, object
+    identity is lost.  Routing must still count each label row once.
+    """
+    coq10 = _row("coq10", "Coenzyme Q10", 30, "mg")
+    epa = _row("epa", "Eicosapentaenoic Acid", 585, "mg")
+    dha = _row("dha", "Docosahexaenoic Acid", 405, "mg")
+    red_yeast_rice = _row("red_yeast_rice", "Red Yeast Rice", 1200, "mg")
+    red_yeast_rice_projection = {
+        **red_yeast_rice,
+        "scoring_input_kind": "label_active_projection",
+        "evidence_type": "blend_anchor_mass",
+        "dose_value": 1200,
+        "dose_unit": "mg",
+    }
+    product = _product(
+        "Omega LDL",
+        [coq10, epa, dha, red_yeast_rice_projection],
+        primary_type="omega_3",
+    )
+    product["ingredient_quality_data"]["ingredients"] = [
+        red_yeast_rice,
+        coq10,
+        epa,
+        dha,
+    ]
+
+    before = build_scoring_classification(
+        product,
+        classification_origin="native_enrichment",
+    )
+    reloaded = json.loads(json.dumps(product))
+    after = build_scoring_classification(
+        reloaded,
+        classification_origin="native_enrichment",
+    )
+
+    assert after["route_module"] == before["route_module"] == "generic"
+    assert after["route_decision"] == before["route_decision"]
+
+
 def test_enricher_native_classification_matches_compat_builder():
     import logging
     from enrich_supplements_v3 import SupplementEnricherV3
