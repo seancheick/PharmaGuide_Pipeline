@@ -6546,6 +6546,10 @@ def build_detail_blob(
             "ui_copy_hint": fc.get("ui_copy_hint"),
         }
 
+    # Scorer-owned low-dose identities drive every consumer projection.  Do
+    # not rely on enrichment rows to duplicate this scoring result.
+    sub_clinical_set = v4_sub_clinical_canonicals(scored)
+
     # Build ingredients
     ingredients = []
     for ing in safe_list(enriched.get("activeIngredients")):
@@ -6656,9 +6660,8 @@ def build_detail_blob(
             "form_match_status": form_contract["form_match_status"],
             "category": safe_str(m.get("category")),
             "bio_score": safe_float(m.get("bio_score")),
-            "below_clinical_dose": json_bool(
-                ing.get("below_clinical_dose")
-                or m.get("below_clinical_dose")
+            "below_clinical_dose": bool(
+                canonical_id and canonical_id in sub_clinical_set
             ),
             "natural": bool(m.get("natural")),
             "score": safe_float(m.get("score")),
@@ -7695,8 +7698,6 @@ def build_detail_blob(
         # Mark the matching analyzed_ingredients / adequacy_results rows
         # so Flutter can render the per-ingredient "Low dose" chip
         # without re-running the dose check client-side.
-        sub_clinical_set = v4_sub_clinical_canonicals(scored)
-
         def _flag_below_clinical(rows):
             if not isinstance(rows, list):
                 return rows

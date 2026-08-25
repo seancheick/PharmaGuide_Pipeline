@@ -181,6 +181,7 @@ def test_scoring_sums_the_complete_daily_bcaa_dose(entries: dict[str, dict]) -> 
     twice = score_evidence(_scoring_product(rows, match, servings_per_day=2))
 
     assert "SUB_CLINICAL_DOSE_DETECTED" in once["metadata"]["flags"]
+    assert set(once["metadata"]["sub_clinical_canonicals"]) == BCAA_IDS
     assert "SUB_CLINICAL_DOSE_DETECTED" not in twice["metadata"]["flags"]
     assert twice["score"] > once["score"] > 0.0
 

@@ -138,6 +138,26 @@ def test_below_clinical_dose_marks_matching_canonical_only():
     assert analyzed["magnesium"]["below_clinical_dose"] is False
 
 
+def test_below_clinical_dose_marks_the_exported_active_ingredient_row():
+    """The app reads the active ingredient first, not only the RDA projection."""
+    enriched = _enriched_with_rda_data()
+    active = {
+        "name": "Acetyl-L-Carnitine Hydrochloride",
+        "raw_source_text": "Acetyl-L-Carnitine Hydrochloride",
+        "canonical_id": "l_carnitine",
+        "mapped": True,
+        "quantity": 500,
+        "unit": "mg",
+    }
+    enriched["activeIngredients"] = [active]
+    enriched["ingredient_quality_data"] = {"ingredients": [dict(active)]}
+
+    blob = build_detail_blob(enriched, _scored_with_sub_clinical(["l_carnitine"]))
+
+    assert blob["ingredients"][0]["canonical_id"] == "l_carnitine"
+    assert blob["ingredients"][0]["below_clinical_dose"] is True
+
+
 def test_below_clinical_dose_false_when_no_sub_clinical_canonicals():
     """Empty sub-clinical set → every row gets False (explicit, not
     missing — Flutter can rely on the field being present)."""

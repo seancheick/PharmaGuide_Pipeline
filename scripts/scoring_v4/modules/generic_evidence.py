@@ -261,9 +261,13 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         ):
             raw *= SUB_CLINICAL_DOSE_GUARD_MULTIPLIER
             _append_once(flags, "SUB_CLINICAL_DOSE_DETECTED")
-            canonical = _canonical_from_entry(entry) or lookup_key
-            if canonical:
-                sub_clinical_canonicals.add(canonical)
+            canonical_ids = _matched_canonical_ids(entry)
+            if canonical_ids:
+                sub_clinical_canonicals.update(canonical_ids)
+            else:
+                canonical = _canonical_from_entry(entry) or lookup_key
+                if canonical:
+                    sub_clinical_canonicals.add(canonical)
 
         max_studied_dose = _as_float(
             entry.get("max_studied_clinical_dose")
@@ -1053,7 +1057,10 @@ def _primary_mass_floor(
         canonical = _canonical_from_entry(entry)
         if not canonical:
             continue  # can't identify the ingredient -> don't anchor a floor on it
-        if canonical in sub_clinical_canonicals:
+        if (
+            canonical in sub_clinical_canonicals
+            or bool(set(_matched_canonical_ids(entry)) & sub_clinical_canonicals)
+        ):
             continue
         if _match_active_mass(entry, index) < threshold:
             continue  # the evidenced ingredient is not a mass-dominant active
@@ -1129,6 +1136,27 @@ def _canonical_from_entry(entry: Dict[str, Any]) -> str:
         or entry.get("study_name")
         or entry.get("ingredient")
     )
+
+
+def _matched_canonical_ids(entry: Dict[str, Any]) -> List[str]:
+    """Return the exact enriched label identities owned by an evidence match."""
+    values: List[Any] = []
+    values.extend(_safe_list(entry.get("matched_canonical_ids")))
+    values.extend(_safe_list(entry.get("aggregate_canonical_ids")))
+    for key in (
+        "matched_canonical_id",
+        "canonical_id",
+        "ingredient_canonical_id",
+    ):
+        if entry.get(key):
+            values.append(entry.get(key))
+
+    canonical_ids: List[str] = []
+    for value in values:
+        canonical_id = re.sub(r"[^a-z0-9]+", "_", _norm_text(value)).strip("_")
+        if canonical_id and canonical_id not in canonical_ids:
+            canonical_ids.append(canonical_id)
+    return canonical_ids
 
 
 def _canonical_text(value: Any) -> str:

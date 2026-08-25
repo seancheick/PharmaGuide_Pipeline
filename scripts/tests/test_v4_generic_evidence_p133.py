@@ -261,6 +261,7 @@ def test_subclinical_guard_uses_the_exact_matched_label_identity() -> None:
                     id="INGR_ACETYL_L_CARNITINE",
                     ingredient="Acetyl-L-Carnitine Hydrochloride",
                     standard_name="Acetyl-L-Carnitine",
+                    matched_canonical_ids=["l_carnitine"],
                     effect_direction="mixed",
                     total_enrollment=None,
                     min_clinical_dose=1000,
@@ -271,9 +272,7 @@ def test_subclinical_guard_uses_the_exact_matched_label_identity() -> None:
     )
 
     assert payload["metadata"]["flags"] == ["SUB_CLINICAL_DOSE_DETECTED"]
-    assert payload["metadata"]["sub_clinical_canonicals"] == [
-        "acetyl l carnitine"
-    ]
+    assert payload["metadata"]["sub_clinical_canonicals"] == ["l_carnitine"]
 
 
 def test_clinical_dose_guard_compares_against_label_directed_daily_dose() -> None:
