@@ -104,6 +104,46 @@ def test_generated_private_provenance_passes_canonical_manual_validator():
     dsld_api_sync._validate_external_manual_label(build_manual_label(_export()))
 
 
+def test_present_other_ingredients_become_supported_pipeline_rows():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from product_submission_import import build_manual_label
+
+    payload = _payload()
+    payload["otherIngredientsDisclosure"] = "present"
+    payload["otherIngredients"] = (
+        "Vegetarian capsule (hypromellose, water), microcrystalline cellulose, "
+        "vegetable magnesium stearate, silicon dioxide."
+    )
+
+    label = build_manual_label(_export(payload))
+
+    assert label["otherIngredients"] == {
+        "ingredients": [
+            {"name": "Vegetarian capsule (hypromellose, water)"},
+            {"name": "microcrystalline cellulose"},
+            {"name": "vegetable magnesium stearate"},
+            {"name": "silicon dioxide."},
+        ]
+    }
+    cleaned = EnhancedDSLDNormalizer().normalize_product(label)
+    assert cleaned["label_ledger_audit"]["support_status"] == "supported"
+    assert all(
+        row.get("omission_reason") != "unsupported_source_structure"
+        for row in cleaned["label_ledger_omissions"]
+    )
+
+
+def test_present_other_ingredients_fail_closed_on_unbalanced_grouping():
+    from product_submission_import import SubmissionImportError, build_manual_label
+
+    payload = _payload()
+    payload["otherIngredientsDisclosure"] = "present"
+    payload["otherIngredients"] = "Capsule (hypromellose, silica"
+
+    with pytest.raises(SubmissionImportError, match="unbalanced grouping"):
+        build_manual_label(_export(payload))
+
+
 def row_id(row: dict) -> str:
     return str(row["submission_id"])
 

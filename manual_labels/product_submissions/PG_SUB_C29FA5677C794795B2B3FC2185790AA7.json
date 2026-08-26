@@ -6,19 +6,22 @@
     {
       "category": "blend",
       "forms": [],
-      "ingredientGroup": "",
+      "ingredientGroup": "Blend (Herb/Botanical)",
       "name": "Full Spectrum Ashwagandha Blend",
       "nestedRows": [
         {
           "category": "botanical",
           "forms": [
             {
+              "category": "botanical",
+              "ingredientGroup": "Ashwagandha",
               "name": "KSM-66"
             }
           ],
-          "ingredientGroup": "",
+          "ingredientGroup": "Ashwagandha",
           "name": "Organic Ashwagandha (root) extract",
           "nestedRows": [],
+          "order": 1,
           "quantity": [
             {
               "quantity": 600,
@@ -29,9 +32,10 @@
         {
           "category": "botanical",
           "forms": [],
-          "ingredientGroup": "",
+          "ingredientGroup": "Ashwagandha",
           "name": "Organic Ashwagandha (root) powder",
           "nestedRows": [],
+          "order": 2,
           "quantity": [
             {
               "quantity": 400,
@@ -40,6 +44,7 @@
           ]
         }
       ],
+      "order": 1,
       "quantity": [
         {
           "quantity": 1000,
@@ -48,15 +53,20 @@
       ]
     },
     {
-      "category": "amino acid",
+      "category": "non-nutrient/non-botanical",
+      "description": "from 125 mg of PharmaGABA standardized to 80% GABA",
       "forms": [
         {
-          "name": "PharmaGABA"
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "GABA",
+          "name": "PharmaGABA",
+          "percent": 80
         }
       ],
-      "ingredientGroup": "",
+      "ingredientGroup": "GABA",
       "name": "GABA (gamma-aminobutyric acid)",
       "nestedRows": [],
+      "order": 2,
       "quantity": [
         {
           "quantity": 100,
@@ -68,12 +78,15 @@
       "category": "botanical",
       "forms": [
         {
+          "category": "botanical",
+          "ingredientGroup": "Ginger",
           "name": "Gingever"
         }
       ],
-      "ingredientGroup": "",
+      "ingredientGroup": "Ginger",
       "name": "Ginger (root) extract",
       "nestedRows": [],
+      "order": 3,
       "quantity": [
         {
           "quantity": 20,
@@ -89,30 +102,31 @@
         "name": "Vegetarian capsule (hypromellose)"
       },
       {
-        "name": "Microcrystalline cellulose"
+        "name": "microcrystalline cellulose"
       },
       {
-        "name": "Vegetable magnesium stearate"
+        "name": "vegetable magnesium stearate"
       },
       {
-        "name": "Silicon dioxide"
+        "name": "silicon dioxide."
       }
     ]
   },
+  "otherIngredientsDisclosure": "present",
   "physicalState": {
-    "langualCode": "",
     "name": "Capsule"
   },
   "productType": {
-    "langualCode": "",
     "name": "Combination Dietary Supplement"
   },
   "servingSizes": [
     {
+      "inSFB": true,
       "maxDailyServings": 1,
       "maxQuantity": 2,
       "minDailyServings": 1,
       "minQuantity": 2,
+      "order": 1,
       "unit": "Capsule(s)"
     }
   ],
@@ -120,11 +134,23 @@
   "statements": [
     {
       "notes": "(Adults) Take two (2) capsules once daily.",
-      "type": "Suggested Use"
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "Usage Warnings: Check with your doctor before using this product if you are taking medication or have any medical conditions. Do not use if you are pregnant or nursing. Do not exceed the recommended daily intake. Not intended for persons under 18. KEEP OUT OF REACH OF CHILDREN. Store in a cool and dry place after opening. The recommended dosage is two capsules per day. But for more personalized results, start with one capsule per day and slowly ramp up (adding an additional capsule per day as needed) until you feel the effects are right for you. Use daily for optimal results.",
+      "type": "Precautions re: All Other"
     },
     {
       "notes": "This product is manufactured in a facility that processes fish extracts and eggshells.",
-      "type": "Precautions"
+      "type": "Precautions re: Allergies"
+    },
+    {
+      "notes": "Supports calmness. With clinically studied KSM-66. Helps maintain healthy cortisol levels. Enhanced with ginger extract. Ashwagandha (Indian Ginseng) is nature's answer to modern stress. When combined with PharmaGABA, a natural byproduct of fermentation that helps manage stress, these two ingredients support the body's response to physical and mental stressors, while boosting stamina, endurance, cognitive health, and overall well-being.",
+      "type": "Formulation re: Other"
+    },
+    {
+      "notes": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease.",
+      "type": "FDA Disclaimer Statement"
     }
   ],
   "upcSku": "0850021920654",
@@ -133,7 +159,7 @@
   "manual_product_provenance": {
     "source_kind": "private_product_submission",
     "source_record_id": "c29fa567-7c79-4795-b2b3-fc2185790aa7",
-    "label_verified_at": "2026-08-25",
+    "label_verified_at": "2026-08-26",
     "review_status": "verified",
     "reviewer": "PharmaGuide Clinical Team",
     "reviewer_record_id": "b735948d-46a7-421b-ae2c-749faff5f51b"
@@ -141,10 +167,10 @@
   "label_record_metadata": {
     "source_name": "PharmaGuide verified product submission",
     "source_record_id": "c29fa567-7c79-4795-b2b3-fc2185790aa7",
-    "source_date": "2026-08-25",
-    "source_updated_date": "2026-08-25",
+    "source_date": "2026-08-26",
+    "source_updated_date": "2026-08-26",
     "product_status": "active",
     "lineage_key": "pharmaguide_submission:c29fa567-7c79-4795-b2b3-fc2185790aa7",
-    "reviewed_at": "2026-08-25T16:09:28.985355+00:00"
+    "reviewed_at": "2026-08-26T13:44:52.91035+00:00"
   }
 }

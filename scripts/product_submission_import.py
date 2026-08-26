@@ -502,6 +502,55 @@ def _validate_label_payload(payload: object) -> dict[str, Any]:
     return normalized
 
 
+def _pipeline_other_ingredient_rows(label_text: str) -> list[dict[str, str]]:
+    """Convert reviewed disclosure text into the cleaner's supported row shape.
+
+    The approval contract intentionally stores the disclosure exactly as the
+    reviewer read it. The cleaner contract, however, accepts a list of rows.
+    Split only on top-level commas/semicolons so parenthesized source details
+    remain attached to their ingredient. Ambiguous, unbalanced grouping fails
+    closed instead of silently changing label meaning.
+    """
+    if not label_text:
+        return []
+
+    matching = {")": "(", "]": "[", "}": "{"}
+    openings = set(matching.values())
+    stack: list[str] = []
+    parts: list[str] = []
+    start = 0
+
+    for index, character in enumerate(label_text):
+        if character in openings:
+            stack.append(character)
+        elif character in matching:
+            if not stack or stack[-1] != matching[character]:
+                raise SubmissionImportError(
+                    "otherIngredients has unbalanced grouping punctuation"
+                )
+            stack.pop()
+        elif character in {",", ";"} and not stack:
+            part = label_text[start:index].strip()
+            if not part:
+                raise SubmissionImportError(
+                    "otherIngredients contains an empty ingredient segment"
+                )
+            parts.append(part)
+            start = index + 1
+
+    if stack:
+        raise SubmissionImportError(
+            "otherIngredients has unbalanced grouping punctuation"
+        )
+    final_part = label_text[start:].strip()
+    if not final_part:
+        raise SubmissionImportError(
+            "otherIngredients contains an empty ingredient segment"
+        )
+    parts.append(final_part)
+    return [{"name": part} for part in parts]
+
+
 def _parse_approved_at(value: object) -> tuple[str, str]:
     text = _required_string(value, "approved_at", max_length=40)
     try:
@@ -579,6 +628,12 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
     if _canonical_json(decoded_payload) != canonical:
         raise SubmissionImportError("approved payload is not canonical JSON")
     payload = _validate_label_payload(decoded_payload)
+    pipeline_payload = dict(payload)
+    pipeline_payload["otherIngredients"] = {
+        "ingredients": _pipeline_other_ingredient_rows(
+            str(payload.get("otherIngredients") or "")
+        )
+    }
 
     approved_at, verified_date = _parse_approved_at(export_row["approved_at"])
     if kind == "label_mismatch":
@@ -601,7 +656,7 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
 
     return {
         "id": product_id,
-        **payload,
+        **pipeline_payload,
         "upcSku": upc,
         "src": f"local/manual_labels/product_submissions/{product_id}",
         "source_type": "external_manual",
@@ -624,7 +679,7 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
             "source_date": verified_date,
             "source_updated_date": verified_date,
             "product_status": "discontinued"
-            if payload["offMarket"]
+            if pipeline_payload["offMarket"]
             else "active",
             "lineage_key": lineage_key,
             "reviewed_at": approved_at,
