@@ -47,10 +47,12 @@ Public API
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field as dataclass_field
 from datetime import date, datetime, timedelta, timezone
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Tuple, Union
 
+from .blob_inventory import HEX_BLOB_SHARDS
+from .transient import retry_transient
 from .quarantine import (
     DEFAULT_BUCKET,
     QUARANTINE_PREFIX,
@@ -67,6 +69,11 @@ _SHARD_NAME_RE = re.compile(r"^[0-9a-f]{2}$")
 # ---------------------------------------------------------------------------
 # Result type
 # ---------------------------------------------------------------------------
+
+
+#: Attempts per quarantine shard listing. Transient 544s are routine on this
+#: bucket; a give-up is recorded as a listing failure, never as "empty".
+SWEEP_LIST_MAX_ATTEMPTS = 4
 
 
 @dataclass(frozen=True)
@@ -92,6 +99,13 @@ class SweepResult:
     failed_per_date: Dict[str, int]
     dry_run: bool
     ttl_days: int
+    #: "{date}/{shard}" entries that could not be listed. Non-empty means the
+    #: sweep saw only part of the quarantine and must not be called done.
+    listing_failures: List[str] = dataclass_field(default_factory=list)
+
+    @property
+    def complete(self) -> bool:
+        return not self.listing_failures
 
     @property
     def total_eligible(self) -> int:
@@ -167,52 +181,46 @@ def _list_blobs_under_quarantine_date(
     *,
     quarantine_root: str = QUARANTINE_PREFIX,
     bucket: str = DEFAULT_BUCKET,
-) -> List[str]:
-    """List every blob path under ``shared/quarantine/{date_str}/``.
+) -> Tuple[List[str], List[str]]:
+    """List every blob under ``shared/quarantine/{date_str}/``.
 
-    Walks the shard subdirectories. Returns a sorted list of full storage
-    paths so the result is deterministic across runs (idempotency tests
-    rely on this).
+    Returns ``(sorted_paths, failed_shards)``.
 
-    Defensive: ignores entries whose name doesn't match the expected
-    shape (2-char shard, ``{hash}.json`` leaf).
+    Enumerates the 00..ff shard directories deterministically rather than
+    listing the date root. Measured 2026-08-26: both live quarantine date
+    roots return HTTP 544 DatabaseTimeout, because storage-api has to roll
+    ~100k objects up into folder entries. Listing the root and catching the
+    error returned [], which the sweeper reported as "nothing expired" — so
+    the 2026-07-17 batch sat unswept long past its TTL.
+
+    A shard that cannot be read is returned in ``failed_shards``, never
+    silently dropped: unread is unswept work, not finished work.
     """
     date_root = f"{quarantine_root}/{date_str}"
-    try:
-        items = client.storage.from_(bucket).list(
-            path=date_root,
-            options={"limit": 1000, "offset": 0},
-        )
-    except Exception:  # noqa: BLE001 — list errors → treat as empty
-        return []
-    if not items:
-        return []
-
     blob_paths: List[str] = []
-    for item in items:
-        name = (item or {}).get("name")
-        if not isinstance(name, str) or not _SHARD_NAME_RE.match(name):
-            continue
-        shard_root = f"{date_root}/{name}"
+    failed_shards: List[str] = []
+
+    for shard in HEX_BLOB_SHARDS:
+        shard_root = f"{date_root}/{shard}"
         try:
-            shard_items = client.storage.from_(bucket).list(
-                path=shard_root,
-                options={"limit": 1000, "offset": 0},
+            shard_items = retry_transient(
+                lambda shard_root=shard_root: client.storage.from_(bucket).list(
+                    path=shard_root,
+                    options={"limit": 1000, "offset": 0},
+                ),
+                max_attempts=SWEEP_LIST_MAX_ATTEMPTS,
             )
-        except Exception:  # noqa: BLE001
+        except Exception:  # noqa: BLE001 — recorded, not swallowed.
+            failed_shards.append(shard)
             continue
-        if not shard_items:
-            continue
-        for sitem in shard_items:
+        for sitem in shard_items or []:
             sname = (sitem or {}).get("name")
-            if not isinstance(sname, str):
-                continue
-            if not sname.endswith(".json"):
+            if not isinstance(sname, str) or not sname.endswith(".json"):
                 continue
             blob_paths.append(f"{shard_root}/{sname}")
 
     blob_paths.sort()
-    return blob_paths
+    return blob_paths, failed_shards
 
 
 # ---------------------------------------------------------------------------
@@ -264,12 +272,14 @@ def sweep_quarantine(
     candidates_per_date: Dict[str, int] = {}
     deleted_per_date: Dict[str, int] = {}
     failed_per_date: Dict[str, int] = {}
+    listing_failures: List[str] = []
 
     for date_str in eligible_dates:
-        blobs = _list_blobs_under_quarantine_date(
+        blobs, failed_shards = _list_blobs_under_quarantine_date(
             client, date_str,
             quarantine_root=quarantine_root, bucket=bucket,
         )
+        listing_failures.extend(f"{date_str}/{s}" for s in failed_shards)
         candidates_per_date[date_str] = len(blobs)
 
         if dry_run:
@@ -295,4 +305,5 @@ def sweep_quarantine(
         failed_per_date=failed_per_date,
         dry_run=dry_run,
         ttl_days=ttl_days,
+        listing_failures=listing_failures,
     )

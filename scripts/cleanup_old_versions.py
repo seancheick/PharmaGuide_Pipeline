@@ -30,14 +30,12 @@ BUCKET = "pharmaguide"
 
 # Supabase storage list calls can hang in SSL reads at production scale.
 # Keep page reads bounded so cleanup either progresses visibly or fails closed.
-STORAGE_LIST_PAGE_TIMEOUT_SECONDS = int(
-    os.environ.get("PG_STORAGE_LIST_PAGE_TIMEOUT_SECONDS", "45")
-)
+# Page timeout and list-retry budget now live in release_safety.blob_inventory
+# (PG_STORAGE_LIST_PAGE_TIMEOUT_SECONDS / PG_STORAGE_LIST_MAX_RETRIES). They
+# were redeclared here with a DIFFERENT default for the same env var, which is
+# how two knobs that look like one drift apart.
 STORAGE_LIST_PROGRESS_EVERY_SHARDS = int(
     os.environ.get("PG_STORAGE_LIST_PROGRESS_EVERY_SHARDS", "16")
-)
-STORAGE_LIST_MAX_RETRIES = int(
-    os.environ.get("PG_STORAGE_LIST_MAX_RETRIES", "8")
 )
 SUPABASE_TABLE_MAX_RETRIES = int(
     os.environ.get("PG_SUPABASE_TABLE_MAX_RETRIES", "5")
@@ -936,7 +934,17 @@ def main(argv=None):
             )
             sweep_deleted = sweep_result.total_deleted
             sweep_failed = sweep_result.total_failed
-            if sweep_result.total_eligible == 0:
+            if not sweep_result.complete:
+                # Do not report "nothing expired" when we simply could not
+                # see it. Both live quarantine date roots 544 on a flat
+                # listing; a shard we failed to read is unswept work.
+                print(
+                    f"  [WARN] Quarantine sweep saw only part of the "
+                    f"quarantine — {len(sweep_result.listing_failures)} "
+                    f"shard listing(s) failed. Swept {sweep_deleted}; "
+                    "the rest remain for the next run."
+                )
+            elif sweep_result.total_eligible == 0:
                 print("  No expired quarantine entries found.")
             else:
                 print(
