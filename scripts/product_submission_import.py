@@ -11,12 +11,15 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 import os
 import re
 import sqlite3
+import sys
 import tempfile
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from datetime import datetime
@@ -25,6 +28,7 @@ from typing import Any, Callable, Iterable
 from uuid import UUID
 
 import env_loader  # noqa: F401  # Load the project .env without overriding shell vars.
+from PIL import Image, ImageOps
 
 
 SCHEMA_VERSION = "manual_label_v1"
@@ -32,6 +36,10 @@ RECEIPT_FILE = ".product_submission_import_receipts"
 REVIEWER_DISPLAY_NAME = "PharmaGuide Clinical Team"
 MAX_CANONICAL_BYTES = 512 * 1024
 MAX_EXPORT_PAGES = 1000
+MAX_PRODUCT_IMAGE_BYTES = 10 * 1024 * 1024
+MAX_PRODUCT_IMAGE_PIXELS = 40_000_000
+PRODUCT_IMAGE_MAX_EDGE = 900
+PRODUCT_IMAGE_WEBP_QUALITY = 88
 _ALLOWED_KINDS = frozenset({"label_mismatch", "missing_product"})
 _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
     {
@@ -660,6 +668,25 @@ def _atomic_write_text(path: Path, content: str) -> None:
             temporary_path.unlink()
 
 
+def _atomic_write_bytes(path: Path, content: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        dir=path.parent,
+    )
+    temporary_path = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary_path, path)
+    finally:
+        if temporary_path.exists():
+            temporary_path.unlink()
+
+
 def materialize_approved_submissions(
     export_rows: Iterable[object],
     *,
@@ -922,6 +949,256 @@ def _service_rpc(function_name: str, payload: dict[str, object]) -> object:
         raise SubmissionImportError(f"{function_name} RPC failed") from exc
 
 
+def _download_private_storage_object(bucket_id: str, object_path: str) -> bytes:
+    if bucket_id not in {
+        "product-submission-photos",
+        "product-submission-reviewer-images",
+    }:
+        raise SubmissionImportError("approved product image bucket is invalid")
+    base_url = os.environ.get("SUPABASE_URL", "").rstrip("/")
+    if not base_url:
+        raise SubmissionImportError("SUPABASE_URL is required")
+    encoded_path = urllib.parse.quote(object_path, safe="/")
+    request = urllib.request.Request(
+        f"{base_url}/storage/v1/object/{bucket_id}/{encoded_path}",
+        headers=_supabase_admin_headers(),
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            content = response.read(MAX_PRODUCT_IMAGE_BYTES + 1)
+    except (OSError, urllib.error.URLError) as exc:
+        raise SubmissionImportError("approved product image download failed") from exc
+    if not 0 < len(content) <= MAX_PRODUCT_IMAGE_BYTES:
+        raise SubmissionImportError("approved product image size is invalid")
+    return content
+
+
+def _render_catalog_webp(content: bytes, expected_content_type: str) -> bytes:
+    expected_formats = {
+        "image/jpeg": "JPEG",
+        "image/png": "PNG",
+        "image/webp": "WEBP",
+    }
+    expected_format = expected_formats.get(expected_content_type)
+    if expected_format is None:
+        raise SubmissionImportError("approved product image type is invalid")
+    try:
+        with Image.open(io.BytesIO(content)) as opened:
+            if opened.format != expected_format:
+                raise SubmissionImportError(
+                    "approved product image type does not match its bytes"
+                )
+            if opened.width * opened.height > MAX_PRODUCT_IMAGE_PIXELS:
+                raise SubmissionImportError(
+                    "approved product image dimensions are too large"
+                )
+            image = ImageOps.exif_transpose(opened)
+            image.load()
+            if image.mode in {"RGBA", "LA", "P"}:
+                alpha = image.convert("RGBA")
+                background = Image.new("RGBA", alpha.size, "white")
+                image = Image.alpha_composite(background, alpha).convert("RGB")
+            else:
+                image = image.convert("RGB")
+            image.thumbnail(
+                (PRODUCT_IMAGE_MAX_EDGE, PRODUCT_IMAGE_MAX_EDGE),
+                Image.Resampling.LANCZOS,
+            )
+            rendered = io.BytesIO()
+            image.save(
+                rendered,
+                format="WEBP",
+                quality=PRODUCT_IMAGE_WEBP_QUALITY,
+                method=6,
+            )
+            return rendered.getvalue()
+    except SubmissionImportError:
+        raise
+    except (OSError, Image.DecompressionBombError) as exc:
+        raise SubmissionImportError("approved product image cannot be decoded") from exc
+
+
+def _load_product_image_index(path: Path) -> dict[str, dict[str, object]]:
+    if not path.exists():
+        return {}
+    try:
+        decoded = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SubmissionImportError("product image index is unreadable") from exc
+    if not isinstance(decoded, dict) or not all(
+        isinstance(product_id, str) and isinstance(entry, dict)
+        for product_id, entry in decoded.items()
+    ):
+        raise SubmissionImportError("product image index is malformed")
+    return decoded
+
+
+def _refresh_catalog_manifest_checksum(catalog_db: Path) -> None:
+    manifest_path = catalog_db.parent / "export_manifest.json"
+    if not manifest_path.exists():
+        return
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SubmissionImportError("catalog export manifest is unreadable") from exc
+    if not isinstance(manifest, dict):
+        raise SubmissionImportError("catalog export manifest is malformed")
+    digest = hashlib.sha256(catalog_db.read_bytes()).hexdigest()
+    manifest["checksum"] = f"sha256:{digest}"
+    manifest["checksum_sha256"] = digest
+    _atomic_write_text(
+        manifest_path,
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+    )
+
+
+def copy_approved_product_images(
+    *,
+    output_dir: str | Path,
+    catalog_db: str | Path,
+    product_images_dir: str | Path,
+    rpc: Callable[[str, dict[str, object]], object] = _service_rpc,
+    download: Callable[[str, str], bytes] = _download_private_storage_object,
+) -> dict[str, int]:
+    """Copy approved missing-product imagery into the canonical release bundle.
+
+    Image failures are isolated from label publication. Each failed object stays
+    eligible for a later release retry until the submission evidence retention
+    window closes.
+    """
+    receipts = _read_receipts(Path(output_dir) / RECEIPT_FILE)["submissions"]
+    image_dir = Path(product_images_dir)
+    index_path = image_dir / "product_image_index.json"
+    image_index = _load_product_image_index(index_path)
+    catalog_path = Path(catalog_db)
+    if not catalog_path.is_file():
+        raise SubmissionImportError("catalog database is missing")
+
+    copied = 0
+    failed = 0
+    skipped = 0
+    try:
+        connection = sqlite3.connect(catalog_path)
+        connection.execute(
+            "select image_thumbnail_url from products_core limit 0"
+        )
+    except sqlite3.Error as exc:
+        raise SubmissionImportError("catalog image schema is unavailable") from exc
+
+    try:
+        for submission_id, receipt in sorted(receipts.items()):
+            if not isinstance(receipt, dict):
+                raise SubmissionImportError("import receipt row is malformed")
+            product_id = str(receipt.get("product_id") or "")
+            if not product_id.startswith("PG_SUB_"):
+                continue
+            filename = f"{product_id}.webp"
+            webp_path = image_dir / filename
+            expected_url = f"product-images/{filename}"
+            existing = connection.execute(
+                "select image_thumbnail_url from products_core where dsld_id = ?",
+                (product_id,),
+            ).fetchone()
+            if existing is None:
+                failed += 1
+                print(
+                    f"WARNING: approved image skipped; catalog row missing: {product_id}",
+                    file=sys.stderr,
+                )
+                continue
+            indexed = image_index.get(product_id)
+            if (
+                existing[0] == expected_url
+                and isinstance(indexed, dict)
+                and indexed.get("filename") == filename
+                and webp_path.is_file()
+                and indexed.get("sha256")
+                == hashlib.sha256(webp_path.read_bytes()).hexdigest()
+            ):
+                skipped += 1
+                continue
+            try:
+                response = rpc(
+                    "get_approved_product_submission_image",
+                    {"p_submission_id": submission_id},
+                )
+                if (
+                    not isinstance(response, list)
+                    or len(response) != 1
+                    or not isinstance(response[0], dict)
+                ):
+                    raise SubmissionImportError(
+                        "approval has no singular product image"
+                    )
+                source = response[0]
+                if set(source) != {
+                    "bucket_id",
+                    "object_path",
+                    "content_type",
+                    "content_sha256",
+                }:
+                    raise SubmissionImportError(
+                        "approved product image manifest is malformed"
+                    )
+                bucket_id = _required_string(
+                    source["bucket_id"], "image bucket", max_length=100
+                )
+                object_path = _required_string(
+                    source["object_path"], "image object path", max_length=500
+                )
+                content_type = _required_string(
+                    source["content_type"], "image content type", max_length=40
+                )
+                expected_hash = _required_string(
+                    source["content_sha256"], "image hash", max_length=64
+                ).lower()
+                if not re.fullmatch(r"[0-9a-f]{64}", expected_hash):
+                    raise SubmissionImportError("approved product image hash is invalid")
+                source_bytes = download(bucket_id, object_path)
+                if hashlib.sha256(source_bytes).hexdigest() != expected_hash:
+                    raise SubmissionImportError(
+                        "approved product image hash does not match"
+                    )
+                webp_bytes = _render_catalog_webp(source_bytes, content_type)
+                _atomic_write_bytes(webp_path, webp_bytes)
+                webp_hash = hashlib.sha256(webp_bytes).hexdigest()
+                updated = connection.execute(
+                    "update products_core set image_thumbnail_url = ? "
+                    "where dsld_id = ?",
+                    (expected_url, product_id),
+                ).rowcount
+                if updated != 1:
+                    raise SubmissionImportError(
+                        "approved product image catalog binding failed"
+                    )
+                image_index[product_id] = {
+                    "filename": filename,
+                    "size_bytes": len(webp_bytes),
+                    "sha256": webp_hash,
+                }
+                copied += 1
+            except (OSError, sqlite3.Error, SubmissionImportError) as exc:
+                failed += 1
+                print(
+                    f"WARNING: approved image copy failed for {product_id}: {exc}",
+                    file=sys.stderr,
+                )
+        connection.commit()
+    finally:
+        connection.close()
+
+    if copied:
+        _atomic_write_text(
+            index_path,
+            json.dumps(image_index, ensure_ascii=False, indent=2, sort_keys=True)
+            + "\n",
+        )
+    if copied or skipped:
+        _refresh_catalog_manifest_checksum(catalog_path)
+    return {"copied": copied, "failed": failed, "skipped": skipped}
+
+
 def mark_released_submissions_promoted(
     *,
     output_dir: str | Path,
@@ -1049,6 +1326,7 @@ def main(argv: list[str] | None = None) -> int:
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--fetch", action="store_true")
     source.add_argument("--input", type=Path)
+    source.add_argument("--copy-images", action="store_true")
     source.add_argument("--mark-promoted", action="store_true")
     parser.add_argument(
         "--output-dir",
@@ -1065,6 +1343,11 @@ def main(argv: list[str] | None = None) -> int:
         "--detail-blobs-dir",
         type=Path,
         default=Path("scripts/dist/detail_blobs"),
+    )
+    parser.add_argument(
+        "--product-images-dir",
+        type=Path,
+        default=Path("scripts/dist/product_images"),
     )
     args = parser.parse_args(argv)
 
@@ -1084,6 +1367,14 @@ def main(argv: list[str] | None = None) -> int:
                     sort_keys=True,
                 )
             )
+            return 0
+        if args.copy_images:
+            result = copy_approved_product_images(
+                output_dir=args.output_dir,
+                catalog_db=args.catalog_db,
+                product_images_dir=args.product_images_dir,
+            )
+            print(json.dumps(result, sort_keys=True))
             return 0
         rows = (
             fetch_approved_submissions(limit=args.limit)

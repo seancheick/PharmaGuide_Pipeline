@@ -138,6 +138,7 @@ ABSORPTION_ENHANCERS_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/absorption_enhanc
 IQM_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/ingredient_quality_map.json"
 IDENTITY_AUDIT_SCRIPT="$REPO_ROOT/scripts/audit_identity_integrity.py"
 SUBMISSION_OUTPUT_DIR="$REPO_ROOT/manual_labels/product_submissions"
+SUBMISSION_RECEIPTS="$SUBMISSION_OUTPUT_DIR/.product_submission_import_receipts"
 SUBMISSION_PIPELINE_PREFIX="$PRODUCTS_DIR/output_Product_Submissions"
 SUBMISSION_SCORE_MANIFEST="$SUBMISSION_PIPELINE_PREFIX"_scored/scored/.stage_manifest.json
 
@@ -528,6 +529,21 @@ else
   skip "Step 3/8: DSLD product image extraction skipped (--skip-product-images)"
 fi
 
+# Approved missing-product labels use the same image bundle and index as DSLD
+# products. The importer re-downloads the singular human-approved private
+# source, verifies its hash, renders the bounded WebP, updates the index, and
+# binds the catalog row before any cloud upload can observe the candidate.
+if (( SKIP_PRODUCT_IMAGES == 0 )) && [[ -f "$SUBMISSION_RECEIPTS" ]]; then
+  info "Product submissions: copying approved catalog images..."
+  "$PG_PYTHON" scripts/product_submission_import.py --copy-images \
+    --output-dir "$SUBMISSION_OUTPUT_DIR" \
+    --catalog-db "$DIST_CATALOG" \
+    --product-images-dir "$DIST_PRODUCT_IMAGES_DIR"
+  ok "Product submissions: approved catalog images reconciled"
+else
+  skip "Product submissions: approved image copy skipped"
+fi
+
 # Step 3 mutates the staged dist catalog in place when it backfills
 # image_thumbnail_url and refreshes export_manifest.json. Mirror that canonical
 # catalog back to final_db_output before freshness compares the two manifests.
@@ -842,7 +858,6 @@ fi
 # present in the released catalog database. The adapter verifies that fact
 # before calling the immutable promotion RPC; unprocessed or failed products
 # remain approved-but-unpromoted for the next release.
-SUBMISSION_RECEIPTS="$SUBMISSION_OUTPUT_DIR/.product_submission_import_receipts"
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )) \
     && [[ -f "$SUBMISSION_RECEIPTS" ]]; then
   info "Closing approved product-submission receipts against the released catalog..."
