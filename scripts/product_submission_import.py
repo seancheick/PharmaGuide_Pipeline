@@ -11,12 +11,15 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 import os
 import re
 import sqlite3
+import sys
 import tempfile
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from datetime import datetime
@@ -25,6 +28,7 @@ from typing import Any, Callable, Iterable
 from uuid import UUID
 
 import env_loader  # noqa: F401  # Load the project .env without overriding shell vars.
+from PIL import Image, ImageOps
 
 
 SCHEMA_VERSION = "manual_label_v1"
@@ -32,6 +36,10 @@ RECEIPT_FILE = ".product_submission_import_receipts"
 REVIEWER_DISPLAY_NAME = "PharmaGuide Clinical Team"
 MAX_CANONICAL_BYTES = 512 * 1024
 MAX_EXPORT_PAGES = 1000
+MAX_PRODUCT_IMAGE_BYTES = 10 * 1024 * 1024
+MAX_PRODUCT_IMAGE_PIXELS = 40_000_000
+PRODUCT_IMAGE_MAX_EDGE = 900
+PRODUCT_IMAGE_WEBP_QUALITY = 88
 _ALLOWED_KINDS = frozenset({"label_mismatch", "missing_product"})
 _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
     {
@@ -41,6 +49,7 @@ _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
         "nutritionalInfo",
         "offMarket",
         "otherIngredients",
+        "otherIngredientsDisclosure",
         "physicalState",
         "productType",
         "servingSizes",
@@ -48,6 +57,67 @@ _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
         "statements",
     }
 )
+_ALLOWED_INGREDIENT_FIELDS = frozenset(
+    {
+        "alternateNames",
+        "category",
+        "description",
+        "forms",
+        "ingredientGroup",
+        "ingredientId",
+        "name",
+        "nestedRows",
+        "notes",
+        "order",
+        "quantity",
+        "uniiCode",
+    }
+)
+_ALLOWED_QUANTITY_FIELDS = frozenset(
+    {
+        "dailyValueTargetGroup",
+        "operator",
+        "quantity",
+        "servingSizeOrder",
+        "servingSizeQuantity",
+        "servingSizeUnit",
+        "unit",
+    }
+)
+_ALLOWED_FORM_FIELDS = frozenset(
+    {
+        "category",
+        "ingredientGroup",
+        "ingredientId",
+        "name",
+        "order",
+        "percent",
+        "prefix",
+        "uniiCode",
+    }
+)
+_ALLOWED_SERVING_FIELDS = frozenset(
+    {
+        "inSFB",
+        "maxDailyServings",
+        "maxQuantity",
+        "minDailyServings",
+        "minQuantity",
+        "notes",
+        "order",
+        "unit",
+    }
+)
+_ALLOWED_STATEMENT_FIELDS = frozenset({"notes", "type"})
+_ALLOWED_CLASSIFICATION_FIELDS = frozenset(
+    {"langualCode", "langualCodeDescription", "name"}
+)
+_RESOLVED_OTHER_INGREDIENT_DISCLOSURES = frozenset(
+    {"present", "declared_none", "included_on_facts_panel"}
+)
+_MAX_INGREDIENT_DEPTH = 5
+_MAX_TOTAL_INGREDIENT_ROWS = 500
+_POSITIVE_NUMBER_MINIMUM = 2.220446049250313e-16
 _UUID_PATTERN = re.compile(
     r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
     re.IGNORECASE,
@@ -110,6 +180,242 @@ def _is_valid_gtin(value: str) -> bool:
     return (10 - weighted_sum % 10) % 10 == int(value[-1])
 
 
+def _reject_unknown_keys(
+    value: dict[str, Any],
+    allowed: frozenset[str],
+    field: str,
+) -> None:
+    unknown = sorted(set(value) - allowed)
+    if unknown:
+        raise SubmissionImportError(f"{field} contains unknown field {unknown[0]}")
+
+
+def _optional_string(
+    value: object,
+    field: str,
+    *,
+    max_length: int,
+) -> None:
+    if value is None:
+        return
+    if not isinstance(value, str) or len(value) > max_length:
+        raise SubmissionImportError(f"{field} must be a string")
+
+
+def _finite_number(value: object, field: str, *, minimum: float) -> float:
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not float(value) >= minimum
+        or not float("-inf") < float(value) < float("inf")
+    ):
+        raise SubmissionImportError(
+            f"{field} must be a finite number >= {minimum}"
+        )
+    return float(value)
+
+
+def _optional_positive_integer(value: object, field: str) -> None:
+    if value is None:
+        return
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise SubmissionImportError(f"{field} must be a positive integer")
+
+
+def _validate_quantity(value: object, path: str) -> None:
+    if not isinstance(value, dict):
+        raise SubmissionImportError(f"{path} must be an object")
+    _reject_unknown_keys(value, _ALLOWED_QUANTITY_FIELDS, path)
+    _finite_number(value.get("quantity"), f"{path}.quantity", minimum=0)
+    _required_string(value.get("unit"), f"{path}.unit", max_length=80)
+    _optional_positive_integer(
+        value.get("servingSizeOrder"), f"{path}.servingSizeOrder"
+    )
+    if value.get("servingSizeQuantity") is not None:
+        _finite_number(
+            value["servingSizeQuantity"],
+            f"{path}.servingSizeQuantity",
+            minimum=0,
+        )
+    _optional_string(value.get("operator"), f"{path}.operator", max_length=20)
+    _optional_string(
+        value.get("servingSizeUnit"),
+        f"{path}.servingSizeUnit",
+        max_length=80,
+    )
+    targets = value.get("dailyValueTargetGroup")
+    if targets is not None and (not isinstance(targets, list) or len(targets) > 30):
+        raise SubmissionImportError(
+            f"{path}.dailyValueTargetGroup must be an array"
+        )
+
+
+def _validate_form(value: object, path: str) -> None:
+    if not isinstance(value, dict):
+        raise SubmissionImportError(f"{path} must be an object")
+    _reject_unknown_keys(value, _ALLOWED_FORM_FIELDS, path)
+    _required_string(value.get("name"), f"{path}.name", max_length=300)
+    _optional_positive_integer(value.get("order"), f"{path}.order")
+    _optional_positive_integer(value.get("ingredientId"), f"{path}.ingredientId")
+    _optional_string(value.get("prefix"), f"{path}.prefix", max_length=80)
+    _optional_string(value.get("category"), f"{path}.category", max_length=120)
+    _optional_string(
+        value.get("ingredientGroup"), f"{path}.ingredientGroup", max_length=300
+    )
+    _optional_string(value.get("uniiCode"), f"{path}.uniiCode", max_length=80)
+    if value.get("percent") is not None:
+        percent = _finite_number(value["percent"], f"{path}.percent", minimum=0)
+        if percent > 100:
+            raise SubmissionImportError(f"{path}.percent must be <= 100")
+
+
+def _validate_ingredient_row(
+    value: object,
+    path: str,
+    *,
+    depth: int,
+    row_counter: list[int],
+) -> None:
+    if depth > _MAX_INGREDIENT_DEPTH:
+        raise SubmissionImportError(f"{path} exceeds maximum nesting depth")
+    row_counter[0] += 1
+    if row_counter[0] > _MAX_TOTAL_INGREDIENT_ROWS:
+        raise SubmissionImportError("ingredient rows exceed maximum total")
+    if not isinstance(value, dict):
+        raise SubmissionImportError(f"{path} must be an object")
+    _reject_unknown_keys(value, _ALLOWED_INGREDIENT_FIELDS, path)
+    _required_string(value.get("name"), f"{path}.name", max_length=300)
+    _required_string(
+        value.get("ingredientGroup"), f"{path}.ingredientGroup", max_length=300
+    )
+    _optional_positive_integer(value.get("order"), f"{path}.order")
+    _optional_positive_integer(value.get("ingredientId"), f"{path}.ingredientId")
+    _optional_string(value.get("category"), f"{path}.category", max_length=120)
+    _optional_string(
+        value.get("description"), f"{path}.description", max_length=2000
+    )
+    _optional_string(value.get("notes"), f"{path}.notes", max_length=2000)
+    _optional_string(value.get("uniiCode"), f"{path}.uniiCode", max_length=80)
+
+    quantities = value.get("quantity")
+    if not isinstance(quantities, list) or len(quantities) > 20:
+        raise SubmissionImportError(f"{path}.quantity must contain 0..20 rows")
+    for index, quantity in enumerate(quantities):
+        _validate_quantity(quantity, f"{path}.quantity[{index}]")
+
+    forms = value.get("forms")
+    if not isinstance(forms, list) or len(forms) > 20:
+        raise SubmissionImportError(f"{path}.forms must contain 0..20 rows")
+    for index, form in enumerate(forms):
+        _validate_form(form, f"{path}.forms[{index}]")
+
+    nested_rows = value.get("nestedRows")
+    if not isinstance(nested_rows, list) or len(nested_rows) > 100:
+        raise SubmissionImportError(f"{path}.nestedRows must contain 0..100 rows")
+    for index, nested in enumerate(nested_rows):
+        _validate_ingredient_row(
+            nested,
+            f"{path}.nestedRows[{index}]",
+            depth=depth + 1,
+            row_counter=row_counter,
+        )
+
+    alternate_names = value.get("alternateNames")
+    if alternate_names is not None:
+        if not isinstance(alternate_names, list) or len(alternate_names) > 50:
+            raise SubmissionImportError(
+                f"{path}.alternateNames must contain valid strings"
+            )
+        for index, name in enumerate(alternate_names):
+            _required_string(
+                name, f"{path}.alternateNames[{index}]", max_length=300
+            )
+
+
+def _validate_serving_size(value: object, path: str) -> None:
+    if not isinstance(value, dict):
+        raise SubmissionImportError(f"{path} must be an object")
+    _reject_unknown_keys(value, _ALLOWED_SERVING_FIELDS, path)
+    min_quantity = _finite_number(
+        value.get("minQuantity"),
+        f"{path}.minQuantity",
+        minimum=_POSITIVE_NUMBER_MINIMUM,
+    )
+    max_quantity = _finite_number(
+        value.get("maxQuantity"),
+        f"{path}.maxQuantity",
+        minimum=_POSITIVE_NUMBER_MINIMUM,
+    )
+    _required_string(value.get("unit"), f"{path}.unit", max_length=80)
+    _optional_positive_integer(value.get("order"), f"{path}.order")
+    _optional_string(value.get("notes"), f"{path}.notes", max_length=1000)
+    for field in ("minDailyServings", "maxDailyServings"):
+        if value.get(field) is not None:
+            _finite_number(
+                value[field],
+                f"{path}.{field}",
+                minimum=_POSITIVE_NUMBER_MINIMUM,
+            )
+    if value.get("inSFB") is not None and not isinstance(value["inSFB"], bool):
+        raise SubmissionImportError(f"{path}.inSFB must be a boolean")
+    if max_quantity < min_quantity:
+        raise SubmissionImportError(f"{path}.maxQuantity must be >= minQuantity")
+
+
+def _validate_classification(value: object, field: str) -> None:
+    if not isinstance(value, dict):
+        raise SubmissionImportError(f"{field} must be an object")
+    _reject_unknown_keys(value, _ALLOWED_CLASSIFICATION_FIELDS, field)
+    _optional_string(value.get("langualCode"), f"{field}.langualCode", max_length=40)
+    _optional_string(
+        value.get("langualCodeDescription"),
+        f"{field}.langualCodeDescription",
+        max_length=300,
+    )
+    _optional_string(value.get("name"), f"{field}.name", max_length=300)
+    _required_string(
+        value.get("name") or value.get("langualCodeDescription"),
+        f"{field} display name",
+        max_length=300,
+    )
+
+
+def _validate_statements(value: object) -> None:
+    if not isinstance(value, list) or len(value) > 100:
+        raise SubmissionImportError("statements must contain 0..100 rows")
+    for index, statement in enumerate(value):
+        path = f"statements[{index}]"
+        if not isinstance(statement, dict):
+            raise SubmissionImportError(f"{path} must be an object")
+        _reject_unknown_keys(statement, _ALLOWED_STATEMENT_FIELDS, path)
+        _required_string(statement.get("type"), f"{path}.type", max_length=200)
+        _required_string(statement.get("notes"), f"{path}.notes", max_length=5000)
+
+
+def _validate_servings_per_container(value: object) -> None:
+    if isinstance(value, bool):
+        raise SubmissionImportError("servingsPerContainer must be positive")
+    if isinstance(value, (int, float)):
+        _finite_number(
+            value,
+            "servingsPerContainer",
+            minimum=_POSITIVE_NUMBER_MINIMUM,
+        )
+        return
+    text = _required_string(value, "servingsPerContainer", max_length=40)
+    try:
+        parsed = float(text)
+    except ValueError as exc:
+        raise SubmissionImportError(
+            "servingsPerContainer must be positive"
+        ) from exc
+    _finite_number(
+        parsed,
+        "servingsPerContainer",
+        minimum=_POSITIVE_NUMBER_MINIMUM,
+    )
+
+
 def _validate_label_payload(payload: object) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise SubmissionImportError("approved payload must be an object")
@@ -133,25 +439,66 @@ def _validate_label_payload(payload: object) -> dict[str, Any]:
         not isinstance(ingredient_rows, list)
         or not ingredient_rows
         or len(ingredient_rows) > 200
-        or not all(isinstance(row, dict) for row in ingredient_rows)
     ):
         raise SubmissionImportError(
-            "approved payload ingredientRows must contain 1..200 objects"
+            "approved payload ingredientRows must contain 1..200 rows"
+        )
+    row_counter = [0]
+    for index, row in enumerate(ingredient_rows):
+        _validate_ingredient_row(
+            row,
+            f"ingredientRows[{index}]",
+            depth=1,
+            row_counter=row_counter,
         )
     serving_sizes = payload.get("servingSizes")
     if (
         not isinstance(serving_sizes, list)
         or not serving_sizes
         or len(serving_sizes) > 20
-        or not all(isinstance(row, dict) for row in serving_sizes)
     ):
         raise SubmissionImportError(
-            "approved payload servingSizes must contain 1..20 objects"
+            "approved payload servingSizes must contain 1..20 rows"
         )
+    for index, serving_size in enumerate(serving_sizes):
+        _validate_serving_size(serving_size, f"servingSizes[{index}]")
     off_market = payload.get("offMarket", 0)
     if off_market not in {0, 1, False, True}:
         raise SubmissionImportError("approved payload offMarket must be 0 or 1")
     normalized["offMarket"] = int(bool(off_market))
+
+    if payload.get("servingsPerContainer") is not None:
+        _validate_servings_per_container(payload["servingsPerContainer"])
+    if payload.get("physicalState") is not None:
+        _validate_classification(payload["physicalState"], "physicalState")
+    if payload.get("productType") is not None:
+        _validate_classification(payload["productType"], "productType")
+    if payload.get("statements") is not None:
+        _validate_statements(payload["statements"])
+    if payload.get("nutritionalInfo") is not None and not isinstance(
+        payload["nutritionalInfo"], dict
+    ):
+        raise SubmissionImportError("nutritionalInfo must be an object")
+
+    disclosure = _required_string(
+        payload.get("otherIngredientsDisclosure"),
+        "otherIngredientsDisclosure",
+        max_length=40,
+    )
+    if disclosure not in _RESOLVED_OTHER_INGREDIENT_DISCLOSURES:
+        raise SubmissionImportError(
+            "otherIngredientsDisclosure is unresolved or invalid"
+        )
+    other_ingredients = payload.get("otherIngredients", "")
+    if not isinstance(other_ingredients, str) or len(other_ingredients) > 20_000:
+        raise SubmissionImportError("otherIngredients must be a string")
+    normalized_other_ingredients = other_ingredients.strip()
+    if disclosure == "present" and not normalized_other_ingredients:
+        raise SubmissionImportError("present other ingredients require text")
+    if disclosure != "present" and normalized_other_ingredients:
+        raise SubmissionImportError(
+            f"{disclosure} requires empty otherIngredients"
+        )
     return normalized
 
 
@@ -312,6 +659,25 @@ def _atomic_write_text(path: Path, content: str) -> None:
     temporary_path = Path(temporary_name)
     try:
         with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary_path, path)
+    finally:
+        if temporary_path.exists():
+            temporary_path.unlink()
+
+
+def _atomic_write_bytes(path: Path, content: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        dir=path.parent,
+    )
+    temporary_path = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
             handle.write(content)
             handle.flush()
             os.fsync(handle.fileno())
@@ -583,6 +949,256 @@ def _service_rpc(function_name: str, payload: dict[str, object]) -> object:
         raise SubmissionImportError(f"{function_name} RPC failed") from exc
 
 
+def _download_private_storage_object(bucket_id: str, object_path: str) -> bytes:
+    if bucket_id not in {
+        "product-submission-photos",
+        "product-submission-reviewer-images",
+    }:
+        raise SubmissionImportError("approved product image bucket is invalid")
+    base_url = os.environ.get("SUPABASE_URL", "").rstrip("/")
+    if not base_url:
+        raise SubmissionImportError("SUPABASE_URL is required")
+    encoded_path = urllib.parse.quote(object_path, safe="/")
+    request = urllib.request.Request(
+        f"{base_url}/storage/v1/object/authenticated/{bucket_id}/{encoded_path}",
+        headers=_supabase_admin_headers(),
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            content = response.read(MAX_PRODUCT_IMAGE_BYTES + 1)
+    except (OSError, urllib.error.URLError) as exc:
+        raise SubmissionImportError("approved product image download failed") from exc
+    if not 0 < len(content) <= MAX_PRODUCT_IMAGE_BYTES:
+        raise SubmissionImportError("approved product image size is invalid")
+    return content
+
+
+def _render_catalog_webp(content: bytes, expected_content_type: str) -> bytes:
+    expected_formats = {
+        "image/jpeg": "JPEG",
+        "image/png": "PNG",
+        "image/webp": "WEBP",
+    }
+    expected_format = expected_formats.get(expected_content_type)
+    if expected_format is None:
+        raise SubmissionImportError("approved product image type is invalid")
+    try:
+        with Image.open(io.BytesIO(content)) as opened:
+            if opened.format != expected_format:
+                raise SubmissionImportError(
+                    "approved product image type does not match its bytes"
+                )
+            if opened.width * opened.height > MAX_PRODUCT_IMAGE_PIXELS:
+                raise SubmissionImportError(
+                    "approved product image dimensions are too large"
+                )
+            image = ImageOps.exif_transpose(opened)
+            image.load()
+            if image.mode in {"RGBA", "LA", "P"}:
+                alpha = image.convert("RGBA")
+                background = Image.new("RGBA", alpha.size, "white")
+                image = Image.alpha_composite(background, alpha).convert("RGB")
+            else:
+                image = image.convert("RGB")
+            image.thumbnail(
+                (PRODUCT_IMAGE_MAX_EDGE, PRODUCT_IMAGE_MAX_EDGE),
+                Image.Resampling.LANCZOS,
+            )
+            rendered = io.BytesIO()
+            image.save(
+                rendered,
+                format="WEBP",
+                quality=PRODUCT_IMAGE_WEBP_QUALITY,
+                method=6,
+            )
+            return rendered.getvalue()
+    except SubmissionImportError:
+        raise
+    except (OSError, Image.DecompressionBombError) as exc:
+        raise SubmissionImportError("approved product image cannot be decoded") from exc
+
+
+def _load_product_image_index(path: Path) -> dict[str, dict[str, object]]:
+    if not path.exists():
+        return {}
+    try:
+        decoded = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SubmissionImportError("product image index is unreadable") from exc
+    if not isinstance(decoded, dict) or not all(
+        isinstance(product_id, str) and isinstance(entry, dict)
+        for product_id, entry in decoded.items()
+    ):
+        raise SubmissionImportError("product image index is malformed")
+    return decoded
+
+
+def _refresh_catalog_manifest_checksum(catalog_db: Path) -> None:
+    manifest_path = catalog_db.parent / "export_manifest.json"
+    if not manifest_path.exists():
+        return
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SubmissionImportError("catalog export manifest is unreadable") from exc
+    if not isinstance(manifest, dict):
+        raise SubmissionImportError("catalog export manifest is malformed")
+    digest = hashlib.sha256(catalog_db.read_bytes()).hexdigest()
+    manifest["checksum"] = f"sha256:{digest}"
+    manifest["checksum_sha256"] = digest
+    _atomic_write_text(
+        manifest_path,
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+    )
+
+
+def copy_approved_product_images(
+    *,
+    output_dir: str | Path,
+    catalog_db: str | Path,
+    product_images_dir: str | Path,
+    rpc: Callable[[str, dict[str, object]], object] = _service_rpc,
+    download: Callable[[str, str], bytes] = _download_private_storage_object,
+) -> dict[str, int]:
+    """Copy approved missing-product imagery into the canonical release bundle.
+
+    Image failures are isolated from label publication. Each failed object stays
+    eligible for a later release retry until the submission evidence retention
+    window closes.
+    """
+    receipts = _read_receipts(Path(output_dir) / RECEIPT_FILE)["submissions"]
+    image_dir = Path(product_images_dir)
+    index_path = image_dir / "product_image_index.json"
+    image_index = _load_product_image_index(index_path)
+    catalog_path = Path(catalog_db)
+    if not catalog_path.is_file():
+        raise SubmissionImportError("catalog database is missing")
+
+    copied = 0
+    failed = 0
+    skipped = 0
+    try:
+        connection = sqlite3.connect(catalog_path)
+        connection.execute(
+            "select image_thumbnail_url from products_core limit 0"
+        )
+    except sqlite3.Error as exc:
+        raise SubmissionImportError("catalog image schema is unavailable") from exc
+
+    try:
+        for submission_id, receipt in sorted(receipts.items()):
+            if not isinstance(receipt, dict):
+                raise SubmissionImportError("import receipt row is malformed")
+            product_id = str(receipt.get("product_id") or "")
+            if not product_id.startswith("PG_SUB_"):
+                continue
+            filename = f"{product_id}.webp"
+            webp_path = image_dir / filename
+            expected_url = f"product-images/{filename}"
+            existing = connection.execute(
+                "select image_thumbnail_url from products_core where dsld_id = ?",
+                (product_id,),
+            ).fetchone()
+            if existing is None:
+                failed += 1
+                print(
+                    f"WARNING: approved image skipped; catalog row missing: {product_id}",
+                    file=sys.stderr,
+                )
+                continue
+            indexed = image_index.get(product_id)
+            if (
+                existing[0] == expected_url
+                and isinstance(indexed, dict)
+                and indexed.get("filename") == filename
+                and webp_path.is_file()
+                and indexed.get("sha256")
+                == hashlib.sha256(webp_path.read_bytes()).hexdigest()
+            ):
+                skipped += 1
+                continue
+            try:
+                response = rpc(
+                    "get_approved_product_submission_image",
+                    {"p_submission_id": submission_id},
+                )
+                if (
+                    not isinstance(response, list)
+                    or len(response) != 1
+                    or not isinstance(response[0], dict)
+                ):
+                    raise SubmissionImportError(
+                        "approval has no singular product image"
+                    )
+                source = response[0]
+                if set(source) != {
+                    "bucket_id",
+                    "object_path",
+                    "content_type",
+                    "content_sha256",
+                }:
+                    raise SubmissionImportError(
+                        "approved product image manifest is malformed"
+                    )
+                bucket_id = _required_string(
+                    source["bucket_id"], "image bucket", max_length=100
+                )
+                object_path = _required_string(
+                    source["object_path"], "image object path", max_length=500
+                )
+                content_type = _required_string(
+                    source["content_type"], "image content type", max_length=40
+                )
+                expected_hash = _required_string(
+                    source["content_sha256"], "image hash", max_length=64
+                ).lower()
+                if not re.fullmatch(r"[0-9a-f]{64}", expected_hash):
+                    raise SubmissionImportError("approved product image hash is invalid")
+                source_bytes = download(bucket_id, object_path)
+                if hashlib.sha256(source_bytes).hexdigest() != expected_hash:
+                    raise SubmissionImportError(
+                        "approved product image hash does not match"
+                    )
+                webp_bytes = _render_catalog_webp(source_bytes, content_type)
+                _atomic_write_bytes(webp_path, webp_bytes)
+                webp_hash = hashlib.sha256(webp_bytes).hexdigest()
+                updated = connection.execute(
+                    "update products_core set image_thumbnail_url = ? "
+                    "where dsld_id = ?",
+                    (expected_url, product_id),
+                ).rowcount
+                if updated != 1:
+                    raise SubmissionImportError(
+                        "approved product image catalog binding failed"
+                    )
+                image_index[product_id] = {
+                    "filename": filename,
+                    "size_bytes": len(webp_bytes),
+                    "sha256": webp_hash,
+                }
+                copied += 1
+            except (OSError, sqlite3.Error, SubmissionImportError) as exc:
+                failed += 1
+                print(
+                    f"WARNING: approved image copy failed for {product_id}: {exc}",
+                    file=sys.stderr,
+                )
+        connection.commit()
+    finally:
+        connection.close()
+
+    if copied:
+        _atomic_write_text(
+            index_path,
+            json.dumps(image_index, ensure_ascii=False, indent=2, sort_keys=True)
+            + "\n",
+        )
+    if copied or skipped:
+        _refresh_catalog_manifest_checksum(catalog_path)
+    return {"copied": copied, "failed": failed, "skipped": skipped}
+
+
 def mark_released_submissions_promoted(
     *,
     output_dir: str | Path,
@@ -710,6 +1326,7 @@ def main(argv: list[str] | None = None) -> int:
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--fetch", action="store_true")
     source.add_argument("--input", type=Path)
+    source.add_argument("--copy-images", action="store_true")
     source.add_argument("--mark-promoted", action="store_true")
     parser.add_argument(
         "--output-dir",
@@ -726,6 +1343,11 @@ def main(argv: list[str] | None = None) -> int:
         "--detail-blobs-dir",
         type=Path,
         default=Path("scripts/dist/detail_blobs"),
+    )
+    parser.add_argument(
+        "--product-images-dir",
+        type=Path,
+        default=Path("scripts/dist/product_images"),
     )
     args = parser.parse_args(argv)
 
@@ -745,6 +1367,14 @@ def main(argv: list[str] | None = None) -> int:
                     sort_keys=True,
                 )
             )
+            return 0
+        if args.copy_images:
+            result = copy_approved_product_images(
+                output_dir=args.output_dir,
+                catalog_db=args.catalog_db,
+                product_images_dir=args.product_images_dir,
+            )
+            print(json.dumps(result, sort_keys=True))
             return 0
         rows = (
             fetch_approved_submissions(limit=args.limit)

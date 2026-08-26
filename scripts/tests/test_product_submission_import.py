@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 import sqlite3
 from pathlib import Path
 
 import pytest
+from PIL import Image
 
 
 def _canonical(value: object) -> str:
@@ -32,6 +34,8 @@ def _payload() -> dict:
             }
         ],
         "offMarket": 0,
+        "otherIngredients": "",
+        "otherIngredientsDisclosure": "declared_none",
         "physicalState": {"langualCode": "", "name": "Capsule"},
         "productType": {
             "langualCode": "",
@@ -411,6 +415,74 @@ def test_materialized_label_enters_existing_import_local_path(tmp_path: Path):
     assert label["manual_product_provenance"]["review_status"] == "verified"
 
 
+def test_approved_product_picture_is_webp_indexed_and_bound_to_catalog(
+    tmp_path: Path,
+):
+    from product_submission_import import (
+        copy_approved_product_images,
+        materialize_approved_submissions,
+    )
+
+    row = _export()
+    manual_dir = tmp_path / "manual"
+    materialize_approved_submissions([row], output_dir=manual_dir)
+    product_id = "PG_SUB_018F4C797C7E4C709D627FC3B9CE6A11"
+
+    catalog = tmp_path / "pharmaguide_core.db"
+    with sqlite3.connect(catalog) as connection:
+        connection.execute(
+            "create table products_core "
+            "(dsld_id text primary key, image_thumbnail_url text)"
+        )
+        connection.execute(
+            "insert into products_core values (?, null)",
+            (product_id,),
+        )
+    image_dir = tmp_path / "product_images"
+    image_dir.mkdir()
+    (image_dir / "product_image_index.json").write_text("{}\n")
+
+    source = io.BytesIO()
+    Image.new("RGB", (1800, 1200), "#183b3f").save(source, format="PNG")
+    source_bytes = source.getvalue()
+    source_hash = hashlib.sha256(source_bytes).hexdigest()
+    calls: list[tuple[str, dict[str, object]]] = []
+
+    result = copy_approved_product_images(
+        output_dir=manual_dir,
+        catalog_db=catalog,
+        product_images_dir=image_dir,
+        rpc=lambda name, payload: calls.append((name, payload)) or [{
+            "bucket_id": "product-submission-photos",
+            "object_path": "user/submission/front.jpg",
+            "content_type": "image/png",
+            "content_sha256": source_hash,
+        }],
+        download=lambda bucket, path: source_bytes,
+    )
+
+    assert result == {"copied": 1, "failed": 0, "skipped": 0}
+    assert calls == [(
+        "get_approved_product_submission_image",
+        {"p_submission_id": row["submission_id"]},
+    )]
+    webp_path = image_dir / f"{product_id}.webp"
+    assert webp_path.is_file()
+    with Image.open(webp_path) as rendered:
+        assert rendered.format == "WEBP"
+        assert rendered.size == (900, 600)
+    index = json.loads((image_dir / "product_image_index.json").read_text())
+    assert index[product_id]["filename"] == f"{product_id}.webp"
+    assert index[product_id]["sha256"] == hashlib.sha256(
+        webp_path.read_bytes()
+    ).hexdigest()
+    with sqlite3.connect(catalog) as connection:
+        assert connection.execute(
+            "select image_thumbnail_url from products_core where dsld_id = ?",
+            (product_id,),
+        ).fetchone() == (f"product-images/{product_id}.webp",)
+
+
 def test_label_mismatch_preserves_existing_dsld_identity():
     from product_submission_import import build_manual_label
 
@@ -605,6 +677,16 @@ def test_release_train_runs_approved_submissions_through_existing_pipeline():
     assert fetch < pipeline < snapshot
     assert "--strict-release-gates" in release[pipeline : pipeline + 500]
     assert "scripts/score_products_v4.py" not in release[fetch:snapshot]
+
+
+def test_release_train_registers_submission_images_before_cloud_sync():
+    release = Path("scripts/release_full.sh").read_text(encoding="utf-8")
+
+    snapshot = release.index("bash scripts/rebuild_dashboard_snapshot.sh")
+    copy_images = release.index("product_submission_import.py --copy-images")
+    cloud_sync = release.index("scripts/sync_to_supabase.py")
+
+    assert snapshot < copy_images < cloud_sync
 
 
 def test_dashboard_snapshot_applies_reviewed_submission_corrections_last():
