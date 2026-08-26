@@ -669,6 +669,40 @@ def test_standard_single_formulation_floor_does_not_lift_unknown_low_bio_single(
     assert payload["metadata"]["standard_single_ingredient_floor"]["target"] == 0.0
 
 
+def test_standard_single_formulation_floor_honors_evidence_form_exclusions() -> None:
+    """AAKG must not borrow the validated-form floor from free L-arginine.
+
+    The evidence scorer already honors ``exclude_aliases`` on the L-arginine
+    record. Formulation must use the same match decision so an excluded
+    compound cannot receive evidence-backed form credit through its broad
+    cleaner parent identity.
+    """
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(
+        supp_type="single_nutrient",
+        product_name="Arginine AKG 3 g Unflavored",
+        ingredients=[
+            _ingredient(
+                name="Arginine AKG",
+                canonical_id="l_arginine",
+                bio_score=10,
+                quantity=3,
+                unit="g",
+                raw_source_text="Arginine AKG",
+                matched_form="l-arginine base",
+                forms=[{"name": "L-Arginine-Alpha-Ketoglutarate"}],
+            )
+        ],
+    )
+
+    payload = score_formulation(product)
+
+    assert payload["score"] == 11.0
+    assert "standard_single_ingredient_floor_adjustment" not in payload["components"]
+    assert payload["metadata"]["standard_single_ingredient_floor"]["target"] == 0.0
+
+
 def test_premium_single_formulation_floor_does_not_lift_multi() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 

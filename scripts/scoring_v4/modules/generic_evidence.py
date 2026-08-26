@@ -605,6 +605,30 @@ def _verified_ingredient_human_evidence_entries() -> Tuple[Dict[str, Any], ...]:
     return tuple(out)
 
 
+def has_verified_ingredient_human_evidence_for_row(
+    row: Dict[str, Any],
+    product: Dict[str, Any] | None = None,
+) -> bool:
+    """Return whether a row has an applicable verified human-evidence entry.
+
+    This is the shared identity decision for non-evidence scoring features
+    that depend on the existence of ingredient-human evidence. It deliberately
+    applies the same compound/form exclusions as evidence recovery so a broad
+    cleaner parent (for example L-Arginine) cannot lend credit to an excluded
+    declared compound (for example AAKG).
+    """
+    row_keys = _row_identity_keys(row)
+    if not row_keys:
+        return False
+    context = product if isinstance(product, dict) else {}
+    for entry in _verified_ingredient_human_evidence_entries():
+        if _entry_excludes_recovery_context(entry, row, context):
+            continue
+        if row_keys & _entry_identity_keys(entry):
+            return True
+    return False
+
+
 def _is_verified_product_level_entry(entry: Dict[str, Any]) -> bool:
     if _norm_text(entry.get("study_type")) == "reference":
         return False
@@ -752,6 +776,11 @@ def _entry_excludes_recovery_context(
         )
         if _canonical_text(row.get(field))
     }
+    row_identities.update(
+        _canonical_text(form.get("name"))
+        for form in _safe_list(row.get("forms"))
+        if isinstance(form, dict) and _canonical_text(form.get("name"))
+    )
     if any(
         _excluded_identity_matches(entry, candidate, excluded)
         for candidate in row_identities

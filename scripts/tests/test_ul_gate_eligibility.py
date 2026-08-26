@@ -1792,3 +1792,59 @@ def test_taxonomy_only_botanical_cannot_inherit_stale_nutrient_ul(enricher):
     assert result["analyzed_ingredients"] == []
     assert result["dose_assessments"] == []
     assert result["ul_review_flags"] == []
+
+
+def test_scoreable_taxonomy_only_botanical_gets_typed_non_ul_dose(enricher):
+    """A validated taxonomy identity still owns its disclosed dose.
+
+    ``taxonomy_only`` is a scoreable identity disposition when the identity
+    resolver retains a mapped canonical.  It must not inherit a stale nutrient
+    UL, but it still needs a typed non-UL dose assessment so strict readiness
+    can reconcile the material label row.
+    """
+    active = {
+        "name": "Organic Ashwagandha (root) extract",
+        "raw_source_text": "Organic Ashwagandha (root) extract",
+        "raw_source_path": "ingredientRows[0].nestedRows[0]",
+        "standardName": "Ashwagandha",
+        "canonical_id": "ashwagandha",
+        "canonical_source_db": "ingredient_quality_map",
+        "quantity": 600,
+        "unit": "mg",
+    }
+    product = _mag([active])
+    product["ingredient_quality_data"] = {
+        "ingredients": [
+            {
+                **active,
+                "standard_name": "Ashwagandha",
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "identity_disposition": "taxonomy_only",
+            }
+        ]
+    }
+
+    result = enricher._collect_rda_ul_data(product)
+
+    assert result["ul_review_flags"] == []
+    assert [
+        {
+            "source_path": row["source_path"],
+            "canonical_id": row["canonical_id"],
+            "source_value": row["source_value"],
+            "source_unit": row["source_unit"],
+            "ul_assessment_status": row["ul_assessment_status"],
+            "readiness": row["readiness"],
+        }
+        for row in result["dose_assessments"]
+    ] == [
+        {
+            "source_path": "ingredientRows[0].nestedRows[0]",
+            "canonical_id": "ashwagandha",
+            "source_value": 600.0,
+            "source_unit": "mg",
+            "ul_assessment_status": "no_ul_applicable",
+            "readiness": "not_applicable",
+        }
+    ]

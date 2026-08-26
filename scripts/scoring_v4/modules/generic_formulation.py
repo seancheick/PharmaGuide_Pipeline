@@ -72,6 +72,9 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
+from scoring_v4.modules.generic_evidence import (
+    has_verified_ingredient_human_evidence_for_row,
+)
 from scoring_v4.modules.immune_support import immune_support_formulation_adjustment
 from scoring_v4.modules.sleep_support import (
     MELATONIN_GUMMY_FORMAT_PENALTY,
@@ -232,8 +235,6 @@ DIETARY_SUGAR_HIGH_PENALTY = _FM["dietary_sugar_high_penalty"]
 DIETARY_SUGAR_CAP = _FM["dietary_sugar_cap"]
 
 PHASE_MARKER_COMPLETE = "P1.3.1b_formulation_complete"
-_DATA_DIR = Path(__file__).resolve().parents[2] / "data"
-_BACKED_CLINICAL_STUDIES_PATH = _DATA_DIR / "backed_clinical_studies.json"
 
 
 # --- A1 bio_score ---------------------------------------------------------
@@ -485,7 +486,7 @@ def _standard_single_floor_target(
     row_keys = _row_identity_keys(row)
     if canonical_id in _DRI_LIKE_STANDARD_SINGLE_CANONICALS or _keys_include_dri_like(row_keys):
         return 0.0
-    if not _has_verified_ingredient_human_evidence_for_row(row, row_keys):
+    if not has_verified_ingredient_human_evidence_for_row(row, product):
         return 0.0
     return STANDARD_SINGLE_FLOOR_VALIDATED_LOW_BIO
 
@@ -502,43 +503,6 @@ def _single_scorable_active(product: Dict[str, Any]) -> Dict[str, Any] | None:
     return row
 
 
-def _has_verified_ingredient_human_evidence_for_row(
-    row: Dict[str, Any],
-    row_keys: set[str] | None = None,
-) -> bool:
-    row_keys = row_keys or _row_identity_keys(row)
-    if not row_keys:
-        return False
-    for entry in _verified_ingredient_human_evidence_entries():
-        if row_keys & _entry_identity_keys(entry):
-            return True
-    return False
-
-
-@lru_cache(maxsize=1)
-def _verified_ingredient_human_evidence_entries() -> tuple[Dict[str, Any], ...]:
-    try:
-        raw = json.loads(_BACKED_CLINICAL_STUDIES_PATH.read_text())
-    except Exception:  # pragma: no cover
-        return tuple()
-    entries = raw.get("backed_clinical_studies") if isinstance(raw, dict) else raw
-    out: list[Dict[str, Any]] = []
-    for entry in _safe_list(entries):
-        if not isinstance(entry, dict):
-            continue
-        if _norm_text(entry.get("study_type")) == "reference":
-            continue
-        if _norm_text(entry.get("evidence_level")) not in {
-            "ingredient-human",
-            "ingredient_human",
-        }:
-            continue
-        if not _safe_list(entry.get("references_structured")):
-            continue
-        out.append(dict(entry))
-    return tuple(out)
-
-
 def _row_identity_keys(row: Dict[str, Any]) -> set[str]:
     keys: set[str] = set()
     for value in (
@@ -550,31 +514,6 @@ def _row_identity_keys(row: Dict[str, Any]) -> set[str]:
         row.get("matched_form"),
     ):
         key = _canonical_text(value)
-        if key:
-            keys.add(key)
-    return keys
-
-
-def _entry_identity_keys(entry: Dict[str, Any]) -> set[str]:
-    keys: set[str] = set()
-    for value in (
-        entry.get("canonical_id"),
-        entry.get("ingredient_canonical_id"),
-        entry.get("standard_name"),
-        entry.get("ingredient"),
-        entry.get("study_name"),
-        entry.get("matched_term"),
-    ):
-        key = _canonical_text(value)
-        if key:
-            keys.add(key)
-    for alias in _safe_list(entry.get("aliases")):
-        key = _canonical_text(alias)
-        if key:
-            keys.add(key)
-    entry_id = str(entry.get("id") or entry.get("study_id") or "")
-    if entry_id.upper().startswith("INGR_"):
-        key = _canonical_text(entry_id[5:].replace("_", " "))
         if key:
             keys.add(key)
     return keys

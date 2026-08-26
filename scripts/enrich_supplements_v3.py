@@ -20131,11 +20131,16 @@ class SupplementEnricherV3:
                     ing_name = ingredient.get('name', '')
                     std_name = ingredient.get('standardName', '') or ing_name
                     quality_identity = _take_quality_identity(ingredient)
-                    if quality_identity.get("identity_disposition") == "taxonomy_only":
-                        # The quality resolver has authoritatively replaced a
-                        # false marker/nutrient identity with source taxonomy.
-                        # Do not run RDA/UL conversion against the stale
-                        # cleaner standardName (for example Lemon -> Folate).
+                    if (
+                        quality_identity.get("identity_disposition")
+                        == "taxonomy_only"
+                        and quality_identity.get("scoreable_identity") is not True
+                    ):
+                        # A non-scoreable taxonomy row may retain a stale
+                        # cleaner nutrient name (for example Lemon -> Folate),
+                        # so it must remain outside dose assessment. A mapped,
+                        # scoreable taxonomy-only row still owns its disclosed
+                        # dose and receives a typed non-UL assessment below.
                         continue
                     resolved_canonical_id = str(
                         quality_identity.get("canonical_id")

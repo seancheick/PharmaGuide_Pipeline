@@ -600,6 +600,20 @@
         "Blend-header and material-row ownership review"
       ],
       "notes": "Garden of Life Wobenzym N Joint Health moves from not_scored to 60.5 / Weak / SAFE after the fresh 37-brand rebuild. Five real score-eligible active rows map at 100%. Papain and Bromelain use their label-declared FIP activity, Rutoside Trihydrate uses its disclosed 150 mg mass, and every material exposure has a matching typed assessment with no conversion fallback. Pancreatin remains outside the active mapping denominator as a blend-header total; its separately declared 300 mg aggregate and 56,000 USP activity are reconciled as typed product-level projections rather than counted as another label ingredient. Evidence review for Papain and Rutoside remains explicitly shadow-incomplete and receives no invented evidence assessment. The six frozen status/score fields change because enforced identity, dose, route, and verification readiness are complete; no safety rule, pillar weight, or calibration target changed."
+    },
+    {
+      "date": "2026-08-25",
+      "action": "refrozen_reviewed_row_reconciliation_and_lemon_identity_corrections",
+      "products": [
+        12012,
+        204571,
+        323080
+      ],
+      "sprints_covered": [
+        "Exact raw-row reconciliation for recovered nutrient rows",
+        "Lemon botanical identity and RDA-inheritance correction"
+      ],
+      "notes": "Re-froze only the three intentional drifts remaining after the fresh 37-brand rebuild and the separate AAKG evidence-exclusion regression fix. CVS Spectravite (12012) now includes its recovered label-declared Chloride 72 mg row in dose assessment, moving Dose 16.7->16.3 and score 68.1->67.7. Thorne Catalyte (323080) now includes its recovered label-declared Chloride 80 mg and Sodium 485 mg rows in dose assessment, moving Dose 16.8->16.0 and score 74.6->73.8; its recovered Folate child is not score-eligible and contributes no score. Garden of Life Adrenal Daily Balance (204571) now resolves Organic Lemon Extract as botanical Lemon instead of the stale folic-acid identity, removing an incorrect nutrient inheritance and moving Formulation 11.6->12.2 and score 58.3->58.9. Routes, score statuses, mapped coverage, verdicts, and safety behavior are unchanged. Nutricost Arginine AKG (269278) was deliberately not re-frozen: its broad L-arginine formulation evidence match was a defect because the verified evidence record excludes AAKG, and the shared evidence matcher now restores the existing 57.3 baseline. These are reviewed identity/reconciliation effects, not calibration changes."
     }
   ]
 }
