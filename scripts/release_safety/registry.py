@@ -61,13 +61,21 @@ Public API
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Optional
 
+from .transient import retry_transient
+
 
 DEFAULT_TABLE = "catalog_releases"
+
+#: Attempts for registry reads that feed the protected-set computation.
+REGISTRY_QUERY_MAX_ATTEMPTS = int(
+    os.environ.get("PG_REGISTRY_QUERY_MAX_ATTEMPTS", "5")
+)
 
 
 class ReleaseState(str, Enum):
@@ -244,11 +252,18 @@ def list_releases_by_state(
     """Return every row matching ``state``. Order is unspecified."""
     if not isinstance(state, ReleaseState):
         raise InvalidReleaseFieldError(f"state must be ReleaseState, got {type(state).__name__}")
-    response = (
-        client.table(table)
-        .select("*")
-        .eq("state", state.value)
-        .execute()
+    # This query is on the protected-set critical path: its rows decide which
+    # blobs a cleanup must not touch. A transient statement timeout here used
+    # to reject an entire orphan sweep, so retry the blip. Persistent failures
+    # still propagate and fail closed.
+    response = retry_transient(
+        lambda: (
+            client.table(table)
+            .select("*")
+            .eq("state", state.value)
+            .execute()
+        ),
+        max_attempts=REGISTRY_QUERY_MAX_ATTEMPTS,
     )
     rows = getattr(response, "data", None) or []
     return [CatalogRelease.from_row(r) for r in rows]

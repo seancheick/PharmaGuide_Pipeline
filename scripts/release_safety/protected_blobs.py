@@ -107,11 +107,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import sqlite3
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable, Optional, Tuple, Union
+
+from .transient import retry_transient
 
 from .bundle_alignment import (
     DEFAULT_BRANCH,
@@ -128,6 +131,12 @@ DEFAULT_BUNDLED_CATALOG_PATH = "assets/db/pharmaguide_core.db"
 DEFAULT_DIST_INDEX_FILENAME = "detail_index.json"
 DEFAULT_DIST_MANIFEST_FILENAME = "export_manifest.json"
 DEFAULT_REGISTRY_BUCKET = "pharmaguide"
+
+#: Attempts for each protected-set storage call. The protected set is the
+#: thing standing between a transient blip and a rejected (or, with a bad
+#: override, an over-broad) sweep — so these calls retry rather than letting
+#: one 544 decide the outcome. Persistent failures still fail closed.
+INDEX_FETCH_MAX_ATTEMPTS = int(os.environ.get("PG_INDEX_FETCH_MAX_ATTEMPTS", "5"))
 
 
 # ---------------------------------------------------------------------------
@@ -680,9 +689,16 @@ def _fetch_index_from_storage(
         parent, basename = "", storage_path
 
     try:
-        items = client.storage.from_(bucket).list(
-            path=parent,
-            options={"limit": 1000, "offset": 0},
+        items = retry_transient(
+            lambda: client.storage.from_(bucket).list(
+                path=parent,
+                options={"limit": 1000, "offset": 0},
+            ),
+            max_attempts=INDEX_FETCH_MAX_ATTEMPTS,
+            on_retry=lambda attempt, exc: print(
+                f"  [WARN] transient storage error listing {bucket}/{parent} "
+                f"(attempt {attempt}): {type(exc).__name__}: {exc}; retrying..."
+            ),
         )
     except Exception as exc:  # noqa: BLE001
         raise RegistryFetchError(
@@ -709,7 +725,15 @@ def _fetch_index_from_storage(
         )
 
     try:
-        return client.storage.from_(bucket).download(storage_path)
+        return retry_transient(
+            lambda: client.storage.from_(bucket).download(storage_path),
+            max_attempts=INDEX_FETCH_MAX_ATTEMPTS,
+            on_retry=lambda attempt, exc: print(
+                f"  [WARN] transient storage error downloading "
+                f"{bucket}/{storage_path} (attempt {attempt}): "
+                f"{type(exc).__name__}: {exc}; retrying..."
+            ),
+        )
     except Exception as exc:  # noqa: BLE001
         raise RegistryFetchError(
             f"Failed to download {bucket}/{storage_path} for db_version="
