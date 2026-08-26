@@ -174,6 +174,17 @@ def test_identity_index_combines_catalog_and_manifest_owned_corpus(tmp_path):
                     "fullName": "Corpus only",
                     "brandName": "New Labs",
                     "upcSku": "4006381333931",
+                    "ingredientRows": [
+                        {
+                            "ingredientGroup": "Vitamin D",
+                            "name": "Vitamin D3",
+                            "quantity": [{"quantity": 25, "unit": "mcg"}],
+                            "forms": [{"name": "Cholecalciferol"}],
+                            "nestedRows": [],
+                            "safety_hits": [{"rule": "server-only"}],
+                        }
+                    ],
+                    "row_ledger": [{"disposition": "server-only"}],
                 },
                 {
                     "dsldId": 900002,
@@ -212,6 +223,10 @@ def test_identity_index_combines_catalog_and_manifest_owned_corpus(tmp_path):
         ("corpus", "900001"),
         ("corpus", "900002"),
     ]
+    draft = corpus_only[0].draft_payload
+    assert draft is not None
+    assert "row_ledger" not in draft
+    assert "safety_hits" not in draft["ingredientRows"][0]
     assert index.built_at == built_at
 
 
@@ -251,3 +266,42 @@ def test_console_exposes_fail_closed_identity_actions():
     assert 'id="identity-index-status"' in index_html
     assert "IDENTITY_INDEX_WARN_DAYS = 30" in serve_source
     assert "IDENTITY_INDEX_BLOCK_DAYS = 60" in serve_source
+
+
+def test_console_editor_picture_and_terminal_state_contracts():
+    index_html = (REVIEW_DIR / "static" / "index.html").read_text()
+    app_js = (REVIEW_DIR / "static" / "app.js").read_text()
+    styles = (REVIEW_DIR / "static" / "styles.css").read_text()
+
+    for element_id in (
+        "other-disclosure",
+        "other-ingredients",
+        "statements-list",
+        "product-picture-options",
+        "reviewer-image-file",
+        "reviewer-image-rights",
+        "reviewer-image-attestation",
+        "photo-lightbox",
+        "image-canvas",
+        "image-rotate",
+        "image-crop",
+    ):
+        assert f'id="{element_id}"' in index_html
+    for disclosure in (
+        "present",
+        "declared_none",
+        "included_on_facts_panel",
+    ):
+        assert f'value="{disclosure}"' in index_html
+    assert "addNestedRow" in app_js
+    assert "addIngredientForm" in app_js
+    assert "addStatement" in app_js
+    assert "state.payload = parsed" in app_js
+    assert "state.client.storage" in app_js
+    assert "uploadToSignedUrl" in app_js
+    assert "source_rights" in app_js
+    assert "product_image_photo_id" in app_js
+    assert "product_image_reviewer_object_id" in app_js
+    assert "setDecisionAvailability" in app_js
+    assert "showModal()" in app_js
+    assert "photo-lightbox" in styles

@@ -20,6 +20,10 @@ const state = {
   queueRequestId: 0,
   identityLookup: null,
   identityRecorded: null,
+  reviewerImages: [],
+  productImage: null,
+  lightboxImage: null,
+  lightboxRotation: 0,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -77,6 +81,7 @@ async function boot() {
     state.payload.ingredientRows.push(emptyRow());
     renderRows();
   });
+  $('add-statement').addEventListener('click', addStatement);
   $('apply-raw').addEventListener('click', applyRawJson);
   $('t-under-review').addEventListener('click', () =>
     transition({ to_status: 'under_review' }),
@@ -86,7 +91,22 @@ async function boot() {
   $('t-duplicate').addEventListener('click', markDuplicate);
   $('catalog-go').addEventListener('click', catalogSearch);
   $('identity-run').addEventListener('click', checkIdentity);
-  for (const id of ['p-brand', 'p-name', 'p-servings-count', 'p-serving-qty', 'p-serving-unit']) {
+  $('other-disclosure').addEventListener('change', syncDisclosureFields);
+  $('other-ingredients').addEventListener('input', syncDisclosureFields);
+  $('reviewer-image-upload').addEventListener('click', uploadReplacementImage);
+  $('lightbox-close').addEventListener('click', closeLightbox);
+  $('image-rotate').addEventListener('click', rotateLightbox);
+  $('image-crop').addEventListener('click', cropLightbox);
+  $('image-use-crop').addEventListener('click', useLightboxCrop);
+  for (const id of [
+    'p-brand',
+    'p-name',
+    'p-product-type',
+    'p-physical-state',
+    'p-servings-count',
+    'p-serving-qty',
+    'p-serving-unit',
+  ]) {
     $(id).addEventListener('input', syncScalarFields);
   }
 }
@@ -180,6 +200,8 @@ function select(submission) {
   state.payload = defaultPayload();
   state.identityLookup = null;
   state.identityRecorded = null;
+  state.reviewerImages = [];
+  state.productImage = null;
   renderQueue();
   renderDetail();
   scheduleUrlRefresh();
@@ -245,7 +267,7 @@ function renderDetail() {
     const img = document.createElement('img');
     img.src = photo.signed_url;
     img.alt = `photo seq ${photo.seq}`;
-    img.addEventListener('click', () => window.open(photo.signed_url, '_blank'));
+    img.addEventListener('click', () => openLightbox(photo));
     const caption = document.createElement('figcaption');
     caption.textContent =
       `#${photo.seq} · ${(photo.categories ?? []).join(', ')}`;
@@ -257,6 +279,8 @@ function renderDetail() {
   syncFieldsFromPayload();
   updateShaPreview();
   renderIdentityCheck();
+  renderProductPictureOptions();
+  setDecisionAvailability();
 }
 
 // ---------------------------------------------------------------- identity
@@ -432,6 +456,7 @@ function renderIdentityCheck() {
 function emptyRow() {
   return {
     name: '',
+    ingredientGroup: 'Dietary Ingredient',
     quantity: [{ quantity: 0, unit: 'mg' }],
     forms: [],
     nestedRows: [],
@@ -452,6 +477,9 @@ function defaultPayload() {
     }],
     servingsPerContainer: 30,
     offMarket: 0,
+    otherIngredientsDisclosure: 'declared_none',
+    otherIngredients: '',
+    statements: [],
   };
 }
 
@@ -459,7 +487,14 @@ function renderRows() {
   const tbody = $('rows-table').querySelector('tbody');
   tbody.textContent = '';
   state.payload.ingredientRows.forEach((row, index) => {
+    renderIngredientRow(row, state.payload.ingredientRows, index, 0, tbody);
+  });
+  $('raw-json').value = JSON.stringify(state.payload, null, 2);
+}
+
+function renderIngredientRow(row, owner, index, depth, tbody) {
     const tr = document.createElement('tr');
+    tr.style.setProperty('--ingredient-depth', depth);
     const nameCell = document.createElement('td');
     const nameInput = document.createElement('input');
     nameInput.value = row.name ?? '';
@@ -467,7 +502,14 @@ function renderRows() {
       row.name = nameInput.value;
       updateShaPreview();
     });
-    nameCell.append(nameInput);
+    const groupInput = document.createElement('input');
+    groupInput.value = row.ingredientGroup ?? '';
+    groupInput.placeholder = 'Ingredient group';
+    groupInput.addEventListener('input', () => {
+      row.ingredientGroup = groupInput.value;
+      updateShaPreview();
+    });
+    nameCell.append(nameInput, groupInput);
 
     const qtyCell = document.createElement('td');
     const qtyInput = document.createElement('input');
@@ -495,53 +537,169 @@ function renderRows() {
     });
     unitCell.append(unitInput);
 
+    const structureCell = document.createElement('td');
+    const formSummary = document.createElement('div');
+    formSummary.className = 'muted';
+    formSummary.textContent = (row.forms ?? []).length
+      ? `forms: ${row.forms.map((form) => form.name).join(', ')}`
+      : 'no forms';
+    const formButton = document.createElement('button');
+    formButton.type = 'button';
+    formButton.className = 'ghost compact';
+    formButton.textContent = '+ form';
+    formButton.addEventListener('click', () => addIngredientForm(row));
+    const nestedButton = document.createElement('button');
+    nestedButton.type = 'button';
+    nestedButton.className = 'ghost compact';
+    nestedButton.textContent = '+ child';
+    nestedButton.addEventListener('click', () => addNestedRow(row));
+    structureCell.append(formSummary, formButton, nestedButton);
+
     const removeCell = document.createElement('td');
     const removeButton = document.createElement('button');
     removeButton.type = 'button';
     removeButton.className = 'ghost';
     removeButton.textContent = '✕';
     removeButton.addEventListener('click', () => {
-      state.payload.ingredientRows.splice(index, 1);
+      owner.splice(index, 1);
       renderRows();
       updateShaPreview();
     });
     removeCell.append(removeButton);
 
-    tr.append(nameCell, qtyCell, unitCell, removeCell);
+    tr.append(nameCell, qtyCell, unitCell, structureCell, removeCell);
     tbody.append(tr);
+    (row.nestedRows ?? []).forEach((nested, nestedIndex) => {
+      renderIngredientRow(
+        nested,
+        row.nestedRows,
+        nestedIndex,
+        depth + 1,
+        tbody,
+      );
+    });
+}
+
+function addIngredientForm(row) {
+  const name = window.prompt('Form name shown on the label');
+  if (!name?.trim()) return;
+  row.forms ??= [];
+  row.forms.push({ name: name.trim() });
+  renderRows();
+  updateShaPreview();
+}
+
+function addNestedRow(row) {
+  row.nestedRows ??= [];
+  row.nestedRows.push(emptyRow());
+  renderRows();
+  updateShaPreview();
+}
+
+function addStatement() {
+  state.payload.statements ??= [];
+  state.payload.statements.push({ type: 'Label statement', notes: '' });
+  renderStatements();
+  updateShaPreview();
+}
+
+function renderStatements() {
+  const list = $('statements-list');
+  list.textContent = '';
+  (state.payload.statements ?? []).forEach((statement, index) => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const type = document.createElement('input');
+    type.placeholder = 'Statement type';
+    type.value = statement.type ?? '';
+    const notes = document.createElement('input');
+    notes.className = 'grow';
+    notes.placeholder = 'Exact label statement';
+    notes.value = statement.notes ?? '';
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'ghost';
+    remove.textContent = '✕';
+    type.addEventListener('input', () => {
+      statement.type = type.value;
+      updateShaPreview();
+    });
+    notes.addEventListener('input', () => {
+      statement.notes = notes.value;
+      updateShaPreview();
+    });
+    remove.addEventListener('click', () => {
+      state.payload.statements.splice(index, 1);
+      renderStatements();
+      updateShaPreview();
+    });
+    row.append(type, notes, remove);
+    list.append(row);
   });
-  $('raw-json').value = JSON.stringify(state.payload, null, 2);
 }
 
 function syncFieldsFromPayload() {
   $('p-brand').value = state.payload.brandName ?? '';
   $('p-name').value = state.payload.fullName ?? '';
+  $('p-product-type').value = state.payload.productType?.name ?? '';
+  $('p-physical-state').value = state.payload.physicalState?.name ?? '';
   $('p-servings-count').value = state.payload.servingsPerContainer ?? '';
   $('p-serving-qty').value = state.payload.servingSizes?.[0]?.maxQuantity ?? 1;
   $('p-serving-unit').value = state.payload.servingSizes?.[0]?.unit ?? '';
+  $('other-disclosure').value =
+    state.payload.otherIngredientsDisclosure ?? 'declared_none';
+  $('other-ingredients').value = state.payload.otherIngredients ?? '';
+  $('other-ingredients').disabled =
+    $('other-disclosure').value !== 'present';
+  renderStatements();
 }
 
 function syncScalarFields() {
   state.payload.brandName = $('p-brand').value;
   state.payload.fullName = $('p-name').value;
+  const productType = $('p-product-type').value.trim();
+  const physicalState = $('p-physical-state').value.trim();
+  if (productType) state.payload.productType = { name: productType };
+  else delete state.payload.productType;
+  if (physicalState) state.payload.physicalState = { name: physicalState };
+  else delete state.payload.physicalState;
   const servings = Number($('p-servings-count').value || 0);
   if (servings > 0) state.payload.servingsPerContainer = servings;
   const quantity = Number($('p-serving-qty').value || 1);
   const unit = $('p-serving-unit').value || 'Capsule(s)';
+  const existingServingSizes = Array.isArray(state.payload.servingSizes)
+    ? state.payload.servingSizes
+    : [];
   state.payload.servingSizes = [{
+    ...(existingServingSizes[0] ?? {}),
     minQuantity: quantity,
     maxQuantity: quantity,
-    minDailyServings: 1,
-    maxDailyServings: 1,
+    minDailyServings: existingServingSizes[0]?.minDailyServings ?? 1,
+    maxDailyServings: existingServingSizes[0]?.maxDailyServings ?? 1,
     unit,
-  }];
+  }, ...existingServingSizes.slice(1)];
+  $('raw-json').value = JSON.stringify(state.payload, null, 2);
+  updateShaPreview();
+}
+
+function syncDisclosureFields() {
+  state.payload.otherIngredientsDisclosure = $('other-disclosure').value;
+  if (state.payload.otherIngredientsDisclosure === 'present') {
+    state.payload.otherIngredients = $('other-ingredients').value;
+    $('other-ingredients').disabled = false;
+  } else {
+    state.payload.otherIngredients = '';
+    $('other-ingredients').value = '';
+    $('other-ingredients').disabled = true;
+  }
   $('raw-json').value = JSON.stringify(state.payload, null, 2);
   updateShaPreview();
 }
 
 function applyRawJson() {
   try {
-    state.payload = JSON.parse($('raw-json').value);
+    const parsed = JSON.parse($('raw-json').value);
+    state.payload = parsed;
     renderRows();
     syncFieldsFromPayload();
     updateShaPreview();
@@ -560,7 +718,223 @@ async function updateShaPreview() {
   }
 }
 
+// ---------------------------------------------------------------- product picture
+
+function renderProductPictureOptions() {
+  const container = $('product-picture-options');
+  container.textContent = '';
+  const missingProduct = state.selected?.kind === 'missing_product';
+  $('reviewer-image-upload').disabled = !missingProduct;
+  if (!missingProduct) {
+    container.textContent = 'Catalog corrections keep the existing product picture.';
+    return;
+  }
+
+  for (const photo of state.selected.photos ?? []) {
+    if (!(photo.categories ?? []).includes('front_identity')) continue;
+    const label = document.createElement('label');
+    label.className = 'picture-option';
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'product-picture';
+    radio.checked = state.productImage?.kind === 'photo' &&
+      state.productImage.id === photo.photo_id;
+    radio.addEventListener('change', () => {
+      state.productImage = { kind: 'photo', id: photo.photo_id };
+    });
+    const image = document.createElement('img');
+    image.src = photo.signed_url;
+    image.alt = 'Front-label product picture option';
+    image.addEventListener('click', (event) => {
+      event.preventDefault();
+      openLightbox(photo);
+    });
+    label.append(radio, image, document.createTextNode('Use original front photo'));
+    container.append(label);
+  }
+
+  for (const imageRecord of state.reviewerImages) {
+    const label = document.createElement('label');
+    label.className = 'picture-option';
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'product-picture';
+    radio.checked = state.productImage?.kind === 'reviewer' &&
+      state.productImage.id === imageRecord.objectId;
+    radio.addEventListener('change', () => {
+      state.productImage = { kind: 'reviewer', id: imageRecord.objectId };
+    });
+    const image = document.createElement('img');
+    image.src = imageRecord.previewUrl;
+    image.alt = 'Reviewer-prepared product picture option';
+    label.append(radio, image, document.createTextNode(imageRecord.label));
+    container.append(label);
+  }
+}
+
+async function uploadReviewerBlob(
+  blob,
+  sourceRights,
+  rightsAttested,
+  label,
+  sourcePhotoId = null,
+) {
+  const objectId = crypto.randomUUID();
+  const upload = await edge({
+    action: 'create_reviewer_image_upload',
+    submission_id: state.selected.id,
+    object_id: objectId,
+    source_rights: sourceRights,
+    rights_attested: rightsAttested,
+    source_photo_id: sourcePhotoId,
+  });
+  const { error } = await state.client.storage
+    .from('product-submission-reviewer-images')
+    .uploadToSignedUrl(upload.object_path, upload.token, blob, {
+      contentType: blob.type,
+      upsert: false,
+    });
+  if (error) throw error;
+  const previewUrl = URL.createObjectURL(blob);
+  state.reviewerImages.push({ objectId, previewUrl, label });
+  state.productImage = { kind: 'reviewer', id: objectId };
+  renderProductPictureOptions();
+}
+
+async function uploadReplacementImage() {
+  const file = $('reviewer-image-file').files?.[0];
+  const sourceRights = $('reviewer-image-rights').value;
+  const attested = $('reviewer-image-attestation').checked;
+  if (!file) return setStatus('Choose a replacement image first.', true);
+  if (!attested) return setStatus('Confirm the publication rights first.', true);
+  try {
+    $('reviewer-image-upload').disabled = true;
+    setStatus('Uploading the verified replacement…');
+    await uploadReviewerBlob(file, sourceRights, true, 'Reviewer replacement');
+    setStatus('Replacement uploaded and selected.');
+  } catch (error) {
+    setStatus(String(error.message ?? error), true);
+  } finally {
+    $('reviewer-image-upload').disabled = false;
+  }
+}
+
+async function openLightbox(photo) {
+  try {
+    const response = await fetch(photo.signed_url);
+    if (!response.ok) throw new Error('Photo could not be opened.');
+    state.lightboxImage = await createImageBitmap(await response.blob());
+    state.lightboxPhoto = photo;
+    state.lightboxRotation = 0;
+    drawLightbox();
+    $('image-use-crop').disabled =
+      !(photo.categories ?? []).includes('front_identity');
+    $('photo-lightbox').showModal();
+  } catch (error) {
+    setStatus(String(error.message ?? error), true);
+  }
+}
+
+function drawLightbox() {
+  const image = state.lightboxImage;
+  if (!image) return;
+  const canvas = $('image-canvas');
+  const rotated = state.lightboxRotation % 180 !== 0;
+  const naturalWidth = rotated ? image.height : image.width;
+  const naturalHeight = rotated ? image.width : image.height;
+  const scale = Math.min(1000 / naturalWidth, 800 / naturalHeight, 1);
+  canvas.width = Math.max(1, Math.round(naturalWidth * scale));
+  canvas.height = Math.max(1, Math.round(naturalHeight * scale));
+  const context = canvas.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.save();
+  context.translate(canvas.width / 2, canvas.height / 2);
+  context.rotate(state.lightboxRotation * Math.PI / 180);
+  context.drawImage(
+    image,
+    -image.width * scale / 2,
+    -image.height * scale / 2,
+    image.width * scale,
+    image.height * scale,
+  );
+  context.restore();
+}
+
+function rotateLightbox() {
+  state.lightboxRotation = (state.lightboxRotation + 90) % 360;
+  drawLightbox();
+}
+
+async function cropLightbox() {
+  const source = $('image-canvas');
+  const size = Math.min(source.width, source.height);
+  const crop = document.createElement('canvas');
+  crop.width = size;
+  crop.height = size;
+  crop.getContext('2d').drawImage(
+    source,
+    (source.width - size) / 2,
+    (source.height - size) / 2,
+    size,
+    size,
+    0,
+    0,
+    size,
+    size,
+  );
+  const blob = await canvasBlob(crop);
+  state.lightboxImage.close?.();
+  state.lightboxImage = await createImageBitmap(blob);
+  state.lightboxRotation = 0;
+  drawLightbox();
+}
+
+function canvasBlob(canvas) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => blob ? resolve(blob) : reject(new Error('Image export failed.')),
+      'image/jpeg',
+      0.92,
+    );
+  });
+}
+
+async function useLightboxCrop() {
+  if (!state.lightboxPhoto) return;
+  try {
+    const blob = await canvasBlob($('image-canvas'));
+    await uploadReviewerBlob(
+      blob,
+      'user_evidence_crop',
+      false,
+      'Front-photo crop',
+      state.lightboxPhoto.photo_id,
+    );
+    closeLightbox();
+    setStatus('Crop uploaded and selected.');
+  } catch (error) {
+    setStatus(String(error.message ?? error), true);
+  }
+}
+
+function closeLightbox() {
+  const dialog = $('photo-lightbox');
+  if (dialog.open) dialog.close();
+  state.lightboxImage?.close?.();
+  state.lightboxImage = null;
+  state.lightboxPhoto = null;
+}
+
 // ---------------------------------------------------------------- decisions
+
+function setDecisionAvailability() {
+  const status = state.selected?.review_status;
+  const terminal = ['approved', 'rejected', 'duplicate'].includes(status);
+  $('t-under-review').disabled = terminal || status !== 'submitted';
+  $('t-approve').disabled = terminal || status !== 'under_review';
+  $('t-reject').disabled = terminal || !['submitted', 'under_review'].includes(status);
+  $('t-duplicate').disabled = terminal || !['submitted', 'under_review'].includes(status);
+}
 
 async function transition(fields) {
   if (!state.selected) return;
@@ -588,12 +962,21 @@ function approve() {
   ) {
     return setStatus('Record a fresh verified no-match identity check first.', true);
   }
+  if (state.selected?.kind === 'missing_product' && !state.productImage) {
+    return setStatus('Choose exactly one catalog product picture first.', true);
+  }
   syncScalarFields();
-  return transition({
+  const fields = {
     to_status: 'approved',
     approved_schema_version: 'manual_label_v1',
     approved_payload: state.payload,
-  });
+  };
+  if (state.productImage?.kind === 'photo') {
+    fields.product_image_photo_id = state.productImage.id;
+  } else if (state.productImage?.kind === 'reviewer') {
+    fields.product_image_reviewer_object_id = state.productImage.id;
+  }
+  return transition(fields);
 }
 
 function reject() {

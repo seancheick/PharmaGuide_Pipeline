@@ -73,6 +73,8 @@
     <div class="row">
       <label>Brand <input id="p-brand"></label>
       <label>Product name <input id="p-name"></label>
+      <label>Product type <input id="p-product-type" placeholder="Dietary supplement"></label>
+      <label>Physical state <input id="p-physical-state" placeholder="Capsule"></label>
     </div>
     <div class="row">
       <label>Servings/container <input id="p-servings-count" type="number" min="1"></label>
@@ -82,10 +84,47 @@
 
     <h3>Ingredient rows</h3>
     <table id="rows-table">
-      <thead><tr><th>Name</th><th>Quantity</th><th>Unit</th><th></th></tr></thead>
+      <thead><tr><th>Name / group</th><th>Quantity</th><th>Unit</th><th>Forms / children</th><th></th></tr></thead>
       <tbody></tbody>
     </table>
     <button id="add-row" type="button" class="ghost">+ Add row</button>
+
+    <h3>Other Ingredients disclosure</h3>
+    <div class="row">
+      <label>Disclosure
+        <select id="other-disclosure">
+          <option value="present">Present on label</option>
+          <option value="declared_none">Label declares none</option>
+          <option value="included_on_facts_panel">Included on Facts panel</option>
+        </select>
+      </label>
+      <label class="grow">Other Ingredients text
+        <textarea id="other-ingredients" rows="3"></textarea>
+      </label>
+    </div>
+
+    <h3>Label statements</h3>
+    <div id="statements-list"></div>
+    <button id="add-statement" type="button" class="ghost">+ Add statement</button>
+
+    <h3>Catalog product picture</h3>
+    <p class="muted">Choose one front-label photo, or upload a verified crop/replacement.</p>
+    <div id="product-picture-options"></div>
+    <div class="decision-block">
+      <div class="row">
+        <input id="reviewer-image-file" type="file" accept="image/jpeg,image/png,image/webp">
+        <select id="reviewer-image-rights">
+          <option value="operator_photo">Photo taken by operator</option>
+          <option value="manufacturer_provided">Manufacturer provided</option>
+          <option value="licensed">Licensed source</option>
+        </select>
+        <label class="checkbox-row">
+          <input id="reviewer-image-attestation" type="checkbox">
+          I confirm PharmaGuide may publish this image.
+        </label>
+        <button id="reviewer-image-upload" type="button" class="ghost">Upload replacement</button>
+      </div>
+    </div>
 
     <details id="raw-json-box">
       <summary>Raw payload JSON (advanced)</summary>
@@ -131,6 +170,19 @@
     <p id="status-line" class="muted" role="status"></p>
   </section>
 </main>
+
+<dialog id="photo-lightbox">
+  <div class="lightbox-head">
+    <strong>Review product image</strong>
+    <button id="lightbox-close" type="button" class="ghost" aria-label="Close">✕</button>
+  </div>
+  <canvas id="image-canvas"></canvas>
+  <div class="row">
+    <button id="image-rotate" type="button" class="ghost">Rotate 90°</button>
+    <button id="image-crop" type="button" class="ghost">Center crop</button>
+    <button id="image-use-crop" type="button" class="primary">Use this crop</button>
+  </div>
+</dialog>
 
 <script src="/vendor/supabase.js"></script>
 <script src="/canonical.js"></script>

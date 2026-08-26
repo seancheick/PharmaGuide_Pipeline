@@ -58,6 +58,32 @@ GTIN_GOLDEN_PATH = Path(__file__).resolve().parent / "fixtures" / "gtin_golden.j
 GTIN_GOLDEN_SHA256 = (
     "d96e600c74654f813da95246ef1d027c042ba62eac7eb05675bcdf58c728f4dc"
 )
+_MANUAL_LABEL_TOP_LEVEL_FIELDS = frozenset({
+    "brandName", "fullName", "ingredientRows", "nutritionalInfo", "offMarket",
+    "otherIngredients", "otherIngredientsDisclosure", "physicalState",
+    "productType", "servingSizes", "servingsPerContainer", "statements",
+})
+_MANUAL_LABEL_INGREDIENT_FIELDS = frozenset({
+    "alternateNames", "category", "description", "forms", "ingredientGroup",
+    "ingredientId", "name", "nestedRows", "notes", "order", "quantity",
+    "uniiCode",
+})
+_MANUAL_LABEL_QUANTITY_FIELDS = frozenset({
+    "dailyValueTargetGroup", "operator", "quantity", "servingSizeOrder",
+    "servingSizeQuantity", "servingSizeUnit", "unit",
+})
+_MANUAL_LABEL_FORM_FIELDS = frozenset({
+    "category", "ingredientGroup", "ingredientId", "name", "order", "percent",
+    "prefix", "uniiCode",
+})
+_MANUAL_LABEL_SERVING_FIELDS = frozenset({
+    "inSFB", "maxDailyServings", "maxQuantity", "minDailyServings",
+    "minQuantity", "notes", "order", "unit",
+})
+_MANUAL_LABEL_STATEMENT_FIELDS = frozenset({"notes", "type"})
+_MANUAL_LABEL_CLASSIFICATION_FIELDS = frozenset({
+    "langualCode", "langualCodeDescription", "name",
+})
 
 
 @dataclass(frozen=True)
@@ -131,6 +157,59 @@ def _verify_gtin_fixture() -> None:
         GTIN_GOLDEN_SHA256
     ):
         raise ValueError("reviewer GTIN fixture does not match the Flutter contract")
+
+
+def _allowed_fields(value: object, allowed: frozenset[str]) -> dict[str, object]:
+    if not isinstance(value, dict):
+        return {}
+    return {key: field for key, field in value.items() if key in allowed}
+
+
+def _project_ingredient_row(value: object) -> dict[str, object]:
+    """Strip enrichment-only fields from a reviewer draft ingredient row."""
+    row = _allowed_fields(value, _MANUAL_LABEL_INGREDIENT_FIELDS)
+    row["quantity"] = [
+        _allowed_fields(item, _MANUAL_LABEL_QUANTITY_FIELDS)
+        for item in row.get("quantity", [])
+        if isinstance(item, dict)
+    ]
+    row["forms"] = [
+        _allowed_fields(item, _MANUAL_LABEL_FORM_FIELDS)
+        for item in row.get("forms", [])
+        if isinstance(item, dict)
+    ]
+    row["nestedRows"] = [
+        _project_ingredient_row(item)
+        for item in row.get("nestedRows", [])
+        if isinstance(item, dict)
+    ]
+    return row
+
+
+def _manual_label_draft(product: dict[str, object]) -> dict[str, object]:
+    """Project corpus truth into the exact, bounded manual-label vocabulary."""
+    draft = _allowed_fields(product, _MANUAL_LABEL_TOP_LEVEL_FIELDS)
+    draft["ingredientRows"] = [
+        _project_ingredient_row(item)
+        for item in draft.get("ingredientRows", [])
+        if isinstance(item, dict)
+    ]
+    draft["servingSizes"] = [
+        _allowed_fields(item, _MANUAL_LABEL_SERVING_FIELDS)
+        for item in draft.get("servingSizes", [])
+        if isinstance(item, dict)
+    ]
+    draft["statements"] = [
+        _allowed_fields(item, _MANUAL_LABEL_STATEMENT_FIELDS)
+        for item in draft.get("statements", [])
+        if isinstance(item, dict)
+    ]
+    for field in ("physicalState", "productType"):
+        if field in draft:
+            draft[field] = _allowed_fields(
+                draft[field], _MANUAL_LABEL_CLASSIFICATION_FIELDS
+            )
+    return draft
 
 
 def identity_index_freshness(
@@ -247,24 +326,7 @@ def build_identity_index(
                     product.get("brandName") or product.get("brand_name") or ""
                 ),
                 upc_sku=str(product.get("upcSku") or product.get("upc_sku") or ""),
-                draft_payload={
-                    key: product[key]
-                    for key in (
-                        "brandName",
-                        "fullName",
-                        "ingredientRows",
-                        "nutritionalInfo",
-                        "offMarket",
-                        "otherIngredients",
-                        "otherIngredientsDisclosure",
-                        "physicalState",
-                        "productType",
-                        "servingSizes",
-                        "servingsPerContainer",
-                        "statements",
-                    )
-                    if key in product
-                },
+                draft_payload=_manual_label_draft(product),
             )
         )
 
