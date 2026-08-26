@@ -960,7 +960,7 @@ def _download_private_storage_object(bucket_id: str, object_path: str) -> bytes:
         raise SubmissionImportError("SUPABASE_URL is required")
     encoded_path = urllib.parse.quote(object_path, safe="/")
     request = urllib.request.Request(
-        f"{base_url}/storage/v1/object/{bucket_id}/{encoded_path}",
+        f"{base_url}/storage/v1/object/authenticated/{bucket_id}/{encoded_path}",
         headers=_supabase_admin_headers(),
         method="GET",
     )
