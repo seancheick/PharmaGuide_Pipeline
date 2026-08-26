@@ -53,6 +53,17 @@ _HASH_RE = re.compile(r"^[0-9a-f]{64}$")
 PAGE_TIMEOUT_SECONDS = int(os.environ.get("PG_STORAGE_LIST_PAGE_TIMEOUT_SECONDS", "45"))
 PAGE_LIMIT = int(os.environ.get("PG_STORAGE_LIST_PAGE_LIMIT", "1000"))
 MAX_ATTEMPTS = int(os.environ.get("PG_STORAGE_LIST_MAX_RETRIES", "5"))
+
+#: Concurrency does NOT scale linearly here — past ~8 it goes backwards.
+#: Measured 2026-08-26 against the live bucket, 32-shard slice, no checkpoint:
+#:
+#:     workers= 8   41.2s   16,351 objects   complete=True    0 retries
+#:     workers=24   98.9s   15,808 objects   complete=False  29 retries
+#:
+#: Supabase serialises these listings server-side, so extra workers buy
+#: contention and 544s rather than throughput — and a partial inventory, which
+#: correctly refuses to be usable. Full 256-shard pass at 8 workers is ~5 min.
+#: Raise this only with a fresh measurement showing it helps.
 MAX_WORKERS = int(os.environ.get("PG_STORAGE_LIST_MAX_WORKERS", "8"))
 
 CHECKPOINT_VERSION = 1
