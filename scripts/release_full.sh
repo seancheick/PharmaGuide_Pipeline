@@ -34,11 +34,14 @@
 #                                  manifests already match dist/ checksums.
 #   7. Prune .previous backups     (assets/db/*.previous)
 #                                  No-ops cleanly when none exist.
-#   8. Commit bundle + cleanup     (git commit assets/db/ then
-#                                  cleanup_old_versions.py --execute ...)
-#                                  Commits the Flutter bundle LOCALLY so the
-#                                  orphan-cleanup bundle_alignment gate passes,
-#                                  then sweeps old version dirs + orphan blobs.
+#   8. Commit bundle + version     (git commit assets/db/ then
+#      cleanup                     cleanup_old_versions.py --execute ...)
+#                                  Commits the Flutter bundle LOCALLY, then
+#                                  prunes old version DIRECTORIES only.
+#                                  Orphan-blob reconciliation is a SEPARATE
+#                                  maintenance step (reconcile_orphan_blobs.py):
+#                                  it needs a ~6 min full-bucket inventory and
+#                                  must not sit on the release critical path.
 #                                  Push stays manual.
 #
 # Usage:
@@ -832,21 +835,33 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
       skip "Flutter bundle already committed — nothing to commit"
     fi
 
-    info "Step 8/8: Aligned storage cleanup (version dirs + orphan blobs)..."
-    # No --expected-count: blast-radius stays a backstop. A big-churn release
-    # that would delete >5% is logged and left for a manual authorized sweep
-    # (cleanup_old_versions.py --execute --cleanup-orphan-blobs ... --expected-count N).
-    # Quarantine is a recoverable MOVE (30-day TTL), not a hard delete.
+    info "Step 8/8: Version-directory cleanup (keeping $KEEP_VERSIONS)..."
+    # Orphan-blob reconciliation is deliberately NOT run here. It requires a
+    # full 256-shard inventory of ~134k objects (~6 min wall-clock) and is pure
+    # housekeeping: a published catalog must not wait on it, and a maintenance
+    # blip must not be reported as a release-step failure. It is a separate,
+    # resumable step — see the deferred command printed below.
     if "$PG_PYTHON" scripts/cleanup_old_versions.py \
-        --execute --cleanup-db --cleanup-orphan-blobs \
+        --execute --cleanup-db \
         --keep "$KEEP_VERSIONS" \
         --flutter-repo "$FLUTTER_REPO" \
         --dist-dir "$DIST_DIR" \
         --branch "$FLUTTER_RELEASE_BRANCH"; then
-      ok "Storage cleanup step done"
+      ok "Version cleanup: OK (retained the $KEEP_VERSIONS newest version dirs)"
     else
-      warn "Storage cleanup returned non-zero — non-fatal; see reports/release_audit/"
+      warn "Version cleanup: FAILED (non-fatal) — see reports/release_audit/"
     fi
+
+    # Reported separately, and never as a success this step did not achieve.
+    warn "Orphan cleanup: DEFERRED (not attempted by the release)"
+    info "  Run the maintenance step when convenient — it is resumable:"
+    info "    scripts/reconcile_orphan_blobs.py \\"
+    info "        --flutter-repo \"$FLUTTER_REPO\" --dist-dir \"$DIST_DIR\" \\"
+    info "        --branch \"$FLUTTER_RELEASE_BRANCH\" \\"
+    info "        --checkpoint reports/orphan_inventory.checkpoint.json \\"
+    info "        --json-report reports/orphan_report.json"
+    info "  Review the exact orphan count in that report, then re-run with"
+    info "  --execute --expected-count N to quarantine (recoverable, 30d TTL)."
   else
     warn "$FLUTTER_REPO is not a git work tree — skipping bundle commit + cleanup"
   fi

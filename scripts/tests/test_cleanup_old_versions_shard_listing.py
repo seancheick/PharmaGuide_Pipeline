@@ -1,144 +1,119 @@
-"""Regression tests for detail-blob shard listing in cleanup_old_versions.py."""
+"""Shard-listing guards for cleanup_old_versions.
+
+Most of this file's original coverage moved when the inventory was extracted
+into ``release_safety.blob_inventory``. The helpers it tested
+(``list_all_blob_shard_dirs``, ``detect_orphan_blobs``, ``cleanup_orphan_blobs``,
+``list_blobs_in_shard``) no longer exist. Equivalent assertions now live in:
+
+  * shard enumeration never touches the root prefix
+      -> test_release_safety_blob_inventory.test_inventory_never_lists_the_shard_root
+  * a shard that keeps failing does not silently truncate the listing
+      -> test_release_safety_blob_inventory
+         .test_inventory_marks_itself_incomplete_when_a_shard_never_succeeds
+         .test_incomplete_inventory_raises_when_completeness_is_required
+  * dry-run orphan reporting
+      -> test_release_safety_orphan_reconcile (now retained-version aware)
+
+What stays here is the guard at THIS layer: the gated cleanup entry point must
+never issue a listing of ``shared/details/sha256`` itself. That call returns
+HTTP 544 DatabaseTimeout deterministically in production (~134k objects), and
+it is the specific regression this file was created to prevent.
+"""
 
 from __future__ import annotations
 
+import json
 import os
 import sys
-import json
-import pytest
 
 _scripts_dir = os.path.join(os.path.dirname(__file__), "..")
 if _scripts_dir not in sys.path:
     sys.path.insert(0, os.path.abspath(_scripts_dir))
 
+PREFIX = "shared/details/sha256"
+
 
 class _Bucket:
-    def __init__(self, objects: set[str], downloads: dict[str, bytes] | None = None) -> None:
-        self.objects = objects
-        self.downloads = downloads or {}
+    def __init__(self, objects):
+        self.objects = set(objects)
         self.listed_paths: list[str] = []
 
-    def list(self, path: str, options=None):
+    def list(self, path="", options=None):
         self.listed_paths.append(path)
-        if path == "shared/details/sha256":
-            raise RuntimeError("root shard listing timed out")
-
-        prefix = path.rstrip("/") + "/"
-        offset = int((options or {}).get("offset", 0))
-        limit = int((options or {}).get("limit", 1000))
+        if path == PREFIX:
+            raise RuntimeError("root shard listing timed out (HTTP 544)")
+        base = path.rstrip("/") + "/" if path else ""
+        opts = options or {}
+        limit = int(opts.get("limit", 1000))
+        offset = int(opts.get("offset", 0))
         names = sorted(
-            full[len(prefix):]
+            full[len(base):]
             for full in self.objects
-            if full.startswith(prefix) and "/" not in full[len(prefix):]
+            if full.startswith(base) and "/" not in full[len(base):]
         )
-        return [{"name": name} for name in names[offset:offset + limit]]
+        return [{"name": n, "metadata": {"size": 10}}
+                for n in names[offset:offset + limit]]
 
-    def download(self, path: str) -> bytes:
-        if path not in self.downloads:
-            raise RuntimeError(f"not found: {path}")
-        return self.downloads[path]
+    def download(self, path):
+        raise RuntimeError(f"not found: {path}")
 
 
-class _Storage:
-    def __init__(self, bucket: _Bucket) -> None:
-        self.bucket = bucket
+class _EmptyTable:
+    """Registry with no ACTIVE/VALIDATING rows — the gate still runs, and the
+    listing assertions below happen before it decides anything."""
 
-    def from_(self, bucket_name: str) -> _Bucket:
-        assert bucket_name == "pharmaguide"
-        return self.bucket
+    def select(self, *_a, **_k):
+        return self
+
+    def eq(self, *_a, **_k):
+        return self
+
+    def order(self, *_a, **_k):
+        return self
+
+    def execute(self):
+        return type("_Resp", (), {"data": []})()
 
 
 class _Client:
-    def __init__(self, objects: set[str], downloads: dict[str, bytes] | None = None) -> None:
-        self.bucket = _Bucket(objects, downloads=downloads)
-        self.storage = _Storage(self.bucket)
+    def __init__(self, objects):
+        self.bucket = _Bucket(objects)
+        self.storage = self
+
+    def from_(self, name):
+        assert name == "pharmaguide"
+        return self.bucket
+
+    def table(self, _name):
+        return _EmptyTable()
 
 
-def test_list_all_blob_shard_dirs_is_deterministic_and_does_not_touch_storage():
-    from cleanup_old_versions import list_all_blob_shard_dirs
+def test_gated_cleanup_never_lists_the_shard_root(tmp_path):
+    """The root prefix 544s at production scale — enumerate 00..ff instead."""
+    from cleanup_old_versions import cleanup_orphan_blobs_with_gates
 
-    client = _Client(set())
-    shards = list_all_blob_shard_dirs(client)
+    kept = "aa" * 32
+    client = _Client({f"{PREFIX}/aa/{kept}.json"})
 
-    assert len(shards) == 256
-    assert shards[0] == "00"
-    assert shards[-1] == "ff"
-    assert client.bucket.listed_paths == []
-
-
-def test_detect_orphan_blobs_no_longer_depends_on_root_shard_listing():
-    from cleanup_old_versions import detect_orphan_blobs
-
-    kept = "0a" * 32
-    orphan = "ff" * 32
-    objects = {
-        f"shared/details/sha256/{kept[:2]}/{kept}.json",
-        f"shared/details/sha256/{orphan[:2]}/{orphan}.json",
-    }
-    client = _Client(objects)
-
-    orphans = detect_orphan_blobs(
-        client,
-        referenced_paths={f"shared/details/sha256/{kept[:2]}/{kept}.json"},
-    )
-
-    assert orphans == [f"shared/details/sha256/{orphan[:2]}/{orphan}.json"]
-    assert "shared/details/sha256" not in client.bucket.listed_paths
-    assert "shared/details/sha256/0a" in client.bucket.listed_paths
-    assert "shared/details/sha256/ff" in client.bucket.listed_paths
-
-
-def test_cleanup_orphan_blobs_dry_run_suppresses_large_path_listing(capsys):
-    from cleanup_old_versions import (
-        ORPHAN_DRY_RUN_SAMPLE_LIMIT,
-        cleanup_orphan_blobs,
-    )
-
-    kept = "0a" * 32
-    orphan_hashes = [f"{idx:064x}" for idx in range(100, 100 + ORPHAN_DRY_RUN_SAMPLE_LIMIT + 5)]
-    objects = {f"shared/details/sha256/{kept[:2]}/{kept}.json"}
-    objects.update(
-        f"shared/details/sha256/{h[:2]}/{h}.json"
-        for h in orphan_hashes
-    )
-    index = {
-        "kept": {
-            "storage_path": f"shared/details/sha256/{kept[:2]}/{kept}.json",
+    dist_dir = tmp_path / "dist"
+    dist_dir.mkdir()
+    (dist_dir / "detail_index.json").write_text(json.dumps({
+        "_meta": {"db_version": "2026.08.26.141540"},
+        "1": {
+            "blob_sha256": kept,
+            "storage_path": f"{PREFIX}/aa/{kept}.json",
+            "blob_version": 1,
         },
-    }
-    client = _Client(
-        objects,
-        downloads={"vTEST/detail_index.json": json.dumps(index).encode("utf-8")},
+    }))
+
+    cleanup_orphan_blobs_with_gates(
+        client,
+        "2026.08.26.141540",
+        flutter_repo_path=str(tmp_path / "flutter"),
+        dist_dir=str(dist_dir),
+        retained_versions=("2026.08.26.141540",),
     )
 
-    deleted, failed = cleanup_orphan_blobs(client, "TEST", dry_run=True)
-    out = capsys.readouterr().out
-
-    assert deleted == len(orphan_hashes)
-    assert failed == 0
-    assert out.count("[DRY-RUN] Would delete orphan") == ORPHAN_DRY_RUN_SAMPLE_LIMIT
-    assert "more orphan blob(s)" in out
-    assert "exact count preserved" in out
-
-
-def test_list_blobs_in_shard_strict_raises_on_repeated_page_failure(monkeypatch):
-    import cleanup_old_versions as cov
-
-    client = _Client(set())
-    attempts = []
-
-    def fail_page(_bucket, prefix, offset, timeout_seconds=None):
-        attempts.append((prefix, offset))
-        raise cov.StorageListPageTimeout("injected storage timeout")
-
-    monkeypatch.setattr(cov, "_list_storage_page", fail_page)
-    monkeypatch.setattr(cov.time, "sleep", lambda _seconds: None)
-
-    with pytest.raises(RuntimeError, match="Blob listing failed"):
-        cov.list_blobs_in_shard(client, "ab", max_retries=3, strict=True)
-
-    assert attempts == [
-        ("shared/details/sha256/ab", 0),
-        ("shared/details/sha256/ab", 0),
-        ("shared/details/sha256/ab", 0),
-    ]
+    assert PREFIX not in client.bucket.listed_paths
+    assert f"{PREFIX}/aa" in client.bucket.listed_paths
+    assert f"{PREFIX}/ff" in client.bucket.listed_paths

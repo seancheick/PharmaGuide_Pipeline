@@ -376,176 +376,17 @@ def quarantine_orphan_blob_batch(
 # Orphan blob detection
 # ---------------------------------------------------------------------------
 
-BLOB_STORAGE_PREFIX = "shared/details/sha256"
-HEX_BLOB_SHARDS = tuple(f"{i:02x}" for i in range(256))
-ORPHAN_DRY_RUN_SAMPLE_LIMIT = 20
-
-
-def fetch_current_detail_index(client, current_version):
-    """Download the current detail_index.json and return the set of referenced blob paths."""
-    import json
-    remote_path = f"v{current_version}/detail_index.json"
-    try:
-        data = client.storage.from_(BUCKET).download(remote_path)
-        index = json.loads(data)
-        return {entry["storage_path"] for entry in index.values()}
-    except Exception as exc:
-        print(f"  [ERROR] Could not download detail_index.json for v{current_version}: {exc}")
-        print(f"  Orphan blob cleanup will be SKIPPED — cannot determine which blobs are active.")
-        return None
-
-
-def list_all_blob_shard_dirs(client):
-    """Return all deterministic blob shard directories.
-
-    Detail blobs are always stored as
-    ``shared/details/sha256/{first-two-hex}/{hash}.json``. Older cleanup code
-    discovered the 2-char shard directories by listing the prefix root, but
-    that Supabase call can time out at production scale. Enumerating 00..ff is
-    deterministic, complete, and lets the existing per-shard paginated listing
-    handle empty shards cheaply.
-    """
-    return list(HEX_BLOB_SHARDS)
-
-
-class StorageListPageTimeout(TimeoutError):
-    """Raised when a single Supabase storage page list exceeds the timeout."""
-
-
-def _list_storage_page(bucket, prefix, offset, timeout_seconds=None):
-    """List one storage page with a bounded wall-clock timeout.
-
-    Supabase-py's public ``bucket.list()`` does not expose a per-call timeout.
-    The bucket proxy's private request path is the same endpoint with timeout
-    pass-through, so production clients use that. Test doubles fall back to the
-    public ``list()`` method.
-    """
-    if timeout_seconds is None:
-        timeout_seconds = STORAGE_LIST_PAGE_TIMEOUT_SECONDS
-
-    options = {"limit": 1000, "offset": offset}
-    if not hasattr(bucket, "_request") or not hasattr(bucket, "id"):
-        return bucket.list(path=prefix, options=options)
-
-    response = bucket._request(
-        "POST",
-        ["object", "list", bucket.id],
-        json={
-            "limit": 1000,
-            "offset": offset,
-            "sortBy": {"column": "name", "order": "asc"},
-            "prefix": prefix,
-        },
-        headers={"Content-Type": "application/json"},
-        timeout=timeout_seconds,
-    )
-    return response.json()
-
-
-def list_blobs_in_shard(client, shard, max_retries=None, *, strict=False):
-    """List all blob paths in a shard directory.
-
-    Retries transient Supabase storage failures (DatabaseTimeout etc.) with
-    exponential backoff before giving up on the page. At high blob counts the
-    per-shard list calls intermittently time out; a silent partial listing
-    would under-detect orphans, so we retry rather than break on first error.
-    """
-    prefix = f"{BLOB_STORAGE_PREFIX}/{shard}"
-    paths = []
-    offset = 0
-    bucket = client.storage.from_(BUCKET)
-    if max_retries is None:
-        max_retries = STORAGE_LIST_MAX_RETRIES
-    while True:
-        items = None
-        for attempt in range(max_retries):
-            try:
-                items = _list_storage_page(bucket, prefix, offset)
-                break
-            except Exception as exc:
-                if attempt == max_retries - 1:
-                    message = (
-                        f"Blob listing failed at offset {offset} in shard "
-                        f"{shard} after {max_retries} attempts: {exc}"
-                    )
-                    print(f"  [WARN] {message}")
-                    if strict:
-                        raise RuntimeError(message) from exc
-                    print(
-                        f"  Returning {len(paths)} blobs found so far "
-                        "(listing may be incomplete)."
-                    )
-                    return paths
-                time.sleep(min(0.5 * (2 ** attempt), 5.0))
-        if not items:
-            break
-        for item in items:
-            name = item.get("name")
-            if name:
-                paths.append(f"{prefix}/{name}")
-        if len(items) < 1000:
-            break
-        offset += 1000
-    return paths
-
-
-def detect_orphan_blobs(client, referenced_paths):
-    """Find all blobs in storage not referenced by the current detail_index."""
-    print("  Scanning shard directories...")
-    shards = list_all_blob_shard_dirs(client)
-    if not shards:
-        print("  No shard directories found.")
-        return []
-
-    all_remote = []
-    for shard in shards:
-        all_remote.extend(list_blobs_in_shard(client, shard))
-
-    orphans = [p for p in all_remote if p not in referenced_paths]
-    print(f"  Total blobs in storage: {len(all_remote)}")
-    print(f"  Referenced by current index: {len(referenced_paths)}")
-    print(f"  Orphaned blobs: {len(orphans)}")
-    return orphans
-
-
-def cleanup_orphan_blobs(client, current_version, dry_run):
-    """Detect and optionally delete orphaned blobs."""
-    print(f"\nFetching current detail_index.json (v{current_version})...")
-    referenced = fetch_current_detail_index(client, current_version)
-    if referenced is None:
-        print("  Cannot determine referenced blobs — skipping orphan cleanup.")
-        return 0, 0
-
-    orphans = detect_orphan_blobs(client, referenced)
-    if not orphans:
-        print("  No orphaned blobs found.")
-        return 0, 0
-
-    deleted = 0
-    failed = 0
-    for idx, path in enumerate(orphans):
-        if dry_run:
-            if idx >= ORPHAN_DRY_RUN_SAMPLE_LIMIT:
-                continue
-            print(f"  [DRY-RUN] Would delete orphan: {path}")
-        else:
-            ok, err = delete_storage_path(client, path)
-            if ok:
-                deleted += 1
-            else:
-                print(f"  [ERROR] Failed to delete orphan {path}: {err}")
-                failed += 1
-
-    if dry_run:
-        if len(orphans) > ORPHAN_DRY_RUN_SAMPLE_LIMIT:
-            remaining = len(orphans) - ORPHAN_DRY_RUN_SAMPLE_LIMIT
-            print(
-                f"  [DRY-RUN] ... and {remaining} more orphan blob(s) "
-                f"(suppressed; exact count preserved in summary)"
-            )
-        deleted = len(orphans)
-
-    return deleted, failed
+# One inventory brain: the shard layout, page listing, retries and
+# completeness rules all live in release_safety.blob_inventory. The former
+# single-version helpers here (fetch_current_detail_index, detect_orphan_blobs,
+# cleanup_orphan_blobs) were removed: they protected only the CURRENT
+# detail_index, so on 2026-08-26 they would have called blobs of the still
+# retained 2026.08.25 catalog deletable.
+from release_safety.blob_inventory import (  # noqa: E402
+    BLOB_STORAGE_PREFIX,
+    HEX_BLOB_SHARDS,
+    inventory_detail_blobs,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -666,28 +507,41 @@ def cleanup_orphan_blobs_with_gates(
     # and the total for blast-radius). Cheaper to do this once here than
     # twice (here + inside the gate).
     print("\nListing all blobs in Supabase storage...")
-    shards = list_all_blob_shard_dirs(client)
-    storage_paths = []
-    shard_total = len(shards)
-    for idx, shard in enumerate(shards, start=1):
-        shard_paths = list_blobs_in_shard(client, shard, strict=True)
-        storage_paths.extend(shard_paths)
-        if (
-            idx == 1
-            or idx == shard_total
-            or idx % STORAGE_LIST_PROGRESS_EVERY_SHARDS == 0
-        ):
+
+    def _progress(done, total, objects):
+        if done == 1 or done == total or done % STORAGE_LIST_PROGRESS_EVERY_SHARDS == 0:
             print(
-                f"  Listed {idx}/{shard_total} shard(s); "
-                f"{len(storage_paths)} blob object(s) seen so far."
+                f"  Listed {done}/{total} shard(s); "
+                f"{objects} blob object(s) seen so far."
             )
-    storage_hashes = set()
-    for path in storage_paths:
-        leaf = path.rsplit("/", 1)[-1]
-        if leaf.endswith(".json"):
-            storage_hashes.add(leaf[:-5])
+
+    inventory = inventory_detail_blobs(
+        client,
+        shards=HEX_BLOB_SHARDS,
+        client_factory=quarantine_client_factory,
+        progress=_progress,
+    )
+    if not inventory.complete:
+        # Fail closed WITHOUT raising: this function's contract is that gate
+        # and I/O failures are reported, not thrown. An undercounted storage
+        # side cannot prove what is an orphan.
+        print(
+            f"\n[release-safety] Storage inventory incomplete: read "
+            f"{inventory.shards_completed}/{inventory.shards_total} shard(s), "
+            f"{len(inventory.failures)} failed."
+        )
+        for failure in inventory.failures[:5]:
+            print(f"    {failure.shard}: {failure.error}")
+        print("  Refusing destructive cleanup. No blobs quarantined.")
+        return 0, 0
+
+    storage_hashes = set(inventory.hashes)
     storage_total = len(storage_hashes)
-    print(f"  {storage_total} unique blobs in storage")
+    print(
+        f"  {storage_total} unique blobs in storage "
+        f"({inventory.retries} retry/retries, "
+        f"{inventory.elapsed_seconds:.1f}s)"
+    )
 
     # Step 2: compute initial orphan candidates (storage − dist.index).
     # The gate will further filter against the bundled∪dist protected set.
@@ -990,13 +844,29 @@ def main(argv=None):
         current_row = next((r for r in rows if r.get("is_current")), rows[0] if rows else None)
         if current_row:
             if dry_run:
-                # Dry-run path is read-only; no destructive gates required
-                # per ADR-0001 HR-12 (read-only ops bypass the lock + gates).
-                # Single-version protection is fine here because nothing is
-                # actually deleted — the output just shows what WOULD be.
-                total_orphans_quarantined, total_orphans_failed = cleanup_orphan_blobs(
-                    client, current_row["db_version"], dry_run,
+                # The old dry run scanned storage against the CURRENT
+                # detail_index only, so every blob kept alive solely by a
+                # retained older catalog was reported as deletable. A count
+                # that errs toward "delete more" is worse than no count.
+                # Orphan reporting now lives in the maintenance tool, which
+                # protects every retained version and states its own limits.
+                print(
+                    "\n[ERROR] Orphan dry-run reporting has moved to "
+                    "scripts/reconcile_orphan_blobs.py."
                 )
+                print(
+                    "        The count this path used to print protected only "
+                    "the current\n        detail_index, not every retained "
+                    "catalog version."
+                )
+                print("\n  Run instead:")
+                print(
+                    "    scripts/reconcile_orphan_blobs.py \\\n"
+                    "        --flutter-repo PATH --dist-dir PATH \\\n"
+                    "        --checkpoint reports/orphan_inventory.checkpoint.json \\\n"
+                    "        --json-report reports/orphan_report.json"
+                )
+                sys.exit(2)
             else:
                 # EXECUTE path — gated per ADR-0001 P1.6.
                 # Required inputs MUST be present; fail closed if missing.
