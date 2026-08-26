@@ -17,6 +17,7 @@ from scoring_input_contract import (  # noqa: E402
     SCORING_CLASSIFICATION_SCHEMA_VERSION,
     build_scoring_classification,
     derive_product_scoring_evidence,
+    profile_owner_candidate_rows,
 )
 from scoring_v4.router import class_for_product  # noqa: E402
 
@@ -137,6 +138,132 @@ def test_route_classification_reuses_scoring_rows(monkeypatch):
     assert build_scoring_classification(product)["route_module"] == "sports"
     assert calls == 1
     assert not any(key.startswith("__scoring_input_contract") for key in product)
+
+
+def test_product_level_blend_evidence_cannot_veto_submitted_botanical_owner(monkeypatch):
+    """Synthetic blend anchors support scoring but are not label ingredients.
+
+    A submitted Ashwagandha + GABA label carries a real KSM-66 row plus a
+    product-level blend-total projection. The projection remains available to
+    routing/scoring, but cannot replace a fully disclosed label-row owner.
+    """
+    label_rows = [
+        _row(
+            "ashwagandha",
+            "Organic Ashwagandha Root Extract",
+            600,
+            raw_source_path="ingredientRows[0].nestedRows[0]",
+            raw_taxonomy={
+                "category": "botanical",
+                "ingredientGroup": "Ashwagandha",
+                "forms": [{"name": "KSM-66", "category": "botanical"}],
+            },
+            forms=[{"name": "KSM-66", "category": "botanical"}],
+            matched_form="KSM-66 ashwagandha",
+        ),
+        _row(
+            "ashwagandha",
+            "Organic Ashwagandha Root Powder",
+            400,
+            raw_source_path="ingredientRows[0].nestedRows[1]",
+            raw_taxonomy={
+                "category": "botanical",
+                "ingredientGroup": "Ashwagandha",
+                "forms": [{"name": "Ashwagandha Root Powder", "category": "botanical"}],
+            },
+            matched_form="ashwagandha (unspecified)",
+        ),
+        _row(
+            "gaba",
+            "GABA (gamma-aminobutyric acid)",
+            100,
+            raw_source_path="ingredientRows[1]",
+            category="amino_acids",
+        ),
+    ]
+    blend_projection = _row(
+        "full_spectrum_ashwagandha_blend",
+        "Full Spectrum Ashwagandha Blend",
+        1000,
+        raw_source_path="ingredientRows[0]",
+        raw_taxonomy={"category": "botanical", "forms": []},
+        scoring_input_kind="product_level_evidence",
+        evidence_type="blend_anchor_mass",
+    )
+    product = _product(
+        "Ashwagandha + GABA",
+        label_rows,
+        primary_type="sleep_support",
+        formulation_data={
+            "standardized_botanicals": [
+                {
+                    "name": "Organic Ashwagandha Root Extract",
+                    "botanical_id": "ashwagandha",
+                    "standard_name": "Ashwagandha",
+                }
+            ]
+        },
+    )
+
+    def fake_get_scoring_ingredients(product_arg, *, strict=True, allow_legacy_fallback=False):
+        assert product_arg is product
+        rows = [*label_rows, blend_projection]
+        return sic.ScoringInputResult(
+            rows=rows,
+            rejected_rows=[],
+            source=f"{sic.SCORING_SOURCE}+{sic.PRODUCT_EVIDENCE_SOURCE}",
+            fallbacks_used=[],
+            strict_contract_passed=True,
+            zero_scorable_reason=None,
+            mapped_count=len(rows),
+            unmapped_count=0,
+            mapped_coverage=1.0,
+            contract_findings=[],
+        )
+
+    monkeypatch.setattr(sic, "get_scoring_ingredients", fake_get_scoring_ingredients)
+
+    contract = build_scoring_classification(
+        product,
+        route_module="generic",
+        classification_origin="native_enrichment",
+    )
+
+    botanical = contract["profile_eligibility"]["botanical"]
+    assert botanical["eligible"] is True
+    assert botanical["owner_type"] == "standardized_botanical"
+    assert botanical["owner_reason_code"] == "standardized_botanical_owner"
+    # The aggregate remains in the classification contract for conservative
+    # blend/dose consumers; it simply cannot outrank the disclosed label row.
+    assert [row["row_ref"] for row in contract["ingredients"]] == [
+        "ingredientRows[0].nestedRows[0]",
+        "ingredientRows[0].nestedRows[1]",
+        "ingredientRows[1]",
+        "ingredientRows[0]",
+    ]
+
+
+def test_unlinked_same_identity_projection_remains_an_owner_candidate():
+    """Equal masses on separate label rows are not reconciliation evidence."""
+    disclosed_row = _row(
+        "elderberry",
+        "Black Elderberry Extract",
+        200,
+        raw_source_path="ingredientRows[1]",
+    )
+    separate_projection = _row(
+        "elderberry",
+        "Elderberry Blend",
+        200,
+        raw_source_path="ingredientRows[0]",
+        scoring_input_kind="product_level_evidence",
+        evidence_type="blend_anchor_mass",
+        linked_rows=["ingredientRows[0]"],
+    )
+
+    assert profile_owner_candidate_rows(
+        [disclosed_row, separate_projection]
+    ) == [disclosed_row, separate_projection]
 
 
 # ── Multivitamin route-trust hardening ──────────────────────────────────────

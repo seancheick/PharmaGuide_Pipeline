@@ -4369,6 +4369,100 @@ def _profile_material_blocking_mass(row: Dict[str, Any], botanical_mass_mg: floa
     return other_mass >= (_PROFILE_NONBOTANICAL_BLOCKER_MATERIALITY_FRACTION * botanical_mass_mg)
 
 
+def profile_owner_candidate_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Remove only fully reconciled blend projections from owner selection.
+
+    Product-level blend totals remain valid conservative fallback evidence.  A
+    projection becomes redundant for identity/profile ownership only when real
+    label rows account for the same canonical exposure or linked source rows
+    and their disclosed masses reconcile to the projection total.  This keeps
+    opaque or partially disclosed aggregates while preventing a duplicate
+    rollup from outranking its own fully disclosed children.
+    """
+    label_rows = [
+        row
+        for row in rows
+        if _norm(row.get("scoring_input_kind")) != "product_level_evidence"
+    ]
+    if not label_rows:
+        return list(rows)
+
+    def row_path(row: Dict[str, Any]) -> str:
+        return str(row.get("raw_source_path") or row.get("source") or "").strip()
+
+    def paths_overlap(owner_path: str, label_path: str) -> bool:
+        if not owner_path or not label_path:
+            return False
+        return label_path == owner_path or label_path.startswith(f"{owner_path}.")
+
+    def path_root(path: str) -> str:
+        return path.split("[", 1)[0].split(".", 1)[0] if path else ""
+
+    def projection_is_reconciled(projection: Dict[str, Any]) -> bool:
+        if _norm(projection.get("scoring_input_kind")) != "product_level_evidence":
+            return False
+        if _norm(projection.get("evidence_type")) != "blend_anchor_mass":
+            return False
+        projection_mass = _role_mass_mg(projection)
+        if projection_mass is None or projection_mass <= 0:
+            return False
+
+        projection_canonical = _norm(
+            projection.get("canonical_id")
+            or projection.get("evidence_canonical_id")
+            or projection.get("scoring_parent_id")
+        )
+        linked_paths = {
+            str(path).strip()
+            for path in _safe_list(projection.get("linked_rows"))
+            if str(path).strip()
+        }
+        projection_path = row_path(projection)
+        if projection_path:
+            linked_paths.add(projection_path)
+        linked_path_roots = {path_root(path) for path in linked_paths if path_root(path)}
+
+        matched_rows: Dict[tuple[str, str], float] = {}
+        for index, label_row in enumerate(label_rows):
+            label_mass = _role_mass_mg(label_row)
+            if label_mass is None or label_mass <= 0:
+                continue
+            label_canonical = _norm(
+                label_row.get("canonical_id")
+                or label_row.get("evidence_canonical_id")
+                or label_row.get("scoring_parent_id")
+            )
+            label_path = row_path(label_row)
+            same_identity = bool(
+                projection_canonical
+                and label_canonical == projection_canonical
+            )
+            linked_identity = any(
+                paths_overlap(owner_path, label_path)
+                for owner_path in linked_paths
+            )
+            label_path_root = path_root(label_path)
+            cross_projection_identity = bool(
+                same_identity
+                and (
+                    not label_path_root
+                    or not linked_path_roots
+                    or label_path_root not in linked_path_roots
+                )
+            )
+            if not (linked_identity or cross_projection_identity):
+                continue
+            matched_rows[(label_path or f"row:{index}", label_canonical)] = label_mass
+
+        if not matched_rows:
+            return False
+        disclosed_mass = sum(matched_rows.values())
+        tolerance = max(0.01, projection_mass * 0.01)
+        return abs(disclosed_mass - projection_mass) <= tolerance
+
+    return [row for row in rows if not projection_is_reconciled(row)]
+
+
 def _classify_botanical_owner_type(
     product: Dict[str, Any],
     rows: List[Dict[str, Any]],
@@ -4388,7 +4482,16 @@ def _classify_botanical_owner_type(
             "owner_row_refs": [], "blocking_row_refs": [], "support_row_refs": [],
         }
 
-    primary_row, primary_contract = max(botanical_pairs, key=lambda p: (_role_mass_mg(p[0]) or 0.0))
+    owner_candidate_ids = {
+        id(row) for row in profile_owner_candidate_rows(rows)
+    }
+    primary_candidates = [
+        pair for pair in botanical_pairs if id(pair[0]) in owner_candidate_ids
+    ] or botanical_pairs
+    primary_row, primary_contract = max(
+        primary_candidates,
+        key=lambda p: (_role_mass_mg(p[0]) or 0.0),
+    )
     botanical_mass = _role_mass_mg(primary_row) or 0.0
     non_botanical_pairs = [(r, c) for r, c in pairs if not _row_profile_eligible(c, "botanical")]
     botanical_is_material = _profile_is_material(botanical_mass, non_botanical_pairs)

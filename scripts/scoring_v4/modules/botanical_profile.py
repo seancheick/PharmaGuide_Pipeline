@@ -349,14 +349,25 @@ def _mass_mg(row: Dict[str, Any]) -> Optional[float]:
 
 
 def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    botanicals = [r for r in _scoring_actives(product) if _is_botanical_active(r)]
+    scoring_actives = _scoring_actives(product)
+    botanicals = [r for r in scoring_actives if _is_botanical_active(r)]
     if not botanicals:
         return None
+    # Share the classification contract's exact aggregate-ownership boundary:
+    # only a fully reconciled duplicate rollup is removed. Opaque/partial blend
+    # anchors remain available as conservative fallback evidence.
+    from scoring_input_contract import profile_owner_candidate_rows
+
+    owner_candidates = profile_owner_candidate_rows(scoring_actives)
+    owner_candidate_ids = {id(row) for row in owner_candidates}
+    candidates = [
+        row for row in botanicals if id(row) in owner_candidate_ids
+    ] or botanicals
     # Highest comparable mass wins; when multiple rows share the same blend
     # total, prefer a recognized botanical anchor over the generic/unmapped
     # blend header. This keeps opaque blend headers conservative without
     # suppressing the known child identity carried by blend_anchor_mass.
-    return max(botanicals, key=lambda r: (
+    return max(candidates, key=lambda r: (
         _mass_mg(r) or 0.0,
         _recognized_botanical_identity(r),
         _as_float(r.get("bio_score")) or 0.0,
