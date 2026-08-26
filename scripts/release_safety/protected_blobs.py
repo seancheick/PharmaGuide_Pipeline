@@ -264,6 +264,10 @@ class ProtectedBlobSet:
     retained_hashes: frozenset = field(default_factory=frozenset)
     retained_count: int = 0                          # total entries (with dup)
     retained_versions: tuple[str, ...] = ()          # db_versions contributing
+    #: unique blob count contributed by EACH protected version, keyed by
+    #: db_version. Feeds the orphan dry-run report's "protected by retained
+    #: version" line, which an operator approves a quarantine against.
+    protected_by_version: dict = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -493,14 +497,16 @@ def compute_protected_blob_set(
     registry_hashes: frozenset = frozenset()
     registry_count = 0
     registry_versions: tuple[str, ...] = ()
+    protected_by_version: dict[str, int] = {}
     if supabase_client is not None:
-        registry_hashes, registry_count, registry_versions = (
+        registry_hashes, registry_count, registry_versions, registry_by_version = (
             _fetch_registry_blob_hashes(
                 supabase_client,
                 bucket=registry_bucket,
                 table=registry_table,
             )
         )
+        protected_by_version.update(registry_by_version)
 
     # --- Step 4: retained version-directory fetch (cleanup --keep N) -----
     retained_hashes: frozenset = frozenset()
@@ -508,13 +514,15 @@ def compute_protected_blob_set(
     retained_versions_contributing: tuple[str, ...] = ()
     retained_versions = tuple(v for v in retained_versions if v)
     if supabase_client is not None and retained_versions:
-        retained_hashes, retained_count, retained_versions_contributing = (
+        (retained_hashes, retained_count, retained_versions_contributing,
+         retained_by_version) = (
             _fetch_retained_version_blob_hashes(
                 supabase_client,
                 bucket=registry_bucket,
                 versions=retained_versions,
             )
         )
+        protected_by_version.update(retained_by_version)
 
     # --- Step 5: compute union (bundled ∪ dist ∪ registry ∪ retained) ----
     protected = bundled_hashes | dist_hashes | registry_hashes | retained_hashes
@@ -538,6 +546,7 @@ def compute_protected_blob_set(
         retained_hashes=retained_hashes,
         retained_count=retained_count,
         retained_versions=retained_versions_contributing,
+        protected_by_version=dict(sorted(protected_by_version.items())),
     )
 
 
@@ -583,6 +592,7 @@ def _fetch_registry_blob_hashes(
     all_hashes: set[str] = set()
     total_count = 0
     versions: list[str] = []
+    per_version: dict[str, int] = {}
 
     for release in protected_rows:
         if not release.detail_index_url:
@@ -616,8 +626,9 @@ def _fetch_registry_blob_hashes(
         all_hashes.update(validated.blob_hashes)
         total_count += validated.count
         versions.append(release.db_version)
+        per_version[release.db_version] = len(validated.blob_hashes)
 
-    return frozenset(all_hashes), total_count, tuple(versions)
+    return frozenset(all_hashes), total_count, tuple(versions), per_version
 
 
 def _fetch_retained_version_blob_hashes(
@@ -636,6 +647,7 @@ def _fetch_retained_version_blob_hashes(
     all_hashes: set[str] = set()
     total_count = 0
     contributing_versions: list[str] = []
+    per_version: dict[str, int] = {}
 
     for db_version in versions:
         index_bytes = _fetch_index_from_storage(
@@ -660,8 +672,10 @@ def _fetch_retained_version_blob_hashes(
         all_hashes.update(validated.blob_hashes)
         total_count += validated.count
         contributing_versions.append(db_version)
+        per_version[db_version] = len(validated.blob_hashes)
 
-    return frozenset(all_hashes), total_count, tuple(contributing_versions)
+    return (frozenset(all_hashes), total_count,
+            tuple(contributing_versions), per_version)
 
 
 def _fetch_index_from_storage(
