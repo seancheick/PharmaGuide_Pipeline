@@ -201,6 +201,21 @@ def main(argv=None, *, client=None) -> int:
         print("\nNothing to quarantine.")
         return EXIT_OK
 
+    # Every candidate must carry a proven fingerprint (size + eTag) — the
+    # engine verifies each action against these frozen values, so a gap here
+    # would silently weaken every downstream proof. Refuse up front instead.
+    unproven = sorted(
+        h for h, fp in report.candidate_fingerprints.items()
+        if fp is None or fp.etag is None
+    )
+    if len(report.candidate_fingerprints) != report.orphan_count or unproven:
+        print(
+            f"\n[refused] {len(unproven) or report.orphan_count} candidate(s) "
+            "lack a proven source fingerprint (missing eTag). Nothing "
+            "quarantined."
+        )
+        return EXIT_REFUSED
+
     from cleanup_old_versions import quarantine_orphan_blob_batch
     from datetime import datetime, timezone
     run_date = args.run_date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -211,6 +226,7 @@ def main(argv=None, *, client=None) -> int:
     moved, failed, failed_paths = quarantine_orphan_blob_batch(
         client, report.orphan_hashes,
         run_date=run_date,
+        source_fingerprints=report.candidate_fingerprints,
         client_factory=client_factory,
         checkpoint_path=Path(args.quarantine_checkpoint),
     )

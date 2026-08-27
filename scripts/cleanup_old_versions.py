@@ -12,7 +12,7 @@ Usage:
 """
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict
 import hashlib
 import json
@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
 
 from supabase_client import get_supabase_client  # noqa: E402
-from release_safety import quarantine_blob, sweep_quarantine  # noqa: E402
+from release_safety import sweep_quarantine  # noqa: E402
 
 BUCKET = "pharmaguide"
 
@@ -42,9 +42,6 @@ STORAGE_LIST_PROGRESS_EVERY_SHARDS = int(
 )
 SUPABASE_TABLE_MAX_RETRIES = int(
     os.environ.get("PG_SUPABASE_TABLE_MAX_RETRIES", "5")
-)
-QUARANTINE_PROGRESS_EVERY_BLOBS = int(
-    os.environ.get("PG_QUARANTINE_PROGRESS_EVERY_BLOBS", "1000")
 )
 QUARANTINE_MAX_WORKERS = int(
     os.environ.get("PG_QUARANTINE_MAX_WORKERS", "4")
@@ -258,40 +255,108 @@ def delete_orphan_blob_batch(client, blob_hashes):
     return deleted, failed, failed_paths
 
 
+def _list_prefix_fingerprints(bucket_proxy, prefix, *, page_limit, max_attempts):
+    """Return {leaf_name: (size, etag)} for every object under ``prefix``.
+
+    Paginated, transient-retried. Raises after retries are exhausted — the
+    caller decides whether that blocks a shard or the whole run.
+    """
+    from release_safety.blob_inventory import list_storage_page
+    from release_safety.transient import retry_transient
+
+    out = {}
+    offset = 0
+    while True:
+        items = retry_transient(
+            lambda offset=offset: list_storage_page(
+                bucket_proxy, prefix, offset, limit=page_limit,
+            ),
+            max_attempts=max_attempts,
+        )
+        if not items:
+            break
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            name = item.get("name")
+            if not name:
+                continue
+            metadata = item.get("metadata") or {}
+            size = metadata.get("size") if isinstance(metadata.get("size"), int) else None
+            etag = metadata.get("eTag") if isinstance(metadata.get("eTag"), str) else None
+            out[name] = (size, etag)
+        if len(items) < page_limit:
+            break
+        offset += page_limit
+    return out
+
+
 def quarantine_orphan_blob_batch(
     client,
     blob_hashes,
     *,
     run_date,
+    source_fingerprints,
     max_workers=None,
     client_factory=None,
     checkpoint_path=None,
+    page_limit=None,
+    max_attempts=None,
 ):
-    """Move reviewed orphan hashes with shard-safe bounded concurrency.
+    """Move approved orphans to quarantine via a per-shard state machine.
 
-    Hashes within one storage shard are processed serially. Different shards
-    may overlap, but every executor thread owns a separate Supabase client
-    created by ``client_factory``. This avoids sharing an HTTP/2 transport
-    across threads and prevents same-shard copy/list/delete races.
+    The previous engine interrogated every blob individually (2 existence
+    listings + copy + visibility poll + delete ≈ 5 requests, 3+ of them the
+    expensive server-side shard listings) — ~311k listing calls at 103k blobs,
+    degrading as the quarantine prefix filled. This engine's listing count is
+    a function of SHARD count (≤4 per shard), never of blob count.
 
-    When ``client_factory`` is omitted (the test/in-memory seam), the supplied
-    client is used serially. Production callers must pass
-    ``get_supabase_client``.
+    Per shard: classify from one active + one target listing against the
+    FROZEN ``source_fingerprints`` an operator approved; copy what is missing
+    (bounded parallel, one client per thread via ``client_factory``); verify
+    every target fingerprint with one listing; batch-delete verified sources
+    (``ORPHAN_DELETE_BATCH_SIZE`` per call); prove with one final listing that
+    candidates are absent and bystanders unchanged.
+
+    Fail-closed semantics:
+      - identity-model violations (fingerprint drift since approval, corrupted
+        target, candidate missing everywhere, missing/unproven source
+        fingerprint) block the WHOLE shard — nothing is deleted there;
+      - operational failures (copy error, delete error) fail only the affected
+        blobs; a delete failure leaves the recoverable duplicate;
+      - ``moved`` counts only candidates whose target is fingerprint-verified
+        AND whose source is proven absent by the final listing.
+
+    Checkpoint: shard-level ``{count, digest}`` entries, recorded only for
+    fully-clean shards, keyed to the exact candidate set (sha256 of the
+    newline-joined sorted hashes — same construction as the dry-run report's
+    ``candidate_digest``). A checkpoint for a different candidate set or an
+    older format raises ``ValueError``. A fully successful run removes its
+    checkpoint.
     """
     hashes = sorted(blob_hashes)
     total = len(hashes)
     if total == 0:
         return 0, 0, []
 
+    from release_safety.blob_inventory import PAGE_LIMIT, MAX_ATTEMPTS
+    from release_safety.quarantine import _copy_storage_object
+    from release_safety.transient import retry_transient
+
+    page_limit = PAGE_LIMIT if page_limit is None else int(page_limit)
+    max_attempts = MAX_ATTEMPTS if max_attempts is None else int(max_attempts)
+
     checkpoint_path = Path(checkpoint_path) if checkpoint_path else None
-    fingerprint = hashlib.sha256("\n".join(hashes).encode("ascii")).hexdigest()
+    candidate_fingerprint = hashlib.sha256(
+        "\n".join(hashes).encode("ascii")
+    ).hexdigest()
     checkpoint_identity = {
-        "version": 1,
+        "version": 2,
         "run_date": run_date,
-        "candidate_fingerprint": fingerprint,
+        "candidate_fingerprint": candidate_fingerprint,
         "candidate_count": total,
     }
-    succeeded = set()
+    completed_shards = {}
     if checkpoint_path is not None and checkpoint_path.exists():
         try:
             saved = json.loads(checkpoint_path.read_text())
@@ -303,43 +368,36 @@ def quarantine_orphan_blob_batch(
             if saved.get(key) != expected:
                 raise ValueError(
                     f"Quarantine checkpoint {checkpoint_path} belongs to a "
-                    "different candidate/run. Use a new checkpoint path."
+                    "different candidate set, run, or checkpoint format. "
+                    "Use a new checkpoint path (or delete the stale file)."
                 )
-        raw_succeeded = saved.get("succeeded", [])
-        if not isinstance(raw_succeeded, list) or not all(
-            isinstance(value, str) and value in hashes for value in raw_succeeded
-        ):
-            raise ValueError(
-                f"Quarantine checkpoint {checkpoint_path} has invalid successes."
-            )
-        succeeded = set(raw_succeeded)
+        raw_shards = saved.get("shards", {})
+        if isinstance(raw_shards, dict):
+            completed_shards = {
+                shard: entry for shard, entry in raw_shards.items()
+                if isinstance(entry, dict) and isinstance(entry.get("count"), int)
+            }
 
-    def _save_quarantine_checkpoint():
+    def _save_checkpoint():
         if checkpoint_path is None:
             return
         payload = {
             **checkpoint_identity,
-            "succeeded": sorted(succeeded),
+            "shards": {k: completed_shards[k] for k in sorted(completed_shards)},
         }
         checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = checkpoint_path.with_suffix(checkpoint_path.suffix + ".tmp")
-        temporary.write_text(json.dumps(payload, sort_keys=True))
-        temporary.replace(checkpoint_path)
-
-    pending_hashes = [blob_hash for blob_hash in hashes if blob_hash not in succeeded]
-    if not pending_hashes:
-        if checkpoint_path is not None:
-            checkpoint_path.unlink(missing_ok=True)
-        return total, 0, []
+        tmp = checkpoint_path.with_suffix(checkpoint_path.suffix + ".tmp")
+        tmp.write_text(json.dumps(payload, sort_keys=True))
+        tmp.replace(checkpoint_path)
 
     hashes_by_shard = defaultdict(list)
-    for blob_hash in pending_hashes:
+    for blob_hash in hashes:
         hashes_by_shard[blob_hash[:2]].append(blob_hash)
 
     workers = QUARANTINE_MAX_WORKERS if max_workers is None else int(max_workers)
     if client_factory is None:
         workers = 1
-    workers = max(1, min(workers, len(hashes_by_shard)))
+    workers = max(1, workers)
     thread_local = threading.local()
 
     def _worker_client():
@@ -349,82 +407,265 @@ def quarantine_orphan_blob_batch(
             thread_local.client = client_factory()
         return thread_local.client
 
-    def _quarantine_shard(shard_hashes):
-        worker_client = _worker_client()
-        outcomes = []
-        for blob_hash in shard_hashes:
-            path = f"{BLOB_STORAGE_PREFIX}/{blob_hash[:2]}/{blob_hash}.json"
-            try:
-                ok, err = quarantine_blob(
-                    worker_client,
-                    path,
-                    run_date=run_date,
-                )
-            except Exception as exc:  # noqa: BLE001 — count + continue.
-                ok = False
-                err = f"{type(exc).__name__}: {exc}"
-            outcomes.append((path, ok, err))
-        return outcomes
+    def _copy_one(blob_hash):
+        src = f"{BLOB_STORAGE_PREFIX}/{blob_hash[:2]}/{blob_hash}.json"
+        dst = f"shared/quarantine/{run_date}/{blob_hash[:2]}/{blob_hash}.json"
+        try:
+            retry_transient(
+                lambda: _raise_on_copy_failure(
+                    _copy_storage_object(_worker_client(), BUCKET, src, dst)
+                ),
+                max_attempts=max_attempts,
+            )
+            return blob_hash, None
+        except Exception as exc:  # noqa: BLE001 — per-blob operational failure.
+            return blob_hash, f"{type(exc).__name__}: {exc}"
 
-    quarantined = len(succeeded)
+    moved = 0
     failed = 0
     failed_paths = []
-    processed = len(succeeded)
-    next_progress_at = QUARANTINE_PROGRESS_EVERY_BLOBS
-    with ThreadPoolExecutor(
-        max_workers=workers,
-        thread_name_prefix="orphan-quarantine",
-    ) as executor:
-        future_to_shard = {
-            executor.submit(_quarantine_shard, shard_hashes): (
-                shard,
-                shard_hashes,
+    shard_index = 0
+    shard_total = len(hashes_by_shard)
+
+    for shard, shard_hashes in sorted(hashes_by_shard.items()):
+        shard_index += 1
+        if shard in completed_shards:
+            moved += completed_shards[shard]["count"]
+            continue
+
+        active_prefix = f"{BLOB_STORAGE_PREFIX}/{shard}"
+        target_prefix = f"shared/quarantine/{run_date}/{shard}"
+        bucket_proxy = client.storage.from_(BUCKET)
+
+        def _fail_shard(reason):
+            nonlocal failed
+            failed += len(shard_hashes)
+            failed_paths.extend(
+                f"{active_prefix}/{h}.json ({reason})" for h in shard_hashes
             )
-            for shard, shard_hashes in sorted(hashes_by_shard.items())
-        }
-        for future in as_completed(future_to_shard):
-            shard, shard_hashes = future_to_shard[future]
-            try:
-                outcomes = future.result()
-            except Exception as exc:  # noqa: BLE001 — count + continue.
-                err = f"{type(exc).__name__}: {exc}"
-                outcomes = [
-                    (
-                        f"{BLOB_STORAGE_PREFIX}/{shard}/{blob_hash}.json",
-                        False,
-                        err,
-                    )
-                    for blob_hash in shard_hashes
-                ]
-            for path, ok, err in outcomes:
-                if ok:
-                    quarantined += 1
-                    succeeded.add(path.rsplit("/", 1)[-1].removesuffix(".json"))
-                else:
-                    failed += 1
-                    failed_paths.append(path)
-                    print(
-                        f"  [ERROR] Failed to quarantine orphan {path}: {err}"
-                    )
-            _save_quarantine_checkpoint()
-            processed += len(outcomes)
-            # Report on threshold CROSSING, not exact multiples. Results
-            # arrive one whole shard at a time (~50 blobs at catalog scale),
-            # so `processed % EVERY == 0` almost never holds and a long run
-            # prints nothing until it finishes — indistinguishable from a
-            # hang for the operator watching it.
-            if processed == total or processed >= next_progress_at:
-                print(
-                    f"  Quarantine progress: {processed}/{total} processed; "
-                    f"{quarantined} moved/idempotent, {failed} failed "
-                    f"(workers={workers})."
+            print(f"  [ERROR] shard {shard} blocked: {reason}")
+
+        try:
+            active = _list_prefix_fingerprints(
+                bucket_proxy, active_prefix,
+                page_limit=page_limit, max_attempts=max_attempts,
+            )
+            target = _list_prefix_fingerprints(
+                bucket_proxy, target_prefix,
+                page_limit=page_limit, max_attempts=max_attempts,
+            )
+        except Exception as exc:  # noqa: BLE001 — cannot see, cannot act.
+            _fail_shard(f"listing failed: {type(exc).__name__}: {exc}")
+            continue
+
+        # --- classify against the frozen approved fingerprints -----------
+        to_copy = []
+        delete_only = []
+        already_complete = []
+        block_reason = None
+        for blob_hash in shard_hashes:
+            leaf = f"{blob_hash}.json"
+            frozen = source_fingerprints.get(blob_hash)
+            frozen_fp = (
+                (frozen.size, frozen.etag)
+                if frozen is not None and getattr(frozen, "etag", None)
+                else None
+            )
+            if frozen_fp is None:
+                block_reason = (
+                    f"candidate {blob_hash} has no proven source fingerprint"
                 )
-                while next_progress_at <= processed:
-                    next_progress_at += QUARANTINE_PROGRESS_EVERY_BLOBS
+                break
+            in_active = active.get(leaf)
+            in_target = target.get(leaf)
+            if in_active is not None:
+                if in_active != frozen_fp:
+                    block_reason = (
+                        f"candidate {blob_hash} drifted since approval "
+                        f"(active {in_active} != frozen {frozen_fp})"
+                    )
+                    break
+                if in_target is None:
+                    to_copy.append(blob_hash)
+                elif in_target == frozen_fp:
+                    delete_only.append(blob_hash)
+                else:
+                    block_reason = (
+                        f"candidate {blob_hash} has a MISMATCHED quarantine "
+                        f"copy (target {in_target} != frozen {frozen_fp})"
+                    )
+                    break
+            else:
+                if in_target == frozen_fp:
+                    already_complete.append(blob_hash)
+                elif in_target is not None:
+                    block_reason = (
+                        f"candidate {blob_hash} is gone from active and its "
+                        f"quarantine copy does not match the approved "
+                        f"fingerprint"
+                    )
+                    break
+                else:
+                    block_reason = (
+                        f"candidate {blob_hash} exists at neither the active "
+                        f"nor the quarantine path"
+                    )
+                    break
+        if block_reason is not None:
+            _fail_shard(block_reason)
+            continue
+
+        bystanders = {
+            leaf: fp for leaf, fp in active.items()
+            if leaf.removesuffix(".json") not in set(shard_hashes)
+        }
+
+        # --- copy phase (the only per-blob requests, bounded parallel) ----
+        copy_failed = {}
+        if to_copy:
+            if workers == 1 or len(to_copy) == 1:
+                results = [_copy_one(h) for h in to_copy]
+            else:
+                with ThreadPoolExecutor(
+                    max_workers=min(workers, len(to_copy)),
+                    thread_name_prefix="orphan-copy",
+                ) as pool:
+                    results = list(pool.map(_copy_one, to_copy))
+            for blob_hash, err in results:
+                if err is not None:
+                    copy_failed[blob_hash] = err
+                    failed += 1
+                    failed_paths.append(
+                        f"{active_prefix}/{blob_hash}.json (copy failed: {err})"
+                    )
+
+        # --- verify every needed target with ONE listing ------------------
+        try:
+            target_after = _list_prefix_fingerprints(
+                bucket_proxy, target_prefix,
+                page_limit=page_limit, max_attempts=max_attempts,
+            )
+        except Exception as exc:  # noqa: BLE001
+            _fail_shard(
+                f"target verification listing failed: "
+                f"{type(exc).__name__}: {exc}"
+            )
+            # The shard-level failure covers the copies too; the copies that
+            # succeeded are idempotently re-verified on the next run.
+            failed -= len(copy_failed)  # avoid double-counting copy failures
+            for blob_hash in copy_failed:
+                failed_paths = [
+                    fp for fp in failed_paths
+                    if not fp.startswith(f"{active_prefix}/{blob_hash}.json")
+                ]
+            continue
+
+        deletable = []
+        for blob_hash in to_copy + delete_only:
+            if blob_hash in copy_failed:
+                continue
+            frozen = source_fingerprints[blob_hash]
+            observed = target_after.get(f"{blob_hash}.json")
+            if observed != (frozen.size, frozen.etag):
+                failed += 1
+                failed_paths.append(
+                    f"{active_prefix}/{blob_hash}.json (target verification "
+                    f"failed: observed {observed})"
+                )
+                continue
+            deletable.append(blob_hash)
+
+        # --- batched source deletion --------------------------------------
+        delete_failed = set()
+        for start_idx in range(0, len(deletable), ORPHAN_DELETE_BATCH_SIZE):
+            batch = deletable[start_idx:start_idx + ORPHAN_DELETE_BATCH_SIZE]
+            batch_paths = [f"{active_prefix}/{h}.json" for h in batch]
+            try:
+                retry_transient(
+                    lambda batch_paths=batch_paths: _remove_storage_batch(
+                        client, batch_paths,
+                    ),
+                    max_attempts=max_attempts,
+                )
+            except Exception as exc:  # noqa: BLE001 — recoverable duplicates.
+                for blob_hash in batch:
+                    delete_failed.add(blob_hash)
+                    failed += 1
+                    failed_paths.append(
+                        f"{active_prefix}/{blob_hash}.json (delete failed, "
+                        f"recoverable duplicate remains: "
+                        f"{type(exc).__name__}: {exc})"
+                    )
+
+        # --- absence + bystander proof with ONE listing -------------------
+        try:
+            active_after = _list_prefix_fingerprints(
+                bucket_proxy, active_prefix,
+                page_limit=page_limit, max_attempts=max_attempts,
+            )
+        except Exception as exc:  # noqa: BLE001
+            _fail_shard(
+                f"absence-proof listing failed: {type(exc).__name__}: {exc}"
+            )
+            continue
+
+        shard_moved = []
+        shard_clean = not copy_failed and not delete_failed
+        for blob_hash in deletable:
+            if blob_hash in delete_failed:
+                continue
+            if f"{blob_hash}.json" in active_after:
+                failed += 1
+                shard_clean = False
+                failed_paths.append(
+                    f"{active_prefix}/{blob_hash}.json (residual: delete "
+                    f"reported success but the object is still listed)"
+                )
+                continue
+            shard_moved.append(blob_hash)
+        shard_moved.extend(already_complete)
+
+        for leaf, fp in bystanders.items():
+            observed = active_after.get(leaf)
+            if observed != fp:
+                failed += 1
+                shard_clean = False
+                failed_paths.append(
+                    f"postcondition: non-candidate {active_prefix}/{leaf} "
+                    f"changed during the shard window "
+                    f"(before {fp}, after {observed})"
+                )
+
+        moved += len(shard_moved)
+        if shard_clean and len(shard_moved) == len(shard_hashes):
+            completed_shards[shard] = {
+                "count": len(shard_moved),
+                "digest": hashlib.sha256(
+                    "\n".join(sorted(shard_moved)).encode("ascii")
+                ).hexdigest(),
+            }
+            _save_checkpoint()
+
+        print(
+            f"  shard {shard} [{shard_index}/{shard_total}]: "
+            f"{len(shard_moved)} moved, "
+            f"{len(shard_hashes) - len(shard_moved)} failed; "
+            f"total {moved}/{total}."
+        )
 
     if failed == 0 and checkpoint_path is not None:
         checkpoint_path.unlink(missing_ok=True)
-    return quarantined, failed, failed_paths
+    return moved, failed, failed_paths
+
+
+def _raise_on_copy_failure(result):
+    """Adapter: ``_copy_storage_object`` returns (ok, err) and swallows the
+    exception, which defeats transient retry. Re-raise so retry_transient can
+    classify the cause; permanent failures surface immediately."""
+    ok, err = result
+    if not ok:
+        raise RuntimeError(err or "copy failed")
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -676,10 +917,16 @@ def cleanup_orphan_blobs_with_gates(
         f"Recoverable for {DEFAULT_QUARANTINE_TTL_DAYS} days."
     )
 
+    # The frozen identity every action is verified against comes from the
+    # same inventory that produced the candidates.
+    orphan_fingerprints = {
+        h: inventory.fingerprint_for(h) for h in actual_orphans
+    }
     quarantined, failed, failed_paths = quarantine_orphan_blob_batch(
         client,
         actual_orphans,
         run_date=run_date,
+        source_fingerprints=orphan_fingerprints,
         client_factory=quarantine_client_factory,
     )
 

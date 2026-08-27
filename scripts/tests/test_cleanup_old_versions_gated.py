@@ -137,22 +137,34 @@ class MockBucket:
             self.objects.pop(p, None)
         return [{"name": p} for p in paths]
 
+    def _etag(self, data: bytes) -> str:
+        import hashlib as _hashlib
+
+        return f'"{_hashlib.md5(data).hexdigest()}"'
+
     def list(self, path: str, options=None):
+        opts = options or {}
+        limit = int(opts.get("limit", 1000))
+        offset = int(opts.get("offset", 0))
         prefix = path.rstrip("/") + "/" if path else ""
         results = []
         seen_dirs: Set[str] = set()
-        for full in self.objects:
+        for full in sorted(self.objects):
             if not full.startswith(prefix):
                 continue
             rest = full[len(prefix):]
             if "/" not in rest:
-                results.append({"name": rest})
+                data = self.objects[full]
+                results.append({"name": rest, "metadata": {
+                    "size": len(data),
+                    "eTag": self._etag(data),
+                }})
             else:
                 first = rest.split("/", 1)[0]
                 if first not in seen_dirs:
                     seen_dirs.add(first)
                     results.append({"name": first})
-        return results
+        return results[offset:offset + limit]
 
     def download(self, path: str) -> bytes:
         """Match supabase-py's storage download contract. Used by P3.5
@@ -240,126 +252,195 @@ def _quarantine_path(date_str: str, blob_hash: str) -> str:
     return f"shared/quarantine/{date_str}/{blob_hash[:2]}/{blob_hash}.json"
 
 
-def test_quarantine_batch_is_parallel_across_shards_and_serial_within_shard(
-    monkeypatch,
-) -> None:
+def test_quarantine_batch_uses_one_client_per_copy_thread(monkeypatch):
+    """Parallel copies must never share one Supabase client across threads —
+    an HTTP/2 transport is not thread-safe. Every worker thread gets its own
+    client from ``client_factory``; listings stay on the caller's client."""
+    import threading
+
     import cleanup_old_versions as cov
 
-    lock = threading.Lock()
-    active_total = 0
-    max_active_total = 0
-    active_by_shard: dict[str, int] = {}
-    max_active_by_shard: dict[str, int] = {}
-    client_ids_by_thread: dict[int, set[int]] = {}
-    created_client_ids: list[int] = []
+    class _Bucket:
+        def __init__(self):
+            self.objects = {}
+            self.lock = threading.Lock()
+            self.copy_client_by_thread: dict[int, set[int]] = {}
+            self.owner = None
 
-    class WorkerClient:
-        pass
+        def _etag(self, data):
+            import hashlib as _h
+
+            return f'"{_h.md5(data).hexdigest()}"'
+
+        def list(self, path="", options=None):
+            opts = options or {}
+            limit = int(opts.get("limit", 1000))
+            offset = int(opts.get("offset", 0))
+            base = path.rstrip("/") + "/" if path else ""
+            names = sorted(
+                full[len(base):]
+                for full in self.objects
+                if full.startswith(base) and "/" not in full[len(base):]
+            )
+            return [
+                {"name": n, "metadata": {
+                    "size": len(self.objects[base + n]),
+                    "eTag": self._etag(self.objects[base + n]),
+                }}
+                for n in names[offset:offset + limit]
+            ]
+
+        def copy(self, src, dst):
+            with self.lock:
+                self.copy_client_by_thread.setdefault(
+                    threading.get_ident(), set()
+                ).add(id(self.owner))
+            time.sleep(0.01)
+            self.objects[dst] = self.objects[src]
+            return {"ok": True}
+
+        def remove(self, paths):
+            for path in paths:
+                self.objects.pop(path, None)
+            return [{"name": p} for p in paths]
+
+    shared_bucket = _Bucket()
+
+    class _Client:
+        def __init__(self):
+            pass
+
+        @property
+        def storage(self):
+            return self
+
+        def from_(self, _name):
+            shared_bucket.owner = self._owner_marker
+            return shared_bucket
+
+    created = []
 
     def client_factory():
-        client = WorkerClient()
-        with lock:
-            created_client_ids.append(id(client))
-        return client
+        c = _Client()
+        c._owner_marker = c
+        created.append(c)
+        return c
 
-    def fake_quarantine(client, path, *, run_date):
-        nonlocal active_total, max_active_total
-        blob_hash = path.rsplit("/", 1)[-1].removesuffix(".json")
-        shard = blob_hash[:2]
-        thread_id = threading.get_ident()
-        with lock:
-            active_total += 1
-            max_active_total = max(max_active_total, active_total)
-            active_by_shard[shard] = active_by_shard.get(shard, 0) + 1
-            max_active_by_shard[shard] = max(
-                max_active_by_shard.get(shard, 0),
-                active_by_shard[shard],
-            )
-            client_ids_by_thread.setdefault(thread_id, set()).add(id(client))
-        try:
-            time.sleep(0.02)
-            if blob_hash == _sharded_h(2, 1):
-                return False, "simulated copy failure"
-            if blob_hash == _sharded_h(3, 2):
-                raise RuntimeError("simulated worker exception")
-            return True, None
-        finally:
-            with lock:
-                active_total -= 1
-                active_by_shard[shard] -= 1
+    base_client = _Client()
+    base_client._owner_marker = base_client
 
-    monkeypatch.setattr(cov, "quarantine_blob", fake_quarantine, raising=False)
-    hashes = {
-        _sharded_h(shard, idx)
-        for shard in range(4)
-        for idx in range(3)
+    hashes = {_sharded_h(0, i) for i in range(12)}
+    for h in hashes:
+        shared_bucket.objects[
+            f"shared/details/sha256/{h[:2]}/{h}.json"
+        ] = b"data-" + h[:8].encode()
+    from release_safety.blob_inventory import ObjectFingerprint
+
+    fingerprints = {
+        h: ObjectFingerprint(
+            size=len(b"data-" + h[:8].encode()),
+            etag=shared_bucket._etag(b"data-" + h[:8].encode()),
+        )
+        for h in hashes
     }
 
-    quarantined, failed, failed_paths = cov.quarantine_orphan_blob_batch(
-        client=object(),
-        blob_hashes=hashes,
-        run_date="2026-08-06",
+    moved, failed, _ = cov.quarantine_orphan_blob_batch(
+        base_client,
+        hashes,
+        run_date="2026-08-28",
+        source_fingerprints=fingerprints,
         max_workers=4,
         client_factory=client_factory,
     )
 
-    assert quarantined == 10
-    assert failed == 2
-    assert len(failed_paths) == 2
-    assert 1 < max_active_total <= 4
-    assert set(max_active_by_shard.values()) == {1}
-    assert 1 < len(created_client_ids) <= 4
-    assert all(len(client_ids) == 1 for client_ids in client_ids_by_thread.values())
+    assert (moved, failed) == (12, 0)
+    assert len(created) >= 1, "worker threads must mint their own clients"
+    for clients in shared_bucket.copy_client_by_thread.values():
+        assert len(clients) == 1, "one client per thread, never shared"
 
 
-def test_quarantine_batch_checkpoint_retries_only_unfinished_hashes(
-    tmp_path, monkeypatch,
-) -> None:
-    """A restarted six-hour move must not recopy already-finished blobs."""
+def test_quarantine_batch_without_factory_stays_serial(monkeypatch):
+    """No client_factory = the caller's client only = strictly serial copies."""
+    import threading
+
     import cleanup_old_versions as cov
 
-    hashes = {_sharded_h(0, 1), _sharded_h(1, 1), _sharded_h(2, 1)}
-    failing_hash = _sharded_h(1, 1)
-    calls: list[str] = []
+    concurrent = {"now": 0, "max": 0}
+    lock = threading.Lock()
 
-    def first_attempt(_client, path, *, run_date):
-        blob_hash = path.rsplit("/", 1)[-1].removesuffix(".json")
-        calls.append(blob_hash)
-        if blob_hash == failing_hash:
-            return False, "temporary failure"
-        return True, None
+    class _Bucket:
+        def __init__(self):
+            self.objects = {}
 
-    monkeypatch.setattr(cov, "quarantine_blob", first_attempt, raising=False)
-    checkpoint = tmp_path / "quarantine.json"
+        def _etag(self, data):
+            import hashlib as _h
+
+            return f'"{_h.md5(data).hexdigest()}"'
+
+        def list(self, path="", options=None):
+            opts = options or {}
+            limit = int(opts.get("limit", 1000))
+            offset = int(opts.get("offset", 0))
+            base = path.rstrip("/") + "/" if path else ""
+            names = sorted(
+                full[len(base):]
+                for full in self.objects
+                if full.startswith(base) and "/" not in full[len(base):]
+            )
+            return [
+                {"name": n, "metadata": {
+                    "size": len(self.objects[base + n]),
+                    "eTag": self._etag(self.objects[base + n]),
+                }}
+                for n in names[offset:offset + limit]
+            ]
+
+        def copy(self, src, dst):
+            with lock:
+                concurrent["now"] += 1
+                concurrent["max"] = max(concurrent["max"], concurrent["now"])
+            time.sleep(0.005)
+            with lock:
+                concurrent["now"] -= 1
+            self.objects[dst] = self.objects[src]
+            return {"ok": True}
+
+        def remove(self, paths):
+            for path in paths:
+                self.objects.pop(path, None)
+            return [{"name": p} for p in paths]
+
+    bucket = _Bucket()
+
+    class _Client:
+        storage = property(lambda self: self)
+
+        def from_(self, _name):
+            return bucket
+
+    hashes = {_sharded_h(0, i) for i in range(6)}
+    for h in hashes:
+        bucket.objects[f"shared/details/sha256/{h[:2]}/{h}.json"] = b"x" + h[:4].encode()
+    from release_safety.blob_inventory import ObjectFingerprint
+
+    fingerprints = {
+        h: ObjectFingerprint(
+            size=len(b"x" + h[:4].encode()),
+            etag=bucket._etag(b"x" + h[:4].encode()),
+        )
+        for h in hashes
+    }
+
     moved, failed, _ = cov.quarantine_orphan_blob_batch(
-        client=object(),
-        blob_hashes=hashes,
-        run_date="2026-08-27",
-        checkpoint_path=checkpoint,
+        _Client(),
+        hashes,
+        run_date="2026-08-28",
+        source_fingerprints=fingerprints,
+        max_workers=8,
     )
 
-    assert (moved, failed) == (2, 1)
-    assert checkpoint.exists()
-
-    calls.clear()
-    monkeypatch.setattr(
-        cov,
-        "quarantine_blob",
-        lambda _client, path, *, run_date: (
-            calls.append(path.rsplit("/", 1)[-1].removesuffix(".json"))
-            or (True, None)
-        ),
-        raising=False,
-    )
-    moved, failed, _ = cov.quarantine_orphan_blob_batch(
-        client=object(),
-        blob_hashes=hashes,
-        run_date="2026-08-27",
-        checkpoint_path=checkpoint,
-    )
-
-    assert calls == [failing_hash]
-    assert (moved, failed) == (3, 0)
+    assert (moved, failed) == (6, 0)
+    assert concurrent["max"] == 1
 
 
 # ===========================================================================
@@ -1044,7 +1125,12 @@ def test_p2_2_partial_quarantine_failure_continues_and_reports(tmp_path):
     assert completion is not None
     assert completion["quarantined_count"] == 2
     assert completion["failed_count"] == 1
-    assert _active_path(failing_orphan) in completion["failed_paths"]
+    # Failed paths are reason-annotated (".../x.json (copy failed: ...)");
+    # the operator sees WHY each path failed, not just that it did.
+    assert any(
+        _active_path(failing_orphan) in reported
+        for reported in completion["failed_paths"]
+    )
 
 
 # ===========================================================================
