@@ -61,6 +61,11 @@ class _FakeBucket:
         self._active = 0
         self.max_concurrent = 0
 
+    def etag_for(self, full_path):
+        """Deterministic per-object eTag, quoted like the live API's."""
+        return f'"et-{full_path.rsplit("/", 1)[-1][:16]}"'
+
+
     def list(self, path="", options=None):
         with self._lock:
             self._active += 1
@@ -84,7 +89,10 @@ class _FakeBucket:
             )
             page = names[offset:offset + limit]
             return [
-                {"name": n, "metadata": {"size": self.sizes.get(base + n, 10)}}
+                {"name": n, "metadata": {
+                    "size": self.sizes.get(base + n, 10),
+                    "eTag": self.etag_for(base + n),
+                }}
                 for n in page
             ]
         finally:
@@ -431,3 +439,109 @@ def test_inventory_records_elapsed_time():
     inv = inventory_detail_blobs(client, shards=("00",))
 
     assert inv.elapsed_seconds >= 0.0
+
+
+# ---------------------------------------------------------------------------
+# Phase 0 — fingerprint truth (size + eTag), checkpoint v3, integrity
+# ---------------------------------------------------------------------------
+
+
+def test_inventory_captures_etag_fingerprints():
+    """Listings carry metadata.eTag for free; the inventory must keep it."""
+    from release_safety.blob_inventory import (
+        ObjectFingerprint,
+        inventory_detail_blobs,
+    )
+
+    a = _blob("00", 1)
+    client, bucket = _client_with({a}, sizes={a: 1234})
+    h = a.rsplit("/", 1)[-1][:-5]
+
+    inv = inventory_detail_blobs(client, shards=("00",))
+
+    fp = inv.fingerprint_for(h)
+    assert isinstance(fp, ObjectFingerprint)
+    assert fp.size == 1234
+    assert fp.etag == bucket.etag_for(a)
+    assert inv.etags[h] == bucket.etag_for(a)
+
+
+def test_v2_checkpoint_is_discarded_by_v3(tmp_path):
+    """Old checkpoints lack eTags; trusting one would fake fingerprint truth."""
+    import release_safety.blob_inventory as bi
+
+    ckpt = tmp_path / "inv.json"
+    client, bucket = _client_with({_blob("00", 1)})
+
+    inventory_detail_blobs_kwargs = dict(shards=("00",), checkpoint_path=ckpt)
+    bi.inventory_detail_blobs(client, **inventory_detail_blobs_kwargs)
+
+    saved = json.loads(ckpt.read_text())
+    saved["version"] = 2
+    saved["shards"] = {"00": [[name, size] for name, size, _e in saved["shards"]["00"]]}
+    ckpt.write_text(json.dumps(saved))
+
+    bucket.listed.clear()
+    inv = bi.inventory_detail_blobs(client, **inventory_detail_blobs_kwargs)
+
+    assert f"{PREFIX}/00" in bucket.listed, "v2 checkpoint must not be resumed"
+    assert inv.complete is True
+
+
+def test_checkpoint_resume_preserves_etags(tmp_path):
+    from release_safety.blob_inventory import inventory_detail_blobs
+
+    ckpt = tmp_path / "inv.json"
+    a = _blob("00", 1)
+    client, bucket = _client_with(
+        {a, _blob("0a", 1)}, fail_plan={f"{PREFIX}/0a": 10_000},
+    )
+    first = inventory_detail_blobs(
+        client, shards=("00", "0a"), max_attempts=2, checkpoint_path=ckpt,
+    )
+    assert first.complete is False
+
+    bucket.fail_plan.clear()
+    second = inventory_detail_blobs(
+        client, shards=("00", "0a"), max_attempts=2, checkpoint_path=ckpt,
+    )
+    h = a.rsplit("/", 1)[-1][:-5]
+    assert second.complete is True
+    assert second.etags[h] == bucket.etag_for(a), (
+        "a shard served from checkpoint must keep its fingerprints"
+    )
+
+
+def test_duplicate_hash_across_shards_fails_closed():
+    """The same blob name observed under two shards means the deletion path
+    cannot be trusted — never present that inventory as usable."""
+    from release_safety.blob_inventory import (
+        IncompleteInventoryError,
+        inventory_detail_blobs,
+    )
+
+    h = "aa" + "0" * 62
+    good = f"{PREFIX}/aa/{h}.json"
+    misplaced = f"{PREFIX}/bb/{h}.json"
+    client, _ = _client_with({good, misplaced})
+
+    inv = inventory_detail_blobs(client, shards=("aa", "bb"))
+
+    assert inv.complete is False
+    assert inv.integrity_failures, "duplicate placement must be recorded"
+    with pytest.raises(IncompleteInventoryError):
+        inv.require_complete()
+
+
+def test_misplaced_blob_alone_fails_closed():
+    """A hash sitting in the wrong shard would be deleted at a path where it
+    does not live. That inventory is not usable for destructive decisions."""
+    from release_safety.blob_inventory import inventory_detail_blobs
+
+    h = "aa" + "1" * 62
+    client, _ = _client_with({f"{PREFIX}/bb/{h}.json"})
+
+    inv = inventory_detail_blobs(client, shards=("bb",))
+
+    assert inv.complete is False
+    assert any(h in failure for failure in inv.integrity_failures)

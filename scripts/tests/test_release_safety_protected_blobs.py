@@ -573,7 +573,10 @@ class _P35Bucket:
                 continue
             rest = full[len(prefix):]
             if "/" not in rest:
-                results.append({"name": rest, "metadata": {"size": len(data)}})
+                results.append({"name": rest, "metadata": {
+                    "size": len(data),
+                    "eTag": f'"et-{rest[:16]}"',
+                }})
             else:
                 first = rest.split("/", 1)[0]
                 if first not in seen_dirs:

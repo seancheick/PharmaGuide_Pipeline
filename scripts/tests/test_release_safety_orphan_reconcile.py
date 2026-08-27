@@ -326,3 +326,98 @@ def test_orphan_hashes_are_sorted_for_reproducible_review(tmp_path):
     )
 
     assert list(report.orphan_hashes) == sorted(report.orphan_hashes)
+
+
+# ---------------------------------------------------------------------------
+# Phase 0 — frozen safety contract: digests + candidate fingerprints
+# ---------------------------------------------------------------------------
+
+
+def test_report_freezes_candidate_and_protected_digests(tmp_path):
+    """The digests pin exactly which set an operator approved. Construction
+    matches the quarantine checkpoint identity: sha256 of newline-joined
+    sorted hashes."""
+    import hashlib
+
+    from release_safety.orphan_reconcile import build_orphan_report
+
+    active = [_h("aa")]
+    orphans = [_h("dd"), _h("ee")]
+    client, flutter_repo, dist_dir = _make_world(
+        tmp_path, active_hashes=active, retained_hashes=active,
+        extra_storage=orphans,
+    )
+
+    report = build_orphan_report(
+        client, flutter_repo_path=flutter_repo, dist_dir=dist_dir,
+        retained_versions=(ACTIVE, RETAINED),
+        shards=_shards_for(active, orphans),
+    )
+
+    expected_candidates = hashlib.sha256(
+        "\n".join(sorted(orphans)).encode("ascii")
+    ).hexdigest()
+    assert report.candidate_digest == expected_candidates
+    assert report.protected_digest == hashlib.sha256(
+        "\n".join(sorted(set(active))).encode("ascii")
+    ).hexdigest()
+    data = report.to_dict()
+    assert data["candidate_digest"] == expected_candidates
+    assert data["protected_digest"] == report.protected_digest
+
+
+def test_report_carries_a_source_fingerprint_for_every_candidate(tmp_path):
+    from release_safety.orphan_reconcile import build_orphan_report
+
+    active = [_h("aa")]
+    orphans = [_h("dd")]
+    client, flutter_repo, dist_dir = _make_world(
+        tmp_path, active_hashes=active, retained_hashes=active,
+        extra_storage=orphans,
+    )
+
+    report = build_orphan_report(
+        client, flutter_repo_path=flutter_repo, dist_dir=dist_dir,
+        retained_versions=(ACTIVE, RETAINED),
+        shards=_shards_for(active, orphans),
+    )
+
+    fps = report.candidate_fingerprints
+    assert set(fps) == set(orphans)
+    assert fps[_h("dd")].size == 100
+    assert fps[_h("dd")].etag, "eTag must be captured for every candidate"
+    data = report.to_dict()
+    assert data["candidate_fingerprints"][_h("dd")]["size"] == 100
+    assert data["candidate_fingerprints"][_h("dd")]["etag"] == fps[_h("dd")].etag
+
+
+def test_blocked_report_freezes_no_candidate_digest(tmp_path):
+    """A blocked report proposes nothing, so it must pin nothing approvable."""
+    from release_safety.orphan_reconcile import build_orphan_report
+
+    active = [_h("aa")]
+    orphans = [_h("dd")]
+    client, flutter_repo, dist_dir = _make_world(
+        tmp_path, active_hashes=active, retained_hashes=active,
+        extra_storage=orphans,
+    )
+    bucket = client.storage.from_("pharmaguide")
+    real_list = bucket.list
+
+    def flaky(path="", options=None):
+        if path == f"{PREFIX}/dd":
+            raise RuntimeError("The connection to the database timed out")
+        return real_list(path=path, options=options)
+
+    bucket.list = flaky
+
+    report = build_orphan_report(
+        client, flutter_repo_path=flutter_repo, dist_dir=dist_dir,
+        retained_versions=(ACTIVE, RETAINED),
+        shards=_shards_for(active, orphans),
+        max_attempts=2,
+    )
+
+    assert report.blocked_reason is not None
+    assert report.candidate_digest is None
+    assert report.candidate_fingerprints == {}

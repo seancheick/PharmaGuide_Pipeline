@@ -20,6 +20,7 @@ A partial answer is never presented as an exact one.
 
 from __future__ import annotations
 
+import hashlib
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -30,8 +31,19 @@ from .blob_inventory import (
     DEFAULT_BUCKET,
     HEX_BLOB_SHARDS,
     BlobInventory,
+    ObjectFingerprint,
     inventory_detail_blobs,
 )
+
+
+def hash_set_digest(hashes) -> str:
+    """sha256 over newline-joined sorted hashes.
+
+    Same construction as the quarantine checkpoint's candidate fingerprint in
+    ``cleanup_old_versions.quarantine_orphan_blob_batch`` so the two artifacts
+    can be cross-checked byte-for-byte.
+    """
+    return hashlib.sha256("\n".join(sorted(hashes)).encode("ascii")).hexdigest()
 from .protected_blobs import compute_protected_blob_set
 
 
@@ -57,6 +69,11 @@ class OrphanReport:
     blocked_reason: Optional[str] = None
     retained_versions: Tuple[str, ...] = ()
     elapsed_seconds: float = 0.0
+    #: Frozen contract an operator approves against. All None/empty when the
+    #: report is blocked — a blocked report pins nothing approvable.
+    candidate_digest: Optional[str] = None
+    protected_digest: Optional[str] = None
+    candidate_fingerprints: Dict[str, ObjectFingerprint] = field(default_factory=dict)
 
     @property
     def orphan_count(self) -> int:
@@ -74,6 +91,12 @@ class OrphanReport:
     def to_dict(self) -> dict:
         return {
             "blocked_reason": self.blocked_reason,
+            "candidate_digest": self.candidate_digest,
+            "protected_digest": self.protected_digest,
+            "candidate_fingerprints": {
+                h: {"size": fp.size, "etag": fp.etag}
+                for h, fp in sorted(self.candidate_fingerprints.items())
+            },
             "retained_versions": list(self.retained_versions),
             "protected_total": self.protected_total,
             "protected_by_version": dict(sorted(self.protected_by_version.items())),
@@ -118,6 +141,8 @@ class OrphanReport:
             f"  Orphan blobs:                  {self.orphan_count:,}",
             f"  Estimated bytes reclaimable:   {_fmt_bytes(self.orphan_bytes)}",
             f"  Proposed quarantine:           {self.proposed_quarantine:,}",
+            f"  Candidate digest:              {self.candidate_digest or '(none — blocked)'}",
+            f"  Protected digest:              {self.protected_digest or '(none — blocked)'}",
             "",
             f"  Listing failures:              {len(inv.failures)}",
             f"  Retries:                       {inv.retries}",
@@ -223,6 +248,16 @@ def build_orphan_report(
             orphan_hashes = tuple(candidates)
             orphan_bytes = sum(inventory.bytes_for(h) for h in candidates)
 
+    candidate_digest = None
+    protected_digest = None
+    candidate_fingerprints: Dict[str, ObjectFingerprint] = {}
+    if blocked is None:
+        candidate_digest = hash_set_digest(orphan_hashes)
+        protected_digest = hash_set_digest(protected.protected)
+        candidate_fingerprints = {
+            h: inventory.fingerprint_for(h) for h in orphan_hashes
+        }
+
     return OrphanReport(
         inventory=inventory,
         protected_total=protected_total,
@@ -232,4 +267,7 @@ def build_orphan_report(
         blocked_reason=blocked,
         retained_versions=retained_versions,
         elapsed_seconds=time.monotonic() - started,
+        candidate_digest=candidate_digest,
+        protected_digest=protected_digest,
+        candidate_fingerprints=candidate_fingerprints,
     )

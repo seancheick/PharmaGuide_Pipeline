@@ -67,11 +67,24 @@ MAX_ATTEMPTS = int(os.environ.get("PG_STORAGE_LIST_MAX_RETRIES", "5"))
 #: Raise this only with a fresh measurement showing it helps.
 MAX_WORKERS = int(os.environ.get("PG_STORAGE_LIST_MAX_WORKERS", "8"))
 
-CHECKPOINT_VERSION = 2
+CHECKPOINT_VERSION = 3
 
 
 class IncompleteInventoryError(RuntimeError):
     """Raised when a caller requires a complete inventory and cannot have one."""
+
+
+@dataclass(frozen=True)
+class ObjectFingerprint:
+    """Identity of one stored object: normalized size + the raw listing eTag.
+
+    The eTag is kept verbatim (quotes included) — it is compared against later
+    listings of the same API, never parsed. ``etag=None`` means the listing did
+    not supply one; destructive paths must treat that as an unproven object.
+    """
+
+    size: int
+    etag: Optional[str]
 
 
 @dataclass(frozen=True)
@@ -91,8 +104,14 @@ class BlobInventory:
 
     prefix: str = BLOB_STORAGE_PREFIX
     sizes: Dict[str, int] = field(default_factory=dict)
+    etags: Dict[str, str] = field(default_factory=dict)
     categories: Dict[str, int] = field(default_factory=dict)
     failures: Tuple[ShardFailure, ...] = ()
+    #: Placement/duplication violations: the same blob name seen under two
+    #: shards, or a hash listed under a shard other than hash[:2]. Deletion
+    #: paths are derived from the hash, so either case means the path we would
+    #: act on is not provably where the object lives — fail closed.
+    integrity_failures: Tuple[str, ...] = ()
     shards_total: int = 0
     shards_completed: int = 0
     retries: int = 0
@@ -113,10 +132,23 @@ class BlobInventory:
 
     @property
     def complete(self) -> bool:
-        return not self.failures and self.shards_completed == self.shards_total
+        return (
+            not self.failures
+            and not self.integrity_failures
+            and self.shards_completed == self.shards_total
+        )
 
     def bytes_for(self, blob_hash: str) -> int:
         return self.sizes.get(blob_hash, 0)
+
+    def fingerprint_for(self, blob_hash: str) -> Optional[ObjectFingerprint]:
+        """Return the object's fingerprint, or None if it was not inventoried."""
+        if blob_hash not in self.sizes:
+            return None
+        return ObjectFingerprint(
+            size=self.sizes[blob_hash],
+            etag=self.etags.get(blob_hash),
+        )
 
     def require_complete(self) -> "BlobInventory":
         """Return self, or raise if any shard could not be read."""
@@ -124,9 +156,13 @@ class BlobInventory:
             return self
         detail = ", ".join(f"{f.shard} ({f.error})" for f in self.failures[:5])
         more = "" if len(self.failures) <= 5 else f" (+{len(self.failures) - 5} more)"
+        integrity = (
+            f" Integrity violations: {'; '.join(self.integrity_failures[:5])}."
+            if self.integrity_failures else ""
+        )
         raise IncompleteInventoryError(
             f"Inventory covered {self.shards_completed}/{self.shards_total} "
-            f"shard(s); {len(self.failures)} failed: {detail}{more}. "
+            f"shard(s); {len(self.failures)} failed: {detail}{more}.{integrity} "
             "Refusing to treat a partial inventory as authoritative."
         )
 
@@ -143,6 +179,8 @@ class BlobInventory:
             "categories": dict(sorted(self.categories.items())),
             "retries": self.retries,
             "failures": [f.to_dict() for f in self.failures],
+            "integrity_failures": list(self.integrity_failures),
+            "etag_coverage": sum(1 for h in self.sizes if h in self.etags),
             "elapsed_seconds": round(self.elapsed_seconds, 3),
         }
 
@@ -325,12 +363,16 @@ def inventory_detail_blobs(
                 if not name:
                     continue
                 size = None
+                etag = None
                 metadata = item.get("metadata")
-                if isinstance(metadata, dict) and isinstance(metadata.get("size"), int):
-                    size = metadata["size"]
-                elif isinstance(item.get("size"), int):
+                if isinstance(metadata, dict):
+                    if isinstance(metadata.get("size"), int):
+                        size = metadata["size"]
+                    if isinstance(metadata.get("eTag"), str):
+                        etag = metadata["eTag"]
+                if size is None and isinstance(item.get("size"), int):
                     size = item["size"]
-                names.append((name, size))
+                names.append((name, size, etag))
             if len(items) < page_limit:
                 break
             offset += page_limit
@@ -393,19 +435,40 @@ def inventory_detail_blobs(
         )
 
     sizes: Dict[str, int] = {}
+    etags: Dict[str, str] = {}
     categories: Dict[str, int] = {}
+    seen_shard_for: Dict[str, str] = {}
+    integrity: list = []
     for shard in sorted(results):
-        for name, size in results[shard]:
+        for entry in results[shard]:
+            name, size, etag = entry
             category, blob_hash = _classify(name)
             categories[category] = categories.get(category, 0) + 1
-            if blob_hash is not None:
-                sizes[blob_hash] = size if isinstance(size, int) else 0
+            if blob_hash is None:
+                continue
+            if blob_hash in seen_shard_for:
+                integrity.append(
+                    f"duplicate: {blob_hash} listed under shards "
+                    f"{seen_shard_for[blob_hash]} and {shard}"
+                )
+                continue
+            seen_shard_for[blob_hash] = shard
+            if blob_hash[:2] != shard:
+                integrity.append(
+                    f"misplaced: {blob_hash} listed under shard {shard} "
+                    f"but its deletion path derives shard {blob_hash[:2]}"
+                )
+            sizes[blob_hash] = size if isinstance(size, int) else 0
+            if isinstance(etag, str):
+                etags[blob_hash] = etag
 
     return BlobInventory(
         prefix=prefix,
         sizes=sizes,
+        etags=etags,
         categories=categories,
         failures=tuple(sorted(failures, key=lambda f: f.shard)),
+        integrity_failures=tuple(sorted(integrity)),
         shards_total=len(shards),
         shards_completed=len(results),
         retries=retry_count["n"],
