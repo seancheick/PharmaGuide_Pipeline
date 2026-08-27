@@ -425,6 +425,95 @@ def test_product_level_botanical_evidence_is_visible_to_profile_scorer():
     assert out["score"] == 10.0  # calibration v2 (was 7)
 
 
+def test_disclosed_ksm66_row_outranks_synthetic_blend_total():
+    """A blend total is fallback evidence, never a replacement for its child.
+
+    The submitted Youtheory label discloses KSM-66 at 600 mg and also carries a
+    product-level 1,000 mg blend projection.  Botanical formulation and dose
+    must use the real label row so the branded form and per-ingredient dose are
+    not erased by the larger synthetic total.
+    """
+    ksm66 = _botanical_ingredient(
+        raw_source_path="ingredientRows[0].nestedRows[0]",
+    )
+    powder = _botanical_ingredient(
+        name="Organic Ashwagandha Root Powder",
+        form="Ashwagandha Root Powder",
+        quantity=400,
+        raw_source_path="ingredientRows[0].nestedRows[1]",
+        matched_form="ashwagandha (unspecified)",
+    )
+    product = _botanical_product(ingredient=ksm66)
+    product["ingredient_quality_data"]["ingredients_scorable"].append(powder)
+    product["ingredient_quality_data"]["ingredients"].append(powder)
+    projection = _blend_anchor_evidence(
+        "ashwagandha",
+        "Organic Ashwagandha Root Extract",
+        1000.0,
+    )
+    projection["raw_source_path"] = "ingredientRows[0]"
+    projection["linked_rows"] = ["ingredientRows[0]"]
+    product["product_scoring_evidence"] = [projection]
+
+    formulation = score_botanical_formulation(product)
+    dose = score_botanical_dose(product)
+
+    assert formulation["components"]["branded_clinically_studied_extract"] == 3.0
+    assert formulation["components"]["marker_standardization_declared"] == 4.0
+    assert dose["band"] == "within_studied_range"
+    assert dose["score"] == 21.0
+
+
+def test_blend_reconciliation_counts_nonbotanical_disclosed_children():
+    """Owner selection reconciles against every disclosed blend child.
+
+    The botanical scorer must use the same ownership boundary as product
+    classification.  A 1,000 mg rollup made from 600 mg KSM-66 plus 400 mg
+    GABA is fully disclosed even though only one child is botanical.
+    """
+    ksm66 = _botanical_ingredient(
+        raw_source_path="ingredientRows[0].nestedRows[0]",
+    )
+    gaba = {
+        "name": "GABA",
+        "standard_name": "GABA",
+        "canonical_id": "gaba",
+        "matched_form": "gaba (unspecified)",
+        "quantity": 400,
+        "unit": "mg",
+        "mapped": True,
+        "raw_source_path": "ingredientRows[0].nestedRows[1]",
+        "raw_taxonomy": {
+            "category": "non-nutrient/non-botanical",
+            "ingredientGroup": "GABA",
+            "forms": [],
+        },
+    }
+    product = _botanical_product(ingredient=ksm66)
+    product["ingredient_quality_data"]["ingredients_scorable"].append(gaba)
+    product["ingredient_quality_data"]["ingredients"].append(gaba)
+    projection = _blend_anchor_evidence(
+        "ashwagandha",
+        "Ashwagandha + GABA Blend",
+        1000.0,
+    )
+    projection["raw_source_path"] = "ingredientRows[0]"
+    projection["linked_rows"] = [
+        "ingredientRows[0]",
+        "ingredientRows[0].nestedRows[0]",
+        "ingredientRows[0].nestedRows[1]",
+    ]
+    product["product_scoring_evidence"] = [projection]
+
+    formulation = score_botanical_formulation(product)
+    dose = score_botanical_dose(product)
+
+    assert formulation["components"]["branded_clinically_studied_extract"] == 3.0
+    assert formulation["components"]["marker_standardization_declared"] == 4.0
+    assert dose["band"] == "within_studied_range"
+    assert dose["score"] == 21.0
+
+
 def test_top_level_proprietary_botanical_blend_total_gets_conservative_profile():
     """A pure botanical proprietary blend with only a total amount is evaluable,
     but only as blend_total_only. It must not fall to generic no-dose fallback,
