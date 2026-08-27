@@ -92,6 +92,32 @@ def run_benchmark(client_factory, *, sample_bytes, objects_per_level,
     base_client = client_factory()
     print(f"Benchmark prefix: {root}/ (throwaway; deleted at the end)")
 
+    try:
+        return _run_benchmark_body(
+            base_client, client_factory, root,
+            sample_bytes=sample_bytes,
+            objects_per_level=objects_per_level,
+            project_count=project_count,
+            out_path=out_path,
+        )
+    finally:
+        # Cleanup runs on success AND on any crash — a stranded _bench
+        # prefix in production is never acceptable.
+        _cleanup_bench_prefix(base_client, root)
+
+
+def _cleanup_bench_prefix(base_client, root):
+    for sub in ("src", "dst"):
+        for size_or_w in _list_names(base_client, f"{root}/{sub}"):
+            prefix = f"{root}/{sub}/{size_or_w}"
+            names = _list_names(base_client, prefix)
+            paths = [f"{prefix}/{n}" for n in names]
+            for start in range(0, len(paths), 500):
+                remove_storage_batch(base_client, BUCKET, paths[start:start + 500])
+
+
+def _run_benchmark_body(base_client, client_factory, root, *, sample_bytes,
+                        objects_per_level, project_count, out_path):
     # Seed one source set per size quantile.
     sources = []
     for size in sample_bytes:
@@ -166,20 +192,17 @@ def run_benchmark(client_factory, *, sample_bytes, objects_per_level,
         if not errors:
             prev_p95 = p95
 
-    # Full cleanup, then prove the prefix empty.
+    # Cleanup, then PROVE the prefix empty (the finally-cleanup also runs,
+    # idempotently, on the crash path).
+    _cleanup_bench_prefix(base_client, root)
     leftovers = []
     for sub in ("src", "dst"):
         for size_or_w in _list_names(base_client, f"{root}/{sub}"):
-            prefix = f"{root}/{sub}/{size_or_w}"
-            names = _list_names(base_client, prefix)
-            paths = [f"{prefix}/{n}" for n in names]
-            for start in range(0, len(paths), 500):
-                remove_storage_batch(base_client, BUCKET, paths[start:start + 500])
-            leftovers.extend(_list_names(base_client, prefix))
+            leftovers.extend(_list_names(base_client, f"{root}/{sub}/{size_or_w}"))
     print(f"Cleanup: {'prefix empty' if not leftovers else f'LEFTOVERS: {leftovers}'}")
 
     report = {
-        "run_id": run_id,
+        "run_id": root.rsplit("/", 1)[-1],
         "levels": results,
         "selected": selected,
         "prefix_empty_after": not leftovers,
@@ -225,13 +248,19 @@ def main(argv=None):
 
     from supabase_client import get_supabase_client
 
-    run_benchmark(
+    report = run_benchmark(
         get_supabase_client,
         sample_bytes=[int(x) for x in args.sample_bytes.split(",") if x],
         objects_per_level=args.objects_per_level,
         project_count=args.project_count,
         out_path=args.out,
     )
+    if not report.get("prefix_empty_after"):
+        print("[FAILED] bench prefix not verifiably empty — inspect storage.")
+        return 1
+    if report.get("selected") is None:
+        print("[FAILED] no worker level met the promotion criteria.")
+        return 1
     return 0
 
 
