@@ -537,18 +537,25 @@ def run_storage_audit(
 
 
 def _list_paginated(client, bucket: str, prefix: str) -> List[dict]:
-    """List ALL items under a prefix, paginating past the 1000-item limit."""
+    """List ALL items under a prefix, or raise — never return a truncation.
+
+    The previous ``except: break`` meant one ReadTimeout silently reported
+    "0 blobs in storage" as a valid audit result. Transient blips retry; a
+    give-up raises so the audit fails loudly instead of lying quietly.
+    """
+    from .transient import retry_transient
+
     items: List[dict] = []
     offset = 0
     page_size = 1000
     while True:
-        try:
-            page = client.storage.from_(bucket).list(
+        page = retry_transient(
+            lambda offset=offset: client.storage.from_(bucket).list(
                 path=prefix,
                 options={"limit": page_size, "offset": offset},
-            )
-        except Exception:  # noqa: BLE001 — list errors → treat as empty
-            break
+            ),
+            max_attempts=4,
+        )
         if not page:
             break
         items.extend(page)

@@ -393,18 +393,27 @@ def _enumerate_dir_objects(
 
 
 def _list_paginated(client, bucket: str, prefix: str) -> List[dict]:
-    """List all items under a prefix, paginating past the 1000-item limit."""
+    """List ALL items under a prefix, or raise — never return a truncation.
+
+    The previous ``except: break`` turned a mid-listing failure into an
+    apparently valid partial result. Fed into compute_delete_plan, a
+    partially-enumerated directory gets partially deleted and then reported
+    done — the origin of the 1-object residue dirs. Transient blips are
+    retried; a give-up raises so the caller fails closed.
+    """
+    from .transient import retry_transient
+
     items: List[dict] = []
     offset = 0
     page_size = 1000
     while True:
-        try:
-            page = client.storage.from_(bucket).list(
+        page = retry_transient(
+            lambda offset=offset: client.storage.from_(bucket).list(
                 path=prefix,
                 options={"limit": page_size, "offset": offset},
-            )
-        except Exception:  # noqa: BLE001
-            break
+            ),
+            max_attempts=4,
+        )
         if not page:
             break
         items.extend(page)
@@ -434,6 +443,102 @@ def _remove_object(
         return True, None
     except Exception as e:  # noqa: BLE001
         return False, f"{type(e).__name__}: {e}"
+
+
+# ---------------------------------------------------------------------------
+# Completeness-bearing version-directory inventory (read-only)
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class VersionDirEntry:
+    """One v{version}/ directory: exact object/byte expectations + status."""
+
+    version: str
+    in_manifest: bool
+    object_count: int
+    total_bytes: int
+    complete: bool
+    error: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class VersionDirInventory:
+    """The reviewable dry report a stale-dir cleanup is approved against."""
+
+    dirs: Tuple[VersionDirEntry, ...]
+    failures: Tuple[str, ...]
+
+    @property
+    def complete(self) -> bool:
+        return not self.failures and all(d.complete for d in self.dirs)
+
+    @property
+    def stale_dirs(self) -> Tuple[VersionDirEntry, ...]:
+        return tuple(d for d in self.dirs if not d.in_manifest)
+
+    def text_report(self) -> str:
+        lines = [
+            "Version-directory inventory "
+            + ("(COMPLETE)" if self.complete else "(INCOMPLETE — do not act)"),
+            f"  {'version':<24} {'manifest':<9} {'objects':>8} {'bytes':>12}  status",
+        ]
+        for d in self.dirs:
+            lines.append(
+                f"  v{d.version:<23} {'YES' if d.in_manifest else 'no':<9} "
+                f"{d.object_count:>8} {d.total_bytes:>12,}  "
+                f"{'ok' if d.complete else f'UNLISTABLE ({d.error})'}"
+            )
+        stale = self.stale_dirs
+        lines.append(
+            f"  stale (not in manifest): {len(stale)} dir(s), "
+            f"{sum(d.object_count for d in stale)} object(s), "
+            f"{sum(d.total_bytes for d in stale):,} bytes"
+        )
+        if self.failures:
+            lines.append(f"  failures: {'; '.join(self.failures)}")
+        return "\n".join(lines)
+
+
+def inventory_version_dirs(
+    client,
+    *,
+    bucket: str = DEFAULT_BUCKET,
+    manifest_table: str = DEFAULT_MANIFEST_TABLE,
+) -> VersionDirInventory:
+    """Enumerate every v{version}/ directory with exact object/byte counts.
+
+    Read-only. A directory that cannot be fully enumerated is included with
+    ``complete=False`` and zeroed counts — never with a truncated count that
+    looks exact. The stale-dir cleanup (approval-gated) must require
+    ``inventory.complete`` before acting.
+    """
+    manifest_versions = _fetch_manifest_versions(client, manifest_table)
+    dirs = []
+    failures = []
+    for dir_name in _list_storage_v_dirs(client, bucket):
+        version = dir_name[1:]
+        try:
+            objects = _enumerate_dir_objects(client, bucket, dir_name)
+        except Exception as exc:  # noqa: BLE001 — reported, never truncated.
+            failures.append(f"{dir_name}: {type(exc).__name__}: {exc}")
+            dirs.append(VersionDirEntry(
+                version=version,
+                in_manifest=version in manifest_versions,
+                object_count=0,
+                total_bytes=0,
+                complete=False,
+                error=f"{type(exc).__name__}",
+            ))
+            continue
+        dirs.append(VersionDirEntry(
+            version=version,
+            in_manifest=version in manifest_versions,
+            object_count=len(objects),
+            total_bytes=sum(size for _p, size in objects),
+            complete=True,
+        ))
+    return VersionDirInventory(dirs=tuple(dirs), failures=tuple(failures))
 
 
 # ---------------------------------------------------------------------------
