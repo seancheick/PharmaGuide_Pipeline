@@ -87,8 +87,25 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--execute", action="store_true", default=False,
-        help="Move the reported orphans to quarantine. Requires "
-             "--expected-count matching a completed dry run exactly.",
+        help="Move the APPROVED orphans to quarantine. Requires "
+             "--approval-report (the dry run's JSON artifact) and "
+             "--expected-count matching that artifact exactly.",
+    )
+    parser.add_argument(
+        "--approval-report", default=None, dest="approval_report",
+        help="Path to the dry-run JSON artifact being executed. The frozen "
+             "candidate set, fingerprints, digests and quarantine date all "
+             "come from THIS file — execution never re-derives the set.",
+    )
+    parser.add_argument(
+        "--canary", type=int, default=None,
+        help="Act on only the lexicographically FIRST N candidates of the "
+             "frozen set (deterministic). --expected-count must equal N.",
+    )
+    parser.add_argument(
+        "--lock-path", default=None, dest="lock_path",
+        help="Release-lock file path (default: the pipeline's .release.lock). "
+             "Held from fresh verification through the final postconditions.",
     )
     parser.add_argument(
         "--expected-count", type=int, default=None, dest="expected_count",
@@ -107,6 +124,201 @@ def _resolve_retained_versions(client, args) -> tuple:
     return tuple(
         row["db_version"] for row in rows[: args.keep] if row.get("db_version")
     )
+
+
+class ApprovalArtifactError(ValueError):
+    """The approval artifact cannot authorize an execution."""
+
+
+def _load_approval_artifact(path, *, expected_count, canary):
+    """Validate the dry-run artifact and return its frozen contract.
+
+    Returns ``(candidates, fingerprints, run_date, protected_digest)``.
+    Raises ApprovalArtifactError with an operator-readable reason otherwise.
+    """
+    import re as _re
+
+    from release_safety.blob_inventory import ObjectFingerprint
+    from release_safety.orphan_reconcile import hash_set_digest
+
+    try:
+        data = json.loads(Path(path).read_text())
+    except (OSError, ValueError) as exc:
+        raise ApprovalArtifactError(
+            f"cannot read approval report {path}: {exc}"
+        ) from exc
+    if not isinstance(data, dict):
+        raise ApprovalArtifactError("approval report is not a JSON object")
+    if data.get("blocked_reason"):
+        raise ApprovalArtifactError(
+            "the approval report is BLOCKED "
+            f"({data['blocked_reason']!r}) — a blocked report pins nothing "
+            "approvable"
+        )
+
+    raw = data.get("candidate_fingerprints")
+    if not isinstance(raw, dict) or not raw:
+        raise ApprovalArtifactError(
+            "approval report carries no candidate_fingerprints — only the "
+            "FULL dry-run JSON (written by --json-report) can authorize an "
+            "execution"
+        )
+    fingerprints = {}
+    for blob_hash, fp in raw.items():
+        if (
+            not isinstance(fp, dict)
+            or not isinstance(fp.get("size"), int)
+            or not isinstance(fp.get("etag"), str)
+            or not fp["etag"]
+        ):
+            raise ApprovalArtifactError(
+                f"candidate {blob_hash} has an unproven fingerprint in the "
+                "approval report"
+            )
+        fingerprints[blob_hash] = ObjectFingerprint(
+            size=fp["size"], etag=fp["etag"],
+        )
+
+    candidates = sorted(fingerprints)
+    digest = data.get("candidate_digest")
+    if digest != hash_set_digest(candidates):
+        raise ApprovalArtifactError(
+            "candidate_digest does not match the candidate set in the "
+            "approval report — the file was edited or corrupted"
+        )
+    protected_digest = data.get("protected_digest")
+    if not (isinstance(protected_digest, str) and len(protected_digest) == 64):
+        raise ApprovalArtifactError(
+            "approval report has no valid protected_digest"
+        )
+    run_date = data.get("quarantine_run_date")
+    if not (isinstance(run_date, str) and _re.match(r"^\d{4}-\d{2}-\d{2}$", run_date)):
+        raise ApprovalArtifactError(
+            "approval report has no quarantine_run_date — regenerate the dry "
+            "run; execution must not choose its own date"
+        )
+
+    act_count = canary if canary is not None else len(candidates)
+    if canary is not None and not (0 < canary <= len(candidates)):
+        raise ApprovalArtifactError(
+            f"--canary {canary} exceeds the artifact's {len(candidates)} "
+            "candidate(s)"
+        )
+    if expected_count != act_count:
+        raise ApprovalArtifactError(
+            f"--expected-count {expected_count} does not match the "
+            f"{'canary size' if canary is not None else 'approved candidate count'} "
+            f"of {act_count}"
+        )
+    return candidates, fingerprints, run_date, protected_digest
+
+
+def _execute_from_artifact(client, args, client_factory) -> int:
+    """Quarantine the frozen approved set under the release lock."""
+    from release_safety.lock import (
+        CorruptLockError,
+        LockContentionError,
+        StaleLockError,
+        acquire_release_lock,
+    )
+    from release_safety.protected_blobs import compute_protected_blob_set
+
+    try:
+        candidates, fingerprints, run_date, _protected_digest = (
+            _load_approval_artifact(
+                args.approval_report,
+                expected_count=args.expected_count,
+                canary=args.canary,
+            )
+        )
+    except ApprovalArtifactError as exc:
+        print(f"\n[refused] {exc}")
+        return EXIT_REFUSED
+
+    act_set = candidates[: args.canary] if args.canary is not None else candidates
+
+    lock_path = Path(args.lock_path) if args.lock_path else None
+    # The lock raises on context ENTRY (same contract gates.py handles), so
+    # the __enter__ must sit inside the try.
+    try:
+        lock_ctx = acquire_release_lock(
+            lock_path, initial_step="reconcile_orphan_blobs --execute",
+        )
+        lock_ctx.__enter__()
+    except (LockContentionError, StaleLockError, CorruptLockError) as exc:
+        print(f"\n[refused] release lock unavailable: {exc}")
+        return EXIT_ERROR
+
+    try:
+        # Fresh protection check INSIDE the lock: a frozen candidate that a
+        # newer catalog re-references since approval has identical content
+        # (identical fingerprint), so drift detection cannot catch it — the
+        # protected-set intersection is the only guard.
+        retained = _resolve_retained_versions(client, args)
+        try:
+            protected = compute_protected_blob_set(
+                args.flutter_repo,
+                args.dist_dir,
+                branch=args.branch,
+                supabase_client=client,
+                registry_bucket=args.bucket,
+                retained_versions=retained,
+            )
+        except Exception as exc:  # noqa: BLE001 — cannot prove, cannot act.
+            print(
+                f"\n[refused] fresh protected-set computation failed "
+                f"({type(exc).__name__}: {exc}); nothing quarantined."
+            )
+            return EXIT_ERROR
+        if protected.degenerate:
+            print(
+                f"\n[refused] fresh protected set is degenerate: "
+                f"{protected.degenerate_reason}"
+            )
+            return EXIT_ERROR
+
+        newly_protected = sorted(set(act_set) & protected.protected)
+        if newly_protected:
+            print(
+                f"\n[BLOCKED] {len(newly_protected)} approved candidate(s) "
+                "have become protected since the approval and will NOT be "
+                "touched:"
+            )
+            for blob_hash in newly_protected[:10]:
+                print(f"    {blob_hash}")
+            if len(newly_protected) > 10:
+                print(f"    ... and {len(newly_protected) - 10} more")
+        to_act = [h for h in act_set if h not in set(newly_protected)]
+
+        moved = failed = 0
+        failed_paths = []
+        if to_act:
+            from cleanup_old_versions import quarantine_orphan_blob_batch
+
+            print(
+                f"\nQuarantining {len(to_act)} blob(s) to "
+                f"shared/quarantine/{run_date}/ (recoverable for 30 days)..."
+            )
+            moved, failed, failed_paths = quarantine_orphan_blob_batch(
+                client, to_act,
+                run_date=run_date,
+                source_fingerprints=fingerprints,
+                max_workers=args.max_workers,
+                max_attempts=args.max_attempts,
+                client_factory=client_factory,
+                checkpoint_path=Path(args.quarantine_checkpoint),
+            )
+    finally:
+        lock_ctx.__exit__(None, None, None)
+
+    print(
+        f"\nExecution summary: {moved} moved, {failed} failed, "
+        f"{len(newly_protected)} blocked-as-protected "
+        f"(of {len(act_set)} approved)."
+    )
+    for path in failed_paths[:10]:
+        print(f"  failed: {path}")
+    return EXIT_OK if failed == 0 and not newly_protected else EXIT_ERROR
 
 
 def _verify_inventory_parity(client, shards) -> int:
@@ -171,6 +383,14 @@ def main(argv=None, *, client=None) -> int:
             "  reviewed decision rather than whatever the scan happened to find."
         )
         return EXIT_REFUSED
+    if args.execute and not args.approval_report:
+        print(
+            "\n[refused] --execute requires --approval-report PATH — the "
+            "dry-run JSON artifact\n  (written by --json-report) whose frozen "
+            "candidate set, fingerprints and\n  quarantine date this "
+            "execution will act on."
+        )
+        return EXIT_REFUSED
 
     # A caller-injected client (tests) must never be fanned out across
     # threads; only a real factory can mint one client per worker.
@@ -192,6 +412,9 @@ def main(argv=None, *, client=None) -> int:
 
     if args.verify_inventory:
         return _verify_inventory_parity(client, shards)
+
+    if args.execute:
+        return _execute_from_artifact(client, args, client_factory)
     retained = _resolve_retained_versions(client, args)
 
     print("=" * 68)
@@ -215,6 +438,11 @@ def main(argv=None, *, client=None) -> int:
     elif args.execute and args.checkpoint:
         print("  execute inventory: fresh rescan (dry-run checkpoint ignored)")
 
+    from datetime import datetime, timezone
+
+    report_run_date = (
+        args.run_date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    )
     report = build_orphan_report(
         client,
         flutter_repo_path=args.flutter_repo,
@@ -228,6 +456,7 @@ def main(argv=None, *, client=None) -> int:
         client_factory=client_factory,
         checkpoint_path=inventory_checkpoint,
         progress=_progress,
+        run_date=report_run_date,
     )
 
     print()
@@ -240,63 +469,20 @@ def main(argv=None, *, client=None) -> int:
         print(f"\n  JSON report written to {path}")
 
     if report.blocked_reason:
-        print("\n[refused] Nothing quarantined — the report is BLOCKED.")
-        return EXIT_REFUSED if args.execute else EXIT_OK
-
-    if not args.execute:
-        print(
-            "\nDry run complete. To act on this exact count, re-run with:\n"
-            f"  --execute --expected-count {report.orphan_count}"
-        )
+        print("\n[refused] Nothing may be acted on — the report is BLOCKED.")
         return EXIT_OK
 
-    if args.expected_count != report.orphan_count:
-        print(
-            f"\n[refused] --expected-count {args.expected_count} does not match "
-            f"the {report.orphan_count} orphan(s) found now.\n"
-            "  Storage changed since the approved dry run, or the wrong count "
-            "was supplied. Re-run the dry run and review again."
-        )
-        return EXIT_REFUSED
-
-    if report.orphan_count == 0:
-        print("\nNothing to quarantine.")
-        return EXIT_OK
-
-    # Every candidate must carry a proven fingerprint (size + eTag) — the
-    # engine verifies each action against these frozen values, so a gap here
-    # would silently weaken every downstream proof. Refuse up front instead.
-    unproven = sorted(
-        h for h, fp in report.candidate_fingerprints.items()
-        if fp is None or fp.etag is None
-    )
-    if len(report.candidate_fingerprints) != report.orphan_count or unproven:
-        print(
-            f"\n[refused] {len(unproven) or report.orphan_count} candidate(s) "
-            "lack a proven source fingerprint (missing eTag). Nothing "
-            "quarantined."
-        )
-        return EXIT_REFUSED
-
-    from cleanup_old_versions import quarantine_orphan_blob_batch
-    from datetime import datetime, timezone
-    run_date = args.run_date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     print(
-        f"\nQuarantining {report.orphan_count} blob(s) to "
-        f"shared/quarantine/{run_date}/ (recoverable for 30 days)..."
+        "\nDry run complete. To act on this exact approved set, re-run with:\n"
+        f"  --execute --approval-report {args.json_report or '<path from --json-report>'} "
+        f"--expected-count {report.orphan_count}"
     )
-    moved, failed, failed_paths = quarantine_orphan_blob_batch(
-        client, report.orphan_hashes,
-        run_date=run_date,
-        source_fingerprints=report.candidate_fingerprints,
-        client_factory=client_factory,
-        checkpoint_path=Path(args.quarantine_checkpoint),
-    )
-    print(f"\nQuarantine complete: {moved} moved, {failed} failed.")
-    if failed_paths:
-        for path in failed_paths[:10]:
-            print(f"  failed: {path}")
-    return EXIT_OK if failed == 0 else EXIT_ERROR
+    if not args.json_report:
+        print(
+            "  (re-run the dry run with --json-report PATH first — the JSON "
+            "artifact IS the approval.)"
+        )
+    return EXIT_OK
 
 
 if __name__ == "__main__":

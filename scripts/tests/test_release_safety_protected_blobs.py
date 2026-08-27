@@ -593,6 +593,17 @@ class _P35Bucket:
             raise RuntimeError(f"not found: {path}")
         return self.objects[path]
 
+    def copy(self, src: str, dst: str):
+        if src not in self.objects:
+            raise RuntimeError(f"source not found: {src}")
+        self.objects[dst] = self.objects[src]
+        return {"ok": True}
+
+    def remove(self, paths):
+        for p in paths:
+            self.objects.pop(p, None)
+        return [{"name": p} for p in paths]
+
 
 class _P35Storage:
     def __init__(self):

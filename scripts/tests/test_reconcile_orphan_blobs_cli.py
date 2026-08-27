@@ -143,49 +143,291 @@ def test_execute_requires_expected_count(tmp_path, capsys):
     assert "--expected-count" in capsys.readouterr().out
 
 
-def test_execute_refuses_when_expected_count_disagrees(tmp_path, capsys):
+def _dry_run_artifact(tmp_path, cli, client, flutter_repo, dist_dir,
+                      *, shards="aa,dd", run_date="2026-08-28"):
+    """Produce a real approval artifact through the CLI's own dry run."""
+    artifact = tmp_path / "approval.json"
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir,
+              "--json-report", str(artifact),
+              "--run-date", run_date,
+              shards=shards),
+        client=client,
+    )
+    assert exit_code == 0, "artifact dry run must succeed"
+    return artifact
+
+
+def test_execute_requires_an_approval_artifact(tmp_path, capsys):
     import reconcile_orphan_blobs as cli
 
     client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=[_h("dd")])
-    attempted = []
-    bucket.move = lambda *a, **k: attempted.append("move")
+    before = dict(bucket.objects)
 
     exit_code = cli.main(
-        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "99"),
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "1"),
         client=client,
     )
 
-    assert exit_code != 0
-    assert attempted == []
-    out = capsys.readouterr().out
-    assert "99" in out and "1" in out
+    assert exit_code == cli.EXIT_REFUSED
+    assert bucket.objects == before
+    assert "--approval-report" in capsys.readouterr().out
 
 
-def test_execute_refuses_when_the_report_is_blocked(tmp_path, capsys):
-    """A shard we could not read means the count is not exact — so no action."""
+def test_execute_refuses_count_disagreeing_with_the_artifact(tmp_path, capsys):
     import reconcile_orphan_blobs as cli
 
     client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=[_h("dd")])
-    attempted = []
-    bucket.move = lambda *a, **k: attempted.append("move")
-    real_list = bucket.list
+    artifact = _dry_run_artifact(tmp_path, cli, client, flutter_repo, dist_dir)
+    before = dict(bucket.objects)
 
-    def flaky(path="", options=None):
-        if path == f"{PREFIX}/dd":
-            raise RuntimeError("The connection to the database timed out")
-        return real_list(path=path, options=options)
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "99",
+              "--approval-report", str(artifact)),
+        client=client,
+    )
 
-    bucket.list = flaky
+    assert exit_code == cli.EXIT_REFUSED
+    assert bucket.objects == before
+    out = capsys.readouterr().out
+    assert "99" in out
+
+
+def test_execute_refuses_a_tampered_artifact(tmp_path, capsys):
+    """The digest pins the SET, not just its size: a swapped hash with the
+    stale digest must be refused before anything is touched."""
+    import reconcile_orphan_blobs as cli
+
+    client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=[_h("dd")])
+    artifact = _dry_run_artifact(tmp_path, cli, client, flutter_repo, dist_dir)
+
+    data = json.loads(artifact.read_text())
+    (old_hash, fp), = list(data["candidate_fingerprints"].items())
+    swapped = _h("ee")
+    data["candidate_fingerprints"] = {swapped: fp}
+    artifact.write_text(json.dumps(data))
+    before = dict(bucket.objects)
 
     exit_code = cli.main(
         _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "1",
-              "--max-attempts", "2"),
+              "--approval-report", str(artifact)),
+        client=client,
+    )
+
+    assert exit_code == cli.EXIT_REFUSED
+    assert bucket.objects == before
+    assert "digest" in capsys.readouterr().out.lower()
+
+
+def test_execute_refuses_a_blocked_report_as_artifact(tmp_path, capsys):
+    """A blocked dry report pins nothing approvable and cannot authorize."""
+    import reconcile_orphan_blobs as cli
+
+    client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=[_h("dd")])
+    artifact = _dry_run_artifact(tmp_path, cli, client, flutter_repo, dist_dir)
+    data = json.loads(artifact.read_text())
+    data["blocked_reason"] = "simulated: inventory incomplete"
+    data["candidate_digest"] = None
+    data["candidate_fingerprints"] = {}
+    artifact.write_text(json.dumps(data))
+    before = dict(bucket.objects)
+
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "0",
+              "--approval-report", str(artifact)),
+        client=client,
+    )
+
+    assert exit_code == cli.EXIT_REFUSED
+    assert bucket.objects == before
+
+
+def test_execute_moves_the_frozen_set_and_the_cli_resumes_for_real(tmp_path, capsys):
+    """The reproduced operational gap: after a partial run, moved blobs vanish
+    from any fresh scan, so a count-pinned re-run could never match again.
+    Executing FROM the frozen artifact makes restart converge: same artifact,
+    same count, same quarantine date — even across midnight."""
+    import reconcile_orphan_blobs as cli
+
+    orphans = [_h("dd"), _h("ee")]
+    client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=orphans)
+    artifact = _dry_run_artifact(
+        tmp_path, cli, client, flutter_repo, dist_dir,
+        shards="aa,dd,ee", run_date="2026-08-28",
+    )
+    ckpt = tmp_path / "q.ckpt.json"
+
+    # Run 1: shard ee's delete fails -> partial success, nonzero exit.
+    real_remove = bucket.remove
+
+    def failing_remove(paths):
+        if any(_h("ee") in p for p in paths):
+            raise RuntimeError("The connection to the database timed out")
+        return real_remove(paths)
+
+    bucket.remove = failing_remove
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "2",
+              "--approval-report", str(artifact),
+              "--quarantine-checkpoint", str(ckpt),
+              "--max-attempts", "2",
+              "--lock-path", str(tmp_path / "lock"),
+              shards="aa,dd,ee"),
+        client=client,
+    )
+    assert exit_code != 0
+    assert f"{PREFIX}/dd/{_h('dd')}.json" not in bucket.objects, "dd moved"
+    assert f"{PREFIX}/ee/{_h('ee')}.json" in bucket.objects, "ee still active"
+
+    # Run 2 (the real CLI restart, storage now CHANGED): same artifact, same
+    # count, remove healthy again -> converges.
+    bucket.remove = real_remove
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "2",
+              "--approval-report", str(artifact),
+              "--quarantine-checkpoint", str(ckpt),
+              "--lock-path", str(tmp_path / "lock"),
+              shards="aa,dd,ee"),
+        client=client,
+    )
+    assert exit_code == 0
+    for h in orphans:
+        assert f"{PREFIX}/{h[:2]}/{h}.json" not in bucket.objects
+        assert (
+            f"shared/quarantine/2026-08-28/{h[:2]}/{h}.json" in bucket.objects
+        ), "every blob lands under the ARTIFACT's quarantine date"
+
+
+def test_execute_blocks_candidates_that_became_protected(tmp_path, capsys):
+    """A frozen candidate re-referenced by a NEWER retained catalog since
+    approval must be skipped loudly — identical content means identical
+    fingerprints, so drift detection alone cannot catch this."""
+    import reconcile_orphan_blobs as cli
+    from test_release_safety_protected_blobs import (
+        _detail_index_bytes,
+        _registry_row,
+    )
+
+    orphans = [_h("dd"), _h("ee")]
+    client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=orphans)
+    artifact = _dry_run_artifact(
+        tmp_path, cli, client, flutter_repo, dist_dir, shards="aa,dd,ee",
+    )
+
+    # A new ACTIVE catalog now references dd.
+    newver = "2026.08.29.000000"
+    bucket.put(
+        f"v{newver}/detail_index.json",
+        _detail_index_bytes([_h("dd")], newver),
+    )
+    client.seed_registry([_registry_row(db_version=newver, state="ACTIVE")])
+
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "2",
+              "--approval-report", str(artifact),
+              "--lock-path", str(tmp_path / "lock"),
+              shards="aa,dd,ee"),
+        client=client,
+    )
+
+    out = capsys.readouterr().out
+    assert exit_code != 0
+    assert f"{PREFIX}/dd/{_h('dd')}.json" in bucket.objects, (
+        "the re-protected candidate must NOT be moved"
+    )
+    assert f"{PREFIX}/ee/{_h('ee')}.json" not in bucket.objects, (
+        "still-orphaned candidates proceed"
+    )
+    assert "protected" in out.lower()
+
+
+def test_execute_holds_the_release_lock_through_mutations(tmp_path):
+    import reconcile_orphan_blobs as cli
+
+    client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=[_h("dd")])
+    artifact = _dry_run_artifact(tmp_path, cli, client, flutter_repo, dist_dir)
+    lock_path = tmp_path / "release.lock"
+
+    lock_seen_during_copy = []
+    real_copy = bucket.copy
+
+    def observing_copy(src, dst):
+        lock_seen_during_copy.append(lock_path.exists())
+        return real_copy(src, dst)
+
+    bucket.copy = observing_copy
+
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "1",
+              "--approval-report", str(artifact),
+              "--lock-path", str(lock_path)),
+        client=client,
+    )
+
+    assert exit_code == 0
+    assert lock_seen_during_copy == [True], (
+        "the release lock must be held while storage is being mutated"
+    )
+    assert not lock_path.exists(), "the lock is released afterwards"
+
+
+def test_execute_refuses_when_another_process_holds_the_lock(tmp_path, capsys):
+    import reconcile_orphan_blobs as cli
+
+    client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=[_h("dd")])
+    artifact = _dry_run_artifact(tmp_path, cli, client, flutter_repo, dist_dir)
+    lock_path = tmp_path / "release.lock"
+    lock_path.write_text(json.dumps({
+        "pid": os.getpid(),  # a live pid that is not us... it IS us; use ppid
+        "hostname": "test",
+        "acquired_at": "2026-08-28T00:00:00+00:00",
+        "current_step": "concurrent release",
+    }))
+    before = dict(bucket.objects)
+
+    # A live foreign holder: use PID 1 (always alive, never us).
+    lock_path.write_text(json.dumps({
+        "pid": 1,
+        "hostname": "test",
+        "acquired_at": "2026-08-28T00:00:00+00:00",
+        "current_step": "concurrent release",
+    }))
+
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "1",
+              "--approval-report", str(artifact),
+              "--lock-path", str(lock_path)),
         client=client,
     )
 
     assert exit_code != 0
-    assert attempted == []
-    assert "BLOCKED" in capsys.readouterr().out
+    assert bucket.objects == before, "no mutation while another release runs"
+
+
+def test_canary_acts_on_the_first_n_of_the_frozen_set_only(tmp_path):
+    import reconcile_orphan_blobs as cli
+
+    orphans = sorted([_h("dd"), _h("ee"), _h("ff")])
+    client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=orphans)
+    artifact = _dry_run_artifact(
+        tmp_path, cli, client, flutter_repo, dist_dir, shards="aa,dd,ee,ff",
+    )
+
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--canary", "2",
+              "--expected-count", "2",
+              "--approval-report", str(artifact),
+              "--lock-path", str(tmp_path / "lock"),
+              shards="aa,dd,ee,ff"),
+        client=client,
+    )
+
+    assert exit_code == 0
+    moved = [h for h in orphans if f"{PREFIX}/{h[:2]}/{h}.json" not in bucket.objects]
+    assert moved == orphans[:2], (
+        "the canary is DETERMINISTIC: the lexicographically first N"
+    )
+    assert f"{PREFIX}/{orphans[2][:2]}/{orphans[2]}.json" in bucket.objects
 
 
 def test_there_is_no_hard_delete_option(tmp_path):
@@ -234,44 +476,6 @@ def test_dry_run_checkpoint_lets_a_second_pass_skip_read_shards(tmp_path):
 
     assert f"{PREFIX}/aa" not in bucket.listed
     assert f"{PREFIX}/dd" not in bucket.listed
-
-
-def test_execute_rescans_storage_instead_of_reusing_dry_run_inventory(
-    tmp_path, monkeypatch, capsys,
-):
-    """The approved count is checked against fresh storage at execution time."""
-    import cleanup_old_versions
-    import reconcile_orphan_blobs as cli
-
-    client, bucket, flutter_repo, dist_dir = _world(
-        tmp_path, orphans=[_h("dd")],
-    )
-    checkpoint = tmp_path / "inventory.json"
-    args = _argv(
-        flutter_repo,
-        dist_dir,
-        "--checkpoint", str(checkpoint),
-        shards="aa,dd,ee",
-    )
-    assert cli.main(args, client=client) == 0
-
-    new_hash = _h("ee")
-    bucket.put(f"{PREFIX}/ee/{new_hash}.json", b"new")
-    attempted = []
-    monkeypatch.setattr(
-        cleanup_old_versions,
-        "quarantine_orphan_blob_batch",
-        lambda *a, **k: attempted.append(True) or (1, 0, []),
-    )
-
-    exit_code = cli.main(
-        args + ["--execute", "--expected-count", "1"],
-        client=client,
-    )
-
-    assert exit_code == cli.EXIT_REFUSED
-    assert attempted == []
-    assert "does not match the 2 orphan(s) found now" in capsys.readouterr().out
 
 
 # ---------------------------------------------------------------------------
