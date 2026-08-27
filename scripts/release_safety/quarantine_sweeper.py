@@ -54,6 +54,8 @@ from typing import Dict, List, Optional, Tuple, Union
 from .blob_inventory import HEX_BLOB_SHARDS, PAGE_LIMIT, list_storage_page
 from .transient import retry_transient
 from .quarantine import (
+    DEFAULT_REMOVE_BATCH_SIZE,
+    remove_storage_batch,
     DEFAULT_BUCKET,
     QUARANTINE_PREFIX,
     _remove_storage_object,    # reused for hard-delete
@@ -102,10 +104,20 @@ class SweepResult:
     #: "{date}/{shard}" entries that could not be listed. Non-empty means the
     #: sweep saw only part of the quarantine and must not be called done.
     listing_failures: List[str] = dataclass_field(default_factory=list)
+    #: Full paths whose delete REQUEST failed (exception from the batch call).
+    deletion_failures: List[str] = dataclass_field(default_factory=list)
+    #: Full paths whose delete was claimed successful but which the absence
+    #: proof still found listed. The listing is the authority, not remove().
+    residual_paths: List[str] = dataclass_field(default_factory=list)
 
     @property
     def complete(self) -> bool:
-        return not self.listing_failures
+        """Done means: saw everything, every delete succeeded, nothing left."""
+        return (
+            not self.listing_failures
+            and not self.deletion_failures
+            and not self.residual_paths
+        )
 
     @property
     def total_eligible(self) -> int:
@@ -203,31 +215,38 @@ def _list_blobs_under_quarantine_date(
     for shard in HEX_BLOB_SHARDS:
         shard_root = f"{date_root}/{shard}"
         try:
-            offset = 0
-            while True:
-                shard_items = retry_transient(
-                    lambda shard_root=shard_root, offset=offset: list_storage_page(
-                        client.storage.from_(bucket),
-                        shard_root,
-                        offset,
-                        limit=PAGE_LIMIT,
-                    ),
-                    max_attempts=SWEEP_LIST_MAX_ATTEMPTS,
-                )
-                for sitem in shard_items or []:
-                    sname = (sitem or {}).get("name")
-                    if not isinstance(sname, str) or not sname.endswith(".json"):
-                        continue
-                    blob_paths.append(f"{shard_root}/{sname}")
-                if len(shard_items or []) < PAGE_LIMIT:
-                    break
-                offset += PAGE_LIMIT
+            blob_paths.extend(_list_one_quarantine_shard(client, bucket, shard_root))
         except Exception:  # noqa: BLE001 — recorded, not swallowed.
             failed_shards.append(shard)
             continue
 
     blob_paths.sort()
     return blob_paths, failed_shards
+
+
+def _list_one_quarantine_shard(client, bucket: str, shard_root: str) -> List[str]:
+    """Paginated, retried listing of one quarantine shard. Raises on give-up."""
+    paths: List[str] = []
+    offset = 0
+    while True:
+        shard_items = retry_transient(
+            lambda offset=offset: list_storage_page(
+                client.storage.from_(bucket),
+                shard_root,
+                offset,
+                limit=PAGE_LIMIT,
+            ),
+            max_attempts=SWEEP_LIST_MAX_ATTEMPTS,
+        )
+        for sitem in shard_items or []:
+            sname = (sitem or {}).get("name")
+            if not isinstance(sname, str) or not sname.endswith(".json"):
+                continue
+            paths.append(f"{shard_root}/{sname}")
+        if len(shard_items or []) < PAGE_LIMIT:
+            break
+        offset += PAGE_LIMIT
+    return paths
 
 
 # ---------------------------------------------------------------------------
@@ -280,6 +299,8 @@ def sweep_quarantine(
     deleted_per_date: Dict[str, int] = {}
     failed_per_date: Dict[str, int] = {}
     listing_failures: List[str] = []
+    deletion_failures: List[str] = []
+    residual_paths: List[str] = []
 
     for date_str in eligible_dates:
         blobs, failed_shards = _list_blobs_under_quarantine_date(
@@ -294,14 +315,63 @@ def sweep_quarantine(
             failed_per_date[date_str] = 0
             continue
 
+        # Batched deletes (500/request, under Supabase's 1,000 cap), then ONE
+        # absence-proof listing per affected shard. The listing is the
+        # authority on what was deleted; remove()'s response is not believed.
+        date_deletion_failures: List[str] = []
+        for start in range(0, len(blobs), DEFAULT_REMOVE_BATCH_SIZE):
+            batch = blobs[start:start + DEFAULT_REMOVE_BATCH_SIZE]
+            try:
+                retry_transient(
+                    lambda batch=batch: remove_storage_batch(
+                        client, bucket, batch,
+                    ),
+                    max_attempts=SWEEP_LIST_MAX_ATTEMPTS,
+                )
+            except Exception:  # noqa: BLE001 — isolate the poison pill.
+                # One bad path must not sink its 500 batch-mates (P2.1b: the
+                # sweep continues past individual failures). Degrade to
+                # per-path removes for THIS batch only.
+                for blob_path in batch:
+                    ok, _err = _remove_storage_object(client, bucket, blob_path)
+                    if not ok:
+                        date_deletion_failures.append(blob_path)
+
+        affected_shards = sorted({p.rsplit("/", 2)[-2] for p in blobs})
+        date_root = f"{quarantine_root}/{date_str}"
+        still_present: set = set()
+        unlistable_after: List[str] = []
+        for shard in affected_shards:
+            shard_root = f"{date_root}/{shard}"
+            try:
+                still_present.update(
+                    _list_one_quarantine_shard(client, bucket, shard_root)
+                )
+            except Exception:  # noqa: BLE001
+                unlistable_after.append(shard)
+
         deleted = 0
         failed = 0
+        failure_set = set(date_deletion_failures)
         for blob_path in blobs:
-            ok, _err = _remove_storage_object(client, bucket, blob_path)
-            if ok:
-                deleted += 1
-            else:
+            shard = blob_path.rsplit("/", 2)[-2]
+            if shard in unlistable_after:
+                # Unknown final state — count as unswept, surface as a
+                # listing failure so complete=False.
                 failed += 1
+                continue
+            if blob_path in still_present:
+                failed += 1
+                if blob_path in failure_set:
+                    deletion_failures.append(blob_path)
+                else:
+                    residual_paths.append(blob_path)
+            else:
+                # Absent — goal state reached, whoever got it there.
+                deleted += 1
+        listing_failures.extend(
+            f"{date_str}/{shard} (post-delete)" for shard in unlistable_after
+        )
         deleted_per_date[date_str] = deleted
         failed_per_date[date_str] = failed
 
@@ -313,4 +383,6 @@ def sweep_quarantine(
         dry_run=dry_run,
         ttl_days=ttl_days,
         listing_failures=listing_failures,
+        deletion_failures=deletion_failures,
+        residual_paths=residual_paths,
     )

@@ -204,3 +204,125 @@ def test_dry_run_sweep_deletes_nothing():
     sweep_quarantine(client, ttl_days=30, dry_run=True, now=NOW)
 
     assert bucket.removed == []
+
+
+# ---------------------------------------------------------------------------
+# Phase 2 — batched deletes, absence proof, honest three-way completeness
+# ---------------------------------------------------------------------------
+
+
+def test_execute_sweep_batch_deletes_in_groups_of_500():
+    from release_safety.quarantine_sweeper import sweep_quarantine
+
+    objects = {
+        _quarantined(OLD_DATE, "aa", f"{i:064x}")
+        for i in range(1200)
+    }
+    bucket = _Bucket(objects)
+    client = _Client(bucket)
+    remove_batches = []
+    real_remove = bucket.remove
+
+    def recording_remove(paths):
+        remove_batches.append(len(paths))
+        return real_remove(paths)
+
+    bucket.remove = recording_remove
+
+    result = sweep_quarantine(client, ttl_days=30, dry_run=False, now=NOW)
+
+    assert result.total_deleted == 1200
+    assert result.complete is True
+    assert remove_batches == [500, 500, 200]
+    assert not bucket.objects, "every expired object must be gone"
+
+
+def test_execute_sweep_proves_absence_and_reports_residuals():
+    """remove() claiming success while the object survives is a residual —
+    reported as incomplete, never as deleted."""
+    from release_safety.quarantine_sweeper import sweep_quarantine
+
+    survivor = _quarantined(OLD_DATE, "aa", "aa")
+    bucket = _Bucket({survivor, _quarantined(OLD_DATE, "ff", "ff")})
+    client = _Client(bucket)
+    real_remove = bucket.remove
+
+    def lying_remove(paths):
+        result = real_remove(paths)
+        if survivor in paths:
+            bucket.objects.add(survivor)  # storage silently kept it
+        return result
+
+    bucket.remove = lying_remove
+
+    result = sweep_quarantine(client, ttl_days=30, dry_run=False, now=NOW)
+
+    assert result.complete is False
+    assert result.residual_paths == [survivor]
+    assert result.total_deleted == 1, "only the proven-absent delete counts"
+
+
+def test_execute_sweep_records_deletion_failures_separately():
+    from release_safety.quarantine_sweeper import sweep_quarantine
+
+    failing = _quarantined(OLD_DATE, "aa", "aa")
+    bucket = _Bucket({failing, _quarantined(OLD_DATE, "ff", "ff")})
+    client = _Client(bucket)
+    real_remove = bucket.remove
+
+    def failing_remove(paths):
+        if failing in paths:
+            raise _storage_error()
+        return real_remove(paths)
+
+    bucket.remove = failing_remove
+
+    result = sweep_quarantine(client, ttl_days=30, dry_run=False, now=NOW)
+
+    assert result.complete is False
+    assert result.deletion_failures, "delete errors must be recorded distinctly"
+    assert result.listing_failures == [], (
+        "a delete error is not a listing failure — do not overload the field"
+    )
+    assert result.total_deleted == 1
+
+
+def test_already_absent_objects_are_idempotent_success():
+    """A re-run after a partial sweep converges without errors."""
+    from release_safety.quarantine_sweeper import sweep_quarantine
+
+    kept = _quarantined(OLD_DATE, "aa", "aa")
+    bucket = _Bucket({kept})
+    client = _Client(bucket)
+    real_remove = bucket.remove
+
+    def racing_remove(paths):
+        # Someone else deleted it between listing and remove.
+        bucket.objects.discard(kept)
+        return real_remove(paths)
+
+    bucket.remove = racing_remove
+
+    result = sweep_quarantine(client, ttl_days=30, dry_run=False, now=NOW)
+
+    assert result.complete is True
+    assert result.total_deleted == 1
+    assert result.deletion_failures == []
+    assert result.residual_paths == []
+
+
+def test_incomplete_because_of_listing_failure_still_reports_distinctly():
+    from release_safety.quarantine_sweeper import sweep_quarantine
+
+    bucket = _Bucket(
+        {_quarantined(OLD_DATE, "aa", "aa")},
+        unlistable={f"{QROOT}/{OLD_DATE}/aa"},
+    )
+    client = _Client(bucket)
+
+    result = sweep_quarantine(client, ttl_days=30, dry_run=False, now=NOW)
+
+    assert result.complete is False
+    assert result.listing_failures
+    assert result.deletion_failures == []
+    assert result.residual_paths == []

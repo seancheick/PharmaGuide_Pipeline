@@ -263,6 +263,45 @@ def _remove_storage_object(client, bucket: str, path: str) -> Tuple[bool, Option
         return False, f"{type(e).__name__}: {e}"
 
 
+DEFAULT_REMOVE_BATCH_SIZE = int(
+    os.environ.get("PG_ORPHAN_DELETE_BATCH_SIZE", "500")
+)
+
+
+def remove_storage_batch(client, bucket: str, paths, *, timeout_seconds=None):
+    """DELETE up to one batch of objects; return the API's deleted-path names.
+
+    The single shared batched-remove seam (Supabase caps one request at 1,000
+    objects; callers stay at DEFAULT_REMOVE_BATCH_SIZE=500 below it). Raises on
+    request failure — callers decide blast radius. The returned names are the
+    server's claim only; destructive callers must still prove absence by
+    listing.
+    """
+    paths = list(paths)
+    if not paths:
+        return []
+    bucket_proxy = client.storage.from_(bucket)
+    if hasattr(bucket_proxy, "_request") and hasattr(bucket_proxy, "id"):
+        response = bucket_proxy._request(
+            "DELETE",
+            ["object", bucket_proxy.id],
+            json={"prefixes": paths},
+            timeout=(
+                timeout_seconds
+                if timeout_seconds is not None
+                else STORAGE_OPERATION_TIMEOUT_SECONDS
+            ),
+        )
+        payload = response.json()
+    else:
+        payload = bucket_proxy.remove(paths)
+    names = []
+    for item in payload or []:
+        if isinstance(item, dict) and isinstance(item.get("name"), str):
+            names.append(item["name"])
+    return names
+
+
 def _list_storage_objects(client, bucket: str, parent: str) -> list:
     bucket_proxy = client.storage.from_(bucket)
     if hasattr(bucket_proxy, "_request") and hasattr(bucket_proxy, "id"):
