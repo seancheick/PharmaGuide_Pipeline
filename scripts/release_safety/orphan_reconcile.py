@@ -74,6 +74,9 @@ class OrphanReport:
     candidate_digest: Optional[str] = None
     protected_digest: Optional[str] = None
     candidate_fingerprints: Dict[str, ObjectFingerprint] = field(default_factory=dict)
+    #: The quarantine date this approval is FOR. Execution uses this value, so
+    #: a run resumed after midnight still lands under the same date directory.
+    quarantine_run_date: Optional[str] = None
 
     @property
     def orphan_count(self) -> int:
@@ -93,6 +96,7 @@ class OrphanReport:
             "blocked_reason": self.blocked_reason,
             "candidate_digest": self.candidate_digest,
             "protected_digest": self.protected_digest,
+            "quarantine_run_date": self.quarantine_run_date,
             "candidate_fingerprints": {
                 h: {"size": fp.size, "etag": fp.etag}
                 for h, fp in sorted(self.candidate_fingerprints.items())
@@ -185,6 +189,7 @@ def build_orphan_report(
     client_factory: Optional[Callable[[], object]] = None,
     checkpoint_path: Optional[Path] = None,
     progress: Optional[Callable[[int, int, int], None]] = None,
+    run_date: Optional[str] = None,
 ) -> OrphanReport:
     """Inventory storage, compute the protected union, and diff them.
 
@@ -248,6 +253,24 @@ def build_orphan_report(
             orphan_hashes = tuple(candidates)
             orphan_bytes = sum(inventory.bytes_for(h) for h in candidates)
 
+    # An unproven fingerprint (no eTag from the listing) blocks HERE, at
+    # report time — never later as an apparently actionable count that
+    # execution then refuses.
+    if blocked is None:
+        unproven = [
+            h for h in orphan_hashes
+            if (fp := inventory.fingerprint_for(h)) is None or not fp.etag
+        ]
+        if unproven:
+            blocked = (
+                f"{len(unproven)} candidate(s) lack a proven source "
+                f"fingerprint (missing eTag in the listing), e.g. "
+                f"{unproven[0]}. Nothing may be proposed from an unproven "
+                "identity."
+            )
+            orphan_hashes = ()
+            orphan_bytes = 0
+
     candidate_digest = None
     protected_digest = None
     candidate_fingerprints: Dict[str, ObjectFingerprint] = {}
@@ -270,4 +293,5 @@ def build_orphan_report(
         candidate_digest=candidate_digest,
         protected_digest=protected_digest,
         candidate_fingerprints=candidate_fingerprints,
+        quarantine_run_date=run_date if blocked is None else None,
     )

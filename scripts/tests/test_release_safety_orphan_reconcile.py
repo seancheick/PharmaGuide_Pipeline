@@ -421,3 +421,66 @@ def test_blocked_report_freezes_no_candidate_digest(tmp_path):
     assert report.blocked_reason is not None
     assert report.candidate_digest is None
     assert report.candidate_fingerprints == {}
+
+
+# ---------------------------------------------------------------------------
+# Hardening pass: the report IS the approval artifact
+# ---------------------------------------------------------------------------
+
+
+def test_report_carries_a_quarantine_run_date(tmp_path):
+    """The artifact pins the quarantine date, so a run resumed after midnight
+    still lands every blob under the SAME date directory."""
+    from release_safety.orphan_reconcile import build_orphan_report
+
+    active = [_h("aa")]
+    client, flutter_repo, dist_dir = _make_world(
+        tmp_path, active_hashes=active, retained_hashes=active,
+        extra_storage=[_h("dd")],
+    )
+
+    report = build_orphan_report(
+        client, flutter_repo_path=flutter_repo, dist_dir=dist_dir,
+        retained_versions=(ACTIVE, RETAINED),
+        shards=_shards_for(active, [_h("dd")]),
+        run_date="2026-08-28",
+    )
+
+    assert report.quarantine_run_date == "2026-08-28"
+    assert report.to_dict()["quarantine_run_date"] == "2026-08-28"
+
+
+def test_candidate_without_etag_blocks_the_dry_report(tmp_path):
+    """An unproven fingerprint must block at REPORT time — not surface later
+    as an apparently actionable count that execute then refuses."""
+    from release_safety.orphan_reconcile import build_orphan_report
+
+    active = [_h("aa")]
+    orphans = [_h("dd")]
+    client, flutter_repo, dist_dir = _make_world(
+        tmp_path, active_hashes=active, retained_hashes=active,
+        extra_storage=orphans,
+    )
+    bucket = client.storage.from_("pharmaguide")
+    real_list = bucket.list
+
+    def stripping(path="", options=None):
+        items = real_list(path=path, options=options)
+        for item in items:
+            metadata = item.get("metadata")
+            if isinstance(metadata, dict):
+                metadata.pop("eTag", None)
+        return items
+
+    bucket.list = stripping
+
+    report = build_orphan_report(
+        client, flutter_repo_path=flutter_repo, dist_dir=dist_dir,
+        retained_versions=(ACTIVE, RETAINED),
+        shards=_shards_for(active, orphans),
+    )
+
+    assert report.blocked_reason is not None
+    assert "fingerprint" in report.blocked_reason.lower()
+    assert report.proposed_quarantine == 0
+    assert report.candidate_digest is None
