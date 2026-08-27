@@ -236,6 +236,44 @@ def test_dry_run_checkpoint_lets_a_second_pass_skip_read_shards(tmp_path):
     assert f"{PREFIX}/dd" not in bucket.listed
 
 
+def test_execute_rescans_storage_instead_of_reusing_dry_run_inventory(
+    tmp_path, monkeypatch, capsys,
+):
+    """The approved count is checked against fresh storage at execution time."""
+    import cleanup_old_versions
+    import reconcile_orphan_blobs as cli
+
+    client, bucket, flutter_repo, dist_dir = _world(
+        tmp_path, orphans=[_h("dd")],
+    )
+    checkpoint = tmp_path / "inventory.json"
+    args = _argv(
+        flutter_repo,
+        dist_dir,
+        "--checkpoint", str(checkpoint),
+        shards="aa,dd,ee",
+    )
+    assert cli.main(args, client=client) == 0
+
+    new_hash = _h("ee")
+    bucket.put(f"{PREFIX}/ee/{new_hash}.json", b"new")
+    attempted = []
+    monkeypatch.setattr(
+        cleanup_old_versions,
+        "quarantine_orphan_blob_batch",
+        lambda *a, **k: attempted.append(True) or (1, 0, []),
+    )
+
+    exit_code = cli.main(
+        args + ["--execute", "--expected-count", "1"],
+        client=client,
+    )
+
+    assert exit_code == cli.EXIT_REFUSED
+    assert attempted == []
+    assert "does not match the 2 orphan(s) found now" in capsys.readouterr().out
+
+
 # ---------------------------------------------------------------------------
 # Release pipeline: separation + honest status
 # ---------------------------------------------------------------------------

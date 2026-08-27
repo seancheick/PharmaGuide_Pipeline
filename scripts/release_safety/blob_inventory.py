@@ -31,6 +31,7 @@ Design rules
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 import threading
@@ -66,7 +67,7 @@ MAX_ATTEMPTS = int(os.environ.get("PG_STORAGE_LIST_MAX_RETRIES", "5"))
 #: Raise this only with a fresh measurement showing it helps.
 MAX_WORKERS = int(os.environ.get("PG_STORAGE_LIST_MAX_WORKERS", "8"))
 
-CHECKPOINT_VERSION = 1
+CHECKPOINT_VERSION = 2
 
 
 class IncompleteInventoryError(RuntimeError):
@@ -195,7 +196,17 @@ def _classify(name: str) -> Tuple[str, Optional[str]]:
 
 
 def _checkpoint_key(prefix: str, shards: Sequence[str]) -> str:
-    return f"{prefix}|{len(shards)}|{shards[0] if shards else ''}-{shards[-1] if shards else ''}"
+    """Fingerprint the exact prefix and ordered shard set.
+
+    The previous ``count + endpoints`` key collided for different middle
+    shards. That let a resume silently reuse work from a different inventory.
+    """
+    payload = json.dumps(
+        {"prefix": prefix, "shards": list(shards)},
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
 
 
 def _load_checkpoint(path: Optional[Path], prefix: str, shards: Sequence[str]) -> dict:

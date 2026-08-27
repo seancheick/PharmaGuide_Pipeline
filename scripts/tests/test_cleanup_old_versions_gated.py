@@ -312,6 +312,56 @@ def test_quarantine_batch_is_parallel_across_shards_and_serial_within_shard(
     assert all(len(client_ids) == 1 for client_ids in client_ids_by_thread.values())
 
 
+def test_quarantine_batch_checkpoint_retries_only_unfinished_hashes(
+    tmp_path, monkeypatch,
+) -> None:
+    """A restarted six-hour move must not recopy already-finished blobs."""
+    import cleanup_old_versions as cov
+
+    hashes = {_sharded_h(0, 1), _sharded_h(1, 1), _sharded_h(2, 1)}
+    failing_hash = _sharded_h(1, 1)
+    calls: list[str] = []
+
+    def first_attempt(_client, path, *, run_date):
+        blob_hash = path.rsplit("/", 1)[-1].removesuffix(".json")
+        calls.append(blob_hash)
+        if blob_hash == failing_hash:
+            return False, "temporary failure"
+        return True, None
+
+    monkeypatch.setattr(cov, "quarantine_blob", first_attempt, raising=False)
+    checkpoint = tmp_path / "quarantine.json"
+    moved, failed, _ = cov.quarantine_orphan_blob_batch(
+        client=object(),
+        blob_hashes=hashes,
+        run_date="2026-08-27",
+        checkpoint_path=checkpoint,
+    )
+
+    assert (moved, failed) == (2, 1)
+    assert checkpoint.exists()
+
+    calls.clear()
+    monkeypatch.setattr(
+        cov,
+        "quarantine_blob",
+        lambda _client, path, *, run_date: (
+            calls.append(path.rsplit("/", 1)[-1].removesuffix(".json"))
+            or (True, None)
+        ),
+        raising=False,
+    )
+    moved, failed, _ = cov.quarantine_orphan_blob_batch(
+        client=object(),
+        blob_hashes=hashes,
+        run_date="2026-08-27",
+        checkpoint_path=checkpoint,
+    )
+
+    assert calls == [failing_hash]
+    assert (moved, failed) == (3, 0)
+
+
 # ===========================================================================
 # Test 1 — happy path: gates pass, only non-protected blobs MOVED to quarantine
 # ===========================================================================

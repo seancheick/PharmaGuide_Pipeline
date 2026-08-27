@@ -163,6 +163,38 @@ def test_a_fully_readable_sweep_reports_itself_complete():
     assert result.listing_failures == []
 
 
+def test_sweeper_paginates_each_quarantine_shard():
+    """Large quarantine shards must not be silently truncated at 1,000."""
+    from release_safety.quarantine_sweeper import sweep_quarantine
+
+    objects = {
+        _quarantined(OLD_DATE, "aa", f"{i:064x}")
+        for i in range(1500)
+    }
+    bucket = _Bucket(objects)
+    client = _Client(bucket)
+
+    result = sweep_quarantine(client, ttl_days=30, dry_run=True, now=NOW)
+
+    assert result.complete is True
+    assert result.total_eligible == 1500
+    assert bucket.listed.count(f"{QROOT}/{OLD_DATE}/aa") == 2
+
+
+def test_sweeper_fails_closed_when_quarantine_root_cannot_be_listed():
+    """An unreadable root is an error, never proof that quarantine is empty."""
+    from release_safety.quarantine_sweeper import sweep_quarantine
+
+    bucket = _Bucket(
+        {_quarantined(OLD_DATE, "aa", "aa")},
+        unlistable={QROOT},
+    )
+    client = _Client(bucket)
+
+    with pytest.raises(Exception, match="timed out"):
+        sweep_quarantine(client, ttl_days=30, dry_run=True, now=NOW)
+
+
 def test_dry_run_sweep_deletes_nothing():
     from release_safety.quarantine_sweeper import sweep_quarantine
 

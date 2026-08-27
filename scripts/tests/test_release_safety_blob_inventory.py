@@ -370,6 +370,27 @@ def test_checkpoint_is_ignored_when_the_shard_set_changes(tmp_path):
     assert f"{PREFIX}/00" in bucket.listed
 
 
+def test_checkpoint_is_ignored_when_only_middle_shards_change(tmp_path):
+    """Equal-sized shard sets with equal endpoints are still different sets."""
+    from release_safety.blob_inventory import inventory_detail_blobs
+
+    ckpt = tmp_path / "inv.json"
+    client, bucket = _client_with(
+        {_blob("00", 1), _blob("0a", 1), _blob("80", 1), _blob("ff", 1)}
+    )
+    inventory_detail_blobs(
+        client, shards=("00", "0a", "ff"), checkpoint_path=ckpt,
+    )
+
+    bucket.listed.clear()
+    second = inventory_detail_blobs(
+        client, shards=("00", "80", "ff"), checkpoint_path=ckpt,
+    )
+
+    assert second.resumed_shards == 0
+    assert f"{PREFIX}/80" in bucket.listed
+
+
 # ---------------------------------------------------------------------------
 # Progress + determinism
 # ---------------------------------------------------------------------------

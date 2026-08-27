@@ -14,10 +14,13 @@ Usage:
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
+import hashlib
+import json
 import sys
 import os
 import threading
 import time
+from pathlib import Path
 
 # Ensure scripts/ is on the path for sibling imports (supabase_client, env_loader)
 sys.path.insert(0, os.path.dirname(__file__))
@@ -262,6 +265,7 @@ def quarantine_orphan_blob_batch(
     run_date,
     max_workers=None,
     client_factory=None,
+    checkpoint_path=None,
 ):
     """Move reviewed orphan hashes with shard-safe bounded concurrency.
 
@@ -279,8 +283,57 @@ def quarantine_orphan_blob_batch(
     if total == 0:
         return 0, 0, []
 
+    checkpoint_path = Path(checkpoint_path) if checkpoint_path else None
+    fingerprint = hashlib.sha256("\n".join(hashes).encode("ascii")).hexdigest()
+    checkpoint_identity = {
+        "version": 1,
+        "run_date": run_date,
+        "candidate_fingerprint": fingerprint,
+        "candidate_count": total,
+    }
+    succeeded = set()
+    if checkpoint_path is not None and checkpoint_path.exists():
+        try:
+            saved = json.loads(checkpoint_path.read_text())
+        except (OSError, ValueError) as exc:
+            raise ValueError(
+                f"Cannot read quarantine checkpoint {checkpoint_path}: {exc}"
+            ) from exc
+        for key, expected in checkpoint_identity.items():
+            if saved.get(key) != expected:
+                raise ValueError(
+                    f"Quarantine checkpoint {checkpoint_path} belongs to a "
+                    "different candidate/run. Use a new checkpoint path."
+                )
+        raw_succeeded = saved.get("succeeded", [])
+        if not isinstance(raw_succeeded, list) or not all(
+            isinstance(value, str) and value in hashes for value in raw_succeeded
+        ):
+            raise ValueError(
+                f"Quarantine checkpoint {checkpoint_path} has invalid successes."
+            )
+        succeeded = set(raw_succeeded)
+
+    def _save_quarantine_checkpoint():
+        if checkpoint_path is None:
+            return
+        payload = {
+            **checkpoint_identity,
+            "succeeded": sorted(succeeded),
+        }
+        checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = checkpoint_path.with_suffix(checkpoint_path.suffix + ".tmp")
+        temporary.write_text(json.dumps(payload, sort_keys=True))
+        temporary.replace(checkpoint_path)
+
+    pending_hashes = [blob_hash for blob_hash in hashes if blob_hash not in succeeded]
+    if not pending_hashes:
+        if checkpoint_path is not None:
+            checkpoint_path.unlink(missing_ok=True)
+        return total, 0, []
+
     hashes_by_shard = defaultdict(list)
-    for blob_hash in hashes:
+    for blob_hash in pending_hashes:
         hashes_by_shard[blob_hash[:2]].append(blob_hash)
 
     workers = QUARANTINE_MAX_WORKERS if max_workers is None else int(max_workers)
@@ -313,10 +366,10 @@ def quarantine_orphan_blob_batch(
             outcomes.append((path, ok, err))
         return outcomes
 
-    quarantined = 0
+    quarantined = len(succeeded)
     failed = 0
     failed_paths = []
-    processed = 0
+    processed = len(succeeded)
     next_progress_at = QUARANTINE_PROGRESS_EVERY_BLOBS
     with ThreadPoolExecutor(
         max_workers=workers,
@@ -346,12 +399,14 @@ def quarantine_orphan_blob_batch(
             for path, ok, err in outcomes:
                 if ok:
                     quarantined += 1
+                    succeeded.add(path.rsplit("/", 1)[-1].removesuffix(".json"))
                 else:
                     failed += 1
                     failed_paths.append(path)
                     print(
                         f"  [ERROR] Failed to quarantine orphan {path}: {err}"
                     )
+            _save_quarantine_checkpoint()
             processed += len(outcomes)
             # Report on threshold CROSSING, not exact multiples. Results
             # arrive one whole shard at a time (~50 blobs at catalog scale),
@@ -367,6 +422,8 @@ def quarantine_orphan_blob_batch(
                 while next_progress_at <= processed:
                     next_progress_at += QUARANTINE_PROGRESS_EVERY_BLOBS
 
+    if failed == 0 and checkpoint_path is not None:
+        checkpoint_path.unlink(missing_ok=True)
     return quarantined, failed, failed_paths
 
 

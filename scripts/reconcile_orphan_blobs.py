@@ -70,6 +70,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Path for the resumable inventory checkpoint. Only shards that "
              "were read in full are recorded.",
     )
+    parser.add_argument(
+        "--quarantine-checkpoint",
+        default="reports/orphan_quarantine.checkpoint.json",
+        help="Execution progress checkpoint. Successful moves are recorded "
+             "atomically so an interrupted run resumes only unfinished blobs.",
+    )
     parser.add_argument("--json-report", default=None, dest="json_report")
     parser.add_argument(
         "--execute", action="store_true", default=False,
@@ -138,6 +144,15 @@ def main(argv=None, *, client=None) -> int:
         if done == total or done % 16 == 0:
             print(f"  inventory: {done}/{total} shard(s), {objects:,} object(s)")
 
+    # Execution must compare the approved count against a fresh storage view.
+    # Reusing the dry-run inventory checkpoint would make storage changes
+    # invisible and defeat the expected-count safety gate.
+    inventory_checkpoint = None
+    if not args.execute and args.checkpoint:
+        inventory_checkpoint = Path(args.checkpoint)
+    elif args.execute and args.checkpoint:
+        print("  execute inventory: fresh rescan (dry-run checkpoint ignored)")
+
     report = build_orphan_report(
         client,
         flutter_repo_path=args.flutter_repo,
@@ -149,7 +164,7 @@ def main(argv=None, *, client=None) -> int:
         max_workers=args.max_workers,
         max_attempts=args.max_attempts,
         client_factory=client_factory,
-        checkpoint_path=Path(args.checkpoint) if args.checkpoint else None,
+        checkpoint_path=inventory_checkpoint,
         progress=_progress,
     )
 
@@ -188,8 +203,6 @@ def main(argv=None, *, client=None) -> int:
 
     from cleanup_old_versions import quarantine_orphan_blob_batch
     from datetime import datetime, timezone
-    from supabase_client import get_supabase_client
-
     run_date = args.run_date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     print(
         f"\nQuarantining {report.orphan_count} blob(s) to "
@@ -197,7 +210,9 @@ def main(argv=None, *, client=None) -> int:
     )
     moved, failed, failed_paths = quarantine_orphan_blob_batch(
         client, report.orphan_hashes,
-        run_date=run_date, client_factory=get_supabase_client,
+        run_date=run_date,
+        client_factory=client_factory,
+        checkpoint_path=Path(args.quarantine_checkpoint),
     )
     print(f"\nQuarantine complete: {moved} moved, {failed} failed.")
     if failed_paths:

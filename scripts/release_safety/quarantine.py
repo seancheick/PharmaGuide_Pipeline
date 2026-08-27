@@ -76,6 +76,8 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import List, Optional, Tuple
 
+from .transient import retry_transient
+
 # ---------------------------------------------------------------------------
 # Constants — paths/buckets are configurable for tests but match the
 # pipeline defaults in production.
@@ -571,13 +573,13 @@ def list_quarantine_dates(
     Returns valid ``YYYY-MM-DD`` strings only — anything that doesn't
     match the format is skipped silently (defensive against hand-edits).
     """
-    try:
-        items = client.storage.from_(bucket).list(
+    items = retry_transient(
+        lambda: client.storage.from_(bucket).list(
             path=quarantine_root,
             options={"limit": 1000, "offset": 0},
-        )
-    except Exception:  # noqa: BLE001
-        return []
+        ),
+        max_attempts=4,
+    )
     if not items:
         return []
     dates: List[str] = []

@@ -51,7 +51,7 @@ from dataclasses import dataclass, field as dataclass_field
 from datetime import date, datetime, timedelta, timezone
 from typing import Dict, List, Optional, Tuple, Union
 
-from .blob_inventory import HEX_BLOB_SHARDS
+from .blob_inventory import HEX_BLOB_SHARDS, PAGE_LIMIT, list_storage_page
 from .transient import retry_transient
 from .quarantine import (
     DEFAULT_BUCKET,
@@ -203,21 +203,28 @@ def _list_blobs_under_quarantine_date(
     for shard in HEX_BLOB_SHARDS:
         shard_root = f"{date_root}/{shard}"
         try:
-            shard_items = retry_transient(
-                lambda shard_root=shard_root: client.storage.from_(bucket).list(
-                    path=shard_root,
-                    options={"limit": 1000, "offset": 0},
-                ),
-                max_attempts=SWEEP_LIST_MAX_ATTEMPTS,
-            )
+            offset = 0
+            while True:
+                shard_items = retry_transient(
+                    lambda shard_root=shard_root, offset=offset: list_storage_page(
+                        client.storage.from_(bucket),
+                        shard_root,
+                        offset,
+                        limit=PAGE_LIMIT,
+                    ),
+                    max_attempts=SWEEP_LIST_MAX_ATTEMPTS,
+                )
+                for sitem in shard_items or []:
+                    sname = (sitem or {}).get("name")
+                    if not isinstance(sname, str) or not sname.endswith(".json"):
+                        continue
+                    blob_paths.append(f"{shard_root}/{sname}")
+                if len(shard_items or []) < PAGE_LIMIT:
+                    break
+                offset += PAGE_LIMIT
         except Exception:  # noqa: BLE001 — recorded, not swallowed.
             failed_shards.append(shard)
             continue
-        for sitem in shard_items or []:
-            sname = (sitem or {}).get("name")
-            if not isinstance(sname, str) or not sname.endswith(".json"):
-                continue
-            blob_paths.append(f"{shard_root}/{sname}")
 
     blob_paths.sort()
     return blob_paths, failed_shards
