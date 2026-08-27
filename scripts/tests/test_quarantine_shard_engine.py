@@ -340,7 +340,9 @@ def test_vanished_bystander_is_reported_as_postcondition_violation():
 # ---------------------------------------------------------------------------
 
 
-def test_checkpoint_resume_skips_completed_shards(tmp_path):
+def test_checkpoint_resume_reproves_completed_shards_without_rework(tmp_path):
+    """A checkpoint is a HINT. On resume the completed shard is re-proven from
+    live storage (listings), but no copy or delete is re-performed."""
     hashes = [_h("aa", 1), _h("bb", 1)]
     client, bucket = _seed(hashes)
     fingerprints = _fingerprints(bucket, hashes)
@@ -363,11 +365,79 @@ def test_checkpoint_resume_skips_completed_shards(tmp_path):
     )
 
     assert (moved, failed) == (2, 0)
-    touched = {op[1] for op in bucket.ops if op[0] == "list"}
-    assert not any(path.endswith("/aa") for path in touched), (
-        "completed shard must not be re-listed on resume"
+    touched = [op[1] for op in bucket.ops if op[0] == "list"]
+    assert any(path.endswith("/aa") for path in touched), (
+        "the completed shard must be RE-PROVEN from live storage on resume"
     )
+    aa_mutations = [
+        op for op in bucket.ops
+        if op[0] in ("copy", "remove") and any(hashes[0] in str(x) for x in op[1:])
+    ]
+    assert aa_mutations == [], "re-proof must not re-copy or re-delete"
     assert not ckpt.exists(), "a fully successful run clears its checkpoint"
+
+
+def test_forged_checkpoint_cannot_fabricate_moved_counts(tmp_path):
+    """The reproduced defect: a checkpoint claiming a shard complete while the
+    source still exists and the target does not. The engine must DO the move
+    (or fail) — never report success from the checkpoint's say-so."""
+    hashes = [_h("aa", 1)]
+    client, bucket = _seed(hashes)
+    fingerprints = _fingerprints(bucket, hashes)
+    ckpt = tmp_path / "q.json"
+
+    import cleanup_old_versions as cov
+
+    forged = {
+        "version": 2,
+        "run_date": RUN_DATE,
+        "candidate_fingerprint": __import__("hashlib").sha256(
+            "\n".join(sorted(hashes)).encode("ascii")
+        ).hexdigest(),
+        "candidate_count": 1,
+        "shards": {"aa": {"count": 1, "digest": "0" * 64}},
+    }
+    ckpt.write_text(json.dumps(forged))
+
+    moved, failed, _ = _run(
+        client, bucket, hashes, fingerprints=fingerprints, checkpoint_path=ckpt,
+    )
+
+    # The truth wins: the blob is actually moved now, counted from proofs.
+    assert (moved, failed) == (1, 0)
+    assert _active(hashes[0]) not in bucket.objects
+    assert _target(hashes[0]) in bucket.objects
+
+
+def test_no_double_count_when_absence_proof_fails_after_a_copy_failure():
+    """A blob that already failed (copy) must not be failed AGAIN when the
+    shard's absence-proof listing later fails."""
+    hashes = [_h("aa", 1), _h("aa", 2)]
+    client, bucket = _seed(hashes)
+    bucket.fail_copy_to.add(_target(hashes[0]))
+
+    # Make ONLY the final (absence-proof) listing of the active shard fail:
+    # classification listing works, target-verify works.
+    active_prefix = f"{ACTIVE_PREFIX}/aa"
+    listing_count = {"n": 0}
+    real_list = bucket.list
+
+    def flaky_final(path="", options=None):
+        if path == active_prefix:
+            listing_count["n"] += 1
+            if listing_count["n"] >= 2:
+                raise RuntimeError("The connection to the database timed out")
+        return real_list(path=path, options=options)
+
+    bucket.list = flaky_final
+
+    moved, failed, failed_paths = _run(client, bucket, hashes, max_attempts=2)
+
+    assert moved == 0
+    assert failed == len(hashes), (
+        f"each candidate fails exactly once; got failed={failed}, "
+        f"paths={failed_paths}"
+    )
 
 
 def test_checkpoint_for_a_different_candidate_set_is_refused(tmp_path):
