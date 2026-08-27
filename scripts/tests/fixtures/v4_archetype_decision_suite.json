@@ -470,7 +470,7 @@
         "product_safety_status": "caution",
         "quality_score_v4_100": 53.8,
         "quality_tier": "Poor",
-        "v4_confidence": "low",
+        "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 30.0,
           "dose": 25.0,
@@ -1220,7 +1220,7 @@
         "product_safety_status": "caution",
         "quality_score_v4_100": 34.1,
         "quality_tier": "Poor",
-        "v4_confidence": "low",
+        "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 23.0,
           "dose": 23.0,
