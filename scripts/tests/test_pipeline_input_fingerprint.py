@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -160,6 +161,48 @@ def test_reference_preflight_rejects_changed_content(tmp_path: Path) -> None:
     issues = enrichment_reference_freshness_issues(repo)
     assert len(issues) == 1
     assert "content mismatch" in issues[0]
+
+
+def test_manifest_freshness_cli_rejects_stale_enrichment(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    data_file = repo / "scripts" / "data" / "reference.json"
+    data_file.parent.mkdir(parents=True)
+    data_file.write_text('{"value": 1}\n', encoding="utf-8")
+    expected = enrichment_reference_fingerprint(repo)
+
+    stage_dir = (
+        repo
+        / "scripts"
+        / "products"
+        / "output_Product_Submissions_enriched"
+        / "enriched"
+    )
+    stage_dir.mkdir(parents=True)
+    output = stage_dir / "enriched_batch_1.json"
+    output.write_text("[]\n", encoding="utf-8")
+    manifest = write_stage_manifest(
+        stage_dir,
+        "enrich",
+        [output],
+        input_fingerprints={REFERENCE_FINGERPRINT_KEY: expected},
+    )
+
+    command = [
+        sys.executable,
+        str(Path(pipeline_module.__file__).with_name("pipeline_freshness.py")),
+        "check-enrichment-manifest",
+        "--repo-root",
+        str(repo),
+        "--manifest",
+        str(manifest),
+    ]
+    current = subprocess.run(command, capture_output=True, text=True)
+    assert current.returncode == 0, current.stderr
+
+    data_file.write_text('{"value": 2}\n', encoding="utf-8")
+    stale = subprocess.run(command, capture_output=True, text=True)
+    assert stale.returncode == 1
+    assert "content mismatch" in stale.stderr
 
 
 def test_release_preflight_uses_reference_content_fingerprints() -> None:

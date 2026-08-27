@@ -160,3 +160,65 @@ def test_batch_runner_propagates_snapshot_failure_and_skips_release(tmp_path):
     assert result.returncode == 1, combined_output
     assert "Snapshot rebuild failed" in combined_output
     assert not release_marker.exists()
+
+
+def test_full_batch_refreshes_stale_product_submissions_before_snapshot(tmp_path):
+    dataset_root = tmp_path / "datasets"
+    (dataset_root / "ExampleBrand").mkdir(parents=True)
+
+    scripts_dir = tmp_path / "scripts"
+    (scripts_dir / "products" / "reports").mkdir(parents=True)
+    submission_dir = tmp_path / "manual_labels" / "product_submissions"
+    submission_dir.mkdir(parents=True)
+    (submission_dir / "approved.json").write_text("{}\n", encoding="utf-8")
+
+    call_log = tmp_path / "pipeline-calls.txt"
+    (scripts_dir / "run_pipeline.py").write_text(
+        "import os, sys\n"
+        "with open(os.environ['PIPELINE_CALL_LOG'], 'a', encoding='utf-8') as f:\n"
+        "    f.write(' '.join(sys.argv[1:]) + '\\n')\n",
+        encoding="utf-8",
+    )
+    (scripts_dir / "pipeline_freshness.py").write_text(
+        "import sys\n"
+        "assert sys.argv[1] == 'check-enrichment-manifest'\n"
+        "print('content mismatch', file=sys.stderr)\n"
+        "raise SystemExit(1)\n",
+        encoding="utf-8",
+    )
+    snapshot = scripts_dir / "rebuild_dashboard_snapshot.sh"
+    snapshot.write_text("#!/bin/bash\necho snapshot-ok\n", encoding="utf-8")
+    snapshot.chmod(snapshot.stat().st_mode | stat.S_IXUSR)
+
+    copied_script = tmp_path / "batch_run_all_datasets.sh"
+    copied_script.write_text(SCRIPT_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    copied_script.chmod(copied_script.stat().st_mode | stat.S_IXUSR)
+
+    result = subprocess.run(
+        [
+            "bash",
+            str(copied_script),
+            "--root",
+            str(dataset_root),
+            "--skip-release",
+        ],
+        capture_output=True,
+        text=True,
+        env={
+            **os.environ,
+            "PIPELINE_CALL_LOG": str(call_log),
+            "PYTHONUNBUFFERED": "1",
+        },
+    )
+
+    combined_output = result.stdout + result.stderr
+    assert result.returncode == 0, combined_output
+    calls = call_log.read_text(encoding="utf-8").splitlines()
+    assert len(calls) == 2, calls
+    assert "output_ExampleBrand" in calls[0]
+    assert f"--raw-dir {submission_dir}" in calls[1]
+    assert "--output-prefix products/output_Product_Submissions" in calls[1]
+    assert "--stages enrich,score" in calls[1]
+    assert combined_output.index("Product Submissions") < combined_output.index(
+        "snapshot-ok"
+    )

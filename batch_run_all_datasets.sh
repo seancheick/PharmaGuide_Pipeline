@@ -58,6 +58,7 @@ set -e -o pipefail  # Exit on error and fail pipelines when any segment fails
 # deterministic multi-hour pipeline run.
 DATASET_ROOT="${PHARMAGUIDE_DATASET_ROOT:-$HOME/Downloads/PharmaGuide_Datasets/staging/brands}"
 SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/scripts" && pwd)"
+REPO_ROOT="$(cd "$SCRIPTS_DIR/.." && pwd)"
 STAGES="clean,enrich,score"  # Default: full pipeline
 TARGET_DATASETS=""  # Empty = all datasets
 PYTHON="${PYTHON:-python3}"  # Use python3 by default
@@ -69,6 +70,9 @@ RELEASE_SKIP_SUPABASE=0
 RELEASE_SKIP_FLUTTER=0
 RELEASE_SUPABASE_DRY_RUN=0
 RELEASE_FLUTTER_REPO=""      # empty = use release_full.sh default
+SUBMISSION_OUTPUT_DIR="$REPO_ROOT/manual_labels/product_submissions"
+SUBMISSION_PIPELINE_PREFIX="products/output_Product_Submissions"
+SUBMISSION_ENRICH_MANIFEST="$SCRIPTS_DIR/${SUBMISSION_PIPELINE_PREFIX}_enriched/enriched/.stage_manifest.json"
 PIPELINE_ONLY=0
 RELEASE_EXPLICIT=0
 
@@ -325,6 +329,32 @@ if [ ${#FAILED[@]} -ne 0 ]; then
     echo -e "${YELLOW}    SKIP_SNAPSHOT=0 bash scripts/rebuild_dashboard_snapshot.sh${NC}"
     echo -e "${YELLOW}    bash scripts/release_full.sh${NC}"
     exit 1
+fi
+
+# Product Submissions is an auxiliary, human-approved label source outside the
+# 37-brand dataset root, but the catalog snapshot includes it. Refresh only its
+# enrichment and score whenever reference-data content changed so a successful
+# brand run cannot reach snapshot assembly with one stale auxiliary manifest.
+if [ "$SKIP_SNAPSHOT" != "1" ] \
+    && [ -d "$SUBMISSION_OUTPUT_DIR" ] \
+    && find "$SUBMISSION_OUTPUT_DIR" -maxdepth 1 -type f -name '*.json' \
+        -print -quit 2>/dev/null | grep -q .; then
+    if ! "$PYTHON" pipeline_freshness.py check-enrichment-manifest \
+        --repo-root "$REPO_ROOT" \
+        --manifest "$SUBMISSION_ENRICH_MANIFEST" >/dev/null 2>&1; then
+        echo -e "${BLUE}Refreshing Product Submissions against current reference data...${NC}"
+        if "$PYTHON" run_pipeline.py \
+            --raw-dir "$SUBMISSION_OUTPUT_DIR" \
+            --output-prefix "$SUBMISSION_PIPELINE_PREFIX" \
+            --stages enrich,score \
+            --strict-release-gates 2>&1 | tee -a "$SUMMARY_FILE"; then
+            echo -e "${GREEN}✓ Product Submissions enrichment and scoring refreshed${NC}"
+        else
+            echo -e "${RED}✗ Product Submissions refresh failed; snapshot and release were not started${NC}"
+            exit 1
+        fi
+        echo ""
+    fi
 fi
 
 # Step A: dashboard snapshot

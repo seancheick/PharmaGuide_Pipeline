@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
+import sys
 from pathlib import Path
 from typing import Iterable
 
@@ -51,6 +53,43 @@ def enrichment_reference_fingerprint(repo_root: Path) -> str:
     )
 
 
+def _enrichment_manifest_reference_issue(
+    manifest_path: Path,
+    *,
+    current_fingerprint: str,
+) -> str | None:
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return f"{manifest_path}: unreadable ({exc})"
+
+    if not isinstance(manifest, dict):
+        return f"{manifest_path}: malformed manifest root"
+    input_fingerprints = manifest.get("input_fingerprints")
+    if input_fingerprints is not None and not isinstance(
+        input_fingerprints, dict
+    ):
+        return f"{manifest_path}: malformed input_fingerprints"
+
+    declared = (input_fingerprints or {}).get(REFERENCE_FINGERPRINT_KEY)
+    if declared == current_fingerprint:
+        return None
+    reason = "missing" if declared is None else "content mismatch"
+    return f"{manifest_path}: reference_data fingerprint {reason}"
+
+
+def enrichment_manifest_reference_issue(
+    repo_root: Path,
+    manifest_path: Path,
+) -> str | None:
+    """Explain why one enrich manifest is stale, or return None if current."""
+    repo_root = Path(repo_root).resolve()
+    return _enrichment_manifest_reference_issue(
+        Path(manifest_path).resolve(),
+        current_fingerprint=enrichment_reference_fingerprint(repo_root),
+    )
+
+
 def enrichment_reference_freshness_issues(repo_root: Path) -> list[str]:
     """Return enrich manifests that do not match current reference contents."""
     repo_root = Path(repo_root).resolve()
@@ -75,26 +114,39 @@ def enrichment_reference_freshness_issues(repo_root: Path) -> list[str]:
     issues: list[str] = []
     for stage_dir in enriched_dirs:
         manifest_path = stage_dir / ".stage_manifest.json"
-        try:
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-            issues.append(f"{manifest_path}: unreadable ({exc})")
-            continue
-
-        if not isinstance(manifest, dict):
-            issues.append(f"{manifest_path}: malformed manifest root")
-            continue
-        input_fingerprints = manifest.get("input_fingerprints")
-        if input_fingerprints is not None and not isinstance(
-            input_fingerprints, dict
-        ):
-            issues.append(f"{manifest_path}: malformed input_fingerprints")
-            continue
-
-        declared = (input_fingerprints or {}).get(REFERENCE_FINGERPRINT_KEY)
-        if declared != current:
-            reason = "missing" if declared is None else "content mismatch"
-            issues.append(
-                f"{manifest_path}: reference_data fingerprint {reason}"
-            )
+        issue = _enrichment_manifest_reference_issue(
+            manifest_path,
+            current_fingerprint=current,
+        )
+        if issue is not None:
+            issues.append(issue)
     return issues
+
+
+def _main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Check content-based pipeline freshness contracts."
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    check = subparsers.add_parser(
+        "check-enrichment-manifest",
+        help="exit zero only when one enrich manifest uses current reference data",
+    )
+    check.add_argument("--repo-root", type=Path, required=True)
+    check.add_argument("--manifest", type=Path, required=True)
+    args = parser.parse_args()
+
+    if args.command == "check-enrichment-manifest":
+        issue = enrichment_manifest_reference_issue(
+            args.repo_root,
+            args.manifest,
+        )
+        if issue is not None:
+            print(issue, file=sys.stderr)
+            return 1
+        return 0
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(_main())

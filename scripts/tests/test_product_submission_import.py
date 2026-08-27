@@ -719,6 +719,19 @@ def test_release_train_runs_approved_submissions_through_existing_pipeline():
     assert "scripts/score_products_v4.py" not in release[fetch:snapshot]
 
 
+def test_release_train_refreshes_submissions_after_reference_data_change():
+    release = Path("scripts/release_full.sh").read_text(encoding="utf-8")
+
+    freshness_function = release[
+        release.index("submission_pipeline_needs_run() {") : release.index(
+            "\n}\n\nif (( SKIP_SUPABASE", release.index("submission_pipeline_needs_run() {")
+        )
+    ]
+    assert "pipeline_freshness.py" in freshness_function
+    assert "check-enrichment-manifest" in freshness_function
+    assert 'SUBMISSION_ENRICH_MANIFEST=' in release
+
+
 def test_release_train_registers_submission_images_before_cloud_sync():
     release = Path("scripts/release_full.sh").read_text(encoding="utf-8")
 
