@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 import sys
 from pathlib import Path
@@ -335,7 +336,34 @@ def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> No
 
 
 def test_blend_anchor_cannot_hide_title_material_unresolved_vitamin_dose() -> None:
-    product = _load_product("76510")
+    # Product 76510 used to carry the source defect this test guarded, but its
+    # Vitamin D unit has since been corrected from NP to IU. Keep the canary
+    # deterministic by recreating the unresolved label input explicitly.
+    product = copy.deepcopy(_load_product("76510"))
+
+    def remove_vitamin_d_dose(node: object) -> None:
+        if isinstance(node, dict):
+            if (
+                node.get("canonical_id") == "vitamin_d"
+                or node.get("normalized_key") == "vitamin_d"
+            ):
+                if "quantity" in node:
+                    node["quantity"] = 0.0
+                if "unit" in node:
+                    node["unit"] = "NP"
+                node.pop("source_correction", None)
+                raw_taxonomy = node.get("raw_taxonomy")
+                if isinstance(raw_taxonomy, dict):
+                    for variant in raw_taxonomy.get("quantityVariants") or []:
+                        variant["quantity"] = 0.0
+                        variant["unit"] = "NP"
+            for value in node.values():
+                remove_vitamin_d_dose(value)
+        elif isinstance(node, list):
+            for value in node:
+                remove_vitamin_d_dose(value)
+
+    remove_vitamin_d_dose(product)
 
     out = score_product_v4(product)
 
