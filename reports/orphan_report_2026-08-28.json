@@ -1,0 +1,58 @@
+{
+  "blocked_reason": null,
+  "candidate_digest": "abf10d108c12b86646cb2fa83f50b47129dca95ae4d97f6c110cd1f922bfb6e9",
+  "elapsed_seconds": 274.335,
+  "inventory": {
+    "categories": {
+      "detail_blob": 135475
+    },
+    "complete": true,
+    "elapsed_seconds": 252.093,
+    "etag_coverage": 135475,
+    "failures": [],
+    "integrity_failures": [],
+    "prefix": "shared/details/sha256",
+    "resumed_shards": 0,
+    "retries": 0,
+    "shards_completed": 256,
+    "shards_total": 256,
+    "total_bytes": 25491561596,
+    "total_objects": 135475,
+    "unique_blobs": 135475
+  },
+  "orphan_bytes": 21933347321,
+  "orphan_count": 118947,
+  "orphan_sample": [
+    "00004b63dddf85e29034d3cc4e518de6c28c6114ccafb099769735effdfb6b36",
+    "0000ee42f9aed7fd941d7e2614da4e1a1f695b8fa1460d6f8ec71bbb994e8bf9",
+    "0001b41ca3368ac3d789f19e53caa4d14c60a96af2b54554351bb23c0ca2c619",
+    "0002f4387649c1c1839c2988ab3f6bc2a05cbbc6b4dc66f9e0a03e2aade33ef6",
+    "000452ae6c816ed57f4ae9dc25c9041e21296e62758d3cb5451cc06e2e670664",
+    "000497f427ac4c2241b9f54745271e048cd6c7bce71d1c3dc6b0a4204f546dbd",
+    "000565af060286ee40654b08802c518b8620efa4b5c186ead275567ca79b2e6f",
+    "0006be29ccd7872911312c82f72e538a24a7b17fa621d82f4cdfd0f09e1c2a15",
+    "0006e10dc3b0a68da6aef7c16ab55f427d94bf1cd3f6e120cbc3a961bc9b4e1f",
+    "000835b7d14e5bad7197a92490ac4607348f48dd28eb750c5dbedf8b2392a0e2",
+    "000915360610f57c5d6b302ef81fed0abbd6d40aee9d1ccdd228e55d8ca025d8",
+    "00099616130a5cd694b391a03650f95e25f3349a3bc745dc8bdae80f99e5a5d1",
+    "0009af09a2ea49e73ad15c95604d83fe5d0b65e73c6c4a50e947dedbcc0968a9",
+    "0009b6f416cbbc19729ad4f87becac603a21827cee6a432e6ba5c3093a1fef26",
+    "0009c0c102c30f60336d9ac6e15f6e4cd7f6633106ad36d34c098d84bfb31441",
+    "000a13ef909ba7eddbc92c9b49476c63ec178c855876bcbfc7ab96f3e20615ec",
+    "000a7e3338f4601c9eab4dcc1bf1ab7721a92659b8445e0ba6d0b236486b1a0b",
+    "000b02842f70090864725b87dbdd39c427d9a2373aad2daf9311461587d4b6f8",
+    "000be177b21d1c9031827e54ec23cc7e6845db09013daca9c7cf3090dc56d1d5",
+    "000c5ea6bb349b961ae3838abfb43ea556cfd23fb1f9be9e0c7e21c05ca18d7f"
+  ],
+  "proposed_quarantine": 118947,
+  "protected_by_version": {
+    "2026.08.26.141540": 15336,
+    "2026.08.27.162958": 15336
+  },
+  "protected_digest": "96fc0f600c5c730c668d2d11bc8670ca26d5f5102840a39968683f6545bfdcab",
+  "protected_total": 16528,
+  "retained_versions": [
+    "2026.08.27.162958",
+    "2026.08.26.141540"
+  ]
+}
