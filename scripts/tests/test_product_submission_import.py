@@ -4,6 +4,8 @@ import hashlib
 import io
 import json
 import sqlite3
+import time
+import urllib.error
 from pathlib import Path
 
 import pytest
@@ -229,6 +231,76 @@ def test_approved_export_uses_stable_cursor_pagination(
             "p_limit": 2,
         },
     ]
+
+
+def test_approved_export_retries_a_transient_network_failure(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    from product_submission_import import fetch_approved_submissions
+
+    attempts = 0
+    retry_delays: list[float] = []
+
+    class _Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args) -> None:
+            return None
+
+        def read(self) -> bytes:
+            return b"[]"
+
+    def _urlopen(*_args, **_kwargs):
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            raise urllib.error.URLError("temporary connection failure")
+        return _Response()
+
+    monkeypatch.setenv("SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("SUPABASE_SECRET_KEY", "sb_secret_pipeline_key")
+    monkeypatch.setattr("urllib.request.urlopen", _urlopen)
+    monkeypatch.setattr(time, "sleep", retry_delays.append)
+
+    assert fetch_approved_submissions() == []
+    assert attempts == 2
+    assert retry_delays == [0.5]
+
+
+def test_approved_export_reports_permanent_http_failure_without_retry(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    from product_submission_import import (
+        SubmissionImportError,
+        fetch_approved_submissions,
+    )
+
+    attempts = 0
+    retry_delays: list[float] = []
+
+    def _urlopen(*_args, **_kwargs):
+        nonlocal attempts
+        attempts += 1
+        raise urllib.error.HTTPError(
+            "https://example.supabase.co/rest/v1/rpc/export",
+            401,
+            "Unauthorized",
+            {},
+            io.BytesIO(b'{"message":"secret server detail"}'),
+        )
+
+    monkeypatch.setenv("SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("SUPABASE_SECRET_KEY", "sb_secret_pipeline_key")
+    monkeypatch.setattr("urllib.request.urlopen", _urlopen)
+    monkeypatch.setattr(time, "sleep", retry_delays.append)
+
+    with pytest.raises(SubmissionImportError, match=r"failed: HTTP 401") as exc:
+        fetch_approved_submissions()
+
+    assert "secret server detail" not in str(exc.value)
+    assert attempts == 1
+    assert retry_delays == []
 
 
 def test_approved_export_fails_closed_if_cursor_does_not_advance(

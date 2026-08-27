@@ -18,6 +18,7 @@ import re
 import sqlite3
 import sys
 import tempfile
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -40,6 +41,8 @@ MAX_PRODUCT_IMAGE_BYTES = 10 * 1024 * 1024
 MAX_PRODUCT_IMAGE_PIXELS = 40_000_000
 PRODUCT_IMAGE_MAX_EDGE = 900
 PRODUCT_IMAGE_WEBP_QUALITY = 88
+APPROVAL_FETCH_RETRY_DELAYS_SECONDS = (0.5, 1.5)
+_RETRYABLE_HTTP_STATUSES = frozenset({408, 425, 429, 500, 502, 503, 504})
 _ALLOWED_KINDS = frozenset({"label_mismatch", "missing_product"})
 _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
     {
@@ -947,13 +950,30 @@ def fetch_approved_submissions(*, limit: int = 100) -> list[dict[str, Any]]:
             headers=_supabase_admin_headers(),
             method="POST",
         )
-        try:
-            with urllib.request.urlopen(request, timeout=30) as response:
-                decoded = json.loads(response.read())
-        except (OSError, urllib.error.URLError, json.JSONDecodeError) as exc:
-            raise SubmissionImportError(
-                "approved submission fetch failed"
-            ) from exc
+        decoded: Any = None
+        for attempt in range(len(APPROVAL_FETCH_RETRY_DELAYS_SECONDS) + 1):
+            failure_detail = ""
+            try:
+                with urllib.request.urlopen(request, timeout=30) as response:
+                    decoded = json.loads(response.read())
+                break
+            except urllib.error.HTTPError as exc:
+                failure_detail = f"HTTP {exc.code}"
+                if exc.code not in _RETRYABLE_HTTP_STATUSES:
+                    raise SubmissionImportError(
+                        f"approved submission fetch failed: {failure_detail}"
+                    ) from exc
+            except (OSError, urllib.error.URLError) as exc:
+                failure_detail = f"network error ({type(exc).__name__})"
+            except json.JSONDecodeError:
+                failure_detail = "invalid JSON response"
+
+            if attempt >= len(APPROVAL_FETCH_RETRY_DELAYS_SECONDS):
+                raise SubmissionImportError(
+                    "approved submission fetch failed after "
+                    f"{attempt + 1} attempts: {failure_detail}"
+                )
+            time.sleep(APPROVAL_FETCH_RETRY_DELAYS_SECONDS[attempt])
         if (
             not isinstance(decoded, list)
             or len(decoded) > limit
