@@ -27,6 +27,13 @@ def test_nac_consumer_goal_is_limited_to_supported_outcomes() -> None:
     assert "longevity" not in consumer_claim_surface
 
 
+def test_nac_verified_chemical_spelling_is_matchable() -> None:
+    """PubChem resolves this spelling and acetylcysteine to CID 12035."""
+    entry = _entry()
+
+    assert "N-Acetyl-L-Cysteine" in entry["aliases"]
+
+
 def test_nac_removes_untraceable_aggregate_counts_and_stale_tags() -> None:
     entry = _entry()
 

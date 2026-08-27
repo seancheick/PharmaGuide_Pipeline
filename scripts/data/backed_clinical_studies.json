@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.6",
-    "last_updated": "2026-08-25",
+    "schema_version": "5.3.7",
+    "last_updated": "2026-08-27",
     "total_entries": 201,
     "changelog": [
+      "5.3.7 (2026-08-27): Added the PubChem-verified N-Acetyl-L-Cysteine spelling (CID 12035; InChIKey PWKSKIMOESPYIA-BYPYZUCNSA-N) to the existing NAC evidence identity. No study, claim, or score strength changed.",
       "5.3.6 (2026-08-25): Added content-verified, mixed human systematic-review evidence for myo-/D-chiro-inositol in PCOS and free/base L-arginine for blood pressure and athletic-performance endpoints. Added exact compound/form exclusions so neither record lends evidence to chemically or pharmacologically distinct inositol and arginine forms.",
       "5.3.5 (2026-08-23): Removed the class-wide BRAND_ALBION_MINERALS evidence record. Its magnesium-bisglycinate and ferrous-bisglycinate citations are compound-specific and already live on their canonical ingredient records; they cannot support unrelated Albion salts such as dimagnesium malate.",
       "5.3.4 (2026-08-18): Added exact-strain clinical records for Bacillus coagulans GBI-30, 6086 and Limosilactobacillus reuteri DSM 17938; added a current CNCM I-745 meta-analysis to Saccharomyces boulardii; corrected HN019 and pterostilbene effect summaries; separated product-brand aliases from exact strain identities.",
@@ -6275,7 +6276,8 @@
       "standard_name": "N-Acetylcysteine",
       "aliases": [
         "nac",
-        "acetylcysteine"
+        "acetylcysteine",
+        "N-Acetyl-L-Cysteine"
       ],
       "category": "antioxidant",
       "evidence_level": "ingredient-human",

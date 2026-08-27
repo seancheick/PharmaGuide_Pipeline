@@ -4422,6 +4422,57 @@ class TestClinicalEvidenceUsesMatchedFormIdentity:
             for match in enriched.get("evidence_data", {}).get("clinical_matches", [])
         }
 
+    def test_verified_nac_spelling_reaches_clinical_evidence(self, enricher):
+        """The verified N-acetyl-L-cysteine spelling reaches NAC evidence."""
+        product = {
+            "id": "test_nac_alternate_name_evidence",
+            "fullName": "N-Acetyl-L-Cysteine 600 mg",
+            "brandName": "Test Brand",
+            "activeIngredients": [
+                {
+                    "name": "N-Acetyl-L-Cysteine",
+                    "standardName": "N-Acetyl Cysteine",
+                    "raw_source_text": "N-Acetyl-L-Cysteine",
+                    "canonical_id": "nac",
+                    "quantity": 600.0,
+                    "unit": "mg",
+                    "forms": [],
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        evidence = enricher._collect_evidence_data(product)
+        evidence_ids = {match.get("id") for match in evidence["clinical_matches"]}
+
+        assert "INGR_NAC" in evidence_ids
+
+    def test_ambiguous_cleaner_abbreviation_does_not_borrow_evidence(self, enricher):
+        """DGL must not link D-glucuronolactone to licorice evidence."""
+        product = {
+            "id": "test_dgl_abbreviation_collision",
+            "fullName": "D-Glucuronolactone 500 mg",
+            "brandName": "Test Brand",
+            "activeIngredients": [
+                {
+                    "name": "D-Glucuronolactone",
+                    "standardName": "D-Glucuronolactone",
+                    "raw_source_text": "D-Glucuronolactone",
+                    "canonical_id": "d_glucuronolactone",
+                    "alternateNames": ["DGL"],
+                    "quantity": 500.0,
+                    "unit": "mg",
+                    "forms": [],
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        evidence = enricher._collect_evidence_data(product)
+        evidence_ids = {match.get("id") for match in evidence["clinical_matches"]}
+
+        assert "PRECLIN_DGL" not in evidence_ids
+
     def test_magnesium_bisglycinate_chelate_routes_to_glycinate_evidence(self, enricher):
         product = {
             "id": "test_magnesium_bisglycinate_evidence",
