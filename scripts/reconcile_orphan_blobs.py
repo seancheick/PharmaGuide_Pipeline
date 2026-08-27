@@ -78,6 +78,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--json-report", default=None, dest="json_report")
     parser.add_argument(
+        "--verify-inventory", action="store_true", default=False,
+        dest="verify_inventory",
+        help="Dual-read check: run BOTH the shard walker and the inventory "
+             "RPC over the same prefix and require byte-exact parity "
+             "(names, sizes, eTags). Read-only; exits non-zero on any "
+             "divergence or if the RPC is unavailable.",
+    )
+    parser.add_argument(
         "--execute", action="store_true", default=False,
         help="Move the reported orphans to quarantine. Requires "
              "--expected-count matching a completed dry run exactly.",
@@ -99,6 +107,57 @@ def _resolve_retained_versions(client, args) -> tuple:
     return tuple(
         row["db_version"] for row in rows[: args.keep] if row.get("db_version")
     )
+
+
+def _verify_inventory_parity(client, shards) -> int:
+    """Read-only dual read: walker vs RPC over the same shards.
+
+    The walker is the authority; the RPC may only ever agree with it. Any
+    divergence — or an unavailable/failing RPC — is a non-zero exit so a
+    scheduled parity check cannot quietly rot.
+    """
+    from release_safety.blob_inventory import (
+        RpcInventoryError,
+        inventory_detail_blobs,
+        inventory_detail_blobs_via_rpc,
+    )
+
+    print("Dual-read inventory parity check (read-only)...")
+    walker = inventory_detail_blobs(client, shards=shards)
+    if not walker.complete:
+        print("  PARITY UNPROVABLE: the walker inventory itself is incomplete.")
+        return EXIT_ERROR
+    try:
+        via_rpc = inventory_detail_blobs_via_rpc(client, shards=shards)
+    except RpcInventoryError as exc:
+        print(f"  PARITY FAILED: RPC path unavailable or invalid: {exc}")
+        return EXIT_ERROR
+
+    mismatches = []
+    if walker.sizes != via_rpc.sizes:
+        only_walker = sorted(set(walker.sizes) - set(via_rpc.sizes))[:5]
+        only_rpc = sorted(set(via_rpc.sizes) - set(walker.sizes))[:5]
+        mismatches.append(
+            f"sizes differ (walker {len(walker.sizes)} vs rpc "
+            f"{len(via_rpc.sizes)}; walker-only sample {only_walker}; "
+            f"rpc-only sample {only_rpc})"
+        )
+    if walker.etags != via_rpc.etags:
+        mismatches.append("eTags differ")
+    if walker.categories != via_rpc.categories:
+        mismatches.append(
+            f"categories differ ({walker.categories} vs {via_rpc.categories})"
+        )
+    if mismatches:
+        print("  PARITY FAILED:")
+        for m in mismatches:
+            print(f"    - {m}")
+        return EXIT_ERROR
+    print(
+        f"  PARITY OK: {len(walker.sizes):,} blob(s), "
+        f"{walker.total_bytes:,} bytes, identical names/sizes/eTags."
+    )
+    return EXIT_OK
 
 
 def main(argv=None, *, client=None) -> int:
@@ -130,6 +189,9 @@ def main(argv=None, *, client=None) -> int:
         tuple(s.strip() for s in args.shards.split(",") if s.strip())
         if args.shards else HEX_BLOB_SHARDS
     )
+
+    if args.verify_inventory:
+        return _verify_inventory_parity(client, shards)
     retained = _resolve_retained_versions(client, args)
 
     print("=" * 68)

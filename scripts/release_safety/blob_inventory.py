@@ -74,6 +74,17 @@ class IncompleteInventoryError(RuntimeError):
     """Raised when a caller requires a complete inventory and cannot have one."""
 
 
+class RpcInventoryError(RuntimeError):
+    """The RPC fast path returned something the client refuses to trust.
+
+    Raised on: RPC transport/API errors, malformed rows, duplicate or
+    non-monotonic cursors, or a summary count/byte mismatch against the rows
+    actually received. A page SHORTER than the limit is NOT a fault — keyset
+    pagination terminates on a short page. Callers fall back to the shard
+    walker, which remains the permanent authority.
+    """
+
+
 @dataclass(frozen=True)
 class ObjectFingerprint:
     """Identity of one stored object: normalized size + the raw listing eTag.
@@ -315,6 +326,21 @@ def inventory_detail_blobs(
     shards = tuple(shards)
     max_attempts = MAX_ATTEMPTS if max_attempts is None else max_attempts
     page_limit = PAGE_LIMIT if page_limit is None else page_limit
+
+    # Feature-flagged RPC fast path (requires the storage-inventory RPC
+    # migration; OFF by default). Any fault falls back to the walker below —
+    # the fast path may only ever be faster, never the sole authority.
+    if os.environ.get("PG_STORAGE_INVENTORY_RPC", "").lower() in ("1", "true", "on"):
+        try:
+            return inventory_detail_blobs_via_rpc(
+                client, prefix=prefix, shards=shards, page_limit=page_limit,
+            )
+        except Exception as exc:  # noqa: BLE001 — walker is the net.
+            print(
+                f"  [WARN] RPC inventory unavailable "
+                f"({type(exc).__name__}: {exc}); falling back to the shard "
+                "walker."
+            )
     workers = MAX_WORKERS if max_workers is None else int(max_workers)
     if client_factory is None:
         # No factory: stay serial. Sharing one client's HTTP transport across
@@ -474,4 +500,154 @@ def inventory_detail_blobs(
         retries=retry_count["n"],
         elapsed_seconds=time.monotonic() - started,
         resumed_shards=resumed,
+    )
+
+
+# ---------------------------------------------------------------------------
+# RPC fast path (Phase 4) — server-side inventory, walker remains authority
+# ---------------------------------------------------------------------------
+
+RPC_SUMMARY_FN = "pg_storage_inventory_summary"
+RPC_PAGE_FN = "pg_storage_inventory_page"
+
+
+def inventory_detail_blobs_via_rpc(
+    client,
+    *,
+    prefix: str = BLOB_STORAGE_PREFIX,
+    shards: Optional[Iterable[str]] = None,
+    page_limit: int = 1000,
+    summary_fn: str = RPC_SUMMARY_FN,
+    page_fn: str = RPC_PAGE_FN,
+) -> BlobInventory:
+    """Inventory ``prefix`` through the read-only inventory RPCs.
+
+    Strictly validated: every row shape-checked, names must be strictly
+    increasing across the whole scan (keyset order is the correctness
+    backbone), and the final count/bytes must equal the summary RPC's answer.
+    Any violation raises :class:`RpcInventoryError`; this function never
+    returns a partial inventory.
+    """
+    started = time.monotonic()
+    page_limit = max(1, min(int(page_limit), 1000))
+
+    def _call(fn, params):
+        try:
+            result = client.rpc(fn, params)
+            result = result.execute() if hasattr(result, "execute") else result
+            return getattr(result, "data", result)
+        except RpcInventoryError:
+            raise
+        except Exception as exc:  # noqa: BLE001
+            raise RpcInventoryError(
+                f"RPC {fn} failed: {type(exc).__name__}: {exc}"
+            ) from exc
+
+    summary_rows = _call(summary_fn, {"p_prefix": prefix})
+    if (
+        not isinstance(summary_rows, list)
+        or len(summary_rows) != 1
+        or not isinstance(summary_rows[0], dict)
+        or not isinstance(summary_rows[0].get("object_count"), int)
+        or not isinstance(summary_rows[0].get("total_bytes"), int)
+    ):
+        raise RpcInventoryError(
+            f"RPC {summary_fn} returned a malformed summary: {summary_rows!r}"
+        )
+    expected_count = summary_rows[0]["object_count"]
+    expected_bytes = summary_rows[0]["total_bytes"]
+
+    base = prefix.rstrip("/") + "/"
+    rows: list = []
+    cursor = None
+    while True:
+        page = _call(
+            page_fn,
+            {"p_prefix": prefix, "p_after": cursor, "p_limit": page_limit},
+        )
+        if not isinstance(page, list):
+            raise RpcInventoryError(
+                f"RPC {page_fn} returned a malformed page: {type(page).__name__}"
+            )
+        for row in page:
+            if (
+                not isinstance(row, dict)
+                or not isinstance(row.get("name"), str)
+                or not isinstance(row.get("size"), int)
+                or not isinstance(row.get("etag"), str)
+            ):
+                raise RpcInventoryError(f"RPC {page_fn} malformed row: {row!r}")
+            name = row["name"]
+            if not name.startswith(base):
+                raise RpcInventoryError(
+                    f"RPC {page_fn} row escapes prefix {prefix!r}: {name!r}"
+                )
+            if cursor is not None and name <= cursor:
+                raise RpcInventoryError(
+                    f"RPC {page_fn} cursor is not strictly monotonic: "
+                    f"{name!r} after {cursor!r} (duplicate or reordered row)"
+                )
+            cursor = name
+            rows.append((name, row["size"], row["etag"]))
+        if len(page) < page_limit:
+            break  # short page == normal keyset termination
+
+    total_bytes = sum(size for _n, size, _e in rows)
+    if len(rows) != expected_count or total_bytes != expected_bytes:
+        raise RpcInventoryError(
+            f"RPC summary mismatch: pages delivered {len(rows)} rows / "
+            f"{total_bytes} bytes but the summary promised {expected_count} / "
+            f"{expected_bytes}. Refusing an inventory that disagrees with "
+            "itself."
+        )
+
+    shard_filter = set(shards) if shards is not None else None
+    sizes: Dict[str, int] = {}
+    etags: Dict[str, str] = {}
+    categories: Dict[str, int] = {}
+    seen_shard_for: Dict[str, str] = {}
+    integrity: list = []
+    for name, size, etag in rows:
+        relative = name[len(base):]
+        if "/" not in relative:
+            continue  # object directly under the prefix root; not a blob
+        shard, leaf = relative.split("/", 1)
+        if "/" in leaf:
+            continue  # deeper nesting is not part of the blob layout
+        if shard_filter is not None and shard not in shard_filter:
+            continue
+        category, blob_hash = _classify(leaf)
+        categories[category] = categories.get(category, 0) + 1
+        if blob_hash is None:
+            continue
+        if blob_hash in seen_shard_for:
+            integrity.append(
+                f"duplicate: {blob_hash} listed under shards "
+                f"{seen_shard_for[blob_hash]} and {shard}"
+            )
+            continue
+        seen_shard_for[blob_hash] = shard
+        if blob_hash[:2] != shard:
+            integrity.append(
+                f"misplaced: {blob_hash} listed under shard {shard} "
+                f"but its deletion path derives shard {blob_hash[:2]}"
+            )
+        sizes[blob_hash] = size
+        etags[blob_hash] = etag
+
+    shard_count = (
+        len(shard_filter) if shard_filter is not None else len(HEX_BLOB_SHARDS)
+    )
+    return BlobInventory(
+        prefix=prefix,
+        sizes=sizes,
+        etags=etags,
+        categories=categories,
+        failures=(),
+        integrity_failures=tuple(sorted(integrity)),
+        shards_total=shard_count,
+        shards_completed=shard_count,
+        retries=0,
+        elapsed_seconds=time.monotonic() - started,
+        resumed_shards=0,
     )
