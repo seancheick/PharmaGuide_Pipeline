@@ -162,6 +162,72 @@ def test_reviewed_limited_evidence_is_complete_not_missing_review() -> None:
     assert "evidence_review_incomplete" not in confidence["evidence"]["drivers"]
 
 
+def test_not_applicable_evidence_review_is_not_low_confidence() -> None:
+    """No applicable ingredient-study question is not missing evidence."""
+    from scoring_v4.confidence import evaluate_confidence
+
+    confidence = evaluate_confidence(
+        {},
+        module_breakdown={
+            "dimensions": {
+                "evidence": {"score": 0.0, "metadata": {"matched_entries": 0}}
+            }
+        },
+        safety_gate={},
+        completeness_gate={},
+        assessment_readiness={
+            "evidence": {
+                "readiness": "not_applicable",
+                "material_active_count": 0,
+                "not_yet_evaluated_count": 0,
+                "ingredient_assessments": [],
+            }
+        },
+    )
+
+    assert confidence["evidence"] == {
+        "level": "moderate",
+        "drivers": ["evidence_assessment_not_applicable"],
+    }
+    assert confidence["band"] == "moderate"
+
+
+def test_supported_readiness_without_individual_match_is_not_low_confidence() -> None:
+    """Nutrition authority can complete review without a clinical match row."""
+    from scoring_v4.confidence import evaluate_confidence
+
+    confidence = evaluate_confidence(
+        {},
+        module_breakdown={
+            "dimensions": {
+                "evidence": {"score": 0.0, "metadata": {"matched_entries": 0}}
+            }
+        },
+        safety_gate={},
+        completeness_gate={},
+        assessment_readiness={
+            "evidence": {
+                "readiness": "complete",
+                "material_active_count": 1,
+                "not_yet_evaluated_count": 0,
+                "ingredient_assessments": [
+                    {
+                        "material": True,
+                        "state": "evaluated_supported",
+                        "evidence_applicability": "nutrition_authority",
+                    }
+                ],
+            }
+        },
+    )
+
+    assert confidence["evidence"] == {
+        "level": "moderate",
+        "drivers": ["evidence_review_complete_supported"],
+    }
+    assert confidence["band"] == "moderate"
+
+
 def test_module_owned_evidence_floor_is_moderate_not_absent() -> None:
     from score_supplements_v4 import score_product_v4
 

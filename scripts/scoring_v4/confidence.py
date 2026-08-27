@@ -116,6 +116,8 @@ def _evidence_confidence(
     # than the ingredient universe.
     if evidence_assessment.get("readiness") == "incomplete":
         return "moderate", ["evidence_review_incomplete"]
+    if evidence_assessment.get("readiness") == "not_applicable":
+        return "moderate", ["evidence_assessment_not_applicable"]
 
     assessed_states = {
         str(row.get("state") or "")
@@ -138,6 +140,8 @@ def _evidence_confidence(
         module_owned = _module_owned_evidence_drivers(metadata, score)
         if module_owned:
             return "moderate", module_owned
+        if "evaluated_supported" in assessed_states:
+            return "moderate", ["evidence_review_complete_supported"]
         return "low", ["no_clinical_evidence_matched"]
 
     drivers: List[str] = []
