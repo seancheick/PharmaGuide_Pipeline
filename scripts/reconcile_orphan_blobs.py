@@ -331,6 +331,8 @@ def _execute_from_artifact(client, args, client_factory) -> int:
                 print(f"    ... and {len(newly_protected) - 10} more")
         to_act = [h for h in act_set if h not in set(newly_protected)]
 
+        from cleanup_old_versions import CHECKPOINT_REVERIFY_UNAVAILABLE
+
         moved = failed = 0
         failed_paths = []
         if to_act:
@@ -352,13 +354,32 @@ def _execute_from_artifact(client, args, client_factory) -> int:
     finally:
         lock_ctx.__exit__(None, None, None)
 
+    verification_unavailable = sum(
+        CHECKPOINT_REVERIFY_UNAVAILABLE in path for path in failed_paths
+    )
+    mutation_failures = failed - verification_unavailable
     print(
-        f"\nExecution summary: {moved} moved, {failed} failed, "
+        f"\nExecution summary: {moved} verified complete, "
+        f"{mutation_failures} mutation failures, "
+        f"{verification_unavailable} verification unavailable, "
         f"{len(newly_protected)} blocked-as-protected "
         f"(of {len(act_set)} approved)."
     )
     for path in failed_paths[:10]:
-        print(f"  failed: {path}")
+        label = (
+            "verify" if CHECKPOINT_REVERIFY_UNAVAILABLE in path else "failed"
+        )
+        print(f"  {label}: {path}")
+    if (
+        verification_unavailable
+        and mutation_failures == 0
+        and not newly_protected
+    ):
+        print(
+            "\n[verification incomplete] No mutation failure remains. Run a "
+            "fresh dry run to prove the full post-drain state; do not rerun "
+            "the mutation solely for these historical verification errors."
+        )
     return EXIT_OK if failed == 0 and not newly_protected else EXIT_ERROR
 
 

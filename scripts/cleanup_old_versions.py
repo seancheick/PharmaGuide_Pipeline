@@ -34,6 +34,9 @@ from release_safety.quarantine import (  # noqa: E402
 )
 
 BUCKET = "pharmaguide"
+CHECKPOINT_REVERIFY_UNAVAILABLE = (
+    "verification unavailable for previously completed shard"
+)
 
 # Supabase storage list calls can hang in SSL reads at production scale.
 # Keep page reads bounded so cleanup either progresses visibly or fails closed.
@@ -334,6 +337,30 @@ def quarantine_orphan_blob_batch(
     for blob_hash in hashes:
         hashes_by_shard[blob_hash[:2]].append(blob_hash)
 
+    def _checkpoint_entry_matches(shard, shard_hashes):
+        entry = completed_shards.get(shard)
+        if not isinstance(entry, dict):
+            return False
+        expected_digest = hashlib.sha256(
+            "\n".join(sorted(shard_hashes)).encode("ascii")
+        ).hexdigest()
+        return (
+            entry.get("count") == len(shard_hashes)
+            and entry.get("digest") == expected_digest
+        )
+
+    # Resume the work that still needs mutation before spending Storage API
+    # requests re-verifying shards that were already proven by an earlier
+    # attempt. Checkpointed shards are still re-proven below; the checkpoint
+    # only changes order and never fabricates completion.
+    shard_order = sorted(
+        hashes_by_shard,
+        key=lambda shard: (
+            _checkpoint_entry_matches(shard, hashes_by_shard[shard]),
+            shard,
+        ),
+    )
+
     workers = QUARANTINE_MAX_WORKERS if max_workers is None else int(max_workers)
     if client_factory is None:
         workers = 1
@@ -367,7 +394,8 @@ def quarantine_orphan_blob_batch(
     shard_index = 0
     shard_total = len(hashes_by_shard)
 
-    for shard, shard_hashes in sorted(hashes_by_shard.items()):
+    for shard in shard_order:
+        shard_hashes = hashes_by_shard[shard]
         shard_index += 1
         shard_hash_set = set(shard_hashes)
         # A checkpoint entry is a HINT for the operator, never a source of
@@ -375,7 +403,8 @@ def quarantine_orphan_blob_batch(
         # storage below, and `moved` only ever counts proven state. A recorded
         # digest that disagrees with this run's candidate slice means the file
         # was forged or belongs to different work; say so and re-prove.
-        recorded = completed_shards.pop(shard, None)
+        recorded_is_valid = _checkpoint_entry_matches(shard, shard_hashes)
+        recorded = completed_shards.get(shard)
         if recorded is not None:
             expected_digest = hashlib.sha256(
                 "\n".join(sorted(shard_hashes)).encode("ascii")
@@ -401,10 +430,15 @@ def quarantine_orphan_blob_batch(
         def _fail(blob_hash, reason):
             shard_failures.setdefault(blob_hash, reason)
 
-        def _fail_all(reason):
+        def _fail_all(reason, *, verification_only=False):
+            if verification_only:
+                reason = (
+                    f"{CHECKPOINT_REVERIFY_UNAVAILABLE}: {reason}"
+                )
             for blob_hash in shard_hashes:
                 _fail(blob_hash, reason)
-            print(f"  [ERROR] shard {shard} blocked: {reason}")
+            label = "VERIFY" if verification_only else "ERROR"
+            print(f"  [{label}] shard {shard} blocked: {reason}")
 
         def _finish_shard():
             nonlocal failed
@@ -424,7 +458,10 @@ def quarantine_orphan_blob_batch(
                 page_limit=page_limit, max_attempts=max_attempts,
             )
         except Exception as exc:  # noqa: BLE001 — cannot see, cannot act.
-            _fail_all(f"listing failed: {type(exc).__name__}: {exc}")
+            _fail_all(
+                f"listing failed: {type(exc).__name__}: {exc}",
+                verification_only=recorded_is_valid,
+            )
             _finish_shard()
             continue
 
@@ -484,6 +521,27 @@ def quarantine_orphan_blob_batch(
         if block_reason is not None:
             _fail_all(block_reason)
             _finish_shard()
+            continue
+
+        # A resumed shard whose candidates are all absent from active storage
+        # and fingerprint-matched in quarantine is already fully proven by
+        # the two classification listings above. No mutation occurred, so a
+        # second target listing and a second active listing add load without
+        # strengthening the proof.
+        if len(already_complete) == len(shard_hashes):
+            moved += len(already_complete)
+            completed_shards[shard] = {
+                "count": len(already_complete),
+                "digest": hashlib.sha256(
+                    "\n".join(sorted(already_complete)).encode("ascii")
+                ).hexdigest(),
+            }
+            _save_checkpoint()
+            print(
+                f"  shard {shard} [{shard_index}/{shard_total}]: "
+                f"0 newly moved, {len(already_complete)} already verified, "
+                f"0 failed; total {moved}/{total}."
+            )
             continue
 
         bystanders = {
@@ -613,9 +671,15 @@ def quarantine_orphan_blob_batch(
             }
             _save_checkpoint()
 
+        shard_moved_set = set(shard_moved)
+        already_verified_count = sum(
+            blob_hash in shard_moved_set for blob_hash in already_complete
+        )
+        newly_moved_count = len(shard_moved) - already_verified_count
         print(
             f"  shard {shard} [{shard_index}/{shard_total}]: "
-            f"{len(shard_moved)} moved, "
+            f"{newly_moved_count} newly moved, "
+            f"{already_verified_count} already verified, "
             f"{len(shard_hashes) - len(shard_moved)} failed; "
             f"total {moved}/{total}."
         )

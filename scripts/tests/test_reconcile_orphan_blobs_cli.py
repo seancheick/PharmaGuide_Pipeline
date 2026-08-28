@@ -351,6 +351,63 @@ def test_execute_moves_the_frozen_set_and_the_cli_resumes_for_real(tmp_path, cap
         ), "every blob lands under the ARTIFACT's quarantine date"
 
 
+def test_execute_reports_prior_reverification_separately_from_mutation_failure(
+    tmp_path, capsys,
+):
+    import reconcile_orphan_blobs as cli
+
+    orphans = [_h("dd"), _h("ee")]
+    client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=orphans)
+    artifact = _dry_run_artifact(
+        tmp_path, cli, client, flutter_repo, dist_dir,
+        shards="aa,dd,ee", run_date="2026-08-28",
+    )
+    ckpt = tmp_path / "q.ckpt.json"
+    lock_path = tmp_path / "lock"
+    real_remove = bucket.remove
+
+    def fail_ee_delete(paths):
+        if any(_h("ee") in path for path in paths):
+            raise RuntimeError("DatabaseTimeout: connection timed out")
+        return real_remove(paths)
+
+    bucket.remove = fail_ee_delete
+    first_exit = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "2",
+              "--approval-report", str(artifact),
+              "--quarantine-checkpoint", str(ckpt),
+              "--max-attempts", "2", "--lock-path", str(lock_path),
+              shards="aa,dd,ee"),
+        client=client,
+    )
+    assert first_exit != 0
+
+    bucket.remove = real_remove
+    real_list = bucket.list
+
+    def fail_dd_reverification(path="", options=None):
+        if path == f"{PREFIX}/dd":
+            raise RuntimeError("DatabaseTimeout: connection timed out")
+        return real_list(path=path, options=options)
+
+    bucket.list = fail_dd_reverification
+    capsys.readouterr()
+    second_exit = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "2",
+              "--approval-report", str(artifact),
+              "--quarantine-checkpoint", str(ckpt),
+              "--max-attempts", "2", "--lock-path", str(lock_path),
+              shards="aa,dd,ee"),
+        client=client,
+    )
+
+    output = capsys.readouterr().out.lower()
+    assert second_exit != 0
+    assert "0 mutation failures" in output
+    assert "1 verification unavailable" in output
+    assert "fresh dry run" in output
+
+
 def test_execute_blocks_candidates_that_became_protected(tmp_path, capsys):
     """A frozen candidate re-referenced by a NEWER retained catalog since
     approval must be skipped loudly — identical content means identical

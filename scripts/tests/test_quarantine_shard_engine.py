@@ -168,6 +168,24 @@ def test_moves_all_candidates_and_listing_count_tracks_shards_not_blobs():
     assert bucket.listing_count() <= 8
 
 
+def test_progress_distinguishes_new_moves_from_already_verified(capsys):
+    hashes = [_h("aa", 1), _h("aa", 2)]
+    client, bucket = _seed(hashes)
+    fingerprints = _fingerprints(bucket, hashes)
+    already_done = hashes[0]
+    bucket.objects[_target(already_done)] = bucket.objects.pop(
+        _active(already_done)
+    )
+
+    moved, failed, _ = _run(
+        client, bucket, hashes, fingerprints=fingerprints,
+    )
+
+    assert (moved, failed) == (2, 0)
+    output = capsys.readouterr().out
+    assert "1 newly moved, 1 already verified, 0 failed" in output
+
+
 def test_non_candidate_and_protected_blobs_are_untouched():
     candidates = [_h("aa", 1)]
     bystander = _h("aa", 2)
@@ -372,12 +390,80 @@ def test_checkpoint_resume_reproves_completed_shards_without_rework(tmp_path):
     assert any(path.endswith("/aa") for path in touched), (
         "the completed shard must be RE-PROVEN from live storage on resume"
     )
+    assert sum(path.endswith("/aa") for path in touched) == 2, (
+        "an already-complete shard needs only the active and quarantine "
+        "classification listings; no post-mutation listings are warranted"
+    )
     aa_mutations = [
         op for op in bucket.ops
         if op[0] in ("copy", "remove") and any(hashes[0] in str(x) for x in op[1:])
     ]
     assert aa_mutations == [], "re-proof must not re-copy or re-delete"
     assert not ckpt.exists(), "a fully successful run clears its checkpoint"
+
+
+def test_checkpoint_resume_prioritizes_unfinished_shards(tmp_path):
+    """A retry must finish outstanding mutations before spending requests
+    re-verifying shards that the checkpoint already proved once."""
+    hashes = [_h("aa", 1), _h("bb", 1)]
+    client, bucket = _seed(hashes)
+    fingerprints = _fingerprints(bucket, hashes)
+    bucket.fail_remove_containing.add(hashes[1])
+    ckpt = tmp_path / "q.json"
+
+    moved, failed, _ = _run(
+        client, bucket, hashes, fingerprints=fingerprints, checkpoint_path=ckpt,
+    )
+    assert (moved, failed) == (1, 1)
+
+    bucket.fail_remove_containing.clear()
+    bucket.ops.clear()
+    _run(
+        client, bucket, hashes, fingerprints=fingerprints, checkpoint_path=ckpt,
+    )
+
+    first_listing = next(op[1] for op in bucket.ops if op[0] == "list")
+    assert first_listing.endswith("/bb"), (
+        "the unfinished shard must run before checkpointed re-verification"
+    )
+
+
+def test_prior_completed_timeout_is_verification_only(tmp_path, capsys):
+    hashes = [_h("aa", 1), _h("bb", 1)]
+    client, bucket = _seed(hashes)
+    fingerprints = _fingerprints(bucket, hashes)
+    bucket.fail_remove_containing.add(hashes[1])
+    ckpt = tmp_path / "q.json"
+
+    moved, failed, _ = _run(
+        client, bucket, hashes, fingerprints=fingerprints, checkpoint_path=ckpt,
+    )
+    assert (moved, failed) == (1, 1)
+    assert "aa" in json.loads(ckpt.read_text())["shards"]
+
+    bucket.fail_remove_containing.clear()
+    real_list = bucket.list
+
+    def fail_prior_completed_listing(path="", options=None):
+        if path.endswith("/aa"):
+            raise RuntimeError("DatabaseTimeout: connection timed out")
+        return real_list(path=path, options=options)
+
+    bucket.list = fail_prior_completed_listing
+    capsys.readouterr()
+    moved, failed, failed_paths = _run(
+        client, bucket, hashes, fingerprints=fingerprints,
+        checkpoint_path=ckpt, max_attempts=2,
+    )
+
+    assert (moved, failed) == (1, 1)
+    assert "[VERIFY] shard aa" in capsys.readouterr().out
+    assert any("verification unavailable" in path for path in failed_paths)
+    saved = json.loads(ckpt.read_text())
+    assert set(saved["shards"]) == {"aa", "bb"}, (
+        "a transient re-verification failure must not erase historical "
+        "completion progress"
+    )
 
 
 def test_forged_checkpoint_cannot_fabricate_moved_counts(tmp_path):
