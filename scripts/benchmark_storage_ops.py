@@ -85,6 +85,40 @@ def _list_names(client, prefix):
     return names
 
 
+def _list_fingerprints(client, prefix):
+    """Return leaf -> (size, eTag), retaining missing metadata as None.
+
+    The benchmark is allowed to select a worker level only when every copied
+    destination has the same listing fingerprint as its source. Object names
+    alone prove neither byte identity nor a complete copy.
+    """
+    fingerprints = {}
+    offset = 0
+    while True:
+        items = retry_transient(
+            lambda offset=offset: list_storage_page(
+                client.storage.from_(BUCKET), prefix, offset,
+            ),
+            max_attempts=5,
+        )
+        if not items:
+            break
+        for item in items:
+            if not isinstance(item, dict) or not isinstance(item.get("name"), str):
+                continue
+            metadata = item.get("metadata")
+            size = metadata.get("size") if isinstance(metadata, dict) else None
+            etag = metadata.get("eTag") if isinstance(metadata, dict) else None
+            fingerprints[item["name"]] = (
+                size if isinstance(size, int) else None,
+                etag if isinstance(etag, str) and etag else None,
+            )
+        if len(items) < 1000:
+            break
+        offset += 1000
+    return fingerprints
+
+
 def run_benchmark(client_factory, *, sample_bytes, objects_per_level,
                   project_count=None, out_path=None):
     run_id = uuid.uuid4().hex[:12]
@@ -107,13 +141,27 @@ def run_benchmark(client_factory, *, sample_bytes, objects_per_level,
 
 
 def _cleanup_bench_prefix(base_client, root):
-    for sub in ("src", "dst"):
-        for size_or_w in _list_names(base_client, f"{root}/{sub}"):
-            prefix = f"{root}/{sub}/{size_or_w}"
-            names = _list_names(base_client, prefix)
-            paths = [f"{prefix}/{n}" for n in names]
-            for start in range(0, len(paths), 500):
-                remove_storage_batch(base_client, BUCKET, paths[start:start + 500])
+    leftovers = []
+    for _attempt in range(3):
+        paths = []
+        for sub in ("src", "dst"):
+            for size_or_w in _list_names(base_client, f"{root}/{sub}"):
+                prefix = f"{root}/{sub}/{size_or_w}"
+                paths.extend(
+                    f"{prefix}/{name}"
+                    for name in _list_names(base_client, prefix)
+                )
+        if not paths:
+            return
+        for start in range(0, len(paths), 500):
+            remove_storage_batch(
+                base_client, BUCKET, paths[start:start + 500],
+            )
+        leftovers = paths
+    raise RuntimeError(
+        f"benchmark cleanup incomplete after 3 attempts; "
+        f"{len(leftovers)} object(s) remain under {root}"
+    )
 
 
 def _run_benchmark_body(base_client, client_factory, root, *, sample_bytes,
@@ -127,6 +175,12 @@ def _run_benchmark_body(base_client, client_factory, root, *, sample_bytes,
             _upload(base_client, path, payload)
             sources.append(path)
     print(f"Seeded {len(sources)} source object(s).")
+
+    source_fingerprints = {}
+    for size in sample_bytes:
+        parent = f"{root}/src/{size}"
+        for leaf, fingerprint in _list_fingerprints(base_client, parent).items():
+            source_fingerprints[f"{parent}/{leaf}"] = fingerprint
 
     results = []
     prev_p95 = None
@@ -143,6 +197,7 @@ def _run_benchmark_body(base_client, client_factory, root, *, sample_bytes,
 
         latencies = []
         errors = []
+        successful_indices = []
 
         def one_copy(idx_path):
             idx, src = idx_path
@@ -153,18 +208,32 @@ def _run_benchmark_body(base_client, client_factory, root, *, sample_bytes,
                     lambda: _copy(worker_client(), src, dst), max_attempts=4,
                 )
             except Exception as exc:  # noqa: BLE001
-                errors.append(f"{type(exc).__name__}: {exc}")
+                errors.append((idx, f"{type(exc).__name__}: {exc}"))
                 return
             latencies.append(time.monotonic() - t0)
+            successful_indices.append(idx)
 
         started = time.monotonic()
         with ThreadPoolExecutor(max_workers=workers) as pool:
             list(pool.map(one_copy, enumerate(sources)))
         elapsed = time.monotonic() - started
 
-        expected = len(sources) - len(errors)
-        landed = len(_list_names(base_client, f"{root}/dst/w{workers}"))
-        mismatches = expected - landed
+        destination = _list_fingerprints(
+            base_client, f"{root}/dst/w{workers}",
+        )
+        expected_leaves = {f"{idx:05d}.bin" for idx in successful_indices}
+        mismatches = sum(
+            1
+            for idx in successful_indices
+            if (
+                (expected_fp := source_fingerprints.get(sources[idx])) is None
+                or expected_fp[0] is None
+                or expected_fp[0] <= 0
+                or expected_fp[1] is None
+                or destination.get(f"{idx:05d}.bin") != expected_fp
+            )
+        )
+        mismatches += len(set(destination) - expected_leaves)
         p95 = _percentile(latencies, 0.95)
         throughput = len(latencies) / elapsed if elapsed else 0.0
         row = {

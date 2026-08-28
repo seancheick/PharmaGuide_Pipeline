@@ -17,6 +17,16 @@ def test_release_full_uses_only_gated_snapshot_for_catalog_mutation() -> None:
     assert '"$PG_PYTHON" scripts/release_catalog_artifact.py' not in source
 
 
+def test_release_full_enters_the_global_lock_before_any_release_gate() -> None:
+    source = SCRIPT.read_text()
+
+    wrapper = 'scripts/run_with_release_lock.py'
+    assert wrapper in source
+    assert source.index(wrapper) < source.index(
+        'run_strict_gate "source-of-truth matrix"'
+    )
+
+
 def test_interaction_import_fallback_uses_gated_catalog_path() -> None:
     source = INTERACTION_SCRIPT.read_text()
 

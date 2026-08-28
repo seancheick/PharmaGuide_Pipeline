@@ -1,10 +1,10 @@
 """Quarantine primitive — soft-delete + recovery for orphaned detail blobs.
 
 Implements ADR-0001 P2 (the quarantine half — sweeper lives in
-``quarantine_sweeper.py``). This module provides the move-to-quarantine
-operation that replaces hard-delete in cleanup_orphan_blobs_with_gates,
-plus the recovery operation that restores quarantined blobs to active
-storage within the 30-day TTL window.
+``quarantine_sweeper.py``). This module provides the copy-verify-delete
+primitive used by the frozen-artifact reconciliation engine, plus the
+recovery operation that restores quarantined blobs to active storage within
+the 30-day TTL window.
 
 Why quarantine
 ==============

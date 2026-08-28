@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import os
 import sys
 
@@ -51,7 +52,17 @@ def test_every_write_stays_under_the_bench_prefix_and_is_cleaned_up():
                 if head not in seen:
                     seen.add(head)
                     names.append(head)
-            return [{"name": n} for n in names[offset:offset + limit]]
+            result = []
+            for n in names[offset:offset + limit]:
+                item = {"name": n}
+                if base + n in self.objects:
+                    payload = self.objects[base + n]
+                    item["metadata"] = {
+                        "size": len(payload),
+                        "eTag": f'"{hashlib.md5(payload).hexdigest()}"',
+                    }
+                result.append(item)
+            return result
 
         def remove(self, paths):
             for p in paths:
@@ -113,7 +124,17 @@ def _make_bucket_and_client(bench_module=None):
                 if head not in seen:
                     seen.add(head)
                     names.append(head)
-            return [{"name": n} for n in names[offset:offset + limit]]
+            result = []
+            for n in names[offset:offset + limit]:
+                item = {"name": n}
+                if base + n in self.objects:
+                    payload = self.objects[base + n]
+                    item["metadata"] = {
+                        "size": len(payload),
+                        "eTag": f'"{hashlib.md5(payload).hexdigest()}"',
+                    }
+                result.append(item)
+            return result
 
         def remove(self, paths):
             for p in paths:
@@ -146,6 +167,25 @@ def test_cleanup_runs_even_when_the_benchmark_body_crashes(monkeypatch):
     assert not bucket.objects, (
         "the throwaway prefix must be emptied even on a crash"
     )
+
+
+def test_crash_cleanup_fails_loudly_when_objects_remain():
+    import benchmark_storage_ops as bench
+
+    bucket, _Client = _make_bucket_and_client()
+    bucket.fail_upload_after = 2
+
+    def lying_remove(paths):
+        return [{"name": p} for p in paths]
+
+    bucket.remove = lying_remove
+
+    with pytest.raises(Exception, match="benchmark cleanup incomplete"):
+        bench.run_benchmark(
+            _Client, sample_bytes=[16], objects_per_level=4,
+        )
+
+    assert bucket.objects, "the raised error must correspond to real leftovers"
 
 
 def test_no_healthy_worker_level_is_a_nonzero_exit(monkeypatch, tmp_path):
@@ -184,3 +224,47 @@ def test_leftover_bench_objects_are_a_nonzero_exit(monkeypatch):
     exit_code = bench.main(["--i-have-approval"])
 
     assert exit_code != 0, "unverified cleanup must not exit 0"
+
+
+def test_corrupted_copies_never_select_a_worker_level():
+    """Landing the expected object names is insufficient: the benchmark must
+    compare destination fingerprints with the source objects it copied."""
+    import benchmark_storage_ops as bench
+
+    bucket, _Client = _make_bucket_and_client()
+
+    def corrupting_copy(src, dst):
+        bucket.writes.append(dst)
+        bucket.objects[dst] = bucket.objects[src] + b"-corrupted"
+        return {"ok": True}
+
+    bucket.copy = corrupting_copy
+
+    report = bench.run_benchmark(
+        _Client, sample_bytes=[16], objects_per_level=3,
+    )
+
+    assert report["selected"] is None
+    assert all(level["mismatches"] > 0 for level in report["levels"])
+
+
+def test_missing_listing_fingerprints_never_select_a_worker_level():
+    import benchmark_storage_ops as bench
+
+    bucket, _Client = _make_bucket_and_client()
+    real_list = bucket.list
+
+    def without_metadata(path="", options=None):
+        return [
+            {"name": item["name"]}
+            for item in real_list(path=path, options=options)
+        ]
+
+    bucket.list = without_metadata
+
+    report = bench.run_benchmark(
+        _Client, sample_bytes=[16], objects_per_level=3,
+    )
+
+    assert report["selected"] is None
+    assert all(level["mismatches"] > 0 for level in report["levels"])

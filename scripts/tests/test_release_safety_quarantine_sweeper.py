@@ -19,6 +19,12 @@ if _scripts_dir not in sys.path:
     sys.path.insert(0, os.path.abspath(_scripts_dir))
 
 
+@pytest.fixture(autouse=True)
+def _isolated_release_lock(monkeypatch, tmp_path):
+    from release_safety import lock as lock_mod
+    monkeypatch.setattr(lock_mod, "DEFAULT_LOCK_PATH", tmp_path / "release.lock")
+
+
 # ---------------------------------------------------------------------------
 # Mock Supabase storage (same shape as P2.1a tests)
 # ---------------------------------------------------------------------------

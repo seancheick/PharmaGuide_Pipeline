@@ -21,12 +21,15 @@ Lock file schema (JSON):
       "host":         str,        # holder hostname (socket.gethostname)
       "started_at":   str,        # ISO-8601 UTC timestamp of acquisition
       "current_step": str,        # operator-updated diagnostic step name
+      "owner_token_sha256": str,  # optional; permits authenticated children
     }
 """
 
 from __future__ import annotations
 
 import errno
+import hashlib
+import hmac
 import json
 import os
 import signal
@@ -233,6 +236,31 @@ def _write_lock_file(lock_path: Path, metadata: dict) -> None:
     os.replace(tmp_path, lock_path)
 
 
+def _create_lock_file_exclusive(lock_path: Path, metadata: dict) -> None:
+    """Create a new lock atomically, refusing to replace an existing owner.
+
+    ``exists()`` followed by ``os.replace()`` is not a mutex: two processes
+    can both observe absence and then replace one another's lock. ``O_EXCL``
+    makes the filesystem choose exactly one winner. A crash during this first
+    write may leave a partial file, which is intentionally fail-closed as a
+    corrupt lock requiring operator review.
+    """
+    descriptor = os.open(
+        lock_path,
+        os.O_WRONLY | os.O_CREAT | os.O_EXCL,
+        0o600,
+    )
+    try:
+        with os.fdopen(descriptor, "w") as handle:
+            descriptor = -1
+            json.dump(metadata, handle)
+            handle.flush()
+            os.fsync(handle.fileno())
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -264,7 +292,7 @@ class ReleaseLock:
 
     @property
     def pid(self) -> int:
-        """PID of the process holding the lock (always equals ``os.getpid()``)."""
+        """PID of the outer process that owns the on-disk lock."""
         return self._owner_pid
 
     @property
@@ -326,6 +354,7 @@ class ReleaseLock:
 def acquire_release_lock(
     lock_path: Optional[Path] = None,
     initial_step: str = "starting",
+    ownership_token: Optional[str] = None,
 ) -> "_ReleaseLockContext":
     """Acquire the pipeline release lock.
 
@@ -337,6 +366,10 @@ def acquire_release_lock(
         lock_path: path to the lock file. Defaults to ``DEFAULT_LOCK_PATH``.
         initial_step: value written into ``current_step`` on first acquisition.
             For re-entry, the existing ``current_step`` is preserved.
+        ownership_token: optional secret held by a wrapper process and passed
+            only through the environment to its child commands. Only its
+            SHA-256 digest is written to the lock file. This enables safe
+            cross-process re-entry while the wrapper remains the sole owner.
 
     Raises (on context-manager entry):
         LockContentionError: another live process holds the lock.
@@ -345,7 +378,9 @@ def acquire_release_lock(
     """
     if lock_path is None:
         lock_path = DEFAULT_LOCK_PATH
-    return _ReleaseLockContext(Path(lock_path), initial_step)
+    return _ReleaseLockContext(
+        Path(lock_path), initial_step, ownership_token=ownership_token,
+    )
 
 
 class _ReleaseLockContext:
@@ -357,11 +392,12 @@ class _ReleaseLockContext:
     ``_HELD_BY_THIS_PROCESS`` dict.
     """
 
-    def __init__(self, lock_path: Path, initial_step: str):
+    def __init__(self, lock_path: Path, initial_step: str, *, ownership_token=None):
         # Normalize the path so re-entry detection works regardless of how the
         # caller spelled it (relative vs absolute, with/without trailing dots).
         self.lock_path = Path(os.path.abspath(str(lock_path)))
         self.initial_step = initial_step
+        self.ownership_token = ownership_token
         self._lock: Optional[ReleaseLock] = None
         self._is_outer = False
 
@@ -374,22 +410,48 @@ class _ReleaseLockContext:
             self._is_outer = False
             return self._lock
 
-        # Inspect any existing lock file on disk.
-        if self.lock_path.exists():
-            holder = _read_lock_file(self.lock_path)  # may raise CorruptLockError
-            if _is_pid_alive(holder["pid"]):
-                raise LockContentionError(holder, self.lock_path)
-            raise StaleLockError(holder, self.lock_path)
-
-        # Acquire — write our metadata atomically.
+        # Acquire with O_EXCL — checking existence before writing would allow
+        # two simultaneous processes to both believe they own the mutex.
         metadata = {
             "pid": os.getpid(),
             "host": socket.gethostname(),
             "started_at": datetime.now(timezone.utc).isoformat(),
             "current_step": self.initial_step,
         }
+        if self.ownership_token:
+            metadata["owner_token_sha256"] = hashlib.sha256(
+                self.ownership_token.encode()
+            ).hexdigest()
         self.lock_path.parent.mkdir(parents=True, exist_ok=True)
-        _write_lock_file(self.lock_path, metadata)
+        while True:
+            try:
+                _create_lock_file_exclusive(self.lock_path, metadata)
+                break
+            except FileExistsError:
+                try:
+                    holder = _read_lock_file(self.lock_path)
+                except FileNotFoundError:
+                    # The previous owner released between O_EXCL and read.
+                    # Retry the atomic create rather than treating that
+                    # harmless race as a corrupt lock.
+                    continue
+                if _is_pid_alive(holder["pid"]):
+                    inherited_token = os.environ.get("PG_RELEASE_LOCK_TOKEN")
+                    expected_digest = holder.get("owner_token_sha256")
+                    if (
+                        isinstance(inherited_token, str)
+                        and inherited_token
+                        and isinstance(expected_digest, str)
+                        and hmac.compare_digest(
+                            hashlib.sha256(inherited_token.encode()).hexdigest(),
+                            expected_digest,
+                        )
+                    ):
+                        self._lock = ReleaseLock(self.lock_path, holder)
+                        self._is_outer = False
+                        return self._lock
+                    raise LockContentionError(holder, self.lock_path)
+                raise StaleLockError(holder, self.lock_path)
 
         lock = ReleaseLock(self.lock_path, metadata)
         lock._install_signal_handlers()

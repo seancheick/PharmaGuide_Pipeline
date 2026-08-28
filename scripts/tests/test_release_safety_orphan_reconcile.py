@@ -484,3 +484,30 @@ def test_candidate_without_etag_blocks_the_dry_report(tmp_path):
     assert "fingerprint" in report.blocked_reason.lower()
     assert report.proposed_quarantine == 0
     assert report.candidate_digest is None
+
+
+def test_zero_byte_candidate_blocks_the_dry_report(tmp_path):
+    """A detail JSON cannot validly be empty, and size=0 is also how the
+    inventory previously normalized a missing size. Neither is approvable."""
+    from release_safety.orphan_reconcile import build_orphan_report
+
+    active = [_h("aa")]
+    orphan = _h("dd")
+    client, flutter_repo, dist_dir = _make_world(
+        tmp_path, active_hashes=active, retained_hashes=active,
+        extra_storage=[orphan],
+    )
+    client.storage.from_("pharmaguide").put(
+        f"{PREFIX}/{orphan[:2]}/{orphan}.json", b"",
+    )
+
+    report = build_orphan_report(
+        client, flutter_repo_path=flutter_repo, dist_dir=dist_dir,
+        retained_versions=(ACTIVE, RETAINED),
+        shards=_shards_for(active, [orphan]),
+    )
+
+    assert report.blocked_reason is not None
+    assert "positive size" in report.blocked_reason
+    assert report.proposed_quarantine == 0
+    assert report.candidate_digest is None

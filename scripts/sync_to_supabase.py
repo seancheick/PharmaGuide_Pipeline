@@ -1361,116 +1361,16 @@ def parse_args(argv=None):
                         help="After successful sync, clean up old versions (keep last 2)")
     parser.add_argument("--cleanup-keep", type=int, default=2,
                         help="Number of versions to keep during cleanup (default: 2)")
-    parser.add_argument(
-        "--allow-destructive-orphan-cleanup",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        dest="allow_destructive_orphan_cleanup",
-        help=(
-            "Include orphan-blob cleanup in the post-sync cleanup. "
-            "DEFAULT IS ON per ADR-0001 P1.6 commit 2 (2026-05-13) — the "
-            "P1+P2+P3 release-safety stack is now in place and the destructive "
-            "step is wrapped in: pipeline lock (HR-12), detail_index validation "
-            "(HR-11), bundle alignment (HR-13), blast-radius gate, registry-backed "
-            "protected set (P3.5: bundled∪dist∪ACTIVE/VALIDATING registry rows), "
-            "and quarantine-with-30d-recovery (P2.1) instead of hard delete. "
-            "Pass --no-allow-destructive-orphan-cleanup to skip the orphan sweep "
-            "(e.g. incident response, deliberate deferral)."
-        ),
-    )
-    # ADR-0001 P1.6 — passthrough flags for the gated orphan cleanup.
-    # When --allow-destructive-orphan-cleanup is set, these are forwarded
-    # to cleanup_old_versions which uses them to evaluate release-safety
-    # gates before any deletion. --flutter-repo is required for the gated
-    # cleanup; --dist-dir defaults to the build_dir positional argument.
-    parser.add_argument(
-        "--flutter-repo",
-        type=str,
-        default=None,
-        dest="flutter_repo",
-        help=(
-            "Path to the Flutter repo root. Required when "
-            "--allow-destructive-orphan-cleanup is set; passed through to "
-            "cleanup_old_versions for the gated cleanup path."
-        ),
-    )
-    parser.add_argument(
-        "--branch",
-        type=str,
-        default="main",
-        help=(
-            "Flutter branch whose committed manifest is the trust anchor for "
-            "bundle-alignment validation (default: main). Passed to cleanup."
-        ),
-    )
-    parser.add_argument(
-        "--override-bundle-mismatch",
-        type=str,
-        default=None,
-        dest="override_bundle_mismatch",
-        help=(
-            "Override the bundle-alignment gate with a written reason. "
-            "Passed to cleanup_old_versions; captured in the audit log."
-        ),
-    )
-    parser.add_argument(
-        "--expected-count",
-        type=int,
-        default=None,
-        dest="expected_count",
-        help=(
-            "Override the blast-radius gate by stating the exact expected "
-            "deletion count. Passed to cleanup_old_versions."
-        ),
-    )
     return parser.parse_args(argv)
 
 
-def _build_cleanup_args(
-    cleanup_keep,
-    allow_destructive_orphan_cleanup,
-    *,
-    flutter_repo=None,
-    dist_dir=None,
-    branch="main",
-    bundle_mismatch_reason=None,
-    expected_count=None,
-):
-    """Build the argv list passed to ``cleanup_old_versions.main``.
-
-    ADR-0001 / P1.0: ``--cleanup-orphan-blobs`` is gated behind an explicit
-    opt-in (``allow_destructive_orphan_cleanup=True``). Default is to omit
-    it so the destructive shared-blob deletion stays FROZEN until P1+P2 land.
-
-    ADR-0001 / P1.6: when the destructive path IS opted-in, the gate-input
-    flags (``--flutter-repo``, ``--dist-dir``, ``--branch``, optional
-    ``--override-bundle-mismatch``, optional ``--expected-count``) are
-    forwarded so cleanup_old_versions can evaluate the release-safety gates.
-
-    Pure function — no I/O, no mocks needed for unit testing.
-    """
-    cleanup_argv = [
+def _build_cleanup_args(cleanup_keep):
+    """Build version-only cleanup argv; orphans use the frozen-artifact CLI."""
+    return [
         "--keep", str(cleanup_keep),
         "--execute",
         "--cleanup-db",
     ]
-    if allow_destructive_orphan_cleanup:
-        cleanup_argv.append("--cleanup-orphan-blobs")
-        # P1.6 passthrough: only forward gate inputs when the destructive
-        # path is opted in. Always pass these when we have them so the
-        # downstream tool can do its own validation (it requires both
-        # --flutter-repo and --dist-dir or it will exit with an error).
-        if flutter_repo:
-            cleanup_argv.extend(["--flutter-repo", str(flutter_repo)])
-        if dist_dir:
-            cleanup_argv.extend(["--dist-dir", str(dist_dir)])
-        if branch and branch != "main":
-            cleanup_argv.extend(["--branch", branch])
-        if bundle_mismatch_reason:
-            cleanup_argv.extend(["--override-bundle-mismatch", bundle_mismatch_reason])
-        if expected_count is not None:
-            cleanup_argv.extend(["--expected-count", str(expected_count)])
-    return cleanup_argv
 
 
 def main(argv=None):
@@ -1493,37 +1393,11 @@ def main(argv=None):
             sys.exit(2)
         elif result["status"] in ("synced", "up_to_date", "dry_run"):
             if args.cleanup and result["status"] == "synced":
-                if args.allow_destructive_orphan_cleanup:
-                    # ADR-0001 P1.6 commit 2 (2026-05-13): orphan-blob cleanup
-                    # is INCLUDED by default now that P1+P2+P3 are landed and
-                    # the destructive step is wrapped in: lock + index
-                    # validation + bundle alignment + blast radius + quarantine
-                    # + registry-backed protected set.
-                    print(
-                        "\n[release-safety] Orphan-blob cleanup INCLUDED by "
-                        "default (ADR-0001 P1.6 commit 2).\n"
-                        "  → Gated by: pipeline lock (HR-12), detail_index "
-                        "validation (HR-11),\n"
-                        "    bundle alignment vs Flutter main HEAD (HR-13), "
-                        "blast-radius (HR-4),\n"
-                        "    registry-backed protected set (P3.5).\n"
-                        "  → Deletions are MOVES to quarantine (P2.1); "
-                        "recoverable for 30 days.\n"
-                        "  → To skip the orphan sweep (e.g. incident response), "
-                        "pass:\n"
-                        "       --no-allow-destructive-orphan-cleanup\n"
-                    )
-                else:
-                    # Operator opted out explicitly. Note: this is now a real
-                    # decision (used to be the default).
-                    print(
-                        "\n[release-safety] Orphan-blob cleanup SKIPPED "
-                        "(--no-allow-destructive-orphan-cleanup).\n"
-                        "  → Per-version directory cleanup + manifest-row "
-                        "cleanup still run.\n"
-                        "  → Orphan blobs in shared/details/ accumulate "
-                        "until the next sweep.\n"
-                    )
+                print(
+                    "\n[release-safety] Orphan reconciliation is a separate "
+                    "frozen-artifact maintenance command; post-sync cleanup "
+                    "will remove version directories and manifest rows only."
+                )
                 print(f"\nRunning post-sync cleanup (keeping last {args.cleanup_keep} versions)...")
                 import importlib, sys as _sys
                 from pathlib import Path as _Path
@@ -1532,21 +1406,7 @@ def main(argv=None):
                 if _script_dir not in _sys.path:
                     _sys.path.insert(0, _script_dir)
                 cleanup_mod = importlib.import_module("cleanup_old_versions")
-                # Full cleanup: storage versions + manifest DB rows.
-                # Orphan-blob cleanup gated by --allow-destructive-orphan-cleanup
-                # (default OFF) per ADR-0001 P1.0; see _build_cleanup_args above.
-                # When opted-in, P1.6 forwards the gate inputs so
-                # cleanup_old_versions can evaluate release-safety gates
-                # before any destructive deletion.
-                cleanup_mod.main(_build_cleanup_args(
-                    args.cleanup_keep,
-                    args.allow_destructive_orphan_cleanup,
-                    flutter_repo=args.flutter_repo,
-                    dist_dir=args.build_dir,
-                    branch=args.branch,
-                    bundle_mismatch_reason=args.override_bundle_mismatch,
-                    expected_count=args.expected_count,
-                ))
+                cleanup_mod.main(_build_cleanup_args(args.cleanup_keep))
             sys.exit(0)
     except FileNotFoundError as e:
         print(f"Error: {e}")

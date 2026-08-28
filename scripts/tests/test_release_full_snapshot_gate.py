@@ -137,7 +137,7 @@ def test_safety_and_formulation_reference_changes_force_catalog_rebuild():
         assert freshness_check < skip_branch
 
 
-def test_storage_cleanup_verifies_the_branch_that_received_the_bundle_commit():
+def test_version_cleanup_is_separate_from_branch_aware_orphan_reconciliation():
     source = RELEASE_SCRIPT.read_text(encoding="utf-8")
 
     branch_resolution = source.index(
@@ -149,4 +149,15 @@ def test_storage_cleanup_verifies_the_branch_that_received_the_bundle_commit():
     cleanup = source.index('"$PG_PYTHON" scripts/cleanup_old_versions.py')
 
     assert branch_resolution < bundle_commit < cleanup
-    assert '--branch "$FLUTTER_RELEASE_BRANCH"' in source
+    cleanup_call = source[cleanup:source.index('; then', cleanup)]
+    assert "--branch" not in cleanup_call
+    assert "--flutter-repo" not in cleanup_call
+    assert "--dist-dir" not in cleanup_call
+
+    deferred_start = source.index('warn "Orphan cleanup: DEFERRED')
+    deferred_end = source.index(
+        "# A submission becomes user-visible", deferred_start,
+    )
+    deferred = source[deferred_start:deferred_end]
+    assert "--branch" in deferred
+    assert "FLUTTER_RELEASE_BRANCH" in deferred

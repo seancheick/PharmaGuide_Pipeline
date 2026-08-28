@@ -14,6 +14,7 @@ All tests are pure unit tests:
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import socket
 import sys
@@ -265,3 +266,59 @@ def test_p1_1_corrupt_lock_file_fails_closed(tmp_path, contents, scenario):
     assert lock_path.read_text() == contents, (
         f"P1.1 fail-closed breach (scenario={scenario}): corrupt lock file was modified."
     )
+
+
+def test_authorized_child_process_can_borrow_without_releasing_parent_lock(
+    tmp_path, monkeypatch,
+):
+    """A release wrapper must be able to hold the lock while its child
+    commands re-enter it. The secret is inherited, but only its hash is
+    written to disk; a borrowed context never removes the parent's lock."""
+    from release_safety.lock import acquire_release_lock, LockContentionError
+
+    lock_path = tmp_path / ".release.lock"
+    token = "child-reentry-secret"
+    holder_metadata = {
+        "pid": 1,
+        "host": "release-wrapper",
+        "started_at": "2026-08-28T00:00:00+00:00",
+        "current_step": "release_full.sh",
+        "owner_token_sha256": hashlib.sha256(token.encode()).hexdigest(),
+    }
+    lock_path.write_text(json.dumps(holder_metadata))
+    monkeypatch.setenv("PG_RELEASE_LOCK_TOKEN", token)
+
+    entered = False
+    try:
+        with acquire_release_lock(lock_path) as borrowed:
+            entered = True
+            assert borrowed.pid == 1
+            assert lock_path.exists()
+    except LockContentionError:
+        pass
+
+    assert entered, "a token-authorized child must borrow the live parent lock"
+    assert lock_path.exists(), "the child must never release its parent's lock"
+def test_initial_acquisition_uses_exclusive_file_creation(tmp_path, monkeypatch):
+    """The mutex must not use a check-then-replace race on first acquire."""
+    from release_safety import lock as lock_mod
+
+    def reject_nonexclusive_write(*_args, **_kwargs):
+        raise AssertionError("initial acquisition used the non-exclusive writer")
+
+    monkeypatch.setattr(lock_mod, "_write_lock_file", reject_nonexclusive_write)
+
+    with lock_mod.acquire_release_lock(tmp_path / "release.lock"):
+        assert (tmp_path / "release.lock").exists()
+
+
+def test_exclusive_create_allows_exactly_one_winner(tmp_path):
+    from release_safety.lock import _create_lock_file_exclusive
+
+    lock_path = tmp_path / "release.lock"
+    _create_lock_file_exclusive(lock_path, {"pid": 1})
+
+    with pytest.raises(FileExistsError):
+        _create_lock_file_exclusive(lock_path, {"pid": 2})
+
+    assert json.loads(lock_path.read_text()) == {"pid": 1}

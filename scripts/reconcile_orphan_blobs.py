@@ -15,8 +15,10 @@ Usage
         --checkpoint reports/orphan_inventory.checkpoint.json \
         --json-report reports/orphan_report.json
 
-    # 2. Only after a human has reviewed that report's exact count:
-    scripts/reconcile_orphan_blobs.py ... --execute --expected-count N
+    # 2. Only after a human has reviewed the full frozen artifact:
+    scripts/reconcile_orphan_blobs.py ... \
+        --execute --approval-report reports/orphan_report.json \
+        --expected-count N
 
 ``--execute`` MOVES blobs to ``shared/quarantine/{date}/`` (recoverable for 30
 days via ``release_safety.recover_blob``). There is no hard-delete path in
@@ -99,8 +101,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--canary", type=int, default=None,
-        help="Act on only the lexicographically FIRST N candidates of the "
-             "frozen set (deterministic). --expected-count must equal N.",
+        help="Act on a deterministic shard-stratified subset of N candidates "
+             "from the frozen set. --expected-count must equal N.",
     )
     parser.add_argument(
         "--lock-path", default=None, dest="lock_path",
@@ -165,15 +167,23 @@ def _load_approval_artifact(path, *, expected_count, canary):
         )
     fingerprints = {}
     for blob_hash, fp in raw.items():
+        if not isinstance(blob_hash, str) or not _re.fullmatch(
+            r"[0-9a-f]{64}", blob_hash,
+        ):
+            raise ApprovalArtifactError(
+                f"candidate key must be a 64-char lowercase hex content "
+                f"hash, got {blob_hash!r}"
+            )
         if (
             not isinstance(fp, dict)
             or not isinstance(fp.get("size"), int)
+            or fp["size"] <= 0
             or not isinstance(fp.get("etag"), str)
             or not fp["etag"]
         ):
             raise ApprovalArtifactError(
                 f"candidate {blob_hash} has an unproven fingerprint in the "
-                "approval report"
+                "approval report (positive size and non-empty eTag required)"
             )
         fingerprints[blob_hash] = ObjectFingerprint(
             size=fp["size"], etag=fp["etag"],
@@ -213,6 +223,34 @@ def _load_approval_artifact(path, *, expected_count, canary):
     return candidates, fingerprints, run_date, protected_digest
 
 
+def _select_canary_candidates(candidates, count):
+    """Choose a deterministic shard-stratified subset of a frozen set.
+
+    Taking the lexicographically first hashes concentrates a 2,000-object
+    canary in only the lowest few shards. Round-robin selection exercises
+    every populated shard before taking a second object from any shard while
+    remaining stable across process and input ordering.
+    """
+    by_shard = {}
+    for blob_hash in sorted(candidates):
+        by_shard.setdefault(blob_hash[:2], []).append(blob_hash)
+    selected = []
+    offset = 0
+    while len(selected) < count:
+        added = False
+        for shard in sorted(by_shard):
+            shard_hashes = by_shard[shard]
+            if offset < len(shard_hashes):
+                selected.append(shard_hashes[offset])
+                added = True
+                if len(selected) == count:
+                    return selected
+        if not added:
+            break
+        offset += 1
+    return selected
+
+
 def _execute_from_artifact(client, args, client_factory) -> int:
     """Quarantine the frozen approved set under the release lock."""
     from release_safety.lock import (
@@ -235,7 +273,10 @@ def _execute_from_artifact(client, args, client_factory) -> int:
         print(f"\n[refused] {exc}")
         return EXIT_REFUSED
 
-    act_set = candidates[: args.canary] if args.canary is not None else candidates
+    act_set = (
+        _select_canary_candidates(candidates, args.canary)
+        if args.canary is not None else candidates
+    )
 
     lock_path = Path(args.lock_path) if args.lock_path else None
     # The lock raises on context ENTRY (same contract gates.py handles), so
@@ -411,7 +452,17 @@ def main(argv=None, *, client=None) -> int:
     )
 
     if args.verify_inventory:
-        return _verify_inventory_parity(client, shards)
+        from release_safety.lock import ReleaseLockError, acquire_release_lock
+
+        try:
+            with acquire_release_lock(
+                Path(args.lock_path) if args.lock_path else None,
+                initial_step="verify_storage_inventory_parity",
+            ):
+                return _verify_inventory_parity(client, shards)
+        except ReleaseLockError as exc:
+            print(f"  PARITY REFUSED: release lock unavailable: {exc}")
+            return EXIT_ERROR
 
     if args.execute:
         return _execute_from_artifact(client, args, client_factory)

@@ -14,10 +14,10 @@ Two behaviours pinned here:
 
 from __future__ import annotations
 
-import json
 import os
 import sys
 import time
+from types import SimpleNamespace
 
 import pytest
 
@@ -71,40 +71,6 @@ class _Client:
         return self.bucket
 
 
-def test_gated_cleanup_fails_closed_on_incomplete_inventory(tmp_path):
-    """A shard we could not read must reject the sweep, not crash it."""
-    from cleanup_old_versions import cleanup_orphan_blobs_with_gates
-
-    kept = "aa" * 32
-    orphan = "dd" * 32
-    bucket = _Bucket(
-        {f"{PREFIX}/aa/{kept}.json", f"{PREFIX}/dd/{orphan}.json"},
-        fail_prefixes={f"{PREFIX}/dd"},
-    )
-    client = _Client(bucket)
-
-    dist_dir = tmp_path / "dist"
-    dist_dir.mkdir()
-    (dist_dir / "detail_index.json").write_text(json.dumps({
-        "_meta": {"db_version": "2026.08.26.141540"},
-        "1": {
-            "blob_sha256": kept,
-            "storage_path": f"{PREFIX}/aa/{kept}.json",
-            "blob_version": 1,
-        },
-    }))
-
-    quarantined, failed = cleanup_orphan_blobs_with_gates(
-        client,
-        "2026.08.26.141540",
-        flutter_repo_path=str(tmp_path / "flutter"),
-        dist_dir=str(dist_dir),
-        retained_versions=("2026.08.26.141540",),
-    )
-
-    assert (quarantined, failed) == (0, 0)
-
-
 def test_dry_run_orphan_path_refuses_instead_of_reporting_a_single_version_count(
     tmp_path, capsys, monkeypatch
 ):
@@ -141,3 +107,58 @@ def test_legacy_single_version_orphan_helpers_are_gone():
 
     assert not hasattr(cov, "cleanup_orphan_blobs")
     assert not hasattr(cov, "detect_orphan_blobs")
+
+
+def test_execute_main_holds_global_lock_during_version_mutations(
+    tmp_path, monkeypatch,
+):
+    import cleanup_old_versions as cov
+    from release_safety import lock as lock_mod
+
+    lock_path = tmp_path / "release.lock"
+    monkeypatch.setattr(lock_mod, "DEFAULT_LOCK_PATH", lock_path)
+    monkeypatch.setattr(cov, "get_supabase_client", lambda: object())
+    monkeypatch.setattr(cov, "fetch_all_versions", lambda _client: [
+        {"db_version": "new", "created_at": "2026-08-28", "is_current": True},
+        {"db_version": "old", "created_at": "2026-08-27", "is_current": False},
+    ])
+    lock_seen = []
+
+    def observing_delete(_client, _version, _dry_run):
+        lock_seen.append(lock_path.exists())
+        return 1, 0
+
+    monkeypatch.setattr(cov, "delete_version_directory", observing_delete)
+    monkeypatch.setattr(cov, "sweep_quarantine", lambda *_a, **_k: SimpleNamespace(
+        total_deleted=0,
+        total_failed=0,
+        complete=True,
+        total_eligible=0,
+        eligible_dates=[],
+        listing_failures=[],
+    ))
+
+    cov.main(["--execute", "--keep", "1"])
+
+    assert lock_seen == [True]
+    assert not lock_path.exists()
+
+
+def test_legacy_orphan_cleanup_cli_refuses_before_any_mutation(
+    monkeypatch, capsys,
+):
+    import cleanup_old_versions as cov
+
+    monkeypatch.setattr(
+        cov,
+        "get_supabase_client",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("legacy orphan CLI must refuse before connecting")
+        ),
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        cov.main(["--execute", "--cleanup-orphan-blobs"])
+
+    assert excinfo.value.code == 2
+    assert "reconcile_orphan_blobs.py" in capsys.readouterr().out

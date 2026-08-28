@@ -331,7 +331,10 @@ def test_vanished_bystander_is_reported_as_postcondition_violation():
 
     moved, failed, failed_paths = _run(client, bucket, [candidate])
 
-    assert failed >= 1
+    assert (moved, failed) == (0, 1), (
+        "a shard-level postcondition breach must fail the approved candidate "
+        "exactly once; moved + failed must equal the candidate count"
+    )
     assert any(bystander in p for p in failed_paths)
 
 

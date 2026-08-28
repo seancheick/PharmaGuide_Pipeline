@@ -85,6 +85,15 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
 source "$REPO_ROOT/scripts/python_env.sh"
 
+# HR-12: a release and storage maintenance may never interleave. The Python
+# wrapper owns the lock for this entire shell run and passes a secret borrow
+# token to child commands that legitimately re-enter the same lock.
+if [[ "${PG_RELEASE_LOCK_WRAPPED:-0}" != "1" ]]; then
+  exec "$PG_PYTHON" scripts/run_with_release_lock.py \
+    --lock-path "$REPO_ROOT/scripts/.release.lock" \
+    -- bash "$0" "$@"
+fi
+
 # ---------------------------------------------------------------------------
 # Defaults
 # ---------------------------------------------------------------------------
@@ -850,10 +859,7 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
     # resumable step — see the deferred command printed below.
     if "$PG_PYTHON" scripts/cleanup_old_versions.py \
         --execute --cleanup-db \
-        --keep "$KEEP_VERSIONS" \
-        --flutter-repo "$FLUTTER_REPO" \
-        --dist-dir "$DIST_DIR" \
-        --branch "$FLUTTER_RELEASE_BRANCH"; then
+        --keep "$KEEP_VERSIONS"; then
       ok "Version cleanup: OK (retained the $KEEP_VERSIONS newest version dirs)"
     else
       warn "Version cleanup: FAILED (non-fatal) — see reports/release_audit/"
@@ -867,8 +873,9 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
     info "        --branch \"$FLUTTER_RELEASE_BRANCH\" \\"
     info "        --checkpoint reports/orphan_inventory.checkpoint.json \\"
     info "        --json-report reports/orphan_report.json"
-    info "  Review the exact orphan count in that report, then re-run with"
-    info "  --execute --expected-count N to quarantine (recoverable, 30d TTL)."
+    info "  Review the exact orphan count and digests in that report, then re-run with"
+    info "  --execute --approval-report reports/orphan_report.json --expected-count N"
+    info "  to quarantine the frozen set (recoverable, 30d TTL)."
   else
     warn "$FLUTTER_REPO is not a git work tree — skipping bundle commit + cleanup"
   fi

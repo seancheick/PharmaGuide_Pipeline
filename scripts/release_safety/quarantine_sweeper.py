@@ -24,11 +24,8 @@ Behavior summary
 
 What this module does NOT do
 ============================
-- No CLI. The sweeper is operator-invoked from a wrapper script (added
-  in a follow-up) or from a cron entry that constructs a script around
-  the public ``sweep_quarantine`` function.
-- No automatic scheduling — explicit operator action only, until P3
-  ships and we know the right cadence.
+- No standalone CLI. ``cleanup_old_versions.py`` invokes it after version
+  cleanup, and callers may use the public function for an explicit run.
 
 Public API
 ==========
@@ -39,9 +36,9 @@ Public API
 
     sweep_quarantine(client, *, ttl_days=30, dry_run=True, now=None,
                      quarantine_root=QUARANTINE_PREFIX,
-                     bucket=DEFAULT_BUCKET) -> SweepResult
+                     bucket=DEFAULT_BUCKET, lock_path=None) -> SweepResult
         Walk eligible quarantine date directories and (if not dry_run)
-        hard-delete every blob inside.
+        hard-delete every blob inside under the global release lock.
 """
 
 from __future__ import annotations
@@ -49,6 +46,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field as dataclass_field
 from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
 from .blob_inventory import HEX_BLOB_SHARDS, PAGE_LIMIT, list_storage_page
@@ -262,6 +260,42 @@ def sweep_quarantine(
     now: Optional[Union[date, datetime]] = None,
     quarantine_root: str = QUARANTINE_PREFIX,
     bucket: str = DEFAULT_BUCKET,
+    lock_path: Optional[Path] = None,
+) -> SweepResult:
+    """Run a read-only preview or a globally locked destructive sweep."""
+    if dry_run:
+        return _sweep_quarantine_unlocked(
+            client,
+            ttl_days=ttl_days,
+            dry_run=True,
+            now=now,
+            quarantine_root=quarantine_root,
+            bucket=bucket,
+        )
+
+    from .lock import acquire_release_lock
+
+    with acquire_release_lock(
+        lock_path, initial_step="sweep_expired_quarantine",
+    ):
+        return _sweep_quarantine_unlocked(
+            client,
+            ttl_days=ttl_days,
+            dry_run=False,
+            now=now,
+            quarantine_root=quarantine_root,
+            bucket=bucket,
+        )
+
+
+def _sweep_quarantine_unlocked(
+    client,
+    *,
+    ttl_days: int,
+    dry_run: bool,
+    now: Optional[Union[date, datetime]],
+    quarantine_root: str,
+    bucket: str,
 ) -> SweepResult:
     """Hard-delete quarantined blobs older than ``ttl_days``.
 

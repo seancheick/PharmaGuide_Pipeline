@@ -219,6 +219,59 @@ def test_execute_refuses_a_tampered_artifact(tmp_path, capsys):
     assert "digest" in capsys.readouterr().out.lower()
 
 
+def test_execute_refuses_non_hash_candidate_even_with_recomputed_digest(
+    tmp_path, capsys,
+):
+    """An approval artifact is input, not a trusted path builder. Recomputing
+    its digest must not make a malformed or path-shaped candidate actionable."""
+    import reconcile_orphan_blobs as cli
+    from release_safety.orphan_reconcile import hash_set_digest
+
+    client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=[_h("dd")])
+    artifact = _dry_run_artifact(tmp_path, cli, client, flutter_repo, dist_dir)
+    data = json.loads(artifact.read_text())
+    (_old_hash, fp), = data["candidate_fingerprints"].items()
+    malformed = "../not-a-content-hash"
+    data["candidate_fingerprints"] = {malformed: fp}
+    data["candidate_digest"] = hash_set_digest([malformed])
+    artifact.write_text(json.dumps(data))
+    before = dict(bucket.objects)
+
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "1",
+              "--approval-report", str(artifact)),
+        client=client,
+    )
+
+    assert exit_code == cli.EXIT_REFUSED
+    assert bucket.objects == before
+    assert "64-char lowercase hex" in capsys.readouterr().out
+
+
+def test_execute_refuses_candidate_without_a_positive_recorded_size(
+    tmp_path, capsys,
+):
+    import reconcile_orphan_blobs as cli
+
+    client, bucket, flutter_repo, dist_dir = _world(tmp_path, orphans=[_h("dd")])
+    artifact = _dry_run_artifact(tmp_path, cli, client, flutter_repo, dist_dir)
+    data = json.loads(artifact.read_text())
+    candidate = next(iter(data["candidate_fingerprints"]))
+    data["candidate_fingerprints"][candidate]["size"] = 0
+    artifact.write_text(json.dumps(data))
+    before = dict(bucket.objects)
+
+    exit_code = cli.main(
+        _argv(flutter_repo, dist_dir, "--execute", "--expected-count", "1",
+              "--approval-report", str(artifact)),
+        client=client,
+    )
+
+    assert exit_code == cli.EXIT_REFUSED
+    assert bucket.objects == before
+    assert "positive size" in capsys.readouterr().out
+
+
 def test_execute_refuses_a_blocked_report_as_artifact(tmp_path, capsys):
     """A blocked dry report pins nothing approvable and cannot authorize."""
     import reconcile_orphan_blobs as cli
@@ -404,7 +457,7 @@ def test_execute_refuses_when_another_process_holds_the_lock(tmp_path, capsys):
     assert bucket.objects == before, "no mutation while another release runs"
 
 
-def test_canary_acts_on_the_first_n_of_the_frozen_set_only(tmp_path):
+def test_canary_acts_on_a_deterministic_subset_of_the_frozen_set_only(tmp_path):
     import reconcile_orphan_blobs as cli
 
     orphans = sorted([_h("dd"), _h("ee"), _h("ff")])
@@ -424,10 +477,27 @@ def test_canary_acts_on_the_first_n_of_the_frozen_set_only(tmp_path):
 
     assert exit_code == 0
     moved = [h for h in orphans if f"{PREFIX}/{h[:2]}/{h}.json" not in bucket.objects]
-    assert moved == orphans[:2], (
-        "the canary is DETERMINISTIC: the lexicographically first N"
-    )
+    assert moved == orphans[:2], "the canary subset must be deterministic"
     assert f"{PREFIX}/{orphans[2][:2]}/{orphans[2]}.json" in bucket.objects
+
+
+def test_canary_selection_is_deterministic_and_spans_all_available_shards():
+    import reconcile_orphan_blobs as cli
+
+    selector = getattr(cli, "_select_canary_candidates", None)
+    assert selector is not None, "the canary needs an explicit selection policy"
+    candidates = [
+        f"{shard:02x}{ordinal:062x}"
+        for shard in range(256)
+        for ordinal in range(2)
+    ]
+
+    selected = selector(candidates, 256)
+
+    assert selected == selector(list(reversed(candidates)), 256)
+    assert {candidate[:2] for candidate in selected} == {
+        f"{shard:02x}" for shard in range(256)
+    }
 
 
 def test_there_is_no_hard_delete_option(tmp_path):
@@ -443,7 +513,11 @@ def test_there_is_no_hard_delete_option(tmp_path):
     assert "--delete" not in parser_actions
 
     source = Path(cli.__file__).read_text()
-    assert "delete_orphan_blob_batch" not in source
+    cleanup_source = (
+        Path(cli.__file__).with_name("cleanup_old_versions.py").read_text()
+    )
+    assert "delete_orphan_blob_batch" not in source + cleanup_source
+    assert "def _remove_storage_batch" not in cleanup_source
 
 
 # ---------------------------------------------------------------------------
@@ -516,6 +590,7 @@ def test_release_never_prints_an_unconditional_storage_cleanup_ok():
 def test_release_points_the_operator_at_the_maintenance_command():
     source = _release_source()
     assert "reconcile_orphan_blobs.py" in source
+    assert "--approval-report" in source
 
 
 def test_release_full_sh_is_syntactically_valid():

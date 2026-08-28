@@ -702,198 +702,30 @@ def test_discover_existing_remote_blob_paths_reports_failed_shard():
 
 
 # ---------------------------------------------------------------------------
-# ADR-0001 / P1.0 — destructive orphan-cleanup freeze
-#
-# Regression guards proving that `sync_to_supabase.py` no longer invokes
-# `--cleanup-orphan-blobs` against `cleanup_old_versions.py` unless the
-# operator explicitly opts in via `--allow-destructive-orphan-cleanup`.
-#
-# This is the mechanically-enforced version of ADR-0001 HR-8 (operational
-# freeze on destructive cleanup until P1+P2 release-safety gates land).
-#
-# These tests are pure-function tests on `_build_cleanup_args` plus
-# `parse_args` defaults — no Supabase client, no network, no mocks needed.
+# Orphan reconciliation has one explicit, frozen-artifact entry point.
+# Post-sync cleanup owns version directories and manifest rows only.
 # ---------------------------------------------------------------------------
 
-def test_p1_0_build_cleanup_args_omits_orphan_cleanup_by_default():
-    """ADR-0001 P1.0: orphan-blob cleanup is FROZEN by default.
-
-    The argv passed to cleanup_old_versions.main MUST NOT include
-    `--cleanup-orphan-blobs` unless the operator passes the explicit
-    `--allow-destructive-orphan-cleanup` opt-in flag.
-
-    This is the regression guard for the 2026-05-12 incident: the existing
-    cleanup logic deletes blobs still referenced by the bundled Flutter
-    catalog whenever bundle-on-main lags dist. Until P1+P2 safety gates
-    land, the destructive step stays mechanically suppressed.
-    """
+def test_post_sync_cleanup_is_version_only():
     from sync_to_supabase import _build_cleanup_args
 
-    argv = _build_cleanup_args(
-        cleanup_keep=2,
-        allow_destructive_orphan_cleanup=False,
-    )
-
-    # The destructive step is omitted by default.
-    assert "--cleanup-orphan-blobs" not in argv, (
-        "P1.0 freeze breach: --cleanup-orphan-blobs leaked into cleanup argv "
-        "even though allow_destructive_orphan_cleanup=False. This re-opens "
-        "the 2026-05-12 failure mode (see ADR-0001)."
-    )
-
-    # Non-destructive cleanup steps still run during the freeze.
-    assert "--keep" in argv
-    assert "2" in argv
-    assert "--execute" in argv
-    assert "--cleanup-db" in argv
+    assert _build_cleanup_args(cleanup_keep=2) == [
+        "--keep", "2", "--execute", "--cleanup-db",
+    ]
 
 
-def test_p1_0_build_cleanup_args_includes_orphan_cleanup_when_explicitly_opted_in():
-    """The explicit `--allow-destructive-orphan-cleanup` flag re-enables it.
-
-    NOTE: this opt-in path will only be SAFE to use once P1+P2 land and the
-    safety gates wrap the destructive step. Until then, operators must
-    leave it OFF (the default). This test guards the wiring, not the policy.
-    """
-    from sync_to_supabase import _build_cleanup_args
-
-    argv = _build_cleanup_args(
-        cleanup_keep=3,
-        allow_destructive_orphan_cleanup=True,
-    )
-
-    assert "--cleanup-orphan-blobs" in argv
-    assert "--keep" in argv
-    assert "3" in argv
-    assert "--execute" in argv
-    assert "--cleanup-db" in argv
-
-
-def test_p1_6_commit_2_parse_args_allow_destructive_orphan_cleanup_defaults_ON():
-    """ADR-0001 P1.6 commit 2 (2026-05-13): orphan-blob cleanup is now
-    INCLUDED by default.
-
-    The P1+P2+P3 release-safety stack is in place — every destructive
-    deletion runs behind the lock + index validation + bundle alignment
-    + blast-radius + registry-backed protected set, and "delete" is a
-    move-to-quarantine with 30-day recovery. The freeze that protected
-    us during the stack's build-out is no longer load-bearing; lifting
-    it returns the pipeline to the intended end state.
-
-    This test is the regression guard for any well-meaning future PR
-    that re-flips the default to False without an ADR amendment.
-    """
+def test_sync_cli_has_no_destructive_orphan_toggle():
     from sync_to_supabase import parse_args
 
     args = parse_args(["/tmp/build"])
-
-    assert args.allow_destructive_orphan_cleanup is True, (
-        "P1.6 commit 2 regression: orphan cleanup default should be ON "
-        "now that P1+P2+P3 safety gates wrap the destructive step. "
-        "If you intend to re-freeze, amend ADR-0001 first."
-    )
+    assert not hasattr(args, "allow_destructive_orphan_cleanup")
 
 
-def test_p1_6_commit_2_parse_args_explicit_allow_flag_still_works():
-    """Backward compat — operators or CI scripts that pass the explicit
-    --allow-destructive-orphan-cleanup flag (now redundant with the default)
-    must still parse to True. No silent rejection."""
+def test_sync_cli_rejects_retired_orphan_toggle():
     from sync_to_supabase import parse_args
 
-    args = parse_args(["/tmp/build", "--allow-destructive-orphan-cleanup"])
-
-    assert args.allow_destructive_orphan_cleanup is True
-
-
-def test_p1_6_commit_2_operator_can_opt_out_via_no_allow_flag():
-    """The escape hatch: --no-allow-destructive-orphan-cleanup flips
-    the default OFF.
-
-    Provided by argparse.BooleanOptionalAction for free. Operators use
-    this during incident response or when explicitly deferring cleanup
-    to a later run.
-    """
-    from sync_to_supabase import parse_args
-
-    args = parse_args(["/tmp/build", "--no-allow-destructive-orphan-cleanup"])
-
-    assert args.allow_destructive_orphan_cleanup is False
-
-
-def test_p1_6_commit_2_build_cleanup_args_default_now_includes_orphan_cleanup():
-    """End-to-end of the freeze flip: parse_args() with default settings
-    feeds _build_cleanup_args() which now produces a cleanup argv
-    containing --cleanup-orphan-blobs. This is the load-bearing flip
-    that re-arms the destructive sweep behind all the safety gates."""
-    from sync_to_supabase import _build_cleanup_args, parse_args
-
-    args = parse_args(["/tmp/build"])
-    argv = _build_cleanup_args(
-        cleanup_keep=args.cleanup_keep,
-        allow_destructive_orphan_cleanup=args.allow_destructive_orphan_cleanup,
-    )
-
-    assert "--cleanup-orphan-blobs" in argv, (
-        "P1.6 commit 2 regression: parse_args defaults no longer produce "
-        "an argv that includes --cleanup-orphan-blobs. The freeze flip "
-        "may have been silently reverted."
-    )
-    # Non-destructive cleanup is still present
-    assert "--keep" in argv
-    assert "--cleanup-db" in argv
-    assert "--execute" in argv
-
-
-def test_p1_6_commit_2_operator_opt_out_suppresses_orphan_cleanup():
-    """The full chain: operator passes --no-allow-destructive-orphan-cleanup,
-    parse_args → False, _build_cleanup_args → no --cleanup-orphan-blobs flag.
-    Other cleanup steps still run."""
-    from sync_to_supabase import _build_cleanup_args, parse_args
-
-    args = parse_args([
-        "/tmp/build", "--no-allow-destructive-orphan-cleanup",
-    ])
-    argv = _build_cleanup_args(
-        cleanup_keep=args.cleanup_keep,
-        allow_destructive_orphan_cleanup=args.allow_destructive_orphan_cleanup,
-    )
-
-    assert "--cleanup-orphan-blobs" not in argv
-    assert "--keep" in argv          # non-destructive cleanup still happens
-    assert "--cleanup-db" in argv
-    assert "--execute" in argv
-
-
-def test_p1_6_commit_2_gates_and_quarantine_still_active_when_opted_in():
-    """Confirm the freeze flip does NOT bypass the safety gates. When
-    cleanup is included (default), _build_cleanup_args forwards the gate
-    inputs (flutter-repo, branch, override knobs) to cleanup_old_versions
-    where they drive evaluate_cleanup_gates. The flag itself only controls
-    inclusion — not whether the gates run."""
-    from sync_to_supabase import _build_cleanup_args
-
-    argv = _build_cleanup_args(
-        cleanup_keep=2,
-        allow_destructive_orphan_cleanup=True,
-        flutter_repo="/path/to/flutter",
-        dist_dir="/path/to/build",
-        branch="release-2026-05",     # non-default so it's forwarded
-        bundle_mismatch_reason="hotfix per incident #42",
-        expected_count=12,
-    )
-
-    # Gate inputs are forwarded so cleanup_old_versions can evaluate
-    # P1.5 gates (lock, index validation, bundle alignment, blast radius)
-    # before any quarantine move. (--branch only forwarded when non-default.)
-    assert "--flutter-repo" in argv
-    assert "/path/to/flutter" in argv
-    assert "--dist-dir" in argv
-    assert "/path/to/build" in argv
-    assert "--branch" in argv
-    assert "release-2026-05" in argv
-    assert "--override-bundle-mismatch" in argv
-    assert "--expected-count" in argv
-    assert "12" in argv
+    with pytest.raises(SystemExit):
+        parse_args(["/tmp/build", "--allow-destructive-orphan-cleanup"])
 
 
 # ---------------------------------------------------------------------------

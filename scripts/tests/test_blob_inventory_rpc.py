@@ -308,6 +308,35 @@ def test_cli_verify_inventory_reports_parity_ok(tmp_path, capsys, monkeypatch):
     assert client.rpc_calls and client.list_calls, "both paths must run"
 
 
+def test_cli_verify_inventory_holds_release_lock_for_the_snapshot(
+    tmp_path, monkeypatch,
+):
+    import reconcile_orphan_blobs as cli
+
+    lock_path = tmp_path / "release.lock"
+    observed = []
+
+    def verify(_client, _shards):
+        observed.append(lock_path.exists())
+        return cli.EXIT_OK
+
+    monkeypatch.setattr(cli, "_verify_inventory_parity", verify)
+
+    exit_code = cli.main(
+        [
+            "--flutter-repo", str(tmp_path),
+            "--dist-dir", str(tmp_path),
+            "--verify-inventory",
+            "--lock-path", str(lock_path),
+        ],
+        client=object(),
+    )
+
+    assert exit_code == cli.EXIT_OK
+    assert observed == [True]
+    assert not lock_path.exists()
+
+
 def test_cli_verify_inventory_fails_on_divergence(tmp_path, capsys):
     import reconcile_orphan_blobs as cli
 

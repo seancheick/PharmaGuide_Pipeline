@@ -28,6 +28,10 @@ import env_loader  # noqa: F401
 
 from supabase_client import get_supabase_client  # noqa: E402
 from release_safety import sweep_quarantine  # noqa: E402
+from release_safety.quarantine import (  # noqa: E402
+    DEFAULT_REMOVE_BATCH_SIZE,
+    remove_storage_batch,
+)
 
 BUCKET = "pharmaguide"
 
@@ -37,20 +41,11 @@ BUCKET = "pharmaguide"
 # (PG_STORAGE_LIST_PAGE_TIMEOUT_SECONDS / PG_STORAGE_LIST_MAX_RETRIES). They
 # were redeclared here with a DIFFERENT default for the same env var, which is
 # how two knobs that look like one drift apart.
-STORAGE_LIST_PROGRESS_EVERY_SHARDS = int(
-    os.environ.get("PG_STORAGE_LIST_PROGRESS_EVERY_SHARDS", "16")
-)
 SUPABASE_TABLE_MAX_RETRIES = int(
     os.environ.get("PG_SUPABASE_TABLE_MAX_RETRIES", "5")
 )
 QUARANTINE_MAX_WORKERS = int(
     os.environ.get("PG_QUARANTINE_MAX_WORKERS", "4")
-)
-ORPHAN_DELETE_BATCH_SIZE = int(
-    os.environ.get("PG_ORPHAN_DELETE_BATCH_SIZE", "500")
-)
-ORPHAN_DELETE_TIMEOUT_SECONDS = int(
-    os.environ.get("PG_ORPHAN_DELETE_TIMEOUT_SECONDS", "60")
 )
 
 
@@ -200,61 +195,6 @@ def delete_manifest_row(client, db_version, dry_run):
         return False, str(exc)
 
 
-def _remove_storage_batch(client, paths):
-    bucket_proxy = client.storage.from_(BUCKET)
-    if hasattr(bucket_proxy, "_request") and hasattr(bucket_proxy, "id"):
-        bucket_proxy._request(
-            "DELETE",
-            ["object", bucket_proxy.id],
-            json={"prefixes": paths},
-            timeout=ORPHAN_DELETE_TIMEOUT_SECONDS,
-        )
-    else:
-        bucket_proxy.remove(paths)
-
-
-def delete_orphan_blob_batch(client, blob_hashes):
-    """Hard-delete reviewed orphan hashes in storage batches.
-
-    This path is only for large historical backlogs after release-safety gates
-    pass with an explicit reviewed expected count. Quarantine remains the
-    default because it is recoverable.
-    """
-    hashes = sorted(blob_hashes)
-    total = len(hashes)
-    deleted = 0
-    failed = 0
-    failed_paths = []
-    for start in range(0, total, ORPHAN_DELETE_BATCH_SIZE):
-        batch_hashes = hashes[start:start + ORPHAN_DELETE_BATCH_SIZE]
-        paths = [
-            f"{BLOB_STORAGE_PREFIX}/{blob_hash[:2]}/{blob_hash}.json"
-            for blob_hash in batch_hashes
-        ]
-        try:
-            _remove_storage_batch(client, paths)
-            deleted += len(paths)
-        except Exception as exc:  # noqa: BLE001 — report and continue.
-            failed += len(paths)
-            failed_paths.extend(paths[:20])
-            print(
-                f"  [ERROR] Failed to delete orphan batch "
-                f"{start + 1}-{start + len(paths)}: "
-                f"{type(exc).__name__}: {exc}"
-            )
-        processed = min(start + len(batch_hashes), total)
-        if (
-            processed == total
-            or processed == len(batch_hashes)
-            or processed % (ORPHAN_DELETE_BATCH_SIZE * 10) == 0
-        ):
-            print(
-                f"  Delete progress: {processed}/{total} processed; "
-                f"{deleted} deleted, {failed} failed."
-            )
-    return deleted, failed, failed_paths
-
-
 def _list_prefix_fingerprints(bucket_proxy, prefix, *, page_limit, max_attempts):
     """Return {leaf_name: (size, etag)} for every object under ``prefix``.
 
@@ -315,7 +255,7 @@ def quarantine_orphan_blob_batch(
     FROZEN ``source_fingerprints`` an operator approved; copy what is missing
     (bounded parallel, one client per thread via ``client_factory``); verify
     every target fingerprint with one listing; batch-delete verified sources
-    (``ORPHAN_DELETE_BATCH_SIZE`` per call); prove with one final listing that
+    (``DEFAULT_REMOVE_BATCH_SIZE`` per call); prove with one final listing that
     candidates are absent and bystanders unchanged.
 
     Fail-closed semantics:
@@ -429,6 +369,7 @@ def quarantine_orphan_blob_batch(
 
     for shard, shard_hashes in sorted(hashes_by_shard.items()):
         shard_index += 1
+        shard_hash_set = set(shard_hashes)
         # A checkpoint entry is a HINT for the operator, never a source of
         # truth: every shard — checkpointed or not — is re-proven from live
         # storage below, and `moved` only ever counts proven state. A recorded
@@ -547,7 +488,7 @@ def quarantine_orphan_blob_batch(
 
         bystanders = {
             leaf: fp for leaf, fp in active.items()
-            if leaf.removesuffix(".json") not in set(shard_hashes)
+            if leaf.removesuffix(".json") not in shard_hash_set
         }
 
         # --- copy phase (the only per-blob requests, bounded parallel) ----
@@ -593,13 +534,13 @@ def quarantine_orphan_blob_batch(
             deletable.append(blob_hash)
 
         # --- batched source deletion --------------------------------------
-        for start_idx in range(0, len(deletable), ORPHAN_DELETE_BATCH_SIZE):
-            batch = deletable[start_idx:start_idx + ORPHAN_DELETE_BATCH_SIZE]
+        for start_idx in range(0, len(deletable), DEFAULT_REMOVE_BATCH_SIZE):
+            batch = deletable[start_idx:start_idx + DEFAULT_REMOVE_BATCH_SIZE]
             batch_paths = [f"{active_prefix}/{h}.json" for h in batch]
             try:
                 retry_transient(
-                    lambda batch_paths=batch_paths: _remove_storage_batch(
-                        client, batch_paths,
+                    lambda batch_paths=batch_paths: remove_storage_batch(
+                        client, BUCKET, batch_paths,
                     ),
                     max_attempts=max_attempts,
                 )
@@ -648,11 +589,18 @@ def quarantine_orphan_blob_batch(
                     f"(before {fp}, after {observed})"
                 )
 
+        if postcondition_violations:
+            for blob_hash in shard_hashes:
+                _fail(
+                    blob_hash,
+                    "shard postcondition violated: a non-candidate changed "
+                    "during the mutation window",
+                )
+            shard_moved = []
+            failed_paths.extend(postcondition_violations)
+
         moved += len(shard_moved)
         _finish_shard()
-        if postcondition_violations:
-            failed += len(postcondition_violations)
-            failed_paths.extend(postcondition_violations)
 
         if not shard_failures and not postcondition_violations and (
             len(shard_moved) == len(shard_hashes)
@@ -691,281 +639,7 @@ def _raise_on_copy_failure(result):
 # Orphan blob detection
 # ---------------------------------------------------------------------------
 
-# One inventory brain: the shard layout, page listing, retries and
-# completeness rules all live in release_safety.blob_inventory. The former
-# single-version helpers here (fetch_current_detail_index, detect_orphan_blobs,
-# cleanup_orphan_blobs) were removed: they protected only the CURRENT
-# detail_index, so on 2026-08-26 they would have called blobs of the still
-# retained 2026.08.25 catalog deletable.
-from release_safety.blob_inventory import (  # noqa: E402
-    BLOB_STORAGE_PREFIX,
-    HEX_BLOB_SHARDS,
-    inventory_detail_blobs,
-)
-
-
-# ---------------------------------------------------------------------------
-# Gated orphan-blob cleanup (ADR-0001 P1.6 + P2.2 — gated + quarantined)
-# ---------------------------------------------------------------------------
-
-
-def cleanup_orphan_blobs_with_gates(
-    client,
-    current_version,
-    *,
-    flutter_repo_path,
-    dist_dir,
-    branch="main",
-    bundle_mismatch_reason=None,
-    expected_count=None,
-    audit_log=None,
-    lock_path=None,
-    run_date=None,
-    retained_versions=(),
-    orphan_action="quarantine",
-    quarantine_client_factory=None,
-):
-    """Run release-safety gates THEN move orphaned detail blobs to quarantine.
-
-    This is the production wire-in for ADR-0001's release-safety stack
-    (P1.6) plus the P2.2 quarantine layer. Unlike the legacy
-    ``cleanup_orphan_blobs`` (single-version protection + hard-delete,
-    the path that caused the 2026-05-12 incident), this function:
-
-      1. Lists all blobs in storage.
-      2. Reads dist/detail_index.json to compute initial orphan candidates
-         (storage hashes NOT in dist's index).
-      3. Calls ``evaluate_cleanup_gates(...)`` in EXECUTE mode with those
-         candidates + storage_total. The gate enforces:
-           - lock acquisition (HR-12)
-           - dist index validation (HR-11)
-           - bundled∪dist∪registry protected-set computation (HR-1, HR-2)
-             (P3.5: registry-backed ACTIVE+VALIDATING rows fold in too)
-           - bundle alignment with Flutter main HEAD (HR-13)
-           - blast-radius (HR-4)
-           - non-empty protected set (HR-2)
-      4. If gates fail, prints failure_summary, returns (0, 0). NO action.
-      5. If gates pass, MOVES (not deletes) only the candidates that
-         survive the protected-set filter into shared/quarantine/{run_date}/.
-         Quarantined blobs are recoverable for 30 days via
-         ``release_safety.recover_blob(...)``; the sweeper hard-deletes
-         them after the TTL.
-
-    Per P2.2 sign-off: per-blob quarantine failures DO NOT abort the
-    cleanup. The function continues across remaining eligible blobs and
-    reports the failure count in the return tuple.
-
-    Args:
-        client: Supabase client.
-        current_version: most-recent db_version (for legacy log compatibility).
-        flutter_repo_path: REQUIRED. Path to the Flutter repo root.
-        dist_dir: REQUIRED. Path to the freshly-built dist/ directory.
-        branch: Flutter branch to read bundled manifest from. Default ``"main"``.
-        bundle_mismatch_reason: optional override for the bundle-alignment gate.
-        expected_count: optional override for the blast-radius gate.
-        audit_log: optional explicit AuditLog. None creates a fresh one.
-        lock_path: optional explicit lock file path.
-        run_date: optional ISO YYYY-MM-DD for the quarantine date directory.
-            Defaults to today UTC. All blobs quarantined by THIS call land
-            under the same date, so the sweeper can drain them as a unit
-            after TTL. Tests pass an explicit value for determinism.
-        retained_versions: db_versions intentionally kept by --keep N.
-            Their version directories remain readable, so their detail blobs
-            must be protected from the orphan sweep.
-
-    Returns:
-    ``(processed_count, failed_count)``. Both 0 if gates rejected.
-
-    Never raises in normal use — gate failures and per-blob quarantine/delete
-    errors are caught and reported. Unexpected exceptions from the gate
-    machinery propagate; callers should wrap in try/except + return
-    (0, 0) per ADR-0001 P1.6 fail-closed requirement.
-    """
-    # Imported here so the module remains importable even when
-    # release_safety package isn't on sys.path (legacy direct invocation).
-    from release_safety import (
-        evaluate_cleanup_gates,
-        GateMode,
-        GateOverrides,
-        validate_detail_index,
-        DEFAULT_QUARANTINE_TTL_DAYS,
-    )
-    from datetime import datetime as _datetime, timezone as _timezone
-    from pathlib import Path as _Path
-
-    # One run_date per cleanup run — every quarantined blob lands under
-    # the same date directory so the sweeper can drain them as a unit.
-    if run_date is None:
-        run_date = _datetime.now(_timezone.utc).strftime("%Y-%m-%d")
-    if orphan_action not in {"quarantine", "delete"}:
-        raise ValueError(
-            "orphan_action must be 'quarantine' or 'delete', "
-            f"got {orphan_action!r}"
-        )
-    if orphan_action == "delete" and expected_count is None:
-        raise ValueError(
-            "orphan_action='delete' requires --expected-count so the "
-            "reviewed blast-radius override is explicit."
-        )
-
-    print("\n=== Gated orphan-blob cleanup (ADR-0001 P1.6 + P2.2) ===")
-    print(f"  flutter_repo:     {flutter_repo_path}")
-    print(f"  dist_dir:         {dist_dir}")
-    print(f"  branch:           {branch}")
-    print(f"  run_date:         {run_date}")
-    print(f"  orphan action:    {orphan_action}")
-    retained_versions = tuple(v for v in retained_versions if v)
-    if retained_versions:
-        print(f"  retained versions: {', '.join(retained_versions)}")
-
-    # Step 1: list all blobs in storage (we need both the candidate set
-    # and the total for blast-radius). Cheaper to do this once here than
-    # twice (here + inside the gate).
-    print("\nListing all blobs in Supabase storage...")
-
-    def _progress(done, total, objects):
-        if done == 1 or done == total or done % STORAGE_LIST_PROGRESS_EVERY_SHARDS == 0:
-            print(
-                f"  Listed {done}/{total} shard(s); "
-                f"{objects} blob object(s) seen so far."
-            )
-
-    inventory = inventory_detail_blobs(
-        client,
-        shards=HEX_BLOB_SHARDS,
-        client_factory=quarantine_client_factory,
-        progress=_progress,
-    )
-    if not inventory.complete:
-        # Fail closed WITHOUT raising: this function's contract is that gate
-        # and I/O failures are reported, not thrown. An undercounted storage
-        # side cannot prove what is an orphan.
-        print(
-            f"\n[release-safety] Storage inventory incomplete: read "
-            f"{inventory.shards_completed}/{inventory.shards_total} shard(s), "
-            f"{len(inventory.failures)} failed."
-        )
-        for failure in inventory.failures[:5]:
-            print(f"    {failure.shard}: {failure.error}")
-        print("  Refusing destructive cleanup. No blobs quarantined.")
-        return 0, 0
-
-    storage_hashes = set(inventory.hashes)
-    storage_total = len(storage_hashes)
-    print(
-        f"  {storage_total} unique blobs in storage "
-        f"({inventory.retries} retry/retries, "
-        f"{inventory.elapsed_seconds:.1f}s)"
-    )
-
-    # Step 2: compute initial orphan candidates (storage − dist.index).
-    # The gate will further filter against the bundled∪dist protected set.
-    try:
-        dist_index = validate_detail_index(_Path(dist_dir) / "detail_index.json")
-    except Exception as exc:
-        print(f"\n[release-safety] Could not validate dist detail_index: {exc}")
-        print("  Refusing destructive cleanup. No blobs quarantined.")
-        return 0, 0
-    candidate_hashes = storage_hashes - dist_index.blob_hashes
-    print(f"  {len(candidate_hashes)} candidates pre-gate (storage \\ dist.index)")
-
-    # Step 3: run the gate in EXECUTE mode.
-    overrides = GateOverrides(
-        bundle_mismatch_reason=bundle_mismatch_reason,
-        expected_count=expected_count,
-    )
-    result = evaluate_cleanup_gates(
-        flutter_repo_path=flutter_repo_path,
-        dist_dir=dist_dir,
-        candidate_blobs=candidate_hashes,
-        storage_total=storage_total,
-        mode=GateMode.EXECUTE,
-        branch=branch,
-        overrides=overrides,
-        audit_log=audit_log,
-        lock_path=lock_path,
-        # P3.6a — registry-backed protected-set is now load-bearing in
-        # production cleanup runs. Strictly additive: any ACTIVE/VALIDATING
-        # catalog_releases row contributes its blob hashes to the protected
-        # set before this gate decides which candidates survive.
-        supabase_client=client,
-        retained_versions=retained_versions,
-    )
-
-    if not result.passed:
-        print("\n" + result.failure_summary())
-        print("\n[release-safety] Orphan cleanup REJECTED — no blobs quarantined.")
-        return 0, 0
-
-    # Step 4: quarantine only candidates surviving the protected-set filter.
-    # P2.2 — the destructive step is now a MOVE-to-quarantine, not a
-    # hard delete. Recoverable for DEFAULT_QUARANTINE_TTL_DAYS (30) days
-    # via release_safety.recover_blob(client, blob_hash).
-    actual_orphans = result.deletion_candidates
-    if orphan_action == "delete":
-        print(
-            f"\n[release-safety] Gates passed. "
-            f"Hard-deleting {len(actual_orphans)} reviewed orphan blob(s) "
-            f"in batches of {ORPHAN_DELETE_BATCH_SIZE} "
-            f"(of {len(candidate_hashes)} pre-gate candidates; "
-            f"{len(candidate_hashes) - len(actual_orphans)} protected by "
-            "release-safety sources)."
-        )
-        deleted, failed, failed_paths = delete_orphan_blob_batch(
-            client, actual_orphans
-        )
-        print(
-            f"\n[release-safety] Batch delete complete: "
-            f"{deleted} deleted, {failed} failed."
-        )
-        if audit_log is not None:
-            audit_log.event(
-                "orphan_delete_completed",
-                deleted_count=deleted,
-                failed_count=failed,
-                failed_paths_sample=failed_paths[:20],
-            )
-        return deleted, failed
-
-    print(
-        f"\n[release-safety] Gates passed. "
-        f"Quarantining {len(actual_orphans)} blob(s) "
-        f"to shared/quarantine/{run_date}/ "
-        f"(of {len(candidate_hashes)} pre-gate candidates; "
-        f"{len(candidate_hashes) - len(actual_orphans)} protected by release-safety sources). "
-        f"Recoverable for {DEFAULT_QUARANTINE_TTL_DAYS} days."
-    )
-
-    # The frozen identity every action is verified against comes from the
-    # same inventory that produced the candidates.
-    orphan_fingerprints = {
-        h: inventory.fingerprint_for(h) for h in actual_orphans
-    }
-    quarantined, failed, failed_paths = quarantine_orphan_blob_batch(
-        client,
-        actual_orphans,
-        run_date=run_date,
-        source_fingerprints=orphan_fingerprints,
-        client_factory=quarantine_client_factory,
-    )
-
-    print(
-        f"\n[release-safety] Quarantine complete: "
-        f"{quarantined} moved, {failed} failed. "
-        f"Recover via: from release_safety import recover_blob; "
-        f"recover_blob(client, '<hash>')"
-    )
-
-    if audit_log is not None:
-        audit_log.event(
-            "quarantine_completed",
-            quarantined_count=quarantined,
-            failed_count=failed,
-            run_date=run_date,
-            failed_paths=failed_paths,
-        )
-
-    return quarantined, failed
+from release_safety.blob_inventory import BLOB_STORAGE_PREFIX  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -1004,71 +678,34 @@ def parse_args(argv=None):
         action="store_true",
         default=False,
         dest="cleanup_orphan_blobs",
-        help=(
-            "Detect orphaned detail blobs not referenced by the current "
-            "detail_index (default: false). Execute mode defaults to "
-            "recoverable quarantine unless --orphan-blob-action=delete is set."
-        ),
-    )
-    parser.add_argument(
-        "--orphan-blob-action",
-        choices=("quarantine", "delete"),
-        default="quarantine",
-        dest="orphan_blob_action",
-        help=(
-            "Action for gated orphan blobs in execute mode. 'quarantine' is "
-            "recoverable and remains the default. 'delete' hard-deletes in "
-            "batches and requires --expected-count."
-        ),
-    )
-    # ADR-0001 P1.6 — release-safety gate inputs.
-    # These are REQUIRED when --cleanup-orphan-blobs --execute is given.
-    # They are unused in dry-run mode (read-only ops do not need gates).
-    parser.add_argument(
-        "--flutter-repo",
-        type=str,
-        default=None,
-        dest="flutter_repo",
-        help="Path to the Flutter repo root (required for --cleanup-orphan-blobs --execute).",
-    )
-    parser.add_argument(
-        "--dist-dir",
-        type=str,
-        default=None,
-        dest="dist_dir",
-        help="Path to dist/ directory (required for --cleanup-orphan-blobs --execute).",
-    )
-    parser.add_argument(
-        "--branch",
-        type=str,
-        default="main",
-        help="Flutter branch whose committed manifest is the trust anchor (default: main).",
-    )
-    parser.add_argument(
-        "--override-bundle-mismatch",
-        type=str,
-        default=None,
-        dest="override_bundle_mismatch",
-        help=(
-            "Override the bundle-alignment gate with a written reason. "
-            "Captured verbatim in the audit log."
-        ),
-    )
-    parser.add_argument(
-        "--expected-count",
-        type=int,
-        default=None,
-        dest="expected_count",
-        help=(
-            "Override the blast-radius gate by stating the exact expected "
-            "deletion count. Must equal the actual count or the gate fails."
-        ),
+        help=argparse.SUPPRESS,
     )
     return parser.parse_args(argv)
 
 
 def main(argv=None):
     args = parse_args(argv)
+    if args.cleanup_orphan_blobs:
+        print(
+            "\n[refused] Orphan reconciliation has one production entrypoint: "
+            "scripts/reconcile_orphan_blobs.py."
+        )
+        print(
+            "  Run its dry report, approve the frozen JSON artifact, then "
+            "execute that artifact."
+        )
+        raise SystemExit(2)
+    if args.execute:
+        from release_safety.lock import acquire_release_lock
+
+        with acquire_release_lock(
+            initial_step="cleanup_old_versions --execute",
+        ):
+            return _run_main(args)
+    return _run_main(args)
+
+
+def _run_main(args):
     dry_run = not args.execute
 
     print("=" * 60)
@@ -1115,21 +752,11 @@ def main(argv=None):
         else:
             safe_old_rows.append(row)
 
-    # Orphan-blob cleanup is DECOUPLED from version-directory retention.
-    # Orphans accumulate independently — a backlog from prior gate-rejected
-    # runs persists even at steady-state version count — so an empty
-    # safe_old_rows must NOT short-circuit the orphan sweep. That early return
-    # is exactly why storage grew to 84% orphans (the cleanup ran only when
-    # there happened to be an old version directory to delete).
     if not safe_old_rows:
-        msg = (
+        print(
             f"Nothing to delete at the version level — {len(rows)} version(s) "
-            f"exist, keep threshold is {args.keep}."
+            f"exist, keep threshold is {args.keep}. Nothing deleted."
         )
-        if not args.cleanup_orphan_blobs:
-            print(msg + " Nothing deleted.")
-            sys.exit(0)
-        print(msg + " Proceeding to orphan-blob cleanup.")
     else:
         print(f"Versions to clean up: {len(safe_old_rows)}")
     print()
@@ -1139,8 +766,6 @@ def main(argv=None):
     total_failed = 0
     total_db_deleted = 0
     total_db_failed = 0
-    gated_cleanup_error = False
-
     for row in safe_old_rows:
         db_version = row["db_version"]
         print(f"--- Cleaning up v{db_version} ---")
@@ -1157,89 +782,6 @@ def main(argv=None):
                 total_db_failed += 1
 
         print()
-
-    # Orphan blob cleanup
-    total_orphans_quarantined = 0
-    total_orphans_failed = 0
-    if args.cleanup_orphan_blobs:
-        current_row = next((r for r in rows if r.get("is_current")), rows[0] if rows else None)
-        if current_row:
-            if dry_run:
-                # The old dry run scanned storage against the CURRENT
-                # detail_index only, so every blob kept alive solely by a
-                # retained older catalog was reported as deletable. A count
-                # that errs toward "delete more" is worse than no count.
-                # Orphan reporting now lives in the maintenance tool, which
-                # protects every retained version and states its own limits.
-                print(
-                    "\n[ERROR] Orphan dry-run reporting has moved to "
-                    "scripts/reconcile_orphan_blobs.py."
-                )
-                print(
-                    "        The count this path used to print protected only "
-                    "the current\n        detail_index, not every retained "
-                    "catalog version."
-                )
-                print("\n  Run instead:")
-                print(
-                    "    scripts/reconcile_orphan_blobs.py \\\n"
-                    "        --flutter-repo PATH --dist-dir PATH \\\n"
-                    "        --checkpoint reports/orphan_inventory.checkpoint.json \\\n"
-                    "        --json-report reports/orphan_report.json"
-                )
-                sys.exit(2)
-            else:
-                # EXECUTE path — gated per ADR-0001 P1.6.
-                # Required inputs MUST be present; fail closed if missing.
-                if not args.flutter_repo or not args.dist_dir:
-                    print(
-                        "\n[ERROR] --cleanup-orphan-blobs --execute requires "
-                        "--flutter-repo AND --dist-dir."
-                    )
-                    print(
-                        "        These are needed to compute the bundled∪dist "
-                        "protected blob set per ADR-0001 HR-2."
-                    )
-                    print(
-                        "        Refusing destructive cleanup. Run with "
-                        "--flutter-repo PATH --dist-dir PATH or omit --execute."
-                    )
-                    sys.exit(2)
-
-                # Wrap in try/except so any unexpected gate-machinery error
-                # fails closed (no deletions) rather than crashing the
-                # cleanup mid-run. Per ADR-0001 P1.6 sign-off.
-                try:
-                    total_orphans_quarantined, total_orphans_failed = (
-                        cleanup_orphan_blobs_with_gates(
-                            client,
-                            current_row["db_version"],
-                            flutter_repo_path=args.flutter_repo,
-                            dist_dir=args.dist_dir,
-                            branch=args.branch,
-                            bundle_mismatch_reason=args.override_bundle_mismatch,
-                            expected_count=args.expected_count,
-                            retained_versions=tuple(
-                                r["db_version"] for r in keep_rows
-                                if r.get("db_version")
-                            ),
-                            orphan_action=args.orphan_blob_action,
-                            quarantine_client_factory=get_supabase_client,
-                        )
-                    )
-                except Exception as exc:
-                    gated_cleanup_error = True
-                    print(
-                        f"\n[release-safety] Unexpected error during gated "
-                        f"orphan cleanup: {type(exc).__name__}: {exc}"
-                    )
-                    print(
-                        "  Refusing destructive cleanup. No blobs deleted. "
-                        "Investigate the error before re-running."
-                    )
-                    total_orphans_quarantined, total_orphans_failed = 0, 0
-        else:
-            print("\n  [WARN] No current version found — skipping orphan blob cleanup.")
 
     # -----------------------------------------------------------------
     # Quarantine sweep — hard-delete expired quarantine entries.
@@ -1292,22 +834,6 @@ def main(argv=None):
         print(f"  Manifest rows {action.lower()}:   {total_db_deleted}")
         if total_db_failed:
             print(f"  Manifest row failures:          {total_db_failed}")
-    if args.cleanup_orphan_blobs:
-        if dry_run:
-            # Dry-run uses the legacy cleanup_orphan_blobs (single-version
-            # protection) for backwards compat; nothing is touched, the
-            # count reflects what WOULD have been deleted.
-            print(f"  Orphan blobs would delete:      {total_orphans_quarantined}")
-        else:
-            if args.orphan_blob_action == "delete":
-                print(f"  Orphan blobs deleted:           {total_orphans_quarantined}")
-            else:
-                # Execute path (P2.2): orphans were MOVED to quarantine, not
-                # deleted. Recoverable for 30 days via release_safety.recover_blob.
-                print(f"  Orphan blobs quarantined:       {total_orphans_quarantined}")
-        if total_orphans_failed:
-            verb = "delete" if dry_run else args.orphan_blob_action
-            print(f"  Orphan blob {verb} failures:  {total_orphans_failed}")
     if not dry_run and (sweep_deleted or sweep_failed):
         print(f"  Quarantine swept (hard-delete): {sweep_deleted}")
         if sweep_failed:
@@ -1316,42 +842,7 @@ def main(argv=None):
     if dry_run:
         print("Dry-run complete. Re-run with --execute to apply deletions.")
     else:
-        # Categorize failures by data-integrity impact:
-        #
-        #   • storage version deletes  → strict. Intentional version retirements
-        #                                are user-initiated; if they fail, the
-        #                                user wants to know.
-        #   • manifest DB row deletes  → strict. Data integrity gate; a row
-        #                                pointing at deleted storage is a
-        #                                real inconsistency.
-        #   • orphan blob deletes      → ALWAYS non-blocking. This is pure
-        #                                housekeeping — the blobs are unreferenced
-        #                                garbage. Whether we delete them today
-        #                                or next run does not affect any user.
-        #                                Failures here are most often transient
-        #                                (HTTP/2 stream limit at ~20K calls per
-        #                                connection, supabase-py response parsing
-        #                                issues on success responses, etc.) and
-        #                                always self-heal on the next cleanup.
-        #                                Blocking the release on housekeeping
-        #                                failures is the wrong call.
-        if total_orphans_failed > 0:
-            orphan_total = total_orphans_quarantined + total_orphans_failed
-            orphan_action_label = (
-                "batch deletes"
-                if args.orphan_blob_action == "delete"
-                else "quarantine moves"
-            )
-            print(
-                f"  Note: {total_orphans_failed}/{orphan_total} orphan-blob "
-                f"{orphan_action_label} failed — typically transient HTTP/2 stream-limit "
-                f"or response-parse issues. Treating as non-blocking; the "
-                f"stragglers retry on the next cleanup run (idempotent)."
-            )
-
         blocking_failures = total_failed + total_db_failed
-        if gated_cleanup_error:
-            blocking_failures += 1
         if blocking_failures == 0:
             print("Cleanup complete.")
         else:

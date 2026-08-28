@@ -253,18 +253,23 @@ def build_orphan_report(
             orphan_hashes = tuple(candidates)
             orphan_bytes = sum(inventory.bytes_for(h) for h in candidates)
 
-    # An unproven fingerprint (no eTag from the listing) blocks HERE, at
+    # An unproven fingerprint (no positive size or no eTag from the listing)
+    # blocks HERE, at
     # report time — never later as an apparently actionable count that
     # execution then refuses.
     if blocked is None:
         unproven = [
             h for h in orphan_hashes
-            if (fp := inventory.fingerprint_for(h)) is None or not fp.etag
+            if (
+                (fp := inventory.fingerprint_for(h)) is None
+                or fp.size <= 0
+                or not fp.etag
+            )
         ]
         if unproven:
             blocked = (
                 f"{len(unproven)} candidate(s) lack a proven source "
-                f"fingerprint (missing eTag in the listing), e.g. "
+                f"fingerprint (positive size and eTag required), e.g. "
                 f"{unproven[0]}. Nothing may be proposed from an unproven "
                 "identity."
             )

@@ -20,6 +20,7 @@ for work that did not happen is not.
 from __future__ import annotations
 
 import os
+import inspect
 import sys
 import time
 from datetime import date
@@ -36,8 +37,10 @@ NOW = date(2026, 8, 26)
 
 
 @pytest.fixture(autouse=True)
-def _no_real_backoff_sleeps(monkeypatch):
+def _isolated_runtime(monkeypatch, tmp_path):
     monkeypatch.setattr(time, "sleep", lambda _s: None)
+    from release_safety import lock as lock_mod
+    monkeypatch.setattr(lock_mod, "DEFAULT_LOCK_PATH", tmp_path / "release.lock")
 
 
 def _storage_error():
@@ -235,6 +238,31 @@ def test_execute_sweep_batch_deletes_in_groups_of_500():
     assert result.complete is True
     assert remove_batches == [500, 500, 200]
     assert not bucket.objects, "every expired object must be gone"
+
+
+def test_execute_sweep_holds_the_release_lock_during_deletes(tmp_path):
+    from release_safety.quarantine_sweeper import sweep_quarantine
+
+    assert "lock_path" in inspect.signature(sweep_quarantine).parameters
+    lock_path = tmp_path / "release.lock"
+    bucket = _Bucket({_quarantined(OLD_DATE, "aa", "aa")})
+    client = _Client(bucket)
+    lock_seen = []
+    real_remove = bucket.remove
+
+    def observing_remove(paths):
+        lock_seen.append(lock_path.exists())
+        return real_remove(paths)
+
+    bucket.remove = observing_remove
+
+    result = sweep_quarantine(
+        client, ttl_days=30, dry_run=False, now=NOW, lock_path=lock_path,
+    )
+
+    assert result.complete is True
+    assert lock_seen == [True]
+    assert not lock_path.exists()
 
 
 def test_execute_sweep_proves_absence_and_reports_residuals():
