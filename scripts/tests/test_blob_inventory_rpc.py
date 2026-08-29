@@ -298,7 +298,8 @@ def test_cli_verify_inventory_reports_parity_ok(tmp_path, capsys, monkeypatch):
     exit_code = cli.main(
         ["--flutter-repo", str(tmp_path), "--dist-dir", str(tmp_path),
          "--retained-version", "x",
-         "--shards", "aa,bb", "--verify-inventory"],
+         "--shards", "aa,bb", "--verify-inventory",
+         "--lock-path", str(tmp_path / "parity.lock")],
         client=client,
     )
 
@@ -361,7 +362,8 @@ def test_cli_verify_inventory_fails_on_divergence(tmp_path, capsys):
     exit_code = cli.main(
         ["--flutter-repo", str(tmp_path), "--dist-dir", str(tmp_path),
          "--retained-version", "x",
-         "--shards", "aa,bb", "--verify-inventory"],
+         "--shards", "aa,bb", "--verify-inventory",
+         "--lock-path", str(tmp_path / "parity.lock")],
         client=client,
     )
 
