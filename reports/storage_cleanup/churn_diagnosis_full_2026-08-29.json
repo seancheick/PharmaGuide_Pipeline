@@ -133,5 +133,7 @@
   ],
   "fix": "enrich_supplements_v3._merge_blend_evidence now emits sorted(sources); behavioral hashseed test pins it",
   "projection_language": "reduction takes effect on the NEXT ordinary catalog rebuild and is PROJECTED until measured there",
-  "classification_notes": "other_order_only sorts EVERY list as a multiset \u2014 an upper bound on order churn that would also mask genuine reorder semantics; sources_order_only is the precise root-cause bucket"
+  "classification_notes": "other_order_only sorts EVERY list as a multiset \u2014 an upper bound on order churn that would also mask genuine reorder semantics; sources_order_only is the precise root-cause bucket",
+  "SUPERSEDED_BY": "churn_diagnosis_reproducible_2026-08-29.json",
+  "superseded_note": "Counts were correct, but this report had no committed generator or complete product/hash provenance. The replacement reproduces all 1,192 pairs and exact byte totals from SHA-256-verified blobs and is backed by churn_pair_ledger_2026-08-29.json."
 }
