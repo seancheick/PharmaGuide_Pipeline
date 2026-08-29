@@ -1,34 +1,39 @@
 -- Storage-inventory RPCs (Phase 4 of the storage-cleanup acceleration plan).
 --
--- STATUS: AUTHORED, NOT APPLIED. Applying this to production requires its own
--- explicit approval (gate (c) in the approved plan). Apply via the MCP
--- apply_migration tool, then repair the schema_migrations stamp (MCP stamps
--- apply-time versions, not file prefixes — see
--- feedback_mcp_apply_migration_version_stamps).
+-- STATUS: AUTHORED, NOT APPLIED. Applying to production requires its own
+-- explicit approval (gate C in the consolidated package).
+--
+-- MIGRATION OWNERSHIP (canonical): this repository's migrations/ directory is
+-- the single source of truth for pipeline-owned schema changes. This file's
+-- version 20260830090000 is FORWARD of the live history head (20260829151221
+-- at authoring time) precisely so that applying it needs NO history editing:
+-- apply it under this exact version and the listing stays aligned. If the
+-- applying tool stamps a different version anyway, use the supported repair
+-- (`supabase migration repair --status applied 20260830090000` plus
+-- `--status reverted <wrong-version>`), never direct table surgery. Verify
+-- alignment afterwards with the migration listing; deployment is blocked
+-- until the listed version equals this file's prefix.
 --
 -- Purpose: replace the 256-request, ~5-minute shard walk with two read-only
--- functions. The client (release_safety.blob_inventory.inventory_detail_blobs
--- _via_rpc) validates every row, requires strictly-monotonic keyset cursors,
--- and cross-checks the page stream against the summary; ANY disagreement
--- falls back to the shard walker, which remains the permanent authority.
+-- functions. The client (release_safety.blob_inventory
+-- .inventory_detail_blobs_via_rpc) validates every row, requires strictly
+-- monotonic keyset cursors, and cross-checks the page stream against the
+-- summary; ANY disagreement falls back to the shard walker, which remains
+-- the permanent authority.
 --
--- Security model (verified against the live project before authoring):
+-- Security model (verified against the live project):
 --   * SECURITY INVOKER — service_role already holds direct SELECT on
 --     storage.objects; no privilege escalation is involved.
 --   * EXECUTE revoked from PUBLIC/anon/authenticated; granted only to
---     service_role. Verify post-apply that anon/authenticated calls fail.
---   * Prefix arguments are restricted to the recognized PharmaGuide layouts
---     (active blob store and dated quarantine trees) — the functions refuse
---     arbitrary bucket spelunking even for a privileged caller.
+--     service_role.
+--   * Prefix arguments restricted to recognized PharmaGuide layouts.
 --
--- Index expectations (verified present):
+-- Index expectations (EXPLAIN-verified 2026-08-29: Index Scan using
+-- idx_objects_bucket_id_name, 16,528 rows, no seq scan):
 --   * idx_objects_bucket_id_name  btree (bucket_id, name COLLATE "C")
 --   * name_prefix_search          btree (name text_pattern_ops)
--- The predicates below compare name COLLATE "C" as a half-open range
--- [prefix||'/', prefix||'0') — '0' is the successor of '/' in ASCII — which
--- the "C"-collated index serves as a range scan. Rollout gate: EXPLAIN
--- (ANALYZE, BUFFERS) on both functions' queries must show a bounded index or
--- bitmap range scan; a whole-table seq scan blocks rollout.
+-- The predicates compare name COLLATE "C" as the half-open range
+-- [prefix||'/', prefix||'0') — '0' is the successor of '/' in ASCII.
 
 create or replace function public.pg_storage_inventory_prefix_ok(p_prefix text)
 returns boolean
