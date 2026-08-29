@@ -387,10 +387,17 @@ def _plan_fingerprint(candidates) -> str:
     return hashlib.sha256(lines.encode("utf-8")).hexdigest()
 
 
-def plan_to_artifact(plan: "DeletePlan", *, manifest_versions) -> dict:
-    """Convert a freshly computed dry plan into the executable approval JSON."""
+def _manifest_digest(manifest_versions) -> str:
+    """Bind the complete retained-manifest snapshot reviewed by the operator."""
     import hashlib
 
+    return hashlib.sha256(
+        "\n".join(sorted(manifest_versions)).encode("utf-8")
+    ).hexdigest()
+
+
+def plan_to_artifact(plan: "DeletePlan", *, manifest_versions) -> dict:
+    """Convert a freshly computed dry plan into the executable approval JSON."""
     candidates = [
         {
             "db_version": c.db_version,
@@ -409,9 +416,7 @@ def plan_to_artifact(plan: "DeletePlan", *, manifest_versions) -> dict:
         "total_count": plan.total_objects,
         "total_bytes": plan.total_bytes,
         "candidates": candidates,
-        "retained_manifest_digest": hashlib.sha256(
-            "\n".join(sorted(manifest_versions)).encode("utf-8")
-        ).hexdigest(),
+        "retained_manifest_digest": _manifest_digest(manifest_versions),
         "fingerprint": _plan_fingerprint(candidates),
     }
 
@@ -454,6 +459,15 @@ def _load_artifact(path) -> dict:
         raise ApprovalArtifactError(
             "artifact records do not reproduce its own fingerprint "
             "(edited or corrupted)"
+        )
+    manifest_digest = data.get("retained_manifest_digest")
+    if (
+        not isinstance(manifest_digest, str)
+        or len(manifest_digest) != 64
+        or any(ch not in "0123456789abcdef" for ch in manifest_digest)
+    ):
+        raise ApprovalArtifactError(
+            "artifact has no valid retained-manifest digest"
         )
     record_count = sum(len(c["objects"]) for c in candidates)
     record_bytes = sum(r["size"] for c in candidates for r in c["objects"])
@@ -511,10 +525,26 @@ def execute_from_artifact(
         print(f"[refused] release lock unavailable: {exc}")
         return 1
     try:
+        fresh_manifest_versions = _fetch_manifest_versions(
+            client, manifest_table,
+        )
+        fresh_manifest_digest = _manifest_digest(fresh_manifest_versions)
+        if fresh_manifest_digest != artifact["retained_manifest_digest"]:
+            print(
+                "[refused] the retained manifest has CHANGED since approval "
+                f"(fresh {fresh_manifest_digest[:16]}… vs approved "
+                f"{artifact['retained_manifest_digest'][:16]}…). Re-run "
+                "the dry plan and review again. Nothing deleted."
+            )
+            return 2
+
         fresh_plan = compute_delete_plan(
             client, bucket=bucket, manifest_table=manifest_table,
         )
-        fresh_artifact = plan_to_artifact(fresh_plan, manifest_versions=set())
+        fresh_artifact = plan_to_artifact(
+            fresh_plan,
+            manifest_versions=fresh_manifest_versions,
+        )
         if fresh_artifact["fingerprint"] != artifact["fingerprint"]:
             print(
                 "[refused] the stale-directory set has CHANGED since approval "

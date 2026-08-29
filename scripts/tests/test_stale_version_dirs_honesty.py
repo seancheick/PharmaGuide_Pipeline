@@ -517,6 +517,58 @@ def test_execute_refuses_size_drift_inside_an_approved_directory(tmp_path):
     assert bucket.objects == before
 
 
+def test_execute_refuses_retained_manifest_drift_even_when_candidates_match(
+    tmp_path,
+):
+    """The manifest snapshot is part of the reviewed approval state.
+
+    Adding a retained manifest row with no corresponding storage directory
+    leaves the stale candidate fingerprint and totals unchanged. Execution
+    must still refuse instead of silently ignoring the artifact's
+    retained_manifest_digest.
+    """
+    import json as _json
+
+    from release_safety.delete_stale_version_dirs import (
+        compute_delete_plan,
+        execute_from_artifact,
+        plan_to_artifact,
+    )
+
+    stale = "2026.08.24.165613"
+    retained_at_approval = "2026.08.27.162958"
+    retained_after_approval = "2026.08.29.120000"
+    bucket = _bucket_with_remove(_dir_objects(stale, 2))
+    client = _plain_manifest(_Client(bucket), versions=(retained_at_approval,))
+    plan = compute_delete_plan(client)
+    artifact_path = tmp_path / "stale_approval.json"
+    artifact = plan_to_artifact(
+        plan,
+        manifest_versions={retained_at_approval},
+    )
+    artifact_path.write_text(_json.dumps(artifact))
+
+    # Candidate objects are identical, but the manifest state reviewed by the
+    # operator has changed since approval.
+    _plain_manifest(
+        client,
+        versions=(retained_at_approval, retained_after_approval),
+    )
+    before = dict(bucket.objects)
+
+    code = execute_from_artifact(
+        client,
+        approval_report=artifact_path,
+        expected_count=artifact["total_count"],
+        expected_bytes=artifact["total_bytes"],
+        fingerprint=artifact["fingerprint"],
+        lock_path=tmp_path / "lock",
+    )
+
+    assert code != 0
+    assert bucket.objects == before, "manifest drift must refuse before delete"
+
+
 def test_execute_from_artifact_happy_path_deletes_and_proves_absence(tmp_path):
     import json as _json
 
