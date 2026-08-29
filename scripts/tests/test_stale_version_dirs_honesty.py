@@ -367,3 +367,181 @@ def test_execute_counts_only_absence_proven_deletions(tmp_path):
     )
     assert result.failed_objects, "the residual object must surface as failed"
     assert any(survivor in path for path, _err in result.failed_objects)
+
+
+# ---------------------------------------------------------------------------
+# Gap 2: execution binds to the reviewed approval artifact, not a fresh recount
+# ---------------------------------------------------------------------------
+
+
+def _plain_manifest(client, versions=()):
+    client.table = lambda name: _ManifestRaceTable(
+        lambda: [{"db_version": v} for v in versions]
+    )
+    return client
+
+
+def _bucket_with_remove(objects):
+    bucket = _Bucket(objects)
+
+    def _real_remove(paths):
+        for path in paths:
+            bucket.objects.pop(path, None)
+        return [{"name": path} for path in paths]
+
+    bucket.remove = _real_remove
+    return bucket
+
+
+def test_plan_artifact_binds_versions_paths_sizes_and_manifest(tmp_path):
+    from release_safety.delete_stale_version_dirs import (
+        compute_delete_plan,
+        plan_to_artifact,
+    )
+
+    stale = "2026.08.24.165613"
+    keep = "2026.08.27.162958"
+    bucket = _bucket_with_remove(_dir_objects(stale, 2))
+    client = _plain_manifest(_Client(bucket), versions=(keep,))
+
+    plan = compute_delete_plan(client)
+    artifact = plan_to_artifact(plan, manifest_versions={keep})
+
+    assert artifact["total_count"] == 2
+    assert artifact["total_bytes"] == plan.total_bytes
+    assert [c["db_version"] for c in artifact["candidates"]] == [stale]
+    records = artifact["candidates"][0]["objects"]
+    assert all(
+        isinstance(r["path"], str) and isinstance(r["size"], int)
+        for r in records
+    )
+    assert len(artifact["fingerprint"]) == 64
+    assert len(artifact["retained_manifest_digest"]) == 64
+
+
+def test_execute_from_artifact_requires_the_full_quad(tmp_path, capsys):
+    from release_safety.delete_stale_version_dirs import (
+        execute_from_artifact,
+    )
+
+    stale = "2026.08.24.165613"
+    bucket = _bucket_with_remove(_dir_objects(stale, 2))
+    client = _plain_manifest(_Client(bucket))
+    before = dict(bucket.objects)
+
+    code = execute_from_artifact(
+        client,
+        approval_report=None,
+        expected_count=2,
+        expected_bytes=20,
+        fingerprint=None,
+        lock_path=tmp_path / "lock",
+    )
+
+    assert code != 0
+    assert bucket.objects == before
+
+
+def test_execute_refuses_a_swapped_candidate_with_identical_totals(tmp_path):
+    """The reproduced weakness: a DIFFERENT directory with the same
+    count/bytes must not pass a totals-only check."""
+    import json as _json
+
+    from release_safety.delete_stale_version_dirs import (
+        compute_delete_plan,
+        execute_from_artifact,
+        plan_to_artifact,
+    )
+
+    old_stale = "2026.08.24.165613"
+    bucket = _bucket_with_remove(_dir_objects(old_stale, 2))
+    client = _plain_manifest(_Client(bucket))
+    plan = compute_delete_plan(client)
+    artifact_path = tmp_path / "stale_approval.json"
+    artifact = plan_to_artifact(plan, manifest_versions=set())
+    artifact_path.write_text(_json.dumps(artifact))
+
+    # The old candidate vanishes; a NEW one appears with IDENTICAL totals.
+    for path in list(bucket.objects):
+        del bucket.objects[path]
+    new_stale = "2026.08.30.000000"
+    bucket.objects.update(_dir_objects(new_stale, 2))
+    before = dict(bucket.objects)
+
+    code = execute_from_artifact(
+        client,
+        approval_report=artifact_path,
+        expected_count=artifact["total_count"],
+        expected_bytes=artifact["total_bytes"],
+        fingerprint=artifact["fingerprint"],
+        lock_path=tmp_path / "lock",
+    )
+
+    assert code != 0
+    assert bucket.objects == before, (
+        "a swapped candidate set with identical totals must refuse"
+    )
+
+
+def test_execute_refuses_size_drift_inside_an_approved_directory(tmp_path):
+    import json as _json
+
+    from release_safety.delete_stale_version_dirs import (
+        compute_delete_plan,
+        execute_from_artifact,
+        plan_to_artifact,
+    )
+
+    stale = "2026.08.24.165613"
+    bucket = _bucket_with_remove(_dir_objects(stale, 2))
+    client = _plain_manifest(_Client(bucket))
+    plan = compute_delete_plan(client)
+    artifact_path = tmp_path / "stale_approval.json"
+    artifact = plan_to_artifact(plan, manifest_versions=set())
+    artifact_path.write_text(_json.dumps(artifact))
+
+    grown = sorted(bucket.objects)[0]
+    bucket.objects[grown] = b"x" * 999  # object replaced since review
+    before = dict(bucket.objects)
+
+    code = execute_from_artifact(
+        client,
+        approval_report=artifact_path,
+        expected_count=artifact["total_count"],
+        expected_bytes=artifact["total_bytes"],
+        fingerprint=artifact["fingerprint"],
+        lock_path=tmp_path / "lock",
+    )
+
+    assert code != 0
+    assert bucket.objects == before
+
+
+def test_execute_from_artifact_happy_path_deletes_and_proves_absence(tmp_path):
+    import json as _json
+
+    from release_safety.delete_stale_version_dirs import (
+        compute_delete_plan,
+        execute_from_artifact,
+        plan_to_artifact,
+    )
+
+    stale = "2026.08.24.165613"
+    bucket = _bucket_with_remove(_dir_objects(stale, 2))
+    client = _plain_manifest(_Client(bucket))
+    plan = compute_delete_plan(client)
+    artifact_path = tmp_path / "stale_approval.json"
+    artifact = plan_to_artifact(plan, manifest_versions=set())
+    artifact_path.write_text(_json.dumps(artifact))
+
+    code = execute_from_artifact(
+        client,
+        approval_report=artifact_path,
+        expected_count=artifact["total_count"],
+        expected_bytes=artifact["total_bytes"],
+        fingerprint=artifact["fingerprint"],
+        lock_path=tmp_path / "lock",
+    )
+
+    assert code == 0
+    assert not any(p.startswith(f"v{stale}/") for p in bucket.objects)
