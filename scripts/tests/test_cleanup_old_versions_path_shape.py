@@ -151,7 +151,7 @@ def test_delete_version_directory_deletes_actual_storage():
     bucket.seed("v2026.05.13.162119/pharmaguide_core.db", b"db")
     bucket.seed("v2026.05.13.162119/detail_index.json", b"idx")
 
-    deleted, failed = delete_version_directory(
+    deleted, failed, verified_empty = delete_version_directory(
         client, "2026.05.13.162119", dry_run=False,
     )
 
