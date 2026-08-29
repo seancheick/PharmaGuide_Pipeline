@@ -115,14 +115,15 @@ def list_version_directory(client, db_version):
     was designed to catch downstream, but at the wrong layer.
     """
     prefix = f"v{db_version}"
-    try:
-        items = client.storage.from_(BUCKET).list(
+    from release_safety.transient import retry_transient
+
+    items = retry_transient(
+        lambda: client.storage.from_(BUCKET).list(
             path=prefix,
             options={"limit": 1000, "offset": 0},
-        )
-    except Exception as exc:
-        print(f"  [WARN] Could not list storage path {prefix}: {exc}")
-        return []
+        ),
+        max_attempts=4,
+    )
 
     if not items:
         return []
@@ -145,41 +146,79 @@ def delete_storage_path(client, path):
 
 
 def delete_version_directory(client, db_version, dry_run):
-    """Delete all objects under v{db_version}/ within the pharmaguide bucket.
+    """Delete every object under v{db_version}/ — recursively, with proof.
 
-    Returns (deleted_count, failed_count). See list_version_directory above
-    for the path-shape contract (bucket-relative).
+    Returns ``(deleted, failed, verified_empty)``. ``verified_empty`` is True
+    only when a post-delete re-enumeration finds NOTHING under the directory;
+    it is the sole license for deleting the version's manifest row. The old
+    implementation listed only the top level (no recursion, no pagination past
+    1,000) and returned [] on listing failure — which is how partially-deleted
+    directories lost their manifest rows and became invisible drift.
     """
-    paths = list_version_directory(client, db_version)
+    from release_safety.delete_stale_version_dirs import _enumerate_dir_objects
+    from release_safety.quarantine import (
+        DEFAULT_REMOVE_BATCH_SIZE,
+        _remove_storage_object,
+        remove_storage_batch,
+    )
+    from release_safety.transient import retry_transient
+
     prefix = f"v{db_version}"
+    try:
+        entries = _enumerate_dir_objects(client, BUCKET, prefix)
+    except Exception as exc:  # noqa: BLE001 — cannot see, cannot act.
+        print(
+            f"  [ERROR] Could not fully enumerate {prefix}/ "
+            f"({type(exc).__name__}: {exc}) — nothing deleted, manifest row "
+            "kept."
+        )
+        return 0, 0, False
 
+    paths = sorted(path for path, _size in entries)
     if not paths:
-        print(f"  No objects found under {prefix}/ — skipping.")
-        return 0, 0
-
-    deleted = 0
-    failed = 0
-    for path in paths:
-        if dry_run:
-            print(f"  [DRY-RUN] Would delete: {path}")
-        else:
-            ok, err = delete_storage_path(client, path)
-            if ok:
-                print(f"  Deleted: {path}")
-                deleted += 1
-            else:
-                print(f"  [ERROR] Failed to delete {path}: {err}")
-                failed += 1
+        print(f"  No objects found under {prefix}/ — already empty.")
+        return 0, 0, True
 
     if dry_run:
-        deleted = len(paths)  # report as "would delete" count
+        for path in paths:
+            print(f"  [DRY-RUN] Would delete: {path}")
+        return len(paths), 0, False
 
-    return deleted, failed
+    failed = 0
+    for start_idx in range(0, len(paths), DEFAULT_REMOVE_BATCH_SIZE):
+        batch = paths[start_idx:start_idx + DEFAULT_REMOVE_BATCH_SIZE]
+        try:
+            retry_transient(
+                lambda batch=batch: remove_storage_batch(client, BUCKET, batch),
+                max_attempts=4,
+            )
+        except Exception:  # noqa: BLE001 — isolate the poison pill.
+            for path in batch:
+                ok, err = _remove_storage_object(client, BUCKET, path)
+                if not ok:
+                    print(f"  [ERROR] Failed to delete {path}: {err}")
+                    failed += 1
 
+    # Absence proof: the listing is the authority, not remove()'s response.
+    try:
+        residue = _enumerate_dir_objects(client, BUCKET, prefix)
+    except Exception as exc:  # noqa: BLE001
+        print(
+            f"  [ERROR] Could not verify {prefix}/ is empty "
+            f"({type(exc).__name__}: {exc}) — manifest row kept."
+        )
+        return len(paths) - failed, failed, False
 
-# ---------------------------------------------------------------------------
-# Database cleanup helpers
-# ---------------------------------------------------------------------------
+    if residue:
+        print(
+            f"  [ERROR] {len(residue)} object(s) still present under "
+            f"{prefix}/ after deletion — manifest row kept; next run resumes."
+        )
+        return len(paths) - len(residue), len(residue), False
+
+    print(f"  Deleted {len(paths)} object(s); {prefix}/ verified empty.")
+    return len(paths), failed, True
+
 
 def delete_manifest_row(client, db_version, dry_run):
     """Delete the export_manifest row for a given db_version.
@@ -744,6 +783,13 @@ def parse_args(argv=None):
         dest="cleanup_orphan_blobs",
         help=argparse.SUPPRESS,
     )
+    parser.add_argument(
+        "--lock-path",
+        type=str,
+        default=None,
+        dest="lock_path",
+        help="Release-lock file path (default: the pipeline's .release.lock).",
+    )
     return parser.parse_args(argv)
 
 
@@ -763,6 +809,7 @@ def main(argv=None):
         from release_safety.lock import acquire_release_lock
 
         with acquire_release_lock(
+            Path(args.lock_path) if args.lock_path else None,
             initial_step="cleanup_old_versions --execute",
         ):
             return _run_main(args)
@@ -834,57 +881,110 @@ def _run_main(args):
         db_version = row["db_version"]
         print(f"--- Cleaning up v{db_version} ---")
 
-        deleted, failed = delete_version_directory(client, db_version, dry_run)
+        deleted, failed, verified_empty = delete_version_directory(
+            client, db_version, dry_run,
+        )
         total_deleted += deleted
         total_failed += failed
 
         if args.cleanup_db:
-            ok, _ = delete_manifest_row(client, db_version, dry_run)
-            if ok:
-                total_db_deleted += 1
+            if dry_run:
+                ok, _ = delete_manifest_row(client, db_version, dry_run)
+                total_db_deleted += 1 if ok else 0
+            elif verified_empty:
+                # The row may die ONLY once storage is proven empty; a
+                # surviving row is what lets the next run resume a partial
+                # deletion instead of stranding the directory forever.
+                ok, _ = delete_manifest_row(client, db_version, dry_run)
+                if ok:
+                    total_db_deleted += 1
+                else:
+                    total_db_failed += 1
             else:
+                print(
+                    f"  Manifest row for {db_version} KEPT — storage "
+                    "deletion incomplete; re-run to resume."
+                )
                 total_db_failed += 1
 
         print()
 
     # -----------------------------------------------------------------
-    # Quarantine sweep — hard-delete expired quarantine entries.
-    # Runs after orphan quarantine so newly quarantined blobs are NOT
-    # eligible (they were just created today, TTL is 30 days).
-    # Non-blocking: failures here are housekeeping, not data-integrity.
+    # Storage-driven reconciliation — REPORT ONLY. Version cleanup iterates
+    # manifest rows, so a directory whose row is already gone would be
+    # permanently invisible here. Surface those from storage truth and point
+    # at the gated stale-dir tool; never auto-delete them.
     # -----------------------------------------------------------------
-    sweep_deleted = 0
-    sweep_failed = 0
-    if not dry_run:
-        print("\nSweeping expired quarantine entries (TTL=30d)...")
-        try:
-            sweep_result = sweep_quarantine(
-                client, ttl_days=30, dry_run=False,
+    try:
+        from release_safety.delete_stale_version_dirs import (
+            inventory_version_dirs,
+        )
+
+        drift = inventory_version_dirs(client)
+        stale = drift.stale_dirs
+        if stale:
+            print(
+                f"\n  [DRIFT] {len(stale)} version director(ies) exist in "
+                "storage with NO manifest row (invisible to this cleanup):"
             )
-            sweep_deleted = sweep_result.total_deleted
-            sweep_failed = sweep_result.total_failed
-            if not sweep_result.complete:
-                # Do not report "nothing expired" when we simply could not
-                # see it. Both live quarantine date roots 544 on a flat
-                # listing; a shard we failed to read is unswept work.
+            for entry in stale:
                 print(
-                    f"  [WARN] Quarantine sweep saw only part of the "
-                    f"quarantine — {len(sweep_result.listing_failures)} "
-                    f"shard listing(s) failed. Swept {sweep_deleted}; "
-                    "the rest remain for the next run."
+                    f"    v{entry.version}: {entry.object_count} object(s), "
+                    f"{entry.total_bytes:,} bytes"
+                    + ("" if entry.complete else "  [UNLISTABLE]")
                 )
-            elif sweep_result.total_eligible == 0:
+            print(
+                "  Review and clean them via the gated tool: "
+                "release_safety.delete_stale_version_dirs "
+                "(dry plan -> --expected-count approval)."
+            )
+    except Exception as exc:  # noqa: BLE001 — report-only.
+        print(
+            f"\n  [WARN] storage-drift reconciliation failed "
+            f"({type(exc).__name__}: {exc})."
+        )
+
+    # -----------------------------------------------------------------
+    # Quarantine sweep — REPORT ONLY. Hard-deleting expired quarantine is
+    # irreversible and must never ride along with catalog publishing: every
+    # real release runs this path, so an automatic sweep here would fire the
+    # first eligible hard-delete unattended, mid-release. The delete lives
+    # exclusively in the gated maintenance command
+    # (scripts/sweep_quarantine.py: dry-run -> durable approval JSON ->
+    # approved execute under the release lock).
+    # -----------------------------------------------------------------
+    if not dry_run:
+        print("\nChecking for sweep-eligible quarantine (TTL=30d, report only)...")
+        try:
+            sweep_report = sweep_quarantine(
+                client, ttl_days=30, dry_run=True,
+            )
+            if sweep_report.total_eligible == 0 and sweep_report.complete:
                 print("  No expired quarantine entries found.")
             else:
                 print(
-                    f"  Swept {sweep_deleted} expired blobs across "
-                    f"{len(sweep_result.eligible_dates)} date(s)."
+                    f"  Quarantine sweep: DEFERRED — "
+                    f"{sweep_report.total_eligible} expired object(s) across "
+                    f"{len(sweep_report.eligible_dates)} date(s) "
+                    f"({', '.join(sweep_report.eligible_dates)}) are eligible "
+                    "for hard-delete."
                 )
-                if sweep_failed:
-                    print(f"  Sweep failures: {sweep_failed} (non-blocking)")
-        except Exception as exc:
-            print(f"  Quarantine sweep error: {type(exc).__name__}: {exc}")
-            print("  Non-blocking — quarantine will be swept on next run.")
+                if not sweep_report.complete:
+                    print(
+                        f"  [WARN] eligibility scan was partial "
+                        f"({len(sweep_report.listing_failures)} listing "
+                        "failure(s)) — counts above are a lower bound."
+                    )
+                print(
+                    "  Run the gated maintenance command when ready:\n"
+                    "    scripts/sweep_quarantine.py            # dry run -> approval JSON\n"
+                    "    scripts/sweep_quarantine.py --execute  # with the approved artifact"
+                )
+        except Exception as exc:  # noqa: BLE001 — report-only, never blocking.
+            print(
+                f"  Quarantine eligibility check failed "
+                f"({type(exc).__name__}: {exc}) — sweep remains deferred."
+            )
 
     # Summary
     print("=" * 60)
@@ -898,10 +998,6 @@ def _run_main(args):
         print(f"  Manifest rows {action.lower()}:   {total_db_deleted}")
         if total_db_failed:
             print(f"  Manifest row failures:          {total_db_failed}")
-    if not dry_run and (sweep_deleted or sweep_failed):
-        print(f"  Quarantine swept (hard-delete): {sweep_deleted}")
-        if sweep_failed:
-            print(f"  Quarantine sweep failures:      {sweep_failed}")
     print()
     if dry_run:
         print("Dry-run complete. Re-run with --execute to apply deletions.")

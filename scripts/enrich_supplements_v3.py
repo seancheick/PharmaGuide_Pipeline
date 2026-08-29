@@ -13990,7 +13990,11 @@ class SupplementEnricherV3:
                 # Union sources
                 existing_sources = set(existing.get("sources", []))
                 existing_sources.add("cleaning")
-                existing["sources"] = list(existing_sources)
+                # sorted(), not list(): set-iteration order follows
+                # PYTHONHASHSEED, and this ordering reaches the
+                # content-addressed detail blob — measured 2026-08-29, it
+                # alone re-hashed ~1,060 of 1,192 changed blobs per release.
+                existing["sources"] = sorted(existing_sources)
                 # Preserve source field provenance.
                 merged_source_paths = set(existing.get("source_fields", []))
                 if existing.get("source_field"):

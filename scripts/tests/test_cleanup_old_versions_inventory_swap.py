@@ -126,9 +126,16 @@ def test_execute_main_holds_global_lock_during_version_mutations(
 
     def observing_delete(_client, _version, _dry_run):
         lock_seen.append(lock_path.exists())
-        return 1, 0
+        return 1, 0, True
 
     monkeypatch.setattr(cov, "delete_version_directory", observing_delete)
+    from release_safety import delete_stale_version_dirs as dsvd
+
+    monkeypatch.setattr(
+        dsvd, "inventory_version_dirs",
+        lambda *_a, **_k: SimpleNamespace(stale_dirs=(), complete=True),
+        raising=False,
+    )
     monkeypatch.setattr(cov, "sweep_quarantine", lambda *_a, **_k: SimpleNamespace(
         total_deleted=0,
         total_failed=0,

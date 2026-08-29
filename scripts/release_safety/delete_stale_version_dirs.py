@@ -251,23 +251,10 @@ def execute_delete_plan(
         total_bytes=plan.total_bytes,
     )
 
-    # Guard 3: re-fetch manifest, defensive against race
-    current_manifest = _fetch_manifest_versions(client, manifest_table)
-    racing = sorted(
-        c.db_version for c in plan.candidates if c.db_version in current_manifest
-    )
-    if racing:
-        log.event(
-            "delete_aborted_manifest_race",
-            racing_versions=racing,
-        )
-        raise ManifestRaceConditionError(
-            f"Race condition: {len(racing)} candidate version(s) appeared "
-            f"in {manifest_table} between plan and execute: {racing}. "
-            "A concurrent release happened. Re-run dry-run."
-        )
-
-    # Guard 4: acquire pipeline release lock
+    # Guard 4: acquire pipeline release lock. Guard 3 (the manifest race
+    # recheck) runs INSIDE it — a recheck done before the lock leaves a
+    # window in which a concurrent release can re-register a candidate
+    # between the check and the grab.
     deleted_versions: List[str] = []
     deleted_objects = 0
     deleted_bytes = 0
@@ -285,10 +272,29 @@ def execute_delete_plan(
     try:
         log.event("lock_acquired", pid=lock.pid)
 
+        # Guard 3 (FINAL, under the lock): no candidate may have re-entered
+        # the manifest. Nothing has been deleted yet, so this aborts clean.
+        current_manifest = _fetch_manifest_versions(client, manifest_table)
+        racing = sorted(
+            c.db_version for c in plan.candidates
+            if c.db_version in current_manifest
+        )
+        if racing:
+            log.event(
+                "delete_aborted_manifest_race",
+                racing_versions=racing,
+            )
+            raise ManifestRaceConditionError(
+                f"Race condition: {len(racing)} candidate version(s) appeared "
+                f"in {manifest_table} between plan and execute: {racing}. "
+                "A concurrent release happened. Re-run dry-run."
+            )
+
         for c in plan.candidates:
             v_deleted = 0
             v_failed = 0
             v_deleted_bytes = 0
+            v_failed_paths = set()
             for path, size in c.objects:
                 ok, err = _remove_object(client, bucket, path)
                 if ok:
@@ -296,6 +302,7 @@ def execute_delete_plan(
                     v_deleted_bytes += size
                 else:
                     v_failed += 1
+                    v_failed_paths.add(path)
                     failed_objects.append((path, err or "unknown"))
 
             log.event(
@@ -308,7 +315,27 @@ def execute_delete_plan(
                 planned_bytes=c.total_bytes,
             )
 
-            if v_failed == 0:
+            # Absence proof: remove()'s response is a claim, the listing is
+            # the authority. Residue keeps the version out of
+            # deleted_versions so the operator sees unfinished work.
+            try:
+                residue = _enumerate_dir_objects(client, bucket, c.dir_path)
+            except Exception as exc:  # noqa: BLE001 — unknown ≠ deleted.
+                v_failed += 1
+                failed_objects.append((
+                    c.dir_path,
+                    f"absence proof failed: {type(exc).__name__}: {exc}",
+                ))
+                residue = None
+            if residue:
+                for path, _size in residue:
+                    if path in v_failed_paths:
+                        continue  # already reported by its delete failure
+                    v_failed += 1
+                    failed_objects.append((
+                        path, "residual: still listed after deletion",
+                    ))
+            if v_failed == 0 and residue is not None:
                 deleted_versions.append(c.db_version)
             deleted_objects += v_deleted
             deleted_bytes += v_deleted_bytes

@@ -242,3 +242,128 @@ def test_version_dir_inventory_text_report_shows_exact_expectations():
     assert stale in text
     assert "2" in text  # exact object expectation
     assert "COMPLETE" in text.upper() or "complete" in text
+
+
+# ---------------------------------------------------------------------------
+# Execute hardening: recheck under the lock; absence is the authority
+# ---------------------------------------------------------------------------
+
+
+class _ManifestRaceTable:
+    """export_manifest double whose rows can change when observed."""
+
+    def __init__(self, rows_fn):
+        self._rows_fn = rows_fn
+
+    def select(self, *_a, **_k):
+        return self
+
+    def execute(self):
+        return type("_R", (), {"data": [dict(r) for r in self._rows_fn()]})()
+
+
+def test_manifest_recheck_happens_under_the_release_lock(tmp_path):
+    """A release that lands between the pre-lock recheck and the lock grab
+    must still abort the deletion — the FINAL recheck belongs inside the
+    lock, where no new release can slip past it."""
+    from release_safety.delete_stale_version_dirs import (
+        ManifestRaceConditionError,
+        compute_delete_plan,
+        execute_delete_plan,
+    )
+
+    stale = "2026.08.24.165613"
+    bucket = _Bucket(_dir_objects(stale, 2))
+
+    def _real_remove(paths):
+        for path in paths:
+            bucket.objects.pop(path, None)
+        return [{"name": path} for path in paths]
+
+    bucket.remove = _real_remove
+    client = _Client(bucket)
+    lock_path = tmp_path / "release.lock"
+
+    def rows():
+        # The version appears in the manifest only once the lock exists —
+        # i.e. AFTER any pre-lock recheck already passed.
+        if lock_path.exists():
+            return [{"db_version": stale}]
+        return []
+
+    client.table = lambda name: _ManifestRaceTable(rows)
+
+    plan = compute_delete_plan(client)
+    assert plan.total_objects == 2
+    before = dict(bucket.objects)
+
+    with pytest.raises(ManifestRaceConditionError):
+        execute_delete_plan(
+            client, plan,
+            expected_count=plan.total_objects,
+            expected_bytes=plan.total_bytes,
+            lock_path=lock_path,
+        )
+
+    assert bucket.objects == before, "a raced version must lose nothing"
+
+
+def test_execute_counts_only_absence_proven_deletions(tmp_path):
+    """remove() claiming success while the object survives must surface as a
+    failure — the re-listing is the authority, and the version must not be
+    reported fully deleted."""
+    from release_safety.delete_stale_version_dirs import (
+        compute_delete_plan,
+        execute_delete_plan,
+    )
+
+    stale = "2026.08.24.165613"
+    objects = _dir_objects(stale, 2)
+    bucket = _Bucket(objects)
+    # The read-only fixture has no remove(); give it a real one so the lying
+    # wrapper below is the ONLY source of failure.
+    def _real_remove(paths):
+        for path in paths:
+            bucket.objects.pop(path, None)
+        return [{"name": path} for path in paths]
+
+    bucket.remove = _real_remove
+    survivor = sorted(objects)[0]
+    real_list = bucket.list
+
+    class _LyingBucket:
+        def __getattr__(self, name):
+            return getattr(bucket, name)
+
+        def list(self, path="", options=None):
+            return real_list(path=path, options=options)
+
+        def remove(self, paths):
+            kept = {}
+            for p in paths:
+                if p == survivor:
+                    kept[p] = bucket.objects.get(p)
+            result = bucket.remove(paths)
+            for p, data in kept.items():
+                if data is not None:
+                    bucket.objects[p] = data  # storage silently kept it
+            return result
+
+    lying = _LyingBucket()
+    client = _Client(bucket)
+    client.from_ = lambda _name: lying
+    client.table = lambda name: _ManifestRaceTable(lambda: [])
+
+    plan = compute_delete_plan(client)
+    result = execute_delete_plan(
+        client, plan,
+        expected_count=plan.total_objects,
+        expected_bytes=plan.total_bytes,
+        lock_path=tmp_path / "release.lock",
+    )
+
+    assert stale not in result.deleted_versions, (
+        "a version with residue must not be reported deleted"
+    )
+    assert result.failed_objects, "the residual object must surface as failed"
+    assert any(survivor in path for path, _err in result.failed_objects)
