@@ -97,8 +97,51 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _path_fingerprint(paths) -> str:
-    return hashlib.sha256("\n".join(sorted(paths)).encode("ascii")).hexdigest()
+QPATH_RE = __import__("re").compile(
+    r"^shared/quarantine/(\d{4}-\d{2}-\d{2})/([0-9a-f]{2})/([0-9a-f]{64})\.json$"
+)
+PRODUCTION_MIN_TTL_DAYS = 30
+
+
+def _records_fingerprint(records) -> str:
+    """Deterministic digest binding every object's exact path, size AND eTag.
+
+    A fingerprint over paths alone would approve an object that was later
+    OVERWRITTEN at the same path — same name, different bytes. Binding
+    size+eTag makes any such substitution refuse the run.
+    """
+    lines = "\n".join(
+        f"{r['path']}\t{r['size']}\t{r['etag']}"
+        for r in sorted(records, key=lambda r: r["path"])
+    )
+    return hashlib.sha256(lines.encode("utf-8")).hexdigest()
+
+
+def _validate_record(record, date_str):
+    """Return an error string, or None. Enforces the exact path grammar and
+    shard/hash agreement so an edited artifact cannot point outside the
+    approved quarantine tree."""
+    if (
+        not isinstance(record, dict)
+        or not isinstance(record.get("path"), str)
+        or not isinstance(record.get("size"), int)
+        or record["size"] < 0
+        or not isinstance(record.get("etag"), str)
+        or not record["etag"]
+    ):
+        return f"malformed object record: {record!r}"
+    match = QPATH_RE.match(record["path"])
+    if not match:
+        return f"path violates the quarantine grammar: {record['path']!r}"
+    path_date, shard, blob_hash = match.groups()
+    if path_date != date_str:
+        return f"path {record['path']!r} is outside approved date {date_str}"
+    if blob_hash[:2] != shard:
+        return (
+            f"shard/hash mismatch: {record['path']!r} claims shard {shard} "
+            f"but the hash derives {blob_hash[:2]}"
+        )
+    return None
 
 
 def _inventory_date(client, date_str: str, *, max_workers=None):
@@ -133,6 +176,7 @@ def _dry_run(client, args, today: _date) -> int:
 
     per_date = {}
     all_paths = {}
+    all_records = []
     for date_str in sorted(dates):
         inv = _inventory_date(client, date_str, max_workers=args.max_workers)
         if not inv.complete:
@@ -144,16 +188,29 @@ def _dry_run(client, args, today: _date) -> int:
             )
             return EXIT_ERROR
         paths = _paths_of(inv, date_str)
+        unproven = sorted(p for p, (_s, e) in paths.items() if not e)
+        if unproven:
+            print(
+                f"[refused] {len(unproven)} object(s) under {date_str} have "
+                f"no eTag in the listing (e.g. {unproven[0]}). An approval "
+                "must bind every object's exact identity."
+            )
+            return EXIT_ERROR
+        records = [
+            {"path": path, "size": size, "etag": etag}
+            for path, (size, etag) in sorted(paths.items())
+        ]
         all_paths.update(paths)
+        all_records.extend(records)
         per_date[date_str] = {
-            "count": len(paths),
+            "count": len(records),
             "bytes": inv.total_bytes,
-            "etag_coverage": sum(1 for _s, e in paths.values() if e),
-            "paths": sorted(paths),
+            "etag_coverage": len(records),
+            "objects": records,
         }
         print(
-            f"  {date_str}: {len(paths):,} object(s), {inv.total_bytes:,} bytes, "
-            f"eTag coverage {per_date[date_str]['etag_coverage']:,}"
+            f"  {date_str}: {len(records):,} object(s), {inv.total_bytes:,} bytes, "
+            f"eTag coverage {len(records):,}"
         )
 
     artifact = {
@@ -161,9 +218,9 @@ def _dry_run(client, args, today: _date) -> int:
         "ttl_days": args.ttl_days,
         "dates": sorted(dates),
         "per_date": per_date,
-        "total_count": len(all_paths),
-        "total_bytes": sum(s for s, _e in all_paths.values()),
-        "path_fingerprint": _path_fingerprint(all_paths),
+        "total_count": len(all_records),
+        "total_bytes": sum(r["size"] for r in all_records),
+        "path_fingerprint": _records_fingerprint(all_records),
     }
     if args.approval_out:
         out = Path(args.approval_out)
@@ -252,37 +309,46 @@ def _execute(client, args, today: _date) -> int:
     if not dates:
         print("\n[refused] approval artifact approves no dates.")
         return EXIT_REFUSED
-    approved_paths = set()
+    if artifact.get("ttl_days") != args.ttl_days:
+        print(
+            f"\n[refused] --ttl-days {args.ttl_days} does not match the "
+            f"artifact's ttl_days {artifact.get('ttl_days')!r} — the TTL the "
+            "approval was reviewed under is part of the approval."
+        )
+        return EXIT_REFUSED
+    approved = {}
+    all_records = []
     for date_str in dates:
         entry = (artifact.get("per_date") or {}).get(date_str) or {}
-        raw_paths = entry.get("paths")
-        if not isinstance(raw_paths, list) or not raw_paths:
+        records = entry.get("objects")
+        if not isinstance(records, list) or not records:
             print(
-                f"\n[refused] approval artifact carries no path list for "
-                f"{date_str} — regenerate the dry run."
+                f"\n[refused] approval artifact carries no object records "
+                f"for {date_str} — regenerate the dry run (older path-only "
+                "artifacts cannot authorize)."
             )
             return EXIT_REFUSED
-        for path in raw_paths:
-            if not (
-                isinstance(path, str)
-                and path.startswith(f"{QUARANTINE_ROOT}/{date_str}/")
-            ):
-                print(
-                    f"\n[refused] approval artifact contains a path outside "
-                    f"the approved quarantine date: {path!r}."
-                )
+        for record in records:
+            error = _validate_record(record, date_str)
+            if error:
+                print(f"\n[refused] {error}")
                 return EXIT_REFUSED
-            approved_paths.add(path)
-    if _path_fingerprint(approved_paths) != artifact["path_fingerprint"]:
+            approved[record["path"]] = (record["size"], record["etag"])
+            all_records.append(record)
+    if _records_fingerprint(all_records) != artifact["path_fingerprint"]:
         print(
             "\n[refused] approval artifact is internally inconsistent: its "
-            "path list does not reproduce its own fingerprint (edited or "
+            "object records do not reproduce its own fingerprint (edited or "
             "corrupted)."
         )
         return EXIT_REFUSED
-    if len(approved_paths) != artifact["total_count"]:
-        print("\n[refused] approval artifact count does not match its paths.")
+    if len(approved) != artifact["total_count"]:
+        print("\n[refused] approval artifact count does not match its records.")
         return EXIT_REFUSED
+    if sum(size for size, _e in approved.values()) != artifact["total_bytes"]:
+        print("\n[refused] approval artifact bytes do not match its records.")
+        return EXIT_REFUSED
+    approved_paths = set(approved)
     not_eligible = [
         d for d in dates
         if not is_eligible_for_hard_delete(d, ttl_days=args.ttl_days, now=today)
@@ -338,6 +404,21 @@ def _execute(client, args, today: _date) -> int:
         # approved path already reached its goal state (absence) and counts
         # as done; an EXTRA path means the candidate set changed after
         # approval, and deleting it would exceed what was reviewed. Refuse.
+        drifted = sorted(
+            path for path, (size, etag) in fresh_paths.items()
+            if path in approved and approved[path] != (size, etag)
+        )
+        if drifted:
+            sample = drifted[0]
+            print(
+                f"\n[refused] content DRIFT since approval: "
+                f"{len(drifted)} object(s) exist at approved paths with a "
+                f"different size/eTag (e.g. {sample}: approved "
+                f"{approved[sample]}, live {fresh_paths[sample]}). An object "
+                "overwritten at the same path is not the object that was "
+                "reviewed. Nothing deleted."
+            )
+            return EXIT_REFUSED
         extra = sorted(set(fresh_paths) - approved_paths)
         if extra:
             print(
@@ -507,6 +588,14 @@ def main(argv=None, *, client=None, today=None) -> int:
         except ValueError as exc:
             print(f"[ERROR] Cannot connect to Supabase: {exc}")
             return EXIT_ERROR
+
+    if args.ttl_days < PRODUCTION_MIN_TTL_DAYS:
+        print(
+            f"\n[refused] --ttl-days {args.ttl_days} is below the "
+            f"{PRODUCTION_MIN_TTL_DAYS}-day production recovery window. "
+            "The floor is not configurable downward."
+        )
+        return EXIT_REFUSED
 
     if args.execute:
         return _execute(client, args, today)
