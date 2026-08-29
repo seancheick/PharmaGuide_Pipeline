@@ -1,0 +1,27 @@
+{
+  "question": "2026-07-17 quarantine held ~31,200 per earlier prose; live count is 18,391. Why?",
+  "evidence": {
+    "original_quarantined_count": {
+      "value": 42418,
+      "source": "reports/release_audit/20260717T203015Z_34816e5edebd.jsonl \u2014 blast-radius gate passed with expected_count=42418 == actual_count (the reviewed July 17 quarantine run)"
+    },
+    "the_31200_figure": "appears in NO artifact (audit logs, reports, code) \u2014 it was unverified prose in a 2026-08-28 session summary and is RETRACTED; the artifact-proven original count is 42,418",
+    "ttl_eligibility": "2026-07-17 + 30d => hard-delete eligible from 2026-08-16",
+    "sweeper_history": [
+      "before 2026-08-26: sweeper listed the date ROOT, which 544s at this scale, and 'except: return []' made every sweep a silent no-op \u2014 releases on 08.19/08.24/08.25 swept nothing",
+      "2026-08-26 fix (1f077866): per-shard 00..ff listing; shards whose listing failed are SKIPPED and reported; deletion iterated the sorted path list",
+      "2026-08-27 19:19Z: release of v2026.08.27.162958 ran cleanup_old_versions --execute (step 8), whose automatic sweep was then live for the first time with 2026-07-17 eligible"
+    ],
+    "live_shard_distribution": {
+      "objects": 18391,
+      "bytes": 2375048433,
+      "empty_shards": 141,
+      "populated_shards": 115,
+      "pattern": "contiguous bands: 00..4c empty (except 0b, 36), 4d..bd populated at mean ~160/shard, be..ff empty",
+      "inference": "contiguous bands match the fixed sweeper's sequential walk with a mid-run window of shard-listing failures (skipped shards survive); July's MOVE engine processed shards in parallel completion order, which cannot produce contiguous bands"
+    },
+    "arithmetic": "42,418 quarantined \u2212 18,391 surviving = 24,027 hard-deleted"
+  },
+  "conclusion": "The 2026-08-27 release's automatic quarantine sweep \u2014 the first release after the sweeper became functional and the July TTL crossed \u2014 hard-deleted 24,027 of the 42,418 July objects. The 18,391 survivors are the shards whose listings failed mid-sweep (plus stragglers), reported at the time as 'swept N; the rest remain for the next run'. The deletion was TTL-contract-compliant but unattended \u2014 the exact hazard the sweep/release decoupling now removes.",
+  "confidence": "high on mechanism (artifact + distribution evidence); the per-run stdout of the 08.27 release was not persisted, so the 24,027 split is arithmetic, not a logged receipt"
+}
