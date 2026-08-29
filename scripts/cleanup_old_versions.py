@@ -744,6 +744,13 @@ def parse_args(argv=None):
         dest="cleanup_orphan_blobs",
         help=argparse.SUPPRESS,
     )
+    parser.add_argument(
+        "--lock-path",
+        type=str,
+        default=None,
+        dest="lock_path",
+        help="Release-lock file path (default: the pipeline's .release.lock).",
+    )
     return parser.parse_args(argv)
 
 
@@ -763,6 +770,7 @@ def main(argv=None):
         from release_safety.lock import acquire_release_lock
 
         with acquire_release_lock(
+            Path(args.lock_path) if args.lock_path else None,
             initial_step="cleanup_old_versions --execute",
         ):
             return _run_main(args)
@@ -848,43 +856,46 @@ def _run_main(args):
         print()
 
     # -----------------------------------------------------------------
-    # Quarantine sweep — hard-delete expired quarantine entries.
-    # Runs after orphan quarantine so newly quarantined blobs are NOT
-    # eligible (they were just created today, TTL is 30 days).
-    # Non-blocking: failures here are housekeeping, not data-integrity.
+    # Quarantine sweep — REPORT ONLY. Hard-deleting expired quarantine is
+    # irreversible and must never ride along with catalog publishing: every
+    # real release runs this path, so an automatic sweep here would fire the
+    # first eligible hard-delete unattended, mid-release. The delete lives
+    # exclusively in the gated maintenance command
+    # (scripts/sweep_quarantine.py: dry-run -> durable approval JSON ->
+    # approved execute under the release lock).
     # -----------------------------------------------------------------
-    sweep_deleted = 0
-    sweep_failed = 0
     if not dry_run:
-        print("\nSweeping expired quarantine entries (TTL=30d)...")
+        print("\nChecking for sweep-eligible quarantine (TTL=30d, report only)...")
         try:
-            sweep_result = sweep_quarantine(
-                client, ttl_days=30, dry_run=False,
+            sweep_report = sweep_quarantine(
+                client, ttl_days=30, dry_run=True,
             )
-            sweep_deleted = sweep_result.total_deleted
-            sweep_failed = sweep_result.total_failed
-            if not sweep_result.complete:
-                # Do not report "nothing expired" when we simply could not
-                # see it. Both live quarantine date roots 544 on a flat
-                # listing; a shard we failed to read is unswept work.
-                print(
-                    f"  [WARN] Quarantine sweep saw only part of the "
-                    f"quarantine — {len(sweep_result.listing_failures)} "
-                    f"shard listing(s) failed. Swept {sweep_deleted}; "
-                    "the rest remain for the next run."
-                )
-            elif sweep_result.total_eligible == 0:
+            if sweep_report.total_eligible == 0 and sweep_report.complete:
                 print("  No expired quarantine entries found.")
             else:
                 print(
-                    f"  Swept {sweep_deleted} expired blobs across "
-                    f"{len(sweep_result.eligible_dates)} date(s)."
+                    f"  Quarantine sweep: DEFERRED — "
+                    f"{sweep_report.total_eligible} expired object(s) across "
+                    f"{len(sweep_report.eligible_dates)} date(s) "
+                    f"({', '.join(sweep_report.eligible_dates)}) are eligible "
+                    "for hard-delete."
                 )
-                if sweep_failed:
-                    print(f"  Sweep failures: {sweep_failed} (non-blocking)")
-        except Exception as exc:
-            print(f"  Quarantine sweep error: {type(exc).__name__}: {exc}")
-            print("  Non-blocking — quarantine will be swept on next run.")
+                if not sweep_report.complete:
+                    print(
+                        f"  [WARN] eligibility scan was partial "
+                        f"({len(sweep_report.listing_failures)} listing "
+                        "failure(s)) — counts above are a lower bound."
+                    )
+                print(
+                    "  Run the gated maintenance command when ready:\n"
+                    "    scripts/sweep_quarantine.py            # dry run -> approval JSON\n"
+                    "    scripts/sweep_quarantine.py --execute  # with the approved artifact"
+                )
+        except Exception as exc:  # noqa: BLE001 — report-only, never blocking.
+            print(
+                f"  Quarantine eligibility check failed "
+                f"({type(exc).__name__}: {exc}) — sweep remains deferred."
+            )
 
     # Summary
     print("=" * 60)
@@ -898,10 +909,6 @@ def _run_main(args):
         print(f"  Manifest rows {action.lower()}:   {total_db_deleted}")
         if total_db_failed:
             print(f"  Manifest row failures:          {total_db_failed}")
-    if not dry_run and (sweep_deleted or sweep_failed):
-        print(f"  Quarantine swept (hard-delete): {sweep_deleted}")
-        if sweep_failed:
-            print(f"  Quarantine sweep failures:      {sweep_failed}")
     print()
     if dry_run:
         print("Dry-run complete. Re-run with --execute to apply deletions.")
