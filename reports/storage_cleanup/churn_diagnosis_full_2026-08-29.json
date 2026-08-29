@@ -1,0 +1,137 @@
+{
+  "old_version": "2026.08.26.141540",
+  "new_version": "2026.08.27.162958",
+  "population": "ALL changed pairs (no sampling)",
+  "changed_pairs": 1192,
+  "sources_order_only": 1044,
+  "other_order_only": 0,
+  "semantic": 148,
+  "errors": 0,
+  "avoidable_new_bytes_exact": 453761407,
+  "semantic_new_bytes": 86402112,
+  "top_semantic_fields": [
+    [
+      "evidence_data.clinical_matches[](len)",
+      109
+    ],
+    [
+      "evidence_data.match_count",
+      109
+    ],
+    [
+      "v4_confidence_detail.evidence_review.not_yet_evaluated_count",
+      73
+    ],
+    [
+      "v4_confidence_detail.evidence_review.readiness",
+      44
+    ],
+    [
+      "v4_confidence_detail.evidence.drivers[]",
+      37
+    ],
+    [
+      "v4_score_explanation.drags[].reason",
+      27
+    ],
+    [
+      "v4_confidence_detail.evidence.level",
+      26
+    ],
+    [
+      "quality_pillars_v4.dose.components.raw_dose",
+      23
+    ],
+    [
+      "quality_pillars_v4.dose.score",
+      23
+    ],
+    [
+      "quality_pillars_v4.dose.reason",
+      22
+    ],
+    [
+      "v4_confidence_detail.evidence.drivers[](len)",
+      18
+    ],
+    [
+      "quality_pillars_v4.formulation.components.raw_formulation",
+      17
+    ],
+    [
+      "quality_pillars_v4.formulation.score",
+      17
+    ],
+    [
+      "quality_pillars_v4.formulation.reason",
+      9
+    ],
+    [
+      "v4_confidence_detail.band",
+      8
+    ],
+    [
+      "v4_confidence_detail.score_uncertainty_pts",
+      8
+    ],
+    [
+      "v4_score_provenance.confidence",
+      8
+    ],
+    [
+      "v4_score_provenance.quality_tier",
+      7
+    ],
+    [
+      "quality_pillars_v4.evidence.components.raw_evidence",
+      7
+    ],
+    [
+      "quality_pillars_v4.evidence.score",
+      7
+    ],
+    [
+      "v4_score_explanation.drags[].pillar",
+      7
+    ],
+    [
+      "v4_score_explanation.strengths[].pillar",
+      6
+    ],
+    [
+      "v4_score_explanation.strengths[].reason",
+      6
+    ],
+    [
+      "quality_pillars_v4.dose.components.archetype",
+      6
+    ],
+    [
+      "quality_pillars_v4.evidence.components.archetype",
+      6
+    ],
+    [
+      "quality_pillars_v4.formulation.components.archetype",
+      6
+    ],
+    [
+      "score_bonuses[](len)",
+      4
+    ],
+    [
+      "audit.gate_audit.verdict",
+      2
+    ],
+    [
+      "quality_pillars_v4.evidence.explanation",
+      2
+    ],
+    [
+      "quality_pillars_v4.evidence.reason",
+      1
+    ]
+  ],
+  "fix": "enrich_supplements_v3._merge_blend_evidence now emits sorted(sources); behavioral hashseed test pins it",
+  "projection_language": "reduction takes effect on the NEXT ordinary catalog rebuild and is PROJECTED until measured there",
+  "classification_notes": "other_order_only sorts EVERY list as a multiset \u2014 an upper bound on order churn that would also mask genuine reorder semantics; sources_order_only is the precise root-cause bucket"
+}

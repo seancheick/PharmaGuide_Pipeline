@@ -1,0 +1,5233 @@
+{
+  "artifact_kind": "stale_version_dirs_approval",
+  "candidates": [
+    {
+      "bytes": 43040741,
+      "db_version": "2026.06.08.231328",
+      "dir_path": "v2026.06.08.231328",
+      "object_count": 2,
+      "objects": [
+        {
+          "path": "v2026.06.08.231328/detail_index.json",
+          "size": 2277349
+        },
+        {
+          "path": "v2026.06.08.231328/pharmaguide_core.db",
+          "size": 40763392
+        }
+      ]
+    },
+    {
+      "bytes": 44875749,
+      "db_version": "2026.06.15.180403",
+      "dir_path": "v2026.06.15.180403",
+      "object_count": 2,
+      "objects": [
+        {
+          "path": "v2026.06.15.180403/detail_index.json",
+          "size": 2277349
+        },
+        {
+          "path": "v2026.06.15.180403/pharmaguide_core.db",
+          "size": 42598400
+        }
+      ]
+    },
+    {
+      "bytes": 44883942,
+      "db_version": "2026.06.16.192123",
+      "dir_path": "v2026.06.16.192123",
+      "object_count": 2,
+      "objects": [
+        {
+          "path": "v2026.06.16.192123/detail_index.json",
+          "size": 2277350
+        },
+        {
+          "path": "v2026.06.16.192123/pharmaguide_core.db",
+          "size": 42606592
+        }
+      ]
+    },
+    {
+      "bytes": 55252126,
+      "db_version": "2026.08.08.120622",
+      "dir_path": "v2026.08.08.120622",
+      "object_count": 2,
+      "objects": [
+        {
+          "path": "v2026.08.08.120622/detail_index.json",
+          "size": 3261598
+        },
+        {
+          "path": "v2026.08.08.120622/pharmaguide_core.db",
+          "size": 51990528
+        }
+      ]
+    },
+    {
+      "bytes": 2994664,
+      "db_version": "2026.08.13.204005",
+      "dir_path": "v2026.08.13.204005",
+      "object_count": 256,
+      "objects": [
+        {
+          "path": "v2026.08.13.204005/share_index/00.json",
+          "size": 13092
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/01.json",
+          "size": 10673
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/02.json",
+          "size": 10520
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/03.json",
+          "size": 13076
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/04.json",
+          "size": 11711
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/05.json",
+          "size": 12666
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/06.json",
+          "size": 14215
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/07.json",
+          "size": 14152
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/08.json",
+          "size": 11314
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/09.json",
+          "size": 10691
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/0a.json",
+          "size": 10973
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/0b.json",
+          "size": 9427
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/0c.json",
+          "size": 9831
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/0d.json",
+          "size": 10645
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/0e.json",
+          "size": 13812
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/0f.json",
+          "size": 9953
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/10.json",
+          "size": 11375
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/11.json",
+          "size": 13087
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/12.json",
+          "size": 12090
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/13.json",
+          "size": 10876
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/14.json",
+          "size": 10576
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/15.json",
+          "size": 13700
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/16.json",
+          "size": 12202
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/17.json",
+          "size": 13006
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/18.json",
+          "size": 11243
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/19.json",
+          "size": 11131
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/1a.json",
+          "size": 12486
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/1b.json",
+          "size": 13977
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/1c.json",
+          "size": 10230
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/1d.json",
+          "size": 12647
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/1e.json",
+          "size": 12850
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/1f.json",
+          "size": 11743
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/20.json",
+          "size": 12752
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/21.json",
+          "size": 10127
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/22.json",
+          "size": 11376
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/23.json",
+          "size": 10983
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/24.json",
+          "size": 11927
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/25.json",
+          "size": 16738
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/26.json",
+          "size": 13373
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/27.json",
+          "size": 10663
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/28.json",
+          "size": 10691
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/29.json",
+          "size": 10381
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/2a.json",
+          "size": 10860
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/2b.json",
+          "size": 16083
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/2c.json",
+          "size": 8544
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/2d.json",
+          "size": 10648
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/2e.json",
+          "size": 13055
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/2f.json",
+          "size": 12593
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/30.json",
+          "size": 10660
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/31.json",
+          "size": 12427
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/32.json",
+          "size": 7617
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/33.json",
+          "size": 13631
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/34.json",
+          "size": 10873
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/35.json",
+          "size": 10584
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/36.json",
+          "size": 12626
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/37.json",
+          "size": 12968
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/38.json",
+          "size": 13775
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/39.json",
+          "size": 10606
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/3a.json",
+          "size": 12684
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/3b.json",
+          "size": 13789
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/3c.json",
+          "size": 12496
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/3d.json",
+          "size": 12109
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/3e.json",
+          "size": 9439
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/3f.json",
+          "size": 13451
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/40.json",
+          "size": 11729
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/41.json",
+          "size": 11915
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/42.json",
+          "size": 13054
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/43.json",
+          "size": 11616
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/44.json",
+          "size": 11178
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/45.json",
+          "size": 12091
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/46.json",
+          "size": 9963
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/47.json",
+          "size": 12468
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/48.json",
+          "size": 11187
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/49.json",
+          "size": 10370
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/4a.json",
+          "size": 12763
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/4b.json",
+          "size": 11864
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/4c.json",
+          "size": 13537
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/4d.json",
+          "size": 12716
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/4e.json",
+          "size": 14569
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/4f.json",
+          "size": 9119
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/50.json",
+          "size": 12187
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/51.json",
+          "size": 14850
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/52.json",
+          "size": 12080
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/53.json",
+          "size": 12094
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/54.json",
+          "size": 13468
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/55.json",
+          "size": 12729
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/56.json",
+          "size": 11083
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/57.json",
+          "size": 11375
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/58.json",
+          "size": 12363
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/59.json",
+          "size": 12839
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/5a.json",
+          "size": 13281
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/5b.json",
+          "size": 14087
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/5c.json",
+          "size": 11222
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/5d.json",
+          "size": 11178
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/5e.json",
+          "size": 10254
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/5f.json",
+          "size": 13951
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/60.json",
+          "size": 12345
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/61.json",
+          "size": 14174
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/62.json",
+          "size": 11487
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/63.json",
+          "size": 12188
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/64.json",
+          "size": 11284
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/65.json",
+          "size": 10766
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/66.json",
+          "size": 10281
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/67.json",
+          "size": 9750
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/68.json",
+          "size": 8985
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/69.json",
+          "size": 11418
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/6a.json",
+          "size": 14367
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/6b.json",
+          "size": 14135
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/6c.json",
+          "size": 13663
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/6d.json",
+          "size": 9913
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/6e.json",
+          "size": 12604
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/6f.json",
+          "size": 12361
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/70.json",
+          "size": 11712
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/71.json",
+          "size": 10518
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/72.json",
+          "size": 9948
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/73.json",
+          "size": 12053
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/74.json",
+          "size": 10703
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/75.json",
+          "size": 8589
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/76.json",
+          "size": 11307
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/77.json",
+          "size": 12297
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/78.json",
+          "size": 11741
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/79.json",
+          "size": 8283
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/7a.json",
+          "size": 14110
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/7b.json",
+          "size": 7752
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/7c.json",
+          "size": 11870
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/7d.json",
+          "size": 10469
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/7e.json",
+          "size": 14322
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/7f.json",
+          "size": 10511
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/80.json",
+          "size": 12941
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/81.json",
+          "size": 12957
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/82.json",
+          "size": 13379
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/83.json",
+          "size": 8557
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/84.json",
+          "size": 10620
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/85.json",
+          "size": 9711
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/86.json",
+          "size": 12253
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/87.json",
+          "size": 13286
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/88.json",
+          "size": 10922
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/89.json",
+          "size": 12297
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/8a.json",
+          "size": 8414
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/8b.json",
+          "size": 10272
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/8c.json",
+          "size": 13408
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/8d.json",
+          "size": 13053
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/8e.json",
+          "size": 11052
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/8f.json",
+          "size": 13850
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/90.json",
+          "size": 11743
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/91.json",
+          "size": 12437
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/92.json",
+          "size": 12148
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/93.json",
+          "size": 12222
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/94.json",
+          "size": 12440
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/95.json",
+          "size": 11916
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/96.json",
+          "size": 13587
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/97.json",
+          "size": 11812
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/98.json",
+          "size": 10328
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/99.json",
+          "size": 11927
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/9a.json",
+          "size": 10174
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/9b.json",
+          "size": 10590
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/9c.json",
+          "size": 14197
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/9d.json",
+          "size": 11995
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/9e.json",
+          "size": 7651
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/9f.json",
+          "size": 9926
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/a0.json",
+          "size": 10593
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/a1.json",
+          "size": 10454
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/a2.json",
+          "size": 13280
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/a3.json",
+          "size": 12734
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/a4.json",
+          "size": 12197
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/a5.json",
+          "size": 12965
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/a6.json",
+          "size": 10576
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/a7.json",
+          "size": 12594
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/a8.json",
+          "size": 13140
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/a9.json",
+          "size": 8772
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/aa.json",
+          "size": 9657
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ab.json",
+          "size": 11946
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ac.json",
+          "size": 10651
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ad.json",
+          "size": 11534
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ae.json",
+          "size": 9814
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/af.json",
+          "size": 10577
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/b0.json",
+          "size": 12119
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/b1.json",
+          "size": 9575
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/b2.json",
+          "size": 13095
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/b3.json",
+          "size": 9964
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/b4.json",
+          "size": 11231
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/b5.json",
+          "size": 10513
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/b6.json",
+          "size": 12789
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/b7.json",
+          "size": 10006
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/b8.json",
+          "size": 9692
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/b9.json",
+          "size": 11846
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ba.json",
+          "size": 12963
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/bb.json",
+          "size": 10599
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/bc.json",
+          "size": 11763
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/bd.json",
+          "size": 15100
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/be.json",
+          "size": 12689
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/bf.json",
+          "size": 12498
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/c0.json",
+          "size": 10465
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/c1.json",
+          "size": 8278
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/c2.json",
+          "size": 10610
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/c3.json",
+          "size": 12061
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/c4.json",
+          "size": 12021
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/c5.json",
+          "size": 11761
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/c6.json",
+          "size": 12958
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/c7.json",
+          "size": 12320
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/c8.json",
+          "size": 11084
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/c9.json",
+          "size": 9843
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ca.json",
+          "size": 10559
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/cb.json",
+          "size": 12202
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/cc.json",
+          "size": 10961
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/cd.json",
+          "size": 13488
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ce.json",
+          "size": 12928
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/cf.json",
+          "size": 14411
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/d0.json",
+          "size": 12413
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/d1.json",
+          "size": 13040
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/d2.json",
+          "size": 11593
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/d3.json",
+          "size": 12170
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/d4.json",
+          "size": 10727
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/d5.json",
+          "size": 13725
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/d6.json",
+          "size": 11917
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/d7.json",
+          "size": 11707
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/d8.json",
+          "size": 12003
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/d9.json",
+          "size": 12817
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/da.json",
+          "size": 10620
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/db.json",
+          "size": 9012
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/dc.json",
+          "size": 12198
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/dd.json",
+          "size": 8326
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/de.json",
+          "size": 13370
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/df.json",
+          "size": 11634
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/e0.json",
+          "size": 12741
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/e1.json",
+          "size": 13460
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/e2.json",
+          "size": 9737
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/e3.json",
+          "size": 12891
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/e4.json",
+          "size": 12052
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/e5.json",
+          "size": 10369
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/e6.json",
+          "size": 10374
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/e7.json",
+          "size": 12051
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/e8.json",
+          "size": 11310
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/e9.json",
+          "size": 11665
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ea.json",
+          "size": 10870
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/eb.json",
+          "size": 10736
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ec.json",
+          "size": 10549
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ed.json",
+          "size": 12398
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ee.json",
+          "size": 10654
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ef.json",
+          "size": 14970
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/f0.json",
+          "size": 13191
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/f1.json",
+          "size": 13509
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/f2.json",
+          "size": 11371
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/f3.json",
+          "size": 11080
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/f4.json",
+          "size": 9919
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/f5.json",
+          "size": 9802
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/f6.json",
+          "size": 12562
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/f7.json",
+          "size": 10929
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/f8.json",
+          "size": 10125
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/f9.json",
+          "size": 9662
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/fa.json",
+          "size": 11601
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/fb.json",
+          "size": 11477
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/fc.json",
+          "size": 9483
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/fd.json",
+          "size": 11881
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/fe.json",
+          "size": 11674
+        },
+        {
+          "path": "v2026.08.13.204005/share_index/ff.json",
+          "size": 10773
+        }
+      ]
+    },
+    {
+      "bytes": 2994608,
+      "db_version": "2026.08.19.035832",
+      "dir_path": "v2026.08.19.035832",
+      "object_count": 256,
+      "objects": [
+        {
+          "path": "v2026.08.19.035832/share_index/00.json",
+          "size": 13092
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/01.json",
+          "size": 10673
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/02.json",
+          "size": 10520
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/03.json",
+          "size": 13076
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/04.json",
+          "size": 11711
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/05.json",
+          "size": 12666
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/06.json",
+          "size": 14215
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/07.json",
+          "size": 14152
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/08.json",
+          "size": 11314
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/09.json",
+          "size": 10691
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/0a.json",
+          "size": 10967
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/0b.json",
+          "size": 9427
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/0c.json",
+          "size": 9831
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/0d.json",
+          "size": 10645
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/0e.json",
+          "size": 13812
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/0f.json",
+          "size": 9953
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/10.json",
+          "size": 11375
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/11.json",
+          "size": 13087
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/12.json",
+          "size": 12089
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/13.json",
+          "size": 10876
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/14.json",
+          "size": 10576
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/15.json",
+          "size": 13700
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/16.json",
+          "size": 12202
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/17.json",
+          "size": 13006
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/18.json",
+          "size": 11243
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/19.json",
+          "size": 11131
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/1a.json",
+          "size": 12486
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/1b.json",
+          "size": 13977
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/1c.json",
+          "size": 10230
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/1d.json",
+          "size": 12647
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/1e.json",
+          "size": 12850
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/1f.json",
+          "size": 11743
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/20.json",
+          "size": 12752
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/21.json",
+          "size": 10127
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/22.json",
+          "size": 11376
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/23.json",
+          "size": 10983
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/24.json",
+          "size": 11927
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/25.json",
+          "size": 16738
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/26.json",
+          "size": 13373
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/27.json",
+          "size": 10663
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/28.json",
+          "size": 10691
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/29.json",
+          "size": 10381
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/2a.json",
+          "size": 10854
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/2b.json",
+          "size": 16083
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/2c.json",
+          "size": 8544
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/2d.json",
+          "size": 10648
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/2e.json",
+          "size": 13055
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/2f.json",
+          "size": 12593
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/30.json",
+          "size": 10654
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/31.json",
+          "size": 12427
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/32.json",
+          "size": 7617
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/33.json",
+          "size": 13631
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/34.json",
+          "size": 10873
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/35.json",
+          "size": 10584
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/36.json",
+          "size": 12626
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/37.json",
+          "size": 12968
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/38.json",
+          "size": 13775
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/39.json",
+          "size": 10606
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/3a.json",
+          "size": 12684
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/3b.json",
+          "size": 13789
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/3c.json",
+          "size": 12496
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/3d.json",
+          "size": 12109
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/3e.json",
+          "size": 9439
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/3f.json",
+          "size": 13455
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/40.json",
+          "size": 11729
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/41.json",
+          "size": 11915
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/42.json",
+          "size": 13054
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/43.json",
+          "size": 11616
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/44.json",
+          "size": 11178
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/45.json",
+          "size": 12091
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/46.json",
+          "size": 9963
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/47.json",
+          "size": 12468
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/48.json",
+          "size": 11187
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/49.json",
+          "size": 10370
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/4a.json",
+          "size": 12763
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/4b.json",
+          "size": 11858
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/4c.json",
+          "size": 13531
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/4d.json",
+          "size": 12716
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/4e.json",
+          "size": 14569
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/4f.json",
+          "size": 9119
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/50.json",
+          "size": 12187
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/51.json",
+          "size": 14844
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/52.json",
+          "size": 12080
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/53.json",
+          "size": 12094
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/54.json",
+          "size": 13468
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/55.json",
+          "size": 12729
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/56.json",
+          "size": 11083
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/57.json",
+          "size": 11375
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/58.json",
+          "size": 12363
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/59.json",
+          "size": 12839
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/5a.json",
+          "size": 13281
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/5b.json",
+          "size": 13825
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/5c.json",
+          "size": 11222
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/5d.json",
+          "size": 11178
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/5e.json",
+          "size": 10254
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/5f.json",
+          "size": 13951
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/60.json",
+          "size": 12345
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/61.json",
+          "size": 14174
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/62.json",
+          "size": 11487
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/63.json",
+          "size": 12188
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/64.json",
+          "size": 11284
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/65.json",
+          "size": 10766
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/66.json",
+          "size": 10281
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/67.json",
+          "size": 9750
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/68.json",
+          "size": 8985
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/69.json",
+          "size": 11412
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/6a.json",
+          "size": 14367
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/6b.json",
+          "size": 14135
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/6c.json",
+          "size": 13663
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/6d.json",
+          "size": 9913
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/6e.json",
+          "size": 12604
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/6f.json",
+          "size": 12361
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/70.json",
+          "size": 11712
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/71.json",
+          "size": 10518
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/72.json",
+          "size": 9948
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/73.json",
+          "size": 12053
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/74.json",
+          "size": 10703
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/75.json",
+          "size": 8589
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/76.json",
+          "size": 11307
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/77.json",
+          "size": 12297
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/78.json",
+          "size": 11741
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/79.json",
+          "size": 8283
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/7a.json",
+          "size": 14110
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/7b.json",
+          "size": 7752
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/7c.json",
+          "size": 11870
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/7d.json",
+          "size": 10469
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/7e.json",
+          "size": 14322
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/7f.json",
+          "size": 10511
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/80.json",
+          "size": 12941
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/81.json",
+          "size": 12951
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/82.json",
+          "size": 13379
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/83.json",
+          "size": 8557
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/84.json",
+          "size": 10620
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/85.json",
+          "size": 9711
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/86.json",
+          "size": 12253
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/87.json",
+          "size": 13280
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/88.json",
+          "size": 10922
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/89.json",
+          "size": 12297
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/8a.json",
+          "size": 8414
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/8b.json",
+          "size": 10272
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/8c.json",
+          "size": 13408
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/8d.json",
+          "size": 13053
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/8e.json",
+          "size": 10812
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/8f.json",
+          "size": 13850
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/90.json",
+          "size": 11743
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/91.json",
+          "size": 12437
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/92.json",
+          "size": 12148
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/93.json",
+          "size": 12222
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/94.json",
+          "size": 12440
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/95.json",
+          "size": 11916
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/96.json",
+          "size": 13587
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/97.json",
+          "size": 11812
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/98.json",
+          "size": 10328
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/99.json",
+          "size": 11927
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/9a.json",
+          "size": 10174
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/9b.json",
+          "size": 10594
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/9c.json",
+          "size": 14197
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/9d.json",
+          "size": 11995
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/9e.json",
+          "size": 7651
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/9f.json",
+          "size": 9926
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/a0.json",
+          "size": 10593
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/a1.json",
+          "size": 10454
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/a2.json",
+          "size": 13280
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/a3.json",
+          "size": 12734
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/a4.json",
+          "size": 12197
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/a5.json",
+          "size": 12965
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/a6.json",
+          "size": 10576
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/a7.json",
+          "size": 12594
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/a8.json",
+          "size": 13140
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/a9.json",
+          "size": 8772
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/aa.json",
+          "size": 9657
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ab.json",
+          "size": 11946
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ac.json",
+          "size": 10651
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ad.json",
+          "size": 11534
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ae.json",
+          "size": 9814
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/af.json",
+          "size": 10577
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/b0.json",
+          "size": 12119
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/b1.json",
+          "size": 9575
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/b2.json",
+          "size": 13092
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/b3.json",
+          "size": 9964
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/b4.json",
+          "size": 11231
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/b5.json",
+          "size": 10513
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/b6.json",
+          "size": 12789
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/b7.json",
+          "size": 10006
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/b8.json",
+          "size": 9692
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/b9.json",
+          "size": 11846
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ba.json",
+          "size": 12963
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/bb.json",
+          "size": 10599
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/bc.json",
+          "size": 11763
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/bd.json",
+          "size": 15094
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/be.json",
+          "size": 12689
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/bf.json",
+          "size": 12498
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/c0.json",
+          "size": 10465
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/c1.json",
+          "size": 8278
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/c2.json",
+          "size": 10610
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/c3.json",
+          "size": 12061
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/c4.json",
+          "size": 12021
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/c5.json",
+          "size": 11761
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/c6.json",
+          "size": 12958
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/c7.json",
+          "size": 12320
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/c8.json",
+          "size": 11084
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/c9.json",
+          "size": 9843
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ca.json",
+          "size": 10559
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/cb.json",
+          "size": 12202
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/cc.json",
+          "size": 10961
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/cd.json",
+          "size": 13488
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ce.json",
+          "size": 12928
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/cf.json",
+          "size": 14411
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/d0.json",
+          "size": 12413
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/d1.json",
+          "size": 13040
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/d2.json",
+          "size": 11593
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/d3.json",
+          "size": 12170
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/d4.json",
+          "size": 10982
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/d5.json",
+          "size": 13725
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/d6.json",
+          "size": 11917
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/d7.json",
+          "size": 11707
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/d8.json",
+          "size": 12003
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/d9.json",
+          "size": 12817
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/da.json",
+          "size": 10620
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/db.json",
+          "size": 9012
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/dc.json",
+          "size": 12198
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/dd.json",
+          "size": 8326
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/de.json",
+          "size": 13370
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/df.json",
+          "size": 11638
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/e0.json",
+          "size": 12741
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/e1.json",
+          "size": 13460
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/e2.json",
+          "size": 9737
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/e3.json",
+          "size": 12891
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/e4.json",
+          "size": 12313
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/e5.json",
+          "size": 10363
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/e6.json",
+          "size": 10374
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/e7.json",
+          "size": 12051
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/e8.json",
+          "size": 11310
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/e9.json",
+          "size": 11659
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ea.json",
+          "size": 10870
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/eb.json",
+          "size": 10736
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ec.json",
+          "size": 10549
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ed.json",
+          "size": 12398
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ee.json",
+          "size": 10654
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ef.json",
+          "size": 14964
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/f0.json",
+          "size": 13191
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/f1.json",
+          "size": 13509
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/f2.json",
+          "size": 11371
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/f3.json",
+          "size": 11080
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/f4.json",
+          "size": 9919
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/f5.json",
+          "size": 9802
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/f6.json",
+          "size": 12562
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/f7.json",
+          "size": 10929
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/f8.json",
+          "size": 10125
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/f9.json",
+          "size": 9662
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/fa.json",
+          "size": 11601
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/fb.json",
+          "size": 11477
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/fc.json",
+          "size": 9483
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/fd.json",
+          "size": 11881
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/fe.json",
+          "size": 11674
+        },
+        {
+          "path": "v2026.08.19.035832/share_index/ff.json",
+          "size": 10773
+        }
+      ]
+    },
+    {
+      "bytes": 2994688,
+      "db_version": "2026.08.19.201500",
+      "dir_path": "v2026.08.19.201500",
+      "object_count": 256,
+      "objects": [
+        {
+          "path": "v2026.08.19.201500/share_index/00.json",
+          "size": 13092
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/01.json",
+          "size": 10673
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/02.json",
+          "size": 10520
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/03.json",
+          "size": 13076
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/04.json",
+          "size": 11711
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/05.json",
+          "size": 12666
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/06.json",
+          "size": 14215
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/07.json",
+          "size": 14152
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/08.json",
+          "size": 11320
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/09.json",
+          "size": 10691
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/0a.json",
+          "size": 10967
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/0b.json",
+          "size": 9427
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/0c.json",
+          "size": 9831
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/0d.json",
+          "size": 10651
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/0e.json",
+          "size": 13812
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/0f.json",
+          "size": 9953
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/10.json",
+          "size": 11375
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/11.json",
+          "size": 13082
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/12.json",
+          "size": 12095
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/13.json",
+          "size": 10876
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/14.json",
+          "size": 10827
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/15.json",
+          "size": 13700
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/16.json",
+          "size": 12202
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/17.json",
+          "size": 13006
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/18.json",
+          "size": 11243
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/19.json",
+          "size": 11131
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/1a.json",
+          "size": 12486
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/1b.json",
+          "size": 13977
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/1c.json",
+          "size": 10236
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/1d.json",
+          "size": 12647
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/1e.json",
+          "size": 12844
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/1f.json",
+          "size": 11743
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/20.json",
+          "size": 12752
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/21.json",
+          "size": 10127
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/22.json",
+          "size": 11376
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/23.json",
+          "size": 10983
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/24.json",
+          "size": 11927
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/25.json",
+          "size": 16738
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/26.json",
+          "size": 13373
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/27.json",
+          "size": 10663
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/28.json",
+          "size": 10691
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/29.json",
+          "size": 10381
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/2a.json",
+          "size": 10854
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/2b.json",
+          "size": 16083
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/2c.json",
+          "size": 8544
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/2d.json",
+          "size": 10648
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/2e.json",
+          "size": 13061
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/2f.json",
+          "size": 12593
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/30.json",
+          "size": 10654
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/31.json",
+          "size": 12427
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/32.json",
+          "size": 7617
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/33.json",
+          "size": 13631
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/34.json",
+          "size": 10873
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/35.json",
+          "size": 10771
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/36.json",
+          "size": 12626
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/37.json",
+          "size": 12968
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/38.json",
+          "size": 13775
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/39.json",
+          "size": 10606
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/3a.json",
+          "size": 12680
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/3b.json",
+          "size": 13795
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/3c.json",
+          "size": 12502
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/3d.json",
+          "size": 12109
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/3e.json",
+          "size": 9439
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/3f.json",
+          "size": 13455
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/40.json",
+          "size": 11729
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/41.json",
+          "size": 11915
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/42.json",
+          "size": 13054
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/43.json",
+          "size": 11616
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/44.json",
+          "size": 11178
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/45.json",
+          "size": 12091
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/46.json",
+          "size": 9963
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/47.json",
+          "size": 12468
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/48.json",
+          "size": 11187
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/49.json",
+          "size": 10370
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/4a.json",
+          "size": 12763
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/4b.json",
+          "size": 12074
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/4c.json",
+          "size": 13531
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/4d.json",
+          "size": 12712
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/4e.json",
+          "size": 14569
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/4f.json",
+          "size": 9119
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/50.json",
+          "size": 12187
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/51.json",
+          "size": 14844
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/52.json",
+          "size": 12080
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/53.json",
+          "size": 12094
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/54.json",
+          "size": 13468
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/55.json",
+          "size": 12735
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/56.json",
+          "size": 11083
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/57.json",
+          "size": 11375
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/58.json",
+          "size": 12363
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/59.json",
+          "size": 12839
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/5a.json",
+          "size": 13281
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/5b.json",
+          "size": 13825
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/5c.json",
+          "size": 11222
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/5d.json",
+          "size": 11178
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/5e.json",
+          "size": 10254
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/5f.json",
+          "size": 13951
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/60.json",
+          "size": 12345
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/61.json",
+          "size": 14174
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/62.json",
+          "size": 11487
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/63.json",
+          "size": 12188
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/64.json",
+          "size": 11284
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/65.json",
+          "size": 10766
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/66.json",
+          "size": 10281
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/67.json",
+          "size": 9750
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/68.json",
+          "size": 8979
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/69.json",
+          "size": 11412
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/6a.json",
+          "size": 14367
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/6b.json",
+          "size": 14135
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/6c.json",
+          "size": 13669
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/6d.json",
+          "size": 9913
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/6e.json",
+          "size": 12604
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/6f.json",
+          "size": 12361
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/70.json",
+          "size": 11718
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/71.json",
+          "size": 10518
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/72.json",
+          "size": 9948
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/73.json",
+          "size": 12059
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/74.json",
+          "size": 10703
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/75.json",
+          "size": 8589
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/76.json",
+          "size": 11307
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/77.json",
+          "size": 12303
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/78.json",
+          "size": 11741
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/79.json",
+          "size": 8283
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/7a.json",
+          "size": 14110
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/7b.json",
+          "size": 7752
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/7c.json",
+          "size": 11870
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/7d.json",
+          "size": 10469
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/7e.json",
+          "size": 14322
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/7f.json",
+          "size": 10511
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/80.json",
+          "size": 12941
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/81.json",
+          "size": 12955
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/82.json",
+          "size": 13379
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/83.json",
+          "size": 8557
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/84.json",
+          "size": 10620
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/85.json",
+          "size": 9466
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/86.json",
+          "size": 12253
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/87.json",
+          "size": 13280
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/88.json",
+          "size": 10922
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/89.json",
+          "size": 12297
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/8a.json",
+          "size": 8414
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/8b.json",
+          "size": 10272
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/8c.json",
+          "size": 13408
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/8d.json",
+          "size": 13053
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/8e.json",
+          "size": 10812
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/8f.json",
+          "size": 13850
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/90.json",
+          "size": 11743
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/91.json",
+          "size": 12443
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/92.json",
+          "size": 12148
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/93.json",
+          "size": 12228
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/94.json",
+          "size": 12444
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/95.json",
+          "size": 11916
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/96.json",
+          "size": 13587
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/97.json",
+          "size": 11812
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/98.json",
+          "size": 10328
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/99.json",
+          "size": 11925
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/9a.json",
+          "size": 10174
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/9b.json",
+          "size": 10594
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/9c.json",
+          "size": 14197
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/9d.json",
+          "size": 11995
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/9e.json",
+          "size": 7651
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/9f.json",
+          "size": 9918
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/a0.json",
+          "size": 10593
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/a1.json",
+          "size": 10454
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/a2.json",
+          "size": 13280
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/a3.json",
+          "size": 12734
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/a4.json",
+          "size": 12197
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/a5.json",
+          "size": 12965
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/a6.json",
+          "size": 10576
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/a7.json",
+          "size": 12594
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/a8.json",
+          "size": 13146
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/a9.json",
+          "size": 8772
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/aa.json",
+          "size": 9657
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ab.json",
+          "size": 11946
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ac.json",
+          "size": 10651
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ad.json",
+          "size": 11534
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ae.json",
+          "size": 9812
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/af.json",
+          "size": 10577
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/b0.json",
+          "size": 12125
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/b1.json",
+          "size": 9575
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/b2.json",
+          "size": 13092
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/b3.json",
+          "size": 9964
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/b4.json",
+          "size": 11231
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/b5.json",
+          "size": 10513
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/b6.json",
+          "size": 12789
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/b7.json",
+          "size": 10006
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/b8.json",
+          "size": 9692
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/b9.json",
+          "size": 11846
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ba.json",
+          "size": 12963
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/bb.json",
+          "size": 10599
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/bc.json",
+          "size": 11763
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/bd.json",
+          "size": 15094
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/be.json",
+          "size": 12689
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/bf.json",
+          "size": 12498
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/c0.json",
+          "size": 10465
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/c1.json",
+          "size": 8278
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/c2.json",
+          "size": 10610
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/c3.json",
+          "size": 12061
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/c4.json",
+          "size": 12021
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/c5.json",
+          "size": 11761
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/c6.json",
+          "size": 12958
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/c7.json",
+          "size": 12320
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/c8.json",
+          "size": 11084
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/c9.json",
+          "size": 9843
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ca.json",
+          "size": 10565
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/cb.json",
+          "size": 12202
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/cc.json",
+          "size": 10961
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/cd.json",
+          "size": 13488
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ce.json",
+          "size": 12928
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/cf.json",
+          "size": 14411
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/d0.json",
+          "size": 12413
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/d1.json",
+          "size": 13040
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/d2.json",
+          "size": 11593
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/d3.json",
+          "size": 12170
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/d4.json",
+          "size": 10978
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/d5.json",
+          "size": 13725
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/d6.json",
+          "size": 11921
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/d7.json",
+          "size": 11707
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/d8.json",
+          "size": 12003
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/d9.json",
+          "size": 12817
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/da.json",
+          "size": 10620
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/db.json",
+          "size": 9010
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/dc.json",
+          "size": 12198
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/dd.json",
+          "size": 8326
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/de.json",
+          "size": 13374
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/df.json",
+          "size": 11638
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/e0.json",
+          "size": 12741
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/e1.json",
+          "size": 13460
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/e2.json",
+          "size": 9737
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/e3.json",
+          "size": 12891
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/e4.json",
+          "size": 12313
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/e5.json",
+          "size": 10363
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/e6.json",
+          "size": 10380
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/e7.json",
+          "size": 12051
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/e8.json",
+          "size": 11310
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/e9.json",
+          "size": 11659
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ea.json",
+          "size": 10870
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/eb.json",
+          "size": 10505
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ec.json",
+          "size": 10549
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ed.json",
+          "size": 12398
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ee.json",
+          "size": 10654
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ef.json",
+          "size": 14968
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/f0.json",
+          "size": 13191
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/f1.json",
+          "size": 13509
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/f2.json",
+          "size": 11371
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/f3.json",
+          "size": 11080
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/f4.json",
+          "size": 9925
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/f5.json",
+          "size": 9601
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/f6.json",
+          "size": 12562
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/f7.json",
+          "size": 10929
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/f8.json",
+          "size": 10131
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/f9.json",
+          "size": 9662
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/fa.json",
+          "size": 11601
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/fb.json",
+          "size": 11477
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/fc.json",
+          "size": 9483
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/fd.json",
+          "size": 11881
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/fe.json",
+          "size": 11674
+        },
+        {
+          "path": "v2026.08.19.201500/share_index/ff.json",
+          "size": 10779
+        }
+      ]
+    },
+    {
+      "bytes": 3369228,
+      "db_version": "2026.08.24.165613",
+      "dir_path": "v2026.08.24.165613",
+      "object_count": 256,
+      "objects": [
+        {
+          "path": "v2026.08.24.165613/share_index/00.json",
+          "size": 15592
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/01.json",
+          "size": 11862
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/02.json",
+          "size": 13844
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/03.json",
+          "size": 13769
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/04.json",
+          "size": 12501
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/05.json",
+          "size": 13637
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/06.json",
+          "size": 15290
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/07.json",
+          "size": 14050
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/08.json",
+          "size": 12742
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/09.json",
+          "size": 11564
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/0a.json",
+          "size": 12764
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/0b.json",
+          "size": 10290
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/0c.json",
+          "size": 11574
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/0d.json",
+          "size": 11412
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/0e.json",
+          "size": 15677
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/0f.json",
+          "size": 10918
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/10.json",
+          "size": 12011
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/11.json",
+          "size": 14433
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/12.json",
+          "size": 14044
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/13.json",
+          "size": 11806
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/14.json",
+          "size": 12802
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/15.json",
+          "size": 15354
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/16.json",
+          "size": 13506
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/17.json",
+          "size": 14900
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/18.json",
+          "size": 13138
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/19.json",
+          "size": 13365
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/1a.json",
+          "size": 12942
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/1b.json",
+          "size": 15478
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/1c.json",
+          "size": 10471
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/1d.json",
+          "size": 14644
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/1e.json",
+          "size": 14149
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/1f.json",
+          "size": 13223
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/20.json",
+          "size": 13950
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/21.json",
+          "size": 12530
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/22.json",
+          "size": 12298
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/23.json",
+          "size": 12886
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/24.json",
+          "size": 13156
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/25.json",
+          "size": 18135
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/26.json",
+          "size": 15549
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/27.json",
+          "size": 12165
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/28.json",
+          "size": 12167
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/29.json",
+          "size": 11628
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/2a.json",
+          "size": 12370
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/2b.json",
+          "size": 17339
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/2c.json",
+          "size": 10262
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/2d.json",
+          "size": 12043
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/2e.json",
+          "size": 14300
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/2f.json",
+          "size": 14812
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/30.json",
+          "size": 12592
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/31.json",
+          "size": 13458
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/32.json",
+          "size": 8900
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/33.json",
+          "size": 14566
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/34.json",
+          "size": 12630
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/35.json",
+          "size": 13627
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/36.json",
+          "size": 14271
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/37.json",
+          "size": 14709
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/38.json",
+          "size": 15201
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/39.json",
+          "size": 11633
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/3a.json",
+          "size": 14956
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/3b.json",
+          "size": 16119
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/3c.json",
+          "size": 14343
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/3d.json",
+          "size": 13054
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/3e.json",
+          "size": 11853
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/3f.json",
+          "size": 15189
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/40.json",
+          "size": 11842
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/41.json",
+          "size": 13082
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/42.json",
+          "size": 14701
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/43.json",
+          "size": 12358
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/44.json",
+          "size": 13553
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/45.json",
+          "size": 12744
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/46.json",
+          "size": 12549
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/47.json",
+          "size": 14496
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/48.json",
+          "size": 13172
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/49.json",
+          "size": 11332
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/4a.json",
+          "size": 13578
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/4b.json",
+          "size": 12948
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/4c.json",
+          "size": 15425
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/4d.json",
+          "size": 13889
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/4e.json",
+          "size": 16048
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/4f.json",
+          "size": 10782
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/50.json",
+          "size": 12983
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/51.json",
+          "size": 15397
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/52.json",
+          "size": 14017
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/53.json",
+          "size": 13026
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/54.json",
+          "size": 14293
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/55.json",
+          "size": 13676
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/56.json",
+          "size": 12292
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/57.json",
+          "size": 13630
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/58.json",
+          "size": 15131
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/59.json",
+          "size": 15319
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/5a.json",
+          "size": 15172
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/5b.json",
+          "size": 15234
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/5c.json",
+          "size": 12733
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/5d.json",
+          "size": 12598
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/5e.json",
+          "size": 11046
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/5f.json",
+          "size": 15463
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/60.json",
+          "size": 13792
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/61.json",
+          "size": 15676
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/62.json",
+          "size": 13856
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/63.json",
+          "size": 13235
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/64.json",
+          "size": 12594
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/65.json",
+          "size": 12297
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/66.json",
+          "size": 13248
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/67.json",
+          "size": 10768
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/68.json",
+          "size": 10739
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/69.json",
+          "size": 12443
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/6a.json",
+          "size": 15567
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/6b.json",
+          "size": 16106
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/6c.json",
+          "size": 15558
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/6d.json",
+          "size": 11468
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/6e.json",
+          "size": 13235
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/6f.json",
+          "size": 14632
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/70.json",
+          "size": 12489
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/71.json",
+          "size": 11025
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/72.json",
+          "size": 11096
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/73.json",
+          "size": 13447
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/74.json",
+          "size": 11883
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/75.json",
+          "size": 10171
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/76.json",
+          "size": 12654
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/77.json",
+          "size": 13028
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/78.json",
+          "size": 14030
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/79.json",
+          "size": 11392
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/7a.json",
+          "size": 16061
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/7b.json",
+          "size": 9099
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/7c.json",
+          "size": 12454
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/7d.json",
+          "size": 13070
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/7e.json",
+          "size": 15360
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/7f.json",
+          "size": 12303
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/80.json",
+          "size": 13686
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/81.json",
+          "size": 14686
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/82.json",
+          "size": 15357
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/83.json",
+          "size": 10412
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/84.json",
+          "size": 11042
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/85.json",
+          "size": 11903
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/86.json",
+          "size": 13272
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/87.json",
+          "size": 14509
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/88.json",
+          "size": 12283
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/89.json",
+          "size": 13714
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/8a.json",
+          "size": 9731
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/8b.json",
+          "size": 12781
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/8c.json",
+          "size": 15553
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/8d.json",
+          "size": 14996
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/8e.json",
+          "size": 13096
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/8f.json",
+          "size": 14234
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/90.json",
+          "size": 12734
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/91.json",
+          "size": 14596
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/92.json",
+          "size": 14463
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/93.json",
+          "size": 13813
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/94.json",
+          "size": 13724
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/95.json",
+          "size": 13798
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/96.json",
+          "size": 14915
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/97.json",
+          "size": 12487
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/98.json",
+          "size": 11584
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/99.json",
+          "size": 13317
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/9a.json",
+          "size": 10725
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/9b.json",
+          "size": 11878
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/9c.json",
+          "size": 15915
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/9d.json",
+          "size": 12951
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/9e.json",
+          "size": 8943
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/9f.json",
+          "size": 10887
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/a0.json",
+          "size": 12732
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/a1.json",
+          "size": 12416
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/a2.json",
+          "size": 14084
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/a3.json",
+          "size": 14387
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/a4.json",
+          "size": 12846
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/a5.json",
+          "size": 13728
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/a6.json",
+          "size": 11962
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/a7.json",
+          "size": 14164
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/a8.json",
+          "size": 14760
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/a9.json",
+          "size": 9578
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/aa.json",
+          "size": 10568
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ab.json",
+          "size": 12332
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ac.json",
+          "size": 11788
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ad.json",
+          "size": 13691
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ae.json",
+          "size": 11537
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/af.json",
+          "size": 12240
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/b0.json",
+          "size": 13472
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/b1.json",
+          "size": 11929
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/b2.json",
+          "size": 13236
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/b3.json",
+          "size": 10664
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/b4.json",
+          "size": 12867
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/b5.json",
+          "size": 11572
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/b6.json",
+          "size": 15807
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/b7.json",
+          "size": 11616
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/b8.json",
+          "size": 11732
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/b9.json",
+          "size": 13568
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ba.json",
+          "size": 13947
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/bb.json",
+          "size": 11676
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/bc.json",
+          "size": 13181
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/bd.json",
+          "size": 16405
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/be.json",
+          "size": 14117
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/bf.json",
+          "size": 13535
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/c0.json",
+          "size": 11412
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/c1.json",
+          "size": 9880
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/c2.json",
+          "size": 12143
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/c3.json",
+          "size": 14153
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/c4.json",
+          "size": 13615
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/c5.json",
+          "size": 13752
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/c6.json",
+          "size": 13803
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/c7.json",
+          "size": 15013
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/c8.json",
+          "size": 13340
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/c9.json",
+          "size": 10481
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ca.json",
+          "size": 12120
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/cb.json",
+          "size": 13214
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/cc.json",
+          "size": 12848
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/cd.json",
+          "size": 14086
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ce.json",
+          "size": 14845
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/cf.json",
+          "size": 15186
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/d0.json",
+          "size": 14429
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/d1.json",
+          "size": 14808
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/d2.json",
+          "size": 14160
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/d3.json",
+          "size": 13582
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/d4.json",
+          "size": 11999
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/d5.json",
+          "size": 15058
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/d6.json",
+          "size": 13543
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/d7.json",
+          "size": 12688
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/d8.json",
+          "size": 13213
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/d9.json",
+          "size": 15623
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/da.json",
+          "size": 13153
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/db.json",
+          "size": 11004
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/dc.json",
+          "size": 13109
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/dd.json",
+          "size": 9853
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/de.json",
+          "size": 14705
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/df.json",
+          "size": 12716
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/e0.json",
+          "size": 13311
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/e1.json",
+          "size": 13921
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/e2.json",
+          "size": 10657
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/e3.json",
+          "size": 14541
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/e4.json",
+          "size": 14340
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/e5.json",
+          "size": 12398
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/e6.json",
+          "size": 13074
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/e7.json",
+          "size": 12970
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/e8.json",
+          "size": 13096
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/e9.json",
+          "size": 12826
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ea.json",
+          "size": 11733
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/eb.json",
+          "size": 13093
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ec.json",
+          "size": 12313
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ed.json",
+          "size": 14946
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ee.json",
+          "size": 12297
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ef.json",
+          "size": 16402
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/f0.json",
+          "size": 14059
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/f1.json",
+          "size": 14597
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/f2.json",
+          "size": 12951
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/f3.json",
+          "size": 12280
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/f4.json",
+          "size": 10593
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/f5.json",
+          "size": 11165
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/f6.json",
+          "size": 13658
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/f7.json",
+          "size": 12458
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/f8.json",
+          "size": 10860
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/f9.json",
+          "size": 9942
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/fa.json",
+          "size": 13113
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/fb.json",
+          "size": 12735
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/fc.json",
+          "size": 11841
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/fd.json",
+          "size": 13025
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/fe.json",
+          "size": 12790
+        },
+        {
+          "path": "v2026.08.24.165613/share_index/ff.json",
+          "size": 11859
+        }
+      ]
+    },
+    {
+      "bytes": 3379222,
+      "db_version": "2026.08.25.090053",
+      "dir_path": "v2026.08.25.090053",
+      "object_count": 256,
+      "objects": [
+        {
+          "path": "v2026.08.25.090053/share_index/00.json",
+          "size": 15592
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/01.json",
+          "size": 11856
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/02.json",
+          "size": 13844
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/03.json",
+          "size": 13769
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/04.json",
+          "size": 12501
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/05.json",
+          "size": 13637
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/06.json",
+          "size": 15290
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/07.json",
+          "size": 14050
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/08.json",
+          "size": 12742
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/09.json",
+          "size": 11766
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/0a.json",
+          "size": 12764
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/0b.json",
+          "size": 10508
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/0c.json",
+          "size": 11574
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/0d.json",
+          "size": 11601
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/0e.json",
+          "size": 15909
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/0f.json",
+          "size": 10918
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/10.json",
+          "size": 12011
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/11.json",
+          "size": 14427
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/12.json",
+          "size": 14044
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/13.json",
+          "size": 11800
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/14.json",
+          "size": 12802
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/15.json",
+          "size": 15354
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/16.json",
+          "size": 13701
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/17.json",
+          "size": 14900
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/18.json",
+          "size": 13333
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/19.json",
+          "size": 13365
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/1a.json",
+          "size": 13131
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/1b.json",
+          "size": 15704
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/1c.json",
+          "size": 10471
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/1d.json",
+          "size": 14644
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/1e.json",
+          "size": 14154
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/1f.json",
+          "size": 13223
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/20.json",
+          "size": 13950
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/21.json",
+          "size": 12530
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/22.json",
+          "size": 12298
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/23.json",
+          "size": 12886
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/24.json",
+          "size": 13156
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/25.json",
+          "size": 18135
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/26.json",
+          "size": 15554
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/27.json",
+          "size": 12165
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/28.json",
+          "size": 12167
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/29.json",
+          "size": 11628
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/2a.json",
+          "size": 12375
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/2b.json",
+          "size": 17339
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/2c.json",
+          "size": 10262
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/2d.json",
+          "size": 12043
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/2e.json",
+          "size": 14724
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/2f.json",
+          "size": 14812
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/30.json",
+          "size": 12592
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/31.json",
+          "size": 13713
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/32.json",
+          "size": 8900
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/33.json",
+          "size": 14833
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/34.json",
+          "size": 12844
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/35.json",
+          "size": 13627
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/36.json",
+          "size": 14265
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/37.json",
+          "size": 14709
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/38.json",
+          "size": 15201
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/39.json",
+          "size": 11633
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/3a.json",
+          "size": 14950
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/3b.json",
+          "size": 16113
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/3c.json",
+          "size": 14343
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/3d.json",
+          "size": 13300
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/3e.json",
+          "size": 11853
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/3f.json",
+          "size": 15189
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/40.json",
+          "size": 12423
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/41.json",
+          "size": 13323
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/42.json",
+          "size": 14695
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/43.json",
+          "size": 12358
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/44.json",
+          "size": 13557
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/45.json",
+          "size": 12738
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/46.json",
+          "size": 12549
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/47.json",
+          "size": 14501
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/48.json",
+          "size": 13172
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/49.json",
+          "size": 11559
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/4a.json",
+          "size": 13566
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/4b.json",
+          "size": 12936
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/4c.json",
+          "size": 15425
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/4d.json",
+          "size": 13889
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/4e.json",
+          "size": 16048
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/4f.json",
+          "size": 10786
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/50.json",
+          "size": 12983
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/51.json",
+          "size": 15397
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/52.json",
+          "size": 14017
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/53.json",
+          "size": 13026
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/54.json",
+          "size": 14293
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/55.json",
+          "size": 13676
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/56.json",
+          "size": 12292
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/57.json",
+          "size": 13624
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/58.json",
+          "size": 15131
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/59.json",
+          "size": 15319
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/5a.json",
+          "size": 15172
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/5b.json",
+          "size": 15234
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/5c.json",
+          "size": 12993
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/5d.json",
+          "size": 12598
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/5e.json",
+          "size": 11046
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/5f.json",
+          "size": 15457
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/60.json",
+          "size": 13786
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/61.json",
+          "size": 15676
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/62.json",
+          "size": 13856
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/63.json",
+          "size": 13236
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/64.json",
+          "size": 12588
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/65.json",
+          "size": 12297
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/66.json",
+          "size": 13248
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/67.json",
+          "size": 10768
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/68.json",
+          "size": 10739
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/69.json",
+          "size": 12437
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/6a.json",
+          "size": 15567
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/6b.json",
+          "size": 16106
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/6c.json",
+          "size": 15558
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/6d.json",
+          "size": 11468
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/6e.json",
+          "size": 13235
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/6f.json",
+          "size": 14867
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/70.json",
+          "size": 12733
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/71.json",
+          "size": 11025
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/72.json",
+          "size": 11096
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/73.json",
+          "size": 13441
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/74.json",
+          "size": 11883
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/75.json",
+          "size": 10171
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/76.json",
+          "size": 12654
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/77.json",
+          "size": 13022
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/78.json",
+          "size": 14030
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/79.json",
+          "size": 11392
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/7a.json",
+          "size": 16065
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/7b.json",
+          "size": 9099
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/7c.json",
+          "size": 12454
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/7d.json",
+          "size": 13070
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/7e.json",
+          "size": 15360
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/7f.json",
+          "size": 12303
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/80.json",
+          "size": 13686
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/81.json",
+          "size": 14686
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/82.json",
+          "size": 15564
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/83.json",
+          "size": 10412
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/84.json",
+          "size": 11042
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/85.json",
+          "size": 11903
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/86.json",
+          "size": 13479
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/87.json",
+          "size": 14509
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/88.json",
+          "size": 12538
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/89.json",
+          "size": 13708
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/8a.json",
+          "size": 9731
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/8b.json",
+          "size": 12781
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/8c.json",
+          "size": 15558
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/8d.json",
+          "size": 15001
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/8e.json",
+          "size": 13096
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/8f.json",
+          "size": 14228
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/90.json",
+          "size": 12734
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/91.json",
+          "size": 14799
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/92.json",
+          "size": 14463
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/93.json",
+          "size": 13813
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/94.json",
+          "size": 13724
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/95.json",
+          "size": 13798
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/96.json",
+          "size": 15139
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/97.json",
+          "size": 12487
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/98.json",
+          "size": 11584
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/99.json",
+          "size": 13512
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/9a.json",
+          "size": 10935
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/9b.json",
+          "size": 11878
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/9c.json",
+          "size": 15915
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/9d.json",
+          "size": 13163
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/9e.json",
+          "size": 8943
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/9f.json",
+          "size": 10887
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/a0.json",
+          "size": 12732
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/a1.json",
+          "size": 12416
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/a2.json",
+          "size": 14501
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/a3.json",
+          "size": 14381
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/a4.json",
+          "size": 13053
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/a5.json",
+          "size": 13728
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/a6.json",
+          "size": 11962
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/a7.json",
+          "size": 14657
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/a8.json",
+          "size": 14982
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/a9.json",
+          "size": 9578
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/aa.json",
+          "size": 10568
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ab.json",
+          "size": 12332
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ac.json",
+          "size": 11782
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ad.json",
+          "size": 13691
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ae.json",
+          "size": 11765
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/af.json",
+          "size": 12240
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/b0.json",
+          "size": 13471
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/b1.json",
+          "size": 11929
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/b2.json",
+          "size": 13480
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/b3.json",
+          "size": 10664
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/b4.json",
+          "size": 12867
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/b5.json",
+          "size": 11572
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/b6.json",
+          "size": 15807
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/b7.json",
+          "size": 11616
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/b8.json",
+          "size": 11732
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/b9.json",
+          "size": 13566
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ba.json",
+          "size": 13947
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/bb.json",
+          "size": 11670
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/bc.json",
+          "size": 13181
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/bd.json",
+          "size": 16405
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/be.json",
+          "size": 14111
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/bf.json",
+          "size": 13535
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/c0.json",
+          "size": 11412
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/c1.json",
+          "size": 9880
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/c2.json",
+          "size": 12137
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/c3.json",
+          "size": 14378
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/c4.json",
+          "size": 13615
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/c5.json",
+          "size": 13752
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/c6.json",
+          "size": 13803
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/c7.json",
+          "size": 15013
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/c8.json",
+          "size": 13340
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/c9.json",
+          "size": 10683
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ca.json",
+          "size": 12346
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/cb.json",
+          "size": 13218
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/cc.json",
+          "size": 12848
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/cd.json",
+          "size": 14086
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ce.json",
+          "size": 14845
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/cf.json",
+          "size": 15186
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/d0.json",
+          "size": 14429
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/d1.json",
+          "size": 14808
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/d2.json",
+          "size": 14160
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/d3.json",
+          "size": 13582
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/d4.json",
+          "size": 11999
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/d5.json",
+          "size": 15058
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/d6.json",
+          "size": 13537
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/d7.json",
+          "size": 12676
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/d8.json",
+          "size": 13213
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/d9.json",
+          "size": 15617
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/da.json",
+          "size": 13158
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/db.json",
+          "size": 11009
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/dc.json",
+          "size": 13109
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/dd.json",
+          "size": 9853
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/de.json",
+          "size": 14705
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/df.json",
+          "size": 12716
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/e0.json",
+          "size": 13311
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/e1.json",
+          "size": 14131
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/e2.json",
+          "size": 10657
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/e3.json",
+          "size": 14541
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/e4.json",
+          "size": 14340
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/e5.json",
+          "size": 12398
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/e6.json",
+          "size": 13074
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/e7.json",
+          "size": 12970
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/e8.json",
+          "size": 13096
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/e9.json",
+          "size": 12826
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ea.json",
+          "size": 11727
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/eb.json",
+          "size": 13093
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ec.json",
+          "size": 12313
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ed.json",
+          "size": 14940
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ee.json",
+          "size": 12517
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ef.json",
+          "size": 16402
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/f0.json",
+          "size": 14263
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/f1.json",
+          "size": 14826
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/f2.json",
+          "size": 12951
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/f3.json",
+          "size": 12523
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/f4.json",
+          "size": 10593
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/f5.json",
+          "size": 11165
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/f6.json",
+          "size": 13658
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/f7.json",
+          "size": 12458
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/f8.json",
+          "size": 10860
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/f9.json",
+          "size": 9942
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/fa.json",
+          "size": 13113
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/fb.json",
+          "size": 12735
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/fc.json",
+          "size": 11851
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/fd.json",
+          "size": 13024
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/fe.json",
+          "size": 12790
+        },
+        {
+          "path": "v2026.08.25.090053/share_index/ff.json",
+          "size": 11859
+        }
+      ]
+    }
+  ],
+  "fingerprint": "9f8c654b0c3a45600ef6789ae61e3b7902ba02bf6a153b5a8d471b4a7b8c03b3",
+  "retained_manifest_digest": "2de57c44bf32b42bd98ead2bbe5e3369a8ddab05cac471a42c3d21648eb06634",
+  "total_bytes": 203784968,
+  "total_count": 1288
+}
