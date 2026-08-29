@@ -1,8 +1,8 @@
 """RPC-backed inventory fast path: strict validation, walker always the net.
 
-The SQL side (migrations/*_storage_inventory_rpc.sql) is applied only with its
-own approval; these tests pin the CLIENT contract so the fast path can never
-weaken the inventory:
+The SQL side is canonically owned by the linked Flutter repository at
+``supabase/migrations/*_storage_inventory_rpc.sql``. These tests pin the
+pipeline CLIENT contract so the fast path can never weaken the inventory:
 
   * a page shorter than the limit is NORMAL termination — never a fault;
   * real faults — RPC error, malformed row, duplicate or non-monotonic

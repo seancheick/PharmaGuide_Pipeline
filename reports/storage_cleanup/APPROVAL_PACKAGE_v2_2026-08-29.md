@@ -1,5 +1,9 @@
 # Storage Maintenance — Consolidated Approval Package v2 (2026-08-29)
 
+> **Superseded by `APPROVAL_PACKAGE_v3_2026-08-29.md`.** V2 predates the
+> single migration owner, manifest-digest execution gate, and committed churn
+> pair ledger. Its RPC path and SHA-256 must not be used.
+
 Supersedes `APPROVAL_PACKAGE_2026-08-29.md`. All four review gaps are closed;
 every number below is a fresh live measurement or an exact full-population
 count. **Nothing irreversible has run.** Recommended execution order per
@@ -30,10 +34,9 @@ review: **(C) RPC → fresh fast inventory → (B) stale dirs → (A) July sweep
    (mutation-checked). The ~1,192→~148 reduction is **projected** until the
    next ordinary rebuild measures it.
 4. **RPC migration re-versioned forward** to `20260830090000` (ahead of live
-   head `20260829151221`) — applying it needs NO history editing; misalignment
-   falls back to the documented `supabase migration repair`, never table
-   surgery. This repo's `migrations/` is the canonical owner. New SHA-256:
-   `74ba616ca6144af9ca05c51c8ddc62f5190259b8e29879da1eed5af40baa794a`.
+   head `20260829151221`). This ownership statement is superseded: the linked
+   Flutter repository is now the sole executable owner. Use v3's pinned
+   rollout; do not apply an SQL file from this pipeline repository.
 
 ## Current live state (measured this pass)
 
@@ -49,12 +52,10 @@ review: **(C) RPC → fresh fast inventory → (B) stale dirs → (A) July sweep
 ## The three production actions (fresh artifacts, exact commands)
 
 ### (C) RPC migration — recommended FIRST (fully reversible)
-Apply `migrations/20260830090000_storage_inventory_rpc.sql` (SHA-256
-`74ba616c…`) under version `20260830090000`; verify the migration listing
-shows exactly that version; then permissions proof, prefix-refusal probe,
-3× `--verify-inventory` parity, fallback probe, advisors — full runbook in
-`rpc_rollout_prep_2026-08-29.md`. Flag stays default-off; walker stays the
-authority. Then run one fresh fast inventory.
+Use the canonical Flutter rollout script named in v3 and
+`rpc_rollout_prep_2026-08-29.md`. It applies the reviewed exact-version file;
+then require the permissions proof, prefix-refusal probe, 3× inventory parity,
+fallback probe, and advisors. The walker remains the authority.
 
 ### (B) Stale version directories — 9 dirs / 1,288 objects / 203,784,968 B
 Artifact: `stale_dirs_approval_2026-08-29.json` · fingerprint
