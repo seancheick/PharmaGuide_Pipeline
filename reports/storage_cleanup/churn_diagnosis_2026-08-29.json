@@ -1,0 +1,182 @@
+{
+  "old_version": "2026.08.26.141540",
+  "new_version": "2026.08.27.162958",
+  "products_old": 15336,
+  "products_new": 15336,
+  "added": 0,
+  "removed": 0,
+  "changed": 1192,
+  "analyzed": 1190,
+  "errors": 2,
+  "semantic_change_products": 1190,
+  "noise_only_products": 0,
+  "order_only_products": 0,
+  "serializer_note": "json.dumps(blob, separators=..., ensure_ascii=False) WITHOUT sort_keys \u2014 key order is hash-relevant (build_final_db.py:10561)",
+  "avoidable_new_bytes": 0,
+  "changed_bytes_old": 539381062,
+  "changed_bytes_new": 540052803,
+  "top_fields": [
+    [
+      "proprietary_blend_detail.blends[].sources[] [semantic]",
+      1060
+    ],
+    [
+      "evidence_data.clinical_matches[](len) [semantic]",
+      109
+    ],
+    [
+      "evidence_data.match_count [semantic]",
+      109
+    ],
+    [
+      "v4_confidence_detail.evidence_review.not_yet_evaluated_count [semantic]",
+      73
+    ],
+    [
+      "v4_confidence_detail.evidence_review.readiness [semantic]",
+      44
+    ],
+    [
+      "v4_confidence_detail.evidence.drivers[] [semantic]",
+      37
+    ],
+    [
+      "v4_score_explanation.drags[].reason [semantic]",
+      29
+    ],
+    [
+      "v4_confidence_detail.evidence.level [semantic]",
+      26
+    ],
+    [
+      "quality_pillars_v4.dose.components.raw_dose [semantic]",
+      23
+    ],
+    [
+      "quality_pillars_v4.dose.score [semantic]",
+      23
+    ],
+    [
+      "quality_pillars_v4.dose.reason [semantic]",
+      22
+    ],
+    [
+      "v4_confidence_detail.evidence.drivers[](len) [semantic]",
+      18
+    ],
+    [
+      "v4_score_explanation.drags[].pillar [semantic]",
+      17
+    ],
+    [
+      "quality_pillars_v4.formulation.components.raw_formulation [semantic]",
+      17
+    ],
+    [
+      "quality_pillars_v4.formulation.score [semantic]",
+      17
+    ],
+    [
+      "quality_pillars_v4.formulation.reason [semantic]",
+      9
+    ],
+    [
+      "v4_confidence_detail.band [semantic]",
+      8
+    ],
+    [
+      "v4_confidence_detail.score_uncertainty_pts [semantic]",
+      8
+    ],
+    [
+      "v4_score_provenance.confidence [semantic]",
+      8
+    ],
+    [
+      "v4_score_provenance.quality_tier [semantic]",
+      8
+    ],
+    [
+      "quality_pillars_v4.evidence.components.raw_evidence [semantic]",
+      7
+    ],
+    [
+      "quality_pillars_v4.evidence.score [semantic]",
+      7
+    ],
+    [
+      "v4_score_explanation.strengths[].pillar [semantic]",
+      7
+    ],
+    [
+      "v4_score_explanation.strengths[].reason [semantic]",
+      7
+    ],
+    [
+      "quality_pillars_v4.dose.components.archetype [semantic]",
+      6
+    ],
+    [
+      "quality_pillars_v4.evidence.components.archetype [semantic]",
+      6
+    ],
+    [
+      "quality_pillars_v4.formulation.components.archetype [semantic]",
+      6
+    ],
+    [
+      "score_bonuses[](len) [semantic]",
+      4
+    ],
+    [
+      "audit.gate_audit.verdict [semantic]",
+      2
+    ],
+    [
+      "quality_pillars_v4.evidence.explanation [semantic]",
+      2
+    ],
+    [
+      "quality_pillars_v4.evidence.reason [semantic]",
+      1
+    ],
+    [
+      "v4_confidence_detail.label_completeness.drivers[](len) [semantic]",
+      1
+    ]
+  ],
+  "noise_key_tokens": [
+    "generated",
+    "timestamp",
+    "_at",
+    "date",
+    "build",
+    "export",
+    "updated",
+    "created",
+    "version"
+  ],
+  "note": "classification is key-name based; 'version' fields counted as noise may include semantic schema bumps \u2014 reviewed below",
+  "root_cause_probe": {
+    "method": "random 25-product sample of the 1,192 changed blobs; blends compared with sources[] normalized to sorted multisets",
+    "sources_order_only": 24,
+    "real_content_changes": 0,
+    "no_blend_diff": 1,
+    "example": {
+      "pid": "222862",
+      "old": [
+        "cleaning",
+        "detector"
+      ],
+      "new": [
+        "detector",
+        "cleaning"
+      ]
+    },
+    "root_cause": "enrich_supplements_v3.py:13993 emitted list(set(...)) for blends[].sources \u2014 ordering follows PYTHONHASHSEED and reaches the content-addressed blob",
+    "fix": "sorted(existing_sources) \u2014 committed this branch; takes effect on the NEXT catalog build (no rebuild run)",
+    "consumer_proof": "no Flutter reader consumes blends[].sources (grep 2026-08-29); adjacent source_fields already sorted",
+    "expected_effect": "per-release changed-blob count drops from ~1,192 toward the ~130 genuinely semantic changes (evidence/confidence/dose fields)",
+    "avoidable_bytes_estimate": "~89% of the 540,052,803 changed-blob bytes per release"
+  }
+}

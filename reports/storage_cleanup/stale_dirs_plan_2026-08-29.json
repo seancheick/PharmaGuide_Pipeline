@@ -1,0 +1,53 @@
+{
+  "generated_utc_date": "2026-08-29",
+  "total_objects": 1288,
+  "total_bytes": 203784968,
+  "candidates": [
+    {
+      "db_version": "2026.06.08.231328",
+      "objects": 2,
+      "bytes": 43040741
+    },
+    {
+      "db_version": "2026.06.15.180403",
+      "objects": 2,
+      "bytes": 44875749
+    },
+    {
+      "db_version": "2026.06.16.192123",
+      "objects": 2,
+      "bytes": 44883942
+    },
+    {
+      "db_version": "2026.08.08.120622",
+      "objects": 2,
+      "bytes": 55252126
+    },
+    {
+      "db_version": "2026.08.13.204005",
+      "objects": 256,
+      "bytes": 2994664
+    },
+    {
+      "db_version": "2026.08.19.035832",
+      "objects": 256,
+      "bytes": 2994608
+    },
+    {
+      "db_version": "2026.08.19.201500",
+      "objects": 256,
+      "bytes": 2994688
+    },
+    {
+      "db_version": "2026.08.24.165613",
+      "objects": 256,
+      "bytes": 3369228
+    },
+    {
+      "db_version": "2026.08.25.090053",
+      "objects": 256,
+      "bytes": 3379222
+    }
+  ],
+  "excluded_in_manifest": null
+}
