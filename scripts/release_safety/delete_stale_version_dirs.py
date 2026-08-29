@@ -365,6 +365,191 @@ def execute_delete_plan(
 
 
 # ---------------------------------------------------------------------------
+# Approval artifact — execution binds to the reviewed set, not a recount
+# ---------------------------------------------------------------------------
+
+
+class ApprovalArtifactError(ValueError):
+    """The stale-dir approval artifact cannot authorize an execution."""
+
+
+def _plan_fingerprint(candidates) -> str:
+    """Digest over sorted (db_version, path, size) records. Totals-only
+    approval let a DIFFERENT directory with identical count/bytes pass; this
+    binds the exact reviewed set."""
+    import hashlib
+
+    lines = "\n".join(
+        f"{c['db_version']}\t{r['path']}\t{r['size']}"
+        for c in sorted(candidates, key=lambda c: c["db_version"])
+        for r in sorted(c["objects"], key=lambda r: r["path"])
+    )
+    return hashlib.sha256(lines.encode("utf-8")).hexdigest()
+
+
+def plan_to_artifact(plan: "DeletePlan", *, manifest_versions) -> dict:
+    """Convert a freshly computed dry plan into the executable approval JSON."""
+    import hashlib
+
+    candidates = [
+        {
+            "db_version": c.db_version,
+            "dir_path": c.dir_path,
+            "object_count": c.object_count,
+            "bytes": c.total_bytes,
+            "objects": [
+                {"path": path, "size": size}
+                for path, size in sorted(c.objects)
+            ],
+        }
+        for c in plan.candidates
+    ]
+    return {
+        "artifact_kind": "stale_version_dirs_approval",
+        "total_count": plan.total_objects,
+        "total_bytes": plan.total_bytes,
+        "candidates": candidates,
+        "retained_manifest_digest": hashlib.sha256(
+            "\n".join(sorted(manifest_versions)).encode("utf-8")
+        ).hexdigest(),
+        "fingerprint": _plan_fingerprint(candidates),
+    }
+
+
+def _load_artifact(path) -> dict:
+    import json as _json
+
+    if path is None:
+        raise ApprovalArtifactError(
+            "--approval-report is required: execution acts on the REVIEWED "
+            "artifact, never on a fresh recount."
+        )
+    try:
+        data = _json.loads(Path(path).read_text())
+    except (OSError, ValueError) as exc:
+        raise ApprovalArtifactError(f"cannot read approval report: {exc}")
+    if data.get("artifact_kind") != "stale_version_dirs_approval":
+        raise ApprovalArtifactError("not a stale-dir approval artifact")
+    candidates = data.get("candidates")
+    if not isinstance(candidates, list) or not candidates:
+        raise ApprovalArtifactError("artifact approves no candidates")
+    for c in candidates:
+        if (
+            not isinstance(c, dict)
+            or not isinstance(c.get("db_version"), str)
+            or not isinstance(c.get("objects"), list)
+            or not c["objects"]
+            or not all(
+                isinstance(r, dict)
+                and isinstance(r.get("path"), str)
+                and r["path"].startswith(f"v{c['db_version']}/")
+                and isinstance(r.get("size"), int)
+                for r in c["objects"]
+            )
+        ):
+            raise ApprovalArtifactError(
+                f"malformed candidate record: {c.get('db_version')!r}"
+            )
+    if _plan_fingerprint(candidates) != data.get("fingerprint"):
+        raise ApprovalArtifactError(
+            "artifact records do not reproduce its own fingerprint "
+            "(edited or corrupted)"
+        )
+    record_count = sum(len(c["objects"]) for c in candidates)
+    record_bytes = sum(r["size"] for c in candidates for r in c["objects"])
+    if record_count != data.get("total_count") or record_bytes != data.get("total_bytes"):
+        raise ApprovalArtifactError("artifact totals do not match its records")
+    return data
+
+
+def execute_from_artifact(
+    client,
+    *,
+    approval_report,
+    expected_count,
+    expected_bytes,
+    fingerprint,
+    bucket: str = DEFAULT_BUCKET,
+    manifest_table: str = DEFAULT_MANIFEST_TABLE,
+    audit_log: Optional[AuditLog] = None,
+    lock_path: Optional[Path] = None,
+) -> int:
+    """Delete exactly the reviewed set. Returns a process exit code.
+
+    Under the release lock: recompute the fresh plan and require it to
+    reproduce the approved fingerprint EXACTLY (a swapped candidate with
+    identical totals, or a same-path size drift, refuses everything), then
+    delegate to execute_delete_plan — which rechecks the manifest inside the
+    lock and proves each directory absent afterwards.
+    """
+    try:
+        artifact = _load_artifact(approval_report)
+    except ApprovalArtifactError as exc:
+        print(f"[refused] {exc}")
+        return 2
+    for label, flag, key in (
+        ("--expected-count", expected_count, "total_count"),
+        ("--expected-bytes", expected_bytes, "total_bytes"),
+        ("--fingerprint", fingerprint, "fingerprint"),
+    ):
+        if flag is None or flag != artifact[key]:
+            print(
+                f"[refused] {label} {flag!r} does not match the artifact's "
+                f"{artifact[key]!r}."
+            )
+            return 2
+
+    # The fresh-set proof AND the deletion share one lock hold (re-entrant
+    # for the nested acquire inside execute_delete_plan) — no window between
+    # proving the set and acting on it.
+    try:
+        outer_lock = acquire_release_lock(
+            lock_path, initial_step="delete_stale_version_dirs artifact",
+        )
+        outer_lock.__enter__()
+    except (LockContentionError, StaleLockError, CorruptLockError) as exc:
+        print(f"[refused] release lock unavailable: {exc}")
+        return 1
+    try:
+        fresh_plan = compute_delete_plan(
+            client, bucket=bucket, manifest_table=manifest_table,
+        )
+        fresh_artifact = plan_to_artifact(fresh_plan, manifest_versions=set())
+        if fresh_artifact["fingerprint"] != artifact["fingerprint"]:
+            print(
+                "[refused] the stale-directory set has CHANGED since approval "
+                f"(fresh {fresh_artifact['total_count']} objects / "
+                f"{fresh_artifact['fingerprint'][:16]}… vs approved "
+                f"{artifact['total_count']} / {artifact['fingerprint'][:16]}…). "
+                "Re-run the dry plan and review again. Nothing deleted."
+            )
+            return 2
+
+        result = execute_delete_plan(
+            client, fresh_plan,
+            expected_count=artifact["total_count"],
+            expected_bytes=artifact["total_bytes"],
+            bucket=bucket,
+            manifest_table=manifest_table,
+            audit_log=audit_log,
+            lock_path=lock_path,
+        )
+    except (ExpectedCountMismatch, ManifestRaceConditionError) as exc:
+        print(f"[refused] {exc}")
+        return 2
+    finally:
+        outer_lock.__exit__(None, None, None)
+
+    print(
+        f"Deleted {result.deleted_objects_count} object(s) / "
+        f"{result.deleted_bytes:,} bytes across "
+        f"{len(result.deleted_versions)} director(ies); "
+        f"{len(result.failed_objects)} failure(s)."
+    )
+    return 0 if not result.failed_objects else 1
+
+
+# ---------------------------------------------------------------------------
 # Internals
 # ---------------------------------------------------------------------------
 
@@ -645,6 +830,13 @@ def _main(argv=None) -> int:
                         help="Required with --execute; must equal plan total.")
     parser.add_argument("--expected-bytes", type=int,
                         help="Required with --execute; must equal plan total.")
+    parser.add_argument("--approval-out",
+                        help="Dry run: write the executable approval JSON here.")
+    parser.add_argument("--approval-report",
+                        help="Execute: the reviewed approval JSON to act on.")
+    parser.add_argument("--fingerprint",
+                        help="Execute: must equal the artifact's fingerprint.")
+    parser.add_argument("--lock-path", type=Path, default=None)
     args = parser.parse_args(argv)
 
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -656,60 +848,41 @@ def _main(argv=None) -> int:
         print(f"Could not connect to Supabase: {exc}", file=sys.stderr)
         return 1
 
+    if args.execute:
+        return execute_from_artifact(
+            client,
+            approval_report=args.approval_report,
+            expected_count=args.expected_count,
+            expected_bytes=args.expected_bytes,
+            fingerprint=args.fingerprint,
+            bucket=args.bucket,
+            manifest_table=args.manifest_table,
+            lock_path=args.lock_path,
+        )
+
     plan = compute_delete_plan(
         client, bucket=args.bucket, manifest_table=args.manifest_table,
     )
     print(format_plan_text(plan))
+    if args.approval_out:
+        import json as _json
 
-    if not args.execute:
-        return 0
-
-    if args.expected_count is None or args.expected_bytes is None:
+        manifest_versions = _fetch_manifest_versions(
+            client, args.manifest_table,
+        )
+        artifact = plan_to_artifact(plan, manifest_versions=manifest_versions)
+        out = Path(args.approval_out)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(_json.dumps(artifact, indent=2, sort_keys=True))
+        print(f"\nApproval artifact written to {out}")
         print(
-            "\nERROR: --execute requires both --expected-count "
-            "and --expected-bytes (must match plan totals exactly).",
-            file=sys.stderr,
+            "To execute this exact reviewed set:\n"
+            f"  --execute --approval-report {out} "
+            f"--expected-count {artifact['total_count']} "
+            f"--expected-bytes {artifact['total_bytes']} "
+            f"--fingerprint {artifact['fingerprint']}"
         )
-        return 2
-
-    try:
-        result = execute_delete_plan(
-            client,
-            plan,
-            expected_count=args.expected_count,
-            expected_bytes=args.expected_bytes,
-            bucket=args.bucket,
-            manifest_table=args.manifest_table,
-        )
-    except ExpectedCountMismatch as exc:
-        print(f"\nERROR: {exc}", file=sys.stderr)
-        return 2
-    except ManifestRaceConditionError as exc:
-        print(f"\nERROR: {exc}", file=sys.stderr)
-        return 3
-    except (LockContentionError, StaleLockError, CorruptLockError) as exc:
-        print(f"\nERROR: lock unavailable: {exc}", file=sys.stderr)
-        return 4
-
-    print()
-    print("─" * 70)
-    print(
-        f"DELETED: {result.deleted_objects_count:,} objects across "
-        f"{len(result.deleted_versions)} versions "
-        f"({_fmt_bytes(result.deleted_bytes)})"
-    )
-    if result.failed_objects:
-        print(
-            f"FAILED:  {len(result.failed_objects):,} object(s) — see audit log: "
-            f"{result.audit_log_path}"
-        )
-        for path, err in result.failed_objects[:10]:
-            print(f"  - {path}: {err}")
-        if len(result.failed_objects) > 10:
-            print(f"  ... ({len(result.failed_objects) - 10} more)")
-    else:
-        print(f"All planned deletions succeeded. Audit: {result.audit_log_path}")
-    return 0 if result.passed else 5
+    return 0
 
 
 if __name__ == "__main__":

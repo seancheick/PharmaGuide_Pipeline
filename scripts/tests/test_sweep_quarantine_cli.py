@@ -121,8 +121,12 @@ def test_dry_run_writes_the_approval_artifact_for_eligible_dates_only(tmp_path):
     assert len(data["path_fingerprint"]) == 64
     import hashlib
 
+    records = data["per_date"][ELIGIBLE]["objects"]
     expected = hashlib.sha256(
-        "\n".join(sorted(_qpath(ELIGIBLE, h) for h in eligible)).encode("ascii")
+        "\n".join(
+            f"{r['path']}\t{r['size']}\t{r['etag']}"
+            for r in sorted(records, key=lambda r: r["path"])
+        ).encode("utf-8")
     ).hexdigest()
     assert data["path_fingerprint"] == expected
 
@@ -381,3 +385,156 @@ def test_execute_refuses_when_quarantine_holds_the_only_protected_copy(
     assert code != 0
     assert bucket.objects == before, "nothing may be deleted in that state"
     assert "protected" in capsys.readouterr().out.lower()
+
+
+# ---------------------------------------------------------------------------
+# Identity hardening: the approval binds (path, size, eTag), not paths alone
+# ---------------------------------------------------------------------------
+
+
+def _mutate_object(bucket, path, new_bytes):
+    bucket.objects[path] = new_bytes
+
+
+def test_artifact_records_carry_size_and_etag_and_the_fingerprint_binds_them(
+    tmp_path,
+):
+    import sweep_quarantine as cli
+
+    eligible = [_qh("aa", 1)]
+    client, bucket, _fr, _dd = _world(tmp_path, eligible_hashes=eligible)
+
+    code, approval = _dry(tmp_path, cli, client)
+
+    assert code == 0
+    data = json.loads(approval.read_text())
+    records = data["per_date"][ELIGIBLE]["objects"]
+    assert len(records) == 1
+    rec = records[0]
+    assert rec["path"] == _qpath(ELIGIBLE, eligible[0])
+    assert isinstance(rec["size"], int) and rec["size"] > 0
+    assert isinstance(rec["etag"], str) and rec["etag"]
+    import hashlib
+
+    expected = hashlib.sha256(
+        "\n".join(
+            f"{r['path']}\t{r['size']}\t{r['etag']}"
+            for r in sorted(records, key=lambda r: r["path"])
+        ).encode("utf-8")
+    ).hexdigest()
+    assert data["path_fingerprint"] == expected
+
+
+@pytest.mark.parametrize("drift", ["size", "etag"])
+def test_execute_refuses_same_path_content_drift(tmp_path, capsys, drift):
+    """An object overwritten at the same path is NOT the object that was
+    approved — the entire run must refuse."""
+    import sweep_quarantine as cli
+
+    client, bucket, flutter_repo, dist_dir, approval, data, eligible = (
+        _approved_world(tmp_path, cli)
+    )
+    target = _qpath(ELIGIBLE, eligible[0])
+    if drift == "size":
+        _mutate_object(bucket, target, b"overwritten with different length")
+    else:
+        # Same length, different content -> same size, different eTag.
+        original = bucket.objects[target]
+        _mutate_object(bucket, target, bytes(reversed(original)))
+    before = dict(bucket.objects)
+
+    code = cli.main(
+        _exec_args(tmp_path, approval, data, flutter_repo, dist_dir),
+        client=client, today=TODAY,
+    )
+
+    assert code != 0
+    assert bucket.objects == before, "nothing may be deleted on content drift"
+    assert "drift" in capsys.readouterr().out.lower()
+
+
+def test_execute_refuses_edited_object_metadata_in_the_artifact(tmp_path):
+    import sweep_quarantine as cli
+
+    client, bucket, flutter_repo, dist_dir, approval, data, eligible = (
+        _approved_world(tmp_path, cli)
+    )
+    tampered = json.loads(approval.read_text())
+    tampered["per_date"][ELIGIBLE]["objects"][0]["size"] += 1
+    approval.write_text(json.dumps(tampered))
+    before = dict(bucket.objects)
+
+    code = cli.main(
+        _exec_args(tmp_path, approval, data, flutter_repo, dist_dir),
+        client=client, today=TODAY,
+    )
+
+    assert code == cli.EXIT_REFUSED
+    assert bucket.objects == before
+
+
+def test_execute_refuses_malformed_or_shard_mismatched_paths(tmp_path):
+    import sweep_quarantine as cli
+
+    client, bucket, flutter_repo, dist_dir, approval, data, eligible = (
+        _approved_world(tmp_path, cli)
+    )
+    tampered = json.loads(approval.read_text())
+    good = tampered["per_date"][ELIGIBLE]["objects"][0]
+    # Hash says shard 'aa' but the path claims shard 'bb'.
+    wrong_shard_path = good["path"].replace(f"/{ELIGIBLE}/aa/", f"/{ELIGIBLE}/bb/")
+    tampered["per_date"][ELIGIBLE]["objects"] = [
+        {**good, "path": wrong_shard_path},
+    ]
+    approval.write_text(json.dumps(tampered))
+    before = dict(bucket.objects)
+
+    code = cli.main(
+        _exec_args(tmp_path, approval, data, flutter_repo, dist_dir),
+        client=client, today=TODAY,
+    )
+
+    assert code == cli.EXIT_REFUSED
+    assert bucket.objects == before
+
+
+def test_execute_requires_ttl_days_to_match_the_artifact(tmp_path):
+    import sweep_quarantine as cli
+
+    client, bucket, flutter_repo, dist_dir, approval, data, eligible = (
+        _approved_world(tmp_path, cli)
+    )
+    before = dict(bucket.objects)
+
+    code = cli.main(
+        _exec_args(tmp_path, approval, data, flutter_repo, dist_dir)
+        + ["--ttl-days", "45"],
+        client=client, today=TODAY,
+    )
+
+    assert code == cli.EXIT_REFUSED
+    assert bucket.objects == before
+
+
+def test_a_ttl_below_30_days_is_prohibited_everywhere(tmp_path, capsys):
+    import sweep_quarantine as cli
+
+    client, bucket, flutter_repo, dist_dir, approval, data, eligible = (
+        _approved_world(tmp_path, cli)
+    )
+    before = dict(bucket.objects)
+
+    dry_code = cli.main(
+        ["--approval-out", str(tmp_path / "x.json"), "--ttl-days", "7"],
+        client=client, today=TODAY,
+    )
+    exec_code = cli.main(
+        _exec_args(tmp_path, approval, data, flutter_repo, dist_dir)
+        + ["--ttl-days", "7"],
+        client=client, today=TODAY,
+    )
+
+    assert dry_code == cli.EXIT_REFUSED
+    assert exec_code == cli.EXIT_REFUSED
+    assert not (tmp_path / "x.json").exists()
+    assert bucket.objects == before

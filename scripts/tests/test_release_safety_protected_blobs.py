@@ -573,9 +573,11 @@ class _P35Bucket:
                 continue
             rest = full[len(prefix):]
             if "/" not in rest:
+                import hashlib as _hashlib
+
                 results.append({"name": rest, "metadata": {
                     "size": len(data),
-                    "eTag": f'"et-{rest[:16]}"',
+                    "eTag": f'"{_hashlib.md5(data).hexdigest()}"',
                 }})
             else:
                 first = rest.split("/", 1)[0]

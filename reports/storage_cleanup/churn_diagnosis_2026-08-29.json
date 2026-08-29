@@ -178,5 +178,7 @@
     "consumer_proof": "no Flutter reader consumes blends[].sources (grep 2026-08-29); adjacent source_fields already sorted",
     "expected_effect": "per-release changed-blob count drops from ~1,192 toward the ~130 genuinely semantic changes (evidence/confidence/dose fields)",
     "avoidable_bytes_estimate": "~89% of the 540,052,803 changed-blob bytes per release"
-  }
+  },
+  "SUPERSEDED_BY": "churn_diagnosis_full_2026-08-29.json",
+  "superseded_note": "This first pass classified list-ORDER differences as 'semantic' because its positional differ could not see reordering, producing the contradictory fields order_only_products=0 / semantic_change_products=1190 / avoidable_new_bytes=0. The full-population pass normalizes sources[] as a multiset over ALL 1,192 pairs: 1,044 sources-order-only (453,761,407 avoidable bytes, exact), 0 other-order-only, 148 semantic, 0 errors. The reduction on the next rebuild is PROJECTED until measured."
 }
