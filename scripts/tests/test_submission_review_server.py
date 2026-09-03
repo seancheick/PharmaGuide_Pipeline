@@ -12,8 +12,13 @@ import hashlib
 import json
 import sqlite3
 import sys
+import threading
+import urllib.request
 from datetime import datetime, timedelta, timezone
+from http.server import ThreadingHTTPServer
 from pathlib import Path
+
+import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parents[1]
 REVIEW_DIR = SCRIPTS_DIR / "submission_review"
@@ -38,6 +43,27 @@ def test_server_binds_loopback_only():
     assert "0.0.0.0" not in source
 
 
+def test_static_reviewer_assets_are_never_served_from_stale_cache():
+    server = ThreadingHTTPServer((serve.BIND_HOST, 0), serve.ReviewerHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        url = f"http://{serve.BIND_HOST}:{server.server_port}/app.js"
+        with urllib.request.urlopen(url, timeout=5) as response:
+            assert response.headers["cache-control"] == "no-store"
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
+
+
+def test_reviewer_page_busts_pre_no_store_asset_caches():
+    index_html = (REVIEW_DIR / "static" / "index.html").read_text()
+
+    for asset in ("styles.css", "canonical.js", "app.js"):
+        assert f'/{asset}?v=20260903-1' in index_html
+
+
 def test_proxy_targets_exactly_the_review_function():
     url = serve.edge_function_url("https://example.supabase.co/")
     assert url == (
@@ -49,6 +75,51 @@ def test_proxy_targets_exactly_the_review_function():
     source = (REVIEW_DIR / "serve.py").read_text()
     assert source.count("urllib.request.Request(") == 1
     assert "edge_function_url(self.supabase_url)" in source
+
+
+def test_photo_proxy_only_allows_this_projects_private_submission_photos():
+    project = "https://example.supabase.co"
+    valid = (
+        "https://example.supabase.co/storage/v1/object/sign/"
+        "product-submission-photos/user/submission/photo?token=secret"
+    )
+    assert serve.validate_submission_photo_url(valid, project) == valid
+
+    forbidden = (
+        "https://evil.example/storage/v1/object/sign/"
+        "product-submission-photos/user/submission/photo?token=secret",
+        "http://example.supabase.co/storage/v1/object/sign/"
+        "product-submission-photos/user/submission/photo?token=secret",
+        "https://example.supabase.co/storage/v1/object/public/"
+        "product-submission-photos/user/submission/photo",
+        "https://example.supabase.co/storage/v1/object/sign/other-bucket/"
+        "user/submission/photo?token=secret",
+        "https://example.supabase.co/storage/v1/object/sign/"
+        "product-submission-photos/user/submission/photo",
+    )
+    for url in forbidden:
+        with pytest.raises(ValueError):
+            serve.validate_submission_photo_url(url, project)
+
+
+def test_lightbox_fetches_private_photo_through_same_origin_proxy():
+    app_js = (REVIEW_DIR / "static" / "app.js").read_text()
+
+    assert "async function fetchReviewPhoto(signedUrl)" in app_js
+    assert "fetch('/api/photo'" in app_js
+    assert "signed_url: signedUrl" in app_js
+    assert "authorization: `Bearer ${state.session.access_token}`" in app_js
+    assert "fetch(photo.signed_url)" not in app_js
+
+
+def test_selecting_another_submission_resets_image_inputs():
+    app_js = (REVIEW_DIR / "static" / "app.js").read_text()
+
+    select_body = app_js.split("function select(submission) {", 1)[1].split(
+        "\n}", 1
+    )[0]
+    assert "$('reviewer-image-attestation').checked = false;" in select_body
+    assert "$('reviewer-image-file').value = '';" in select_body
 
 
 def test_catalog_search_is_parameterized_and_bounded(tmp_path):

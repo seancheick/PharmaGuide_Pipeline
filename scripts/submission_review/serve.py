@@ -49,6 +49,7 @@ from stage_manifest import MANIFEST_NAME, select_stage_files  # noqa: E402
 BIND_HOST = "127.0.0.1"
 EDGE_FUNCTION_PATH = "/functions/v1/review-product-submissions"
 MAX_PROXY_BODY_BYTES = 2 * 1024 * 1024
+MAX_PHOTO_BODY_BYTES = 20 * 1024 * 1024
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 CATALOG_SEARCH_LIMIT = 20
 IDENTITY_INDEX_WARN_DAYS = 30
@@ -150,6 +151,33 @@ def canonical_gtin14_candidates(value: object) -> set[str]:
         if expanded is not None:
             candidates.add(expanded.rjust(14, "0"))
     return candidates
+
+
+def validate_submission_photo_url(value: object, supabase_url: str) -> str:
+    """Accept only signed private submission-photo URLs from this project."""
+    from urllib.parse import parse_qs, urlparse
+
+    raw = str(value or "").strip()
+    source = urlparse(raw)
+    project = urlparse(supabase_url)
+    photo_prefix = (
+        "/storage/v1/object/sign/product-submission-photos/"
+    )
+    query = parse_qs(source.query, keep_blank_values=True)
+    if (
+        source.scheme != "https"
+        or source.netloc != project.netloc
+        or source.username is not None
+        or source.password is not None
+        or not source.path.startswith(photo_prefix)
+        or source.path == photo_prefix
+        or source.fragment
+        or set(query) != {"token"}
+        or len(query["token"]) != 1
+        or not query["token"][0]
+    ):
+        raise ValueError("invalid submission photo URL")
+    return raw
 
 
 def _verify_gtin_fixture() -> None:
@@ -398,6 +426,11 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(STATIC_DIR), **kwargs)
 
+    def end_headers(self) -> None:
+        if not self.path.startswith("/api/"):
+            self.send_header("cache-control", "no-store")
+        super().end_headers()
+
     def _json(self, payload: object, status: int = 200) -> None:
         body = json.dumps(payload).encode()
         self.send_response(status)
@@ -456,7 +489,7 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):  # noqa: N802
-        if self.path not in {"/api/edge", "/api/dsld_refresh"}:
+        if self.path not in {"/api/edge", "/api/dsld_refresh", "/api/photo"}:
             self._json({"error": "not found"}, 404)
             return
         length = int(self.headers.get("content-length") or 0)
@@ -467,6 +500,34 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
         authorization = self.headers.get("authorization")
         if not authorization or not authorization.startswith("Bearer "):
             self._json({"error": "reviewer session required"}, 401)
+            return
+
+        if self.path == "/api/photo":
+            try:
+                payload = json.loads(body)
+                photo_url = validate_submission_photo_url(
+                    payload.get("signed_url"),
+                    self.supabase_url,
+                )
+                with urllib.request.urlopen(photo_url, timeout=30) as response:
+                    content_type = response.headers.get_content_type()
+                    photo = response.read(MAX_PHOTO_BODY_BYTES + 1)
+                if not content_type.startswith("image/"):
+                    raise ValueError("submission photo is not an image")
+                if len(photo) > MAX_PHOTO_BODY_BYTES:
+                    raise ValueError("submission photo is too large")
+            except (ValueError, json.JSONDecodeError):
+                self._json({"error": "invalid submission photo"}, 400)
+                return
+            except (urllib.error.HTTPError, OSError):
+                self._json({"error": "submission photo unavailable"}, 502)
+                return
+            self.send_response(200)
+            self.send_header("content-type", content_type)
+            self.send_header("cache-control", "no-store")
+            self.send_header("content-length", str(len(photo)))
+            self.end_headers()
+            self.wfile.write(photo)
             return
 
         if self.path == "/api/dsld_refresh":

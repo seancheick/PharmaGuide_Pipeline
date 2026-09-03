@@ -202,6 +202,8 @@ function select(submission) {
   state.identityRecorded = null;
   state.reviewerImages = [];
   state.productImage = null;
+  $('reviewer-image-attestation').checked = false;
+  $('reviewer-image-file').value = '';
   renderQueue();
   renderDetail();
   scheduleUrlRefresh();
@@ -819,11 +821,24 @@ async function uploadReplacementImage() {
   }
 }
 
+async function fetchReviewPhoto(signedUrl) {
+  const response = await fetch('/api/photo', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${state.session.access_token}`,
+    },
+    body: JSON.stringify({ signed_url: signedUrl }),
+  });
+  if (!response.ok) throw new Error('Photo could not be opened.');
+  return response.blob();
+}
+
 async function openLightbox(photo) {
   try {
-    const response = await fetch(photo.signed_url);
-    if (!response.ok) throw new Error('Photo could not be opened.');
-    state.lightboxImage = await createImageBitmap(await response.blob());
+    state.lightboxImage = await createImageBitmap(
+      await fetchReviewPhoto(photo.signed_url),
+    );
     state.lightboxPhoto = photo;
     state.lightboxRotation = 0;
     drawLightbox();
