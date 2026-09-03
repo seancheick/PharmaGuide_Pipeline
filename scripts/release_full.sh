@@ -486,8 +486,8 @@ run_strict_gate "form-note export artifact" \
 #
 # Skip when: dist/product_images/product_image_index.json exists, the dist/
 # catalog DB is not newer than that index, the DB already has
-# product-images-backed thumbnail paths for every PDF-label product, and the
-# corresponding .webp count is not short.
+# product-images-backed thumbnail paths and nonempty files for every eligible
+# DSLD PDF. Reviewer-approved submission photos are handled by the import lane.
 # ---------------------------------------------------------------------------
 
 step3_needs_run() {
@@ -500,39 +500,14 @@ step3_needs_run() {
   local status
   status="$(
     "$PG_PYTHON" - "$DIST_CATALOG" "$DIST_PRODUCT_IMAGES_DIR" <<'PY'
-import os
-import sqlite3
 import sys
 
-db_path, image_dir = sys.argv[1], sys.argv[2]
-conn = sqlite3.connect(db_path)
-try:
-    eligible = conn.execute(
-        "SELECT COUNT(*) FROM products_core "
-        "WHERE image_url IS NOT NULL AND image_url != '' "
-        "AND LOWER(image_url) LIKE '%.pdf'"
-    ).fetchone()[0]
-    backfilled = conn.execute(
-        "SELECT COUNT(*) FROM products_core "
-        "WHERE image_url IS NOT NULL AND image_url != '' "
-        "AND LOWER(image_url) LIKE '%.pdf' "
-        "AND image_thumbnail_url LIKE 'product-images/%'"
-    ).fetchone()[0]
-finally:
-    conn.close()
+sys.path.insert(0, "scripts")
+from extract_product_images import needs_image_extraction
 
-webp_count = 0
-if os.path.isdir(image_dir):
-    for name in os.listdir(image_dir):
-        if name.endswith(".webp"):
-            path = os.path.join(image_dir, name)
-            if os.path.isfile(path) and os.path.getsize(path) > 0:
-                webp_count += 1
-
-needs_run = backfilled < eligible or webp_count < eligible
-print("run" if needs_run else "skip")
+print("run" if needs_image_extraction(sys.argv[1], sys.argv[2]) else "skip")
 PY
-  )"
+  )" || return 0
   [[ "$status" == "run" ]]
 }
 

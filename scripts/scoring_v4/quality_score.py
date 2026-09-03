@@ -150,11 +150,15 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
     metadata = dim.get("metadata") if isinstance(dim, dict) else None
     if not isinstance(metadata, dict):
         return fallback
+    if metadata.get("reason_code") == "probiotic_afu_reference_unavailable":
+        return "AFU amounts are disclosed, but a compatible dose benchmark has not been verified."
     if metadata.get("window_proxy_reason") == "aggregate_cfu_not_per_strain":
         return (
             "Total CFU is disclosed, but without amounts for each strain, "
             "their doses can't be checked."
         )
+    if metadata.get("window_proxy_reason") == "per_strain_cfu_missing":
+        return "Dose adequacy could not be verified from the disclosed probiotic amounts."
     return fallback
 
 

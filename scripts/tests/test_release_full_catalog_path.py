@@ -17,6 +17,13 @@ def test_release_full_uses_only_gated_snapshot_for_catalog_mutation() -> None:
     assert '"$PG_PYTHON" scripts/release_catalog_artifact.py' not in source
 
 
+def test_release_image_probe_shares_extractor_eligibility() -> None:
+    source = SCRIPT.read_text().split("step3_needs_run()", 1)[1].split("if (( SKIP_PRODUCT_IMAGES", 1)[0]
+    assert "from extract_product_images import needs_image_extraction" in source
+    assert "SELECT COUNT(*)" not in source
+    assert ')" || return 0' in source  # probe errors must not silently skip work
+
+
 def test_release_full_enters_the_global_lock_before_any_release_gate() -> None:
     source = SCRIPT.read_text()
 

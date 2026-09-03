@@ -19,6 +19,7 @@ import re
 from typing import Any, Dict, Iterable, List, Set
 
 from scoring_input_contract import get_scoring_ingredients
+from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements
 
 
 PHASE_MARKER = "P2.2_probiotic_dose"
@@ -62,6 +63,20 @@ def score_dose(product: Any) -> Dict[str, Any]:
     capped v3 total from /5 to /15.
     """
     product = product if isinstance(product, dict) else {}
+    afu_rows = pending_afu_measurements(product)
+    if afu_rows:
+        return {
+            "score": None,
+            "max": CAP_DOSE,
+            "components": {},
+            "penalties": {},
+            "metadata": {
+                "phase": PHASE_MARKER,
+                "assessment_status": "unresolved_reference",
+                "reason_code": AFU_REVIEW_REASON,
+                "afu_measurements": afu_rows,
+            },
+        }
     pdata = _probiotic_payload(product)
     clinical_strains = _safe_list(pdata.get("clinical_strains"))
 

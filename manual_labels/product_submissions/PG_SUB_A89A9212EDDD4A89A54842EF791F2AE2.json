@@ -1,0 +1,242 @@
+{
+  "id": "PG_SUB_A89A9212EDDD4A89A54842EF791F2AE2",
+  "brandName": "Ritual",
+  "fullName": "Essential for Men Multivitamin 18+",
+  "ingredientRows": [
+    {
+      "category": "vitamin",
+      "forms": [
+        {
+          "name": "Retinyl Palmitate"
+        }
+      ],
+      "ingredientGroup": "Vitamin A",
+      "name": "Vitamin A (as retinyl palmitate)",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 180,
+          "unit": "mcg RAE"
+        }
+      ]
+    },
+    {
+      "category": "vitamin",
+      "forms": [
+        {
+          "name": "Cholecalciferol"
+        }
+      ],
+      "ingredientGroup": "Vitamin D",
+      "name": "Vitamin D (as cholecalciferol) [from Lichen (whole plant)]",
+      "nestedRows": [],
+      "notes": "Label also declares 2,000 IU.",
+      "quantity": [
+        {
+          "quantity": 50,
+          "unit": "mcg"
+        }
+      ]
+    },
+    {
+      "category": "vitamin",
+      "forms": [
+        {
+          "name": "Alpha-Tocopherol"
+        },
+        {
+          "name": "Mixed Tocopherols"
+        }
+      ],
+      "ingredientGroup": "Vitamin E",
+      "name": "Vitamin E (as alpha-tocopherol from mixed tocopherols) [from Brassica napus (seed)]",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 6.7,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "category": "vitamin",
+      "forms": [
+        {
+          "name": "6S-5-Methyltetrahydrofolate (Glucosamine Salt)"
+        }
+      ],
+      "ingredientGroup": "Folate",
+      "name": "Folate (as 6S-5-Methyltetrahydrofolate (glucosamine salt))",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 200,
+          "unit": "mcg DFE"
+        }
+      ]
+    },
+    {
+      "category": "vitamin",
+      "forms": [
+        {
+          "name": "Methylcobalamin"
+        }
+      ],
+      "ingredientGroup": "Vitamin B12",
+      "name": "Vitamin B12 (as methylcobalamin)",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 8,
+          "unit": "mcg"
+        }
+      ]
+    },
+    {
+      "category": "mineral",
+      "forms": [
+        {
+          "name": "Dimagnesium Malate"
+        }
+      ],
+      "ingredientGroup": "Magnesium",
+      "name": "Magnesium (as dimagnesium malate)",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 30,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "category": "mineral",
+      "forms": [
+        {
+          "name": "Zinc Bisglycinate"
+        }
+      ],
+      "ingredientGroup": "Zinc",
+      "name": "Zinc (as bisglycinate)",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 2.4,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "category": "fatty acid",
+      "forms": [
+        {
+          "name": "Schizochytrium sp. (whole microalgae)"
+        }
+      ],
+      "ingredientGroup": "DHA (Docosahexaenoic Acid)",
+      "name": "Omega-3 Docosahexaenoic Acid (DHA) Fatty Acid [from Schizochytrium sp. (whole microalgae)]",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 330,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "category": "mineral",
+      "forms": [
+        {
+          "name": "Calcium Fructoborate"
+        }
+      ],
+      "ingredientGroup": "Boron",
+      "name": "Boron (as calcium fructoborate)",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 0.7,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "category": "vitamin",
+      "forms": [
+        {
+          "name": "Menaquinone-7"
+        }
+      ],
+      "ingredientGroup": "Vitamin K",
+      "name": "Vitamin K2 (as Menaquinone-7)",
+      "nestedRows": [],
+      "quantity": [
+        {
+          "quantity": 90,
+          "unit": "mcg"
+        }
+      ]
+    }
+  ],
+  "offMarket": 0,
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Beadlets (cellulose, Non-GMO corn zein)"
+      },
+      {
+        "name": "stomach acid-resistant vegan capsule (hypromellose, gellan gum)"
+      },
+      {
+        "name": "silica."
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "name": "Delayed-release capsule"
+  },
+  "productType": {
+    "name": "Multivitamin dietary supplement"
+  },
+  "servingSizes": [
+    {
+      "maxDailyServings": 1,
+      "maxQuantity": 2,
+      "minDailyServings": 1,
+      "minQuantity": 2,
+      "unit": "Vegan Capsule(s)"
+    }
+  ],
+  "servingsPerContainer": 30,
+  "statements": [
+    {
+      "notes": "For men 18+. Take two capsules together daily, with or without food. Keep in a cool, dry place, out of direct sunlight.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "Consult your healthcare practitioner before using this product if you are using medications or have a medical condition.",
+      "type": "Precautions re: All Other"
+    }
+  ],
+  "upcSku": "0850031975026",
+  "src": "local/manual_labels/product_submissions/PG_SUB_A89A9212EDDD4A89A54842EF791F2AE2",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "a89a9212-eddd-4a89-a548-42ef791f2ae2",
+    "label_verified_at": "2026-09-03",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team",
+    "reviewer_record_id": "b735948d-46a7-421b-ae2c-749faff5f51b"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "a89a9212-eddd-4a89-a548-42ef791f2ae2",
+    "source_date": "2026-09-03",
+    "source_updated_date": "2026-09-03",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:a89a9212-eddd-4a89-a548-42ef791f2ae2",
+    "reviewed_at": "2026-09-03T14:40:01.406422+00:00"
+  }
+}

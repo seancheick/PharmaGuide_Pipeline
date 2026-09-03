@@ -99,6 +99,7 @@ from assessment_readiness import ASSESSMENT_READINESS_SCHEMA_VERSION
 from supplement_type_utils import mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement, percentile_label_for
 from form_factor_normalizer import canonicalize_form_factor
+from probiotic_measurements import collect_afu_measurements
 from inactive_ingredient_resolver import (
     InactiveIngredientResolver,
     active_form_duplicate_candidate,
@@ -16034,6 +16035,7 @@ class SupplementEnricherV3:
             "cfu_raw_source_path": cfu_raw_source_path,
             "cfu_evidence_scope": cfu_evidence_scope,
             "cfu_linked_rows": sorted(set(cfu_linked_rows)),
+            "afu_measurements": collect_afu_measurements(product),
             # Clinical and other data
             "clinical_strains": found_clinical_strains,
             "clinical_strain_count": len(found_clinical_strains),
@@ -16877,13 +16879,17 @@ class SupplementEnricherV3:
             Dict with serving_basis and form_factor at top level
         """
         serving_sizes = product.get('servingSizes', [])
-        physical_state = product.get('physicalState', {})
+        physical_state = product.get('physicalState') or {}
         statements = product.get('statements', [])
         user_groups = product.get('userGroups', [])
 
         # Determine form_factor from physicalState
         form_factor = None
-        langual_desc = physical_state.get('langualCodeDescription', '')
+        # Manual-label submissions use physicalState.name. Prefer the DSLD
+        # description when supplied, but normalize both through the same path.
+        langual_desc = str(physical_state.get('langualCodeDescription') or '').strip()
+        if not langual_desc:
+            langual_desc = str(physical_state.get('name') or '').strip()
         if langual_desc:
             form_factor = self._normalize_form_factor(langual_desc)
 

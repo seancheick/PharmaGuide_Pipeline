@@ -804,6 +804,29 @@ def test_release_train_refreshes_submissions_after_reference_data_change():
     assert 'SUBMISSION_ENRICH_MANIFEST=' in release
 
 
+@pytest.mark.parametrize("explicit_hold", [False, True])
+def test_submission_image_copy_distinguishes_review_hold_from_lost_catalog_row(tmp_path, explicit_hold):
+    from product_submission_import import copy_approved_product_images, materialize_approved_submissions
+
+    manual_dir = tmp_path / "manual"
+    materialize_approved_submissions([_export()], output_dir=manual_dir)
+    catalog = tmp_path / "pharmaguide_core.db"
+    with sqlite3.connect(catalog) as connection:
+        connection.execute("CREATE TABLE products_core (dsld_id TEXT, image_thumbnail_url TEXT)")
+    if explicit_hold:
+        (tmp_path / "export_manifest.json").write_text(json.dumps({
+            "excluded_by_gate": [{
+                "dsld_id": "PG_SUB_018F4C797C7E4C709D627FC3B9CE6A11",
+                "error": "review_queue: NOT_SCORED",
+            }],
+        }))
+    result = copy_approved_product_images(
+        output_dir=manual_dir, catalog_db=catalog, product_images_dir=tmp_path / "images",
+        rpc=lambda *_: pytest.fail("A missing catalog row must not fetch an image"),
+    )
+    assert result == {"copied": 0, "failed": 0 if explicit_hold else 1, "skipped": 1 if explicit_hold else 0}
+
+
 def test_release_train_registers_submission_images_before_cloud_sync():
     release = Path("scripts/release_full.sh").read_text(encoding="utf-8")
 

@@ -20,6 +20,7 @@ import io
 import json
 import logging
 import os
+import re
 import sqlite3
 import sys
 import time
@@ -256,7 +257,7 @@ def process_one(dsld_id: str, image_url: str, output_dir: str,
 
 
 def load_products_from_db(db_path: str) -> list[tuple[str, str]]:
-    """Return list of (dsld_id, image_url) where image_url ends in .pdf."""
+    """Return DSLD records with PDFs; submissions use reviewer-approved photos."""
     conn = sqlite3.connect(db_path)
     try:
         rows = conn.execute(
@@ -266,7 +267,28 @@ def load_products_from_db(db_path: str) -> list[tuple[str, str]]:
         ).fetchall()
     finally:
         conn.close()
-    return rows
+    return [(product_id, url) for product_id, url in rows
+            if re.fullmatch(r"[0-9]+", str(product_id))]
+
+
+def needs_image_extraction(db_path: str, image_dir: str) -> bool:
+    """Check the exact same DSLD targets the extractor will process.
+
+    Unrelated files or reviewer photos cannot compensate for a missing DSLD
+    thumbnail. Submission IDs with stale synthetic PDF URLs are never targets.
+    """
+    targets = load_products_from_db(db_path)
+    with sqlite3.connect(db_path) as conn:
+        thumbnails = dict(conn.execute(
+            "SELECT dsld_id, image_thumbnail_url FROM products_core"
+        ))
+    for product_id, _ in targets:
+        filename = f"{product_id}.webp"
+        path = os.path.join(image_dir, filename)
+        if (thumbnails.get(product_id) != f"product-images/{filename}"
+                or not os.path.isfile(path) or os.path.getsize(path) == 0):
+            return True
+    return False
 
 
 def run_extraction(

@@ -33,6 +33,7 @@ from assessment_readiness import (
     has_sports_primary_identity_signal,
 )
 from dose_assessment import has_incomplete_material_dose_assessment
+from probiotic_measurements import AFU_REVIEW_REASON
 from scoring_input_contract import classify_ingredient_roles, get_scoring_ingredients
 
 MULTI_DOSE_COVERAGE_MIN = 0.60
@@ -345,6 +346,7 @@ def _finalize(
     soft_missing: Optional[List[str]] = None,
     score_cap: Optional[float] = None,
     verdict_ceiling: Optional[str] = None,
+    reason: str = "incomplete_product_data",
 ) -> CompletenessResult:
     # Preserve first occurrence order while removing duplicates.
     unique_missing = list(dict.fromkeys(missing))
@@ -354,7 +356,7 @@ def _finalize(
         module=module,
         is_live_eligible=eligible,
         verdict=None if eligible else "NOT_SCORED",
-        reason=None if eligible else "incomplete_product_data",
+        reason=None if eligible else reason,
         missing_fields=unique_missing,
         mapped_coverage=round(mapped_coverage, 4),
         dose_coverage=dose_coverage,
@@ -614,6 +616,7 @@ def evaluate_completeness_gate_with_readiness(
         if strain_count <= 0:
             soft_missing.append("named_strain_not_disclosed")
         # Per-strain CFU and clinical-strain codes are soft fields.
+        dose_reason = _safe_dict(readiness.get("dose")).get("reason_code")
         return _finalize(
             module,
             missing,
@@ -623,6 +626,11 @@ def evaluate_completeness_gate_with_readiness(
             soft_missing=soft_missing,
             score_cap=score_cap,
             verdict_ceiling=verdict_ceiling,
+            reason=(
+                AFU_REVIEW_REASON
+                if "dose_assessment_readiness" in missing and dose_reason == AFU_REVIEW_REASON
+                else "incomplete_product_data"
+            ),
         )
 
     if module == "multi_or_prenatal":

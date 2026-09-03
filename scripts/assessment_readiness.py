@@ -13,6 +13,7 @@ import math
 import re
 from typing import Any, Dict, Iterable, List, Mapping
 
+from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements
 from scoring_input_contract import (
     ROLE_ADJUNCT,
     ROLE_CLAIM_PROMINENT,
@@ -858,6 +859,17 @@ def _dose_readiness(
     *,
     module: str,
 ) -> Dict[str, Any]:
+    afu_rows = pending_afu_measurements(product) if module == "probiotic" else []
+    if afu_rows:
+        return {
+            "readiness": READINESS_INCOMPLETE,
+            "collection_status": "unresolved_reference",
+            "assessment_source": "probiotic_afu_measurements",
+            "reason_code": AFU_REVIEW_REASON,
+            "incomplete_source_row_refs": sorted({row["source_row_ref"] for row in afu_rows}),
+            "measurements": afu_rows,
+        }
+
     def _number(value: Any) -> float | None:
         if isinstance(value, bool):
             return None

@@ -1,0 +1,362 @@
+{
+  "id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+  "brandName": "Seed",
+  "fullName": "DS-01 Daily Synbiotic",
+  "ingredientRows": [
+    {
+      "category": "blend",
+      "forms": [],
+      "ingredientGroup": "Probiotic Blend",
+      "name": "Digestive Health Probiotic Blend",
+      "nestedRows": [
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium longum",
+          "name": "B. longum SD-BB536-JP",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium breve",
+          "name": "B. breve SD-BR3-IT",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Lactiplantibacillus plantarum",
+          "name": "L. plantarum SD-LP1-IT",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Lacticaseibacillus rhamnosus",
+          "name": "L. rhamnosus SD-LR6-IT",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Lacticaseibacillus rhamnosus",
+          "name": "L. rhamnosus HRVD113-US",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium infantis",
+          "name": "B. infantis SD-M63-JP",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium lactis",
+          "name": "B. lactis SD-BS5-IT",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium lactis",
+          "name": "B. lactis HRVD524-US",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Lactobacillus crispatus",
+          "name": "L. crispatus SD-LCR01-IT",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Lacticaseibacillus casei",
+          "name": "L. casei HRVD300-US",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium breve",
+          "name": "B. breve HRVD521-US",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium longum",
+          "name": "B. longum HRVD90b-US",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium lactis",
+          "name": "B. lactis SD-150-BE",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Limosilactobacillus fermentum",
+          "name": "L. fermentum SD-LF8-IT",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Lacticaseibacillus rhamnosus",
+          "name": "L. rhamnosus SD-GG-BE",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Limosilactobacillus reuteri",
+          "name": "L. reuteri SD-RD830-FR",
+          "nestedRows": [],
+          "quantity": []
+        }
+      ],
+      "quantity": [
+        {
+          "quantity": 206,
+          "unit": "mg"
+        },
+        {
+          "quantity": 37,
+          "unit": "Billion AFU"
+        }
+      ]
+    },
+    {
+      "category": "blend",
+      "forms": [],
+      "ingredientGroup": "Probiotic Blend",
+      "name": "Micronutrient Synthesis Probiotic Blend",
+      "nestedRows": [
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium adolescentis",
+          "name": "B. adolescentis SD-BA5-IT",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Limosilactobacillus reuteri",
+          "name": "L. reuteri SD-LRE2-IT",
+          "nestedRows": [],
+          "quantity": []
+        }
+      ],
+      "quantity": [
+        {
+          "quantity": 46,
+          "unit": "mg"
+        },
+        {
+          "quantity": 8.05,
+          "unit": "Billion AFU"
+        }
+      ]
+    },
+    {
+      "category": "blend",
+      "forms": [],
+      "ingredientGroup": "Probiotic Blend",
+      "name": "Dermatological Health Probiotic Blend",
+      "nestedRows": [
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Ligilactobacillus salivarius",
+          "name": "L. salivarius SD-LS1-IT",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium lactis",
+          "name": "B. lactis SD-CECT8145-SP",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium longum",
+          "name": "B. longum SD-CECT7347-SP",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Lacticaseibacillus casei",
+          "name": "L. casei SD-CECT9104-SP",
+          "nestedRows": [],
+          "quantity": []
+        }
+      ],
+      "quantity": [
+        {
+          "quantity": 37,
+          "unit": "mg"
+        },
+        {
+          "quantity": 3.3,
+          "unit": "Billion AFU"
+        }
+      ]
+    },
+    {
+      "category": "blend",
+      "forms": [],
+      "ingredientGroup": "Probiotic Blend",
+      "name": "Cardiovascular Health Probiotic Blend",
+      "nestedRows": [
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Lactiplantibacillus plantarum",
+          "name": "L. plantarum SD-LPLDL-UK",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "category": "probiotic",
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium lactis",
+          "name": "B. lactis SD-MB2409-IT",
+          "nestedRows": [],
+          "quantity": []
+        }
+      ],
+      "quantity": [
+        {
+          "quantity": 18,
+          "unit": "mg"
+        },
+        {
+          "quantity": 5.25,
+          "unit": "Billion AFU"
+        }
+      ]
+    },
+    {
+      "category": "botanical",
+      "forms": [
+        {
+          "name": "Indian Pomegranate (Fruit)"
+        }
+      ],
+      "ingredientGroup": "Pomegranate",
+      "name": "MAPP Microbiota-Accessible Polyphenolic Precursors",
+      "nestedRows": [],
+      "notes": "Indian pomegranate fruit; greater than 40% polyphenolic bioactives.",
+      "quantity": [
+        {
+          "quantity": 400,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "offMarket": 0,
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Acid-Resistant Vegan Outer [chlorophyllin] and Inner [hypromellose, water] Capsules"
+      },
+      {
+        "name": "organic rice fiber"
+      },
+      {
+        "name": "organic rice extract blend."
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "name": "Capsule"
+  },
+  "productType": {
+    "name": "Probiotic + Prebiotic Supplement"
+  },
+  "servingSizes": [
+    {
+      "maxDailyServings": 1,
+      "maxQuantity": 2,
+      "minDailyServings": 1,
+      "minQuantity": 2,
+      "unit": "Capsule(s)"
+    }
+  ],
+  "servingsPerContainer": 30,
+  "statements": [
+    {
+      "notes": "For Optimal Use: Take two capsules at once, daily. No refrigeration necessary.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "If you are attempting to become, are pregnant or nursing, consult your healthcare provider before use.",
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications"
+    },
+    {
+      "notes": "Keep out of reach of children. Do not use if seal is broken.",
+      "type": "Precautions re: Children"
+    },
+    {
+      "notes": "Tested For: Dairy, gluten, soy, nuts, shellfish, sesame, glyphosate/AMPA, and 14 classes of allergens as defined by European Food and Safety Authority (EFSA).",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "type": "FDA Disclaimer Statement"
+    }
+  ],
+  "upcSku": "0860340001620",
+  "src": "local/manual_labels/product_submissions/PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "35e0bd33-74bf-494b-80fe-abe87fc559e7",
+    "label_verified_at": "2026-09-03",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team",
+    "reviewer_record_id": "b735948d-46a7-421b-ae2c-749faff5f51b"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "35e0bd33-74bf-494b-80fe-abe87fc559e7",
+    "source_date": "2026-09-03",
+    "source_updated_date": "2026-09-03",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:35e0bd33-74bf-494b-80fe-abe87fc559e7",
+    "reviewed_at": "2026-09-03T14:40:36.950594+00:00"
+  }
+}

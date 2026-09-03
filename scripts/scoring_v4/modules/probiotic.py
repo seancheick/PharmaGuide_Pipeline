@@ -171,6 +171,11 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     dose_dim.components = dose_payload["components"]
     dose_dim.penalties = dose_payload["penalties"]
     dose_dim.metadata = dose_payload.get("metadata", {})
+    if dose_dim.score is None:
+        # Production readiness stops this earlier. Direct module audits must
+        # also preserve an unresolved assessment instead of summing it as zero.
+        result.metadata["score_unavailable_reason"] = dose_dim.metadata.get("reason_code")
+        return result
 
     evidence_payload = score_evidence(product)
     evidence_dim = result.dimensions["evidence"]

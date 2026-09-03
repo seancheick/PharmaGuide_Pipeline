@@ -91,7 +91,7 @@ V4_SCORER_KEYS = (
 # classification-schema version, and the version+fingerprint of every config
 # rubric consumed. Bump SCORING_ENGINE_VERSION on a material ALGORITHM change;
 # config-value changes are captured by the per-rubric fingerprints, not here.
-SCORING_ENGINE_VERSION = "4.3.0"
+SCORING_ENGINE_VERSION = "4.3.1"
 SCORING_MODE = "production"
 
 
@@ -377,7 +377,11 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
                 "intentional_non_scoreable_product"
             )
         else:
-            result["score_unavailable_reason"] = "blocked_by_completeness_gate"
+            result["score_unavailable_reason"] = (
+                completeness.reason
+                if completeness.reason and completeness.reason != "incomplete_product_data"
+                else "blocked_by_completeness_gate"
+            )
         return result
 
     # Layer 3 — one dispatch/assembly seam for every routed module. The former

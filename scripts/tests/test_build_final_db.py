@@ -497,7 +497,8 @@ def test_build_final_db_streaming_path_preserves_last_write_wins_duplicates(monk
         assert manifest["detail_blob_count"] == 1
         assert manifest["detail_blob_unique_count"] == 1
         assert manifest["detail_index_checksum"].startswith("sha256:")
-        assert manifest["scoring_version"] == "4.3.0"
+        from score_supplements_v4 import SCORING_ENGINE_VERSION
+        assert manifest["scoring_version"] == SCORING_ENGINE_VERSION
         assert manifest["quality_score_config_checksum"].startswith("sha256:")
         assert "scoring_config_checksum" not in manifest
         assert "scoring_config_checksum" not in manifest["integrity"]

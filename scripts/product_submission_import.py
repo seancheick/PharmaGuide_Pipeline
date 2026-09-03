@@ -1109,7 +1109,7 @@ def _load_product_image_index(path: Path) -> dict[str, dict[str, object]]:
     return decoded
 
 
-def _refresh_catalog_manifest_checksum(catalog_db: Path) -> None:
+def _load_catalog_manifest(catalog_db: Path) -> dict | None:
     manifest_path = catalog_db.parent / "export_manifest.json"
     if not manifest_path.exists():
         return
@@ -1119,6 +1119,14 @@ def _refresh_catalog_manifest_checksum(catalog_db: Path) -> None:
         raise SubmissionImportError("catalog export manifest is unreadable") from exc
     if not isinstance(manifest, dict):
         raise SubmissionImportError("catalog export manifest is malformed")
+    return manifest
+
+
+def _refresh_catalog_manifest_checksum(catalog_db: Path) -> None:
+    manifest = _load_catalog_manifest(catalog_db)
+    if manifest is None:
+        return
+    manifest_path = catalog_db.parent / "export_manifest.json"
     digest = hashlib.sha256(catalog_db.read_bytes()).hexdigest()
     manifest["checksum"] = f"sha256:{digest}"
     manifest["checksum_sha256"] = digest
@@ -1149,6 +1157,12 @@ def copy_approved_product_images(
     catalog_path = Path(catalog_db)
     if not catalog_path.is_file():
         raise SubmissionImportError("catalog database is missing")
+    manifest = _load_catalog_manifest(catalog_path) or {}
+    excluded = manifest.get("excluded_by_gate") or []
+    held_ids = {
+        row.get("dsld_id") for row in excluded
+        if isinstance(row, dict) and isinstance(row.get("dsld_id"), str)
+    } if isinstance(excluded, list) else set()
 
     copied = 0
     failed = 0
@@ -1176,6 +1190,12 @@ def copy_approved_product_images(
                 (product_id,),
             ).fetchone()
             if existing is None:
+                if product_id in held_ids:
+                    # The scorer's explicit exclusion is authoritative. Label
+                    # approval does not guarantee readiness for catalog release.
+                    skipped += 1
+                    print(f"INFO: approved image deferred; catalog review hold: {product_id}", file=sys.stderr)
+                    continue
                 failed += 1
                 print(
                     f"WARNING: approved image skipped; catalog row missing: {product_id}",

@@ -9184,8 +9184,8 @@ class EnhancedDSLDNormalizer:
         return DSLDValidator.validate_upc_sku(upc)
     
     def _generate_image_url(self, thumbnail: str, product_id: str) -> str:
-        """Generate valid DSLD image URL"""
-        if not product_id:
+        """Only numeric DSLD records have a DSLD PDF; manual labels do not."""
+        if not re.fullmatch(r"[0-9]+", str(product_id or "")):
             return ""
         return DSLD_IMAGE_URL_TEMPLATE.format(product_id)
     

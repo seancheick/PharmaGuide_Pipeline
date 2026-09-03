@@ -1,13 +1,59 @@
 import os
 import json
 import sqlite3
+import pytest
 
 from extract_product_images import (
     backfill_image_thumbnail_urls,
     default_output_dir_for_db,
     parse_args,
     refresh_export_manifest_checksum,
+    load_products_from_db,
 )
+
+
+def test_dsld_pdf_extraction_excludes_submission_and_non_dsld_ids(tmp_path):
+    db_path = tmp_path / "catalog.db"
+    with sqlite3.connect(db_path) as conn:
+        conn.execute("CREATE TABLE products_core (dsld_id TEXT, image_url TEXT)")
+        conn.executemany("INSERT INTO products_core VALUES (?, ?)", [
+            ("12345", "https://api.ods.od.nih.gov/dsld/s3/pdf/12345.pdf"),
+            ("PG_SUB_12345", "https://api.ods.od.nih.gov/dsld/s3/pdf/PG_SUB_12345.pdf"),
+            ("MANUAL_12345", "https://api.ods.od.nih.gov/dsld/s3/pdf/MANUAL_12345.pdf"),
+        ])
+    assert load_products_from_db(str(db_path)) == [
+        ("12345", "https://api.ods.od.nih.gov/dsld/s3/pdf/12345.pdf"),
+    ]
+
+
+def test_cleaner_does_not_invent_dsld_pdf_for_submission():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer.__new__(EnhancedDSLDNormalizer)
+    assert normalizer._generate_image_url("", "PG_SUB_12345") == ""
+    assert normalizer._generate_image_url("", "12345").endswith("/12345.pdf")
+
+
+@pytest.mark.parametrize("missing", [False, True])
+def test_release_image_probe_uses_exact_dsld_targets_not_file_count(tmp_path, missing):
+    from extract_product_images import needs_image_extraction
+
+    db_path = tmp_path / "catalog.db"
+    with sqlite3.connect(db_path) as conn:
+        conn.execute("CREATE TABLE products_core (dsld_id TEXT, image_url TEXT, image_thumbnail_url TEXT)")
+        conn.executemany("INSERT INTO products_core VALUES (?, ?, ?)", [
+            ("12345", "https://api.ods.od.nih.gov/dsld/s3/pdf/12345.pdf", "product-images/12345.webp"),
+            ("PG_SUB_1", "https://api.ods.od.nih.gov/dsld/s3/pdf/PG_SUB_1.pdf", None),
+        ])
+    image_dir = tmp_path / "images"
+    image_dir.mkdir()
+    (image_dir / "unrelated.webp").write_bytes(b"webp")
+    if not missing:
+        (image_dir / "12345.webp").write_bytes(b"webp")
+    assert needs_image_extraction(str(db_path), str(image_dir)) is missing
+    with sqlite3.connect(db_path) as conn:
+        conn.execute("UPDATE products_core SET image_thumbnail_url = NULL WHERE dsld_id = '12345'")
+    assert needs_image_extraction(str(db_path), str(image_dir))
 
 
 def test_default_output_dir_lives_next_to_db():

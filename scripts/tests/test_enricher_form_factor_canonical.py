@@ -121,3 +121,20 @@ def test_canonical_field_present_in_returned_dict(enricher):
     assert "form_factor_canonical" in result
     assert isinstance(result["form_factor_canonical"], str)
     assert result["form_factor_canonical"]  # non-empty
+
+
+@pytest.mark.parametrize("description", [None, "", "   "])
+def test_submission_physical_state_name_is_used_when_description_missing(enricher, description):
+    product = _raw_product(physical_state={
+        "name": "Capsule", "langualCodeDescription": description,
+    })
+    result = enricher._collect_serving_basis_data(product)
+    assert result["form_factor_canonical"] == "capsule"
+    assert result["form_factor"] == "capsule"
+
+
+def test_dsld_physical_state_description_takes_precedence_over_name(enricher):
+    product = _raw_product(physical_state={
+        "name": "Capsule", "langualCodeDescription": "Softgel Capsule",
+    })
+    assert enricher._collect_serving_basis_data(product)["form_factor_canonical"] == "softgel"

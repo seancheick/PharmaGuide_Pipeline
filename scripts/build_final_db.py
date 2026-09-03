@@ -7811,6 +7811,10 @@ def build_detail_blob(
                 probiotic_data.get("detected_postbiotic_patterns")
             ),
         }
+        if probiotic_data.get("afu_measurements"):
+            blob["probiotic_detail"]["afu_measurements"] = safe_list(
+                probiotic_data["afu_measurements"]
+            )
 
     # Synergy cluster detail — matched clusters with ingredient doses
     formulation_data = safe_dict(enriched.get("formulation_data"))
