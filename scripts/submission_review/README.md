@@ -56,7 +56,8 @@ and is recorded in the immutable review-event audit trail.
 ## Review SLAs and judgment calls
 
 - Reject with a *retakeable* code (`photo_quality`, `missing_panel`,
-  `label_unreadable`) whenever better photos would fix it — the app tells
+  `label_unreadable`, `product_identity_mismatch`) whenever better or
+  product-matched photos would fix it — the app tells
   the user exactly what to redo.
 - `not_a_supplement` is for food, cosmetics, medical devices, and drugs.
 - When the label shows a product the catalog already has, prefer

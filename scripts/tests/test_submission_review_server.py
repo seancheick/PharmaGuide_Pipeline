@@ -305,3 +305,10 @@ def test_console_editor_picture_and_terminal_state_contracts():
     assert "setDecisionAvailability" in app_js
     assert "showModal()" in app_js
     assert "photo-lightbox" in styles
+
+
+def test_console_offers_a_typed_product_identity_mismatch_rejection():
+    index_html = (REVIEW_DIR / "static" / "index.html").read_text()
+
+    assert 'value="product_identity_mismatch"' in index_html
+    assert "Photos don’t match scanned product" in index_html
