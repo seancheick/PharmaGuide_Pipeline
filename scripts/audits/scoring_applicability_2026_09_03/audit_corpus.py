@@ -50,29 +50,63 @@ def summary(row):
 
 
 def load_baseline_report(path: Path, baseline: dict, input_hashes: dict) -> tuple[dict, str]:
-    """Overlay complete prior candidates only when their exact input corpus agrees."""
-    raw = path.read_bytes()
-    report = json.loads(raw)
-    if (not isinstance(report, dict) or report.get("complete") is not True
-            or report.get("product_count") != len(baseline)
-            or report.get("baseline_product_count") != len(baseline)
-            or report.get("input_hashes") != input_hashes or report.get("errors")):
-        raise ValueError("Baseline report is incomplete or does not prove the current input corpus")
-    overlays = {}
-    for section in ("changes", "canaries"):
-        rows = report.get(section)
-        if not isinstance(rows, list):
-            raise ValueError(f"Baseline report has invalid {section}")
-        for row in rows:
-            pid = str(row.get("id")) if isinstance(row, dict) else ""
-            candidate = row.get("candidate") if isinstance(row, dict) else None
-            if (pid not in baseline or not isinstance(candidate, dict)
-                    or set(candidate) != set(summary({}))):
-                raise ValueError(f"Baseline report has invalid candidate: {pid}")
-            if pid in overlays and overlays[pid] != candidate:
-                raise ValueError(f"Baseline report has conflicting candidates: {pid}")
-            overlays[pid] = candidate
-    return {**baseline, **overlays}, hashlib.sha256(raw).hexdigest()
+    """Reconstruct authenticated ancestor candidates before applying child deltas.
+
+    Reports omit unchanged non-canaries, so a child is not a standalone overlay
+    on shipped artifacts. Every ancestor must prove the same complete corpus.
+    """
+    ancestors: set[Path] = set()
+
+    def load(current: Path, expected_digest: str | None = None) -> tuple[dict, str]:
+        current = current.resolve()
+        if current in ancestors:
+            raise ValueError(f"Baseline report chain contains a cycle: {current}")
+        ancestors.add(current)
+        try:
+            raw = current.read_bytes()
+            report = json.loads(raw)
+        except (OSError, ValueError) as exc:
+            raise ValueError(f"Baseline report cannot be read: {current}") from exc
+        digest = hashlib.sha256(raw).hexdigest()
+        if expected_digest is not None and digest != expected_digest:
+            raise ValueError(f"Baseline parent report hash mismatch: {current}")
+        if (not isinstance(report, dict) or report.get("complete") is not True
+                or report.get("product_count") != len(baseline)
+                or report.get("baseline_product_count") != len(baseline)
+                or report.get("input_hashes") != input_hashes or report.get("errors")):
+            raise ValueError("Baseline report is incomplete or does not prove the current input corpus")
+
+        inherited = baseline
+        parent = report.get("baseline_report")
+        parent_digest = report.get("baseline_report_sha256")
+        if parent is not None:
+            if (not isinstance(parent, str) or not parent.strip()
+                    or not isinstance(parent_digest, str) or not parent_digest):
+                raise ValueError("Baseline parent report requires a path and hash")
+            parent_path = Path(parent)
+            if not parent_path.is_absolute():
+                parent_path = current.parent / parent_path
+            inherited, _ = load(parent_path, parent_digest)
+        elif parent_digest is not None:
+            raise ValueError("Baseline parent hash has no report path")
+
+        overlays = {}
+        for section in ("changes", "canaries"):
+            rows = report.get(section)
+            if not isinstance(rows, list):
+                raise ValueError(f"Baseline report has invalid {section}")
+            for row in rows:
+                pid = str(row.get("id")) if isinstance(row, dict) else ""
+                candidate = row.get("candidate") if isinstance(row, dict) else None
+                if (pid not in baseline or not isinstance(candidate, dict)
+                        or set(candidate) != set(summary({}))):
+                    raise ValueError(f"Baseline report has invalid candidate: {pid}")
+                if pid in overlays and overlays[pid] != candidate:
+                    raise ValueError(f"Baseline report has conflicting candidates: {pid}")
+                overlays[pid] = candidate
+        return {**inherited, **overlays}, digest
+
+    return load(path)
 
 
 def parse_target_ids(value: str | None) -> set[str] | None:
@@ -114,9 +148,12 @@ def strain_summary(product):
             for row in (product.get("probiotic_data") or {}).get("clinical_strains", [])]
 
 
-def init_worker(implementation_root: str | Path = ROOT) -> None:
-    """Load the selected implementation while retaining ROOT for source inputs."""
-    global ENRICHER
+def init_worker(implementation_root: str | Path = ROOT,
+                input_root: str | Path | None = None) -> None:
+    """Keep source inputs separate from the implementation in spawned workers."""
+    global ENRICHER, ROOT
+    if input_root is not None:
+        ROOT = Path(input_root).resolve()
     implementation_root = Path(implementation_root).resolve()
     sys.path.insert(0, str(implementation_root / "scripts"))
     logging.disable(logging.CRITICAL)
@@ -203,19 +240,24 @@ def main():
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--baseline-report", type=Path, help="Complete prior report for the identical input corpus")
     parser.add_argument("--target-ids", type=parse_target_ids, help="Comma-separated IDs; process only these products")
+    parser.add_argument("--input-root", type=Path, default=ROOT,
+                        help="Checkout containing the manifest-owned source product inputs")
     parser.add_argument("--implementation-root", type=Path, default=ROOT,
-                        help="Implementation/code/data checkout; source product inputs remain in this repository")
+                        help="Implementation/code/data checkout, independent of source product inputs")
     args = parser.parse_args()
     if not 1 <= args.workers <= 2:
         parser.error("Use one or two bounded workers")
     implementation_root = args.implementation_root.resolve()
+    input_root = args.input_root.resolve()
     if not (implementation_root / "scripts/enrich_supplements_v3.py").is_file():
         parser.error("Implementation root does not contain scripts/enrich_supplements_v3.py")
-    if args.baseline_report and args.baseline_report.resolve() == args.output.resolve():
-        parser.error("Output must not replace the baseline report")
-    enriched_files = select_stage_files((ROOT / "scripts/products").glob("output_*_enriched/enriched"), "enrich", require_manifest=True)
-    scored_files = select_stage_files((ROOT / "scripts/products").glob("output_*_scored/scored"), "score", require_manifest=True)
-    cleaned_files = select_stage_files((ROOT / "scripts/products").glob("output_*/cleaned"), "clean", require_manifest=True)
+    if not (input_root / "scripts/products").is_dir():
+        parser.error("Input root does not contain scripts/products")
+    if args.output.exists():
+        parser.error("Output must be a new path; existing reports must not be replaced")
+    enriched_files = select_stage_files((input_root / "scripts/products").glob("output_*_enriched/enriched"), "enrich", require_manifest=True)
+    scored_files = select_stage_files((input_root / "scripts/products").glob("output_*_scored/scored"), "score", require_manifest=True)
+    cleaned_files = select_stage_files((input_root / "scripts/products").glob("output_*/cleaned"), "clean", require_manifest=True)
     baseline, buckets = {}, defaultdict(list)
     for f in scored_files:
         for row in json.loads(f.read_text()):
@@ -231,8 +273,9 @@ def main():
                  "307727", "307728", "337852"}
     selected |= REVIEW_TARGET_IDS
     selected &= set(baseline)
-    sources = {str(p.relative_to(ROOT)): sha(p) for p in enriched_files + scored_files + cleaned_files}
+    sources = {str(p.relative_to(input_root)): sha(p) for p in enriched_files + scored_files + cleaned_files}
     baseline_digest = None
+    source_baseline = baseline
     if args.baseline_report:
         baseline, baseline_digest = load_baseline_report(args.baseline_report, baseline, sources)
     full_baseline_count = len(baseline)
@@ -245,9 +288,9 @@ def main():
     code = implementation_hashes(implementation_root)
     runner_hashes = {str(p.resolve()): sha(p) for p in (Path(__file__), ROOT / "scripts/stage_manifest.py")}
     report = {"kind": "read_only_enriched_corpus_impact_audit", "complete": False,
-              "baseline_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+              "baseline_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=input_root, text=True).strip(),
               "input_hashes": sources, "candidate_code_hashes": code,
-              "input_root": str(ROOT), "implementation_root": str(implementation_root),
+              "input_root": str(input_root), "implementation_root": str(implementation_root),
               "audit_runner_hashes": runner_hashes,
               "baseline_report": str(args.baseline_report.resolve()) if args.baseline_report else None,
               "baseline_report_sha256": baseline_digest,
@@ -259,12 +302,14 @@ def main():
               "full_reenrichment_ids": sorted(selected), "baseline_product_count": len(baseline),
               "changes": [], "canaries": [], "errors": []}
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(report, indent=2)+"\n")
+    # Exclusive creation also rejects a collision after the preflight check.
+    with args.output.open("x") as handle:
+        handle.write(json.dumps(report, indent=2)+"\n")
     start, seen = time.monotonic(), set()
     transitions = Counter()
     rejected = Counter()
     with ProcessPoolExecutor(max_workers=args.workers, initializer=init_worker, mp_context=get_context("spawn"),
-                             initargs=(str(implementation_root),)) as pool:
+                             initargs=(str(implementation_root), str(input_root))) as pool:
         tasks = [(str(f), selected, args.target_ids) for f in enriched_files]
         for index, batch in enumerate(pool.map(process_file, tasks), 1):
             for row in batch:
@@ -285,7 +330,7 @@ def main():
     if seen != set(baseline):
         raise RuntimeError("Baseline/candidate product sets differ")
     for name, digest in sources.items():
-        if sha(ROOT / name) != digest:
+        if sha(input_root / name) != digest:
             raise RuntimeError(f"Source changed during audit: {name}")
     for name, digest in code.items():
         if sha(implementation_root / name) != digest:
@@ -293,8 +338,12 @@ def main():
     for name, digest in runner_hashes.items():
         if sha(name) != digest:
             raise RuntimeError(f"Audit runner changed during audit: {name}")
-    if args.baseline_report and sha(args.baseline_report) != baseline_digest:
-        raise RuntimeError("Baseline report changed during audit")
+    if args.baseline_report:
+        # The immediate report can stay unchanged while a transitive ancestor
+        # is replaced. Revalidate every link before declaring the replay complete.
+        _, latest_digest = load_baseline_report(args.baseline_report, source_baseline, sources)
+        if latest_digest != baseline_digest:
+            raise RuntimeError("Baseline report changed during audit")
     report.update(complete=True, product_count=len(seen), elapsed_seconds=round(time.monotonic()-start, 1),
                   status_transitions={f"{a}->{b}": n for (a,b),n in transitions.items()},
                   rejected_evidence_reasons=dict(rejected))
