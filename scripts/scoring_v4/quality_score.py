@@ -555,7 +555,15 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     score = _num(dim.get("score"))
     val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
     reason = _reason_formulation(_band(val, weight))
-    if (dim.get("metadata", {}).get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula":
+    meta = dim.get("metadata") or {}
+    assessed_count = meta.get("iqm_form_quality_assessed_count")
+    if (
+        type(assessed_count) is int and assessed_count == 0
+        and not meta.get("botanical_profile_applied")
+        and not meta.get("collagen_profile_applied")
+    ):
+        reason = "Ingredient-form quality is not rated in PharmaGuide's current data."
+    if (meta.get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula":
         reason = "The reviewed commercial formula matches the reported strain composition, total AFU potency and prebiotic."
     if archetype == "omega":
         reason = _omega_formulation_reason(dim, reason)

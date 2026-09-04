@@ -240,18 +240,19 @@ PHASE_MARKER_COMPLETE = "P1.3.1b_formulation_complete"
 # --- A1 bio_score ---------------------------------------------------------
 
 
-def _score_bio_score(product: Dict[str, Any]) -> float:
-    """Average bio_score across scorable active ingredients. Already on
-    the 0-15 scale, so the dimension contribution = avg directly (no
-    rescale, vs v3 where avg/15 * 18). Returns 0 when no scorable ings."""
+def _bio_score_assessment(product: Dict[str, Any]) -> tuple[float, int]:
+    """Return the unchanged A1 average and the count of available form ratings.
+
+    No rating and an explicit zero both contribute zero numerically, but they
+    must not produce the same consumer explanation. Use the same eligible
+    rows and bio_score reader for both the arithmetic and that distinction.
+    """
     scorable = scorable_ingredients(product, allow_sole_mapped_blend=True)
-    if not scorable:
-        return 0.0
     scores = [s for s in (bio_score_of(i) for i in scorable) if s is not None]
     if not scores:
-        return 0.0
+        return 0.0, 0
     avg = sum(scores) / len(scores)
-    return _clamp(0.0, CAP_BIO_SCORE, avg)
+    return _clamp(0.0, CAP_BIO_SCORE, avg), len(scores)
 
 
 # --- A2 premium forms -----------------------------------------------------
@@ -790,8 +791,9 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(product, dict):
         product = {}
 
+    bio_score, form_assessed_count = _bio_score_assessment(product)
     components: Dict[str, float] = {
-        "A1_bio_score":               round(_score_bio_score(product), 4),
+        "A1_bio_score":               round(bio_score, 4),
         "A2_premium_forms":           round(_score_premium_forms(product), 4),
         "A3_delivery_system":         round(_score_delivery_system(product), 4),
         "A4_absorption_enhancer":     round(_score_absorption_enhancer(product), 4),
@@ -928,6 +930,7 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
             "phase": PHASE_MARKER_COMPLETE,
             "deferred_components": [],
             "deferred_penalties": [],
+            "iqm_form_quality_assessed_count": form_assessed_count,
             "botanical_profile_applied": bool(botanical_formulation),
             "botanical_formulation": botanical_formulation.get("components", {}),
             "collagen_profile_applied": bool(collagen_formulation),

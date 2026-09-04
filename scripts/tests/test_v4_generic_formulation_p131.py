@@ -99,6 +99,46 @@ def _product(
     return product
 
 
+@pytest.mark.parametrize("bio_score,assessed_count", [(None, 0), (0.0, 1), (14.0, 1)])
+def test_unrated_form_is_not_described_as_low_quality(bio_score, assessed_count):
+    from scoring_v4.modules.generic_formulation import score_formulation
+    from scoring_v4.quality_score import assemble_quality_score
+
+    product = _product(ingredients=[_ingredient(bio_score=bio_score)])
+    dim = score_formulation(product)
+    result = assemble_quality_score({
+        "raw_score_v4_100": 0.0,
+        "v4_verdict": "SAFE",
+        "v4_module": "generic",
+        "v4_breakdown": {"module": {"dimensions": {"formulation": dim}}},
+    })
+
+    assert dim["metadata"]["iqm_form_quality_assessed_count"] == assessed_count
+    assert dim["components"]["A1_bio_score"] == (bio_score or 0.0)
+    reason = result["quality_pillars_v4"]["formulation"]["reason"]
+    if bio_score is None:
+        assert reason == "Ingredient-form quality is not rated in PharmaGuide's current data."
+    else:
+        assert "not rated" not in reason
+
+
+@pytest.mark.parametrize("profile", ["botanical_profile_applied", "collagen_profile_applied"])
+def test_non_iqm_form_assessment_keeps_its_quality_explanation(profile):
+    from scoring_v4.quality_score import assemble_quality_score
+
+    result = assemble_quality_score({
+        "raw_score_v4_100": 0.0,
+        "v4_verdict": "SAFE",
+        "v4_module": "generic",
+        "v4_breakdown": {"module": {"dimensions": {"formulation": {
+            "score": 25.0, "max": 30.0,
+            "metadata": {"iqm_form_quality_assessed_count": 0, profile: True},
+        }}}},
+    })
+
+    assert "not rated" not in result["quality_pillars_v4"]["formulation"]["reason"]
+
+
 # --- A1 bio_score ---------------------------------------------------------
 
 
