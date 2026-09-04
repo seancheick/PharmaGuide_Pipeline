@@ -557,7 +557,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.1.0-probiotic-applicability"
+    assert out["quality_score_version"] == "1.1.1-probiotic-label-dose"
 
 
 def test_public_quality_cap_limits_score_without_changing_raw() -> None:

@@ -44,11 +44,11 @@ ORIGINAL = {
     },
     "probiotic": {
         "cap_dose": 25.0, "cap_per_strain_cfu_disclosure": 10.0, "cap_cfu_adequacy": 15.0,
-        "cap_aggregate_cfu_proxy_adequacy": 11.0, "aggregate_cfu_low_tier_presence_floor": 2.0,
+        # 2026-09-04: remove invented allocations / clinical support from Dose.
+        "aggregate_cfu_low_tier_presence_floor": 2.0,
         "aggregate_cfu_low_named_strain_total_floor": 4.0, "cap_direct_strain_mass_floor": 5.0,
         "v3_cfu_adequacy_cap": 5.0,
         "tier_points": {"low": 0.0, "adequate": 1.0, "good": 2.0, "excellent": 3.0},
-        "support_level_caps": {"high": 1.0, "moderate": 0.75, "weak": 0.5},
     },
     "omega": {"cap_dose": 25.0},
     "sports": {"dimension_cap": 25.0},
@@ -85,7 +85,7 @@ def test_runtime_constants_read_from_config_no_drift():
     assert multi_prenatal_dose.CRITICAL_MIN_PCT_RDA == DM["multi_prenatal"]["critical_min_pct_rda"]
     assert multi_prenatal_dose.PANEL_BREADTH_FULL_COUNT == 18
     assert probiotic_dose.TIER_POINTS == DM["probiotic"]["tier_points"]
-    assert probiotic_dose.SUPPORT_LEVEL_CAPS == DM["probiotic"]["support_level_caps"]
+    assert "support_level_caps" not in DM["probiotic"]
     assert probiotic_dose.CAP_CFU_ADEQUACY == 15.0
     assert omega_dose.CAP_DOSE == 25.0
     assert sports_dose.DIMENSION_CAP == 25.0

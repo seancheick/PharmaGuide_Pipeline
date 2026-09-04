@@ -15,7 +15,7 @@ from pathlib import Path
 from clinical_applicability import reviewed_entries
 from normalization import normalize_text
 from serving_frequency import resolve_daily_serving_range
-from probiotic_measurements import strain_cfu_tier, clinical_strain_research_scope
+from probiotic_measurements import strain_cfu_tier, clinical_strain_research_scope, normalized_cfu_count
 
 
 def _key(value):
@@ -300,27 +300,89 @@ def clinical_strain_matches_source_row(product: Mapping, clinical: Mapping, row:
     return len(owner_refs) == 1
 
 
-def independent_clinical_strains(product: Mapping) -> list[dict]:
-    """Admit only enrichment identities backed by current independent review."""
+def consolidated_native_strains(product: Mapping) -> list[dict]:
+    """One projection per source/identity, including rejected diagnostic rows.
+
+    Duplicate projections are not independent reviews. Keep agreed fields;
+    disputed review metadata fails closed, while physical exclusion flags and
+    their explanations survive. Never select a review by input order.
+    """
     pdata = product.get("probiotic_data") or product.get("probiotic_detail") or {}
-    if not isinstance(pdata, Mapping) or not isinstance(pdata.get("clinical_strains"), list):
+    rows = pdata.get("clinical_strains") if isinstance(pdata, Mapping) else None
+    if not isinstance(rows, list):
         return []
+    groups = {}
+    for index, row in enumerate(rows):
+        if not isinstance(row, dict):
+            continue
+        cid, ref = row.get("clinical_id"), row.get("source_row_ref")
+        if isinstance(cid, str) and cid and (ref is None or isinstance(ref, str)):
+            key = (cid, ref, None if ref else _key(row.get("strain")))
+        else:
+            key = (index,)
+        groups.setdefault(key, []).append(row)
+    review_fields = {
+        "dr_pham_signoff", "review_status", "research_match_status",
+        "evidence_scope", "human_evidence", "clinical_support_level",
+        "evidence_level", "indication_primary", "source_urls", "source_count",
+    }
+    result = []
+    for group in groups.values():
+        first = group[0]
+        if all(row == first for row in group):
+            result.append(first)
+            continue
+        fields = set().union(*(row.keys() for row in group))
+        conflicts = sorted(k for k in fields if any(
+            k not in row or k not in first or row[k] != first[k] for row in group))
+        merged = {k: first[k] for k in sorted(fields - set(conflicts))}
+        merged["projection_conflict_fields"] = conflicts
+        for flag in ("is_blocked", "is_inactivated", "is_postbiotic"):
+            if any(row.get(flag) for row in group):
+                merged[flag] = True
+        for note in ("block_reason", "postbiotic_note"):
+            values = sorted({row[note] for row in group
+                             if isinstance(row.get(note), str) and row[note]})
+            if values:
+                merged[note] = "; ".join(values)
+        if review_fields.intersection(conflicts) or merged.get("is_blocked"):
+            merged.update(review_status="pending_review", dr_pham_signoff=False,
+                          research_match_status="rejected" if merged.get("is_blocked") else "pending_review",
+                          clinical_support_level=None)
+        result.append(merged)
+    return result
+
+
+def label_owned_native_strains(product: Mapping) -> list[dict]:
+    """Prove label identities once, independently of clinical-source review.
+
+    An evidence hold does not erase a strain printed on the label. Conversely,
+    a registry ID alone cannot supply an identity, an owner or a dose.
+    """
     registry = _clinical_strain_registry()
-    independent = []
-    for row in pdata["clinical_strains"]:
-        if not isinstance(row, dict) or not isinstance(row.get("clinical_id"), str):
+    matched = []
+    for row in consolidated_native_strains(product):
+        if not isinstance(row.get("clinical_id"), str):
             continue
         reference = registry.get(row["clinical_id"])
-        if not reference:
+        if not reference or row.get("is_blocked"):
             continue
-        identity = row.get("strain") or row.get("standard_name") or row.get("name")
-        if not clinical_strain_identity_matches(identity, reference):
+        if not clinical_strain_identity_matches(row.get("strain"), reference):
             continue
-        if "source_row_ref" in row:
-            if not clinical_strain_matches_source_row(
-                product, row, {"raw_source_path": row["source_row_ref"]}
-            ):
-                continue
+        if not clinical_strain_matches_source_row(product, row, {
+            "raw_source_path": row.get("source_row_ref"), "name": row.get("strain")
+        }):
+            continue
+        matched.append(row)
+    return matched
+
+
+def independent_clinical_strains(product: Mapping) -> list[dict]:
+    """Admit only label identities backed by current independent review."""
+    registry = _clinical_strain_registry()
+    independent = []
+    for row in label_owned_native_strains(product):
+        reference = registry[row["clinical_id"]]
         thresholds = reference.get("cfu_thresholds") or {}
         evidence = thresholds.get("evidence") or {}
         validation = evidence.get("clinical_validation") or {}
@@ -353,6 +415,10 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
     """
     if not product.get("probiotic_data") and isinstance(product.get("probiotic_detail"), Mapping):
         product = {**product, "probiotic_data": product["probiotic_detail"]}
+    pdata = product.get("probiotic_data")
+    if isinstance(pdata, Mapping):
+        product = {**product, "probiotic_data": {
+            **pdata, "clinical_strains": consolidated_native_strains(product)}}
     formula = assess_studied_formula(product)
     registry = _clinical_strain_registry()
     accepted = {id(row) for row in independent_clinical_strains(product)
@@ -403,19 +469,32 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
     return {"formula_assessment": formula, "strain_assessments": results}
 
 
-def assessed_native_strain_doses(product: Mapping) -> list[dict]:
-    """Project the shared assessment to the existing Dose arithmetic interface."""
-    assessment = assess_probiotic_evidence(product)
-    by_owner = {(r["clinical_id"], r["source_row_ref"]): r
-                for r in assessment["strain_assessments"] if r["research_accepted"]}
-    return [{**row, "cfu_per_day": assessed["cfu_per_day"],
-             "adequacy_tier": assessed["industry_adequacy_tier"],
-             "clinical_support_level": assessed["support_level"]}
-            for row in independent_clinical_strains(product)
-            if (assessed := by_owner.get((row.get("clinical_id"), row.get("source_row_ref"))))]
+def measured_native_strain_doses(product: Mapping) -> list[dict]:
+    """Label-owned daily potency, not clinical applicability or source approval."""
+    registry = _clinical_strain_registry()
+    measured = []
+    for row in label_owned_native_strains(product):
+        daily_range = _owned_daily_cfu_range(product, row)
+        cfu = daily_range[0] if daily_range is not None else None
+        thresholds = registry[row["clinical_id"]].get("cfu_thresholds") or {}
+        measured.append({"clinical_id": row["clinical_id"], "strain": row["strain"],
+            "source_row_ref": row.get("source_row_ref"), "cfu_per_day": cfu,
+            "maximum_cfu_per_day": daily_range[1] if daily_range is not None else None,
+            "adequacy_tier": strain_cfu_tier(cfu, thresholds.get("tiers_cfu_per_day")),
+            "is_inactivated": bool(row.get("is_inactivated")),
+            "is_postbiotic": bool(row.get("is_postbiotic"))})
+    return measured
 
 
 def _owned_daily_cfu(product: Mapping, row: Mapping) -> float | None:
+    """A discrete daily dose for trial applicability; a range is not one dose."""
+    daily_range = _owned_daily_cfu_range(product, row)
+    if daily_range is None or daily_range[0] != daily_range[1]:
+        return None
+    return daily_range[0]
+
+
+def _owned_daily_cfu_range(product: Mapping, row: Mapping) -> tuple[float, float] | None:
     """Use the existing CFU producer's unique row-level measure, never its total.
 
     The legacy clinical row's cfu_per_day is actually a per-serving stamp. Join
@@ -427,23 +506,27 @@ def _owned_daily_cfu(product: Mapping, row: Mapping) -> float | None:
             product, row, {"raw_source_path": ref}):
         return None
     blends = (product.get("probiotic_data") or {}).get("probiotic_blends") or []
-    measures = []
+    measures = set()
     for blend in blends:
         if not isinstance(blend, Mapping) or blend.get("raw_source_path") != ref:
             continue
         measure = blend.get("cfu_data") or {}
         if (len(blend.get("strains") or []) != 1 or not isinstance(measure, Mapping)
+                or _key(normalize_text(str(blend["strains"][0]))) != _key(normalize_text(
+                    str(row.get("label_name") or row.get("strain") or "")))
                 or measure.get("raw_source_path") != ref
                 or measure.get("evidence_scope") != "row_level"):
             return None
-        measures.append(_number(measure.get("cfu_count")))
+        measures.add(normalized_cfu_count(measure) if measure.get("has_cfu") is True else None)
     basis = product.get("serving_basis") or {}
     lower, upper, _ = resolve_daily_serving_range(dict(product))
-    if (len(measures) != 1 or measures[0] is None or measures[0] <= 0
+    if (len(measures) != 1 or None in measures
             or not isinstance(basis, Mapping) or not basis.get("servings_per_day_source")
-            or lower != upper or lower <= 0):
+            or lower <= 0):
         return None
-    return measures[0] * lower
+    amount = next(iter(measures))
+    minimum, maximum = _number(amount * lower), _number(amount * upper)
+    return (minimum, maximum) if minimum is not None and maximum is not None else None
 
 
 def strain_assessments_for_match(entry: Mapping, assessment: Mapping) -> list[dict]:

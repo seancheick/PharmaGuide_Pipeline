@@ -13,7 +13,7 @@ import math
 import re
 from typing import Any, Dict, Iterable, List, Mapping
 
-from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements
+from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu
 from scoring_input_contract import (
     ROLE_ADJUNCT,
     ROLE_CLAIM_PROMINENT,
@@ -1111,11 +1111,7 @@ def _dose_readiness(
         probiotic = _safe_dict(
             product.get("probiotic_data") or product.get("probiotic_detail")
         )
-        try:
-            total_billion = float(probiotic.get("total_billion_count") or 0.0)
-        except (TypeError, ValueError):
-            total_billion = 0.0
-        if total_billion > 0:
+        if declared_total_cfu(probiotic) > 0:
             return {
                 "readiness": READINESS_COMPLETE,
                 "collection_status": "module_complete",

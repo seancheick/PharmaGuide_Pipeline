@@ -309,14 +309,6 @@ def positive_number(row: Mapping[str, Any]) -> float | None:
     return None
 
 
-def _number(value: Any) -> float:
-    try:
-        number = float(value)
-    except (TypeError, ValueError):
-        return 0.0
-    return number if number > 0 else 0.0
-
-
 def _probiotic_features(
     product: Mapping[str, Any],
     label_text: str,
@@ -333,9 +325,10 @@ def _probiotic_features(
         for row in blends
         if (row.get("strain_identity_texts") or row.get("strains"))
     )
-    total_cfu = _number(payload.get("total_cfu"))
-    total_billion = _number(payload.get("total_billion_count"))
-    has_cfu = bool(payload.get("has_cfu")) or total_cfu > 0 or total_billion > 0
+    from probiotic_measurements import declared_total_cfu
+    total_cfu = declared_total_cfu(payload)
+    total_billion = total_cfu / 1e9
+    has_cfu = total_cfu > 0
     return {
         "probiotic_label_intent": bool(_PROBIOTIC_LABEL_RE.search(label_text)),
         "probiotic_primary_type": primary_type == "probiotic",

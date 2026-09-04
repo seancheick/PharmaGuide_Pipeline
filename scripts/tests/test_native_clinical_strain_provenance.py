@@ -356,7 +356,7 @@ def test_reviewed_formula_reference_cannot_be_spoofed_as_independent_strain(
     assert independent_clinical_strains(product) == []
 
 
-def test_pending_strain_dose_keeps_disclosure_without_clinical_adequacy() -> None:
+def test_pending_strain_keeps_label_potency_without_clinical_adequacy() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     product = _owned_product(
@@ -374,12 +374,13 @@ def test_pending_strain_dose_keeps_disclosure_without_clinical_adequacy() -> Non
 
     dose = score_dose(product)
     assert dose["components"]["per_strain_cfu_disclosure"] == 10
-    assert dose["components"]["cfu_adequacy"] == 0
+    assert dose["components"]["cfu_adequacy"] == 6
+    assert score_evidence(product)["components"]["dose_applicability"] == 0
 
 
 def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None:
     from scoring_v4.modules.probiotic_dose import (
-        AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR,
+        AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR,
         score_dose,
     )
 
@@ -397,13 +398,13 @@ def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None
 
     dose = score_dose(product)
     assert dose["components"]["per_strain_cfu_disclosure"] == 0
-    assert dose["components"]["cfu_adequacy"] == AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR
+    assert dose["components"]["cfu_adequacy"] == AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR
     assert dose["metadata"]["aggregate_cfu_proxy"]["reason"] == (
-        "aggregate_cfu_without_clinical_strain_mapping_floor"
+        "aggregate_cfu_named_label_presence"
     )
 
 
-def test_unreviewed_strains_keep_label_diversity_but_no_clinical_code_credit() -> None:
+def test_unreviewed_strains_keep_label_identity_but_no_clinical_credit() -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
     product = _owned_product(
@@ -418,8 +419,9 @@ def test_unreviewed_strains_keep_label_diversity_but_no_clinical_code_credit() -
 
     formulation = score_formulation(product)
     assert formulation["components"]["named_species_diversity"] == 4
-    assert formulation["components"]["clinical_strain_codes"] == 0
-    assert formulation["metadata"]["clinical_strain_count"] == 0
+    assert formulation["components"]["identified_strain_codes"] == 3
+    assert formulation["metadata"]["identified_strain_count"] == 1
+    assert score_evidence(product)["score"] == 0
 
 
 @pytest.fixture(scope="module")

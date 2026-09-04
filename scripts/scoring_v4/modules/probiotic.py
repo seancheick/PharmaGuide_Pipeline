@@ -9,7 +9,8 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
                                diversity 4 + clinical strains 5 + delivery 5
                                + prebiotic 3
     Dose                25     P2.2 — per-strain CFU disclosed 10 + adequacy 15
-                               (CFU/strain × tier × support level, capped per §6)
+                               (source-owned daily potency; aggregate presence
+                                does not manufacture strain-level doses)
     Evidence            20     P2.3 — strain-clinical credit (multiplicative
                                pipeline, cap_per_ingredient 7) + indication
                                relevance 8

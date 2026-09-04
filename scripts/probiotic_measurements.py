@@ -19,6 +19,39 @@ _AFU_UNIT = re.compile(
 AFU_REVIEW_REASON = "probiotic_afu_reference_unavailable"
 
 
+def normalized_cfu_count(measure: Mapping) -> float | None:
+    """Read one normalized CFU measurement; reject invalid or conflicting twins.
+
+    CFU and billion-CFU are the same unit at a known scale, unlike AFU or mass.
+    An explicitly invalid count is not rescued by a second redundant field.
+    """
+    values = []
+    for field, scale in (("cfu_count", 1.0), ("billion_count", 1e9)):
+        if field not in measure:
+            continue
+        value = measure[field]
+        if isinstance(value, bool):
+            return None
+        try:
+            number = float(value) * scale
+        except (TypeError, ValueError, OverflowError):
+            return None
+        if not math.isfinite(number) or number <= 0:
+            return None
+        values.append(number)
+    if not values or any(not math.isclose(values[0], v, rel_tol=1e-9) for v in values[1:]):
+        return None
+    return values[0]
+
+
+def declared_total_cfu(pdata: Mapping) -> float:
+    """Consume enrichment's ownership-reconciled total, never re-sum projections."""
+    measure = {target: pdata[source] for source, target in (
+        ("total_cfu", "cfu_count"), ("total_billion_count", "billion_count")
+    ) if source in pdata}
+    return normalized_cfu_count(measure) or 0.0
+
+
 def strain_cfu_tier(cfu_per_day, tiers_cfu_per_day) -> str | None:
     """Map a per-strain CFU count to the registry's potency band.
 

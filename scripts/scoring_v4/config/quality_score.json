@@ -1,9 +1,9 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.1.0-probiotic-applicability",
+    "version": "1.1.1-probiotic-label-dose",
     "schema_version": "1.0.0",
-    "last_updated": "2026-09-03",
+    "last_updated": "2026-09-04",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Generic single-bioactive caps prevent clean narrow products from implying elite clinical-formula evidence. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
     "phase": "generic_public_caps"
   },
@@ -161,13 +161,11 @@
       "cap_dose": 25.0,
       "cap_per_strain_cfu_disclosure": 10.0,
       "cap_cfu_adequacy": 15.0,
-      "cap_aggregate_cfu_proxy_adequacy": 11.0,
       "aggregate_cfu_low_tier_presence_floor": 2.0,
       "aggregate_cfu_low_named_strain_total_floor": 4.0,
       "cap_direct_strain_mass_floor": 5.0,
       "v3_cfu_adequacy_cap": 5.0,
-      "tier_points": { "low": 0.0, "adequate": 1.0, "good": 2.0, "excellent": 3.0 },
-      "support_level_caps": { "high": 1.0, "moderate": 0.75, "weak": 0.5 }
+      "tier_points": { "low": 0.0, "adequate": 1.0, "good": 2.0, "excellent": 3.0 }
     },
     "omega": { "cap_dose": 25.0 },
     "sports": { "dimension_cap": 25.0 },

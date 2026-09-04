@@ -94,10 +94,11 @@ def test_omega3_dose_bonus_from_v4_module():
     assert omega["detail"] == "high clinical"
 
 
-def test_probiotic_quality_bonus_from_v4_module():
+@pytest.mark.parametrize("identity_key", ["identified_strain_codes", "clinical_strain_codes"])
+def test_probiotic_quality_bonus_from_v4_module(identity_key):
     """The probiotic module credits strain quality via formulation components;
     surface it as the 'Probiotic quality bonus' chip."""
-    scored = _scored_v4(form={"clinical_strain_codes": 8.0, "named_species_diversity": 2.0})
+    scored = _scored_v4(form={identity_key: 8.0, "named_species_diversity": 2.0})
     bonuses, _ = derive_v4_tradeoffs(scored, {})
     prob = _by_id(bonuses, "probiotic")
     assert prob["label"] == "Probiotic quality bonus"

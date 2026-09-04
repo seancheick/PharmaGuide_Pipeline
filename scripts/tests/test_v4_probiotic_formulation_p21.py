@@ -47,7 +47,7 @@ def _product(
                 "unit": "g",
             }
         )
-    return {
+    product = {
         "status": "active",
         "form_factor": "capsule",
         "supplement_type": {"type": "probiotic"},
@@ -82,6 +82,13 @@ def _product(
             "has_survivability_coating": survivability,
         },
     }
+    # Physical identity requires a label owner, not a detached registry ID.
+    product["activeIngredients"] = []
+    for index, row in enumerate(product["probiotic_data"]["clinical_strains"]):
+        ref = f"ingredientRows[{index}]"
+        row["source_row_ref"] = ref
+        product["activeIngredients"].append({"name": row["strain"], "raw_source_path": ref})
+    return product
 
 
 def test_probiotic_formulation_scores_full_25_point_contract() -> None:
@@ -95,7 +102,7 @@ def test_probiotic_formulation_scores_full_25_point_contract() -> None:
         "total_cfu_disclosed": 4.0,
         "cfu_amount": 5.0,
         "named_species_diversity": 4.0,
-        "clinical_strain_codes": 8.0,
+        "identified_strain_codes": 8.0,
         "delivery_survivability": 3.0,
         "prebiotic_complement": 1.0,
     }
@@ -160,7 +167,7 @@ def test_clinical_strain_code_tiers_use_v4_eight_point_cap(
 
     payload = score_formulation(_product(clinical_strain_count=clinical_strain_count))
 
-    assert payload["components"]["clinical_strain_codes"] == expected
+    assert payload["components"]["identified_strain_codes"] == expected
 
 
 @pytest.mark.parametrize(

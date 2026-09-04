@@ -38,6 +38,7 @@ generic_transparency where v4 already has v3-parity tests (P1.3.5).
 
 from __future__ import annotations
 
+import math
 from typing import Any, Dict
 
 from scoring_v4.modules.generic_transparency import (
@@ -49,6 +50,7 @@ from scoring_v4.modules.generic_transparency import (
     B5_CAP,
 )
 from scoring_v4.modules.probiotic_dose import _per_strain_cfu_disclosed_keys
+from probiotic_measurements import declared_total_cfu
 
 
 PHASE_MARKER = "P2.5_probiotic_transparency"
@@ -271,16 +273,7 @@ def _score_aggregate_cfu_disclosure_proxy(pdata: Dict[str, Any], per_strain_poin
 
 
 def _total_billion_count(pdata: Dict[str, Any]) -> float:
-    total = _as_float(pdata.get("total_billion_count"), 0.0)
-    if total > 0:
-        return total
-    total_cfu = _as_float(pdata.get("total_cfu"), 0.0)
-    if total_cfu > 0:
-        return total_cfu / 1_000_000_000.0
-    for blend in _safe_list(pdata.get("probiotic_blends")):
-        cfu_data = _safe_dict(_safe_dict(blend).get("cfu_data"))
-        total += _as_float(cfu_data.get("billion_count"), 0.0)
-    return max(0.0, total)
+    return declared_total_cfu(pdata) / 1e9
 
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
@@ -311,18 +304,14 @@ def _safe_list(value: Any) -> list:
 
 
 def _as_int(value: Any, default: int = 0) -> int:
-    try:
-        if value is None:
-            return default
-        return int(float(value))
-    except (TypeError, ValueError):
-        return default
+    return int(_as_float(value, default))
 
 
 def _as_float(value: Any, default: float = 0.0) -> float:
     try:
-        if value is None:
+        if value is None or isinstance(value, bool):
             return default
-        return float(value)
-    except (TypeError, ValueError):
+        number = float(value)
+        return number if math.isfinite(number) else default
+    except (TypeError, ValueError, OverflowError):
         return default

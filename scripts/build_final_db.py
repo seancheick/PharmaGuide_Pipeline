@@ -2764,7 +2764,10 @@ def derive_v4_tradeoffs(
         if band:
             omega_bonus["detail"] = band
         bonuses.append(omega_bonus)
-    _prob_signals = ("clinical_strain_codes", "cfu_amount", "named_species_diversity")
+    # Read the current physical-identity component, or the legacy stamped alias
+    # at this export boundary. Never add both if a transitional artifact has both.
+    identity_key = "identified_strain_codes" if "identified_strain_codes" in form else "clinical_strain_codes"
+    _prob_signals = (identity_key, "cfu_amount", "named_species_diversity")
     if any(_pos(form, k) for k in _prob_signals):
         bonuses.append({"id": "probiotic", "label": "Probiotic quality bonus",
                         "score": sum(safe_float(form.get(k), 0) for k in _prob_signals)})
@@ -4694,6 +4697,7 @@ def _fold_probiotic_serving_headers(
     ledger: List[Dict[str, Any]],
 ) -> List[Dict[str, Any]]:
     """Represent alternative serving columns as one blend parent + variants."""
+    from probiotic_measurements import declared_total_cfu
     probiotic_data = enriched.get("probiotic_data") or {}
     selected_headers = [
         row
@@ -4744,7 +4748,7 @@ def _fold_probiotic_serving_headers(
         ]
         selected["display_type"] = "structural_container"
         selected["children"] = child_names or safe_list(selected.get("children"))
-        total_billion = safe_float(probiotic_data.get("total_billion_count"), 0) or 0
+        total_billion = declared_total_cfu(probiotic_data) / 1e9
         if total_billion > 0:
             selected["exact_dose_text"] = f"{total_billion:g} billion CFU"
 
@@ -6530,11 +6534,9 @@ def build_detail_blob(
     # dict so ``_compute_display_badge`` wakes up naturally.
     probiotic_strain_adequacy: Dict[str, Dict[str, Any]] = {}
     probiotic_adequacy_by_ref: Dict[str, Dict[str, Any]] = {}
-    from studied_formulas import clinical_strain_matches_source_row
+    from studied_formulas import clinical_strain_matches_source_row, consolidated_native_strains
     exported_clinical_strains = []
-    for fc in safe_list(safe_dict(enriched.get("probiotic_data")).get("clinical_strains")):
-        if not isinstance(fc, dict):
-            continue
+    for fc in consolidated_native_strains(enriched):
         if "source_row_ref" in fc and not clinical_strain_matches_source_row(
             enriched, fc, {"raw_source_path": fc["source_row_ref"]}
         ):
@@ -7779,12 +7781,17 @@ def build_detail_blob(
     # Probiotic detail — strains, CFU, clinical matches
     probiotic_data = safe_dict(enriched.get("probiotic_data"))
     if probiotic_data.get("is_probiotic_product"):
+        from probiotic_measurements import declared_total_cfu
+
+        # Display the same reconciled measurement consumed by the scorer.
+        # Missing, invalid or contradictory twins cannot light a CFU chip.
+        total_cfu = declared_total_cfu(probiotic_data)
         # Pre-format the user-facing CFU label so Flutter renders without
         # re-deciding rounding rules — same pattern as display_dose_label
         # on ingredient rows. e.g. 25.0 → "25 billion CFU"; 5.5 → "5.5
         # billion CFU"; 0/None → "" (empty hides the chip).
-        billion = probiotic_data.get("total_billion_count")
-        if isinstance(billion, (int, float)) and billion > 0:
+        billion = total_cfu / 1e9
+        if billion > 0:
             if billion == int(billion):
                 _cfu_label = f"{int(billion)} billion CFU"
             else:
@@ -7795,11 +7802,11 @@ def build_detail_blob(
         blob["probiotic_detail"] = {
             "is_probiotic": True,
             "total_strain_count": probiotic_data.get("total_strain_count"),
-            "total_cfu": probiotic_data.get("total_cfu"),
-            "total_billion_count": probiotic_data.get("total_billion_count"),
+            "total_cfu": total_cfu,
+            "total_billion_count": billion,
             "total_cfu_label": _cfu_label,
             "guarantee_type": probiotic_data.get("guarantee_type"),
-            "has_cfu": probiotic_data.get("has_cfu"),
+            "has_cfu": total_cfu > 0,
             # clinical_strains entries may carry per-strain is_inactivated /
             # is_postbiotic / is_blocked / postbiotic_note / block_reason flags
             # added 2026-05-01. Flutter can render strain-level postbiotic /
@@ -8620,17 +8627,14 @@ def _probiotic_has_named_identity(pdata: Dict[str, Any]) -> bool:
 
 
 def _probiotic_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> bool:
+    from probiotic_measurements import declared_total_cfu
     pdata = safe_dict(enriched.get("probiotic_data") or enriched.get("probiotic_detail"))
     if not safe_bool(pdata.get("is_probiotic_product") or pdata.get("is_probiotic")):
         return False
     if not _probiotic_has_named_identity(pdata):
         return False
-    total_billion = safe_float(pdata.get("total_billion_count"))
-    if total_billion is None:
-        total_cfu = safe_float(pdata.get("total_cfu"))
-        total_billion = (total_cfu / 1_000_000_000.0) if total_cfu else None
     if enforce_dose_gate:
-        return total_billion is not None and total_billion >= 1.0
+        return declared_total_cfu(pdata) >= 1e9
     return True
 
 

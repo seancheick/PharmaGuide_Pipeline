@@ -8,12 +8,14 @@ Dose and strain-clinical evidence belongs to P2.3 Evidence.
 
 from __future__ import annotations
 
+import math
 import re
 from typing import Any, Dict
 
 from scoring_input_contract import get_scoring_ingredients
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
-from studied_formulas import independent_clinical_strains
+from studied_formulas import label_owned_native_strains
+from probiotic_measurements import declared_total_cfu
 
 
 PHASE_MARKER = "P2.1_probiotic_formulation"
@@ -35,20 +37,16 @@ def _safe_list(value: Any) -> list:
 
 def _as_float(value: Any, default: float = 0.0) -> float:
     try:
-        if value is None:
+        if value is None or isinstance(value, bool):
             return default
-        return float(value)
-    except (TypeError, ValueError):
+        number = float(value)
+        return number if math.isfinite(number) else default
+    except (TypeError, ValueError, OverflowError):
         return default
 
 
 def _as_int(value: Any, default: int = 0) -> int:
-    try:
-        if value is None:
-            return default
-        return int(float(value))
-    except (TypeError, ValueError):
-        return default
+    return int(_as_float(value, default))
 
 
 def score_formulation(product: Any) -> Dict[str, Any]:
@@ -59,7 +57,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
       - CFU amount tier: 5
       - named species diversity: 4, using an appropriate-diversity curve
         rather than rewarding strain count indefinitely
-      - exact clinical strain codes: 8
+      - exact label-owned strain identities: 8 (not clinical benefit)
       - delivery/survivability: 3
       - prebiotic complement: 1
 
@@ -72,13 +70,13 @@ def score_formulation(product: Any) -> Dict[str, Any]:
 
     total_billion = _total_billion_count(pdata)
     strain_count = _total_strain_count(pdata)
-    clinical_count = len(independent_clinical_strains(product))
+    identity_count = len({row["clinical_id"] for row in label_owned_native_strains(product)})
 
     components = {
         "total_cfu_disclosed": _score_total_cfu_disclosed(total_billion),
         "cfu_amount": _score_cfu_amount(total_billion),
         "named_species_diversity": _score_named_species_diversity(strain_count),
-        "clinical_strain_codes": _score_clinical_strain_codes(clinical_count),
+        "identified_strain_codes": _score_identified_strain_codes(identity_count),
         "delivery_survivability": _score_delivery_survivability(product, pdata),
         "prebiotic_complement": _score_prebiotic_complement(product, pdata),
     }
@@ -90,7 +88,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         # independent clinical trial for every constituent strain.
         components.pop("total_cfu_disclosed")
         components.pop("cfu_amount")
-        components.pop("clinical_strain_codes")
+        components.pop("identified_strain_codes")
         components.update(native_potency_disclosed=4.0, studied_formula_potency=5.0,
                           studied_formula_strain_identity=8.0,
                           delivery_survivability=3.0, prebiotic_complement=1.0)
@@ -105,7 +103,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "pre_penalty_score": round(raw_score, 4),
         "total_billion_count": total_billion,
         "total_strain_count": strain_count,
-        "clinical_strain_count": clinical_count,
+        "identified_strain_count": identity_count,
         "cap_applied": raw_score > CAP_FORMULATION,
     }
     metadata.update(shared_penalties["metadata"])
@@ -121,13 +119,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
 
 
 def _total_billion_count(pdata: Dict[str, Any]) -> float:
-    total = _as_float(pdata.get("total_billion_count"), 0.0)
-    if total > 0:
-        return total
-    for blend in _safe_list(pdata.get("probiotic_blends")):
-        cfu_data = _safe_dict(_safe_dict(blend).get("cfu_data"))
-        total += _as_float(cfu_data.get("billion_count"), 0.0)
-    return max(0.0, total)
+    return declared_total_cfu(pdata) / 1e9
 
 
 def _total_strain_count(pdata: Dict[str, Any]) -> int:
@@ -172,14 +164,14 @@ def _score_named_species_diversity(strain_count: int) -> float:
     return 0.0
 
 
-def _score_clinical_strain_codes(clinical_count: int) -> float:
-    if clinical_count >= 5:
+def _score_identified_strain_codes(identity_count: int) -> float:
+    if identity_count >= 5:
         return 8.0
-    if clinical_count >= 3:
+    if identity_count >= 3:
         return 7.0
-    if clinical_count >= 2:
+    if identity_count >= 2:
         return 5.0
-    if clinical_count >= 1:
+    if identity_count >= 1:
         return 3.0
     return 0.0
 

@@ -1191,12 +1191,10 @@ def _has_non_probiotic_strict_active(product: Dict[str, Any]) -> bool:
 
 
 def _derive_probiotic_cfu_evidence(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    from probiotic_measurements import declared_total_cfu
     pdata = _safe_dict(product.get("probiotic_data"))
-    total_cfu = _as_float(pdata.get("total_cfu"), None)
-    if total_cfu is None or total_cfu <= 0:
-        billion = _as_float(pdata.get("total_billion_count"), None)
-        total_cfu = (billion * 1_000_000_000) if billion and billion > 0 else None
-    if total_cfu is None or total_cfu <= 0:
+    total_cfu = declared_total_cfu(pdata)
+    if total_cfu <= 0:
         return None
 
     primary_type = _primary_type(product)
@@ -3409,17 +3407,10 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
 
     is_product = bool(data.get("is_probiotic_product") or data.get("is_probiotic"))
     strain_count = int(data.get("total_strain_count") or 0)
-    has_cfu = (
-        bool(data.get("has_cfu"))
-        or _route_positive_number(data.get("total_cfu"))
-        or _route_positive_number(data.get("total_billion_count"))
-    )
-    total_billion = _route_number(data.get("total_billion_count"))
-    total_cfu = _route_number(data.get("total_cfu"))
-    high_cfu = (
-        total_billion >= _ROUTE_PROBIOTIC_HIGH_CFU_BILLIONS
-        or total_cfu >= (_ROUTE_PROBIOTIC_HIGH_CFU_BILLIONS * 1_000_000_000)
-    )
+    from probiotic_measurements import declared_total_cfu
+    total_cfu = declared_total_cfu(data)
+    has_cfu = total_cfu > 0
+    high_cfu = total_cfu >= (_ROUTE_PROBIOTIC_HIGH_CFU_BILLIONS * 1_000_000_000)
     name_signal = bool(_ROUTE_PROBIOTIC_NAME_RE.search(name_text or ""))
     primary_type = _primary_type(product)
 

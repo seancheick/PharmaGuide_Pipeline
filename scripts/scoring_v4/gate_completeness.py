@@ -33,7 +33,7 @@ from assessment_readiness import (
     has_sports_primary_identity_signal,
 )
 from dose_assessment import has_incomplete_material_dose_assessment
-from probiotic_measurements import AFU_REVIEW_REASON
+from probiotic_measurements import AFU_REVIEW_REASON, declared_total_cfu
 from scoring_input_contract import classify_ingredient_roles, get_scoring_ingredients
 
 MULTI_DOSE_COVERAGE_MIN = 0.60
@@ -299,17 +299,8 @@ def _has_missing_micronutrient_amount_panel(
 
 
 def _total_cfu_billion(product: Dict[str, Any]) -> float:
-    pdata = _safe_dict(product.get("probiotic_data"))
-    total = _as_float(pdata.get("total_billion_count"), None)
-    if total is not None and total > 0:
-        return total
-    total = 0.0
-    for blend in _safe_list(pdata.get("probiotic_blends")):
-        if not isinstance(blend, dict):
-            continue
-        cfu_data = _safe_dict(blend.get("cfu_data"))
-        total += _as_float(cfu_data.get("billion_count"), 0.0) or 0.0
-    return total or 0.0
+    pdata = _safe_dict(product.get("probiotic_data") or product.get("probiotic_detail"))
+    return declared_total_cfu(pdata) / 1e9
 
 
 def _named_strain_count(product: Dict[str, Any]) -> int:

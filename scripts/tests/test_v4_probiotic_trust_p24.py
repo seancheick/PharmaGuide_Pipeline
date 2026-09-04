@@ -253,7 +253,7 @@ def test_probiotic_trust_independent_of_formulation_dose_evidence() -> None:
     high_form_no_certs["probiotic_data"]["total_strain_count"] = 10
     high_form_no_certs["probiotic_data"]["clinical_strain_count"] = 5
     high_form_no_certs["probiotic_data"]["clinical_strains"] = [
-        {"name": name, "clinical_id": clinical_id}
+        {"name": name, "strain": name, "clinical_id": clinical_id}
         for name, clinical_id in [
             ("Lactobacillus rhamnosus GG", "STRAIN_LGG"),
             ("Bifidobacterium lactis BB-12", "STRAIN_LACTIS_BB12"),
@@ -264,6 +264,11 @@ def test_probiotic_trust_independent_of_formulation_dose_evidence() -> None:
     ]
     high_form_no_certs["probiotic_data"]["prebiotic_present"] = True
     high_form_no_certs["probiotic_data"]["has_survivability_coating"] = True
+    high_form_no_certs["activeIngredients"] = []
+    for index, row in enumerate(high_form_no_certs["probiotic_data"]["clinical_strains"]):
+        row["source_row_ref"] = f"ingredientRows[{index}]"
+        high_form_no_certs["activeIngredients"].append({
+            "name": row["strain"], "raw_source_path": row["source_row_ref"]})
 
     breakdown = score_probiotic(high_form_no_certs).to_breakdown()
     assert breakdown["dimensions"]["formulation"]["score"] > 20.0
