@@ -1,5 +1,8 @@
 # Probiotic rubric clinical review — 2026-09-04
 
+This is the frozen pre-implementation review. The follow-up work is tracked in
+[EXECUTION.md](EXECUTION.md); its changes do not rewrite the baseline measurements below.
+
 ## Decision
 
 **Keep the operational rebuild paused. The correctness work is substantially stronger, but the probiotic rubric is not clinically calibrated.** This review found both rubric choices and one further identity/routing defect; they need different fixes.
