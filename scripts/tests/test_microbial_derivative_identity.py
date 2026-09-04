@@ -6,7 +6,9 @@ from copy import deepcopy
 
 import pytest
 
-from identity_integrity import normalize_label_display, resolve_identity
+from identity_integrity import (
+    build_canonical_identity_registry, normalize_label_display, resolve_identity,
+)
 from scoring_input_contract import _has_probiotic_identity_text, get_scoring_ingredients
 from supplement_taxonomy import _row_has_probiotic_identity
 
@@ -121,13 +123,16 @@ def test_exact_whole_yeast_alias_cannot_validate_its_extract(enricher, literal: 
     assert decision.source_label_form == "extract"
 
 
-def test_real_extract_boundary_is_quarantined_without_probiotic_route(enricher) -> None:
+def test_unregistered_extract_boundary_is_quarantined_without_probiotic_route(enricher) -> None:
     from scoring_v4.scored_artifact import build_scored_artifact
 
     product = {
         "id": "label-boundary-fixture",
         "fullName": "Beta Glucan",
-        "activeIngredients": [_yeast_extract_row()],
+        "activeIngredients": [{
+            **_yeast_extract_row(), "name": "Saccharomyces cerevisiae fraction",
+            "raw_source_text": "Saccharomyces cerevisiae fraction",
+        }],
         "inactiveIngredients": [],
     }
     product["ingredient_quality_data"] = enricher._collect_ingredient_quality_data(product)
@@ -138,7 +143,7 @@ def test_real_extract_boundary_is_quarantined_without_probiotic_route(enricher) 
     assert not iqd["ingredients_scorable"]
     assert iqd["ingredients_skipped"][0]["identity_disposition"] == "identity_conflict"
     assert iqd["ingredients_skipped"][0]["canonical_id"] is None
-    assert product["activeIngredients"][0]["name"] == "Saccharomyces cerevisiae extract"
+    assert product["activeIngredients"][0]["name"] == "Saccharomyces cerevisiae fraction"
     assert product["probiotic_data"] == {"is_probiotic_product": False}
     assert product["primary_type"] != "probiotic"
     artifact = build_scored_artifact(product)
@@ -229,11 +234,12 @@ def test_nonlive_blend_component_is_not_counted_as_a_strain(enricher, forms: boo
     assert all(row["cfu_per_day"] is None for row in result["clinical_strains"])
 
 
-@pytest.mark.parametrize("normalized_name", ["Saccharomyces cerevisiae extract", "Beta Glucan"])
+@pytest.mark.parametrize("normalized_name", ["Saccharomyces cerevisiae fraction", "Beta Glucan"])
 def test_guessed_preparation_from_candidate_resolver_is_not_literal_proof(
     enricher, normalized_name: str,
 ) -> None:
     row = {**_yeast_extract_row(), "name": normalized_name,
+           "raw_source_text": "Saccharomyces cerevisiae fraction",
            "ingredientGroup": "Saccharomyces cerevisiae"}
 
     def broad_resolver(value: str) -> str:
@@ -403,10 +409,20 @@ def test_exact_branded_alias_survives_previously_cleaned_generic_owner(
 
 @pytest.mark.parametrize("alternate_only", [False, True])
 def test_ambiguous_preparation_alias_does_not_override_source_taxonomy(
-    enricher, alternate_only: bool,
+    alternate_only: bool,
 ) -> None:
-    literal = "dried yeast fermentate"
-    registry = enricher._current_canonical_identity_registry()
+    # Keep the actual cross-registry disagreement regression independent of
+    # curated aliases: resolving one real label must not weaken this guard.
+    literal = "ambiguous yeast fermentate"
+    registry = build_canonical_identity_registry({
+        "ingredient_quality_map": {"yeast_fermentate": {
+            "standard_name": "Yeast Fermentate", "aliases": [literal],
+        }},
+        "other_ingredients": {"other_ingredients": [{
+            "id": "different_preparation", "standard_name": "Different preparation",
+            "aliases": [literal],
+        }]},
+    })
     assert registry.resolve_verified_preferred(literal) is None
     row = {
         **_yeast_extract_row(), "name": literal, "raw_source_text": literal,
@@ -416,11 +432,13 @@ def test_ambiguous_preparation_alias_does_not_override_source_taxonomy(
     if alternate_only:
         row["alternateNames"] = [row.pop("ingredientGroup")]
 
-    result = enricher._collect_ingredient_quality_data({"activeIngredients": [row]})
-    assert result["ingredients_scorable"] == []
-    assert result["ingredients_skipped"][0]["identity_disposition"] == "identity_conflict"
-    assert result["ingredients_skipped"][0]["canonical_id"] is None
-    assert result["ingredients_skipped"][0]["source_label_name"] == literal
+    decision = resolve_identity(
+        row, "yeast_fermentate", _organism_resolver, canonical_registry=registry,
+    )
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert decision.scoreable_identity is False
+    assert decision.source_label_name == literal
 
 
 def _fermentate_source_row() -> dict:
@@ -447,9 +465,12 @@ def test_required_conflict_blocks_product_readiness_and_root_score(enricher) -> 
     from scoring_v4.scored_artifact import build_scored_artifact
 
     product, issues = enricher.enrich_product({
-        "id": "airborne-real-label-boundary", "fullName": "Beta-Immune Booster Zesty Orange",
+        "id": "unregistered-preparation-boundary", "fullName": "Immune Booster",
         "brandName": "Airborne", "activeIngredients": [
-            _valid_vitamin_row(), _fermentate_source_row(),
+            _valid_vitamin_row(), {
+                **_fermentate_source_row(), "name": "unregistered yeast fermentate",
+                "raw_source_text": "unregistered yeast fermentate",
+            },
         ], "inactiveIngredients": [],
     })
     assert product, issues

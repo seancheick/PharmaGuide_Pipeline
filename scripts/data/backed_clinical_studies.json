@@ -2,10 +2,12 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.9",
-    "last_updated": "2026-09-03",
+    "schema_version": "5.3.11",
+    "last_updated": "2026-09-04",
     "total_entries": 202,
     "changelog": [
+      "5.3.11 (2026-09-04): Repair exact source-declared cranberry fruit-concentrate and Boswellia resin-extract evidence joins. Scope existing records to fruit/extract preparations and actual urinary/OA endpoints; correct source-bound enrollments, remove untraceable registry counts and the whole-plant Boswellia UNII. No dose thresholds, evidence multipliers or clinical approvals added.",
+      "5.3.10 (2026-09-04): Restore two exact green-tea extract label aliases and two verified full EGCG spellings; constrain existing evidence to source-declared extract/catechin preparations, excluding whole-leaf and theanine-targeted transfers. Existing PMIDs rechecked; no evidence-strength, aggregate-count, or dose-threshold changes.",
       "5.3.9 (2026-09-03): Add DS-01 companion mechanistic PMID 41750436; record shared-protocol/cohort uncertainty and unpublished per-blend trial allocations. Retain single symptom RCT, positive_weak effect and enrollment 350; no automatic publication-count credit.",
       "5.3.8 (2026-09-03): Scope zinc cold-lozenge and AREDS combination research to their actual interventions; add exact DS-01 formula/native-AFU assessment from two content-verified trials. No pillar weights changed.",
       "5.3.7 (2026-08-27): Added the PubChem-verified N-Acetyl-L-Cysteine spelling (CID 12035; InChIKey PWKSKIMOESPYIA-BYPYZUCNSA-N) to the existing NAC evidence identity. No study, claim, or score strength changed.",
@@ -8531,9 +8533,50 @@
       "standard_name": "Green Tea Extract",
       "aliases": [
         "egcg",
+        "epigallocatechin gallate",
+        "epigallocatechin-3-gallate",
         "green tea catechins",
-        "camellia sinensis"
+        "camellia sinensis",
+        "green tea leaf extract",
+        "standardized green tea extract"
       ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "green tea extract",
+          "green tea leaf extract",
+          "green tea camellia sinensis extract",
+          "green tea camellia sinensis leaf extract",
+          "green tea leaves extract",
+          "green tea decaffeinated extract",
+          "greenselect",
+          "green tea phytosome",
+          "green tea catechins",
+          "egcg",
+          "epigallocatechin gallate",
+          "epigallocatechin 3 gallate"
+        ],
+        "excluded_canonical_ids": [
+          "l_theanine",
+          "caffeine"
+        ],
+        "excluded_form_terms": [
+          "l-theanine",
+          "theanine"
+        ],
+        "supported_outcomes": [
+          "modest_weight_change",
+          "body_composition",
+          "oxidative_stress_markers"
+        ],
+        "reviewed_at": "2026-09-04",
+        "source_pmids": [
+          "38031409",
+          "19597519"
+        ],
+        "reason": "The reviewed intervention family is green-tea extract/catechins, not automatic species-level, whole-leaf, or explicitly theanine-targeted preparation transfer. A source-owned theanine label/form or verified l_theanine or caffeine primary is excluded without inferring a constituent dose or changing primary identity. Caffeine named as a constituent does not exclude an extract primary. Greenselect and Green Tea Phytosome are source-verified extract preparation names, not new branded clinical evidence. This preparation-scope check does not establish an effective dose, complete evidence review, systemic bioavailability, or ineffectiveness of an excluded product."
+      },
       "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
@@ -8551,9 +8594,9 @@
         "Increase Energy",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Human evidence supports green-tea catechins for small reductions in body weight, body fat, and some oxidative-stress markers, especially when caffeine is present. Effects are generally modest rather than transformative.",
+      "notes": "Human evidence supports green-tea catechins for small reductions in body weight, body fat, and some oxidative-stress markers, especially when caffeine is present. Effects are generally modest rather than transformative. Preparation applicability is limited to source-declared extract/catechin interventions; a generic species name, whole-leaf powder, or explicitly theanine-targeted preparation does not establish that scope. This bounded matching review does not establish clinical efficacy at every label amount or validate the legacy aggregate enrollment.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-09-04",
       "notable_studies": "Recent GRADE-based pooled evidence includes PMID 38031409, which found small but statistically significant benefits for body mass, BMI, and oxidative-stress endpoints. Earlier catechin-plus-caffeine evidence is captured in PMID 19597519 and remains directionally supportive for fat oxidation, though clinical effect sizes are modest.",
       "references_structured": [
         {
@@ -9796,7 +9839,8 @@
         "cranberry proanthocyanidins",
         "cranberry",
         "cranberry juice extract",
-        "whole cranberry"
+        "whole cranberry",
+        "cranberry fruit concentrate"
       ],
       "category": "urinary_genitourinary",
       "evidence_level": "ingredient-human",
@@ -9806,15 +9850,21 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "UTI prevention ↑",
-        "bacterial adhesion ↓"
+        "Recurrent symptomatic, culture-verified urinary tract infections"
       ],
-      "health_goals_supported": [
-        "Immune Support"
-      ],
-      "notes": "Multiple RCTs for urinary tract health and UTI prevention.",
+      "health_goals_supported": [],
+      "notes": "Family-level evidence concerns cranberry fruit products for prevention of recurrent UTIs in selected populations, not treatment of an existing infection or general immune support. Fruit juice, tablets and powders were studied; equivalence of preparations and PAC doses is uncertain. Total concentrate mass is not a PAC dose or a verified clinical minimum. Enrollment 8857 belongs only to the April 2023 Cochrane review; participants from the overlapping 2021 review are not summed. No efficacy is inferred for cranberry seed oil or leaf extracts.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-09-04",
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": ["cranberry", "vaccinium macrocarpon"],
+        "excluded_form_terms": ["seed", "leaf", "leaves", "root", "essential oil"],
+        "supported_outcomes": ["recurrent_uti_prevention"],
+        "studied_population": "Selected UTI-susceptible populations, including women with recurrent UTIs, children and people following urinary interventions; not a treatment claim or evidence of benefit for pregnancy, institutionalized elderly people or incomplete bladder emptying.",
+        "source_pmids": ["37068952", "34473789"]
+      },
       "notable_studies": "The 2023 Cochrane review (PMID 37068952) found cranberry products reduce recurrent urinary-tract-infection risk in selected populations, especially women with recurrent UTIs and children. A 2021 systematic review/meta-analysis with trial-sequential analysis (PMID 34473789) also supported cranberry use as an adjunct preventive strategy in susceptible groups.",
       "references_structured": [
         {
@@ -9902,15 +9952,12 @@
         "unii": "0MVO31Q3QS"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Immune Support",
-      "total_enrollment": 373,
-      "registry_completed_trials_count": 111,
+      "primary_outcome": "Prevention of recurrent symptomatic urinary tract infections",
+      "total_enrollment": 8857,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis; registry_completed_trials_count=111; total_enrollment=373; endpoint_tags=cardiovascular,glycemic_control,digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Existing positive direction is restricted to prevention of recurrent UTIs in the responsive populations of the cited reviews. Cochrane reports moderate-certainty pooled benefit with heterogeneity; preparation and PAC-dose comparisons are uncertain. This is not universal benefit, treatment efficacy or product-specific dose equivalence.",
       "endpoint_relevance_tags": [
-        "cardiovascular",
-        "glycemic_control",
-        "digestive_health"
+        "recurrent_uti_prevention"
       ]
     },
     {
@@ -12745,31 +12792,39 @@
       "id": "PRECLIN_BOSWELLIA",
       "standard_name": "Boswellia Serrata",
       "aliases": [
-        "akba",
-        "boswellic acids",
-        "frankincense extract"
+        "frankincense extract",
+        "boswellia serrata resin extract",
+        "boswellia serrata gum resin extract",
+        "boswellia serrata extract"
       ],
       "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "5-LOX inhibition ↑",
-        "leukotriene ↓"
+        "Osteoarthritis pain",
+        "Joint stiffness",
+        "Physical function"
       ],
       "health_goals_supported": [
-        "Reduce Stress/Anxiety",
-        "Healthy Aging/Longevity"
+        "Joint & Bone Mobility"
       ],
-      "notes": "Human evidence supports Boswellia serrata for osteoarthritis symptom relief, especially pain and stiffness, with pooled RCT support and newer placebo-controlled branded-extract trials. Most of the strongest data are joint-health specific rather than broad anti-inflammatory benefit across conditions (PMID 32680575, PMID 39092235).",
+      "notes": "Human evidence concerns Boswellia serrata extracts for osteoarthritis pain, stiffness and function, not stress, longevity or broad immune benefit. This family-level association does not establish that an unspecified resin extract equals Aflapin or Boswellin Super in standardized composition, dose or onset. Enrollment 545 is the seven-trial 2020 review only; participants from the newer trials are not summed. No generic extract-mass threshold is established here. The former UNII X7B7P649WQ identifies BOSWELLIA SERRATA WHOLE, not an extract, and is not used as an extract identifier.",
       "study_type": "systematic_review_meta",
       "published_studies": [
-        "mechanistic",
-        "animal",
         "RCT",
         "systematic_review",
         "meta-analysis"
       ],
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-09-04",
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": ["boswellia serrata resin extract", "boswellia serrata gum resin extract", "boswellia serrata extract", "boswellia extract", "aflapin", "apresflex", "boswellin", "5 loxin"],
+        "excluded_form_terms": ["essential oil", "resin powder", "leaf", "leaves"],
+        "supported_outcomes": ["osteoarthritis_pain_stiffness_function"],
+        "studied_population": "People with osteoarthritis, principally knee OA; not generalized stress, immune or longevity evidence. Named standardized extract trials do not establish equivalence to every generic resin extract.",
+        "source_pmids": ["32680575", "39092235", "35512759"]
+      },
       "notable_studies": "A meta-analysis of seven randomized trials found significant improvements in WOMAC pain, stiffness, and function in osteoarthritis (PMID 32680575). More recent placebo-controlled trials with standardized extracts also reported relatively rapid symptomatic improvement, including the 2024 Boswellin Super study (PMID 39092235) and the earlier Aflapin trial (PMID 35512759).",
       "references_structured": [
         {
@@ -12853,19 +12908,13 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "external_ids": {
-        "unii": "X7B7P649WQ"
-      },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Reduce Stress/Anxiety",
-      "total_enrollment": 240,
-      "registry_completed_trials_count": 25,
+      "primary_outcome": "Osteoarthritis pain, stiffness and physical function",
+      "total_enrollment": 545,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Reduce Stress/Anxiety; published_tags=mechanistic,animal,RCT,systematic_review,meta-analysis; registry_completed_trials_count=25; total_enrollment=240; endpoint_tags=joint_pain,immune_support,digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Existing positive direction is limited to OA pain, stiffness and function in the seven-trial review and cited standardized-extract trials. The preparations differ; this is not proof of interchangeable doses, rapid benefit from any generic resin extract, or benefit outside the studied joint condition.",
       "endpoint_relevance_tags": [
-        "joint_pain",
-        "immune_support",
-        "digestive_health"
+        "joint_pain"
       ]
     },
     {

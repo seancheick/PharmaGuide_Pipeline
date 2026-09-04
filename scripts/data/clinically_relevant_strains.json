@@ -6,10 +6,10 @@
     "last_updated": "2026-09-04",
     "total_entries": 49,
     "data_source": null,
-    "version": "2.2.11",
-    "native_context_note": "2026-09-04 bounded primary-source review: 14 outcome/population/dose contexts across seven high-reach native identities, authored once and joined to explicit combination members. Contexts are source-verified, pending clinical review, not new clinician approval or universal efficacy ranges. Historical approval flags and primary evidence anchors remain unchanged by this addition.",
+    "version": "2.2.12",
+    "native_context_note": "2026-09-04 bounded primary-source review: 16 outcome/population/dose contexts across eight native identities, authored once and joined to explicit combination members. Contexts are source-verified, pending clinical review, not new clinician approval or universal efficacy ranges. Historical approval flags and primary PMID anchors remain unchanged; Lpc-37's primary null result and stale source-description fields are corrected separately from context approval.",
     "signoff_status_note": "40/49 entries retain historical clinician sign-off flags. On 2026-09-04 native approvals for BB-12 and Bi-07 were suspended after source verification failed; replacements require clinician review. Historical review records remain in version control. Sign-off does not establish positive effect, applicability to every label, or completeness of this literature search.",
-    "clinical_validation_note": "14 non-flipped strains now carry clinical_support_level per 4-question framework (strain-explicit / outcome-relevant / human-clinical / dose-mentioned). All 14 score 'weak' at abstract level; 5 have stronger swap candidates identified. Dr Pham review required before any PMID swap.",
+    "clinical_validation_note": "Historical abstract-level validation is retained where not re-reviewed. Per-entry source reviews and study_contexts distinguish identity, dose, clinical outcome and review completion; binary question counts are not efficacy approval. New PMID scoring anchors require clinical review.",
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient."
   },
   "clinically_relevant_strains": [
@@ -2480,6 +2480,30 @@
     {
       "id": "STRAIN_PARACASEI_LPC37",
       "standard_name": "Lactobacillus paracasei Lpc-37",
+      "study_contexts": [
+        {
+          "context_id": "lpc37_sisu_stress_response_33385020", "source_pmids": ["33385020"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_PARACASEI_LPC37"],
+          "population": {"age_group": "adult", "description": "120 healthy adults aged 18–45, stratified by sex and chronic stress"},
+          "purpose": "physiology", "condition": "stress_response",
+          "dose": {"basis": "measured_viability", "unit": "CFU", "values": [17500000000, 16800000000], "dosage_forms": ["capsule"], "duration_days": 35, "co_therapies": []},
+          "outcomes": [{"name": "heart_rate_response_to_acute_stress", "hierarchy": "primary", "kind": "surrogate", "direction": "null"}, {"name": "perceived_stress_per_protocol", "hierarchy": "secondary", "kind": "patient_important", "direction": "positive"}],
+          "trial_family": "rct_33385020",
+          "limitations": ["One capsule daily; initial 17.5B and final 16.8B CFU are viability measurements, not separate randomized doses. The stated target was 10B CFU/capsule; no efficacy interval is inferred.", "Primary result null in ITT and PP; perceived-stress signal is secondary. Chronic-stress subgroups had opposite heart-rate responses, not uniform benefit.", "Industry involvement; no baseline stress-test comparison. Not digestive or generic immune-efficacy evidence."],
+          "review_status": "source_verified_pending_clinical_review"
+        },
+        {
+          "context_id": "lpc37_chillex_exam_stress_37662485", "source_pmids": ["37662485"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_PARACASEI_LPC37"],
+          "population": {"age_group": "adult", "description": "190 healthy university students aged 18–40 facing examinations"},
+          "purpose": "physiology", "condition": "examination_stress",
+          "dose": {"basis": "measured_viability", "unit": "CFU", "values": [15600000000, 13500000000], "dosage_forms": ["capsule"], "duration_days": 70, "co_therapies": []},
+          "outcomes": [{"name": "state_anxiety_at_week_eight", "hierarchy": "primary", "kind": "patient_important", "direction": "null"}, {"name": "cortisol_awakening_response", "hierarchy": "secondary", "kind": "surrogate", "direction": "null"}],
+          "trial_family": "rct_37662485",
+          "limitations": ["One capsule daily for ten weeks; primary assessment at eight weeks. Initial 15.6B and final 13.5B CFU/capsule are site-averaged viability measurements, not dose arms or an efficacy range.", "Primary state-anxiety comparison P=.446. The first null hierarchical secondary test halted formal testing; later sleep and alertness signals are exploratory, not confirmed benefits.", "Industry-funded; the expected examination-related anxiety increase did not occur. No broad mood, immune or digestive benefit established."],
+          "review_status": "source_verified_pending_clinical_review"
+        }
+      ],
       "aliases": [
         "L. paracasei Lpc-37",
         "Lpc-37",
@@ -2488,15 +2512,17 @@
         "Lactobacillus paracasei strain Lpc-37"
       ],
       "evidence_level": "high",
-      "key_benefits": [
-        "immune support",
-        "stress reduction",
-        "mood support",
-        "perceived stress reduction"
-      ],
-      "notable_studies": "RCTs for perceived stress reduction, immune function. Part of HOWARU line. (IFF/DuPont)",
+      "key_benefits": [],
+      "notable_studies": "Two single-strain stress-response RCTs had null primary outcomes. Sisu reported secondary/subgroup perceived-stress signals; the larger ChillEx trial had no multiplicity-robust secondary efficacy. These studies do not establish generic immune or digestive benefit.",
+      "evidence_review": {
+        "search_coverage": "partial", "reviewed_on": "2026-09-04",
+        "reviewed_by": "Codex source verification (AI-assisted)", "clinical_signoff_changed": false,
+        "source_pmids": ["33385020", "37662485"],
+        "scope": "Primary stress-response outcomes and source-specific viability/regimen; not a systematic review or a new approved dosing policy.",
+        "unresolved": ["Outcome-specific clinical policy review", "Applicability beyond the studied healthy adult populations"]
+      },
       "cfu_thresholds": {
-        "indication_primary": "immune support",
+        "indication_primary": "stress-response research; primary efficacy not demonstrated",
         "tiers_cfu_per_day": {
           "low": {
             "upper_exclusive": 1000000000
@@ -2515,22 +2541,20 @@
         },
         "evidence": {
           "type": "strain_specific_clinical_evidence",
-          "source_short": "Neurobiology of Stress (2020) — The Sisu Study: probiotic effects on stress/mood; strain-specific clinical evidence",
+          "source_short": "Neurobiology of Stress (2020) — Sisu: exact-strain stress-response RCT; primary heart-rate outcome null",
           "pmid": "33385020",
           "url": "https://pubmed.ncbi.nlm.nih.gov/33385020/",
-          "verified_date": "2026-04-21",
+          "verified_date": "2026-09-04",
           "evidence_strength": "medium",
           "clinical_support_level": "moderate",
+          "effect_direction": "null",
+          "effect_direction_basis": "Primary heart-rate outcome was null in ITT and PP. Favorable secondary/subgroup findings are retained separately in the pending study context, not treated as primary efficacy.",
           "clinical_validation": {
-            "q1_strain_explicit": "NO",
-            "q2_outcome_relevant": "YES",
+            "q1_strain_explicit": "YES",
             "q3_human_clinical": "YES",
-            "q4_dose_mentioned": "NO",
-            "q4_dose_sample": null,
-            "score_yes_count": 2,
-            "validated_by": "agent:claude-code",
-            "validated_date": "2026-04-21",
-            "framework": "4-question clinical validation (strain-explicit / outcome-relevant / human-clinical / dose-mentioned)"
+            "q4_dose_mentioned": "YES",
+            "scope_verified_on": "2026-09-04",
+            "scope_verification_note": "Exact Lpc-37 and once-daily capsule are explicit. Initial/final CFU assays and the nominal target are distinct; primary outcome was null. Source identity and dose reporting do not establish efficacy or clinical applicability."
           },
           "previous_citation": {
             "pmid": "39842252",
@@ -2542,7 +2566,7 @@
             "swapped_date": "2026-04-21"
           }
         },
-        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain referenced but evidence is adjacent (review / co-studied paper). Dr Pham may upgrade citation when signing off.",
+        "notes": "Tier cutoffs remain historical industry convention, not a source-verified efficacy range. Sisu explicitly studied Lpc-37 but its primary outcome was null; secondary signals and the later null ChillEx trial are recorded in pending contexts. Historical source-selection sign-off does not approve these new contexts or a dosing policy.",
         "dr_pham_signoff": true,
         "dr_pham_signoff_verified_by": "Dr Pham (authored swap) + agent:claude-code (API-verified 2026-04-21)",
         "dr_pham_signoff_verified_date": "2026-04-21",

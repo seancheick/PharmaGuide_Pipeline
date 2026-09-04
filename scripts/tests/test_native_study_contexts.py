@@ -181,6 +181,7 @@ def test_priority_native_contexts_are_curated_without_new_approval():
         "STRAIN_SACCHAROMYCES": {"26756877", "22472744", "41675330"},
         "STRAIN_ACIDOPHILUS_NCFM": {"28082816", "19651563"},
         "STRAIN_LACTIS_BL04": {"24268677", "28343401"},
+        "STRAIN_PARACASEI_LPC37": {"33385020", "37662485"},
     }
     seen = set()
     for cid, pmids in expected.items():
@@ -209,6 +210,58 @@ def test_real_study_doses_preserve_ambiguity_and_separate_arms():
     assert study("STRAIN_LACTIS_BI07", "36149331")["dose"]["basis"] == "single_challenge"
     assert study("STRAIN_LACTIS_BI07", "21436726")["identity_scope"] == "combination"
     assert study("STRAIN_SACCHAROMYCES", "26756877")["identity_scope"] == "species_general"
+
+
+def test_lpc37_primary_null_results_and_viability_are_not_positive_dose_arms():
+    entry = studied_formulas._clinical_strain_registry()["STRAIN_PARACASEI_LPC37"]
+    contexts = {c["source_pmids"][0]: c for c in entry.get("study_contexts", [])}
+    assert set(contexts) == {"33385020", "37662485"}
+    for pmid, values, days in (("33385020", [1.75e10, 1.68e10], 35),
+                               ("37662485", [1.56e10, 1.35e10], 70)):
+        context_row = contexts[pmid]
+        assert context_row["dose"]["basis"] == "measured_viability"
+        assert context_row["dose"]["values"] == values
+        assert context_row["dose"]["duration_days"] == days
+        assert context_row["review_status"] == "source_verified_pending_clinical_review"
+        assert [o["direction"] for o in context_row["outcomes"]
+                if o["hierarchy"] == "primary"] == ["null"]
+    evidence = entry["cfu_thresholds"]["evidence"]
+    assert evidence["pmid"] == "33385020"  # No approval borrowed by the new paper.
+    assert evidence["effect_direction"] == "null"
+    assert evidence["clinical_validation"]["q1_strain_explicit"] == "YES"
+    assert evidence["clinical_validation"]["q4_dose_mentioned"] == "YES"
+    assert entry["cfu_thresholds"]["dr_pham_signoff"] is True  # Historical record only.
+
+
+def test_lpc37_sources_join_without_new_approval_or_interpolated_dose():
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+
+    product = strain_product(clinical_id="STRAIN_PARACASEI_LPC37",
+                             name="Lactobacillus paracasei Lpc-37", dose=1.56e10)
+    result = assessment(product)
+    assert set(result["source_pmids"]) == {"33385020", "37662485"}
+    assert result["scoring_source_pmids"] == ["33385020"]
+    assert result["dose_applicable"] is False
+    assert {c["dose_comparison"] for c in result["study_contexts"]} == {"study_daily_dose_unresolved"}
+    evidence = score_evidence(product)
+    assert evidence["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "pending_clinical_review"
+    assert evidence["metadata"]["evidence_result_state"] == "evaluated_null"
+
+
+@pytest.mark.parametrize("stale_field", ["indication_primary", "indication_secondary", "clinical_support_level"])
+def test_native_indication_copy_uses_current_registry_not_old_artifact(stale_field):
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+
+    product = strain_product(clinical_id="STRAIN_PARACASEI_LPC37",
+                             name="Lactobacillus paracasei Lpc-37", dose=1.56e10)
+    clinical = product["probiotic_data"]["clinical_strains"][0]
+    clinical[stale_field] = "digestive immune support"
+    before = deepcopy(product)
+    evidence = score_evidence(product)
+    categories = evidence["metadata"]["claim_alignment"]["strain_categories"]
+    assert not {"digestive", "immune"}.intersection(categories)
+    assert evidence["metadata"]["evidence_result_state"] == "evaluated_null"
+    assert product == before
 
 
 def test_source_verified_pending_research_is_not_called_no_human_evidence():

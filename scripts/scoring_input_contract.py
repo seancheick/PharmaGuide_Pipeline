@@ -64,7 +64,7 @@ _LABEL_ACTIVE_PROJECTION_REASONS = {
     "single_active_title_embedded_mass",
 }
 SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.3.0"
-ROUTE_CLASSIFIER_VERSION = "1.3.0"
+ROUTE_CLASSIFIER_VERSION = "1.3.1"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
@@ -1605,6 +1605,46 @@ def _derive_top_level_botanical_blend_evidence(
     return evidence
 
 
+def _identity_projection_rejection_reason(
+    source_row: Dict[str, Any], identity_row: Dict[str, Any],
+) -> Optional[str]:
+    """Validate a claimed identity tuple without resolving ingredient identity."""
+    canonical_id = identity_row.get("canonical_id_after")
+    source_db = identity_row.get("canonical_source_db")
+    repaired = identity_row.get("identity_disposition") == "repaired"
+    if repaired or (canonical_id and canonical_id != source_row.get("canonical_id")):
+        missing = [
+            field for field in ("canonical_id_after", "canonical_source_db", "standard_name")
+            if not isinstance(identity_row.get(field), str) or not identity_row[field].strip()
+        ]
+        if missing:
+            return "identity_projection_incomplete:" + ",".join(missing)
+    if (
+        canonical_id
+        and source_db in {"banned_recalled_ingredients", "harmful_additives"}
+        and (canonical_id, source_db) != (
+            source_row.get("canonical_id"), source_row.get("canonical_source_db")
+        )
+    ):
+        return "identity_projection_rejected:safety_record_substitution"
+    if repaired:
+        if identity_row.get("canonical_id") not in (None, canonical_id):
+            return "identity_projection_inconsistent:canonical_id"
+        recognition_source = identity_row.get("recognition_source")
+        if (
+            identity_row.get("recognized_non_scorable") is True
+            and identity_row.get("recognized_entry_id") == canonical_id
+            and recognition_source not in {None, "banned_recalled_ingredients", "harmful_additives"}
+        ):
+            for field, expected in (
+                ("canonical_source_db", recognition_source),
+                ("standard_name", identity_row.get("recognized_entry_name")),
+            ):
+                if expected and identity_row.get(field) != expected:
+                    return f"identity_projection_inconsistent:{field}"
+    return None
+
+
 def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Derive ScoringEvidence v1 rows from cleaner/enrichment-owned fields.
 
@@ -1658,11 +1698,21 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         active_row = dict(raw_active)
         identity_row = identity_row_for(raw_active)
         if identity_row is not None:
-            active_row["identity_disposition"] = identity_row.get(
-                "identity_disposition"
-            )
-            if identity_row.get("canonical_id_after"):
-                active_row["canonical_id"] = identity_row["canonical_id_after"]
+            if _identity_projection_rejection_reason(raw_active, identity_row):
+                # The shared required-conflict ledger retains this exposure
+                # for coverage/readiness; it cannot become scoring evidence.
+                continue
+            if identity_row.get("identity_disposition") is not None:
+                active_row["identity_disposition"] = identity_row["identity_disposition"]
+            canonical_id = identity_row.get("canonical_id_after")
+            source_db = identity_row.get("canonical_source_db")
+            standard_name = identity_row.get("standard_name")
+            if canonical_id:
+                active_row["canonical_id"] = canonical_id
+                if source_db:
+                    active_row["canonical_source_db"] = source_db
+                if standard_name:
+                    active_row["standardName"] = standard_name
             if identity_row.get("source_label_key"):
                 active_row["source_label_key"] = identity_row["source_label_key"]
         disposition = active_row.get("identity_disposition")
@@ -2425,7 +2475,7 @@ def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
 
 
 def required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
-    """Keep required label conflicts visible even when IQD cannot score them.
+    """Keep required conflicts and invalid identity projections in coverage.
 
     This consumes the existing typed identity decision, not label matching or
     dose inference. Source ownership can supply fields omitted by an IQD row;
@@ -2448,16 +2498,26 @@ def required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, 
                        _safe_list(iqd.get("ingredients_skipped")),
                        _safe_list(iqd.get("ingredients_scorable"))):
         for index, row in enumerate(collection):
-            if not isinstance(row, dict) or row.get("identity_disposition") != "identity_conflict":
+            if not isinstance(row, dict):
                 continue
             key = scoring_row_key(row, index)
             source_owner = source_by_key.get(key, {})
+            projection_rejection = (
+                _identity_projection_rejection_reason(source_owner, row)
+                if collection is not source_rows else None
+            )
+            if row.get("identity_disposition") != "identity_conflict" and not projection_rejection:
+                continue
             owned = {**source_owner, **row}
             for field in ("source_section", "cleaner_row_role", "score_eligible_by_cleaner"):
                 if owned.get(field) is None:
                     owned[field] = source_owner.get(field)
             cleaner_role = _norm(owned.get("cleaner_row_role"))
             role = _norm(owned.get("role_classification") or cleaner_role)
+            if projection_rejection and role == "recognized_non_scorable":
+                # Recognized preparation is not an intentional source-row
+                # exclusion when the cleaner still requires this exposure.
+                role = cleaner_role
             if (
                 owned.get("score_eligible_by_cleaner") is not True
                 or cleaner_role in EXCLUDED_CLEANER_ROLES
@@ -2469,6 +2529,16 @@ def required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, 
                 or owned.get("is_excipient")
             ):
                 continue
+            if projection_rejection:
+                owned.update({
+                    "identity_disposition": "identity_conflict",
+                    "scoreable_identity": False,
+                    "identity_contract_rejection_reason": projection_rejection,
+                    "identity_resolution_rationale": (
+                        "Identity projection rejected by the scoring-input contract: "
+                        + projection_rejection
+                    ),
+                })
             conflicts[key] = owned
     return conflicts
 
@@ -2589,7 +2659,7 @@ def _build_scoring_ingredients(
         elif rejection is not None:
             rejected.append(rejection)
     for row in required_conflicts.values():
-        reason = "identity_disposition_not_scoreable:identity_conflict"
+        reason = row.get("identity_contract_rejection_reason") or "identity_disposition_not_scoreable:identity_conflict"
         rejected.append(_reject(row, reason))
         row_findings.append(reason)
 
@@ -2851,6 +2921,9 @@ _CLASSIFICATION_BOTANICAL_SOURCE_TERMS = {
     "bark", "flower", "seed", "fruit", "berry", "rhizome", "aerial",
     "whole herb", "herb", "plant part",
 }
+# DSLD may classify whole seaweed as "other". Its own source wording is
+# botanical evidence even when a corrected registry name no longer says Extract.
+_CLASSIFICATION_SEAWEED_SOURCE_RE = re.compile(r"\b(?:seaweed|kelp|bladderwrack)\b", re.IGNORECASE)
 _CLASSIFICATION_ANIMAL_SOURCE_RE = re.compile(
     r"\b("
     r"animal|bovine|porcine|beef|chicken|fish|marine|gelatin|cartilage|"
@@ -2901,9 +2974,12 @@ _CLASSIFICATION_DOMAIN_BY_CANONICAL = {
 }
 _CLASSIFICATION_ISOLATED_BOTANICAL_MARKERS = {
     "activated_charcoal",
+    "astaxanthin",
     "caffeine",
     "ceramides",
     "d_limonene",
+    "fucoidan",
+    "fucoxanthin",
     "lycopene",
     "lutein",
     "policosanol",
@@ -4115,7 +4191,10 @@ def _botanical_source_evidence(row: Dict[str, Any], product: Optional[Dict[str, 
     text = _classification_row_text(row).lower()
     if (
         not _CLASSIFICATION_ANIMAL_SOURCE_RE.search(text)
-        and any(term in text for term in _CLASSIFICATION_BOTANICAL_SOURCE_TERMS)
+        and (
+            any(term in text for term in _CLASSIFICATION_BOTANICAL_SOURCE_TERMS)
+            or _CLASSIFICATION_SEAWEED_SOURCE_RE.search(text)
+        )
     ):
         evidence.append("botanical_source_text")
     return bool(evidence), sorted(set(evidence))
@@ -4329,10 +4408,12 @@ def _profile_botanical_is_title_head(
     ]
     botanical_in_head = botanical_pos is not None and botanical_pos < boundary
     non_botanical_in_head = any(pos < boundary for pos in non_botanical_positions)
-    if botanical_in_head and not non_botanical_in_head:
-        return True
-    if non_botanical_in_head and not botanical_in_head:
+    # Names after "with"/"plus"/"&" describe additions, not the title head.
+    # Their relative order cannot promote a support botanical to owner.
+    if not botanical_in_head:
         return False
+    if not non_botanical_in_head:
+        return True
     if botanical_pos is not None and non_botanical_positions:
         return botanical_pos < min(non_botanical_positions)
     return False

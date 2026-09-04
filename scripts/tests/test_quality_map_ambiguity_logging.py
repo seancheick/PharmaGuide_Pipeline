@@ -31,12 +31,6 @@ def _duplicate_path_debugs(caplog):
     [
         ("Sodium", "Sodium", "sodium", "sodium (unspecified)"),
         (
-            "EpiCor dried Yeast Fermentate",
-            "Yeast Fermentate Dried",
-            "yeast_fermentate",
-            "yeast fermentate (unspecified)",
-        ),
-        (
             "Chondroitin Sulfate, Sodium",
             "Chondroitin Sulfate, Sodium",
             "chondroitin",
@@ -62,5 +56,21 @@ def test_same_resolution_quality_map_duplicates_do_not_warn(
     assert result["canonical_id"] == expected_parent
     assert result["form_id"] == expected_form
     assert result["match_ambiguity_candidates"] == []
+    assert _ambiguity_warnings(caplog) == []
+    assert _duplicate_path_debugs(caplog) == []
+
+
+def test_epicor_exact_owner_does_not_inherit_generic_yeast_iqm(enricher, caplog):
+    quality_map = enricher.databases.get("ingredient_quality_map", {})
+    caplog.clear()
+
+    with caplog.at_level(logging.DEBUG, logger="enrich_supplements_v3"):
+        result = enricher._match_quality_map(
+            "EpiCor dried Yeast Fermentate",
+            "Yeast Fermentate Dried",
+            quality_map,
+        )
+
+    assert result is None
     assert _ambiguity_warnings(caplog) == []
     assert _duplicate_path_debugs(caplog) == []

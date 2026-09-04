@@ -44,7 +44,7 @@ _MICROBIAL_SOURCE_RE = re.compile(
 )
 _MICROBIAL_PREPARATION_RE = re.compile(
     r"\b(?:extracts?|(?:hydro)?lysates?|fermentates?|fractions?|cell[-\s]+wall(?:s)?|"
-    r"(?:heat[-\s]+(?:killed|inactivated)|inactivated|non[-\s]*viable|"
+    r"(?:heat[-\s]+(?:killed|inactivated|treated)|inactivated|non[-\s]*viable|"
     r"tyndalli[sz]ed)(?:\s+(?:cells?|cultures?))?|postbiotics?)\b",
     re.IGNORECASE,
 )
@@ -843,12 +843,20 @@ def resolve_identity(
         )
     )
     microbial_derivative_conflict = bool(
-        structured_canonical
-        and has_nonlive_microbial_derivative_evidence(row)
-        and _has_whole_microbial_identity(structured_canonical)
-        and any(
-            _has_whole_microbial_identity(item.value)
-            for item in resolved_structured_evidence
+        has_nonlive_microbial_derivative_evidence(row)
+        and (
+            # Older cleaner identities can still name a whole organism when
+            # DSLD's category is TBD. The row's own preparation form is the
+            # contradiction; a resolved category is not required to see it.
+            (canonical_before and _has_whole_microbial_identity(canonical_before))
+            or (
+                structured_canonical
+                and _has_whole_microbial_identity(structured_canonical)
+                and any(
+                    _has_whole_microbial_identity(item.value)
+                    for item in resolved_structured_evidence
+                )
+            )
         )
     )
     exact_literal_match = (
@@ -910,14 +918,14 @@ def resolve_identity(
         canonical_after = literal_preparation_canonical
         rationale = (
             "The exact literal label establishes the registered preparation identity; "
-            "structured source-organism taxonomy cannot replace it."
+            "a supplied whole-organism identity cannot replace it."
         )
     elif microbial_derivative_conflict:
         disposition = "identity_conflict"
         canonical_after = None
         rationale = (
             "The literal source or its label form identifies a non-live microbial "
-            "preparation; structured organism taxonomy cannot establish the "
+            "preparation; a supplied whole-organism identity cannot establish the "
             "preparation's canonical identity."
         )
     elif len(structured_canonicals) > 1 and structured_canonical is None:

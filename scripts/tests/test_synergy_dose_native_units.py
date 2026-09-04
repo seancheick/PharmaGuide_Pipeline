@@ -103,3 +103,43 @@ class TestMgDefaultPreserved:
     def test_mg_threshold_native(self):
         e = _enricher_with([_cluster("cur", "curcumin", 500)], {})
         assert _meets(e, _product("Curcumin", 500, "mg")) is True
+
+
+class TestUnconvertibleThresholds:
+    def test_cross_dimensional_unit_does_not_false_positive_a_solo_cluster(self):
+        e = _enricher_with([_cluster("pro", "probiotics", 100)], {"probiotics": "cfu"})
+        assert e._collect_synergy_data(_product("Probiotics", 500, "mg")) == []
+
+    def test_unsupported_unit_does_not_false_positive_a_solo_cluster(self):
+        e = _enricher_with([_cluster("cur", "curcumin", 500)], {})
+        assert e._collect_synergy_data(_product("Curcumin", 600, "spoon")) == []
+
+    def test_multi_ingredient_cluster_keeps_unconvertible_match_but_marks_it_unevaluable(self):
+        e = _enricher_with([{
+            "id": "mixed",
+            "standard_name": "mixed",
+            "ingredients": ["curcumin", "probiotics"],
+            "canonical_ids": ["curcumin", "probiotics"],
+            "min_effective_doses": {"curcumin": 500, "probiotics": 100},
+            "allow_single_ingredient": False,
+            "primary_ingredients": ["curcumin", "probiotics"],
+        }], {"probiotics": "cfu"})
+        product = {
+            "name": "t",
+            "activeIngredients": [
+                {"name": "Curcumin", "standardName": "Curcumin", "quantity": 500, "unit": "mg"},
+                {"name": "Probiotics", "standardName": "Probiotics", "quantity": 500, "unit": "mg"},
+            ],
+        }
+
+        clusters = e._collect_synergy_data(product)
+
+        assert len(clusters) == 1
+        assert clusters[0]["all_adequate"] is False
+        matched = {row["cluster_ingredient"]: row for row in clusters[0]["matched_ingredients"]}
+        assert matched["curcumin"]["meets_minimum"] is True
+        assert matched["curcumin"]["dose_evaluable"] is True
+        assert matched["probiotics"]["evaluated_quantity"] is None
+        assert matched["probiotics"]["evaluated_unit"] is None
+        assert matched["probiotics"]["dose_evaluable"] is False
+        assert matched["probiotics"]["meets_minimum"] is False

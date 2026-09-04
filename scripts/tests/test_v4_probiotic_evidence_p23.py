@@ -239,6 +239,7 @@ def test_precaution_statement_does_not_create_positioning_relevance() -> None:
             )
         ],
     )
+    baseline = score_evidence(product)
     product["statements"] = [
         {
             "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
@@ -249,7 +250,9 @@ def test_precaution_statement_does_not_create_positioning_relevance() -> None:
     payload = score_evidence(product)
 
     assert payload["components"]["dose_applicability"] == 0.0
-    assert payload["metadata"]["indication_relevance_level"] == "none"
+    # Current registry indications, not this old artifact's free text, own
+    # the descriptive categories. Adding a precaution must not change them.
+    assert payload["metadata"]["claim_alignment"] == baseline["metadata"]["claim_alignment"]
     assert payload["metadata"]["product_positioning_categories"] == []
 
 

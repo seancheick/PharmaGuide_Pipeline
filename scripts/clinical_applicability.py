@@ -43,9 +43,18 @@ def _number(value: Any) -> float | None:
         return None
 
 
-def _row_text(row: Mapping) -> str:
-    values = [row.get(k) for k in ("name", "raw_source_text", "matched_form", "form_id")]
-    forms = row.get("forms")
+def _row_text(row: Mapping, *, source_only: bool = False) -> str:
+    if source_only:
+        label = row.get("raw_source_text") or row.get("source_label_name")
+        if not isinstance(label, str) or not label.strip():
+            return ""
+        values = [label]
+        taxonomy = row.get("raw_taxonomy")
+        source_forms = taxonomy.get("forms") if isinstance(taxonomy, Mapping) else None
+        forms = source_forms if isinstance(source_forms, list) else row.get("forms")
+    else:
+        values = [row.get(k) for k in ("name", "raw_source_text", "matched_form", "form_id")]
+        forms = row.get("forms")
     if isinstance(forms, list):
         values.extend(f.get("name") for f in forms if isinstance(f, Mapping))
     # Parent/source notation is one linked label assertion: Zinc (as acetate)
@@ -73,12 +82,21 @@ def _valid_policy(policy: Any) -> bool:
         return False
     if "studied_population" in policy and not isinstance(policy["studied_population"], str):
         return False
-    for field in ("dosage_forms", "required_form_terms", "supported_outcomes", "source_pmids"):
+    for field in ("dosage_forms", "required_form_terms", "supported_outcomes", "source_pmids",
+                  "excluded_canonical_ids", "excluded_form_terms"):
         if field in policy and (
             not isinstance(policy[field], list)
             or any(not isinstance(value, str) or not value.strip() for value in policy[field])
         ):
             return False
+        if field in {"excluded_canonical_ids", "excluded_form_terms"} and any(
+            not _key(value) for value in policy.get(field, [])
+        ):
+            return False
+    if "require_source_label_form" in policy and not isinstance(policy["require_source_label_form"], bool):
+        return False
+    if policy.get("require_source_label_form") and not policy.get("required_form_terms"):
+        return False
     bounds = []
     for field in ("minimum_daily_dose", "maximum_daily_dose"):
         value = _number(policy[field]) if field in policy else None
@@ -93,7 +111,7 @@ def _valid_policy(policy: Any) -> bool:
     return True
 
 
-def _rows(product: Mapping):
+def _rows(product: Mapping, *, source_only: bool = False):
     seen = set()
 
     def walk(rows):
@@ -101,18 +119,24 @@ def _rows(product: Mapping):
             if not isinstance(row, Mapping):
                 continue
             ref = row.get("raw_source_path") or row.get("source_row_ref")
+            valid_reference = not source_only or (isinstance(ref, str) and bool(ref.strip()))
             identity = (ref, row.get("name"), str(row.get("quantity")), row.get("unit"))
-            if identity not in seen and _is_exposure_row(row):
+            if valid_reference and identity not in seen and _is_exposure_row(row):
                 seen.add(identity)
                 yield row
             yield from walk(row.get("nestedIngredients"))
 
-    yield from walk(product.get("activeIngredients"))
+    originals = product.get("activeIngredients") or []
+    yield from walk(originals)
+    # Source-required scopes cannot replace an original owner with a generated
+    # row, even when the generated row has a different or missing reference.
+    if source_only and any(isinstance(row, Mapping) for row in originals):
+        return
     iqd = product.get("ingredient_quality_data") or {}
     yield from walk(iqd.get("ingredients_scorable") or iqd.get("ingredients"))
 
 
-def _linked_rows(product: Mapping, entry: Mapping):
+def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False):
     source_refs = entry.get("matched_source_row_refs")
     if source_refs is not None and (
         not isinstance(source_refs, list)
@@ -122,12 +146,16 @@ def _linked_rows(product: Mapping, entry: Mapping):
     refs = set(source_refs or [])
     name = _key(entry.get("ingredient"))
     canonicals = {_key(c) for c in entry.get("matched_canonical_ids") or []}
-    rows = list(_rows(product))
+    rows = list(_rows(product, source_only=source_only))
     if refs:
         return [r for r in rows if (r.get("raw_source_path") or r.get("source_row_ref")) in refs]
     exact = [r for r in rows if name and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
     if exact:
         return exact
+    if source_only:
+        # Legacy source-required matches may use an exact referenced label
+        # owner, but a canonical guess is not preparation/source evidence.
+        return []
     # Legacy boundary only: one canonical row is unambiguous. Multiple forms of
     # the same nutrient may not lend their amount to an unmatched source form.
     candidates = [r for r in rows if _key(r.get("canonical_id")) in canonicals]
@@ -155,8 +183,19 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping) -> dict:
 
     lower, upper, _ = resolve_daily_serving_range(dict(product))
     reasons = []
-    for row in _linked_rows(product, entry):
-        text = _row_text(row)
+    source_only = policy.get("require_source_label_form", False)
+    excluded_canonicals = {_key(value) for value in policy.get("excluded_canonical_ids", [])}
+    for row in _linked_rows(product, entry, source_only=source_only):
+        text = _row_text(row, source_only=source_only)
+        if source_only and not text:
+            reasons.append("clinical_source_label_unresolved")
+            continue
+        if _key(row.get("canonical_id")) in excluded_canonicals:
+            reasons.append("clinical_identity_excluded")
+            continue
+        if any(" " + _key(term) + " " in text for term in policy.get("excluded_form_terms", [])):
+            reasons.append("clinical_form_excluded")
+            continue
         forms = policy.get("required_form_terms") or []
         if forms and not any(" " + _key(form) + " " in text for form in forms):
             reasons.append("clinical_form_mismatch")

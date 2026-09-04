@@ -13,7 +13,10 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
-from scoring_input_contract import build_scoring_classification  # noqa: E402
+from scoring_input_contract import (  # noqa: E402
+    ROUTE_CLASSIFIER_VERSION,
+    build_scoring_classification,
+)
 from scoring_v4.route_features import extract_route_features  # noqa: E402
 
 
@@ -682,7 +685,7 @@ def test_route_decision_is_single_structured_classifier_result() -> None:
         "module": decision["route_module"],
         "reason_codes": decision["route_evidence"],
         "confidence": decision["route_confidence"],
-        "classifier_version": "1.3.0",
+        "classifier_version": ROUTE_CLASSIFIER_VERSION,
     }
 
 

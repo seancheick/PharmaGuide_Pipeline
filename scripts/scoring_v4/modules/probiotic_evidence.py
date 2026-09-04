@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Set
 
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
 from scoring_v4.modules.generic_evidence import resolved_clinical_matches
-from studied_formulas import (assess_studied_formula, assess_probiotic_evidence,
+from studied_formulas import (assess_probiotic_evidence,
                              independent_clinical_strains, strain_assessments_for_match)
 
 
@@ -93,7 +93,7 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         max(generic_score, native_evidence["score"]),
     )
 
-    relevance = _claim_alignment(product)
+    relevance = _claim_alignment(product, assessment)
     # Claim alignment is descriptive only. Native dose applicability must be
     # reviewed; generic 1B/10B/50B bands and marketing phrases cannot prove it.
     formula = assessment["formula_assessment"]
@@ -258,9 +258,9 @@ def _score_native_clinical_strain_evidence(
     }
 
 
-def _claim_alignment(product: Dict[str, Any]) -> Dict[str, Any]:
+def _claim_alignment(product: Dict[str, Any], assessment: Dict[str, Any]) -> Dict[str, Any]:
     product_categories = _product_positioning_categories(product)
-    strain_categories = _strain_indication_categories(product)
+    strain_categories = _strain_indication_categories(assessment)
     matched = product_categories & strain_categories
     partial = {
         b
@@ -316,16 +316,18 @@ def _product_positioning_categories(product: Dict[str, Any]) -> Set[str]:
     return categories
 
 
-def _strain_indication_categories(product: Dict[str, Any]) -> Set[str]:
+def _strain_indication_categories(assessment: Dict[str, Any]) -> Set[str]:
+    """Use current registry copy from the same assessment that owns credit."""
     categories: Set[str] = set()
-    for strain in _clinical_strains(product):
+    for strain in assessment["strain_assessments"]:
+        if not strain["research_accepted"]:
+            continue
         text_parts = [
             strain.get("indication_primary"),
             strain.get("indication_secondary"),
-            strain.get("clinical_support_level"),
         ]
         categories.update(_categories_from_text(" ".join(str(x or "") for x in text_parts)))
-    formula = assess_studied_formula(product)
+    formula = assessment["formula_assessment"]
     if formula["status"] == "assessed_studied_formula":
         categories.update(formula["supported_outcomes"])
     return categories

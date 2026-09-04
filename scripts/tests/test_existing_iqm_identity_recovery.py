@@ -1316,6 +1316,7 @@ def test_stale_botanical_source_recovery_uses_bounded_identity_index(
     assert enricher._botanical_source_identity(stale_pycrinil_row) == (
         "globe_artichoke",
         "botanical_ingredients",
+        "Globe Artichoke",
     )
 
 
@@ -1351,7 +1352,7 @@ def test_static_banned_alias_filter_is_reused(
         ("lavender", "linalool"),
         ("globe_artichoke", "cynarin"),
         ("cloves", "eugenol"),
-        ("mulberry", "dnj_1_deoxynojirimycin"),
+        ("white_mulberry", "dnj_1_deoxynojirimycin"),
         ("horny_goat_weed", "icariin"),
         ("siberian_rhubarb", "rhaponticin"),
         ("wakame", "fucoidan"),

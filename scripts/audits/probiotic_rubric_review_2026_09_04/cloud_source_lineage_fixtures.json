@@ -1,0 +1,2625 @@
+{
+  "purpose": "Public DSLD source-lineage fixtures for cloud continuation; not full product snapshots or a full-corpus acceptance input. Fields outside the label/ingredient projection were intentionally omitted. No source ownership has been inferred or added.",
+  "snapshot_date": "2026-09-04",
+  "complete_product_snapshots": false,
+  "products": [
+    {
+      "dsld_id": "213475",
+      "source_batch": "scripts/products/output_Natures_Way/cleaned/cleaned_batch_1.json",
+      "source_batch_sha256": "e6d227380424845a3a84f5d510b1cb06b24a89f378cf717ad8c9e88497504865",
+      "projection_sha256": "bab36b0ffd0d6d7f55ba3107c6ad234e0570dd7102549b076733e111d52af11c",
+      "cleaned_label_projection": {
+        "id": "213475",
+        "fullName": "Phosphatidylserine 100 mg",
+        "brandName": "Nature's Way",
+        "productType": {
+          "langualCode": "A1310",
+          "langualCodeDescription": "Fat/Fatty Acid"
+        },
+        "physicalState": {
+          "langualCode": "E0161",
+          "langualCodeDescription": "Softgel Capsule"
+        },
+        "servingsPerContainer": null,
+        "activeIngredients": [
+          {
+            "ingredientId": 236356,
+            "uniiCode": null,
+            "order": 2,
+            "raw_category": "fat",
+            "raw_source_text": "SerinAid Phosphatidylserine complex",
+            "branded_token_extracted": null,
+            "canonical_id": "phosphatidylserine",
+            "canonical_source_db": "ingredient_quality_map",
+            "cleaner_match_method": null,
+            "label_nutrient_context": null,
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[1]",
+            "normalized_key": "serinaid_phosphatidylserine_complex",
+            "cleaner_row_role": "blend_header_total",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "blend_header_total",
+            "dose_class": "blend_total_weight",
+            "raw_taxonomy": {
+              "category": "fat",
+              "ingredientGroup": "Phosphatidylserine",
+              "ingredientId": 236356,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": [
+                {
+                  "quantity": 500.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 1,
+                  "serving_size_unit": "Softgel(s)",
+                  "daily_value_target_group": "adult_4_plus"
+                }
+              ]
+            },
+            "name": "SerinAid Phosphatidylserine complex",
+            "label_display_name": null,
+            "standardName": "Phosphatidylserine",
+            "ingredientGroup": "Phosphatidylserine",
+            "quantity": 500.0,
+            "unit": "mg",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "proprietaryBlend": true,
+            "disclosureLevel": "full",
+            "parentBlend": null,
+            "isNestedIngredient": false,
+            "nestedIngredients": [
+              {
+                "ingredientId": 5188,
+                "uniiCode": null,
+                "order": 3,
+                "raw_category": "fat",
+                "raw_source_text": "Phosphatidylserine",
+                "branded_token_extracted": null,
+                "canonical_id": "phosphatidylserine",
+                "canonical_source_db": "ingredient_quality_map",
+                "cleaner_match_method": null,
+                "label_nutrient_context": null,
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[1].nestedRows[0]",
+                "normalized_key": "phosphatidylserine",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": true,
+                "score_exclusion_reason": null,
+                "dose_class": "therapeutic_mass",
+                "raw_taxonomy": {
+                  "category": "fat",
+                  "ingredientGroup": "Phosphatidylserine",
+                  "ingredientId": 5188,
+                  "uniiCode": null,
+                  "forms": [],
+                  "parentBlend": "SerinAid Phosphatidylserine complex",
+                  "isNestedIngredient": true,
+                  "nested_depth": 1,
+                  "quantityVariants": [
+                    {
+                      "quantity": 100.0,
+                      "unit": "mg",
+                      "index": 0,
+                      "quantity_parsed": true,
+                      "serving_size_order": 1,
+                      "serving_size_quantity": 1,
+                      "serving_size_unit": "Softgel(s)"
+                    }
+                  ]
+                },
+                "name": "Phosphatidylserine",
+                "label_display_name": null,
+                "standardName": "Phosphatidylserine",
+                "ingredientGroup": "Phosphatidylserine",
+                "quantity": 100.0,
+                "unit": "mg",
+                "dailyValue": null,
+                "quantityVariants": null,
+                "forms": [],
+                "alternateNames": [],
+                "mapped": true,
+                "proprietaryBlend": false,
+                "disclosureLevel": null,
+                "parentBlend": "SerinAid Phosphatidylserine complex",
+                "isNestedIngredient": true,
+                "nestedIngredients": [],
+                "parentBlendMass": 500.0,
+                "parentBlendUnit": "mg",
+                "hierarchyType": null,
+                "quantityProvided": true
+              }
+            ],
+            "parentBlendMass": null,
+            "parentBlendUnit": null,
+            "hierarchyType": "blend_header",
+            "harvestMethod": "providing",
+            "notes": "SerinAid Phosphatidylserine complex Note: providing "
+          }
+        ],
+        "inactiveIngredients": [
+          {
+            "ingredientId": 146962,
+            "uniiCode": null,
+            "order": 1,
+            "raw_category": "protein",
+            "raw_source_text": "Gelatin",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "normalized_key": "gelatin",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "protein",
+              "ingredientGroup": "Gelatin",
+              "ingredientId": 146962,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "PII_GELATIN_CAPSULE",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Gelatin",
+            "standardName": "Gelatin Capsule",
+            "ingredientGroup": "Gelatin",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "gelatin_capsule"
+          },
+          {
+            "ingredientId": 3985,
+            "uniiCode": null,
+            "order": 2,
+            "raw_category": "other",
+            "raw_source_text": "Glycerin",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "normalized_key": "glycerin",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "other",
+              "ingredientGroup": "Glycerol",
+              "ingredientId": 3985,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "NHA_VEGETABLE_GLYCERIN",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Glycerin",
+            "standardName": "Vegetable Glycerin",
+            "ingredientGroup": "Glycerol",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "processing_aid"
+          },
+          {
+            "ingredientId": 3793,
+            "uniiCode": null,
+            "order": 3,
+            "raw_category": "fat",
+            "raw_source_text": "Soybean Oil",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "normalized_key": "soybean_oil",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "fat",
+              "ingredientGroup": "Soybean Oil",
+              "ingredientId": 3793,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "PII_SOY_BEAN_OIL",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Soybean Oil",
+            "standardName": "Soy Bean Oil",
+            "ingredientGroup": "Soybean Oil",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "carrier"
+          },
+          {
+            "ingredientId": 3777,
+            "uniiCode": null,
+            "order": 4,
+            "raw_category": "other",
+            "raw_source_text": "purified Water",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "normalized_key": "purified_water",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "other",
+              "ingredientGroup": "Water",
+              "ingredientId": 3777,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "PII_PURIFIED_WATER",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "purified Water",
+            "standardName": "Purified Water",
+            "ingredientGroup": "Water",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "solvent"
+          }
+        ],
+        "raw_inactives_count": 4,
+        "raw_actives_count": 3,
+        "display_ingredients": [
+          {
+            "raw_source_text": "Calories",
+            "display_name": "Calories",
+            "source_section": "activeIngredients",
+            "display_type": "nutrition_fact",
+            "resolution_type": "display_only",
+            "score_included": false,
+            "children": [],
+            "raw_source_path": "ingredientRows[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "5 Calories",
+            "raw_category": "other",
+            "ingredient_group": "Calories",
+            "label_display_name": "Calories",
+            "label_order": 0,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "softgels",
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "2da61762d2e1787d8c9022dc63ecd2b3f1cdc6ec7db818c88fc4858d2a185eba"
+          },
+          {
+            "raw_source_text": "SerinAid Phosphatidylserine complex",
+            "display_name": "SerinAid Phosphatidylserine complex",
+            "label_display_name": "SerinAid Phosphatidylserine complex",
+            "source_section": "activeIngredients",
+            "display_type": "structural_container",
+            "resolution_type": "structural_parent",
+            "score_included": false,
+            "canonical_id": "phosphatidylserine",
+            "label_display_form": null,
+            "raw_source_path": "ingredientRows[1]",
+            "source_order": 2,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "500 mg",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 1,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "softgels",
+            "raw_category": "fat",
+            "ingredient_group": "Phosphatidylserine",
+            "children": [
+              "Phosphatidylserine"
+            ],
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "6ad72f0cffeda1476dbf86e2c1688e3036f26b3a92f6ec873bb11b31575cec02"
+          },
+          {
+            "raw_source_text": "Gelatin",
+            "display_name": "Gelatin",
+            "label_display_name": "Gelatin",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "PII_GELATIN_CAPSULE",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 2,
+            "raw_category": "protein",
+            "ingredient_group": "Gelatin",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "b2944f578f3ded59268a00c4548d0a2a98070e047704d1ff0b21d3f678eb81dd"
+          },
+          {
+            "raw_source_text": "Glycerin",
+            "display_name": "Glycerin",
+            "label_display_name": "Glycerin",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_VEGETABLE_GLYCERIN",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "source_order": 2,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 3,
+            "raw_category": "other",
+            "ingredient_group": "Glycerol",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "23aa1300b46ecff27533cd1af67924425922f0ad8192e4f321d364aca77a06fd"
+          },
+          {
+            "raw_source_text": "Soybean Oil",
+            "display_name": "Soybean Oil",
+            "label_display_name": "Soybean Oil",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "PII_SOY_BEAN_OIL",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "source_order": 3,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 4,
+            "raw_category": "fat",
+            "ingredient_group": "Soybean Oil",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "b4e379d7275b5b8c1a482a6bf295d5505a5d270fe1b23225d99c8ae9bcf33544"
+          },
+          {
+            "raw_source_text": "purified Water",
+            "display_name": "purified Water",
+            "label_display_name": "purified Water",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "PII_PURIFIED_WATER",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "source_order": 4,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 5,
+            "raw_category": "other",
+            "ingredient_group": "Water",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "bd5169d2a38246215f7ae73ae025007968608ee34bf6d607820447d680822df2"
+          }
+        ],
+        "label_ledger_omissions": [
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[0]",
+            "raw_source_text": "Phosphatidylserine",
+            "omission_reason": "duplicate_source_line"
+          }
+        ],
+        "label_source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Calories",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "SerinAid Phosphatidylserine complex",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[0]",
+            "raw_source_text": "Phosphatidylserine",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "Gelatin",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "raw_source_text": "Glycerin",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "raw_source_text": "Soybean Oil",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "raw_source_text": "purified Water",
+            "source_section": "inactiveIngredients"
+          }
+        ],
+        "label_ledger_audit": {
+          "support_status": "supported",
+          "source_structure": "proprietary_blend",
+          "meaningful_source_rows": 6,
+          "displayed_rows": 6,
+          "omitted_rows": 1,
+          "completeness_percentage": 100.0,
+          "completeness_status": "complete"
+        },
+        "nutritionalInfo": {
+          "calories": {
+            "amount": 5.0,
+            "unit": "Calorie(s)"
+          }
+        },
+        "statements": [
+          {
+            "type": "Formulation re: Other",
+            "notes": "Brain function"
+          },
+          {
+            "type": "Formula re: Contains",
+            "notes": "Phosphatidylserine (PS) helps regulate membrane transfer of nutrients and neurotransmitters necessary for proper brain function. Our PS is carefully tested and produced to superior quality standards."
+          },
+          {
+            "type": "FDA Disclaimer Statement",
+            "notes": "These statements have not been evaluated by the Food & Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease."
+          },
+          {
+            "type": "General Statements: All Other Content",
+            "notes": "Nature’s Way Since 1969"
+          },
+          {
+            "type": "Formula re: Contains",
+            "notes": "Phosphatidylserine 100 mg per serving"
+          },
+          {
+            "type": "FDA Statement of Identity",
+            "notes": "Dietary supplement"
+          },
+          {
+            "type": "Suggested/Recommended/Usage/Directions",
+            "notes": "Recommendation: Take 1 softgel three times daily for one month, then two times daily thereafter. Best results are obtained with continuous use."
+          },
+          {
+            "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+            "notes": "If you are pregnant, nursing, or taking any medications, consult a healthcare professional before use."
+          },
+          {
+            "type": "Precautions re: Allergies",
+            "notes": "Contains soy."
+          },
+          {
+            "type": "Precautions re: Children",
+            "notes": "Keep out of reach of children."
+          },
+          {
+            "type": "Precautions re: All Other",
+            "notes": "Safety sealed with printed inner seal. Do not use if seal is broken or missing."
+          },
+          {
+            "type": "Formulation re: Does NOT Contain",
+            "notes": "Gluten free. No salt, yeast-derived ingredients, wheat, corn, dairy products, or artificial colors, flavors, or preservatives."
+          },
+          {
+            "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+            "notes": "2019 Distributed by Nature’s Way Brands, LLC"
+          },
+          {
+            "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+            "notes": "SerinAid and logo are trademarks of Chemi Nutraceuticals, Inc."
+          },
+          {
+            "type": "General Statements: All Other Content",
+            "notes": "Bottles made from 97% post-consumer recycled plastic"
+          },
+          {
+            "type": "Seals/Symbols",
+            "notes": "Quality Global Sourcing Bottled & Tested In the USA"
+          }
+        ],
+        "claims": [
+          {
+            "langualCode": "P0065",
+            "langualCodeDescription": "Nutrient "
+          },
+          {
+            "langualCode": "P0115",
+            "langualCodeDescription": "All Other"
+          },
+          {
+            "langualCode": "P0265",
+            "langualCodeDescription": "Structure/Function"
+          }
+        ],
+        "servingSizes": [
+          {
+            "order": 1,
+            "minQuantity": 1.0,
+            "maxQuantity": 1.0,
+            "unit": "Softgel(s)",
+            "notes": "",
+            "minDailyServings": 2,
+            "maxDailyServings": 3,
+            "normalizedServing": 1.0,
+            "servingQuantitySource": "label",
+            "dailyServingsSource": "label"
+          }
+        ],
+        "labelRelationships": [
+          {
+            "type": "Image difference, same product",
+            "labelId": 40527
+          },
+          {
+            "type": "Package size difference, same product",
+            "labelId": 293377
+          },
+          {
+            "type": "Package size difference, same product",
+            "labelId": 54685
+          },
+          {
+            "type": "Image difference, same product",
+            "labelId": 79867
+          },
+          {
+            "type": "Package size difference, same product",
+            "labelId": 230001
+          },
+          {
+            "type": "Package size difference, same product",
+            "labelId": 213476
+          },
+          {
+            "type": "Package size difference, same product",
+            "labelId": 40527
+          },
+          {
+            "type": "Package size difference, same product",
+            "labelId": 62276
+          },
+          {
+            "type": "Package size difference, same product",
+            "labelId": 40528
+          },
+          {
+            "type": "Image difference, same product",
+            "labelId": 54685
+          },
+          {
+            "type": "Package size difference, same product",
+            "labelId": 54686
+          },
+          {
+            "type": "Package size difference, same product",
+            "labelId": 79867
+          }
+        ],
+        "labelText": {
+          "raw": "Brain function Phosphatidylserine (PS) helps regulate membrane transfer of nutrients and neurotransmitters necessary for proper brain function. Our PS is carefully tested and produced to superior quality standards. These statements have not been evaluated by the Food & Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Nature’s Way Since 1969 Phosphatidylserine 100 mg per serving Dietary supplement Recommendation: Take 1 softgel three times daily for one month, then two times daily thereafter. Best results are obtained with continuous use. If you are pregnant, nursing, or taking any medications, consult a healthcare professional before use. Contains soy. Keep out of reach of children. Safety sealed with printed inner seal. Do not use if seal is broken or missing. Gluten free. No salt, yeast-derived ingredients, wheat, corn, dairy products, or artificial colors, flavors, or preservatives. 2019 Distributed by Nature’s Way Brands, LLC SerinAid and logo are trademarks of Chemi Nutraceuticals, Inc. Bottles made from 97% post-consumer recycled plastic Quality Global Sourcing Bottled & Tested In the USA",
+          "parsed": {
+            "certifications": [],
+            "testing": [],
+            "origin": [],
+            "flavor": [],
+            "probioticGuarantee": [
+              "providing"
+            ],
+            "cleanLabelClaims": [
+              "Dairy Free",
+              "Gluten Free",
+              "No Artificial Colors",
+              "No Artificial Flavors",
+              "No Preservatives",
+              "No Salt",
+              "No Wheat",
+              "Yeast Free"
+            ],
+            "allergens": [
+              "soy"
+            ],
+            "allergenFree": [
+              "dairy",
+              "gluten",
+              "wheat",
+              "yeast"
+            ],
+            "warnings": [
+              "Contains: Soy",
+              "If pregnant, nursing, or taking any medications, consult a healthcare professional before use",
+              "Keep out of reach of children"
+            ],
+            "storage": [],
+            "directions": "Recommendation: Take 1 softgel three times daily for one month, then two times daily thereafter. Best results are obtained with continuous use.",
+            "marketingClaims": [
+              "Since 1969"
+            ],
+            "qualityFeatures": [
+              "Safety sealed"
+            ],
+            "proprietaryBlendDisclosure": {
+              "blendCount": 1,
+              "blends": [
+                {
+                  "name": "SerinAid Phosphatidylserine complex",
+                  "totalAmount": "500 mg",
+                  "individualAmounts": "Disclosed",
+                  "ingredients": [
+                    "Phosphatidylserine"
+                  ]
+                }
+              ]
+            }
+          },
+          "searchText": "SerinAid Phosphatidylserine complex SerinAid Phosphatidylserine complex Note: providing Gelatin Glycerin Soybean Oil purified Water Brain function Phosphatidylserine (PS) helps regulate membrane transfer of nutrients and neurotransmitters necessary for proper brain function. Our PS is carefully tested and produced to superior quality standards. These statements have not been evaluated by the Food & Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Nature’s Way Since 1969 Phosphatidylserine 100 mg per serving Dietary supplement Recommendation: Take 1 softgel three times daily for one month, then two times daily thereafter. Best results are obtained with continuous use. If you are pregnant, nursing, or taking any medications, consult a healthcare professional before use. Contains soy. Keep out of reach of children. Safety sealed with printed inner seal. Do not use if seal is broken or missing. Gluten free. No salt, yeast-derived ingredients, wheat, corn, dairy products, or artificial colors, flavors, or preservatives. 2019 Distributed by Nature’s Way Brands, LLC SerinAid and logo are trademarks of Chemi Nutraceuticals, Inc. Bottles made from 97% post-consumer recycled plastic Quality Global Sourcing Bottled & Tested In the USA"
+        }
+      }
+    },
+    {
+      "dsld_id": "218600",
+      "source_batch": "scripts/products/output_Solgar/cleaned/cleaned_batch_1.json",
+      "source_batch_sha256": "7d03b0c07a5955eccc94ae8150661e1a4f4546c310c93715d0e70d34ff4ea1b6",
+      "projection_sha256": "928b7bf07f95c92cdade3e46267e667fb6eff128fc5c9a984007242c55b4fc71",
+      "cleaned_label_projection": {
+        "id": "218600",
+        "fullName": "Phosphatidyl Serine 200 mg",
+        "brandName": "Solgar",
+        "productType": {
+          "langualCode": "A1310",
+          "langualCodeDescription": "Fat/Fatty Acid"
+        },
+        "physicalState": {
+          "langualCode": "E0161",
+          "langualCodeDescription": "Softgel Capsule"
+        },
+        "servingsPerContainer": null,
+        "activeIngredients": [
+          {
+            "ingredientId": 172140,
+            "uniiCode": null,
+            "order": 3,
+            "raw_category": "fat",
+            "raw_source_text": "Phosphatidylserine",
+            "branded_token_extracted": null,
+            "canonical_id": "phosphatidylserine",
+            "canonical_source_db": "ingredient_quality_map",
+            "cleaner_match_method": null,
+            "label_nutrient_context": null,
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[2]",
+            "normalized_key": "phosphatidylserine",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": true,
+            "score_exclusion_reason": null,
+            "dose_class": "therapeutic_mass",
+            "raw_taxonomy": {
+              "category": "fat",
+              "ingredientGroup": "Phosphatidylserine",
+              "ingredientId": 172140,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": [
+                {
+                  "quantity": 200.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 1,
+                  "serving_size_unit": "Softgel(s)",
+                  "daily_value_target_group": "adult_4_plus"
+                }
+              ]
+            },
+            "name": "Phosphatidylserine",
+            "label_display_name": null,
+            "standardName": "Phosphatidylserine",
+            "ingredientGroup": "Phosphatidylserine",
+            "quantity": 200.0,
+            "unit": "mg",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "proprietaryBlend": false,
+            "disclosureLevel": null,
+            "parentBlend": null,
+            "isNestedIngredient": false,
+            "nestedIngredients": [],
+            "parentBlendMass": null,
+            "parentBlendUnit": null,
+            "hierarchyType": null,
+            "harvestMethod": "derived from",
+            "notes": "Phosphatidylserine Note: derived from "
+          },
+          {
+            "ingredientId": 171882,
+            "uniiCode": null,
+            "order": 4,
+            "raw_category": "blend",
+            "raw_source_text": "Phosphatidylserine complex",
+            "branded_token_extracted": null,
+            "canonical_id": "phosphatidylserine",
+            "canonical_source_db": "ingredient_quality_map",
+            "cleaner_match_method": null,
+            "label_nutrient_context": null,
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[2].nestedRows[0]",
+            "normalized_key": "phosphatidylserine_complex",
+            "cleaner_row_role": "blend_header_total",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "blend_header_total",
+            "dose_class": "blend_total_weight",
+            "raw_taxonomy": {
+              "category": "blend",
+              "ingredientGroup": "Blend (Fatty Acid or Fat/Oil Supplement)",
+              "ingredientId": 171882,
+              "uniiCode": null,
+              "forms": [
+                {
+                  "name": "from Soy Lecithin",
+                  "ingredientId": 124514,
+                  "order": 1,
+                  "prefix": null,
+                  "percent": null,
+                  "category": "fat",
+                  "ingredientGroup": "lecithin",
+                  "uniiCode": null
+                }
+              ],
+              "parentBlend": "Phosphatidylserine",
+              "isNestedIngredient": true,
+              "nested_depth": 1,
+              "quantityVariants": [
+                {
+                  "quantity": 1000.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 1,
+                  "serving_size_unit": "Softgel(s)"
+                }
+              ]
+            },
+            "name": "Phosphatidylserine complex",
+            "label_display_name": null,
+            "standardName": "Phosphatidylserine",
+            "ingredientGroup": "Blend (Fatty Acid or Fat/Oil Supplement)",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [
+              {
+                "name": "from Soy Lecithin",
+                "ingredientId": 124514,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "fat",
+                "ingredientGroup": "lecithin",
+                "uniiCode": null
+              }
+            ],
+            "alternateNames": [],
+            "mapped": true,
+            "proprietaryBlend": false,
+            "disclosureLevel": null,
+            "parentBlend": "Phosphatidylserine",
+            "isNestedIngredient": true,
+            "nestedIngredients": [],
+            "parentBlendMass": 200,
+            "parentBlendUnit": "mg",
+            "hierarchyType": "blend_header"
+          }
+        ],
+        "inactiveIngredients": [
+          {
+            "ingredientId": 5004,
+            "uniiCode": null,
+            "order": 1,
+            "raw_category": "fat",
+            "raw_source_text": "Medium Chain Triglycerides",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "normalized_key": "medium_chain_triglycerides",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "fat",
+              "ingredientGroup": "Medium chain triglycerides (MCT)",
+              "ingredientId": 5004,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "mct_oil",
+            "canonical_source_db": "ingredient_quality_map",
+            "label_nutrient_context": null,
+            "name": "Medium Chain Triglycerides",
+            "standardName": "Medium Chain Triglycerides",
+            "ingredientGroup": "Medium chain triglycerides (MCT)",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null
+          },
+          {
+            "ingredientId": 47548,
+            "uniiCode": null,
+            "order": 2,
+            "raw_category": "protein",
+            "raw_source_text": "Gelatin",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "normalized_key": "gelatin",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "protein",
+              "ingredientGroup": "Gelatin",
+              "ingredientId": 47548,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "PII_GELATIN_CAPSULE",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Gelatin",
+            "standardName": "Gelatin Capsule",
+            "ingredientGroup": "Gelatin",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "gelatin_capsule"
+          },
+          {
+            "ingredientId": 40831,
+            "uniiCode": null,
+            "order": 3,
+            "raw_category": "other",
+            "raw_source_text": "Vegetable Glycerin",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "normalized_key": "vegetable_glycerin",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "other",
+              "ingredientGroup": "Glycerol",
+              "ingredientId": 40831,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "NHA_VEGETABLE_GLYCERIN",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Vegetable Glycerin",
+            "standardName": "Vegetable Glycerin",
+            "ingredientGroup": "Glycerol",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "processing_aid"
+          },
+          {
+            "ingredientId": 116426,
+            "uniiCode": null,
+            "order": 4,
+            "raw_category": "other",
+            "raw_source_text": "natural Caramel color",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "normalized_key": "natural_caramel_color",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "other",
+              "ingredientGroup": "Color",
+              "ingredientId": 116426,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "NHA_NATURAL_COLORS",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "natural Caramel color",
+            "standardName": "Natural Colors from Plants",
+            "ingredientGroup": "Color",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "natural_colorant"
+          }
+        ],
+        "raw_inactives_count": 4,
+        "raw_actives_count": 5,
+        "display_ingredients": [
+          {
+            "raw_source_text": "Calories",
+            "display_name": "Calories",
+            "source_section": "activeIngredients",
+            "display_type": "nutrition_fact",
+            "resolution_type": "display_only",
+            "score_included": false,
+            "children": [],
+            "raw_source_path": "ingredientRows[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "10 Calories",
+            "raw_category": "other",
+            "ingredient_group": "Calories",
+            "label_display_name": "Calories",
+            "label_order": 0,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "softgels",
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "c162d28a4749ced86cd91ac8b7a676ffda7cc8257025feb393122a171670cb6b"
+          },
+          {
+            "raw_source_text": "Total Fat",
+            "display_name": "Total Fat",
+            "source_section": "activeIngredients",
+            "display_type": "nutrition_fact",
+            "resolution_type": "display_only",
+            "score_included": false,
+            "children": [],
+            "raw_source_path": "ingredientRows[1]",
+            "source_order": 2,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "1 g",
+            "raw_category": "fat",
+            "ingredient_group": "Fat (unspecified)",
+            "label_display_name": "Total Fat",
+            "label_order": 1,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "softgels",
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "73d098ea37bb7076bd636dd231f67bf7e22c93f649ffd699387a20852d95d749"
+          },
+          {
+            "raw_source_text": "Phosphatidylserine",
+            "display_name": "Phosphatidylserine",
+            "label_display_name": "Phosphatidylserine",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "resolution_type": "direct_mapped",
+            "score_included": true,
+            "canonical_id": "phosphatidylserine",
+            "label_display_form": null,
+            "raw_source_path": "ingredientRows[2]",
+            "source_order": 3,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "200 mg",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 2,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "softgels",
+            "raw_category": "fat",
+            "ingredient_group": "Phosphatidylserine",
+            "children": [
+              "Phosphatidylserine complex"
+            ],
+            "is_label_context": false,
+            "display_disposition": "scored",
+            "identity_integrity_state": "clean",
+            "form_display_state": "not_disclosed",
+            "ledger_fingerprint": "af6bebf30df32464091ca09677e1cfc6d1649af465deb1ed356951e69122aca1"
+          },
+          {
+            "raw_source_text": "Phosphatidylserine complex",
+            "display_name": "Phosphatidylserine complex",
+            "label_display_name": "Phosphatidylserine complex",
+            "source_section": "activeIngredients",
+            "display_type": "structural_container",
+            "resolution_type": "structural_parent",
+            "score_included": false,
+            "canonical_id": "phosphatidylserine",
+            "label_display_form": "from Soy Lecithin",
+            "raw_source_path": "ingredientRows[2].nestedRows[0]",
+            "source_order": 4,
+            "nested_depth": 1,
+            "parent_label": "Phosphatidylserine",
+            "parent_source_path": "ingredientRows[2]",
+            "exact_dose_text": "1,000 mg",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 3,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "softgels",
+            "raw_category": "blend",
+            "ingredient_group": "Blend (Fatty Acid or Fat/Oil Supplement)",
+            "children": [
+              "from Soy Lecithin"
+            ],
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "listed_not_assessed",
+            "ledger_fingerprint": "4d6e325733d6273159912487cac57ab307699f9017f6dd83ff44695b0eea8390",
+            "folded_label_components": [
+              {
+                "label_display_name": "from Soy Lecithin",
+                "raw_source_text": "from Soy Lecithin",
+                "raw_source_path": "ingredientRows[2].nestedRows[0].forms[0]",
+                "parent_label": "Phosphatidylserine complex",
+                "exact_dose_text": "",
+                "score_included": false
+              }
+            ]
+          },
+          {
+            "raw_source_text": "Medium Chain Triglycerides",
+            "display_name": "Medium Chain Triglycerides",
+            "label_display_name": "Medium Chain Triglycerides",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "mct_oil",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 4,
+            "raw_category": "fat",
+            "ingredient_group": "Medium chain triglycerides (MCT)",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "a26f955447a9bc44286e3f72c7168789d33271da52b33e9ace688713a5de399c"
+          },
+          {
+            "raw_source_text": "Gelatin",
+            "display_name": "Gelatin",
+            "label_display_name": "Gelatin",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "PII_GELATIN_CAPSULE",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "source_order": 2,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 5,
+            "raw_category": "protein",
+            "ingredient_group": "Gelatin",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "502473298f006fedd8bed31e9478b873f9f7518f32efd96ae4344b810dcbe0bf"
+          },
+          {
+            "raw_source_text": "Vegetable Glycerin",
+            "display_name": "Vegetable Glycerin",
+            "label_display_name": "Vegetable Glycerin",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_VEGETABLE_GLYCERIN",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "source_order": 3,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 6,
+            "raw_category": "other",
+            "ingredient_group": "Glycerol",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "5db842dde36f12377140ae12ac597e17a2149d5c29967b1f818ae0990f0a8bdd"
+          },
+          {
+            "raw_source_text": "natural Caramel color",
+            "display_name": "natural Caramel color",
+            "label_display_name": "natural Caramel color",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_NATURAL_COLORS",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "source_order": 4,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 7,
+            "raw_category": "other",
+            "ingredient_group": "Color",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "7d5a9bb1912c70a31699e06fea3c1abd8bdb1a9edb5d32ed85d81799cefdca3d"
+          }
+        ],
+        "label_ledger_omissions": [
+          {
+            "raw_source_path": "ingredientRows[2].nestedRows[0].forms[0]",
+            "raw_source_text": "from Soy Lecithin",
+            "omission_reason": "duplicate_source_line"
+          }
+        ],
+        "label_source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Calories",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Total Fat",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Phosphatidylserine",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[2].nestedRows[0]",
+            "raw_source_text": "Phosphatidylserine complex",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[2].nestedRows[0].forms[0]",
+            "raw_source_text": "from Soy Lecithin",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "Medium Chain Triglycerides",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "raw_source_text": "Gelatin",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "raw_source_text": "Vegetable Glycerin",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "raw_source_text": "natural Caramel color",
+            "source_section": "inactiveIngredients"
+          }
+        ],
+        "label_ledger_audit": {
+          "support_status": "supported",
+          "source_structure": "proprietary_blend",
+          "meaningful_source_rows": 8,
+          "displayed_rows": 8,
+          "omitted_rows": 1,
+          "completeness_percentage": 100.0,
+          "completeness_status": "complete"
+        },
+        "nutritionalInfo": {
+          "calories": {
+            "amount": 10.0,
+            "unit": "Calorie(s)"
+          },
+          "totalFat": {
+            "amount": 1.0,
+            "unit": "Gram(s)"
+          }
+        },
+        "statements": [
+          {
+            "type": "Formulation re: Other",
+            "notes": "Solgar’s Phosphatidylserine 200 mg Softgels are a premium brain health supplement derived from natural sources. Phosphatidylserine levels in the brain can decline with age, so it is important to supplement daily, helping replenish this nutrient that is naturally found in brain cell membranes, to aid brain function."
+          },
+          {
+            "type": "FDA Disclaimer Statement",
+            "notes": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
+          },
+          {
+            "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+            "notes": "2019 Solgar, Inc."
+          },
+          {
+            "type": "General Statements: All Other Content",
+            "notes": "Solgar since 1947"
+          },
+          {
+            "type": "Formulation re: Other",
+            "notes": "Supports a healthy mind"
+          },
+          {
+            "type": "Formulation re: Does NOT Contain",
+            "notes": "Non-GMO\nGluten, wheat & dairy free"
+          },
+          {
+            "type": "FDA Statement of Identity",
+            "notes": "Dietary Supplement"
+          },
+          {
+            "type": "Precautions re: Allergies",
+            "notes": "Contains soy."
+          },
+          {
+            "type": "Suggested/Recommended/Usage/Directions",
+            "notes": "Suggested Use: As a dietary supplement for adults, take one (1) softgel twice daily, preferably with a meal or as directed by a healthcare practitioner."
+          },
+          {
+            "type": "Formulation re: Does NOT Contain",
+            "notes": "Free of: Gluten, wheat, dairy, yeast, sugar, sodium, artificial flavor, sweetener and preservatives."
+          },
+          {
+            "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+            "notes": "If you are pregnant, nursing, taking any medications or have any medical condition, please consult your healthcare practitioner before taking any dietary supplement."
+          },
+          {
+            "type": "Precautions re: All Other",
+            "notes": "Discontinue use and consult your healthcare practitioner if any adverse reactions occur."
+          },
+          {
+            "type": "Precautions re: Children",
+            "notes": "Keep out of reach of children."
+          },
+          {
+            "type": "Storage",
+            "notes": "Store at room temperature."
+          },
+          {
+            "type": "Precautions re: All Other",
+            "notes": "Do not use if outer bottle seal is missing or damaged."
+          }
+        ],
+        "claims": [
+          {
+            "langualCode": "P0115",
+            "langualCodeDescription": "All Other"
+          },
+          {
+            "langualCode": "P0265",
+            "langualCodeDescription": "Structure/Function"
+          }
+        ],
+        "servingSizes": [
+          {
+            "order": 1,
+            "minQuantity": 1.0,
+            "maxQuantity": 1.0,
+            "unit": "Softgel(s)",
+            "notes": "",
+            "minDailyServings": 2,
+            "maxDailyServings": 2,
+            "normalizedServing": 1.0,
+            "servingQuantitySource": "label",
+            "dailyServingsSource": "label"
+          }
+        ],
+        "labelRelationships": [
+          {
+            "type": "Image difference, same product",
+            "labelId": 79654
+          },
+          {
+            "type": "Image difference, same product",
+            "labelId": 44233
+          }
+        ],
+        "labelText": {
+          "raw": "Solgar’s Phosphatidylserine 200 mg Softgels are a premium brain health supplement derived from natural sources. Phosphatidylserine levels in the brain can decline with age, so it is important to supplement daily, helping replenish this nutrient that is naturally found in brain cell membranes, to aid brain function. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease. 2019 Solgar, Inc. Solgar since 1947 Supports a healthy mind Non-GMO\nGluten, wheat & dairy free Dietary Supplement Contains soy. Suggested Use: As a dietary supplement for adults, take one (1) softgel twice daily, preferably with a meal or as directed by a healthcare practitioner. Free of: Gluten, wheat, dairy, yeast, sugar, sodium, artificial flavor, sweetener and preservatives. If you are pregnant, nursing, taking any medications or have any medical condition, please consult your healthcare practitioner before taking any dietary supplement. Discontinue use and consult your healthcare practitioner if any adverse reactions occur. Keep out of reach of children. Store at room temperature. Do not use if outer bottle seal is missing or damaged.",
+          "parsed": {
+            "certifications": [
+              "Non-GMO-General"
+            ],
+            "testing": [],
+            "origin": [],
+            "flavor": [],
+            "probioticGuarantee": [
+              "derived from"
+            ],
+            "cleanLabelClaims": [
+              "Dairy Free",
+              "Non-GMO"
+            ],
+            "allergens": [
+              "soy"
+            ],
+            "allergenFree": [
+              "dairy"
+            ],
+            "warnings": [
+              "Contains: Soy",
+              "If pregnant, nursing, or taking any medications, consult a healthcare professional before use",
+              "Keep out of reach of children"
+            ],
+            "storage": [
+              "Store at room temperature."
+            ],
+            "directions": "As a dietary supplement for adults, take one (1) softgel twice daily, preferably with a meal or as directed by a healthcare practitioner.",
+            "marketingClaims": [
+              "Since 1947"
+            ],
+            "qualityFeatures": [],
+            "proprietaryBlendDisclosure": null
+          },
+          "searchText": "Phosphatidylserine Phosphatidylserine Note: derived from Phosphatidylserine complex from Soy Lecithin Medium Chain Triglycerides Gelatin Vegetable Glycerin natural Caramel color Solgar’s Phosphatidylserine 200 mg Softgels are a premium brain health supplement derived from natural sources. Phosphatidylserine levels in the brain can decline with age, so it is important to supplement daily, helping replenish this nutrient that is naturally found in brain cell membranes, to aid brain function. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease. 2019 Solgar, Inc. Solgar since 1947 Supports a healthy mind Non-GMO\nGluten, wheat & dairy free Dietary Supplement Contains soy. Suggested Use: As a dietary supplement for adults, take one (1) softgel twice daily, preferably with a meal or as directed by a healthcare practitioner. Free of: Gluten, wheat, dairy, yeast, sugar, sodium, artificial flavor, sweetener and preservatives. If you are pregnant, nursing, taking any medications or have any medical condition, please consult your healthcare practitioner before taking any dietary supplement. Discontinue use and consult your healthcare practitioner if any adverse reactions occur. Keep out of reach of children. Store at room temperature. Do not use if outer bottle seal is missing or damaged."
+        }
+      }
+    },
+    {
+      "dsld_id": "218838",
+      "source_batch": "scripts/products/output_Solgar/cleaned/cleaned_batch_1.json",
+      "source_batch_sha256": "7d03b0c07a5955eccc94ae8150661e1a4f4546c310c93715d0e70d34ff4ea1b6",
+      "projection_sha256": "e6bbe846fd8a10aeb1c5634a55d39bca15975381d7115e60acefc515dc2b3814",
+      "cleaned_label_projection": {
+        "id": "218838",
+        "fullName": "Phosphatidylserine Complex",
+        "brandName": "Solgar",
+        "productType": {
+          "langualCode": "A1310",
+          "langualCodeDescription": "Fat/Fatty Acid"
+        },
+        "physicalState": {
+          "langualCode": "E0155",
+          "langualCodeDescription": "Tablet or Pill"
+        },
+        "servingsPerContainer": null,
+        "activeIngredients": [
+          {
+            "ingredientId": 45229,
+            "uniiCode": null,
+            "order": 3,
+            "raw_category": "fat",
+            "raw_source_text": "Phosphatidylserine Complex",
+            "branded_token_extracted": null,
+            "canonical_id": "phosphatidylserine",
+            "canonical_source_db": "ingredient_quality_map",
+            "cleaner_match_method": null,
+            "label_nutrient_context": null,
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[2]",
+            "normalized_key": "phosphatidylserine_complex",
+            "cleaner_row_role": "blend_header_total",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "blend_header_total",
+            "dose_class": "blend_total_weight",
+            "raw_taxonomy": {
+              "category": "fat",
+              "ingredientGroup": "Phosphatidylserine",
+              "ingredientId": 45229,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": [
+                {
+                  "quantity": 500.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 1,
+                  "serving_size_unit": "Tablet(s)",
+                  "daily_value_target_group": "adult_4_plus"
+                }
+              ]
+            },
+            "name": "Phosphatidylserine Complex",
+            "label_display_name": null,
+            "standardName": "Phosphatidylserine",
+            "ingredientGroup": "Phosphatidylserine",
+            "quantity": 500.0,
+            "unit": "mg",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "proprietaryBlend": false,
+            "disclosureLevel": null,
+            "parentBlend": null,
+            "isNestedIngredient": false,
+            "nestedIngredients": [],
+            "parentBlendMass": null,
+            "parentBlendUnit": null,
+            "hierarchyType": "blend_header"
+          },
+          {
+            "ingredientId": 5188,
+            "uniiCode": null,
+            "order": 4,
+            "raw_category": "fat",
+            "raw_source_text": "Phosphatidylserine",
+            "branded_token_extracted": null,
+            "canonical_id": "phosphatidylserine",
+            "canonical_source_db": "ingredient_quality_map",
+            "cleaner_match_method": null,
+            "label_nutrient_context": null,
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[3]",
+            "normalized_key": "phosphatidylserine",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": true,
+            "score_exclusion_reason": null,
+            "dose_class": "therapeutic_mass",
+            "raw_taxonomy": {
+              "category": "fat",
+              "ingredientGroup": "Phosphatidylserine",
+              "ingredientId": 5188,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": [
+                {
+                  "quantity": 100.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 1,
+                  "serving_size_unit": "Tablet(s)",
+                  "daily_value_target_group": "adult_4_plus"
+                }
+              ]
+            },
+            "name": "Phosphatidylserine",
+            "label_display_name": null,
+            "standardName": "Phosphatidylserine",
+            "ingredientGroup": "Phosphatidylserine",
+            "quantity": 100.0,
+            "unit": "mg",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "proprietaryBlend": false,
+            "disclosureLevel": null,
+            "parentBlend": null,
+            "isNestedIngredient": false,
+            "nestedIngredients": [],
+            "parentBlendMass": null,
+            "parentBlendUnit": null,
+            "hierarchyType": null
+          },
+          {
+            "ingredientId": 4096,
+            "uniiCode": null,
+            "order": 5,
+            "raw_category": "fat",
+            "raw_source_text": "Phosphatidylcholine",
+            "branded_token_extracted": null,
+            "canonical_id": "phosphatidylcholine",
+            "canonical_source_db": "ingredient_quality_map",
+            "cleaner_match_method": null,
+            "label_nutrient_context": null,
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[4]",
+            "normalized_key": "phosphatidylcholine",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": true,
+            "score_exclusion_reason": null,
+            "dose_class": "therapeutic_mass",
+            "raw_taxonomy": {
+              "category": "fat",
+              "ingredientGroup": "phosphatidylcholine",
+              "ingredientId": 4096,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": [
+                {
+                  "quantity": 60.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 1,
+                  "serving_size_unit": "Tablet(s)",
+                  "daily_value_target_group": "adult_4_plus"
+                }
+              ]
+            },
+            "name": "Phosphatidylcholine",
+            "label_display_name": null,
+            "standardName": "Phosphatidylcholine",
+            "ingredientGroup": "phosphatidylcholine",
+            "quantity": 60.0,
+            "unit": "mg",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "proprietaryBlend": false,
+            "disclosureLevel": null,
+            "parentBlend": null,
+            "isNestedIngredient": false,
+            "nestedIngredients": [],
+            "parentBlendMass": null,
+            "parentBlendUnit": null,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "emulsifier"
+          }
+        ],
+        "inactiveIngredients": [
+          {
+            "ingredientId": 4058,
+            "uniiCode": null,
+            "order": 1,
+            "raw_category": "other",
+            "raw_source_text": "Microcrystalline Cellulose",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "normalized_key": "microcrystalline_cellulose",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "other",
+              "ingredientGroup": "Cellulose",
+              "ingredientId": 4058,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "NHA_MICROCRYSTALLINE_CELLULOSE",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Microcrystalline Cellulose",
+            "standardName": "Microcrystalline Cellulose",
+            "ingredientGroup": "Cellulose",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "fiber_bulking"
+          },
+          {
+            "ingredientId": 10413,
+            "uniiCode": null,
+            "order": 2,
+            "raw_category": "fat",
+            "raw_source_text": "Soy Lecithin",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "normalized_key": "soy_lecithin",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "fat",
+              "ingredientGroup": "lecithin",
+              "ingredientId": 10413,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "PII_LECITHIN_SOY",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Soy Lecithin",
+            "standardName": "Soy Lecithin",
+            "ingredientGroup": "lecithin",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "natural_emulsifier"
+          },
+          {
+            "ingredientId": 3700,
+            "uniiCode": null,
+            "order": 3,
+            "raw_category": "mineral",
+            "raw_source_text": "Dicalcium Phosphate",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "normalized_key": "dicalcium_phosphate",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "ingredientId": 3700,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "PII_DICALCIUM_PHOSPHATE",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": "dicalcium phosphate",
+            "name": "Dicalcium Phosphate",
+            "standardName": "Dicalcium Phosphate (as filler)",
+            "ingredientGroup": "Calcium",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "mineral_filler"
+          },
+          {
+            "ingredientId": 293311,
+            "uniiCode": "ETJ7Z6XBU4",
+            "order": 4,
+            "raw_category": "mineral",
+            "raw_source_text": "Silica",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "normalized_key": "silica",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "mineral",
+              "ingredientGroup": "Silicon",
+              "ingredientId": 293311,
+              "uniiCode": "ETJ7Z6XBU4",
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "silica",
+            "canonical_source_db": "ingredient_quality_map",
+            "label_nutrient_context": "silica",
+            "name": "Silica",
+            "standardName": "Silicon Dioxide",
+            "ingredientGroup": "Silicon",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "anti_caking_agent"
+          },
+          {
+            "ingredientId": 3810,
+            "uniiCode": null,
+            "order": 5,
+            "raw_category": "fiber",
+            "raw_source_text": "Vegetable Cellulose",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[4]",
+            "normalized_key": "vegetable_cellulose",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "fiber",
+              "ingredientGroup": "Cellulose",
+              "ingredientId": 3810,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "PII_VEGETABLE_CELLULOSE",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Vegetable Cellulose",
+            "standardName": "Vegetable Cellulose",
+            "ingredientGroup": "Cellulose",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "cellulose_filler"
+          },
+          {
+            "ingredientId": 3813,
+            "uniiCode": null,
+            "order": 6,
+            "raw_category": "other",
+            "raw_source_text": "Vegetable Magnesium Stearate",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[5]",
+            "normalized_key": "vegetable_magnesium_stearate",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "other",
+              "ingredientGroup": "Magnesium stearate",
+              "ingredientId": 3813,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "NHA_MAGNESIUM_STEARATE",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Vegetable Magnesium Stearate",
+            "standardName": "Magnesium Stearate",
+            "ingredientGroup": "Magnesium stearate",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "processing_aid"
+          },
+          {
+            "ingredientId": 285558,
+            "uniiCode": "4ELV7Z65AP",
+            "order": 7,
+            "raw_category": "fatty acid",
+            "raw_source_text": "Stearic Acid",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[6]",
+            "normalized_key": "stearic_acid",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "fatty acid",
+              "ingredientGroup": "Stearic Acid",
+              "ingredientId": 285558,
+              "uniiCode": "4ELV7Z65AP",
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "NHA_STEARIC_ACID",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Stearic Acid",
+            "standardName": "Stearic Acid",
+            "ingredientGroup": "Stearic Acid",
+            "forms": [],
+            "alternateNames": [
+              "C18:0"
+            ],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "processing_aid"
+          },
+          {
+            "ingredientId": 3812,
+            "uniiCode": null,
+            "order": 8,
+            "raw_category": "other",
+            "raw_source_text": "Vegetable Glycerin",
+            "source_section": "inactive",
+            "raw_source_path": "otheringredients.ingredients[7]",
+            "normalized_key": "vegetable_glycerin",
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": false,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+              "category": "other",
+              "ingredientGroup": "Glycerol",
+              "ingredientId": 3812,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": []
+            },
+            "canonical_id": "NHA_VEGETABLE_GLYCERIN",
+            "canonical_source_db": "other_ingredients",
+            "label_nutrient_context": null,
+            "name": "Vegetable Glycerin",
+            "standardName": "Vegetable Glycerin",
+            "ingredientGroup": "Glycerol",
+            "forms": [],
+            "alternateNames": [],
+            "mapped": true,
+            "hierarchyType": null,
+            "isAdditive": true,
+            "additiveType": "processing_aid"
+          }
+        ],
+        "raw_inactives_count": 8,
+        "raw_actives_count": 5,
+        "display_ingredients": [
+          {
+            "raw_source_text": "Calories",
+            "display_name": "Calories",
+            "source_section": "activeIngredients",
+            "display_type": "nutrition_fact",
+            "resolution_type": "display_only",
+            "score_included": false,
+            "children": [],
+            "raw_source_path": "ingredientRows[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "5 Calories",
+            "raw_category": "other",
+            "ingredient_group": "Calories",
+            "label_display_name": "Calories",
+            "label_order": 0,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "tablets",
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "2da61762d2e1787d8c9022dc63ecd2b3f1cdc6ec7db818c88fc4858d2a185eba"
+          },
+          {
+            "raw_source_text": "Total Carbohydrates",
+            "display_name": "Total Carbohydrates",
+            "source_section": "activeIngredients",
+            "display_type": "nutrition_fact",
+            "resolution_type": "display_only",
+            "score_included": false,
+            "children": [],
+            "raw_source_path": "ingredientRows[1]",
+            "source_order": 2,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "1 g",
+            "raw_category": "sugar",
+            "ingredient_group": "Carbohydrate",
+            "label_display_name": "Total Carbohydrates",
+            "label_order": 1,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "tablets",
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "43a982d473624aec6925c9bab11c3b8a8bf32ee24f44d282b660b39d2006ac5f"
+          },
+          {
+            "raw_source_text": "Phosphatidylserine Complex",
+            "display_name": "Phosphatidylserine Complex",
+            "label_display_name": "Phosphatidylserine Complex",
+            "source_section": "activeIngredients",
+            "display_type": "structural_container",
+            "resolution_type": "structural_parent",
+            "score_included": false,
+            "canonical_id": "phosphatidylserine",
+            "label_display_form": null,
+            "raw_source_path": "ingredientRows[2]",
+            "source_order": 3,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "500 mg",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 2,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "tablets",
+            "raw_category": "fat",
+            "ingredient_group": "Phosphatidylserine",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "ad428189b3e49aa5cd294a749a73bf0a4500f44345bc33945cef7a138d25368f"
+          },
+          {
+            "raw_source_text": "Phosphatidylserine",
+            "display_name": "Phosphatidylserine",
+            "label_display_name": "Phosphatidylserine",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "resolution_type": "direct_mapped",
+            "score_included": true,
+            "canonical_id": "phosphatidylserine",
+            "label_display_form": null,
+            "raw_source_path": "ingredientRows[3]",
+            "source_order": 4,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "100 mg",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 3,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "tablets",
+            "raw_category": "fat",
+            "ingredient_group": "Phosphatidylserine",
+            "children": [],
+            "is_label_context": false,
+            "display_disposition": "scored",
+            "identity_integrity_state": "clean",
+            "form_display_state": "not_disclosed",
+            "ledger_fingerprint": "a459f846cb8441e907e48fa5b0b30a8536db02b4df97535ec7251bf3841adbea"
+          },
+          {
+            "raw_source_text": "Phosphatidylcholine",
+            "display_name": "Phosphatidylcholine",
+            "label_display_name": "Phosphatidylcholine",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "resolution_type": "direct_mapped",
+            "score_included": true,
+            "canonical_id": "phosphatidylcholine",
+            "label_display_form": null,
+            "raw_source_path": "ingredientRows[4]",
+            "source_order": 5,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "60 mg",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 4,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "tablets",
+            "raw_category": "fat",
+            "ingredient_group": "phosphatidylcholine",
+            "children": [],
+            "is_label_context": false,
+            "display_disposition": "scored",
+            "identity_integrity_state": "clean",
+            "form_display_state": "not_disclosed",
+            "ledger_fingerprint": "47da600ee1f8d81c54007adfe07f20ef713141284f6f6efa707339194ff695bb"
+          },
+          {
+            "raw_source_text": "Microcrystalline Cellulose",
+            "display_name": "Microcrystalline Cellulose",
+            "label_display_name": "Microcrystalline Cellulose",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_MICROCRYSTALLINE_CELLULOSE",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 5,
+            "raw_category": "other",
+            "ingredient_group": "Cellulose",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "9f1cf9d24218dcbe0e5f404abc2bb972b077cb55eb64f2c4228499d6c19fbea9"
+          },
+          {
+            "raw_source_text": "Soy Lecithin",
+            "display_name": "Soy Lecithin",
+            "label_display_name": "Soy Lecithin",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "PII_LECITHIN_SOY",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "source_order": 2,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 6,
+            "raw_category": "fat",
+            "ingredient_group": "lecithin",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "4f37690280a87086f6dbf568d290ed8c073d48bcf26236ce7491ae4e895d1195"
+          },
+          {
+            "raw_source_text": "Dicalcium Phosphate",
+            "display_name": "Dicalcium Phosphate",
+            "label_display_name": "Dicalcium Phosphate",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "PII_DICALCIUM_PHOSPHATE",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "source_order": 3,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 7,
+            "raw_category": "mineral",
+            "ingredient_group": "Calcium",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "cd6335f935069cf98f431778fadbed69f3249c8ebbc770d3269a19e25b0f1e2e"
+          },
+          {
+            "raw_source_text": "Silica",
+            "display_name": "Silica",
+            "label_display_name": "Silica",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "silica",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "source_order": 4,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 8,
+            "raw_category": "mineral",
+            "ingredient_group": "Silicon",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "6668775b3d30ef5a423609f954ff32fb66c44049d4c92f8997fb89709ceaf578"
+          },
+          {
+            "raw_source_text": "Vegetable Cellulose",
+            "display_name": "Vegetable Cellulose",
+            "label_display_name": "Vegetable Cellulose",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "PII_VEGETABLE_CELLULOSE",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[4]",
+            "source_order": 5,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 9,
+            "raw_category": "fiber",
+            "ingredient_group": "Cellulose",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "ccd30fb975a4f6c0e0403dec0b9135d6be8ef23d9e1558f31dcae26fe90fed12"
+          },
+          {
+            "raw_source_text": "Vegetable Magnesium Stearate",
+            "display_name": "Vegetable Magnesium Stearate",
+            "label_display_name": "Vegetable Magnesium Stearate",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_MAGNESIUM_STEARATE",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[5]",
+            "source_order": 6,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 10,
+            "raw_category": "other",
+            "ingredient_group": "Magnesium stearate",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "9a09e15a37f450b5c06b6aed393bf9f0efe61377c565bc5787d205bffc8b7eb4"
+          },
+          {
+            "raw_source_text": "Stearic Acid",
+            "display_name": "Stearic Acid",
+            "label_display_name": "Stearic Acid",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_STEARIC_ACID",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[6]",
+            "source_order": 7,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 11,
+            "raw_category": "fatty acid",
+            "ingredient_group": "Stearic Acid",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "8c8930af4be646ef047eedde70e0cabd13faa72454aab62a225054fff14d6e4c"
+          },
+          {
+            "raw_source_text": "Vegetable Glycerin",
+            "display_name": "Vegetable Glycerin",
+            "label_display_name": "Vegetable Glycerin",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_VEGETABLE_GLYCERIN",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[7]",
+            "source_order": 8,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 12,
+            "raw_category": "other",
+            "ingredient_group": "Glycerol",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "2b977a5851805ba1b6b878dd3567be22d0df62274c67a61211f107a6522a273e"
+          }
+        ],
+        "label_ledger_omissions": [],
+        "label_source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Calories",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Total Carbohydrates",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Phosphatidylserine Complex",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[3]",
+            "raw_source_text": "Phosphatidylserine",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[4]",
+            "raw_source_text": "Phosphatidylcholine",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "Microcrystalline Cellulose",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "raw_source_text": "Soy Lecithin",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "raw_source_text": "Dicalcium Phosphate",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "raw_source_text": "Silica",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[4]",
+            "raw_source_text": "Vegetable Cellulose",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[5]",
+            "raw_source_text": "Vegetable Magnesium Stearate",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[6]",
+            "raw_source_text": "Stearic Acid",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[7]",
+            "raw_source_text": "Vegetable Glycerin",
+            "source_section": "inactiveIngredients"
+          }
+        ],
+        "label_ledger_audit": {
+          "support_status": "supported",
+          "source_structure": "proprietary_blend",
+          "meaningful_source_rows": 13,
+          "displayed_rows": 13,
+          "omitted_rows": 0,
+          "completeness_percentage": 100.0,
+          "completeness_status": "complete"
+        },
+        "nutritionalInfo": {
+          "calories": {
+            "amount": 5.0,
+            "unit": "Calorie(s)"
+          },
+          "totalCarbohydrates": {
+            "amount": 1.0,
+            "unit": "Gram(s)"
+          }
+        },
+        "statements": [
+          {
+            "type": "Formula re: Contains",
+            "notes": "Phosphatidylserine is a natural substance found in the brain where it plays an important role in the integrity and fluidity of cell membranes. Phosphatidylserine levels in the brain can decline with age. Supplementing with Phosphatidylserine Complex is a good choice to help replenish phosphatidylserine levels and support a healthy mind."
+          },
+          {
+            "type": "FDA Disclaimer Statement",
+            "notes": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
+          },
+          {
+            "type": "Formula re: Kosher",
+            "notes": "Solgar’s KOF-K certification # K-1250"
+          },
+          {
+            "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+            "notes": "2017 Solgar, Inc."
+          },
+          {
+            "type": "General Statements: All Other Content",
+            "notes": "Solgar since 1947"
+          },
+          {
+            "type": "Formulation re: Other",
+            "notes": "Aids brain function to support a healthy mind"
+          },
+          {
+            "type": "Formulation re: Does NOT Contain",
+            "notes": "Non-GMO\nGluten, wheat & dairy free"
+          },
+          {
+            "type": "Formulation re: Vegetarian/Vegan",
+            "notes": "Suitable for vegans"
+          },
+          {
+            "type": "Seals/Symbols",
+            "notes": "GF Certified Gluten-free\nK Parve (Kosher)"
+          },
+          {
+            "type": "FDA Statement of Identity",
+            "notes": "Dietary Supplement"
+          },
+          {
+            "type": "Precautions re: Allergies",
+            "notes": "Contains soy ingredients."
+          },
+          {
+            "type": "Suggested/Recommended/Usage/Directions",
+            "notes": "Suggested Use: As a dietary supplement for adults, take one (1) tablet three times daily,preferably with meals or as directed by a healthcare practitioner."
+          },
+          {
+            "type": "Formulation re: Does NOT Contain",
+            "notes": "Free of: Gluten, wheat, dairy, yeast, sugar, sodium, artificial flavor, sweetener, preservatives and color."
+          },
+          {
+            "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+            "notes": "If you are pregnant, nursing, taking any medications or have any medical condition, please consult your healthcare practitioner before taking any dietary supplement."
+          },
+          {
+            "type": "Precautions re: All Other",
+            "notes": "Discontinue use and consult your healthcare practitioner if any adverse reactions occur."
+          },
+          {
+            "type": "Precautions re: Children",
+            "notes": "Keep out of reach of children."
+          },
+          {
+            "type": "Storage",
+            "notes": "Store at room temperature."
+          },
+          {
+            "type": "Precautions re: All Other",
+            "notes": "Do not use if outer bottle seal is missing or damaged."
+          }
+        ],
+        "claims": [
+          {
+            "langualCode": "P0115",
+            "langualCodeDescription": "All Other"
+          },
+          {
+            "langualCode": "P0265",
+            "langualCodeDescription": "Structure/Function"
+          }
+        ],
+        "servingSizes": [
+          {
+            "order": 1,
+            "minQuantity": 1.0,
+            "maxQuantity": 1.0,
+            "unit": "Tablet(s)",
+            "notes": "",
+            "minDailyServings": 3,
+            "maxDailyServings": 3,
+            "normalizedServing": 1.0,
+            "servingQuantitySource": "label",
+            "dailyServingsSource": "label"
+          }
+        ],
+        "labelRelationships": [
+          {
+            "type": "Image difference, same product",
+            "labelId": 45091
+          },
+          {
+            "type": "Image difference, same product",
+            "labelId": 81751
+          },
+          {
+            "type": "Image difference, same product",
+            "labelId": 133112
+          }
+        ],
+        "labelText": {
+          "raw": "Phosphatidylserine is a natural substance found in the brain where it plays an important role in the integrity and fluidity of cell membranes. Phosphatidylserine levels in the brain can decline with age. Supplementing with Phosphatidylserine Complex is a good choice to help replenish phosphatidylserine levels and support a healthy mind. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease. Solgar’s KOF-K certification # K-1250 2017 Solgar, Inc. Solgar since 1947 Aids brain function to support a healthy mind Non-GMO\nGluten, wheat & dairy free Suitable for vegans GF Certified Gluten-free\nK Parve (Kosher) Dietary Supplement Contains soy ingredients. Suggested Use: As a dietary supplement for adults, take one (1) tablet three times daily,preferably with meals or as directed by a healthcare practitioner. Free of: Gluten, wheat, dairy, yeast, sugar, sodium, artificial flavor, sweetener, preservatives and color. If you are pregnant, nursing, taking any medications or have any medical condition, please consult your healthcare practitioner before taking any dietary supplement. Discontinue use and consult your healthcare practitioner if any adverse reactions occur. Keep out of reach of children. Store at room temperature. Do not use if outer bottle seal is missing or damaged.",
+          "parsed": {
+            "certifications": [
+              "Gluten-Free-General",
+              "Kosher-General",
+              "Non-GMO-General"
+            ],
+            "testing": [],
+            "origin": [],
+            "flavor": [],
+            "probioticGuarantee": [],
+            "cleanLabelClaims": [
+              "Dairy Free",
+              "Gluten Free",
+              "Non-GMO"
+            ],
+            "allergens": [
+              "soy"
+            ],
+            "allergenFree": [
+              "dairy",
+              "gluten"
+            ],
+            "warnings": [
+              "Contains: Soy",
+              "If pregnant, nursing, or taking any medications, consult a healthcare professional before use",
+              "Keep out of reach of children"
+            ],
+            "storage": [
+              "Store at room temperature."
+            ],
+            "directions": "As a dietary supplement for adults, take one (1) tablet three times daily,preferably with meals or as directed by a healthcare practitioner.",
+            "marketingClaims": [
+              "Since 1947"
+            ],
+            "qualityFeatures": [],
+            "proprietaryBlendDisclosure": null
+          },
+          "searchText": "Phosphatidylserine Complex Phosphatidylserine Phosphatidylcholine Microcrystalline Cellulose Soy Lecithin Dicalcium Phosphate Silica Vegetable Cellulose Vegetable Magnesium Stearate Stearic Acid Vegetable Glycerin Phosphatidylserine is a natural substance found in the brain where it plays an important role in the integrity and fluidity of cell membranes. Phosphatidylserine levels in the brain can decline with age. Supplementing with Phosphatidylserine Complex is a good choice to help replenish phosphatidylserine levels and support a healthy mind. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease. Solgar’s KOF-K certification # K-1250 2017 Solgar, Inc. Solgar since 1947 Aids brain function to support a healthy mind Non-GMO\nGluten, wheat & dairy free Suitable for vegans GF Certified Gluten-free\nK Parve (Kosher) Dietary Supplement Contains soy ingredients. Suggested Use: As a dietary supplement for adults, take one (1) tablet three times daily,preferably with meals or as directed by a healthcare practitioner. Free of: Gluten, wheat, dairy, yeast, sugar, sodium, artificial flavor, sweetener, preservatives and color. If you are pregnant, nursing, taking any medications or have any medical condition, please consult your healthcare practitioner before taking any dietary supplement. Discontinue use and consult your healthcare practitioner if any adverse reactions occur. Keep out of reach of children. Store at room temperature. Do not use if outer bottle seal is missing or damaged."
+        }
+      }
+    }
+  ]
+}

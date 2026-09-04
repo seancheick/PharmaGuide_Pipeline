@@ -440,6 +440,8 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
                   "source_row_ref": row.get("source_row_ref"), "dose_applicable": False,
                   "cfu_per_day": _owned_daily_cfu(product, row),
                   "support_level": support, "research_accepted": id(row) in accepted,
+                  "indication_primary": thresholds.get("indication_primary"),
+                  "indication_secondary": thresholds.get("indication_secondary"),
                   "effect_direction": evidence.get("effect_direction"),
                   "source_pmids": [p for p in [evidence.get("pmid"), *evidence.get("additional_pmids", [])] if p],
                   "supported_outcomes": [], "studied_population": None}

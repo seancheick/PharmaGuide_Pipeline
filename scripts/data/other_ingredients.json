@@ -2,9 +2,9 @@
   "_metadata": {
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
-    "schema_version": "5.4.2",
+    "schema_version": "5.4.3",
     "last_updated": "2026-09-04",
-    "total_entries": 727,
+    "total_entries": 729,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -19561,11 +19561,11 @@
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
-      "notes": "Sunfiber AG \u2014 agricultural/food-grade variant of Sunfiber PHGG prebiotic fiber (Taiyo International). Same base material as standard Sunfiber but formulated for food/supplement manufacturing applications. FDA GRAS.",
+      "notes": "Sunfiber AG \u2014 agglomerated PHGG variant of Sunfiber prebiotic fiber (Taiyo International). Same base material as standard Sunfiber for food/supplement manufacturing applications.",
       "common_uses": [
         "prebiotic support"
       ],
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-09-04",
       "external_ids": {},
       "functional_roles": [
         "filler",
@@ -24944,6 +24944,40 @@
         "marine tissue ingredient"
       ],
       "last_updated": "2026-07-16",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "NHA_IMMUNO_LP20",
+      "standard_name": "Immuno-LP20",
+      "aliases": ["immuno-lp20"],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Commercial preparation identity only: House Wellness Foods' mixture of nonviable heat-treated L. plantarum L-137 and dextrin. It is not live L. plantarum or the isolated HK L-137 constituent. Preserve the labeled whole-preparation mass; do not generate constituent amounts or CFU. No exact mixture CID, CAS or UNII has been verified. No IQM quality rating, safety conclusion or clinical-efficacy credit is supplied by this record. Primary identity source reviewed 2026-09-04: https://immuno-lp20.com/ .",
+      "common_uses": ["active ingredient identity"],
+      "last_updated": "2026-09-04",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "NHA_SACCHAROMYCES_CEREVISIAE_EXTRACT",
+      "standard_name": "Saccharomyces cerevisiae Extract",
+      "aliases": [
+        "Saccharomyces cerevisiae extract"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Exact label preparation identity only, not whole brewer's yeast, live S. boulardii, generic yeast extract, or purified beta-glucan. Jarrow DSLD 264610 and 307558 declare this source extract at 250 mg; glucan composition or a separately declared child amount remains distinct and is not a parent-dose conversion. Identity-only recognition supplies no IQM quality or clinical-efficacy credit. No exact-preparation CID, CAS, or UNII has been verified; broad organism and glucan-constituent identifiers are intentionally not assigned. Sources reviewed 2026-09-04: https://jarrow.com/products/beta-glucan-60-capsules ; https://api.ods.od.nih.gov/dsld/s3/pdf/264610.pdf ; https://api.ods.od.nih.gov/dsld/s3/pdf/307558.pdf .",
+      "common_uses": [
+        "active ingredient identity"
+      ],
+      "last_updated": "2026-09-04",
       "external_ids": {},
       "functional_roles": [],
       "is_active_only": true

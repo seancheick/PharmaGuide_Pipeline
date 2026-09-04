@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 631,
       "total_forms": 1421,
-      "total_form_aliases": 12114,
+      "total_form_aliases": 12110,
       "parents_with_parent_aliases": 119,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -61,7 +61,7 @@
       "vitamins": 25
     },
     "schema_version": "5.5.4",
-    "last_updated": "2026-08-25",
+    "last_updated": "2026-09-04",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -44604,11 +44604,9 @@
         },
         "notes": "Heat-killed Lactobacillus plantarum L-137 is used as a postbiotic immune-support ingredient. It is a distinct branded/form identity from live L. plantarum probiotic strains and is tracked separately for clean label resolution. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
-          "immuno-lp20",
           "hk l-137",
           "heat-killed lactobacillus plantarum l-137",
           "lactobacillus plantarum l-137",
-          "lp20",
           "heat-treated Lactobacillus plantarum L-137"
         ],
         "dosage_importance": 1.0,
@@ -63735,19 +63733,17 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Saccharomyces cerevisiae dried fermentate (EpiCor); contains beta-glucans, mannan-oligosaccharides, and metabolites. RCTs show reduced cold/flu incidence and duration (PMID 19298191). Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
+        "notes": "Unspecified yeast-fermentate form. A generic label does not establish a branded preparation, live-organism identity, or efficacy demonstrated for a particular fermentation process. Exact generic dried-fermentate identity is owned by NHA_YEAST_FERMENTATE_DRIED in other_ingredients.json. The unrelated Spirulina citation and unsupported cold/flu claim were removed during the 2026-09-04 source audit; existing form ratings were not recalibrated.",
         "aliases": [
           "yeast fermentate",
           "yeast hydrolysate",
-          "dried yeast fermentate",
           "dnf-10",
           "dnf-10 yeast hydrolysate",
           "dnf 10",
           "saccharomyces cerevisiae fermentate",
           "renewx",
           "renewx probiotic",
-          "renewx prebiotic",
-          "yeast fermentate, dried"
+          "renewx prebiotic"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

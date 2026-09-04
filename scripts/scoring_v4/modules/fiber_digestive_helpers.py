@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any, Dict, Iterable, List, Optional
 
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
     _safe_dict,
+    _safe_list,
     get_active_ingredients,
 )
 
@@ -46,6 +48,31 @@ FIBER_TERMS = (
     "prebiotic",
 )
 
+PHGG_CANONICALS = frozenset({
+    "nha_sunfiber",
+    "nha_sunfiber_ag",
+    "partially_hydrolyzed_guar_gum",
+})
+
+GUAR_CANONICALS = frozenset({
+    "guar_gum",
+    "oi_guar_gum",
+})
+
+COMPATIBLE_GUAR_CANONICALS = frozenset({
+    "",
+    "fiber",
+    *GUAR_CANONICALS,
+})
+
+PHGG_ROW_TERMS = (
+    re.compile(r"\bphgg\b"),
+    re.compile(r"\bsunfiber(?:\s+ag)?\b"),
+    re.compile(r"\bpartially\s+hydrolyzed\s+guar(?:\s+gum)?\b"),
+    re.compile(r"\bhydrolyzed\s+guar\s+gum\b"),
+    re.compile(r"\bguar\s+gum\s+hydrolyzed\b"),
+)
+
 
 def row_text(row: Dict[str, Any]) -> str:
     return " ".join(
@@ -66,9 +93,42 @@ def canonical(row: Dict[str, Any]) -> str:
     return _norm_text(row.get("canonical_id")).replace("-", "_")
 
 
+def _normalize_signal_text(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", _norm_text(value)).strip()
+
+
+def _phgg_signal_text(row: Dict[str, Any]) -> str:
+    pieces = [
+        _normalize_signal_text(row.get("name")),
+        _normalize_signal_text(row.get("raw_source_text")),
+    ]
+    for form in _safe_list(row.get("forms")):
+        if isinstance(form, dict):
+            pieces.append(_normalize_signal_text(form.get("name")))
+    raw_taxonomy = _safe_dict(row.get("raw_taxonomy"))
+    for form in _safe_list(raw_taxonomy.get("forms")):
+        if isinstance(form, dict):
+            pieces.append(_normalize_signal_text(form.get("name")))
+    return " ".join(piece for piece in pieces if piece)
+
+
+def is_hydrolyzed_guar_fiber_row(row: Dict[str, Any]) -> bool:
+    if not isinstance(row, dict):
+        return False
+    cid = canonical(row)
+    if cid in PHGG_CANONICALS:
+        return True
+    if cid not in COMPATIBLE_GUAR_CANONICALS:
+        return False
+    text = _phgg_signal_text(row)
+    return any(pattern.search(text) for pattern in PHGG_ROW_TERMS)
+
+
 def is_fiber_row(row: Dict[str, Any]) -> bool:
     if not isinstance(row, dict):
         return False
+    if is_hydrolyzed_guar_fiber_row(row):
+        return True
     if canonical(row) in FIBER_CANONICALS:
         return True
     if _norm_text(row.get("category")) == "fiber":

@@ -1054,111 +1054,36 @@ class SupplementEnricherV3:
         product: Dict,
         ingredient_quality_data: Optional[Dict] = None,
     ) -> List[Dict]:
-        """Return active rows eligible for active-only enrichment collectors.
-
-        Cleaner/enrichment already splits primary scorable actives from
-        disclosed-blend children. Synergy, clinical evidence, standardized
-        botanical, and RDA/UL collectors must use that same contract instead of
-        the flattened label list, otherwise undosed blend members behave like
-        primary ingredients.
-        """
-        active_ingredients = [
-            ing for ing in product.get('activeIngredients', [])
-            if isinstance(ing, dict)
-        ]
-        iqd = ingredient_quality_data if isinstance(ingredient_quality_data, dict) else product.get("ingredient_quality_data")
-        if not isinstance(iqd, dict) or not isinstance(iqd.get("ingredients_scorable"), list):
-            return active_ingredients
-
+        """Return strict source-owned exposures, never a same-name parent proxy."""
         contract_product = dict(product)
-        contract_product["ingredient_quality_data"] = iqd
-        try:
-            result = get_scoring_ingredients(
-                contract_product,
-                strict=True,
-                allow_legacy_fallback=False,
-            )
-        except Exception as exc:  # pragma: no cover - defensive legacy fallback.
-            self.logger.debug("strict scoring contract unavailable for enrichment: %s", exc)
-            return active_ingredients
-
-        scoring_rows = [
-            row for row in result.rows
-            if (
-                str(row.get("scoring_input_kind") or "") != "product_level_evidence"
-                and not self._is_display_only_blend_scoring_row(row)
-            )
-        ]
-        if not scoring_rows:
-            return []
-
-        source_paths = {
-            str(row.get("raw_source_path") or row.get("source_path") or "").strip()
-            for row in scoring_rows
-            if str(row.get("raw_source_path") or row.get("source_path") or "").strip()
-        }
-        terms = set()
-        canonical_ids = set()
-        for row in scoring_rows:
-            for key in (
-                "raw_source_text",
-                "name",
-                "standard_name",
-                "standardName",
-                "matched_name",
-                "display_label",
-            ):
-                value = str(row.get(key) or "").strip()
-                if value:
-                    terms.add(norm_module.make_normalized_key(value))
-            canonical = str(
-                row.get("canonical_id") or row.get("parent_key") or row.get("normalized_key") or ""
-            ).strip()
-            if canonical:
-                canonical_ids.add(canonical.lower())
-
-        selected: List[Dict] = []
-        for ing in active_ingredients:
-            path = str(ing.get("raw_source_path") or ing.get("source_path") or "").strip()
-            if path and path in source_paths:
-                selected.append(ing)
-                continue
-            matched = False
-            for key in (
-                "raw_source_text",
-                "name",
-                "standardName",
-                "standard_name",
-                "matched_name",
-                "display_label",
-            ):
-                value = str(ing.get(key) or "").strip()
-                if value and norm_module.make_normalized_key(value) in terms:
-                    matched = True
-                    break
-            canonical = str(
-                ing.get("canonical_id") or ing.get("parent_key") or ing.get("normalized_key") or ""
-            ).strip().lower()
-            if matched or (canonical and canonical in canonical_ids):
-                selected.append(ing)
-
-        if selected:
-            return selected
-
-        return [self._active_ingredient_from_scoring_row(row) for row in scoring_rows]
+        if isinstance(ingredient_quality_data, dict):
+            contract_product["ingredient_quality_data"] = ingredient_quality_data
+        return self._source_owned_active_ingredients_for_enrichment(
+            contract_product, include_ancestors=False,
+        )
 
     def _dose_active_ingredients_for_enrichment(
         self,
         product: Dict,
     ) -> List[Dict]:
-        """Return exact label rows that own strict scoring-dose exposures.
+        """Add structural lineage to the same source-owned exposure projection."""
+        return self._source_owned_active_ingredients_for_enrichment(
+            product, include_ancestors=True,
+        )
 
-        RDA/UL collection needs disclosed, dose-bearing nested rows as well as
-        their structural owners.  The general active collector intentionally
-        works from top-level rows, and its canonical-name fallback can select a
-        parent proxy when the strict scoring row is a quantified nested child.
-        This dose-specific projection instead joins by stable source path,
-        retaining owner rows only as lineage context.
+    def _source_owned_active_ingredients_for_enrichment(
+        self,
+        product: Dict,
+        *,
+        include_ancestors: bool,
+    ) -> List[Dict]:
+        """Join strict scoring exposures to their exact original label rows.
+
+        Quantified nested ingredients are independent exposures; undosed or
+        display-only children remain excluded by the scoring contract. RDA/UL
+        additionally needs their ancestors for double-count prevention. Other
+        collectors must never substitute those totals for a child's identity
+        or amount. Both modes use this one source-ownership join.
         """
         active_tree = [
             row
@@ -1170,7 +1095,7 @@ class SupplementEnricherV3:
         if not isinstance(iqd, dict) or not isinstance(
             iqd.get("ingredients_scorable"), list
         ):
-            return flattened
+            return flattened if include_ancestors else active_tree
 
         try:
             result = get_scoring_ingredients(
@@ -1180,9 +1105,9 @@ class SupplementEnricherV3:
             )
         except Exception as exc:  # pragma: no cover - defensive old artifacts.
             self.logger.debug(
-                "strict dose projection unavailable for enrichment: %s", exc
+                "strict source-owner projection unavailable for enrichment: %s", exc
             )
-            return flattened
+            return flattened if include_ancestors else active_tree
 
         scoring_rows = [
             row
@@ -1209,7 +1134,7 @@ class SupplementEnricherV3:
         # A nested dose may be a component of a disclosed owner total. Keep
         # each ancestor as lineage context so the existing dose-role logic can
         # prevent double counting and assign UL ownership correctly.
-        for source_path in tuple(selected_paths):
+        for source_path in tuple(selected_paths) if include_ancestors else ():
             owner_path = source_path
             while ".nestedRows[" in owner_path:
                 owner_path = re.sub(r"\.nestedRows\[\d+\]$", "", owner_path)
@@ -1836,6 +1761,7 @@ class SupplementEnricherV3:
 
         # ── Non-scorable DB index: normalized_name → result dict ──
         nonscorable_idx: Dict[str, Dict] = {}
+        botanical_source_identities: Dict[Tuple[str, str], Tuple[str, str, str]] = {}
 
         def _recognition_priority(result: Dict) -> int:
             source = (result or {}).get("recognition_source")
@@ -1872,6 +1798,15 @@ class SupplementEnricherV3:
                     "matched_entry_name": entry.get('standard_name'),
                     "recognition_type": rec_type,
                 }
+                source_id, source_name = entry.get('id'), entry.get('standard_name')
+                if (
+                    db_key in BOTANICAL_CANONICAL_SOURCE_DBS
+                    and isinstance(source_id, str) and source_id.strip()
+                    and isinstance(source_name, str) and source_name.strip()
+                ):
+                    botanical_source_identities[(source_id, db_key)] = (
+                        source_id, db_key, source_name,
+                    )
                 # Index standard_name and all aliases
                 for name_text in [entry.get('standard_name', '')] + (entry.get('aliases', []) or []):
                     if not name_text:
@@ -1914,6 +1849,7 @@ class SupplementEnricherV3:
                     nonscorable_idx[text_norm] = result
 
         self._nonscorable_index = nonscorable_idx
+        self._botanical_source_identities = botanical_source_identities
 
         # standardized_botanicals is a mixed historical registry: most rows
         # are source botanicals, while some branded/non-botanical rows point
@@ -2027,7 +1963,8 @@ class SupplementEnricherV3:
     def _botanical_source_identity(
         self,
         ingredient: Dict,
-    ) -> Optional[Tuple[str, str]]:
+    ) -> Optional[Tuple[str, str, str]]:
+        """Return the existing source authority with its registry-owned name."""
         source_db = ingredient.get("canonical_source_db")
         source_id = ingredient.get("canonical_id")
         if (
@@ -2035,7 +1972,7 @@ class SupplementEnricherV3:
             and isinstance(source_id, str)
             and source_id
         ):
-            return source_id, source_db
+            return self._botanical_source_identities.get((source_id, source_db))
 
         # Fail-safe for replaying older cleaned artifacts: current exact raw
         # source identity outranks a stale marker-valued standardName/canonical.
@@ -2061,10 +1998,9 @@ class SupplementEnricherV3:
                 in BOTANICAL_CANONICAL_SOURCE_DBS
                 and recognition.get("matched_entry_id")
             ):
-                return (
-                    recognition["matched_entry_id"],
-                    recognition["recognition_source"],
-                )
+                return self._botanical_source_identities.get((
+                    recognition["matched_entry_id"], recognition["recognition_source"],
+                ))
         return None
 
     def _is_blocked_botanical_source_marker_match(
@@ -2084,8 +2020,14 @@ class SupplementEnricherV3:
             return False
         source_identity = self._botanical_source_identity(ingredient)
         if not source_identity:
-            return False
-        source_id, _source_db = source_identity
+            # An invalid declared botanical record is not permission to score
+            # its IQM marker. This hint blocks substitution, never maps identity.
+            return bool(
+                ingredient.get("canonical_source_db") in BOTANICAL_CANONICAL_SOURCE_DBS
+                and isinstance(ingredient.get("canonical_id"), str)
+                and ingredient["canonical_id"].strip()
+            )
+        source_id, _source_db, _source_name = source_identity
         resolved_id = match_result.get("canonical_id")
         canonical_source_id, canonical_source_db = (
             self._current_canonical_identity_registry().canonicalize(
@@ -4365,24 +4307,70 @@ class SupplementEnricherV3:
                 ),
             }
         )
+        if not coherent_quality_match:
+            # A recognized preparation or rejected identity has no IQM form
+            # rating. Do not retain either a rejected candidate's rating or
+            # the legacy neutral fallback after the identity decision.
+            for field in (
+                "bio_score", "score", "natural", "form_id", "matched_form",
+                "final_form_bio_score", "aggregation_method", "form_source",
+                "absorption", "notes",
+            ):
+                entry[field] = None
+            entry["matched_forms"] = []
+            entry["additional_forms"] = []
 
-    @staticmethod
     def _project_repaired_identity_to_active_row(
+        self,
         active_row: Dict,
         entry: Dict,
-        decision: IdentityDecision,
-        match_result: Optional[Dict],
     ) -> None:
+        """Project a complete final primary identity, never a safety record."""
+        canonical_id = entry.get("canonical_id")
+        source_db = entry.get("canonical_source_db")
+        botanical_lineage = (
+            entry.get("identity_disposition") == "taxonomy_only"
+            and entry.get("recognition_type") == "botanical_marker_lineage"
+            and source_db in BOTANICAL_CANONICAL_SOURCE_DBS
+        )
         if (
-            decision.disposition != "repaired"
-            or entry.get("scoreable_identity") is not True
-            or not isinstance(match_result, dict)
+            (entry.get("identity_disposition") != "repaired" and not botanical_lineage)
+            or not canonical_id
+            or canonical_id != entry.get("canonical_id_after")
+            or not source_db
+            or not entry.get("standard_name")
         ):
             return
+        if source_db == "ingredient_quality_map":
+            # Missing dose may exclude a row from scoring without undoing its
+            # coherent IQM identity/form, validated by _stamp_iqd_identity.
+            if entry.get("scoreable_identity") is not True and entry.get("bio_score") is None:
+                return
+        elif entry.get("scoreable_identity") is True:
+            return
+        else:
+            source_identity = (
+                self._botanical_source_identity(active_row) if botanical_lineage
+                else self._current_canonical_identity_registry().resolve_verified_preferred(
+                    entry.get("source_label_name")
+                )
+            )
+            expected_identity = (
+                (canonical_id, source_db, entry.get("standard_name"))
+                if botanical_lineage else (canonical_id, source_db)
+            )
+            if (
+                entry.get("recognized_non_scorable") is not True
+                or entry.get("recognition_source") != source_db
+                or entry.get("recognized_entry_id") != canonical_id
+                or entry.get("recognized_entry_name") != entry.get("standard_name")
+                or source_identity != expected_identity
+            ):
+                return
         active_row.update(
             {
-                "canonical_id": entry.get("canonical_id"),
-                "canonical_source_db": "ingredient_quality_map",
+                "canonical_id": canonical_id,
+                "canonical_source_db": source_db,
                 "standardName": entry.get("standard_name"),
                 "form_id": entry.get("form_id"),
                 "matched_form": entry.get("matched_form"),
@@ -4791,7 +4779,7 @@ class SupplementEnricherV3:
                 quality_entry,
                 ingredient,
                 identity_decision,
-                match_result,
+                None if blocked_botanical_marker_match else match_result,
                 taxonomy_coherent,
             )
             if blocked_botanical_marker_match:
@@ -4799,14 +4787,14 @@ class SupplementEnricherV3:
                 # form (for example Green Tea / Caffeine) cannot be promoted
                 # into either a marker score or a repaired extract score.
                 source_identity = self._botanical_source_identity(ingredient)
-                source_id, source_db = source_identity or (
-                    ingredient.get("canonical_id"),
-                    ingredient.get("canonical_source_db"),
+                source_id, source_db, source_name = source_identity or (
+                    None, "unmapped", None,
                 )
                 quality_entry.update({
                     "canonical_id": source_id,
                     "canonical_id_after": source_id,
                     "canonical_source_db": source_db,
+                    "standard_name": source_name,
                     "identity_disposition": "taxonomy_only",
                     "identity_resolution_rationale": (
                         "The printed botanical source is retained as mapped "
@@ -4818,30 +4806,47 @@ class SupplementEnricherV3:
                     "mapped_identity": True,
                     "role_classification": "recognized_non_scorable",
                     "recognition_source": source_db,
+                    "recognized_entry_id": source_id,
+                    "recognized_entry_name": source_name,
                     "recognition_type": "botanical_marker_lineage",
                     "recognition_reason": "botanical_marker_is_secondary_metadata",
                     "identity_decision_reason": "botanical_marker_is_secondary_metadata",
                 })
+                if not source_identity:
+                    # A declared botanical hint can block marker substitution
+                    # without proving a valid source registry identity.
+                    quality_entry.update({
+                        "identity_disposition": "identity_conflict",
+                        "identity_decision_reason": "botanical_source_identity_unresolved",
+                        "identity_resolution_rationale": (
+                            "The botanical source record or preferred name is unavailable; "
+                            "its IQM marker cannot replace the unresolved source exposure."
+                        ),
+                        "mapped": False,
+                        "mapped_identity": False,
+                        "recognized_non_scorable": False,
+                        "role_classification": "active_unmapped",
+                    })
+                    if self._iqd_row_has_dose_evidence(quality_entry):
+                        unmapped_scorable_count += 1
+                        legacy_unmapped_count += 1
+                        self._track_unmapped(ing_name, 'active')
                 self._tag_fallback_decision(
                     quality_entry,
                     "clinical_fail_safe",
-                    "botanical_marker_is_secondary_metadata",
+                    quality_entry["identity_decision_reason"],
                 )
-                recognized_non_scorable_count += 1
+                if source_identity:
+                    recognized_non_scorable_count += 1
                 self._route_non_scorable_iqd_row(
                     quality_entry,
                     ingredients_skipped,
                     ingredients_recognized_non_scorable,
-                    skip_reason=SKIP_REASON_RECOGNIZED_NON_SCORABLE,
+                    skip_reason=(SKIP_REASON_RECOGNIZED_NON_SCORABLE if source_identity
+                                 else "botanical_source_identity_unresolved"),
                 )
                 all_quality_data.append(quality_entry)
                 continue
-            self._project_repaired_identity_to_active_row(
-                source_ingredient,
-                quality_entry,
-                identity_decision,
-                match_result,
-            )
             if context_match_reason and match_result:
                 quality_entry["identity_decision_reason"] = "product_label_marker_context_match"
                 self._tag_fallback_decision(quality_entry, "clinical_fail_safe", context_match_reason)
@@ -5045,6 +5050,14 @@ class SupplementEnricherV3:
                     ),
                 )
             all_quality_data.append(quality_entry)
+
+        # Pass 1 emits exactly one final IQD row per active source row,
+        # including every skip/recognition branch. Project only now, after
+        # recognition has settled the primary identity and owning registry.
+        for source_ingredient, quality_entry in zip(
+            active_ingredients, all_quality_data, strict=True,
+        ):
+            self._project_repaired_identity_to_active_row(source_ingredient, quality_entry)
 
         # =================================================================
         # PASS 2: Rescue therapeutic actives from inactiveIngredients
@@ -5819,7 +5832,8 @@ class SupplementEnricherV3:
         )
         if row.get("recognized_non_scorable") or row.get("role_classification") == "recognized_non_scorable":
             row["recognized_non_scorable"] = True
-            row["role_classification"] = "recognized_non_scorable"
+            if row.get("identity_disposition") != "identity_conflict":
+                row["role_classification"] = "recognized_non_scorable"
             self._append_unique_iqd_row(ingredients_recognized_non_scorable, row)
         self._append_unique_iqd_row(ingredients_skipped, row)
 
@@ -5879,25 +5893,41 @@ class SupplementEnricherV3:
             "identity_decision_reason": recognition_reason,
         })
 
-        if (
-            recognition_source == "banned_recalled_ingredients"
-            and ingredient.get("canonical_id")
-            and ingredient.get("canonical_source_db")
-            not in {"banned_recalled_ingredients", "harmful_additives"}
-        ):
-            row.update({
-                "canonical_id": ingredient.get("canonical_id"),
-                "canonical_id_after": ingredient.get("canonical_id"),
-                "canonical_source_db": ingredient.get("canonical_source_db"),
-                "safety_identity_id": matched_entry_id,
-                "identity_decision_reason": "safety_identity_excluded_from_scoring",
-            })
+        if recognition_source in {"banned_recalled_ingredients", "harmful_additives"}:
+            row["safety_identity_id"] = matched_entry_id
+            if (
+                decision.canonical_id_after
+                and is_identity_scoreable(decision.disposition)
+                and row.get("canonical_source_db")
+                not in {None, "", "unmapped", "banned_recalled_ingredients", "harmful_additives"}
+            ):
+                # _stamp_iqd_identity already retained the validated primary
+                # decision. The safety match has no authority to replace it.
+                row["identity_decision_reason"] = "safety_identity_excluded_from_scoring"
+            else:
+                row.update({
+                    "canonical_id": None,
+                    "canonical_id_after": None,
+                    "canonical_source_db": "unmapped",
+                    "mapped": False,
+                    "mapped_identity": False,
+                    "identity_disposition": "identity_conflict",
+                    "role_classification": "active_unmapped",
+                    "identity_confidence": 0.0,
+                    "identity_decision_reason": "safety_recognition_without_primary_identity",
+                    "identity_resolution_rationale": (
+                        "Safety recognition does not establish a verified primary identity; "
+                        "the source ingredient remains unresolved."
+                    ),
+                })
         elif matched_entry_id and recognition_source:
             row.update({
                 "canonical_id": matched_entry_id,
                 "canonical_id_after": matched_entry_id,
                 "canonical_source_db": recognition_source,
             })
+            if matched_entry_name:
+                row["standard_name"] = matched_entry_name
 
     def _compute_excipient_flags(self, ingredient: Dict) -> Tuple[bool, Optional[str]]:
         """Determine excipient status for ingredient-level signals.
@@ -10923,13 +10953,14 @@ class SupplementEnricherV3:
                                 dose_evaluable = True
                                 meets_min = converted >= min_dose
                             else:
-                                # Unbridgeable unit (a CFU threshold, or a product unit
-                                # with no conversion rule) → compare in the threshold's
-                                # native scale; never drop the credit on a convention we
-                                # cannot convert.
-                                evaluated_quantity, evaluated_unit = qty_num, target_unit
-                                dose_evaluable = qty_num > 0
-                                meets_min = qty_num >= min_dose
+                                # Unbridgeable unit pair (e.g. mg ↔ CFU, or an unsupported
+                                # label unit) is not dose-evaluable for a thresholded
+                                # synergy comparison. Preserve the source amount/unit on the
+                                # matched ingredient, but do not treat the raw numeric value
+                                # as though it were already in the threshold's unit.
+                                evaluated_quantity, evaluated_unit = None, None
+                                dose_evaluable = False
+                                meets_min = False
                         else:
                             meets_min = qty_num > 0
 

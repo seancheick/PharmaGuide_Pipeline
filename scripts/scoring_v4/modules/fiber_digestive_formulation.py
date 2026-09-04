@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any, Dict, List
 
 from scoring_v4.modules.fiber_digestive_helpers import (
     canonical,
     fiber_rows,
     has_fiber_context,
+    GUAR_CANONICALS,
+    is_hydrolyzed_guar_fiber_row,
     nutrition_fiber_grams,
     product_name_text,
     row_text,
@@ -16,7 +19,12 @@ from scoring_v4.modules.generic_formulation import (
     score_formulation as score_generic_formulation,
     shared_formulation_penalty_detail,
 )
-from scoring_v4.modules.generic_helpers import _safe_dict, _safe_list, get_active_ingredients
+from scoring_v4.modules.generic_helpers import (
+    _norm_text,
+    _safe_dict,
+    _safe_list,
+    get_active_ingredients,
+)
 
 
 from scoring_v4.quality_score_config import block as _cfg_block
@@ -87,13 +95,43 @@ def _source_quality(rows: List[Dict[str, Any]], product: Dict[str, Any]) -> tupl
     canons = {canonical(row) for row in rows}
     if {"psyllium", "psyllium_husk"} & canons or "psyllium" in text:
         return 12.0, "psyllium"
-    if any(term in text for term in ("acacia", "partially hydrolyzed guar", "guar", "glucomannan", "konjac", "beta glucan")):
-        return 10.0, "viscous_or_gel_fiber"
+    if any(is_hydrolyzed_guar_fiber_row(row) for row in rows):
+        return 10.0, "hydrolyzed_guar_fiber"
+    if any(term in text for term in ("acacia", "glucomannan", "konjac", "beta glucan")):
+        return 10.0, "soluble_fiber"
+    if any(_has_row_owned_guar_signal(row) for row in rows):
+        return 10.0, "soluble_fiber"
     if any(term in text for term in ("inulin", "prebiotic", "resistant starch")):
         return 9.0, "prebiotic_fiber"
     if rows:
         return 7.0, "generic_fiber"
     return 3.0, "fiber_claim_without_mapped_fiber"
+
+
+def _has_row_owned_guar_signal(row: Dict[str, Any]) -> bool:
+    cid = canonical(row)
+    if cid in GUAR_CANONICALS:
+        return True
+    if cid not in {"", "fiber"}:
+        return False
+    owned_text = " ".join(
+        _norm_text(part)
+        for part in (
+            row.get("name"),
+            row.get("raw_source_text"),
+            *[
+                form.get("name")
+                for form in _safe_list(row.get("forms"))
+                if isinstance(form, dict)
+            ],
+            *[
+                form.get("name")
+                for form in _safe_list(_safe_dict(row.get("raw_taxonomy")).get("forms"))
+                if isinstance(form, dict)
+            ],
+        )
+    )
+    return bool(re.search(r"\bguar\b", owned_text))
 
 
 def _fiber_disclosure(rows: List[Dict[str, Any]], product: Dict[str, Any]) -> float:

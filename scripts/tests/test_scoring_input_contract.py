@@ -1459,7 +1459,12 @@ def test_identity_integrity_strict_reports_missing_disposition_without_erasing_l
 def test_identity_integrity_strict_accepts_scoreable_dispositions():
     for disposition in ("clean", "repaired", "taxonomy_only"):
         result = get_scoring_ingredients(
-            _product([_row(identity_disposition=disposition)]),
+            _product([_row(
+                identity_disposition=disposition,
+                canonical_id_after="magnesium",
+                canonical_source_db="ingredient_quality_map",
+                standard_name="Magnesium",
+            )]),
             strict=True,
         )
         assert [r["canonical_id"] for r in result.rows] == ["magnesium"], disposition
