@@ -12,13 +12,15 @@ not establish that the multiplier is clinically calibrated.
    shadow variant that leaves potency adequacy in Dose, disclosure in Transparency,
    and formulation credit for supported identity/delivery/formulation properties.
    Define applicable maxima before redistributing any removed points.
-2. **Separate identity from approval of one native reference.** The targeted replay
+2. **Separate identity from approval of one native reference — corrected in the
+   [2026-09-04 dose follow-up](../probiotic_dose_2026_09_04/README.md).** The original targeted replay
    makes the coupling visible: withholding BB-12's invalid native source leaves
    Ritual's Evidence at 8, but lowers Formulation 14.3→12.5 and Dose 9.5→5.5.
    Total falls 61.8→56.0. This is existing rubric behavior, not new weights, and
    must not be sold as evidence that the bottle's physical quality deteriorated.
-   Review which components really measure identity, dose disclosure, industry
-   potency, or clinical support; assign each a single meaning before calibration.
+   The follow-up separates label-owned identity and potency from source approval
+   and removes inferred equal shares. Remaining disclosure overlap and
+   potency-size rewards still require the rubric decision in item 1.
 3. **Do not populate blanket strain-dose windows.** The current unused native
    applicability interface checks population/form/exposure, not clinical indication
    or concomitant treatment. Before adding real windows, require reviewed

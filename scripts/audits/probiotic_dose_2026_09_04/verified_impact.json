@@ -1,0 +1,3425 @@
+{
+  "date": "2026-09-04",
+  "scope": "Probiotic label identity and dose correctness; not rubric calibration or release approval",
+  "implementation_parent": "8359facc",
+  "implementation_commit": "e8fc7ef08b8523c83ae450cd01a986c05f5c1779",
+  "branch": "codex/probiotic-evidence-coverage",
+  "release_approved": false,
+  "operational_pipeline_run": false,
+  "clinical_reference_changes": false,
+  "clinical_registry_sha256": "26a9dee95dfd264140cde384591046a7ad98b8169ec15e32646b07ea49b7b163",
+  "global_weight_changes": false,
+  "config_version": "1.1.1-probiotic-label-dose",
+  "config_fingerprint": "18b7ff59dc1c4baa",
+  "reports": [
+    {
+      "kind": "final_targeted_reenrichment",
+      "path": "/Users/seancheick/Downloads/dsld_clean/reports/probiotic_dose_2026_09_04/targeted_final.json",
+      "sha256": "adc18f99aa3deb111308ec300d258aa21a6e5b6c0494852bb7e32fd1dc951d57",
+      "product_count": 42,
+      "elapsed_seconds": 35.1
+    },
+    {
+      "kind": "final_complete_corpus_impact",
+      "path": "/Users/seancheick/Downloads/dsld_clean/reports/probiotic_dose_2026_09_04/corpus_impact_final.json",
+      "sha256": "07c4a5e1592855d17f9351b396a5c7327b15bf595e4dea115c1c1f62041d2214"
+    }
+  ],
+  "verification": {
+    "fast_profile": {
+      "passed": 12950,
+      "skipped": 167,
+      "failed": 0,
+      "elapsed_seconds": 216.12,
+      "timing": "Before final two export-only adapters; full/release profile not run"
+    },
+    "final_export_and_probiotic_profile": {
+      "passed": 428,
+      "skipped": 5,
+      "failed": 0,
+      "elapsed_seconds": 8.35,
+      "new_regression_cases": 71,
+      "timing": "After final export adapters"
+    },
+    "independent_review": "No remaining actionable blockers found in the bounded dose/CFU scope after corrections",
+    "targeted_vs_full_summary_disagreements": [],
+    "gate_unification_vs_prior_replay_candidate_summaries_equal": true,
+    "skip_caveat": "Missing generated-artifact canaries and existing conditional skips are not counted as verified behaviors."
+  },
+  "counts": {
+    "numeric_changes": 215,
+    "increases": 130,
+    "decreases": 85,
+    "route_changes": 0,
+    "confidence_changes": 0,
+    "tier_changes": 19,
+    "verdict_changes": 10
+  },
+  "verdict_interpretation": "All 10 changes are legacy POOR->SAFE from the unchanged score/raw-module-score floor. These are not new clinical safety findings or policy approvals; the safety-hygiene pillar is unchanged.",
+  "complete": true,
+  "product_count": 15415,
+  "baseline_product_count": 15415,
+  "elapsed_seconds": 328.6,
+  "baseline_report": "/Users/seancheick/Downloads/dsld_clean/reports/probiotic_coverage_2026_09_03/corpus_impact_final.json",
+  "baseline_report_sha256": "bf06c68de7d1a0c48fd46355b2cdde0da1efb38c9fa765956ddf9b55d5e8095b",
+  "status_transitions": {
+    "scored->scored": 15284,
+    "not_scored->not_scored": 77,
+    "suppressed_safety->suppressed_safety": 54
+  },
+  "fully_reenriched_count": 217,
+  "errors": [],
+  "numeric_changes": [
+    {
+      "id": "218195",
+      "name": "Baby Probiotic Drops",
+      "brand": "Culturelle Baby",
+      "module": "probiotic",
+      "before": 49.7,
+      "after": 50.5,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "229974",
+      "name": "Probiotic + Multivitamin Gummies Mixed Berry",
+      "brand": "Culturelle",
+      "module": "probiotic",
+      "before": 57.9,
+      "after": 58.1,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "246008",
+      "name": "Grow + Thrive Unflavored",
+      "brand": "Culturelle Baby",
+      "module": "probiotic",
+      "before": 49.5,
+      "after": 52.1,
+      "pillar_deltas": {
+        "formulation": [
+          10.7,
+          12.5
+        ],
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "246011",
+      "name": "Baby Grow + Thrive",
+      "brand": "Culturelle Baby",
+      "module": "probiotic",
+      "before": 58.5,
+      "after": 61.1,
+      "pillar_deltas": {
+        "formulation": [
+          13.2,
+          15
+        ],
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "246012",
+      "name": "Baby Grow + Thrive",
+      "brand": "Culturelle Baby",
+      "module": "probiotic",
+      "before": 58.5,
+      "after": 61.1,
+      "pillar_deltas": {
+        "formulation": [
+          13.2,
+          15
+        ],
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "250846",
+      "name": "Digestive Daily Probiotic",
+      "brand": "Culturelle",
+      "module": "probiotic",
+      "before": 66,
+      "after": 62.1,
+      "pillar_deltas": {
+        "dose": [
+          7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "250917",
+      "name": "Purely Probiotics Daily Chewables Bursting Berry Flavor!",
+      "brand": "Culturelle Kids",
+      "module": "probiotic",
+      "before": 58.2,
+      "after": 60.5,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "250929",
+      "name": "Purely Probiotics Packets No Flavor Added",
+      "brand": "Culturelle Kids",
+      "module": "probiotic",
+      "before": 62.3,
+      "after": 64.6,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "250953",
+      "name": "Probiotic + Fiber Regularity Packets",
+      "brand": "Culturelle Kids",
+      "module": "probiotic",
+      "before": 63.1,
+      "after": 65.4,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "267554",
+      "name": "Digestive Daily Probiotic Chewables Fresh Orange Flavor",
+      "brand": "Culturelle",
+      "module": "probiotic",
+      "before": 61.1,
+      "after": 65.7,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          13.7
+        ]
+      }
+    },
+    {
+      "id": "267567",
+      "name": "Probiotic Gummies Berry Blast Flavor",
+      "brand": "Culturelle Kids",
+      "module": "probiotic",
+      "before": 52.5,
+      "after": 54.7,
+      "pillar_deltas": {
+        "dose": [
+          1.4,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "267568",
+      "name": "Probiotic Gummies Mixed Berry",
+      "brand": "Culturelle",
+      "module": "probiotic",
+      "before": 64,
+      "after": 65.2,
+      "pillar_deltas": {
+        "dose": [
+          10.2,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "267571",
+      "name": "Women's Healthy Balance",
+      "brand": "Culturelle",
+      "module": "probiotic",
+      "before": 57.3,
+      "after": 58.1,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "267572",
+      "name": "Probiotic Gummies Berry Blast Flavor",
+      "brand": "Culturelle Kids",
+      "module": "probiotic",
+      "before": 52.5,
+      "after": 54.7,
+      "pillar_deltas": {
+        "dose": [
+          1.4,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "267573",
+      "name": "Probiotic Gummies Mixed Berry",
+      "brand": "Culturelle",
+      "module": "probiotic",
+      "before": 64,
+      "after": 65.2,
+      "pillar_deltas": {
+        "dose": [
+          10.2,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "267602",
+      "name": "Total Balance",
+      "brand": "Culturelle",
+      "module": "probiotic",
+      "before": 58,
+      "after": 58.8,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "267657",
+      "name": "Probiotic Gummies with Prebiotics Mixed Berry",
+      "brand": "Culturelle",
+      "module": "probiotic",
+      "before": 57.9,
+      "after": 58.1,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "267658",
+      "name": "Probiotic with Prebiotics & Vitamin C Mixed Berry Flavor",
+      "brand": "Culturelle",
+      "module": "probiotic",
+      "before": 57.9,
+      "after": 58.1,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "267888",
+      "name": "Probiotic Gummies with Prebiotics Mixed Berry",
+      "brand": "Culturelle",
+      "module": "probiotic",
+      "before": 57.9,
+      "after": 58.1,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "269621",
+      "name": "Digestive Probiotic 20 Billion",
+      "brand": "Doctor's Best",
+      "module": "probiotic",
+      "before": 56.6,
+      "after": 54.5,
+      "pillar_deltas": {
+        "dose": [
+          5.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "63960",
+      "name": "Fast Melt Immune Probiotic 3 Billion With Bifodan",
+      "brand": "Doctor's Best",
+      "module": "probiotic",
+      "before": 60.5,
+      "after": 61.6,
+      "pillar_deltas": {
+        "dose": [
+          12.6,
+          13.7
+        ]
+      }
+    },
+    {
+      "id": "82415",
+      "name": "Probiotic 2 Billion With LactoSpore",
+      "brand": "Doctor's Best",
+      "module": "probiotic",
+      "before": 56.6,
+      "after": 57.2,
+      "pillar_deltas": {
+        "dose": [
+          10.8,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "178595",
+      "name": "Digestive Health Probiotic",
+      "brand": "Equate",
+      "module": "probiotic",
+      "before": 54.9,
+      "after": 53.3,
+      "pillar_deltas": {
+        "dose": [
+          4.9,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "212443",
+      "name": "Probiotic Complex Extra Strength 100 Billion CFUs",
+      "brand": "GNC Probiotic Complex",
+      "module": "probiotic",
+      "before": 66,
+      "after": 60.6,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "304445",
+      "name": "Probiotic Solutions Adults 50 Plus 55 Billion CFUs",
+      "brand": "GNC Probiotic Solutions",
+      "module": "probiotic",
+      "before": 57.2,
+      "after": 51.8,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "76803",
+      "name": "Probiotic Solutions Prenatal 20 Billion CFUs",
+      "brand": "GNC Probiotic Solutions",
+      "module": "probiotic",
+      "before": 49.1,
+      "after": 45.2,
+      "pillar_deltas": {
+        "dose": [
+          7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "77147",
+      "name": "Probiotic Solutions Multi Strain 25 Billion CFUs",
+      "brand": "GNC Probiotic Solutions",
+      "module": "probiotic",
+      "before": 58.5,
+      "after": 55.8,
+      "pillar_deltas": {
+        "dose": [
+          5.8,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "173776",
+      "name": "Once Daily Ultra 90 Billion Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 51.7,
+      "after": 52.6,
+      "pillar_deltas": {
+        "dose": [
+          2.7,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "233029",
+      "name": "Daily Care 25 Billion CFU Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 55.4,
+      "after": 55.6,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "233043",
+      "name": "Mood Daily Care 40 Billion CFU Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 64.5,
+      "after": 59.1,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "233050",
+      "name": "Prenatal Daily Care 20 Billion CFU Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 60.9,
+      "after": 58.8,
+      "pillar_deltas": {
+        "dose": [
+          5.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "233085",
+      "name": "Women's Daily Care 40 Billion CFU Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 54.6,
+      "after": 54.8,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "233091",
+      "name": "Critical Care 80 Billion CFU Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 59.9,
+      "after": 54.5,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "233110",
+      "name": "Men's Daily Care 40 Billion CFU Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 46.5,
+      "after": 47.9,
+      "pillar_deltas": {
+        "dose": [
+          1.7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "241328",
+      "name": "Paleo Defense Ultra",
+      "brand": "Garden of Life",
+      "module": "probiotic",
+      "before": 42.7,
+      "after": 44.6,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "241331",
+      "name": "Paleo Defense Women",
+      "brand": "Garden of Life",
+      "module": "probiotic",
+      "before": 51.8,
+      "after": 52.6,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "242637",
+      "name": "Ultra Probiotic Formula",
+      "brand": "Garden of Life Primal Defense",
+      "module": "probiotic",
+      "before": 54,
+      "after": 54.8,
+      "pillar_deltas": {
+        "dose": [
+          2.5,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "242654",
+      "name": "Ultra Probiotic Formula",
+      "brand": "Garden of Life Primal Defense",
+      "module": "probiotic",
+      "before": 54,
+      "after": 54.8,
+      "pillar_deltas": {
+        "dose": [
+          2.5,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "242657",
+      "name": "Platinum Series Immune+",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 67.3,
+      "after": 61.8,
+      "pillar_deltas": {
+        "dose": [
+          9.3,
+          3.8
+        ]
+      }
+    },
+    {
+      "id": "242658",
+      "name": "Platinum Series Liver Health+",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 59,
+      "after": 57.2,
+      "pillar_deltas": {
+        "dose": [
+          7.1,
+          5.3
+        ]
+      }
+    },
+    {
+      "id": "243976",
+      "name": "Once Daily Prenatal",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 63.7,
+      "after": 64.5,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "250114",
+      "name": "Women's Probiotic Berry Flavor",
+      "brand": "Garden of Life Dr. Fomulated",
+      "module": "probiotic",
+      "before": 46.1,
+      "after": 46.3,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "256934",
+      "name": "Platinum Series Restore Sleep with Herbs",
+      "brand": "Garden of Life Dr. Formulated",
+      "module": "probiotic",
+      "before": 57.8,
+      "after": 52.4,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "256941",
+      "name": "Platinum Series Iron Absorb+",
+      "brand": "Garden of Life Dr. Formulated",
+      "module": "probiotic",
+      "before": 57.4,
+      "after": 55.9,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "267300",
+      "name": "Mood+ 50 Billion Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 47.8,
+      "after": 47.4,
+      "pillar_deltas": {
+        "dose": [
+          3.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "267301",
+      "name": "Mood+ 50 Billion Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 47.8,
+      "after": 47.4,
+      "pillar_deltas": {
+        "dose": [
+          3.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "267340",
+      "name": "100 Billion Probiotic",
+      "brand": "OM Original Medicine by Garden of Life",
+      "module": "probiotic",
+      "before": 59.6,
+      "after": 54.2,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "274061",
+      "name": "Mood+ 50 Billion Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 51.7,
+      "after": 51.3,
+      "pillar_deltas": {
+        "dose": [
+          3.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "274081",
+      "name": "Once Daily Prenatal",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 63.7,
+      "after": 64.5,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "274671",
+      "name": "Ultra Probiotic Formula",
+      "brand": "Garden of Life Primal Defense",
+      "module": "probiotic",
+      "before": 54,
+      "after": 54.8,
+      "pillar_deltas": {
+        "dose": [
+          2.5,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "275474",
+      "name": "Once Daily Ultra",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 51.4,
+      "after": 52.2,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "28963",
+      "name": "Kids Probiotic Formula Natural Banana Flavor",
+      "brand": "Garden of Life Primal Defense",
+      "module": "probiotic",
+      "before": 56.8,
+      "after": 57.6,
+      "pillar_deltas": {
+        "dose": [
+          2.5,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "297603",
+      "name": "Kids Probiotic 3 Billion CFU",
+      "brand": "Garden of Life",
+      "module": "probiotic",
+      "before": 52.1,
+      "after": 52.3,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "297659",
+      "name": "Women's Probiotic Gummies Berry Flavor",
+      "brand": "Garden of Life Dr. Formulated",
+      "module": "probiotic",
+      "before": 47.5,
+      "after": 47.7,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "297668",
+      "name": "Probiotics 30 Billion",
+      "brand": "Garden of Life Dr. Formulated",
+      "module": "probiotic",
+      "before": 56.9,
+      "after": 54.8,
+      "pillar_deltas": {
+        "dose": [
+          5.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "297693",
+      "name": "Gas & Bloating Daily Care",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 61.6,
+      "after": 55.2,
+      "pillar_deltas": {
+        "dose": [
+          10,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "321379",
+      "name": "Ultra Ultimate Probiotic Formula",
+      "brand": "Garden of Life Primal Defense",
+      "module": "probiotic",
+      "before": 54,
+      "after": 54.8,
+      "pillar_deltas": {
+        "dose": [
+          2.5,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "322603",
+      "name": "Ultra Ultimate Probiotic Formula",
+      "brand": "Garden of Life Primal Defense",
+      "module": "probiotic",
+      "before": 54,
+      "after": 54.8,
+      "pillar_deltas": {
+        "dose": [
+          2.5,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "322604",
+      "name": "Ultra Ultimate Probiotic Formula",
+      "brand": "Garden of Life Primal Defense",
+      "module": "probiotic",
+      "before": 54,
+      "after": 54.8,
+      "pillar_deltas": {
+        "dose": [
+          2.5,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "326762",
+      "name": "Probiotics 100 Billion",
+      "brand": "Garden of Life Dr. Formulated",
+      "module": "probiotic",
+      "before": 63.8,
+      "after": 57.4,
+      "pillar_deltas": {
+        "dose": [
+          10,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "326763",
+      "name": "Probiotics Calm 50 Billion",
+      "brand": "Garden of Life Dr. Formulated",
+      "module": "probiotic",
+      "before": 61.8,
+      "after": 56.5,
+      "pillar_deltas": {
+        "dose": [
+          8.9,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "326764",
+      "name": "Probiotics Gas & Bloating 50 Billion",
+      "brand": "Garden of Life Dr. Formulated",
+      "module": "probiotic",
+      "before": 70.4,
+      "after": 64,
+      "pillar_deltas": {
+        "dose": [
+          10,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "326765",
+      "name": "Probiotics Immune 50 Billion",
+      "brand": "Garden of Life Dr. Formulated",
+      "module": "probiotic",
+      "before": 70.6,
+      "after": 64.2,
+      "pillar_deltas": {
+        "dose": [
+          10,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "326766",
+      "name": "Probiotics Women's pH 50 Billion",
+      "brand": "Garden of Life Dr. Formulated",
+      "module": "probiotic",
+      "before": 60.3,
+      "after": 57.1,
+      "pillar_deltas": {
+        "dose": [
+          6.8,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "326769",
+      "name": "Urinary Tract+ Shelf Stable",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 51.8,
+      "after": 54,
+      "pillar_deltas": {
+        "dose": [
+          1.4,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "334123",
+      "name": "Women's Daily Care 40 Billion CFU Guaranteed",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 45.8,
+      "after": 47.4,
+      "pillar_deltas": {
+        "dose": [
+          2,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "334127",
+      "name": "Probiotics Kids 5 Billion Strawberry Flavor",
+      "brand": "Garden of Life Dr. Formulated",
+      "module": "probiotic",
+      "before": 49.7,
+      "after": 49.9,
+      "pillar_deltas": {
+        "dose": [
+          3.4,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "83159",
+      "name": "Urinary Tract+",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "module": "probiotic",
+      "before": 57.7,
+      "after": 59.9,
+      "pillar_deltas": {
+        "dose": [
+          1.4,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "307586",
+      "name": "Fem Dophilus",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 54.9,
+      "after": 53.4,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "307587",
+      "name": "Fem Dophilus 5 Billion CFU",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 54.9,
+      "after": 53.4,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "307621",
+      "name": "Ideal Bowel Support 10 Billion CFU",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 60.4,
+      "after": 65,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          13.7
+        ]
+      }
+    },
+    {
+      "id": "307626",
+      "name": "Jarro-Dophilus Infant 1 Billion CFU",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 47.4,
+      "after": 52.4,
+      "pillar_deltas": {
+        "formulation": [
+          7.3,
+          10
+        ],
+        "dose": [
+          9.1,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "307627",
+      "name": "Jarro-Dophilus EPS 10 Billion CFU",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 54.7,
+      "after": 54.3,
+      "pillar_deltas": {
+        "dose": [
+          3.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "307628",
+      "name": "Jarro-Dophilus EPS 10 Billion CFU",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 54.7,
+      "after": 54.3,
+      "pillar_deltas": {
+        "dose": [
+          3.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "307629",
+      "name": "Jarro-Dophilus Ultra 50 Billion CFU",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 57.4,
+      "after": 52,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "307631",
+      "name": "Jarro-Dophilus 10 Billion CFU Allergen Free",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 36.6,
+      "after": 41,
+      "pillar_deltas": {
+        "formulation": [
+          7.7,
+          10.5
+        ],
+        "dose": [
+          1.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "307632",
+      "name": "Jarro-Dophilus EPS 25 Billion CFU",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 54.7,
+      "after": 54.3,
+      "pillar_deltas": {
+        "dose": [
+          3.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "307750",
+      "name": "Yum-Yum Dophilus 1 Billion CFU Raspberry",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 40.6,
+      "after": 44.9,
+      "pillar_deltas": {
+        "formulation": [
+          5.7,
+          8.4
+        ],
+        "dose": [
+          1.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "307751",
+      "name": "Yum-Yum Dophilus 1 Billion CFU Raspberry",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 40.6,
+      "after": 46.7,
+      "pillar_deltas": {
+        "formulation": [
+          5.7,
+          10.2
+        ],
+        "dose": [
+          1.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "321946",
+      "name": "Jarro-Dophilus Kids 1 Billion CFU Raspberry",
+      "brand": "Jarrow Formulas",
+      "module": "probiotic",
+      "before": 40.6,
+      "after": 46.7,
+      "pillar_deltas": {
+        "formulation": [
+          5.7,
+          10.2
+        ],
+        "dose": [
+          1.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "182174",
+      "name": "FLORASSIST Balance",
+      "brand": "Life Extension",
+      "module": "probiotic",
+      "before": 55.1,
+      "after": 53.5,
+      "pillar_deltas": {
+        "dose": [
+          4.9,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "182421",
+      "name": "FLORASSIST GI with Phage Technology",
+      "brand": "Life Extension",
+      "module": "probiotic",
+      "before": 54.2,
+      "after": 52.6,
+      "pillar_deltas": {
+        "dose": [
+          4.9,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "182666",
+      "name": "FLORASSIST Immune Health",
+      "brand": "Life Extension",
+      "module": "probiotic",
+      "before": 40.4,
+      "after": 44.7,
+      "pillar_deltas": {
+        "formulation": [
+          10,
+          12.7
+        ],
+        "dose": [
+          3.5,
+          5.1
+        ]
+      }
+    },
+    {
+      "id": "210848",
+      "name": "Immune Health",
+      "brand": "Life Extension Florassist",
+      "module": "probiotic",
+      "before": 40.4,
+      "after": 44.7,
+      "pillar_deltas": {
+        "formulation": [
+          10,
+          12.7
+        ],
+        "dose": [
+          3.5,
+          5.1
+        ]
+      }
+    },
+    {
+      "id": "232042",
+      "name": "Balance",
+      "brand": "Life Extension Florassist",
+      "module": "probiotic",
+      "before": 55.1,
+      "after": 53.5,
+      "pillar_deltas": {
+        "dose": [
+          4.9,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "232334",
+      "name": "GI with Phage Technology",
+      "brand": "Life Extension Florassist",
+      "module": "probiotic",
+      "before": 54.2,
+      "after": 52.6,
+      "pillar_deltas": {
+        "dose": [
+          4.9,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "232775",
+      "name": "Winter Immune Support",
+      "brand": "Life Extension Florassist",
+      "module": "probiotic",
+      "before": 37.8,
+      "after": 42.1,
+      "pillar_deltas": {
+        "formulation": [
+          8.4,
+          11.1
+        ],
+        "dose": [
+          1.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "60560",
+      "name": "FlorAssist",
+      "brand": "Life Extension",
+      "module": "probiotic",
+      "before": 53.4,
+      "after": 53.6,
+      "pillar_deltas": {
+        "dose": [
+          3.1,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "63294",
+      "name": "FLORASSIST Oral Hygeine",
+      "brand": "Life Extension",
+      "module": "probiotic",
+      "before": 48.6,
+      "after": 48.2,
+      "pillar_deltas": {
+        "dose": [
+          3.7,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "65064",
+      "name": "FLORASSIST Oral Hygiene",
+      "brand": "Life Extension",
+      "module": "probiotic",
+      "before": 57.9,
+      "after": 58.5,
+      "pillar_deltas": {
+        "dose": [
+          10.8,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "251169",
+      "name": "Baby & Me 2 Prenatal Probiotic + Prebiotic",
+      "brand": "MegaFood",
+      "module": "probiotic",
+      "before": 53.9,
+      "after": 54.7,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.7
+        ]
+      }
+    },
+    {
+      "id": "257008",
+      "name": "MegaFlora Women's Probiotic",
+      "brand": "MegaFood",
+      "module": "probiotic",
+      "before": 55.1,
+      "after": 55.9,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "257033",
+      "name": "MegaFlora Probiotic with Turmeric",
+      "brand": "MegaFood",
+      "module": "probiotic",
+      "before": 52.3,
+      "after": 53.2,
+      "pillar_deltas": {
+        "dose": [
+          2.7,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "273553",
+      "name": "MegaFlora Women's Probiotic",
+      "brand": "MegaFood",
+      "module": "probiotic",
+      "before": 55.1,
+      "after": 55.9,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "287477",
+      "name": "MegaFlora Probiotic with Turmeric",
+      "brand": "MegaFood",
+      "module": "probiotic",
+      "before": 51.3,
+      "after": 52.1,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "287478",
+      "name": "MegaFlora Women's Probiotic",
+      "brand": "MegaFood",
+      "module": "probiotic",
+      "before": 56,
+      "after": 56.8,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "333195",
+      "name": "Digestive Probiotic Ultra Strength",
+      "brand": "MegaFood",
+      "module": "probiotic",
+      "before": 64.9,
+      "after": 59.5,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "240067",
+      "name": "Probiotic + Prebiotic Gummies",
+      "brand": "Member's Mark",
+      "module": "probiotic",
+      "before": 45.1,
+      "after": 45.3,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "287361",
+      "name": "10 Strain Probiotic",
+      "brand": "Member's Mark",
+      "module": "probiotic",
+      "before": 54.2,
+      "after": 52.7,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "62007",
+      "name": "5X Probiotic Digestive Care Supplement",
+      "brand": "Member's Mark",
+      "module": "probiotic",
+      "before": 50.3,
+      "after": 51.1,
+      "pillar_deltas": {
+        "dose": [
+          2.5,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "62008",
+      "name": "5X Probiotic Digestive Care Supplement",
+      "brand": "Member's Mark",
+      "module": "probiotic",
+      "before": 50.3,
+      "after": 51.1,
+      "pillar_deltas": {
+        "dose": [
+          2.5,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "180385",
+      "name": "Digestive Probiotics + Energy B12 Dual Action",
+      "brand": "Nature Made",
+      "module": "probiotic",
+      "before": 59.3,
+      "after": 59.9,
+      "pillar_deltas": {
+        "dose": [
+          10.8,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "240117",
+      "name": "Probiotic 10",
+      "brand": "Nature's Bounty",
+      "module": "probiotic",
+      "before": 71.6,
+      "after": 65.9,
+      "pillar_deltas": {
+        "dose": [
+          9,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "253081",
+      "name": "Probiotic Gummies",
+      "brand": "Nature's Bounty",
+      "module": "probiotic",
+      "before": 61.3,
+      "after": 61.9,
+      "pillar_deltas": {
+        "dose": [
+          10.9,
+          11.5
+        ]
+      }
+    },
+    {
+      "id": "277025",
+      "name": "Probiotic Gummies",
+      "brand": "Nature's Bounty",
+      "module": "probiotic",
+      "before": 61.2,
+      "after": 61.8,
+      "pillar_deltas": {
+        "dose": [
+          10.8,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "62743",
+      "name": "Probiotic 10",
+      "brand": "Nature's Bounty",
+      "module": "probiotic",
+      "before": 71.4,
+      "after": 65.7,
+      "pillar_deltas": {
+        "dose": [
+          9,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "62845",
+      "name": "Probiotic Gummies",
+      "brand": "Nature's Bounty",
+      "module": "probiotic",
+      "before": 58.8,
+      "after": 59.4,
+      "pillar_deltas": {
+        "dose": [
+          10.9,
+          11.5
+        ]
+      }
+    },
+    {
+      "id": "64458",
+      "name": "Probiotic Gummies",
+      "brand": "Nature's Bounty",
+      "module": "probiotic",
+      "before": 58.8,
+      "after": 59.4,
+      "pillar_deltas": {
+        "dose": [
+          10.9,
+          11.5
+        ]
+      }
+    },
+    {
+      "id": "64459",
+      "name": "Probiotic Gummies",
+      "brand": "Nature's Bounty",
+      "module": "probiotic",
+      "before": 58.8,
+      "after": 59.4,
+      "pillar_deltas": {
+        "dose": [
+          10.9,
+          11.5
+        ]
+      }
+    },
+    {
+      "id": "65691",
+      "name": "Probiotic Gummies",
+      "brand": "Nature's Bounty",
+      "module": "probiotic",
+      "before": 58.8,
+      "after": 59.4,
+      "pillar_deltas": {
+        "dose": [
+          10.9,
+          11.5
+        ]
+      }
+    },
+    {
+      "id": "73305",
+      "name": "Probiotics Gummies",
+      "brand": "Nature's Bounty",
+      "module": "probiotic",
+      "before": 61.3,
+      "after": 61.9,
+      "pillar_deltas": {
+        "dose": [
+          10.9,
+          11.5
+        ]
+      }
+    },
+    {
+      "id": "74446",
+      "name": "Probiotic Gummies",
+      "brand": "Nature's Bounty",
+      "module": "probiotic",
+      "before": 61.3,
+      "after": 61.9,
+      "pillar_deltas": {
+        "dose": [
+          10.9,
+          11.5
+        ]
+      }
+    },
+    {
+      "id": "199521",
+      "name": "Fortify Gummy Probiotic 6 Billion Berry Flavored",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 62.5,
+      "after": 63.1,
+      "pillar_deltas": {
+        "dose": [
+          10.8,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "200156",
+      "name": "Fortify Kids Probiotics 10 Billion Fruit Punch Flavored",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 43.5,
+      "after": 46.1,
+      "pillar_deltas": {
+        "formulation": [
+          10.2,
+          12
+        ],
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "201940",
+      "name": "Fortify Dual Action Immune Defense 20 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 60.1,
+      "after": 58.6,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "201941",
+      "name": "Fortify Dual Action Urinary Health 20 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 63.6,
+      "after": 58.6,
+      "pillar_deltas": {
+        "dose": [
+          8.1,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "202097",
+      "name": "Primadophilus Optima Kids Probiotics 10 Billion Fruit Punch Flavored",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 43.5,
+      "after": 46.1,
+      "pillar_deltas": {
+        "formulation": [
+          10.2,
+          12
+        ],
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "202109",
+      "name": "Primadophilus Optima Kids Probiotics 10 Billion Vanilla Flavored",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 42.3,
+      "after": 45,
+      "pillar_deltas": {
+        "formulation": [
+          9.5,
+          11.4
+        ],
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "205129",
+      "name": "Fortify Optima Probiotic Intensive 200 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 56.6,
+      "after": 54.5,
+      "pillar_deltas": {
+        "formulation": [
+          18.2,
+          20
+        ],
+        "dose": [
+          7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "205138",
+      "name": "Fortify Women's Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 64.6,
+      "after": 59.2,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "205141",
+      "name": "Fortify Age 50+ Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 65.6,
+      "after": 60.2,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "212413",
+      "name": "Fortify Women's Probiotic 30 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 64,
+      "after": 58.6,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "212425",
+      "name": "Fortify Daily Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 62.8,
+      "after": 57.4,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "213643",
+      "name": "Fortify Digestive & Heart Health",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 58.3,
+      "after": 56.4,
+      "pillar_deltas": {
+        "dose": [
+          5.5,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "228024",
+      "name": "Fortify Optima Immune Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 54.2,
+      "after": 54.5,
+      "pillar_deltas": {
+        "formulation": [
+          15.5,
+          17.3
+        ],
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "230023",
+      "name": "Fortify Optima Women's Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 48.6,
+      "after": 48.9,
+      "pillar_deltas": {
+        "formulation": [
+          15.5,
+          17.3
+        ],
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "230028",
+      "name": "Fortify Optima Daily Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 52.4,
+      "after": 50.3,
+      "pillar_deltas": {
+        "formulation": [
+          15.5,
+          17.3
+        ],
+        "dose": [
+          7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "230033",
+      "name": "Fortify Optima Adult 50+ Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 45.3,
+      "after": 48,
+      "pillar_deltas": {
+        "formulation": [
+          14.5,
+          16.4
+        ],
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "242461",
+      "name": "Fortify Digestive Complete",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 49.2,
+      "after": 47.7,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "242571",
+      "name": "Primadophilus Reuteri",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 51,
+      "after": 52.9,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "242945",
+      "name": "Primadophilus Reuteri",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 51,
+      "after": 52.9,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "251908",
+      "name": "Fortify Gummy Probiotic 6 Billion Berry Flavored",
+      "brand": "Nature's Way ",
+      "module": "probiotic",
+      "before": 62.5,
+      "after": 63.1,
+      "pillar_deltas": {
+        "dose": [
+          10.8,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "267830",
+      "name": "Fortify Mood & Stress",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 51.3,
+      "after": 52.2,
+      "pillar_deltas": {
+        "dose": [
+          2.7,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "267898",
+      "name": "Probiotic Pearls Max Potency",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 57.5,
+      "after": 56.5,
+      "pillar_deltas": {
+        "dose": [
+          4.1,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "273394",
+      "name": "Fortify Age 50+ Probiotic + Prebiotics 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 60.1,
+      "after": 58,
+      "pillar_deltas": {
+        "formulation": [
+          15.7,
+          17.5
+        ],
+        "dose": [
+          7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "273399",
+      "name": "Fortify Daily Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 60.6,
+      "after": 57,
+      "pillar_deltas": {
+        "formulation": [
+          15.7,
+          17.5
+        ],
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "273450",
+      "name": "Fortify Men's Probiotic 30 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 61.9,
+      "after": 56.5,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "288699",
+      "name": "Fortify Optima Daily Probiotic 60 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 61.7,
+      "after": 56.3,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "293282",
+      "name": "Fortify Optima Daily Probiotic + Prebiotics",
+      "brand": "Nature's Way Fortify Optima",
+      "module": "probiotic",
+      "before": 65.5,
+      "after": 60.1,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "317030",
+      "name": "Fortify Adult Daily Probiotic 30 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 64.5,
+      "after": 61,
+      "pillar_deltas": {
+        "formulation": [
+          18.4,
+          19.3
+        ],
+        "dose": [
+          7.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "317109",
+      "name": "Fortify Adults 50+ Daily Probiotic 30 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 65.8,
+      "after": 60.4,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "317110",
+      "name": "Fortify Women's Daily Probiotic 30 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 66.8,
+      "after": 61.4,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "327963",
+      "name": "Fortify Adult Probiotic 50 Billion Extra-Strength",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 66,
+      "after": 61.5,
+      "pillar_deltas": {
+        "formulation": [
+          19.1,
+          20
+        ],
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "327965",
+      "name": "Fortify Ultra Potency Optima Probiotic 100 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 69,
+      "after": 63.6,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "327966",
+      "name": "Fortify 50+ Optima Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 55.8,
+      "after": 56.1,
+      "pillar_deltas": {
+        "formulation": [
+          18.2,
+          20
+        ],
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "327967",
+      "name": "Fortify Women's Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 67.1,
+      "after": 61.7,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "328031",
+      "name": "Primadophilus Reuteri Probiotic Capsules",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 46.2,
+      "after": 48.1,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "328090",
+      "name": "Women's 3-in-1 Probiotic Gummy Orange Flavored",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 65.8,
+      "after": 66.4,
+      "pillar_deltas": {
+        "dose": [
+          10.8,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "332922",
+      "name": "Fortify Optima Probiotic 35 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 62.9,
+      "after": 57.5,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "332946",
+      "name": "Primadophilus Reuteri Probiotic Capsules",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 46.2,
+      "after": 48.1,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "332954",
+      "name": "Women's 3-in-1 Probiotic Gummy Orange Flavored",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 65.8,
+      "after": 66.4,
+      "pillar_deltas": {
+        "dose": [
+          10.8,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "333747",
+      "name": "Fortify Adults 50+ Probiotic Extra Strength 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 69.5,
+      "after": 64.1,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "333748",
+      "name": "Fortify Optima Daily Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 55.1,
+      "after": 53,
+      "pillar_deltas": {
+        "formulation": [
+          18.2,
+          20
+        ],
+        "dose": [
+          7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "333749",
+      "name": "Fortify Optima Women's Probiotic 50 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 55.8,
+      "after": 56.1,
+      "pillar_deltas": {
+        "formulation": [
+          18.2,
+          20
+        ],
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "333914",
+      "name": "Fortify Optima 50+ Probiotic 90 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 60.4,
+      "after": 55,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "333915",
+      "name": "Fortify Optima Probiotic 35 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 65.6,
+      "after": 60.2,
+      "pillar_deltas": {
+        "dose": [
+          8.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "334428",
+      "name": "Elite Extra Strength Probiotic Pearls 5 Billion Cultures",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 56.5,
+      "after": 55.5,
+      "pillar_deltas": {
+        "dose": [
+          4.1,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "334440",
+      "name": "Max Potency Probiotic Pearls 5 Billion",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 58.5,
+      "after": 57.5,
+      "pillar_deltas": {
+        "dose": [
+          4.1,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "66386",
+      "name": "Primadophilus Fortify Women's Probiotic",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 46.5,
+      "after": 47.3,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "78296",
+      "name": "Primadophilus Fortify Gummy Probiotic Berry Flavored",
+      "brand": "Nature's Way",
+      "module": "probiotic",
+      "before": 62.5,
+      "after": 63.1,
+      "pillar_deltas": {
+        "dose": [
+          10.8,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "306383",
+      "name": "Probiotic Complex >50 Billion CFU",
+      "brand": "Nutricost",
+      "module": "probiotic",
+      "before": 60.2,
+      "after": 58.7,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "201151",
+      "name": "Quick Melt Probiotic Sticks Crisp Apple",
+      "brand": "OLLY",
+      "module": "probiotic",
+      "before": 62.5,
+      "after": 58.6,
+      "pillar_deltas": {
+        "dose": [
+          7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "201154",
+      "name": "Quick Melt Probiotic Sticks Juicy Blueberry",
+      "brand": "OLLY",
+      "module": "probiotic",
+      "before": 62.5,
+      "after": 58.6,
+      "pillar_deltas": {
+        "dose": [
+          7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "201158",
+      "name": "Kids Quick Melt Probiotic Sticks Wacky Watermelon",
+      "brand": "OLLY",
+      "module": "probiotic",
+      "before": 56.1,
+      "after": 54.6,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "230118",
+      "name": "Multi + Probiotic Tropical Twist",
+      "brand": "OLLY",
+      "module": "probiotic",
+      "before": 57.7,
+      "after": 58.9,
+      "pillar_deltas": {
+        "dose": [
+          10.2,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "230149",
+      "name": "Extra Strength Probiotic Juicy Apple",
+      "brand": "OLLY",
+      "module": "probiotic",
+      "before": 66.6,
+      "after": 68.3,
+      "pillar_deltas": {
+        "dose": [
+          12,
+          13.7
+        ]
+      }
+    },
+    {
+      "id": "267662",
+      "name": "Happy Hoo-Ha",
+      "brand": "OLLY",
+      "module": "probiotic",
+      "before": 56.5,
+      "after": 55,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "273631",
+      "name": "Probiotic Tropical Mango",
+      "brand": "OLLY",
+      "module": "probiotic",
+      "before": 46.4,
+      "after": 47.8,
+      "pillar_deltas": {
+        "dose": [
+          1.7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "335681",
+      "name": "Multi + Probiotic Tropical Twist",
+      "brand": "OLLY",
+      "module": "probiotic",
+      "before": 43.6,
+      "after": 45.5,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "178450",
+      "name": "TruBiotics",
+      "brand": "Bayer One A Day",
+      "module": "probiotic",
+      "before": 44,
+      "after": 47.4,
+      "pillar_deltas": {
+        "formulation": [
+          10,
+          11.8
+        ],
+        "dose": [
+          2,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "178453",
+      "name": "TruBiotics with Immune Support Advantage",
+      "brand": "Bayer One A Day",
+      "module": "probiotic",
+      "before": 48.6,
+      "after": 51.8,
+      "pillar_deltas": {
+        "formulation": [
+          10.9,
+          12.7
+        ],
+        "dose": [
+          1.7,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "180820",
+      "name": "Wish You Well. Mango & Pineapple Flavor",
+      "brand": "Ora",
+      "module": "probiotic",
+      "before": 49.5,
+      "after": 50.3,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "184373",
+      "name": "Wish You Well. Mango & Pineapple Flavor",
+      "brand": "Ora",
+      "module": "probiotic",
+      "before": 49.5,
+      "after": 50.3,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "184468",
+      "name": "Wish You Well. Mango & Pineapple Flavor",
+      "brand": "Ora",
+      "module": "probiotic",
+      "before": 49.5,
+      "after": 50.3,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "202686",
+      "name": "Trust Your Gut Organic Apple & Raspberry Flavor",
+      "brand": "Ora",
+      "module": "probiotic",
+      "before": 45.1,
+      "after": 47,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "229148",
+      "name": "Trust Your Gut. Lavender Lemonade Flavor",
+      "brand": "Ora",
+      "module": "probiotic",
+      "before": 52.2,
+      "after": 54.1,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "229176",
+      "name": "Wish You Well. Mango & Pineapple Flavor",
+      "brand": "Ora",
+      "module": "probiotic",
+      "before": 49.5,
+      "after": 50.3,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "259879",
+      "name": "Trust Your Gut Apple & Raspberry",
+      "brand": "Ora",
+      "module": "probiotic",
+      "before": 55.1,
+      "after": 55.9,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "259890",
+      "name": "Lady Bugs",
+      "brand": "Ora",
+      "module": "probiotic",
+      "before": 59.2,
+      "after": 58.8,
+      "pillar_deltas": {
+        "dose": [
+          3.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "322682",
+      "name": "Trust Your Gut",
+      "brand": "Ora",
+      "module": "probiotic",
+      "before": 54.6,
+      "after": 55.4,
+      "pillar_deltas": {
+        "dose": [
+          2.3,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "188755",
+      "name": "Probiotic EasySticks",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 57.7,
+      "after": 57.9,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "219289",
+      "name": "Synbiotic GG",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 63.1,
+      "after": 65.4,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "246181",
+      "name": "Lactobacillus Acidophilus",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 57.9,
+      "after": 60.2,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "246182",
+      "name": "Lactobacillus Acidophilus",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 57.9,
+      "after": 60.2,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "247319",
+      "name": "Saccharomyces Boulardii",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 63.8,
+      "after": 68.4,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          13.7
+        ]
+      }
+    },
+    {
+      "id": "261618",
+      "name": "PureBi-Ome Intensive",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 59.3,
+      "after": 57.8,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "261861",
+      "name": "Probiotic Chewables Natural Berry-Cherry Flavor",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 54.9,
+      "after": 54.5,
+      "pillar_deltas": {
+        "dose": [
+          3.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "278257",
+      "name": "Probiotic IMM",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 55.5,
+      "after": 55.7,
+      "pillar_deltas": {
+        "dose": [
+          2.9,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "294040",
+      "name": "Probiotic 50B",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 54.8,
+      "after": 54.4,
+      "pillar_deltas": {
+        "dose": [
+          3.5,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "294041",
+      "name": "Probiotic G.I.",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 48.8,
+      "after": 50.7,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "294042",
+      "name": "Probiotic-5",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 48.8,
+      "after": 50.7,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "295532",
+      "name": "Probiotic G.I.",
+      "brand": "Pure Encapsulations",
+      "module": "probiotic",
+      "before": 48.8,
+      "after": 50.7,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "299239",
+      "name": "Synbiotic+",
+      "brand": "Ritual",
+      "module": "probiotic",
+      "before": 56,
+      "after": 55.9,
+      "pillar_deltas": {
+        "formulation": [
+          12.5,
+          14.3
+        ],
+        "dose": [
+          5.5,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "217182",
+      "name": "ABC Dophilus Powder",
+      "brand": "Solgar",
+      "module": "probiotic",
+      "before": 56.7,
+      "after": 58.5,
+      "pillar_deltas": {
+        "formulation": [
+          9.1,
+          10.9
+        ]
+      }
+    },
+    {
+      "id": "241240",
+      "name": "Advanced Acidophilus Plus",
+      "brand": "Solgar",
+      "module": "probiotic",
+      "before": 50.9,
+      "after": 52.7,
+      "pillar_deltas": {
+        "formulation": [
+          6.8,
+          8.6
+        ]
+      }
+    },
+    {
+      "id": "263873",
+      "name": "Probi 20",
+      "brand": "Solgar",
+      "module": "probiotic",
+      "before": 64.7,
+      "after": 60.1,
+      "pillar_deltas": {
+        "dose": [
+          8.2,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "264106",
+      "name": "Advanced Acidophilus Plus",
+      "brand": "Solgar",
+      "module": "probiotic",
+      "before": 50.9,
+      "after": 52.7,
+      "pillar_deltas": {
+        "formulation": [
+          6.8,
+          8.6
+        ]
+      }
+    },
+    {
+      "id": "264116",
+      "name": "Advanced Multi-Billion Dophilus",
+      "brand": "Solgar",
+      "module": "probiotic",
+      "before": 58.8,
+      "after": 68.1,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          18.4
+        ]
+      }
+    },
+    {
+      "id": "44161",
+      "name": "Advanced Acidophilus Plus",
+      "brand": "Solgar",
+      "module": "probiotic",
+      "before": 57.6,
+      "after": 59.5,
+      "pillar_deltas": {
+        "formulation": [
+          9.5,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "44163",
+      "name": "Advanced Acidophilus Plus",
+      "brand": "Solgar",
+      "module": "probiotic",
+      "before": 57.6,
+      "after": 59.5,
+      "pillar_deltas": {
+        "formulation": [
+          9.5,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "79324",
+      "name": "Advanced Multi-Billion Dophilus",
+      "brand": "Solgar",
+      "module": "probiotic",
+      "before": 66.5,
+      "after": 75.8,
+      "pillar_deltas": {
+        "dose": [
+          9.1,
+          18.4
+        ]
+      }
+    },
+    {
+      "id": "326252",
+      "name": "Daily Probiotics",
+      "brand": "Sports Research",
+      "module": "probiotic",
+      "before": 63.2,
+      "after": 61.7,
+      "pillar_deltas": {
+        "dose": [
+          4.6,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "178562",
+      "name": "Children's Probiotic Gummies",
+      "brand": "Spring Valley",
+      "module": "probiotic",
+      "before": 62.1,
+      "after": 61.4,
+      "pillar_deltas": {
+        "formulation": [
+          14.5,
+          12.7
+        ],
+        "dose": [
+          12.6,
+          13.7
+        ]
+      }
+    },
+    {
+      "id": "178713",
+      "name": "Probiotic Gummies",
+      "brand": "Spring Valley",
+      "module": "probiotic",
+      "before": 56.6,
+      "after": 54.7,
+      "pillar_deltas": {
+        "formulation": [
+          13,
+          11.1
+        ]
+      }
+    },
+    {
+      "id": "298031",
+      "name": "FloraSport 20B",
+      "brand": "Thorne",
+      "module": "probiotic",
+      "before": 65.9,
+      "after": 67.2,
+      "pillar_deltas": {
+        "dose": [
+          13.2,
+          14.5
+        ]
+      }
+    },
+    {
+      "id": "306247",
+      "name": "FloraSport 20B",
+      "brand": "Thorne",
+      "module": "probiotic",
+      "before": 65.9,
+      "after": 67.2,
+      "pillar_deltas": {
+        "dose": [
+          13.2,
+          14.5
+        ]
+      }
+    },
+    {
+      "id": "306291",
+      "name": "Sacro-B",
+      "brand": "Thorne",
+      "module": "probiotic",
+      "before": 63.6,
+      "after": 61.7,
+      "pillar_deltas": {
+        "dose": [
+          5.5,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "323130",
+      "name": "Sacro-B",
+      "brand": "Thorne",
+      "module": "probiotic",
+      "before": 63.6,
+      "after": 61.7,
+      "pillar_deltas": {
+        "dose": [
+          5.5,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "337852",
+      "name": "Bacillus Coagulans",
+      "brand": "Thorne",
+      "module": "probiotic",
+      "before": 60.8,
+      "after": 62.4,
+      "pillar_deltas": {
+        "dose": [
+          2,
+          3.6
+        ]
+      }
+    },
+    {
+      "id": "240347",
+      "name": "Children's Probiotic Packets",
+      "brand": "up&up",
+      "module": "probiotic",
+      "before": 48.7,
+      "after": 49.5,
+      "pillar_deltas": {
+        "dose": [
+          2.5,
+          3.3
+        ]
+      }
+    },
+    {
+      "id": "286725",
+      "name": "Probiotic Natural Raspberry, Peach & Mango Flavor",
+      "brand": "vitafusion",
+      "module": "probiotic",
+      "before": 52.2,
+      "after": 53.4,
+      "pillar_deltas": {
+        "dose": [
+          10.2,
+          11.4
+        ]
+      }
+    },
+    {
+      "id": "221677",
+      "name": "Nordic Flora Probiotic Comfort",
+      "brand": "Nordic Naturals",
+      "module": "probiotic",
+      "before": 49.5,
+      "after": 51.4,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "223171",
+      "name": "Nordic Flora Probiotic Daily",
+      "brand": "Nordic Naturals",
+      "module": "probiotic",
+      "before": 51.7,
+      "after": 53.6,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "223172",
+      "name": "Nordic Flora Probiotic Women",
+      "brand": "Nordic Naturals",
+      "module": "probiotic",
+      "before": 55,
+      "after": 56.9,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    },
+    {
+      "id": "74080",
+      "name": "Nordic Probiotic Sport",
+      "brand": "Nordic Naturals",
+      "module": "probiotic",
+      "before": 51.1,
+      "after": 53,
+      "pillar_deltas": {
+        "dose": [
+          1.2,
+          3.1
+        ]
+      }
+    }
+  ],
+  "route_changes": [],
+  "confidence_changes": [],
+  "verdict_changes": [
+    {
+      "id": "246008",
+      "before": "POOR",
+      "after": "SAFE"
+    },
+    {
+      "id": "307750",
+      "before": "POOR",
+      "after": "SAFE"
+    },
+    {
+      "id": "307751",
+      "before": "POOR",
+      "after": "SAFE"
+    },
+    {
+      "id": "321946",
+      "before": "POOR",
+      "after": "SAFE"
+    },
+    {
+      "id": "200156",
+      "before": "POOR",
+      "after": "SAFE"
+    },
+    {
+      "id": "202097",
+      "before": "POOR",
+      "after": "SAFE"
+    },
+    {
+      "id": "202109",
+      "before": "POOR",
+      "after": "SAFE"
+    },
+    {
+      "id": "230033",
+      "before": "POOR",
+      "after": "SAFE"
+    },
+    {
+      "id": "178450",
+      "before": "POOR",
+      "after": "SAFE"
+    },
+    {
+      "id": "178453",
+      "before": "POOR",
+      "after": "SAFE"
+    }
+  ],
+  "tier_changes": [
+    {
+      "id": "269621",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "304445",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "233091",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "256934",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "267340",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "297668",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "326764",
+      "before": "Acceptable",
+      "after": "Weak"
+    },
+    {
+      "id": "326765",
+      "before": "Acceptable",
+      "after": "Weak"
+    },
+    {
+      "id": "307629",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "182174",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "232042",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "240117",
+      "before": "Acceptable",
+      "after": "Weak"
+    },
+    {
+      "id": "62743",
+      "before": "Acceptable",
+      "after": "Weak"
+    },
+    {
+      "id": "205129",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "333748",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "201158",
+      "before": "Weak",
+      "after": "Poor"
+    },
+    {
+      "id": "322682",
+      "before": "Poor",
+      "after": "Weak"
+    },
+    {
+      "id": "79324",
+      "before": "Weak",
+      "after": "Acceptable"
+    },
+    {
+      "id": "178713",
+      "before": "Weak",
+      "after": "Poor"
+    }
+  ],
+  "pillar_changes": [
+    {
+      "pillar": "formulation",
+      "changed": 36
+    },
+    {
+      "pillar": "dose",
+      "changed": 209
+    },
+    {
+      "pillar": "evidence",
+      "changed": 0
+    },
+    {
+      "pillar": "transparency",
+      "changed": 0
+    },
+    {
+      "pillar": "verification",
+      "changed": 0
+    },
+    {
+      "pillar": "safety_hygiene",
+      "changed": 0
+    }
+  ],
+  "comparators": [
+    {
+      "id": "250851",
+      "name": "Digestive Daily Probiotic",
+      "brand": "Culturelle",
+      "before": 72.7,
+      "after": 72.7
+    },
+    {
+      "id": "326762",
+      "name": "Probiotics 100 Billion",
+      "brand": "Garden of Life Dr. Formulated",
+      "before": 63.8,
+      "after": 57.4
+    },
+    {
+      "id": "307727",
+      "name": "Saccharomyces Boulardii + MOS 5 Billion CFU",
+      "brand": "Jarrow Formulas",
+      "before": 62.4,
+      "after": 62.4
+    },
+    {
+      "id": "327965",
+      "name": "Fortify Ultra Potency Optima Probiotic 100 Billion",
+      "brand": "Nature's Way",
+      "before": 69,
+      "after": 63.6
+    },
+    {
+      "id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+      "name": "DS-01 Daily Synbiotic",
+      "brand": "Seed",
+      "before": 81.2,
+      "after": 81.2
+    },
+    {
+      "id": "299239",
+      "name": "Synbiotic+",
+      "brand": "Ritual",
+      "before": 56,
+      "after": 55.9
+    }
+  ]
+}
