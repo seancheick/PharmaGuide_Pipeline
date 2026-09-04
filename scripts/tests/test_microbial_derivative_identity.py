@@ -95,6 +95,7 @@ def test_real_extract_boundary_is_quarantined_without_probiotic_route(enricher) 
 @pytest.mark.parametrize("name,form", [
     ("Saccharomyces cerevisiae extract", None),
     ("Lactobacillus acidophilus lysate", None),
+    ("yeast hydrolysate", None),
     ("L. acidophilus lysate", None),
     ("B. lactis heat-inactivated", None),
     ("Saccharomyces cerevisiae", "cell wall fragments"),
@@ -124,14 +125,15 @@ def test_derivative_evidence_is_shared_across_identity_consumers(
     ("Saccharomyces boulardii", "saccharomyces_boulardii"),
     ("Saccharomyces cerevisiae", "brewers_yeast"),
 ])
+@pytest.mark.parametrize("unrelated_form", ["rice bran extract", "whey hydrolysate"])
 def test_live_yeast_owned_dose_survives_unrelated_extracts(
-    enricher, name: str, canonical: str,
+    enricher, name: str, canonical: str, unrelated_form: str,
 ) -> None:
     live = {
         "name": name, "raw_source_text": name, "ingredientGroup": name,
         "canonical_id": canonical, "category": "probiotic",
         "raw_source_path": "ingredientRows[0]", "quantity": 5_000_000_000,
-        "unit": "CFU", "forms": [{"name": "rice bran extract"}],
+        "unit": "CFU", "forms": [{"name": unrelated_form}],
     }
     decision = resolve_identity(live, canonical, _organism_resolver)
     assert decision.disposition == "clean"
@@ -173,27 +175,85 @@ def test_nonlive_blend_component_is_not_counted_as_a_strain(enricher, forms: boo
     assert all(row["cfu_per_day"] is None for row in result["clinical_strains"])
 
 
-def test_reviewed_preparation_identity_does_not_become_organism_conflict() -> None:
-    row = {**_yeast_extract_row(), "name": "Yeast beta-glucans",
-           "raw_source_text": "Yeast beta-glucans"}
-    # This callback stands for an already-verified preparation identity;
-    # the identity contract must not invent the mapping itself.
-    decision = resolve_identity(row, "beta_glucan", lambda _: "beta_glucan")
-    assert decision.disposition == "clean"
-    assert decision.canonical_id == "beta_glucan"
+@pytest.mark.parametrize("normalized_name", ["Saccharomyces cerevisiae extract", "Beta Glucan"])
+def test_guessed_preparation_from_candidate_resolver_is_not_literal_proof(
+    enricher, normalized_name: str,
+) -> None:
+    row = {**_yeast_extract_row(), "name": normalized_name,
+           "ingredientGroup": "Saccharomyces cerevisiae"}
+
+    def broad_resolver(value: str) -> str:
+        if normalize_label_display(value).casefold() == "saccharomyces cerevisiae":
+            return "brewers_yeast"
+        return "beta_glucan"
+
+    decision = resolve_identity(
+        row, "beta_glucan", broad_resolver,
+        canonical_registry=enricher._current_canonical_identity_registry(),
+    )
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert decision.scoreable_identity is False
 
 
-def test_existing_exact_preparation_keeps_its_identity_over_source_taxonomy(enricher) -> None:
+def test_alternate_taxonomy_cannot_replace_unverified_preparation() -> None:
+    row = {**_yeast_extract_row(), "name": "Yeast Fermentate",
+           "raw_source_text": "Yeast Fermentate",
+           "alternateNames": ["Saccharomyces cerevisiae"], "forms": []}
+    row.pop("ingredientGroup")
+
+    def resolver(value: str) -> str | None:
+        return {"yeast fermentate": "yeast_fermentate",
+                "saccharomyces cerevisiae": "brewers_yeast"}.get(
+            normalize_label_display(value).casefold()
+        )
+
+    decision = resolve_identity(row, "yeast_fermentate", resolver)
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+
+
+@pytest.mark.parametrize("literal", [
+    "Yeast Fermentate", "Saccharomyces cerevisiae fermentate", "yeast hydrolysate",
+])
+@pytest.mark.parametrize("alternate_only", [False, True])
+def test_existing_exact_preparation_keeps_its_identity_over_source_taxonomy(
+    enricher, literal: str, alternate_only: bool,
+) -> None:
     row = {
-        **_yeast_extract_row(), "name": "Yeast Fermentate",
-        "raw_source_text": "Yeast Fermentate", "standardName": "Yeast Fermentate",
+        **_yeast_extract_row(), "name": literal,
+        "raw_source_text": literal, "standardName": "Yeast Fermentate",
         "canonical_id": "yeast_fermentate", "ingredientGroup": "Saccharomyces cerevisiae",
         "forms": [],
     }
+    if alternate_only:
+        row["alternateNames"] = [row.pop("ingredientGroup")]
     result = enricher._collect_ingredient_quality_data({"activeIngredients": [row]})
     assert len(result["ingredients_scorable"]) == 1
     assert result["ingredients_scorable"][0]["canonical_id"] == "yeast_fermentate"
-    assert result["ingredients_scorable"][0]["source_label_name"] == "Yeast Fermentate"
+    assert result["ingredients_scorable"][0]["source_label_name"] == literal
+
+
+@pytest.mark.parametrize("alternate_only", [False, True])
+def test_ambiguous_preparation_alias_does_not_override_source_taxonomy(
+    enricher, alternate_only: bool,
+) -> None:
+    literal = "dried yeast fermentate"
+    registry = enricher._current_canonical_identity_registry()
+    assert registry.resolve_verified_preferred(literal) is None
+    row = {
+        **_yeast_extract_row(), "name": literal, "raw_source_text": literal,
+        "standardName": "Yeast Fermentate", "canonical_id": "yeast_fermentate",
+        "ingredientGroup": "Saccharomyces cerevisiae", "forms": [],
+    }
+    if alternate_only:
+        row["alternateNames"] = [row.pop("ingredientGroup")]
+
+    result = enricher._collect_ingredient_quality_data({"activeIngredients": [row]})
+    assert result["ingredients_scorable"] == []
+    assert result["ingredients_skipped"][0]["identity_disposition"] == "identity_conflict"
+    assert result["ingredients_skipped"][0]["canonical_id"] is None
+    assert result["ingredients_skipped"][0]["source_label_name"] == literal
 
 
 def test_real_source_owned_cerevisiae_active_culture_dose_is_retained(enricher) -> None:

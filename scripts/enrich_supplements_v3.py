@@ -4287,6 +4287,7 @@ class SupplementEnricherV3:
             taxonomy_coherent=taxonomy_coherent,
             allow_unscoreable_taxonomy_only=allow_unscoreable_taxonomy_only,
             canonical_parent_of=canonical_parent_of,
+            canonical_registry=self._current_canonical_identity_registry(),
         )
 
         if decision.disposition == "repaired" and decision.canonical_id:

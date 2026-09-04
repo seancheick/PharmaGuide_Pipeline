@@ -43,7 +43,7 @@ _MICROBIAL_SOURCE_RE = re.compile(
     re.IGNORECASE,
 )
 _MICROBIAL_PREPARATION_RE = re.compile(
-    r"\b(?:extracts?|lysates?|fermentates?|fractions?|cell[-\s]+wall(?:s)?|"
+    r"\b(?:extracts?|(?:hydro)?lysates?|fermentates?|fractions?|cell[-\s]+wall(?:s)?|"
     r"(?:heat[-\s]+(?:killed|inactivated)|inactivated|non[-\s]*viable|"
     r"tyndalli[sz]ed)(?:\s+(?:cells?|cultures?))?|postbiotics?)\b",
     re.IGNORECASE,
@@ -739,6 +739,7 @@ def resolve_identity(
     taxonomy_coherent: bool = False,
     allow_unscoreable_taxonomy_only: bool = False,
     canonical_parent_of: CanonicalParentPredicate | None = None,
+    canonical_registry: CanonicalIdentityRegistry | None = None,
 ) -> IdentityDecision:
     """Resolve label identity without reproducing the external taxonomy matcher.
 
@@ -748,6 +749,8 @@ def resolve_identity(
     ``allow_unscoreable_taxonomy_only`` is reserved for rows the caller already
     classified as intentionally non-scorable; it records that context without
     inferring a canonical identity.
+    ``canonical_registry`` supplies exact literal name/alias proof for source
+    preparation exceptions; the general candidate resolver alone cannot.
     """
     evidence = extract_label_evidence(row)
     canonical_before = _canonical(supplied_canonical_id)
@@ -767,14 +770,16 @@ def resolve_identity(
     )
     raw_evidence = tuple(item for item in evidence if item.kind == "source_name")
     form_evidence = tuple(item for item in evidence if item.kind == "source_form")
+    resolved_structured_evidence = primary_structured_evidence
     structured_canonicals = _resolved_canonicals(
-        primary_structured_evidence,
+        resolved_structured_evidence,
         resolve_candidate,
         canonical_parent_of,
     )
     if not structured_canonicals:
+        resolved_structured_evidence = alternate_name_evidence
         structured_canonicals = _resolved_canonicals(
-            alternate_name_evidence,
+            resolved_structured_evidence,
             resolve_candidate,
             canonical_parent_of,
         )
@@ -829,13 +834,20 @@ def resolve_identity(
         and any(
             _MICROBIAL_SOURCE_RE.search(item.value)
             and not has_nonlive_microbial_derivative_evidence({"name": item.value})
-            for item in primary_structured_evidence
+            for item in resolved_structured_evidence
         )
+    )
+    exact_literal_match = (
+        canonical_registry.resolve_verified_preferred(raw_evidence[0].value)
+        if microbial_derivative_conflict and canonical_registry and raw_evidence
+        else None
     )
     literal_preparation_identity = bool(
         microbial_derivative_conflict
         and canonical_before
         and raw_canonical == canonical_before
+        and exact_literal_match
+        and exact_literal_match[0] == canonical_before
         and (
             not _MICROBIAL_SOURCE_RE.search(canonical_before.replace("_", " "))
             or has_nonlive_microbial_derivative_evidence(
