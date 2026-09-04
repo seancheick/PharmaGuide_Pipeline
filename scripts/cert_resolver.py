@@ -260,13 +260,9 @@ def _brands_likely_same(product_brand_norm: str, registry_brand_norm: str) -> bo
     return product_tokens.issubset(registry_tokens) or registry_tokens.issubset(product_tokens)
 
 
-_DOSE_NUMERIC_PATTERN = re.compile(
-    r"\b\d+(?:\.\d+)?\s*(?:mg|mcg|µg|g|kg|iu|ml|fl\s*oz|oz|billion|cfu|cfus)\b\.?",
-    re.IGNORECASE,
-)
-
 _SKU_DOSE_TOKEN_PATTERN = re.compile(
-    r"\b(\d+(?:\.\d+)?)\s*(mg|mcg|µg|g|kg|iu|ml|fl\s*oz|oz|billion|cfu|cfus)\b\.?",
+    r"\b(\d+(?:\.\d+)?)\s*(mg|mcg|µg|g|kg|iu|ml|fl\s*oz|oz|"
+    r"(?:billion|b)(?:\s*(?:cfus?|afu))?|cfus?|afu)\b\.?",
     re.IGNORECASE,
 )
 
@@ -279,6 +275,12 @@ _SKU_FORM_TOKENS = {
     "chewable": "chewable", "chewables": "chewable",
     "powder": "powder", "liquid": "liquid", "drops": "drops",
 }
+_SKU_NET_CONTENTS_FORM_PATTERN = re.compile(
+    r"(?:\d+(?:\.\d+)?\s+)?(?:once\s+daily\s+)?"
+    r"(?:(?P<material>vegetarian|vegan|gelatin)\s+)?"
+    r"(?P<form>" + "|".join(_SKU_FORM_TOKENS) + r")(?:\(s\))?",
+    re.IGNORECASE,
+)
 
 _SKU_SEX_TOKENS = {
     "men": "male", "mens": "male", "man": "male", "male": "male", "him": "male",
@@ -333,11 +335,12 @@ _MARINE_PRODUCT_RE = re.compile(
 def normalize_product(text: str) -> str:
     if not text:
         return ""
-    text = _strip_accents(text).lower().strip()
     text = re.sub(r"[®™©]", " ", text)
+    text = re.sub(r"(?<=\w)['’]s\b", "", text, flags=re.IGNORECASE)
+    text = _strip_accents(text).lower().strip()
     # Strip dose-number+unit pairs first (e.g., "200 mg", "5000 IU") so the
     # leading numeric doesn't survive into the noise-stripped output.
-    text = _DOSE_NUMERIC_PATTERN.sub(" ", text)
+    text = _SKU_DOSE_TOKEN_PATTERN.sub(" ", text)
     text = _PRODUCT_NOISE_PATTERN.sub(" ", text)
     # Convert hyphens and slashes to spaces — "Multi-Vitamin" must tokenize as
     # ["multi", "vitamin"] so it aligns with "Vitamin" in matching.
@@ -355,6 +358,14 @@ def _sku_dose_tokens(text: str) -> set[str]:
     normalized = _strip_accents(text).lower()
     for value, unit in _SKU_DOSE_TOKEN_PATTERN.findall(normalized):
         unit_norm = unit.replace("µ", "u").replace(" ", "")
+        # Registry shorthand 50B and label 50 billion CFU identify the same
+        # strength. AFU remains a distinct measurement; never infer CFU from it.
+        if unit_norm in {"b", "billion", "bcfu", "bcfus", "billioncfu", "billioncfus"}:
+            unit_norm = "billioncfu"
+        elif unit_norm in {"bafu", "billionafu"}:
+            unit_norm = "billionafu"
+        elif unit_norm == "cfus":
+            unit_norm = "cfu"
         tokens.add(f"{value.rstrip('0').rstrip('.') if '.' in value else value}{unit_norm}")
     return tokens
 
@@ -365,6 +376,34 @@ def _sku_form_tokens(text: str) -> set[str]:
     normalized = _strip_accents(text).lower()
     normalized = re.sub(r"[^a-z0-9\s]", " ", normalized)
     return {_SKU_FORM_TOKENS[token] for token in normalized.split() if token in _SKU_FORM_TOKENS}
+
+
+def _with_label_form_context(product: str, context: dict[str, Any] | None) -> str:
+    """Add only explicit form evidence, never marketing or serving instructions.
+
+    A narrowly parsed net-contents unit may carry a material qualifier such as
+    Vegetarian Capsule(s). Counts and the printed Once Daily prefix are not
+    product identity. Unsupported descriptors stay unresolved, not guessed.
+    """
+    context = context if isinstance(context, dict) else {}
+    parts = [product]
+    form = context.get("form_factor_canonical") or context.get("form_factor")
+    if isinstance(form, str) and form.lower().strip() in _SKU_FORM_TOKENS:
+        parts.append(_SKU_FORM_TOKENS[form.lower().strip()])
+    contents = context.get("netContents")
+    for row in contents if isinstance(contents, list) else []:
+        unit = row.get("unit") if isinstance(row, dict) else None
+        if not isinstance(unit, str):
+            continue
+        # DSLD prints both of these plural templates on gummy package units.
+        # Still require the entire resulting unit to match the narrow grammar.
+        unit = re.sub(r"\bgumm(?:ie\(s\)|y\(ies\))$", "gummies", unit.strip(), flags=re.IGNORECASE)
+        match = _SKU_NET_CONTENTS_FORM_PATTERN.fullmatch(unit)
+        if match:
+            if match["material"]:
+                parts.append(match["material"].lower())
+            parts.append(_SKU_FORM_TOKENS[match["form"].lower()])
+    return " ".join(parts)
 
 
 @lru_cache(maxsize=65_536)
@@ -396,12 +435,65 @@ def _sku_population_conflict(product: str, candidate: str) -> bool:
     return False
 
 
+def _sku_identity_tokens(text: str, brand_tokens: set[str]) -> frozenset[str]:
+    """Name identity after the existing population/strength/form guards.
+
+    Only descriptors and already-validated population language are removed.
+    Material qualifiers (immune, herbal, named additions) remain required.
+    """
+    normalized = normalize_product(text)
+    tokens = set(normalized.split()) - brand_tokens
+    # Form identity is checked separately before these name tokens qualify.
+    # In particular, caplet/caplets must not become different name qualifiers;
+    # keep normalize_product unchanged because it also indexes reviewed overrides.
+    tokens -= _SKU_FORM_TOKENS.keys()
+    tokens -= {"for", "and", "with", "formula", "multivitamin"}
+    tokens -= _SKU_SEX_TOKENS.keys()
+    tokens -= _SKU_LIFE_STAGE_TOKENS.keys()
+    _, _, ages = _sku_population_tokens(text)
+    if ages:
+        tokens -= {"age", "ages", "up", "older", "over", "plus"}
+        tokens -= {number for age in ages for number in re.findall(r"\d+", age)}
+    if any(re.fullmatch(r"[abcdek]\d*", token) for token in tokens):
+        tokens.discard("vitamin")
+    return frozenset(tokens)
+
+
+def _literal_product_name(text: str, registry_brand: str) -> str:
+    """Keep the whole normalized name, removing only a leading registry brand.
+
+    Population and descriptor words can comprise the literal product name.
+    Do not turn their removal from broad identity tokens into an empty match.
+    Raw strength/form/population guards remain required at the call site.
+    """
+    name = normalize_product(text)
+    brand = normalize_product(normalize_brand(registry_brand))
+    if name == brand:
+        return ""
+    if brand and name.startswith(brand + " "):
+        name = name[len(brand) + 1:]
+    return name
+
+
 def _sku_flavor_tokens(text: str) -> set[str]:
     if not text:
         return set()
     normalized = _strip_accents(text).lower()
     normalized = re.sub(r"[^a-z0-9\s]", " ", normalized)
     return {token for token in normalized.split() if token in _SKU_FLAVOR_TOKENS}
+
+
+def _sku_query_flavor_tokens(text: str) -> set[str]:
+    """Existing flavor refinements, not arbitrary named product editions."""
+    tokens = _sku_flavor_tokens(text)
+    if not tokens:
+        return tokens
+    tokens.update({"flavor", "flavored", "flavour", "flavoured", "flavors", "flavours"})
+    normalized = normalize_product(text)
+    for phrase in ("strawberry lemonade", "chocolate fudge", "berry fresh"):
+        if re.search(rf"\b{phrase}\b", normalized):
+            tokens.update(phrase.split())
+    return tokens
 
 
 def _sku_flavor_only_match(product: str, candidate: str, brand_tokens: set[str]) -> bool:
@@ -504,12 +596,12 @@ def _sku_variant_conflict(
 
     doses_a = _sku_dose_tokens(product_a)
     doses_b = _sku_dose_tokens(product_b)
-    if doses_a and doses_b and doses_a != doses_b:
+    if doses_b and doses_a != doses_b:
         return True
 
     forms_a = _sku_form_tokens(product_a)
     forms_b = _sku_form_tokens(product_b)
-    if forms_a and forms_b and forms_a.isdisjoint(forms_b):
+    if forms_b and (not forms_a or not forms_a.issubset(forms_b)):
         return True
 
     if _sku_stim_nonstim_conflict(product_a, product_b):
@@ -662,8 +754,8 @@ def _check_override(
                 verified_at=override.get("verified_at"),
                 source_url=override.get("source_url"),
                 notes="curated override",
-                matched_brand=override.get("brand"),
-                matched_product=override.get("product"),
+                matched_brand=override.get("matched_brand") or override.get("brand"),
+                matched_product=override.get("matched_product") or override.get("product"),
             )
     return None
 
@@ -674,6 +766,8 @@ def resolve(
     claimed_programs: Iterable[str],
     registry: CertRegistry,
     dsld_id: str | None = None,
+    *,
+    label_context: dict[str, Any] | None = None,
 ) -> list[CertResolution]:
     """Resolve every claimed program to its registry scope.
 
@@ -681,7 +775,10 @@ def resolve(
     Returns one CertResolution per claimed program."""
 
     brand_norm = normalize_brand(brand)
-    product_norm = normalize_product(product)
+    reviewed_product_norm = normalize_product(product)
+    identity_product = _with_label_form_context(product, label_context)
+    product_norm = normalize_product(identity_product)
+    query_flavor_tokens = _sku_query_flavor_tokens(product)
     out: list[CertResolution] = []
 
     for claimed in claimed_programs:
@@ -692,11 +789,11 @@ def resolve(
         # Stage 1: curated override wins
         override_resolution = _check_override(
             brand_norm,
-            product_norm,
+            reviewed_product_norm,
             program_canon,
             registry,
             dsld_id=dsld_id,
-            product=product,
+            product=identity_product,
         )
         if override_resolution is not None:
             out.append(override_resolution)
@@ -730,25 +827,69 @@ def resolve(
         # Stage 3: product-level matching within brand-matched candidates
         best_sku: tuple[tuple[bool, float, int, int], float, dict[str, Any], bool] | None = None
         best_line: tuple[tuple[bool, float, int, int], float, dict[str, Any], bool] | None = None
+        qualifying_identities: set[tuple[frozenset[str], ...]] = set()
+        exact_identities: set[tuple[frozenset[str], ...]] = set()
+        qualifying_records = []
         for c in brand_matches:
             raw_candidate_product = c.get("product", "") or c.get("product_normalized", "")
+            raw_candidate_product = _with_label_form_context(
+                raw_candidate_product, {"form_factor": c.get("product_form")}
+            )
             c_product = normalize_product(c.get("product_normalized", raw_candidate_product))
             if not c_product:
                 continue
             variant_conflict = _sku_variant_conflict(
-                product, raw_candidate_product, brand_a=brand,
+                identity_product, raw_candidate_product, brand_a=brand,
                 brand_b=c.get("brand", c.get("brand_normalized", "")),
             )
+            brand_tokens = set(normalize_product(
+                f"{brand} {c.get('brand', c.get('brand_normalized', ''))}"
+            ).split())
+            product_tokens = _sku_identity_tokens(identity_product, brand_tokens)
+            candidate_tokens = _sku_identity_tokens(raw_candidate_product, brand_tokens)
+            registry_brand = c.get("brand", c.get("brand_normalized", ""))
+            literal_product = _literal_product_name(product, registry_brand)
+            literal_candidate = _literal_product_name(raw_candidate_product, registry_brand)
+            literal_identity = bool(literal_product) and literal_product == literal_candidate
+            exact_identity = literal_identity or (bool(product_tokens) and product_tokens == candidate_tokens)
+            # A registry-specific qualifier may not disappear just because
+            # token_set_ratio calls a subset 100 (Daily Probiotics -> Daily
+            # Immune Probiotics). Extra query detail may refine a listed line;
+            # a missing registry qualifier requires an explicit reviewed alias.
+            insufficient_identity = not exact_identity and (
+                not candidate_tokens.issubset(product_tokens)
+                or len(product_tokens & candidate_tokens) < 2
+            )
+            # Query-side named additions also identify distinct SKUs. Use the
+            # raw title, not appended form evidence, and remove only registry
+            # brand tokens so a query sub-brand cannot hide its own edition.
+            registry_brand_tokens = set(normalize_product(registry_brand).split())
+            query_additions = (
+                _sku_identity_tokens(product, registry_brand_tokens)
+                - _sku_identity_tokens(raw_candidate_product, registry_brand_tokens)
+                - query_flavor_tokens
+            )
+            unsupported_edition = bool(query_additions) and c.get("scope") != "product_line"
+            variant_conflict = variant_conflict or insufficient_identity or unsupported_edition
 
             # SKU exact-ish match via token_set_ratio
             ratio = fuzz.token_set_ratio(product_norm, c_product)
             token_delta = abs(len(product_norm.split()) - len(c_product.split()))
+            if not variant_conflict:
+                # Once all registry qualifiers are present and the raw
+                # strength/form/population guards pass, compare the validated
+                # product identity. Embedded registry brand text and extra
+                # source-backed form detail must not dilute that match.
+                ratio = 100.0 if literal_identity else fuzz.token_set_ratio(
+                    " ".join(sorted(product_tokens)), " ".join(sorted(candidate_tokens))
+                )
+                token_delta = abs(len(product_tokens) - len(candidate_tokens))
             # A compatible qualifying record must win over a conflicting row
             # whose strength/form disappeared during normalization. If none
             # qualifies, retain the best fuzzy candidate for review as before.
             sku_rank = (
                 not variant_conflict and ratio >= SKU_RATIO_FLOOR,
-                ratio, 1 if product_norm == c_product else 0, -token_delta,
+                ratio, int(exact_identity), -token_delta,
             )
             if not best_sku or sku_rank > best_sku[0]:
                 best_sku = (sku_rank, ratio, c, variant_conflict)
@@ -757,10 +898,34 @@ def resolve(
             overlap = _keyword_overlap(product_norm, c_product)
             line_rank = (
                 not variant_conflict and overlap >= PRODUCT_LINE_KEYWORD_OVERLAP_FLOOR,
-                overlap, 1 if product_norm == c_product else 0, -token_delta,
+                overlap, int(exact_identity), -token_delta,
             )
             if not best_line or line_rank > best_line[0]:
                 best_line = (line_rank, overlap, c, variant_conflict)
+            if not variant_conflict and (
+                ratio >= SKU_RATIO_FLOOR or overlap >= PRODUCT_LINE_KEYWORD_OVERLAP_FLOOR
+            ):
+                identity = (
+                    candidate_tokens,
+                    frozenset(_sku_dose_tokens(raw_candidate_product)),
+                    frozenset(_sku_form_tokens(raw_candidate_product)),
+                    *_sku_population_tokens(raw_candidate_product),
+                )
+                qualifying_identities.add(identity)
+                qualifying_records.append(c)
+                if exact_identity:
+                    exact_identities.add(identity)
+
+        # Duplicate registry rows for one identity are harmless; distinct
+        # plausible variants require review, not a choice based on row order.
+        if len(exact_identities or qualifying_identities) > 1:
+            # Keep a deterministic representative plus the candidate IDs for
+            # existing review tooling; no candidate receives scoring authority.
+            candidates = sorted(qualifying_records, key=lambda row: (str(row.get("record_id") or ""), str(row.get("product") or "")))
+            resolution = _record_to_resolution(candidates[0], program_canon, "needs_review", 0.0)
+            out.append(replace(resolution, notes="ambiguous registry product variants: " + ", ".join(
+                str(row.get("record_id") or row.get("product")) for row in candidates)))
+            continue
 
         # Apply thresholds
         if best_sku and best_sku[1] >= SKU_RATIO_FLOOR:
@@ -768,7 +933,8 @@ def resolve(
             if variant_conflict:
                 out.append(_record_to_resolution(c, program_canon, "needs_review", ratio / 100.0))
             else:
-                out.append(_record_to_resolution(c, program_canon, "sku", ratio / 100.0))
+                scope = "product_line" if c.get("scope") == "product_line" else "sku"
+                out.append(_record_to_resolution(c, program_canon, scope, ratio / 100.0))
         elif best_sku and best_sku[1] >= SKU_NEEDS_REVIEW_FLOOR:
             _rank, ratio, c, _variant_conflict = best_sku
             out.append(_record_to_resolution(c, program_canon, "needs_review", ratio / 100.0))
@@ -799,6 +965,8 @@ def discover_verified_programs(
     product: str,
     registry: CertRegistry,
     dsld_id: str | None = None,
+    *,
+    label_context: dict[str, Any] | None = None,
 ) -> list[CertResolution]:
     """Discover direct SKU/product-line certs from loaded registries.
 
@@ -810,7 +978,8 @@ def discover_verified_programs(
     """
     discovered: list[CertResolution] = []
     for program in sorted(registry.records_by_program):
-        for resolution in resolve(brand, product, [program], registry, dsld_id=dsld_id):
+        for resolution in resolve(brand, product, [program], registry, dsld_id=dsld_id,
+                                  label_context=label_context):
             if resolution.scope not in {"sku", "product_line"}:
                 continue
             note = "registry_discovered_product_match"

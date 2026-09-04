@@ -27,6 +27,7 @@ from cert_resolver import (  # noqa: E402
     normalize_product,
     normalize_program,
     resolve,
+    _sku_dose_tokens,
 )
 
 
@@ -466,6 +467,351 @@ class TestResolverConservativeThresholds:
         out = resolve("10X ATHLETIC", "10X Pump Non-Stim", ["Informed Sport"], registry)
         assert len(out) == 1
         assert out[0].scope == "sku"
+
+
+class TestSkuStrengthIdentity:
+    @pytest.mark.parametrize("query,registered", [
+        ("Wheybolic Alpha Chocolate Fudge", "Wheybolic Chocolate Fudge"),
+        ("Wheybolic Ripped Chocolate Fudge", "Wheybolic Chocolate Fudge"),
+        ("Amplified 100% Whey Protein Vanilla", "100% Whey"),
+        ("Burp-less Fish Oil 1000 mg Softgels", "Fish Oil 1000 mg Softgels"),
+        ("Super Strength Omega-3 EPA Fish Oil", "Super Fish Oil"),
+        ("Calcium Plus Magnesium", "Calcium Plus"),
+        ("Daily Probiotics Immune", "Daily Probiotics"),
+    ])
+    def test_query_named_addition_cannot_inherit_generic_sku(self, query, registered):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Example", "product": registered, "scope": "sku",
+        }])
+
+        assert not resolve("Example", query, ["NSF Certified"], registry)[0].scores_points()
+
+    @pytest.mark.parametrize("scope", ["sku", "product_line"])
+    def test_explicit_registry_line_authority_is_not_inferred_from_generic_sku(self, scope):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Example", "product": "Daily Probiotics",
+            "scope": scope, "record_id": "EXPLICIT_LINE_FIXTURE",
+        }])
+        result = resolve("Example", "Daily Probiotics Immune", ["NSF Certified"], registry)[0]
+
+        if scope == "product_line":
+            assert result.scope == "product_line"
+            assert result.scores_points()
+        else:
+            assert not result.scores_points()
+
+    def test_query_sub_brand_cannot_hide_a_named_product_addition(self):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Example", "product": "Daily Probiotics", "scope": "sku",
+        }])
+
+        assert not resolve("Example Immune", "Daily Probiotics Immune",
+                           ["NSF Certified"], registry)[0].scores_points()
+
+    @pytest.mark.parametrize("strength", ["50B", "50b", "50 billion", "50 billion CFU", "50billionCFU"])
+    def test_equivalent_billion_spellings_keep_strength_identity(self, strength):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Example",
+            "product": "Immune Probiotics 50B Capsules",
+        }])
+
+        result = resolve("Example", f"Immune Probiotics {strength} Capsules",
+                         ["NSF Certified"], registry)[0]
+
+        assert result.scope == "sku"
+        assert result.scores_points()
+        assert _sku_dose_tokens(strength) == _sku_dose_tokens("50 billion CFU")
+
+    @pytest.mark.parametrize("strength", ["100 Billion", "30 Billion", "100B", "30billionCFU"])
+    def test_different_billion_strength_cannot_inherit_credit(self, strength):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Garden of Life",
+            "product": "Dr. Formulated Probiotics Immune 50B",
+        }])
+        product = f"Probiotics {strength}"
+
+        result = resolve("Garden of Life Dr. Formulated", product,
+                         ["NSF Certified"], registry)[0]
+
+        assert not result.scores_points()
+        assert discover_verified_programs("Garden of Life Dr. Formulated", product, registry) == []
+
+    @pytest.mark.parametrize(
+        ("product", "certified_product"),
+        [
+            ("Probiotics 50B", "Immune Probiotics 50B"),
+            ("Probiotics 50B", "Probiotics Digestive 50B"),
+            ("Probiotics", "Immune Probiotics"),
+            ("Daily Probiotics 50B", "Daily Immune Probiotics 50B"),
+            ("Example Probiotics", "Example Immune Probiotics"),
+            ("Daily Probiotics", "Daily Probiotics 50B"),
+            ("Immune Probiotics 50 billion AFU", "Immune Probiotics 50 billion CFU"),
+            ("Immune Probiotics 50 billion AFU", "Immune Probiotics 50B"),
+        ],
+    )
+    def test_incomplete_or_conflicting_identity_cannot_inherit_credit(self, product, certified_product):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Example", "product": certified_product,
+        }])
+
+        assert not resolve("Example", product, ["NSF Certified"], registry)[0].scores_points()
+        assert discover_verified_programs("Example", product, registry) == []
+
+    @pytest.mark.parametrize("reverse", [False, True])
+    def test_ambiguous_variants_do_not_pick_a_registry_row_by_order(self, reverse):
+        records = [{
+            "program": "NSF Certified", "brand": "Example", "product": product,
+            "record_id": f"TEST_{index}",
+        } for index, product in enumerate([
+            "Daily Probiotics for Women Capsules", "Daily Probiotics for Men and Women Capsules",
+        ])]
+        registry = _make_registry(records=list(reversed(records)) if reverse else records)
+
+        result = resolve("Example", "Daily Probiotics for Women Capsules", ["NSF Certified"], registry)[0]
+
+        assert result.scope == "needs_review"
+        assert not result.scores_points()
+        assert "ambiguous" in (result.notes or "")
+        assert result.record_id == "TEST_0"
+        assert result.matched_product == records[0]["product"]
+        assert "TEST_1" in result.notes
+
+    @pytest.mark.parametrize(
+        ("product", "expected"),
+        [("Vitamin B12 1000 mcg", {"1000mcg"}),
+         ("Vitamin B1 50 mg", {"50mg"}),
+         ("Vitamin D3 5000 IU", {"5000iu"}),
+         ("B-Complex 50", set())],
+    )
+    def test_billion_shorthand_does_not_consume_vitamin_identity(self, product, expected):
+        assert _sku_dose_tokens(product) == expected
+
+    @pytest.mark.parametrize("product", ["Vitamin B12 1000 mcg", "Vitamin D3 5000 IU", "Probiotics 50B"])
+    def test_exact_product_with_strength_keeps_credit(self, product):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Example", "product": product,
+        }])
+
+        assert resolve("Example", product, ["NSF Certified"], registry)[0].scores_points()
+
+    def test_reviewed_product_line_override_keeps_explicit_authority(self):
+        registry = _make_registry(overrides=[{
+            "brand": "Example", "product": "Probiotics 50 Billion",
+            "program": "NSF Certified", "status": "verified", "scope": "product_line",
+            "matched_product": "Daily Probiotics", "record_id": "REVIEWED_LINE",
+        }])
+
+        result = resolve("Example", "Probiotics 50 Billion", ["NSF Certified"], registry)[0]
+
+        assert result.scope == "product_line"
+        assert result.record_id == "REVIEWED_LINE"
+        assert result.matched_product == "Daily Probiotics"
+        assert result.scores_points()
+
+    @pytest.mark.parametrize("query,registered", [
+        ("D3 5000 IU", "Vitamin D3 5000 IU"),
+        ("B12 1000 mcg", "Vitamin B12 1000 mcg"),
+    ])
+    def test_optional_vitamin_descriptor_is_not_a_variant(self, query, registered):
+        registry = _make_registry(records=[{
+            "program": "USP Verified", "brand": "Example", "product": registered,
+        }])
+        assert resolve("Example", query, ["USP Verified"], registry)[0].scores_points()
+
+    @pytest.mark.parametrize(
+        ("dsld_id", "product", "expected_scope"),
+        [("326762", "Probiotics 100 Billion", "needs_review"),
+         ("297668", "Probiotics 30 Billion", "needs_review"),
+         ("326765", "Probiotics Immune 50 Billion", "sku")],
+    )
+    def test_real_garden_of_life_registry_keeps_credit_with_correct_strength(self, dsld_id, product, expected_scope):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Garden of Life",
+            "product": "Dr. Formulated Probiotics Immune 50B", "record_id": "IMMUNE50_FIXTURE",
+        }])
+
+        result = resolve("Garden of Life Dr. Formulated", product,
+                         ["NSF Certified"], registry, dsld_id=dsld_id)[0]
+
+        assert result.scope == expected_scope
+        if expected_scope == "sku":
+            assert result.record_id == "IMMUNE50_FIXTURE"
+        else:
+            assert not result.scores_points()
+            assert not any(match.program == "NSF Certified" for match in discover_verified_programs(
+                "Garden of Life Dr. Formulated", product, registry, dsld_id=dsld_id
+            ))
+
+
+class TestSkuFormContext:
+    @pytest.mark.parametrize("unit", ["Gummie(s)", "Gummy(ies)", "90 Gummy(ies)"])
+    def test_printed_gummy_plural_unit_supplies_explicit_form(self, unit):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Example", "product": "Daily Probiotic",
+            "product_form": "Gummy",
+        }])
+        result = resolve("Example", "Daily Probiotic", ["NSF Certified"], registry,
+                         label_context={"netContents": [{"unit": unit}]})[0]
+
+        assert result.scope == "sku"
+
+    @pytest.mark.parametrize("unit", ["Take 2 Gummy(ies) Daily", "Immune Gummy(ies)", "Capsule(ies)"])
+    def test_gummy_plural_adapter_does_not_admit_instructions_or_other_descriptors(self, unit):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Example", "product": "Daily Probiotic",
+            "product_form": "Gummy",
+        }])
+        assert not resolve("Example", "Daily Probiotic", ["NSF Certified"], registry,
+                           label_context={"netContents": [{"unit": unit}]})[0].scores_points()
+
+    @pytest.mark.parametrize("brand,query,registry_brand,registered,form", [
+        ("GNC TriFlex", "TriFlex", "GNC", "GNC Triflex", "tablet"),
+        ("Garden of Life", "Kids Multivitamin Powder", "Garden of Life, LLC", "Garden of Life Kids Multivitamin Powder", "powder"),
+        ("Kirkland Signature", "Adult Multivitamin Gummies", "Kirkland Signature", "Kirkland Signature Adult Multivitamin Gummies", "gummy"),
+        ("GNC", "Zinc 50 mg", "GNC", "GNC Zinc 50 mg", "tablet"),
+    ])
+    def test_exact_literal_name_survives_removed_core_tokens(self, brand, query, registry_brand, registered, form):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": registry_brand, "product": registered,
+        }])
+        result = resolve(brand, query, ["NSF Certified"], registry,
+                         label_context={"form_factor_canonical": form,
+                                        "netContents": [{"unit": f"Vegetarian {form}(s)"}]})[0]
+
+        assert result.scope == "sku"
+
+    @pytest.mark.parametrize("query,registered", [
+        ("Kids", "Kids Multivitamin"),
+        ("Adult Multivitamin Gummies", "Adult Multivitamin Zero Sugar Gummies"),
+        ("Probiotics", "Immune Probiotics"),
+        ("Zinc 50 mg", "Zinc 100 mg"),
+        ("Kids Multivitamin Gummies", "Kids Multivitamin Tablets"),
+        ("Kids Multivitamin Gummies", "Adult Multivitamin Gummies"),
+        ("", "Multivitamin"),
+        ("Example", "Example"),
+    ])
+    def test_literal_name_guard_never_treats_empty_or_subset_names_as_equal(self, query, registered):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Example", "product": registered,
+        }])
+
+        assert not resolve("Example", query, ["NSF Certified"], registry)[0].scores_points()
+
+    @pytest.mark.parametrize("material", ["Vegetarian", "Vegan"])
+    def test_source_form_detail_does_not_dilute_matching_registry_brand_prefix(self, material):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Garden of Life",
+            "product": "Dr. Formulated Probiotics Immune 50B", "product_form": "Capsule",
+            "record_id": "IMMUNE50_FIXTURE",
+        }])
+        result = resolve(
+            "Garden of Life Dr. Formulated", "Probiotics Immune 50 Billion",
+            ["NSF Certified"], registry,
+            label_context={"form_factor_canonical": "capsule",
+                           "netContents": [{"unit": f"{material} Capsule(s)"}]},
+        )[0]
+
+        assert result.scope == "sku"
+        assert result.record_id == "IMMUNE50_FIXTURE"
+
+    @pytest.mark.parametrize("query,form", [
+        ("Probiotics 100 Billion", "capsule"),
+        ("Probiotics Immune 100 Billion", "capsule"),
+        ("Probiotics 50 Billion", "capsule"),
+        ("Probiotics Immune 50 Billion", "tablet"),
+    ])
+    def test_identity_ranking_cannot_bypass_variant_guards(self, query, form):
+        registry = _make_registry(records=[{
+            "program": "NSF Certified", "brand": "Garden of Life",
+            "product": "Dr. Formulated Probiotics Immune 50B", "product_form": "Capsule",
+        }])
+        result = resolve(
+            "Garden of Life Dr. Formulated", query, ["NSF Certified"], registry,
+            label_context={"form_factor_canonical": form,
+                           "netContents": [{"unit": f"Vegetarian {form}(s)"}]},
+        )[0]
+
+        assert not result.scores_points()
+
+    @pytest.mark.parametrize("registered_form", ["Caplet", "Caplets"])
+    def test_source_caplet_form_matches_singular_and_plural_registry_form(self, registered_form):
+        registry = _make_registry(records=[{
+            "program": "USP Verified", "brand": "Nature Made",
+            "product": f"Nature Made Vitamin C 500 mg with Rose Hips {registered_form}",
+        }])
+        result = resolve(
+            "Nature Made", "Vitamin C 500 mg With Rose Hips", ["USP Verified"], registry,
+            label_context={"form_factor_canonical": "caplet",
+                           "netContents": [{"unit": "Caplet(s)"}]},
+        )[0]
+
+        assert result.scope == "sku"
+
+    def test_caplet_identity_normalization_does_not_equate_tablet_form(self):
+        registry = _make_registry(records=[{
+            "program": "USP Verified", "brand": "Nature Made",
+            "product": "Nature Made Vitamin C 500 mg with Rose Hips Caplets",
+        }])
+        assert not resolve(
+            "Nature Made", "Vitamin C 500 mg With Rose Hips", ["USP Verified"], registry,
+            label_context={"form_factor_canonical": "tablet"},
+        )[0].scores_points()
+
+    @pytest.mark.parametrize("form", ["Capsules", "Tablets", "Softgels", "Gummies", "Powder", "Liquid"])
+    def test_missing_registry_form_needs_review(self, form):
+        registry = _make_registry(records=[{
+            "program": "USP Verified", "brand": "Example", "product": f"Vitamin D3 5000 IU {form}",
+        }])
+
+        result = resolve("Example", "D3 5000 IU", ["USP Verified"], registry)[0]
+
+        assert result.scope == "needs_review"
+        assert not result.scores_points()
+
+    def test_structured_registry_form_also_requires_product_form_evidence(self):
+        registry = _make_registry(records=[{
+            "program": "USP Verified", "brand": "Example", "product": "Vitamin D3 5000 IU",
+            "product_form": "Capsule",
+        }])
+
+        assert not resolve("Example", "D3 5000 IU", ["USP Verified"], registry)[0].scores_points()
+
+    @pytest.mark.parametrize("form_field", ["form_factor_canonical", "form_factor"])
+    def test_explicit_canonical_form_can_complete_registry_identity(self, form_field):
+        registry = _make_registry(records=[{
+            "program": "USP Verified", "brand": "Example", "product": "Vitamin D3 5000 IU Capsules",
+        }])
+
+        result = resolve("Example", "D3 5000 IU", ["USP Verified"], registry,
+                         label_context={form_field: "capsule"})[0]
+
+        assert result.scores_points()
+
+    def test_conflicting_title_and_canonical_form_cannot_match_either_variant(self):
+        registry = _make_registry(records=[{
+            "program": "USP Verified", "brand": "Example", "product": "Vitamin D3 5000 IU Capsules",
+        }])
+
+        assert not resolve("Example", "D3 5000 IU Softgels", ["USP Verified"], registry,
+                           label_context={"form_factor_canonical": "capsule"})[0].scores_points()
+
+    def test_form_descriptor_context_does_not_change_reviewed_override_key_or_id(self):
+        registry = _make_registry(overrides=[{
+            "brand": "Example", "product": "Daily Probiotic", "program": "USP Verified",
+            "scope": "product_line", "status": "verified", "dsld_id": "reviewed-id",
+            "record_id": "REVIEWED_LINE",
+        }])
+        context = {"form_factor_canonical": "capsule", "netContents": [{"unit": "Vegetarian Capsule(s)"}]}
+
+        result = resolve("Example", "Daily Probiotic", ["USP Verified"], registry,
+                         dsld_id="reviewed-id", label_context=context)[0]
+        wrong_id = resolve("Example", "Daily Probiotic", ["USP Verified"], registry,
+                           dsld_id="different-id", label_context=context)[0]
+
+        assert result.record_id == "REVIEWED_LINE"
+        assert result.scope == "product_line"
+        assert result.scores_points()
+        assert not wrong_id.scores_points()
 
 
 class TestResolverScoring:

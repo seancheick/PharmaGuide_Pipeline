@@ -13085,6 +13085,12 @@ class SupplementEnricherV3:
             or product.get("dsldId")
             or product.get("productId")
         )
+        # Registry identity may need the actual dosage form or a printed
+        # net-contents material qualifier. Keep these separate from the title
+        # so reviewed override keys and DSLD identities remain unchanged.
+        label_context = {key: product.get(key) for key in (
+            "form_factor_canonical", "form_factor", "netContents",
+        )}
         resolutions = (
             resolve(
                 brand,
@@ -13092,6 +13098,7 @@ class SupplementEnricherV3:
                 claimed_programs,
                 registry,
                 dsld_id=str(product_dsld_id) if product_dsld_id is not None else None,
+                label_context=label_context,
             )
             if claimed_programs
             else []
@@ -13101,6 +13108,7 @@ class SupplementEnricherV3:
             product_name,
             registry,
             dsld_id=str(product_dsld_id) if product_dsld_id is not None else None,
+            label_context=label_context,
         )
         if discovered_resolutions:
             by_program = {

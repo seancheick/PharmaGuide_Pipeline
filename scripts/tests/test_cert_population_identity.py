@@ -30,6 +30,9 @@ from test_cert_resolver import _make_registry
         ("Essential Women Multivitamin", "Essential Women Multivitamin Ages 50 and Up"),
         ("CoQ10 200 mg Softgels", "CoQ10 100 mg Softgels"),
         ("Vitamin D3 + K2 Softgels", "Vitamin D3 + K2 Gummies"),
+        ("Essential Daily Multivitamin", "Essential Daily Multivitamin Herbal"),
+        ("Essential Daily Multivitamin", "Essential Daily Multivitamin Himalayan"),
+        ("Essential Daily Multivitamin", "Essential Daily Multivitamin 50 and Uplift"),
     ],
 )
 def test_incompatible_variant_never_receives_registry_credit(product, certified_product):
@@ -60,9 +63,6 @@ def test_incompatible_variant_never_receives_registry_credit(product, certified_
         ("Essential Daily Multivitamin for Him 50+", "Essential Daily Multivitamin for Men 50+"),
         ("Essential Kids Multivitamin Ages 2 and Up", "Essential Kids Multivitamin 2+"),
         ("Essential Women Multivitamin Ages 50 and Up", "Essential Women Multivitamin 50+"),
-        ("Essential Daily Multivitamin", "Essential Daily Multivitamin Herbal"),
-        ("Essential Daily Multivitamin", "Essential Daily Multivitamin Himalayan"),
-        ("Essential Daily Multivitamin", "Essential Daily Multivitamin 50 and Uplift"),
     ],
 )
 def test_supported_identity_and_base_line_matches_keep_credit(product, certified_product):
@@ -158,7 +158,8 @@ def test_real_ritual_womens_record_does_not_verify_mens_product():
 def test_real_population_specific_brand_supplies_label_identity():
     registry = CertRegistry.load()
 
-    result = resolve("Nature Made Kids First", "Multi with Omega-3", ["USP Verified"], registry)[0]
+    result = resolve("Nature Made Kids First", "Multi with Omega-3", ["USP Verified"], registry,
+                     label_context={"form_factor_canonical": "gummy"})[0]
 
     assert result.scope == "sku"
     assert result.matched_product == "Nature Made Kids First Multi with Omega-3 Gummies"
@@ -249,11 +250,64 @@ def test_real_zinc_picolinate_matching_strength_remains_discoverable():
     registry = CertRegistry.load()
 
     matches = discover_verified_programs("Thorne", "Zinc Picolinate 30 mg", registry,
-                                         dsld_id="291803")
+                                         dsld_id="291803", label_context={"form_factor_canonical": "capsule"})
 
     assert any(match.program == "NSF Certified" and match.scope == "sku"
                and match.matched_product == "Thorne® Zinc Picolinate 30 mg"
                for match in matches)
+
+
+@pytest.mark.parametrize("source,dsld_id,record_id", [
+    ("output_Garden_of_life_enriched/enriched/enriched_cleaned_batch_2.json", "326765", "NSF_CERTIFIE_90843FED563A"),
+    ("output_Nature_Made_enriched/enriched/enriched_cleaned_batch_1.json", "179567", "USP_VERIFIED_E23C156DFA48"),
+    ("output_Nature_Made_enriched/enriched/enriched_cleaned_batch_1.json", "179682", "USP_VERIFIED_E23C156DFA48"),
+    ("output_GNC_enriched/enriched/enriched_cleaned_batch_4.json", "69623", "CONSUMERLAB_1EF2345DA0FC"),
+    ("output_GNC_enriched/enriched/enriched_cleaned_batch_2.json", "243038", "CONSUMERLAB_B22055A0546B"),
+    ("output_GNC_enriched/enriched/enriched_cleaned_batch_5.json", "77146", "CONSUMERLAB_24CA69C78AC5"),
+    ("output_GNC_enriched/enriched/enriched_cleaned_batch_5.json", "77163", "CONSUMERLAB_24CA69C78AC5"),
+    ("output_Garden_of_life_enriched/enriched/enriched_cleaned_batch_2.json", "327402", "NSF_CERTIFIE_D4BCF7D29051"),
+    ("output_Kirkland_Signature_enriched/enriched/enriched_cleaned_batch_1.json", "239499", "USP_VERIFIED_39DC5AE7CE69"),
+    ("output_Olly/cleaned/cleaned_batch_1.json", "230157", "NSF_CERTIFIE_EAC1D5275C44"),
+    ("output_Olly/cleaned/cleaned_batch_1.json", "273631", "NSF_CERTIFIE_F995BFDC01CE"),
+    ("output_Olly/cleaned/cleaned_batch_1.json", "290548", "NSF_CERTIFIE_3D37AC2815DE"),
+])
+def test_real_label_form_detail_preserves_complete_registry_identity(source, dsld_id, record_id):
+    path = Path(__file__).resolve().parents[1] / "products" / source
+    if not path.is_file():
+        pytest.skip("local enriched corpus not available")
+    product = next(row for row in json.loads(path.read_text()) if str(row.get("id")) == dsld_id)
+
+    matches = discover_verified_programs(
+        product["brandName"], product["fullName"], CertRegistry.load(),
+        dsld_id=dsld_id, label_context=product,
+    )
+
+    assert any(row.record_id == record_id and row.scores_points() for row in matches)
+
+
+@pytest.mark.parametrize("brand_directory,dsld_id,record_id,retained_record", [
+    ("GNC", "210510", "CONSUMERLAB_1EC707BB1D61", "INFORMED_CHO_2A37E46C977C"),
+    ("GNC", "220082", "CONSUMERLAB_1EC707BB1D61", "INFORMED_CHO_E04203686D9C"),
+    ("GNC", "18518", "INFORMED_CHO_FC7B49F1D312", None),
+    ("Nature_Made", "179748", "USP_VERIFIED_14A671BAE9D9", None),
+    ("Nature_Made", "180107", "USP_VERIFIED_14A671BAE9D9", None),
+    ("Nature_Made", "271506", "USP_VERIFIED_14A671BAE9D9", None),
+    ("Nature_Made", "211392", "INFORMED_CHO_C158CCD681EE", None),
+])
+def test_real_named_variant_never_inherits_generic_sku(brand_directory, dsld_id, record_id, retained_record):
+    path = Path(__file__).resolve().parents[1] / f"products/output_{brand_directory}_enriched/enriched/enriched_cleaned_batch_1.json"
+    if not path.is_file():
+        pytest.skip("local enriched corpus not available")
+    product = next(row for row in json.loads(path.read_text()) if str(row.get("id")) == dsld_id)
+
+    matches = discover_verified_programs(
+        product["brandName"], product["fullName"], CertRegistry.load(),
+        dsld_id=dsld_id, label_context=product,
+    )
+
+    assert not any(row.record_id == record_id for row in matches)
+    if retained_record:
+        assert any(row.record_id == retained_record and row.scores_points() for row in matches)
 
 
 @pytest.mark.parametrize(
@@ -283,3 +337,72 @@ def test_named_addition_matching_uses_meaningful_tokens_not_literal_plus(product
     }])
 
     assert resolve("Example", product, ["NSF Certified"], registry)[0].scores_points()
+
+
+def _producer_cert_resolution(product, registry):
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    enricher = SupplementEnricherV3.__new__(SupplementEnricherV3)
+    enricher._cert_registry_cache = registry
+    return enricher._resolve_verified_cert_programs(
+        product, {"programs": [{"name": "USP Verified"}]}, [],
+    )
+
+
+@pytest.mark.parametrize("form_field", ["form_factor_canonical", "form_factor"])
+def test_cert_producer_supplies_actual_product_form(form_field):
+    registry = _make_registry(records=[{
+        "brand": "Example", "product": "Vitamin D3 5000 IU Capsules", "program": "USP Verified",
+    }])
+    product = {"brandName": "Example", "fullName": "D3 5000 IU", form_field: "capsule"}
+
+    assert _producer_cert_resolution(product, registry)[0]["scope"] == "sku"
+
+
+@pytest.mark.parametrize("unit", ["Once Daily Vegetarian Capsule(s)", "Vegetarian Capsules", "30 Vegetarian Capsules"])
+def test_printed_net_contents_form_descriptor_preserves_culturelle_identity(unit):
+    registry = _make_registry(records=[{
+        "brand": "Culturelle", "product": "Culturelle Digestive Daily Probiotic Vegetarian Capsules",
+        "program": "USP Verified",
+    }])
+    product = {"id": "250851", "brandName": "Culturelle", "fullName": "Digestive Daily Probiotic",
+               "form_factor_canonical": "capsule", "netContents": [{"quantity": 10, "unit": unit}]}
+
+    assert _producer_cert_resolution(product, registry)[0]["scope"] == "sku"
+
+
+@pytest.mark.parametrize("unit", ["Capsules", "Vegan Capsules", "No Vegetarian Capsules",
+                                    "Take one Vegetarian Capsule daily", "50B Vegetarian Capsules"])
+def test_net_contents_adapter_cannot_guess_missing_material_qualifier(unit):
+    registry = _make_registry(records=[{
+        "brand": "Culturelle", "product": "Digestive Daily Probiotic Vegetarian Capsules",
+        "program": "USP Verified",
+    }])
+    product = {"brandName": "Culturelle", "fullName": "Digestive Daily Probiotic",
+               "form_factor_canonical": "capsule", "netContents": [{"unit": unit}],
+               "statements": [{"notes": "Vegetarian"}]}
+
+    assert _producer_cert_resolution(product, registry)[0]["scope"] == "needs_review"
+
+
+def test_net_contents_once_daily_does_not_supply_missing_named_daily_variant():
+    registry = _make_registry(records=[{
+        "brand": "Culturelle", "product": "Digestive Daily Probiotic Vegetarian Capsules",
+        "program": "USP Verified",
+    }])
+    product = {"brandName": "Culturelle", "fullName": "Digestive Probiotic",
+               "form_factor_canonical": "capsule",
+               "netContents": [{"unit": "Once Daily Vegetarian Capsule(s)"}]}
+
+    assert _producer_cert_resolution(product, registry)[0]["scope"] == "needs_review"
+
+
+def test_real_culturelle_form_descriptor_supplies_registry_identity_at_producer_boundary():
+    path = Path(__file__).resolve().parents[1] / "products/output_Culturelle_enriched/enriched/enriched_cleaned_batch_1.json"
+    if not path.is_file():
+        pytest.skip("local enriched corpus not available")
+    product = next(row for row in json.loads(path.read_text()) if str(row["id"]) == "250851")
+
+    matches = _producer_cert_resolution(product, CertRegistry.load())
+
+    assert any(row["scope"] == "sku" and row["record_id"] == "USP_VERIFIED_A72E3970D2E5" for row in matches)
