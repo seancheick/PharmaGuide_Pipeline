@@ -40,6 +40,14 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
+REVIEWED_STRAINS = [
+    ("Lactobacillus rhamnosus GG", "STRAIN_LGG"),
+    ("Bifidobacterium lactis BB-12", "STRAIN_LACTIS_BB12"),
+    ("Lactobacillus reuteri DSM 17938", "STRAIN_REUTERI_DSM17938"),
+    ("Bifidobacterium longum BB536", "STRAIN_LONGUM_BB536"),
+    ("Lactobacillus rhamnosus HN001", "STRAIN_RHAMNOSUS_HN001"),
+]
+
 
 def _probiotic_product(
     *,
@@ -85,9 +93,10 @@ def _probiotic_product(
             "has_survivability_coating": survivability,
             "prebiotic_present": prebiotic,
             "clinical_strains": [
-                {"name": f"Strain_{i+1}", "clinical_support_level": "high",
+                {"name": name, "clinical_id": clinical_id,
+                 "clinical_support_level": "high",
                  "adequacy_tier": None, "cfu_per_day": None}
-                for i in range(clinical_strain_count)
+                for name, clinical_id in REVIEWED_STRAINS[:clinical_strain_count]
             ],
         },
         "has_disease_claims": has_disease_claims,
@@ -321,17 +330,17 @@ def test_confidence_high_when_full_per_strain_disclosure() -> None:
     product = _probiotic_product()
     # Replace blends with per-strain CFU disclosure
     product["probiotic_data"]["probiotic_blends"] = [
-        {"name": f"L. species_{i+1}",
-         "strains": [f"L. species_{i+1}"],
+        {"name": name,
+         "strains": [name],
          "cfu_data": {"has_cfu": True, "billion_count": 10}}
-        for i in range(5)
+        for name, _clinical_id in REVIEWED_STRAINS
     ]
     # Also add per-strain cfu_per_day to clinical_strains for adequacy
     product["probiotic_data"]["clinical_strains"] = [
-        {"name": f"L. species_{i+1}",
+        {"name": name, "clinical_id": clinical_id,
          "clinical_support_level": "high",
          "adequacy_tier": "adequate", "cfu_per_day": 1e10}
-        for i in range(5)
+        for name, clinical_id in REVIEWED_STRAINS
     ]
     out = score_product_v4(product)
     conf = out["v4_breakdown"]["confidence"]

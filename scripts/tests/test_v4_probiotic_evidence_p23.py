@@ -48,7 +48,10 @@ def _clinical_strain(
 ) -> dict:
     return {
         "strain": strain,
-        "clinical_id": strain.upper().replace(" ", "_"),
+        "clinical_id": {
+            "Lactobacillus rhamnosus GG": "STRAIN_LGG",
+            "Lactobacillus rhamnosus HN001": "STRAIN_RHAMNOSUS_HN001",
+        }[strain],
         "clinical_support_level": "high",
         "indication_primary": indication,
     }

@@ -18,6 +18,8 @@ import re
 from typing import Any, Dict, List, Set
 
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
+from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+from studied_formulas import assess_studied_formula, independent_clinical_strains
 
 
 PHASE_MARKER = "P2.3_probiotic_evidence"
@@ -112,6 +114,7 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         "phase": PHASE_MARKER,
         "metadata": {
             "phase": PHASE_MARKER,
+            "studied_formula_assessment": assess_studied_formula(product),
             "generic_evidence_score": generic_score,
             "generic_evidence_metadata": generic_payload.get("metadata", {}),
             "native_clinical_strain_evidence_score": round(native_evidence["score"], 4),
@@ -281,7 +284,7 @@ def _relevance(
 
 
 def _best_effect_direction_multiplier(product: Dict[str, Any]) -> float:
-    matches = _safe_list(_safe_dict(product.get("evidence_data")).get("clinical_matches"))
+    matches, _ = resolved_clinical_matches(product)
     if not matches:
         return 1.0
     best = 0.0
@@ -320,12 +323,14 @@ def _strain_indication_categories(product: Dict[str, Any]) -> Set[str]:
             strain.get("clinical_support_level"),
         ]
         categories.update(_categories_from_text(" ".join(str(x or "") for x in text_parts)))
+    formula = assess_studied_formula(product)
+    if formula["status"] == "assessed_studied_formula":
+        categories.update(formula["supported_outcomes"])
     return categories
 
 
 def _clinical_strains(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    pdata = _probiotic_payload(product)
-    return [row for row in _safe_list(pdata.get("clinical_strains")) if isinstance(row, dict)]
+    return independent_clinical_strains(product)
 
 
 def _native_strain_key(strain: Dict[str, Any]) -> str:

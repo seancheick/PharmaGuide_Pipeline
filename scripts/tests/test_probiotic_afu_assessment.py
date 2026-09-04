@@ -118,22 +118,31 @@ def test_missing_cfu_is_not_reported_as_proven_underdose():
     assert "could not be verified" in copy
 
 
-def test_real_seed_pipeline_is_not_scored_but_label_measurements_export(seed_cleaned):
+def test_real_seed_pipeline_scores_verified_formula_without_inventing_cfu(seed_cleaned):
     from scoring_v4.scored_artifact import build_scored_artifact
     from build_final_db import build_detail_blob
+    from audits.evidence_match_reachability import build_reachability_report, recompute_evidence
 
-    enriched, _ = SupplementEnricherV3().enrich_product(deepcopy(seed_cleaned))
+    enricher = SupplementEnricherV3()
+    enriched, _ = enricher.enrich_product(deepcopy(seed_cleaned))
+    assert enriched["evidence_data"]["match_count"] == len(enriched["evidence_data"]["clinical_matches"])
     scored = build_scored_artifact(enriched)
-    assert scored["_v4_scoring_engine_version"] == "4.3.1"
-    assert scored["quality_score_status"] == "not_scored"
-    assert scored["quality_score_v4_100"] is None
-    assert scored["score_unavailable_reason"] == "probiotic_afu_reference_unavailable"
-    assert scored["not_scorable_reason"] == "probiotic_afu_reference_unavailable"
-    assert scored["assessment_readiness"]["dose"]["reason_code"] == "probiotic_afu_reference_unavailable"
+    assert scored["quality_score_status"] == "scored"
+    assert scored["quality_score_v4_100"] is not None
+    assert scored["assessment_readiness"]["dose"]["readiness"] == "complete"
+    assert "total_cfu_not_disclosed" not in scored["_v4_completeness_gate"]["soft_missing"]
+    assert scored["_v4_confidence_detail"]["evidence"]["level"] == "moderate"
+    assert enriched["probiotic_data"]["studied_formula_assessment"]["status"] == "assessed_studied_formula"
     assert enriched["form_factor_canonical"] == "capsule"
     blob = build_detail_blob(enriched, scored)
     assert len(blob["probiotic_detail"]["afu_measurements"]) == 4
     assert blob["probiotic_detail"]["total_strain_count"] == 24
+    assert blob["probiotic_detail"]["total_cfu"] == 0
+    assert blob["probiotic_detail"]["studied_formula_assessment"]["source_pmids"] == ["41599868", "40944126"]
+    report = build_reachability_report(
+        [enriched], recompute=lambda p: recompute_evidence(enricher, p),
+    )
+    assert report["summary"]["candidate_clean"] is True
 
 
 def test_cfu_only_detail_does_not_gain_empty_afu_payload():

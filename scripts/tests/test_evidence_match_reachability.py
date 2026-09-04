@@ -61,6 +61,39 @@ def test_exact_stamped_and_recomputed_match_is_clean():
     assert report["summary"]["newly_reachable_native_match_count"] == 0
     assert report["summary"]["stale_native_match_count"] == 0
     assert report["summary"]["unlinked_recomputed_match_count"] == 0
+
+
+def test_exact_studied_formula_replays_after_probiotic_collection():
+    from types import SimpleNamespace
+    from audits import evidence_match_reachability as audit
+    from studied_formulas import formula_clinical_match
+    from test_studied_formula_assessment import seed_label
+
+    product = seed_label()
+    product["id"] = "formula-reachability"
+    match = formula_clinical_match(product)
+    product["evidence_data"] = {"clinical_matches": [match], "match_count": 1}
+    # The initial ingredient collector runs before the formula's probiotic
+    # measurements exist; the final replay must include that later stage.
+    enricher = SimpleNamespace(_collect_evidence_data=lambda *args: {
+        "clinical_matches": [], "match_count": 0,
+    })
+    report = build_reachability_report([product], recompute=lambda p: audit.recompute_evidence(enricher, p))
+
+    assert report["summary"]["candidate_clean"] is True
+    assert report["recomputed_entry_product_counts"] == {"FORMULA_SEED_DS01": 1}
+
+    product["activeIngredients"][-1]["quantity"] = 200
+    report = build_reachability_report([product], recompute=lambda p: audit.recompute_evidence(enricher, p))
+    assert report["summary"]["candidate_clean"] is False
+    assert report["summary"]["stale_native_match_count"] == 1
+
+
+def test_source_row_link_is_identity_provenance_without_fake_canonical():
+    match = _match("FORMULA_EXAMPLE", canonical=None)
+    match["matched_source_row_refs"] = ["ingredientRows[0].nestedRows[0]"]
+    report = build_reachability_report([_product([match])], recompute=lambda p: {"clinical_matches": [match]})
+    assert report["summary"]["candidate_clean"] is True
     assert report["products"] == []
 
 

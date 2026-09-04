@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.7",
-    "last_updated": "2026-08-27",
-    "total_entries": 201,
+    "schema_version": "5.3.8",
+    "last_updated": "2026-09-03",
+    "total_entries": 202,
     "changelog": [
+      "5.3.8 (2026-09-03): Scope zinc cold-lozenge and AREDS combination research to their actual interventions; add exact DS-01 formula/native-AFU assessment from two content-verified trials. No pillar weights changed.",
       "5.3.7 (2026-08-27): Added the PubChem-verified N-Acetyl-L-Cysteine spelling (CID 12035; InChIKey PWKSKIMOESPYIA-BYPYZUCNSA-N) to the existing NAC evidence identity. No study, claim, or score strength changed.",
       "5.3.6 (2026-08-25): Added content-verified, mixed human systematic-review evidence for myo-/D-chiro-inositol in PCOS and free/base L-arginine for blood pressure and athletic-performance endpoints. Added exact compound/form exclusions so neither record lends evidence to chemically or pharmacologically distinct inositol and arginine forms.",
       "5.3.5 (2026-08-23): Removed the class-wide BRAND_ALBION_MINERALS evidence record. Its magnesium-bisglycinate and ferrous-bisglycinate citations are compound-specific and already live on their canonical ingredient records; they cannot support unrelated Albion salts such as dimagnesium malate.",
@@ -63,6 +64,95 @@
     "flutter_top_level_key": "backed_clinical_studies"
   },
   "backed_clinical_studies": [
+    {
+      "id": "FORMULA_SEED_DS01",
+      "standard_name": "Seed DS-01 Daily Synbiotic",
+      "aliases": [],
+      "category": "digestive_gut",
+      "evidence_level": "product-human",
+      "evidence_scope": "formula_specific",
+      "study_type": "rct_single",
+      "published_studies": ["RCT"],
+      "published_studies_count": 2,
+      "total_enrollment": 350,
+      "score_contribution": "tier_2",
+      "effect_direction": "positive_weak",
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "One six-week symptom-endpoint RCT supports this complete formula for adult bloating, gas and abdominal discomfort. Attrition (350 baseline; 219 at week six), sponsor involvement and lack of independent symptom-endpoint replication limit certainty. A separate small mechanistic trial does not establish additional clinical benefits.",
+      "key_endpoints": ["Self-reported bloating, gas and abdominal discomfort", "Digestive quality of life"],
+      "endpoint_relevance_tags": ["digestive"],
+      "health_goals_supported": ["Digestive Health"],
+      "notes": "Evidence is for the whole 24-strain plus pomegranate formulation, not individual strains, skin, heart health or micronutrient synthesis. 350 is the baseline sample of the symptom trial, not a sum across studies. No CFU conversion is known or used. The 32-participant companion trial reports microbiome/metabolite endpoints; it is not independent replication of symptom efficacy.",
+      "last_updated": "2026-09-03",
+      "applicability": {"scope": "formula_context_only", "reason": "Requires complete formula_contract verification; name matching cannot award credit."},
+      "formula_contract": {
+        "brand": "Seed",
+        "product_name": "DS-01 Daily Synbiotic",
+        "dosage_form": "capsule",
+        "capsules_per_serving": 2,
+        "daily_servings": 1,
+        "daily_afu": 53600000000,
+        "blend_composition": [
+          {"strain_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "daily_afu": 37000000000},
+          {"strain_indices": [16, 17], "daily_afu": 8050000000},
+          {"strain_indices": [18, 19, 20, 21], "daily_afu": 3300000000},
+          {"strain_indices": [22, 23], "daily_afu": 5250000000}
+        ],
+        "prebiotic_canonical_id": "pomegranate",
+        "prebiotic_brand_token": "MAPP",
+        "prebiotic_mass_mg": 400,
+        "prebiotic_identity": "Indian pomegranate fruit MAPP, greater than 40% polyphenolic bioactives",
+        "strain_names": [
+          ["B. longum SD-BB536-JP", "Bifidobacterium longum SD-BB536-JP"],
+          ["B. breve SD-BR3-IT", "Bifidobacterium breve SD-BR3-IT"],
+          ["L. plantarum SD-LP1-IT", "Lactiplantibacillus plantarum SD-LP1-IT"],
+          ["L. rhamnosus SD-LR6-IT", "Lacticaseibacillus rhamnosus SD-LR6-IT"],
+          ["L. rhamnosus HRVD113-US", "Lacticaseibacillus rhamnosus HRVD113-US"],
+          ["B. infantis SD-M63-JP", "Bifidobacterium infantis SD-M63-JP"],
+          ["B. lactis SD-BS5-IT", "Bifidobacterium lactis SD-BS5-IT"],
+          ["B. lactis HRVD524-US", "Bifidobacterium lactis HRVD524-US"],
+          ["L. crispatus SD-LCR01-IT", "Lactobacillus crispatus SD-LCR01-IT"],
+          ["L. casei HRVD300-US", "Lacticaseibacillus casei HRVD300-US"],
+          ["B. breve HRVD521-US", "Bifidobacterium breve HRVD521-US"],
+          ["B. longum HRVD90b-US", "Bifidobacterium longum HRVD90b-US"],
+          ["B. lactis SD-150-BE", "Bifidobacterium lactis SD150-BE", "Bifidobacterium lactis SD-150-BE"],
+          ["L. fermentum SD-LF8-IT", "Limosilactobacillus fermentum SD-LF8-IT"],
+          ["L. rhamnosus SD-GG-BE", "Lacticaseibacillus rhamnosus SD-GG-BE"],
+          ["L. reuteri SD-RD830-FR", "Limosilactobacillus reuteri RD830-FR", "Limosilactobacillus reuteri SD-RD830-FR"],
+          ["B. adolescentis SD-BA5-IT", "Bifidobacterium adolescentis SD-BA5-IT"],
+          ["L. reuteri SD-LRE2-IT", "Limosilactobacillus reuteri SD-LRE2-IT"],
+          ["L. salivarius SD-LS1-IT", "Ligilactobacillus salivarius SD-LS1-IT"],
+          ["B. lactis SD-CECT8145-SP", "Bifidobacterium lactis SD-CECT8145-SP"],
+          ["B. longum SD-CECT7347-SP", "Bifidobacterium longum SD-CECT7347-SP"],
+          ["L. casei SD-CECT9104-SP", "Lacticaseibacillus casei SD-CECT9104-SP"],
+          ["L. plantarum SD-LPLDL-UK", "Lactiplantibacillus plantarum SD-LPLDL-UK"],
+          ["B. lactis SD-MB2409-IT", "Bifidobacterium lactis SD-MB2409-IT"]
+        ],
+        "identity_source_url": "https://seed.com/approach",
+        "dose_source_url": "https://help.seed.com/en-US/articles/ds-01-daily-synbiotic-295557",
+        "delivery_basis": "Exact named product with complete matching composition; ViaCap documented in trial and manufacturer product reference, not inferred from capsule form alone.",
+        "supported_outcomes": ["digestive"],
+        "studied_population": "Adults with self-reported bloating, gas or abdominal discomfort; not pregnancy, pediatric or disease-treatment evidence.",
+        "source_pmids": ["41599868", "40944126"],
+        "reviewed_at": "2026-09-03"
+      },
+      "references_structured": [
+        {
+          "pmid": "41599868",
+          "title": "A Randomized, Placebo-Controlled Trial Evaluating Multi-Species Synbiotic Supplementation for Bloating, Gas, and Abdominal Discomfort.",
+          "year": 2026,
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41599868/",
+          "supports_claims": ["Complete DS-01 formula: 53.6 billion AFU plus 400 mg pomegranate daily; six-week adult digestive symptom and quality-of-life outcomes."]
+        },
+        {
+          "pmid": "40944126",
+          "title": "Multi-Species Synbiotic Supplementation Enhances Gut Microbial Diversity, Increases Urolithin A and Butyrate Production, and Reduces Inflammation in Healthy Adults: A Randomized, Placebo-Controlled Trial.",
+          "year": 2025,
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40944126/",
+          "supports_claims": ["Same complete formula and native AFU dose; small 91-day mechanistic study, not independent proof of individual-strain or disease-treatment efficacy."]
+        }
+      ]
+    },
     {
       "id": "BRAND_MERIVA",
       "standard_name": "Meriva Curcumin Phytosome",
@@ -215,6 +305,17 @@
     {
       "id": "BRAND_KSM66",
       "standard_name": "KSM-66",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": ["ksm-66", "ksm66"],
+        "supported_outcomes": ["stress_mood", "sleep"],
+        "studied_population": "Adults with elevated perceived stress, studied for eight weeks or 60 days",
+        "reviewed_at": "2026-09-03",
+        "source_pmids": ["23439798", "32021735"]
+      },
+      "min_clinical_dose": 250,
+      "max_studied_clinical_dose": 600,
+      "dose_unit": "mg",
       "aliases": [
         "ksm66",
         "ixoreal ashwagandha",
@@ -231,18 +332,17 @@
       "score_contribution": "tier_1",
       "key_endpoints": [
         "cortisol ↓",
-        "strength ↑",
-        "libido ↑",
-        "stress ↓"
+        "perceived stress ↓",
+        "self-reported sleep quality ↑",
+        "anxiety scores ↓ at 600 mg/day"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
-        "Increase Energy",
-        "Focus & Mental Clarity"
+        "Sleep Quality"
       ],
-      "notes": "High-concentration full-spectrum ashwagandha root extract with explicit randomized evidence for stress reduction and supportive human data for sleep and quality-of-life outcomes.",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Chandrasekhar et al. (2012, PMID 23439798) randomized chronically stressed adults and reported lower stress scores and serum cortisol with a high-concentration full-spectrum root extract commonly mapped to KSM-66. Salve et al. (2020, PMID 32021735) reported additional randomized evidence for stress, anxiety, and sleep-quality improvement with standardized ashwagandha root extract.",
+      "notes": "Both retained trials explicitly used KSM-66 ashwagandha root extract supplied by Ixoreal. Evidence concerns short-term stress-related outcomes in stressed adults, with sleep-quality findings in the eight-week trial. Plain root powder and other extracts cannot borrow this branded exposure or its studied-dose assessment. Anxiety improvement at 250 mg/day was not significant in the dose-ranging trial.",
+      "last_updated": "2026-09-03",
+      "notable_studies": "Chandrasekhar et al. (2012, PMID 23439798) randomized 64 chronically stressed adults to 300 mg KSM-66 twice daily or placebo for 60 days. Salve et al. (2019, PMID 32021735) randomized 60 stressed adults to 250 mg/day, 600 mg/day or placebo for eight weeks; 58 completed. The two trials total 124 randomized participants.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -283,19 +383,14 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "external_ids": {
-        "unii": "V038D626IF"
-      },
       "effect_direction": "positive_strong",
       "primary_outcome": "Reduce Stress/Anxiety",
-      "total_enrollment": 200,
-      "registry_completed_trials_count": 7,
+      "total_enrollment": 124,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Reduce Stress/Anxiety; published_tags=RCT,brand; registry_completed_trials_count=7; total_enrollment=200; endpoint_tags=stress_mood,sleep,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Retained positive_strong classification for the two cited KSM-66 root-extract trials' short-term perceived-stress and cortisol findings, with sleep-quality findings in the dose-ranging trial. Applicability is extract-specific; the studied 250-600 mg/day dose envelope is assessed separately, and the 250 mg/day anxiety result was not significant.",
       "endpoint_relevance_tags": [
         "stress_mood",
-        "sleep",
-        "muscle_recovery"
+        "sleep"
       ]
     },
     {
@@ -7099,7 +7194,19 @@
     },
     {
       "id": "INGR_ZINC_PICOLINATE",
-      "standard_name": "Zinc Picolinate",
+      "standard_name": "Zinc acetate/gluconate lozenges",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": ["zinc acetate", "zinc gluconate"],
+        "dosage_forms": ["lozenge", "lozenges"],
+        "minimum_daily_dose": 80,
+        "maximum_daily_dose": 207,
+        "dose_unit": "mg",
+        "studied_population": "Adults with an acute common cold; early short-term treatment, not prevention",
+        "supported_outcomes": ["common_cold_duration"],
+        "reviewed_at": "2026-09-03",
+        "source_pmids": ["25888289", "27378206", "28515951"]
+      },
       "aliases": [
         "zinc"
       ],
@@ -7112,17 +7219,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "cold duration ↓ (33-37% reduction)",
-        "immune function ↑",
-        "upper respiratory symptoms ↓"
+        "Shorter common-cold duration with studied acetate/gluconate lozenges"
       ],
-      "health_goals_supported": [
-        "Immune Support"
-      ],
-      "notes": "Human evidence supports zinc most clearly for common-cold treatment when delivered as high-dose lozenges started early. That evidence applies mainly to acetate or gluconate lozenges and should not be over-attributed to zinc picolinate specifically.",
-      "notable_studies": "High-dose zinc-lozenge meta-analyses include PMID 25888289, PMID 27378206, and PMID 28515951, which reported shorter cold duration when treatment began within 24 hours. These studies were based on acetate or gluconate lozenges rather than zinc picolinate-specific trials.",
+      "health_goals_supported": ["Immune Support"],
+      "notes": "This record concerns early, short-term treatment of acute common colds in adults using zinc acetate or gluconate lozenges; it does not establish prevention or efficacy of other zinc forms or swallowed capsules. The 80-207 mg/day applicability bounds are a conservative envelope of observed trial doses, not an intake recommendation. Safety and upper-limit assessment remains separate.",
+      "notable_studies": "PMID 25888289 assessed acetate lozenges at 80-92 mg/day and discussed initiation within 24 hours for less than two weeks. PMID 27378206 pooled 199 participants from three acetate-lozenge trials. PMID 28515951 pooled seven acetate/gluconate-lozenge trials with 575 participants; observed dose groups were 80-92 and 192-207 mg/day. These overlapping reviews must not be summed as independent participant cohorts.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-09-03",
       "references_structured": [
         {
           "type": "pubmed",
@@ -7202,19 +7305,13 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "external_ids": {
-        "unii": "J41CSQ7QDS"
-      },
       "effect_direction": "positive_strong",
       "primary_outcome": "Immune Support",
-      "total_enrollment": 600,
-      "registry_completed_trials_count": 32,
+      "total_enrollment": 575,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=32; total_enrollment=600; endpoint_tags=cardiovascular,glycemic_control,digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Positive pooled cold-duration findings apply only within the reviewed acetate/gluconate lozenge scope, dose envelope and acute-treatment context. PMID 28515951 supplies the 575-participant denominator; overlapping reviews do not add independent enrollment. This classification does not establish generic preventive benefit or efficacy for other zinc preparations.",
       "endpoint_relevance_tags": [
-        "cardiovascular",
-        "glycemic_control",
-        "digestive_health"
+        "common_cold_duration"
       ]
     },
     {
@@ -16563,6 +16660,12 @@
     {
       "id": "INGR_VITAMIN_A_BETA_CAROTENE",
       "standard_name": "Vitamin A / Beta-Carotene",
+      "applicability": {
+        "scope": "formula_context_only",
+        "reason": "AREDS/AREDS2 combination evidence in selected AMD populations does not establish independent efficacy of a vitamin A or beta-carotene ingredient. Nutritional adequacy remains a separate DRI-authority assessment.",
+        "reviewed_at": "2026-09-03",
+        "source_pmids": ["23644932", "35653117", "37702300"]
+      },
       "aliases": [
         "vitamin a",
         "beta carotene",
@@ -16570,25 +16673,22 @@
         "provitamin a"
       ],
       "category": "eye_health",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "systematic_review"
       ],
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "visual function support ↑",
-        "immune function support ↑",
-        "oxidative stress support ↑"
+        "AMD progression with studied antioxidant/mineral combinations; contextual reference only"
       ],
       "health_goals_supported": [
-        "Eye & Vision",
-        "Immune Support"
+        "Eye & Vision"
       ],
-      "notes": "Human evidence for vitamin A and beta-carotene supplementation is context-specific. The strongest supplement-level evidence is in targeted eye-health formulations for selected AMD populations and in correction of deficiency states, not blanket supplementation for the general population.",
-      "notable_studies": "AREDS2 is indexed as PMID 23644932, with longer-term follow-up at PMID 35653117. Cochrane review PMID 37702300 supports antioxidant-vitamin/mineral formulas for selected AMD populations. NIH ODS also notes that provitamin A carotenoids such as beta-carotene do not share the teratogenic upper-limit concerns of preformed vitamin A.",
-      "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "notes": "The retained citations concern AREDS/AREDS2 or antioxidant/mineral combination formulations in selected AMD populations. They do not establish independent efficacy of vitamin A, beta-carotene or a retinyl-palmitate multivitamin ingredient. This context-only record cannot grant individual-ingredient clinical credit; nutritional adequacy remains a separate assessment.",
+      "notable_studies": "PMID 23644932 tested additions and modifications to an AREDS background formulation, not standalone vitamin A. PMID 35653117 followed the AREDS2 cohort and supports lutein/zeaxanthin as a replacement for beta-carotene in that formulation context. Cochrane review PMID 37702300 found moderate-certainty evidence that antioxidant multivitamin/mineral formulations probably slow progression to late AMD. These findings are not transferable to isolated vitamin A or beta-carotene supplementation.",
+      "study_type": "reference",
+      "last_updated": "2026-09-03",
       "references_structured": [
         {
           "type": "pubmed",
@@ -16709,17 +16809,12 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "external_ids": {
-        "unii": "81G40H8B0T"
-      },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Eye & Vision",
-      "total_enrollment": 29133,
-      "registry_completed_trials_count": 46,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Eye & Vision; published_tags=RCT,systematic_review; registry_completed_trials_count=46; total_enrollment=29133; endpoint_tags=stress_mood; notes/citations contain no automated downgrade signals.",
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Context-only record: AREDS/AREDS2 and antioxidant/mineral evidence concerns combination formulations and selected AMD populations, with different findings by formulation and comparison. Outcomes cannot be attributed to standalone vitamin A or beta-carotene; no individual-ingredient clinical credit is permitted.",
       "endpoint_relevance_tags": [
-        "stress_mood"
+        "amd_progression_combination_context"
       ]
     },
     {

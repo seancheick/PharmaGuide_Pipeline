@@ -75,6 +75,7 @@ def _probiotic_product(*, verified_cert_programs=None, gmp=None, has_coa=False,
             ],
             "clinical_strains": [
                 {"name": "L. rhamnosus HN001",
+                 "clinical_id": "STRAIN_RHAMNOSUS_HN001",
                  "clinical_support_level": "high",
                  "adequacy_tier": None, "cfu_per_day": None}
             ],
@@ -251,6 +252,16 @@ def test_probiotic_trust_independent_of_formulation_dose_evidence() -> None:
     high_form_no_certs["probiotic_data"]["total_billion_count"] = 50.0
     high_form_no_certs["probiotic_data"]["total_strain_count"] = 10
     high_form_no_certs["probiotic_data"]["clinical_strain_count"] = 5
+    high_form_no_certs["probiotic_data"]["clinical_strains"] = [
+        {"name": name, "clinical_id": clinical_id}
+        for name, clinical_id in [
+            ("Lactobacillus rhamnosus GG", "STRAIN_LGG"),
+            ("Bifidobacterium lactis BB-12", "STRAIN_LACTIS_BB12"),
+            ("Lactobacillus reuteri DSM 17938", "STRAIN_REUTERI_DSM17938"),
+            ("Bifidobacterium longum BB536", "STRAIN_LONGUM_BB536"),
+            ("Lactobacillus rhamnosus HN001", "STRAIN_RHAMNOSUS_HN001"),
+        ]
+    ]
     high_form_no_certs["probiotic_data"]["prebiotic_present"] = True
     high_form_no_certs["probiotic_data"]["has_survivability_coating"] = True
 

@@ -755,11 +755,14 @@ def test_verification_preserves_present_absent_and_not_evaluated_states() -> Non
     assert missing["readiness"] == "incomplete"
 
 
-def test_probiotic_native_clinical_strain_and_typed_dose_are_material_assessments() -> None:
+@pytest.mark.parametrize("has_label_owner", [True, False])
+def test_probiotic_native_clinical_strain_requires_label_owner_for_material_assessment(has_label_owner) -> None:
     from assessment_readiness import evaluate_assessment_readiness
 
-    row = _row("Probiotic Blend", "probiotic_blend", quantity=50, unit="billion CFU")
+    row = _row("Lactobacillus rhamnosus GG", "lactobacillus_rhamnosus", quantity=50, unit="billion CFU")
     product = _product(row, title="Daily Probiotic")
+    if has_label_owner:
+        product["activeIngredients"] = [row]
     product["supplement_taxonomy"] = {"primary_type": "probiotic"}
     product["probiotic_data"] = {
         "is_probiotic_product": True,
@@ -767,8 +770,8 @@ def test_probiotic_native_clinical_strain_and_typed_dose_are_material_assessment
         "total_strain_count": 1,
         "clinical_strains": [
             {
-                "clinical_id": "fixture-clinical-strain",
-                "name": "Fixture strain",
+                "clinical_id": "STRAIN_LGG",
+                "strain": "Lactobacillus rhamnosus GG",
                 "clinical_support_level": "high",
             }
         ],
@@ -777,9 +780,12 @@ def test_probiotic_native_clinical_strain_and_typed_dose_are_material_assessment
 
     assessment = result["evidence"]["ingredient_assessments"][0]
     assert assessment["material"] is True
-    assert assessment["state"] == "evaluated_supported"
+    assert assessment["state"] == (
+        "evaluated_supported" if has_label_owner else "not_yet_evaluated"
+    )
     assert result["dose"]["assessment_source"] == "typed_dose_assessments"
-    assert result["is_live_ready"] is True
+    if has_label_owner:
+        assert result["is_live_ready"] is True
 
 
 def test_completeness_gate_does_not_block_on_shadow_evidence() -> None:

@@ -6529,22 +6529,25 @@ def build_detail_blob(
     # ``adequacy_tier`` + ``clinical_support_level`` onto the ingredient
     # dict so ``_compute_display_badge`` wakes up naturally.
     probiotic_strain_adequacy: Dict[str, Dict[str, Any]] = {}
+    probiotic_adequacy_by_ref: Dict[str, Dict[str, Any]] = {}
+    from studied_formulas import clinical_strain_matches_source_row
+    exported_clinical_strains = []
     for fc in safe_list(safe_dict(enriched.get("probiotic_data")).get("clinical_strains")):
         if not isinstance(fc, dict):
             continue
+        if "source_row_ref" in fc and not clinical_strain_matches_source_row(
+            enriched, fc, {"raw_source_path": fc["source_row_ref"]}
+        ):
+            continue
+        exported_clinical_strains.append(fc)
         strain_name = safe_str(fc.get("strain"))
         if not strain_name:
             continue
-        probiotic_strain_adequacy[strain_name.strip().lower()] = {
-            "adequacy_tier": fc.get("adequacy_tier"),
-            "clinical_support_level": fc.get("clinical_support_level"),
-            "cfu_per_day": fc.get("cfu_per_day"),
-            "clinical_id": fc.get("clinical_id"),
-            # Sprint E1.3.2.b — hybrid confidence descriptors.
-            "cfu_confidence": fc.get("cfu_confidence"),
-            "dose_basis": fc.get("dose_basis"),
-            "ui_copy_hint": fc.get("ui_copy_hint"),
-        }
+        source_ref = safe_str(fc.get("source_row_ref"))
+        if source_ref:
+            probiotic_adequacy_by_ref[source_ref] = fc
+        else:
+            probiotic_strain_adequacy[strain_name.strip().lower()] = fc
 
     # Scorer-owned low-dose identities drive every consumer projection.  Do
     # not rely on enrichment rows to duplicate this scoring result.
@@ -6600,8 +6603,14 @@ def build_detail_blob(
         )
 
         qty = ing.get("quantity")
-        # Sprint E1.3.2 — look up adequacy by strain name (case-insensitive).
-        _strain_adequacy = probiotic_strain_adequacy.get(name.strip().lower()) or {}
+        # Source ownership disambiguates repeated marketing names such as HOWARU.
+        source_ref = safe_str(ing.get("raw_source_path"))
+        _strain_adequacy = next((
+            candidate for candidate in (
+                probiotic_adequacy_by_ref.get(source_ref),
+                probiotic_strain_adequacy.get(name.strip().lower()),
+            ) if candidate and clinical_strain_matches_source_row(enriched, candidate, ing)
+        ), {})
         # Canonical form + dose contract for Flutter. Single source of
         # truth: pipeline emits explicit states, Flutter renders them.
         form_contract = _compute_form_contract(ing, m)
@@ -7795,8 +7804,8 @@ def build_detail_blob(
             # is_postbiotic / is_blocked / postbiotic_note / block_reason flags
             # added 2026-05-01. Flutter can render strain-level postbiotic /
             # rejected badges from these fields.
-            "clinical_strains": safe_list(probiotic_data.get("clinical_strains")),
-            "clinical_strain_count": probiotic_data.get("clinical_strain_count", 0),
+            "clinical_strains": exported_clinical_strains,
+            "clinical_strain_count": len(exported_clinical_strains),
             "prebiotic_present": probiotic_data.get("prebiotic_present", False),
             "prebiotic_name": safe_str(probiotic_data.get("prebiotic_name")),
             "has_survivability_coating": probiotic_data.get("has_survivability_coating", False),
@@ -7815,6 +7824,8 @@ def build_detail_blob(
             blob["probiotic_detail"]["afu_measurements"] = safe_list(
                 probiotic_data["afu_measurements"]
             )
+            from studied_formulas import assess_studied_formula
+            blob["probiotic_detail"]["studied_formula_assessment"] = assess_studied_formula(enriched)
 
     # Synergy cluster detail — matched clusters with ingredient doses
     formulation_data = safe_dict(enriched.get("formulation_data"))

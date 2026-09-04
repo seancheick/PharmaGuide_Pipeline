@@ -180,6 +180,11 @@ def _evidence_confidence(
         drivers.append("sub_clinical_dose_detected")
         if level == "high":
             level = "moderate"
+    if any((m.get("applicability_assessment") or {}).get("status") == "assessed_studied_formula" for m in clinical_matches):
+        level = _min_level(level, "moderate")
+        drivers.append("formula_evidence_independent_confirmation_limited")
+    if metadata.get("recovered_matches"):
+        drivers.append("v4_evidence_recovered_from_contract")
     return level, drivers
 
 
@@ -246,7 +251,7 @@ def _label_completeness_confidence(
     dose_reason = dose_meta.get("window_proxy_reason")
     if dose_reason in {"aggregate_cfu_not_per_strain",
                        "no_strain_data",
-                       "per_strain_cfu_missing"}:
+                       "per_strain_cfu_missing", "formula_dose_not_individual_strain_doses"}:
         level = _min_level(level, "moderate")
         drivers.append("per_strain_cfu_not_disclosed")
 
@@ -497,11 +502,12 @@ def _supp_type_driver(product: Any) -> List[str]:
 
 
 def _clinical_matches(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    evidence = _safe_dict(product.get("evidence_data"))
-    matches = _safe_list(evidence.get("clinical_matches"))
-    if not matches:
-        matches = _safe_list(_safe_dict(product.get("clinical_evidence")).get("clinical_matches"))
-    return [m for m in matches if isinstance(m, dict)]
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    # Legacy alias is accepted only at this boundary; applicability stays the
+    # same as scoring/readiness, never a second raw-list confidence shortcut.
+    if not product.get("evidence_data") and product.get("clinical_evidence"):
+        product = {**product, "evidence_data": product["clinical_evidence"]}
+    return resolved_clinical_matches(product)[0]
 
 
 def _verified_cert_entries(product: Dict[str, Any]) -> List[Dict[str, Any]]:

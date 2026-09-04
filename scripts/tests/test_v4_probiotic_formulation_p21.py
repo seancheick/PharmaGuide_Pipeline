@@ -66,8 +66,14 @@ def _product(
             "total_strain_count": strain_count,
             "clinical_strain_count": clinical_strain_count,
             "clinical_strains": [
-                {"strain": f"Clinical {i}", "clinical_id": f"STRAIN_{i}"}
-                for i in range(1, clinical_strain_count + 1)
+                {"strain": name, "clinical_id": clinical_id}
+                for name, clinical_id in [
+                    ("Lactobacillus rhamnosus GG", "STRAIN_LGG"),
+                    ("Bifidobacterium lactis BB-12", "STRAIN_LACTIS_BB12"),
+                    ("Lactobacillus reuteri DSM 17938", "STRAIN_REUTERI_DSM17938"),
+                    ("Bifidobacterium longum BB536", "STRAIN_LONGUM_BB536"),
+                    ("Lactobacillus rhamnosus HN001", "STRAIN_RHAMNOSUS_HN001"),
+                ][:clinical_strain_count]
             ],
             "prebiotic_present": prebiotic_present,
             "prebiotic_name": "Inulin" if prebiotic_present else "",

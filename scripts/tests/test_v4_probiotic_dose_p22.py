@@ -22,10 +22,35 @@ def _strain(
     is_inactivated: bool = False,
     is_postbiotic: bool = False,
 ) -> dict:
+    # Arithmetic fixtures carry an explicit reviewed enrichment identity.
+    # Label abbreviations below are not a production strain matcher.
+    clinical_ids = {
+        "LGG": "STRAIN_LGG",
+        "Lactobacillus rhamnosus GG": "STRAIN_LGG",
+        "Lactobacillus rhamnosus": "STRAIN_LGG",
+        "L. rhamnosus": "STRAIN_LGG",
+        "Bifidobacterium lactis BB-12": "STRAIN_LACTIS_BB12",
+        "Bifidobacterium lactis": "STRAIN_LACTIS_BB12",
+        "B. lactis": "STRAIN_LACTIS_BB12",
+        "Lactobacillus acidophilus NCFM": "STRAIN_ACIDOPHILUS_NCFM",
+        "Lactobacillus acidophilus": "STRAIN_ACIDOPHILUS_NCFM",
+        "L. acidophilus": "STRAIN_ACIDOPHILUS_NCFM",
+        "Lactobacillus plantarum": "STRAIN_PLANTARUM_299V",
+        "Lactobacillus plantarum 299v": "STRAIN_PLANTARUM_299V",
+        "L. plantarum": "STRAIN_PLANTARUM_299V",
+        "Lactobacillus reuteri DSM 17938": "STRAIN_REUTERI_DSM17938",
+        "Lactobacillus reuteri": "STRAIN_REUTERI_DSM17938",
+        "L. reuteri": "STRAIN_REUTERI_DSM17938",
+        "Bifidobacterium longum BB536": "STRAIN_LONGUM_BB536",
+        "Bifidobacterium longum": "STRAIN_LONGUM_BB536",
+        "B. longum": "STRAIN_LONGUM_BB536",
+        "Bifidobacterium lactis HN019": "STRAIN_LACTIS_HN019",
+        "Streptococcus salivarius K12": "STRAIN_K12",
+    }
     return {
         "strain": name,
         "name": name,
-        "clinical_id": name.upper().replace(" ", "_"),
+        "clinical_id": clinical_ids.get(name),
         "cfu_per_day": cfu_per_day,
         "adequacy_tier": adequacy_tier,
         "clinical_support_level": support,
@@ -129,9 +154,9 @@ def test_aggregate_blend_cfu_gets_capped_adequacy_proxy_not_disclosure_credit() 
         "cfu_data": {"has_cfu": True, "billion_count": 50.0, "cfu_count": 50_000_000_000},
     }
     clinical_strains = [
-        _strain("Lactobacillus acidophilus", cfu_per_day=None, adequacy_tier=None, support="high"),
-        _strain("Bifidobacterium lactis", cfu_per_day=None, adequacy_tier=None, support="high"),
-        _strain("Lactobacillus rhamnosus", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Lactobacillus acidophilus NCFM", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Bifidobacterium lactis BB-12", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Lactobacillus rhamnosus GG", cfu_per_day=None, adequacy_tier=None, support="high"),
     ]
 
     payload = score_dose(
@@ -157,9 +182,9 @@ def test_low_aggregate_cfu_gets_small_numeric_total_cfu_floor() -> None:
         "cfu_data": {"has_cfu": True, "billion_count": 0.9, "cfu_count": 900_000_000},
     }
     clinical_strains = [
-        _strain("Lactobacillus acidophilus", cfu_per_day=None, adequacy_tier=None, support="high"),
-        _strain("Bifidobacterium lactis", cfu_per_day=None, adequacy_tier=None, support="high"),
-        _strain("Lactobacillus rhamnosus", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Lactobacillus acidophilus NCFM", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Bifidobacterium lactis BB-12", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Lactobacillus rhamnosus GG", cfu_per_day=None, adequacy_tier=None, support="high"),
     ]
 
     product = _product(total_strain_count=3, blends=[aggregate_blend], clinical_strains=clinical_strains)
@@ -191,12 +216,12 @@ def test_named_strain_low_aggregate_cfu_gets_modest_total_cfu_floor() -> None:
         "cfu_data": {"has_cfu": True, "billion_count": 2.0, "cfu_count": 2_000_000_000},
     }
     clinical_strains = [
-        _strain("Lactobacillus acidophilus", cfu_per_day=None, adequacy_tier=None, support="high"),
-        _strain("Bifidobacterium lactis", cfu_per_day=None, adequacy_tier=None, support="high"),
-        _strain("Lactobacillus rhamnosus", cfu_per_day=None, adequacy_tier=None, support="moderate"),
-        _strain("Lactobacillus plantarum", cfu_per_day=None, adequacy_tier=None, support="moderate"),
-        _strain("Bifidobacterium longum", cfu_per_day=None, adequacy_tier=None, support="weak"),
-        _strain("Lactobacillus reuteri", cfu_per_day=None, adequacy_tier=None, support="weak"),
+        _strain("Lactobacillus acidophilus NCFM", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Bifidobacterium lactis BB-12", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Lactobacillus rhamnosus GG", cfu_per_day=None, adequacy_tier=None, support="moderate"),
+        _strain("Lactobacillus plantarum 299v", cfu_per_day=None, adequacy_tier=None, support="moderate"),
+        _strain("Bifidobacterium longum BB536", cfu_per_day=None, adequacy_tier=None, support="weak"),
+        _strain("Lactobacillus reuteri DSM 17938", cfu_per_day=None, adequacy_tier=None, support="weak"),
     ]
 
     product = _product(total_strain_count=6, blends=[aggregate_blend], clinical_strains=clinical_strains)
@@ -329,14 +354,14 @@ def test_incomplete_per_strain_cfu_still_uses_aggregate_cfu_adequacy_proxy() -> 
         },
     ]
     clinical_strains = [
-        _strain("B. bifidum", cfu_per_day=None, adequacy_tier=None, support="high"),
-        _strain("B. lactis", cfu_per_day=None, adequacy_tier=None, support="high"),
-        _strain("L. rhamnosus", cfu_per_day=None, adequacy_tier=None, support="moderate"),
-        _strain("L. plantarum", cfu_per_day=None, adequacy_tier=None, support="moderate"),
-        _strain("L. acidophilus", cfu_per_day=None, adequacy_tier=None, support="high"),
-        _strain("L. salivarius", cfu_per_day=None, adequacy_tier=None, support="weak"),
-        _strain("B. longum", cfu_per_day=None, adequacy_tier=None, support="high"),
-        _strain("L. reuteri", cfu_per_day=None, adequacy_tier=None, support="weak"),
+        _strain("Bifidobacterium lactis HN019", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Bifidobacterium lactis BB-12", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Lactobacillus rhamnosus GG", cfu_per_day=None, adequacy_tier=None, support="moderate"),
+        _strain("Lactobacillus plantarum 299v", cfu_per_day=None, adequacy_tier=None, support="moderate"),
+        _strain("Lactobacillus acidophilus NCFM", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Streptococcus salivarius K12", cfu_per_day=None, adequacy_tier=None, support="weak"),
+        _strain("Bifidobacterium longum BB536", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Lactobacillus reuteri DSM 17938", cfu_per_day=None, adequacy_tier=None, support="weak"),
     ]
 
     product = _product(total_strain_count=8, blends=blends, clinical_strains=clinical_strains)
@@ -403,8 +428,11 @@ def test_cfu_adequacy_caps_v3_five_points_to_v4_fifteen_points() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     strains = [
-        _strain(f"Clinical Strain {idx}", adequacy_tier="excellent", support="high")
-        for idx in range(1, 5)
+        _strain(name, adequacy_tier="excellent", support="high")
+        for name in (
+            "Lactobacillus rhamnosus GG", "Bifidobacterium lactis BB-12",
+            "Lactobacillus reuteri DSM 17938", "Bifidobacterium longum BB536",
+        )
     ]
 
     payload = score_dose(_product(total_strain_count=4, clinical_strains=strains))
@@ -417,10 +445,10 @@ def test_cfu_adequacy_hard_gates_missing_tier_missing_cfu_and_postbiotic() -> No
     from scoring_v4.modules.probiotic_dose import score_dose
 
     strains = [
-        _strain("No tier", adequacy_tier=None, support="high"),
-        _strain("No cfu", cfu_per_day=None, adequacy_tier="excellent", support="high"),
-        _strain("Postbiotic", adequacy_tier="excellent", support="high", is_postbiotic=True),
-        _strain("Inactivated", adequacy_tier="excellent", support="high", is_inactivated=True),
+        _strain("Lactobacillus rhamnosus GG", adequacy_tier=None, support="high"),
+        _strain("Bifidobacterium lactis BB-12", cfu_per_day=None, adequacy_tier="excellent", support="high"),
+        _strain("Lactobacillus reuteri DSM 17938", adequacy_tier="excellent", support="high", is_postbiotic=True),
+        _strain("Bifidobacterium longum BB536", adequacy_tier="excellent", support="high", is_inactivated=True),
     ]
 
     product = _product(total_strain_count=4, clinical_strains=strains)

@@ -21,6 +21,7 @@ import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from collagen_taxonomy import PEPTIDES_I_III, classify_collagen_subtype_strict
+from clinical_applicability import filter_clinical_matches
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
@@ -409,7 +410,14 @@ def resolved_clinical_matches(
     recovered_matches = _recover_contract_evidence_matches(product, matches)
     if recovered_matches:
         matches.extend(recovered_matches)
-    return matches, recovered_matches
+    matches, _ = filter_clinical_matches(product, matches)
+    from studied_formulas import formula_clinical_match
+    formula = formula_clinical_match(product)
+    if formula:
+        matches = [entry for entry in matches if _entry_id(entry) != formula["id"]]
+        matches.append(formula)
+    accepted_ids = {_entry_id(entry) for entry in matches}
+    return matches, [entry for entry in recovered_matches if _entry_id(entry) in accepted_ids]
 
 
 def _recover_contract_evidence_matches(
@@ -975,6 +983,9 @@ def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float
         if mass <= 0:
             continue
         max_mass = max(max_mass, mass)
+        source_ref = row.get("raw_source_path") or row.get("source_row_ref")
+        if source_ref:
+            index[f"source:{source_ref}"] = mass
         for tok in (row.get("canonical_id"), row.get("standard_name"),
                     row.get("name"), row.get("matched_form")):
             key = _norm_text(tok)
@@ -986,6 +997,9 @@ def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float
 def _match_active_mass(entry: Dict[str, Any], index: Dict[str, float]) -> float:
     """Mass of the active an evidence match links to (0 if not found). Links by
     normalized identity (match ingredient/standard_name/matched_term/canonical)."""
+    refs = entry.get("matched_source_row_refs") or []
+    if refs:
+        return max((index.get(f"source:{ref}", 0.0) for ref in refs), default=0.0)
     for tok in (_canonical_from_entry(entry), entry.get("ingredient"),
                 entry.get("standard_name"), entry.get("matched_term")):
         key = _norm_text(tok)
@@ -1074,6 +1088,7 @@ def _primary_mass_floor(
         return 0.0, None
     canon_index = _active_canonical_index(product)
     threshold = PRIMARY_MASS_FRACTION * max_mass
+    dose_map = _dose_map(product)
     floor = 0.0
     floor_canon: Optional[str] = None
     for entry in matches:
@@ -1093,6 +1108,10 @@ def _primary_mass_floor(
             continue
         if _match_active_mass(entry, index) < threshold:
             continue  # the evidenced ingredient is not a mass-dominant active
+        if entry.get("min_clinical_dose") is not None:
+            dose, _ = _converted_product_dose(entry, dose_map)
+            if dose is None:
+                continue  # an unconvertible amount cannot establish a studied dose
         st = _norm_text(entry.get("study_type"))
         branded = (
             _norm_text(entry.get("evidence_level")) in _BRANDED_EVIDENCE_LEVELS
@@ -1208,6 +1227,9 @@ def _dose_map(product: Dict[str, Any]) -> Dict[str, Tuple[float, str]]:
             continue
         quantity *= daily_multiplier
         unit = _norm_text(ing.get("unit_normalized") or ing.get("unit"))
+        source_ref = ing.get("raw_source_path") or ing.get("source_row_ref")
+        if source_ref:
+            doses[f"source:{source_ref}"] = (quantity, unit)
         for name in (
             ing.get("standard_name"),
             ing.get("name"),
@@ -1245,6 +1267,24 @@ def _converted_product_dose(
     # exact label row that enrichment matched.  Resolve the exact match
     # provenance first (e.g. acetyl-L-carnitine hydrochloride), then fall back
     # through structured canonical and study identities.
+    refs = entry.get("matched_source_row_refs") or []
+    dose_unit = _norm_text(entry.get("dose_unit") or "mg")
+    if refs and not entry.get("aggregate_canonical_ids"):
+        # Source lineage is authoritative. Never borrow a larger amount from
+        # a differently formulated sibling just because canonical IDs agree.
+        converted = []
+        for ref in refs:
+            dose = dose_map.get(f"source:{ref}")
+            if dose is None:
+                continue
+            value = _convert_unit(dose[0], dose[1], dose_unit)
+            if value is None and _is_vitamin_d_evidence_entry(entry):
+                value = _convert_vitamin_d_evidence_unit(dose[0], dose[1], dose_unit)
+            if value is not None:
+                converted.append(value)
+        # Multiple eligible rows are not summed without an explicit aggregate
+        # contract. The largest individually disclosed matching amount wins.
+        return max(converted, default=None), _canonical_from_entry(entry) or ""
     lookup_keys: List[str] = []
     for lookup_name in (
         entry.get("matched_term"),
@@ -1324,8 +1364,10 @@ def _convert_vitamin_d_evidence_unit(
 
 
 def _convert_unit(quantity: float, from_unit: str, to_unit: str) -> Optional[float]:
-    from_u = _norm_text(from_unit)
-    to_u = _norm_text(to_unit)
+    # DSLD spells plural units as Gram(s)/Milligram(s). Normalize only that
+    # documented spelling; unrecognized dimensions still return None.
+    from_u = _norm_text(from_unit).replace("(s)", "s")
+    to_u = _norm_text(to_unit).replace("(s)", "s")
     if from_u == to_u:
         return quantity
 

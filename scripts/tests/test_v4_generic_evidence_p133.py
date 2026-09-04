@@ -154,7 +154,7 @@ def test_magnesium_style_meta_analysis_scores_6_48() -> None:
     assert payload["metadata"]["ingredient_points"]["magnesium"] == 6.48
 
 
-def test_ksm66_branded_rct_scores_4_5_not_zero() -> None:
+def test_ksm66_branded_rct_scores_3_6_not_zero() -> None:
     """KSM-66 canary: branded-RCT evidence is recognized and not collapsed
     to generic Withania. Calibration can change later; matching must work."""
     from scoring_v4.modules.generic_evidence import score_evidence
@@ -173,18 +173,20 @@ def test_ksm66_branded_rct_scores_4_5_not_zero() -> None:
             matches=[
                 _match(
                     id="BRAND_KSM66",
-                    ingredient="KSM-66",
+                    ingredient="KSM-66 Ashwagandha",
                     standard_name="KSM-66",
                     study_type="rct_multiple",
                     evidence_level="branded-rct",
-                    total_enrollment=200,
+                    total_enrollment=124,
                 )
             ],
         )
     )
 
-    assert payload["score"] == 4.5
-    assert payload["metadata"]["ingredient_points"]["ksm 66"] == 4.5
+    # Two cited trials randomized 64 + 60 = 124, not the old 200. Existing
+    # enrollment weighting is 0.8: 5 × 0.9 × 0.8 = 3.6 (no calibration change).
+    assert payload["score"] == 3.6
+    assert payload["metadata"]["ingredient_points"]["ksm 66"] == 3.6
 
 
 def test_effect_direction_null_downweights_but_does_not_drop_to_zero() -> None:

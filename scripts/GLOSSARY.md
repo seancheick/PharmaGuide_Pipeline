@@ -161,6 +161,8 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 | **Ingredient-level recall flag** | `has_banned_substance` or `has_recalled_ingredient`. Never use `is_recalled`, which implies an unsupported product-level recall. |
 | **Ghost reference / phantom citation** | A real identifier whose content does not support the claim. Existence alone is not verification. |
 | **Content verification** | Confirming that a PMID/CUI/RXCUI/UNII/NCT/CAS/CID identifies and supports the intended entity or claim. |
+| **Clinical applicability assessment** | A shared decision that an identity-matched evidence record also fits its reviewed form, delivery, daily-dose and outcome scope. Rejected matches remain auditable but cannot supply clinical points, depth bonuses or reviewed-support states. An unreviewed scope is not a negative clinical finding. |
+| **Studied formula assessment** | A complete-formula match to a reviewed registry record: product identity, all strain identities, native-unit daily dose and co-ingredient composition. Formula evidence never becomes independent per-strain efficacy or invented per-strain quantities. |
 | **Clinical source of truth** | Primary regulatory or scientific evidence plus curated, tested local data. Generated reports are review queues, not authoritative data. |
 
 ## Versions and tests

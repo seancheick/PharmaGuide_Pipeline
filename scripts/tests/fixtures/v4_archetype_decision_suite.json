@@ -817,11 +817,11 @@
             {"name": "Lactobacillus plantarum 299v", "strains": ["Lactobacillus plantarum 299v"], "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10}}
           ],
           "clinical_strains": [
-            {"strain": "Lactobacillus rhamnosus GG", "name": "Lactobacillus rhamnosus GG", "clinical_id": "FIXTURE_STRAIN_LGG", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
-            {"strain": "Bifidobacterium lactis BB-12", "name": "Bifidobacterium lactis BB-12", "clinical_id": "FIXTURE_STRAIN_BB12", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
-            {"strain": "Lactobacillus reuteri DSM 17938", "name": "Lactobacillus reuteri DSM 17938", "clinical_id": "FIXTURE_STRAIN_DSM17938", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
-            {"strain": "Bifidobacterium longum BB536", "name": "Bifidobacterium longum BB536", "clinical_id": "FIXTURE_STRAIN_BB536", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
-            {"strain": "Lactobacillus plantarum 299v", "name": "Lactobacillus plantarum 299v", "clinical_id": "FIXTURE_STRAIN_299V", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"}
+            {"strain": "Lactobacillus rhamnosus GG", "name": "Lactobacillus rhamnosus GG", "clinical_id": "STRAIN_LGG", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
+            {"strain": "Bifidobacterium lactis BB-12", "name": "Bifidobacterium lactis BB-12", "clinical_id": "STRAIN_LACTIS_BB12", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
+            {"strain": "Lactobacillus reuteri DSM 17938", "name": "Lactobacillus reuteri DSM 17938", "clinical_id": "STRAIN_REUTERI_DSM17938", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
+            {"strain": "Bifidobacterium longum BB536", "name": "Bifidobacterium longum BB536", "clinical_id": "STRAIN_LONGUM_BB536", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
+            {"strain": "Lactobacillus plantarum 299v", "name": "Lactobacillus plantarum 299v", "clinical_id": "STRAIN_PLANTARUM_299V", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"}
           ]
         },
         "evidence_data": {

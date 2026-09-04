@@ -300,13 +300,14 @@ def _is_supportive_human_match(match: Mapping[str, Any]) -> bool:
     )
 
 
-def _probiotic_native_evidence_state(product: Mapping[str, Any]) -> str | None:
-    probiotic = _safe_dict(product.get("probiotic_data") or product.get("probiotic_detail"))
-    strains = [
-        row
-        for row in _safe_list(probiotic.get("clinical_strains"))
-        if isinstance(row, dict)
-    ]
+def _probiotic_native_evidence_state(product: Mapping[str, Any], row: Mapping[str, Any] | None = None) -> str | None:
+    from studied_formulas import clinical_strain_matches_source_row, independent_clinical_strains
+    strains = independent_clinical_strains(product)
+    if row is not None:
+        strains = [
+            strain for strain in strains
+            if clinical_strain_matches_source_row(product, strain, row)
+        ]
     if not strains:
         return None
     tokens = {
@@ -350,12 +351,6 @@ def evaluate_evidence_assessment(
         for match in matches
         if isinstance(match, dict)
     ]
-    probiotic_state = (
-        _probiotic_native_evidence_state(product)
-        if module == "probiotic"
-        else None
-    )
-
     assessments: List[Dict[str, Any]] = []
     incomplete_refs: List[str] = []
     for index, (row, role) in enumerate(zip(rows, roles)):
@@ -363,10 +358,12 @@ def evaluate_evidence_assessment(
         source_ref = _row_ref(row, index)
         role_name = str(role.get("role") or ROLE_ADJUNCT)
         material = role_name in _MATERIAL_ROLES
+        probiotic_state = _probiotic_native_evidence_state(product, row) if module == "probiotic" else None
         linked = [
             match
             for match, keys in indexed_matches
-            if _identity_keys(row) & keys
+            if (source_ref in match.get("matched_source_row_refs", [])
+                if match.get("matched_source_row_refs") else _identity_keys(row) & keys)
         ]
         evidence_ids = list(dict.fromkeys(
             evidence_id
@@ -387,6 +384,10 @@ def evaluate_evidence_assessment(
             applicability = EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY
             state = EVIDENCE_EVALUATED_SUPPORTED
             reason = "established_dri_nutrition_authority"
+        elif any(match.get("evidence_origin") == "verified_formula_contract" for match in linked):
+            applicability = EVIDENCE_APPLICABILITY_MODULE_AGGREGATE
+            state = EVIDENCE_EVALUATED_SUPPORTED
+            reason = "reviewed_complete_formula_evidence"
         elif any(_is_supportive_human_match(match) for match in linked):
             state = EVIDENCE_EVALUATED_SUPPORTED
             reason = "reviewed_human_evidence_supportive"

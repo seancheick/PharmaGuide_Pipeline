@@ -77,6 +77,12 @@ def _probiotic_product(
     ]
     if extra_active:
         actives.extend(extra_active)
+    for index, active in enumerate(actives):
+        active.setdefault("raw_source_path", f"ingredientRows[{index}]")
+        active.setdefault("raw_source_text", active["name"])
+        for child_index, child in enumerate(active.get("nestedIngredients") or []):
+            child.setdefault("raw_source_path", f"ingredientRows[{index}].nestedRows[{child_index}]")
+            child.setdefault("raw_source_text", child["name"])
     return {
         "id": "test_p05",
         "product_name": "Test Probiotic",
@@ -185,8 +191,8 @@ def test_rejected_row_overrides_any_research_metadata() -> None:
 
 def test_exact_lgg_and_bb12_nested_blend_resolve_to_exact_clinical_strains(enricher) -> None:
     """Manual/DTC labels often put branded strain IDs in a nested row's
-    ingredientGroup/notes instead of the display name. Exact strain evidence
-    must beat species-level representative strains.
+    ingredientGroup instead of the display name. Exact source-owned codes
+    must beat species-level representative strains; notes are not proof.
     """
     product = _probiotic_product(
         nested_in_blend=[
@@ -195,7 +201,7 @@ def test_exact_lgg_and_bb12_nested_blend_resolve_to_exact_clinical_strains(enric
                 "standardName": "Lactobacillus rhamnosus",
                 "ingredientGroup": "LGG",
                 "category": "probiotic",
-                "notes": "strain LGG",
+                "notes": "",
                 "nestedIngredients": [],
             },
             {
@@ -203,7 +209,7 @@ def test_exact_lgg_and_bb12_nested_blend_resolve_to_exact_clinical_strains(enric
                 "standardName": "Bifidobacterium animalis subsp. lactis",
                 "ingredientGroup": "BB-12",
                 "category": "probiotic",
-                "notes": "strain BB-12",
+                "notes": "",
                 "nestedIngredients": [],
             },
         ],
@@ -366,7 +372,7 @@ def test_seed_ds01_sd_strain_codes_resolve_to_exact_formula_backed_strains(enric
                 "standardName": "Bifidobacterium breve",
                 "ingredientGroup": "SD-BR3-IT",
                 "category": "probiotic",
-                "notes": "strain SD-BR3-IT",
+                "notes": "",
                 "nestedIngredients": [],
             },
             {
@@ -374,7 +380,7 @@ def test_seed_ds01_sd_strain_codes_resolve_to_exact_formula_backed_strains(enric
                 "standardName": "Ligilactobacillus salivarius",
                 "ingredientGroup": "SD-LS1-IT",
                 "category": "probiotic",
-                "notes": "strain SD-LS1-IT",
+                "notes": "",
                 "nestedIngredients": [],
             },
             {
@@ -382,7 +388,7 @@ def test_seed_ds01_sd_strain_codes_resolve_to_exact_formula_backed_strains(enric
                 "standardName": "Lactiplantibacillus plantarum",
                 "ingredientGroup": "SD-LP1-IT",
                 "category": "probiotic",
-                "notes": "strain SD-LP1-IT",
+                "notes": "",
                 "nestedIngredients": [],
             },
             {
@@ -390,7 +396,7 @@ def test_seed_ds01_sd_strain_codes_resolve_to_exact_formula_backed_strains(enric
                 "standardName": "Lactiplantibacillus plantarum",
                 "ingredientGroup": "SD-LPLDL-UK",
                 "category": "probiotic",
-                "notes": "strain SD-LPLDL-UK",
+                "notes": "",
                 "nestedIngredients": [],
             },
         ],
@@ -409,6 +415,9 @@ def test_seed_ds01_sd_strain_codes_resolve_to_exact_formula_backed_strains(enric
     assert "STRAIN_RHAMNOSUS_HN001" not in ids
     assert pd["prebiotic_present"] is True
     assert "pomegranate" in pd["prebiotic_name"].lower()
+    assert all(entry["research_match_status"] == "pending_review" for entry in pd["clinical_strains"])
+    from studied_formulas import independent_clinical_strains
+    assert independent_clinical_strains({**product, "probiotic_data": pd}) == []
 
 
 def test_clinically_relevant_strains_are_in_content_verifier_config() -> None:

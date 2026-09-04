@@ -13,6 +13,7 @@ from typing import Any, Dict
 
 from scoring_input_contract import get_scoring_ingredients
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
+from studied_formulas import independent_clinical_strains
 
 
 PHASE_MARKER = "P2.1_probiotic_formulation"
@@ -61,13 +62,17 @@ def score_formulation(product: Any) -> Dict[str, Any]:
       - exact clinical strain codes: 8
       - delivery/survivability: 3
       - prebiotic complement: 1
+
+    An exact reviewed whole-formula AFU assessment uses these same component
+    budgets for native potency, studied strain identity and delivery. It does
+    not claim a CFU amount or independent research for each constituent.
     """
     product = product if isinstance(product, dict) else {}
     pdata = _probiotic_payload(product)
 
     total_billion = _total_billion_count(pdata)
     strain_count = _total_strain_count(pdata)
-    clinical_count = _clinical_strain_count(pdata)
+    clinical_count = len(independent_clinical_strains(product))
 
     components = {
         "total_cfu_disclosed": _score_total_cfu_disclosed(total_billion),
@@ -77,6 +82,18 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "delivery_survivability": _score_delivery_survivability(product, pdata),
         "prebiotic_complement": _score_prebiotic_complement(product, pdata),
     }
+    from studied_formulas import assess_studied_formula
+    formula = assess_studied_formula(product)
+    if formula["status"] == "assessed_studied_formula":
+        # Same six component budgets, assessed in the study's native unit.
+        # Do not feed AFU into the CFU size tiers or call formula evidence an
+        # independent clinical trial for every constituent strain.
+        components.pop("total_cfu_disclosed")
+        components.pop("cfu_amount")
+        components.pop("clinical_strain_codes")
+        components.update(native_potency_disclosed=4.0, studied_formula_potency=5.0,
+                          studied_formula_strain_identity=8.0,
+                          delivery_survivability=3.0, prebiotic_complement=1.0)
     shared_penalties = shared_formulation_penalty_detail(product)
     penalties = dict(shared_penalties["penalties"])
     penalty_magnitude = sum(abs(float(value or 0.0)) for value in penalties.values())
@@ -92,6 +109,8 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "cap_applied": raw_score > CAP_FORMULATION,
     }
     metadata.update(shared_penalties["metadata"])
+    if formula["status"] == "assessed_studied_formula":
+        metadata["studied_formula_assessment"] = formula
     return {
         "score": round(score, 2),
         "max": CAP_FORMULATION,
@@ -123,19 +142,6 @@ def _total_strain_count(pdata: Dict[str, Any]) -> int:
             if key:
                 strains.add(key)
     return len(strains)
-
-
-def _clinical_strain_count(pdata: Dict[str, Any]) -> int:
-    count = _as_int(pdata.get("clinical_strain_count"), 0)
-    if count > 0:
-        return count
-    seen = set()
-    for strain in _safe_list(pdata.get("clinical_strains")):
-        strain = _safe_dict(strain)
-        key = str(strain.get("clinical_id") or strain.get("strain") or "").strip().lower()
-        if key:
-            seen.add(key)
-    return len(seen)
 
 
 def _score_total_cfu_disclosed(total_billion: float) -> float:

@@ -3,10 +3,10 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
-    "last_updated": "2026-07-17",
+    "last_updated": "2026-09-03",
     "total_entries": 49,
     "data_source": null,
-    "version": "2.2.8",
+    "version": "2.2.9",
     "signoff_status_note": "42/49 strains fully signed off (dr_pham_signoff: true). Dr Pham completed post-verification async pass on 2026-04-21: 3 strains downgraded (B. clausii strong→medium; 2 L. paracasei strong→weak), 2 citations swapped (Lpc-37 → PMID 33385020; Nissle 1917 → PMID 15479682 [Kruis 2004 gold-standard RCT]), 8 weak strains confirmed honest. 2026-05-22 unmapped-resolution batch added 2 new entries pending Dr Pham review: STRAIN_PLANTARUM_LP01 (Probiotical LMG P-21021, 3 content-verified PMIDs) and STRAIN_LACTIS_BS01 (Probiotical LMG P-21384, 2 content-verified PMIDs). 2026-06-05 Seed DS-01 exact-code batch added 4 formula-backed SD-* strains pending Dr Pham review; PMIDs 40944126 and 41750436 are DS-01 product/formula RCTs, not isolated strain-specific trials. 2026-07-13 added exact M-63 identity with two content-verified single-strain RCTs (PMIDs 36986131 and 42056537), conservatively classified moderate pending clinician review.",
     "clinical_validation_note": "14 non-flipped strains now carry clinical_support_level per 4-question framework (strain-explicit / outcome-relevant / human-clinical / dose-mentioned). All 14 score 'weak' at abstract level; 5 have stronger swap candidates identified. Dr Pham review required before any PMID swap.",
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient."
@@ -20,7 +20,10 @@
         "LGG",
         "Lactobacillus GG",
         "Lacticaseibacillus rhamnosus GG",
-        "ATCC 53103"
+        "ATCC 53103",
+        "Lactobacillus rhamnosus LGG",
+        "L. rhamnosus LGG",
+        "L. rhamnosus GG, LGG"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -237,7 +240,8 @@
         "Blis K12 Streptococcus salivarius",
         "Streptococcus salivarius BLIS K-12",
         "S. salivarius BLIS K-12",
-        "S. salivarius BLIS K12"
+        "S. salivarius BLIS K12",
+        "BLIS K12 S. salivarius K12"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -290,7 +294,8 @@
         "Streptococcus salivarius BLIS M18",
         "Streptococcus salivarius BLIS M-18",
         "S. salivarius BLIS M18",
-        "S. salivarius BLIS M-18"
+        "S. salivarius BLIS M-18",
+        "BLIS M18 S. salivarius M18"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -394,7 +399,8 @@
         "LactoSpore",
         "B. coagulans LactoSpore",
         "Bacillus coagulans Lactospore MTCC5856",
-        "Bacillus coagulans Lactospore"
+        "Bacillus coagulans Lactospore",
+        "Lactospore Bacillus coagulans MTCC5856"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -578,7 +584,10 @@
         "Bifidobacterium animalis HN019",
         "Bifidobacterium animalis lactis HN019",
         "DR10",
-        "HOWARU Bifido"
+        "HOWARU Bifido",
+        "Bifidobacterium lactis strain HN019",
+        "HOWARU Bifidobacterium animalis lactis HN019",
+        "HOWARU B. lactis HN019"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -635,7 +644,9 @@
       "aliases": [
         "B. lactis Bi-07",
         "Bi-07",
-        "Bifidobacterium animalis Bi-07"
+        "Bifidobacterium animalis Bi-07",
+        "Bifidobacterium animalis lactis Bi-07",
+        "B. animalis lactis Bi-07"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -682,7 +693,8 @@
       "aliases": [
         "L. plantarum 299v",
         "Lp299v",
-        "Lactiplantibacillus plantarum 299v"
+        "Lactiplantibacillus plantarum 299v",
+        "Lactobacillus plantarum Lp299v"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -741,7 +753,8 @@
         "HEAL9",
         "DSM 15312",
         "Lactiplantibacillus plantarum HEAL9",
-        "L. plantarum DSM 15312"
+        "L. plantarum DSM 15312",
+        "Lactobacillus plantarum DSM 15312"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -791,7 +804,8 @@
         "L. paracasei 8700:2",
         "DSM 13434",
         "Lacticaseibacillus paracasei 8700:2",
-        "L. paracasei DSM 13434"
+        "L. paracasei DSM 13434",
+        "Lactobacillus paracasei DSM 13434"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -954,7 +968,9 @@
       "aliases": [
         "L. acidophilus NCFM",
         "NCFM",
-        "Lactobacillus acidophilus NC-FM"
+        "Lactobacillus acidophilus NC-FM",
+        "HOWARU Lactobacillus acidophilus NCFM",
+        "HOWARU L. acidophilus NCFM"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -1132,7 +1148,9 @@
       "aliases": [
         "B. lactis BB-12",
         "BB-12",
-        "Bifidobacterium animalis BB-12"
+        "Bifidobacterium animalis BB-12",
+        "Bifidobacterium animalis lactis BB-12",
+        "Bifidobacterium animalis subsp. lactis BB-12"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -1414,7 +1432,9 @@
         "HN001",
         "DR20",
         "HOWARU Rhamnosus",
-        "Lacticaseibacillus rhamnosus HN001"
+        "Lacticaseibacillus rhamnosus HN001",
+        "HOWARU L. rhamnosus HN001",
+        "HOWARU Lactobacillus rhamnosus HN001"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -1594,7 +1614,8 @@
         "L.CASEI 431",
         "CASEI 431",
         "Lactobacillus casei 431",
-        "L. paracasei 431"
+        "L. paracasei 431",
+        "L. paracasei, L. CASEI 431"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -1699,7 +1720,10 @@
         "Bl-04",
         "HOWARU Bl-04",
         "Bifidobacterium animalis Bl-04",
-        "Bifidobacterium animalis subsp. lactis Bl-04"
+        "Bifidobacterium animalis subsp. lactis Bl-04",
+        "Bifidobacterium animalis lactis Bl-04",
+        "B. animalis lactis Bl-04",
+        "Bifidobacterium lactis strain Bl-04"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -2269,7 +2293,8 @@
         "L. paracasei Lpc-37",
         "Lpc-37",
         "HOWARU Lpc-37",
-        "Lacticaseibacillus paracasei Lpc-37"
+        "Lacticaseibacillus paracasei Lpc-37",
+        "Lactobacillus paracasei strain Lpc-37"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -2507,7 +2532,8 @@
       "aliases": [
         "B. lactis UABla-12",
         "UABla-12",
-        "Bifidobacterium animalis UABla-12"
+        "Bifidobacterium animalis UABla-12",
+        "Bifidobacterium animalis lactis UABla-12"
       ],
       "evidence_level": "moderate",
       "key_benefits": [

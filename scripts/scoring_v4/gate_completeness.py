@@ -600,6 +600,8 @@ def evaluate_completeness_gate_with_readiness(
     dose_cov: Optional[float] = None
 
     if module == "probiotic":
+        from studied_formulas import assess_studied_formula
+        formula = assess_studied_formula(product)
         checked_fields.extend(["total_cfu", "named_strain"])
         strain_count = _named_strain_count(product)
         if (
@@ -608,6 +610,9 @@ def evaluate_completeness_gate_with_readiness(
             and not readiness_enforced
         ):
             missing.append("active_identity")
+        elif formula["status"] == "assessed_studied_formula":
+            checked_fields.append("studied_formula_native_afu")
+            soft_missing.append("individual_strain_amounts_not_disclosed")
         elif _total_cfu_billion(product) <= 0:
             if strain_count > 0 or ingredients:
                 soft_missing.append("total_cfu_not_disclosed")

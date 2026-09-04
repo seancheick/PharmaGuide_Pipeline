@@ -96,10 +96,13 @@ def pending_afu_measurements(product: Mapping) -> list[dict]:
     pdata = product.get("probiotic_data") or product.get("probiotic_detail") or {}
     if not isinstance(pdata, Mapping):
         return []
-    # There is no reviewed AFU reference yet. A caller-authored status must not
-    # bypass readiness merely by claiming the measurement was assessed.
     rows = pdata.get("afu_measurements")
     if rows is None:
+        return []
+    # Only the current, exact formula contract can settle an AFU exposure. Never
+    # trust an enriched/caller-supplied success stamp or convert AFU into CFU.
+    from studied_formulas import assess_studied_formula
+    if assess_studied_formula(product)["status"] == "assessed_studied_formula":
         return []
     if not isinstance(rows, list):
         rows = [rows]

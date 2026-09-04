@@ -91,7 +91,7 @@ V4_SCORER_KEYS = (
 # classification-schema version, and the version+fingerprint of every config
 # rubric consumed. Bump SCORING_ENGINE_VERSION on a material ALGORITHM change;
 # config-value changes are captured by the per-rubric fingerprints, not here.
-SCORING_ENGINE_VERSION = "4.3.1"
+SCORING_ENGINE_VERSION = "4.3.2"
 SCORING_MODE = "production"
 
 

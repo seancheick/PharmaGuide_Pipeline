@@ -60,13 +60,30 @@ def _match_has_identity_provenance(match: dict[str, Any]) -> bool:
         return True
     return any(
         str(value or "").strip()
-        for field in ("matched_canonical_ids", "aggregate_canonical_ids")
+        for field in ("matched_canonical_ids", "aggregate_canonical_ids", "matched_source_row_refs")
         for value in (
             match.get(field)
             if isinstance(match.get(field), list)
             else []
         )
     )
+
+
+def recompute_evidence(enricher: SupplementEnricherV3, product: dict[str, Any]) -> dict[str, Any]:
+    """Replay both native ingredient and later whole-formula evidence stages.
+
+    Formula identity is re-proven from label/measurement inputs, never accepted
+    from the stamped evidence block that this audit is checking.
+    """
+    from studied_formulas import formula_clinical_match
+
+    evidence = enricher._collect_evidence_data(product, product.get("ingredient_quality_data"))
+    formula = formula_clinical_match(product)
+    if formula:
+        matches = [m for m in _clinical_matches(evidence) if _entry_id(m) != formula["id"]]
+        evidence["clinical_matches"] = [*matches, formula]
+        evidence["match_count"] = len(evidence["clinical_matches"])
+    return evidence
 
 
 def build_reachability_report(
@@ -219,10 +236,7 @@ def main(argv: list[str] | None = None) -> int:
     enricher = SupplementEnricherV3()
 
     def recompute(product: dict[str, Any]) -> dict[str, Any]:
-        return enricher._collect_evidence_data(
-            product,
-            product.get("ingredient_quality_data"),
-        )
+        return recompute_evidence(enricher, product)
 
     report = build_reachability_report(products, recompute=recompute)
     report["inputs"] = inputs

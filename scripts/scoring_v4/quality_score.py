@@ -152,6 +152,8 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
         return fallback
     if metadata.get("reason_code") == "probiotic_afu_reference_unavailable":
         return "AFU amounts are disclosed, but a compatible dose benchmark has not been verified."
+    if metadata.get("dose_adequacy_basis") == "studied_formula_native_afu":
+        return "The complete formula matches its studied AFU dose; individual strain amounts are not disclosed."
     if metadata.get("window_proxy_reason") == "aggregate_cfu_not_per_strain":
         return (
             "Total CFU is disclosed, but without amounts for each strain, "
@@ -226,6 +228,8 @@ def _probiotic_transparency_reason(dim: Dict[str, Any], fallback: str) -> str:
         return fallback
     named = _num(components.get("strain_identities_named"))
     per_strain = _num(components.get("per_strain_cfu_on_label"))
+    if _num(components.get("aggregate_native_afu_disclosure")) > 0:
+        return "The formula's AFU amounts and strain identities are disclosed; individual strain amounts are not."
     aggregate = _num(components.get("aggregate_cfu_disclosure_proxy"))
     if named >= 8.0 and per_strain <= 0.0 and aggregate > 0.0:
         return (
@@ -314,10 +318,22 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
     mx = _num(dim.get("max"))
     val = round((score / mx) * weight, 1) if mx else 0.0
     val = max(0.0, min(float(weight), val))
+    reason = _reason_generic(name, _band(val, weight))
+    if name == "transparency":
+        metadata = dim.get("metadata") or {}
+        count = _num(metadata.get("panel_active_count"))
+        if count > 0:
+            if (
+                _num(metadata.get("panel_named_count"), -1) == count
+                and _num(metadata.get("panel_dose_count"), -1) == count
+            ):
+                reason = "Active ingredient identities and amounts are fully disclosed."
+            else:
+                reason = "Not all active ingredient identities or individual amounts are disclosed."
     return {
         "score": val,
         "max": weight,
-        "reason": _reason_generic(name, _band(val, weight)),
+        "reason": reason,
         "components": {"source_dim": src, "raw_score": score, "raw_max": mx},
     }
 
@@ -537,6 +553,8 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     score = _num(dim.get("score"))
     val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
     reason = _reason_formulation(_band(val, weight))
+    if (dim.get("metadata", {}).get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula":
+        reason = "The disclosed strain formula, native AFU potency and prebiotic match the studied formulation."
     if archetype == "omega":
         reason = _omega_formulation_reason(dim, reason)
     return {
@@ -558,10 +576,16 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
     score = _num(dim.get("score"))
     val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
+    reason = _reason_evidence(_band(val, weight))
+    metadata = dim.get("metadata") or {}
+    if _num(metadata.get("primary_evidence_floor")) > 0:
+        reason = "Evidence credit is driven by the primary ingredient, not a trial of the whole formula."
+    if (metadata.get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula":
+        reason = "The complete formula has adult digestive-symptom trial evidence; independent confirmation is limited."
     return {
         "score": val,
         "max": weight,
-        "reason": _reason_evidence(_band(val, weight)),
+        "reason": reason,
         "components": {"raw_evidence": score, "archetype": archetype, "reference": ref},
     }
 

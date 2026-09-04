@@ -93,6 +93,8 @@ def score_transparency(product: Any) -> Dict[str, Any]:
     strain_identities = _score_strain_identities(pdata)
     per_strain_cfu = _score_per_strain_cfu_on_label(pdata)
     aggregate_cfu_proxy = _score_aggregate_cfu_disclosure_proxy(pdata, per_strain_cfu)
+    from studied_formulas import assess_studied_formula
+    formula = assess_studied_formula(product)
 
     components = {
         "strain_identities_named":     round(strain_identities, 4),
@@ -100,6 +102,9 @@ def score_transparency(product: Any) -> Dict[str, Any]:
         "aggregate_cfu_disclosure_proxy": round(aggregate_cfu_proxy, 4),
         "B3_claim_compliance":         round(b3, 4),
     }
+    if formula["status"] == "assessed_studied_formula":
+        components.pop("aggregate_cfu_disclosure_proxy")
+        components["aggregate_native_afu_disclosure"] = max(0.0, CAP_AGGREGATE_CFU_DISCLOSURE_PROXY - per_strain_cfu)
     penalties = {
         "B2_false_allergen_free_claim":    _neg_or_zero(b2),
         "B5_proprietary_blend_opacity":    _neg_or_zero(b5),
@@ -137,6 +142,9 @@ def score_transparency(product: Any) -> Dict[str, Any]:
             ),
         },
     }
+    if formula["status"] == "assessed_studied_formula":
+        metadata.pop("aggregate_cfu_disclosure")
+        metadata["studied_formula_assessment"] = formula
 
     return {
         "score": round(score, 4),

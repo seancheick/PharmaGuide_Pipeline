@@ -14642,6 +14642,11 @@ class SupplementEnricherV3:
 
                     if study_id in seen_study_ids:
                         existing_match = matches_by_study_id.get(study_id)
+                        source_ref = ingredient.get("raw_source_path")
+                        if existing_match is not None and source_ref:
+                            refs = existing_match.setdefault("matched_source_row_refs", [])
+                            if source_ref not in refs:
+                                refs.append(source_ref)
                         if existing_match is not None and ingredient_canonical_id:
                             matched_canonicals = existing_match.setdefault(
                                 "matched_canonical_ids",
@@ -14671,6 +14676,8 @@ class SupplementEnricherV3:
                         "health_goals_supported": study.get('health_goals_supported', []),
                         "key_endpoints": study.get('key_endpoints', [])
                     }
+                    if ingredient.get("raw_source_path"):
+                        match_payload["matched_source_row_refs"] = [ingredient["raw_source_path"]]
                     if is_aggregate_evidence:
                         match_payload["matched_canonical_id"] = (
                             study.get("evidence_group_id") or study_name
@@ -14682,6 +14689,7 @@ class SupplementEnricherV3:
 
                     # Optional schema extensions (forward-compatible passthrough).
                     optional_fields = [
+                        "applicability",
                         "min_clinical_dose",
                         "max_studied_clinical_dose",
                         "max_clinical_dose",
@@ -14791,6 +14799,7 @@ class SupplementEnricherV3:
                         "marker_evidence_id": marker_entry.get("evidence_id"),
                     }
                     optional_fields = [
+                        "applicability",
                         "min_clinical_dose", "max_studied_clinical_dose",
                         "max_clinical_dose", "max_studied_dose", "dose_unit",
                         "typical_effective_dose", "dose_range",
@@ -14814,8 +14823,11 @@ class SupplementEnricherV3:
         all_text = self._get_all_product_text(product)
         unsubstantiated = self._check_unsubstantiated_claims(all_text)
 
+        from clinical_applicability import filter_clinical_matches
+        matches, rejected = filter_clinical_matches(product, matches)
         return {
             "clinical_matches": matches,
+            "rejected_clinical_matches": rejected,
             "match_count": len(matches),
             "unsubstantiated_claims": unsubstantiated
         }
@@ -15369,6 +15381,7 @@ class SupplementEnricherV3:
 
         # Check if this is a probiotic product
         probiotic_blends = []
+        blend_source_rows = {}
         total_strains = 0
         all_nested_strains = []
 
@@ -15554,6 +15567,9 @@ class SupplementEnricherV3:
                     "is_blend_header_total": is_blend_header,
                     "serving_size_quantities": _serving_size_quantities(ingredient),
                 })
+                # Keep owner objects local; serialized blends retain only their
+                # existing disclosure fields, not duplicate ingredient payloads.
+                blend_source_rows[id(probiotic_blends[-1])] = strain_rows or [ingredient]
 
                 total_strains += len(strain_names)
                 all_nested_strains.extend(strain_names)
@@ -15634,6 +15650,8 @@ class SupplementEnricherV3:
             return {"is_probiotic_product": False}
 
         # Check for clinically relevant strains
+        from studied_formulas import clinical_strain_identity_from_label
+
         strains_db = self.databases.get('clinically_relevant_strains', {})
         clinical_strains = strains_db.get('clinically_relevant_strains', [])
 
@@ -15676,6 +15694,7 @@ class SupplementEnricherV3:
                 else None
             )
             for idx, strain in enumerate(blend_strains):
+                source_row = blend_source_rows[id(blend)][idx]
                 strain_identity = (
                     blend_strain_identities[idx]
                     if idx < len(blend_strain_identities)
@@ -15704,9 +15723,8 @@ class SupplementEnricherV3:
                     continue
                 postbiotic = _is_postbiotic(str(strain_identity), blend_name)
                 for clinical in clinical_strains:
-                    clin_name = clinical.get('standard_name', '')
-                    clin_aliases = clinical.get('aliases', [])
-                    if self._strain_match(strain_identity, clin_name, clin_aliases):
+                    matched_identity = clinical_strain_identity_from_label(source_row, clinical)
+                    if matched_identity:
                         thresholds = clinical.get("cfu_thresholds") or {}
                         tiers = thresholds.get("tiers_cfu_per_day") or {}
                         adequacy_tier = _compute_strain_cfu_tier(per_strain_cfu, tiers)
@@ -15719,7 +15737,7 @@ class SupplementEnricherV3:
                             threshold_dose_basis=thresholds.get("dose_basis"),
                         )
                         entry = {
-                            "strain": strain,
+                            "strain": matched_identity,
                             "clinical_id": clinical.get('id', ''),
                             "evidence_level": clinical.get('evidence_level', 'moderate'),
                             # Sprint E1.3.2 additions — carry per-strain
@@ -15735,6 +15753,10 @@ class SupplementEnricherV3:
                             "ui_copy_hint": hybrid["ui_copy_hint"],
                             **_probiotic_research_presentation(clinical),
                         }
+                        if source_row.get("raw_source_path"):
+                            entry["source_row_ref"] = source_row["raw_source_path"]
+                        if matched_identity != strain:
+                            entry["label_name"] = strain
                         # Postbiotic / inactivated form — CFU scoring does
                         # not apply (different mechanism). Scorer hard-gates
                         # on is_inactivated to skip CFU credit.
@@ -19019,11 +19041,13 @@ class SupplementEnricherV3:
     ) -> Dict[str, Any]:
         """Classify whether a label dose is valid for a nutrient UL comparison.
 
-        A Daily Value anchors the row to a nutrient declaration. When DV is
-        absent, an exact source-UNII match to the canonical IQM parent proves
-        that the amount measures the parent substance itself. A direct UNII
-        match to an IQM form is also accepted when the nutrient reference
-        explicitly lists that form inside the UL scope. Other form/compound
+        A Daily Value anchors the row to a nutrient declaration. An explicit
+        parent-nutrient declaration with a parenthetical source also anchors
+        the amount when the cleaner confirms its active role and identity.
+        When DV is absent, an exact source-UNII match to the canonical IQM
+        parent proves that the amount measures the parent substance itself.
+        A direct UNII match to an IQM form is also accepted when the nutrient
+        reference explicitly lists that form inside the UL scope. Other form/compound
         identities remain conservative because their labelled mass is not
         necessarily the nutrient-equivalent mass.
         """
@@ -19101,6 +19125,39 @@ class SupplementEnricherV3:
             and float(value) > 0
             for value in numeric_ul_values
         )
+        source_detail = r"(?:[^()[\]]|\([^()[\]]*\))+"
+        label_declaration = re.fullmatch(
+            r"\s*(?P<parent>[^()[\]]+?)\s*"
+            rf"(?:\(\s*(?:as|from)\s+{source_detail}\)"
+            rf"|\[\s*(?:as|from)\s+{source_detail}\])"
+            rf"(?:\s*\[\s*from\s+{source_detail}\])?\s*",
+            str(ingredient.get("raw_source_text") or ingredient.get("name") or ""),
+            flags=re.IGNORECASE,
+        )
+        if (
+            label_declaration
+            and isinstance(parent, dict)
+            and nutrient_reference
+            and self._normalize_text(parent.get("standard_name") or "")
+            == self._normalize_text(standard_name or "")
+            and self._normalize_text(label_declaration.group("parent"))
+            in parent_identity_keys
+            and raw_group in parent_identity_keys
+            and ingredient.get("source_section") == "active"
+            and ingredient.get("cleaner_row_role") == "active_scorable"
+            and ingredient.get("score_eligible_by_cleaner") is True
+            and ingredient.get("dose_class") != "source_material_mass"
+            and not ingredient.get("isNestedIngredient")
+            and not ingredient.get("parentBlend")
+        ):
+            # "Magnesium (as citrate)" declares magnesium, whereas
+            # "Magnesium citrate" declares a compound mass. A broad DSLD
+            # nutrient group alone cannot establish elemental exposure.
+            return {
+                "ul_gate_eligible": True,
+                "ul_exposure_basis": "supplement_facts_parent_nutrient_amount",
+                "ul_gate_ineligible_reason": None,
+            }
         if (
             parent_unii
             and parent_unii in declared_identity_uniis
@@ -22191,6 +22248,14 @@ class SupplementEnricherV3:
 
             # Probiotic-specific data
             enriched["probiotic_data"] = self._collect_probiotic_data(enriched)
+            if enriched["probiotic_data"].get("afu_measurements"):
+                from studied_formulas import assess_studied_formula, formula_clinical_match
+                formula_assessment = assess_studied_formula(enriched)
+                enriched["probiotic_data"]["studied_formula_assessment"] = formula_assessment
+                formula_match = formula_clinical_match(enriched)
+                if formula_match:
+                    enriched["evidence_data"]["clinical_matches"].append(formula_match)
+                    enriched["evidence_data"]["match_count"] = len(enriched["evidence_data"]["clinical_matches"])
 
             # Nutrition amounts are canonical routing inputs for products whose
             # protein identity is declared only in the Nutrition Facts panel.

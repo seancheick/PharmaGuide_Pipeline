@@ -63,6 +63,20 @@ def score_dose(product: Any) -> Dict[str, Any]:
     capped v3 total from /5 to /15.
     """
     product = product if isinstance(product, dict) else {}
+    from studied_formulas import assess_studied_formula, independent_clinical_strains
+    formula = assess_studied_formula(product)
+    if formula["status"] == "assessed_studied_formula":
+        return {
+            "score": CAP_CFU_ADEQUACY, "max": CAP_DOSE,
+            "components": {"per_strain_cfu_disclosure": 0,
+                           "studied_formula_dose_adequacy": CAP_CFU_ADEQUACY},
+            "penalties": {},
+            "metadata": {"phase": PHASE_MARKER, "assessment_status": formula["status"],
+                         "dose_adequacy_basis": "studied_formula_native_afu",
+                         "studied_formula_assessment": formula,
+                         "per_strain_cfu_disclosed_count": 0,
+                         "window_proxy_reason": "formula_dose_not_individual_strain_doses"},
+        }
     afu_rows = pending_afu_measurements(product)
     if afu_rows:
         return {
@@ -79,18 +93,19 @@ def score_dose(product: Any) -> Dict[str, Any]:
         }
     pdata = _probiotic_payload(product)
     clinical_strains = _safe_list(pdata.get("clinical_strains"))
+    reviewed_strains = independent_clinical_strains(product)
 
     total_strain_count = _total_strain_count(pdata, clinical_strains)
     disclosed_keys = _per_strain_cfu_disclosed_keys(pdata, clinical_strains)
     disclosed_count = min(len(disclosed_keys), total_strain_count) if total_strain_count else 0
     disclosure_score = _score_per_strain_cfu_disclosure(disclosed_count, total_strain_count)
 
-    adequacy = _compute_cfu_adequacy(clinical_strains)
+    adequacy = _compute_cfu_adequacy(reviewed_strains)
     cfu_adequacy_v3 = adequacy["v3_points"]
     cfu_adequacy_scaled = min(CAP_CFU_ADEQUACY, cfu_adequacy_v3 * 3.0)
     aggregate_proxy = _compute_aggregate_cfu_proxy(
         pdata,
-        clinical_strains,
+        reviewed_strains,
         total_strain_count=total_strain_count,
         disclosed_count=disclosed_count,
     )
@@ -500,7 +515,7 @@ def _per_strain_cfu_disclosed_keys(
     for item in clinical_strains or []:
         strain = _safe_dict(item)
         if strain.get("cfu_per_day") is not None:
-            key = _strain_key(strain)
+            key = _canonical_key(strain["label_name"]) if strain.get("label_name") else _strain_key(strain)
             if key:
                 keys.add(key)
 
