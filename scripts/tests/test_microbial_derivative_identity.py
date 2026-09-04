@@ -67,6 +67,60 @@ def test_extract_literal_blocks_taxonomy_repair_and_preserves_label() -> None:
     )
 
 
+def test_fermented_rice_preparation_is_not_an_organism_identity(enricher) -> None:
+    """The shared cleaned label boundary on DSLD 311956/330490/330491."""
+    row = {
+        **_yeast_extract_row(), "name": "Red Yeast Rice extract",
+        "raw_source_text": "Red Yeast Rice extract", "quantity": 600.0,
+        "standardName": "Red Yeast Rice", "ingredientGroup": "Red Yeast Rice",
+        "canonical_id": "red_yeast_rice", "canonical_source_db": "botanical_ingredients",
+        "forms": [{"name": "Monascus purpureus Extract", "ingredientGroup": "Red Yeast"}],
+    }
+    registry = enricher._current_canonical_identity_registry()
+    assert registry.resolve_verified_preferred(row["raw_source_text"]) == (
+        "red_yeast_rice", "botanical_ingredients",
+    )
+    decision = resolve_identity(
+        row, row["canonical_id"],
+        enricher._identity_candidate_resolver(
+            enricher.databases["ingredient_quality_map"], row["canonical_id"],
+        ),
+        canonical_registry=registry,
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "red_yeast_rice"
+    assert decision.source_label_name == "Red Yeast Rice extract"
+    assert decision.source_label_form == "Monascus purpureus Extract"
+    assert enricher._collect_probiotic_data({"activeIngredients": [row]}) == {
+        "is_probiotic_product": False,
+    }
+
+
+@pytest.mark.parametrize("literal", ["Brewer's Yeast", "Brewers' yeast"])
+def test_exact_whole_yeast_alias_cannot_validate_its_extract(enricher, literal: str) -> None:
+    row = {
+        **_yeast_extract_row(), "name": literal, "raw_source_text": literal,
+        "ingredientGroup": literal, "forms": [{"name": "extract"}],
+    }
+    registry = enricher._current_canonical_identity_registry()
+    assert registry.resolve_verified_preferred(literal) == (
+        "brewers_yeast", "ingredient_quality_map",
+    )
+    decision = resolve_identity(
+        row, "brewers_yeast",
+        enricher._identity_candidate_resolver(
+            enricher.databases["ingredient_quality_map"], "brewers_yeast",
+        ),
+        canonical_registry=registry,
+    )
+
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert decision.source_label_name == literal
+    assert decision.source_label_form == "extract"
+
+
 def test_real_extract_boundary_is_quarantined_without_probiotic_route(enricher) -> None:
     from scoring_v4.scored_artifact import build_scored_artifact
 
@@ -232,6 +286,72 @@ def test_existing_exact_preparation_keeps_its_identity_over_source_taxonomy(
     assert len(result["ingredients_scorable"]) == 1
     assert result["ingredients_scorable"][0]["canonical_id"] == "yeast_fermentate"
     assert result["ingredients_scorable"][0]["source_label_name"] == literal
+
+
+@pytest.mark.parametrize("literal,canonical,source_db,form", [
+    ("EpiCor", "epicor", "standardized_botanicals",
+     "Saccharomyces cerevisiae, Dry, Fermentate"),
+    ("EpiCor dried Yeast Fermentate", "NHA_YEAST_FERMENTATE_DRIED",
+     "other_ingredients", None),
+])
+@pytest.mark.parametrize("intermediate", ["yeast_fermentate", None])
+def test_exact_preparation_identity_repairs_intermediate_quality_parent(
+    enricher, literal: str, canonical: str, source_db: str, form: str | None,
+    intermediate: str | None,
+) -> None:
+    """Actual EpiCor labels enter IQD with a generic quality-parent match."""
+    row = {
+        **_yeast_extract_row(), "name": literal, "raw_source_text": literal,
+        "canonical_id": canonical, "canonical_source_db": source_db,
+        "standardName": "EpiCor" if canonical == "epicor" else "Yeast Fermentate (Dried)",
+        "ingredientGroup": "Saccharomyces cerevisiae",
+        "forms": [{"name": form}] if form else [],
+    }
+    registry = enricher._current_canonical_identity_registry()
+    assert registry.resolve_verified_preferred(literal) == (canonical, source_db)
+    decision = resolve_identity(
+        row, intermediate,
+        enricher._identity_candidate_resolver(
+            enricher.databases["ingredient_quality_map"], intermediate,
+        ),
+        canonical_registry=registry,
+    )
+
+    assert decision.disposition == "repaired"
+    assert decision.canonical_id == canonical
+    assert decision.source_label_name == literal
+    assert decision.source_label_form == form
+    quality_row = enricher._collect_ingredient_quality_data(
+        {"activeIngredients": [row]},
+    )["ingredients"][0]
+    assert quality_row["canonical_id"] == canonical
+    assert quality_row["identity_disposition"] in {"clean", "repaired"}
+    assert quality_row["source_label_name"] == literal
+    assert quality_row["source_label_form"] == form
+
+
+@pytest.mark.parametrize("literal", [
+    "EpiCor-style yeast fermentate", "Unverified Yeast Fermentate",
+])
+def test_brand_word_in_normalized_name_or_form_is_not_exact_source_proof(
+    enricher, literal: str,
+) -> None:
+    row = {
+        **_yeast_extract_row(), "raw_source_text": literal, "name": "EpiCor",
+        "ingredientGroup": "Saccharomyces cerevisiae",
+        "forms": [{"name": "EpiCor"}],
+    }
+    registry = enricher._current_canonical_identity_registry()
+    assert registry.resolve_verified_preferred(literal) is None
+    decision = resolve_identity(
+        row, None,
+        enricher._identity_candidate_resolver(enricher.databases["ingredient_quality_map"]),
+        canonical_registry=registry,
+    )
+
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert decision.source_label_name == literal
 
 
 @pytest.mark.parametrize("alternate_only", [False, True])

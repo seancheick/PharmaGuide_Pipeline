@@ -586,6 +586,24 @@ def has_nonlive_microbial_derivative_evidence(row: Mapping[str, Any]) -> bool:
     return False
 
 
+def _has_whole_microbial_identity(value: str) -> bool:
+    """Distinguish organism identity from a microbial source in a food name.
+
+    This does not establish viability. Generic words such as yeast identify
+    an organism only as whole labels, not inside preparations like fermented
+    rice. Scientific taxa retain the shared, bounded source vocabulary.
+    """
+    text = normalize_label_display(value.replace("_", " "))
+    if has_nonlive_microbial_derivative_evidence({"name": text}):
+        return False
+    return bool(
+        re.fullmatch(r"(?:(?:(?:brewer|baker)(?:['’]s|s['’]?)?|nutritional)\s+)?yeast|bacteria",
+                     text, re.IGNORECASE)
+        or any(match.group().casefold() not in {"yeast", "bacteria"}
+               for match in _MICROBIAL_SOURCE_RE.finditer(text))
+    )
+
+
 def is_identity_scoreable(disposition: str | None) -> bool:
     return disposition in _SCOREABLE_DISPOSITIONS
 
@@ -827,13 +845,9 @@ def resolve_identity(
     microbial_derivative_conflict = bool(
         structured_canonical
         and has_nonlive_microbial_derivative_evidence(row)
-        and _MICROBIAL_SOURCE_RE.search(structured_canonical.replace("_", " "))
-        and not has_nonlive_microbial_derivative_evidence(
-            {"name": structured_canonical.replace("_", " ")}
-        )
+        and _has_whole_microbial_identity(structured_canonical)
         and any(
-            _MICROBIAL_SOURCE_RE.search(item.value)
-            and not has_nonlive_microbial_derivative_evidence({"name": item.value})
+            _has_whole_microbial_identity(item.value)
             for item in resolved_structured_evidence
         )
     )
@@ -842,18 +856,11 @@ def resolve_identity(
         if microbial_derivative_conflict and canonical_registry and raw_evidence
         else None
     )
-    literal_preparation_identity = bool(
-        microbial_derivative_conflict
-        and canonical_before
-        and raw_canonical == canonical_before
-        and exact_literal_match
-        and exact_literal_match[0] == canonical_before
-        and (
-            not _MICROBIAL_SOURCE_RE.search(canonical_before.replace("_", " "))
-            or has_nonlive_microbial_derivative_evidence(
-                {"name": canonical_before.replace("_", " ")}
-            )
-        )
+    literal_preparation_canonical = (
+        exact_literal_match[0]
+        if exact_literal_match
+        and not _has_whole_microbial_identity(exact_literal_match[0])
+        else None
     )
     display_canonical = (
         raw_canonical
@@ -861,7 +868,7 @@ def resolve_identity(
         else structured_canonical or raw_canonical
     )
     if microbial_derivative_conflict:
-        display_canonical = raw_canonical if literal_preparation_identity else None
+        display_canonical = literal_preparation_canonical
     source_name = _source_name(
         evidence,
         display_canonical,
@@ -872,6 +879,8 @@ def resolve_identity(
         # cases the literal source wording remains the authoritative display.
         prefer_literal_source=not form_validates_specific_over_structured_parent,
     )
+    if literal_preparation_canonical:
+        source_name = raw_evidence[0].value
     source_form = next(
         (item.value for item in evidence if item.kind == "source_form"),
         None,
@@ -894,11 +903,13 @@ def resolve_identity(
         disposition: IdentityDisposition = "missing_display_label"
         canonical_after = None
         rationale = "No displayable literal ingredient-line label was available."
-    elif literal_preparation_identity:
-        disposition = "clean"
-        canonical_after = canonical_before
+    elif literal_preparation_canonical:
+        disposition = (
+            "clean" if literal_preparation_canonical == canonical_before else "repaired"
+        )
+        canonical_after = literal_preparation_canonical
         rationale = (
-            "The exact literal label validates the supplied preparation identity; "
+            "The exact literal label establishes the registered preparation identity; "
             "structured source-organism taxonomy cannot replace it."
         )
     elif microbial_derivative_conflict:
