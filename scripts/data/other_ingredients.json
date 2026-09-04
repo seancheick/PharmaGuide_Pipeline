@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
-    "schema_version": "5.4.1",
-    "last_updated": "2026-08-19",
+    "schema_version": "5.4.2",
+    "last_updated": "2026-09-04",
     "total_entries": 727,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -22906,18 +22906,17 @@
       "aliases": [
         "yeast fermentate, dried",
         "dried yeast fermentate",
-        "yeast fermentate dried",
-        "epicor dried yeast fermentate"
+        "yeast fermentate dried"
       ],
       "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "branded_complex",
       "allergen": false,
-      "notes": "Identity-only mapping for dried yeast fermentate complexes (including branded EpiCor-style labels).",
+      "notes": "Identity-only mapping for generic dried yeast fermentate complexes. The exact branded label EpiCor dried yeast fermentate belongs to the existing EpiCor preparation entry in standardized_botanicals.json; generic fermentate names do not establish EpiCor identity.",
       "common_uses": [
         "immune support"
       ],
-      "last_updated": "2026-02-24",
+      "last_updated": "2026-09-04",
       "external_ids": {},
       "functional_roles": [],
       "is_active_only": true

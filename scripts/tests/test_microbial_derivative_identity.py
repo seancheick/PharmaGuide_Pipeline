@@ -291,8 +291,7 @@ def test_existing_exact_preparation_keeps_its_identity_over_source_taxonomy(
 @pytest.mark.parametrize("literal,canonical,source_db,form", [
     ("EpiCor", "epicor", "standardized_botanicals",
      "Saccharomyces cerevisiae, Dry, Fermentate"),
-    ("EpiCor dried Yeast Fermentate", "NHA_YEAST_FERMENTATE_DRIED",
-     "other_ingredients", None),
+    ("EpiCor dried Yeast Fermentate", "epicor", "standardized_botanicals", None),
 ])
 @pytest.mark.parametrize("intermediate", ["yeast_fermentate", None])
 def test_exact_preparation_identity_repairs_intermediate_quality_parent(
@@ -352,6 +351,54 @@ def test_brand_word_in_normalized_name_or_form_is_not_exact_source_proof(
     assert decision.disposition == "identity_conflict"
     assert decision.canonical_id is None
     assert decision.source_label_name == literal
+
+
+def test_preparation_alias_registry_metadata_matches_actual_rows(enricher) -> None:
+    standardized = enricher.databases["standardized_botanicals"]
+    other = enricher.databases["other_ingredients"]
+    assert standardized["_metadata"]["total_entries"] == len(
+        standardized["standardized_botanicals"],
+    )
+    assert other["_metadata"]["total_entries"] == len(other["other_ingredients"])
+    assert standardized["_metadata"]["statistics"]["total_aliases"] == sum(
+        len(entry.get("aliases") or [])
+        for entry in standardized["standardized_botanicals"]
+    )
+
+
+@pytest.mark.parametrize("quantity", [250.0, 500.0])
+def test_exact_branded_alias_survives_previously_cleaned_generic_owner(
+    enricher, quantity: float,
+) -> None:
+    """Doctor's Best 25491/25492 source identity predates alias correction."""
+    literal = "EpiCor dried Yeast Fermentate"
+    row = {
+        **_yeast_extract_row(), "name": literal, "raw_source_text": literal,
+        "canonical_id": "NHA_YEAST_FERMENTATE_DRIED",
+        "canonical_source_db": "other_ingredients",
+        "standardName": "Yeast Fermentate (Dried)",
+        "ingredientGroup": "Saccharomyces cerevisiae", "quantity": quantity, "forms": [],
+    }
+    product, issues = enricher.enrich_product({
+        "id": "epicor-old-clean-owner", "fullName": "EpiCor",
+        "activeIngredients": [row], "inactiveIngredients": [],
+    })
+    assert product, issues
+    quality_row = product["ingredient_quality_data"]["ingredients"][0]
+    assert quality_row["canonical_id"] == "epicor"
+    assert quality_row["source_label_name"] == literal
+    assert product["probiotic_data"] == {"is_probiotic_product": False}
+    preparations = product["formulation_data"]["standardized_botanicals"]
+    assert len(preparations) == 1
+    assert preparations[0]["botanical_id"] == "epicor"
+    scoring = get_scoring_ingredients(product, strict=True)
+    assert scoring.unmapped_count == 0
+    assert len(scoring.rows) == 1
+    assert scoring.rows[0]["canonical_id"] == "epicor"
+    assert scoring.rows[0]["name"] == literal
+    assert scoring.rows[0]["quantity"] == quantity
+    assert scoring.rows[0]["raw_source_path"] == row["raw_source_path"]
+    assert product["evidence_data"]["clinical_matches"] == []
 
 
 @pytest.mark.parametrize("alternate_only", [False, True])

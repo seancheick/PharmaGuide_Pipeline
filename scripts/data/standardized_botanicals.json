@@ -55,8 +55,8 @@
       "sources": "string[] \u2014 required when bonus_eligible=true (PMID/DOI/USP monograph/NIH ODS/ABC URL)"
     },
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
-    "schema_version": "5.0.0",
-    "last_updated": "2026-08-20",
+    "schema_version": "5.0.1",
+    "last_updated": "2026-09-04",
     "total_entries": 180,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
@@ -91,7 +91,7 @@
       "vegetable_greens": 6
     },
     "statistics": {
-      "total_aliases": 982,
+      "total_aliases": 862,
       "entries_with_threshold": 108,
       "high_priority": 68,
       "medium_priority": 170
@@ -2330,7 +2330,8 @@
     {
       "standard_name": "EpiCor",
       "aliases": [
-        "EpiCor High-Metabolite Immunogens"
+        "EpiCor High-Metabolite Immunogens",
+        "epicor dried yeast fermentate"
       ],
       "markers": [
         "beta-glucans",
@@ -2338,9 +2339,13 @@
         "metabolites"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-09-04",
       "id": "epicor",
       "notes": "EpiCor \u2014 dried yeast fermentate (S. cerevisiae). Whole-food matrix, not standardized to single marker. Identity-tested as complete fermentate.",
+      "sources": [
+        "https://www.cargill.com/doc/1432208360027/state-of-the-art-prototypes.pdf",
+        "https://www.cargill.com/supplements/epicor-faqs"
+      ],
       "category": "fermentate",
       "external_ids": {},
       "data_quality": "complete",
