@@ -1217,7 +1217,7 @@
           "purpose": "prevention", "condition": "antibiotic_associated_diarrhea",
           "dose": {"basis": "unresolved", "unit": "CFU", "values": [], "dosage_forms": [], "duration_days": null, "co_therapies": ["antibiotics"]},
           "outcomes": [{"name": "antibiotic_associated_diarrhea_prevention", "hierarchy": "guideline", "kind": "patient_important", "direction": "positive"}],
-          "trial_family": "espghan_pediatric_aad_guideline_2016",
+          "trial_family": "guideline_review_26756877",
           "limitations": ["Guideline recommendation, not a new independent trial", "Moderate-quality evidence for prevention in children does not establish adult treatment or general digestive benefit", "The inspected abstract does not authenticate CNCM I-745 or establish an exact dose"],
           "review_status": "source_verified_pending_clinical_review"
         },

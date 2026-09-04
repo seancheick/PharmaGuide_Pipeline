@@ -161,6 +161,16 @@ def test_nonpositive_and_nonfinite_study_dose_is_invalid(registry, value):
     assert assessment(strain_product(dose=1e9))["study_contexts"][0]["status"] == "invalid_context"
 
 
+def test_shared_guideline_has_one_study_family_across_native_contexts():
+    registry = studied_formulas._clinical_strain_registry()
+    contexts = [context for cid in ("STRAIN_LGG", "STRAIN_SACCHAROMYCES")
+                for context in registry[cid]["study_contexts"]
+                if "26756877" in context["source_pmids"]]
+    assert len(contexts) == 2
+    assert len({context["context_id"] for context in contexts}) == 2
+    assert len({context["trial_family"] for context in contexts}) == 1
+
+
 def test_priority_native_contexts_are_curated_without_new_approval():
     registry = studied_formulas._clinical_strain_registry()
     expected = {
