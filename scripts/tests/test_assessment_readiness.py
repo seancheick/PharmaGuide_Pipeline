@@ -535,6 +535,61 @@ def test_source_identity_diagnostic_excludes_non_scoring_nutrition_rows() -> Non
     assert result["identity"]["source_mapped_coverage"] == 1.0
 
 
+@pytest.mark.parametrize("collection", ["ingredients", "ingredients_skipped", "both"])
+@pytest.mark.parametrize("exclusion", ["quality_map_match", ""])
+def test_source_identity_counts_required_conflict_once(
+    collection: str, exclusion: str,
+) -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    active = _row("Magnesium", "magnesium")
+    conflict = _row("Yeast preparation", "brewers_yeast")
+    conflict.update({
+        "raw_source_path": "ingredientRows[1]",
+        "source_row_ref": "ingredientRows[1]",
+        "identity_disposition": "identity_conflict",
+        "scoreable_identity": False,
+        "score_exclusion_reason": exclusion,
+    })
+    product = _product(active)
+    product["activeIngredients"] = [active, conflict]
+    quality = product["ingredient_quality_data"]
+    if collection in {"ingredients", "both"}:
+        quality["ingredients"].append(conflict)
+    if collection in {"ingredients_skipped", "both"}:
+        quality["ingredients_skipped"] = [conflict]
+
+    identity = evaluate_assessment_readiness(product, module="generic")["identity"]
+
+    assert identity["mapped_coverage"] == 0.5
+    assert identity["source_score_eligible_active_count"] == 2
+    assert identity["source_mapped_count"] == 1
+    assert identity["source_unmapped_count"] == 1
+    assert identity["source_mapped_coverage"] == 0.5
+    assert identity["readiness"] == "incomplete"
+
+
+def test_source_identity_respects_explicit_cleaner_exclusion_over_legacy_role() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    active = _row("Magnesium", "magnesium")
+    excluded = _row("Excluded row", "excluded")
+    excluded.update({
+        "raw_source_path": "ingredientRows[1]",
+        "source_row_ref": "ingredientRows[1]",
+        "identity_disposition": "identity_conflict",
+        "score_eligible_by_cleaner": False,
+    })
+    product = _product(active)
+    product["activeIngredients"] = [active, excluded]
+    product["ingredient_quality_data"]["ingredients"].append(excluded)
+
+    identity = evaluate_assessment_readiness(product, module="generic")["identity"]
+
+    assert identity["source_score_eligible_active_count"] == 1
+    assert identity["source_mapped_coverage"] == 1.0
+
+
 def test_product_projection_reuses_typed_source_row_dose_assessment() -> None:
     """A scoring projection is not a second physical exposure."""
     from assessment_readiness import evaluate_assessment_readiness

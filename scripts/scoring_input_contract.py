@@ -2424,7 +2424,7 @@ def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
     )
 
 
-def _required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+def required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     """Keep required label conflicts visible even when IQD cannot score them.
 
     This consumes the existing typed identity decision, not label matching or
@@ -2441,7 +2441,7 @@ def _required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str,
                 if isinstance(child, dict) and id(child) not in seen_objects:
                     seen_objects.add(id(child))
                     source_rows.append(child)
-    source_by_key = {_classification_row_key(row, index): row
+    source_by_key = {scoring_row_key(row, index): row
                      for index, row in enumerate(source_rows)}
     conflicts: Dict[str, Dict[str, Any]] = {}
     for collection in (source_rows, _safe_list(iqd.get("ingredients")),
@@ -2450,7 +2450,7 @@ def _required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str,
         for index, row in enumerate(collection):
             if not isinstance(row, dict) or row.get("identity_disposition") != "identity_conflict":
                 continue
-            key = _classification_row_key(row, index)
+            key = scoring_row_key(row, index)
             source_owner = source_by_key.get(key, {})
             owned = {**source_owner, **row}
             for field in ("source_section", "cleaner_row_role", "score_eligible_by_cleaner"):
@@ -2495,7 +2495,7 @@ def _build_scoring_ingredients(
     if strict and not isinstance(iqd.get("ingredients_scorable"), list):
         contract_findings.append("missing_iqd_ingredients_scorable_list")
     candidates = [row for row in _safe_list(iqd.get("ingredients_scorable")) if isinstance(row, dict)]
-    required_conflicts = _required_identity_conflicts(product)
+    required_conflicts = required_identity_conflicts(product)
     product_evidence_rows, product_evidence_rejected, product_evidence_findings = _product_scoring_evidence_rows(
         product,
         strict=strict,
@@ -2580,7 +2580,7 @@ def _build_scoring_ingredients(
     rows: List[Dict[str, Any]] = []
     row_findings: List[str] = []
     for index, row in enumerate(candidates):
-        if _classification_row_key(row, index) in required_conflicts:
+        if scoring_row_key(row, index) in required_conflicts:
             continue
         ok, rejection, findings = _evaluate_row(row, strict=strict)
         row_findings.extend(findings)
@@ -2601,11 +2601,11 @@ def _build_scoring_ingredients(
     # dose-bearing label actives unresolved for identity remain in the
     # denominator but never enter scoring rows.
     mapped_coverage_keys = {
-        _classification_row_key(row, index)
+        scoring_row_key(row, index)
         for index, row in enumerate(rows)
     }
     unresolved_coverage_keys = {
-        _classification_row_key(item.row, index)
+        scoring_row_key(item.row, index)
         for index, item in enumerate(rejected)
         if item.reason == "missing_scoring_identity"
         and _norm(item.row.get("scoring_input_kind")) != "product_level_evidence"
@@ -2614,7 +2614,7 @@ def _build_scoring_ingredients(
     for index, row in enumerate(_safe_list(iqd.get("ingredients"))):
         if not isinstance(row, dict) or not _is_genuine_unresolved_label_active(row):
             continue
-        key = _classification_row_key(row, index)
+        key = scoring_row_key(row, index)
         if key in mapped_coverage_keys or key in unresolved_coverage_keys:
             continue
         rejected.append(RejectedScoringRow(row=row, reason="missing_scoring_identity"))
@@ -2679,7 +2679,7 @@ def get_scoring_ingredients(
     )
 
 
-def _classification_row_key(row: Dict[str, Any], index: int) -> str:
+def scoring_row_key(row: Dict[str, Any], index: int) -> str:
     """Stable row identity for population union/deduplication."""
     for key in ("raw_source_path", "row_id", "ingredientId", "source_label_key"):
         value = str(row.get(key) or "").strip()
@@ -2748,7 +2748,7 @@ def get_classification_ingredients(product: Dict[str, Any]) -> ClassificationInp
         allow_legacy_fallback=False,
     )
     original_scorable_keys = {
-        _classification_row_key(row, index)
+        scoring_row_key(row, index)
         for index, row in enumerate(_safe_list(iqd.get("ingredients_scorable")))
         if isinstance(row, dict)
     }
@@ -2764,7 +2764,7 @@ def get_classification_ingredients(product: Dict[str, Any]) -> ClassificationInp
         # that population through the authoritative strict scoring contract.
         # Admitting every recovered row here reintroduces decorative probiotic
         # bases and turns ``quantified_label_actives`` into an NP-row union.
-        key = _classification_row_key(source_row, index)
+        key = scoring_row_key(source_row, index)
         if key not in original_scorable_keys:
             continue
         row = dict(source_row)
@@ -2790,7 +2790,7 @@ def get_classification_ingredients(product: Dict[str, Any]) -> ClassificationInp
         raw_category = _safe_dict(row.get("raw_taxonomy")).get("category")
         if raw_category:
             row["classification_category"] = raw_category
-        key = _classification_row_key(row, index)
+        key = scoring_row_key(row, index)
         if key in seen:
             continue
         seen.add(key)

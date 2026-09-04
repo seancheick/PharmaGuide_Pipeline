@@ -23,6 +23,8 @@ from scoring_input_contract import (
     classify_ingredient_roles,
     get_scoring_ingredients,
     has_unresolved_identity_reason,
+    required_identity_conflicts,
+    scoring_row_key,
     score_exclusion_reason,
 )
 from scoring_v4.modules.generic_evidence import (
@@ -488,9 +490,9 @@ def _source_score_eligible_active_rows(
     """Return cleaner-owned active rows even when dose filtering removes them."""
     quality = _safe_dict(product.get("ingredient_quality_data"))
     rows = quality.get("ingredients")
-    return [
-        row
-        for row in _safe_list(rows)
+    source_rows = {
+        scoring_row_key(row, index): row
+        for index, row in enumerate(_safe_list(rows))
         if isinstance(row, Mapping)
         and _norm(row.get("source_section")) != "inactive"
         and (
@@ -504,9 +506,17 @@ def _source_score_eligible_active_rows(
         )
         and (
             row.get("score_eligible_by_cleaner") is True
-            or _norm(row.get("cleaner_row_role")) == "active_scorable"
+            or (
+                row.get("score_eligible_by_cleaner") is None
+                and _norm(row.get("cleaner_row_role")) == "active_scorable"
+            )
         )
-    ]
+    }
+    # Reuse the scoring contract's exact ownership/eligibility decision. A
+    # conflict can live only in skipped IQD rows, or carry a stale positive
+    # match reason; neither may erase it from source-coverage diagnostics.
+    source_rows.update(required_identity_conflicts(dict(product)))
+    return list(source_rows.values())
 
 
 def evaluate_catalog_disposition(product: Mapping[str, Any]) -> Dict[str, Any]:
@@ -770,7 +780,7 @@ def _identity_readiness(
         if row.get("mapped_identity") is not False
         and bool(str(row.get("canonical_id") or "").strip())
         and _norm(row.get("identity_disposition"))
-        not in {"unresolved", "rejected", "parse_error"}
+        not in {"unresolved", "rejected", "parse_error", "identity_conflict", "missing_display_label"}
     ]
     source_mapped_count = len(mapped_source_rows)
     source_unmapped_count = len(source_rows) - source_mapped_count
