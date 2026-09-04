@@ -3,11 +3,11 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
-    "last_updated": "2026-09-03",
+    "last_updated": "2026-09-04",
     "total_entries": 49,
     "data_source": null,
-    "version": "2.2.9",
-    "signoff_status_note": "42/49 strains fully signed off (dr_pham_signoff: true). Dr Pham completed post-verification async pass on 2026-04-21: 3 strains downgraded (B. clausii strong→medium; 2 L. paracasei strong→weak), 2 citations swapped (Lpc-37 → PMID 33385020; Nissle 1917 → PMID 15479682 [Kruis 2004 gold-standard RCT]), 8 weak strains confirmed honest. 2026-05-22 unmapped-resolution batch added 2 new entries pending Dr Pham review: STRAIN_PLANTARUM_LP01 (Probiotical LMG P-21021, 3 content-verified PMIDs) and STRAIN_LACTIS_BS01 (Probiotical LMG P-21384, 2 content-verified PMIDs). 2026-06-05 Seed DS-01 exact-code batch added 4 formula-backed SD-* strains pending Dr Pham review; PMIDs 40944126 and 41750436 are DS-01 product/formula RCTs, not isolated strain-specific trials. 2026-07-13 added exact M-63 identity with two content-verified single-strain RCTs (PMIDs 36986131 and 42056537), conservatively classified moderate pending clinician review.",
+    "version": "2.2.10",
+    "signoff_status_note": "40/49 entries retain historical clinician sign-off flags. On 2026-09-04 native approvals for BB-12 and Bi-07 were suspended after source verification failed; replacements require clinician review. Historical review records remain in version control. Sign-off does not establish positive effect, applicability to every label, or completeness of this literature search.",
     "clinical_validation_note": "14 non-flipped strains now carry clinical_support_level per 4-question framework (strain-explicit / outcome-relevant / human-clinical / dose-mentioned). All 14 score 'weak' at abstract level; 5 have stronger swap candidates identified. Dr Pham review required before any PMID swap.",
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient."
   },
@@ -32,7 +32,17 @@
         "diarrhea prevention",
         "pediatric health"
       ],
-      "notable_studies": "Over 1000 published studies, 250+ clinical trials, most researched probiotic strain worldwide",
+      "notable_studies": "LGG is explicitly named in the ESPGHAN pediatric antibiotic-associated diarrhea prevention guideline. This does not establish efficacy for every age group or digestive indication.",
+      "evidence_review": {
+        "search_coverage": "partial",
+        "reviewed_on": "2026-09-03",
+        "reviewed_by": "Codex source verification (AI-assisted)",
+        "clinical_signoff_changed": false,
+        "source_pmids": ["26756877", "33295643"],
+        "scope": "Primary guideline strain specificity and secondary review interpretation; not an exhaustive efficacy or dose review.",
+        "queries": ["26756877", "33295643", "Lactobacillus rhamnosus GG antibiotic associated diarrhea systematic review"],
+        "unresolved": ["Adult general-use applicability", "Outcome-specific studied CFU doses"]
+      },
       "cfu_thresholds": {
         "indication_primary": "prevention of antibiotic-associated diarrhea",
         "tiers_cfu_per_day": {
@@ -58,15 +68,23 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/26756877/",
           "recommendation_strength": "strong recommendation, moderate quality of evidence",
           "verified_date": "2026-04-21",
-          "evidence_strength": "strong"
+          "evidence_strength": "strong",
+          "clinical_validation": {
+            "q1_strain_explicit": "YES",
+            "q3_human_clinical": "YES",
+            "scope_verified_on": "2026-09-03",
+            "scope_verification_note": "PMID 26756877 explicitly names LGG for pediatric AAD prevention; no adult general-use dose range inferred."
+          }
         },
         "secondary_indications": [
           {
-            "name": "acute infectious diarrhea duration reduction",
+            "name": "acute infectious diarrhea treatment (duration benefit uncertain)",
             "pmid": "33295643",
             "url": "https://pubmed.ncbi.nlm.nih.gov/33295643/",
             "source_short": "Cochrane 2020 — probiotics for acute infectious diarrhoea",
-            "verified_date": "2026-04-21"
+            "verified_date": "2026-09-03",
+            "effect_direction": "uncertain",
+            "interpretation": "Low-risk trials found no difference in diarrhea lasting at least 48 hours; the effect on duration was uncertain. Not proof of duration reduction."
           }
         ],
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). ESPGHAN 2016 strongly recommends LGG for AAD prevention but the abstract does not specify the exact CFU threshold; adequate/good boundary pending Dr Pham full-text review.",
@@ -595,9 +613,9 @@
         "gut transit",
         "digestive health"
       ],
-      "notable_studies": "Multiple RCTs for immune function and constipation",
+      "notable_studies": "The two cited eight-week constipation trials did not outperform placebo on their primary complete spontaneous bowel movement endpoint; other outcomes require separate review.",
       "cfu_thresholds": {
-        "indication_primary": "relief of functional constipation (bowel-movement frequency)",
+        "indication_primary": "functional constipation (primary bowel-movement endpoint not improved in the cited trials)",
         "tiers_cfu_per_day": {
           "low": {
             "upper_exclusive": 1000000000
@@ -619,19 +637,23 @@
           "source_short": "JAMA Netw Open 2024 — 8-week HN019 for functional constipation",
           "pmid": "39356506",
           "url": "https://pubmed.ncbi.nlm.nih.gov/39356506/",
-          "verified_date": "2026-04-21",
-          "evidence_strength": "strong"
+          "verified_date": "2026-09-04",
+          "evidence_strength": "strong",
+          "effect_direction": "null",
+          "interpretation": "No superiority to placebo on the primary complete spontaneous bowel movement endpoint. Study quality is distinct from evidence of benefit; this does not establish lack of benefit for every outcome."
         },
         "secondary_indications": [
           {
-            "name": "colonic transit-time reduction",
+            "name": "functional constipation (primary CSBM endpoint not improved)",
             "pmid": "40320938",
             "url": "https://pubmed.ncbi.nlm.nih.gov/40320938/",
             "source_short": "Mol Nutr Food Res 2025 — multi-center HN019 RCT",
-            "verified_date": "2026-04-21"
+            "verified_date": "2026-09-04",
+            "effect_direction": "null",
+            "interpretation": "HN019 was not superior to placebo for complete spontaneous bowel movement frequency or the reported fecal analyses."
           }
         ],
-        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). HN019 constipation RCTs typically dose 10–20B CFU/day — Dr Pham may confirm adequate tier lower bound from full-text.",
+        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day), not a clinically effective range. The primary eight-week trial tested 7.0B CFU/day at start and 4.69B at end without superiority on its primary endpoint. No reviewed dose-applicability range is established here.",
         "dr_pham_signoff": true,
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
@@ -648,12 +670,9 @@
         "Bifidobacterium animalis lactis Bi-07",
         "B. animalis lactis Bi-07"
       ],
-      "evidence_level": "high",
-      "key_benefits": [
-        "immune support",
-        "respiratory health"
-      ],
-      "notable_studies": "RCTs for upper respiratory infections",
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "The former native citation concerned a different species in a laboratory study. Correctly matched human evidence remains pending review; this is not evidence of no benefit.",
       "cfu_thresholds": {
         "indication_primary": "immune support and respiratory health",
         "tiers_cfu_per_day": {
@@ -673,18 +692,23 @@
           }
         },
         "evidence": {
-          "type": "strain_referenced_clinical_study",
-          "source_short": "Research in microbiology — Genetic and proteomic characterization of rifaximin resistance in Bifidobacterium infantis BI07.",
-          "pmid": "17408927",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/17408927/",
-          "verified_date": "2026-04-21",
-          "evidence_strength": "medium"
+          "type": "unverified_reference",
+          "source_short": "Native clinical source pending identity-correct review",
+          "pmid": null,
+          "url": null,
+          "verified_date": "2026-09-04",
+          "evidence_strength": "unreviewed",
+          "clinical_validation": {
+            "q1_strain_explicit": "UNCLEAR",
+            "q3_human_clinical": "NO",
+            "note": "Former citation addressed a different species and was not a human clinical trial. No replacement approved."
+          }
         },
-        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain referenced but evidence is adjacent (review / co-studied paper). Dr Pham may upgrade citation when signing off.",
-        "dr_pham_signoff": true,
-        "dr_pham_signoff_verified_by": "agent:claude-code",
-        "dr_pham_signoff_verified_date": "2026-04-21",
-        "dr_pham_signoff_verification_note": "PMID 17408927 verified, title-match=YES"
+        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day), not reviewed efficacy thresholds. Native clinical credit is on hold pending identity-correct evidence review.",
+        "dr_pham_signoff": false,
+        "dr_pham_signoff_verified_by": null,
+        "dr_pham_signoff_verified_date": null,
+        "dr_pham_signoff_verification_note": "Historical approval suspended on 2026-09-04 after citation identity mismatch; no replacement has been clinically approved."
       }
     },
     {
@@ -1152,13 +1176,9 @@
         "Bifidobacterium animalis lactis BB-12",
         "Bifidobacterium animalis subsp. lactis BB-12"
       ],
-      "evidence_level": "high",
-      "key_benefits": [
-        "digestive health",
-        "immune support",
-        "infant health"
-      ],
-      "notable_studies": "Most documented Bifidobacterium strain",
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "A verified replacement study candidate is retained in the review queue; the former native citation could not be verified. Search and clinical review remain incomplete.",
       "cfu_thresholds": {
         "indication_primary": "immune support and gut health",
         "tiers_cfu_per_day": {
@@ -1178,18 +1198,18 @@
           }
         },
         "evidence": {
-          "type": "strain_referenced_clinical_study",
-          "source_short": "Annals of family medicine — Efficacy and Safety of BB-12 Supplemented Strawberry Yogurt For Healthy Children on Antibiotics (PLAY ON).",
-          "pmid": "38271203",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/38271203/",
-          "verified_date": "2026-04-21",
-          "evidence_strength": "medium"
+          "type": "unverified_reference",
+          "source_short": "Native clinical source pending verification and review",
+          "pmid": null,
+          "url": null,
+          "verified_date": "2026-09-04",
+          "evidence_strength": "unreviewed"
         },
-        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain referenced but evidence is adjacent (review / co-studied paper). Dr Pham may upgrade citation when signing off.",
-        "dr_pham_signoff": true,
-        "dr_pham_signoff_verified_by": "agent:claude-code",
-        "dr_pham_signoff_verified_date": "2026-04-21",
-        "dr_pham_signoff_verification_note": "PMID 38271203 verified, title-match=YES"
+        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day), not reviewed efficacy thresholds. The research candidate is not a clinician-approved replacement and does not establish a continuous dose range.",
+        "dr_pham_signoff": false,
+        "dr_pham_signoff_verified_by": null,
+        "dr_pham_signoff_verified_date": null,
+        "dr_pham_signoff_verification_note": "Historical approval suspended on 2026-09-04 because the cited record could not be verified; a replacement requires clinician review."
       }
     },
     {

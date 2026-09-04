@@ -303,7 +303,19 @@ def test_exact_group_code_is_owned_through_producer_readiness_and_export(enriche
     owner["notes"] = ""  # typed code, not prose
     sibling = _row(name, index=1, cfu=0)
     product = _collect(enricher, [owner, sibling])
+    matched = product["probiotic_data"]["clinical_strains"]
+    assert len(matched) == 1
+    assert matched[0]["source_row_ref"] == owner["raw_source_path"]
     clinical = independent_clinical_strains(product)
+    if code == "BB-12":
+        # Correctly resolved identity does not restore a held clinical source.
+        assert clinical == []
+        assert _probiotic_native_evidence_state(product, owner) is None
+        assert _probiotic_native_evidence_state(product, sibling) is None
+        exported = build_detail_blob(product, {})["ingredients"]
+        assert exported[0]["clinical_support_level"] is None
+        assert exported[1]["clinical_support_level"] is None
+        return
     assert len(clinical) == 1
     assert clinical[0]["source_row_ref"] == owner["raw_source_path"]
     assert clinical[0]["label_name"] == name

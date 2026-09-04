@@ -1025,7 +1025,15 @@ def check_clinically_relevant_strains(findings: List[Finding], data: Dict[str, A
             continue
         _check_required(findings, file, e, i, [("id", str), ("standard_name", str)])
         _check_list_of_strings(findings, file, e, i, "aliases", required=False)
-        _check_enum(findings, file, e, i, "evidence_level", {"high", "moderate", "low"}, severity="warning")
+        _check_enum(findings, file, e, i, "evidence_level", {"high", "moderate", "low", "unreviewed"}, severity="warning")
+        if e.get("evidence_level") == "unreviewed":
+            thresholds = e.get("cfu_thresholds")
+            approved = isinstance(thresholds, dict) and thresholds.get("dr_pham_signoff") is True
+            if approved or e.get("key_benefits"):
+                findings.append(Finding(
+                    "error", file, f"[{i}].evidence_level", "unreviewed_evidence_claim",
+                    "unapproved source with no benefit claims", "approval or benefits present",
+                ))
 
 
 def check_proprietary_blends(findings: List[Finding], data: Dict[str, Any], file: str) -> None:

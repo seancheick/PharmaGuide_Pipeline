@@ -1,0 +1,2036 @@
+{
+  "kind": "probiotic_coverage_material_impact_summary",
+  "as_of": "2026-09-04",
+  "baseline_candidate_commit": "2a5b99d7",
+  "comparison_is_not_against_live_phone_catalog": true,
+  "release_approved": false,
+  "global_weights_changed": false,
+  "sources": [
+    {
+      "path": "/Users/seancheick/Downloads/dsld_clean/reports/probiotic_coverage_2026_09_03/targeted_final.json",
+      "sha256": "4ca34f82802d29119192e00a295c2294710eee5106d22e63ceb59d64e80eaed9"
+    },
+    {
+      "path": "/Users/seancheick/Downloads/dsld_clean/reports/probiotic_coverage_2026_09_03/corpus_impact_final.json",
+      "sha256": "bf06c68de7d1a0c48fd46355b2cdde0da1efb38c9fa765956ddf9b55d5e8095b"
+    },
+    {
+      "path": "/Users/seancheick/Downloads/dsld_clean/reports/probiotic_coverage_2026_09_03/citation_content_final.json",
+      "sha256": "9c2e25702f43ab56468203b3a5490a79e5d6d0f365df736708e648c21c736569"
+    }
+  ],
+  "baseline_chain": [
+    {
+      "path": "/Users/seancheick/Downloads/dsld_clean/reports/probiotic_rubric_2026_09_03/corpus_impact_reviewed.json",
+      "sha256": "97570a3819c3413f17282898840ce403807aa3dd8c3fa771c7d7f1db915f2fbe"
+    },
+    {
+      "path": "/Users/seancheick/Downloads/dsld_clean/reports/scoring_applicability_2026_09_03/corpus_impact.json",
+      "sha256": "5bd6df71f464f9e6bc4514f9a9ba90eb4518ef589a6f957fbf9553675ea30134"
+    }
+  ],
+  "complete": true,
+  "product_count": 15415,
+  "full_reenrichment_count": 217,
+  "recomputed_lanes": [
+    "certification",
+    "probiotic",
+    "proprietary_blend_provenance",
+    "evidence",
+    "scoring"
+  ],
+  "status_transitions": {
+    "scored->scored": 15284,
+    "not_scored->not_scored": 77,
+    "suppressed_safety->suppressed_safety": 54
+  },
+  "changed_fields": {
+    "score": 57,
+    "pillars": 57,
+    "verdict": 9,
+    "tier": 11,
+    "status": 0,
+    "module": 0,
+    "confidence": 0,
+    "reasons": 196
+  },
+  "numeric_change_modules": {
+    "probiotic": 57
+  },
+  "numeric_delta_range": [
+    -11.4,
+    -0.9
+  ],
+  "all_numeric_changes": [
+    {
+      "id": "246008",
+      "brand": "Culturelle Baby",
+      "name": "Grow + Thrive Unflavored",
+      "baseline": {
+        "score": 53.1,
+        "pillars": {
+          "formulation": 12.5,
+          "dose": 4.1,
+          "evidence": 8,
+          "transparency": 9,
+          "verification": 11,
+          "safety_hygiene": 8.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 49.5,
+        "pillars": {
+          "formulation": 10.7,
+          "dose": 2.3,
+          "evidence": 8,
+          "transparency": 9,
+          "verification": 11,
+          "safety_hygiene": 8.5
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "246011",
+      "brand": "Culturelle Baby",
+      "name": "Baby Grow + Thrive",
+      "baseline": {
+        "score": 62.1,
+        "pillars": {
+          "formulation": 15,
+          "dose": 4.1,
+          "evidence": 8,
+          "transparency": 14,
+          "verification": 11,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 58.5,
+        "pillars": {
+          "formulation": 13.2,
+          "dose": 2.3,
+          "evidence": 8,
+          "transparency": 14,
+          "verification": 11,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "246012",
+      "brand": "Culturelle Baby",
+      "name": "Baby Grow + Thrive",
+      "baseline": {
+        "score": 62.1,
+        "pillars": {
+          "formulation": 15,
+          "dose": 4.1,
+          "evidence": 8,
+          "transparency": 14,
+          "verification": 11,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 58.5,
+        "pillars": {
+          "formulation": 13.2,
+          "dose": 2.3,
+          "evidence": 8,
+          "transparency": 14,
+          "verification": 11,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "269621",
+      "brand": "Doctor's Best",
+      "name": "Digestive Probiotic 20 Billion",
+      "baseline": {
+        "score": 58.6,
+        "pillars": {
+          "formulation": 15.9,
+          "dose": 5.2,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 6,
+          "safety_hygiene": 8.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 56.6,
+        "pillars": {
+          "formulation": 15.9,
+          "dose": 5.2,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 6,
+          "safety_hygiene": 8.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "304445",
+      "brand": "GNC Probiotic Solutions",
+      "name": "Probiotic Solutions Adults 50 Plus 55 Billion CFUs",
+      "baseline": {
+        "score": 59.2,
+        "pillars": {
+          "formulation": 15.7,
+          "dose": 8.5,
+          "evidence": 8,
+          "transparency": 11,
+          "verification": 9,
+          "safety_hygiene": 7
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 57.2,
+        "pillars": {
+          "formulation": 15.7,
+          "dose": 8.5,
+          "evidence": 6,
+          "transparency": 11,
+          "verification": 9,
+          "safety_hygiene": 7
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "173776",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "name": "Once Daily Ultra 90 Billion Guaranteed",
+      "baseline": {
+        "score": 54.7,
+        "pillars": {
+          "formulation": 15.2,
+          "dose": 2.7,
+          "evidence": 3,
+          "transparency": 14.8,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 51.7,
+        "pillars": {
+          "formulation": 15.2,
+          "dose": 2.7,
+          "evidence": 0,
+          "transparency": 14.8,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "241328",
+      "brand": "Garden of Life",
+      "name": "Paleo Defense Ultra",
+      "baseline": {
+        "score": 45.7,
+        "pillars": {
+          "formulation": 13,
+          "dose": 1.2,
+          "evidence": 3,
+          "transparency": 9.5,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 42.7,
+        "pillars": {
+          "formulation": 13,
+          "dose": 1.2,
+          "evidence": 0,
+          "transparency": 9.5,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "267300",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "name": "Mood+ 50 Billion Guaranteed",
+      "baseline": {
+        "score": 53.8,
+        "pillars": {
+          "formulation": 16.1,
+          "dose": 3.5,
+          "evidence": 6,
+          "transparency": 9.2,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 47.8,
+        "pillars": {
+          "formulation": 16.1,
+          "dose": 3.5,
+          "evidence": 0,
+          "transparency": 9.2,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "267301",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "name": "Mood+ 50 Billion Guaranteed",
+      "baseline": {
+        "score": 53.8,
+        "pillars": {
+          "formulation": 16.1,
+          "dose": 3.5,
+          "evidence": 6,
+          "transparency": 9.2,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 47.8,
+        "pillars": {
+          "formulation": 16.1,
+          "dose": 3.5,
+          "evidence": 0,
+          "transparency": 9.2,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "274061",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "name": "Mood+ 50 Billion Guaranteed",
+      "baseline": {
+        "score": 57.7,
+        "pillars": {
+          "formulation": 16.1,
+          "dose": 3.5,
+          "evidence": 6,
+          "transparency": 13.1,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 51.7,
+        "pillars": {
+          "formulation": 16.1,
+          "dose": 3.5,
+          "evidence": 0,
+          "transparency": 13.1,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "275474",
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "name": "Once Daily Ultra",
+      "baseline": {
+        "score": 54.4,
+        "pillars": {
+          "formulation": 15.2,
+          "dose": 2.3,
+          "evidence": 3,
+          "transparency": 14.9,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 51.4,
+        "pillars": {
+          "formulation": 15.2,
+          "dose": 2.3,
+          "evidence": 0,
+          "transparency": 14.9,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "308258",
+      "brand": "Life Extension Florassist",
+      "name": "Probiotic Daily Bowel Regularity",
+      "baseline": {
+        "score": 64.4,
+        "pillars": {
+          "formulation": 11.4,
+          "dose": 13.7,
+          "evidence": 4.8,
+          "transparency": 15,
+          "verification": 11,
+          "safety_hygiene": 8.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 61.6,
+        "pillars": {
+          "formulation": 11.4,
+          "dose": 13.7,
+          "evidence": 2,
+          "transparency": 15,
+          "verification": 11,
+          "safety_hygiene": 8.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "328802",
+      "brand": "Life Extension Florassist",
+      "name": "Daily Bowel Regularity",
+      "baseline": {
+        "score": 64.7,
+        "pillars": {
+          "formulation": 11.4,
+          "dose": 14,
+          "evidence": 4.8,
+          "transparency": 15,
+          "verification": 11,
+          "safety_hygiene": 8.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 61.9,
+        "pillars": {
+          "formulation": 11.4,
+          "dose": 14,
+          "evidence": 2,
+          "transparency": 15,
+          "verification": 11,
+          "safety_hygiene": 8.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "257033",
+      "brand": "MegaFood",
+      "name": "MegaFlora Probiotic with Turmeric",
+      "baseline": {
+        "score": 55.5,
+        "pillars": {
+          "formulation": 11.8,
+          "dose": 2.7,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 52.3,
+        "pillars": {
+          "formulation": 11.8,
+          "dose": 2.7,
+          "evidence": 4.8,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "287477",
+      "brand": "MegaFood",
+      "name": "MegaFlora Probiotic with Turmeric",
+      "baseline": {
+        "score": 55.1,
+        "pillars": {
+          "formulation": 11.8,
+          "dose": 2.3,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 51.3,
+        "pillars": {
+          "formulation": 11.8,
+          "dose": 2.3,
+          "evidence": 4.2,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "200156",
+      "brand": "Nature's Way",
+      "name": "Fortify Kids Probiotics 10 Billion Fruit Punch Flavored",
+      "baseline": {
+        "score": 54.8,
+        "pillars": {
+          "formulation": 12,
+          "dose": 5.8,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 7
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 43.5,
+        "pillars": {
+          "formulation": 10.2,
+          "dose": 2.3,
+          "evidence": 0,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 7
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "202097",
+      "brand": "Nature's Way",
+      "name": "Primadophilus Optima Kids Probiotics 10 Billion Fruit Punch Flavored",
+      "baseline": {
+        "score": 54.8,
+        "pillars": {
+          "formulation": 12,
+          "dose": 5.8,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 7
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 43.5,
+        "pillars": {
+          "formulation": 10.2,
+          "dose": 2.3,
+          "evidence": 0,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 7
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "202109",
+      "brand": "Nature's Way",
+      "name": "Primadophilus Optima Kids Probiotics 10 Billion Vanilla Flavored",
+      "baseline": {
+        "score": 53.7,
+        "pillars": {
+          "formulation": 11.4,
+          "dose": 5.8,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 6.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 42.3,
+        "pillars": {
+          "formulation": 9.5,
+          "dose": 2.3,
+          "evidence": 0,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 6.5
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "205129",
+      "brand": "Nature's Way",
+      "name": "Fortify Optima Probiotic Intensive 200 Billion",
+      "baseline": {
+        "score": 65.9,
+        "pillars": {
+          "formulation": 20,
+          "dose": 8.5,
+          "evidence": 6,
+          "transparency": 13.4,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 56.6,
+        "pillars": {
+          "formulation": 18.2,
+          "dose": 7,
+          "evidence": 0,
+          "transparency": 13.4,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "228024",
+      "brand": "Nature's Way",
+      "name": "Fortify Optima Immune Probiotic 50 Billion",
+      "baseline": {
+        "score": 59.5,
+        "pillars": {
+          "formulation": 17.3,
+          "dose": 8.1,
+          "evidence": 6,
+          "transparency": 10.1,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 54.2,
+        "pillars": {
+          "formulation": 15.5,
+          "dose": 4.6,
+          "evidence": 6,
+          "transparency": 10.1,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "230023",
+      "brand": "Nature's Way",
+      "name": "Fortify Optima Women's Probiotic 50 Billion",
+      "baseline": {
+        "score": 59.9,
+        "pillars": {
+          "formulation": 17.3,
+          "dose": 8.1,
+          "evidence": 6,
+          "transparency": 10.5,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 48.6,
+        "pillars": {
+          "formulation": 15.5,
+          "dose": 4.6,
+          "evidence": 0,
+          "transparency": 10.5,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "230028",
+      "brand": "Nature's Way",
+      "name": "Fortify Optima Daily Probiotic 50 Billion",
+      "baseline": {
+        "score": 61.7,
+        "pillars": {
+          "formulation": 17.3,
+          "dose": 8.5,
+          "evidence": 6,
+          "transparency": 11.9,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 52.4,
+        "pillars": {
+          "formulation": 15.5,
+          "dose": 7,
+          "evidence": 0,
+          "transparency": 11.9,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "230033",
+      "brand": "Nature's Way",
+      "name": "Fortify Optima Adult 50+ Probiotic 50 Billion",
+      "baseline": {
+        "score": 55,
+        "pillars": {
+          "formulation": 16.4,
+          "dose": 4.1,
+          "evidence": 6,
+          "transparency": 10.5,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 45.3,
+        "pillars": {
+          "formulation": 14.5,
+          "dose": 2.3,
+          "evidence": 0,
+          "transparency": 10.5,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "242461",
+      "brand": "Nature's Way",
+      "name": "Fortify Digestive Complete",
+      "baseline": {
+        "score": 52.2,
+        "pillars": {
+          "formulation": 14.5,
+          "dose": 4.6,
+          "evidence": 3,
+          "transparency": 12.1,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 49.2,
+        "pillars": {
+          "formulation": 14.5,
+          "dose": 4.6,
+          "evidence": 0,
+          "transparency": 12.1,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "267830",
+      "brand": "Nature's Way",
+      "name": "Fortify Mood & Stress",
+      "baseline": {
+        "score": 52.5,
+        "pillars": {
+          "formulation": 11.8,
+          "dose": 2.7,
+          "evidence": 8,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 51.3,
+        "pillars": {
+          "formulation": 11.8,
+          "dose": 2.7,
+          "evidence": 6.8,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "267948",
+      "brand": "Nature's Way",
+      "name": "Probiotic Pearls Women's",
+      "baseline": {
+        "score": 50.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 3,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 47.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 0,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "268071",
+      "brand": "Nature's Way",
+      "name": "Probiotic Pearls Women's",
+      "baseline": {
+        "score": 50.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 3,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 47.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 0,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "270534",
+      "brand": "Nature's Way",
+      "name": "Probiotic Pearls Women's",
+      "baseline": {
+        "score": 46.7,
+        "pillars": {
+          "formulation": 11.1,
+          "dose": 3.1,
+          "evidence": 3,
+          "transparency": 11,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 43.7,
+        "pillars": {
+          "formulation": 11.1,
+          "dose": 3.1,
+          "evidence": 0,
+          "transparency": 11,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "273394",
+      "brand": "Nature's Way",
+      "name": "Fortify Age 50+ Probiotic + Prebiotics 50 Billion",
+      "baseline": {
+        "score": 65.5,
+        "pillars": {
+          "formulation": 17.5,
+          "dose": 8.5,
+          "evidence": 8,
+          "transparency": 13.5,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 60.1,
+        "pillars": {
+          "formulation": 15.7,
+          "dose": 7,
+          "evidence": 5.9,
+          "transparency": 13.5,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "273399",
+      "brand": "Nature's Way",
+      "name": "Fortify Daily Probiotic 50 Billion",
+      "baseline": {
+        "score": 64.5,
+        "pillars": {
+          "formulation": 17.5,
+          "dose": 8.5,
+          "evidence": 8,
+          "transparency": 12.5,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 60.6,
+        "pillars": {
+          "formulation": 15.7,
+          "dose": 8.5,
+          "evidence": 5.9,
+          "transparency": 12.5,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "277889",
+      "brand": "Nature's Way",
+      "name": "Probiotic Pearls Women's",
+      "baseline": {
+        "score": 50.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 3,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 47.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 0,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "317030",
+      "brand": "Nature's Way",
+      "name": "Fortify Adult Daily Probiotic 30 Billion",
+      "baseline": {
+        "score": 66.4,
+        "pillars": {
+          "formulation": 19.3,
+          "dose": 8.5,
+          "evidence": 8,
+          "transparency": 12.6,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 64.5,
+        "pillars": {
+          "formulation": 18.4,
+          "dose": 7.5,
+          "evidence": 8,
+          "transparency": 12.6,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "327963",
+      "brand": "Nature's Way",
+      "name": "Fortify Adult Probiotic 50 Billion Extra-Strength",
+      "baseline": {
+        "score": 66.9,
+        "pillars": {
+          "formulation": 20,
+          "dose": 8.5,
+          "evidence": 8,
+          "transparency": 12.4,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 66,
+        "pillars": {
+          "formulation": 19.1,
+          "dose": 8.5,
+          "evidence": 8,
+          "transparency": 12.4,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "327966",
+      "brand": "Nature's Way",
+      "name": "Fortify 50+ Optima Probiotic 50 Billion",
+      "baseline": {
+        "score": 67.1,
+        "pillars": {
+          "formulation": 20,
+          "dose": 8.1,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 55.8,
+        "pillars": {
+          "formulation": 18.2,
+          "dose": 4.6,
+          "evidence": 0,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "328034",
+      "brand": "Nature's Way",
+      "name": "Women's Probiotic Pearls 1 Billion",
+      "baseline": {
+        "score": 50.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 3,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 47.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 0,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "333748",
+      "brand": "Nature's Way",
+      "name": "Fortify Optima Daily Probiotic 50 Billion",
+      "baseline": {
+        "score": 64.4,
+        "pillars": {
+          "formulation": 20,
+          "dose": 8.5,
+          "evidence": 6,
+          "transparency": 11.9,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 55.1,
+        "pillars": {
+          "formulation": 18.2,
+          "dose": 7,
+          "evidence": 0,
+          "transparency": 11.9,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "333749",
+      "brand": "Nature's Way",
+      "name": "Fortify Optima Women's Probiotic 50 Billion",
+      "baseline": {
+        "score": 67.1,
+        "pillars": {
+          "formulation": 20,
+          "dose": 8.1,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 55.8,
+        "pillars": {
+          "formulation": 18.2,
+          "dose": 4.6,
+          "evidence": 0,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "334441",
+      "brand": "Nature's Way",
+      "name": "Women's Probiotic Pearls 1 Billion",
+      "baseline": {
+        "score": 50.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 3,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 47.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 0,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "334442",
+      "brand": "Nature's Way",
+      "name": "Women's Probiotic Pearls 1 Billion",
+      "baseline": {
+        "score": 50.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 3,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 47.5,
+        "pillars": {
+          "formulation": 13.9,
+          "dose": 3.1,
+          "evidence": 0,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "66386",
+      "brand": "Nature's Way",
+      "name": "Primadophilus Fortify Women's Probiotic",
+      "baseline": {
+        "score": 49.5,
+        "pillars": {
+          "formulation": 14.5,
+          "dose": 2.3,
+          "evidence": 3,
+          "transparency": 11.7,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 46.5,
+        "pillars": {
+          "formulation": 14.5,
+          "dose": 2.3,
+          "evidence": 0,
+          "transparency": 11.7,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "178450",
+      "brand": "Bayer One A Day",
+      "name": "TruBiotics",
+      "baseline": {
+        "score": 47.9,
+        "pillars": {
+          "formulation": 11.8,
+          "dose": 4.1,
+          "evidence": 6,
+          "transparency": 10,
+          "verification": 9,
+          "safety_hygiene": 7
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 44,
+        "pillars": {
+          "formulation": 10,
+          "dose": 2,
+          "evidence": 6,
+          "transparency": 10,
+          "verification": 9,
+          "safety_hygiene": 7
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "178453",
+      "brand": "Bayer One A Day",
+      "name": "TruBiotics with Immune Support Advantage",
+      "baseline": {
+        "score": 52.2,
+        "pillars": {
+          "formulation": 12.7,
+          "dose": 3.5,
+          "evidence": 8,
+          "transparency": 11,
+          "verification": 9,
+          "safety_hygiene": 8
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 48.6,
+        "pillars": {
+          "formulation": 10.9,
+          "dose": 1.7,
+          "evidence": 8,
+          "transparency": 11,
+          "verification": 9,
+          "safety_hygiene": 8
+        },
+        "verdict": "POOR",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "184730",
+      "brand": "Pure Encapsulations",
+      "name": "Probiotic 123",
+      "baseline": {
+        "score": 51.8,
+        "pillars": {
+          "formulation": 12.7,
+          "dose": 3.1,
+          "evidence": 3,
+          "transparency": 14,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 48.8,
+        "pillars": {
+          "formulation": 12.7,
+          "dose": 3.1,
+          "evidence": 0,
+          "transparency": 14,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "278251",
+      "brand": "Pure Encapsulations",
+      "name": "Probiotic 123",
+      "baseline": {
+        "score": 51.8,
+        "pillars": {
+          "formulation": 12.7,
+          "dose": 3.1,
+          "evidence": 3,
+          "transparency": 14,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 48.8,
+        "pillars": {
+          "formulation": 12.7,
+          "dose": 3.1,
+          "evidence": 0,
+          "transparency": 14,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "294040",
+      "brand": "Pure Encapsulations",
+      "name": "Probiotic 50B",
+      "baseline": {
+        "score": 57.8,
+        "pillars": {
+          "formulation": 17.3,
+          "dose": 3.5,
+          "evidence": 3,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 54.8,
+        "pillars": {
+          "formulation": 17.3,
+          "dose": 3.5,
+          "evidence": 0,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "294041",
+      "brand": "Pure Encapsulations",
+      "name": "Probiotic G.I.",
+      "baseline": {
+        "score": 51.8,
+        "pillars": {
+          "formulation": 13.6,
+          "dose": 1.2,
+          "evidence": 3,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 48.8,
+        "pillars": {
+          "formulation": 13.6,
+          "dose": 1.2,
+          "evidence": 0,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "294042",
+      "brand": "Pure Encapsulations",
+      "name": "Probiotic-5",
+      "baseline": {
+        "score": 51.8,
+        "pillars": {
+          "formulation": 13.6,
+          "dose": 1.2,
+          "evidence": 3,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 48.8,
+        "pillars": {
+          "formulation": 13.6,
+          "dose": 1.2,
+          "evidence": 0,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "295532",
+      "brand": "Pure Encapsulations",
+      "name": "Probiotic G.I.",
+      "baseline": {
+        "score": 51.8,
+        "pillars": {
+          "formulation": 13.6,
+          "dose": 1.2,
+          "evidence": 3,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 48.8,
+        "pillars": {
+          "formulation": 13.6,
+          "dose": 1.2,
+          "evidence": 0,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "299239",
+      "brand": "Ritual",
+      "name": "Synbiotic+",
+      "baseline": {
+        "score": 61.8,
+        "pillars": {
+          "formulation": 14.3,
+          "dose": 9.5,
+          "evidence": 8,
+          "transparency": 11.5,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 56,
+        "pillars": {
+          "formulation": 12.5,
+          "dose": 5.5,
+          "evidence": 8,
+          "transparency": 11.5,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "217182",
+      "brand": "Solgar",
+      "name": "ABC Dophilus Powder",
+      "baseline": {
+        "score": 58.5,
+        "pillars": {
+          "formulation": 10.9,
+          "dose": 9.1,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 8,
+          "safety_hygiene": 7.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 56.7,
+        "pillars": {
+          "formulation": 9.1,
+          "dose": 9.1,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 8,
+          "safety_hygiene": 7.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "241240",
+      "brand": "Solgar",
+      "name": "Advanced Acidophilus Plus",
+      "baseline": {
+        "score": 52.7,
+        "pillars": {
+          "formulation": 8.6,
+          "dose": 9.1,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 8,
+          "safety_hygiene": 6
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 50.9,
+        "pillars": {
+          "formulation": 6.8,
+          "dose": 9.1,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 8,
+          "safety_hygiene": 6
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "264106",
+      "brand": "Solgar",
+      "name": "Advanced Acidophilus Plus",
+      "baseline": {
+        "score": 52.7,
+        "pillars": {
+          "formulation": 8.6,
+          "dose": 9.1,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 8,
+          "safety_hygiene": 6
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      },
+      "candidate": {
+        "score": 50.9,
+        "pillars": {
+          "formulation": 6.8,
+          "dose": 9.1,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 8,
+          "safety_hygiene": 6
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    },
+    {
+      "id": "44161",
+      "brand": "Solgar",
+      "name": "Advanced Acidophilus Plus",
+      "baseline": {
+        "score": 59.5,
+        "pillars": {
+          "formulation": 11.4,
+          "dose": 9.1,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 57.6,
+        "pillars": {
+          "formulation": 9.5,
+          "dose": 9.1,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "44163",
+      "brand": "Solgar",
+      "name": "Advanced Acidophilus Plus",
+      "baseline": {
+        "score": 59.5,
+        "pillars": {
+          "formulation": 11.4,
+          "dose": 9.1,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 57.6,
+        "pillars": {
+          "formulation": 9.5,
+          "dose": 9.1,
+          "evidence": 6,
+          "transparency": 15,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "298031",
+      "brand": "Thorne",
+      "name": "FloraSport 20B",
+      "baseline": {
+        "score": 71.9,
+        "pillars": {
+          "formulation": 13.2,
+          "dose": 13.2,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 15,
+          "safety_hygiene": 7.5
+        },
+        "verdict": "SAFE",
+        "tier": "Acceptable"
+      },
+      "candidate": {
+        "score": 65.9,
+        "pillars": {
+          "formulation": 13.2,
+          "dose": 13.2,
+          "evidence": 2,
+          "transparency": 15,
+          "verification": 15,
+          "safety_hygiene": 7.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "306247",
+      "brand": "Thorne",
+      "name": "FloraSport 20B",
+      "baseline": {
+        "score": 71.9,
+        "pillars": {
+          "formulation": 13.2,
+          "dose": 13.2,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 15,
+          "safety_hygiene": 7.5
+        },
+        "verdict": "SAFE",
+        "tier": "Acceptable"
+      },
+      "candidate": {
+        "score": 65.9,
+        "pillars": {
+          "formulation": 13.2,
+          "dose": 13.2,
+          "evidence": 2,
+          "transparency": 15,
+          "verification": 15,
+          "safety_hygiene": 7.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "286725",
+      "brand": "vitafusion",
+      "name": "Probiotic Natural Raspberry, Peach & Mango Flavor",
+      "baseline": {
+        "score": 55.2,
+        "pillars": {
+          "formulation": 12.5,
+          "dose": 10.2,
+          "evidence": 3,
+          "transparency": 15,
+          "verification": 7,
+          "safety_hygiene": 7.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 52.2,
+        "pillars": {
+          "formulation": 12.5,
+          "dose": 10.2,
+          "evidence": 0,
+          "transparency": 15,
+          "verification": 7,
+          "safety_hygiene": 7.5
+        },
+        "verdict": "SAFE",
+        "tier": "Poor"
+      }
+    }
+  ],
+  "six_comparators": [
+    {
+      "id": "250851",
+      "brand": "Culturelle",
+      "name": "Digestive Daily Probiotic",
+      "baseline": {
+        "score": 72.7,
+        "pillars": {
+          "formulation": 12.5,
+          "dose": 13.7,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 15,
+          "safety_hygiene": 8.5
+        },
+        "verdict": "SAFE",
+        "tier": "Acceptable"
+      },
+      "candidate": {
+        "score": 72.7,
+        "pillars": {
+          "formulation": 12.5,
+          "dose": 13.7,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 15,
+          "safety_hygiene": 8.5
+        },
+        "verdict": "SAFE",
+        "tier": "Acceptable"
+      }
+    },
+    {
+      "id": "326762",
+      "brand": "Garden of Life Dr. Formulated",
+      "name": "Probiotics 100 Billion",
+      "baseline": {
+        "score": 63.8,
+        "pillars": {
+          "formulation": 17.5,
+          "dose": 10,
+          "evidence": 8,
+          "transparency": 9.3,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 63.8,
+        "pillars": {
+          "formulation": 17.5,
+          "dose": 10,
+          "evidence": 8,
+          "transparency": 9.3,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "307727",
+      "brand": "Jarrow Formulas",
+      "name": "Saccharomyces Boulardii + MOS 5 Billion CFU",
+      "baseline": {
+        "score": 62.4,
+        "pillars": {
+          "formulation": 12.5,
+          "dose": 11.4,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 6.5,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 62.4,
+        "pillars": {
+          "formulation": 12.5,
+          "dose": 11.4,
+          "evidence": 8,
+          "transparency": 15,
+          "verification": 6.5,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "327965",
+      "brand": "Nature's Way",
+      "name": "Fortify Ultra Potency Optima Probiotic 100 Billion",
+      "baseline": {
+        "score": 69,
+        "pillars": {
+          "formulation": 20,
+          "dose": 8.5,
+          "evidence": 8,
+          "transparency": 14.5,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 69,
+        "pillars": {
+          "formulation": 20,
+          "dose": 8.5,
+          "evidence": 8,
+          "transparency": 14.5,
+          "verification": 9,
+          "safety_hygiene": 9
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    },
+    {
+      "id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+      "brand": "Seed",
+      "name": "DS-01 Daily Synbiotic",
+      "baseline": {
+        "score": 81.2,
+        "pillars": {
+          "formulation": 20,
+          "dose": 20,
+          "evidence": 10.2,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Strong"
+      },
+      "candidate": {
+        "score": 81.2,
+        "pillars": {
+          "formulation": 20,
+          "dose": 20,
+          "evidence": 10.2,
+          "transparency": 12,
+          "verification": 9,
+          "safety_hygiene": 10
+        },
+        "verdict": "SAFE",
+        "tier": "Strong"
+      }
+    },
+    {
+      "id": "299239",
+      "brand": "Ritual",
+      "name": "Synbiotic+",
+      "baseline": {
+        "score": 61.8,
+        "pillars": {
+          "formulation": 14.3,
+          "dose": 9.5,
+          "evidence": 8,
+          "transparency": 11.5,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      },
+      "candidate": {
+        "score": 56,
+        "pillars": {
+          "formulation": 12.5,
+          "dose": 5.5,
+          "evidence": 8,
+          "transparency": 11.5,
+          "verification": 9,
+          "safety_hygiene": 9.5
+        },
+        "verdict": "SAFE",
+        "tier": "Weak"
+      }
+    }
+  ],
+  "interpretation": [
+    "Read-only replay: 217 selected labels fully re-enriched, changed lanes recomputed for all 15415 manifest-owned enriched products; not an operational full rebuild or final export.",
+    "4390 diagnostic records also compare older raw enrichment with recomputed metadata; they are not 4390 newly changed scores.",
+    "SAFE to POOR in nine products is the existing score-floor consequence, not a newly discovered safety hazard. Review knowledge-gap treatment and pillar ownership before numeric release.",
+    "Seed remains 81.2; five of six comparators unchanged. Ritual 61.8 to 56.0 exposes native source approval affecting Formulation and Dose while Evidence remains 8.0.",
+    "Earlier targeted.json and corpus_impact.json are superseded. The latter used an incomplete baseline chain and reported 56 spurious non-probiotic score differences.",
+    "Citation screen matched 55 occurrences over 43 live PMIDs. Keyword/topic matching is not clinical content validation; individual source findings are in source_corrections.md."
+  ],
+  "open_gates": [
+    "BB-12/Bi-07 source replacement clinician review",
+    "Native indication/population/co-therapy/dose applicability contract and curation",
+    "Report-first probiotic pillar-ownership decision",
+    "Independent blinded benchmark before weight calibration",
+    "Operational rebuild, final export and release/Flutter gates after candidate decisions"
+  ]
+}

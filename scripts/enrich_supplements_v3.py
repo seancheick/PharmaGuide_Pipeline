@@ -607,7 +607,7 @@ def _normalize_parent_blend_mg(mass, unit) -> Optional[float]:
     return None
 
 
-def _derive_clinical_support_level(strain_entry) -> str:
+def _derive_clinical_support_level(strain_entry) -> Optional[str]:
     """Resolve ``clinical_support_level`` with a fallback chain:
 
       1. explicit ``cfu_thresholds.evidence.clinical_support_level``
@@ -615,7 +615,8 @@ def _derive_clinical_support_level(strain_entry) -> str:
          (strong→high, medium→moderate, weak→weak)
       3. conservative default ``"weak"`` (protects against overclaim)
 
-    Returns exactly one of ``"high" | "moderate" | "weak"``.
+    Explicitly unreviewed evidence returns None: a review gap is not weak
+    evidence. Otherwise returns ``"high" | "moderate" | "weak"``.
     """
     if not isinstance(strain_entry, dict):
         return "weak"
@@ -623,6 +624,8 @@ def _derive_clinical_support_level(strain_entry) -> str:
     evidence = (thresholds.get("evidence") or {}) if isinstance(thresholds, dict) else {}
     if not isinstance(evidence, dict):
         return "weak"
+    if strain_entry.get("evidence_level") == "unreviewed" or evidence.get("evidence_strength") == "unreviewed":
+        return None
 
     explicit = evidence.get("clinical_support_level") or thresholds.get("clinical_support_level")
     if isinstance(explicit, str):
@@ -673,6 +676,8 @@ def _probiotic_research_presentation(
         match_status = "rejected"
     elif review_status != "clinician_verified":
         match_status = "pending_review"
+    elif evidence_scope == "scope_unresolved":
+        match_status = "scope_unresolved"
     elif evidence_scope == "formula_specific":
         match_status = "formula_only"
     elif evidence_scope == "strain_specific" and human_evidence:

@@ -169,6 +169,8 @@ def clinical_strain_research_scope(entry: dict) -> dict:
         scope = "formula_specific"
     elif explicit == "YES" or "strain_specific" in evidence_type:
         scope = "strain_specific"
-    else:
+    elif explicit == "NO":
         scope = "species_general"
+    else:
+        scope = "scope_unresolved"
     return {"evidence_scope": scope, "human_evidence": human_evidence}

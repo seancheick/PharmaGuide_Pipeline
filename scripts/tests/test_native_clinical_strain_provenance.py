@@ -286,8 +286,23 @@ def test_verified_corpus_spelling_variants_keep_exact_native_identity(
         include_source_ref=True,
     )
 
-    assert independent_clinical_strains(product) == product["probiotic_data"]["clinical_strains"]
-    assert score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"] > 0
+    reference = studied_formulas._clinical_strain_registry()[clinical_id]
+    assert studied_formulas.clinical_strain_identity_matches(strain, reference)
+    assert studied_formulas.clinical_strain_matches_source_row(
+        product, product["probiotic_data"]["clinical_strains"][0],
+        product["activeIngredients"][0])
+    # Exact identity does not approve a source. These two native references are
+    # on hold; the other listed sources do not establish human clinical evidence.
+    held = {"STRAIN_LACTIS_BB12", "STRAIN_LACTIS_BI07"}
+    nonhuman = {"STRAIN_ACIDOPHILUS_NCFM", "STRAIN_LACTIS_BL04",
+                "STRAIN_CASEI_431", "STRAIN_PARACASEI_8700"}
+    assert independent_clinical_strains(product) == (
+        [] if clinical_id in held else product["probiotic_data"]["clinical_strains"])
+    score = score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"]
+    if clinical_id in held | nonhuman:
+        assert score == 0
+    else:
+        assert score > 0
 
 
 @pytest.mark.parametrize(
@@ -465,8 +480,8 @@ def test_producer_cannot_export_a_badge_for_a_different_strain(
 
 
 @pytest.mark.parametrize("strain,clinical_id,status", [
-    ("Lactobacillus rhamnosus LGG", "STRAIN_LGG", "species_level"),
-    ("Bifidobacterium animalis lactis BB-12", "STRAIN_LACTIS_BB12", "species_level"),
+    ("Lactobacillus rhamnosus LGG", "STRAIN_LGG", "exact_strain"),
+    ("Bifidobacterium animalis lactis BB-12", "STRAIN_LACTIS_BB12", "pending_review"),
     ("Bifidobacterium longum subsp. infantis M-63", "STRAIN_INFANTIS_M63", "pending_review"),
     ("Bifidobacterium breve SD-BR3-IT", "STRAIN_BREVE_SD_BR3_IT", "pending_review"),
 ])

@@ -588,11 +588,19 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         assessed = (metadata.get("evidence_assessment") or {}).get("strain_assessments", [])
         if metadata.get("evidence_result_state") == "evaluated_unfavorable":
             reason = "Reviewed research is unfavorable for the assessed outcome; this is distinct from missing research."
+        elif metadata.get("evidence_result_state") == "evaluated_null":
+            reason = "The cited human trial did not show benefit for its primary outcome; other outcomes and studies require separate assessment."
+        elif metadata.get("evidence_result_state") == "human_clinical_evidence_unestablished":
+            reason = "Our review of human clinical evidence is incomplete; the recorded nonclinical or unresolved sources do not establish benefit. This is not a product-quality finding."
+        elif metadata.get("evidence_result_state") == "native_research_review_incomplete":
+            reason = "Our strain-specific source review is incomplete; no conclusion about benefit or product quality follows from this review gap."
         elif any(row.get("dose_applicable") for row in assessed):
             reason = "Reviewed strain evidence matches the disclosed dose and label context; benefits remain outcome-specific."
         elif val > 0 and any(row.get("research_accepted") for row in assessed):
             credited = metadata.get("native_clinical_strain_evidence_rows") or []
-            if credited and all(row.get("evidence_scope") == "species_general" for row in credited):
+            if credited and any(row.get("evidence_scope") == "scope_unresolved" for row in credited):
+                reason = "Research is recorded, but our review of its specificity and dose applicability is incomplete; this is not a product-quality finding."
+            elif credited and all(row.get("evidence_scope") == "species_general" for row in credited):
                 reason = "Our registry currently classifies this as species-level research; applicability to the exact studied strain and dose is not established for this label."
             else:
                 reason = "Named strains have reviewed research; a matching studied dose is not established for this label."

@@ -155,6 +155,10 @@ def test_category_fixtures_expose_reference_mismatches_without_recalibrating() -
     assert probiotic["raw_dimensions"]["dose"] == 25.0
     assert probiotic["pillars"]["dose"] == 20.0
     assert probiotic["normalization_references"]["dose"] == 22.0
+    # Preserve this mixed five-strain fixture as a source-hold canary:
+    # BB-12 still resolves, but its suspended citation cannot supply the fifth
+    # clinical-code formulation point. Public formulation remains capped at 20.
+    assert probiotic["raw_dimensions"]["formulation"] == 23.25
     assert omega["raw_dimensions"]["dose"] == 25.0
     assert omega["normalization_references"]["dose"] == 23.0
     assert prenatal["raw_dimensions"]["evidence"] == 18.0

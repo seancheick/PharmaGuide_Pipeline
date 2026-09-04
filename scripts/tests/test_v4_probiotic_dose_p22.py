@@ -72,9 +72,11 @@ def _product(
     guarantee_type: str | None = "at_expiration",
 ) -> dict:
     if clinical_strains is None:
+        # Use currently reviewed identities for the saturation arithmetic.
+        # BB-12's source hold is tested separately, not bypassed here.
         clinical_strains = [
             _strain("Lactobacillus rhamnosus GG", adequacy_tier="excellent", support="high"),
-            _strain("Bifidobacterium lactis BB-12", adequacy_tier="good", support="moderate"),
+            _strain("Bifidobacterium longum BB536", adequacy_tier="good", support="moderate"),
             _strain("Lactobacillus reuteri DSM 17938", adequacy_tier="adequate", support="weak"),
         ]
     clinical_strains = deepcopy(clinical_strains)
@@ -660,7 +662,7 @@ def test_aggregate_cfu_proxy_still_wins_over_direct_mass_floor() -> None:
         active_rows=[{"name": "Lactobacillus rhamnosus GG", "quantity": 30.0, "unit": "mg"}],
         clinical_strains=[
             _strain("Lactobacillus rhamnosus GG", cfu_per_day=None, adequacy_tier="excellent", support="high"),
-            _strain("Bifidobacterium lactis BB-12", cfu_per_day=None, adequacy_tier="good", support="high"),
+            _strain("Bifidobacterium longum BB536", cfu_per_day=None, adequacy_tier="good", support="high"),
         ],
         total_billion=20.0,
     )

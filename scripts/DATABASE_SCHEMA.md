@@ -328,7 +328,7 @@ Primary keys: `clinically_relevant_strains` (array), `prebiotics` (object)
 | `id` | string | YES | Unique ID (e.g., `STRAIN_LGG`) |
 | `standard_name` | string | YES | Full strain name with designation |
 | `aliases` | string[] | YES | Alternative names, ATCC numbers |
-| `evidence_level` | string | YES | `high`, `moderate`, `emerging` |
+| `evidence_level` | string | YES | `high`, `moderate`, `low`, `unreviewed`; unreviewed sources cannot carry approved benefit claims |
 | `key_benefits` | string[] | YES | Clinical benefit areas |
 | `notable_studies` | string | NO | Key research citations |
 

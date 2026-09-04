@@ -324,6 +324,12 @@ def independent_clinical_strains(product: Mapping) -> list[dict]:
         thresholds = reference.get("cfu_thresholds") or {}
         evidence = thresholds.get("evidence") or {}
         validation = evidence.get("clinical_validation") or {}
+        # Specificity is not review completion or strength. Preserve previously
+        # reviewed contextual research while its scope is being curated, without
+        # accepting a caller's unknown-scope stamp against a resolved reference.
+        allowed_match_statuses = {"exact_strain", "species_level"}
+        if clinical_strain_research_scope(reference)["evidence_scope"] == "scope_unresolved":
+            allowed_match_statuses.add("scope_unresolved")
         if (thresholds.get("dr_pham_signoff") is not True
                 or evidence.get("type") == "product_formula_rct"
                 or validation.get("q1_strain_explicit") == "FORMULA_LEVEL"
@@ -332,7 +338,7 @@ def independent_clinical_strains(product: Mapping) -> list[dict]:
                 or row.get("dr_pham_signoff") is False
                 or row.get("review_status") in {"pending_review", "rejected", "needs_revision"}
                 or ("research_match_status" in row
-                    and row["research_match_status"] not in {"exact_strain", "species_level"})):
+                    and row["research_match_status"] not in allowed_match_statuses)):
             continue
         independent.append(row)
     return independent
@@ -368,6 +374,7 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
                   "source_row_ref": row.get("source_row_ref"), "dose_applicable": False,
                   "cfu_per_day": _owned_daily_cfu(product, row),
                   "support_level": support, "research_accepted": id(row) in accepted,
+                  "effect_direction": evidence.get("effect_direction"),
                   "source_pmids": [p for p in [evidence.get("pmid"), *evidence.get("additional_pmids", [])] if p],
                   "supported_outcomes": [], "studied_population": None}
         result.update(clinical_strain_research_scope(reference))

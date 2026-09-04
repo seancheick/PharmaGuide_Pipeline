@@ -111,12 +111,21 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     }
     raw_score = sum(components.values())
     score = max(0.0, min(CAP_EVIDENCE, raw_score))
-    if score == 0 and any(_norm_text(m.get("effect_direction")) == "negative" for m in accepted):
+    credited_directions = [r.get("effect_direction") for r in native_evidence["rows"]]
+    if score == 0 and (any(_norm_text(m.get("effect_direction")) == "negative" for m in accepted)
+                       or "negative" in credited_directions):
         evidence_state = "evaluated_unfavorable"
+    elif generic_score == 0 and credited_directions and all(d == "null" for d in credited_directions):
+        evidence_state = "evaluated_null"
     elif applicable_effects:
         evidence_state = "evaluated_applicable"
     elif score > 0:
         evidence_state = "research_present_applicability_unestablished"
+    elif native_evidence["uncredited_rows"]:
+        evidence_state = "human_clinical_evidence_unestablished"
+    elif any(row["status"] == "strain_identity_or_review_unresolved"
+             for row in assessment["strain_assessments"]):
+        evidence_state = "native_research_review_incomplete"
     else:
         evidence_state = "applicability_unestablished"
 
@@ -137,6 +146,7 @@ def score_evidence(product: Any) -> Dict[str, Any]:
             "generic_evidence_metadata": generic_payload.get("metadata", {}),
             "native_clinical_strain_evidence_score": round(native_evidence["score"], 4),
             "native_clinical_strain_evidence_rows": native_evidence["rows"],
+            "uncredited_native_strain_evidence_rows": native_evidence["uncredited_rows"],
             "clinical_strain_count": len(_clinical_strains(product)),
             "indication_relevance_level": relevance["level"],
             "product_positioning_categories": sorted(relevance["product_categories"]),
@@ -158,11 +168,14 @@ def _score_native_clinical_strain_evidence(
     matches. This fallback prevents a second-brain gap where
     ``probiotic_data.clinical_strains`` identifies a known clinical strain but
     ``evidence_data.clinical_matches`` is empty, which otherwise produces zero
-    strain evidence for products like BB536-only probiotics.
+    strain evidence for products like BB536-only probiotics. A native support
+    label supplies clinical points only when that source establishes human
+    evidence; this does not reject an independent accepted generic match.
     """
 
     seen: Set[str] = set()
     rows: List[Dict[str, Any]] = []
+    uncredited_rows: List[Dict[str, Any]] = []
     for strain in assessment["strain_assessments"]:
         if not strain["research_accepted"] or strain["status"] in {
             "strain_dose_incompatible", "strain_context_mismatch", "strain_context_unresolved"
@@ -172,6 +185,18 @@ def _score_native_clinical_strain_evidence(
         if key in seen:
             continue
         seen.add(key)
+
+        if strain.get("human_evidence") is not True:
+            uncredited_rows.append({
+                "clinical_id": strain.get("clinical_id"),
+                "strain": strain.get("strain"),
+                "human_evidence": strain.get("human_evidence"),
+                "source_pmids": strain["source_pmids"],
+                "evidence_scope": strain["evidence_scope"],
+                "applicability_status": strain["status"],
+                "reason_code": "human_clinical_evidence_unestablished",
+            })
+            continue
 
         support_token = _norm_text(strain["support_level"])
         base_points = NATIVE_STRAIN_EVIDENCE_POINTS.get(support_token, 0.0)
@@ -192,8 +217,13 @@ def _score_native_clinical_strain_evidence(
                 "applicability_status": strain["status"],
                 "source_pmids": strain["source_pmids"],
                 "evidence_scope": strain["evidence_scope"],
-                "effect_multiplier": min((_effect_multiplier(m) for m in matches
-                    if strain in strain_assessments_for_match(m, assessment)), default=1.0),
+                "effect_direction": strain.get("effect_direction"),
+                # Apply the existing direction scale once, using this native
+                # source and any accepted identity-owned match. Independent
+                # backbone evidence is still scored separately above.
+                "effect_multiplier": min([_effect_multiplier(strain), *(
+                    _effect_multiplier(m) for m in matches
+                    if strain in strain_assessments_for_match(m, assessment))]),
             }
         )
 
@@ -220,6 +250,7 @@ def _score_native_clinical_strain_evidence(
     return {
         "score": min(CAP_STRAIN_CLINICAL, weighted_score),
         "rows": weighted_rows,
+        "uncredited_rows": uncredited_rows,
     }
 
 

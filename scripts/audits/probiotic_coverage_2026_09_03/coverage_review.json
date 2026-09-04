@@ -1,0 +1,90 @@
+{
+  "kind": "internal_evidence_search_coverage",
+  "as_of": "2026-09-04",
+  "not_a_score_or_clinician_approval": true,
+  "search_coverage": "partial",
+  "search_log_files": ["research_native.md", "research_formulas.md", "source_corrections.md"],
+  "scope": "Six exact comparator labels and their cited native/formula sources; bounded primary literature searches, not exhaustive absence claims.",
+  "registry_snapshot": {
+    "entries": 49,
+    "historical_signoff_flags_retained": 40,
+    "flagged_entries_with_human_source_classification": 29,
+    "strain_specific": 26,
+    "species_general": 5,
+    "formula_specific": 4,
+    "scope_unresolved": 14,
+    "native_dose_applicability_records": 0,
+    "sha256": "26a9dee95dfd264140cde384591046a7ad98b8169ec15e32646b07ea49b7b163",
+    "caveat": "Source classification and historical signoff are not a fresh outcome-level clinical review of all entries."
+  },
+  "representative_label_replay": {
+    "products": 42,
+    "scored": 41,
+    "safety_suppressed": 1,
+    "with_reviewed_native_identity": 27,
+    "with_credited_human_native_research": 24,
+    "with_applicable_native_dose": 0,
+    "with_applicable_whole_formula": 1,
+    "without_native_matches": 14,
+    "evidence_states": {
+      "research_present_applicability_unestablished": 27,
+      "applicability_unestablished": 11,
+      "human_clinical_evidence_unestablished": 2,
+      "evaluated_applicable": 1,
+      "not_assessed_safety_suppressed": 1
+    },
+    "source_report": "reports/probiotic_coverage_2026_09_03/targeted_final.json",
+    "source_report_sha256": "4ca34f82802d29119192e00a295c2294710eee5106d22e63ceb59d64e80eaed9",
+    "selection": "cert_rubric_audit.md: 42-ID stratified probiotic set; not a prevalence or clinical efficacy estimate"
+  },
+  "products": [
+    {
+      "id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+      "name": "Seed DS-01",
+      "coverage": "partial",
+      "evidence_found": "Exact formula: one symptom trial and two mechanistic companion papers; not three independent symptom replications.",
+      "dose_scope": "Whole formula at native AFU and prebiotic dose; no invented per-strain CFU.",
+      "remaining": ["Independent replication", "Blinded rubric validation"]
+    },
+    {
+      "id": "250851",
+      "name": "Culturelle Digestive Daily",
+      "coverage": "partial",
+      "evidence_found": "LGG-specific pediatric AAD and functional pain literature; no blanket adult digestive applicability inferred.",
+      "dose_scope": "Disclosed CFU; reviewed indication-specific window absent.",
+      "remaining": ["Adult label outcome/population review", "Native dose-applicability curation"]
+    },
+    {
+      "id": "299239",
+      "name": "Ritual Synbiotic+",
+      "coverage": "partial",
+      "evidence_found": "Native strain literature and a mixed-result BB-12 replacement candidate; no exact formula trial found in this search.",
+      "dose_scope": "Total blend CFU does not establish each strain's exposure.",
+      "remaining": ["BB-12 replacement clinical approval", "Whole-formula search/review", "Cross-pillar dependence on native approval"]
+    },
+    {
+      "id": "307727",
+      "name": "Jarrow S. boulardii + MOS",
+      "coverage": "partial",
+      "evidence_found": "Context-dependent species/strain literature; label does not prove CNCM I-745 identity.",
+      "dose_scope": "CFU disclosed, but no matched reviewed strain/context dose window.",
+      "remaining": ["Native specificity review", "Exact-label identity and indication applicability"]
+    },
+    {
+      "id": "326762",
+      "name": "Garden of Life 100 Billion",
+      "coverage": "partial",
+      "evidence_found": "Mixed native-source set; no exact formula trial found. Closest five-strain study is a different, uncontrolled formula.",
+      "dose_scope": "Unknown individual shares; not inferred from 100B total.",
+      "remaining": ["Outcome-specific native curation", "Exact NSF WF-edition equivalence unresolved"]
+    },
+    {
+      "id": "327965",
+      "name": "Nature's Way Fortify Optima 100 Billion",
+      "coverage": "partial",
+      "evidence_found": "Mixed human, off-indication and nonclinical native sources; no exact formula trial found.",
+      "dose_scope": "Unknown individual shares; not inferred from 100B total.",
+      "remaining": ["Bi-07 identity-correct clinical approval", "Outcome-specific native curation", "Whole-formula applicability review"]
+    }
+  ]
+}

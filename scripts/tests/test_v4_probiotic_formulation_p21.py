@@ -69,7 +69,9 @@ def _product(
                 {"strain": name, "clinical_id": clinical_id}
                 for name, clinical_id in [
                     ("Lactobacillus rhamnosus GG", "STRAIN_LGG"),
-                    ("Bifidobacterium lactis BB-12", "STRAIN_LACTIS_BB12"),
+                    # Saturation arithmetic needs five reviewed identities;
+                    # BB-12's held citation is tested separately, not bypassed.
+                    ("Lactobacillus plantarum 299v", "STRAIN_PLANTARUM_299V"),
                     ("Lactobacillus reuteri DSM 17938", "STRAIN_REUTERI_DSM17938"),
                     ("Bifidobacterium longum BB536", "STRAIN_LONGUM_BB536"),
                     ("Lactobacillus rhamnosus HN001", "STRAIN_RHAMNOSUS_HN001"),
