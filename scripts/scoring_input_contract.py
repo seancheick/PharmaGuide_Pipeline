@@ -2365,8 +2365,9 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
     # allowing an otherwise valid old-batch row to be evaluated. Current release
     # artifacts are blocked independently by audit_identity_integrity.py. A
     # present disposition is authoritative and unresolved/invalid identities
-    # are always rejected here as a scoring backstop.
-    if strict:
+    # are always rejected here as a scoring backstop. Established conflicts
+    # remain rejected even when old-batch shape compatibility is requested.
+    if strict or row.get("identity_disposition") == "identity_conflict":
         disposition = row.get("identity_disposition")
         is_product_level_evidence = (
             row.get("scoring_input_kind") == "product_level_evidence"
@@ -2423,6 +2424,55 @@ def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
     )
 
 
+def _required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    """Keep required label conflicts visible even when IQD cannot score them.
+
+    This consumes the existing typed identity decision, not label matching or
+    dose inference. Source ownership can supply fields omitted by an IQD row;
+    explicit structural, inactive and non-scorable dispositions stay excluded.
+    """
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
+    source_rows = [row for row in _safe_list(product.get("activeIngredients"))
+                   if isinstance(row, dict)]
+    seen_objects = {id(row) for row in source_rows}
+    for row in source_rows:
+        for field in ("nestedIngredients", "nested_ingredients"):
+            for child in _safe_list(row.get(field)):
+                if isinstance(child, dict) and id(child) not in seen_objects:
+                    seen_objects.add(id(child))
+                    source_rows.append(child)
+    source_by_key = {_classification_row_key(row, index): row
+                     for index, row in enumerate(source_rows)}
+    conflicts: Dict[str, Dict[str, Any]] = {}
+    for collection in (source_rows, _safe_list(iqd.get("ingredients")),
+                       _safe_list(iqd.get("ingredients_skipped")),
+                       _safe_list(iqd.get("ingredients_scorable"))):
+        for index, row in enumerate(collection):
+            if not isinstance(row, dict) or row.get("identity_disposition") != "identity_conflict":
+                continue
+            key = _classification_row_key(row, index)
+            source_owner = source_by_key.get(key, {})
+            owned = {**source_owner, **row}
+            for field in ("source_section", "cleaner_row_role", "score_eligible_by_cleaner"):
+                if owned.get(field) is None:
+                    owned[field] = source_owner.get(field)
+            cleaner_role = _norm(owned.get("cleaner_row_role"))
+            role = _norm(owned.get("role_classification") or cleaner_role)
+            if (
+                owned.get("score_eligible_by_cleaner") is not True
+                or cleaner_role in EXCLUDED_CLEANER_ROLES
+                or role not in VALID_ACTIVE_ROLES | {"active_unmapped"}
+                or (_norm(owned.get("source_section")) != "active"
+                    and role != "active_misfiled_in_inactive")
+                or owned.get("is_blend_header")
+                or owned.get("blend_total_weight_only")
+                or owned.get("is_excipient")
+            ):
+                continue
+            conflicts[key] = owned
+    return conflicts
+
+
 def _build_scoring_ingredients(
     product: Dict[str, Any],
     *,
@@ -2445,6 +2495,7 @@ def _build_scoring_ingredients(
     if strict and not isinstance(iqd.get("ingredients_scorable"), list):
         contract_findings.append("missing_iqd_ingredients_scorable_list")
     candidates = [row for row in _safe_list(iqd.get("ingredients_scorable")) if isinstance(row, dict)]
+    required_conflicts = _required_identity_conflicts(product)
     product_evidence_rows, product_evidence_rejected, product_evidence_findings = _product_scoring_evidence_rows(
         product,
         strict=strict,
@@ -2528,13 +2579,19 @@ def _build_scoring_ingredients(
             ))
     rows: List[Dict[str, Any]] = []
     row_findings: List[str] = []
-    for row in candidates:
+    for index, row in enumerate(candidates):
+        if _classification_row_key(row, index) in required_conflicts:
+            continue
         ok, rejection, findings = _evaluate_row(row, strict=strict)
         row_findings.extend(findings)
         if ok:
             rows.append(row)
         elif rejection is not None:
             rejected.append(rejection)
+    for row in required_conflicts.values():
+        reason = "identity_disposition_not_scoreable:identity_conflict"
+        rejected.append(_reject(row, reason))
+        row_findings.append(reason)
 
     # Coverage counts unique score-eligible source exposures. A typed
     # product-level projection can join a structural owner dose to a mapped
@@ -2553,6 +2610,7 @@ def _build_scoring_ingredients(
         if item.reason == "missing_scoring_identity"
         and _norm(item.row.get("scoring_input_kind")) != "product_level_evidence"
     } - mapped_coverage_keys
+    unresolved_coverage_keys.update(required_conflicts)
     for index, row in enumerate(_safe_list(iqd.get("ingredients"))):
         if not isinstance(row, dict) or not _is_genuine_unresolved_label_active(row):
             continue

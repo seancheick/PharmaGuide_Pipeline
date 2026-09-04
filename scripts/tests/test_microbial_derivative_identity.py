@@ -7,7 +7,7 @@ from copy import deepcopy
 import pytest
 
 from identity_integrity import normalize_label_display, resolve_identity
-from scoring_input_contract import _has_probiotic_identity_text
+from scoring_input_contract import _has_probiotic_identity_text, get_scoring_ingredients
 from supplement_taxonomy import _row_has_probiotic_identity
 
 
@@ -254,6 +254,181 @@ def test_ambiguous_preparation_alias_does_not_override_source_taxonomy(
     assert result["ingredients_skipped"][0]["identity_disposition"] == "identity_conflict"
     assert result["ingredients_skipped"][0]["canonical_id"] is None
     assert result["ingredients_skipped"][0]["source_label_name"] == literal
+
+
+def _fermentate_source_row() -> dict:
+    """Required 500 mg active printed on Airborne DSLD 178352."""
+    return {
+        **_yeast_extract_row(), "name": "dried Yeast Fermentate",
+        "raw_source_text": "dried Yeast Fermentate", "raw_source_path": "ingredientRows[11]",
+        "standardName": "Yeast Fermentate", "canonical_id": "yeast_fermentate",
+        "ingredientGroup": "Saccharomyces cerevisiae", "quantity": 500.0, "forms": [],
+    }
+
+
+def _valid_vitamin_row() -> dict:
+    return {
+        **_fermentate_source_row(), "name": "Vitamin C", "raw_source_text": "Vitamin C",
+        "raw_source_path": "ingredientRows[3]", "standardName": "Vitamin C",
+        "ingredientGroup": "Vitamin C", "canonical_id": "vitamin_c",
+        "identity_disposition": "clean", "scoreable_identity": True,
+        "role_classification": "active_scorable", "mapped": True,
+    }
+
+
+def test_required_conflict_blocks_product_readiness_and_root_score(enricher) -> None:
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product, issues = enricher.enrich_product({
+        "id": "airborne-real-label-boundary", "fullName": "Beta-Immune Booster Zesty Orange",
+        "brandName": "Airborne", "activeIngredients": [
+            _valid_vitamin_row(), _fermentate_source_row(),
+        ], "inactiveIngredients": [],
+    })
+    assert product, issues
+    scoring = get_scoring_ingredients(product, strict=True)
+    assert scoring.unmapped_count == 1
+    assert scoring.mapped_coverage < 1.0
+    assert not any(row["raw_source_path"] == "ingredientRows[11]" for row in scoring.rows)
+    artifact = build_scored_artifact(product)
+    assert artifact["assessment_readiness"]["identity"]["readiness"] == "incomplete"
+    assert artifact["assessment_readiness"]["is_live_ready"] is False
+    assert artifact["quality_score_status"] == "not_scored"
+    assert artifact["quality_score_v4_100"] is None
+    assert artifact["verdict"] == "NOT_SCORED"
+
+
+@pytest.mark.parametrize("collection", [
+    "activeIngredients", "ingredients", "ingredients_skipped", "ingredients_scorable",
+])
+@pytest.mark.parametrize("scoreable_identity", [False, True])
+@pytest.mark.parametrize("canonical", [None, "yeast_fermentate"])
+@pytest.mark.parametrize("strict", [False, True])
+def test_required_conflict_is_counted_across_every_rejection_guard(
+    collection: str, scoreable_identity: bool, canonical: str | None, strict: bool,
+) -> None:
+    valid = _valid_vitamin_row()
+    conflict = {
+        **_fermentate_source_row(), "canonical_id": canonical,
+        "identity_disposition": "identity_conflict", "scoreable_identity": scoreable_identity,
+        "role_classification": "active_scorable", "score_exclusion_reason": "quality_map_match",
+    }
+    product = {
+        "assessment_readiness_contract_version": "1.0.0", "activeIngredients": [],
+        "ingredient_quality_data": {"ingredients_scorable": [valid],
+                                    "ingredients_skipped": [], "ingredients": [valid]},
+    }
+    owner = product if collection == "activeIngredients" else product["ingredient_quality_data"]
+    owner[collection].append(conflict)
+    result = get_scoring_ingredients(product, strict=strict)
+
+    assert result.mapped_count == 1
+    assert result.unmapped_count == 1
+    assert result.mapped_coverage == 0.5
+    assert [row["canonical_id"] for row in result.rows] == ["vitamin_c"]
+    assert any(row.row["raw_source_path"] == "ingredientRows[11]" for row in result.rejected_rows)
+    assert not any(row.row.get("scoring_input_kind") == "recovered_active_identity"
+                   for row in result.rejected_rows)
+
+
+@pytest.mark.parametrize("quantity,unit", [(500.0, "mg"), (None, "NP")])
+@pytest.mark.parametrize("null_ownership", [False, True])
+@pytest.mark.parametrize("strict", [False, True])
+def test_partial_conflict_uses_source_ownership_without_inventing_identity(
+    quantity: float | None, unit: str, null_ownership: bool, strict: bool,
+) -> None:
+    valid = _valid_vitamin_row()
+    source = {**_fermentate_source_row(), "quantity": quantity, "unit": unit}
+    conflict = {"raw_source_path": source["raw_source_path"], "canonical_id": None,
+                "identity_disposition": "identity_conflict", "scoreable_identity": False}
+    if null_ownership:
+        conflict.update(source_section=None, cleaner_row_role=None, score_eligible_by_cleaner=None)
+    result = get_scoring_ingredients({
+        "assessment_readiness_contract_version": "1.0.0", "activeIngredients": [source],
+        "ingredient_quality_data": {"ingredients_scorable": [valid], "ingredients": [conflict]},
+    }, strict=strict)
+    assert result.unmapped_count == 1
+    assert result.mapped_coverage == 0.5
+    assert result.rejected_rows[0].row["canonical_id"] is None
+    assert result.rejected_rows[0].row["quantity"] == quantity
+    assert source["canonical_id"] == "yeast_fermentate"
+
+
+@pytest.mark.parametrize("strict", [False, True])
+def test_duplicate_conflict_owns_coverage_over_a_stale_scorable_copy(strict: bool) -> None:
+    valid = _valid_vitamin_row()
+    stale = {**_fermentate_source_row(), "identity_disposition": "clean",
+             "scoreable_identity": True, "role_classification": "active_scorable"}
+    conflict = {**stale, "canonical_id": None, "identity_disposition": "identity_conflict",
+                "scoreable_identity": False}
+    result = get_scoring_ingredients({
+        "assessment_readiness_contract_version": "1.0.0", "activeIngredients": [stale],
+        "ingredient_quality_data": {"ingredients_scorable": [valid, stale],
+                                    "ingredients_skipped": [conflict], "ingredients": [valid, conflict]},
+    }, strict=strict)
+    assert result.mapped_count == 1
+    assert result.unmapped_count == 1
+    assert result.mapped_coverage == 0.5
+    assert len(result.rejected_rows) == 1
+    assert [row["canonical_id"] for row in result.rows] == ["vitamin_c"]
+
+
+@pytest.mark.parametrize("strict", [False, True])
+@pytest.mark.parametrize("required_child", [False, True])
+def test_nested_conflict_uses_only_its_own_required_source_ownership(
+    strict: bool, required_child: bool,
+) -> None:
+    valid = _valid_vitamin_row()
+    child = {**_fermentate_source_row(), "raw_source_path": "ingredientRows[0].nestedRows[0]",
+             "score_eligible_by_cleaner": required_child}
+    conflict = {"raw_source_path": child["raw_source_path"], "canonical_id": None,
+                "identity_disposition": "identity_conflict", "scoreable_identity": False}
+    result = get_scoring_ingredients({
+        "assessment_readiness_contract_version": "1.0.0",
+        "activeIngredients": [{"name": "Immune Blend", "raw_source_path": "ingredientRows[0]",
+                               "cleaner_row_role": "blend_header_total", "score_eligible_by_cleaner": False,
+                               "nestedIngredients": [child]}],
+        "ingredient_quality_data": {"ingredients_scorable": [valid], "ingredients": [conflict]},
+    }, strict=strict)
+    assert result.unmapped_count == int(required_child)
+    assert result.mapped_coverage == (0.5 if required_child else 1.0)
+    assert [row["canonical_id"] for row in result.rows] == ["vitamin_c"]
+
+
+def test_legacy_shape_does_not_make_an_established_conflict_scoreable() -> None:
+    result = get_scoring_ingredients({"ingredient_quality_data": {
+        "ingredients_scorable": [{"name": "Yeast Fermentate",
+            "canonical_id": "yeast_fermentate", "identity_disposition": "identity_conflict",
+            "scoreable_identity": True}],
+    }}, strict=False)
+    assert result.rows == []
+    assert result.rejected_rows[0].reason == "identity_disposition_not_scoreable:identity_conflict"
+
+
+@pytest.mark.parametrize("excluded", [
+    {"source_section": "inactive"},
+    {"score_eligible_by_cleaner": False},
+    {"cleaner_row_role": "blend_header_total"},
+    {"cleaner_row_role": "nested_display_only"},
+    {"cleaner_row_role": "nutrition_rollup"},
+    {"is_blend_header": True},
+    {"blend_total_weight_only": True},
+    {"is_excipient": True},
+    {"role_classification": "recognized_non_scorable",
+     "score_exclusion_reason": "recognized_non_scorable"},
+])
+def test_intentionally_excluded_conflict_is_not_a_required_active(excluded: dict) -> None:
+    valid = _valid_vitamin_row()
+    conflict = {**_fermentate_source_row(), "canonical_id": None,
+                "identity_disposition": "identity_conflict", "scoreable_identity": False,
+                "role_classification": "active_scorable", **excluded}
+    result = get_scoring_ingredients({
+        "assessment_readiness_contract_version": "1.0.0",
+        "ingredient_quality_data": {"ingredients_scorable": [valid],
+                                    "ingredients_skipped": [conflict], "ingredients": [valid, conflict]},
+    }, strict=True)
+    assert result.unmapped_count == 0
+    assert result.mapped_coverage == 1.0
 
 
 def test_real_source_owned_cerevisiae_active_culture_dose_is_retained(enricher) -> None:

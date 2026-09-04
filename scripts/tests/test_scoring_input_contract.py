@@ -1397,8 +1397,8 @@ def test_unmapped_blend_anchor_mass_does_not_get_iqm_form_quality_credit():
 # --- Task 3: strict scoring-input identity disposition guard ---
 # _row() defaults scoreable_identity=True, so passing a non-scoreable disposition
 # reproduces the malformed upstream invariant: a row that claims to be scoreable
-# while its identity disposition says otherwise. Strict mode must reject it and
-# fail the contract; non-strict mode keeps the old-batch behavior.
+# while its identity disposition says otherwise. Typed conflicts must fail in
+# every mode; strict mode also enforces the remaining disposition vocabulary.
 
 
 def test_identity_integrity_strict_rejects_conflict_disposition_even_when_flag_true():
@@ -1466,13 +1466,15 @@ def test_identity_integrity_strict_accepts_scoreable_dispositions():
         assert result.strict_contract_passed is True, disposition
 
 
-def test_identity_integrity_non_strict_tolerates_conflict_for_old_batch():
+def test_identity_integrity_non_strict_rejects_typed_conflict_in_old_batch():
     result = get_scoring_ingredients(
         _product([_row(identity_disposition="identity_conflict")]),
         strict=False,
     )
 
-    assert [r["canonical_id"] for r in result.rows] == ["magnesium"]
+    assert result.rows == []
+    assert result.unmapped_count == 1
+    assert result.strict_contract_passed is False
 
 
 def test_identity_integrity_non_strict_tolerates_missing_disposition_for_old_batch():
