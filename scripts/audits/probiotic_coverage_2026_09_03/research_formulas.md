@@ -52,7 +52,7 @@ Observed from `comparators.json`:
 
 ### Seed DS-01 exact formula
 
-1. PMID [41599868](https://pubmed.ncbi.nlm.nih.gov/41599868/)  
+1. PMID [41599868](https://pubmed.ncbi.nlm.nih.gov/41599868/)
    Full text: <https://pmc.ncbi.nlm.nih.gov/articles/PMC12845427/>
 
 - Design: randomized, double-blind, placebo-controlled decentralized trial.
@@ -64,7 +64,7 @@ Observed from `comparators.json`:
 - Applicability read: strongest exact-formula evidence in this bounded set.
 - Limitations: attrition was substantial; symptom outcomes are commercial-sponsor-funded single-trial evidence.
 
-2. PMID [40944126](https://pubmed.ncbi.nlm.nih.gov/40944126/)  
+2. PMID [40944126](https://pubmed.ncbi.nlm.nih.gov/40944126/)
    Full text: <https://pmc.ncbi.nlm.nih.gov/articles/PMC12430871/>
 
 - Design: randomized, placebo-controlled trial.
@@ -75,7 +75,7 @@ Observed from `comparators.json`:
 - Funding/conflicts: funded by Seed Health; employee/shareholder and advisor conflicts disclosed.
 - Applicability read: confirms exact formula identity and biologic activity, but does not independently establish symptom benefit.
 
-3. PMID [41750436](https://pubmed.ncbi.nlm.nih.gov/41750436/)  
+3. PMID [41750436](https://pubmed.ncbi.nlm.nih.gov/41750436/)
    Full text: <https://pmc.ncbi.nlm.nih.gov/articles/PMC12937403/>
 
 - Design: randomized, placebo-controlled proof-of-mechanism trial.
