@@ -1312,21 +1312,52 @@ def assert_baseline_access(
     baseline_path: Path,
     *,
     stage: str,
+    manifest_path: Path,
     candidate_lock_path: Path | None = None,
 ) -> None:
-    """Reject unauthorized baseline paths before opening them."""
+    """Bind the stage to its manifest-owned path before reading baseline bytes.
+
+    Call only after verifying the response lock (and approved candidate lock
+    for holdout). Hash the authorized artifact before its CSV rows are parsed.
+    Standalone copies, renames, and file symlinks are not accepted.
+    """
     normalized_name = baseline_path.name.lower()
     if stage == "development":
         if "sealed" in normalized_name or "holdout" in normalized_name:
             raise AnalysisContractError(
                 "development analyzer refuses sealed holdout before file read"
             )
-        return
-    if stage != "holdout":
+    elif stage != "holdout":
         raise AnalysisContractError("unknown analysis stage")
-    if candidate_lock_path is None or not candidate_lock_path.is_file():
+    if stage == "holdout" and (
+        candidate_lock_path is None or not candidate_lock_path.is_file()
+    ):
         raise AnalysisContractError(
             "holdout analysis requires an existing candidate lock"
+        )
+    artifact_name = (
+        "development_baseline_key.csv"
+        if stage == "development"
+        else "SEALED_HOLDOUT_KEY.csv"
+    )
+    expected_path = manifest_path.resolve().parent / artifact_name
+    if baseline_path.is_symlink() or baseline_path.resolve() != expected_path:
+        raise AnalysisContractError(
+            f"{stage} analysis requires the manifest-owned {artifact_name} "
+            f"at {expected_path}; standalone copies, renames, and file symlinks "
+            "are not accepted"
+        )
+    manifest = _load_json(manifest_path)
+    expected_hash = (
+        (manifest.get("artifacts") or {}).get(artifact_name) or {}
+    ).get("sha256")
+    if not isinstance(expected_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", expected_hash):
+        raise AnalysisContractError(
+            f"manifest has no valid baseline artifact sha256 for {artifact_name}"
+        )
+    if _sha256(expected_path) != expected_hash:
+        raise AnalysisContractError(
+            f"baseline artifact sha256 does not match manifest for {artifact_name}"
         )
 
 
@@ -1586,11 +1617,6 @@ def main(argv: list[str] | None = None) -> int:
         else "holdout"
     )
     candidate_lock_path = getattr(args, "candidate_lock", None)
-    assert_baseline_access(
-        args.baseline_key,
-        stage=stage,
-        candidate_lock_path=candidate_lock_path,
-    )
     lock = _load_json(args.response_lock)
     spec = _load_json(args.analysis_spec)
     verify_response_lock(
@@ -1611,6 +1637,12 @@ def main(argv: list[str] | None = None) -> int:
             response_lock_sha256=_sha256(args.response_lock),
             spec=spec,
         )
+    assert_baseline_access(
+        args.baseline_key,
+        stage=stage,
+        manifest_path=args.manifest,
+        candidate_lock_path=candidate_lock_path,
+    )
 
     result = analyze_benchmark(
         _load_csv(args.baseline_key),

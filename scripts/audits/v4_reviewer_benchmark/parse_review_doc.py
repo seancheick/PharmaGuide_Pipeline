@@ -39,6 +39,8 @@ def _line(text: str, label: str, *, required: bool = False) -> str:
 
 
 def parse_document(text: str, slotmap: dict, frozen: dict) -> list[dict]:
+    if not text.strip():
+        raise AnalysisContractError("review document is empty")
     if slotmap.get("response_contract_version") != RESPONSE_CONTRACT_VERSION or not isinstance(slotmap.get("reviews"), dict):
         raise AnalysisContractError("legacy or missing sequence map; generate a new document from a new freeze, never guess review_sequence")
     if slotmap.get("freeze_id") != frozen["spec"]["freeze_id"]:

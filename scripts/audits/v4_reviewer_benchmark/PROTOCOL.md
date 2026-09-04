@@ -218,10 +218,12 @@ and the analysis implementation. The ordered response fields and canonical
 validator live in the analysis implementation and are reused by the document
 parser and freeze producer; no separate validator is maintained. Any change
 creates a new benchmark freeze.
-The development analyzer rejects the sealed holdout by filename and split
-before reading its rows. Holdout analysis additionally requires an approved,
-content-locked candidate record containing the frozen analysis hashes and
-expected direction.
+The analyzer binds each stage to its exact manifest-owned baseline artifact
+beside the manifest, rejecting standalone copies, renamed files, and file
+symlinks before opening baseline bytes. The artifact's manifest hash is then
+verified before CSV parsing; the row split is still checked afterwards.
+Holdout analysis requires the approved, content-locked candidate record and
+unchanged analysis hashes before even hashing the holdout artifact.
 
 Document construction requires an explicit freeze directory. Its private
 sequence map binds the freeze ID, manifest, blinded packet, frozen randomized
@@ -230,6 +232,7 @@ canonical `review_sequence` from the packet separate from `reviewer_order`
 from the template. Missing/legacy sequence maps fail closed; neither value is
 guessed from the other. The parser requires the same freeze and verifies the
 map before producing a complete, validated CSV with JSON-list citations.
+Empty or whitespace-only returned documents produce a clear error and no CSV.
 
 The full response lock still requires all products and all three registered
 reviewers, with complete 1–N randomized permutations matching the frozen

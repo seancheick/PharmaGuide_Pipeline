@@ -54,6 +54,7 @@ def frozen(tmp_path):
         row["reviewer_order"] = orders[row["reviewer_slot"]][row["review_sequence"] - 1]
     _write_csv(root / "reviewer_packet.csv", packet)
     _write_csv(root / "reviewer_response_template.csv", template)
+    _write_csv(root / "development_baseline_key.csv", _stage_baseline())
     (root / "ANALYSIS_SPEC.json").write_text(json.dumps(spec))
     manifest = {
         "freeze_id": spec["freeze_id"],
@@ -64,6 +65,7 @@ def frozen(tmp_path):
         },
         "artifacts": {name: {"sha256": _sha256(root / name)} for name in (
             "reviewer_packet.csv", "reviewer_response_template.csv",
+            "development_baseline_key.csv",
         )},
     }
     (root / "manifest.json").write_text(json.dumps(manifest))
@@ -180,8 +182,7 @@ def test_document_parser_lock_and_sparse_stage_roundtrip(frozen, tmp_path):
     cli_lock = _run(ANALYZER, "lock-responses", *_input_arguments(inputs),
                     "--locked-on", "synthetic-fixture", "--output", lock_path)
     assert cli_lock.returncode == 0, cli_lock.stdout + cli_lock.stderr
-    baseline_path = tmp_path / "synthetic-development-key.csv"
-    _write_csv(baseline_path, _stage_baseline())
+    baseline_path = frozen[0] / "development_baseline_key.csv"
     report_path = tmp_path / "new-analysis.json"
     cli_analysis = _run(ANALYZER, "analyze-development", *_input_arguments(inputs),
                         "--response-lock", lock_path, "--baseline-key", baseline_path,
@@ -371,3 +372,126 @@ def test_freeze_rejects_a_non_three_rater_design_before_reading_inputs(monkeypat
     monkeypatch.setattr(freeze, "_parse_args", lambda argv: SimpleNamespace(reviewers_per_product=panel_size))
     with pytest.raises(ValueError, match="exactly three"):
         freeze.main([])
+
+
+def _development_arguments(frozen, tmp_path):
+    inputs = _lock_inputs(frozen, tmp_path, _ratings(frozen))
+    lock = analysis.build_response_lock(**inputs, locked_on="synthetic-fixture")
+    lock_path = tmp_path / "new-response-lock.json"
+    lock_path.write_text(json.dumps(lock))
+    report_path = tmp_path / "new-analysis.json"
+    return ["analyze-development", *_input_arguments(inputs),
+            "--response-lock", str(lock_path), "--output", str(report_path)], report_path
+
+
+@pytest.mark.parametrize("copied_split", ["holdout", "development"])
+def test_development_refuses_renamed_baseline_before_any_read(frozen, tmp_path, monkeypatch, copied_split):
+    arguments, report_path = _development_arguments(frozen, tmp_path)
+    renamed = tmp_path / "plain_baseline.csv"
+    _write_csv(renamed, [dict(row, analysis_split=copied_split) for row in _stage_baseline()])
+    opened = []
+    original_open = Path.open
+
+    def record_open(path, *args, **kwargs):
+        if path == renamed:
+            opened.append(path)
+        return original_open(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "open", record_open)
+    failure = None
+    try:
+        analysis.main([*arguments, "--baseline-key", str(renamed)])
+    except analysis.AnalysisContractError as exc:
+        failure = str(exc)
+
+    assert opened == [], "a renamed baseline must not be hashed or parsed"
+    assert failure and "manifest-owned development_baseline_key.csv" in failure
+    assert not report_path.exists()
+
+
+def test_changed_stage_artifact_is_rejected_before_csv_parsing(frozen, tmp_path, monkeypatch):
+    arguments, report_path = _development_arguments(frozen, tmp_path)
+    baseline_path = frozen[0] / "development_baseline_key.csv"
+    with baseline_path.open("a") as handle:
+        handle.write("\n")
+    parsed_paths = []
+    original_load = analysis._load_csv
+
+    def record_parse(path):
+        if path == baseline_path:
+            parsed_paths.append(path)
+        return original_load(path)
+
+    monkeypatch.setattr(analysis, "_load_csv", record_parse)
+    failure = None
+    try:
+        analysis.main([*arguments, "--baseline-key", str(baseline_path)])
+    except analysis.AnalysisContractError as exc:
+        failure = str(exc)
+
+    assert parsed_paths == [], "stage artifact hash must be verified before CSV parsing"
+    assert failure and "baseline artifact sha256" in failure
+    assert not report_path.exists()
+
+
+def test_missing_stage_hash_refuses_baseline_before_any_read(frozen, tmp_path, monkeypatch):
+    manifest_path = frozen[0] / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    del manifest["artifacts"]["development_baseline_key.csv"]
+    manifest_path.write_text(json.dumps(manifest))
+    arguments, report_path = _development_arguments(frozen, tmp_path)
+    baseline_path = frozen[0] / "development_baseline_key.csv"
+    opened = []
+    original_open = Path.open
+
+    def record_open(path, *args, **kwargs):
+        if path == baseline_path:
+            opened.append(path)
+        return original_open(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "open", record_open)
+    with pytest.raises(analysis.AnalysisContractError, match="no valid baseline artifact sha256"):
+        analysis.main([*arguments, "--baseline-key", str(baseline_path)])
+    assert opened == []
+    assert not report_path.exists()
+
+
+def test_invalid_candidate_never_opens_or_hashes_holdout(frozen, tmp_path, monkeypatch):
+    # Synthetic bytes only; deliberately invalid candidate, not human approval.
+    holdout = frozen[0] / "SEALED_HOLDOUT_KEY.csv"
+    _write_csv(holdout, [dict(row, analysis_split="holdout") for row in _stage_baseline()])
+    manifest_path = frozen[0] / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["artifacts"][holdout.name] = {"sha256": _sha256(holdout)}
+    manifest_path.write_text(json.dumps(manifest))
+    arguments, report_path = _development_arguments(frozen, tmp_path)
+    arguments[0] = "analyze-holdout"
+    candidate = tmp_path / "invalid-candidate.json"
+    candidate.write_text(json.dumps({"status": "locked"}))
+    opened = []
+    original_open = Path.open
+
+    def record_open(path, *args, **kwargs):
+        if path == holdout:
+            opened.append(path)
+        return original_open(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "open", record_open)
+    with pytest.raises(analysis.AnalysisContractError, match="candidate lock"):
+        analysis.main([*arguments, "--baseline-key", str(holdout),
+                       "--candidate-lock", str(candidate)])
+    assert opened == []
+    assert not report_path.exists()
+
+
+@pytest.mark.parametrize("contents", ["", " \t", "\n\n\t \n"])
+def test_empty_review_return_fails_cleanly_without_csv(frozen, tmp_path, contents):
+    doc, slotmap = _document(frozen, tmp_path)
+    doc.write_text(contents)
+    out = tmp_path / "empty-response"
+    parsed = _parse(frozen, doc, slotmap, out)
+
+    assert parsed.returncode == 1
+    assert "ERROR — no CSV written: review document is empty" in parsed.stdout
+    assert "Traceback" not in parsed.stderr
+    assert not (out / "answers_R1.csv").exists()

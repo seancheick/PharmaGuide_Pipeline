@@ -461,7 +461,9 @@ def test_development_access_guard_rejects_holdout_before_file_read(tmp_path):
     sealed = tmp_path / "SEALED_HOLDOUT_KEY.csv"
 
     with pytest.raises(AnalysisContractError, match="refuses sealed holdout"):
-        assert_baseline_access(sealed, stage="development")
+        assert_baseline_access(
+            sealed, stage="development", manifest_path=tmp_path / "manifest.json",
+        )
     assert not sealed.exists()
 
 

@@ -67,7 +67,7 @@ must verify source content. Rationale and sources are mandatory. Empty or
 converted to `other`.
 
 Missing attestations, malformed numbers/citations, missing scores/rationale,
-invalid enums, duplicate/unknown blocks, partial product sets, or changed
+invalid enums, empty documents, duplicate/unknown blocks, partial product sets, or changed
 freeze provenance produce no CSV. A legacy/missing slotmap fails clearly.
 The answer file uses exclusive creation and cannot replace an existing
 answer. Preserve the raw return; corrections must be appended with a new
@@ -107,6 +107,15 @@ Every full randomized order must be the frozen 1–N permutation. The lock
 records and rechecks the packet and template hashes, not only the responses.
 Stage analysis validates the complete frozen assignments first, then selects
 its subset without renumbering sparse original orders.
+
+The baseline path must be the exact stage artifact beside that locked
+manifest: `development_baseline_key.csv` for development or
+`SEALED_HOLDOUT_KEY.csv` for separately authorized holdout analysis. A
+standalone copied or renamed key is rejected even if it contains legitimate
+development data; file symlinks are also rejected. Use the manifest-owned
+artifact, not an exported copy. Wrong paths are rejected before any baseline
+read, and the manifest's artifact hash must match before CSV rows are parsed.
+Holdout candidate approval is validated before any holdout bytes are hashed.
 
 If any reviewer reports exposure, `unknown`, or a protocol deviation, the
 whole product is excluded from the independent complete-panel analysis and
