@@ -51,11 +51,13 @@ def test_exact_seed_formula_receives_native_afu_assessment_and_scoped_evidence()
     assert result["status"] == "assessed_studied_formula"
     assert result["daily_dose"] == {"value": 53600000000, "unit": "AFU"}
     assert len(result["strain_source_row_refs"]) == 24
-    assert result["source_pmids"] == ["41599868", "40944126"]
+    assert result["source_pmids"] == ["41599868", "40944126", "41750436"]
     assert pending_afu_measurements(product) == []
     dose = score_dose(product)
-    assert dose["score"] == 15
-    assert dose["components"] == {"per_strain_cfu_disclosure": 0, "studied_formula_dose_adequacy": 15}
+    assert dose["score"] == dose["max"] == 25
+    assert dose["components"] == {"studied_formula_dose_adequacy": 25}
+    assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 0
+    assert dose["metadata"]["dose_adequacy_basis"] == "studied_formula_native_afu"
     assert "total_cfu" not in result
     evidence = formula_clinical_match(product)
     assert evidence["study_type"] == "rct_single"

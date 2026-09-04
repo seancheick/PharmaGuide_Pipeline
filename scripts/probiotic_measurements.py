@@ -1,8 +1,8 @@
-"""Preserve AFU label measurements without pretending they are CFU.
+"""Shared probiotic measurement and registry-scope adapters.
 
 This is a measurement adapter, not a clinical benchmark. No universal AFU/CFU
-conversion or AFU adequacy range is authored. Rows remain assessment-incomplete
-until an independently reviewed, compatible reference is implemented.
+conversion or AFU adequacy range is authored. CFU potency bands and research
+scope retain the registry's meaning; neither invents clinical dose applicability.
 """
 
 from __future__ import annotations
@@ -17,6 +17,38 @@ _AFU_UNIT = re.compile(
     re.IGNORECASE,
 )
 AFU_REVIEW_REASON = "probiotic_afu_reference_unavailable"
+
+
+def strain_cfu_tier(cfu_per_day, tiers_cfu_per_day) -> str | None:
+    """Map a per-strain CFU count to the registry's potency band.
+
+    These bands do not establish trial-dose applicability or clinical efficacy.
+
+    Returns one of ``"low" | "adequate" | "good" | "excellent"`` or
+    ``None`` when the dose is zero/missing or the bands dict is empty.
+    Tolerates band-key order and missing ``upper_exclusive`` (treats it
+    as +infinity) / missing ``lower_inclusive`` (treats it as 0).
+    """
+    if (isinstance(cfu_per_day, bool) or not isinstance(cfu_per_day, (int, float))
+            or not math.isfinite(cfu_per_day) or cfu_per_day <= 0):
+        return None
+    if not isinstance(tiers_cfu_per_day, dict) or not tiers_cfu_per_day:
+        return None
+
+    for tier_name in ("low", "adequate", "good", "excellent"):
+        band = tiers_cfu_per_day.get(tier_name)
+        if not isinstance(band, dict):
+            continue
+        lower = band.get("lower_inclusive", 0)
+        upper = band.get("upper_exclusive")
+        lower_ok = cfu_per_day >= (lower if isinstance(lower, (int, float)) else 0)
+        upper_ok = (
+            upper is None
+            or (isinstance(upper, (int, float)) and cfu_per_day < upper)
+        )
+        if lower_ok and upper_ok:
+            return tier_name
+    return None
 
 
 def collect_afu_measurements(product: Mapping) -> list[dict]:
@@ -117,3 +149,26 @@ def pending_afu_measurements(product: Mapping) -> list[dict]:
         }
         for index, row in enumerate(rows)
     ]
+
+
+def clinical_strain_research_scope(entry: dict) -> dict:
+    """One registry-owned scope decision for presentation and scored evidence."""
+    entry = entry if isinstance(entry, dict) else {}
+    thresholds = entry.get("cfu_thresholds") or {}
+    thresholds = thresholds if isinstance(thresholds, dict) else {}
+    evidence = thresholds.get("evidence") or {}
+    evidence = evidence if isinstance(evidence, dict) else {}
+    validation = evidence.get("clinical_validation") or {}
+    validation = validation if isinstance(validation, dict) else {}
+    evidence_type = str(evidence.get("type") or "").strip().lower()
+    explicit = str(validation.get("q1_strain_explicit") or "").strip().upper()
+    human = str(validation.get("q3_human_clinical") or "").strip().upper()
+    human_evidence = human == "YES" if human else any(
+        token in evidence_type for token in ("rct", "meta_analysis", "clinical", "guideline", "human"))
+    if explicit == "FORMULA_LEVEL" or evidence_type == "product_formula_rct":
+        scope = "formula_specific"
+    elif explicit == "YES" or "strain_specific" in evidence_type:
+        scope = "strain_specific"
+    else:
+        scope = "species_general"
+    return {"evidence_scope": scope, "human_evidence": human_evidence}

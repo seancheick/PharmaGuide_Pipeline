@@ -15,6 +15,7 @@ from pathlib import Path
 from clinical_applicability import reviewed_entries
 from normalization import normalize_text
 from serving_frequency import resolve_daily_serving_range
+from probiotic_measurements import strain_cfu_tier, clinical_strain_research_scope
 
 
 def _key(value):
@@ -126,7 +127,7 @@ def _assess(product, entry, contract):
             return _failure("formula_blend_afu_mismatch")
     if not math.isclose(total * lower, contract["daily_afu"], rel_tol=1e-12):
         return _failure("formula_afu_dose_mismatch")
-    return {"status": "assessed_studied_formula", "reason_code": "exact_studied_formula_and_dose",
+    return {"status": "assessed_studied_formula", "reason_code": "reviewed_commercial_formula_and_reported_total_dose",
             "evidence_id": entry["id"], "scope": "formula_specific",
             "daily_dose": {"value": contract["daily_afu"], "unit": "AFU"},
             "afu_source_row_refs": sorted(header_refs), "strain_source_row_refs": sorted(strain_refs),
@@ -335,3 +336,148 @@ def independent_clinical_strains(product: Mapping) -> list[dict]:
             continue
         independent.append(row)
     return independent
+
+
+def assess_probiotic_evidence(product: Mapping) -> dict:
+    """Normalize existing identity decisions; never promote industry dose tiers.
+
+    Exact strain research remains contextual evidence when dose or reviewed
+    clinical scope is unknown. A whole-formula assessment owns its own dose;
+    it does not manufacture quantities or research approvals for its members.
+    """
+    if not product.get("probiotic_data") and isinstance(product.get("probiotic_detail"), Mapping):
+        product = {**product, "probiotic_data": product["probiotic_detail"]}
+    formula = assess_studied_formula(product)
+    registry = _clinical_strain_registry()
+    accepted = {id(row) for row in independent_clinical_strains(product)
+                if "source_row_ref" in row or clinical_strain_matches_source_row(
+                    product, row, {"name": row.get("strain")})}
+    pdata = product.get("probiotic_data") or {}
+    raw_rows = pdata.get("clinical_strains", []) if isinstance(pdata, Mapping) else []
+    results = []
+    for row in raw_rows if isinstance(raw_rows, list) else []:
+        if not isinstance(row, Mapping):
+            continue
+        reference = registry.get(str(row.get("clinical_id") or ""), {})
+        thresholds = reference.get("cfu_thresholds") or {}
+        evidence = thresholds.get("evidence") or {}
+        support = evidence.get("clinical_support_level") or evidence.get("evidence_strength") or "weak"
+        support = {"strong": "high", "medium": "moderate"}.get(support, support)
+        scope = reference.get("applicability")
+        result = {"clinical_id": row.get("clinical_id"), "strain": row.get("strain"),
+                  "source_row_ref": row.get("source_row_ref"), "dose_applicable": False,
+                  "cfu_per_day": _owned_daily_cfu(product, row),
+                  "support_level": support, "research_accepted": id(row) in accepted,
+                  "source_pmids": [p for p in [evidence.get("pmid"), *evidence.get("additional_pmids", [])] if p],
+                  "supported_outcomes": [], "studied_population": None}
+        result.update(clinical_strain_research_scope(reference))
+        if not reference:
+            status = "strain_reference_unreviewed"
+        elif not clinical_strain_identity_matches(row.get("strain"), reference):
+            status = "strain_identity_mismatch"
+        elif id(row) not in accepted:
+            status = "strain_identity_or_review_unresolved"
+        elif row.get("is_inactivated") or row.get("is_postbiotic"):
+            status = "strain_context_mismatch"
+        elif result["cfu_per_day"] is None or result["cfu_per_day"] <= 0:
+            status = "strain_dose_unknown"
+        elif not isinstance(scope, Mapping):
+            status = "strain_dose_reference_unreviewed"
+        else:
+            status = _assess_strain_scope(product, result, scope)
+            result.update(source_pmids=scope.get("source_pmids", []),
+                          supported_outcomes=scope.get("supported_outcomes", []),
+                          studied_population=scope.get("studied_population"))
+        result["status"] = status
+        result["industry_adequacy_tier"] = strain_cfu_tier(
+            result["cfu_per_day"], thresholds.get("tiers_cfu_per_day"))
+        result["dose_applicable"] = status == "strain_dose_applicable"
+        results.append(result)
+    return {"formula_assessment": formula, "strain_assessments": results}
+
+
+def assessed_native_strain_doses(product: Mapping) -> list[dict]:
+    """Project the shared assessment to the existing Dose arithmetic interface."""
+    assessment = assess_probiotic_evidence(product)
+    by_owner = {(r["clinical_id"], r["source_row_ref"]): r
+                for r in assessment["strain_assessments"] if r["research_accepted"]}
+    return [{**row, "cfu_per_day": assessed["cfu_per_day"],
+             "adequacy_tier": assessed["industry_adequacy_tier"],
+             "clinical_support_level": assessed["support_level"]}
+            for row in independent_clinical_strains(product)
+            if (assessed := by_owner.get((row.get("clinical_id"), row.get("source_row_ref"))))]
+
+
+def _owned_daily_cfu(product: Mapping, row: Mapping) -> float | None:
+    """Use the existing CFU producer's unique row-level measure, never its total.
+
+    The legacy clinical row's cfu_per_day is actually a per-serving stamp. Join
+    back to its source-owned measurement and apply explicit serving frequency.
+    Missing provenance is unknown, not zero, and AFU never enters this path.
+    """
+    ref = row.get("source_row_ref")
+    if not isinstance(ref, str) or not ref or not clinical_strain_matches_source_row(
+            product, row, {"raw_source_path": ref}):
+        return None
+    blends = (product.get("probiotic_data") or {}).get("probiotic_blends") or []
+    measures = []
+    for blend in blends:
+        if not isinstance(blend, Mapping) or blend.get("raw_source_path") != ref:
+            continue
+        measure = blend.get("cfu_data") or {}
+        if (len(blend.get("strains") or []) != 1 or not isinstance(measure, Mapping)
+                or measure.get("raw_source_path") != ref
+                or measure.get("evidence_scope") != "row_level"):
+            return None
+        measures.append(_number(measure.get("cfu_count")))
+    basis = product.get("serving_basis") or {}
+    lower, upper, _ = resolve_daily_serving_range(dict(product))
+    if (len(measures) != 1 or measures[0] is None or measures[0] <= 0
+            or not isinstance(basis, Mapping) or not basis.get("servings_per_day_source")
+            or lower != upper or lower <= 0):
+        return None
+    return measures[0] * lower
+
+
+def strain_assessments_for_match(entry: Mapping, assessment: Mapping) -> list[dict]:
+    """Join a generic clinical record to already-reviewed native identities."""
+    registry = _clinical_strain_registry()
+    return [row for row in assessment["strain_assessments"]
+            if row["research_accepted"] and row["status"] not in {
+                "strain_context_mismatch", "strain_context_unresolved", "strain_dose_incompatible"}
+            and (entry.get("id") == row["clinical_id"] or any(
+                clinical_strain_identity_matches(entry.get(field), registry[row["clinical_id"]])
+                for field in ("standard_name", "ingredient")))]
+
+
+def _assess_strain_scope(product: Mapping, row: Mapping, scope: Mapping) -> str:
+    """Require a finite, source-backed native-CFU range and explicit label scope.
+
+    This consumes curated applicability in the existing strain registry. A
+    caller's adequacy_tier/dose_basis stamp cannot create a reviewed reference.
+    Population is label scope, not inferred from marketing or a user's profile.
+    """
+    low, high = (_number(scope.get(k)) for k in ("minimum_daily_dose", "maximum_daily_dose"))
+    def has_text_list(key):
+        value = scope.get(key)
+        return (isinstance(value, list) and bool(value)
+                and all(isinstance(item, str) and item.strip() for item in value))
+
+    if (scope.get("dose_unit") != "CFU" or low is None or high is None
+            or low <= 0 or high < low
+            or not all(has_text_list(key) for key in (
+                "source_pmids", "supported_outcomes", "dosage_forms"))
+            or not all(isinstance(scope.get(key), str) and scope[key].strip()
+                       for key in ("studied_population", "target_population"))):
+        return "strain_dose_reference_unreviewed"
+    form = product.get("form_factor_canonical") or product.get("form_factor")
+    population = product.get("target_population")
+    if not form or not population:
+        return "strain_context_unresolved"
+    if (_key(form) not in {_key(f) for f in scope["dosage_forms"]}
+            or _key(population) != _key(scope["target_population"])):
+        return "strain_context_mismatch"
+    if not row.get("source_row_ref") or not clinical_strain_matches_source_row(
+            product, row, {"raw_source_path": row["source_row_ref"]}):
+        return "strain_context_unresolved"
+    return "strain_dose_applicable" if low <= _number(row.get("cfu_per_day")) <= high else "strain_dose_incompatible"

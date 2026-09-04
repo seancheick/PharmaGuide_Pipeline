@@ -161,6 +161,8 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
         )
     if metadata.get("window_proxy_reason") == "per_strain_cfu_missing":
         return "Dose adequacy could not be verified from the disclosed probiotic amounts."
+    if metadata.get("reference_basis") == "industry_potency_not_trial_efficacy":
+        return "Disclosed CFU is assessed against potency benchmarks, not proof of clinical benefit."
     return fallback
 
 
@@ -554,7 +556,7 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
     reason = _reason_formulation(_band(val, weight))
     if (dim.get("metadata", {}).get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula":
-        reason = "The disclosed strain formula, native AFU potency and prebiotic match the studied formulation."
+        reason = "The reviewed commercial formula matches the reported strain composition, total AFU potency and prebiotic."
     if archetype == "omega":
         reason = _omega_formulation_reason(dim, reason)
     return {
@@ -582,6 +584,20 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         reason = "Evidence credit is driven by the primary ingredient, not a trial of the whole formula."
     if (metadata.get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula":
         reason = "The complete formula has adult digestive-symptom trial evidence; independent confirmation is limited."
+    elif archetype == "probiotic":
+        assessed = (metadata.get("evidence_assessment") or {}).get("strain_assessments", [])
+        if metadata.get("evidence_result_state") == "evaluated_unfavorable":
+            reason = "Reviewed research is unfavorable for the assessed outcome; this is distinct from missing research."
+        elif any(row.get("dose_applicable") for row in assessed):
+            reason = "Reviewed strain evidence matches the disclosed dose and label context; benefits remain outcome-specific."
+        elif val > 0 and any(row.get("research_accepted") for row in assessed):
+            credited = metadata.get("native_clinical_strain_evidence_rows") or []
+            if credited and all(row.get("evidence_scope") == "species_general" for row in credited):
+                reason = "Our registry currently classifies this as species-level research; applicability to the exact studied strain and dose is not established for this label."
+            else:
+                reason = "Named strains have reviewed research; a matching studied dose is not established for this label."
+        else:
+            reason = "Our reviewed evidence does not establish probiotic benefit for this formula and dose; this is not a product-quality finding."
     return {
         "score": val,
         "max": weight,

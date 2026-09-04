@@ -791,10 +791,28 @@
         "form_factor_canonical": "capsule",
         "supplement_taxonomy": {"primary_type": "probiotic", "percentile_category": "probiotic"},
         "supplement_type": {"type": "probiotic"},
+        "activeIngredients": [
+          {"name": "Lactobacillus rhamnosus GG", "raw_source_path": "ingredientRows[0]", "quantity": 10000000000, "unit": "CFU", "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": true},
+          {"name": "Bifidobacterium lactis BB-12", "raw_source_path": "ingredientRows[1]", "quantity": 10000000000, "unit": "CFU", "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": true},
+          {"name": "Lactobacillus reuteri DSM 17938", "raw_source_path": "ingredientRows[2]", "quantity": 10000000000, "unit": "CFU", "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": true},
+          {"name": "Bifidobacterium longum BB536", "raw_source_path": "ingredientRows[3]", "quantity": 10000000000, "unit": "CFU", "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": true},
+          {"name": "Lactobacillus plantarum 299v", "raw_source_path": "ingredientRows[4]", "quantity": 10000000000, "unit": "CFU", "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": true}
+        ],
+        "serving_basis": {
+          "basis_count": 1,
+          "basis_unit": "capsule",
+          "min_servings_per_day": 1,
+          "max_servings_per_day": 1,
+          "servings_per_day_source": "servingSizes"
+        },
         "ingredient_quality_data": {
-          "total_active": 1,
+          "total_active": 5,
           "ingredients_scorable": [
-            {"name": "Five-Strain Probiotic Blend", "standard_name": "Probiotic Blend", "canonical_id": "probiotic_blend", "quantity": 50000000000, "dose": 50000000000, "unit": "CFU", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "probiotic_cfu"}
+            {"name": "Lactobacillus rhamnosus GG", "standard_name": "Lactobacillus rhamnosus GG", "canonical_id": "lactobacillus_rhamnosus_gg", "quantity": 10000000000, "dose": 10000000000, "unit": "CFU", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "ingredientRows[0]", "dose_class": "probiotic_cfu"},
+            {"name": "Bifidobacterium lactis BB-12", "standard_name": "Bifidobacterium lactis BB-12", "canonical_id": "bifidobacterium_lactis_bb_12", "quantity": 10000000000, "dose": 10000000000, "unit": "CFU", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "ingredientRows[1]", "dose_class": "probiotic_cfu"},
+            {"name": "Lactobacillus reuteri DSM 17938", "standard_name": "Lactobacillus reuteri DSM 17938", "canonical_id": "lactobacillus_reuteri_dsm_17938", "quantity": 10000000000, "dose": 10000000000, "unit": "CFU", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "ingredientRows[2]", "dose_class": "probiotic_cfu"},
+            {"name": "Bifidobacterium longum BB536", "standard_name": "Bifidobacterium longum BB536", "canonical_id": "bifidobacterium_longum_bb536", "quantity": 10000000000, "dose": 10000000000, "unit": "CFU", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "ingredientRows[3]", "dose_class": "probiotic_cfu"},
+            {"name": "Lactobacillus plantarum 299v", "standard_name": "Lactobacillus plantarum 299v", "canonical_id": "lactobacillus_plantarum_299v", "quantity": 10000000000, "dose": 10000000000, "unit": "CFU", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "ingredientRows[4]", "dose_class": "probiotic_cfu"}
           ]
         },
         "probiotic_data": {
@@ -810,18 +828,18 @@
           "prebiotic_present": true,
           "prebiotic_name": "Inulin",
           "probiotic_blends": [
-            {"name": "Lactobacillus rhamnosus GG", "strains": ["Lactobacillus rhamnosus GG"], "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10}},
-            {"name": "Bifidobacterium lactis BB-12", "strains": ["Bifidobacterium lactis BB-12"], "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10}},
-            {"name": "Lactobacillus reuteri DSM 17938", "strains": ["Lactobacillus reuteri DSM 17938"], "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10}},
-            {"name": "Bifidobacterium longum BB536", "strains": ["Bifidobacterium longum BB536"], "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10}},
-            {"name": "Lactobacillus plantarum 299v", "strains": ["Lactobacillus plantarum 299v"], "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10}}
+            {"name": "Lactobacillus rhamnosus GG", "strains": ["Lactobacillus rhamnosus GG"], "raw_source_path": "ingredientRows[0]", "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10, "raw_source_path": "ingredientRows[0]", "evidence_scope": "row_level"}},
+            {"name": "Bifidobacterium lactis BB-12", "strains": ["Bifidobacterium lactis BB-12"], "raw_source_path": "ingredientRows[1]", "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10, "raw_source_path": "ingredientRows[1]", "evidence_scope": "row_level"}},
+            {"name": "Lactobacillus reuteri DSM 17938", "strains": ["Lactobacillus reuteri DSM 17938"], "raw_source_path": "ingredientRows[2]", "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10, "raw_source_path": "ingredientRows[2]", "evidence_scope": "row_level"}},
+            {"name": "Bifidobacterium longum BB536", "strains": ["Bifidobacterium longum BB536"], "raw_source_path": "ingredientRows[3]", "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10, "raw_source_path": "ingredientRows[3]", "evidence_scope": "row_level"}},
+            {"name": "Lactobacillus plantarum 299v", "strains": ["Lactobacillus plantarum 299v"], "raw_source_path": "ingredientRows[4]", "cfu_data": {"has_cfu": true, "cfu_count": 10000000000, "billion_count": 10, "raw_source_path": "ingredientRows[4]", "evidence_scope": "row_level"}}
           ],
           "clinical_strains": [
-            {"strain": "Lactobacillus rhamnosus GG", "name": "Lactobacillus rhamnosus GG", "clinical_id": "STRAIN_LGG", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
-            {"strain": "Bifidobacterium lactis BB-12", "name": "Bifidobacterium lactis BB-12", "clinical_id": "STRAIN_LACTIS_BB12", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
-            {"strain": "Lactobacillus reuteri DSM 17938", "name": "Lactobacillus reuteri DSM 17938", "clinical_id": "STRAIN_REUTERI_DSM17938", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
-            {"strain": "Bifidobacterium longum BB536", "name": "Bifidobacterium longum BB536", "clinical_id": "STRAIN_LONGUM_BB536", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"},
-            {"strain": "Lactobacillus plantarum 299v", "name": "Lactobacillus plantarum 299v", "clinical_id": "STRAIN_PLANTARUM_299V", "cfu_per_day": 10000000000, "adequacy_tier": "excellent", "clinical_support_level": "high", "indication_primary": "digestive health"}
+            {"strain": "Lactobacillus rhamnosus GG", "name": "Lactobacillus rhamnosus GG", "label_name": "Lactobacillus rhamnosus GG", "clinical_id": "STRAIN_LGG", "source_row_ref": "ingredientRows[0]", "indication_primary": "digestive health"},
+            {"strain": "Bifidobacterium lactis BB-12", "name": "Bifidobacterium lactis BB-12", "label_name": "Bifidobacterium lactis BB-12", "clinical_id": "STRAIN_LACTIS_BB12", "source_row_ref": "ingredientRows[1]", "indication_primary": "digestive health"},
+            {"strain": "Lactobacillus reuteri DSM 17938", "name": "Lactobacillus reuteri DSM 17938", "label_name": "Lactobacillus reuteri DSM 17938", "clinical_id": "STRAIN_REUTERI_DSM17938", "source_row_ref": "ingredientRows[2]", "indication_primary": "digestive health"},
+            {"strain": "Bifidobacterium longum BB536", "name": "Bifidobacterium longum BB536", "label_name": "Bifidobacterium longum BB536", "clinical_id": "STRAIN_LONGUM_BB536", "source_row_ref": "ingredientRows[3]", "indication_primary": "digestive health"},
+            {"strain": "Lactobacillus plantarum 299v", "name": "Lactobacillus plantarum 299v", "label_name": "Lactobacillus plantarum 299v", "clinical_id": "STRAIN_PLANTARUM_299V", "source_row_ref": "ingredientRows[4]", "indication_primary": "digestive health"}
           ]
         },
         "evidence_data": {
@@ -839,8 +857,8 @@
         "archetype": "probiotic",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 96.0,
-        "quality_tier": "Elite",
+        "quality_score_v4_100": 84.0,
+        "quality_tier": "Strong",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 22.0,
@@ -850,7 +868,7 @@
         "pillars": {
           "formulation": 20.0,
           "dose": 20.0,
-          "evidence": 20.0,
+          "evidence": 8.0,
           "transparency": 15.0,
           "verification": 11.0,
           "safety_hygiene": 10.0
@@ -858,7 +876,7 @@
         "raw_dimensions": {
           "formulation": 24.25,
           "dose": 25.0,
-          "evidence": 20.0,
+          "evidence": 8.0,
           "transparency": 15.0
         }
       }

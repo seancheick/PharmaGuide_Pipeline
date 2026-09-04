@@ -138,7 +138,7 @@ def test_real_seed_pipeline_scores_verified_formula_without_inventing_cfu(seed_c
     assert len(blob["probiotic_detail"]["afu_measurements"]) == 4
     assert blob["probiotic_detail"]["total_strain_count"] == 24
     assert blob["probiotic_detail"]["total_cfu"] == 0
-    assert blob["probiotic_detail"]["studied_formula_assessment"]["source_pmids"] == ["41599868", "40944126"]
+    assert blob["probiotic_detail"]["studied_formula_assessment"]["source_pmids"] == ["41599868", "40944126", "41750436"]
     report = build_reachability_report(
         [enriched], recompute=lambda p: recompute_evidence(enricher, p),
     )

@@ -17,18 +17,82 @@ import studied_formulas  # noqa: E402
 from studied_formulas import independent_clinical_strains  # noqa: E402
 
 
+def _clinical_row(**fields) -> dict:
+    return {
+        "strain": "Invented strain X",
+        "clinical_support_level": "strong",
+        "indication_primary": "digestive",
+        **fields,
+    }
+
+
 def _product(**fields) -> dict:
     return {
         "product_name": "Digestive probiotic",
         "probiotic_data": {
-            "clinical_strains": [{
-                "strain": "Invented strain X",
-                "clinical_support_level": "strong",
-                "indication_primary": "digestive",
-                **fields,
+            "clinical_strains": [_clinical_row(**fields)],
+        },
+    }
+
+
+def _owned_product(
+    *,
+    owner_name: str | None = None,
+    include_source_ref: bool = False,
+    quantity: float | int | None = None,
+    unit: str = "CFU",
+    **fields,
+) -> dict:
+    row = _clinical_row(**fields)
+    ref = "ingredientRows[0]"
+    label = (
+        owner_name
+        or row.get("label_name")
+        or row.get("strain")
+        or row.get("standard_name")
+        or row.get("name")
+        or "Invented strain X"
+    )
+    if include_source_ref:
+        row["source_row_ref"] = ref
+        row.setdefault("label_name", label)
+    row_quantity = quantity
+    if row_quantity is None:
+        row_quantity = row.get("cfu_per_day")
+    has_cfu = row_quantity is not None and float(row_quantity) > 0
+    product = {
+        "product_name": "Digestive probiotic",
+        "activeIngredients": [{
+            "name": label,
+            "raw_source_path": ref,
+            "quantity": row_quantity or 0,
+            "unit": unit if has_cfu else "NP",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": True,
+        }],
+        "serving_basis": {
+            "basis_count": 1,
+            "basis_unit": "capsule",
+            "min_servings_per_day": 1,
+            "max_servings_per_day": 1,
+            "servings_per_day_source": "servingSizes",
+        },
+        "probiotic_data": {
+            "clinical_strains": [row],
+            "probiotic_blends": [{
+                "name": label,
+                "strains": [label],
+                "raw_source_path": ref,
+                "cfu_data": {
+                    "has_cfu": has_cfu,
+                    "cfu_count": row_quantity if has_cfu else None,
+                    "raw_source_path": ref,
+                    "evidence_scope": "row_level",
+                },
             }],
         },
     }
+    return product
 
 
 @pytest.mark.parametrize(
@@ -71,7 +135,7 @@ def test_unproven_native_rows_cannot_award_evidence_or_indication_credit(
     assert independent_clinical_strains(product) == []
     evidence = score_evidence(product)
     assert evidence["metadata"]["native_clinical_strain_evidence_score"] == 0
-    assert evidence["components"]["indication_relevance"] == 0
+    assert evidence["components"]["dose_applicability"] == 0
 
 
 @pytest.mark.parametrize("status", [None, "exact_strain", "species_level"])
@@ -83,7 +147,7 @@ def test_reviewed_lgg_registry_identity_retains_native_support(status: str | Non
     }
     if status is not None:
         fields["research_match_status"] = status
-    product = _product(**fields)
+    product = _owned_product(include_source_ref=True, **fields)
 
     assert independent_clinical_strains(product) == product["probiotic_data"]["clinical_strains"]
     assert score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"] == 8
@@ -116,25 +180,46 @@ def test_real_clinical_id_cannot_authorize_wrong_or_missing_row_identity(fields:
     assert score_evidence(product)["score"] == 0
 
 
+def test_legacy_name_fallback_without_primary_strain_identity_cannot_earn_credit() -> None:
+    product = _owned_product(
+        clinical_id="STRAIN_LGG",
+        strain=None,
+        name="LGG",
+        owner_name="LGG",
+        research_match_status="exact_strain",
+        include_source_ref=True,
+    )
+
+    assessment = studied_formulas.assess_probiotic_evidence(product)
+    assert independent_clinical_strains(product) == []
+    assert assessment["strain_assessments"][0]["research_accepted"] is False
+    assert assessment["strain_assessments"][0]["status"] == "strain_identity_mismatch"
+    assert score_evidence(product)["score"] == 0
+
+
 @pytest.mark.parametrize(
-    "clinical_id,fields",
+    "clinical_id,strain,owner_name",
     [
-        ("STRAIN_LGG", {"strain": "LGG"}),
-        ("STRAIN_LGG", {"strain": "  lgg®  "}),
-        ("STRAIN_LGG", {"strain": "ATCC 53103"}),
-        ("STRAIN_LGG", {"strain": "Lactobacillus rhamnosus GG:"}),
-        ("STRAIN_LGG", {"strain": "Lacticaseibacillus rhamnosus GG"}),
-        ("STRAIN_LGG", {"strain": None, "name": "LGG"}),
-        ("STRAIN_LONGUM_BB536", {"strain": "BB536"}),
-        ("STRAIN_LONGUM_BB536", {"strain": None, "standard_name": "B. longum BB536"}),
-        ("STRAIN_ACIDOPHILUS_NCFM", {"strain": "Lactobacillus acidophilus (NCFM)"}),
-        ("STRAIN_LACTIS_HN019", {"strain": "Bifidobacterium lactis (HN019)"}),
+        ("STRAIN_LGG", "Lactobacillus rhamnosus GG", "LGG"),
+        ("STRAIN_LGG", "Lactobacillus rhamnosus GG", "  lgg®  "),
+        ("STRAIN_LGG", "Lactobacillus rhamnosus GG", "ATCC 53103"),
+        ("STRAIN_LGG", "Lactobacillus rhamnosus GG", "Lactobacillus rhamnosus GG:"),
+        ("STRAIN_LGG", "Lactobacillus rhamnosus GG", "Lacticaseibacillus rhamnosus GG"),
+        ("STRAIN_LONGUM_BB536", "Bifidobacterium longum BB536", "BB536"),
+        ("STRAIN_LONGUM_BB536", "Bifidobacterium longum BB536", "B. longum BB536"),
+        ("STRAIN_ACIDOPHILUS_NCFM", "Lactobacillus acidophilus NCFM", "Lactobacillus acidophilus (NCFM)"),
+        ("STRAIN_LACTIS_HN019", "Bifidobacterium lactis HN019", "Bifidobacterium lactis (HN019)"),
     ],
 )
 def test_exact_registry_aliases_preserve_independent_native_evidence(
-    clinical_id: str, fields: dict,
+    clinical_id: str, strain: str, owner_name: str,
 ) -> None:
-    product = _product(clinical_id=clinical_id, **fields)
+    product = _owned_product(
+        clinical_id=clinical_id,
+        strain=strain,
+        owner_name=owner_name,
+        include_source_ref=True,
+    )
 
     assert independent_clinical_strains(product) == product["probiotic_data"]["clinical_strains"]
 
@@ -194,7 +279,12 @@ def test_exact_registry_aliases_preserve_independent_native_evidence(
 def test_verified_corpus_spelling_variants_keep_exact_native_identity(
     clinical_id: str, strain: str,
 ) -> None:
-    product = _product(clinical_id=clinical_id, strain=strain)
+    product = _owned_product(
+        clinical_id=clinical_id,
+        strain=strain,
+        owner_name=strain,
+        include_source_ref=True,
+    )
 
     assert independent_clinical_strains(product) == product["probiotic_data"]["clinical_strains"]
     assert score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"] > 0
@@ -240,11 +330,12 @@ def test_reviewed_formula_reference_cannot_be_spoofed_as_independent_strain(
     registry = copy.deepcopy(studied_formulas._clinical_strain_registry())
     registry["STRAIN_BREVE_SD_BR3_IT"]["cfu_thresholds"]["dr_pham_signoff"] = True
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
-    product = _product(
+    product = _owned_product(
         clinical_id="STRAIN_BREVE_SD_BR3_IT",
         strain="Bifidobacterium breve SD-BR3-IT",
         research_match_status="exact_strain",
         evidence_scope="strain_specific",
+        include_source_ref=True,
     )
 
     assert independent_clinical_strains(product) == []
@@ -253,11 +344,12 @@ def test_reviewed_formula_reference_cannot_be_spoofed_as_independent_strain(
 def test_pending_strain_dose_keeps_disclosure_without_clinical_adequacy() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
-    product = _product(
+    product = _owned_product(
         strain="Bifidobacterium longum subsp. infantis M-63",
         clinical_id="STRAIN_INFANTIS_M63",
         cfu_per_day=10_000_000_000,
         adequacy_tier="good",
+        include_source_ref=True,
     )
     product["probiotic_data"].update({
         "total_strain_count": 1,
@@ -276,10 +368,11 @@ def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None
         score_dose,
     )
 
-    product = _product(
+    product = _owned_product(
         strain="Bifidobacterium longum subsp. infantis M-63",
         clinical_id="STRAIN_INFANTIS_M63",
         clinical_support_level="high",
+        include_source_ref=True,
     )
     product["probiotic_data"].update({
         "total_strain_count": 1,
@@ -298,9 +391,10 @@ def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None
 def test_unreviewed_strains_keep_label_diversity_but_no_clinical_code_credit() -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
-    product = _product(
+    product = _owned_product(
         clinical_id="STRAIN_BREVE_SD_BR3_IT",
         strain="Bifidobacterium breve SD-BR3-IT",
+        include_source_ref=True,
     )
     product["probiotic_data"].update({
         "total_strain_count": 4,

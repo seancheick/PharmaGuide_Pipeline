@@ -1,4 +1,4 @@
-"""v4 Probiotic Evidence — P2.3 tests."""
+"""Probiotic research and dose applicability; marketing alignment is metadata."""
 
 from __future__ import annotations
 
@@ -64,12 +64,15 @@ def _product(
     matches: list[dict] | None = None,
     clinical_strains: list[dict] | None = None,
 ) -> dict:
+    strains = [_clinical_strain()] if clinical_strains is None else clinical_strains
     return {
         "status": "active",
         "form_factor": "capsule",
         "product_name": product_name,
         "brand_name": brand_name,
         "supplement_type": {"type": "probiotic"},
+        "activeIngredients": [{"name": row["strain"], "raw_source_path": f"ingredientRows[{i}]"}
+                              for i, row in enumerate(strains)],
         "ingredient_quality_data": {
             "total_active": 1,
             "ingredients_scorable": [
@@ -90,24 +93,25 @@ def _product(
             "is_probiotic_product": True,
             "total_strain_count": 1,
             "clinical_strain_count": 1,
-            "clinical_strains": [_clinical_strain()] if clinical_strains is None else clinical_strains,
+            "clinical_strains": strains,
         },
     }
 
 
-def test_probiotic_evidence_scores_pipeline_plus_exact_indication_relevance() -> None:
+def test_undosed_strain_receives_contextual_evidence_without_marketing_points() -> None:
     from scoring_v4.modules.probiotic_evidence import score_evidence
 
     payload = score_evidence(_product())
 
     assert payload["max"] == 20.0
-    assert payload["score"] == 16.0
+    assert payload["score"] == 8.0
     assert payload["components"] == {
         "strain_clinical_evidence": 8.0,
-        "indication_relevance": 8.0,
+        "dose_applicability": 0.0,
     }
     assert payload["metadata"]["phase"] == "P2.3_probiotic_evidence"
     assert payload["metadata"]["indication_relevance_level"] == "direct"
+    assert payload["metadata"]["claim_alignment"]["level"] == "direct"
     assert payload["metadata"]["native_clinical_strain_evidence_score"] == 8.0
 
 
@@ -121,7 +125,8 @@ def test_native_clinical_strain_evidence_scores_when_generic_matches_are_missing
             {
                 "strain": "Bifidobacterium longum BB536",
                 "clinical_id": "STRAIN_LONGUM_BB536",
-                "clinical_support_level": "moderate",
+                # Caller claims cannot upgrade the registry's moderate support.
+                "clinical_support_level": "high",
                 "indication_primary": "digestive comfort and immune support",
             }
         ],
@@ -130,32 +135,37 @@ def test_native_clinical_strain_evidence_scores_when_generic_matches_are_missing
     payload = score_evidence(product)
 
     assert payload["components"]["strain_clinical_evidence"] == 6.0
-    assert payload["components"]["indication_relevance"] == 8.0
+    assert payload["components"]["dose_applicability"] == 0.0
+    assert payload["score"] == 6.0
     assert payload["metadata"]["indication_relevance_level"] == "direct"
     assert payload["metadata"]["generic_evidence_score"] == 0.0
     assert payload["metadata"]["native_clinical_strain_evidence_score"] == 6.0
     native_rows = payload["metadata"]["native_clinical_strain_evidence_rows"]
     assert native_rows[0]["clinical_id"] == "STRAIN_LONGUM_BB536"
+    assert native_rows[0]["support_level"] == "moderate"
 
 
-def test_strain_clinical_evidence_caps_at_12_points() -> None:
+def test_undosed_verified_strains_do_not_stack_beyond_strongest_contextual_record() -> None:
     from scoring_v4.modules.probiotic_evidence import score_evidence
 
-    matches = [
-        _match(
-            id=f"STRAIN_{idx}",
-            standard_name=f"Clinical Strain {idx}",
-            published_studies_count=50,
-            base_points=7,
-            multiplier=1,
-        )
-        for idx in range(1, 8)
-    ]
+    payload = score_evidence(_product(matches=[], clinical_strains=[
+        _clinical_strain(), _clinical_strain(strain="Lactobacillus rhamnosus HN001"),
+    ]))
 
-    payload = score_evidence(_product(matches=matches))
+    assert payload["components"] == {"strain_clinical_evidence": 8.0, "dose_applicability": 0.0}
+    assert payload["score"] == 8.0
+    assert payload["metadata"]["clinical_strain_count"] == 2
+    assert len(payload["metadata"]["native_clinical_strain_evidence_rows"]) == 1
 
-    assert payload["components"]["strain_clinical_evidence"] == 12.0
-    assert payload["metadata"]["generic_evidence_score"] > 12.0
+
+def test_generic_strain_matches_require_verified_native_identity() -> None:
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+
+    payload = score_evidence(_product(clinical_strains=[]))
+
+    assert payload["score"] == 0.0
+    assert payload["components"]["dose_applicability"] == 0.0
+    assert payload["metadata"]["uncredited_strain_match_ids"] == ["STRAIN_LGG_EVIDENCE"]
 
 
 def test_prenatal_positioning_gets_partial_relevance_for_infant_evidence() -> None:
@@ -173,7 +183,8 @@ def test_prenatal_positioning_gets_partial_relevance_for_infant_evidence() -> No
 
     payload = score_evidence(product)
 
-    assert payload["components"]["indication_relevance"] == 4.0
+    assert payload["components"]["dose_applicability"] == 0.0
+    assert payload["score"] == 8.0
     assert payload["metadata"]["indication_relevance_level"] == "partial"
 
 
@@ -187,7 +198,8 @@ def test_generic_daily_probiotic_gets_broad_relevance_for_gut_or_immune_strains(
 
     payload = score_evidence(product)
 
-    assert payload["components"]["indication_relevance"] == 4.0
+    assert payload["components"]["dose_applicability"] == 0.0
+    assert payload["score"] == 8.0
     assert payload["metadata"]["indication_relevance_level"] == "broad"
 
 
@@ -200,13 +212,15 @@ def test_structured_positioning_statement_gets_direct_relevance() -> None:
         product_name="FloraSport 20B",
         clinical_strains=[_clinical_strain(indication="immune support and gut health")],
     )
+    baseline = score_evidence(product)
     product["statements"] = [
         {"type": "Formulation re: Other", "notes": "GI Support\nImmune Support"}
     ]
 
     payload = score_evidence(product)
 
-    assert payload["components"]["indication_relevance"] == 8.0
+    assert payload["components"] == baseline["components"]
+    assert payload["components"]["dose_applicability"] == 0.0
     assert payload["metadata"]["indication_relevance_level"] == "direct"
     assert payload["metadata"]["product_positioning_categories"] == ["digestive", "immune"]
 
@@ -234,7 +248,7 @@ def test_precaution_statement_does_not_create_positioning_relevance() -> None:
 
     payload = score_evidence(product)
 
-    assert payload["components"]["indication_relevance"] == 0.0
+    assert payload["components"]["dose_applicability"] == 0.0
     assert payload["metadata"]["indication_relevance_level"] == "none"
     assert payload["metadata"]["product_positioning_categories"] == []
 
@@ -249,11 +263,11 @@ def test_unrelated_positioning_gets_no_indication_relevance() -> None:
 
     payload = score_evidence(product)
 
-    assert payload["components"]["indication_relevance"] == 0.0
+    assert payload["components"]["dose_applicability"] == 0.0
     assert payload["metadata"]["indication_relevance_level"] == "none"
 
 
-def test_effect_direction_negative_zeros_indication_relevance() -> None:
+def test_effect_direction_negative_zeros_same_strain_research_credit() -> None:
     from scoring_v4.modules.probiotic_evidence import score_evidence
 
     product = _product(matches=[_match(effect_direction="negative")])
@@ -261,20 +275,21 @@ def test_effect_direction_negative_zeros_indication_relevance() -> None:
     payload = score_evidence(product)
 
     assert payload["components"]["strain_clinical_evidence"] == 0.0
-    assert payload["components"]["indication_relevance"] == 0.0
-    assert payload["metadata"]["indication_effect_multiplier"] == 0.0
+    assert payload["components"]["dose_applicability"] == 0.0
+    assert payload["metadata"]["native_clinical_strain_evidence_rows"][0]["effect_multiplier"] == 0.0
     assert payload["score"] == 0.0
 
 
-def test_effect_direction_mixed_downweights_indication_relevance() -> None:
+def test_effect_direction_mixed_downweights_same_strain_research_credit() -> None:
     from scoring_v4.modules.probiotic_evidence import score_evidence
 
     product = _product(matches=[_match(effect_direction="mixed")])
 
     payload = score_evidence(product)
 
-    assert payload["components"]["indication_relevance"] == 4.8
-    assert payload["metadata"]["indication_effect_multiplier"] == 0.6
+    assert payload["components"] == {"strain_clinical_evidence": 4.8, "dose_applicability": 0.0}
+    assert payload["score"] == 4.8
+    assert payload["metadata"]["native_clinical_strain_evidence_rows"][0]["effect_multiplier"] == 0.6
 
 
 def test_score_probiotic_wires_evidence_dimension_at_p23() -> None:
@@ -283,7 +298,7 @@ def test_score_probiotic_wires_evidence_dimension_at_p23() -> None:
     breakdown = score_probiotic(_product()).to_breakdown()
 
     evidence = breakdown["dimensions"]["evidence"]
-    assert evidence["score"] == 16.0
+    assert evidence["score"] == 8.0
     assert evidence["metadata"]["phase"] == "P2.3_probiotic_evidence"
     # Module-level phase rolls forward as each P2.x slice lands.
     assert breakdown["phase"].startswith("P2.")
@@ -301,7 +316,7 @@ def test_probiotic_evidence_accepts_final_blob_probiotic_detail_alias() -> None:
 
     payload = score_evidence(product)
 
-    assert payload["score"] == 16.0
+    assert payload["score"] == 8.0
     assert payload["metadata"]["clinical_strain_count"] == 1
 
 
@@ -313,4 +328,4 @@ def test_probiotic_evidence_resilient_to_malformed_input() -> None:
         assert payload["score"] == 0.0
         assert payload["max"] == 20.0
         assert payload["components"]["strain_clinical_evidence"] == 0.0
-        assert payload["components"]["indication_relevance"] == 0.0
+        assert payload["components"]["dose_applicability"] == 0.0

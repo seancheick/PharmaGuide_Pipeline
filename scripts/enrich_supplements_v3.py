@@ -493,34 +493,10 @@ def _normalize_unii(value):
     return canon
 
 
-def _compute_strain_cfu_tier(cfu_per_day, tiers_cfu_per_day) -> Optional[str]:
-    """Map a per-strain CFU count to its adequacy tier using Dr Pham's
-    authored ``tiers_cfu_per_day`` band dict.
-
-    Returns one of ``"low" | "adequate" | "good" | "excellent"`` or
-    ``None`` when the dose is zero/missing or the bands dict is empty.
-    Tolerates band-key order and missing ``upper_exclusive`` (treats it
-    as +infinity) / missing ``lower_inclusive`` (treats it as 0).
-    """
-    if not isinstance(cfu_per_day, (int, float)) or cfu_per_day <= 0:
-        return None
-    if not isinstance(tiers_cfu_per_day, dict) or not tiers_cfu_per_day:
-        return None
-
-    for tier_name in ("low", "adequate", "good", "excellent"):
-        band = tiers_cfu_per_day.get(tier_name)
-        if not isinstance(band, dict):
-            continue
-        lower = band.get("lower_inclusive", 0)
-        upper = band.get("upper_exclusive")
-        lower_ok = cfu_per_day >= (lower if isinstance(lower, (int, float)) else 0)
-        upper_ok = (
-            upper is None
-            or (isinstance(upper, (int, float)) and cfu_per_day < upper)
-        )
-        if lower_ok and upper_ok:
-            return tier_name
-    return None
+from probiotic_measurements import (
+    strain_cfu_tier as _compute_strain_cfu_tier,
+    clinical_strain_research_scope,
+)
 
 
 # Sprint E1.3.2.b — probiotic confidence hybrid (descriptive layer).
@@ -679,25 +655,8 @@ def _probiotic_research_presentation(
     thresholds = thresholds if isinstance(thresholds, dict) else {}
     evidence = thresholds.get("evidence") or {}
     evidence = evidence if isinstance(evidence, dict) else {}
-    validation = evidence.get("clinical_validation") or {}
-    validation = validation if isinstance(validation, dict) else {}
-
-    evidence_type = str(evidence.get("type") or "").strip().lower()
-    strain_explicit = str(validation.get("q1_strain_explicit") or "").strip().upper()
-    human_token = str(validation.get("q3_human_clinical") or "").strip().upper()
-    human_evidence = human_token == "YES"
-    if not human_token:
-        human_evidence = any(
-            token in evidence_type
-            for token in ("rct", "meta_analysis", "clinical", "guideline", "human")
-        )
-
-    if strain_explicit == "FORMULA_LEVEL" or evidence_type == "product_formula_rct":
-        evidence_scope = "formula_specific"
-    elif strain_explicit == "YES" or "strain_specific" in evidence_type:
-        evidence_scope = "strain_specific"
-    else:
-        evidence_scope = "species_general"
+    scope = clinical_strain_research_scope(entry)
+    evidence_scope, human_evidence = scope["evidence_scope"], scope["human_evidence"]
 
     review_status = (
         "clinician_verified"
@@ -13442,6 +13401,12 @@ class SupplementEnricherV3:
         active_ingredients = product.get('activeIngredients', [])
         inactive_ingredients = product.get('inactiveIngredients', [])
         total_active = len(active_ingredients)
+        label_source_refs = {
+            f"{section}[{index}]": row.get("raw_source_path")
+            for section, rows in (("activeIngredients", active_ingredients),
+                                  ("inactiveIngredients", inactive_ingredients))
+            for index, row in enumerate(rows) if isinstance(row, dict)
+        }
 
         # Chemical-identity resolution handles for the branded single-active
         # escape below (same databases the scorer's skip logic trusts via
@@ -13512,6 +13477,7 @@ class SupplementEnricherV3:
                         "hidden_count": len(detector_without_amounts),
                         "source_field": blend.source_field,
                         "source_path": blend.source_field,
+                        "source_row_ref": label_source_refs.get(blend.source_field),
                         "child_ingredients": detector_children,
                         "sources": ["detector"],
                         "evidence": {
@@ -13586,6 +13552,7 @@ class SupplementEnricherV3:
                     "quantity": candidate.get("quantity"),
                     "unit": candidate.get("unit", "") or "",
                     "source_field": f"{source_name}[{header_idx}]",
+                    "source_row_ref": candidate.get("raw_source_path"),
                 }
 
             for idx, ingredient in enumerate(ingredient_list):
@@ -13698,6 +13665,10 @@ class SupplementEnricherV3:
                             "hidden_count": 0,
                             "source_field": parent_source_field,
                             "source_path": parent_source_field,
+                            "source_row_ref": (
+                                str(ingredient.get("raw_source_path")).rsplit(".nestedRows[", 1)[0]
+                                if ".nestedRows[" in str(ingredient.get("raw_source_path") or "")
+                                else (parent_header or {}).get("source_row_ref")),
                             "sources": ["cleaning"],
                             "_keyword_blend": parent_looks_like_blend,
                             "_parent_source_field": parent_source_field,
@@ -13706,6 +13677,13 @@ class SupplementEnricherV3:
                             "_children_without_amounts": set(),
                         }
                         nested_parent_groups[group_key] = group
+
+                    child_ref = str(ingredient.get("raw_source_path") or "")
+                    if (".nestedRows[" in child_ref
+                            and group["source_row_ref"] != child_ref.rsplit(".nestedRows[", 1)[0]):
+                        # A legacy same-name merge spanning different owners
+                        # cannot authorize an allocation-specific exception.
+                        group["source_row_ref"] = None
 
                     group["_source_fields"].add(source_field)
                     if parent_header and parent_header.get("source_field"):
@@ -13764,6 +13742,7 @@ class SupplementEnricherV3:
                     "unit": unit,
                     "source_field": source_field,
                     "source_path": source_field,
+                    "source_row_ref": ingredient.get("raw_source_path"),
                     "child_ingredients": child_ingredients,
                     "sources": ["cleaning"],
                     "evidence": {
@@ -14021,6 +14000,11 @@ class SupplementEnricherV3:
                 # Keep detector_group as the classifier category
                 if cleaning_blend.get("name"):
                     existing["name"] = cleaning_blend["name"]
+                if "source_row_ref" in cleaning_blend:
+                    previous_ref = existing.get("source_row_ref")
+                    cleaner_ref = cleaning_blend["source_row_ref"]
+                    existing["source_row_ref"] = (
+                        None if previous_ref and previous_ref != cleaner_ref else cleaner_ref)
                 # Prefer richer child payload from cleaning when available.
                 if cleaning_blend.get("child_ingredients"):
                     existing["child_ingredients"] = cleaning_blend.get("child_ingredients", [])
@@ -15489,6 +15473,31 @@ class SupplementEnricherV3:
                     values.append(number)
             return values
 
+        # Cleaner may emit a nested tree or flattened rows with the same source
+        # paths. Prove allocation ownership from that ledger, not from which
+        # representation happened to reach the CFU collector. Empty subheaders
+        # keep the parent unresolved; a sibling prebiotic never becomes a strain.
+        source_rows = self._flatten_active_ingredients_for_analysis(active_ingredients)
+        strain_allocation_owner_refs = set()
+        for owner in source_rows:
+            ref = _row_path(owner)
+            if not ref or not _is_blend_header_total(owner):
+                continue
+            descendants = [r for r in source_rows if _row_path(r).startswith(ref + ".nestedRows[")]
+            if descendants:
+                members = [r for r in descendants if not _is_blend_header_total(r)]
+                incomplete = any(
+                    _is_blend_header_total(r) and not any(
+                        _row_path(child).startswith(_row_path(r) + ".nestedRows[")
+                        for child in descendants)
+                    for r in descendants)
+            else:
+                members = owner.get("forms") or []
+                incomplete = False
+            if (members and not incomplete
+                    and all(isinstance(r, dict) and _is_probiotic_identity(r) for r in members)):
+                strain_allocation_owner_refs.add(ref)
+
         flattened_child_parent_paths = {
             _parent_path(_row_path(ingredient))
             for ingredient in active_ingredients
@@ -16055,6 +16064,7 @@ class SupplementEnricherV3:
             "is_probiotic": True,  # Top-level flag for quick filtering
             "is_probiotic_product": True,
             "probiotic_blends": probiotic_blends,
+            "strain_allocation_owner_refs": sorted(strain_allocation_owner_refs),
             "total_strain_count": total_strains,
             # Aggregate CFU data at top level for easy access
             "has_cfu": has_cfu,

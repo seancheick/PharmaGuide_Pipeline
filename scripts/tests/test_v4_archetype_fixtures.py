@@ -147,7 +147,13 @@ def test_category_fixtures_expose_reference_mismatches_without_recalibrating() -
         suite.by_id("prenatal_multi__ideal")
     ).actual
 
+    # The probiotic ideal fixture now uses source-owned row CFU plus explicit
+    # one-per-day serving basis. Raw dose still maxes out on industry potency
+    # bands (/25 raw module scale), while the public pillar remains 20.0 on the
+    # shipped /20 pillar scale. The separate evidence/applicability limit is the
+    # 8.0 evidence result, not the reason public dose is below the raw maximum.
     assert probiotic["raw_dimensions"]["dose"] == 25.0
+    assert probiotic["pillars"]["dose"] == 20.0
     assert probiotic["normalization_references"]["dose"] == 22.0
     assert omega["raw_dimensions"]["dose"] == 25.0
     assert omega["normalization_references"]["dose"] == 23.0

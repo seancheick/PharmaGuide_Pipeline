@@ -615,6 +615,7 @@ def _score_b5_proprietary_blend_penalty(
                 "dedupe_fingerprint": _fingerprint_to_string(_blend_dedupe_fingerprint(blend)),
                 "source_field": source_field,
                 "source_path": source_path,
+                **({"source_row_ref": blend["source_row_ref"]} if "source_row_ref" in blend else {}),
                 "unit_conversion_failed": bool(blend_unit_failed or child_unit_failed),
                 "children_with_amount_count": len(children_with_amounts),
                 "children_without_amount_count": len(children_without_amounts),

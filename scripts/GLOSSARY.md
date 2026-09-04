@@ -163,19 +163,22 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 | **Content verification** | Confirming that a PMID/CUI/RXCUI/UNII/NCT/CAS/CID identifies and supports the intended entity or claim. |
 | **Clinical applicability assessment** | A shared decision that an identity-matched evidence record also fits its reviewed form, delivery, daily-dose and outcome scope. Rejected matches remain auditable but cannot supply clinical points, depth bonuses or reviewed-support states. An unreviewed scope is not a negative clinical finding. |
 | **Studied formula assessment** | A complete-formula match to a reviewed registry record: product identity, all strain identities, native-unit daily dose and co-ingredient composition. Formula evidence never becomes independent per-strain efficacy or invented per-strain quantities. |
+| **Probiotic evidence assessment** | The downstream audit record from the existing formula/strain identity boundary. Separates exact studied formula, exact strain with reviewed dose/context, dose undisclosed, dose-reference unreviewed, and identity/review/context mismatches. Industry CFU bands are not clinical trial dose ranges. Study population is a scope restriction, not a claim of suitability for an individual app user. |
+| **Claim alignment** | Descriptive overlap between label claims and reviewed outcomes. It contributes no clinical-evidence points and cannot change scientific identity, dose applicability, or study strength. |
+| **Strain allocation owner** | A source label container whose complete descendants are probiotic identities. Enrichment emits its stable row reference so Transparency can avoid charging twice for undisclosed strain allocation. Mixed or unresolved containers do not qualify; positional indexes are not ownership proof. |
 | **Clinical source of truth** | Primary regulatory or scientific evidence plus curated, tested local data. Generated reports are review queues, not authoritative data. |
 
 ## Versions and tests
 
-| Contract | Current code value |
+| Contract | Canonical producer (read the value there) |
 |---|---|
-| Export schema | `2.3.0` (`build_final_db.py`) |
-| Export core columns | `111` (`build_final_db.py`) |
-| Pipeline manifest version | `3.4.0` (`build_final_db.py`) |
-| Enrichment version | `3.1.0` (`enrich_supplements_v3.py`) |
-| V4 scoring engine | `4.2.0` (`score_supplements_v4.py`) |
-| V4 quality config | `1.0.6-clean-label-registry` (`quality_score.json`) |
-| Legacy scorer config | `3.6.1` (`scoring_config.json`) |
+| Export schema, core columns and pipeline manifest | `build_final_db.py` |
+| Enrichment version | `enrich_supplements_v3.py` |
+| V4 scoring engine | `score_supplements_v4.py` |
+| V4 quality config | `scoring_v4/config/quality_score.json` |
+
+Do not copy version values or column counts into this glossary: they drift.
+The retired scorer's config is not a production version authority.
 
 All tests run through `scripts/test.sh`. `fast` is the development profile;
 `release` and `full` are pre-ship profiles. Direct raw pytest commands are not

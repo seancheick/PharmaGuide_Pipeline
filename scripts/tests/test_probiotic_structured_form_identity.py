@@ -43,6 +43,58 @@ def _collect(enricher, rows):
     return product
 
 
+@pytest.mark.parametrize("mixed", [False, True])
+@pytest.mark.parametrize("flattened", [False, True])
+def test_allocation_scope_is_emitted_from_actual_blend_members(enricher, mixed, flattened):
+    owner = _row("Probiotic Blend")
+    owner["cleaner_row_role"] = "blend_header_total"
+    owner["nestedIngredients"] = [_row("Lactobacillus rhamnosus GG")]
+    if mixed:
+        owner["nestedIngredients"].append({"name": "Inulin", "category": "prebiotic"})
+    for index, child in enumerate(owner["nestedIngredients"]):
+        child["raw_source_path"] = f"ingredientRows[0].nestedRows[{index}]"
+    rows = [owner]
+    if flattened:
+        rows.extend(owner.pop("nestedIngredients"))
+    product = _collect(enricher, rows)
+    assert (owner["raw_source_path"] in product["probiotic_data"]["strain_allocation_owner_refs"]) is not mixed
+
+
+def test_flattened_nested_blends_use_leaf_owners_without_swallowing_prebiotic(enricher):
+    rows = [
+        {"name": "Probiotic Blend", "raw_source_path": "ingredientRows[0]", "cleaner_row_role": "blend_header_total"},
+        {"name": "Lactobacilli Blend", "raw_source_path": "ingredientRows[0].nestedRows[0]", "cleaner_row_role": "blend_header_total"},
+        {"name": "Lactobacillus rhamnosus GG", "raw_source_path": "ingredientRows[0].nestedRows[0].nestedRows[0]"},
+        {"name": "Prebiotic Blend", "raw_source_path": "ingredientRows[1]", "cleaner_row_role": "blend_header_total"},
+        {"name": "Inulin", "raw_source_path": "ingredientRows[1].nestedRows[0]"},
+    ]
+    product = _collect(enricher, rows)
+    assert set(product["probiotic_data"]["strain_allocation_owner_refs"]) == {
+        "ingredientRows[0]", "ingredientRows[0].nestedRows[0]"}
+
+    rows.insert(3, {"name": "Unresolved Blend", "raw_source_path": "ingredientRows[0].nestedRows[1]",
+                    "cleaner_row_role": "blend_header_total"})
+    assert "ingredientRows[0]" not in _collect(enricher, rows)["probiotic_data"]["strain_allocation_owner_refs"]
+
+
+def test_real_fortify_subblend_opacity_uses_source_owner_not_first_child_index(enricher):
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    path = SCRIPTS_ROOT / "products/output_Natures_Way/cleaned/cleaned_batch_2.json"
+    if not path.exists():
+        pytest.skip("Local Fortify source unavailable; synthetic ownership cases remain unconditional")
+    product = next(p for p in json.loads(path.read_text()) if str(p.get("id")) == "327965")
+    product["probiotic_data"] = enricher._collect_probiotic_data(product)
+    product["proprietary_data"] = enricher._collect_proprietary_data(product)
+    rows = score_transparency(product)["metadata"]["B5_blend_evidence"]
+    for row in rows:
+        if row["blend_name"] in {"Lactobacilli Blend", "Bifidobacteria Blend"}:
+            assert row["source_row_ref"] in product["probiotic_data"]["strain_allocation_owner_refs"]
+            assert row["computed_blend_penalty_magnitude"] == 0
+    assert any(r["blend_name"] == "Proprietary Plant-Based Prebiotic Blend"
+               and r["computed_blend_penalty_magnitude"] > 0 for r in rows)
+
+
 def test_real_327965_retains_three_distinct_howaru_source_owners(enricher):
     path = SCRIPTS_ROOT / "products/output_Natures_Way/cleaned/cleaned_batch_2.json"
     if not path.exists():

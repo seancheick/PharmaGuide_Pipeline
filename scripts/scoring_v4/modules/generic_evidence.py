@@ -220,7 +220,8 @@ _MODULE_OWNED_EVIDENCE_CANONICALS = frozenset({
 })
 
 
-def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False) -> Dict[str, Any]:
+def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False,
+                   accepted_matches: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
     """Compute the generic-module Evidence dimension.
 
     Returns a dimension payload compatible with
@@ -235,6 +236,12 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         product = {}
 
     matches, recovered_matches = resolved_clinical_matches(product)
+    if accepted_matches is not None:
+        # A category may narrow the shared applicability result, never add a
+        # match or bypass clinical_applicability's restrictions.
+        accepted_ids = {_entry_id(entry) for entry in accepted_matches}
+        matches = [entry for entry in matches if _entry_id(entry) in accepted_ids]
+        recovered_matches = [entry for entry in recovered_matches if _entry_id(entry) in accepted_ids]
     dose_map = _dose_map(product)
     ingredient_points: Dict[str, float] = defaultdict(float)
     matched_entry_ids: set[str] = set()

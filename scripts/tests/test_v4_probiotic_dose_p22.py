@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from copy import deepcopy
 import sys
 from pathlib import Path
 
@@ -11,6 +12,10 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
+
+
+def _key(value: str | None) -> str:
+    return "".join(ch.lower() if ch.isalnum() else " " for ch in str(value or "")).split()
 
 
 def _strain(
@@ -72,6 +77,31 @@ def _product(
             _strain("Bifidobacterium lactis BB-12", adequacy_tier="good", support="moderate"),
             _strain("Lactobacillus reuteri DSM 17938", adequacy_tier="adequate", support="weak"),
         ]
+    clinical_strains = deepcopy(clinical_strains)
+    owners = []
+    owner_slots: dict[tuple[str, ...], dict] = {}
+    for index, strain in enumerate(clinical_strains):
+        owner_name = str(
+            strain.get("label_name")
+            or strain.get("name")
+            or strain.get("strain")
+            or ""
+        ).strip()
+        if not owner_name:
+            continue
+        ref = str(strain.get("source_row_ref") or f"ingredientRows[{index}]")
+        owner = {
+            "name": owner_name,
+            "raw_source_path": ref,
+            "quantity": 0,
+            "unit": "NP",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": True,
+        }
+        owners.append(owner)
+        owner_slots[tuple(_key(owner_name))] = owner
+        strain.setdefault("source_row_ref", ref)
+        strain.setdefault("label_name", owner_name)
     if blends is None:
         blends = [
             {
@@ -81,9 +111,35 @@ def _product(
             }
             for strain in clinical_strains
         ]
+    blends = deepcopy(blends)
+    # One explicit daily serving makes the fixture count both per-serving and
+    # daily. The label-owned cfu_data, not the legacy clinical stamp, is read by
+    # production; registry support and tiers are deliberately not overridden.
+    for index, blend in enumerate(blends, start=len(owners)):
+        strains = [str(s).strip() for s in blend.get("strains", []) if str(s).strip()]
+        owner = owner_slots.get(tuple(_key(strains[0]))) if len(strains) == 1 else None
+        ref = owner["raw_source_path"] if owner else f"ingredientRows[{index}]"
+        blend["raw_source_path"] = ref
+        measure = blend.setdefault("cfu_data", {})
+        if len(strains) == 1:
+            measure.update(raw_source_path=ref, evidence_scope="row_level")
+            if owner:
+                owner["quantity"] = measure.get("cfu_count") or 0
+                owner["unit"] = "CFU" if measure.get("has_cfu") else owner["unit"]
+        else:
+            measure.setdefault("raw_source_path", ref)
+        if len(strains) == 1:
+            for strain in clinical_strains:
+                if strain.get("name") == strains[0]:
+                    strain["source_row_ref"] = ref
+                    strain["label_name"] = blend["name"]
     return {
         "status": "active",
         "form_factor": "capsule",
+        "activeIngredients": owners,
+        "serving_basis": {"basis_count": 1, "basis_unit": "capsule",
+                          "min_servings_per_day": 1, "max_servings_per_day": 1,
+                          "servings_per_day_source": "servingSizes"},
         "supplement_type": {"type": "probiotic"},
         "ingredient_quality_data": {
             "total_active": max(1, total_strain_count),
@@ -397,31 +453,30 @@ def test_single_strain_has_cfu_boolean_counts_for_disclosure_without_numeric_ade
 
 
 @pytest.mark.parametrize(
-    ("tier", "support", "expected_v3", "expected_v4"),
+    ("tier", "support", "expected_points"),
     [
-        ("low", "high", 0.0, 0.0),
-        ("adequate", "high", 1.0, 3.0),
-        ("good", "high", 2.0, 6.0),
-        ("excellent", "high", 3.0, 9.0),
-        ("good", "moderate", 1.5, 4.5),
-        ("excellent", "weak", 1.5, 4.5),
-        ("good", "unknown", 1.0, 3.0),
+        ("low", "high", 0.0),
+        ("adequate", "high", 1.0),
+        ("good", "high", 2.0),
+        ("excellent", "high", 3.0),
+        ("good", "moderate", 1.5),
+        ("excellent", "weak", 1.5),
+        ("good", "unknown", 1.0),
     ],
 )
-def test_cfu_adequacy_preserves_v3_tier_support_math_then_scales_2x(
+def test_cfu_adequacy_preserves_tier_support_arithmetic(
     tier: str,
     support: str,
-    expected_v3: float,
-    expected_v4: float,
+    expected_points: float,
 ) -> None:
-    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_dose import _compute_cfu_adequacy
 
-    payload = score_dose(
-        _product(total_strain_count=1, clinical_strains=[_strain("LGG", adequacy_tier=tier, support=support)])
+    payload = _compute_cfu_adequacy(
+        [_strain("LGG", adequacy_tier=tier, support=support)]
     )
 
-    assert payload["metadata"]["cfu_adequacy_v3_points"] == pytest.approx(expected_v3)
-    assert payload["components"]["cfu_adequacy"] == pytest.approx(expected_v4)
+    assert payload["v3_points"] == pytest.approx(expected_points)
+    assert payload["strain_contributions"][0]["points"] == pytest.approx(expected_points)
 
 
 def test_cfu_adequacy_caps_v3_five_points_to_v4_fifteen_points() -> None:
@@ -442,7 +497,7 @@ def test_cfu_adequacy_caps_v3_five_points_to_v4_fifteen_points() -> None:
 
 
 def test_cfu_adequacy_hard_gates_missing_tier_missing_cfu_and_postbiotic() -> None:
-    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_dose import _compute_cfu_adequacy
 
     strains = [
         _strain("Lactobacillus rhamnosus GG", adequacy_tier=None, support="high"),
@@ -451,16 +506,10 @@ def test_cfu_adequacy_hard_gates_missing_tier_missing_cfu_and_postbiotic() -> No
         _strain("Bifidobacterium longum BB536", adequacy_tier="excellent", support="high", is_inactivated=True),
     ]
 
-    product = _product(total_strain_count=4, clinical_strains=strains)
-    product["probiotic_data"]["has_cfu"] = False
-    product["probiotic_data"]["total_billion_count"] = 0.0
-    product["probiotic_data"]["total_cfu"] = 0
-    product["probiotic_data"]["probiotic_blends"] = []
+    payload = _compute_cfu_adequacy(strains)
 
-    payload = score_dose(product)
-
-    assert payload["components"]["cfu_adequacy"] == 0.0
-    skipped = [row.get("skipped_reason") for row in payload["metadata"]["cfu_adequacy_contributions"]]
+    assert payload["v3_points"] == 0.0
+    skipped = [row.get("skipped_reason") for row in payload["strain_contributions"]]
     assert "postbiotic_inactivated_no_cfu_credit" in skipped
 
 
@@ -515,10 +564,29 @@ def _scorable_row(row: dict, index: int) -> dict:
 
 def _no_cfu_probiotic(*, active_rows, clinical_strains, total_billion=0.0,
                       guarantee_type="at_expiration"):
-    scorable_rows = [
-        _scorable_row(row, index)
-        for index, row in enumerate(active_rows)
-    ]
+    active_rows = deepcopy(active_rows)
+    clinical_strains = deepcopy(clinical_strains)
+    keyed_rows: dict[tuple[str, ...], dict] = {}
+    for index, row in enumerate(active_rows):
+        row.setdefault("raw_source_path", f"activeIngredients[{index}]")
+        keyed_rows[tuple(_key(row.get("name")))] = row
+    for strain in clinical_strains:
+        name = str(strain.get("label_name") or strain.get("name") or strain.get("strain") or "").strip()
+        if not name:
+            continue
+        row = keyed_rows.get(tuple(_key(name)))
+        if row is None:
+            row = {
+                "name": name,
+                "quantity": 0.0,
+                "unit": "NP",
+                "raw_source_path": f"activeIngredients[{len(active_rows)}]",
+            }
+            active_rows.append(row)
+            keyed_rows[tuple(_key(name))] = row
+        strain.setdefault("source_row_ref", row["raw_source_path"])
+        strain.setdefault("label_name", row["name"])
+    scorable_rows = [_scorable_row(row, index) for index, row in enumerate(active_rows)]
     return {
         "status": "active",
         "supplement_type": {"type": "probiotic"},
@@ -605,13 +673,20 @@ def test_aggregate_cfu_proxy_still_wins_over_direct_mass_floor() -> None:
 def test_per_strain_cfu_disclosed_blocks_direct_mass_floor() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
     # Strain DISCLOSES per-strain CFU (disclosed_count>=1) but adequacy computes 0
-    # (no tier). CFU is disclosed, so dose is not "absent" — the mass floor must NOT
+    # (no reviewed strain identity). CFU is disclosed, so dose is not "absent" — the mass floor must NOT
     # fire (it is only for products with no CFU at all).
     product = _no_cfu_probiotic(
-        active_rows=[{"name": "Lactobacillus acidophilus La-14", "quantity": 10.0, "unit": "mg"}],
+        active_rows=[{"name": "Lactobacillus acidophilus La-14", "quantity": 10.0, "unit": "mg",
+                      "raw_source_path": "ingredientRows[0]", "notes": "5 billion CFU"}],
         clinical_strains=[_strain("Lactobacillus acidophilus La-14",
                                   cfu_per_day=5_000_000_000, adequacy_tier=None)],
     )
+    product["probiotic_data"]["probiotic_blends"] = [{
+        "name": "Lactobacillus acidophilus La-14", "strains": ["Lactobacillus acidophilus La-14"],
+        "raw_source_path": "ingredientRows[0]",
+        "cfu_data": {"has_cfu": True, "cfu_count": 5_000_000_000,
+                     "raw_source_path": "ingredientRows[0]", "evidence_scope": "row_level"},
+    }]
     payload = score_dose(product)
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] >= 1
     assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is False

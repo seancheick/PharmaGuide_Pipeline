@@ -15,9 +15,9 @@ generic Transparency penalty machinery:
 
     Penalties (reused from generic_transparency):
       - B2 false allergen-free claim            up to -2
-      - B5 opacity (class-aware probiotic 0.4x) up to -5
-        (§5 line 255: probiotic with hidden per-strain CFU but
-         named strains earns a moderate penalty, not a severe one.)
+      - B5 opacity (class-aware probiotic 0.4x) up to -5 for mixed or
+        unresolved blends. Pure, source-owned probiotic allocation opacity is
+        already measured by the disclosure component and is not deducted twice.
       - B6 marketing / disease claims           -5
 
     Final: clamp(0, 15, sum(positives) - sum(|penalties|))
@@ -46,6 +46,7 @@ from scoring_v4.modules.generic_transparency import (
     _score_b3_claim_compliance,
     _score_b5_proprietary_blend_penalty,
     _score_b6_disease_claim_penalty,
+    B5_CAP,
 )
 from scoring_v4.modules.probiotic_dose import _per_strain_cfu_disclosed_keys
 
@@ -95,6 +96,7 @@ def score_transparency(product: Any) -> Dict[str, Any]:
     aggregate_cfu_proxy = _score_aggregate_cfu_disclosure_proxy(pdata, per_strain_cfu)
     from studied_formulas import assess_studied_formula
     formula = assess_studied_formula(product)
+    b5, b5_evidence = _consolidate_strain_allocation_opacity(pdata, formula, b5_evidence)
 
     components = {
         "strain_identities_named":     round(strain_identities, 4),
@@ -199,13 +201,40 @@ def _score_strain_identities(pdata: Dict[str, Any]) -> float:
     return round(CAP_STRAIN_IDENTITIES * ratio, 4)
 
 
+def _consolidate_strain_allocation_opacity(pdata, formula, evidence):
+    """One transparency consequence for undisclosed individual strain amounts.
+
+    CFU/AFU allocation already limits the seven-point disclosure line. Remove
+    the second B5 deduction only for a source-owned, pure probiotic blend.
+    Mixed botanical/prebiotic blends and unresolvable owners keep their B5.
+    """
+    pure_refs = {ref for ref in _safe_list(pdata.get("strain_allocation_owner_refs"))
+                 if isinstance(ref, str) and ref}
+    if formula["status"] == "assessed_studied_formula":
+        pure_refs.update(formula["afu_source_row_refs"])
+    updated = []
+    for original in evidence:
+        row = dict(original)
+        ref = row.get("source_row_ref")
+        # The producer owns row identity. No raw-active or positional fallback
+        # in scoring: old metadata without a canonical owner keeps its penalty.
+        if ref and ref in pure_refs:
+            row.update(allocation_disclosure_counted_once=True,
+                       original_blend_penalty_magnitude=row["computed_blend_penalty_magnitude"],
+                       computed_blend_penalty=0.0, computed_blend_penalty_magnitude=0.0,
+                       consolidation_reason="individual_strain_amounts_already_in_disclosure_component")
+        updated.append(row)
+    return min(B5_CAP, sum(r["computed_blend_penalty_magnitude"] for r in updated)), updated
+
+
 def _score_per_strain_cfu_on_label(pdata: Dict[str, Any]) -> float:
     """+7 when all named strains have individual CFU disclosed.
     Proportional credit when only some strains have per-strain CFU.
 
-    Reuses the disclosure-detection logic from probiotic_dose to keep
-    consistency between Dose (15 pts) and Transparency (7 pts) per
-    §6 line 298 ("intentionally double-counts with the Dose dimension").
+    Reuses Dose's label-measurement detector. Dose's disclosure
+    component measures assessability; this seven-point line measures label
+    transparency. Within Transparency, B5 must not deduct for that same
+    undisclosed strain allocation a second time.
     """
     total_strain_count = _as_int(pdata.get("total_strain_count"), 0)
     if total_strain_count <= 0:
@@ -255,7 +284,11 @@ def _total_billion_count(pdata: Dict[str, Any]) -> float:
 
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
-    """Read enriched-input `probiotic_data` and final-blob `probiotic_detail`."""
+    """Read the payload or its compatibility alias in source-complete inputs.
+
+    A consumer blob alone is not a replayable scoring input: it uses stamped
+    pillars. Missing source owners cannot authorize a B5 consolidation.
+    """
     return _safe_dict(product.get("probiotic_data") or product.get("probiotic_detail"))
 
 

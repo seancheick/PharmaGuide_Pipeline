@@ -1,15 +1,8 @@
-"""v4 Probiotic Evidence dimension — P2.3.
+"""Probiotic evidence: research support /12 and reviewed dose applicability /8.
 
-The probiotic Evidence rubric has two lines:
-
-  - strain-clinical evidence pipeline: 12
-  - indication relevance to product positioning: 8
-
-The first line reuses the already-verified v4 multiplicative evidence
-pipeline and caps its contribution at 12 for the probiotic module. The
-second line is deliberately conservative and based only on available
-label/product text plus enriched clinical-strain indication text. It
-does not invent condition matching when the source fields are absent.
+Claim wording is descriptive only. Unknown-dose strain presence is contextual
+research, capped at the strongest single native record; it cannot accumulate
+full evidence credit by adding more strains. Formula evidence owns its scope.
 """
 
 from __future__ import annotations
@@ -19,7 +12,8 @@ from typing import Any, Dict, List, Set
 
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
 from scoring_v4.modules.generic_evidence import resolved_clinical_matches
-from studied_formulas import assess_studied_formula, independent_clinical_strains
+from studied_formulas import (assess_studied_formula, assess_probiotic_evidence,
+                             independent_clinical_strains, strain_assessments_for_match)
 
 
 PHASE_MARKER = "P2.3_probiotic_evidence"
@@ -30,7 +24,7 @@ _EM = _cfg_block("evidence_magnitudes", "probiotic")["probiotic"]
 
 CAP_EVIDENCE = _EM["cap_evidence"]
 CAP_STRAIN_CLINICAL = _EM["cap_strain_clinical"]
-CAP_INDICATION_RELEVANCE = _EM["cap_indication_relevance"]
+CAP_DOSE_APPLICABILITY = _EM["cap_dose_applicability"]
 
 INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "digestive": {
@@ -84,27 +78,47 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     """Return the probiotic Evidence dimension payload."""
     product = product if isinstance(product, dict) else {}
 
-    generic_payload = score_generic_evidence(product)
+    assessment = assess_probiotic_evidence(product)
+    matches, _ = resolved_clinical_matches(product)
+    accepted = [m for m in matches if not _is_strain_match(m)
+                or strain_assessments_for_match(m, assessment)]
+    generic_payload = score_generic_evidence(product, accepted_matches=accepted)
     generic_score = _as_float(generic_payload.get("score"), 0.0)
-    effect_multiplier = _best_effect_direction_multiplier(product)
     native_evidence = _score_native_clinical_strain_evidence(
-        product,
-        effect_multiplier=effect_multiplier,
+        matches=accepted,
+        assessment=assessment,
     )
     strain_clinical = min(
         CAP_STRAIN_CLINICAL,
         max(generic_score, native_evidence["score"]),
     )
 
-    relevance = _score_indication_relevance(product)
-    indication_relevance = relevance["score"]
+    relevance = _claim_alignment(product)
+    # Claim alignment is descriptive only. Native dose applicability must be
+    # reviewed; generic 1B/10B/50B bands and marketing phrases cannot prove it.
+    formula = assessment["formula_assessment"]
+    applicable_effects = [_effect_multiplier(m) for m in accepted
+                         if m.get("id") == formula.get("evidence_id")
+                         and formula["status"] == "assessed_studied_formula"]
+    applicable_effects += [r["effect_multiplier"] for r in native_evidence["rows"] if r["dose_applicable"]]
+    applicability_credit = CAP_DOSE_APPLICABILITY * max(applicable_effects, default=0.0)
+    if not applicable_effects:
+        strain_clinical = min(strain_clinical, max(NATIVE_STRAIN_EVIDENCE_POINTS.values()))
 
     components = {
         "strain_clinical_evidence": round(strain_clinical, 4),
-        "indication_relevance": round(indication_relevance, 4),
+        "dose_applicability": round(applicability_credit, 4),
     }
     raw_score = sum(components.values())
     score = max(0.0, min(CAP_EVIDENCE, raw_score))
+    if score == 0 and any(_norm_text(m.get("effect_direction")) == "negative" for m in accepted):
+        evidence_state = "evaluated_unfavorable"
+    elif applicable_effects:
+        evidence_state = "evaluated_applicable"
+    elif score > 0:
+        evidence_state = "research_present_applicability_unestablished"
+    else:
+        evidence_state = "applicability_unestablished"
 
     return {
         "score": round(score, 4),
@@ -114,7 +128,11 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         "phase": PHASE_MARKER,
         "metadata": {
             "phase": PHASE_MARKER,
-            "studied_formula_assessment": assess_studied_formula(product),
+            "evidence_assessment": assessment,
+            "evidence_result_state": evidence_state,
+            "claim_alignment": relevance,
+            "studied_formula_assessment": formula,
+            "uncredited_strain_match_ids": [m.get("id") for m in matches if m not in accepted],
             "generic_evidence_score": generic_score,
             "generic_evidence_metadata": generic_payload.get("metadata", {}),
             "native_clinical_strain_evidence_score": round(native_evidence["score"], 4),
@@ -125,15 +143,14 @@ def score_evidence(product: Any) -> Dict[str, Any]:
             "strain_indication_categories": sorted(relevance["strain_categories"]),
             "matched_relevance_categories": sorted(relevance["matched_categories"]),
             "relevance_reason": relevance["reason"],
-            "indication_effect_multiplier": relevance["effect_multiplier"],
         },
     }
 
 
 def _score_native_clinical_strain_evidence(
-    product: Dict[str, Any],
     *,
-    effect_multiplier: float,
+    matches: list,
+    assessment: dict,
 ) -> Dict[str, Any]:
     """Score probiotic-native clinical strain evidence already found by enrichment.
 
@@ -144,18 +161,19 @@ def _score_native_clinical_strain_evidence(
     strain evidence for products like BB536-only probiotics.
     """
 
-    if effect_multiplier <= 0:
-        return {"score": 0.0, "rows": []}
-
     seen: Set[str] = set()
     rows: List[Dict[str, Any]] = []
-    for strain in _clinical_strains(product):
+    for strain in assessment["strain_assessments"]:
+        if not strain["research_accepted"] or strain["status"] in {
+            "strain_dose_incompatible", "strain_context_mismatch", "strain_context_unresolved"
+        }:
+            continue
         key = _native_strain_key(strain)
         if key in seen:
             continue
         seen.add(key)
 
-        support_token = _native_support_token(strain)
+        support_token = _norm_text(strain["support_level"])
         base_points = NATIVE_STRAIN_EVIDENCE_POINTS.get(support_token, 0.0)
         if base_points <= 0:
             continue
@@ -170,21 +188,31 @@ def _score_native_clinical_strain_evidence(
                 ),
                 "support_level": support_token,
                 "base_points": base_points,
+                "dose_applicable": strain["dose_applicable"],
+                "applicability_status": strain["status"],
+                "source_pmids": strain["source_pmids"],
+                "evidence_scope": strain["evidence_scope"],
+                "effect_multiplier": min((_effect_multiplier(m) for m in matches
+                    if strain in strain_assessments_for_match(m, assessment)), default=1.0),
             }
         )
 
-    rows.sort(key=lambda row: row["base_points"], reverse=True)
+    rows.sort(key=lambda row: (-row["base_points"] * row["effect_multiplier"], str(row["clinical_id"])))
+    # Undosed strain presence is contextual research, not cumulative proof for
+    # a blend. Keep the strongest such record; stack only dose-applicable rows.
+    contextual = [r for r in rows if not r["dose_applicable"]][:1]
+    applicable = [r for r in rows if r["dose_applicable"]]
+    rows = applicable or contextual
     weighted_score = 0.0
     weighted_rows: List[Dict[str, Any]] = []
     for idx, row in enumerate(rows[: len(NATIVE_STRAIN_EVIDENCE_WEIGHTS)]):
         weight = NATIVE_STRAIN_EVIDENCE_WEIGHTS[idx]
-        contribution = row["base_points"] * weight * effect_multiplier
+        contribution = row["base_points"] * weight * row["effect_multiplier"]
         weighted_score += contribution
         weighted_rows.append(
             {
                 **row,
                 "weight": weight,
-                "effect_multiplier": effect_multiplier,
                 "contribution": round(contribution, 4),
             }
         )
@@ -195,105 +223,44 @@ def _score_native_clinical_strain_evidence(
     }
 
 
-def _score_indication_relevance(product: Dict[str, Any]) -> Dict[str, Any]:
+def _claim_alignment(product: Dict[str, Any]) -> Dict[str, Any]:
     product_categories = _product_positioning_categories(product)
     strain_categories = _strain_indication_categories(product)
     matched = product_categories & strain_categories
-    effect_multiplier = _best_effect_direction_multiplier(product)
-
-    if matched:
-        return _relevance(
-            8.0 * effect_multiplier,
-            "direct",
-            product_categories,
-            strain_categories,
-            matched,
-            "direct_category_overlap",
-            effect_multiplier,
-        )
-
     partial = {
         b
         for a, b in PARTIAL_RELEVANCE_PAIRS
         if (a in product_categories and b in strain_categories)
         or (b in product_categories and a in strain_categories)
     }
-    if partial:
-        return _relevance(
-            4.0 * effect_multiplier,
-            "partial",
-            product_categories,
-            strain_categories,
-            partial,
-            "related_category_overlap",
-            effect_multiplier,
-        )
-
-    if not product_categories and (strain_categories & BROAD_PROBIOTIC_CATEGORIES):
-        broad = strain_categories & BROAD_PROBIOTIC_CATEGORIES
-        return _relevance(
-            4.0 * effect_multiplier,
-            "broad",
-            product_categories,
-            strain_categories,
-            broad,
-            "generic_probiotic_positioning",
-            effect_multiplier,
-        )
-
-    if not product_categories and not strain_categories:
-        return _relevance(
-            0.0,
-            "not_evaluable",
-            product_categories,
-            strain_categories,
-            set(),
-            "missing_positioning_or_indication_data",
-            effect_multiplier,
-        )
-
-    return _relevance(
-        0.0,
-        "none",
-        product_categories,
-        strain_categories,
-        set(),
-        "no_relevance_overlap",
-        effect_multiplier,
-    )
-
-
-def _relevance(
-    score: float,
-    level: str,
-    product_categories: Set[str],
-    strain_categories: Set[str],
-    matched_categories: Set[str],
-    reason: str,
-    effect_multiplier: float,
-) -> Dict[str, Any]:
+    broad = strain_categories & BROAD_PROBIOTIC_CATEGORIES
+    if matched:
+        level, reason = "direct", "direct_category_overlap"
+    elif partial:
+        level, reason, matched = "partial", "related_category_overlap", partial
+    elif not product_categories and broad:
+        level, reason, matched = "broad", "generic_probiotic_positioning", broad
+    elif not product_categories and not strain_categories:
+        level, reason = "not_evaluable", "missing_positioning_or_indication_data"
+    else:
+        level, reason = "none", "no_relevance_overlap"
     return {
-        "score": min(CAP_INDICATION_RELEVANCE, score),
         "level": level,
-        "product_categories": product_categories,
-        "strain_categories": strain_categories,
-        "matched_categories": matched_categories,
+        "product_categories": sorted(product_categories),
+        "strain_categories": sorted(strain_categories),
+        "matched_categories": sorted(matched),
         "reason": reason,
-        "effect_multiplier": effect_multiplier,
     }
 
 
-def _best_effect_direction_multiplier(product: Dict[str, Any]) -> float:
-    matches, _ = resolved_clinical_matches(product)
-    if not matches:
-        return 1.0
-    best = 0.0
-    for match in matches:
-        if not isinstance(match, dict):
-            continue
-        effect = _norm_text(match.get("effect_direction") or "positive_strong").replace(" ", "_")
-        best = max(best, EFFECT_DIRECTION_MULTIPLIERS.get(effect, 1.0))
-    return best
+def _is_strain_match(match: dict) -> bool:
+    return (match.get("study_type") == "clinical_strain"
+            or str(match.get("evidence_level", "")).replace("_", "-") == "strain-clinical")
+
+
+def _effect_multiplier(match: dict) -> float:
+    effect = _norm_text(match.get("effect_direction") or "positive_strong").replace(" ", "_")
+    return EFFECT_DIRECTION_MULTIPLIERS.get(effect, 0.0)
 
 
 def _product_positioning_categories(product: Dict[str, Any]) -> Set[str]:
@@ -341,23 +308,6 @@ def _native_strain_key(strain: Dict[str, Any]) -> str:
         or strain.get("standard_name")
         or strain.get("name")
     )
-
-
-def _native_support_token(strain: Dict[str, Any]) -> str:
-    candidates = (
-        strain.get("clinical_support_level"),
-        strain.get("evidence_level"),
-        strain.get("evidence_strength"),
-        strain.get("support_level"),
-    )
-    for candidate in candidates:
-        token = _norm_text(candidate)
-        if not token:
-            continue
-        for known in NATIVE_STRAIN_EVIDENCE_POINTS:
-            if known in token.split() or token == known:
-                return known
-    return ""
 
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:

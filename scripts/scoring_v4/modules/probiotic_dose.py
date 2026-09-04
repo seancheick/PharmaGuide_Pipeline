@@ -11,6 +11,10 @@ Aggregate CFU is not treated as per-strain disclosure. When named strains and
 a total CFU are present but strain-level CFU is absent, the module grants only
 a capped adequacy proxy and keeps the disclosure/confidence caveat. This avoids
 turning real dose evidence into zero while still penalizing the label gap.
+
+A reviewed complete-formula dose instead owns the full dimension: unknown
+individual allocations cannot invalidate an assessed formula-level dose.
+Individual allocation disclosure remains separately visible in Transparency.
 """
 
 from __future__ import annotations
@@ -63,13 +67,12 @@ def score_dose(product: Any) -> Dict[str, Any]:
     capped v3 total from /5 to /15.
     """
     product = product if isinstance(product, dict) else {}
-    from studied_formulas import assess_studied_formula, independent_clinical_strains
+    from studied_formulas import assess_studied_formula, assessed_native_strain_doses
     formula = assess_studied_formula(product)
     if formula["status"] == "assessed_studied_formula":
         return {
-            "score": CAP_CFU_ADEQUACY, "max": CAP_DOSE,
-            "components": {"per_strain_cfu_disclosure": 0,
-                           "studied_formula_dose_adequacy": CAP_CFU_ADEQUACY},
+            "score": CAP_DOSE, "max": CAP_DOSE,
+            "components": {"studied_formula_dose_adequacy": CAP_DOSE},
             "penalties": {},
             "metadata": {"phase": PHASE_MARKER, "assessment_status": formula["status"],
                          "dose_adequacy_basis": "studied_formula_native_afu",
@@ -93,7 +96,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
         }
     pdata = _probiotic_payload(product)
     clinical_strains = _safe_list(pdata.get("clinical_strains"))
-    reviewed_strains = independent_clinical_strains(product)
+    reviewed_strains = assessed_native_strain_doses(product)
 
     total_strain_count = _total_strain_count(pdata, clinical_strains)
     disclosed_keys = _per_strain_cfu_disclosed_keys(pdata, clinical_strains)
@@ -168,6 +171,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
             "cfu_adequacy_v3_points": round(cfu_adequacy_v3, 4),
             "cfu_adequacy_scaled_points": round(cfu_adequacy_scaled, 4),
             "cfu_adequacy_basis": cfu_adequacy_basis,
+            "reference_basis": "industry_potency_not_trial_efficacy",
             "cfu_adequacy_contributions": adequacy["strain_contributions"],
             "aggregate_cfu_proxy": aggregate_proxy,
             "direct_strain_mass_floor": direct_strain_mass_floor,
@@ -512,13 +516,8 @@ def _per_strain_cfu_disclosed_keys(
 ) -> Set[str]:
     keys: Set[str] = set()
 
-    for item in clinical_strains or []:
-        strain = _safe_dict(item)
-        if strain.get("cfu_per_day") is not None:
-            key = _canonical_key(strain["label_name"]) if strain.get("label_name") else _strain_key(strain)
-            if key:
-                keys.add(key)
-
+    # Disclosure is a property of the label measurement, not a clinical-match
+    # stamp. A stale cfu_per_day cannot manufacture disclosed quantities.
     for blend_item in _safe_list(pdata.get("probiotic_blends")):
         blend = _safe_dict(blend_item)
         strains = [str(s).strip() for s in _safe_list(blend.get("strains")) if str(s).strip()]

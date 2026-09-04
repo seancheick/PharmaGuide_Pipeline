@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.8",
+    "schema_version": "5.3.9",
     "last_updated": "2026-09-03",
     "total_entries": 202,
     "changelog": [
+      "5.3.9 (2026-09-03): Add DS-01 companion mechanistic PMID 41750436; record shared-protocol/cohort uncertainty and unpublished per-blend trial allocations. Retain single symptom RCT, positive_weak effect and enrollment 350; no automatic publication-count credit.",
       "5.3.8 (2026-09-03): Scope zinc cold-lozenge and AREDS combination research to their actual interventions; add exact DS-01 formula/native-AFU assessment from two content-verified trials. No pillar weights changed.",
       "5.3.7 (2026-08-27): Added the PubChem-verified N-Acetyl-L-Cysteine spelling (CID 12035; InChIKey PWKSKIMOESPYIA-BYPYZUCNSA-N) to the existing NAC evidence identity. No study, claim, or score strength changed.",
       "5.3.6 (2026-08-25): Added content-verified, mixed human systematic-review evidence for myo-/D-chiro-inositol in PCOS and free/base L-arginine for blood pressure and athletic-performance endpoints. Added exact compound/form exclusions so neither record lends evidence to chemically or pharmacologically distinct inositol and arginine forms.",
@@ -73,16 +74,16 @@
       "evidence_scope": "formula_specific",
       "study_type": "rct_single",
       "published_studies": ["RCT"],
-      "published_studies_count": 2,
+      "published_studies_count": 3,
       "total_enrollment": 350,
       "score_contribution": "tier_2",
       "effect_direction": "positive_weak",
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "One six-week symptom-endpoint RCT supports this complete formula for adult bloating, gas and abdominal discomfort. Attrition (350 baseline; 219 at week six), sponsor involvement and lack of independent symptom-endpoint replication limit certainty. A separate small mechanistic trial does not establish additional clinical benefits.",
+      "effect_direction_rationale": "One six-week symptom-endpoint RCT supports this complete formula for adult bloating, gas and abdominal discomfort. Attrition (350 baseline; 219 at week six), sponsor involvement and lack of independent symptom-endpoint replication limit certainty. Two related small mechanistic publications under a shared protocol do not establish additional clinical benefits or independent symptom replication.",
       "key_endpoints": ["Self-reported bloating, gas and abdominal discomfort", "Digestive quality of life"],
       "endpoint_relevance_tags": ["digestive"],
       "health_goals_supported": ["Digestive Health"],
-      "notes": "Evidence is for the whole 24-strain plus pomegranate formulation, not individual strains, skin, heart health or micronutrient synthesis. 350 is the baseline sample of the symptom trial, not a sum across studies. No CFU conversion is known or used. The 32-participant companion trial reports microbiome/metabolite endpoints; it is not independent replication of symptom efficacy.",
+      "notes": "Evidence is for the whole 24-strain plus pomegranate formulation, not individual strains, skin, heart health or micronutrient synthesis. 350 is the baseline sample of the symptom trial, not a sum across studies. No CFU conversion is known or used. PMID 40944126 and 41750436 share protocol NCT04171466; both report 32 randomized, with 27 and 21 completing respectively. The registration reports 46 actual participants across four arms; unique cohort overlap is unresolved, so counts are not summed. Their microbiome/metabolite and barrier outcomes are not independent symptom replication or demonstrated prevention of antibiotic-associated diarrhea. Trial reports establish the named formula, strain list and total potency, not the commercial label's per-blend or individual-strain quantities. Commercial per-blend allocations remain label-identity constraints only.",
       "last_updated": "2026-09-03",
       "applicability": {"scope": "formula_context_only", "reason": "Requires complete formula_contract verification; name matching cannot award credit."},
       "formula_contract": {
@@ -133,7 +134,7 @@
         "delivery_basis": "Exact named product with complete matching composition; ViaCap documented in trial and manufacturer product reference, not inferred from capsule form alone.",
         "supported_outcomes": ["digestive"],
         "studied_population": "Adults with self-reported bloating, gas or abdominal discomfort; not pregnancy, pediatric or disease-treatment evidence.",
-        "source_pmids": ["41599868", "40944126"],
+        "source_pmids": ["41599868", "40944126", "41750436"],
         "reviewed_at": "2026-09-03"
       },
       "references_structured": [
@@ -150,6 +151,19 @@
           "year": 2025,
           "url": "https://pubmed.ncbi.nlm.nih.gov/40944126/",
           "supports_claims": ["Same complete formula and native AFU dose; small 91-day mechanistic study, not independent proof of individual-strain or disease-treatment efficacy."]
+        },
+        {
+          "pmid": "41750436",
+          "title": "Multi-Species Synbiotic Supplementation After Antibiotics Promotes Recovery of Microbial Diversity and Function, and Increases Gut Barrier Integrity: A Randomized, Placebo-Controlled Trial.",
+          "year": 2026,
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41750436/",
+          "supports_claims": ["Related 91-day antibiotic-challenge proof-of-mechanism study of DS-01 at 53.6 billion AFU plus 400 mg pomegranate daily; microbiome, metabolites and barrier function, not demonstrated prevention of antibiotic-associated diarrhea."],
+          "study_role": "related_mechanistic",
+          "trial_registration": "NCT04171466",
+          "randomized": 32,
+          "completed": 21,
+          "cohort_independence": "Shared master protocol with PMID 40944126; exact participant overlap unresolved.",
+          "funding_limitation": "Seed Health funding and author affiliations; not independent replication."
         }
       ]
     },
