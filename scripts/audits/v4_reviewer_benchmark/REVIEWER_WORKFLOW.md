@@ -1,69 +1,136 @@
 # Reviewer workflow — one file out, one file back
 
-Replaces the earlier 4-file packet (brief + HTML + answer CSV + brand list).
-That packet asked a clinician to hand-sum six columns 120 times; the first
-return failed arithmetic on 38% of rows with a uniform +10 offset (the
-quality-checks column silently dropped from the sum) and carried an invalid
-`reviewer_slot`, breaking the join it existed to guarantee.
+Status: **draft/unratified, response contract 2.0.0; a new freeze is required.**
+The clinical brief is not yet authorized for distribution. This engineering
+repair does not assert clinical-owner approval, statistician ratification, or
+a valid independent human benchmark. Weights, tier thresholds, and the fixed
+three-reviewer design are unchanged.
 
-Now the reviewer writes six numbers and a few words. The machine does the
-arithmetic and restores the frozen column contract.
+Historical v6 files, original answers, and reviewer-provenance records remain
+untouched. Never backfill a missing exposure declaration with `no` or rewrite
+PHAM or another reviewer as independent. A legacy slotmap cannot be upgraded by
+guessing a sequence from a randomized order.
 
-## Send
+## Build a draft document
 
-```bash
-python3 scripts/audits/v4_reviewer_benchmark/build_review_doc.py \
-    --slot 2 --reviewer-id KEVIN --out /tmp/out
-```
-
-Writes `REVIEW_<id>.md` (everything the reviewer needs — instructions, 120
-products in their own randomized order, a fill-in block under each) and
-`.slotmap_<id>.json`. Fill in the return address and deadline at the top before
-sending. Keep the slotmap: it is the only path from a returned file back to the
-frozen template, and without it ICC(A,1)/ICC(A,3) cannot be fit.
-
-## Receive
+After a separately authorized new freeze, use its explicit directory:
 
 ```bash
-python3 scripts/audits/v4_reviewer_benchmark/parse_review_doc.py \
-    --doc REVIEW_KEVIN.md --slotmap responses/slotmap_KEVIN.json --out responses/
+PYENV_VERSION=3.13.3 pyenv exec python scripts/audits/v4_reviewer_benchmark/build_review_doc.py \
+    --freeze-dir /path/to/new-freeze \
+    --slot 2 --reviewer-id REVIEWER_ID --out /path/to/new-document-directory
 ```
 
-Computes `overall_0_100`, restores slot/order/round, and validates ranges,
-half-point increments, enum values, duplicate and unknown IDs, missing scores,
-and `caution`/`blocked` without a driver. **A file with any error writes no
-CSV** — broken data cannot quietly enter the study. A blank template correctly
-produces 720 errors (120 x 6 empty pillars).
+The output directory must not already exist. The builder writes
+`REVIEW_<id>.md` and `.slotmap_<id>.json`, with the actual frozen product count.
+Do not send the draft before clinical ratification. Fill in the return address
+and deadline before distribution, then retain the exact sent copy.
 
-## What is blinded out
+The private slotmap binds freeze ID and hashes for the manifest, blinded
+packet, randomized response template, analysis specification, and shared
+analysis/validation implementation. It contains two separate values per
+product: canonical `review_sequence` from the packet and `reviewer_order` from
+the template. Neither is derived from the other.
 
-Only the two artifacts a reviewer may receive are read. Neither baseline key is
-ever opened. No engine score, threshold, denominator, penalty, or
-development/holdout split appears in the generated file. `review_sequence` — the
-hidden master join key — is withheld.
+Three header attestations are deliberately blank:
 
-`third_party_programs` renders **name only**. It holds dicts carrying our own
-`{"verified": true}` verdict, and `str(dict)` once leaked that into 20 blinded
-blocks, pre-answering the exact pillar the reviewer is meant to judge.
+- `AI_ASSISTANCE_USED:`
+- `PRIOR_AI_REVIEW_SEEN:`
+- `ENGINE_OUTPUT_SEEN:`
 
-## Data-defect flags
+The reviewer must answer each with `yes`, `no`, or `unknown`; the declaration
+applies to the entire returned document. AI-assisted research, drafting or
+rating counts as assistance. Exposure after starting the review must also be
+declared. An explicit `yes` or `unknown` preserves the response as exploratory;
+it does not qualify it for independent primary validation.
 
-Products carry inline `⚠ DATA NOTE` blocks for our own extraction gaps, so a
-reviewer never has to guess whether we already know: zero quantities, missing
-units, implausible serving frequencies, parent-total-then-component-forms rows
-(do not add them), and `%DV` values internally inconsistent with the amount.
-The `%DV` reference in `dv_reference.json` is derived from all 13,271 shipped
-blobs (median amount implying 100% DV per ingredient|unit, >=8 observations),
-so it encodes no scoring policy and cannot drift from a hand-typed table.
+## Parse a complete return
 
-Counts quoted in the instructions are computed at generation time and written to
-`COUNTS.json` — never retyped. An earlier draft hand-copied them and got two
-wrong.
+```bash
+PYENV_VERSION=3.13.3 pyenv exec python scripts/audits/v4_reviewer_benchmark/parse_review_doc.py \
+    --freeze-dir /path/to/new-freeze \
+    --doc /path/to/returned/REVIEW_REVIEWER_ID.md \
+    --slotmap /path/to/new-document-directory/.slotmap_REVIEWER_ID.json \
+    --out /path/to/new-response-directory
+```
 
-## Contents
+The parser computes the six-pillar sum and restores the frozen sequence, slot,
+randomized order and initial review round. It calls the same canonical
+validator used by locking and analysis; score limits, increments, tolerances
+and enums come from the locked analysis specification.
 
-- `sent/` — the exact document each reviewer received (audit trail)
-- `responses/` — returned answers in the frozen column contract, plus the
-  slotmaps needed to parse them
-- `pending_v7/` — prerequisites for the next freeze (amendment, registry,
-  reviewer provenance)
+`SOURCES:` accepts semicolon-separated PMID, DOI or HTTP(S) URL tokens and
+becomes a JSON list in `source_citations_json`. This checks citation syntax,
+not whether a source exists or supports the clinical claim; reviewers still
+must verify source content. Rationale and sources are mandatory. Empty or
+`none` `ODD:` means no deviation; actual compromise text is preserved, not
+converted to `other`.
+
+Missing attestations, malformed numbers/citations, missing scores/rationale,
+invalid enums, duplicate/unknown blocks, partial product sets, or changed
+freeze provenance produce no CSV. A legacy/missing slotmap fails clearly.
+The answer file uses exclusive creation and cannot replace an existing
+answer. Preserve the raw return; corrections must be appended with a new
+`review_round` and `correction_reason` in a fresh combined response artifact.
+Earlier exposure/deviation history continues to exclude the affected product.
+
+## Lock all three reviewers, then analyze
+
+Combine the validated returns using the exact ordered CSV header, retaining
+all original and appended correction rows. Do not edit old returns in place.
+After the registry is independently completed and verified:
+
+```bash
+PYENV_VERSION=3.13.3 pyenv exec python scripts/audits/v4_reviewer_benchmark_analysis.py lock-responses \
+    --manifest /path/to/new-freeze/manifest.json \
+    --analysis-spec /path/to/new-freeze/ANALYSIS_SPEC.json \
+    --reviewer-packet /path/to/new-freeze/reviewer_packet.csv \
+    --reviewer-template /path/to/new-freeze/reviewer_response_template.csv \
+    --reviewer-registry /path/to/reviewer_registry.csv \
+    --responses /path/to/all_responses.csv \
+    --locked-on YYYY-MM-DD --output /path/to/new_response_lock.json
+
+PYENV_VERSION=3.13.3 pyenv exec python scripts/audits/v4_reviewer_benchmark_analysis.py analyze-development \
+    --manifest /path/to/new-freeze/manifest.json \
+    --analysis-spec /path/to/new-freeze/ANALYSIS_SPEC.json \
+    --reviewer-packet /path/to/new-freeze/reviewer_packet.csv \
+    --reviewer-template /path/to/new-freeze/reviewer_response_template.csv \
+    --reviewer-registry /path/to/reviewer_registry.csv \
+    --responses /path/to/all_responses.csv \
+    --response-lock /path/to/new_response_lock.json \
+    --baseline-key /path/to/new-freeze/development_baseline_key.csv \
+    --output /path/to/new_development_report.json
+```
+
+All products and all three registered reviewers are required for the lock.
+Every full randomized order must be the frozen 1–N permutation. The lock
+records and rechecks the packet and template hashes, not only the responses.
+Stage analysis validates the complete frozen assignments first, then selects
+its subset without renumbering sparse original orders.
+
+If any reviewer reports exposure, `unknown`, or a protocol deviation, the
+whole product is excluded from the independent complete-panel analysis and
+retained in the explicitly exploratory all-locked report. The software never
+drops one rater and calls a two-rater comparison the primary ICC(A,3).
+If no independent complete-panel products remain, the report status is
+`blocked_independent_primary_analysis`, primary metrics/ICC are absent, and
+calibration remains ineligible. A content lock is not proof of independence.
+
+Response locks and reports also require fresh output files. Do not open the
+sealed holdout in this workflow: it remains separately approval-gated behind
+the candidate lock and unchanged analysis hashes.
+
+## Blinding and label-fact fidelity
+
+The document/parser path reads only blinded packet/template content and
+provenance metadata. It never opens a baseline key. No engine score, tier,
+pillar result, split assignment or master sequence is printed in the reviewer
+document. Third-party program dictionaries render the claimed name only, never
+the engine's verification decision.
+
+Constituent-form notes render the freeze's source-owned nesting annotation;
+the document builder does not reconstruct relationships by summing unrelated
+label rows. Daily servings still use the shared serving-frequency resolver,
+including provenance checks. The existing DV reference is only an internal
+label-consistency flag. Data-note counts are computed during document creation,
+not manually copied.

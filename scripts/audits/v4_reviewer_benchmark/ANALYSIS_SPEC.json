@@ -1,9 +1,10 @@
 {
-  "schema_version": "1.0.0",
-  "analysis_version": "1.0.0",
-  "protocol_version": "1.1.0",
-  "freeze_id": "2026-08-06-v6",
-  "status": "locked_before_reviewer_registration",
+  "schema_version": "2.0.0",
+  "analysis_version": "2.0.0",
+  "response_contract_version": "2.0.0",
+  "protocol_version": "1.2.0",
+  "freeze_id": "pending-v7-not-frozen",
+  "status": "draft_unratified_new_freeze_required",
   "primary_design": {
     "panel_size": 3,
     "same_reviewers_for_every_product": true,
@@ -17,11 +18,25 @@
     "substitutions_in_primary_analysis": false
   },
   "rating_contract": {
+    "pillar_limits": {
+      "formulation_0_20": 20,
+      "dose_0_20": 20,
+      "evidence_0_20": 20,
+      "transparency_0_15": 15,
+      "verification_0_15": 15,
+      "formula_quality_checks_0_10": 10
+    },
+    "confidence_values": ["high", "moderate", "low"],
+    "label_sufficiency_values": ["yes", "no"],
+    "attestation_values": ["yes", "no", "unknown"],
     "increment": 0.5,
     "arithmetic_tolerance": 0.000001,
     "overall_is_exact_pillar_sum": true,
     "missing_value_imputation": false,
     "primary_requires_no_protocol_deviation": true,
+    "primary_requires_all_exposure_attestations_no": true,
+    "exposure_history_cannot_be_erased_by_correction": true,
+    "nonindependent_responses": "retain_exploratory_exclude_whole_product_from_fixed_panel_primary",
     "source_citation_required": true,
     "safety_source_required_for_concern": true
   },

@@ -13,11 +13,16 @@ import hashlib
 import json
 import math
 import sqlite3
+import sys
 from collections import Counter, defaultdict
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Iterable
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from audits.v4_reviewer_benchmark_analysis import (  # noqa: E402
+    RESPONSE_CONTRACT_VERSION, RESPONSE_FIELDS, validate_response_contract,
+)
 
 EXPECTED_ARCHETYPES = (
     "b_complex",
@@ -931,7 +936,8 @@ def _response_template_rows(
             reviewer_products,
             start=1,
         ):
-            rows.append({
+            row = {field: "" for field in RESPONSE_FIELDS}
+            row.update({
                 "benchmark_id": product["benchmark_id"],
                 "review_sequence": product["review_sequence"],
                 "reviewer_slot": reviewer_slot,
@@ -939,21 +945,9 @@ def _response_template_rows(
                 "reviewer_order": reviewer_order,
                 "review_round": 1,
                 "correction_reason": "",
-                "formulation_0_20": "",
-                "dose_0_20": "",
-                "evidence_0_20": "",
-                "transparency_0_15": "",
-                "verification_0_15": "",
-                "formula_quality_checks_0_10": "",
-                "overall_0_100": "",
-                "product_safety_status": "",
-                "safety_concern_driver": "",
-                "assessment_confidence": "",
-                "label_facts_sufficient": "",
                 "source_citations_json": "[]",
-                "rationale": "",
-                "protocol_deviation": "",
             })
+            rows.append(row)
     return rows
 
 
@@ -1055,13 +1049,14 @@ def prepare_benchmark_output_dir(path: Path) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
-    if args.reviewers_per_product < 3:
-        raise ValueError("at least three independent reviewers are required")
+    if args.reviewers_per_product != 3:
+        raise ValueError("exactly three fixed reviewers are required")
     analysis_spec = json.loads(
         args.analysis_spec.read_text(encoding="utf-8")
     )
     if not isinstance(analysis_spec, dict):
         raise ValueError("analysis spec is not a JSON object")
+    validate_response_contract(analysis_spec)
     if analysis_spec.get("freeze_id") != args.freeze_id:
         raise ValueError(
             "analysis spec freeze_id does not match requested freeze"
@@ -1152,11 +1147,10 @@ def main(argv: list[str] | None = None) -> int:
         args.reviewers_per_product,
         seed=args.seed,
     )
-    response_fields = tuple(response_rows[0])
     _write_csv(
         args.output_dir / "reviewer_response_template.csv",
         response_rows,
-        response_fields,
+        RESPONSE_FIELDS,
     )
     _write_csv(
         args.output_dir / "reviewer_registry_template.csv",
@@ -1268,6 +1262,7 @@ def main(argv: list[str] | None = None) -> int:
             },
         },
         "analysis_contract": {
+            "response_contract_version": RESPONSE_CONTRACT_VERSION,
             "analysis_version": analysis_spec.get("analysis_version"),
             "protocol_version": analysis_spec.get("protocol_version"),
             "analysis_spec_sha256": _sha256(args.analysis_spec),

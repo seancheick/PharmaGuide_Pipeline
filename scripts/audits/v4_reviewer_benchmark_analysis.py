@@ -14,10 +14,12 @@ import hashlib
 import json
 import math
 import random
+import re
 from collections import Counter, defaultdict
 from pathlib import Path
 from statistics import mean, median
 from typing import Any, Iterable, Mapping, Sequence
+from urllib.parse import urlsplit
 
 
 PILLAR_REVIEW_FIELDS = (
@@ -36,15 +38,15 @@ PILLAR_ENGINE_FIELDS = (
     "pillar_verification_v4",
     "pillar_safety_hygiene_v4",
 )
-PILLAR_LIMITS = {
-    "formulation_0_20": 20.0,
-    "dose_0_20": 20.0,
-    "evidence_0_20": 20.0,
-    "transparency_0_15": 15.0,
-    "verification_0_15": 15.0,
-    "formula_quality_checks_0_10": 10.0,
-}
-RESPONSE_REQUIRED_FIELDS = frozenset({
+RESPONSE_CONTRACT_VERSION = "2.0.0"
+ATTESTATION_FIELDS = (
+    "ai_assistance_used",
+    "prior_ai_review_seen",
+    "engine_output_seen",
+)
+# One ordered schema for the freeze, document parser, and response validator.
+# Its implementation stays here, inside the manifest's analysis-script hash.
+RESPONSE_FIELDS = (
     "benchmark_id",
     "review_sequence",
     "reviewer_slot",
@@ -52,6 +54,7 @@ RESPONSE_REQUIRED_FIELDS = frozenset({
     "reviewer_order",
     "review_round",
     "correction_reason",
+    *ATTESTATION_FIELDS,
     *PILLAR_REVIEW_FIELDS,
     "overall_0_100",
     "product_safety_status",
@@ -61,7 +64,8 @@ RESPONSE_REQUIRED_FIELDS = frozenset({
     "source_citations_json",
     "rationale",
     "protocol_deviation",
-})
+)
+RESPONSE_REQUIRED_FIELDS = frozenset(RESPONSE_FIELDS)
 REGISTRY_REQUIRED_FIELDS = frozenset({
     "reviewer_slot",
     "reviewer_id",
@@ -146,6 +150,109 @@ def _load_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def validate_response_contract(spec: Mapping[str, Any]) -> dict[str, Any]:
+    """Reject legacy contracts; never infer a new contract for old answers."""
+    if spec.get("response_contract_version") != RESPONSE_CONTRACT_VERSION:
+        raise AnalysisContractError(
+            "legacy or missing response contract; a new versioned freeze is required"
+        )
+    contract = dict(spec.get("rating_contract") or {})
+    limits = contract.get("pillar_limits") or {}
+    if set(limits) != set(PILLAR_REVIEW_FIELDS):
+        raise AnalysisContractError("rating contract requires all six pillar_limits")
+    if any(_as_float(value, field="pillar limit") <= 0 for value in limits.values()):
+        raise AnalysisContractError("pillar limits must be positive")
+    if _as_float(contract.get("increment"), field="rating increment") <= 0:
+        raise AnalysisContractError("rating increment must be positive")
+    if _as_float(contract.get("arithmetic_tolerance"), field="arithmetic tolerance") < 0:
+        raise AnalysisContractError("arithmetic tolerance cannot be negative")
+    for field in ("confidence_values", "label_sufficiency_values", "attestation_values"):
+        if not isinstance(contract.get(field), list) or not contract[field]:
+            raise AnalysisContractError(f"rating contract requires {field}")
+    if set(contract["attestation_values"]) != {"yes", "no", "unknown"}:
+        raise AnalysisContractError("attestation values must be yes/no/unknown")
+    return contract
+
+
+def validate_packet_sequences(rows: Iterable[Mapping[str, Any]]) -> dict[str, int]:
+    """Validate the full blinded packet's canonical sequence, not rater order."""
+    sequences: dict[str, int] = {}
+    for row in rows:
+        bid = _nonempty(row.get("benchmark_id"), field="packet benchmark_id")
+        if bid in sequences:
+            raise AnalysisContractError("duplicate packet benchmark_id")
+        sequences[bid] = _as_int(row.get("review_sequence"), field="packet review_sequence")
+    if not sequences or set(sequences.values()) != set(range(1, len(sequences) + 1)):
+        raise AnalysisContractError("packet review_sequence must be a complete 1-N permutation")
+    return sequences
+
+
+def validate_template_orders(
+    rows: Iterable[Mapping[str, Any]],
+    sequences: Mapping[str, int],
+    spec: Mapping[str, Any],
+) -> dict[int, dict[str, int]]:
+    """Read frozen randomized assignments without deriving them from sequence."""
+    validate_response_contract(spec)
+    panel_size = _as_int((spec.get("primary_design") or {}).get("panel_size"), field="panel_size")
+    if panel_size != 3:
+        raise AnalysisContractError("primary design requires exactly three fixed reviewers")
+    orders: dict[int, dict[str, int]] = {slot: {} for slot in range(1, panel_size + 1)}
+    for row in rows:
+        missing = RESPONSE_REQUIRED_FIELDS - set(row)
+        if missing:
+            raise AnalysisContractError(f"response template missing fields: {sorted(missing)}")
+        bid = str(row.get("benchmark_id") or "")
+        slot = _as_int(row.get("reviewer_slot"), field="template reviewer_slot")
+        if bid not in sequences or slot not in orders:
+            raise AnalysisContractError("response template has unknown product or reviewer slot")
+        if bid in orders[slot]:
+            raise AnalysisContractError("duplicate response template assignment")
+        if _as_int(row.get("review_sequence"), field="template review_sequence") != sequences[bid]:
+            raise AnalysisContractError("response template review_sequence does not match packet")
+        orders[slot][bid] = _as_int(row.get("reviewer_order"), field="template reviewer_order")
+    for slot, assigned in orders.items():
+        if set(assigned) != set(sequences) or set(assigned.values()) != set(range(1, len(sequences) + 1)):
+            raise AnalysisContractError(f"template slot {slot} reviewer_order must be a complete 1-N permutation")
+    return orders
+
+
+def load_frozen_response_inputs(
+    *, manifest_path: Path, analysis_spec_path: Path, analysis_script_path: Path,
+    reviewer_packet_path: Path, reviewer_template_path: Path,
+) -> dict[str, Any]:
+    """Load only blinded inputs and verify their freeze provenance."""
+    manifest, spec = _load_json(manifest_path), _load_json(analysis_spec_path)
+    validate_response_contract(spec)
+    if not spec.get("freeze_id") or manifest.get("freeze_id") != spec["freeze_id"]:
+        raise AnalysisContractError("analysis spec freeze_id does not match benchmark manifest")
+    contract = dict(manifest.get("analysis_contract") or {})
+    if contract.get("response_contract_version") != RESPONSE_CONTRACT_VERSION:
+        raise AnalysisContractError("legacy manifest; a new response-contract freeze is required")
+    hashes = {
+        "manifest_sha256": _sha256(manifest_path),
+        "analysis_spec_sha256": _sha256(analysis_spec_path),
+        "analysis_script_sha256": _sha256(analysis_script_path),
+        "reviewer_packet_sha256": _sha256(reviewer_packet_path),
+        "reviewer_template_sha256": _sha256(reviewer_template_path),
+    }
+    for field in ("analysis_spec_sha256", "analysis_script_sha256"):
+        if contract.get(field) != hashes[field]:
+            raise AnalysisContractError(f"{field} does not match benchmark manifest")
+    for name, field in (("reviewer_packet.csv", "reviewer_packet_sha256"),
+                        ("reviewer_response_template.csv", "reviewer_template_sha256")):
+        if ((manifest.get("artifacts") or {}).get(name) or {}).get("sha256") != hashes[field]:
+            raise AnalysisContractError(f"{field} does not match benchmark manifest")
+    packet = _load_csv(reviewer_packet_path)
+    sequences = validate_packet_sequences(packet)
+    orders = validate_template_orders(_load_csv(reviewer_template_path), sequences, spec)
+    expected_ratings = _as_int((spec.get("primary_design") or {}).get("required_ratings"), field="required_ratings")
+    if expected_ratings != len(sequences) * len(orders):
+        raise AnalysisContractError("full packet rating count does not match analysis spec")
+    return {"manifest": manifest, "spec": spec, "packet": packet,
+            "sequences": sequences, "orders": orders, "hashes": hashes}
+
+
 def validate_reviewer_registry(
     rows: Iterable[Mapping[str, Any]],
     spec: Mapping[str, Any],
@@ -173,6 +280,8 @@ def validate_reviewer_registry(
         design.get("panel_size"),
         field="primary_design.panel_size",
     )
+    if panel_size != 3:
+        raise AnalysisContractError("primary design requires exactly three fixed reviewers")
     primary_rows = [
         row for row in source_rows
         if str(row.get("panel_role") or "").strip().lower() == "primary"
@@ -303,6 +412,12 @@ def _validate_source_citations(
         if isinstance(citation, str):
             if not citation.strip():
                 raise AnalysisContractError("source citation cannot be blank")
+            text = citation.strip()
+            url = urlsplit(text)
+            valid_url = url.scheme in {"https", "http"} and bool(url.hostname) and not re.search(r"\s", text)
+            valid_id = re.fullmatch(r"(?:PMID\s*:?\s*)?[1-9][0-9]*|(?:DOI\s*:?\s*)?10\.[0-9]{4,9}/\S+", text, re.I)
+            if not valid_url and not valid_id:
+                raise AnalysisContractError("source citation must be a PMID, DOI, or HTTP(S) URL")
             continue
         if not isinstance(citation, dict):
             raise AnalysisContractError(
@@ -330,10 +445,12 @@ def validate_and_select_responses(
     panel: Mapping[int, Mapping[str, Any]],
     benchmark_sequences: Mapping[str, int],
     spec: Mapping[str, Any],
+    *,
+    reviewer_orders: Mapping[int, Mapping[str, int]] | None = None,
 ) -> list[dict[str, Any]]:
     """Validate append-only responses and select each latest review round."""
     source_rows = [dict(row) for row in rows]
-    contract = dict(spec.get("rating_contract") or {})
+    contract = validate_response_contract(spec)
     increment = _as_float(contract.get("increment"), field="rating increment")
     tolerance = _as_float(
         contract.get("arithmetic_tolerance"),
@@ -390,6 +507,8 @@ def validate_and_select_responses(
         )
         if reviewer_order < 1:
             raise AnalysisContractError("reviewer_order must be positive")
+        if reviewer_orders is not None and reviewer_order != reviewer_orders.get(slot, {}).get(benchmark_id):
+            raise AnalysisContractError(f"{benchmark_id}/{reviewer_id}.reviewer_order does not match frozen template")
         review_round = _as_int(
             original.get("review_round"),
             field=f"{benchmark_id}/{reviewer_id}.review_round",
@@ -406,7 +525,8 @@ def validate_and_select_responses(
             )
 
         numeric: dict[str, float] = {}
-        for field, maximum in PILLAR_LIMITS.items():
+        for field in PILLAR_REVIEW_FIELDS:
+            maximum = _as_float(contract["pillar_limits"][field], field="pillar limit")
             value = _as_float(
                 original.get(field),
                 field=f"{benchmark_id}/{reviewer_id}.{field}",
@@ -447,14 +567,14 @@ def validate_and_select_responses(
         confidence = str(
             original.get("assessment_confidence") or ""
         ).strip()
-        if confidence not in {"high", "moderate", "low"}:
+        if confidence not in contract["confidence_values"]:
             raise AnalysisContractError(
                 f"{benchmark_id}/{reviewer_id} invalid confidence"
             )
         sufficient = str(
             original.get("label_facts_sufficient") or ""
         ).strip().lower()
-        if sufficient not in {"yes", "no"}:
+        if sufficient not in contract["label_sufficiency_values"]:
             raise AnalysisContractError(
                 f"{benchmark_id}/{reviewer_id} invalid label sufficiency"
             )
@@ -468,8 +588,17 @@ def validate_and_select_responses(
             field=f"{benchmark_id}/{reviewer_id}.rationale",
         )
         deviation = str(original.get("protocol_deviation") or "").strip()
+        if deviation.lower() == "none":
+            deviation = ""
+        attestations = {}
+        for field in ATTESTATION_FIELDS:
+            value = str(original.get(field) or "").strip()
+            if value not in contract["attestation_values"]:
+                raise AnalysisContractError(f"{benchmark_id}/{reviewer_id}.{field} must be yes/no/unknown")
+            attestations[field] = value
         normalized = dict(original)
         normalized.update(numeric)
+        normalized.update(attestations)
         normalized.update({
             "benchmark_id": benchmark_id,
             "review_sequence": sequence,
@@ -521,10 +650,20 @@ def validate_and_select_responses(
             raise AnalysisContractError(
                 f"{key} reviewer_order changed across review rounds"
             )
-        selected.append(max(
+        latest = dict(max(
             grouped[key],
             key=lambda row: row["review_round"],
         ))
+        # A correction cannot erase earlier exposure or compromised review.
+        exclusions: set[str] = set()
+        for previous in grouped[key]:
+            for field in ATTESTATION_FIELDS:
+                if previous[field] != "no":
+                    exclusions.add(f"{field}={previous[field]}")
+            if previous["protocol_deviation"]:
+                exclusions.add(f"protocol_deviation: {previous['protocol_deviation']}")
+        latest["primary_exclusion_reasons"] = sorted(exclusions)
+        selected.append(latest)
 
     product_count = len(benchmark_sequences)
     expected_order = set(range(1, product_count + 1))
@@ -888,6 +1027,8 @@ def analyze_benchmark(
     spec: Mapping[str, Any],
     *,
     stage: str,
+    reviewer_packet_rows: Iterable[Mapping[str, Any]],
+    reviewer_template_rows: Iterable[Mapping[str, Any]],
 ) -> dict[str, Any]:
     """Run the pre-specified descriptive benchmark analysis."""
     baselines = [dict(row) for row in baseline_rows]
@@ -912,35 +1053,83 @@ def analyze_benchmark(
             field=f"{benchmark_id}.review_sequence",
         )
 
+    # Validate the complete frozen permutation BEFORE selecting a stage.
+    # Original randomized orders remain sparse in development/holdout subsets.
+    full_sequences = validate_packet_sequences(reviewer_packet_rows)
+    orders = validate_template_orders(reviewer_template_rows, full_sequences, spec)
+    if any(full_sequences.get(bid) != sequence for bid, sequence in benchmark_sequences.items()):
+        raise AnalysisContractError("baseline review_sequence does not match frozen packet")
     panel = validate_reviewer_registry(registry_rows, spec)
-    stage_responses = [
-        dict(row)
-        for row in response_rows
-        if str(row.get("benchmark_id")) in benchmark_sequences
-    ]
-    selected = validate_and_select_responses(
-        stage_responses,
+    full_selected = validate_and_select_responses(
+        response_rows,
         panel,
-        benchmark_sequences,
+        full_sequences,
         spec,
+        reviewer_orders=orders,
     )
+    selected = [row for row in full_selected if row["benchmark_id"] in benchmark_sequences]
     all_records = _consensus_records(baselines, selected, spec)
     excluded_benchmark_ids = sorted({
         str(row["benchmark_id"])
         for row in selected
-        if str(row.get("protocol_deviation") or "").strip()
+        if row["primary_exclusion_reasons"]
     })
     records = [
         record for record in all_records
         if str(record["baseline"]["benchmark_id"])
         not in excluded_benchmark_ids
     ]
-    if not records:
-        raise AnalysisContractError(
-            "no products remain after protocol-deviation exclusions"
-        )
     bootstrap = dict(spec.get("bootstrap") or {})
     tier_order = list(spec.get("tier_order_low_to_high") or [])
+    sensitivity_scores = [float(record["consensus"]["overall_0_100"]) for record in all_records]
+    sensitivity_overall = _score_metrics(
+        [_as_float(record["baseline"].get("quality_score_v4_100"), field="quality_score_v4_100") for record in all_records],
+        sensitivity_scores,
+        engine_tiers=[str(record["baseline"].get("quality_tier")) for record in all_records],
+        consensus_tiers=[_tier_for_score(score, spec) for score in sensitivity_scores],
+        tier_order=tier_order, bootstrap=bootstrap,
+        seed_suffix=f"{stage}:sensitivity_all_locked",
+    )
+    common = {
+        "schema_version": "2.0.0",
+        "analysis_version": spec.get("analysis_version"),
+        "freeze_id": spec.get("freeze_id"),
+        "stage": stage,
+        "sample": {
+            "analyzed_products": len(records),
+            "selected_ratings": len(selected),
+            "primary_ratings": len(records) * len(panel),
+            "reviewer_panel_size": len(panel),
+            "full_packet_products": len(full_sequences),
+            "excluded_products": len(excluded_benchmark_ids),
+            "excluded_benchmark_ids": excluded_benchmark_ids,
+        },
+        "primary_exclusions": [
+            {"benchmark_id": row["benchmark_id"], "reviewer_id": row["reviewer_id"],
+             "reasons": row["primary_exclusion_reasons"]}
+            for row in selected if row["primary_exclusion_reasons"]
+        ],
+        "sensitivity_all_locked_responses": {
+            "status": "exploratory_only",
+            "independent_primary": False,
+            "products": len(all_records),
+            "overall": sensitivity_overall,
+            "potential_safety_undercalls": sum(bool(record["potential_safety_undercall"]) for record in all_records),
+            "potential_safety_overcalls": sum(bool(record["potential_safety_overcall"]) for record in all_records),
+        },
+    }
+    if not records:
+        return {
+            **common,
+            "status": "blocked_independent_primary_analysis",
+            "primary_assessment": {
+                "status": "blocked",
+                "reason": "no_independent_complete_panel_products",
+                "note": "Exposed/unknown responses remain exploratory; the fixed three-rater panel was not reduced.",
+            },
+            "overall": None, "pillars": {}, "agreement": {}, "strata": {}, "safety": {},
+            "calibration": {"eligible": False, "decision_thresholds_status": (spec.get("decision_thresholds") or {}).get("status")},
+        }
 
     engine_scores = [
         _as_float(
@@ -1095,46 +1284,10 @@ def analyze_benchmark(
         if record["potential_safety_overcall"]
     ]
     thresholds = dict(spec.get("decision_thresholds") or {})
-    sensitivity_engine_scores = [
-        _as_float(
-            record["baseline"].get("quality_score_v4_100"),
-            field="quality_score_v4_100",
-        )
-        for record in all_records
-    ]
-    sensitivity_consensus_scores = [
-        float(record["consensus"]["overall_0_100"])
-        for record in all_records
-    ]
-    sensitivity_overall = _score_metrics(
-        sensitivity_engine_scores,
-        sensitivity_consensus_scores,
-        engine_tiers=[
-            str(record["baseline"].get("quality_tier"))
-            for record in all_records
-        ],
-        consensus_tiers=[
-            _tier_for_score(score, spec)
-            for score in sensitivity_consensus_scores
-        ],
-        tier_order=tier_order,
-        bootstrap=bootstrap,
-        seed_suffix=f"{stage}:sensitivity_all_locked",
-    )
     return {
-        "schema_version": "1.0.0",
-        "analysis_version": spec.get("analysis_version"),
-        "freeze_id": spec.get("freeze_id"),
-        "stage": stage,
+        **common,
         "status": "descriptive_only_calibration_frozen",
-        "sample": {
-            "analyzed_products": len(records),
-            "selected_ratings": len(selected),
-            "primary_ratings": len(records) * len(panel),
-            "reviewer_panel_size": len(panel),
-            "excluded_products": len(excluded_benchmark_ids),
-            "excluded_benchmark_ids": excluded_benchmark_ids,
-        },
+        "primary_assessment": {"status": "descriptive_only", "independent_complete_panel": True},
         "overall": overall,
         "pillars": pillars,
         "agreement": agreement,
@@ -1145,18 +1298,6 @@ def analyze_benchmark(
             "requires_blinded_adjudication": undercalls > 0,
             "undercall_queue": undercall_queue,
             "overcall_queue": overcall_queue,
-        },
-        "sensitivity_all_locked_responses": {
-            "products": len(all_records),
-            "overall": sensitivity_overall,
-            "potential_safety_undercalls": sum(
-                bool(record["potential_safety_undercall"])
-                for record in all_records
-            ),
-            "potential_safety_overcalls": sum(
-                bool(record["potential_safety_overcall"])
-                for record in all_records
-            ),
         },
         "calibration": {
             "eligible": bool(
@@ -1195,31 +1336,18 @@ def build_response_lock(
     analysis_spec_path: Path,
     analysis_script_path: Path,
     reviewer_packet_path: Path,
+    reviewer_template_path: Path,
     reviewer_registry_path: Path,
     responses_path: Path,
     locked_on: str,
 ) -> dict[str, Any]:
     """Validate complete blinded inputs and return their content lock."""
-    manifest = _load_json(manifest_path)
-    spec = _load_json(analysis_spec_path)
-    contract = dict(manifest.get("analysis_contract") or {})
-    if _sha256(analysis_spec_path) != contract.get("analysis_spec_sha256"):
-        raise AnalysisContractError(
-            "analysis spec does not match benchmark manifest"
-        )
-    if _sha256(analysis_script_path) != contract.get("analysis_script_sha256"):
-        raise AnalysisContractError(
-            "analysis script does not match benchmark manifest"
-        )
-    packet_rows = _load_csv(reviewer_packet_path)
-    benchmark_sequences = {
-        _nonempty(row.get("benchmark_id"), field="packet benchmark_id"):
-        _as_int(
-            row.get("review_sequence"),
-            field="packet review_sequence",
-        )
-        for row in packet_rows
-    }
+    frozen = load_frozen_response_inputs(
+        manifest_path=manifest_path, analysis_spec_path=analysis_spec_path,
+        analysis_script_path=analysis_script_path, reviewer_packet_path=reviewer_packet_path,
+        reviewer_template_path=reviewer_template_path,
+    )
+    manifest, spec, benchmark_sequences = frozen["manifest"], frozen["spec"], frozen["sequences"]
     panel = validate_reviewer_registry(
         _load_csv(reviewer_registry_path),
         spec,
@@ -1229,6 +1357,7 @@ def build_response_lock(
         panel,
         benchmark_sequences,
         spec,
+        reviewer_orders=frozen["orders"],
     )
     expected_ratings = _as_int(
         (spec.get("primary_design") or {}).get("required_ratings"),
@@ -1239,18 +1368,20 @@ def build_response_lock(
             "full response lock rating count does not match analysis spec"
         )
     return {
-        "schema_version": "1.0.0",
+        "schema_version": "2.0.0",
+        "response_contract_version": RESPONSE_CONTRACT_VERSION,
         "status": "locked",
         "freeze_id": manifest.get("freeze_id"),
         "locked_on": _nonempty(locked_on, field="locked_on"),
-        "manifest_sha256": _sha256(manifest_path),
-        "analysis_spec_sha256": _sha256(analysis_spec_path),
-        "analysis_script_sha256": _sha256(analysis_script_path),
-        "reviewer_packet_sha256": _sha256(reviewer_packet_path),
+        **frozen["hashes"],
         "reviewer_registry_sha256": _sha256(reviewer_registry_path),
         "responses_sha256": _sha256(responses_path),
         "selected_rating_count": len(selected),
         "benchmark_product_count": len(benchmark_sequences),
+        "exploratory_only_rating_count": sum(bool(row["primary_exclusion_reasons"]) for row in selected),
+        "independent_complete_panel_products": len(set(benchmark_sequences) - {
+            row["benchmark_id"] for row in selected if row["primary_exclusion_reasons"]
+        }),
     }
 
 
@@ -1260,16 +1391,22 @@ def verify_response_lock(
     manifest_path: Path,
     analysis_spec_path: Path,
     analysis_script_path: Path,
+    reviewer_packet_path: Path,
+    reviewer_template_path: Path,
     reviewer_registry_path: Path,
     responses_path: Path,
 ) -> None:
     """Fail when any locked response input or analysis artifact changed."""
     if lock.get("status") != "locked":
         raise AnalysisContractError("response lock status is not locked")
+    if lock.get("response_contract_version") != RESPONSE_CONTRACT_VERSION:
+        raise AnalysisContractError("legacy response lock; a new versioned freeze is required")
     expected = {
         "manifest_sha256": _sha256(manifest_path),
         "analysis_spec_sha256": _sha256(analysis_spec_path),
         "analysis_script_sha256": _sha256(analysis_script_path),
+        "reviewer_packet_sha256": _sha256(reviewer_packet_path),
+        "reviewer_template_sha256": _sha256(reviewer_template_path),
         "reviewer_registry_sha256": _sha256(reviewer_registry_path),
         "responses_sha256": _sha256(responses_path),
     }
@@ -1278,6 +1415,13 @@ def verify_response_lock(
             raise AnalysisContractError(
                 f"response lock {field} does not match current file"
             )
+    frozen = load_frozen_response_inputs(
+        manifest_path=manifest_path, analysis_spec_path=analysis_spec_path,
+        analysis_script_path=analysis_script_path, reviewer_packet_path=reviewer_packet_path,
+        reviewer_template_path=reviewer_template_path,
+    )
+    if lock.get("freeze_id") != frozen["manifest"].get("freeze_id"):
+        raise AnalysisContractError("response lock freeze_id does not match manifest")
 
 
 def validate_candidate_lock(
@@ -1377,6 +1521,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "manifest",
         "analysis-spec",
         "reviewer-packet",
+        "reviewer-template",
         "reviewer-registry",
         "responses",
         "output",
@@ -1390,6 +1535,8 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             "manifest",
             "analysis-spec",
             "response-lock",
+            "reviewer-packet",
+            "reviewer-template",
             "reviewer-registry",
             "responses",
             "baseline-key",
@@ -1411,6 +1558,8 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
+    if args.output.exists():
+        raise FileExistsError(f"output is immutable; already exists: {args.output}")
     script_path = Path(__file__).resolve()
     if args.command == "lock-responses":
         lock = build_response_lock(
@@ -1418,14 +1567,13 @@ def main(argv: list[str] | None = None) -> int:
             analysis_spec_path=args.analysis_spec,
             analysis_script_path=script_path,
             reviewer_packet_path=args.reviewer_packet,
+            reviewer_template_path=args.reviewer_template,
             reviewer_registry_path=args.reviewer_registry,
             responses_path=args.responses,
             locked_on=args.locked_on,
         )
-        args.output.write_text(
-            json.dumps(lock, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
+        with args.output.open("x", encoding="utf-8") as handle:
+            handle.write(json.dumps(lock, indent=2, sort_keys=True) + "\n")
         print(json.dumps({
             "status": lock["status"],
             "selected_rating_count": lock["selected_rating_count"],
@@ -1450,6 +1598,8 @@ def main(argv: list[str] | None = None) -> int:
         manifest_path=args.manifest,
         analysis_spec_path=args.analysis_spec,
         analysis_script_path=script_path,
+        reviewer_packet_path=args.reviewer_packet,
+        reviewer_template_path=args.reviewer_template,
         reviewer_registry_path=args.reviewer_registry,
         responses_path=args.responses,
     )
@@ -1468,11 +1618,11 @@ def main(argv: list[str] | None = None) -> int:
         _load_csv(args.reviewer_registry),
         spec,
         stage=stage,
+        reviewer_packet_rows=_load_csv(args.reviewer_packet),
+        reviewer_template_rows=_load_csv(args.reviewer_template),
     )
-    args.output.write_text(
-        json.dumps(result, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
+    with args.output.open("x", encoding="utf-8") as handle:
+        handle.write(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print(json.dumps({
         "status": result["status"],
         "analyzed_products": result["sample"]["analyzed_products"],

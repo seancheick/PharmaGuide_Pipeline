@@ -28,8 +28,9 @@ PILLAR_VALUES = (16.0, 15.0, 14.0, 12.0, 11.0, 9.0)
 def _spec(*, iterations: int = 50) -> dict:
     return {
         "schema_version": "1.0.0",
-        "analysis_version": "1.0.0",
-        "protocol_version": "1.1.0",
+        "analysis_version": "2.0.0",
+        "response_contract_version": "2.0.0",
+        "protocol_version": "1.2.0",
         "freeze_id": "fixture-v1",
         "primary_design": {
             "panel_size": 3,
@@ -43,6 +44,14 @@ def _spec(*, iterations: int = 50) -> dict:
             "substitutions_in_primary_analysis": False,
         },
         "rating_contract": {
+            "pillar_limits": dict(zip((
+                "formulation_0_20", "dose_0_20", "evidence_0_20",
+                "transparency_0_15", "verification_0_15",
+                "formula_quality_checks_0_10",
+            ), (20, 20, 20, 15, 15, 10))),
+            "confidence_values": ["high", "moderate", "low"],
+            "label_sufficiency_values": ["yes", "no"],
+            "attestation_values": ["yes", "no", "unknown"],
             "increment": 0.5,
             "arithmetic_tolerance": 0.000001,
             "overall_is_exact_pillar_sum": True,
@@ -121,7 +130,7 @@ def _registry_rows() -> list[dict]:
             "conflicts_json": "[]",
             "training_completed_on": "2026-08-07",
             "training_assessment_score": "95",
-            "protocol_version": "1.1.0",
+            "protocol_version": "1.2.0",
             "independence_attested_on": "2026-08-07",
             "data_use_attested_on": "2026-08-07",
             "registered_on": "2026-08-07",
@@ -150,6 +159,9 @@ def _response(
         "reviewer_order": str(sequence),
         "review_round": str(review_round),
         "correction_reason": correction_reason,
+        "ai_assistance_used": "no",
+        "prior_ai_review_seen": "no",
+        "engine_output_seen": "no",
         "formulation_0_20": str(values[0]),
         "dose_0_20": str(values[1]),
         "evidence_0_20": str(values[2]),
@@ -187,6 +199,16 @@ def _responses() -> list[dict]:
         for bid, sequence in _benchmark_map().items()
         for slot in (1, 2, 3)
     ]
+
+
+def _blinded_inputs() -> dict:
+    return {
+        "reviewer_packet_rows": [
+            {"benchmark_id": bid, "review_sequence": sequence}
+            for bid, sequence in _benchmark_map().items()
+        ],
+        "reviewer_template_rows": _responses(),
+    }
 
 
 def _baseline() -> list[dict]:
@@ -351,6 +373,7 @@ def test_analysis_reports_engine_minus_consensus_and_freezes_calibration():
         _registry_rows(),
         _spec(),
         stage="development",
+        **_blinded_inputs(),
     )
 
     assert result["status"] == "descriptive_only_calibration_frozen"
@@ -376,6 +399,7 @@ def test_development_analysis_filters_locked_holdout_responses():
         _registry_rows(),
         spec,
         stage="development",
+        **_blinded_inputs(),
     )
 
     assert result["sample"]["analyzed_products"] == 1
@@ -392,6 +416,7 @@ def test_protocol_deviation_excludes_product_and_keeps_sensitivity_record():
         _registry_rows(),
         _spec(),
         stage="development",
+        **_blinded_inputs(),
     )
 
     assert result["sample"]["analyzed_products"] == 1
@@ -413,6 +438,7 @@ def test_any_more_severe_reviewer_creates_safety_undercall_queue():
         _registry_rows(),
         _spec(),
         stage="development",
+        **_blinded_inputs(),
     )
 
     assert result["safety"]["potential_undercalls"] == 1
@@ -443,12 +469,14 @@ def test_response_lock_detects_post_lock_mutation(tmp_path):
     registry_path = tmp_path / "reviewer_registry.csv"
     responses_path = tmp_path / "responses.csv"
     packet_path = tmp_path / "reviewer_packet.csv"
+    template_path = tmp_path / "reviewer_response_template.csv"
     spec_path = tmp_path / "ANALYSIS_SPEC.json"
     script_path = tmp_path / "analysis.py"
     manifest_path = tmp_path / "manifest.json"
 
     _write_csv(registry_path, _registry_rows())
     _write_csv(responses_path, _responses())
+    _write_csv(template_path, _responses())
     _write_csv(
         packet_path,
         [
@@ -461,8 +489,13 @@ def test_response_lock_detects_post_lock_mutation(tmp_path):
     manifest_path.write_text(json.dumps({
         "freeze_id": "fixture-v1",
         "analysis_contract": {
+            "response_contract_version": "2.0.0",
             "analysis_spec_sha256": _sha256(spec_path),
             "analysis_script_sha256": _sha256(script_path),
+        },
+        "artifacts": {
+            "reviewer_packet.csv": {"sha256": _sha256(packet_path)},
+            "reviewer_response_template.csv": {"sha256": _sha256(template_path)},
         },
     }), encoding="utf-8")
 
@@ -471,6 +504,7 @@ def test_response_lock_detects_post_lock_mutation(tmp_path):
         analysis_spec_path=spec_path,
         analysis_script_path=script_path,
         reviewer_packet_path=packet_path,
+        reviewer_template_path=template_path,
         reviewer_registry_path=registry_path,
         responses_path=responses_path,
         locked_on="2026-08-08",
@@ -480,6 +514,8 @@ def test_response_lock_detects_post_lock_mutation(tmp_path):
         manifest_path=manifest_path,
         analysis_spec_path=spec_path,
         analysis_script_path=script_path,
+        reviewer_packet_path=packet_path,
+        reviewer_template_path=template_path,
         reviewer_registry_path=registry_path,
         responses_path=responses_path,
     )
@@ -494,6 +530,8 @@ def test_response_lock_detects_post_lock_mutation(tmp_path):
             manifest_path=manifest_path,
             analysis_spec_path=spec_path,
             analysis_script_path=script_path,
+            reviewer_packet_path=packet_path,
+            reviewer_template_path=template_path,
             reviewer_registry_path=registry_path,
             responses_path=responses_path,
         )

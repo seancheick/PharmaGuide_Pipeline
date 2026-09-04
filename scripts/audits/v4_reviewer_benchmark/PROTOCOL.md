@@ -1,10 +1,17 @@
 # PharmaGuide V4 blinded reviewer benchmark protocol
 
-Status: sample, protocol, and analysis contract frozen; reviewers not yet registered
+Status: **draft, unratified; new freeze required.** This working protocol is not
+clinical-owner or statistician approval. Do not distribute the clinical brief
+or begin a new review until its outstanding clinical wording is ratified.
 
-Protocol version: 1.1.0
+Protocol version: 1.2.0 (response and analysis contract 2.0.0)
 
-Freeze ID: `2026-08-06-v6`
+Proposed freeze placeholder: `pending-v7-not-frozen`
+
+The frozen v6 artifacts and original returned answers remain unchanged. This
+draft does not retroactively alter that study, validate its human independence,
+or authorize calibration. Set a real new freeze ID only during an authorized
+new freeze; do not reuse an existing freeze directory.
 
 ## Purpose and context of use
 
@@ -21,7 +28,7 @@ analysis must be specified before ratings are interpreted. See the
 and the FDA's emphasis that an assessment is evaluated within a defined
 [context of use](https://www.fda.gov/about-fda/clinical-outcome-assessment-coa-frequently-asked-questions).
 
-## Frozen sample
+## Proposed sample (unchanged design, not newly frozen)
 
 - 120 released, scored products.
 - 10 products from each of the 12 V4 scoring archetypes.
@@ -60,8 +67,8 @@ Reviewers must not receive or inspect:
 Product and brand names remain visible because product-level certification and
 manufacturer evidence are concepts under review. Reviewers must not search the
 PharmaGuide app or repository. Accidental unblinding is recorded in
-`protocol_deviation`; that rating is excluded from the primary analysis and
-retained in a sensitivity analysis.
+`protocol_deviation`; that entire product is excluded from the complete-panel
+primary analysis and retained in an explicitly exploratory sensitivity report.
 
 The baseline key is opened in two stages:
 
@@ -99,6 +106,16 @@ The three deterministic assignments are frozen in
 `reviewer_response_template.csv`; `review_sequence` is the hidden master join
 key, while `reviewer_order` is the only order used for reviewer distribution.
 
+The response contract additionally requires explicit `yes` / `no` / `unknown`
+answers to `ai_assistance_used`, `prior_ai_review_seen`, and `engine_output_seen`.
+These are blank in newly generated documents and response templates. Reviewer
+credentials, registry independence dates, and prior participation do not fill
+them in. AI-assisted research, drafting or rating is assistance; prior AI review
+and engine-output exposure are separate facts. A missing/invalid attestation
+blocks ingestion; an explicit `unknown` or `yes` is retained, but is not an
+independent primary response. Do not retrospectively rewrite PHAM or another
+historical reviewer as independent or fabricate a missing attestation.
+
 ## Independent review procedure
 
 For each assigned benchmark ID:
@@ -109,7 +126,8 @@ For each assigned benchmark ID:
 3. Record every source used in `source_citations_json`. A PMID, DOI, or direct
    official URL is required for each material clinical conclusion.
 4. Score each pillar independently using the anchors below.
-5. Enter `overall_0_100` as the exact sum of the six pillar ratings.
+5. In the one-file review workflow, leave totaling to the parser; it computes
+   `overall_0_100` as the exact sum and the shared validator rechecks it.
 6. Assign the independent product safety status.
 7. For `caution`, `unsafe`, or `blocked`, identify the substance, dose, or
    product-level event in `safety_concern_driver`.
@@ -154,10 +172,20 @@ or product-level event that drives the rating.
 ## Locked analysis plan
 
 Primary analysis uses only products whose three responses pass the arithmetic
-gates and contain no protocol deviation. If any reviewer records a deviation,
+gates, whose three exposure attestations are all `no` for every reviewer, and
+whose review history contains no protocol deviation or exposure/unknown
+attestation. Only empty/`none` deviation text means no deviation; other text is
+preserved verbatim, not recoded as `other`. If any reviewer records a deviation,
 that whole product is excluded from the complete-panel primary analysis and
 retained in the all-locked-responses sensitivity analysis. No imputation is
 performed for missing ratings.
+
+The fixed three-rater panel is never reduced to two independent reviewers and
+called the primary ICC. Corrections cannot erase an earlier exposure or
+compromised response. If no independent complete-panel products remain, the
+assessment is `blocked_independent_primary_analysis`: no primary score metrics
+or ICC are emitted, the all-locked report is explicitly exploratory, and
+calibration remains ineligible.
 
 1. Require three eligible, blinded ratings per product.
 2. Verify each reviewer overall equals the six-pillar sum.
@@ -186,11 +214,31 @@ performed for missing ratings.
 The fixed tier thresholds, safety severity order, bootstrap seed and
 iterations, arithmetic tolerance, exclusion rules, and metric direction are
 machine-readable in `ANALYSIS_SPEC.json`. The manifest fingerprints that file
-and the analysis implementation. Any change creates a new benchmark freeze.
+and the analysis implementation. The ordered response fields and canonical
+validator live in the analysis implementation and are reused by the document
+parser and freeze producer; no separate validator is maintained. Any change
+creates a new benchmark freeze.
 The development analyzer rejects the sealed holdout by filename and split
 before reading its rows. Holdout analysis additionally requires an approved,
 content-locked candidate record containing the frozen analysis hashes and
 expected direction.
+
+Document construction requires an explicit freeze directory. Its private
+sequence map binds the freeze ID, manifest, blinded packet, frozen randomized
+template, analysis specification, and analysis implementation hashes. It keeps
+canonical `review_sequence` from the packet separate from `reviewer_order`
+from the template. Missing/legacy sequence maps fail closed; neither value is
+guessed from the other. The parser requires the same freeze and verifies the
+map before producing a complete, validated CSV with JSON-list citations.
+
+The full response lock still requires all products and all three registered
+reviewers, with complete 1–N randomized permutations matching the frozen
+template. Stage analysis validates that full contract before selecting a
+development or holdout subset, preserving sparse original orders. Lock
+verification rechecks both packet and template hashes as well as registry,
+responses, manifest, specification and shared analysis/validation code before
+baseline access. Documents, CSVs, response locks and reports use fresh output
+targets; they must never overwrite a prior result.
 
 This protocol does not invent a pass/fail accuracy threshold before a
 statistician and clinical owner sign it. Lack of a threshold cannot be used to

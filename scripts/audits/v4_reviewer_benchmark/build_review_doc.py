@@ -10,16 +10,16 @@ So: the reviewer never computes a total and never touches an ID. They write six
 numbers and a few words. parse_review_doc.py does the arithmetic, restores the
 frozen column contract, and reports anything missing.
 
-Reads only the two blinded artifacts a reviewer may receive. Never opens either
-baseline key. Emits no engine score, threshold, or split assignment.
+Reads blinded packet/template content and provenance metadata. Never opens
+either baseline key. Emits no engine score, threshold, or split assignment.
 
-Usage: python3 build_review_doc.py --slot 1 --reviewer-id KEVIN --out DIR
+Usage: python3 build_review_doc.py --freeze-dir FREEZE --slot 1 --reviewer-id ID --out NEW_DIR
 """
 from __future__ import annotations
 
 import argparse
-import csv
 import json
+import re
 from pathlib import Path
 import sys
 
@@ -27,9 +27,9 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 from serving_frequency import resolve_daily_serving_range  # noqa: E402
-
-FREEZE = (Path(__file__).resolve().parents[2]
-          / "reports" / "v4_reviewer_benchmark_2026_08_06_v6")
+from audits.v4_reviewer_benchmark_analysis import (  # noqa: E402
+    AnalysisContractError, RESPONSE_CONTRACT_VERSION, load_frozen_response_inputs,
+)
 
 # Median amount implying 100% DV per ingredient|unit, derived from all 13,271
 # shipped blobs (>=8 observations each). Used ONLY to flag internally
@@ -39,8 +39,31 @@ DV_REF = json.loads((Path(__file__).parent / "dv_reference.json").read_text())
 
 HEADER = """# Supplement label review — {rid}
 
+**Draft clinical brief — unratified. Not authorized for reviewer distribution
+until the clinical owner ratifies the brief and a new freeze is approved.**
+
+Freeze: `{freeze_id}` · Response contract: `{response_contract_version}`
+
 You need nothing except this file. Fill in the blanks under each product and
 email the file back. **Please don't retype or reformat anything else.**
+
+## Required review provenance
+
+Complete each line with `yes`, `no`, or `unknown`. Do not leave it blank.
+These answers apply to this entire returned document; they are not inferred
+from your credentials or an independence statement. AI-assisted research,
+drafting or scoring counts as assistance. Record any prior AI-generated review
+you saw, and any PharmaGuide engine output you saw. If exposure happens later,
+update these answers and explain the affected rating in `ODD:`.
+
+```
+AI_ASSISTANCE_USED:
+PRIOR_AI_REVIEW_SEEN:
+ENGINE_OUTPUT_SEEN:
+```
+
+`yes` or `unknown` responses are retained as exploratory, not independent
+primary validation. Never change an answer to make a review appear independent.
 
 ## What we're asking
 
@@ -85,7 +108,7 @@ Then fill in the block. **Whole or half points only** (12, 12.5, 13).
 - `unsafe` — the labeled regimen itself creates a serious, established concern
 - `caution` — elevated dose, uncertain long-term safety, or a narrower safety
   margin, without a clear expectation of serious harm
-- `no_known_concern` — nothing known after you looked
+- `no_known_catalog_concern` — nothing known after you looked
 - `not_assessed` — you genuinely couldn't judge
 
 For `blocked`/`unsafe`/`caution`, name the substance or dose on the `DRIVER:`
@@ -333,16 +356,31 @@ def facts(row):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--freeze-dir", required=True, type=Path)
     ap.add_argument("--slot", required=True)
     ap.add_argument("--reviewer-id", required=True)
     ap.add_argument("--out", required=True, type=Path)
     a = ap.parse_args()
-    a.out.mkdir(parents=True, exist_ok=True)
-
-    packet = {r["benchmark_id"]: r for r in csv.DictReader((FREEZE / "reviewer_packet.csv").open())}
-    resp = sorted((r for r in csv.DictReader((FREEZE / "reviewer_response_template.csv").open())
-                   if r["reviewer_slot"] == a.slot), key=lambda r: int(r["reviewer_order"]))
-    assert len(resp) == 120, len(resp)
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*", a.reviewer_id):
+        raise AnalysisContractError("reviewer-id must be a filename-safe registered ID")
+    frozen = load_frozen_response_inputs(
+        manifest_path=a.freeze_dir / "manifest.json",
+        analysis_spec_path=a.freeze_dir / "ANALYSIS_SPEC.json",
+        analysis_script_path=SCRIPTS_DIR / "audits" / "v4_reviewer_benchmark_analysis.py",
+        reviewer_packet_path=a.freeze_dir / "reviewer_packet.csv",
+        reviewer_template_path=a.freeze_dir / "reviewer_response_template.csv",
+    )
+    try:
+        slot = int(a.slot)
+    except ValueError as exc:
+        raise AnalysisContractError("reviewer slot must be an integer") from exc
+    if slot not in frozen["orders"]:
+        raise AnalysisContractError("reviewer slot is not in the frozen panel")
+    packet = {row["benchmark_id"]: row for row in frozen["packet"]}
+    resp = sorted(({
+        "benchmark_id": bid, "reviewer_order": order,
+        "review_sequence": frozen["sequences"][bid],
+    } for bid, order in frozen["orders"][slot].items()), key=lambda row: row["reviewer_order"])
 
     blocks, st = [], {"zero": 0, "nounit": 0, "serving_untrusted": 0}
     rollups = 0
@@ -363,15 +401,30 @@ def main() -> int:
                                    facts=f, notes=nt, bid=r["benchmark_id"]))
 
     brands = sorted({packet[r["benchmark_id"]]["brand_name"] for r in resp})
-    doc = HEADER.format(rid=a.reviewer_id, n=len(resp), brands=len(brands), **st) \
+    doc = HEADER.format(rid=a.reviewer_id, n=len(resp), brands=len(brands),
+                        freeze_id=frozen["spec"]["freeze_id"],
+                        response_contract_version=RESPONSE_CONTRACT_VERSION, **st) \
         + "".join(blocks) \
         + "\n# Brands in this set (conflict check)\n\n" \
         + "\n".join(f"- {b}" for b in brands) + "\n"
     out = a.out / f"REVIEW_{a.reviewer_id}.md"
-    out.write_text(doc)
-    (a.out / f".slotmap_{a.reviewer_id}.json").write_text(json.dumps(
-        {"slot": a.slot, "reviewer_id": a.reviewer_id,
-         "order": {r["benchmark_id"]: r["reviewer_order"] for r in resp}}, indent=1))
+    slotmap = {
+        "response_contract_version": RESPONSE_CONTRACT_VERSION,
+        "freeze_id": frozen["spec"]["freeze_id"],
+        **frozen["hashes"],
+        "slot": slot, "reviewer_id": a.reviewer_id,
+        "reviews": {row["benchmark_id"]: {
+            "review_sequence": row["review_sequence"],
+            "reviewer_order": row["reviewer_order"],
+        } for row in resp},
+    }
+    # A fresh directory reserves the pair together, preserving all sent files.
+    a.out.mkdir(parents=True, exist_ok=False)
+    with out.open("x", encoding="utf-8") as handle:
+        handle.write(doc)
+    with (a.out / f".slotmap_{a.reviewer_id}.json").open("x", encoding="utf-8") as handle:
+        json.dump(slotmap, handle, indent=2)
+        handle.write("\n")
     # A packet frozen before `parent_index` existed carries no nesting evidence,
     # so total-vs-forms notes correctly drop to 0. Print it rather than let a
     # silent zero read as "no such products in this slot".

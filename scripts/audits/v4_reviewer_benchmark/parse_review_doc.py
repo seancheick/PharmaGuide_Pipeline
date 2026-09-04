@@ -1,15 +1,10 @@
-"""Read a filled REVIEW_<id>.md back into the frozen CSV contract.
+"""Convert a complete returned document into the frozen response contract.
 
-The reviewer never computes a total and never touches slot/order/round -- this
-does it. That removes the two failure classes the first returned sheet hit:
-a uniform +10 arithmetic error (quality-checks dropped from a hand-sum) and an
-invalid reviewer_slot that broke the join to the frozen template.
+Only syntax is parsed here. Scores, enums, sources, provenance attestations,
+and complete assignments are checked by the same validator used for analysis.
+No baseline key is opened and no existing response file is overwritten.
 
-Everything is validated and nothing is silently accepted: out-of-range values,
-non-half-point increments, unknown enum values, unknown or duplicated IDs, and
-missing scores are all reported. A file with ANY error emits no CSV.
-
-Usage: python3 parse_review_doc.py --doc REVIEW_KEVIN.md --slotmap .slotmap_KEVIN.json --out DIR
+Usage: parse_review_doc.py --freeze-dir FREEZE --doc REVIEW_ID.md --slotmap MAP --out DIR
 """
 from __future__ import annotations
 
@@ -17,132 +12,117 @@ import argparse
 import csv
 import json
 import re
+import sys
 from pathlib import Path
 
-FIELDS = {
-    "FORMULATION": ("formulation_0_20", 20), "DOSE": ("dose_0_20", 20),
-    "EVIDENCE": ("evidence_0_20", 20), "TRANSPARENCY": ("transparency_0_15", 15),
-    "VERIFICATION": ("verification_0_15", 15), "QUALITY": ("formula_quality_checks_0_10", 10),
-}
-SAFETY = {"blocked", "unsafe", "caution", "no_known_concern",
-          "no_known_catalog_concern", "not_assessed"}
-SAFETY_CANON = {"no_known_concern": "no_known_catalog_concern"}
-CONF = {"high", "moderate", "low"}
-YN = {"yes", "no"}
-DEV = {"none", "saw_engine_score", "conflict_discovered", "source_access_failure", "other"}
+SCRIPTS_DIR = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(SCRIPTS_DIR))
 
-OUT_COLS = ["benchmark_id", "reviewer_slot", "reviewer_id", "reviewer_order",
-            "review_round", "correction_reason", "formulation_0_20", "dose_0_20",
-            "evidence_0_20", "transparency_0_15", "verification_0_15",
-            "formula_quality_checks_0_10", "overall_0_100", "product_safety_status",
-            "safety_concern_driver", "assessment_confidence", "label_facts_sufficient",
-            "source_citations_json", "rationale", "protocol_deviation"]
+from audits.v4_reviewer_benchmark_analysis import (  # noqa: E402
+    ATTESTATION_FIELDS, PILLAR_REVIEW_FIELDS, RESPONSE_CONTRACT_VERSION,
+    RESPONSE_FIELDS, AnalysisContractError, _as_float, _as_int,
+    load_frozen_response_inputs, validate_and_select_responses,
+)
+
+PILLAR_LABELS = ("FORMULATION", "DOSE", "EVIDENCE", "TRANSPARENCY",
+                 "VERIFICATION", "QUALITY")
+
+
+def _line(text: str, label: str, *, required: bool = False) -> str:
+    # Horizontal whitespace only: a blank must never consume the next line.
+    matches = re.findall(rf"^{re.escape(label)}(?:[ \t]+\([^\n:]*\))?:[ \t]*([^\n]*)$", text, re.M)
+    if len(matches) > 1:
+        raise AnalysisContractError(f"{label} appears more than once")
+    if required and not matches:
+        raise AnalysisContractError(f"{label} is missing")
+    return matches[0].strip() if matches else ""
+
+
+def parse_document(text: str, slotmap: dict, frozen: dict) -> list[dict]:
+    if slotmap.get("response_contract_version") != RESPONSE_CONTRACT_VERSION or not isinstance(slotmap.get("reviews"), dict):
+        raise AnalysisContractError("legacy or missing sequence map; generate a new document from a new freeze, never guess review_sequence")
+    if slotmap.get("freeze_id") != frozen["spec"]["freeze_id"]:
+        raise AnalysisContractError("sequence map freeze_id does not match")
+    for field, expected in frozen["hashes"].items():
+        if slotmap.get(field) != expected:
+            raise AnalysisContractError(f"sequence map {field} does not match frozen input")
+    slot = _as_int(slotmap.get("slot"), field="sequence map slot")
+    rid = str(slotmap.get("reviewer_id") or "")
+    if slot not in frozen["orders"] or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*", rid):
+        raise AnalysisContractError("sequence map has invalid reviewer slot or ID")
+    expected_reviews = {
+        bid: {"review_sequence": frozen["sequences"][bid], "reviewer_order": order}
+        for bid, order in frozen["orders"][slot].items()
+    }
+    if slotmap["reviews"] != expected_reviews:
+        raise AnalysisContractError("sequence map assignments do not match frozen packet/template")
+    if text.splitlines()[0] != f"# Supplement label review — {rid}":
+        raise AnalysisContractError("document reviewer does not match sequence map")
+    provenance = f'Freeze: `{frozen["spec"]["freeze_id"]}` · Response contract: `{RESPONSE_CONTRACT_VERSION}`'
+    if provenance not in text.splitlines():
+        raise AnalysisContractError("document freeze provenance is missing or changed")
+    attestations = {field: _line(text, field.upper(), required=True) for field in ATTESTATION_FIELDS}
+
+    rows = []
+    for body in re.findall(r"```[^\n]*\n(.*?)```", text, re.S):
+        if not re.search(r"^ID:", body, re.M):
+            continue
+        bid = _line(body, "ID", required=True)
+        if bid not in expected_reviews:
+            raise AnalysisContractError(f"unknown benchmark_id {bid}")
+        values = {field: _line(body, label) for field, label in zip(PILLAR_REVIEW_FIELDS, PILLAR_LABELS)}
+        total = sum(_as_float(raw, field=f"{bid}.{field}") for field, raw in values.items())
+        sources = _line(body, "SOURCES")
+        rows.append({
+            **values, **attestations, **expected_reviews[bid],
+            "benchmark_id": bid, "reviewer_slot": slot, "reviewer_id": rid,
+            "review_round": 1, "correction_reason": "", "overall_0_100": total,
+            "product_safety_status": _line(body, "SAFETY"),
+            "safety_concern_driver": _line(body, "DRIVER"),
+            "assessment_confidence": _line(body, "CONFIDENCE"),
+            "label_facts_sufficient": _line(body, "LABEL ENOUGH?"),
+            "source_citations_json": json.dumps([value.strip() for value in sources.split(";")] if sources else []),
+            "rationale": _line(body, "WHY"),
+            "protocol_deviation": _line(body, "ODD"),
+        })
+    return validate_and_select_responses(
+        rows, {slot: {"reviewer_id": rid}}, frozen["sequences"],
+        frozen["spec"], reviewer_orders=frozen["orders"],
+    )
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--doc", required=True, type=Path)
-    ap.add_argument("--slotmap", required=True, type=Path)
-    ap.add_argument("--out", required=True, type=Path)
-    a = ap.parse_args()
-    sm = json.loads(a.slotmap.read_text())
-    order, slot, rid = sm["order"], sm["slot"], sm["reviewer_id"]
-
-    text = a.doc.read_text()
-    blocks = re.findall(r"```\s*\nID:\s*(PG-[0-9A-Fa-f]+)\s*\n(.*?)```", text, re.S)
-    errs, warns, rows, seen = [], [], [], set()
-
-    for bid, body in blocks:
-        def get(label):
-            # the doc prints "FORMULATION (0-20):", so tolerate anything
-            # between the label and its colon.
-            m = re.search(rf"^{re.escape(label)}[^:\n]*:\s*(.*)$", body, re.M)
-            return (m.group(1).strip() if m else "")
-
-        if bid not in order:
-            errs.append(f"{bid}: not in this reviewer's frozen product set")
-            continue
-        if bid in seen:
-            errs.append(f"{bid}: appears more than once")
-            continue
-        seen.add(bid)
-
-        vals, ok = {}, True
-        for lab, (col, hi) in FIELDS.items():
-            raw = re.sub(r"\(.*?\)", "", get(lab)).strip()
-            if raw == "":
-                errs.append(f"{bid}: {lab} is blank"); ok = False; continue
-            try:
-                v = float(raw)
-            except ValueError:
-                errs.append(f"{bid}: {lab} = {raw!r} is not a number"); ok = False; continue
-            if not 0 <= v <= hi:
-                errs.append(f"{bid}: {lab} = {v} outside 0–{hi}"); ok = False
-            elif abs(v * 2 - round(v * 2)) > 1e-9:
-                errs.append(f"{bid}: {lab} = {v} is not a whole or half point"); ok = False
-            vals[col] = v
-        if not ok:
-            continue
-
-        safety = get("SAFETY").lower().replace(" ", "_")
-        if safety not in SAFETY:
-            errs.append(f"{bid}: SAFETY = {get('SAFETY')!r} not one of {sorted(SAFETY)}")
-            continue
-        safety = SAFETY_CANON.get(safety, safety)
-        conf, suff = get("CONFIDENCE").lower(), get("LABEL ENOUGH?").lower()
-        if conf not in CONF:
-            errs.append(f"{bid}: CONFIDENCE = {get('CONFIDENCE')!r}"); continue
-        if suff not in YN:
-            errs.append(f"{bid}: LABEL ENOUGH? = {get('LABEL ENOUGH?')!r}"); continue
-        dev = (get("ODD").lower().replace(" ", "_") or "none")
-        if dev not in DEV:
-            dev = "other"
-            warns.append(f"{bid}: ODD text not a known value — recorded as 'other', review manually")
-
-        driver, srcs = get("DRIVER"), get("SOURCES")
-        if safety in ("blocked", "unsafe", "caution") and not driver:
-            errs.append(f"{bid}: SAFETY={safety} requires a DRIVER"); continue
-        if not srcs:
-            warns.append(f"{bid}: no SOURCES recorded")
-
-        total = sum(vals.values())          # <- the arithmetic, done here
-        rows.append({**vals, "benchmark_id": bid, "reviewer_slot": slot,
-                     "reviewer_id": rid, "reviewer_order": order[bid], "review_round": 1,
-                     "correction_reason": "", "overall_0_100": (int(total) if total == int(total) else total),
-                     "product_safety_status": safety, "safety_concern_driver": driver,
-                     "assessment_confidence": conf, "label_facts_sufficient": suff,
-                     "source_citations_json": srcs, "rationale": get("WHY"),
-                     "protocol_deviation": dev})
-
-    missing = sorted(set(order) - seen)
-    print(f"parsed {len(rows)} of {len(order)} products")
-    if missing:
-        print(f"\nNOT ANSWERED ({len(missing)}):")
-        for m in missing[:15]:
-            print(f"   {m}")
-        if len(missing) > 15:
-            print(f"   ... and {len(missing)-15} more")
-    if warns:
-        print(f"\nWARNINGS ({len(warns)}):")
-        for w in warns[:20]:
-            print(f"   {w}")
-    if errs:
-        print(f"\nERRORS ({len(errs)}) — no CSV written:")
-        for e in errs[:30]:
-            print(f"   {e}")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--freeze-dir", required=True, type=Path)
+    parser.add_argument("--doc", required=True, type=Path)
+    parser.add_argument("--slotmap", required=True, type=Path)
+    parser.add_argument("--out", required=True, type=Path)
+    args = parser.parse_args()
+    try:
+        frozen = load_frozen_response_inputs(
+            manifest_path=args.freeze_dir / "manifest.json",
+            analysis_spec_path=args.freeze_dir / "ANALYSIS_SPEC.json",
+            analysis_script_path=SCRIPTS_DIR / "audits" / "v4_reviewer_benchmark_analysis.py",
+            reviewer_packet_path=args.freeze_dir / "reviewer_packet.csv",
+            reviewer_template_path=args.freeze_dir / "reviewer_response_template.csv",
+        )
+        slotmap = json.loads(args.slotmap.read_text(encoding="utf-8"))
+        if not isinstance(slotmap, dict):
+            raise AnalysisContractError("sequence map must be a JSON object")
+        rows = parse_document(args.doc.read_text(encoding="utf-8"), slotmap, frozen)
+        output = args.out / f"answers_{slotmap['reviewer_id']}.csv"
+        args.out.mkdir(parents=True, exist_ok=True)
+        with output.open("x", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=RESPONSE_FIELDS, lineterminator="\n")
+            writer.writeheader()
+            for row in sorted(rows, key=lambda row: row["reviewer_order"]):
+                serialized = {field: row[field] for field in RESPONSE_FIELDS}
+                serialized["source_citations_json"] = json.dumps(row["source_citations_json"], ensure_ascii=False)
+                writer.writerow(serialized)
+    except (AnalysisContractError, OSError, json.JSONDecodeError) as exc:
+        print(f"ERROR — no CSV written: {exc}")
         return 1
-    if missing:
-        print("\nIncomplete — no CSV written. Ask the reviewer for the missing blocks.")
-        return 1
-
-    a.out.mkdir(parents=True, exist_ok=True)
-    p = a.out / f"answers_{rid}.csv"
-    with p.open("w", newline="\n") as fh:
-        w = csv.DictWriter(fh, fieldnames=OUT_COLS)
-        w.writeheader()
-        rows.sort(key=lambda r: int(r["reviewer_order"]))
-        w.writerows(rows)
-    print(f"\nOK — arithmetic computed for all {len(rows)} rows. Wrote {p}")
+    print(f"OK — validated {len(rows)} responses; wrote {output}")
     return 0
 
 
