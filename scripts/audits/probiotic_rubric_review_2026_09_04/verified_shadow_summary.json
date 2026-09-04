@@ -1,0 +1,495 @@
+{
+  "kind": "report_only_probiotic_rubric_sensitivity",
+  "complete": true,
+  "production_changes": false,
+  "clinically_validated": false,
+  "baseline_report": "/Users/seancheick/Downloads/dsld_clean/reports/probiotic_dose_2026_09_04/corpus_impact_final.json",
+  "baseline_sha256": "07c4a5e1592855d17f9351b396a5c7327b15bf595e4dea115c1c1f62041d2214",
+  "population_definition": "All current authenticated candidate rows routed probiotic; no blob replay",
+  "count": 551,
+  "statuses": {
+    "scored": 546,
+    "suppressed_safety": 5
+  },
+  "fully_reenriched": 40,
+  "elapsed_seconds": 61.4,
+  "errors": [],
+  "baseline_disagreements": [],
+  "note": "Ablations keep denominators; no point redistribution, verdict recomputation, indication approval or superiority claim.",
+  "impact": {
+    "form_no_size_diversity": {
+      "population_count": 551,
+      "scored_count": 546,
+      "excluded_unscored_count": 5,
+      "scored_pair_count": 148785,
+      "changed": 546,
+      "increased": 0,
+      "decreased": 546,
+      "mean_delta": -5.96,
+      "min_delta": -8.2,
+      "max_delta": -1.1,
+      "strict_pairwise_rank_reversals": 5587
+    },
+    "identity_fraction": {
+      "population_count": 551,
+      "scored_count": 546,
+      "excluded_unscored_count": 5,
+      "scored_pair_count": 148785,
+      "changed": 339,
+      "increased": 160,
+      "decreased": 179,
+      "mean_delta": 0.317,
+      "min_delta": -5.1,
+      "max_delta": 4.6,
+      "strict_pairwise_rank_reversals": 8409
+    },
+    "flat_total_disclosure": {
+      "population_count": 551,
+      "scored_count": 546,
+      "excluded_unscored_count": 5,
+      "scored_pair_count": 148785,
+      "changed": 153,
+      "increased": 153,
+      "decreased": 0,
+      "mean_delta": 0.285,
+      "min_delta": 0,
+      "max_delta": 2,
+      "strict_pairwise_rank_reversals": 1574
+    },
+    "dose_without_disclosure": {
+      "population_count": 551,
+      "scored_count": 546,
+      "excluded_unscored_count": 5,
+      "scored_pair_count": 148785,
+      "changed": 535,
+      "increased": 0,
+      "decreased": 535,
+      "mean_delta": -4.264,
+      "min_delta": -9.1,
+      "max_delta": 0,
+      "strict_pairwise_rank_reversals": 12373
+    },
+    "combined_form_transparency": {
+      "population_count": 551,
+      "scored_count": 546,
+      "excluded_unscored_count": 5,
+      "scored_pair_count": 148785,
+      "changed": 545,
+      "increased": 21,
+      "decreased": 524,
+      "mean_delta": -5.356,
+      "min_delta": -12.2,
+      "max_delta": 2.5,
+      "strict_pairwise_rank_reversals": 13588
+    }
+  },
+  "review_priority": [
+    {
+      "clinical_id": "STRAIN_LGG",
+      "product_count": 113
+    },
+    {
+      "clinical_id": "STRAIN_LACTIS_BL04",
+      "product_count": 84
+    },
+    {
+      "clinical_id": "STRAIN_ACIDOPHILUS_NCFM",
+      "product_count": 68
+    },
+    {
+      "clinical_id": "STRAIN_PARACASEI_LPC37",
+      "product_count": 52
+    },
+    {
+      "clinical_id": "STRAIN_LONGUM_BB536",
+      "product_count": 41
+    },
+    {
+      "clinical_id": "STRAIN_RHAMNOSUS_HN001",
+      "product_count": 38
+    },
+    {
+      "clinical_id": "STRAIN_LACTIS_BI07",
+      "product_count": 34
+    },
+    {
+      "clinical_id": "STRAIN_LACTIS_HN019",
+      "product_count": 33
+    },
+    {
+      "clinical_id": "STRAIN_SUBTILIS_DE111",
+      "product_count": 31
+    },
+    {
+      "clinical_id": "STRAIN_COAGULANS_IS2",
+      "product_count": 20
+    },
+    {
+      "clinical_id": "STRAIN_COAGULANS_MTCC5856",
+      "product_count": 19
+    },
+    {
+      "clinical_id": "STRAIN_ACIDOPHILUS_DDS1",
+      "product_count": 17
+    },
+    {
+      "clinical_id": "STRAIN_SACCHAROMYCES",
+      "product_count": 16
+    },
+    {
+      "clinical_id": "STRAIN_LACTIS_BB12",
+      "product_count": 15
+    },
+    {
+      "clinical_id": "STRAIN_PLANTARUM_299V",
+      "product_count": 13
+    },
+    {
+      "clinical_id": "STRAIN_ACIDOPHILUS_LA5",
+      "product_count": 12
+    },
+    {
+      "clinical_id": "STRAIN_BREVE_M16V",
+      "product_count": 10
+    },
+    {
+      "clinical_id": "STRAIN_HELVETICUS_R0052",
+      "product_count": 8
+    },
+    {
+      "clinical_id": "STRAIN_PLANTARUM_LP01",
+      "product_count": 7
+    },
+    {
+      "clinical_id": "STRAIN_CASEI_431",
+      "product_count": 4
+    },
+    {
+      "clinical_id": "STRAIN_COAGULANS_GBI30",
+      "product_count": 4
+    },
+    {
+      "clinical_id": "STRAIN_FERMENTUM_RC14",
+      "product_count": 4
+    },
+    {
+      "clinical_id": "STRAIN_LONGUM_R0175",
+      "product_count": 4
+    },
+    {
+      "clinical_id": "STRAIN_RHAMNOSUS_GR1",
+      "product_count": 4
+    },
+    {
+      "clinical_id": "STRAIN_COAGULANS_SNZ1969",
+      "product_count": 3
+    },
+    {
+      "clinical_id": "STRAIN_INFANTIS_M63",
+      "product_count": 3
+    },
+    {
+      "clinical_id": "STRAIN_M18",
+      "product_count": 3
+    },
+    {
+      "clinical_id": "STRAIN_K12",
+      "product_count": 2
+    },
+    {
+      "clinical_id": "STRAIN_LACTIS_BS01",
+      "product_count": 2
+    },
+    {
+      "clinical_id": "STRAIN_LACTIS_UABla12",
+      "product_count": 2
+    },
+    {
+      "clinical_id": "STRAIN_PARACASEI_8700",
+      "product_count": 2
+    },
+    {
+      "clinical_id": "STRAIN_PLANTARUM_HEAL9",
+      "product_count": 2
+    },
+    {
+      "clinical_id": "STRAIN_BREVE_SD_BR3_IT",
+      "product_count": 1
+    },
+    {
+      "clinical_id": "STRAIN_PLANTARUM_SD_LP1_IT",
+      "product_count": 1
+    },
+    {
+      "clinical_id": "STRAIN_PLANTARUM_SD_LPLDL_UK",
+      "product_count": 1
+    },
+    {
+      "clinical_id": "STRAIN_SALIVARIUS_SD_LS1_IT",
+      "product_count": 1
+    }
+  ],
+  "controls": [
+    {
+      "id": "250851",
+      "name": "Digestive Daily Probiotic",
+      "brand": "Culturelle",
+      "baseline_score": 72.7,
+      "baseline_status": "scored",
+      "baseline_pillars": {
+        "formulation": 12.5,
+        "dose": 13.7,
+        "evidence": 8,
+        "transparency": 15,
+        "verification": 15,
+        "safety_hygiene": 8.5
+      },
+      "shadows": {
+        "form_no_size_diversity": {
+          "score": 66.3,
+          "status": "scored"
+        },
+        "identity_fraction": {
+          "score": 77.2,
+          "status": "scored"
+        },
+        "flat_total_disclosure": {
+          "score": 72.7,
+          "status": "scored"
+        },
+        "dose_without_disclosure": {
+          "score": 63.6,
+          "status": "scored"
+        },
+        "combined_form_transparency": {
+          "score": 70.9,
+          "status": "scored"
+        }
+      }
+    },
+    {
+      "id": "326762",
+      "name": "Probiotics 100 Billion",
+      "brand": "Garden of Life Dr. Formulated",
+      "baseline_score": 57.4,
+      "baseline_status": "scored",
+      "baseline_pillars": {
+        "formulation": 17.5,
+        "dose": 3.6,
+        "evidence": 8,
+        "transparency": 9.3,
+        "verification": 9,
+        "safety_hygiene": 10
+      },
+      "shadows": {
+        "form_no_size_diversity": {
+          "score": 51,
+          "status": "scored"
+        },
+        "identity_fraction": {
+          "score": 52.6,
+          "status": "scored"
+        },
+        "flat_total_disclosure": {
+          "score": 57.4,
+          "status": "scored"
+        },
+        "dose_without_disclosure": {
+          "score": 53.8,
+          "status": "scored"
+        },
+        "combined_form_transparency": {
+          "score": 46.2,
+          "status": "scored"
+        }
+      }
+    },
+    {
+      "id": "307727",
+      "name": "Saccharomyces Boulardii + MOS 5 Billion CFU",
+      "brand": "Jarrow Formulas",
+      "baseline_score": 62.4,
+      "baseline_status": "scored",
+      "baseline_pillars": {
+        "formulation": 12.5,
+        "dose": 11.4,
+        "evidence": 8,
+        "transparency": 15,
+        "verification": 6.5,
+        "safety_hygiene": 9
+      },
+      "shadows": {
+        "form_no_size_diversity": {
+          "score": 56.9,
+          "status": "scored"
+        },
+        "identity_fraction": {
+          "score": 66.9,
+          "status": "scored"
+        },
+        "flat_total_disclosure": {
+          "score": 62.4,
+          "status": "scored"
+        },
+        "dose_without_disclosure": {
+          "score": 53.3,
+          "status": "scored"
+        },
+        "combined_form_transparency": {
+          "score": 61.5,
+          "status": "scored"
+        }
+      }
+    },
+    {
+      "id": "327965",
+      "name": "Fortify Ultra Potency Optima Probiotic 100 Billion",
+      "brand": "Nature's Way",
+      "baseline_score": 63.6,
+      "baseline_status": "scored",
+      "baseline_pillars": {
+        "formulation": 20,
+        "dose": 3.1,
+        "evidence": 8,
+        "transparency": 14.5,
+        "verification": 9,
+        "safety_hygiene": 9
+      },
+      "shadows": {
+        "form_no_size_diversity": {
+          "score": 56.6,
+          "status": "scored"
+        },
+        "identity_fraction": {
+          "score": 60.5,
+          "status": "scored"
+        },
+        "flat_total_disclosure": {
+          "score": 63.6,
+          "status": "scored"
+        },
+        "dose_without_disclosure": {
+          "score": 60.5,
+          "status": "scored"
+        },
+        "combined_form_transparency": {
+          "score": 53.2,
+          "status": "scored"
+        }
+      }
+    },
+    {
+      "id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+      "name": "DS-01 Daily Synbiotic",
+      "brand": "Seed",
+      "baseline_score": 81.2,
+      "baseline_status": "scored",
+      "baseline_pillars": {
+        "formulation": 20,
+        "dose": 20,
+        "evidence": 10.2,
+        "transparency": 12,
+        "verification": 9,
+        "safety_hygiene": 10
+      },
+      "shadows": {
+        "form_no_size_diversity": {
+          "score": 75.7,
+          "status": "scored"
+        },
+        "identity_fraction": {
+          "score": 81.2,
+          "status": "scored"
+        },
+        "flat_total_disclosure": {
+          "score": 81.2,
+          "status": "scored"
+        },
+        "dose_without_disclosure": {
+          "score": 81.2,
+          "status": "scored"
+        },
+        "combined_form_transparency": {
+          "score": 75.7,
+          "status": "scored"
+        }
+      }
+    },
+    {
+      "id": "299239",
+      "name": "Synbiotic+",
+      "brand": "Ritual",
+      "baseline_score": 55.9,
+      "baseline_status": "scored",
+      "baseline_pillars": {
+        "formulation": 14.3,
+        "dose": 3.6,
+        "evidence": 8,
+        "transparency": 11.5,
+        "verification": 9,
+        "safety_hygiene": 9.5
+      },
+      "shadows": {
+        "form_no_size_diversity": {
+          "score": 49.6,
+          "status": "scored"
+        },
+        "identity_fraction": {
+          "score": 58.6,
+          "status": "scored"
+        },
+        "flat_total_disclosure": {
+          "score": 55.9,
+          "status": "scored"
+        },
+        "dose_without_disclosure": {
+          "score": 52.3,
+          "status": "scored"
+        },
+        "combined_form_transparency": {
+          "score": 52.3,
+          "status": "scored"
+        }
+      }
+    },
+    {
+      "id": "79324",
+      "name": "Advanced Multi-Billion Dophilus",
+      "brand": "Solgar",
+      "baseline_score": 75.8,
+      "baseline_status": "scored",
+      "baseline_pillars": {
+        "formulation": 16.4,
+        "dose": 18.4,
+        "evidence": 8,
+        "transparency": 15,
+        "verification": 8,
+        "safety_hygiene": 10
+      },
+      "shadows": {
+        "form_no_size_diversity": {
+          "score": 69.4,
+          "status": "scored"
+        },
+        "identity_fraction": {
+          "score": 76.7,
+          "status": "scored"
+        },
+        "flat_total_disclosure": {
+          "score": 75.8,
+          "status": "scored"
+        },
+        "dose_without_disclosure": {
+          "score": 66.7,
+          "status": "scored"
+        },
+        "combined_form_transparency": {
+          "score": 70.3,
+          "status": "scored"
+        }
+      }
+    }
+  ],
+  "full_report_path": "/Users/seancheick/Downloads/dsld_clean/reports/probiotic_rubric_review_2026_09_04/shadow_full_final.json",
+  "full_report_sha256": "eb6497d415c36492b1c957cc00e42d126a45929680c39109706299188145378f"
+}
