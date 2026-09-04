@@ -1,5 +1,12 @@
 # Protocol amendment 1.1.1 — DRAFT, NOT RATIFIED
 
+**Historical pre-freeze proposal; workflow guidance superseded 2026-09-04.**
+The current draft engineering contract is [protocol 1.2.0](../PROTOCOL.md) and
+[response workflow 2.0.0](../REVIEWER_WORKFLOW.md). The issues and original
+proposals below are retained for provenance, not as competing parser or
+distribution instructions. Clinical/statistical ratification, including the
+reviewer brief, remains outstanding. No historical approval is implied.
+
 **Status:** proposed · **Supersedes:** nothing yet · **Applies to:** the next
 benchmark freeze (v7), never retroactively to `2026-08-06-v6`
 

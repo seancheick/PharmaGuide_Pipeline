@@ -6,6 +6,10 @@ or begin a new review until its outstanding clinical wording is ratified.
 
 Protocol version: 1.2.0 (response and analysis contract 2.0.0)
 
+**Owner-only working protocol; never send this file to reviewers.** The
+reviewer-facing brief/document follows [REVIEWER_WORKFLOW.md](REVIEWER_WORKFLOW.md).
+Clinical ratification of that brief remains required before distribution.
+
 Proposed freeze placeholder: `pending-v7-not-frozen`
 
 The frozen v6 artifacts and original returned answers remain unchanged. This
@@ -48,12 +52,12 @@ post-stratification or a separate prevalence-weighted sample.
 
 ## Blinding and artifact handling
 
-Reviewers receive only:
-
-1. this protocol;
-2. `reviewer_packet.csv`; and
-3. their reviewer-slot rows from `reviewer_response_template.csv`, joined to
-   the packet by `benchmark_id` and sorted by `reviewer_order`.
+After clinical ratification and an authorized new freeze, reviewers receive
+only their freeze-bound `REVIEW_<reviewer_id>.md` document generated through
+[REVIEWER_WORKFLOW.md](REVIEWER_WORKFLOW.md). It combines the reviewer-facing
+brief with label facts from `reviewer_packet.csv` and that slot's response
+fields in frozen `reviewer_order`. Retain the exact sent copy. Do not send
+this owner protocol, the private slotmap, or sample-selection instructions.
 
 Reviewers must not receive or inspect:
 

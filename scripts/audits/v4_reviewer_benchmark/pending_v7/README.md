@@ -1,5 +1,12 @@
 # Pending inputs for benchmark freeze v7
 
+**Historical staging notes; workflow guidance superseded 2026-09-04.** Use
+[the owner protocol](../PROTOCOL.md) and [the reviewer workflow](../REVIEWER_WORKFLOW.md)
+for the current draft engineering contract. Catalog versions, panel status and
+operational instructions below record the earlier preparation, not a fresh
+state check. The reviewer brief and clinical/statistical decisions remain
+unratified; this notice does not authorize distribution or opening either key.
+
 Nothing here is in force. These are the prerequisites that must be settled
 **before** v7 is cut, staged outside `scripts/reports/v4_reviewer_benchmark_2026_08_06_v6/`
 so the v6 freeze stays byte-intact for audit.
