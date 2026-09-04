@@ -593,7 +593,7 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         elif metadata.get("evidence_result_state") == "human_clinical_evidence_unestablished":
             reason = "Our review of human clinical evidence is incomplete; the recorded nonclinical or unresolved sources do not establish benefit. This is not a product-quality finding."
         elif metadata.get("evidence_result_state") == "native_research_review_incomplete":
-            reason = "Our strain-specific source review is incomplete; no conclusion about benefit or product quality follows from this review gap."
+            reason = "Our strain-specific human clinical review is incomplete; no conclusion about benefit or product quality follows from this review gap."
         elif any(row.get("dose_applicable") for row in assessed):
             reason = "Reviewed strain evidence matches the disclosed dose and label context; benefits remain outcome-specific."
         elif val > 0 and any(row.get("research_accepted") for row in assessed):

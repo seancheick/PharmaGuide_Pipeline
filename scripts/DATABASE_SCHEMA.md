@@ -319,7 +319,7 @@ Each condition and drug class includes `id`, `label`, `description`, `app_catego
 ---
 
 ### 9. clinically_relevant_strains.json
-**Purpose:** `probiotic_strain_validation` | **Entries:** 42 | **Version:** 2.1.0
+**Purpose:** `probiotic_strain_validation` | Read counts and version from `_metadata`.
 
 Primary keys: `clinically_relevant_strains` (array), `prebiotics` (object)
 
@@ -331,6 +331,21 @@ Primary keys: `clinically_relevant_strains` (array), `prebiotics` (object)
 | `evidence_level` | string | YES | `high`, `moderate`, `low`, `unreviewed`; unreviewed sources cannot carry approved benefit claims |
 | `key_benefits` | string[] | YES | Clinical benefit areas |
 | `notable_studies` | string | NO | Key research citations |
+| `study_contexts` | object[] | NO | Source-verified, pending-clinical-review outcome contexts; not efficacy approvals |
+
+Each context has a unique `context_id`, `source_pmids`, `identity_scope`, explicit
+native `components`, population, purpose, condition, dose, outcomes, trial-family
+identity and limitations. `studied_formulas.valid_native_study_context` is the
+shape contract. Discrete daily arms, viability measurements, single challenges
+and unresolved doses are distinct; no universal min/max native applicability
+fallback is accepted. Combination research is authored once and joined only to
+its listed components; it never grants individual-strain dose credit.
+
+`assess_probiotic_evidence` owns label comparison and review status.
+`source_pmids` inventories known references/contexts; `scoring_source_pmids`
+identifies the existing scoring reference only. Pending contexts cannot inherit
+historical clinician approval. `native_context_review` is independent of the
+effect direction and score. Citation retrieval alone does not approve a claim.
 
 ---
 

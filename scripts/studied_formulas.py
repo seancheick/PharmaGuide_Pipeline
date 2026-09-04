@@ -9,6 +9,7 @@ import json
 import math
 import re
 from collections.abc import Mapping
+from copy import deepcopy
 from functools import lru_cache
 from pathlib import Path
 
@@ -435,7 +436,6 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
         evidence = thresholds.get("evidence") or {}
         support = evidence.get("clinical_support_level") or evidence.get("evidence_strength") or "weak"
         support = {"strong": "high", "medium": "moderate"}.get(support, support)
-        scope = reference.get("applicability")
         result = {"clinical_id": row.get("clinical_id"), "strain": row.get("strain"),
                   "source_row_ref": row.get("source_row_ref"), "dose_applicable": False,
                   "cfu_per_day": _owned_daily_cfu(product, row),
@@ -444,6 +444,14 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
                   "source_pmids": [p for p in [evidence.get("pmid"), *evidence.get("additional_pmids", [])] if p],
                   "supported_outcomes": [], "studied_population": None}
         result.update(clinical_strain_research_scope(reference))
+        # Point-producing reference provenance is distinct from the inventory
+        # of known research. Newly found sources do not inherit its approval.
+        result["scoring_source_pmids"] = list(result["source_pmids"])
+        result["study_contexts"] = _assess_native_study_contexts(product, row, reference)
+        result["source_pmids"] = sorted(set(result["source_pmids"]) | {
+            pmid for context in result["study_contexts"]
+            if context.get("status") == "source_context_recorded"
+            for pmid in context["source_pmids"]})
         if not reference:
             status = "strain_reference_unreviewed"
         elif not clinical_strain_identity_matches(row.get("strain"), reference):
@@ -454,19 +462,158 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
             status = "strain_context_mismatch"
         elif result["cfu_per_day"] is None or result["cfu_per_day"] <= 0:
             status = "strain_dose_unknown"
-        elif not isinstance(scope, Mapping):
-            status = "strain_dose_reference_unreviewed"
+        elif result["study_contexts"] or "study_contexts" in reference:
+            # New primary-source contexts are not clinician-approved scoring
+            # policies. A legacy universal range cannot bypass their review.
+            status = "strain_context_review_pending"
         else:
-            status = _assess_strain_scope(product, result, scope)
-            result.update(source_pmids=scope.get("source_pmids", []),
-                          supported_outcomes=scope.get("supported_outcomes", []),
-                          studied_population=scope.get("studied_population"))
+            # Retired universal min/max blocks cannot establish an outcome,
+            # regimen or combination policy. The source-context model is the
+            # only native path; no approved outcome policy is authored yet.
+            status = "strain_dose_reference_unreviewed"
         result["status"] = status
         result["industry_adequacy_tier"] = strain_cfu_tier(
             result["cfu_per_day"], thresholds.get("tiers_cfu_per_day"))
         result["dose_applicable"] = status == "strain_dose_applicable"
         results.append(result)
-    return {"formula_assessment": formula, "strain_assessments": results}
+    context_ids = sorted({context["context_id"] for row in results
+        for context in row["study_contexts"]
+        if context.get("status") == "source_context_recorded"
+        and context.get("dose_comparison") not in {
+            "identity_owner_unresolved", "organism_preparation_mismatch"}})
+    return {"formula_assessment": formula, "strain_assessments": results,
+            "native_context_review": {
+                "status": "pending_clinical_review" if context_ids else "not_curated",
+                "context_ids": context_ids}}
+
+
+def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
+    """Validate the registry-owned research record, not a clinical approval.
+
+    This format deliberately cannot authorize efficacy points. Clinical review
+    of an outcome-specific applicability policy is a separate approval step.
+    """
+    if not isinstance(context, Mapping):
+        return False
+
+    def text_list(value, *, allow_empty=False):
+        return isinstance(value, list) and (allow_empty or bool(value)) and all(
+            isinstance(item, str) and item.strip() for item in value)
+
+    if (not all(isinstance(context.get(key), str) and context[key].strip()
+                for key in ("context_id", "condition", "trial_family"))
+            or context.get("review_status") != "source_verified_pending_clinical_review"
+            or not text_list(context.get("source_pmids"))
+            or not text_list(context.get("components"))
+            or reference_id not in context["components"]
+            or not set(context["components"]) <= set(_clinical_strain_registry())
+            or context.get("identity_scope") not in ("exact_strain", "species_general", "combination")
+            or context.get("purpose") not in ("prevention", "treatment", "challenge", "physiology")
+            or not text_list(context.get("limitations"))):
+        return False
+    components = context["components"]
+    if (len(set(components)) != len(components)
+            or (len(components) > 1) != (context["identity_scope"] == "combination")):
+        return False
+    population, dose, outcomes = (context.get(k) for k in ("population", "dose", "outcomes"))
+    if (not isinstance(population, Mapping)
+            or population.get("age_group") not in ("adult", "child", "infant", "mixed", "unknown")
+            or not isinstance(population.get("description"), str) or not population["description"].strip()
+            or not isinstance(dose, Mapping)
+            or dose.get("basis") not in ("discrete_daily_arms", "measured_viability", "single_challenge", "unresolved")
+            or dose.get("unit") != "CFU"
+            or not isinstance(dose.get("values"), list)
+            or any(_number(v) is None or _number(v) <= 0 for v in dose["values"])
+            or (dose["basis"] == "discrete_daily_arms" and not dose["values"])
+            or not text_list(dose.get("dosage_forms"), allow_empty=True)
+            or not text_list(dose.get("co_therapies"), allow_empty=True)):
+        return False
+    duration = dose.get("duration_days")
+    if duration is not None and (_number(duration) is None or _number(duration) <= 0):
+        return False
+    if not isinstance(outcomes, list) or not outcomes:
+        return False
+    return all(isinstance(outcome, Mapping)
+        and isinstance(outcome.get("name"), str) and outcome["name"].strip()
+        and outcome.get("hierarchy") in ("primary", "secondary", "post_hoc", "guideline", "unresolved")
+        and outcome.get("kind") in ("patient_important", "surrogate")
+        and outcome.get("direction") in ("positive", "mixed", "null", "negative", "unresolved")
+        for outcome in outcomes)
+
+
+def _native_study_contexts(reference: Mapping) -> list:
+    """One authored record per study context; combinations join by explicit IDs."""
+    contexts = reference.get("study_contexts", [])
+    if not isinstance(contexts, list):
+        return [None]
+    contexts = list(contexts)
+    reference_id = reference.get("id")
+    if not reference_id:
+        return contexts
+    for other in _clinical_strain_registry().values():
+        if other.get("id") == reference_id:
+            continue
+        others = other.get("study_contexts", [])
+        if not isinstance(others, list):
+            continue
+        for context in others:
+            if (isinstance(context, Mapping)
+                    and isinstance(context.get("components"), list)
+                    and reference_id in context["components"]):
+                contexts.append(context)
+    return contexts
+
+
+def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Mapping) -> list[dict]:
+    """Compare label facts to studies through the existing identity/dose owner.
+
+    Keep findings per outcome/trial. Marketing cannot establish a diagnosis,
+    treatment duration, antibiotic co-therapy or lactose challenge. A matching
+    amount therefore does not imply outcome applicability or patient benefit.
+    """
+    contexts = _native_study_contexts(reference)
+    result = []
+    for context in contexts:
+        if not valid_native_study_context(context, reference.get("id")):
+            result.append({"status": "invalid_context", "clinical_applicability": "not_established"})
+            continue
+        dose = context["dose"]
+        owned = clinical_strain_matches_source_row(product, row, {
+            "raw_source_path": row.get("source_row_ref"), "name": row.get("strain")})
+        amount = _owned_daily_cfu(product, row) if owned else None
+        if not owned:
+            comparison = "identity_owner_unresolved"
+        elif row.get("is_inactivated") or row.get("is_postbiotic"):
+            comparison = "organism_preparation_mismatch"
+        elif context["identity_scope"] == "combination":
+            comparison = "combination_not_individual_dose"
+        elif context["identity_scope"] == "species_general":
+            comparison = "species_not_exact_strain"
+        elif dose["basis"] != "discrete_daily_arms":
+            comparison = "study_daily_dose_unresolved"
+        elif amount is None:
+            comparison = "label_dose_unknown"
+        else:
+            comparison = ("matches_tested_daily_dose" if amount in dose["values"]
+                          else "outside_tested_daily_doses")
+        population = _key(product.get("target_population"))
+        study_population = context["population"]["age_group"]
+        population_comparison = (
+            "label_population_unknown" if not population or study_population in {"unknown", "mixed"}
+            else "same_broad_age_group" if population == _key(study_population)
+            else "different_label_population")
+        form = _key(product.get("form_factor_canonical") or product.get("form_factor"))
+        delivery_comparison = (
+            "delivery_unknown" if not form or not dose["dosage_forms"]
+            else "same_delivery_form" if form in {_key(f) for f in dose["dosage_forms"]}
+            else "different_delivery_form")
+        result.append({**deepcopy(context), "status": "source_context_recorded",
+            "dose_comparison": comparison, "label_daily_cfu": amount,
+            "source_row_ref": row.get("source_row_ref"),
+            "population_comparison": population_comparison,
+            "delivery_comparison": delivery_comparison,
+            "clinical_applicability": "not_established"})
+    return result
 
 
 def measured_native_strain_doses(product: Mapping) -> list[dict]:
@@ -538,36 +685,3 @@ def strain_assessments_for_match(entry: Mapping, assessment: Mapping) -> list[di
             and (entry.get("id") == row["clinical_id"] or any(
                 clinical_strain_identity_matches(entry.get(field), registry[row["clinical_id"]])
                 for field in ("standard_name", "ingredient")))]
-
-
-def _assess_strain_scope(product: Mapping, row: Mapping, scope: Mapping) -> str:
-    """Require a finite, source-backed native-CFU range and explicit label scope.
-
-    This consumes curated applicability in the existing strain registry. A
-    caller's adequacy_tier/dose_basis stamp cannot create a reviewed reference.
-    Population is label scope, not inferred from marketing or a user's profile.
-    """
-    low, high = (_number(scope.get(k)) for k in ("minimum_daily_dose", "maximum_daily_dose"))
-    def has_text_list(key):
-        value = scope.get(key)
-        return (isinstance(value, list) and bool(value)
-                and all(isinstance(item, str) and item.strip() for item in value))
-
-    if (scope.get("dose_unit") != "CFU" or low is None or high is None
-            or low <= 0 or high < low
-            or not all(has_text_list(key) for key in (
-                "source_pmids", "supported_outcomes", "dosage_forms"))
-            or not all(isinstance(scope.get(key), str) and scope[key].strip()
-                       for key in ("studied_population", "target_population"))):
-        return "strain_dose_reference_unreviewed"
-    form = product.get("form_factor_canonical") or product.get("form_factor")
-    population = product.get("target_population")
-    if not form or not population:
-        return "strain_context_unresolved"
-    if (_key(form) not in {_key(f) for f in scope["dosage_forms"]}
-            or _key(population) != _key(scope["target_population"])):
-        return "strain_context_mismatch"
-    if not row.get("source_row_ref") or not clinical_strain_matches_source_row(
-            product, row, {"raw_source_path": row["source_row_ref"]}):
-        return "strain_context_unresolved"
-    return "strain_dose_applicable" if low <= _number(row.get("cfu_per_day")) <= high else "strain_dose_incompatible"

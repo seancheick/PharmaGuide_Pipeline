@@ -118,7 +118,7 @@ FILE_CONFIGS = [
     },
     {
         # Probiotic strain database: citations live inside
-        # cfu_thresholds.evidence.{pmid,secondary_pmid,additional_pmids}.
+        # cfu_thresholds.evidence and the source-owned study_contexts.
         # Some entries are formula-backed (for example Seed DS-01), so include
         # notable_studies/key_benefits in topic extraction instead of checking
         # only the exact strain code.
@@ -326,6 +326,9 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
             evidence.get("secondary_pmid"),
             *list(evidence.get("additional_pmids") or []),
         ]
+        for context in entry.get("study_contexts") or []:
+            if isinstance(context, dict):
+                candidates.extend(context.get("source_pmids") or [])
         for candidate in candidates:
             pmid = re.sub(r"[^0-9]", "", str(candidate or ""))
             if pmid:

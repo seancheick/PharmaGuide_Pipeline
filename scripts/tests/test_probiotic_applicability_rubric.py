@@ -59,7 +59,7 @@ def test_industry_tiers_cannot_be_called_a_verified_clinical_dose():
     p["probiotic_data"]["clinical_strains"][0]["dose_basis"] = "clinical"  # stale/caller stamp
     assessment = studied_formulas.assess_probiotic_evidence(p)
     row = assessment["strain_assessments"][0]
-    assert row["status"] == "strain_dose_reference_unreviewed"
+    assert row["status"] == "strain_context_review_pending"
     assert row["dose_applicable"] is False
 
 
@@ -87,7 +87,7 @@ def test_species_research_is_not_presented_as_exact_strain_evidence(monkeypatch)
     evidence = score_evidence(p)
     row = evidence["metadata"]["evidence_assessment"]["strain_assessments"][0]
     assert row["evidence_scope"] == "species_general"
-    assert row["status"] == "strain_dose_reference_unreviewed"
+    assert row["status"] == "strain_context_review_pending"
     assert row["dose_applicable"] is False
     assert evidence["metadata"]["native_clinical_strain_evidence_rows"][0]["evidence_scope"] == "species_general"
     cfg = {"evidence_subscale": {"archetype_reference": {"probiotic": 20}, "default_reference": 20}}
@@ -128,8 +128,11 @@ def test_legacy_native_match_requires_one_actual_label_owner(owners, accepted):
 
 @pytest.fixture
 def reviewed_dose(monkeypatch):
-    # Synthetic reviewed policy exercises the same contract without publishing a claim.
+    # A historical single-range shape is deliberately no longer sufficient.
     registry = deepcopy(studied_formulas._clinical_strain_registry())
+    # Isolate this legacy-boundary fixture from newly pending real contexts.
+    # The separate native-context suite proves they cannot be bypassed.
+    registry["STRAIN_LGG"].pop("study_contexts", None)
     registry["STRAIN_LGG"]["applicability"] = {
         "dose_unit": "CFU", "minimum_daily_dose": 1e9, "maximum_daily_dose": 2e10,
         "dosage_forms": ["capsule"], "target_population": "adult",
@@ -140,12 +143,12 @@ def reviewed_dose(monkeypatch):
 
 
 @pytest.mark.parametrize("change,expected", [
-    (None, "strain_dose_applicable"), ("low", "strain_dose_incompatible"),
-    ("high", "strain_dose_incompatible"), ("form", "strain_context_mismatch"),
-    ("population", "strain_context_mismatch"), ("missing_population", "strain_context_unresolved"),
+    (None, "strain_dose_reference_unreviewed"), ("low", "strain_dose_reference_unreviewed"),
+    ("high", "strain_dose_reference_unreviewed"), ("form", "strain_dose_reference_unreviewed"),
+    ("population", "strain_dose_reference_unreviewed"), ("missing_population", "strain_dose_reference_unreviewed"),
     ("unknown", "strain_dose_unknown"),
 ])
-def test_reviewed_strain_dose_scope_is_reproved(reviewed_dose, change, expected):
+def test_legacy_single_range_never_proves_native_applicability(reviewed_dose, change, expected):
     p = strain_product(dose=1e10)
     for key, value in (("low", 1e6), ("high", 1e12), ("unknown", None)):
         if change == key:
@@ -157,7 +160,9 @@ def test_reviewed_strain_dose_scope_is_reproved(reviewed_dose, change, expected)
 
 
 def test_unknown_dose_does_not_receive_exact_dose_evidence_credit(reviewed_dose):
-    assert score_evidence(strain_product(dose=1e10))["score"] > score_evidence(strain_product())["score"]
+    known, unknown = score_evidence(strain_product(dose=1e10)), score_evidence(strain_product())
+    assert known["score"] == unknown["score"]
+    assert known["components"]["dose_applicability"] == unknown["components"]["dose_applicability"] == 0
 
 
 def test_formula_dose_not_reduced_for_unknown_individual_allocations():
@@ -174,7 +179,8 @@ def test_caller_dose_cannot_override_owner_measurement(reviewed_dose):
     expected = score_dose(p)
     p["probiotic_data"]["clinical_strains"][0]["cfu_per_day"] = 1e10
     p["probiotic_data"]["clinical_strains"][0]["adequacy_tier"] = "excellent"
-    assert studied_formulas.assess_probiotic_evidence(p)["strain_assessments"][0]["status"] == "strain_dose_incompatible"
+    assert studied_formulas.assess_probiotic_evidence(p)["strain_assessments"][0]["cfu_per_day"] == 1e6
+    assert studied_formulas.assess_probiotic_evidence(p)["strain_assessments"][0]["dose_applicable"] is False
     assert score_dose(p)["score"] == expected["score"]
     assert score_dose(p)["metadata"]["cfu_adequacy_contributions"][0]["cfu_per_day"] == 1e6
 

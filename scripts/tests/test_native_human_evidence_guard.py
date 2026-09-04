@@ -27,11 +27,13 @@ def test_nonhuman_native_reference_does_not_earn_human_clinical_credit(clinical_
     assert metadata["generic_evidence_score"] == 0
     assert result["score"] == 0
     assert metadata["native_clinical_strain_evidence_rows"] == []
-    assert metadata["evidence_result_state"] == "human_clinical_evidence_unestablished"
+    # The historical anchor is nonhuman, but newly verified human contexts
+    # exist and await clinical review; zero credit is not absence of research.
+    assert metadata["evidence_result_state"] == "native_research_review_incomplete"
     uncredited = metadata["uncredited_native_strain_evidence_rows"]
     assert len(uncredited) == 1
     assert uncredited[0]["clinical_id"] == clinical_id
-    assert uncredited[0]["source_pmids"] == assessment["source_pmids"]
+    assert uncredited[0]["source_pmids"] == assessment["scoring_source_pmids"]
     assert uncredited[0]["reason_code"] == "human_clinical_evidence_unestablished"
 
 
@@ -49,7 +51,7 @@ def test_native_nonhuman_reference_cannot_supply_dose_applicability_points(monke
     result = score_evidence(strain_product(
         dose=1e10, clinical_id="STRAIN_ACIDOPHILUS_NCFM", name="Lactobacillus acidophilus NCFM"))
     assessment = result["metadata"]["evidence_assessment"]["strain_assessments"][0]
-    assert assessment["dose_applicable"] is True
+    assert assessment["dose_applicable"] is False
     assert assessment["human_evidence"] is False
     assert result["components"] == {"strain_clinical_evidence": 0, "dose_applicability": 0}
 

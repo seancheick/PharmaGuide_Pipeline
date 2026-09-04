@@ -61,8 +61,8 @@ def run_probes():
             "source_pmids": [registry[cid]["cfu_thresholds"]["evidence"]["pmid"]],
         }
     with patch.object(studied_formulas, "_clinical_strain_registry", return_value=registry):
-        record("one reviewed-scope fixture", owned_label(), simulated_scope=True)
-        record("two reviewed-scope fixtures", two, simulated_scope=True)
+        record("one rejected legacy-scope fixture", owned_label(), simulated_scope=True)
+        record("two rejected legacy-scope fixtures", two, simulated_scope=True)
 
     for count in (15, 20):
         product = {"probiotic_data": {"total_strain_count": count, "total_cfu": 1e11,

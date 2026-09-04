@@ -6,7 +6,8 @@
     "last_updated": "2026-09-04",
     "total_entries": 49,
     "data_source": null,
-    "version": "2.2.10",
+    "version": "2.2.11",
+    "native_context_note": "2026-09-04 bounded primary-source review: 14 outcome/population/dose contexts across seven high-reach native identities, authored once and joined to explicit combination members. Contexts are source-verified, pending clinical review, not new clinician approval or universal efficacy ranges. Historical approval flags and primary evidence anchors remain unchanged by this addition.",
     "signoff_status_note": "40/49 entries retain historical clinician sign-off flags. On 2026-09-04 native approvals for BB-12 and Bi-07 were suspended after source verification failed; replacements require clinician review. Historical review records remain in version control. Sign-off does not establish positive effect, applicability to every label, or completeness of this literature search.",
     "clinical_validation_note": "14 non-flipped strains now carry clinical_support_level per 4-question framework (strain-explicit / outcome-relevant / human-clinical / dose-mentioned). All 14 score 'weak' at abstract level; 5 have stronger swap candidates identified. Dr Pham review required before any PMID swap.",
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient."
@@ -15,6 +16,32 @@
     {
       "id": "STRAIN_LGG",
       "standard_name": "Lactobacillus rhamnosus GG",
+      "study_contexts": [
+        {
+          "context_id": "lgg_pediatric_aad_guideline_26756877",
+          "source_pmids": ["26756877"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_LGG"],
+          "population": {"age_group": "child", "description": "Children at risk of antibiotic-associated diarrhea"},
+          "purpose": "prevention", "condition": "antibiotic_associated_diarrhea",
+          "dose": {"basis": "unresolved", "unit": "CFU", "values": [], "dosage_forms": [], "duration_days": null, "co_therapies": ["Antibiotic course"]},
+          "outcomes": [{"name": "antibiotic_associated_diarrhea_incidence", "hierarchy": "guideline", "kind": "patient_important", "direction": "positive"}],
+          "trial_family": "guideline_review_26756877",
+          "limitations": ["Moderate-quality evidence and strong pediatric prevention recommendation; not treatment or adult general-use support.", "Inspected abstract does not establish an exact dose, form or duration; guideline aggregates trials and is not another independent RCT."],
+          "review_status": "source_verified_pending_clinical_review"
+        },
+        {
+          "context_id": "lgg_pediatric_pain_17229242",
+          "source_pmids": ["17229242"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_LGG"],
+          "population": {"age_group": "child", "description": "104 children aged 6–16 with Rome II functional abdominal pain disorders; IBS subgroup n=37"},
+          "purpose": "treatment", "condition": "functional_abdominal_pain",
+          "dose": {"basis": "unresolved", "unit": "CFU", "values": [], "dosage_forms": ["capsule"], "duration_days": 28, "co_therapies": []},
+          "outcomes": [{"name": "pain_free_response", "hierarchy": "primary", "kind": "patient_important", "direction": "mixed"}, {"name": "pain_severity", "hierarchy": "secondary", "kind": "patient_important", "direction": "null"}],
+          "trial_family": "rct_17229242",
+          "limitations": ["Methods and flow diagram describe 3B CFU twice daily; Discussion says 3B daily. Do not select an automated dose until this conflict is resolved.", "Overall primary outcome P=.08 in Table 2 conflicts with the reported relative-benefit interval excluding one. Authors report benefit, especially the small IBS subgroup; retain the inconsistency and wide intervals.", "No clear FD/FAP subgroup benefit; university funded, product supplied by manufacturer."],
+          "review_status": "source_verified_pending_clinical_review"
+        }
+      ],
       "aliases": [
         "L. rhamnosus GG",
         "LGG",
@@ -597,6 +624,30 @@
     {
       "id": "STRAIN_LACTIS_HN019",
       "standard_name": "Bifidobacterium lactis HN019",
+      "study_contexts": [
+        {
+          "context_id": "hn019_constipation_39356506", "source_pmids": ["39356506"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_LACTIS_HN019"],
+          "population": {"age_group": "adult", "description": "229 adults aged 18–70 with Rome III functional constipation, China"},
+          "purpose": "treatment", "condition": "functional_constipation",
+          "dose": {"basis": "measured_viability", "unit": "CFU", "values": [7000000000, 4690000000], "dosage_forms": ["powder", "sachet"], "duration_days": 56, "co_therapies": []},
+          "outcomes": [{"name": "complete_spontaneous_bowel_movements", "hierarchy": "primary", "kind": "patient_important", "direction": "null"}],
+          "trial_family": "rct_39356506",
+          "limitations": ["7.0B at first visit and 4.69B at last visit describe measured potency of one once-daily 2-g sachet regimen, not randomized dose arms or an efficacy range.", "Primary between-group outcome P=.37; null for this outcome does not establish lack of benefit in every context.", "Industry funded with sponsor involvement in planning, analysis and interpretation."],
+          "review_status": "source_verified_pending_clinical_review"
+        },
+        {
+          "context_id": "hn019_constipation_40320938", "source_pmids": ["40320938"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_LACTIS_HN019"],
+          "population": {"age_group": "adult", "description": "Adults with Rome III functional constipation, four French clinical units"},
+          "purpose": "treatment", "condition": "functional_constipation",
+          "dose": {"basis": "unresolved", "unit": "CFU", "values": [], "dosage_forms": [], "duration_days": 56, "co_therapies": []},
+          "outcomes": [{"name": "complete_spontaneous_bowel_movements", "hierarchy": "primary", "kind": "patient_important", "direction": "null"}],
+          "trial_family": "rct_40320938",
+          "limitations": ["Primary abstract verified; exact CFU/formulation and full-method limitations not established in this pass.", "A separate null eight-week constipation trial, not a companion analysis of the China trial; no universal ineffectiveness inference."],
+          "review_status": "source_verified_pending_clinical_review"
+        }
+      ],
       "aliases": [
         "B. lactis HN019",
         "Bifidobacterium animalis HN019",
@@ -663,6 +714,30 @@
     {
       "id": "STRAIN_LACTIS_BI07",
       "standard_name": "Bifidobacterium lactis Bi-07",
+      "study_contexts": [
+        {
+          "context_id": "ncfm_bi07_bloating_21436726", "source_pmids": ["21436726"],
+          "identity_scope": "combination", "components": ["STRAIN_ACIDOPHILUS_NCFM", "STRAIN_LACTIS_BI07"],
+          "population": {"age_group": "adult", "description": "60 adults with non-constipation functional bowel disorders"},
+          "purpose": "treatment", "condition": "functional_bowel_disorders",
+          "dose": {"basis": "discrete_daily_arms", "unit": "CFU", "values": [200000000000], "dosage_forms": ["pill"], "duration_days": 56, "co_therapies": []},
+          "outcomes": [{"name": "global_gastrointestinal_relief", "hierarchy": "primary", "kind": "patient_important", "direction": "null"}, {"name": "treatment_satisfaction", "hierarchy": "primary", "kind": "patient_important", "direction": "null"}, {"name": "bloating", "hierarchy": "secondary", "kind": "patient_important", "direction": "positive"}],
+          "trial_family": "rct_21436726",
+          "limitations": ["200B total daily is the combination dose. The study states equal amounts in twice-daily 100B pills; this cannot allocate an unspecified product blend or establish either strain alone.", "Small heterogeneous industry-supported pilot; primary global outcomes negative, bloating a secondary finding."],
+          "review_status": "source_verified_pending_clinical_review"
+        },
+        {
+          "context_id": "bi07_lactose_challenges_36149331", "source_pmids": ["36149331"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_LACTIS_BI07"],
+          "population": {"age_group": "adult", "description": "Adults with lactose intolerance in Booster Alpha and Omega crossover challenges"},
+          "purpose": "challenge", "condition": "lactose_maldigestion",
+          "dose": {"basis": "single_challenge", "unit": "CFU", "values": [2400000000000, 2340000000000], "dosage_forms": ["powder", "sachet"], "duration_days": null, "co_therapies": ["25 g lactose with milk in Alpha or water in Omega; one-week washouts"]},
+          "outcomes": [{"name": "breath_hydrogen", "hierarchy": "primary", "kind": "surrogate", "direction": "positive"}, {"name": "gastrointestinal_symptoms", "hierarchy": "secondary", "kind": "patient_important", "direction": "null"}, {"name": "nausea_omega", "hierarchy": "secondary", "kind": "patient_important", "direction": "negative"}],
+          "trial_family": "crossover_pair_36149331",
+          "limitations": ["Methods give 2.40T CFU in Alpha and 2.34T in Omega; the abstract rounds to 2T. Not a daily-use dosing interval.", "Surrogate lactose digestion benefit is not symptom relief. More nausea was reported in Omega; questionnaire and blinding limitations apply.", "Industry supported; these two challenge experiments are not two independent chronic symptom-efficacy replications."],
+          "review_status": "source_verified_pending_clinical_review"
+        }
+      ],
       "aliases": [
         "B. lactis Bi-07",
         "Bi-07",
@@ -672,7 +747,7 @@
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
-      "notable_studies": "The former native citation concerned a different species in a laboratory study. Correctly matched human evidence remains pending review; this is not evidence of no benefit.",
+      "notable_studies": "Human contexts now record an NCFM combination trial with secondary bloating findings and an acute lactose-challenge surrogate study. Neither establishes broad Bi-07 symptom benefit. The former mismatched source remains replaced by a review hold, not a clinician-approved new anchor.",
       "cfu_thresholds": {
         "indication_primary": "immune support and respiratory health",
         "tiers_cfu_per_day": {
@@ -989,6 +1064,30 @@
     {
       "id": "STRAIN_ACIDOPHILUS_NCFM",
       "standard_name": "Lactobacillus acidophilus NCFM",
+      "study_contexts": [
+        {
+          "context_id": "ncfm_adult_ibs_28082816", "source_pmids": ["28082816"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_ACIDOPHILUS_NCFM"],
+          "population": {"age_group": "adult", "description": "Adults aged 18–65 with Rome III IBS; 391 randomized, 340 completed"},
+          "purpose": "treatment", "condition": "irritable_bowel_syndrome",
+          "dose": {"basis": "unresolved", "unit": "CFU", "values": [], "dosage_forms": ["capsule"], "duration_days": 84, "co_therapies": []},
+          "outcomes": [{"name": "ibs_symptom_severity_score", "hierarchy": "primary", "kind": "patient_important", "direction": "null"}, {"name": "abdominal_pain_moderate_severe_subgroup", "hierarchy": "post_hoc", "kind": "patient_important", "direction": "positive"}],
+          "trial_family": "ncfm_finnish_adult_ibs_2016",
+          "limitations": ["Nominal once-daily arms are 1 billion and 10 billion CFU, not an efficacy interval", "Reported low-dose capsule viability exceeds 9.8 billion CFU, conflicting with the nominal 1-billion arm; automated dose comparison remains unresolved", "Primary IBS-SSS and overall secondary outcomes did not differ from placebo", "Pain signal comes from a post hoc subgroup, not the primary endpoint", "Industry supplied study product and participated in the study"],
+          "review_status": "source_verified_pending_clinical_review"
+        },
+        {
+          "context_id": "ncfm_child_cold_flu_symptoms_19651563", "source_pmids": ["19651563"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_ACIDOPHILUS_NCFM"],
+          "population": {"age_group": "child", "description": "Children aged 3–5; NCFM-only arm of a 326-participant three-arm trial"},
+          "purpose": "prevention", "condition": "cold_and_flu_like_symptoms",
+          "dose": {"basis": "unresolved", "unit": "CFU", "values": [], "dosage_forms": [], "duration_days": null, "co_therapies": []},
+          "outcomes": [{"name": "fever_and_cough_incidence_and_duration", "hierarchy": "unresolved", "kind": "patient_important", "direction": "positive"}, {"name": "rhinorrhea_incidence_single_strain_arm", "hierarchy": "unresolved", "kind": "patient_important", "direction": "null"}],
+          "trial_family": "ncfm_bi07_preschool_symptoms_2009",
+          "limitations": ["Twice-daily administration for six months; exact CFU, dosage form and prespecified endpoint hierarchy were not verified in the accessible abstract", "Study also includes a distinct NCFM plus Bi-07 arm; its results are not allocated to NCFM alone", "Reported symptoms do not establish laboratory-confirmed infection prevention or adult digestive benefit"],
+          "review_status": "source_verified_pending_clinical_review"
+        }
+      ],
       "aliases": [
         "L. acidophilus NCFM",
         "NCFM",
@@ -1002,7 +1101,7 @@
         "immune support",
         "lactose digestion"
       ],
-      "notable_studies": "Over 60 published studies",
+      "notable_studies": "Human NCFM-only IBS and pediatric respiratory-symptom trials identified; IBS primary result was null with a post hoc pain signal. New contexts await clinical review and do not replace the historical weak-source approval.",
       "cfu_thresholds": {
         "indication_primary": "abdominal bloating and gut health",
         "tiers_cfu_per_day": {
@@ -1053,7 +1152,7 @@
             "note": "Dr Pham review required before swap; abstract-level validation cannot confirm full-text dose/outcome alignment."
           }
         },
-        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Best-available PubMed hit is animal-model / narrative / mixed-strain. Dr Pham should replace with a stronger strain-specific RCT if one exists.",
+        "notes": "Legacy tier cutoffs are industry convention, not universal efficacy thresholds. Human IBS and pediatric respiratory-symptom contexts are now source-verified but pending clinical review. The historical animal-source approval does not automatically approve those new contexts.",
         "dr_pham_signoff": true,
         "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
@@ -1110,6 +1209,41 @@
     {
       "id": "STRAIN_SACCHAROMYCES",
       "standard_name": "Saccharomyces boulardii",
+      "study_contexts": [
+        {
+          "context_id": "sboulardii_child_aad_prevention_26756877", "source_pmids": ["26756877"],
+          "identity_scope": "species_general", "components": ["STRAIN_SACCHAROMYCES"],
+          "population": {"age_group": "child", "description": "Children receiving antibiotics with risk factors for antibiotic-associated diarrhea"},
+          "purpose": "prevention", "condition": "antibiotic_associated_diarrhea",
+          "dose": {"basis": "unresolved", "unit": "CFU", "values": [], "dosage_forms": [], "duration_days": null, "co_therapies": ["antibiotics"]},
+          "outcomes": [{"name": "antibiotic_associated_diarrhea_prevention", "hierarchy": "guideline", "kind": "patient_important", "direction": "positive"}],
+          "trial_family": "espghan_pediatric_aad_guideline_2016",
+          "limitations": ["Guideline recommendation, not a new independent trial", "Moderate-quality evidence for prevention in children does not establish adult treatment or general digestive benefit", "The inspected abstract does not authenticate CNCM I-745 or establish an exact dose"],
+          "review_status": "source_verified_pending_clinical_review"
+        },
+        {
+          "context_id": "sboulardii_elderly_aad_prevention_22472744", "source_pmids": ["22472744"],
+          "identity_scope": "species_general", "components": ["STRAIN_SACCHAROMYCES"],
+          "population": {"age_group": "adult", "description": "Elderly hospitalized adults receiving antibiotics; mean age 79 years"},
+          "purpose": "prevention", "condition": "antibiotic_associated_diarrhea",
+          "dose": {"basis": "unresolved", "unit": "CFU", "values": [], "dosage_forms": ["capsule"], "duration_days": null, "co_therapies": ["antibiotics"]},
+          "outcomes": [{"name": "antibiotic_associated_diarrhea_incidence", "hierarchy": "primary", "kind": "patient_important", "direction": "null"}],
+          "trial_family": "sboulardii_elderly_hospital_aad_2012",
+          "limitations": ["275 randomized participants; 204 completed follow-up", "Twice-daily capsules started within 48 hours of antibiotics and continued seven days after withdrawal; no preventive superiority", "Exact CFU amount and strain code were not verified in the accessible abstract", "An elderly inpatient null result does not negate pediatric guideline evidence"],
+          "review_status": "source_verified_pending_clinical_review"
+        },
+        {
+          "context_id": "sboulardii_nosocomial_diarrhea_treatment_41675330", "source_pmids": ["41675330"],
+          "identity_scope": "species_general", "components": ["STRAIN_SACCHAROMYCES"],
+          "population": {"age_group": "adult", "description": "72 severely ill hospitalized adults with non-C. difficile nosocomial diarrhea"},
+          "purpose": "treatment", "condition": "non_cdiff_nosocomial_diarrhea",
+          "dose": {"basis": "unresolved", "unit": "CFU", "values": [], "dosage_forms": [], "duration_days": 5, "co_therapies": ["standard inpatient care"]},
+          "outcomes": [{"name": "stool_weight", "hierarchy": "primary", "kind": "patient_important", "direction": "null"}, {"name": "stool_frequency_and_consistency", "hierarchy": "secondary", "kind": "patient_important", "direction": "null"}],
+          "trial_family": "sboulardii_bangkok_nosocomial_diarrhea_2026",
+          "limitations": ["Treatment, not prevention, in a severely ill inpatient population", "No placebo arm and limited blinding", "No advantage over standard care in reported stool outcomes", "Exact dose and strain code remain unresolved from the inspected source"],
+          "review_status": "source_verified_pending_clinical_review"
+        }
+      ],
       "aliases": [
         "S. boulardii",
         "Saccharomyces boulardii CNCM I-745",
@@ -1122,7 +1256,7 @@
         "antibiotic-associated diarrhea",
         "C. diff prevention"
       ],
-      "notable_studies": "Gold standard for traveler's diarrhea and AAD",
+      "notable_studies": "Pediatric antibiotic-associated diarrhea prevention guideline and separate adult inpatient prevention/treatment trials; results and applicability differ by population. New structured contexts await clinical review.",
       "cfu_thresholds": {
         "indication_primary": "prevention of antibiotic-associated diarrhea",
         "tiers_cfu_per_day": {
@@ -1159,7 +1293,7 @@
             "verified_date": "2026-04-21"
           }
         ],
-        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). S. boulardii CNCM I-745 and Biocodex dose in trials typically 5–10B CFU/day — Dr Pham may tighten adequate/good boundary.",
+        "notes": "Legacy tier cutoffs are industry convention (1B / 10B / 50B CFU/day), not verified universal efficacy thresholds. Species-level evidence does not authenticate CNCM I-745; exact dose, population and outcome applicability require separate clinical review.",
         "dr_pham_signoff": true,
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
@@ -1169,6 +1303,19 @@
     {
       "id": "STRAIN_LACTIS_BB12",
       "standard_name": "Bifidobacterium lactis BB-12",
+      "study_contexts": [
+        {
+          "context_id": "bb12_low_stool_frequency_26382580", "source_pmids": ["26382580"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_LACTIS_BB12"],
+          "population": {"age_group": "adult", "description": "1248 generally healthy adults with low stool frequency and abdominal discomfort"},
+          "purpose": "treatment", "condition": "low_stool_frequency",
+          "dose": {"basis": "discrete_daily_arms", "unit": "CFU", "values": [1000000000, 10000000000], "dosage_forms": ["capsule"], "duration_days": 28, "co_therapies": []},
+          "outcomes": [{"name": "defecation_frequency_responder", "hierarchy": "primary", "kind": "patient_important", "direction": "null"}, {"name": "global_abdominal_relief", "hierarchy": "primary", "kind": "patient_important", "direction": "null"}, {"name": "tightened_frequency_responder", "hierarchy": "post_hoc", "kind": "patient_important", "direction": "positive"}],
+          "trial_family": "rct_26382580",
+          "limitations": ["Original overall frequency-responder OR 1.31 (95% CI .98–1.75); the stronger responder result used a post hoc definition. Average-frequency analyses were favorable.", "Similar effects at 1B and 10B do not establish benefit at intermediate doses or a dose-response advantage.", "Not a diagnosed functional-constipation population; industry funded with disclosed relationships."],
+          "review_status": "source_verified_pending_clinical_review"
+        }
+      ],
       "aliases": [
         "B. lactis BB-12",
         "BB-12",
@@ -1178,7 +1325,7 @@
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
-      "notable_studies": "A verified replacement study candidate is retained in the review queue; the former native citation could not be verified. Search and clinical review remain incomplete.",
+      "notable_studies": "A 1248-adult trial is recorded with mixed stool-frequency results and no global-discomfort benefit. The former native citation could not be verified; the replacement remains pending clinician approval and the search is not exhaustive.",
       "cfu_thresholds": {
         "indication_primary": "immune support and gut health",
         "tiers_cfu_per_day": {
@@ -1735,6 +1882,30 @@
     {
       "id": "STRAIN_LACTIS_BL04",
       "standard_name": "Bifidobacterium lactis Bl-04",
+      "study_contexts": [
+        {
+          "context_id": "bl04_active_adult_respiratory_24268677", "source_pmids": ["24268677"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_LACTIS_BL04"],
+          "population": {"age_group": "adult", "description": "Healthy physically active adults; Bl-04-only arm of a 465-participant three-arm trial"},
+          "purpose": "prevention", "condition": "upper_respiratory_illness",
+          "dose": {"basis": "discrete_daily_arms", "unit": "CFU", "values": [2000000000], "dosage_forms": ["drink"], "duration_days": null, "co_therapies": []},
+          "outcomes": [{"name": "upper_respiratory_illness_risk", "hierarchy": "unresolved", "kind": "patient_important", "direction": "positive"}],
+          "trial_family": "bl04_ncfm_bi07_active_adults_2014",
+          "limitations": ["Bl-04 hazard ratio 0.73, 95% CI 0.55–0.95; this is not a universal 27% benefit for every user", "Distinct NCFM plus Bi-07 arm was not significantly better than placebo", "Too few gastrointestinal episodes for a useful analysis", "Duration and prespecified endpoint hierarchy were not established in the inspected abstract; do not infer adult digestive applicability"],
+          "review_status": "source_verified_pending_clinical_review"
+        },
+        {
+          "context_id": "bl04_rhinovirus_challenge_28343401", "source_pmids": ["28343401"],
+          "identity_scope": "exact_strain", "components": ["STRAIN_LACTIS_BL04"],
+          "population": {"age_group": "adult", "description": "Healthy rhinovirus-susceptible adult volunteers; 152 randomized before experimental RV-A39 challenge"},
+          "purpose": "challenge", "condition": "experimental_rhinovirus_infection",
+          "dose": {"basis": "unresolved", "unit": "CFU", "values": [], "dosage_forms": ["sachet", "drink"], "duration_days": 33, "co_therapies": ["experimental RV-A39 inoculation after 28 days"]},
+          "outcomes": [{"name": "nasal_lavage_cxcl8_response", "hierarchy": "primary", "kind": "surrogate", "direction": "positive"}, {"name": "subjective_cold_symptoms", "hierarchy": "secondary", "kind": "patient_important", "direction": "null"}, {"name": "infection_rate", "hierarchy": "secondary", "kind": "patient_important", "direction": "null"}],
+          "trial_family": "bl04_rhinovirus_challenge_2017",
+          "limitations": ["Daily sachet supplied a minimum of 2 billion CFU, not an exact verified dose or an unbounded efficacy range", "Primary inflammatory marker is a surrogate; cold symptoms did not improve", "Challenge model is not routine community infection prevention", "Industry sponsored the trial; baseline CXCL8 differed between groups"],
+          "review_status": "source_verified_pending_clinical_review"
+        }
+      ],
       "aliases": [
         "B. lactis Bl-04",
         "Bl-04",
@@ -1752,7 +1923,7 @@
         "URTI reduction",
         "antiviral response"
       ],
-      "notable_studies": "RCT showed 27% reduction in URTI risk in physically active adults. 49+ clinical trial publications. Rhinovirus challenge studies. (IFF/DuPont HOWARU)",
+      "notable_studies": "A Bl-04-only physically active adult trial reported lower respiratory-illness risk; an experimental rhinovirus study changed a surrogate but not symptoms. New human contexts await clinical review; no verified publication-count claim is made.",
       "cfu_thresholds": {
         "indication_primary": "respiratory infection and immune support",
         "tiers_cfu_per_day": {
@@ -1792,7 +1963,7 @@
           },
           "clinical_reviewer_note": "Clinical reviewer (2026-04-21): Similar to NCFM — studied in blends. KEEP; weak classification justified."
         },
-        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Best-available PubMed hit is animal-model / narrative / mixed-strain. Dr Pham should replace with a stronger strain-specific RCT if one exists.",
+        "notes": "Legacy tier cutoffs are industry convention, not universal efficacy thresholds. Human respiratory-illness and rhinovirus-challenge contexts are now source-verified but pending clinical review. The historical weak-source approval does not automatically approve those new contexts or general digestive benefit.",
         "dr_pham_signoff": true,
         "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",

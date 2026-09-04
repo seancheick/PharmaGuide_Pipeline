@@ -132,6 +132,12 @@ def _evidence_confidence(
 
     evidence_dim = _dimension(module, "evidence")
     metadata = _safe_dict(evidence_dim.get("metadata"))
+    native_review = _safe_dict(_safe_dict(metadata.get("evidence_assessment")).get("native_context_review"))
+    formula = _safe_dict(metadata.get("studied_formula_assessment"))
+    if (metadata.get("evidence_result_state") == "native_research_review_incomplete"
+            or (native_review.get("status") == "pending_clinical_review"
+                and formula.get("status") != "assessed_studied_formula")):
+        return "moderate", ["evidence_review_incomplete"]
     score = _as_float(evidence_dim.get("score"), 0.0) or 0.0
     matched_entries = int(_as_float(metadata.get("matched_entries"), 0.0) or 0)
     clinical_matches = _clinical_matches(product)

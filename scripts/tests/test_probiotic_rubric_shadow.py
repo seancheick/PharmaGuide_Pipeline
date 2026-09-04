@@ -134,5 +134,6 @@ def test_adversarial_probes_are_labelled_and_do_not_change_registry():
     assert all(row["synthetic"] for row in result["cases"])
     case = {r["name"]: r for r in result["cases"]}
     assert case["LGG 0.1B"]["dimensions"]["dose"]["components"]["cfu_adequacy"] == 0
-    assert case["two reviewed-scope fixtures"]["dimensions"]["evidence"]["score"] > case["one reviewed-scope fixture"]["dimensions"]["evidence"]["score"]
+    assert case["two rejected legacy-scope fixtures"]["dimensions"]["evidence"]["score"] == case["one rejected legacy-scope fixture"]["dimensions"]["evidence"]["score"]
+    assert case["two rejected legacy-scope fixtures"]["dimensions"]["evidence"]["components"]["dose_applicability"] == 0
     assert case["two-strain finished-formula fixture"]["dimensions"]["dose"]["score"] == 25

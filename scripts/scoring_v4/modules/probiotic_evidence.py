@@ -121,6 +121,10 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         evidence_state = "evaluated_applicable"
     elif score > 0:
         evidence_state = "research_present_applicability_unestablished"
+    elif assessment["native_context_review"]["status"] == "pending_clinical_review":
+        # Newly verified human research is pending clinical review, not absent.
+        # It receives no new points until its applicability policy is approved.
+        evidence_state = "native_research_review_incomplete"
     elif native_evidence["uncredited_rows"]:
         evidence_state = "human_clinical_evidence_unestablished"
     elif any(row["status"] == "strain_identity_or_review_unresolved"
@@ -191,7 +195,7 @@ def _score_native_clinical_strain_evidence(
                 "clinical_id": strain.get("clinical_id"),
                 "strain": strain.get("strain"),
                 "human_evidence": strain.get("human_evidence"),
-                "source_pmids": strain["source_pmids"],
+                "source_pmids": strain["scoring_source_pmids"],
                 "evidence_scope": strain["evidence_scope"],
                 "applicability_status": strain["status"],
                 "reason_code": "human_clinical_evidence_unestablished",
@@ -215,7 +219,7 @@ def _score_native_clinical_strain_evidence(
                 "base_points": base_points,
                 "dose_applicable": strain["dose_applicable"],
                 "applicability_status": strain["status"],
-                "source_pmids": strain["source_pmids"],
+                "source_pmids": strain["scoring_source_pmids"],
                 "evidence_scope": strain["evidence_scope"],
                 "effect_direction": strain.get("effect_direction"),
                 # Apply the existing direction scale once, using this native
