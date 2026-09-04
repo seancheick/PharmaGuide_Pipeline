@@ -12,14 +12,24 @@ from concurrent.futures import ProcessPoolExecutor
 import hashlib
 import json
 import logging
+from multiprocessing import get_context
 from pathlib import Path
 import subprocess
 import sys
 import time
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
-from stage_manifest import select_stage_files
+
+REVIEW_TARGET_IDS = {"PG_SUB_35E0BD3374BF494B80FEABE87FC559E7", "299239", "250851",
+                     "327965", "307727", "326762"}
+
+
+def select_stage_files(stage_dirs: Any, stage: str, *, require_manifest: bool) -> list[Path]:
+    """Import lazily so spawned workers do not preload the input checkout's code."""
+    from stage_manifest import select_stage_files as select
+    return select(stage_dirs, stage, require_manifest=require_manifest)
 
 
 def sha(path):
@@ -39,33 +49,106 @@ def summary(row):
             "reasons": {k: v.get("reason") for k, v in pillars.items()}}
 
 
+def load_baseline_report(path: Path, baseline: dict, input_hashes: dict) -> tuple[dict, str]:
+    """Overlay complete prior candidates only when their exact input corpus agrees."""
+    raw = path.read_bytes()
+    report = json.loads(raw)
+    if (not isinstance(report, dict) or report.get("complete") is not True
+            or report.get("product_count") != len(baseline)
+            or report.get("baseline_product_count") != len(baseline)
+            or report.get("input_hashes") != input_hashes or report.get("errors")):
+        raise ValueError("Baseline report is incomplete or does not prove the current input corpus")
+    overlays = {}
+    for section in ("changes", "canaries"):
+        rows = report.get(section)
+        if not isinstance(rows, list):
+            raise ValueError(f"Baseline report has invalid {section}")
+        for row in rows:
+            pid = str(row.get("id")) if isinstance(row, dict) else ""
+            candidate = row.get("candidate") if isinstance(row, dict) else None
+            if (pid not in baseline or not isinstance(candidate, dict)
+                    or set(candidate) != set(summary({}))):
+                raise ValueError(f"Baseline report has invalid candidate: {pid}")
+            if pid in overlays and overlays[pid] != candidate:
+                raise ValueError(f"Baseline report has conflicting candidates: {pid}")
+            overlays[pid] = candidate
+    return {**baseline, **overlays}, hashlib.sha256(raw).hexdigest()
+
+
+def parse_target_ids(value: str | None) -> set[str] | None:
+    """Parse an explicit nonempty target list; None alone means the full corpus."""
+    if value is None:
+        return None
+    targets = {part.strip() for part in value.split(",")}
+    if "" in targets:
+        raise ValueError("Every target ID must be nonempty")
+    return targets
+
+
+def target_products(rows: list[dict], target_ids: set[str] | None) -> list[dict]:
+    """Filter before any enrichment or cleaned-input lookup."""
+    return rows if target_ids is None else [row for row in rows if product_id(row) in target_ids]
+
+
+def implementation_hashes(implementation_root: Path) -> dict[str, str]:
+    """Hash code and reference/config data relative to the implementation used."""
+    scripts = implementation_root / "scripts"
+    files = (list(scripts.glob("*.py")) + list((scripts / "scoring_v4").rglob("*.py"))
+             + list((scripts / "data").rglob("*.json"))
+             + list((scripts / "config").rglob("*.json"))
+             + list((scripts / "scoring_v4/config").glob("*.json")))
+    reachability = scripts / "audits/evidence_match_reachability.py"
+    if reachability.is_file():
+        files.append(reachability)
+    return {str(path.relative_to(implementation_root)): sha(path) for path in sorted(set(files))}
+
+
+def json_safe(value: Any) -> Any:
+    """Retain nested report data, converting set-valued diagnostics to arrays."""
+    return json.loads(json.dumps(value, allow_nan=False, default=lambda item:
+        sorted(item, key=str) if isinstance(item, (set, frozenset)) else str(item)))
+
+
 def strain_summary(product):
     return [{k: row.get(k) for k in ("strain", "clinical_id", "research_match_status", "review_status", "source_row_ref", "label_name")}
             for row in (product.get("probiotic_data") or {}).get("clinical_strains", [])]
 
 
-def init_worker():
+def init_worker(implementation_root: str | Path = ROOT) -> None:
+    """Load the selected implementation while retaining ROOT for source inputs."""
     global ENRICHER
+    implementation_root = Path(implementation_root).resolve()
+    sys.path.insert(0, str(implementation_root / "scripts"))
     logging.disable(logging.CRITICAL)
-    from enrich_supplements_v3 import SupplementEnricherV3
-    ENRICHER = SupplementEnricherV3()
+    import enrich_supplements_v3
+    if not Path(enrich_supplements_v3.__file__).resolve().is_relative_to(implementation_root):
+        raise RuntimeError("Worker imported enrichment outside the selected implementation root")
+    ENRICHER = enrich_supplements_v3.SupplementEnricherV3()
 
 
 def process_file(args):
-    path, selected = args
-    from scoring_v4.scored_artifact import build_scored_artifact
-    from studied_formulas import assess_studied_formula
-    from audits.evidence_match_reachability import recompute_evidence
+    path, selected, target_ids = args
     path = Path(path)
+    products = target_products(json.loads(path.read_text()), target_ids)
+    if not products:
+        return []
+    from scoring_v4.scored_artifact import build_scored_artifact
+    import studied_formulas
+    from audits.evidence_match_reachability import recompute_evidence
+    assess_studied_formula = studied_formulas.assess_studied_formula
     brand_root = path.parent.parent.name.removesuffix("_enriched")
     cleaned_dir = ROOT / "scripts/products" / brand_root / "cleaned"
-    cleaned = {}
-    for file in select_stage_files([cleaned_dir], "clean", require_manifest=True):
-        for row in json.loads(file.read_text()):
-            if product_id(row) in selected:
-                cleaned[product_id(row)] = row
+    cleaned, clean_sources = {}, {}
+    needed = {product_id(p) for p in products} & selected
+    if needed:
+        for file in select_stage_files([cleaned_dir], "clean", require_manifest=True):
+            for row in target_products(json.loads(file.read_text()), needed):
+                pid = product_id(row)
+                if pid in cleaned:
+                    raise RuntimeError(f"Duplicate selected clean source: {pid}")
+                cleaned[pid], clean_sources[pid] = row, str(file.relative_to(ROOT))
     result = []
-    for p in json.loads(path.read_text()):
+    for p in products:
         pid = product_id(p)
         before_certs = p.get("verified_cert_programs") or []
         before_evidence = [m.get("id") for m in (p.get("evidence_data") or {}).get("clinical_matches", [])]
@@ -80,12 +163,14 @@ def process_file(args):
             p["certification_data"] = ENRICHER._collect_certification_data(p)
             p["verified_cert_programs"] = p["certification_data"]["verified_cert_programs"]
             p["probiotic_data"] = ENRICHER._collect_probiotic_data(p)
+            p["proprietary_data"] = ENRICHER._collect_proprietary_data(p)
+            p["proprietary_blends"] = p["proprietary_data"].get("blends", [])
             if p["probiotic_data"].get("afu_measurements"):
                 p["probiotic_data"]["studied_formula_assessment"] = assess_studied_formula(p)
             p["evidence_data"] = recompute_evidence(ENRICHER, p)
         score = build_scored_artifact(p)
         after_evidence = [m.get("id") for m in p["evidence_data"].get("clinical_matches", [])]
-        result.append({"id": pid, "name": p.get("fullName"), "brand": p.get("brandName"),
+        record = {"id": pid, "name": p.get("fullName"), "brand": p.get("brandName"),
                        "candidate": summary(score), "full_reenrichment": pid in selected,
                        "evidence_before": before_evidence, "evidence_after": after_evidence,
                        "strains_before": before_strains, "strains_after": strain_summary(p),
@@ -93,7 +178,22 @@ def process_file(args):
                        "cert_before": before_certs if before_certs != p.get("verified_cert_programs") else None,
                        "cert_after": p.get("verified_cert_programs") if before_certs != p.get("verified_cert_programs") else None,
                        "formula": assess_studied_formula(p) if pid.startswith("PG_SUB_") else None,
-                       "readiness": score.get("assessment_readiness") if pid.startswith("PG_SUB_") else None})
+                       "readiness": score.get("assessment_readiness") if pid.startswith("PG_SUB_") else None,
+                       "source_inputs": {"enriched": str(path.relative_to(ROOT)), "cleaned": clean_sources.get(pid)}}
+        if pid in REVIEW_TARGET_IDS or target_ids is not None:
+            assess_native = getattr(studied_formulas, "assess_probiotic_evidence", None)
+            record["candidate_detail"] = {
+                "quality_pillars_v4": score.get("quality_pillars_v4"),
+                "_v4_module_breakdown": score.get("_v4_module_breakdown"),
+                "cert_records_before": before_certs,
+                "cert_records_after": p.get("verified_cert_programs") or [],
+                "certification_data": p.get("certification_data"),
+                "probiotic_data": p.get("probiotic_data") or p.get("probiotic_detail"),
+                "evidence_data": p.get("evidence_data"),
+                "native_evidence_assessment": assess_native(p) if callable(assess_native) else None,
+                "assessment_readiness": score.get("assessment_readiness"),
+            }
+        result.append(json_safe(record))
     return result
 
 
@@ -101,9 +201,18 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--workers", type=int, default=2)
+    parser.add_argument("--baseline-report", type=Path, help="Complete prior report for the identical input corpus")
+    parser.add_argument("--target-ids", type=parse_target_ids, help="Comma-separated IDs; process only these products")
+    parser.add_argument("--implementation-root", type=Path, default=ROOT,
+                        help="Implementation/code/data checkout; source product inputs remain in this repository")
     args = parser.parse_args()
     if not 1 <= args.workers <= 2:
         parser.error("Use one or two bounded workers")
+    implementation_root = args.implementation_root.resolve()
+    if not (implementation_root / "scripts/enrich_supplements_v3.py").is_file():
+        parser.error("Implementation root does not contain scripts/enrich_supplements_v3.py")
+    if args.baseline_report and args.baseline_report.resolve() == args.output.resolve():
+        parser.error("Output must not replace the baseline report")
     enriched_files = select_stage_files((ROOT / "scripts/products").glob("output_*_enriched/enriched"), "enrich", require_manifest=True)
     scored_files = select_stage_files((ROOT / "scripts/products").glob("output_*_scored/scored"), "score", require_manifest=True)
     cleaned_files = select_stage_files((ROOT / "scripts/products").glob("output_*/cleaned"), "clean", require_manifest=True)
@@ -120,18 +229,33 @@ def main():
     selected |= {"270966", "279714", "313839", "280347", "327416", "335195"}
     selected |= {"252636", "291803", "299239", "333749", "269621", "174659", "222758", "222881", "327965",
                  "307727", "307728", "337852"}
+    selected |= REVIEW_TARGET_IDS
     selected &= set(baseline)
     sources = {str(p.relative_to(ROOT)): sha(p) for p in enriched_files + scored_files + cleaned_files}
-    code_files = (list((ROOT / "scripts").glob("*.py"))
-                  + list((ROOT / "scripts/scoring_v4").rglob("*.py"))
-                  + list((ROOT / "scripts/data").rglob("*.json"))
-                  + [ROOT / "scripts/scoring_v4/config/quality_score.json",
-                     ROOT / "scripts/audits/evidence_match_reachability.py", Path(__file__)])
-    code = {str(p.relative_to(ROOT)): sha(p) for p in code_files}
+    baseline_digest = None
+    if args.baseline_report:
+        baseline, baseline_digest = load_baseline_report(args.baseline_report, baseline, sources)
+    full_baseline_count = len(baseline)
+    if args.target_ids is not None:
+        missing = args.target_ids - set(baseline)
+        if missing:
+            parser.error(f"Target IDs absent from baseline: {', '.join(sorted(missing))}")
+        baseline = {pid: baseline[pid] for pid in sorted(args.target_ids)}
+        selected = set(args.target_ids)
+    code = implementation_hashes(implementation_root)
+    runner_hashes = {str(p.resolve()): sha(p) for p in (Path(__file__), ROOT / "scripts/stage_manifest.py")}
     report = {"kind": "read_only_enriched_corpus_impact_audit", "complete": False,
               "baseline_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "input_hashes": sources, "candidate_code_hashes": code,
-              "selection_policy": "lowest SHA256(20260903:id) per brand/module plus every submission and reviewed certification/native-strain canary",
+              "input_root": str(ROOT), "implementation_root": str(implementation_root),
+              "audit_runner_hashes": runner_hashes,
+              "baseline_report": str(args.baseline_report.resolve()) if args.baseline_report else None,
+              "baseline_report_sha256": baseline_digest,
+              "selection_policy": "explicit target IDs only" if args.target_ids is not None else
+                  "lowest SHA256(20260903:id) per brand/module plus every submission and reviewed certification/native-strain canary",
+              "recomputed_lanes": ["certification", "probiotic", "proprietary_blend_provenance", "evidence", "scoring"],
+              "target_ids": sorted(args.target_ids) if args.target_ids is not None else None,
+              "full_baseline_product_count": full_baseline_count,
               "full_reenrichment_ids": sorted(selected), "baseline_product_count": len(baseline),
               "changes": [], "canaries": [], "errors": []}
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -139,8 +263,10 @@ def main():
     start, seen = time.monotonic(), set()
     transitions = Counter()
     rejected = Counter()
-    with ProcessPoolExecutor(max_workers=args.workers, initializer=init_worker) as pool:
-        for index, batch in enumerate(pool.map(process_file, [(str(f), selected) for f in enriched_files]), 1):
+    with ProcessPoolExecutor(max_workers=args.workers, initializer=init_worker, mp_context=get_context("spawn"),
+                             initargs=(str(implementation_root),)) as pool:
+        tasks = [(str(f), selected, args.target_ids) for f in enriched_files]
+        for index, batch in enumerate(pool.map(process_file, tasks), 1):
             for row in batch:
                 pid = row["id"]
                 if pid in seen or pid not in baseline:
@@ -158,9 +284,17 @@ def main():
             print(f"{index}/{len(enriched_files)} files; {len(seen)} products; {len(report['changes'])} changed", flush=True)
     if seen != set(baseline):
         raise RuntimeError("Baseline/candidate product sets differ")
-    for name, digest in sources.items() | code.items():
+    for name, digest in sources.items():
         if sha(ROOT / name) != digest:
             raise RuntimeError(f"Source changed during audit: {name}")
+    for name, digest in code.items():
+        if sha(implementation_root / name) != digest:
+            raise RuntimeError(f"Implementation changed during audit: {name}")
+    for name, digest in runner_hashes.items():
+        if sha(name) != digest:
+            raise RuntimeError(f"Audit runner changed during audit: {name}")
+    if args.baseline_report and sha(args.baseline_report) != baseline_digest:
+        raise RuntimeError("Baseline report changed during audit")
     report.update(complete=True, product_count=len(seen), elapsed_seconds=round(time.monotonic()-start, 1),
                   status_transitions={f"{a}->{b}": n for (a,b),n in transitions.items()},
                   rejected_evidence_reasons=dict(rejected))

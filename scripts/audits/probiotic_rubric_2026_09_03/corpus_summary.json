@@ -1,0 +1,499 @@
+{
+  "kind": "probiotic_rubric_corpus_summary",
+  "baseline_head": "bc98fe2d9746ff0703590503fe63792a96427e92",
+  "candidate_scoring_version": "4.4.0",
+  "complete": true,
+  "method": {
+    "all_products": 15415,
+    "full_clean_to_enrich_canaries": 217,
+    "remaining_products": "Every changed producer lane recomputed from manifest-owned enriched input before scoring",
+    "lanes": [
+      "certification",
+      "probiotic",
+      "proprietary_blend_provenance",
+      "evidence",
+      "scoring"
+    ],
+    "operational_pipeline_run": false,
+    "release_ready": false
+  },
+  "elapsed_seconds": 355.6,
+  "hashes": {
+    "full_report_sha256": "97570a3819c3413f17282898840ce403807aa3dd8c3fa771c7d7f1db915f2fbe",
+    "baseline_report_sha256": "5bd6df71f464f9e6bc4514f9a9ba90eb4518ef589a6f957fbf9553675ea30134",
+    "input_set_sha256": "499b40f598319307634338e3106221d0137e8a0f2ac6fb6ae4584606f0320e76",
+    "candidate_code_set_sha256": "84915f78944dfb998bf57777434e639df6021368f7eb117c38b844405356a444",
+    "set_digest_serialization": "UTF-8 json.dumps(mapping, sort_keys=True), with default Python JSON separators"
+  },
+  "field_change_counts": {
+    "score": 1014,
+    "status": 0,
+    "verdict": 79,
+    "tier": 487,
+    "module": 0,
+    "confidence": 104
+  },
+  "pillar_change_counts": {
+    "formulation": 10,
+    "dose": 15,
+    "evidence": 348,
+    "transparency": 328,
+    "verification": 574,
+    "safety_hygiene": 0
+  },
+  "status_transitions": {
+    "scored->scored": 15284,
+    "not_scored->not_scored": 77,
+    "suppressed_safety->suppressed_safety": 54
+  },
+  "distribution": {
+    "before": {
+      "all": {
+        "products": 15415,
+        "numeric_scores": 15284,
+        "mean": 63.518,
+        "median": 64,
+        "minimum": 19.5,
+        "maximum": 98.1,
+        "tiers": {
+          "Weak": 6597,
+          "Poor": 3885,
+          "Acceptable": 3587,
+          "Strong": 1089,
+          "Excellent": 97,
+          "None": 131,
+          "Elite": 29
+        },
+        "verdicts": {
+          "SAFE": 11783,
+          "CAUTION": 1416,
+          "POOR": 2085,
+          "NOT_SCORED": 77,
+          "BLOCKED": 54
+        },
+        "confidence": {
+          "moderate": 14715,
+          "low": 551,
+          "None": 131,
+          "high": 18
+        }
+      },
+      "by_module": {
+        "b_complex": {
+          "products": 146,
+          "numeric_scores": 146,
+          "mean": 77.403,
+          "median": 77.4,
+          "minimum": 54.8,
+          "maximum": 93.6,
+          "tiers": {
+            "Weak": 30,
+            "Acceptable": 55,
+            "Strong": 59,
+            "Excellent": 1,
+            "Poor": 1
+          },
+          "verdicts": {
+            "CAUTION": 89,
+            "SAFE": 57
+          },
+          "confidence": {
+            "moderate": 138,
+            "low": 7,
+            "high": 1
+          }
+        },
+        "fiber_digestive": {
+          "products": 412,
+          "numeric_scores": 412,
+          "mean": 58.35,
+          "median": 58.2,
+          "minimum": 31.3,
+          "maximum": 96.7,
+          "tiers": {
+            "Weak": 185,
+            "Acceptable": 51,
+            "Excellent": 1,
+            "Strong": 12,
+            "Poor": 162,
+            "Elite": 1
+          },
+          "verdicts": {
+            "SAFE": 348,
+            "CAUTION": 15,
+            "POOR": 49
+          },
+          "confidence": {
+            "moderate": 352,
+            "low": 60
+          }
+        },
+        "generic": {
+          "products": 10600,
+          "numeric_scores": 10485,
+          "mean": 63.069,
+          "median": 63.3,
+          "minimum": 22.6,
+          "maximum": 96.5,
+          "tiers": {
+            "Poor": 3035,
+            "Weak": 4156,
+            "Acceptable": 2441,
+            "Strong": 770,
+            "None": 115,
+            "Excellent": 61,
+            "Elite": 22
+          },
+          "verdicts": {
+            "SAFE": 7974,
+            "POOR": 1785,
+            "CAUTION": 726,
+            "NOT_SCORED": 68,
+            "BLOCKED": 47
+          },
+          "confidence": {
+            "moderate": 10355,
+            "None": 115,
+            "low": 119,
+            "high": 11
+          }
+        },
+        "multi_or_prenatal": {
+          "products": 2073,
+          "numeric_scores": 2067,
+          "mean": 66.762,
+          "median": 66.5,
+          "minimum": 38.2,
+          "maximum": 91.5,
+          "tiers": {
+            "Weak": 1203,
+            "Poor": 140,
+            "Acceptable": 609,
+            "None": 6,
+            "Strong": 114,
+            "Excellent": 1
+          },
+          "verdicts": {
+            "SAFE": 1540,
+            "CAUTION": 526,
+            "POOR": 1,
+            "BLOCKED": 1,
+            "NOT_SCORED": 5
+          },
+          "confidence": {
+            "moderate": 1825,
+            "low": 241,
+            "None": 6,
+            "high": 1
+          }
+        },
+        "omega": {
+          "products": 723,
+          "numeric_scores": 719,
+          "mean": 63.081,
+          "median": 63.6,
+          "minimum": 30.2,
+          "maximum": 90.8,
+          "tiers": {
+            "Weak": 349,
+            "Acceptable": 109,
+            "Poor": 175,
+            "None": 4,
+            "Strong": 81,
+            "Excellent": 5
+          },
+          "verdicts": {
+            "SAFE": 648,
+            "POOR": 60,
+            "NOT_SCORED": 4,
+            "CAUTION": 11
+          },
+          "confidence": {
+            "moderate": 711,
+            "None": 4,
+            "low": 8
+          }
+        },
+        "probiotic": {
+          "products": 551,
+          "numeric_scores": 546,
+          "mean": 56.93,
+          "median": 58.05,
+          "minimum": 31.4,
+          "maximum": 82,
+          "tiers": {
+            "Weak": 197,
+            "Poor": 240,
+            "Acceptable": 94,
+            "Strong": 15,
+            "None": 5
+          },
+          "verdicts": {
+            "SAFE": 392,
+            "POOR": 153,
+            "BLOCKED": 5,
+            "CAUTION": 1
+          },
+          "confidence": {
+            "moderate": 520,
+            "low": 25,
+            "None": 5,
+            "high": 1
+          }
+        },
+        "sports": {
+          "products": 910,
+          "numeric_scores": 909,
+          "mean": 65.737,
+          "median": 65.1,
+          "minimum": 19.5,
+          "maximum": 98.1,
+          "tiers": {
+            "Weak": 477,
+            "Poor": 132,
+            "Acceptable": 228,
+            "Excellent": 28,
+            "Strong": 38,
+            "Elite": 6,
+            "None": 1
+          },
+          "verdicts": {
+            "SAFE": 824,
+            "POOR": 37,
+            "CAUTION": 48,
+            "BLOCKED": 1
+          },
+          "confidence": {
+            "moderate": 814,
+            "low": 91,
+            "high": 4,
+            "None": 1
+          }
+        }
+      }
+    },
+    "after": {
+      "all": {
+        "products": 15415,
+        "numeric_scores": 15284,
+        "mean": 63.151,
+        "median": 63.5,
+        "minimum": 19.5,
+        "maximum": 98.1,
+        "tiers": {
+          "Weak": 6670,
+          "Poor": 4032,
+          "Acceptable": 3454,
+          "Strong": 1015,
+          "None": 131,
+          "Excellent": 80,
+          "Elite": 33
+        },
+        "verdicts": {
+          "SAFE": 11728,
+          "CAUTION": 1416,
+          "POOR": 2140,
+          "NOT_SCORED": 77,
+          "BLOCKED": 54
+        },
+        "confidence": {
+          "moderate": 14639,
+          "low": 633,
+          "None": 131,
+          "high": 12
+        }
+      },
+      "by_module": {
+        "b_complex": {
+          "products": 146,
+          "numeric_scores": 146,
+          "mean": 76.732,
+          "median": 77.4,
+          "minimum": 54.8,
+          "maximum": 93.6,
+          "tiers": {
+            "Weak": 31,
+            "Acceptable": 67,
+            "Strong": 46,
+            "Excellent": 1,
+            "Poor": 1
+          },
+          "verdicts": {
+            "CAUTION": 89,
+            "SAFE": 57
+          },
+          "confidence": {
+            "moderate": 138,
+            "low": 7,
+            "high": 1
+          }
+        },
+        "fiber_digestive": {
+          "products": 412,
+          "numeric_scores": 412,
+          "mean": 58.21,
+          "median": 58.2,
+          "minimum": 31.3,
+          "maximum": 96.7,
+          "tiers": {
+            "Weak": 188,
+            "Acceptable": 48,
+            "Strong": 13,
+            "Poor": 162,
+            "Elite": 1
+          },
+          "verdicts": {
+            "SAFE": 348,
+            "CAUTION": 15,
+            "POOR": 49
+          },
+          "confidence": {
+            "moderate": 352,
+            "low": 60
+          }
+        },
+        "generic": {
+          "products": 10600,
+          "numeric_scores": 10485,
+          "mean": 62.891,
+          "median": 63.1,
+          "minimum": 22.6,
+          "maximum": 96.5,
+          "tiers": {
+            "Poor": 3069,
+            "Weak": 4176,
+            "Acceptable": 2415,
+            "Strong": 751,
+            "None": 115,
+            "Excellent": 55,
+            "Elite": 19
+          },
+          "verdicts": {
+            "SAFE": 7935,
+            "POOR": 1824,
+            "CAUTION": 726,
+            "NOT_SCORED": 68,
+            "BLOCKED": 47
+          },
+          "confidence": {
+            "moderate": 10311,
+            "None": 115,
+            "low": 165,
+            "high": 9
+          }
+        },
+        "multi_or_prenatal": {
+          "products": 2073,
+          "numeric_scores": 2067,
+          "mean": 66.552,
+          "median": 66.4,
+          "minimum": 38.2,
+          "maximum": 91.5,
+          "tiers": {
+            "Weak": 1231,
+            "Poor": 143,
+            "Acceptable": 588,
+            "None": 6,
+            "Strong": 104,
+            "Excellent": 1
+          },
+          "verdicts": {
+            "SAFE": 1540,
+            "CAUTION": 526,
+            "POOR": 1,
+            "BLOCKED": 1,
+            "NOT_SCORED": 5
+          },
+          "confidence": {
+            "moderate": 1806,
+            "low": 260,
+            "None": 6,
+            "high": 1
+          }
+        },
+        "omega": {
+          "products": 723,
+          "numeric_scores": 719,
+          "mean": 62.621,
+          "median": 63.1,
+          "minimum": 30.2,
+          "maximum": 90.8,
+          "tiers": {
+            "Weak": 367,
+            "Acceptable": 109,
+            "Poor": 176,
+            "None": 4,
+            "Strong": 62,
+            "Excellent": 5
+          },
+          "verdicts": {
+            "SAFE": 647,
+            "POOR": 61,
+            "NOT_SCORED": 4,
+            "CAUTION": 11
+          },
+          "confidence": {
+            "moderate": 692,
+            "None": 4,
+            "low": 27
+          }
+        },
+        "probiotic": {
+          "products": 551,
+          "numeric_scores": 546,
+          "mean": 52.147,
+          "median": 52,
+          "minimum": 28.3,
+          "maximum": 81.2,
+          "tiers": {
+            "Poor": 337,
+            "Weak": 195,
+            "Acceptable": 13,
+            "None": 5,
+            "Strong": 1
+          },
+          "verdicts": {
+            "SAFE": 386,
+            "POOR": 159,
+            "BLOCKED": 5,
+            "CAUTION": 1
+          },
+          "confidence": {
+            "moderate": 522,
+            "low": 23,
+            "None": 5,
+            "high": 1
+          }
+        },
+        "sports": {
+          "products": 910,
+          "numeric_scores": 909,
+          "mean": 65.501,
+          "median": 65,
+          "minimum": 19.5,
+          "maximum": 98.1,
+          "tiers": {
+            "Weak": 482,
+            "Poor": 144,
+            "Acceptable": 214,
+            "Strong": 38,
+            "Excellent": 18,
+            "Elite": 13,
+            "None": 1
+          },
+          "verdicts": {
+            "SAFE": 815,
+            "POOR": 46,
+            "CAUTION": 48,
+            "BLOCKED": 1
+          },
+          "confidence": {
+            "moderate": 818,
+            "low": 91,
+            "None": 1
+          }
+        }
+      }
+    }
+  }
+}
