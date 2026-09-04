@@ -271,21 +271,29 @@ _SKU_DOSE_TOKEN_PATTERN = re.compile(
 )
 
 _SKU_FORM_TOKENS = {
-    "capsule",
-    "capsules",
-    "caplet",
-    "caplets",
-    "tablet",
-    "tablets",
-    "softgel",
-    "softgels",
-    "gummy",
-    "gummies",
-    "chewable",
-    "chewables",
-    "powder",
-    "liquid",
-    "drops",
+    "capsule": "capsule", "capsules": "capsule",
+    "caplet": "caplet", "caplets": "caplet",
+    "tablet": "tablet", "tablets": "tablet",
+    "softgel": "softgel", "softgels": "softgel",
+    "gummy": "gummy", "gummies": "gummy",
+    "chewable": "chewable", "chewables": "chewable",
+    "powder": "powder", "liquid": "liquid", "drops": "drops",
+}
+
+_SKU_SEX_TOKENS = {
+    "men": "male", "mens": "male", "man": "male", "male": "male", "him": "male",
+    "women": "female", "womens": "female", "woman": "female", "female": "female", "her": "female",
+    "boy": "male", "boys": "male", "girl": "female", "girls": "female",
+}
+_SKU_LIFE_STAGE_TOKENS = {
+    "prenatal": "prenatal", "pregnancy": "prenatal", "pregnant": "prenatal",
+    "postnatal": "postnatal", "postpartum": "postnatal",
+    "kid": "child", "kids": "child", "child": "child", "children": "child",
+    "teen": "teen", "teens": "teen", "teenager": "teen", "adolescent": "teen",
+    "adult": "adult", "adults": "adult",
+    "baby": "infant", "babies": "infant", "infant": "infant", "infants": "infant",
+    "toddler": "toddler", "toddlers": "toddler",
+    "senior": "senior", "seniors": "senior",
 }
 
 _SKU_FLAVOR_TOKENS = {
@@ -356,7 +364,36 @@ def _sku_form_tokens(text: str) -> set[str]:
         return set()
     normalized = _strip_accents(text).lower()
     normalized = re.sub(r"[^a-z0-9\s]", " ", normalized)
-    return {token for token in normalized.split() if token in _SKU_FORM_TOKENS}
+    return {_SKU_FORM_TOKENS[token] for token in normalized.split() if token in _SKU_FORM_TOKENS}
+
+
+@lru_cache(maxsize=65_536)
+def _sku_population_tokens(text: str) -> tuple[frozenset[str], ...]:
+    """Explicit label population qualifiers, kept separate from fuzzy name text.
+
+    Age labels identify formulations, not overlapping patient eligibility:
+    an 18+ listing does not certify a different 50+ formulation.
+    """
+    normalized = _strip_accents(text or "").lower()
+    words = set(re.findall(r"[a-z]+", normalized))
+    sexes = frozenset(_SKU_SEX_TOKENS[w] for w in words if w in _SKU_SEX_TOKENS)
+    stages = frozenset(_SKU_LIFE_STAGE_TOKENS[w] for w in words if w in _SKU_LIFE_STAGE_TOKENS)
+    ages = set()
+    for lower in re.findall(r"\b(\d{1,2})\s*(?:\+|plus\b|(?:and\s+)?(?:older|over|up)\b)", normalized):
+        ages.add(f"{int(lower)}+")
+    for lower, upper in re.findall(r"\bages?\s*(\d{1,2})\s*[-–]\s*(\d{1,2})\b", normalized):
+        ages.add(f"{int(lower)}-{int(upper)}")
+    return sexes, stages, frozenset(ages)
+
+
+def _sku_population_conflict(product: str, candidate: str) -> bool:
+    for requested, certified in zip(_sku_population_tokens(product), _sku_population_tokens(candidate)):
+        # A population-specific registry row cannot establish identity for an
+        # unspecified label. A generic row may cover a more specific member;
+        # explicit combined lines (prenatal + postnatal) can cover either member.
+        if certified and (not requested or not requested.issubset(certified)):
+            return True
+    return False
 
 
 def _sku_flavor_tokens(text: str) -> set[str]:
@@ -365,6 +402,54 @@ def _sku_flavor_tokens(text: str) -> set[str]:
     normalized = _strip_accents(text).lower()
     normalized = re.sub(r"[^a-z0-9\s]", " ", normalized)
     return {token for token in normalized.split() if token in _SKU_FLAVOR_TOKENS}
+
+
+def _sku_flavor_only_match(product: str, candidate: str, brand_tokens: set[str]) -> bool:
+    """A named flavor is not evidence for the underlying certified product.
+
+    For example, fruit powder must not inherit a flavored creatine listing.
+    Only explicit flavor descriptions trigger this guard: fruit names can
+    also identify actual ingredients, not merely flavors.
+    """
+    normalized = _strip_accents(candidate).lower()
+    if not re.search(r"\bflavou?r(?:ed)?\b", normalized):
+        return False
+    descriptors = brand_tokens | {"flavor", "flavored", "flavour", "flavoured"}
+    product_tokens = set(normalize_product(product).split()) - descriptors
+    candidate_tokens = set(normalize_product(candidate).split()) - descriptors
+    if product_tokens == candidate_tokens:
+        return False
+    flavor_tokens = _sku_flavor_tokens(candidate)
+    # Preserve multi-word descriptions when a delivery-form word separates
+    # them from the product identity ("powder sour green apple flavored").
+    forms = "|".join(_SKU_FORM_TOKENS)
+    for description in re.findall(rf"\b(?:{forms})\b\s+(.+?)\s+flavou?r(?:ed)?\b", normalized):
+        flavor_tokens.update(normalize_product(description).split())
+    # Registry names may omit the form: "creatine pear flavored".
+    flavor_tokens.update(re.findall(r"\b([a-z]+)\s+flavou?r(?:ed)?\b", normalized))
+    return bool(flavor_tokens) and (product_tokens & candidate_tokens).issubset(flavor_tokens)
+
+
+def _sku_named_addition_conflict(product: str, candidate: str, brand_tokens: set[str]) -> bool:
+    """Keep explicit additions/editions such as B12 + Folate or CBD+ Focus.
+
+    The '+' need not appear on the queried label, but the named addition must.
+    Age suffixes such as 50+ are handled by the population guard instead.
+    """
+    product_tokens = set(normalize_product(product).split()) - brand_tokens
+    for plus in re.finditer(r"\+", candidate):
+        if re.search(r"\b\d{1,2}\s*$", candidate[:plus.start()]):
+            continue
+        # Strip trademarks before Unicode folding can turn ™ into the letters
+        # "TM"; that annotation is not a named ingredient or product edition.
+        suffix = re.sub(r"[®™©]", " ", candidate[plus.end():])
+        addition = {
+            token for token in normalize_product(suffix).split()
+            if any(char.isalpha() for char in token)
+        } - brand_tokens
+        if addition and not addition.issubset(product_tokens):
+            return True
+    return False
 
 
 def _program_requires_marine_context(program: str) -> bool:
@@ -390,16 +475,32 @@ def _sku_stim_nonstim_conflict(product_a: str, product_b: str) -> bool:
     )
 
 
-def _sku_variant_conflict(product_a: str, product_b: str) -> bool:
-    """True when dose/form tokens make two high-ratio matches unsafe to auto-SKU.
+def _sku_variant_conflict(
+    product_a: str,
+    product_b: str,
+    *,
+    brand_a: str = "",
+    brand_b: str = "",
+) -> bool:
+    """True when identity qualifiers make a high-ratio match unsafe to auto-SKU.
 
     Normalization intentionally strips dose and form words for broad product
     matching, but certification verification is SKU-sensitive. A 100 mg softgel
     listing should not score a 200 mg softgel claim, and a gummies listing
     should not score a softgel claim without reviewer confirmation.
     """
-    if normalize_product(product_a) == normalize_product(product_b):
-        return False
+    # Never short-circuit on normalize_product equality: that deliberately
+    # erases strength and form, which are certification identity constraints.
+    # Population qualifiers may live in a label's sub-brand (Kids First,
+    # Garden of Life Baby). Use that context only for population, not flavor
+    # or strength, which must come from the product itself.
+    if _sku_population_conflict(f"{brand_a} {product_a}", f"{brand_b} {product_b}"):
+        return True
+    brand_tokens = set(normalize_product(f"{brand_a} {brand_b}").split())
+    if _sku_flavor_only_match(product_a, product_b, brand_tokens):
+        return True
+    if _sku_named_addition_conflict(product_a, product_b, brand_tokens):
+        return True
 
     doses_a = _sku_dose_tokens(product_a)
     doses_b = _sku_dose_tokens(product_b)
@@ -495,8 +596,10 @@ def _check_override(
     program: str,
     registry: CertRegistry,
     dsld_id: str | None = None,
+    *,
+    product: str,
 ) -> CertResolution | None:
-    """Manual override always wins. Returns CertResolution or None."""
+    """Apply a curated override only to its reviewed raw product identity."""
     program_canon = normalize_program(program)
     request_dsld_id = str(dsld_id or "").strip()
     # Direct (brand, product) hit
@@ -514,6 +617,14 @@ def _check_override(
             override_dsld_id = str(override.get("dsld_id") or "").strip()
             if override_dsld_id and override_dsld_id != request_dsld_id:
                 continue
+            # An override reviews one raw product (or an explicit whole brand),
+            # not every strength/form collapsed into its normalized index key.
+            # Compare to the reviewed product, not matched_product: a reviewed
+            # product-line mapping may legitimately carry extra dose detail.
+            if override.get("product") and _sku_variant_conflict(
+                product, override["product"], brand_a=brand_norm, brand_b=override.get("brand", "")
+            ):
+                continue
             status = override.get("status", "verified")
             scope = override.get("scope", "sku")
             if status == "rejected":
@@ -529,6 +640,19 @@ def _check_override(
                     record_id=override.get("record_id"),
                     notes="override pending_review",
                 )
+            if scope in {"sku", "product_line"} and override.get("matched_product"):
+                if _sku_population_conflict(
+                    f"{brand_norm} {product}",
+                    f"{override.get('matched_brand', '')} {override['matched_product']}",
+                ):
+                    return CertResolution(
+                        program=program_canon,
+                        scope="needs_review",
+                        record_id=override.get("record_id"),
+                        notes="curated override population conflict",
+                        matched_brand=override.get("matched_brand"),
+                        matched_product=override["matched_product"],
+                    )
             # verified
             return CertResolution(
                 program=program_canon,
@@ -572,6 +696,7 @@ def resolve(
             program_canon,
             registry,
             dsld_id=dsld_id,
+            product=product,
         )
         if override_resolution is not None:
             out.append(override_resolution)
@@ -603,25 +728,37 @@ def resolve(
             continue
 
         # Stage 3: product-level matching within brand-matched candidates
-        best_sku: tuple[tuple[float, int, int], float, dict[str, Any], bool] | None = None
-        best_line: tuple[tuple[float, int, int], float, dict[str, Any], bool] | None = None
+        best_sku: tuple[tuple[bool, float, int, int], float, dict[str, Any], bool] | None = None
+        best_line: tuple[tuple[bool, float, int, int], float, dict[str, Any], bool] | None = None
         for c in brand_matches:
             raw_candidate_product = c.get("product", "") or c.get("product_normalized", "")
             c_product = normalize_product(c.get("product_normalized", raw_candidate_product))
             if not c_product:
                 continue
-            variant_conflict = _sku_variant_conflict(product, raw_candidate_product)
+            variant_conflict = _sku_variant_conflict(
+                product, raw_candidate_product, brand_a=brand,
+                brand_b=c.get("brand", c.get("brand_normalized", "")),
+            )
 
             # SKU exact-ish match via token_set_ratio
             ratio = fuzz.token_set_ratio(product_norm, c_product)
             token_delta = abs(len(product_norm.split()) - len(c_product.split()))
-            sku_rank = (ratio, 1 if product_norm == c_product else 0, -token_delta)
+            # A compatible qualifying record must win over a conflicting row
+            # whose strength/form disappeared during normalization. If none
+            # qualifies, retain the best fuzzy candidate for review as before.
+            sku_rank = (
+                not variant_conflict and ratio >= SKU_RATIO_FLOOR,
+                ratio, 1 if product_norm == c_product else 0, -token_delta,
+            )
             if not best_sku or sku_rank > best_sku[0]:
                 best_sku = (sku_rank, ratio, c, variant_conflict)
 
             # Product-line keyword overlap
             overlap = _keyword_overlap(product_norm, c_product)
-            line_rank = (overlap, 1 if product_norm == c_product else 0, -token_delta)
+            line_rank = (
+                not variant_conflict and overlap >= PRODUCT_LINE_KEYWORD_OVERLAP_FLOOR,
+                overlap, 1 if product_norm == c_product else 0, -token_delta,
+            )
             if not best_line or line_rank > best_line[0]:
                 best_line = (line_rank, overlap, c, variant_conflict)
 
