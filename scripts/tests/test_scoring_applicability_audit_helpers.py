@@ -133,6 +133,13 @@ def test_target_parser_and_filter_do_not_turn_empty_selection_into_full_run():
     assert audit.target_products(rows, None) == rows
 
 
+def test_extra_clean_reenrichment_preserves_full_corpus_selection():
+    assert audit.merge_reenrichment_ids({"canary"}, {"derivative"}, {"canary", "derivative", "other"}) == {"canary", "derivative"}
+    assert audit.merge_reenrichment_ids({"canary"}, None, {"canary", "other"}) == {"canary"}
+    with pytest.raises(ValueError, match="absent"):
+        audit.merge_reenrichment_ids({"canary"}, {"missing"}, {"canary"})
+
+
 def test_process_file_filters_before_clean_source_lookup(tmp_path, monkeypatch):
     path = tmp_path / "not-selected.json"
     path.write_text(json.dumps([{"id": "excluded"}]))
@@ -180,7 +187,8 @@ def test_process_file_only_reenriches_target_with_its_cleaned_identity(tmp_path,
         return {**row, "evidence_data": {}, "verified_cert_programs": [{"record_id": "after"}]}, []
 
     monkeypatch.setattr(audit, "ENRICHER", SimpleNamespace(enrich_product=enrich), raising=False)
-    score = {"quality_pillars_v4": {"evidence": {"score": 8, "detail": {"tags": {"native", "reviewed"}}}},
+    score = {"assessment_readiness": {"identity": "unresolved", "is_ready": False},
+             "quality_pillars_v4": {"evidence": {"score": 8, "detail": {"tags": {"native", "reviewed"}}}},
              "_v4_module_breakdown": {"dimensions": {"evidence": {"components": {"research": 8}}}}}
     monkeypatch.setitem(sys.modules, "scoring_v4.scored_artifact", SimpleNamespace(build_scored_artifact=lambda p: score))
     monkeypatch.setitem(sys.modules, "studied_formulas", SimpleNamespace(
@@ -193,6 +201,7 @@ def test_process_file_only_reenriches_target_with_its_cleaned_identity(tmp_path,
 
     assert [row["id"] for row in calls] == ["wanted"]
     assert rows[0]["name"] == "clean target"
+    assert rows[0]["readiness"] == score["assessment_readiness"]
     detail = rows[0]["candidate_detail"]
     assert detail["cert_records_before"] == [{"record_id": "before"}]
     assert detail["cert_records_after"] == [{"record_id": "after"}]

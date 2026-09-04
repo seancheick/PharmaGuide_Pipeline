@@ -124,6 +124,15 @@ def target_products(rows: list[dict], target_ids: set[str] | None) -> list[dict]
     return rows if target_ids is None else [row for row in rows if product_id(row) in target_ids]
 
 
+def merge_reenrichment_ids(selected: set[str], requested: set[str] | None,
+                          available: set[str]) -> set[str]:
+    """Expand clean replay without reducing the full-corpus scoring denominator."""
+    missing = (requested or set()) - available
+    if missing:
+        raise ValueError(f"Re-enrichment IDs absent from baseline: {', '.join(sorted(missing))}")
+    return selected | (requested or set())
+
+
 def implementation_hashes(implementation_root: Path) -> dict[str, str]:
     """Hash code and reference/config data relative to the implementation used."""
     scripts = implementation_root / "scripts"
@@ -215,7 +224,7 @@ def process_file(args):
                        "cert_before": before_certs if before_certs != p.get("verified_cert_programs") else None,
                        "cert_after": p.get("verified_cert_programs") if before_certs != p.get("verified_cert_programs") else None,
                        "formula": assess_studied_formula(p) if pid.startswith("PG_SUB_") else None,
-                       "readiness": score.get("assessment_readiness") if pid.startswith("PG_SUB_") else None,
+                       "readiness": score.get("assessment_readiness"),
                        "source_inputs": {"enriched": str(path.relative_to(ROOT)), "cleaned": clean_sources.get(pid)}}
         if pid in REVIEW_TARGET_IDS or target_ids is not None:
             assess_native = getattr(studied_formulas, "assess_probiotic_evidence", None)
@@ -240,6 +249,8 @@ def main():
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--baseline-report", type=Path, help="Complete prior report for the identical input corpus")
     parser.add_argument("--target-ids", type=parse_target_ids, help="Comma-separated IDs; process only these products")
+    parser.add_argument("--reenrich-ids", type=parse_target_ids,
+                        help="Additional IDs to fully re-enrich; retain the whole scoring corpus")
     parser.add_argument("--input-root", type=Path, default=ROOT,
                         help="Checkout containing the manifest-owned source product inputs")
     parser.add_argument("--implementation-root", type=Path, default=ROOT,
@@ -273,6 +284,10 @@ def main():
                  "307727", "307728", "337852"}
     selected |= REVIEW_TARGET_IDS
     selected &= set(baseline)
+    try:
+        selected = merge_reenrichment_ids(selected, args.reenrich_ids, set(baseline))
+    except ValueError as exc:
+        parser.error(str(exc))
     sources = {str(p.relative_to(input_root)): sha(p) for p in enriched_files + scored_files + cleaned_files}
     baseline_digest = None
     source_baseline = baseline
@@ -295,7 +310,8 @@ def main():
               "baseline_report": str(args.baseline_report.resolve()) if args.baseline_report else None,
               "baseline_report_sha256": baseline_digest,
               "selection_policy": "explicit target IDs only" if args.target_ids is not None else
-                  "lowest SHA256(20260903:id) per brand/module plus every submission and reviewed certification/native-strain canary",
+                  "lowest SHA256(20260903:id) per brand/module plus every submission, reviewed canaries and explicit extra clean-replay IDs",
+              "extra_reenrichment_ids": sorted(args.reenrich_ids or []),
               "recomputed_lanes": ["certification", "probiotic", "proprietary_blend_provenance", "evidence", "scoring"],
               "target_ids": sorted(args.target_ids) if args.target_ids is not None else None,
               "full_baseline_product_count": full_baseline_count,
