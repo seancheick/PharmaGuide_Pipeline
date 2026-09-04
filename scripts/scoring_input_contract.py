@@ -25,7 +25,11 @@ from scoring_reference_resolver import has_therapeutic_reference, is_known_botan
 # Single source of truth for identity disposition vocabulary and scoreability.
 # Never copy the disposition list here; the contract must consume the same policy
 # the enricher stamps rows with.
-from identity_integrity import IDENTITY_DISPOSITIONS, is_identity_scoreable
+from identity_integrity import (
+    IDENTITY_DISPOSITIONS,
+    has_nonlive_microbial_derivative_evidence,
+    is_identity_scoreable,
+)
 from scoring_v4.route_features import (
     B_COMPLEX_DISQUALIFY_CANONICALS,
     B_VITAMIN_CANONICALS,
@@ -1102,6 +1106,8 @@ def _extract_enzyme_activity(row: Dict[str, Any]) -> tuple[Optional[float], Opti
 
 
 def _has_probiotic_identity_text(row: Dict[str, Any]) -> bool:
+    if has_nonlive_microbial_derivative_evidence(row):
+        return False
     text = " ".join(
         str(row.get(key) or "")
         for key in ("name", "standardName", "standard_name", "canonical_id", "raw_source_text", "category")

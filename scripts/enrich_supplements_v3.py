@@ -118,6 +118,7 @@ from scoring_input_contract import (
     normalize_product_evidence_scope,
 )
 from identity_integrity import (
+    has_nonlive_microbial_derivative_evidence,
     IdentityDecision,
     build_canonical_identity_registry,
     is_identity_scoreable,
@@ -4975,7 +4976,14 @@ class SupplementEnricherV3:
 
                 # TIERED MATCHING (per dev feedback):
                 # Before marking as unmapped, check if recognized in other databases
-                recognition = self._is_recognized_non_scorable(ing_name, std_name)
+                # A derivative/organism identity conflict is unresolved, not
+                # a recognized whole-organism preparation. A secondary name
+                # match cannot replace the quarantined canonical identity.
+                if not (
+                    identity_decision.disposition == "identity_conflict"
+                    and has_nonlive_microbial_derivative_evidence(ingredient)
+                ):
+                    recognition = self._is_recognized_non_scorable(ing_name, std_name)
                 if recognition:
                     self._restamp_recognized_non_scorable_identity(
                         quality_entry,
@@ -15390,6 +15398,8 @@ class SupplementEnricherV3:
             return path.split(marker, 1)[0] if marker in path else ""
 
         def _is_probiotic_identity(ingredient: Dict) -> bool:
+            if has_nonlive_microbial_derivative_evidence(ingredient):
+                return False
             ing_name = str(ingredient.get('name', '') or '').lower()
             std_name = str(ingredient.get('standardName', '') or '').lower()
             category = str(ingredient.get('category', '') or '').lower()
@@ -15411,7 +15421,7 @@ class SupplementEnricherV3:
                     continue
                 children = display_row.get("children") or []
                 if not any(
-                    _PROBIOTIC_IDENTITY_RE.search(str(child or ""))
+                    _is_probiotic_identity({"name": str(child or "")})
                     for child in children
                 ):
                     continue
@@ -15553,7 +15563,16 @@ class SupplementEnricherV3:
                     if isinstance(form, dict)
                     and _is_probiotic_identity(form)
                 ] if is_blend_header and not nested else []
-                strain_rows = nested or form_strains
+                strain_rows = [
+                    row for row in (nested or form_strains)
+                    if not has_nonlive_microbial_derivative_evidence(row)
+                ]
+                # A header is not a strain. Its source-derived components
+                # cannot turn it into an organism through the header name.
+                if is_blend_header and not strain_rows and (
+                    nested or ingredient.get("forms")
+                ):
+                    continue
                 strain_names = (
                     [n.get('name', '') for n in strain_rows]
                     if strain_rows
@@ -15713,6 +15732,10 @@ class SupplementEnricherV3:
             per_strain_cfu = (
                 float(blend_cfu)
                 if isinstance(blend_cfu, (int, float)) and blend_cfu > 0 and len(blend_strains) == 1
+                and (
+                    not blend.get("is_blend_header_total")
+                    or blend.get("raw_source_path") in strain_allocation_owner_refs
+                )
                 else None
             )
             for idx, strain in enumerate(blend_strains):
@@ -16443,6 +16466,8 @@ class SupplementEnricherV3:
 
     @staticmethod
     def _has_probiotic_identity_text(row: Dict[str, Any]) -> bool:
+        if has_nonlive_microbial_derivative_evidence(row):
+            return False
         text = " ".join(
             str(row.get(key) or "")
             for key in ("name", "standardName", "standard_name", "canonical_id", "raw_source_text", "category")

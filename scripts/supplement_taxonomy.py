@@ -26,6 +26,7 @@ from collections import Counter
 from math import ceil
 from typing import Any
 
+from identity_integrity import has_nonlive_microbial_derivative_evidence
 from supplement_type_utils import (
     NON_SCORABLE_CATEGORIES,
     canonical_category,
@@ -108,11 +109,6 @@ _PROBIOTIC_IDENTITY_RE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
-_NON_LIVE_PROBIOTIC_DERIVATIVE_RE = re.compile(
-    r"\b(epicor|postbiotic|dried\s+yeast\s+fermentate|yeast\s+fermentate)\b",
-    re.IGNORECASE,
-)
-
 # ============================================================================
 # PRIMARY TYPE DEFINITIONS — derived from product_type_vocab.json
 # ============================================================================
@@ -435,6 +431,8 @@ def _row_has_probiotic_identity(
     row: dict[str, Any],
     category: str | None = None,
 ) -> bool:
+    if has_nonlive_microbial_derivative_evidence(row):
+        return False
     category = category or canonical_category(row.get("category"))
     if category in {"probiotic", "bacteria"}:
         return True
@@ -448,8 +446,6 @@ def _row_has_probiotic_identity(
             )
         )
     )
-    if _NON_LIVE_PROBIOTIC_DERIVATIVE_RE.search(text):
-        return False
     return bool(_PROBIOTIC_IDENTITY_RE.search(text))
 
 

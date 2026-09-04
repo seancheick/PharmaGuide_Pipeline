@@ -34,6 +34,25 @@ _LITERAL_PARENTHESIZED_IDENTITY_RE = re.compile(
     r"^(.+?)\s*[\(（]([^()（）]*)[\)）]\s*$"
 )
 _FORM_IDENTITY_PREFIX_RE = re.compile(r"^(?:as|from)\s+", re.IGNORECASE)
+_MICROBIAL_SOURCE_RE = re.compile(
+    r"\b(?:yeast|bacteria|saccharomyces|lactobacillus|bifidobacterium|"
+    r"streptococcus|bacillus|limosilactobacillus|lacticaseibacillus|"
+    r"lactiplantibacillus|lactococcus|s\.\s*(?:cerevisiae|boulardii)|"
+    r"l\.\s*(?:acidophilus|reuteri|rhamnosus|plantarum|casei|salivarius)|"
+    r"b\.\s*(?:lactis|longum|bifidum|breve|infantis|animalis|coagulans|subtilis))\b",
+    re.IGNORECASE,
+)
+_MICROBIAL_PREPARATION_RE = re.compile(
+    r"\b(?:extracts?|lysates?|fermentates?|fractions?|cell[-\s]+wall(?:s)?|"
+    r"(?:heat[-\s]+(?:killed|inactivated)|inactivated|non[-\s]*viable|"
+    r"tyndalli[sz]ed)(?:\s+(?:cells?|cultures?))?|postbiotics?)\b",
+    re.IGNORECASE,
+)
+_MICROBIAL_COMPONENT_RE = re.compile(
+    r"\b(?:cell[-\s]+wall(?:s)?|(?:beta|β)[-\s\d,./]+(?:beta[-\s\d,./]+)?"
+    r"glucans?|manno[-\s]*oligosaccharides?)\b",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -517,6 +536,56 @@ def extract_label_evidence(row: Mapping[str, Any]) -> tuple[LabelEvidence, ...]:
     return tuple(evidence)
 
 
+def has_nonlive_microbial_derivative_evidence(row: Mapping[str, Any]) -> bool:
+    """Recognize a row-owned preparation, never infer a replacement identity.
+
+    Literal source names and their own forms can contradict organism taxonomy.
+    Mass units, product prose, sibling rows and other ingredients cannot. A
+    generic preparation form applies to its microbial owner; an unrelated
+    named extract form (for example rice bran extract) does not.
+    """
+    evidence = extract_label_evidence(row)
+    names = [item.value for item in evidence if item.kind == "source_name"]
+    if not names:
+        names = [str(row.get(key) or "") for key in (
+            "source_label_name", "label_display_name",
+        )]
+    forms = [item.value for item in evidence if item.kind == "source_form"]
+    for text in names:
+        if re.search(r"\b(?:epicor|postbiotics?)\b", text, re.IGNORECASE):
+            return True
+        if _MICROBIAL_SOURCE_RE.search(text) and (
+            _MICROBIAL_PREPARATION_RE.search(text)
+            or _MICROBIAL_COMPONENT_RE.search(text)
+        ):
+            return True
+
+    # On structural headers, forms describe sibling blend members rather than
+    # the preparation of the header itself. Consumers evaluate those rows.
+    if (
+        row.get("cleaner_row_role") == "blend_header_total"
+        or row.get("hierarchyType") == "blend_header"
+        or row.get("dose_class") == "blend_total_weight"
+    ):
+        return False
+    microbial_owner = any(_MICROBIAL_SOURCE_RE.search(text) for text in names)
+    component_owner = any(_MICROBIAL_COMPONENT_RE.search(text) for text in names)
+    for text in forms:
+        if _MICROBIAL_SOURCE_RE.search(text) and (
+            component_owner
+            or _MICROBIAL_PREPARATION_RE.search(text)
+            or _MICROBIAL_COMPONENT_RE.search(text)
+        ):
+            return True
+        unprefixed = _FORM_IDENTITY_PREFIX_RE.sub("", text).strip()
+        if microbial_owner and (
+            _MICROBIAL_PREPARATION_RE.fullmatch(unprefixed)
+            or _MICROBIAL_COMPONENT_RE.search(text)
+        ):
+            return True
+    return False
+
+
 def is_identity_scoreable(disposition: str | None) -> bool:
     return disposition in _SCOREABLE_DISPOSITIONS
 
@@ -750,11 +819,37 @@ def resolve_identity(
             for candidate in _form_candidate_variants(item.value)
         )
     )
+    microbial_derivative_conflict = bool(
+        structured_canonical
+        and has_nonlive_microbial_derivative_evidence(row)
+        and _MICROBIAL_SOURCE_RE.search(structured_canonical.replace("_", " "))
+        and not has_nonlive_microbial_derivative_evidence(
+            {"name": structured_canonical.replace("_", " ")}
+        )
+        and any(
+            _MICROBIAL_SOURCE_RE.search(item.value)
+            and not has_nonlive_microbial_derivative_evidence({"name": item.value})
+            for item in primary_structured_evidence
+        )
+    )
+    literal_preparation_identity = bool(
+        microbial_derivative_conflict
+        and canonical_before
+        and raw_canonical == canonical_before
+        and (
+            not _MICROBIAL_SOURCE_RE.search(canonical_before.replace("_", " "))
+            or has_nonlive_microbial_derivative_evidence(
+                {"name": canonical_before.replace("_", " ")}
+            )
+        )
+    )
     display_canonical = (
         raw_canonical
         if literal_specific_over_structured_parent
         else structured_canonical or raw_canonical
     )
+    if microbial_derivative_conflict:
+        display_canonical = raw_canonical if literal_preparation_identity else None
     source_name = _source_name(
         evidence,
         display_canonical,
@@ -787,6 +882,21 @@ def resolve_identity(
         disposition: IdentityDisposition = "missing_display_label"
         canonical_after = None
         rationale = "No displayable literal ingredient-line label was available."
+    elif literal_preparation_identity:
+        disposition = "clean"
+        canonical_after = canonical_before
+        rationale = (
+            "The exact literal label validates the supplied preparation identity; "
+            "structured source-organism taxonomy cannot replace it."
+        )
+    elif microbial_derivative_conflict:
+        disposition = "identity_conflict"
+        canonical_after = None
+        rationale = (
+            "The literal source or its label form identifies a non-live microbial "
+            "preparation; structured organism taxonomy cannot establish the "
+            "preparation's canonical identity."
+        )
     elif len(structured_canonicals) > 1 and structured_canonical is None:
         disposition = "identity_conflict"
         canonical_after = None
