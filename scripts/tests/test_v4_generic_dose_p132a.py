@@ -802,3 +802,71 @@ def test_generic_dose_does_not_import_v3_scorer() -> None:
     source = Path(gd.__file__).read_text()
     assert "from score_supplements" not in source
     assert "import score_supplements" not in source
+
+
+# --- Primary active without a reference cannot borrow full window credit ---
+
+
+def _mixed_product(primary_qty: float):
+    rows = [
+        _ingredient(name="Vitamin B6", canonical_id="vitamin_b6_pyridoxine", quantity=1.7, unit="mg"),
+        _ingredient(name="Vitamin B12", canonical_id="vitamin_b12_cobalamin", quantity=2.4, unit="mcg"),
+        _ingredient(name="Cognigrape", canonical_id="cognigrape", quantity=primary_qty, unit="mg", bio_score=None),
+    ]
+    return _product(
+        ingredients=rows,
+        adequacy_results=[
+            {"canonical_id": "vitamin_b6_pyridoxine", "nutrient": "Vitamin B6", "pct_rda": 130.0, "pct_ul": 1.7},
+            {"canonical_id": "vitamin_b12_cobalamin", "nutrient": "Vitamin B12", "pct_rda": 100.0, "pct_ul": None},
+        ],
+        supp_type="multi",
+    )
+
+
+def test_unassessed_mass_primary_caps_window_credit_at_partial() -> None:
+    # 304628-style label: two in-window vitamins, a 250 mg botanical with no
+    # reference. The vitamins' window average must not present a complete
+    # product-dose assessment while the mass-primary active is unassessed.
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    payload = score_dose(_mixed_product(250.0))
+    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["metadata"]["window_proxy_status"] == "partial_credit_primary_active_unassessed"
+    assert payload["metadata"]["primary_active_unassessed"] == "cognigrape"
+    assert payload["metadata"]["partial_credit_value"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+
+def test_trace_unassessed_active_does_not_cap_window_credit() -> None:
+    # A 1 mg unreferenced co-active is not the mass-primary; the assessed
+    # vitamins own the dose story and full window credit stands.
+    from scoring_v4.modules.generic_dose import score_dose, CAP_SUPPLEMENTAL_WINDOW
+
+    payload = score_dose(_mixed_product(1.0))
+    assert payload["components"]["supplemental_window_proxy"] == CAP_SUPPLEMENTAL_WINDOW
+    assert "primary_active_unassessed" not in payload["metadata"]
+
+
+def test_opaque_blend_total_is_not_a_dose_primary() -> None:
+    # Raw D3 / Daily C-Protect pattern: an in-window vitamin plus a heavier
+    # greens/fruit blend header. The opaque total is not the product's primary
+    # active for the dose story; only an identified label active can cap.
+    from scoring_v4.modules.generic_dose import _mass_primary_without_reference
+
+    product = _mixed_product(1.0)
+    blend = {
+        "evidence_type": "blend_anchor_mass", "scoreable": True, "scoreable_identity": True,
+        "score_eligible_by_cleaner": True, "dose_class": "therapeutic_mass", "dose_value": 755.0,
+        "dose_unit": "mg", "source": "active", "raw_source_path": "ingredientRows[9]",
+        "evidence_scope": "blend_level", "linked_rows": ["ingredientRows[9]"], "confidence": "low",
+        "reason": "identity_bearing_blend_header_mass", "name": "Superfood greens blend",
+        "canonical_id": "superfood_greens_herbal_blends", "clean_identity_id": "superfood_greens_herbal_blends",
+        "scoring_parent_id": "superfood_greens_herbal_blends", "evidence_canonical_id": "superfood_greens_herbal_blends",
+        "canonical_source_db": "proprietary_blends", "evidence_origin": "compatibility_derived",
+    }
+    product["product_scoring_evidence"] = [blend]
+    assert _mass_primary_without_reference(product) is None
+
+    unmapped = _mixed_product(250.0)
+    unmapped["ingredient_quality_data"]["ingredients_scorable"][2]["canonical_source_db"] = "unmapped"
+    assert _mass_primary_without_reference(unmapped) is None
+    assert _mass_primary_without_reference(_mixed_product(250.0)) == "cognigrape"
