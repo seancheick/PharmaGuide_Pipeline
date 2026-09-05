@@ -153,3 +153,156 @@ e4d581c69d35abd05488433a7f68d9da5ae8bcd8e187dd9550c8a15680164dac  scripts/data/b
 a5099dc5290552af97556436cf4ea8937d9f311c006eb7d457baa179dc4651b4  scripts/tests/test_botanical_lost_match_dispositions.py
 18b7ff59dc1c4baa4e89562492ffa9338491bb618da42e4044900f805beae9e1  scripts/scoring_v4/config/quality_score.json
 ```
+
+---
+
+# Round 2 — Codex audit follow-up (2026-09-05, same worktree)
+
+Codex accepted the source-ownership fix and listed five corrections. Each was
+reproduced first, fixed at its root with a RED-first test, and measured.
+
+## Commits
+
+- `7c8b5fa0` fix(applicability): source-required terms ignore enrichment-derived forms (cherry-pick of cloud `19ebfbbf`)
+- `58a5aa6c` fix(evidence): registry trial counts no longer feed the depth bonus
+- `fd2215e8` fix(dose): unreferenced mass-primary active caps the window proxy at partial credit
+- `f5054f86` fix(cleaner): blend rows and disagreeing form UNIIs never identify a row
+- `bc5f06a3` feat(taxonomy): urinary tract health outcome and goal; PS record reclassified (registry 5.3.13)
+- `07715980` refactor(dose): the mass-primary label-active decision lives in the scoring contract
+- plus the docs commit that adds this section
+
+## 1. Applicability bypass (cloud `19ebfbbf`)
+
+Its regression was RED on the local branch (`1 failed, 15 passed` with the
+cloud test file). Cherry-picked as `7c8b5fa0` with `-x`; the cloud branch's
+alternative ownership implementation was not adopted.
+
+## 2. Cranberry contract failures — truthful urinary taxonomy
+
+Neither the locked 15-label outcome vocabulary nor the 18 user goals had a
+urinary entry, so the checkpoint's free-text outcome and empty goal list
+could not be mapped honestly. Added, with every contract and app pin updated:
+
+- `primary_outcome_vocab.json`: `urinary_tract_health` / "Urinary Tract
+  Health" (16 entries; related goal below). Notes state prevention of
+  recurrent UTIs, not treatment.
+- `user_goals_vocab.json`: `GOAL_URINARY_TRACT_HEALTH` (19 goals, priority
+  low); `user_goals_to_clusters.json` maps it to the existing
+  `urinary_tract_health` synergy cluster (required, 1.0) with
+  `probiotic_and_gut_health` 0.4, the same blocked workout clusters as other
+  goals and min_match_score 0.6.
+- `db_integrity_sanity_check.py` canonical goal list, and the three pipeline
+  contract tests (outcome 16, goals 19, mapping integrity) updated.
+- INGR_CRANBERRY: `primary_outcome` "Urinary Tract Health",
+  `health_goals_supported` ["Urinary Tract Health"].
+- App repo `/Users/seancheick/PharmaGuide ai` (NOT committed — main is your
+  branch with one unpushed commit): both vocab assets synced from the
+  pipeline (the goal asset also picks up two pre-existing
+  `related_drug_class_ids` differences), `schema_ids.dart` goals/labels/
+  priorities, the loader comment, and both drift tests (`flutter test`: 10
+  passed). Profile and wizard screens enumerate `SchemaIds.goals` dynamically,
+  so no other app list exists.
+
+## 3. Identity corrections proven end to end
+
+- `enhanced_normalizer._try_unii_match`: a DSLD blend-group row never takes a
+  form UNII as its identity, and disagreeing form UNIIs identify nothing.
+  Tests: `test_unii_form_identity_ambiguity.py` (3) plus the existing ledger
+  and cleaner suites.
+- Cleaner replayed on the raw records (`clean_dsld_data.py` on
+  17186.json and 328831.json), then enriched and scored with the candidate:
+  17186's header is now an unmapped `blend_header_total` (no vitamin C
+  identity; evidence 10.5 → 5.8, transparency 15.0 → 0.9 under the existing
+  opaque-blend policy, score 66.2 → 48.6); 328831 "Botalys" maps to ginseng
+  and matches INGR_GINSENG (score 65.7, versus 56.9 old and 71.6 with the wrong
+  astragalus identity). The read-only corpus audit still replays the stored
+  cleaned rows, so both products keep their old identities in the reports
+  below until the operational re-clean; the harness cannot show the fix.
+- Follow-up, not changed: `_anchor_identity` mints a slug identity from an
+  unmapped header's standard name (`glucosamine_chondroitin_complex`); a
+  product-level projection with a non-registry identity is a pre-existing
+  seam for the identity review.
+
+## 4. Evidence-credit semantics
+
+- `_published_study_count` no longer falls back to
+  `registry_completed_trials_count` (DATABASE_SCHEMA.md contract). The test
+  that pinned the old fallback was inverted to the contract. 155 entries lose
+  that exposure; the effect is a depth-bonus change only.
+- BRAND_PHOSPHATIDYLSERINE → INGR_PHOSPHATIDYLSERINE, `ingredient-human`,
+  standard name Phosphatidylserine (registry 5.3.13). Both cited trials are
+  ingredient-level (PMID 20523044 PS-DHA; PMID 21103034 soybean PS). The
+  `serinaid` alias stays as a name for the ingredient. Tests referencing the
+  id updated. Primary floor for PS labels moves from the branded tier to the
+  generic strong tier (26 labels 73.2 → 70.6, including the two SerinAid
+  labels), and four PS labels that the branded guard had excluded now earn
+  the ingredient-level evidence (e.g. 243046 56.3 → 72.6). One product, 82935
+  GNC "Stress Hormone Balancing Blend", drops 61.7 → 37.2: its only PS row is
+  an undisclosed 0 mg child inside a 400 mg PS + phosphatidic-acid blend, so
+  ingredient-level evidence cannot attach once the record is no longer treated
+  as a product-level branded study; the formulation change follows from the
+  lost brand credit. Reviewed as a consequence of the honest classification,
+  not corrected.
+
+## 5. Dose coverage
+
+`generic_dose.score_dose`: when the heaviest competing active (same
+source-ownership helper as evidence) has no RDA/UL adequacy row, the
+supplemental-window proxy is capped at the existing partial credit for a
+disclosed dose without a reference (`NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT`),
+and metadata records `window_proxy_status = partial_credit_primary_active_unassessed`
+and `primary_active_unassessed`. A trace unreferenced co-active does not cap.
+No new magnitude was introduced. Cognigrape 304628 moves from 20/20 to the
+partial band. The first full pass showed the cap also firing on 172 products
+whose heaviest row is an opaque greens/fruit blend total or an unmapped
+projection (Raw D3, Daily C-Protect, Methyl B12, Vitamin C sprays); those are
+not the product's primary active, so the cap is limited to identified label
+actives (not `product_level_evidence`, not `unmapped`). Tests: three cases at
+the scorer and helper level; the synthetic clamp fixture (rows named Magnesium
+with placeholder ids) is honoured by matching adequacy rows on nutrient name
+as well as canonical id.
+
+## Verification
+
+- Seam suites across everything changed this round: 1,075 passed, 18 skipped.
+- Contract/integrity suites: 43 passed (integrity errors and warnings 0).
+- Targeted 831-product comparison (checkpoint `dcd38005` vs candidate, same
+  inputs and baseline, before the cap narrowing): 356 score changes, 61 up and
+  295 down, 0 status/module changes. Downs by cause: 223 evidence-only
+  changes of at most 0.5 (registry-count depth bonus removed), 46 PS-family
+  tier changes above 1.0, 8 dose-cap cases, remaining small mixed changes.
+  Reports `corpus_round2_control_dcd38005_targets.json` and
+  `corpus_round2_candidate_targets.json`.
+- Consolidated full audit before the cap narrowing
+  (`corpus_continuation_2026_09_05_full_v3.json`, SHA-256 `a952b513…e970`,
+  838.0 s, zero errors): transitions identical; controls unchanged; 2,451
+  score changes versus the round-1 final report (2,440 down, mostly the tiny
+  depth-bonus change; 172 dose-cap products, reviewed above and narrowed).
+- FINAL consolidated audit (`corpus_continuation_2026_09_05_full_v4.json`,
+  SHA-256 `64286ff51bb9dd4d15fcb94c6b9e8df51103639d457fcd7400c75d8cd66d73da`,
+  845.3 s, zero errors, 8,078 fully re-enriched, baseline
+  `corpus_preparation_control_cea87d01_source_owners.json`): transitions
+  identical to the checkpoint; seven controls unchanged (Seed 81.2, Culturelle
+  72.7, Garden 57.4, Fortify 63.6, Ritual 55.9, Jarrow 62.4, Solgar 75.8).
+  Versus the old-code control: 2,545 retained numerical changes (evidence
+  2,485, formulation 123, dose 61), 163 tier, 28 verdict, 0 confidence.
+  Versus the round-1 final report (round-2 effect alone): 2,397 score changes,
+  7 up and 2,390 down, 0 status or module changes. 2,394 of the downs are the
+  small depth-bonus change from removing the registry-count fallback; 19 are
+  the narrowed dose cap (iron builders with a heavier botanical, cranberry and
+  cinnamon formulas, the Cognigrape gummy, all 20 → 14.5-band); the PS family
+  moves 18.9 → 14.7 evidence with four previously excluded PS labels gaining
+  14.7 and 82935 losing its undisclosed-dose evidence as described above.
+- Broad `scripts/test.sh fast` on the final tree: 13,517 passed, 165 skipped,
+  0 failed (219.7 s). The two round-1 cranberry failures are resolved.
+- Committed tree verified against the hashes the final audit ran on
+  (12 implementation/data files, all match).
+
+## Still open after round 2
+
+- Operational re-clean is required before 17186 and 328831 change in a
+  shipped catalog; the corpus audit cannot replay the cleaner.
+- Unmapped-header identity minting (`_anchor_identity` standard-name slug).
+- Enrollment convention, remaining branded-with-generic-alias entries, and
+  the semantics decisions listed in round 1.
+- App-side taxonomy edits are in the working tree of the app repo, uncommitted.

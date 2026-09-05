@@ -381,3 +381,26 @@ Research: [source_ownership_lineage_research.md](source_ownership_lineage_resear
 Not done here, by design: main merge, operational pipeline, export, Supabase,
 Flutter import, weight changes, enrollment/registry-count corrections, brand
 tier policy, clinical approvals, benchmark ratings.
+
+### Round 2 — Codex audit follow-up (2026-09-05)
+
+See the round-2 section of [CONTINUATION_RETURN_2026_09_05.md](CONTINUATION_RETURN_2026_09_05.md).
+
+- [x] Cloud applicability fix `19ebfbbf` cherry-picked (`7c8b5fa0`); its regression was RED locally.
+- [x] Truthful urinary taxonomy: outcome `urinary_tract_health` (16) and goal
+  `GOAL_URINARY_TRACT_HEALTH` (19) with cluster mapping, integrity checker,
+  pipeline contract tests and app constants/assets/drift tests; cranberry
+  outcome and goals set to it. Both prior broad-suite failures resolved.
+- [x] Identity: blend-group rows never take a form UNII; disagreeing form
+  UNIIs identify nothing; cleaner replayed on 17186 and 328831 and re-scored
+  (header unmapped; Botalys → ginseng). Corpus audit cannot replay the cleaner.
+- [x] Evidence credit: registry-count depth-bonus fallback removed per
+  DATABASE_SCHEMA.md; PS record reclassified to INGR_PHOSPHATIDYLSERINE
+  (ingredient-human), registry 5.3.13.
+- [x] Dose: window proxy capped at the existing no-reference partial credit
+  when the mass-primary competing active has no adequacy row; metadata names it.
+- [x] Targeted 831-product comparison (checkpoint vs candidate) and the final
+  consolidated audit `corpus_continuation_2026_09_05_full_v4.json`
+  (SHA-256 `64286ff5…d73da`): controls unchanged; round-2 effect is 2,397 score
+  changes (2,394 small depth-bonus, 19 narrowed dose cap, the PS tier move);
+  broad fast 13,517 passed / 0 failed on the final tree.
