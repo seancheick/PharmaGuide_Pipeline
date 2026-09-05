@@ -394,12 +394,14 @@ def test_depth_bonus_uses_published_studies_count_bands() -> None:
     assert payload["score"] == 6.98
 
 
-def test_depth_bonus_uses_registry_completed_trials_when_count_absent() -> None:
+def test_depth_bonus_ignores_registry_completed_trials() -> None:
+    # DATABASE_SCHEMA.md: registry_completed_trials_count is discovery metadata,
+    # never a substitute for published_studies_count.
     from scoring_v4.modules.generic_evidence import score_evidence
 
     payload = score_evidence(_product(matches=[_match(registry_completed_trials_count=40)]))
 
-    assert payload["components"]["depth_bonus"] == 0.5
+    assert payload["components"]["depth_bonus"] == 0.0
 
 
 def test_collagen_primary_recovers_verified_evidence_when_enrichment_dropped_match() -> None:

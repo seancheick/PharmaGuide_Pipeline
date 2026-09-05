@@ -1428,9 +1428,8 @@ def _published_study_count(entry: Dict[str, Any]) -> Optional[float]:
     explicit = _as_float(entry.get("published_studies_count"), None)
     if explicit is not None:
         return explicit
-    registry = _as_float(entry.get("registry_completed_trials_count"), None)
-    if registry is not None:
-        return registry
+    # registry_completed_trials_count is discovery/enrichment metadata and,
+    # per DATABASE_SCHEMA.md, never a substitute for a published-study count.
     legacy = entry.get("published_studies")
     if isinstance(legacy, (int, float)):
         return _as_float(legacy, None)
