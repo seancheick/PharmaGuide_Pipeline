@@ -2206,15 +2206,35 @@ class EnhancedDSLDNormalizer:
         )
         if unii and unii in identity_unii_lookup:
             return identity_unii_lookup[unii], "unii_exact_match"
-        # Try forms[*].uniiCode
+        # Try forms[*].uniiCode. A form UNII identifies the row only when every
+        # UNII-bearing form agrees on one substance: DSLD encodes some blend
+        # headers' constituents as forms (e.g. Chondroitin Sulfate, Glucosamine
+        # Sulfate, Vitamin C under "Glucosamine Chondroitin Complex"), and the
+        # first hit must not become a 3,500 mg vitamin C identity.
         forms = ingredient_data.get("forms") or []
+        form_hit = None
+        group = str(ingredient_data.get("ingredientGroup") or "").strip().lower()
+        if "blend" in group:
+            # A DSLD blend group lists its constituents as forms; none of
+            # them is the identity of the whole row.
+            return None
         if isinstance(forms, list):
             for form in forms:
                 if not isinstance(form, dict):
                     continue
                 form_unii = _normalize_unii(form.get("uniiCode"))
-                if form_unii and form_unii in identity_unii_lookup:
-                    return identity_unii_lookup[form_unii], "unii_form_exact_match"
+                if not form_unii or form_unii not in identity_unii_lookup:
+                    continue
+                payload = identity_unii_lookup[form_unii]
+                if form_hit is None:
+                    form_hit = payload
+                    continue
+                if (payload.get("standard_name"), payload.get("type")) != (
+                    form_hit.get("standard_name"), form_hit.get("type")
+                ):
+                    return None
+        if form_hit is not None:
+            return form_hit, "unii_form_exact_match"
         return None
 
     def _fast_ingredient_lookup(self, name: str) -> Dict[str, Any]:
