@@ -86,3 +86,38 @@ individual source review. Absence from a registry is not evidence of inefficacy.
   from the whole-extract matcher: **14 failed** before the data correction.
   Final GREEN and corpus results are recorded by the
   continuation acceptance report, not inferred from these tests.
+
+## Independent review — 2026-09-05 (cloud continuation)
+
+Re-verified each claim above against live primary sources, per the
+per-claim verification rule:
+
+- PMIDs 37068952 (April 2023 Cochrane; 50 studies / 8,857; responsive vs
+  non-responsive populations exactly as recorded), 34473789 (distinct 2021
+  review, 23 trials / 3,979, not summed), 32680575 (seven trials / 545 OA
+  patients; WOMAC endpoints), 39092235 (Boswellin Super 30% AKBA; 150/300 mg
+  tablets twice daily = 300/600 mg/day, 90 days, 105 randomized/98 completed),
+  35512759 (Aflapin 20% AKBA; 70 randomized / 67 completed; 100 mg/day,
+  30 days), 38031409 and 19597519 (green-tea scope sources) — all re-fetched
+  from PubMed; titles, populations, doses and enrollments match the records.
+- UNIIs re-checked against the FDA substance registry (openFDA mirror of
+  GSRS; gsrs.fda.gov unreachable from this environment): X7B7P649WQ resolves
+  to BOSWELLIA SERRATA WHOLE (removal correct); 0MVO31Q3QS resolves to
+  CRANBERRY / AMERICAN CRANBERRY FRUIT / CRANBERRY PREPARATION (retention
+  correct).
+- Both full EGCG alias spellings confirmed as primary PubChem synonyms of
+  CID 65064 (CAS 989-51-5).
+- Evaluator review found one real derived-form bypass in the new
+  `require_source_label_form` lane: a row without `raw_taxonomy` let
+  enrichment-written `forms` names assemble a source-required term. Fixed
+  test-first (`test_enrichment_derived_form_cannot_satisfy_a_source_required_term`
+  RED → GREEN); cleaner-declared taxonomy forms (e.g. 218600's
+  "from Soy Lecithin") still count, enrichment-derived names never do.
+- Exclusion-before-inclusion ordering confirmed: "cranberry seed oil" is
+  rejected by the excluded part term before the required family term can
+  admit it; whole resin/powder falls to `clinical_form_mismatch`, never
+  borrows extract research.
+- NOT completed here: replay of the nine Boswellia peer labels and the final
+  corpus measurement — the manifest-owned inputs are not provisioned in this
+  environment. That acceptance remains open, exactly as the cloud checkpoint
+  states.

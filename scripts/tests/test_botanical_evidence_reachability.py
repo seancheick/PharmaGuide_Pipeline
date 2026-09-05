@@ -74,6 +74,39 @@ def test_stale_generic_match_cannot_supply_a_different_preparation(study_id, lab
     assert rejected[0]["reason_code"] == "clinical_form_excluded"
 
 
+def test_enrichment_derived_form_cannot_satisfy_a_source_required_term():
+    # A source-required preparation scope reads the label's own words. A legacy
+    # row without raw_taxonomy must not assemble the required term from
+    # enrichment-derived form names — that data is exactly what the
+    # require_source_label_form contract distrusts.
+    source = _product("legacy-derived-form", "Boswellia serrata", "Boswellia",
+                      "boswellia_serrata_resin", "Boswellia Serrata", 500.0,
+                      "ingredientRows[0]")
+    row = source["activeIngredients"][0]
+    del row["raw_taxonomy"]
+    row["forms"] = [{"name": "gum resin extract"}]
+    match = {"id": "PRECLIN_BOSWELLIA", "ingredient": "Boswellia serrata",
+             "matched_source_row_refs": ["ingredientRows[0]"]}
+    accepted, rejected = filter_clinical_matches(source, [match])
+    assert accepted == []
+    assert rejected[0]["reason_code"] == "clinical_form_mismatch"
+
+
+def test_source_taxonomy_forms_still_reach_the_required_term():
+    # The same words declared by the cleaner's own source taxonomy remain a
+    # legitimate preparation assertion (e.g. 218600's "from Soy Lecithin").
+    source = _product("source-form", "Boswellia serrata", "Boswellia",
+                      "boswellia_serrata_resin", "Boswellia Serrata", 500.0,
+                      "ingredientRows[0]")
+    row = source["activeIngredients"][0]
+    row["raw_taxonomy"]["forms"] = [{"name": "gum resin extract"}]
+    match = {"id": "PRECLIN_BOSWELLIA", "ingredient": "Boswellia serrata",
+             "matched_source_row_refs": ["ingredientRows[0]"]}
+    accepted, rejected = filter_clinical_matches(source, [match])
+    assert rejected == []
+    assert len(accepted) == 1
+
+
 @pytest.mark.parametrize("study_id,unsupported", [
     ("PRECLIN_BOSWELLIA", {"Reduce Stress/Anxiety", "Healthy Aging/Longevity"}),
     ("INGR_CRANBERRY", {"Immune Support"}),
