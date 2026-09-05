@@ -263,8 +263,9 @@ def test_missing_synergy_detail_returns_empty_match():
 
 
 def test_clusters_with_no_overlap_returns_empty_match():
-    # urinary_tract_health is a real cluster but isn't weighted by any of the 18 goals.
-    result = compute_goal_matches(_enriched(["urinary_tract_health"]))
+    # prostate_health is a real cluster but isn't weighted by any of the 19 goals
+    # (urinary_tract_health gained GOAL_URINARY_TRACT_HEALTH on 2026-09-05).
+    result = compute_goal_matches(_enriched(["prostate_health"]))
     assert result["goal_matches"] == []
     assert result["goal_match_confidence"] == 0.0
 

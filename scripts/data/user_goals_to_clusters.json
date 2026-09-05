@@ -3,8 +3,8 @@
     "description": "User goal to product-cluster matching rules (pipeline-owned matching contract)",
     "purpose": "goal_matching",
     "schema_version": "6.0.0",
-    "last_updated": "2026-04-23",
-    "total_entries": 18,
+    "last_updated": "2026-09-05",
+    "total_entries": 19,
     "schema_notes": {
       "cluster_weights": "Float 0.0-1.0 per cluster. 1.0 = core to goal, 0.7-0.9 = strongly relevant, 0.4-0.6 = moderately relevant. Used to compute matched_weight / max_weight per supplement.",
       "required_clusters": "Cluster IDs that must be present for goal to qualify. If non-empty and none are present, the goal is not matched regardless of weighted score.",
@@ -25,8 +25,12 @@
         "mood_balance": 0.5,
         "adrenal_support": 0.4
       },
-      "required_clusters": ["sleep_stack"],
-      "blocked_by_clusters": ["pre_workout_energy"],
+      "required_clusters": [
+        "sleep_stack"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -41,8 +45,13 @@
         "mood_gut_axis_probiotic_blend": 0.5,
         "probiotic_and_gut_health": 0.4
       },
-      "required_clusters": ["stress_resilience", "mood_balance"],
-      "blocked_by_clusters": ["pre_workout_energy"],
+      "required_clusters": [
+        "stress_resilience",
+        "mood_balance"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -57,8 +66,13 @@
         "blood_sugar_regulation": 0.4,
         "nitric_oxide_blood_flow": 0.4
       },
-      "required_clusters": ["energy_mitochondria", "pre_workout_energy"],
-      "blocked_by_clusters": ["sleep_stack"],
+      "required_clusters": [
+        "energy_mitochondria",
+        "pre_workout_energy"
+      ],
+      "blocked_by_clusters": [
+        "sleep_stack"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -74,7 +88,11 @@
         "liver_support": 0.4,
         "detox_pathway": 0.4
       },
-      "required_clusters": ["gut_barrier", "probiotic_and_gut_health", "digestive_enzymes"],
+      "required_clusters": [
+        "gut_barrier",
+        "probiotic_and_gut_health",
+        "digestive_enzymes"
+      ],
       "blocked_by_clusters": [],
       "min_match_score": 0.5
     },
@@ -89,8 +107,14 @@
         "pre_workout_energy": 0.6,
         "recovery_support": 0.4
       },
-      "required_clusters": ["fat_metabolism", "blood_sugar_regulation"],
-      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
+      "required_clusters": [
+        "fat_metabolism",
+        "blood_sugar_regulation"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy",
+        "pre_post_workout"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -109,8 +133,15 @@
         "energy_mitochondria": 0.5,
         "methylation_support": 0.5
       },
-      "required_clusters": ["cardiovascular_support", "blood_pressure_support", "nitric_oxide_blood_flow", "omega3_niacin_lipid"],
-      "blocked_by_clusters": ["pre_workout_energy"],
+      "required_clusters": [
+        "cardiovascular_support",
+        "blood_pressure_support",
+        "nitric_oxide_blood_flow",
+        "omega3_niacin_lipid"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -128,8 +159,14 @@
         "joint_inflammation": 0.5,
         "inflammation_control": 0.5
       },
-      "required_clusters": ["longevity_and_anti_aging", "antioxidant_defense"],
-      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
+      "required_clusters": [
+        "longevity_and_anti_aging",
+        "antioxidant_defense"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy",
+        "pre_post_workout"
+      ],
       "min_match_score": 0.4
     },
     {
@@ -144,8 +181,13 @@
         "detox_pathway": 0.4,
         "nerve_health_neuropathy_support": 0.25
       },
-      "required_clusters": ["blood_sugar_regulation"],
-      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
+      "required_clusters": [
+        "blood_sugar_regulation"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy",
+        "pre_post_workout"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -156,8 +198,14 @@
         "immune_probiotic_blend": 0.8,
         "gut_barrier": 0.4
       },
-      "required_clusters": ["immune_defense", "immune_probiotic_blend"],
-      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
+      "required_clusters": [
+        "immune_defense",
+        "immune_probiotic_blend"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy",
+        "pre_post_workout"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -173,8 +221,14 @@
         "mood_balance": 0.5,
         "stress_resilience": 0.4
       },
-      "required_clusters": ["cognitive_performance", "focus_attention_support", "cognitive_amino_acids"],
-      "blocked_by_clusters": ["sleep_stack"],
+      "required_clusters": [
+        "cognitive_performance",
+        "focus_attention_support",
+        "cognitive_amino_acids"
+      ],
+      "blocked_by_clusters": [
+        "sleep_stack"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -189,8 +243,13 @@
         "adrenal_support": 0.4,
         "magnesium_nervous_system": 0.5
       },
-      "required_clusters": ["mood_balance", "methylation_support"],
-      "blocked_by_clusters": ["pre_workout_energy"],
+      "required_clusters": [
+        "mood_balance",
+        "methylation_support"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -205,7 +264,9 @@
         "electrolyte_balance": 0.5,
         "nitric_oxide_blood_flow": 0.4
       },
-      "required_clusters": ["muscle_building_recovery"],
+      "required_clusters": [
+        "muscle_building_recovery"
+      ],
       "blocked_by_clusters": [],
       "min_match_score": 0.5
     },
@@ -220,7 +281,10 @@
         "collagen_synthesis_support": 0.6,
         "detox_pathway": 0.3
       },
-      "required_clusters": ["joint_inflammation", "bone_health"],
+      "required_clusters": [
+        "joint_inflammation",
+        "bone_health"
+      ],
       "blocked_by_clusters": [],
       "min_match_score": 0.5
     },
@@ -236,8 +300,15 @@
         "detox_pathway": 0.4,
         "inflammation_control": 0.4
       },
-      "required_clusters": ["hair_skin_nutrition", "skin_health_complex", "collagen_synthesis_support"],
-      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
+      "required_clusters": [
+        "hair_skin_nutrition",
+        "skin_health_complex",
+        "collagen_synthesis_support"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy",
+        "pre_post_workout"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -251,8 +322,14 @@
         "antioxidant_defense": 0.5,
         "kidney_health_support": 0.4
       },
-      "required_clusters": ["liver_support", "detox_pathway"],
-      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
+      "required_clusters": [
+        "liver_support",
+        "detox_pathway"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy",
+        "pre_post_workout"
+      ],
       "min_match_score": 0.5
     },
     {
@@ -266,8 +343,14 @@
         "omega_3_absorption_enhancement": 0.6,
         "magnesium_nervous_system": 0.5
       },
-      "required_clusters": ["prenatal_pregnancy_support"],
-      "blocked_by_clusters": ["fat_metabolism", "pre_workout_energy", "pre_post_workout"],
+      "required_clusters": [
+        "prenatal_pregnancy_support"
+      ],
+      "blocked_by_clusters": [
+        "fat_metabolism",
+        "pre_workout_energy",
+        "pre_post_workout"
+      ],
       "min_match_score": 0.7
     },
     {
@@ -285,8 +368,15 @@
         "liver_support": 0.5,
         "methylation_support": 0.5
       },
-      "required_clusters": ["hormone_balance_men", "hormone_balance_women", "thyroid_support"],
-      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
+      "required_clusters": [
+        "hormone_balance_men",
+        "hormone_balance_women",
+        "thyroid_support"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy",
+        "pre_post_workout"
+      ],
       "min_match_score": 0.4
     },
     {
@@ -299,8 +389,29 @@
         "omega_3_absorption_enhancement": 0.5,
         "nitric_oxide_blood_flow": 0.4
       },
-      "required_clusters": ["eye_health"],
-      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
+      "required_clusters": [
+        "eye_health"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy",
+        "pre_post_workout"
+      ],
+      "min_match_score": 0.6
+    },
+    {
+      "id": "GOAL_URINARY_TRACT_HEALTH",
+      "user_facing_goal": "Urinary Tract Health",
+      "cluster_weights": {
+        "urinary_tract_health": 1.0,
+        "probiotic_and_gut_health": 0.4
+      },
+      "required_clusters": [
+        "urinary_tract_health"
+      ],
+      "blocked_by_clusters": [
+        "pre_workout_energy",
+        "pre_post_workout"
+      ],
       "min_match_score": 0.6
     }
   ]

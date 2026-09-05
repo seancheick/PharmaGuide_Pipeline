@@ -35,6 +35,7 @@ CANONICAL_FLUTTER_GOAL_IDS = {
     "GOAL_PRENATAL_PREGNANCY",
     "GOAL_HORMONAL_BALANCE",
     "GOAL_EYE_VISION_HEALTH",
+    "GOAL_URINARY_TRACT_HEALTH",
 }
 
 # v6.0.0 contract — exactly these per-goal keys are allowed.

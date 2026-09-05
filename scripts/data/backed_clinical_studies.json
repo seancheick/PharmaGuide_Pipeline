@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.12",
+    "schema_version": "5.3.13",
     "last_updated": "2026-09-05",
     "total_entries": 202,
     "changelog": [
+      "5.3.13 (2026-09-05): Reclassify BRAND_PHOSPHATIDYLSERINE as INGR_PHOSPHATIDYLSERINE (ingredient-human): its own notes and both cited trials (PS-DHA, soybean PS) are ingredient-level, not SerinAid-specific; the serinaid alias remains a name for the ingredient. Registry-count depth-bonus fallback removed in code per DATABASE_SCHEMA.md.",
       "5.3.12 (2026-09-05): Individually reviewed lost botanical joins: add exact registry-projected preparation aliases for Echinacea purpurea aerial/herb/root extract (PMID 24554461) and Astragalus root/extract (PMID 37952511); give INGR_CINNAMON_EXTRACT an explicit Ceylon exclusion scope (PMID 24019277). Real-label review of 5.3.11: PRECLIN_BOSWELLIA required terms now include the printed extract spellings (gum extract, standardized extract, Apres-Flex, Casperome, frankincense phytosome) and its primary outcome uses the locked vocabulary label Joint & Bone Health. Fermented black garlic, whole red-grape extract and DPP-IV enzyme products remain unjoined after review. No enrollment, effect-direction, multiplier, dose-threshold or clinical-approval changes.",
       "5.3.11 (2026-09-04): Repair exact source-declared cranberry fruit-concentrate and Boswellia resin-extract evidence joins. Scope existing records to fruit/extract preparations and actual urinary/OA endpoints; correct source-bound enrollments, remove untraceable registry counts and the whole-plant Boswellia UNII. No dose thresholds, evidence multipliers or clinical approvals added.",
       "5.3.10 (2026-09-04): Restore two exact green-tea extract label aliases and two verified full EGCG spellings; constrain existing evidence to source-declared extract/catechin preparations, excluding whole-leaf and theanine-targeted transfers. Existing PMIDs rechecked; no evidence-strength, aggregate-count, or dose-threshold changes.",
@@ -2467,14 +2468,14 @@
       ]
     },
     {
-      "id": "BRAND_PHOSPHATIDYLSERINE",
-      "standard_name": "SerinAid Phosphatidylserine",
+      "id": "INGR_PHOSPHATIDYLSERINE",
+      "standard_name": "Phosphatidylserine",
       "aliases": [
         "serinaid",
         "phosphatidylserine"
       ],
       "category": "cognitive_neurological",
-      "evidence_level": "branded-rct",
+      "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT"
       ],
@@ -2491,8 +2492,8 @@
       ],
       "notes": "Human evidence supports phosphatidylserine as an ingredient, but the cited trials are on soy-derived PS products such as Sharp-PS and Soy-PS rather than on a clearly validated SerinAid-specific trial set.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Vakhapova et al. (2010, PMID 20523044) placebo-controlled trial found PS-DHA improved memory measures in non-demented older adults with memory complaints. Kato-Kataoka et al. (2010, PMID 21103034) reported benefits in lower-baseline-memory subgroups taking soy-derived phosphatidylserine. The evidence is therefore ingredient-level rather than clearly SerinAid-brand-specific.",
+      "last_updated": "2026-09-05",
+      "notable_studies": "Vakhapova et al. (2010, PMID 20523044) placebo-controlled trial found PS-DHA improved memory measures in non-demented older adults with memory complaints. Kato-Kataoka et al. (2010, PMID 21103034) reported benefits in lower-baseline-memory subgroups taking soy-derived phosphatidylserine. The evidence is therefore ingredient-level rather than clearly SerinAid-brand-specific; the record was reclassified from a branded entry to ingredient-human on 2026-09-05 because neither cited trial studied SerinAid (PS-DHA and soybean-derived PS respectively).",
       "references_structured": [
         {
           "type": "pubmed",
@@ -9853,7 +9854,7 @@
       "key_endpoints": [
         "Recurrent symptomatic, culture-verified urinary tract infections"
       ],
-      "health_goals_supported": [],
+      "health_goals_supported": ["Urinary Tract Health"],
       "notes": "Family-level evidence concerns cranberry fruit products for prevention of recurrent UTIs in selected populations, not treatment of an existing infection or general immune support. Fruit juice, tablets and powders were studied; equivalence of preparations and PAC doses is uncertain. Total concentrate mass is not a PAC dose or a verified clinical minimum. Enrollment 8857 belongs only to the April 2023 Cochrane review; participants from the overlapping 2021 review are not summed. No efficacy is inferred for cranberry seed oil or leaf extracts.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-09-04",
@@ -9953,7 +9954,7 @@
         "unii": "0MVO31Q3QS"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Prevention of recurrent symptomatic urinary tract infections",
+      "primary_outcome": "Urinary Tract Health",
       "total_enrollment": 8857,
       "effect_direction_confidence": "high",
       "effect_direction_rationale": "Existing positive direction is restricted to prevention of recurrent UTIs in the responsive populations of the cited reviews. Cochrane reports moderate-certainty pooled benefit with heterogeneity; preparation and PAC-dose comparisons are uncertain. This is not universal benefit, treatment efficacy or product-specific dose equivalence.",

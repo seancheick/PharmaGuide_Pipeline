@@ -1,7 +1,7 @@
 """Hygiene: remove 2-3 char brand aliases that false-match as SUBSTRINGS.
 
 `_brand_mentioned` does a substring `term in all_text` check. Aliases 'ps'
-(BRAND_PHOSPHATIDYLSERINE), 'asi' (BRAND_NITROSIGINE), 'nr' (BRAND_NIAGEN) match
+(INGR_PHOSPHATIDYLSERINE), 'asi' (BRAND_NITROSIGINE), 'nr' (BRAND_NIAGEN) match
 inside unrelated words ("ca[ps]ule", "qu[asi]", "evening primrose oil" → "..n r.."),
 so generic/unrelated products wrongly pass the brand-evidence guard. The full-name
 aliases (phosphatidylserine / arginine silicate / nicotinamide riboside) cover real
@@ -36,7 +36,7 @@ def _study(enricher, sid):
 
 
 @pytest.mark.parametrize("sid,gone,kept", [
-    ("BRAND_PHOSPHATIDYLSERINE", "ps", "phosphatidylserine"),
+    ("INGR_PHOSPHATIDYLSERINE", "ps", "phosphatidylserine"),
     ("BRAND_NITROSIGINE", "asi", "arginine silicate"),
     ("BRAND_NIAGEN", "nr", "nicotinamide riboside"),
 ])
@@ -50,7 +50,7 @@ def test_short_substring_alias_removed_full_name_kept(enricher, sid, gone, kept)
 
 
 @pytest.mark.parametrize("name,sid", [
-    ("Multivitamin Veggie Capsules", "BRAND_PHOSPHATIDYLSERINE"),  # 'ps' in 'capsules'
+    ("Multivitamin Veggie Capsules", "INGR_PHOSPHATIDYLSERINE"),  # 'ps' in 'capsules'
     ("Evening Primrose Oil", "BRAND_NIAGEN"),                       # 'nr' substring
 ])
 def test_substring_does_not_pass_brand_guard(enricher, name, sid) -> None:

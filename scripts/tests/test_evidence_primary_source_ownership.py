@@ -20,7 +20,7 @@ def _ps_complex_product():
     )
     evidence = deepcopy(next(
         entry for entry in registry["backed_clinical_studies"]
-        if entry["id"] == "BRAND_PHOSPHATIDYLSERINE"
+        if entry["id"] == "INGR_PHOSPHATIDYLSERINE"
     ))
     child_ref = "ingredientRows[1].nestedRows[0]"
     evidence.update(
@@ -250,7 +250,7 @@ def _ps_evidence(child_ref: str) -> dict:
     )
     evidence = deepcopy(next(
         entry for entry in registry["backed_clinical_studies"]
-        if entry["id"] == "BRAND_PHOSPHATIDYLSERINE"
+        if entry["id"] == "INGR_PHOSPHATIDYLSERINE"
     ))
     evidence.update(
         ingredient="Phosphatidylserine",

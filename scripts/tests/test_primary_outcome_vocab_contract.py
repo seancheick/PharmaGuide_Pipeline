@@ -26,11 +26,11 @@ def items(vocab):
 def test_metadata(vocab):
     md = vocab["_metadata"]
     assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 15
+    assert md["total_entries"] == 16
 
 
-def test_exactly_15(items):
-    assert len(items) == 15
+def test_exactly_16(items):
+    assert len(items) == 16
 
 
 REQUIRED = {"id", "name", "legacy_display", "notes", "related_user_goal_id"}

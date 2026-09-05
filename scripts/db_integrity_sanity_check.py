@@ -1215,6 +1215,7 @@ def check_user_goals_to_clusters(findings: List[Finding], data: Dict[str, Any], 
         "GOAL_FOCUS_MENTAL_CLARITY", "GOAL_MOOD_EMOTIONAL_WELLNESS", "GOAL_MUSCLE_GROWTH_RECOVERY",
         "GOAL_JOINT_BONE_MOBILITY", "GOAL_SKIN_HAIR_NAILS", "GOAL_LIVER_DETOX",
         "GOAL_PRENATAL_PREGNANCY", "GOAL_HORMONAL_BALANCE", "GOAL_EYE_VISION_HEALTH",
+ "GOAL_URINARY_TRACT_HEALTH",
     }
 
     seen_ids: set = set()
@@ -1242,7 +1243,7 @@ def check_user_goals_to_clusters(findings: List[Finding], data: Dict[str, Any], 
             if gid not in _CANONICAL_FLUTTER_GOAL_IDS:
                 findings.append(Finding(
                     "error", file, f"[{i}].id", "non_canonical_flutter_goal_id",
-                    "one of 18 canonical Flutter goal IDs", gid,
+                    "one of 19 canonical Flutter goal IDs", gid,
                 ))
 
         # cluster_weights: values must be floats in [0.0, 1.0] and keys must be valid cluster IDs

@@ -35,12 +35,12 @@ def goals(vocab):
 def test_metadata_block_present(vocab):
     md = vocab["_metadata"]
     assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 18
+    assert md["total_entries"] == 19
     assert "LOCKED" in md["status"]
 
 
 def test_exactly_18_goals_locked(goals):
-    assert len(goals) == 18, f"locked at 18; got {len(goals)}"
+    assert len(goals) == 19, f"locked at 19; got {len(goals)}"
 
 
 REQUIRED_FIELDS = {"id", "name", "notes", "priority"}
@@ -65,7 +65,7 @@ def test_every_id_unique_and_goal_prefix(goals):
         assert GOAL_ID_PATTERN.match(gid), f"id {gid!r} doesn't match GOAL_<UPPER_SNAKE>"
 
 
-def test_canonical_18_ids_match_schema_ids_dart(goals):
+def test_canonical_19_ids_match_schema_ids_dart(goals):
     expected = {
         "GOAL_SLEEP_QUALITY", "GOAL_REDUCE_STRESS_ANXIETY",
         "GOAL_INCREASE_ENERGY", "GOAL_DIGESTIVE_HEALTH",
@@ -76,6 +76,7 @@ def test_canonical_18_ids_match_schema_ids_dart(goals):
         "GOAL_JOINT_BONE_MOBILITY", "GOAL_SKIN_HAIR_NAILS",
         "GOAL_LIVER_DETOX", "GOAL_PRENATAL_PREGNANCY",
         "GOAL_HORMONAL_BALANCE", "GOAL_EYE_VISION_HEALTH",
+        "GOAL_URINARY_TRACT_HEALTH",
     }
     actual = {g["id"] for g in goals}
     assert actual == expected, f"missing={expected-actual} extra={actual-expected}"
