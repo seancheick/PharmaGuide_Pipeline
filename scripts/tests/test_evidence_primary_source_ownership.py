@@ -128,3 +128,139 @@ def test_unrelated_aggregate_still_competes_with_trace_active(canonical, quantit
     result = score_evidence(product, apply_primary_floor=True)
 
     assert result["metadata"]["primary_evidence_floor"] == 0.0
+
+
+def _reverse_hierarchy_product():
+    # DSLD 218600 (cloud_source_lineage_fixtures.json): the label prints
+    # "Phosphatidylserine 200 mg" as the score-eligible active row at
+    # ingredientRows[2] and nests its supplying "Phosphatidylserine complex"
+    # 1,000 mg BENEATH it at ingredientRows[2].nestedRows[0] as a
+    # blend_header_total. The supplying complex is the same physical material
+    # as the active it quantifies; only structural containment proves that.
+    product = _ps_complex_product()
+    active = product["ingredient_quality_data"]["ingredients"][0]
+    active.update(quantity=200.0, raw_source_path="ingredientRows[2]")
+    total = product["product_scoring_evidence"][0]
+    total.update(
+        name="Phosphatidylserine complex",
+        dose_value=1000.0,
+        raw_source_path="ingredientRows[2].nestedRows[0]",
+        linked_rows=["ingredientRows[2].nestedRows[0]"],
+    )
+    evidence = product["evidence_data"]["clinical_matches"][0]
+    evidence["matched_source_row_refs"] = ["ingredientRows[2]"]
+    return product
+
+
+def test_reverse_hierarchy_supplying_complex_does_not_dilute_its_owner():
+    product = _reverse_hierarchy_product()
+    original = deepcopy(product)
+
+    without_total = deepcopy(product)
+    without_total["product_scoring_evidence"] = []
+    control = score_evidence(without_total, apply_primary_floor=True)
+    actual = score_evidence(product, apply_primary_floor=True)
+
+    assert product == original
+    assert control["metadata"]["primary_evidence_floor"] > 0
+    assert actual["metadata"]["primary_evidence_floor"] == (
+        control["metadata"]["primary_evidence_floor"]
+    )
+    assert actual["score"] == control["score"]
+
+
+def test_sibling_complex_without_owner_link_still_competes():
+    # DSLD 218838 (cloud_source_lineage_fixtures.json): "Phosphatidylserine
+    # Complex" 500 mg (ingredientRows[2]), "Phosphatidylserine" 100 mg
+    # (ingredientRows[3]) and "Phosphatidylcholine" 60 mg (ingredientRows[4])
+    # are SIBLING rows with no structural owner links. The label alone does not
+    # prove the complex supplies the PS row, so the complex must keep competing;
+    # resolving that label is an explicit open review item, not an inference
+    # this scorer may make from shared canonical identity.
+    product = _ps_complex_product()
+    active = product["ingredient_quality_data"]["ingredients"][0]
+    active["raw_source_path"] = "ingredientRows[3]"
+    sibling = {
+        **active,
+        "name": "Phosphatidylcholine",
+        "standard_name": "Phosphatidylcholine",
+        "canonical_id": "phosphatidylcholine",
+        "quantity": 60.0,
+        "raw_source_path": "ingredientRows[4]",
+        "raw_source_text": "Phosphatidylcholine",
+    }
+    product["ingredient_quality_data"]["ingredients"].append(sibling)
+    product["ingredient_quality_data"]["ingredients_scorable"].append(sibling)
+    total = product["product_scoring_evidence"][0]
+    total.update(
+        name="Phosphatidylserine Complex",
+        raw_source_path="ingredientRows[2]",
+        linked_rows=["ingredientRows[2]"],
+    )
+    evidence = product["evidence_data"]["clinical_matches"][0]
+    evidence["matched_source_row_refs"] = ["ingredientRows[3]"]
+    original = deepcopy(product)
+
+    result = score_evidence(product, apply_primary_floor=True)
+
+    assert product == original
+    assert result["metadata"]["primary_evidence_floor"] == 0.0
+
+
+def test_owned_sibling_constituent_still_competes_inside_the_blend():
+    # A heavier co-constituent nested beside the evidenced child is different
+    # physical material, even though both live under the same owning total.
+    # Excluding the parent total must not silence real sibling competition.
+    product = _ps_complex_product()
+    child = product["ingredient_quality_data"]["ingredients"][0]
+    sibling = {
+        **child,
+        "name": "Phosphatidylcholine",
+        "standard_name": "Phosphatidylcholine",
+        "canonical_id": "phosphatidylcholine",
+        "quantity": 300.0,
+        "raw_source_path": "ingredientRows[1].nestedRows[1]",
+        "raw_source_text": "Phosphatidylcholine",
+    }
+    product["ingredient_quality_data"]["ingredients"].append(sibling)
+    product["ingredient_quality_data"]["ingredients_scorable"].append(sibling)
+    original = deepcopy(product)
+
+    result = score_evidence(product, apply_primary_floor=True)
+
+    assert product == original
+    assert result["metadata"]["primary_evidence_floor"] == 0.0
+
+
+@pytest.mark.parametrize("linked_rows,floor_preserved", [
+    (["ingredientRows[1]"], True),
+    (["activeIngredients[0]"], False),
+])
+def test_synthetic_total_links_through_original_tree_not_names(
+    linked_rows, floor_preserved
+):
+    # DSLD 213475 also emits the complex total as a synthetic activeIngredients
+    # entry. Ownership of the nested child must come from the declared original
+    # ingredientRows tree (linked_rows / raw_source_path), never from the
+    # matching canonical_id or display name it shares with the child.
+    product = _ps_complex_product()
+    total = product["product_scoring_evidence"][0]
+    total.update(
+        raw_source_path="activeIngredients[0]",
+        linked_rows=list(linked_rows),
+    )
+    original = deepcopy(product)
+
+    without_total = deepcopy(product)
+    without_total["product_scoring_evidence"] = []
+    control = score_evidence(without_total, apply_primary_floor=True)
+    actual = score_evidence(product, apply_primary_floor=True)
+
+    assert product == original
+    assert control["metadata"]["primary_evidence_floor"] > 0
+    if floor_preserved:
+        assert actual["metadata"]["primary_evidence_floor"] == (
+            control["metadata"]["primary_evidence_floor"]
+        )
+    else:
+        assert actual["metadata"]["primary_evidence_floor"] == 0.0

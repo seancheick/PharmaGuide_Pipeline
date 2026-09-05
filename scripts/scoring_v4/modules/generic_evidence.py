@@ -535,7 +535,7 @@ def _recover_verified_primary_ingredient_matches(
     _, max_mass = _active_mass_index(product)
     if max_mass <= 0.0:
         return []
-    threshold = PRIMARY_MASS_FRACTION * max_mass
+    mass_rows = _active_mass_rows(product)
 
     recovered: List[Dict[str, Any]] = []
     for row in get_active_ingredients(product):
@@ -547,7 +547,12 @@ def _recover_verified_primary_ingredient_matches(
             # borrow generic per-ingredient human evidence or primary floors.
             continue
         mass = _mass_mg(row) or 0.0
-        if mass < threshold:
+        if mass <= 0.0:
+            continue
+        competing = _competing_active_mass(
+            mass_rows, _row_physical_source_refs(row), max_mass
+        )
+        if mass < PRIMARY_MASS_FRACTION * competing:
             continue
         row_canonical_id = str(row.get("canonical_id") or "").strip().lower()
         row_keys = _row_identity_keys(row)
@@ -977,6 +982,74 @@ def _identity_matches(value: Any, target: str) -> bool:
     return target == "collagen" and "collagen" in key
 
 
+def _active_mass_rows(
+    product: Dict[str, Any],
+) -> List[Tuple[Tuple[str, ...], float]]:
+    """(declared physical source refs, mass mg) for every massed active row."""
+    rows: List[Tuple[Tuple[str, ...], float]] = []
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        mass = _evidence_matching_mass_mg(row) or 0.0
+        if mass <= 0:
+            continue
+        rows.append((_row_physical_source_refs(row), mass))
+    return rows
+
+
+def _row_physical_source_refs(row: Dict[str, Any]) -> Tuple[str, ...]:
+    """Source-lineage refs a row declares: its own label-tree path plus any
+    explicitly linked original rows. Identity fields are deliberately excluded;
+    lineage must be declared by the source contract, never inferred from a
+    shared canonical_id or display name."""
+    refs: List[str] = []
+    for value in (row.get("raw_source_path"), row.get("source_row_ref")):
+        text = str(value or "").strip()
+        if text:
+            refs.append(text)
+    for value in row.get("linked_rows") or []:
+        text = str(value or "").strip()
+        if text:
+            refs.append(text)
+    return tuple(dict.fromkeys(refs))
+
+
+def _same_physical_source(
+    refs_a: Tuple[str, ...], refs_b: Tuple[str, ...]
+) -> bool:
+    """True when two rows declare the same physical label material: one source
+    path equals or structurally contains the other (a blend total at
+    ingredientRows[1] owns its constituent at ingredientRows[1].nestedRows[0],
+    and vice versa for a nested supplying complex). Sibling paths never match."""
+    for a in refs_a:
+        for b in refs_b:
+            if a == b or a.startswith(f"{b}.") or b.startswith(f"{a}."):
+                return True
+    return False
+
+
+def _competing_active_mass(
+    mass_rows: List[Tuple[Tuple[str, ...], float]],
+    own_refs: Tuple[str, ...],
+    default: float,
+) -> float:
+    """Heaviest active mass a candidate must be compared against for primary
+    dominance. With proven lineage, rows sharing the candidate's physical
+    source are excluded — a structural total cannot compete with its own
+    quantified active. Without lineage proof the historical whole-product
+    maximum stands; sibling rows and unrelated aggregates always compete."""
+    if not own_refs:
+        return default
+    return max(
+        (
+            mass
+            for refs, mass in mass_rows
+            if not _same_physical_source(refs, own_refs)
+        ),
+        default=0.0,
+    )
+
+
 def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float]:
     """Map each active's normalized identity tokens -> its mass (mg), plus the
     heaviest active mass. Used to link an evidence match back to the active it
@@ -1093,8 +1166,8 @@ def _primary_mass_floor(
     index, max_mass = _active_mass_index(product)
     if max_mass <= 0:
         return 0.0, None
+    mass_rows = _active_mass_rows(product)
     canon_index = _active_canonical_index(product)
-    threshold = PRIMARY_MASS_FRACTION * max_mass
     dose_map = _dose_map(product)
     floor = 0.0
     floor_canon: Optional[str] = None
@@ -1113,7 +1186,19 @@ def _primary_mass_floor(
             or bool(set(_matched_canonical_ids(entry)) & sub_clinical_canonicals)
         ):
             continue
-        if _match_active_mass(entry, index) < threshold:
+        entry_mass = _match_active_mass(entry, index)
+        if entry_mass <= 0.0:
+            continue  # an unmassed match can never be the mass-dominant active
+        entry_refs = tuple(
+            ref
+            for ref in (
+                str(value or "").strip()
+                for value in (entry.get("matched_source_row_refs") or [])
+            )
+            if ref
+        )
+        competing = _competing_active_mass(mass_rows, entry_refs, max_mass)
+        if entry_mass < PRIMARY_MASS_FRACTION * competing:
             continue  # the evidenced ingredient is not a mass-dominant active
         if entry.get("min_clinical_dose") is not None:
             dose, _ = _converted_product_dose(entry, dose_map)
