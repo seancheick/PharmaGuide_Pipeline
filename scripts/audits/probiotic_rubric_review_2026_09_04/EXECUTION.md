@@ -331,3 +331,53 @@ uploaded. Cloud engineering may proceed; full-corpus acceptance requires secure
 input provisioning or the operator's later local comparison. Global weights
 remain unchanged. No main merge, catalog publication or app bundle push belongs
 to this handoff checkpoint.
+
+## Local continuation — 2026-09-05 (feature worktree, from `dcd38005`)
+
+Return package: [CONTINUATION_RETURN_2026_09_05.md](CONTINUATION_RETURN_2026_09_05.md).
+Research: [source_ownership_lineage_research.md](source_ownership_lineage_research.md),
+[botanical_lost_match_dispositions.md](botanical_lost_match_dispositions.md).
+
+- [x] Reproduced the saved RED exactly (`1 failed, 175 passed`; floor 0.0 vs 18.0)
+  and verified all six §9 fingerprints and the three fixture hashes.
+- [x] Fixed the owned-total defect with one contract-level lineage decision
+  (`primary_mass_competitor_rows`) consumed by the three primary-mass helpers;
+  synthetic `activeIngredients[i]` provenance resolves through the real tree;
+  undisclosed members and activity-unit children keep a total competing.
+  Ownership file 11 passed; seam suite 489 passed; real labels 213475 60.8→75.9,
+  218600 60.3→75.4, 218838 unchanged (explicit unresolved sibling lineage).
+- [x] Matched targeted comparison (774 products, checkpoint vs candidate,
+  same inputs/baseline): 40 upward evidence-only score changes, 0 status/
+  module/route/evidence-set changes; every change reviewed by cause. The
+  activity-unit refinement reverted Wobenzym N and MegaZymes.
+- [x] Reviewed the botanical patch independently: joins are same-row and
+  form-gated; published-study tags are score-neutral; the removed registry
+  counts do change the depth bonus (cranberry −0.5, Boswellia −0.25 band).
+- [x] Dispositioned every lost evidence match from the accepted report:
+  echinacea and astragalus joined after reading the cited reviews live;
+  Ceylon cinnamon made an explicit reviewed denial (visible on real labels);
+  black garlic, BioVin red-grape extract and DPP-IV enzymes left unjoined;
+  the remaining families classified (holds, reviewed scopes, no score effect).
+  Registry 5.3.12; disposition file 12 passed; citation gate ok=461 / 0 / 0 / 0
+  with the two pre-existing reviewed ghost suspects.
+- [x] Attributed the five §6 dose changes with an old-code run: all moved off
+  `botanical_clinical_dose_v1` to proxy/sleep/partial-credit methods; printed
+  amounts unchanged; receiving-path semantics recorded as a decision.
+- [x] Full 15,415-product comparison against the old-code control
+  (`corpus_continuation_2026_09_05_full_v2.json`, SHA-256 `1ff7d579…8a462b`, 840.3 s,
+  zero errors): transitions identical to the accepted checkpoint; 268 retained
+  numerical changes (evidence 195 / formulation 79 / dose 43); seven controls
+  unchanged. Versus the accepted report: 180 score changes, 177 up, 3 reviewed
+  decreases, 0 status changes. The first pass (`…_full.json`) exposed 14
+  decreases; 11 were 5.3.11 real-label gaps fixed with tests (Boswellia printed
+  extract spellings, Pacran recovery row reference, cinnamon typo).
+- [x] Broad `scripts/test.sh fast` after the corpus run: 2 failed, 13,505 passed,
+  167 skipped. Both failures are the 5.3.11 cranberry entry's locked-vocabulary
+  outcome and empty goal list — a taxonomy decision, not weakened or papered over.
+- [x] Concurrent cloud branch `claude/probiotic-evidence-audit-1xp12h` compared
+  on the same targets: its fix reaches 29 of this branch's 40 products and leaves
+  real 213475 at floor 0; its nine tests pass against this branch.
+
+Not done here, by design: main merge, operational pipeline, export, Supabase,
+Flutter import, weight changes, enrollment/registry-count corrections, brand
+tier policy, clinical approvals, benchmark ratings.
