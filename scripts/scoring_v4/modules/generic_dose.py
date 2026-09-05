@@ -72,7 +72,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
-from scoring_input_contract import _role_mass_mg, primary_mass_competitor_rows
+from scoring_input_contract import mass_primary_label_active
 from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.modules.immune_support import score_immune_support_dose
 from scoring_v4.modules.joint_support import score_joint_support_dose
@@ -230,33 +230,17 @@ def _score_no_reference_quantified_dose(product: Dict[str, Any]) -> tuple[float,
 
 
 def _mass_primary_without_reference(product: Dict[str, Any]) -> Optional[str]:
-    """Canonical id of the heaviest competing active when it has no adequacy
-    row. Uses the shared source-ownership competitor set so a structural total
-    cannot stand in for its own child, and the contract's mass parser."""
+    """Identity of the product's mass-primary label active when it has no
+    adequacy row. The scoring contract decides which row is the primary
+    (shared source ownership, no opaque totals, no unmapped identities)."""
     assessed: set[str] = set()
     for row in _safe_list(_safe_dict((product or {}).get("rda_ul_data")).get("adequacy_results")):
         if isinstance(row, dict):
             assessed.update(
                 _norm_text(row.get(key)) for key in ("canonical_id", "nutrient") if row.get(key)
             )
-    heaviest: Optional[Dict[str, Any]] = None
-    heaviest_mass = 0.0
-    rows = get_active_ingredients(product)
-    for row in primary_mass_competitor_rows(product, rows):
-        mass = _role_mass_mg(row)
-        if mass is None or mass <= heaviest_mass:
-            continue
-        heaviest_mass = mass
-        heaviest = row
+    heaviest = mass_primary_label_active(product, get_active_ingredients(product))
     if heaviest is None:
-        return None
-    # Only an identified label active can own the product's dose story. An
-    # opaque blend total (superfood/greens bases) or an unmapped projection
-    # is not a primary active whose missing reference should cap assessed
-    # nutrients; it is already reported by transparency and identity coverage.
-    if _norm_text(heaviest.get("scoring_input_kind")) == "product_level_evidence":
-        return None
-    if _norm_text(heaviest.get("canonical_source_db")) in {"unmapped"}:
         return None
     identities = {
         _norm_text(heaviest.get(key))
