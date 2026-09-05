@@ -49,9 +49,12 @@ def _row_text(row: Mapping, *, source_only: bool = False) -> str:
         if not isinstance(label, str) or not label.strip():
             return ""
         values = [label]
+        # Only the cleaner's own source taxonomy may extend the label words: a
+        # source-required scope distrusts enrichment-derived form names, so a
+        # row without source taxonomy contributes its printed label text alone.
         taxonomy = row.get("raw_taxonomy")
         source_forms = taxonomy.get("forms") if isinstance(taxonomy, Mapping) else None
-        forms = source_forms if isinstance(source_forms, list) else row.get("forms")
+        forms = source_forms if isinstance(source_forms, list) else []
     else:
         values = [row.get(k) for k in ("name", "raw_source_text", "matched_form", "form_id")]
         forms = row.get("forms")
