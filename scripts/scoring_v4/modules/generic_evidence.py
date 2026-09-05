@@ -22,6 +22,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from collagen_taxonomy import PEPTIDES_I_III, classify_collagen_subtype_strict
 from clinical_applicability import filter_clinical_matches
+from scoring_input_contract import primary_mass_competitor_rows
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
@@ -908,7 +909,7 @@ def _keys_include_module_owned_evidence(keys: set[str]) -> bool:
 def _has_primary_collagen_peptide_identity(product: Dict[str, Any]) -> bool:
     max_active_mass = 0.0
     max_peptide_mass = 0.0
-    for row in get_active_ingredients(product):
+    for row in _competing_active_rows(product):
         if not isinstance(row, dict):
             continue
         mass = _mass_mg(row) or 0.0
@@ -977,19 +978,32 @@ def _identity_matches(value: Any, target: str) -> bool:
     return target == "collagen" and "collagen" in key
 
 
+def _competing_active_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Actives that compete for mass dominance: the shared scoring contract
+    removes a structural total whose source lineage proves it is the physical
+    source of a quantified label active (its own child or parent row)."""
+    return primary_mass_competitor_rows(product, get_active_ingredients(product))
+
+
 def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float]:
     """Map each active's normalized identity tokens -> its mass (mg), plus the
-    heaviest active mass. Used to link an evidence match back to the active it
-    came from and decide whether that active is mass-dominant."""
+    heaviest COMPETING active mass. Used to link an evidence match back to the
+    active it came from and decide whether that active is mass-dominant. Every
+    row is indexed at its real mass; only competitors set the maximum."""
     index: Dict[str, float] = {}
     max_mass = 0.0
-    for row in get_active_ingredients(product):
+    rows = get_active_ingredients(product)
+    # Projected rows are rebuilt on every contract call, so the competitor
+    # set must be derived from this same row list.
+    competitors = {id(row) for row in primary_mass_competitor_rows(product, rows)}
+    for row in rows:
         if not isinstance(row, dict):
             continue
         mass = _evidence_matching_mass_mg(row) or 0.0
         if mass <= 0:
             continue
-        max_mass = max(max_mass, mass)
+        if id(row) in competitors:
+            max_mass = max(max_mass, mass)
         source_ref = row.get("raw_source_path") or row.get("source_row_ref")
         if source_ref:
             index[f"source:{source_ref}"] = mass
@@ -1052,7 +1066,7 @@ def _mass_dominant_essential_canonical(product: Dict[str, Any]) -> Optional[str]
     product, only a product whose PRIMARY ingredient is the essential nutrient."""
     best_cid: Optional[str] = None
     best_mass = 0.0
-    for row in get_active_ingredients(product):
+    for row in _competing_active_rows(product):
         if not isinstance(row, dict):
             continue
         mass = _mass_mg(row) or 0.0

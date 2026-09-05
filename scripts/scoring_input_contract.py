@@ -1277,9 +1277,12 @@ def _sports_primary_identity_without_dose(row: Dict[str, Any], canonical: str) -
     return _stamp_evidence_identity_contract(item, row)
 
 
-def _is_nested_under(parent_path: str, row: Dict[str, Any]) -> bool:
-    child_path = str(row.get("raw_source_path") or "")
+def _path_is_nested_under(parent_path: str, child_path: str) -> bool:
     return bool(parent_path and child_path.startswith(f"{parent_path}.nestedRows["))
+
+
+def _is_nested_under(parent_path: str, row: Dict[str, Any]) -> bool:
+    return _path_is_nested_under(parent_path, str(row.get("raw_source_path") or ""))
 
 
 def _identity_named_in_product_title(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
@@ -2474,14 +2477,8 @@ def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
     )
 
 
-def required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
-    """Keep required conflicts and invalid identity projections in coverage.
-
-    This consumes the existing typed identity decision, not label matching or
-    dose inference. Source ownership can supply fields omitted by an IQD row;
-    explicit structural, inactive and non-scorable dispositions stay excluded.
-    """
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
+def _source_tree_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Flatten the product's original active-ingredient tree, parents first."""
     source_rows = [row for row in _safe_list(product.get("activeIngredients"))
                    if isinstance(row, dict)]
     seen_objects = {id(row) for row in source_rows}
@@ -2491,6 +2488,18 @@ def required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, 
                 if isinstance(child, dict) and id(child) not in seen_objects:
                     seen_objects.add(id(child))
                     source_rows.append(child)
+    return source_rows
+
+
+def required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    """Keep required conflicts and invalid identity projections in coverage.
+
+    This consumes the existing typed identity decision, not label matching or
+    dose inference. Source ownership can supply fields omitted by an IQD row;
+    explicit structural, inactive and non-scorable dispositions stay excluded.
+    """
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
+    source_rows = _source_tree_rows(product)
     source_by_key = {scoring_row_key(row, index): row
                      for index, row in enumerate(source_rows)}
     conflicts: Dict[str, Dict[str, Any]] = {}
@@ -4597,6 +4606,117 @@ def profile_owner_candidate_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, A
         return abs(disclosed_mass - projection_mass) <= tolerance
 
     return [row for row in rows if not projection_is_reconciled(row)]
+
+
+_SYNTHETIC_TREE_PATH = re.compile(
+    r"^activeIngredients\[(\d+)\]((?:\.nestedIngredients\[\d+\])*)$"
+)
+
+
+def _resolve_source_tree_path(product: Dict[str, Any], path: str) -> str:
+    """Resolve a synthetic ``activeIngredients[i]`` provenance path to the
+    original label row path through the product's actual tree. Any path that
+    is not a resolvable tree index is returned unchanged."""
+    match = _SYNTHETIC_TREE_PATH.match(path)
+    if not match:
+        return path
+    indexes = [int(match.group(1))]
+    indexes.extend(int(value) for value in re.findall(r"\[(\d+)\]", match.group(2)))
+    node: Any = _safe_list(product.get("activeIngredients"))
+    for depth, index in enumerate(indexes):
+        if depth:
+            node = _safe_list(node.get("nestedIngredients")) if isinstance(node, dict) else []
+        if index >= len(node) or not isinstance(node[index], dict):
+            return path
+        node = node[index]
+    return str(node.get("raw_source_path") or "").strip() or path
+
+
+def primary_mass_competitor_rows(
+    product: Dict[str, Any], rows: List[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
+    """Rows that compete for mass dominance (primary-floor style comparisons).
+
+    A ``product_level_evidence`` structural total is not a separate active when
+    the source tree proves it is the physical source of, or the material
+    supplying, a quantified label active: the label row is the same row, is
+    nested under the total, or is the total's ancestor.  Synthetic
+    ``activeIngredients[i]`` provenance resolves through the actual tree; shared
+    canonical identity or name never creates lineage.  An owned total leaves
+    the competition only when mass-comparable label rows stand in for it: the
+    linked active and every member of the total's own subtree must carry a
+    comparable mass.  An undisclosed member, or one declared only in activity,
+    CFU or IU units, keeps the total competing as an opaque aggregate, and no
+    remainder is assigned to any child.  Unlinked totals, row-level label
+    projections and totals without a mass-quantified linked active always
+    compete.  Rows are returned unchanged and in order; nothing is mutated.
+    """
+    product = product or {}
+    rows = [row for row in _safe_list(rows) if isinstance(row, dict)]
+
+    def row_path(row: Dict[str, Any]) -> str:
+        return str(row.get("raw_source_path") or "").strip()
+
+    quantified_label_paths = {
+        row_path(row)
+        for row in rows
+        if _norm(row.get("scoring_input_kind")) != "product_level_evidence"
+        and row_path(row)
+        and _role_mass_mg(row) is not None
+    }
+    if not quantified_label_paths:
+        return rows
+
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
+    quantified_by_path: Dict[str, bool] = {}
+    for collection in (
+        _source_tree_rows(product),
+        _safe_list(iqd.get("ingredients")),
+        _safe_list(iqd.get("ingredients_skipped")),
+        _safe_list(iqd.get("ingredients_scorable")),
+    ):
+        for row in collection:
+            if not isinstance(row, dict):
+                continue
+            path = row_path(row)
+            if path:
+                quantified_by_path[path] = (
+                    quantified_by_path.get(path, False)
+                    or _role_mass_mg(row) is not None
+                )
+
+    def lineage_owned(total: Dict[str, Any]) -> bool:
+        total_paths = {
+            _resolve_source_tree_path(product, str(path).strip())
+            for path in (*_safe_list(total.get("linked_rows")), total.get("raw_source_path"))
+            if str(path or "").strip()
+        }
+        if not total_paths:
+            return False
+        linked = any(
+            label_path == total_path
+            or _path_is_nested_under(total_path, label_path)
+            or _path_is_nested_under(label_path, total_path)
+            for total_path in total_paths
+            for label_path in quantified_label_paths
+        )
+        if not linked:
+            return False
+        return all(
+            quantified
+            for total_path in total_paths
+            for path, quantified in quantified_by_path.items()
+            if _path_is_nested_under(total_path, path)
+        )
+
+    return [
+        row
+        for row in rows
+        if not (
+            _norm(row.get("scoring_input_kind")) == "product_level_evidence"
+            and lineage_owned(row)
+        )
+    ]
 
 
 def _classify_botanical_owner_type(
