@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.11",
-    "last_updated": "2026-09-04",
+    "schema_version": "5.3.12",
+    "last_updated": "2026-09-05",
     "total_entries": 202,
     "changelog": [
+      "5.3.12 (2026-09-05): Individually reviewed lost botanical joins: add exact registry-projected preparation aliases for Echinacea purpurea aerial/herb/root extract (PMID 24554461) and Astragalus root/extract (PMID 37952511); give INGR_CINNAMON_EXTRACT an explicit Ceylon exclusion scope (PMID 24019277). Real-label review of 5.3.11: PRECLIN_BOSWELLIA required terms now include the printed extract spellings (gum extract, standardized extract, Apres-Flex, Casperome, frankincense phytosome) and its primary outcome uses the locked vocabulary label Joint & Bone Health. Fermented black garlic, whole red-grape extract and DPP-IV enzyme products remain unjoined after review. No enrollment, effect-direction, multiplier, dose-threshold or clinical-approval changes.",
       "5.3.11 (2026-09-04): Repair exact source-declared cranberry fruit-concentrate and Boswellia resin-extract evidence joins. Scope existing records to fruit/extract preparations and actual urinary/OA endpoints; correct source-bound enrollments, remove untraceable registry counts and the whole-plant Boswellia UNII. No dose thresholds, evidence multipliers or clinical approvals added.",
       "5.3.10 (2026-09-04): Restore two exact green-tea extract label aliases and two verified full EGCG spellings; constrain existing evidence to source-declared extract/catechin preparations, excluding whole-leaf and theanine-targeted transfers. Existing PMIDs rechecked; no evidence-strength, aggregate-count, or dose-threshold changes.",
       "5.3.9 (2026-09-03): Add DS-01 companion mechanistic PMID 41750436; record shared-protocol/cohort uncertainty and unpublished per-blend trial allocations. Retain single symptom RCT, positive_weak effect and enrollment 350; no automatic publication-count credit.",
@@ -9968,8 +9969,19 @@
         "cinnulin pf",
         "cinnamon",
         "cinnamon bark",
-        "cinnamon bark extract"
+        "cinnamon bark extract",
+        "ceylon cinnamon",
+        "cinnamomum verum"
       ],
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_canonical_ids": ["ceylon_cinnamon"],
+        "excluded_form_terms": ["ceylon", "cinnamomum verum", "cinnamomum zeylanicum", "true cinnamon"],
+        "supported_outcomes": ["fasting_glucose", "lipid_profile"],
+        "reviewed_at": "2026-09-05",
+        "source_pmids": ["24019277"],
+        "reason": "The registry family and its aliases are Cassia/Cinnulin cinnamon preparations. The cited 2013 meta-analysis of 10 type 2 diabetes trials reports no Ceylon-specific subgroup, so Ceylon cinnamon (Cinnamomum verum) is excluded rather than assumed equivalent; its aliases exist only so the exclusion is recorded as a reviewed rejection. The scope is an exclusion, not a source-word requirement, so a misspelled but correctly mapped generic cinnamon label keeps its family evidence. This scope check does not establish an effective dose, an HbA1c benefit, or ineffectiveness of Ceylon cinnamon."
+      },
       "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
@@ -9985,9 +9997,9 @@
       "health_goals_supported": [
         "Blood Sugar Support"
       ],
-      "notes": "Meta-analytic human evidence supports cinnamon for modest fasting-glucose and insulin-resistance improvements, but HbA1c and long-term glycemic effects are less consistently robust across trials.",
+      "notes": "Meta-analytic human evidence supports cinnamon for modest fasting-glucose and insulin-resistance improvements, but HbA1c and long-term glycemic effects are less consistently robust across trials. Applicability is scoped to Cassia/Cinnulin preparations; Ceylon cinnamon is excluded pending its own source review, which is not a finding of ineffectiveness.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-09-05",
       "notable_studies": "Meta-analysis PMID 24019277 found favorable glycemic and lipid shifts with cinnamon supplementation, although the effect size on HbA1c remained modest.",
       "references_structured": [
         {
@@ -12808,18 +12820,18 @@
       "health_goals_supported": [
         "Joint & Bone Mobility"
       ],
-      "notes": "Human evidence concerns Boswellia serrata extracts for osteoarthritis pain, stiffness and function, not stress, longevity or broad immune benefit. This family-level association does not establish that an unspecified resin extract equals Aflapin or Boswellin Super in standardized composition, dose or onset. Enrollment 545 is the seven-trial 2020 review only; participants from the newer trials are not summed. No generic extract-mass threshold is established here. The former UNII X7B7P649WQ identifies BOSWELLIA SERRATA WHOLE, not an extract, and is not used as an extract identifier.",
+      "notes": "Human evidence concerns Boswellia serrata extracts for osteoarthritis pain, stiffness and function, not stress, longevity or broad immune benefit. This family-level association does not establish that an unspecified resin extract equals Aflapin or Boswellin Super in standardized composition, dose or onset. Enrollment 545 is the seven-trial 2020 review only; participants from the newer trials are not summed. No generic extract-mass threshold is established here. The former UNII X7B7P649WQ identifies BOSWELLIA SERRATA WHOLE, not an extract, and is not used as an extract identifier. Real-label review (2026-09-05) added the printed extract spellings gum extract, standardized extract, Apres-Flex, Casperome and frankincense phytosome as family-level extract preparations; a bare Boswellia serrata row with only a boswellic-acid form stays unmatched until its source states an extract. The primary outcome uses the locked vocabulary label Joint & Bone Health for osteoarthritis pain, stiffness and function.",
       "study_type": "systematic_review_meta",
       "published_studies": [
         "RCT",
         "systematic_review",
         "meta-analysis"
       ],
-      "last_updated": "2026-09-04",
+      "last_updated": "2026-09-05",
       "applicability": {
         "scope": "ingredient",
         "require_source_label_form": true,
-        "required_form_terms": ["boswellia serrata resin extract", "boswellia serrata gum resin extract", "boswellia serrata extract", "boswellia extract", "aflapin", "apresflex", "boswellin", "5 loxin"],
+        "required_form_terms": ["boswellia serrata resin extract", "boswellia serrata gum resin extract", "boswellia serrata extract", "boswellia extract", "gum extract", "standardized extract", "aflapin", "apresflex", "apres flex", "boswellin", "5 loxin", "casperome", "frankincense phytosome"],
         "excluded_form_terms": ["essential oil", "resin powder", "leaf", "leaves"],
         "supported_outcomes": ["osteoarthritis_pain_stiffness_function"],
         "studied_population": "People with osteoarthritis, principally knee OA; not generalized stress, immune or longevity evidence. Named standardized extract trials do not establish equivalence to every generic resin extract.",
@@ -12909,7 +12921,7 @@
         }
       ],
       "effect_direction": "positive_strong",
-      "primary_outcome": "Osteoarthritis pain, stiffness and physical function",
+      "primary_outcome": "Joint & Bone Health",
       "total_enrollment": 545,
       "effect_direction_confidence": "high",
       "effect_direction_rationale": "Existing positive direction is limited to OA pain, stiffness and function in the seven-trial review and cited standardized-extract trials. The preparations differ; this is not proof of interchangeable doses, rapid benefit from any generic resin extract, or benefit outside the studied joint condition.",
@@ -18361,7 +18373,9 @@
       "aliases": [
         "astragalus",
         "astragalus membranaceus",
-        "huang qi"
+        "huang qi",
+        "astragalus root",
+        "astragalus extract"
       ],
       "category": "adaptogen_stress",
       "evidence_level": "ingredient-human",
@@ -18378,10 +18392,10 @@
         "Immune Support",
         "Increase Energy"
       ],
-      "notes": "Human evidence indicates immunomodulatory effects, but heterogeneity and methodological variability are substantial.",
+      "notes": "Human evidence indicates immunomodulatory effects, but heterogeneity and methodological variability are substantial. The root (Radix Astragali, huang qi) is the medicinal part named by this family, so a source-declared root preparation or extract is a family-level join; the 2023 meta-analysis pooled heterogeneous human Astragalus interventions and does not establish preparation, route or dose equivalence.",
       "notable_studies": "Systematic review/meta-analysis of human studies found favorable immune-marker changes with high heterogeneity (PMID: 37952511).",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-02-17",
+      "last_updated": "2026-09-05",
       "references_structured": [
         {
           "type": "pubmed",
@@ -18575,7 +18589,10 @@
         "echinacea",
         "echinacea purpurea",
         "echinacea angustifolia",
-        "echinacea extract"
+        "echinacea extract",
+        "echinacea purpurea aerial",
+        "echinacea purpurea herb",
+        "echinacea purpurea root extract"
       ],
       "category": "immune",
       "evidence_level": "ingredient-human",
@@ -18593,10 +18610,10 @@
       "health_goals_supported": [
         "Immune Support"
       ],
-      "notes": "Evidence suggests modest, formulation-dependent effects for common-cold outcomes; heterogeneity across preparations is substantial.",
+      "notes": "Evidence suggests modest, formulation-dependent effects for common-cold outcomes; heterogeneity across preparations is substantial. The 2014 Cochrane review pooled 24 trials across Echinacea species and plant parts, including seven trials of Echinacea purpurea aerial-part preparations, so the registry-projected aerial, herb and purpurea root-extract preparation names are family-level joins. Species and plant part do not establish a studied dose or a product-specific effect.",
       "notable_studies": "The best indexed pooled evidence remains the 2014 systematic review/meta-analysis (PMID 24554461), which found mixed but directionally favorable results for prevention or treatment of the common cold depending on product and regimen. Echinacea should therefore remain product-sensitive rather than presented as uniformly effective.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-09-05",
       "references_structured": [
         {
           "type": "pubmed",

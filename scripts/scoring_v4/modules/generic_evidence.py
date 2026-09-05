@@ -500,9 +500,22 @@ def _recover_verified_product_level_matches(
             # the primary-floor gate can prove this is not trace evidence.
             recovered_entry["matched_term"] = row.get("name") or row.get("standard_name")
             recovered_entry["matched_canonical_id"] = row.get("canonical_id")
+            _stamp_recovery_source_ref(recovered_entry, row)
             recovered.append(recovered_entry)
             existing_ids.add(entry_id)
     return recovered
+
+
+def _stamp_recovery_source_ref(entry: Dict[str, Any], row: Dict[str, Any]) -> None:
+    """Bind a scoring-contract recovery to the exact row it was recovered from.
+
+    Source-required applicability scopes evaluate only the referenced source
+    row; without the reference every recovery is rejected as unresolved even
+    when the row's own label satisfies the scope.
+    """
+    ref = str(row.get("raw_source_path") or row.get("source_row_ref") or "").strip()
+    if ref:
+        entry["matched_source_row_refs"] = [ref]
 
 
 def _recover_verified_primary_ingredient_matches(
@@ -581,6 +594,7 @@ def _recover_verified_primary_ingredient_matches(
             recovered_entry["source_data"] = f"backed_clinical_studies:{entry_id}"
             recovered_entry["matched_term"] = row.get("standard_name") or row.get("name")
             recovered_entry["matched_canonical_id"] = row.get("canonical_id")
+            _stamp_recovery_source_ref(recovered_entry, row)
             recovered.append(recovered_entry)
             existing_ids.add(entry_id)
             existing_identity_keys.update(entry_keys)
