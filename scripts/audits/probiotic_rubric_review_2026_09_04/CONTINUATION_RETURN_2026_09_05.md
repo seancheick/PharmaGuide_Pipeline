@@ -488,3 +488,92 @@ identity as `mapped: True` before.
   while its `evidence_tier` is 4 (display text only; untouched).
 - The identity corrections (17186, 328831, the 27 UNII rows) reach shipped
   artifacts only through an operational re-clean.
+
+---
+
+# Round 3, second pass — Codex's third audit (2026-09-06)
+
+Codex reproduced three remaining gaps in the round-3 tree (`3e2f5343`). Each
+was reproduced here with a failing test before the change, then closed; the
+65 products the ancestry rule had released and the cranberry goal changes
+were reviewed; one consolidated audit was run on the final tree.
+
+## Commits
+
+Pipeline `3e2f5343..221594af` plus the docs commit that adds this
+section, on `codex/probiotic-evidence-coverage`. The app repository needs no
+change this pass (vocabularies unchanged). Nothing merged, published,
+uploaded, imported, calibrated or rebuilt.
+
+## 1. Dose credit no longer transfers across ancestry
+
+Reproduced: vitamin C nested under an unassessed Cognigrape restored 22/22.
+`source_linked_rows` now links only the same physical row — the same
+resolved source path, or the product's single active re-identified from the
+title (`single_active_title_embedded_mass`, the "Vitamin K2" child the
+enricher cuts under an assessed "Vitamin K" row) with the label row it is
+nested under. A constituent a parent declares, an ordinary projection nested
+under a row, or a sibling row never transfers an assessment; shared ancestry
+is not applicability. Review of the 65 products the ancestry rule released:
+61 are capped again (flaxseed 36, borage seed oil 10, black currant 3, fish
+oil 3, chia 2, BHB 2, lingonberry, omega-6, brewer's yeast, acerola,
+lecithin); 4 stay released — the K2 title projection (25514) and three
+products with no identified primary at all (`dose_guard_families_2026_09_06.json`
+updated). Tests: `test_v4_generic_dose_p132a.py` (+2, and the constituent
+test inverted to "does not assess its parent").
+
+## 2. The urinary goal consumes the evidence registry
+
+Reproduced: "Cranberry Leaf Extract 500 mg" was supported at confidence 1.0
+although `INGR_CRANBERRY` excludes leaf; the 500 mg cutoff was the synergy
+cluster's number. `_urinary_goal_cluster_applies` now tests each candidate
+row through `clinical_applicability.assess_clinical_applicability` against
+`INGR_CRANBERRY`, exactly as the evidence pillar does: the printed source
+label must be a cranberry fruit preparation (leaf, seed, root and essential
+oil excluded there) and, when the entry carries a dose policy, its minimum
+daily dose decides supported vs. `below_applicable_clinical_dose` →
+underdosed. The entry carries no dose policy — its own note records that
+equivalence of preparations and PAC doses is uncertain (Cochrane 2023, PMID
+37068952) — so today an applicable cranberry row declares neither. The
+synergy min-dose loader and the local seed rule are removed; the identity
+token set is a prefilter only. Consequences, measured on the corpus
+(`urinary_goal_transitions_2026_09_06.json` superseded): of the 227 products that carry the urinary synergy cluster or a cranberry row, the round-2 tree listed 118 as supported and 9 as underdosed (129 cluster matches, 42 of them without a cranberry row); the final tree lists none — every applicable cranberry row is withheld for want of a reviewed dose policy, and every vitamin C + probiotic, uva ursi, D-mannose and leaf/seed product is excluded on applicability (`urinary_goal_transitions_2026_09_06_v2.json`).
+Tests: `test_compute_goal_matches.py` (registry has no dose policy; nothing
+declared without one across six shapes; with a hypothetical patched policy
+the supported/underdosed tiers hold and leaf, seed, lactobacillus + vitamin C,
+D-mannose, uva ursi and a branded row whose label never says cranberry all
+fail). The registry's applicability module reads `unit_normalized`, and the
+enricher writes `gram(s)` there for DSLD's "Gram(s)", which its unit table
+does not know; that pre-existing seam (affecting any entry with a dose
+policy, of which there are six, none cranberry) is recorded, not changed.
+
+## 3. Structural classification overrides legacy flags
+
+Reproduced: replaying the 17186 fixture with explicit `mapped: true` on the
+structural projection preserved it. The row build now sets `mapped` and
+`mapped_identity` to False for every `label_taxonomy_anchor`, whatever the
+item carried. The stored corpus artifacts carry no explicit flags on native
+evidence, so corpus scores are unchanged by this. Test:
+`test_structural_anchor_identity_flags.py` (+1).
+
+## Verification
+
+- Targeted comparison, 1,826 structural products, control `db5325d2` vs
+  candidate (`corpus_round3_candidate_structural_targets_v3.json`):
+  1,826 products (candidate 379.0 s, zero errors), status transitions identical; 337 products differ, all decreases — 289 formulation changes of at most 0.8 points and 48 dose caps to 14.5 — the same set as the first pass (`corpus_round3_structural_ab_diffs_v3.json`): the narrowed lineage rule touches none of the structural products.
+- Final consolidated audit `corpus_continuation_2026_09_06_full_v7.json`
+  (SHA-256 `df89363f0d9027d062fa2a42eb1137267c56af3d46b88d9994b4b7f2937f657a`, 900.4 s, zero errors): transitions identical to round 2 (15,104 scored, 257 not scored, 54 suppressed); 902 products differ from the round-2 report — 752 score changes, all decreases, no status change: 342 dose (266 at −5.5, the 20 → 14.5 cap for a primary whose own source carries no bandable reference — 61 more than the first pass, the ancestry releases now capped again; 76 smaller) and 410 formulation (≤ 0.8); 117 tier labels and 4 verdict labels follow those decreases; 150 copy-only changes (484 dose reasons name the missing benchmark, Cognigrape 304628 at 56.4). Natural Vitamin K2 25514 is unchanged from round 2 (title projection kept). The round-1 controls, 213475 and 218600 are unchanged; the committed tree matches all 267 audited file hashes.
+- Broad `scripts/test.sh fast` on the final tree: 13,553 passed, 165 skipped, 0 failed (235.2 s).
+
+## Human decisions after this pass
+
+- `INGR_CRANBERRY` needs a reviewed dose policy (`dose_unit`,
+  `minimum_daily_dose`, per preparation if the review supports it) before the
+  urinary goal can declare support; until then the goal is present in the
+  vocabularies and the mapping but matches no product.
+- Branded cranberry rows whose printed label never says cranberry (CranRx)
+  fail the registry's source-label rule for the goal and the evidence pillar
+  alike; adding the printed brand to the entry's aliases is a registry review.
+- `clinical_applicability._UNIT_SCALE` does not know `gram(s)`.
+- The keratin-over-biotin mass-dominance item and the reference-table
+  coverage item from the first pass stand.

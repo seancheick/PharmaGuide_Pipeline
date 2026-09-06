@@ -445,3 +445,20 @@ See the round-3 section of [CONTINUATION_RETURN_2026_09_05.md](CONTINUATION_RETU
 Not done here, by design: main merge, operational pipeline/re-clean, export,
 Supabase, Flutter import, weight calibration, 37-brand rerun, PAC-based
 cranberry dose gate, probiotic strain rules for the urinary goal.
+
+### Round 3, second pass — Codex's third audit (2026-09-06)
+
+See the matching section of [CONTINUATION_RETURN_2026_09_05.md](CONTINUATION_RETURN_2026_09_05.md).
+
+- [x] Dose: no credit transfer across ancestry; only the same physical row
+  (same path, or the title-embedded single-active projection with its label
+  row) assesses a primary. 61 of the 65 ancestry releases capped again.
+- [x] Urinary goal consumes `INGR_CRANBERRY` applicability (leaf/seed/root
+  excluded) and declares nothing without a reviewed dose policy; the synergy
+  500 mg cutoff and the local seed rule are gone. of the 227 products that carry the urinary synergy cluster or a cranberry row, the round-2 tree listed 118 as supported and 9 as underdosed (129 cluster matches, 42 of them without a cranberry row); the final tree lists none — every applicable cranberry row is withheld for want of a reviewed dose policy, and every vitamin C + probiotic, uva ursi, D-mannose and leaf/seed product is excluded on applicability (`urinary_goal_transitions_2026_09_06_v2.json`).
+- [x] Structural anchors are `mapped=False` regardless of legacy flags.
+- [x] Targeted comparison on the 1,826 structural products: 1,826 products (candidate 379.0 s, zero errors), status transitions identical; 337 products differ, all decreases — 289 formulation changes of at most 0.8 points and 48 dose caps to 14.5 — the same set as the first pass (`corpus_round3_structural_ab_diffs_v3.json`): the narrowed lineage rule touches none of the structural products.
+- [x] Final consolidated audit `corpus_continuation_2026_09_06_full_v7.json`
+  (SHA-256 `df89363f0d9027d062fa2a42eb1137267c56af3d46b88d9994b4b7f2937f657a`, 900.4 s, zero errors): transitions identical to round 2 (15,104 scored, 257 not scored, 54 suppressed); 902 products differ from the round-2 report — 752 score changes, all decreases, no status change: 342 dose (266 at −5.5, the 20 → 14.5 cap for a primary whose own source carries no bandable reference — 61 more than the first pass, the ancestry releases now capped again; 76 smaller) and 410 formulation (≤ 0.8); 117 tier labels and 4 verdict labels follow those decreases; 150 copy-only changes (484 dose reasons name the missing benchmark, Cognigrape 304628 at 56.4). Natural Vitamin K2 25514 is unchanged from round 2 (title projection kept). The round-1 controls, 213475 and 218600 are unchanged; the committed tree matches all 267 audited file hashes.
+- [x] Broad `scripts/test.sh fast` on the final tree: 13,553 passed, 165 skipped, 0 failed (235.2 s).
+- [x] Pipeline committed and pushed (`3e2f5343..221594af` plus docs); app unchanged.
