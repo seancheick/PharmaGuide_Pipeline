@@ -4719,33 +4719,46 @@ def primary_mass_competitor_rows(
     ]
 
 
-def mass_primary_label_active(
+def mass_primary_label_actives(
     product: Dict[str, Any], rows: List[Dict[str, Any]]
-) -> Optional[Dict[str, Any]]:
-    """The heaviest competing row when it is an identified label active.
+) -> List[Dict[str, Any]]:
+    """The identified label actives that share the heaviest competing mass.
 
     Reuses :func:`primary_mass_competitor_rows` so a structural total cannot
-    stand in for its own child. Returns None when the heaviest competitor is a
+    stand in for its own child. Every competitor tied at the top mass is a
+    primary; the result does not depend on label order and is sorted by
+    identity so callers make the same decision for the same label. A
     ``product_level_evidence`` total (opaque blends are reported by
-    transparency, not treated as the product's primary active) or carries an
-    unmapped identity. Identity policy stays in this contract; scoring modules
-    consume the row without reading identity fields themselves.
+    transparency, not treated as the product's primary active) or a row with
+    an unmapped identity is never returned, and when it alone holds the top
+    mass the product has no identified primary. Identity policy stays in this
+    contract; scoring modules consume the rows without reading identity
+    fields themselves.
     """
-    heaviest: Optional[Dict[str, Any]] = None
-    heaviest_mass = 0.0
+    top_mass = 0.0
+    candidates: List[tuple[float, Dict[str, Any]]] = []
     for row in primary_mass_competitor_rows(product, rows):
         mass = _role_mass_mg(row)
-        if mass is None or mass <= heaviest_mass:
+        if mass is None or mass <= 0:
             continue
-        heaviest_mass = mass
-        heaviest = row
-    if heaviest is None:
-        return None
-    if _norm(heaviest.get("scoring_input_kind")) == "product_level_evidence":
-        return None
-    if _norm(heaviest.get("canonical_source_db")) == "unmapped":
-        return None
-    return heaviest
+        candidates.append((mass, row))
+        top_mass = max(top_mass, mass)
+    if not candidates:
+        return []
+    primaries = [
+        row
+        for mass, row in candidates
+        if mass == top_mass
+        and _norm(row.get("scoring_input_kind")) != "product_level_evidence"
+        and _norm(row.get("canonical_source_db")) != "unmapped"
+    ]
+    return sorted(
+        primaries,
+        key=lambda row: (
+            _norm(row.get("canonical_id") or row.get("standard_name") or row.get("name")),
+            str(row.get("raw_source_path") or ""),
+        ),
+    )
 
 
 def _classify_botanical_owner_type(

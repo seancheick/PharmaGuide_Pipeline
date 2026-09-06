@@ -870,3 +870,80 @@ def test_opaque_blend_total_is_not_a_dose_primary() -> None:
     unmapped["ingredient_quality_data"]["ingredients_scorable"][2]["canonical_source_db"] = "unmapped"
     assert _mass_primary_without_reference(unmapped) is None
     assert _mass_primary_without_reference(_mixed_product(250.0)) == "cognigrape"
+
+
+# --- Round 3 (Codex audit): only usable assessments count; ties are deterministic ---
+
+
+def test_empty_assessment_row_does_not_restore_full_credit() -> None:
+    # An adequacy row for the primary with neither reference percentage is not
+    # an assessment; the cap must hold exactly as if the row were absent.
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    product = _mixed_product(250.0)
+    product["rda_ul_data"]["adequacy_results"].append(
+        {"canonical_id": "cognigrape", "nutrient": "Cognigrape", "pct_rda": None, "pct_ul": None}
+    )
+    payload = score_dose(product)
+    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["metadata"]["primary_active_unassessed"] == "cognigrape"
+
+
+def test_ul_only_assessment_row_is_not_a_usable_assessment() -> None:
+    # The window proxy skips a row with pct_ul but no pct_rda (no band); the
+    # guard must use the same usability rule as the proxy it protects.
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    product = _mixed_product(250.0)
+    product["rda_ul_data"]["adequacy_results"].append(
+        {"canonical_id": "cognigrape", "nutrient": "Cognigrape", "pct_rda": None, "pct_ul": 4.0}
+    )
+    payload = score_dose(product)
+    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+
+def test_rda_only_assessment_row_is_a_usable_assessment() -> None:
+    from scoring_v4.modules.generic_dose import score_dose, CAP_SUPPLEMENTAL_WINDOW
+
+    product = _mixed_product(250.0)
+    product["rda_ul_data"]["adequacy_results"].append(
+        {"canonical_id": "cognigrape", "nutrient": "Cognigrape", "pct_rda": 80.0, "pct_ul": None}
+    )
+    payload = score_dose(product)
+    assert payload["components"]["supplemental_window_proxy"] == CAP_SUPPLEMENTAL_WINDOW
+    assert "primary_active_unassessed" not in payload["metadata"]
+
+
+def _tied_product(unassessed_first: bool):
+    rows = [
+        _ingredient(name="Vitamin C", canonical_id="vitamin_c", quantity=250.0, unit="mg"),
+        _ingredient(name="Cognigrape", canonical_id="cognigrape", quantity=250.0, unit="mg", bio_score=None),
+    ]
+    if unassessed_first:
+        rows.reverse()
+    return _product(
+        ingredients=rows,
+        adequacy_results=[
+            {"canonical_id": "vitamin_c", "nutrient": "Vitamin C", "pct_rda": 278.0, "pct_ul": 12.5},
+        ],
+        supp_type="multi",
+    )
+
+
+def test_tied_mass_primaries_cap_regardless_of_label_order() -> None:
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    for unassessed_first in (False, True):
+        payload = score_dose(_tied_product(unassessed_first))
+        assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, unassessed_first
+        assert payload["metadata"]["primary_active_unassessed"] == "cognigrape"
+
+
+def test_mass_primary_label_actives_returns_every_tied_row_in_stable_order() -> None:
+    from scoring_input_contract import mass_primary_label_actives
+    from scoring_v4.modules.generic_helpers import get_active_ingredients
+
+    for unassessed_first in (False, True):
+        product = _tied_product(unassessed_first)
+        primaries = mass_primary_label_actives(product, get_active_ingredients(product))
+        assert [row["canonical_id"] for row in primaries] == ["cognigrape", "vitamin_c"]

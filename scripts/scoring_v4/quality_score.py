@@ -178,6 +178,19 @@ def _undisclosed_component_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
     return None
 
 
+def _unassessed_primary_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
+    """Say why dose credit is partial when the main active has no benchmark."""
+    metadata = dim.get("metadata") if isinstance(dim, dict) else None
+    if not isinstance(metadata, dict):
+        return None
+    if metadata.get("window_proxy_status") == "partial_credit_primary_active_unassessed":
+        return (
+            "The main ingredient's dose benchmark is unavailable, so dose "
+            "credit is partial."
+        )
+    return None
+
+
 def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
     """Return safety-limit copy when B7 confirms an actionable excess."""
     metadata = dim.get("metadata") if isinstance(dim, dict) else None
@@ -637,6 +650,8 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
     reason = over_limit_reason
     if reason is None:
         reason = _undisclosed_component_dose_reason(dim)
+    if reason is None:
+        reason = _unassessed_primary_dose_reason(dim)
     if reason is None:
         reason = _reason_dose(_band(val, weight))
     if archetype == "probiotic" and over_limit_reason is None:

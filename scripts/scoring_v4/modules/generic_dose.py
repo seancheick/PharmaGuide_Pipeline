@@ -72,7 +72,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
-from scoring_input_contract import mass_primary_label_active
+from scoring_input_contract import mass_primary_label_actives
 from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.modules.immune_support import score_immune_support_dose
 from scoring_v4.modules.joint_support import score_joint_support_dose
@@ -230,25 +230,33 @@ def _score_no_reference_quantified_dose(product: Dict[str, Any]) -> tuple[float,
 
 
 def _mass_primary_without_reference(product: Dict[str, Any]) -> Optional[str]:
-    """Identity of the product's mass-primary label active when it has no
-    adequacy row. The scoring contract decides which row is the primary
-    (shared source ownership, no opaque totals, no unmapped identities)."""
+    """Identity of a mass-primary label active that has no usable assessment.
+
+    The scoring contract decides which rows are the primaries (shared source
+    ownership, no opaque totals, no unmapped identities, every row tied at the
+    top mass). An adequacy row counts as an assessment only when the window
+    proxy could band it (`_band_credit` is not None): a row with no reference
+    percentage assesses nothing. When several primaries lack an assessment the
+    first by identity is named, so the decision is the same for any label
+    order.
+    """
     assessed: set[str] = set()
     for row in _safe_list(_safe_dict((product or {}).get("rda_ul_data")).get("adequacy_results")):
-        if isinstance(row, dict):
-            assessed.update(
-                _norm_text(row.get(key)) for key in ("canonical_id", "nutrient") if row.get(key)
-            )
-    heaviest = mass_primary_label_active(product, get_active_ingredients(product))
-    if heaviest is None:
-        return None
-    identities = {
-        _norm_text(heaviest.get(key))
-        for key in ("canonical_id", "standard_name", "name", "nutrient")
-        if heaviest.get(key)
-    }
-    if identities and not (identities & assessed):
-        return _norm_text(heaviest.get("canonical_id") or heaviest.get("standard_name") or heaviest.get("name"))
+        if not isinstance(row, dict):
+            continue
+        if _band_credit(_as_float(row.get("pct_rda"), None), _as_float(row.get("pct_ul"), None)) is None:
+            continue
+        assessed.update(
+            _norm_text(row.get(key)) for key in ("canonical_id", "nutrient") if row.get(key)
+        )
+    for primary in mass_primary_label_actives(product, get_active_ingredients(product)):
+        identities = {
+            _norm_text(primary.get(key))
+            for key in ("canonical_id", "standard_name", "name", "nutrient")
+            if primary.get(key)
+        }
+        if identities and not (identities & assessed):
+            return _norm_text(primary.get("canonical_id") or primary.get("standard_name") or primary.get("name"))
     return None
 
 

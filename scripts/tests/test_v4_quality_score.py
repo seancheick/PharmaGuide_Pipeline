@@ -765,3 +765,22 @@ def test_soft_signals_capped_at_3() -> None:
 def test_verification_never_exceeds_15() -> None:
     v = _verif(_bd_verif(b4a=12.0, b4c=2.0, d1=2.0, d4=1.0))
     assert v["score"] <= 15.0
+
+
+# ---- dose copy when the primary active has no benchmark ---------------------
+
+def test_dose_reason_names_the_missing_primary_benchmark() -> None:
+    from scoring_v4.quality_score import _pillar_dose, _config
+
+    cfg = _config()
+    dim = {
+        "score": 16.0,
+        "metadata": {
+            "window_proxy_status": "partial_credit_primary_active_unassessed",
+            "primary_active_unassessed": "cognigrape",
+            "partial_credit_value": 16.0,
+        },
+    }
+    out = _pillar_dose(dim, 20.0, "multi", cfg)
+    assert "benchmark" in out["reason"].lower()
+    assert "studied range" not in out["reason"].lower()
