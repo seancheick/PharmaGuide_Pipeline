@@ -41,7 +41,7 @@
       "total_parents": 631,
       "total_forms": 1421,
       "total_form_aliases": 12110,
-      "parents_with_parent_aliases": 119,
+      "parents_with_parent_aliases": 120,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -61,7 +61,7 @@
       "vitamins": 25
     },
     "schema_version": "5.5.4",
-    "last_updated": "2026-09-04",
+    "last_updated": "2026-09-06",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -55385,7 +55385,10 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [
+      "Pomegranate Fruit, Peel Extract",
+      "Punica granatum fruit and peel extract"
+    ]
   },
   "mustard_seed": {
     "standard_name": "Mustard Seed",

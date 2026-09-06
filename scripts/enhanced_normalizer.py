@@ -2210,7 +2210,10 @@ class EnhancedDSLDNormalizer:
         # UNII-bearing form agrees on one substance: DSLD encodes some blend
         # headers' constituents as forms (e.g. Chondroitin Sulfate, Glucosamine
         # Sulfate, Vitamin C under "Glucosamine Chondroitin Complex"), and the
-        # first hit must not become a 3,500 mg vitamin C identity.
+        # first hit must not become a 3,500 mg vitamin C identity. A form UNII
+        # the identity index does not know cannot be shown to agree, so it
+        # blocks the row identity the same way a disagreeing one does; the
+        # row then falls through to name matching.
         forms = ingredient_data.get("forms") or []
         form_hit = None
         group = str(ingredient_data.get("ingredientGroup") or "").strip().lower()
@@ -2223,8 +2226,10 @@ class EnhancedDSLDNormalizer:
                 if not isinstance(form, dict):
                     continue
                 form_unii = _normalize_unii(form.get("uniiCode"))
-                if not form_unii or form_unii not in identity_unii_lookup:
+                if not form_unii:
                     continue
+                if form_unii not in identity_unii_lookup:
+                    return None
                 payload = identity_unii_lookup[form_unii]
                 if form_hit is None:
                     form_hit = payload

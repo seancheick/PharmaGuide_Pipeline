@@ -50,3 +50,15 @@ def test_blend_group_row_never_takes_a_form_unii(normalizer):
     row = {"name": "Glucosamine Chondroitin Complex", "ingredientGroup": "Blend (Combination)", "uniiCode": None,
            "forms": [{"name": "Chondroitin Sulfate", "uniiCode": None}, {"name": "Glucosamine Sulfate", "uniiCode": None}, {"name": "Vitamin C", "uniiCode": unii_a}]}
     assert normalizer._try_unii_match(row) is None
+
+
+def test_unresolved_sibling_form_unii_blocks_the_row_identity(normalizer):
+    # One form resolves, another carries a well-formed UNII the identity index
+    # does not know. Agreement cannot be established, so the recognized form
+    # must not become the whole row's identity.
+    (unii_a, _), _ = _two_distinct_uniis(normalizer)
+    unknown = "ZZZZZZZZ99"
+    assert unknown not in normalizer._identity_unii_to_payload_lookup
+    row = {"name": "Vitamin B6", "uniiCode": None,
+           "forms": [{"name": "Pyridoxine HCl", "uniiCode": unii_a}, {"name": "Other", "uniiCode": unknown}]}
+    assert normalizer._try_unii_match(row) is None
