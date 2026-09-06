@@ -404,3 +404,44 @@ See the round-2 section of [CONTINUATION_RETURN_2026_09_05.md](CONTINUATION_RETU
   (SHA-256 `64286ff5…d73da`): controls unchanged; round-2 effect is 2,397 score
   changes (2,394 small depth-bonus, 19 narrowed dose cap, the PS tier move);
   broad fast 13,517 passed / 0 failed on the final tree.
+
+### Round 3 — Codex second audit (2026-09-06)
+
+See the round-3 section of [CONTINUATION_RETURN_2026_09_05.md](CONTINUATION_RETURN_2026_09_05.md).
+
+- [x] Dose guard holes reproduced at module level (an empty adequacy row
+  restored 22/22; a mass tie flipped 22↔16 with label order), then closed:
+  `mass_primary_label_actives` returns every identified label active tied at
+  the top competing mass in identity order; only an adequacy row the window
+  proxy can band counts as an assessment. Consumer copy names the missing
+  benchmark. Six tests.
+- [x] Urinary goal reproduced through `compute_goal_matches` on the enriched
+  corpus (42 of 44 cluster matches without a cranberry row were "supported";
+  98 cranberry-row products without the cluster never matched), then owned by
+  one reviewed rule in `build_final_db` (cranberry incl. Pacran, Cran-Max,
+  CranRx, Flowens; disclosed mass; the synergy cluster's own 500 mg extract
+  dose; seed fractions and undisclosed listings excluded; the cluster never
+  earns the goal). D-mannose wording corrected in both vocabularies (PMID
+  38587819 verified live). Thirteen tests. App assets synced and committed.
+- [x] Identity: an unresolved sibling form UNII blocks a row's form-UNII
+  identity (raw-label scan: 266 mixed rows; cleaner replay on 217 labels:
+  27 reviewed identity corrections, one regression fixed by a pomegranate
+  alias verified on GSRS). Structural anchors carry `identity_kind` and are
+  never stamped mapped; readiness consumes the contract's
+  `has_scoring_identity` instead of `mapped`. Replay fixtures for 17186 and
+  328831 added as acceptance evidence (five tests).
+- [x] Dose guard, second pass: assessments are source-linked (constituent
+  under the primary, or the label row a projected child was cut from) through
+  the contract's lineage; 65 of the 344 newly capped products released, 279
+  reviewed as primaries without a bandable benchmark. Five more tests.
+- [x] Targeted control-vs-candidate comparison on the 1,826 products carrying
+  unmapped structural projections: 1,826 products (control 361.6 s, candidate 363.4 s, zero errors), status transitions identical (1,592 scored, 187 not scored, 47 suppressed); 337 products differ, all decreases — 289 formulation changes of at most 0.8 points (the panel-form neutral floor is no longer granted to a structural anchor that was stamped mapped) and 48 dose caps to 14.5 where the primary's own source carries no bandable reference (25 protein powders, saw palmetto, nicotinamide riboside, resveratrol…; Life Extension NAD+ Cell Regenerator 182477: the 250 mg NR row has pct_rda and pct_ul None and its 22/22 came from quercetin's 30% RDA alone). Reports: `corpus_round3_control_db5325d2_structural_targets.json`, `corpus_round3_candidate_structural_targets_v2.json`, `corpus_round3_structural_ab_diffs.json`.
+- [x] Final consolidated audit `corpus_continuation_2026_09_06_full_v6.json`
+  (SHA-256 `7e1ae7e6340749608f74be497ce40de4b74ced88ab9519621392bed099096094`, 861.9 s, zero errors): transitions identical to round 2 (15,104 scored, 257 not scored, 54 suppressed); 832 products differ from the round-2 report — 691 score changes, all decreases, no status change: 281 dose (212 at −5.5, the 20 → 14.5 cap for a primary whose source lineage has no bandable reference: protein powders, CLA, caffeine, BHB, L-tyrosine, fish oil with unreferenced EPA/DHA rows, keratin over biotin; 69 smaller) and 410 formulation (≤ 0.8); 92 tier labels and 4 verdict labels follow those decreases; 141 copy-only changes (414 dose reasons now name the missing benchmark, Cognigrape 304628 included at 56.4). The round-1 controls, 213475 and 218600 are unchanged; the committed tree matches all 267 audited file hashes.
+- [x] Broad `scripts/test.sh fast` on the final tree: 13,547 passed, 165 skipped, 0 failed (216.4 s).
+- [x] Both repositories committed and pushed (pipeline
+  `db5325d2..3e2f5343` plus the docs commit that adds this section; app `73ee825..4c1685c`).
+
+Not done here, by design: main merge, operational pipeline/re-clean, export,
+Supabase, Flutter import, weight calibration, 37-brand rerun, PAC-based
+cranberry dose gate, probiotic strain rules for the urinary goal.

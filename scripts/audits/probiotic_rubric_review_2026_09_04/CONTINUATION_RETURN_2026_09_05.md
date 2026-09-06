@@ -306,3 +306,185 @@ as well as canonical id.
 - Enrollment convention, remaining branded-with-generic-alias entries, and
   the semantics decisions listed in round 1.
 - App-side taxonomy edits are in the working tree of the app repo, uncommitted.
+
+---
+
+# Round 3 — Codex's second audit (2026-09-06)
+
+Codex kept the ownership fix and found three reproducible boundaries after
+round 2. Each was reproduced before any change, closed with regression tests,
+measured on the corpus, and left as one system: the contract decides
+identities and primaries, the builder decides the goal, the modules consume.
+
+## Commits
+
+Pipeline `db5325d2..3e2f5343` plus the docs commit that adds this section, on `codex/probiotic-evidence-coverage`;
+app `73ee825..4c1685c` on `main` of `/Users/seancheick/PharmaGuide ai`
+(the six taxonomy files Codex asked to preserve, plus the loader comment
+that still said 18 goals). Nothing merged, published, uploaded, imported,
+calibrated or rebuilt.
+
+## 1. Dose guard — usable assessments, deterministic ties
+
+Reproduced at module level with the round-2 fixtures: an adequacy row for the
+primary with both percentages empty restored 22/22 (expected 16); with an
+assessed and an unassessed active at equal mass, reversing the label order
+flipped 22 ↔ 16.
+
+- `scoring_input_contract.mass_primary_label_actives` replaces the single-row
+  helper: every identified label active tied at the top competing mass is a
+  primary, returned in identity order; an opaque total or unmapped row is
+  never returned and, when it alone holds the top mass, there is no
+  identified primary (unchanged policy).
+- `generic_dose._mass_primary_without_reference` counts an adequacy row as an
+  assessment only when the window proxy itself could band it
+  (`_band_credit(pct_rda, pct_ul) is not None`): pct_rda-only rows are
+  usable, pct_ul-only and empty rows are not. A potassium row (the proxy's
+  dietary-intake exclusion) with numeric percentages still counts as assessed
+  because a reference exists; the guard's copy would otherwise claim a
+  benchmark is unavailable when it is merely excluded.
+- Assessments are source-linked. Closing the empty-row hole first exposed
+  344 products whose mass primary has no bandable adequacy row; 65 of them
+  are assessed through their own source — the constituent a parent declares
+  (ALA under flaxseed oil in 36, GLA under borage oil in 10) or the label row
+  a projected child was cut from (the enricher's "Vitamin K2" child under the
+  assessed "Vitamin K" row, tied at 45 mcg). `scoring_input_contract.
+  source_linked_rows` applies the contract's existing lineage (same resolved
+  path, nested under, or ancestor; never shared identity) and the guard
+  reads identities across that set. A constituent the label prints as a
+  sibling row (6 flaxseed labels) stays unlinked; a parent whose constituents
+  carry no percentage (fish oil with EPA/DHA rows, 11) stays capped.
+  Families still capped (`reports/…/dose_guard_families_2026_09_06.json`):
+  protein powders 40, caffeine 13, BHB 12, CLA 12, L-tyrosine 12, fish oil 11,
+  keratin 9, phytosterols 9, chlorophyll 9, fiber 7, saw palmetto 7, …
+- Consumer copy: `quality_score._unassessed_primary_dose_reason` — "The main
+  ingredient's dose benchmark is unavailable, so dose credit is partial." —
+  sits after the over-limit and undisclosed-component copy and before the
+  band copy, so Cognigrape no longer reads "reasonable but not fully in the
+  studied range".
+- Tests: `test_v4_generic_dose_p132a.py` (+10: empty row, UL-only row,
+  RDA-only row, tie in both orders, helper order, nested constituent, same-path
+  projection, nested projection under an assessed parent, sibling constituent,
+  parent with unassessed constituents) and `test_v4_quality_score.py` (+1).
+
+## 2. Urinary goal — reviewed applicability, owned by the goal rule
+
+Reproduced through `build_final_db.compute_goal_matches` over the 15,415
+enriched products (probe only; the builder was not run). 129 products carry
+the enricher's `urinary_tract_health` synergy cluster; 44 of them have no
+cranberry row and 42 of those were "supported" — lactobacillus + vitamin C
+(15, Culturelle immune packets, Garden of Life collagen beauty), uva ursi +
+vitamin C, D-mannose + vitamin C. 98 products with a cranberry row and no
+cluster (BulkSupplements 500 mg extract, 5 g powders) never matched.
+
+- `_urinary_goal_cluster_applies` in `build_final_db.py` (constants block
+  documents the review): a label row whose identity is cranberry — canonical
+  `cranberry`, `cranberry_fruit`, or the standardized brands `pacran`,
+  `cran_max`, `cranrx`, `flowens`, or the label text — with a disclosed mass.
+  Supported when the mass reaches the synergy cluster's own minimum for
+  "cranberry extract" (500 mg, read from `synergy_cluster.json` through
+  `_synergy_cluster_min_dose_mg`; no second copy of the number); present
+  below it → `goal_matches_underdosed`. Seed oil / seed extract rows and
+  undisclosed listings inside fruit blends are excluded; a cranberry blend
+  header counts for presence only. The synergy cluster itself never earns the
+  goal on either the primary or the legacy path.
+- Not credited on their own, by review and recorded in the code: vitamin C,
+  unspecified probiotics/lactobacillus, uva ursi, hibiscus, and D-mannose —
+  Hayward et al., JAMA Intern Med 2024 (PMID 38587819, title verified live
+  via esummary) found no prevention benefit. Both vocabulary notes now say so
+  (`user_goals_vocab.json`, `primary_outcome_vocab.json`, ≤ 200 chars);
+  `user_goals_to_clusters.json` is unchanged.
+- Corpus effect (probe, `reports/…/urinary_goal_transitions_2026_09_06.json`):
+  supported→partial 83 (cranberry 60–400 mg: CVS 168 mg concentrate,
+  BulkSupplements 60 mg softgels, GNC multis at 2.5–10 mg), none→supported 45,
+  none→partial 46, supported→none 18 (the vitamin C + probiotic / uva ursi
+  families), partial→supported 2 (CranRx gummies at 500 mg), unchanged 33.
+  Products with any urinary status: 127 → 200.
+- Tests: `test_compute_goal_matches.py` (+13: extract 500 mg, powder in
+  grams, branded CranRx, trace cranberry in a multi → partial, disclosed
+  nested row → partial, blend header → partial; negatives for lactobacillus +
+  vitamin C, D-mannose + vitamin C, uva ursi + vitamin C, D-mannose alone,
+  seed extract, undisclosed listing; dedup with the cluster).
+- App: assets re-synced after the wording change; `flutter test` on both
+  drift tests: 10 passed; committed as `4c1685c`.
+
+## 3. Identity — agreement, not first-hit; structural ≠ verified
+
+**Form UNIIs.** `_try_unii_match` now returns None when any UNII-bearing form
+carries a UNII the identity index does not know; the row falls through to
+name matching. Scan of all 15,414 raw labels: 266 non-blend rows mix a
+resolvable and an unresolvable form UNII, 263 of them currently identified
+through the resolvable one. The cleaner was replayed on those 217 labels
+(`reports/…/cleaner_replay_unii_strict_2026_09_06.json`, 8,915 rows
+compared): 27 identity changes in 27 products, each read individually —
+plain "Lactobacillus" listings no longer become `lactobacillus_plantarum`
+(12), "Protease(s)" no longer `bacillus_subtilis` (8), "Vitamin K" with mixed
+K1/K2 forms → `vitamin_k` (2), "Vitamin K2" and "Vitamin D2" no longer
+`brewers_yeast` (3), "Medium Chain Triglycerides" no longer `lauric_acid`,
+bergamot "Polyphenolic Flavones" → its marker row; 236 rows change match
+method only (same identity by name). One regression was found and fixed with
+one entry: "Pomegranate Fruit, Peel Extract" (forms POMEGRANATE `56687D1Z4D`
+and POMEGRANATE FRUIT RIND `RS999V57DU`, both verified on GSRS) fell to the
+other-ingredients "pomegranate juice" entry; the IQM `pomegranate` entry has a
+single `external_ids.unii` slot, so two printed-name aliases were added and
+the row maps to `pomegranate` again (statistic and date reconciled). Test:
+`test_unii_form_identity_ambiguity.py` (+1).
+
+**Structural anchors.** Every derived evidence item now carries
+`identity_kind`: `verified_ingredient` when the identity it carries is the
+cleaner's (its `clean_identity_id` — for a header total, the mapped nested
+child it is keyed to — else the source row's canonical), otherwise
+`label_taxonomy_anchor` when `_anchor_identity` minted one from the label's
+group or standard name. A structural anchor is `mapped: False`,
+`mapped_identity: False`, keeps its `product_level_evidence` role and its
+anchor as the join key, and never becomes a dose primary. The one rule is
+public, `has_scoring_identity` (a verified row by its mapped identity, a
+structural anchor by its anchor alone); `assessment_readiness` consumes it
+instead of re-reading `mapped`, which is what made the 24-strain seed
+probiotic `not_scored` during development (its header totals are keyed to
+mapped nested children — classifying by the header's source db was wrong,
+and the seed-pipeline test caught it). Recovery of skipped rows can no longer
+upgrade a minted anchor to a mapped identity (no corpus instances). Census:
+2,673 product-level rows and 74 label projections carried an unmapped
+identity as `mapped: True` before.
+- Fixture `replay_identity_fixtures_2026_09_06.json` (17186 and 328831,
+  replayed through the candidate cleaner and enricher, trimmed to the fields
+  the contract and modules read) and `test_structural_anchor_identity_flags.py`
+  (5): the 3,500 mg header stays a structural total with `mapped: False`, the
+  vitamin C row keeps its cleaner identity, the header is never a dose
+  primary, and Ginseng Plus matches INGR_GINSENG, not astragalus.
+
+## Verification
+
+- Targeted comparison, 1,826 products carrying unmapped structural
+  projections, control `db5325d2` (detached worktree) vs candidate, same
+  targets and baseline: 1,826 products (control 361.6 s, candidate 363.4 s, zero errors), status transitions identical (1,592 scored, 187 not scored, 47 suppressed); 337 products differ, all decreases — 289 formulation changes of at most 0.8 points (the panel-form neutral floor is no longer granted to a structural anchor that was stamped mapped) and 48 dose caps to 14.5 where the primary's own source carries no bandable reference (25 protein powders, saw palmetto, nicotinamide riboside, resveratrol…; Life Extension NAD+ Cell Regenerator 182477: the 250 mg NR row has pct_rda and pct_ul None and its 22/22 came from quercetin's 30% RDA alone). Reports: `corpus_round3_control_db5325d2_structural_targets.json`, `corpus_round3_candidate_structural_targets_v2.json`, `corpus_round3_structural_ab_diffs.json`.
+- Final consolidated audit `corpus_continuation_2026_09_06_full_v6.json`
+  (SHA-256 `7e1ae7e6340749608f74be497ce40de4b74ced88ab9519621392bed099096094`, 861.9 s, zero errors): transitions identical to round 2 (15,104 scored, 257 not scored, 54 suppressed); 832 products differ from the round-2 report — 691 score changes, all decreases, no status change: 281 dose (212 at −5.5, the 20 → 14.5 cap for a primary whose source lineage has no bandable reference: protein powders, CLA, caffeine, BHB, L-tyrosine, fish oil with unreferenced EPA/DHA rows, keratin over biotin; 69 smaller) and 410 formulation (≤ 0.8); 92 tier labels and 4 verdict labels follow those decreases; 141 copy-only changes (414 dose reasons now name the missing benchmark, Cognigrape 304628 included at 56.4). The round-1 controls, 213475 and 218600 are unchanged; the committed tree matches all 267 audited file hashes.
+  The earlier `…_full_v5.json` (SHA-256 `f7b26146…c2fa49`) is the same tree
+  before the source-linked rule and is kept as the record that exposed it.
+- Broad `scripts/test.sh fast` on the final tree: 13,547 passed, 165 skipped, 0 failed (216.4 s).
+- Contract leak audit (in the suite) passes: `generic_dose` reads no identity
+  field; the goal rule lives in the builder, not a scoring selector.
+
+## Human decisions after round 3
+
+- 83 cranberry products between 60 and 400 mg are now "partially supported"
+  under the cluster's 500 mg extract dose; a PAC-based (36 mg/day) or
+  concentrate-ratio gate would need clinical review before it is added.
+- Mass dominance names 25 mg keratin, not 10 mg biotin, the primary of nine
+  "Biotin 10,000 mcg" products, so they now read "main ingredient's benchmark
+  unavailable" and drop 5.5 points; whether label prominence should override
+  mass for microgram nutrients is a scoring-policy decision, not made here.
+- Primaries whose reference exists in principle but has no percentage in
+  `rda_ul_data` (protein, EPA/DHA, chlorophyll) now read as unassessed; a
+  reference-table coverage item.
+- Probiotic strains with urinary evidence (L. rhamnosus GR-1 / L. reuteri
+  RC-14, L. crispatus) are not credited; adding strain rules is a review item.
+- The IQM schema holds one UNII per entry; a second registered UNII for the
+  same substance (pomegranate fruit rind) cannot be indexed without a schema
+  change.
+- `synergy_cluster.json` `urinary_tract_health` note reads "Tier 1 (strong)"
+  while its `evidence_tier` is 4 (display text only; untouched).
+- The identity corrections (17186, 328831, the 27 UNII rows) reach shipped
+  artifacts only through an operational re-clean.
