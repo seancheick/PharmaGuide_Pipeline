@@ -4782,26 +4782,33 @@ def primary_mass_competitor_rows(
 def source_linked_rows(
     product: Dict[str, Any], row: Dict[str, Any], rows: List[Dict[str, Any]]
 ) -> List[Dict[str, Any]]:
-    """Rows that share ``row``'s label source.
+    """Rows that are the same physical label row as ``row``.
 
-    The same lineage :func:`primary_mass_competitor_rows` uses: the same
-    resolved source path (a title-embedded projection of a label row is the
-    same physical row), a path nested under it (the constituents a parent row
-    declares: ALA under flaxseed oil, EPA and DHA under fish oil), or an
-    ancestor (the label row a projected "Vitamin K2" child was cut from),
-    collected across the scoring rows, the product tree and the identity
-    ledger. Synthetic ``activeIngredients[i]`` provenance resolves through the
-    tree; shared identity or name never creates lineage, so a constituent the
-    label prints as a sibling row is not linked. An assessment of any of these
-    rows is an assessment of ``row``'s source. Rows are returned unchanged;
-    nothing is mutated.
+    Two rows are the same source when they resolve to the same source path
+    (a projection of a label row), or when one is the product's single active
+    re-identified from the title (``single_active_title_embedded_mass``, the
+    "Vitamin K2" child the enricher cuts under an assessed "Vitamin K" row)
+    and the other is the label row it is nested under. Nothing else is
+    linked: a constituent a parent declares (ALA under flaxseed oil, vitamin
+    C listed under a botanical) is a different substance, and shared label
+    ancestry is not assessment applicability. Synthetic ``activeIngredients[i]``
+    provenance resolves through the tree; shared identity or name never
+    creates lineage. Rows are collected across the scoring rows, the product
+    tree and the identity ledger, returned unchanged; nothing is mutated.
     """
     product = product or {}
-    row_paths = {
-        _resolve_source_tree_path(product, str(path).strip())
-        for path in (*_safe_list(row.get("linked_rows")), row.get("raw_source_path"))
-        if str(path or "").strip()
-    }
+
+    def own_paths(candidate: Dict[str, Any]) -> set:
+        return {
+            _resolve_source_tree_path(product, str(path).strip())
+            for path in (*_safe_list(candidate.get("linked_rows")), candidate.get("raw_source_path"))
+            if str(path or "").strip()
+        }
+
+    def is_title_projection(candidate: Dict[str, Any]) -> bool:
+        return _norm(candidate.get("reason")) == "single_active_title_embedded_mass"
+
+    row_paths = own_paths(row)
     if not row_paths:
         return []
     iqd = _safe_dict(product.get("ingredient_quality_data"))
@@ -4817,16 +4824,18 @@ def source_linked_rows(
         for candidate in collection:
             if not isinstance(candidate, dict) or candidate is row or id(candidate) in seen:
                 continue
-            path = str(candidate.get("raw_source_path") or "").strip()
-            if not path:
+            paths = own_paths(candidate)
+            if not paths:
                 continue
-            path = _resolve_source_tree_path(product, path)
-            if any(
-                path == own
-                or _path_is_nested_under(own, path)
-                or _path_is_nested_under(path, own)
-                for own in row_paths
-            ):
+            same_source = any(path == own for path in paths for own in row_paths)
+            projection_of_label_row = (
+                is_title_projection(candidate)
+                and any(_path_is_nested_under(own, path) for path in paths for own in row_paths)
+            ) or (
+                is_title_projection(row)
+                and any(_path_is_nested_under(path, own) for path in paths for own in row_paths)
+            )
+            if same_source or projection_of_label_row:
                 seen.add(id(candidate))
                 linked.append(candidate)
     return linked

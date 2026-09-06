@@ -952,11 +952,12 @@ def test_mass_primary_label_actives_returns_every_tied_row_in_stable_order() -> 
 # --- Assessments are source-linked: constituents and projections of the primary ---
 
 
-def test_parent_row_is_assessed_through_its_nested_constituent() -> None:
+def test_nested_constituent_does_not_assess_its_parent() -> None:
     # Flaxseed Oil 1000 mg declares ALA 500 mg under it; ALA carries the
-    # reference. The parent is the mass primary and is assessed through its
-    # own constituent, so full window credit stands.
-    from scoring_v4.modules.generic_dose import score_dose, CAP_SUPPLEMENTAL_WINDOW
+    # reference, flaxseed oil does not. A constituent is a different substance:
+    # shared ancestry is not assessment applicability, so the parent stays
+    # capped (Codex round-3 audit).
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
 
     rows = [
         _ingredient(name="Flaxseed Oil", canonical_id="flaxseed", quantity=1000.0, unit="mg", bio_score=None,
@@ -972,8 +973,8 @@ def test_parent_row_is_assessed_through_its_nested_constituent() -> None:
         ],
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == CAP_SUPPLEMENTAL_WINDOW
-    assert "primary_active_unassessed" not in payload["metadata"]
+    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["metadata"]["primary_active_unassessed"] == "flaxseed"
 
 
 def test_title_projection_of_an_assessed_row_is_not_a_second_primary() -> None:
@@ -1035,7 +1036,7 @@ def test_nested_projection_under_an_assessed_parent_is_not_a_second_primary() ->
                     raw_source_path="ingredientRows[0]"),
         _ingredient(name="Vitamin K2", canonical_id="vitamin_k2", quantity=45.0, unit="mcg", bio_score=None,
                     raw_source_path="ingredientRows[0].nestedRows[0]", scoring_input_kind="label_active_projection",
-                    linked_rows=["ingredientRows[0].nestedRows[0]"]),
+                    linked_rows=["ingredientRows[0].nestedRows[0]"], reason="single_active_title_embedded_mass"),
     ]
     product = _product(
         ingredients=rows,
@@ -1044,6 +1045,27 @@ def test_nested_projection_under_an_assessed_parent_is_not_a_second_primary() ->
     payload = score_dose(product)
     assert payload["components"]["supplemental_window_proxy"] == CAP_SUPPLEMENTAL_WINDOW
     assert "primary_active_unassessed" not in payload["metadata"]
+
+
+def test_nested_child_without_the_title_projection_marker_is_not_the_parent() -> None:
+    # Same shape as above but a real nested child: an ordinary projection or
+    # constituent nested under an assessed row does not inherit its assessment.
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    rows = [
+        _ingredient(name="Vitamin K", canonical_id="vitamin_k", quantity=45.0, unit="mcg",
+                    raw_source_path="ingredientRows[0]"),
+        _ingredient(name="Oleic Acid", canonical_id="oleic_acid", quantity=45.0, unit="mcg", bio_score=None,
+                    raw_source_path="ingredientRows[0].nestedRows[0]", scoring_input_kind="label_active_projection",
+                    linked_rows=["ingredientRows[0].nestedRows[0]"], reason="identity_bearing_active_anchor_mass"),
+    ]
+    product = _product(
+        ingredients=rows,
+        adequacy_results=[{"canonical_id": "vitamin_k", "nutrient": "Vitamin K1", "pct_rda": 37.5, "pct_ul": None}],
+    )
+    payload = score_dose(product)
+    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["metadata"]["primary_active_unassessed"] == "oleic_acid"
 
 
 def test_sibling_constituent_row_does_not_assess_the_primary() -> None:
@@ -1067,3 +1089,25 @@ def test_sibling_constituent_row_does_not_assess_the_primary() -> None:
     payload = score_dose(product)
     assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
     assert payload["metadata"]["primary_active_unassessed"] == "flaxseed"
+
+
+def test_assessed_constituent_nested_under_the_primary_does_not_assess_it() -> None:
+    # Codex round-3 audit: vitamin C nested under Cognigrape in the label tree
+    # must not transfer its assessment upward. Shared ancestry is not
+    # assessment applicability; only the primary's own assessment counts.
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    rows = [
+        _ingredient(name="Cognigrape", canonical_id="cognigrape", quantity=250.0, unit="mg", bio_score=None,
+                    raw_source_path="ingredientRows[0]"),
+        _ingredient(name="Vitamin C", canonical_id="vitamin_c", quantity=90.0, unit="mg",
+                    raw_source_path="ingredientRows[0].nestedRows[0]"),
+    ]
+    product = _product(
+        ingredients=rows,
+        adequacy_results=[{"canonical_id": "vitamin_c", "nutrient": "Vitamin C", "pct_rda": 100.0, "pct_ul": 4.5}],
+        supp_type="multi",
+    )
+    payload = score_dose(product)
+    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["metadata"]["primary_active_unassessed"] == "cognigrape"
