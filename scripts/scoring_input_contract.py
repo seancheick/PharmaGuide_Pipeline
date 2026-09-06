@@ -667,9 +667,36 @@ def _form_quality_from_iqm(canonical_id: Any, context: Dict[str, Any]) -> Dict[s
     return out
 
 
-def _anchor_identity(row: Dict[str, Any]) -> tuple[str, Optional[str]]:
+def _is_verified_canonical(value: Any) -> bool:
+    """A cleaner-assigned ingredient identity, as opposed to no identity or a
+    generic blend placeholder."""
+    canonical = _slug(value)
+    return bool(canonical) and canonical not in _GENERIC_BLEND_IDENTITIES and not canonical.startswith("blend_")
+
+
+def _verified_anchor_canonical(row: Dict[str, Any]) -> str:
+    """The row's cleaner-verified ingredient identity, or "" when the cleaner
+    left it unmapped or only a generic blend identity is present."""
     canonical = _slug(row.get("canonical_id"))
-    if canonical and canonical not in _GENERIC_BLEND_IDENTITIES and not canonical.startswith("blend_"):
+    return canonical if _is_verified_canonical(canonical) else ""
+
+
+def _identity_kind(row: Dict[str, Any], clean_identity_id: Any = None) -> str:
+    """``verified_ingredient`` when the identity a projection carries is the
+    cleaner's (its ``clean_identity_id`` — a nested child's identity for a
+    header total — or, failing that, the source row's own canonical id);
+    ``label_taxonomy_anchor`` when :func:`_anchor_identity` had to mint one
+    from the label's ingredient group or standard name. A minted anchor keys
+    structural evidence (a blend total, an unmapped row's mass) and is never
+    presented as a mapped ingredient identity."""
+    if clean_identity_id is not None:
+        return "verified_ingredient" if _is_verified_canonical(clean_identity_id) else "label_taxonomy_anchor"
+    return "verified_ingredient" if _verified_anchor_canonical(row) else "label_taxonomy_anchor"
+
+
+def _anchor_identity(row: Dict[str, Any]) -> tuple[str, Optional[str]]:
+    canonical = _verified_anchor_canonical(row)
+    if canonical:
         return canonical, row.get("name") or row.get("standardName")
 
     raw_taxonomy = _safe_dict(row.get("raw_taxonomy"))
@@ -773,6 +800,7 @@ def _stamp_evidence_identity_contract(
     if _is_label_identity_source(row):
         item["identity_contract_required"] = True
         item["identity_disposition"] = row.get("identity_disposition")
+    item["identity_kind"] = _identity_kind(row, item.get("clean_identity_id"))
     return item
 
 
@@ -2136,7 +2164,22 @@ class ClassificationInputResult:
     scoring_contract_findings: List[str] = field(default_factory=list)
 
 
+def has_scoring_identity(row: Dict[str, Any]) -> bool:
+    """Whether a scoring row carries an identity the contract scores on.
+
+    The one rule for every consumer (readiness included): a verified row by
+    its mapped identity, a structural label-taxonomy anchor by its anchor
+    alone. No consumer should re-derive this from ``mapped`` flags.
+    """
+    return _has_identity(row)
+
+
 def _has_identity(row: Dict[str, Any]) -> bool:
+    if row.get("identity_kind") == "label_taxonomy_anchor":
+        # A structural anchor minted from label taxonomy identifies structural
+        # evidence (a blend total, an unmapped row's mass) and nothing more;
+        # it never satisfies this check through a mapped-identity claim.
+        return bool(row.get("canonical_id"))
     if row.get("mapped_identity") is False:
         return False
     return bool(
@@ -2337,12 +2380,25 @@ def _product_scoring_evidence_rows(
             )
             continue
 
+        # Native evidence emitted before identity_kind existed is classified
+        # by the identity it carries: a verified clean_identity_id (a mapped
+        # row, or a header total keyed to its mapped nested child) is the
+        # cleaner's; otherwise an unmapped source row can only have lent a
+        # minted label-taxonomy anchor.
+        identity_kind = item.get("identity_kind") or (
+            "verified_ingredient"
+            if _is_verified_canonical(item.get("clean_identity_id"))
+            or _norm(item.get("canonical_source_db")) != "unmapped"
+            else "label_taxonomy_anchor"
+        )
+        structural_anchor = identity_kind == "label_taxonomy_anchor"
         row = {
             **item,
             "name": item.get("name") or item.get("label") or evidence_type,
             "canonical_id": item.get("canonical_id") or item.get("evidence_canonical_id") or evidence_type,
-            "mapped": item.get("mapped", True),
-            "mapped_identity": item.get("mapped_identity", True),
+            "identity_kind": identity_kind,
+            "mapped": item.get("mapped", not structural_anchor),
+            "mapped_identity": item.get("mapped_identity", not structural_anchor),
             "scoreable_identity": True,
             "role_classification": "active_scorable",
             "cleaner_row_role": "active_scorable",
@@ -2629,8 +2685,12 @@ def _build_scoring_ingredients(
             recovered["cleaner_row_role"] = "active_scorable"
             recovered["role_classification"] = "active_scorable"
             recovered["score_eligible_by_cleaner"] = True
-            recovered["mapped"] = True
-            recovered["mapped_identity"] = True
+            # Recovery restores the cleaner's own identity verdict; it cannot
+            # upgrade a minted label-taxonomy anchor into a mapped identity.
+            verified = bool(_verified_anchor_canonical(row))
+            recovered["identity_kind"] = _identity_kind(row)
+            recovered["mapped"] = verified
+            recovered["mapped_identity"] = verified
             recovered["scoreable_identity"] = True
             recovered["is_blend_header"] = False
             recovered["blend_total_weight_only"] = False

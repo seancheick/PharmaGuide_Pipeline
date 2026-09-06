@@ -1,0 +1,4710 @@
+{
+ "17186": {
+  "evidence_data": {
+   "clinical_matches": [
+    {
+     "effect_direction": "positive_weak",
+     "effect_direction_confidence": "medium",
+     "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=871; total_enrollment=11306; endpoint_tags=cardiovascular,digestive_health; notes/citations include weak-effect language.",
+     "endpoint_relevance_tags": [
+      "cardiovascular",
+      "digestive_health"
+     ],
+     "evidence_level": "ingredient-human",
+     "health_goals_supported": [
+      "Immune Support",
+      "Healthy Aging/Longevity",
+      "Skin, Hair & Nails"
+     ],
+     "id": "INGR_VITAMIN_C",
+     "ingredient": "Vitamin C",
+     "key_endpoints": [
+      "immune support \u2191",
+      "collagen synthesis \u2191",
+      "antioxidant \u2191",
+      "cold duration \u2193",
+      "leukocyte vitamin C \u2191"
+     ],
+     "match_method": "standard_name",
+     "matched_canonical_ids": [
+      "vitamin_c"
+     ],
+     "matched_source_row_refs": [
+      "ingredientRows[3]"
+     ],
+     "matched_term": "Vitamin C",
+     "notable_studies": "The major cold-literature synthesis remains Hemila and Chalker (PMID 23440782), which found shorter cold duration but limited prevention in the general population. Later review updates include PMID 38082300, while high-exertion prevention effects were highlighted in earlier analyses such as PMID 17636648.",
+     "notes": "Vitamin C clearly supports deficiency correction, antioxidant biology, and collagen synthesis. For common-cold outcomes, the best human evidence supports modest shortening of duration rather than strong prevention effects in the general population.",
+     "primary_outcome": "Immune Support",
+     "published_studies": [
+      "RCT",
+      "meta-analysis",
+      "systematic_review"
+     ],
+     "references_structured": [
+      {
+       "authority": "NCBI PubMed",
+       "citation": "The Cochrane database of systematic reviews (2013-01-31)",
+       "doi": "10.1002/14651858.CD000980.pub4",
+       "evidence_grade": "systematic_review",
+       "mesh_terms": [
+        "Administration, Oral",
+        "Adult",
+        "Age Factors",
+        "Ascorbic Acid",
+        "Child",
+        "Common Cold",
+        "Humans",
+        "Randomized Controlled Trials as Topic"
+       ],
+       "pmid": "23440782",
+       "publication_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Research Support, Non-U.S. Gov't",
+        "Systematic Review"
+       ],
+       "published_date": "2013-01-31",
+       "retracted": false,
+       "supplementary_concepts": [],
+       "supports_claims": [],
+       "title": "Vitamin C for preventing and treating the common cold.",
+       "type": "pubmed",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/23440782/",
+       "verification_source": "pubmed_eutils"
+      },
+      {
+       "authority": "NCBI PubMed",
+       "citation": "BMC public health (2023-12-11)",
+       "doi": "10.1186/s12889-023-17229-8",
+       "evidence_grade": "meta_analysis",
+       "mesh_terms": [
+        "Humans",
+        "Common Cold",
+        "Ascorbic Acid",
+        "Vitamins",
+        "Double-Blind Method",
+        "Absenteeism",
+        "Randomized Controlled Trials as Topic"
+       ],
+       "pmid": "38082300",
+       "publication_types": [
+        "Meta-Analysis",
+        "Review",
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't"
+       ],
+       "published_date": "2023-12-11",
+       "retracted": false,
+       "supplementary_concepts": [],
+       "supports_claims": [],
+       "title": "Vitamin C reduces the severity of common colds: a meta-analysis.",
+       "type": "pubmed",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/38082300/",
+       "verification_source": "pubmed_eutils"
+      },
+      {
+       "authority": "NCBI PubMed",
+       "citation": "The Cochrane database of systematic reviews (2007-07-18)",
+       "doi": "10.1002/14651858.CD000980.pub3",
+       "evidence_grade": "systematic_review",
+       "mesh_terms": [
+        "Administration, Oral",
+        "Ascorbic Acid",
+        "Common Cold",
+        "Humans",
+        "Randomized Controlled Trials as Topic",
+        "Respiratory Tract Infections"
+       ],
+       "pmid": "17636648",
+       "publication_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Systematic Review"
+       ],
+       "published_date": "2007-07-18",
+       "retracted": false,
+       "supplementary_concepts": [],
+       "supports_claims": [],
+       "title": "Vitamin C for preventing and treating the common cold.",
+       "type": "pubmed",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/17636648/",
+       "verification_source": "pubmed_eutils"
+      }
+     ],
+     "registry_completed_trials_count": 871,
+     "score_contribution": "tier_1",
+     "standard_name": "Vitamin C",
+     "study_id": "INGR_VITAMIN_C",
+     "study_name": "Vitamin C",
+     "study_type": "systematic_review_meta",
+     "total_enrollment": 11306,
+     "ui_evidence_scope": "ingredient"
+    },
+    {
+     "effect_direction": "positive_weak",
+     "effect_direction_confidence": "medium",
+     "effect_direction_rationale": "Reference-only NIH ODS fact sheet; study_type=reference; evidence_level=reference; no PMID/NCT/DOI-backed standalone manganese clinical evidence identified.",
+     "endpoint_relevance_tags": [
+      "muscle_recovery"
+     ],
+     "evidence_level": "reference",
+     "health_goals_supported": [
+      "Joint & Bone Health",
+      "Healthy Aging/Longevity"
+     ],
+     "id": "INGR_MANGANESE",
+     "ingredient": "Manganese",
+     "key_endpoints": [
+      "bone matrix support \u2191",
+      "antioxidant enzyme cofactor support \u2191"
+     ],
+     "match_method": "standard_name",
+     "matched_canonical_ids": [
+      "manganese"
+     ],
+     "matched_source_row_refs": [
+      "ingredientRows[4]"
+     ],
+     "matched_term": "Manganese",
+     "notable_studies": "NIH ODS Manganese anchors the evidence around enzyme-cofactor biology, dietary adequacy, and toxicity risk from excessive exposure. Because stand-alone manganese supplementation trials with clear clinical endpoints remain sparse, this entry should stay conservative and deficiency-oriented rather than claim broad therapeutic efficacy.",
+     "notes": "Human supplementation evidence for manganese is limited. NIH ODS mainly supports manganese as an essential trace-element cofactor, while direct interventional outcome data are sparse and usually embedded in multimineral or deficiency-related contexts rather than stand-alone manganese efficacy trials.",
+     "primary_outcome": "Joint & Bone Health",
+     "published_studies": [
+      "reference"
+     ],
+     "references_structured": [
+      {
+       "authority": "NIH Office of Dietary Supplements",
+       "citation": "NIH Office of Dietary Supplements",
+       "evidence_grade": "reference",
+       "mesh_terms": [],
+       "publication_types": [],
+       "published_date": null,
+       "retracted": false,
+       "supplementary_concepts": [],
+       "supports_claims": [],
+       "title": "Manganese - Health Professional Fact Sheet",
+       "type": "nih_ods",
+       "url": "https://ods.od.nih.gov/factsheets/Manganese-HealthProfessional/",
+       "verification_source": "nih_ods"
+      }
+     ],
+     "registry_completed_trials_count": 0,
+     "score_contribution": "tier_3",
+     "standard_name": "Manganese",
+     "study_id": "INGR_MANGANESE",
+     "study_name": "Manganese",
+     "study_type": "reference",
+     "total_enrollment": 0,
+     "ui_evidence_scope": "indirect"
+    }
+   ],
+   "match_count": 2,
+   "rejected_clinical_matches": [],
+   "unsubstantiated_claims": {
+    "claims": [],
+    "found": false
+   }
+  },
+  "ingredient_quality_data": {
+   "blend_header_rows": [],
+   "blend_only_product": false,
+   "contains_match_wins_count": 0,
+   "demoted_absorption_enhancers": [],
+   "ingredients": [
+    {
+     "absorption": "70%",
+     "additional_forms": [],
+     "aggregation_method": "single",
+     "bio_score": 13.0,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "vitamin_c",
+     "canonical_id_after": "vitamin_c",
+     "canonical_id_before": "vitamin_c",
+     "canonical_redirect_from": null,
+     "canonical_redirect_source": null,
+     "canonical_source_db": "ingredient_quality_map",
+     "category": "vitamins",
+     "certificates": [],
+     "cleaner_match_method": "unii_exact_match",
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dosage_importance": 1.5,
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [
+      {
+       "display_form": "Ascorbic Acid",
+       "dsld_category": "vitamin",
+       "dsld_ingredient_group": "Vitamin C",
+       "dsld_prefix": null,
+       "dsld_unii_code": "PQ6CK8PD0R",
+       "keep_from_prefixed_form": false,
+       "match_candidates": [
+        "Ascorbic Acid",
+        "Vitamin C Ascorbic Acid"
+       ],
+       "percent_share": 1.0,
+       "raw_form_text": "Ascorbic Acid"
+      }
+     ],
+     "fallback_class": null,
+     "fallback_reason": null,
+     "final_form_bio_score": 13.0,
+     "form_extraction_used": true,
+     "form_id": "ascorbic acid",
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "quality_map_match",
+     "identity_disposition": "clean",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Vitamin C\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Vitamin C\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Vitamin C\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Vitamin C\"},{\"field\":\"label_nutrient_context\",\"kind\":\"structured_identity\",\"value\":\"vitamin c\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Ascorbic Acid\"}]",
+     "identity_resolution_rationale": "Structured line identity agrees with the supplied canonical ID.",
+     "identity_taxonomy_coherent": true,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_nested_ingredient": false,
+     "is_parent_total": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "Ascorbic Acid",
+     "label_display_name": "Vitamin C",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_ambiguity_candidates": [],
+     "match_tier": "exact",
+     "matched_alias": "ascorbic acid",
+     "matched_entry_id": null,
+     "matched_form": "ascorbic acid",
+     "matched_forms": [
+      {
+       "bio_score": 13.0,
+       "canonical_id": "vitamin_c",
+       "form_key": "ascorbic acid",
+       "match_method": "exact",
+       "matched_candidate": "Ascorbic Acid",
+       "natural": false,
+       "percent_share": 1.0,
+       "raw_form_text": "Ascorbic Acid",
+       "score": 13.0
+      }
+     ],
+     "matched_target": "form_name",
+     "name": "Vitamin C",
+     "natural": false,
+     "never_promote_reason": null,
+     "normalized_key": "vitamin_c",
+     "notes": "The standard, most widely studied form of vitamin C. Highly bioavailable at normal doses (200 mg: ~90% absorbed). Acidic \u2014 may cause stomach upset in sensitive individuals at high doses. The benchmark against which all other forms are compared.",
+     "original_label": "Vitamin C",
+     "parent_blend": null,
+     "parent_blend_mass_mg": null,
+     "quantity": 500.0,
+     "raw_source_path": "ingredientRows[3]",
+     "raw_source_text": "Vitamin C",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "forms": [
+       {
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin C",
+        "ingredientId": 278604,
+        "name": "Ascorbic Acid",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": "PQ6CK8PD0R"
+       }
+      ],
+      "ingredientGroup": "Vitamin C",
+      "ingredientId": 278603,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value": 833.0,
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 500.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Tablet(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": "PQ6CK8PD0R"
+     },
+     "recognition_reason": null,
+     "recognition_source": null,
+     "recognition_type": null,
+     "role_classification": "active_scorable",
+     "safety_hits": [
+      {
+       "condition_hits": [
+        {
+         "action": "Keep vitamin C intake within guideline ranges; avoid high-dose supplementation without clinical need.",
+         "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
+         "alert_headline": "Keep vitamin C within prenatal range",
+         "condition_id": "pregnancy",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 2000.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 500.0,
+           "daily_amount": 500.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ascorbic acid",
+           "observed_amount": 500.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 2000.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "monitor",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 500.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 2000.0
+           }
+          ]
+         },
+         "dose_floor_status": null,
+         "dose_threshold_evaluation": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 2000.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 500.0,
+           "daily_amount": 500.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ascorbic acid",
+           "observed_amount": 500.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 2000.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "monitor",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 500.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 2000.0
+           }
+          ]
+         },
+         "evidence_level": "established",
+         "informational_note": "Vitamin C is dose-sensitive at high intake \u2014 higher doses warrant clinician review.",
+         "materiality": "presence",
+         "mechanism": "Vitamin C is essential, but excessive supplemental intake above UL is not recommended in pregnancy.",
+         "min_effective_dose": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant"
+           ]
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+          "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Threshold escalates only when intake exceeds adult UL.",
+         "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
+         "alert_headline": "Keep vitamin C within prenatal range",
+         "condition_id": "pregnancy",
+         "direction": "harmful",
+         "evidence_level": "established",
+         "informational_note": "Vitamin C is dose-sensitive at high intake \u2014 higher doses warrant clinician review.",
+         "materiality": "presence",
+         "mechanism": "Dose-dependent tolerability; excessive daily intake can increase adverse-effect risk.",
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+          "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Threshold escalates only when intake exceeds adult UL.",
+         "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
+         "alert_headline": "Keep vitamin C within prenatal range",
+         "condition_id": "lactation",
+         "direction": "harmful",
+         "evidence_level": "established",
+         "informational_note": "Vitamin C is dose-sensitive at high intake \u2014 higher doses warrant clinician review.",
+         "materiality": "presence",
+         "mechanism": "Dose-dependent tolerability; excessive daily intake can increase adverse-effect risk.",
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+          "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+         ],
+         "warning_type": null
+        }
+       ],
+       "drug_class_hits": [],
+       "last_reviewed": "2026-02-28",
+       "pregnancy_lactation": {
+        "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
+        "alert_headline": "Keep vitamin C within prenatal range",
+        "direction": "harmful",
+        "evidence_level": "established",
+        "informational_note": "Vitamin C is dose-sensitive at high intake \u2014 higher doses warrant clinician review.",
+        "lactation_category": "monitor",
+        "materiality": "presence",
+        "mechanism": "Dose-dependent tolerability; excessive daily intake can increase adverse-effect risk.",
+        "notes": "Threshold escalates only when intake exceeds adult UL.",
+        "pregnancy_category": "monitor",
+        "profile_gate": {
+         "dose": null,
+         "excludes": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "nutrient_forms_any": [],
+          "product_forms_any": [],
+          "profile_flags_any": []
+         },
+         "gate_type": "profile_flag",
+         "requires": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "profile_flags_any": [
+           "pregnant",
+           "breastfeeding"
+          ]
+         }
+        },
+        "sources": [
+         "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+         "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+        ]
+       },
+       "rule_id": "RULE_IQM_VITAMIN_C_PREGNANCY_EXCESS",
+       "source_bucket": "ingredients",
+       "subject_ref": {
+        "canonical_id": "vitamin_c",
+        "db": "ingredient_quality_map"
+       }
+      }
+     ],
+     "score": 13.0,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "scoreable_identity": true,
+     "source_label_form": "Ascorbic Acid",
+     "source_label_key": "label:vitamin_c:vitamin c:500:mg",
+     "source_label_name": "Vitamin C",
+     "source_section": "active",
+     "standard_name": "Vitamin C",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    },
+    {
+     "absorption": "poor (Mn class baseline genuinely low ~3-8%)",
+     "additional_forms": [],
+     "aggregation_method": "single",
+     "bio_score": 8.0,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "manganese",
+     "canonical_id_after": "manganese",
+     "canonical_id_before": "manganese",
+     "canonical_redirect_from": null,
+     "canonical_redirect_source": null,
+     "canonical_source_db": "ingredient_quality_map",
+     "category": "minerals",
+     "certificates": [],
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dosage_importance": 0.5,
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [
+      {
+       "display_form": "Manganese Sulfate",
+       "dsld_category": "mineral",
+       "dsld_ingredient_group": "Manganese",
+       "dsld_prefix": "as",
+       "dsld_unii_code": null,
+       "keep_from_prefixed_form": false,
+       "match_candidates": [
+        "Manganese Sulfate",
+        "Manganese Manganese Sulfate"
+       ],
+       "percent_share": 1.0,
+       "raw_form_text": "Manganese Sulfate"
+      }
+     ],
+     "fallback_class": null,
+     "fallback_reason": null,
+     "final_form_bio_score": 8.0,
+     "form_extraction_used": true,
+     "form_id": "manganese sulfate",
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "quality_map_match",
+     "identity_disposition": "clean",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Manganese\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Manganese\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Manganese\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Manganese\"},{\"field\":\"label_nutrient_context\",\"kind\":\"structured_identity\",\"value\":\"manganese\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"as Manganese Sulfate\"}]",
+     "identity_resolution_rationale": "Structured line identity agrees with the supplied canonical ID.",
+     "identity_taxonomy_coherent": true,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_nested_ingredient": false,
+     "is_parent_total": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "as Manganese Sulfate",
+     "label_display_name": "Manganese",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_ambiguity_candidates": [],
+     "match_tier": "exact",
+     "matched_alias": "manganese sulfate",
+     "matched_entry_id": null,
+     "matched_form": "manganese sulfate",
+     "matched_forms": [
+      {
+       "bio_score": 8.0,
+       "canonical_id": "manganese",
+       "form_key": "manganese sulfate",
+       "match_method": "exact",
+       "matched_candidate": "Manganese Sulfate",
+       "natural": false,
+       "percent_share": 1.0,
+       "raw_form_text": "Manganese Sulfate",
+       "score": 8.0
+      }
+     ],
+     "matched_target": "form_name",
+     "name": "Manganese",
+     "natural": false,
+     "never_promote_reason": null,
+     "normalized_key": "manganese",
+     "notes": "An inorganic salt form with lower absorption than organic chelates. More likely to cause GI upset at higher doses. Inexpensive, so it's common in budget multivitamins. If your label says sulfate, you're getting a basic form. B28 audit 2026-04-25: Mn class-equivalence (inherent low F).",
+     "original_label": "Manganese",
+     "parent_blend": null,
+     "parent_blend_mass_mg": null,
+     "quantity": 5.0,
+     "raw_source_path": "ingredientRows[4]",
+     "raw_source_text": "Manganese",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "forms": [
+       {
+        "category": "mineral",
+        "ingredientGroup": "Manganese",
+        "ingredientId": 4343,
+        "name": "Manganese Sulfate",
+        "order": 1,
+        "percent": null,
+        "prefix": "as",
+        "uniiCode": null
+       }
+      ],
+      "ingredientGroup": "Manganese",
+      "ingredientId": 28383,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value": 250.0,
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 5.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Tablet(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": null,
+     "recognition_source": null,
+     "recognition_type": null,
+     "role_classification": "active_scorable",
+     "safety_hits": [
+      {
+       "condition_hits": [
+        {
+         "action": "Avoid manganese supplementation above 5 mg/day in liver disease. In advanced cirrhosis or liver failure, avoid supplemental manganese entirely. Evaluate manganese status if neurological symptoms develop.",
+         "alert_body": "Manganese clearance can be impaired in liver disease, leading to accumulation. If you have liver disease, avoid high-dose manganese unless your clinician monitors levels.",
+         "alert_headline": "Manganese clearance depends on the liver",
+         "condition_id": "liver_disease",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "caution",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 5.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 5.0,
+           "daily_amount": 5.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "manganese sulfate",
+           "observed_amount": 5.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 5.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "caution",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 5.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 5.0
+           }
+          ]
+         },
+         "dose_floor_status": null,
+         "dose_threshold_evaluation": {
+          "clinical_severity": "caution",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 5.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 5.0,
+           "daily_amount": 5.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "manganese sulfate",
+           "observed_amount": 5.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 5.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "caution",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 5.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 5.0
+           }
+          ]
+         },
+         "evidence_level": "established",
+         "informational_note": "Manganese depends on liver clearance \u2014 relevant to people with liver conditions.",
+         "materiality": "presence",
+         "mechanism": "Manganese is excreted almost exclusively via bile. Liver disease impairs biliary excretion, leading to systemic accumulation. Excess manganese deposits in the basal ganglia (globus pallidus), producing manganism \u2014 a Parkinson-like neurotoxic syndrome with rigidity, bradykinesia, and psychiatric symptoms. MRI T1 hyperintensity in liver disease patients with elevated manganese is well-documented.",
+         "min_effective_dose": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "condition",
+          "requires": {
+           "conditions_any": [
+            "liver_disease"
+           ],
+           "drug_classes_any": [],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://pubmed.ncbi.nlm.nih.gov/9875025/",
+          "https://pubmed.ncbi.nlm.nih.gov/9002084/"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
+         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile \u2014 talk to your clinician.",
+         "alert_headline": "Standard nutrient \u2014 clinician guidance suggested",
+         "condition_id": "pregnancy",
+         "direction": "neutral",
+         "evidence_level": "limited",
+         "informational_note": "RDA-range standard nutrient \u2014 generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
+         "materiality": "presence",
+         "mechanism": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "monitor",
+         "sources": [],
+         "warning_type": null
+        },
+        {
+         "action": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
+         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile \u2014 talk to your clinician.",
+         "alert_headline": "Standard nutrient \u2014 clinician guidance suggested",
+         "condition_id": "lactation",
+         "direction": "neutral",
+         "evidence_level": "limited",
+         "informational_note": "RDA-range standard nutrient \u2014 generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
+         "materiality": "presence",
+         "mechanism": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "monitor",
+         "sources": [],
+         "warning_type": null
+        }
+       ],
+       "drug_class_hits": [],
+       "last_reviewed": "2026-04-09",
+       "pregnancy_lactation": {
+        "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile \u2014 talk to your clinician.",
+        "alert_headline": "Standard nutrient \u2014 clinician guidance suggested",
+        "direction": "neutral",
+        "evidence_level": "limited",
+        "informational_note": "RDA-range standard nutrient \u2014 generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
+        "lactation_category": "monitor",
+        "materiality": "presence",
+        "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
+        "pregnancy_category": "monitor",
+        "profile_gate": {
+         "dose": null,
+         "excludes": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "nutrient_forms_any": [],
+          "product_forms_any": [],
+          "profile_flags_any": []
+         },
+         "gate_type": "profile_flag",
+         "requires": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "profile_flags_any": [
+           "pregnant",
+           "breastfeeding"
+          ]
+         }
+        }
+       },
+       "rule_id": "RULE_IQM_MANGANESE_LIVER",
+       "source_bucket": "ingredients",
+       "subject_ref": {
+        "canonical_id": "manganese",
+        "db": "ingredient_quality_map"
+       }
+      }
+     ],
+     "score": 8.0,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "scoreable_identity": true,
+     "source_label_form": "as Manganese Sulfate",
+     "source_label_key": "label:manganese:manganese:5:mg",
+     "source_label_name": "Manganese",
+     "source_section": "active",
+     "standard_name": "Manganese",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    },
+    {
+     "absorption": null,
+     "additional_forms": [],
+     "aggregation_method": null,
+     "bio_score": null,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": true,
+     "canonical_id": null,
+     "canonical_id_after": null,
+     "canonical_id_before": null,
+     "canonical_source_db": "unmapped",
+     "category": "unknown",
+     "certificates": [],
+     "cleaner_match_method": null,
+     "cleaner_row_role": "blend_header_total",
+     "delivers_markers": [],
+     "dose_class": "blend_total_weight",
+     "extracted_forms": [],
+     "fallback_class": "clinical_fail_safe",
+     "fallback_reason": "blend_header_total_weight_only",
+     "final_form_bio_score": null,
+     "form_extraction_used": false,
+     "form_id": null,
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": "blend_header",
+     "identity_confidence": 0.0,
+     "identity_decision_reason": "blend_header_total_weight_only",
+     "identity_disposition": "taxonomy_only",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Glucosamine Chondroitin Complex\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Glucosamine Chondroitin Complex\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Blend (Combination)\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Blend (Combination)\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Chondroitin Sulfate\"},{\"field\":\"forms[1]\",\"kind\":\"source_form\",\"value\":\"Glucosamine Sulfate\"},{\"field\":\"forms[2]\",\"kind\":\"source_form\",\"value\":\"Vitamin C\"}]",
+     "identity_resolution_rationale": "The row was intentionally classified as non-scorable; no canonical identity was inferred from raw label or form text.",
+     "identity_taxonomy_coherent": false,
+     "is_blend_header": true,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_proprietary_blend": true,
+     "label_display_form": "Chondroitin Sulfate",
+     "label_display_name": "Glucosamine Chondroitin Complex",
+     "mapped": false,
+     "mapped_identity": false,
+     "match_tier": null,
+     "matched_alias": null,
+     "matched_form": null,
+     "matched_forms": [],
+     "matched_target": null,
+     "name": "Glucosamine Chondroitin Complex",
+     "natural": null,
+     "never_promote_reason": null,
+     "normalized_key": "glucosamine_chondroitin_complex",
+     "notes": null,
+     "original_label": "Glucosamine Chondroitin Complex",
+     "quantity": 3500.0,
+     "raw_source_path": "ingredientRows[6]",
+     "raw_source_text": "Glucosamine Chondroitin Complex",
+     "raw_taxonomy": {
+      "category": "blend",
+      "forms": [
+       {
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Chondroitin Sulfate",
+        "ingredientId": 164786,
+        "name": "Chondroitin Sulfate",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": null
+       },
+       {
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Glucosamine Sulfate",
+        "ingredientId": 16072,
+        "name": "Glucosamine Sulfate",
+        "order": 2,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": null
+       },
+       {
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin C",
+        "ingredientId": 278591,
+        "name": "Vitamin C",
+        "order": 3,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": "PQ6CK8PD0R"
+       }
+      ],
+      "ingredientGroup": "Blend (Combination)",
+      "ingredientId": 20754,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 3500.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Tablet(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": null,
+     "recognition_source": null,
+     "recognition_type": null,
+     "recognized_entry_id": null,
+     "recognized_entry_name": null,
+     "role_classification": "inactive_non_scorable",
+     "safety_hits": [],
+     "score": null,
+     "score_eligible_by_cleaner": false,
+     "score_exclusion_reason": "blend_header_total",
+     "scoreable_identity": false,
+     "skip_reason": "blend_header_total_weight_only",
+     "source_label_form": "Chondroitin Sulfate",
+     "source_label_key": "label:glucosamine chondroitin complex:glucosamine chondroitin complex:3500:mg",
+     "source_label_name": "Glucosamine Chondroitin Complex",
+     "source_section": "active",
+     "standard_name": "Glucosamine Chondroitin Complex",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    }
+   ],
+   "ingredients_recognized_non_scorable": [],
+   "ingredients_scorable": [
+    {
+     "absorption": "70%",
+     "additional_forms": [],
+     "aggregation_method": "single",
+     "bio_score": 13.0,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "vitamin_c",
+     "canonical_id_after": "vitamin_c",
+     "canonical_id_before": "vitamin_c",
+     "canonical_redirect_from": null,
+     "canonical_redirect_source": null,
+     "canonical_source_db": "ingredient_quality_map",
+     "category": "vitamins",
+     "certificates": [],
+     "cleaner_match_method": "unii_exact_match",
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dosage_importance": 1.5,
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [
+      {
+       "display_form": "Ascorbic Acid",
+       "dsld_category": "vitamin",
+       "dsld_ingredient_group": "Vitamin C",
+       "dsld_prefix": null,
+       "dsld_unii_code": "PQ6CK8PD0R",
+       "keep_from_prefixed_form": false,
+       "match_candidates": [
+        "Ascorbic Acid",
+        "Vitamin C Ascorbic Acid"
+       ],
+       "percent_share": 1.0,
+       "raw_form_text": "Ascorbic Acid"
+      }
+     ],
+     "fallback_class": null,
+     "fallback_reason": null,
+     "final_form_bio_score": 13.0,
+     "form_extraction_used": true,
+     "form_id": "ascorbic acid",
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "quality_map_match",
+     "identity_disposition": "clean",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Vitamin C\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Vitamin C\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Vitamin C\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Vitamin C\"},{\"field\":\"label_nutrient_context\",\"kind\":\"structured_identity\",\"value\":\"vitamin c\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Ascorbic Acid\"}]",
+     "identity_resolution_rationale": "Structured line identity agrees with the supplied canonical ID.",
+     "identity_taxonomy_coherent": true,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_nested_ingredient": false,
+     "is_parent_total": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "Ascorbic Acid",
+     "label_display_name": "Vitamin C",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_ambiguity_candidates": [],
+     "match_tier": "exact",
+     "matched_alias": "ascorbic acid",
+     "matched_entry_id": null,
+     "matched_form": "ascorbic acid",
+     "matched_forms": [
+      {
+       "bio_score": 13.0,
+       "canonical_id": "vitamin_c",
+       "form_key": "ascorbic acid",
+       "match_method": "exact",
+       "matched_candidate": "Ascorbic Acid",
+       "natural": false,
+       "percent_share": 1.0,
+       "raw_form_text": "Ascorbic Acid",
+       "score": 13.0
+      }
+     ],
+     "matched_target": "form_name",
+     "name": "Vitamin C",
+     "natural": false,
+     "never_promote_reason": null,
+     "normalized_key": "vitamin_c",
+     "notes": "The standard, most widely studied form of vitamin C. Highly bioavailable at normal doses (200 mg: ~90% absorbed). Acidic \u2014 may cause stomach upset in sensitive individuals at high doses. The benchmark against which all other forms are compared.",
+     "original_label": "Vitamin C",
+     "parent_blend": null,
+     "parent_blend_mass_mg": null,
+     "quantity": 500.0,
+     "raw_source_path": "ingredientRows[3]",
+     "raw_source_text": "Vitamin C",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "forms": [
+       {
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin C",
+        "ingredientId": 278604,
+        "name": "Ascorbic Acid",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": "PQ6CK8PD0R"
+       }
+      ],
+      "ingredientGroup": "Vitamin C",
+      "ingredientId": 278603,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value": 833.0,
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 500.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Tablet(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": "PQ6CK8PD0R"
+     },
+     "recognition_reason": null,
+     "recognition_source": null,
+     "recognition_type": null,
+     "role_classification": "active_scorable",
+     "safety_hits": [
+      {
+       "condition_hits": [
+        {
+         "action": "Keep vitamin C intake within guideline ranges; avoid high-dose supplementation without clinical need.",
+         "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
+         "alert_headline": "Keep vitamin C within prenatal range",
+         "condition_id": "pregnancy",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 2000.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 500.0,
+           "daily_amount": 500.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ascorbic acid",
+           "observed_amount": 500.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 2000.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "monitor",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 500.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 2000.0
+           }
+          ]
+         },
+         "dose_floor_status": null,
+         "dose_threshold_evaluation": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 2000.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 500.0,
+           "daily_amount": 500.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ascorbic acid",
+           "observed_amount": 500.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 2000.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "monitor",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 500.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 2000.0
+           }
+          ]
+         },
+         "evidence_level": "established",
+         "informational_note": "Vitamin C is dose-sensitive at high intake \u2014 higher doses warrant clinician review.",
+         "materiality": "presence",
+         "mechanism": "Vitamin C is essential, but excessive supplemental intake above UL is not recommended in pregnancy.",
+         "min_effective_dose": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant"
+           ]
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+          "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Threshold escalates only when intake exceeds adult UL.",
+         "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
+         "alert_headline": "Keep vitamin C within prenatal range",
+         "condition_id": "pregnancy",
+         "direction": "harmful",
+         "evidence_level": "established",
+         "informational_note": "Vitamin C is dose-sensitive at high intake \u2014 higher doses warrant clinician review.",
+         "materiality": "presence",
+         "mechanism": "Dose-dependent tolerability; excessive daily intake can increase adverse-effect risk.",
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+          "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Threshold escalates only when intake exceeds adult UL.",
+         "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
+         "alert_headline": "Keep vitamin C within prenatal range",
+         "condition_id": "lactation",
+         "direction": "harmful",
+         "evidence_level": "established",
+         "informational_note": "Vitamin C is dose-sensitive at high intake \u2014 higher doses warrant clinician review.",
+         "materiality": "presence",
+         "mechanism": "Dose-dependent tolerability; excessive daily intake can increase adverse-effect risk.",
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+          "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+         ],
+         "warning_type": null
+        }
+       ],
+       "drug_class_hits": [],
+       "last_reviewed": "2026-02-28",
+       "pregnancy_lactation": {
+        "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
+        "alert_headline": "Keep vitamin C within prenatal range",
+        "direction": "harmful",
+        "evidence_level": "established",
+        "informational_note": "Vitamin C is dose-sensitive at high intake \u2014 higher doses warrant clinician review.",
+        "lactation_category": "monitor",
+        "materiality": "presence",
+        "mechanism": "Dose-dependent tolerability; excessive daily intake can increase adverse-effect risk.",
+        "notes": "Threshold escalates only when intake exceeds adult UL.",
+        "pregnancy_category": "monitor",
+        "profile_gate": {
+         "dose": null,
+         "excludes": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "nutrient_forms_any": [],
+          "product_forms_any": [],
+          "profile_flags_any": []
+         },
+         "gate_type": "profile_flag",
+         "requires": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "profile_flags_any": [
+           "pregnant",
+           "breastfeeding"
+          ]
+         }
+        },
+        "sources": [
+         "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+         "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+        ]
+       },
+       "rule_id": "RULE_IQM_VITAMIN_C_PREGNANCY_EXCESS",
+       "source_bucket": "ingredients",
+       "subject_ref": {
+        "canonical_id": "vitamin_c",
+        "db": "ingredient_quality_map"
+       }
+      }
+     ],
+     "score": 13.0,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "scoreable_identity": true,
+     "source_label_form": "Ascorbic Acid",
+     "source_label_key": "label:vitamin_c:vitamin c:500:mg",
+     "source_label_name": "Vitamin C",
+     "source_section": "active",
+     "standard_name": "Vitamin C",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    },
+    {
+     "absorption": "poor (Mn class baseline genuinely low ~3-8%)",
+     "additional_forms": [],
+     "aggregation_method": "single",
+     "bio_score": 8.0,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "manganese",
+     "canonical_id_after": "manganese",
+     "canonical_id_before": "manganese",
+     "canonical_redirect_from": null,
+     "canonical_redirect_source": null,
+     "canonical_source_db": "ingredient_quality_map",
+     "category": "minerals",
+     "certificates": [],
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dosage_importance": 0.5,
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [
+      {
+       "display_form": "Manganese Sulfate",
+       "dsld_category": "mineral",
+       "dsld_ingredient_group": "Manganese",
+       "dsld_prefix": "as",
+       "dsld_unii_code": null,
+       "keep_from_prefixed_form": false,
+       "match_candidates": [
+        "Manganese Sulfate",
+        "Manganese Manganese Sulfate"
+       ],
+       "percent_share": 1.0,
+       "raw_form_text": "Manganese Sulfate"
+      }
+     ],
+     "fallback_class": null,
+     "fallback_reason": null,
+     "final_form_bio_score": 8.0,
+     "form_extraction_used": true,
+     "form_id": "manganese sulfate",
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "quality_map_match",
+     "identity_disposition": "clean",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Manganese\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Manganese\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Manganese\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Manganese\"},{\"field\":\"label_nutrient_context\",\"kind\":\"structured_identity\",\"value\":\"manganese\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"as Manganese Sulfate\"}]",
+     "identity_resolution_rationale": "Structured line identity agrees with the supplied canonical ID.",
+     "identity_taxonomy_coherent": true,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_nested_ingredient": false,
+     "is_parent_total": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "as Manganese Sulfate",
+     "label_display_name": "Manganese",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_ambiguity_candidates": [],
+     "match_tier": "exact",
+     "matched_alias": "manganese sulfate",
+     "matched_entry_id": null,
+     "matched_form": "manganese sulfate",
+     "matched_forms": [
+      {
+       "bio_score": 8.0,
+       "canonical_id": "manganese",
+       "form_key": "manganese sulfate",
+       "match_method": "exact",
+       "matched_candidate": "Manganese Sulfate",
+       "natural": false,
+       "percent_share": 1.0,
+       "raw_form_text": "Manganese Sulfate",
+       "score": 8.0
+      }
+     ],
+     "matched_target": "form_name",
+     "name": "Manganese",
+     "natural": false,
+     "never_promote_reason": null,
+     "normalized_key": "manganese",
+     "notes": "An inorganic salt form with lower absorption than organic chelates. More likely to cause GI upset at higher doses. Inexpensive, so it's common in budget multivitamins. If your label says sulfate, you're getting a basic form. B28 audit 2026-04-25: Mn class-equivalence (inherent low F).",
+     "original_label": "Manganese",
+     "parent_blend": null,
+     "parent_blend_mass_mg": null,
+     "quantity": 5.0,
+     "raw_source_path": "ingredientRows[4]",
+     "raw_source_text": "Manganese",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "forms": [
+       {
+        "category": "mineral",
+        "ingredientGroup": "Manganese",
+        "ingredientId": 4343,
+        "name": "Manganese Sulfate",
+        "order": 1,
+        "percent": null,
+        "prefix": "as",
+        "uniiCode": null
+       }
+      ],
+      "ingredientGroup": "Manganese",
+      "ingredientId": 28383,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value": 250.0,
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 5.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Tablet(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": null,
+     "recognition_source": null,
+     "recognition_type": null,
+     "role_classification": "active_scorable",
+     "safety_hits": [
+      {
+       "condition_hits": [
+        {
+         "action": "Avoid manganese supplementation above 5 mg/day in liver disease. In advanced cirrhosis or liver failure, avoid supplemental manganese entirely. Evaluate manganese status if neurological symptoms develop.",
+         "alert_body": "Manganese clearance can be impaired in liver disease, leading to accumulation. If you have liver disease, avoid high-dose manganese unless your clinician monitors levels.",
+         "alert_headline": "Manganese clearance depends on the liver",
+         "condition_id": "liver_disease",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "caution",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 5.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 5.0,
+           "daily_amount": 5.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "manganese sulfate",
+           "observed_amount": 5.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 5.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "caution",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 5.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 5.0
+           }
+          ]
+         },
+         "dose_floor_status": null,
+         "dose_threshold_evaluation": {
+          "clinical_severity": "caution",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 5.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 5.0,
+           "daily_amount": 5.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "manganese sulfate",
+           "observed_amount": 5.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 5.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "caution",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 5.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 5.0
+           }
+          ]
+         },
+         "evidence_level": "established",
+         "informational_note": "Manganese depends on liver clearance \u2014 relevant to people with liver conditions.",
+         "materiality": "presence",
+         "mechanism": "Manganese is excreted almost exclusively via bile. Liver disease impairs biliary excretion, leading to systemic accumulation. Excess manganese deposits in the basal ganglia (globus pallidus), producing manganism \u2014 a Parkinson-like neurotoxic syndrome with rigidity, bradykinesia, and psychiatric symptoms. MRI T1 hyperintensity in liver disease patients with elevated manganese is well-documented.",
+         "min_effective_dose": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "condition",
+          "requires": {
+           "conditions_any": [
+            "liver_disease"
+           ],
+           "drug_classes_any": [],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://pubmed.ncbi.nlm.nih.gov/9875025/",
+          "https://pubmed.ncbi.nlm.nih.gov/9002084/"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
+         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile \u2014 talk to your clinician.",
+         "alert_headline": "Standard nutrient \u2014 clinician guidance suggested",
+         "condition_id": "pregnancy",
+         "direction": "neutral",
+         "evidence_level": "limited",
+         "informational_note": "RDA-range standard nutrient \u2014 generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
+         "materiality": "presence",
+         "mechanism": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "monitor",
+         "sources": [],
+         "warning_type": null
+        },
+        {
+         "action": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
+         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile \u2014 talk to your clinician.",
+         "alert_headline": "Standard nutrient \u2014 clinician guidance suggested",
+         "condition_id": "lactation",
+         "direction": "neutral",
+         "evidence_level": "limited",
+         "informational_note": "RDA-range standard nutrient \u2014 generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
+         "materiality": "presence",
+         "mechanism": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "monitor",
+         "sources": [],
+         "warning_type": null
+        }
+       ],
+       "drug_class_hits": [],
+       "last_reviewed": "2026-04-09",
+       "pregnancy_lactation": {
+        "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile \u2014 talk to your clinician.",
+        "alert_headline": "Standard nutrient \u2014 clinician guidance suggested",
+        "direction": "neutral",
+        "evidence_level": "limited",
+        "informational_note": "RDA-range standard nutrient \u2014 generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
+        "lactation_category": "monitor",
+        "materiality": "presence",
+        "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
+        "pregnancy_category": "monitor",
+        "profile_gate": {
+         "dose": null,
+         "excludes": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "nutrient_forms_any": [],
+          "product_forms_any": [],
+          "profile_flags_any": []
+         },
+         "gate_type": "profile_flag",
+         "requires": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "profile_flags_any": [
+           "pregnant",
+           "breastfeeding"
+          ]
+         }
+        }
+       },
+       "rule_id": "RULE_IQM_MANGANESE_LIVER",
+       "source_bucket": "ingredients",
+       "subject_ref": {
+        "canonical_id": "manganese",
+        "db": "ingredient_quality_map"
+       }
+      }
+     ],
+     "score": 8.0,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "scoreable_identity": true,
+     "source_label_form": "as Manganese Sulfate",
+     "source_label_key": "label:manganese:manganese:5:mg",
+     "source_label_name": "Manganese",
+     "source_section": "active",
+     "standard_name": "Manganese",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    }
+   ],
+   "ingredients_skipped": [
+    {
+     "absorption": null,
+     "additional_forms": [],
+     "aggregation_method": null,
+     "bio_score": null,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": true,
+     "canonical_id": null,
+     "canonical_id_after": null,
+     "canonical_id_before": null,
+     "canonical_source_db": "unmapped",
+     "category": "unknown",
+     "certificates": [],
+     "cleaner_match_method": null,
+     "cleaner_row_role": "blend_header_total",
+     "delivers_markers": [],
+     "dose_class": "blend_total_weight",
+     "extracted_forms": [],
+     "fallback_class": "clinical_fail_safe",
+     "fallback_reason": "blend_header_total_weight_only",
+     "final_form_bio_score": null,
+     "form_extraction_used": false,
+     "form_id": null,
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": "blend_header",
+     "identity_confidence": 0.0,
+     "identity_decision_reason": "blend_header_total_weight_only",
+     "identity_disposition": "taxonomy_only",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Glucosamine Chondroitin Complex\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Glucosamine Chondroitin Complex\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Blend (Combination)\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Blend (Combination)\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Chondroitin Sulfate\"},{\"field\":\"forms[1]\",\"kind\":\"source_form\",\"value\":\"Glucosamine Sulfate\"},{\"field\":\"forms[2]\",\"kind\":\"source_form\",\"value\":\"Vitamin C\"}]",
+     "identity_resolution_rationale": "The row was intentionally classified as non-scorable; no canonical identity was inferred from raw label or form text.",
+     "identity_taxonomy_coherent": false,
+     "is_blend_header": true,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_proprietary_blend": true,
+     "label_display_form": "Chondroitin Sulfate",
+     "label_display_name": "Glucosamine Chondroitin Complex",
+     "mapped": false,
+     "mapped_identity": false,
+     "match_tier": null,
+     "matched_alias": null,
+     "matched_form": null,
+     "matched_forms": [],
+     "matched_target": null,
+     "name": "Glucosamine Chondroitin Complex",
+     "natural": null,
+     "never_promote_reason": null,
+     "normalized_key": "glucosamine_chondroitin_complex",
+     "notes": null,
+     "original_label": "Glucosamine Chondroitin Complex",
+     "quantity": 3500.0,
+     "raw_source_path": "ingredientRows[6]",
+     "raw_source_text": "Glucosamine Chondroitin Complex",
+     "raw_taxonomy": {
+      "category": "blend",
+      "forms": [
+       {
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Chondroitin Sulfate",
+        "ingredientId": 164786,
+        "name": "Chondroitin Sulfate",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": null
+       },
+       {
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Glucosamine Sulfate",
+        "ingredientId": 16072,
+        "name": "Glucosamine Sulfate",
+        "order": 2,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": null
+       },
+       {
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin C",
+        "ingredientId": 278591,
+        "name": "Vitamin C",
+        "order": 3,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": "PQ6CK8PD0R"
+       }
+      ],
+      "ingredientGroup": "Blend (Combination)",
+      "ingredientId": 20754,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 3500.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Tablet(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": null,
+     "recognition_source": null,
+     "recognition_type": null,
+     "recognized_entry_id": null,
+     "recognized_entry_name": null,
+     "role_classification": "inactive_non_scorable",
+     "safety_hits": [],
+     "score": null,
+     "score_eligible_by_cleaner": false,
+     "score_exclusion_reason": "blend_header_total",
+     "scoreable_identity": false,
+     "skip_reason": "blend_header_total_weight_only",
+     "source_label_form": "Chondroitin Sulfate",
+     "source_label_key": "label:glucosamine chondroitin complex:glucosamine chondroitin complex:3500:mg",
+     "source_label_name": "Glucosamine Chondroitin Complex",
+     "source_section": "active",
+     "standard_name": "Glucosamine Chondroitin Complex",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    }
+   ],
+   "parent_fallback_count": 0,
+   "pattern_match_wins_count": 0,
+   "premium_form_count": 1,
+   "promoted_from_inactive": [],
+   "quality_data_schema_version": 2,
+   "recognized_non_scorable_count": 0,
+   "scorable_ingredient_names_normalized": [
+    "vitamin c",
+    "manganese"
+   ],
+   "skipped_non_scorable_count": 1,
+   "skipped_reasons_breakdown": {
+    "blend_header_total_weight_only": 1
+   },
+   "total_active": 3,
+   "total_ingredients_evaluated": 3,
+   "total_records_seen": 3,
+   "total_scorable_active_count": 2,
+   "unevaluated_records": 0,
+   "unmapped_count": 0,
+   "unmapped_scorable_count": 0
+  },
+  "primary_type": "joint_support",
+  "product_scoring_evidence": [
+   {
+    "canonical_id": "glucosamine_chondroitin_complex",
+    "canonical_source_db": "unmapped",
+    "clean_identity_id": null,
+    "confidence": "medium",
+    "dose_class": "therapeutic_mass",
+    "dose_unit": "mg",
+    "dose_value": 3500.0,
+    "evidence_canonical_id": "glucosamine_chondroitin_complex",
+    "evidence_origin": "compatibility_derived",
+    "evidence_scope": "blend_level",
+    "evidence_type": "blend_anchor_mass",
+    "forms": [
+     {
+      "category": "non-nutrient/non-botanical",
+      "ingredientGroup": "Chondroitin Sulfate",
+      "ingredientId": 164786,
+      "name": "Chondroitin Sulfate",
+      "order": 1,
+      "percent": null,
+      "prefix": null,
+      "uniiCode": null
+     },
+     {
+      "category": "non-nutrient/non-botanical",
+      "ingredientGroup": "Glucosamine Sulfate",
+      "ingredientId": 16072,
+      "name": "Glucosamine Sulfate",
+      "order": 2,
+      "percent": null,
+      "prefix": null,
+      "uniiCode": null
+     },
+     {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin C",
+      "ingredientId": 278591,
+      "name": "Vitamin C",
+      "order": 3,
+      "percent": null,
+      "prefix": null,
+      "uniiCode": "PQ6CK8PD0R"
+     }
+    ],
+    "identity_contract_required": true,
+    "identity_disposition": "taxonomy_only",
+    "identity_kind": "label_taxonomy_anchor",
+    "linked_rows": [
+     "ingredientRows[6]"
+    ],
+    "name": "Glucosamine Chondroitin Complex",
+    "raw_source_path": "ingredientRows[6]",
+    "raw_source_text": "Glucosamine Chondroitin Complex",
+    "raw_taxonomy": {
+     "category": "blend",
+     "forms": [
+      {
+       "category": "non-nutrient/non-botanical",
+       "ingredientGroup": "Chondroitin Sulfate",
+       "ingredientId": 164786,
+       "name": "Chondroitin Sulfate",
+       "order": 1,
+       "percent": null,
+       "prefix": null,
+       "uniiCode": null
+      },
+      {
+       "category": "non-nutrient/non-botanical",
+       "ingredientGroup": "Glucosamine Sulfate",
+       "ingredientId": 16072,
+       "name": "Glucosamine Sulfate",
+       "order": 2,
+       "percent": null,
+       "prefix": null,
+       "uniiCode": null
+      },
+      {
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin C",
+       "ingredientId": 278591,
+       "name": "Vitamin C",
+       "order": 3,
+       "percent": null,
+       "prefix": null,
+       "uniiCode": "PQ6CK8PD0R"
+      }
+     ],
+     "ingredientGroup": "Blend (Combination)",
+     "ingredientId": 20754,
+     "isNestedIngredient": false,
+     "nested_depth": 0,
+     "parentBlend": null,
+     "quantityVariants": [
+      {
+       "daily_value_target_group": "adult_4_plus",
+       "index": 0,
+       "quantity": 3500.0,
+       "quantity_parsed": true,
+       "serving_size_order": 1,
+       "serving_size_quantity": 3,
+       "serving_size_unit": "Tablet(s)",
+       "unit": "mg"
+      }
+     ],
+     "uniiCode": null
+    },
+    "reason": "identity_bearing_blend_header_mass",
+    "score_eligible_by_cleaner": true,
+    "scoreable": true,
+    "scoreable_identity": true,
+    "scoring_parent_id": "glucosamine_chondroitin_complex",
+    "source": "active",
+    "source_section": "product",
+    "standardName": "Glucosamine Chondroitin Complex"
+   }
+  ]
+ },
+ "328831": {
+  "fullName": "Ginseng Plus",
+  "ingredient_quality_data": {
+   "blend_header_rows": [],
+   "blend_only_product": false,
+   "contains_match_wins_count": 0,
+   "demoted_absorption_enhancers": [],
+   "ingredients": [
+    {
+     "absorption": null,
+     "additional_forms": [],
+     "aggregation_method": null,
+     "bio_score": null,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "greek_mountain_tea_aerial_parts",
+     "canonical_id_after": "greek_mountain_tea_aerial_parts",
+     "canonical_id_before": "greek_mountain_tea_aerial_parts",
+     "canonical_source_db": "botanical_ingredients",
+     "category": "unknown",
+     "certificates": [],
+     "cleaner_match_method": null,
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [],
+     "fallback_class": "clinical_fail_safe",
+     "fallback_reason": "recognized_non_scorable",
+     "final_form_bio_score": null,
+     "form_extraction_used": false,
+     "form_id": null,
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "leaf",
+     "identity_disposition": "taxonomy_only",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Greek Mountain Tea Aerial Parts Extract\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Greek Mountain Tea Aerial Parts Extract\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"TBD\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"TBD\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Sideritis scardica Aerial Parts Extract\"}]",
+     "identity_resolution_rationale": "The row was intentionally classified as non-scorable; its validated source identity was retained for non-scoring lineage.",
+     "identity_taxonomy_coherent": false,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "Sideritis scardica Aerial Parts Extract",
+     "label_display_name": "Greek Mountain Tea Aerial Parts Extract",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_tier": null,
+     "matched_alias": null,
+     "matched_entry_id": "greek_mountain_tea_aerial_parts",
+     "matched_entry_name": "Greek Mountain Tea Aerial Parts",
+     "matched_form": null,
+     "matched_forms": [],
+     "matched_target": null,
+     "name": "Greek Mountain Tea Aerial Parts Extract",
+     "natural": null,
+     "never_promote_reason": null,
+     "normalized_key": "greek_mountain_tea_aerial_parts_extract",
+     "notes": null,
+     "original_label": "Greek Mountain Tea Aerial Parts Extract",
+     "quantity": 475.0,
+     "raw_source_path": "ingredientRows[0]",
+     "raw_source_text": "Greek Mountain Tea Aerial Parts Extract",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "forms": [
+       {
+        "category": "botanical",
+        "ingredientGroup": "TBD",
+        "ingredientId": 358189,
+        "name": "Sideritis scardica Aerial Parts Extract",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": null
+       }
+      ],
+      "ingredientGroup": "TBD",
+      "ingredientId": 358186,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 475.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Capsule(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": "leaf",
+     "recognition_source": "botanical_ingredients",
+     "recognition_type": "botanical_unscored",
+     "recognized_entry_id": "greek_mountain_tea_aerial_parts",
+     "recognized_entry_name": "Greek Mountain Tea Aerial Parts",
+     "recognized_non_scorable": true,
+     "role_classification": "recognized_non_scorable",
+     "safety_hits": [],
+     "score": null,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": "recognized_non_scorable",
+     "score_included": false,
+     "scoreable_identity": false,
+     "skip_reason": "recognized_non_scorable",
+     "source_label_form": "Sideritis scardica Aerial Parts Extract",
+     "source_label_key": "label:greek_mountain_tea_aerial_parts:greek mountain tea aerial parts extract:475:mg",
+     "source_label_name": "Greek Mountain Tea Aerial Parts Extract",
+     "source_section": "active",
+     "standard_name": "Greek Mountain Tea Aerial Parts",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    },
+    {
+     "absorption": "low (ginsenoside biotransformation-dependent)",
+     "additional_forms": [],
+     "aggregation_method": null,
+     "bio_score": 10.0,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "ginseng",
+     "canonical_id_after": "ginseng",
+     "canonical_id_before": "ginseng",
+     "canonical_redirect_from": null,
+     "canonical_redirect_source": null,
+     "canonical_source_db": "ingredient_quality_map",
+     "category": "herbs",
+     "certificates": [],
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dosage_importance": 1.0,
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [],
+     "fallback_class": null,
+     "fallback_reason": null,
+     "final_form_bio_score": null,
+     "form_extraction_used": false,
+     "form_id": "ginseng (unspecified)",
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "quality_map_match",
+     "identity_disposition": "clean",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Botalys\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Botalys\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Ginseng\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Ginseng\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Korean Red Ginseng Root Extract\"}]",
+     "identity_resolution_rationale": "Structured line identity agrees with the supplied canonical ID.",
+     "identity_taxonomy_coherent": true,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_nested_ingredient": false,
+     "is_parent_total": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "Korean Red Ginseng Root Extract",
+     "label_display_name": "Ginseng",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_ambiguity_candidates": [],
+     "match_tier": "exact",
+     "matched_alias": "ginseng",
+     "matched_entry_id": null,
+     "matched_form": "ginseng (unspecified)",
+     "matched_forms": [],
+     "matched_target": "form_alias",
+     "name": "Botalys",
+     "natural": false,
+     "never_promote_reason": null,
+     "normalized_key": "botalys",
+     "notes": "Form not specified on the label. Ginseng products span multiple species (Panax ginseng, P. quinquefolius, Eleutherococcus), processing methods (white, red, black, fermented), and ginsenoside profiles. Bioavailability and effects vary substantially by form. Scored conservatively until species and preparation are confirmed. B33 audit 2026-04-25: ginsenoside biotransformation-dep.",
+     "original_label": null,
+     "parent_blend": null,
+     "parent_blend_mass_mg": null,
+     "quantity": 420.0,
+     "raw_source_path": "ingredientRows[1]",
+     "raw_source_text": "Botalys",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "forms": [
+       {
+        "category": "botanical",
+        "ingredientGroup": "Ginseng",
+        "ingredientId": 358190,
+        "name": "Korean Red Ginseng Root Extract",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": null
+       }
+      ],
+      "ingredientGroup": "Ginseng",
+      "ingredientId": 358191,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 420.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Capsule(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": null,
+     "recognition_source": null,
+     "recognition_type": null,
+     "role_classification": "active_scorable",
+     "safety_hits": [
+      {
+       "condition_hits": [
+        {
+         "action": "Avoid routine use during pregnancy unless clinician-directed.",
+         "alert_body": "Ginseng's pregnancy and breastfeeding safety data are limited. If you are pregnant or nursing, talk to your obstetric team before use \u2014 safer alternatives may be available.",
+         "alert_headline": "Limited pregnancy safety data",
+         "condition_id": "pregnancy",
+         "direction": "harmful",
+         "dose_decision": null,
+         "dose_floor_status": null,
+         "dose_threshold_evaluation": null,
+         "evidence_level": "probable",
+         "informational_note": "Ginseng has limited pregnancy data \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
+         "materiality": "presence",
+         "mechanism": "NCCIH reports some evidence of pregnancy safety concerns and expert caution for use.",
+         "min_effective_dose": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant"
+           ]
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Monitor glucose levels when combining with diabetes medications.",
+         "alert_body": "Ginseng can lower blood sugar. If you have diabetes, talk to your clinician before adding ginseng and monitor your glucose, especially in the first weeks.",
+         "alert_headline": "May modestly lower blood sugar",
+         "condition_id": "diabetes",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "review",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">=",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 200.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">=",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 200.0,
+           "threshold_unit": "mg"
+          },
+          "evaluation_status": "above_threshold",
+          "release_blocking": false
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": null,
+         "evidence_level": "probable",
+         "informational_note": "Ginseng affects blood sugar \u2014 relevant to people with diabetes.",
+         "materiality": "dose_dependent",
+         "mechanism": "Ginsenosides improve insulin sensitivity and increase pancreatic beta-cell insulin secretion. RCTs show significant postprandial glucose reduction.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "condition",
+          "requires": {
+           "conditions_any": [
+            "diabetes"
+           ],
+           "drug_classes_any": [],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Stop ginseng at least 7 days before elective surgery. Inform surgeon.",
+         "alert_body": "Ginseng may affect platelet function and blood sugar. Tell your surgical team before a procedure, especially if you use blood thinners or diabetes medication.",
+         "alert_headline": "Ginseng may affect bleeding or glucose",
+         "condition_id": "surgery_scheduled",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "caution",
+          "consumer_disposition": "review",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">=",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 200.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">=",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 200.0,
+           "threshold_unit": "mg"
+          },
+          "evaluation_status": "above_threshold",
+          "release_blocking": false
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": null,
+         "evidence_level": "probable",
+         "informational_note": "Ginseng can affect perioperative bleeding \u2014 relevant to anyone preparing for surgery.",
+         "materiality": "dose_dependent",
+         "mechanism": "Ginseng may affect platelet aggregation and coagulation parameters. Case reports of reduced warfarin INR documented.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "surgery_scheduled"
+           ]
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Prefer avoidance unless obstetric team approves.",
+         "alert_body": "Ginseng's pregnancy and breastfeeding safety data are limited. If you are pregnant or nursing, talk to your obstetric team before use \u2014 safer alternatives may be available.",
+         "alert_headline": "Limited pregnancy safety data",
+         "condition_id": "pregnancy",
+         "direction": "unknown",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng has limited pregnancy data \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
+         "materiality": "presence",
+         "mechanism": "Pregnancy/lactation safety data are limited and concerns are noted in safety reviews.",
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Prefer avoidance unless obstetric team approves.",
+         "alert_body": "Ginseng's pregnancy and breastfeeding safety data are limited. If you are pregnant or nursing, talk to your obstetric team before use \u2014 safer alternatives may be available.",
+         "alert_headline": "Limited pregnancy safety data",
+         "condition_id": "lactation",
+         "direction": "unknown",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng has limited pregnancy data \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
+         "materiality": "presence",
+         "mechanism": "Pregnancy/lactation safety data are limited and concerns are noted in safety reviews.",
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        }
+       ],
+       "drug_class_hits": [
+        {
+         "action": "Monitor for hypoglycemia symptoms.",
+         "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
+         "alert_headline": "May add to diabetes-med effects",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "review",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">=",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 200.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">=",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 200.0,
+           "threshold_unit": "mg"
+          },
+          "evaluation_status": "above_threshold",
+          "release_blocking": false
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": null,
+         "drug_class_id": "hypoglycemics_high_risk",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng affects blood sugar \u2014 relevant to people on diabetes medications.",
+         "materiality": "dose_dependent",
+         "mechanism": "Mild additive glucose-lowering effect.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "drug_class",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [
+            "hypoglycemics_high_risk"
+           ],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Monitor for hypoglycemia symptoms.",
+         "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
+         "alert_headline": "May add to diabetes-med effects",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "review",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">=",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 200.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">=",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 200.0,
+           "threshold_unit": "mg"
+          },
+          "evaluation_status": "above_threshold",
+          "release_blocking": false
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": null,
+         "drug_class_id": "hypoglycemics_lower_risk",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng affects blood sugar \u2014 relevant to people on diabetes medications.",
+         "materiality": "dose_dependent",
+         "mechanism": "Mild additive glucose-lowering effect.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "drug_class",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [
+            "hypoglycemics_lower_risk"
+           ],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "If you take warfarin, talk to your prescriber before using ginseng. INR may need re-checking after starting.",
+         "alert_body": "Panax ginseng has mixed evidence for changing how warfarin works. INR monitoring is recommended if you start a ginseng supplement.",
+         "alert_headline": "May affect warfarin levels",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 1000.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 1000.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "monitor",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 420.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 1000.0
+           }
+          ]
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 1000.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 1000.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "monitor",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 420.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 1000.0
+           }
+          ]
+         },
+         "drug_class_id": "anticoagulants",
+         "evidence_level": "established",
+         "informational_note": "Ginseng may interact with warfarin \u2014 relevant to anyone on anticoagulants.",
+         "materiality": "dose_dependent",
+         "mechanism": "Mixed evidence \u2014 some studies show reduced INR (efficacy reduction); others null. Effect appears variable across products and individuals.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "drug_class",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [
+            "anticoagulants"
+           ],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "If you take an MAOI, talk to your prescriber before using Panax or American ginseng.",
+         "alert_body": "Panax ginseng combined with MAO-inhibitor antidepressants has been linked to high blood pressure in case reports.",
+         "alert_headline": "May raise blood pressure with MAOIs",
+         "direction": "harmful",
+         "dose_decision": null,
+         "dose_floor_status": null,
+         "dose_threshold_evaluation": null,
+         "drug_class_id": "maois",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng may interact with MAOIs \u2014 relevant to anyone on phenelzine or similar drugs.",
+         "materiality": "presence",
+         "mechanism": "Multiple case reports of hypertensive episodes when combined with MAOIs (especially phenelzine). Evidence is thinner than M1-M5 but real.",
+         "min_effective_dose": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "drug_class",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [
+            "maois"
+           ],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Monitor for hypoglycemia symptoms.",
+         "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
+         "alert_headline": "May add to diabetes-med effects",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "review",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">=",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 200.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">=",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 200.0,
+           "threshold_unit": "mg"
+          },
+          "evaluation_status": "above_threshold",
+          "release_blocking": false
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": null,
+         "drug_class_id": "hypoglycemics_unknown",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng affects blood sugar \u2014 relevant to people on diabetes medications.",
+         "materiality": "dose_dependent",
+         "mechanism": "Mild additive glucose-lowering effect.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "drug_class",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [
+            "hypoglycemics_unknown"
+           ],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        }
+       ],
+       "last_reviewed": "2026-03-18",
+       "pregnancy_lactation": {
+        "alert_body": "Ginseng's pregnancy and breastfeeding safety data are limited. If you are pregnant or nursing, talk to your obstetric team before use \u2014 safer alternatives may be available.",
+        "alert_headline": "Limited pregnancy safety data",
+        "direction": "unknown",
+        "evidence_level": "probable",
+        "informational_note": "Ginseng has limited pregnancy data \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
+        "lactation_category": "caution",
+        "materiality": "presence",
+        "mechanism": "Pregnancy/lactation safety data are limited and concerns are noted in safety reviews.",
+        "notes": "Prefer avoidance unless obstetric team approves.",
+        "pregnancy_category": "caution",
+        "profile_gate": {
+         "dose": null,
+         "excludes": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "nutrient_forms_any": [],
+          "product_forms_any": [],
+          "profile_flags_any": []
+         },
+         "gate_type": "profile_flag",
+         "requires": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "profile_flags_any": [
+           "pregnant",
+           "breastfeeding"
+          ]
+         }
+        },
+        "sources": [
+         "https://www.nccih.nih.gov/health/asian-ginseng"
+        ]
+       },
+       "rule_id": "RULE_INGREDIENT_GINSENG",
+       "source_bucket": "ingredients",
+       "subject_ref": {
+        "canonical_id": "ginseng",
+        "db": "ingredient_quality_map"
+       }
+      }
+     ],
+     "score": 10.0,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "scoreable_identity": true,
+     "source_label_form": "Korean Red Ginseng Root Extract",
+     "source_label_key": "label:ginseng:botalys:420:mg",
+     "source_label_name": "Ginseng",
+     "source_section": "active",
+     "standard_name": "Ginseng",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    },
+    {
+     "absorption": null,
+     "additional_forms": [],
+     "aggregation_method": null,
+     "bio_score": null,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "lion_s_mane",
+     "canonical_id_after": "lion_s_mane",
+     "canonical_id_before": "lions_mane",
+     "canonical_source_db": "botanical_ingredients",
+     "category": "unknown",
+     "certificates": [],
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dosage_importance": 1.0,
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [],
+     "fallback_class": "clinical_fail_safe",
+     "fallback_reason": "mushroom",
+     "final_form_bio_score": null,
+     "form_extraction_used": false,
+     "form_id": null,
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "mushroom",
+     "identity_disposition": "repaired",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Lion's Mane Fruiting Body Extract\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Lion's Mane Fruiting Body Extract\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Hericium mushroom\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Hericium mushroom\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Hericium erinaceus Fruiting Body Extract\"}]",
+     "identity_resolution_rationale": "Unambiguous structured line identity replaced the supplied canonical ID 'lions_mane' with 'lion_s_mane'.",
+     "identity_taxonomy_coherent": true,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_nested_ingredient": false,
+     "is_parent_total": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "Hericium erinaceus Fruiting Body Extract",
+     "label_display_name": "Hericium mushroom",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_ambiguity_candidates": [],
+     "match_tier": null,
+     "matched_alias": null,
+     "matched_entry_id": "lion_s_mane",
+     "matched_entry_name": "Lion's Mane",
+     "matched_form": null,
+     "matched_forms": [],
+     "matched_target": null,
+     "name": "Lion's Mane Fruiting Body Extract",
+     "natural": null,
+     "never_promote_reason": null,
+     "normalized_key": "lions_mane_fruiting_body_extract",
+     "notes": null,
+     "original_label": "Lion's Mane Fruiting Body Extract",
+     "parent_blend": null,
+     "parent_blend_mass_mg": null,
+     "quantity": 400.0,
+     "raw_source_path": "ingredientRows[2]",
+     "raw_source_text": "Lion's Mane Fruiting Body Extract",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "forms": [
+       {
+        "category": "botanical",
+        "ingredientGroup": "Hericium mushroom",
+        "ingredientId": 297739,
+        "name": "Hericium erinaceus Fruiting Body Extract",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": "BU6Y4J4C2E"
+       }
+      ],
+      "ingredientGroup": "Hericium mushroom",
+      "ingredientId": 328580,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 400.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Capsule(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": "mushroom",
+     "recognition_source": "botanical_ingredients",
+     "recognition_type": "botanical_unscored",
+     "recognized_entry_id": "lion_s_mane",
+     "recognized_entry_name": "Lion's Mane",
+     "recognized_non_scorable": true,
+     "role_classification": "recognized_non_scorable",
+     "safety_hits": [],
+     "score": null,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": "recognized_non_scorable",
+     "score_included": false,
+     "scoreable_identity": false,
+     "skip_reason": "recognized_non_scorable",
+     "source_label_form": "Hericium erinaceus Fruiting Body Extract",
+     "source_label_key": "label:lion_s_mane:lion's mane fruiting body extract:400:mg",
+     "source_label_name": "Hericium mushroom",
+     "source_section": "active",
+     "standard_name": "Lion's Mane",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    }
+   ],
+   "ingredients_recognized_non_scorable": [
+    {
+     "absorption": null,
+     "additional_forms": [],
+     "aggregation_method": null,
+     "bio_score": null,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "greek_mountain_tea_aerial_parts",
+     "canonical_id_after": "greek_mountain_tea_aerial_parts",
+     "canonical_id_before": "greek_mountain_tea_aerial_parts",
+     "canonical_source_db": "botanical_ingredients",
+     "category": "unknown",
+     "certificates": [],
+     "cleaner_match_method": null,
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [],
+     "fallback_class": "clinical_fail_safe",
+     "fallback_reason": "recognized_non_scorable",
+     "final_form_bio_score": null,
+     "form_extraction_used": false,
+     "form_id": null,
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "leaf",
+     "identity_disposition": "taxonomy_only",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Greek Mountain Tea Aerial Parts Extract\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Greek Mountain Tea Aerial Parts Extract\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"TBD\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"TBD\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Sideritis scardica Aerial Parts Extract\"}]",
+     "identity_resolution_rationale": "The row was intentionally classified as non-scorable; its validated source identity was retained for non-scoring lineage.",
+     "identity_taxonomy_coherent": false,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "Sideritis scardica Aerial Parts Extract",
+     "label_display_name": "Greek Mountain Tea Aerial Parts Extract",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_tier": null,
+     "matched_alias": null,
+     "matched_entry_id": "greek_mountain_tea_aerial_parts",
+     "matched_entry_name": "Greek Mountain Tea Aerial Parts",
+     "matched_form": null,
+     "matched_forms": [],
+     "matched_target": null,
+     "name": "Greek Mountain Tea Aerial Parts Extract",
+     "natural": null,
+     "never_promote_reason": null,
+     "normalized_key": "greek_mountain_tea_aerial_parts_extract",
+     "notes": null,
+     "original_label": "Greek Mountain Tea Aerial Parts Extract",
+     "quantity": 475.0,
+     "raw_source_path": "ingredientRows[0]",
+     "raw_source_text": "Greek Mountain Tea Aerial Parts Extract",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "forms": [
+       {
+        "category": "botanical",
+        "ingredientGroup": "TBD",
+        "ingredientId": 358189,
+        "name": "Sideritis scardica Aerial Parts Extract",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": null
+       }
+      ],
+      "ingredientGroup": "TBD",
+      "ingredientId": 358186,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 475.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Capsule(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": "leaf",
+     "recognition_source": "botanical_ingredients",
+     "recognition_type": "botanical_unscored",
+     "recognized_entry_id": "greek_mountain_tea_aerial_parts",
+     "recognized_entry_name": "Greek Mountain Tea Aerial Parts",
+     "recognized_non_scorable": true,
+     "role_classification": "recognized_non_scorable",
+     "safety_hits": [],
+     "score": null,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": "recognized_non_scorable",
+     "score_included": false,
+     "scoreable_identity": false,
+     "skip_reason": "recognized_non_scorable",
+     "source_label_form": "Sideritis scardica Aerial Parts Extract",
+     "source_label_key": "label:greek_mountain_tea_aerial_parts:greek mountain tea aerial parts extract:475:mg",
+     "source_label_name": "Greek Mountain Tea Aerial Parts Extract",
+     "source_section": "active",
+     "standard_name": "Greek Mountain Tea Aerial Parts",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    },
+    {
+     "absorption": null,
+     "additional_forms": [],
+     "aggregation_method": null,
+     "bio_score": null,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "lion_s_mane",
+     "canonical_id_after": "lion_s_mane",
+     "canonical_id_before": "lions_mane",
+     "canonical_source_db": "botanical_ingredients",
+     "category": "unknown",
+     "certificates": [],
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dosage_importance": 1.0,
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [],
+     "fallback_class": "clinical_fail_safe",
+     "fallback_reason": "mushroom",
+     "final_form_bio_score": null,
+     "form_extraction_used": false,
+     "form_id": null,
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "mushroom",
+     "identity_disposition": "repaired",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Lion's Mane Fruiting Body Extract\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Lion's Mane Fruiting Body Extract\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Hericium mushroom\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Hericium mushroom\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Hericium erinaceus Fruiting Body Extract\"}]",
+     "identity_resolution_rationale": "Unambiguous structured line identity replaced the supplied canonical ID 'lions_mane' with 'lion_s_mane'.",
+     "identity_taxonomy_coherent": true,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_nested_ingredient": false,
+     "is_parent_total": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "Hericium erinaceus Fruiting Body Extract",
+     "label_display_name": "Hericium mushroom",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_ambiguity_candidates": [],
+     "match_tier": null,
+     "matched_alias": null,
+     "matched_entry_id": "lion_s_mane",
+     "matched_entry_name": "Lion's Mane",
+     "matched_form": null,
+     "matched_forms": [],
+     "matched_target": null,
+     "name": "Lion's Mane Fruiting Body Extract",
+     "natural": null,
+     "never_promote_reason": null,
+     "normalized_key": "lions_mane_fruiting_body_extract",
+     "notes": null,
+     "original_label": "Lion's Mane Fruiting Body Extract",
+     "parent_blend": null,
+     "parent_blend_mass_mg": null,
+     "quantity": 400.0,
+     "raw_source_path": "ingredientRows[2]",
+     "raw_source_text": "Lion's Mane Fruiting Body Extract",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "forms": [
+       {
+        "category": "botanical",
+        "ingredientGroup": "Hericium mushroom",
+        "ingredientId": 297739,
+        "name": "Hericium erinaceus Fruiting Body Extract",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": "BU6Y4J4C2E"
+       }
+      ],
+      "ingredientGroup": "Hericium mushroom",
+      "ingredientId": 328580,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 400.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Capsule(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": "mushroom",
+     "recognition_source": "botanical_ingredients",
+     "recognition_type": "botanical_unscored",
+     "recognized_entry_id": "lion_s_mane",
+     "recognized_entry_name": "Lion's Mane",
+     "recognized_non_scorable": true,
+     "role_classification": "recognized_non_scorable",
+     "safety_hits": [],
+     "score": null,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": "recognized_non_scorable",
+     "score_included": false,
+     "scoreable_identity": false,
+     "skip_reason": "recognized_non_scorable",
+     "source_label_form": "Hericium erinaceus Fruiting Body Extract",
+     "source_label_key": "label:lion_s_mane:lion's mane fruiting body extract:400:mg",
+     "source_label_name": "Hericium mushroom",
+     "source_section": "active",
+     "standard_name": "Lion's Mane",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    }
+   ],
+   "ingredients_scorable": [
+    {
+     "absorption": "low (ginsenoside biotransformation-dependent)",
+     "additional_forms": [],
+     "aggregation_method": null,
+     "bio_score": 10.0,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "ginseng",
+     "canonical_id_after": "ginseng",
+     "canonical_id_before": "ginseng",
+     "canonical_redirect_from": null,
+     "canonical_redirect_source": null,
+     "canonical_source_db": "ingredient_quality_map",
+     "category": "herbs",
+     "certificates": [],
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dosage_importance": 1.0,
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [],
+     "fallback_class": null,
+     "fallback_reason": null,
+     "final_form_bio_score": null,
+     "form_extraction_used": false,
+     "form_id": "ginseng (unspecified)",
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "quality_map_match",
+     "identity_disposition": "clean",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Botalys\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Botalys\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Ginseng\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Ginseng\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Korean Red Ginseng Root Extract\"}]",
+     "identity_resolution_rationale": "Structured line identity agrees with the supplied canonical ID.",
+     "identity_taxonomy_coherent": true,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_nested_ingredient": false,
+     "is_parent_total": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "Korean Red Ginseng Root Extract",
+     "label_display_name": "Ginseng",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_ambiguity_candidates": [],
+     "match_tier": "exact",
+     "matched_alias": "ginseng",
+     "matched_entry_id": null,
+     "matched_form": "ginseng (unspecified)",
+     "matched_forms": [],
+     "matched_target": "form_alias",
+     "name": "Botalys",
+     "natural": false,
+     "never_promote_reason": null,
+     "normalized_key": "botalys",
+     "notes": "Form not specified on the label. Ginseng products span multiple species (Panax ginseng, P. quinquefolius, Eleutherococcus), processing methods (white, red, black, fermented), and ginsenoside profiles. Bioavailability and effects vary substantially by form. Scored conservatively until species and preparation are confirmed. B33 audit 2026-04-25: ginsenoside biotransformation-dep.",
+     "original_label": null,
+     "parent_blend": null,
+     "parent_blend_mass_mg": null,
+     "quantity": 420.0,
+     "raw_source_path": "ingredientRows[1]",
+     "raw_source_text": "Botalys",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "forms": [
+       {
+        "category": "botanical",
+        "ingredientGroup": "Ginseng",
+        "ingredientId": 358190,
+        "name": "Korean Red Ginseng Root Extract",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": null
+       }
+      ],
+      "ingredientGroup": "Ginseng",
+      "ingredientId": 358191,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 420.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Capsule(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": null,
+     "recognition_source": null,
+     "recognition_type": null,
+     "role_classification": "active_scorable",
+     "safety_hits": [
+      {
+       "condition_hits": [
+        {
+         "action": "Avoid routine use during pregnancy unless clinician-directed.",
+         "alert_body": "Ginseng's pregnancy and breastfeeding safety data are limited. If you are pregnant or nursing, talk to your obstetric team before use \u2014 safer alternatives may be available.",
+         "alert_headline": "Limited pregnancy safety data",
+         "condition_id": "pregnancy",
+         "direction": "harmful",
+         "dose_decision": null,
+         "dose_floor_status": null,
+         "dose_threshold_evaluation": null,
+         "evidence_level": "probable",
+         "informational_note": "Ginseng has limited pregnancy data \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
+         "materiality": "presence",
+         "mechanism": "NCCIH reports some evidence of pregnancy safety concerns and expert caution for use.",
+         "min_effective_dose": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant"
+           ]
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Monitor glucose levels when combining with diabetes medications.",
+         "alert_body": "Ginseng can lower blood sugar. If you have diabetes, talk to your clinician before adding ginseng and monitor your glucose, especially in the first weeks.",
+         "alert_headline": "May modestly lower blood sugar",
+         "condition_id": "diabetes",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "review",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">=",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 200.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">=",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 200.0,
+           "threshold_unit": "mg"
+          },
+          "evaluation_status": "above_threshold",
+          "release_blocking": false
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": null,
+         "evidence_level": "probable",
+         "informational_note": "Ginseng affects blood sugar \u2014 relevant to people with diabetes.",
+         "materiality": "dose_dependent",
+         "mechanism": "Ginsenosides improve insulin sensitivity and increase pancreatic beta-cell insulin secretion. RCTs show significant postprandial glucose reduction.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "condition",
+          "requires": {
+           "conditions_any": [
+            "diabetes"
+           ],
+           "drug_classes_any": [],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Stop ginseng at least 7 days before elective surgery. Inform surgeon.",
+         "alert_body": "Ginseng may affect platelet function and blood sugar. Tell your surgical team before a procedure, especially if you use blood thinners or diabetes medication.",
+         "alert_headline": "Ginseng may affect bleeding or glucose",
+         "condition_id": "surgery_scheduled",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "caution",
+          "consumer_disposition": "review",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">=",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 200.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">=",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 200.0,
+           "threshold_unit": "mg"
+          },
+          "evaluation_status": "above_threshold",
+          "release_blocking": false
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": null,
+         "evidence_level": "probable",
+         "informational_note": "Ginseng can affect perioperative bleeding \u2014 relevant to anyone preparing for surgery.",
+         "materiality": "dose_dependent",
+         "mechanism": "Ginseng may affect platelet aggregation and coagulation parameters. Case reports of reduced warfarin INR documented.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "surgery_scheduled"
+           ]
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Prefer avoidance unless obstetric team approves.",
+         "alert_body": "Ginseng's pregnancy and breastfeeding safety data are limited. If you are pregnant or nursing, talk to your obstetric team before use \u2014 safer alternatives may be available.",
+         "alert_headline": "Limited pregnancy safety data",
+         "condition_id": "pregnancy",
+         "direction": "unknown",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng has limited pregnancy data \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
+         "materiality": "presence",
+         "mechanism": "Pregnancy/lactation safety data are limited and concerns are noted in safety reviews.",
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Prefer avoidance unless obstetric team approves.",
+         "alert_body": "Ginseng's pregnancy and breastfeeding safety data are limited. If you are pregnant or nursing, talk to your obstetric team before use \u2014 safer alternatives may be available.",
+         "alert_headline": "Limited pregnancy safety data",
+         "condition_id": "lactation",
+         "direction": "unknown",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng has limited pregnancy data \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
+         "materiality": "presence",
+         "mechanism": "Pregnancy/lactation safety data are limited and concerns are noted in safety reviews.",
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "profile_flag",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "profile_flags_any": [
+            "pregnant",
+            "breastfeeding"
+           ]
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        }
+       ],
+       "drug_class_hits": [
+        {
+         "action": "Monitor for hypoglycemia symptoms.",
+         "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
+         "alert_headline": "May add to diabetes-med effects",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "review",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">=",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 200.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">=",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 200.0,
+           "threshold_unit": "mg"
+          },
+          "evaluation_status": "above_threshold",
+          "release_blocking": false
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": null,
+         "drug_class_id": "hypoglycemics_high_risk",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng affects blood sugar \u2014 relevant to people on diabetes medications.",
+         "materiality": "dose_dependent",
+         "mechanism": "Mild additive glucose-lowering effect.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "drug_class",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [
+            "hypoglycemics_high_risk"
+           ],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Monitor for hypoglycemia symptoms.",
+         "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
+         "alert_headline": "May add to diabetes-med effects",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "review",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">=",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 200.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">=",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 200.0,
+           "threshold_unit": "mg"
+          },
+          "evaluation_status": "above_threshold",
+          "release_blocking": false
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": null,
+         "drug_class_id": "hypoglycemics_lower_risk",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng affects blood sugar \u2014 relevant to people on diabetes medications.",
+         "materiality": "dose_dependent",
+         "mechanism": "Mild additive glucose-lowering effect.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "drug_class",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [
+            "hypoglycemics_lower_risk"
+           ],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "If you take warfarin, talk to your prescriber before using ginseng. INR may need re-checking after starting.",
+         "alert_body": "Panax ginseng has mixed evidence for changing how warfarin works. INR monitoring is recommended if you start a ginseng supplement.",
+         "alert_headline": "May affect warfarin levels",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 1000.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 1000.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "monitor",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 420.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 1000.0
+           }
+          ]
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "suppress",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 1000.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 1000.0,
+           "threshold_unit": "mg"
+          },
+          "evaluated": true,
+          "evaluation_status": "below_threshold",
+          "matched_threshold": false,
+          "release_blocking": false,
+          "selected_from": "severity_if_not_met",
+          "selected_severity": "monitor",
+          "thresholds_checked": [
+           {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 420.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 1000.0
+           }
+          ]
+         },
+         "drug_class_id": "anticoagulants",
+         "evidence_level": "established",
+         "informational_note": "Ginseng may interact with warfarin \u2014 relevant to anyone on anticoagulants.",
+         "materiality": "dose_dependent",
+         "mechanism": "Mixed evidence \u2014 some studies show reduced INR (efficacy reduction); others null. Effect appears variable across products and individuals.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "drug_class",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [
+            "anticoagulants"
+           ],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "If you take an MAOI, talk to your prescriber before using Panax or American ginseng.",
+         "alert_body": "Panax ginseng combined with MAO-inhibitor antidepressants has been linked to high blood pressure in case reports.",
+         "alert_headline": "May raise blood pressure with MAOIs",
+         "direction": "harmful",
+         "dose_decision": null,
+         "dose_floor_status": null,
+         "dose_threshold_evaluation": null,
+         "drug_class_id": "maois",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng may interact with MAOIs \u2014 relevant to anyone on phenelzine or similar drugs.",
+         "materiality": "presence",
+         "mechanism": "Multiple case reports of hypertensive episodes when combined with MAOIs (especially phenelzine). Evidence is thinner than M1-M5 but real.",
+         "min_effective_dose": null,
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "drug_class",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [
+            "maois"
+           ],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "caution",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        },
+        {
+         "action": "Monitor for hypoglycemia symptoms.",
+         "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
+         "alert_headline": "May add to diabetes-med effects",
+         "direction": "harmful",
+         "dose_decision": {
+          "clinical_severity": "monitor",
+          "consumer_disposition": "review",
+          "decision_rule": {
+           "amount_missing_disposition": "suppress",
+           "basis": "per_day",
+           "comparator": ">=",
+           "consumer_disposition_if_met": "review",
+           "consumer_disposition_if_not_met": "suppress",
+           "conversion_failure_policy": "release_block",
+           "threshold": 200.0,
+           "threshold_unit": "mg",
+           "unknown_form_disposition": "suppress"
+          },
+          "dose_evaluation": {
+           "comparator": ">=",
+           "conversion_method": "identity",
+           "converted_amount": 420.0,
+           "daily_amount": 420.0,
+           "daily_unit": "mg",
+           "dose_source": "suggested_daily_serving",
+           "form_context": "ginseng (unspecified)",
+           "observed_amount": 420.0,
+           "observed_unit": "mg",
+           "serving_multiplier": 1.0,
+           "threshold": 200.0,
+           "threshold_unit": "mg"
+          },
+          "evaluation_status": "above_threshold",
+          "release_blocking": false
+         },
+         "dose_floor_status": "at_or_above",
+         "dose_threshold_evaluation": null,
+         "drug_class_id": "hypoglycemics_unknown",
+         "evidence_level": "probable",
+         "informational_note": "Ginseng affects blood sugar \u2014 relevant to people on diabetes medications.",
+         "materiality": "dose_dependent",
+         "mechanism": "Mild additive glucose-lowering effect.",
+         "min_effective_dose": {
+          "basis": "per_day",
+          "confidence": "medium",
+          "confidence_basis": "documented_effective_dose",
+          "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose.",
+          "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+          "unit": "mg",
+          "value": 200
+         },
+         "profile_gate": {
+          "dose": null,
+          "excludes": {
+           "conditions_any": [],
+           "drug_classes_any": [],
+           "nutrient_forms_any": [],
+           "product_forms_any": [],
+           "profile_flags_any": []
+          },
+          "gate_type": "drug_class",
+          "requires": {
+           "conditions_any": [],
+           "drug_classes_any": [
+            "hypoglycemics_unknown"
+           ],
+           "profile_flags_any": []
+          }
+         },
+         "severity": "monitor",
+         "sources": [
+          "https://www.nccih.nih.gov/health/asian-ginseng"
+         ],
+         "warning_type": null
+        }
+       ],
+       "last_reviewed": "2026-03-18",
+       "pregnancy_lactation": {
+        "alert_body": "Ginseng's pregnancy and breastfeeding safety data are limited. If you are pregnant or nursing, talk to your obstetric team before use \u2014 safer alternatives may be available.",
+        "alert_headline": "Limited pregnancy safety data",
+        "direction": "unknown",
+        "evidence_level": "probable",
+        "informational_note": "Ginseng has limited pregnancy data \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
+        "lactation_category": "caution",
+        "materiality": "presence",
+        "mechanism": "Pregnancy/lactation safety data are limited and concerns are noted in safety reviews.",
+        "notes": "Prefer avoidance unless obstetric team approves.",
+        "pregnancy_category": "caution",
+        "profile_gate": {
+         "dose": null,
+         "excludes": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "nutrient_forms_any": [],
+          "product_forms_any": [],
+          "profile_flags_any": []
+         },
+         "gate_type": "profile_flag",
+         "requires": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "profile_flags_any": [
+           "pregnant",
+           "breastfeeding"
+          ]
+         }
+        },
+        "sources": [
+         "https://www.nccih.nih.gov/health/asian-ginseng"
+        ]
+       },
+       "rule_id": "RULE_INGREDIENT_GINSENG",
+       "source_bucket": "ingredients",
+       "subject_ref": {
+        "canonical_id": "ginseng",
+        "db": "ingredient_quality_map"
+       }
+      }
+     ],
+     "score": 10.0,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "scoreable_identity": true,
+     "source_label_form": "Korean Red Ginseng Root Extract",
+     "source_label_key": "label:ginseng:botalys:420:mg",
+     "source_label_name": "Ginseng",
+     "source_section": "active",
+     "standard_name": "Ginseng",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    }
+   ],
+   "ingredients_skipped": [
+    {
+     "absorption": null,
+     "additional_forms": [],
+     "aggregation_method": null,
+     "bio_score": null,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "greek_mountain_tea_aerial_parts",
+     "canonical_id_after": "greek_mountain_tea_aerial_parts",
+     "canonical_id_before": "greek_mountain_tea_aerial_parts",
+     "canonical_source_db": "botanical_ingredients",
+     "category": "unknown",
+     "certificates": [],
+     "cleaner_match_method": null,
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [],
+     "fallback_class": "clinical_fail_safe",
+     "fallback_reason": "recognized_non_scorable",
+     "final_form_bio_score": null,
+     "form_extraction_used": false,
+     "form_id": null,
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "leaf",
+     "identity_disposition": "taxonomy_only",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Greek Mountain Tea Aerial Parts Extract\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Greek Mountain Tea Aerial Parts Extract\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"TBD\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"TBD\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Sideritis scardica Aerial Parts Extract\"}]",
+     "identity_resolution_rationale": "The row was intentionally classified as non-scorable; its validated source identity was retained for non-scoring lineage.",
+     "identity_taxonomy_coherent": false,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "Sideritis scardica Aerial Parts Extract",
+     "label_display_name": "Greek Mountain Tea Aerial Parts Extract",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_tier": null,
+     "matched_alias": null,
+     "matched_entry_id": "greek_mountain_tea_aerial_parts",
+     "matched_entry_name": "Greek Mountain Tea Aerial Parts",
+     "matched_form": null,
+     "matched_forms": [],
+     "matched_target": null,
+     "name": "Greek Mountain Tea Aerial Parts Extract",
+     "natural": null,
+     "never_promote_reason": null,
+     "normalized_key": "greek_mountain_tea_aerial_parts_extract",
+     "notes": null,
+     "original_label": "Greek Mountain Tea Aerial Parts Extract",
+     "quantity": 475.0,
+     "raw_source_path": "ingredientRows[0]",
+     "raw_source_text": "Greek Mountain Tea Aerial Parts Extract",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "forms": [
+       {
+        "category": "botanical",
+        "ingredientGroup": "TBD",
+        "ingredientId": 358189,
+        "name": "Sideritis scardica Aerial Parts Extract",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": null
+       }
+      ],
+      "ingredientGroup": "TBD",
+      "ingredientId": 358186,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 475.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Capsule(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": "leaf",
+     "recognition_source": "botanical_ingredients",
+     "recognition_type": "botanical_unscored",
+     "recognized_entry_id": "greek_mountain_tea_aerial_parts",
+     "recognized_entry_name": "Greek Mountain Tea Aerial Parts",
+     "recognized_non_scorable": true,
+     "role_classification": "recognized_non_scorable",
+     "safety_hits": [],
+     "score": null,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": "recognized_non_scorable",
+     "score_included": false,
+     "scoreable_identity": false,
+     "skip_reason": "recognized_non_scorable",
+     "source_label_form": "Sideritis scardica Aerial Parts Extract",
+     "source_label_key": "label:greek_mountain_tea_aerial_parts:greek mountain tea aerial parts extract:475:mg",
+     "source_label_name": "Greek Mountain Tea Aerial Parts Extract",
+     "source_section": "active",
+     "standard_name": "Greek Mountain Tea Aerial Parts",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    },
+    {
+     "absorption": null,
+     "additional_forms": [],
+     "aggregation_method": null,
+     "bio_score": null,
+     "blend_disclosed_components_count": 0,
+     "blend_total_weight_only": false,
+     "canonical_id": "lion_s_mane",
+     "canonical_id_after": "lion_s_mane",
+     "canonical_id_before": "lions_mane",
+     "canonical_source_db": "botanical_ingredients",
+     "category": "unknown",
+     "certificates": [],
+     "cleaner_row_role": "active_scorable",
+     "delivers_markers": [],
+     "dosage_importance": 1.0,
+     "dose_class": "therapeutic_mass",
+     "extracted_forms": [],
+     "fallback_class": "clinical_fail_safe",
+     "fallback_reason": "mushroom",
+     "final_form_bio_score": null,
+     "form_extraction_used": false,
+     "form_id": null,
+     "form_source": null,
+     "form_unmapped": false,
+     "has_dose": true,
+     "hierarchyType": null,
+     "identity_confidence": 1.0,
+     "identity_decision_reason": "mushroom",
+     "identity_disposition": "repaired",
+     "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Lion's Mane Fruiting Body Extract\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Lion's Mane Fruiting Body Extract\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Hericium mushroom\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Hericium mushroom\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Hericium erinaceus Fruiting Body Extract\"}]",
+     "identity_resolution_rationale": "Unambiguous structured line identity replaced the supplied canonical ID 'lions_mane' with 'lion_s_mane'.",
+     "identity_taxonomy_coherent": true,
+     "is_blend_header": false,
+     "is_dual_form": false,
+     "is_excipient": false,
+     "is_nested_ingredient": false,
+     "is_parent_total": false,
+     "is_proprietary_blend": false,
+     "label_display_form": "Hericium erinaceus Fruiting Body Extract",
+     "label_display_name": "Hericium mushroom",
+     "mapped": true,
+     "mapped_identity": true,
+     "match_ambiguity_candidates": [],
+     "match_tier": null,
+     "matched_alias": null,
+     "matched_entry_id": "lion_s_mane",
+     "matched_entry_name": "Lion's Mane",
+     "matched_form": null,
+     "matched_forms": [],
+     "matched_target": null,
+     "name": "Lion's Mane Fruiting Body Extract",
+     "natural": null,
+     "never_promote_reason": null,
+     "normalized_key": "lions_mane_fruiting_body_extract",
+     "notes": null,
+     "original_label": "Lion's Mane Fruiting Body Extract",
+     "parent_blend": null,
+     "parent_blend_mass_mg": null,
+     "quantity": 400.0,
+     "raw_source_path": "ingredientRows[2]",
+     "raw_source_text": "Lion's Mane Fruiting Body Extract",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "forms": [
+       {
+        "category": "botanical",
+        "ingredientGroup": "Hericium mushroom",
+        "ingredientId": 297739,
+        "name": "Hericium erinaceus Fruiting Body Extract",
+        "order": 1,
+        "percent": null,
+        "prefix": null,
+        "uniiCode": "BU6Y4J4C2E"
+       }
+      ],
+      "ingredientGroup": "Hericium mushroom",
+      "ingredientId": 328580,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "parentBlend": null,
+      "quantityVariants": [
+       {
+        "daily_value_target_group": "adult_4_plus",
+        "index": 0,
+        "quantity": 400.0,
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Capsule(s)",
+        "unit": "mg"
+       }
+      ],
+      "uniiCode": null
+     },
+     "recognition_reason": "mushroom",
+     "recognition_source": "botanical_ingredients",
+     "recognition_type": "botanical_unscored",
+     "recognized_entry_id": "lion_s_mane",
+     "recognized_entry_name": "Lion's Mane",
+     "recognized_non_scorable": true,
+     "role_classification": "recognized_non_scorable",
+     "safety_hits": [],
+     "score": null,
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": "recognized_non_scorable",
+     "score_included": false,
+     "scoreable_identity": false,
+     "skip_reason": "recognized_non_scorable",
+     "source_label_form": "Hericium erinaceus Fruiting Body Extract",
+     "source_label_key": "label:lion_s_mane:lion's mane fruiting body extract:400:mg",
+     "source_label_name": "Hericium mushroom",
+     "source_section": "active",
+     "standard_name": "Lion's Mane",
+     "unit": "mg",
+     "unit_normalized": "mg",
+     "unmapped_forms": []
+    }
+   ],
+   "parent_fallback_count": 0,
+   "pattern_match_wins_count": 0,
+   "premium_form_count": 0,
+   "promoted_from_inactive": [],
+   "quality_data_schema_version": 2,
+   "recognized_non_scorable_count": 2,
+   "scorable_ingredient_names_normalized": [
+    "ginseng",
+    "botalys"
+   ],
+   "skipped_non_scorable_count": 2,
+   "skipped_reasons_breakdown": {
+    "recognized_non_scorable": 1
+   },
+   "total_active": 3,
+   "total_ingredients_evaluated": 3,
+   "total_records_seen": 3,
+   "total_scorable_active_count": 1,
+   "unevaluated_records": 0,
+   "unmapped_count": 0,
+   "unmapped_scorable_count": 0
+  },
+  "product_scoring_evidence": [
+   {
+    "anchor_risk_class": "botanical_or_standardized",
+    "canonical_id": "greek_mountain_tea_aerial_parts",
+    "canonical_source_db": "botanical_ingredients",
+    "clean_identity_id": "greek_mountain_tea_aerial_parts",
+    "confidence": "medium",
+    "dose_class": "therapeutic_mass",
+    "dose_unit": "mg",
+    "dose_value": 475.0,
+    "evidence_canonical_id": "greek_mountain_tea_aerial_parts",
+    "evidence_origin": "compatibility_derived",
+    "evidence_scope": "row_level",
+    "evidence_type": "blend_anchor_mass",
+    "forms": [
+     {
+      "category": "botanical",
+      "ingredientGroup": "TBD",
+      "ingredientId": 358189,
+      "name": "Sideritis scardica Aerial Parts Extract",
+      "order": 1,
+      "percent": null,
+      "prefix": null,
+      "uniiCode": null
+     }
+    ],
+    "identity_contract_required": true,
+    "identity_disposition": "taxonomy_only",
+    "identity_kind": "verified_ingredient",
+    "linked_rows": [
+     "ingredientRows[0]"
+    ],
+    "name": "Greek Mountain Tea Aerial Parts Extract",
+    "raw_source_path": "ingredientRows[0]",
+    "raw_source_text": "Greek Mountain Tea Aerial Parts Extract",
+    "raw_taxonomy": {
+     "category": "botanical",
+     "forms": [
+      {
+       "category": "botanical",
+       "ingredientGroup": "TBD",
+       "ingredientId": 358189,
+       "name": "Sideritis scardica Aerial Parts Extract",
+       "order": 1,
+       "percent": null,
+       "prefix": null,
+       "uniiCode": null
+      }
+     ],
+     "ingredientGroup": "TBD",
+     "ingredientId": 358186,
+     "isNestedIngredient": false,
+     "nested_depth": 0,
+     "parentBlend": null,
+     "quantityVariants": [
+      {
+       "daily_value_target_group": "adult_4_plus",
+       "index": 0,
+       "quantity": 475.0,
+       "quantity_parsed": true,
+       "serving_size_order": 1,
+       "serving_size_quantity": 2,
+       "serving_size_unit": "Capsule(s)",
+       "unit": "mg"
+      }
+     ],
+     "uniiCode": null
+    },
+    "reason": "identity_bearing_active_anchor_mass",
+    "score_eligible_by_cleaner": true,
+    "scoreable": true,
+    "scoreable_identity": true,
+    "scoring_parent_id": "greek_mountain_tea_aerial_parts",
+    "source": "active",
+    "source_section": "product",
+    "standardName": "Greek Mountain Tea Aerial Parts"
+   },
+   {
+    "anchor_risk_class": "botanical_or_standardized",
+    "canonical_id": "lion_s_mane",
+    "canonical_source_db": "botanical_ingredients",
+    "clean_identity_id": "lion_s_mane",
+    "confidence": "medium",
+    "dose_class": "therapeutic_mass",
+    "dose_unit": "mg",
+    "dose_value": 400.0,
+    "evidence_canonical_id": "lion_s_mane",
+    "evidence_origin": "compatibility_derived",
+    "evidence_scope": "row_level",
+    "evidence_type": "blend_anchor_mass",
+    "forms": [
+     {
+      "category": "botanical",
+      "ingredientGroup": "Hericium mushroom",
+      "ingredientId": 297739,
+      "name": "Hericium erinaceus Fruiting Body Extract",
+      "order": 1,
+      "percent": null,
+      "prefix": null,
+      "uniiCode": "BU6Y4J4C2E"
+     }
+    ],
+    "identity_contract_required": true,
+    "identity_disposition": "repaired",
+    "identity_kind": "verified_ingredient",
+    "linked_rows": [
+     "ingredientRows[2]"
+    ],
+    "name": "Lion's Mane Fruiting Body Extract",
+    "raw_source_path": "ingredientRows[2]",
+    "raw_source_text": "Lion's Mane Fruiting Body Extract",
+    "raw_taxonomy": {
+     "category": "botanical",
+     "forms": [
+      {
+       "category": "botanical",
+       "ingredientGroup": "Hericium mushroom",
+       "ingredientId": 297739,
+       "name": "Hericium erinaceus Fruiting Body Extract",
+       "order": 1,
+       "percent": null,
+       "prefix": null,
+       "uniiCode": "BU6Y4J4C2E"
+      }
+     ],
+     "ingredientGroup": "Hericium mushroom",
+     "ingredientId": 328580,
+     "isNestedIngredient": false,
+     "nested_depth": 0,
+     "parentBlend": null,
+     "quantityVariants": [
+      {
+       "daily_value_target_group": "adult_4_plus",
+       "index": 0,
+       "quantity": 400.0,
+       "quantity_parsed": true,
+       "serving_size_order": 1,
+       "serving_size_quantity": 2,
+       "serving_size_unit": "Capsule(s)",
+       "unit": "mg"
+      }
+     ],
+     "uniiCode": null
+    },
+    "reason": "identity_bearing_active_anchor_mass",
+    "score_eligible_by_cleaner": true,
+    "scoreable": true,
+    "scoreable_identity": true,
+    "scoring_parent_id": "lion_s_mane",
+    "source": "active",
+    "source_section": "product",
+    "standardName": "Lion's Mane"
+   }
+  ]
+ }
+}

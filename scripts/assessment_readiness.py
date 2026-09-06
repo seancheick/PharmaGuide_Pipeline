@@ -22,6 +22,7 @@ from scoring_input_contract import (
     build_scoring_classification,
     classify_ingredient_roles,
     get_scoring_ingredients,
+    has_scoring_identity,
     has_unresolved_identity_reason,
     required_identity_conflicts,
     scoring_row_key,
@@ -766,12 +767,14 @@ def _identity_readiness(
         for row in scoring_input.rows
         if row.get("scoring_input_kind") == "product_level_evidence"
     ]
+    # The contract owns what counts as a scoring identity: a verified row by
+    # its mapped identity, a structural label-taxonomy anchor (an unmapped
+    # blend total) by its anchor alone. Its `mapped` flag is truthfully False
+    # and must not be re-read here as "unidentified".
     mapped_product_evidence = [
         row
         for row in product_evidence_rows
-        if row.get("scoreable_identity") is True
-        and row.get("mapped") is not False
-        and bool(str(row.get("canonical_id") or "").strip())
+        if row.get("scoreable_identity") is True and has_scoring_identity(row)
     ]
     source_rows = _source_score_eligible_active_rows(product)
     mapped_source_rows = [
