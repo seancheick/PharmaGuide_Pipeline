@@ -65,3 +65,20 @@ def test_replayed_ginseng_plus_matches_ginseng_not_astragalus(replays):
     ids = [m.get("id") for m in resolved_clinical_matches(replays["328831"])[0]]
     assert "INGR_GINSENG" in ids
     assert not any("ASTRAGALUS" in str(i) for i in ids)
+
+
+def test_structural_classification_overrides_legacy_mapped_flags(replays):
+    # An older enriched artifact may carry explicit mapped=True on the same
+    # structural projection. Classification is authoritative, not a default.
+    from copy import deepcopy
+
+    product = deepcopy(replays["17186"])
+    for item in product["product_scoring_evidence"]:
+        if item.get("raw_source_path") == "ingredientRows[6]":
+            item["mapped"] = True
+            item["mapped_identity"] = True
+            item.pop("identity_kind", None)
+    header = _header_row(get_scoring_ingredients(product, strict=True).rows)
+    assert header["identity_kind"] == "label_taxonomy_anchor"
+    assert header["mapped"] is False
+    assert header["mapped_identity"] is False

@@ -2396,9 +2396,11 @@ def _product_scoring_evidence_rows(
             **item,
             "name": item.get("name") or item.get("label") or evidence_type,
             "canonical_id": item.get("canonical_id") or item.get("evidence_canonical_id") or evidence_type,
+            # Classification is authoritative: a structural anchor is never a
+            # mapped identity, whatever flags an older artifact stamped on it.
             "identity_kind": identity_kind,
-            "mapped": item.get("mapped", not structural_anchor),
-            "mapped_identity": item.get("mapped_identity", not structural_anchor),
+            "mapped": False if structural_anchor else item.get("mapped", True),
+            "mapped_identity": False if structural_anchor else item.get("mapped_identity", True),
             "scoreable_identity": True,
             "role_classification": "active_scorable",
             "cleaner_row_role": "active_scorable",
