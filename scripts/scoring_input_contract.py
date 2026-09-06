@@ -4779,6 +4779,59 @@ def primary_mass_competitor_rows(
     ]
 
 
+def source_linked_rows(
+    product: Dict[str, Any], row: Dict[str, Any], rows: List[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
+    """Rows that share ``row``'s label source.
+
+    The same lineage :func:`primary_mass_competitor_rows` uses: the same
+    resolved source path (a title-embedded projection of a label row is the
+    same physical row), a path nested under it (the constituents a parent row
+    declares: ALA under flaxseed oil, EPA and DHA under fish oil), or an
+    ancestor (the label row a projected "Vitamin K2" child was cut from),
+    collected across the scoring rows, the product tree and the identity
+    ledger. Synthetic ``activeIngredients[i]`` provenance resolves through the
+    tree; shared identity or name never creates lineage, so a constituent the
+    label prints as a sibling row is not linked. An assessment of any of these
+    rows is an assessment of ``row``'s source. Rows are returned unchanged;
+    nothing is mutated.
+    """
+    product = product or {}
+    row_paths = {
+        _resolve_source_tree_path(product, str(path).strip())
+        for path in (*_safe_list(row.get("linked_rows")), row.get("raw_source_path"))
+        if str(path or "").strip()
+    }
+    if not row_paths:
+        return []
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
+    linked: List[Dict[str, Any]] = []
+    seen: set = set()
+    for collection in (
+        _safe_list(rows),
+        _source_tree_rows(product),
+        _safe_list(iqd.get("ingredients")),
+        _safe_list(iqd.get("ingredients_skipped")),
+        _safe_list(iqd.get("ingredients_scorable")),
+    ):
+        for candidate in collection:
+            if not isinstance(candidate, dict) or candidate is row or id(candidate) in seen:
+                continue
+            path = str(candidate.get("raw_source_path") or "").strip()
+            if not path:
+                continue
+            path = _resolve_source_tree_path(product, path)
+            if any(
+                path == own
+                or _path_is_nested_under(own, path)
+                or _path_is_nested_under(path, own)
+                for own in row_paths
+            ):
+                seen.add(id(candidate))
+                linked.append(candidate)
+    return linked
+
+
 def mass_primary_label_actives(
     product: Dict[str, Any], rows: List[Dict[str, Any]]
 ) -> List[Dict[str, Any]]:

@@ -72,7 +72,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
-from scoring_input_contract import mass_primary_label_actives
+from scoring_input_contract import mass_primary_label_actives, source_linked_rows
 from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.modules.immune_support import score_immune_support_dose
 from scoring_v4.modules.joint_support import score_joint_support_dose
@@ -249,11 +249,16 @@ def _mass_primary_without_reference(product: Dict[str, Any]) -> Optional[str]:
         assessed.update(
             _norm_text(row.get(key)) for key in ("canonical_id", "nutrient") if row.get(key)
         )
-    for primary in mass_primary_label_actives(product, get_active_ingredients(product)):
+    active_rows = get_active_ingredients(product)
+    for primary in mass_primary_label_actives(product, active_rows):
+        # An assessment is source-linked: it may sit on the primary itself, on
+        # a projection of the same label row, or on a constituent the row
+        # declares (ALA under flaxseed oil). The contract owns that lineage.
         identities = {
-            _norm_text(primary.get(key))
+            _norm_text(linked_row.get(key))
+            for linked_row in (primary, *source_linked_rows(product, primary, active_rows))
             for key in ("canonical_id", "standard_name", "name", "nutrient")
-            if primary.get(key)
+            if linked_row.get(key)
         }
         if identities and not (identities & assessed):
             return _norm_text(primary.get("canonical_id") or primary.get("standard_name") or primary.get("name"))

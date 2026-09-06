@@ -947,3 +947,123 @@ def test_mass_primary_label_actives_returns_every_tied_row_in_stable_order() -> 
         product = _tied_product(unassessed_first)
         primaries = mass_primary_label_actives(product, get_active_ingredients(product))
         assert [row["canonical_id"] for row in primaries] == ["cognigrape", "vitamin_c"]
+
+
+# --- Assessments are source-linked: constituents and projections of the primary ---
+
+
+def test_parent_row_is_assessed_through_its_nested_constituent() -> None:
+    # Flaxseed Oil 1000 mg declares ALA 500 mg under it; ALA carries the
+    # reference. The parent is the mass primary and is assessed through its
+    # own constituent, so full window credit stands.
+    from scoring_v4.modules.generic_dose import score_dose, CAP_SUPPLEMENTAL_WINDOW
+
+    rows = [
+        _ingredient(name="Flaxseed Oil", canonical_id="flaxseed", quantity=1000.0, unit="mg", bio_score=None,
+                    raw_source_path="ingredientRows[0]"),
+        _ingredient(name="Alpha-Linolenic Acid", canonical_id="alpha_linolenic_acid", quantity=500.0, unit="mg",
+                    raw_source_path="ingredientRows[0].nestedRows[0]"),
+    ]
+    product = _product(
+        ingredients=rows,
+        adequacy_results=[
+            {"canonical_id": "flaxseed", "nutrient": "Flaxseed Oil", "pct_rda": None, "pct_ul": None},
+            {"canonical_id": "alpha_linolenic_acid", "nutrient": "Alpha-Linolenic Acid", "pct_rda": 31.25, "pct_ul": None},
+        ],
+    )
+    payload = score_dose(product)
+    assert payload["components"]["supplemental_window_proxy"] == CAP_SUPPLEMENTAL_WINDOW
+    assert "primary_active_unassessed" not in payload["metadata"]
+
+
+def test_title_projection_of_an_assessed_row_is_not_a_second_primary() -> None:
+    # "Natural Vitamin K2 45 mcg": the label row is assessed; the enricher's
+    # title-embedded projection of the same row ties it at 45 mcg. One
+    # physical source, one assessment.
+    from scoring_v4.modules.generic_dose import score_dose, CAP_SUPPLEMENTAL_WINDOW
+
+    rows = [
+        _ingredient(name="Vitamin K", canonical_id="vitamin_k", quantity=45.0, unit="mcg",
+                    raw_source_path="ingredientRows[0]"),
+        _ingredient(name="Vitamin K2", canonical_id="vitamin_k2", quantity=45.0, unit="mcg", bio_score=None,
+                    raw_source_path="ingredientRows[0]", scoring_input_kind="label_active_projection",
+                    linked_rows=["ingredientRows[0]"]),
+    ]
+    product = _product(
+        ingredients=rows,
+        adequacy_results=[{"canonical_id": "vitamin_k", "nutrient": "Vitamin K1", "pct_rda": 37.5, "pct_ul": None}],
+    )
+    payload = score_dose(product)
+    assert payload["components"]["supplemental_window_proxy"] == CAP_SUPPLEMENTAL_WINDOW
+    assert "primary_active_unassessed" not in payload["metadata"]
+
+
+def test_parent_with_unassessed_constituents_is_still_capped() -> None:
+    # Fish oil 500 mg with EPA/DHA rows that carry no reference, beside an
+    # assessed 5 mg lutein: the primary's source has no benchmark anywhere.
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    rows = [
+        _ingredient(name="Omega-3 Fatty Acids", canonical_id="fish_oil", quantity=500.0, unit="mg", bio_score=None,
+                    raw_source_path="ingredientRows[3]"),
+        _ingredient(name="Eicosapentaenoic Acid", canonical_id="epa", quantity=325.0, unit="mg", bio_score=None,
+                    raw_source_path="ingredientRows[3].nestedRows[0]"),
+        _ingredient(name="Lutein", canonical_id="lutein", quantity=5.0, unit="mg", raw_source_path="ingredientRows[4]"),
+    ]
+    product = _product(
+        ingredients=rows,
+        adequacy_results=[
+            {"canonical_id": "fish_oil", "nutrient": "Omega-3", "pct_rda": None, "pct_ul": None},
+            {"canonical_id": "epa", "nutrient": "EPA", "pct_rda": None, "pct_ul": None},
+            {"canonical_id": "lutein", "nutrient": "Lutein", "pct_rda": 166.7, "pct_ul": None},
+        ],
+        supp_type="multi",
+    )
+    payload = score_dose(product)
+    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["metadata"]["primary_active_unassessed"] == "fish_oil"
+
+
+def test_nested_projection_under_an_assessed_parent_is_not_a_second_primary() -> None:
+    # Real 25514 shape: the enricher cuts a "Vitamin K2" child under the
+    # assessed "Vitamin K" label row at the same 45 mcg. The parent's
+    # assessment is the assessment of the child's source.
+    from scoring_v4.modules.generic_dose import score_dose, CAP_SUPPLEMENTAL_WINDOW
+
+    rows = [
+        _ingredient(name="Vitamin K", canonical_id="vitamin_k", quantity=45.0, unit="mcg",
+                    raw_source_path="ingredientRows[0]"),
+        _ingredient(name="Vitamin K2", canonical_id="vitamin_k2", quantity=45.0, unit="mcg", bio_score=None,
+                    raw_source_path="ingredientRows[0].nestedRows[0]", scoring_input_kind="label_active_projection",
+                    linked_rows=["ingredientRows[0].nestedRows[0]"]),
+    ]
+    product = _product(
+        ingredients=rows,
+        adequacy_results=[{"canonical_id": "vitamin_k", "nutrient": "Vitamin K1", "pct_rda": 37.5, "pct_ul": None}],
+    )
+    payload = score_dose(product)
+    assert payload["components"]["supplemental_window_proxy"] == CAP_SUPPLEMENTAL_WINDOW
+    assert "primary_active_unassessed" not in payload["metadata"]
+
+
+def test_sibling_constituent_row_does_not_assess_the_primary() -> None:
+    # Some labels print ALA as a sibling of flaxseed oil, not under it. Shared
+    # identity never creates lineage, so the parent stays unassessed.
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    rows = [
+        _ingredient(name="Flaxseed Oil", canonical_id="flaxseed", quantity=1000.0, unit="mg", bio_score=None,
+                    raw_source_path="ingredientRows[0]"),
+        _ingredient(name="Alpha-Linolenic Acid", canonical_id="alpha_linolenic_acid", quantity=500.0, unit="mg",
+                    raw_source_path="ingredientRows[1]"),
+    ]
+    product = _product(
+        ingredients=rows,
+        adequacy_results=[
+            {"canonical_id": "flaxseed", "nutrient": "Flaxseed Oil", "pct_rda": None, "pct_ul": None},
+            {"canonical_id": "alpha_linolenic_acid", "nutrient": "Alpha-Linolenic Acid", "pct_rda": 62.5, "pct_ul": None},
+        ],
+    )
+    payload = score_dose(product)
+    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["metadata"]["primary_active_unassessed"] == "flaxseed"
