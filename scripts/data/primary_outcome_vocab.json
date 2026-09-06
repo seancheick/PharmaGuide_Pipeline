@@ -127,7 +127,7 @@
       "id": "urinary_tract_health",
       "name": "Urinary tract health",
       "legacy_display": "Urinary Tract Health",
-      "notes": "Prevention of recurrent urinary tract infections in susceptible people; cranberry products, D-mannose. Not treatment of an active infection.",
+      "notes": "Prevention of recurrent urinary tract infections in susceptible people; cranberry products. D-mannose is not credited (no benefit in its largest trial). Not treatment of an active infection.",
       "related_user_goal_id": "GOAL_URINARY_TRACT_HEALTH"
     }
   ]

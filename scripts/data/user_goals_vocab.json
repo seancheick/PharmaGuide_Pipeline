@@ -215,7 +215,7 @@
     {
       "id": "GOAL_URINARY_TRACT_HEALTH",
       "name": "Urinary Tract Health",
-      "notes": "Support urinary tract health and reduce recurrent urinary tract infections. Common targets: cranberry (proanthocyanidins), D-mannose, probiotics.",
+      "notes": "Support urinary tract health and reduce recurrent urinary tract infections. Reviewed target: cranberry (proanthocyanidins). D-mannose showed no prevention benefit in its largest trial.",
       "priority": "low",
       "related_condition_ids": [],
       "related_drug_class_ids": []

@@ -8565,6 +8565,26 @@ FIBER_GOAL_CLUSTER_ID = "gut_barrier"
 CREATINE_GOAL_CLUSTER_ID = "muscle_building_recovery"
 SLEEP_GOAL_CLUSTER_ID = "sleep_stack"
 JOINT_GOAL_CLUSTER_ID = "joint_inflammation"
+URINARY_GOAL_CLUSTER_ID = "urinary_tract_health"
+# Reviewed applicability for GOAL_URINARY_TRACT_HEALTH (2026-09-06). Cranberry
+# products (proanthocyanidin-bearing fruit, extract, powder, Pacran, Cran-Max,
+# Flowens) are the one label active credited: Cochrane 2023 (Williams et al.)
+# found cranberry products reduce symptomatic UTI recurrence. Not credited on
+# their own, by review: vitamin C (urine acidification is not prevention
+# evidence), unspecified probiotics/lactobacillus (strain-specific, not shown
+# orally), uva ursi and hibiscus (traditional/symptom use), and D-mannose — the
+# largest RCT (Hayward et al., JAMA Intern Med 2024, PMID 38587819) showed no
+# prevention benefit. The synergy cluster keeps matching these for the synergy
+# display; it does not decide this goal.
+URINARY_GOAL_CANONICAL_IDS = {
+    "cranberry", "cranberry_fruit",
+    # Branded cranberry preparations in standardized_botanicals.json.
+    "pacran", "cran_max", "cranrx", "flowens",
+}
+URINARY_GOAL_TEXT_TOKENS = (
+    "cranberry", "vaccinium macrocarpon", "pacran", "cran-max", "cranmax", "cranrx", "flowens",
+)
+URINARY_GOAL_DOSE_CLUSTER_INGREDIENT = "cranberry extract"
 FIBER_GOAL_MIN_DOSE_G = 3.0
 CREATINE_GOAL_MIN_DOSE_G = 3.0
 CREATINE_GOAL_MIN_BIO_SCORE = 10.0
@@ -8898,6 +8918,93 @@ def _joint_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> b
     return False
 
 
+_SYNERGY_MIN_DOSE_CACHE: Optional[Dict[str, Dict[str, float]]] = None
+
+
+def _synergy_cluster_min_dose_mg(cluster_id: str, ingredient: str) -> Optional[float]:
+    """The cluster's own minimum effective dose (synergy_cluster.json), so a
+    goal rule and the synergy detector never hold two copies of one number."""
+    global _SYNERGY_MIN_DOSE_CACHE
+    if _SYNERGY_MIN_DOSE_CACHE is None:
+        table: Dict[str, Dict[str, float]] = {}
+        try:
+            synergy_path = Path(__file__).parent / "data" / "synergy_cluster.json"
+            with open(synergy_path, "r", encoding="utf-8") as f:
+                clusters = safe_list(json.load(f).get("synergy_clusters"))
+            for cluster in clusters:
+                if isinstance(cluster, dict) and safe_str(cluster.get("id")):
+                    table[safe_str(cluster.get("id"))] = {
+                        safe_str(k).lower(): safe_float(v, 0.0)
+                        for k, v in safe_dict(cluster.get("min_effective_doses")).items()
+                    }
+        except Exception as exc:
+            logger.warning("Failed to load synergy_cluster.json: %s", exc)
+        _SYNERGY_MIN_DOSE_CACHE = table
+    value = safe_dict(_SYNERGY_MIN_DOSE_CACHE.get(cluster_id)).get(ingredient.lower())
+    return float(value) if value else None
+
+
+def _urinary_active_id(row: Dict[str, Any]) -> Optional[str]:
+    text = _joint_row_text(row)
+    if "seed" in text:
+        # Cranberry seed oil / seed extract is a fatty-acid or polyphenol
+        # fraction, not the proanthocyanidin-bearing fruit the evidence is on.
+        return None
+    canonical = safe_str(row.get("canonical_id")).lower()
+    if canonical in URINARY_GOAL_CANONICAL_IDS:
+        return "cranberry"
+    if any(token in text for token in URINARY_GOAL_TEXT_TOKENS):
+        return "cranberry"
+    return None
+
+
+def _urinary_goal_rows(enriched: Dict) -> List[Dict[str, Any]]:
+    """Label rows for the urinary goal: the full identity ledger, because the
+    enricher keeps a trace cranberry row (10 mg in a women's multi) in
+    ``ingredients`` yet skips it for scoring, and presence still matters for
+    the underdosed surface."""
+    iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    rows: List[Dict[str, Any]] = []
+    seen_paths: set = set()
+    for key in ("ingredients_scorable", "ingredients", "ingredients_skipped"):
+        for row in safe_list(iqd.get(key)):
+            if not isinstance(row, dict):
+                continue
+            path = safe_str(row.get("raw_source_path"))
+            if path and path in seen_paths:
+                continue
+            if path:
+                seen_paths.add(path)
+            role = safe_str(row.get("cleaner_row_role")).lower()
+            if role in {"inactive", "excipient", "source_descriptor", "label_header", "nutrition_rollup", "composition_leaf"}:
+                continue
+            rows.append(row)
+    return rows
+
+
+def _urinary_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> bool:
+    """Urinary goal support is decided here, from label rows, not by the
+    urinary synergy cluster (which fires on any two of its ingredients, e.g.
+    vitamin C plus unspecified probiotics). Only a row with a disclosed mass
+    counts: an undisclosed cranberry listing inside a fruit blend is neither
+    supported nor "present but underdosed". A cranberry blend header counts
+    for presence only: its total is not a cranberry dose."""
+    min_dose = _synergy_cluster_min_dose_mg(URINARY_GOAL_CLUSTER_ID, URINARY_GOAL_DOSE_CLUSTER_INGREDIENT)
+    for row in _urinary_goal_rows(enriched):
+        if not _urinary_active_id(row):
+            continue
+        mg = _mass_dose_mg(row)
+        if mg is None:
+            continue
+        if not enforce_dose_gate:
+            return True
+        if safe_str(row.get("cleaner_row_role")).lower() == "blend_header_total":
+            continue
+        if min_dose is not None and mg >= min_dose:
+            return True
+    return False
+
+
 def _joint_active_id(row: Dict[str, Any]) -> Optional[str]:
     canonical = safe_str(row.get("canonical_id")).lower()
     text = _joint_row_text(row)
@@ -9226,6 +9333,10 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
         focused = _GOAL_CLUSTER_FOCUSED_NUTRIENTS.get(cid)
         is_focused_product = active_count <= _GOAL_CLUSTER_FOCUS_MAX_ACTIVES
         cluster_all_adequate = _goal_cluster_all_adequate(cluster)
+        if cid == URINARY_GOAL_CLUSTER_ID:
+            # Owned by _urinary_goal_cluster_applies: the cluster's two-of-any
+            # rule (vitamin C + probiotics) is not urinary applicability.
+            return False
         if cid == "prenatal_pregnancy_support":
             return _prenatal_goal_cluster_allowed(
                 matched,
@@ -9281,7 +9392,7 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
     synergy_detail = safe_dict(enriched.get("synergy_detail"))
     for cluster in safe_list(synergy_detail.get("clusters_matched")):
         cid = safe_str(cluster)
-        if cid:
+        if cid and cid != URINARY_GOAL_CLUSTER_ID:
             ids.add(cid)
     for cluster in safe_list(synergy_detail.get("clusters")):
         if isinstance(cluster, dict):
@@ -9308,6 +9419,8 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
         ids.add(SLEEP_GOAL_CLUSTER_ID)
     if _joint_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
         ids.add(JOINT_GOAL_CLUSTER_ID)
+    if _urinary_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
+        ids.add(URINARY_GOAL_CLUSTER_ID)
 
     return ids
 
