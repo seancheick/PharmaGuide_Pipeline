@@ -752,21 +752,26 @@ def test_low_dose_preworkout_routes_training_and_energy_to_underdosed():
     assert "GOAL_MUSCLE_GROWTH_RECOVERY" in result["goal_matches_underdosed"]
 
 
-# ---- Urinary tract health: reviewed applicability owned by the goal rule ----
+# ---- Urinary tract health: the goal consumes the evidence registry's applicability ----
 
 
 def _urinary_enriched(*, ledger_rows, cluster_ingredients=None, scorable=True, role="active_scorable"):
-    """Enrichment shape for the urinary goal: label ledger rows plus, when
-    given, the enricher's ``urinary_tract_health`` synergy cluster match."""
+    """Enrichment shape for the urinary goal: label tree + identity ledger rows
+    plus, when given, the enricher's ``urinary_tract_health`` synergy cluster
+    match. Rows carry the printed source label the registry's
+    ``require_source_label_form`` rule reads."""
     rows = []
-    for name, canonical_id, quantity, unit in ledger_rows:
+    for index, (name, canonical_id, quantity, unit) in enumerate(ledger_rows):
         rows.append({
-            "name": name, "standard_name": name, "canonical_id": canonical_id,
-            "quantity": quantity, "unit": unit, "mapped": True,
+            "name": name, "standard_name": name, "raw_source_text": name,
+            "raw_source_path": f"ingredientRows[{index}]", "canonical_id": canonical_id,
+            "quantity": quantity, "unit": unit, "unit_normalized": {"Gram(s)": "g"}.get(unit, unit.lower()),
+            "mapped": True,
             "scoreable_identity": True, "cleaner_row_role": role,
         })
     enriched = {
         "fullName": "Urinary fixture",
+        "activeIngredients": [dict(row) for row in rows],
         "ingredient_quality_data": {
             "ingredients": rows,
             "ingredients_scorable": rows if scorable else [],
@@ -784,103 +789,98 @@ def _urinary_enriched(*, ledger_rows, cluster_ingredients=None, scorable=True, r
     return enriched
 
 
-def test_cranberry_extract_alone_matches_urinary_goal():
-    result = compute_goal_matches(_urinary_enriched(
-        ledger_rows=[("Cranberry Fruit Extract", "cranberry", 500, "mg")],
-    ))
-    assert "GOAL_URINARY_TRACT_HEALTH" in result["goal_matches"]
-    assert "GOAL_URINARY_TRACT_HEALTH" not in result["goal_matches_underdosed"]
+def _urinary_result(enriched):
+    result = compute_goal_matches(enriched)
+    if "GOAL_URINARY_TRACT_HEALTH" in result["goal_matches"]:
+        return "supported"
+    if "GOAL_URINARY_TRACT_HEALTH" in result["goal_matches_underdosed"]:
+        return "underdosed"
+    return "none"
 
 
-def test_cranberry_whole_fruit_powder_in_grams_matches_urinary_goal():
-    result = compute_goal_matches(_urinary_enriched(
-        ledger_rows=[("Cranberry, Powder", "cranberry", 5, "Gram(s)")],
-    ))
-    assert "GOAL_URINARY_TRACT_HEALTH" in result["goal_matches"]
+@pytest.fixture
+def cranberry_dose_policy(monkeypatch):
+    """A hypothetical reviewed dose policy on INGR_CRANBERRY, so the two-tier
+    logic can be exercised without inventing a clinical dose in the data."""
+    import copy
+    import clinical_applicability
+
+    entries = copy.deepcopy(clinical_applicability.reviewed_entries())
+    entries["INGR_CRANBERRY"]["applicability"].update({"dose_unit": "mg", "minimum_daily_dose": 500})
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: entries)
+    return entries
 
 
-def test_trace_cranberry_in_a_multi_routes_urinary_goal_to_underdosed():
-    # GNC women's multis: 10 mg cranberry fruit concentrate the enricher keeps
-    # in the ledger but skips for scoring. Present, not effectively dosed.
-    result = compute_goal_matches(_urinary_enriched(
-        ledger_rows=[("Cranberry fruit concentrate", "cranberry_fruit", 10, "mg")],
-        cluster_ingredients=[("cranberry", 10, True), ("vitamin c", 100, False)],
-        scorable=False,
-    ))
-    assert "GOAL_URINARY_TRACT_HEALTH" not in result["goal_matches"]
-    assert "GOAL_URINARY_TRACT_HEALTH" in result["goal_matches_underdosed"]
+def test_registry_cranberry_entry_has_no_reviewed_dose_policy():
+    import clinical_applicability
+
+    policy = clinical_applicability.reviewed_entries()["INGR_CRANBERRY"]["applicability"]
+    assert "dose_unit" not in policy and "minimum_daily_dose" not in policy
+    assert "leaf" in policy["excluded_form_terms"] and "seed" in policy["excluded_form_terms"]
 
 
 @pytest.mark.parametrize(
     "ledger_rows, cluster_ingredients",
     [
-        # Culturelle immune packets: unspecified lactobacillus + vitamin C.
+        ([("Cranberry Fruit Extract", "cranberry", 500, "mg")], None),
+        ([("Cranberry, Powder", "cranberry", 5, "Gram(s)")], None),
+        ([("Pacran Cranberry Powder", "pacran", 500, "mg"), ("Vitamin C", "vitamin_c", 100, "mg")],
+         [("pacran", 500, True), ("vitamin c", 100, False)]),
+        ([("Cranberry Leaf Extract", "cranberry", 500, "mg")], None),
         ([("Vitamin C", "vitamin_c", 90, "mg"), ("Lactobacillus rhamnosus GG", "lactobacillus_rhamnosus", 53, "mg")],
          [("lactobacillus", 53, True), ("vitamin c", 90, False)]),
-        # Vitamin C + D-mannose: no prevention benefit shown in the largest RCT.
+        ([("D-Mannose", "d_mannose", 2000, "mg")], None),
+    ],
+)
+def test_without_a_reviewed_dose_policy_the_goal_declares_nothing(ledger_rows, cluster_ingredients):
+    # The registry says preparation and PAC-dose equivalence is uncertain and
+    # carries no dose policy: an applicable cranberry row is neither
+    # "supported" nor "underdosed", and the two-of-any cluster never decides.
+    assert _urinary_result(_urinary_enriched(ledger_rows=ledger_rows, cluster_ingredients=cluster_ingredients)) == "none"
+
+
+def test_cranberry_leaf_is_excluded_by_the_evidence_applicability_rules(cranberry_dose_policy):
+    # backed_clinical_studies INGR_CRANBERRY excludes leaf/seed/root preparations.
+    assert _urinary_result(_urinary_enriched(ledger_rows=[("Cranberry Leaf Extract", "cranberry", 500, "mg")])) == "none"
+    assert _urinary_result(_urinary_enriched(ledger_rows=[("Cranberry seed extract", "cranberry", 750, "mg")])) == "none"
+
+
+def test_applicable_cranberry_at_the_reviewed_dose_is_supported(cranberry_dose_policy):
+    assert _urinary_result(_urinary_enriched(ledger_rows=[("Cranberry Fruit Extract", "cranberry", 500, "mg")])) == "supported"
+    assert _urinary_result(_urinary_enriched(ledger_rows=[("Cranberry, Powder", "cranberry", 5, "Gram(s)")])) == "supported"
+
+
+def test_applicable_cranberry_below_the_reviewed_dose_is_underdosed(cranberry_dose_policy):
+    assert _urinary_result(_urinary_enriched(ledger_rows=[("Cranberry Fruit Extract", "cranberry", 60, "mg")])) == "underdosed"
+    # GNC women's multis: 10 mg cranberry the enricher keeps in the ledger but skips.
+    assert _urinary_result(_urinary_enriched(
+        ledger_rows=[("Cranberry fruit concentrate", "cranberry_fruit", 10, "mg")],
+        cluster_ingredients=[("cranberry", 10, True), ("vitamin c", 100, False)], scorable=False,
+    )) == "underdosed"
+
+
+@pytest.mark.parametrize(
+    "ledger_rows, cluster_ingredients",
+    [
+        ([("Vitamin C", "vitamin_c", 90, "mg"), ("Lactobacillus rhamnosus GG", "lactobacillus_rhamnosus", 53, "mg")],
+         [("lactobacillus", 53, True), ("vitamin c", 90, False)]),
         ([("Vitamin C", "vitamin_c", 60, "mg"), ("D-Mannose", "d_mannose", 2000, "mg")],
          [("d-mannose", 2000, True), ("vitamin c", 60, False)]),
         ([("Vitamin C", "vitamin_c", 500, "mg"), ("Uva Ursi Leaf", "uva_ursi_leaf", 300, "mg")],
          [("uva ursi", 300, True), ("vitamin c", 500, True)]),
         ([("D-Mannose", "d_mannose", 2000, "mg")], None),
+        # A branded row whose printed label never says cranberry fails the
+        # registry's source-label rule, exactly as the evidence pillar would.
+        ([("CranRx", "cranrx", 500, "mg")], None),
     ],
 )
-def test_urinary_goal_needs_a_reviewed_urinary_active(ledger_rows, cluster_ingredients):
-    result = compute_goal_matches(_urinary_enriched(
-        ledger_rows=ledger_rows, cluster_ingredients=cluster_ingredients,
-    ))
-    assert "GOAL_URINARY_TRACT_HEALTH" not in result["goal_matches"]
-    assert "GOAL_URINARY_TRACT_HEALTH" not in result["goal_matches_underdosed"]
+def test_urinary_goal_needs_a_registry_applicable_cranberry_row(cranberry_dose_policy, ledger_rows, cluster_ingredients):
+    assert _urinary_result(_urinary_enriched(ledger_rows=ledger_rows, cluster_ingredients=cluster_ingredients)) == "none"
 
 
-def test_cranberry_with_cluster_match_is_supported_once():
+def test_cranberry_with_cluster_match_is_supported_once(cranberry_dose_policy):
     result = compute_goal_matches(_urinary_enriched(
-        ledger_rows=[("Pacran Cranberry Powder", "cranberry", 500, "mg"), ("Vitamin C", "vitamin_c", 100, "mg")],
+        ledger_rows=[("Pacran Cranberry Powder", "pacran", 500, "mg"), ("Vitamin C", "vitamin_c", 100, "mg")],
         cluster_ingredients=[("pacran", 500, True), ("vitamin c", 100, False)],
     ))
     assert result["goal_matches"].count("GOAL_URINARY_TRACT_HEALTH") == 1
-
-
-def test_cranberry_seed_fractions_do_not_count_as_cranberry():
-    result = compute_goal_matches(_urinary_enriched(
-        ledger_rows=[("Cranberry seed extract", "cranberry", 750, "mg")],
-    ))
-    assert "GOAL_URINARY_TRACT_HEALTH" not in result["goal_matches"]
-    assert "GOAL_URINARY_TRACT_HEALTH" not in result["goal_matches_underdosed"]
-
-
-def test_undisclosed_cranberry_in_a_fruit_blend_is_not_partial_support():
-    result = compute_goal_matches(_urinary_enriched(
-        ledger_rows=[("Cranberry juice powder", "cranberry", 0, "NP")],
-        scorable=False, role="nested_display_only",
-    ))
-    assert "GOAL_URINARY_TRACT_HEALTH" not in result["goal_matches"]
-    assert "GOAL_URINARY_TRACT_HEALTH" not in result["goal_matches_underdosed"]
-
-
-def test_disclosed_nested_cranberry_below_dose_is_partial_support():
-    result = compute_goal_matches(_urinary_enriched(
-        ledger_rows=[("Cranberry fruit powder", "cranberry", 100, "mg")],
-        scorable=False, role="nested_display_only",
-    ))
-    assert "GOAL_URINARY_TRACT_HEALTH" not in result["goal_matches"]
-    assert "GOAL_URINARY_TRACT_HEALTH" in result["goal_matches_underdosed"]
-
-
-def test_cranberry_blend_header_total_is_presence_not_dose():
-    result = compute_goal_matches(_urinary_enriched(
-        ledger_rows=[("Cranberry Complex", "cranberry", 900, "mg")],
-        scorable=False, role="blend_header_total",
-    ))
-    assert "GOAL_URINARY_TRACT_HEALTH" not in result["goal_matches"]
-    assert "GOAL_URINARY_TRACT_HEALTH" in result["goal_matches_underdosed"]
-
-
-def test_branded_cranberry_preparation_matches_urinary_goal():
-    # Nature's Way CranRx gummies: standardized_botanicals id "cranrx" (36 mg
-    # PAC cranberry extract) at 500 mg, no "cranberry" in the printed name.
-    result = compute_goal_matches(_urinary_enriched(
-        ledger_rows=[("CranRx", "cranrx", 500, "mg"), ("D-Mannose", "d_mannose", 200, "mg")],
-        cluster_ingredients=[("d-mannose", 200, False), ("vitamin c", 90, False)],
-    ))
-    assert "GOAL_URINARY_TRACT_HEALTH" in result["goal_matches"]

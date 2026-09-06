@@ -8566,25 +8566,26 @@ CREATINE_GOAL_CLUSTER_ID = "muscle_building_recovery"
 SLEEP_GOAL_CLUSTER_ID = "sleep_stack"
 JOINT_GOAL_CLUSTER_ID = "joint_inflammation"
 URINARY_GOAL_CLUSTER_ID = "urinary_tract_health"
-# Reviewed applicability for GOAL_URINARY_TRACT_HEALTH (2026-09-06). Cranberry
-# products (proanthocyanidin-bearing fruit, extract, powder, Pacran, Cran-Max,
-# Flowens) are the one label active credited: Cochrane 2023 (Williams et al.)
-# found cranberry products reduce symptomatic UTI recurrence. Not credited on
-# their own, by review: vitamin C (urine acidification is not prevention
-# evidence), unspecified probiotics/lactobacillus (strain-specific, not shown
-# orally), uva ursi and hibiscus (traditional/symptom use), and D-mannose — the
-# largest RCT (Hayward et al., JAMA Intern Med 2024, PMID 38587819) showed no
-# prevention benefit. The synergy cluster keeps matching these for the synergy
-# display; it does not decide this goal.
-URINARY_GOAL_CANONICAL_IDS = {
-    "cranberry", "cranberry_fruit",
-    # Branded cranberry preparations in standardized_botanicals.json.
-    "pacran", "cran_max", "cranrx", "flowens",
-}
+# GOAL_URINARY_TRACT_HEALTH is decided by the reviewed evidence entry
+# INGR_CRANBERRY in backed_clinical_studies.json through the same applicability
+# rules the evidence pillar uses (clinical_applicability): the printed source
+# label must be a cranberry fruit preparation (leaf, seed, root and essential
+# oil are excluded there), and support is declared only against the entry's
+# reviewed dose policy. The entry records that equivalence of preparations and
+# PAC doses is uncertain (Cochrane 2023, PMID 37068952) and carries no dose
+# policy, so today an applicable cranberry row declares neither "supported"
+# nor "underdosed"; adding a reviewed dose to the registry lights this goal.
+# Not credited, by review: vitamin C, unspecified probiotics/lactobacillus, uva
+# ursi, hibiscus, and D-mannose (Hayward et al., JAMA Intern Med 2024, PMID
+# 38587819, no prevention benefit). The urinary synergy cluster keeps matching
+# these for the synergy display; it does not decide this goal.
+URINARY_GOAL_EVIDENCE_ID = "INGR_CRANBERRY"
+# Identity prefilter only: which label rows are worth testing against the
+# registry's applicability rules. It never decides applicability itself.
+URINARY_GOAL_CANONICAL_IDS = {"cranberry", "cranberry_fruit", "pacran", "cran_max", "cranrx", "flowens"}
 URINARY_GOAL_TEXT_TOKENS = (
     "cranberry", "vaccinium macrocarpon", "pacran", "cran-max", "cranmax", "cranrx", "flowens",
 )
-URINARY_GOAL_DOSE_CLUSTER_INGREDIENT = "cranberry extract"
 FIBER_GOAL_MIN_DOSE_G = 3.0
 CREATINE_GOAL_MIN_DOSE_G = 3.0
 CREATINE_GOAL_MIN_BIO_SCORE = 10.0
@@ -8918,51 +8919,19 @@ def _joint_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> b
     return False
 
 
-_SYNERGY_MIN_DOSE_CACHE: Optional[Dict[str, Dict[str, float]]] = None
-
-
-def _synergy_cluster_min_dose_mg(cluster_id: str, ingredient: str) -> Optional[float]:
-    """The cluster's own minimum effective dose (synergy_cluster.json), so a
-    goal rule and the synergy detector never hold two copies of one number."""
-    global _SYNERGY_MIN_DOSE_CACHE
-    if _SYNERGY_MIN_DOSE_CACHE is None:
-        table: Dict[str, Dict[str, float]] = {}
-        try:
-            synergy_path = Path(__file__).parent / "data" / "synergy_cluster.json"
-            with open(synergy_path, "r", encoding="utf-8") as f:
-                clusters = safe_list(json.load(f).get("synergy_clusters"))
-            for cluster in clusters:
-                if isinstance(cluster, dict) and safe_str(cluster.get("id")):
-                    table[safe_str(cluster.get("id"))] = {
-                        safe_str(k).lower(): safe_float(v, 0.0)
-                        for k, v in safe_dict(cluster.get("min_effective_doses")).items()
-                    }
-        except Exception as exc:
-            logger.warning("Failed to load synergy_cluster.json: %s", exc)
-        _SYNERGY_MIN_DOSE_CACHE = table
-    value = safe_dict(_SYNERGY_MIN_DOSE_CACHE.get(cluster_id)).get(ingredient.lower())
-    return float(value) if value else None
-
-
 def _urinary_active_id(row: Dict[str, Any]) -> Optional[str]:
-    text = _joint_row_text(row)
-    if "seed" in text:
-        # Cranberry seed oil / seed extract is a fatty-acid or polyphenol
-        # fraction, not the proanthocyanidin-bearing fruit the evidence is on.
-        return None
     canonical = safe_str(row.get("canonical_id")).lower()
     if canonical in URINARY_GOAL_CANONICAL_IDS:
         return "cranberry"
-    if any(token in text for token in URINARY_GOAL_TEXT_TOKENS):
+    if any(token in _joint_row_text(row) for token in URINARY_GOAL_TEXT_TOKENS):
         return "cranberry"
     return None
 
 
 def _urinary_goal_rows(enriched: Dict) -> List[Dict[str, Any]]:
-    """Label rows for the urinary goal: the full identity ledger, because the
+    """Label rows worth testing: the full identity ledger, because the
     enricher keeps a trace cranberry row (10 mg in a women's multi) in
-    ``ingredients`` yet skips it for scoring, and presence still matters for
-    the underdosed surface."""
+    ``ingredients`` yet skips it for scoring."""
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
     rows: List[Dict[str, Any]] = []
     seen_paths: set = set()
@@ -8971,36 +8940,42 @@ def _urinary_goal_rows(enriched: Dict) -> List[Dict[str, Any]]:
             if not isinstance(row, dict):
                 continue
             path = safe_str(row.get("raw_source_path"))
-            if path and path in seen_paths:
+            if not path or path in seen_paths:
                 continue
-            if path:
-                seen_paths.add(path)
-            role = safe_str(row.get("cleaner_row_role")).lower()
-            if role in {"inactive", "excipient", "source_descriptor", "label_header", "nutrition_rollup", "composition_leaf"}:
-                continue
+            seen_paths.add(path)
             rows.append(row)
     return rows
 
 
 def _urinary_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> bool:
-    """Urinary goal support is decided here, from label rows, not by the
-    urinary synergy cluster (which fires on any two of its ingredients, e.g.
-    vitamin C plus unspecified probiotics). Only a row with a disclosed mass
-    counts: an undisclosed cranberry listing inside a fruit blend is neither
-    supported nor "present but underdosed". A cranberry blend header counts
-    for presence only: its total is not a cranberry dose."""
-    min_dose = _synergy_cluster_min_dose_mg(URINARY_GOAL_CLUSTER_ID, URINARY_GOAL_DOSE_CLUSTER_INGREDIENT)
+    """Urinary goal support consumes the evidence registry's applicability.
+
+    Each candidate row is tested exactly as the evidence pillar tests a
+    clinical match: ``assess_clinical_applicability`` applies INGR_CRANBERRY's
+    reviewed source-label form rules (leaf, seed, root and essential-oil
+    preparations are excluded) and, when the entry carries a dose policy, its
+    minimum daily dose. Supported needs an applicable row under a known dose
+    policy; ``below_applicable_clinical_dose`` is the underdosed surface. With
+    no reviewed dose policy — the entry's own note: preparation and PAC-dose
+    equivalence is uncertain — an applicable row declares neither.
+    """
+    from clinical_applicability import assess_clinical_applicability, reviewed_entries
+
+    entry = safe_dict(reviewed_entries().get(URINARY_GOAL_EVIDENCE_ID))
+    policy = safe_dict(entry.get("applicability"))
+    dose_policy_known = bool(safe_str(policy.get("dose_unit"))) and policy.get("minimum_daily_dose") is not None
     for row in _urinary_goal_rows(enriched):
         if not _urinary_active_id(row):
             continue
-        mg = _mass_dose_mg(row)
-        if mg is None:
-            continue
-        if not enforce_dose_gate:
+        verdict = assess_clinical_applicability(
+            enriched,
+            {"id": URINARY_GOAL_EVIDENCE_ID, "matched_source_row_refs": [safe_str(row.get("raw_source_path"))]},
+        )
+        status = safe_str(verdict.get("status"))
+        reason = safe_str(verdict.get("reason_code"))
+        if status == "applicable" and dose_policy_known:
             return True
-        if safe_str(row.get("cleaner_row_role")).lower() == "blend_header_total":
-            continue
-        if min_dose is not None and mg >= min_dose:
+        if reason == "below_applicable_clinical_dose" and not enforce_dose_gate:
             return True
     return False
 
