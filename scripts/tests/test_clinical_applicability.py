@@ -292,3 +292,41 @@ def test_enrichment_collector_applies_shared_zinc_scope(
     if not accepted:
         assert any(match["id"] == "INGR_ZINC_PICOLINATE"
                    for match in evidence["rejected_clinical_matches"])
+
+
+# ---- Units come from the pipeline's canonical mass-unit function -------------
+
+
+@pytest.mark.parametrize("unit,unit_normalized,amount", [
+    ("Gram(s)", None, 0.08),          # DSLD's printed unit spelling
+    ("Gram(s)", "gram(s)", 0.08),     # what the enricher writes to unit_normalized
+    ("Milligram(s)", None, 80),
+    ("mcg", None, 80000),
+])
+def test_dose_policy_resolves_every_canonical_mass_unit_spelling(unit, unit_normalized, amount):
+    product = zinc_product("zinc acetate", amount, "lozenge")
+    row = product["ingredient_quality_data"]["ingredients_scorable"][0]
+    row["unit"] = unit
+    if unit_normalized is not None:
+        row["unit_normalized"] = unit_normalized
+    verdict = assess_clinical_applicability(product, product["evidence_data"]["clinical_matches"][0])
+    assert verdict["status"] == "applicable", verdict
+
+
+def test_dose_policy_leaves_non_mass_units_unresolved():
+    product = zinc_product("zinc acetate", 80, "lozenge")
+    product["ingredient_quality_data"]["ingredients_scorable"][0]["unit"] = "IU"
+    verdict = assess_clinical_applicability(product, product["evidence_data"]["clinical_matches"][0])
+    assert verdict["status"] == "not_applicable"
+    assert verdict["reason_code"] == "clinical_dose_unresolved"
+
+
+def test_policy_dose_unit_accepts_canonical_spellings(monkeypatch):
+    import clinical_applicability
+
+    entries = deepcopy(reviewed_entries())
+    entries["INGR_ZINC_PICOLINATE"]["applicability"]["dose_unit"] = "Milligram(s)"
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: entries)
+    product = zinc_product("zinc acetate", 80, "lozenge")
+    verdict = assess_clinical_applicability(product, product["evidence_data"]["clinical_matches"][0])
+    assert verdict["status"] == "applicable", verdict

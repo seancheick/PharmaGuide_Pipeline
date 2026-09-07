@@ -15,12 +15,21 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from normalization import canonicalize_mass_unit
 from serving_frequency import resolve_daily_serving_range
 
 
-_UNIT_SCALE = {"g": 1000, "gram": 1000, "grams": 1000,
-               "mg": 1, "milligram": 1, "milligrams": 1,
-               "mcg": .001, "ug": .001, "microgram": .001, "micrograms": .001}
+# Milligrams per canonical mass token. Spelling is the pipeline's business:
+# ``canonicalize_mass_unit`` owns every alias (DSLD's "Gram(s)", the enricher's
+# "gram(s)", "Milligram(s)", "µg"...), so this module keeps no unit map of its own.
+_MG_PER_CANONICAL_UNIT = {"g": 1000.0, "mg": 1.0, "mcg": 0.001}
+
+
+def _mass_unit_scale(unit: Any) -> float | None:
+    """Milligrams per one unit, or None for anything that is not a mass unit."""
+    if not isinstance(unit, str) or not unit.strip():
+        return None
+    return _MG_PER_CANONICAL_UNIT.get(canonicalize_mass_unit(unit))
 
 
 @lru_cache(maxsize=1)
@@ -109,7 +118,7 @@ def _valid_policy(policy: Any) -> bool:
     if all(value is not None for value in bounds) and bounds[0] > bounds[1]:
         return False
     if "dose_unit" in policy or any(value is not None for value in bounds):
-        if not isinstance(policy.get("dose_unit"), str) or _key(policy["dose_unit"]) not in _UNIT_SCALE:
+        if _mass_unit_scale(policy.get("dose_unit")) is None:
             return False
     return True
 
@@ -204,13 +213,13 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping) -> dict:
             reasons.append("clinical_form_mismatch")
             continue
         amount = _number(row.get("quantity"))
-        unit = _key(row.get("unit_normalized") or row.get("unit"))
-        target = _key(policy.get("dose_unit"))
-        if target:
-            if amount is None or amount <= 0 or unit not in _UNIT_SCALE:
+        unit_scale = _mass_unit_scale(row.get("unit_normalized") or row.get("unit"))
+        target_scale = _mass_unit_scale(policy.get("dose_unit"))
+        if target_scale is not None:
+            if amount is None or amount <= 0 or unit_scale is None:
                 reasons.append("clinical_dose_unresolved")
                 continue
-            amount *= _UNIT_SCALE[unit] / _UNIT_SCALE[target]
+            amount *= unit_scale / target_scale
             minimum, maximum = policy.get("minimum_daily_dose"), policy.get("maximum_daily_dose")
             if minimum is not None and amount * lower < float(minimum):
                 reasons.append("below_applicable_clinical_dose")
