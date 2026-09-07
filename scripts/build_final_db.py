@@ -8572,7 +8572,7 @@ URINARY_GOAL_CLUSTER_ID = "urinary_tract_health"
 # label must be a cranberry fruit preparation (leaf, seed, root and essential
 # oil are excluded there), and support is declared only against the entry's
 # reviewed dose policy. The entry records that equivalence of preparations and
-# PAC doses is uncertain (Cochrane 2023, PMID 37068952) and carries no dose
+# PAC doses is uncertain (Cochrane, Nov 2023 update, PMID 37947276) and carries no dose
 # policy, so today an applicable cranberry row declares neither "supported"
 # nor "underdosed"; adding a reviewed dose to the registry lights this goal.
 # Not credited, by review: vitamin C, unspecified probiotics/lactobacillus, uva

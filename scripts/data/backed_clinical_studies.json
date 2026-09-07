@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.3.13",
-    "last_updated": "2026-09-05",
+    "schema_version": "5.3.14",
+    "last_updated": "2026-09-07",
     "total_entries": 202,
     "changelog": [
+      "5.3.14 (2026-09-07): INGR_CRANBERRY cites the current Cochrane version (PMID 37947276, Nov 2023, pub7; verified via PubMed esummary/efetch) in place of the superseded April 2023 record; notes and notable_studies restate that preparation and PAC-dose equivalence is uncertain and that the entry deliberately carries no dose policy. Applicability rules unchanged. clinical_applicability now reads mass units through normalization.canonicalize_mass_unit.",
       "5.3.13 (2026-09-05): Reclassify BRAND_PHOSPHATIDYLSERINE as INGR_PHOSPHATIDYLSERINE (ingredient-human): its own notes and both cited trials (PS-DHA, soybean PS) are ingredient-level, not SerinAid-specific; the serinaid alias remains a name for the ingredient. Registry-count depth-bonus fallback removed in code per DATABASE_SCHEMA.md.",
       "5.3.12 (2026-09-05): Individually reviewed lost botanical joins: add exact registry-projected preparation aliases for Echinacea purpurea aerial/herb/root extract (PMID 24554461) and Astragalus root/extract (PMID 37952511); give INGR_CINNAMON_EXTRACT an explicit Ceylon exclusion scope (PMID 24019277). Real-label review of 5.3.11: PRECLIN_BOSWELLIA required terms now include the printed extract spellings (gum extract, standardized extract, Apres-Flex, Casperome, frankincense phytosome) and its primary outcome uses the locked vocabulary label Joint & Bone Health. Fermented black garlic, whole red-grape extract and DPP-IV enzyme products remain unjoined after review. No enrollment, effect-direction, multiplier, dose-threshold or clinical-approval changes.",
       "5.3.11 (2026-09-04): Repair exact source-declared cranberry fruit-concentrate and Boswellia resin-extract evidence joins. Scope existing records to fruit/extract preparations and actual urinary/OA endpoints; correct source-bound enrollments, remove untraceable registry counts and the whole-plant Boswellia UNII. No dose thresholds, evidence multipliers or clinical approvals added.",
@@ -9855,9 +9856,9 @@
         "Recurrent symptomatic, culture-verified urinary tract infections"
       ],
       "health_goals_supported": ["Urinary Tract Health"],
-      "notes": "Family-level evidence concerns cranberry fruit products for prevention of recurrent UTIs in selected populations, not treatment of an existing infection or general immune support. Fruit juice, tablets and powders were studied; equivalence of preparations and PAC doses is uncertain. Total concentrate mass is not a PAC dose or a verified clinical minimum. Enrollment 8857 belongs only to the April 2023 Cochrane review; participants from the overlapping 2021 review are not summed. No efficacy is inferred for cranberry seed oil or leaf extracts.",
+      "notes": "Family-level evidence concerns cranberry fruit products for prevention of recurrent UTIs in selected populations, not treatment of an existing infection or general immune support. Fruit juice, tablets and powders were studied; equivalence of preparations and PAC doses is uncertain, so this entry carries no dose policy and no universal total-mass threshold is justified. Total concentrate mass is not a PAC dose or a verified clinical minimum. Enrollment 8857 belongs only to the November 2023 Cochrane update (which supersedes the April 2023 version); participants from the overlapping 2021 review are not summed. No efficacy is inferred for cranberry seed oil or leaf extracts.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-09-04",
+      "last_updated": "2026-09-07",
       "applicability": {
         "scope": "ingredient",
         "require_source_label_form": true,
@@ -9865,22 +9866,23 @@
         "excluded_form_terms": ["seed", "leaf", "leaves", "root", "essential oil"],
         "supported_outcomes": ["recurrent_uti_prevention"],
         "studied_population": "Selected UTI-susceptible populations, including women with recurrent UTIs, children and people following urinary interventions; not a treatment claim or evidence of benefit for pregnancy, institutionalized elderly people or incomplete bladder emptying.",
-        "source_pmids": ["37068952", "34473789"]
+        "source_pmids": ["37947276", "34473789"]
       },
-      "notable_studies": "The 2023 Cochrane review (PMID 37068952) found cranberry products reduce recurrent urinary-tract-infection risk in selected populations, especially women with recurrent UTIs and children. A 2021 systematic review/meta-analysis with trial-sequential analysis (PMID 34473789) also supported cranberry use as an adjunct preventive strategy in susceptible groups.",
+      "notable_studies": "The Cochrane review, updated November 2023 (PMID 37947276, fifth update; 50 RCTs, 8857 randomised participants), found in moderate-certainty evidence that cranberry products reduce the risk of symptomatic, culture-verified UTIs (RR 0.70) — in women with recurrent UTIs, in children and in people susceptible after an intervention — with little or no benefit in institutionalised elderly people, pregnant women or people with neuromuscular bladder dysfunction; one trial compared tablets with liquid and two compared PAC doses, so equivalence of preparations and PAC doses stays uncertain. It supersedes the April 2023 version (PMID 37068952). A 2021 systematic review/meta-analysis with trial-sequential analysis (PMID 34473789) also supported cranberry use as an adjunct preventive strategy in susceptible groups.",
       "references_structured": [
         {
           "type": "pubmed",
           "authority": "NCBI PubMed",
-          "pmid": "37068952",
-          "doi": "10.1002/14651858.CD001321.pub6",
+          "pmid": "37947276",
+          "doi": "10.1002/14651858.CD001321.pub7",
           "title": "Cranberries for preventing urinary tract infections.",
-          "citation": "The Cochrane database of systematic reviews (2023-04-17)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/37068952/",
-          "published_date": "2023-04-17",
+          "citation": "The Cochrane database of systematic reviews (2023-11-10)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37947276/",
+          "published_date": "2023-11-10",
           "publication_types": [
             "Systematic Review",
-            "Journal Article"
+            "Journal Article",
+            "Research Support, Non-U.S. Gov't"
           ],
           "mesh_terms": [
             "Male",
