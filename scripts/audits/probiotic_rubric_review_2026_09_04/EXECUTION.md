@@ -462,3 +462,22 @@ See the matching section of [CONTINUATION_RETURN_2026_09_05.md](CONTINUATION_RET
   (SHA-256 `df89363f0d9027d062fa2a42eb1137267c56af3d46b88d9994b4b7f2937f657a`, 900.4 s, zero errors): transitions identical to round 2 (15,104 scored, 257 not scored, 54 suppressed); 902 products differ from the round-2 report — 752 score changes, all decreases, no status change: 342 dose (266 at −5.5, the 20 → 14.5 cap for a primary whose own source carries no bandable reference — 61 more than the first pass, the ancestry releases now capped again; 76 smaller) and 410 formulation (≤ 0.8); 117 tier labels and 4 verdict labels follow those decreases; 150 copy-only changes (484 dose reasons name the missing benchmark, Cognigrape 304628 at 56.4). Natural Vitamin K2 25514 is unchanged from round 2 (title projection kept). The round-1 controls, 213475 and 218600 are unchanged; the committed tree matches all 267 audited file hashes.
 - [x] Broad `scripts/test.sh fast` on the final tree: 13,553 passed, 165 skipped, 0 failed (235.2 s).
 - [x] Pipeline committed and pushed (`3e2f5343..221594af` plus docs); app unchanged.
+
+### Round 3, third pass — Codex's fourth audit (2026-09-07)
+
+See the matching section of [CONTINUATION_RETURN_2026_09_05.md](CONTINUATION_RETURN_2026_09_05.md).
+
+- [x] `clinical_applicability` reads mass units through
+  `normalization.canonicalize_mass_unit`; private unit table removed; 3 tests.
+- [x] `INGR_CRANBERRY` cites the current Cochrane record (PMID 37947276,
+  verified live); registry 5.3.14; no dose policy added; citation gate ok=462.
+- [x] Owner-selection rule delivered as a measured decision brief
+  (`owner_rule_decision_brief_2026_09_07.json`: 359 generic-module products
+  capped, 264 with an assessed nutrient ≥ 100% RDA); no rule adopted.
+- [x] Broad `scripts/test.sh fast`: 13,559 passed, 165 skipped, 0 failed.
+- [x] Final consolidated audit `corpus_continuation_2026_09_07_full_v8.json`
+  (SHA-256 `0befc7f623c4750fb932080ed9ca05505213f4e0dbae550c306c88da75f87517`, 907.0 s, zero errors) vs v7: transitions identical (15,104 scored, 257 not scored, 54 suppressed); zero score changes, zero pillar changes, zero copy changes against the second-pass report — the unit fix and the citation refresh move no product, as expected (zinc rows are printed in mg; the cranberry entry's applicability is unchanged). The committed tree matches all 267 audited file hashes.
+- [x] Pipeline committed and pushed (`61223eba..58e4645d` plus docs); app unchanged.
+
+Not done here, by design: main merge, operational pipeline/re-clean, release,
+weight calibration, 37-brand rerun, a cranberry dose policy, an owner rule.

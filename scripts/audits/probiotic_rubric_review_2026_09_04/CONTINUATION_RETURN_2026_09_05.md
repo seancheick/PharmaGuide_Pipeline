@@ -577,3 +577,106 @@ evidence, so corpus scores are unchanged by this. Test:
 - `clinical_applicability._UNIT_SCALE` does not know `gram(s)`.
 - The keratin-over-biotin mass-dominance item and the reference-table
   coverage item from the first pass stand.
+
+---
+
+# Round 3, third pass — Codex's fourth audit (2026-09-07)
+
+Codex confirmed the three second-pass closures and left four items: a shared
+unit-normalization defect, the cranberry goal being disabled rather than
+finished, a stale Cochrane citation, and the keratin-over-biotin owner rule.
+The first three are engineering or verification work and were done; the
+fourth is a scoring-policy decision and is delivered as a measured brief.
+
+## Commits
+
+Pipeline `61223eba..58e4645d` plus the docs commit that adds this
+section, on `codex/probiotic-evidence-coverage`. App unchanged. Nothing
+merged, published, uploaded, imported, calibrated or rebuilt.
+
+## 1. One unit vocabulary
+
+`clinical_applicability` kept a private unit table keyed by its own text
+normalizer, so DSLD's "Gram(s)" and the enricher's "gram(s)" became "gram s"
+and any dose policy marked such rows `clinical_dose_unresolved`. The module
+now asks `normalization.canonicalize_mass_unit` for the canonical g/mg/mcg
+token and keeps only the milligram factor per token; policy `dose_unit`
+validation uses the same path. Tests: `test_clinical_applicability.py` (+3).
+Corpus exposure today: the only entry with a dose policy is
+`INGR_ZINC_PICOLINATE` (2,310 products carry a match record for it; zinc rows
+are printed in mg), so no score moves; the fix matters for every future dose
+policy, cranberry included.
+
+## 2 and 3. Cranberry evidence: current citation, still no dose policy
+
+Both PubMed records were verified live (esummary and efetch). The review was
+updated on 10 November 2023 (PMID 37947276, pub7; Williams, Stothart, Hahn,
+Stephens, Craig, Hodson): 50 RCTs, 8,857 randomised participants; in
+moderate-certainty evidence cranberry products reduce symptomatic,
+culture-verified UTIs (RR 0.70) in women with recurrent UTIs, in children and
+in people susceptible after an intervention; little or no benefit in
+institutionalised elderly people, pregnant women or neuromuscular bladder
+dysfunction; one tablet-versus-liquid and two PAC-dose comparisons only.
+Registry 5.3.14: `INGR_CRANBERRY` cites pub7 in place of the superseded April
+record (`references_structured`, `source_pmids`, `notable_studies`, `notes`),
+and the notes now say the entry deliberately carries no dose policy because
+the review does not justify a universal total-mass threshold. Applicability
+rules unchanged; no dose policy added. Citation gate
+`verify_backed_studies_citations.py`: ok=462, 0 title mismatch, 0 drift, two
+pre-existing ghost-suspects unrelated to this entry. The urinary goal
+therefore stays inactive by design until a preparation-specific dose is
+reviewed into the registry; that review is the human decision.
+
+## 4. Owner-selection rule — decision brief, not a change
+
+Measured on the enriched corpus with the final tree
+(`reports/…/owner_rule_decision_brief_2026_09_07.json`). Among products the
+generic module scores, the no-benchmark cap reduces the dose window of 359
+products (the 342 round-3 changes plus the 19 from round 2 minus overlap,
+and the four released later). In 264 of them an assessed nutrient sits at or
+above 100% of its reference while a heavier row without a benchmark holds the
+mass primary: protein powders 27, flaxseed oil 19, caffeine 13, fish oil 11,
+L-tyrosine 11, CLA 10, borage oil 10, keratin 9 (all nine "Biotin 10,000 mcg"
+products: biotin at 33,333% of its AI, 25–100 mg keratin heavier), chlorophyll
+9, beetroot powder 8, … The other 95 have no strong assessed nutrient and are
+plainly primaries without a benchmark. Products other modules score
+(multi_or_prenatal 353, omega 138, sports 59 …) do not consume this guard.
+
+Candidate rules, each one system and testable, none adopted here:
+
+- **A. Mass dominance as today.** Conservative; the nine biotin products and
+  the multivitamin-style generic formulas keep reading "main ingredient's
+  benchmark unavailable" although their labelled nutrient is assessed.
+- **B. Reference-multiple co-primary.** A label active assessed at ≥ 100% of
+  its reference counts as a primary alongside the mass primary, so the cap
+  applies only when no assessed active reaches its reference. Uses the
+  existing reference table, no new data; would release up to 264 of the 359.
+- **C. Title-declared active.** When the product title names an assessed
+  nutrient ("Biotin 10,000 mcg"), that nutrient owns the dose story. Small
+  effect (a handful of products name the assessed nutrient in the title);
+  needs the title parser the contract already uses for single actives.
+- **D. Type-driven owner.** `single_vitamin`, `b_complex`,
+  `vitamin_mineral_combo` products take their vitamin/mineral row as owner
+  (about 36 of the 264); botanical, sports and general products keep mass
+  dominance.
+
+This is the rule Codex asked for before calibration; choosing it is a product
+decision. Vinpocetine (2.4.1) is outside this audit, as Codex noted.
+
+## Verification
+
+- Final consolidated audit `corpus_continuation_2026_09_07_full_v8.json`
+  (SHA-256 `0befc7f623c4750fb932080ed9ca05505213f4e0dbae550c306c88da75f87517`, 907.0 s, zero errors), baselined on
+  `…_full_v7.json` so it isolates this pass: transitions identical (15,104 scored, 257 not scored, 54 suppressed); zero score changes, zero pillar changes, zero copy changes against the second-pass report — the unit fix and the citation refresh move no product, as expected (zinc rows are printed in mg; the cranberry entry's applicability is unchanged). The committed tree matches all 267 audited file hashes.
+- Broad `scripts/test.sh fast` on the final tree: 13,559 passed, 165
+  skipped, 0 failed (248.4 s).
+- Focused: applicability/zinc/KSM-66 168 passed; registry, citation,
+  applicability, cranberry, urinary, vocabulary and goal suites 978 passed.
+
+## Human decisions after this pass
+
+- Choose the owner-selection rule (A–D above) before calibration.
+- Review a preparation-specific cranberry dose policy for `INGR_CRANBERRY`
+  (the November 2023 Cochrane record is the current basis) and whether the
+  printed brand "CranRx" belongs in its source-label terms.
+- Operational re-clean and rebuild remain the user's call; nothing here ran.
