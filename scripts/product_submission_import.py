@@ -31,7 +31,7 @@ from uuid import UUID
 import env_loader  # noqa: F401  # Load the project .env without overriding shell vars.
 from PIL import Image, ImageOps
 from submission_review.gtin import (
-    canonical_gtin14_candidates,
+    canonical_normalized_gtin14,
     is_valid_gtin as _is_valid_gtin,
 )
 
@@ -756,7 +756,8 @@ def materialize_approved_submissions(
     for submission_id, value in receipt_rows.items():
         if not isinstance(value, dict):
             continue
-        for gtin14 in canonical_gtin14_candidates(value.get("upc")):
+        gtin14 = canonical_normalized_gtin14(value.get("upc"))
+        if gtin14 is not None:
             upc_owners.setdefault(gtin14, set()).add(
                 (submission_id, str(value.get("product_id") or ""))
             )
@@ -775,7 +776,8 @@ def materialize_approved_submissions(
         seen_product_ids.add(product_id)
 
         upc = str(label["upcSku"])
-        for gtin14 in sorted(canonical_gtin14_candidates(upc)):
+        gtin14 = canonical_normalized_gtin14(upc)
+        if gtin14 is not None:
             for owner_submission_id, owner_product_id in sorted(
                 upc_owners.get(gtin14, ())
             ):

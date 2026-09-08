@@ -17,6 +17,17 @@ def is_valid_gtin(value: str) -> bool:
     return (10 - weighted_sum % 10) % 10 == int(value[-1])
 
 
+def canonical_normalized_gtin14(value: object) -> str | None:
+    """Canonicalize one established GTIN without inferring UPC-E identity.
+
+    Known UPC-E barcodes are expanded before submission. A normalized
+    eight-digit receipt therefore owns its EAN-8 identity only.
+    """
+    if not isinstance(value, str) or not is_valid_gtin(value):
+        return None
+    return value.rjust(14, "0")
+
+
 def _expand_upce(value: str) -> str | None:
     if len(value) != 8 or not value.isdigit() or value[0] not in {"0", "1"}:
         return None
@@ -40,8 +51,9 @@ def canonical_gtin14_candidates(value: object) -> set[str]:
         return set()
     digits = re.sub(r"[^0-9]", "", raw)
     candidates: set[str] = set()
-    if is_valid_gtin(digits):
-        candidates.add(digits.rjust(14, "0"))
+    primary = canonical_normalized_gtin14(digits)
+    if primary is not None:
+        candidates.add(primary)
     if len(digits) == 8:
         expanded = _expand_upce(digits)
         if expanded is not None:
