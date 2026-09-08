@@ -883,3 +883,24 @@ then use `scripts/release_full.sh` for the separately approved publication.
 Keep the blinded human reviewer benchmark, new clinical-context approvals,
 preparation-specific cranberry policy and any weight calibration explicit;
 engineering tests do not complete those scientific review steps.
+
+### September 8 post-rebuild integration — supersedes the rebuild instruction above
+
+The operator completed all 37 brands from raw labels. Its snapshot stopped on
+297 unresolved identity rows in 231 products; do **not** repeat the whole
+brand run to address that export integration failure.
+
+The follow-up corrects quarantine-before-consumer assembly and requires an
+actual candidate exclusion receipt, not a status flag, to contain expected
+identity rejections. Unrelated contract failures remain fatal. It also fixes
+certification's canonical-form producer order, refreshes only the 13 affected
+brands, and updates twelve independently reviewed August score snapshots.
+
+The candidate now accounts for 15,415 inputs as 15,103 live products and 312
+quarantines. No guessed identity or clinical policy was added. Original live
+dist, Supabase, Flutter bundle and phone remain untouched. See
+`docs/release_candidates/identity_quarantine_gate_2026_09_08.md` and its JSON
+receipt for the exact test completion status, candidate hashes and release-only
+handoff. That report, not the earlier raw-rebuild instruction, owns the next
+operational step. Interaction rebuild/parity, clinical policy decisions and
+weight calibration remain explicit separate work.
