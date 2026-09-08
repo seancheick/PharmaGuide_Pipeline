@@ -674,12 +674,17 @@ decision. Vinpocetine (2.4.1) is outside this audit, as Codex noted.
   (SHA-256 `0befc7f623c4750fb932080ed9ca05505213f4e0dbae550c306c88da75f87517`, 907.0 s, zero errors), baselined on
   `…_full_v7.json` so it isolates this pass: transitions identical (15,104 scored, 257 not scored, 54 suppressed); zero score changes, zero pillar changes, zero copy changes against the second-pass report — the unit fix and the citation refresh move no product, as expected (zinc rows are printed in mg; the cranberry entry's applicability is unchanged). The committed tree matches all 267 audited file hashes.
 - Broad `scripts/test.sh fast` on the final tree: 13,559 passed, 165
-  skipped, 0 failed (248.4 s); `--collect-only` lists 13,724 tests. Codex's
-  independent run collected six fewer (13,553 passed, 165 skipped): the
-  consumer-copy suite parametrises two tests over cases sampled from the
-  local scored corpus (`test_v4_pillar_consumer_copy.py::_scored_corpus`),
-  so the collected total follows the corpus visible to the checkout the
-  suite runs in — a collection difference, not a failure or a hidden test.
+  skipped, 0 failed (248.4 s); `--collect-only` lists 13,724 tests
+  (`reports/…/fast_suite_collect_only_2026_09_07.txt`, per-file counts).
+  Codex's independent run collected six fewer (13,553 passed, 165 skipped,
+  0 failed). Twenty suites parametrise over files found on disk at
+  collection time (for example `test_canonical_id_e2e_continuity.py` globs
+  `scripts/products`, `test_pipeline_integrity.py`, `test_scoring_snapshot_v1.py`),
+  so the collected total follows the artifacts visible to the checkout the
+  suite runs in; the worktree holds one corpus directory where the main
+  checkout holds 116. I could not attribute the six from this side: diff
+  the two `--collect-only` listings to name them. Both runs report zero
+  failures.
 - Focused: applicability/zinc/KSM-66 168 passed; registry, citation,
   applicability, cranberry, urinary, vocabulary and goal suites 978 passed.
 
