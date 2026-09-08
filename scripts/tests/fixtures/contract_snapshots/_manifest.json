@@ -1,7 +1,7 @@
 {
   "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
   "schema_version": "2.0.0",
-  "frozen_on": "2026-08-24",
+  "frozen_on": "2026-09-08",
   "fixture_schema": {
     "frozen_fields": [
       "dsld_id",
@@ -193,6 +193,18 @@
     }
   ],
   "changelog": [
+    {
+      "date": "2026-09-08",
+      "action": "refrozen_reviewed_september_identity_evidence_and_certification_corrections",
+      "products": [12012, 18141, 239600, 241353, 274498, 278454, 288344, 294077, 298070, 321405, 323080, 327416],
+      "sprints_covered": [
+        "Required active identity ownership",
+        "Source- and delivery-specific evidence applicability",
+        "Probiotic disclosure provenance",
+        "Certification population and dosage-form matching"
+      ],
+      "notes": "These twelve previously August-frozen cases exactly match the approved corpus_dose_closure_verified.json (SHA-256 97c930705071cceced31d538aa5b4eb758f3fef300cffebe67043d4d08b7f832) and a fresh full-enrichment replay of all twelve, with zero drift. CVS Spectravite 12012 becomes NOT_SCORED with null numeric score: Nickel/Tin remain unresolved primary identities, mapped coverage 0.9355, two unresolved required actives. Evidence-only corrections are 18141 66.0->64.0, 239600 63.5->62.2, 241353 53.7->53.2, 274498 54.1->53.5, 278454 76.9->76.4, 288344 71.6->71.2, 294077 86.3->82.1, 321405 60.5->60.3 and 323080 73.8->73.3 under already-reviewed source/formula/delivery applicability and source-owned evidence rules; Zinc 15 no longer inherits the inapplicable zinc-lozenge evidence. FloraMend 298070 47.2->48.8 changes Transparency 12.4->14.0 through the reviewed disclosure-provenance correction. Baby Multivitamin Liquid 327416 66.7->60.5 changes Evidence 16.1->15.9 and Verification 15->9: the Kids Multivitamin certification cannot transfer to the baby preparation. Other pillars, routes and verdicts remain unchanged for the eleven scored products. No weights, dose policy or clinical identifiers were changed to satisfy these fixtures. Evidence and per-product comparisons are documented in docs/release_candidates/identity_quarantine_gate_2026_09_08.md and reports/identity_quarantine_2026_09_08/snapshot_canary_replay.json."
+    },
     {
       "date": "2026-08-20",
       "action": "refrozen_v4_3_scoring_integrity_readiness",
