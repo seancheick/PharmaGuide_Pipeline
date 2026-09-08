@@ -45,6 +45,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import env_loader  # noqa: E402,F401
 from stage_manifest import MANIFEST_NAME, select_stage_files  # noqa: E402
+from submission_review.gtin import (  # noqa: E402
+    canonical_gtin14_candidates,
+    is_valid_gtin as _is_valid_gtin,
+)
 
 BIND_HOST = "127.0.0.1"
 EDGE_FUNCTION_PATH = "/functions/v1/review-product-submissions"
@@ -54,7 +58,6 @@ STATIC_DIR = Path(__file__).resolve().parent / "static"
 CATALOG_SEARCH_LIMIT = 20
 IDENTITY_INDEX_WARN_DAYS = 30
 IDENTITY_INDEX_BLOCK_DAYS = 60
-GTIN_INPUT_PATTERN = re.compile(r"^[0-9\s-]+$")
 GTIN_GOLDEN_PATH = Path(__file__).resolve().parent / "fixtures" / "gtin_golden.json"
 GTIN_GOLDEN_SHA256 = (
     "d96e600c74654f813da95246ef1d027c042ba62eac7eb05675bcdf58c728f4dc"
@@ -110,47 +113,6 @@ class IdentityIndex:
         if not _is_valid_gtin(canonical_gtin14) or len(canonical_gtin14) != 14:
             return []
         return list(self.matches.get(canonical_gtin14, ()))
-
-
-def _is_valid_gtin(value: str) -> bool:
-    if len(value) not in {8, 12, 13, 14} or not value.isdigit():
-        return False
-    weighted_sum = 0
-    for position_from_right, digit in enumerate(reversed(value[:-1]), start=1):
-        weighted_sum += int(digit) * (3 if position_from_right % 2 else 1)
-    return (10 - weighted_sum % 10) % 10 == int(value[-1])
-
-
-def _expand_upce(value: str) -> str | None:
-    if len(value) != 8 or not value.isdigit() or value[0] not in {"0", "1"}:
-        return None
-    number_system, d1, d2, d3, d4, d5, d6, check_digit = value
-    if d6 in {"0", "1", "2"}:
-        body = f"{number_system}{d1}{d2}{d6}0000{d3}{d4}{d5}"
-    elif d6 == "3":
-        body = f"{number_system}{d1}{d2}{d3}00000{d4}{d5}"
-    elif d6 == "4":
-        body = f"{number_system}{d1}{d2}{d3}{d4}00000{d5}"
-    else:
-        body = f"{number_system}{d1}{d2}{d3}{d4}{d5}0000{d6}"
-    expanded = body + check_digit
-    return expanded if _is_valid_gtin(expanded) else None
-
-
-def canonical_gtin14_candidates(value: object) -> set[str]:
-    """Return exact canonical interpretations using the Flutter GTIN rules."""
-    raw = str(value or "").strip()
-    if not raw or not GTIN_INPUT_PATTERN.fullmatch(raw):
-        return set()
-    digits = re.sub(r"[^0-9]", "", raw)
-    candidates: set[str] = set()
-    if _is_valid_gtin(digits):
-        candidates.add(digits.rjust(14, "0"))
-    if len(digits) == 8:
-        expanded = _expand_upce(digits)
-        if expanded is not None:
-            candidates.add(expanded.rjust(14, "0"))
-    return candidates
 
 
 def validate_submission_photo_url(value: object, supabase_url: str) -> str:
