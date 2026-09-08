@@ -1,5 +1,8 @@
 # Continuation return package — 2026-09-05 (local, feature worktree)
 
+> Current integration status: see **2026-09-08 engineering closure** below.
+> Earlier branch, test and stopping-boundary statements are historical records.
+
 For Codex's independent audit. Everything below was produced in
 `/Users/seancheick/Downloads/dsld_clean/worktrees/probiotic-evidence-coverage`
 on branch `codex/probiotic-evidence-coverage` from checkpoint `dcd38005`.
@@ -695,3 +698,87 @@ decision. Vinpocetine (2.4.1) is outside this audit, as Codex noted.
   (the November 2023 Cochrane record is the current basis) and whether the
   printed brand "CranRx" belongs in its source-label terms.
 - Operational re-clean and rebuild remain the user's call; nothing here ran.
+
+---
+
+## 2026-09-08 engineering closure
+
+The operator authorized finishing this integration, merging the completed work
+to main, pushing, and removing stale branches. This supersedes the historical
+handoff's main-merge prohibition. Catalog publication remains a separate
+operational verification step after a complete rebuild.
+
+### Decisions for this correctness integration
+
+- Retain owner rule A (current source-owned mass-primary guard). The generic
+  denominator is 359 capped products; 264 have another assessed nutrient at
+  or above its reference and 95 do not. The other modules' counts are explicitly
+  hypothetical and do not contribute to that denominator. No new owner rule
+  or weight adjustment is part of this integration.
+- Retain the cranberry entry's reviewed preparation restrictions and lack of a
+  dose policy. The urinary goal remains withheld. A bare CranRx label does not
+  gain preparation-specific evidence through an unreviewed alias. This is the
+  current behavior selected for integration; a future policy needs its own
+  source review, tests and impact assessment.
+- The alternative cloud ownership commit `79b37e35` is superseded by the
+  tested source-ownership implementation on this branch. Its applicable
+  companion `19ebfbbf` is already incorporated as `7c8b5fa0`. Preserve the cloud
+  tip under an archive tag before deleting its branch; do not layer a second
+  ownership implementation onto main.
+
+### Fresh verification
+
+- `scripts/test.sh fast`: **13,559 passed, 165 skipped, zero failures**, 226.02 s,
+  at `f29a5a9d`. The prior Codex report incorrectly reused the preceding pass's
+  13,553 figure. Collection at `61223eba` gives 64 applicability cases; the
+  current file gives 70. The exact six additions are the four mass-spelling
+  cases, non-mass rejection, and canonical policy-unit spelling. A checkout's
+  disk-dependent tests can change totals in general, but no unexplained
+  six-case discrepancy remains in these two revisions.
+- Live `verify_backed_studies_citations.py --strict`: 462 claims pass, zero
+  title mismatch/drift/not-found; the two existing heuristic suspects remain
+  individually reviewed in the registry. This gate checks citation integrity;
+  it does not provide missing clinical approval.
+- Independently rechecked v8: SHA-256
+  `0befc7f623c4750fb932080ed9ca05505213f4e0dbae550c306c88da75f87517`;
+  all 267 implementation, 174 input and two runner hashes match. The report
+  covers 15,415 products and 8,078 full re-enrichments. Relative to v7, score,
+  status, verdict, route, confidence, pillar and consumer-reason changes are all
+  zero. Metadata recollection records are not score changes.
+- Ran the production `run_pipeline.py` through **Clean → Enrich → Score** on
+  40 existing public raw labels with `--strict-release-gates`, using isolated
+  output paths. All stages passed in 19.71 s. All 27 reviewed UNII corrections
+  reproduce; 17186 retains an unmapped structural header and 328831 maps
+  Botalys to ginseng. Source files are unchanged. All 40 score successfully,
+  all have mapped coverage 1.0, and recomputing the exported score, pillars,
+  module, verdict, status and confidence produces zero mismatches.
+- Example final raw-label replays: 17186 = 48.6; Ginseng Plus 328831 = 65.7;
+  Cognigrape 304628 = 56.4. These are candidate results, not a catalog publish.
+
+Local evidence is retained under
+`/Users/seancheick/Downloads/dsld_clean/reports/scoring_merge_2026_09_08/`:
+`fast.log`, `fast.xml`, both applicability collection listings, `citations.log`,
+`raw_manifest.json`, `pipeline.log`, and `targeted_verification.json` with
+the manifest-owned Clean/Enrich/Score outputs. Raw-label subsets and local
+reports are not copied into this public Git repository.
+
+### Operational handoff after main integration
+
+Run from the main pipeline checkout:
+
+```bash
+bash batch_run_all_datasets.sh --stages clean,enrich,score --skip-release
+```
+
+This rebuilds the brand corpus from raw labels and runs the snapshot stage;
+the snapshot prerequisite also refreshes Product_Submissions enrichment and
+scoring when its reference stamp is stale. An enrich-only run would preserve
+the old cleaner identities. The isolated 40-product run does not replace the
+live brand outputs or the full-corpus rebuild.
+
+After the rebuild, review the full candidate changes and exclusions, run the
+release/full tiers sequentially, validate Flutter import and artifact parity,
+then use `scripts/release_full.sh` for the separately approved publication.
+Keep the blinded human reviewer benchmark, new clinical-context approvals,
+preparation-specific cranberry policy and any weight calibration explicit;
+engineering tests do not complete those scientific review steps.
