@@ -40,6 +40,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from threading import Lock
 
 # scripts/ on the path so the repo .env loads without overriding shell vars.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -108,6 +109,9 @@ class IdentityIndex:
 
     built_at: datetime
     matches: dict[str, tuple[IdentityCandidate, ...]]
+    catalog_db: Path
+    products_dir: Path
+    source_revision: str
 
     def lookup(self, canonical_gtin14: str) -> list[IdentityCandidate]:
         if not _is_valid_gtin(canonical_gtin14) or len(canonical_gtin14) != 14:
@@ -265,6 +269,25 @@ def _catalog_generated_at(connection: sqlite3.Connection, catalog_db: Path) -> d
     return datetime.fromtimestamp(catalog_db.stat().st_mtime, timezone.utc)
 
 
+def identity_source_revision(catalog_db: Path, products_dir: Path) -> str:
+    """Detect source replacement, additions, edits, or removal between checks.
+
+    Stat the corpus cheaply on every lookup; the manifest validates content
+    hashes when a changed source requires rebuilding the index.
+    """
+    sources = {catalog_db, *products_dir.glob("output_*_enriched/enriched/*.json")}
+    wal = Path(f"{catalog_db}-wal")
+    if wal.exists():
+        sources.add(wal)
+    versions = []
+    for source in sorted(sources):
+        stat = source.stat()
+        versions.append((
+            str(source), stat.st_ino, stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns,
+        ))
+    return hashlib.sha256(json.dumps(versions).encode()).hexdigest()
+
+
 def build_identity_index(
     catalog_db: Path,
     products_dir: Path,
@@ -274,6 +297,7 @@ def build_identity_index(
     """Build the exact released-catalog + manifest-owned corpus index."""
     catalog_db = Path(catalog_db).resolve()
     products_dir = Path(products_dir).resolve()
+    source_revision = identity_source_revision(catalog_db, products_dir)
     _verify_gtin_fixture()
     by_gtin: dict[str, dict[tuple[str, str], IdentityCandidate]] = {}
 
@@ -332,7 +356,12 @@ def build_identity_index(
     }
     if built_at is None:
         raise ValueError("identity index has no source timestamp")
-    return IdentityIndex(built_at=built_at, matches=frozen)
+    if identity_source_revision(catalog_db, products_dir) != source_revision:
+        raise ValueError("identity sources changed during indexing; retry the check")
+    return IdentityIndex(
+        built_at=built_at, matches=frozen, catalog_db=catalog_db,
+        products_dir=products_dir, source_revision=source_revision,
+    )
 
 
 def edge_function_url(supabase_url: str) -> str:
@@ -381,6 +410,7 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
     anon_key = ""
     catalog_db = Path("scripts/dist/pharmaguide_core.db")
     identity_index: IdentityIndex | None = None
+    _identity_index_lock = Lock()
     dsld_import_dir = Path(
         "~/Downloads/PharmaGuide_Datasets/staging/brands/User_Submissions"
     ).expanduser()
@@ -396,10 +426,24 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
     def _json(self, payload: object, status: int = 200) -> None:
         body = json.dumps(payload).encode()
         self.send_response(status)
+        self.send_header("cache-control", "no-store")
         self.send_header("content-type", "application/json; charset=utf-8")
         self.send_header("content-length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
+    def _current_identity_index(self) -> IdentityIndex:
+        with self._identity_index_lock:
+            index = self.identity_index
+            if index is None:
+                raise ValueError("identity index unavailable")
+            current_revision = identity_source_revision(
+                index.catalog_db, index.products_dir
+            )
+            if current_revision != index.source_revision:
+                index = build_identity_index(index.catalog_db, index.products_dir)
+                type(self).identity_index = index
+            return index
 
     def do_GET(self):  # noqa: N802 (stdlib naming)
         if self.path == "/api/config":
@@ -430,18 +474,21 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
             if len(gtin14) != 14 or not _is_valid_gtin(gtin14):
                 self._json({"error": "exact canonical GTIN-14 required"}, 400)
                 return
-            if self.identity_index is None:
+            try:
+                index = self._current_identity_index()
+            except (OSError, sqlite3.Error, ValueError):
                 self._json({"error": "identity index unavailable"}, 503)
                 return
             self._json({
                 "canonical_gtin14": gtin14,
-                "index_built_at": self.identity_index.built_at.isoformat(),
+                "index_built_at": index.built_at.isoformat(),
+                "index_revision": index.source_revision,
                 "freshness": identity_index_freshness(
-                    self.identity_index.built_at
+                    index.built_at
                 ),
                 "matches": [
                     asdict(candidate)
-                    for candidate in self.identity_index.lookup(gtin14)
+                    for candidate in index.lookup(gtin14)
                 ],
             })
             return

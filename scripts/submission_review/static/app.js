@@ -314,9 +314,42 @@ async function checkIdentity() {
   }
 }
 
-async function recordMatch(outcome, options = {}) {
+async function requireCurrentIdentity() {
   const lookup = state.identityLookup;
   if (!lookup) throw new Error('Run the identity check first.');
+  const submissionId = state.selected?.id;
+  let current = null;
+  try {
+    const response = await fetch(
+      `/api/identity_lookup?gtin14=${encodeURIComponent(lookup.canonical_gtin14)}`,
+      { cache: 'no-store' },
+    );
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error ?? 'Identity check unavailable.');
+    if (state.selected?.id !== submissionId) {
+      throw new Error('The selected submission changed. Run its identity check.');
+    }
+    current = payload;
+    if (
+      !lookup.index_revision || current.index_revision !== lookup.index_revision ||
+      current.canonical_gtin14 !== canonicalSubmissionGtin14() ||
+      current.freshness === 'blocked'
+    ) {
+      throw new Error('Identity sources changed or expired. Review the current matches and record a new check.');
+    }
+    return current;
+  } catch (error) {
+    if (state.selected?.id === submissionId) {
+      state.identityLookup = current;
+      state.identityRecorded = null;
+      renderIdentityCheck();
+    }
+    throw error;
+  }
+}
+
+async function recordMatch(outcome, options = {}) {
+  const lookup = await requireCurrentIdentity();
   const result = await edge({
     action: 'record_match',
     submission_id: state.selected.id,
@@ -970,7 +1003,7 @@ async function transition(fields) {
   }
 }
 
-function approve() {
+async function approve() {
   if (
     state.selected?.kind === 'missing_product' &&
     state.identityRecorded !== 'no_match_verified'
@@ -979,6 +1012,13 @@ function approve() {
   }
   if (state.selected?.kind === 'missing_product' && !state.productImage) {
     return setStatus('Choose exactly one catalog product picture first.', true);
+  }
+  if (state.selected?.kind === 'missing_product') {
+    try {
+      await requireCurrentIdentity();
+    } catch (error) {
+      return setStatus(String(error.message ?? error), true);
+    }
   }
   syncScalarFields();
   const fields = {
