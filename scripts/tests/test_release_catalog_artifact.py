@@ -20,6 +20,8 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import release_catalog_artifact as rca  # noqa: E402
+import audit_identity_integrity as identity_audit
+from dataclasses import replace
 
 
 # ---------------------------------------------------------------------------
@@ -284,6 +286,148 @@ def test_validate_accepts_proven_contract_quarantine(good_release_dir: Path) -> 
     )
 
     assert result["contract_quarantine_count"] == 1
+
+
+def _identity_quarantine(input_dir: Path, product_id: str = "HELD"):
+    record = identity_audit.DispositionRecord(
+        product_id=product_id, route="generic", source_path="ingredientRows[0]",
+        label_display_name="Nickel", label_display_form=None,
+        supplied_canonical=None, final_canonical=None,
+        disposition="identity_conflict", scoreable_identity=False,
+        rationale="Primary identity is unresolved.",
+        violation="unresolved_identity_conflict",
+    )
+    issue = "review_queue: identity integrity ingredientRows[0]:unresolved_identity_conflict"
+    manifest_path = input_dir / "export_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["integrity"].update(contract_quarantine_count=1, excluded_by_gate_count=1)
+    manifest["excluded_by_gate"] = [{"dsld_id": product_id, "error": issue}]
+    manifest_path.write_text(json.dumps(manifest))
+    (input_dir / "export_audit_report.json").write_text(json.dumps({
+        "counts": {"export_contract_invalid": 0, "export_contract_quarantined": 1},
+        "contract_failures": [],
+        "contract_quarantines": [{"dsld_id": product_id, "issues": [issue]}],
+    }))
+    return record
+
+
+def test_identity_gate_accepts_only_proven_export_quarantine(good_release_dir):
+    record = _identity_quarantine(good_release_dir)
+    assert record.failed  # The source defect remains a defect.
+    assert identity_audit.uncontained_failures([record], good_release_dir) == []
+
+
+@pytest.mark.parametrize("surface", ["catalog", "index", "blob"])
+def test_identity_quarantine_cannot_leak_to_any_catalog_surface(good_release_dir, surface):
+    record = _identity_quarantine(good_release_dir, "ID00001" if surface == "catalog" else "HELD")
+    if surface == "index":
+        (good_release_dir / "detail_index.json").write_text('{"products":{"HELD":{}}}')
+    if surface == "blob":
+        (good_release_dir / "detail_blobs" / "HELD.json").write_text('{}')
+    with pytest.raises(rca.ReleaseValidationError):
+        identity_audit.uncontained_failures([record], good_release_dir)
+
+
+@pytest.mark.parametrize("change", ["wrong_id", "unrelated_reason", "scoreable", "missing_stamp"])
+def test_identity_gate_does_not_amnesty_unproven_or_malformed_rows(good_release_dir, change):
+    record = _identity_quarantine(good_release_dir)
+    if change == "wrong_id":
+        record = replace(record, product_id="NOT-IN-LEDGER")
+    elif change == "unrelated_reason":
+        audit_path = good_release_dir / "export_audit_report.json"
+        audit = json.loads(audit_path.read_text())
+        audit["contract_quarantines"][0]["issues"] = ["review_queue: unrelated dose hold"]
+        audit_path.write_text(json.dumps(audit))
+    elif change == "scoreable":
+        record = replace(record, scoreable_identity=True)
+    else:
+        record = replace(record, disposition=None, violation="missing_or_invalid_disposition:None")
+    assert identity_audit.uncontained_failures([record], good_release_dir) == [record]
+
+
+@pytest.mark.parametrize("defect", ["missing_audit", "bad_checksum", "wrong_count"])
+def test_identity_gate_requires_the_existing_release_validation(good_release_dir, defect):
+    record = _identity_quarantine(good_release_dir)
+    if defect == "missing_audit":
+        (good_release_dir / "export_audit_report.json").unlink()
+    else:
+        path = good_release_dir / "export_manifest.json"
+        manifest = json.loads(path.read_text())
+        if defect == "bad_checksum":
+            manifest["checksum"] = "sha256:" + "0" * 64
+        else:
+            manifest["integrity"]["contract_quarantine_count"] = 2
+        path.write_text(json.dumps(manifest))
+    with pytest.raises(rca.ReleaseValidationError):
+        identity_audit.uncontained_failures([record], good_release_dir)
+
+
+@pytest.mark.parametrize("status,verdict", [("not_scored", "NOT_SCORED"), ("suppressed_safety", "BLOCKED")])
+def test_scoring_gate_accepts_identity_failure_only_after_export_quarantine(good_release_dir, status, verdict):
+    from audit_source_of_truth_contract import audit_scoring
+    from test_scoring_source_of_truth_audit import _args, _scored, _write
+
+    _identity_quarantine(good_release_dir)
+    product = _scored(dsld_id="HELD", quality_score_status=status, verdict=verdict,
+                      quality_score_v4_100=None, score_100_equivalent=None,
+                      strict_scoring_contract={"passed": False, "findings": ["identity_disposition_not_scoreable:identity_conflict"]})
+    product["assessment_readiness"]["dose"]["readiness"] = "incomplete"
+    path = good_release_dir.parent / "scored.json"
+    _write(path, product)
+    args = _args(path)
+    assert audit_scoring(args)  # Without actual export proof the gate is strict.
+    args.dist_dir = str(good_release_dir)
+    assert audit_scoring(args) == []
+
+
+@pytest.mark.parametrize("defect", [
+    "missing_receipt", "numeric_score", "missing_contract", "forbidden_fallback",
+    "unrelated_strict_failure", "mixed_strict_failures", "empty_strict_findings",
+    "malformed_strict_findings", "missing_strict_passed", "malformed_strict_passed",
+    "shadow_suppressed_dose", "missing_suppressed_dose", "legacy_suppressed_dose",
+])
+def test_scoring_quarantine_keeps_uncontained_or_structural_failures(good_release_dir, defect):
+    from audit_source_of_truth_contract import audit_scoring
+    from test_scoring_source_of_truth_audit import _args, _scored, _write
+
+    _identity_quarantine(good_release_dir)
+    product = _scored(dsld_id="HELD", quality_score_status="not_scored", verdict="NOT_SCORED",
+                      quality_score_v4_100=None, score_100_equivalent=None,
+                      strict_scoring_contract={"passed": False, "findings": ["identity_disposition_not_scoreable:identity_conflict"]})
+    if defect == "missing_receipt":
+        product["dsld_id"] = "UNPROVEN"
+    elif defect == "numeric_score":
+        product["quality_score_v4_100"] = 50
+    elif defect == "missing_contract":
+        product.pop("strict_scoring_contract")
+    elif defect == "unrelated_strict_failure":
+        product["strict_scoring_contract"]["findings"] = ["missing_required_fields:dose_class"]
+    elif defect == "mixed_strict_failures":
+        product["strict_scoring_contract"]["findings"].append("malformed_product_scoring_evidence:0:dose_class")
+    elif defect == "empty_strict_findings":
+        product["strict_scoring_contract"]["findings"] = []
+    elif defect == "malformed_strict_findings":
+        product["strict_scoring_contract"]["findings"] = "identity_disposition_not_scoreable:identity_conflict"
+    elif defect == "missing_strict_passed":
+        product["strict_scoring_contract"].pop("passed")
+    elif defect == "malformed_strict_passed":
+        product["strict_scoring_contract"]["passed"] = "false"
+    elif defect.endswith("suppressed_dose"):
+        product.update(quality_score_status="suppressed_safety", verdict="BLOCKED")
+        product["assessment_readiness"]["dose"]["readiness"] = "incomplete"
+        if defect == "shadow_suppressed_dose":
+            product["assessment_readiness"]["enforcement_mode"] = "shadow"
+        elif defect == "missing_suppressed_dose":
+            product["assessment_readiness"].pop("dose")
+        else:
+            product["assessment_readiness"]["dose"]["migration_inference"] = True
+    else:
+        product["iqd_contract_diagnostics"]["iqd_ingredients_fallback_used"] = True
+    path = good_release_dir.parent / "scored.json"
+    _write(path, product)
+    args = _args(path)
+    args.dist_dir = str(good_release_dir)
+    assert audit_scoring(args)
 
 
 def test_validate_rejects_quarantine_that_is_present_in_catalog(

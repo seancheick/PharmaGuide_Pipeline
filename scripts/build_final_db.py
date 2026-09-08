@@ -3399,6 +3399,16 @@ def _classify_export_error(msg: str) -> str:
     return "error"
 
 
+def _classify_export_contract_issues(issues: List[str]) -> str:
+    """A quarantine reason cannot amnesty a separate schema failure."""
+    buckets = {_classify_export_error(issue) for issue in issues}
+    if "error" in buckets or not buckets:
+        return "error"
+    if "excluded_by_gate" in buckets:
+        return "excluded_by_gate"
+    return "warning"
+
+
 def _validate_active_count_reconciliation(
     blob: Dict[str, Any], raw_actives_count: int, dsld_id: str
 ) -> None:
@@ -10382,7 +10392,7 @@ def update_audit_state(
     )
     if issues:
         entry = {"dsld_id": pid, "issues": issues[:5]}
-        if _classify_export_error("; ".join(issues)) == "excluded_by_gate":
+        if _classify_export_contract_issues(issues) == "excluded_by_gate":
             counts["export_contract_quarantined"] += 1
             contract_quarantine_count += 1
             contract_quarantines.append(entry)
@@ -10621,30 +10631,10 @@ def build_final_db(
 
             blob_path = os.path.join(detail_dir, f"{pid}.json")
             tmp_blob_path = f"{blob_path}.tmp"
+            contract_error_bucket = None
             try:
-                blob = (
-                    build_detail_blob(enriched, scored)
-                    if export_schema_version == EXPORT_SCHEMA_VERSION
-                    else build_detail_blob(
-                        enriched,
-                        scored,
-                        export_schema_version=export_schema_version,
-                    )
-                )
-                effective_scored = project_export_scored_artifact(
-                    enriched, scored, blob
-                )
-                if effective_scored != scored:
-                    scored = effective_scored
-                    blob = (
-                        build_detail_blob(enriched, scored)
-                        if export_schema_version == EXPORT_SCHEMA_VERSION
-                        else build_detail_blob(
-                            enriched,
-                            scored,
-                            export_schema_version=export_schema_version,
-                        )
-                    )
+                # Quarantine is decided from the source contract, before
+                # constructing a consumer blob that requires resolved rows.
                 contract_issues = validate_export_contract(enriched, scored)
                 (
                     products_with_warnings_count,
@@ -10664,7 +10654,19 @@ def build_final_db(
                     contract_issues=contract_issues,
                 )
                 if contract_issues:
+                    contract_error_bucket = _classify_export_contract_issues(contract_issues)
                     raise ValueError("; ".join(contract_issues[:10]))
+                blob = (
+                    build_detail_blob(enriched, scored)
+                    if export_schema_version == EXPORT_SCHEMA_VERSION
+                    else build_detail_blob(
+                        enriched,
+                        scored,
+                        export_schema_version=export_schema_version,
+                    )
+                )
+                # This asserts safety parity; it never rewrites Stage 3.
+                project_export_scored_artifact(enriched, scored, blob)
                 blob_json = json.dumps(blob, ensure_ascii=False, separators=(",", ":"))
                 blob_sha256 = hashlib.sha256(blob_json.encode("utf-8")).hexdigest()
                 full_row = build_core_row(
@@ -10716,7 +10718,7 @@ def build_final_db(
                     os.remove(blob_path)
                 c.execute("DELETE FROM products_core WHERE dsld_id = ?", (str(pid),))
                 msg = str(e)
-                bucket = _classify_export_error(msg)
+                bucket = contract_error_bucket or _classify_export_error(msg)
                 entry = {"dsld_id": str(pid), "error": msg}
                 if bucket == "excluded_by_gate":
                     # By-design coverage gate (E1.2.5). Product correctly

@@ -342,12 +342,6 @@ else
   skip "Product submissions: no approved labels to process"
 fi
 
-# This verifies the already-produced enrichment output before any freshness
-# shortcut can reuse it. A catalog rebuild cannot repair stale enrichment, so
-# fail with the actionable upstream requirement instead of restaging old data.
-run_strict_gate "active identity integrity" \
-  "$PG_PYTHON" "$IDENTITY_AUDIT_SCRIPT" --products-dir "$PRODUCTS_DIR"
-
 # ---------------------------------------------------------------------------
 # Step 1: Assemble final DB from per-brand outputs
 #
@@ -475,6 +469,12 @@ if step2_needs_run; then
 else
   skip "Step 2/8: dist/ catalog already current — skipping stage"
 fi
+
+# Run even when assembly/staging was skipped. Unresolved identities must have
+# a verified quarantine receipt and be absent from the actual outgoing catalog.
+run_strict_gate "active identity integrity" \
+  "$PG_PYTHON" "$IDENTITY_AUDIT_SCRIPT" \
+    --products-dir "$PRODUCTS_DIR" --export-dir "$DIST_DIR"
 
 # Gate B inspects the emitted blob contract after the candidate has been
 # promoted to dist and before any publication step can run.

@@ -474,7 +474,33 @@ def validate_release_candidate(
         "product_count": product_count,
         "integrity": integrity,
         "contract_quarantine_count": quarantine_count,
+        "contract_quarantines": contract_quarantines,
     }
+
+
+def verified_contract_quarantines(input_dir: Path) -> dict[str, tuple[str, ...]]:
+    """Return receipts only after proving the exported quarantine is contained.
+
+    Source audits reuse the same catalog validator as release staging. Local
+    unindexed blobs are checked too: they must not resurrect an excluded ID.
+    The staging owner independently enforces the catalog-size release floor.
+    """
+    result = validate_release_candidate(input_dir=input_dir, min_products=1)
+    receipts = {}
+    for entry in result["contract_quarantines"]:
+        pid = str(entry["dsld_id"])
+        issues = entry.get("issues")
+        _require(
+            isinstance(issues, list) and bool(issues)
+            and all(isinstance(issue, str) and issue.strip() for issue in issues),
+            f"Contract quarantine {pid} has no valid issue receipt.",
+        )
+        _require(
+            not (input_dir / "detail_blobs" / f"{pid}.json").exists(),
+            f"A contract-quarantined product still has a detail blob: {pid}",
+        )
+        receipts[pid] = tuple(issues)
+    return receipts
 
 
 # ---------------------------------------------------------------------------

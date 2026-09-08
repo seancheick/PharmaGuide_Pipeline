@@ -87,7 +87,9 @@ def test_identity_contract_gate_runs_even_when_catalog_is_fresh():
     identity_gate = source.index('run_strict_gate "active identity integrity"')
     freshness_branch = source.index('if step1_needs_run; then')
 
-    assert identity_gate < freshness_branch
+    publication = source.index("# Step 3: Extract/backfill DSLD product images")
+    assert freshness_branch < identity_gate < publication
+    assert '--export-dir "$DIST_DIR"' in source[identity_gate:publication]
     for path in (
         "scripts/audit_identity_integrity.py",
         "scripts/identity_integrity.py",

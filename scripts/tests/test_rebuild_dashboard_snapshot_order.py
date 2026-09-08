@@ -26,11 +26,21 @@ def test_source_gates_run_before_catalog_build() -> None:
         'run_strict_gate "cleaner/IQD row contract"',
         'run_strict_gate "enrichment/IQD source-of-truth contract"',
         'run_strict_gate "clinical drift contract"',
-        'run_strict_gate "active identity integrity"',
         'run_strict_gate "RDA/UL emitted-reference stamp parity"',
-        'run_strict_gate "scoring assessment readiness"',
     ):
         assert source.index(label) < build
+
+
+def test_identity_gate_proves_candidate_exclusion_before_promotion() -> None:
+    source = SCRIPT.read_text()
+    build = source.index('"$PG_PYTHON" scripts/build_final_db.py')
+    identity = source.index('run_strict_gate "active identity integrity"')
+    promotion = source.index('"$PG_PYTHON" scripts/promote_release_artifacts.py')
+    assert build < identity < promotion
+    assert '--export-dir "$FINAL_CANDIDATE"' in source[identity:promotion]
+    scoring = source.index('run_strict_gate "scoring assessment readiness"')
+    assert build < scoring < promotion
+    assert '--dist-dir "$FINAL_CANDIDATE"' in source[scoring:promotion]
 
 
 def test_candidate_only_mode_preserves_gated_artifacts_without_live_promotion() -> None:
@@ -59,3 +69,8 @@ def test_snapshot_build_uses_strict_export_error_gate() -> None:
     build_end = source.index('run_strict_gate "detail-blob field completeness"')
 
     assert "--strict" in source[build_start:build_end]
+
+
+def test_snapshot_does_not_discard_product_failure_diagnostics() -> None:
+    source = SCRIPT.read_text()
+    assert "| tail" not in source

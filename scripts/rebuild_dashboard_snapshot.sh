@@ -9,7 +9,7 @@
 #
 # This script rebuilds it in one step:
 #   1. Discovers every scripts/products/*_enriched/enriched and *_scored/scored pair.
-#   2. Runs every source gate before catalog assembly.
+#   2. Runs source gates before assembly; identity containment needs a candidate.
 #   3. Builds and stages sibling candidate directories without touching live data.
 #   4. Runs every artifact gate against those candidates.
 #   5. Promotes both candidates together with rollback on any rename failure.
@@ -19,7 +19,7 @@
 #     bash scripts/rebuild_dashboard_snapshot.sh \
 #       --candidate-only --candidate-root /absolute/path/to/candidate
 #
-# Runtime: ~1 minute on current 20-brand catalog.
+# Runtime depends on catalog size and the full set of release gates.
 
 set -euo pipefail
 
@@ -146,12 +146,8 @@ run_strict_gate "enrichment/IQD source-of-truth contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" enrichment --products-dir scripts/products --strict-release
 run_strict_gate "clinical drift contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" clinical --products-dir scripts/products --strict-release
-run_strict_gate "active identity integrity" \
-  "$PG_PYTHON" scripts/audit_identity_integrity.py --products-dir scripts/products
 run_strict_gate "RDA/UL emitted-reference stamp parity" \
   "$PG_PYTHON" scripts/audit_rda_ul_reference_stamps.py --products-dir scripts/products
-run_strict_gate "scoring assessment readiness" \
-  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring --products-dir scripts/products --strict-release
 run_strict_gate "scoring snapshot contract" \
   bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
 
@@ -194,8 +190,16 @@ echo "◦ Building from ${#ENR[@]} enriched dirs + ${#SCR[@]} scored dirs..."
   --enriched-dir "${ENR[@]}" \
   --scored-dir "${SCR[@]}" \
   --output-dir "$FINAL_CANDIDATE" \
-  --strict \
-  2>&1 | tail -5
+  --strict
+
+# The builder quarantines unresolved identities. Prove their actual exclusion
+# before promotion; a pre-build all-source gate prevents quarantine itself.
+run_strict_gate "active identity integrity" \
+  "$PG_PYTHON" scripts/audit_identity_integrity.py \
+    --products-dir scripts/products --export-dir "$FINAL_CANDIDATE"
+run_strict_gate "scoring assessment readiness" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring \
+    --products-dir scripts/products --dist-dir "$FINAL_CANDIDATE" --strict-release
 
 run_strict_gate "detail-blob field completeness" \
   "$PG_PYTHON" scripts/audit_contract_sync.py \
@@ -215,8 +219,7 @@ run_strict_gate "detail-blob field completeness" \
 "$PG_PYTHON" scripts/release_catalog_artifact.py \
   --input-dir "$FINAL_CANDIDATE" \
   --output-dir "$DIST_CANDIDATE" \
-  --preserve-assets-from scripts/dist \
-  2>&1 | tail -5
+  --preserve-assets-from scripts/dist
 
 # 4. Gate both candidates completely before the promotion step below.
 run_strict_gate "form-note export artifact" \

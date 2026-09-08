@@ -3687,7 +3687,7 @@ def _artifact_from_canned(dsld_id: str, v4_result: dict) -> dict:
 
 
 def _run_build(
-    tmp, enriched_list, scored_list, *, export_schema_version="2.4.0"
+    tmp, enriched_list, scored_list, *, export_schema_version="2.4.0", strict=False
 ):
     root = Path(tmp)
     enriched_dir = root / "enriched"; enriched_dir.mkdir()
@@ -3701,8 +3701,51 @@ def _run_build(
         str(output_dir),
         str(Path(__file__).parent.parent),
         export_schema_version=export_schema_version,
+        strict=strict,
     )
     return result, output_dir
+
+
+def test_not_scored_is_quarantined_before_consumer_blob_validation(tmp_path, monkeypatch):
+    scored = _artifact_from_canned(
+        "999", _canned_v4(status="not_scored", quality_100=None, verdict="NOT_SCORED")
+    )
+
+    def unresolved_blob(*args, **kwargs):
+        raise ValueError("[999] row_ledger UNRESOLVED_SCORE_ACTIVE")
+
+    # Consumer records require resolved actives; excluded QA records must never
+    # be assembled as consumer records in the first place.
+    monkeypatch.setattr("build_final_db.build_detail_blob", unresolved_blob)
+    result, out = _run_build(tmp_path, [make_enriched()], [scored], strict=True)
+    assert result["product_count"] == 0
+    assert result["error_count"] == 0
+    audit = json.loads((out / "export_audit_report.json").read_text())
+    assert [r["dsld_id"] for r in audit["contract_quarantines"]] == ["999"]
+    assert not audit["contract_failures"]
+    assert not list((out / "detail_blobs").glob("*.json"))
+    assert not json.loads((out / "detail_index.json").read_text())
+
+
+def test_quarantine_reason_cannot_hide_an_unrelated_missing_required_field(tmp_path):
+    scored = _artifact_from_canned(
+        "999", _canned_v4(status="not_scored", quality_100=None, verdict="NOT_SCORED")
+    )
+    enriched = make_enriched()
+    del enriched["product_name"]
+    with pytest.raises(ValueError, match="1 product export error"):
+        _run_build(tmp_path, [enriched], [scored], strict=True)
+
+
+def test_contract_audit_counts_mixed_quarantine_and_schema_failure_as_failure():
+    from build_final_db import init_audit_counts, update_audit_state
+
+    counts, quarantines, failures = init_audit_counts(), [], []
+    update_audit_state(counts, [], quarantines, failures, 0, 0, 0,
+                       "999", make_enriched(), make_scored(),
+                       contract_issues=["review_queue: NOT_SCORED", "missing enriched.product_name"])
+    assert not quarantines
+    assert len(failures) == 1
 
 
 def _core_rows(output_dir, cols):

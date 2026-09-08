@@ -28,6 +28,7 @@ from assessment_readiness import (
 
 from stage_manifest import select_stage_files
 from pipeline_freshness import enrichment_reference_freshness_issues
+from release_catalog_artifact import ReleaseValidationError, verified_contract_quarantines
 from supplement_taxonomy import (
     CLASSIFICATION_CONTRACT_VERSION,
     INPUT_CONTRACT_IQD_ALL_ROWS,
@@ -712,6 +713,13 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
     if not files:
         return [Finding("SCORING_NO_INPUT", "no scored product files found for scoring contract audit")]
 
+    quarantines = {}
+    if getattr(args, "dist_dir", None):
+        try:
+            quarantines = verified_contract_quarantines(repo_path(args.dist_dir))
+        except (ReleaseValidationError, OSError, ValueError) as exc:
+            return [Finding("SCORING_QUARANTINE_PROOF_INVALID", str(exc), str(args.dist_dir))]
+
     allowed_sources = {
         "ingredient_quality_data.ingredients_scorable",
         "ingredient_quality_data.ingredients_scorable+product_scoring_evidence",
@@ -724,6 +732,8 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
             continue
         for product in products:
             pid = product_identity(product)
+            finding_start = len(findings)
+            typed_suppressed_dose_failure = False
             verdict = str(product.get("verdict") or "").upper()
             diag = _scoring_diag(product)
             source = (
@@ -902,12 +912,44 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                         not in {"complete", "not_applicable"}
                         or dose_readiness.get("migration_inference") is True
                     ):
+                        typed_suppressed_dose_failure = (
+                            readiness.get("enforcement_mode") == "enforced"
+                            and dose_readiness.get("readiness") == "incomplete"
+                            and dose_readiness.get("migration_inference") is not True
+                        )
                         findings.append(Finding(
                             "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE",
                             f"{pid}: safety-suppressed product has unresolved or "
                             "legacy-inferred material dose assessment",
                             str(file_path),
                         ))
+            # Identity rejection remains visible in the stage artifact. Only
+            # its expected downstream failures can be contained, and only by
+            # the actual export ledger plus absence proof—not by status alone.
+            identity_contained = (
+                quality_status in {"not_scored", "suppressed_safety"}
+                and product.get("quality_score_v4_100") is None
+                and product.get("score_100_equivalent") is None
+                and any(issue.startswith("review_queue: identity integrity ")
+                        for issue in quarantines.get(pid, ()))
+            )
+            if identity_contained:
+                contained_codes = set()
+                if typed_suppressed_dose_failure:
+                    contained_codes.add("SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE")
+                strict_reasons = strict_contract.get("findings")
+                if (
+                    strict_contract.get("passed") is False
+                    and isinstance(strict_reasons, list)
+                    and bool(strict_reasons)
+                    and all(reason == "identity_disposition_not_scoreable:identity_conflict"
+                            for reason in strict_reasons)
+                ):
+                    contained_codes.add("SCORING_STRICT_CONTRACT_FAILED")
+                findings[finding_start:] = [
+                    finding for finding in findings[finding_start:]
+                    if finding.code not in contained_codes
+                ]
     return findings
 
 

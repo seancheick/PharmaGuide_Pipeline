@@ -18,6 +18,11 @@ Rows explicitly excluded by the cleaner remain visible as ``source_excluded``
 records and require a reason, but they do not need a scoring/IQD identity row.
 Disposition vocabulary and scoreability otherwise come from
 ``identity_integrity``; the route inventory comes from the v4 router.
+
+With ``--export-dir``, an unresolved non-scoreable identity may be contained by
+the candidate's verified export quarantine. The source finding is preserved;
+the product must be absent from SQLite, the detail index, and local blobs.
+All other identity-contract failures still block the release.
 """
 
 from __future__ import annotations
@@ -31,6 +36,7 @@ from typing import Any, Callable, Iterator, Optional
 
 from enrichment_contract_validator import EnrichmentContractValidator
 from identity_integrity import IDENTITY_DISPOSITIONS, normalize_label_display
+from release_catalog_artifact import ReleaseValidationError, verified_contract_quarantines
 from scoring_v4.router import VALID_CLASSES, class_for_product
 from stage_manifest import select_stage_files
 
@@ -322,15 +328,62 @@ def _format_summary(records: list[DispositionRecord]) -> str:
     return "\n".join(lines)
 
 
+def uncontained_failures(
+    records: list[DispositionRecord], export_dir: Path,
+) -> list[DispositionRecord]:
+    """Prove containment using the existing export contract, never a score flag.
+
+    The common release validator owns manifest/checksum/count reconciliation
+    and quarantine absence from SQLite and detail_index. This adapter only
+    joins the independently audited identity findings to that proven ledger.
+    It does not alter source dispositions or decide catalog eligibility.
+    """
+    receipts = verified_contract_quarantines(export_dir)
+    identity_quarantines = {
+        pid for pid, issues in receipts.items()
+        if any(
+            issue.startswith("review_queue: identity integrity ")
+            for issue in issues
+        )
+    }
+    failures = []
+    for record in records:
+        if not record.failed:
+            continue
+        contained = (
+            record.violation == "unresolved_identity_conflict"
+            and not record.scoreable_identity
+            and record.product_id in identity_quarantines
+        )
+        if not contained:
+            failures.append(record)
+    return failures
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--products-dir", default=DEFAULT_PRODUCTS_DIR)
+    parser.add_argument(
+        "--export-dir", type=Path,
+        help="Built candidate whose verified quarantine may contain unresolved identities.",
+    )
     args = parser.parse_args()
 
     records = audit_enriched_outputs(products_dir=Path(args.products_dir))
     print(_format_summary(records))
 
     failures = [r for r in records if r.failed]
+    if args.export_dir is not None:
+        try:
+            failures = uncontained_failures(records, args.export_dir)
+        except (ReleaseValidationError, OSError, ValueError) as exc:
+            print(f"identity integrity gate FAILED: {exc}")
+            return 1
+        contained = [r for r in records if r.failed and r not in failures]
+        print(
+            f"verified identity quarantine: {len(contained)} row(s) in "
+            f"{len({r.product_id for r in contained})} excluded product(s)"
+        )
     if failures:
         failures.sort(key=lambda r: (r.source_path, r.product_id, r.violation or ""))
         print(f"\nidentity integrity gate FAILED: {len(failures)} active row(s) unresolved:")
