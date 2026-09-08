@@ -71,6 +71,29 @@ def test_failed_conversion_never_substitutes_raw_value(enricher) -> None:
     assert assessment["readiness"] == "incomplete"
 
 
+@pytest.mark.parametrize("unit,readiness,conversion", [
+    ("mg RAE", "incomplete", "failed"),
+    ("mcg RAE", "not_applicable", "converted"),
+])
+def test_no_ul_does_not_excuse_failed_vitamin_a_conversion(
+    enricher, unit, readiness, conversion,
+) -> None:
+    # DSLD 223563/223572 declares 900 mg RAE as beta-carotene. Preserve that
+    # source quantity; absence of a beta-carotene UL cannot validate its unit.
+    row = _row("Vitamin A", "vitamin_a", 900, unit, daily_value=60)
+    row["forms"] = [{"name": "Beta-Carotene"}]
+    result = _collect(enricher, row)
+    assessment = result["dose_assessments"][0]
+    assert assessment["source_value"] == 900
+    assert assessment["source_unit"] == unit
+    assert assessment["ul_assessment_status"] == "no_ul_applicable"
+    assert assessment["conversion_status"] == conversion
+    assert assessment["readiness"] == readiness
+    if conversion == "failed":
+        assert assessment["normalized_value"] is None
+        assert assessment["reason_code"] == "conversion_failed"
+
+
 def test_transglucosidase_tg_is_typed_non_ul_activity_not_conversion_failure(
     enricher,
 ) -> None:

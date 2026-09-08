@@ -188,6 +188,18 @@ def build_dose_assessment(
         ):
             assessment_status = NO_UL_APPLICABLE
             readiness = READINESS_NOT_APPLICABLE
+            # A failed nutrient conversion stays unresolved even without a UL.
+            # Native activity/count units with no nutrient rule need no such
+            # conversion (for example enzyme TG and probiotic organisms).
+            if (
+                material
+                and evidence.get("success") is False
+                and evidence.get("conversion_rule_id")
+                and not evidence.get("nonfatal_reason")
+            ):
+                conversion_status = CONVERSION_FAILED
+                readiness = READINESS_INCOMPLETE
+                reason = "conversion_failed"
         elif reason in _UNRESOLVED_FORM_REASONS:
             assessment_status = UNRESOLVED_FORM
             readiness = READINESS_INCOMPLETE

@@ -131,6 +131,31 @@ def test_positive_human_evidence_marks_material_active_supported() -> None:
     assert result["is_live_ready"] is True
 
 
+@pytest.mark.parametrize("typed_readiness", ["incomplete", "not_applicable"])
+def test_failed_dose_conversion_cannot_hide_as_evidence_adjunct(typed_readiness) -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    primary = _row("Calcium", "calcium", quantity=500)
+    unconverted = _row("Vitamin A", "vitamin_a", quantity=900, unit="mg RAE")
+    unconverted.update(raw_source_path="ingredientRows[1]", source_row_ref="ingredientRows[1]")
+    product = _product(primary, title="Calcium Formula")
+    product["ingredient_quality_data"].update(
+        ingredients=[primary, unconverted], ingredients_scorable=[primary, unconverted], total_active=2,
+    )
+    product["rda_ul_data"]["dose_assessments"].append({
+        "source_row_ref": "ingredientRows[1]", "canonical_id": "vitamin_a",
+        "material": True, "source_value": 900, "source_unit": "mg RAE",
+        "normalized_value": None, "conversion_status": "failed",
+        "ul_assessment_status": "no_ul_applicable", "readiness": typed_readiness,
+    })
+    result = evaluate_assessment_readiness(product, module="generic")
+    assert result["dose"]["readiness"] == "incomplete"
+    assert result["dose"]["incomplete_source_row_refs"] == ["ingredientRows[1]"]
+    assert result["is_live_ready"] is False
+    assert build_scored_artifact(product)["quality_score_status"] == "not_scored"
+
+
 def test_sports_readiness_requires_a_sports_relevant_identity() -> None:
     """Mapped minerals must not make a sports-routed product identity-ready."""
     from assessment_readiness import evaluate_assessment_readiness

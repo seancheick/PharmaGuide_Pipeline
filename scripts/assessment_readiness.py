@@ -13,6 +13,7 @@ import math
 import re
 from typing import Any, Dict, Iterable, List, Mapping
 
+from dose_assessment import CONVERSION_FAILED, NOT_DISTINCT_EXPOSURE
 from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu
 from scoring_input_contract import (
     ROLE_ADJUNCT,
@@ -902,15 +903,36 @@ def _dose_readiness(
         if isinstance(row, Mapping) and row.get("material") is True
     ]
     material_count = len(material_rows)
+    rda_ul = _safe_dict(product.get("rda_ul_data"))
+    assessments = _safe_list(rda_ul.get("dose_assessments"))
+    collection_status = str(rda_ul.get("collection_status") or "")
+    failed_conversion_refs = sorted({
+        str(assessment.get("source_path") or assessment.get("source_row_ref") or "unknown")
+        for assessment in assessments
+        if isinstance(assessment, Mapping)
+        and assessment.get("material") is True
+        and assessment.get("conversion_status") == CONVERSION_FAILED
+        and assessment.get("ul_assessment_status") != NOT_DISTINCT_EXPOSURE
+    })
+    # Evidence materiality cannot waive a known dose-conversion failure: an
+    # unrecognized unit may itself have caused a row to be classified adjunct.
+    if failed_conversion_refs:
+        return {
+            "readiness": READINESS_INCOMPLETE,
+            "reason_code": "conversion_failed",
+            "collection_status": collection_status,
+            "assessment_count": len(assessments),
+            "material_active_count": material_count,
+            "assessment_source": "typed_dose_assessments",
+            "incomplete_source_row_refs": failed_conversion_refs,
+        }
     if material_count == 0:
         source_rows = _source_score_eligible_active_rows(product)
-        rda_ul = _safe_dict(product.get("rda_ul_data"))
         assessments = [
             assessment
             for assessment in _safe_list(rda_ul.get("dose_assessments"))
             if isinstance(assessment, Mapping)
         ]
-        collection_status = str(rda_ul.get("collection_status") or "")
 
         def _ready_typed_source_assessment(
             source_ref: str,
@@ -1018,10 +1040,6 @@ def _dose_readiness(
     requirements: Dict[tuple[Any, ...], Mapping[str, Any]] = {}
     for row in material_rows:
         requirements.setdefault(_requirement_key(row), row)
-
-    rda_ul = _safe_dict(product.get("rda_ul_data"))
-    assessments = _safe_list(rda_ul.get("dose_assessments"))
-    collection_status = str(rda_ul.get("collection_status") or "")
 
     def _matches(
         requirement: tuple[Any, ...],
