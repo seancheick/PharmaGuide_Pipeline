@@ -94,6 +94,27 @@ def test_no_ul_does_not_excuse_failed_vitamin_a_conversion(
         assert assessment["reason_code"] == "conversion_failed"
 
 
+@pytest.mark.parametrize("name,canonical,quantity,unit,conversion", [
+    ("Alpha-Carotene", "alpha_carotene", 1.24, "mg", "not_applicable"),
+    ("Alpha-Carotene", "alpha_carotene", 1240, "Microgram(s)", "converted"),
+    ("Beta-Cryptoxanthin", "beta_cryptoxanthin", 10, "mg", "not_applicable"),
+])
+def test_no_ul_native_carotenoid_mass_does_not_require_vitamin_a_equivalence(
+    enricher, name, canonical, quantity, unit, conversion,
+) -> None:
+    # The label mass is understood even when a retinol-equivalence conversion
+    # is unavailable. No RAE amount may be invented for that separate question.
+    assessment = _collect(enricher, _row(name, canonical, quantity, unit))["dose_assessments"][0]
+    assert assessment["ul_assessment_status"] == "no_ul_applicable"
+    assert assessment["readiness"] == "not_applicable"
+    assert assessment["conversion_status"] == conversion
+    if conversion == "not_applicable":
+        assert assessment["normalized_value"] is None
+    else:
+        # Preserve the existing explicit mcg-to-RAE rule, not a raw fallback.
+        assert assessment["normalized_value"] == pytest.approx(quantity / 24)
+
+
 def test_transglucosidase_tg_is_typed_non_ul_activity_not_conversion_failure(
     enricher,
 ) -> None:

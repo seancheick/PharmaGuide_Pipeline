@@ -13,7 +13,7 @@ import math
 import re
 from typing import Any, Dict, Iterable, List, Mapping
 
-from dose_assessment import CONVERSION_FAILED, NOT_DISTINCT_EXPOSURE
+from dose_assessment import CONVERSION_FAILED, NO_UL_APPLICABLE
 from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu
 from scoring_input_contract import (
     ROLE_ADJUNCT,
@@ -912,10 +912,11 @@ def _dose_readiness(
         if isinstance(assessment, Mapping)
         and assessment.get("material") is True
         and assessment.get("conversion_status") == CONVERSION_FAILED
-        and assessment.get("ul_assessment_status") != NOT_DISTINCT_EXPOSURE
+        and assessment.get("ul_assessment_status") == NO_UL_APPLICABLE
     })
-    # Evidence materiality cannot waive a known dose-conversion failure: an
-    # unrecognized unit may itself have caused a row to be classified adjunct.
+    # "No UL" cannot waive an unresolved nutrient-specific unit, even if the
+    # unrecognized unit caused an adjunct evidence role. Other incomplete dose
+    # representations still use the source-owned assessment matching below.
     if failed_conversion_refs:
         return {
             "readiness": READINESS_INCOMPLETE,

@@ -156,6 +156,24 @@ def test_failed_dose_conversion_cannot_hide_as_evidence_adjunct(typed_readiness)
     assert build_scored_artifact(product)["quality_score_status"] == "not_scored"
 
 
+def test_ready_same_source_dose_can_resolve_an_incomplete_alternative() -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    product = _product(_row("Calcium", "calcium", quantity=500))
+    product["rda_ul_data"]["dose_assessments"].append({
+        "source_row_ref": "ingredientRows[0]", "canonical_id": "calcium",
+        "material": True, "source_value": 50, "source_unit": "NP",
+        "normalized_value": None, "conversion_status": "failed",
+        "ul_assessment_status": "unresolved_unit", "readiness": "incomplete",
+        "reason_code": "amount_not_declared",
+    })
+    # The initial assessment proves the same row's declared mg dose. A second
+    # representation without a unit must not invalidate that owned proof.
+    result = evaluate_assessment_readiness(product, module="generic")
+    assert result["dose"]["readiness"] == "complete"
+    assert result["is_live_ready"] is True
+
+
 def test_sports_readiness_requires_a_sports_relevant_identity() -> None:
     """Mapped minerals must not make a sports-routed product identity-ready."""
     from assessment_readiness import evaluate_assessment_readiness

@@ -11,6 +11,8 @@ import math
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, Iterable, Optional
 
+from normalization import canonicalize_mass_unit
+
 
 ASSESSED_WITHIN_LIMIT = "assessed_within_limit"
 ASSESSED_OVER_LIMIT = "assessed_over_limit"
@@ -188,14 +190,16 @@ def build_dose_assessment(
         ):
             assessment_status = NO_UL_APPLICABLE
             readiness = READINESS_NOT_APPLICABLE
-            # A failed nutrient conversion stays unresolved even without a UL.
-            # Native activity/count units with no nutrient rule need no such
-            # conversion (for example enzyme TG and probiotic organisms).
+            # No UL cannot validate an unresolved nutrient-specific unit.
+            # A known native mass (e.g. alpha-carotene mg) remains usable even
+            # without retinol equivalence. Do not invent that converted value.
+            # Native activity/count units with no nutrient rule are unchanged.
             if (
                 material
                 and evidence.get("success") is False
                 and evidence.get("conversion_rule_id")
                 and not evidence.get("nonfatal_reason")
+                and canonicalize_mass_unit(source_unit) not in {"g", "mg", "mcg"}
             ):
                 conversion_status = CONVERSION_FAILED
                 readiness = READINESS_INCOMPLETE
