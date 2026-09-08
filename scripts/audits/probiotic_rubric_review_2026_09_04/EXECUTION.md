@@ -474,7 +474,12 @@ See the matching section of [CONTINUATION_RETURN_2026_09_05.md](CONTINUATION_RET
 - [x] Owner-selection rule delivered as a measured decision brief
   (`owner_rule_decision_brief_2026_09_07.json`: 359 generic-module products
   capped, 264 with an assessed nutrient ≥ 100% RDA); no rule adopted.
-- [x] Broad `scripts/test.sh fast`: 13,559 passed, 165 skipped, 0 failed.
+- [x] Broad `scripts/test.sh fast`: 13,559 passed, 165 skipped, 0 failed
+  (13,724 collected; Codex's run collected six fewer corpus-sampled
+  consumer-copy cases — a collection difference, not a failure).
+- [x] Owner-rule brief denominator clarified: 359 = generic-routed products
+  the cap actually reduces; other modules' counts are hypothetical and
+  labelled not-shipped.
 - [x] Final consolidated audit `corpus_continuation_2026_09_07_full_v8.json`
   (SHA-256 `0befc7f623c4750fb932080ed9ca05505213f4e0dbae550c306c88da75f87517`, 907.0 s, zero errors) vs v7: transitions identical (15,104 scored, 257 not scored, 54 suppressed); zero score changes, zero pillar changes, zero copy changes against the second-pass report — the unit fix and the citation refresh move no product, as expected (zinc rows are printed in mg; the cranberry entry's applicability is unchanged). The committed tree matches all 267 audited file hashes.
 - [x] Pipeline committed and pushed (`61223eba..58e4645d` plus docs); app unchanged.

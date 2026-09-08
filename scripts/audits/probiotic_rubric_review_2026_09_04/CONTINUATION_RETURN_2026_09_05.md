@@ -631,16 +631,21 @@ reviewed into the registry; that review is the human decision.
 
 Measured on the enriched corpus with the final tree
 (`reports/…/owner_rule_decision_brief_2026_09_07.json`). Among products the
-generic module scores, the no-benchmark cap reduces the dose window of 359
-products (the 342 round-3 changes plus the 19 from round 2 minus overlap,
-and the four released later). In 264 of them an assessed nutrient sits at or
+generic module scores — the only module that consumes this guard — the
+no-benchmark cap reduces the dose window of 359 products: measured directly
+on the final tree as generic-routed products whose uncapped window proxy
+exceeds the partial credit and whose mass primary has no assessment on its
+own source. That denominator is not derived from the audit change counts,
+which span every module and every cause. In 264 of them an assessed nutrient sits at or
 above 100% of its reference while a heavier row without a benchmark holds the
 mass primary: protein powders 27, flaxseed oil 19, caffeine 13, fish oil 11,
 L-tyrosine 11, CLA 10, borage oil 10, keratin 9 (all nine "Biotin 10,000 mcg"
 products: biotin at 33,333% of its AI, 25–100 mg keratin heavier), chlorophyll
 9, beetroot powder 8, … The other 95 have no strong assessed nutrient and are
-plainly primaries without a benchmark. Products other modules score
-(multi_or_prenatal 353, omega 138, sports 59 …) do not consume this guard.
+plainly primaries without a benchmark. The brief also records what
+`generic_dose` would say for products other modules score (multi_or_prenatal
+353, omega 138, sports 59 …); those modules never consult the guard, so those
+counts are hypothetical, not shipped effects, and are labelled so in the JSON.
 
 Candidate rules, each one system and testable, none adopted here:
 
@@ -669,7 +674,12 @@ decision. Vinpocetine (2.4.1) is outside this audit, as Codex noted.
   (SHA-256 `0befc7f623c4750fb932080ed9ca05505213f4e0dbae550c306c88da75f87517`, 907.0 s, zero errors), baselined on
   `…_full_v7.json` so it isolates this pass: transitions identical (15,104 scored, 257 not scored, 54 suppressed); zero score changes, zero pillar changes, zero copy changes against the second-pass report — the unit fix and the citation refresh move no product, as expected (zinc rows are printed in mg; the cranberry entry's applicability is unchanged). The committed tree matches all 267 audited file hashes.
 - Broad `scripts/test.sh fast` on the final tree: 13,559 passed, 165
-  skipped, 0 failed (248.4 s).
+  skipped, 0 failed (248.4 s); `--collect-only` lists 13,724 tests. Codex's
+  independent run collected six fewer (13,553 passed, 165 skipped): the
+  consumer-copy suite parametrises two tests over cases sampled from the
+  local scored corpus (`test_v4_pillar_consumer_copy.py::_scored_corpus`),
+  so the collected total follows the corpus visible to the checkout the
+  suite runs in — a collection difference, not a failure or a hidden test.
 - Focused: applicability/zinc/KSM-66 168 passed; registry, citation,
   applicability, cranberry, urinary, vocabulary and goal suites 978 passed.
 
