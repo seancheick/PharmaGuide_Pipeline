@@ -22273,6 +22273,21 @@ class SupplementEnricherV3:
             enriched["absorption_data"] = self._collect_absorption_data(enriched)
             enriched["formulation_data"] = self._collect_formulation_data(enriched)
 
+            # Canonical label form must exist before certification resolution.
+            # Keep the cert input label-only: passing all enriched fields could
+            # recycle generated claims as if they were printed on the label.
+            serving_data = self._collect_serving_basis_data(product)
+            enriched["serving_basis"] = serving_data["serving_basis"]
+            enriched["form_factor"] = serving_data["form_factor"]
+            enriched["form_factor_canonical"] = serving_data.get(
+                "form_factor_canonical", "unknown"
+            )
+            certification_input = {
+                **product,
+                "form_factor": enriched["form_factor"],
+                "form_factor_canonical": enriched["form_factor_canonical"],
+            }
+
             # Section B: Safety & Purity
             # Collect contaminant_data once, pass to compliance to avoid double-collection
             contaminant_data = self._collect_contaminant_data(product)
@@ -22280,7 +22295,7 @@ class SupplementEnricherV3:
             enriched["compliance_data"] = self._collect_compliance_data(
                 product, contaminant_data=contaminant_data
             )
-            enriched["certification_data"] = self._collect_certification_data(product)
+            enriched["certification_data"] = self._collect_certification_data(certification_input)
             enriched["proprietary_data"] = self._collect_proprietary_data(product)
 
             # Section C: Evidence & Research
@@ -22298,16 +22313,6 @@ class SupplementEnricherV3:
             # P1.3: Add manufacturer_normalized at top-level for stable matching
             manufacturer_raw = manufacturer_data.get('manufacturer', '') or manufacturer_data.get('brand_name', '')
             enriched["manufacturer_normalized"] = self._normalize_company_name(manufacturer_raw)
-
-            # P0.4: Serving basis and form factor for deterministic prescore
-            # SP-3 (2026-05-21): also emit canonical form_factor for downstream
-            # consumers. Legacy `form_factor` is kept additive.
-            serving_data = self._collect_serving_basis_data(product)
-            enriched["serving_basis"] = serving_data["serving_basis"]
-            enriched["form_factor"] = serving_data["form_factor"]
-            enriched["form_factor_canonical"] = serving_data.get(
-                "form_factor_canonical", "unknown"
-            )
 
             # Section E: User Profile Data (for device-side scoring)
             collect_rda_ul_data = self.config.get("processing_config", {}).get("collect_rda_ul_data", True)

@@ -359,6 +359,30 @@ def test_cert_producer_supplies_actual_product_form(form_field):
     assert _producer_cert_resolution(product, registry)[0]["scope"] == "sku"
 
 
+@pytest.mark.parametrize("field", ["langualCodeDescription", "name"])
+@pytest.mark.parametrize("physical_form,qualifies", [("Powder", True), ("Capsule", False), ("", False)])
+def test_full_enrichment_certification_sees_the_same_label_form_as_replay(field, physical_form, qualifies):
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    enricher = SupplementEnricherV3()
+    enricher._cert_registry_cache = _make_registry(records=[{
+        "program": "NSF Certified", "brand": "Test Formula Brand",
+        "product": "D-Aspartic Acid", "product_form": "powder",
+        "record_id": "TEST-FORM-OWNED-CERT",
+    }])
+    product = {
+        "id": "TEST-CERT-ORDER", "fullName": "D-Aspartic Acid",
+        "brandName": "Test Formula Brand", "activeIngredients": [],
+        "inactiveIngredients": [], "physicalState": {field: physical_form},
+    }
+    enriched, _ = enricher.enrich_product(product)
+    assert enriched.get("enrichment_status") != "validation_failed"
+    produced = enriched["verified_cert_programs"]
+    replay = enricher._collect_certification_data(enriched)["verified_cert_programs"]
+    assert any(row["scope"] == "sku" for row in produced) is qualifies
+    assert produced == replay
+
+
 @pytest.mark.parametrize("unit", ["Once Daily Vegetarian Capsule(s)", "Vegetarian Capsules", "30 Vegetarian Capsules"])
 def test_printed_net_contents_form_descriptor_preserves_culturelle_identity(unit):
     registry = _make_registry(records=[{
