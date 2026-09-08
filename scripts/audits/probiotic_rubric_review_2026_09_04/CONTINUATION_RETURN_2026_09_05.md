@@ -749,9 +749,10 @@ operational verification step after a complete rebuild.
   40 existing public raw labels with `--strict-release-gates`, using isolated
   output paths. All stages passed in 19.71 s. All 27 reviewed UNII corrections
   reproduce; 17186 retains an unmapped structural header and 328831 maps
-  Botalys to ginseng. Source files are unchanged. All 40 score successfully,
-  all have mapped coverage 1.0, and recomputing the exported score, pillars,
-  module, verdict, status and confidence produces zero mismatches.
+  Botalys to ginseng. Source files are unchanged. This initial replay scored
+  all 40, with mapped coverage 1.0 and zero recomputation mismatches. The
+  independent dose review below subsequently identified two of those scores
+  as ineligible; the second replay supersedes the initial eligibility result.
 - Example final raw-label replays: 17186 = 48.6; Ginseng Plus 328831 = 65.7;
   Cognigrape 304628 = 56.4. These are candidate results, not a catalog publish.
 
@@ -761,6 +762,106 @@ Local evidence is retained under
 `raw_manifest.json`, `pipeline.log`, and `targeted_verification.json` with
 the manifest-owned Clean/Enrich/Score outputs. Raw-label subsets and local
 reports are not copied into this public Git repository.
+
+### Additional dose-contract defect found before push
+
+The raw labels for Nutricost 223563 and 223572 declare vitamin A from
+beta-carotene as **900 mg RAE**. No verified replacement label was available;
+the source quantity must not be silently rewritten to micrograms. Conversion
+to the nutrient reference unit fails, with no normalized quantity emitted.
+Previously the producer replaced that failure with `not_applicable` because
+beta-carotene has no established UL. Separately, evidence materiality could
+classify the unrecognized-unit row as adjunct and omit it from dose readiness.
+
+The typed dose producer now preserves an unresolved nutrient-specific unit as
+incomplete even where no UL applies; an adjunct evidence role cannot waive
+it. It distinguishes that from a known native mass without a nutrient-activity
+equivalent (for example alpha-carotene mg without a normalized RAE amount).
+Native enzyme activity and probiotic count units remain valid, as do
+non-distinct components and alternative dose representations already resolved
+on their own source. No conversion factor, label quantity, dose benchmark,
+weight or UL was added.
+
+Regression proof: three failing assertions and one valid-unit control before
+the fix; **180 focused tests pass** after it. A fresh strict production
+Clean/Enrich/Score replay completes all 40 in 18.14 s: **38 scored, two
+`not_scored`** (223563/223572), zero recomputation mismatches. The other 38
+retain exactly the same scores, pillars, routes, verdicts and confidence.
+All 27 cleaner identity corrections and both structural/botanical canaries
+still pass. The two source units remain unchanged and normalized values stay
+null. Evidence: `dose_red.log`, `dose_green.log`, `dose_pipeline.log`,
+`targeted_dose_verification.json` and `output_DoseClosure*` under the local
+audit directory above. These labels require source review, not score tuning.
+
+The first full-corpus replay of this extra fix found an overbroad guard:
+38 products would have lost eligibility, including valid carotenoid masses,
+composition percentages and source-owned alternative dose representations.
+That candidate (`corpus_dose_closure_final.json`) is **superseded**, not the
+approved integration. The refined producer uses `canonicalize_mass_unit`;
+the consumer targets unresolved no-UL conversions rather than overriding all
+existing source-owned assessment matching. Regression controls pin native
+carotenoid mass, the existing supported microgram conversion, and a valid
+same-source alternative assessment. The focused set then passed 184 tests.
+
+Fresh full re-enrichment/scoring of the 42-product risk set preserves the
+prior scores and routes of 36 and identifies six real source-unit holds:
+223563/223572 (900 mg RAE), 328644 (1,300 mg RAE), and
+231334/231335/263865 (vitamin A declared as 6,000 mcg DFE). The downloaded raw
+files independently contain those exact units; this is not an enrichment
+rewrite. All six remain reviewable QA records, not safety/legal blocks.
+Evidence: `corpus_dose_42_refined.json` and the final corpus verification
+record below. The unit policy does not assume the intended replacement unit.
+
+### Final integration verification (2026-09-08)
+
+- `corpus_dose_closure_verified.json`: **15,415 products, 8,079 fully
+  re-enriched, zero errors**, 840.0 s. SHA-256:
+  `97c930705071cceced31d538aa5b4eb758f3fef300cffebe67043d4d08b7f832`.
+  The exact v8 full-enrichment cohort was retained and 68812 added to cover
+  every potential conversion failure. An earlier attempt omitted v8's
+  expanded cohort and correctly failed on a stale route stamp; that failure
+  also reproduces with the unchanged pre-fix code. It was not bypassed.
+- Exactly the six documented source-unit products transition to `not_scored`.
+  All other scores, statuses, verdicts, confidence, pillars and consumer
+  reasons match v8, and **every route matches**. Transitions:
+  15,098 scored→scored, 257 not_scored→not_scored, 54 safety-suppressed
+  unchanged, six scored→not_scored. Metadata-only changes are not counted as
+  score changes. Only `dose_assessment.py` and `assessment_readiness.py`
+  differ among v8's shared implementation/reference hashes.
+- All **272 implementation/reference, 174 input and two runner hashes**
+  reverified. The main checkout includes five additional local FDA cache/raw
+  reference files compared with the feature checkout's 267-file inventory;
+  the final audit includes and fingerprints them as well.
+- Final production **Clean → Enrich → Score** replay, strict gates, current
+  code, 44 unchanged raw labels: all stages pass in 20.91 s; **38 scored and
+  six correctly quarantined**. All 27 identity corrections and both extra
+  canaries pass, with zero recomputation mismatches and no score/pillar/route/
+  verdict/confidence changes to the 38 scored controls. Evidence:
+  `final_pipeline.log`, `raw_final_manifest.json`,
+  `targeted_final_verification.json`, and isolated `output_FinalClosure*`.
+- Flutter integration checks: **43 tests pass; analysis reports no issues**.
+  The app remains unchanged at `4c1685c`. Pipeline/app vocabulary and
+  probiotic-research display contracts agree.
+- Final `scripts/test.sh fast`, after both corpus and raw-label replays:
+  **13,692 passed, 42 skipped, zero failures**, 338.08 s. Evidence:
+  `final_fast.log` and `final_fast.xml`. Skips include existing historical
+  fixture/path assumptions; this is not a substitute for the release/full
+  tiers against rebuilt artifacts.
+- `scripts/test.sh release` stops at its preflight as expected: current
+  reference data is not in the brand enrichment manifests, and the catalog
+  and Flutter bundle are not fresh together. No bypass was used and no
+  release test pass or publication is claimed. Evidence:
+  `release_preflight.log`. Rebuild first using the command below.
+
+All six retired worktrees, including their ignored local evidence, were
+archived and file-hash verified before removal. Recovery directory:
+`/Users/seancheick/Downloads/PharmaGuide_Worktree_Archives/scoring_2026_09_08/`
+(`manifest.json` records each commit, archive hash and verified file count).
+Existing stashes and unrelated dependency-update branches are preserved.
+The superseded cloud implementation is retained by annotated tag
+`archive/claude-probiotic-evidence-audit-2026-09-08`; its correct applicability
+change is already integrated, while the rejected ownership alternative is
+not reintroduced into main.
 
 ### Operational handoff after main integration
 

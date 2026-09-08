@@ -73,6 +73,7 @@ def test_failed_conversion_never_substitutes_raw_value(enricher) -> None:
 
 @pytest.mark.parametrize("unit,readiness,conversion", [
     ("mg RAE", "incomplete", "failed"),
+    ("mcg DFE", "incomplete", "failed"),
     ("mcg RAE", "not_applicable", "converted"),
 ])
 def test_no_ul_does_not_excuse_failed_vitamin_a_conversion(
