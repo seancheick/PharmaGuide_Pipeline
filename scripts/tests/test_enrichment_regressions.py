@@ -4345,6 +4345,7 @@ class TestLiposomalPureWayCVitaminC:
                     "standardName": "Vitamin C",
                     "canonical_id": "vitamin_c",
                     "canonical_source_db": "ingredient_quality_map",
+                    "raw_source_path": "ingredientRows[0]",
                     "quantity": 500.0,
                     "unit": "mg",
                     "forms": [
@@ -4404,6 +4405,18 @@ class TestLiposomalPureWayCVitaminC:
 
         assert issues == []
         assert "BRAND_PUREWAY_C" in evidence_ids
+
+    def test_unlinked_form_does_not_borrow_branded_evidence(self, enricher):
+        product = self._vitamin_c_pureway_product("Liposomal Vitamin C")
+        product["activeIngredients"][0].pop("raw_source_path")
+        enriched, issues = enricher.enrich_product(product)
+        evidence_ids = {
+            match["id"]
+            for match in enriched["evidence_data"]["clinical_matches"]
+        }
+        assert issues == []
+        assert "INGR_VITAMIN_C" in evidence_ids
+        assert "BRAND_PUREWAY_C" not in evidence_ids
 
 
 class TestClinicalEvidenceUsesMatchedFormIdentity:

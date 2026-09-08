@@ -54,6 +54,7 @@ def _probiotic_product(
     strain_count: int = 5,
     total_billion: float = 50.0,
     clinical_strain_count: int = 5,
+    per_strain_cfu: bool = False,
     survivability: bool = True,
     prebiotic: bool = True,
     trust_certs: list | None = None,
@@ -116,6 +117,21 @@ def _probiotic_product(
             ]
         }}
     product.update(extra)
+    if per_strain_cfu:
+        assert strain_count <= len(REVIEWED_STRAINS)
+        disclosed = REVIEWED_STRAINS[:strain_count]
+        per_strain_billion = total_billion / strain_count
+        product["probiotic_data"]["probiotic_blends"] = [
+            {"name": name, "strains": [name],
+             "cfu_data": {"has_cfu": True, "billion_count": per_strain_billion}}
+            for name, _ in disclosed
+        ]
+        product["probiotic_data"]["clinical_strains"] = [
+            {"name": name, "clinical_id": clinical_id,
+             "clinical_support_level": "high", "adequacy_tier": "adequate",
+             "cfu_per_day": per_strain_billion * 1e9}
+            for name, clinical_id in disclosed
+        ]
     return product
 
 
@@ -263,8 +279,10 @@ def test_shadow_emits_real_score_for_probiotic_at_p26() -> None:
 def test_shadow_verdict_safe_when_score_above_40() -> None:
     from score_supplements_v4 import score_product_v4
 
-    # Strong probiotic with SKU certs → production score well above 40
+    # Explicit CFU disclosure + SKU certification clears the quality boundary.
+    # This synthetic fixture does not establish source-owned clinical adequacy.
     product = _probiotic_product(
+        per_strain_cfu=True,
         trust_certs=[
             {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry"}
         ],
@@ -272,6 +290,17 @@ def test_shadow_verdict_safe_when_score_above_40() -> None:
     out = score_product_v4(product)
     assert out["raw_score_v4_100"] > 40.0
     assert out["v4_verdict"] == "SAFE"
+
+
+def test_sku_certification_does_not_force_aggregate_only_probiotic_above_40() -> None:
+    from score_supplements_v4 import score_product_v4
+
+    product = _probiotic_product(trust_certs=[
+        {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry"}
+    ])
+    out = score_product_v4(product)
+    assert out["raw_score_v4_100"] < 40.0
+    assert out["v4_verdict"] == "POOR"
 
 
 def test_shadow_verdict_caution_overrides_score_band() -> None:
@@ -327,21 +356,7 @@ def test_confidence_high_when_full_per_strain_disclosure() -> None:
     aggregate-only label-completeness penalty."""
     from score_supplements_v4 import score_product_v4
 
-    product = _probiotic_product()
-    # Replace blends with per-strain CFU disclosure
-    product["probiotic_data"]["probiotic_blends"] = [
-        {"name": name,
-         "strains": [name],
-         "cfu_data": {"has_cfu": True, "billion_count": 10}}
-        for name, _clinical_id in REVIEWED_STRAINS
-    ]
-    # Also add per-strain cfu_per_day to clinical_strains for adequacy
-    product["probiotic_data"]["clinical_strains"] = [
-        {"name": name, "clinical_id": clinical_id,
-         "clinical_support_level": "high",
-         "adequacy_tier": "adequate", "cfu_per_day": 1e10}
-        for name, clinical_id in REVIEWED_STRAINS
-    ]
+    product = _probiotic_product(per_strain_cfu=True)
     out = score_product_v4(product)
     conf = out["v4_breakdown"]["confidence"]
     drivers = conf["label_completeness"]["drivers"]

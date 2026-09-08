@@ -82,42 +82,33 @@ SPORTS_CANARIES = {
 
 
 PROBIOTIC_CANARIES = {
-    # Highest real probiotic scorer from the catalog sweep.
+    # Sep-08 reviewed re-lock: direct module scores, not the final six-pillar
+    # export totals. Contextual evidence is not strain-dose applicability.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        # Re-baseline 2026-07-19: committed probiotic calibration drift (~-1.2).
-        "score_range": (81.4, 82.8),
+        "score_range": (61.8, 63.2),
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        # Re-baseline 2026-07-19: committed calibration lifted raw ~+2.7.
-        "score_range": (58.5, 59.9),
+        "score_range": (46.8, 48.2),
         "traits": {"trust_positive": True},
     },
     # Aggregate-CFU-only canary: gets Formulation credit and capped dose proxy,
     # but not full per-strain disclosure/adequacy.
     "178346": {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
-        # Re-locked 2026-08-22 against the rebuilt corpus, replacing an xfail.
-        # The drop from the 2026-07-03 baseline is the intended effect of
-        # ce688c96 "require exact strain-code identity", and the driver is now
-        # asserted rather than the number alone. The label names ten species and
-        # no strain codes; only two of them (L. acidophilus, L. plantarum) map to
-        # a clinically-characterised strain, so the even-split proxy earns
-        # 2.5 v3 points -> 7.5 of its 11.0 cap, and an undisclosed CFU guarantee
-        # applies the 0.85 multiplier: 7.5 * 0.85 = 6.375 -> 6.38.
-        "score_range": (58.9, 60.3),
+        # Ten species and no owned strain doses: aggregate disclosure receives
+        # its existing floor, never an invented even allocation of total CFU.
+        "score_range": (34.8, 36.2),
         "traits": {
             "aggregate_cfu_proxy": True,
             "trust_zero": True,
-            "dose_score": 6.38,
+            "dose_score": 1.7,
             "aggregate_proxy_detail": {
-                "reason": "aggregate_cfu_even_split_proxy",
-                "proxy_tier": "good",
-                "score": 7.5,
-                "matched_strain_count": 2,
+                "score": 2.0,
+                "reason": "aggregate_cfu_label_presence",
                 "total_strain_count": 10,
             },
         },
@@ -125,7 +116,7 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (60.8, 62.2),
+        "score_range": (46.1, 47.5),
         "traits": {"dose_positive": True, "trust_zero": True},
     },
     # Per-strain CFU + positive Trust path.
@@ -135,32 +126,30 @@ PROBIOTIC_CANARIES = {
         # the pre-fix artifact counted a phantom second blend row, inflating
         # total CFU from 2.25B to 3.37B and strain count from 3 to 4. The
         # corrected corpus legitimately lowers the raw dose score 5.9 -> 3.4.
-        "score_range": (42.4, 43.8),
+        "score_range": (40.9, 42.3),
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
     "76803": {
         "label": "GNC Probiotic Solutions Prenatal 20B",
-        # Re-locked 2026-08-22 against the rebuilt corpus, replacing an xfail.
-        # Lactobacillus rhamnosus GG IS recognised here (clinical_id STRAIN_LGG),
-        # so this is not a matching failure: the label discloses no per-strain
-        # CFU, so the even-split proxy models 10B/strain -> "excellent" tier,
-        # 3.0 v3 points -> 9.0 of the 11.0 cap, and the undisclosed CFU guarantee
-        # applies 0.85: 9.0 * 0.85 = 7.65. Verification credit is unchanged
-        # (trust_positive); the total moves because dose does.
-        "score_range": (44.9, 46.3),
+        # LGG has contextual evidence, but undisclosed per-strain CFU cannot
+        # establish its studied dose. The named-strain disclosure floor applies.
+        "score_range": (41.9, 43.3),
         "traits": {
             "prenatal_name_routes_probiotic": True,
             "trust_positive": True,
-            "dose_score": 7.65,
+            "dose_score": 3.4,
             "aggregate_proxy_detail": {
-                "reason": "aggregate_cfu_even_split_proxy",
-                "proxy_tier": "excellent",
-                "score": 9.0,
-                "matched_strain_count": 1,
+                "score": 4.0,
+                "reason": "aggregate_cfu_named_label_presence",
                 "total_strain_count": 2,
             },
         },
+    },
+    "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7": {
+        "label": "Seed DS-01 Daily Synbiotic",
+        "score_range": (77.6, 79.0),
+        "traits": {"studied_formula_afu": True, "dose_score": 25.0},
     },
 }
 
@@ -325,23 +314,19 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
             expected["label"], dose,
         )
     if "aggregate_proxy_detail" in traits:
-        # Lock the mechanism, not just the number: which proxy fired, on how
-        # many recognised strains out of how many the label names, and what the
-        # undisclosed-guarantee multiplier did to it. A future change that moves
-        # the score then fails with the reason attached.
+        # Aggregate disclosure is not a per-strain adequacy estimate.
         want = traits["aggregate_proxy_detail"]
         meta = breakdown["dimensions"]["dose"]["metadata"]
         proxy = meta["aggregate_cfu_proxy"]
         assert proxy["applied"] is True
         assert proxy["reason"] == want["reason"]
-        assert proxy["proxy_tier"] == want["proxy_tier"]
+        assert proxy["floor"] == want["score"]
         assert proxy["score"] == pytest.approx(want["score"])
-        assert len(proxy["contributions"]) == want["matched_strain_count"], (
-            "recognised clinical strains changed", proxy["contributions"],
-        )
+        assert not proxy.get("contributions")
         assert meta["total_strain_count"] == want["total_strain_count"]
         assert meta["per_strain_cfu_disclosed_count"] == 0
-        assert meta["cfu_adequacy_basis"] == "aggregate_cfu_modeled_proxy"
+        assert meta["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
+        assert meta["reference_basis"] == "industry_potency_not_trial_efficacy"
         guarantee = meta["cfu_guarantee"]
         assert guarantee["applied"] is True
         assert guarantee["reason"] == "cfu_guarantee_not_disclosed"
@@ -350,11 +335,16 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
         )
         assert dose["components"]["per_strain_cfu_disclosure"] == 0.0
         assert dose["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
-        # The proxy used to be asserted at its 11.0 cap. It saturated only while
-        # species-level names were credited as strains; under exact strain-code
-        # identity it earns points per recognised strain, so the value and the
-        # recognised-strain count are asserted together above instead.
         assert proxy["score"] <= proxy["cap"]
+    if traits.get("studied_formula_afu"):
+        meta = breakdown["dimensions"]["dose"]["metadata"]
+        assert meta["assessment_status"] == "assessed_studied_formula"
+        assert meta["dose_adequacy_basis"] == "studied_formula_native_afu"
+        formula = meta["studied_formula_assessment"]
+        assert formula["evidence_id"] == "FORMULA_SEED_DS01"
+        assert formula["daily_dose"] == {"value": 53_600_000_000.0, "unit": "AFU"}
+        assert meta["per_strain_cfu_disclosed_count"] == 0
+        assert meta["window_proxy_reason"] == "formula_dose_not_individual_strain_doses"
     if traits.get("trust_zero"):
         assert _verification_strength(breakdown) == 0
     if traits.get("trust_positive"):

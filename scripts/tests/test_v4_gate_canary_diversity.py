@@ -35,18 +35,16 @@ V4_CANARIES = {
         "score": None,
         "safety_short_circuit": True,
     },
-    # The safety decision remains audit-visible while scoring continues.
-    # 7-keto-DHEA reaches scoring through a product-level dose projection, so
-    # it is owned by the module rather than counted as a second label-active
-    # evidence question.
+    # Unresolved identity must stop scoring, even when the separate substance
+    # policy is CAUTION rather than a safety short circuit.
     "241706": {
         "label": "HUM Ripped Rooster",
         "module": "generic",
-        "verdict": "CAUTION",
-        "confidence": "moderate",
-        "score_unavailable_reason": None,
-        "score": 43.1,
-        "unevaluated_canonicals": set(),
+        "verdict": "NOT_SCORED",
+        "confidence": None,
+        "score_unavailable_reason": "blocked_by_completeness_gate",
+        "score": None,
+        "missing": {"strict_scoring_contract", "mapped_coverage", "identity_assessment_readiness"},
         "safety_verdict": "CAUTION",
     },
     # The dedicated digestive route remains correct. Both the activity rows and
@@ -60,20 +58,14 @@ V4_CANARIES = {
         "score": 36.2,
         "unevaluated_canonicals": set(),
     },
-    # Probiotic with named strains but no total CFU: scoreable with low
-    # confidence; dose/transparency dimensions keep it weak without a forced
-    # CAUTION ceiling.
+    # No total CFU and no demonstrated dose applicability: dose remains zero.
+    # Contextual strain evidence alone does not force a SAFE score band.
     "241707": {
         "label": "HUM Skin Squad Pre + Probiotic",
         "module": "probiotic",
-        # re-baseline 2026-06-06: native clinical-strain credit lifted score
-        # 30.7 -> 47.2, crossing the 40 SAFE cutoff. SAFE = no safety concern
-        # (low quality is conveyed by the score, not the verdict).
-        # 2026-07-19: current raw is 47.2 (matches the documented value above);
-        # the old hi=47.1 was an off-by-0.1 window set below the real score.
-        "verdict": "SAFE",
+        "verdict": "POOR",
         "confidence": "low",
-        "score_range": (46.5, 47.9),
+        "score_range": (35.5, 36.9),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as aggregate
     # evidence with moderate uncertainty, no score cap, and no CAUTION ceiling.
@@ -100,17 +92,16 @@ V4_CANARIES = {
         "confidence": "moderate",
         "score_range": (82.3, 83.7),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
     },
-    # A disclosed fiber dose is not a substitute for a reviewed fiber-evidence
-    # assessment; the route and dose remain testable on the QA record.
-    # `fiber` names the product-level total, which the fiber module assesses,
-    # so this product has no individual evidence question left open.
+    # Assessment coverage is separate from quality. This disclosed fiber total
+    # remains module-owned, with incomplete evidence review surfaced separately.
     "12932": {
         "label": "vitafusion Fiber Gummies",
         "module": "fiber_digestive",
         "verdict": "SAFE",
-        "confidence": "low",
+        "confidence": "moderate",
         "score_unavailable_reason": None,
         "score": 50.0,
+        "evidence_driver": "evidence_review_incomplete",
         "unevaluated_canonicals": set(),
     },
     # The chlorophyll blend anchor reconciles and maps as a module-owned product
@@ -119,21 +110,22 @@ V4_CANARIES = {
         "label": "Triple Chlorophyll (GNC)",
         "module": "generic",
         "verdict": "SAFE",
-        "confidence": "low",
+        "confidence": "moderate",
         "score_unavailable_reason": None,
         "score": 48.2,
+        "evidence_driver": "evidence_review_complete_limited_or_negative",
         "unevaluated_canonicals": set(),
     },
     # Real-catalog guard for the four-micronutrient taxonomy false positive: the
-    # targeted hair formula remains generic, while PABA and Fo-Ti evidence debt
-    # keeps it out of the live catalog.
+    # targeted hair formula remains generic. PABA/Fo-Ti review debt stays visible
+    # in the shadow evidence lane; zinc lozenge evidence cannot transfer to gummies.
     "241692": {
         "label": "HUM Hair Sweet Hair Berry",
         "module": "generic",
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 65.5,
+        "score": 50.7,
         "unevaluated_canonicals": {"paba", "fo_ti"},
     },
     # Typed confidence high on the probiotic module.
@@ -142,7 +134,8 @@ V4_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "high",
-        "score_range": (72.6, 74.0),  # Re-baseline 2026-06-15: 2d6b841a sugar/additive penalties -> raw 73.3
+        # Contextual MTCC5856 evidence; no unestablished DE111 human credit.
+        "score_range": (63.9, 65.3),
     },
     # Fully ready verdict-diversity anchors. These replace products that are now
     # correctly quarantined for material evidence that has not been reviewed.
@@ -157,9 +150,9 @@ V4_CANARIES = {
     "206362": {
         "label": "GNC Kids Probiotic Fast Stix",
         "module": "probiotic",
-        "verdict": "POOR",
+        "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (39.1, 40.0),
+        "score_range": (40.6, 41.5),
     },
 }
 
@@ -230,6 +223,8 @@ def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict
         assert lo <= out["raw_score_v4_100"] <= hi
 
     breakdown = out["v4_breakdown"]
+    if "evidence_driver" in expected:
+        assert expected["evidence_driver"] in breakdown["confidence"]["evidence"]["drivers"]
     if expected.get("safety_short_circuit"):
         assert breakdown["safety_gate"]["short_circuits_scoring"] is True
         assert "module" not in breakdown

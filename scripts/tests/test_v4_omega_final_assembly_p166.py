@@ -269,7 +269,9 @@ def _load_canaries(ids):
     ("327776", "Sports Research", 84.9, 85.9),
     ("326270", "Sports Research", 84.9, 85.9),
     ("288740", "Nordic Naturals", 63.6, 64.6),
-    ("273630", "Garden of Life", 77.1, 78.1),
+    # Sep-08 canonical-form ordering restores the verified exact-SKU NSF match;
+    # the approved audit already carries its verification15 (not brand-only2).
+    ("273630", "Garden of Life", 84.0, 85.0),
     ("239592", "CVS Health", 49.4, 50.4),
     ("182968", "Pure Encapsulations",  52.0, 59.0),
 ])

@@ -31,6 +31,10 @@ IDENTITY_FIELDS = {
     "evidence_origin",
 }
 
+# Both product totals and direct label-row projections are derived. The
+# latter remains a material active; its origin is provenance, not evidence credit.
+DERIVED_INPUT_KINDS = {"product_level_evidence", "label_active_projection"}
+
 
 @lru_cache(maxsize=1)
 def _golden_index() -> dict:
@@ -64,7 +68,7 @@ def _evidence_rows(product: dict) -> list[dict]:
     result = get_scoring_ingredients(product, strict=True)
     return [
         row for row in result.rows
-        if row.get("scoring_input_kind") == "product_level_evidence"
+        if row.get("scoring_input_kind") in DERIVED_INPUT_KINDS
     ]
 
 
@@ -173,10 +177,21 @@ def test_scorable_rows_lack_evidence_origin(dsld_id: str) -> None:
     result = get_scoring_ingredients(product, strict=True)
     scorable_rows = [
         r for r in result.rows
-        if r.get("scoring_input_kind") != "product_level_evidence"
+        if r.get("scoring_input_kind") not in DERIVED_INPUT_KINDS
     ]
     for row in scorable_rows:
         assert row.get("evidence_origin") is None, (
             f"Non-evidence row should not have evidence_origin, "
             f"got {row.get('evidence_origin')!r} for {row.get('name')}"
         )
+
+
+def test_label_active_projection_retains_its_source_provenance() -> None:
+    rows = _evidence_rows(_load_product(PROTEIN_DSLD))
+    projections = [r for r in rows if r.get("scoring_input_kind") == "label_active_projection"]
+    assert projections, "The protein canary must exercise a direct label-row projection"
+    for row in projections:
+        assert row["evidence_scope"] == "row_level"
+        assert row["raw_source_path"]
+        assert row["evidence_origin"] == "compatibility_derived"
+        assert row["clean_identity_id"] == row["scoring_parent_id"]

@@ -505,10 +505,9 @@ _CANARY_TRUST_EXPECTED = {
     # 288740 (Nordic): evidence text is "third-party purity"/IFOS — no GMP-mandating
     # keyword, so no facility-GMP B4b (data-wording gap, not policy).
     "288740": 2.0,
-    # 273630 (Garden of Life): manufacturer evidence says NSF certification, but
-    # not GMP/facility/manufacturing quality. Product-only cert language must not
-    # infer facility-level GMP for every SKU.
-    "273630": 2.0,
+    # Exact softgel SKU NSF_CERTIFIE_FE59EE128321 is verified, not merely a
+    # manufacturer-wide claim. Canonical-form ordering now exposes it at runtime.
+    "273630": 15.0,
     "239592": 0.0,
     "182968": 0.0,
 }
@@ -560,6 +559,21 @@ def test_canary_trust_matches_curated_override_state(dsld_id):
         pytest.skip(f"canary {dsld_id} not in catalog")
 
     payload = score_trust(canaries[dsld_id])
+    if dsld_id == "273630":
+        sku = next(
+            entry for entry in canaries[dsld_id]["verified_cert_programs"]
+            if entry.get("record_id") == "NSF_CERTIFIE_FE59EE128321"
+        )
+        assert sku["program"] == "NSF Certified"
+        assert sku["scope"] == "sku"
+        assert sku["match_confidence"] == 1.0
+        assert payload["components"]["b4a_verified_certifications"] == 10.0
+        assert payload["components"]["b4b_gmp"] == 4.0
+        assert payload["metadata"]["b4b"]["source"] == "verified_cert_implies_gmp"
+        assert payload["metadata"]["b4b"]["program"] == "NSF Certified"
+        assert payload["metadata"]["b4a"]["B4a_scored_entries"] == [
+            {"program": "NSF Certified", "scope": "sku", "pts": 10.0}
+        ]
     expected = _CANARY_TRUST_EXPECTED[dsld_id]
     assert payload["score"] == expected, (
         f"canary {dsld_id} Trust {payload['score']} != {expected}. "

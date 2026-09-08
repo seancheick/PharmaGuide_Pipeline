@@ -1206,7 +1206,9 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Zembrin", "Mesembrine"),
         ("Xanthoparmelia scabrosa", "Xanthoparmelia"),
         ("Yeast Fermentate, Dried", "yeast fermentate"),
-        ("EpiCor dried Yeast Fermentate", "yeast fermentate"),
+        # Exact branded alias belongs to the reviewed EpiCor preparation;
+        # generic fermentate must not replace that identity (Sep-04 audit).
+        ("EpiCor dried Yeast Fermentate", "EpiCor"),
         ("Soynatto Fermented Soyfood", "Isoflavones"),
         ("MaquiBright Aristotelia chilensis berry standardized extract", "Maqui"),
         ("EVNolMax", "Vitamin E"),
