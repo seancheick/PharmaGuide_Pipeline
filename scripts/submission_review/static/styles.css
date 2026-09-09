@@ -148,3 +148,25 @@ code { background: var(--low); padding: .1rem .3rem; border-radius: 4px; font-si
 .draft-rows { width: 100%; border-collapse: collapse; margin-top: 8px; }
 .draft-rows th, .draft-rows td { text-align: left; padding: 3px 6px;
   border-bottom: 1px solid #eee; font-size: 0.95em; }
+
+/* Readiness: the next action, never a dead end. */
+#readiness { border: 1px solid #d8d8d8; border-radius: 6px; padding: 10px 14px;
+  margin: 12px 0; background: #fbfbfb; }
+#readiness-list { list-style: none; padding: 0; margin: 6px 0 0; }
+#readiness-list li { padding: 3px 0 3px 22px; position: relative; }
+#readiness-list li.ready { color: #2f6a3a; }
+#readiness-list li.ready::before { content: "✓"; position: absolute; left: 4px; }
+#readiness-list li.blocking { color: #8a5a00; font-weight: 600; }
+#readiness-list li.blocking::before { content: "•"; position: absolute; left: 4px; }
+#t-approve:disabled { cursor: not-allowed; opacity: 0.55; }
+
+/* Verification: a tick per field the reviewer has actually read. */
+#verify-checklist { flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.verify-chip { display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid #d0d0d0; border-radius: 999px; padding: 4px 12px;
+  cursor: pointer; font-size: 0.95em; }
+.verify-chip.verified { border-color: #2f6a3a; background: #eef6f0; color: #2f6a3a; }
+
+#help-drawer { max-width: 44rem; }
+#help-body dt { font-weight: 600; margin-top: 10px; }
+#help-body dd { margin: 2px 0 0 0; color: #444; }

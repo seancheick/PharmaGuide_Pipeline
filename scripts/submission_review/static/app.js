@@ -84,6 +84,9 @@ async function boot() {
   });
   $('add-statement').addEventListener('click', addStatement);
   $('ai-draft-load').addEventListener('click', loadDraftIntoEditor);
+  $('help-open').addEventListener('click', openHelp);
+  $('help-close').addEventListener('click', () => $('help-drawer').close());
+  document.addEventListener('keydown', handleShortcut);
   $('apply-raw').addEventListener('click', applyRawJson);
   $('t-under-review').addEventListener('click', () =>
     transition({ to_status: 'under_review' }),
@@ -294,6 +297,8 @@ function renderDetail() {
   }
 
   renderDraft();
+  renderVerifyChecklist();
+  renderReadiness();
   renderRows();
   syncFieldsFromPayload();
   updateShaPreview();
@@ -520,6 +525,202 @@ function renderIdentityCheck() {
 }
 
 // ---------------------------------------------------------------- payload
+
+// ------------------------------------------------- reviewer readiness
+//
+// The console's job is to make the next action obvious. A reviewer should
+// never have to guess why Approve is refusing, and should never be able to
+// approve a field nobody has actually read off the photographs.
+//
+// These checks are a reviewer aid on top of the server's own gates, not a
+// replacement for them: the database still refuses a stale revision, a missing
+// identity check and an unverified payload whatever this page believes.
+
+const CRITICAL_FIELDS = [
+  ['brand', 'Brand'],
+  ['name', 'Product name'],
+  ['serving', 'Serving size and count'],
+  ['rows', 'Every ingredient row'],
+  ['other', 'Other Ingredients'],
+];
+
+/** Ticks belong to one exact payload and one exact evidence revision. */
+function verificationKey() {
+  const submission = state.selected;
+  if (!submission) return null;
+  return `${submission.id}:${submission.evidence_revision}:${state.payloadSha ?? ''}`;
+}
+
+function verifiedSet() {
+  const key = verificationKey();
+  if (!key) return new Set();
+  if (state.verifiedKey !== key) {
+    // The label text or the evidence moved. A check of an older value is not
+    // a check of this one, so the ticks go rather than quietly carrying over.
+    state.verifiedKey = key;
+    state.verified = new Set();
+  }
+  return state.verified;
+}
+
+function toggleVerified(field) {
+  const verified = verifiedSet();
+  if (verified.has(field)) verified.delete(field); else verified.add(field);
+  renderVerifyChecklist();
+  renderReadiness();
+  setDecisionAvailability();
+}
+
+function renderVerifyChecklist() {
+  const host = $('verify-checklist');
+  if (!host) return;
+  host.textContent = '';
+  const verified = verifiedSet();
+  for (const [field, label] of CRITICAL_FIELDS) {
+    const wrap = document.createElement('label');
+    wrap.className = verified.has(field) ? 'verify-chip verified' : 'verify-chip';
+    const box = document.createElement('input');
+    box.type = 'checkbox';
+    box.id = `verify-${field}`;
+    box.checked = verified.has(field);
+    box.addEventListener('change', () => toggleVerified(field));
+    const text = document.createElement('span');
+    text.textContent = label;
+    wrap.append(box, text);
+    host.append(wrap);
+  }
+}
+
+/** Everything standing between the reviewer and Approve, in plain sentences. */
+function readinessChecks() {
+  const submission = state.selected;
+  if (!submission) return [];
+  const verified = verifiedSet();
+  const missing = CRITICAL_FIELDS.filter(([field]) => !verified.has(field));
+  const checks = [
+    {
+      done: !state.reviewInvalidated,
+      todo: 'The photos changed while you were reading. Open this submission again.',
+      done_text: 'You are looking at the current photos.',
+    },
+    {
+      done: submission.review_status === 'under_review',
+      todo: 'Press Start review so this submission is assigned to you.',
+      done_text: 'This submission is assigned to you.',
+    },
+    {
+      done: missing.length === 0,
+      todo: missing.length === 1
+        ? `Read ${missing[0][1].toLowerCase()} off the photographs and tick it.`
+        : `Read and tick ${missing.length} more fields.`,
+      done_text: 'Every field has been read off the photographs.',
+    },
+  ];
+  if (submission.kind === 'missing_product') {
+    checks.push({
+      done: state.identityRecorded === 'no_match_verified',
+      todo: 'Run the barcode check to confirm this product is not already in the catalog.',
+      done_text: 'Checked: this barcode is not already in the catalog.',
+    });
+    checks.push({
+      done: Boolean(state.productImage),
+      todo: 'Choose the one photo that becomes the catalog picture.',
+      done_text: 'Catalog picture chosen.',
+    });
+  }
+  return checks;
+}
+
+function renderReadiness() {
+  const list = $('readiness-list');
+  const progress = $('readiness-progress');
+  if (!list) return;
+  list.textContent = '';
+  const checks = readinessChecks();
+  const done = checks.filter((check) => check.done).length;
+  progress.textContent = checks.length ? `${done} of ${checks.length} done` : '';
+  for (const check of checks) {
+    const item = document.createElement('li');
+    item.className = check.done ? 'ready' : 'blocking';
+    // Say what to do, not what is wrong: a reviewer needs the next action.
+    item.textContent = check.done ? check.done_text : check.todo;
+    list.append(item);
+  }
+}
+
+function approvalBlockers() {
+  return readinessChecks().filter((check) => !check.done);
+}
+
+// ------------------------------------------------------------- help drawer
+
+async function openHelp() {
+  const drawer = $('help-drawer');
+  const body = $('help-body');
+  if (!state.help) {
+    try {
+      state.help = await (await fetch('/help.json')).json();
+    } catch {
+      state.help = { terms: [], rejections: [] };
+    }
+  }
+  body.textContent = '';
+  const terms = document.createElement('dl');
+  for (const entry of state.help.terms ?? []) {
+    const term = document.createElement('dt');
+    term.textContent = entry.term;
+    const plain = document.createElement('dd');
+    plain.textContent = entry.plain;
+    terms.append(term, plain);
+  }
+  const rejections = document.createElement('dl');
+  for (const entry of state.help.rejections ?? []) {
+    const term = document.createElement('dt');
+    term.textContent = `Reject: ${entry.code}`;
+    const plain = document.createElement('dd');
+    // The reviewer should see the sentence the submitter will read.
+    plain.textContent = `${entry.use_when} The submitter sees: "${entry.user_sees}"`;
+    rejections.append(term, plain);
+  }
+  const after = document.createElement('p');
+  after.textContent = state.help.after_approve ?? '';
+  body.append(terms, rejections, after);
+  drawer.showModal();
+}
+
+// -------------------------------------------------------------- shortcuts
+//
+// One key per decision, and never while the reviewer is typing into a field.
+
+function isTyping(target) {
+  const tag = (target?.tagName ?? '').toLowerCase();
+  return tag === 'input' || tag === 'textarea' || tag === 'select'
+    || target?.isContentEditable === true;
+}
+
+function handleShortcut(event) {
+  if (event.metaKey || event.ctrlKey || event.altKey) return;
+  if (isTyping(event.target)) return;
+  const keys = {
+    j: () => moveSelection(1),
+    k: () => moveSelection(-1),
+    a: () => $('t-approve').disabled || approve(),
+    s: () => $('t-under-review').disabled || transition({ to_status: 'under_review' }),
+    '?': () => openHelp(),
+  };
+  const action = keys[event.key];
+  if (!action) return;
+  event.preventDefault();
+  action();
+}
+
+function moveSelection(step) {
+  const items = state.submissions ?? [];
+  if (!items.length) return;
+  const current = items.findIndex((item) => item.id === state.selected?.id);
+  const next = items[Math.min(items.length - 1, Math.max(0, current + step))];
+  if (next && next.id !== state.selected?.id) select(next);
+}
 
 // ------------------------------------------------------------------ AI draft
 //
@@ -961,11 +1162,17 @@ function applyRawJson() {
 
 async function updateShaPreview() {
   try {
-    $('payload-sha').textContent =
-      (await sha256Hex(canonicalJson(state.payload))).slice(0, 16) + '…';
+    const digest = await sha256Hex(canonicalJson(state.payload));
+    state.payloadSha = digest;
+    $('payload-sha').textContent = digest.slice(0, 16) + '…';
   } catch {
+    state.payloadSha = null;
     $('payload-sha').textContent = 'invalid payload';
   }
+  // Editing a field is the reviewer withdrawing their own check of it.
+  renderVerifyChecklist();
+  renderReadiness();
+  setDecisionAvailability();
 }
 
 // ---------------------------------------------------------------- product picture
@@ -1200,7 +1407,11 @@ function setDecisionAvailability() {
   const status = state.selected?.review_status;
   const terminal = state.reviewInvalidated || ['approved', 'rejected', 'duplicate'].includes(status);
   $('t-under-review').disabled = terminal || status !== 'submitted';
-  $('t-approve').disabled = terminal || status !== 'under_review';
+  const blockers = approvalBlockers();
+  const approveButton = $('t-approve');
+  approveButton.disabled = terminal || status !== 'under_review' || blockers.length > 0;
+  // A disabled button with no reason is a dead end. Say the next action.
+  approveButton.title = blockers.length ? blockers[0].todo : 'Approve this label.';
   $('t-reject').disabled = terminal || !['submitted', 'under_review'].includes(status);
   $('t-duplicate').disabled = terminal || !['submitted', 'under_review'].includes(status);
 }

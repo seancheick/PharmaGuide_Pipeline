@@ -85,6 +85,12 @@
     </section>
 
     <h2>Approved label (manual_label_v1)</h2>
+    <p class="muted">
+      Tick a field once you have read it off the photographs. Ticks clear
+      whenever the label text or the evidence changes, because a check of an
+      older value is not a check of this one.
+    </p>
+    <div id="verify-checklist" class="row"></div>
     <div class="row">
       <label>Brand <input id="p-brand"></label>
       <label>Product name <input id="p-name"></label>
@@ -153,9 +159,19 @@
     </p>
 
     <h2>Decision</h2>
+    <section id="readiness" aria-live="polite">
+      <div class="row">
+        <h3 id="readiness-title">Before you approve</h3>
+        <span id="readiness-progress" class="mono muted"></span>
+      </div>
+      <ul id="readiness-list"></ul>
+    </section>
     <div class="row">
       <button id="t-under-review" type="button">Start review</button>
       <button id="t-approve" type="button" class="primary">Approve</button>
+      <button id="help-open" type="button" class="ghost" aria-haspopup="dialog">
+        What do these mean?
+      </button>
     </div>
     <div class="decision-block">
       <div class="row">
@@ -187,6 +203,14 @@
     <p id="status-line" class="muted" role="status"></p>
   </section>
 </main>
+
+<dialog id="help-drawer">
+  <div class="lightbox-head">
+    <strong>Reviewer help</strong>
+    <button id="help-close" type="button" class="ghost" aria-label="Close">✕</button>
+  </div>
+  <div id="help-body"></div>
+</dialog>
 
 <dialog id="photo-lightbox">
   <div class="lightbox-head">

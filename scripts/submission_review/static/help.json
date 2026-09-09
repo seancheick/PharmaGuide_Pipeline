@@ -1,0 +1,66 @@
+{
+  "schema_version": "reviewer_help_v1",
+  "_comment": "One vocabulary for the console and any future admin surface. Plain words a new reviewer can act on, not definitions of our internal names.",
+  "terms": [
+    {
+      "term": "Serving basis",
+      "plain": "What the amounts on the panel are per: one capsule, two capsules, a scoop. Copy it exactly as printed. If the panel says 'per 2 capsules', the doses are for two, not one."
+    },
+    {
+      "term": "%DV-only row",
+      "plain": "A row that shows only a percentage and no weight. Record the percentage and leave the amount blank. Do not calculate the milligrams yourself."
+    },
+    {
+      "term": "Proprietary blend",
+      "plain": "A named mixture with one total weight and its parts listed underneath. Record the blend as the parent and each part beneath it. The parts usually have no individual dose, and that blank is the correct answer."
+    },
+    {
+      "term": "CFU and AFU",
+      "plain": "Counts of live organisms in probiotics, not weights. Copy the unit exactly as printed; they are not interchangeable and neither is milligrams."
+    },
+    {
+      "term": "Other Ingredients disclosure",
+      "plain": "Whether the label lists non-active ingredients, says there are none, or folds them into the Facts panel. 'Not verified' is not a finding, it means nobody has looked yet."
+    },
+    {
+      "term": "Duplicate versus new edition",
+      "plain": "Same barcode does not mean same product. A reformulation or a new size is a different label. Only mark duplicate when the printed label matches the one already in the catalog."
+    },
+    {
+      "term": "Discontinued",
+      "plain": "The product is off the market. It still gets an accurate record; discontinued is a status, not a reason to reject."
+    },
+    {
+      "term": "Unverified model confidence",
+      "plain": "How sure the model was about its own reading. It is a hint about where to look first. It is never evidence, and it can be confidently wrong."
+    }
+  ],
+  "rejections": [
+    {
+      "code": "photo_quality",
+      "user_sees": "The photos were too blurry or dark to read. Please retake them.",
+      "use_when": "You can tell what the product is but cannot read the panel."
+    },
+    {
+      "code": "missing_panel",
+      "user_sees": "A required panel was missing. Please photograph the Supplement Facts and ingredients.",
+      "use_when": "One of the required faces was never photographed."
+    },
+    {
+      "code": "label_unreadable",
+      "user_sees": "The label could not be read. Please retake the photos.",
+      "use_when": "The panel is present but genuinely illegible, including foreign-language panels you cannot read."
+    },
+    {
+      "code": "product_identity_mismatch",
+      "user_sees": "The photos do not match the scanned barcode. Please try again.",
+      "use_when": "The barcode, front and panel are not the same product."
+    },
+    {
+      "code": "not_a_supplement",
+      "user_sees": "This product is not a dietary supplement.",
+      "use_when": "Food, cosmetic, medicine, or anything outside the catalog."
+    }
+  ],
+  "after_approve": "The label enters the next catalog build. It is scored by the pipeline, not by you or by the model, and the submitter is told their product is live once it ships."
+}
