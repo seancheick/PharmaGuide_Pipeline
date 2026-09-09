@@ -13,6 +13,7 @@ const state = {
   session: null,
   submissions: [],
   selected: null,
+  reviewInvalidated: false,
   payload: null,
   refreshTimer: null,
   nextAfter: null,
@@ -197,6 +198,7 @@ function renderQueue() {
 
 function select(submission) {
   state.selected = submission;
+  state.reviewInvalidated = false;
   state.payload = defaultPayload();
   state.identityLookup = null;
   state.identityRecorded = null;
@@ -216,15 +218,27 @@ function scheduleUrlRefresh() {
 }
 
 async function refreshSelected() {
-  if (!state.selected) return;
+  const selection = state.selected;
+  if (!selection) return;
   try {
     const { submissions } = await edge({
       action: 'list',
-      submission_id: state.selected.id,
+      submission_id: selection.id,
       limit: 1,
     });
-    if (submissions.length === 1) {
-      state.selected = submissions[0];
+    if (state.selected !== selection) return;
+    if (submissions.length === 1 && submissions[0].id === selection.id) {
+      const fresh = submissions[0];
+      if (fresh.evidence_revision !== selection.evidence_revision ||
+          fresh.evidence_manifest_sha256 !== selection.evidence_manifest_sha256) {
+        state.submissions = state.submissions.map((row) => row.id === fresh.id ? fresh : row);
+        select(fresh);
+        state.reviewInvalidated = true;
+        setDecisionAvailability();
+        setStatus('Photos changed. Select this submission again and review the new evidence before deciding.', true);
+        return;
+      }
+      state.selected = fresh;
       renderDetail();
       scheduleUrlRefresh();
     }
@@ -348,16 +362,32 @@ async function requireCurrentIdentity() {
   }
 }
 
+function selectedEvidenceBinding() {
+  const selected = state.selected;
+  if (!selected || !Number.isSafeInteger(selected.evidence_revision) || selected.evidence_revision < 1 ||
+      !/^[0-9a-f]{64}$/.test(selected.evidence_manifest_sha256 ?? '')) {
+    throw new Error('Refresh this submission before reviewing its evidence.');
+  }
+  return {expected_evidence_revision:selected.evidence_revision,
+    evidence_manifest_sha256:selected.evidence_manifest_sha256};
+}
+
 async function recordMatch(outcome, options = {}) {
+  const selectedId = state.selected?.id;
+  const binding = selectedEvidenceBinding();
   const lookup = await requireCurrentIdentity();
   const result = await edge({
     action: 'record_match',
-    submission_id: state.selected.id,
+    submission_id: selectedId,
+    ...binding,
     outcome,
     canonical_gtin14: lookup.canonical_gtin14,
     index_built_at: lookup.index_built_at,
     ...options,
   });
+  if (state.selected?.id !== selectedId || state.selected.evidence_revision !== binding.expected_evidence_revision) {
+    throw new Error('The selected submission changed. Review its current evidence.');
+  }
   state.identityRecorded = outcome;
   renderIdentityCheck();
   return result;
@@ -815,9 +845,12 @@ async function uploadReviewerBlob(
   sourcePhotoId = null,
 ) {
   const objectId = crypto.randomUUID();
+  const selectedId = state.selected?.id;
+  const binding = selectedEvidenceBinding();
   const upload = await edge({
     action: 'create_reviewer_image_upload',
-    submission_id: state.selected.id,
+    submission_id: selectedId,
+    ...binding,
     object_id: objectId,
     source_rights: sourceRights,
     rights_attested: rightsAttested,
@@ -830,6 +863,9 @@ async function uploadReviewerBlob(
       upsert: false,
     });
   if (error) throw error;
+  if (state.selected?.id !== selectedId || state.selected.evidence_revision !== binding.expected_evidence_revision) {
+    throw new Error('The selected submission changed. Refresh before choosing its picture.');
+  }
   const previewUrl = URL.createObjectURL(blob);
   state.reviewerImages.push({ objectId, previewUrl, label });
   state.productImage = { kind: 'reviewer', id: objectId };
@@ -977,7 +1013,7 @@ function closeLightbox() {
 
 function setDecisionAvailability() {
   const status = state.selected?.review_status;
-  const terminal = ['approved', 'rejected', 'duplicate'].includes(status);
+  const terminal = state.reviewInvalidated || ['approved', 'rejected', 'duplicate'].includes(status);
   $('t-under-review').disabled = terminal || status !== 'submitted';
   $('t-approve').disabled = terminal || status !== 'under_review';
   $('t-reject').disabled = terminal || !['submitted', 'under_review'].includes(status);
@@ -986,11 +1022,13 @@ function setDecisionAvailability() {
 
 async function transition(fields) {
   if (!state.selected) return;
+  if (state.reviewInvalidated) return setStatus('Review the updated evidence before deciding.', true);
   try {
     setStatus('Working…');
     const result = await edge({
       action: 'transition',
       submission_id: state.selected.id,
+      ...selectedEvidenceBinding(),
       ...fields,
     });
     setStatus(
@@ -1004,6 +1042,8 @@ async function transition(fields) {
 }
 
 async function approve() {
+  const selection = state.selected;
+  if (state.reviewInvalidated) return setStatus('Review the updated evidence before deciding.', true);
   if (
     state.selected?.kind === 'missing_product' &&
     state.identityRecorded !== 'no_match_verified'
@@ -1019,6 +1059,9 @@ async function approve() {
     } catch (error) {
       return setStatus(String(error.message ?? error), true);
     }
+  }
+  if (state.selected !== selection || state.reviewInvalidated) {
+    return setStatus('The selected evidence changed. Review it before approving.', true);
   }
   syncScalarFields();
   const fields = {

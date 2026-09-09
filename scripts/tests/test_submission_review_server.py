@@ -471,7 +471,7 @@ vm.runInContext(fs.readFileSync(asset, 'utf8') +
   '\nfunction boot() {}\nasync function loadQueue() {}\nasync function refreshSelected() {}', context);
 (async () => {
   await vm.runInContext(`(async () => {
-    state.selected = {id: 'submission', kind: 'missing_product', normalized_upc: '050428381397'};
+    state.selected = {id: 'submission', kind: 'missing_product', normalized_upc: '050428381397', evidence_revision: 2, evidence_manifest_sha256: 'a'.repeat(64)};
     state.session = {access_token: 'reviewer-test-session'};
     state.identityLookup = previous;
     state.identityRecorded = 'no_match_verified';
@@ -494,6 +494,8 @@ vm.runInContext(fs.readFileSync(asset, 'utf8') +
     decisions = [row for row in observed["calls"] if row["url"] == "/api/edge"]
     if source_state == "current":
         assert len(decisions) == 1
+        assert decisions[0]["body"]["expected_evidence_revision"] == 2
+        assert decisions[0]["body"]["evidence_manifest_sha256"] == "a" * 64
         assert observed["calls"][0]["url"].startswith("/api/identity_lookup")
     else:
         assert decisions == []
