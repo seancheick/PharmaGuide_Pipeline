@@ -235,8 +235,14 @@ def build_manifest(iqm: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str,
 
         set_values: dict[str, Any] = {}
         unset_values: list[str] = []
+        # A replacement record is new evidence and names its own axis. A
+        # retained record keeps the axis already authored on its form; there is
+        # nothing to re-author, and only the three replacement forms appear in
+        # REPLACEMENT_AXES.
+        desired_axis: str | None = None
         if key in REPLACEMENT_EVIDENCE:
             desired_evidence = copy.deepcopy(REPLACEMENT_EVIDENCE[key])
+            desired_axis = REPLACEMENT_AXES[key]
             verified_count += 1
         elif keep_ids:
             missing = sorted(keep_ids - set(references_by_id))
@@ -262,25 +268,24 @@ def build_manifest(iqm: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str,
             backlog_count += 1
 
         if desired_evidence is not None:
+            # Validate the proposal against the form that will own it, so the
+            # assessment axis resolves exactly as it will after the write.
             prospective = copy.deepcopy(form)
             prospective.update(SCORE_CORRECTIONS.get(key, {}))
+            prospective["form_evidence"] = desired_evidence
+            if desired_axis is not None:
+                prospective[FORM_AXIS_FIELD] = desired_axis
             excellent = float(prospective.get("bio_score") or 0) >= 12
-            # Validate the proposal against the form that will own it, so
-            # the assessment axis resolves exactly as it will after the write.
-            desired_axis = REPLACEMENT_AXES[(ingredient_key, form_key)]
             problems = validate_iqm_form(
-                {
-                    **prospective,
-                    "form_evidence": desired_evidence,
-                    FORM_AXIS_FIELD: desired_axis,
-                },
+                prospective,
                 label=f"{ingredient_key}::{form_key}",
                 excellent=excellent,
             )
             if problems:
                 raise ValueError("\n".join(problems))
             set_values["form_evidence"] = desired_evidence
-            set_values[FORM_AXIS_FIELD] = desired_axis
+            if desired_axis is not None:
+                set_values[FORM_AXIS_FIELD] = desired_axis
 
         set_values.update(SCORE_CORRECTIONS.get(key, {}))
         change: dict[str, Any] = {
