@@ -2,15 +2,15 @@
 
 It reads nothing and invents nothing: it echoes the evidence it was given into
 a minimal abstaining draft. That makes it useless for measuring a model and
-exactly right for proving that queueing, leasing, validation, recording and
-scoring all work before any provider is chosen or paid.
+useful for exercising queueing, leasing, validation and recording before any
+provider is chosen or paid. It does not establish extraction or scoring accuracy.
 """
 
 from __future__ import annotations
 
 from typing import Any
 
-from ..extractor import EvidenceBundle, ExtractionConfig, ExtractionError
+from ..extractor import PreparedBundle, ExtractionConfig, ExtractionError, ExtractionResult, Usage
 
 
 class FakeAdapter:
@@ -20,12 +20,12 @@ class FakeAdapter:
         self._fail_with = fail_with
 
     def extract(
-        self, bundle: EvidenceBundle, config: ExtractionConfig
-    ) -> dict[str, Any]:
+        self, bundle: PreparedBundle, config: ExtractionConfig
+    ) -> ExtractionResult:
         if self._fail_with is not None:
             raise ExtractionError(self._fail_with, "fake adapter was told to fail")
         snapshot = bundle.snapshot
-        return {
+        return ExtractionResult(draft={
             "schema_version": "label_draft_v1",
             "draft_origin": "model",
             "provider": config.provider,
@@ -34,16 +34,8 @@ class FakeAdapter:
             "evidence_revision": bundle.evidence_revision,
             "evidence_snapshot": snapshot,
             # Provenance the writer checks: a model draft must name what it was
-            # actually sent, and the sent bytes must be the leased bytes.
-            "sent_inputs": [
-                {
-                    "input_id": f"i{index}",
-                    "photo_id": photo.photo_id,
-                    "original_sha256": photo.sha256,
-                    "sent_sha256": photo.sha256,
-                }
-                for index, photo in enumerate(bundle.photos)
-            ],
+            # actually sent, linked to the original leased-photo hash.
+            "sent_inputs": [photo.as_sent_input() for photo in bundle.photos],
             "photo_roles": [],
             "identity": {
                 "brand": _unknown(),
@@ -64,7 +56,7 @@ class FakeAdapter:
             "abstained": True,
             "abstain_reason": "fake adapter does not read labels",
             "overall_confidence": None,
-        }
+        }, usage=Usage())
 
 
 def _unknown() -> dict[str, Any]:

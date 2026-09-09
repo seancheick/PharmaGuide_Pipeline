@@ -22,44 +22,20 @@ from __future__ import annotations
 
 import hashlib
 import io
-from dataclasses import dataclass
 from pathlib import Path
 
-from .extractor import EvidenceBundle, EvidencePhoto, ExtractionError
+from .extractor import EvidenceBundle, EvidencePhoto, ExtractionError, PreparedBundle, PreparedInput
 
-#: Matches the app's own upload ceiling. A larger file never came from us.
+#: Worker-side input ceiling, also enforced by the bounded local reader.
 MAX_SOURCE_BYTES = 15 * 1024 * 1024
 #: A supplement label needs detail, not a poster. Above this the pixels are
 #: cost and risk, not information.
 MAX_PIXELS = 40_000_000
+MAX_SOURCE_EDGE = 16_384
 MAX_EDGE = 4096
 #: What an adapter is allowed to transmit per photo after preparation.
 MAX_SENT_BYTES = 4 * 1024 * 1024
-ALLOWED_FORMATS = frozenset({"JPEG", "PNG", "WEBP", "HEIF", "HEIC"})
-
-
-@dataclass(frozen=True)
-class PreparedInput:
-    """One photo as it will actually be sent, and what it came from."""
-
-    input_id: str
-    photo_id: str
-    #: Hash of the bytes as stored, which the manifest also carries.
-    original_sha256: str
-    #: Hash of the bytes actually transmitted. Different when re-encoded, and
-    #: recorded separately so provenance is not a guess.
-    sent_sha256: str
-    content_type: str
-    byte_size: int
-    data: bytes = b""
-
-    def as_sent_input(self) -> dict[str, object]:
-        return {
-            "input_id": self.input_id,
-            "photo_id": self.photo_id,
-            "original_sha256": self.original_sha256,
-            "sent_sha256": self.sent_sha256,
-        }
+ALLOWED_FORMATS = frozenset({"JPEG", "PNG", "WEBP"})
 
 
 def prepare_bundle(
@@ -67,7 +43,7 @@ def prepare_bundle(
     *,
     reader=None,
     max_sent_bytes: int = MAX_SENT_BYTES,
-) -> list[PreparedInput]:
+) -> PreparedBundle:
     """Prepare every leased photo, or raise a typed failure.
 
     `reader` returns the stored bytes for one photo; the default reads the
@@ -75,12 +51,14 @@ def prepare_bundle(
     network and so the fetch policy stays the caller's decision.
     """
     read = reader or _read_local
+    if not bundle.photos or len(bundle.snapshot) != len(bundle.photos):
+        raise ExtractionError("unsupported_evidence", "empty or duplicate evidence")
     prepared: list[PreparedInput] = []
     for index, photo in enumerate(bundle.photos):
         prepared.append(
             _prepare_photo(photo, f"i{index}", read, max_sent_bytes=max_sent_bytes)
         )
-    return prepared
+    return PreparedBundle(bundle.submission_id, bundle.evidence_revision, tuple(prepared))
 
 
 def _prepare_photo(
@@ -117,40 +95,44 @@ def _prepare_photo(
         content_type=content_type,
         byte_size=len(data),
         data=data,
+        categories=photo.categories,
     )
 
 
 def _bounded_reencode(raw: bytes, *, max_sent_bytes: int) -> tuple[bytes, str]:
     try:
-        from PIL import Image
+        from PIL import Image, ImageOps
     except ImportError as error:  # pragma: no cover - environment guard
         raise ExtractionError("preparation_failed", "imaging support is unavailable") from error
 
     # Refuse the bomb before allocating for it. `open` is lazy, so the header
     # is available without decoding the pixels.
     try:
-        probe = Image.open(io.BytesIO(raw))
-        image_format = (probe.format or "").upper()
-        width, height = probe.size
-    except Exception as error:  # noqa: BLE001
-        raise ExtractionError("unsupported_evidence", "evidence is not a readable image") from error
-    if image_format not in ALLOWED_FORMATS:
-        raise ExtractionError("unsupported_evidence", "unsupported image format")
-    if width <= 0 or height <= 0 or width * height > MAX_PIXELS:
-        raise ExtractionError("unsupported_evidence", "evidence exceeds the pixel limit")
-
-    try:
-        probe.load()
-        prepared = probe.convert("RGB")
-        prepared.thumbnail((MAX_EDGE, MAX_EDGE))
-        buffer = io.BytesIO()
-        # A fresh RGB save carries no EXIF, so location and device metadata do
-        # not travel to a provider even though the app already stripped them.
-        prepared.save(buffer, format="JPEG", quality=88, optimize=True)
+        with Image.open(io.BytesIO(raw)) as probe:
+            image_format = (probe.format or "").upper()
+            width, height = probe.size
+            if image_format not in ALLOWED_FORMATS:
+                raise ExtractionError("unsupported_evidence", "unsupported image format")
+            if width <= 0 or height <= 0 or width * height > MAX_PIXELS:
+                raise ExtractionError("unsupported_evidence", "evidence exceeds the pixel limit")
+            if max(width, height) > MAX_SOURCE_EDGE:
+                raise ExtractionError("unsupported_evidence", "evidence exceeds the dimension limit")
+            if getattr(probe, "n_frames", 1) != 1:
+                raise ExtractionError("unsupported_evidence", "multi-frame evidence requires separate photos")
+            probe.load()
+            oriented = ImageOps.exif_transpose(probe)
+            rgba = oriented.convert("RGBA")
+            prepared = Image.new("RGB", rgba.size, "white")
+            prepared.paste(rgba, mask=rgba.getchannel("A"))
+            prepared.thumbnail((MAX_EDGE, MAX_EDGE))
+            buffer = io.BytesIO()
+            # Apply orientation before stripping EXIF; composite transparency
+            # so black label text remains readable on a transparent background.
+            prepared.save(buffer, format="JPEG", quality=88, optimize=True)
     except ExtractionError:
         raise
     except Exception as error:  # noqa: BLE001
-        raise ExtractionError("preparation_failed", "evidence could not be prepared") from error
+        raise ExtractionError("unsupported_evidence", "evidence is not a readable image") from error
 
     data = buffer.getvalue()
     if len(data) > max_sent_bytes:
@@ -161,4 +143,5 @@ def _bounded_reencode(raw: bytes, *, max_sent_bytes: int) -> tuple[bytes, str]:
 def _read_local(photo: EvidencePhoto) -> bytes:
     if not photo.path:
         raise ExtractionError("preparation_failed", "no local path for leased evidence")
-    return Path(photo.path).read_bytes()
+    with Path(photo.path).open("rb") as source:
+        return source.read(MAX_SOURCE_BYTES + 1)

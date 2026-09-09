@@ -11,6 +11,7 @@ forgets a flag must not be able to start spending.
 
 from __future__ import annotations
 
+import threading
 import time
 from dataclasses import dataclass, field
 from typing import Any, Protocol
@@ -20,6 +21,7 @@ from .extractor import (
     ExtractionConfig,
     ExtractionError,
     LabelDraftExtractor,
+    PREPARATION_VERSION,
 )
 from .photo_prep import prepare_bundle
 
@@ -32,6 +34,12 @@ class LeasedJob:
     job_id: str
     fencing_token: int
     bundle: EvidenceBundle
+    configuration: ExtractionConfig
+    heartbeat_seconds: float = 30.0
+
+
+class LeaseLostError(RuntimeError):
+    """The queue confirmed this token no longer owns its lease."""
 
 
 @dataclass
@@ -75,6 +83,8 @@ class ExtractionQueue(Protocol):
 
     def heartbeat(self, job_id: str, fencing_token: int) -> None: ...
 
+    def reserve(self, job_id: str, fencing_token: int) -> bool: ...
+
     def complete(
         self,
         job_id: str,
@@ -84,7 +94,7 @@ class ExtractionQueue(Protocol):
         draft: dict[str, Any] | None = None,
         usage: dict[str, Any] | None = None,
         error_code: str | None = None,
-        cost_microcents: int = 0,
+        cost_microcents: int | None = None,
     ) -> None: ...
 
     def remaining_microcents(self) -> int: ...
@@ -93,7 +103,6 @@ class ExtractionQueue(Protocol):
 def drain(
     queue: ExtractionQueue,
     extractor: LabelDraftExtractor,
-    config: ExtractionConfig,
     limits: DrainLimits | None = None,
     *,
     reader=None,
@@ -108,7 +117,11 @@ def drain(
         if clock() - started >= limits.max_seconds:
             report.stopped_because = "time_limit"
             break
-        remaining = queue.remaining_microcents()
+        try:
+            remaining = queue.remaining_microcents()
+        except Exception:
+            report.stopped_because = "queue_unavailable"
+            break
         if remaining <= 0:
             # Stop before claiming, so a job is not leased only to be failed.
             report.stopped_because = "budget_exhausted"
@@ -117,13 +130,24 @@ def drain(
             report.stopped_because = "run_budget_reached"
             break
 
-        jobs = queue.claim(1)
+        try:
+            jobs = queue.claim(1)
+        except Exception:
+            report.stopped_because = "queue_unavailable"
+            break
         if not jobs:
             report.stopped_because = "queue_empty"
             break
         job = jobs[0]
         report.claimed += 1
-        _work_one(queue, extractor, config, job, report, reader=reader)
+        if limits.max_microcents and job.configuration.max_cost_microcents > limits.max_microcents - report.spent_microcents:
+            _record_failure(queue, job, ExtractionError("budget_exhausted"), report, cost=0, admission_hold=True)
+            if report.stopped_because == "queue_empty":
+                report.stopped_because = "run_budget_reached"
+            break
+        _work_one(queue, extractor, job, report, reader=reader)
+        if report.stopped_because in {"completion_unknown", "queue_unavailable", "budget_exhausted", "cost_unknown"}:
+            break
 
     else:
         report.stopped_because = "job_limit"
@@ -133,36 +157,55 @@ def drain(
 def _work_one(
     queue: ExtractionQueue,
     extractor: LabelDraftExtractor,
-    config: ExtractionConfig,
     job: LeasedJob,
     report: DrainReport,
     *,
     reader=None,
 ) -> None:
+    config = job.configuration
+    called = False
+    result = None
     try:
+        if config.prep_config_version != PREPARATION_VERSION:
+            raise ExtractionError("preparation_failed", "unsupported preparation version")
         prepared = prepare_bundle(job.bundle, reader=reader)
         # Preparation can take a while on a slow disk or a large set; tell the
         # database the lease is still wanted before the provider call.
         queue.heartbeat(job.job_id, job.fencing_token)
-        result = extractor.extract(job.bundle, config)
+        if not queue.reserve(job.job_id, job.fencing_token):
+            _record_failure(queue, job, ExtractionError("budget_exhausted"), report, cost=0, admission_hold=True)
+            if report.stopped_because == "queue_empty":
+                report.stopped_because = "budget_exhausted"
+            return
+        with _LeaseHeartbeat(queue, job) as heartbeat:
+            called = True
+            result = extractor.extract(prepared, config)
+        if heartbeat.error is not None:
+            raise heartbeat.error
+        queue.heartbeat(job.job_id, job.fencing_token)
+    except LeaseLostError:
+        if result is not None:
+            report.spent_microcents += result.usage.microcents
+        report.failure_codes["lease_lost"] = report.failure_codes.get("lease_lost", 0) + 1
+        return
     except ExtractionError as error:
-        _record_failure(queue, job, error, report)
+        cost = error.usage.microcents if error.usage is not None else (None if called else 0)
+        _record_failure(queue, job, error, report, cost=cost)
+        if cost is None and report.stopped_because == "queue_empty":
+            # The DB retains this attempt's reservation. Stop this run too:
+            # unknown spend cannot be treated as zero against a run cap.
+            report.stopped_because = "cost_unknown"
         return
     except Exception:  # noqa: BLE001 - a worker never dies on one job
-        _record_failure(
-            queue,
-            job,
-            ExtractionError("model_failure", "extraction failed unexpectedly"),
-            report,
-        )
+        if result is not None:
+            report.spent_microcents += result.usage.microcents
+        report.stopped_because = "queue_unavailable"
         return
 
     draft = dict(result.draft)
-    # The draft names exactly what was transmitted, which is not always what
-    # was stored: preparation re-encodes.
-    draft["sent_inputs"] = [entry.as_sent_input() for entry in prepared]
     usage = result.usage.as_payload()
     cost = int(usage.get("cost_microcents") or 0)
+    report.spent_microcents += cost
     try:
         queue.complete(
             job.job_id,
@@ -172,13 +215,18 @@ def _work_one(
             usage=usage,
             cost_microcents=cost,
         )
-    except Exception:  # noqa: BLE001
+    except LeaseLostError:
         # A lost lease is not a drafting failure. Leave the job to whoever
         # holds it now rather than overwriting their result.
         report.failure_codes["lease_lost"] = report.failure_codes.get("lease_lost", 0) + 1
         return
+    except Exception:
+        # A timeout may mean the transaction committed. Never issue a second,
+        # contradictory failure completion or spend on more jobs until checked.
+        report.failure_codes["completion_unknown"] = report.failure_codes.get("completion_unknown", 0) + 1
+        report.stopped_because = "completion_unknown"
+        return
     report.drafted += 1
-    report.spent_microcents += cost
 
 
 def _record_failure(
@@ -186,15 +234,58 @@ def _record_failure(
     job: LeasedJob,
     error: ExtractionError,
     report: DrainReport,
+    *,
+    cost: int | None = None,
+    admission_hold: bool = False,
 ) -> None:
     retryable = error.code in RETRYABLE_CODES
     outcome = "retryable_error" if retryable else "failed"
+    if admission_hold:
+        outcome = "budget_hold"
+    elif error.code in {"unreadable_evidence", "unsupported_evidence"}:
+        outcome = "needs_evidence"
     report.failure_codes[error.code] = report.failure_codes.get(error.code, 0) + 1
+    report.spent_microcents += cost or 0
+    try:
+        queue.complete(job.job_id, job.fencing_token, outcome, error_code=error.code, cost_microcents=cost)
+    except LeaseLostError:
+        report.failure_codes["lease_lost"] = report.failure_codes.get("lease_lost", 0) + 1
+        return
+    except Exception:
+        report.stopped_because = "completion_unknown"
+        report.failure_codes["completion_unknown"] = report.failure_codes.get("completion_unknown", 0) + 1
+        return
     if retryable:
         report.retryable += 1
     else:
         report.failed += 1
-    try:
-        queue.complete(job.job_id, job.fencing_token, outcome, error_code=error.code)
-    except Exception:  # noqa: BLE001
-        report.failure_codes["lease_lost"] = report.failure_codes.get("lease_lost", 0) + 1
+
+
+class _LeaseHeartbeat:
+    """Renew during a blocking model call; surface loss before completion."""
+
+    def __init__(self, queue: ExtractionQueue, job: LeasedJob):
+        self.queue, self.job = queue, job
+        self.stop = threading.Event()
+        self.error: Exception | None = None
+
+    def __enter__(self):
+        if self.job.heartbeat_seconds <= 0:
+            raise ValueError("heartbeat interval must be positive")
+        self.thread = threading.Thread(target=self._run, daemon=True)
+        self.thread.start()
+        return self
+
+    def _run(self):
+        while not self.stop.wait(self.job.heartbeat_seconds):
+            try:
+                self.queue.heartbeat(self.job.job_id, self.job.fencing_token)
+            except Exception as error:
+                self.error = error
+                return
+
+    def __exit__(self, *_):
+        self.stop.set()
+        self.thread.join(timeout=1.0)
+        if self.thread.is_alive():
+            self.error = RuntimeError("heartbeat acknowledgement unknown")

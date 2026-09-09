@@ -182,6 +182,15 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 | **Strain allocation owner** | A source label container whose complete descendants are probiotic identities. Enrichment emits its stable row reference so Transparency can avoid charging twice for undisclosed strain allocation. Mixed or unresolved containers do not qualify; positional indexes are not ownership proof. |
 | **Clinical source of truth** | Primary regulatory or scientific evidence plus curated, tested local data. Generated reports are review queues, not authoritative data. |
 
+## Submission extraction contracts
+
+| Term | Meaning |
+|---|---|
+| **PreparedBundle** | The provider's only evidence input: bounded, orientation-corrected, metadata-free bytes with original and transmitted hashes. Original storage paths are not provider inputs. |
+| **Leased configuration** | The database-owned provider, model digest, prompt, preparation, retention and maximum-call-cost settings frozen when a job is enqueued. Workers consume this snapshot; local flags cannot silently replace it. |
+| **Extraction budget reservation** | An atomic allowance held before a provider call, identified by job and fencing token. Known cost settles it; unknown cost retains the hold until explicitly reconciled. Monthly and pilot caps share one database calculation. |
+| **Unknown completion** | A write whose acknowledgement was lost. It is neither a confirmed draft nor a confirmed lease loss; the worker stops until the persisted outcome can be checked. |
+
 ## Versions and tests
 
 | Contract | Canonical producer (read the value there) |

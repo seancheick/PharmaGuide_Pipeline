@@ -54,8 +54,8 @@ def test_prepared_input_records_both_hashes() -> None:
 
     prepared = prepare_bundle(bundle, reader=_reader({_PHOTO_A: source}))
 
-    assert len(prepared) == 1
-    entry = prepared[0]
+    assert len(prepared.photos) == 1
+    entry = prepared.photos[0]
     assert entry.original_sha256 == hashlib.sha256(source).hexdigest()
     # Re-encoding changes the bytes, so what was sent is hashed separately
     # rather than assumed equal to what was stored.
@@ -145,7 +145,7 @@ def test_only_the_leased_photos_are_prepared() -> None:
     prepared = prepare_bundle(bundle, reader=read)
 
     assert seen == [_PHOTO_A]
-    assert [entry.photo_id for entry in prepared] == [_PHOTO_A]
+    assert [entry.photo_id for entry in prepared.photos] == [_PHOTO_A]
 
 
 def test_input_ids_are_stable_and_positional() -> None:
@@ -156,4 +156,34 @@ def test_input_ids_are_stable_and_positional() -> None:
         bundle, reader=_reader({_PHOTO_A: first, _PHOTO_B: second})
     )
 
-    assert [entry.input_id for entry in prepared] == ["i0", "i1"]
+    assert [entry.input_id for entry in prepared.photos] == ["i0", "i1"]
+
+
+def test_orientation_is_applied_before_metadata_is_removed() -> None:
+    source = io.BytesIO()
+    exif = Image.Exif()
+    exif[274] = 6
+    Image.new("RGB", (80, 40), "white").save(source, format="JPEG", exif=exif)
+    data = source.getvalue()
+    prepared = prepare_bundle(_bundle(_photo(_PHOTO_A, data)), reader=_reader({_PHOTO_A: data}))
+    with Image.open(io.BytesIO(prepared.photos[0].data)) as result:
+        assert result.size == (40, 80)
+        assert not result.getexif()
+
+
+def test_transparent_label_is_composited_on_white() -> None:
+    source = io.BytesIO()
+    Image.new("RGBA", (16, 16), (0, 0, 0, 0)).save(source, format="PNG")
+    data = source.getvalue()
+    prepared = prepare_bundle(_bundle(_photo(_PHOTO_A, data)), reader=_reader({_PHOTO_A: data}))
+    with Image.open(io.BytesIO(prepared.photos[0].data)) as result:
+        assert min(result.getpixel((8, 8))) > 245
+
+
+def test_multiframe_image_is_not_silently_reduced_to_one_label() -> None:
+    source = io.BytesIO()
+    Image.new("RGB", (16, 16), "red").save(source, format="PNG", save_all=True,
+        append_images=[Image.new("RGB", (16, 16), "blue")])
+    data = source.getvalue()
+    with pytest.raises(ExtractionError):
+        prepare_bundle(_bundle(_photo(_PHOTO_A, data)), reader=_reader({_PHOTO_A: data}))

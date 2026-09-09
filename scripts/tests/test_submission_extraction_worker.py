@@ -7,29 +7,32 @@ around a model are correct before one is chosen.
 from __future__ import annotations
 
 import copy
+import hashlib
 
 import pytest
 
 from submission_review.extraction.adapters.fake_adapter import FakeAdapter
 from submission_review.extraction.extractor import (
-    EvidenceBundle,
-    EvidencePhoto,
+    PreparedBundle,
+    PreparedInput,
     ExtractionConfig,
     ExtractionError,
     LabelDraftExtractor,
+    ExtractionResult,
+    Usage,
 )
 
 _PHOTO_A = "10000000-0000-0000-0000-000000000001"
 _PHOTO_B = "10000000-0000-0000-0000-000000000002"
 
 
-def _bundle(revision: int = 1) -> EvidenceBundle:
-    return EvidenceBundle(
+def _bundle(revision: int = 1) -> PreparedBundle:
+    return PreparedBundle(
         submission_id="018f4c79-7c7e-4c70-9d62-7fc3b9ce6a11",
         evidence_revision=revision,
         photos=(
-            EvidencePhoto(photo_id=_PHOTO_A, sha256="a" * 64),
-            EvidencePhoto(photo_id=_PHOTO_B, sha256="b" * 64),
+            PreparedInput("i0", _PHOTO_A, "a" * 64, hashlib.sha256(b"one").hexdigest(), "image/jpeg", 3, b"one"),
+            PreparedInput("i1", _PHOTO_B, "b" * 64, hashlib.sha256(b"two").hexdigest(), "image/jpeg", 3, b"two"),
         ),
     )
 
@@ -53,7 +56,7 @@ class _Adapter:
         self.payload = payload
 
     def extract(self, bundle, config):
-        return copy.deepcopy(self.payload)
+        return ExtractionResult(copy.deepcopy(self.payload), Usage())
 
 
 class _CrashingAdapter:
@@ -62,7 +65,7 @@ class _CrashingAdapter:
 
 
 def _valid_payload(bundle, config):
-    return FakeAdapter().extract(bundle, config)
+    return FakeAdapter().extract(bundle, config).draft
 
 
 def test_a_valid_model_draft_passes_with_its_usage() -> None:
@@ -138,7 +141,7 @@ def test_a_mismatched_origin_is_caught_by_the_envelope_contract() -> None:
         LabelDraftExtractor(_Adapter(payload)).extract(bundle, _config())
 
     assert error.value.code == "model_failure"
-    assert "draft_origin" in error.value.detail
+    assert "invalid provider draft" in error.value.detail
 
 
 def test_an_extractor_configured_as_human_still_cannot_file_transcription() -> None:
@@ -167,7 +170,7 @@ def test_an_invalid_envelope_becomes_a_typed_failure_not_a_crash() -> None:
 
 
 def test_an_empty_lease_is_refused_before_any_provider_work() -> None:
-    empty = EvidenceBundle(
+    empty = PreparedBundle(
         submission_id="018f4c79-7c7e-4c70-9d62-7fc3b9ce6a11",
         evidence_revision=1,
         photos=(),
@@ -200,3 +203,20 @@ def test_unexpected_adapter_failures_are_typed_without_leaking_details() -> None
 def test_an_unknown_failure_code_cannot_be_invented() -> None:
     with pytest.raises(ValueError):
         ExtractionError("something_new", "not in the vocabulary")
+
+
+def test_adapter_usage_is_preserved_and_cannot_be_overridden_by_details() -> None:
+    class PaidAdapter(FakeAdapter):
+        def extract(self, bundle, config):
+            result = super().extract(bundle, config)
+            return ExtractionResult(result.draft, Usage(microcents=12, details={"cost_microcents": 0}))
+
+    result = LabelDraftExtractor(PaidAdapter()).extract(_bundle(), _config())
+    assert result.usage.as_payload()["cost_microcents"] == 12
+
+
+def test_draft_with_invented_transmission_hash_is_rejected() -> None:
+    payload = _valid_payload(_bundle(), _config())
+    payload["sent_inputs"][0]["sent_sha256"] = "f" * 64
+    with pytest.raises(ExtractionError, match="prepared evidence"):
+        LabelDraftExtractor(_Adapter(payload)).extract(_bundle(), _config())

@@ -11,6 +11,8 @@ written once, tested with a fake, and swapped without touching the caller.
 
 from __future__ import annotations
 
+import hashlib
+import math
 import time
 from dataclasses import dataclass, field
 from typing import Any, Protocol
@@ -18,6 +20,7 @@ from typing import Any, Protocol
 from .envelope import LabelDraftError, validate_label_draft_v1
 
 FAILURE_SCHEMA = "extraction_failure_v1"
+PREPARATION_VERSION = "prep_v1"
 
 #: Typed failures. A model that fell over is not the same thing as evidence a
 #: careful reader cannot use, and a reviewer needs to see which happened.
@@ -36,12 +39,13 @@ FAILURE_CODES = frozenset(
 class ExtractionError(RuntimeError):
     """The extractor could not produce a draft, and says why in one code."""
 
-    def __init__(self, code: str, detail: str = "") -> None:
+    def __init__(self, code: str, detail: str = "", *, usage: Usage | None = None) -> None:
         if code not in FAILURE_CODES:
             raise ValueError(f"unknown extraction failure code {code!r}")
         super().__init__(f"{code}: {detail}" if detail else code)
         self.code = code
         self.detail = detail
+        self.usage = usage
 
     def as_envelope(self) -> dict[str, Any]:
         return {
@@ -57,14 +61,14 @@ class EvidencePhoto:
 
     photo_id: str
     sha256: str
-    #: Local path to the fetched bytes. The worker fetches; the adapter reads.
+    #: Local path consumed only by preparation, never exposed to an adapter.
     path: str | None = None
     categories: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
 class EvidenceBundle:
-    """Everything an extractor is allowed to see about one submission."""
+    """Original evidence leased to the worker for preparation."""
 
     submission_id: str
     evidence_revision: int
@@ -77,6 +81,37 @@ class EvidenceBundle:
 
 
 @dataclass(frozen=True)
+class PreparedInput:
+    """The exact sanitized bytes an adapter receives, with original lineage."""
+
+    input_id: str
+    photo_id: str
+    original_sha256: str
+    sent_sha256: str
+    content_type: str
+    byte_size: int
+    data: bytes
+    categories: tuple[str, ...] = ()
+
+    def as_sent_input(self) -> dict[str, object]:
+        return {"input_id": self.input_id, "photo_id": self.photo_id,
+                "original_sha256": self.original_sha256, "sent_sha256": self.sent_sha256}
+
+
+@dataclass(frozen=True)
+class PreparedBundle:
+    """Provider input; intentionally contains no original paths or raw bytes."""
+
+    submission_id: str
+    evidence_revision: int
+    photos: tuple[PreparedInput, ...]
+
+    @property
+    def snapshot(self) -> dict[str, str]:
+        return {photo.photo_id: photo.original_sha256 for photo in self.photos}
+
+
+@dataclass(frozen=True)
 class ExtractionConfig:
     """The pinned configuration a run is attributable to."""
 
@@ -84,11 +119,12 @@ class ExtractionConfig:
     model: str
     model_digest: str
     prompt_version: str
-    prep_config_version: str = "prep_v1"
+    prep_config_version: str = PREPARATION_VERSION
     #: An adapter refuses to run until the retention terms it operates under
     #: are stated. Free tiers that train on submissions are not an option, and
     #: silence is not consent.
     retention_policy_version: str | None = None
+    max_cost_microcents: int = 0
 
 
 @dataclass
@@ -101,11 +137,15 @@ class Usage:
     details: dict[str, Any] = field(default_factory=dict)
 
     def as_payload(self) -> dict[str, Any]:
+        if type(self.microcents) is not int or self.microcents < 0:
+            raise ValueError("invalid extraction cost")
+        if not math.isfinite(self.latency_seconds) or self.latency_seconds < 0:
+            raise ValueError("invalid extraction latency")
         return {
+            **self.details,
             "cost_microcents": int(self.microcents),
             "latency_seconds": round(float(self.latency_seconds), 4),
             "cold_start": bool(self.cold_start),
-            **self.details,
         }
 
 
@@ -119,9 +159,9 @@ class LabelDraftAdapter(Protocol):
     """What a provider adapter must offer, and nothing more."""
 
     def extract(
-        self, bundle: EvidenceBundle, config: ExtractionConfig
-    ) -> dict[str, Any]:
-        """Return a candidate ``label_draft_v1`` payload or raise."""
+        self, bundle: PreparedBundle, config: ExtractionConfig
+    ) -> ExtractionResult:
+        """Return a candidate draft and authoritative adapter usage, or raise."""
 
 
 class LabelDraftExtractor:
@@ -137,19 +177,30 @@ class LabelDraftExtractor:
         self._adapter = adapter
 
     def extract(
-        self, bundle: EvidenceBundle, config: ExtractionConfig
+        self, bundle: PreparedBundle, config: ExtractionConfig
     ) -> ExtractionResult:
-        if config.retention_policy_version is None:
+        if not isinstance(config.retention_policy_version, str) or not config.retention_policy_version.strip():
             raise ExtractionError(
                 "provider_unavailable",
                 "an adapter must state the retention terms it runs under",
+                usage=Usage(),
             )
+        if not isinstance(bundle, PreparedBundle):
+            raise ExtractionError("preparation_failed", "prepared evidence required", usage=Usage())
         if not bundle.photos:
-            raise ExtractionError("unsupported_evidence", "no photos were leased")
+            raise ExtractionError("unsupported_evidence", "no photos were leased", usage=Usage())
+        if len(bundle.snapshot) != len(bundle.photos) or len({p.input_id for p in bundle.photos}) != len(bundle.photos):
+            raise ExtractionError("preparation_failed", "duplicate evidence identity")
+        for photo in bundle.photos:
+            if len(photo.data) != photo.byte_size or hashlib.sha256(photo.data).hexdigest() != photo.sent_sha256:
+                raise ExtractionError("preparation_failed", "prepared bytes do not match provenance")
         started = time.monotonic()
         try:
-            payload = self._adapter.extract(bundle, config)
-        except ExtractionError:
+            result = self._adapter.extract(bundle, config)
+        except ExtractionError as error:
+            # A typed adapter exception still crosses the untrusted boundary.
+            # Invalid usage means unknown cost, never an invented zero charge.
+            error.usage = _checked_usage(error.usage)
             raise
         except Exception as error:
             # Adapters are provider boundaries. An unexpected SDK/network
@@ -161,17 +212,22 @@ class LabelDraftExtractor:
                 "provider_unavailable", "provider adapter failed"
             ) from error
         elapsed = time.monotonic() - started
+        usage = _checked_usage(getattr(result, "usage", None))
         try:
-            draft = validate_label_draft_v1(payload)
-        except LabelDraftError as error:
-            raise ExtractionError("model_failure", str(error)) from error
+            if not isinstance(result, ExtractionResult):
+                raise LabelDraftError("$", "adapter result must include usage")
+            if usage is None:
+                raise LabelDraftError("$", "adapter usage must be valid")
+            draft = validate_label_draft_v1(result.draft)
+        except (LabelDraftError, ValueError, TypeError, AttributeError) as error:
+            raise ExtractionError("model_failure", "invalid provider draft", usage=usage) from error
         if draft.get("evidence_snapshot") != bundle.snapshot:
             raise ExtractionError(
-                "model_failure", "draft snapshot is not the leased evidence"
+                "model_failure", "draft snapshot is not the leased evidence", usage=result.usage
             )
         if draft.get("evidence_revision") != bundle.evidence_revision:
             raise ExtractionError(
-                "model_failure", "draft revision is not the leased revision"
+                "model_failure", "draft revision is not the leased revision", usage=result.usage
             )
         for key, expected in (
             ("provider", config.provider),
@@ -180,11 +236,23 @@ class LabelDraftExtractor:
         ):
             if draft.get(key) != expected:
                 raise ExtractionError(
-                    "model_failure", f"draft {key} is not the configured one"
+                    "model_failure", f"draft {key} is not the configured one", usage=result.usage
                 )
         if draft.get("draft_origin") != "model":
             raise ExtractionError(
-                "model_failure", "an extractor produces model drafts only"
+                "model_failure", "an extractor produces model drafts only", usage=result.usage
             )
-        usage = Usage(latency_seconds=elapsed)
-        return ExtractionResult(draft=draft, usage=usage)
+        if draft["sent_inputs"] != [photo.as_sent_input() for photo in bundle.photos]:
+            raise ExtractionError("model_failure", "draft inputs are not the prepared evidence", usage=result.usage)
+        result.usage.latency_seconds = elapsed
+        return ExtractionResult(draft=draft, usage=result.usage)
+
+
+def _checked_usage(value: object) -> Usage | None:
+    if not isinstance(value, Usage):
+        return None
+    try:
+        value.as_payload()
+    except (ValueError, TypeError, AttributeError, OverflowError):
+        return None
+    return value
