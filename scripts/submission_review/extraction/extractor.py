@@ -147,7 +147,19 @@ class LabelDraftExtractor:
         if not bundle.photos:
             raise ExtractionError("unsupported_evidence", "no photos were leased")
         started = time.monotonic()
-        payload = self._adapter.extract(bundle, config)
+        try:
+            payload = self._adapter.extract(bundle, config)
+        except ExtractionError:
+            raise
+        except Exception as error:
+            # Adapters are provider boundaries. An unexpected SDK/network
+            # exception must become a retryable typed failure rather than
+            # escaping the worker and leaving the lease to expire. Do not
+            # expose provider exception text: it can contain request data or
+            # credentials.
+            raise ExtractionError(
+                "provider_unavailable", "provider adapter failed"
+            ) from error
         elapsed = time.monotonic() - started
         try:
             draft = validate_label_draft_v1(payload)

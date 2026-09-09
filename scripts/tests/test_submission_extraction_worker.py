@@ -56,6 +56,11 @@ class _Adapter:
         return copy.deepcopy(self.payload)
 
 
+class _CrashingAdapter:
+    def extract(self, bundle, config):
+        raise RuntimeError("provider response contained a secret")
+
+
 def _valid_payload(bundle, config):
     return FakeAdapter().extract(bundle, config)
 
@@ -181,6 +186,15 @@ def test_adapter_failures_stay_typed() -> None:
         )
 
     assert error.value.code == "provider_unavailable"
+
+
+def test_unexpected_adapter_failures_are_typed_without_leaking_details() -> None:
+    with pytest.raises(ExtractionError) as error:
+        LabelDraftExtractor(_CrashingAdapter()).extract(_bundle(), _config())
+
+    assert error.value.code == "provider_unavailable"
+    assert error.value.detail == "provider adapter failed"
+    assert "secret" not in str(error.value)
 
 
 def test_an_unknown_failure_code_cannot_be_invented() -> None:
