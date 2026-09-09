@@ -28,6 +28,16 @@ const state = {
   productImage: null,
   lightboxImage: null,
   lightboxRotation: 0,
+  // The reviewer's own saved corrections and attestations, as the server
+  // reports them. The local tick set stays the fast path for rendering; this
+  // is the durable record that survives a reload.
+  review: null,
+  reviewLoadedFor: null,
+  reviewSaveTimer: null,
+  reviewSaveRequest: 0,
+  reviewVerifyRequest: 0,
+  reviewSuperseded: false,
+  reviewDigestMismatch: false,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -212,12 +222,20 @@ function select(submission) {
   state.payloadCanonical = null;
   state.verifiedKey = null;
   state.verified = new Set();
+  state.review = null;
+  state.reviewLoadedFor = null;
+  state.reviewSuperseded = false;
+  state.reviewDigestMismatch = false;
   state.identityLookup = null;
   state.identityRecorded = null;
   state.reviewerImages = [];
   state.productImage = null;
   $('reviewer-image-attestation').checked = false;
   $('reviewer-image-file').value = '';
+  // Last, and only if one is pending: cancelling a save is cleanup, and
+  // cleanup must never be able to abort the reset above part-way through.
+  if (state.reviewSaveTimer) clearTimeout(state.reviewSaveTimer);
+  state.reviewSaveTimer = null;
   renderQueue();
   renderDetail();
   void refreshSelected();
@@ -313,6 +331,9 @@ function renderDetail() {
   renderIdentityCheck();
   renderProductPictureOptions();
   setDecisionAvailability();
+  renderReviewBanner();
+  // Restore this reviewer's saved corrections and ticks, once per revision.
+  void loadReview();
 }
 
 // ---------------------------------------------------------------- identity
@@ -587,6 +608,7 @@ function toggleVerified(field) {
   renderVerifyChecklist();
   renderReadiness();
   setDecisionAvailability();
+  void persistVerification(field, verified.has(field));
 }
 
 function renderVerifyChecklist() {
@@ -621,6 +643,15 @@ function readinessChecks() {
       done: !state.reviewInvalidated,
       todo: 'The photos changed while you were reading. Open this submission again.',
       done_text: 'You are looking at the current photos.',
+    },
+    {
+      // Saved work that describes other photographs, or text the server reads
+      // differently, cannot authorize this decision.
+      done: !state.reviewSuperseded && !state.reviewDigestMismatch,
+      todo: state.reviewDigestMismatch
+        ? 'This page and the server disagree about the label text. Reopen this submission.'
+        : 'New photographs arrived after you started. Reopen this submission to read them.',
+      done_text: 'Your saved review matches this evidence.',
     },
     {
       done: submission.review_status === 'under_review',
@@ -670,6 +701,191 @@ function renderReadiness() {
 function approvalBlockers() {
   return readinessChecks().filter((check) => !check.done);
 }
+
+// ------------------------------------------------- persistent reviewer review
+//
+// A reviewer who reloads the page must find their corrections and their ticks
+// exactly as they left them, and must never find a tick standing against text
+// or photographs that have since moved. The server owns both facts; this layer
+// keeps the page and the server saying the same thing.
+//
+// The local tick set remains the rendering fast path. It is hydrated from the
+// server on open and confirmed against the server on every change, so an
+// optimistic tick the server refuses is taken back rather than left showing.
+
+/** Where each console field lives in the label contract, for both sides. */
+const FIELD_PATHS = new Map([
+  ['brand', 'identity.brand'],
+  ['name', 'identity.product_name'],
+  ['serving', 'serving.size'],
+  ['rows', 'ingredient_rows'],
+  ['other', 'other_ingredients'],
+]);
+
+/** The photograph the model says a field was read off, when it says one. */
+function sourcePhotoForField(field) {
+  const draft = state.draft?.draft_payload;
+  if (!draft) return null;
+  const lookup = {
+    brand: draft.identity?.brand,
+    name: draft.identity?.product_name,
+    serving: draft.serving?.size,
+    other: draft.other_ingredients,
+    rows: Array.isArray(draft.ingredient_rows) ? draft.ingredient_rows[0] : null,
+  }[field];
+  const source = lookup?.sources?.[0] ?? lookup?.display_name?.sources?.[0];
+  const photoId = source?.photo_id ?? null;
+  // Only offer a photograph that is actually part of this evidence revision.
+  return (state.selected?.photos ?? []).some((p) => p.photo_id === photoId)
+    ? photoId
+    : null;
+}
+
+function hydrateReview(review) {
+  state.review = review ?? null;
+  const draft = review?.draft ?? null;
+  state.reviewSuperseded = Boolean(draft?.superseded);
+  // The server's digest is authoritative. If the two sides canonicalize the
+  // same label differently an attestation would bind to text the reviewer
+  // never saw, so it becomes a blocker rather than a silent disagreement.
+  state.reviewDigestMismatch = Boolean(
+    draft && !draft.superseded && state.payloadSha &&
+    draft.payload_sha256 !== state.payloadSha,
+  );
+  const key = verificationKey();
+  if (!key) return;
+  const live = (review?.verifications ?? [])
+    .filter((entry) => entry.live)
+    .map((entry) => entry.field_path);
+  const fields = new Set();
+  for (const [field, path] of FIELD_PATHS) {
+    if (live.includes(path)) fields.add(field);
+  }
+  state.verifiedKey = key;
+  state.verified = fields;
+}
+
+async function loadReview() {
+  const submission = state.selected;
+  if (!submission || !state.session) return;
+  const key = `${submission.id}:${submission.evidence_revision}`;
+  if (state.reviewLoadedFor === key) return;
+  state.reviewLoadedFor = key;
+  let review;
+  try {
+    ({ review } = await edge({ action: 'load_review', submission_id: submission.id }));
+  } catch {
+    state.reviewLoadedFor = null;
+    setStatus('Saved review could not be loaded; your edits will not persist.', true);
+    return;
+  }
+  if (state.selected?.id !== submission.id) return;
+  const draft = review?.draft;
+  // Restore the reviewer's own work. A superseded draft is never adopted into
+  // the editor: it describes photographs that are no longer the evidence.
+  if (draft && !draft.superseded && draft.payload) {
+    state.payload = draft.payload;
+    syncFieldsFromPayload();
+    renderRows();
+    await updateShaPreview();
+  }
+  hydrateReview(review);
+  renderVerifyChecklist();
+  renderReadiness();
+  renderReviewBanner();
+  setDecisionAvailability();
+}
+
+function scheduleReviewSave() {
+  if (!state.session) return;
+  clearTimeout(state.reviewSaveTimer);
+  state.reviewSaveTimer = setTimeout(() => void saveReview(), 800);
+}
+
+async function saveReview() {
+  const submission = state.selected;
+  if (!submission || !state.session) return;
+  if (!state.payloadSha || state.reviewInvalidated) return;
+  if (!submission.evidence_manifest_sha256) return;
+  const requestId = ++state.reviewSaveRequest;
+  const boundSha = state.payloadSha;
+  let review;
+  try {
+    ({ review } = await edge({
+      action: 'save_review',
+      submission_id: submission.id,
+      payload: state.payload,
+      expected_evidence_revision: submission.evidence_revision,
+      evidence_manifest_sha256: submission.evidence_manifest_sha256,
+    }));
+  } catch {
+    setStatus('Your corrections are not being saved. Reopen this submission.', true);
+    return;
+  }
+  // A save that finished after a newer edit must not describe the screen.
+  if (requestId !== state.reviewSaveRequest) return;
+  if (state.selected?.id !== submission.id || state.payloadSha !== boundSha) return;
+  hydrateReview(review);
+  renderReviewBanner();
+  setDecisionAvailability();
+}
+
+/** Persist one tick, and take it back if the server refuses. */
+async function persistVerification(field, verified) {
+  const submission = state.selected;
+  const path = FIELD_PATHS.get(field);
+  if (!submission || !state.session) return;
+  if (!path || !state.payloadSha) return;
+  const boundSha = state.payloadSha;
+  // Ticks are made in quick succession. An earlier reply describes fewer of
+  // them, so letting a late arrival repaint the list would silently drop a
+  // check the database has already accepted.
+  const requestId = ++state.reviewVerifyRequest;
+  let review;
+  try {
+    ({ review } = await edge({
+      action: 'set_field_verification',
+      submission_id: submission.id,
+      field_path: path,
+      payload_sha256: boundSha,
+      verified,
+      photo_id: verified ? sourcePhotoForField(field) : null,
+    }));
+  } catch {
+    if (state.selected?.id === submission.id && state.payloadSha === boundSha) {
+      // The tick did not reach the database, so the page must stop showing it.
+      state.verified.delete(field);
+      renderVerifyChecklist();
+      renderReadiness();
+      setDecisionAvailability();
+    }
+    setStatus('That check could not be recorded. Read the field again.', true);
+    return;
+  }
+  if (requestId !== state.reviewVerifyRequest) return;
+  if (state.selected?.id !== submission.id || state.payloadSha !== boundSha) return;
+  hydrateReview(review);
+  renderVerifyChecklist();
+  renderReadiness();
+  setDecisionAvailability();
+}
+
+/** Say plainly when saved work no longer applies to what is on screen. */
+function renderReviewBanner() {
+  const banner = $('review-banner');
+  if (!banner) return;
+  let message = '';
+  if (state.reviewDigestMismatch) {
+    message = 'This page and the server disagree about the label text. ' +
+      'Reopen this submission before approving.';
+  } else if (state.reviewSuperseded) {
+    message = 'New photographs arrived after you started. Your earlier ' +
+      'corrections were kept but no longer apply to this evidence.';
+  }
+  banner.textContent = message;
+  banner.hidden = message === '';
+}
+
 
 // ------------------------------------------------------------- help drawer
 
@@ -1210,6 +1426,9 @@ async function updateShaPreview() {
     state.payloadSha = null;
     $('payload-sha').textContent = 'invalid payload';
   }
+  // Deliberately outside the try above: a failure to save is not the label
+  // being invalid, and must never be reported to the reviewer as one.
+  if (state.payloadSha) scheduleReviewSave();
   // Editing a field is the reviewer withdrawing their own check of it.
   renderVerifyChecklist();
   renderReadiness();

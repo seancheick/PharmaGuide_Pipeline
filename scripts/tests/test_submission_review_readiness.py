@@ -245,7 +245,10 @@ def test_a_fully_checked_submission_can_be_approved() -> None:
 
     assert _blockers(out) == []
     assert out["approveDisabled"] is False
-    assert out["progress"].startswith("5 of 5")
+    # Count the gates that exist rather than a number frozen at one moment:
+    # adding a gate must not silently pass by leaving this assertion behind.
+    done = len(out["items"])
+    assert out["progress"].startswith(f"{done} of {done}")
 
 
 def test_approve_is_refused_until_every_field_has_been_read() -> None:

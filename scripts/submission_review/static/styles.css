@@ -170,3 +170,10 @@ code { background: var(--low); padding: .1rem .3rem; border-radius: 4px; font-si
 #help-drawer { max-width: 44rem; }
 #help-body dt { font-weight: 600; margin-top: 10px; }
 #help-body dd { margin: 2px 0 0 0; color: #444; }
+
+/* Saved work that no longer applies to what is on screen. Loud on purpose:
+   a reviewer must not carry an earlier reading into new evidence. */
+.review-banner {
+  margin: 0 0 12px; padding: 10px 12px; border-radius: 6px;
+  border: 1px solid #b8860b; background: #fdf6e3; color: #6b5200;
+}
