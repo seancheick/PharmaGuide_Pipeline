@@ -135,3 +135,16 @@ button.compact { padding: .2rem .35rem; font-size: .75rem; }
 #catalog-results li:hover { background: var(--low); }
 code { background: var(--low); padding: .1rem .3rem; border-radius: 4px; font-size: .78rem; }
 #detail-head .mono { font-family: ui-monospace, monospace; font-size: .8rem; color: var(--fg-muted); }
+
+/* AI draft: a starting point shown beside the photographs, never instead. */
+#ai-draft { border-left: 3px solid #b8b8b8; padding-left: 12px; margin: 16px 0; }
+.draft-field { display: grid; grid-template-columns: 12rem 1fr 12rem; gap: 8px;
+  padding: 2px 0; align-items: baseline; }
+.draft-label { color: #555; }
+.draft-value { font-weight: 600; }
+/* Unreadable must look unreadable. A blank would read as "nothing on the
+   label" rather than "the model could not read it". */
+.draft-unknown { color: #8a5a00; font-style: italic; }
+.draft-rows { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.draft-rows th, .draft-rows td { text-align: left; padding: 3px 6px;
+  border-bottom: 1px solid #eee; font-size: 0.95em; }

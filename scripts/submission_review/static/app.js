@@ -83,6 +83,7 @@ async function boot() {
     renderRows();
   });
   $('add-statement').addEventListener('click', addStatement);
+  $('ai-draft-load').addEventListener('click', loadDraftIntoEditor);
   $('apply-raw').addEventListener('click', applyRawJson);
   $('t-under-review').addEventListener('click', () =>
     transition({ to_status: 'under_review' }),
@@ -291,6 +292,7 @@ function renderDetail() {
     grid.append(figure);
   }
 
+  renderDraft();
   renderRows();
   syncFieldsFromPayload();
   updateShaPreview();
@@ -517,6 +519,150 @@ function renderIdentityCheck() {
 }
 
 // ---------------------------------------------------------------- payload
+
+// ------------------------------------------------------------------ AI draft
+//
+// Shown beside the photographs, never instead of them. A draft is a starting
+// point a reviewer checks against the label; the fields most often wrong when
+// a machine reads a supplement panel — dose, unit, and which blend a row
+// belongs to — are the ones surfaced hardest here.
+
+function draftFieldValue(field) {
+  if (!field || typeof field !== 'object') return null;
+  return field.status === 'read' || field.status === 'partial' ? field.value : null;
+}
+
+function draftFieldRow(label, field) {
+  const row = document.createElement('div');
+  row.className = 'draft-field';
+  const status = field && typeof field === 'object' ? field.status : 'not_present';
+  const value = draftFieldValue(field);
+  const name = document.createElement('span');
+  name.className = 'draft-label';
+  name.textContent = label;
+  const shown = document.createElement('span');
+  // An unreadable field says so. It must never render as blank, which reads
+  // as "nothing on the label" rather than "the model could not read it".
+  shown.className = value === null ? 'draft-unknown' : 'draft-value';
+  shown.textContent = value === null ? `— ${status}` : String(value);
+  const provenance = document.createElement('span');
+  provenance.className = 'mono muted';
+  const sources = (field && field.sources) || [];
+  provenance.textContent = sources.length
+    ? `from ${sources.map((source) => source.input_id).join(', ')}`
+    : 'no source cited';
+  row.append(name, shown, provenance);
+  return row;
+}
+
+function renderDraft() {
+  const section = $('ai-draft');
+  const body = $('ai-draft-body');
+  const meta = $('ai-draft-meta');
+  body.textContent = '';
+  meta.textContent = '';
+  const extraction = (state.selected?.extractions ?? [])[0];
+  state.draft = extraction ?? null;
+  if (!extraction || !extraction.draft_payload) {
+    section.classList.add('hidden');
+    return;
+  }
+  section.classList.remove('hidden');
+  const payload = extraction.draft_payload;
+  meta.textContent =
+    `v${extraction.version} · ${extraction.actor_kind} · ${extraction.provider}` +
+    ` ${extraction.model} · prompt ${extraction.prompt_version}` +
+    ` · revision ${extraction.evidence_revision}`;
+
+  if (payload.abstained) {
+    const abstained = document.createElement('p');
+    abstained.className = 'draft-unknown';
+    abstained.textContent =
+      `The model did not read this label: ${payload.abstain_reason ?? 'no reason given'}.` +
+      ' Transcribe it by hand.';
+    body.append(abstained);
+  }
+
+  const identity = payload.identity ?? {};
+  const serving = payload.serving ?? {};
+  body.append(
+    draftFieldRow('Brand', identity.brand),
+    draftFieldRow('Product name', identity.product_name),
+    draftFieldRow('Serving size', serving.size),
+    draftFieldRow('Servings per container', serving.servings_per_container),
+    draftFieldRow('Serving basis', serving.basis_text),
+    draftFieldRow('Other ingredients', (payload.other_ingredients ?? {}).text),
+  );
+
+  const rows = payload.ingredient_rows ?? [];
+  const table = document.createElement('table');
+  table.className = 'draft-rows';
+  const header = document.createElement('tr');
+  for (const column of ['Ingredient', 'Amount', 'Unit', 'Belongs to', 'From']) {
+    const cell = document.createElement('th');
+    cell.textContent = column;
+    header.append(cell);
+  }
+  table.append(header);
+  rows.forEach((row, index) => {
+    const line = document.createElement('tr');
+    const amount = row.amount && row.amount.status === 'read' ? row.amount.value : null;
+    const parent = row.parent_index === null || row.parent_index === undefined
+      ? (row.is_blend_header ? 'blend header' : '')
+      : draftFieldValue((rows[row.parent_index] ?? {}).display_name) ?? '?';
+    const sources = (row.display_name?.sources ?? []).map((s) => s.input_id).join(', ');
+    for (const [text, unknown] of [
+      [draftFieldValue(row.display_name) ?? '—', draftFieldValue(row.display_name) === null],
+      [amount ? String(amount.value) : '—', !amount],
+      [amount ? amount.unit_text : '—', !amount],
+      [parent || '—', false],
+      [sources || 'no source', !sources],
+    ]) {
+      const cell = document.createElement('td');
+      cell.className = unknown ? 'draft-unknown' : '';
+      cell.textContent = text;
+      line.append(cell);
+    }
+    line.dataset.rowIndex = String(index);
+    table.append(line);
+  });
+  if (rows.length) body.append(table);
+}
+
+/** Fill the editor from the draft, keeping only what the model claims to have
+ * actually read. Nothing unreadable is carried across as a value, because a
+ * blank a reviewer must fill is safer than a guess they might accept. */
+function loadDraftIntoEditor() {
+  const payload = state.draft?.draft_payload;
+  if (!payload) return;
+  const next = defaultPayload();
+  const brand = draftFieldValue(payload.identity?.brand);
+  const name = draftFieldValue(payload.identity?.product_name);
+  if (brand) next.brandName = String(brand);
+  if (name) next.fullName = String(name);
+  const other = draftFieldValue((payload.other_ingredients ?? {}).text);
+  if (other) next.otherIngredients = String(other);
+  const rows = (payload.ingredient_rows ?? [])
+    .filter((row) => draftFieldValue(row.display_name))
+    .map((row) => {
+      const entry = emptyRow();
+      entry.name = String(draftFieldValue(row.display_name));
+      const amount = row.amount && row.amount.status === 'read' ? row.amount.value : null;
+      entry.quantity = [{
+        quantity: amount ? Number(amount.value) : 0,
+        unit: amount ? String(amount.unit_text) : 'mg',
+      }];
+      return entry;
+    });
+  next.ingredientRows = rows.length ? rows : [emptyRow()];
+  state.payload = next;
+  renderRows();
+  syncFieldsFromPayload();
+  updateShaPreview();
+  setStatus(
+    'Draft loaded. Every field is unverified until you have read it off the photographs.',
+  );
+}
 
 function emptyRow() {
   return {
