@@ -1,5 +1,10 @@
 # Live integration and reviewer workstation — milestone handoff
 
+> Historical milestone report. The subsequent
+> [workstation audit](submission_workstation_audit_2026_09_09.md) corrects its
+> integration scope, readiness races, candidate fingerprint and artifact-state
+> claims. Use that audit for the next handoff; this is not a deployment sign-off.
+
 2026-09-09. Continued from pipeline `541b456c` and app `bce3624`; both verified
 as ancestors. Source and local verification only. Extraction remains disabled,
 nothing was deployed, no catalog was rebuilt, and no paid or remote model was

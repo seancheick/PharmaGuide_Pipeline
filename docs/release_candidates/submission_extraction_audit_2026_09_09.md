@@ -1,5 +1,9 @@
 # Extraction workflow audit and continuation
 
+> Historical audit. The later
+> [workstation audit and continuation](submission_workstation_audit_2026_09_09.md)
+> records the current fixes, local integration evidence and candidate version.
+
 2026-09-09. Audited pipeline `b33615ee..3fa96b55` and app
 `8825941..171c4cc`. These are source fixes, **not a deployment or model
 qualification**. The catalog, clinical data, scoring weights and production
