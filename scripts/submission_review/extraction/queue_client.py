@@ -226,6 +226,33 @@ class SupabaseExtractionQueue:
         finally:
             self.release_evidence(job_id)
 
+    def attempt_outcome(self, job_id: str, fencing_token: int) -> dict[str, Any]:
+        """What actually happened to one attempt, when the answer was lost.
+
+        A completion can time out with the transaction already committed.
+        Retrying blind double-charges or files a second draft; giving up blind
+        strands a reservation and loses a draft that exists. So the worker
+        asks, keyed on the exact attempt: a later attempt's result says nothing
+        about this one.
+        """
+        rows = self._rpc(
+            "product_submission_extraction_attempt_outcome",
+            {"p_job_id": job_id, "p_fencing_token": int(fencing_token)},
+        )
+        if isinstance(rows, list) and rows:
+            rows = rows[0]
+        if not isinstance(rows, dict):
+            raise _RpcRejected("the queue returned no attempt outcome", code=None)
+        return {
+            "attempt_is_current": bool(rows.get("attempt_is_current")),
+            "job_state": rows.get("job_state"),
+            "result_extraction_version": rows.get("result_extraction_version"),
+            "draft_recorded": bool(rows.get("draft_recorded")),
+            "reservation_open": bool(rows.get("reservation_open")),
+            "reserved_microcents": int(rows.get("reserved_microcents") or 0),
+            "settled_microcents": int(rows.get("settled_microcents") or 0),
+        }
+
     def remaining_microcents(self) -> int:
         rows = self._rpc("product_submission_extraction_allowance")
         if isinstance(rows, list) and rows:

@@ -150,3 +150,65 @@ def test_max_seconds_is_documented_as_an_admission_window() -> None:
         runner.main(["run", "--help"])
 
     assert "admission window" in buffer.getvalue()
+
+
+class _OutcomeQueue(_Queue):
+    def __init__(self, outcome):
+        super().__init__()
+        self.outcome = outcome
+
+    def attempt_outcome(self, job_id, fencing_token):
+        return self.outcome
+
+
+def _outcome(**overrides):
+    base = {
+        "attempt_is_current": True,
+        "job_state": "leased",
+        "result_extraction_version": None,
+        "draft_recorded": False,
+        "reservation_open": False,
+        "reserved_microcents": 0,
+        "settled_microcents": 0,
+    }
+    base.update(overrides)
+    return base
+
+
+def _reconcile(monkeypatch, capsys, outcome):
+    queue = _OutcomeQueue(outcome)
+    monkeypatch.setattr(runner, "_queue", lambda args: queue)
+    code = runner.main(["reconcile", "--job-id", "j1", "--fencing-token", "4"])
+    return code, json.loads(capsys.readouterr().out), queue
+
+
+def test_a_committed_draft_must_not_be_retried(monkeypatch, capsys) -> None:
+    code, printed, queue = _reconcile(
+        monkeypatch, capsys, _outcome(draft_recorded=True, result_extraction_version=2)
+    )
+
+    assert code == 0
+    assert "do not retry" in printed["verdict"]
+    assert queue.closed
+
+
+def test_an_attempt_another_worker_took_over_is_finished(monkeypatch, capsys) -> None:
+    _, printed, _ = _reconcile(monkeypatch, capsys, _outcome(attempt_is_current=False))
+
+    assert "another attempt owns this job" in printed["verdict"]
+
+
+def test_no_draft_means_the_attempt_may_be_retried(monkeypatch, capsys) -> None:
+    _, printed, _ = _reconcile(monkeypatch, capsys, _outcome())
+
+    assert "may be retried" in printed["verdict"]
+
+
+def test_an_outstanding_reservation_is_never_settled_on_age(monkeypatch, capsys) -> None:
+    # Time passing is not evidence that a model call cost nothing.
+    _, printed, _ = _reconcile(
+        monkeypatch, capsys, _outcome(reservation_open=True, reserved_microcents=900)
+    )
+
+    assert "verified usage" in printed["verdict"]
+    assert printed["reserved_microcents"] == 900

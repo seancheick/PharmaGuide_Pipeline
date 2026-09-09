@@ -126,6 +126,37 @@ def command_status(args) -> int:
     return 0
 
 
+def command_reconcile(args) -> int:
+    """Say what one uncertain attempt actually did, and what is owed.
+
+    Used after a completion whose answer was lost. It states facts and stops:
+    age is not evidence that a call cost nothing, so nothing is settled here on
+    a guess.
+    """
+    queue = _queue(args)
+    try:
+        outcome = queue.attempt_outcome(args.job_id, args.fencing_token)
+    except Exception:
+        print("the attempt could not be checked", file=sys.stderr)
+        return 1
+    finally:
+        queue.close()
+
+    if outcome["draft_recorded"]:
+        verdict = "the draft was recorded; do not retry this attempt"
+    elif not outcome["attempt_is_current"]:
+        verdict = "another attempt owns this job; this one is finished"
+    else:
+        verdict = "no draft was recorded; this attempt may be retried"
+    if outcome["reservation_open"]:
+        verdict += (
+            "; a reservation is still outstanding and needs verified usage "
+            "or proof the call never ran before it is settled"
+        )
+    print(json.dumps({**outcome, "verdict": verdict}, indent=2))
+    return 0
+
+
 def command_run(args) -> int:
     queue = _queue(args)
     extractor = LabelDraftExtractor(_adapter(args))
@@ -161,6 +192,9 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("preflight")
     sub.add_parser("status")
+    reconcile = sub.add_parser("reconcile")
+    reconcile.add_argument("--job-id", required=True)
+    reconcile.add_argument("--fencing-token", type=int, required=True)
     run = sub.add_parser("run")
     run.add_argument("--max-jobs", type=int, default=5)
     run.add_argument(
@@ -182,6 +216,7 @@ def main(argv: list[str] | None = None) -> int:
         return {
             "preflight": command_preflight,
             "status": command_status,
+            "reconcile": command_reconcile,
             "run": command_run,
         }[args.command](args)
     except QueueConfigurationError as error:
