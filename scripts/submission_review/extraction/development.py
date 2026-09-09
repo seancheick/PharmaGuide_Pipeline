@@ -56,9 +56,26 @@ def run_development_split(
             "--split holdout for a single ledgered evaluation"
         )
     products = load_manifest(holdout_dir, split)
+    if limit is not None and (type(limit) is not int or limit < 1):
+        raise DevelopmentRunError("limit must be a positive integer")
+    # A run is a new private directory under runs, never a gold/photo path.
+    run_dir = run_dir.resolve()
+    runs_root = (holdout_dir / "runs").resolve()
+    if runs_root != holdout_dir.resolve() / "runs":
+        raise DevelopmentRunError("the runs directory must not redirect into frozen evidence")
+    if run_dir == runs_root or not run_dir.is_relative_to(runs_root) or run_dir.exists():
+        raise DevelopmentRunError("use a new directory inside the holdout runs directory")
+    manifest = json.loads((holdout_dir / "manifest.json").read_text())
+    observed = _config_payload(config)
+    observed["prompt_sha256"] = extractor.prompt_sha256
+    candidates = [c for c in manifest["candidates"] if c["configuration"] == observed]
+    if len(candidates) != 1:
+        raise DevelopmentRunError("configuration must match one unchanged predeclared candidate")
     if limit is not None:
         products = products[:limit]
-    run_dir.mkdir(parents=True, exist_ok=True)
+    run_dir.mkdir(parents=True, mode=0o700)
+    _write(run_dir / "configuration.json", {
+        "candidate_id": candidates[0]["id"], "configuration": observed})
     summary = {"products": 0, "drafted": 0, "failed": 0, "failure_codes": {}}
 
     for entry in products:
@@ -86,6 +103,16 @@ def run_development_split(
             )
             continue
         summary["drafted"] += 1
+        # Retain precisely the sanitized bytes the evaluator hashes. Never use
+        # model-authored input ids as filenames.
+        sent_paths = []
+        for index, photo in enumerate(prepared.photos):
+            relative = f"{key}-input-{index}.jpg"
+            path = run_dir / relative
+            with path.open("xb") as stream:
+                stream.write(photo.data)
+            path.chmod(0o600)
+            sent_paths.append({"input_id": photo.input_id, "path": relative})
         _write(run_dir / f"{key}.json", result.draft)
         _write(
             run_dir / f"{key}.meta.json",
@@ -93,13 +120,9 @@ def run_development_split(
                 "latency_seconds": round(clock() - started, 4),
                 "cost_microcents": result.usage.microcents,
                 "cold_start": result.usage.cold_start,
-                "sent_inputs": [
-                    {"input_id": sent["input_id"], "path": f"{key}-{sent['input_id']}.jpg"}
-                    for sent in result.draft.get("sent_inputs", [])
-                ],
+                "sent_inputs": sent_paths,
             },
         )
-    _write(run_dir / "configuration.json", {"configuration": _config_payload(config)})
     return summary
 
 
@@ -127,13 +150,14 @@ def _config_payload(config: ExtractionConfig) -> dict[str, Any]:
         "model": config.model,
         "model_digest": config.model_digest,
         "prompt_version": config.prompt_version,
-        "prep_config_version": config.prep_config_version,
         "preparation": {"version": config.prep_config_version},
     }
 
 
 def _write(path: Path, payload: Any) -> None:
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    with path.open("x", encoding="utf-8") as stream:
+        stream.write(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    path.chmod(0o600)
 
 
 def gold_template(product_key: str) -> dict[str, Any]:

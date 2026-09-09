@@ -149,7 +149,8 @@ def test_an_extractor_configured_as_human_still_cannot_file_transcription() -> N
     # claims to be a person, so the envelope's provider rule is satisfied.
     human = _config(provider="human", model="human")
     bundle = _bundle()
-    payload = _valid_payload(bundle, human)
+    payload = _valid_payload(bundle, _config())
+    payload.update(provider="human", model="human")
     payload["draft_origin"] = "human_transcription"
     payload["sent_inputs"] = []
 

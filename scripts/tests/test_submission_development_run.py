@@ -87,7 +87,7 @@ def _build_set(root: Path, keys=("d-1", "d-2"), split: str = "development") -> N
                             "model": "fake-1",
                             "model_digest": "c" * 64,
                             "prompt_version": "p1",
-                            "prompt_sha256": "b" * 64,
+                            "prompt_sha256": FakeAdapter.prompt_sha256,
                             "preparation": {"version": "prep_v1"},
                         },
                     }
@@ -115,6 +115,22 @@ def test_a_development_run_writes_output_the_benchmark_can_read(tmp_path: Path) 
         assert draft["sent_inputs"]
         meta = json.loads((run_dir / f"{key}.meta.json").read_text())
         assert meta["latency_seconds"] >= 0
+    # Use the actual consumer, not a JSON-read proxy for it.
+    report = benchmark.evaluate(root, run_dir, "development")
+    assert report["configuration"] == "candidate-a"
+
+
+def test_run_cannot_overwrite_gold_or_an_existing_run(tmp_path):
+    root = tmp_path / "set"
+    _build_set(root)
+    before = (root / "gold/d-1.json").read_bytes()
+    with pytest.raises(DevelopmentRunError):
+        run_development_split(root, root / "gold", LabelDraftExtractor(FakeAdapter()), _config())
+    assert (root / "gold/d-1.json").read_bytes() == before
+    run = root / "runs/one"
+    run_development_split(root, run, LabelDraftExtractor(FakeAdapter()), _config())
+    with pytest.raises(DevelopmentRunError):
+        run_development_split(root, run, LabelDraftExtractor(FakeAdapter()), _config())
 
 
 def test_the_held_out_split_cannot_be_run_from_a_tuning_loop(tmp_path: Path) -> None:

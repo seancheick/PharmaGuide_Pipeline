@@ -176,6 +176,14 @@ class LabelDraftExtractor:
     def __init__(self, adapter: LabelDraftAdapter) -> None:
         self._adapter = adapter
 
+    @property
+    def prompt_sha256(self) -> str:
+        """Adapter-owned immutable instructions, required before a benchmark."""
+        value = getattr(self._adapter, "prompt_sha256", None)
+        if not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+            raise ValueError("adapter has no immutable prompt digest")
+        return value
+
     def extract(
         self, bundle: PreparedBundle, config: ExtractionConfig
     ) -> ExtractionResult:

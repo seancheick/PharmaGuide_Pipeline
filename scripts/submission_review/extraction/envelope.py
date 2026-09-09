@@ -103,6 +103,12 @@ TOP_LEVEL_KEYS = frozenset(
 )
 REQUIRED_TOP_LEVEL_KEYS = TOP_LEVEL_KEYS - {"job_key", "result_fingerprint", "evidence_revision"}
 
+# Label observations are distinct from runtime provenance authored by the worker.
+LABEL_CONTENT_KEYS = REQUIRED_TOP_LEVEL_KEYS - {
+    "schema_version", "draft_origin", "provider", "model", "prompt_version",
+    "evidence_snapshot", "sent_inputs",
+}
+
 MAX_INGREDIENT_ROWS = 500
 MAX_STATEMENTS = 100
 MAX_DISCREPANCIES = 100

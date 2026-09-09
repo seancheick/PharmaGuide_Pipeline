@@ -9,6 +9,7 @@ provider is chosen or paid. It does not establish extraction or scoring accuracy
 from __future__ import annotations
 
 from typing import Any
+import hashlib
 
 from ..extractor import PreparedBundle, ExtractionConfig, ExtractionError, ExtractionResult, Usage
 
@@ -16,12 +17,16 @@ from ..extractor import PreparedBundle, ExtractionConfig, ExtractionError, Extra
 class FakeAdapter:
     """Returns a valid, abstaining draft over whatever was leased."""
 
+    prompt_sha256 = hashlib.sha256(b"fake-abstain-v1: no label reading").hexdigest()
+
     def __init__(self, *, fail_with: str | None = None) -> None:
         self._fail_with = fail_with
 
     def extract(
         self, bundle: PreparedBundle, config: ExtractionConfig
     ) -> ExtractionResult:
+        if config.provider != "fake":
+            raise ExtractionError("provider_unavailable", "fake adapter requires a fake configuration", usage=Usage())
         if self._fail_with is not None:
             raise ExtractionError(self._fail_with, "fake adapter was told to fail")
         snapshot = bundle.snapshot
