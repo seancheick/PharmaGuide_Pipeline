@@ -1,0 +1,516 @@
+{
+  "schema_version": "axis_classification_proposal_v1",
+  "_metadata": {
+    "batch": "01-microbial",
+    "created_on": "2026-09-09",
+    "status": "proposed_for_review",
+    "applies_nothing": "A review artifact. It authors no data. Applying it requires a fingerprinted manifest in a separate reviewed step.",
+    "basis": "A named live organism is judged on reaching the gut alive, so its axis follows from the substance's identity; the record's own absorption text is quoted verbatim for the reviewer to check. Generic delivery formats and prebiotics must carry the claim in their own wording, and are escalated when they do not.",
+    "not_evidence": "Assigning an axis records which evidence standard applies. It does not clear the evidence backlog and changes no score.",
+    "proposed": 48,
+    "escalated": 2,
+    "remaining_after_this_batch": 145
+  },
+  "proposed": [
+    {
+      "key": "bacillus_coagulans::bacillus coagulans gbi-30",
+      "ingredient_key": "bacillus_coagulans",
+      "form_key": "bacillus coagulans gbi-30",
+      "bio_score": 14,
+      "record_says": "excellent survival",
+      "form_sha256": "6490ed9a2d9cf9f063a00e517736e8c22aeaceb874a60ef2b8e8dafeaf1d6206",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bacillus_coagulans::bacillus coagulans mtcc 5856",
+      "ingredient_key": "bacillus_coagulans",
+      "form_key": "bacillus coagulans mtcc 5856",
+      "bio_score": 14,
+      "record_says": "excellent survival",
+      "form_sha256": "7d95259f77502fae6ed4a003a386ecc7f7f39b377063fe8493c0a48a77795bba",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bacillus_coagulans::bacillus coagulans snz 1969",
+      "ingredient_key": "bacillus_coagulans",
+      "form_key": "bacillus coagulans snz 1969",
+      "bio_score": 13,
+      "record_says": "excellent survival",
+      "form_sha256": "39a7ced2763f593e9d1b6fc91ccad547cd0bc6584ea542e73de030f62e16bb84",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bacillus_coagulans::bacillus coagulans unique is-2",
+      "ingredient_key": "bacillus_coagulans",
+      "form_key": "bacillus coagulans unique is-2",
+      "bio_score": 13,
+      "record_says": "excellent survival",
+      "form_sha256": "7e27ad2c0969ee8f5b178d44e91814a6d3c39cd0d959f50f925684ff48501437",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bacillus_indicus::bacillus indicus (unspecified)",
+      "ingredient_key": "bacillus_indicus",
+      "form_key": "bacillus indicus (unspecified)",
+      "bio_score": 12,
+      "record_says": "very good",
+      "form_sha256": "9d4ad0da1b84836b0d1f14b728ad825adc646dd6a6d70f3565381f46f11ac051",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_bifidum::bifidobacterium bifidum (unspecified)",
+      "ingredient_key": "bifidobacterium_bifidum",
+      "form_key": "bifidobacterium bifidum (unspecified)",
+      "bio_score": 12,
+      "record_says": "very good",
+      "form_sha256": "596e3282ea134b4bdfcb4d579c265c47c2d8b4ee8677ee9c926bb3980ad4ed02",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_bifidum::bifidobacterium bifidum bb-06",
+      "ingredient_key": "bifidobacterium_bifidum",
+      "form_key": "bifidobacterium bifidum bb-06",
+      "bio_score": 13,
+      "record_says": "high colonization (~80%)",
+      "form_sha256": "2f1e2f64ca513e30ecea6b9ad321e56f9641a2b05ab69850c2edbe7237194a91",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_bifidum::bifidobacterium bifidum r0071",
+      "ingredient_key": "bifidobacterium_bifidum",
+      "form_key": "bifidobacterium bifidum r0071",
+      "bio_score": 13,
+      "record_says": "high colonization (~85%)",
+      "form_sha256": "cf00c99845e284b5e031e8953d6eb522f390ad31ad740827bf64ad71f430433e",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_breve::bifidobacterium breve m-16v",
+      "ingredient_key": "bifidobacterium_breve",
+      "form_key": "bifidobacterium breve m-16v",
+      "bio_score": 14,
+      "record_says": "excellent",
+      "form_sha256": "8aecbeaf05a6888053520d04ad5630df0d1ee8c93ee45a34866ccf9bbd421555",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_lactis::bifidobacterium animalis subsp. lactis",
+      "ingredient_key": "bifidobacterium_lactis",
+      "form_key": "bifidobacterium animalis subsp. lactis",
+      "bio_score": 12,
+      "record_says": "very good",
+      "form_sha256": "f125234d14b0e328cea0662390ce53b996c10e2ce26be11a13489be6dfc3dd4f",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_lactis::bifidobacterium lactis bb-12",
+      "ingredient_key": "bifidobacterium_lactis",
+      "form_key": "bifidobacterium lactis bb-12",
+      "bio_score": 14,
+      "record_says": "excellent",
+      "form_sha256": "0346fec38711542fe8ac3cba29b97ab091523af30c4986e4b234b2cda89d7c25",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_lactis::bifidobacterium lactis bi-07",
+      "ingredient_key": "bifidobacterium_lactis",
+      "form_key": "bifidobacterium lactis bi-07",
+      "bio_score": 13,
+      "record_says": "very good",
+      "form_sha256": "e47eb2498b288c86927a64d7b3a8127c577cf1d2f3a2fa52e8ea860c006e69d1",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_lactis::bifidobacterium lactis bl-04",
+      "ingredient_key": "bifidobacterium_lactis",
+      "form_key": "bifidobacterium lactis bl-04",
+      "bio_score": 13,
+      "record_says": "high colonization (~85%)",
+      "form_sha256": "fdabfab30942745eb11d1cc96aa4267dd7eccd36598712789566297bf1ebd81f",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_lactis::bifidobacterium lactis hn019",
+      "ingredient_key": "bifidobacterium_lactis",
+      "form_key": "bifidobacterium lactis hn019",
+      "bio_score": 15,
+      "record_says": "excellent colonization (~90%)",
+      "form_sha256": "a4b88b447ad05f1203f30e2c4ae0c6bcb0655b939d12b5a53692db4c2765cbba",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_longum::bifidobacterium longum (unspecified)",
+      "ingredient_key": "bifidobacterium_longum",
+      "form_key": "bifidobacterium longum (unspecified)",
+      "bio_score": 12,
+      "record_says": "very good",
+      "form_sha256": "e32d2598bc1a91f401fb2b33e22a3e8a7c74bdff92d5e73bc6553e65365dd20f",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_longum::bifidobacterium longum 35624",
+      "ingredient_key": "bifidobacterium_longum",
+      "form_key": "bifidobacterium longum 35624",
+      "bio_score": 15,
+      "record_says": "excellent colonization (~90%)",
+      "form_sha256": "bda66c01563f2cf93d7f4f98170346dbd9e90ed7ab71b9ee8a75e78d1b5785f4",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_longum::bifidobacterium longum bb536",
+      "ingredient_key": "bifidobacterium_longum",
+      "form_key": "bifidobacterium longum bb536",
+      "bio_score": 15,
+      "record_says": "excellent colonization (~90%)",
+      "form_sha256": "0480ce1b3892026406cd7f640514beb6f66e7c43e93793f834f3909190b4d8d6",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "bifidobacterium_longum::bifidobacterium longum subsp. infantis",
+      "ingredient_key": "bifidobacterium_longum",
+      "form_key": "bifidobacterium longum subsp. infantis",
+      "bio_score": 12,
+      "record_says": "very good",
+      "form_sha256": "51a3cb264ae58127679b38255935fc44071382dae25fb3f6b9dcc90dfcfcba34",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "inulin::inulin (unspecified)",
+      "ingredient_key": "inulin",
+      "form_key": "inulin (unspecified)",
+      "bio_score": 12,
+      "record_says": "non-digestible β(2→1) fructan; colonic fermentation to SCFA; not systemically absorbed intact",
+      "form_sha256": "b8ac5bd8603ff5ba4e8b3165df72daee26ffbfcaf5deedf97dfc135281183289",
+      "proposed_axis": "microbial_substrate_utilization",
+      "basis": "prebiotic substrate; ISAPP requires selective utilisation plus host benefit"
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus (unspecified)",
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus (unspecified)",
+      "bio_score": 12,
+      "record_says": "low (live organism class; B18 framework)",
+      "form_sha256": "9b6fe0ad884159491d875b4445c7b4f3c44e919e84528f5fed21f3d37ce26250",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus dds-1",
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus dds-1",
+      "bio_score": 13,
+      "record_says": "good colonization (~80%)",
+      "form_sha256": "bbfa5798b9c6d5a63d743565506ffee2c52fcb9a0da19b9e13759d573d6e2424",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus la-02",
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus la-02",
+      "bio_score": 12,
+      "record_says": "very good",
+      "form_sha256": "7a579b004f9534f4163d5e379c6924fb3b49a847fc74d813560870eba3577c72",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus la-14",
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus la-14",
+      "bio_score": 13,
+      "record_says": "high colonization (~80%)",
+      "form_sha256": "465b37047ed094c4d0f7a2ef37c5aa66ff83f0825575192bb94bf6bc3490f57f",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus la-5",
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus la-5",
+      "bio_score": 14,
+      "record_says": "excellent",
+      "form_sha256": "972ef0f00683d4dd7247932782bd995245e5b4a4a475faf53310ece58e892fc4",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_acidophilus::lactobacillus acidophilus ncfm",
+      "ingredient_key": "lactobacillus_acidophilus",
+      "form_key": "lactobacillus acidophilus ncfm",
+      "bio_score": 15,
+      "record_says": "excellent colonization (~90%)",
+      "form_sha256": "48707413d7472ec8ccf3a75c19efb005352ea3ca11637ad962076a7e9306944d",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_casei::lactobacillus casei lc-11",
+      "ingredient_key": "lactobacillus_casei",
+      "form_key": "lactobacillus casei lc-11",
+      "bio_score": 13,
+      "record_says": "high colonization (~80%)",
+      "form_sha256": "6a4511f92d8ec8d0acb35e7d604853966ad52c2a41920e3d1da6650bcd18f997",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_casei::lactobacillus casei shirota",
+      "ingredient_key": "lactobacillus_casei",
+      "form_key": "lactobacillus casei shirota",
+      "bio_score": 13,
+      "record_says": "high colonization (~85%)",
+      "form_sha256": "398846d3cb1d19bbf44aaca187fbff8f3f744b997ddd8b62b2db9cbc18748dd4",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_helveticus::lactobacillus helveticus (unspecified)",
+      "ingredient_key": "lactobacillus_helveticus",
+      "form_key": "lactobacillus helveticus (unspecified)",
+      "bio_score": 12,
+      "record_says": "good",
+      "form_sha256": "ca28c649f76f52a6a128d2c16aa0364e745465a4c14d76e00923459b2397e6e5",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_paracasei::lactobacillus paracasei l.casei 431",
+      "ingredient_key": "lactobacillus_paracasei",
+      "form_key": "lactobacillus paracasei l.casei 431",
+      "bio_score": 13,
+      "record_says": "very good",
+      "form_sha256": "1747774aec723a7b232d97ce0418d973a4083326b992355ca3ca9819f9233413",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_paracasei::lactobacillus paracasei lpc-37",
+      "ingredient_key": "lactobacillus_paracasei",
+      "form_key": "lactobacillus paracasei lpc-37",
+      "bio_score": 13,
+      "record_says": "high colonization (~85%)",
+      "form_sha256": "b64f6660602446132f0f23890cbd08bd5b24a71dbcebaf85f5b65ddd15972e0e",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_plantarum::lactobacillus plantarum dr7",
+      "ingredient_key": "lactobacillus_plantarum",
+      "form_key": "lactobacillus plantarum dr7",
+      "bio_score": 13,
+      "record_says": "high colonization (~85%)",
+      "form_sha256": "4714567d761da7529ed8960285803e0953e619054b6cad0a3abc76fe786f123e",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_plantarum::lactobacillus plantarum lp299v",
+      "ingredient_key": "lactobacillus_plantarum",
+      "form_key": "lactobacillus plantarum lp299v",
+      "bio_score": 15,
+      "record_says": "excellent colonization (~90%)",
+      "form_sha256": "d5381b61d82c80eca23500a269003f872680e0be743d8c0279106b780aa43e4c",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_reuteri::lactobacillus reuteri ATCC PTA 5289",
+      "ingredient_key": "lactobacillus_reuteri",
+      "form_key": "lactobacillus reuteri ATCC PTA 5289",
+      "bio_score": 14,
+      "record_says": "excellent",
+      "form_sha256": "fb5788e1af5907d0e90423726eefb07421e3d9268fb147769989d41cfbfafffe",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_reuteri::lactobacillus reuteri DSM 17938",
+      "ingredient_key": "lactobacillus_reuteri",
+      "form_key": "lactobacillus reuteri DSM 17938",
+      "bio_score": 14,
+      "record_says": "excellent",
+      "form_sha256": "935e09fa83c4d7b0c87ab9e086211ccc8119b69cbf30055dd1ed3869c4a77213",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_reuteri::lactobacillus reuteri rc-14",
+      "ingredient_key": "lactobacillus_reuteri",
+      "form_key": "lactobacillus reuteri rc-14",
+      "bio_score": 14,
+      "record_says": "excellent",
+      "form_sha256": "36566bc61c96a44f529153859011f9d42b7774107a3d3cd60dcc8c1c611aad54",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_rhamnosus::lactobacillus rhamnosus gg",
+      "ingredient_key": "lactobacillus_rhamnosus",
+      "form_key": "lactobacillus rhamnosus gg",
+      "bio_score": 15,
+      "record_says": "excellent colonization (~95%)",
+      "form_sha256": "cf34c525ae180b0e0f26ac643abedb7623ea8719211e0e04396dc1fe841025f4",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_rhamnosus::lactobacillus rhamnosus gr-1",
+      "ingredient_key": "lactobacillus_rhamnosus",
+      "form_key": "lactobacillus rhamnosus gr-1",
+      "bio_score": 14,
+      "record_says": "excellent",
+      "form_sha256": "13800d79498f563e979136c13a3ebe7e467504d945889aaeb7343a7195c7342d",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_rhamnosus::lactobacillus rhamnosus hn001",
+      "ingredient_key": "lactobacillus_rhamnosus",
+      "form_key": "lactobacillus rhamnosus hn001",
+      "bio_score": 14,
+      "record_says": "excellent",
+      "form_sha256": "e5cf982182e6244f052ad9446e13c77feb077c740db6002597cab4ecd1cccbd9",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "lactobacillus_rhamnosus::lactobacillus rhamnosus lr-04",
+      "ingredient_key": "lactobacillus_rhamnosus",
+      "form_key": "lactobacillus rhamnosus lr-04",
+      "bio_score": 12,
+      "record_says": "very good",
+      "form_sha256": "ec52d672224ea1299dc3bb9adc9bc1221169cbc3ce13e963076ea0aae14fd07e",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "prebiotics::fructooligosaccharides (FOS)",
+      "ingredient_key": "prebiotics",
+      "form_key": "fructooligosaccharides (FOS)",
+      "bio_score": 12,
+      "record_says": "excellent fermentation",
+      "form_sha256": "eb9360ed09202124fee78d4aa18aaeda85ccf63c9f7219a082c74b43b793f419",
+      "proposed_axis": "microbial_substrate_utilization",
+      "basis": "prebiotic substrate; ISAPP requires selective utilisation plus host benefit"
+    },
+    {
+      "key": "prebiotics::galactooligosaccharides (GOS)",
+      "ingredient_key": "prebiotics",
+      "form_key": "galactooligosaccharides (GOS)",
+      "bio_score": 12,
+      "record_says": "excellent fermentation",
+      "form_sha256": "b3d4c641454fbff5329ef934155b865cf4ec054489effea7c40a54f64f4e0683",
+      "proposed_axis": "microbial_substrate_utilization",
+      "basis": "prebiotic substrate; ISAPP requires selective utilisation plus host benefit"
+    },
+    {
+      "key": "prebiotics::human milk oligosaccharides (HMO)",
+      "ingredient_key": "prebiotics",
+      "form_key": "human milk oligosaccharides (HMO)",
+      "bio_score": 13,
+      "record_says": "excellent fermentation",
+      "form_sha256": "39ec6735880c79c931305e00dbfa4bde1aefcae1cbaa441121e34e84d47539df",
+      "proposed_axis": "microbial_substrate_utilization",
+      "basis": "prebiotic substrate; ISAPP requires selective utilisation plus host benefit"
+    },
+    {
+      "key": "probiotics::enteric coated",
+      "ingredient_key": "probiotics",
+      "form_key": "enteric coated",
+      "bio_score": 14,
+      "record_says": "90%+ survival",
+      "form_sha256": "e1353bbe26224af4168dbde4c6d149e7852e8b1c24bda0cd6427c867699b0df1",
+      "proposed_axis": "organism_survivability",
+      "basis": "delivery format whose recorded claim is organism survival"
+    },
+    {
+      "key": "probiotics::freeze-dried with prebiotics",
+      "ingredient_key": "probiotics",
+      "form_key": "freeze-dried with prebiotics",
+      "bio_score": 12,
+      "record_says": "good",
+      "form_sha256": "63a1991ef27850856daef579ad102e40ee642671801d9aa71ee24f1cc82cb2b7",
+      "proposed_axis": "organism_survivability",
+      "basis": "delivery format whose recorded claim is organism survival"
+    },
+    {
+      "key": "probiotics::spore-based",
+      "ingredient_key": "probiotics",
+      "form_key": "spore-based",
+      "bio_score": 14,
+      "record_says": "excellent survival",
+      "form_sha256": "d8c39cfbec2d274991b92bac246b069551d0a376f11f97cd1ebb9025f9800bf5",
+      "proposed_axis": "organism_survivability",
+      "basis": "delivery format whose recorded claim is organism survival"
+    },
+    {
+      "key": "saccharomyces_boulardii::saccharomyces boulardii cncm i-745",
+      "ingredient_key": "saccharomyces_boulardii",
+      "form_key": "saccharomyces boulardii cncm i-745",
+      "bio_score": 15,
+      "record_says": "excellent transient colonization (~90%)",
+      "form_sha256": "4b81b6132219d9905d46979242b78d9c508f878c1c2493dd846ae5bd73d21434",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "streptococcus_salivarius::streptococcus salivarius k12",
+      "ingredient_key": "streptococcus_salivarius",
+      "form_key": "streptococcus salivarius k12",
+      "bio_score": 14,
+      "record_says": "good",
+      "form_sha256": "47744bc1a2fed8fc0230dcb71213faeb5e23197154118fc911052b55e3a61962",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    },
+    {
+      "key": "streptococcus_salivarius::streptococcus salivarius m18",
+      "ingredient_key": "streptococcus_salivarius",
+      "form_key": "streptococcus salivarius m18",
+      "bio_score": 14,
+      "record_says": "good",
+      "form_sha256": "c39b72dfc4792a0bb6e6d57b3791d0ceafa7567e57a4f3f1b4a0a2ffdac6041c",
+      "proposed_axis": "organism_survivability",
+      "basis": "parent ingredient is a live microbial species"
+    }
+  ],
+  "escalated": [
+    {
+      "key": "probiotics::liposomal probiotics",
+      "ingredient_key": "probiotics",
+      "form_key": "liposomal probiotics",
+      "bio_score": 13,
+      "record_says": "enhanced",
+      "form_sha256": "d110a4edec96b99d8a8b3400c10fabee7336c71bbac9820f1dcb13812a3ae01f",
+      "question": "delivery format whose recorded claim does not state survival; 'rapid uptake' reads systemic and needs a reviewer"
+    },
+    {
+      "key": "probiotics::liquid probiotics",
+      "ingredient_key": "probiotics",
+      "form_key": "liquid probiotics",
+      "bio_score": 12,
+      "record_says": "good (rapid uptake)",
+      "form_sha256": "806d960231e50939ba0eec056e62c6fe1282dc0e8ed27db1194f6fec70d63bc2",
+      "question": "delivery format whose recorded claim does not state survival; 'rapid uptake' reads systemic and needs a reviewer"
+    }
+  ]
+}
