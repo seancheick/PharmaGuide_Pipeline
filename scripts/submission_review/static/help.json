@@ -38,27 +38,22 @@
   "rejections": [
     {
       "code": "photo_quality",
-      "user_sees": "The photos were too blurry or dark to read. Please retake them.",
       "use_when": "You can tell what the product is but cannot read the panel."
     },
     {
       "code": "missing_panel",
-      "user_sees": "A required panel was missing. Please photograph the Supplement Facts and ingredients.",
       "use_when": "One of the required faces was never photographed."
     },
     {
       "code": "label_unreadable",
-      "user_sees": "The label could not be read. Please retake the photos.",
-      "use_when": "The panel is present but genuinely illegible, including foreign-language panels you cannot read."
+      "use_when": "The panel is present but genuinely illegible. An unfamiliar language is not an unreadable photo: leave it for a reviewer who can verify that language."
     },
     {
       "code": "product_identity_mismatch",
-      "user_sees": "The photos do not match the scanned barcode. Please try again.",
       "use_when": "The barcode, front and panel are not the same product."
     },
     {
       "code": "not_a_supplement",
-      "user_sees": "This product is not a dietary supplement.",
       "use_when": "Food, cosmetic, medicine, or anything outside the catalog."
     }
   ],

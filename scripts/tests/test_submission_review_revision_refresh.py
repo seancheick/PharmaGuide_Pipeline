@@ -47,6 +47,7 @@ def test_refresh_never_rebinds_old_human_review_to_new_evidence(change):
 const fs=require('node:fs'),vm=require('node:vm');
 const [asset,change]=process.argv.slice(1), calls=[];
 const ctx=vm.createContext({calls,change,document:{getElementById(){return {value:'',checked:false};}}});
+vm.runInContext(fs.readFileSync(asset.replace('app.js','canonical.js'),'utf8'),ctx);
 vm.runInContext(fs.readFileSync(asset,'utf8')+`
 function boot(){} function renderDetail(){} function renderQueue(){}
 function scheduleUrlRefresh(){} function syncScalarFields(){} function setStatus(){}
@@ -56,6 +57,8 @@ function setDecisionAvailability(){} async function loadQueue(){}
 await vm.runInContext(`(async()=>{
 state.selected={id:'a',kind:'label_mismatch',review_status:'under_review',evidence_revision:1,evidence_manifest_sha256:'a'.repeat(64)};
 state.payload={fullName:'Old draft'};state.identityRecorded='no_match_verified';state.productImage={id:'old'};
+state.payloadCanonical=canonicalJson(state.payload);state.payloadSha='c'.repeat(64);
+state.verifiedKey=verificationKey();state.verified=new Set(CRITICAL_FIELDS.map(([key])=>key));
 edge=async(body)=>{
   if(body.action!=='list'){calls.push(body);return {};}
   if(change==='selection'){state.selected={id:'b'};state.payload={fullName:'Selected B'};}

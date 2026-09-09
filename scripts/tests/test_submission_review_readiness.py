@@ -35,6 +35,7 @@ const document={createElement:()=>el('new'),getElementById:(id)=>(nodes[id] ||= 
   addEventListener(){}};
 const ctx=vm.createContext({out,console,document,fetch:async()=>({json:async()=>({})}),
   structuredClone:(v)=>JSON.parse(JSON.stringify(v))});
+vm.runInContext(fs.readFileSync(asset.replace('app.js','canonical.js'),'utf8'),ctx);
 vm.runInContext(fs.readFileSync(asset,'utf8')+`
 function boot(){} function renderRows(){} function syncFieldsFromPayload(){}
 function setStatus(){} function renderDraft(){} function renderQueue(){}
@@ -43,6 +44,8 @@ function renderProductPictureOptions(){} function updateShaPreview(){}
 `,ctx);
 vm.runInContext(`
 state.selected = ${JSON.stringify(setup.submission)};
+state.payload = {brandName:'Example'};
+state.payloadCanonical = canonicalJson(state.payload);
 state.payloadSha = ${JSON.stringify(setup.payload_sha)};
 state.identityRecorded = ${JSON.stringify(setup.identity)};
 state.productImage = ${setup.product_image ? "{id:'p'}" : 'null'};
@@ -63,6 +66,149 @@ process.stdout.write(JSON.stringify(out));
 """
 
 ALL_FIELDS = ["brand", "name", "serving", "rows", "other"]
+
+
+def _exercise(script):
+    """Run real state transitions; only browser/HTTP boundaries are simulated."""
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js required for console behavior")
+    harness = r"""
+const fs=require('node:fs'),vm=require('node:vm');
+function el(id){return {id,children:[],value:'',checked:false,disabled:false,open:false,
+  classList:{add(){},remove(){},toggle(){}},style:{setProperty(){}},listeners:{},
+  set textContent(v){this.text=v;this.children=[]},get textContent(){return this.text||''},
+  append(...items){this.children.push(...items)},
+  addEventListener(kind,fn){this.listeners[kind]=fn},
+  querySelector(){return this},showModal(){this.open=true},close(){this.open=false}}}
+const nodes={},pending=[],calls=[],out={};
+const document={getElementById:id=>(nodes[id] ||= el(id)),createElement:()=>el(''),
+ createTextNode:text=>({textContent:text}),querySelector:()=>Object.values(nodes).find(n=>n.open),
+ addEventListener(){}};
+const ctx=vm.createContext({document,console,out,pending,calls,
+ structuredClone:v=>JSON.parse(JSON.stringify(v))});
+vm.runInContext(fs.readFileSync(process.argv[1].replace('app.js','canonical.js'),'utf8'),ctx);
+vm.runInContext(fs.readFileSync(process.argv[1],'utf8')+`
+function boot(){} function setStatus(message){out.status=message;}
+function renderRows(){} function renderStatements(){} function scheduleUrlRefresh(){}
+function renderDetail(){} function renderQueue(){}
+sha256Hex=(text)=>new Promise(resolve=>pending.push({text,resolve}));
+edge=async body=>{calls.push(body);return {};};
+state.selected={id:'s1',kind:'label_mismatch',review_status:'under_review',evidence_revision:2,
+ evidence_manifest_sha256:'a'.repeat(64)};
+state.payload={brandName:'Original'};
+state.payloadSha='a'.repeat(64);
+state.payloadCanonical=canonicalJson(state.payload);
+for(const [field] of CRITICAL_FIELDS) toggleVerified(field);
+`,ctx);
+(async()=>{await vm.runInContext(process.argv[2],ctx);console.log(JSON.stringify(out));})()
+.catch(e=>{console.error(e);process.exitCode=1});
+"""
+    result = subprocess.run([node, "-e", harness, str(ASSET), script],
+                            capture_output=True, text=True, check=True, timeout=15)
+    return json.loads(result.stdout)
+
+
+def test_real_edit_revokes_checks_before_the_hash_finishes():
+    out = _exercise("""(async()=>{
+      state.payload.brandName='Edited';
+      const hashing=updateShaPreview();
+      out.disabled=document.getElementById('t-approve').disabled;
+      out.checked=verifiedSet().size;
+      pending[0].resolve('b'.repeat(64)); await hashing;
+      out.after=verifiedSet().size;
+    })()""")
+    assert out == {"disabled": True, "checked": 0, "after": 0}
+
+
+def test_older_hash_completion_cannot_rebind_newer_payload():
+    out = _exercise("""(async()=>{
+      state.payload.brandName='First'; const first=updateShaPreview();
+      state.payload.brandName='Second'; const second=updateShaPreview();
+      pending[1].resolve('c'.repeat(64)); await second;
+      for(const [field] of CRITICAL_FIELDS) toggleVerified(field);
+      pending[0].resolve('b'.repeat(64)); await first;
+      out.sha=state.payloadSha; out.checked=verifiedSet().size;
+    })()""")
+    assert out == {"sha": "c" * 64, "checked": 5}
+
+
+def test_approve_action_itself_refuses_unchecked_fields():
+    out = _exercise("""(async()=>{
+      toggleVerified('rows'); await approve(); out.calls=calls.length;
+    })()""")
+    assert out["calls"] == 0
+    assert "ingredient" in out["status"].lower()
+
+
+def test_selecting_last_required_image_refreshes_approval_immediately():
+    out = _exercise("""(async()=>{
+      state.selected.kind='missing_product'; state.identityRecorded='no_match_verified';
+      state.selected.photos=[{photo_id:'p1',categories:['front_identity'],signed_url:'fixture'}];
+      renderProductPictureOptions(); setDecisionAvailability();
+      out.before=document.getElementById('t-approve').disabled;
+      document.getElementById('product-picture-options').children[0].children[0].listeners.change();
+      out.after=document.getElementById('t-approve').disabled;
+    })()""")
+    assert out == {"before": True, "after": False}
+
+
+def test_keyboard_does_not_approve_under_an_open_dialog():
+    out = _exercise("""(async()=>{
+      document.getElementById('help-drawer').showModal();
+      approve=()=>calls.push('approved');
+      handleShortcut({key:'a',target:{tagName:'BUTTON'},preventDefault(){}});
+      out.calls=calls.length;
+    })()""")
+    assert out == {"calls": 0}
+
+
+def test_help_blocks_shortcuts_while_its_content_is_still_loading():
+    out = _exercise("""(async()=>{
+      let resolve;
+      globalThis.fetch=()=>new Promise(done=>resolve=done);
+      const loading=openHelp();
+      approve=()=>calls.push('approved');
+      handleShortcut({key:'a',target:{tagName:'BUTTON'},preventDefault(){}});
+      out.calls=calls.length;
+      resolve({json:async()=>({})});await loading;
+    })()""")
+    assert out == {"calls": 0}
+
+
+def test_help_does_not_author_a_second_copy_of_consumer_resolution_text():
+    help_data = json.loads((ASSET.parent / 'help.json').read_text())
+    assert all('user_sees' not in entry for entry in help_data['rejections'])
+    assert 'The submitter sees:' not in ASSET.read_text()
+
+
+def test_approval_rechecks_payload_after_waiting_for_identity():
+    out = _exercise("""(async()=>{
+      state.selected.kind='missing_product';state.selected.normalized_upc='012345678905';
+      state.identityRecorded='no_match_verified';state.productImage={kind:'photo',id:'p1'};
+      state.identityLookup={canonical_gtin14:'00012345678905',index_revision:'source',freshness:'fresh'};
+      let finish;
+      globalThis.fetch=()=>new Promise(resolve=>finish=resolve);
+      const approval=approve();
+      state.payload.brandName='Edited while identity was checked';
+      finish({ok:true,json:async()=>state.identityLookup});await approval;
+      out.calls=calls.length;
+    })()""")
+    assert out['calls'] == 0
+    assert 'changed' in out['status'].lower()
+
+
+def test_recording_identity_refreshes_readiness_immediately():
+    out = _exercise("""(async()=>{
+      state.selected.kind='missing_product';state.selected.normalized_upc='012345678905';
+      state.identityRecorded=null;state.productImage={kind:'photo',id:'p1'};
+      state.identityLookup={canonical_gtin14:'00012345678905',index_revision:'source',freshness:'fresh',matches:[]};
+      globalThis.fetch=async()=>({ok:true,json:async()=>state.identityLookup});
+      setDecisionAvailability();out.before=document.getElementById('t-approve').disabled;
+      await recordMatch('no_match_verified');
+      out.after=document.getElementById('t-approve').disabled;
+    })()""")
+    assert out == {'before': True, 'after': False}
 
 
 def _render(**overrides):

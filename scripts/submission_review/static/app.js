@@ -15,6 +15,9 @@ const state = {
   selected: null,
   reviewInvalidated: false,
   payload: null,
+  payloadSha: null,
+  payloadCanonical: null,
+  payloadHashRequest: 0,
   refreshTimer: null,
   nextAfter: null,
   totalOpenCount: 0,
@@ -81,6 +84,7 @@ async function boot() {
   $('add-row').addEventListener('click', () => {
     state.payload.ingredientRows.push(emptyRow());
     renderRows();
+    updateShaPreview();
   });
   $('add-statement').addEventListener('click', addStatement);
   $('ai-draft-load').addEventListener('click', loadDraftIntoEditor);
@@ -204,6 +208,10 @@ function select(submission) {
   state.selected = submission;
   state.reviewInvalidated = false;
   state.payload = defaultPayload();
+  state.payloadSha = null;
+  state.payloadCanonical = null;
+  state.verifiedKey = null;
+  state.verified = new Set();
   state.identityLookup = null;
   state.identityRecorded = null;
   state.reviewerImages = [];
@@ -420,6 +428,8 @@ function identityButton(label, action, className = 'ghost') {
 }
 
 function renderIdentityCheck() {
+  renderReadiness();
+  setDecisionAvailability();
   const section = $('identity-check');
   const status = $('identity-index-status');
   const results = $('identity-results');
@@ -547,13 +557,20 @@ const CRITICAL_FIELDS = [
 /** Ticks belong to one exact payload and one exact evidence revision. */
 function verificationKey() {
   const submission = state.selected;
-  if (!submission) return null;
-  return `${submission.id}:${submission.evidence_revision}:${state.payloadSha ?? ''}`;
+  if (!submission || !state.payloadSha) return null;
+  try {
+    if (canonicalJson(state.payload) !== state.payloadCanonical) return null;
+  } catch { return null; }
+  return `${submission.id}:${submission.evidence_revision}:${submission.evidence_manifest_sha256}:${state.payloadSha}`;
 }
 
 function verifiedSet() {
   const key = verificationKey();
-  if (!key) return new Set();
+  if (!key) {
+    state.verifiedKey = null;
+    state.verified = new Set();
+    return state.verified;
+  }
   if (state.verifiedKey !== key) {
     // The label text or the evidence moved. A check of an older value is not
     // a check of this one, so the ticks go rather than quietly carrying over.
@@ -564,6 +581,7 @@ function verifiedSet() {
 }
 
 function toggleVerified(field) {
+  if (!verificationKey() || !CRITICAL_FIELDS.some(([key]) => key === field)) return;
   const verified = verifiedSet();
   if (verified.has(field)) verified.delete(field); else verified.add(field);
   renderVerifyChecklist();
@@ -583,6 +601,7 @@ function renderVerifyChecklist() {
     box.type = 'checkbox';
     box.id = `verify-${field}`;
     box.checked = verified.has(field);
+    box.disabled = !verificationKey();
     box.addEventListener('change', () => toggleVerified(field));
     const text = document.createElement('span');
     text.textContent = label;
@@ -605,12 +624,12 @@ function readinessChecks() {
     },
     {
       done: submission.review_status === 'under_review',
-      todo: 'Press Start review so this submission is assigned to you.',
-      done_text: 'This submission is assigned to you.',
+      todo: 'Press Start review before making an approval decision.',
+      done_text: 'This submission is under review.',
     },
     {
-      done: missing.length === 0,
-      todo: missing.length === 1
+      done: Boolean(verificationKey()) && missing.length === 0,
+      todo: !verificationKey() ? 'Wait for the current payload check; correct invalid JSON if it fails.' : missing.length === 1
         ? `Read ${missing[0][1].toLowerCase()} off the photographs and tick it.`
         : `Read and tick ${missing.length} more fields.`,
       done_text: 'Every field has been read off the photographs.',
@@ -657,11 +676,18 @@ function approvalBlockers() {
 async function openHelp() {
   const drawer = $('help-drawer');
   const body = $('help-body');
+  // Make the page inert immediately, not after the help fetch. Otherwise an
+  // approval shortcut can fire in the interval between click and response.
+  if (!drawer.open) drawer.showModal();
+  body.textContent = 'Loading reviewer help…';
   if (!state.help) {
     try {
-      state.help = await (await fetch('/help.json')).json();
+      const response = await fetch('/help.json');
+      if (response.ok === false) throw new Error('Help unavailable');
+      state.help = await response.json();
     } catch {
-      state.help = { terms: [], rejections: [] };
+      body.textContent = 'Reviewer help could not be loaded. Close and reopen to retry.';
+      return;
     }
   }
   body.textContent = '';
@@ -678,14 +704,14 @@ async function openHelp() {
     const term = document.createElement('dt');
     term.textContent = `Reject: ${entry.code}`;
     const plain = document.createElement('dd');
-    // The reviewer should see the sentence the submitter will read.
-    plain.textContent = `${entry.use_when} The submitter sees: "${entry.user_sees}"`;
+    // Operator guidance, not a second translation of consumer resolution copy.
+    // The app's productSubmissionResolutionGuidance owns that wording.
+    plain.textContent = entry.use_when;
     rejections.append(term, plain);
   }
   const after = document.createElement('p');
   after.textContent = state.help.after_approve ?? '';
   body.append(terms, rejections, after);
-  drawer.showModal();
 }
 
 // -------------------------------------------------------------- shortcuts
@@ -699,6 +725,7 @@ function isTyping(target) {
 }
 
 function handleShortcut(event) {
+  if (event.repeat || event.isComposing || document.querySelector('dialog[open]')) return;
   if (event.metaKey || event.ctrlKey || event.altKey) return;
   if (isTyping(event.target)) return;
   const keys = {
@@ -1161,11 +1188,25 @@ function applyRawJson() {
 }
 
 async function updateShaPreview() {
+  const requestId = ++state.payloadHashRequest;
+  let canonical;
   try {
-    const digest = await sha256Hex(canonicalJson(state.payload));
+    canonical = canonicalJson(state.payload);
+    // Unchanged refreshes preserve checks. Edits revoke them synchronously,
+    // before WebCrypto yields, and old promises cannot restore stale hashes.
+    if (canonical === state.payloadCanonical && state.payloadSha) return;
+    state.payloadCanonical = canonical;
+    state.payloadSha = null;
+    renderVerifyChecklist();
+    renderReadiness();
+    setDecisionAvailability();
+    $('payload-sha').textContent = 'checking…';
+    const digest = await sha256Hex(canonical);
+    if (requestId !== state.payloadHashRequest) return;
     state.payloadSha = digest;
     $('payload-sha').textContent = digest.slice(0, 16) + '…';
   } catch {
+    if (requestId !== state.payloadHashRequest) return;
     state.payloadSha = null;
     $('payload-sha').textContent = 'invalid payload';
   }
@@ -1178,6 +1219,8 @@ async function updateShaPreview() {
 // ---------------------------------------------------------------- product picture
 
 function renderProductPictureOptions() {
+  renderReadiness();
+  setDecisionAvailability();
   const container = $('product-picture-options');
   container.textContent = '';
   const missingProduct = state.selected?.kind === 'missing_product';
@@ -1198,6 +1241,8 @@ function renderProductPictureOptions() {
       state.productImage.id === photo.photo_id;
     radio.addEventListener('change', () => {
       state.productImage = { kind: 'photo', id: photo.photo_id };
+      renderReadiness();
+      setDecisionAvailability();
     });
     const image = document.createElement('img');
     image.src = photo.signed_url;
@@ -1220,6 +1265,8 @@ function renderProductPictureOptions() {
       state.productImage.id === imageRecord.objectId;
     radio.addEventListener('change', () => {
       state.productImage = { kind: 'reviewer', id: imageRecord.objectId };
+      renderReadiness();
+      setDecisionAvailability();
     });
     const image = document.createElement('img');
     image.src = imageRecord.previewUrl;
@@ -1439,6 +1486,10 @@ async function transition(fields) {
 
 async function approve() {
   const selection = state.selected;
+  if (!selection) return;
+  const blocker = approvalBlockers()[0];
+  if (blocker) return setStatus(blocker.todo, true);
+  const reviewedKey = verificationKey();
   if (state.reviewInvalidated) return setStatus('Review the updated evidence before deciding.', true);
   if (
     state.selected?.kind === 'missing_product' &&
@@ -1456,10 +1507,12 @@ async function approve() {
       return setStatus(String(error.message ?? error), true);
     }
   }
-  if (state.selected !== selection || state.reviewInvalidated) {
+  if (state.selected !== selection || state.reviewInvalidated ||
+      reviewedKey !== verificationKey() || approvalBlockers().length) {
     return setStatus('The selected evidence changed. Review it before approving.', true);
   }
-  syncScalarFields();
+  // Input handlers already own the editor payload. Do not re-normalize it
+  // after the reviewer attests to its exact digest (e.g. serving ranges).
   const fields = {
     to_status: 'approved',
     approved_schema_version: 'manual_label_v1',

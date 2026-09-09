@@ -467,16 +467,19 @@ const context = vm.createContext({
   },
 });
 // Boot and queue refresh concern login/listing, outside these decision actions.
+vm.runInContext(fs.readFileSync(asset.replace('app.js','canonical.js'),'utf8'), context);
 vm.runInContext(fs.readFileSync(asset, 'utf8') +
   '\nfunction boot() {}\nasync function loadQueue() {}\nasync function refreshSelected() {}', context);
 (async () => {
   await vm.runInContext(`(async () => {
-    state.selected = {id: 'submission', kind: 'missing_product', normalized_upc: '050428381397', evidence_revision: 2, evidence_manifest_sha256: 'a'.repeat(64)};
+    state.selected = {id: 'submission', kind: 'missing_product', review_status:'under_review', normalized_upc: '050428381397', evidence_revision: 2, evidence_manifest_sha256: 'a'.repeat(64)};
     state.session = {access_token: 'reviewer-test-session'};
     state.identityLookup = previous;
     state.identityRecorded = 'no_match_verified';
     state.productImage = {kind: 'photo', id: 'front-photo'};
     state.payload = {};
+    state.payloadCanonical=canonicalJson(state.payload);state.payloadSha='b'.repeat(64);
+    state.verifiedKey=verificationKey();state.verified=new Set(CRITICAL_FIELDS.map(([key])=>key));
     try {
       if (action === 'record') await recordMatch('no_match_verified');
       else await approve();
