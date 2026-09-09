@@ -80,6 +80,7 @@ DISCREPANCY_SEVERITIES = frozenset({"info", "warning", "critical"})
 TOP_LEVEL_KEYS = frozenset(
     {
         "schema_version",
+        "draft_origin",
         "provider",
         "model",
         "prompt_version",
@@ -134,6 +135,10 @@ def validate_label_draft_v1(value: Any) -> dict[str, Any]:
         raise LabelDraftError("$.schema_version", f"must be {SCHEMA_VERSION}")
     for key in ("provider", "model", "prompt_version"):
         _token(draft[key], f"$.{key}")
+    _enum(draft["draft_origin"], {"model", "human_transcription"}, "$.draft_origin")
+    human = draft["draft_origin"] == "human_transcription"
+    if human and (draft["provider"] != "human" or draft["model"] != "human"):
+        raise LabelDraftError("$.draft_origin", "human transcription requires human provider and model")
     for key in ("job_key", "result_fingerprint"):
         if key in draft and draft[key] is not None:
             _token(draft[key], f"$.{key}")
@@ -142,6 +147,10 @@ def validate_label_draft_v1(value: Any) -> dict[str, Any]:
 
     snapshot = _snapshot(draft["evidence_snapshot"])
     _sent_inputs(draft["sent_inputs"], snapshot)
+    if human and draft["sent_inputs"]:
+        raise LabelDraftError("$.sent_inputs", "human transcription has no model inputs")
+    if not human and not draft["sent_inputs"]:
+        raise LabelDraftError("$.sent_inputs", "model draft requires actual sent inputs")
     _photo_roles(draft["photo_roles"], snapshot)
 
     identity = _obj(draft["identity"], "$.identity")
@@ -151,17 +160,17 @@ def validate_label_draft_v1(value: Any) -> dict[str, Any]:
     _nullable_field(identity.get("barcode_digits_seen"), "$.identity.barcode_digits_seen", snapshot)
 
     serving = _obj(draft["serving"], "$.serving")
-    _reject_unknown(serving, {"size", "servings_per_container", "basis_text"}, "$.serving")
+    _reject_unknown(serving, {"size", "servings_per_container", "basis_text", "amount"}, "$.serving")
     for key in ("size", "servings_per_container", "basis_text"):
         _field(serving.get(key), f"$.serving.{key}", snapshot)
+    _amount(serving.get("amount"), "$.serving.amount", snapshot)
 
     _ingredient_rows(draft["ingredient_rows"], snapshot)
 
     other = _obj(draft["other_ingredients"], "$.other_ingredients")
     _reject_unknown(other, {"text", "disclosure_hint"}, "$.other_ingredients")
     _nullable_field(other.get("text"), "$.other_ingredients.text", snapshot)
-    if other.get("disclosure_hint") not in DISCLOSURE_HINTS:
-        raise LabelDraftError("$.other_ingredients.disclosure_hint", "unknown disclosure hint")
+    _enum(other.get("disclosure_hint"), DISCLOSURE_HINTS, "$.other_ingredients.disclosure_hint")
 
     statements = _list(draft["statements"], "$.statements", MAX_STATEMENTS)
     for index, statement in enumerate(statements):
@@ -177,6 +186,7 @@ def validate_label_draft_v1(value: Any) -> dict[str, Any]:
     elif reason is not None:
         _text(reason, "$.abstain_reason", MAX_SHORT, required=False)
     _confidence(draft["overall_confidence"], "$.overall_confidence")
+    _trace_sources(draft, {i["input_id"]: i for i in draft["sent_inputs"]}, human)
     return draft
 
 
@@ -198,13 +208,20 @@ def _snapshot(value: Any) -> dict[str, str]:
 
 def _sent_inputs(value: Any, snapshot: dict[str, str]) -> None:
     items = _list(value, "$.sent_inputs", len(snapshot) * 4)
+    seen = set()
     for index, item in enumerate(items):
         path = f"$.sent_inputs[{index}]"
         entry = _obj(item, path)
-        _reject_unknown(entry, {"photo_id", "sha256", "crop"}, path)
+        _reject_unknown(entry, {"input_id", "photo_id", "original_sha256", "sent_sha256", "crop"}, path)
+        _token(entry.get("input_id"), f"{path}.input_id")
+        if entry["input_id"] in seen:
+            raise LabelDraftError(f"{path}.input_id", "duplicate input id")
+        seen.add(entry["input_id"])
         photo_id = _photo_ref(entry.get("photo_id"), f"{path}.photo_id", snapshot)
-        if entry.get("sha256") != snapshot[photo_id]:
-            raise LabelDraftError(f"{path}.sha256", "must equal the snapshot hash")
+        if entry.get("original_sha256") != snapshot[photo_id]:
+            raise LabelDraftError(f"{path}.original_sha256", "must equal the original snapshot hash")
+        if not isinstance(entry.get("sent_sha256"), str) or not _SHA256.fullmatch(entry["sent_sha256"]):
+            raise LabelDraftError(f"{path}.sent_sha256", "must hash the actually sent bytes")
         if "crop" in entry and entry["crop"] is not None:
             _region(entry["crop"], f"{path}.crop")
 
@@ -217,20 +234,16 @@ def _photo_roles(value: Any, snapshot: dict[str, str]) -> None:
         _reject_unknown(entry, {"photo_id", "declared", "inferred", "readability", "issues"}, path)
         _photo_ref(entry.get("photo_id"), f"{path}.photo_id", snapshot)
         for role in _list(entry.get("declared"), f"{path}.declared", len(PHOTO_ROLES)):
-            if role not in PHOTO_ROLES:
-                raise LabelDraftError(f"{path}.declared", f"unknown role {role!r}")
+            _enum(role, PHOTO_ROLES, f"{path}.declared")
         for j, inferred in enumerate(_list(entry.get("inferred"), f"{path}.inferred", len(PHOTO_ROLES))):
             ipath = f"{path}.inferred[{j}]"
             inferred_obj = _obj(inferred, ipath)
             _reject_unknown(inferred_obj, {"role", "confidence"}, ipath)
-            if inferred_obj.get("role") not in PHOTO_ROLES:
-                raise LabelDraftError(f"{ipath}.role", "unknown role")
+            _enum(inferred_obj.get("role"), PHOTO_ROLES, f"{ipath}.role")
             _confidence(inferred_obj.get("confidence"), f"{ipath}.confidence")
-        if entry.get("readability") not in READABILITIES:
-            raise LabelDraftError(f"{path}.readability", "unknown readability")
+        _enum(entry.get("readability"), READABILITIES, f"{path}.readability")
         for issue in _list(entry.get("issues"), f"{path}.issues", len(PHOTO_ISSUES)):
-            if issue not in PHOTO_ISSUES:
-                raise LabelDraftError(f"{path}.issues", f"unknown issue {issue!r}")
+            _enum(issue, PHOTO_ISSUES, f"{path}.issues")
 
 
 def _ingredient_rows(value: Any, snapshot: dict[str, str]) -> None:
@@ -250,8 +263,7 @@ def _ingredient_rows(value: Any, snapshot: dict[str, str]) -> None:
         _nullable_field(row.get("form_text"), f"{path}.form_text", snapshot)
         if not isinstance(row.get("is_blend_header"), bool):
             raise LabelDraftError(f"{path}.is_blend_header", "must be boolean")
-        if row.get("status") not in ROW_STATUSES:
-            raise LabelDraftError(f"{path}.status", "unknown row status")
+        _enum(row.get("status"), ROW_STATUSES, f"{path}.status")
         parent = row.get("parent_index")
         if parent is not None:
             if isinstance(parent, bool) or not isinstance(parent, int):
@@ -270,10 +282,8 @@ def _discrepancies(value: Any, snapshot: dict[str, str]) -> None:
         path = f"$.discrepancies[{index}]"
         entry = _obj(item, path)
         _reject_unknown(entry, {"code", "severity", "detail", "photo_ids"}, path)
-        if entry.get("code") not in DISCREPANCY_CODES:
-            raise LabelDraftError(f"{path}.code", "unknown discrepancy code")
-        if entry.get("severity") not in DISCREPANCY_SEVERITIES:
-            raise LabelDraftError(f"{path}.severity", "unknown severity")
+        _enum(entry.get("code"), DISCREPANCY_CODES, f"{path}.code")
+        _enum(entry.get("severity"), DISCREPANCY_SEVERITIES, f"{path}.severity")
         _text(entry.get("detail"), f"{path}.detail", MAX_TEXT, required=False)
         for j, photo_id in enumerate(_list(entry.get("photo_ids"), f"{path}.photo_ids", len(snapshot))):
             _photo_ref(photo_id, f"{path}.photo_ids[{j}]", snapshot)
@@ -287,8 +297,7 @@ def _field(value: Any, path: str, snapshot: dict[str, str], *, numeric: bool = F
     field = _obj(value, path)
     _reject_unknown(field, {"value", "status", "confidence", "sources"}, path)
     status = field.get("status")
-    if status not in FIELD_STATUSES:
-        raise LabelDraftError(f"{path}.status", "unknown field status")
+    _enum(status, FIELD_STATUSES, f"{path}.status")
     raw = field.get("value")
     sources = _list(field.get("sources"), f"{path}.sources", len(snapshot) * 4)
     if status in ("read", "partial"):
@@ -314,7 +323,7 @@ def _field(value: Any, path: str, snapshot: dict[str, str], *, numeric: bool = F
     for index, source in enumerate(sources):
         spath = f"{path}.sources[{index}]"
         entry = _obj(source, spath)
-        _reject_unknown(entry, {"photo_id", "supporting_text", "region"}, spath)
+        _reject_unknown(entry, {"input_id", "photo_id", "supporting_text", "region"}, spath)
         _photo_ref(entry.get("photo_id"), f"{spath}.photo_id", snapshot)
         _text(entry.get("supporting_text"), f"{spath}.supporting_text", MAX_TEXT, required=False)
         if "region" in entry and entry["region"] is not None:
@@ -334,15 +343,18 @@ def _amount(value: Any, path: str, snapshot: dict[str, str]) -> None:
     field = _obj(value, path)
     _reject_unknown(field, {"value", "status", "confidence", "sources"}, path)
     status = field.get("status")
-    if status not in FIELD_STATUSES:
-        raise LabelDraftError(f"{path}.status", "unknown field status")
+    _enum(status, FIELD_STATUSES, f"{path}.status")
     raw = field.get("value")
     sources = _list(field.get("sources"), f"{path}.sources", len(snapshot) * 4)
     if status in ("read", "partial"):
         amount = _obj(raw, f"{path}.value")
         _reject_unknown(amount, {"value", "unit_text"}, f"{path}.value")
-        _finite_number(amount.get("value"), f"{path}.value.value", minimum=0.0)
-        _text(amount.get("unit_text"), f"{path}.value.unit_text", MAX_SHORT, required=True)
+        if amount.get("value") is not None or status == "read":
+            _finite_number(amount.get("value"), f"{path}.value.value", minimum=0.0)
+        if amount.get("unit_text") is not None or status == "read":
+            _text(amount.get("unit_text"), f"{path}.value.unit_text", MAX_SHORT, required=True)
+        if amount.get("value") is None and amount.get("unit_text") is None:
+            raise LabelDraftError(f"{path}.value", "partial amount needs a number or printed unit")
         if not sources:
             raise LabelDraftError(f"{path}.sources", f"{status} amount requires a source")
     else:
@@ -352,7 +364,7 @@ def _amount(value: Any, path: str, snapshot: dict[str, str]) -> None:
     for index, source in enumerate(sources):
         spath = f"{path}.sources[{index}]"
         entry = _obj(source, spath)
-        _reject_unknown(entry, {"photo_id", "supporting_text", "region"}, spath)
+        _reject_unknown(entry, {"input_id", "photo_id", "supporting_text", "region"}, spath)
         _photo_ref(entry.get("photo_id"), f"{spath}.photo_id", snapshot)
         _text(entry.get("supporting_text"), f"{spath}.supporting_text", MAX_TEXT, required=False)
         if "region" in entry and entry["region"] is not None:
@@ -361,6 +373,30 @@ def _amount(value: Any, path: str, snapshot: dict[str, str]) -> None:
 
 # ---------------------------------------------------------------------------
 # Primitives
+
+
+def _enum(value: Any, choices: set[str] | frozenset[str], path: str) -> None:
+    if not isinstance(value, str) or value not in choices:
+        raise LabelDraftError(path, "unknown enum value")
+
+
+def _trace_sources(value: Any, inputs: dict[str, dict], human: bool, path: str = "$") -> None:
+    """Every model field points to a specific transmitted image, not just a photo."""
+    if isinstance(value, list):
+        for index, child in enumerate(value):
+            _trace_sources(child, inputs, human, f"{path}[{index}]")
+    elif isinstance(value, dict):
+        for source in value.get("sources", []):
+            input_id = source.get("input_id")
+            if human:
+                if input_id is not None:
+                    raise LabelDraftError(f"{path}.sources", "human source cannot cite a model input")
+            elif not isinstance(input_id, str) or input_id not in inputs:
+                raise LabelDraftError(f"{path}.sources", "must cite an actual sent input_id")
+            elif inputs[input_id]["photo_id"] != source["photo_id"]:
+                raise LabelDraftError(f"{path}.sources", "input_id belongs to another photo")
+        for key, child in value.items():
+            _trace_sources(child, inputs, human, f"{path}.{key}")
 
 
 def _obj(value: Any, path: str) -> dict[str, Any]:
