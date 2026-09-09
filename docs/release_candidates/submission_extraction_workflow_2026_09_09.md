@@ -54,7 +54,7 @@ current-revision drafts in list, `171c4cc` contention/revocation/disabled cases.
 | Run | Result |
 |---|---|
 | SQL harness, real migration chain, with concurrency | 68 cases pass |
-| Pipeline fast backstop | see final run below |
+| Pipeline fast backstop | 13,995 passed, 42 skipped |
 | Flutter safety invariants, services, scanner, contributions | 1,292 passed |
 | Deno edge tests, entrypoints type-check | 76 passed |
 | Local adapter against the installed model | valid envelope in 15.8s |
