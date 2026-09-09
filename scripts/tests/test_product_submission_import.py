@@ -434,6 +434,85 @@ def test_materialization_recovers_exact_label_after_receipt_write_interruption(
     assert (tmp_path / ".product_submission_import_receipts").exists()
 
 
+@pytest.mark.parametrize("same_export", [False, True])
+@pytest.mark.parametrize(
+    ("first_upc", "second_upc"),
+    [
+        ("01234565", "00000001234565"),
+        ("050428381397", "0050428381397"),
+        ("0050428381397", "00050428381397"),
+        ("00050428381397", "050428381397"),
+    ],
+)
+def test_equivalent_gtin_widths_cannot_materialize_two_submission_identities(
+    tmp_path: Path, same_export: bool, first_upc: str, second_upc: str,
+):
+    from product_submission_import import (
+        SubmissionImportError,
+        materialize_approved_submissions,
+    )
+
+    first = _export(normalized_upc=first_upc)
+    second = _export(
+        normalized_upc=second_upc,
+        submission_id="028f4c79-7c7e-4c70-9d62-7fc3b9ce6a22",
+    )
+    if not same_export:
+        imported = materialize_approved_submissions([first], output_dir=tmp_path)
+        label = json.loads(imported.output_paths[0].read_text())
+        assert label["upcSku"] == first_upc
+        before = {path.name: path.read_bytes() for path in tmp_path.iterdir()}
+        retry = materialize_approved_submissions([first], output_dir=tmp_path)
+        assert retry.already_imported_submission_ids == [first["submission_id"]]
+        assert retry.imported_submission_ids == []
+    else:
+        before = {}
+
+    with pytest.raises(SubmissionImportError, match="UPC"):
+        materialize_approved_submissions(
+            [first, second] if same_export else [second], output_dir=tmp_path,
+        )
+
+    assert {path.name: path.read_bytes() for path in tmp_path.iterdir()} == before
+
+
+@pytest.mark.parametrize("same_export", [False, True])
+@pytest.mark.parametrize(
+    ("first_upc", "second_upc"),
+    [("01234565", "012345000065"), ("012345000065", "01234565")],
+)
+def test_established_ean8_identity_does_not_own_ambiguous_upce_candidate(
+    tmp_path: Path, same_export: bool, first_upc: str, second_upc: str,
+):
+    from product_submission_import import materialize_approved_submissions
+
+    first = _export(normalized_upc=first_upc)
+    second = _export(
+        normalized_upc=second_upc,
+        submission_id="028f4c79-7c7e-4c70-9d62-7fc3b9ce6a22",
+    )
+    if same_export:
+        result = materialize_approved_submissions([first, second], output_dir=tmp_path)
+        assert result.imported_submission_ids == [
+            first["submission_id"], second["submission_id"],
+        ]
+    else:
+        materialize_approved_submissions([first], output_dir=tmp_path)
+        result = materialize_approved_submissions([second], output_dir=tmp_path)
+        assert result.imported_submission_ids == [second["submission_id"]]
+
+    assert {
+        json.loads(path.read_text())["upcSku"] for path in tmp_path.glob("*.json")
+    } == {first_upc, second_upc}
+    before = {path.name: path.read_bytes() for path in tmp_path.iterdir()}
+    retry = materialize_approved_submissions([first, second], output_dir=tmp_path)
+    assert retry.imported_submission_ids == []
+    assert retry.already_imported_submission_ids == [
+        first["submission_id"], second["submission_id"],
+    ]
+    assert {path.name: path.read_bytes() for path in tmp_path.iterdir()} == before
+
+
 def test_new_correction_replaces_only_a_previously_promoted_correction(
     tmp_path: Path,
 ):

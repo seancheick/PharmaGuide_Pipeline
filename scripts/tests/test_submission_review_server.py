@@ -10,7 +10,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
 import sqlite3
+import subprocess
 import sys
 import threading
 import urllib.request
@@ -245,6 +247,7 @@ def test_identity_index_combines_catalog_and_manifest_owned_corpus(tmp_path):
                     "fullName": "Corpus only",
                     "brandName": "New Labs",
                     "upcSku": "4006381333931",
+                    "quality_score_v4_100": 20,
                     "ingredientRows": [
                         {
                             "ingredientGroup": "Vitamin D",
@@ -262,6 +265,11 @@ def test_identity_index_combines_catalog_and_manifest_owned_corpus(tmp_path):
                     "fullName": "Second exact version",
                     "brandName": "New Labs",
                     "upcSku": "4006381333931",
+                    "quality_score_v4_100": 95,
+                    "ingredientRows": [{
+                        "name": "Vitamin D3",
+                        "quantity": [{"quantity": 50, "unit": "mcg"}],
+                    }],
                 },
             ]
         )
@@ -298,6 +306,11 @@ def test_identity_index_combines_catalog_and_manifest_owned_corpus(tmp_path):
     assert draft is not None
     assert "row_ledger" not in draft
     assert "safety_hits" not in draft["ingredientRows"][0]
+    assert [
+        row.draft_payload["ingredientRows"][0]["quantity"][0]["quantity"]
+        for row in corpus_only
+    ] == [25, 50]
+    assert all("quality_score_v4_100" not in row.draft_payload for row in corpus_only)
     assert index.built_at == built_at
 
 
@@ -314,6 +327,77 @@ def test_identity_index_freshness_has_warn_and_block_boundaries():
     )
     assert serve.IDENTITY_INDEX_WARN_DAYS == 30
     assert serve.IDENTITY_INDEX_BLOCK_DAYS == 60
+
+
+@pytest.mark.parametrize("new_source", ["catalog", "corpus", "invalid_corpus"])
+def test_identity_lookup_finds_candidate_added_after_prior_no_match(tmp_path, new_source):
+    catalog = tmp_path / "catalog.db"
+    with sqlite3.connect(catalog) as connection:
+        connection.execute(
+            "create table products_core "
+            "(dsld_id text, product_name text, brand_name text, upc_sku text)"
+        )
+    stage = tmp_path / "products" / "output_Test_enriched" / "enriched"
+    stage.mkdir(parents=True)
+    batch = stage / "enriched_cleaned_batch_1.json"
+
+    def write_corpus(rows):
+        batch.write_text(json.dumps(rows))
+        (stage / ".stage_manifest.json").write_text(json.dumps({
+            "schema_version": "1.0.0", "stage": "enrich",
+            "processing_complete": True, "owned_files": [batch.name],
+            "content_sha256": {
+                batch.name: hashlib.sha256(batch.read_bytes()).hexdigest()
+            },
+        }))
+
+    write_corpus([])
+
+    class Handler(serve.ReviewerHandler):
+        identity_index = serve.build_identity_index(catalog, tmp_path / "products")
+
+    server = ThreadingHTTPServer((serve.BIND_HOST, 0), Handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        url = (
+            f"http://{serve.BIND_HOST}:{server.server_port}"
+            "/api/identity_lookup?gtin14=00050428381397"
+        )
+        with urllib.request.urlopen(url, timeout=5) as response:
+            assert json.load(response)["matches"] == []
+        if new_source == "catalog":
+            with sqlite3.connect(catalog) as connection:
+                connection.execute(
+                    "insert into products_core values (?, ?, ?, ?)",
+                    ("278454", "Vitamin D3", "Example Labs", "0050428381397"),
+                )
+        else:
+            new_rows = [{
+                "dsldId": 278454, "fullName": "Vitamin D3",
+                "brandName": "Example Labs", "upcSku": "0050428381397",
+            }]
+            if new_source == "invalid_corpus":
+                batch.write_text(json.dumps(new_rows))
+                # A changed batch cannot serve the old no-match while its
+                # manifest is invalid, even across repeated lookup attempts.
+                for _ in range(2):
+                    with pytest.raises(urllib.error.HTTPError) as error:
+                        urllib.request.urlopen(url, timeout=5)
+                    assert error.value.code == 503
+            write_corpus(new_rows)
+        with urllib.request.urlopen(url, timeout=5) as response:
+            assert response.headers["cache-control"] == "no-store"
+            assert [
+                (row["source"], row["dsld_id"])
+                for row in json.load(response)["matches"]
+            ] == [
+                ("catalog" if new_source == "catalog" else "corpus", "278454"),
+            ]
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
 
 
 def test_console_exposes_fail_closed_identity_actions():
@@ -337,6 +421,85 @@ def test_console_exposes_fail_closed_identity_actions():
     assert 'id="identity-index-status"' in index_html
     assert "IDENTITY_INDEX_WARN_DAYS = 30" in serve_source
     assert "IDENTITY_INDEX_BLOCK_DAYS = 60" in serve_source
+
+
+@pytest.mark.parametrize("action", ["record", "approve"])
+@pytest.mark.parametrize("source_state", ["changed", "unavailable", "blocked", "current"])
+def test_console_rechecks_identity_before_recording_or_approving(action, source_state):
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js is required for reviewer interaction tests")
+    harness = r"""
+const fs = require('node:fs');
+const vm = require('node:vm');
+const [asset, action, sourceState] = process.argv.slice(1);
+const previous = {
+  canonical_gtin14: '00050428381397', index_built_at: '2026-09-08T12:00:00Z',
+  index_revision: 'prior-source', freshness: 'fresh', matches: [],
+};
+const current = structuredClone(previous);
+if (sourceState === 'changed') {
+  current.index_revision = 'new-source';
+  current.matches = [{source: 'corpus', dsld_id: '278454', brand_name: 'Example',
+    product_name: 'Vitamin D3', upc_sku: '050428381397', draft_payload: {}}];
+}
+if (sourceState === 'blocked') current.freshness = 'blocked';
+const calls = [];
+const elements = new Map();
+function element() {
+  return {value: '', textContent: '', style: {}, classList: {add() {}, remove() {}},
+    append() {}, addEventListener() {}};
+}
+const context = vm.createContext({
+  structuredClone, previous, calls, action,
+  document: {createElement: element, getElementById(id) {
+    if (!elements.has(id)) elements.set(id, element());
+    return elements.get(id);
+  }},
+  fetch: async (url, options) => {
+    calls.push({url, body: options?.body ? JSON.parse(options.body) : null});
+    if (url.startsWith('/api/identity_lookup')) {
+      return {ok: sourceState !== 'unavailable', json: async () => (
+        sourceState === 'unavailable' ? {error: 'identity index unavailable'} : current
+      )};
+    }
+    return {ok: true, json: async () => ({})};
+  },
+});
+// Boot and queue refresh concern login/listing, outside these decision actions.
+vm.runInContext(fs.readFileSync(asset, 'utf8') +
+  '\nfunction boot() {}\nasync function loadQueue() {}\nasync function refreshSelected() {}', context);
+(async () => {
+  await vm.runInContext(`(async () => {
+    state.selected = {id: 'submission', kind: 'missing_product', normalized_upc: '050428381397', evidence_revision: 2, evidence_manifest_sha256: 'a'.repeat(64)};
+    state.session = {access_token: 'reviewer-test-session'};
+    state.identityLookup = previous;
+    state.identityRecorded = 'no_match_verified';
+    state.productImage = {kind: 'photo', id: 'front-photo'};
+    state.payload = {};
+    try {
+      if (action === 'record') await recordMatch('no_match_verified');
+      else await approve();
+    } catch (_) {}
+  })()`, context);
+  process.stdout.write(JSON.stringify({calls,
+    recorded: vm.runInContext('state.identityRecorded', context)}));
+})().catch(error => {console.error(error); process.exitCode = 1;});
+"""
+    result = subprocess.run(
+        [node, "-e", harness, str(REVIEW_DIR / "static" / "app.js"), action, source_state],
+        capture_output=True, text=True, check=True, timeout=15,
+    )
+    observed = json.loads(result.stdout)
+    decisions = [row for row in observed["calls"] if row["url"] == "/api/edge"]
+    if source_state == "current":
+        assert len(decisions) == 1
+        assert decisions[0]["body"]["expected_evidence_revision"] == 2
+        assert decisions[0]["body"]["evidence_manifest_sha256"] == "a" * 64
+        assert observed["calls"][0]["url"].startswith("/api/identity_lookup")
+    else:
+        assert decisions == []
+        assert observed["recorded"] is None
 
 
 def test_console_editor_picture_and_terminal_state_contracts():

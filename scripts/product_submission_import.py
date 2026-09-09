@@ -30,6 +30,10 @@ from uuid import UUID
 
 import env_loader  # noqa: F401  # Load the project .env without overriding shell vars.
 from PIL import Image, ImageOps
+from submission_review.gtin import (
+    canonical_normalized_gtin14,
+    is_valid_gtin as _is_valid_gtin,
+)
 
 
 SCHEMA_VERSION = "manual_label_v1"
@@ -170,17 +174,6 @@ def _required_uuid(value: object, field: str) -> str:
     except ValueError as exc:
         raise SubmissionImportError(f"{field} must be a UUID") from exc
     return normalized
-
-
-def _is_valid_gtin(value: str) -> bool:
-    if len(value) not in {8, 12, 13, 14} or not value.isdigit():
-        return False
-    body = value[:-1]
-    weighted_sum = sum(
-        int(body[-position]) * (3 if position % 2 else 1)
-        for position in range(1, len(body) + 1)
-    )
-    return (10 - weighted_sum % 10) % 10 == int(value[-1])
 
 
 def _reject_unknown_keys(
@@ -759,14 +752,15 @@ def materialize_approved_submissions(
     prepared: list[tuple[str, dict[str, Any], str, Path]] = []
     seen_submission_ids: set[str] = set()
     seen_product_ids: set[str] = set()
-    upc_owner = {
-        str(value.get("upc")): (
-            submission_id,
-            str(value.get("product_id") or ""),
-        )
-        for submission_id, value in receipt_rows.items()
-        if isinstance(value, dict) and value.get("upc")
-    }
+    upc_owners: dict[str, set[tuple[str, str]]] = {}
+    for submission_id, value in receipt_rows.items():
+        if not isinstance(value, dict):
+            continue
+        gtin14 = canonical_normalized_gtin14(value.get("upc"))
+        if gtin14 is not None:
+            upc_owners.setdefault(gtin14, set()).add(
+                (submission_id, str(value.get("product_id") or ""))
+            )
     already_imported: list[str] = []
 
     for raw_row in export_rows:
@@ -782,18 +776,20 @@ def materialize_approved_submissions(
         seen_product_ids.add(product_id)
 
         upc = str(label["upcSku"])
-        if upc:
-            existing_upc_owner = upc_owner.get(upc)
-            if (
-                existing_upc_owner is not None
-                and existing_upc_owner[0] != submission_id
-                and existing_upc_owner[1] != product_id
+        gtin14 = canonical_normalized_gtin14(upc)
+        if gtin14 is not None:
+            for owner_submission_id, owner_product_id in sorted(
+                upc_owners.get(gtin14, ())
             ):
-                raise SubmissionImportError(
-                    f"UPC {upc} is already owned by submission "
-                    f"{existing_upc_owner[0]}"
-                )
-            upc_owner[upc] = (submission_id, product_id)
+                if (
+                    owner_submission_id != submission_id
+                    and owner_product_id != product_id
+                ):
+                    raise SubmissionImportError(
+                        f"UPC {upc} is already owned by submission "
+                        f"{owner_submission_id}"
+                    )
+            upc_owners.setdefault(gtin14, set()).add((submission_id, product_id))
 
         serialized = json.dumps(label, ensure_ascii=False, indent=2) + "\n"
         label_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
