@@ -1,5 +1,12 @@
 # Local extraction-to-review workflow — milestone handoff
 
+> Superseded for readiness claims by
+> [the independent audit and continuation](submission_extraction_audit_2026_09_09.md).
+> The original model smoke test bypassed the shared extractor, and the
+> development-output test did not invoke the benchmark. Those claims did not
+> establish an end-to-end working workflow. Preserve this document as history;
+> use the audit for the current rollout boundary and next milestone.
+
 Date: 2026-09-09. Continued from pipeline `b33615ee` and app `8825941`.
 Source implementation and local verification. Nothing was deployed, extraction
 remains disabled, no paid or third-party service was contacted, no model was

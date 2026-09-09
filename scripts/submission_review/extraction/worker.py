@@ -168,16 +168,17 @@ def _work_one(
     try:
         if config.prep_config_version != PREPARATION_VERSION:
             raise ExtractionError("preparation_failed", "unsupported preparation version")
-        prepared = prepare_bundle(job.bundle, reader=reader)
-        # Preparation can take a while on a slow disk or a large set; tell the
-        # database the lease is still wanted before the provider call.
         queue.heartbeat(job.job_id, job.fencing_token)
-        if not queue.reserve(job.job_id, job.fencing_token):
-            _record_failure(queue, job, ExtractionError("budget_exhausted"), report, cost=0, admission_hold=True)
-            if report.stopped_because == "queue_empty":
-                report.stopped_because = "budget_exhausted"
-            return
         with _LeaseHeartbeat(queue, job) as heartbeat:
+            prepared = prepare_bundle(
+                job.bundle, reader=reader or getattr(queue, "read_evidence", None))
+            if heartbeat.error is not None:
+                raise heartbeat.error
+            if not queue.reserve(job.job_id, job.fencing_token):
+                _record_failure(queue, job, ExtractionError("budget_exhausted"), report, cost=0, admission_hold=True)
+                if report.stopped_because == "queue_empty":
+                    report.stopped_because = "budget_exhausted"
+                return
             called = True
             result = extractor.extract(prepared, config)
         if heartbeat.error is not None:

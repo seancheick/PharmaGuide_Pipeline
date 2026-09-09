@@ -5,9 +5,9 @@ One runner, used both by hand and by any later schedule. There is deliberately
 no second scheduled implementation: a cron entry calls this with the same flags
 a person would type, so what runs unattended is what was tested.
 
-    scripts/prepare_product_submissions.py preflight --mode local
+    scripts/prepare_product_submissions.py --mode local preflight
     scripts/prepare_product_submissions.py status
-    scripts/prepare_product_submissions.py run --mode local --max-jobs 5
+    scripts/prepare_product_submissions.py --mode local run --max-jobs 5
 
 What this program will not do, by construction: pull a model, fall back to a
 remote or paid provider, upload a photograph anywhere, approve or reject a
@@ -49,7 +49,8 @@ MODES = ("fake", "local")
 
 def _queue(args) -> SupabaseExtractionQueue:
     return SupabaseExtractionQueue(
-        WorkerCredentials.from_environment(), timeout=args.request_timeout
+        WorkerCredentials.from_environment(), timeout=args.request_timeout,
+        attempt_journal=args.attempt_journal if args.command == "run" else None,
     )
 
 
@@ -147,7 +148,7 @@ def command_reconcile(args) -> int:
     elif not outcome["attempt_is_current"]:
         verdict = "another attempt owns this job; this one is finished"
     else:
-        verdict = "no draft was recorded; this attempt may be retried"
+        verdict = "no draft is confirmed; do not rerun inference or completion blindly; inspect the lease and usage"
     if outcome["reservation_open"]:
         verdict += (
             "; a reservation is still outstanding and needs verified usage "
@@ -189,6 +190,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="hard deadline for one model call",
     )
     parser.add_argument("--request-timeout", type=float, default=20.0)
+    parser.add_argument("--attempt-journal", type=Path,
+                        default=SCRIPTS_DIR.parent / "reports/submission_extraction/attempts.jsonl",
+                        help="private local attempt references for uncertain-completion reconciliation")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("preflight")
     sub.add_parser("status")

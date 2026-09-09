@@ -198,10 +198,11 @@ def test_an_attempt_another_worker_took_over_is_finished(monkeypatch, capsys) ->
     assert "another attempt owns this job" in printed["verdict"]
 
 
-def test_no_draft_means_the_attempt_may_be_retried(monkeypatch, capsys) -> None:
+def test_no_draft_is_not_permission_to_rerun_a_live_or_uncertain_attempt(monkeypatch, capsys) -> None:
     _, printed, _ = _reconcile(monkeypatch, capsys, _outcome())
 
-    assert "may be retried" in printed["verdict"]
+    assert "do not rerun" in printed["verdict"]
+    assert "may be retried" not in printed["verdict"]
 
 
 def test_an_outstanding_reservation_is_never_settled_on_age(monkeypatch, capsys) -> None:

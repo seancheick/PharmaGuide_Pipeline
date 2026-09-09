@@ -38,7 +38,7 @@ _DIGEST = hashlib.sha256(_IMAGE).hexdigest()
 
 _ENV = {
     "SUPABASE_URL": "https://example.test",
-    "SUPABASE_PUBLISHABLE_KEY": "publishable",
+    "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_fixture",
     "EXTRACTION_WORKER_EMAIL": "worker@example.test",
     "EXTRACTION_WORKER_PASSWORD": "worker-secret",
 }
@@ -121,7 +121,7 @@ def test_the_worker_signs_in_as_itself() -> None:
     credentials = WorkerCredentials.from_environment(_ENV)
 
     assert credentials.email == "worker@example.test"
-    assert credentials.anon_key == "publishable"
+    assert credentials.anon_key == "sb_publishable_fixture"
 
 
 def test_a_service_key_in_the_environment_is_refused() -> None:
@@ -131,6 +131,39 @@ def test_a_service_key_in_the_environment_is_refused() -> None:
         with pytest.raises(QueueConfigurationError) as error:
             WorkerCredentials.from_environment({**_ENV, key: "sb_secret_value"})
         assert key in str(error.value)
+
+
+def test_admin_key_cannot_hide_in_public_slot_or_opt_out():
+    with pytest.raises(QueueConfigurationError):
+        WorkerCredentials.from_environment({**_ENV, "SUPABASE_PUBLISHABLE_KEY": "sb_secret_value"})
+    with pytest.raises(QueueConfigurationError):
+        WorkerCredentials.from_environment({**_ENV, "SUPABASE_SERVICE_ROLE_KEY": "secret",
+                                            "EXTRACTION_WORKER_ALLOW_ADMIN_ENV": "1"})
+
+
+@pytest.mark.parametrize("url", ["http://remote.test", "https://user:pass@example.test", "https://example.test/private"])
+def test_worker_credentials_are_not_sent_to_unsafe_endpoints(url):
+    with pytest.raises(QueueConfigurationError):
+        WorkerCredentials.from_environment({**_ENV, "SUPABASE_URL": url})
+
+
+def test_photo_id_is_validated_before_any_fetch_or_write(tmp_path):
+    row = _claim_row(evidence_manifest={"../../escaped": _DIGEST},
+                     evidence_object_paths={"../../escaped": "owner/photo"})
+    transport = _Transport(claim_rows=[row])
+    with pytest.raises(ExtractionError):
+        _queue(tmp_path, transport).claim(1)
+    assert transport.fetched == []
+
+
+def test_non_boolean_budget_ack_is_not_permission(tmp_path):
+    class Bad(_Transport):
+        def post_json(self, url, **kwargs):
+            if url.endswith("reserve_product_submission_extraction_budget"):
+                return "false"
+            return super().post_json(url, **kwargs)
+    with pytest.raises(Exception):
+        _queue(tmp_path, Bad()).reserve("job", 1)
 
 
 def test_missing_worker_credentials_name_what_is_missing() -> None:
@@ -153,6 +186,8 @@ def test_a_claim_builds_the_job_from_the_queue_alone(tmp_path: Path) -> None:
     # The configuration is the one pinned at enqueue, never a local default.
     assert job.configuration.model == "gemma4"
     assert job.configuration.retention_policy_version == "local-only-v1"
+    assert transport.fetched == []  # claim never downloads outside the heartbeat
+    queue.read_evidence(job.bundle.photos[0])
     assert transport.fetched == [
         f"https://example.test/storage/v1/object/product-submission-photos/owner/{_SUBMISSION}/{_PHOTO}"
     ]
@@ -175,7 +210,8 @@ def test_a_traversing_evidence_path_is_never_fetched(tmp_path: Path) -> None:
     queue = _queue(tmp_path, transport)
 
     with pytest.raises(ExtractionError):
-        queue.claim(1)
+        job = queue.claim(1)[0]
+        queue.read_evidence(job.bundle.photos[0])
 
     assert transport.fetched == []
 
@@ -184,6 +220,7 @@ def test_leased_photos_land_in_a_private_directory_and_are_removed(tmp_path: Pat
     transport = _Transport()
     queue = _queue(tmp_path, transport)
     job = queue.claim(1)[0]
+    queue.read_evidence(job.bundle.photos[0])
     stored = Path(job.bundle.photos[0].path)
 
     assert stored.exists()
@@ -202,6 +239,7 @@ def test_evidence_is_removed_even_when_completion_fails(tmp_path: Path) -> None:
     transport = _Transport()
     queue = _queue(tmp_path, transport)
     job = queue.claim(1)[0]
+    queue.read_evidence(job.bundle.photos[0])
     stored = Path(job.bundle.photos[0].path)
     transport.rejections["complete_product_submission_extraction_job"] = RuntimeError(
         "network gone"
@@ -213,6 +251,47 @@ def test_evidence_is_removed_even_when_completion_fails(tmp_path: Path) -> None:
     assert not stored.exists()
 
 
+def test_lost_completion_ack_is_reconciled_without_second_write(tmp_path):
+    class LostAck(_Transport):
+        def post_json(self, url, **kwargs):
+            if url.endswith("complete_product_submission_extraction_job"):
+                self.calls.append("complete_product_submission_extraction_job")
+                raise TimeoutError()
+            if url.endswith("product_submission_extraction_attempt_outcome"):
+                return [{"attempt_is_current": True, "job_state": "review_ready",
+                         "draft_recorded": True, "result_extraction_version": 2,
+                         "reservation_open": False, "reserved_microcents": 1,
+                         "settled_microcents": 0}]
+            return super().post_json(url, **kwargs)
+    transport = LostAck()
+    queue = _queue(tmp_path, transport)
+    queue.complete(_claim_row()["job_id"], 3, "review_ready", cost_microcents=0)
+    assert transport.calls.count("complete_product_submission_extraction_job") == 1
+
+
+def test_live_attempt_is_not_proof_of_completion(tmp_path):
+    transport = _Transport()
+    transport.rejections["complete_product_submission_extraction_job"] = TimeoutError()
+    with pytest.raises(Exception):
+        _queue(tmp_path, transport).complete(_claim_row()["job_id"], 3, "review_ready")
+
+
+def test_uncertain_completion_leaves_a_private_reconciliation_receipt(tmp_path):
+    journal = tmp_path / "attempts.jsonl"
+    transport = _Transport()
+    transport.rejections["complete_product_submission_extraction_job"] = TimeoutError()
+    queue = SupabaseExtractionQueue(WorkerCredentials.from_environment(_ENV),
+                                    transport=transport, workspace=tmp_path,
+                                    attempt_journal=journal)
+    with pytest.raises(Exception):
+        queue.complete(_claim_row()["job_id"], 3, "review_ready")
+    import json
+    record = json.loads(journal.read_text().splitlines()[0])
+    assert record["job_id"] == _claim_row()["job_id"] and record["fencing_token"] == 3
+    assert set(record) == {"job_id", "fencing_token", "outcome", "cost_microcents", "event"}
+    assert oct(journal.stat().st_mode)[-3:] == "600"
+
+
 def test_a_lost_lease_is_reported_as_such(tmp_path: Path) -> None:
     from submission_review.extraction.queue_client import _RpcRejected
 
@@ -220,7 +299,7 @@ def test_a_lost_lease_is_reported_as_such(tmp_path: Path) -> None:
     queue = _queue(tmp_path, transport)
     job = queue.claim(1)[0]
     transport.rejections["heartbeat_product_submission_extraction_job"] = _RpcRejected(
-        "rejected", code="55000"
+        "rejected", code="lease_lost"
     )
 
     with pytest.raises(LeaseLostError):

@@ -35,7 +35,7 @@ function boot(){} function renderRows(){} function syncFieldsFromPayload(){}
 function updateShaPreview(){} function setStatus(s){ out.status=s; }
 `,ctx);
 vm.runInContext(`
-state.selected={extractions:[JSON.parse(${JSON.stringify(payloadJson)})]};
+state.selected={evidence_revision:2,extractions:[JSON.parse(${JSON.stringify(payloadJson)})]};
 renderDraft();
 out.hidden = document.getElementById('ai-draft').classList.contains('hidden');
 `,ctx);
@@ -89,6 +89,8 @@ def _field(value, status="read", input_id="i0"):
 
 def _payload(**overrides):
     payload = {
+        "schema_version": "label_draft_v1", "draft_origin": "model",
+        "evidence_revision": 2,
         "abstained": False,
         "abstain_reason": None,
         "identity": {
@@ -99,8 +101,9 @@ def _payload(**overrides):
             "size": _field("2 capsules"),
             "servings_per_container": _field("60"),
             "basis_text": _field("Amount Per Serving"),
+            "amount": _field({"value": 2, "unit_text": "capsules"}),
         },
-        "other_ingredients": {"text": _field("Vegetable cellulose")},
+        "other_ingredients": {"text": _field("Vegetable cellulose"), "disclosure_hint": "present"},
         "ingredient_rows": [
             {
                 "display_name": _field("Magnesium"),
@@ -211,9 +214,8 @@ def test_loading_the_draft_never_carries_an_unreadable_value_across() -> None:
     # A blank the reviewer must fill is safer than a guess they might accept.
     assert editor["brandName"] == ""
     assert editor["fullName"] == "Mag"
-    assert [row["name"] for row in editor["ingredientRows"]] == ["Zinc"]
-    # A row with no readable amount gets zero, not an invented dose.
-    assert editor["ingredientRows"][0]["quantity"][0]["quantity"] == 0
+    assert [row["name"] for row in editor["ingredientRows"]] == ["", "Zinc"]
+    assert editor["ingredientRows"][0]["quantity"] == []
 
 
 def test_loading_says_plainly_that_nothing_is_verified_yet() -> None:
@@ -227,7 +229,7 @@ def test_no_draft_hides_the_panel_entirely() -> None:
     if node is None:
         pytest.skip("Node.js required for console behavior")
     harness = _HARNESS.replace(
-        "state.selected={extractions:[JSON.parse(${JSON.stringify(payloadJson)})]};",
+        "state.selected={evidence_revision:2,extractions:[JSON.parse(${JSON.stringify(payloadJson)})]};",
         "state.selected={extractions:[]};",
     )
     result = subprocess.run(
@@ -237,3 +239,30 @@ def test_no_draft_hides_the_panel_entirely() -> None:
         check=True,
     )
     assert json.loads(result.stdout)["hidden"] is True
+
+
+def test_loader_preserves_label_serving_disclosure_and_unknown_daily_frequency():
+    editor = _render(_payload())["payload"]
+    assert editor["servingSizes"][0]["minQuantity"] == 2
+    assert editor["servingSizes"][0]["unit"] == "capsules"
+    assert editor["servingSizes"][0].get("minDailyServings") is None
+    assert editor["servingsPerContainer"] == "60"
+    assert editor["otherIngredientsDisclosure"] == "present"
+    assert editor["otherIngredients"] == "Vegetable cellulose"
+
+
+def test_loader_preserves_nested_rows_forms_and_displays_conflicts():
+    row = _payload()["ingredient_rows"][0]
+    header = {**row, "display_name": _field("Blend"), "is_blend_header": True}
+    child = {**row, "parent_index": 0, "form_text": _field("glycinate")}
+    out = _render(_payload(ingredient_rows=[header, child], discrepancies=[
+        {"severity": "critical", "code": "multiple_products", "detail": "Two different bottles", "photo_ids": ["p1"]}]))
+    assert len(out["payload"]["ingredientRows"]) == 1
+    assert out["payload"]["ingredientRows"][0]["nestedRows"][0]["forms"] == [{"name": "glycinate"}]
+    assert "Two different bottles" in " ".join(out["fields"])
+
+
+def test_stale_or_noncanonical_drafts_are_not_loaded():
+    for payload in [_payload(schema_version="manual_label_v1"), _payload(evidence_revision=1)]:
+        out = _render(payload)
+        assert out["hidden"] is True

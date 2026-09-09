@@ -8,6 +8,11 @@ contract name elsewhere.
 
 ## Pipeline and release terms
 
+**Extraction attempt receipt:** database-owned history of a claimed extraction
+attempt, keyed by job and fencing token and bound to its worker. Derived in the
+same transaction as queue state changes, never authored by adapters. It proves a
+committed outcome after a lost response without borrowing another attempt's result.
+
 | Term | Meaning |
 |---|---|
 | **Full-corpus run** | `bash batch_run_all_datasets.sh` with no `--targets`. Runs Clean → Enrich → Score for every eligible brand directory, then rebuilds the snapshot and starts the full release if every brand succeeded. |

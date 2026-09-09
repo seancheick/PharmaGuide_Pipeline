@@ -209,7 +209,7 @@ function select(submission) {
   $('reviewer-image-file').value = '';
   renderQueue();
   renderDetail();
-  scheduleUrlRefresh();
+  void refreshSelected();
 }
 
 // Signed URLs live 300s; refresh this submission's row just before expiry.
@@ -241,10 +241,11 @@ async function refreshSelected() {
       }
       state.selected = fresh;
       renderDetail();
-      scheduleUrlRefresh();
     }
   } catch {
-    // Keep the stale view; the next manual action reloads.
+    // Keep the edited payload; retry metadata without inventing a fresh binding.
+  } finally {
+    if (state.selected?.id === selection.id) scheduleUrlRefresh();
   }
 }
 
@@ -561,7 +562,11 @@ function renderDraft() {
   const meta = $('ai-draft-meta');
   body.textContent = '';
   meta.textContent = '';
-  const extraction = (state.selected?.extractions ?? [])[0];
+  const extraction = (state.selected?.extractions ?? []).find((entry) =>
+    entry.draft_payload?.schema_version === 'label_draft_v1' &&
+    entry.draft_payload?.draft_origin === 'model' &&
+    entry.evidence_revision === state.selected.evidence_revision &&
+    entry.draft_payload.evidence_revision === state.selected.evidence_revision);
   state.draft = extraction ?? null;
   if (!extraction || !extraction.draft_payload) {
     section.classList.add('hidden');
@@ -594,11 +599,22 @@ function renderDraft() {
     draftFieldRow('Other ingredients', (payload.other_ingredients ?? {}).text),
   );
 
+  for (const finding of payload.discrepancies ?? []) {
+    const warning = document.createElement('p');
+    warning.className = 'draft-unknown';
+    warning.textContent = `${finding.severity}: ${finding.code} — ${finding.detail ?? ''}`;
+    body.append(warning);
+  }
+  for (const role of payload.photo_roles ?? []) {
+    const finding = document.createElement('p');
+    finding.textContent = `Photo ${role.photo_id}: ${role.readability}; ${(role.issues ?? []).join(', ')}; detected ${(role.inferred ?? []).map(r => r.role).join(', ')}`;
+    body.append(finding);
+  }
   const rows = payload.ingredient_rows ?? [];
   const table = document.createElement('table');
   table.className = 'draft-rows';
   const header = document.createElement('tr');
-  for (const column of ['Ingredient', 'Amount', 'Unit', 'Belongs to', 'From']) {
+  for (const column of ['Ingredient', 'Amount', 'Unit', 'Form', '%DV', 'Belongs to', 'From']) {
     const cell = document.createElement('th');
     cell.textContent = column;
     header.append(cell);
@@ -606,17 +622,21 @@ function renderDraft() {
   table.append(header);
   rows.forEach((row, index) => {
     const line = document.createElement('tr');
-    const amount = row.amount && row.amount.status === 'read' ? row.amount.value : null;
+    const amount = draftFieldValue(row.amount);
     const parent = row.parent_index === null || row.parent_index === undefined
       ? (row.is_blend_header ? 'blend header' : '')
       : draftFieldValue((rows[row.parent_index] ?? {}).display_name) ?? '?';
-    const sources = (row.display_name?.sources ?? []).map((s) => s.input_id).join(', ');
+    const sources = [row.display_name, row.amount, row.form_text, row.percent_dv]
+      .flatMap(field => field?.sources ?? []).map(s => s.input_id);
+    const sourceText = [...new Set(sources)].join(', ');
     for (const [text, unknown] of [
       [draftFieldValue(row.display_name) ?? '—', draftFieldValue(row.display_name) === null],
       [amount ? String(amount.value) : '—', !amount],
       [amount ? amount.unit_text : '—', !amount],
+      [draftFieldValue(row.form_text) ?? '—', !draftFieldValue(row.form_text)],
+      [String(draftFieldValue(row.percent_dv) ?? '—'), false],
       [parent || '—', false],
-      [sources || 'no source', !sources],
+      [sourceText || 'no source', !sourceText],
     ]) {
       const cell = document.createElement('td');
       cell.className = unknown ? 'draft-unknown' : '';
@@ -636,25 +656,44 @@ function loadDraftIntoEditor() {
   const payload = state.draft?.draft_payload;
   if (!payload) return;
   const next = defaultPayload();
-  const brand = draftFieldValue(payload.identity?.brand);
-  const name = draftFieldValue(payload.identity?.product_name);
-  if (brand) next.brandName = String(brand);
-  if (name) next.fullName = String(name);
-  const other = draftFieldValue((payload.other_ingredients ?? {}).text);
-  if (other) next.otherIngredients = String(other);
-  const rows = (payload.ingredient_rows ?? [])
-    .filter((row) => draftFieldValue(row.display_name))
-    .map((row) => {
-      const entry = emptyRow();
-      entry.name = String(draftFieldValue(row.display_name));
-      const amount = row.amount && row.amount.status === 'read' ? row.amount.value : null;
-      entry.quantity = [{
-        quantity: amount ? Number(amount.value) : 0,
-        unit: amount ? String(amount.unit_text) : 'mg',
-      }];
-      return entry;
-    });
-  next.ingredientRows = rows.length ? rows : [emptyRow()];
+  next.brandName = String(draftFieldValue(payload.identity?.brand) ?? '');
+  next.fullName = String(draftFieldValue(payload.identity?.product_name) ?? '');
+  next.servingsPerContainer = draftFieldValue(payload.serving?.servings_per_container);
+  const serving = draftFieldValue(payload.serving?.amount);
+  next.servingSizes = [{
+    minQuantity: serving?.value ?? null, maxQuantity: serving?.value ?? null,
+    unit: serving?.unit_text ?? '',
+    minDailyServings: null, maxDailyServings: null,
+  }];
+  const other = draftFieldValue(payload.other_ingredients?.text);
+  // An observed list cannot be hidden behind a declared-none default.
+  next.otherIngredients = String(other ?? '');
+  next.otherIngredientsDisclosure = other !== null ? 'present'
+    : payload.other_ingredients?.disclosure_hint === 'declared_none' ? 'declared_none' : '';
+  const flat = (payload.ingredient_rows ?? []).map((row) => {
+    const amount = draftFieldValue(row.amount);
+    const form = draftFieldValue(row.form_text);
+    const dv = draftFieldValue(row.percent_dv);
+    return {
+      ...emptyRow(), name: String(draftFieldValue(row.display_name) ?? ''),
+      quantity: amount ? [{quantity: amount.value, unit: amount.unit_text}] : [],
+      forms: form ? [{name: String(form)}] : [],
+      // manual_label_v1 has no scalar %DV field. Preserve its printed value as
+      // label notes, never confuse it with a compound/form percentage.
+      ...(dv === null ? {} : {notes: `Printed %DV: ${dv}`}),
+    };
+  });
+  next.ingredientRows = [];
+  (payload.ingredient_rows ?? []).forEach((row, index) => {
+    if (Number.isInteger(row.parent_index) && row.parent_index >= 0 &&
+        row.parent_index < index && payload.ingredient_rows[row.parent_index].is_blend_header) {
+      flat[row.parent_index].nestedRows.push(flat[index]);
+    } else {
+      next.ingredientRows.push(flat[index]);
+    }
+  });
+  next.statements = (payload.statements ?? []).map(draftFieldValue)
+    .filter(value => value !== null).map(value => ({type: 'Label statement', notes: String(value)}));
   state.payload = next;
   renderRows();
   syncFieldsFromPayload();
@@ -668,7 +707,7 @@ function emptyRow() {
   return {
     name: '',
     ingredientGroup: 'Dietary Ingredient',
-    quantity: [{ quantity: 0, unit: 'mg' }],
+    quantity: [],
     forms: [],
     nestedRows: [],
   };
@@ -680,15 +719,15 @@ function defaultPayload() {
     fullName: '',
     ingredientRows: [emptyRow()],
     servingSizes: [{
-      minQuantity: 1,
-      maxQuantity: 1,
-      minDailyServings: 1,
-      maxDailyServings: 1,
-      unit: 'Capsule(s)',
+      minQuantity: null,
+      maxQuantity: null,
+      minDailyServings: null,
+      maxDailyServings: null,
+      unit: '',
     }],
-    servingsPerContainer: 30,
+    servingsPerContainer: null,
     offMarket: 0,
-    otherIngredientsDisclosure: 'declared_none',
+    otherIngredientsDisclosure: '',
     otherIngredients: '',
     statements: [],
   };
@@ -729,8 +768,8 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     qtyInput.value = row.quantity?.[0]?.quantity ?? '';
     qtyInput.addEventListener('input', () => {
       row.quantity = [{
-        quantity: Number(qtyInput.value || 0),
-        unit: row.quantity?.[0]?.unit ?? 'mg',
+        quantity: qtyInput.value.trim() === '' ? null : Number(qtyInput.value),
+        unit: row.quantity?.[0]?.unit ?? '',
       }];
       updateShaPreview();
     });
@@ -738,10 +777,10 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
 
     const unitCell = document.createElement('td');
     const unitInput = document.createElement('input');
-    unitInput.value = row.quantity?.[0]?.unit ?? 'mg';
+    unitInput.value = row.quantity?.[0]?.unit ?? '';
     unitInput.addEventListener('input', () => {
       row.quantity = [{
-        quantity: Number(qtyInput.value || 0),
+        quantity: qtyInput.value.trim() === '' ? null : Number(qtyInput.value),
         unit: unitInput.value,
       }];
       updateShaPreview();
@@ -855,10 +894,10 @@ function syncFieldsFromPayload() {
   $('p-product-type').value = state.payload.productType?.name ?? '';
   $('p-physical-state').value = state.payload.physicalState?.name ?? '';
   $('p-servings-count').value = state.payload.servingsPerContainer ?? '';
-  $('p-serving-qty').value = state.payload.servingSizes?.[0]?.maxQuantity ?? 1;
+  $('p-serving-qty').value = state.payload.servingSizes?.[0]?.maxQuantity ?? '';
   $('p-serving-unit').value = state.payload.servingSizes?.[0]?.unit ?? '';
   $('other-disclosure').value =
-    state.payload.otherIngredientsDisclosure ?? 'declared_none';
+    state.payload.otherIngredientsDisclosure ?? '';
   $('other-ingredients').value = state.payload.otherIngredients ?? '';
   $('other-ingredients').disabled =
     $('other-disclosure').value !== 'present';
@@ -875,9 +914,9 @@ function syncScalarFields() {
   if (physicalState) state.payload.physicalState = { name: physicalState };
   else delete state.payload.physicalState;
   const servings = Number($('p-servings-count').value || 0);
-  if (servings > 0) state.payload.servingsPerContainer = servings;
-  const quantity = Number($('p-serving-qty').value || 1);
-  const unit = $('p-serving-unit').value || 'Capsule(s)';
+  state.payload.servingsPerContainer = servings > 0 ? servings : null;
+  const quantity = $('p-serving-qty').value.trim() === '' ? null : Number($('p-serving-qty').value);
+  const unit = $('p-serving-unit').value;
   const existingServingSizes = Array.isArray(state.payload.servingSizes)
     ? state.payload.servingSizes
     : [];
@@ -885,8 +924,8 @@ function syncScalarFields() {
     ...(existingServingSizes[0] ?? {}),
     minQuantity: quantity,
     maxQuantity: quantity,
-    minDailyServings: existingServingSizes[0]?.minDailyServings ?? 1,
-    maxDailyServings: existingServingSizes[0]?.maxDailyServings ?? 1,
+    minDailyServings: existingServingSizes[0]?.minDailyServings ?? null,
+    maxDailyServings: existingServingSizes[0]?.maxDailyServings ?? null,
     unit,
   }, ...existingServingSizes.slice(1)];
   $('raw-json').value = JSON.stringify(state.payload, null, 2);
