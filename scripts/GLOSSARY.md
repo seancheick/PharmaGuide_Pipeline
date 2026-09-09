@@ -77,6 +77,10 @@ contract name elsewhere.
 | `natural` | Whether the form is supported as naturally derived. |
 | `score` | Legacy `bio_score + 3` when `natural=true`, capped at 18. Do not use this value as pure bioavailability. |
 | `absorption_structured` | Structured value/range/quality/notes evidence. It must not claim more precision than the supporting source. |
+| `form_evidence_axis` | The single authored home for a form's assessment axis, and the value validation uses. It records which evidence standard the form is judged against, and exists before evidence work begins so a reviewer knows which bar applies. `form_evidence.axis` is a migration-era duplicate that may not disagree with it; it is not a second input. |
+| **Assessment axis** | One of `systemic_bioavailability`, `delivery_to_site`, `form_quality_confidence`, `organism_survivability`, `class_equivalence`, `microbial_substrate_utilization`. Declaring an axis never changes a score and never clears the evidence backlog. |
+| `microbial_substrate_utilization` | Prebiotic axis. Per the ISAPP definition this is two-part: evidence must show selective utilisation by host microbiota AND a demonstrated health benefit. Reaching the colon is not the claim, which is why this is not `delivery_to_site`. Enforced structurally through `AXIS_REQUIRED_CLAIMS`. |
+| `AXIS_REQUIRED_CLAIMS` | Per-axis structured criteria the references must collectively support. Without it an axis name constrains nothing, and evidence answering a different scientific question could clear a backlog entry. |
 | `alias_identity_scope` | Reviewed identity authority for a form alias. `same_identity` permits exact parent-identity recovery; `source_preparation` excludes the form and its aliases from primary identity indexes. |
 | `same_identity_aliases` | Narrow per-alias alternative to form-wide `same_identity`; only exact listed labels receive parent-identity authority. |
 | `source_form_aliases` | Parent-scoped form-selection clues evaluated only after the cleaner/reviewer has established that IQM parent. They are absent from global identity indexes. |

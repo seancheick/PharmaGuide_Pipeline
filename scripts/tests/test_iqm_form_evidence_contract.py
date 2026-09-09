@@ -9,7 +9,11 @@ from pathlib import Path
 import pytest
 
 from iqm_form_evidence import (
+    AXIS_REQUIRED_CLAIMS,
+    SUPPORTED_AXES,
     ManifestError,
+    excellent_axis_coverage,
+    resolve_form_axis,
     apply_manifest_file,
     backlog_initial_digest,
     build_initial_backlog,
@@ -618,3 +622,245 @@ def test_clinical_review_queue_is_complete_provisional_and_axis_aware():
         if row["ingredient"] in local_ingredients:
             assert row["proposed_axis"] == "delivery_to_site"
             assert row["review_bucket"] == "local_delivery_recheck"
+
+
+# ---------------------------------------------------------------------------
+# Canonical form-level assessment axis
+#
+# The axis used to live only inside `form_evidence`, which does not exist until
+# evidence is finished. A form awaiting review therefore had no declared axis,
+# so a reviewer could not tell which evidence standard applied to it. The size
+# of that group is not yet established: an early keyword estimate was retracted
+# as unreliable, and the real number comes from the reviewed classification
+# manifest rather than from prose matching.
+#
+# `form_evidence_axis` is now the single authored home for that value.
+# `form_evidence.axis` is derived from it during migration and must never
+# disagree: one value, one place, nothing to drift.
+# ---------------------------------------------------------------------------
+
+
+def test_microbial_substrate_utilization_is_a_supported_axis():
+    """Prebiotics need their own standard.
+
+    ISAPP requires selective microbial utilisation plus a demonstrated host
+    benefit. "Reaches the colon" is not sufficient, so this cannot be folded
+    into delivery_to_site without flattening two different questions.
+    """
+    assert "microbial_substrate_utilization" in SUPPORTED_AXES
+
+
+def test_form_level_axis_is_the_authored_value():
+    form = {"bio_score": 14, "score": 14, "natural": False}
+    form["form_evidence_axis"] = "systemic_bioavailability"
+    assert resolve_form_axis(form) == "systemic_bioavailability"
+
+
+def test_form_level_axis_rejects_a_value_outside_the_vocabulary():
+    iqm = _iqm(
+        {
+            "bio_score": 11,
+            "score": 11,
+            "natural": False,
+            "form_evidence_axis": "vibes_based_absorption",
+        }
+    )
+    assert validate_iqm_form_evidence(iqm, backlog=set()) == [
+        "magnesium::magnesium citrate: unsupported form_evidence_axis"
+    ]
+
+
+def test_nested_axis_may_not_disagree_with_the_form_level_axis():
+    """Two fields that must 'match' can drift. This proves they cannot."""
+    evidence = _approved_evidence()
+    evidence["axis"] = "delivery_to_site"
+    iqm = _iqm(
+        {
+            "bio_score": 14,
+            "score": 14,
+            "natural": False,
+            "form_evidence_axis": "systemic_bioavailability",
+            "form_evidence": evidence,
+        }
+    )
+    assert validate_iqm_form_evidence(iqm, backlog=set()) == [
+        "magnesium::magnesium citrate: form_evidence.axis disagrees with form_evidence_axis"
+    ]
+
+
+def test_assigning_an_axis_alone_never_clears_a_backlog_form():
+    """Classification is not evidence.
+
+    A backlogged Excellent form that gains only an axis must stay backlogged,
+    keep its score, and raise no error. Clearing still requires approved
+    evidence at strong or moderate.
+    """
+    form = {
+        "bio_score": 14,
+        "score": 14,
+        "natural": False,
+        "form_evidence_axis": "organism_survivability",
+    }
+    iqm = _iqm(form)
+    key = "magnesium::magnesium citrate"
+
+    assert validate_iqm_form_evidence(iqm, backlog={key}) == []
+    assert form["bio_score"] == 14
+    coverage = excellent_axis_coverage(iqm)
+    assert (coverage.canonical, coverage.legacy, coverage.total, coverage.missing) == (
+        1,
+        0,
+        1,
+        [],
+    )
+
+
+def test_axis_coverage_counts_only_excellent_forms():
+    """Lower-rated forms are not forced into a classification they have not
+    been reviewed for. Coverage is a promotion gate, not a census."""
+    iqm = {
+        "_metadata": {"schema_version": "5.4.15"},
+        "magnesium": {
+            "standard_name": "Magnesium",
+            "forms": {
+                "magnesium citrate": {
+                    "bio_score": 14,
+                    "score": 14,
+                    "natural": False,
+                    "form_evidence_axis": "systemic_bioavailability",
+                },
+                "magnesium oxide": {"bio_score": 3, "score": 3, "natural": False},
+            },
+        },
+    }
+    coverage = excellent_axis_coverage(iqm)
+    assert (coverage.canonical, coverage.legacy, coverage.total) == (1, 0, 1)
+    assert coverage.missing == []
+
+
+def test_axis_coverage_reports_gaps_without_failing_validation():
+    """Enforcement stays off until coverage is complete.
+
+    Failing every missing axis today would block the pipeline on 195 forms
+    nobody has reviewed yet.
+    """
+    iqm = _iqm({"bio_score": 14, "score": 14, "natural": False})
+    key = "magnesium::magnesium citrate"
+
+    coverage = excellent_axis_coverage(iqm)
+    assert (coverage.canonical, coverage.legacy, coverage.total) == (0, 0, 1)
+    assert coverage.missing == [key]
+    assert validate_iqm_form_evidence(iqm, backlog={key}) == []
+
+
+def test_complete_axis_coverage_can_be_enforced_once_reached():
+    """The switch exists and is off by default; turning it on is the final
+    step after all Excellent forms carry a reviewed axis."""
+    iqm = _iqm({"bio_score": 14, "score": 14, "natural": False})
+    key = "magnesium::magnesium citrate"
+
+    assert validate_iqm_form_evidence(
+        iqm, backlog={key}, require_axis_coverage=True
+    ) == [f"{key}: Excellent form lacks a reviewed form_evidence_axis"]
+
+
+def test_canonical_axis_alone_satisfies_evidence_validation():
+    """The whole point of hoisting the field.
+
+    A record carrying no nested `axis` must validate when the form declares
+    one. Before this, `form_evidence_axis` was decorative: the nested copy was
+    still the required input, so a canonical-only record failed with
+    "unsupported evidence axis".
+    """
+    evidence = _approved_evidence()
+    del evidence["axis"]
+    iqm = _iqm(
+        {
+            "bio_score": 14,
+            "score": 14,
+            "natural": False,
+            "form_evidence_axis": "systemic_bioavailability",
+            "form_evidence": evidence,
+        }
+    )
+    assert validate_iqm_form_evidence(iqm, backlog=set()) == []
+
+
+def test_prebiotic_axis_rejects_evidence_that_only_shows_bioavailability():
+    """An axis name that constrains nothing is decoration.
+
+    Pharmacokinetic evidence filed under the prebiotic axis must not clear a
+    backlog entry: ISAPP requires selective utilisation AND a host benefit.
+    """
+    evidence = _approved_evidence()
+    del evidence["axis"]
+    evidence["references_structured"][0]["supports_claims"] = ["oral_bioavailability"]
+    iqm = _iqm(
+        {
+            "bio_score": 14,
+            "score": 14,
+            "natural": False,
+            "form_evidence_axis": "microbial_substrate_utilization",
+            "form_evidence": evidence,
+        }
+    )
+    assert validate_iqm_form_evidence(iqm, backlog=set()) == [
+        "magnesium::magnesium citrate: microbial_substrate_utilization evidence "
+        "must support host_benefit, selective_microbial_utilization"
+    ]
+
+
+def test_prebiotic_axis_accepts_selective_utilisation_with_host_benefit():
+    evidence = _approved_evidence()
+    del evidence["axis"]
+    evidence["references_structured"][0]["supports_claims"] = [
+        "selective_microbial_utilization",
+        "host_benefit",
+    ]
+    iqm = _iqm(
+        {
+            "bio_score": 14,
+            "score": 14,
+            "natural": False,
+            "form_evidence_axis": "microbial_substrate_utilization",
+            "form_evidence": evidence,
+        }
+    )
+    assert validate_iqm_form_evidence(iqm, backlog=set()) == []
+
+
+def test_required_claims_are_declared_only_for_axes_that_need_them():
+    """The map is narrow by design. Existing axes keep the generic rules they
+    shipped with; only the new axis gained a semantic gate."""
+    assert set(AXIS_REQUIRED_CLAIMS) == {"microbial_substrate_utilization"}
+
+
+def test_axis_coverage_separates_canonical_from_legacy():
+    """0/250 canonical must never read as 55/250 done."""
+    legacy_evidence = _approved_evidence()  # carries the nested axis only
+    iqm = {
+        "_metadata": {"schema_version": "5.4.15"},
+        "magnesium": {
+            "standard_name": "Magnesium",
+            "forms": {
+                "magnesium citrate": {
+                    "bio_score": 14,
+                    "score": 14,
+                    "natural": False,
+                    "form_evidence_axis": "systemic_bioavailability",
+                },
+                "magnesium malate": {
+                    "bio_score": 13,
+                    "score": 13,
+                    "natural": False,
+                    "form_evidence": legacy_evidence,
+                },
+                "magnesium taurate": {"bio_score": 12, "score": 12, "natural": False},
+            },
+        },
+    }
+    coverage = excellent_axis_coverage(iqm)
+    assert coverage.canonical == 1
+    assert coverage.legacy == 1
+    assert coverage.total == 3
+    assert coverage.missing == ["magnesium::magnesium taurate"]

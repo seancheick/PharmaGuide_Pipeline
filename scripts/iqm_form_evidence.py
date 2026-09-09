@@ -19,7 +19,7 @@ import tempfile
 import unicodedata
 from datetime import date
 from pathlib import Path
-from typing import Any, Iterable, Iterator
+from typing import Any, Iterable, Iterator, NamedTuple
 
 
 EXCELLENT_BIO_SCORE = 12
@@ -31,6 +31,42 @@ SUPPORTED_AXES = {
     "form_quality_confidence",
     "organism_survivability",
     "class_equivalence",
+    # Prebiotics. Deliberately NOT folded into delivery_to_site: reaching the
+    # colon is not the claim. ISAPP requires selective microbial utilisation
+    # PLUS a demonstrated host benefit, which is a different question from
+    # whether a substance arrives at its site of action intact.
+    "microbial_substrate_utilization",
+}
+
+# The canonical, form-level home for a form's assessment axis.
+#
+# The axis previously existed only inside `form_evidence`, which does not exist
+# until evidence work is finished. A form awaiting review therefore declared no
+# axis at all, so a reviewer could not tell which evidence standard applied to
+# it. How many forms that affects is not yet established — an early keyword
+# estimate was retracted as unreliable, and the real figure comes from the
+# reviewed classification manifest, not from prose matching.
+#
+# This is the ONLY authored axis value. `validate_form_evidence` takes the
+# resolved axis as an argument, so the nested `form_evidence.axis` is a
+# migration-era duplicate that may not disagree — never a second input.
+FORM_AXIS_FIELD = "form_evidence_axis"
+
+# Structured criteria that a given axis demands of its evidence.
+#
+# Without this, an axis name is decoration: the generic validator would accept
+# a pharmacokinetic study filed under a prebiotic axis and let it clear a
+# backlog entry. Each entry names claim tokens the references must collectively
+# carry.
+#
+# microbial_substrate_utilization encodes the ISAPP prebiotic definition, which
+# is deliberately two-part: selective utilisation by host microbiota AND a
+# demonstrated health benefit. Showing a substrate reaches the colon proves
+# neither.
+AXIS_REQUIRED_CLAIMS: dict[str, frozenset[str]] = {
+    "microbial_substrate_utilization": frozenset(
+        {"selective_microbial_utilization", "host_benefit"}
+    ),
 }
 SUPPORTED_EVIDENCE_LEVELS = {
     "strong",
@@ -57,6 +93,66 @@ class ManifestError(ValueError):
 
 def evidence_key(ingredient_key: str, form_key: str) -> str:
     return f"{ingredient_key}::{form_key}"
+
+
+def resolve_form_axis(form: dict[str, Any]) -> Any:
+    """The axis a form is assessed on, from its single authored home.
+
+    Falls back to the nested `form_evidence.axis` while the 55 pre-existing
+    records are migrated up. The fallback is a compatibility shim, not a second
+    source of truth: `validate_iqm_form_evidence` rejects any form where the
+    two disagree, so the fallback can only ever return the same value the
+    form-level field would.
+    """
+    if not isinstance(form, dict):
+        return None
+    axis = form.get(FORM_AXIS_FIELD)
+    if axis is not None:
+        return axis
+    form_evidence = form.get("form_evidence")
+    if isinstance(form_evidence, dict):
+        return form_evidence.get("axis")
+    return None
+
+
+class AxisCoverage(NamedTuple):
+    """Axis coverage over Excellent forms, split by where the axis lives.
+
+    `canonical` and `legacy` are reported separately on purpose. Collapsing
+    them into one number made 0/250 canonical migration read as 55/250 done,
+    because every one of those 55 was counted through the nested fallback.
+    """
+
+    canonical: int
+    legacy: int
+    total: int
+    missing: list[str]
+
+
+def excellent_axis_coverage(iqm: dict[str, Any]) -> AxisCoverage:
+    """How many Excellent forms carry a reviewed axis, and in which field.
+
+    Scoped to Excellent forms on purpose. Lower-rated forms are not forced into
+    a classification nobody has reviewed; the axis is a promotion gate, not a
+    census of the whole map.
+    """
+    canonical = 0
+    legacy = 0
+    total = 0
+    missing: list[str] = []
+    for ingredient_key, form_key, form in _iter_forms(iqm):
+        bio_score = form.get("bio_score")
+        if not isinstance(bio_score, (int, float)) or bio_score < EXCELLENT_BIO_SCORE:
+            continue
+        total += 1
+        if form.get(FORM_AXIS_FIELD) in SUPPORTED_AXES:
+            canonical += 1
+        elif resolve_form_axis(form) in SUPPORTED_AXES:
+            legacy += 1
+        else:
+            missing.append(evidence_key(ingredient_key, form_key))
+    missing.sort()
+    return AxisCoverage(canonical, legacy, total, missing)
 
 
 def form_digest(form: dict[str, Any]) -> str:
@@ -127,15 +223,45 @@ def validate_form_evidence(
     *,
     label: str,
     excellent: bool,
+    axis: Any = None,
 ) -> list[str]:
+    """Validate one structured evidence record.
+
+    `axis` is the resolved, form-level assessment axis. When supplied it is the
+    authority, and a record carrying no nested `axis` of its own is valid —
+    that is the point of hoisting the field. The nested value is only consulted
+    while unmigrated records still exist.
+    """
     if not isinstance(form_evidence, dict):
         return [f"{label}: form_evidence must be an object"]
 
     problems: list[str] = []
     if form_evidence.get("schema_version") not in SUPPORTED_SCHEMA_VERSIONS:
         problems.append(f"{label}: unsupported form_evidence schema_version")
-    if form_evidence.get("axis") not in SUPPORTED_AXES:
+
+    effective_axis = axis if axis is not None else form_evidence.get("axis")
+    if effective_axis not in SUPPORTED_AXES:
         problems.append(f"{label}: unsupported evidence axis")
+
+    # An axis name means nothing unless it constrains the evidence filed under
+    # it. Checked only for Excellent records, which are the ones that clear the
+    # backlog and reach a user.
+    required_claims = AXIS_REQUIRED_CLAIMS.get(effective_axis)
+    if excellent and required_claims:
+        references = form_evidence.get("references_structured")
+        supplied: set[str] = set()
+        if isinstance(references, list):
+            for reference in references:
+                if isinstance(reference, dict):
+                    claims = reference.get("supports_claims")
+                    if isinstance(claims, list):
+                        supplied.update(str(claim) for claim in claims)
+        absent = sorted(required_claims - supplied)
+        if absent:
+            problems.append(
+                f"{label}: {effective_axis} evidence must support "
+                f"{', '.join(absent)}"
+            )
 
     evidence_level = form_evidence.get("evidence_level")
     if evidence_level not in SUPPORTED_EVIDENCE_LEVELS:
@@ -209,7 +335,15 @@ def validate_iqm_form_evidence(
     iqm: dict[str, Any],
     *,
     backlog: set[str],
+    require_axis_coverage: bool = False,
 ) -> list[str]:
+    """Validate structured evidence, and optionally full axis coverage.
+
+    `require_axis_coverage` stays False until every Excellent form carries a
+    reviewed axis. Failing all missing axes today would block the pipeline on
+    forms nobody has reviewed yet; the switch is flipped once coverage is
+    complete, after which a new Excellent form cannot ship without one.
+    """
     problems: list[str] = []
     seen_keys: set[str] = set()
 
@@ -219,6 +353,32 @@ def validate_iqm_form_evidence(
         bio_score = form.get("bio_score")
         excellent = isinstance(bio_score, (int, float)) and bio_score >= EXCELLENT_BIO_SCORE
         form_evidence = form.get("form_evidence")
+
+        # The form-level axis is validated whether or not evidence exists —
+        # declaring an axis is the step that PRECEDES evidence work.
+        authored_axis = form.get(FORM_AXIS_FIELD)
+        if authored_axis is not None and authored_axis not in SUPPORTED_AXES:
+            problems.append(f"{key}: unsupported {FORM_AXIS_FIELD}")
+        elif require_axis_coverage and excellent and authored_axis is None:
+            if not (
+                isinstance(form_evidence, dict)
+                and form_evidence.get("axis") in SUPPORTED_AXES
+            ):
+                problems.append(
+                    f"{key}: Excellent form lacks a reviewed {FORM_AXIS_FIELD}"
+                )
+
+        # Two fields that must "match" can drift. This makes them one value:
+        # the nested axis is derived, so disagreement is a hard error.
+        if (
+            isinstance(form_evidence, dict)
+            and authored_axis is not None
+            and form_evidence.get("axis") is not None
+            and form_evidence.get("axis") != authored_axis
+        ):
+            problems.append(
+                f"{key}: form_evidence.axis disagrees with {FORM_AXIS_FIELD}"
+            )
 
         if form_evidence is None:
             if excellent and key not in backlog:
@@ -235,6 +395,7 @@ def validate_iqm_form_evidence(
             form_evidence,
             label=key,
             excellent=excellent,
+            axis=resolve_form_axis(form),
         )
         problems.extend(evidence_problems)
         if key in backlog and not evidence_problems:
@@ -720,7 +881,11 @@ def main(argv: list[str] | None = None) -> int:
 
 
 __all__ = [
+    "AXIS_REQUIRED_CLAIMS",
+    "AxisCoverage",
+    "FORM_AXIS_FIELD",
     "ManifestError",
+    "SUPPORTED_AXES",
     "apply_manifest_file",
     "backlog_initial_digest",
     "build_initial_backlog",
@@ -728,8 +893,10 @@ __all__ = [
     "catalog_form_usage",
     "collect_pubmed_pmids",
     "evidence_key",
+    "excellent_axis_coverage",
     "form_digest",
     "load_backlog_file",
+    "resolve_form_axis",
     "validate_exported_form_evidence",
     "validate_form_evidence",
     "validate_iqm_form_evidence",
