@@ -254,13 +254,17 @@ class SupabaseExtractionQueue:
         }
 
     def remaining_microcents(self) -> int:
-        rows = self._rpc("product_submission_extraction_allowance")
+        # The worker-facing view, which checks the allowlist and is granted to
+        # authenticated. The bare allowance function it wraps is internal and
+        # revoked from every role, so calling that directly fails in a real
+        # deployment however well it reads.
+        rows = self._rpc("product_submission_extraction_budget_state")
         if isinstance(rows, list) and rows:
             rows = rows[0]
         if not isinstance(rows, dict):
             return 0
         try:
-            return max(0, int(rows.get("remaining") or 0))
+            return max(0, int(rows.get("remaining_microcents") or 0))
         except (TypeError, ValueError):
             return 0
 

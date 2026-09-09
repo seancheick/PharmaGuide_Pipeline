@@ -90,8 +90,14 @@ class _Transport:
             raise self.rejections[name]
         if name == "claim_product_submission_extraction_jobs":
             return self.claim_rows
-        if name == "product_submission_extraction_allowance":
-            return [{"spent": 0, "outstanding": 0, "remaining": 5000}]
+        if name == "product_submission_extraction_budget_state":
+            # The worker-facing shape, as the granted function returns it.
+            return [{
+                "month_key": "2026-09",
+                "spent_microcents": 0,
+                "monthly_cap_microcents": 100000,
+                "remaining_microcents": 5000,
+            }]
         if name == "reserve_product_submission_extraction_budget":
             return True
         return None
