@@ -283,6 +283,19 @@ def test_only_prepared_bytes_are_sent() -> None:
     assert "tools" not in generate[0]
 
 
+def test_candidate_digest_binds_every_static_generation_setting():
+    transport = _Transport()
+    adapter = _adapter(transport)
+    adapter.extract(_bundle(), _config())
+    request = next(body for url, body in transport.posted if url.endswith('/api/generate'))
+    static = {key: value for key, value in request.items() if key not in {'model', 'images'}}
+    static['prompt'] = static['prompt'].split('\nOrdered image identifiers: ')[0]
+    digest = hashlib.sha256(json.dumps(static, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+    assert adapter.prompt_sha256 == digest
+    assert request['think'] is False
+    assert request['options']['repeat_penalty'] == 1.1
+
+
 def test_real_adapter_contract_passes_through_the_shared_extractor() -> None:
     bundle = _bundle()
     photo = bundle.photos[0]
