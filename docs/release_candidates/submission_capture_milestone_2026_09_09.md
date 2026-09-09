@@ -71,28 +71,33 @@ fix turns the resume test red. A guard that cannot fail is not a guard.
   claim shape changed, so migration, functions and app must roll out together
   in a verified window.
 - **Device-tested:** no. The app builds, launches and renders on the
-  simulator, but the capture flow needs a camera the simulator does not have,
-  and Contributions needs a signed-in account. The new screens have widget
-  coverage, not a device run. This is the open gap in this milestone.
+  simulator. Physical-camera behaviour cannot be proven there, but that is the
+  only part that needs a phone: the draft list, a restored capture and the
+  error states can be exercised from saved-photo fixtures under a controlled
+  signed-in setup, and that visual pass is still owed. The new screens
+  currently have widget coverage, not a rendered inspection.
 
 ## Remaining defects and decisions
 
-1. **The release gate cannot pass, for a pre-existing reason.** Enrichment
+1. **The release gate does not pass, and that stands unresolved.** Enrichment
    records a content hash of every data file, and the artifacts on disk match
    no recent commit: `origin/main` before any of this work hashes to
    `34f64057…` while the manifests record `bced5f9d…`. No build was running.
-   The prescribed remedy is a 37-brand re-enrich, which also publishes unless
-   explicitly stopped, so it was not run. This is documented, not bypassed,
-   and it is not evidence that source changes are defective.
+   Two things are true at once and neither cancels the other: the mismatch
+   predates this work, *and* the axis hoist changed a data file, so a rebuild
+   is genuinely owed before any catalog ship. Documented, not bypassed. This is
+   also not a claim that all 37 brands must rerun to verify capture work, which
+   touches no data file at all; sequencing the rebuild is a separate decision.
 2. **On-device OCR (B2.6, B2.7) is deliberately not built.** Its own benchmark
    gates it, and that benchmark does not exist yet.
 3. **No revision UI.** The server accepts evidence revisions; the app does not
    yet open one. Intake deliberately answers `open_existing` for a pending
    retake so current clients stay correct.
-4. **Two capture decisions for the owner**, both generic delivery formats
-   rather than organisms: `liposomal probiotics` records only "enhanced", and
-   `liquid probiotics` records "good (rapid uptake)", which reads systemic
-   rather than survival-based.
+4. **Two questions belong to the evidence-axis track, not to capture.**
+   `liposomal probiotics` and `liquid probiotics` have no assessment axis yet.
+   Neither "enhanced" nor "good (rapid uptake)" establishes the right
+   scientific standard, so they stay open on the clinical track and block
+   nothing here.
 
 ## Next milestone
 
