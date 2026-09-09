@@ -71,7 +71,7 @@ from inactive_ingredient_resolver import (
     active_form_duplicate_candidate,
     safety_terms_without_active_form_duplicates,
 )
-from iqm_form_evidence import validate_form_evidence
+from iqm_form_evidence import validate_iqm_form
 from identity.safety import (
     has_explicit_form_evidence,
     normalize_safety_source,
@@ -4050,11 +4050,7 @@ def _derive_form_evidence(
     evidence = form.get("form_evidence")
     bio_score = safe_float(form.get("bio_score"))
     excellent = bio_score is not None and bio_score >= 12
-    if validate_form_evidence(
-        evidence,
-        label="form_evidence",
-        excellent=excellent,
-    ):
+    if validate_iqm_form(form, label="form_evidence", excellent=excellent):
         return None
     return {
         "evidence_level": safe_str(evidence.get("evidence_level")),

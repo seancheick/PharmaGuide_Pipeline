@@ -15,9 +15,10 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 from iqm_form_evidence import (  # noqa: E402
+    FORM_AXIS_FIELD,
     apply_manifest_file,
     form_digest,
-    validate_form_evidence,
+    validate_iqm_form,
 )
 
 
@@ -93,10 +94,17 @@ COLLAGEN_REFERENCE = _pubmed_reference(
     supports_claims=["collagen_tripeptide_absorption"],
 )
 
+# The assessment axis is a form-level field; each replacement record above is
+# filed under the axis named here.
+REPLACEMENT_AXES: dict[tuple[str, str], str] = {
+    ("hmb", "hmb calcium salt (hmb-ca)"): "systemic_bioavailability",
+    ("hmb", "hmb free acid (hmb-fa)"): "systemic_bioavailability",
+    ("collagen", "collagen tripeptides"): "systemic_bioavailability",
+}
+
 REPLACEMENT_EVIDENCE: dict[tuple[str, str], dict[str, Any]] = {
     ("hmb", "hmb calcium salt (hmb-ca)"): {
         "schema_version": "1.0.0",
-        "axis": "systemic_bioavailability",
         "evidence_level": "moderate",
         "score_supported": True,
         "rationale": (
@@ -113,7 +121,6 @@ REPLACEMENT_EVIDENCE: dict[tuple[str, str], dict[str, Any]] = {
     },
     ("hmb", "hmb free acid (hmb-fa)"): {
         "schema_version": "1.0.0",
-        "axis": "systemic_bioavailability",
         "evidence_level": "moderate",
         "score_supported": True,
         "rationale": (
@@ -130,7 +137,6 @@ REPLACEMENT_EVIDENCE: dict[tuple[str, str], dict[str, Any]] = {
     },
     ("collagen", "collagen tripeptides"): {
         "schema_version": "1.0.0",
-        "axis": "systemic_bioavailability",
         "evidence_level": "moderate",
         "score_supported": True,
         "rationale": (
@@ -259,14 +265,22 @@ def build_manifest(iqm: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str,
             prospective = copy.deepcopy(form)
             prospective.update(SCORE_CORRECTIONS.get(key, {}))
             excellent = float(prospective.get("bio_score") or 0) >= 12
-            problems = validate_form_evidence(
-                desired_evidence,
+            # Validate the proposal against the form that will own it, so
+            # the assessment axis resolves exactly as it will after the write.
+            desired_axis = REPLACEMENT_AXES[(ingredient_key, form_key)]
+            problems = validate_iqm_form(
+                {
+                    **prospective,
+                    "form_evidence": desired_evidence,
+                    FORM_AXIS_FIELD: desired_axis,
+                },
                 label=f"{ingredient_key}::{form_key}",
                 excellent=excellent,
             )
             if problems:
                 raise ValueError("\n".join(problems))
             set_values["form_evidence"] = desired_evidence
+            set_values[FORM_AXIS_FIELD] = desired_axis
 
         set_values.update(SCORE_CORRECTIONS.get(key, {}))
         change: dict[str, Any] = {
@@ -313,8 +327,8 @@ def update_backlog(iqm: dict[str, Any]) -> None:
         if not isinstance(bio_score, (int, float)) or bio_score < 12:
             continue
         evidence = form.get("form_evidence")
-        if evidence is None or validate_form_evidence(
-            evidence,
+        if evidence is None or validate_iqm_form(
+            form,
             label=key,
             excellent=True,
         ):

@@ -23,6 +23,7 @@ from iqm_form_evidence import (
     form_digest,
     load_backlog_file,
     validate_exported_form_evidence,
+    validate_iqm_form,
     validate_iqm_form_evidence,
     verify_pubmed_content,
 )
@@ -60,7 +61,6 @@ def _reference(*, pmid: str = "14596323") -> dict:
 def _approved_evidence() -> dict:
     return {
         "schema_version": "1.0.0",
-        "axis": "systemic_bioavailability",
         "evidence_level": "moderate",
         "score_supported": True,
         "rationale": "A direct human comparison supports the assigned form-quality tier.",
@@ -74,6 +74,15 @@ def _approved_evidence() -> dict:
 
 
 def _iqm(form: dict) -> dict:
+    """Wrap one form as an IQM.
+
+    A form that owns evidence also owns its assessment axis (hoisted out of
+    `form_evidence` on 2026-09-09), so the default is supplied here rather than
+    repeated in every case that is really testing something else.
+    """
+    form = dict(form)
+    if "form_evidence" in form and "form_evidence_axis" not in form:
+        form["form_evidence_axis"] = "systemic_bioavailability"
     return {
         "_metadata": {"schema_version": "5.4.15"},
         "magnesium": {
@@ -101,9 +110,9 @@ def test_frozen_backlog_allows_existing_gap_but_rejects_stale_entries():
         backlog={"magnesium::magnesium citrate"},
     ) == []
 
-    iqm["magnesium"]["forms"]["magnesium citrate"]["form_evidence"] = (
-        _approved_evidence()
-    )
+    citrate = iqm["magnesium"]["forms"]["magnesium citrate"]
+    citrate["form_evidence"] = _approved_evidence()
+    citrate["form_evidence_axis"] = "systemic_bioavailability"
     assert validate_iqm_form_evidence(
         iqm,
         backlog={"magnesium::magnesium citrate"},
@@ -287,7 +296,10 @@ def test_manifest_apply_updates_all_entries_and_reports_exact_counts(tmp_path: P
                         "ingredient_key": "magnesium",
                         "form_key": "magnesium citrate",
                         "expected_form_sha256": form_digest(form),
-                        "set": {"form_evidence": _approved_evidence()},
+                        "set": {
+                            "form_evidence": _approved_evidence(),
+                            "form_evidence_axis": "systemic_bioavailability",
+                        },
                     }
                 ],
             },
@@ -670,8 +682,12 @@ def test_form_level_axis_rejects_a_value_outside_the_vocabulary():
     ]
 
 
-def test_nested_axis_may_not_disagree_with_the_form_level_axis():
-    """Two fields that must 'match' can drift. This proves they cannot."""
+def test_a_nested_axis_is_rejected_rather_than_reconciled():
+    """Two fields that must 'match' can drift, so there is only one field.
+
+    Before the hoist this was a disagreement check. Now the nested copy is not
+    a second opinion to reconcile — it is simply not allowed to exist.
+    """
     evidence = _approved_evidence()
     evidence["axis"] = "delivery_to_site"
     iqm = _iqm(
@@ -684,7 +700,8 @@ def test_nested_axis_may_not_disagree_with_the_form_level_axis():
         }
     )
     assert validate_iqm_form_evidence(iqm, backlog=set()) == [
-        "magnesium::magnesium citrate: form_evidence.axis disagrees with form_evidence_axis"
+        "magnesium::magnesium citrate: axis belongs on the form"
+        " (form_evidence_axis), not inside form_evidence"
     ]
 
 
@@ -773,7 +790,6 @@ def test_canonical_axis_alone_satisfies_evidence_validation():
     "unsupported evidence axis".
     """
     evidence = _approved_evidence()
-    del evidence["axis"]
     iqm = _iqm(
         {
             "bio_score": 14,
@@ -793,7 +809,6 @@ def test_prebiotic_axis_rejects_evidence_that_only_shows_bioavailability():
     backlog entry: ISAPP requires selective utilisation AND a host benefit.
     """
     evidence = _approved_evidence()
-    del evidence["axis"]
     evidence["references_structured"][0]["supports_claims"] = ["oral_bioavailability"]
     iqm = _iqm(
         {
@@ -812,7 +827,6 @@ def test_prebiotic_axis_rejects_evidence_that_only_shows_bioavailability():
 
 def test_prebiotic_axis_accepts_selective_utilisation_with_host_benefit():
     evidence = _approved_evidence()
-    del evidence["axis"]
     evidence["references_structured"][0]["supports_claims"] = [
         "selective_microbial_utilization",
         "host_benefit",
@@ -836,8 +850,13 @@ def test_required_claims_are_declared_only_for_axes_that_need_them():
 
 
 def test_axis_coverage_separates_canonical_from_legacy():
-    """0/250 canonical must never read as 55/250 done."""
-    legacy_evidence = _approved_evidence()  # carries the nested axis only
+    """0/250 canonical must never read as 55/250 done.
+
+    After the hoist, `legacy` counts nested axes that should no longer exist,
+    and such a form is still `missing` a usable canonical axis.
+    """
+    legacy_evidence = _approved_evidence()
+    legacy_evidence["axis"] = "systemic_bioavailability"
     iqm = {
         "_metadata": {"schema_version": "5.4.15"},
         "magnesium": {
@@ -863,4 +882,167 @@ def test_axis_coverage_separates_canonical_from_legacy():
     assert coverage.canonical == 1
     assert coverage.legacy == 1
     assert coverage.total == 3
-    assert coverage.missing == ["magnesium::magnesium taurate"]
+    assert coverage.missing == [
+        "magnesium::magnesium malate",
+        "magnesium::magnesium taurate",
+    ]
+
+
+# --- the axis seam: one validator, one owning form -------------------------
+#
+# `form_evidence_axis` lives on the form, but the evidence record is what gets
+# validated. Every caller that hands over a bare evidence block loses the axis
+# and gets "unsupported evidence axis" for a perfectly valid hoisted record.
+# These tests hold the seam shut at each production consumer.
+
+
+def _hoisted_form(bio_score: int = 14) -> dict:
+    """An already-migrated form: axis on the form, absent from the evidence."""
+    evidence = _approved_evidence()
+    axis = "systemic_bioavailability"
+    return {
+        "bio_score": bio_score,
+        "score": bio_score,
+        "natural": False,
+        "form_evidence_axis": axis,
+        "form_evidence": evidence,
+    }
+
+
+def test_manifest_hoists_the_axis_and_drops_the_nested_copy_atomically(
+    tmp_path: Path,
+):
+    """The migration must be expressible as one change per form.
+
+    Setting the canonical field and rewriting the evidence without its nested
+    `axis` in a single change means no form is ever observable in a state where
+    both copies are missing.
+    """
+    iqm_path = tmp_path / "ingredient_quality_map.json"
+    manifest_path = tmp_path / "manifest.json"
+    # Genuine pre-migration shape: the axis exists only inside the evidence.
+    legacy_evidence = _approved_evidence()
+    legacy_evidence["axis"] = "systemic_bioavailability"
+    original = {
+        "_metadata": {"schema_version": "5.4.15"},
+        "magnesium": {
+            "standard_name": "Magnesium",
+            "forms": {
+                "magnesium citrate": {
+                    "bio_score": 14,
+                    "score": 14,
+                    "natural": False,
+                    "form_evidence": legacy_evidence,
+                }
+            },
+        },
+    }
+    form = original["magnesium"]["forms"]["magnesium citrate"]
+    iqm_path.write_text(json.dumps(original, indent=2) + "\n")
+    hoisted_evidence = _approved_evidence()
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0.0",
+                "changes": [
+                    {
+                        "ingredient_key": "magnesium",
+                        "form_key": "magnesium citrate",
+                        "expected_form_sha256": form_digest(form),
+                        "set": {
+                            "form_evidence_axis": "systemic_bioavailability",
+                            "form_evidence": hoisted_evidence,
+                        },
+                    }
+                ],
+            },
+            indent=2,
+        )
+        + "\n"
+    )
+
+    summary = apply_manifest_file(iqm_path, manifest_path)
+
+    assert summary == {"expected": 1, "applied": 1, "unchanged": 0}
+    migrated = json.loads(iqm_path.read_text())["magnesium"]["forms"][
+        "magnesium citrate"
+    ]
+    assert migrated["form_evidence_axis"] == "systemic_bioavailability"
+    assert "axis" not in migrated["form_evidence"]
+    assert validate_iqm_form_evidence(
+        json.loads(iqm_path.read_text()), backlog=set()
+    ) == []
+
+
+def test_hoisted_evidence_is_not_pushed_back_into_the_backlog():
+    """The backlog lists forms whose evidence is missing or invalid.
+
+    A migrated form has complete evidence. Rebuilding the backlog without the
+    form-level axis would re-open 55 settled reviews.
+    """
+    iqm = _iqm(_hoisted_form())
+
+    backlog = build_initial_backlog(iqm, created_on="2026-09-09")
+
+    assert backlog["remaining_forms"] == []
+
+
+def test_hoisted_evidence_does_not_appear_as_a_catalog_evidence_gap():
+    iqm = _iqm(_hoisted_form())
+
+    gaps = catalog_evidence_gaps(iqm, {"magnesium::magnesium citrate": {}})
+
+    assert gaps == []
+
+
+def test_no_production_caller_validates_evidence_without_its_owning_form():
+    """The structural guarantee behind the three tests above.
+
+    `validate_iqm_form` is the only public validator precisely so that a future
+    caller cannot reintroduce this defect by forgetting a keyword argument.
+    """
+    offenders = sorted(
+        str(path.relative_to(SCRIPTS_DIR))
+        for path in SCRIPTS_DIR.rglob("*.py")
+        if "tests" not in path.parts
+        and path.name != "iqm_form_evidence.py"
+        and "validate_form_evidence" in path.read_text(encoding="utf-8")
+    )
+
+    assert offenders == []
+
+
+def test_nested_axis_is_rejected_and_no_longer_resolves():
+    """Post-hoist, the nested copy is not a fallback but an error.
+
+    Leaving it readable would let a future edit reintroduce a second source of
+    truth that silently wins whenever the form-level field is absent.
+    """
+    evidence = _approved_evidence()
+    evidence["axis"] = "systemic_bioavailability"
+    form = {
+        "bio_score": 14,
+        "score": 14,
+        "natural": False,
+        "form_evidence_axis": "systemic_bioavailability",
+        "form_evidence": evidence,
+    }
+
+    assert resolve_form_axis({"form_evidence": evidence}) is None
+    assert validate_iqm_form(form, label="magnesium::magnesium citrate") == [
+        "magnesium::magnesium citrate: axis belongs on the form"
+        " (form_evidence_axis), not inside form_evidence"
+    ]
+
+
+def test_shipped_iqm_carries_no_nested_axis_and_full_canonical_coverage():
+    """The migration's permanent invariant, asserted against shipped data."""
+    iqm = json.loads(IQM_PATH.read_text(encoding="utf-8"))
+
+    coverage = excellent_axis_coverage(iqm)
+
+    assert coverage.legacy == 0
+    assert coverage.canonical == 55
+    assert coverage.total == 250
+    assert len(coverage.missing) == 195
+    assert sorted(coverage.missing) == sorted(load_backlog_file(BACKLOG_PATH))

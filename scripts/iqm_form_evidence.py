@@ -47,9 +47,9 @@ SUPPORTED_AXES = {
 # estimate was retracted as unreliable, and the real figure comes from the
 # reviewed classification manifest, not from prose matching.
 #
-# This is the ONLY authored axis value. `validate_form_evidence` takes the
-# resolved axis as an argument, so the nested `form_evidence.axis` is a
-# migration-era duplicate that may not disagree — never a second input.
+# This is the ONLY authored axis value, and since the 2026-09-09 hoist the only
+# place it may appear. `validate_iqm_form` resolves it from the form itself; a
+# nested `form_evidence.axis` is rejected rather than read as a fallback.
 FORM_AXIS_FIELD = "form_evidence_axis"
 
 # Structured criteria that a given axis demands of its evidence.
@@ -98,21 +98,14 @@ def evidence_key(ingredient_key: str, form_key: str) -> str:
 def resolve_form_axis(form: dict[str, Any]) -> Any:
     """The axis a form is assessed on, from its single authored home.
 
-    Falls back to the nested `form_evidence.axis` while the 55 pre-existing
-    records are migrated up. The fallback is a compatibility shim, not a second
-    source of truth: `validate_iqm_form_evidence` rejects any form where the
-    two disagree, so the fallback can only ever return the same value the
-    form-level field would.
+    There is no fallback. The 55 records that once carried the axis inside
+    `form_evidence` were migrated to the form-level field on 2026-09-09
+    (`audits/form_evidence_20260813/axis_hoist_manifest_20260909.json`), and a
+    nested `axis` is now rejected outright, so a second source cannot reappear.
     """
     if not isinstance(form, dict):
         return None
-    axis = form.get(FORM_AXIS_FIELD)
-    if axis is not None:
-        return axis
-    form_evidence = form.get("form_evidence")
-    if isinstance(form_evidence, dict):
-        return form_evidence.get("axis")
-    return None
+    return form.get(FORM_AXIS_FIELD)
 
 
 class AxisCoverage(NamedTuple):
@@ -121,6 +114,9 @@ class AxisCoverage(NamedTuple):
     `canonical` and `legacy` are reported separately on purpose. Collapsing
     them into one number made 0/250 canonical migration read as 55/250 done,
     because every one of those 55 was counted through the nested fallback.
+    Since the 2026-09-09 hoist, `legacy` is a tripwire that must stay 0: it
+    counts forms that carry a nested `form_evidence.axis`, which no longer
+    resolves and which validation rejects.
     """
 
     canonical: int
@@ -145,10 +141,14 @@ def excellent_axis_coverage(iqm: dict[str, Any]) -> AxisCoverage:
         if not isinstance(bio_score, (int, float)) or bio_score < EXCELLENT_BIO_SCORE:
             continue
         total += 1
+        evidence = form.get("form_evidence")
+        if isinstance(evidence, dict) and "axis" in evidence:
+            # A nested axis is rejected by validation and resolves to nothing.
+            # Counting it here turns a reintroduced duplicate into a visible
+            # number instead of a silent hole in `missing`.
+            legacy += 1
         if form.get(FORM_AXIS_FIELD) in SUPPORTED_AXES:
             canonical += 1
-        elif resolve_form_axis(form) in SUPPORTED_AXES:
-            legacy += 1
         else:
             missing.append(evidence_key(ingredient_key, form_key))
     missing.sort()
@@ -218,7 +218,7 @@ def _validate_reference(reference: Any, label: str) -> list[str]:
     return problems
 
 
-def validate_form_evidence(
+def _validate_evidence_record(
     form_evidence: Any,
     *,
     label: str,
@@ -239,7 +239,12 @@ def validate_form_evidence(
     if form_evidence.get("schema_version") not in SUPPORTED_SCHEMA_VERSIONS:
         problems.append(f"{label}: unsupported form_evidence schema_version")
 
-    effective_axis = axis if axis is not None else form_evidence.get("axis")
+    if "axis" in form_evidence:
+        problems.append(
+            f"{label}: axis belongs on the form ({FORM_AXIS_FIELD}), "
+            "not inside form_evidence"
+        )
+    effective_axis = axis
     if effective_axis not in SUPPORTED_AXES:
         problems.append(f"{label}: unsupported evidence axis")
 
@@ -297,6 +302,36 @@ def validate_form_evidence(
                 _validate_reference(reference, f"{label}.references_structured[{index}]")
             )
     return problems
+
+
+def validate_iqm_form(form: Any, *, label: str, excellent: Any = None) -> list[str]:
+    """Validate the evidence a form owns, against the axis that form declares.
+
+    This is the only public validator, and it deliberately takes the **owning
+    form** rather than a bare `form_evidence` block. The assessment axis lives
+    on the form; a caller holding only the nested evidence cannot resolve it,
+    so a hoisted record fails as "unsupported evidence axis" at every consumer
+    that forgot to pass the axis along. Five production callers had that bug at
+    once. Taking the form deletes the argument they were forgetting.
+
+    `excellent` defaults to the form's own `bio_score`. Pass it explicitly only
+    when validating a form against a score correction not yet applied to it.
+    """
+    if not isinstance(form, dict):
+        return [f"{label}: form must be an object"]
+    if excellent is None:
+        bio_score = form.get("bio_score")
+        excellent = (
+            isinstance(bio_score, (int, float))
+            and not isinstance(bio_score, bool)
+            and bio_score >= EXCELLENT_BIO_SCORE
+        )
+    return _validate_evidence_record(
+        form.get("form_evidence"),
+        label=label,
+        excellent=bool(excellent),
+        axis=resolve_form_axis(form),
+    )
 
 
 def validate_exported_form_evidence(form_evidence: Any, *, label: str) -> list[str]:
@@ -368,18 +403,6 @@ def validate_iqm_form_evidence(
                     f"{key}: Excellent form lacks a reviewed {FORM_AXIS_FIELD}"
                 )
 
-        # Two fields that must "match" can drift. This makes them one value:
-        # the nested axis is derived, so disagreement is a hard error.
-        if (
-            isinstance(form_evidence, dict)
-            and authored_axis is not None
-            and form_evidence.get("axis") is not None
-            and form_evidence.get("axis") != authored_axis
-        ):
-            problems.append(
-                f"{key}: form_evidence.axis disagrees with {FORM_AXIS_FIELD}"
-            )
-
         if form_evidence is None:
             if excellent and key not in backlog:
                 problems.append(
@@ -391,11 +414,10 @@ def validate_iqm_form_evidence(
                 )
             continue
 
-        evidence_problems = validate_form_evidence(
-            form_evidence,
+        evidence_problems = validate_iqm_form(
+            form,
             label=key,
             excellent=excellent,
-            axis=resolve_form_axis(form),
         )
         problems.extend(evidence_problems)
         if key in backlog and not evidence_problems:
@@ -418,8 +440,8 @@ def build_initial_backlog(
             continue
         key = evidence_key(ingredient_key, form_key)
         evidence = form.get("form_evidence")
-        if evidence is None or validate_form_evidence(
-            evidence,
+        if evidence is None or validate_iqm_form(
+            form,
             label=key,
             excellent=True,
         ):
@@ -608,7 +630,7 @@ def catalog_evidence_gaps(
                 f"{key}: Excellent bio_score {bio_score:g} lacks approved form_evidence"
             ]
         else:
-            issues = validate_form_evidence(evidence, label=key, excellent=True)
+            issues = validate_iqm_form(form, label=key, excellent=True)
         if issues:
             gaps.append(
                 {
@@ -785,7 +807,7 @@ def apply_manifest_file(iqm_path: Path, manifest_path: Path) -> dict[str, int]:
         excellent = isinstance(bio_score, (int, float)) and bio_score >= EXCELLENT_BIO_SCORE
         evidence = form.get("form_evidence")
         if evidence is not None:
-            issues = validate_form_evidence(evidence, label=key, excellent=excellent)
+            issues = validate_iqm_form(form, label=key, excellent=excellent)
             if issues:
                 raise ManifestError("\n".join(issues))
 
@@ -898,7 +920,7 @@ __all__ = [
     "load_backlog_file",
     "resolve_form_axis",
     "validate_exported_form_evidence",
-    "validate_form_evidence",
+    "validate_iqm_form",
     "validate_iqm_form_evidence",
     "verify_pubmed_content",
 ]

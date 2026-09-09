@@ -42,7 +42,6 @@ NOTE = (
 PREVIEW = "The active coenzyme form of B2, also called FMN."
 FORM_EVIDENCE = {
     "schema_version": "1.0.0",
-    "axis": "class_equivalence",
     "evidence_level": "moderate",
     "score_supported": True,
     "rationale": "Human evidence supports class-equivalent oral absorption.",
@@ -72,7 +71,13 @@ FORM_EVIDENCE = {
 
 
 def _iqm(**form_overrides):
-    form = {"bio_score": 10, "notes": "Workspace prose. Cited evidence: PMID:8604671."}
+    # The assessment axis lives on the form, never inside `form_evidence`
+    # (hoisted 2026-09-09). Curated fixtures carry it the way shipped data does.
+    form = {
+        "bio_score": 10,
+        "notes": "Workspace prose. Cited evidence: PMID:8604671.",
+        "form_evidence_axis": "class_equivalence",
+    }
     form.update(form_overrides)
     return {"vitamin_b2_riboflavin": {"forms": {"riboflavin-5-phosphate": form}}}
 
@@ -463,3 +468,23 @@ def test_uncurated_form_emits_null_on_the_canonical_path(monkeypatch):
     analysis = _riboflavin_row(blob)["analysis"]
     assert analysis["form_note"] is None
     assert analysis["form_note_preview"] is None
+
+
+def test_export_resolves_the_axis_from_the_owning_form():
+    """The exporter validates before emitting, and the axis lives on the form.
+
+    Validating the bare evidence block instead would reject every migrated
+    record as "unsupported evidence axis", and this function fails closed: the
+    device would silently stop showing verified sources with nothing raised.
+    """
+    exported = {
+        "evidence_level": "moderate",
+        "references_structured": FORM_EVIDENCE["references_structured"],
+    }
+    assert _derive_form_evidence(_match(), _iqm(form_evidence=FORM_EVIDENCE)) == exported
+
+    no_axis = _iqm(form_evidence=FORM_EVIDENCE)
+    del no_axis["vitamin_b2_riboflavin"]["forms"]["riboflavin-5-phosphate"][
+        "form_evidence_axis"
+    ]
+    assert _derive_form_evidence(_match(), no_axis) is None
