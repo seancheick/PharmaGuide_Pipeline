@@ -58,6 +58,7 @@ from submission_review.extraction.catalog_gold import (  # noqa: E402
     case_counts,
     disagreements,
     read_candidate,
+    _record_path,
     scan as scan_barcodes,
     thin_cases,
 )
@@ -358,7 +359,10 @@ def scan(barcodes: list[str], catalog_db: Path, products_dir: Path,
 
 def diff(dsld_id: str, draft_path: Path, blobs_dir: Path, *, as_json: bool = False) -> int:
     """List only the rows a person has to settle between record and photograph."""
-    blob_path = blobs_dir / f"{dsld_id}.json"
+    try:
+        blob_path = _record_path(dsld_id, blobs_dir)
+    except ValueError as error:
+        raise HoldoutSetError(str(error)) from error
     if not blob_path.is_file():
         raise HoldoutSetError(f"no catalog record {dsld_id} under {blobs_dir}")
     if not draft_path.is_file():

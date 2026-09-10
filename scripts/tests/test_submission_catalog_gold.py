@@ -95,6 +95,14 @@ def test_a_record_file_holding_another_record_is_refused(tmp_path):
         cg.read_candidate("8", tmp_path)
 
 
+def test_a_record_id_cannot_escape_the_catalog_directory(tmp_path):
+    """A CLI identifier must never turn into an arbitrary file path."""
+    outside = tmp_path.parent / "secret.json"
+    outside.write_text(json.dumps({"dsld_id": "../secret"}), encoding="utf-8")
+    with pytest.raises(ValueError, match="invalid catalog record id"):
+        cg.read_candidate("../secret", tmp_path)
+
+
 def test_an_unreadable_barcode_is_not_looked_up(tmp_path):
     [result] = cg.scan(["99999"], _Index({}), tmp_path)
     assert result.canonical == () and not result.matched
@@ -216,3 +224,36 @@ def test_one_record_row_is_paired_at_most_once(tmp_path):
         _row("Magnesium", 200.0, "mg"), _row("Magnesium", 200.0, "mg"),
     ]))
     assert [d.kind for d in found] == ["absent_from_record"]
+
+
+def test_a_reformulated_record_surfaces_as_hard_disagreements(tmp_path):
+    """A stale edition is not detectable by date; it shows up as contradiction.
+
+    The record cannot tell you it is out of date, and `source_date` only says
+    when the record was written. What a reformulation looks like from here is
+    a changed dose plus a row on one side and not the other — which is exactly
+    the signal that sends the product to the two-person route instead.
+    """
+    blob = json.loads(_blob(tmp_path, "40", ingredients=[
+        {"raw_source_text": "Magnesium", "quantity": 200.0, "unit": "mg", "forms": []},
+        {"raw_source_text": "Vitamin B6", "quantity": 2.0, "unit": "mg", "forms": []},
+    ]).read_text())
+    found = cg.disagreements(blob, _draft([
+        _row("Magnesium (as magnesium glycinate)", 400.0, "mg"),   # reformulated dose
+        _row("Zinc", 15.0, "mg"),                                  # added since
+    ]))
+    kinds = sorted((d.kind, d.row) for d in found)
+    assert ("amount", "Magnesium (as magnesium glycinate)") in kinds
+    assert ("absent_from_record", "Zinc") in kinds
+    assert ("missing_from_draft", "Vitamin B6") in kinds
+    assert not any(d.kind == "name_text" for d in found)
+
+
+def test_a_record_carries_its_age_so_a_person_can_weigh_it(tmp_path):
+    _blob(tmp_path, "41")
+    candidate = cg.read_candidate("41", tmp_path)
+    assert candidate.source_date == "2019-01-01"
+    assert candidate.source_name == "NIH DSLD"
+    # Age is never a verdict here: nothing in this module drops or downgrades a
+    # record for being old. A person compares the package.
+    assert "source_date" not in candidate.corroboration()

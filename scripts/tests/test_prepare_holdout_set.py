@@ -183,3 +183,81 @@ def test_status_names_what_is_still_missing(workspace: Path, capsys) -> None:
     # Naming the thin cases is the difference between a list of chores and a
     # number that never moves.
     assert "glare" in out and "unit_CFU" in out
+
+
+def _record(root: Path, dsld_id: str, rows: list[dict]) -> Path:
+    blobs = root / "blobs"
+    blobs.mkdir(exist_ok=True)
+    (blobs / f"{dsld_id}.json").write_text(json.dumps({
+        "dsld_id": dsld_id, "brand_name": "Northwind",
+        "product_name": "Magnesium Glycinate",
+        "serving_info": {"basis_count": 2.0, "basis_unit": "capsule"},
+        "label_record": {"source_name": "NIH DSLD", "source_date": "2019-01-01",
+                         "formula_fingerprint": "f" * 64},
+        "proprietary_blend_detail": {"has_proprietary_blends": False},
+        "ingredients": rows,
+    }), encoding="utf-8")
+    return blobs
+
+
+def _valid_draft(rows: list[dict]) -> dict:
+    fixture = (Path(__file__).parents[1] / "submission_review" / "fixtures"
+               / "label_draft_v1_cases.json")
+    cases = json.loads(fixture.read_text(encoding="utf-8"))["cases"]
+    draft = json.loads(json.dumps(next(c for c in cases if c.get("valid"))["payload"]))
+    template = draft["ingredient_rows"][0]
+    built = []
+    for row in rows:
+        made = json.loads(json.dumps(template))
+        made["display_name"]["value"] = row["name"]
+        made["amount"]["value"] = {"value": row["value"], "unit_text": row["unit"]}
+        made["parent_index"] = None
+        made["is_blend_header"] = False
+        built.append(made)
+    draft["ingredient_rows"] = built
+    return draft
+
+
+def test_comparing_a_draft_never_writes_a_value_into_gold(workspace: Path, capsys) -> None:
+    """The whole safeguard, in one test.
+
+    `diff` reads a model's draft. It may print rows for a person to settle and
+    nothing else: the gold record must be byte-identical afterwards and still
+    count as unfilled, or a model's reading has quietly become the answer.
+    """
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    gold = root / "gold" / "northwind-mag.json"
+    before = gold.read_bytes()
+
+    blobs = _record(workspace, "500", [
+        {"raw_source_text": "Magnesium", "quantity": 200.0, "unit": "mg", "forms": []}])
+    draft = workspace / "draft.json"
+    draft.write_text(json.dumps(_valid_draft(
+        [{"name": "Magnesium", "value": 400.0, "unit": "mg"}])), encoding="utf-8")
+
+    assert main(["diff", "--dsld-id", "500", "--draft", str(draft),
+                 "--blobs-dir", str(blobs)]) == 0
+    assert "200 mg" in capsys.readouterr().out
+    assert gold.read_bytes() == before
+
+    assert main(["status", str(root)]) == 0
+    assert "gold filled    0 / 1" in capsys.readouterr().out
+
+
+def test_a_file_that_is_not_a_draft_is_refused_with_a_message(workspace: Path, capsys) -> None:
+    blobs = _record(workspace, "501", [
+        {"raw_source_text": "Magnesium", "quantity": 200.0, "unit": "mg", "forms": []}])
+    junk = workspace / "junk.json"
+    junk.write_text(json.dumps({"schema_version": "label_draft_v1", "not": "a draft"}),
+                    encoding="utf-8")
+    assert main(["diff", "--dsld-id", "501", "--draft", str(junk),
+                 "--blobs-dir", str(blobs)]) == 2
+    assert "not a valid label_draft_v1" in capsys.readouterr().err
+
+
+def test_a_missing_record_or_draft_is_refused_not_guessed(workspace: Path, capsys) -> None:
+    blobs = _record(workspace, "502", [])
+    assert main(["diff", "--dsld-id", "999", "--draft", str(workspace / "nope.json"),
+                 "--blobs-dir", str(blobs)]) == 2
+    assert "no catalog record 999" in capsys.readouterr().err

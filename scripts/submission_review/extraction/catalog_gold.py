@@ -85,6 +85,18 @@ _UNIT_FAMILIES: dict[str, str] = {
 }
 
 
+def _record_path(dsld_id: str, blobs_dir: Path) -> Path:
+    """Resolve a catalog record without allowing path traversal."""
+    value = str(dsld_id)
+    if not value or value in {".", ".."} or Path(value).name != value:
+        raise ValueError(f"invalid catalog record id: {dsld_id!r}")
+    root = blobs_dir.resolve()
+    path = (root / f"{value}.json").resolve()
+    if not path.is_relative_to(root):
+        raise ValueError(f"invalid catalog record id: {dsld_id!r}")
+    return path
+
+
 @dataclass(frozen=True)
 class CatalogCandidate:
     """One DSLD record proposed for a scanned barcode. Not a decision."""
@@ -167,7 +179,7 @@ def label_cases(blob: Mapping[str, Any]) -> frozenset[str]:
 def read_candidate(dsld_id: str, blobs_dir: Path, *, brand: str = "", name: str = "",
                    upc: str = "") -> CatalogCandidate | None:
     """Load one record, refusing a blob that is not the record asked for."""
-    path = blobs_dir / f"{dsld_id}.json"
+    path = _record_path(dsld_id, blobs_dir)
     if not path.is_file():
         return None
     blob = json.loads(path.read_text(encoding="utf-8"))
