@@ -225,7 +225,7 @@ def test_what_the_model_could_not_supply_is_shown_to_the_reviewer() -> None:
                         "printed": "2 capsules"}],
     })
 
-    assert "1 field(s)" in out["status"]
+    assert "1 field the model could not supply" in out["status"]
 
 
 def test_loading_says_plainly_that_nothing_is_verified_yet() -> None:

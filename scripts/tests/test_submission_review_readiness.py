@@ -359,4 +359,4 @@ def test_importer_problems_block_approval_and_are_counted() -> None:
     ])
 
     assert out["approveDisabled"] is True
-    assert any("Fix 2 problem(s)" in text for text in _blockers(out))
+    assert any("Fix the 2 problems" in text for text in _blockers(out))

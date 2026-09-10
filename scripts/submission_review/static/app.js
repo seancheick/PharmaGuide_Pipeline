@@ -52,6 +52,11 @@ const state = {
 
 const $ = (id) => document.getElementById(id);
 
+/** "1 problem" / "2 problems". One helper, so no screen says "problem(s)". */
+function plural(count, singular, pluralForm = `${singular}s`) {
+  return `${count} ${count === 1 ? singular : pluralForm}`;
+}
+
 function setStatus(message, isError = false) {
   const line = $('status-line');
   line.textContent = message;
@@ -194,7 +199,7 @@ async function loadQueue(append = false) {
     $('queue-count').textContent =
       `${state.totalOpenCount} open · ${state.submissions.length} loaded`;
     loadMore.classList.toggle('hidden', state.nextAfter === null);
-    setStatus(`${state.submissions.length} submission(s) loaded.`);
+    setStatus(`${plural(state.submissions.length, 'submission')} loaded.`);
     // Readiness is the server's answer, refreshed with the queue it describes.
     void refreshBatchStates();
   } catch (error) {
@@ -703,7 +708,7 @@ function readinessChecks() {
       done: Array.isArray(state.diagnostics) && state.diagnostics.length === 0,
       todo: state.diagnostics === null
         ? 'Waiting for the label check. If it does not arrive, reopen this submission.'
-        : `Fix ${state.diagnostics.length} problem(s) the catalog importer will refuse.`,
+        : `Fix the ${plural(state.diagnostics.length, 'problem')} the catalog importer will refuse.`,
       done_text: 'The catalog importer accepts this label.',
     },
     {
@@ -1130,9 +1135,7 @@ function renderBatchBar() {
   const summary = $('batch-summary');
   if (button) {
     button.disabled = count === 0 || state.batchRunning;
-    button.textContent = count === 1
-      ? 'Approve 1 verified submission'
-      : `Approve ${count} verified submissions`;
+    button.textContent = `Approve ${plural(count, 'verified submission')}`;
   }
   if (summary && !state.batchResults) {
     const eligible = state.submissions.filter(batchEligible).length;
@@ -1458,8 +1461,9 @@ async function loadDraftIntoEditor() {
   await updateShaPreview();
   const count = state.unresolvedFromDraft.length;
   setStatus(count
-    ? `Draft loaded, unverified. ${count} field(s) the model could not supply `
-      + 'are listed below; read every field off the photographs before approving.'
+    ? `Draft loaded, unverified. ${plural(count, 'field')} the model could not `
+      + 'supply are listed below; read every field off the photographs before '
+      + 'approving.'
     : 'Draft loaded, unverified. Read every field off the photographs '
       + 'before approving.');
 }

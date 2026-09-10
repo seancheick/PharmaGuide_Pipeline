@@ -260,7 +260,7 @@ def test_the_console_asks_the_importer_rather_than_judging_the_label() -> None:
     assert out["diagnostics"] == [
         {"path": "ingredientRows[1]", "message": "amount must be a number"}
     ]
-    assert any("Fix 1 problem(s)" in todo for todo in out["blockers"])
+    assert any("Fix the 1 problem" in todo for todo in out["blockers"])
 
 
 def test_a_validator_outage_is_unknown_not_clean() -> None:

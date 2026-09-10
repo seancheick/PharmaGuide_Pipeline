@@ -11,6 +11,14 @@
   --caution: #8A611D;
   --bad: #9F2929;
   --rule: #E0DCD3;
+  /* State surfaces. These hues were already in the sheet, typed in by hand at
+     each use; naming them is what stops the next addition inventing a new
+     red. Every state below is one of these and nothing else. */
+  --good: #2F6B4F;
+  --good-soft: #E2EFE8;
+  --caution-soft: #F6EEDC;
+  --bad-soft: #F6E4E4;
+  --accent-soft: #E4EDED;
 }
 * { box-sizing: border-box; }
 body {
@@ -54,7 +62,10 @@ main { display: grid; grid-template-columns: 340px 1fr; min-height: calc(100vh -
 #detail-panel { padding: 1rem 1.5rem 3rem; max-width: 60rem; overflow-y: auto; }
 #queue { list-style: none; margin: .8rem 0 0; padding: 0; }
 #queue li {
-  padding: .6rem .7rem;
+  position: relative;
+  /* Room for the batch pick, which is pinned to the top-right so a column of
+     them scans as a column instead of interleaving with each row's text. */
+  padding: .6rem 2.1rem .6rem .7rem;
   border: 1px solid var(--rule);
   border-radius: 8px;
   margin-bottom: .5rem;
@@ -62,7 +73,7 @@ main { display: grid; grid-template-columns: 340px 1fr; min-height: calc(100vh -
   background: var(--bg);
 }
 #queue li:hover { border-color: var(--accent-strong); }
-#queue li.active { border-color: var(--accent); background: #E4EDED; }
+#queue li.active { border-color: var(--accent); background: var(--accent-soft); }
 #queue .id { font-family: ui-monospace, monospace; font-size: .72rem; color: var(--fg-subtle); }
 .badge {
   display: inline-block;
@@ -74,9 +85,9 @@ main { display: grid; grid-template-columns: 340px 1fr; min-height: calc(100vh -
   color: var(--fg-muted);
   margin-right: .3rem;
 }
-.badge.approved { background: #E2EFE8; color: #2F6B4F; }
-.badge.rejected, .badge.duplicate { background: #F6E4E4; color: var(--bad); }
-.badge.under_review { background: #E4EDED; color: var(--accent-strong); }
+.badge.approved { background: var(--good-soft); color: var(--good); }
+.badge.rejected, .badge.duplicate { background: var(--bad-soft); color: var(--bad); }
+.badge.under_review { background: var(--accent-soft); color: var(--accent-strong); }
 .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; }
 .photo-grid figure { margin: 0; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: var(--surface); }
 .photo-grid img { width: 100%; height: 160px; object-fit: cover; display: block; cursor: zoom-in; }
@@ -92,8 +103,8 @@ input, select, textarea, button {
 label { display: flex; flex-direction: column; gap: .15rem; font-size: .8rem; color: var(--fg-muted); }
 textarea { width: 100%; font-family: ui-monospace, monospace; font-size: .8rem; }
 button { cursor: pointer; }
-button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-button.danger { background: #fff; border-color: var(--bad); color: var(--bad); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+button.danger { background: var(--surface); border-color: var(--bad); color: var(--bad); }
 button.ghost { background: transparent; }
 button:disabled { opacity: .45; cursor: default; }
 table { border-collapse: collapse; width: 100%; }
@@ -136,71 +147,204 @@ button.compact { padding: .2rem .35rem; font-size: .75rem; }
 code { background: var(--low); padding: .1rem .3rem; border-radius: 4px; font-size: .78rem; }
 #detail-head .mono { font-family: ui-monospace, monospace; font-size: .8rem; color: var(--fg-muted); }
 
+/* --------------------------------------------------------------------------
+   Reviewer workstation.
+
+   Everything below shares one shape with the panels above it: a surface card,
+   a 1px rule, an 8px radius, rem spacing. Colour is only ever a token, and a
+   state is one of four — accent, good, caution, bad — so a new panel cannot
+   introduce a new red. Loud states earn their weight from a left bar and a
+   soft tint rather than from a brighter hue.
+   -------------------------------------------------------------------------- */
+
+.panel {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: .7rem .9rem;
+  margin: .8rem 0;
+  background: var(--surface);
+}
+.panel-caution { border-left: 4px solid var(--caution); background: var(--caution-soft); }
+.panel-bad { border-left: 4px solid var(--bad); background: var(--bad-soft); }
+
 /* AI draft: a starting point shown beside the photographs, never instead. */
-#ai-draft { border-left: 3px solid #b8b8b8; padding-left: 12px; margin: 16px 0; }
-.draft-field { display: grid; grid-template-columns: 12rem 1fr 12rem; gap: 8px;
-  padding: 2px 0; align-items: baseline; }
-.draft-label { color: #555; }
+#ai-draft {
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: .7rem .9rem;
+  margin: .8rem 0;
+  background: var(--surface);
+}
+.draft-field {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) 1fr minmax(6rem, 12rem);
+  gap: .5rem;
+  padding: .15rem 0;
+  align-items: baseline;
+}
+.draft-label { color: var(--fg-muted); font-size: .82rem; }
 .draft-value { font-weight: 600; }
 /* Unreadable must look unreadable. A blank would read as "nothing on the
    label" rather than "the model could not read it". */
-.draft-unknown { color: #8a5a00; font-style: italic; }
-.draft-rows { width: 100%; border-collapse: collapse; margin-top: 8px; }
-.draft-rows th, .draft-rows td { text-align: left; padding: 3px 6px;
-  border-bottom: 1px solid #eee; font-size: 0.95em; }
+.draft-unknown { color: var(--caution); font-style: italic; }
+.draft-rows { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+.draft-rows th, .draft-rows td {
+  text-align: left;
+  padding: .25rem .4rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: .82rem;
+}
+.draft-rows th { color: var(--fg-muted); font-weight: 600; }
+
+/* What the model could not supply. Gaps to fill, not errors. */
+.draft-unresolved {
+  margin: .5rem 0 0;
+  padding-left: 1.2rem;
+  font-size: .82rem;
+  color: var(--fg-muted);
+}
+.draft-unresolved li { padding: .1rem 0; }
 
 /* Readiness: the next action, never a dead end. */
-#readiness { border: 1px solid #d8d8d8; border-radius: 6px; padding: 10px 14px;
-  margin: 12px 0; background: #fbfbfb; }
-#readiness-list { list-style: none; padding: 0; margin: 6px 0 0; }
-#readiness-list li { padding: 3px 0 3px 22px; position: relative; }
-#readiness-list li.ready { color: #2f6a3a; }
-#readiness-list li.ready::before { content: "✓"; position: absolute; left: 4px; }
-#readiness-list li.blocking { color: #8a5a00; font-weight: 600; }
-#readiness-list li.blocking::before { content: "•"; position: absolute; left: 4px; }
-#t-approve:disabled { cursor: not-allowed; opacity: 0.55; }
+#readiness {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: .7rem .9rem;
+  margin: .8rem 0;
+  background: var(--surface);
+}
+.readiness-head { justify-content: space-between; align-items: baseline; }
+.readiness-head h3 { margin: 0; }
+/* The count is a status, not a heading: it sits at the far edge and stays
+   quiet so the blockers below carry the weight. */
+#readiness-progress { margin-left: auto; }
+#readiness-list { list-style: none; padding: 0; margin: .5rem 0 0; }
+#readiness-list li {
+  padding: .2rem 0 .2rem 1.4rem;
+  position: relative;
+  font-size: .9rem;
+}
+#readiness-list li.ready { color: var(--good); }
+#readiness-list li.ready::before {
+  content: "✓";
+  position: absolute;
+  left: .1rem;
+  font-weight: 700;
+}
+/* A blocker is the one thing the reviewer should read next, so it carries
+   the weight on this panel. */
+#readiness-list li.blocking { color: var(--caution); font-weight: 600; }
+#readiness-list li.blocking::before {
+  content: "●";
+  position: absolute;
+  left: .15rem;
+  font-size: .7em;
+  top: .45em;
+}
+#t-approve:disabled { cursor: not-allowed; }
 
 /* Verification: a tick per field the reviewer has actually read. */
-#verify-checklist { flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-.verify-chip { display: inline-flex; align-items: center; gap: 6px;
-  border: 1px solid #d0d0d0; border-radius: 999px; padding: 4px 12px;
-  cursor: pointer; font-size: 0.95em; }
-.verify-chip.verified { border-color: #2f6a3a; background: #eef6f0; color: #2f6a3a; }
-
-#help-drawer { max-width: 44rem; }
-#help-body dt { font-weight: 600; margin-top: 10px; }
-#help-body dd { margin: 2px 0 0 0; color: #444; }
+#verify-checklist { flex-wrap: wrap; gap: .5rem; margin-bottom: .6rem; }
+.verify-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: .25rem .7rem;
+  background: var(--surface);
+  cursor: pointer;
+  font-size: .85rem;
+  color: var(--fg);
+  transition: border-color .12s ease, background .12s ease;
+}
+.verify-chip:hover { border-color: var(--accent-strong); }
+.verify-chip.verified {
+  border-color: var(--good);
+  background: var(--good-soft);
+  color: var(--good);
+  font-weight: 600;
+}
+.verify-chip input { margin: 0; }
+.verify-source {
+  margin-left: .1rem;
+  padding: .05rem .4rem;
+  font-size: .72rem;
+  line-height: 1.4;
+  cursor: pointer;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--fg-muted);
+}
+.verify-source:hover { border-color: var(--accent-strong); color: var(--accent-strong); }
+/* The photograph a field was read off, while the reviewer is looking at it. */
+figure.source-photo { outline: 3px solid var(--accent-strong); outline-offset: 2px; }
 
 /* Saved work that no longer applies to what is on screen. Loud on purpose:
    a reviewer must not carry an earlier reading into new evidence. */
 .review-banner {
-  margin: 0 0 12px; padding: 10px 12px; border-radius: 6px;
-  border: 1px solid #b8860b; background: #fdf6e3; color: #6b5200;
+  margin: .8rem 0;
+  padding: .7rem .9rem;
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--caution);
+  border-radius: 8px;
+  background: var(--caution-soft);
+  color: var(--caution);
+  font-weight: 600;
 }
 
 /* What the catalog importer will refuse. Not advice: these block approval. */
 .diagnostics {
-  margin: 0 0 12px; padding: 10px 12px; border-radius: 6px;
-  border: 1px solid #a4343a; background: #fdf0f1; color: #7d2229;
+  margin: .8rem 0;
+  padding: .7rem .9rem;
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--bad);
+  border-radius: 8px;
+  background: var(--bad-soft);
+  color: var(--bad);
 }
-.diagnostics ul { margin: 6px 0 0; padding-left: 20px; }
-.diagnostics code { background: #f6dcde; padding: 0 3px; border-radius: 3px; }
-.diagnostics-heading { margin: 0; font-weight: 600; }
-.verify-source {
-  margin-left: 6px; padding: 0 6px; font-size: 11px; cursor: pointer;
-  border: 1px solid var(--border, #ccc); border-radius: 3px; background: transparent;
-}
-figure.source-photo { outline: 3px solid #2f6a3a; outline-offset: 2px; }
+.diagnostics ul { margin: .4rem 0 0; padding-left: 1.2rem; }
+.diagnostics li { padding: .1rem 0; font-size: .85rem; }
+.diagnostics code { background: var(--surface); color: var(--bad); }
+.diagnostics-heading { margin: 0; font-weight: 600; font-size: .9rem; }
 
 /* Batch approval. Selectable only when the server says the item is fully read. */
-.batch-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  margin: 8px 0; }
-.batch-results { list-style: none; margin: 6px 0 0; padding: 0; width: 100%; }
-.batch-results li { font-size: 12px; padding: 2px 0; }
-.batch-results li.ready { color: #2f6a3a; }
-.batch-results li.blocking { color: #a4343a; }
-.queue-pick { margin-left: auto; }
+.batch-bar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin: .6rem 0 0;
+  padding-top: .6rem;
+  border-top: 1px solid var(--rule);
+}
+.batch-results { list-style: none; margin: .4rem 0 0; padding: 0; width: 100%; }
+.batch-results li { font-size: .8rem; padding: .1rem 0; }
+.batch-results li.ready { color: var(--good); }
+.batch-results li.blocking { color: var(--bad); }
+/* Pinned rather than floated: the row is a list-item, so margin-left:auto did
+   nothing and the pick fell onto its own line under the id. */
+.queue-pick {
+  position: absolute;
+  top: .6rem;
+  right: .65rem;
+  margin: 0;
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
 
-/* What the model could not supply. These are gaps to fill, not errors. */
-.draft-unresolved { margin: 6px 0 0; padding-left: 20px; font-size: 12px; }
-.draft-unresolved code { background: #eee; padding: 0 3px; border-radius: 3px; }
+#help-drawer {
+  max-width: 44rem;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  background: var(--surface);
+  color: var(--fg);
+}
+#help-drawer::backdrop { background: rgb(24 26 27 / 72%); }
+#help-body dt { font-weight: 600; margin-top: .7rem; }
+#help-body dd { margin: .15rem 0 0; color: var(--fg-muted); font-size: .9rem; }
