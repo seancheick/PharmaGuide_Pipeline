@@ -25,7 +25,11 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* rem, not px: a reviewer who has set a larger default font must get one.
+     At the 16px default this is the 15px the console has always used. */
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.5;
 }
 header {
   display: flex;
@@ -111,9 +115,9 @@ table { border-collapse: collapse; width: 100%; }
 #rows-table th, #rows-table td { border-bottom: 1px solid var(--rule); padding: .3rem .4rem; text-align: left; }
 #rows-table input { width: 100%; padding: .3rem .4rem; }
 #rows-table tr td:first-child { padding-left: calc(.4rem + var(--ingredient-depth, 0) * 1.25rem); }
-#rows-table td:nth-child(2) { width: 8rem; }
-#rows-table td:nth-child(3) { width: 7rem; }
-#rows-table td:nth-child(4) { width: 2.5rem; }
+#rows-table td:nth-child(2) { min-width: 7rem; }
+#rows-table td:nth-child(3) { min-width: 6rem; }
+#rows-table td:nth-child(4) { min-width: 2.5rem; }
 button.compact { padding: .2rem .35rem; font-size: .75rem; }
 .picture-option {
   display: inline-grid;
@@ -189,6 +193,7 @@ code { background: var(--low); padding: .1rem .3rem; border-radius: 4px; font-si
    label" rather than "the model could not read it". */
 .draft-unknown { color: var(--caution); font-style: italic; }
 .draft-rows { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+#ai-draft-body { overflow-x: auto; }
 .draft-rows th, .draft-rows td {
   text-align: left;
   padding: .25rem .4rem;
@@ -217,10 +222,13 @@ code { background: var(--low); padding: .1rem .3rem; border-radius: 4px; font-si
 .readiness-head { justify-content: space-between; align-items: baseline; }
 .readiness-head h3 { margin: 0; }
 /* The count is a status, not a heading: it sits at the far edge and stays
-   quiet so the blockers below carry the weight. */
+   quiet so the blockers below carry the weight. It wraps rather than pushing
+   the panel wider when a reviewer has set a large font. */
 #readiness-progress { margin-left: auto; }
+.readiness-head { flex-wrap: wrap; }
 #readiness-list { list-style: none; padding: 0; margin: .5rem 0 0; }
 #readiness-list li {
+  overflow-wrap: anywhere;
   padding: .2rem 0 .2rem 1.4rem;
   position: relative;
   font-size: .9rem;
@@ -306,8 +314,8 @@ figure.source-photo { outline: 3px solid var(--accent-strong); outline-offset: 2
   color: var(--bad);
 }
 .diagnostics ul { margin: .4rem 0 0; padding-left: 1.2rem; }
-.diagnostics li { padding: .1rem 0; font-size: .85rem; }
-.diagnostics code { background: var(--surface); color: var(--bad); }
+.diagnostics li { padding: .1rem 0; font-size: .85rem; overflow-wrap: anywhere; }
+.diagnostics code { background: var(--surface); color: var(--bad); white-space: normal; }
 .diagnostics-heading { margin: 0; font-weight: 600; font-size: .9rem; }
 
 /* Batch approval. Selectable only when the server says the item is fully read. */
@@ -348,3 +356,57 @@ figure.source-photo { outline: 3px solid var(--accent-strong); outline-offset: 2
 #help-drawer::backdrop { background: rgb(24 26 27 / 72%); }
 #help-body dt { font-weight: 600; margin-top: .7rem; }
 #help-body dd { margin: .15rem 0 0; color: var(--fg-muted); font-size: .9rem; }
+
+/* --------------------------------------------------------------------------
+   Narrower screens.
+
+   The workplace is a desktop; a tablet or a phone is for a quick look or a
+   small correction. So nothing is hidden at any width — a reviewer must never
+   find that the thing blocking approval is only visible on another device —
+   the layout just stops being two columns and the wide things scroll inside
+   themselves instead of pushing the page sideways.
+   -------------------------------------------------------------------------- */
+
+/* Long machine strings (ids, digests) must wrap rather than widen the page. */
+#queue .id, .mono, code { overflow-wrap: anywhere; }
+
+/* A control sizes to its content by default — a select to its longest option —
+   and a flex item refuses to shrink below that. Both push a narrow layout
+   sideways, and this is true at every width, not just on a phone. */
+input, select, textarea, button { max-width: 100%; min-width: 0; }
+.row > * { min-width: 0; }
+
+/* Anything genuinely wide scrolls in its own box, never the document. */
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 900px) {
+  main {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  #queue-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+    /* Enough to scan a few rows without burying the submission being read. */
+    max-height: 45vh;
+  }
+  #detail-panel { padding: 1rem 1rem 3rem; max-width: none; }
+  header { padding: .8rem 1rem; flex-wrap: wrap; }
+}
+
+@media (max-width: 620px) {
+  header { gap: .5rem; }
+  header h1 { font-size: 1.15rem; }
+  #detail-panel { padding: .8rem .8rem 3rem; }
+  /* Label, value and source stack: three columns in 320px is unreadable. */
+  .draft-field { grid-template-columns: 1fr; gap: .1rem; padding: .35rem 0; }
+  .draft-label { font-size: .78rem; }
+  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+  .photo-grid img { height: 130px; }
+  /* A picture choice is a decision; give it the full width to be legible. */
+  .picture-option { display: grid; grid-template-columns: auto 56px 1fr; width: 100%; margin-right: 0; }
+  /* 22rem of basis does not fit beside its own padding on a phone. */
+  .grow { flex-basis: 100%; }
+  #readiness-progress { white-space: nowrap; }
+  .batch-bar > button { flex: 1 1 auto; }
+}
