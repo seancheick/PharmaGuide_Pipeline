@@ -368,3 +368,124 @@ def test_a_batch_approval_applies_once_and_is_not_replayed(stack, reviewer, subm
     final = _call(stack, reviewer,
                   {"action": "review_states", "submission_ids": [submission_id]})["states"]
     assert final[0]["review_status"] == "approved"
+
+
+def _tick_all(stack, reviewer, submission_id, sha):
+    for path in REQUIRED_PATHS:
+        _call(stack, reviewer, {
+            "action": "set_field_verification", "submission_id": submission_id,
+            "field_path": path, "payload_sha256": sha, "verified": True,
+        })
+
+
+def test_diagnostics_come_from_the_validator_that_refuses_the_approval(
+    stack, reviewer, submission,
+):
+    submission_id = submission["submission_id"]
+    revision, manifest, _ = _start_and_save(stack, reviewer, submission_id)
+
+    broken = _label_payload()
+    broken["ingredientRows"] = [{"name": "Missing everything else"}]
+    diagnostics = _call(stack, reviewer, {
+        "action": "validate_label", "payload": broken,
+    })["diagnostics"]
+    assert diagnostics, "a label the gate refuses must produce diagnostics"
+    # The whole-payload verdict stays first and authoritative; the located
+    # detail is added to it, never in place of it.
+    assert diagnostics[0]["path"] == "$"
+    assert any(entry["path"] == "ingredientRows[0]" for entry in diagnostics)
+
+    # The same payload, offered for approval, is refused by the same code.
+    saved = _call(stack, reviewer, {
+        "action": "save_review", "submission_id": submission_id,
+        "payload": broken, "expected_evidence_revision": revision,
+        "evidence_manifest_sha256": manifest,
+    })["review"]
+    _tick_all(stack, reviewer, submission_id, saved["draft"]["payload_sha256"])
+    refused = _call(stack, reviewer, {"action": "batch_transition", "items": [{
+        "submission_id": submission_id, "to_status": "approved",
+        "expected_evidence_revision": revision,
+        "evidence_manifest_sha256": manifest,
+        "product_image_photo_id": submission["photo_id"],
+    }]})
+    assert refused["applied"] == 0
+
+    # And a label it accepts produces no diagnostics at all.
+    assert _call(stack, reviewer,
+                 {"action": "validate_label", "payload": _label_payload()})["diagnostics"] == []
+
+
+def test_single_and_batch_approval_enforce_the_same_reading(
+    stack, reviewer, submission,
+):
+    submission_id = submission["submission_id"]
+    revision, manifest, sha = _start_and_save(stack, reviewer, submission_id)
+    _call(stack, reviewer, {
+        "action": "set_field_verification", "submission_id": submission_id,
+        "field_path": "identity.brand", "payload_sha256": sha, "verified": True,
+    })
+    _call(stack, reviewer, {
+        "action": "record_match", "submission_id": submission_id,
+        "outcome": "no_match_verified", "canonical_gtin14": "00012345678905",
+        "index_built_at": "2026-09-10T00:00:00Z", "candidate_dsld_ids": [],
+        "expected_evidence_revision": revision,
+        "evidence_manifest_sha256": manifest,
+    })
+    approval = {
+        "submission_id": submission_id, "to_status": "approved",
+        "expected_evidence_revision": revision,
+        "evidence_manifest_sha256": manifest,
+        "product_image_photo_id": submission["photo_id"],
+    }
+
+    # One field of five read. The single path must refuse exactly as the batch
+    # path does; the browser checklist is not the only gate for either.
+    _call(stack, reviewer, {
+        **approval, "action": "transition",
+        "approved_schema_version": "manual_label_v1",
+        "approved_payload": _label_payload(),
+    }, expect=400)
+    assert _call(stack, reviewer,
+                 {"action": "batch_transition", "items": [approval]})["applied"] == 0
+
+    _tick_all(stack, reviewer, submission_id, sha)
+
+    # Fully read, the single path now succeeds.
+    _call(stack, reviewer, {
+        **approval, "action": "transition",
+        "approved_schema_version": "manual_label_v1",
+        "approved_payload": _label_payload(),
+    })
+    final = _call(stack, reviewer,
+                  {"action": "review_states", "submission_ids": [submission_id]})["states"]
+    assert final[0]["review_status"] == "approved"
+
+
+def test_a_concurrent_edit_rebinds_the_reading_to_the_later_text(
+    stack, reviewer, submission,
+):
+    submission_id = submission["submission_id"]
+    revision, manifest, first_sha = _start_and_save(stack, reviewer, submission_id)
+    _tick_all(stack, reviewer, submission_id, first_sha)
+
+    # A second reviewer window saves different text against the same evidence.
+    second = _call(stack, reviewer, {
+        "action": "save_review", "submission_id": submission_id,
+        "payload": _label_payload("Second Window"),
+        "expected_evidence_revision": revision,
+        "evidence_manifest_sha256": manifest,
+    })["review"]
+    second_sha = second["draft"]["payload_sha256"]
+    assert second_sha != first_sha
+
+    # Every earlier tick describes text nobody is looking at now.
+    assert all(entry["live"] is False for entry in second["verifications"])
+    states = _call(stack, reviewer,
+                   {"action": "review_states", "submission_ids": [submission_id]})["states"]
+    assert states[0]["fully_verified"] is False
+
+    # And the older digest can no longer be attested to.
+    _call(stack, reviewer, {
+        "action": "set_field_verification", "submission_id": submission_id,
+        "field_path": "identity.brand", "payload_sha256": first_sha, "verified": True,
+    }, expect=400)
