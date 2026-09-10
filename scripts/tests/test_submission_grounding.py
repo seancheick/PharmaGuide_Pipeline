@@ -244,15 +244,27 @@ def test_a_reader_that_produced_the_draft_is_marked_not_independent() -> None:
     from submission_review.extraction.extractor import LabelDraftExtractor
     from submission_review.extraction.extractor import ExtractionConfig
 
+    class _ConfiguredFakeAdapter(FakeAdapter):
+        """A fake reading adapter that accepts the producer under test."""
+
+        def extract(self, bundle, config):
+            # Reuse the canonical fake draft, then only retag its pinned
+            # producer fields. The test is about the grounding seam, not a
+            # second adapter implementation.
+            result = super().extract(bundle, _ocr_config("fake"))
+            result.draft.update(
+                provider=config.provider,
+                model=config.model,
+                prompt_version=config.prompt_version,
+            )
+            return result
+
     config = ExtractionConfig(
         provider="ocr", model="rapidocr", model_digest="c" * 64,
         prompt_version="p1", retention_policy_version="local-only-v1",
     )
-    extractor = LabelDraftExtractor(FakeAdapter(), grounding_reader=_PageReader())
-    try:
-        result = extractor.extract(_prepared(), config)
-    except Exception:
-        return  # the fake adapter refuses a non-fake provider; nothing to assert
+    extractor = LabelDraftExtractor(_ConfiguredFakeAdapter(), grounding_reader=_PageReader())
+    result = extractor.extract(_prepared(), config)
 
     # Checking a reading against the reader that produced it can only catch an
     # assembly bug, never an invented value, so the benchmark must be told.

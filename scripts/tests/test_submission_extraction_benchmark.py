@@ -238,6 +238,53 @@ def test_per_field_reporting_separates_a_dose_error_from_a_unit_error(holdout) -
     assert per_field["unit"]["products_without_error"] == {"n": 1, "N": 2, "rate": 0.5, "ci95": (0.0945, 0.9055)}
 
 
+def test_qualification_gates_use_product_level_dimension_rate(tmp_path: Path) -> None:
+    """A product with two rows contributes one independent dose observation."""
+    root = tmp_path / "holdout"
+    entries = [
+        _entry("d-1", "brand-a/mag"),
+        _entry("d-2", "brand-b/mag"),
+        _entry("d-3", "brand-c/blur"),
+    ]
+    golds = {key: _gold(key) for key in ("d-1", "d-2")}
+    golds["d-3"] = _gold("d-3", expected="abstain")
+    for gold in (golds["d-1"], golds["d-2"]):
+        gold["rows"][1] = {
+            "display_name": "Zinc",
+            "amount": {"value": 10, "unit_text": "mg"},
+            "owner": None,
+            "parent_index": None,
+            "is_blend_header": False,
+            "percent_dv": None,
+            "form_text": None,
+            "readable": True,
+        }
+    _write_set(root, entries, golds)
+    run = root / "runs" / "r1"
+    run.mkdir(parents=True)
+
+    first = _valid_draft()
+    first["ingredient_rows"][0]["amount"]["value"]["value"] = 999
+    extra = copy.deepcopy(first["ingredient_rows"][0])
+    extra["display_name"]["value"] = "Zinc"
+    extra["amount"]["value"]["value"] = 10
+    first["ingredient_rows"].append(extra)
+    second = _valid_draft()
+    second_extra = copy.deepcopy(second["ingredient_rows"][0])
+    second_extra["display_name"]["value"] = "Zinc"
+    second_extra["amount"]["value"]["value"] = 10
+    second["ingredient_rows"].append(second_extra)
+    _write(run, "d-1", first)
+    _write(run, "d-2", second)
+    _write(run, "d-3", {**_valid_draft(), "abstained": True, "abstain_reason": "unreadable"})
+
+    report = evaluate(root, run, "development")
+    per_field = report["metrics"]["per_field"]["dose"]
+    assert per_field["observations"]["rate"] == 0.75
+    assert per_field["products_without_error"]["rate"] == 0.5
+    assert report["gates"]["dose_accuracy"]["observed"] == 0.5
+
+
 def test_gold_must_transcribe_printed_statements(holdout) -> None:
     root, _ = holdout
     gold = json.loads((root / "gold" / "d-1.json").read_text())

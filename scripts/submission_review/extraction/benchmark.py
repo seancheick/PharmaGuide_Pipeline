@@ -702,7 +702,11 @@ def evaluate(holdout_dir: Path, run_dir: Path, split: str, configuration: str | 
         }
     metrics["per_field"] = per_field
     for dimension in ("dose", "unit", "blend_nesting"):
-        metrics[f"{dimension}_accuracy"] = per_field[dimension]["observations"]
+        # Qualification must use independent product samples, not correlated
+        # row observations from the same label. Keep the observation interval
+        # in ``per_field`` for diagnostics, but feed the product interval to
+        # the frozen gates.
+        metrics[f"{dimension}_accuracy"] = per_field[dimension]["products_without_error"]
 
     gates = _apply_gates(metrics)
     gates["frozen_qualification_set"] = {"threshold": True, "observed": receipt["mode"],
