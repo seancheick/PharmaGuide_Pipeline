@@ -163,6 +163,7 @@ Development and explicitly synthetic miniature sets can never qualify.
 | Dose accuracy (printed number **and** unit) on matched readable rows | 100% |
 | Unit accuracy alone on matched readable rows | 100% |
 | Blend nesting (parent header and header flag) on matched readable rows | 100% |
+| Printed statements present (directions and warnings reaching the draft) | 100% |
 | Expected abstentions honoured (unreadable set) | 100% |
 | Critical errors remaining after human review of the drafts | 0 |
 | p95 draft latency on all products (cold starts also reported separately) | ≤ 60 s |
@@ -177,9 +178,13 @@ together, because one bad photograph or one misread panel takes several of
 them at once, so an interval computed over observations is narrower than the
 evidence supports. Qualification decisions read the product interval.
 
-Printed statements (directions and warnings) are measured and reported but
-are **not** gated. A missed direction is a copy defect the reviewer sees in
-the editor; a missed dose is a health claim about a product.
+Printed statements are measured twice. **Presence is gated at 100%**: a
+warning that never reaches the draft is a warning the reader never gets, and
+"do not use if pregnant" is not copy. **Exact wording is reported and not
+gated**, because a gate a misplaced comma can fail is a gate that gets worked
+around rather than met. A statement counts as present when it is reproduced,
+or when a returned statement carries at least 90% of its words; a fragment
+does not count.
 
 OCR / retake set (must pass before any automatic user-facing retake
 request leaves observation mode): unnecessary-retake rate ≤ 2% on acceptable
@@ -323,3 +328,19 @@ its edition ambiguous, the product goes to the two-person route or leaves the
 set. `scripts/prepare_holdout_set.py scan` proposes candidates and `diff`
 lists the rows to settle; neither writes a value into a gold record, and a
 test asserts a gold file is byte-identical after a comparison runs.
+
+2026-09-10 — Warnings gated on presence. Two independent reviews put warnings
+among the hard safety gates and were right to: on a health product a dropped
+"consult a physician if taking anticoagulants" is not a copy defect. The gate
+is presence rather than exact text, so it measures whether the warning
+arrived, and the verbatim comparison stays beside it as a reported metric.
+Frozen before any result exists; no existing threshold was loosened.
+
+2026-09-10 — Unit-family detection moved to the pipeline's own vocabulary.
+`catalog_gold.unit_case` kept a local spelling table, which missed
+"Milligram(s)" across 820 rows of the corpus and reported AFU as absent from
+the catalogue entirely — probiotics print "Billion AFU", never a bare token,
+so a person would have gone hunting for a product they already had. Mass
+spelling now comes from `normalization.canonicalize_mass_unit`, the one owner
+of those aliases; activity units match on a whole word, which keeps the
+enzyme units GALU and GaIU out of the gram and IU families.

@@ -23,7 +23,7 @@ import statistics
 import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Sequence
 
 from .envelope import LabelDraftError, validate_label_draft_v1
 from ..gtin import canonical_gtin14_candidates
@@ -38,7 +38,8 @@ SPLITS = ("development", "holdout")
 #: unit: those are not the same failure and they do not carry the same risk.
 DIMENSIONS = (
     "identity", "serving", "row_presence", "dose", "unit",
-    "blend_nesting", "printed_detail", "other_ingredients", "statements",
+    "blend_nesting", "printed_detail", "other_ingredients",
+    "statement_presence", "statements",
 )
 
 # Frozen gates (HOLDOUT.md). Change only through a dated amendment there.
@@ -53,6 +54,10 @@ GATES: dict[str, Any] = {
     "dose_accuracy": 1.0,
     "unit_accuracy": 1.0,
     "blend_nesting_accuracy": 1.0,
+    # A printed warning that never reaches the draft is a warning the reader
+    # never gets. Presence is gated; wording is measured beside it, because a
+    # gate a comma can fail is a gate that gets worked around.
+    "statement_presence_accuracy": 1.0,
     "invented_actives": 0,
     "wrong_product_substitutions": 0,
     "magnitude_errors": 0,
@@ -462,6 +467,27 @@ def _same(gold: Any, draft: Any) -> bool:
     return _norm(gold) == _norm(draft) if isinstance(gold, str) and isinstance(draft, str) else gold == draft
 
 
+#: A statement counts as present when it is reproduced, or when what came
+#: back covers essentially all of its words. Below this the draft is not
+#: carrying the printed warning any more, it is carrying a fragment.
+STATEMENT_PRESENCE_COVERAGE = 0.9
+
+
+def _statement_present(expected: str, printed: Sequence[str]) -> bool:
+    if not expected:
+        return True
+    if expected in printed:
+        return True
+    words = [w for w in re.findall(r"[a-z0-9]+", expected) if len(w) > 2]
+    if not words:
+        return False
+    for candidate in printed:
+        found = sum(1 for word in words if word in candidate)
+        if found / len(words) >= STATEMENT_PRESENCE_COVERAGE:
+            return True
+    return False
+
+
 def score_product(gold: dict[str, Any], kind: str, draft: dict[str, Any] | None) -> dict[str, Any]:
     result: dict[str, Any] = {
         "product_key": gold["product_key"],
@@ -520,7 +546,13 @@ def score_product(gold: dict[str, Any], kind: str, draft: dict[str, Any] | None)
 
     printed = [_norm(_value(statement)) for statement in draft.get("statements", [])]
     for statement in gold.get("statements", []):
-        tally("statements", _norm(statement) in printed)
+        expected = _norm(statement)
+        # Two questions, deliberately separate. Did the warning arrive at all,
+        # and did it arrive verbatim? "Do not use if pregnant" reaching the
+        # reviewer with a comma out of place is a copy defect; not reaching
+        # them is a safety one.
+        tally("statement_presence", _statement_present(expected, printed))
+        tally("statements", expected in printed)
 
     def owner_matches(gold_row, row):
         if "parent_index" in gold_row:
@@ -760,7 +792,7 @@ def evaluate(holdout_dir: Path, run_dir: Path, split: str, configuration: str | 
             ),
         }
     metrics["per_field"] = per_field
-    for dimension in ("dose", "unit", "blend_nesting"):
+    for dimension in ("dose", "unit", "blend_nesting", "statement_presence"):
         # Qualification must use independent product samples, not correlated
         # row observations from the same label. Keep the observation interval
         # in ``per_field`` for diagnostics, but feed the product interval to

@@ -57,7 +57,6 @@ from submission_review.extraction.catalog_gold import (  # noqa: E402
     CASE_SOURCES,
     case_counts,
     disagreements,
-    read_candidate,
     _record_path,
     scan as scan_barcodes,
     thin_cases,

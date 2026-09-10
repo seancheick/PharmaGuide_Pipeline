@@ -20,12 +20,15 @@ Confirming the edition is a person's job, and the physical label always wins.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+import re
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
+from normalization import canonicalize_mass_unit
+
 from ..gtin import canonical_gtin14_candidates
-from .benchmark import REQUIRED_CASES, _draft_rows, _norm, _unit
+from .benchmark import REQUIRED_CASES, _draft_rows, _norm
 
 #: Where each required case can come from. Three different answers, and
 #: conflating them is how a set ends up believing it covers a case it never
@@ -68,21 +71,19 @@ assert set(CASE_SOURCES) == set(REQUIRED_CASES), (
 
 CATALOG_CASES = frozenset(c for c, source in CASE_SOURCES.items() if source == "catalog")
 
-#: Printed units carry qualifiers ("mcg DFE", "mg NE", "gram(s)"). The case is
-#: about the unit family; the printed string itself stays untouched in gold.
-#:
-#: Spellings are listed, never matched by prefix. Tested against every unit in
-#: the shipped catalog, a prefix rule reads the enzyme-activity units GALU and
-#: GaIU as grams and the misspelling "mgc" as milligrams. An unrecognised
-#: spelling belongs in no family; guessing one is how a unit error is born.
-_UNIT_FAMILIES: dict[str, str] = {
-    "mg": "unit_mg", "mg ne": "unit_mg",
-    "mcg": "unit_mcg", "mcg dfe": "unit_mcg", "mcg rae": "unit_mcg",
-    "g": "unit_g", "gram": "unit_g", "grams": "unit_g", "gram(s)": "unit_g",
-    "iu": "unit_IU",
-    "cfu": "unit_CFU",
-    "afu": "unit_AFU",
-}
+#: Mass spelling is not this module's business. `canonicalize_mass_unit` is
+#: the pipeline's one owner of every alias — DSLD's "Gram(s)", the enricher's
+#: "Milligram(s)", "µg", "mgc" — and a second table here was measurably worse:
+#: it missed "Milligram(s)" on 820 rows of the corpus while reading the enzyme
+#: units GALU and GaIU as grams.
+_MASS_CASES: dict[str, str] = {"mg": "unit_mg", "mcg": "unit_mcg", "g": "unit_g"}
+
+#: Activity and count units are not masses and that owner does not claim them.
+#: Matched on a whole word, because they arrive with a magnitude in front and
+#: a dosage form behind — "Billion AFU", "12.5 Billion Probiotic CFU
+#: Capsule(s)" — and because a prefix rule reads GaIU as international units.
+_ACTIVITY_CASES: dict[str, str] = {"iu": "unit_IU", "cfu": "unit_CFU", "afu": "unit_AFU"}
+_WORD_BOUNDARY = re.compile(r"[a-z]+")
 
 
 def _record_path(dsld_id: str, blobs_dir: Path) -> Path:
@@ -149,8 +150,26 @@ class Disagreement:
 
 
 def unit_case(unit_text: Any) -> str | None:
-    """Which unit family a printed unit belongs to, or None."""
-    return _UNIT_FAMILIES.get(_unit(unit_text))
+    """Which unit family a printed unit belongs to, or None.
+
+    Mass first, through the pipeline's canonicaliser, taking the leading token
+    so a qualified unit ("mcg DFE", "mg NE", "Grams Powder") keeps its family
+    while a concentration ("mcg/g") and a unit nobody recognises keep none.
+    """
+    if not isinstance(unit_text, str) or not unit_text.strip():
+        return None
+    canonical = canonicalize_mass_unit(unit_text)
+    if not isinstance(canonical, str) or not canonical:
+        return None
+    head = canonicalize_mass_unit(canonical.split(" ", 1)[0])
+    case = _MASS_CASES.get(canonical) or _MASS_CASES.get(head)
+    if case:
+        return case
+    for word in _WORD_BOUNDARY.findall(canonical):
+        activity = _ACTIVITY_CASES.get(word)
+        if activity:
+            return activity
+    return None
 
 
 def label_cases(blob: Mapping[str, Any]) -> frozenset[str]:

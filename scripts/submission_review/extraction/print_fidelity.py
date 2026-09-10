@@ -26,10 +26,10 @@ import io
 import json
 import re
 import sys
-import unicodedata
 from dataclasses import dataclass
 from typing import Any, Iterable, Sequence
 
+from .benchmark import _norm
 from .extractor import EvidenceBundle, EvidencePhoto
 from .photo_prep import prepare_bundle
 
@@ -274,10 +274,11 @@ def prepare(raw: bytes) -> bytes:
 
 
 def _normalize(text: str) -> str:
-    folded = unicodedata.normalize("NFKC", text).casefold()
-    # OCR splits and rejoins words at will; comparing on a whitespace-free
-    # blob asks whether the characters survived, not how they were grouped.
-    return _SPACE.sub("", folded).replace("’", "'")
+    # Case and unicode folding belong to the subsystem's one normalizer.
+    # What is local here is dropping whitespace entirely: OCR splits and
+    # rejoins words at will, and the question is whether the characters
+    # survived preparation, not how they were grouped.
+    return _SPACE.sub("", _norm(text)).replace("’", "'")
 
 
 def _digit_tokens(lines: Iterable[str]) -> tuple[str, ...]:
@@ -297,8 +298,7 @@ def _tokens(line: str) -> tuple[str, ...]:
     "90" as too short to be evidence — and those are the doses. A line is not
     recovered if its dose is not.
     """
-    folded = unicodedata.normalize("NFKC", line).casefold()
-    return tuple(_WORD.findall(folded)) + _digit_tokens((line,))
+    return tuple(_WORD.findall(_norm(line))) + _digit_tokens((line,))
 
 
 def score(recovered: Sequence[str], expected: Sequence[str] = PANEL_LINES) -> Reading:

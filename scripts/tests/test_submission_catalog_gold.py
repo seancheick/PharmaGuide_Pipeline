@@ -54,12 +54,34 @@ def test_every_required_case_is_classified():
     assert set(cg.CASE_SOURCES.values()) == {"catalog", "capture", "sourcing"}
 
 
-def test_units_are_matched_by_spelling_not_by_prefix():
-    """Measured against the shipped catalog: prefixes read enzymes as grams."""
-    assert cg.unit_case("mcg DFE") == "unit_mcg"
-    assert cg.unit_case("Gram(s)") == "unit_g"
-    assert cg.unit_case("mg NE") == "unit_mg"
-    for unknown in ("GALU", "GaIU", "mgc", "mcg/g", "NP", "HUT", None, ""):
+def test_mass_spelling_comes_from_the_pipeline_not_from_a_second_table():
+    """A local table missed Milligram(s) on 820 rows of the real corpus."""
+    for spelling in ("mg", "Milligram(s)", "mg NE", "mg DFE", "mg AT", "mgc"):
+        assert cg.unit_case(spelling) == "unit_mg" or spelling == "mgc", spelling
+    assert cg.unit_case("mgc") == "unit_mcg"          # the pipeline's own alias
+    for spelling in ("mcg", "Microgram(s)", "\u00b5g", "mcg DFE", "mcg RAE"):
+        assert cg.unit_case(spelling) == "unit_mcg", spelling
+    for spelling in ("g", "Gram(s)", "grams", "Grams Powder"):
+        assert cg.unit_case(spelling) == "unit_g", spelling
+
+
+def test_activity_units_survive_a_magnitude_and_a_dosage_form():
+    """Probiotics print "Billion AFU", never a bare token.
+
+    Found in the real corpus after a bare-spelling table reported AFU as
+    absent from the catalogue entirely, which would have sent a person
+    hunting for a product they already had.
+    """
+    assert cg.unit_case("AFU") == "unit_AFU"
+    assert cg.unit_case("Billion AFU") == "unit_AFU"
+    assert cg.unit_case("billion CFU") == "unit_CFU"
+    assert cg.unit_case("12.5 Billion Probiotic CFU Capsule(s)") == "unit_CFU"
+    assert cg.unit_case("75000000000 CFU Capsule(s)") == "unit_CFU"
+
+
+def test_a_unit_nobody_recognises_belongs_to_no_family():
+    """Whole words only: a prefix rule reads the enzyme unit GaIU as IU."""
+    for unknown in ("GALU", "GaIU", "mmg", "mcg/g", "NP", "HUT", "Kilogram(s)", None, ""):
         assert cg.unit_case(unknown) is None, unknown
 
 

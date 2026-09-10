@@ -455,3 +455,47 @@ def test_without_a_reference_two_people_are_still_required(holdout) -> None:
     gold = {**_gold("d-1"), "checked_by": [_confirmer()]}
     with pytest.raises(BenchmarkError, match="two distinct human checkers"):
         _load(root, "d-1", gold)
+
+
+def test_a_dropped_warning_blocks_qualification(holdout) -> None:
+    """Presence is gated because a warning that never arrives is a safety gap."""
+    root, run = holdout
+    silent = _valid_draft()
+    silent["statements"] = []
+    _write(run, "d-1", silent)
+    _write(run, "d-2", _valid_draft())
+    _write(run, "d-3", {**_valid_draft(), "abstained": True, "abstain_reason": "unreadable"})
+
+    report = evaluate(root, run, "development")
+
+    assert report["metrics"]["per_field"]["statement_presence"]["observations"]["rate"] == 0.5
+    assert report["gates"]["statement_presence_accuracy"]["passed"] is False
+
+
+def test_a_warning_reworded_is_reported_but_does_not_block(holdout) -> None:
+    """A comma out of place is a copy defect, not a missing warning."""
+    root, run = holdout
+    reworded = _valid_draft()
+    reworded["statements"][0]["value"] = "Take two capsules daily, with food."
+    _write(run, "d-1", reworded)
+    _write(run, "d-2", _valid_draft())
+    _write(run, "d-3", {**_valid_draft(), "abstained": True, "abstain_reason": "unreadable"})
+
+    metrics = evaluate(root, run, "development")["metrics"]
+
+    assert metrics["per_field"]["statement_presence"]["observations"]["rate"] == 1.0
+    assert metrics["per_field"]["statements"]["observations"]["rate"] == 0.5
+    assert "statements" not in evaluate.__globals__["GATES"]
+
+
+def test_a_fragment_of_a_warning_is_not_the_warning(holdout) -> None:
+    root, run = holdout
+    fragment = _valid_draft()
+    fragment["statements"][0]["value"] = "Take two capsules."
+    _write(run, "d-1", fragment)
+    _write(run, "d-2", _valid_draft())
+    _write(run, "d-3", {**_valid_draft(), "abstained": True, "abstain_reason": "unreadable"})
+
+    metrics = evaluate(root, run, "development")["metrics"]
+
+    assert metrics["per_field"]["statement_presence"]["observations"]["rate"] == 0.5
