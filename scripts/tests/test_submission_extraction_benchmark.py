@@ -499,3 +499,16 @@ def test_a_fragment_of_a_warning_is_not_the_warning(holdout) -> None:
     metrics = evaluate(root, run, "development")["metrics"]
 
     assert metrics["per_field"]["statement_presence"]["observations"]["rate"] == 0.5
+
+
+def test_warning_presence_rejects_a_negation_flip(holdout) -> None:
+    """Word overlap must not turn a safety reversal into a present warning."""
+    expected = (
+        "Do not use this product unless your doctor specifically approves it "
+        "for continued use during pregnancy or breastfeeding for your medical condition."
+    )
+    candidate = (
+        "Use this product unless your doctor specifically approves it "
+        "for continued use during pregnancy or breastfeeding for your medical condition."
+    )
+    assert benchmark._statement_present(expected, [candidate]) is False

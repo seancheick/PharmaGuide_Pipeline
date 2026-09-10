@@ -471,6 +471,9 @@ def _same(gold: Any, draft: Any) -> bool:
 #: back covers essentially all of its words. Below this the draft is not
 #: carrying the printed warning any more, it is carrying a fragment.
 STATEMENT_PRESENCE_COVERAGE = 0.9
+_NEGATION_RE = re.compile(
+    r"\b(?:no|not|never|avoid|without|cannot|can't|don't|do\s+not|must\s+not)\b"
+)
 
 
 def _statement_present(expected: str, printed: Sequence[str]) -> bool:
@@ -482,6 +485,11 @@ def _statement_present(expected: str, printed: Sequence[str]) -> bool:
     if not words:
         return False
     for candidate in printed:
+        # Word overlap alone can accept a dangerous polarity reversal (for
+        # example, dropping "not" from a long warning). Presence is useful
+        # only when the warning's basic negation polarity is preserved.
+        if bool(_NEGATION_RE.search(expected)) != bool(_NEGATION_RE.search(candidate)):
+            continue
         found = sum(1 for word in words if word in candidate)
         if found / len(words) >= STATEMENT_PRESENCE_COVERAGE:
             return True
