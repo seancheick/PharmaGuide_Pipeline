@@ -158,9 +158,29 @@ def command_reconcile(args) -> int:
     return 0
 
 
+def _grounding_reader(args):
+    """The independent reader that checks a draft against the photographs.
+
+    Optional on purpose: a missing engine must not stop the queue being
+    worked. It is never silently absent, though — a run says whether the
+    check was in place, because "no report" and "nothing wrong" look identical
+    in a record and must not be confused later.
+    """
+    if getattr(args, "no_grounding", False):
+        return None, "disabled"
+    try:
+        from submission_review.extraction.adapters.rapidocr_reader import (
+            RapidOcrReader,
+        )
+        return RapidOcrReader(), "enabled"
+    except Exception as error:  # noqa: BLE001 - an optional engine
+        return None, f"unavailable: {type(error).__name__}"
+
+
 def command_run(args) -> int:
     queue = _queue(args)
-    extractor = LabelDraftExtractor(_adapter(args))
+    reader, grounding_status = _grounding_reader(args)
+    extractor = LabelDraftExtractor(_adapter(args), grounding_reader=reader)
     limits = DrainLimits(
         max_jobs=args.max_jobs,
         max_seconds=args.max_seconds,
@@ -171,7 +191,8 @@ def command_run(args) -> int:
     finally:
         # Another person's photographs never outlive the run that fetched them.
         queue.close()
-    print(json.dumps(report.as_summary(), indent=2))
+    print(json.dumps(
+        {**report.as_summary(), "grounding": grounding_status}, indent=2))
     # A run that stopped on a limit or an unknown outcome is not a clean run,
     # and a scheduler should be able to see that without parsing prose.
     return 0 if report.stopped_because in {"queue_empty", "job_limit"} else 2
@@ -208,6 +229,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="admission window: stops starting new jobs, never interrupts one",
     )
     run.add_argument("--max-microcents", type=int, default=0)
+    run.add_argument(
+        "--no-grounding",
+        action="store_true",
+        help="skip the independent check that each reading is printed where "
+             "the draft says it is; the report is recorded, never enforced",
+    )
     return parser
 
 

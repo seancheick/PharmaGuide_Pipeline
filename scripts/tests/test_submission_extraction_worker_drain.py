@@ -96,6 +96,7 @@ class _Queue:
                 "error_code": error_code,
                 "cost": cost_microcents,
                 "draft": draft,
+                "usage": usage,
             }
         )
 
@@ -346,3 +347,53 @@ def test_provider_budget_failure_is_not_an_unreserved_admission_hold() -> None:
     drain(queue, _extractor(fail_with="budget_exhausted"), reader=_reader)
     assert queue.reservations == ["job-0"]
     assert queue.completed[0]["outcome"] == "retryable_error"
+
+
+class _GroundingReader:
+    """An independent reader that sees one line of printed text."""
+
+    def __init__(self, text="Northwind"):
+        self._text = text
+
+    def read(self, data, *, photo_id, input_id):
+        from submission_review.extraction.adapters.ocr_adapter import (
+            OcrLine, OcrPage,
+        )
+        return OcrPage(
+            photo_id=photo_id, input_id=input_id,
+            lines=(OcrLine(text=self._text, left=1.0, top=1.0,
+                           right=90.0, bottom=20.0),),
+        )
+
+
+def test_a_grounding_report_reaches_the_recorded_attempt() -> None:
+    queue = _Queue()
+    extractor = LabelDraftExtractor(
+        FakeAdapter(), grounding_reader=_GroundingReader())
+
+    report = drain(queue, extractor, reader=_reader)
+
+    assert report.drafted == 1
+    # The verifier existed for a while with no production caller, which is the
+    # same as not existing. This is the proof that it now travels with the
+    # attempt a reviewer and the benchmark will read.
+    usage = queue.completed[0]["usage"]
+    assert usage["grounding"]["status"] == "ok"
+    assert usage["grounding"]["independent_of_producer"] is True
+
+
+def test_a_failing_verifier_still_records_the_draft() -> None:
+    class _Broken:
+        def read(self, data, *, photo_id, input_id):
+            raise RuntimeError("engine exploded")
+
+    queue = _Queue()
+    extractor = LabelDraftExtractor(FakeAdapter(), grounding_reader=_Broken())
+
+    report = drain(queue, extractor, reader=_reader)
+
+    # Grounding reports; it does not gate. A broken verifier must not cost the
+    # reviewer a reading that was produced correctly.
+    assert report.drafted == 1
+    assert queue.completed[0]["outcome"] == "review_ready"
+    assert queue.completed[0]["usage"]["grounding"]["status"] == "unavailable"

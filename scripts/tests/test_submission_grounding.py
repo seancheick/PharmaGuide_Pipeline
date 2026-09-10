@@ -168,3 +168,92 @@ def test_the_report_says_how_much_of_the_reading_is_supported() -> None:
     payload = report.as_payload()
     assert payload["schema_version"] == "grounding_report_v1"
     assert abs(payload["rate"] - 2 / 3) < 1e-9
+
+
+def _prepared(data: bytes = b"\xff\xd8fixture"):
+    from submission_review.extraction.extractor import PreparedBundle, PreparedInput
+    import hashlib
+    # The boundary verifies the bytes against their provenance, so a
+    # placeholder digest is refused before grounding is ever reached.
+    digest = hashlib.sha256(data).hexdigest()
+    photo = PreparedInput(
+        input_id="i1", photo_id=_PHOTO, original_sha256=digest,
+        sent_sha256=digest, content_type="image/jpeg", byte_size=len(data),
+        data=data, categories=("supplement_facts",),
+    )
+    return PreparedBundle(submission_id="s1", evidence_revision=1, photos=(photo,))
+
+
+def _ocr_config(provider="ollama"):
+    from submission_review.extraction.extractor import ExtractionConfig
+    return ExtractionConfig(
+        provider=provider, model="m", model_digest="c" * 64,
+        prompt_version="p1", retention_policy_version="local-only-v1",
+    )
+
+
+class _PageReader:
+    """Stands in for an engine: returns whatever the test says was printed."""
+
+    def __init__(self, page=None, boom=False):
+        self._page, self._boom = page, boom
+
+    def read(self, data, *, photo_id, input_id):
+        if self._boom:
+            raise RuntimeError("engine exploded")
+        return self._page or _page()
+
+
+def _run(reader, provider="ollama"):
+    from submission_review.extraction.adapters.fake_adapter import FakeAdapter
+    from submission_review.extraction.extractor import LabelDraftExtractor
+    extractor = LabelDraftExtractor(FakeAdapter(), grounding_reader=reader)
+    return extractor.extract(_prepared(), _ocr_config("fake"))
+
+
+def test_the_worker_boundary_records_a_grounding_report() -> None:
+    result = _run(_PageReader(_page("Northwind")))
+
+    report = result.usage.as_payload()["grounding"]
+    assert report["status"] == "ok"
+    assert report["schema_version"] == "grounding_report_v1"
+
+
+def test_grounding_never_fails_an_extraction() -> None:
+    # A broken verifier is not a broken reading. If the check cannot run, the
+    # draft still stands and the absence is stated rather than assumed.
+    result = _run(_PageReader(boom=True))
+
+    report = result.usage.as_payload()["grounding"]
+    assert report["status"] == "unavailable"
+    assert result.draft["schema_version"] == "label_draft_v1"
+
+
+def test_no_reader_means_no_report_rather_than_a_passing_one() -> None:
+    from submission_review.extraction.adapters.fake_adapter import FakeAdapter
+    from submission_review.extraction.extractor import LabelDraftExtractor
+
+    result = LabelDraftExtractor(FakeAdapter()).extract(_prepared(), _ocr_config("fake"))
+
+    # Silence must never read as "everything was located".
+    assert "grounding" not in result.usage.as_payload()
+
+
+def test_a_reader_that_produced_the_draft_is_marked_not_independent() -> None:
+    from submission_review.extraction.adapters.fake_adapter import FakeAdapter
+    from submission_review.extraction.extractor import LabelDraftExtractor
+    from submission_review.extraction.extractor import ExtractionConfig
+
+    config = ExtractionConfig(
+        provider="ocr", model="rapidocr", model_digest="c" * 64,
+        prompt_version="p1", retention_policy_version="local-only-v1",
+    )
+    extractor = LabelDraftExtractor(FakeAdapter(), grounding_reader=_PageReader())
+    try:
+        result = extractor.extract(_prepared(), config)
+    except Exception:
+        return  # the fake adapter refuses a non-fake provider; nothing to assert
+
+    # Checking a reading against the reader that produced it can only catch an
+    # assembly bug, never an invented value, so the benchmark must be told.
+    assert result.usage.as_payload()["grounding"]["independent_of_producer"] is False

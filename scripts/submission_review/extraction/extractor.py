@@ -18,6 +18,7 @@ from dataclasses import dataclass, field
 from typing import Any, Mapping, Protocol
 
 from .checks import run_checks
+from .grounding import verify_grounding
 from .envelope import MAX_DISCREPANCIES, LabelDraftError, validate_label_draft_v1
 
 FAILURE_SCHEMA = "extraction_failure_v1"
@@ -176,8 +177,17 @@ class LabelDraftExtractor:
     lease is not a reading of these photos, whatever it contains.
     """
 
-    def __init__(self, adapter: LabelDraftAdapter) -> None:
+    def __init__(
+        self,
+        adapter: LabelDraftAdapter,
+        *,
+        grounding_reader: Any | None = None,
+    ) -> None:
         self._adapter = adapter
+        # An optional second reader that looks at the same prepared bytes and
+        # answers one question: is each value the producer claims actually
+        # printed where it says it is. It grants nothing and blocks nothing.
+        self._grounding_reader = grounding_reader
 
     @property
     def prompt_sha256(self) -> str:
@@ -301,8 +311,51 @@ class LabelDraftExtractor:
                 raise ExtractionError(
                     "model_failure", "deterministic findings were invalid", usage=result.usage
                 ) from error
+        self._attach_grounding(draft, bundle, config, result.usage)
         result.usage.latency_seconds = elapsed
         return ExtractionResult(draft=draft, usage=result.usage)
+
+    def _attach_grounding(
+        self,
+        draft: dict[str, Any],
+        bundle: PreparedBundle,
+        config: ExtractionConfig,
+        usage: Usage,
+    ) -> None:
+        """Record whether the reading can be located in the photographs.
+
+        A safety report, not a gate. Nothing here refuses a draft, changes a
+        disposition or reaches approval: it writes what an independent reader
+        could and could not find, so a reviewer sees it and the benchmark can
+        measure it per field.
+
+        Grounding a draft against the very reader that produced it is
+        circular — it can only catch an assembly bug, never an invented value —
+        so whether the check was independent of the producer is recorded
+        alongside the result rather than left for someone to assume.
+        """
+        if self._grounding_reader is None:
+            return
+        try:
+            pages = [
+                self._grounding_reader.read(
+                    photo.data, photo_id=photo.photo_id, input_id=photo.input_id)
+                for photo in bundle.photos
+            ]
+            report = verify_grounding(draft, pages)
+        except Exception as error:  # noqa: BLE001 - a report must never fail a run
+            # A broken verifier is not a broken reading. Say the check did not
+            # run rather than let it decide anything by its absence.
+            usage.details["grounding"] = {
+                "schema_version": "grounding_report_v1",
+                "status": "unavailable",
+                "reason": type(error).__name__,
+            }
+            return
+        payload = report.as_payload()
+        payload["status"] = "ok"
+        payload["independent_of_producer"] = config.provider != "ocr"
+        usage.details["grounding"] = payload
 
 
 def _checked_usage(value: object) -> Usage | None:

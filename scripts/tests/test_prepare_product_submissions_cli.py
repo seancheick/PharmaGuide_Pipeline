@@ -92,7 +92,12 @@ def test_the_run_summary_carries_no_identifiers(monkeypatch, capsys) -> None:
     runner.main(["run"])
 
     printed = json.loads(capsys.readouterr().out)
+    # "grounding" states whether the independent check was in place. A record
+    # that omits it cannot be told apart later from one where nothing was wrong.
+    assert printed["grounding"] in {"enabled", "disabled"} or printed[
+        "grounding"].startswith("unavailable")
     assert set(printed) == {
+        "grounding",
         "claimed",
         "drafted",
         "failed",
