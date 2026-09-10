@@ -180,7 +180,12 @@ def _work_one(
                     report.stopped_because = "budget_exhausted"
                 return
             called = True
-            result = extractor.extract(prepared, config)
+            result = extractor.extract(
+                prepared,
+                config,
+                submission_gtin=job.bundle.submission_gtin,
+                catalog_match=job.bundle.catalog_match,
+            )
         if heartbeat.error is not None:
             raise heartbeat.error
         queue.heartbeat(job.job_id, job.fencing_token)
