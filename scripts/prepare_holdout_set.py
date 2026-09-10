@@ -14,7 +14,11 @@ of the benchmark:
 eye, twice, by two people who have not seen a model's answer. A prefilled
 template is the fastest way to turn a check into a rubber stamp.
 
-*It never reads a model.* No provider is called here, and no draft is imported.
+*It never lets a model's reading become a value.* No provider is called here.
+`diff` will compare an existing draft against a catalog record, because a list
+of disputed rows is what makes a human check finish in minutes instead of
+hours — but it only ever prints rows for a person to settle. Nothing a model
+read is written anywhere near a gold label.
 
 *It never edits a product already in the manifest.* The set is frozen once
 scoring begins; correcting a mistake is a deliberate act with a dated
@@ -26,6 +30,8 @@ amendment, not a silent overwrite.
         --split development --case unit_mg --case nested_blend \
         --photo ~/captures/front.jpg --photo ~/captures/facts.jpg
     python3 scripts/prepare_holdout_set.py status reports/submission_holdout
+    python3 scripts/prepare_holdout_set.py scan --barcode 048107092900
+    python3 scripts/prepare_holdout_set.py diff --dsld-id 1059 --draft run/d-1.json
 """
 from __future__ import annotations
 
@@ -47,10 +53,27 @@ from submission_review.extraction.benchmark import (  # noqa: E402
     SPLITS,
     _TOKEN,
 )
+from submission_review.extraction.catalog_gold import (  # noqa: E402
+    CASE_SOURCES,
+    case_counts,
+    disagreements,
+    read_candidate,
+    scan as scan_barcodes,
+    thin_cases,
+)
+from submission_review.extraction.envelope import (  # noqa: E402
+    LabelDraftError,
+    validate_label_draft_v1,
+)
 from submission_review.extraction.development import (  # noqa: E402
     gold_template,
     intake_manifest_entry,
 )
+
+#: Defaults shared with the reviewer console, which owns identity lookup.
+CATALOG_DB = Path("scripts/dist/pharmaguide_core.db")
+PRODUCTS_DIR = Path("scripts/products")
+BLOBS_DIR = Path("scripts/dist/detail_blobs")
 
 #: What a qualifying set contains, from the frozen protocol.
 REQUIRED_COUNTS = {"development": 20, "holdout": 40}
@@ -200,11 +223,9 @@ def status(root: Path) -> int:
     incomplete = [e["product_key"] for e in products if not _gold_is_filled(root, e)]
     print(f"  gold filled  {len(products) - len(incomplete):>3} / {len(products)}")
 
-    covered = {c for e in products if e["split"] == "holdout" for c in e["cases"]}
-    thin = sorted(
-        case for case in REQUIRED_CASES
-        if sum(1 for e in products if e["split"] == "holdout" and case in e["cases"]) < 2
-    )
+    counts = case_counts(e["cases"] for e in products if e["split"] == "holdout")
+    covered = set(counts)
+    thin = thin_cases(counts)
     print(f"  case cover   {len(covered):>3} / {len(REQUIRED_CASES)} seen in holdout")
     if thin:
         # Two holdout products per case, including the expected abstentions.
@@ -244,6 +265,131 @@ def _gold_is_filled(root: Path, entry: dict) -> bool:
     return bool((gold.get("identity") or {}).get("brand"))
 
 
+def _by_source(cases) -> dict[str, list[str]]:
+    grouped: dict[str, list[str]] = {"catalog": [], "capture": [], "sourcing": []}
+    for case in sorted(cases):
+        grouped[CASE_SOURCES[case]].append(case)
+    return grouped
+
+
+def scan(barcodes: list[str], catalog_db: Path, products_dir: Path,
+         blobs_dir: Path, *, as_json: bool = False) -> int:
+    """Report what the catalog already knows about bottles you can hold."""
+    from submission_review.serve import build_identity_index
+
+    if not barcodes:
+        raise HoldoutSetError("give at least one --barcode, or --barcodes-file")
+    if not as_json:
+        print(f"Building the identity index from {catalog_db} and {products_dir} "
+              "(this takes about a minute)…", file=sys.stderr)
+    index = build_identity_index(catalog_db, products_dir)
+    results = scan_barcodes(barcodes, index, blobs_dir)
+
+    # Counted once per barcode, and only where one record matched. A barcode
+    # with two candidate editions covers nothing until a person says which
+    # edition is in their hand.
+    counts = case_counts(r.candidates[0].cases for r in results if len(r.candidates) == 1)
+    if as_json:
+        json.dump({
+            "scanned": [
+                {"barcode": r.barcode, "canonical": list(r.canonical), "note": r.note,
+                 "candidates": [
+                     {"dsld_id": c.dsld_id, "brand": c.brand_name, "product_name": c.product_name,
+                      "serving": c.serving, "active_rows": c.active_rows,
+                      "formula_fingerprint": c.formula_fingerprint,
+                      "source_name": c.source_name, "source_date": c.source_date,
+                      "catalog_version": c.catalog_version, "cases": sorted(c.cases)}
+                     for c in r.candidates]}
+                for r in results],
+            "case_counts": counts,
+            "thin": thin_cases(counts),
+            "case_sources": CASE_SOURCES,
+        }, sys.stdout, indent=2)
+        sys.stdout.write("\n")
+        return 0
+
+    matched = [r for r in results if r.matched]
+    print(f"\n{len(matched)} of {len(results)} barcode(s) matched a catalog record.\n")
+    for result in results:
+        if not result.matched:
+            if not result.canonical:
+                # Not a product without a record: not a barcode at all.
+                print(f"  {result.barcode:<16} unreadable — {result.note}")
+                print("  " + " " * 16 + "  rescan it; nothing was looked up\n")
+                continue
+            print(f"  {result.barcode:<16} no match — not in the catalog")
+            print("  " + " " * 16 + "  this one needs the two-person transcription route\n")
+            continue
+        for candidate in result.candidates:
+            print(f"  {result.barcode:<16} candidate  dsld:{candidate.dsld_id}")
+            print(f"  {'':<16}   {candidate.brand_name} — {candidate.product_name}")
+            print(f"  {'':<16}   serving {candidate.serving or 'unknown'}"
+                  f" · {candidate.active_rows} active row(s)")
+            print(f"  {'':<16}   covers: "
+                  + (", ".join(sorted(candidate.cases)) or "no required case"))
+            print(f"  {'':<16}   source: {candidate.source_name or 'unknown'}"
+                  f" {candidate.source_date or ''}".rstrip())
+        if result.note:
+            print(f"  {'':<16}   NOTE: {result.note}")
+        print(f"  {'':<16}   confirm against the bottle before using it: brand, product")
+        print(f"  {'':<16}   name, serving size and row count. The record's version and")
+        print(f"  {'':<16}   date identify the record, not the package — they cannot")
+        print(f"  {'':<16}   confirm the edition you are holding.\n")
+
+    grouped = _by_source(REQUIRED_CASES)
+    thin = set(thin_cases(counts))
+    print("Required cases, two products each:\n")
+    have = [c for c in grouped["catalog"] if c not in thin]
+    need = [c for c in grouped["catalog"] if c in thin]
+    print("  covered by these records   "
+          + (", ".join(f"{c} ({counts[c]})" for c in have) or "none yet"))
+    print("  still short                "
+          + (", ".join(f"{c} ({counts.get(c, 0)})" for c in need) or "none"))
+    print("\n  the record cannot say — you decide these when you photograph:")
+    print("    " + ", ".join(grouped["capture"]))
+    print("\n  the record cannot say — you have to find such a label:")
+    print("    " + ", ".join(grouped["sourcing"]))
+    ambiguous = [r.barcode for r in results if len(r.candidates) > 1]
+    if ambiguous:
+        print("\n  not counted, edition unresolved: " + ", ".join(ambiguous))
+    print("\nA match is a candidate, never a decision. The physical label wins.")
+    return 0
+
+
+def diff(dsld_id: str, draft_path: Path, blobs_dir: Path, *, as_json: bool = False) -> int:
+    """List only the rows a person has to settle between record and photograph."""
+    blob_path = blobs_dir / f"{dsld_id}.json"
+    if not blob_path.is_file():
+        raise HoldoutSetError(f"no catalog record {dsld_id} under {blobs_dir}")
+    if not draft_path.is_file():
+        raise HoldoutSetError(f"no draft at {draft_path}")
+    blob = json.loads(blob_path.read_text(encoding="utf-8"))
+    # Validated through the one draft contract before it is read at all: an
+    # arbitrary file is not a draft, and a malformed one must fail as a
+    # message rather than a traceback.
+    try:
+        draft = validate_label_draft_v1(json.loads(draft_path.read_text(encoding="utf-8")))
+    except LabelDraftError as error:
+        raise HoldoutSetError(f"{draft_path} is not a valid label_draft_v1: {error}") from error
+    found = disagreements(blob, draft)
+    if as_json:
+        json.dump([vars(d) for d in found], sys.stdout, indent=2)
+        sys.stdout.write("\n")
+        return 0
+    if not found:
+        print(f"dsld:{dsld_id} and {draft_path.name} agree on every row.")
+        print("That is not proof either is right — it is two independent readings")
+        print("that did not diverge. Confirm the edition against the bottle.")
+        return 0
+    print(f"\n{len(found)} row(s) to settle against the photograph:\n")
+    for item in found:
+        print(f"  {item.kind:<20} {item.row}")
+        print(f"  {'':<20}   record: {item.record if item.record is not None else '—'}")
+        print(f"  {'':<20}   draft:  {item.draft if item.draft is not None else '—'}")
+    print("\nSettle each one by reading the label. Neither side is authoritative.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
@@ -260,6 +406,21 @@ def build_parser() -> argparse.ArgumentParser:
                       help=f"repeatable; one of: {', '.join(sorted(REQUIRED_CASES))}")
     node.add_argument("--photo", action="append", default=[], dest="photos",
                       type=Path, required=True)
+
+    node = sub.add_parser("scan", help="match scanned barcodes to catalog records")
+    node.add_argument("--barcode", action="append", default=[], dest="barcodes")
+    node.add_argument("--barcodes-file", type=Path,
+                      help="one barcode per line; blank lines and # comments ignored")
+    node.add_argument("--catalog-db", type=Path, default=CATALOG_DB)
+    node.add_argument("--products-dir", type=Path, default=PRODUCTS_DIR)
+    node.add_argument("--blobs-dir", type=Path, default=BLOBS_DIR)
+    node.add_argument("--json", action="store_true", dest="as_json")
+
+    node = sub.add_parser("diff", help="rows where a record and a draft disagree")
+    node.add_argument("--dsld-id", required=True)
+    node.add_argument("--draft", type=Path, required=True)
+    node.add_argument("--blobs-dir", type=Path, default=BLOBS_DIR)
+    node.add_argument("--json", action="store_true", dest="as_json")
     return parser
 
 
@@ -270,6 +431,20 @@ def main(argv: list[str] | None = None) -> int:
             return init(args.root)
         if args.command == "status":
             return status(args.root)
+        if args.command == "scan":
+            barcodes = list(args.barcodes)
+            if args.barcodes_file:
+                if not args.barcodes_file.is_file():
+                    raise HoldoutSetError(f"no barcode list at {args.barcodes_file}")
+                barcodes += [
+                    line.split("#", 1)[0].strip()
+                    for line in args.barcodes_file.read_text(encoding="utf-8").splitlines()
+                    if line.split("#", 1)[0].strip()
+                ]
+            return scan(barcodes, args.catalog_db, args.products_dir,
+                        args.blobs_dir, as_json=args.as_json)
+        if args.command == "diff":
+            return diff(args.dsld_id, args.draft, args.blobs_dir, as_json=args.as_json)
         return add(args.root, args.key, args.family, args.split,
                    args.cases, args.photos)
     except HoldoutSetError as error:
