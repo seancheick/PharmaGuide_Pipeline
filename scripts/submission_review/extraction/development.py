@@ -214,6 +214,9 @@ def gold_template(product_key: str) -> dict[str, Any]:
             "amount": None,
         },
         "other_ingredients": {"text": "", "disclosure_hint": "present"},
+        # Directions and warnings, transcribed as printed. An empty array
+        # means the checker looked and the label prints none.
+        "statements": [],
         "rows": [
             {
                 "display_name": "",

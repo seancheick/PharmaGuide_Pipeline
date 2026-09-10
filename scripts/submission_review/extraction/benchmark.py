@@ -33,12 +33,26 @@ GOLD_SCHEMA = "gold_label_v1"
 FAILURE_SCHEMA = "extraction_failure_v1"
 SPLITS = ("development", "holdout")
 
+#: Reported separately because an aggregate hides them. A run can read ninety
+#: per cent of a label correctly and still have put every dose in the wrong
+#: unit: those are not the same failure and they do not carry the same risk.
+DIMENSIONS = (
+    "identity", "serving", "row_presence", "dose", "unit",
+    "blend_nesting", "printed_detail", "other_ingredients", "statements",
+)
+
 # Frozen gates (HOLDOUT.md). Change only through a dated amendment there.
 GATES: dict[str, Any] = {
     "schema_safe_rate": 1.0,
     "row_recall": 0.99,
     "tuple_exact_rate": 0.99,
     "field_fidelity": 0.99,
+    # A wrong dose, a wrong unit and a row hung under the wrong blend header
+    # are the three errors a reviewer is least likely to catch by eye and the
+    # three that change what a person swallows. They admit no error budget.
+    "dose_accuracy": 1.0,
+    "unit_accuracy": 1.0,
+    "blend_nesting_accuracy": 1.0,
     "invented_actives": 0,
     "wrong_product_substitutions": 0,
     "magnitude_errors": 0,
@@ -176,6 +190,11 @@ def load_gold(holdout_dir: Path, entry: dict[str, Any]) -> dict[str, Any]:
                 continue
             _gold_text(field)
     _gold_amount(gold["serving"]["amount"])
+    statements = gold.get("statements")
+    if not isinstance(statements, list):
+        raise BenchmarkError("gold needs statements (an explicit empty array when none are printed)")
+    for statement in statements:
+        _gold_text(statement)
     rows = gold.get("rows")
     if not isinstance(rows, list):
         raise BenchmarkError("gold rows must be an array")
@@ -401,7 +420,13 @@ def score_product(gold: dict[str, Any], kind: str, draft: dict[str, Any] | None)
         "field_checks": 0,
         "field_exact": 0,
         "serving_exact": False,
+        "dimensions": {name: {"checks": 0, "exact": 0} for name in DIMENSIONS},
     }
+
+    def tally(dimension: str, correct: Any, count: int = 1) -> None:
+        counts = result["dimensions"][dimension]
+        counts["checks"] += count
+        counts["exact"] += count if correct else 0
     if gold["expected"] == "abstain":
         result["expected_abstention_honoured"] = kind in ("abstain", "failure")
         return result
@@ -426,12 +451,17 @@ def score_product(gold: dict[str, Any], kind: str, draft: dict[str, Any] | None)
         observed = actual if section == "other_ingredients" and field == "disclosure_hint" else _value(actual)
         exact = _amount_exact(expected, observed) if section == "serving" and field == "amount" else _same(expected, observed)
         result["field_exact"] += int(exact)
+        tally(section, exact)
         if section == "serving":
             serving_match &= exact
         asserted = actual.get("value") if isinstance(actual, dict) and actual.get("status") in ("read", "partial") else None
         if section == "identity" and asserted is not None and not _same(expected, asserted):
             result["wrong_product"] = True
     result["serving_exact"] = serving_match
+
+    printed = [_norm(_value(statement)) for statement in draft.get("statements", [])]
+    for statement in gold.get("statements", []):
+        tally("statements", _norm(statement) in printed)
 
     def owner_matches(gold_row, row):
         if "parent_index" in gold_row:
@@ -475,16 +505,28 @@ def score_product(gold: dict[str, Any], kind: str, draft: dict[str, Any] | None)
         if not gold_row.get("readable", True) or row["name_status"] != "read":
             continue
         result["recalled_rows"] += 1
+        if g_amount is not None:
+            # A dose is right only when its number and its unit are both
+            # right, so `dose` is the strict pair and `unit` isolates which
+            # half failed. An unread amount fails both: a missing dose reads
+            # as an absent ingredient.
+            tally("unit", unit_match)
+            tally("dose", _amount_exact(g_amount, d_amount))
+        tally("blend_nesting",
+              owner_match and gold_row.get("is_blend_header", False) == row["is_blend_header"])
         fidelity = True
         for field in ("form_text", "percent_dv"):
             if gold_row.get(field) is not None:
                 exact = _same(gold_row[field], row[field])
                 result["field_exact"] += int(exact)
+                tally("printed_detail", exact)
                 fidelity &= exact
         exact = (_amount_exact(g_amount, d_amount) and owner_match and serving_match and fidelity
                  and gold_row.get("is_blend_header", False) == row["is_blend_header"]
                  and row["row_status"] == "read" and (d_amount is None or row["amount_status"] == "read"))
         result["tuple_exact"] += int(exact)
+    tally("row_presence", True, result["recalled_rows"])
+    tally("row_presence", False, result["readable_rows"] - result["recalled_rows"])
     return result
 
 
@@ -641,6 +683,27 @@ def evaluate(holdout_dir: Path, run_dir: Path, split: str, configuration: str | 
         metrics["critical_post_review_errors"] = sum(r["critical_errors"] for r in reviews)
         metrics["reviewer_median_time_reduction"] = 1 - statistics.median(assisted) / statistics.median(manual)
         metrics["reviewer_p95_time_ratio"] = _percentile(assisted, 95) / _percentile(manual, 95)
+    # Per dimension, two denominators. The observation rate answers "how often
+    # was this field right"; the product rate answers "on how many labels was
+    # it right everywhere". Only the second has independent samples — fields
+    # within one label fail together (one bad photograph, one misread panel),
+    # so an interval computed over observations is narrower than the evidence
+    # supports. Read the product interval when deciding whether a candidate
+    # qualifies; read the observation rate to see how bad a failure is.
+    per_field: dict[str, Any] = {}
+    for dimension in DIMENSIONS:
+        counts = [p["dimensions"][dimension] for p in drafted]
+        contributing = [c for c in counts if c["checks"]]
+        per_field[dimension] = {
+            "observations": _rate(sum(c["exact"] for c in counts), sum(c["checks"] for c in counts)),
+            "products_without_error": _rate(
+                sum(c["exact"] == c["checks"] for c in contributing), len(contributing)
+            ),
+        }
+    metrics["per_field"] = per_field
+    for dimension in ("dose", "unit", "blend_nesting"):
+        metrics[f"{dimension}_accuracy"] = per_field[dimension]["observations"]
+
     gates = _apply_gates(metrics)
     gates["frozen_qualification_set"] = {"threshold": True, "observed": receipt["mode"],
                                          "passed": True if receipt["mode"] == "qualification" and split == "holdout" else None}

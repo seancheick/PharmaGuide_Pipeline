@@ -35,6 +35,7 @@ def _gold(key: str, expected: str = "draft", checkers=("ab", "cd")) -> dict:
         "identity": {"brand": "Example Brand", "product_name": "Magnesium Glycinate 200 mg", "barcode_digits_seen": "012345678905"},
         "serving": {"size": "2 capsules", "basis_text": "Amount Per Serving", "servings_per_container": "60", "amount": None},
         "other_ingredients": {"text": "Vegetable cellulose, rice flour", "disclosure_hint": "present"},
+        "statements": ["Take two capsules daily with food."],
         "rows": [
             {
                 "display_name": "Magnesium (as magnesium glycinate)",
@@ -205,7 +206,63 @@ def test_invented_rows_magnitude_errors_and_wrong_product_fail_gates(holdout) ->
     assert metrics["expected_abstentions_honoured_rate"]["rate"] == 1.0  # a typed failure honours it
     assert report["verdict"] == "does_not_qualify"
     failed = {name for name, gate in report["gates"].items() if gate["passed"] is False}
-    assert failed == {"invented_actives", "magnitude_errors", "wrong_product_substitutions", "tuple_exact_rate", "field_fidelity"}
+    assert failed == {"invented_actives", "magnitude_errors", "wrong_product_substitutions",
+                      "tuple_exact_rate", "field_fidelity", "dose_accuracy"}
+    # The dimensions discriminate: the corrupted amount kept its printed unit
+    # and its ownership, so only the dose reads as wrong.
+    per_field = metrics["per_field"]
+    assert per_field["dose"]["observations"]["rate"] < 1.0
+    assert per_field["unit"]["observations"]["rate"] == 1.0
+    assert per_field["blend_nesting"]["observations"]["rate"] == 1.0
+    assert per_field["identity"]["observations"]["rate"] < 1.0
+
+
+def test_per_field_reporting_separates_a_dose_error_from_a_unit_error(holdout) -> None:
+    """An aggregate cannot tell these apart, and they are not the same risk."""
+    root, run = holdout
+    wrong_unit = _valid_draft()
+    wrong_unit["ingredient_rows"][0]["amount"]["value"]["unit_text"] = "mcg"
+    _write(run, "d-1", wrong_unit)
+    _write(run, "d-2", _valid_draft())
+    _write(run, "d-3", {**_valid_draft(), "abstained": True, "abstain_reason": "unreadable"})
+
+    per_field = evaluate(root, run, "development")["metrics"]["per_field"]
+
+    assert per_field["unit"]["observations"] == {"n": 1, "N": 2, "rate": 0.5, "ci95": (0.0945, 0.9055)}
+    # A wrong unit is also a wrong dose; a wrong dose is not always a wrong unit.
+    assert per_field["dose"]["observations"]["rate"] == 0.5
+    assert per_field["row_presence"]["observations"]["rate"] == 1.0
+    assert per_field["statements"]["observations"]["rate"] == 1.0
+    # One of the two drafted products carries the error, and the product-level
+    # denominator counts labels, not fields.
+    assert per_field["unit"]["products_without_error"] == {"n": 1, "N": 2, "rate": 0.5, "ci95": (0.0945, 0.9055)}
+
+
+def test_gold_must_transcribe_printed_statements(holdout) -> None:
+    root, _ = holdout
+    gold = json.loads((root / "gold" / "d-1.json").read_text())
+    del gold["statements"]
+    (root / "gold" / "d-1.json").write_text(json.dumps(gold))
+    entry = json.loads((root / "manifest.json").read_text())
+    with pytest.raises(benchmark.BenchmarkError, match="statements"):
+        benchmark.load_gold(root, next(
+            p | {"gold_sha256": hashlib.sha256((root / "gold" / "d-1.json").read_bytes()).hexdigest()}
+            for p in entry["products"] if p["product_key"] == "d-1"))
+
+
+def test_a_missed_warning_is_reported_without_blocking_qualification(holdout) -> None:
+    """Warnings are measured, not gated: a missed direction is not a dose."""
+    root, run = holdout
+    silent = _valid_draft()
+    silent["statements"] = []
+    _write(run, "d-1", silent)
+    _write(run, "d-2", _valid_draft())
+    _write(run, "d-3", {**_valid_draft(), "abstained": True, "abstain_reason": "unreadable"})
+
+    report = evaluate(root, run, "development")
+
+    assert report["metrics"]["per_field"]["statements"]["observations"]["rate"] == 0.5
+    assert "statements" not in report["gates"]
 
 
 def test_missing_invalid_and_abstained_outputs_are_missing_coverage(holdout) -> None:

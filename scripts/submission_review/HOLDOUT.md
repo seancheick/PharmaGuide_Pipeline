@@ -160,10 +160,26 @@ Development and explicitly synthetic miniature sets can never qualify.
 | Wrong-product substitutions (brand or name from another product) | 0 |
 | Order-of-magnitude amount errors (×10 or ÷10 with the same unit) | 0 |
 | Printed-unit mismatches after explicit spelling equivalence | 0 |
+| Dose accuracy (printed number **and** unit) on matched readable rows | 100% |
+| Unit accuracy alone on matched readable rows | 100% |
+| Blend nesting (parent header and header flag) on matched readable rows | 100% |
 | Expected abstentions honoured (unreadable set) | 100% |
 | Critical errors remaining after human review of the drafts | 0 |
 | p95 draft latency on all products (cold starts also reported separately) | ≤ 60 s |
 | Median reviewer time per accepted label vs manual transcription | ≥ 30% lower, p95 not worse |
+
+Every gate above is also reported **per dimension** — identity, serving, row
+presence, dose, unit, blend nesting, printed detail (form and %DV), other
+ingredients, and printed statements — under `metrics.per_field`, with two
+denominators. `observations` counts fields; `products_without_error` counts
+labels. Only the second has independent samples: fields within one label fail
+together, because one bad photograph or one misread panel takes several of
+them at once, so an interval computed over observations is narrower than the
+evidence supports. Qualification decisions read the product interval.
+
+Printed statements (directions and warnings) are measured and reported but
+are **not** gated. A missed direction is a copy defect the reviewer sees in
+the editor; a missed dose is a health claim about a product.
 
 OCR / retake set (must pass before any automatic user-facing retake
 request leaves observation mode): unnecessary-retake rate ≤ 2% on acceptable
@@ -250,3 +266,25 @@ unit spellings and original/sent image provenance; added a real freeze
 verification scaffold and enforced predeclared one-use candidate evaluation.
 This amendment corrects the Batch 1 protocol/implementation; it does not
 assert that the real data set or independent human checks exist.
+
+2026-09-10 — Per-dimension reporting. An aggregate accuracy hides which field
+failed, and the fields do not carry equal risk: a run can read ninety per
+cent of a label correctly and still have put every dose in the wrong unit.
+`metrics.per_field` now reports each dimension separately, with a
+product-level denominator alongside the field-level one because fields within
+a label are not independent observations. Three gates are added at 100% —
+dose, unit and blend nesting — because those are the three errors a reviewer
+is least likely to catch by eye and the three that change what a person
+swallows. `gold_label_v1` gains a required `statements` array (explicit `[]`
+when the label prints none) so directions and warnings can be measured at
+all; they are reported, not gated. This tightens the protocol before any
+result exists and before the set is assembled; no threshold was loosened.
+
+2026-09-10 — Shared preparation measured, not gated. The step every candidate
+shares was measured against genuine 6pt print
+(`docs/release_candidates/shared_preprocessing_fine_print_2026_09_10.md`).
+Preparation is transparent above roughly 25 pixels per em and can drop a dose
+row between 18 and 23. Because both candidates read the same prepared bytes,
+that loss appears in a benchmark as agreement. Any holdout photograph whose
+Facts panel spans less than about a third of the frame width therefore
+measures the capture, not the reader, and must be recorded as such.
