@@ -25,16 +25,23 @@ function el(){
   return node;
 }
 const nodes={'ai-draft':el(),'ai-draft-body':el(),'ai-draft-meta':el()};
+const mapped = process.argv[3] ? JSON.parse(process.argv[3]) : {payload:{}, unresolved:[]};
 const ctx=vm.createContext({
   out, console,
-  document:{createElement:()=>el(), getElementById:(id)=>nodes[id]||el()},
+  document:{createElement:()=>el(), createTextNode:(t)=>({textContent:t}),
+            getElementById:(id)=>nodes[id]||el()},
   structuredClone:(v)=>JSON.parse(JSON.stringify(v)),
+  // Stands in for /api/draft_to_label. The mapping itself is Python's, and is
+  // tested there; what matters here is that the console asks and adopts.
+  fetch:async(url,init)=>{ out.mapperUrl=url; out.sentDraft=JSON.parse(init.body).draft;
+    return {ok:true, json:async()=>mapped}; },
 });
 vm.runInContext(fs.readFileSync(asset,'utf8')+`
 function boot(){} function renderRows(){} function syncFieldsFromPayload(){}
 function updateShaPreview(){} function setStatus(s){ out.status=s; }
 `,ctx);
 vm.runInContext(`
+state.session={access_token:'fixture'};
 state.selected={evidence_revision:2,extractions:[JSON.parse(${JSON.stringify(payloadJson)})]};
 renderDraft();
 out.hidden = document.getElementById('ai-draft').classList.contains('hidden');
@@ -46,14 +53,16 @@ function walk(n,acc){ if(!n) return acc; if(n.textContent) acc.push(n.textConten
 out.fields = walk(document.getElementById('ai-draft-body'),[]);
 out.meta = document.getElementById('ai-draft-meta').textContent;
 `,ctx);
-vm.runInContext(`
-try{ loadDraftIntoEditor(); out.payload = state.payload; }catch(e){ out.payload={error:String(e)}; }
-`,ctx);
-process.stdout.write(JSON.stringify(out));
+(async()=>{
+  await vm.runInContext(`loadDraftIntoEditor()`,ctx);
+  out.payload = vm.runInContext('state.payload',ctx);
+  out.unresolved = vm.runInContext('state.unresolvedFromDraft',ctx);
+  process.stdout.write(JSON.stringify(out));
+})().catch(e=>{console.error(e);process.exitCode=1});
 """
 
 
-def _render(payload, **extraction):
+def _render(payload, mapped=None, **extraction):
     node = shutil.which("node")
     if node is None:
         pytest.skip("Node.js required for console behavior")
@@ -67,12 +76,10 @@ def _render(payload, **extraction):
         "draft_payload": payload,
     }
     record.update(extraction)
-    result = subprocess.run(
-        [node, "-e", _HARNESS, str(ASSET), json.dumps(record)],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
+    argv = [node, "-e", _HARNESS, str(ASSET), json.dumps(record)]
+    argv.append(json.dumps(mapped if mapped is not None
+                           else {"payload": {}, "unresolved": []}))
+    result = subprocess.run(argv, capture_output=True, text=True, check=True)
     return json.loads(result.stdout)
 
 
@@ -189,33 +196,36 @@ def test_an_abstention_tells_the_reviewer_to_transcribe_by_hand() -> None:
     assert "by hand" in text
 
 
-def test_loading_the_draft_never_carries_an_unreadable_value_across() -> None:
-    payload = _payload(
-        identity={"brand": _field(None, "unreadable"), "product_name": _field("Mag")},
-        ingredient_rows=[
-            {
-                "display_name": _field(None, "unreadable"),
-                "amount": None,
-                "parent_index": None,
-                "is_blend_header": False,
-            },
-            {
-                "display_name": _field("Zinc"),
-                "amount": None,
-                "parent_index": None,
-                "is_blend_header": False,
-            },
-        ],
-    )
+def test_the_console_sends_the_draft_to_the_one_mapper() -> None:
+    out = _render(_payload())
 
-    out = _render(payload)
+    # The browser used to map this itself and had already drifted from the
+    # Python mapper. There is one mapper now, and this is how it is reached.
+    assert out["mapperUrl"] == "/api/draft_to_label"
+    assert out["sentDraft"]["identity"]["brand"]["value"] == "Northwind Labs"
 
-    editor = out["payload"]
-    # A blank the reviewer must fill is safer than a guess they might accept.
-    assert editor["brandName"] == ""
-    assert editor["fullName"] == "Mag"
-    assert [row["name"] for row in editor["ingredientRows"]] == ["", "Zinc"]
-    assert editor["ingredientRows"][0]["quantity"] == []
+
+def test_the_console_adopts_the_mapping_exactly_as_returned() -> None:
+    mapped = {
+        "payload": {"brandName": "From The Mapper", "ingredientRows": []},
+        "unresolved": [{"path": "servingSizes", "reason": "printed as text",
+                        "printed": "2 capsules"}],
+    }
+
+    out = _render(_payload(), mapped=mapped)
+
+    assert out["payload"]["brandName"] == "From The Mapper"
+    assert out["unresolved"] == mapped["unresolved"]
+
+
+def test_what_the_model_could_not_supply_is_shown_to_the_reviewer() -> None:
+    out = _render(_payload(), mapped={
+        "payload": {},
+        "unresolved": [{"path": "servingSizes", "reason": "printed as text",
+                        "printed": "2 capsules"}],
+    })
+
+    assert "1 field(s)" in out["status"]
 
 
 def test_loading_says_plainly_that_nothing_is_verified_yet() -> None:
@@ -241,24 +251,14 @@ def test_no_draft_hides_the_panel_entirely() -> None:
     assert json.loads(result.stdout)["hidden"] is True
 
 
-def test_loader_preserves_label_serving_disclosure_and_unknown_daily_frequency():
-    editor = _render(_payload())["payload"]
-    assert editor["servingSizes"][0]["minQuantity"] == 2
-    assert editor["servingSizes"][0]["unit"] == "capsules"
-    assert editor["servingSizes"][0].get("minDailyServings") is None
-    assert editor["servingsPerContainer"] == "60"
-    assert editor["otherIngredientsDisclosure"] == "present"
-    assert editor["otherIngredients"] == "Vegetable cellulose"
+def test_a_conflict_the_model_found_is_shown_beside_the_draft() -> None:
+    out = _render(_payload(discrepancies=[{
+        "code": "multiple_products", "severity": "warning",
+        "detail": "Two different bottles appear across these photographs.",
+        "photo_ids": ["p1"],
+    }]))
 
-
-def test_loader_preserves_nested_rows_forms_and_displays_conflicts():
-    row = _payload()["ingredient_rows"][0]
-    header = {**row, "display_name": _field("Blend"), "is_blend_header": True}
-    child = {**row, "parent_index": 0, "form_text": _field("glycinate")}
-    out = _render(_payload(ingredient_rows=[header, child], discrepancies=[
-        {"severity": "critical", "code": "multiple_products", "detail": "Two different bottles", "photo_ids": ["p1"]}]))
-    assert len(out["payload"]["ingredientRows"]) == 1
-    assert out["payload"]["ingredientRows"][0]["nestedRows"][0]["forms"] == [{"name": "glycinate"}]
+    # Display of findings belongs to this panel; the mapping does not.
     assert "Two different bottles" in " ".join(out["fields"])
 
 

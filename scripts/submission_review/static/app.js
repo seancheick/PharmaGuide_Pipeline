@@ -45,6 +45,7 @@ const state = {
   diagnostics: null,
   diagnosticsSha: null,
   diagnosticsRequest: 0,
+  unresolvedFromDraft: [],
   reviewSuperseded: false,
   reviewDigestMismatch: false,
 };
@@ -1418,55 +1419,67 @@ function renderDraft() {
 /** Fill the editor from the draft, keeping only what the model claims to have
  * actually read. Nothing unreadable is carried across as a value, because a
  * blank a reviewer must fill is safer than a guess they might accept. */
-function loadDraftIntoEditor() {
-  const payload = state.draft?.draft_payload;
-  if (!payload) return;
-  const next = defaultPayload();
-  next.brandName = String(draftFieldValue(payload.identity?.brand) ?? '');
-  next.fullName = String(draftFieldValue(payload.identity?.product_name) ?? '');
-  next.servingsPerContainer = draftFieldValue(payload.serving?.servings_per_container);
-  const serving = draftFieldValue(payload.serving?.amount);
-  next.servingSizes = [{
-    minQuantity: serving?.value ?? null, maxQuantity: serving?.value ?? null,
-    unit: serving?.unit_text ?? '',
-    minDailyServings: null, maxDailyServings: null,
-  }];
-  const other = draftFieldValue(payload.other_ingredients?.text);
-  // An observed list cannot be hidden behind a declared-none default.
-  next.otherIngredients = String(other ?? '');
-  next.otherIngredientsDisclosure = other !== null ? 'present'
-    : payload.other_ingredients?.disclosure_hint === 'declared_none' ? 'declared_none' : '';
-  const flat = (payload.ingredient_rows ?? []).map((row) => {
-    const amount = draftFieldValue(row.amount);
-    const form = draftFieldValue(row.form_text);
-    const dv = draftFieldValue(row.percent_dv);
-    return {
-      ...emptyRow(), name: String(draftFieldValue(row.display_name) ?? ''),
-      quantity: amount ? [{quantity: amount.value, unit: amount.unit_text}] : [],
-      forms: form ? [{name: String(form)}] : [],
-      // manual_label_v1 has no scalar %DV field. Preserve its printed value as
-      // label notes, never confuse it with a compound/form percentage.
-      ...(dv === null ? {} : {notes: `Printed %DV: ${dv}`}),
-    };
-  });
-  next.ingredientRows = [];
-  (payload.ingredient_rows ?? []).forEach((row, index) => {
-    if (Number.isInteger(row.parent_index) && row.parent_index >= 0 &&
-        row.parent_index < index && payload.ingredient_rows[row.parent_index].is_blend_header) {
-      flat[row.parent_index].nestedRows.push(flat[index]);
-    } else {
-      next.ingredientRows.push(flat[index]);
-    }
-  });
-  next.statements = (payload.statements ?? []).map(draftFieldValue)
-    .filter(value => value !== null).map(value => ({type: 'Label statement', notes: String(value)}));
-  state.payload = next;
-  renderRows();
+/**
+ * Fill the editor from the model's reading.
+ *
+ * The mapping itself is not done here. It used to be, and the browser copy had
+ * already drifted from the Python one: it parsed a structured serving amount
+ * the other ignored, and kept a printed %DV the other only reported. A
+ * reviewer must not get a different starting draft depending on which copy
+ * ran, so there is now one mapper and this asks it.
+ */
+async function loadDraftIntoEditor() {
+  const draft = state.draft?.draft_payload;
+  if (!draft) return;
+  let mapped;
+  try {
+    const response = await fetch('/api/draft_to_label', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${state.session.access_token}`,
+      },
+      body: JSON.stringify({ draft }),
+    });
+    if (response.ok === false) throw new Error('mapper unavailable');
+    mapped = await response.json();
+  } catch {
+    setStatus('The AI draft could not be loaded. Transcribe the label by hand.', true);
+    return;
+  }
+  if (state.draft?.draft_payload !== draft) return;
+  // A draft is a starting point for a human, never an approval. Everything
+  // below still has to be read off the photographs and ticked.
+  state.payload = { ...defaultPayload(), ...mapped.payload };
+  state.unresolvedFromDraft = mapped.unresolved ?? [];
   syncFieldsFromPayload();
-  updateShaPreview();
-  setStatus(
-    'Draft loaded. Every field is unverified until you have read it off the photographs.',
-  );
+  renderRows();
+  renderUnresolved();
+  await updateShaPreview();
+  const count = state.unresolvedFromDraft.length;
+  setStatus(count
+    ? `Draft loaded, unverified. ${count} field(s) the model could not supply `
+      + 'are listed below; read every field off the photographs before approving.'
+    : 'Draft loaded, unverified. Read every field off the photographs '
+      + 'before approving.');
+}
+
+/** What the model could not supply, in the reviewer's words. */
+function renderUnresolved() {
+  const host = $('draft-unresolved');
+  if (!host) return;
+  host.textContent = '';
+  const entries = state.unresolvedFromDraft ?? [];
+  host.hidden = entries.length === 0;
+  for (const entry of entries) {
+    const item = document.createElement('li');
+    const path = document.createElement('code');
+    path.textContent = entry.path;
+    const reason = document.createTextNode(
+      ` ${entry.reason}${entry.printed ? ` — printed: ${entry.printed}` : ''}`);
+    item.append(path, reason);
+    host.append(item);
+  }
 }
 
 function emptyRow() {

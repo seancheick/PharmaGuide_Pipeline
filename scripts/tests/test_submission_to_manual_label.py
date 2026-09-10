@@ -159,3 +159,66 @@ def test_the_skeleton_is_deliberately_not_approvable_on_its_own() -> None:
     with pytest.raises(SubmissionImportError):
         _validate_label_payload(skeleton.payload)
     assert skeleton.unresolved
+
+
+def test_a_structured_serving_amount_crosses_but_the_phrase_never_does() -> None:
+    structured = to_manual_label(_draft(serving={
+        "size": _f("2 capsules"),
+        "servings_per_container": _f("30"),
+        "amount": _f({"value": 2, "unit_text": "capsule"}),
+    }))
+    phrase_only = to_manual_label(_draft(serving={
+        "size": _f("2 capsules"), "servings_per_container": _f("30"),
+        "amount": None,
+    }))
+
+    # The draft carries both. Copying the structured amount is transcription;
+    # parsing the phrase would be a reading decision about the photograph.
+    assert structured.payload["servingSizes"] == [
+        {"minQuantity": 2.0, "maxQuantity": 2.0, "unit": "capsule", "order": 1}
+    ]
+    assert "servingSizes" not in phrase_only.payload
+    assert any(e["path"] == "servingSizes" for e in phrase_only.unresolved)
+
+
+def test_a_printed_percent_dv_is_kept_in_the_row_notes() -> None:
+    skeleton = to_manual_label(_draft(ingredient_rows=[
+        _row("Calcium", amount=_f(None, "not_present"), percent_dv=_f(20)),
+    ]))
+
+    row = skeleton.payload["ingredientRows"][0]
+    # notes is a real field on an ingredient row, so the printed value survives
+    # in the payload as well as being named as unrecordable as a quantity.
+    assert row["notes"] == "Printed %DV: 20"
+    assert row["quantity"] == []
+    assert any(e["path"] == "ingredientRows[0].quantity" for e in skeleton.unresolved)
+
+
+def test_servings_per_container_and_disclosure_cross_intact() -> None:
+    skeleton = to_manual_label(_draft(
+        serving={"size": _f("2 capsules"),
+                 "servings_per_container": _f("60"),
+                 "amount": _f({"value": 2, "unit_text": "capsules"})},
+        other_ingredients={"text": _f("Vegetable cellulose"),
+                           "disclosure_hint": "present"},
+    ))
+
+    # Relocated from the console suite when the browser mapper was deleted:
+    # the behaviour is the mapper's, so the test belongs beside it.
+    assert skeleton.payload["servingsPerContainer"] == "60"
+    assert skeleton.payload["servingSizes"][0]["unit"] == "capsules"
+    assert skeleton.payload["servingSizes"][0]["minQuantity"] == 2
+    assert skeleton.payload["otherIngredientsDisclosure"] == "present"
+    assert skeleton.payload["otherIngredients"] == "Vegetable cellulose"
+
+
+def test_a_nested_row_keeps_its_own_form() -> None:
+    skeleton = to_manual_label(_draft(ingredient_rows=[
+        _row("Proprietary Blend", is_blend_header=True),
+        _row("Magnesium", parent_index=0, form_text=_f("glycinate"),
+             amount=_f({"value": 200, "unit_text": "mg"})),
+    ]))
+
+    child = skeleton.payload["ingredientRows"][0]["nestedRows"][0]
+    assert child["forms"] == [{"name": "glycinate"}]
+    assert child["quantity"] == [{"quantity": 200.0, "unit": "mg"}]

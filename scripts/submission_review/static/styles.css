@@ -200,3 +200,7 @@ figure.source-photo { outline: 3px solid #2f6a3a; outline-offset: 2px; }
 .batch-results li.ready { color: #2f6a3a; }
 .batch-results li.blocking { color: #a4343a; }
 .queue-pick { margin-left: auto; }
+
+/* What the model could not supply. These are gaps to fill, not errors. */
+.draft-unresolved { margin: 6px 0 0; padding-left: 20px; font-size: 12px; }
+.draft-unresolved code { background: #eee; padding: 0 3px; border-radius: 3px; }

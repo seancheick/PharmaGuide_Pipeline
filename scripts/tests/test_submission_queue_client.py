@@ -336,3 +336,115 @@ def test_an_oversized_response_is_refused(tmp_path: Path) -> None:
 
     with pytest.raises(Exception):
         _decode(_Response())
+
+
+def _reading_adapter(barcode: str | None):
+    """A fake that reports reading a barcode, so the checks have something to
+    compare. The shared FakeAdapter deliberately reads nothing."""
+    from submission_review.extraction.adapters.fake_adapter import FakeAdapter
+
+    class ReadingAdapter(FakeAdapter):
+        def extract(self, bundle, config):
+            result = super().extract(bundle, config)
+            if barcode is not None:
+                photo = bundle.photos[0]
+                result.draft["identity"]["barcode_digits_seen"] = {
+                    "value": barcode, "status": "read", "confidence": 0.9,
+                    # A read field must name the image it was read off; the
+                    # envelope refuses a reading with no source.
+                    "sources": [{
+                        "input_id": photo.input_id,
+                        "photo_id": photo.photo_id,
+                        "supporting_text": barcode,
+                    }],
+                }
+            return result
+
+    return ReadingAdapter()
+
+
+_FAKE_CONFIG = {**_CONFIG, "provider": "fake", "model": "fake-1"}
+
+
+def _extract_from_claim(tmp_path, row, adapter):
+    """Drive the production path: claim, prepare, extract."""
+    from submission_review.extraction.extractor import LabelDraftExtractor
+    from submission_review.extraction.photo_prep import prepare_bundle
+
+    queue = _queue(tmp_path, _Transport(claim_rows=[row]))
+    job = queue.claim(1)[0]
+    prepared = prepare_bundle(job.bundle, reader=queue.read_evidence)
+    return job, LabelDraftExtractor(adapter).extract(
+        prepared,
+        job.configuration,
+        submission_gtin=job.bundle.submission_gtin,
+        catalog_match=job.bundle.catalog_match,
+    )
+
+
+def test_a_claim_carries_the_identity_context_onto_the_bundle(tmp_path) -> None:
+    queue = _queue(tmp_path, _Transport(claim_rows=[_claim_row(
+        submission_gtin="00012345678905",
+        catalog_match={"outcome": "catalog_match", "matched_dsld_id": "12345"},
+    )]))
+
+    job = queue.claim(1)[0]
+
+    # The worker reads nothing but its lease, so this is the only route in.
+    assert job.bundle.submission_gtin == "00012345678905"
+    assert job.bundle.catalog_match["matched_dsld_id"] == "12345"
+
+
+def test_a_barcode_mismatch_is_found_from_a_real_claim(tmp_path) -> None:
+    _, result = _extract_from_claim(
+        tmp_path,
+        _claim_row(submission_gtin="00012345678905", configuration=_FAKE_CONFIG),
+        _reading_adapter("012345678929"),
+    )
+
+    codes = {finding["code"] for finding in result.draft["discrepancies"]}
+    assert "barcode_mismatch" in codes
+
+
+def test_the_same_barcode_in_another_width_is_not_a_mismatch(tmp_path) -> None:
+    _, result = _extract_from_claim(
+        tmp_path,
+        _claim_row(submission_gtin="00012345678905", configuration=_FAKE_CONFIG),
+        _reading_adapter("012345678905"),
+    )
+
+    codes = {finding["code"] for finding in result.draft["discrepancies"]}
+    # GTIN-12 and GTIN-14 are widths of one identity; the claim hands over the
+    # canonical form precisely so the worker never has to decide that itself.
+    assert "barcode_mismatch" not in codes
+
+
+def test_a_recorded_catalog_hit_reaches_the_findings_from_a_real_claim(tmp_path) -> None:
+    _, result = _extract_from_claim(
+        tmp_path,
+        _claim_row(
+            submission_gtin="00012345678905",
+            catalog_match={"outcome": "catalog_match", "matched_dsld_id": "12345"},
+            configuration=_FAKE_CONFIG,
+        ),
+        _reading_adapter(None),
+    )
+
+    findings = [f for f in result.draft["discrepancies"] if f["code"] == "catalog_candidate"]
+    assert findings, "a recorded catalog hit produced no candidate finding"
+    # Still a candidate to compare against, never a disposition, and the
+    # catalog identity is not named in what the reviewer is shown.
+    assert findings[0]["severity"] == "info"
+    assert "12345" not in findings[0]["detail"]
+
+
+def test_a_claim_without_context_still_extracts(tmp_path) -> None:
+    _, result = _extract_from_claim(
+        tmp_path, _claim_row(configuration=_FAKE_CONFIG),
+        _reading_adapter("012345678929"),
+    )
+
+    codes = {finding["code"] for finding in result.draft["discrepancies"]}
+    # Nothing to compare against is not a finding. An older database that does
+    # not return the context must not make every submission look wrong.
+    assert "barcode_mismatch" not in codes

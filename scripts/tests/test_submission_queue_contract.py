@@ -134,3 +134,69 @@ def test_the_client_reads_evidence_only_from_the_leased_paths() -> None:
     assert "evidence_object_paths" in client
     assert "storage/v1/object" in client
     assert re.search(r'f"\{[^"]*\}/\{[^"]*submission_id[^"]*\}/', client) is None
+
+
+#: Every column the client reads off a claimed row. The worker learns nothing
+#: except through its lease, so anything absent here is a fact it cannot have.
+CLAIM_COLUMNS = {
+    "job_id",
+    "submission_id",
+    "evidence_revision",
+    "job_key",
+    "fencing_token",
+    "attempts",
+    "leased_until",
+    "evidence_manifest",
+    "evidence_object_paths",
+    "configuration",
+    "submission_gtin",
+    "catalog_match",
+}
+
+
+def _latest_claim_return_columns() -> set[str]:
+    """The columns the most recent definition of the claim actually returns."""
+    sql = _migrations()
+    # The function has been redefined more than once; only the last definition
+    # is live, and rebuilding it from an older ancestor is how a column gets
+    # silently dropped.
+    definitions = list(re.finditer(
+        r"FUNCTION public\.claim_product_submission_extraction_jobs\("
+        r".*?RETURNS TABLE \((?P<columns>.*?)\)\s*LANGUAGE",
+        sql, re.S,
+    ))
+    assert definitions, "the claim function is not defined in any migration"
+    body = definitions[-1].group("columns")
+    return {
+        line.strip().split()[0]
+        for line in body.split(",")
+        if line.strip()
+    }
+
+
+def test_the_claim_returns_every_column_the_worker_reads() -> None:
+    returned = _latest_claim_return_columns()
+
+    missing = CLAIM_COLUMNS - returned
+    assert not missing, (
+        "the worker reads columns the claim does not return: "
+        f"{sorted(missing)}"
+    )
+
+
+def test_the_claim_returns_nothing_the_worker_does_not_read() -> None:
+    returned = _latest_claim_return_columns()
+
+    # A claim is also a disclosure. Anything handed to the worker that it has
+    # no use for is data leaving the database for no reason.
+    extra = returned - CLAIM_COLUMNS
+    assert not extra, f"the claim discloses unused columns: {sorted(extra)}"
+
+
+def test_the_client_reads_the_identity_context_the_claim_now_carries() -> None:
+    client = _client()
+
+    # Deterministic checks can only compare a printed barcode against the
+    # filing if the filing reaches the worker. It has exactly one route in.
+    assert "submission_gtin" in client
+    assert "catalog_match" in client

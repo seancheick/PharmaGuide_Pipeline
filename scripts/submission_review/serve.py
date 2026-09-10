@@ -498,7 +498,8 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):  # noqa: N802
-        if self.path not in {"/api/edge", "/api/dsld_refresh", "/api/photo"}:
+        if self.path not in {"/api/edge", "/api/dsld_refresh", "/api/photo",
+                             "/api/draft_to_label"}:
             self._json({"error": "not found"}, 404)
             return
         length = int(self.headers.get("content-length") or 0)
@@ -537,6 +538,33 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
             self.send_header("content-length", str(len(photo)))
             self.end_headers()
             self.wfile.write(photo)
+            return
+
+        if self.path == "/api/draft_to_label":
+            # One mapper. The console used to reimplement this in JavaScript
+            # and the two had already drifted: the browser copy parsed a
+            # serving amount the Python copy ignored, and recorded a printed
+            # %DV the Python copy only reported. A reviewer must not get a
+            # different starting draft depending on which copy ran.
+            try:
+                body_json = json.loads(body)
+            except json.JSONDecodeError:
+                self._json({"error": "invalid request"}, 400)
+                return
+            try:
+                from submission_review.extraction.to_manual_label import (
+                    to_manual_label,
+                )
+                skeleton = to_manual_label(body_json.get("draft") or {})
+            except Exception:  # noqa: BLE001 - a mapper fault is not a label
+                # Never answer with a half-mapped payload: the reviewer would
+                # be editing something no code claims to have produced.
+                self._json({"error": "draft could not be mapped"}, 503)
+                return
+            self._json({
+                "payload": skeleton.payload,
+                "unresolved": skeleton.unresolved,
+            })
             return
 
         if self.path == "/api/dsld_refresh":

@@ -100,13 +100,23 @@ def to_manual_label(draft: Mapping[str, Any]) -> ManualLabelSkeleton:
         else:
             payload[target] = text
 
-    # Serving size is printed as a phrase ("2 capsules", "1 scoop (31 g)").
-    # The catalog wants numbers, and turning one into the other is a reading
-    # decision about the photograph, so it stays with the reviewer.
+    # The draft carries two things about the serving: a structured amount and
+    # the phrase as printed. Using the structured amount is transcription, not
+    # inference, so it crosses. Parsing the phrase would be a reading decision
+    # about the photograph, so that stays with the reviewer.
     serving = draft.get("serving") or {}
     serving_text = _text(serving.get("size"))
-    missing("servingSizes", FREE_TEXT_ONLY if serving_text else
-            _field_note(serving.get("size")), serving_text)
+    amount = _amount(serving.get("amount"))
+    if amount is not None:
+        payload["servingSizes"] = [{
+            "minQuantity": amount["quantity"],
+            "maxQuantity": amount["quantity"],
+            "unit": amount["unit"],
+            "order": 1,
+        }]
+    else:
+        missing("servingSizes", FREE_TEXT_ONLY if serving_text else
+                _field_note(serving.get("size")), serving_text)
     per_container = _text(serving.get("servings_per_container"))
     if per_container:
         payload["servingsPerContainer"] = per_container
@@ -169,10 +179,13 @@ def _rows(rows: Sequence[Any], missing) -> list[dict[str, Any]]:
         if amount is not None:
             entry["quantity"] = [amount]
         elif _field_value(row.get("percent_dv")) is not None:
-            # A %DV-only row prints no weight, and manual_label_v1 has no field
-            # for the percentage itself. Say so rather than drop it.
-            missing(f"{path}.quantity", NO_TARGET_FIELD,
-                    f"%DV {_field_value(row.get('percent_dv'))}")
+            # A %DV-only row prints no weight, and manual_label_v1 has no
+            # numeric field for the percentage. Keep the printed value in the
+            # row's notes so it is not lost, and still tell the reviewer that
+            # the catalog cannot record it as a quantity.
+            printed = _field_value(row.get("percent_dv"))
+            entry["notes"] = f"Printed %DV: {printed}"
+            missing(f"{path}.quantity", NO_TARGET_FIELD, f"%DV {printed}")
         elif row.get("is_blend_header") is not True:
             missing(f"{path}.quantity", _field_note(row.get("amount")))
 
