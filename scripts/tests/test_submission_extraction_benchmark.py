@@ -436,6 +436,19 @@ def test_an_import_with_unsettled_disagreements_is_not_gold(holdout) -> None:
             _load(root, "d-1", gold)
 
 
+def test_reference_source_requires_utc_sha256_provenance(holdout) -> None:
+    root, _ = holdout
+    for imported_at in ("2026-09-10T00:00:00+05:00", "2026-09-10T00:00:00"):
+        gold = {**_gold("d-1"), "sourced_from": {**REFERENCE, "imported_at": imported_at},
+                "checked_by": [_confirmer()]}
+        with pytest.raises(BenchmarkError, match="UTC timestamp"):
+            _load(root, "d-1", gold)
+    gold = {**_gold("d-1"), "sourced_from": {**REFERENCE, "formula_fingerprint": "not-a-hash"},
+            "checked_by": [_confirmer()]}
+    with pytest.raises(BenchmarkError, match="formula_fingerprint"):
+        _load(root, "d-1", gold)
+
+
 def test_without_a_reference_two_people_are_still_required(holdout) -> None:
     """The original route is unchanged; the amendment adds one, removes none."""
     root, _ = holdout

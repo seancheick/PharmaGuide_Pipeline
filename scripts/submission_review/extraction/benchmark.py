@@ -122,6 +122,17 @@ def _timestamp(value: Any) -> bool:
         return False
 
 
+def _utc_timestamp(value: Any) -> bool:
+    """Whether an ISO timestamp carries an explicit zero UTC offset."""
+    if not _timestamp(value):
+        return False
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    return parsed.utcoffset() == timezone.utc.utcoffset(parsed)
+
+
 def _wilson(successes: int, total: int, z: float = 1.96) -> tuple[float, float] | None:
     if total <= 0:
         return None
@@ -174,8 +185,11 @@ def _reference_source(product_key: str, value: Any) -> dict[str, Any] | None:
     for key in ("source_name", "source_record_id", "formula_fingerprint", "imported_at"):
         if not isinstance(value.get(key), str) or not value[key].strip():
             raise BenchmarkError(f"{product_key}: sourced_from needs {key}")
-    if not _timestamp(value.get("imported_at")):
+    if not _utc_timestamp(value.get("imported_at")):
         raise BenchmarkError(f"{product_key}: sourced_from.imported_at must be a UTC timestamp")
+    if not re.fullmatch(r"[0-9a-f]{64}", value["formula_fingerprint"]):
+        raise BenchmarkError(
+            f"{product_key}: sourced_from.formula_fingerprint must be a lowercase SHA-256")
     resolved = value.get("disagreements_resolved")
     if type(resolved) is not int or resolved < 0:
         raise BenchmarkError(
