@@ -12,4 +12,5 @@ tqdm>=4.66,<5       # progress bars for batch_processor / enrich / score pipelin
 beautifulsoup4>=4.12,<5
 lxml>=5.0,<7
 playwright>=1.50,<2
-rapidocr-onnxruntime
+# Keep the OCR engine/weights reproducible for benchmark fingerprints.
+rapidocr-onnxruntime==1.2.3

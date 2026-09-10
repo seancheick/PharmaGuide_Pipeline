@@ -130,7 +130,17 @@ def _claimed_strings(value: Any) -> list[str]:
     if isinstance(value, (int, float)):
         # Trailing zeros differ between "500" and "500.0"; compare as printed.
         text = f"{value:g}"
-        return [text, text.replace(".", ",")]
+        variants = {text, text.replace(".", ",")}
+        # Labels commonly use a thousands separator while the draft stores a
+        # numeric value. Include that faithful printed form without accepting
+        # any other number or doing fuzzy matching.
+        if text.isdigit() and len(text) > 3:
+            variants.add(f"{int(text):,}")
+        elif "." in text:
+            whole, fraction = text.split(".", 1)
+            if whole.isdigit() and len(whole) > 3:
+                variants.add(f"{int(whole):,}.{fraction}")
+        return sorted(variants)
     if isinstance(value, Mapping):
         claimed: list[str] = []
         for key in ("value", "unit_text"):
@@ -139,11 +149,37 @@ def _claimed_strings(value: Any) -> list[str]:
     return []
 
 
+def _missing_claims(value: Any, haystack: str) -> list[str]:
+    """Return claims with no faithful printed representation in ``haystack``.
+
+    A number can have several equivalent label spellings (``5000`` and
+    ``5,000``). Those are alternatives, not separate claims: requiring every
+    spelling would reject an honest reading merely because the label chose a
+    thousands separator.
+    """
+    if isinstance(value, str):
+        return [value] if value and _normalize(value) not in haystack else []
+    if isinstance(value, bool) or value is None:
+        return []
+    if isinstance(value, (int, float)):
+        variants = [text for text in _claimed_strings(value) if text]
+        return [] if any(_normalize(text) in haystack for text in variants) else variants[:1]
+    if isinstance(value, Mapping):
+        missing: list[str] = []
+        for key in ("value", "unit_text"):
+            missing.extend(_missing_claims(value.get(key), haystack))
+        return missing
+    return []
+
+
 def verify_grounding(
     draft: Mapping[str, Any], pages: Sequence[Any]
 ) -> GroundingReport:
     """Locate every read field in the photograph its source names."""
-    by_photo = {getattr(page, "photo_id", None): _page_text(page) for page in pages}
+    by_photo = {
+        getattr(page, "photo_id", None): (getattr(page, "input_id", None), _page_text(page))
+        for page in pages
+    }
     results: list[FieldGrounding] = []
 
     for path, field in _iter_fields(draft):
@@ -155,10 +191,16 @@ def verify_grounding(
             continue
         source = sources[0] if isinstance(sources[0], Mapping) else {}
         photo_id = source.get("photo_id")
-        haystack = by_photo.get(photo_id)
-        if haystack is None:
+        page_context = by_photo.get(photo_id)
+        if page_context is None:
             results.append(FieldGrounding(
                 path, False, "cites a photograph that was not read", photo_id))
+            continue
+        input_id = source.get("input_id")
+        page_input_id, haystack = page_context
+        if input_id != page_input_id:
+            results.append(FieldGrounding(
+                path, False, "cited input does not belong to the photograph", photo_id))
             continue
 
         supporting = _normalize(str(source.get("supporting_text") or ""))
@@ -168,10 +210,7 @@ def verify_grounding(
             continue
 
         claimed = _claimed_strings(field.get("value"))
-        missing = [
-            piece for piece in claimed
-            if piece and _normalize(piece) not in haystack
-        ]
+        missing = _missing_claims(field.get("value"), haystack)
         # A number is the expensive thing to get wrong. Requiring only that
         # *something* claimed was found lets an invented dose pass whenever its
         # unit happens to be printed, which is always — so every digit-bearing

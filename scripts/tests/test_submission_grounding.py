@@ -106,6 +106,27 @@ def test_collapsed_spacing_does_not_read_as_a_fabrication() -> None:
     assert report.ungrounded == ()
 
 
+def test_thousands_separator_does_not_read_as_a_fabrication() -> None:
+    draft = _draft([_row(
+        amount=_field({"value": 5000.0, "unit_text": "mg"}, "5,000 mg"),
+    )])
+
+    report = verify_grounding(draft, [_page("Northwind", "Vitamin C", "5,000 mg")])
+
+    assert report.ungrounded == ()
+
+
+def test_source_input_must_belong_to_the_cited_photo() -> None:
+    draft = _draft([_row()])
+    draft["ingredient_rows"][0]["display_name"]["sources"][0]["input_id"] = "wrong-input"
+
+    report = verify_grounding(draft, [_page("Vitamin C")])
+
+    entry = next(item for item in report.fields if item.path == "ingredient_rows[0].display_name")
+    assert not entry.grounded
+    assert "input" in entry.reason
+
+
 def test_a_field_citing_a_photograph_nobody_read_is_not_grounded() -> None:
     draft = _draft([_row()])
     other = OcrPage(photo_id="22222222-2222-4222-8222-222222222222",
