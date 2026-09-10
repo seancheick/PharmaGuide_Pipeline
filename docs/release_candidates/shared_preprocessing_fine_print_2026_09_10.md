@@ -101,9 +101,19 @@ unclaimed.
   Do not read a threshold off this table.
 - **One engine, one font, one panel.** RapidOCR, Arial, fourteen lines. A
   different engine may sit on a different knife edge.
-- **The device step is a model.** `device_encode` mirrors the Dart call's two
-  constants; it is not that code running. If the app's sanitiser changes, this
-  model must change with it.
+- **The device step is a re-implementation, but a checked one.**
+  `device_encode` was written against both platform implementations of
+  flutter_image_compress, not its documentation: Android's
+  `max(1, min(w/minW, h/minH))` with truncation and iOS's equivalent
+  floor-based rule both reduce, for an equal minWidth/minHeight pair, to
+  "scale the short side to 2400". Rounding matches theirs. It is still not
+  that code running, and if the app's two constants change this must change
+  with them.
+- **Digit recall is substring matching.** A short printed number such as "30"
+  can be satisfied coincidentally by digits elsewhere in the panel, so digit
+  recall is mildly optimistic. The conclusions above rest on line recall,
+  which requires every word *and* every number of a line, and on the named
+  row that was lost.
 
 ## What follows
 

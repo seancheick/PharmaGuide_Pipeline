@@ -238,8 +238,13 @@ def device_encode(
     """Re-encode the way the phone does before upload.
 
     Downscale only, preserving aspect, until the short side reaches
-    `short_edge` — the behaviour of flutter_image_compress's minWidth and
-    minHeight pair on a portrait photograph.
+    `short_edge`. This is flutter_image_compress's own rule with an equal
+    minWidth/minHeight pair, read from both platform implementations rather
+    than from its documentation: Android computes
+    `max(1, min(w/minW, h/minH))` and truncates, and iOS picks the scale from
+    whichever side is proportionally larger and floors, which comes to the
+    same thing. Rounding matches theirs, so the pixel counts here are the
+    pixel counts a phone uploads.
     """
     from PIL import Image
 
@@ -248,7 +253,7 @@ def device_encode(
         scale = min(frame.width / short_edge, frame.height / short_edge)
         if scale > 1.0:
             frame = frame.resize(
-                (round(frame.width / scale), round(frame.height / scale)),
+                (int(frame.width / scale), int(frame.height / scale)),
                 Image.LANCZOS,
             )
         buffer = io.BytesIO()
