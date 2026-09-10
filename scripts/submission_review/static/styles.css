@@ -410,3 +410,16 @@ input, select, textarea, button { max-width: 100%; min-width: 0; }
   #readiness-progress { white-space: nowrap; }
   .batch-bar > button { flex: 1 1 auto; }
 }
+
+/* Touch. A finger is not a mouse pointer: the controls that are comfortable
+   at 12px with a trackpad are the ones a reviewer will miss on a phone, and
+   the ones they will miss are the tick and the batch pick — exactly the two
+   that decide whether something gets approved. */
+@media (pointer: coarse) {
+  .verify-chip { padding: .45rem .9rem; }
+  .verify-chip input { width: 1.15rem; height: 1.15rem; }
+  .verify-source { padding: .3rem .6rem; font-size: .8rem; }
+  .queue-pick { width: 1.5rem; height: 1.5rem; top: .5rem; right: .5rem; }
+  #queue li { padding-right: 2.6rem; }
+  button.compact { padding: .4rem .6rem; }
+}
