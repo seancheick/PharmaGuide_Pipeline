@@ -41,8 +41,20 @@ def _blob(tmp: Path, dsld_id: str, **overrides) -> Path:
         "proprietary_blend_detail": {"has_proprietary_blends": False},
         "ingredients": [{"raw_source_text": "Magnesium", "quantity": 200.0, "unit": "mg",
                          "forms": ["glycinate"]}],
+        "display_ingredients": [{"label_display_name": "Magnesium",
+                                 "exact_dose_text": "200 mg",
+                                 "raw_source_path": "ingredientRows[0]"}],
     }
     payload.update(overrides)
+    # Fixtures written before the printed panel existed still pass their rows
+    # as `ingredients`; mirror them so the comparison sees a panel.
+    if "display_ingredients" not in overrides and "ingredients" in overrides:
+        payload["display_ingredients"] = [
+            {"label_display_name": r.get("raw_source_text"),
+             "exact_dose_text": ("" if r.get("quantity") is None
+                                 else f"{r['quantity']:g} {r.get('unit') or ''}".strip()),
+             "raw_source_path": f"ingredientRows[{i}]"}
+            for i, r in enumerate(overrides["ingredients"])]
     path = tmp / f"{dsld_id}.json"
     path.write_text(json.dumps(payload), encoding="utf-8")
     return path
@@ -279,3 +291,51 @@ def test_a_record_carries_its_age_so_a_person_can_weigh_it(tmp_path):
     # Age is never a verdict here: nothing in this module drops or downgrades a
     # record for being old. A person compares the package.
     assert "source_date" not in candidate.corroboration()
+
+
+def test_the_comparison_reads_the_printed_panel_not_the_scored_subset(tmp_path):
+    """The bug this pins made a perfect reading look like an invented label.
+
+    `ingredients` holds only the scored actives — 36% of printed rows across
+    the catalog. Reading a photograph against it reports Calories, a blend
+    header and the capsule shell as rows the extractor made up. Measured on
+    record 1059: twelve such findings out of sixteen printed rows.
+    """
+    blob = json.loads(_blob(tmp_path, "50",
+        ingredients=[{"raw_source_text": "Niacin", "quantity": 20.0, "unit": "mg", "forms": []}],
+        display_ingredients=[
+            {"label_display_name": "Calories", "exact_dose_text": "20 {Calories}",
+             "raw_source_path": "ingredientRows[0]"},
+            {"label_display_name": "Total Fat", "exact_dose_text": "2 g",
+             "raw_source_path": "ingredientRows[1]"},
+            {"label_display_name": "Niacin", "exact_dose_text": "20 mg",
+             "raw_source_path": "ingredientRows[2]"},
+            {"label_display_name": "Thermogenic Blend", "exact_dose_text": "184 mg",
+             "raw_source_path": "ingredientRows[3]"},
+        ]).read_text())
+
+    perfect = _draft([_row("Calories"), _row("Total Fat", 2.0, "g"),
+                      _row("Niacin", 20.0, "mg"), _row("Thermogenic Blend", 184.0, "mg")])
+    assert cg.disagreements(blob, perfect) == []
+
+    # And the panel is still what catches a real error.
+    wrong = _draft([_row("Calories"), _row("Total Fat", 2.0, "g"),
+                    _row("Niacin", 200.0, "mg"), _row("Thermogenic Blend", 184.0, "mg")])
+    assert [d.kind for d in cg.disagreements(blob, wrong)] == ["amount"]
+
+
+def test_printed_dose_text_is_parsed_by_the_adapter_parser(tmp_path):
+    """No second dose parser: the thousands comma is already handled."""
+    blob = json.loads(_blob(tmp_path, "51", ingredients=[], display_ingredients=[
+        {"label_display_name": "Conjugated Linoleic Acid", "exact_dose_text": "1,300 mg",
+         "raw_source_path": "ingredientRows[0]"}]).read_text())
+    [row] = cg.printed_rows(blob)
+    assert row["amount"] == {"value": 1300.0, "unit_text": "mg"}
+
+
+def test_unit_cases_count_rows_the_scored_subset_never_sees(tmp_path):
+    """A gram unit printed only on a nutrition row still covers unit_g."""
+    blob = json.loads(_blob(tmp_path, "52", ingredients=[], display_ingredients=[
+        {"label_display_name": "Total Fat", "exact_dose_text": "2 g",
+         "raw_source_path": "ingredientRows[0]"}]).read_text())
+    assert "unit_g" in cg.label_cases(blob)

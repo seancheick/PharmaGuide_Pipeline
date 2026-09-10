@@ -252,15 +252,22 @@ def _gold_is_filled(root: Path, entry: dict) -> bool:
     except ValueError:
         return False
     checkers = gold.get("checked_by") or []
-    if len(checkers) != 2:
+    # Two routes, one standard, and this must agree with the loader that
+    # enforces it: benchmark.load_gold requires two checkers normally and one
+    # when the gold names an independent source. Hard-coding two here reported
+    # every correctly imported reference record as still blank, forever.
+    reference = gold.get("sourced_from")
+    if len(checkers) != (1 if reference else 2):
         return False
     initials = [str(c.get("checker", "")) for c in checkers]
     if any(not i or i.startswith("<") for i in initials):
         return False
     # Two people, not one person twice: the whole point of the second read.
-    if initials[0].strip().lower() == initials[1].strip().lower():
+    if not reference and initials[0].strip().lower() == initials[1].strip().lower():
         return False
     if any(c.get("model_output_seen") for c in checkers):
+        return False
+    if reference and not any(c.get("confirmed_physical_label") is True for c in checkers):
         return False
     return bool((gold.get("identity") or {}).get("brand"))
 

@@ -28,6 +28,7 @@ from typing import Any, Iterable, Mapping, Sequence
 from normalization import canonicalize_mass_unit
 
 from ..gtin import canonical_gtin14_candidates
+from .adapters.ocr_adapter import _parse_amount
 from .benchmark import REQUIRED_CASES, _draft_rows, _norm
 
 #: Where each required case can come from. Three different answers, and
@@ -96,6 +97,34 @@ def _record_path(dsld_id: str, blobs_dir: Path) -> Path:
     if not path.is_relative_to(root):
         raise ValueError(f"invalid catalog record id: {dsld_id!r}")
     return path
+
+
+def printed_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """The panel as the label prints it.
+
+    `display_ingredients` is the printed ledger; `ingredients` is the scored
+    actives subset and holds 36% of the printed rows across the catalog. A
+    photograph shows the panel, so anything comparing a photograph to a record
+    must read the panel — otherwise a perfect reading of a real label reports
+    Calories, Total Fat, a blend header and the capsule shell as rows the
+    extractor invented. Measured on record 1059: twelve such findings out of
+    sixteen printed rows.
+
+    Dose text is parsed by the adapter's parser, which already handles the
+    thousands comma and leaves a pseudo-unit like "{Calories}" unparsed.
+    """
+    rows: list[dict[str, Any]] = []
+    for row in blob.get("display_ingredients") or ():
+        name = row.get("label_display_name") or row.get("display_name")
+        if not name:
+            continue
+        parsed = _parse_amount(str(row.get("exact_dose_text") or ""))
+        rows.append({
+            "name": str(name),
+            "amount": parsed[0] if parsed else None,
+            "path": row.get("raw_source_path"),
+        })
+    return rows
 
 
 @dataclass(frozen=True)
@@ -187,9 +216,14 @@ def label_cases(blob: Mapping[str, Any]) -> frozenset[str]:
     if blend.get("has_proprietary_blends"):
         found.add("nested_blend")
     for row in blob.get("ingredients") or ():
+        # Forms are an enrichment concept and live only on this layer.
         if len(row.get("forms") or ()) > 1:
             found.add("multiple_forms")
-        case = unit_case(row.get("unit"))
+    for row in printed_rows(blob):
+        # Units are a printed property, so they are counted from the printed
+        # panel: reading them off the actives subset misses every unit that
+        # only a blend child or a nutrition row carries.
+        case = unit_case((row["amount"] or {}).get("unit_text"))
         if case:
             found.add(case)
     return frozenset(found & CATALOG_CASES)
@@ -271,7 +305,7 @@ def disagreements(blob: Mapping[str, Any], draft: Mapping[str, Any]) -> list[Dis
     both reported, because either can be the reformulation that makes the
     record the wrong gold for this bottle.
     """
-    record_rows = list(blob.get("ingredients") or ())
+    record_rows = printed_rows(blob)
     draft_rows = [r for r in _draft_rows(dict(draft)) if _norm(r["name"])]
 
     # Pass 1: the same printed name. Pass 2: the same printed name once a
@@ -316,11 +350,12 @@ def disagreements(blob: Mapping[str, Any], draft: Mapping[str, Any]) -> list[Dis
     for index, row, renamed in pairs:
         record = record_rows[index]
         drafted = row["amount"] or {}
-        printed = str(record.get("raw_source_text") or record.get("name") or "")
-        if unit_case(record.get("unit")) != unit_case(drafted.get("unit_text")):
+        printed = str(record.get("name") or "")
+        record_amount = record["amount"] or {}
+        if unit_case(record_amount.get("unit_text")) != unit_case(drafted.get("unit_text")):
             found.append(Disagreement("unit", row["name"],
                                       _record_amount(record), _amount_text(drafted)))
-        elif record.get("quantity") != drafted.get("value"):
+        elif record_amount.get("value") != drafted.get("value"):
             found.append(Disagreement("amount", row["name"],
                                       _record_amount(record), _amount_text(drafted)))
         elif renamed:
@@ -337,8 +372,7 @@ def disagreements(blob: Mapping[str, Any], draft: Mapping[str, Any]) -> list[Dis
     for index in leftover_record:
         record = record_rows[index]
         found.append(Disagreement(
-            "missing_from_draft",
-            str(record.get("raw_source_text") or record.get("name") or ""),
+            "missing_from_draft", str(record["name"]),
             _record_amount(record), None,
         ))
     return found
@@ -356,16 +390,13 @@ def _find_record(rows: Sequence[Mapping[str, Any]], taken: set[int], key: str) -
     for index, row in enumerate(rows):
         if index in taken:
             continue
-        if _norm(row.get("raw_source_text") or row.get("name")) == key:
+        if _norm(row.get("name")) == key:
             return index
     return None
 
 
 def _record_amount(row: Mapping[str, Any]) -> str:
-    quantity, unit = row.get("quantity"), row.get("unit")
-    if quantity is None:
-        return str(unit or "")
-    return f"{quantity:g} {unit or ''}".strip()
+    return _amount_text(row.get("amount")) or ""
 
 
 def _amount_text(amount: Any) -> str | None:

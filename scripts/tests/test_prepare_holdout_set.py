@@ -196,6 +196,13 @@ def _record(root: Path, dsld_id: str, rows: list[dict]) -> Path:
                          "formula_fingerprint": "f" * 64},
         "proprietary_blend_detail": {"has_proprietary_blends": False},
         "ingredients": rows,
+        # The printed panel, which is what a photograph shows and what the
+        # comparison reads. `ingredients` is the scored actives subset.
+        "display_ingredients": [
+            {"label_display_name": row["raw_source_text"],
+             "exact_dose_text": f"{row['quantity']:g} {row['unit']}",
+             "raw_source_path": f"ingredientRows[{index}]"}
+            for index, row in enumerate(rows)],
     }), encoding="utf-8")
     return blobs
 
@@ -261,3 +268,49 @@ def test_a_missing_record_or_draft_is_refused_not_guessed(workspace: Path, capsy
     assert main(["diff", "--dsld-id", "999", "--draft", str(workspace / "nope.json"),
                  "--blobs-dir", str(blobs)]) == 2
     assert "no catalog record 999" in capsys.readouterr().err
+
+
+def test_a_reference_sourced_gold_counts_as_filled(workspace: Path, capsys) -> None:
+    """`status` must agree with the loader about what a complete gold is.
+
+    benchmark.load_gold accepts one checker when the record names an
+    independent source. This predicate hard-coded two, so every correctly
+    imported reference record was reported blank forever and the set could
+    never read as complete.
+    """
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    gold_path = root / "gold" / "northwind-mag.json"
+    gold = json.loads(gold_path.read_text())
+    gold["identity"]["brand"] = "Northwind"
+    gold["sourced_from"] = {
+        "source_name": "NIH DSLD", "source_record_id": "500",
+        "formula_fingerprint": "a" * 64, "imported_at": "2026-09-10T00:00:00Z",
+        "disagreements_resolved": 0,
+    }
+    gold["checked_by"] = [{"checker": "ab", "checked_at": "2026-09-10T00:00:00Z",
+                           "human": True, "independent": True,
+                           "model_output_seen": False, "confirmed_physical_label": True}]
+    gold_path.write_text(json.dumps(gold), encoding="utf-8")
+
+    assert main(["status", str(root)]) == 0
+    assert "gold filled    1 / 1" in capsys.readouterr().out
+
+
+def test_a_reference_gold_without_physical_confirmation_is_not_filled(workspace: Path, capsys) -> None:
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    gold_path = root / "gold" / "northwind-mag.json"
+    gold = json.loads(gold_path.read_text())
+    gold["identity"]["brand"] = "Northwind"
+    gold["sourced_from"] = {
+        "source_name": "NIH DSLD", "source_record_id": "500",
+        "formula_fingerprint": "a" * 64, "imported_at": "2026-09-10T00:00:00Z",
+        "disagreements_resolved": 0,
+    }
+    gold["checked_by"] = [{"checker": "ab", "checked_at": "2026-09-10T00:00:00Z",
+                           "human": True, "independent": True, "model_output_seen": False}]
+    gold_path.write_text(json.dumps(gold), encoding="utf-8")
+
+    assert main(["status", str(root)]) == 0
+    assert "gold filled    0 / 1" in capsys.readouterr().out
