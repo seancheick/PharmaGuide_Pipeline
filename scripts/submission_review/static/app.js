@@ -35,6 +35,7 @@ const state = {
   reviewLoadedFor: null,
   reviewSaveTimer: null,
   reviewSaveRequest: 0,
+  reviewLoadRequest: 0,
   reviewVerifyRequest: 0,
   reviewSuperseded: false,
   reviewDigestMismatch: false,
@@ -223,6 +224,7 @@ function select(submission) {
   state.verifiedKey = null;
   state.verified = new Set();
   state.review = null;
+  state.reviewLoadRequest += 1;
   state.reviewLoadedFor = null;
   state.reviewSuperseded = false;
   state.reviewDigestMismatch = false;
@@ -769,6 +771,7 @@ async function loadReview() {
   const submission = state.selected;
   if (!submission || !state.session) return;
   const key = `${submission.id}:${submission.evidence_revision}`;
+  const requestId = state.reviewLoadRequest;
   if (state.reviewLoadedFor === key) return;
   state.reviewLoadedFor = key;
   let review;
@@ -779,7 +782,12 @@ async function loadReview() {
     setStatus('Saved review could not be loaded; your edits will not persist.', true);
     return;
   }
-  if (state.selected?.id !== submission.id) return;
+  // The same submission id survives a retake. Bind the response to the
+  // revision as well as the id, otherwise a slow old response can restore
+  // corrections made against photographs that are no longer current.
+  if (state.reviewLoadRequest !== requestId ||
+      state.selected?.id !== submission.id ||
+      `${state.selected?.id}:${state.selected?.evidence_revision}` !== key) return;
   const draft = review?.draft;
   // Restore the reviewer's own work. A superseded draft is never adopted into
   // the editor: it describes photographs that are no longer the evidence.
@@ -809,6 +817,8 @@ async function saveReview() {
   if (!submission.evidence_manifest_sha256) return;
   const requestId = ++state.reviewSaveRequest;
   const boundSha = state.payloadSha;
+  const boundRevision = submission.evidence_revision;
+  const boundManifest = submission.evidence_manifest_sha256;
   let review;
   try {
     ({ review } = await edge({
@@ -824,7 +834,10 @@ async function saveReview() {
   }
   // A save that finished after a newer edit must not describe the screen.
   if (requestId !== state.reviewSaveRequest) return;
-  if (state.selected?.id !== submission.id || state.payloadSha !== boundSha) return;
+  if (state.selected?.id !== submission.id ||
+      state.selected?.evidence_revision !== boundRevision ||
+      state.selected?.evidence_manifest_sha256 !== boundManifest ||
+      state.payloadSha !== boundSha) return;
   hydrateReview(review);
   renderReviewBanner();
   setDecisionAvailability();
@@ -837,6 +850,8 @@ async function persistVerification(field, verified) {
   if (!submission || !state.session) return;
   if (!path || !state.payloadSha) return;
   const boundSha = state.payloadSha;
+  const boundRevision = submission.evidence_revision;
+  const boundManifest = submission.evidence_manifest_sha256;
   // Ticks are made in quick succession. An earlier reply describes fewer of
   // them, so letting a late arrival repaint the list would silently drop a
   // check the database has already accepted.
@@ -863,7 +878,10 @@ async function persistVerification(field, verified) {
     return;
   }
   if (requestId !== state.reviewVerifyRequest) return;
-  if (state.selected?.id !== submission.id || state.payloadSha !== boundSha) return;
+  if (state.selected?.id !== submission.id ||
+      state.selected?.evidence_revision !== boundRevision ||
+      state.selected?.evidence_manifest_sha256 !== boundManifest ||
+      state.payloadSha !== boundSha) return;
   hydrateReview(review);
   renderVerifyChecklist();
   renderReadiness();

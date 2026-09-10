@@ -110,6 +110,27 @@ def test_a_superseded_draft_is_never_adopted_into_the_editor() -> None:
     assert any("Reopen this submission" in todo for todo in out["blockers"])
 
 
+def test_a_late_review_load_cannot_restore_work_from_an_older_revision() -> None:
+    out = _exercise("""(async()=>{
+      let release; const gate=new Promise(r=>{release=r;});
+      edge=async()=>{await gate; return {review:{
+        draft:{payload:{brandName:'Old revision'},payload_sha256:'a'.repeat(64),superseded:false},
+        verifications:[]}};};
+      await updateShaPreview();
+      const pending=loadReview();
+      // A retake keeps the submission id but changes the evidence revision.
+      state.selected.evidence_revision=3;
+      state.selected.evidence_manifest_sha256='f'.repeat(64);
+      state.payload={brandName:'Current revision'};
+      await updateShaPreview();
+      state.reviewLoadRequest += 1;
+      release(); await pending;
+      out.brand=state.payload.brandName;
+    })()""")
+
+    assert out["brand"] == "Current revision"
+
+
 def test_a_tick_the_server_refused_is_taken_back_on_screen() -> None:
     out = _exercise("""(async()=>{
       await updateShaPreview();
