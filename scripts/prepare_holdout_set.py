@@ -32,7 +32,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import sys
+import tempfile
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent
@@ -43,6 +45,7 @@ from submission_review.extraction.benchmark import (  # noqa: E402
     MANIFEST_SCHEMA,
     REQUIRED_CASES,
     SPLITS,
+    _TOKEN,
 )
 from submission_review.extraction.development import (  # noqa: E402
     gold_template,
@@ -72,9 +75,24 @@ def _load(root: Path) -> dict:
 
 
 def _save(root: Path, manifest: dict) -> None:
-    _manifest_path(root).write_text(
-        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    # A laptop sleep, disk-full error, or interrupted process must not leave a
+    # truncated manifest that hides an otherwise valid frozen set. Replace the
+    # completed file atomically in the same directory.
+    target = _manifest_path(root)
+    payload = json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+    fd, temporary = tempfile.mkstemp(prefix=".manifest.", dir=root, text=True)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+            stream.write(payload)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, target)
+    except BaseException:
+        try:
+            os.unlink(temporary)
+        except OSError:
+            pass
+        raise
 
 
 def init(root: Path) -> int:
@@ -91,6 +109,12 @@ def init(root: Path) -> int:
 def add(root: Path, key: str, family: str, split: str,
         cases: list[str], photos: list[Path]) -> int:
     manifest = _load(root)
+    if not _TOKEN.fullmatch(key):
+        raise HoldoutSetError(
+            "key must be a path-safe token (letters, digits, '.', '_' or '-')"
+        )
+    if not family.strip() or "/" not in family:
+        raise HoldoutSetError("family must be a nonempty 'brand/line' value")
     if split not in SPLITS:
         raise HoldoutSetError(f"split must be one of {', '.join(SPLITS)}")
     unknown = sorted(set(cases) - REQUIRED_CASES)
@@ -125,20 +149,39 @@ def add(root: Path, key: str, family: str, split: str,
     if destination.exists():
         raise HoldoutSetError(f"{destination} already exists")
 
-    destination.mkdir(parents=True)
     stored = []
-    for index, photo in enumerate(photos):
-        target = destination / f"{index:02d}{photo.suffix.lower()}"
-        target.write_bytes(photo.read_bytes())
-        stored.append(target)
+    try:
+        destination.mkdir(parents=True)
+        for index, photo in enumerate(photos):
+            target = destination / f"{index:02d}{photo.suffix.lower()}"
+            target.write_bytes(photo.read_bytes())
+            stored.append(target)
 
-    entry = intake_manifest_entry(key, family, split, stored, root)
-    entry["cases"] = sorted(set(cases))
-    gold_path.write_text(
-        json.dumps(gold_template(key), indent=2) + "\n", encoding="utf-8")
+        entry = intake_manifest_entry(key, family, split, stored, root)
+        entry["cases"] = sorted(set(cases))
+        gold_path.write_text(
+            json.dumps(gold_template(key), indent=2) + "\n", encoding="utf-8"
+        )
 
-    manifest["products"].append(entry)
-    _save(root, manifest)
+        manifest["products"].append(entry)
+        _save(root, manifest)
+    except BaseException:
+        # The directory and gold file were created only by this invocation, so
+        # clean them on any failed write and leave the set self-consistent.
+        for path in stored:
+            try:
+                path.unlink()
+            except OSError:
+                pass
+        try:
+            destination.rmdir()
+        except OSError:
+            pass
+        try:
+            gold_path.unlink()
+        except OSError:
+            pass
+        raise
     print(f"Added {key} to {split} with {len(stored)} photograph(s).")
     print(f"Now fill in {gold_path} by eye, twice, independently.")
     return 0

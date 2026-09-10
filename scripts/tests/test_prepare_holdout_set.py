@@ -117,6 +117,22 @@ def test_a_product_is_never_silently_replaced(workspace: Path) -> None:
     assert len(entry) == 1
 
 
+def test_unsafe_product_key_cannot_escape_the_set(workspace: Path) -> None:
+    assert _add(workspace, "../outside", "front") == 2
+    assert not (workspace / "outside").exists()
+    assert not (workspace.parent / "outside").exists()
+
+
+def test_family_is_explicit_brand_line_metadata(workspace: Path) -> None:
+    root = workspace / "set"
+    assert main([
+        "add", str(root), "--key", "a", "--family", "Northwind",
+        "--split", "development", "--case", "unit_mg", "--photo",
+        str(workspace / "captures/front.jpg"),
+    ]) == 2
+    assert json.loads((root / "manifest.json").read_text())["products"] == []
+
+
 def _fill_gold(root: Path, key: str, first: str, second: str,
                *, model_seen: bool = False) -> None:
     path = root / "set/gold" / f"{key}.json"
