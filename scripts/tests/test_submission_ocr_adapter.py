@@ -92,6 +92,58 @@ def test_a_row_is_assembled_from_boxes_at_the_same_height() -> None:
     assert rows[0]["amount"]["value"] == {"value": 500.0, "unit_text": "mg"}
 
 
+def test_wrapped_name_and_amount_stay_one_row_when_boxes_overlap_as_a_chain() -> None:
+    draft = _extract([
+        _line("Bifidobacterium longum", 40, left=10, width=220, height=42),
+        _line("subsp. longum 35624", 79, left=10, width=220, height=55),
+        _line("10 mg", 80, left=300, width=70, height=51),
+    ])
+
+    rows = draft["ingredient_rows"]
+    assert len(rows) == 1
+    assert rows[0]["display_name"]["value"] == "Bifidobacterium longum subsp. longum 35624"
+    assert rows[0]["amount"]["value"] == {"value": 10.0, "unit_text": "mg"}
+
+
+def test_collapsed_serving_headings_are_still_read() -> None:
+    draft = _extract([
+        _line("ServingSize:1Capsule", 0),
+        _line("ServingsPerContainer:28", 30),
+        _line("Vitamin C", 80, left=10, width=120),
+        _line("500 mg", 80, left=300, width=70),
+    ])
+
+    assert draft["serving"]["size"]["value"] == "1Capsule"
+    assert draft["serving"]["servings_per_container"]["value"] == "28"
+
+
+def test_overlapping_amount_bridges_wrapped_name_lines() -> None:
+    draft = _extract([
+        _line("Chaste Tree", 40, left=10, width=160, height=47),
+        _line("42 mg", 85, left=300, width=70, height=51),
+        _line("berry extract", 92, left=10, width=140, height=37),
+    ])
+
+    rows = draft["ingredient_rows"]
+    assert len(rows) == 1
+    assert rows[0]["display_name"]["value"] == "Chaste Tree berry extract"
+    assert rows[0]["amount"]["value"] == {"value": 42.0, "unit_text": "mg"}
+
+
+def test_disclosure_and_footnotes_are_not_emitted_as_ingredients() -> None:
+    draft = _extract([
+        _line("Vitamin C", 40, left=10, width=120),
+        _line("500 mg", 40, left=300, width=70),
+        _line("+ Provides 6 billion CFU", 80, left=10, width=220),
+        _line("cells until the best by date", 120, left=10, width=220),
+        _line("Other ingredients: cellulose", 160, left=10, width=220),
+        _line("magnesium stearate", 200, left=10, width=220),
+    ])
+
+    rows = draft["ingredient_rows"]
+    assert [row["display_name"]["value"] for row in rows] == ["Vitamin C"]
+
+
 def test_the_printed_unit_crosses_exactly_as_printed() -> None:
     draft = _extract([
         _line("Folate", 40, left=10, width=100),

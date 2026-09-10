@@ -80,10 +80,12 @@ _PERCENT = re.compile(r"(?P<value>\d+(?:\.\d+)?)\s*%")
 #: Rows a panel prints that are not ingredients.
 #: Panel furniture, matched with optional spacing for the same reason.
 _NOT_A_ROW = re.compile(
-    r"^\s*(supplement\s*facts|amount\s*per\s*serving|%?\s*daily\s*value"
+    r"^\s*(supplement\s*facts|amount\s*per\s*serving|%\s*d\s*v|%?\s*daily\s*value"
     r"|serving\s*size|servings?\s*per\s*container|ingredients?)\b",
     re.IGNORECASE,
 )
+_OTHER_INGREDIENTS = re.compile(r"^\s*other\s+ingredients?\b", re.IGNORECASE)
+_FOOTNOTE_START = re.compile(r"^\s*\+\s*(?:provides|[t†‡])", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -134,20 +136,37 @@ def _rows_from_lines(lines: Sequence[OcrLine]) -> list[list[OcrLine]]:
     association a flat text dump destroys.
     """
     ordered = sorted(lines, key=lambda line: (line.middle, line.left))
+
+    def same_band(left: OcrLine, right: OcrLine) -> bool:
+        # A wrapped label line can overlap the amount box rather than the
+        # first name box. Treat overlap as a connected component so that the
+        # amount bridges the whole printed row even when OCR tie-breaks put it
+        # before the final wrapped line.
+        vertical_overlap = min(left.bottom, right.bottom) - max(left.top, right.top)
+        tolerance = max(left.height, right.height) * 0.5
+        return vertical_overlap >= 0 or abs(left.middle - right.middle) <= tolerance
+
+    # Build connected vertical components rather than comparing only with the
+    # last line. This handles a row whose boxes overlap as A→C and B→C but not
+    # A→B (common when a name wraps beside a right-hand amount).
     rows: list[list[OcrLine]] = []
     for line in ordered:
-        if rows:
-            band = rows[-1]
-            reference = band[0]
-            # Same row when the centres are within half a line height: tighter
-            # than a full height, or a tall name wraps into its neighbour.
-            tolerance = max(reference.height, line.height) * 0.5
-            if abs(line.middle - reference.middle) <= tolerance:
-                band.append(line)
-                continue
-        rows.append([line])
+        matches = [
+            band for band in rows
+            if any(same_band(line, member) for member in band)
+        ]
+        if not matches:
+            rows.append([line])
+            continue
+        target = matches[0]
+        target.append(line)
+        for other in matches[1:]:
+            target.extend(other)
+            rows.remove(other)
+
     for band in rows:
-        band.sort(key=lambda line: line.left)
+        band.sort(key=lambda line: (line.middle, line.left))
+    rows.sort(key=lambda band: min(line.middle for line in band))
     return rows
 
 
@@ -205,12 +224,40 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
     """
     built: list[dict[str, Any]] = []
     indents: list[float] = []
+    footer_started = False
     for band in rows:
         joined = _clean(" ".join(line.text for line in band))
         if not joined or _NOT_A_ROW.match(joined):
             continue
-        name_text = _clean(band[0].text)
-        amount_text = _clean(" ".join(line.text for line in band[1:])) or joined
+        if _OTHER_INGREDIENTS.match(joined):
+            # This disclosure terminates the facts panel. Subsequent OCR lines
+            # are its wrapped contents, not additional active ingredients.
+            break
+        if footer_started:
+            continue
+        if _FOOTNOTE_START.match(joined):
+            # Footnote text can wrap across many bands; once it starts, none of
+            # those lines belong in the ingredient table.
+            footer_started = True
+            continue
+
+        amount_lines = [line for line in band if _parse_amount(_clean(line.text))]
+        name_lines = [
+            line for line in band
+            if line not in amount_lines and not _PERCENT.fullmatch(_clean(line.text))
+        ]
+        # Left-edge sorting is useful for pairing a single row, but wrapped
+        # names can have a one-pixel horizontal jitter. Restore their printed
+        # reading order before joining them.
+        name_lines.sort(key=lambda line: (line.top, line.left))
+        name_text = _clean(" ".join(line.text for line in name_lines))
+        amount_text = _clean(" ".join(line.text for line in amount_lines)) or joined
+        if not name_text and amount_lines:
+            # A compact OCR box may contain both the name and amount. Remove
+            # the measured portion rather than calling the whole line an
+            # ingredient name.
+            match = _AMOUNT.search(joined)
+            name_text = _clean((joined[:match.start()] + joined[match.end():]) if match else joined)
         amount = _parse_amount(amount_text)
         percent = _parse_percent(amount_text)
         # A line that is only a heading with no number is still a printed row
@@ -275,9 +322,9 @@ def _find_line(page: OcrPage, pattern: re.Pattern[str]) -> tuple[str, str] | Non
     return None
 
 
-_SERVING_SIZE = re.compile(r"serving size[:\s]+(?P<value>.+)", re.IGNORECASE)
+_SERVING_SIZE = re.compile(r"serving\s*size[:\s]+(?P<value>.+)", re.IGNORECASE)
 _SERVINGS_PER = re.compile(
-    r"servings? per container[:\s]+(?P<value>[\w.,/ ]+)", re.IGNORECASE)
+    r"servings?\s*per\s*container[:\s]+(?P<value>[\w.,/ ]+)", re.IGNORECASE)
 
 
 class OcrLabelAdapter:
