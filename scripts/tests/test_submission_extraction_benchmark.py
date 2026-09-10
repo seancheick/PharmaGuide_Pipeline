@@ -512,3 +512,49 @@ def test_warning_presence_rejects_a_negation_flip(holdout) -> None:
         "for continued use during pregnancy or breastfeeding for your medical condition."
     )
     assert benchmark._statement_present(expected, [candidate]) is False
+
+
+def test_warning_presence_counts_every_negation_not_just_one() -> None:
+    """A second negation in the sentence must not shelter a dropped first one.
+
+    Reproduced against the real gate: "Do not use ... without first consulting
+    your physician" and the same sentence with "do not" removed both contain a
+    negation, so an existence check passes them, and the remaining 13 of 14
+    words clear a 90% overlap bar. A pregnancy warning reads as present while
+    saying the opposite.
+    """
+    gold = benchmark._norm(
+        "Do not use if you are pregnant, nursing, or taking any medication "
+        "without first consulting your physician")
+    flipped = benchmark._norm(
+        "Do use if you are pregnant, nursing, or taking any medication "
+        "without first consulting your physician")
+    assert benchmark._statement_present(gold, [flipped]) is False
+    assert benchmark._statement_present(gold, [gold]) is True
+
+
+def test_warning_presence_counts_repeated_negations() -> None:
+    gold = benchmark._norm(
+        "Do not use if pregnant or nursing. Do not exceed the recommended "
+        "daily dose of two capsules")
+    one_dropped = benchmark._norm(
+        "Do use if pregnant or nursing. Do not exceed the recommended "
+        "daily dose of two capsules")
+    assert benchmark._statement_present(gold, [one_dropped]) is False
+
+
+def test_a_negation_the_draft_invented_is_not_the_printed_statement() -> None:
+    gold = benchmark._norm(
+        "Take two capsules daily with food and a full glass of water each morning")
+    invented = benchmark._norm(
+        "Do not take two capsules daily with food and a full glass of water each morning")
+    assert benchmark._statement_present(gold, [invented]) is False
+
+
+def test_the_same_negation_spelled_differently_still_matches() -> None:
+    """Polarity, not vocabulary: "cannot" and "must not" reverse identically."""
+    gold = benchmark._norm(
+        "You cannot take this product with anticoagulant medication of any kind")
+    reworded = benchmark._norm(
+        "You must not take this product with anticoagulant medication of any kind")
+    assert benchmark._statement_present(gold, [reworded]) is True

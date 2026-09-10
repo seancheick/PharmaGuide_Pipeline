@@ -474,6 +474,24 @@ STATEMENT_PRESENCE_COVERAGE = 0.9
 _NEGATION_RE = re.compile(
     r"\b(?:no|not|never|avoid|without|cannot|can't|don't|do\s+not|must\s+not)\b"
 )
+#: Every spelling that carries the same reversal collapses to one token, so
+#: "do not" and "cannot" are compared as the same negation.
+_NEGATION_SENSE = {"cannot": "not", "can't": "not", "don't": "not",
+                   "do not": "not", "must not": "not"}
+
+
+def _negations(text: str) -> Counter:
+    """The negations a statement carries, counted.
+
+    Counted rather than merely detected: a warning that reads "do not use if
+    pregnant ... without first consulting your physician" carries two, and
+    asking only whether *a* negation survives lets the draft drop "do not",
+    keep "without", and still clear the check at 93% word overlap. That is a
+    pregnancy warning turning into its opposite while the gate reports the
+    warning as present.
+    """
+    found = (" ".join(match.group(0).split()) for match in _NEGATION_RE.finditer(text))
+    return Counter(_NEGATION_SENSE.get(token, token) for token in found)
 
 
 def _statement_present(expected: str, printed: Sequence[str]) -> bool:
@@ -485,10 +503,10 @@ def _statement_present(expected: str, printed: Sequence[str]) -> bool:
     if not words:
         return False
     for candidate in printed:
-        # Word overlap alone can accept a dangerous polarity reversal (for
-        # example, dropping "not" from a long warning). Presence is useful
-        # only when the warning's basic negation polarity is preserved.
-        if bool(_NEGATION_RE.search(expected)) != bool(_NEGATION_RE.search(candidate)):
+        # Word overlap alone accepts a polarity reversal: dropping "not" from
+        # a long warning costs one word out of fourteen. Every negation the
+        # label prints must survive, not merely one of them.
+        if _negations(expected) != _negations(candidate):
             continue
         found = sum(1 for word in words if word in candidate)
         if found / len(words) >= STATEMENT_PRESENCE_COVERAGE:
