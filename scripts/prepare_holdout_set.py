@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+from datetime import datetime, timezone
 import json
 import os
 import sys
@@ -49,6 +50,7 @@ if str(SCRIPTS) not in sys.path:
 
 from submission_review.extraction.benchmark import (  # noqa: E402
     MANIFEST_SCHEMA,
+    _sha,
     REQUIRED_CASES,
     SPLITS,
     BenchmarkError,
@@ -57,6 +59,9 @@ from submission_review.extraction.benchmark import (  # noqa: E402
 )
 from submission_review.extraction.catalog_gold import (  # noqa: E402
     CASE_SOURCES,
+    gold_rows,
+    other_ingredients_text,
+    verify_fingerprint,
     case_counts,
     disagreements,
     _record_path,
@@ -99,16 +104,15 @@ def _load(root: Path) -> dict:
     return manifest
 
 
-def _save(root: Path, manifest: dict) -> None:
+def _atomic_write_json(target: Path, payload: dict, *, prefix: str) -> None:
     # A laptop sleep, disk-full error, or interrupted process must not leave a
-    # truncated manifest that hides an otherwise valid frozen set. Replace the
+    # truncated file that hides an otherwise valid frozen set. Replace the
     # completed file atomically in the same directory.
-    target = _manifest_path(root)
-    payload = json.dumps(manifest, indent=2, sort_keys=True) + "\n"
-    fd, temporary = tempfile.mkstemp(prefix=".manifest.", dir=root, text=True)
+    text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    fd, temporary = tempfile.mkstemp(prefix=prefix, dir=target.parent, text=True)
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as stream:
-            stream.write(payload)
+            stream.write(text)
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temporary, target)
@@ -118,6 +122,10 @@ def _save(root: Path, manifest: dict) -> None:
         except OSError:
             pass
         raise
+
+
+def _save(root: Path, manifest: dict) -> None:
+    _atomic_write_json(_manifest_path(root), manifest, prefix=".manifest.")
 
 
 def init(root: Path) -> int:
@@ -393,6 +401,147 @@ def diff(dsld_id: str, draft_path: Path, blobs_dir: Path, *, as_json: bool = Fal
     return 0
 
 
+def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
+                     reviewer: str, *, confirmed: bool, blobs_dir: Path,
+                     barcode: str | None, serving_size: str | None,
+                     servings_per_container: str | None,
+                     statements: list[str] | None) -> int:
+    """Propose a gold record from a catalog transcription a person confirmed.
+
+    The rule that makes this safe is that it refuses every disagreement.
+    Where the record and the photographed label agree on every row, no model
+    value has entered the gold record and the confirming person never had one
+    to be anchored by: they compared a transcription written by someone else
+    against the bottle in their hand. Where anything disagrees, that is no
+    longer true, and the product goes to the two-person route.
+    """
+    if not confirmed:
+        raise HoldoutSetError(
+            "refusing: pass --confirmed-physical-label only after comparing the "
+            "record to the package itself. No record can make that judgement.")
+    if statements is None:
+        raise HoldoutSetError(
+            "refusing: a catalog record does not carry printed directions or "
+            "warnings. Pass --statement for each one printed, or --no-statements "
+            "if the label prints none. An empty list assumed is a claim nobody made.")
+    if (root / "freeze.json").exists():
+        raise HoldoutSetError(
+            "refusing: this set is frozen. Writing gold now would invalidate "
+            "every result scored against it.")
+
+    manifest = _load(root)
+    entry = next((e for e in manifest["products"] if e["product_key"] == key), None)
+    if entry is None:
+        raise HoldoutSetError(f"{key} is not in the manifest; run `add` first")
+    if _gold_is_filled(root, entry):
+        raise HoldoutSetError(
+            f"{key} already has a complete gold record; correcting one is a "
+            "dated amendment, never a silent overwrite")
+
+    blob_path = _record_path(dsld_id, blobs_dir)
+    if not blob_path.is_file():
+        raise HoldoutSetError(f"no catalog record {dsld_id} under {blobs_dir}")
+    blob = json.loads(blob_path.read_text(encoding="utf-8"))
+    if str(blob.get("dsld_id") or "") != str(dsld_id):
+        raise HoldoutSetError(f"{blob_path} does not hold record {dsld_id}")
+    try:
+        fingerprint = verify_fingerprint(blob)
+    except ValueError as error:
+        raise HoldoutSetError(f"refusing: {error}") from error
+
+    if not draft_path.is_file():
+        raise HoldoutSetError(f"no draft at {draft_path}")
+    try:
+        draft = validate_label_draft_v1(json.loads(draft_path.read_text(encoding="utf-8")))
+    except LabelDraftError as error:
+        raise HoldoutSetError(f"{draft_path} is not a valid label_draft_v1: {error}") from error
+
+    differences = disagreements(blob, draft)
+    if differences:
+        lines = "\n".join(
+            f"    {d.kind:<20} {d.row}\n      record: {d.record or '—'}\n"
+            f"      photo : {d.draft or '—'}" for d in differences[:12])
+        raise HoldoutSetError(
+            f"refusing: {len(differences)} row(s) disagree between the record and "
+            f"the photographed label.\n{lines}\n"
+            "  Settle these by reading the package. If the record is stale, "
+            "reformulated, or its edition is ambiguous, this product takes the "
+            "two-person transcription route instead.")
+
+    record = blob.get("label_record") or {}
+    stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    gold = {
+        "schema_version": "gold_label_v1",
+        "product_key": key,
+        "sourced_from": {
+            "source_name": str(record.get("source_name") or "unknown"),
+            "source_record_id": str(record.get("source_record_id") or dsld_id),
+            "formula_fingerprint": fingerprint,
+            "imported_at": stamp,
+            # Zero by construction: an import with anything unsettled is refused
+            # above, so this can never be a number somebody typed.
+            "disagreements_resolved": 0,
+        },
+        "checked_by": [{
+            "checker": reviewer,
+            "checked_at": stamp,
+            "human": True,
+            "independent": True,
+            "model_output_seen": False,
+            "confirmed_physical_label": True,
+        }],
+        "expected": "draft",
+        "identity": {
+            "brand": str(blob.get("brand_name") or "") or None,
+            "product_name": str(blob.get("product_name") or "") or None,
+            # Digits a person read off the package. A record's barcode would
+            # identify the record, which is not the same claim.
+            "barcode_digits_seen": barcode,
+        },
+        "serving": {
+            # The printed serving phrase is not in a catalog record: what the
+            # record holds is a derived basis. Left null unless a person typed
+            # what the panel says.
+            "size": serving_size,
+            "amount": None,
+            "basis_text": None,
+            "servings_per_container": servings_per_container,
+        },
+        "other_ingredients": {
+            "text": other_ingredients_text(blob),
+            "disclosure_hint": "present" if other_ingredients_text(blob) else "unknown",
+        },
+        "statements": list(statements),
+        "rows": gold_rows(blob),
+    }
+
+    gold_path = root / entry["gold"]
+    previous = gold_path.read_bytes() if gold_path.exists() else None
+    try:
+        _atomic_write_json(gold_path, gold, prefix=f".{key}.")
+        entry["gold_sha256"] = _sha(gold_path)
+        # The writer's acceptance test is the scorer's own loader, so this
+        # command cannot drift from what the benchmark will later accept.
+        load_gold(root, entry)
+        _save(root, manifest)
+    except BaseException:
+        if previous is None:
+            gold_path.unlink(missing_ok=True)
+        else:
+            gold_path.write_bytes(previous)
+        entry.pop("gold_sha256", None)
+        raise
+
+    print(f"Imported dsld:{dsld_id} into {key}: {len(gold['rows'])} printed row(s), "
+          f"{len(gold['statements'])} statement(s).")
+    print(f"  source      {gold['sourced_from']['source_name']} "
+          f"{record.get('source_date') or ''}".rstrip())
+    print(f"  fingerprint {fingerprint[:16]}… (recomputed from the record's own panel)")
+    print(f"  confirmed   {reviewer} compared the record to the package")
+    print("\nThis is a proposed reference, not a verdict. The physical label wins.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
@@ -418,6 +567,26 @@ def build_parser() -> argparse.ArgumentParser:
     node.add_argument("--products-dir", type=Path, default=PRODUCTS_DIR)
     node.add_argument("--blobs-dir", type=Path, default=BLOBS_DIR)
     node.add_argument("--json", action="store_true", dest="as_json")
+
+    node = sub.add_parser("import-reference",
+                          help="propose gold from a confirmed catalog record")
+    node.add_argument("root", type=Path)
+    node.add_argument("--key", required=True)
+    node.add_argument("--dsld-id", required=True)
+    node.add_argument("--draft", type=Path, required=True)
+    node.add_argument("--reviewer", required=True,
+                      help="initials of the person who compared record to package")
+    node.add_argument("--confirmed-physical-label", action="store_true", dest="confirmed")
+    node.add_argument("--barcode", default=None,
+                      help="digits read off the package, not from the record")
+    node.add_argument("--serving-size", default=None,
+                      help="the serving phrase as the panel prints it")
+    node.add_argument("--servings-per-container", default=None)
+    node.add_argument("--statement", action="append", default=None, dest="statements",
+                      help="repeatable; a printed direction or warning, verbatim")
+    node.add_argument("--no-statements", action="store_true",
+                      help="the label prints no directions or warnings")
+    node.add_argument("--blobs-dir", type=Path, default=BLOBS_DIR)
 
     node = sub.add_parser("diff", help="rows where a record and a draft disagree")
     node.add_argument("--dsld-id", required=True)
@@ -446,6 +615,16 @@ def main(argv: list[str] | None = None) -> int:
                 ]
             return scan(barcodes, args.catalog_db, args.products_dir,
                         args.blobs_dir, as_json=args.as_json)
+        if args.command == "import-reference":
+            if args.statements and args.no_statements:
+                raise HoldoutSetError("pass --statement or --no-statements, not both")
+            statements = [] if args.no_statements else args.statements
+            return import_reference(
+                args.root, args.key, args.dsld_id, args.draft, args.reviewer,
+                confirmed=args.confirmed, blobs_dir=args.blobs_dir,
+                barcode=args.barcode, serving_size=args.serving_size,
+                servings_per_container=args.servings_per_container,
+                statements=statements)
         if args.command == "diff":
             return diff(args.dsld_id, args.draft, args.blobs_dir, as_json=args.as_json)
         return add(args.root, args.key, args.family, args.split,

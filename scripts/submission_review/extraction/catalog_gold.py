@@ -25,6 +25,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
+from label_record_contract import formula_fingerprint
 from normalization import canonicalize_mass_unit
 
 from ..gtin import canonical_gtin14_candidates
@@ -125,6 +126,87 @@ def printed_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
             "path": row.get("raw_source_path"),
         })
     return rows
+
+
+#: `display_type` for a printed blend header. A nutrition-fact row may also
+#: carry children ("Calories from Fat" under "Calories"), and gold's
+#: parent_index may only point at a blend header, so nesting under anything
+#: else is dropped rather than misrepresented.
+BLEND_HEADER_TYPE = "structural_container"
+
+
+def verify_fingerprint(blob: Mapping[str, Any]) -> str:
+    """The record's stored fingerprint, recomputed from its own panel.
+
+    `label_record_contract.formula_fingerprint` is the pipeline's owner of
+    this hash. Recomputing proves the record is internally consistent — that
+    the fingerprint describes the panel stored beside it. It proves nothing
+    about the bottle; a person still confirms the edition.
+    """
+    stored = (blob.get("label_record") or {}).get("formula_fingerprint")
+    if not isinstance(stored, str) or not re.fullmatch(r"[0-9a-f]{64}", stored):
+        raise ValueError("record carries no usable formula fingerprint")
+    try:
+        recomputed = formula_fingerprint(blob.get("display_ingredients"))
+    except ValueError as error:
+        raise ValueError(f"record panel is malformed: {error}") from error
+    if recomputed is None:
+        raise ValueError("record has no printed panel to fingerprint")
+    if recomputed != stored:
+        raise ValueError(
+            "record fingerprint does not match its own panel "
+            f"({stored[:12]}… stored, {recomputed[:12]}… recomputed)")
+    return stored
+
+
+def gold_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """The printed panel as gold_label_v1 rows.
+
+    Everything here is transcription, never inference: the printed name, the
+    printed dose parsed by the adapter's parser, the printed nesting, and the
+    %DV that the enriched layer carries for that same printed row. A row the
+    record cannot supply a value for gets an explicit null.
+    """
+    by_path = {r.get("raw_source_path"): r
+               for r in (blob.get("ingredients") or ()) if r.get("raw_source_path")}
+    source = [r for r in (blob.get("display_ingredients") or ())
+              if r.get("label_display_name") or r.get("display_name")]
+    rows: list[dict[str, Any]] = []
+    for row in source:
+        name = str(row.get("label_display_name") or row.get("display_name"))
+        parsed = _parse_amount(str(row.get("exact_dose_text") or ""))
+        joined = by_path.get(row.get("raw_source_path")) or {}
+        percent = joined.get("dailyValue")
+        form = row.get("label_display_form")
+        rows.append({
+            "display_name": name,
+            "amount": parsed[0] if parsed else None,
+            "parent_index": None,
+            "is_blend_header": row.get("display_type") == BLEND_HEADER_TYPE,
+            "readable": True,
+            "form_text": str(form) if form else None,
+            "percent_dv": float(percent) if isinstance(percent, (int, float)) else None,
+        })
+    # Parents second, so an index always points at a row already emitted.
+    headers: dict[str, int] = {}
+    for index, (row, built) in enumerate(zip(source, rows)):
+        if built["is_blend_header"]:
+            headers[_norm(built["display_name"])] = index
+        parent = row.get("parent_label")
+        if parent is None:
+            continue
+        owner = headers.get(_norm(parent))
+        if owner is not None and owner < index:
+            built["parent_index"] = owner
+    return rows
+
+
+def other_ingredients_text(blob: Mapping[str, Any]) -> str | None:
+    """The inactive ingredients as the record lists them, or nothing."""
+    names = [str(r.get("label_display") or r.get("raw_source_text") or "").strip()
+             for r in (blob.get("inactive_ingredients") or ())]
+    joined = ", ".join(n for n in names if n)
+    return joined or None
 
 
 @dataclass(frozen=True)

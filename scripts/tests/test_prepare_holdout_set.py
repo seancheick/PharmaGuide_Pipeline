@@ -8,6 +8,7 @@ scoring time, when re-shooting is the only fix.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -19,7 +20,7 @@ SCRIPTS = Path(__file__).parents[1]
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from prepare_holdout_set import main  # noqa: E402
+from prepare_holdout_set import _gold_is_filled, main  # noqa: E402
 
 
 def _photo(directory: Path, name: str) -> Path:
@@ -235,7 +236,12 @@ def _valid_draft(rows: list[dict]) -> dict:
     for row in rows:
         made = json.loads(json.dumps(template))
         made["display_name"]["value"] = row["name"]
-        made["amount"]["value"] = {"value": row["value"], "unit_text": row["unit"]}
+        if row["value"] is None:
+            # A blend child with no disclosed dose has no amount, not an
+            # amount whose value is null.
+            made["amount"] = None
+        else:
+            made["amount"]["value"] = {"value": row["value"], "unit_text": row["unit"]}
         made["parent_index"] = None
         made["is_blend_header"] = False
         built.append(made)
@@ -376,3 +382,178 @@ def test_status_does_not_call_malformed_reference_gold_filled(workspace: Path, c
 
     assert main(["status", str(root)]) == 0
     assert "gold filled    0 / 1" in capsys.readouterr().out
+
+
+def _import(root: Path, key: str, dsld_id: str, draft: Path, blobs: Path, *extra: str) -> int:
+    return main(["import-reference", str(root), "--key", key, "--dsld-id", dsld_id,
+                 "--draft", str(draft), "--reviewer", "sb", "--blobs-dir", str(blobs),
+                 *extra])
+
+
+def _panel_record(root: Path, dsld_id: str) -> Path:
+    """A catalog record whose stored fingerprint matches its own panel."""
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).parents[1]))
+    from label_record_contract import formula_fingerprint
+
+    panel = [
+        {"label_display_name": "Magnesium", "exact_dose_text": "200 mg", "label_order": 0,
+         "raw_source_path": "ingredientRows[0]", "display_type": "mapped_ingredient",
+         "nested_depth": 0, "parent_label": None},
+        {"label_display_name": "Herbal Blend", "exact_dose_text": "450 mg", "label_order": 1,
+         "raw_source_path": "ingredientRows[1]", "display_type": "structural_container",
+         "nested_depth": 0, "parent_label": None},
+        {"label_display_name": "Ashwagandha", "exact_dose_text": "", "label_order": 2,
+         "raw_source_path": "ingredientRows[1].nestedRows[0]",
+         "display_type": "mapped_ingredient", "nested_depth": 1,
+         "parent_label": "Herbal Blend"},
+    ]
+    blobs = root / "blobs"
+    blobs.mkdir(exist_ok=True)
+    (blobs / f"{dsld_id}.json").write_text(json.dumps({
+        "dsld_id": dsld_id, "brand_name": "Northwind", "product_name": "Magnesium Glycinate",
+        "serving_info": {"basis_count": 2.0, "basis_unit": "capsule"},
+        "label_record": {"source_name": "NIH DSLD", "source_record_id": dsld_id,
+                         "source_date": "2019-01-01",
+                         "formula_fingerprint": formula_fingerprint(panel)},
+        "proprietary_blend_detail": {"has_proprietary_blends": True},
+        "ingredients": [{"raw_source_text": "Magnesium", "quantity": 200.0, "unit": "mg",
+                         "forms": [], "raw_source_path": "ingredientRows[0]",
+                         "dailyValue": 48.0}],
+        "display_ingredients": panel,
+        "inactive_ingredients": [{"label_display": "Vegetable cellulose"}],
+    }), encoding="utf-8")
+    return blobs
+
+
+def _panel_draft(root: Path, *, magnesium: float = 200.0) -> Path:
+    draft = _valid_draft([
+        {"name": "Magnesium", "value": magnesium, "unit": "mg"},
+        {"name": "Herbal Blend", "value": 450.0, "unit": "mg"},
+        {"name": "Ashwagandha", "value": None, "unit": None},
+    ])
+    path = root / "panel-draft.json"
+    path.write_text(json.dumps(draft), encoding="utf-8")
+    return path
+
+
+def test_an_imported_record_is_what_the_scorer_accepts(workspace: Path, capsys) -> None:
+    """The writer's acceptance test is the scorer's own loader, not a copy."""
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    blobs = _panel_record(workspace, "700")
+    draft = _panel_draft(workspace)
+
+    assert _import(root, "northwind-mag", "700", draft, blobs,
+                   "--confirmed-physical-label", "--barcode", "012345678905",
+                   "--serving-size", "2 capsules", "--no-statements") == 0
+    capsys.readouterr()
+
+    gold = json.loads((root / "gold" / "northwind-mag.json").read_text())
+    assert gold["sourced_from"]["source_name"] == "NIH DSLD"
+    assert gold["sourced_from"]["disagreements_resolved"] == 0
+    assert gold["checked_by"][0]["confirmed_physical_label"] is True
+    assert gold["checked_by"][0]["model_output_seen"] is False
+    # The printed panel, with nesting pointing at the real blend header.
+    assert [r["display_name"] for r in gold["rows"]] == [
+        "Magnesium", "Herbal Blend", "Ashwagandha"]
+    assert gold["rows"][2]["parent_index"] == 1
+    assert gold["rows"][1]["is_blend_header"] is True
+    assert gold["rows"][0]["percent_dv"] == 48.0
+    # Digits a person read off the package; the record's own barcode is not it.
+    assert gold["identity"]["barcode_digits_seen"] == "012345678905"
+
+    entry = next(p for p in json.loads((root / "manifest.json").read_text())["products"]
+                 if p["product_key"] == "northwind-mag")
+    assert entry["gold_sha256"] == hashlib.sha256(
+        (root / "gold" / "northwind-mag.json").read_bytes()).hexdigest()
+    assert main(["status", str(root)]) == 0
+    assert "gold filled    1 / 1" in capsys.readouterr().out
+
+
+def test_any_disagreement_refuses_the_import(workspace: Path, capsys) -> None:
+    """Zero disagreements is what makes one confirmer enough.
+
+    With nothing in dispute, no model value reached the record and the
+    confirming person had none to be anchored by. One disagreement and that
+    is no longer true, so the product takes the two-person route.
+    """
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    blobs = _panel_record(workspace, "701")
+    draft = _panel_draft(workspace, magnesium=2000.0)
+
+    assert _import(root, "northwind-mag", "701", draft, blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    error = capsys.readouterr().err
+    assert "1 row(s) disagree" in error and "two-person transcription route" in error
+    assert _gold_is_filled(root, next(
+        p for p in json.loads((root / "manifest.json").read_text())["products"]
+        if p["product_key"] == "northwind-mag")) is False
+
+
+def test_a_record_whose_fingerprint_does_not_match_its_panel_is_refused(workspace: Path, capsys) -> None:
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    blobs = _panel_record(workspace, "702")
+    blob_path = blobs / "702.json"
+    tampered = json.loads(blob_path.read_text())
+    tampered["label_record"]["formula_fingerprint"] = "b" * 64
+    blob_path.write_text(json.dumps(tampered), encoding="utf-8")
+
+    assert _import(root, "northwind-mag", "702", _panel_draft(workspace), blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    assert "does not match its own panel" in capsys.readouterr().err
+
+
+def test_physical_confirmation_and_a_statements_decision_are_both_required(workspace: Path, capsys) -> None:
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    blobs = _panel_record(workspace, "703")
+    draft = _panel_draft(workspace)
+
+    assert _import(root, "northwind-mag", "703", draft, blobs, "--no-statements") == 2
+    assert "--confirmed-physical-label" in capsys.readouterr().err
+
+    assert _import(root, "northwind-mag", "703", draft, blobs,
+                   "--confirmed-physical-label") == 2
+    assert "a claim nobody made" in capsys.readouterr().err
+
+
+def test_a_refused_import_leaves_the_gold_and_manifest_untouched(workspace: Path, capsys) -> None:
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    gold_path = root / "gold" / "northwind-mag.json"
+    before_gold = gold_path.read_bytes()
+    before_manifest = (root / "manifest.json").read_bytes()
+    blobs = _panel_record(workspace, "704")
+
+    assert _import(root, "northwind-mag", "704", _panel_draft(workspace, magnesium=99.0),
+                   blobs, "--confirmed-physical-label", "--no-statements") == 2
+    capsys.readouterr()
+    assert gold_path.read_bytes() == before_gold
+    assert (root / "manifest.json").read_bytes() == before_manifest
+
+
+def test_a_complete_gold_record_is_never_silently_replaced(workspace: Path, capsys) -> None:
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    blobs = _panel_record(workspace, "705")
+    draft = _panel_draft(workspace)
+    assert _import(root, "northwind-mag", "705", draft, blobs,
+                   "--confirmed-physical-label", "--no-statements") == 0
+    capsys.readouterr()
+    assert _import(root, "northwind-mag", "705", draft, blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    assert "dated amendment" in capsys.readouterr().err
+
+
+def test_importing_into_a_frozen_set_is_refused(workspace: Path, capsys) -> None:
+    """Writing gold after a freeze invalidates every result scored against it."""
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    (root / "freeze.json").write_text("{}", encoding="utf-8")
+    blobs = _panel_record(workspace, "706")
+    assert _import(root, "northwind-mag", "706", _panel_draft(workspace), blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    assert "frozen" in capsys.readouterr().err
