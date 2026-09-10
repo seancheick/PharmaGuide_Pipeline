@@ -140,8 +140,26 @@ def _fill_gold(root: Path, key: str, first: str, second: str,
     for slot, checker in zip(gold["checked_by"], (first, second)):
         slot.update(checker=checker, checked_at="2026-09-10T00:00:00Z",
                     model_output_seen=model_seen and checker == first)
-    gold["identity"]["brand"] = "Northwind"
+    _complete_gold(gold)
     path.write_text(json.dumps(gold, indent=2))
+
+
+def _complete_gold(gold: dict) -> None:
+    """Make the fixture satisfy the canonical gold schema, not just status."""
+    gold["identity"].update(
+        brand="Northwind", product_name="Magnesium Glycinate",
+        barcode_digits_seen=None,
+    )
+    gold["serving"].update(
+        size="2 capsules", servings_per_container="30",
+        basis_text="2 capsules", amount={"value": 200, "unit_text": "mg"},
+    )
+    gold["other_ingredients"] = {"text": None, "disclosure_hint": "unknown"}
+    gold["rows"] = [{
+        "display_name": "Magnesium", "amount": {"value": 200, "unit_text": "mg"},
+        "owner": None, "parent_index": None, "is_blend_header": False,
+        "percent_dv": None, "form_text": None, "readable": True,
+    }]
 
 
 def _gold_filled(capsys) -> int:
@@ -282,7 +300,7 @@ def test_a_reference_sourced_gold_counts_as_filled(workspace: Path, capsys) -> N
     assert _add(workspace, "northwind-mag", "front", "facts") == 0
     gold_path = root / "gold" / "northwind-mag.json"
     gold = json.loads(gold_path.read_text())
-    gold["identity"]["brand"] = "Northwind"
+    _complete_gold(gold)
     gold["sourced_from"] = {
         "source_name": "NIH DSLD", "source_record_id": "500",
         "formula_fingerprint": "a" * 64, "imported_at": "2026-09-10T00:00:00Z",
@@ -302,7 +320,7 @@ def test_a_reference_gold_without_physical_confirmation_is_not_filled(workspace:
     assert _add(workspace, "northwind-mag", "front", "facts") == 0
     gold_path = root / "gold" / "northwind-mag.json"
     gold = json.loads(gold_path.read_text())
-    gold["identity"]["brand"] = "Northwind"
+    _complete_gold(gold)
     gold["sourced_from"] = {
         "source_name": "NIH DSLD", "source_record_id": "500",
         "formula_fingerprint": "a" * 64, "imported_at": "2026-09-10T00:00:00Z",
@@ -310,6 +328,50 @@ def test_a_reference_gold_without_physical_confirmation_is_not_filled(workspace:
     }
     gold["checked_by"] = [{"checker": "ab", "checked_at": "2026-09-10T00:00:00Z",
                            "human": True, "independent": True, "model_output_seen": False}]
+    gold_path.write_text(json.dumps(gold), encoding="utf-8")
+
+    assert main(["status", str(root)]) == 0
+    assert "gold filled    0 / 1" in capsys.readouterr().out
+
+
+def test_status_accepts_two_confirmers_on_reference_gold(workspace: Path, capsys) -> None:
+    """Reference gold may have one or more distinct human confirmations."""
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts") == 0
+    gold_path = root / "gold" / "northwind-mag.json"
+    gold = json.loads(gold_path.read_text())
+    _complete_gold(gold)
+    gold["sourced_from"] = {
+        "source_name": "NIH DSLD", "source_record_id": "500",
+        "formula_fingerprint": "a" * 64, "imported_at": "2026-09-10T00:00:00Z",
+        "disagreements_resolved": 0,
+    }
+    gold["checked_by"] = [
+        {"checker": "ab", "checked_at": "2026-09-10T00:00:00Z", "human": True,
+         "independent": True, "model_output_seen": False,
+         "confirmed_physical_label": True},
+        {"checker": "cd", "checked_at": "2026-09-10T00:00:00Z", "human": True,
+         "independent": True, "model_output_seen": False,
+         "confirmed_physical_label": True},
+    ]
+    gold_path.write_text(json.dumps(gold), encoding="utf-8")
+
+    assert main(["status", str(root)]) == 0
+    assert "gold filled    1 / 1" in capsys.readouterr().out
+
+
+def test_status_does_not_call_malformed_reference_gold_filled(workspace: Path, capsys) -> None:
+    """A malformed sourced_from value must not bypass the canonical loader."""
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front") == 0
+    gold_path = root / "gold" / "northwind-mag.json"
+    gold = json.loads(gold_path.read_text())
+    gold["identity"]["brand"] = "Northwind"
+    gold["sourced_from"] = "not-an-object"
+    gold["checked_by"] = [{"checker": "ab", "checked_at": "2026-09-10T00:00:00Z",
+                            "human": True, "independent": True,
+                            "model_output_seen": False,
+                            "confirmed_physical_label": True}]
     gold_path.write_text(json.dumps(gold), encoding="utf-8")
 
     assert main(["status", str(root)]) == 0

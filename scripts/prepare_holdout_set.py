@@ -51,7 +51,9 @@ from submission_review.extraction.benchmark import (  # noqa: E402
     MANIFEST_SCHEMA,
     REQUIRED_CASES,
     SPLITS,
+    BenchmarkError,
     _TOKEN,
+    load_gold,
 )
 from submission_review.extraction.catalog_gold import (  # noqa: E402
     CASE_SOURCES,
@@ -243,33 +245,24 @@ def status(root: Path) -> int:
 
 
 def _gold_is_filled(root: Path, entry: dict) -> bool:
-    """A gold record still holding its placeholders is not a reading."""
+    """Whether the gold record is valid enough for the benchmark loader.
+
+    ``status`` is an operator-facing preview before the manifest is frozen, so
+    it deliberately validates the current gold bytes rather than requiring
+    the template-time ``gold_sha256`` in the manifest.  All semantic checks
+    still come from ``benchmark.load_gold``; maintaining a smaller predicate
+    here had allowed status to disagree with the actual scorer.
+    """
     path = root / entry["gold"]
     if not path.exists():
         return False
     try:
-        gold = json.loads(path.read_text(encoding="utf-8"))
-    except ValueError:
+        current = dict(entry)
+        current["gold_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+        load_gold(root, current)
+    except (OSError, ValueError, BenchmarkError):
         return False
-    checkers = gold.get("checked_by") or []
-    # Two routes, one standard, and this must agree with the loader that
-    # enforces it: benchmark.load_gold requires two checkers normally and one
-    # when the gold names an independent source. Hard-coding two here reported
-    # every correctly imported reference record as still blank, forever.
-    reference = gold.get("sourced_from")
-    if len(checkers) != (1 if reference else 2):
-        return False
-    initials = [str(c.get("checker", "")) for c in checkers]
-    if any(not i or i.startswith("<") for i in initials):
-        return False
-    # Two people, not one person twice: the whole point of the second read.
-    if not reference and initials[0].strip().lower() == initials[1].strip().lower():
-        return False
-    if any(c.get("model_output_seen") for c in checkers):
-        return False
-    if reference and not any(c.get("confirmed_physical_label") is True for c in checkers):
-        return False
-    return bool((gold.get("identity") or {}).get("brand"))
+    return True
 
 
 def _by_source(cases) -> dict[str, list[str]]:
