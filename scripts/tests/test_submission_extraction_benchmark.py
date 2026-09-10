@@ -370,3 +370,75 @@ def test_holdout_split_requires_a_named_configuration(holdout) -> None:
     root, _run = holdout
     with pytest.raises(SystemExit):
         benchmark.main(["--holdout", str(root), "--run", "runs/r1", "--split", "holdout"])
+
+
+REFERENCE = {
+    "source_name": "NIH DSLD",
+    "source_record_id": "178392",
+    "formula_fingerprint": "f" * 64,
+    "imported_at": "2026-09-10T00:00:00Z",
+    "disagreements_resolved": 3,
+}
+
+
+def _confirmer(name: str = "ab", *, confirmed: bool = True) -> dict:
+    return {"checker": name, "checked_at": "2026-09-10T00:00:00Z", "human": True,
+            "independent": True, "model_output_seen": False,
+            "confirmed_physical_label": confirmed}
+
+
+def _load(root: Path, key: str, gold: dict):
+    """Rewrite one gold file and read it back through the real loader."""
+    path = root / "gold" / f"{key}.json"
+    path.write_text(json.dumps(gold), encoding="utf-8")
+    entry = dict(next(p for p in json.loads((root / "manifest.json").read_text())["products"]
+                      if p["product_key"] == key))
+    entry["gold_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return benchmark.load_gold(root, entry)
+
+
+def test_reference_sourced_gold_needs_only_one_human_confirmation(holdout) -> None:
+    """The second reading already exists; it was written from the label."""
+    root, _ = holdout
+    gold = {**_gold("d-1"), "sourced_from": REFERENCE, "checked_by": [_confirmer()]}
+    assert _load(root, "d-1", gold)["sourced_from"]["source_record_id"] == "178392"
+
+
+def test_reference_sourced_gold_still_needs_the_physical_label_confirmed(holdout) -> None:
+    """The one judgement no record and no tool can make."""
+    root, _ = holdout
+    gold = {**_gold("d-1"), "sourced_from": REFERENCE,
+            "checked_by": [_confirmer(confirmed=False)]}
+    with pytest.raises(BenchmarkError, match="confirmed the physical label"):
+        _load(root, "d-1", gold)
+
+
+def test_a_model_may_never_be_named_as_the_gold_source(holdout) -> None:
+    """The route exists only because the source is independent of any model."""
+    root, _ = holdout
+    for poison in ("model", "provider", "generated_by", "prompt_version"):
+        gold = {**_gold("d-1"), "sourced_from": {**REFERENCE, poison: "qwen3-vl:4b"},
+                "checked_by": [_confirmer()]}
+        with pytest.raises(BenchmarkError, match="a model may not be a gold source"):
+            _load(root, "d-1", gold)
+
+
+def test_an_import_with_unsettled_disagreements_is_not_gold(holdout) -> None:
+    root, _ = holdout
+    missing = {k: v for k, v in REFERENCE.items() if k != "disagreements_resolved"}
+    gold = {**_gold("d-1"), "sourced_from": missing, "checked_by": [_confirmer()]}
+    with pytest.raises(BenchmarkError, match="how many disagreements were resolved"):
+        _load(root, "d-1", gold)
+    for key in ("source_name", "source_record_id", "formula_fingerprint"):
+        thin = {k: v for k, v in REFERENCE.items() if k != key}
+        gold = {**_gold("d-1"), "sourced_from": thin, "checked_by": [_confirmer()]}
+        with pytest.raises(BenchmarkError, match=f"sourced_from needs {key}"):
+            _load(root, "d-1", gold)
+
+
+def test_without_a_reference_two_people_are_still_required(holdout) -> None:
+    """The original route is unchanged; the amendment adds one, removes none."""
+    root, _ = holdout
+    gold = {**_gold("d-1"), "checked_by": [_confirmer()]}
+    with pytest.raises(BenchmarkError, match="two distinct human checkers"):
+        _load(root, "d-1", gold)

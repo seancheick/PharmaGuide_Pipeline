@@ -288,3 +288,38 @@ row between 18 and 23. Because both candidates read the same prepared bytes,
 that loss appears in a benchmark as agreement. Any holdout photograph whose
 Facts panel spans less than about a third of the frame width therefore
 measures the capture, not the reader, and must be recorded as such.
+
+2026-09-10 — A second route to gold, for products the catalog already knows.
+
+Typing sixty labels by hand is why this set does not exist. The route that
+removes most of that typing without weakening the measurement is a
+transcription that already existed and was not derived from our photograph:
+the NIH DSLD records in the released catalog were written from the physical
+label by someone else, before any of this. A gold record may therefore be
+either:
+
+* **two independent human transcriptions** — unchanged, and still the only
+  route for any product the catalog does not hold; or
+* **one independently sourced transcription plus one human confirmation of
+  the physical label edition**, with every disagreement between the record
+  and the photographed label settled by a person.
+
+Both give gold two sources of error with no cause in common. Two models
+reading one photograph do not, however accurate each is: they share the
+photograph and the preparation step, so a row preparation deleted is missing
+from both and their agreement reads as confirmation. A model may never be
+named as a gold source, and `load_gold` refuses one that is.
+
+A reference-sourced record carries `sourced_from` with the source name,
+record id, formula fingerprint, import timestamp, and the number of
+disagreements a person settled. It needs one checker with
+`confirmed_physical_label: true`. That confirmation is the one judgement no
+record and no tool can make: whether a record written years ago describes the
+package in a person's hand. The record's own version and date identify the
+record, not the package, and cannot stand in for it.
+
+The physical label always wins. Where the record is stale, reformulated, or
+its edition ambiguous, the product goes to the two-person route or leaves the
+set. `scripts/prepare_holdout_set.py scan` proposes candidates and `diff`
+lists the rows to settle; neither writes a value into a gold record, and a
+test asserts a gold file is byte-identical after a comparison runs.

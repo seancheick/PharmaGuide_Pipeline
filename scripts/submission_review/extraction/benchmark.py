@@ -155,6 +155,34 @@ def _gold_text(value: Any) -> None:
         raise BenchmarkError("gold text must be nonempty text or explicit null")
 
 
+def _reference_source(product_key: str, value: Any) -> dict[str, Any] | None:
+    """Validate an independently sourced transcription, or refuse it.
+
+    A reference is a transcription that existed before this benchmark and was
+    not derived from our photograph or from any model. It must say where it
+    came from, which record it is, and how many disagreements with the
+    photographed label a person settled -- because an import with unresolved
+    disagreements is not gold, it is an unfinished comparison.
+    """
+    if value is None:
+        return None
+    if not isinstance(value, dict):
+        raise BenchmarkError(f"{product_key}: sourced_from must be an object")
+    if any(key in value for key in ("model", "provider", "generated_by", "prompt_version")):
+        # The route exists because the source is independent of any model.
+        raise BenchmarkError(f"{product_key}: a model may not be a gold source")
+    for key in ("source_name", "source_record_id", "formula_fingerprint", "imported_at"):
+        if not isinstance(value.get(key), str) or not value[key].strip():
+            raise BenchmarkError(f"{product_key}: sourced_from needs {key}")
+    if not _timestamp(value.get("imported_at")):
+        raise BenchmarkError(f"{product_key}: sourced_from.imported_at must be a UTC timestamp")
+    resolved = value.get("disagreements_resolved")
+    if type(resolved) is not int or resolved < 0:
+        raise BenchmarkError(
+            f"{product_key}: sourced_from must record how many disagreements were resolved")
+    return value
+
+
 def load_gold(holdout_dir: Path, entry: dict[str, Any]) -> dict[str, Any]:
     path = _inside(holdout_dir, entry.get("gold"))
     if _sha(path) != entry.get("gold_sha256"):
@@ -168,15 +196,32 @@ def load_gold(holdout_dir: Path, entry: dict[str, Any]) -> dict[str, Any]:
         raise BenchmarkError(f"{entry['product_key']}: gold product_key mismatch")
     checkers = gold.get("checked_by") or []
     if not isinstance(checkers, list) or any(not isinstance(c, dict) for c in checkers):
-        raise BenchmarkError("gold needs two distinct human checkers")
+        raise BenchmarkError("gold needs human checkers")
     names = {_norm(c.get("checker")) for c in checkers}
-    if len(checkers) < 2 or len(names) < 2 or "" in names:
-        raise BenchmarkError(f"{entry['product_key']}: gold needs two distinct human checkers")
+    reference = _reference_source(entry["product_key"], gold.get("sourced_from"))
+    # Two routes to one standard: two people reading the label independently,
+    # or one pre-existing transcription that was written from the label by
+    # someone else, confirmed against the physical package by one person here.
+    # Both give the gold two sources of error with no cause in common, which
+    # is the property the benchmark rests on. Two runs of one instrument --
+    # two models on one photograph -- do not, however accurate each is.
+    required = 1 if reference else 2
+    if len(checkers) < required or len(names) < required or "" in names:
+        raise BenchmarkError(
+            f"{entry['product_key']}: gold needs "
+            + ("a human physical-label confirmation" if reference
+               else "two distinct human checkers"))
     for checker in checkers:
         if (any(key in checker for key in ("model", "provider", "generated_by"))
                 or checker.get("human") is not True or checker.get("independent") is not True
                 or checker.get("model_output_seen") is not False or not _timestamp(checker.get("checked_at"))):
             raise BenchmarkError(f"{entry['product_key']}: gold must be human-checked")
+    if reference and not any(c.get("confirmed_physical_label") is True for c in checkers):
+        # The one thing no tool can do: decide that a record written years ago
+        # describes the package in a person's hand.
+        raise BenchmarkError(
+            f"{entry['product_key']}: reference-sourced gold needs one checker who "
+            "confirmed the physical label edition")
     if gold.get("expected") not in ("draft", "abstain"):
         raise BenchmarkError(f"{entry['product_key']}: gold expected must be draft|abstain")
     for section, keys in (("identity", {"brand", "product_name", "barcode_digits_seen"}),
