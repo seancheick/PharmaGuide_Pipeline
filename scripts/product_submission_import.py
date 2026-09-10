@@ -412,6 +412,52 @@ def _validate_servings_per_container(value: object) -> None:
     )
 
 
+def collect_label_diagnostics(payload: object) -> list[dict[str, str]]:
+    """Every problem the authoritative validator sees, path by path.
+
+    The reviewer console renders these and has no label rules of its own. That
+    matters more than convenience: a second validator written in JavaScript
+    would eventually disagree with this one, and the console would start
+    telling a reviewer that a label is acceptable which the importer will
+    refuse at the catalog gate.
+
+    ``_validate_label_payload`` stops at the first problem, which is correct
+    for an import gate and useless for a person fixing a twenty-row label. The
+    same row and serving helpers are therefore re-run individually to collect
+    the rest. Nothing new is decided here.
+    """
+    try:
+        _validate_label_payload(payload)
+        return []
+    except SubmissionImportError as error:
+        summary = str(error)
+    if not isinstance(payload, dict):
+        return [{"path": "$", "message": summary}]
+
+    diagnostics: list[dict[str, str]] = []
+    rows = payload.get("ingredientRows")
+    if isinstance(rows, list):
+        for index, row in enumerate(rows):
+            path = f"ingredientRows[{index}]"
+            try:
+                # A fresh counter per row: the aggregate row cap belongs to the
+                # whole-payload run above, which owns the authoritative answer.
+                _validate_ingredient_row(row, path, depth=1, row_counter=[0])
+            except SubmissionImportError as error:
+                diagnostics.append({"path": path, "message": str(error)})
+    servings = payload.get("servingSizes")
+    if isinstance(servings, list):
+        for index, serving in enumerate(servings):
+            path = f"servingSizes[{index}]"
+            try:
+                _validate_serving_size(serving, path)
+            except SubmissionImportError as error:
+                diagnostics.append({"path": path, "message": str(error)})
+    # The whole-payload message is the authority; per-field detail only ever
+    # adds to it, and must never replace it with silence.
+    return diagnostics or [{"path": "$", "message": summary}]
+
+
 def _validate_label_payload(payload: object) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise SubmissionImportError("approved payload must be an object")

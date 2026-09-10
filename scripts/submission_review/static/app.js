@@ -37,6 +37,14 @@ const state = {
   reviewSaveRequest: 0,
   reviewLoadRequest: 0,
   reviewVerifyRequest: 0,
+  batchStates: new Map(),
+  batchSelected: new Set(),
+  batchStateRequest: 0,
+  batchRunning: false,
+  batchResults: null,
+  diagnostics: null,
+  diagnosticsSha: null,
+  diagnosticsRequest: 0,
   reviewSuperseded: false,
   reviewDigestMismatch: false,
 };
@@ -92,6 +100,8 @@ async function boot() {
   $('filter-status').addEventListener('change', () => loadQueue());
   $('filter-kind').addEventListener('change', () => loadQueue());
   $('load-more').addEventListener('click', () => loadQueue(true));
+  $('batch-select-all').addEventListener('click', () => selectAllEligible());
+  $('batch-approve').addEventListener('click', () => void approveBatch());
   $('add-row').addEventListener('click', () => {
     state.payload.ingredientRows.push(emptyRow());
     renderRows();
@@ -184,6 +194,8 @@ async function loadQueue(append = false) {
       `${state.totalOpenCount} open · ${state.submissions.length} loaded`;
     loadMore.classList.toggle('hidden', state.nextAfter === null);
     setStatus(`${state.submissions.length} submission(s) loaded.`);
+    // Readiness is the server's answer, refreshed with the queue it describes.
+    void refreshBatchStates();
   } catch (error) {
     if (requestId !== state.queueRequestId) return;
     setStatus(String(error.message ?? error), true);
@@ -210,6 +222,17 @@ function renderQueue() {
     id.className = 'id';
     id.textContent = submission.id;
     item.append(badge, kind, id);
+    if (batchEligible(submission)) {
+      const pick = document.createElement('input');
+      pick.type = 'checkbox';
+      pick.className = 'queue-pick';
+      pick.checked = state.batchSelected.has(submission.id);
+      pick.title = 'Include in the next batch approval';
+      // Picking an item for a batch is not opening it.
+      pick.addEventListener('click', (event) => event.stopPropagation?.());
+      pick.addEventListener('change', () => toggleBatchSelection(submission.id));
+      item.append(pick);
+    }
     item.addEventListener('click', () => select(submission));
     list.append(item);
   }
@@ -224,6 +247,9 @@ function select(submission) {
   state.verifiedKey = null;
   state.verified = new Set();
   state.review = null;
+  state.diagnostics = null;
+  state.diagnosticsSha = null;
+  state.diagnosticsRequest += 1;
   state.reviewLoadRequest += 1;
   state.reviewLoadedFor = null;
   state.reviewSuperseded = false;
@@ -313,6 +339,7 @@ function renderDetail() {
   grid.textContent = '';
   for (const photo of submission.photos ?? []) {
     const figure = document.createElement('figure');
+    figure.dataset.photoId = photo.photo_id;
     const img = document.createElement('img');
     img.src = photo.signed_url;
     img.alt = `photo seq ${photo.seq}`;
@@ -334,6 +361,7 @@ function renderDetail() {
   renderProductPictureOptions();
   setDecisionAvailability();
   renderReviewBanner();
+  renderDiagnostics();
   // Restore this reviewer's saved corrections and ticks, once per revision.
   void loadReview();
 }
@@ -630,6 +658,18 @@ function renderVerifyChecklist() {
     const text = document.createElement('span');
     text.textContent = label;
     wrap.append(box, text);
+    // A tick means "I read this off the photograph". Where the draft says
+    // which photograph that was, make it one click away rather than a hunt.
+    const photoId = sourcePhotoForField(field);
+    if (photoId) {
+      const source = document.createElement('button');
+      source.type = 'button';
+      source.className = 'verify-source';
+      source.textContent = 'source';
+      source.title = 'Show the photograph this reading came from';
+      source.addEventListener('click', () => focusSourcePhoto(photoId));
+      wrap.append(source);
+    }
     host.append(wrap);
   }
 }
@@ -654,6 +694,16 @@ function readinessChecks() {
         ? 'This page and the server disagree about the label text. Reopen this submission.'
         : 'New photographs arrived after you started. Reopen this submission to read them.',
       done_text: 'Your saved review matches this evidence.',
+    },
+    {
+      // Not yet checked is not the same as clean. An unanswered validator
+      // must not read as permission: approving a label the importer will
+      // refuse produces a broken catalog entry nobody is watching for.
+      done: Array.isArray(state.diagnostics) && state.diagnostics.length === 0,
+      todo: state.diagnostics === null
+        ? 'Waiting for the label check. If it does not arrive, reopen this submission.'
+        : `Fix ${state.diagnostics.length} problem(s) the catalog importer will refuse.`,
+      done_text: 'The catalog importer accepts this label.',
     },
     {
       done: submission.review_status === 'under_review',
@@ -904,6 +954,267 @@ function renderReviewBanner() {
   banner.hidden = message === '';
 }
 
+
+// ------------------------------------------------- server-owned diagnostics
+//
+// The console has no label rules of its own. It asks the importer's validator
+// — the same code that gates catalog entry — and renders the answer. A second
+// validator written here would eventually disagree with that one, and the
+// disagreement would surface as a reviewer being told a label is fine and the
+// catalog gate refusing it later, with nobody able to say which was right.
+
+async function refreshDiagnostics() {
+  const submission = state.selected;
+  if (!submission || !state.session || !state.payloadSha) return;
+  if (state.diagnosticsSha === state.payloadSha) return;
+  const requestId = ++state.diagnosticsRequest;
+  const boundSha = state.payloadSha;
+  let diagnostics;
+  try {
+    const response = await fetch('/api/validate_label', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${state.session.access_token}`,
+      },
+      body: JSON.stringify({ payload: state.payload }),
+    });
+    if (response.ok === false) throw new Error('validator unavailable');
+    ({ diagnostics } = await response.json());
+  } catch {
+    // Unknown is not clean. Leaving the previous answer standing would let a
+    // reviewer approve against a check that never actually ran.
+    if (requestId !== state.diagnosticsRequest) return;
+    state.diagnostics = null;
+    state.diagnosticsSha = null;
+    renderDiagnostics();
+    setDecisionAvailability();
+    return;
+  }
+  if (requestId !== state.diagnosticsRequest) return;
+  if (state.selected?.id !== submission.id || state.payloadSha !== boundSha) return;
+  state.diagnostics = Array.isArray(diagnostics) ? diagnostics : null;
+  state.diagnosticsSha = state.diagnostics ? boundSha : null;
+  renderDiagnostics();
+  renderReadiness();
+  setDecisionAvailability();
+}
+
+function renderDiagnostics() {
+  const host = $('label-diagnostics');
+  if (!host) return;
+  host.textContent = '';
+  const diagnostics = state.diagnostics;
+  if (!diagnostics || diagnostics.length === 0) {
+    host.hidden = true;
+    return;
+  }
+  host.hidden = false;
+  const heading = document.createElement('p');
+  heading.className = 'diagnostics-heading';
+  heading.textContent = diagnostics.length === 1
+    ? 'The catalog importer will refuse this label:'
+    : `The catalog importer will refuse this label (${diagnostics.length} problems):`;
+  host.append(heading);
+  const list = document.createElement('ul');
+  for (const entry of diagnostics) {
+    const item = document.createElement('li');
+    const path = document.createElement('code');
+    path.textContent = entry.path ?? '$';
+    const message = document.createTextNode(` ${entry.message ?? ''}`);
+    item.append(path, message);
+    list.append(item);
+  }
+  host.append(list);
+}
+
+/** Bring the photograph a field was read off into view, and mark it. */
+function focusSourcePhoto(photoId) {
+  const grid = $('photos');
+  if (!grid || !photoId) return false;
+  let found = false;
+  for (const figure of grid.children ?? []) {
+    const matches = figure.dataset?.photoId === photoId;
+    figure.classList?.[matches ? 'add' : 'remove']('source-photo');
+    if (matches) {
+      found = true;
+      figure.scrollIntoView?.({ block: 'nearest' });
+    }
+  }
+  return found;
+}
+
+// ------------------------------------------------------------ batch actions
+//
+// A batch is a convenience for one person at one screen: it saves the clicks,
+// never the reading. Each item is applied through the ordinary human
+// transition with its own evidence fence, its own payload and its own
+// attestations, and the server sources the approved label from that
+// reviewer's saved draft rather than from this page. A ticked neighbour, a
+// model's confidence and a stale screen all authorize exactly nothing.
+
+/** Server-reported readiness per submission, for this reviewer only. */
+function batchState(submissionId) {
+  return state.batchStates?.get(submissionId) ?? null;
+}
+
+function batchEligible(submission) {
+  const readiness = batchState(submission.id);
+  // A new product also needs its barcode check and its catalog picture, and
+  // neither is knowable from the queue. Offering it here would only produce a
+  // refusal the reviewer cannot act on from this screen, so new products are
+  // approved from their own page. The server supports either kind; this is a
+  // limit of what the queue knows, and it is stated rather than hidden.
+  if (submission.kind !== 'label_mismatch') return false;
+  return Boolean(
+    readiness && readiness.fully_verified && !readiness.superseded &&
+    submission.review_status === 'under_review',
+  );
+}
+
+async function refreshBatchStates() {
+  if (!state.session) return;
+  const ids = state.submissions
+    .filter((submission) => submission.review_status === 'under_review')
+    .map((submission) => submission.id)
+    .slice(0, 100);
+  const requestId = ++state.batchStateRequest;
+  if (ids.length === 0) {
+    state.batchStates = new Map();
+    renderQueue();
+    renderBatchBar();
+    return;
+  }
+  let states;
+  try {
+    ({ states } = await edge({ action: 'review_states', submission_ids: ids }));
+  } catch {
+    // Unknown readiness offers nothing to select, which is the safe direction.
+    if (requestId !== state.batchStateRequest) return;
+    state.batchStates = new Map();
+    renderQueue();
+    renderBatchBar();
+    return;
+  }
+  if (requestId !== state.batchStateRequest) return;
+  state.batchStates = new Map(
+    (states ?? []).map((entry) => [entry.submission_id, entry]),
+  );
+  // Anything that stopped being eligible while we asked stops being selected.
+  for (const id of [...state.batchSelected]) {
+    const submission = state.submissions.find((entry) => entry.id === id);
+    if (!submission || !batchEligible(submission)) state.batchSelected.delete(id);
+  }
+  renderQueue();
+  renderBatchBar();
+}
+
+function toggleBatchSelection(submissionId) {
+  const submission = state.submissions.find((entry) => entry.id === submissionId);
+  if (!submission || !batchEligible(submission)) return;
+  if (state.batchSelected.has(submissionId)) {
+    state.batchSelected.delete(submissionId);
+  } else {
+    state.batchSelected.add(submissionId);
+  }
+  renderBatchBar();
+}
+
+function selectAllEligible() {
+  for (const submission of state.submissions) {
+    if (batchEligible(submission)) state.batchSelected.add(submission.id);
+  }
+  renderQueue();
+  renderBatchBar();
+}
+
+function renderBatchBar() {
+  const bar = $('batch-bar');
+  if (!bar) return;
+  const count = state.batchSelected.size;
+  const button = $('batch-approve');
+  const summary = $('batch-summary');
+  if (button) {
+    button.disabled = count === 0 || state.batchRunning;
+    button.textContent = count === 1
+      ? 'Approve 1 verified submission'
+      : `Approve ${count} verified submissions`;
+  }
+  if (summary && !state.batchResults) {
+    const eligible = state.submissions.filter(batchEligible).length;
+    summary.textContent = eligible === 0
+      ? 'Nothing is fully read yet.'
+      : `${eligible} fully read and ready.`;
+  }
+  bar.hidden = false;
+}
+
+function renderBatchResults() {
+  const host = $('batch-results');
+  if (!host) return;
+  host.textContent = '';
+  const results = state.batchResults;
+  if (!results) {
+    host.hidden = true;
+    return;
+  }
+  host.hidden = false;
+  for (const entry of results) {
+    const line = document.createElement('li');
+    line.className = entry.applied ? 'ready' : 'blocking';
+    line.textContent = entry.applied
+      ? `${entry.submission_id}: approved`
+      : `${entry.submission_id}: not approved — open it to see why`;
+    host.append(line);
+  }
+}
+
+async function approveBatch() {
+  if (state.batchRunning || state.batchSelected.size === 0) return;
+  const items = [...state.batchSelected].map((id) => {
+    const readiness = batchState(id);
+    const submission = state.submissions.find((entry) => entry.id === id);
+    return {
+      submission_id: id,
+      to_status: 'approved',
+      // Each item carries its own fence. The approved label itself is read
+      // server-side from this reviewer's saved draft, never sent from here.
+      expected_evidence_revision: readiness.evidence_revision,
+      evidence_manifest_sha256: readiness.evidence_manifest_sha256,
+      ...(submission?.kind === 'missing_product' && submission.product_image_photo_id
+        ? { product_image_photo_id: submission.product_image_photo_id }
+        : {}),
+    };
+  });
+  state.batchRunning = true;
+  state.batchResults = null;
+  renderBatchBar();
+  let response;
+  try {
+    response = await edge({ action: 'batch_transition', items });
+  } catch {
+    // The request may have applied some items before the answer was lost.
+    // Re-running it blind would be a second attempt at work that may already
+    // be done, so refresh and make the reviewer look instead.
+    state.batchRunning = false;
+    state.batchSelected.clear();
+    setStatus(
+      'The batch answer was lost. Some submissions may already be approved; ' +
+      'the queue has been refreshed — check before trying again.', true);
+    await loadQueue();
+    return;
+  }
+  state.batchRunning = false;
+  state.batchResults = response.results ?? [];
+  // Only the ones that actually applied leave the selection; a refusal stays
+  // visible so the reviewer can open it.
+  for (const entry of state.batchResults) {
+    if (entry.applied) state.batchSelected.delete(entry.submission_id);
+  }
+  setStatus(`${response.applied ?? 0} of ${response.total ?? items.length} approved.`);
+  renderBatchResults();
+  await loadQueue();
+}
 
 // ------------------------------------------------------------- help drawer
 
@@ -1446,7 +1757,10 @@ async function updateShaPreview() {
   }
   // Deliberately outside the try above: a failure to save is not the label
   // being invalid, and must never be reported to the reviewer as one.
-  if (state.payloadSha) scheduleReviewSave();
+  if (state.payloadSha) {
+    scheduleReviewSave();
+    void refreshDiagnostics();
+  }
   // Editing a field is the reviewer withdrawing their own check of it.
   renderVerifyChecklist();
   renderReadiness();

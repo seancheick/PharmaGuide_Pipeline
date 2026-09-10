@@ -48,6 +48,12 @@
       <button id="reload" type="button">Reload</button>
     </div>
     <p id="queue-count" class="muted" aria-live="polite"></p>
+    <div id="batch-bar" class="batch-bar" hidden>
+      <span id="batch-summary" class="muted"></span>
+      <button id="batch-select-all" type="button">Select all ready</button>
+      <button id="batch-approve" type="button" disabled>Approve 0 verified submissions</button>
+      <ul id="batch-results" class="batch-results" hidden></ul>
+    </div>
     <ul id="queue"></ul>
     <button id="load-more" class="ghost hidden" type="button">Load more</button>
   </aside>
@@ -160,6 +166,7 @@
 
     <h2>Decision</h2>
     <p id="review-banner" class="review-banner" hidden></p>
+    <section id="label-diagnostics" class="diagnostics" aria-live="polite" hidden></section>
     <section id="readiness" aria-live="polite">
       <div class="row">
         <h3 id="readiness-title">Before you approve</h3>

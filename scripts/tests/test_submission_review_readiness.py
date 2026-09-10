@@ -50,6 +50,7 @@ state.payloadSha = ${JSON.stringify(setup.payload_sha)};
 state.identityRecorded = ${JSON.stringify(setup.identity)};
 state.productImage = ${setup.product_image ? "{id:'p'}" : 'null'};
 state.reviewInvalidated = ${setup.invalidated ? 'true' : 'false'};
+state.diagnostics = ${JSON.stringify(setup.diagnostics)};
 renderVerifyChecklist();
 for (const field of ${JSON.stringify(setup.verified)}) toggleVerified(field);
 renderReadiness();
@@ -99,6 +100,7 @@ state.selected={id:'s1',kind:'label_mismatch',review_status:'under_review',evide
 state.payload={brandName:'Original'};
 state.payloadSha='a'.repeat(64);
 state.payloadCanonical=canonicalJson(state.payload);
+state.diagnostics=[];
 for(const [field] of CRITICAL_FIELDS) toggleVerified(field);
 `,ctx);
 (async()=>{await vm.runInContext(process.argv[2],ctx);console.log(JSON.stringify(out));})()
@@ -226,6 +228,9 @@ def _render(**overrides):
         "identity": "no_match_verified",
         "product_image": True,
         "invalidated": False,
+        # The importer's validator has answered and found nothing. "Not yet
+        # answered" is a separate state, and it blocks.
+        "diagnostics": [],
         "verified": ALL_FIELDS,
     }
     setup.update(overrides)
@@ -338,3 +343,20 @@ def test_every_critical_field_gets_its_own_tick() -> None:
     out = _render(verified=[])
 
     assert len(out["chips"]) == len(ALL_FIELDS)
+
+
+def test_an_unanswered_label_check_is_not_treated_as_clean() -> None:
+    out = _render(diagnostics=None)
+
+    assert out["approveDisabled"] is True
+    assert any("Waiting for the label check" in text for text in _blockers(out))
+
+
+def test_importer_problems_block_approval_and_are_counted() -> None:
+    out = _render(diagnostics=[
+        {"path": "ingredientRows[2]", "message": "amount must be a number"},
+        {"path": "servingSizes[0]", "message": "minQuantity required"},
+    ])
+
+    assert out["approveDisabled"] is True
+    assert any("Fix 2 problem(s)" in text for text in _blockers(out))

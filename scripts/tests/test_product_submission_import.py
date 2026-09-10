@@ -927,3 +927,79 @@ def test_dashboard_snapshot_applies_reviewed_submission_corrections_last():
 
     assert enriched_append < build
     assert scored_append < build
+
+
+def _valid_label() -> dict:
+    """A payload the importer accepts, as the reviewer console would send it."""
+    return {
+        "fullName": "Example Multivitamin",
+        "brandName": "Example Brand",
+        "ingredientRows": [
+            {
+                "name": "Vitamin D3",
+                "ingredientGroup": "vitamin_d",
+                "order": 1,
+                "quantity": [],
+                "forms": [],
+                "nestedRows": [],
+            }
+        ],
+        "servingSizes": [{"minQuantity": 1.0, "maxQuantity": 1.0, "unit": "capsule", "order": 1}],
+        "otherIngredientsDisclosure": "declared_none",
+    }
+
+
+def test_diagnostics_are_empty_only_when_the_importer_would_accept() -> None:
+    from product_submission_import import (
+        collect_label_diagnostics,
+        _validate_label_payload,
+    )
+
+    payload = _valid_label()
+    # The two must agree by construction; this is the whole point of routing
+    # the console through the importer's own validator.
+    _validate_label_payload(payload)
+    assert collect_label_diagnostics(payload) == []
+
+
+def test_every_bad_row_is_reported_not_just_the_first() -> None:
+    from product_submission_import import collect_label_diagnostics
+
+    payload = _valid_label()
+    payload["ingredientRows"] = [
+        payload["ingredientRows"][0],
+        {"name": "Broken A"},
+        {"name": "Broken B"},
+    ]
+    paths = [entry["path"] for entry in collect_label_diagnostics(payload)]
+
+    # A reviewer fixing a twenty-row label must not have to save once per
+    # error to discover the next one.
+    assert "ingredientRows[1]" in paths
+    assert "ingredientRows[2]" in paths
+    assert "ingredientRows[0]" not in paths
+
+
+def test_a_whole_payload_failure_is_never_reported_as_silence() -> None:
+    from product_submission_import import collect_label_diagnostics
+
+    payload = _valid_label()
+    del payload["brandName"]
+    diagnostics = collect_label_diagnostics(payload)
+
+    # Every row is individually fine, so per-row collection finds nothing.
+    # Returning [] here would tell the console the label is acceptable.
+    assert diagnostics
+    assert diagnostics[0]["path"] == "$"
+    assert "brandName" in diagnostics[0]["message"]
+
+
+def test_a_forbidden_top_level_field_is_reported() -> None:
+    from product_submission_import import collect_label_diagnostics
+
+    payload = _valid_label()
+    payload["dsldId"] = "PG_SUB_1"
+    diagnostics = collect_label_diagnostics(payload)
+
+    assert diagnostics
+    assert any("forbidden" in entry["message"] for entry in diagnostics)

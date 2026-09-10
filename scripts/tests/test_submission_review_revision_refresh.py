@@ -58,6 +58,8 @@ await vm.runInContext(`(async()=>{
 state.selected={id:'a',kind:'label_mismatch',review_status:'under_review',evidence_revision:1,evidence_manifest_sha256:'a'.repeat(64)};
 state.payload={fullName:'Old draft'};state.identityRecorded='no_match_verified';state.productImage={id:'old'};
 state.payloadCanonical=canonicalJson(state.payload);state.payloadSha='c'.repeat(64);
+state.diagnostics=[];  // the importer's validator has answered: nothing wrong
+
 state.verifiedKey=verificationKey();state.verified=new Set(CRITICAL_FIELDS.map(([key])=>key));
 edge=async(body)=>{
   if(body.action!=='list'){calls.push(body);return {};}

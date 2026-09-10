@@ -479,6 +479,8 @@ vm.runInContext(fs.readFileSync(asset, 'utf8') +
     state.productImage = {kind: 'photo', id: 'front-photo'};
     state.payload = {};
     state.payloadCanonical=canonicalJson(state.payload);state.payloadSha='b'.repeat(64);
+    state.diagnostics=[];  // the importer's validator has answered: nothing wrong
+
     state.verifiedKey=verificationKey();state.verified=new Set(CRITICAL_FIELDS.map(([key])=>key));
     try {
       if (action === 'record') await recordMatch('no_match_verified');

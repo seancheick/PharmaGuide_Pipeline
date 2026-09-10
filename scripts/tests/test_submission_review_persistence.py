@@ -37,6 +37,7 @@ const document={getElementById:id=>(nodes[id] ||= el(id)),createElement:()=>el('
 // The reviewer's session exists; persistence is expected to engage.
 const ctx=vm.createContext({document,console,out,calls,nodes,
  setTimeout,clearTimeout,queueMicrotask,
+ fetch:async()=>({ok:true,json:async()=>({diagnostics:[]})}),
  structuredClone:v=>JSON.parse(JSON.stringify(v))});
 vm.runInContext(fs.readFileSync(process.argv[1].replace('app.js','canonical.js'),'utf8'),ctx);
 vm.runInContext(fs.readFileSync(process.argv[1],'utf8')+`
@@ -239,3 +240,89 @@ def test_an_older_verification_reply_cannot_drop_a_newer_tick() -> None:
     # The stale reply lists one tick. Repainting from it would discard a check
     # the database has already accepted.
     assert out["checked"] == ["brand", "serving"]
+
+
+def test_the_console_asks_the_importer_rather_than_judging_the_label() -> None:
+    out = _exercise("""(async()=>{
+      fetch=async(url,init)=>{calls.push({url,body:JSON.parse(init.body)});
+        return {ok:true,json:async()=>({diagnostics:[
+          {path:'ingredientRows[1]',message:'amount must be a number'}]})};};
+      await updateShaPreview();
+      await refreshDiagnostics();
+      out.url=calls[0].url;
+      out.sentPayload=calls[0].body.payload;
+      out.diagnostics=state.diagnostics;
+      out.blockers=approvalBlockers().map(c=>c.todo);
+    })()""")
+
+    assert out["url"] == "/api/validate_label"
+    assert out["sentPayload"] == {"brandName": "Original"}
+    assert out["diagnostics"] == [
+        {"path": "ingredientRows[1]", "message": "amount must be a number"}
+    ]
+    assert any("Fix 1 problem(s)" in todo for todo in out["blockers"])
+
+
+def test_a_validator_outage_is_unknown_not_clean() -> None:
+    out = _exercise("""(async()=>{
+      fetch=async()=>({ok:true,json:async()=>({diagnostics:[]})});
+      await updateShaPreview();
+      await refreshDiagnostics();
+      out.beforeOutage=approvalBlockers().map(c=>c.todo);
+      state.payload={brandName:'Edited'};
+      await updateShaPreview();
+      fetch=async()=>{throw new Error('down');};
+      await refreshDiagnostics();
+      out.diagnostics=state.diagnostics;
+      out.blockers=approvalBlockers().map(c=>c.todo);
+    })()""")
+
+    # A previous clean answer must not survive an outage: it would let the
+    # reviewer approve against a check that never ran for this text.
+    assert not any("label check" in todo for todo in out["beforeOutage"])
+    assert out["diagnostics"] is None
+    assert any("Waiting for the label check" in todo for todo in out["blockers"])
+
+
+def test_a_stale_diagnostics_reply_cannot_clear_a_newer_payload() -> None:
+    out = _exercise("""(async()=>{
+      let release; const gate=new Promise(r=>{release=r;});
+      let first=true;
+      fetch=async()=>{
+        if(first){first=false; await gate;
+          return {ok:true,json:async()=>({diagnostics:[]})};}
+        return {ok:true,json:async()=>({diagnostics:[
+          {path:'$',message:'brandName required'}]})};};
+      await updateShaPreview();
+      const slow=refreshDiagnostics();
+      state.payload={brandName:'Edited'};
+      await updateShaPreview();
+      await refreshDiagnostics();
+      release(); await slow;
+      out.diagnostics=state.diagnostics;
+    })()""")
+
+    # The stale reply said "clean" about text nobody is looking at any more.
+    assert out["diagnostics"] == [{"path": "$", "message": "brandName required"}]
+
+
+def test_a_field_points_at_the_photograph_it_was_read_from() -> None:
+    out = _exercise("""(async()=>{
+      state.draft={draft_payload:{identity:{brand:{sources:[
+        {photo_id:'11111111-1111-1111-1111-111111111111'}]}}}};
+      const grid=document.getElementById('photos');
+      const match={dataset:{photoId:'11111111-1111-1111-1111-111111111111'},
+        classList:{_s:new Set(),add(c){this._s.add(c)},remove(c){this._s.delete(c)}},
+        scrollIntoView(){}};
+      const other={dataset:{photoId:'22222222-2222-2222-2222-222222222222'},
+        classList:{_s:new Set(),add(c){this._s.add(c)},remove(c){this._s.delete(c)}},
+        scrollIntoView(){}};
+      grid.children=[match,other];
+      out.found=focusSourcePhoto('11111111-1111-1111-1111-111111111111');
+      out.marked=[...match.classList._s];
+      out.otherMarked=[...other.classList._s];
+    })()""")
+
+    assert out["found"] is True
+    assert out["marked"] == ["source-photo"]
+    assert out["otherMarked"] == []

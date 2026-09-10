@@ -498,7 +498,8 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):  # noqa: N802
-        if self.path not in {"/api/edge", "/api/dsld_refresh", "/api/photo"}:
+        if self.path not in {"/api/edge", "/api/dsld_refresh", "/api/photo",
+                             "/api/validate_label"}:
             self._json({"error": "not found"}, 404)
             return
         length = int(self.headers.get("content-length") or 0)
@@ -537,6 +538,26 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
             self.send_header("content-length", str(len(photo)))
             self.end_headers()
             self.wfile.write(photo)
+            return
+
+        if self.path == "/api/validate_label":
+            # The importer's own validator answers this. The console asks
+            # rather than deciding, so the page can never call a label
+            # acceptable that the catalog gate will refuse.
+            try:
+                payload = json.loads(body)
+            except json.JSONDecodeError:
+                self._json({"error": "invalid request"}, 400)
+                return
+            try:
+                from product_submission_import import collect_label_diagnostics
+                diagnostics = collect_label_diagnostics(payload.get("payload"))
+            except Exception:  # noqa: BLE001 - a validator fault is not a verdict
+                # Never answer "looks fine" because the validator broke: an
+                # empty diagnostics list is what unblocks the reviewer.
+                self._json({"error": "validator unavailable"}, 503)
+                return
+            self._json({"diagnostics": diagnostics})
             return
 
         if self.path == "/api/dsld_refresh":
