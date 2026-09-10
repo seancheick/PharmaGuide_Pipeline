@@ -77,6 +77,51 @@ def test_a_valid_model_draft_passes_with_its_usage() -> None:
     assert result.usage.as_payload()["cost_microcents"] == 0
 
 
+def test_deterministic_prechecks_are_attached_at_the_extractor_boundary() -> None:
+    """Every caller gets the same cheap findings; none may forget the seam."""
+    result = LabelDraftExtractor(FakeAdapter()).extract(_bundle(), _config())
+
+    assert {
+        finding["code"] for finding in result.draft["discrepancies"]
+    } == {"facts_panel_missing"}
+
+
+def test_prechecks_use_identity_context_carried_by_the_evidence_bundle() -> None:
+    bundle = PreparedBundle(
+        submission_id=_bundle().submission_id,
+        evidence_revision=1,
+        photos=_bundle().photos,
+    )
+
+    result = LabelDraftExtractor(FakeAdapter()).extract(
+        bundle,
+        _config(),
+        submission_gtin="012345678905",
+        catalog_match={"dsld_id": "DSLD_1"},
+    )
+    codes = {finding["code"] for finding in result.draft["discrepancies"]}
+    assert codes == {"facts_panel_missing", "catalog_candidate"}
+
+
+def test_identity_context_is_not_exposed_to_the_provider_bundle() -> None:
+    seen = {}
+
+    class InspectingAdapter(FakeAdapter):
+        def extract(self, bundle, config):
+            seen["has_gtin"] = hasattr(bundle, "submission_gtin")
+            seen["has_catalog_match"] = hasattr(bundle, "catalog_match")
+            return super().extract(bundle, config)
+
+    bundle = _bundle()
+    LabelDraftExtractor(InspectingAdapter()).extract(
+        bundle,
+        _config(),
+        submission_gtin="012345678905",
+        catalog_match={"dsld_id": "DSLD_1"},
+    )
+    assert seen == {"has_gtin": False, "has_catalog_match": False}
+
+
 def test_an_adapter_without_stated_retention_terms_never_runs() -> None:
     # Silence is not consent. A provider that has not said what it does with a
     # user's photos does not get to see them.

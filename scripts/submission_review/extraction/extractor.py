@@ -15,9 +15,10 @@ import hashlib
 import math
 import time
 from dataclasses import dataclass, field
-from typing import Any, Protocol
+from typing import Any, Mapping, Protocol
 
-from .envelope import LabelDraftError, validate_label_draft_v1
+from .checks import run_checks
+from .envelope import MAX_DISCREPANCIES, LabelDraftError, validate_label_draft_v1
 
 FAILURE_SCHEMA = "extraction_failure_v1"
 PREPARATION_VERSION = "prep_v1"
@@ -73,6 +74,10 @@ class EvidenceBundle:
     submission_id: str
     evidence_revision: int
     photos: tuple[EvidencePhoto, ...]
+    # Optional context is supplied by the identity owner at the queue
+    # boundary.  It is deliberately not inferred from model output.
+    submission_gtin: str | None = None
+    catalog_match: Mapping[str, Any] | None = None
 
     @property
     def snapshot(self) -> dict[str, str]:
@@ -158,9 +163,7 @@ class ExtractionResult:
 class LabelDraftAdapter(Protocol):
     """What a provider adapter must offer, and nothing more."""
 
-    def extract(
-        self, bundle: PreparedBundle, config: ExtractionConfig
-    ) -> ExtractionResult:
+    def extract(self, bundle: PreparedBundle, config: ExtractionConfig) -> ExtractionResult:
         """Return a candidate draft and authoritative adapter usage, or raise."""
 
 
@@ -185,7 +188,12 @@ class LabelDraftExtractor:
         return value
 
     def extract(
-        self, bundle: PreparedBundle, config: ExtractionConfig
+        self,
+        bundle: PreparedBundle,
+        config: ExtractionConfig,
+        *,
+        submission_gtin: str | None = None,
+        catalog_match: Mapping[str, Any] | None = None,
     ) -> ExtractionResult:
         if not isinstance(config.retention_policy_version, str) or not config.retention_policy_version.strip():
             raise ExtractionError(
@@ -252,6 +260,47 @@ class LabelDraftExtractor:
             )
         if draft["sent_inputs"] != [photo.as_sent_input() for photo in bundle.photos]:
             raise ExtractionError("model_failure", "draft inputs are not the prepared evidence", usage=result.usage)
+        # These are deterministic findings, not model claims.  Attach them at
+        # the one extractor boundary so every worker/development caller gets
+        # the same checks and no caller can forget to run them.
+        derived = run_checks(
+            draft,
+            submission_gtin=submission_gtin,
+            catalog_match=catalog_match,
+        )
+        if derived:
+            existing = draft.get("discrepancies") or []
+            merged = list(existing)
+            seen = {
+                (
+                    item.get("code"), item.get("severity"), item.get("detail"),
+                    tuple(item.get("photo_ids") or ()),
+                )
+                for item in existing
+                if isinstance(item, dict)
+            }
+            for finding in derived:
+                key = (
+                    finding["code"], finding["severity"], finding["detail"],
+                    tuple(finding.get("photo_ids") or ()),
+                )
+                if key not in seen:
+                    merged.append(finding)
+                    seen.add(key)
+            if len(merged) > MAX_DISCREPANCIES:
+                raise ExtractionError(
+                    "model_failure",
+                    "draft discrepancy limit exceeded after deterministic checks",
+                    usage=result.usage,
+                )
+            draft = dict(draft)
+            draft["discrepancies"] = merged
+            try:
+                draft = validate_label_draft_v1(draft)
+            except (LabelDraftError, ValueError, TypeError, AttributeError) as error:
+                raise ExtractionError(
+                    "model_failure", "deterministic findings were invalid", usage=result.usage
+                ) from error
         result.usage.latency_seconds = elapsed
         return ExtractionResult(draft=draft, usage=result.usage)
 

@@ -89,8 +89,14 @@ def run_development_split(
                 )
             # The same preparation the queue worker runs, so what is measured
             # is the bytes a provider would actually have been sent.
-            prepared = prepare_bundle(_bundle_for(holdout_dir, entry))
-            result = extractor.extract(prepared, config)
+            source_bundle = _bundle_for(holdout_dir, entry)
+            prepared = prepare_bundle(source_bundle)
+            result = extractor.extract(
+                prepared,
+                config,
+                submission_gtin=source_bundle.submission_gtin,
+                catalog_match=source_bundle.catalog_match,
+            )
         except ExtractionError as error:
             summary["failed"] += 1
             summary["failure_codes"][error.code] = (
@@ -140,7 +146,20 @@ def _bundle_for(holdout_dir: Path, entry: dict[str, Any]) -> EvidenceBundle:
     if not photos:
         raise ExtractionError("unsupported_evidence", "the product has no photos")
     return EvidenceBundle(
-        submission_id=entry["product_key"], evidence_revision=1, photos=tuple(photos)
+        submission_id=entry["product_key"],
+        evidence_revision=1,
+        photos=tuple(photos),
+        submission_gtin=(
+            str(entry["submission_gtin"]).strip()
+            if isinstance(entry.get("submission_gtin"), str)
+            and entry["submission_gtin"].strip()
+            else None
+        ),
+        catalog_match=(
+            entry["catalog_match"]
+            if isinstance(entry.get("catalog_match"), dict)
+            else None
+        ),
     )
 
 

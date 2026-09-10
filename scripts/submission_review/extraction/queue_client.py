@@ -381,6 +381,17 @@ class SupabaseExtractionQueue:
                 submission_id=str(row.get("submission_id") or ""),
                 evidence_revision=int(row.get("evidence_revision") or 0),
                 photos=tuple(photos),
+                submission_gtin=(
+                    str(row["submission_gtin"]).strip()
+                    if isinstance(row.get("submission_gtin"), str)
+                    and row["submission_gtin"].strip()
+                    else None
+                ),
+                catalog_match=(
+                    row["catalog_match"]
+                    if isinstance(row.get("catalog_match"), dict)
+                    else None
+                ),
             ),
             configuration=config,
             # Heartbeat well before the SQL minimum lease of 30 seconds.
