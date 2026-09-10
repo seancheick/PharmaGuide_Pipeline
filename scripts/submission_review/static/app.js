@@ -957,11 +957,11 @@ function renderReviewBanner() {
 
 // ------------------------------------------------- server-owned diagnostics
 //
-// The console has no label rules of its own. It asks the importer's validator
-// — the same code that gates catalog entry — and renders the answer. A second
-// validator written here would eventually disagree with that one, and the
-// disagreement would surface as a reviewer being told a label is fine and the
-// catalog gate refusing it later, with nobody able to say which was right.
+// The console has no label rules of its own. It asks the Edge Function for the
+// verdict of the very validator that will refuse the approval, so a reviewer
+// can never be told a label is acceptable by one implementation and refused by
+// another with nobody able to say which was right. The catalog importer keeps
+// its own validator for its own gate; a pinned fixture proves the two agree.
 
 async function refreshDiagnostics() {
   const submission = state.selected;
@@ -971,16 +971,9 @@ async function refreshDiagnostics() {
   const boundSha = state.payloadSha;
   let diagnostics;
   try {
-    const response = await fetch('/api/validate_label', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${state.session.access_token}`,
-      },
-      body: JSON.stringify({ payload: state.payload }),
-    });
-    if (response.ok === false) throw new Error('validator unavailable');
-    ({ diagnostics } = await response.json());
+    ({ diagnostics } = await edge({
+      action: 'validate_label', payload: state.payload,
+    }));
   } catch {
     // Unknown is not clean. Leaving the previous answer standing would let a
     // reviewer approve against a check that never actually ran.

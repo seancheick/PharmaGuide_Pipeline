@@ -244,18 +244,18 @@ def test_an_older_verification_reply_cannot_drop_a_newer_tick() -> None:
 
 def test_the_console_asks_the_importer_rather_than_judging_the_label() -> None:
     out = _exercise("""(async()=>{
-      fetch=async(url,init)=>{calls.push({url,body:JSON.parse(init.body)});
-        return {ok:true,json:async()=>({diagnostics:[
-          {path:'ingredientRows[1]',message:'amount must be a number'}]})};};
+      edge=async(body)=>{calls.push(body);
+        return {diagnostics:[
+          {path:'ingredientRows[1]',message:'amount must be a number'}]};};
       await updateShaPreview();
       await refreshDiagnostics();
-      out.url=calls[0].url;
-      out.sentPayload=calls[0].body.payload;
+      out.action=calls[0].action;
+      out.sentPayload=calls[0].payload;
       out.diagnostics=state.diagnostics;
       out.blockers=approvalBlockers().map(c=>c.todo);
     })()""")
 
-    assert out["url"] == "/api/validate_label"
+    assert out["action"] == "validate_label"
     assert out["sentPayload"] == {"brandName": "Original"}
     assert out["diagnostics"] == [
         {"path": "ingredientRows[1]", "message": "amount must be a number"}
@@ -265,13 +265,15 @@ def test_the_console_asks_the_importer_rather_than_judging_the_label() -> None:
 
 def test_a_validator_outage_is_unknown_not_clean() -> None:
     out = _exercise("""(async()=>{
-      fetch=async()=>({ok:true,json:async()=>({diagnostics:[]})});
+      edge=async()=>({diagnostics:[]});
       await updateShaPreview();
       await refreshDiagnostics();
       out.beforeOutage=approvalBlockers().map(c=>c.todo);
+      // The outage starts before the edit, because diagnostics now travel the
+      // same channel as every other reviewer call.
+      edge=async()=>{throw new Error('down');};
       state.payload={brandName:'Edited'};
       await updateShaPreview();
-      fetch=async()=>{throw new Error('down');};
       await refreshDiagnostics();
       out.diagnostics=state.diagnostics;
       out.blockers=approvalBlockers().map(c=>c.todo);
@@ -288,11 +290,9 @@ def test_a_stale_diagnostics_reply_cannot_clear_a_newer_payload() -> None:
     out = _exercise("""(async()=>{
       let release; const gate=new Promise(r=>{release=r;});
       let first=true;
-      fetch=async()=>{
-        if(first){first=false; await gate;
-          return {ok:true,json:async()=>({diagnostics:[]})};}
-        return {ok:true,json:async()=>({diagnostics:[
-          {path:'$',message:'brandName required'}]})};};
+      edge=async()=>{
+        if(first){first=false; await gate; return {diagnostics:[]};}
+        return {diagnostics:[{path:'$',message:'brandName required'}]};};
       await updateShaPreview();
       const slow=refreshDiagnostics();
       state.payload={brandName:'Edited'};
