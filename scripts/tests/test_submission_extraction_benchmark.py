@@ -207,7 +207,8 @@ def test_invented_rows_magnitude_errors_and_wrong_product_fail_gates(holdout) ->
     assert report["verdict"] == "does_not_qualify"
     failed = {name for name, gate in report["gates"].items() if gate["passed"] is False}
     assert failed == {"invented_actives", "magnitude_errors", "wrong_product_substitutions",
-                      "tuple_exact_rate", "field_fidelity", "dose_accuracy"}
+                      "tuple_exact_rate", "field_fidelity", "dose_accuracy",
+                      "identity_accuracy"}
     # The dimensions discriminate: the corrupted amount kept its printed unit
     # and its ownership, so only the dose reads as wrong.
     per_field = metrics["per_field"]
@@ -236,6 +237,30 @@ def test_per_field_reporting_separates_a_dose_error_from_a_unit_error(holdout) -
     # One of the two drafted products carries the error, and the product-level
     # denominator counts labels, not fields.
     assert per_field["unit"]["products_without_error"] == {"n": 1, "N": 2, "rate": 0.5, "ci95": (0.0945, 0.9055)}
+
+
+def test_identity_and_serving_accuracy_are_independent_frozen_gates(holdout) -> None:
+    """A perfect draft passes; wrong identity or serving cannot qualify."""
+    root, run = holdout
+    good = _valid_draft()
+    _write(run, "d-1", good)
+    _write(run, "d-2", good)
+    _write(run, "d-3", {**good, "abstained": True, "abstain_reason": "unreadable"})
+    report = evaluate(root, run, "development")
+    assert report["gates"]["identity_accuracy"]["passed"] is True
+    assert report["gates"]["serving_accuracy"]["passed"] is True
+
+    wrong_identity = _valid_draft()
+    wrong_identity["identity"]["barcode_digits_seen"]["value"] = "036000291452"
+    _write(run, "d-1", wrong_identity)
+    report = evaluate(root, run, "development")
+    assert report["gates"]["identity_accuracy"]["passed"] is False
+
+    wrong_serving = _valid_draft()
+    wrong_serving["serving"]["size"]["value"] = "3 capsules"
+    _write(run, "d-1", wrong_serving)
+    report = evaluate(root, run, "development")
+    assert report["gates"]["serving_accuracy"]["passed"] is False
 
 
 def test_qualification_gates_use_product_level_dimension_rate(tmp_path: Path) -> None:

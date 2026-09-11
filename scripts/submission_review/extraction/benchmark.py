@@ -54,6 +54,12 @@ GATES: dict[str, Any] = {
     "dose_accuracy": 1.0,
     "unit_accuracy": 1.0,
     "blend_nesting_accuracy": 1.0,
+    # Identity and serving size are safety-critical inputs to the review
+    # payload. They are already measured per product; leaving them
+    # diagnostic-only could qualify a candidate with the wrong product or
+    # serving basis attached to otherwise correct ingredient rows.
+    "identity_accuracy": 1.0,
+    "serving_accuracy": 1.0,
     # A printed warning that never reaches the draft is a warning the reader
     # never gets. Presence is gated; wording is measured beside it, because a
     # gate a comma can fail is a gate that gets worked around.
@@ -818,7 +824,9 @@ def evaluate(holdout_dir: Path, run_dir: Path, split: str, configuration: str | 
             ),
         }
     metrics["per_field"] = per_field
-    for dimension in ("dose", "unit", "blend_nesting", "statement_presence"):
+    for dimension in (
+        "identity", "serving", "dose", "unit", "blend_nesting", "statement_presence"
+    ):
         # Qualification must use independent product samples, not correlated
         # row observations from the same label. Keep the observation interval
         # in ``per_field`` for diagnostics, but feed the product interval to

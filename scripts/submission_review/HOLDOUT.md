@@ -344,3 +344,11 @@ so a person would have gone hunting for a product they already had. Mass
 spelling now comes from `normalization.canonicalize_mass_unit`, the one owner
 of those aliases; activity units match on a whole word, which keeps the
 enzyme units GALU and GaIU out of the gram and IU families.
+
+2026-09-10 — Identity and serving-size qualification gates. These fields were
+already measured in `metrics.per_field`, but measurement without enforcement
+could let a candidate qualify with the right ingredient rows attached to the
+wrong product or serving basis. `identity_accuracy` and `serving_accuracy` now
+use the same independent product-level denominator as the existing dose, unit,
+blend-nesting and statement-presence gates, each at 100%. This is a tightening
+before any real provider run; no result or threshold was loosened.
