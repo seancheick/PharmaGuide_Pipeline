@@ -146,6 +146,104 @@ def test_present_other_ingredients_fail_closed_on_unbalanced_grouping():
         build_manual_label(_export(payload))
 
 
+def test_quantified_disclosure_preserves_ingredients_and_their_qualifier():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from product_submission_import import build_manual_label
+
+    payload = _payload()
+    payload["otherIngredientsDisclosure"] = "present"
+    payload["otherIngredients"] = (
+        "Microcrystalline cellulose; Less than 2% of: magnesium stearate, "
+        "silicon dioxide."
+    )
+    label = build_manual_label(_export(payload))
+    assert label["otherIngredients"]["ingredients"][1] == {
+        "name": "Less than 2% of:",
+        "forms": [{"name": "magnesium stearate"}, {"name": "silicon dioxide."}],
+    }
+    cleaned = EnhancedDSLDNormalizer().normalize_product(label)
+    assert any(
+        row.get("canonical_id") and "magnesium stearate" in row["name"].lower()
+        for row in cleaned["inactiveIngredients"]
+    )
+    assert any(
+        row.get("raw_source_text") == "Less than 2% of:"
+        and "magnesium stearate" in row.get("children", [])
+        for row in cleaned["display_ingredients"]
+    )
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        (
+            "May contain: milk, soy; cellulose",
+            [
+                {"name": "May contain:", "forms": [{"name": "milk"}, {"name": "soy"}]},
+                {"name": "cellulose"},
+            ],
+        ),
+        (
+            "Less than 2% of: capsule (hypromellose, water), silica",
+            [{"name": "Less than 2% of:", "forms": [
+                {"name": "capsule (hypromellose, water)"}, {"name": "silica"},
+            ]}],
+        ),
+        (
+            "Does not contain: milk; color (vegetable juice)",
+            [{"name": "Does not contain: milk"}, {"name": "color (vegetable juice)"}],
+        ),
+        (
+            "Less than 2% of: silica; Less than 1% of: carnauba wax",
+            [
+                {"name": "Less than 2% of:", "forms": [{"name": "silica"}]},
+                {"name": "Less than 1% of:", "forms": [{"name": "carnauba wax"}]},
+            ],
+        ),
+    ],
+)
+def test_disclosure_grouping_preserves_scope_and_never_strips_negation(text, expected):
+    from product_submission_import import build_manual_label
+
+    payload = _payload()
+    payload["otherIngredientsDisclosure"] = "present"
+    payload["otherIngredients"] = text
+    assert build_manual_label(_export(payload))["otherIngredients"]["ingredients"] == expected
+
+
+def test_disclosure_heading_without_a_child_fails_closed():
+    from product_submission_import import SubmissionImportError, build_manual_label
+
+    payload = _payload()
+    payload["otherIngredientsDisclosure"] = "present"
+    payload["otherIngredients"] = "Less than 2% of:"
+    with pytest.raises(SubmissionImportError, match="heading without an ingredient"):
+        build_manual_label(_export(payload))
+
+
+@pytest.mark.parametrize("source_shape", ["text", "inline_row", "structured_header"])
+def test_native_pipeline_and_submission_use_the_same_disclosure_cleaning(source_shape):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from product_submission_import import build_manual_label
+
+    text = "Less than 2% of: magnesium stearate, silicon dioxide"
+    payload = _payload()
+    payload["otherIngredientsDisclosure"] = "present"
+    payload["otherIngredients"] = text
+    imported = build_manual_label(_export(payload))
+    native = json.loads(json.dumps(imported))
+    if source_shape == "text":
+        native["otherIngredients"] = text
+    elif source_shape == "inline_row":
+        native["otherIngredients"] = {"ingredients": [{"name": text}]}
+    normalizer = EnhancedDSLDNormalizer()
+    expected = normalizer.normalize_product(imported)
+    actual = normalizer.normalize_product(native)
+    assert actual["inactiveIngredients"] == expected["inactiveIngredients"]
+    assert actual["display_ingredients"] == expected["display_ingredients"]
+    assert actual["label_ledger_audit"] == expected["label_ledger_audit"]
+
+
 def row_id(row: dict) -> str:
     return str(row["submission_id"])
 

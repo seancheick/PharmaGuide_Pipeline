@@ -498,53 +498,14 @@ def _validate_label_payload(payload: object) -> dict[str, Any]:
     return normalized
 
 
-def _pipeline_other_ingredient_rows(label_text: str) -> list[dict[str, str]]:
-    """Convert reviewed disclosure text into the cleaner's supported row shape.
+def _pipeline_other_ingredient_rows(label_text: str) -> list[dict[str, Any]]:
+    """Adapt the shared cleaner's disclosure parser to the import error contract."""
+    from enhanced_normalizer import parse_other_ingredient_disclosure
 
-    The approval contract intentionally stores the disclosure exactly as the
-    reviewer read it. The cleaner contract, however, accepts a list of rows.
-    Split only on top-level commas/semicolons so parenthesized source details
-    remain attached to their ingredient. Ambiguous, unbalanced grouping fails
-    closed instead of silently changing label meaning.
-    """
-    if not label_text:
-        return []
-
-    matching = {")": "(", "]": "[", "}": "{"}
-    openings = set(matching.values())
-    stack: list[str] = []
-    parts: list[str] = []
-    start = 0
-
-    for index, character in enumerate(label_text):
-        if character in openings:
-            stack.append(character)
-        elif character in matching:
-            if not stack or stack[-1] != matching[character]:
-                raise SubmissionImportError(
-                    "otherIngredients has unbalanced grouping punctuation"
-                )
-            stack.pop()
-        elif character in {",", ";"} and not stack:
-            part = label_text[start:index].strip()
-            if not part:
-                raise SubmissionImportError(
-                    "otherIngredients contains an empty ingredient segment"
-                )
-            parts.append(part)
-            start = index + 1
-
-    if stack:
-        raise SubmissionImportError(
-            "otherIngredients has unbalanced grouping punctuation"
-        )
-    final_part = label_text[start:].strip()
-    if not final_part:
-        raise SubmissionImportError(
-            "otherIngredients contains an empty ingredient segment"
-        )
-    parts.append(final_part)
-    return [{"name": part} for part in parts]
+    try:
+        return parse_other_ingredient_disclosure(label_text)
+    except ValueError as error:
+        raise SubmissionImportError(str(error)) from error
 
 
 def _parse_approved_at(value: object) -> tuple[str, str]:

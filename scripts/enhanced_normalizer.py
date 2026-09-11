@@ -366,6 +366,133 @@ INTENTIONAL_IQM_BR_DUAL_CLASSIFICATION = frozenset({
 })
 
 
+def parse_other_ingredient_disclosure(label_text: str) -> list[dict[str, Any]]:
+    """Convert reviewed disclosure text into the cleaner's supported row shape.
+
+    The approval contract intentionally stores the disclosure exactly as the
+    reviewer read it. The cleaner contract, however, accepts a list of rows.
+    Split only on top-level commas/semicolons so parenthesized source details
+    remain attached to their ingredient. Ambiguous, unbalanced grouping fails
+    closed instead of silently changing label meaning.
+    """
+    if not label_text:
+        return []
+
+    matching = {")": "(", "]": "[", "}": "{"}
+    openings = set(matching.values())
+    stack: list[str] = []
+    parts: list[tuple[str, str]] = []
+    start = 0
+
+    for index, character in enumerate(label_text):
+        if character in openings:
+            stack.append(character)
+        elif character in matching:
+            if not stack or stack[-1] != matching[character]:
+                raise ValueError(
+                    "otherIngredients has unbalanced grouping punctuation"
+                )
+            stack.pop()
+        elif character in {",", ";"} and not stack:
+            part = label_text[start:index].strip()
+            if not part:
+                raise ValueError(
+                    "otherIngredients contains an empty ingredient segment"
+                )
+            parts.append((part, character))
+            start = index + 1
+
+    if stack:
+        raise ValueError(
+            "otherIngredients has unbalanced grouping punctuation"
+        )
+    final_part = label_text[start:].strip()
+    if not final_part:
+        raise ValueError(
+            "otherIngredients contains an empty ingredient segment"
+        )
+    parts.append((final_part, ""))
+
+    # The cleaner owns heading recognition and expansion. Keep qualifiers as
+    # parent rows rather than dropping their wording or mapping them as names.
+    rows: list[dict[str, Any]] = []
+    heading: dict[str, Any] | None = None
+    for part, delimiter in parts:
+        prefix, colon, remainder = part.partition(":")
+        if colon and is_label_header(prefix + colon):
+            if not remainder.strip():
+                raise ValueError(
+                    "otherIngredients contains a heading without an ingredient"
+                )
+            heading = {"name": prefix + colon, "forms": []}
+            rows.append(heading)
+            part = remainder.strip()
+        if heading is None:
+            rows.append({"name": part})
+        else:
+            heading["forms"].append({"name": part})
+        # A semicolon closes the current disclosure clause; a comma does not.
+        if delimiter == ";":
+            heading = None
+    return rows
+
+
+def is_label_header(name: str) -> bool:
+    """
+    Check if ingredient name is a label header like 'Less than 2% of:' that may contain
+    real ingredients in its forms array.
+
+    These should be skipped as ingredients themselves, but their forms should be extracted.
+
+    Args:
+        name: The ingredient name
+
+    Returns:
+        True if this is a structural header (not an actual ingredient)
+    """
+    if not name:
+        return False
+
+    processed_name = _preprocess_text_module_cached(name)
+    if processed_name in STRUCTURAL_OTHER_HEADER_NAMES:
+        return True
+
+    name_lower = norm_module.normalize_text(name)
+
+    # A3: Patterns for structural headers that contain real ingredients in forms
+    header_patterns = [
+        r"^less\s+than\s+\d+%\s+of:?$",
+        r"^contains?\s+less\s+than\s+\d+%\s+of:?$",
+        r"^contains?\s+less\s+than\s+\d+%\s+of\s+blend:?$",
+        r"^contains?\s*<?\s*\d+%\s+of:?$",
+        r"^<\s*\d+%\s+of:?$",
+        r"^\d+%\s+or\s+less\s+of:?$",
+        r"^contains?\s+\d+%\s+or\s+less\s+of:?$",
+        r"^may\s+contain\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
+        r"^may(?:\s+also)?\s+contain:?$",
+        r"^may(?:\s+also)?\s+contain\s*<?\s*\d+(?:\.\d+)?%:?$",
+        r"^contains?\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
+        r".*\b(shell|capsule)\s+ingredients:?$",
+        # 2026-05-15: suffix-less percentage fragments. DSLD occasionally parses
+        # label text like "Natural flavor, citric acid, less than 0.1%
+        # sodium benzoate" into separate rows including a bare "less than 0.1%"
+        # entry with no forms[] attached. Existing patterns above all require
+        # "of" or "of:" suffix; this entry slips through and gets promoted to
+        # active by enricher Pass 2, triggering UNMAPPED_ACTIVE_INGREDIENT and
+        # NOT_SCORED. Treating bare-percentage strings as label headers means
+        # _expand_header_forms_for_processing drops them (no forms → empty
+        # expansion → silently filtered). Closes 1 product in Bucket 1 NOT_SCORED.
+        r"^less\s+than\s+\d+(\.\d+)?\s*%\s*$",
+        r"^<\s*\d+(\.\d+)?\s*%\s*$",
+    ]
+
+    for pattern in header_patterns:
+        if re.match(pattern, name_lower):
+            return True
+
+    return False
+
+
 STRUCTURAL_OTHER_HEADER_NAMES = frozenset({
     "may also contain",
     "soft gel shell",
@@ -5934,6 +6061,10 @@ class EnhancedDSLDNormalizer:
                 if key in raw_data:
                     other_ing_data = raw_data[key] or {}
                     break
+            if isinstance(other_ing_data, str):
+                other_ing_data = {
+                    "ingredients": parse_other_ingredient_disclosure(other_ing_data)
+                }
             if not isinstance(other_ing_data, dict):
                 self._record_unsupported_label_source(
                     "otheringredients",
@@ -5950,6 +6081,26 @@ class EnhancedDSLDNormalizer:
                 "otheringredients.ingredients",
                 "inactiveIngredients",
             )
+            # Native DSLD rows can contain the same inline disclosure text as
+            # submissions. Expand only recognized, undosed headings; ordinary
+            # chemical names and already-structured forms remain untouched.
+            expanded_disclosures = []
+            for row in other_ingredients_raw:
+                name = str(row.get("name") or "")
+                prefix, colon, _ = name.partition(":")
+                if (
+                    colon and is_label_header(prefix + colon)
+                    and not row.get("forms") and not row.get("nestedRows")
+                    and not row.get("quantity") and not row.get("amount")
+                ):
+                    expanded_disclosures.extend(
+                        {**row, **parsed}
+                        for parsed in parse_other_ingredient_disclosure(name)
+                    )
+                else:
+                    expanded_disclosures.append(row)
+            other_ingredients_raw = expanded_disclosures
+            other_ing_data = {**other_ing_data, "ingredients": other_ingredients_raw}
             self._stamp_raw_source_paths(
                 other_ingredients_raw,
                 "otheringredients.ingredients",
@@ -11589,59 +11740,7 @@ class EnhancedDSLDNormalizer:
         return False
 
     def _is_label_header(self, name: str) -> bool:
-        """
-        Check if ingredient name is a label header like 'Less than 2% of:' that may contain
-        real ingredients in its forms array.
-
-        These should be skipped as ingredients themselves, but their forms should be extracted.
-
-        Args:
-            name: The ingredient name
-
-        Returns:
-            True if this is a structural header (not an actual ingredient)
-        """
-        if not name:
-            return False
-
-        processed_name = self.matcher.preprocess_text(name)
-        if processed_name in STRUCTURAL_OTHER_HEADER_NAMES:
-            return True
-
-        name_lower = norm_module.normalize_text(name)
-
-        # A3: Patterns for structural headers that contain real ingredients in forms
-        header_patterns = [
-            r"^less\s+than\s+\d+%\s+of:?$",
-            r"^contains?\s+less\s+than\s+\d+%\s+of:?$",
-            r"^contains?\s+less\s+than\s+\d+%\s+of\s+blend:?$",
-            r"^contains?\s*<?\s*\d+%\s+of:?$",
-            r"^<\s*\d+%\s+of:?$",
-            r"^\d+%\s+or\s+less\s+of:?$",
-            r"^contains?\s+\d+%\s+or\s+less\s+of:?$",
-            r"^may\s+contain\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
-            r"^may(?:\s+also)?\s+contain:?$",
-            r"^may(?:\s+also)?\s+contain\s*<?\s*\d+(?:\.\d+)?%:?$",
-            r"^contains?\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
-            r".*\b(shell|capsule)\s+ingredients:?$",
-            # 2026-05-15: suffix-less percentage fragments. DSLD occasionally parses
-            # label text like "Natural flavor, citric acid, less than 0.1%
-            # sodium benzoate" into separate rows including a bare "less than 0.1%"
-            # entry with no forms[] attached. Existing patterns above all require
-            # "of" or "of:" suffix; this entry slips through and gets promoted to
-            # active by enricher Pass 2, triggering UNMAPPED_ACTIVE_INGREDIENT and
-            # NOT_SCORED. Treating bare-percentage strings as label headers means
-            # _expand_header_forms_for_processing drops them (no forms → empty
-            # expansion → silently filtered). Closes 1 product in Bucket 1 NOT_SCORED.
-            r"^less\s+than\s+\d+(\.\d+)?\s*%\s*$",
-            r"^<\s*\d+(\.\d+)?\s*%\s*$",
-        ]
-
-        for pattern in header_patterns:
-            if re.match(pattern, name_lower):
-                return True
-
-        return False
+        return is_label_header(name)
 
     def _is_semantic_label_qualifier(self, name: str) -> bool:
         """Return true for headers whose wording changes child ingredient meaning.
