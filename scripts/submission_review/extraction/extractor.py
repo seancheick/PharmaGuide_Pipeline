@@ -228,6 +228,11 @@ class LabelDraftExtractor:
             # Invalid usage means unknown cost, never an invented zero charge.
             error.usage = _checked_usage(error.usage)
             raise
+        except LabelDraftError as error:
+            # Some adapters validate before returning. This is the same bad
+            # draft as a validation failure below, not an unavailable engine.
+            # No usage was returned, so do not invent a zero-cost receipt.
+            raise ExtractionError("model_failure", "invalid provider draft") from error
         except Exception as error:
             # Adapters are provider boundaries. An unexpected SDK/network
             # exception must become a retryable typed failure rather than

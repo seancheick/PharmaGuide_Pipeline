@@ -8,6 +8,12 @@ contract name elsewhere.
 
 ## Pipeline and release terms
 
+**DSLD extraction diagnostic:** a repeatable, non-qualifying run of saved DSLD
+PDF renders through the existing `LabelDraftExtractor`. Original raw records,
+catalog references, image/model fingerprints and outcomes are retained
+separately. Catalog discrepancies are not independent gold accuracy; diagnostic
+images used for tuning cannot later be represented as untouched holdout data.
+
 **Extraction attempt receipt:** database-owned history of a claimed extraction
 attempt, keyed by job and fencing token and bound to its worker. Derived in the
 same transaction as queue state changes, never authored by adapters. It proves a

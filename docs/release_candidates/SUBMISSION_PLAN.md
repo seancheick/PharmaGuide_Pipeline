@@ -1,8 +1,10 @@
 # Submission extraction — the plan
 
 One document. It replaces plan v3 and the two review threads it merges, so
-there is one place to read and one place to change. Written 2026-09-10 on
-pipeline `ecaa9a4e`.
+there is one place to read and one place to change. Updated 2026-09-10 after
+reconstructing the completed work through `64f65fbb` and running the saved
+DSLD image experiment. Code and experiment receipts take priority over older
+chat status summaries.
 
 Standing constraints: extraction stays disabled; no `auto_approved` and no
 approval-RPC change before the frozen holdout qualifies; one server-side
@@ -14,23 +16,127 @@ reversed in writing.
 
 Done and pushed: the draft envelope, worker and queue; deterministic checks;
 the grounding verifier wired at the boundary; per-dimension benchmark
-reporting with gates on dose, unit, blend nesting and warning presence; the
+reporting with gates on identity, serving, dose, unit, blend nesting and warning presence; the
 shared-preprocessing measurement; the barcode coverage tool; and the protocol
 amendment that lets a pre-existing independent transcription serve as gold
-when a person confirms the edition.
+when a person confirms the edition. `import-reference` is implemented
+(`f6b02aa5`), with expanded comparison (`cd25fe81`) and shared GTIN validation
+(`6f30948f`). Identity and serving gates landed in `fbcc5420`.
 
-Not done: `import-reference`, the 20+40 set itself, the benchmark run, and
-everything downstream of it.
+Not done: the frozen qualifying 20+40 set, a qualifying benchmark run, and
+the later observation/automation stages. Development diagnostics are now
+running; they are not held-out evaluations.
+
+The unfinished reference-import hardening was retained and audited rather
+than duplicated: shared Facts-row selection excludes Other Ingredients,
+%DV is compared, unnamed draft rows require review, partial transcriptions
+are protected, and draft hashes must belong to the product. Additional
+reproduced fixes rehash the actual photo files, reject escaped gold paths
+before writing, treat partial/unreadable statements as unresolved, and keep
+model-invented row names out of the blinded refusal. These use the existing
+benchmark path/hash/statement helpers and the same catalog comparator.
+These reference-import changes are now committed in `eb988f69`; do not
+reapply them as a new implementation.
+
+Verification for this checkpoint: final affected submission/holdout slice
+528 passed, 24 opt-in tests skipped; release profile 123 passed and all
+subsequent artifact/live-identifier gates passed. The earlier broad fast
+backstop passed 14,238 tests (66 skipped) before the last four regression
+fixes; the final affected slice and release checks ran after those fixes.
+
+### Recovered experiment checkpoint — do not restart image collection
+
+The 60 high-resolution images downloaded with `64f65fbb` survived. All image
+hashes verified. The manifest-selected set (2400px maximum width, WebP quality
+95, 26,186,236 bytes) is now preserved outside `/tmp` at
+`reports/submission_dsld_diagnostic_20260910/`. Extra unselected temporary
+files were not imported. Production phone images were not changed.
+
+The same directory contains the matching 60 raw DSLD records, 60 catalog
+records, model-file hashes, exact prepared inputs for successful extractions,
+per-product drafts/receipts, `summary.json`, and `pipeline_audit.json`.
+These generated assets are gitignored local files, not remotely backed up by
+a code push. The tracked plan records their location and results.
+
+**RapidOCR baseline:** 60 attempted, 48 drafts, 11 failures, 1 abstention.
+None of the returned drafts had an empty catalog-discrepancy list. Counts
+include 549 catalog rows absent from drafts and 181 draft rows not matched to
+the catalog. These are discrepancy counts, NOT clinical accuracy metrics:
+the catalog is not independent raw-source gold, and the renders show complete
+page-one package artwork rather than necessarily isolated Facts panels.
+
+Full-artwork columns and tall marketing text bridge OCR row bands. On DSLD
+739, a reproduced resulting name exceeded the envelope's 2,000-character
+limit, but the baseline labeled it `provider_unavailable`. The shared extractor now distinguishes an
+adapter-raised `LabelDraftError` as `model_failure`, with no leaked label text
+and no invented cost. A two-product real-image rerun preserved 695's draft
+and correctly reported 739 as `model_failure`; see
+`reports/submission_dsld_ocr_typed_failure_20260910/`. The baseline is retained,
+not silently rewritten. Remaining failures still need individual diagnosis.
+
+**Audited rerun:** `reports/submission_dsld_audited_20260910/` preserves all
+60 verified images and the current code hashes. Same outcomes: 48 drafts,
+11 `model_failure`, 1 abstention. All 49 returned draft files (including the
+abstention) are byte-identical to the baseline. The corrected comparator
+reports 279 missing Facts rows instead of 549: 270 Other Ingredients rows
+were previously charged to the wrong section. It additionally exposes 26
+%DV discrepancies. This is a correction to measurement, not improved OCR.
+
+**Existing pipeline audit, same 60 products:** all 60 cleaned-source records
+available; zero BLOCKER/HIGH findings, 16 LOW missing inactive-contract
+signals, 2 MEDIUM blend dose-disclosure findings. This audit consumes existing
+stage artifacts; it is not a fresh full rebuild or independent clinical audit.
+
+**Local vision smoke:** installed `qwen3-vl:latest` (8.8B, Q4_K_M), pinned to
+`901cae73216286ea8c5aba8b46d307ff7188f737285ec500c795a12f05225d28`, was tried
+on DSLD 695 via the existing Ollama adapter, on an isolated cloud-disabled
+daemon. It returned an empty reading and failed closed. Receipt:
+`reports/submission_dsld_qwen_smoke_20260910/`. This was NOT a 4B test and
+does not qualify or disqualify all possible Qwen configurations.
+
+A follow-up simple reading of the same prepared image returned the printed
+Turmeric name and 500 mg amount. The production structured request returned
+an empty answer while its separate `thinking` field contained template keys.
+This isolates a structured-response integration issue, not a missing model.
+Do not parse the thinking field as a validated draft or count the simple
+reading as qualification. The temporary diagnostic daemon was stopped;
+the operator's normal Ollama daemon was not changed.
+
+**Resume here:** improve Facts-panel isolation/row assembly using these
+saved failures; diagnose the pinned vision candidate's empty response before
+spending a 60-product run; compare the resulting readings with independently
+reviewed source transcriptions. Do not tune a frozen holdout on these images
+after using them for development. Raw-source-to-clean/export reconciliation
+remains distinct from extraction comparison; do not treat export agreement
+as proof the cleaner is correct.
+
+Repeatable diagnostic entry point (new output directory each run):
+
+```bash
+~/.pyenv/versions/3.13.3/bin/python scripts/diagnose_dsld_extraction.py \
+  --manifest reports/submission_dsld_diagnostic_20260910/diagnostic_manifest.json \
+  --output reports/submission_dsld_next_run \
+  --raw-root /Users/seancheick/Downloads/PharmaGuide_Datasets/staging/brands
+```
+
+Use `--limit` for a bounded development smoke. For a local vision model add
+`--provider ollama --model <installed-tag> --model-digest <full-digest>` and
+`--endpoint <cloud-disabled-loopback-daemon>`. No models are downloaded and no
+queue, approval, gold, catalog or production settings are written.
 
 ## What is actually blocking
 
-Real bottles, real photographs, and one person deciding that a record
+**Not a blocker for DSLD development diagnostics:** the saved PDF renders and
+raw JSON can be compared now. They expose extraction and pipeline problems
+without claiming real-world qualification.
+
+**Still required for physical-package qualification:** real bottles, real photographs, and one person deciding that a record
 describes the package in their hand. Tools can select candidates, match
 barcodes, compare records, generate templates, compute coverage, list
 disagreements and score runs. None can make that judgement, and no amount of
 model agreement substitutes for it.
 
-## Phase 1 — `import-reference`, then assemble and freeze
+## Phase 1 — `import-reference` implemented; assemble and freeze remains
 
 `prepare_holdout_set.py import-reference` writes a proposed gold record from a
 confirmed catalog candidate. It must: load the candidate through the existing
@@ -65,7 +171,7 @@ separately: identity, product name, serving, row presence, dose, unit, blend
 parentage, warning presence, warning wording, printed detail, other
 ingredients, provenance, abstention. Two denominators each, because fields
 within one label are not independent observations. Gates at 100% on dose,
-unit, blend nesting and warning presence. A critical numeric or unit error
+unit, identity, serving, blend nesting and warning presence. A critical numeric or unit error
 blocks automation regardless of confidence or agreement between extractors.
 
 Shared preprocessing is tested separately, and independent-extractor agreement
