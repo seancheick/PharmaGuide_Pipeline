@@ -47,7 +47,7 @@ from ..extractor import (
 #: believed, whatever the text height says.
 _MIN_INDENT_STEP = 8.0
 
-RULES_VERSION = "ocr-geometry-v5"
+RULES_VERSION = "ocr-geometry-v10"
 PROVIDER = "ocr"
 
 #: Units as labels print them. Case is preserved in the draft; matching is not.
@@ -76,12 +76,35 @@ _AMOUNT = re.compile(
     rf"(?P<unit>{_UNIT_PATTERN})\b",
     re.IGNORECASE,
 )
-_PERCENT = re.compile(r"(?P<value>\d+(?:\.\d+)?)\s*%")
+_PERCENT = re.compile(r"(?P<value>\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)\s*%")
+#: A number the dose column prints on its own, with or without its unit.
+#: It marks where a printed row sits even when OCR has lost the unit.
+_BARE_NUMBER = re.compile(r"\d+(?:[.,]\d+)*")
+#: OCR reads a thousands comma as a decimal point: "1,000 mg" arrives as
+#: "1.000 mg" and would be read as 1 mg. Of 98,377 printed doses in the
+#: catalog only 34 are a 1-999 value with exactly three decimals, against
+#: 5,746 written with a thousands comma, so such a reading is refused rather
+#: than guessed in either direction. A leading zero ("0.025") is unambiguous.
+_AMBIGUOUS_THOUSANDS = re.compile(r"(?<![\d,.])[1-9]\d{0,2}\.\d{3}(?!\d)")
+
+
+def _misread_dose(text: str) -> bool:
+    """One or two letters glued to the front of a complete dose.
+
+    OCR reads "10mcg" as "T0mcg"; the parser skipped the letter and returned
+    0 mcg (DSLD 745). A name glued to its dose ("Chromium10mcg") has a longer
+    prefix and is left alone.
+    """
+    match = re.fullmatch(r"([A-Za-z]{1,2})(\S.*)", text)
+    return bool(match and _AMOUNT.fullmatch(match.group(2)))
 #: Rows a panel prints that are not ingredients.
 #: Panel furniture, matched with optional spacing for the same reason.
 _NOT_A_ROW = re.compile(
-    r"^\s*(supplement\s*facts|amount\s*per\s*serving|%\s*d\s*v|%?\s*daily\s*value"
-    r"|serving\s*size|servings?\s*per\s*container|ingredients?)\b",
+    # "Amount per ..." and "Servings per ..." open no ingredient name, so they
+    # are headings however OCR spaces them: "AmountPerTablet",
+    # "ServingsPerContainer100". A word boundary after "per" missed both.
+    r"^\s*(?:(?:supplement\s*facts|%\s*d\s*v|%?\s*daily\s*value"
+    r"|serving\s*size|ingredients?)\b|amount\s*per|servings?\s*per)",
     re.IGNORECASE,
 )
 _OTHER_INGREDIENTS = re.compile(r"^\s*other\s+ingredients?\b", re.IGNORECASE)
@@ -141,6 +164,11 @@ def _rows_from_lines(lines: Sequence[OcrLine]) -> list[list[OcrLine]]:
     the left, the amount on the right. Grouping by band is what recovers the
     association a flat text dump destroys.
     """
+    # Panel headings are never rows, and serving size is read from the page
+    # separately. Left in, a heading chains into the rows below it and a band
+    # that begins with one is dropped whole, taking real rows with it.
+    lines = [line for line in lines
+             if not (_NOT_A_ROW.match(_clean(line.text)) or _SERVING_SIZE.match(_clean(line.text)))]
     ordered = sorted(lines, key=lambda line: (line.middle, line.left))
 
     def same_band(left: OcrLine, right: OcrLine) -> bool:
@@ -176,21 +204,33 @@ def _rows_from_lines(lines: Sequence[OcrLine]) -> list[list[OcrLine]]:
         # amount-only boxes anchor those rows; overlap alone must not collapse
         # two doses. Keep the connected-component behavior for wrapped names
         # sharing one amount, and do not use parenthetical form doses as anchors.
-        anchors = sorted(
-            (line for line in band if _AMOUNT.fullmatch(
+        #
+        # A row is anchored by any number the right-hand columns print for it,
+        # not only a dose with its unit: OCR loses units ("5 g" read as "59")
+        # and some rows print only a %DV. Anchoring on unit-bearing doses
+        # alone sent every row above the first such dose into that dose's
+        # row. Numbers at the same height are one printed row.
+        numbers = sorted(
+            (line for line in band if (lambda text: _AMOUNT.fullmatch(text)
+                                       or _PERCENT.fullmatch(text)
+                                       or _BARE_NUMBER.fullmatch(text))(
                 _clean(line.text).rstrip("*†‡ "))),
             key=lambda line: line.middle,
         )
-        if len(anchors) > 1 and all(
-            right.middle - left.middle > min(left.height, right.height) * 0.5
-            for left, right in zip(anchors, anchors[1:])
-        ):
-            buckets: list[list[OcrLine]] = [[] for _ in anchors]
+        anchors: list[list[OcrLine]] = []
+        for line in numbers:
+            last = anchors[-1][-1] if anchors else None
+            if last is not None and line.middle - last.middle <= min(line.height, last.height) * 0.5:
+                anchors[-1].append(line)
+            else:
+                anchors.append([line])
+        centres = [sum(item.middle for item in group) / len(group) for group in anchors]
+        if len(centres) > 1:
+            buckets: list[list[OcrLine]] = [[] for _ in centres]
             for line in band:
-                index = min(range(len(anchors)),
-                            key=lambda i: abs(line.middle - anchors[i].middle))
+                index = min(range(len(centres)), key=lambda i: abs(line.middle - centres[i]))
                 buckets[index].append(line)
-            separated.extend(buckets)
+            separated.extend(bucket for bucket in buckets if bucket)
         else:
             separated.append(band)
     rows = separated
@@ -238,7 +278,7 @@ def _parse_percent(text: str) -> tuple[float, str] | None:
     match = _PERCENT.search(text)
     if match is None:
         return None
-    return float(match.group("value")), match.group(0)
+    return float(match.group("value").replace(",", "")), match.group(0)
 
 
 def _row_indent(band: Sequence[OcrLine]) -> float:
@@ -272,9 +312,31 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
             continue
 
         amount_lines = [line for line in band if _parse_amount(_clean(line.text))]
+        # A bare number standing apart in the dose column is a dose whose unit
+        # OCR lost ("5 g" read as "59"), not part of the ingredient's name. A
+        # number right beside the name ("Vitamin B" | "12") is still the name.
+        text_right = max((line.right for line in band
+                          if not _BARE_NUMBER.fullmatch(_clean(line.text).rstrip("*†‡ "))
+                          and line not in amount_lines
+                          and not _PERCENT.fullmatch(_clean(line.text))), default=None)
+        lost_units = [
+            line for line in band
+            if _BARE_NUMBER.fullmatch(_clean(line.text).rstrip("*†‡ "))
+            and (text_right is None or line.left - text_right > line.height * 2)
+        ]
+        # A name always prints left of its dose. A name box starting right of
+        # the dose column belongs to a second column of the panel (DSLD 778),
+        # and joined here it would carry this row's dose to another
+        # ingredient. Only a box that is a dose and nothing else marks the
+        # column: a box packing name and dose together would mark it at the
+        # name's own edge and throw the rest of the name away.
+        dose_column = min((line.left for line in amount_lines
+                           if _AMOUNT.fullmatch(_clean(line.text).rstrip("*†‡ "))), default=None)
         name_lines = [
             line for line in band
-            if line not in amount_lines and not _PERCENT.fullmatch(_clean(line.text))
+            if line not in amount_lines and line not in lost_units
+            and not _PERCENT.fullmatch(_clean(line.text))
+            and (dose_column is None or line.left < dose_column)
         ]
         # Left-edge sorting is useful for pairing a single row, but wrapped
         # names can have a one-pixel horizontal jitter. Restore their printed
@@ -290,15 +352,37 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
             name_text = _clean((amount_text[:match.start()] + amount_text[match.end():]) if match else amount_text)
             if _PERCENT.fullmatch(name_text):
                 name_text = ""
-        amount = _parse_amount(amount_text)
+        # The row's dose is a box that is only a dose. A number inside a
+        # parenthetical is a constituent ("(5% Hydrastine = 6.25 mg)"), and
+        # on a dense panel the one above can share this band: taking the
+        # first number in the joined text read 6.25 mg for a 25 mg row.
+        pure_doses = [line for line in amount_lines
+                      if _AMOUNT.fullmatch(_clean(line.text).rstrip("*†‡ "))]
+        misread = [line for line in amount_lines
+                   if _misread_dose(_clean(line.text).rstrip("*†‡ "))]
+        dose_text = (_clean(" ".join(line.text for line in pure_doses))
+                     if pure_doses else amount_text)
+        amount = None if (misread and not pure_doses) else _parse_amount(dose_text)
         percent = _parse_percent(amount_text)
         if percent is None:
             separate_percent = [line for line in band if _PERCENT.fullmatch(_clean(line.text))]
             if len(separate_percent) == 1:
                 percent = _parse_percent(separate_percent[0].text)
+        # Applied here, to OCR text, and not in _parse_amount itself: that
+        # parser also reads typed DSLD transcriptions, where "1.575 g" is a
+        # real 1.575 g and there is no comma for OCR to have misread.
+        ambiguous_amount = amount is not None and bool(_AMBIGUOUS_THOUSANDS.search(amount[1]))
+        if ambiguous_amount:
+            amount = None
+        if amount is None and (lost_units or misread):
+            # A dose is printed here; it just cannot be read as one.
+            ambiguous_amount = True
+        ambiguous_percent = percent is not None and bool(_AMBIGUOUS_THOUSANDS.search(percent[1]))
+        if ambiguous_percent:
+            percent = None
         # A line that is only a heading with no number is still a printed row
         # (a blend header), so it is kept rather than dropped.
-        if not name_text and amount is None:
+        if not name_text and amount is None and not ambiguous_amount:
             continue
 
         row: dict[str, Any] = {
@@ -313,10 +397,13 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
         if amount is not None:
             row["amount"] = _read_field(page, amount[0], amount[1])
         else:
-            row["amount"] = _unread_field("not_present")
+            # Printed but ambiguous is unreadable; nothing printed is absent.
+            row["amount"] = _unread_field("unreadable" if ambiguous_amount else "not_present")
             row["status"] = "partial"
         if percent is not None:
             row["percent_dv"] = _read_field(page, percent[0], percent[1])
+        elif ambiguous_percent:
+            row["percent_dv"] = _unread_field()
 
         indent = _row_indent(band)
         # A real panel indents a blend child by roughly a character width;
@@ -360,7 +447,10 @@ def _find_line(page: OcrPage, pattern: re.Pattern[str]) -> tuple[str, str] | Non
 
 _SERVING_SIZE = re.compile(r"serving\s*size[:\s]*(?P<value>.+)", re.IGNORECASE)
 _SERVINGS_PER = re.compile(
-    r"servings?\s*per\s*container[:\s]+(?P<value>[\w.,/ ]+)", re.IGNORECASE)
+    # Package words only. "Servings Per Bottle" is a container count; "Servings
+    # Per Day" is not, and reading it as one puts a wrong value on a gated field.
+    r"servings?\s*per\s*(?:container|bottle|package|pack|packet|box|bag|jar"
+    r"|tube|canister|pouch|tub|can)[:\s]+(?P<value>[\w.,/ ]+)", re.IGNORECASE)
 
 
 class OcrLabelAdapter:

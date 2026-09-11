@@ -264,13 +264,80 @@ targeted release invocation ran the 34 adapter/diagnostic tests plus all
 standard artifact and live-identifier gates, successfully. This follow-up did
 not rerun the full 123-test release slice from the previous checkpoint.
 
-**Resume here:** improve Facts-panel isolation/row assembly using these
-saved failures; do not spend a 60-product vision run until a candidate meets
-the draft contract on bounded smoke tests. Compare readings with independently
-reviewed source transcriptions. Do not tune a frozen holdout on these images
-after using them for development. Raw-source-to-clean/export reconciliation
-remains distinct from extraction comparison; do not treat export agreement
-as proof the cleaner is correct.
+### OCR dose safety, row boundaries, Gemini diagnosis — 2026-09-11
+
+Continued in the same OCR adapter, comparator and shared instruction; no new
+extractor, parser or schema owner. Each defect below was reproduced on a real
+DSLD image, pinned by a test written to fail first, then fixed.
+
+**Doses.** Three readings produced wrong doses, the error class gated at zero.
+OCR turns "1,000 mg" into "1.000 mg", read as 1 mg (8718, 758, 746). Of 98,377
+printed catalog doses only 34 are a 1-999 value with exactly three decimals,
+against 5,746 written with a thousands comma, so such an OCR reading is now
+unreadable rather than guessed; typed DSLD transcriptions are unaffected. A
+number inside a parenthetical constituent line no longer beats the row's own
+dose box (699: 6.25 mg read for 25 mg). One or two letters glued to a dose are a
+misread digit, not a prefix (745: "T0mcg" read as 0 mcg). A name printed right
+of the dose column belongs to a second column (778: Choline given Riboflavin's
+50 mg). Separately, "1,667%" was parsed as 667% even when OCR read the comma
+correctly; the percent parser now reads thousands.
+
+**Rows.** On a dense panel every box touches the next, so the heading, the
+first rows and the first dose chained into one band, which began with
+"Supplement Facts" and was dropped whole — 739 lost Calories, Carbohydrate and
+Vitamin C 1,000 mg. Headings are now excluded before banding, and a row is
+anchored by any right-hand number, not only a dose with its unit. A number with
+no name is an unidentified row, not a name ("59"). "Servings per" and "Amount
+per" are headings in any spacing, and "Servings Per Bottle" is now read.
+
+Rules v6-v9 were intermediate; v10 is final. Same 60 images, same comparator
+for both columns (v5 re-scored with today's comparator for a fair comparison):
+
+| | v5 | v10 |
+|---|---|---|
+| Products drafted | 50 | 55 |
+| Doses read | 321 | 351 |
+| Wrong doses against the catalog | 5 | 0 |
+| OCR readings at thousandfold risk | 10 | 0 |
+| Headings read as rows | 8 | 0 |
+| Catalog rows missed | 253 | 215 |
+
+These are development results on images used to find the bugs, and the catalog
+is not independent gold. They are not qualification. Receipts:
+`reports/submission_dsld_ocr_rows_v10_20260911/` (v6-v9 kept as intermediates).
+
+**Writer and comparator now share one nesting rule.** `_blend_parents` decides
+a row's parent for both gold_rows and the comparator; before, a reading
+identical to what the writer produces was refused on every label with a
+nutrition-fact sub-row or EPA under Fish Oil. Verified: across 400 real
+records such a reading now yields no row disagreements.
+
+**Gemini's three contract failures are diagnosed, not model errors.** 2502
+stopped with MAX_TOKENS after 11,517 of 12,000 tokens went to thinking (the
+probe sets no thinking limit). 739 returned a correct object wrapped in a
+one-element list. 695 nested a standardization line ("95% Curcuminoids") under
+an ordinary ingredient, which the contract only allows under a blend header.
+The shared instruction (now `label-draft-local-v7`; v6 fails closed) states
+"one object, never an array" and where standardization lines and constituents
+go. No output is unwrapped or repaired. OCR grounding of the one valid Gemini
+reading located 5 of 9 claims, including the dose; the 4 it missed were
+stylized or tiny text, and Gemini's barcode matches the catalog exactly.
+
+**The Gemini key is currently rejected.** A well-formed key loaded exactly as
+the probe loads it returned "API key not valid" on tiny text-only requests,
+though the same probe succeeded earlier on 2026-09-11. No alternate key was
+sought. Until a working key exists, the thinking-limit parameter for Gemini 3
+is unverified and no retest was run.
+
+**Resume here:** provide a working Gemini key, then retest 695, 739 and 2502
+with the v7 instruction and an explicit thinking limit, verifying the Gemini 3
+parameter name against the API before relying on it. OCR row assembly is not
+the next investment: its remaining gaps are character misreads (the engine's)
+and missed rows that grounding does not need. Do not spend a 60-product vision
+run until a candidate meets the draft contract on bounded smoke tests. Do not
+tune a frozen holdout on these images after using them for development.
+Raw-source-to-clean/export reconciliation remains distinct from extraction
+comparison; do not treat export agreement as proof the cleaner is correct.
 
 Repeatable diagnostic entry point (new output directory each run):
 

@@ -352,3 +352,245 @@ def test_an_engine_failure_becomes_a_typed_failure() -> None:
 
     # A provider boundary must never let an SDK exception escape the worker.
     assert raised.value.code == "model_failure"
+
+
+def _rows(draft):
+    def amount(row):
+        field = row.get("amount") or {}
+        return (field.get("value") or {}).get("value") if field.get("status") == "read" else None
+    return [((row["display_name"] or {}).get("value"), amount(row)) for row in draft["ingredient_rows"]]
+
+
+def test_header_lines_do_not_swallow_the_first_rows() -> None:
+    """Reproduced on DSLD 739 (Emergen-C), including its OCR quirks.
+
+    Every box on a dense panel touches the next, so the header, the first
+    four rows and Thiamin's dose chained into one band. Each line then went
+    to its nearest dose, all of them to Thiamin's, and the resulting row
+    began with "Supplement Facts" and was dropped whole — Vitamin C 1,000 mg,
+    the product's headline ingredient, with it.
+    """
+    draft = _extract([
+        _line("Supplement Facts", 58, left=23, width=190, height=12),
+        _line("Serving Size 1 packet (8.3 g)", 76, left=23, width=135, height=12),
+        _line("% DV", 89, left=306, width=25, height=11),
+        _line("Amount Per Serving", 90, left=23, width=76, height=11),
+        _line("Calories", 101, left=23, width=36, height=11),
+        _line("20", 103, left=269, width=16, height=9),
+        _line("2%", 112, left=305, width=26, height=11),
+        _line("Total Carbohydrate", 113, left=24, width=79, height=11),
+        _line("59", 113, left=267, width=19, height=11),
+        _line("Vitamin C (as ascorbic acid) 1.0", 136, left=24, width=260, height=11),
+        _line("1.667%", 137, left=299, width=32, height=11),
+        _line("0.38mg", 147, left=250, width=33, height=11),
+        _line("25%", 148, left=308, width=23, height=11),
+        _line("Thiamin (as thiamine HCl)", 150, left=24, width=114, height=10),
+        _line("0.43 mg", 158, left=248, width=36, height=11),
+        _line("25%", 159, left=309, width=23, height=11),
+        _line("Riboflavin", 160, left=23, width=60, height=11),
+    ])
+    rows = _rows(draft)
+    names = [name or "" for name, _ in rows]
+    assert names[0] == "Calories"
+    assert "Total Carbohydrate" in names
+    assert any(name.startswith("Vitamin C") for name in names)
+    assert ("Thiamin (as thiamine HCl)", 0.38) in rows
+    assert ("Riboflavin", 0.43) in rows
+    assert not any(h in name for name in names
+                   for h in ("Supplement Facts", "Serving Size", "Amount Per Serving"))
+
+
+def test_a_percent_with_a_thousands_comma_is_read_whole() -> None:
+    """"1,667%" was read as 667%, even when OCR got the comma right."""
+    from submission_review.extraction.adapters.ocr_adapter import _parse_percent
+    assert _parse_percent("1,667%")[0] == 1667.0
+    assert _parse_percent("25%")[0] == 25.0
+
+
+def test_an_ambiguous_thousands_reading_is_never_a_dose() -> None:
+    """OCR turns "1,000 mg" into "1.000 mg", which read as 1 mg.
+
+    Found in real drafts (DSLD 8718, 758, 746). On 98,377 printed doses only
+    34 are a 1-999 value with exactly three decimals, against 5,746 written
+    with a thousands comma, so the reading is refused rather than guessed.
+    A person reads it; a thousandfold dose is the error gated at zero.
+    """
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Vitamin C", 40, left=10, width=120),
+        _line("1.000 mg", 40, left=300, width=70),
+        _line("1.667%", 40, left=380, width=50),
+    ])
+    [row] = draft["ingredient_rows"]
+    assert row["display_name"]["value"] == "Vitamin C"
+    assert row["amount"]["status"] == "unreadable"
+    assert row["amount"]["value"] is None
+    assert (row["percent_dv"] or {}).get("value") is None
+
+
+def test_unambiguous_decimals_and_thousands_are_still_read() -> None:
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Vitamin B12", 40, left=10, width=120),
+        _line("0.025 mg", 40, left=300, width=70),
+        _line("Folic Acid", 70, left=10, width=120),
+        _line("12.5 mcg", 70, left=300, width=70),
+        _line("Vitamin C", 100, left=10, width=120),
+        _line("1,000 mg", 100, left=300, width=70),
+    ])
+    assert _rows(draft) == [("Vitamin B12", 0.025), ("Folic Acid", 12.5), ("Vitamin C", 1000.0)]
+
+
+
+def test_a_number_beside_the_name_is_still_the_name() -> None:
+    """Only a number standing apart in the dose column is a lost-unit dose."""
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Vitamin B", 40, left=10, width=90, height=18),
+        _line("12", 40, left=102, width=18, height=18),
+        _line("6 mcg", 40, left=300, width=70, height=18),
+    ])
+    assert _rows(draft) == [("Vitamin B 12", 6.0)]
+
+
+def test_a_dose_whose_unit_was_lost_is_unreadable_not_absent() -> None:
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Total Carbohydrate", 40, left=10, width=120, height=18),
+        _line("59", 40, left=300, width=30, height=18),
+    ])
+    [row] = draft["ingredient_rows"]
+    assert row["display_name"]["value"] == "Total Carbohydrate"
+    assert row["amount"]["status"] == "unreadable"
+
+
+def test_a_number_with_no_name_is_an_unidentified_row_not_a_name() -> None:
+    """Sugars on DSLD 739: OCR read "59" (for 5 g) and never the word.
+
+    A number must not become an ingredient's name — the same rule that keeps
+    a lone "25%" from naming a row. It is a printed row nobody could read.
+    """
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Total Carbohydrate", 40, left=10, width=120, height=18),
+        _line("5 g", 40, left=300, width=30, height=18),
+        _line("59", 70, left=300, width=30, height=18),
+        _line("Vitamin C", 100, left=10, width=120, height=18),
+        _line("500 mg", 100, left=300, width=70, height=18),
+    ])
+    names = [(row["display_name"] or {}).get("value") for row in draft["ingredient_rows"]]
+    assert "59" not in names
+    unnamed = [row for row in draft["ingredient_rows"] if row["display_name"]["status"] == "unreadable"]
+    assert len(unnamed) == 1 and unnamed[0]["amount"]["status"] == "unreadable"
+
+
+def test_any_servings_per_line_is_a_heading() -> None:
+    """Labels print "Servings Per Bottle", "Per Package", "Per Container"."""
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Servings Per Bottle 30", 20, left=10, width=200, height=18),
+        _line("Vitamin C", 60, left=10, width=120, height=18),
+        _line("500 mg", 60, left=300, width=70, height=18),
+    ])
+    assert _rows(draft) == [("Vitamin C", 500.0)]
+
+
+
+def test_servings_per_bottle_is_read_as_servings_per_container() -> None:
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Servings Per Bottle 30", 20, left=10, width=200, height=18),
+        _line("Vitamin C", 60, left=10, width=120, height=18),
+        _line("500 mg", 60, left=300, width=70, height=18),
+    ])
+    assert draft["serving"]["servings_per_container"]["value"] == "30"
+
+
+
+@pytest.mark.parametrize("heading", ["ServingsPerContainer100", "AmountPerTablet %DailyValue"])
+def test_a_heading_with_its_spaces_lost_is_still_a_heading(heading) -> None:
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line(heading, 20, left=10, width=200, height=18),
+        _line("Vitamin C", 60, left=10, width=120, height=18),
+        _line("500 mg", 60, left=300, width=70, height=18),
+    ])
+    assert _rows(draft) == [("Vitamin C", 500.0)]
+
+
+def test_a_second_column_name_never_takes_this_rows_dose() -> None:
+    """Reproduced on DSLD 778, a Facts panel printed in two columns.
+
+    The right-hand column's "Choline" sat in the same band as Riboflavin's
+    name and dose. Joined, it read as "Choline ... Riboflavin" at Riboflavin's
+    50 mg — a wrong dose for Choline, the error the benchmark gates at zero.
+    A name that starts right of the row's dose column is another column's.
+    """
+    draft = _extract([
+        # A heading as wide as 778's, so the panel's bounds admit both columns.
+        _line("Supplement Facts", 0, left=100, width=1000),
+        _line("Riboflavin (Vitamin B-2)", 40, left=100, width=210, height=18),
+        _line("50mg", 40, left=540, width=67, height=18),
+        _line("2941%", 40, left=630, width=70, height=18),
+        _line("Choline (as Choline Bitartrate)", 41, left=730, width=260, height=18),
+    ])
+    assert _rows(draft) == [("Riboflavin (Vitamin B-2)", 50.0)]
+
+
+def test_a_name_packed_into_its_own_dose_box_keeps_its_wrapped_line() -> None:
+    """A box holding name and dose together does not mark a dose column."""
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Magnesium (as magnesium", 40, left=10, width=200, height=18),
+        _line("bisglycinate) 200 mg", 52, left=10, width=260, height=18),
+    ])
+    [row] = draft["ingredient_rows"]
+    assert row["display_name"]["value"].startswith("Magnesium (as magnesium")
+    assert row["amount"]["value"]["value"] == 200.0
+
+
+def test_the_rows_own_dose_box_wins_over_a_standardization_line() -> None:
+    """DSLD 699: the previous ingredient's "(5% Hydrastine = 6.25 mg)" shared
+    Echinacea's band, sat above its "25mg*", and was read as its dose because
+    the parser took the first number it met. A box that is only a dose is the
+    row's dose; a constituent in parentheses never is."""
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("(5% Hydrastine = 6.25 mg)", 30, left=20, width=200, height=14),
+        _line("Echinacea angustifolia Root Extract", 44, left=10, width=260, height=14),
+        _line("25mg*", 43, left=400, width=60, height=14),
+    ])
+    assert [amount for _, amount in _rows(draft)] == [25.0]
+
+
+def test_a_misread_digit_glued_to_a_dose_is_unreadable_not_zero() -> None:
+    """DSLD 745: "10mcg" came back as "T0mcg" and was read as 0 mcg."""
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Chromium (as chromium ascorbate)", 40, left=10, width=220, height=18),
+        _line("T0mcg", 40, left=300, width=50, height=18),
+        _line("8%", 40, left=380, width=30, height=18),
+    ])
+    [row] = draft["ingredient_rows"]
+    assert row["amount"]["status"] == "unreadable"
+
+
+def test_a_name_glued_to_its_dose_keeps_the_dose() -> None:
+    """Only one or two letters stuck to a number read as a misread digit."""
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Chromium10mcg", 40, left=10, width=220, height=18),
+    ])
+    assert [amount for _, amount in _rows(draft)] == [10.0]
+
+
+def test_servings_per_day_is_never_servings_per_container() -> None:
+    """A daily count read as a container count is a wrong value on a gated
+    field. Only package words name a container."""
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Servings Per Day 2", 20, left=10, width=200, height=18),
+        _line("Vitamin C", 60, left=10, width=120, height=18),
+        _line("500 mg", 60, left=300, width=70, height=18),
+    ])
+    assert draft["serving"]["servings_per_container"]["value"] is None
