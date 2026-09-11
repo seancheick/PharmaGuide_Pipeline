@@ -1,7 +1,7 @@
 # Submission extraction — the plan
 
 One document. It replaces plan v3 and the two review threads it merges, so
-there is one place to read and one place to change. Updated 2026-09-10 after
+there is one place to read and one place to change. Updated 2026-09-11 after
 reconstructing the completed work through `64f65fbb` and running the saved
 DSLD image experiment. Code and experiment receipts take priority over older
 chat status summaries.
@@ -102,9 +102,55 @@ Do not parse the thinking field as a validated draft or count the simple
 reading as qualification. The temporary diagnostic daemon was stopped;
 the operator's normal Ollama daemon was not changed.
 
+### Qwen follow-up — 2026-09-11
+
+No new model was downloaded. Ollama 0.34.0 runs the installed Qwen3-VL
+8.8B digest above. The same image and request through `/api/chat` still
+returned an empty final answer. Removing forced JSON reached a 4096-token
+context ceiling without a final answer. An explicit raw-template image probe
+was refused with HTTP 400 (tokenization failure). These are diagnostic
+experiments, not alternate production paths.
+
+The adapter had pinned output length but inherited context size from the
+daemon. The single request template now pins `num_ctx=16384`, retaining the
+12000-token output ceiling and 180-second request deadline. Version v5 was
+tested locally and still returned an empty Qwen3-VL answer. Version v6 adds
+explicit field-wrapper, serving-quantity and disclosure instructions after
+the next candidate ignored the original shorthand. Both settings and text
+remain part of the one prompt fingerprint; old configurations fail closed.
+The validator and approval path were not relaxed; thinking-only JSON still
+cannot become a draft.
+
+The already-installed `qwen3.5:latest` (9.7B Q4_K_M), digest
+`6488c96fa5faab64bb65cbd30d4289e20e6130ef535a93ef9a49f42eda893ea7`,
+returned final JSON but omitted required field objects and source references.
+On DSLD 695, its v5 reading also confused ingredient mass with serving amount
+and contradicted its Other Ingredients disclosure. The v6 reading corrected
+those two items but still lacked field wrappers and omitted a barcode digit.
+Both readings omitted the visible physician-consultation / pre-surgery warning
+while retaining marketing statements. This is a safety-relevant omission,
+not just JSON formatting. Checked against the saved 695 artwork, not inferred
+from our export.
+Do not add an output-repair mapper or fabricate sources to make this pass.
+
+Receipts are local under `reports/submission_dsld_qwen_context_v5_20260911/`,
+`reports/submission_dsld_qwen35_v5_20260911/`,
+`reports/submission_dsld_qwen35_v6_20260911/`, and
+`reports/submission_dsld_qwen_probes_20260911/`. A further unchanged v6 smoke
+on DSLD 695, 739 and 2502 returned three `model_failure` outcomes; receipts
+are in `reports/submission_dsld_qwen35_v6_three_20260911/`. None constitutes gold or
+qualification. Current installed candidates are not ready for submission
+extraction; this is not a claim that every Qwen variant is unsuitable.
+The isolated cloud-disabled diagnostic daemon was stopped after the runs;
+the operator's normal daemon and installed models were left intact.
+Verification: 533 submission/holdout tests passed (24 opt-in skips); a
+targeted release invocation ran the 34 adapter/diagnostic tests plus all
+standard artifact and live-identifier gates, successfully. This follow-up did
+not rerun the full 123-test release slice from the previous checkpoint.
+
 **Resume here:** improve Facts-panel isolation/row assembly using these
-saved failures; diagnose the pinned vision candidate's empty response before
-spending a 60-product run; compare the resulting readings with independently
+saved failures; do not spend a 60-product vision run until a candidate meets
+the draft contract on bounded smoke tests. Compare readings with independently
 reviewed source transcriptions. Do not tune a frozen holdout on these images
 after using them for development. Raw-source-to-clean/export reconciliation
 remains distinct from extraction comparison; do not treat export agreement

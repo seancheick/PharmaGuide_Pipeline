@@ -296,6 +296,44 @@ def test_candidate_digest_binds_every_static_generation_setting():
     assert request['options']['repeat_penalty'] == 1.1
 
 
+def test_context_budget_is_explicit_and_leaves_room_beyond_output_tokens():
+    transport = _Transport()
+    _adapter(transport).extract(_bundle(), _config())
+    request = next(body for url, body in transport.posted if url.endswith('/api/generate'))
+    assert request['options'].get('num_ctx') == 16384
+    assert request['options']['num_ctx'] > request['options']['num_predict']
+
+
+@pytest.mark.parametrize('version', ['label-draft-local-v4', 'label-draft-local-v5'])
+def test_previous_configuration_is_not_silently_reused(version):
+    transport = _Transport()
+    with pytest.raises(ExtractionError, match='unsupported local configuration'):
+        _adapter(transport).extract(_bundle(), _config(prompt_version=version))
+    assert not transport.posted
+
+
+def test_thinking_only_json_is_never_accepted_as_a_label():
+    class ThinkingOnly(_Transport):
+        def post_json(self, url, body, *, timeout):
+            if url.endswith('/api/show'):
+                return super().post_json(url, body, timeout=timeout)
+            return {'response': '', 'thinking': json.dumps(_READING),
+                    'done': True, 'done_reason': 'stop'}
+
+    with pytest.raises(ExtractionError, match='empty reading'):
+        _adapter(ThinkingOnly()).extract(_bundle(), _config())
+
+
+def test_prompt_explicitly_preserves_field_wrappers_and_serving_meaning():
+    transport = _Transport()
+    _adapter(transport).extract(_bundle(), _config())
+    prompt = next(body['prompt'] for url, body in transport.posted
+                  if url.endswith('/api/generate'))
+    assert 'Never replace a field object with a bare string or number.' in prompt
+    assert 'sources is an array of objects' in prompt
+    assert 'not the mass of an ingredient' in prompt
+
+
 def test_real_adapter_contract_passes_through_the_shared_extractor() -> None:
     bundle = _bundle()
     photo = bundle.photos[0]
