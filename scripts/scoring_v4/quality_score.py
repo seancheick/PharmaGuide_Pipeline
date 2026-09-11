@@ -347,6 +347,16 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
                 reason = "Active ingredient identities and amounts are fully disclosed."
             else:
                 reason = "Not all active ingredient identities or individual amounts are disclosed."
+        elif (
+            "PROPRIETARY_BLEND_PRESENT" in (metadata.get("flags") or [])
+            and _band(val, weight) == "high"
+        ):
+            # A high band would say every amount is disclosed; a blend whose
+            # members carry no amounts makes that false.
+            reason = (
+                "Most amounts are disclosed, but ingredients in a proprietary "
+                "blend are listed without their individual amounts."
+            )
     return {
         "score": val,
         "max": weight,

@@ -25,6 +25,19 @@ def test_real_disclosure_gap_is_not_hidden_by_other_points():
     assert "not all" in pillar["reason"].lower()
 
 
+def test_a_blend_with_undisclosed_amounts_is_never_called_fully_transparent():
+    # URO Vaginal Moisture + Mood: 600 mg disclosed, a 295 mg blend whose five
+    # members carry no amounts. A high band must not claim every amount is shown.
+    pillar = _pillar_from_dim("transparency", {
+        "score": 8.0, "max": 10.0,
+        "penalties": {"B5_proprietary_blend_opacity": -1.99},
+        "metadata": {"flags": ["PROPRIETARY_BLEND_PRESENT"]},
+    }, 15, "transparency")
+    assert pillar["score"] == 12.0
+    assert "every amount is disclosed" not in pillar["reason"]
+    assert "blend" in pillar["reason"].lower()
+
+
 def test_primary_ingredient_floor_is_not_whole_formula_efficacy_claim():
     from scoring_v4.quality_score import _config
     pillar = _pillar_evidence({"score": 18, "metadata": {
