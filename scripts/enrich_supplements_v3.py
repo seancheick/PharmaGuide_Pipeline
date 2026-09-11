@@ -2507,7 +2507,7 @@ class SupplementEnricherV3:
                 match_candidates.append(no_hyphen)
 
         # 6. Remove "from X" suffix for additional candidate
-        from_removed = re.sub(r'\s+from\s+\w+\s*$', '', candidate2, flags=re.IGNORECASE).strip()
+        from_removed = re.split(r'\s+from\s+', candidate2, maxsplit=1, flags=re.IGNORECASE)[0].strip()
         if from_removed and from_removed != candidate2 and from_removed.lower() not in [c.lower() for c in match_candidates]:
             match_candidates.append(from_removed)
 
@@ -8132,6 +8132,8 @@ class SupplementEnricherV3:
             form_match = None
             matched_candidate = None
             matched_unspecified = False
+            deferred_parent_match = None
+            has_source_suffix = bool(re.search(r'\s+from\s+', raw_form_text, flags=re.IGNORECASE))
             for candidate in match_candidates:
                 form_match = self._match_quality_map(
                     candidate, candidate, quality_map, _form_extraction_attempt=True,
@@ -8146,6 +8148,15 @@ class SupplementEnricherV3:
                     if _reject_false_omega_form_match(form_match):
                         form_match = None
                         continue
+                    # Parent scoring defaults are not a successful reading of
+                    # this form. Try every explicit candidate before falling
+                    # back; otherwise the first unresolved source phrase can
+                    # hide a later exact chemical-form match.
+                    if has_source_suffix and form_match.get('fallback_form_selected'):
+                        if deferred_parent_match is None:
+                            deferred_parent_match = (form_match, candidate)
+                        form_match = None
+                        continue
                     form_id = form_match.get('form_id', '')
                     # Accept if it's a specific form (not unspecified)
                     if form_id and 'unspecified' not in form_id.lower():
@@ -8157,6 +8168,15 @@ class SupplementEnricherV3:
                         # Track these separately to avoid false form-loss flags.
                         matched_unspecified = True
                         form_match = None
+
+            if form_match is None and deferred_parent_match is not None:
+                form_match, candidate = deferred_parent_match
+                form_id = form_match.get('form_id', '')
+                if form_id and 'unspecified' not in form_id.lower():
+                    matched_candidate = candidate
+                else:
+                    matched_unspecified = True
+                    form_match = None
 
             if form_match and matched_candidate:
                 bio_score = form_match.get('bio_score', 5)
@@ -8525,6 +8545,15 @@ class SupplementEnricherV3:
             unwrapped = re.sub(r'\s+', ' ', unwrapped).strip()
             if unwrapped and unwrapped not in match_candidates:
                 match_candidates.append(unwrapped)
+
+            # Reuse the label-text form parser for source-qualified forms,
+            # including multi-word sources such as "from sunflower oil".
+            # Keep the complete phrase first and preserve it for display.
+            if re.search(r'\s+from\s+', form_name, flags=re.IGNORECASE):
+                parsed_form = self._parse_single_form(form_name, [])
+                for candidate in (parsed_form or {}).get('match_candidates', []):
+                    if candidate not in match_candidates:
+                        match_candidates.append(candidate)
 
             # BRANDED PREFIX RECONSTRUCTION: When the ingredient name is a bare
             # branded prefix (e.g. "MicroActive") and the form is the actual
