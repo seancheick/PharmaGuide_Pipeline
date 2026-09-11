@@ -112,8 +112,9 @@ def test_ocr_invalid_draft_is_model_failure_not_provider_outage(tmp_path):
     class Reader:
         def read(self, data, *, photo_id, input_id):
             return OcrPage(photo_id, input_id, (
-                OcrLine("A" * 2001, 0, 0, 100, 20),
-                OcrLine("10 mg", 200, 0, 260, 20),
+                OcrLine("Supplement Facts", 0, 0, 260, 20),
+                OcrLine("A" * 2001, 0, 40, 100, 60),
+                OcrLine("10 mg", 200, 40, 260, 60),
             ))
 
     manifest, _ = source(tmp_path)

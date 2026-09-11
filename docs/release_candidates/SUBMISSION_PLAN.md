@@ -102,6 +102,74 @@ Do not parse the thinking field as a validated draft or count the simple
 reading as qualification. The temporary diagnostic daemon was stopped;
 the operator's normal Ollama daemon was not changed.
 
+### OCR panel isolation — 2026-09-11
+
+The existing OCR adapter now uses a recognized Supplement Facts heading to
+bound its OCR column and stops before recognized footers. It retains original
+input/photo provenance; no image-preparation fork or new mapper was added.
+Multiple recognized panels abstain rather than combining possible editions.
+An untagged marketing dose no longer selects a Facts panel. A single explicitly
+tagged, cropped panel can still be read without its heading. These are
+conservative geometry heuristics, not guaranteed panel detection; rules v3
+must be evaluated independently of v2.
+
+Saved rerun: `reports/submission_dsld_ocr_panel_20260911/`, same 60 images,
+51 drafts, 9 abstentions, zero adapter failures. This is NOT qualification or
+an accuracy improvement claim. Catalog missing-row findings increased from
+279 to 573, while unmatched draft rows fell from 181 to 99. The remaining
+readings are incomplete: DSLD 695 still treats collapsed
+`ServingSizeOneCapsule` as an ingredient; DSLD 739 still merges dense adjacent
+rows (including Alpha Lipoic Acid and Quercetin). Bounds may also omit boxes.
+The previous baseline remains untouched for comparison.
+
+Next bounded chunk: fix dense-row separation and collapsed serving-header
+recognition in this same adapter, preserving wrapped-name and blend tests.
+Re-run these saved images before broader model experiments. Do not enable
+extraction or promote these drafts; warnings, identity and completeness still
+fail the intended standard.
+
+Verification: 14,256 fast-tier tests passed, 66 skipped. The focused adapter
+and diagnostic slice passed 29 tests; the three new panel-selection regressions
+were first demonstrated failing before the fix. The diagnostic fixture was
+updated to keep exercising invalid-draft classification behind a real heading.
+The targeted release invocation also completed successfully: 29 tests plus
+the standard artifact/freshness and live-identifier gates. No catalog rebuild
+or production deployment was performed.
+
+### Gemini public-image smoke — 2026-09-11
+
+At the operator's explicit request, tested the configured Gemini key with
+public DSLD images only. Model discovery succeeded. Google's current pricing
+lists `gemini-3.8-flash` with a free tier; the key's actual billing tier was
+not independently verified. Free-tier data-use terms are not suitable for
+silently forwarding private submissions. No worker/provider registry changed.
+
+The diagnostic reuses the existing instruction, image preparation, envelope
+assembly/validator and catalog comparator, without a repair mapper. DSLD 695
+returned a valid draft, with its correct 500 mg amount, one-capsule serving,
+048107076009 barcode, Other Ingredients and physician/pre-surgery warning.
+Visual spot-check agrees on those fields. Three catalog differences remain:
+brand wording, form detail and Other Ingredients punctuation. Those differences
+do not by themselves establish which source is wrong. No gold was authored.
+
+DSLD 739 returned HTTP 503 twice (one bounded retry); 2502 returned HTTP 503
+on its first attempt. Thus this smoke produced ONE validated draft across
+three selected products, not a successful three-product benchmark. Availability
+is unresolved, and no accuracy or qualification rate is claimed. Model version
+and token usage were saved; the diagnostic identifier hash is explicitly NOT
+a model-weights digest. Cost was not verified as zero.
+
+Receipts: local gitignored `reports/submission_dsld_gemini38_smoke_20260911/`,
+`reports/submission_dsld_gemini38_retry_20260911/`, and
+`reports/submission_dsld_gemini38_third_20260911/`. The one-off orchestration is
+`reports/gemini_public_dsld_probe_20260911.py`; it is not a production adapter.
+Next Gemini step: a bounded availability retest, then a tested hosted adapter
+behind the same extractor with explicit retention and usage accounting before
+any private submission or qualifying run. Do not automatically rerun all 60.
+
+Sources checked: https://ai.google.dev/gemini-api/docs/pricing and
+https://ai.google.dev/api/generate-content.
+
 ### Qwen follow-up — 2026-09-11
 
 No new model was downloaded. Ollama 0.34.0 runs the installed Qwen3-VL

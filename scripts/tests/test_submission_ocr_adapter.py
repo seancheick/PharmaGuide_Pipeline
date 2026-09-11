@@ -92,6 +92,46 @@ def test_a_row_is_assembled_from_boxes_at_the_same_height() -> None:
     assert rows[0]["amount"]["value"] == {"value": 500.0, "unit_text": "mg"}
 
 
+def test_facts_column_excludes_tall_marketing_and_footer() -> None:
+    draft = _extract([
+        _line("Marketing 900 mg", 0, left=10, width=300, height=180),
+        _line("SupplementFacts", 20, left=500, width=260),
+        _line("Vitamin C", 60, left=500, width=120),
+        _line("500 mg", 60, left=800, width=70),
+        _line("*Daily Value not established.", 100, left=500),
+        _line("OtherIngredients: cellulose", 130, left=500),
+        _line("Warning: contains 50 mg", 160, left=500),
+    ])
+    assert [r["display_name"]["value"] for r in draft["ingredient_rows"]] == ["Vitamin C"]
+    assert draft["ingredient_rows"][0]["amount"]["value"]["value"] == 500
+
+
+def test_undeclared_marketing_amount_is_not_a_facts_panel() -> None:
+    draft = _extract([_line("Super power 500 mg", 40)],
+                     bundle=_bundle(_photo(categories=())))
+    assert draft["abstained"] is True
+
+
+def test_two_facts_headings_abstain_instead_of_combining_editions() -> None:
+    draft = _extract([
+        _line("Supplement Facts", 0), _line("Vitamin C 500 mg", 40),
+        _line("Supplement Facts", 150), _line("Vitamin C 100 mg", 190),
+    ])
+    assert draft["abstained"] is True
+
+
+def test_recognized_facts_panel_does_not_depend_on_user_slot_and_keeps_source() -> None:
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("Vitamin C", 40, width=120),
+        _line("500 mg", 40, left=300, width=70),
+    ], bundle=_bundle(_photo(categories=("front_identity",))))
+    row = draft["ingredient_rows"][0]
+    assert row["display_name"]["value"] == "Vitamin C"
+    assert row["amount"]["sources"][0]["photo_id"] == _PHOTO
+    assert row["amount"]["sources"][0]["input_id"] == "i1"
+
+
 def test_wrapped_name_and_amount_stay_one_row_when_boxes_overlap_as_a_chain() -> None:
     draft = _extract([
         _line("Bifidobacterium longum", 40, left=10, width=220, height=42),

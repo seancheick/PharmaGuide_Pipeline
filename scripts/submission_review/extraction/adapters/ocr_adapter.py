@@ -47,7 +47,7 @@ from ..extractor import (
 #: believed, whatever the text height says.
 _MIN_INDENT_STEP = 8.0
 
-RULES_VERSION = "ocr-geometry-v2"
+RULES_VERSION = "ocr-geometry-v3"
 PROVIDER = "ocr"
 
 #: Units as labels print them. Case is preserved in the draft; matching is not.
@@ -86,6 +86,12 @@ _NOT_A_ROW = re.compile(
 )
 _OTHER_INGREDIENTS = re.compile(r"^\s*other\s+ingredients?\b", re.IGNORECASE)
 _FOOTNOTE_START = re.compile(r"^\s*\+\s*(?:provides|[t†‡])", re.IGNORECASE)
+_FACTS_HEADING = re.compile(r"\s*supplement\s*facts\s*", re.IGNORECASE)
+_PANEL_END = re.compile(
+    r"^\s*(?:other\s*ingredients?\b|warnings?\b|directions?\b|"
+    r"[^\w]*daily\s*value\s*not\s*established|[^\w]*percent\s*daily\s*values?)",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -433,18 +439,35 @@ class OcrLabelAdapter:
 
     @staticmethod
     def _panel(bundle: PreparedBundle, pages: dict[str, OcrPage]) -> OcrPage | None:
-        for photo in bundle.photos:
-            if "supplement_facts" in photo.categories:
-                return pages.get(photo.photo_id)
-        # No declared panel: the page with the most amounts is the best guess a
-        # rule can make, and it is a guess about which photo, never about what
-        # it says.
-        scored = [
-            (sum(1 for line in page.lines if _AMOUNT.search(line.text)), page)
-            for page in pages.values()
+        headings = [
+            (page, line) for page in pages.values() for line in page.lines
+            if _FACTS_HEADING.fullmatch(line.text)
         ]
-        best = max(scored, key=lambda pair: pair[0], default=(0, None))
-        return best[1] if best[0] else None
+        if len(headings) > 1:
+            # Multiple panels may be different editions. Do not pick one or
+            # combine their doses merely because a slot was tagged Facts.
+            return None
+        if headings:
+            page, heading = headings[0]
+            # Retain original coordinates and input provenance; this selects
+            # OCR boxes, not a second image-preparation pipeline. The heading
+            # anchors a bounded column, with room for a separate amount column.
+            left = heading.left - heading.height * 0.5
+            right = heading.right + max(
+                heading.height * 6, (heading.right - heading.left) * 0.75)
+            lines = [line for line in page.lines
+                     if line.top >= heading.top and line.left >= left
+                     and line.right <= right]
+            end = min((line.top for line in lines if _PANEL_END.match(line.text)),
+                      default=float("inf"))
+            return OcrPage(page.photo_id, page.input_id,
+                           tuple(line for line in lines if line.top < end))
+        # A tightly cropped, explicitly tagged panel may lack its heading.
+        # Untagged marketing text containing a dose is not enough evidence.
+        declared = [pages[photo.photo_id] for photo in bundle.photos
+                    if "supplement_facts" in photo.categories
+                    and photo.photo_id in pages]
+        return declared[0] if len(declared) == 1 else None
 
     @staticmethod
     def _front(bundle: PreparedBundle, pages: dict[str, OcrPage]) -> OcrPage | None:
