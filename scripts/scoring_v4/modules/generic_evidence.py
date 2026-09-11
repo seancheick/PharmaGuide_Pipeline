@@ -1043,6 +1043,40 @@ def _match_active_mass(entry: Dict[str, Any], index: Dict[str, float]) -> float:
     return 0.0
 
 
+def _unambiguous_non_structural_source_ref(
+    product: Dict[str, Any], entry: Dict[str, Any]
+) -> Optional[str]:
+    """Return the one massed label row directly referenced by an evidence match.
+
+    ``matched_source_row_refs`` records identity matches and may also contain a
+    structural total with the same identity. Only a single referenced,
+    non-product-level row establishes the evidence numerator; otherwise the
+    historical identity fallback remains in force.
+    """
+    entry_refs = {
+        str(ref).strip()
+        for ref in (entry.get("matched_source_row_refs") or [])
+        if str(ref or "").strip()
+    }
+    if not entry_refs:
+        return None
+
+    anchors = set()
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        if _norm_text(row.get("scoring_input_kind")) == "product_level_evidence":
+            continue
+        if (_evidence_matching_mass_mg(row) or 0.0) <= 0.0:
+            continue
+        source_ref = str(
+            row.get("raw_source_path") or row.get("source_row_ref") or ""
+        ).strip()
+        if source_ref in entry_refs:
+            anchors.add(source_ref)
+    return next(iter(anchors)) if len(anchors) == 1 else None
+
+
 def _active_canonical_index(product: Dict[str, Any]) -> Dict[str, str]:
     """Map each active's normalized identity tokens -> its raw canonical_id. An
     evidence match resolves to a normalized standard-name (e.g. 'psyllium husk',
@@ -1141,7 +1175,13 @@ def _primary_mass_floor(
             or bool(set(_matched_canonical_ids(entry)) & sub_clinical_canonicals)
         ):
             continue
-        if _match_active_mass(entry, index) < threshold:
+        anchor_ref = _unambiguous_non_structural_source_ref(product, entry)
+        entry_mass = (
+            index.get(f"source:{anchor_ref}", 0.0)
+            if anchor_ref is not None
+            else _match_active_mass(entry, index)
+        )
+        if entry_mass < threshold:
             continue  # the evidenced ingredient is not a mass-dominant active
         if entry.get("min_clinical_dose") is not None:
             dose, _ = _converted_product_dose(entry, dose_map)

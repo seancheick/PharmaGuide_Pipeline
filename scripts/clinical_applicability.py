@@ -205,7 +205,15 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping) -> dict:
         if _key(row.get("canonical_id")) in excluded_canonicals:
             reasons.append("clinical_identity_excluded")
             continue
-        if any(" " + _key(term) + " " in text for term in policy.get("excluded_form_terms", [])):
+        # Required terms stay source-strict, but a disqualifying preparation
+        # from any form layer must still reject the row. Otherwise an
+        # enrichment-derived "seed oil" can disappear when source taxonomy is
+        # absent and incorrectly satisfy the broader cranberry scope.
+        exclusion_text = text if not source_only else text + _row_text(row)
+        if any(
+            " " + _key(term) + " " in exclusion_text
+            for term in policy.get("excluded_form_terms", [])
+        ):
             reasons.append("clinical_form_excluded")
             continue
         forms = policy.get("required_form_terms") or []

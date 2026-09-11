@@ -92,6 +92,35 @@ def test_enrichment_derived_form_cannot_satisfy_a_source_required_term():
     assert rejected[0]["reason_code"] == "clinical_form_mismatch"
 
 
+@pytest.mark.parametrize("raw_taxonomy", [None, {"category": "botanical", "forms": []}])
+def test_enrichment_derived_form_still_disqualifies(raw_taxonomy):
+    source = _product(
+        "legacy-excluded-form",
+        "Cranberry Concentrate",
+        "Cranberry",
+        "cranberry_fruit",
+        "Cranberry Extract",
+        500.0,
+        "ingredientRows[0]",
+    )
+    row = source["activeIngredients"][0]
+    if raw_taxonomy is None:
+        del row["raw_taxonomy"]
+    else:
+        row["raw_taxonomy"] = raw_taxonomy
+    row["forms"] = [{"name": "seed oil"}]
+    match = {
+        "id": "INGR_CRANBERRY",
+        "ingredient": "Cranberry Concentrate",
+        "matched_source_row_refs": ["ingredientRows[0]"],
+    }
+
+    accepted, rejected = filter_clinical_matches(source, [match])
+
+    assert accepted == []
+    assert rejected[0]["reason_code"] == "clinical_form_excluded"
+
+
 def test_source_taxonomy_forms_still_reach_the_required_term():
     # The same words declared by the cleaner's own source taxonomy remain a
     # legitimate preparation assertion (e.g. 218600's "from Soy Lecithin").

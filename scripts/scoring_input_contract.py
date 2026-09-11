@@ -4748,11 +4748,39 @@ def primary_mass_competitor_rows(
                 )
 
     def lineage_owned(total: Dict[str, Any]) -> bool:
-        total_paths = {
+        raw_own_path = str(
+            total.get("raw_source_path") or total.get("source_row_ref") or ""
+        ).strip()
+        resolved_own_path = (
+            _resolve_source_tree_path(product, raw_own_path)
+            if raw_own_path
+            else ""
+        )
+        linked_paths = {
             _resolve_source_tree_path(product, str(path).strip())
-            for path in (*_safe_list(total.get("linked_rows")), total.get("raw_source_path"))
+            for path in _safe_list(total.get("linked_rows"))
             if str(path or "").strip()
         }
+
+        # A row with a real source-tree position proves that position. Its
+        # linked_rows may only corroborate the same lineage; an unrelated
+        # aggregate cannot silence a competitor by claiming the evidenced
+        # row (or every row) in a one-sided link. Synthetic projections whose
+        # activeIngredients path cannot be resolved have no position of their
+        # own, so their declared original-tree links remain the only evidence.
+        if resolved_own_path.startswith("ingredientRows["):
+            total_paths = {resolved_own_path}
+            total_paths.update(
+                path
+                for path in linked_paths
+                if (
+                    path == resolved_own_path
+                    or _path_is_nested_under(resolved_own_path, path)
+                    or _path_is_nested_under(path, resolved_own_path)
+                )
+            )
+        else:
+            total_paths = linked_paths
         if not total_paths:
             return False
         linked = any(

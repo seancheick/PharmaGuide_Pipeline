@@ -130,6 +130,54 @@ def test_unrelated_aggregate_still_competes_with_trace_active(canonical, quantit
     assert result["metadata"]["primary_evidence_floor"] == 0.0
 
 
+def test_identity_matched_extra_refs_do_not_supply_the_numerator():
+    # The enricher records every identity-matching row. A sibling structural
+    # total in that list is identity evidence, not the evidenced active's mass.
+    product = _ps_complex_product()
+    active = product["ingredient_quality_data"]["ingredients"][0]
+    active["raw_source_path"] = "ingredientRows[3]"
+    total = product["product_scoring_evidence"][0]
+    total.update(
+        name="Phosphatidylserine Complex",
+        raw_source_path="ingredientRows[2]",
+        linked_rows=["ingredientRows[2]"],
+    )
+    product["evidence_data"]["clinical_matches"][0]["matched_source_row_refs"] = [
+        "ingredientRows[3]",
+        "ingredientRows[2]",
+    ]
+    original = deepcopy(product)
+
+    result = score_evidence(product, apply_primary_floor=True)
+
+    assert product == original
+    assert result["metadata"]["primary_evidence_floor"] == 0.0
+
+
+@pytest.mark.parametrize("aggregate_linked_rows", [
+    ["ingredientRows[1].nestedRows[0]"],
+    ["ingredientRows[1]", "ingredientRows[1].nestedRows[0]", "ingredientRows[7]"],
+])
+def test_foreign_linked_rows_cannot_silence_an_aggregate(aggregate_linked_rows):
+    # linked_rows may corroborate an aggregate's own source position. A row at
+    # an unrelated path cannot claim the evidenced row or every row as lineage.
+    product = _ps_complex_product()
+    aggregate = dict(product["product_scoring_evidence"][0])
+    aggregate.update(
+        name="Unrelated aggregate",
+        raw_source_path="ingredientRows[7]",
+        linked_rows=list(aggregate_linked_rows),
+        dose_value=5000.0,
+    )
+    product["product_scoring_evidence"] = [aggregate]
+    original = deepcopy(product)
+
+    result = score_evidence(product, apply_primary_floor=True)
+
+    assert product == original
+    assert result["metadata"]["primary_evidence_floor"] == 0.0
+
+
 # --- Real-label lineage (public DSLD fixtures, hash-verified) ----------------
 
 import hashlib
