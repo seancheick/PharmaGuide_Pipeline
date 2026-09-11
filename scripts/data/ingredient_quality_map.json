@@ -39,8 +39,8 @@
     },
     "statistics": {
       "total_parents": 632,
-      "total_forms": 1422,
-      "total_form_aliases": 12114,
+      "total_forms": 1424,
+      "total_form_aliases": 12117,
       "parents_with_parent_aliases": 120,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -14382,6 +14382,28 @@
     "cui": "C0021547",
     "rxcui": "5833",
     "forms": {
+      "inositol from inositol hexanicotinate": {
+        "alias_identity_scope": "source_preparation",
+        "bio_score": 5,
+        "natural": false,
+        "score": 5,
+        "absorption": null,
+        "notes": "Inositol declared from inositol hexanicotinate (also named inositol niacinate or nicotinate). This is an ester source preparation, not a declaration of free myo-inositol or the chiro stereoisomer. Preserve the labeled inositol amount; do not infer liberated inositol or niacin quantities. The score is a conservative unassessed allowance, not a measured absorption estimate or efficacy claim.",
+        "aliases": ["inositol from inositol hexanicotinate"],
+        "source_form_aliases": [
+          "inositol niacinate",
+          "inositol nicotinate",
+          "inositol hexanicotinate",
+          "inositol hexaniacinate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
+        }
+      },
       "myo-inositol": {
         "bio_score": 10,
         "natural": false,
@@ -59223,6 +59245,28 @@
     "cui": "C0054312",
     "rxcui": "596718",
     "forms": {
+      "tributyrin": {
+        "bio_score": 5,
+        "natural": false,
+        "score": 5,
+        "absorption": null,
+        "notes": "Tributyrin is the glycerol triester of butyric acid, also called glyceryl tributyrate. CoreBiome identifies a tributyrin preparation. Preserve the labeled preparation amount; do not convert it into a free butyric-acid dose. Form identity does not establish comparative absorption or clinical benefit. The score is a conservative unassessed allowance, not a measured absorption estimate.",
+        "aliases": [
+          "tributyrin",
+          "glyceryl tributyrate",
+          "glycerol tributyrate",
+          "corebiome",
+          "corebiome tributyrin",
+          "corebiome butyrate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
+        }
+      },
       "butyric acid (unspecified)": {
         "bio_score": 6,
         "natural": true,
@@ -59233,15 +59277,11 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Butyric acid (C4 SCFA) naturally produced by colonic bacterial fermentation of dietary fiber. Primary colonocyte energy substrate (~70% of energy needs). Inhibits histone deacetylases (HDACs) modulating NF-kB-driven inflammation. Tributyrin (glycerol triester) form provides superior oral delivery vs free acid (PMID 28381011). Protective against colorectal cancer in preclinical models.",
+        "notes": "Butyric acid (C4 SCFA) naturally produced by colonic bacterial fermentation of dietary fiber. Primary colonocyte energy substrate (~70% of energy needs). Inhibits histone deacetylases (HDACs) modulating NF-kB-driven inflammation. Protective against colorectal cancer in preclinical models.",
         "aliases": [
           "butyric acid",
           "butyrate",
-          "butanoic acid",
-          "tributyrin",
-          "corebiome",
-          "corebiome tributyrin",
-          "corebiome butyrate"
+          "butanoic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

@@ -9299,7 +9299,13 @@ class SupplementEnricherV3:
             }
 
         def build_parent_match_data(parent_key: str, parent_data: Dict) -> Tuple[Dict, bool, Optional[str]]:
-            forms = parent_data.get('forms', {})
+            # A named source preparation is not an identity-neutral default.
+            # It may be selected by explicit parent-scoped evidence, never by
+            # the lowest-score fallback when the label omits its source.
+            forms = {
+                name: data for name, data in parent_data.get('forms', {}).items()
+                if data.get('alias_identity_scope') != 'source_preparation'
+            }
             if forms:
                 def _norm(value: str) -> str:
                     return str(value or "").strip().lower()

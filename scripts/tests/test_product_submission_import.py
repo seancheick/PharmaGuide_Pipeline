@@ -290,6 +290,39 @@ def row_id(row: dict) -> str:
     return str(row["submission_id"])
 
 
+@pytest.mark.parametrize("name,group,source,form_id", [
+    ("Inositol", "Inositol", "inositol niacinate", "inositol from inositol hexanicotinate"),
+    ("Tributyrin", "Butyric Acid", "CoreBiome tributyrin", "tributyrin"),
+])
+def test_source_compound_forms_share_native_and_submission_pipeline(name, group, source, form_id):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from product_submission_import import build_manual_label
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    payload = _payload()
+    payload["ingredientRows"][0].update({
+        "name": name, "ingredientGroup": group,
+        "forms": [{"name": source}],
+        "quantity": [{"quantity": 1, "unit": "mg"}],
+    })
+    imported = build_manual_label(_export(payload))
+    native = dict(payload, id="native-source-form")
+    normalizer = EnhancedDSLDNormalizer()
+    enricher = SupplementEnricherV3()
+    outputs = []
+    for raw in (native, imported):
+        enriched, errors = enricher.enrich_product(normalizer.normalize_product(raw))
+        assert not errors
+        rows = enriched["ingredient_quality_data"]["ingredients"]
+        assert rows[0]["form_id"] == form_id
+        assert rows[0]["quantity"] == 1
+        outputs.append((rows, build_scored_artifact(enriched)))
+    assert outputs[0][0] == outputs[1][0]
+    for field in ("quality_score_v4_100", "quality_score_status", "quality_pillars_v4"):
+        assert outputs[0][1][field] == outputs[1][1][field]
+
+
 def test_admin_headers_support_secret_keys_without_fabricating_a_bearer_jwt(
     monkeypatch: pytest.MonkeyPatch,
 ):
