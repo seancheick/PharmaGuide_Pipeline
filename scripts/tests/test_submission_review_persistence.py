@@ -71,6 +71,35 @@ def _exercise(script):
     return json.loads(result.stdout)
 
 
+def test_picture_url_refresh_preserves_unsaved_label_and_selection():
+    out = _exercise("""(async()=>{
+      state.reviewerImages=[{objectId:'image-1',previewUrl:'expired'}];
+      state.productImage={kind:'reviewer',id:'image-1'};
+      state.payload={brandName:'Unsaved edit'};
+      edge=async()=>({review:{draft:{payload:{brandName:'Older saved label'}},
+        reviewer_images:[{object_id:'image-1',signed_url:'renewed'}]}});
+      await refreshReviewerPictureUrls();
+      out.brand=state.payload.brandName;
+      out.url=state.reviewerImages[0].previewUrl;
+      out.picture=state.productImage.id;
+    })()""")
+    assert out == {'brand':'Unsaved edit','url':'renewed','picture':'image-1'}
+
+
+def test_approved_controls_are_read_only_but_raw_json_remains_copyable():
+    out = _exercise("""(()=>{
+      const input=document.getElementById('brand');
+      const raw=document.getElementById('raw-json');
+      document.querySelectorAll=()=>[input,raw];
+      state.selected.review_status='approved';
+      setApprovedReadOnly();
+      out.locked=input.disabled;out.rawReadOnly=raw.readOnly;out.rawDisabled=raw.disabled;
+      state.selected.review_status='under_review';
+      setApprovedReadOnly();out.editable=!input.disabled&&!raw.readOnly;
+    })()""")
+    assert out == {'locked':True,'rawReadOnly':True,'rawDisabled':False,'editable':True}
+
+
 def test_saved_corrections_are_restored_when_the_page_reopens() -> None:
     # The whole point of persistence: a reload must not cost the reviewer the
     # twenty ingredient rows they already corrected.
@@ -87,6 +116,36 @@ def test_saved_corrections_are_restored_when_the_page_reopens() -> None:
 
     assert out["brand"] == "Corrected"
     assert out["checked"] == ["brand"]
+
+
+def test_saved_product_picture_is_restored_with_fresh_preview() -> None:
+    out = _exercise("""(async()=>{
+      edge=async()=>({review:{draft:null,verifications:[],
+        product_image:{kind:'reviewer',id:'image-1'},
+        reviewer_images:[{object_id:'image-1',signed_url:'https://signed.example/fresh'}]}});
+      await loadReview();
+      out.picture=state.productImage;
+      out.images=state.reviewerImages;
+    })()""")
+    assert out["picture"] == {"kind": "reviewer", "id": "image-1"}
+    assert out["images"][0]["previewUrl"] == "https://signed.example/fresh"
+
+
+def test_approved_label_reopens_from_the_approval_not_an_empty_personal_draft() -> None:
+    out = _exercise("""(async()=>{
+      state.selected.review_status='approved';
+      edge=async(body)=>{calls.push(body.action);return {review:{draft:null,
+        approved_label:{approved_payload:{brandName:'Approved brand',ingredientRows:[{name:'Calcium'}]}},
+        verifications:[]}}};
+      await loadReview();
+      await saveReview();
+      out.brand=state.payload.brandName;
+      out.rows=state.payload.ingredientRows;
+      out.saves=calls.filter(x=>x==='save_review').length;
+    })()""")
+    assert out["brand"] == "Approved brand"
+    assert out["rows"] == [{"name": "Calcium"}]
+    assert out["saves"] == 0
 
 
 def test_a_superseded_draft_is_never_adopted_into_the_editor() -> None:

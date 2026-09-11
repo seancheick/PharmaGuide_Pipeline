@@ -143,16 +143,19 @@ def test_approve_action_itself_refuses_unchecked_fields():
     assert "ingredient" in out["status"].lower()
 
 
-def test_selecting_last_required_image_refreshes_approval_immediately():
+def test_selecting_last_required_image_refreshes_approval_after_save():
     out = _exercise("""(async()=>{
       state.selected.kind='missing_product'; state.identityRecorded='no_match_verified';
       state.selected.photos=[{photo_id:'p1',categories:['front_identity'],signed_url:'fixture'}];
       renderProductPictureOptions(); setDecisionAvailability();
       out.before=document.getElementById('t-approve').disabled;
       document.getElementById('product-picture-options').children[0].children[0].listeners.change();
+      out.during=document.getElementById('t-approve').disabled;
+      await state.pictureSavePromise;
       out.after=document.getElementById('t-approve').disabled;
+      out.saved=calls.some(call=>call.action==='set_review_image');
     })()""")
-    assert out == {"before": True, "after": False}
+    assert out == {"before": True, "during": True, "after": False, "saved": True}
 
 
 def test_keyboard_does_not_approve_under_an_open_dialog():

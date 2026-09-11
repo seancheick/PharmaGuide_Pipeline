@@ -26,6 +26,7 @@ const state = {
   identityRecorded: null,
   reviewerImages: [],
   productImage: null,
+  pictureSavePromise: Promise.resolve(),
   lightboxImage: null,
   lightboxRotation: 0,
   // The reviewer's own saved corrections and attestations, as the server
@@ -312,6 +313,7 @@ async function refreshSelected() {
       }
       state.selected = fresh;
       renderDetail();
+      if (state.reviewerImages.length) await refreshReviewerPictureUrls();
     }
   } catch {
     // Keep the edited payload; retry metadata without inventing a fresh binding.
@@ -323,6 +325,7 @@ async function refreshSelected() {
 // ---------------------------------------------------------------- detail
 
 function renderDetail() {
+  setApprovedReadOnly();
   const submission = state.selected;
   $('detail-panel').classList.remove('hidden');
   const head = $('detail-head');
@@ -385,6 +388,7 @@ function renderDetail() {
   renderDiagnostics();
   // Restore this reviewer's saved corrections and ticks, once per revision.
   void loadReview();
+  setApprovedReadOnly();
 }
 
 // ---------------------------------------------------------------- identity
@@ -860,30 +864,41 @@ async function loadReview() {
       state.selected?.id !== submission.id ||
       `${state.selected?.id}:${state.selected?.evidence_revision}` !== key) return;
   const draft = review?.draft;
+  const approved = submission.review_status === 'approved' ? review?.approved_label : null;
   // Restore the reviewer's own work. A superseded draft is never adopted into
   // the editor: it describes photographs that are no longer the evidence.
-  if (draft && !draft.superseded && draft.payload) {
-    state.payload = draft.payload;
+  if (approved?.approved_payload || (submission.review_status !== 'approved' && draft && !draft.superseded && draft.payload)) {
+    state.payload = approved?.approved_payload ?? draft.payload;
     syncFieldsFromPayload();
     renderRows();
     await updateShaPreview();
   }
-  hydrateReview(review);
+  if (state.reviewLoadRequest !== requestId ||
+      state.selected?.id !== submission.id ||
+      state.selected?.evidence_revision !== submission.evidence_revision) return;
+  hydrateReview(approved ? {...review, draft:null, verifications:[]} : review);
+  state.productImage = review?.product_image
+    ? {kind: review.product_image.kind, id: review.product_image.id} : null;
+  state.reviewerImages = (review?.reviewer_images ?? []).map((image) => ({
+    objectId: image.object_id, previewUrl: image.signed_url, label: 'Saved replacement',
+  }));
+  renderProductPictureOptions();
   renderVerifyChecklist();
   renderReadiness();
   renderReviewBanner();
   setDecisionAvailability();
+  setApprovedReadOnly();
 }
 
 function scheduleReviewSave() {
-  if (!state.session) return;
+  if (!state.session || state.selected?.review_status === 'approved') return;
   clearTimeout(state.reviewSaveTimer);
   state.reviewSaveTimer = setTimeout(() => void saveReview(), 800);
 }
 
 async function saveReview() {
   const submission = state.selected;
-  if (!submission || !state.session) return;
+  if (!submission || !state.session || submission.review_status === 'approved') return;
   if (!state.payloadSha || state.reviewInvalidated) return;
   if (!submission.evidence_manifest_sha256) return;
   const requestId = ++state.reviewSaveRequest;
@@ -964,7 +979,11 @@ function renderReviewBanner() {
   const banner = $('review-banner');
   if (!banner) return;
   let message = '';
-  if (state.reviewDigestMismatch) {
+  if (state.selected?.review_status === 'approved') {
+    message = state.review?.approved_label
+      ? 'Approved label — read-only. This is the record used by the catalog importer.'
+      : 'The approved label could not be loaded. This does not mean it was deleted. Reopen this review.';
+  } else if (state.reviewDigestMismatch) {
     message = 'This page and the server disagree about the label text. ' +
       'Reopen this submission before approving.';
   } else if (state.reviewSuperseded) {
@@ -1699,6 +1718,7 @@ function syncFieldsFromPayload() {
   $('other-ingredients').value = state.payload.otherIngredients ?? '';
   $('other-ingredients').disabled =
     $('other-disclosure').value !== 'present';
+  $('raw-json').value = JSON.stringify(state.payload, null, 2);
   renderStatements();
 }
 
@@ -1794,6 +1814,58 @@ async function updateShaPreview() {
 
 // ---------------------------------------------------------------- product picture
 
+// Renew preview links without restoring a label over the reviewer's edits.
+async function refreshReviewerPictureUrls() {
+  const selection = state.selected;
+  if (!selection || !state.reviewerImages.length) return;
+  const {review} = await edge({action:'load_review',submission_id:selection.id});
+  if (state.selected !== selection) return;
+  const urls = new Map((review?.reviewer_images ?? []).map(image =>
+    [image.object_id, image.signed_url]));
+  state.reviewerImages = state.reviewerImages.map(image =>
+    urls.has(image.objectId) ? {...image, previewUrl:urls.get(image.objectId)} : image);
+  renderProductPictureOptions();
+}
+
+function setApprovedReadOnly() {
+  const approved = state.selected?.review_status === 'approved';
+  for (const node of document.querySelectorAll?.('#detail-panel input, #detail-panel textarea, #detail-panel select, #detail-panel button') ?? []) {
+    if (node.id === 'raw-json') { node.readOnly = approved; continue; }
+    if (approved) { node.dataset.approvedDisabled = 'true'; node.disabled = true; }
+    else if (node.dataset.approvedDisabled) { delete node.dataset.approvedDisabled; node.disabled = false; }
+  }
+}
+
+async function chooseProductImage(picture) {
+  const submission = state.selected;
+  if (!submission || submission.review_status === 'approved') return;
+  const binding = selectedEvidenceBinding();
+  const previous = state.pictureSavePromise;
+  let finish;
+  state.pictureSavePromise = new Promise(resolve => { finish = resolve; });
+  await previous;
+  try {
+    if (state.selected?.id !== submission.id || state.selected?.evidence_revision !== submission.evidence_revision) {
+      throw new Error('Selection changed before picture was saved.');
+    }
+    await saveReview();
+    await edge({action:'set_review_image',submission_id:submission.id,...binding,
+      kind:picture.kind,image_id:picture.id});
+    if (state.selected?.id !== submission.id ||
+        state.selected?.evidence_revision !== binding.expected_evidence_revision ||
+        state.selected?.evidence_manifest_sha256 !== binding.evidence_manifest_sha256) return;
+    state.productImage = picture;
+    renderProductPictureOptions();
+  } finally { finish(); }
+}
+
+function selectProductImage(picture) {
+  void chooseProductImage(picture).catch(() => {
+    renderProductPictureOptions();
+    setStatus('Picture selection could not be saved. Please try again.', true);
+  });
+}
+
 function renderProductPictureOptions() {
   renderReadiness();
   setDecisionAvailability();
@@ -1816,9 +1888,7 @@ function renderProductPictureOptions() {
     radio.checked = state.productImage?.kind === 'photo' &&
       state.productImage.id === photo.photo_id;
     radio.addEventListener('change', () => {
-      state.productImage = { kind: 'photo', id: photo.photo_id };
-      renderReadiness();
-      setDecisionAvailability();
+      selectProductImage({ kind: 'photo', id: photo.photo_id });
     });
     const image = document.createElement('img');
     image.src = photo.signed_url;
@@ -1840,9 +1910,7 @@ function renderProductPictureOptions() {
     radio.checked = state.productImage?.kind === 'reviewer' &&
       state.productImage.id === imageRecord.objectId;
     radio.addEventListener('change', () => {
-      state.productImage = { kind: 'reviewer', id: imageRecord.objectId };
-      renderReadiness();
-      setDecisionAvailability();
+      selectProductImage({ kind: 'reviewer', id: imageRecord.objectId });
     });
     const image = document.createElement('img');
     image.src = imageRecord.previewUrl;
@@ -1850,6 +1918,7 @@ function renderProductPictureOptions() {
     label.append(radio, image, document.createTextNode(imageRecord.label));
     container.append(label);
   }
+  setApprovedReadOnly();
 }
 
 async function uploadReviewerBlob(
@@ -1883,7 +1952,7 @@ async function uploadReviewerBlob(
   }
   const previewUrl = URL.createObjectURL(blob);
   state.reviewerImages.push({ objectId, previewUrl, label });
-  state.productImage = { kind: 'reviewer', id: objectId };
+  await chooseProductImage({ kind: 'reviewer', id: objectId });
   renderProductPictureOptions();
 }
 
@@ -2041,6 +2110,7 @@ function setDecisionAvailability() {
   $('t-request-evidence').disabled = terminal ||
     !['submitted', 'under_review'].includes(status) ||
     state.selected?.kind !== 'missing_product';
+  setApprovedReadOnly();
 }
 
 // Every decision on the selected evidence goes through here, fenced to the
