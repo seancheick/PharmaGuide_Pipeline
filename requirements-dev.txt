@@ -12,5 +12,10 @@ tqdm>=4.66,<5       # progress bars for batch_processor / enrich / score pipelin
 beautifulsoup4>=4.12,<5
 lxml>=5.0,<7
 playwright>=1.50,<2
+# Dashboard modules are imported by the fast test profile. Keep their runtime
+# requirements centralized, and declare pyarrow because the tests import it
+# directly rather than relying on Streamlit's transitive dependency.
+-r scripts/dashboard/requirements.txt
+pyarrow>=17,<26
 # Keep the OCR engine/weights reproducible for benchmark fingerprints.
 rapidocr-onnxruntime==1.2.3
