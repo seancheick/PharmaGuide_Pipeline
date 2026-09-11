@@ -366,6 +366,24 @@ INTENTIONAL_IQM_BR_DUAL_CLASSIFICATION = frozenset({
 })
 
 
+# Abbreviations whose full stop is printed text, not the end of the list.
+_PRINTED_ABBREVIATIONS = frozenset({
+    "l", "f", "sp", "spp", "ssp", "subsp", "var", "inc", "co", "ltd",
+})
+
+
+def _drop_closing_full_stop(text: str) -> str:
+    """The period that ends a disclosure sentence is not part of the last name."""
+    if not text.endswith(".") or text.endswith(".."):
+        return text
+    body = text[:-1].rstrip()
+    last_word = re.split(r"[\s(\[]", body)[-1].lower() if body else ""
+    if (not last_word or body[-1].isdigit() or "." in last_word
+            or last_word in _PRINTED_ABBREVIATIONS):
+        return text
+    return body
+
+
 def parse_other_ingredient_disclosure(label_text: str) -> list[dict[str, Any]]:
     """Convert disclosure text into the shared cleaner's supported row shape.
 
@@ -406,7 +424,7 @@ def parse_other_ingredient_disclosure(label_text: str) -> list[dict[str, Any]]:
         raise ValueError(
             "otherIngredients has unbalanced grouping punctuation"
         )
-    final_part = label_text[start:].strip()
+    final_part = _drop_closing_full_stop(label_text[start:].strip())
     if not final_part:
         raise ValueError(
             "otherIngredients contains an empty ingredient segment"

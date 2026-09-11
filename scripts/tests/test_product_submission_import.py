@@ -124,7 +124,8 @@ def test_present_other_ingredients_become_supported_pipeline_rows():
             {"name": "Vegetarian capsule (hypromellose, water)"},
             {"name": "microcrystalline cellulose"},
             {"name": "vegetable magnesium stearate"},
-            {"name": "silicon dioxide."},
+            # The sentence's closing period is not part of the name.
+            {"name": "silicon dioxide"},
         ]
     }
     cleaned = EnhancedDSLDNormalizer().normalize_product(label)
@@ -159,7 +160,7 @@ def test_quantified_disclosure_preserves_ingredients_and_their_qualifier():
     label = build_manual_label(_export(payload))
     assert label["otherIngredients"]["ingredients"][1] == {
         "name": "Less than 2% of:",
-        "forms": [{"name": "magnesium stearate"}, {"name": "silicon dioxide."}],
+        "forms": [{"name": "magnesium stearate"}, {"name": "silicon dioxide"}],
     }
     cleaned = EnhancedDSLDNormalizer().normalize_product(label)
     assert any(
@@ -199,6 +200,29 @@ def test_quantified_disclosure_preserves_ingredients_and_their_qualifier():
                 {"name": "Less than 2% of:", "forms": [{"name": "silica"}]},
                 {"name": "Less than 1% of:", "forms": [{"name": "carnauba wax"}]},
             ],
+        ),
+        # The sentence ends the list; its period is not part of the last name.
+        (
+            "Gelatin; Less than 2% of: magnesium stearate, silicon dioxide.",
+            [
+                {"name": "Gelatin"},
+                {"name": "Less than 2% of:", "forms": [
+                    {"name": "magnesium stearate"}, {"name": "silicon dioxide"},
+                ]},
+            ],
+        ),
+        # Printed abbreviations and numbers keep their full stop.
+        (
+            "Rice flour, grape seed (Vitis vinifera L.)",
+            [{"name": "Rice flour"}, {"name": "grape seed (Vitis vinifera L.)"}],
+        ),
+        (
+            "Cellulose, Vitis vinifera L.",
+            [{"name": "Cellulose"}, {"name": "Vitis vinifera L."}],
+        ),
+        (
+            "Cellulose, pectin (ACME Ingredients Inc.)",
+            [{"name": "Cellulose"}, {"name": "pectin (ACME Ingredients Inc.)"}],
         ),
     ],
 )
