@@ -34,6 +34,10 @@ const state = {
   // is the durable record that survives a reload.
   review: null,
   reviewLoadedFor: null,
+  // Set only once the server's copy of this submission's review has been
+  // read and applied. Until then the page holds a blank default, and saving
+  // it would overwrite the reviewer's real work.
+  reviewReadyFor: null,
   reviewSaveTimer: null,
   reviewSaveRequest: 0,
   reviewLoadRequest: 0,
@@ -267,6 +271,7 @@ function select(submission) {
   state.diagnosticsRequest += 1;
   state.reviewLoadRequest += 1;
   state.reviewLoadedFor = null;
+  state.reviewReadyFor = null;
   state.reviewSuperseded = false;
   state.reviewDigestMismatch = false;
   state.identityLookup = null;
@@ -876,6 +881,7 @@ async function loadReview() {
   if (state.reviewLoadRequest !== requestId ||
       state.selected?.id !== submission.id ||
       state.selected?.evidence_revision !== submission.evidence_revision) return;
+  state.reviewReadyFor = key;
   hydrateReview(approved ? {...review, draft:null, verifications:[]} : review);
   state.productImage = review?.product_image
     ? {kind: review.product_image.kind, id: review.product_image.id} : null;
@@ -901,6 +907,7 @@ async function saveReview() {
   if (!submission || !state.session || submission.review_status === 'approved') return;
   if (!state.payloadSha || state.reviewInvalidated) return;
   if (!submission.evidence_manifest_sha256) return;
+  if (state.reviewReadyFor !== `${submission.id}:${submission.evidence_revision}`) return;
   const requestId = ++state.reviewSaveRequest;
   const boundSha = state.payloadSha;
   const boundRevision = submission.evidence_revision;

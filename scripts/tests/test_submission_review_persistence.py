@@ -385,3 +385,42 @@ def test_a_field_points_at_the_photograph_it_was_read_from() -> None:
     assert out["found"] is True
     assert out["marked"] == ["source-photo"]
     assert out["otherMarked"] == []
+
+
+def test_opening_a_submission_never_saves_over_its_draft_before_it_loads() -> None:
+    # Production lost a reviewed Adrenal Complex draft this way: opening the
+    # submission hashed the blank page and the debounced save fired before the
+    # slower load_review answered, writing the blank default over the work.
+    out = _exercise("""(async()=>{
+      let finishLoad;
+      edge=async(body)=>{calls.push(body.action);
+        if(body.action==='load_review') return new Promise(done=>finishLoad=done);
+        return {review:{}};};
+      state.payload=defaultPayload();state.payloadCanonical=null;state.payloadSha=null;
+      await updateShaPreview();
+      const loading=loadReview();
+      await new Promise(done=>setTimeout(done,900));
+      out.savedBeforeLoad=calls.filter(action=>action==='save_review').length;
+      finishLoad({review:{draft:{payload:{brandName:'Reviewed work'},superseded:false}}});
+      await loading;
+      await new Promise(done=>setTimeout(done,900));
+      out.brand=state.payload.brandName;
+    })()""")
+
+    assert out["savedBeforeLoad"] == 0
+    assert out["brand"] == "Reviewed work"
+
+
+def test_a_failed_draft_load_never_saves_over_the_server_copy() -> None:
+    out = _exercise("""(async()=>{
+      edge=async(body)=>{calls.push(body.action);
+        if(body.action==='load_review') throw new Error('offline');
+        return {review:{}};};
+      await loadReview();
+      state.payload={brandName:'Typed while offline'};
+      await updateShaPreview();
+      await new Promise(done=>setTimeout(done,900));
+      out.saves=calls.filter(action=>action==='save_review').length;
+    })()""")
+
+    assert out["saves"] == 0
