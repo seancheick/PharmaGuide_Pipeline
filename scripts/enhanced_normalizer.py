@@ -367,10 +367,10 @@ INTENTIONAL_IQM_BR_DUAL_CLASSIFICATION = frozenset({
 
 
 def parse_other_ingredient_disclosure(label_text: str) -> list[dict[str, Any]]:
-    """Convert reviewed disclosure text into the cleaner's supported row shape.
+    """Convert disclosure text into the shared cleaner's supported row shape.
 
-    The approval contract intentionally stores the disclosure exactly as the
-    reviewer read it. The cleaner contract, however, accepts a list of rows.
+    Native sources and the submission adapter use this same parser. The
+    reviewed submission retains its original text; this is a derived row view.
     Split only on top-level commas/semicolons so parenthesized source details
     remain attached to their ingredient. Ambiguous, unbalanced grouping fails
     closed instead of silently changing label meaning.
@@ -6087,9 +6087,9 @@ class EnhancedDSLDNormalizer:
             expanded_disclosures = []
             for row in other_ingredients_raw:
                 name = str(row.get("name") or "")
-                prefix, colon, _ = name.partition(":")
+                prefix, colon, remainder = name.partition(":")
                 if (
-                    colon and is_label_header(prefix + colon)
+                    colon and remainder.strip() and is_label_header(prefix + colon)
                     and not row.get("forms") and not row.get("nestedRows")
                     and not row.get("quantity") and not row.get("amount")
                 ):

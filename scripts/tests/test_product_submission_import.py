@@ -244,6 +244,21 @@ def test_native_pipeline_and_submission_use_the_same_disclosure_cleaning(source_
     assert actual["label_ledger_audit"] == expected["label_ledger_audit"]
 
 
+def test_native_standalone_heading_keeps_existing_structural_handling():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = _payload()
+    raw["id"] = "standalone-heading"
+    raw["otherIngredients"] = {"ingredients": [{"name": "Less than 2% of:"}]}
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    assert cleaned["activeIngredients"]
+    assert not cleaned["inactiveIngredients"]
+    assert any(
+        row["omission_reason"] == "decorative_or_header_text"
+        for row in cleaned["label_ledger_omissions"]
+    )
+
+
 def row_id(row: dict) -> str:
     return str(row["submission_id"])
 
