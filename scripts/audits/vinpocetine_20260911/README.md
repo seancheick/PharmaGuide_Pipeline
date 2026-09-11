@@ -40,6 +40,18 @@ the source changes, with the pipeline rerun deferred.
 - Live interaction verifier including PubMed: 1 valid, 0 warnings, 0 errors.
   See `interaction_verification.json`.
 
+## Integration verification
+
+- Integrated the audit and shared-disclosure parser changes into main.
+- Broad fast profile: 14,348 passed, 66 skipped; five failures were reconciled
+  against the final source. Three exercised the earlier standalone-heading code,
+  one pinned metadata to the old date, and one catalog scan exceeded 120 seconds.
+- All five exact failed tests passed on final source (51.11 seconds total;
+  catalog scan allowance 300 seconds). No assertion was weakened for the scan.
+- Final submission-import file: 64 passed, including native/submission scoring
+  parity. Metadata and vinpocetine follow-up: 25 passed.
+- These are source integration checks, not a rebuilt catalog release gate.
+
 ## Remaining before release
 
 Rebuild later with the final source/config fingerprints, compare the complete

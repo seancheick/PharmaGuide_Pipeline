@@ -15,7 +15,10 @@ BY_ID = {row["id"]: row for row in PAYLOAD["interactions"]}
 def test_latest_interaction_copy_edit_is_recorded_in_metadata():
     metadata = PAYLOAD["_metadata"]
 
-    assert metadata["last_updated"] == "2026-08-08"
+    # Later verified edits must not erase this historical correction.
+    from datetime import date
+
+    assert date.fromisoformat(metadata["last_updated"]) >= date(2026, 8, 8)
     assert any(
         note.startswith("2026-08-08:")
         and "vitamin E/warfarin" in note
