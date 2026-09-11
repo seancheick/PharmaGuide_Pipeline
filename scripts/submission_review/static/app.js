@@ -124,6 +124,7 @@ async function boot() {
   );
   $('t-approve').addEventListener('click', approve);
   $('t-reject').addEventListener('click', reject);
+  $('t-request-evidence').addEventListener('click', requestEvidence);
   $('t-duplicate').addEventListener('click', markDuplicate);
   $('catalog-go').addEventListener('click', catalogSearch);
   $('identity-run').addEventListener('click', checkIdentity);
@@ -228,6 +229,13 @@ function renderQueue() {
     id.className = 'id';
     id.textContent = submission.id;
     item.append(badge, kind, id);
+    if (submission.evidence_requested_at &&
+        submission.evidence_requested_revision === submission.evidence_revision) {
+      const waiting = document.createElement('span');
+      waiting.className = 'badge';
+      waiting.textContent = 'waiting for photos';
+      item.append(waiting);
+    }
     if (batchEligible(submission)) {
       const pick = document.createElement('input');
       pick.type = 'checkbox';
@@ -331,6 +339,13 @@ function renderDetail() {
       ? ' · declared: no separate ingredient panel'
       : '');
   head.append(title, meta);
+  const requestNote = evidenceRequestNote(submission);
+  if (requestNote) {
+    const request = document.createElement('p');
+    request.className = 'muted';
+    request.textContent = requestNote;
+    head.append(request);
+  }
   if (submission.resolution_code) {
     const resolution = document.createElement('p');
     resolution.className = 'muted';
@@ -2022,15 +2037,22 @@ function setDecisionAvailability() {
   approveButton.title = blockers.length ? blockers[0].todo : 'Approve this label.';
   $('t-reject').disabled = terminal || !['submitted', 'under_review'].includes(status);
   $('t-duplicate').disabled = terminal || !['submitted', 'under_review'].includes(status);
+  // Only missing-product captures have a photo flow to retake into.
+  $('t-request-evidence').disabled = terminal ||
+    !['submitted', 'under_review'].includes(status) ||
+    state.selected?.kind !== 'missing_product';
 }
 
-async function transition(fields) {
+// Every decision on the selected evidence goes through here, fenced to the
+// revision the reviewer is looking at. `action` is `transition` for a status
+// change and `request_evidence` for a photo request.
+async function transition(fields, action = 'transition') {
   if (!state.selected) return;
   if (state.reviewInvalidated) return setStatus('Review the updated evidence before deciding.', true);
   try {
     setStatus('Working…');
     const result = await edge({
-      action: 'transition',
+      action,
       submission_id: state.selected.id,
       ...selectedEvidenceBinding(),
       ...fields,
@@ -2085,6 +2107,31 @@ async function approve() {
     fields.product_image_reviewer_object_id = state.productImage.id;
   }
   return transition(fields);
+}
+
+const RETAKE_PANELS = [
+  'front_identity', 'supplement_facts', 'ingredient_disclosure',
+  'barcode', 'directions_warnings', 'lot_expiry',
+];
+
+// Keeps the submission and the review; the submitter retakes only the
+// ticked panels. The server tells them once per evidence revision.
+function requestEvidence() {
+  const panels = RETAKE_PANELS.filter((panel) => $(`retake-${panel}`).checked);
+  if (!panels.length) {
+    return setStatus('Tick the panel or panels that need a new photo.', true);
+  }
+  return transition({ reason: $('retake-reason').value, panels }, 'request_evidence');
+}
+
+// An open request names the revision on screen; photos sent since answer it.
+function evidenceRequestNote(submission) {
+  if (!submission.evidence_requested_at) return null;
+  const panels = (submission.evidence_request_panels ?? []).join(', ');
+  return submission.evidence_requested_revision === submission.evidence_revision
+    ? `waiting for new photos of: ${panels} (${submission.evidence_request_reason})`
+    : `new photos received after a request for: ${panels} ` +
+      `(now revision ${submission.evidence_revision})`;
 }
 
 function reject() {

@@ -185,6 +185,21 @@
       </button>
     </div>
     <div class="decision-block">
+      <div class="row" id="retake-request">
+        <select id="retake-reason">
+          <option value="photo_quality">Too blurry or dark</option>
+          <option value="label_unreadable">Label unreadable</option>
+          <option value="missing_panel">Panel missing</option>
+          <option value="other">Other</option>
+        </select>
+        <label><input type="checkbox" id="retake-front_identity"> Front</label>
+        <label><input type="checkbox" id="retake-supplement_facts"> Facts</label>
+        <label><input type="checkbox" id="retake-ingredient_disclosure"> Other ingredients</label>
+        <label><input type="checkbox" id="retake-barcode"> Barcode</label>
+        <label><input type="checkbox" id="retake-directions_warnings"> Directions</label>
+        <label><input type="checkbox" id="retake-lot_expiry"> Lot/expiry</label>
+        <button id="t-request-evidence" type="button">Ask for new photos</button>
+      </div>
       <div class="row">
         <select id="reject-code">
           <option value="photo_quality">Photos unreadable (retakeable)</option>

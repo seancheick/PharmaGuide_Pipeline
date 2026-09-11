@@ -27,6 +27,10 @@
       "plain": "Same barcode does not mean same product. A reformulation or a new size is a different label. Only mark duplicate when the printed label matches the one already in the catalog."
     },
     {
+      "term": "Ask for new photos",
+      "plain": "Use it instead of rejecting when the product is right but a panel is blurry, cut off or missing. Tick only the panels you need; the submitter keeps their other photos, the submission stays yours to review, and the new photos arrive as a new evidence revision."
+    },
+    {
       "term": "Discontinued",
       "plain": "The product is off the market. It still gets an accurate record; discontinued is a status, not a reason to reject."
     },

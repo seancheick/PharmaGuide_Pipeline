@@ -360,3 +360,59 @@ def test_importer_problems_block_approval_and_are_counted() -> None:
 
     assert out["approveDisabled"] is True
     assert any("Fix the 2 problems" in text for text in _blockers(out))
+
+
+def test_a_photo_request_names_the_ticked_panels_against_the_evidence_on_screen():
+    out = _exercise("""(async()=>{
+      state.selected.kind='missing_product';
+      document.getElementById('retake-supplement_facts').checked=true;
+      document.getElementById('retake-barcode').checked=true;
+      document.getElementById('retake-reason').value='label_unreadable';
+      await requestEvidence();
+      out.first=calls[0];
+    })()""")
+    assert out["first"] == {
+        "action": "request_evidence",
+        "submission_id": "s1",
+        "expected_evidence_revision": 2,
+        "evidence_manifest_sha256": "a" * 64,
+        "reason": "label_unreadable",
+        "panels": ["supplement_facts", "barcode"],
+    }
+
+
+def test_a_photo_request_with_no_panel_ticked_sends_nothing():
+    out = _exercise("""(async()=>{
+      state.selected.kind='missing_product';
+      await requestEvidence();
+      out.calls=calls.length;
+    })()""")
+    assert out["calls"] == 0
+    assert "Tick the panel" in out["status"]
+
+
+def test_photo_requests_are_offered_only_for_open_missing_product_reviews():
+    out = _exercise("""(async()=>{
+      const button=document.getElementById('t-request-evidence');
+      setDecisionAvailability(); out.correction=button.disabled;
+      state.selected.kind='missing_product';
+      setDecisionAvailability(); out.open=button.disabled;
+      state.selected.review_status='rejected';
+      setDecisionAvailability(); out.closed=button.disabled;
+    })()""")
+    assert out == {"correction": True, "open": False, "closed": True}
+
+
+def test_an_open_request_reads_as_waiting_and_a_newer_revision_as_answered():
+    out = _exercise("""(async()=>{
+      const asked={evidence_requested_at:'t',evidence_requested_revision:2,
+        evidence_revision:2,evidence_request_reason:'photo_quality',
+        evidence_request_panels:['supplement_facts']};
+      out.waiting=evidenceRequestNote(asked);
+      out.answered=evidenceRequestNote({...asked,evidence_revision:3});
+      out.none=evidenceRequestNote({evidence_revision:1});
+    })()""")
+    assert out["waiting"].startswith("waiting for new photos of: supplement_facts")
+    assert out["answered"].startswith("new photos received")
+    assert "revision 3" in out["answered"]
+    assert out["none"] is None
