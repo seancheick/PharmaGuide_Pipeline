@@ -339,7 +339,7 @@ def test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classificatio
         # Vinpocetine: owner decision 2026-09-11 that quality and risk are
         # separate outputs. IQM scores absorption; NOOTROPIC_VINPOCETINE keeps
         # the FDA reproductive-risk CAUTION (legal conclusion still tentative).
-        # Pending clinician sign-off.
+        # Prior approval confirmed by the project owner on 2026-09-11.
         ("vinpocetine", "NOOTROPIC_VINPOCETINE"),
     }
     assert ("citrus_bioflavonoids", "RISK_BITTER_ORANGE") not in observed_parent_ids
