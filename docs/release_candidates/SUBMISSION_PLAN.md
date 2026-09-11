@@ -367,15 +367,46 @@ and `reports/submission_dsld_gemini3flash_v8_20260911/`. The one-off probe and
 raw responses remain local diagnostic artifacts, not production adapters or
 independent gold. A valid draft is not an accuracy clearance.
 
-**Resume here:** address the remaining bounded Gemini output-contract failures
-through the existing adapter contract (consider schema-constrained generation),
-then verify field accuracy on the three images before expanding the run.
+**Output-contract follow-up (2026-09-11):** shared prompt v11 explicitly
+requires partial status for a printed number without a printed unit, and empty
+sources for absent/unreadable fields. The validator and output mapping are
+unchanged; no units are invented and no invalid responses repaired. Six added
+tests cover the transmitted instructions plus acceptance/rejection at the real
+adapter boundary. Flash-Lite v9 passed 2/3; its remaining Calories amount had
+null unit but incorrectly used read status. The explicit final status check in
+v10 yielded **3/3 valid drafts** with `gemini-3.5-flash-lite` on public DSLD
+695, 739, 2502 (HTTP 200, STOP). Final v11 clarifies that exactly one missing
+amount component is partial, while both missing remain unreadable; its fresh
+three-label run also passed 3/3. These nine development calls are not holdout
+qualification and do not establish a general schema-success rate.
+
+Receipts: `reports/submission_dsld_gemini35lite_v9_20260911/` and
+`reports/submission_dsld_gemini35lite_v10_20260911/` and
+`reports/submission_dsld_gemini35lite_v11_20260911/`. The v10 responses consumed
+24,641 total tokens across three calls. Accuracy remains unresolved: comparisons
+flag product-name, form-text, other-ingredient and blend-header differences;
+some are representation differences, not yet adjudicated errors. No automatic
+approval, production provider registration, or extraction enablement occurred.
+The final v11 run consumed 25,502 total tokens. Its saved prompt fingerprint
+matches the final shared instruction. Verification: full fast suite 14,287
+passed / 66 skipped; final affected extraction suite 123 passed after the last
+prompt/test edit. Full release command also passed: 123 release tests plus
+strict artifact, source-of-truth and live-identifier checks. No catalog was
+rebuilt or published.
+
+**Resume here:** adjudicate the three saved v11 drafts against their original
+images and raw DSLD records before spending calls on a larger run. Keep
+field accuracy separate from schema validity. Consider constrained generation
+only through the existing contract owner, not a parallel validator.
 For quota-efficient candidate selection, evaluate stable `gemini-3.5-flash-lite`
 behind that same contract before a larger Flash run. Google's models/pricing
 pages list it for high-volume use with a free tier; that is not evidence of
 label accuracy or of this project's quota. Active RPM, input TPM and RPD must
 be read from the project's AI Studio limits; they are per project, not per key.
-The available browser was signed out during this audit. Reuse saved responses,
+Subsequent signed-in inspection showed this project on Free tier with
+Flash-Lite 3.5 limits of 15 RPM, 250K input TPM, and 500 RPD, versus 20 RPD for
+Flash 3 preview. These are observed project limits, not guaranteed availability
+or remaining daily balance. Reuse saved responses,
 bound development calls, and defer on quota exhaustion rather than rotate keys
 or silently fall back to an unqualified model. Sources checked 2026-09-11:
 https://ai.google.dev/gemini-api/docs/models,

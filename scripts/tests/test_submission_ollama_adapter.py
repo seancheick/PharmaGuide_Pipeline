@@ -345,6 +345,50 @@ def test_real_adapter_contract_passes_through_the_shared_extractor() -> None:
     assert result.usage.microcents == 0
 
 
+def test_prompt_teaches_missing_units_and_absent_daily_values():
+    transport = _Transport()
+    _adapter(transport).extract(_bundle(), _config())
+    prompt = next(body['prompt'] for url, body in transport.posted
+                  if url.endswith('/api/generate'))
+    assert 'Never use an empty string for unit_text or invent a unit.' in prompt
+    assert '"value": {"value": 20, "unit_text": null}, "status": "partial"' in prompt
+    assert 'not_present and unreadable ALWAYS have value null and sources []' in prompt
+    assert 'A daily-value footnote symbol is not a numeric percent_dv.' in prompt
+    assert 'If exactly one amount component is null, its field status MUST be partial, never read.' in prompt
+
+
+@pytest.mark.parametrize(('unit', 'status', 'invalid'), [
+    ('', 'read', True), (None, 'read', True), (None, 'partial', False),
+])
+def test_number_without_printed_unit_is_partial_not_repaired(unit, status, invalid):
+    reading = copy.deepcopy(_READING)
+    amount = reading['ingredient_rows'][0]['amount']
+    amount['value'] = {'value': 20, 'unit_text': unit}
+    amount['status'] = status
+    transport = _Transport(reading=reading)
+    if invalid:
+        with pytest.raises(ExtractionError):
+            _adapter(transport).extract(_bundle(), _config())
+    else:
+        result = _adapter(transport).extract(_bundle(), _config())
+        assert result.draft['ingredient_rows'][0]['amount'] == amount
+
+
+@pytest.mark.parametrize('has_source', [True, False])
+def test_absent_daily_value_never_cites_an_image(has_source):
+    reading = copy.deepcopy(_READING)
+    field = {'value': None, 'status': 'not_present', 'confidence': None,
+             'sources': _field(1)['sources'] if has_source else []}
+    reading['ingredient_rows'][0]['percent_dv'] = field
+    transport = _Transport(reading=reading)
+    if has_source:
+        with pytest.raises(ExtractionError):
+            _adapter(transport).extract(_bundle(), _config())
+    else:
+        result = _adapter(transport).extract(_bundle(), _config())
+        assert result.draft['ingredient_rows'][0]['percent_dv'] == field
+
+
 @pytest.mark.parametrize("endpoint", [
     "http://localhost.attacker.test", "http://127.0.0.1.attacker.test",
     "http://localhost@attacker.test", "http://localhost:11434/?redirect=remote",
