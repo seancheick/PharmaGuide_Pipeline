@@ -92,6 +92,43 @@ def test_a_row_is_assembled_from_boxes_at_the_same_height() -> None:
     assert rows[0]["amount"]["value"] == {"value": 500.0, "unit_text": "mg"}
 
 
+def test_parenthesized_child_doses_anchor_overlapping_bottle_rows() -> None:
+    # Geometry reproduced from a real curved-bottle reading. Parenthesized
+    # doses are complete right-column boxes, not a formulation subclause.
+    boxes = [
+        ("Full Spectrum Ashwagandha Blend", 82, 481, 694, 542),
+        ("1,000mg", 1096, 511, 1259, 557),
+        ("OrganicAshwagandha(root)extract(KSM-66)", 130, 531, 939, 598),
+        ("(600 mg)", 1098, 558, 1254, 603),
+        ("OrganicAshwagandha(root)powder", 134, 579, 762, 640),
+        ("(400mg)", 1096, 604, 1253, 649),
+        ("GABA(gamma-aminobutyricacid)", 94, 635, 676, 695),
+        ("100mg", 1116, 657, 1250, 712),
+        ("(from125mgofPharmaGABAstandardizedto80%GABA)", 97, 682, 1086, 750),
+        ("Ginger(root)extract", 100, 743, 666, 800),
+        ("20 mg", 1127, 765, 1243, 816),
+    ]
+    draft = _extract([_line("Supplement Facts", 90, left=35, width=1597, height=254), *[
+        OcrLine(text=text, left=left, top=top, right=right, bottom=bottom)
+        for text, left, top, right, bottom in boxes
+    ]])
+    rows = draft["ingredient_rows"]
+    assert len(rows) == 5
+    assert [row["amount"]["value"]["value"] for row in rows] == [1000, 600, 400, 100, 20]
+    assert [row["parent_index"] for row in rows] == [None, 0, 0, None, None]
+    assert rows[0]["display_name"]["value"] == "Full Spectrum Ashwagandha Blend"
+    assert rows[0]["is_blend_header"] is True
+
+
+def test_formulation_subclause_is_not_a_standalone_parenthesized_dose() -> None:
+    from submission_review.extraction.adapters.ocr_adapter import _standalone_amount
+
+    assert _standalone_amount("(600 mg)†")
+    assert _standalone_amount("600mg")
+    for text in ("(from 125 mg)", "(5% constituent = 6.25 mg)", "(600mg", "600mg)"):
+        assert not _standalone_amount(text)
+
+
 def test_collapsed_serving_header_is_not_an_ingredient() -> None:
     draft = _extract([
         _line("Supplement Facts", 0),

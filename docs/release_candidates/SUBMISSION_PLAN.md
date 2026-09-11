@@ -558,16 +558,132 @@ The local one-off probe also now refuses existing output directories and no
 longer copies seed answers. Previously it could mix model/configuration results
 when resuming. This is a diagnostic-script fix, not a production adapter.
 
-**Resume here:** implement schema-constrained hosted output from the existing
-contract owner, retaining the strict validator and semantic checks. Prove it
-on a bounded set of the saved failures (739, 18102, 247106, 4283) before another
-60-image run. In parallel with that evaluation, use a controlled close-up vs
-full-page comparison for 247106; do not presume the cause. Recheck current
-project quotas before calls: the earlier signed-in dashboard snapshot already
-included Flash (5 RPM / 250K input TPM / 20 RPD) and Flash-Lite
-(15 RPM / 250K input TPM / 500 RPD); those are observed limits, not guarantees.
-Do not tune a frozen holdout on these images. Production extraction stays
-disabled.
+**Structured generation and controlled framing audit — 2026-09-11.**
+`envelope.generation_schema()` now owns the model-facing structural projection.
+Runtime unknown-key checks use the same shape vocabulary and existing enum
+constants. The Ollama adapter actually sends this schema (not just JSON mode),
+and its immutable request fingerprint includes it. The public-only Gemini
+probe sends the same projection. The hosted probe remains diagnostic-only,
+not a queue adapter; paid-cost/retention qualification is not implied.
+
+Gemini accepted a small structural control but returned HTTP 400 for the full
+schema with numeric/list bounds, including an expanded-reference version.
+The same complete structure without those bounds was accepted. The portable
+projection therefore retains types, required fields, enums and unknown-key
+rejection; bounds remain enforced by the unchanged runtime validator. Their
+text descriptions also accompany the projection. No failed output is repaired.
+The precise provider-internal reason for rejecting those bounds is unknown.
+
+Four full-page readings used one immutable v17 configuration, Flash 3.5,
+temperature 0, minimal thinking, and 65,536 maximum output tokens:
+
+| DSLD label | Structural schema | Strict runtime acceptance | Reading observation |
+|---|---|---|---|
+| 739 | Pass | Pass | Missing servings count is an explicit not-present field; 21 rows. Not an accuracy pass. |
+| 18102 | Pass | Rejected | Pixel source regions violate normalized coordinates; 21 rows, including 10 blend children. |
+| 247106 | Pass | Rejected | Same coordinate error; 35 rows, 11 blend headers, no child rows. Many member names were read but placed in form_text. |
+| 4283 | Pass | Rejected | Same coordinate error; 16 rows. Range/inequality amounts retain supporting text and null numeric endpoints; blend members still not separate rows. |
+
+This closes the observed bare-field shape failure in that run, NOT extraction
+accuracy. In particular, 247106 demonstrates an assembly failure as well as
+small-print risk: the answer already contains many of the missing-row names.
+The 99-row catalog comparison is a reference count, not independent image gold.
+
+**v18 correction, locally tested but not live-retested:** the source-region
+contract now describes normalized 0..1 coordinates, never pixels, in BOTH the
+generation schema and shared prompt through one description constant. Tests
+preserve rejection of the observed pixel boxes. The schema-bound request has
+a new prompt version/fingerprint. The four v17 results must never be relabeled
+as v18 evidence.
+
+**Close-up:** `photo_prep.prepare_bundle` can now select an explicit normalized
+view after orientation and before the usual thumbnail/metadata-safe encoding.
+Original hash, transmitted hash and crop coordinates remain bound through the
+extractor. The existing diagnostic CLI exposes `--crop X Y W H` for exactly one
+selected product; no new image processor, input identity, or approval route.
+Default preparation is unchanged and crops never upscale an image.
+The requested 247106 crop is `(0.68, 0, 0.32, 1)`: 768×1089 pixels from the
+2400×1089 full-page render, retaining the Facts panel but not the front/warnings.
+
+The same-config Gemini close-up call returned **429, daily free-tier requests
+exhausted, limit 20** before producing an answer. Stopped without retry or
+quota circumvention. Gemini A/B and live v18 verification remain unfinished.
+The local OCR candidate was run through the existing diagnostic/extractor on
+both views: both abstained with zero accepted ingredient rows. Raw OCR produced
+118 full-page vs 91 crop lines (different visible areas, NOT an accuracy metric)
+and misread the Facts headings as `SuplementFacts` / `SurplementFacts`.
+Tiny-print names remain visibly corrupted in both readings. Cropping alone
+did not rescue this OCR configuration; do not convert that result into a
+conclusion about Gemini or silently fuzzily repair the OCR text.
+
+**Original phone-photo check (local only):** read-only, hash-verified downloads
+of the user's Youtheory Ashwagandha + GABA and Seed DS-01 Facts photos were
+tested at full framing and explicit crops through the same preparation and
+OCR extractor. These are development cases, not new gold or qualification.
+They are different products from DSLD 247106, so this is NOT an edition-matched
+test proving that phone photos outperform DSLD images.
+
+Youtheory exposed an actual assembly bug: OCR read `(600 mg)` and `(400mg)`,
+but parenthesized dose-column boxes did not anchor rows. v11 collapsed five
+printed rows into three. A failing real-geometry regression now drives v12's
+single standalone-dose predicate at row grouping, dose-column and dose-selection
+sites. It accepts a complete parenthesized dose, never `(from 125 mg)` or a
+constituent equation. Replaying the identical full/crop OCR observations now
+recovers 1,000/600/400/100/20 mg with the two children bound to the blend.
+Names still have OCR defects; this is a row/dose fix, not perfect extraction.
+Both Seed views still return 11 malformed/combined rows, no nested children,
+and no resolved amounts. A further trace isolates the amount loss: the OCR
+does read all dose boxes, but `_panel` estimates the table width from the
+heading width. Its right boundary is 1938 pixels (full) / 1842.5 (crop), while
+the amount boxes extend to 2143–2152 / 2056–2068. The selector drops them.
+Correct table-boundary detection, dense strain-list assembly and preservation
+of paired mg/AFU quantities remain open; simply widening every panel would risk
+pulling neighboring marketing text into ingredients. Do not flatten into gold.
+
+A single Qwen3-VL local-only canary on the original Youtheory Facts photo,
+using v18 and installed weights `901cae732162…`, exceeded its 150-second
+deadline without a complete response. No accuracy conclusion follows from a
+timeout. An isolated cloud-disabled daemon was used and stopped afterwards;
+the user's existing Ollama settings were unchanged. No private image went to
+Gemini, no paid fallback was attempted, and neither submission was altered.
+Private diagnostic receipts are kept outside version control under
+`reports/private_capture_audit_20260911/` (including pre-fix readings).
+
+Verification of this increment: final fast tier **14,325 passed / 66 skipped**;
+affected extraction/OCR/contract slice **388 passed / 12 skipped**; OCR adapter
+suite **45 passed**; release tier **123 passed**, followed by passing artifact
+freshness, Flutter parity and live identifier/citation gates. An earlier fast
+run timed out in one synergy test while local inference was running; the whole
+synergy file then passed (11 tests), and the complete final fast rerun above
+passed with inference stopped. No timeout threshold or safety gate was relaxed.
+
+Receipts are local and immutable:
+`submission_dsld_gemini35flash_v17_structured_four_20260911/`,
+`submission_dsld_gemini35flash_v17_structured_closeup_20260911/`, and
+`submission_dsld_ocr_{fullpage,closeup}_247106_20260911/` under `reports/`.
+The earlier rejected bounded-schema request remains separately preserved in
+`submission_dsld_gemini35flash_v16_structured_four_20260911/`.
+
+**Resume here:** after quota availability is verified, use at most five image
+calls for the four full-page v18 readings and the same-config 247106 close-up.
+Inspect strict acceptance and actual blend-child coverage separately. Do not
+run another 60-image batch until this bounded test is informative. If names
+continue to land in blend form_text, test focused blend-region reading through
+the same extractor rather than another broad prompt rewrite or automatic
+comma-splitting. Never tune the frozen holdout on these development images.
+The next independent local increment is Seed's amount-column and strain-list
+assembly, tested on the saved original OCR observations before another engine
+run. Preserve dual units and uncertain parentage rather than inventing values.
+Production extraction remains disabled; no gold, approvals or catalog writes.
+
+Established services do not treat structured output as proof of correctness:
+[AWS Textract](https://docs.aws.amazon.com/textract/latest/dg/textract-best-practices.html)
+describes image-quality and use-case-dependent scrutiny;
+[Azure Document Intelligence](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/concept/accuracy-confidence?view=doc-intel-4.0.0)
+separates confidence from evaluated accuracy and human review; and
+[Google Document AI](https://docs.cloud.google.com/document-ai/docs/evaluate)
+measures predictions against labeled test documents. These are relevant
+engineering patterns, not claims about a specific supplement competitor.
 
 Repeatable diagnostic entry point (new output directory each run):
 

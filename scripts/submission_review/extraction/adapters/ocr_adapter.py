@@ -47,7 +47,7 @@ from ..extractor import (
 #: believed, whatever the text height says.
 _MIN_INDENT_STEP = 8.0
 
-RULES_VERSION = "ocr-geometry-v11"
+RULES_VERSION = "ocr-geometry-v12"
 PROVIDER = "ocr"
 
 #: Units as labels print them. Case is preserved in the draft; matching is not.
@@ -157,6 +157,19 @@ def _clean(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def _standalone_amount(text: str) -> bool:
+    """A complete dose-column box, optionally enclosed in parentheses.
+
+    Labels can print a blend child's dose as '(600 mg)'. Only unwrap a whole
+    pair: '(from 125 mg)' and constituent equations remain formulation text,
+    never row anchors. Unit recognition stays with the existing amount parser.
+    """
+    text = _clean(text).rstrip("*†‡ ")
+    if text.startswith("(") and text.endswith(")"):
+        text = text[1:-1].strip()
+    return _AMOUNT.fullmatch(text) is not None
+
+
 def _rows_from_lines(lines: Sequence[OcrLine]) -> list[list[OcrLine]]:
     """Group lines into printed rows by vertical overlap.
 
@@ -211,7 +224,7 @@ def _rows_from_lines(lines: Sequence[OcrLine]) -> list[list[OcrLine]]:
         # alone sent every row above the first such dose into that dose's
         # row. Numbers at the same height are one printed row.
         numbers = sorted(
-            (line for line in band if (lambda text: _AMOUNT.fullmatch(text)
+            (line for line in band if (lambda text: _standalone_amount(text)
                                        or _PERCENT.fullmatch(text)
                                        or _BARE_NUMBER.fullmatch(text))(
                 _clean(line.text).rstrip("*†‡ "))),
@@ -331,7 +344,7 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
         # column: a box packing name and dose together would mark it at the
         # name's own edge and throw the rest of the name away.
         dose_column = min((line.left for line in amount_lines
-                           if _AMOUNT.fullmatch(_clean(line.text).rstrip("*†‡ "))), default=None)
+                           if _standalone_amount(line.text)), default=None)
         name_lines = [
             line for line in band
             if line not in amount_lines and line not in lost_units
@@ -357,7 +370,7 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
         # on a dense panel the one above can share this band: taking the
         # first number in the joined text read 6.25 mg for a 25 mg row.
         pure_doses = [line for line in amount_lines
-                      if _AMOUNT.fullmatch(_clean(line.text).rstrip("*†‡ "))]
+                      if _standalone_amount(line.text)]
         misread = [line for line in amount_lines
                    if _misread_dose(_clean(line.text).rstrip("*†‡ "))]
         dose_text = (_clean(" ".join(line.text for line in pure_doses))
