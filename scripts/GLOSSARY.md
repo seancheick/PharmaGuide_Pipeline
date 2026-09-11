@@ -195,6 +195,11 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 
 ## Submission extraction contracts
 
+**Generation schema:** the model-facing structural projection of `label_draft_v1`,
+owned by its envelope module. It constrains output shape, not truth or approval;
+the existing validator still checks status/value relationships and evidence
+provenance. Hosted adapters must not author their own label-field vocabulary.
+
 | Term | Meaning |
 |---|---|
 | **PreparedBundle** | The provider's only evidence input: bounded, orientation-corrected, metadata-free bytes with original and transmitted hashes. Original storage paths are not provider inputs. |

@@ -124,3 +124,28 @@ def test_ocr_invalid_draft_is_model_failure_not_provider_outage(tmp_path):
                             LabelDraftExtractor(OcrLabelAdapter(Reader())), config)
     assert result["results"][0]["failure"]["code"] == "model_failure"
     assert "AAAA" not in json.dumps(result)
+
+
+def test_single_label_close_up_is_recorded_through_the_existing_diagnostic(tmp_path):
+    manifest, _ = source(tmp_path)
+    config = ExtractionConfig(provider='fake', model='fake-1', model_digest='c' * 64,
+                              prompt_version='p1', retention_policy_version='local-only-v1')
+    output = tmp_path / 'experiment'
+    crop = {'x': .5, 'y': 0, 'w': .5, 'h': 1}
+    result = run_diagnostic(manifest, output, tmp_path, tmp_path,
+                            LabelDraftExtractor(FakeAdapter()), config, crop_region=crop)
+    assert result['results'][0]['sent_inputs'][0]['crop'] == crop
+    assert json.loads((output / 'configuration.json').read_text())['crop_region'] == crop
+    with Image.open(output / 'runs' / '7-input-0.jpg') as image:
+        assert image.size == (40, 100)
+
+
+def test_close_up_diagnostic_refuses_ambiguous_multiple_labels_before_creating_output(tmp_path):
+    manifest, payload = source(tmp_path)
+    payload['products'].append({**payload['products'][0], 'dsld_id': '8'})
+    manifest.write_text(json.dumps(payload))
+    output = tmp_path / 'experiment'
+    with pytest.raises(ValueError, match='one selected product'):
+        run_diagnostic(manifest, output, tmp_path, tmp_path, None, None,
+                       crop_region={'x': .5, 'y': 0, 'w': .5, 'h': 1})
+    assert not output.exists()

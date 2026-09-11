@@ -266,3 +266,16 @@ def test_draft_with_invented_transmission_hash_is_rejected() -> None:
     payload["sent_inputs"][0]["sent_sha256"] = "f" * 64
     with pytest.raises(ExtractionError, match="prepared evidence"):
         LabelDraftExtractor(_Adapter(payload)).extract(_bundle(), _config())
+
+
+def test_crop_provenance_reaches_the_boundary_and_cannot_be_reauthored() -> None:
+    from dataclasses import replace
+    original = _bundle()
+    bundle = replace(original, photos=(replace(original.photos[0], crop=(.5, 0, .5, 1)),
+                                       original.photos[1]))
+    payload = _valid_payload(bundle, _config())
+    result = LabelDraftExtractor(_Adapter(payload)).extract(bundle, _config())
+    assert result.draft['sent_inputs'][0]['crop'] == {'x': .5, 'y': 0, 'w': .5, 'h': 1}
+    payload['sent_inputs'][0].pop('crop')
+    with pytest.raises(ExtractionError, match='prepared evidence'):
+        LabelDraftExtractor(_Adapter(payload)).extract(bundle, _config())

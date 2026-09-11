@@ -91,3 +91,86 @@ def test_valid_drafts_are_returned_unmodified() -> None:
     for case in _fixture()["cases"]:
         if case["valid"]:
             assert validate_label_draft_v1(case["payload"]) == case["payload"]
+
+
+def _generation_schema() -> dict:
+    from submission_review.extraction import envelope
+    assert hasattr(envelope, 'generation_schema'), 'the contract must own its generation projection'
+    return envelope.generation_schema()
+
+
+def test_generation_schema_contains_only_label_content_and_is_detached() -> None:
+    from submission_review.extraction.envelope import LABEL_CONTENT_KEYS
+    schema = _generation_schema()
+    assert set(schema['properties']) == LABEL_CONTENT_KEYS
+    assert set(schema['required']) == LABEL_CONTENT_KEYS
+    schema['properties'].clear()
+    assert set(_generation_schema()['properties']) == LABEL_CONTENT_KEYS
+
+
+def test_generation_schema_uses_portable_structure_and_runtime_keeps_bounds() -> None:
+    from jsonschema import Draft202012Validator
+    from submission_review.extraction.envelope import LABEL_CONTENT_KEYS, LabelDraftError, validate_label_draft_v1
+    schema = _generation_schema()
+    def check(node):
+        if isinstance(node, dict):
+            assert not {'$ref', '$defs', 'maxItems', 'minimum', 'maximum'} & node.keys()
+            for value in node.values():
+                check(value)
+        elif isinstance(node, list):
+            for value in node:
+                check(value)
+    check(schema)
+    draft = copy.deepcopy(_fixture()['cases'][0]['payload'])
+    draft['serving']['amount'] = None
+    draft['overall_confidence'] = 1.1
+    Draft202012Validator(schema).validate({key: draft[key] for key in LABEL_CONTENT_KEYS})
+    with pytest.raises(LabelDraftError):
+        validate_label_draft_v1(draft)
+
+
+@pytest.mark.parametrize('bad_serving', [None, '60', {}, {'value': None}])
+def test_structured_output_rejects_the_observed_bare_or_incomplete_serving(bad_serving) -> None:
+    from jsonschema import Draft202012Validator, ValidationError
+    from submission_review.extraction.envelope import LABEL_CONTENT_KEYS
+    draft = copy.deepcopy(_fixture()['cases'][0]['payload'])
+    draft['serving']['amount'] = None  # Older valid drafts may omit this optional field.
+    content = {key: draft[key] for key in LABEL_CONTENT_KEYS}
+    validator = Draft202012Validator(_generation_schema())
+    validator.validate(content)
+    content['serving']['servings_per_container'] = bad_serving
+    with pytest.raises(ValidationError):
+        validator.validate(content)
+
+
+def test_generated_shape_accepts_unknowns_but_does_not_replace_semantic_validation() -> None:
+    from jsonschema import Draft202012Validator
+    from submission_review.extraction.envelope import LABEL_CONTENT_KEYS, LabelDraftError, validate_label_draft_v1
+    draft = copy.deepcopy(_fixture()['cases'][0]['payload'])
+    draft['serving']['amount'] = None
+    draft['serving']['servings_per_container'] = {
+        'value': None, 'status': 'not_present', 'confidence': None, 'sources': []}
+    content = {key: draft[key] for key in LABEL_CONTENT_KEYS}
+    validator = Draft202012Validator(_generation_schema())
+    validator.validate(content)
+    validate_label_draft_v1(draft)
+    # Correctly typed, but the source belongs to no actual sent input.
+    draft['identity']['brand']['sources'][0]['input_id'] = 'not-sent'
+    validator.validate({key: draft[key] for key in LABEL_CONTENT_KEYS})
+    with pytest.raises(LabelDraftError):
+        validate_label_draft_v1(draft)
+
+
+def test_generation_explains_coordinate_units_and_rejects_observed_pixel_regions_at_runtime() -> None:
+    from jsonschema import Draft202012Validator
+    from submission_review.extraction.envelope import LABEL_CONTENT_KEYS, LabelDraftError, validate_label_draft_v1
+    schema = _generation_schema()
+    region = schema['properties']['identity']['properties']['brand']['properties']['sources']['items']['properties']['region']['anyOf'][0]
+    assert '0..1' in region['description']
+    assert 'pixels' in region['description']
+    draft = copy.deepcopy(_fixture()['cases'][0]['payload'])
+    draft['serving']['amount'] = None
+    draft['identity']['brand']['sources'][0]['region'] = {'x': 40, 'y': 190, 'w': 340, 'h': 120}
+    Draft202012Validator(schema).validate({key: draft[key] for key in LABEL_CONTENT_KEYS})
+    with pytest.raises(LabelDraftError, match='region.x'):
+        validate_label_draft_v1(draft)

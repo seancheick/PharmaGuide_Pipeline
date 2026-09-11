@@ -187,3 +187,60 @@ def test_multiframe_image_is_not_silently_reduced_to_one_label() -> None:
     data = source.getvalue()
     with pytest.raises(ExtractionError):
         prepare_bundle(_bundle(_photo(_PHOTO_A, data)), reader=_reader({_PHOTO_A: data}))
+
+
+def test_close_up_uses_the_same_preparation_and_keeps_original_provenance() -> None:
+    source = _jpeg(200, 100)
+    crop = {'x': 0.5, 'y': 0.0, 'w': 0.5, 'h': 1.0}
+    bundle = _bundle(_photo(_PHOTO_A, source))
+    prepared = prepare_bundle(bundle, reader=_reader({_PHOTO_A: source}), crops={_PHOTO_A: crop})
+    entry = prepared.photos[0]
+    assert entry.original_sha256 == hashlib.sha256(source).hexdigest()
+    assert entry.sent_sha256 == hashlib.sha256(entry.data).hexdigest()
+    assert entry.as_sent_input()['crop'] == crop
+    with Image.open(io.BytesIO(entry.data)) as result:
+        assert result.size == (100, 100)
+        assert not result.getexif()
+    # Provenance must not follow later mutation of a caller's request or receipt.
+    crop['x'] = 0
+    entry.as_sent_input()['crop']['x'] = 0
+    assert entry.as_sent_input()['crop']['x'] == 0.5
+
+
+@pytest.mark.parametrize('crop', [
+    {'x': 0.8, 'y': 0, 'w': 0.3, 'h': 1},
+    {'x': 0, 'y': 0, 'w': 0, 'h': 1},
+    {'x': True, 'y': 0, 'w': 0.5, 'h': 1},
+    {'x': float('nan'), 'y': 0, 'w': 0.5, 'h': 1},
+])
+def test_invalid_close_up_is_refused_before_reading(crop) -> None:
+    source = _jpeg()
+    seen = []
+    with pytest.raises(ExtractionError):
+        prepare_bundle(_bundle(_photo(_PHOTO_A, source)),
+                       reader=lambda photo: seen.append(photo), crops={_PHOTO_A: crop})
+    assert seen == []
+
+
+def test_close_up_cannot_request_an_unleased_photo() -> None:
+    source = _jpeg()
+    with pytest.raises(ExtractionError):
+        prepare_bundle(_bundle(_photo(_PHOTO_A, source)),
+                       crops={_PHOTO_B: {'x': 0, 'y': 0, 'w': 1, 'h': 1}})
+
+
+def test_close_up_coordinates_are_applied_after_orientation() -> None:
+    image = Image.new('RGB', (80, 40), 'red')
+    image.paste(Image.new('RGB', (40, 40), 'blue'), (40, 0))
+    exif = Image.Exif()
+    exif[274] = 6  # Clockwise: the blue right half becomes the bottom half.
+    buffer = io.BytesIO()
+    image.save(buffer, format='JPEG', exif=exif)
+    raw = buffer.getvalue()
+    prepared = prepare_bundle(_bundle(_photo(_PHOTO_A, raw)), reader=_reader({_PHOTO_A: raw}),
+                              crops={_PHOTO_A: {'x': 0, 'y': .5, 'w': 1, 'h': .5}})
+    with Image.open(io.BytesIO(prepared.photos[0].data)) as result:
+        assert result.size == (40, 40)
+        red, green, blue = result.getpixel((20, 20))
+        assert blue > 240 and red < 10 and green < 10
+        assert not result.getexif()

@@ -98,10 +98,15 @@ class PreparedInput:
     byte_size: int
     data: bytes
     categories: tuple[str, ...] = ()
+    #: Optional normalized x/y/w/h in the orientation-corrected original.
+    crop: tuple[float, float, float, float] | None = None
 
     def as_sent_input(self) -> dict[str, object]:
-        return {"input_id": self.input_id, "photo_id": self.photo_id,
-                "original_sha256": self.original_sha256, "sent_sha256": self.sent_sha256}
+        result: dict[str, object] = {"input_id": self.input_id, "photo_id": self.photo_id,
+                                    "original_sha256": self.original_sha256, "sent_sha256": self.sent_sha256}
+        if self.crop is not None:
+            result["crop"] = dict(zip(("x", "y", "w", "h"), self.crop))
+        return result
 
 
 @dataclass(frozen=True)

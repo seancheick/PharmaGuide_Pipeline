@@ -125,6 +125,25 @@ def test_a_reading_becomes_a_valid_draft_the_program_owns() -> None:
     }
 
 
+def test_generation_uses_the_envelope_schema_not_json_mode() -> None:
+    from submission_review.extraction.envelope import generation_schema
+    from submission_review.extraction.adapters.ollama_adapter import PROMPT_SHA256
+    transport = _Transport()
+    _adapter(transport).extract(_bundle(), _config())
+    body = next(body for url, body in transport.posted if url.endswith('/api/generate'))
+    assert body['format'] == generation_schema()
+    template = {key: value for key, value in body.items() if key not in ('model', 'images')}
+    template['prompt'] = template['prompt'].split('\nOrdered image identifiers:')[0]
+    assert hashlib.sha256(json.dumps(template, sort_keys=True, separators=(',', ':')).encode()).hexdigest() == PROMPT_SHA256
+
+
+def test_coordinate_guidance_is_shared_with_the_prompt_not_only_the_decoder() -> None:
+    from submission_review.extraction import envelope
+    from submission_review.extraction.adapters.ollama_adapter import _INSTRUCTION
+    assert hasattr(envelope, 'SOURCE_REGION_DESCRIPTION')
+    assert envelope.SOURCE_REGION_DESCRIPTION in _INSTRUCTION
+
+
 def test_the_model_cannot_rewrite_what_the_draft_is_a_reading_of() -> None:
     # A model that returns provenance-shaped keys must not be able to change
     # the revision, the snapshot, or which model the result is attributed to.

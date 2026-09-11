@@ -68,6 +68,7 @@ def run_diagnostic(
     extractor: LabelDraftExtractor, config: ExtractionConfig,
     *, runtime: dict[str, Any] | None = None,
     limit: int | None = None,
+    crop_region: dict[str, float] | None = None,
 ) -> dict[str, Any]:
     """Preserve selected sources and record one extraction outcome per product."""
     manifest, selected = selected_images(manifest_path)
@@ -76,6 +77,8 @@ def run_diagnostic(
             raise ValueError("limit must be a positive integer")
         selected = selected[:limit]
         manifest = {**manifest, "products": [entry for entry, _ in selected]}
+    if crop_region is not None and len(selected) != 1:
+        raise ValueError("a close-up requires exactly one selected product")
     # Refuse replacement, including a previous interrupted experiment.
     output.mkdir(parents=True, exist_ok=False)
     for folder in ("images", "raw", "catalog", "runs"):
@@ -90,6 +93,7 @@ def run_diagnostic(
         "mode": "diagnostic_only", "qualification": False,
         "configuration": asdict(config), "prompt_sha256": extractor.prompt_sha256,
         "runtime": runtime or {},
+        "crop_region": crop_region,
         "limitations": [
             "DSLD PDF page-one renders, not real phone captures or a frozen holdout",
             "Catalog comparison is not independent raw-source gold",
@@ -137,7 +141,8 @@ def run_diagnostic(
             entry["sha256"], str(output / "images" / f"{key}.webp"),
         )
         try:
-            prepared = prepare_bundle(EvidenceBundle(key, 1, (photo,)))
+            prepared = prepare_bundle(EvidenceBundle(key, 1, (photo,)),
+                                      crops={photo.photo_id: crop_region} if crop_region is not None else None)
             result = extractor.extract(prepared, config)
         except ExtractionError as error:
             receipt["outcome"] = "failed"
@@ -180,6 +185,8 @@ def main() -> int:
     parser.add_argument("--model-digest")
     parser.add_argument("--endpoint", default="http://127.0.0.1:11434")
     parser.add_argument("--limit", type=int)
+    parser.add_argument("--crop", type=float, nargs=4, metavar=('X', 'Y', 'W', 'H'),
+                        help="normalized close-up in the oriented image; exactly one selected product")
     args = parser.parse_args()
     runtime = {"python": sys.version,
                "packages": {"Pillow": importlib.metadata.version("Pillow")}}
@@ -224,7 +231,8 @@ def main() -> int:
         )
         extractor = LabelDraftExtractor(OcrLabelAdapter(RapidOcrReader()))
     result = run_diagnostic(args.manifest, args.output, args.blobs, args.raw_root,
-                            extractor, config, runtime=runtime, limit=args.limit)
+                            extractor, config, runtime=runtime, limit=args.limit,
+                            crop_region=dict(zip(('x', 'y', 'w', 'h'), args.crop)) if args.crop else None)
     print(json.dumps({k: v for k, v in result.items() if k != "results"}))
     return 0
 

@@ -23,8 +23,10 @@ from __future__ import annotations
 import hashlib
 import io
 from pathlib import Path
+from collections.abc import Mapping
 
 from .extractor import EvidenceBundle, EvidencePhoto, ExtractionError, PreparedBundle, PreparedInput
+from .envelope import LabelDraftError, _region
 
 #: Worker-side input ceiling, also enforced by the bounded local reader.
 MAX_SOURCE_BYTES = 15 * 1024 * 1024
@@ -43,20 +45,37 @@ def prepare_bundle(
     *,
     reader=None,
     max_sent_bytes: int = MAX_SENT_BYTES,
+    crops: Mapping[str, Mapping[str, float]] | None = None,
 ) -> PreparedBundle:
     """Prepare every leased photo, or raise a typed failure.
 
     `reader` returns the stored bytes for one photo; the default reads the
     local path the worker fetched to. It is injected so tests never need a
-    network and so the fetch policy stays the caller's decision.
+    network and so the fetch policy stays the caller's decision. Optional crops
+    select one view per leased photo; they never add evidence or upscale it.
+    Coordinates refer to the orientation-corrected original, before thumbnailing.
     """
     read = reader or _read_local
     if not bundle.photos or len(bundle.snapshot) != len(bundle.photos):
         raise ExtractionError("unsupported_evidence", "empty or duplicate evidence")
+    validated_crops: dict[str, tuple[float, float, float, float]] = {}
+    if crops is not None:
+        if not isinstance(crops, Mapping) or set(crops) - set(bundle.snapshot):
+            raise ExtractionError("unsupported_evidence", "crop must reference leased evidence")
+        for photo_id, region in crops.items():
+            try:
+                value = dict(region)
+                _region(value, "$.crop")  # The envelope owns coordinate validity.
+                if value['w'] <= 0 or value['h'] <= 0:
+                    raise ValueError('empty crop')
+                validated_crops[photo_id] = tuple(value[key] for key in ('x', 'y', 'w', 'h'))
+            except (LabelDraftError, ValueError, TypeError):
+                raise ExtractionError("unsupported_evidence", "invalid crop region") from None
     prepared: list[PreparedInput] = []
     for index, photo in enumerate(bundle.photos):
         prepared.append(
-            _prepare_photo(photo, f"i{index}", read, max_sent_bytes=max_sent_bytes)
+            _prepare_photo(photo, f"i{index}", read, max_sent_bytes=max_sent_bytes,
+                           crop=validated_crops.get(photo.photo_id))
         )
     return PreparedBundle(bundle.submission_id, bundle.evidence_revision, tuple(prepared))
 
@@ -67,6 +86,7 @@ def _prepare_photo(
     read,
     *,
     max_sent_bytes: int,
+    crop: tuple[float, float, float, float] | None = None,
 ) -> PreparedInput:
     try:
         raw = read(photo)
@@ -86,7 +106,7 @@ def _prepare_photo(
             "preparation_failed", "evidence does not match its manifest hash"
         )
 
-    data, content_type = _bounded_reencode(raw, max_sent_bytes=max_sent_bytes)
+    data, content_type = _bounded_reencode(raw, max_sent_bytes=max_sent_bytes, crop=crop)
     return PreparedInput(
         input_id=input_id,
         photo_id=photo.photo_id,
@@ -96,10 +116,12 @@ def _prepare_photo(
         byte_size=len(data),
         data=data,
         categories=photo.categories,
+        crop=crop,
     )
 
 
-def _bounded_reencode(raw: bytes, *, max_sent_bytes: int) -> tuple[bytes, str]:
+def _bounded_reencode(raw: bytes, *, max_sent_bytes: int,
+                      crop: tuple[float, float, float, float] | None = None) -> tuple[bytes, str]:
     try:
         from PIL import Image, ImageOps
     except ImportError as error:  # pragma: no cover - environment guard
@@ -124,6 +146,11 @@ def _bounded_reencode(raw: bytes, *, max_sent_bytes: int) -> tuple[bytes, str]:
             rgba = oriented.convert("RGBA")
             prepared = Image.new("RGB", rgba.size, "white")
             prepared.paste(rgba, mask=rgba.getchannel("A"))
+            if crop is not None:
+                x, y, w, h = crop
+                width, height = prepared.size
+                prepared = prepared.crop((round(x * width), round(y * height),
+                                          round((x + w) * width), round((y + h) * height)))
             prepared.thumbnail((MAX_EDGE, MAX_EDGE))
             buffer = io.BytesIO()
             # Apply orientation before stripping EXIF; composite transparency

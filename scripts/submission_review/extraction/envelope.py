@@ -120,6 +120,114 @@ _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _TOKEN = re.compile(r"^[A-Za-z0-9._:/+-]{1,120}$")
 
 
+def _object_shape(properties: dict[str, Any], *, optional: tuple[str, ...] = ()) -> dict[str, Any]:
+    return {"type": "object", "properties": properties, "additionalProperties": False,
+            "required": [key for key in properties if key not in optional]}
+
+
+def _ref(name: str, *, nullable: bool = False) -> dict[str, Any]:
+    ref = {"$ref": f"#/$defs/{name}"}
+    return {"anyOf": [ref, {"type": "null"}]} if nullable else ref
+
+
+def _array_shape(items: dict[str, Any], maximum: int | None = None) -> dict[str, Any]:
+    return {"type": "array", "items": items, **({"maxItems": maximum} if maximum is not None else {})}
+
+
+def _enum_shape(values: frozenset[str]) -> dict[str, Any]:
+    return {"type": "string", "enum": sorted(values)}
+
+
+def _field_shape(value: dict[str, Any]) -> dict[str, Any]:
+    return _object_shape({"value": value, "status": _enum_shape(FIELD_STATUSES),
+                          "confidence": _ref("confidence"),
+                          "sources": _array_shape(_ref("source"))})
+
+
+# One structural vocabulary for both the runtime unknown-key checks and the
+# generation projection. Cross-field semantics remain in the validator below;
+# a provider's JSON-Schema subset cannot prove provenance, truth or parentage.
+SOURCE_REGION_DESCRIPTION = (
+    "Normalized 0..1 coordinates relative to the sent image, never pixels. "
+    "x/y are the top-left; w/h are width/height. x+w and y+h must not exceed 1. "
+    "Omit the optional region if it cannot be located reliably."
+)
+_SHAPES = {
+    "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "region": {**_object_shape({key: {"type": "number", "minimum": 0, "maximum": 1}
+                                for key in ("x", "y", "w", "h")}),
+               "description": SOURCE_REGION_DESCRIPTION},
+    "source": _object_shape({"input_id": {"type": "string"}, "photo_id": {"type": "string"},
+                             "supporting_text": {"type": ["string", "null"]},
+                             "region": _ref("region", nullable=True)}, optional=("supporting_text", "region")),
+    "field": _field_shape({"type": ["string", "number", "null"]}),
+    "numeric_field": _field_shape({"type": ["number", "null"], "minimum": 0}),
+    "amount_value": _object_shape({"value": {"type": ["number", "null"], "minimum": 0},
+                                    "unit_text": {"type": ["string", "null"]}}),
+    "amount_field": _field_shape(_ref("amount_value", nullable=True)),
+    "identity": _object_shape({"brand": _ref("field"), "product_name": _ref("field"),
+                               "barcode_digits_seen": _ref("field", nullable=True)}),
+    "serving": _object_shape({"size": _ref("field"), "servings_per_container": _ref("field"),
+                              "basis_text": _ref("field"), "amount": _ref("amount_field", nullable=True)}),
+    "row": _object_shape({"display_name": _ref("field"), "amount": _ref("amount_field", nullable=True),
+                          "percent_dv": _ref("numeric_field", nullable=True), "form_text": _ref("field", nullable=True),
+                          "parent_index": {"type": ["integer", "null"], "minimum": 0},
+                          "is_blend_header": {"type": "boolean"}, "status": _enum_shape(ROW_STATUSES)}),
+    "other": _object_shape({"text": _ref("field", nullable=True), "disclosure_hint": _enum_shape(DISCLOSURE_HINTS)}),
+    "inferred_role": _object_shape({"role": _enum_shape(PHOTO_ROLES), "confidence": _ref("confidence")}),
+    "photo_role": _object_shape({"photo_id": {"type": "string"},
+                                 "declared": _array_shape(_enum_shape(PHOTO_ROLES), len(PHOTO_ROLES)),
+                                 "inferred": _array_shape(_ref("inferred_role"), len(PHOTO_ROLES)),
+                                 "readability": _enum_shape(READABILITIES),
+                                 "issues": _array_shape(_enum_shape(PHOTO_ISSUES), len(PHOTO_ISSUES))}),
+    "discrepancy": _object_shape({"code": _enum_shape(DISCREPANCY_CODES),
+                                  "severity": _enum_shape(DISCREPANCY_SEVERITIES),
+                                  "detail": {"type": ["string", "null"]},
+                                  "photo_ids": _array_shape({"type": "string"})}),
+}
+_CONTENT_SHAPE = _object_shape({
+    "identity": _ref("identity"), "serving": _ref("serving"),
+    "ingredient_rows": _array_shape(_ref("row"), MAX_INGREDIENT_ROWS),
+    "other_ingredients": _ref("other"), "statements": _array_shape(_ref("field"), MAX_STATEMENTS),
+    "photo_roles": _array_shape(_ref("photo_role")),
+    "discrepancies": _array_shape(_ref("discrepancy"), MAX_DISCREPANCIES),
+    "abstained": {"type": "boolean"}, "abstain_reason": {"type": ["string", "null"]},
+    "overall_confidence": _ref("confidence"),
+})
+assert set(_CONTENT_SHAPE["properties"]) == LABEL_CONTENT_KEYS
+
+
+def generation_schema() -> dict[str, Any]:
+    """Return detached model-content constraints, never an approval validator.
+
+    All model content keys are requested explicitly (nullable fields use null).
+    Runtime validation remains backwards-compatible with omitted optional keys
+    and enforces the relationships that constrained generation cannot express.
+    """
+    # Constrained decoders can reject a valid schema when numeric/list bounds
+    # expand their state space. Inline this small acyclic shape vocabulary and
+    # leave bounds to the unchanged runtime validator. Never relax that gate.
+    def project(value: Any) -> Any:
+        if isinstance(value, list):
+            return [project(item) for item in value]
+        if not isinstance(value, dict):
+            return value
+        if "$ref" in value:
+            return project(_SHAPES[value["$ref"].removeprefix("#/$defs/")])
+        result = {key: project(item) for key, item in value.items()
+                  if key not in {"maxItems", "minimum", "maximum"}}
+        bounds = [f"{key}: {value[key]}" for key in ("minimum", "maximum", "maxItems") if key in value]
+        if bounds:
+            result["description"] = " ".join(filter(None, (result.get("description"),
+                                                           "Runtime limits: " + "; ".join(bounds) + ".")))
+        return result
+    return project(_CONTENT_SHAPE)
+
+
+def _shape_keys(name: str) -> frozenset[str]:
+    return frozenset(_SHAPES[name]["properties"])
+
+
 class LabelDraftError(ValueError):
     """A draft violates the ``label_draft_v1`` contract; ``path`` names where."""
 
@@ -160,13 +268,13 @@ def validate_label_draft_v1(value: Any) -> dict[str, Any]:
     _photo_roles(draft["photo_roles"], snapshot)
 
     identity = _obj(draft["identity"], "$.identity")
-    _reject_unknown(identity, {"brand", "product_name", "barcode_digits_seen"}, "$.identity")
+    _reject_unknown(identity, _shape_keys("identity"), "$.identity")
     _field(identity.get("brand"), "$.identity.brand", snapshot)
     _field(identity.get("product_name"), "$.identity.product_name", snapshot)
     _nullable_field(identity.get("barcode_digits_seen"), "$.identity.barcode_digits_seen", snapshot)
 
     serving = _obj(draft["serving"], "$.serving")
-    _reject_unknown(serving, {"size", "servings_per_container", "basis_text", "amount"}, "$.serving")
+    _reject_unknown(serving, _shape_keys("serving"), "$.serving")
     for key in ("size", "servings_per_container", "basis_text"):
         _field(serving.get(key), f"$.serving.{key}", snapshot)
     _amount(serving.get("amount"), "$.serving.amount", snapshot)
@@ -174,7 +282,7 @@ def validate_label_draft_v1(value: Any) -> dict[str, Any]:
     _ingredient_rows(draft["ingredient_rows"], snapshot)
 
     other = _obj(draft["other_ingredients"], "$.other_ingredients")
-    _reject_unknown(other, {"text", "disclosure_hint"}, "$.other_ingredients")
+    _reject_unknown(other, _shape_keys("other"), "$.other_ingredients")
     _nullable_field(other.get("text"), "$.other_ingredients.text", snapshot)
     _enum(other.get("disclosure_hint"), DISCLOSURE_HINTS, "$.other_ingredients.disclosure_hint")
 
@@ -237,14 +345,14 @@ def _photo_roles(value: Any, snapshot: dict[str, str]) -> None:
     for index, item in enumerate(roles):
         path = f"$.photo_roles[{index}]"
         entry = _obj(item, path)
-        _reject_unknown(entry, {"photo_id", "declared", "inferred", "readability", "issues"}, path)
+        _reject_unknown(entry, _shape_keys("photo_role"), path)
         _photo_ref(entry.get("photo_id"), f"{path}.photo_id", snapshot)
         for role in _list(entry.get("declared"), f"{path}.declared", len(PHOTO_ROLES)):
             _enum(role, PHOTO_ROLES, f"{path}.declared")
         for j, inferred in enumerate(_list(entry.get("inferred"), f"{path}.inferred", len(PHOTO_ROLES))):
             ipath = f"{path}.inferred[{j}]"
             inferred_obj = _obj(inferred, ipath)
-            _reject_unknown(inferred_obj, {"role", "confidence"}, ipath)
+            _reject_unknown(inferred_obj, _shape_keys("inferred_role"), ipath)
             _enum(inferred_obj.get("role"), PHOTO_ROLES, f"{ipath}.role")
             _confidence(inferred_obj.get("confidence"), f"{ipath}.confidence")
         _enum(entry.get("readability"), READABILITIES, f"{path}.readability")
@@ -260,7 +368,7 @@ def _ingredient_rows(value: Any, snapshot: dict[str, str]) -> None:
         row = _obj(item, path)
         _reject_unknown(
             row,
-            {"display_name", "amount", "percent_dv", "form_text", "parent_index", "is_blend_header", "status"},
+            _shape_keys("row"),
             path,
         )
         _field(row.get("display_name"), f"{path}.display_name", snapshot)
@@ -287,7 +395,7 @@ def _discrepancies(value: Any, snapshot: dict[str, str]) -> None:
     for index, item in enumerate(items):
         path = f"$.discrepancies[{index}]"
         entry = _obj(item, path)
-        _reject_unknown(entry, {"code", "severity", "detail", "photo_ids"}, path)
+        _reject_unknown(entry, _shape_keys("discrepancy"), path)
         _enum(entry.get("code"), DISCREPANCY_CODES, f"{path}.code")
         _enum(entry.get("severity"), DISCREPANCY_SEVERITIES, f"{path}.severity")
         _text(entry.get("detail"), f"{path}.detail", MAX_TEXT, required=False)
@@ -301,7 +409,7 @@ def _discrepancies(value: Any, snapshot: dict[str, str]) -> None:
 
 def _field(value: Any, path: str, snapshot: dict[str, str], *, numeric: bool = False) -> None:
     field = _obj(value, path)
-    _reject_unknown(field, {"value", "status", "confidence", "sources"}, path)
+    _reject_unknown(field, _shape_keys("field"), path)
     status = field.get("status")
     _enum(status, FIELD_STATUSES, f"{path}.status")
     raw = field.get("value")
@@ -329,7 +437,7 @@ def _field(value: Any, path: str, snapshot: dict[str, str], *, numeric: bool = F
     for index, source in enumerate(sources):
         spath = f"{path}.sources[{index}]"
         entry = _obj(source, spath)
-        _reject_unknown(entry, {"input_id", "photo_id", "supporting_text", "region"}, spath)
+        _reject_unknown(entry, _shape_keys("source"), spath)
         _photo_ref(entry.get("photo_id"), f"{spath}.photo_id", snapshot)
         _text(entry.get("supporting_text"), f"{spath}.supporting_text", MAX_TEXT, required=False)
         if "region" in entry and entry["region"] is not None:
@@ -347,14 +455,14 @@ def _amount(value: Any, path: str, snapshot: dict[str, str]) -> None:
     if value is None:
         return
     field = _obj(value, path)
-    _reject_unknown(field, {"value", "status", "confidence", "sources"}, path)
+    _reject_unknown(field, _shape_keys("amount_field"), path)
     status = field.get("status")
     _enum(status, FIELD_STATUSES, f"{path}.status")
     raw = field.get("value")
     sources = _list(field.get("sources"), f"{path}.sources", len(snapshot) * 4)
     if status in ("read", "partial"):
         amount = _obj(raw, f"{path}.value")
-        _reject_unknown(amount, {"value", "unit_text"}, f"{path}.value")
+        _reject_unknown(amount, _shape_keys("amount_value"), f"{path}.value")
         if amount.get("value") is not None or status == "read":
             _finite_number(amount.get("value"), f"{path}.value.value", minimum=0.0)
         if amount.get("unit_text") is not None or status == "read":
@@ -370,7 +478,7 @@ def _amount(value: Any, path: str, snapshot: dict[str, str]) -> None:
     for index, source in enumerate(sources):
         spath = f"{path}.sources[{index}]"
         entry = _obj(source, spath)
-        _reject_unknown(entry, {"input_id", "photo_id", "supporting_text", "region"}, spath)
+        _reject_unknown(entry, _shape_keys("source"), spath)
         _photo_ref(entry.get("photo_id"), f"{spath}.photo_id", snapshot)
         _text(entry.get("supporting_text"), f"{spath}.supporting_text", MAX_TEXT, required=False)
         if "region" in entry and entry["region"] is not None:
@@ -480,7 +588,7 @@ def _photo_ref(value: Any, path: str, snapshot: dict[str, str]) -> str:
 
 def _region(value: Any, path: str) -> None:
     region = _obj(value, path)
-    _reject_unknown(region, {"x", "y", "w", "h"}, path)
+    _reject_unknown(region, _shape_keys("region"), path)
     for key in ("x", "y", "w", "h"):
         component = region.get(key)
         _finite_number(component, f"{path}.{key}")
