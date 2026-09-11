@@ -68,6 +68,85 @@ def test_parse_args_allows_default_output_dir():
     assert args.output_dir is None
 
 
+def test_parse_args_exposes_bounded_diagnostic_high_resolution_mode():
+    args = parse_args([
+        "--db-path", "catalog.db",
+        "--diagnostic-ids-file", "ids.txt",
+        "--diagnostic-output-dir", "diagnostic",
+        "--diagnostic-max-width", "2400",
+        "--diagnostic-quality", "95",
+    ])
+    assert args.diagnostic_ids_file == "ids.txt"
+    assert args.diagnostic_output_dir == "diagnostic"
+    assert args.diagnostic_max_width == 2400
+    assert args.diagnostic_quality == 95
+
+
+def test_diagnostic_extraction_writes_a_manifest_without_mutating_catalog(tmp_path, monkeypatch):
+    from extract_product_images import run_diagnostic_extraction
+
+    db_path = tmp_path / "catalog.db"
+    with sqlite3.connect(db_path) as conn:
+        conn.execute("CREATE TABLE products_core (dsld_id TEXT, image_url TEXT)")
+        conn.execute(
+            "INSERT INTO products_core VALUES (?, ?)",
+            ("12345", "https://example.test/12345.pdf"),
+        )
+    output = tmp_path / "diagnostic"
+    source_pdf = tmp_path / "source.pdf"
+    source_pdf.write_bytes(b"pdf-bytes")
+
+    monkeypatch.setattr(
+        "extract_product_images.download_pdf",
+        lambda dsld_id, url: str(source_pdf),
+    )
+
+    def fake_render(pdf_path, output_path, *, max_width_px, webp_quality):
+        assert pdf_path == str(source_pdf)
+        assert max_width_px == 2400
+        assert webp_quality == 95
+        with open(output_path, "wb") as handle:
+            handle.write(b"diagnostic-image")
+        return len(b"diagnostic-image")
+
+    monkeypatch.setattr("extract_product_images.pdf_page1_to_webp", fake_render)
+    before = db_path.read_bytes()
+
+    summary = run_diagnostic_extraction(
+        str(db_path), str(output), ["12345"], max_width_px=2400, webp_quality=95
+    )
+
+    assert summary["selected"] == 1
+    assert summary["written"] == 1
+    assert summary["failed"] == 0
+    assert db_path.read_bytes() == before
+    manifest = json.loads((output / "diagnostic_manifest.json").read_text())
+    assert manifest["mode"] == "diagnostic"
+    assert manifest["preparation"]["max_width_px"] == 2400
+    assert manifest["preparation"]["webp_quality"] == 95
+    assert manifest["preparation"]["render_zoom"] > 0
+    assert manifest["products"][0]["dsld_id"] == "12345"
+
+
+def test_pdf_renderer_honors_explicit_diagnostic_width(tmp_path):
+    fitz = pytest.importorskip("fitz")
+    from extract_product_images import pdf_page1_to_webp
+    from PIL import Image
+
+    source = tmp_path / "label.pdf"
+    document = fitz.open()
+    page = document.new_page(width=100, height=140)
+    page.insert_text((10, 30), "Supplement Facts 200 mg")
+    document.save(source)
+    document.close()
+
+    output = tmp_path / "label.webp"
+    pdf_page1_to_webp(str(source), str(output), max_width_px=240, webp_quality=95)
+    with Image.open(output) as image:
+        assert image.width == 240
+        assert image.height > image.width
+
+
 def test_backfill_image_thumbnail_urls_updates_existing_images(tmp_path):
     db_path = tmp_path / "pharmaguide_core.db"
     image_dir = tmp_path / "product_images"

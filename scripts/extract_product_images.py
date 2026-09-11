@@ -154,14 +154,27 @@ def download_pdf(dsld_id: str, url: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def pdf_page1_to_webp(pdf_path: str, output_path: str) -> int:
+def pdf_page1_to_webp(
+    pdf_path: str,
+    output_path: str,
+    *,
+    max_width_px: int = MAX_WIDTH_PX,
+    webp_quality: int = WEBP_QUALITY,
+) -> int:
     """Render page 1 of a PDF, resize to max width, save as WebP.
 
     No cropping — the full label page is preserved as-is.
+    ``max_width_px`` and ``webp_quality`` are explicit so the diagnostic
+    high-resolution path cannot silently change the production defaults.
     Returns file size in bytes.
     """
     import fitz  # PyMuPDF
     from PIL import Image
+
+    if type(max_width_px) is not int or not 1 <= max_width_px <= 4096:
+        raise ValueError("max_width_px must be an integer from 1 through 4096")
+    if type(webp_quality) is not int or not 1 <= webp_quality <= 100:
+        raise ValueError("webp_quality must be an integer from 1 through 100")
 
     # We trust the input source (NIH DSLD PDFs). Disable PIL's DoS check.
     # Without this, oversized DSLD label panels trigger DecompressionBombError.
@@ -192,17 +205,23 @@ def pdf_page1_to_webp(pdf_path: str, output_path: str) -> int:
     img = Image.open(io.BytesIO(img_data))
 
     # Resize to max width (preserve aspect ratio)
-    if img.width > MAX_WIDTH_PX:
-        ratio = MAX_WIDTH_PX / img.width
+    if img.width > max_width_px:
+        ratio = max_width_px / img.width
         new_h = int(img.height * ratio)
-        img = img.resize((MAX_WIDTH_PX, new_h), Image.LANCZOS)
+        img = img.resize((max_width_px, new_h), Image.LANCZOS)
 
     # Convert to RGB if needed (PDF pages can have odd modes)
     if img.mode not in ("RGB", "L"):
         img = img.convert("RGB")
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    img.save(output_path, "WEBP", quality=WEBP_QUALITY)
+    tmp_output = output_path + ".tmp"
+    try:
+        img.save(tmp_output, "WEBP", quality=webp_quality)
+        os.replace(tmp_output, output_path)
+    finally:
+        if os.path.exists(tmp_output):
+            os.unlink(tmp_output)
     return os.path.getsize(output_path)
 
 
@@ -217,6 +236,111 @@ def file_sha256(path: str) -> str:
         for chunk in iter(lambda: f.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def _write_json_atomic(path: str, payload: dict) -> None:
+    """Write a diagnostic manifest without leaving a partial JSON file."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp_path = path + ".tmp"
+    try:
+        with open(tmp_path, "w", encoding="utf-8") as handle:
+            json.dump(payload, handle, indent=2, sort_keys=True)
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(tmp_path, path)
+    finally:
+        if os.path.exists(tmp_path):
+            os.unlink(tmp_path)
+
+
+def run_diagnostic_extraction(
+    db_path: str,
+    output_dir: str,
+    dsld_ids: list[str],
+    *,
+    max_width_px: int = 2400,
+    webp_quality: int = 95,
+) -> dict:
+    """Render a bounded high-resolution DSLD sample without changing the catalog.
+
+    This is deliberately separate from :func:`run_extraction`: diagnostic
+    images live outside the shipped product-image directory, and this function
+    never backfills SQLite or rewrites an export checksum. The manifest records
+    the exact source URL, PDF digest, output digest and encoding settings so a
+    later benchmark can prove which bytes it used.
+    """
+    if not dsld_ids:
+        raise ValueError("diagnostic sample needs at least one DSLD id")
+    if len(dsld_ids) > 200:
+        raise ValueError("diagnostic sample is capped at 200 DSLD ids")
+    normalized = [str(value).strip() for value in dsld_ids]
+    if any(not re.fullmatch(r"[0-9]+", value) for value in normalized):
+        raise ValueError("diagnostic DSLD ids must be numeric")
+    if len(set(normalized)) != len(normalized):
+        raise ValueError("diagnostic DSLD ids must be unique")
+    if type(max_width_px) is not int or not 900 <= max_width_px <= 4096:
+        raise ValueError("diagnostic max width must be an integer from 900 through 4096")
+    if type(webp_quality) is not int or not 1 <= webp_quality <= 100:
+        raise ValueError("diagnostic quality must be an integer from 1 through 100")
+
+    products = dict(load_products_from_db(db_path))
+    missing = [value for value in normalized if value not in products]
+    if missing:
+        raise ValueError("no DSLD PDF URL for id(s): " + ", ".join(missing))
+
+    ensure_cache_dir()
+    os.makedirs(output_dir, exist_ok=True)
+    records = []
+    written = 0
+    failed = 0
+    for dsld_id in normalized:
+        image_path = os.path.join(output_dir, f"{dsld_id}.webp")
+        pdf_path = None
+        try:
+            pdf_path = download_pdf(dsld_id, products[dsld_id])
+            size_bytes = pdf_page1_to_webp(
+                pdf_path,
+                image_path,
+                max_width_px=max_width_px,
+                webp_quality=webp_quality,
+            )
+            records.append({
+                "dsld_id": dsld_id,
+                "source_url": products[dsld_id],
+                "pdf_sha256": file_sha256(pdf_path),
+                "path": f"{dsld_id}.webp",
+                "size_bytes": size_bytes,
+                "sha256": file_sha256(image_path),
+                "status": "ok",
+            })
+            written += 1
+        except Exception as exc:
+            failed += 1
+            records.append({
+                "dsld_id": dsld_id,
+                "source_url": products[dsld_id],
+                "status": "failed",
+                "error_type": type(exc).__name__,
+            })
+            logger.warning("Diagnostic render failed for %s: %s", dsld_id, exc)
+
+    manifest = {
+        "schema_version": "dsld_image_diagnostic_v1",
+        "mode": "diagnostic",
+        "source": "NIH DSLD PDF",
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "preparation": {
+            "max_width_px": max_width_px,
+            "webp_quality": webp_quality,
+            "render_zoom": RENDER_ZOOM,
+            "max_source_pixels": MAX_SOURCE_PIXELS,
+        },
+        "products": records,
+    }
+    _write_json_atomic(os.path.join(output_dir, "diagnostic_manifest.json"), manifest)
+    return {"selected": len(normalized), "written": written, "failed": failed,
+            "manifest": os.path.join(output_dir, "diagnostic_manifest.json")}
 
 
 # ---------------------------------------------------------------------------
@@ -531,6 +655,29 @@ def parse_args(argv=None):
         help="Regenerate all .webp files even if they already exist. "
              "PDF cache is reused, only the render+resize+encode step runs again.",
     )
+    parser.add_argument(
+        "--diagnostic-ids-file",
+        default=None,
+        help="Run a bounded high-resolution experiment for numeric DSLD ids in this file "
+             "instead of touching the production catalog image directory.",
+    )
+    parser.add_argument(
+        "--diagnostic-output-dir",
+        default=None,
+        help="Output directory for diagnostic images (default: <db-dir>/diagnostic_product_images).",
+    )
+    parser.add_argument(
+        "--diagnostic-max-width",
+        type=int,
+        default=2400,
+        help="Diagnostic WebP width, 900-4096px (default: 2400).",
+    )
+    parser.add_argument(
+        "--diagnostic-quality",
+        type=int,
+        default=95,
+        help="Diagnostic WebP quality, 1-100 (default: 95).",
+    )
     return parser.parse_args(argv)
 
 
@@ -542,6 +689,39 @@ def main(argv=None):
         sys.exit(1)
 
     output_dir = args.output_dir or default_output_dir_for_db(args.db_path)
+
+    if args.diagnostic_ids_file:
+        if args.output_dir:
+            print("Error: --output-dir cannot be combined with --diagnostic-ids-file")
+            sys.exit(2)
+        if not os.path.isfile(args.diagnostic_ids_file):
+            print(f"Error: diagnostic id file not found: {args.diagnostic_ids_file}")
+            sys.exit(2)
+        ids = []
+        with open(args.diagnostic_ids_file, "r", encoding="utf-8") as handle:
+            for line in handle:
+                value = line.split("#", 1)[0].strip()
+                if value:
+                    ids.append(value)
+        diagnostic_dir = args.diagnostic_output_dir or os.path.join(
+            os.path.dirname(os.path.abspath(args.db_path)), "diagnostic_product_images"
+        )
+        try:
+            summary = run_diagnostic_extraction(
+                args.db_path,
+                diagnostic_dir,
+                ids,
+                max_width_px=args.diagnostic_max_width,
+                webp_quality=args.diagnostic_quality,
+            )
+        except ValueError as exc:
+            print(f"Error: {exc}")
+            sys.exit(2)
+        print(
+            f"Diagnostic extraction: {summary['written']}/{summary['selected']} written, "
+            f"{summary['failed']} failed. Manifest: {summary['manifest']}"
+        )
+        return
 
     run_extraction(
         db_path=args.db_path,

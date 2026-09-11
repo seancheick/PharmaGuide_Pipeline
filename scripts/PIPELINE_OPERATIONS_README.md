@@ -237,6 +237,28 @@ bash scripts/release_full.sh --force
 
 `--force` overrides freshness decisions. It does not bypass gates.
 
+### Diagnostic high-resolution DSLD images
+
+The shipped catalog keeps the 900px WebP thumbnails. For OCR experiments,
+select a bounded sample of numeric DSLD IDs and render larger copies into a
+separate directory; this mode never updates `products_core`, the export
+manifest, or Flutter assets:
+
+```bash
+python scripts/extract_product_images.py \
+  --db-path scripts/dist/pharmaguide_core.db \
+  --diagnostic-ids-file /path/to/ids.txt \
+  --diagnostic-output-dir /tmp/pharmaguide-dsld-diagnostic \
+  --diagnostic-max-width 2400 \
+  --diagnostic-quality 95
+```
+
+The file accepts one DSLD ID per line (blank lines and `#` comments are
+ignored) and is capped at 200 unique IDs. The output contains a
+`diagnostic_manifest.json` with source-PDF and rendered-image hashes. These
+bytes are for measurement only; benchmark qualification must use the exact
+preparation configuration intended for production.
+
 ## 7. Batch release options
 
 Options passed from the batch wrapper to `release_full.sh` after a successful
