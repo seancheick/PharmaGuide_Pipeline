@@ -259,6 +259,33 @@ def test_native_standalone_heading_keeps_existing_structural_handling():
     )
 
 
+def test_native_and_submission_routes_have_identical_enrichment_and_v4_score():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from product_submission_import import build_manual_label
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    text = "Less than 2% of: magnesium stearate, silicon dioxide"
+    payload = _payload()
+    payload["otherIngredientsDisclosure"] = "present"
+    payload["otherIngredients"] = text
+    imported = build_manual_label(_export(payload))
+    native = json.loads(json.dumps(imported))
+    native["otherIngredients"] = {"ingredients": [{"name": text}]}
+    normalizer = EnhancedDSLDNormalizer()
+    enricher = SupplementEnricherV3()
+    results = []
+    for raw in (imported, native):
+        enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+        results.append((enriched, build_scored_artifact(enriched)))
+
+    first, second = results
+    for field in ("ingredient_quality_data", "harmful_additives", "allergen_hits"):
+        assert first[0][field] == second[0][field]
+    for field in ("quality_score_v4_100", "quality_score_status", "quality_pillars_v4"):
+        assert first[1][field] == second[1][field]
+
+
 def row_id(row: dict) -> str:
     return str(row["submission_id"])
 
