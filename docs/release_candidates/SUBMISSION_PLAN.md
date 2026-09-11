@@ -394,10 +394,91 @@ prompt/test edit. Full release command also passed: 123 release tests plus
 strict artifact, source-of-truth and live-identifier checks. No catalog was
 rebuilt or published.
 
-**Resume here:** adjudicate the three saved v11 drafts against their original
-images and raw DSLD records before spending calls on a larger run. Keep
-field accuracy separate from schema validity. Consider constrained generation
-only through the existing contract owner, not a parallel validator.
+**Three-label accuracy review (2026-09-11, AI-assisted development review):**
+reviewed the saved v11 drafts, the downloaded DSLD label images, the raw JSON
+records, and the catalog disagreement receipts. No new API calls, no gold
+attestations, no source-data edits. These already-seen images remain development
+data, not an independent holdout. This review is not a two-person sign-off.
+
+| Check | Observed result | Scope/limitation |
+| --- | --- | --- |
+| Row coverage | 1 + 21 + 7 = 29 rows present | Reviewed row alignment; not generic position-only matching |
+| Primary numeric amounts | 29/29 agree with raw DSLD | Does not assess every embedded standardization number |
+| Explicit dose units | 28/28 agree with raw DSLD | Calories has no printed unit; draft correctly retains 20 with unknown unit, not an invented kcal |
+| Numeric %DV | 19/19 agree with raw DSLD | Printed historical label values, not recalculated modern daily values |
+| Visible barcode digits | 695 and 2502 match image and raw | 739 image has none; draft abstains |
+| Full extraction clearance | NOT PASSED | Serving inference, missing fields, identity omissions, and reference disagreements remain |
+
+**Actual extraction issues (not catalog formatting):**
+
+- 695: `servings_per_container=100` is marked read, but the image only prints
+  100 capsules and a one-capsule serving. Raw DSLD has null servings per
+  container. The draft inferred rather than transcribed that field. Its
+  `basis_text` says Serving Size although Amount Per Serving is printed.
+- 2502: similarly infers `servings_per_container=60` from the package count.
+  `basis_text` is not_present despite a visible Amount Per Serving heading.
+  Product name omits the prominently printed 100 mg strength.
+- 739: product name contains only the flavor, omitting 1,000 mg Vitamin C.
+  Structured `serving.amount` is null despite the correctly read size string
+  1 packet (8.3 g); `basis_text` also misses Amount Per Serving. Treat this
+  as incomplete, not permission for the downstream mapper to invent data.
+- Statement completeness is not established. Principal directions/warnings
+  are retained, but examples of missing printed text include 2502's instruction
+  to read the entire label before use and multiple marketing statements.
+  Do not infer 100% statement coverage from preserved core warnings.
+
+**Reference/comparison findings, kept separate from model errors:**
+
+- 739 image prints Total Carbohydrate / Sugars; raw DSLD names them Total
+  Carbohydrates / Sugar. The draft follows the image. The catalog comparator
+  reports both as missing/extra because both have 5 g and its safe fallback
+  refuses ambiguous amount-only matching. Do not add a fuzzy auto-match.
+- The Calories 20 finding comes from the catalog projection leaving the
+  `{Calories}` pseudo-unit unparsed. The raw record contains quantity 20.
+  This is not an invented dose in the draft.
+- 739 raw forms are incomplete relative to the image (including Calcium,
+  Phosphorus, Potassium, Zinc and Thiamin). A richer image transcription is
+  not automatically a hallucination just because the form arrays differ.
+- 2502 raw green-tea notes say minimum 9% polyphenols; the image and draft
+  say 90%. This is an explicit source conflict, not a model dose error.
+  Preserve the original record; a source correction needs separate evidence
+  and review, not rewriting gold to match the candidate.
+- 2502 Whole grape extract includes Polygonum cuspidatum in the printed
+  combined row. Raw DSLD categorizes it as blend with no nested rows; the
+  draft preserves the second botanical in form_text but marks ordinary row.
+  This requires a reviewed contract interpretation, not forcing either
+  shape to agree by silently flattening or inventing child doses.
+- Terminal punctuation, case, botanical detail and moving printed qualifiers
+  into form_text account for several other discrepancies. GNC's label brand
+  line, raw brand and shortened catalog brand are also different surfaces.
+- The catalog disagreement helper does NOT compare serving fields or
+  statements. Its docstring incorrectly called it the only adjudication list;
+  corrected that claim. The benchmark already owns serving and statement
+  checks; do not build another evaluator or call an empty catalog diff an
+  accuracy pass.
+- 695's GNC-procedure/USP-standard text is a transcribed manufacturer claim,
+  not a verified third-party certificate. Nothing here awards certification
+  credit or proves a registry match.
+
+Review inputs: `reports/submission_dsld_gemini35lite_v11_20260911/*.draft.json`,
+the manifest-pinned images in `reports/submission_dsld_diagnostic_20260910/`,
+and raw `staging/brands/{GNC/695,Emergen_C/739,Life_Extension/2502}.json`.
+Draft SHA256 values: 695 `27af4d534e60e6f2bfe8bd96e74d66983815ac1109feb0ad4be8d8523df8c167`;
+739 `ac9ab2f16fd640894634b6cbac22d4d833b6981d2d005280e269246cdafc6f25`;
+2502 `0929f95d62cefc169c3bef95d4e9848de50efeeec5a48abf0a7c4e54404731ae`.
+Raw SHA256 values: 695 `a997d48732f6a6d1bce4dd1394dc3d4d34f01e97840a73447f18b60ce0acaa1b`;
+739 `867e5687b28bb343df1b7751f4d9dc05edd67ec3cce9d27600c2cd8a66de3d0b`;
+2502 `2ae48e5fec46071262f53d144bbc46d18ce72847cfa11ee8c69f95e902fb5a24`.
+
+**Resume here:** fix serving transcription (package count is not an explicitly
+printed servings-per-container field; do not omit a visible basis or serving
+amount) and full product-name capture in the shared instruction, test-first.
+Retest these three development images within a fixed small call budget. Keep
+reference disputes unresolved and original source files immutable. Reuse the
+existing benchmark for serving, identity and statement checks once the
+reference route's review requirements are satisfied. Only then expand to more
+development labels; production extraction stays disabled. Schema-constrained
+generation, if added, must stay under the existing contract owner.
 For quota-efficient candidate selection, evaluate stable `gemini-3.5-flash-lite`
 behind that same contract before a larger Flash run. Google's models/pricing
 pages list it for high-volume use with a free tier; that is not evidence of

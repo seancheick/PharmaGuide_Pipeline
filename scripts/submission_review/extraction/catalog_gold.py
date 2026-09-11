@@ -6,10 +6,12 @@ however good they are: they share the photograph, they share the preparation
 step, and a row that preparation deleted is missing from both of them. Their
 agreement then reads as confirmation of a product that has no magnesium in it.
 
-NIH's DSLD transcriptions already in this catalog do qualify. They were
-written from the physical label by someone else, before any of this existed,
-so the two sources have no common cause of error. That is the property that
-matters, not which source is more accurate.
+NIH's DSLD transcriptions can supply independent reference candidates under
+the gold protocol, but are not automatically correct or edition-matched.
+Catalog transformations and raw transcription mistakes can introduce errors;
+comparison with the matching label image is still required. In particular,
+agreement between an image reading and its associated record is not proof
+that either covers a different bottle or that a model-derived gold is valid.
 
 What this module does is mechanical: it finds the candidate record for a
 scanned barcode, says which of the protocol's required cases that record can
@@ -420,10 +422,11 @@ def case_counts(case_sets: Iterable[Iterable[str]]) -> dict[str, int]:
 def disagreements(blob: Mapping[str, Any], draft: Mapping[str, Any]) -> list[Disagreement]:
     """Rows where the record and a draft of the photograph do not agree.
 
-    This is the only list a person needs to adjudicate. It is deliberately
-    one-sided in nothing: a row the draft invented and a row it dropped are
-    both reported, because either can be the reformulation that makes the
-    record the wrong gold for this bottle.
+    This is a catalog disagreement aid, not a complete label audit. It does
+    not compare serving fields or statements; use the benchmark's existing
+    field-level checks against independently established gold for those.
+    Both invented and dropped rows are reported because either can be the
+    reformulation that makes the record the wrong gold for this bottle.
     """
     record_rows = printed_rows(blob)
     every_row = _draft_rows(dict(draft))
