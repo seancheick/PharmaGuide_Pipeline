@@ -243,6 +243,12 @@ def _valid_draft(rows: list[dict]) -> dict:
                                  "confidence": None, "sources": []}
         else:
             made["form_text"] = None
+        # Only a row that prints a %DV carries one. Copying the template's
+        # onto every row read a blend header as "48% DV".
+        if row.get("percent_dv") is None:
+            made["percent_dv"] = None
+        else:
+            made["percent_dv"]["value"] = row["percent_dv"]
         if row["value"] is None:
             # A blend child with no disclosed dose has no amount, not an
             # amount whose value is null.
@@ -433,14 +439,52 @@ def _panel_record(root: Path, dsld_id: str) -> Path:
     return blobs
 
 
+def _bind(draft: dict, root: Path, key: str) -> dict:
+    """Make a fixture draft a reading of one product's own photographs.
+
+    The pinned fixture describes photographs that are not in any holdout set.
+    Content is identity, so its evidence is rewritten to this product's photo
+    hashes, and every photo id it cites follows.
+    """
+    entry = next(p for p in json.loads((root / "manifest.json").read_text())["products"]
+                 if p["product_key"] == key)
+    photos = entry["photos"]
+    old_ids = list(draft["evidence_snapshot"])
+    mapping = {old: photos[i]["photo_id"] for i, old in enumerate(old_ids)}
+    draft["evidence_snapshot"] = {photos[i]["photo_id"]: photos[i]["sha256"]
+                                  for i in range(len(old_ids))}
+
+    def swap(value):
+        if isinstance(value, dict):
+            if value.get("photo_id") in mapping:
+                value["photo_id"] = mapping[value["photo_id"]]
+            for child in value.values():
+                swap(child)
+        elif isinstance(value, list):
+            for child in value:
+                swap(child)
+
+    swap({k: v for k, v in draft.items() if k != "evidence_snapshot"})
+    for sent, photo in zip(draft["sent_inputs"], photos):
+        sent["original_sha256"] = sent["sent_sha256"] = photo["sha256"]
+        sent.pop("crop", None)
+    return draft
+
+
 def _panel_draft(root: Path, *, magnesium: float = 200.0) -> Path:
     # A faithful reading of the panel: the blend is a header and its child
     # hangs under it. A flat reading is a real disagreement, not a fixture nit.
     draft = _valid_draft([
-        {"name": "Magnesium", "value": magnesium, "unit": "mg"},
+        {"name": "Magnesium", "value": magnesium, "unit": "mg", "percent_dv": 48.0},
         {"name": "Herbal Blend", "value": 450.0, "unit": "mg", "blend_header": True},
         {"name": "Ashwagandha", "value": None, "unit": None, "parent_index": 1},
     ])
+    # The panel prints no directions, so --no-statements stays an honest answer.
+    draft["statements"] = []
+    if (root / "set" / "manifest.json").exists() and any(
+            e["product_key"] == "northwind-mag"
+            for e in json.loads((root / "set" / "manifest.json").read_text())["products"]):
+        draft = _bind(draft, root / "set", "northwind-mag")
     path = root / "panel-draft.json"
     path.write_text(json.dumps(draft), encoding="utf-8")
     return path
@@ -604,10 +648,12 @@ def test_the_comparison_covers_everything_gold_takes_from_the_record(workspace: 
     blobs = _panel_record(workspace, "710")
 
     flat = _valid_draft([
-        {"name": "Magnesium", "value": 200.0, "unit": "mg"},
+        {"name": "Magnesium", "value": 200.0, "unit": "mg", "percent_dv": 48.0},
         {"name": "Herbal Blend", "value": 450.0, "unit": "mg"},   # header read as a row
         {"name": "Ashwagandha", "value": None, "unit": None},     # child read as flat
     ])
+    flat["statements"] = []
+    flat = _bind(flat, root, "northwind-mag")
     path = workspace / "flat.json"
     path.write_text(json.dumps(flat), encoding="utf-8")
 
@@ -660,3 +706,158 @@ def test_a_placeholder_reviewer_is_refused(workspace: Path, capsys) -> None:
                  "--reviewer", "   ", "--blobs-dir", str(blobs),
                  "--confirmed-physical-label", "--no-statements"]) == 2
     assert "initials of a real person" in capsys.readouterr().err
+
+
+
+def _write_draft(workspace: Path, name: str, draft: dict) -> Path:
+    path = workspace / name
+    path.write_text(json.dumps(draft), encoding="utf-8")
+    return path
+
+
+def _panel_rows(**overrides) -> list[dict]:
+    rows = [
+        {"name": "Magnesium", "value": 200.0, "unit": "mg", "percent_dv": 48.0},
+        {"name": "Herbal Blend", "value": 450.0, "unit": "mg", "blend_header": True},
+        {"name": "Ashwagandha", "value": None, "unit": None, "parent_index": 1},
+    ]
+    return rows
+
+
+def _setup(workspace: Path, dsld_id: str) -> tuple[Path, Path]:
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts",
+                family="Example Brand/magnesium") == 0
+    return root, _panel_record(workspace, dsld_id)
+
+
+def test_a_draft_of_other_photographs_is_refused(workspace: Path, capsys) -> None:
+    """The comparison is only independent if it read THIS product's photos.
+
+    An unbound draft could be of a different bottle, or a reading of the
+    record itself; either would let "no disagreements" confirm nothing.
+    """
+    root, blobs = _setup(workspace, "720")
+    unbound = _valid_draft(_panel_rows())
+    unbound["statements"] = []
+    draft = _write_draft(workspace, "unbound.json", unbound)
+
+    assert _import(root, "northwind-mag", "720", draft, blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    assert "not a reading of this product's photographs" in capsys.readouterr().err
+
+
+def test_an_in_progress_transcription_is_never_overwritten(workspace: Path, capsys) -> None:
+    """Only a pristine template may be replaced. A half-done human reading
+    is not complete gold, so the filled-gold check alone does not protect it."""
+    root, blobs = _setup(workspace, "721")
+    gold_path = root / "gold" / "northwind-mag.json"
+    partial = json.loads(gold_path.read_text())
+    partial["identity"]["brand"] = "Example Brand"
+    partial["rows"][0]["display_name"] = "Magnesium"
+    gold_path.write_text(json.dumps(partial), encoding="utf-8")
+    before = gold_path.read_bytes()
+
+    assert _import(root, "northwind-mag", "721", _panel_draft(workspace), blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    assert "already holds a transcription" in capsys.readouterr().err
+    assert gold_path.read_bytes() == before
+
+
+def test_no_statements_is_refused_when_the_photograph_shows_one(workspace: Path, capsys) -> None:
+    root, blobs = _setup(workspace, "722")
+    draft = _bind(_valid_draft(_panel_rows()), root, "northwind-mag")
+    assert draft["statements"], "the fixture draft reads a printed direction"
+    path = _write_draft(workspace, "with-statement.json", draft)
+
+    assert _import(root, "northwind-mag", "722", path, blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    assert "statement" in capsys.readouterr().err
+
+
+def test_typed_statements_must_match_what_the_photograph_shows(workspace: Path, capsys) -> None:
+    root, blobs = _setup(workspace, "723")
+    path = _write_draft(workspace, "with-statement.json",
+                        _bind(_valid_draft(_panel_rows()), root, "northwind-mag"))
+
+    assert _import(root, "northwind-mag", "723", path, blobs,
+                   "--confirmed-physical-label",
+                   "--statement", "Keep out of reach of children at all times.") == 2
+    capsys.readouterr()
+    assert _import(root, "northwind-mag", "723", path, blobs,
+                   "--confirmed-physical-label",
+                   "--statement", "Take two capsules daily with food.") == 0
+
+
+def test_a_refusal_never_shows_the_model_reading(workspace: Path, capsys) -> None:
+    """The confirmer must not be anchored by a model value.
+
+    A refusal names the rows and the record's value, and sends the person to
+    the package. Printing what the model read would hand them the answer.
+    """
+    root, blobs = _setup(workspace, "724")
+    assert _import(root, "northwind-mag", "724", _panel_draft(workspace, magnesium=2000.0),
+                   blobs, "--confirmed-physical-label", "--no-statements") == 2
+    error = capsys.readouterr().err
+    assert "Magnesium" in error and "200 mg" in error
+    assert "2000" not in error
+
+
+def test_an_empty_operator_value_is_refused_as_a_message(workspace: Path, capsys) -> None:
+    root, blobs = _setup(workspace, "725")
+    for flag in ("--serving-size", "--servings-per-container", "--statement"):
+        code = _import(root, "northwind-mag", "725", _panel_draft(workspace), blobs,
+                       "--confirmed-physical-label", flag, "   ",
+                       *(["--no-statements"] if flag != "--statement" else []))
+        assert code == 2, flag
+        assert "empty" in capsys.readouterr().err, flag
+
+
+def test_reference_import_rechecks_actual_photo_bytes(workspace: Path, capsys) -> None:
+    root, blobs = _setup(workspace, "726")
+    path = _panel_draft(workspace)
+    entry = json.loads((root / "manifest.json").read_text())["products"][0]
+    (root / entry["photos"][0]["path"]).write_bytes(b"replaced photograph")
+    assert _import(root, "northwind-mag", "726", path, blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    assert "photo" in capsys.readouterr().err.lower()
+
+
+def test_reference_refusal_does_not_leak_an_invented_row_name(workspace: Path, capsys) -> None:
+    root, blobs = _setup(workspace, "727")
+    path = _panel_draft(workspace)
+    draft = json.loads(path.read_text())
+    draft["ingredient_rows"][0]["display_name"]["value"] = "INVENTED MODEL ANSWER"
+    path.write_text(json.dumps(draft))
+    assert _import(root, "northwind-mag", "727", path, blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    assert "INVENTED MODEL ANSWER" not in capsys.readouterr().err
+
+
+def test_partial_warning_cannot_confirm_no_statements(workspace: Path, capsys) -> None:
+    root, blobs = _setup(workspace, "728")
+    draft = _bind(_valid_draft(_panel_rows()), root, "northwind-mag")
+    draft["statements"][0]["status"] = "partial"
+    path = _write_draft(workspace, "partial-warning.json", draft)
+    assert _import(root, "northwind-mag", "728", path, blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    assert "statement" in capsys.readouterr().err
+
+
+def test_escaped_gold_path_is_refused_before_any_write(workspace: Path, monkeypatch) -> None:
+    import prepare_holdout_set as module
+    root, blobs = _setup(workspace, "729")
+    path = _panel_draft(workspace)
+    manifest = json.loads((root / "manifest.json").read_text())
+    manifest["products"][0]["gold"] = "../outside.json"
+    (workspace / "outside.json").write_text(json.dumps(module.gold_template("northwind-mag")))
+    (root / "manifest.json").write_text(json.dumps(manifest))
+    writes = []
+    original = module._atomic_write_json
+    def record_write(target, payload, **kwargs):
+        writes.append(target)
+        return original(target, payload, **kwargs)
+    monkeypatch.setattr(module, "_atomic_write_json", record_write)
+    assert _import(root, "northwind-mag", "729", path, blobs,
+                   "--confirmed-physical-label", "--no-statements") == 2
+    assert writes == []

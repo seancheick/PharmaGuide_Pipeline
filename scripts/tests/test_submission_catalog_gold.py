@@ -339,3 +339,68 @@ def test_unit_cases_count_rows_the_scored_subset_never_sees(tmp_path):
         {"label_display_name": "Total Fat", "exact_dose_text": "2 g",
          "raw_source_path": "ingredientRows[0]"}]).read_text())
     assert "unit_g" in cg.label_cases(blob)
+
+
+
+def test_other_ingredients_never_become_facts_rows(tmp_path):
+    """38% of printed rows are the Other Ingredients section.
+
+    Taken as Facts rows they are scored twice — as ingredient rows and in the
+    other-ingredients line — and a correct extractor that files them where
+    they belong is charged with missing them.
+    """
+    blob = json.loads(_blob(tmp_path, "60", ingredients=[], display_ingredients=[
+        {"label_display_name": "Magnesium", "exact_dose_text": "200 mg",
+         "source_section": "activeIngredients", "raw_source_path": "ingredientRows[0]"},
+        {"label_display_name": "Gelatin", "exact_dose_text": "",
+         "source_section": "inactiveIngredients", "raw_source_path": "otherIngredients[0]"},
+    ]).read_text())
+    assert [r["display_name"] for r in cg.gold_rows(blob)] == ["Magnesium"]
+    assert [r["name"] for r in cg.printed_rows(blob)] == ["Magnesium"]
+
+
+def test_a_row_the_draft_could_not_read_is_a_disagreement(tmp_path):
+    """An unreadable row on the photograph is exactly what a reformulation
+    looks like from here: a printed row the record may not have. Dropping it
+    let a four-row bottle import as a three-row gold."""
+    blob = json.loads(_blob(tmp_path, "61").read_text())
+    unreadable = {"display_name": {"status": "unreadable", "value": None, "sources": []},
+                  "amount": None, "parent_index": None, "is_blend_header": False,
+                  "status": "unreadable"}
+    found = cg.disagreements(blob, _draft([_row("Magnesium", 200.0, "mg"), unreadable]))
+    assert [d.kind for d in found] == ["unreadable_in_draft"]
+
+
+def test_a_non_finite_label_order_is_refused_not_crashed(tmp_path):
+    blob = json.loads(_blob(tmp_path, "62").read_text())
+    blob["label_record"]["formula_fingerprint"] = "a" * 64
+    blob["display_ingredients"][0]["label_order"] = float("inf")
+    with pytest.raises(ValueError):
+        cg.verify_fingerprint(blob)
+
+
+def test_percent_dv_is_compared_because_gold_takes_it_from_the_record(tmp_path):
+    """Gold writes the record's %DV. Uncompared, a stale record's %DV would
+    enter gold with nothing independent behind it."""
+    blob = json.loads(_blob(tmp_path, "63",
+        ingredients=[{"raw_source_text": "Magnesium", "quantity": 200.0, "unit": "mg",
+                      "forms": [], "raw_source_path": "ingredientRows[0]", "dailyValue": 48.0}],
+        display_ingredients=[{"label_display_name": "Magnesium", "exact_dose_text": "200 mg",
+                              "raw_source_path": "ingredientRows[0]"}]).read_text())
+    agreeing = _row("Magnesium", 200.0, "mg")
+    agreeing["percent_dv"] = {"status": "read", "value": 48.0, "confidence": None, "sources": []}
+    assert cg.disagreements(blob, _draft([agreeing])) == []
+
+    stale = _row("Magnesium", 200.0, "mg")
+    stale["percent_dv"] = {"status": "read", "value": 50.0, "confidence": None, "sources": []}
+    assert [d.kind for d in cg.disagreements(blob, _draft([stale]))] == ["percent_dv"]
+
+
+def test_a_boolean_daily_value_is_not_a_percentage(tmp_path):
+    """bool is an int in Python; True must not become 1% DV in gold."""
+    blob = json.loads(_blob(tmp_path, "64",
+        ingredients=[{"raw_source_text": "Magnesium", "quantity": 200.0, "unit": "mg",
+                      "forms": [], "raw_source_path": "ingredientRows[0]", "dailyValue": True}],
+        display_ingredients=[{"label_display_name": "Magnesium", "exact_dose_text": "200 mg",
+                              "raw_source_path": "ingredientRows[0]"}]).read_text())
+    assert cg.gold_rows(blob)[0]["percent_dv"] is None

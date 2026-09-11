@@ -50,6 +50,8 @@ if str(SCRIPTS) not in sys.path:
 
 from submission_review.extraction.benchmark import (  # noqa: E402
     MANIFEST_SCHEMA,
+    _inside,
+    _statement_present,
     _norm,
     _sha,
     REQUIRED_CASES,
@@ -60,6 +62,8 @@ from submission_review.extraction.benchmark import (  # noqa: E402
 )
 from submission_review.extraction.catalog_gold import (  # noqa: E402
     CASE_SOURCES,
+    Disagreement,
+    printed_rows,
     gold_rows,
     other_ingredients_text,
     verify_fingerprint,
@@ -404,6 +408,26 @@ def diff(dsld_id: str, draft_path: Path, blobs_dir: Path, *, as_json: bool = Fal
     return 0
 
 
+def _statement_disagreements(statements: list[str], draft: dict) -> list[Disagreement]:
+    """Where the typed statements and the photograph's statements differ.
+
+    The operator types what the package prints; the draft read the same
+    package. Either side holding a statement the other lacks means one of
+    them is wrong, and a warning is not a field to settle by default.
+    """
+    typed = [_norm(text) for text in statements]
+    read = [_norm(item.get("value")) for item in (draft.get("statements") or ())
+            if isinstance(item, dict) and item.get("status") == "read" and item.get("value")]
+    found = [Disagreement("statement", "typed statement not on the photograph", None, None)
+             for text in typed if not _statement_present(text, read)]
+    found += [Disagreement("statement", "photographed statement not typed", None, None)
+              for text in read if not _statement_present(text, typed)]
+    found += [Disagreement("statement", "statement needs a complete reading", None, None)
+              for item in (draft.get("statements") or ())
+              if isinstance(item, dict) and item.get("status") in ("partial", "unreadable")]
+    return found
+
+
 def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
                      reviewer: str, *, confirmed: bool, blobs_dir: Path,
                      barcode: str | None, serving_size: str | None,
@@ -431,6 +455,11 @@ def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
             raise HoldoutSetError(
                 "refusing: --barcode must be a valid UPC/EAN/GTIN with a "
                 "valid check digit, or be omitted when no barcode is visible")
+    for flag, value in (("--serving-size", serving_size),
+                        ("--servings-per-container", servings_per_container),
+                        *(("--statement", text) for text in (statements or ()))):
+        if value is not None and not str(value).strip():
+            raise HoldoutSetError(f"refusing: {flag} was given an empty value")
     if statements is None:
         raise HoldoutSetError(
             "refusing: a catalog record does not carry printed directions or "
@@ -449,6 +478,17 @@ def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
         raise HoldoutSetError(
             f"{key} already has a complete gold record; correcting one is a "
             "dated amendment, never a silent overwrite")
+    existing = _inside(root, entry["gold"])
+    if existing.exists():
+        try:
+            current = json.loads(existing.read_text(encoding="utf-8"))
+        except ValueError:
+            current = None
+        if current != gold_template(key):
+            raise HoldoutSetError(
+                f"refusing: {existing} already holds a transcription someone "
+                "started. Only a blank template is replaced; finish or remove "
+                "that reading deliberately first.")
 
     try:
         blob_path = _record_path(dsld_id, blobs_dir)
@@ -470,12 +510,34 @@ def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
         draft = validate_label_draft_v1(json.loads(draft_path.read_text(encoding="utf-8")))
     except LabelDraftError as error:
         raise HoldoutSetError(f"{draft_path} is not a valid label_draft_v1: {error}") from error
+    # Content is identity. "No disagreements" only means something if the
+    # draft read the photographs this product was added with; a draft of
+    # another bottle, or a reading of the record itself, would confirm nothing.
+    photographed = set()
+    for photo in entry.get("photos") or ():
+        actual = _sha(_inside(root, photo["path"]))
+        if actual != photo["sha256"]:
+            raise HoldoutSetError("refusing: a product photograph changed after it was added")
+        photographed.add(actual)
+    read = set((draft.get("evidence_snapshot") or {}).values())
+    if not read or not read <= photographed:
+        raise HoldoutSetError(
+            f"refusing: {draft_path} is not a reading of this product's "
+            "photographs. Its evidence hashes do not match the photographs "
+            f"{key} was added with.")
 
-    differences = disagreements(blob, draft)
+    differences = disagreements(blob, draft) + _statement_disagreements(
+        statements, draft)
     if differences:
+        # The model's reading is deliberately withheld. The person who
+        # settles these is the one about to attest that they compared the
+        # record to the package; showing them the model's answer first would
+        # make that attestation false.
+        record_names = {_norm(row["name"]): row["name"] for row in printed_rows(blob)}
         lines = "\n".join(
-            f"    {d.kind:<20} {d.row}\n      record: {d.record or '—'}\n"
-            f"      photo : {d.draft or '—'}" for d in differences[:12])
+            f"    {d.kind:<20} {record_names.get(_norm(d.row), 'label field')}\n"
+            f"      record: {d.record or '—'}"
+            for d in differences[:12])
         raise HoldoutSetError(
             f"refusing: {len(differences)} row(s) disagree between the record and "
             f"the photographed label.\n{lines}\n"
@@ -542,7 +604,7 @@ def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
         "rows": gold_rows(blob),
     }
 
-    gold_path = root / entry["gold"]
+    gold_path = existing
     previous = gold_path.read_bytes() if gold_path.exists() else None
     try:
         _atomic_write_json(gold_path, gold, prefix=f".{key}.")
@@ -660,7 +722,7 @@ def main(argv: list[str] | None = None) -> int:
             return diff(args.dsld_id, args.draft, args.blobs_dir, as_json=args.as_json)
         return add(args.root, args.key, args.family, args.split,
                    args.cases, args.photos)
-    except HoldoutSetError as error:
+    except (HoldoutSetError, BenchmarkError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
 

@@ -352,3 +352,25 @@ wrong product or serving basis. `identity_accuracy` and `serving_accuracy` now
 use the same independent product-level denominator as the existing dose, unit,
 blend-nesting and statement-presence gates, each at 100%. This is a tightening
 before any real provider run; no result or threshold was loosened.
+
+2026-09-11 — The reference route's comparison, tightened after an adversarial
+review. `import-reference` now refuses a draft that is not a reading of the
+product's own photographs (checked by content hash); refuses to replace
+anything but a pristine template, so a half-finished human transcription is
+never discarded; treats a row the photograph shows but the reader could not
+name as a disagreement, since that is what a reformulation looks like; keeps
+Other Ingredients rows out of the Facts rows, where they had been scored twice;
+compares %DV, which gold takes from the record; and compares typed statements
+against the photographed ones in both directions. A refusal names the rows and
+the record's value but never the model's reading.
+
+Follow-up counterexamples require rehashing the actual files, not merely
+trusting manifest hash strings; resolving the gold path within the set before
+any write; treating partial/unreadable statements as unresolved rather than
+absent; and naming rows from the independent record, never echoing a
+model-invented name in a blinded refusal.
+
+One condition this code cannot enforce, and the route depends on it: the
+person who confirms a product must not have seen a model's reading of that
+product first — including through `diff`, which prints both sides for a
+reviewer's triage. Where they have, the product takes the two-person route.

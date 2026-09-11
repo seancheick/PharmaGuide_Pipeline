@@ -100,6 +100,31 @@ def _record_path(dsld_id: str, blobs_dir: Path) -> Path:
     return path
 
 
+#: The printed ledger carries both panels. Other Ingredients rows are 38% of
+#: it across the catalog, and belong in gold's other-ingredients line, never
+#: among its Facts rows.
+_OTHER_SECTION = "inactiveIngredients"
+
+
+def _facts_rows(blob: Mapping[str, Any]) -> list[Mapping[str, Any]]:
+    """Printed Supplement Facts rows, in label order — the one owner of that rule."""
+    return [row for row in (blob.get("display_ingredients") or ())
+            if row.get("source_section") != _OTHER_SECTION
+            and (row.get("label_display_name") or row.get("display_name"))]
+
+
+def _daily_values(blob: Mapping[str, Any]) -> dict[str, float]:
+    """%DV by printed row. The panel does not carry it; the enriched layer
+    does, for the same printed row, keyed by raw_source_path."""
+    values: dict[str, float] = {}
+    for row in blob.get("ingredients") or ():
+        path, value = row.get("raw_source_path"), row.get("dailyValue")
+        # bool is an int in Python: True must never become 1% of a daily value.
+        if path and isinstance(value, (int, float)) and not isinstance(value, bool):
+            values[path] = float(value)
+    return values
+
+
 def printed_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
     """The panel as the label prints it.
 
@@ -115,10 +140,9 @@ def printed_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
     thousands comma and leaves a pseudo-unit like "{Calories}" unparsed.
     """
     rows: list[dict[str, Any]] = []
-    for row in blob.get("display_ingredients") or ():
+    daily = _daily_values(blob)
+    for row in _facts_rows(blob):
         name = row.get("label_display_name") or row.get("display_name")
-        if not name:
-            continue
         parsed = _parse_amount(str(row.get("exact_dose_text") or ""))
         rows.append({
             "name": str(name),
@@ -127,6 +151,7 @@ def printed_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
             "is_blend_header": row.get("display_type") == BLEND_HEADER_TYPE,
             "parent": row.get("parent_label"),
             "form_text": row.get("label_display_form") or None,
+            "percent_dv": daily.get(row.get("raw_source_path")),
         })
     return rows
 
@@ -151,7 +176,7 @@ def verify_fingerprint(blob: Mapping[str, Any]) -> str:
         raise ValueError("record carries no usable formula fingerprint")
     try:
         recomputed = formula_fingerprint(blob.get("display_ingredients"))
-    except ValueError as error:
+    except (ValueError, OverflowError, TypeError) as error:
         raise ValueError(f"record panel is malformed: {error}") from error
     if recomputed is None:
         raise ValueError("record has no printed panel to fingerprint")
@@ -170,16 +195,12 @@ def gold_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
     %DV that the enriched layer carries for that same printed row. A row the
     record cannot supply a value for gets an explicit null.
     """
-    by_path = {r.get("raw_source_path"): r
-               for r in (blob.get("ingredients") or ()) if r.get("raw_source_path")}
-    source = [r for r in (blob.get("display_ingredients") or ())
-              if r.get("label_display_name") or r.get("display_name")]
+    daily = _daily_values(blob)
+    source = _facts_rows(blob)
     rows: list[dict[str, Any]] = []
     for row in source:
         name = str(row.get("label_display_name") or row.get("display_name"))
         parsed = _parse_amount(str(row.get("exact_dose_text") or ""))
-        joined = by_path.get(row.get("raw_source_path")) or {}
-        percent = joined.get("dailyValue")
         form = row.get("label_display_form")
         rows.append({
             "display_name": name,
@@ -188,7 +209,7 @@ def gold_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
             "is_blend_header": row.get("display_type") == BLEND_HEADER_TYPE,
             "readable": True,
             "form_text": str(form) if form else None,
-            "percent_dv": float(percent) if isinstance(percent, (int, float)) else None,
+            "percent_dv": daily.get(row.get("raw_source_path")),
         })
     # Parents second, so an index always points at a row already emitted.
     headers: dict[str, int] = {}
@@ -391,7 +412,14 @@ def disagreements(blob: Mapping[str, Any], draft: Mapping[str, Any]) -> list[Dis
     record the wrong gold for this bottle.
     """
     record_rows = printed_rows(blob)
-    draft_rows = [r for r in _draft_rows(dict(draft)) if _norm(r["name"])]
+    every_row = _draft_rows(dict(draft))
+    draft_rows = [r for r in every_row if _norm(r["name"])]
+    # A row the photograph shows but the reader could not name is exactly
+    # what a reformulation looks like from here: a printed row the record may
+    # not have. Dropping it let a four-row bottle agree with a three-row
+    # record, so each one is reported for a person to read off the package.
+    unreadable = [Disagreement("unreadable_in_draft", f"row {r['index'] + 1}", None, None)
+                  for r in every_row if not _norm(r["name"])]
 
     # Pass 1: the same printed name. Pass 2: the same printed name once a
     # trailing form parenthetical is removed, because DSLD keeps the form in
@@ -471,6 +499,11 @@ def disagreements(blob: Mapping[str, Any], draft: Mapping[str, Any]) -> list[Dis
         if _norm(record["form_text"]) != _norm(row["form_text"]):
             found.append(Disagreement("form_text", row["name"],
                                       record["form_text"] or "—", row["form_text"] or "—"))
+        if record["percent_dv"] != row["percent_dv"]:
+            found.append(Disagreement(
+                "percent_dv", row["name"],
+                "—" if record["percent_dv"] is None else f"{record['percent_dv']:g}%",
+                "—" if row["percent_dv"] is None else f"{row['percent_dv']:g}%"))
 
     for row in unpaired_draft:
         found.append(Disagreement("absent_from_record", row["name"], None,
@@ -494,7 +527,7 @@ def disagreements(blob: Mapping[str, Any], draft: Mapping[str, Any]) -> list[Dis
             found.append(Disagreement("identity" if label != "other_ingredients"
                                       else "other_ingredients",
                                       label, str(stored or "—"), str(read)))
-    return found
+    return found + unreadable
 
 
 def _read_field(section: Any, key: str) -> Any:
