@@ -784,3 +784,29 @@ def test_dose_reason_names_the_missing_primary_benchmark() -> None:
     out = _pillar_dose(dim, 20.0, "multi", cfg)
     assert "benchmark" in out["reason"].lower()
     assert "studied range" not in out["reason"].lower()
+
+
+def test_disclosed_amount_without_reference_does_not_claim_studied_dose():
+    from scoring_v4.quality_score import _pillar_dose, _config
+
+    dim = {
+        "score": 16.0,
+        "metadata": {"window_proxy_status": "partial_credit_without_rda_proxy"},
+    }
+    out = _pillar_dose(dim, 20.0, "generic", _config())
+    assert "benchmark is unavailable" in out["reason"]
+    assert "studied range" not in out["reason"]
+    # Explanation changes must not change the dose points.
+    control = _pillar_dose({"score": 16.0}, 20.0, "generic", _config())
+    assert out["score"] == control["score"]
+
+
+def test_opaque_blend_reason_precedes_missing_reference_reason():
+    from scoring_v4.quality_score import _pillar_dose, _config
+
+    dim = {"score": 16.0, "metadata": {
+        "window_proxy_status": "partial_credit_without_rda_proxy",
+        "botanical_dose_band": "blend_total_only",
+    }}
+    out = _pillar_dose(dim, 20.0, "generic", _config())
+    assert "individual ingredient amounts" in out["reason"]

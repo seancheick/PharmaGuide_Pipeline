@@ -23,14 +23,12 @@ volunteers, oral vs IV (PMID 2624613); 60-100% higher when taken with food
 """
 
 import json
-import logging
 import os
 import sys
 
 import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-logging.disable(logging.CRITICAL)
 
 from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
 
@@ -132,3 +130,74 @@ def test_vinpocetine_is_scored_and_keeps_its_safety_identity():
     # high-risk match that drives CAUTION must still be recorded.
     banned = enriched["contaminant_data"]["banned_substances"]["substances"]
     assert [hit["banned_id"] for hit in banned] == ["NOOTROPIC_VINPOCETINE"]
+
+
+def test_absorption_does_not_invent_a_pooled_interval(iqm):
+    form = iqm['vinpocetine']['forms']['vinpocetine (unspecified)']
+    absorption = form['absorption_structured']
+    assert absorption['value'] == 0.067
+    assert absorption.get('range_low') is None
+    assert absorption.get('range_high') is None
+    assert '2624613' in absorption['notes']
+    assert '56.6' in form['notes'], 'retain the conflicting older result'
+
+
+def test_anticoagulant_sources_are_not_misrepresented_as_regulatory():
+    from api_audit.verify_interactions import derive_evidence_level
+    doc = _load('curated_interactions/curated_interactions_v1.json')
+    entry = next(r for r in doc['interactions'] if r['id'] == 'DSI_ANTICOAG_VINPOCETINE')
+    assert entry['severity'] == 'Moderate', 'retain the precaution during clinical review'
+    assert entry['evidence_basis'] == 'preclinical'
+    assert derive_evidence_level(entry['evidence_basis'], entry['clinical_confidence'], entry['source_pmids']) == 'theoretical'
+    assert '2272713' in entry['source_pmids']
+    assert 'https://pubmed.ncbi.nlm.nih.gov/2272713/' in entry['source_urls']
+    assert 'in vitro' in entry['mechanism']
+    assert 'unlikely' in entry['mechanism']
+    assert entry['verification']['wording_review_status'] == 'complete'
+    assert 'project owner' in entry['verification']['approval_provenance']
+    assert 'clinician review' not in entry['verification']['wording_review_method']
+    assert entry['management'].startswith('Avoid starting vinpocetine')
+    assert 'additional monitoring' in entry['management']
+
+
+def test_single_active_canary_is_restored_and_policy_text_is_current():
+    canaries = _load('canary_products.json')
+    selected = next(c for c in canaries['canaries'] if c['dsld_id'] == '294063')
+    assert selected['subclass'] == 'single_active_caution_scored'
+    assert selected['expected_safety_verdict'] == 'CAUTION'
+    assert selected['expected_quality_score_status'] == 'scored'
+    assert 'FDA enforcement action effectively extinguished' not in json.dumps(canaries)
+    doc = _load('interaction_orphan_allowlist.json')
+    item = next(r for r in doc['allowlist'] if r['canonical_id'] == 'vinpocetine')
+    assert 'Blocked/banned' not in item['reason']
+
+
+def test_real_single_active_label_reaches_the_scored_artifact():
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures/vinpocetine_294063_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    artifact = build_scored_artifact(enriched)
+    assert artifact['quality_score_status'] == 'scored'
+    assert isinstance(artifact['quality_score_v4_100'], (int, float))
+    assert artifact['safety_verdict'] == 'CAUTION'
+    assert artifact['verdict'] == 'CAUTION'
+    assert artifact['blocking_reason'] is None
+    dose = artifact['quality_pillars_v4']['dose']
+    assert 'benchmark is unavailable' in dose['reason']
+    assert 'studied range' not in dose['reason']
+
+
+@pytest.mark.parametrize('name', ['Vincamine', 'Vinca minor', 'Voacanga africana', 'Periwinkle'])
+def test_related_names_do_not_become_vinpocetine(name):
+    product = {
+        'dsld_id': 99999, 'product_name': name,
+        'activeIngredients': [{'ingredientName': name, 'standardName': name,
+                               'quantity': '20', 'unit': 'mg'}],
+        'inactiveIngredients': [],
+    }
+    enriched, _ = SupplementEnricherV3().enrich_product(product)
+    rows = enriched['ingredient_quality_data'].get('ingredients_scorable', [])
+    assert all(row.get('canonical_id') != 'vinpocetine' for row in rows)

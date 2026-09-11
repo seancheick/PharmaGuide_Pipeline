@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.2.4",
-    "last_updated": "2026-08-08",
+    "last_updated": "2026-09-11",
     "total_entries": 94,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
@@ -3000,27 +3000,32 @@
       "agent2_id": "C0059752",
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Vinpocetine has published pharmacokinetic interaction potential through CYP and P-glycoprotein pathways, and product literature reports changes in coagulation measures when vinpocetine is added to warfarin. Anticoagulant users should treat the combination as clinically important.",
-      "management": "Avoid starting vinpocetine while taking warfarin or another anticoagulant unless a prescriber is explicitly managing the risk. If exposure occurred, tell the anticoagulation clinician and ask whether INR or bleeding monitoring is needed.",
+      "mechanism": "Vinpocetine inhibited P-glycoprotein in vitro; the clinical relevance is uncertain. CYP inhibition occurred above expected human exposures, making a clinical CYP interaction unlikely (PMID 28930203). A small study in 18 healthy men found only a minute warfarin effect, considered unlikely to have clinical implications (PMID 2272713). These findings do not establish clinically important potentiation across the anticoagulant class; this warning is precautionary.",
+      "management": "Avoid starting vinpocetine while taking warfarin or another anticoagulant unless your prescriber is managing the combination. If you already take both, tell your anticoagulation clinician and ask whether additional monitoring is needed.",
       "source_urls": [
-        "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/vinpocetine-dietary-supplements",
-        "https://pubmed.ncbi.nlm.nih.gov/28930203/"
+        "https://pubmed.ncbi.nlm.nih.gov/28930203/",
+        "https://pubmed.ncbi.nlm.nih.gov/2272713/"
       ],
       "source_pmids": [
-        "28930203"
+        "28930203",
+        "2272713"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-05-17T20:20:00Z",
+        "verified_at": "2026-09-11T00:00:00Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "manual_primary_source_review_2026_05_17"
+        "method": "primary_full_text_and_original_human_study_abstract_review",
+        "wording_review_status": "complete",
+        "wording_review_method": "source_based_editorial_review",
+        "approval_provenance": "Prior approval confirmed by the project owner on 2026-09-11; no new clinician review represented.",
+        "review_note": "Retained Moderate severity and precautionary class scope. Evidence remains theoretical with low confidence; the cited studies do not establish clinically important class-wide potentiation."
       },
-      "evidence_basis": "label_regulatory",
-      "clinical_confidence": "medium",
+      "evidence_basis": "preclinical",
+      "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "nootropic_vinpocetine",

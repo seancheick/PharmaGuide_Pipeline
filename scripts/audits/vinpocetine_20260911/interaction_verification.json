@@ -1,0 +1,17 @@
+{
+  "total_entries": 1,
+  "valid": 1,
+  "warnings": 0,
+  "errors": 0,
+  "blocked_by": [],
+  "cui_corrections": [],
+  "rxcui_mismatches": [],
+  "unmapped_supplements": [],
+  "food_agents": [],
+  "ghost_pmids": [],
+  "retracted_pmids": [],
+  "topic_mismatch_pmids": [],
+  "unknown_classes": [],
+  "issues": []
+}
+

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "204468",
+    "score": 36.5,
+    "status": "scored",
+    "safety": "CAUTION",
+    "dose_reason": "Doses are reasonable but not fully in the studied range."
+  },
+  {
+    "id": "232923",
+    "score": 47.2,
+    "status": "scored",
+    "safety": "CAUTION",
+    "dose_reason": "The dose benchmark is unavailable, so disclosed amounts receive partial credit."
+  },
+  {
+    "id": "294063",
+    "score": 40.1,
+    "status": "scored",
+    "safety": "CAUTION",
+    "dose_reason": "The dose benchmark is unavailable, so disclosed amounts receive partial credit."
+  },
+  {
+    "id": "295535",
+    "score": 40.1,
+    "status": "scored",
+    "safety": "CAUTION",
+    "dose_reason": "The dose benchmark is unavailable, so disclosed amounts receive partial credit."
+  },
+  {
+    "id": "328399",
+    "score": 57.4,
+    "status": "scored",
+    "safety": "CAUTION",
+    "dose_reason": "Doses land in the clinically studied range."
+  },
+  {
+    "id": "44121",
+    "score": 53.9,
+    "status": "scored",
+    "safety": "CAUTION",
+    "dose_reason": "Doses are reasonable but not fully in the studied range."
+  },
+  {
+    "id": "59786",
+    "score": 54.4,
+    "status": "scored",
+    "safety": "CAUTION",
+    "dose_reason": "Doses land in the clinically studied range."
+  },
+  {
+    "id": "60562",
+    "score": 54.4,
+    "status": "scored",
+    "safety": "CAUTION",
+    "dose_reason": "Doses land in the clinically studied range."
+  },
+  {
+    "id": "77114",
+    "score": 38.5,
+    "status": "scored",
+    "safety": "CAUTION",
+    "dose_reason": "Doses fall short of the amounts shown to work."
+  }
+]

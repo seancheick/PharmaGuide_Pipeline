@@ -11,8 +11,12 @@
         "product_name": "Vinpocetine 20 mg",
         "subclass": "blocked_vinpocetine",
         "retired_on": "2026-05-29",
-        "reason": "FDA enforcement action effectively extinguished single-active vinpocetine products from the shipped catalog. No current single-active vinpocetine SKU remains to anchor this archetype; the blocked-by-vinpocetine pathway is now covered exclusively by the multi-active blend canary 232923 (Life Extension Cognitex Elite Pregnenolone). Removed rather than rotated because no replacement single-active product ships.",
-        "historical_anchors": ["294063 Pure Encapsulations Vinpocetine 20 mg", "16012 Thorne Vinpocetine"]
+        "reason": "The previous retirement note attributed catalog absence to FDA enforcement without supporting evidence. Catalog exclusion does not establish removal from the market. Restored on 2026-09-11 after adding the verified IQM identity; the current policy is CAUTION with a quality score.",
+        "historical_anchors": [
+          "294063 Pure Encapsulations Vinpocetine 20 mg",
+          "16012 Thorne Vinpocetine"
+        ],
+        "restored_on": "2026-09-11"
       }
     ],
     "primary_classes": [
@@ -583,6 +587,24 @@
       "v3_shipped_score": 68.1,
       "v3_shipped_verdict": "SAFE",
       "notes": "Legion claims Labdoor (manual-review-only per P0.1c routing). Tests that non-B4a cert programs don't accidentally credit B4a. Pure Encapsulations + ConsumerLab follow the same rule."
+    },
+    {
+      "dsld_id": "294063",
+      "brand_name": "Pure Encapsulations",
+      "product_name": "Vinpocetine 20 mg",
+      "primary_class": "specialty",
+      "subclass": "single_active_caution_scored",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "high_risk_active_scored_with_caution",
+        "individual_quantified_dose_no_rda_reference"
+      ],
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": "BLOCKED",
+      "expected_safety_verdict": "CAUTION",
+      "expected_quality_score_status": "scored",
+      "notes": "Real single-active label: verified vinpocetine quality identity with separate CAUTION policy. Dose credit is partial because no dose benchmark is available; do not describe this as a studied dose range. v3 fields retain historical policy."
     }
   ]
 }

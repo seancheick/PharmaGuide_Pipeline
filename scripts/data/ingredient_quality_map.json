@@ -73758,7 +73758,7 @@
         "natural": false,
         "score": 6,
         "absorption": "~6.7% absolute oral bioavailability in elderly volunteers, oral vs IV (PMID 2624613); 60-100% higher when taken with food (PMID 1418055)",
-        "notes": "Rapid, extensive ester cleavage to apovincaminic acid; elimination half-life about 2 h in older adults (PMID 3691609) and linear kinetics without accumulation at 15-30 mg/day (PMID 2384112). A 1979 study reported 56.6% bioavailability (PMID 582791); the later IV-referenced 6.7% estimate is used. Score reflects absorption only; the CAUTION policy lives on the safety entry.",
+        "notes": "Rapid, extensive ester cleavage to apovincaminic acid; elimination half-life about 2 h in older adults (PMID 3691609) and linear kinetics without accumulation at 15-30 mg/day (PMID 2384112). A 1979 study reported 56.6% bioavailability (PMID 582791); the later IV-referenced 6.7% estimate is used. Score reflects absorption only; the CAUTION policy lives on the safety entry. Bio_score 6 is an ordinal absorption-quality calibration, not a measured percentage or evidence of clinical efficacy; estimates differ across studies.",
         "aliases": [
           "vinpocetine",
           "ethyl apovincaminate",
@@ -73768,9 +73768,10 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.067,
-          "range_low": 0.05,
-          "range_high": 0.13,
-          "quality": "poor"
+          "range_low": null,
+          "range_high": null,
+          "quality": "poor",
+          "notes": "Study-specific absolute bioavailability of 6.7% in elderly volunteers given oral 20 mg versus IV 10 mg (PMID 2624613); no pooled range established. Food effects (PMID 1418055) are relative exposure changes from a separate study."
         }
       }
     },
