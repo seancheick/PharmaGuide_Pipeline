@@ -19312,6 +19312,12 @@
           "sharp-ps phosphatidylserine",
           "neurosyn"
         ],
+        "source_form_aliases": [
+          "sunflower lecithin",
+          "sunflower",
+          "sunflower seed",
+          "helianthus annuus seed"
+        ],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.8,

@@ -103,3 +103,44 @@ def test_existing_parent_and_form_identities_remain_distinct(enricher, parent, n
     row = enriched["ingredient_quality_data"]["ingredients"][0]
     assert row["canonical_id"] == parent
     assert row["form_id"] == expected
+
+
+@pytest.mark.parametrize("name,source", [
+    # Native DSLD shape (e.g. Nature's Way 293377): PS row, source form only.
+    ("Phosphatidylserine", "Sunflower Lecithin"),
+    # Submitted label: the printed row keeps its wording; the source form is
+    # recorded the way DSLD records PS sources (plain name, no "from").
+    ("Phosphatidyl Serine from Sunflower (Helianthus annuus L.) Seed",
+     "Sunflower (Helianthus annuus L.) Seed"),
+])
+def test_sunflower_sourced_phosphatidylserine_selects_the_sunflower_form(enricher, name, source):
+    product = {
+        "id": "sunflower-ps", "product_name": name,
+        "activeIngredients": [{
+            "name": name, "standardName": "Phosphatidylserine",
+            "canonical_id": "phosphatidylserine",
+            "canonical_source_db": "ingredient_quality_map",
+            "quantity": 100, "unit": "mg", "forms": [{"name": source}],
+        }], "inactiveIngredients": [],
+    }
+    enriched, errors = enricher.enrich_product(product)
+    assert not errors
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row["canonical_id"] == "phosphatidylserine"
+    assert row["form_id"] == "sunflower phosphatidylserine"
+    assert row["quantity"] == 100
+
+
+def test_a_sunflower_source_alias_never_turns_lecithin_into_phosphatidylserine(enricher):
+    product = {
+        "id": "sunflower-lecithin", "product_name": "Sunflower Lecithin",
+        "activeIngredients": [{
+            "name": "Sunflower Lecithin", "standardName": "Lecithin",
+            "canonical_id": "lecithin", "canonical_source_db": "ingredient_quality_map",
+            "quantity": 1200, "unit": "mg", "forms": [],
+        }], "inactiveIngredients": [],
+    }
+    enriched, errors = enricher.enrich_product(product)
+    assert not errors
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row["canonical_id"] == "lecithin"
