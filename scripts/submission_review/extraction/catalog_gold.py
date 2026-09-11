@@ -124,6 +124,9 @@ def printed_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
             "name": str(name),
             "amount": parsed[0] if parsed else None,
             "path": row.get("raw_source_path"),
+            "is_blend_header": row.get("display_type") == BLEND_HEADER_TYPE,
+            "parent": row.get("parent_label"),
+            "form_text": row.get("label_display_form") or None,
         })
     return rows
 
@@ -448,6 +451,27 @@ def disagreements(blob: Mapping[str, Any], draft: Mapping[str, Any]) -> list[Dis
                 f"{printed} · {_record_amount(record)}",
                 f"{row['name']} · {_amount_text(drafted) or '—'}",
             ))
+    for index, row, _renamed in pairs:
+        # Everything gold carries from the record is compared, not only the
+        # dose. Otherwise "no disagreements" means the two readings agree
+        # about names and numbers while gold silently takes its nesting,
+        # forms and %DV from one side alone.
+        record = record_rows[index]
+        if bool(record["is_blend_header"]) != bool(row["is_blend_header"]):
+            found.append(Disagreement(
+                "blend_header", row["name"],
+                "blend header" if record["is_blend_header"] else "ordinary row",
+                "blend header" if row["is_blend_header"] else "ordinary row"))
+        record_parent = _norm(record["parent"]) or None
+        draft_parent = _norm(row["owner"]) or None
+        if record_parent != draft_parent:
+            found.append(Disagreement("nesting", row["name"],
+                                      record["parent"] or "no parent",
+                                      row["owner"] or "no parent"))
+        if _norm(record["form_text"]) != _norm(row["form_text"]):
+            found.append(Disagreement("form_text", row["name"],
+                                      record["form_text"] or "—", row["form_text"] or "—"))
+
     for row in unpaired_draft:
         found.append(Disagreement("absent_from_record", row["name"], None,
                                   _amount_text(row["amount"] or {})))
@@ -457,7 +481,30 @@ def disagreements(blob: Mapping[str, Any], draft: Mapping[str, Any]) -> list[Dis
             "missing_from_draft", str(record["name"]),
             _record_amount(record), None,
         ))
+
+    for label, stored, read in (
+        ("brand", blob.get("brand_name"), _read_field(draft.get("identity"), "brand")),
+        ("product_name", blob.get("product_name"),
+         _read_field(draft.get("identity"), "product_name")),
+        ("other_ingredients", other_ingredients_text(blob),
+         _read_field(draft.get("other_ingredients"), "text")),
+    ):
+        # An unread field is not a contradiction: the draft simply did not say.
+        if read is not None and _norm(stored) != _norm(read):
+            found.append(Disagreement("identity" if label != "other_ingredients"
+                                      else "other_ingredients",
+                                      label, str(stored or "—"), str(read)))
     return found
+
+
+def _read_field(section: Any, key: str) -> Any:
+    if not isinstance(section, Mapping):
+        return None
+    return _value(section.get(key))
+
+
+def _value(field: Any) -> Any:
+    return field.get("value") if isinstance(field, Mapping) and field.get("status") == "read" else None
 
 
 def _without_parenthetical(name: str) -> str:

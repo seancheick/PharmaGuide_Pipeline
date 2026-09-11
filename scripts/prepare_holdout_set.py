@@ -50,6 +50,7 @@ if str(SCRIPTS) not in sys.path:
 
 from submission_review.extraction.benchmark import (  # noqa: E402
     MANIFEST_SCHEMA,
+    _norm,
     _sha,
     REQUIRED_CASES,
     SPLITS,
@@ -69,6 +70,7 @@ from submission_review.extraction.catalog_gold import (  # noqa: E402
     thin_cases,
 )
 from submission_review.extraction.envelope import (  # noqa: E402
+    DISCLOSURE_HINTS,
     LabelDraftError,
     validate_label_draft_v1,
 )
@@ -405,6 +407,7 @@ def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
                      reviewer: str, *, confirmed: bool, blobs_dir: Path,
                      barcode: str | None, serving_size: str | None,
                      servings_per_container: str | None,
+                     disclosure_hint: str | None,
                      statements: list[str] | None) -> int:
     """Propose a gold record from a catalog transcription a person confirmed.
 
@@ -415,6 +418,8 @@ def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
     against the bottle in their hand. Where anything disagrees, that is no
     longer true, and the product goes to the two-person route.
     """
+    if not str(reviewer).strip() or str(reviewer).startswith("<"):
+        raise HoldoutSetError("--reviewer needs the initials of a real person")
     if not confirmed:
         raise HoldoutSetError(
             "refusing: pass --confirmed-physical-label only after comparing the "
@@ -438,7 +443,10 @@ def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
             f"{key} already has a complete gold record; correcting one is a "
             "dated amendment, never a silent overwrite")
 
-    blob_path = _record_path(dsld_id, blobs_dir)
+    try:
+        blob_path = _record_path(dsld_id, blobs_dir)
+    except ValueError as error:
+        raise HoldoutSetError(str(error)) from error
     if not blob_path.is_file():
         raise HoldoutSetError(f"no catalog record {dsld_id} under {blobs_dir}")
     blob = json.loads(blob_path.read_text(encoding="utf-8"))
@@ -467,6 +475,15 @@ def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
             "  Settle these by reading the package. If the record is stale, "
             "reformulated, or its edition is ambiguous, this product takes the "
             "two-person transcription route instead.")
+
+    brand = str(blob.get("brand_name") or "")
+    if _norm(brand) and _norm(brand) != _norm(entry.get("brand")):
+        # Caught here rather than at freeze, where it would surface as an
+        # unfreezable set long after the operator has moved on.
+        raise HoldoutSetError(
+            f"refusing: the record's brand ({brand}) is not the manifest's "
+            f"({entry.get('brand')}). Add the product under the brand the "
+            "package prints, or this set can never be frozen.")
 
     record = blob.get("label_record") or {}
     stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -509,7 +526,10 @@ def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
         },
         "other_ingredients": {
             "text": other_ingredients_text(blob),
-            "disclosure_hint": "present" if other_ingredients_text(blob) else "unknown",
+            # Scored against the draft, so it must be a reading. A record
+            # lists inactive ingredients; it does not say whether the panel
+            # printed an "Other Ingredients" line, so nothing is claimed here.
+            "disclosure_hint": disclosure_hint,
         },
         "statements": list(statements),
         "rows": gold_rows(blob),
@@ -582,6 +602,9 @@ def build_parser() -> argparse.ArgumentParser:
     node.add_argument("--serving-size", default=None,
                       help="the serving phrase as the panel prints it")
     node.add_argument("--servings-per-container", default=None)
+    node.add_argument("--other-ingredients-disclosure", default=None,
+                      choices=sorted(DISCLOSURE_HINTS), dest="disclosure_hint",
+                      help="what the panel prints; omitted means no claim")
     node.add_argument("--statement", action="append", default=None, dest="statements",
                       help="repeatable; a printed direction or warning, verbatim")
     node.add_argument("--no-statements", action="store_true",
@@ -624,6 +647,7 @@ def main(argv: list[str] | None = None) -> int:
                 confirmed=args.confirmed, blobs_dir=args.blobs_dir,
                 barcode=args.barcode, serving_size=args.serving_size,
                 servings_per_container=args.servings_per_container,
+                disclosure_hint=args.disclosure_hint,
                 statements=statements)
         if args.command == "diff":
             return diff(args.dsld_id, args.draft, args.blobs_dir, as_json=args.as_json)
