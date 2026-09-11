@@ -404,3 +404,62 @@ def test_a_boolean_daily_value_is_not_a_percentage(tmp_path):
         display_ingredients=[{"label_display_name": "Magnesium", "exact_dose_text": "200 mg",
                               "raw_source_path": "ingredientRows[0]"}]).read_text())
     assert cg.gold_rows(blob)[0]["percent_dv"] is None
+
+
+def _draft_of_gold(blob) -> dict:
+    """A reading that says exactly what the gold writer would write."""
+    rows = []
+    for g in cg.gold_rows(blob):
+        rows.append({
+            "display_name": {"status": "read", "value": g["display_name"]},
+            "amount": None if g["amount"] is None else {"status": "read", "value": g["amount"]},
+            "parent_index": g["parent_index"], "is_blend_header": g["is_blend_header"],
+            "form_text": None if not g["form_text"] else {"status": "read", "value": g["form_text"]},
+            "percent_dv": None if g["percent_dv"] is None else {"status": "read", "value": g["percent_dv"]},
+            "status": "read"})
+    return {"ingredient_rows": rows}
+
+
+def test_the_writer_and_the_comparator_agree_about_nesting(tmp_path):
+    """One rule for what counts as a parent.
+
+    Gold may only nest under a blend header, so the writer leaves a
+    nutrition-facts sub-row or a constituent under an ordinary ingredient
+    flat. The comparator used the raw printed parent instead, so a reading
+    identical to what the writer produces was refused — on every label with
+    "Calories from Fat" or EPA under Fish Oil.
+    """
+    blob = json.loads(_blob(tmp_path, "70", ingredients=[], display_ingredients=[
+        {"label_display_name": "Calories", "exact_dose_text": "20 {Calories}",
+         "display_type": "nutrition_fact", "parent_label": None,
+         "raw_source_path": "ingredientRows[0]"},
+        {"label_display_name": "Calories from Fat", "exact_dose_text": "",
+         "display_type": "nutrition_fact", "parent_label": "Calories",
+         "raw_source_path": "ingredientRows[0].nestedRows[0]"},
+        {"label_display_name": "Fish Oil", "exact_dose_text": "1000 mg",
+         "display_type": "mapped_ingredient", "parent_label": None,
+         "raw_source_path": "ingredientRows[1]"},
+        {"label_display_name": "EPA", "exact_dose_text": "180 mg",
+         "display_type": "mapped_ingredient", "parent_label": "Fish Oil",
+         "raw_source_path": "ingredientRows[1].nestedRows[0]"},
+        {"label_display_name": "Herbal Blend", "exact_dose_text": "450 mg",
+         "display_type": "structural_container", "parent_label": None,
+         "raw_source_path": "ingredientRows[2]"},
+        {"label_display_name": "Ashwagandha", "exact_dose_text": "",
+         "display_type": "mapped_ingredient", "parent_label": "Herbal Blend",
+         "raw_source_path": "ingredientRows[2].nestedRows[0]"},
+    ]).read_text())
+    assert cg.disagreements(blob, _draft_of_gold(blob)) == []
+    # And real blend nesting is still enforced: flattening the blend child is caught.
+    flat = _draft_of_gold(blob)
+    flat["ingredient_rows"][5]["parent_index"] = None
+    assert [d.kind for d in cg.disagreements(blob, flat)] == ["nesting"]
+
+
+def test_a_typed_record_dose_with_three_decimals_is_still_read(tmp_path):
+    """The thousands ambiguity is an OCR artefact. A DSLD transcription is
+    typed, so "1.575 g" in a record is a real 1.575 g and must stay read."""
+    blob = json.loads(_blob(tmp_path, "80", ingredients=[], display_ingredients=[
+        {"label_display_name": "Creatine", "exact_dose_text": "1.575 g",
+         "raw_source_path": "ingredientRows[0]"}]).read_text())
+    assert cg.printed_rows(blob)[0]["amount"] == {"value": 1.575, "unit_text": "g"}

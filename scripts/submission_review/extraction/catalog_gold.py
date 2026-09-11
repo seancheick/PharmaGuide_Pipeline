@@ -125,6 +125,25 @@ def _daily_values(blob: Mapping[str, Any]) -> dict[str, float]:
     return values
 
 
+def _blend_parents(source: Sequence[Mapping[str, Any]]) -> list[int | None]:
+    """Each Facts row's parent index, or None — the one owner of that rule.
+
+    Gold may only nest a row under an earlier blend header. A row printed
+    under a nutrition fact ("Calories from Fat") or under an ordinary
+    ingredient (EPA under Fish Oil) is therefore flat. The writer and the
+    comparator both ask this function, so they cannot disagree about it.
+    """
+    parents: list[int | None] = []
+    headers: dict[str, int] = {}
+    for index, row in enumerate(source):
+        if row.get("display_type") == BLEND_HEADER_TYPE:
+            name = row.get("label_display_name") or row.get("display_name")
+            headers[_norm(name)] = index
+        owner = headers.get(_norm(row.get("parent_label"))) if row.get("parent_label") else None
+        parents.append(owner if owner is not None and owner < index else None)
+    return parents
+
+
 def printed_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
     """The panel as the label prints it.
 
@@ -141,15 +160,19 @@ def printed_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
     """
     rows: list[dict[str, Any]] = []
     daily = _daily_values(blob)
-    for row in _facts_rows(blob):
+    source = _facts_rows(blob)
+    parents = _blend_parents(source)
+    for index, row in enumerate(source):
         name = row.get("label_display_name") or row.get("display_name")
+        owner = parents[index]
         parsed = _parse_amount(str(row.get("exact_dose_text") or ""))
         rows.append({
             "name": str(name),
             "amount": parsed[0] if parsed else None,
             "path": row.get("raw_source_path"),
             "is_blend_header": row.get("display_type") == BLEND_HEADER_TYPE,
-            "parent": row.get("parent_label"),
+            "parent": (None if owner is None else
+                       source[owner].get("label_display_name") or source[owner].get("display_name")),
             "form_text": row.get("label_display_form") or None,
             "percent_dv": daily.get(row.get("raw_source_path")),
         })
@@ -211,17 +234,8 @@ def gold_rows(blob: Mapping[str, Any]) -> list[dict[str, Any]]:
             "form_text": str(form) if form else None,
             "percent_dv": daily.get(row.get("raw_source_path")),
         })
-    # Parents second, so an index always points at a row already emitted.
-    headers: dict[str, int] = {}
-    for index, (row, built) in enumerate(zip(source, rows)):
-        if built["is_blend_header"]:
-            headers[_norm(built["display_name"])] = index
-        parent = row.get("parent_label")
-        if parent is None:
-            continue
-        owner = headers.get(_norm(parent))
-        if owner is not None and owner < index:
-            built["parent_index"] = owner
+    for built, owner in zip(rows, _blend_parents(source)):
+        built["parent_index"] = owner
     return rows
 
 
