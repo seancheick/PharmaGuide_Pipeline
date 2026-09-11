@@ -107,6 +107,22 @@ def test_a_percent_dv_only_row_invents_no_amount() -> None:
     assert reported and reported[0]["printed"] == "%DV 20"
 
 
+@pytest.mark.parametrize('dv', [None, 13])
+@pytest.mark.parametrize('header', [False, True])
+def test_incomplete_amount_keeps_printed_range_for_reviewer(dv, header):
+    amount = _f({'value': None, 'unit_text': 'IU'}, 'partial')
+    amount['sources'] = [{'supporting_text': 'Vitamin A 667 - 1,042 IU 13-21%'}]
+    skeleton = to_manual_label(_draft(ingredient_rows=[
+        _row('Vitamin A', amount=amount, percent_dv=_f(dv) if dv else None,
+             is_blend_header=header),
+    ]))
+    row = skeleton.payload['ingredientRows'][0]
+    assert row['quantity'] == []
+    assert row['forms'] == []
+    gap = next(e for e in skeleton.unresolved if e['path'] == 'ingredientRows[0].quantity')
+    assert gap['printed'] == 'Vitamin A 667 - 1,042 IU 13-21%'
+
+
 def test_the_serving_phrase_is_never_parsed_into_numbers() -> None:
     skeleton = to_manual_label(_draft())
 

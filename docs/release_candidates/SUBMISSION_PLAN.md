@@ -478,8 +478,9 @@ repaired; the envelope validator is unchanged and still owns acceptance.
 **60-label run** (`gemini-3.5-flash-lite`, v11, thinking minimal): 54 of 60
 validated. Five hit the 12,000-token answer cap with no thinking used — labels
 of 26-99 Facts rows, since every field carries value, status, confidence and a
-source. One network failure. Of 402 doses claimed, OCR independently found 389
-(97%) printed on the label.
+source. One network failure. Claude reported OCR finding 389 of 402 claimed
+doses (97%) somewhere in the image. This is NOT extraction accuracy: it does
+not establish the correct row, serving column, unit, or missing-row coverage.
 
 **What the 38 dose differences from the catalog were.** 29 are Calories rows
 the catalog cannot hold as a number (`20 {Calories}`); OCR confirms Gemini's
@@ -487,7 +488,8 @@ number is printed in every one. One is a probiotic count. Seven are on 4283,
 which prints two serving columns (1 tsp, and 3 tsp "Advanced Usage"): five are
 correct 1-tsp values where the catalog used 3 tsp. Two are real errors: Vitamin
 A printed "667 - 1,042 IU" and Vitamin D "4 - 10 IU" were reported as the low
-end only, understating fat-soluble vitamins. No wrong unit ("I.U." is a
+end only, understating fat-soluble vitamins. The reported dose-diff review
+found no wrong unit; that is not a full-corpus unit audit ("I.U." is a
 spelling our unit vocabulary does not recognise). Blend members were filed
 wrongly: 180692's 23 members merged into one row, and 18102's went into the
 blend's form_text — the latter partly caused by the v7 form_text wording.
@@ -503,11 +505,14 @@ heading; product name in full; a field not printed is still a field object;
 %DV is never partial; only `field|null` fields may be null. Gemini's answer cap
 raised to 65,536 (the model's limit, verified). v4-v14 fail closed.
 
-**Retest and comparison.** v12 on Flash-Lite fixed 4283's ranges and flagged
-its two servings, split 180692 into 18 member rows, stopped inferring 695's
+**Retest and comparison.** v12 on Flash-Lite removed 4283's numeric dose
+endpoints and flagged its two servings, but put ranges in form_text and still
+reported 13% instead of 13-21% DV and 1% instead of 1-3% DV. The range defect
+was NOT closed. It split 180692 into 18 member rows, stopped inferring 695's
 servings, read the basis heading, and completed 758 (26/26 rows). It did not
 fix 18102 (members still in form_text), 2502 (still infers 60, though the
-label prints only "60 Vegetarian Capsules") or 247106 (35 of 99 rows).
+label prints only "60 Vegetarian Capsules") or 247106 (36 rows in v12;
+the later Flash v14 result has 35, against the reported 99 reference rows).
 On the four hardest labels under v13:
 
 | | 3.5 Flash-Lite | 3.5 Flash | Gemma 4 26B |
@@ -516,13 +521,16 @@ On the four hardest labels under v13:
 | 2502 servings not invented | no | yes | - |
 | 18102 blend members as rows | invalid | yes (8 + 2) | - |
 
-Gemma 4 31B returned HTTP 500 on every request, including plain text. 3.5
-Flash follows the substantive rules Flash-Lite breaks; its two failures are
-shapes, not inventions. One persists: 739's servings per container stays a
+Gemma 4 31B returned HTTP 500 on every request, including plain text. On these
+selected cases, 3.5 Flash followed some rules Flash-Lite broke; this small
+sample establishes neither a general accuracy advantage nor absence of
+invented values. One output-shape failure persists: 739's servings per container stays a
 bare `null` through v12, v14 and v15, so wording does not fix it. It fails
-closed. 247106 (99 rows, 11 blends) lists blend headers without members in
-both models; OCR reads about 25 row names at this resolution, so the print is
-likely too small in a full-page render — a capture problem, not a rule.
+closed (the invalid attempt does not become an accepted editable draft).
+247106 lists blend headers without members in both models. Many member names
+are visible in the saved image. Low OCR recovery alone cannot establish that
+resolution, rather than model reading/assembly, caused the omissions. Compare
+a close-up with the full-page input under the same pinned configuration.
 
 Receipts (local, gitignored): `submission_dsld_gemini35lite_v11_all60_20260911/`,
 `..._gemini35lite_v12_retest_...`, `..._gemini35lite_v13_hard_...`,
@@ -531,13 +539,33 @@ Receipts (local, gitignored): `submission_dsld_gemini35lite_v11_all60_20260911/`
 qualification. The one-off probe gained a paced, capped, quota-stopping mode;
 it is still not a production adapter.
 
-**Resume here:** (1) read `gemini-3.5-flash`'s free-tier limits in AI Studio —
-they were not in the recorded dashboard snapshot, and it is the better reader;
-(2) decide schema-constrained generation for hosted output, generated from the
-existing contract owner rather than a second schema, since wording has stopped
-fixing shape slips; (3) if quota allows, run 3.5 Flash on the 60 development
-images with the OCR double-check, reusing nothing across configurations; (4)
-treat the densest labels as a capture problem (fine print), not a model one.
+**Codex audit and bounded retest (v16).** The single shared instruction now
+explicitly preserves dose and %DV ranges/inequalities without numeric defaults
+or range-as-form metadata. The one manual-label mapper retains an incomplete
+amount's supporting text in its unresolved field, including blend headers;
+existing statements also cross unchanged. Regression tests cover the adapter
+through this mapper. One live Flash call on 4283 produced a valid draft with
+Vitamin A/D ranges and cholesterol bounds retained in statements, null numeric
+values, and no range-as-form values. It omitted the requested supporting_text
+on amount sources and still put OmegaXanthin blend members in form_text.
+Thus the targeted result improved, but neither full instruction compliance nor
+qualification is established. Receipt: local
+`submission_dsld_gemini35flash_v16_codex_range_20260911/`.
+All 54 saved v11 drafts plus this new draft also mapped without errors or
+mutation of the input drafts/files; this checks compatibility, not accuracy.
+
+The local one-off probe also now refuses existing output directories and no
+longer copies seed answers. Previously it could mix model/configuration results
+when resuming. This is a diagnostic-script fix, not a production adapter.
+
+**Resume here:** implement schema-constrained hosted output from the existing
+contract owner, retaining the strict validator and semantic checks. Prove it
+on a bounded set of the saved failures (739, 18102, 247106, 4283) before another
+60-image run. In parallel with that evaluation, use a controlled close-up vs
+full-page comparison for 247106; do not presume the cause. Recheck current
+project quotas before calls: the earlier signed-in dashboard snapshot already
+included Flash (5 RPM / 250K input TPM / 20 RPD) and Flash-Lite
+(15 RPM / 250K input TPM / 500 RPD); those are observed limits, not guarantees.
 Do not tune a frozen holdout on these images. Production extraction stays
 disabled.
 

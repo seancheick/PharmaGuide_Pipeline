@@ -59,6 +59,18 @@ def _text(entry: object) -> str | None:
     return stripped or None
 
 
+def _printed_source(entry: object) -> str | None:
+    """Keep attributed partial text visible; never parse it into a quantity."""
+    if not isinstance(entry, Mapping):
+        return None
+    texts = []
+    for source in entry.get("sources") or []:
+        text = source.get("supporting_text") if isinstance(source, Mapping) else None
+        if isinstance(text, str) and text.strip() and text not in texts:
+            texts.append(text)
+    return "\n".join(texts) or None
+
+
 def _amount(entry: object) -> dict[str, Any] | None:
     """An amount field: {value: number, unit_text: string}, both required.
 
@@ -176,6 +188,7 @@ def _rows(rows: Sequence[Any], missing) -> list[dict[str, Any]]:
             missing(f"{path}.name", UNREADABLE)
 
         amount = _amount(row.get("amount"))
+        printed_amount = _printed_source(row.get("amount"))
         if amount is not None:
             entry["quantity"] = [amount]
         elif _field_value(row.get("percent_dv")) is not None:
@@ -185,9 +198,11 @@ def _rows(rows: Sequence[Any], missing) -> list[dict[str, Any]]:
             # the catalog cannot record it as a quantity.
             printed = _field_value(row.get("percent_dv"))
             entry["notes"] = f"Printed %DV: {printed}"
-            missing(f"{path}.quantity", NO_TARGET_FIELD, f"%DV {printed}")
-        elif row.get("is_blend_header") is not True:
-            missing(f"{path}.quantity", _field_note(row.get("amount")))
+            missing(f"{path}.quantity", FREE_TEXT_ONLY if printed_amount else NO_TARGET_FIELD,
+                    printed_amount or f"%DV {printed}")
+        elif printed_amount or row.get("is_blend_header") is not True:
+            missing(f"{path}.quantity", FREE_TEXT_ONLY if printed_amount else
+                    _field_note(row.get("amount")), printed_amount)
 
         form = _text(row.get("form_text"))
         if form:

@@ -304,7 +304,7 @@ def test_context_budget_is_explicit_and_leaves_room_beyond_output_tokens():
     assert request['options']['num_ctx'] > request['options']['num_predict']
 
 
-@pytest.mark.parametrize('version', [f'label-draft-local-v{n}' for n in range(4, 15)])
+@pytest.mark.parametrize('version', [f'label-draft-local-v{n}' for n in range(4, 16)])
 def test_previous_configuration_is_not_silently_reused(version):
     transport = _Transport()
     with pytest.raises(ExtractionError, match='unsupported local configuration'):
@@ -355,6 +355,39 @@ def test_prompt_teaches_missing_units_and_absent_daily_values():
     assert 'not_present and unreadable ALWAYS have value null and sources []' in prompt
     assert 'A daily-value footnote symbol is not a numeric percent_dv.' in prompt
     assert 'If exactly one amount component is null, its field status MUST be partial, never read.' in prompt
+
+
+def test_prompt_preserves_bounded_values_outside_numeric_fields():
+    transport = _Transport()
+    _adapter(transport).extract(_bundle(), _config())
+    prompt = next(body['prompt'] for url, body in transport.posted
+                  if url.endswith('/api/generate'))
+    assert 'Ranges and inequalities apply to BOTH amounts and percent_dv.' in prompt
+    assert 'Never put dose ranges in form_text.' in prompt
+    assert 'supporting_text containing the complete printed range or inequality' in prompt
+    assert 'A printed 13-21% is not 13%, and <5 mg is not 5 mg.' in prompt
+
+
+def test_validated_range_reaches_the_single_mapper_without_a_numeric_default():
+    from submission_review.extraction.to_manual_label import to_manual_label
+
+    reading = copy.deepcopy(_READING)
+    row = reading['ingredient_rows'][0]
+    row['display_name'] = _field('Vitamin A')
+    row['amount'] = _field({'value': None, 'unit_text': 'IU'})
+    row['amount']['status'] = 'partial'
+    printed = 'Vitamin A 667 - 1,042 IU 13-21%'
+    row['amount']['sources'][0]['supporting_text'] = printed
+    row['percent_dv'] = {'value': None, 'status': 'unreadable',
+                         'confidence': None, 'sources': []}
+    row['form_text'] = None
+    reading['statements'] = [_field(printed)]
+    draft = _adapter(_Transport(reading=reading)).extract(_bundle(), _config()).draft
+    skeleton = to_manual_label(draft)
+    assert skeleton.payload['ingredientRows'][0]['quantity'] == []
+    assert skeleton.payload['ingredientRows'][0]['forms'] == []
+    assert any(e.get('printed') == printed for e in skeleton.unresolved)
+    assert skeleton.payload['statements'] == [{'type': printed}]
 
 
 @pytest.mark.parametrize(('unit', 'status', 'invalid'), [
