@@ -69,6 +69,7 @@ from submission_review.extraction.catalog_gold import (  # noqa: E402
     scan as scan_barcodes,
     thin_cases,
 )
+from submission_review.gtin import canonical_gtin14_candidates  # noqa: E402
 from submission_review.extraction.envelope import (  # noqa: E402
     DISCLOSURE_HINTS,
     LabelDraftError,
@@ -424,6 +425,12 @@ def import_reference(root: Path, key: str, dsld_id: str, draft_path: Path,
         raise HoldoutSetError(
             "refusing: pass --confirmed-physical-label only after comparing the "
             "record to the package itself. No record can make that judgement.")
+    if barcode is not None:
+        barcode = str(barcode).strip()
+        if not canonical_gtin14_candidates(barcode):
+            raise HoldoutSetError(
+                "refusing: --barcode must be a valid UPC/EAN/GTIN with a "
+                "valid check digit, or be omitted when no barcode is visible")
     if statements is None:
         raise HoldoutSetError(
             "refusing: a catalog record does not carry printed directions or "

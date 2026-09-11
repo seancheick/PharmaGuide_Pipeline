@@ -518,6 +518,22 @@ def test_a_record_whose_fingerprint_does_not_match_its_panel_is_refused(workspac
     assert "does not match its own panel" in capsys.readouterr().err
 
 
+def test_an_invalid_barcode_is_refused_before_writing_gold(workspace: Path, capsys) -> None:
+    """Gold must use the same check-digit identity owner as submissions."""
+    root = workspace / "set"
+    assert _add(workspace, "northwind-mag", "front", "facts",
+                family="Example Brand/magnesium") == 0
+    gold_path = root / "gold" / "northwind-mag.json"
+    before = gold_path.read_bytes()
+    blobs = _panel_record(workspace, "702b")
+
+    assert _import(root, "northwind-mag", "702b", _panel_draft(workspace), blobs,
+                   "--confirmed-physical-label", "--barcode", "123456789013",
+                   "--no-statements") == 2
+    assert "valid UPC/EAN/GTIN" in capsys.readouterr().err
+    assert gold_path.read_bytes() == before
+
+
 def test_physical_confirmation_and_a_statements_decision_are_both_required(workspace: Path, capsys) -> None:
     root = workspace / "set"
     assert _add(workspace, "northwind-mag", "front", "facts",
