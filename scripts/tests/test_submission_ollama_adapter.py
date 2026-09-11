@@ -304,7 +304,7 @@ def test_context_budget_is_explicit_and_leaves_room_beyond_output_tokens():
     assert request['options']['num_ctx'] > request['options']['num_predict']
 
 
-@pytest.mark.parametrize('version', ['label-draft-local-v4', 'label-draft-local-v5'])
+@pytest.mark.parametrize('version', ['label-draft-local-v4', 'label-draft-local-v5', 'label-draft-local-v6'])
 def test_previous_configuration_is_not_silently_reused(version):
     transport = _Transport()
     with pytest.raises(ExtractionError, match='unsupported local configuration'):
