@@ -470,37 +470,76 @@ Raw SHA256 values: 695 `a997d48732f6a6d1bce4dd1394dc3d4d34f01e97840a73447f18b60c
 739 `867e5687b28bb343df1b7751f4d9dc05edd67ec3cce9d27600c2cd8a66de3d0b`;
 2502 `2ae48e5fec46071262f53d144bbc46d18ce72847cfa11ee8c69f95e902fb5a24`.
 
-**Resume here:** fix serving transcription (package count is not an explicitly
-printed servings-per-container field; do not omit a visible basis or serving
-amount) and full product-name capture in the shared instruction, test-first.
-Retest these three development images within a fixed small call budget. Keep
-reference disputes unresolved and original source files immutable. Reuse the
-existing benchmark for serving, identity and statement checks once the
-reference route's review requirements are satisfied. Only then expand to more
-development labels; production extraction stays disabled. Schema-constrained
-generation, if added, must stay under the existing contract owner.
-For quota-efficient candidate selection, evaluate stable `gemini-3.5-flash-lite`
-behind that same contract before a larger Flash run. Google's models/pricing
-pages list it for high-volume use with a free tier; that is not evidence of
-label accuracy or of this project's quota. Active RPM, input TPM and RPD must
-be read from the project's AI Studio limits; they are per project, not per key.
-Subsequent signed-in inspection showed this project on Free tier with
-Flash-Lite 3.5 limits of 15 RPM, 250K input TPM, and 500 RPD, versus 20 RPD for
-Flash 3 preview. These are observed project limits, not guaranteed availability
-or remaining daily balance. Reuse saved responses,
-bound development calls, and defer on quota exhaustion rather than rotate keys
-or silently fall back to an unqualified model. Sources checked 2026-09-11:
-https://ai.google.dev/gemini-api/docs/models,
-https://ai.google.dev/gemini-api/docs/pricing,
-https://ai.google.dev/gemini-api/docs/rate-limits.
-Missing OCR rows reduce
-grounding coverage: an unchecked field is not verified, and matching the
-remaining fields cannot establish completeness. OCR is not declared finished
-or qualified. Do not spend a 60-product vision
-run until a candidate meets the draft contract on bounded smoke tests. Do not
-tune a frozen holdout on these images after using them for development.
-Raw-source-to-clean/export reconciliation remains distinct from extraction
-comparison; do not treat export agreement as proof the cleaner is correct.
+### Gemini: 60-label run, accuracy review, model comparison — 2026-09-11
+
+Public DSLD images only, free tier, within a stated call budget. No output was
+repaired; the envelope validator is unchanged and still owns acceptance.
+
+**60-label run** (`gemini-3.5-flash-lite`, v11, thinking minimal): 54 of 60
+validated. Five hit the 12,000-token answer cap with no thinking used — labels
+of 26-99 Facts rows, since every field carries value, status, confidence and a
+source. One network failure. Of 402 doses claimed, OCR independently found 389
+(97%) printed on the label.
+
+**What the 38 dose differences from the catalog were.** 29 are Calories rows
+the catalog cannot hold as a number (`20 {Calories}`); OCR confirms Gemini's
+number is printed in every one. One is a probiotic count. Seven are on 4283,
+which prints two serving columns (1 tsp, and 3 tsp "Advanced Usage"): five are
+correct 1-tsp values where the catalog used 3 tsp. Two are real errors: Vitamin
+A printed "667 - 1,042 IU" and Vitamin D "4 - 10 IU" were reported as the low
+end only, understating fat-soluble vitamins. No wrong unit ("I.U." is a
+spelling our unit vocabulary does not recognise). Blend members were filed
+wrongly: 180692's 23 members merged into one row, and 18102's went into the
+blend's form_text — the latter partly caused by the v7 form_text wording.
+Codex's review of three labels added inferred servings per container (695,
+2502), a missed basis heading, incomplete product names, and a DSLD error (9%
+vs 90% polyphenols) where Gemini read the label correctly.
+
+**Shared instruction v12-v15**, one owner: a blend's members are rows, never
+form_text or one merged row; a printed dose range is partial, never one end; a
+second serving column is flagged `serving_basis_ambiguous`; servings per
+container is never computed from a package count; basis_text is the printed
+heading; product name in full; a field not printed is still a field object;
+%DV is never partial; only `field|null` fields may be null. Gemini's answer cap
+raised to 65,536 (the model's limit, verified). v4-v14 fail closed.
+
+**Retest and comparison.** v12 on Flash-Lite fixed 4283's ranges and flagged
+its two servings, split 180692 into 18 member rows, stopped inferring 695's
+servings, read the basis heading, and completed 758 (26/26 rows). It did not
+fix 18102 (members still in form_text), 2502 (still infers 60, though the
+label prints only "60 Vegetarian Capsules") or 247106 (35 of 99 rows).
+On the four hardest labels under v13:
+
+| | 3.5 Flash-Lite | 3.5 Flash | Gemma 4 26B |
+|---|---|---|---|
+| Valid drafts | 3/4 | 2/4 | 0/4 |
+| 2502 servings not invented | no | yes | - |
+| 18102 blend members as rows | invalid | yes (8 + 2) | - |
+
+Gemma 4 31B returned HTTP 500 on every request, including plain text. 3.5
+Flash follows the substantive rules Flash-Lite breaks; its two failures are
+shapes, not inventions. One persists: 739's servings per container stays a
+bare `null` through v12, v14 and v15, so wording does not fix it. It fails
+closed. 247106 (99 rows, 11 blends) lists blend headers without members in
+both models; OCR reads about 25 row names at this resolution, so the print is
+likely too small in a full-page render — a capture problem, not a rule.
+
+Receipts (local, gitignored): `submission_dsld_gemini35lite_v11_all60_20260911/`,
+`..._gemini35lite_v12_retest_...`, `..._gemini35lite_v13_hard_...`,
+`..._gemini35flash_v13_hard_...`, `..._gemini35flash_v14_hard_...`,
+`..._gemini35flash_v15_739_...`, `..._gemma4_26b_v13_hard_...`. None is gold or
+qualification. The one-off probe gained a paced, capped, quota-stopping mode;
+it is still not a production adapter.
+
+**Resume here:** (1) read `gemini-3.5-flash`'s free-tier limits in AI Studio —
+they were not in the recorded dashboard snapshot, and it is the better reader;
+(2) decide schema-constrained generation for hosted output, generated from the
+existing contract owner rather than a second schema, since wording has stopped
+fixing shape slips; (3) if quota allows, run 3.5 Flash on the 60 development
+images with the OCR double-check, reusing nothing across configurations; (4)
+treat the densest labels as a capture problem (fine print), not a model one.
+Do not tune a frozen holdout on these images. Production extraction stays
+disabled.
 
 Repeatable diagnostic entry point (new output directory each run):
 
