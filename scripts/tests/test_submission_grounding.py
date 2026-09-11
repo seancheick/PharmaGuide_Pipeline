@@ -92,6 +92,12 @@ def test_an_invented_ingredient_name_is_caught() -> None:
     assert [entry.path for entry in report.ungrounded] == ["ingredient_rows[0].display_name"]
 
 
+def test_a_printed_number_does_not_ground_an_unprinted_unit() -> None:
+    draft = _draft([_row(amount=_field({"value": 500.0, "unit_text": "IU"}, "500 mg"))])
+    report = verify_grounding(draft, [_page("Northwind", "Vitamin C", "500 mg")])
+    assert [entry.path for entry in report.ungrounded] == ["ingredient_rows[0].amount"]
+
+
 def test_collapsed_spacing_does_not_read_as_a_fabrication() -> None:
     draft = _draft([_row(
         name="Proprietary Blend",

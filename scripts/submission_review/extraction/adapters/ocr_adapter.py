@@ -47,7 +47,7 @@ from ..extractor import (
 #: believed, whatever the text height says.
 _MIN_INDENT_STEP = 8.0
 
-RULES_VERSION = "ocr-geometry-v10"
+RULES_VERSION = "ocr-geometry-v11"
 PROVIDER = "ocr"
 
 #: Units as labels print them. Case is preserved in the draft; matching is not.
@@ -371,7 +371,11 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
         # Applied here, to OCR text, and not in _parse_amount itself: that
         # parser also reads typed DSLD transcriptions, where "1.575 g" is a
         # real 1.575 g and there is no comma for OCR to have misread.
-        ambiguous_amount = amount is not None and bool(_AMBIGUOUS_THOUSANDS.search(amount[1]))
+        # Multiple dose boxes can be alternate serving columns or adjacent
+        # ingredients. Geometry has not resolved that basis; even equal values
+        # do not establish which column belongs to this row.
+        ambiguous_amount = len(pure_doses) > 1 or (
+            amount is not None and bool(_AMBIGUOUS_THOUSANDS.search(amount[1])))
         if ambiguous_amount:
             amount = None
         if amount is None and (lost_units or misread):

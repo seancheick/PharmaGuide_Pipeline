@@ -290,7 +290,8 @@ anchored by any right-hand number, not only a dose with its unit. A number with
 no name is an unidentified row, not a name ("59"). "Servings per" and "Amount
 per" are headings in any spacing, and "Servings Per Bottle" is now read.
 
-Rules v6-v9 were intermediate; v10 is final. Same 60 images, same comparator
+Rules v6-v9 were intermediate; v10 produced the following development results.
+Same 60 images, same comparator
 for both columns (v5 re-scored with today's comparator for a fair comparison):
 
 | | v5 | v10 |
@@ -312,9 +313,10 @@ identical to what the writer produces was refused on every label with a
 nutrition-fact sub-row or EPA under Fish Oil. Verified: across 400 real
 records such a reading now yields no row disagreements.
 
-**Gemini's three contract failures are diagnosed, not model errors.** 2502
+**Gemini's three contract failures have identified failure modes, not an
+accuracy clearance.** 2502
 stopped with MAX_TOKENS after 11,517 of 12,000 tokens went to thinking (the
-probe sets no thinking limit). 739 returned a correct object wrapped in a
+probe sets no thinking limit). 739 returned an object wrapped in a
 one-element list. 695 nested a standardization line ("95% Curcuminoids") under
 an ordinary ingredient, which the contract only allows under a blend header.
 The shared instruction (now `label-draft-local-v7`; v6 fails closed) states
@@ -323,17 +325,66 @@ go. No output is unwrapped or repaired. OCR grounding of the one valid Gemini
 reading located 5 of 9 claims, including the dose; the 4 it missed were
 stylized or tiny text, and Gemini's barcode matches the catalog exactly.
 
-**The Gemini key is currently rejected.** A well-formed key loaded exactly as
-the probe loads it returned "API key not valid" on tiny text-only requests,
-though the same probe succeeded earlier on 2026-09-11. No alternate key was
-sought. Until a working key exists, the thinking-limit parameter for Gemini 3
-is unverified and no retest was run.
+**Audit update, 2026-09-11:** the configured key successfully returned model
+discovery and a tiny `gemini-3-flash-preview` generation (HTTP 200, one
+candidate, STOP). The earlier invalid-key result is not a current blocker;
+its cause was not established. No alternate credentials were used or printed.
+This proves availability for those requests, not image-extraction accuracy.
+After the operator replaced `.env`'s `GEMINI_API_KEY`, a separate generation
+check explicitly cleared the inherited key before using the existing env
+loader: HTTP 200, one candidate, STOP. The updated file's key works too.
 
-**Resume here:** provide a working Gemini key, then retest 695, 739 and 2502
-with the v7 instruction and an explicit thinking limit, verifying the Gemini 3
-parameter name against the API before relying on it. OCR row assembly is not
-the next investment: its remaining gaps are character misreads (the engine's)
-and missed rows that grounding does not need. Do not spend a 60-product vision
+**OCR audit correction:** v11 marks multiple pure-dose boxes in one row as
+unreadable, even if their values agree. The adapter has not resolved alternate
+serving columns or adjacent ingredient columns and must not choose the first
+dose. Two regression cases reproduced v10's incorrect `read` status before
+the fix. The v11 rerun is retained at
+`reports/submission_dsld_ocr_columns_v11_20260911/`: 55 drafts, 5 abstentions,
+zero catalog amount disagreements, but 25 unit findings, 56 identity findings,
+and 362 missing-row findings. These counts come from the diagnostic summary
+and are not the differently filtered v10 table's denominator.
+
+**Grounding audit correction:** a claimed number present on the page formerly
+masked an absent unit (500 IU could be marked grounded on a page printing
+500 mg). The existing verifier now requires every component returned missing
+by its own claim matcher, not only missing numeric components. A failing-first
+regression covers it. This remains a page-text presence report, not proof of
+correct row association, complete transcription, or approval eligibility.
+
+**Gemini bounded retest:** the new `.env` key completed all three public-label
+requests with v7 plus `thinkingConfig.thinkingLevel=minimal`, supported by
+https://ai.google.dev/gemini-api/docs/generate-content/thinking. All three
+failed validation because `serving.amount.unit_text` was outside the value
+wrapper. The shared instruction itself ambiguously described amount fields;
+v8 now explicitly specifies the nested field wrapper for serving and ingredient
+amounts, with a regression asserting the actual transmitted instruction.
+No adapter repairs were added and validation was not relaxed.
+
+The v8 retest yielded one valid draft (695), while 739 supplied an empty amount
+unit and 2502 attached sources to a `not_present` percent-DV field. All returned
+HTTP 200. Receipts are in `reports/submission_dsld_gemini3flash_v7_20260911/`
+and `reports/submission_dsld_gemini3flash_v8_20260911/`. The one-off probe and
+raw responses remain local diagnostic artifacts, not production adapters or
+independent gold. A valid draft is not an accuracy clearance.
+
+**Resume here:** address the remaining bounded Gemini output-contract failures
+through the existing adapter contract (consider schema-constrained generation),
+then verify field accuracy on the three images before expanding the run.
+For quota-efficient candidate selection, evaluate stable `gemini-3.5-flash-lite`
+behind that same contract before a larger Flash run. Google's models/pricing
+pages list it for high-volume use with a free tier; that is not evidence of
+label accuracy or of this project's quota. Active RPM, input TPM and RPD must
+be read from the project's AI Studio limits; they are per project, not per key.
+The available browser was signed out during this audit. Reuse saved responses,
+bound development calls, and defer on quota exhaustion rather than rotate keys
+or silently fall back to an unqualified model. Sources checked 2026-09-11:
+https://ai.google.dev/gemini-api/docs/models,
+https://ai.google.dev/gemini-api/docs/pricing,
+https://ai.google.dev/gemini-api/docs/rate-limits.
+Missing OCR rows reduce
+grounding coverage: an unchecked field is not verified, and matching the
+remaining fields cannot establish completeness. OCR is not declared finished
+or qualified. Do not spend a 60-product vision
 run until a candidate meets the draft contract on bounded smoke tests. Do not
 tune a frozen holdout on these images after using them for development.
 Raw-source-to-clean/export reconciliation remains distinct from extraction

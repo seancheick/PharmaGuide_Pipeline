@@ -209,7 +209,6 @@ def verify_grounding(
                 path, False, "the quoted text is not in the photograph", photo_id))
             continue
 
-        claimed = _claimed_strings(field.get("value"))
         missing = _missing_claims(field.get("value"), haystack)
         # A number is the expensive thing to get wrong. Requiring only that
         # *something* claimed was found lets an invented dose pass whenever its
@@ -222,7 +221,10 @@ def verify_grounding(
                 f"value not found in the photograph: {numeric_missing[0][:40]}",
                 photo_id))
             continue
-        if missing and len(missing) == len(claimed):
+        # Numeric spelling variants are already resolved by _missing_claims.
+        # Every remaining component must be present, including the unit: a
+        # printed number cannot lend support to an unprinted unit.
+        if missing:
             results.append(FieldGrounding(
                 path, False, f"value not found in the photograph: {missing[0][:40]}",
                 photo_id))

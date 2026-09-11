@@ -332,6 +332,7 @@ def test_prompt_explicitly_preserves_field_wrappers_and_serving_meaning():
     assert 'Never replace a field object with a bare string or number.' in prompt
     assert 'sources is an array of objects' in prompt
     assert 'not the mass of an ingredient' in prompt
+    assert 'unit_text belongs inside value, never beside status or sources' in prompt
 
 
 def test_real_adapter_contract_passes_through_the_shared_extractor() -> None:

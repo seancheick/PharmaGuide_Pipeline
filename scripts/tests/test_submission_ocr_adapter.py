@@ -594,3 +594,18 @@ def test_servings_per_day_is_never_servings_per_container() -> None:
         _line("500 mg", 60, left=300, width=70, height=18),
     ])
     assert draft["serving"]["servings_per_container"]["value"] is None
+
+
+@pytest.mark.parametrize("second_dose", ["1000 mg", "500 mg"])
+def test_multiple_dose_columns_require_a_resolved_serving_basis(second_dose) -> None:
+    draft = _extract([
+        _line("Supplement Facts", 0, width=1000),
+        _line("Vitamin C", 40, left=10, width=120),
+        _line("500 mg", 40, left=300, width=70),
+        _line(second_dose, 40, left=500, width=70),
+    ])
+    [row] = draft["ingredient_rows"]
+    assert row["display_name"]["value"] == "Vitamin C"
+    assert row["amount"]["status"] == "unreadable"
+    assert row["amount"]["value"] is None
+    assert row["status"] == "partial"
