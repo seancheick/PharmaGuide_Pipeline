@@ -92,6 +92,40 @@ def test_a_row_is_assembled_from_boxes_at_the_same_height() -> None:
     assert rows[0]["amount"]["value"] == {"value": 500.0, "unit_text": "mg"}
 
 
+def test_collapsed_serving_header_is_not_an_ingredient() -> None:
+    draft = _extract([
+        _line("Supplement Facts", 0),
+        _line("ServingSizeOneCapsule", 30),
+        _line("Turmeric Root Extract 500 mg", 70),
+    ])
+    assert draft["serving"]["size"]["value"] == "OneCapsule"
+    assert [r["display_name"]["value"] for r in draft["ingredient_rows"]] == ["Turmeric Root Extract"]
+
+
+def test_dense_touching_rows_keep_separate_amounts_and_names() -> None:
+    draft = _extract([
+        _line("Alpha Lipoic Acid", 40, width=120, height=14),
+        _line("1 mg", 39, left=260, width=40, height=15),
+        _line("Quercetin", 51, width=120, height=14),
+        _line("2 mg", 50, left=260, width=40, height=15),
+    ])
+    assert [(r["display_name"]["value"], r["amount"]["value"]["value"])
+            for r in draft["ingredient_rows"]] == [("Alpha Lipoic Acid", 1), ("Quercetin", 2)]
+
+
+def test_amount_and_percent_without_name_remain_an_unidentified_partial_row() -> None:
+    draft = _extract([
+        _line("0.5 mg", 40, left=260, width=40),
+        _line("25%", 40, left=310, width=40),
+    ])
+    row = draft["ingredient_rows"][0]
+    assert row["display_name"]["status"] == "unreadable"
+    assert row["display_name"]["value"] is None
+    assert row["amount"]["value"]["value"] == 0.5
+    assert row["percent_dv"]["value"] == 25
+    assert row["status"] == "partial"
+
+
 def test_facts_column_excludes_tall_marketing_and_footer() -> None:
     draft = _extract([
         _line("Marketing 900 mg", 0, left=10, width=300, height=180),

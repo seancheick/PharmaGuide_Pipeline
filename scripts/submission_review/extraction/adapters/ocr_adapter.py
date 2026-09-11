@@ -47,7 +47,7 @@ from ..extractor import (
 #: believed, whatever the text height says.
 _MIN_INDENT_STEP = 8.0
 
-RULES_VERSION = "ocr-geometry-v3"
+RULES_VERSION = "ocr-geometry-v5"
 PROVIDER = "ocr"
 
 #: Units as labels print them. Case is preserved in the draft; matching is not.
@@ -170,6 +170,30 @@ def _rows_from_lines(lines: Sequence[OcrLine]) -> list[list[OcrLine]]:
             target.extend(other)
             rows.remove(other)
 
+    separated: list[list[OcrLine]] = []
+    for band in rows:
+        # Dense print has slightly overlapping boxes on adjacent rows. Distinct
+        # amount-only boxes anchor those rows; overlap alone must not collapse
+        # two doses. Keep the connected-component behavior for wrapped names
+        # sharing one amount, and do not use parenthetical form doses as anchors.
+        anchors = sorted(
+            (line for line in band if _AMOUNT.fullmatch(
+                _clean(line.text).rstrip("*†‡ "))),
+            key=lambda line: line.middle,
+        )
+        if len(anchors) > 1 and all(
+            right.middle - left.middle > min(left.height, right.height) * 0.5
+            for left, right in zip(anchors, anchors[1:])
+        ):
+            buckets: list[list[OcrLine]] = [[] for _ in anchors]
+            for line in band:
+                index = min(range(len(anchors)),
+                            key=lambda i: abs(line.middle - anchors[i].middle))
+                buckets[index].append(line)
+            separated.extend(buckets)
+        else:
+            separated.append(band)
+    rows = separated
     for band in rows:
         band.sort(key=lambda line: (line.middle, line.left))
     rows.sort(key=lambda band: min(line.middle for line in band))
@@ -233,7 +257,7 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
     footer_started = False
     for band in rows:
         joined = _clean(" ".join(line.text for line in band))
-        if not joined or _NOT_A_ROW.match(joined):
+        if not joined or _NOT_A_ROW.match(joined) or _SERVING_SIZE.match(joined):
             continue
         if _OTHER_INGREDIENTS.match(joined):
             # This disclosure terminates the facts panel. Subsequent OCR lines
@@ -262,23 +286,29 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
             # A compact OCR box may contain both the name and amount. Remove
             # the measured portion rather than calling the whole line an
             # ingredient name.
-            match = _AMOUNT.search(joined)
-            name_text = _clean((joined[:match.start()] + joined[match.end():]) if match else joined)
+            match = _AMOUNT.search(amount_text)
+            name_text = _clean((amount_text[:match.start()] + amount_text[match.end():]) if match else amount_text)
+            if _PERCENT.fullmatch(name_text):
+                name_text = ""
         amount = _parse_amount(amount_text)
         percent = _parse_percent(amount_text)
+        if percent is None:
+            separate_percent = [line for line in band if _PERCENT.fullmatch(_clean(line.text))]
+            if len(separate_percent) == 1:
+                percent = _parse_percent(separate_percent[0].text)
         # A line that is only a heading with no number is still a printed row
         # (a blend header), so it is kept rather than dropped.
-        if not name_text:
+        if not name_text and amount is None:
             continue
 
         row: dict[str, Any] = {
-            "display_name": _read_field(page, name_text, name_text),
+            "display_name": _read_field(page, name_text, name_text) if name_text else _unread_field(),
             "amount": None,
             "percent_dv": None,
             "form_text": None,
             "parent_index": None,
             "is_blend_header": False,
-            "status": "read",
+            "status": "read" if name_text else "partial",
         }
         if amount is not None:
             row["amount"] = _read_field(page, amount[0], amount[1])
@@ -328,7 +358,7 @@ def _find_line(page: OcrPage, pattern: re.Pattern[str]) -> tuple[str, str] | Non
     return None
 
 
-_SERVING_SIZE = re.compile(r"serving\s*size[:\s]+(?P<value>.+)", re.IGNORECASE)
+_SERVING_SIZE = re.compile(r"serving\s*size[:\s]*(?P<value>.+)", re.IGNORECASE)
 _SERVINGS_PER = re.compile(
     r"servings?\s*per\s*container[:\s]+(?P<value>[\w.,/ ]+)", re.IGNORECASE)
 

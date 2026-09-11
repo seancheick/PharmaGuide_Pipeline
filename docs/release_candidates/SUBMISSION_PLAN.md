@@ -136,6 +136,54 @@ The targeted release invocation also completed successfully: 29 tests plus
 the standard artifact/freshness and live-identifier gates. No catalog rebuild
 or production deployment was performed.
 
+### OCR row follow-up and Gemini availability — 2026-09-11
+
+Continued in the same OCR adapter, not a replacement parser. Three reproduced
+defects now have regression coverage: collapsed `ServingSizeOneCapsule` is
+serving text rather than an ingredient; distinct amount-only boxes separate
+overlapping dense rows; and a dose plus standalone %DV without a readable name
+retains an unidentified partial row rather than naming it `25%`. Standalone
+%DV boxes now populate the existing percent field. Wrapped-name tests remain.
+Rules v4 was an intermediate measured run; v5 includes the unidentified-row
+fix. Historical receipts are not overwritten.
+
+The same 60 images were rerun under
+`reports/submission_dsld_ocr_rows_v4_20260911/` (intermediate) and
+`reports/submission_dsld_ocr_rows_v5_20260911/` (final). Final outcomes: 50
+drafts, 10 abstentions, no adapter failures. Missing-row findings fell from
+573 at v3 to 404 at v5, still above the earlier v2 count of 279; these are
+catalog comparisons, not independent accuracy measurements. Thirteen rows
+are explicitly unreadable. DSLD 695 now has one ingredient and the printed
+serving text. DSLD 739 has 16 rows instead of one merged row, but still misses
+early nutrients and has OCR misspellings. No qualification is claimed.
+Next OCR work should address header/row boundaries and ambiguous missing-name
+or multi-amount rows, using the preserved geometry rather than guessed text.
+Verification: 540 affected submission/holdout tests passed, 24 opt-in skips;
+32 focused adapter/diagnostic tests passed. All three new defect tests were
+observed failing before their fixes. The full fast suite was not rerun for
+this bounded follow-up; its previous checkpoint remains recorded above.
+The targeted release run passed its 32 tests and artifact/identity gates, then
+failed the final citation gate on a PubMed HTTP 400 batch response. An unchanged
+rerun of `verify_backed_studies_citations.py --strict` passed all 449 PMIDs
+(zero not-found); no clinical data was edited and no gate was bypassed.
+
+Gemini's two failed public labels (739 and 2502) were each retried once in this
+turn and both again returned HTTP 503. See the local-only
+`reports/submission_dsld_gemini38_availability_20260911/`. No automatic retry
+loop, alternate key, paid upgrade, private upload or production adapter was
+introduced. The one successful prior reading remains encouraging but does
+not establish availability or qualification.
+
+One bounded comparator run used the already available `gemini-3-flash-preview`
+with the same prompt and settings, saved at
+`reports/submission_dsld_gemini3flash_smoke_20260911/`. All three requests
+returned HTTP 200, but none yielded an accepted draft: 695 pointed a child at
+a non-blend header, 739 omitted the required `abstain_reason`, and 2502 stopped
+without completing its reading. This distinguishes the earlier HTTP failures
+from content/contract failures. No output was repaired or promoted. Next hosted
+work must address these explicit contract failures without a second schema
+owner, then repeat a bounded public-image test before a larger comparison.
+
 ### Gemini public-image smoke — 2026-09-11
 
 At the operator's explicit request, tested the configured Gemini key with
