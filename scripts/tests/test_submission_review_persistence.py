@@ -424,3 +424,22 @@ def test_a_failed_draft_load_never_saves_over_the_server_copy() -> None:
     })()""")
 
     assert out["saves"] == 0
+
+
+def test_a_background_render_never_overwrites_the_raw_json_being_typed() -> None:
+    # A reviewer pasting a corrected payload into the advanced box lost it when
+    # any re-render (save, refresh, diagnostics) fired mid-edit.
+    out = _exercise("""(async()=>{
+      state.payload={brandName:'Original',ingredientRows:[],statements:[]};
+      const box=document.getElementById('raw-json');
+      box.value='{"brandName":"Half-typed';
+      document.activeElement=box;
+      renderRawJson();
+      out.whileTyping=box.value;
+      document.activeElement=null;
+      renderRawJson();
+      out.afterBlur=box.value.includes('Original');
+    })()""")
+
+    assert out["whileTyping"] == '{"brandName":"Half-typed'
+    assert out["afterBlur"] is True

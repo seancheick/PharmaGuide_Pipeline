@@ -1557,13 +1557,22 @@ function defaultPayload() {
   };
 }
 
+// The advanced box is also an input. A reviewer may be part-way through
+// pasting a corrected payload into it, and a background re-render (a save
+// reply, a URL refresh, diagnostics) must not overwrite what they are typing.
+function renderRawJson() {
+  const box = $('raw-json');
+  if (document.activeElement === box) return;
+  box.value = JSON.stringify(state.payload, null, 2);
+}
+
 function renderRows() {
   const tbody = $('rows-table').querySelector('tbody');
   tbody.textContent = '';
   state.payload.ingredientRows.forEach((row, index) => {
     renderIngredientRow(row, state.payload.ingredientRows, index, 0, tbody);
   });
-  $('raw-json').value = JSON.stringify(state.payload, null, 2);
+  renderRawJson();
 }
 
 function renderIngredientRow(row, owner, index, depth, tbody) {
@@ -1725,7 +1734,7 @@ function syncFieldsFromPayload() {
   $('other-ingredients').value = state.payload.otherIngredients ?? '';
   $('other-ingredients').disabled =
     $('other-disclosure').value !== 'present';
-  $('raw-json').value = JSON.stringify(state.payload, null, 2);
+  renderRawJson();
   renderStatements();
 }
 
@@ -1753,7 +1762,7 @@ function syncScalarFields() {
     maxDailyServings: existingServingSizes[0]?.maxDailyServings ?? null,
     unit,
   }, ...existingServingSizes.slice(1)];
-  $('raw-json').value = JSON.stringify(state.payload, null, 2);
+  renderRawJson();
   updateShaPreview();
 }
 
@@ -1767,7 +1776,7 @@ function syncDisclosureFields() {
     $('other-ingredients').value = '';
     $('other-ingredients').disabled = true;
   }
-  $('raw-json').value = JSON.stringify(state.payload, null, 2);
+  renderRawJson();
   updateShaPreview();
 }
 
