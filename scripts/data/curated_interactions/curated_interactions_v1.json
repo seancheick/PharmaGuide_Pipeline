@@ -3000,7 +3000,7 @@
       "agent2_id": "C0059752",
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Vinpocetine has published pharmacokinetic interaction potential through CYP and P-glycoprotein pathways, and product literature reports changes in coagulation measures when vinpocetine is added to warfarin. Because vinpocetine is also a non-lawful supplement ingredient in the U.S. catalog, anticoagulant users should treat the combination as clinically important.",
+      "mechanism": "Vinpocetine has published pharmacokinetic interaction potential through CYP and P-glycoprotein pathways, and product literature reports changes in coagulation measures when vinpocetine is added to warfarin. Anticoagulant users should treat the combination as clinically important.",
       "management": "Avoid starting vinpocetine while taking warfarin or another anticoagulant unless a prescriber is explicitly managing the risk. If exposure occurred, tell the anticoagulation clinician and ask whether INR or bleeding monitoring is needed.",
       "source_urls": [
         "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/vinpocetine-dietary-supplements",

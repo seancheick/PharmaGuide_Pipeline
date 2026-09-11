@@ -44,6 +44,7 @@ DUAL_CLASSIFIED_IQM_KEYS = [
     "yohimbe",
     "cascara_sagrada",
     "7_keto_dhea",
+    "vinpocetine",
 ]
 
 

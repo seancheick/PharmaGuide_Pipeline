@@ -336,6 +336,11 @@ def test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classificatio
         # (banned_recalled high_risk status drives the safety gate). Same
         # pattern as 7_keto_dhea above.
         ("dhea", "BANNED_DHEA"),
+        # Vinpocetine: owner decision 2026-09-11 that quality and risk are
+        # separate outputs. IQM scores absorption; NOOTROPIC_VINPOCETINE keeps
+        # the FDA reproductive-risk CAUTION (legal conclusion still tentative).
+        # Pending clinician sign-off.
+        ("vinpocetine", "NOOTROPIC_VINPOCETINE"),
     }
     assert ("citrus_bioflavonoids", "RISK_BITTER_ORANGE") not in observed_parent_ids
     assert all(status in {"high_risk", "watchlist"} for _, _, status, _ in overlaps)

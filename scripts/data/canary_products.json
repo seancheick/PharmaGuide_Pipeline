@@ -3,7 +3,7 @@
     "schema_version": "1.0.0",
     "description": "Curated 35-product v4 canary set spanning 14 primary classes (single_nutrient, multivitamin, prenatal_multi, probiotic, fish_oil, herbal_branded_extract / unstandardized / marker_pct, sports_opaque / transparent, specialty, greens_superfood, blocked_verdict, manufacturer_signal_only) and all 4 B5 router class routes (probiotic / multi_or_prenatal / sports_active / generic). Each entry encodes expected_b5_class, expected_dose_route_v4, edge_cases, and v3 shipped score/verdict for regression baselining.",
     "purpose": "v4 dose + B5 class-aware + cert coverage canary set. Used by test_v4_canary_coverage.py to guarantee every product class + edge case the v4 design depends on is exercised on real shipped data. Add a new entry before adding a new class to the scorer; remove an entry only with a decision log note. Source of truth for canary-based regression review and the score-delta report.",
-    "last_updated": "2026-05-29",
+    "last_updated": "2026-09-11",
     "retired_canaries": [
       {
         "dsld_id": "294063",
@@ -540,17 +540,17 @@
       "dsld_id": "232923",
       "brand_name": "Life Extension",
       "product_name": "Cognitex Elite Pregnenolone",
-      "primary_class": "blocked_verdict",
-      "subclass": "blocked_blend_contains_vinpocetine",
+      "primary_class": "specialty",
+      "subclass": "caution_high_risk_active_scored",
       "expected_b5_class": "generic",
-      "expected_dose_route_v4": "blocked_short_circuit",
+      "expected_dose_route_v4": "blend_per_component_or_not_scored",
       "edge_cases": [
-        "banned_ingredient_inside_multi_blend",
-        "blocked_verdict_short_circuits_dose"
+        "high_risk_active_scored_with_caution",
+        "individually_dosed_high_risk_active_beside_partial_blend"
       ],
       "v3_shipped_score": null,
       "v3_shipped_verdict": "BLOCKED",
-      "notes": "Tracks the 'cognitive blend with vinpocetine / blocked-risk' archetype, NOT product continuity for any single brand. Replaced historical canary 16072 (Thorne Memoractiv) on 2026-05-23 because the current Thorne Memoractiv reformulated out of vinpocetine and no longer carries the BLOCKED verdict. Life Extension Cognitex Elite Pregnenolone is the current shipped multi-active cognitive blend whose B0/B1 gate fires on vinpocetine — same archetype, same edge cases. Historical anchors (rotated out as catalog evolved): 16072 Thorne Memoractiv (pre-2026-05 BLOCKED, current SAFE)."
+      "notes": "Tracks the 'high-risk active that is scored and carries CAUTION' archetype, NOT product continuity for any single brand. Vinpocetine 20 mg is dosed individually beside a partially disclosed blueberry blend. The 2026-08-24 policy review moved vinpocetine (NOOTROPIC_VINPOCETINE) from BLOCKED to CAUTION: FDA's dietary-ingredient conclusion is still tentative, while its reproductive-risk advisory stands. The 2026-09-11 IQM entry gave vinpocetine a verified scoring identity, so this product is now scored (47.2 on 2026-09-11) with CAUTION kept; quality and risk are separate outputs. v3_shipped_* are the historical v3 values. Historical anchors: 16072 Thorne Memoractiv (pre-2026-05 BLOCKED, since reformulated without vinpocetine)."
     },
     {
       "dsld_id": "211448",

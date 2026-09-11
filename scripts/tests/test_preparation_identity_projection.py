@@ -397,7 +397,11 @@ def _safety_identity_product(label: str, quantity: float, unit: str) -> dict:
 
 @pytest.mark.parametrize("label,quantity,unit,safety_source,safety_id", [
     ("Nickel", 5.0, "mcg", "harmful_additives", "ADD_NICKEL"),
-    ("Vinpocetine", 20.0, "mg", "banned_recalled_ingredients", "NOOTROPIC_VINPOCETINE"),
+    # A high-risk active with no scoring identity anywhere. Vinpocetine held
+    # this slot until it gained a verified IQM entry (2026-09-11); the guard
+    # it illustrates is unchanged.
+    ("5a-Hydroxy Laxogenin", 25.0, "mg", "banned_recalled_ingredients",
+     "ADD_5A_HYDROXY_LAXOGENIN"),
 ])
 @pytest.mark.parametrize("supplied_canonical", [None, "vitamin_c"])
 def test_safety_only_recognition_keeps_required_primary_identity_unresolved(
@@ -516,7 +520,7 @@ def test_classification_keeps_a_safety_only_conflict_in_the_required_role(
     assert scoring.mapped_coverage == 0.5
 
 
-@pytest.mark.parametrize("label", ["Nickel", "Vinpocetine"])
+@pytest.mark.parametrize("label", ["Nickel", "5a-Hydroxy Laxogenin"])
 @pytest.mark.parametrize("exclusion", ["inactive", "excipient"])
 def test_safety_recognition_does_not_make_an_excluded_source_required(
     enricher: SupplementEnricherV3, label: str, exclusion: str,

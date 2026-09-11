@@ -38,9 +38,9 @@
       }
     },
     "statistics": {
-      "total_parents": 631,
-      "total_forms": 1421,
-      "total_form_aliases": 12110,
+      "total_parents": 632,
+      "total_forms": 1422,
+      "total_form_aliases": 12114,
       "parents_with_parent_aliases": 120,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -55,13 +55,13 @@
       "herbs": 193,
       "minerals": 29,
       "mushroom_extracts": 10,
-      "other": 25,
+      "other": 26,
       "probiotics": 47,
       "proteins": 16,
       "vitamins": 25
     },
     "schema_version": "5.5.4",
-    "last_updated": "2026-09-06",
+    "last_updated": "2026-09-11",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1762,7 +1762,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 631,
+    "total_entries": 632,
     "total_ingredients": 1416,
     "data_quality": {
       "review_status": "stub"
@@ -73747,5 +73747,56 @@
       "menadione",
       "vitamin k-3"
     ]
+  },
+  "vinpocetine": {
+    "standard_name": "Vinpocetine",
+    "category": "other",
+    "description": "Semi-synthetic ethyl ester of apovincaminic acid, derived from the Vinca minor alkaloid vincamine; low, food-dependent oral bioavailability. FDA's reproductive-risk advisory is carried by the separate safety policy (NOOTROPIC_VINPOCETINE), not by this quality entry.",
+    "forms": {
+      "vinpocetine (unspecified)": {
+        "bio_score": 6,
+        "natural": false,
+        "score": 6,
+        "absorption": "~6.7% absolute oral bioavailability in elderly volunteers, oral vs IV (PMID 2624613); 60-100% higher when taken with food (PMID 1418055)",
+        "notes": "Rapid, extensive ester cleavage to apovincaminic acid; elimination half-life about 2 h in older adults (PMID 3691609) and linear kinetics without accumulation at 15-30 mg/day (PMID 2384112). A 1979 study reported 56.6% bioavailability (PMID 582791); the later IV-referenced 6.7% estimate is used. Score reflects absorption only; the CAUTION policy lives on the safety entry.",
+        "aliases": [
+          "vinpocetine",
+          "ethyl apovincaminate",
+          "apovincaminic acid ethyl ester",
+          "cavinton"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.067,
+          "range_low": 0.05,
+          "range_high": 0.13,
+          "quality": "poor"
+        }
+      }
+    },
+    "cui": "C0059752",
+    "rxcui": "24506",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "other",
+    "cui_note": "",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-09-11",
+      "research_status": "validated"
+    },
+    "external_ids": {
+      "unii": "543512OBTC",
+      "cas": "42971-09-5",
+      "pubchem_cid": 443955
+    },
+    "aliases": []
   }
 }
