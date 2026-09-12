@@ -694,8 +694,26 @@ const RELATION_TEXT = {
     'means when one barcode has more than one product.',
 };
 
+/** The decision the reviewer made, while the recorded check still supports it.
+ *
+ * A relation is an answer about one catalog record, recorded against one
+ * lookup. Re-running the lookup can retract that match — the catalog is
+ * rebuilt, the record is withdrawn, a different record now answers to the
+ * barcode — and an answer to a question that is no longer being asked must
+ * not reach an approval. Readiness and approval both read this, so the page
+ * cannot offer what it would then fail to send.
+ */
+function activeCatalogRelation() {
+  const relation = state.catalogRelation;
+  if (!relation || state.identityRecorded !== 'catalog_match') return null;
+  const stillMatched = (state.identityLookup?.matches ?? []).some(
+    (match) => match.dsld_id === relation.dsldId,
+  );
+  return stillMatched ? relation : null;
+}
+
 function renderCatalogRelationChoice() {
-  const chosen = state.catalogRelation;
+  const chosen = activeCatalogRelation();
   $('comparison-choice').textContent = chosen
     ? RELATION_TEXT[chosen.kind](chosen.dsldId)
     : 'Decide from the differences above. Neither is assumed.';
@@ -963,9 +981,7 @@ function readinessChecks() {
     },
   ];
   if (submission.kind === 'missing_product') {
-    const relation = state.identityRecorded === 'catalog_match'
-      ? state.catalogRelation
-      : null;
+    const relation = activeCatalogRelation();
     checks.push({
       done: state.identityRecorded === 'no_match_verified' || Boolean(relation),
       todo: state.identityRecorded === 'catalog_match'
@@ -2409,7 +2425,7 @@ async function approve() {
   if (
     state.selected?.kind === 'missing_product' &&
     state.identityRecorded !== 'no_match_verified' &&
-    !(state.identityRecorded === 'catalog_match' && state.catalogRelation)
+    !activeCatalogRelation()
   ) {
     return setStatus('Record a fresh verified no-match identity check first.', true);
   }
@@ -2434,10 +2450,11 @@ async function approve() {
     approved_schema_version: 'manual_label_v1',
     approved_payload: state.payload,
   };
-  if (state.catalogRelation?.kind === 'correction') {
-    fields.correction_target_dsld_id = state.catalogRelation.dsldId;
-  } else if (state.catalogRelation?.kind === 'edition') {
-    fields.edition_of_dsld_id = state.catalogRelation.dsldId;
+  const relation = activeCatalogRelation();
+  if (relation?.kind === 'correction') {
+    fields.correction_target_dsld_id = relation.dsldId;
+  } else if (relation?.kind === 'edition') {
+    fields.edition_of_dsld_id = relation.dsldId;
   }
   if (state.productImage?.kind === 'photo') {
     fields.product_image_photo_id = state.productImage.id;
