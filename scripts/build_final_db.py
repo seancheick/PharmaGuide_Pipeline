@@ -82,6 +82,7 @@ from identity.safety import (
 from identity.interaction import (
     interaction_tags_from_text,
     normalize_catalog_interaction_tag,
+    normalize_interaction_canonical_id,
 )
 from scoring_input_contract import get_scoring_ingredients
 from serving_frequency import (
@@ -1714,6 +1715,34 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
     ingredients = safe_list(iqd.get("ingredients"))
 
+    # BLOCKED/UNSAFE products ship their warning with a null score (see the
+    # docstring). An unresolved identity conflict and a failed strict scoring
+    # contract both protect a *score*. Neither applies to a row that is
+    # unresolved only because its sole recognition is a safety record, on a
+    # product that ships no score: withholding that product hides the ban from
+    # the person scanning it. Every other identity or contract finding still
+    # blocks, display defects included.
+    ships_no_score = (
+        safe_str(scored.get("_v4_quality_status")) == "suppressed_safety"
+        and safe_str(scored.get("verdict")).upper() in {"BLOCKED", "UNSAFE"}
+    )
+    conflict_paths = {
+        safe_str(ingredient.get("raw_source_path"))
+        for ingredient in ingredients
+        if isinstance(ingredient, dict)
+        and ingredient.get("identity_disposition") == "identity_conflict"
+    }
+    safety_only_paths = {
+        safe_str(ingredient.get("raw_source_path"))
+        for ingredient in ingredients
+        if ships_no_score
+        and isinstance(ingredient, dict)
+        and ingredient.get("identity_disposition") == "identity_conflict"
+        and ingredient.get("identity_decision_reason")
+        == "safety_recognition_without_primary_identity"
+        and safe_str(ingredient.get("safety_identity_id"))
+    }
+
     # Fresh enriched rows carry the shared identity disposition. Reuse the
     # release audit rather than reproducing its identity rules here: direct
     # final-DB builds then fail closed on a stamped conflict or missing label,
@@ -1724,11 +1753,17 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         for ingredient in ingredients
     ):
         for record in audit_product(enriched):
-            if record.failed:
-                issues.append(
-                    "review_queue: identity integrity "
-                    f"{record.source_path or 'unknown'}:{record.violation}"
-                )
+            if not record.failed:
+                continue
+            if (
+                record.violation == "unresolved_identity_conflict"
+                and record.source_path in safety_only_paths
+            ):
+                continue
+            issues.append(
+                "review_queue: identity integrity "
+                f"{record.source_path or 'unknown'}:{record.violation}"
+            )
 
     for idx, ingredient in enumerate(ingredients):
         if not isinstance(ingredient, dict):
@@ -1765,7 +1800,12 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     )
     if not strict_scoring_contract:
         issues.append("missing scored.strict_scoring_contract")
-    elif strict_scoring_contract.get("passed") is not True:
+    elif strict_scoring_contract.get("passed") is not True and not (
+        safety_only_paths
+        and conflict_paths <= safety_only_paths
+        and set(strict_scoring_contract.get("findings") or [])
+        == {"identity_disposition_not_scoreable:identity_conflict"}
+    ):
         issues.append(
             "review_queue: export cannot ship score with failed strict "
             "scoring contract."
@@ -8501,6 +8541,22 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
             ing.get("raw_source_text"),
             ing.get("normalized_key"),
         )
+
+    # A safety record that names an ingredient the interaction rules join on —
+    # CBD, red yeast rice, kava — carries that ingredient even when its row has
+    # no scoring identity and never renders as a primary active. The
+    # interaction owner's alias table is the one authority on which records
+    # those are; any other regulatory id is posture, not identity, and stays
+    # out of the tags.
+    for ing in ingredients:
+        if not isinstance(ing, dict):
+            continue
+        safety_id = safe_str(ing.get("safety_identity_id"))
+        interaction_id = (
+            normalize_interaction_canonical_id(safety_id) if safety_id else None
+        )
+        if interaction_id and interaction_id != safety_id:
+            add_interaction_tag(interaction_id)
 
     # Primary category — sourced from supplement_taxonomy (single source of truth)
     taxonomy = enriched.get("supplement_taxonomy") or (scored or {}).get("supplement_taxonomy") or {}

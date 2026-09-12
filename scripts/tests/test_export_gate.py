@@ -38,6 +38,7 @@ from build_final_db import (
     init_audit_counts,
     update_audit_state,
     validate_export_contract,
+    classify_product_categories,
     write_audit_report,
 )
 from core_export_model import PRODUCTS_CORE_COLUMNS
@@ -1404,3 +1405,121 @@ class TestInteractionProfileExport:
         """Products with no interactions should not have interaction_summary."""
         blob = build_detail_blob(_base_enriched(), _base_scored())
         assert "interaction_summary" not in blob
+
+
+# ─── BLOCKED/UNSAFE products ship their warning, not a score ───
+#
+# validate_export_contract documents that BLOCKED/UNSAFE products SHIP with a
+# null score because "the recall or ban reason is the data the user needs".
+# Two checks that protect a score — the identity audit's unresolved conflict
+# and the strict scoring contract — ran on that lane too. A banned active the
+# enricher recognizes only through a safety record has no scoring identity by
+# design, so every such product was withheld: someone scanning a CBD product
+# got "not found" instead of BLOCKED. CBD shipped BLOCKED on 2026-09-03 and
+# not since. These mirror products 222758 and 213013 at the export layer.
+
+_SAFETY_ONLY_FINDING = "identity_disposition_not_scoreable:identity_conflict"
+
+
+def _safety_only_row(path="ingredientRows[1].nestedRows[0]",
+                     label="Broad Spectrum Phytocannabinoids",
+                     safety_id="BANNED_CBD_US", **overrides):
+    row = {
+        "raw_source_text": label, "name": label, "standard_name": label,
+        "bio_score": None, "natural": None, "score": None, "notes": None,
+        "category": None, "mapped": False, "safety_hits": [],
+        "raw_source_path": path,
+        "source_label_name": label, "label_display_name": label,
+        "source_label_key": f"label:{label.lower()}",
+        "canonical_id": None, "canonical_id_before": None, "canonical_id_after": None,
+        "canonical_source_db": "unmapped", "scoreable_identity": False,
+        "recognized_non_scorable": True,
+        "recognition_source": "banned_recalled_ingredients",
+        "safety_identity_id": safety_id,
+        "identity_disposition": "identity_conflict",
+        "identity_decision_reason": "safety_recognition_without_primary_identity",
+        "role_classification": "active_unmapped",
+    }
+    row.update(overrides)
+    return row
+
+
+def _safety_only_product(row=None, **scored_overrides):
+    row = row or _safety_only_row()
+    enriched = _base_enriched(
+        product_name="Broad Spectrum Hemp+ Recovery",
+        activeIngredients=[{
+            "name": row["name"], "standardName": row["name"],
+            "raw_source_text": row["raw_source_text"],
+            "raw_source_path": row["raw_source_path"],
+            "quantity": 25, "unit": "mg",
+        }],
+        ingredient_quality_data={"ingredients": [row], "ingredients_scorable": []},
+    )
+    strict = {"passed": False, "findings": [_SAFETY_ONLY_FINDING]}
+    scored = _base_scored(**{"verdict": "BLOCKED", **scored_overrides},
+                          strict_scoring_contract=strict)
+    scored["scoring_metadata"]["strict_scoring_contract"] = strict
+    return enriched, scored
+
+
+def _gate_issues(enriched, scored):
+    return [issue for issue in validate_export_contract(enriched, scored)
+            if "identity integrity" in issue or "strict scoring contract" in issue]
+
+
+def test_a_banned_product_ships_its_blocked_verdict():
+    enriched, scored = _safety_only_product()
+    assert _gate_issues(enriched, scored) == []
+
+
+def test_a_product_that_ships_a_score_is_still_held_to_the_score_contract():
+    enriched, scored = _safety_only_product(
+        verdict="CAUTION", safety_verdict="CAUTION",
+        _v4_quality_status="not_scored", quality_score_status="not_scored",
+    )
+    issues = _gate_issues(enriched, scored)
+    assert any("unresolved_identity_conflict" in issue for issue in issues)
+    assert any("strict scoring contract" in issue for issue in issues)
+
+
+def test_an_identity_conflict_without_a_safety_recognition_still_blocks():
+    row = _safety_only_row(
+        recognition_source=None, safety_identity_id=None,
+        identity_decision_reason="botanical_source_identity_unresolved",
+    )
+    enriched, scored = _safety_only_product(row)
+    issues = _gate_issues(enriched, scored)
+    assert any("unresolved_identity_conflict" in issue for issue in issues)
+    assert any("strict scoring contract" in issue for issue in issues)
+
+
+def test_any_other_strict_contract_finding_still_blocks():
+    enriched, scored = _safety_only_product()
+    strict = {"passed": False, "findings": [_SAFETY_ONLY_FINDING, "missing_iqd_ingredients_scorable_list"]}
+    scored["strict_scoring_contract"] = strict
+    scored["scoring_metadata"]["strict_scoring_contract"] = strict
+    assert any("strict scoring contract" in issue for issue in _gate_issues(enriched, scored))
+
+
+def test_a_display_defect_on_a_banned_row_still_blocks():
+    row = _safety_only_row(identity_disposition="missing_display_label")
+    enriched, scored = _safety_only_product(row)
+    assert any("missing_display_label" in issue for issue in _gate_issues(enriched, scored))
+
+
+def test_a_banned_row_without_a_scoring_identity_still_carries_its_interaction_tag():
+    # 213013's shape: a nested row, no "CBD" in the product or row name, and no
+    # scoring identity. The interaction owner maps the safety record to the
+    # ingredient Quick Check joins on.
+    enriched, scored = _safety_only_product()
+    tags = classify_product_categories(enriched, scored)["key_ingredient_tags"]
+    assert "cbd" in tags
+
+
+def test_a_regulatory_record_that_is_not_an_ingredient_never_becomes_a_tag():
+    row = _safety_only_row(label="Maltodextrin", safety_id="ADD_MALTODEXTRIN",
+                           recognition_source="harmful_additives")
+    enriched, scored = _safety_only_product(row)
+    tags = classify_product_categories(enriched, scored)["key_ingredient_tags"]
+    assert not any(tag.startswith(("add_", "banned_")) for tag in tags)
