@@ -8,6 +8,18 @@ Function under the signed-in reviewer's own account.
 ## Run
 
 ```bash
+bash scripts/submission_review/start.sh
+```
+
+Opens the console, starting it only if it is not already up — a second copy
+would fail on the port, which reads like the console is broken when it is
+merely already running. Takes a port (`start.sh 8899`) and `--no-open` to
+print the URL instead of opening a browser. A cold start spends about half a
+minute building its identity index before the page answers.
+
+To run the server directly instead:
+
+```bash
 SUPABASE_URL=... SUPABASE_ANON_KEY=... \
   python3 scripts/submission_review/serve.py \
   --catalog-db scripts/dist/pharmaguide_core.db
