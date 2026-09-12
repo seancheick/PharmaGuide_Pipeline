@@ -509,3 +509,34 @@ def test_unapplied_raw_json_blocks_approval_and_does_not_leak_to_next_product():
     assert out['blocked'] is True
     assert out['pending'] is False
     assert out['brand'] == ''
+
+
+@pytest.mark.parametrize('change', ['none', 'revision', 'barcode', 'index_date', 'catalog_hit', 'outcome', 'missing', 'blocked', 'unknown_freshness', 'server_refused', 'manifest'])
+def test_reopening_restores_only_a_current_server_recorded_no_match(change):
+    out = _exercise("""(async()=>{
+      state.selected.kind='missing_product';state.selected.normalized_upc='030772032565';
+      const checkedAt='2026-09-12T12:00:00Z';
+      const check={recorded:true,satisfies_approval:true,outcome:'no_match_verified',
+        evidence_revision:2,index_built_at:checkedAt};
+      if(CHANGE==='revision')check.evidence_revision=1;
+      if(CHANGE==='server_refused')check.satisfies_approval=false;
+      if(CHANGE==='index_date')check.index_built_at='2026-09-11T12:00:00Z';
+      if(CHANGE==='outcome')check.outcome='catalog_match';
+      edge=async()=>({review:{draft:null,verifications:[],
+        current_evidence_revision:2,current_evidence_manifest_sha256:(CHANGE==='manifest'?'f':'e').repeat(64),
+        identity_check:CHANGE==='missing'?null:check}});
+      fetch=async()=>({ok:true,json:async()=>({canonical_gtin14:CHANGE==='barcode'?'00012345678905':'00030772032565',
+        index_revision:'current',index_built_at:checkedAt,
+        freshness:CHANGE==='blocked'?'blocked':CHANGE==='unknown_freshness'?'unknown':'fresh',
+        matches:CHANGE==='catalog_hit'?[{dsld_id:'123'}]:[]})});
+      await loadReview();out.recorded=state.identityRecorded;
+      if(CHANGE==='none'){
+        fetch=async()=>({ok:true,json:async()=>({...state.identityLookup,index_revision:'changed'})});
+        await checkIdentity();out.afterChange=state.identityRecorded;
+        await checkIdentity();out.afterRetry=state.identityRecorded;
+      }
+    })()""".replace('CHANGE',json.dumps(change)))
+    assert out['recorded'] == ('no_match_verified' if change == 'none' else None)
+    if change == 'none':
+        assert out['afterChange'] is None
+        assert out['afterRetry'] is None

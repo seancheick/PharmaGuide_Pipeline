@@ -436,16 +436,44 @@ async function checkIdentity() {
       payload.index_revision === state.identityLookup?.index_revision &&
       payload.canonical_gtin14 === state.identityLookup?.canonical_gtin14 &&
       payload.freshness !== 'blocked';
+    const previousLookup = state.identityLookup;
     state.identityLookup = payload;
-    if (!unchanged) state.identityRecorded = null;
+    if (!unchanged) {
+      state.identityRecorded = null;
+      // A changed snapshot invalidates even a previously hydrated receipt.
+      // Repeating the lookup must not resurrect that old decision.
+      if (previousLookup && state.review) state.review.identity_check = null;
+    }
+    restoreRecordedIdentity();
     renderIdentityCheck();
     setStatus('Identity check complete.');
   } catch (error) {
     if (!stillCurrent()) return;
     state.identityLookup = null;
     state.identityRecorded = null;
+    if (state.review) state.review.identity_check = null;
     renderIdentityCheck();
     setStatus(String(error.message ?? error), true);
+  }
+}
+
+function restoreRecordedIdentity() {
+  if (state.identityRecorded) return;
+  const check = state.review?.identity_check;
+  const lookup = state.identityLookup;
+  const selected = state.selected;
+  // Restoring a no-hit check is safe only after a fresh lookup still has no
+  // candidates. Overrides of real hits need to be explicitly reviewed again.
+  const checkedAt = Date.parse(check?.index_built_at);
+  if (selected?.kind === 'missing_product' && check?.outcome === 'no_match_verified' &&
+      check.recorded === true && check.satisfies_approval === true &&
+      check.evidence_revision === selected.evidence_revision &&
+      state.review.current_evidence_manifest_sha256 === selected.evidence_manifest_sha256 &&
+      lookup?.canonical_gtin14 === canonicalSubmissionGtin14() &&
+      ['fresh', 'warning'].includes(lookup.freshness) && lookup.index_revision &&
+      Array.isArray(lookup.matches) && lookup.matches.length === 0 &&
+      Number.isFinite(checkedAt) && checkedAt === Date.parse(lookup.index_built_at)) {
+    state.identityRecorded = 'no_match_verified';
   }
 }
 
@@ -477,6 +505,7 @@ async function requireCurrentIdentity() {
     if (state.selected?.id === submissionId) {
       state.identityLookup = current;
       state.identityRecorded = null;
+      if (state.review) state.review.identity_check = null;
       renderIdentityCheck();
     }
     throw error;
@@ -510,6 +539,7 @@ async function recordMatch(outcome, options = {}) {
     throw new Error('The selected submission changed. Review its current evidence.');
   }
   state.identityRecorded = outcome;
+  if (state.review) state.review.identity_check = null;
   renderIdentityCheck();
   return result;
 }
@@ -921,6 +951,11 @@ async function loadReview() {
   renderReviewBanner();
   setDecisionAvailability();
   setApprovedReadOnly();
+  if (submission.kind === 'missing_product' &&
+      ['submitted', 'under_review'].includes(submission.review_status) &&
+      review?.identity_check) {
+    await checkIdentity();
+  }
 }
 
 function scheduleReviewSave() {
