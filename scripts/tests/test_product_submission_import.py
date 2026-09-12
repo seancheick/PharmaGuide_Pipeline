@@ -1306,6 +1306,19 @@ def test_an_edition_may_share_a_barcode_with_an_imported_product(tmp_path):
     assert (tmp_path / "PG_SUB_11111111222243338444555555555555.json").exists()
 
 
+def test_an_imported_product_remains_replayable_after_an_edition(tmp_path):
+    from product_submission_import import materialize_approved_submissions
+
+    original = _export()
+    edition = _export(submission_id=_EDITION_ID, edition_of_dsld_id="178392")
+    materialize_approved_submissions([original, edition], output_dir=tmp_path)
+    before = {p.name: p.read_bytes() for p in tmp_path.iterdir()}
+    result = materialize_approved_submissions([original, edition], output_dir=tmp_path)
+    assert result.imported_submission_ids == []
+    assert result.already_imported_submission_ids == [original['submission_id'], _EDITION_ID]
+    assert {p.name: p.read_bytes() for p in tmp_path.iterdir()} == before
+
+
 def test_a_correction_may_follow_an_edition_on_the_same_barcode(tmp_path):
     from product_submission_import import materialize_approved_submissions
 

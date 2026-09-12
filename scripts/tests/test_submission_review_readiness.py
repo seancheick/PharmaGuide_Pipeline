@@ -644,3 +644,35 @@ def test_the_same_equivalence_written_two_ways_still_compares():
         .map(r=>[r[0],r[3]]));
     """)
     assert out["status"] == {"Folate": "differs", "Niacin": "differs"}
+
+
+def test_mass_scales_are_not_compared_without_conversion():
+    out = _catalog_hit("""
+      out.status = [];
+      for (const [left, right] of [['g','mg'], ['mg','mcg'], ['mg DFE','mcg DFE']]) {
+        const rows = labelComparisonRows(
+          {ingredientRows:[{name:'Nutrient',quantity:[{quantity:1,unit:left}]}]},
+          {ingredientRows:[{name:'Nutrient',quantity:[{quantity:1000,unit:right}]}]});
+        out.status.push(rows.find(r=>r[0]==='Nutrient')[3]);
+      }
+    """)
+    assert out['status'] == ['units', 'units', 'units']
+
+
+def test_comparison_preserves_blend_members_repeated_rows_and_all_amounts():
+    out = _catalog_hit("""
+      const original={ingredientRows:[{name:'Blend',quantity:[{quantity:100,unit:'mg'}],
+        nestedRows:[{name:'Herb',quantity:[{quantity:10,unit:'mg'}]},
+                    {name:'Herb',quantity:[{quantity:20,unit:'mg'}]}]},
+        {name:'Vitamin',forms:[{name:'Form A'}],quantity:[{quantity:1,unit:'mg'},
+          {quantity:50,unit:'IU'}]}]};
+      const changed=structuredClone(original);
+      changed.ingredientRows[0].nestedRows[0].quantity[0].quantity=15;
+      changed.ingredientRows[1].quantity[1].quantity=60;
+      changed.ingredientRows[1].forms[0].name='Form B';
+      out.rows=labelComparisonRows(changed,original);
+    """)
+    changed = [row for row in out['rows'] if row[3] == 'differs']
+    assert len(changed) == 3
+    assert any('Herb' in row[0] for row in changed)
+    assert any('forms' in row[0].lower() for row in changed)

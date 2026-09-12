@@ -800,7 +800,10 @@ def materialize_approved_submissions(
         # under two ids. An edition or a correction is a recorded decision that
         # a second record on this barcode is intended, backed by a catalog match
         # the approval gate verified, so it is not a collision.
-        if gtin14 is not None and _catalog_relation(raw_row) is None:
+        # An exact existing receipt is checked below. Its unchanged replay is
+        # not a new competing identity when another reviewed edition arrived.
+        if (gtin14 is not None and submission_id not in receipt_rows
+                and _catalog_relation(raw_row) is None):
             for owner_submission_id, owner_product_id in sorted(
                 upc_owners.get(gtin14, ())
             ):

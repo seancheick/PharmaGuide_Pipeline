@@ -726,26 +726,37 @@ function unitKind(unit) {
   // Keyed by the equivalence itself, not the whole string: "mcg DFE" and
   // "mcg DFE (as folic acid)" measure the same thing, so a real change in
   // amount between them is evidence, not a unit difference.
-  const equivalent = text.match(/\b(rae|dfe|ne|alpha-te|a-te)\b/);
-  if (equivalent) return `equivalent:${equivalent[1]}`;
-  if (/^(mcg|µg|ug|mg|g)$/.test(text)) return 'mass';
+  const equivalent = text.match(/^(mcg|µg|ug|mg|g)\s+(rae|dfe|ne|alpha-te|a-te)\b/);
+  if (equivalent) return `${equivalent[1]} ${equivalent[2]}`;
+  // Unit scale matters too: 1 g and 1000 mg must not be called different
+  // doses without the pipeline's conversion. This view does no conversion.
   return text;
 }
 
 function amountsByName(label) {
   const amounts = new Map();
-  for (const row of label?.ingredientRows ?? []) {
-    const name = String(row.name ?? '').trim();
-    if (!name) continue;
-    const quantity = (row.quantity ?? [])[0] ?? {};
-    amounts.set(name.toLowerCase(), {
-      name,
-      unit: quantity.unit ?? null,
-      text: [quantity.quantity, quantity.unit].filter(
-        (part) => part !== undefined && part !== null && part !== '',
-      ).join(' ') || '—',
-    });
+  function visit(rows, parent = '') {
+    const occurrences = new Map();
+    for (const row of rows) {
+      const name = String(row.name ?? '').trim();
+      if (!name) continue;
+      const path = parent ? `${parent} / ${name}` : name;
+      const count = (occurrences.get(name.toLowerCase()) ?? 0) + 1;
+      occurrences.set(name.toLowerCase(), count);
+      const key = `${path.toLowerCase()} [${count}]`;
+      const quantities = row.quantity ?? [];
+      amounts.set(key, {
+        name: path,
+        unit: quantities.map((quantity) => unitKind(quantity.unit)).join(';'),
+        text: quantities.map((quantity) => [quantity.quantity, quantity.unit].filter(
+          (part) => part !== undefined && part !== null && part !== '',
+        ).join(' ')).join('; ') || '—',
+        forms: (row.forms ?? []).map((form) => form.name).filter(Boolean).join('; '),
+      });
+      visit(row.nestedRows ?? [], `${path} [${count}]`);
+    }
   }
+  visit(label?.ingredientRows ?? []);
   return amounts;
 }
 
@@ -774,7 +785,7 @@ function labelComparisonRows(submitted, catalog) {
     let status = 'differs';
     if (left && right) {
       if (left.text === right.text) status = 'same';
-      else if (unitKind(left.unit) !== unitKind(right.unit)) status = 'units';
+      else if (left.unit !== right.unit) status = 'units';
     }
     rows.push([
       (left ?? right).name,
@@ -782,6 +793,12 @@ function labelComparisonRows(submitted, catalog) {
       right ? right.text : 'not on that record',
       status,
     ]);
+    if (left?.forms || right?.forms) {
+      rows.push([
+        `${(left ?? right).name} — forms`, left?.forms || '—', right?.forms || '—',
+        left?.forms === right?.forms ? 'same' : 'differs',
+      ]);
+    }
   }
   return rows;
 }
