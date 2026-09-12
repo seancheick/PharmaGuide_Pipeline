@@ -546,7 +546,10 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
         )
 
     submission_id = _required_uuid(export_row["submission_id"], "submission_id")
-    reviewer_id = _required_uuid(export_row["reviewer_id"], "reviewer_id")
+    # An approval must name a real reviewer, so the id is still required and
+    # validated — it just does not travel into the label. Nothing downstream
+    # reads it, and the shipped catalog and this repository are public.
+    _required_uuid(export_row["reviewer_id"], "reviewer_id")
     kind = _required_string(export_row["kind"], "kind", max_length=30)
     if kind not in _ALLOWED_KINDS:
         raise SubmissionImportError("kind is unsupported")
@@ -623,7 +626,6 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
             "label_verified_at": verified_date,
             "review_status": "verified",
             "reviewer": REVIEWER_DISPLAY_NAME,
-            "reviewer_record_id": reviewer_id,
         },
         "label_record_metadata": {
             "source_name": "PharmaGuide verified product submission",
@@ -757,15 +759,38 @@ def materialize_approved_submissions(
         output_path = destination / f"{product_id}.json"
         existing_receipt = receipt_rows.get(submission_id)
         if existing_receipt is not None:
-            if (
-                existing_receipt.get("label_sha256") != label_hash
-                or not output_path.exists()
-                or hashlib.sha256(output_path.read_bytes()).hexdigest() != label_hash
+            existing_hash = (
+                hashlib.sha256(output_path.read_bytes()).hexdigest()
+                if output_path.exists() else None
+            )
+            if existing_receipt.get("label_sha256") == label_hash and existing_hash == label_hash:
+                already_imported.append(submission_id)
+                continue
+            # Recreate exactly the previous serializer's private-account field.
+            # Only this known privacy-only transition may change an immutable
+            # receipt. No normalization or clinical-field edits are accepted.
+            legacy_label = {
+                **label,
+                "manual_product_provenance": {
+                    **label["manual_product_provenance"],
+                    "reviewer_record_id": _required_uuid(raw_row["reviewer_id"], "reviewer_id"),
+                },
+            }
+            legacy_hash = hashlib.sha256(
+                (json.dumps(legacy_label, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+            ).hexdigest()
+            if not (
+                existing_receipt.get("label_sha256") == legacy_hash
+                and existing_hash in {legacy_hash, label_hash}
+                and existing_receipt.get("output_file") == output_path.name
+                and existing_receipt.get("product_id") == product_id
             ):
                 raise SubmissionImportError(
                     "an imported submission changed after approval"
                 )
-            already_imported.append(submission_id)
+            # The new bytes with the old receipt also recover a crash between
+            # the two atomic replacements. Preserve promotion state below.
+            prepared.append((submission_id, label, serialized, output_path))
             continue
         if output_path.exists():
             try:
@@ -810,6 +835,7 @@ def materialize_approved_submissions(
         _atomic_write_text(output_path, serialized)
         label_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
         receipt_rows[submission_id] = {
+            **receipt_rows.get(submission_id, {}),
             "label_sha256": label_hash,
             "output_file": output_path.name,
             "product_id": label["id"],

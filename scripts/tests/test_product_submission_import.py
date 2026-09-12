@@ -84,7 +84,6 @@ def test_builds_pipeline_owned_identity_and_honest_private_provenance():
         "label_verified_at": "2026-07-30",
         "review_status": "verified",
         "reviewer": "PharmaGuide Clinical Team",
-        "reviewer_record_id": "3f276b64-0836-4bea-9453-1c8db4d1f8dd",
         "source_kind": "private_product_submission",
         "source_record_id": "018f4c79-7c7e-4c70-9d62-7fc3b9ce6a11",
     }
@@ -94,6 +93,79 @@ def test_builds_pipeline_owned_identity_and_honest_private_provenance():
     serialized = json.dumps(label).lower()
     assert "user_id" not in serialized
     assert "object_path" not in serialized
+    # The label ships in a public repository and into the catalog. It records
+    # that a named human verified it, never the reviewer's account id: nothing
+    # reads that id, and an account identifier is not label provenance.
+    assert _export()["reviewer_id"] not in serialized
+
+
+@pytest.mark.parametrize("crash_after_label", [False, True])
+def test_legacy_reviewer_id_redaction_preserves_receipt_and_retries(
+    tmp_path, monkeypatch, crash_after_label
+):
+    import product_submission_import as importer
+
+    original = importer.build_manual_label
+
+    def legacy(row):
+        label = original(row)
+        label["manual_product_provenance"]["reviewer_record_id"] = row["reviewer_id"]
+        return label
+
+    row = _export()
+    monkeypatch.setattr(importer, "build_manual_label", legacy)
+    result = importer.materialize_approved_submissions([row], output_dir=tmp_path)
+    path = result.output_paths[0]
+    receipt_path = tmp_path / importer.RECEIPT_FILE
+    receipts = json.loads(receipt_path.read_text())
+    receipts["submissions"][row["submission_id"]]["promoted_catalog_version"] = "existing-release"
+    receipt_path.write_text(json.dumps(receipts))
+    monkeypatch.setattr(importer, "build_manual_label", original)
+    if crash_after_label:
+        path.write_text(json.dumps(original(row), ensure_ascii=False, indent=2) + "\n")
+    importer.materialize_approved_submissions([row], output_dir=tmp_path)
+    assert row["reviewer_id"] not in path.read_text()
+    updated_receipt = json.loads(receipt_path.read_text())["submissions"][row["submission_id"]]
+    assert updated_receipt["promoted_catalog_version"] == "existing-release"
+    retry = importer.materialize_approved_submissions([row], output_dir=tmp_path)
+    assert retry.already_imported_submission_ids == [row["submission_id"]]
+
+
+@pytest.mark.parametrize("tamper", ["label", "approval", "reviewer", "receipt"])
+def test_privacy_migration_refuses_any_other_change(tmp_path, monkeypatch, tamper):
+    import product_submission_import as importer
+
+    original = importer.build_manual_label
+
+    def legacy(row):
+        label = original(row)
+        label["manual_product_provenance"]["reviewer_record_id"] = row["reviewer_id"]
+        return label
+
+    row = _export()
+    monkeypatch.setattr(importer, "build_manual_label", legacy)
+    result = importer.materialize_approved_submissions([row], output_dir=tmp_path)
+    path = result.output_paths[0]
+    receipt_path = tmp_path / importer.RECEIPT_FILE
+    monkeypatch.setattr(importer, "build_manual_label", original)
+    if tamper == "label":
+        label = json.loads(path.read_text())
+        label["fullName"] = "Changed product"
+        path.write_text(json.dumps(label, ensure_ascii=False, indent=2) + "\n")
+    elif tamper == "approval":
+        payload = _payload()
+        payload["ingredientRows"][0]["quantity"][0]["quantity"] = 100
+        row = _export(payload)
+    elif tamper == "reviewer":
+        row["reviewer_id"] = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+    else:
+        receipts = json.loads(receipt_path.read_text())
+        receipts["submissions"][row["submission_id"]]["label_sha256"] = "0" * 64
+        receipt_path.write_text(json.dumps(receipts))
+    before = (path.read_bytes(), receipt_path.read_bytes())
+    with pytest.raises(importer.SubmissionImportError, match="changed after approval"):
+        importer.materialize_approved_submissions([row], output_dir=tmp_path)
+    assert (path.read_bytes(), receipt_path.read_bytes()) == before
 
 
 def test_generated_private_provenance_passes_canonical_manual_validator():
