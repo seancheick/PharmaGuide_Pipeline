@@ -419,3 +419,117 @@ def test_an_open_request_reads_as_waiting_and_a_newer_revision_as_answered():
     assert out["answered"].startswith("new photos received")
     assert "revision 3" in out["answered"]
     assert out["none"] is None
+
+
+# ---------------------------------------------------------------------------
+# A barcode the catalog already uses: correction or separate edition
+# ---------------------------------------------------------------------------
+
+
+def _catalog_hit(script: str) -> dict:
+    """A missing-product capture whose barcode names one catalog record."""
+    return _exercise("""
+      state.selected={id:'s2',kind:'missing_product',review_status:'under_review',
+        normalized_upc:'016500558170',evidence_revision:1,
+        evidence_manifest_sha256:'a'.repeat(64)};
+      state.productImage={kind:'photo',id:'p1'};
+      state.identityRecorded='catalog_match';
+      state.identityLookup={canonical_gtin14:'00016500558170',index_revision:'r1',
+        freshness:'fresh',index_built_at:'2026-09-10T08:45:34Z',matches:[
+          {source:'catalog',dsld_id:'178392',brand_name:'One A Day',
+           product_name:"Women's Prenatal 1"},
+          {source:'corpus',dsld_id:'178392',brand_name:'One A Day',
+           product_name:"Women's Prenatal 1",draft_payload:{
+             brandName:'One A Day',fullName:"Women's Prenatal 1",
+             servingsPerContainer:30,
+             servingSizes:[{minQuantity:1,maxQuantity:1,unit:'Softgel(s)'}],
+             ingredientRows:[
+               {name:'Biotin',quantity:[{quantity:300,unit:'mcg'}]},
+               {name:'Folic Acid',quantity:[{quantity:800,unit:'mcg'}]}]}}]};
+      state.payload={brandName:'One A Day',fullName:'Prenatal',
+        servingsPerContainer:30,
+        servingSizes:[{minQuantity:1,maxQuantity:1,unit:'Softgel(s)'}],
+        ingredientRows:[
+          {name:'Biotin',quantity:[{quantity:35,unit:'mcg'}]},
+          {name:'Folate',quantity:[{quantity:1330,unit:'mcg DFE'}]}]};
+    """ + script)
+
+
+def test_a_catalog_hit_alone_never_authorizes_an_approval():
+    out = _catalog_hit("""
+      renderReadiness();
+      out.blocked=(document.getElementById('readiness-list').children||[])
+        .filter(n=>n.className==='blocking').map(n=>n.textContent);
+    """)
+    assert any("corrects that record or is a separate edition" in text
+               for text in out["blocked"]), out["blocked"]
+
+
+def test_the_comparison_shows_what_actually_differs():
+    out = _catalog_hit("""
+      const rows=labelComparisonRows(state.payload,
+        state.identityLookup.matches[1].draft_payload);
+      out.rows=rows;
+      out.differing=rows.filter(([,mine,theirs])=>mine!==theirs).map(r=>r[0]);
+    """)
+    # The product name, both biotin amounts, and each folate spelling differ.
+    assert "Biotin" in out["differing"]
+    assert "Product name" in out["differing"]
+    assert ["Servings per container", "30", "30"] in out["rows"]
+    assert ["Serving size", "1 Softgel(s)", "1 Softgel(s)"] in out["rows"]
+    assert ["Biotin", "35 mcg", "300 mcg"] in out["rows"]
+    assert ["Folate", "1330 mcg DFE", "not on that record"] in out["rows"]
+
+
+def test_choosing_correction_or_edition_clears_the_blocker():
+    for kind, expected in (
+        ("correction", "corrects catalog record 178392"),
+        ("edition", "separate edition beside catalog record 178392"),
+    ):
+        out = _catalog_hit(f"""
+          chooseCatalogRelation({kind!r}, '178392');
+          out.done=(document.getElementById('readiness-list').children||[])
+            .filter(n=>n.className==='ready').map(n=>n.textContent);
+        """)
+        assert any(expected in text for text in out["done"]), out["done"]
+
+
+def test_the_decision_travels_with_the_approval():
+    for kind, field in (
+        ("correction", "correction_target_dsld_id"),
+        ("edition", "edition_of_dsld_id"),
+    ):
+        out = _catalog_hit(f"""(async()=>{{
+          state.payloadSha='a'.repeat(64);
+          state.payloadCanonical=canonicalJson(state.payload);
+          state.diagnostics=[];
+          for(const [field] of CRITICAL_FIELDS) toggleVerified(field);
+          chooseCatalogRelation({kind!r}, '178392');
+          requireCurrentIdentity=async()=>state.identityLookup;
+          await approve();
+          out.call=calls.filter(c=>c.to_status==='approved')[0]||null;
+        }})()""")
+        assert out["call"], "approval was refused"
+        assert out["call"][field] == "178392"
+        other = ({"correction_target_dsld_id", "edition_of_dsld_id"} - {field}).pop()
+        assert other not in out["call"]
+
+
+def test_a_verified_no_match_still_carries_no_catalog_relation():
+    out = _exercise("""(async()=>{
+      state.selected={id:'s3',kind:'missing_product',review_status:'under_review',
+        normalized_upc:'0850051911561',evidence_revision:1,
+        evidence_manifest_sha256:'a'.repeat(64)};
+      state.productImage={kind:'photo',id:'p1'};
+      state.identityRecorded='no_match_verified';
+      state.identityLookup={canonical_gtin14:'00850051911561',index_revision:'r1',
+        freshness:'fresh',matches:[]};
+      state.diagnostics=[];
+      for(const [field] of CRITICAL_FIELDS) toggleVerified(field);
+      requireCurrentIdentity=async()=>state.identityLookup;
+      await approve();
+      out.call=calls.filter(c=>c.to_status==='approved')[0]||null;
+    })()""")
+    assert out["call"], "approval was refused"
+    assert "correction_target_dsld_id" not in out["call"]
+    assert "edition_of_dsld_id" not in out["call"]

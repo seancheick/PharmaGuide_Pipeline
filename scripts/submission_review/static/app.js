@@ -24,6 +24,7 @@ const state = {
   queueRequestId: 0,
   identityLookup: null,
   identityRecorded: null,
+  catalogRelation: null,
   identityCheckRequest: 0,
   rawJsonRendered: null,
   reviewerImages: [],
@@ -294,6 +295,7 @@ function select(submission) {
   state.reviewDigestMismatch = false;
   state.identityLookup = null;
   state.identityRecorded = null;
+  state.catalogRelation = null;
   state.reviewerImages = [];
   state.productImage = null;
   $('reviewer-image-attestation').checked = false;
@@ -688,6 +690,139 @@ function identityButton(label, action, className = 'ghost') {
   return button;
 }
 
+// ------------------------------------------------- catalog label comparison
+//
+// A barcode the catalog already uses does not say which product is in the
+// bottle. Either the catalog record is this label transcribed wrongly, or it
+// is a different formula sold under the same barcode — manufacturers
+// reformulate and keep the barcode. The two have opposite consequences for
+// someone who already has the product in a stack, so the reviewer decides
+// from the two labels side by side, never from the barcode.
+
+function servingText(label) {
+  const serving = (label?.servingSizes ?? [])[0];
+  if (!serving) return '—';
+  const size = serving.minQuantity === serving.maxQuantity
+    ? serving.minQuantity
+    : `${serving.minQuantity}–${serving.maxQuantity}`;
+  return [size, serving.unit].filter(Boolean).join(' ') || '—';
+}
+
+function amountsByName(label) {
+  const amounts = new Map();
+  for (const row of label?.ingredientRows ?? []) {
+    const name = String(row.name ?? '').trim();
+    if (!name) continue;
+    const quantity = (row.quantity ?? [])[0] ?? {};
+    amounts.set(name.toLowerCase(), {
+      name,
+      text: [quantity.quantity, quantity.unit].filter(
+        (part) => part !== undefined && part !== null && part !== '',
+      ).join(' ') || '—',
+    });
+  }
+  return amounts;
+}
+
+/** Field, this label, catalog record — in label order, amounts last. */
+function labelComparisonRows(submitted, catalog) {
+  const rows = [
+    ['Brand', submitted?.brandName, catalog?.brandName],
+    ['Product name', submitted?.fullName, catalog?.fullName],
+    ['Servings per container',
+      submitted?.servingsPerContainer, catalog?.servingsPerContainer],
+    ['Serving size', servingText(submitted), servingText(catalog)],
+  ].map(([field, mine, theirs]) => [
+    field,
+    mine === undefined || mine === null || mine === '' ? '—' : String(mine),
+    theirs === undefined || theirs === null || theirs === '' ? '—' : String(theirs),
+  ]);
+  const mine = amountsByName(submitted);
+  const theirs = amountsByName(catalog);
+  for (const key of new Set([...mine.keys(), ...theirs.keys()])) {
+    const left = mine.get(key);
+    const right = theirs.get(key);
+    rows.push([
+      (left ?? right).name,
+      left ? left.text : 'not on this label',
+      right ? right.text : 'not on that record',
+    ]);
+  }
+  return rows;
+}
+
+function catalogDraftFor(dsldId) {
+  return (state.identityLookup?.matches ?? []).find(
+    (match) => match.dsld_id === dsldId && match.draft_payload,
+  )?.draft_payload ?? null;
+}
+
+function renderLabelComparison(dsldId) {
+  const section = $('label-comparison');
+  const catalog = catalogDraftFor(dsldId);
+  if (!dsldId || !catalog) {
+    section.classList.add('hidden');
+    return;
+  }
+  section.classList.remove('hidden');
+  $('comparison-target').textContent = dsldId;
+  const rows = labelComparisonRows(state.payload, catalog);
+  const differing = rows.filter(([, mine, theirs]) => mine !== theirs).length;
+  $('comparison-summary').textContent = differing === 0
+    ? 'Every field below reads the same on both.'
+    : `${plural(differing, 'field')} read differently. Read them off the ` +
+      'photographs before deciding.';
+  const body = $('comparison-table').querySelector('tbody');
+  body.textContent = '';
+  for (const [field, mine, theirs] of rows) {
+    const tr = document.createElement('tr');
+    if (mine !== theirs) tr.className = 'differs';
+    for (const value of [field, mine, theirs]) {
+      const td = document.createElement('td');
+      td.textContent = value;
+      tr.append(td);
+    }
+    body.append(tr);
+  }
+
+  const actions = $('comparison-actions');
+  actions.textContent = '';
+  actions.append(identityButton(
+    'This corrects the catalog record',
+    () => chooseCatalogRelation('correction', dsldId),
+  ));
+  actions.append(identityButton(
+    'This is a separate edition',
+    () => chooseCatalogRelation('edition', dsldId),
+  ));
+  renderCatalogRelationChoice();
+}
+
+const RELATION_TEXT = {
+  correction: (id) => `This label will rewrite catalog record ${id}. Its id ` +
+    'stays, so anyone who already has it keeps the same product.',
+  edition: (id) => `This label will become its own product beside catalog ` +
+    `record ${id}, which is left unchanged. The app asks which bottle a scan ` +
+    'means when one barcode has more than one product.',
+};
+
+function renderCatalogRelationChoice() {
+  const chosen = state.catalogRelation;
+  $('comparison-choice').textContent = chosen
+    ? RELATION_TEXT[chosen.kind](chosen.dsldId)
+    : 'Decide from the differences above. Neither is assumed.';
+}
+
+function chooseCatalogRelation(kind, dsldId) {
+  if (state.identityRecorded !== 'catalog_match') {
+    return setStatus('Record the catalog match first.', true);
+  }
+  state.catalogRelation = { kind, dsldId };
+  renderCatalogRelationChoice();
+  renderReadiness();
+  setDecisionAvailability();
+}
+
 function renderIdentityCheck() {
   renderReadiness();
   setDecisionAvailability();
@@ -704,6 +839,9 @@ function renderIdentityCheck() {
   }
   section.classList.remove('hidden');
   const lookup = state.identityLookup;
+  if (state.identityRecorded !== 'catalog_match') {
+    $('label-comparison').classList.add('hidden');
+  }
   if (!lookup) {
     status.textContent = 'Check whether this barcode is already in the catalog before approving a new product.';
     return;
@@ -748,6 +886,18 @@ function renderIdentityCheck() {
       $('dup-target').value = catalogIds[0];
       await markDuplicate();
     }, 'primary'));
+    // The common case: same product line, different label. Neither duplicate
+    // nor "not this product" is true, so the reviewer gets to say what is.
+    actions.append(identityButton('Label differs — compare', async () => {
+      await recordMatch('catalog_match', { matched_dsld_id: catalogIds[0] });
+      state.catalogRelation = null;
+      renderLabelComparison(catalogIds[0]);
+      setStatus('Catalog match recorded. Decide from the two labels.');
+    }));
+    const hint = document.createElement('p');
+    hint.className = 'muted';
+    hint.textContent = 'For a changed formula or an incorrect catalog label, choose “Label differs — compare”, not “These are different products”.';
+    actions.append(hint);
   } else if (catalogIds.length === 0 && ids.length === 1) {
     const draftMatch = lookup.matches.find(
       (match) => match.source === 'corpus' && match.dsld_id === ids[0],
@@ -935,10 +1085,20 @@ function readinessChecks() {
     },
   ];
   if (submission.kind === 'missing_product') {
+    const relation = state.identityRecorded === 'catalog_match'
+      ? state.catalogRelation
+      : null;
     checks.push({
-      done: state.identityRecorded === 'no_match_verified',
-      todo: 'Run the barcode check to confirm this product is not already in the catalog.',
-      done_text: 'Checked: this barcode is not already in the catalog.',
+      done: state.identityRecorded === 'no_match_verified' || Boolean(relation),
+      todo: state.identityRecorded === 'catalog_match'
+        ? 'This barcode is already in the catalog. Compare the two labels and '
+          + 'say whether this corrects that record or is a separate edition.'
+        : 'Run the barcode check to confirm this product is not already in the catalog.',
+      done_text: relation
+        ? (relation.kind === 'correction'
+          ? `Checked: this label corrects catalog record ${relation.dsldId}.`
+          : `Checked: a separate edition beside catalog record ${relation.dsldId}.`)
+        : 'Checked: this barcode is not already in the catalog.',
     });
     checks.push({
       done: Boolean(state.productImage),
@@ -2370,7 +2530,8 @@ async function approve() {
   if (state.reviewInvalidated) return setStatus('Review the updated evidence before deciding.', true);
   if (
     state.selected?.kind === 'missing_product' &&
-    state.identityRecorded !== 'no_match_verified'
+    state.identityRecorded !== 'no_match_verified' &&
+    !(state.identityRecorded === 'catalog_match' && state.catalogRelation)
   ) {
     return setStatus('Record a fresh verified no-match identity check first.', true);
   }
@@ -2395,6 +2556,11 @@ async function approve() {
     approved_schema_version: 'manual_label_v1',
     approved_payload: state.payload,
   };
+  if (state.catalogRelation?.kind === 'correction') {
+    fields.correction_target_dsld_id = state.catalogRelation.dsldId;
+  } else if (state.catalogRelation?.kind === 'edition') {
+    fields.edition_of_dsld_id = state.catalogRelation.dsldId;
+  }
   if (state.productImage?.kind === 'photo') {
     fields.product_image_photo_id = state.productImage.id;
   } else if (state.productImage?.kind === 'reviewer') {

@@ -521,6 +521,37 @@ def _parse_approved_at(value: object) -> tuple[str, str]:
     return text, parsed.date().isoformat()
 
 
+
+def _catalog_relation(export_row: dict[str, Any]) -> tuple[str, str] | None:
+    """Which catalog record this approval decided about, and how.
+
+    ``correction_target_dsld_id`` rewrites that record; ``edition_of_dsld_id``
+    leaves it alone and stands beside it. They are different decisions with
+    different consequences for anyone who already has the product, so a
+    submission may carry at most one.
+    """
+    present = [
+        (field, export_row.get(field))
+        for field in ("correction_target_dsld_id", "edition_of_dsld_id")
+        if export_row.get(field) is not None
+    ]
+    if not present:
+        return None
+    if len(present) > 1:
+        raise SubmissionImportError(
+            "a submission is either a correction or a separate edition"
+        )
+    field, value = present[0]
+    catalog_id = _required_string(value, field, max_length=30)
+    if not catalog_id.isdigit():
+        raise SubmissionImportError(f"{field} must be a catalog id")
+    return field, catalog_id
+
+
+def _edition_of(export_row: dict[str, Any]) -> str | None:
+    relation = _catalog_relation(export_row)
+    return relation[1] if relation and relation[0] == "edition_of_dsld_id" else None
+
 def build_manual_label(export_row: object) -> dict[str, Any]:
     """Validate one service export and build its pipeline-owned label."""
     if not isinstance(export_row, dict):
@@ -535,7 +566,11 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
         "schema_version",
         "submission_id",
     }
-    optional_export_fields = {"target_dsld_id"}
+    optional_export_fields = {
+        "target_dsld_id",
+        "correction_target_dsld_id",
+        "edition_of_dsld_id",
+    }
     unknown_export_fields = (
         set(export_row) - required_export_fields - optional_export_fields
     )
@@ -606,13 +641,25 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
             raise SubmissionImportError("target_dsld_id must be numeric")
         product_id = target_id
         lineage_key = f"dsld:{target_id}"
+        if _catalog_relation(export_row) is not None:
+            raise SubmissionImportError(
+                "a correction cannot also carry a catalog relation"
+            )
     else:
         if export_row.get("target_dsld_id") is not None:
             raise SubmissionImportError(
                 "missing-product export cannot specify target_dsld_id"
             )
-        product_id = "PG_SUB_" + submission_id.replace("-", "").upper()
-        lineage_key = f"pharmaguide_submission:{submission_id}"
+        relation = _catalog_relation(export_row)
+        if relation is not None and relation[0] == "correction_target_dsld_id":
+            # The reviewer verified that the catalog record is this label
+            # transcribed wrongly, so it is rewritten in place and keeps its
+            # id: anyone who already has it in a stack keeps the same product.
+            product_id = relation[1]
+            lineage_key = f"dsld:{product_id}"
+        else:
+            product_id = "PG_SUB_" + submission_id.replace("-", "").upper()
+            lineage_key = f"pharmaguide_submission:{submission_id}"
 
     return {
         "id": product_id,
@@ -642,6 +689,14 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
             else "active",
             "lineage_key": lineage_key,
             "reviewed_at": approved_at,
+            # A different formula sold under a barcode the catalog already
+            # uses. The record it names is left alone — nobody's bottle
+            # changes contents — and this label becomes its own product.
+            **(
+                {"edition_of_dsld_id": edition_of}
+                if (edition_of := _edition_of(export_row))
+                else {}
+            ),
         },
     }
 

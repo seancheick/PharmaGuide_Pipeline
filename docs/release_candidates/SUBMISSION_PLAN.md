@@ -806,7 +806,9 @@ session for this first slice; no new durable draft or approval schema.
 Use **Selected by submitter**, **Suggested sections**, and **Please confirm**
 beside the evidence. Preserve the original categories and bytes; do not
 silently retag evidence or fill approval fields. The same role owner feeds
-the existing extraction `photo_roles`/mismatch report when extraction runs.
+the existing extraction `photo_roles` when extraction runs. The located hints
+carry no fabricated confidence; confidence-thresholded extraction findings
+remain unchanged, while this guidance report states possible role mismatch.
 No second ingredient parser or approval path. Phone-side photo-role prompts
 are a subsequent capture slice, not a second Dart classifier in this batch;
 the phone change here is the known-product precheck and clearer capture

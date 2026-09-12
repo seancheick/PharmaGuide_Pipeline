@@ -37,6 +37,18 @@
     {
       "term": "Unverified model confidence",
       "plain": "How sure the model was about its own reading. It is a hint about where to look first. It is never evidence, and it can be confidently wrong."
+    },
+    {
+      "term": "Same barcode, different label",
+      "plain": "Manufacturers reformulate and keep the barcode. So a barcode that is already in the catalog does not mean we already have this label. Compare the two labels and say which of the two things is true: the catalog record is this label written down wrongly, or it is a different formula sold under the same barcode."
+    },
+    {
+      "term": "This corrects the catalog record",
+      "plain": "Pick this only when the two labels are meant to be the same and ours is wrong — a typo, a missed row, a wrong amount. The catalog record is rewritten and keeps its id, so anyone who already has it in a stack keeps the same product."
+    },
+    {
+      "term": "This is a separate edition",
+      "plain": "Pick this when the bottle in the photographs is genuinely a different formula from the catalog record — different amounts, different ingredients — even though the barcode is the same. The old record is left alone so nobody's bottle silently changes contents, and this label becomes its own product. When someone scans that barcode the app asks which bottle they have."
     }
   ],
   "rejections": [

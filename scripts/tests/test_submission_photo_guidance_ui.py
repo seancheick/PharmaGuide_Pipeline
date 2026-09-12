@@ -92,5 +92,7 @@ out.status=document.getElementById('identity-index-status').textContent;
 """)
     assert "Same product and label — already in catalog" in out["actions"]
     assert "These are different products" in out["actions"]
+    assert any("changed formula" in text and "Label differs — compare" in text
+               for text in out["actions"])
     assert out["result"].startswith("Ritual Synbiotic+")
     assert "Compare the label" in out["status"]
