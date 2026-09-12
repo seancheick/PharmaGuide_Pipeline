@@ -363,7 +363,16 @@ class CoverageGate:
             domain_results[domain_name] = domain_result
 
             if not passes:
-                msg = f"{domain_name} coverage {coverage:.1f}% < {config['threshold']}%"
+                # Say what a shortfall means. A bonus-only domain reading low
+                # is a bonus not earned, not a gap in the label, and calling it
+                # "coverage" is what made reviewers read it as one.
+                msg = (
+                    f"{domain_name} coverage {coverage:.1f}% < "
+                    f"{config['threshold']}%"
+                    if config["severity"] == "BLOCK" else
+                    f"{domain_name} {coverage:.1f}% matched — bonus-only, "
+                    f"not counted in coverage and never blocks scoring"
+                )
                 effective_severity = self._get_effective_severity(
                     domain_name, config["severity"], total, unmatched
                 )
@@ -382,9 +391,26 @@ class CoverageGate:
             else:
                 warnings.append(f"[{issue.issue_type}] {issue.description}")
 
-        # Calculate overall coverage
-        summary = match_ledger.get("summary", {}) if ledger_valid else {}
-        overall_coverage = summary.get("coverage_percent", 0.0)
+        # Calculate overall coverage over the domains that actually score.
+        #
+        # Coverage answers "of what we should have scored, how much did we
+        # map". Bonus-only domains are not part of that question: a brand
+        # absent from the manufacturer bonus list forfeits a bonus, it does not
+        # leave the label unmapped. The ledger's roll-up counts every domain,
+        # so reading it here both understated fully mapped products (a small
+        # product with an unlisted brand reported 66.7%) and let a genuinely
+        # unmapped ingredient hide behind matched bonus lookups.
+        scoring_matched = 0
+        scoring_scorable = 0
+        for domain_result in domain_results.values():
+            if domain_result.severity != "BLOCK":
+                continue
+            scoring_matched += domain_result.matched
+            scoring_scorable += domain_result.scorable_total
+        overall_coverage = (
+            round(scoring_matched / scoring_scorable * 100, 2)
+            if scoring_scorable else 100.0  # Nothing to score is vacuously covered
+        )
 
         can_score = len(blocking_issues) == 0
 

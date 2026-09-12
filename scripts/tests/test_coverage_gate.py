@@ -117,7 +117,8 @@ class TestCoverageThresholds:
         # Should still be able to score (manufacturer is WARN)
         assert result.can_score
         assert len(result.warnings) > 0
-        assert "manufacturer coverage 80.0%" in result.warnings[0]
+        assert "manufacturer 80.0% matched" in result.warnings[0]
+        assert "bonus-only" in result.warnings[0]
 
     def test_empty_domain_vacuously_covered(self, gate):
         """Domain with 0 items should be considered covered."""
@@ -460,20 +461,38 @@ class TestBatchProcessing:
         assert "2" in result.blocked_product_ids
 
     def test_batch_coverage_average(self, gate):
-        """Test that average coverage is calculated correctly."""
+        """Test that average coverage is calculated correctly.
+
+        Coverage comes from the scoring domains, not from the ledger's
+        all-domain roll-up, so the summary values here are deliberately wrong.
+        """
         products = [
             {
                 "dsld_id": 1,
                 "match_ledger": {
-                    "domains": {},
-                    "summary": {"coverage_percent": 80.0}
+                    "domains": {
+                        "ingredients": {
+                            "total_raw": 5, "matched": 4, "unmatched": 1,
+                            "skipped": 0, "scorable_total": 5,
+                            "scorable_coverage_percent": 80.0,
+                            "coverage_percent": 80.0,
+                        }
+                    },
+                    "summary": {"coverage_percent": 12.0}
                 }
             },
             {
                 "dsld_id": 2,
                 "match_ledger": {
-                    "domains": {},
-                    "summary": {"coverage_percent": 100.0}
+                    "domains": {
+                        "ingredients": {
+                            "total_raw": 5, "matched": 5, "unmatched": 0,
+                            "skipped": 0, "scorable_total": 5,
+                            "scorable_coverage_percent": 100.0,
+                            "coverage_percent": 100.0,
+                        }
+                    },
+                    "summary": {"coverage_percent": 12.0}
                 }
             }
         ]
@@ -1028,6 +1047,62 @@ class TestCoverageGateCliPartialLoadTolerance:
             f"below the 95% threshold. returncode={proc.returncode}, "
             f"stderr: {proc.stderr[-300:]}"
         )
+
+
+class TestBonusOnlyDomainsStayOutOfCoverage:
+    """Coverage answers "of what we should score, how much did we map".
+
+    Bonus-only domains are not part of that question. A brand missing from the
+    manufacturer bonus list forfeits a bonus; it does not leave the label
+    unmapped. Counting it dragged fully mapped products under 100% and sent
+    reviewers hunting a gap that was not there.
+    """
+
+    @pytest.fixture
+    def gate(self):
+        return CoverageGate()
+
+    @staticmethod
+    def _domain(matched, unmatched):
+        total = matched + unmatched
+        return {
+            "total_raw": total, "matched": matched, "unmatched": unmatched,
+            "rejected": 0, "skipped": 0, "recognized_non_scorable": 0,
+            "recognized_botanical_unscored": 0, "scorable_total": total,
+            "scorable_coverage_percent": (matched / total * 100) if total else 100.0,
+            "coverage_percent": (matched / total * 100) if total else 100.0,
+        }
+
+    def test_an_unmatched_bonus_brand_is_not_a_coverage_gap(self, gate):
+        result = gate.check_product({
+            "dsld_id": 1,
+            "match_ledger": {
+                "domains": {
+                    "ingredients": self._domain(1, 0),
+                    "additives": self._domain(1, 0),
+                    "manufacturer": self._domain(0, 1),
+                },
+                # The ledger keeps counting every domain; the gate must not
+                # take that roll-up as the product's coverage.
+                "summary": {"coverage_percent": 66.67},
+            },
+        })
+        assert result.overall_coverage == pytest.approx(100.0)
+        assert result.can_score
+
+    def test_an_unmapped_scoring_ingredient_still_lowers_coverage(self, gate):
+        result = gate.check_product({
+            "dsld_id": 2,
+            "match_ledger": {
+                "domains": {
+                    "ingredients": self._domain(3, 1),
+                    "manufacturer": self._domain(1, 0),
+                },
+                "summary": {"coverage_percent": 100.0},
+            },
+        })
+        assert result.overall_coverage == pytest.approx(75.0)
+
 
 
 if __name__ == "__main__":
