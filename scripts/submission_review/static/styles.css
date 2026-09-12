@@ -66,18 +66,15 @@ main {
   min-height: 0;
 }
 #queue-panel {
+  min-height: 0;
   border-right: 1px solid var(--rule);
   padding: 1rem;
   background: var(--surface);
   overflow-y: auto;
 }
-#detail-panel {
-  padding: 1rem 1.5rem 0;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
+/* min-height:0 or the grid row stretches to the tallest child and the whole
+   window scrolls instead of the panel. */
+#detail-panel { padding: 1rem 1.5rem 0; overflow-y: auto; min-height: 0; }
 
 /* Photographs beside the fields, not above them: every field on this page is
    read off a photograph, and a check that needs a scroll in between is a check
@@ -86,9 +83,9 @@ main {
   display: grid;
   grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
   gap: 1.5rem;
+  /* start, so the evidence column's box spans the whole review column and the
+     sticky pane has room to stay put while the label scrolls past it. */
   align-items: start;
-  flex: 1;
-  min-height: 0;
 }
 #evidence-pane {
   position: sticky;
@@ -100,20 +97,32 @@ main {
 #evidence-pane h2 { margin-top: 0; }
 #review-pane { min-width: 0; padding-bottom: 3rem; max-width: 52rem; }
 
-/* The decision and what is still missing stay in view while the reviewer works
-   down the label. */
+/* Only the one button that starts a review sits at the top. The checklist and
+   the decision belong at the end of the review, where the reviewer arrives
+   after reading the label. */
 .decision-bar {
   position: sticky;
   top: 0;
   z-index: 5;
   background: var(--bg);
-  border-bottom: 1px solid var(--rule);
-  padding: .6rem 0 .5rem;
-  margin-bottom: .8rem;
+  padding: .4rem 0;
 }
-.decision-bar-line { align-items: center; gap: .5rem; }
-#readiness-title { margin: 0; font-size: .95rem; }
-#readiness { margin: .5rem 0 0; }
+.decision-bar[hidden] { display: none; }
+
+/* The state is said, not just coloured: colour alone is not a status. */
+.state-pill {
+  font-size: .72rem;
+  font-weight: 600;
+  vertical-align: middle;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--fg-muted);
+}
+.state-pill.approved { background: #14532d; color: #dcfce7; border-color: #166534; }
+.state-pill.rejected, .state-pill.duplicate { background: #4c1d24; color: #fee2e2; border-color: #7f1d1d; }
+.state-pill.under_review { background: #1e3a5f; color: #dbeafe; border-color: #1d4ed8; }
 
 @media (max-width: 60rem) {
   main { grid-template-columns: 1fr; height: auto; }

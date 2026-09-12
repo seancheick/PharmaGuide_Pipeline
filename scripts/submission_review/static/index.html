@@ -67,20 +67,7 @@
     </aside>
     <div id="review-pane">
     <div id="decision-bar" class="decision-bar">
-      <div class="row decision-bar-line">
-        <h3 id="readiness-title">Before you approve</h3>
-        <span id="readiness-progress" class="mono muted"></span>
-        <button id="t-approve" type="button" class="primary">Approve</button>
-        <button id="t-under-review" type="button" class="ghost">Start review</button>
-        <button id="help-open" type="button" class="ghost" aria-haspopup="dialog">
-          What do these mean?
-        </button>
-      </div>
-      <p id="review-banner" class="review-banner" hidden></p>
-      <section id="label-diagnostics" class="diagnostics" aria-live="polite" hidden></section>
-      <section id="readiness" aria-live="polite">
-        <ul id="readiness-list"></ul>
-      </section>
+      <button id="t-under-review" type="button">Start review</button>
     </div>
 
     <section id="identity-check">
@@ -187,7 +174,22 @@
       (the server recomputes and enforces its own).
     </p>
 
-    <h2>Other decisions</h2>
+    <h2>Decision</h2>
+    <p id="review-banner" class="review-banner" hidden></p>
+    <section id="label-diagnostics" class="diagnostics" aria-live="polite" hidden></section>
+    <section id="readiness" aria-live="polite">
+      <div class="row readiness-head">
+        <h3 id="readiness-title">Before you approve</h3>
+        <span id="readiness-progress" class="mono muted"></span>
+      </div>
+      <ul id="readiness-list"></ul>
+    </section>
+    <div class="row">
+      <button id="t-approve" type="button" class="primary">Approve</button>
+      <button id="help-open" type="button" class="ghost" aria-haspopup="dialog">
+        What do these mean?
+      </button>
+    </div>
     <div class="decision-block">
       <div class="row" id="retake-request">
         <select id="retake-reason">

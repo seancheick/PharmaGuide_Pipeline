@@ -337,6 +337,15 @@ async function refreshSelected() {
 
 // ---------------------------------------------------------------- detail
 
+/** Where this submission stands, in the reviewer's words. */
+const REVIEW_STATE_TEXT = {
+  submitted: 'Not started',
+  under_review: 'In review',
+  approved: 'Approved',
+  rejected: 'Not accepted',
+  duplicate: 'Marked duplicate',
+};
+
 function renderDetail() {
   setApprovedReadOnly();
   const submission = state.selected;
@@ -347,6 +356,11 @@ function renderDetail() {
   title.textContent = submission.kind === 'missing_product'
     ? `Missing product — UPC ${submission.normalized_upc ?? '?'}`
     : `Catalog correction — dsld ${submission.product_submission_mismatch_details?.dsld_id ?? '?'}`;
+  const pill = document.createElement('span');
+  pill.className = `state-pill ${submission.review_status}`;
+  pill.textContent = REVIEW_STATE_TEXT[submission.review_status] ??
+    submission.review_status;
+  title.append(' ', pill);
   const meta = document.createElement('p');
   meta.className = 'mono';
   meta.textContent = `${submission.id} · ${submission.review_status}` +
@@ -2187,7 +2201,10 @@ function closeLightbox() {
 function setDecisionAvailability() {
   const status = state.selected?.review_status;
   const terminal = state.reviewInvalidated || ['approved', 'rejected', 'duplicate'].includes(status);
+  // One button at the top, and only while it means something: a submission
+  // already under review has nothing to start.
   $('t-under-review').disabled = terminal || status !== 'submitted';
+  $('decision-bar').hidden = terminal || status !== 'submitted';
   const blockers = approvalBlockers();
   const approveButton = $('t-approve');
   approveButton.disabled = terminal || status !== 'under_review' || blockers.length > 0;
