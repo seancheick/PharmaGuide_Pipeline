@@ -33,6 +33,7 @@ from dataclasses import dataclass, field
 from typing import Any, Protocol, Sequence
 
 from ..envelope import SCHEMA_VERSION, validate_label_draft_v1
+from ..photo_guidance import suggest_photo_roles
 from ..extractor import (
     ExtractionConfig,
     ExtractionError,
@@ -47,7 +48,7 @@ from ..extractor import (
 #: believed, whatever the text height says.
 _MIN_INDENT_STEP = 8.0
 
-RULES_VERSION = "ocr-geometry-v12"
+RULES_VERSION = "ocr-geometry-v13"
 PROVIDER = "ocr"
 
 #: Units as labels print them. Case is preserved in the draft; matching is not.
@@ -540,10 +541,12 @@ class OcrLabelAdapter:
                 {
                     "photo_id": photo.photo_id,
                     "declared": list(photo.categories),
-                    # Geometry cannot say what a photograph is *of*; claiming
-                    # otherwise would be the kind of guess this adapter exists
-                    # to avoid.
-                    "inferred": [],
+                    # Located headings suggest sections, never a probability
+                    # that the image is complete or belongs to this product.
+                    "inferred": [
+                        {"role": item["role"], "confidence": None}
+                        for item in suggest_photo_roles(by_photo[photo.photo_id])
+                    ],
                     "readability": "ok" if by_photo[photo.photo_id].lines else "unreadable",
                     "issues": [],
                 }

@@ -55,6 +55,10 @@ const state = {
   unresolvedFromDraft: [],
   reviewSuperseded: false,
   reviewDigestMismatch: false,
+  photoGuidanceRequest: 0,
+  photoGuidancePending: false,
+  photoGuidanceReport: null,
+  photoGuidanceMessage: '',
 };
 
 const $ = (id) => document.getElementById(id);
@@ -104,10 +108,7 @@ async function boot() {
     onSignedIn(verified.session);
   });
 
-  $('signout').addEventListener('click', async () => {
-    await state.client.auth.signOut();
-    window.location.reload();
-  });
+  $('signout').addEventListener('click', signOut);
 
   $('reload').addEventListener('click', () => loadQueue());
   $('raw-json').addEventListener('input', () => {
@@ -159,7 +160,15 @@ async function boot() {
   }
 }
 
+async function signOut() {
+  state.session = null;
+  resetPhotoGuidance();
+  await state.client.auth.signOut();
+  window.location.reload();
+}
+
 function onSignedIn(session) {
+  resetPhotoGuidance();
   state.session = session;
   $('signin-form').classList.add('hidden');
   $('verify-form').classList.add('hidden');
@@ -264,6 +273,7 @@ function renderQueue() {
 }
 
 function select(submission) {
+  resetPhotoGuidance();
   state.selected = submission;
   state.reviewInvalidated = false;
   state.payload = defaultPayload();
@@ -399,9 +409,16 @@ function renderDetail() {
     caption.textContent =
       `#${photo.seq} · ${(photo.categories ?? []).join(', ')}`;
     figure.append(img, caption);
+    const guide = document.createElement('button');
+    guide.type = 'button';
+    guide.className = 'ghost photo-guidance-button';
+    guide.textContent = 'Suggest photo sections';
+    guide.addEventListener('click', () => checkPhotoGuidance(photo));
+    figure.append(guide);
     grid.append(figure);
   }
 
+  renderPhotoGuidance();
   renderDraft();
   renderVerifyChecklist();
   renderReadiness();
@@ -419,6 +436,101 @@ function renderDetail() {
 }
 
 // ---------------------------------------------------------------- identity
+
+const PHOTO_SECTION_LABELS = {
+  front_identity: 'Product identity', supplement_facts: 'Supplement Facts',
+  ingredient_disclosure: 'Ingredients', directions_warnings: 'Directions / warnings',
+  barcode: 'Barcode / printed UPC', lot_expiry: 'Lot / expiry',
+};
+
+function resetPhotoGuidance() {
+  state.photoGuidanceRequest += 1;
+  state.photoGuidancePending = false;
+  state.photoGuidanceReport = null;
+  state.photoGuidanceMessage = '';
+  renderPhotoGuidance();
+}
+
+async function checkPhotoGuidance(photo) {
+  if (state.photoGuidancePending || !state.session || !state.selected) return;
+  const selected = state.selected;
+  const token = state.session.access_token;
+  if (!(selected.photos ?? []).some(p => p.photo_id === photo.photo_id &&
+      p.content_sha256 === photo.content_sha256)) return;
+  const request = ++state.photoGuidanceRequest;
+  const current = () => request === state.photoGuidanceRequest &&
+    state.session?.access_token === token && state.selected?.id === selected.id &&
+    state.selected?.evidence_revision === selected.evidence_revision &&
+    state.selected?.evidence_manifest_sha256 === selected.evidence_manifest_sha256;
+  state.photoGuidancePending = true;
+  state.photoGuidanceReport = null;
+  state.photoGuidanceMessage = `Checking photo ${photo.seq ?? ''} locally… You can continue reviewing.`;
+  renderPhotoGuidance();
+  try {
+    const response = await fetch('/api/photo_guidance', {
+      method: 'POST',
+      headers: {'content-type': 'application/json', authorization: `Bearer ${token}`},
+      body: JSON.stringify({submission_id: selected.id, photo_id: photo.photo_id,
+        evidence_revision: selected.evidence_revision,
+        evidence_manifest_sha256: selected.evidence_manifest_sha256}),
+    });
+    const report = await response.json();
+    if (!current()) return;
+    if (!response.ok || report.submission_id !== selected.id ||
+        report.photo_id !== photo.photo_id || report.photo_sha256 !== photo.content_sha256 ||
+        report.evidence_revision !== selected.evidence_revision ||
+        report.evidence_manifest_sha256 !== selected.evidence_manifest_sha256) {
+      throw new Error('Guidance unavailable or evidence changed');
+    }
+    state.photoGuidanceReport = report;
+    state.photoGuidanceMessage = '';
+  } catch {
+    if (current()) state.photoGuidanceMessage =
+      'Photo guidance unavailable. You can still review the photos manually; reload and try again if needed.';
+  } finally {
+    if (current()) {
+      state.photoGuidancePending = false;
+      renderPhotoGuidance();
+    }
+  }
+}
+
+function renderPhotoGuidance() {
+  const panel = $('photo-guidance');
+  if (!panel) return;
+  panel.textContent = '';
+  panel.hidden = !state.photoGuidanceMessage && !state.photoGuidanceReport;
+  if (state.photoGuidanceMessage) {
+    panel.textContent = state.photoGuidanceMessage;
+    return;
+  }
+  const report = state.photoGuidanceReport;
+  if (!report) return;
+  const photo = (state.selected?.photos ?? []).find(p => p.photo_id === report.photo_id);
+  if (!photo) return;
+  const line = (text, tag = 'p') => {
+    const element = document.createElement(tag);
+    element.textContent = text;
+    panel.append(element);
+  };
+  line(`Photo ${photo.seq ?? ''} · Section suggestions`, 'h3');
+  line(`Selected by submitter: ${(photo.categories ?? []).map(r => PHOTO_SECTION_LABELS[r] ?? r).join(', ') || 'Not specified'}`);
+  const suggestions = report.suggestions ?? [];
+  if (suggestions.length) {
+    line('Suggested sections:');
+    for (const item of suggestions) {
+      line(`${PHOTO_SECTION_LABELS[item.role] ?? item.role} — “${item.text}”`);
+    }
+    line(report.possible_role_mismatch
+      ? 'Please confirm: the detected text suggests a different section. One photo can cover several sections.'
+      : 'Please confirm these sections against the photo.');
+  } else {
+    line(report.status === 'unreadable'
+      ? 'No readable text was found. Check the image or request a clearer photo.'
+      : 'The section could not be identified confidently. Review the photo manually.');
+  }
+  line('Suggestions only—not verification of the product, full panel, amounts, or image rights.');
+}
 
 function canonicalSubmissionGtin14() {
   const digits = String(state.selected?.normalized_upc ?? '');
@@ -593,16 +705,22 @@ function renderIdentityCheck() {
   section.classList.remove('hidden');
   const lookup = state.identityLookup;
   if (!lookup) {
-    status.textContent = 'Required before approval. Exact matches only; no fuzzy lookup.';
+    status.textContent = 'Check whether this barcode is already in the catalog before approving a new product.';
     return;
   }
   const built = new Date(lookup.index_built_at).toLocaleString();
-  status.textContent = `Index ${lookup.freshness} · source snapshot ${built}` +
-    (state.identityRecorded ? ` · recorded ${state.identityRecorded}` : '');
+  const hasCatalogMatch = lookup.matches.some(match => match.source === 'catalog');
+  status.textContent = (hasCatalogMatch
+    ? 'This barcode matches a product in the catalog. Compare the label before closing this submission. '
+    : lookup.matches.length
+      ? 'Found in DSLD — not yet in the app catalog. Compare the label before importing. '
+      : 'No matching barcode was found in this index. ') +
+    `Index ${lookup.freshness} · source snapshot ${built}` +
+    (state.identityRecorded ? ' · check recorded' : '');
   for (const match of lookup.matches) {
     const item = document.createElement('li');
-    item.textContent = `${match.source} · ${match.dsld_id} · ` +
-      `${match.brand_name} ${match.product_name}`;
+    item.textContent = `${match.brand_name} ${match.product_name}`.trim() +
+      ` · ${match.source === 'catalog' ? 'In app catalog' : 'DSLD reference'} · ID ${match.dsld_id}`;
     results.append(item);
   }
 
@@ -624,7 +742,7 @@ function renderIdentityCheck() {
   }
 
   if (catalogIds.length === 1 && ids.length === 1) {
-    actions.append(identityButton('Record and mark catalog duplicate', async () => {
+    actions.append(identityButton('Same product and label — already in catalog', async () => {
       await recordMatch('catalog_match', { matched_dsld_id: catalogIds[0] });
       $('dup-code').value = 'already_in_catalog';
       $('dup-target').value = catalogIds[0];
@@ -666,7 +784,7 @@ function renderIdentityCheck() {
     }));
   }
 
-  actions.append(identityButton('None of these is this product', async () => {
+  actions.append(identityButton('These are different products', async () => {
     const reason = window.prompt('Why are the exact barcode hits not this product?');
     if (!reason?.trim()) throw new Error('An audited reason is required.');
     for (const dsldId of ids) {
