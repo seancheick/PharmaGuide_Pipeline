@@ -897,15 +897,42 @@ The release-gate attempt passed 102 tests with 21 skips, then correctly stopped
 because this worktree has no `scripts/dist/detail_blobs`; no release was made.
 
 Integration must include Claude's typed label-version picker, not reinstate its
-old return contract. Physical-phone and authenticated live reviewer verification
-are still distinct release checks. The isolated simulator build failed to link
+old return contract. Authenticated live reviewer verification and hands-on phone
+flow checks remain distinct from installation. The isolated simulator build failed to link
 `Pods_Runner`; a widget-render preview is not a device pass. The full app suite
-also reports two existing catalog-artifact checks (interaction hash and CBD
-canary), so no clean-release claim is made from that run. Reporting against a
+reported two catalog-artifact checks (interaction hash and CBD canary); the
+interaction mismatch was subsequently reproduced and fixed as described below.
+The CBD canary remains unresolved, so no full-suite clean-release claim is made.
+Reporting against a
 `PG_SUB_*` catalog record remains unsupported by the existing numeric-only
 mismatch metadata contract; View remains available and Report explicitly says
 unavailable. Widen that shared app/server contract in its own verified batch,
 not by inventing a client-only target or bypassing validation.
+
+**Standalone phone checkpoint (2026-09-12):** Built release 1.0.0+17 from
+committed app `f64900b` in the isolated worktree, with the shared Makefile's
+configuration and the current manifest-verified pipeline database. Verified
+signature, absence of the stale debug dylib, release configuration marker, and
+both bundled database hashes. Installed over the existing app on Sean's iPhone
+without uninstalling; launched without a debugger and verified its process
+remained running. Physical unplug/reopen and capture UX still need the user's
+hands-on check; installation is not proof of those flows.
+
+The public interaction download pin still pointed at August's artifact even
+though the staged September manifest named the current one. After explicit
+operator approval, published `clinical-db-2026.09.12.1` with SQLite SHA-256
+`298f5b80dcaefc20dc472f254c771ad6c894a840340a5a6468721da0568b9c4c` and the
+existing pipeline manifest. App `4da011f` updates the pin and refuses hydration
+when pin and staged manifest disagree. Regression observed failing before the
+guard; 28 shell checks and 39 Flutter interaction-database guards passed after
+the fix. A fresh download through the real hydration script verified the exact
+published bytes. This packaging operation changes no clinical source rules.
+The previous assets remain available. Reviewer guidance remains on its isolated
+branch until integration can preserve the shared checkout's unfinished edits.
+Combined Claude's committed identity-decision safeguard `315e59c0` with the
+guidance branch; all 75 focused readiness, classifier/service and guidance UI
+tests passed. The first sandboxed run could not bind two localhost fixtures;
+the unchanged rerun with localhost permissions passed both.
 
 ## Phase 2 — benchmark
 
