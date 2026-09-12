@@ -1,5 +1,24 @@
 """Exercise the real reviewer JS: hints must never become approval state."""
 from test_submission_review_readiness import _exercise
+from pathlib import Path
+from html.parser import HTMLParser
+
+
+def test_queue_errors_are_visible_before_a_submission_is_selected():
+    class StatusLocation(HTMLParser):
+        hidden_detail = False
+        visible_status = False
+
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            if attrs.get('id') == 'detail-panel':
+                self.hidden_detail = True
+            if attrs.get('id') == 'status-line':
+                self.visible_status = not self.hidden_detail
+
+    parser = StatusLocation()
+    parser.feed((Path(__file__).parents[1] / 'submission_review/static/index.html').read_text())
+    assert parser.visible_status
 
 
 SETUP = """
@@ -78,6 +97,48 @@ def test_guidance_failure_leaves_a_useful_message_and_does_not_touch_label():
     assert "review the photos manually" in out["text"]
     assert out["brand"] == "Original"
     assert out["pending"] is False
+
+
+def test_refreshed_session_updates_requests_without_discarding_review():
+    out = _exercise(SETUP + """
+state.session={access_token:'old',user:{id:'reviewer'}};
+state.photoGuidancePending=true;
+const before=JSON.stringify({payload:state.payload,verified:[...state.verified]});
+updateAuthSession('TOKEN_REFRESHED',{access_token:'new',user:{id:'reviewer'}});
+out.token=state.session.access_token;out.pending=state.photoGuidancePending;
+out.unchanged=before===JSON.stringify({payload:state.payload,verified:[...state.verified]});
+""")
+    assert out['token'] == 'new'
+    assert out['pending'] is False
+    assert out['unchanged'] is True
+
+
+def test_expired_session_guidance_asks_for_signin_not_connection_retry():
+    out = _exercise(SETUP + """
+(async()=>{
+ fetch=async()=>({ok:false,status:401,json:async()=>({error:'expired'})});
+ await checkPhotoGuidance(photo);
+ out.text=flatten(document.getElementById('photo-guidance'));
+})()
+""")
+    assert 'Sign in again' in out['text']
+
+
+def test_auth_signout_invalidates_work_without_initial_session_reload_loop():
+    out = _exercise("""
+window={location:{reload(){out.reloads=(out.reloads||0)+1;}}};
+state.session=null;
+updateAuthSession('INITIAL_SESSION',null);
+out.initialReloads=out.reloads||0;
+state.session={access_token:'old',user:{id:'reviewer'}};
+state.photoGuidancePending=true;
+updateAuthSession('SIGNED_OUT',null);
+out.session=state.session;out.pending=state.photoGuidancePending;
+""")
+    assert out['initialReloads'] == 0
+    assert out['reloads'] == 1
+    assert out['session'] is None
+    assert out['pending'] is False
 
 
 def test_identity_copy_explains_catalog_match_without_asserting_label_equivalence():

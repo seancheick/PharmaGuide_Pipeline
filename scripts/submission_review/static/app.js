@@ -83,6 +83,9 @@ async function boot() {
   state.client = supabase.createClient(config.supabase_url, config.anon_key);
   const { data } = await state.client.auth.getSession();
   if (data.session) onSignedIn(data.session);
+  // The SDK owns token refresh. Keep every local API caller on that session;
+  // do not reinitialize the editor when a token changes during a long review.
+  state.client.auth.onAuthStateChange(updateAuthSession);
 
   $('signin-form').addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -169,6 +172,20 @@ async function signOut() {
   window.location.reload();
 }
 
+function updateAuthSession(_event, session) {
+  // Initial sign-in is handled by getSession/verifyOtp above. In particular,
+  // INITIAL_SESSION(null) must not trigger a reload loop on the sign-in page.
+  if (!state.session) return;
+  if (!session || session.user.id !== state.session.user.id) {
+    state.session = null;
+    resetPhotoGuidance();
+    window.location.reload();
+    return;
+  }
+  if (session.access_token !== state.session.access_token) resetPhotoGuidance();
+  state.session = session;
+}
+
 function onSignedIn(session) {
   resetPhotoGuidance();
   state.session = session;
@@ -192,6 +209,7 @@ async function edge(body) {
   });
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
+    if (response.status === 401) throw new Error('Your session expired. Sign in again to continue reviewing.');
     throw new Error(payload.error ?? `edge call failed (${response.status})`);
   }
   return payload;
@@ -480,6 +498,10 @@ async function checkPhotoGuidance(photo) {
     });
     const report = await response.json();
     if (!current()) return;
+    if (response.status === 401 || response.status === 403) {
+      state.photoGuidanceMessage = 'Reviewer access could not be confirmed. Sign in again before checking this photo.';
+      return;
+    }
     if (!response.ok || report.submission_id !== selected.id ||
         report.photo_id !== photo.photo_id || report.photo_sha256 !== photo.content_sha256 ||
         report.evidence_revision !== selected.evidence_revision ||
