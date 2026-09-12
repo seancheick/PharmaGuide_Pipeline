@@ -507,3 +507,11 @@ input, select, textarea, button { max-width: 100%; min-width: 0; }
   font-weight: 400;
 }
 #label-comparison.hidden { display: none; }
+
+/* Different units are not a difference in dose. Said in words and muted, so
+   it never reads as the evidence a decision rests on. */
+#comparison-table tr.units-differ td { color: var(--fg-muted); font-style: italic; }
+#comparison-table tr.units-differ td:first-child::after {
+  content: " — different units";
+  font-style: normal;
+}

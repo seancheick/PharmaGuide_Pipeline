@@ -470,15 +470,14 @@ def test_the_comparison_shows_what_actually_differs():
       const rows=labelComparisonRows(state.payload,
         state.identityLookup.matches[1].draft_payload);
       out.rows=rows;
-      out.differing=rows.filter(([,mine,theirs])=>mine!==theirs).map(r=>r[0]);
+      out.differing=rows.filter(r=>r[3]==='differs').map(r=>r[0]);
     """)
-    # The product name, both biotin amounts, and each folate spelling differ.
     assert "Biotin" in out["differing"]
     assert "Product name" in out["differing"]
-    assert ["Servings per container", "30", "30"] in out["rows"]
-    assert ["Serving size", "1 Softgel(s)", "1 Softgel(s)"] in out["rows"]
-    assert ["Biotin", "35 mcg", "300 mcg"] in out["rows"]
-    assert ["Folate", "1330 mcg DFE", "not on that record"] in out["rows"]
+    assert ["Servings per container", "30", "30", "same"] in out["rows"]
+    assert ["Serving size", "1 Softgel(s)", "1 Softgel(s)", "same"] in out["rows"]
+    assert ["Biotin", "35 mcg", "300 mcg", "differs"] in out["rows"]
+    assert ["Folate", "1330 mcg DFE", "not on that record", "differs"] in out["rows"]
 
 
 def test_choosing_correction_or_edition_clears_the_blocker():
@@ -600,3 +599,48 @@ def test_a_decision_is_bound_to_the_label_it_was_made_against():
     # The table is redrawn from the edited label, not left describing the old one.
     assert "EDITED AFTER DECISION" not in out["summary"]
     assert out["summary"]
+
+
+
+def test_a_unit_change_alone_is_never_read_as_a_new_formula():
+    """400 IU and 10 mcg of vitamin D are the same dose printed two ways.
+
+    FDA moved labels from IU to mcg, so an old record and a new label can show
+    one formula in two unit systems. The comparison must not present that as
+    the difference a correction-or-edition decision rests on.
+    """
+    out = _catalog_hit("""
+      const rows=labelComparisonRows(
+        {ingredientRows:[
+          {name:'Vitamin D',quantity:[{quantity:10,unit:'mcg'}]},
+          {name:'Vitamin A',quantity:[{quantity:650,unit:'mcg RAE'}]},
+          {name:'Zinc',quantity:[{quantity:13,unit:'mg'}]}]},
+        {ingredientRows:[
+          {name:'Vitamin D',quantity:[{quantity:400,unit:'IU'}]},
+          {name:'Vitamin A',quantity:[{quantity:4000,unit:'IU'}]},
+          {name:'Zinc',quantity:[{quantity:15,unit:'mg'}]}]});
+      out.status=Object.fromEntries(rows.filter(r=>r[0].startsWith('Vitamin')||r[0]==='Zinc')
+        .map(r=>[r[0],r[3]]));
+    """)
+    assert out["status"]["Vitamin D"] == "units"
+    assert out["status"]["Vitamin A"] == "units"
+    # Same unit, different amount: that is evidence.
+    assert out["status"]["Zinc"] == "differs"
+
+
+def test_the_same_equivalence_written_two_ways_still_compares():
+    """"mcg DFE" and "mcg DFE (as folic acid)" are one unit kind.
+
+    Treating them as different units would hide a real dose change as a unit
+    difference — the reverse failure, and the one that loses evidence.
+    """
+    out = _catalog_hit("""
+      const rows=labelComparisonRows(
+        {ingredientRows:[{name:'Folate',quantity:[{quantity:680,unit:'mcg DFE (as folic acid)'}]},
+                         {name:'Niacin',quantity:[{quantity:16,unit:'mg NE'}]}]},
+        {ingredientRows:[{name:'Folate',quantity:[{quantity:1330,unit:'mcg DFE'}]},
+                         {name:'Niacin',quantity:[{quantity:20,unit:'mg NE'}]}]});
+      out.status=Object.fromEntries(rows.filter(r=>['Folate','Niacin'].includes(r[0]))
+        .map(r=>[r[0],r[3]]));
+    """)
+    assert out["status"] == {"Folate": "differs", "Niacin": "differs"}

@@ -598,6 +598,28 @@ function servingText(label) {
   return [size, serving.unit].filter(Boolean).join(' ') || '—';
 }
 
+/** What a unit measures. Amounts are compared only within one kind.
+ *
+ * IU and micrograms can describe the same dose: FDA moved labels from IU to
+ * mcg with compliance in 2020–21, so an older record and a newer label can
+ * print one formula two ways. Converting between them depends on the form —
+ * natural and synthetic vitamin E convert differently — which this page does
+ * not know, and the pipeline's unit conversions own that rule. So a different
+ * kind is reported as not comparable here, never read as a new formula.
+ */
+function unitKind(unit) {
+  const text = String(unit ?? '').trim().toLowerCase();
+  if (!text) return 'none';
+  if (/^iu\b/.test(text)) return 'iu';
+  // Keyed by the equivalence itself, not the whole string: "mcg DFE" and
+  // "mcg DFE (as folic acid)" measure the same thing, so a real change in
+  // amount between them is evidence, not a unit difference.
+  const equivalent = text.match(/\b(rae|dfe|ne|alpha-te|a-te)\b/);
+  if (equivalent) return `equivalent:${equivalent[1]}`;
+  if (/^(mcg|µg|ug|mg|g)$/.test(text)) return 'mass';
+  return text;
+}
+
 function amountsByName(label) {
   const amounts = new Map();
   for (const row of label?.ingredientRows ?? []) {
@@ -606,6 +628,7 @@ function amountsByName(label) {
     const quantity = (row.quantity ?? [])[0] ?? {};
     amounts.set(name.toLowerCase(), {
       name,
+      unit: quantity.unit ?? null,
       text: [quantity.quantity, quantity.unit].filter(
         (part) => part !== undefined && part !== null && part !== '',
       ).join(' ') || '—',
@@ -614,28 +637,38 @@ function amountsByName(label) {
   return amounts;
 }
 
-/** Field, this label, catalog record — in label order, amounts last. */
+/** Field, this label, catalog record, and whether they differ — in label
+ *  order, amounts last. `units` means the two print the amount in different
+ *  kinds of unit, so this page cannot say whether the dose changed. */
 function labelComparisonRows(submitted, catalog) {
+  const shown = (value) =>
+    value === undefined || value === null || value === '' ? '—' : String(value);
   const rows = [
     ['Brand', submitted?.brandName, catalog?.brandName],
     ['Product name', submitted?.fullName, catalog?.fullName],
     ['Servings per container',
       submitted?.servingsPerContainer, catalog?.servingsPerContainer],
     ['Serving size', servingText(submitted), servingText(catalog)],
-  ].map(([field, mine, theirs]) => [
-    field,
-    mine === undefined || mine === null || mine === '' ? '—' : String(mine),
-    theirs === undefined || theirs === null || theirs === '' ? '—' : String(theirs),
-  ]);
+  ].map(([field, mine, theirs]) => {
+    const left = shown(mine);
+    const right = shown(theirs);
+    return [field, left, right, left === right ? 'same' : 'differs'];
+  });
   const mine = amountsByName(submitted);
   const theirs = amountsByName(catalog);
   for (const key of new Set([...mine.keys(), ...theirs.keys()])) {
     const left = mine.get(key);
     const right = theirs.get(key);
+    let status = 'differs';
+    if (left && right) {
+      if (left.text === right.text) status = 'same';
+      else if (unitKind(left.unit) !== unitKind(right.unit)) status = 'units';
+    }
     rows.push([
       (left ?? right).name,
       left ? left.text : 'not on this label',
       right ? right.text : 'not on that record',
+      status,
     ]);
   }
   return rows;
@@ -658,16 +691,24 @@ function renderLabelComparison(dsldId) {
   section.classList.remove('hidden');
   $('comparison-target').textContent = dsldId;
   const rows = labelComparisonRows(state.payload, catalog);
-  const differing = rows.filter(([, mine, theirs]) => mine !== theirs).length;
-  $('comparison-summary').textContent = differing === 0
-    ? 'Every field below reads the same on both.'
-    : `${plural(differing, 'field')} read differently. Read them off the ` +
-      'photographs before deciding.';
+  const differing = rows.filter((row) => row[3] === 'differs').length;
+  const unitsOnly = rows.filter((row) => row[3] === 'units').length;
+  $('comparison-summary').textContent = [
+    differing === 0
+      ? 'No field reads differently in the same units.'
+      : `${plural(differing, 'field')} read differently in the same units — ` +
+        'the evidence that decides between a correction and an edition.',
+    unitsOnly === 0
+      ? ''
+      : `${plural(unitsOnly, 'amount')} printed in different units (for example ` +
+        'IU and mcg) cannot be compared here and prove nothing on their own.',
+  ].filter(Boolean).join(' ');
   const body = $('comparison-table').querySelector('tbody');
   body.textContent = '';
-  for (const [field, mine, theirs] of rows) {
+  for (const [field, mine, theirs, status] of rows) {
     const tr = document.createElement('tr');
-    if (mine !== theirs) tr.className = 'differs';
+    if (status === 'differs') tr.className = 'differs';
+    else if (status === 'units') tr.className = 'units-differ';
     for (const value of [field, mine, theirs]) {
       const td = document.createElement('td');
       td.textContent = value;
