@@ -533,3 +533,44 @@ def test_a_verified_no_match_still_carries_no_catalog_relation():
     assert out["call"], "approval was refused"
     assert "correction_target_dsld_id" not in out["call"]
     assert "edition_of_dsld_id" not in out["call"]
+
+
+def test_a_decision_dies_with_the_match_check_it_was_made_against():
+    """A relation is only as good as the recorded check that supports it.
+
+    Re-running the lookup after the catalog moved can retract the match the
+    decision was made against. The decision must not outlive it and reach an
+    approval, where the server would refuse it as a mismatch the reviewer
+    cannot see.
+    """
+    out = _catalog_hit("""(async()=>{
+      chooseCatalogRelation('edition', '178392');
+      // The catalog moved: this barcode is nobody else's now.
+      state.identityLookup={canonical_gtin14:'00016500558170',index_revision:'r2',
+        freshness:'fresh',matches:[]};
+      state.identityRecorded='no_match_verified';
+      state.payloadSha='a'.repeat(64);
+      state.payloadCanonical=canonicalJson(state.payload);
+      state.diagnostics=[];
+      for(const [field] of CRITICAL_FIELDS) toggleVerified(field);
+      requireCurrentIdentity=async()=>state.identityLookup;
+      await approve();
+      out.call=calls.filter(c=>c.to_status==='approved')[0]||null;
+    })()""")
+    assert out["call"], "approval was refused"
+    assert "edition_of_dsld_id" not in out["call"]
+    assert "correction_target_dsld_id" not in out["call"]
+
+
+def test_a_decision_for_another_record_never_rides_along():
+    """The lookup now names a different catalog record than the one decided."""
+    out = _catalog_hit("""
+      chooseCatalogRelation('correction', '178392');
+      state.identityLookup.matches=[{source:'catalog',dsld_id:'299239',
+        brand_name:'Other',product_name:'Other'}];
+      renderReadiness();
+      out.blocked=(document.getElementById('readiness-list').children||[])
+        .filter(n=>n.className==='blocking').map(n=>n.textContent);
+    """)
+    assert any("corrects that record or is a separate edition" in text
+               for text in out["blocked"]), out["blocked"]
