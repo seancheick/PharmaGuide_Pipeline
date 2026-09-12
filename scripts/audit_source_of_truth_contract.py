@@ -28,7 +28,12 @@ from assessment_readiness import (
 
 from stage_manifest import select_stage_files
 from pipeline_freshness import enrichment_reference_freshness_issues
-from release_catalog_artifact import ReleaseValidationError, verified_contract_quarantines
+from release_catalog_artifact import (
+    ReleaseValidationError,
+    SUPPRESSED_SAFETY_DOSE_QUARANTINE,
+    verified_contract_quarantines,
+    verified_warning_only_products,
+)
 from supplement_taxonomy import (
     CLASSIFICATION_CONTRACT_VERSION,
     INPUT_CONTRACT_IQD_ALL_ROWS,
@@ -714,9 +719,11 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
         return [Finding("SCORING_NO_INPUT", "no scored product files found for scoring contract audit")]
 
     quarantines = {}
+    warning_only = set()
     if getattr(args, "dist_dir", None):
         try:
             quarantines = verified_contract_quarantines(repo_path(args.dist_dir))
+            warning_only = verified_warning_only_products(repo_path(args.dist_dir))
         except (ReleaseValidationError, OSError, ValueError) as exc:
             return [Finding("SCORING_QUARANTINE_PROOF_INVALID", str(exc), str(args.dist_dir))]
 
@@ -933,9 +940,22 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                 and any(issue.startswith("review_queue: identity integrity ")
                         for issue in quarantines.get(pid, ()))
             )
-            if identity_contained:
+            warning_contained = (
+                pid in warning_only and quality_status == "suppressed_safety"
+                and verdict in {"BLOCKED", "UNSAFE"}
+                and product.get("quality_score_v4_100") is None
+                and product.get("score_100_equivalent") is None
+            )
+            dose_contained = (
+                quality_status == "suppressed_safety"
+                and product.get("quality_score_v4_100") is None
+                and product.get("score_100_equivalent") is None
+                and typed_suppressed_dose_failure
+                and SUPPRESSED_SAFETY_DOSE_QUARANTINE in quarantines.get(pid, ())
+            )
+            if identity_contained or warning_contained or dose_contained:
                 contained_codes = set()
-                if typed_suppressed_dose_failure:
+                if (identity_contained or dose_contained) and typed_suppressed_dose_failure:
                     contained_codes.add("SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE")
                 strict_reasons = strict_contract.get("findings")
                 if (

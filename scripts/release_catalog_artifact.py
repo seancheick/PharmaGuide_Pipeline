@@ -98,9 +98,17 @@ import os
 import shutil
 import sqlite3
 import sys
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
+
+
+# Shared serialized receipt: the builder records it and source audits verify
+# actual exclusion before containing the corresponding readiness finding.
+SUPPRESSED_SAFETY_DOSE_QUARANTINE = (
+    "review_queue: suppressed safety product has unresolved material dose assessment."
+)
 
 
 # ---------------------------------------------------------------------------
@@ -501,6 +509,35 @@ def verified_contract_quarantines(input_dir: Path) -> dict[str, tuple[str, ...]]
         )
         receipts[pid] = tuple(issues)
     return receipts
+
+
+def verified_warning_only_products(input_dir: Path) -> set[str]:
+    """Prove warning-only publication from the checksum-validated catalog.
+
+    A source status flag alone is not containment. Numeric public scores must
+    be null in the actual catalog. The retired text display may also carry its
+    defined "N/A" sentinel; schemas without the v4 score cannot prove containment.
+    """
+    result = validate_release_candidate(input_dir=input_dir, min_products=1)
+    uri = result["db_path"].resolve().as_uri() + "?mode=ro"
+    with closing(sqlite3.connect(uri, uri=True)) as conn:
+        columns = {row[1] for row in conn.execute("PRAGMA table_info(products_core)")}
+        required = {"dsld_id", "verdict", "quality_score_status", "quality_score_v4_100"}
+        if not required <= columns:
+            return set()
+        mirror_checks = ""
+        if "score_100_equivalent" in columns:
+            mirror_checks += " AND score_100_equivalent IS NULL"
+        if "score_display_100_equivalent" in columns:
+            mirror_checks += (
+                " AND (score_display_100_equivalent IS NULL"
+                " OR score_display_100_equivalent='N/A')"
+            )
+        return {str(row[0]) for row in conn.execute(
+            "SELECT dsld_id FROM products_core WHERE verdict IN ('BLOCKED','UNSAFE') "
+            "AND quality_score_status='suppressed_safety' AND quality_score_v4_100 IS NULL "
+            + mirror_checks
+        )}
 
 
 # ---------------------------------------------------------------------------

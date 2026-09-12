@@ -1457,7 +1457,7 @@ def _safety_only_product(row=None, **scored_overrides):
         ingredient_quality_data={"ingredients": [row], "ingredients_scorable": []},
     )
     strict = {"passed": False, "findings": [_SAFETY_ONLY_FINDING]}
-    scored = _base_scored(**{"verdict": "BLOCKED", **scored_overrides},
+    scored = _base_scored(**{"verdict": "BLOCKED", "display_100": "N/A", **scored_overrides},
                           strict_scoring_contract=strict)
     scored["scoring_metadata"]["strict_scoring_contract"] = strict
     return enriched, scored
@@ -1471,6 +1471,85 @@ def _gate_issues(enriched, scored):
 def test_a_banned_product_ships_its_blocked_verdict():
     enriched, scored = _safety_only_product()
     assert _gate_issues(enriched, scored) == []
+
+
+def _safety_only_label_product():
+    enriched, scored = _safety_only_product(_safety_only_row(path="ingredientRows[0]"))
+    source = {
+        "raw_source_path": "ingredientRows[0]",
+        "raw_source_text": "Broad Spectrum Phytocannabinoids",
+        "source_section": "activeIngredients",
+        "score_eligible_by_cleaner": True,
+    }
+    enriched["label_source_rows"] = [source]
+    enriched["raw_actives_count"] = 1
+    enriched["display_ingredients"] = [{
+        **source, "display_type": "unmapped_ingredient",
+        "display_disposition": "unmapped", "score_included": False,
+        "canonical_id": None,
+    }]
+    return enriched, scored
+
+
+def test_warning_only_product_builds_a_label_without_faking_mapping_coverage():
+    enriched, scored = _safety_only_label_product()
+    blob = build_detail_blob(enriched, scored)
+    assert blob["row_ledger"][0]["mapping_disposition"] == "unresolved_score_active"
+    assert blob["row_ledger_summary"]["mapped_coverage"] == 0.0
+    assert blob["row_ledger"][0]["source_label"] == "Broad Spectrum Phytocannabinoids"
+
+
+@pytest.mark.parametrize("mutation", ["scored", "wrong_label", "other_path"])
+def test_warning_only_label_cannot_excuse_another_unresolved_row(mutation):
+    enriched, scored = _safety_only_label_product()
+    if mutation == "scored":
+        scored["_v4_quality_score_100"] = 75
+    elif mutation == "wrong_label":
+        enriched["label_source_rows"][0]["raw_source_text"] = "Magnesium"
+    else:
+        enriched["ingredient_quality_data"]["ingredients"][0]["raw_source_path"] = "ingredientRows[1]"
+    with pytest.raises(ValueError, match="UNRESOLVED_SCORE_ACTIVE"):
+        build_detail_blob(enriched, scored)
+
+
+@pytest.mark.parametrize("overrides", [
+    {"label_display_name": "Wrong label"},
+    {"source_label_name": ""},
+    {"scoreable_identity": True},
+    {"canonical_id": "magnesium"},
+    {"canonical_id_after": "magnesium"},
+    {"canonical_id_before": "magnesium"},
+    {"recognition_source": "ingredient_quality_map"},
+    {"raw_source_path": ""},
+])
+def test_safety_exception_requires_an_honest_unscored_label_row(overrides):
+    enriched, scored = _safety_only_product(_safety_only_row(**overrides))
+    assert _gate_issues(enriched, scored)
+
+
+def test_safety_exception_cannot_hide_a_second_conflict_at_the_same_path():
+    enriched, scored = _safety_only_product()
+    enriched["ingredient_quality_data"]["ingredients"].append(
+        _safety_only_row(identity_decision_reason="competing_identity")
+    )
+    assert _gate_issues(enriched, scored)
+
+
+@pytest.mark.parametrize("field", ["_v4_quality_score_100", "quality_score_v4_100", "score_100_equivalent"])
+def test_warning_only_exception_requires_null_scores(field):
+    enriched, scored = _safety_only_product(**{field: 75})
+    assert _gate_issues(enriched, scored)
+
+
+def test_warning_only_exception_rejects_a_numeric_display_string():
+    enriched, scored = _safety_only_product(display_100="75/100")
+    assert _gate_issues(enriched, scored)
+
+
+def test_warning_only_exception_requires_a_typed_contract_failure():
+    enriched, scored = _safety_only_product()
+    scored["strict_scoring_contract"]["passed"] = None
+    assert _gate_issues(enriched, scored)
 
 
 def test_a_product_that_ships_a_score_is_still_held_to_the_score_contract():

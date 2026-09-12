@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from collections import Counter
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Any, Literal
@@ -28,6 +29,40 @@ IDENTITY_DISPOSITIONS: tuple[IdentityDisposition, ...] = (
     "missing_display_label",
 )
 _SCOREABLE_DISPOSITIONS = frozenset({"clean", "repaired", "taxonomy_only"})
+
+
+def safety_only_conflict_paths(rows: Iterable[Mapping[str, Any]]) -> set[str]:
+    """Identify intact label rows whose only unresolved identity is safety-only.
+
+    This does not make a row scoreable. Export/release may contain this finding
+    only when the product actually ships a BLOCKED/UNSAFE warning and no score.
+    Paths must be nonempty and unique so one row cannot excuse another.
+    """
+    rows = [row for row in rows if isinstance(row, Mapping)]
+    paths = Counter(
+        row["raw_source_path"] for row in rows
+        if isinstance(row.get("raw_source_path"), str)
+    )
+    return {
+        row["raw_source_path"] for row in rows
+        if isinstance(row.get("raw_source_path"), str)
+        and row["raw_source_path"].strip()
+        and paths[row["raw_source_path"]] == 1
+        and row.get("identity_disposition") == "identity_conflict"
+        and row.get("identity_decision_reason") == "safety_recognition_without_primary_identity"
+        and row.get("recognition_source") in {"banned_recalled_ingredients", "harmful_additives"}
+        and isinstance(row.get("safety_identity_id"), str)
+        and row["safety_identity_id"].strip()
+        and row.get("scoreable_identity") is False
+        and not row.get("canonical_id")
+        and not row.get("canonical_id_before")
+        and not row.get("canonical_id_after")
+        and isinstance(row.get("source_label_name"), str)
+        and row["source_label_name"].strip()
+        and row.get("label_display_name") == normalize_label_display(row["source_label_name"])
+    }
+
+
 _PARENTHESIZED_MARKER_RE = re.compile(r"\((?:tm|r|sm)\)", re.IGNORECASE)
 _PARENTHESIZED_IDENTITY_RE = re.compile(r"^(.+?)\s*\(([^()]*)\)\s*$")
 _LITERAL_PARENTHESIZED_IDENTITY_RE = re.compile(

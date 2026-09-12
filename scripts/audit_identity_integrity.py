@@ -23,6 +23,10 @@ With ``--export-dir``, an unresolved non-scoreable identity may be contained by
 the candidate's verified export quarantine. The source finding is preserved;
 the product must be absent from SQLite, the detail index, and local blobs.
 All other identity-contract failures still block the release.
+
+An intact safety-only unresolved row may instead be contained by a verified
+BLOCKED/UNSAFE catalog record with no numeric public score. This uses
+the same row eligibility policy as export; source dispositions stay unchanged.
 """
 
 from __future__ import annotations
@@ -35,8 +39,16 @@ from pathlib import Path
 from typing import Any, Callable, Iterator, Optional
 
 from enrichment_contract_validator import EnrichmentContractValidator
-from identity_integrity import IDENTITY_DISPOSITIONS, normalize_label_display
-from release_catalog_artifact import ReleaseValidationError, verified_contract_quarantines
+from identity_integrity import (
+    IDENTITY_DISPOSITIONS,
+    normalize_label_display,
+    safety_only_conflict_paths,
+)
+from release_catalog_artifact import (
+    ReleaseValidationError,
+    verified_contract_quarantines,
+    verified_warning_only_products,
+)
 from scoring_v4.router import VALID_CLASSES, class_for_product
 from stage_manifest import select_stage_files
 
@@ -62,6 +74,7 @@ class DispositionRecord:
     scoreable_identity: bool
     rationale: str
     violation: str | None
+    safety_only_identity: bool = False
 
     @property
     def failed(self) -> bool:
@@ -192,6 +205,7 @@ def audit_product(
         route = "generic"
     product_id = str(product.get("dsld_id") or product.get("id") or "unknown")
     records: list[DispositionRecord] = []
+    safety_paths = safety_only_conflict_paths(_identity_rows(product))
     for active, row, pair_violation in _active_identity_pairs(product):
         active = active or {}
         if (
@@ -241,6 +255,10 @@ def audit_product(
                 scoreable_identity=bool(row.get("scoreable_identity")),
                 rationale=str(row.get("identity_resolution_rationale") or ""),
                 violation=pair_violation or _row_violation(row),
+                safety_only_identity=(
+                    isinstance(row.get("raw_source_path"), str)
+                    and row["raw_source_path"] in safety_paths
+                ),
             )
         )
 
@@ -331,14 +349,16 @@ def _format_summary(records: list[DispositionRecord]) -> str:
 def uncontained_failures(
     records: list[DispositionRecord], export_dir: Path,
 ) -> list[DispositionRecord]:
-    """Prove containment using the existing export contract, never a score flag.
+    """Prove quarantine or warning-only containment from the actual export.
 
     The common release validator owns manifest/checksum/count reconciliation
     and quarantine absence from SQLite and detail_index. This adapter only
-    joins the independently audited identity findings to that proven ledger.
+    joins the independently audited identity findings to that proven ledger
+    or a verified warning-only catalog row.
     It does not alter source dispositions or decide catalog eligibility.
     """
     receipts = verified_contract_quarantines(export_dir)
+    warning_only = verified_warning_only_products(export_dir)
     identity_quarantines = {
         pid for pid, issues in receipts.items()
         if any(
@@ -353,7 +373,9 @@ def uncontained_failures(
         contained = (
             record.violation == "unresolved_identity_conflict"
             and not record.scoreable_identity
-            and record.product_id in identity_quarantines
+            and (record.product_id in identity_quarantines
+                 or (record.safety_only_identity
+                     and (record.product_id in warning_only or record.product_id in receipts)))
         )
         if not contained:
             failures.append(record)
@@ -381,8 +403,8 @@ def main() -> int:
             return 1
         contained = [r for r in records if r.failed and r not in failures]
         print(
-            f"verified identity quarantine: {len(contained)} row(s) in "
-            f"{len({r.product_id for r in contained})} excluded product(s)"
+            f"verified identity containment: {len(contained)} row(s) in "
+            f"{len({r.product_id for r in contained})} quarantined or warning-only product(s)"
         )
     if failures:
         failures.sort(key=lambda r: (r.source_path, r.product_id, r.violation or ""))

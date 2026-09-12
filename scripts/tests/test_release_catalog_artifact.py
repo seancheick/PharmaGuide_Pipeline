@@ -288,7 +288,7 @@ def test_validate_accepts_proven_contract_quarantine(good_release_dir: Path) -> 
     assert result["contract_quarantine_count"] == 1
 
 
-def _identity_quarantine(input_dir: Path, product_id: str = "HELD"):
+def _identity_quarantine(input_dir: Path, product_id: str = "HELD", *, issue=None):
     record = identity_audit.DispositionRecord(
         product_id=product_id, route="generic", source_path="ingredientRows[0]",
         label_display_name="Nickel", label_display_form=None,
@@ -297,7 +297,7 @@ def _identity_quarantine(input_dir: Path, product_id: str = "HELD"):
         rationale="Primary identity is unresolved.",
         violation="unresolved_identity_conflict",
     )
-    issue = "review_queue: identity integrity ingredientRows[0]:unresolved_identity_conflict"
+    issue = issue or "review_queue: identity integrity ingredientRows[0]:unresolved_identity_conflict"
     manifest_path = input_dir / "export_manifest.json"
     manifest = json.loads(manifest_path.read_text())
     manifest["integrity"].update(contract_quarantine_count=1, excluded_by_gate_count=1)
@@ -315,6 +315,130 @@ def test_identity_gate_accepts_only_proven_export_quarantine(good_release_dir):
     record = _identity_quarantine(good_release_dir)
     assert record.failed  # The source defect remains a defect.
     assert identity_audit.uncontained_failures([record], good_release_dir) == []
+
+
+def test_safety_identity_can_be_contained_by_a_verified_dose_quarantine(good_release_dir):
+    from dataclasses import replace
+    record = _identity_quarantine(
+        good_release_dir,
+        issue="review_queue: suppressed safety product has unresolved material dose assessment.",
+    )
+    assert identity_audit.uncontained_failures([record], good_release_dir)
+    safety_record = replace(record, safety_only_identity=True)
+    assert identity_audit.uncontained_failures([safety_record], good_release_dir) == []
+
+
+def test_scoring_gate_accepts_dose_hold_but_not_inferred_or_unrelated_failures(good_release_dir):
+    from audit_source_of_truth_contract import audit_scoring
+    from test_scoring_source_of_truth_audit import _args, _scored, _write
+    _identity_quarantine(
+        good_release_dir,
+        issue="review_queue: suppressed safety product has unresolved material dose assessment.",
+    )
+    product = _scored(dsld_id="HELD", quality_score_status="suppressed_safety",
+                      verdict="BLOCKED", quality_score_v4_100=None, score_100_equivalent=None,
+                      strict_scoring_contract={"passed": False, "findings": ["identity_disposition_not_scoreable:identity_conflict"]})
+    product["assessment_readiness"]["dose"]["readiness"] = "incomplete"
+    path = good_release_dir.parent / "held-scored.json"
+    args = _args(path)
+    args.dist_dir = str(good_release_dir)
+    _write(path, product)
+    assert audit_scoring(args) == []
+    product["assessment_readiness"]["dose"]["migration_inference"] = True
+    _write(path, product)
+    assert audit_scoring(args)
+    product["assessment_readiness"]["dose"]["migration_inference"] = False
+    product["strict_scoring_contract"]["findings"].append("unrelated_failure")
+    _write(path, product)
+    assert any(f.code == "SCORING_STRICT_CONTRACT_FAILED" for f in audit_scoring(args))
+
+
+def _warning_only_candidate(directory, *, verdict="BLOCKED", status="suppressed_safety", score=None):
+    db = directory / "pharmaguide_core.db"
+    with sqlite3.connect(db) as conn:
+        for name, kind in (("verdict", "TEXT"), ("quality_score_status", "TEXT"),
+                           ("quality_score_v4_100", "REAL"), ("score_100_equivalent", "REAL"),
+                           ("score_display_100_equivalent", "TEXT")):
+            conn.execute(f"ALTER TABLE products_core ADD COLUMN {name} {kind}")
+        conn.execute("UPDATE products_core SET verdict=?, quality_score_status=?, "
+                     "quality_score_v4_100=? WHERE dsld_id='ID00000'", (verdict, status, score))
+    manifest_path = directory / "export_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["checksum"] = "sha256:" + rca.compute_sha256(db)
+    manifest_path.write_text(json.dumps(manifest))
+    from test_export_gate import _safety_only_product
+    enriched, _ = _safety_only_product()
+    enriched["dsld_id"] = "ID00000"
+    return identity_audit.audit_product(enriched)
+
+
+def test_identity_gate_accepts_verified_warning_only_export(good_release_dir):
+    records = _warning_only_candidate(good_release_dir)
+    assert any(r.failed for r in records)  # Source remains unresolved for scoring.
+    assert identity_audit.uncontained_failures(records, good_release_dir) == []
+
+
+def test_warning_only_proof_accepts_the_real_unavailable_display_sentinel(good_release_dir):
+    records = _warning_only_candidate(good_release_dir)
+    db = good_release_dir / "pharmaguide_core.db"
+    with sqlite3.connect(db) as conn:
+        conn.execute("UPDATE products_core SET score_display_100_equivalent='N/A' WHERE dsld_id='ID00000'")
+    path = good_release_dir / "export_manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest["checksum"] = "sha256:" + rca.compute_sha256(db)
+    path.write_text(json.dumps(manifest))
+    assert identity_audit.uncontained_failures(records, good_release_dir) == []
+
+
+def test_warning_only_proof_supports_catalogs_without_retired_score_mirrors(good_release_dir):
+    records = _warning_only_candidate(good_release_dir)
+    db = good_release_dir / "pharmaguide_core.db"
+    with sqlite3.connect(db) as conn:
+        conn.execute("ALTER TABLE products_core DROP COLUMN score_100_equivalent")
+        conn.execute("ALTER TABLE products_core DROP COLUMN score_display_100_equivalent")
+    path = good_release_dir / "export_manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest["checksum"] = "sha256:" + rca.compute_sha256(db)
+    path.write_text(json.dumps(manifest))
+    assert identity_audit.uncontained_failures(records, good_release_dir) == []
+
+
+@pytest.mark.parametrize("changes", [
+    {"score": 75}, {"verdict": "SAFE"}, {"status": "scored"},
+])
+def test_warning_only_identity_exception_never_accepts_a_score_or_safe_verdict(good_release_dir, changes):
+    records = _warning_only_candidate(good_release_dir, **changes)
+    assert identity_audit.uncontained_failures(records, good_release_dir)
+
+
+@pytest.mark.parametrize("mirror", ["score_100_equivalent", "score_display_100_equivalent"])
+def test_warning_only_identity_exception_rejects_a_numeric_compatibility_score(good_release_dir, mirror):
+    records = _warning_only_candidate(good_release_dir)
+    db = good_release_dir / "pharmaguide_core.db"
+    with sqlite3.connect(db) as conn:
+        conn.execute(f"UPDATE products_core SET {mirror}=0 WHERE dsld_id='ID00000'")
+    path = good_release_dir / "export_manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest["checksum"] = "sha256:" + rca.compute_sha256(db)
+    path.write_text(json.dumps(manifest))
+    assert identity_audit.uncontained_failures(records, good_release_dir)
+
+
+def test_scoring_gate_accepts_verified_warning_only_export(good_release_dir):
+    from audit_source_of_truth_contract import audit_scoring
+    from test_scoring_source_of_truth_audit import _args, _scored, _write
+    _warning_only_candidate(good_release_dir)
+    product = _scored(dsld_id="ID00000", quality_score_status="suppressed_safety",
+                      verdict="BLOCKED", quality_score_v4_100=None, score_100_equivalent=None,
+                      strict_scoring_contract={"passed": False, "findings": ["identity_disposition_not_scoreable:identity_conflict"]})
+    path = good_release_dir.parent / "warning-scored.json"
+    _write(path, product)
+    args = _args(path)
+    args.dist_dir = str(good_release_dir)
+    assert audit_scoring(args) == []
+    product["assessment_readiness"]["dose"]["readiness"] = "incomplete"
+    _write(path, product)
+    assert any(f.code == "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" for f in audit_scoring(args))
 
 
 @pytest.mark.parametrize("surface", ["catalog", "index", "blob"])

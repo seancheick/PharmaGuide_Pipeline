@@ -84,14 +84,19 @@ from identity.interaction import (
     normalize_catalog_interaction_tag,
     normalize_interaction_canonical_id,
 )
+from identity_integrity import (
+    is_identity_scoreable,
+    normalize_label_display,
+    safety_only_conflict_paths,
+)
 from scoring_input_contract import get_scoring_ingredients
 from serving_frequency import (
     format_daily_frequency,
     resolve_daily_serving_multiplier,
 )
-from identity_integrity import is_identity_scoreable
 from label_record_contract import build_label_record_contract
 from row_ledger import build_row_ledger, summarize_row_ledger, validate_row_ledger
+from release_catalog_artifact import SUPPRESSED_SAFETY_DOSE_QUARANTINE
 from scoring_v4.modules.fiber_digestive_helpers import (
     fiber_rows as _fiber_goal_rows,
     has_fiber_context as _has_fiber_goal_context,
@@ -1722,26 +1727,13 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     # product that ships no score: withholding that product hides the ban from
     # the person scanning it. Every other identity or contract finding still
     # blocks, display defects included.
-    ships_no_score = (
-        safe_str(scored.get("_v4_quality_status")) == "suppressed_safety"
-        and safe_str(scored.get("verdict")).upper() in {"BLOCKED", "UNSAFE"}
-    )
     conflict_paths = {
         safe_str(ingredient.get("raw_source_path"))
         for ingredient in ingredients
         if isinstance(ingredient, dict)
         and ingredient.get("identity_disposition") == "identity_conflict"
     }
-    safety_only_paths = {
-        safe_str(ingredient.get("raw_source_path"))
-        for ingredient in ingredients
-        if ships_no_score
-        and isinstance(ingredient, dict)
-        and ingredient.get("identity_disposition") == "identity_conflict"
-        and ingredient.get("identity_decision_reason")
-        == "safety_recognition_without_primary_identity"
-        and safe_str(ingredient.get("safety_identity_id"))
-    }
+    safety_only_paths = set(_warning_only_identity_labels(enriched, scored))
 
     # Fresh enriched rows carry the shared identity disposition. Reuse the
     # release audit rather than reproducing its identity rules here: direct
@@ -1802,9 +1794,12 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         issues.append("missing scored.strict_scoring_contract")
     elif strict_scoring_contract.get("passed") is not True and not (
         safety_only_paths
+        and strict_scoring_contract.get("passed") is False
         and conflict_paths <= safety_only_paths
-        and set(strict_scoring_contract.get("findings") or [])
-        == {"identity_disposition_not_scoreable:identity_conflict"}
+        and isinstance(strict_scoring_contract.get("findings"), list)
+        and bool(strict_scoring_contract["findings"])
+        and all(finding == "identity_disposition_not_scoreable:identity_conflict"
+                for finding in strict_scoring_contract["findings"])
     ):
         issues.append(
             "review_queue: export cannot ship score with failed strict "
@@ -1956,10 +1951,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
                 not in {"complete", "not_applicable"}
                 or dose_readiness.get("migration_inference") is True
             ):
-                issues.append(
-                    "review_queue: suppressed safety product has unresolved "
-                    "material dose assessment."
-                )
+                issues.append(SUPPRESSED_SAFETY_DOSE_QUARANTINE)
 
     coverage = scored.get("mapped_coverage")
     try:
@@ -3449,8 +3441,33 @@ def _classify_export_contract_issues(issues: List[str]) -> str:
     return "warning"
 
 
+def _warning_only_identity_labels(
+    enriched: Dict[str, Any], scored: Dict[str, Any],
+) -> Dict[str, str]:
+    """Contain safety-only identity gaps without authorizing a public score."""
+    if not (
+        scored.get("_v4_quality_status") == "suppressed_safety"
+        and safe_str(scored.get("verdict")).upper() in {"BLOCKED", "UNSAFE"}
+        and scored.get("_v4_quality_score_100") is None
+        and scored.get("quality_score_v4_100") is None
+        and scored.get("score_100_equivalent") is None
+        and scored.get("display_100") == "N/A"
+    ):
+        return {}
+    rows = safe_list(safe_dict(enriched.get("ingredient_quality_data")).get("ingredients"))
+    paths = safety_only_conflict_paths(rows)
+    return {
+        row["raw_source_path"]: row["label_display_name"]
+        for row in rows
+        if isinstance(row, dict)
+        and isinstance(row.get("raw_source_path"), str)
+        and row["raw_source_path"] in paths
+    }
+
+
 def _validate_active_count_reconciliation(
-    blob: Dict[str, Any], raw_actives_count: int, dsld_id: str
+    blob: Dict[str, Any], raw_actives_count: int, dsld_id: str,
+    *, warning_only_identity_labels: Optional[Dict[str, str]] = None,
 ) -> None:
     """Reconcile source actives exactly, with a legacy aggregate fallback."""
     blob_actives = len(blob.get("ingredients") or [])
@@ -3474,6 +3491,25 @@ def _validate_active_count_reconciliation(
         # aggregate inconsistently counted forms and alternate serving rows,
         # so it remains diagnostic only once an exact ledger is present.
         issues = validate_row_ledger(blob.get("row_ledger"), None)
+        # The strict ledger stays honest about its unresolved mapping and
+        # coverage. Contain only the same intact safety-only source row that
+        # passed the export identity gate, never a dropped or substituted row.
+        labels = warning_only_identity_labels or {}
+        contained_refs = {
+            row.get("row_ref") for row in safe_list(blob.get("row_ledger"))
+            if isinstance(row, dict)
+            and isinstance(row.get("row_ref"), str)
+            and row["row_ref"] in labels
+            and normalize_label_display(row.get("source_label")) == labels[row["row_ref"]]
+            and not row.get("canonical_id")
+            and row.get("mapping_disposition") == "unresolved_score_active"
+            and row.get("reason_code") == "UNRESOLVED_CANONICAL_IDENTITY"
+            and row.get("final_destination") == "display_ingredients"
+        }
+        issues = [issue for issue in issues if not (
+            issue.get("code") == "UNRESOLVED_SCORE_ACTIVE"
+            and issue.get("row_ref") in contained_refs
+        )]
         if issues:
             first = issues[0]
             raise ValueError(
@@ -8096,7 +8132,10 @@ def build_detail_blob(
         row_ledger_summary["legacy_raw_actives_count"] = raw_actives_count
         blob["row_ledger"] = row_ledger
         blob["row_ledger_summary"] = row_ledger_summary
-    _validate_active_count_reconciliation(blob, raw_actives_count, dsld_id_for_validation)
+    _validate_active_count_reconciliation(
+        blob, raw_actives_count, dsld_id_for_validation,
+        warning_only_identity_labels=_warning_only_identity_labels(enriched, scored),
+    )
 
     # Sprint E1.5.X-4 — product availability exposed as a dedicated top-level
     # field, structured so Flutter renders it in the "Consider" (soft-signal)
