@@ -1473,6 +1473,66 @@ def test_a_banned_product_ships_its_blocked_verdict():
     assert _gate_issues(enriched, scored) == []
 
 
+# A banned or recalled ingredient decides the verdict at any amount, so an
+# unassessed dose can never hold it back. Mirrors 252933: single-ingredient
+# Sulbutiamine, whose only row is the banned one, so no dose could ever be
+# assessed and the product vanished.
+_CONFIRMED_BAN = {
+    "verdict": "BLOCKED",
+    "winning_rule": "NOOTROPIC_SULBUTIAMINE",
+    "substance": "Sulbutiamine",
+    "matched_role": "active",
+    "match_resolution": "confirmed",
+    "reason_code": "banned_ingredient",
+    "policy_basis": {"status": "banned", "ban_context": "substance",
+                     "policy_verification_status": "verified"},
+}
+_CONFIRMED_RECALL = {
+    **_CONFIRMED_BAN,
+    "verdict": "UNSAFE",
+    "winning_rule": "RECALL_RULE",
+    "substance": "Recalled ingredient",
+    "reason_code": "recalled_ingredient",
+    "policy_basis": {"status": "recalled", "policy_verification_status": "verified"},
+}
+
+
+def _dose_hold_issues(verdict="BLOCKED", decision=_CONFIRMED_BAN, **dose):
+    from release_catalog_artifact import SUPPRESSED_SAFETY_DOSE_QUARANTINE
+    readiness = {"enforcement_mode": "enforced", "dose": {
+        "readiness": "incomplete", "reason_code": "no_scoreable_active_dose",
+        "migration_inference": False, **dose}}
+    scored = _base_scored(verdict=verdict, assessment_readiness=readiness)
+    if decision is not None:
+        scored["safety_decision"] = decision
+    return [issue for issue in validate_export_contract(_base_enriched(), scored)
+            if issue == SUPPRESSED_SAFETY_DOSE_QUARANTINE]
+
+
+@pytest.mark.parametrize("verdict, decision", [
+    ("BLOCKED", _CONFIRMED_BAN),
+    ("UNSAFE", _CONFIRMED_RECALL),
+])
+def test_a_confirmed_ban_or_recall_ships_though_its_dose_was_never_assessed(verdict, decision):
+    assert _dose_hold_issues(verdict, decision) == []
+
+
+@pytest.mark.parametrize("verdict, decision", [
+    ("BLOCKED", None),
+    ("BLOCKED", {**_CONFIRMED_BAN, "match_resolution": "likely"}),
+    ("BLOCKED", {**_CONFIRMED_BAN, "policy_basis": {
+        "status": "banned", "policy_verification_status": "needs_review"}}),
+    ("UNSAFE", _CONFIRMED_BAN),
+    ("BLOCKED", _CONFIRMED_RECALL),
+])
+def test_every_other_suppressed_verdict_is_still_held_for_an_unassessed_dose(verdict, decision):
+    assert _dose_hold_issues(verdict, decision)
+
+
+def test_a_confirmed_ban_is_still_held_on_legacy_dose_inference():
+    assert _dose_hold_issues(readiness="complete", migration_inference=True)
+
+
 def _safety_only_label_product():
     enriched, scored = _safety_only_product(_safety_only_row(path="ingredientRows[0]"))
     source = {

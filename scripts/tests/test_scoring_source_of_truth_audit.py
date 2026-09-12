@@ -228,6 +228,97 @@ def test_scoring_audit_rejects_unresolved_dose_on_safety_suppressed_product(
     assert "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" in codes
 
 
+def _confirmed_ban(**overrides) -> dict:
+    """The safety gate's record of a confirmed, policy-verified ban."""
+    decision = {
+        "verdict": "BLOCKED",
+        "winning_rule": "NOOTROPIC_SULBUTIAMINE",
+        "substance": "Sulbutiamine",
+        "matched_role": "active",
+        "match_resolution": "confirmed",
+        "reason_code": "banned_ingredient",
+        "policy_basis": {
+            "status": "banned",
+            "ban_context": "substance",
+            "policy_verification_status": "verified",
+        },
+    }
+    decision.update(overrides)
+    return decision
+
+
+def _codes_for_unassessed_dose(tmp_path: Path, verdict: str, decision) -> set:
+    path = tmp_path / "scored.json"
+    product = _scored(
+        verdict=verdict,
+        quality_score_status="suppressed_safety",
+        scoring_status="suppressed_safety",
+    )
+    if decision is not None:
+        product["safety_decision"] = decision
+    product["assessment_readiness"]["dose"]["readiness"] = "incomplete"
+    _write(path, product)
+    return {finding.code for finding in audit_scoring(_args(path))}
+
+
+def _confirmed_recall() -> dict:
+    return _confirmed_ban(
+        verdict="UNSAFE",
+        winning_rule="RECALL_RULE",
+        substance="Recalled ingredient",
+        reason_code="recalled_ingredient",
+        policy_basis={"status": "recalled", "policy_verification_status": "verified"},
+    )
+
+
+def test_scoring_audit_never_holds_a_confirmed_ban_or_recall_for_its_dose(
+    tmp_path: Path,
+) -> None:
+    # A banned or recalled ingredient decides the verdict at any amount, so its
+    # dose decides nothing. The hold hid single-ingredient Sulbutiamine (252933):
+    # no dose could be assessed, so a scan said "not found" instead of "Do not use".
+    for verdict, decision in (("BLOCKED", _confirmed_ban()), ("UNSAFE", _confirmed_recall())):
+        case_dir = tmp_path / verdict
+        case_dir.mkdir()
+        codes = _codes_for_unassessed_dose(case_dir, verdict, decision)
+        assert "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" not in codes, verdict
+
+
+def test_scoring_audit_holds_every_other_suppressed_verdict_for_its_dose(
+    tmp_path: Path,
+) -> None:
+    cases = {
+        "likely_match": ("BLOCKED", _confirmed_ban(match_resolution="likely")),
+        "unverified_policy": ("BLOCKED", _confirmed_ban(policy_basis={
+            "status": "banned", "policy_verification_status": "needs_review",
+        })),
+        "ban_on_unsafe_product": ("UNSAFE", _confirmed_ban()),
+        "recall_on_blocked_product": ("BLOCKED", _confirmed_recall()),
+    }
+    for name, (verdict, decision) in cases.items():
+        case_dir = tmp_path / name
+        case_dir.mkdir()
+        codes = _codes_for_unassessed_dose(case_dir, verdict, decision)
+        assert "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" in codes, name
+
+
+def test_a_confirmed_ban_still_cannot_rely_on_legacy_dose_inference(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "scored.json"
+    product = _scored(
+        verdict="BLOCKED",
+        quality_score_status="suppressed_safety",
+        scoring_status="suppressed_safety",
+        safety_decision=_confirmed_ban(),
+    )
+    product["assessment_readiness"]["dose"]["migration_inference"] = True
+    _write(path, product)
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" in codes
+
+
 def test_scoring_audit_rejects_retired_nutrition_only_verdict(tmp_path: Path) -> None:
     path = tmp_path / "scored.json"
     _write(

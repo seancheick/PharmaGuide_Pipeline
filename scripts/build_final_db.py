@@ -96,7 +96,7 @@ from serving_frequency import (
 )
 from label_record_contract import build_label_record_contract
 from row_ledger import build_row_ledger, summarize_row_ledger, validate_row_ledger
-from release_catalog_artifact import SUPPRESSED_SAFETY_DOSE_QUARANTINE
+from release_catalog_artifact import SUPPRESSED_SAFETY_DOSE_QUARANTINE, is_confirmed_ban_or_recall
 from scoring_v4.modules.fiber_digestive_helpers import (
     fiber_rows as _fiber_goal_rows,
     has_fiber_context as _has_fiber_goal_context,
@@ -1947,8 +1947,11 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         ):
             dose_readiness = safe_dict(readiness_value.get("dose"))
             if (
-                dose_readiness.get("readiness")
-                not in {"complete", "not_applicable"}
+                (
+                    dose_readiness.get("readiness")
+                    not in {"complete", "not_applicable"}
+                    and not is_confirmed_ban_or_recall(scored)
+                )
                 or dose_readiness.get("migration_inference") is True
             ):
                 issues.append(SUPPRESSED_SAFETY_DOSE_QUARANTINE)

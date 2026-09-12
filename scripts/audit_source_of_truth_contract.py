@@ -31,6 +31,7 @@ from pipeline_freshness import enrichment_reference_freshness_issues
 from release_catalog_artifact import (
     ReleaseValidationError,
     SUPPRESSED_SAFETY_DOSE_QUARANTINE,
+    is_confirmed_ban_or_recall,
     verified_contract_quarantines,
     verified_warning_only_products,
 )
@@ -915,8 +916,11 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                     dose_readiness = _safe_dict(readiness.get("dose"))
                     if (
                         readiness.get("enforcement_mode") != "enforced"
-                        or dose_readiness.get("readiness")
-                        not in {"complete", "not_applicable"}
+                        or (
+                            dose_readiness.get("readiness")
+                            not in {"complete", "not_applicable"}
+                            and not is_confirmed_ban_or_recall(product)
+                        )
                         or dose_readiness.get("migration_inference") is True
                     ):
                         typed_suppressed_dose_failure = (
