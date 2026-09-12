@@ -1103,6 +1103,28 @@ class TestBonusOnlyDomainsStayOutOfCoverage:
         })
         assert result.overall_coverage == pytest.approx(75.0)
 
+    def test_legacy_domain_counts_do_not_become_fully_covered(self, gate):
+        domain = self._domain(3, 1)
+        del domain['scorable_total']
+        result = gate.check_product({'match_ledger': {'domains': {
+            'ingredients': domain, 'manufacturer': self._domain(1, 0),
+        }}})
+        assert result.overall_coverage == pytest.approx(75.0)
+
+    def test_legacy_denominator_keeps_non_scorable_exclusions(self, gate):
+        domain = self._domain(3, 1)
+        del domain['scorable_total']
+        domain.update(total_raw=7, skipped=1, recognized_non_scorable=1,
+                      recognized_botanical_unscored=1)
+        result = gate.check_product({'match_ledger': {'domains': {'ingredients': domain}}})
+        assert result.overall_coverage == pytest.approx(75.0)
+
+    @pytest.mark.parametrize('ledger', [None, [], {'domains':None}])
+    def test_missing_ledger_is_not_reported_as_one_hundred_percent(self, gate, ledger):
+        result = gate.check_product({'match_ledger':ledger})
+        assert not result.can_score
+        assert result.overall_coverage == 0.0
+
 
 
 if __name__ == "__main__":

@@ -31,6 +31,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 
+from match_ledger import EXCLUDED_FROM_SCORABLE
+
 from run_artifacts import (
     atomic_write_json,
     atomic_write_text,
@@ -315,7 +317,15 @@ class CoverageGate:
             # Extract additional breakdown fields
             recognized_non_scorable = domain_data.get("recognized_non_scorable", 0)
             recognized_botanical_unscored = domain_data.get("recognized_botanical_unscored", 0)
-            scorable_total = domain_data.get("scorable_total", 0)
+            # Legacy ledgers omit the derived denominator. Apply the ledger
+            # owner's exclusions, rather than treating a missing field as an
+            # empty domain (which would report 100% for unmapped ingredients).
+            scorable_total = domain_data.get("scorable_total")
+            if scorable_total is None:
+                scorable_total = total - sum(
+                    domain_data.get(decision, 0)
+                    for decision in EXCLUDED_FROM_SCORABLE
+                )
             # Use scorable_coverage_percent if available, fallback to coverage_percent
             # (the ledger sets coverage_percent = scorable_coverage_percent for compatibility)
             scorable_coverage = domain_data.get("scorable_coverage_percent", coverage)
@@ -411,6 +421,8 @@ class CoverageGate:
             round(scoring_matched / scoring_scorable * 100, 2)
             if scoring_scorable else 100.0  # Nothing to score is vacuously covered
         )
+        if not ledger_valid:
+            overall_coverage = 0.0  # Unknown is not complete coverage.
 
         can_score = len(blocking_issues) == 0
 

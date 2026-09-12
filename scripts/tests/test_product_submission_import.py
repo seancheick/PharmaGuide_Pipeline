@@ -178,6 +178,15 @@ def test_generated_private_provenance_passes_canonical_manual_validator():
     dsld_api_sync._validate_external_manual_label(build_manual_label(_export()))
 
 
+def test_committed_submission_labels_keep_reviewer_accounts_private():
+    labels_dir = Path(__file__).resolve().parents[2] / "manual_labels/product_submissions"
+    labels = list(labels_dir.glob("*.json"))
+    assert labels, "The committed submission labels are the privacy regression corpus"
+    for path in labels:
+        label = json.loads(path.read_text(encoding="utf-8"))
+        assert "reviewer_record_id" not in label["manual_product_provenance"], path.name
+
+
 def test_present_other_ingredients_become_supported_pipeline_rows():
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from product_submission_import import build_manual_label
