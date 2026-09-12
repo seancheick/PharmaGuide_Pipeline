@@ -739,6 +739,92 @@ benchmark's own inputs. With it: adaptive panel coverage rather than a fixed
 checklist, camera/library choice, reusing one photo for several roles, retake
 and resume, OCR UPC suggestion with manual entry, and Sentry events.
 
+### Photo guidance and known-product intake — design for review, 2026-09-12
+
+This batch improves submission intake and reviewer guidance; it does not
+qualify extraction, approve products, or replace Claude's correction/edition
+work. Proposed behavior below requires review before implementation.
+
+**Known-product intake.** Before starting a new missing-product capture from
+Product Submissions, resolve the confirmed UPC through the existing
+`CoreDatabase.resolveByGtin` / `GtinIdentity` path used by scanning. Do not
+implement another barcode matcher. One match displays its brand and product
+name with **View product** and **Report incorrect label**. Multiple matches
+use the existing version selector, including its correction-work improvements;
+never choose a version by score or recency. Reporting opens the existing
+label-mismatch flow against the selected record and its existing consent.
+Dismissal is not a no-match result. An unresolved version must not acquire a
+guessed target or silently create a second product; keep an explicit route
+back to label comparison/reporting. Only an actual no-match opens ordinary
+missing-product capture. A failed lookup is a retryable error, not no-match.
+
+The installed catalog can lag the reviewer's released/catalog-plus-corpus
+index. Describe absence as **not found in this device's catalog**, not proof
+that the product does not exist anywhere. Keep backend duplicate checks;
+do not add a separate online identity database to hide this limitation.
+Recheck when resuming a missing-product draft or retrying a rejected one,
+preserving saved photos if a newly installed catalog now contains a match.
+Automatic rejection, deletion, and automatic conversion of existing drafts
+are excluded. Repeated taps cannot launch duplicate sheets or requests.
+
+**Reviewer copy.** Use **Check for an existing product** for the lookup and
+show the product's brand/name before technical IDs. A catalog hit says
+**This barcode matches a product in the catalog. Compare the label before
+closing this submission.** The duplicate action is **Same product and label
+— already in catalog**; its existing label-equivalence confirmation remains.
+The no-match override says **These are different products** and explicitly
+is not the route for a changed formula. Reuse Claude's **Label differs from
+catalog** action for that case. A corpus-only hit says **Found in DSLD — not
+yet in the app catalog** and retains the existing import/verification flow.
+Freshness and IDs remain available as secondary information; display copy
+never changes the database's readiness rule.
+
+**Reviewer photo guidance first.** Reuse the existing RapidOCR reader and
+evidence-image preparation, adding one conservative role-suggestion owner in
+the extraction package. Recognized headings and nearby text support Facts,
+ingredient disclosure, directions/warnings, or UPC suggestions. No heading
+does not prove a panel is absent; front identity is not inferred merely from
+the absence of a Facts heading. Return unknown when support is insufficient.
+Several roles may be suggested for one photo. Detected heading regions and
+brief explanations accompany suggestions; no fabricated probability scores.
+Role agreement never verifies the product, edition, dose, image rights, or
+panel completeness. Keep unreadability distinct from wrong-role findings.
+
+The local signed-in reviewer requests guidance on the currently selected
+submission's existing private photos, with no hosted model call. Extend the
+existing reviewer/photo-access boundary: authenticate/authorize through the
+existing reviewer API, obtain the current evidence manifest server-side,
+download only its allowed signed photos with existing host/size/time bounds,
+and reject a changed selection or evidence revision. Do not accept arbitrary
+image URLs, client claims of reviewer authority, or unbounded OCR work. One
+bounded request per selection; engine failure yields **Guidance unavailable**
+and leaves manual review usable. No full-label extraction job is enqueued,
+and disabled extraction stays disabled. Reports are advisory, bound to photo
+hash + evidence revision + rule version, held only in the current review
+session for this first slice; no new durable draft or approval schema.
+
+Use **Selected by submitter**, **Suggested sections**, and **Please confirm**
+beside the evidence. Preserve the original categories and bytes; do not
+silently retag evidence or fill approval fields. The same role owner feeds
+the existing extraction `photo_roles`/mismatch report when extraction runs.
+No second ingredient parser or approval path. Phone-side photo-role prompts
+are a subsequent capture slice, not a second Dart classifier in this batch;
+the phone change here is the known-product precheck and clearer capture
+instructions (brand/name, complete Facts panel, full directions/warnings,
+barcode or printed UPC), using existing camera/library/multi-role support.
+
+**Acceptance.** Test camera/library inputs, multi-role photos, Facts uploaded
+as front, cropped headings, unreadable images, non-English/unknown text,
+OCR unavailable, changed evidence during a request, oversized images,
+unauthorized access and arbitrary URLs. Test unique/ambiguous/no-match/error
+catalog outcomes, cancelled selection, canonical GTIN widths, signed-out
+report consent, resumed drafts, stale installed catalog, and no unintended
+submission creation. Pin reviewer action wording without weakening identity
+or label-equivalence checks. Run focused and broad suites plus actual UI
+inspection; record device/production verification separately from unit tests.
+Coordinate edits with Claude: its in-progress identity comparison, migration
+and importer are not owned by this batch and must not be overwritten.
+
 ## Phase 2 — benchmark
 
 RapidOCR and `qwen3-vl:4b` through one `LabelDraftExtractor`. Reported
