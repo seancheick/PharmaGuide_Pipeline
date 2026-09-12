@@ -1281,3 +1281,58 @@ def test_a_correction_submission_carries_no_second_relation(field):
         build_manual_label(_export(
             kind="label_mismatch", target_dsld_id="299239", **{field: "178392"},
         ))
+
+
+# A barcode may name more than one product, but only by a reviewed decision.
+# The collision rule exists to stop the same product being imported twice
+# under two ids; an edition or a correction is the reviewer saying, with a
+# recorded catalog match behind it, that a second record on this barcode is
+# intended.
+
+_EDITION_ID = "11111111-2222-4333-8444-555555555555"
+_CORRECTION_ID = "22222222-3333-4444-8555-666666666666"
+
+
+def test_an_edition_may_share_a_barcode_with_an_imported_product(tmp_path):
+    from product_submission_import import materialize_approved_submissions
+
+    materialize_approved_submissions([_export()], output_dir=tmp_path)
+    result = materialize_approved_submissions(
+        [_export(submission_id=_EDITION_ID, edition_of_dsld_id="178392")],
+        output_dir=tmp_path,
+    )
+
+    assert result.imported_submission_ids == [_EDITION_ID]
+    assert (tmp_path / "PG_SUB_11111111222243338444555555555555.json").exists()
+
+
+def test_a_correction_may_follow_an_edition_on_the_same_barcode(tmp_path):
+    from product_submission_import import materialize_approved_submissions
+
+    materialize_approved_submissions(
+        [_export(submission_id=_EDITION_ID, edition_of_dsld_id="178392")],
+        output_dir=tmp_path,
+    )
+    result = materialize_approved_submissions(
+        [_export(submission_id=_CORRECTION_ID, correction_target_dsld_id="178392")],
+        output_dir=tmp_path,
+    )
+
+    assert result.imported_submission_ids == [_CORRECTION_ID]
+    assert (tmp_path / "178392.json").exists()
+
+
+def test_an_unrelated_second_product_on_a_barcode_is_still_a_collision(tmp_path):
+    from product_submission_import import (
+        SubmissionImportError,
+        materialize_approved_submissions,
+    )
+
+    materialize_approved_submissions(
+        [_export(submission_id=_EDITION_ID, edition_of_dsld_id="178392")],
+        output_dir=tmp_path,
+    )
+    with pytest.raises(SubmissionImportError, match="already owned"):
+        materialize_approved_submissions(
+            [_export(submission_id=_CORRECTION_ID)], output_dir=tmp_path,
+        )

@@ -795,7 +795,12 @@ def materialize_approved_submissions(
 
         upc = str(label["upcSku"])
         gtin14 = canonical_normalized_gtin14(upc)
-        if gtin14 is not None:
+        # A barcode names one product unless a reviewer decided otherwise.
+        # The collision exists to stop the same product being imported twice
+        # under two ids. An edition or a correction is a recorded decision that
+        # a second record on this barcode is intended, backed by a catalog match
+        # the approval gate verified, so it is not a collision.
+        if gtin14 is not None and _catalog_relation(raw_row) is None:
             for owner_submission_id, owner_product_id in sorted(
                 upc_owners.get(gtin14, ())
             ):
@@ -807,6 +812,7 @@ def materialize_approved_submissions(
                         f"UPC {upc} is already owned by submission "
                         f"{owner_submission_id}"
                     )
+        if gtin14 is not None:
             upc_owners.setdefault(gtin14, set()).add((submission_id, product_id))
 
         serialized = json.dumps(label, ensure_ascii=False, indent=2) + "\n"

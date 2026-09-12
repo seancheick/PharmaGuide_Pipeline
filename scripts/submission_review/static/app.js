@@ -25,6 +25,7 @@ const state = {
   identityLookup: null,
   identityRecorded: null,
   catalogRelation: null,
+  comparisonTarget: null,
   identityCheckRequest: 0,
   rawJsonRendered: null,
   reviewerImages: [],
@@ -286,6 +287,7 @@ function select(submission) {
   state.identityLookup = null;
   state.identityRecorded = null;
   state.catalogRelation = null;
+  state.comparisonTarget = null;
   state.reviewerImages = [];
   state.productImage = null;
   $('reviewer-image-attestation').checked = false;
@@ -647,6 +649,7 @@ function catalogDraftFor(dsldId) {
 
 function renderLabelComparison(dsldId) {
   const section = $('label-comparison');
+  state.comparisonTarget = dsldId ?? null;
   const catalog = catalogDraftFor(dsldId);
   if (!dsldId || !catalog) {
     section.classList.add('hidden');
@@ -706,6 +709,9 @@ const RELATION_TEXT = {
 function activeCatalogRelation() {
   const relation = state.catalogRelation;
   if (!relation || state.identityRecorded !== 'catalog_match') return null;
+  // Made against one label. An edit after deciding is a different label, and
+  // a correction would rewrite a catalog record with text nobody compared.
+  if (!state.payloadSha || relation.payloadSha !== state.payloadSha) return null;
   const stillMatched = (state.identityLookup?.matches ?? []).some(
     (match) => match.dsld_id === relation.dsldId,
   );
@@ -723,7 +729,10 @@ function chooseCatalogRelation(kind, dsldId) {
   if (state.identityRecorded !== 'catalog_match') {
     return setStatus('Record the catalog match first.', true);
   }
-  state.catalogRelation = { kind, dsldId };
+  if (!state.payloadSha) {
+    return setStatus('Wait for the label check to finish, then decide.', true);
+  }
+  state.catalogRelation = { kind, dsldId, payloadSha: state.payloadSha };
   renderCatalogRelationChoice();
   renderReadiness();
   setDecisionAvailability();
@@ -2080,6 +2089,9 @@ async function updateShaPreview() {
   if (state.payloadSha) {
     scheduleReviewSave();
     void refreshDiagnostics();
+    // The comparison describes the label on screen, so it is redrawn from the
+    // edited one; the decision made against the old one no longer counts.
+    if (state.comparisonTarget) renderLabelComparison(state.comparisonTarget);
   }
   // Editing a field is the reviewer withdrawing their own check of it.
   renderVerifyChecklist();

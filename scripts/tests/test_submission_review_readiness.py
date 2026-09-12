@@ -574,3 +574,29 @@ def test_a_decision_for_another_record_never_rides_along():
     """)
     assert any("corrects that record or is a separate edition" in text
                for text in out["blocked"]), out["blocked"]
+
+
+def test_a_decision_is_bound_to_the_label_it_was_made_against():
+    """Editing the label after deciding withdraws the decision.
+
+    A correction rewrites a catalog record in place, under the id stacks point
+    at. It must carry the text the reviewer compared, not text edited after
+    the comparison was drawn — the same rule that clears a field's tick.
+    """
+    out = _catalog_hit("""(async()=>{
+      state.payloadSha='a'.repeat(64);
+      state.payloadCanonical=canonicalJson(state.payload);
+      renderLabelComparison('178392');
+      chooseCatalogRelation('correction','178392');
+      out.before=activeCatalogRelation();
+      state.payload.fullName='EDITED AFTER DECISION';
+      const hashing=updateShaPreview();
+      pending[0].resolve('b'.repeat(64)); await hashing;
+      out.after=activeCatalogRelation();
+      out.summary=document.getElementById('comparison-summary').textContent;
+    })()""")
+    assert out["before"] == {"kind": "correction", "dsldId": "178392", "payloadSha": "a" * 64}
+    assert out["after"] is None
+    # The table is redrawn from the edited label, not left describing the old one.
+    assert "EDITED AFTER DECISION" not in out["summary"]
+    assert out["summary"]
