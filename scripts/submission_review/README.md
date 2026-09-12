@@ -17,6 +17,12 @@ merely already running. Takes a port (`start.sh 8899`) and `--no-open` to
 print the URL instead of opening a browser. A cold start spends about half a
 minute building its identity index before the page answers.
 
+Reuse requires the console's health response to match the current server code.
+An unrelated website or an older console is not treated as a successful start.
+If the port is occupied, inspect the process shown by the launcher and stop only
+the identified old console before retrying. Startup logs are private to your
+account; a failed startup stops only the new process the launcher created.
+
 To run the server directly instead:
 
 ```bash

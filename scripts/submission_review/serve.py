@@ -52,6 +52,8 @@ from submission_review.gtin import (  # noqa: E402
 )
 
 BIND_HOST = "127.0.0.1"
+# Captured once: a running process must not advertise code edited after startup.
+SERVER_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 EDGE_FUNCTION_PATH = "/functions/v1/review-product-submissions"
 MAX_PROXY_BODY_BYTES = 2 * 1024 * 1024
 MAX_PHOTO_BODY_BYTES = 20 * 1024 * 1024
@@ -446,6 +448,10 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
             return index
 
     def do_GET(self):  # noqa: N802 (stdlib naming)
+        if self.path == "/api/health":
+            self._json({"service": "pharmaguide-submission-review",
+                        "version": 1, "server_sha256": SERVER_SHA256})
+            return
         if self.path == "/api/config":
             # The anon key is a public client credential by design.
             self._json({

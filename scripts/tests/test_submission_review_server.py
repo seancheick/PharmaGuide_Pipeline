@@ -59,6 +59,24 @@ def test_static_reviewer_assets_are_never_served_from_stale_cache():
         thread.join(timeout=5)
 
 
+def test_launcher_health_identifies_the_loaded_server_without_credentials():
+    server = ThreadingHTTPServer((serve.BIND_HOST, 0), serve.ReviewerHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        with urllib.request.urlopen(f"http://{serve.BIND_HOST}:{server.server_port}/api/health") as response:
+            assert response.headers["cache-control"] == "no-store"
+            health = json.load(response)
+        assert health == {
+            "service": "pharmaguide-submission-review", "version": 1,
+            "server_sha256": hashlib.sha256((REVIEW_DIR / "serve.py").read_bytes()).hexdigest(),
+        }
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
+
+
 def test_reviewer_page_busts_pre_no_store_asset_caches():
     index_html = (REVIEW_DIR / "static" / "index.html").read_text()
 
