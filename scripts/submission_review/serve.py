@@ -46,6 +46,7 @@ from threading import Lock
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import env_loader  # noqa: E402,F401
 from stage_manifest import MANIFEST_NAME, select_stage_files  # noqa: E402
+from submission_review.photo_guidance_service import validate_submission_photo_url  # noqa: E402
 from submission_review.gtin import (  # noqa: E402
     canonical_gtin14_candidates,
     is_valid_gtin as _is_valid_gtin,
@@ -119,33 +120,6 @@ class IdentityIndex:
         if not _is_valid_gtin(canonical_gtin14) or len(canonical_gtin14) != 14:
             return []
         return list(self.matches.get(canonical_gtin14, ()))
-
-
-def validate_submission_photo_url(value: object, supabase_url: str) -> str:
-    """Accept only signed private submission-photo URLs from this project."""
-    from urllib.parse import parse_qs, urlparse
-
-    raw = str(value or "").strip()
-    source = urlparse(raw)
-    project = urlparse(supabase_url)
-    photo_prefix = (
-        "/storage/v1/object/sign/product-submission-photos/"
-    )
-    query = parse_qs(source.query, keep_blank_values=True)
-    if (
-        source.scheme != "https"
-        or source.netloc != project.netloc
-        or source.username is not None
-        or source.password is not None
-        or not source.path.startswith(photo_prefix)
-        or source.path == photo_prefix
-        or source.fragment
-        or set(query) != {"token"}
-        or len(query["token"]) != 1
-        or not query["token"][0]
-    ):
-        raise ValueError("invalid submission photo URL")
-    return raw
 
 
 def _verify_gtin_fixture() -> None:
@@ -505,7 +479,7 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self):  # noqa: N802
         if self.path not in {"/api/edge", "/api/dsld_refresh", "/api/photo",
-                             "/api/draft_to_label"}:
+                             "/api/draft_to_label", "/api/photo_guidance"}:
             self._json({"error": "not found"}, 404)
             return
         length = int(self.headers.get("content-length") or 0)
@@ -516,6 +490,24 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
         authorization = self.headers.get("authorization")
         if not authorization or not authorization.startswith("Bearer "):
             self._json({"error": "reviewer session required"}, 401)
+            return
+
+        if self.path == "/api/photo_guidance":
+            from submission_review.photo_guidance_service import (
+                GuidanceError, execute_photo_guidance,
+            )
+            try:
+                payload = json.loads(body)
+                report = execute_photo_guidance(
+                    payload, authorization, self.supabase_url, self.anon_key,
+                )
+            except (json.JSONDecodeError, UnicodeDecodeError):
+                self._json({"error": "Invalid photo selection."}, 400)
+                return
+            except GuidanceError as error:
+                self._json({"error": str(error)}, error.status)
+                return
+            self._json(report)
             return
 
         if self.path == "/api/photo":

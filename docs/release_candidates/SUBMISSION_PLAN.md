@@ -739,11 +739,11 @@ benchmark's own inputs. With it: adaptive panel coverage rather than a fixed
 checklist, camera/library choice, reusing one photo for several roles, retake
 and resume, OCR UPC suggestion with manual entry, and Sentry events.
 
-### Photo guidance and known-product intake — design for review, 2026-09-12
+### Photo guidance and known-product intake — approved, 2026-09-12
 
-This batch improves submission intake and reviewer guidance; it does not
+Approved by the user on 2026-09-12. This batch improves submission intake and reviewer guidance; it does not
 qualify extraction, approve products, or replace Claude's correction/edition
-work. Proposed behavior below requires review before implementation.
+work. Implementation tasks follow this specification.
 
 **Known-product intake.** Before starting a new missing-product capture from
 Product Submissions, resolve the confirmed UPC through the existing
@@ -806,7 +806,9 @@ session for this first slice; no new durable draft or approval schema.
 Use **Selected by submitter**, **Suggested sections**, and **Please confirm**
 beside the evidence. Preserve the original categories and bytes; do not
 silently retag evidence or fill approval fields. The same role owner feeds
-the existing extraction `photo_roles`/mismatch report when extraction runs.
+the existing extraction `photo_roles` when extraction runs. The located hints
+carry no fabricated confidence; confidence-thresholded extraction findings
+remain unchanged, while this guidance report states possible role mismatch.
 No second ingredient parser or approval path. Phone-side photo-role prompts
 are a subsequent capture slice, not a second Dart classifier in this batch;
 the phone change here is the known-product precheck and clearer capture
@@ -824,6 +826,113 @@ or label-equivalence checks. Run focused and broad suites plus actual UI
 inspection; record device/production verification separately from unit tests.
 Coordinate edits with Claude: its in-progress identity comparison, migration
 and importer are not owned by this batch and must not be overwritten.
+
+#### Photo guidance / known-product intake implementation plan
+
+**Goal:** Prevent avoidable duplicate submissions and help reviewers identify
+misfiled photos without delegating approval to OCR.
+**Architecture:** Existing Flutter GTIN resolver and mismatch flow; one Python
+photo-role classifier shared by the OCR adapter and local reviewer endpoint.
+**Tech stack:** Flutter/Riverpod, stdlib reviewer HTTP server, RapidOCR, pytest.
+Use test-driven implementation and subagent-driven review in isolated worktrees.
+
+1. **Phone intake** — own app `lib/features/contributions/product_submissions_screen.dart`,
+   new `known_product_submission_sheet.dart` beside it, and contribution tests.
+   Write failing tests for known UPC, no-match, lookup error, ambiguous/cancelled
+   selection, retries and saved-draft preservation. Run `flutter test test/features/contributions`.
+   Route all missing-product entries on this screen through one guarded helper
+   using `CoreDatabase.resolveByGtin`. Known records offer view/report; only
+   `UpcNotFound` opens capture. Reuse mismatch metadata and navigation owners.
+   Confirm tests pass, run analyze and broad tests, then commit only owned files.
+2. **Advisory classifier** — create `scripts/submission_review/extraction/photo_guidance.py`
+   and `scripts/tests/test_submission_photo_guidance.py`; modify only the OCR
+   adapter's role assembly. Test `suggest_photo_roles(page)` with Facts,
+   directions, warnings, other ingredients, printed UPC, mixed roles, absent
+   headings, long marketing prose and unreadable pages before implementing.
+   Return supported role + matched text/region and a versioned report, never a
+   probability or approval verdict. Reuse `OcrPage`, `photo_prep`, and GTIN owner.
+   Run `scripts/test.sh fast -k 'submission_photo_guidance or submission_ocr_adapter'`.
+3. **Bounded reviewer execution** — extend `serve.py` with `/api/photo_guidance`
+   and endpoint tests in `test_submission_photo_guidance.py`. Browser sends only
+   submission ID, evidence revision/manifest hash and selected photo ID. Server
+   calls the existing authorized reviewer list action for that ID, validates
+   binding, prepares only that photo from server-returned signed URL and SHA.
+   Bound the entire authorized operation (including DNS, both evidence reads,
+   download and OCR) in a 90-second subprocess with input/output size bounds
+   and a single-process semaphore; no disk photo copies. Re-fetch current
+   evidence after OCR, refusing stale results. Test real HTTP with controlled
+   upstream transport and runner: unauthorized, URL injection, stale evidence,
+   oversized input, timeout, unavailable engine and success. Never enqueue jobs.
+4. **Reviewer UI and copy** — after rereading Claude's final diff, touch only
+   guidance/copy integration in `static/app.js`, `index.html`, and `styles.css`.
+   New guidance button beside selected evidence shows declared and suggested
+   sections with readable reasons; clear on selection/evidence/session change.
+   Retain located support in prepared-image pixel coordinates in the report;
+   display matched text without an overlay on the differently sized original.
+   Only add overlays once orientation/coordinate agreement is proven. One request
+   at a time; unavailable OCR leaves normal review untouched. Update duplicate
+   wording without changing callbacks or the label-equivalence confirmation.
+   Add JS harness tests for rendering, races, errors and unchanged approval.
+5. **Verify and integrate** — focused tests red then green per task; independent
+   spec review followed by quality review. Run reviewer/extraction broad sweep,
+   Flutter analyze/full tests, real OCR canary on supplied label, browser and
+   device/simulator inspection. Integrate committed changes without replacing
+   Claude's uncommitted work; run combined tests and push owned commits. Report
+   device, authenticated reviewer and production gaps honestly, not as passes.
+
+**Implementation verification (2026-09-12):** The isolated implementation now
+has the shared role owner, authorized local guidance endpoint, advisory reviewer
+UI, and contribution entry precheck. Real OCR on the supplied Align Facts image
+identified Facts and Other Ingredients when the declared role was front identity;
+the supplied retailer screenshot yielded its printed UPC. Explicit retailer
+warning headings are covered by regressions too. Offline browser inspection at
+desktop and 390px width confirmed readable guidance and duplicate wording, with
+no approval-state mutation. Phone widget tests cover new, resumed, rejected and
+retake entries, and the persistent-snackbar retry after leaving Contributions.
+Independent spec/quality reviews identified and closed the whole-operation
+timeout, local-miss wording, sign-out race and disposed-screen retry gaps.
+The isolated pipeline fast backstop passed 14,364 tests with 191 skips (many
+require unbundled local corpus artifacts); this is not a rebuilt-catalog audit.
+The release-gate attempt passed 102 tests with 21 skips, then correctly stopped
+because this worktree has no `scripts/dist/detail_blobs`; no release was made.
+
+Integration must include Claude's typed label-version picker, not reinstate its
+old return contract. Authenticated live reviewer verification and hands-on phone
+flow checks remain distinct from installation. The isolated simulator build failed to link
+`Pods_Runner`; a widget-render preview is not a device pass. The full app suite
+reported two catalog-artifact checks (interaction hash and CBD canary); the
+interaction mismatch was subsequently reproduced and fixed as described below.
+The CBD canary remains unresolved, so no full-suite clean-release claim is made.
+Reporting against a
+`PG_SUB_*` catalog record remains unsupported by the existing numeric-only
+mismatch metadata contract; View remains available and Report explicitly says
+unavailable. Widen that shared app/server contract in its own verified batch,
+not by inventing a client-only target or bypassing validation.
+
+**Standalone phone checkpoint (2026-09-12):** Built release 1.0.0+17 from
+committed app `f64900b` in the isolated worktree, with the shared Makefile's
+configuration and the current manifest-verified pipeline database. Verified
+signature, absence of the stale debug dylib, release configuration marker, and
+both bundled database hashes. Installed over the existing app on Sean's iPhone
+without uninstalling; launched without a debugger and verified its process
+remained running. Physical unplug/reopen and capture UX still need the user's
+hands-on check; installation is not proof of those flows.
+
+The public interaction download pin still pointed at August's artifact even
+though the staged September manifest named the current one. After explicit
+operator approval, published `clinical-db-2026.09.12.1` with SQLite SHA-256
+`298f5b80dcaefc20dc472f254c771ad6c894a840340a5a6468721da0568b9c4c` and the
+existing pipeline manifest. App `4da011f` updates the pin and refuses hydration
+when pin and staged manifest disagree. Regression observed failing before the
+guard; 28 shell checks and 39 Flutter interaction-database guards passed after
+the fix. A fresh download through the real hydration script verified the exact
+published bytes. This packaging operation changes no clinical source rules.
+The previous assets remain available. Reviewer guidance remains on its isolated
+branch until integration can preserve the shared checkout's unfinished edits.
+Combined Claude's committed identity-decision safeguard `315e59c0` with the
+guidance branch; all 75 focused readiness, classifier/service and guidance UI
+tests passed. The first sandboxed run could not bind two localhost fixtures;
+the unchanged rerun with localhost permissions passed both.
 
 ## Phase 2 — benchmark
 

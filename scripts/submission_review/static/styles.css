@@ -169,6 +169,17 @@ main {
   cursor: zoom-in;
 }
 .photo-grid figcaption { padding: .35rem .5rem; font-size: .72rem; color: var(--fg-muted); }
+.photo-guidance-button { margin: .5rem; max-width: calc(100% - 1rem); }
+.photo-guidance {
+  margin-top: 1rem;
+  padding: .8rem;
+  background: var(--accent-soft);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+  font-size: .85rem;
+}
+.photo-guidance h3 { margin-top: 0; }
 input, select, textarea, button {
   font: inherit;
   padding: .45rem .6rem;
