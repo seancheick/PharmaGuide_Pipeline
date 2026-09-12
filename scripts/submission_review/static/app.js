@@ -24,6 +24,8 @@ const state = {
   queueRequestId: 0,
   identityLookup: null,
   identityRecorded: null,
+  identityCheckRequest: 0,
+  rawJsonRendered: null,
   reviewerImages: [],
   productImage: null,
   pictureSavePromise: Promise.resolve(),
@@ -108,6 +110,10 @@ async function boot() {
   });
 
   $('reload').addEventListener('click', () => loadQueue());
+  $('raw-json').addEventListener('input', () => {
+    renderReadiness();
+    setDecisionAvailability();
+  });
   $('filter-status').addEventListener('change', () => loadQueue());
   $('filter-kind').addEventListener('change', () => loadQueue());
   $('load-more').addEventListener('click', () => loadQueue(true));
@@ -261,6 +267,8 @@ function select(submission) {
   state.selected = submission;
   state.reviewInvalidated = false;
   state.payload = defaultPayload();
+  renderRawJson(true);
+  state.identityCheckRequest += 1;
   state.payloadSha = null;
   state.payloadCanonical = null;
   state.verifiedKey = null;
@@ -407,6 +415,12 @@ function canonicalSubmissionGtin14() {
 
 async function checkIdentity() {
   if (state.selected?.kind !== 'missing_product') return;
+  const selection = state.selected;
+  const requestId = ++state.identityCheckRequest;
+  const stillCurrent = () => requestId === state.identityCheckRequest &&
+    state.selected?.id === selection.id &&
+    state.selected?.evidence_revision === selection.evidence_revision &&
+    state.selected?.evidence_manifest_sha256 === selection.evidence_manifest_sha256;
   const gtin14 = canonicalSubmissionGtin14();
   if (!gtin14) return setStatus('This submission has no valid barcode identity.', true);
   try {
@@ -415,12 +429,22 @@ async function checkIdentity() {
       `/api/identity_lookup?gtin14=${encodeURIComponent(gtin14)}`,
     );
     const payload = await response.json();
+    if (!stillCurrent()) return;
     if (!response.ok) throw new Error(payload.error ?? 'identity lookup failed');
+    if (payload.canonical_gtin14 !== gtin14) throw new Error('Barcode lookup returned a different identity.');
+    const unchanged = payload.index_revision &&
+      payload.index_revision === state.identityLookup?.index_revision &&
+      payload.canonical_gtin14 === state.identityLookup?.canonical_gtin14 &&
+      payload.freshness !== 'blocked';
     state.identityLookup = payload;
-    state.identityRecorded = null;
+    if (!unchanged) state.identityRecorded = null;
     renderIdentityCheck();
     setStatus('Identity check complete.');
   } catch (error) {
+    if (!stillCurrent()) return;
+    state.identityLookup = null;
+    state.identityRecorded = null;
+    renderIdentityCheck();
     setStatus(String(error.message ?? error), true);
   }
 }
@@ -759,6 +783,9 @@ function readinessChecks() {
       todo: 'Choose the one photo that becomes the catalog picture.',
       done_text: 'Catalog picture chosen.',
     });
+  }
+  if (hasUnappliedRawJson()) {
+    checks.push({done:false, todo:'Apply your raw JSON edits before approving.', done_text:''});
   }
   return checks;
 }
@@ -1559,11 +1586,21 @@ function defaultPayload() {
 
 // The advanced box is also an input. A reviewer may be part-way through
 // pasting a corrected payload into it, and a background re-render (a save
-// reply, a URL refresh, diagnostics) must not overwrite what they are typing.
-function renderRawJson() {
+// reply, a URL refresh, diagnostics) must not overwrite unapplied edits,
+// even after focus moves to the Apply button or to a photograph.
+function renderRawJson(force = false) {
   const box = $('raw-json');
-  if (document.activeElement === box) return;
+  if (!force && document.activeElement === box) {
+    state.rawJsonRendered ??= '';
+    return;
+  }
+  if (!force && hasUnappliedRawJson()) return;
   box.value = JSON.stringify(state.payload, null, 2);
+  state.rawJsonRendered = box.value;
+}
+
+function hasUnappliedRawJson() {
+  return state.rawJsonRendered !== null && $('raw-json').value !== state.rawJsonRendered;
 }
 
 function renderRows() {
@@ -1786,6 +1823,7 @@ function applyRawJson() {
     state.payload = parsed;
     renderRows();
     syncFieldsFromPayload();
+    renderRawJson(true);
     updateShaPreview();
     setStatus('Raw payload applied.');
   } catch (error) {

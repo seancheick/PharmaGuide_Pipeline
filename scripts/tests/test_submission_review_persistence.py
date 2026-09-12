@@ -438,8 +438,74 @@ def test_a_background_render_never_overwrites_the_raw_json_being_typed() -> None
       out.whileTyping=box.value;
       document.activeElement=null;
       renderRawJson();
-      out.afterBlur=box.value.includes('Original');
+      out.afterBlur=box.value;
     })()""")
 
     assert out["whileTyping"] == '{"brandName":"Half-typed'
-    assert out["afterBlur"] is True
+    assert out["afterBlur"] == '{"brandName":"Half-typed'
+
+
+def test_raw_edit_survives_blur_and_successful_apply_resets_the_buffer():
+    out = _exercise("""(()=>{
+      state.payload={brandName:'Original',ingredientRows:[],statements:[]};
+      renderRawJson();
+      const box=document.getElementById('raw-json');
+      box.value=JSON.stringify({brandName:'Edited',ingredientRows:[],statements:[]});
+      document.activeElement=null;
+      renderRawJson();
+      applyRawJson();
+      out.brand=state.payload.brandName;
+      state.payload.brandName='Later structured edit';
+      renderRawJson();out.after=JSON.parse(box.value).brandName;
+    })()""")
+    assert out['brand'] == 'Edited'
+    assert out['after'] == 'Later structured edit'
+
+
+def test_late_barcode_check_cannot_populate_a_different_submission():
+    out = _exercise("""(async()=>{
+      state.selected.kind='missing_product';state.selected.normalized_upc='030772032565';
+      let finish;fetch=()=>new Promise(done=>finish=done);
+      const checking=checkIdentity();
+      state.selected={...state.selected,id:'other',normalized_upc:'850064220032'};
+      finish({ok:true,json:async()=>({canonical_gtin14:'00030772032565',index_revision:'one'})});
+      await checking;out.lookup=state.identityLookup;
+    })()""")
+    assert out['lookup'] is None
+
+
+def test_identical_barcode_recheck_keeps_the_recorded_result():
+    out = _exercise("""(async()=>{
+      state.selected.kind='missing_product';state.selected.normalized_upc='030772032565';
+      state.identityLookup={canonical_gtin14:'00030772032565',index_revision:'one',freshness:'fresh'};
+      state.identityRecorded='no_match_verified';
+      fetch=async()=>({ok:true,json:async()=>({...state.identityLookup})});
+      await checkIdentity();out.recorded=state.identityRecorded;
+    })()""")
+    assert out['recorded'] == 'no_match_verified'
+
+
+@pytest.mark.parametrize('change',['index','blocked','failure'])
+def test_changed_or_failed_barcode_recheck_invalidates_recorded_result(change):
+    out = _exercise("""(async()=>{
+      state.selected.kind='missing_product';state.selected.normalized_upc='030772032565';
+      state.identityLookup={canonical_gtin14:'00030772032565',index_revision:'one',freshness:'fresh'};
+      state.identityRecorded='no_match_verified';
+      fetch=async()=>({ok:CHANGE!=='failure',json:async()=>({...state.identityLookup,
+        index_revision:CHANGE==='index'?'two':'one',freshness:CHANGE==='blocked'?'blocked':'fresh'})});
+      await checkIdentity();out.recorded=state.identityRecorded;
+    })()""".replace('CHANGE',json.dumps(change)))
+    assert out['recorded'] is None
+
+
+def test_unapplied_raw_json_blocks_approval_and_does_not_leak_to_next_product():
+    out = _exercise("""(()=>{
+      renderRawJson();document.getElementById('raw-json').value='unfinished';
+      out.blocked=approvalBlockers().some(item=>item.todo.includes('raw JSON'));
+      select({...state.selected,id:'other'});
+      out.pending=hasUnappliedRawJson();
+      out.brand=JSON.parse(document.getElementById('raw-json').value).brandName;
+    })()""")
+    assert out['blocked'] is True
+    assert out['pending'] is False
+    assert out['brand'] == ''
