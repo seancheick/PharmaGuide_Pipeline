@@ -82,6 +82,24 @@
       <div id="identity-actions" class="row"></div>
     </section>
 
+    <!-- A barcode the catalog already uses is a question, not an answer: is
+         this that record transcribed wrongly, or a different formula sold
+         under the same barcode? The reviewer answers from the difference. -->
+    <section id="label-comparison" class="hidden">
+      <h3>This label beside catalog record <span id="comparison-target"></span></h3>
+      <p class="muted" id="comparison-summary"></p>
+      <div class="scroll-x">
+        <table id="comparison-table">
+          <thead>
+            <tr><th>Field</th><th>This label</th><th>Catalog record</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div id="comparison-actions" class="row"></div>
+      <p class="muted" id="comparison-choice" aria-live="polite"></p>
+    </section>
+
     <section id="ai-draft" class="hidden">
       <div class="row">
         <h2>AI draft</h2>

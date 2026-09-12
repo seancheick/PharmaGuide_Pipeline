@@ -1205,3 +1205,79 @@ def test_dashboard_snapshot_applies_reviewed_submission_corrections_last():
 
     assert enriched_append < build
     assert scored_append < build
+
+
+# ---------------------------------------------------------------------------
+# A barcode already in the catalog: correction or separate edition
+#
+# Same barcode, different label, two different truths. Correcting rewrites the
+# catalog record in place and keeps its id, so a stack that points at it keeps
+# the same product. An edition leaves that record alone and becomes its own
+# product, so nobody's bottle silently changes contents.
+# ---------------------------------------------------------------------------
+
+
+def test_a_correction_rewrites_the_catalog_record_it_names():
+    from product_submission_import import build_manual_label
+
+    label = build_manual_label(_export(correction_target_dsld_id="178392"))
+
+    assert label["id"] == "178392"
+    assert label["label_record_metadata"]["lineage_key"] == "dsld:178392"
+    # The submission stays the source record, as it does for every manual label.
+    assert label["label_record_metadata"]["source_record_id"] == (
+        "018f4c79-7c7e-4c70-9d62-7fc3b9ce6a11"
+    )
+    assert "edition_of_dsld_id" not in label["label_record_metadata"]
+
+
+def test_an_edition_becomes_its_own_product_and_names_its_sibling():
+    from product_submission_import import build_manual_label
+
+    label = build_manual_label(_export(edition_of_dsld_id="178392"))
+
+    assert label["id"] == "PG_SUB_018F4C797C7E4C709D627FC3B9CE6A11"
+    assert label["label_record_metadata"]["lineage_key"] == (
+        "pharmaguide_submission:018f4c79-7c7e-4c70-9d62-7fc3b9ce6a11"
+    )
+    assert label["label_record_metadata"]["edition_of_dsld_id"] == "178392"
+
+
+def test_a_submission_cannot_be_a_correction_and_an_edition_at_once():
+    from product_submission_import import (
+        SubmissionImportError,
+        build_manual_label,
+    )
+
+    with pytest.raises(SubmissionImportError):
+        build_manual_label(
+            _export(correction_target_dsld_id="178392", edition_of_dsld_id="1")
+        )
+
+
+@pytest.mark.parametrize("field", ["correction_target_dsld_id", "edition_of_dsld_id"])
+def test_a_catalog_relation_must_name_a_catalog_id(field):
+    from product_submission_import import (
+        SubmissionImportError,
+        build_manual_label,
+    )
+
+    for value in ("PG_SUB_1", "17-8392", "", "178392x", 178392, None if False else "1e5"):
+        with pytest.raises(SubmissionImportError):
+            build_manual_label(_export(**{field: value}))
+    # Surrounding whitespace is normalized away, as every other id on this
+    # path is: the value still has to be a catalog id.
+    assert build_manual_label(_export(**{field: " 178392 "}))
+
+
+@pytest.mark.parametrize("field", ["correction_target_dsld_id", "edition_of_dsld_id"])
+def test_a_correction_submission_carries_no_second_relation(field):
+    from product_submission_import import (
+        SubmissionImportError,
+        build_manual_label,
+    )
+
+    with pytest.raises(SubmissionImportError):
+        build_manual_label(_export(
+            kind="label_mismatch", target_dsld_id="299239", **{field: "178392"},
+        ))

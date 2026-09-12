@@ -496,3 +496,14 @@ input, select, textarea, button { max-width: 100%; min-width: 0; }
   #queue li { padding-right: 2.6rem; }
   button.compact { padding: .4rem .6rem; }
 }
+
+/* A row that reads differently on the two labels is the whole point of the
+   comparison, so it is marked in text weight as well as colour. */
+#comparison-table td { padding: .35rem .6rem; vertical-align: top; }
+#comparison-table tr.differs td { font-weight: 600; background: var(--surface); }
+#comparison-table tr.differs td:first-child::after {
+  content: " ≠";
+  color: var(--fg-muted);
+  font-weight: 400;
+}
+#label-comparison.hidden { display: none; }
