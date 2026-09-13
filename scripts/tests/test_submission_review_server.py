@@ -552,7 +552,7 @@ def test_console_editor_picture_and_terminal_state_contracts():
     ):
         assert f'value="{disclosure}"' in index_html
     assert "addNestedRow" in app_js
-    assert "addIngredientForm" in app_js
+    assert "Form as printed" in app_js  # printed form is typed inline per row
     assert "addStatement" in app_js
     assert "state.payload = parsed" in app_js
     assert "state.client.storage" in app_js

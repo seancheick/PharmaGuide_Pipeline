@@ -170,7 +170,7 @@ async function boot() {
   $('t-request-evidence').addEventListener('click', requestEvidence);
   $('t-duplicate').addEventListener('click', markDuplicate);
   $('catalog-go').addEventListener('click', catalogSearch);
-  $('identity-run').addEventListener('click', checkIdentity);
+  $('identity-run').addEventListener('click', () => checkIdentity({ record: true }));
   $('other-disclosure').addEventListener('change', syncDisclosureFields);
   $('other-ingredients').addEventListener('input', syncDisclosureFields);
   $('reviewer-image-upload').addEventListener('click', uploadReplacementImage);
@@ -634,7 +634,7 @@ function canonicalSubmissionGtin14() {
     : null;
 }
 
-async function checkIdentity() {
+async function checkIdentity({ record = false } = {}) {
   if (state.selected?.kind !== 'missing_product') return;
   const selection = state.selected;
   const requestId = ++state.identityCheckRequest;
@@ -670,6 +670,23 @@ async function checkIdentity() {
     }
     restoreRecordedIdentity();
     renderIdentityCheck();
+    if (record && (payload.matches ?? []).length === 0 &&
+        ['fresh', 'warning'].includes(payload.freshness) &&
+        state.identityRecorded !== 'no_match_verified' &&
+        ['submitted', 'under_review'].includes(state.selected?.review_status)) {
+      // Nothing to decide: the index answered, so the answer is recorded as
+      // the audited check. A failure leaves the card asking to retry.
+      try {
+        await recordMatch('no_match_verified');
+        if (!stillCurrent()) return;
+        setStatus('Verified: this barcode is not in the catalog. Recorded.');
+        return;
+      } catch (error) {
+        if (!stillCurrent()) return;
+        setStatus(`No match found, but it could not be recorded: ${error.message ?? error}`, true);
+        return;
+      }
+    }
     setStatus('Identity check complete.');
   } catch (error) {
     if (!stillCurrent()) return;
@@ -1083,12 +1100,13 @@ function renderIdentityCheck() {
         `Recorded. Transcription and approval can proceed. ${indexNote}`);
       return;
     }
+    // Reached when a lookup found nothing but no current record exists: the
+    // record failed, or the page was reopened after the index moved. The one
+    // action is the same check again, which records what it finds.
     show('no_match', 'No matching barcode found',
-      `Nothing in the catalog or DSLD uses this barcode. Record that finding so approval can proceed. ${indexNote}`);
-    actions.append(identityButton('Record verified no match', async () => {
-      await recordMatch('no_match_verified');
-      setStatus('Verified no match recorded. Transcription may proceed.');
-    }, 'primary'));
+      `Nothing in the catalog or DSLD uses this barcode, but that is not recorded yet. Check again to record it. ${indexNote}`);
+    runButton.className = 'primary';
+    runButton.textContent = 'Check again and record';
     return;
   }
   show('match',
@@ -2125,7 +2143,7 @@ function renderUnresolved() {
 function emptyRow() {
   return {
     name: '',
-    ingredientGroup: 'Dietary Ingredient',
+    ingredientGroup: '',
     quantity: [],
     forms: [],
     nestedRows: [],
@@ -2191,17 +2209,32 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     nameInput.placeholder = 'Ingredient as printed';
     nameInput.setAttribute?.('aria-label', 'Ingredient name');
     nameInput.value = row.name ?? '';
+    // DSLD's ingredientGroup is the ingredient family ("Vitamin D",
+    // "Proprietary Blend"). The cleaner reads it for blend handling and as
+    // an identity fallback, and the validator refuses an empty one, so it
+    // follows the name until the reviewer writes something else: a group
+    // equal to the name is a no-op downstream, which is what a label that
+    // prints no family deserves.
+    const groupInput = document.createElement('input');
+    groupInput.className = 'row-group';
+    groupInput.placeholder = 'Group · follows the name';
+    groupInput.title = 'DSLD ingredient group, for example "Vitamin D" or "Proprietary Blend". Left alone, it follows the ingredient name.';
+    groupInput.setAttribute?.('aria-label', 'Ingredient group');
+    let groupFollowsName = !row.ingredientGroup || row.ingredientGroup === row.name;
+    if (groupFollowsName) row.ingredientGroup = row.name ?? '';
+    groupInput.value = row.ingredientGroup ?? '';
     nameInput.addEventListener('input', () => {
       row.name = nameInput.value;
+      if (groupFollowsName) {
+        row.ingredientGroup = nameInput.value;
+        groupInput.value = nameInput.value;
+      }
       updateShaPreview();
     });
-    const groupInput = document.createElement('input');
-    groupInput.value = row.ingredientGroup ?? '';
-    groupInput.placeholder = 'Group (e.g. Dietary Ingredient)';
-    groupInput.className = 'row-group';
-    groupInput.setAttribute?.('aria-label', 'Ingredient group');
     groupInput.addEventListener('input', () => {
       row.ingredientGroup = groupInput.value;
+      groupFollowsName = groupInput.value === '' || groupInput.value === nameInput.value;
+      if (groupInput.value === '') row.ingredientGroup = nameInput.value;
       updateShaPreview();
     });
     nameWrap.append(nameInput);
@@ -2249,26 +2282,19 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     // being a table cell also stops spanning its columns.
     const toolsWrap = document.createElement('div');
     toolsWrap.className = 'row-tools-cell';
-    const formSummary = document.createElement('div');
-    formSummary.className = 'row-forms';
-    if ((row.forms ?? []).length) {
-      const printed = document.createElement('strong');
-      printed.textContent = row.forms.map((form) => form.name).join(', ');
-      formSummary.append('Form: ', printed);
-    } else {
-      formSummary.textContent = 'No form printed';
-    }
-    const formButton = document.createElement('button');
-    formButton.type = 'button';
-    formButton.className = 'ghost compact';
-    formButton.textContent = 'Edit forms';
-    formButton.addEventListener('click', () => {
-      const current = (row.forms ?? []).map(form => form.name).join('; ');
-      const printed = window.prompt('Forms exactly as printed, separated by semicolons. Leave empty when no form is printed.', current);
-      if (printed === null) return;
-      row.forms = printed.split(';').map(name => name.trim()).filter(Boolean).map(name =>
-        (row.forms ?? []).find(form => form.name === name) ?? {name});
-      renderRows();
+    // The printed form is typed where it is read, not through a prompt.
+    // Several forms are separated by semicolons; existing form records keep
+    // their other fields when their name is unchanged.
+    const formInput = document.createElement('input');
+    formInput.className = 'row-form';
+    formInput.placeholder = 'Form as printed, e.g. cholecalciferol';
+    formInput.title = 'The form printed for this ingredient. Separate several with semicolons. Leave empty when none is printed.';
+    formInput.setAttribute?.('aria-label', 'Printed form');
+    formInput.value = (row.forms ?? []).map((form) => form.name).join('; ');
+    formInput.addEventListener('input', () => {
+      const previous = row.forms ?? [];
+      row.forms = formInput.value.split(';').map((name) => name.trim()).filter(Boolean)
+        .map((name) => previous.find((form) => form.name === name) ?? { name });
       updateShaPreview();
     });
     const nestedButton = document.createElement('button');
@@ -2278,7 +2304,7 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     nestedButton.addEventListener('click', () => addNestedRow(row));
     const structureActions = document.createElement('div');
     structureActions.className = 'row-structure-actions';
-    structureActions.append(groupInput, formSummary, formButton, nestedButton);
+    structureActions.append(groupInput, formInput, nestedButton);
 
     const rowActions = document.createElement('div');
     rowActions.className = 'row-actions';
@@ -2312,14 +2338,6 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     });
 }
 
-function addIngredientForm(row) {
-  const name = window.prompt('Form name shown on the label');
-  if (!name?.trim()) return;
-  row.forms ??= [];
-  row.forms.push({ name: name.trim() });
-  renderRows();
-  updateShaPreview();
-}
 
 function addNestedRow(row) {
   row.nestedRows ??= [];

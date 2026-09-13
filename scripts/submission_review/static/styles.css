@@ -571,9 +571,10 @@ table { border-collapse: collapse; width: 100%; }
 .rows-table .row-tools-cell { display: flex; justify-content: space-between; align-items: center; gap: .5rem 1rem; flex-wrap: wrap; }
 .rows-table .row-structure-actions, .rows-table .row-actions { display: flex; gap: .35rem; align-items: center; flex-wrap: wrap; }
 .rows-table .row-actions { margin-left: auto; justify-content: flex-end; }
-.rows-table .row-group { flex: 0 1 11rem; min-height: 2rem; padding: .2rem .5rem; font-size: .78rem; color: var(--fg-muted); }
-.rows-table .row-forms { font-size: .8rem; color: var(--fg-muted); overflow-wrap: anywhere; }
-.rows-table .row-forms strong { color: var(--fg); font-weight: 500; }
+.rows-table .row-group, .rows-table .row-form { min-height: 2.1rem; padding: .2rem .5rem; font-size: .8rem; }
+.rows-table .row-group { flex: 1 1 9rem; color: var(--fg-muted); }
+.rows-table .row-form { flex: 2 1 12rem; }
+.rows-table .row-structure-actions { flex: 1 1 auto; }
 .solo-evidence-status { font-size: .76rem; color: var(--fg-muted); }
 .rows-table tbody:empty::after { content: "No rows yet. Add one for every ingredient printed on the panel."; }
 .statements { display: flex; flex-direction: column; gap: .5rem; }
