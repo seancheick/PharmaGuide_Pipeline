@@ -71,6 +71,40 @@ arrives by email → enter it. Requirements:
 Every transition pushes a generic notification to the submitter's devices
 and is recorded in the immutable review-event audit trail.
 
+## Solo development: start with one product
+
+1. Submit the product photographs in the app and run the existing extraction worker.
+2. In this console, choose **Load readable fields into the editor**. This starts
+   a development review and preserves the untouched machine output.
+3. Use **Evidence** beside a row to inspect its source. **Original: supported** means the
+   ingredient/amount/unit association has machine evidence; still check the photo.
+   These badges describe the untouched machine reading, not later edits.
+   **Original: check this** and **Original: not checked** require your own reading. Old extractions
+   remain usable and show Not checked until extracted with the new verifier.
+4. Edit incorrect values or printed forms, **Confirm** each checked row, and
+   **Remove** invented rows with a reason. Add any missed rows with the existing
+   ingredient controls. Use these controls during a development review; advanced
+   JSON replacements that cannot be mapped unambiguously cannot produce a report.
+5. Check the complete-label checkbox and **Save development report**. Download
+   the summary and CSV. Your normal approval process is unchanged; the report can
+   also be saved after approval while the development review remains open.
+
+Completed records are private local files in `reports/submission_solo/`.
+Saving rechecks your reviewer access and binds the original draft, mapper output,
+and grounding to the stored extraction and evidence revision. Reports include
+only the signed-in reviewer's records; browser-supplied verification cannot replace
+the stored machine report.
+The report uses each product's latest completed review. Working review marks
+are session-local: save your completed report before switching products or
+closing the page. The server still saves label corrections through its existing
+workflow. Timing excludes hidden/unfocused windows and inactivity after 30 seconds;
+use **Pause timer** for deliberate breaks. These are single-reviewer development
+results, not a qualified accuracy claim or independent gold standard.
+
+The app migration `20260913010000_submission_row_grounding.sql` exposes only the
+grounding report through the existing reviewer-only RPC. Apply it to the review
+backend before expecting row evidence; it makes no approval-policy changes.
+
 ## Review SLAs and judgment calls
 
 - Reject with a *retakeable* code (`photo_quality`, `missing_panel`,

@@ -526,3 +526,9 @@ input, select, textarea, button { max-width: 100%; min-width: 0; }
   content: " — different units";
   font-style: normal;
 }
+/* Local development evidence and results; deliberately part of the reviewer. */
+#solo-evidence { max-width: min(96vw, 1100px); }
+#solo-evidence-canvas { max-width: 100%; height: auto; display: block; margin-bottom: 1rem; }
+.solo-evidence-status { display: block; font-size: .85rem; margin: .35rem 0; }
+.solo-report { white-space: pre-wrap; overflow-wrap: anywhere; }
+#solo-review { margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--border); }

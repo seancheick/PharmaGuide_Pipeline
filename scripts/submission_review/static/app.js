@@ -79,6 +79,7 @@ function setStatus(message, isError = false) {
 // ---------------------------------------------------------------- auth
 
 async function boot() {
+  if (typeof SoloReview !== 'undefined') SoloReview.init();
   const config = await (await fetch('/api/config')).json();
   state.client = supabase.createClient(config.supabase_url, config.anon_key);
   const { data } = await state.client.auth.getSession();
@@ -293,6 +294,7 @@ function renderQueue() {
 }
 
 function select(submission) {
+  if (typeof SoloReview !== 'undefined') SoloReview.reset();
   resetPhotoGuidance();
   state.selected = submission;
   state.reviewInvalidated = false;
@@ -1953,7 +1955,8 @@ async function loadDraftIntoEditor() {
   if (state.draft?.draft_payload !== draft) return;
   // A draft is a starting point for a human, never an approval. Everything
   // below still has to be read off the photographs and ticked.
-  state.payload = { ...defaultPayload(), ...mapped.payload };
+  state.payload = structuredClone(mapped.payload);
+  if (typeof SoloReview !== 'undefined') SoloReview.start(state.draft, structuredClone(state.payload));
   state.unresolvedFromDraft = mapped.unresolved ?? [];
   syncFieldsFromPayload();
   renderRows();
@@ -2098,8 +2101,16 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     const formButton = document.createElement('button');
     formButton.type = 'button';
     formButton.className = 'ghost compact';
-    formButton.textContent = '+ form';
-    formButton.addEventListener('click', () => addIngredientForm(row));
+    formButton.textContent = 'Edit forms';
+    formButton.addEventListener('click', () => {
+      const current = (row.forms ?? []).map(form => form.name).join('; ');
+      const printed = window.prompt('Forms exactly as printed, separated by semicolons. Leave empty when no form is printed.', current);
+      if (printed === null) return;
+      row.forms = printed.split(';').map(name => name.trim()).filter(Boolean).map(name =>
+        (row.forms ?? []).find(form => form.name === name) ?? {name});
+      renderRows();
+      updateShaPreview();
+    });
     const nestedButton = document.createElement('button');
     nestedButton.type = 'button';
     nestedButton.className = 'ghost compact';
@@ -2113,11 +2124,16 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     removeButton.className = 'ghost';
     removeButton.textContent = '✕';
     removeButton.addEventListener('click', () => {
+      if (typeof SoloReview !== 'undefined' && !SoloReview.remove(row)) return;
       owner.splice(index, 1);
       renderRows();
       updateShaPreview();
     });
     removeCell.append(removeButton);
+    if (typeof SoloReview !== 'undefined') {
+      removeButton.textContent = 'Remove';
+      SoloReview.attach(row, removeCell, nameInput);
+    }
 
     tr.append(nameCell, qtyCell, unitCell, structureCell, removeCell);
     tbody.append(tr);
@@ -2252,7 +2268,15 @@ function syncDisclosureFields() {
 function applyRawJson() {
   try {
     const parsed = JSON.parse($('raw-json').value);
+    const previousRows = typeof SoloReview !== 'undefined' ? SoloReview.flatten(state.payload.ingredientRows) : [];
+    const previousPayload = state.payload;
     state.payload = parsed;
+    try {
+      if (typeof SoloReview !== 'undefined') SoloReview.rawReplaced(previousRows);
+    } catch (error) {
+      state.payload = previousPayload;
+      throw error;
+    }
     renderRows();
     syncFieldsFromPayload();
     renderRawJson(true);
@@ -2271,6 +2295,7 @@ async function updateShaPreview() {
     // Unchanged refreshes preserve checks. Edits revoke them synchronously,
     // before WebCrypto yields, and old promises cannot restore stale hashes.
     if (canonical === state.payloadCanonical && state.payloadSha) return;
+    if (typeof SoloReview !== 'undefined') SoloReview.changed();
     state.payloadCanonical = canonical;
     state.payloadSha = null;
     renderVerifyChecklist();
@@ -2319,6 +2344,8 @@ async function refreshReviewerPictureUrls() {
 function setApprovedReadOnly() {
   const approved = state.selected?.review_status === 'approved';
   for (const node of document.querySelectorAll?.('#detail-panel input, #detail-panel textarea, #detail-panel select, #detail-panel button') ?? []) {
+    // Development notes and evidence access cannot alter the approved label.
+    if (node.dataset.soloReadOnly === 'true') { node.disabled = false; continue; }
     if (node.id === 'raw-json') { node.readOnly = approved; continue; }
     if (approved) { node.dataset.approvedDisabled = 'true'; node.disabled = true; }
     else if (node.dataset.approvedDisabled) { delete node.dataset.approvedDisabled; node.disabled = false; }

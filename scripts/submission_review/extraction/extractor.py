@@ -101,6 +101,11 @@ class PreparedInput:
     #: Optional normalized x/y/w/h in the orientation-corrected original.
     crop: tuple[float, float, float, float] | None = None
 
+    # Geometry retained internally; the draft input contract stays unchanged.
+    original_size: tuple[int, int] | None = None
+    prepared_size: tuple[int, int] | None = None
+    pixel_crop: tuple[int, int, int, int] | None = None
+
     def as_sent_input(self) -> dict[str, object]:
         result: dict[str, object] = {"input_id": self.input_id, "photo_id": self.photo_id,
                                     "original_sha256": self.original_sha256, "sent_sha256": self.sent_sha256}
@@ -352,7 +357,7 @@ class LabelDraftExtractor:
                     photo.data, photo_id=photo.photo_id, input_id=photo.input_id)
                 for photo in bundle.photos
             ]
-            report = verify_grounding(draft, pages)
+            report = verify_grounding(draft, pages, prepared_inputs=bundle.photos)
         except Exception as error:  # noqa: BLE001 - a report must never fail a run
             # A broken verifier is not a broken reading. Say the check did not
             # run rather than let it decide anything by its absence.
@@ -365,6 +370,7 @@ class LabelDraftExtractor:
         payload = report.as_payload()
         payload["status"] = "ok"
         payload["independent_of_producer"] = config.provider != "ocr"
+        payload["independence_note"] = ("Legacy provider-name heuristic only; reader identity and independence are not verified.")
         usage.details["grounding"] = payload
 
 

@@ -106,7 +106,8 @@ def _prepare_photo(
             "preparation_failed", "evidence does not match its manifest hash"
         )
 
-    data, content_type = _bounded_reencode(raw, max_sent_bytes=max_sent_bytes, crop=crop)
+    geometry = {}
+    data, content_type = _bounded_reencode(raw, max_sent_bytes=max_sent_bytes, crop=crop, geometry=geometry)
     return PreparedInput(
         input_id=input_id,
         photo_id=photo.photo_id,
@@ -117,11 +118,13 @@ def _prepare_photo(
         data=data,
         categories=photo.categories,
         crop=crop,
+        **geometry,
     )
 
 
 def _bounded_reencode(raw: bytes, *, max_sent_bytes: int,
-                      crop: tuple[float, float, float, float] | None = None) -> tuple[bytes, str]:
+                      crop: tuple[float, float, float, float] | None = None,
+                      geometry: dict | None = None) -> tuple[bytes, str]:
     try:
         from PIL import Image, ImageOps
     except ImportError as error:  # pragma: no cover - environment guard
@@ -146,12 +149,17 @@ def _bounded_reencode(raw: bytes, *, max_sent_bytes: int,
             rgba = oriented.convert("RGBA")
             prepared = Image.new("RGB", rgba.size, "white")
             prepared.paste(rgba, mask=rgba.getchannel("A"))
+            original_size = prepared.size
+            pixel_crop = (0, 0, *original_size)
             if crop is not None:
                 x, y, w, h = crop
                 width, height = prepared.size
-                prepared = prepared.crop((round(x * width), round(y * height),
-                                          round((x + w) * width), round((y + h) * height)))
+                pixel_crop = (round(x * width), round(y * height),
+                              round((x + w) * width), round((y + h) * height))
+                prepared = prepared.crop(pixel_crop)
             prepared.thumbnail((MAX_EDGE, MAX_EDGE))
+            if geometry is not None:
+                geometry.update(original_size=original_size, pixel_crop=pixel_crop, prepared_size=prepared.size)
             buffer = io.BytesIO()
             # Apply orientation before stripping EXIF; composite transparency
             # so black label text remains readable on a transparent background.

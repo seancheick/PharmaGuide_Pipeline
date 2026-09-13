@@ -194,6 +194,24 @@
       (the server recomputes and enforces its own).
     </p>
 
+    <section id="solo-review" hidden>
+      <h2>Solo development review</h2>
+      <p class="muted">The untouched machine reading is preserved. Confirm rows after checking the photos. This report does not change approval.</p>
+      <p id="solo-status" aria-live="polite"></p>
+      <button id="solo-pause" type="button" class="ghost" data-solo-read-only="true">Pause timer</button>
+      <p class="muted">Timing pauses when this window is inactive or after 30 seconds without interaction. Use Pause for longer reading breaks.</p>
+      <label>Suspected photo causes (optional, comma separated)
+        <input id="solo-causes" placeholder="glare, tiny text, curvature" data-solo-read-only="true">
+      </label>
+      <label><input id="solo-complete" type="checkbox" data-solo-read-only="true"> I checked the product/UPC, serving information, every ingredient and printed form, other ingredients, and captured warnings. I added any missed rows.</label>
+      <div class="row">
+        <button id="solo-save" type="button" data-solo-read-only="true">Save development report</button>
+        <button id="solo-csv" type="button" class="ghost" data-solo-read-only="true" hidden>Download CSV</button>
+        <button id="solo-text" type="button" class="ghost" data-solo-read-only="true" hidden>Download summary</button>
+      </div>
+      <pre id="solo-report" class="solo-report"></pre>
+    </section>
+
     <h2>Decision</h2>
     <p id="review-banner" class="review-banner" hidden></p>
     <section id="label-diagnostics" class="diagnostics" aria-live="polite" hidden></section>
@@ -278,8 +296,19 @@
   </div>
 </dialog>
 
+<dialog id="solo-evidence">
+  <div class="row">
+    <h2>Label evidence</h2>
+    <button id="solo-evidence-close" type="button">Close</button>
+  </div>
+  <p id="solo-evidence-note"></p>
+  <canvas id="solo-evidence-canvas"></canvas>
+  <button id="solo-full-photo" type="button">Open full photograph</button>
+</dialog>
+
 <script src="/vendor/supabase.js"></script>
 <script src="/canonical.js?v=20260903-1"></script>
+<script src="/solo.js?v=20260913-1"></script>
 <script src="/app.js?v=20260903-1"></script>
 </body>
 </html>

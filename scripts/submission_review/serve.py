@@ -479,7 +479,7 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self):  # noqa: N802
         if self.path not in {"/api/edge", "/api/dsld_refresh", "/api/photo",
-                             "/api/draft_to_label", "/api/photo_guidance"}:
+                             "/api/draft_to_label", "/api/photo_guidance", "/api/solo_review"}:
             self._json({"error": "not found"}, 404)
             return
         length = int(self.headers.get("content-length") or 0)
@@ -490,6 +490,22 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
         authorization = self.headers.get("authorization")
         if not authorization or not authorization.startswith("Bearer "):
             self._json({"error": "reviewer session required"}, 401)
+            return
+
+        if self.path == "/api/solo_review":
+            from submission_review.solo_review import save_authorized_review, SoloReviewError
+            try:
+                result = save_authorized_review(json.loads(body), authorization, self.supabase_url, self.anon_key)
+            except SoloReviewError as error:
+                self._json({"error": str(error)}, error.status)
+                return
+            except (ValueError, TypeError, KeyError, RecursionError) as error:
+                self._json({"error": str(error)}, 400)
+                return
+            except OSError:
+                self._json({"error": "The private development record could not be saved."}, 503)
+                return
+            self._json(result)
             return
 
         if self.path == "/api/photo_guidance":

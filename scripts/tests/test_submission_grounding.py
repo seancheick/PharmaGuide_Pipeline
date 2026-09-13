@@ -275,3 +275,145 @@ def test_a_reader_that_produced_the_draft_is_marked_not_independent() -> None:
     # Checking a reading against the reader that produced it can only catch an
     # assembly bug, never an invented value, so the benchmark must be told.
     assert result.usage.as_payload()["grounding"]["independent_of_producer"] is False
+
+
+def _spatial_page(*rows):
+    return OcrPage(_PHOTO, 'i1', tuple(OcrLine(text, left, top, right, bottom)
+                                     for text, left, top, right, bottom in rows))
+
+
+def _grounded_row(page, name='Vitamin C', amount=500, unit='mg', **kwargs):
+    draft = _draft([_row(name, _field({'value': amount, 'unit_text': unit}, f'{amount} {unit}'))])
+    return verify_grounding(draft, [page], **kwargs).as_payload()['rows'][0]
+
+
+def test_spatial_grounding_keeps_valid_row_and_rejects_swapped_dose():
+    page = _spatial_page(('Vitamin C', 10, 10, 150, 25), ('500 mg', 200, 10, 260, 25),
+                         ('Calcium', 10, 40, 150, 55), ('250 mg', 200, 40, 260, 55))
+    assert _grounded_row(page)['status'] == 'supported'
+    assert _grounded_row(page, amount=250)['status'] == 'check_this'
+    assert _grounded_row(page, unit='IU')['status'] == 'check_this'
+
+
+def test_spatial_number_is_not_substring_and_name_is_exact():
+    page = _spatial_page(('Vitamin C 1500 mg', 10, 10, 260, 25))
+    assert _grounded_row(page, amount=500)['status'] == 'check_this'
+    assert _grounded_row(page, name='Vitamin', amount=1500)['status'] == 'check_this'
+
+
+def test_spatial_wrap_reuses_geometry_grouping():
+    page = _spatial_page(('Vitamin', 10, 10, 150, 24), ('C', 10, 26, 150, 40),
+                         ('500 mg', 200, 15, 260, 35))
+    assert _grounded_row(page)['status'] == 'supported'
+
+
+def test_spatial_repeated_and_multiple_columns_are_uncertain():
+    repeated = _spatial_page(('Vitamin C 500 mg', 10, 10, 260, 25),
+                             ('Vitamin C 500 mg', 10, 40, 260, 55))
+    columns = _spatial_page(('Vitamin C', 10, 10, 150, 25), ('500 mg', 200, 10, 260, 25),
+                           ('500 mg', 300, 10, 360, 25))
+    assert _grounded_row(repeated)['status'] == 'check_this'
+    assert _grounded_row(columns)['status'] == 'check_this'
+
+
+def test_spatial_missing_or_invalid_geometry_is_not_checked():
+    from types import SimpleNamespace
+    for line in (SimpleNamespace(text='Vitamin C 500 mg'),
+                 OcrLine('Vitamin C 500 mg', 10, 10, float('nan'), 25),
+                 OcrLine('Vitamin C 500 mg', 20, 10, 10, 25)):
+        page = OcrPage(_PHOTO, 'i1', (line,))
+        assert _grounded_row(page)['status'] == 'not_checked'
+
+
+def test_spatial_sources_must_agree_and_draft_is_unchanged():
+    from copy import deepcopy
+    draft = _draft([_row(amount=_field({'value': 500, 'unit_text': 'mg'}, '500 mg'))])
+    draft['ingredient_rows'][0]['amount']['sources'][0]['input_id'] = 'i2'
+    before = deepcopy(draft)
+    report = verify_grounding(draft, [_spatial_page(('Vitamin C 500 mg', 10, 10, 260, 25))])
+    assert report.rows[0]['status'] == 'check_this'
+    assert draft == before
+
+
+def test_spatial_blends_are_conservative():
+    draft = _draft([_row(amount=_field({'value': 500, 'unit_text': 'mg'}, '500 mg'))])
+    draft['ingredient_rows'][0]['parent_index'] = 0
+    assert verify_grounding(draft, [_spatial_page(('Vitamin C 500 mg', 10, 10, 260, 25))]).rows[0]['status'] == 'check_this'
+
+
+def test_region_requires_proven_transform_and_uses_exact_crop_pixels():
+    from types import SimpleNamespace
+    page = _spatial_page(('Vitamin C 500 mg', 10, 10, 260, 25))
+    assert _grounded_row(page)['region'] is None
+    prepared = SimpleNamespace(photo_id=_PHOTO, input_id='i1', original_size=(1001, 701),
+                               prepared_size=(501, 351), pixel_crop=(100, 70, 601, 421))
+    result = _grounded_row(page, prepared_inputs=[prepared])
+    assert result['region'] == {'x': 110 / 1001, 'y': 80 / 701, 'w': 250 / 1001, 'h': 15 / 701}
+    prepared.prepared_size = (200, 200)
+    assert _grounded_row(page, prepared_inputs=[prepared])['status'] == 'not_checked'
+
+
+def test_preparation_records_orientation_and_exact_pixel_rounding():
+    import hashlib
+    import io
+    from PIL import Image
+    from submission_review.extraction.extractor import EvidenceBundle, EvidencePhoto
+    from submission_review.extraction.photo_prep import prepare_bundle
+    buffer = io.BytesIO()
+    image = Image.new('RGB', (701, 1001), 'white')
+    exif = Image.Exif()
+    exif[274] = 6
+    image.save(buffer, format='JPEG', exif=exif)
+    raw = buffer.getvalue()
+    photo = EvidencePhoto(photo_id=_PHOTO, sha256=hashlib.sha256(raw).hexdigest())
+    bundle = EvidenceBundle('s1', 1, (photo,))
+    prepared = prepare_bundle(bundle, reader=lambda _: raw,
+                              crops={_PHOTO: {'x': .1, 'y': .1, 'w': .5, 'h': .5}}).photos[0]
+    assert prepared.original_size == (1001, 701)
+    assert prepared.pixel_crop == (100, 70, 601, 421)
+    assert prepared.prepared_size == (501, 351)
+    # Internal geometry must not expand the label_draft_v1 input schema.
+    assert 'pixel_crop' not in prepared.as_sent_input()
+
+
+def test_new_row_check_retains_page_wide_baseline_for_comparison():
+    page = _spatial_page(('Northwind', 10, 1, 150, 8),
+                         ('Vitamin C 500 mg', 10, 20, 260, 35),
+                         ('Calcium 250 mg', 10, 50, 260, 65))
+    draft = _draft([_row(amount=_field({'value': 250, 'unit_text': 'mg'}, '250 mg'))])
+    report = verify_grounding(draft, [page])
+    assert report.rate == 1.0
+    assert report.rows[0]['status'] == 'check_this'
+
+
+def test_name_spanning_two_amount_rows_has_ambiguous_ownership():
+    page = _spatial_page(('Vitamin C', 10, 10, 150, 50),
+                         ('500 mg', 200, 10, 260, 25), ('250 mg', 200, 40, 260, 55))
+    assert _grounded_row(page)['status'] == 'check_this'
+
+
+def test_missing_cited_page_is_not_checked_but_duplicates_are_ambiguous():
+    draft = _draft([_row(amount=_field({'value': 500, 'unit_text': 'mg'}, '500 mg'))])
+    page = _spatial_page(('Vitamin C 500 mg', 10, 10, 260, 25))
+    assert verify_grounding(draft, []).rows[0]['status'] == 'not_checked'
+    assert verify_grounding(draft, [page, page]).rows[0]['status'] == 'check_this'
+
+
+def test_name_spanning_unitless_amount_rows_has_ambiguous_ownership():
+    page = _spatial_page(('Vitamin C', 10, 10, 150, 50),
+                         ('500 mg', 200, 10, 260, 25), ('250', 200, 40, 280, 55))
+    assert _grounded_row(page)['status'] == 'check_this'
+
+
+def test_amount_and_percent_on_same_row_are_one_anchor():
+    page = _spatial_page(('Vitamin C', 10, 10, 150, 25),
+                         ('500 mg', 200, 10, 260, 25), ('556%', 280, 10, 330, 25))
+    assert _grounded_row(page)['status'] == 'supported'
+
+
+def test_two_machine_rows_cannot_both_claim_one_printed_occurrence():
+    import copy
+    row = _row(amount=_field({'value': 500, 'unit_text': 'mg'}, '500 mg'))
+    draft = _draft([row, copy.deepcopy(row)])
+    page = _spatial_page(('Vitamin C 500 mg', 10, 10, 260, 25))
+    assert [row['status'] for row in verify_grounding(draft, [page]).rows] == ['check_this', 'check_this']
