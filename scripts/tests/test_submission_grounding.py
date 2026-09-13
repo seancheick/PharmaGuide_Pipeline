@@ -353,6 +353,20 @@ def test_region_requires_proven_transform_and_uses_exact_crop_pixels():
     assert _grounded_row(page, prepared_inputs=[prepared])['status'] == 'not_checked'
 
 
+def test_rotated_grounding_checks_dimensions_and_maps_back_to_the_photo():
+    from dataclasses import replace
+    from types import SimpleNamespace
+    page = replace(_spatial_page(('Vitamin C 500 mg', 10, 10, 260, 25)),
+                   rotation_degrees=90, image_size=(400, 200))
+    prepared = SimpleNamespace(photo_id=_PHOTO, input_id='i1', original_size=(200, 400),
+                               prepared_size=(200, 400), pixel_crop=(0, 0, 200, 400))
+    result = _grounded_row(page, prepared_inputs=[prepared])
+    assert result['status'] == 'supported'
+    assert result['region'] == {'x': .05, 'y': .35, 'w': .075, 'h': .625}
+    assert _grounded_row(replace(page, image_size=(200, 400)),
+                         prepared_inputs=[prepared])['status'] == 'not_checked'
+
+
 def test_preparation_records_orientation_and_exact_pixel_rounding():
     import hashlib
     import io

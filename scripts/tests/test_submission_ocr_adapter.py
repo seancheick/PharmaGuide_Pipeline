@@ -139,6 +139,27 @@ def test_collapsed_serving_header_is_not_an_ingredient() -> None:
     assert [r["display_name"]["value"] for r in draft["ingredient_rows"]] == ["Turmeric Root Extract"]
 
 
+def test_sideways_reread_panel_furniture_never_becomes_ingredients():
+    draft = _extract([
+        _line('Suppiement Facts', 0, width=600),
+        _line('Serving size 1capsule', 40),
+        _line('Servingsper container 60', 70),
+        _line('Vitamin D 100mcg', 110),
+        _line('Vitamin K2 100mcg', 150),
+        _line('*Dailyvalue (DV)notestablished.', 190),
+        _line('Otheringredients:vegetarian capsule', 230),
+        _line('cellulose, water', 260),
+    ])
+    assert [r['display_name']['value'] for r in draft['ingredient_rows']] == ['Vitamin D', 'Vitamin K2']
+
+
+def test_headingless_panel_stops_at_collapsed_other_ingredients():
+    draft = _extract([_line('Vitamin C 500mg', 30),
+                      _line('Otheringredients:cellulose', 70),
+                      _line('water', 110)])
+    assert [r['display_name']['value'] for r in draft['ingredient_rows']] == ['Vitamin C']
+
+
 def test_dense_touching_rows_keep_separate_amounts_and_names() -> None:
     draft = _extract([
         _line("Alpha Lipoic Acid", 40, width=120, height=14),

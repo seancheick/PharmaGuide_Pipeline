@@ -21,7 +21,6 @@ from .extractor import (
     ExtractionConfig,
     ExtractionError,
     LabelDraftExtractor,
-    PREPARATION_VERSION,
 )
 from .photo_prep import prepare_bundle
 
@@ -166,12 +165,11 @@ def _work_one(
     called = False
     result = None
     try:
-        if config.prep_config_version != PREPARATION_VERSION:
-            raise ExtractionError("preparation_failed", "unsupported preparation version")
         queue.heartbeat(job.job_id, job.fencing_token)
         with _LeaseHeartbeat(queue, job) as heartbeat:
             prepared = prepare_bundle(
-                job.bundle, reader=reader or getattr(queue, "read_evidence", None))
+                job.bundle, reader=reader or getattr(queue, "read_evidence", None),
+                prep_config_version=config.prep_config_version)
             if heartbeat.error is not None:
                 raise heartbeat.error
             if not queue.reserve(job.job_id, job.fencing_token):

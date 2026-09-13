@@ -12,6 +12,7 @@ model adapter makes.
 from __future__ import annotations
 
 import io
+import math
 from typing import Any
 
 from ..extractor import ExtractionError, Usage
@@ -41,7 +42,9 @@ class RapidOcrReader:
                 "the local OCR engine is not installed",
                 usage=Usage(),
             ) from error
-        self._engine = RapidOCR()
+        # Per-line 180-degree repair hides which way the page reads. Read
+        # upright candidates instead, so amount columns keep their direction.
+        self._engine = RapidOCR(use_angle_cls=False)
         return self._engine
 
     def read(self, data: bytes, *, photo_id: str, input_id: str) -> OcrPage:
@@ -56,8 +59,31 @@ class RapidOcrReader:
             # Decoded in memory: the prepared bytes are a user's photograph and
             # do not get a second copy on disk for an engine's convenience.
             frame = numpy.asarray(image.convert("RGB"))
-        result, _ = self._resolve()(frame)
+        engine = self._resolve()
 
+        def read_frame(pixels: Any, rotation: int) -> OcrPage:
+            result, _ = engine(pixels)
+            return OcrPage(photo_id, input_id, self._lines(result), rotation,
+                           (pixels.shape[1], pixels.shape[0]))
+
+        initial = read_frame(frame, 0)
+        vertical = sum(line.height > (line.right - line.left) * 1.5 for line in initial.lines)
+        if initial.lines and vertical <= len(initial.lines) / 2:
+            return initial
+        # At most four reads. A tie is unresolved, not permission to reverse
+        # row ownership. Confidence selects orientation only, never approval.
+        candidates = [read_frame(numpy.ascontiguousarray(numpy.rot90(frame, -turn)), turn * 90)
+                      for turn in (1, 2, 3)]
+        def readability(page: OcrPage) -> float:
+            return sum(min(len(line.text), 80) * (line.confidence or 0) for line in page.lines
+                       if line.right - line.left >= line.height)
+        candidates.sort(key=readability, reverse=True)
+        best, runner_up = candidates[:2]
+        if readability(best) > 0 and readability(best) > readability(runner_up) * 1.1:
+            return best
+        return OcrPage(photo_id, input_id, image_size=(frame.shape[1], frame.shape[0]))
+
+    def _lines(self, result: Any) -> tuple[OcrLine, ...]:
         lines: list[OcrLine] = []
         for box, text, confidence in result or ():
             value = str(text).strip()
@@ -67,7 +93,7 @@ class RapidOcrReader:
                 score = float(confidence)
             except (TypeError, ValueError):
                 score = 0.0
-            if score < self._min_confidence:
+            if not math.isfinite(score) or not self._min_confidence <= score <= 1:
                 # Dropped rather than passed on: a low-confidence line is the
                 # engine guessing, and the reviewer sees a missing row, which
                 # is honest, instead of a plausible wrong one.
@@ -78,4 +104,4 @@ class RapidOcrReader:
                 text=value, left=min(xs), top=min(ys),
                 right=max(xs), bottom=max(ys), confidence=score,
             ))
-        return OcrPage(photo_id=photo_id, input_id=input_id, lines=tuple(lines))
+        return tuple(lines)

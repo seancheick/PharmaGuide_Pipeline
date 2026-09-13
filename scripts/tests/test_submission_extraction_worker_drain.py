@@ -124,6 +124,35 @@ def test_a_drafted_job_is_completed_review_ready_with_what_was_sent() -> None:
     assert queue.heartbeats == ["job-0", "job-0"]
 
 
+def test_worker_uses_the_leased_preparation_profile():
+    from dataclasses import replace
+    from submission_review.extraction.photo_prep import LOCAL_PREPARATION_VERSION
+
+    class InspectingAdapter(FakeAdapter):
+        def extract(self, bundle, config):
+            assert bundle.prep_config_version == LOCAL_PREPARATION_VERSION
+            return super().extract(bundle, config)
+
+    queue = _Queue()
+    queue._pending[0] = replace(queue._pending[0], configuration=_config(
+        prep_config_version=LOCAL_PREPARATION_VERSION))
+    assert drain(queue, LabelDraftExtractor(InspectingAdapter()), reader=_reader).drafted == 1
+
+
+def test_extractor_refuses_a_different_profile_before_calling_adapter():
+    from submission_review.extraction.photo_prep import prepare_bundle
+    from submission_review.extraction.extractor import ExtractionError
+
+    class MustNotRun(FakeAdapter):
+        def extract(self, bundle, config):
+            pytest.fail('a mislabeled preparation must not reach a model')
+
+    prepared = prepare_bundle(_job(0).bundle, reader=_reader)
+    with pytest.raises(ExtractionError, match='configuration mismatch'):
+        LabelDraftExtractor(MustNotRun()).extract(prepared, _config(
+            prep_config_version='prep_local_4mp_v1'))
+
+
 def test_adapter_receives_only_the_prepared_bytes_recorded_in_provenance() -> None:
     class InspectingAdapter(FakeAdapter):
         observed = None

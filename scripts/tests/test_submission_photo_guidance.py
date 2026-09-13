@@ -37,9 +37,25 @@ def test_sections_are_multi_role_and_include_located_support():
     assert all("confidence" not in item for item in result)
 
 
-@pytest.mark.parametrize("text", ["SupplementFacts", "SUPPLEMENT FACTS", "Supplement Facts:"])
+@pytest.mark.parametrize("text", ["SupplementFacts", "SUPPLEMENT FACTS", "Supplement Facts:", "Suppiement Facts"])
 def test_collapsed_heading_is_supported(text):
     assert suggestions(text)[0]["role"] == "supplement_facts"
+
+
+def test_sideways_guidance_box_uses_prepared_not_rotated_pixels():
+    from dataclasses import replace
+    from submission_review.extraction.photo_guidance import guidance_for_page
+    rotated = replace(page('Supplement Facts'), rotation_degrees=90, image_size=(400, 200))
+    result = guidance_for_page(rotated, declared=())
+    assert result['coordinate_space'] == 'prepared_image_pixels'
+    assert result['suggestions'][0]['box'] == {'left': 0, 'top': 100, 'right': 18, 'bottom': 390}
+
+
+def test_guidance_does_not_emit_a_box_outside_the_reading_image():
+    from dataclasses import replace
+    from submission_review.extraction.photo_guidance import guidance_for_page
+    source = replace(page('Supplement Facts'), rotation_degrees=90, image_size=(20, 20))
+    assert guidance_for_page(source, declared=())['suggestions'] == []
 
 
 @pytest.mark.parametrize("text", ["Allergens & warnings", "Product Warning: Keep out of reach of children"])

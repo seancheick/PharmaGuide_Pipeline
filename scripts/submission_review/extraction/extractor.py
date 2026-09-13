@@ -121,6 +121,7 @@ class PreparedBundle:
     submission_id: str
     evidence_revision: int
     photos: tuple[PreparedInput, ...]
+    prep_config_version: str = PREPARATION_VERSION
 
     @property
     def snapshot(self) -> dict[str, str]:
@@ -223,6 +224,8 @@ class LabelDraftExtractor:
             )
         if not isinstance(bundle, PreparedBundle):
             raise ExtractionError("preparation_failed", "prepared evidence required", usage=Usage())
+        if bundle.prep_config_version != config.prep_config_version:
+            raise ExtractionError("preparation_failed", "prepared evidence configuration mismatch")
         if not bundle.photos:
             raise ExtractionError("unsupported_evidence", "no photos were leased", usage=Usage())
         if len(bundle.snapshot) != len(bundle.photos) or len({p.input_id for p in bundle.photos}) != len(bundle.photos):

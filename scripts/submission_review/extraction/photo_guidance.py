@@ -14,14 +14,15 @@ from ..gtin import canonical_gtin14_candidates
 if TYPE_CHECKING:
     from .adapters.ocr_adapter import OcrPage
 
-RULES_VERSION = "photo-sections-v1"
+RULES_VERSION = "photo-sections-v2"
 MAX_LINES = 2000
 MAX_SUPPORT_TEXT = 200
 
 # Whole headings, or a heading followed by a colon. A mention embedded in
 # marketing prose ("read the Supplement Facts") is deliberately not enough.
+FACTS_HEADING = re.compile(r"^\s*supp[li]ement\s*facts\s*:?\s*$", re.I)
 _HEADINGS = (
-    ("supplement_facts", re.compile(r"^supplement\s*facts\s*:?(?:\s*)$", re.I)),
+    ("supplement_facts", FACTS_HEADING),
     ("ingredient_disclosure", re.compile(r"^(?:other\s*)?ingredients?\s*(?::|$)", re.I)),
     ("directions_warnings", re.compile(
         r"^(?:directions(?:\s*for\s*use)?|suggested\s*use|recommended\s*use|"
@@ -48,7 +49,12 @@ def suggest_photo_roles(page: OcrPage) -> list[dict]:
         if code and canonical_gtin14_candidates(code.group(1)):
             roles.append("barcode")
         for role in roles:
-            suggestions.setdefault(role, {"role": role, "text": text, "box": box})
+            try:
+                coordinates = page.input_box(*(box[key] for key in ('left', 'top', 'right', 'bottom')))
+            except ValueError:
+                continue
+            input_box = dict(zip(('left', 'top', 'right', 'bottom'), coordinates))
+            suggestions.setdefault(role, {"role": role, "text": text, "box": input_box})
     return list(suggestions.values())
 
 

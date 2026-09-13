@@ -43,7 +43,8 @@ def _jpeg(seed: int) -> bytes:
     return buffer.getvalue()
 
 
-def _build_set(root: Path, keys=("d-1", "d-2"), split: str = "development") -> None:
+def _build_set(root: Path, keys=("d-1", "d-2"), split: str = "development",
+               prep_version: str = 'prep_v1') -> None:
     (root / "gold").mkdir(parents=True, exist_ok=True)
     entries = []
     for index, key in enumerate(keys):
@@ -88,7 +89,7 @@ def _build_set(root: Path, keys=("d-1", "d-2"), split: str = "development") -> N
                             "model_digest": "c" * 64,
                             "prompt_version": "p1",
                             "prompt_sha256": FakeAdapter.prompt_sha256,
-                            "preparation": {"version": "prep_v1"},
+                            "preparation": {"version": prep_version},
                         },
                     }
                 ],
@@ -118,6 +119,21 @@ def test_a_development_run_writes_output_the_benchmark_can_read(tmp_path: Path) 
     # Use the actual consumer, not a JSON-read proxy for it.
     report = benchmark.evaluate(root, run_dir, "development")
     assert report["configuration"] == "candidate-a"
+
+
+def test_development_run_uses_the_same_opt_in_profile_as_worker(tmp_path):
+    from dataclasses import replace
+    from submission_review.extraction.photo_prep import LOCAL_PREPARATION_VERSION
+    root = tmp_path / 'set'
+    _build_set(root, prep_version=LOCAL_PREPARATION_VERSION)
+    config = replace(_config(), prep_config_version=LOCAL_PREPARATION_VERSION)
+    class InspectingAdapter(FakeAdapter):
+        def extract(self, bundle, configuration):
+            assert bundle.prep_config_version == LOCAL_PREPARATION_VERSION
+            return super().extract(bundle, configuration)
+    result = run_development_split(root, root / 'runs' / 'bounded',
+                                   LabelDraftExtractor(InspectingAdapter()), config)
+    assert result['drafted'] == 2
 
 
 def test_run_cannot_overwrite_gold_or_an_existing_run(tmp_path):

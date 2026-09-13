@@ -248,7 +248,7 @@ def _valid_box(line: Any, dimensions: tuple[int, int] | None) -> bool:
             and (dimensions is None or (right <= dimensions[0] and bottom <= dimensions[1])))
 
 
-def _original_region(band: Sequence[Any], prepared: Any) -> dict[str, float] | None:
+def _original_region(band: Sequence[Any], prepared: Any, page: Any = None) -> dict[str, float] | None:
     # Only preparation's recorded integer pixel window proves this transform.
     size = getattr(prepared, "prepared_size", None)
     original = getattr(prepared, "original_size", None)
@@ -258,10 +258,17 @@ def _original_region(band: Sequence[Any], prepared: Any) -> dict[str, float] | N
     left, top, right, bottom = window
     if not (0 <= left < right <= original[0] and 0 <= top < bottom <= original[1]):
         return None
-    x = left + min(line.left for line in band) / size[0] * (right - left)
-    y = top + min(line.top for line in band) / size[1] * (bottom - top)
-    x2 = left + max(line.right for line in band) / size[0] * (right - left)
-    y2 = top + max(line.bottom for line in band) / size[1] * (bottom - top)
+    x1, y1 = min(line.left for line in band), min(line.top for line in band)
+    x2, y2 = max(line.right for line in band), max(line.bottom for line in band)
+    if page is not None:
+        try:
+            x1, y1, x2, y2 = page.input_box(x1, y1, x2, y2)
+        except ValueError:
+            return None
+    x = left + x1 / size[0] * (right - left)
+    y = top + y1 / size[1] * (bottom - top)
+    x2 = left + x2 / size[0] * (right - left)
+    y2 = top + y2 / size[1] * (bottom - top)
     return {"x": x / original[0], "y": y / original[1],
             "w": (x2 - x) / original[0], "h": (y2 - y) / original[1]}
 
@@ -316,6 +323,14 @@ def _verify_rows(draft, pages, prepared_inputs):
         prepared_matches = [p for p in prepared_inputs if (p.photo_id, p.input_id) == (page.photo_id, page.input_id)]
         prepared = prepared_matches[0] if len(prepared_matches) == 1 else None
         size = getattr(prepared, "prepared_size", None)
+        expected_size = size[::-1] if size and page.rotation_degrees in (90, 270) else size
+        if (page.rotation_degrees not in (0, 90, 180, 270)
+                or (page.image_size is not None and expected_size is not None
+                    and page.image_size != expected_size)):
+            result.update(status="not_checked", reason="OCR orientation geometry is invalid")
+            yield result
+            continue
+        size = page.image_size or expected_size
         if not page.lines or any(not _valid_box(line, size) for line in page.lines):
             result.update(status="not_checked", reason="OCR geometry is missing or invalid")
             yield result
@@ -359,7 +374,7 @@ def _verify_rows(draft, pages, prepared_inputs):
             yield result
             continue
         band, text, doses = candidates[0]
-        result["region"] = _original_region(band, prepared)
+        result["region"] = _original_region(band, prepared, page)
         if name_claims[(_normalize(name["value"]), page.photo_id, page.input_id)] > 1:
             result["reason"] = "multiple machine rows claim the same printed ingredient occurrence"
             yield result

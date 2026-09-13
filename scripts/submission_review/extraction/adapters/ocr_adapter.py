@@ -28,12 +28,13 @@ changes the contract.
 from __future__ import annotations
 
 import hashlib
+import math
 import re
 from dataclasses import dataclass, field
 from typing import Any, Protocol, Sequence
 
 from ..envelope import SCHEMA_VERSION, validate_label_draft_v1
-from ..photo_guidance import suggest_photo_roles
+from ..photo_guidance import FACTS_HEADING, suggest_photo_roles
 from ..extractor import (
     ExtractionConfig,
     ExtractionError,
@@ -48,7 +49,7 @@ from ..extractor import (
 #: believed, whatever the text height says.
 _MIN_INDENT_STEP = 8.0
 
-RULES_VERSION = "ocr-geometry-v13"
+RULES_VERSION = "ocr-geometry-v14"
 PROVIDER = "ocr"
 
 #: Units as labels print them. Case is preserved in the draft; matching is not.
@@ -104,16 +105,15 @@ _NOT_A_ROW = re.compile(
     # "Amount per ..." and "Servings per ..." open no ingredient name, so they
     # are headings however OCR spaces them: "AmountPerTablet",
     # "ServingsPerContainer100". A word boundary after "per" missed both.
-    r"^\s*(?:(?:supplement\s*facts|%\s*d\s*v|%?\s*daily\s*value"
+    r"^\s*(?:(?:%\s*d\s*v|%?\s*daily\s*value"
     r"|serving\s*size|ingredients?)\b|amount\s*per|servings?\s*per)",
     re.IGNORECASE,
 )
-_OTHER_INGREDIENTS = re.compile(r"^\s*other\s+ingredients?\b", re.IGNORECASE)
+_OTHER_INGREDIENTS = re.compile(r"^\s*other\s*ingredients?\b", re.IGNORECASE)
 _FOOTNOTE_START = re.compile(r"^\s*\+\s*(?:provides|[t†‡])", re.IGNORECASE)
-_FACTS_HEADING = re.compile(r"\s*supplement\s*facts\s*", re.IGNORECASE)
 _PANEL_END = re.compile(
     r"^\s*(?:other\s*ingredients?\b|warnings?\b|directions?\b|"
-    r"[^\w]*daily\s*value\s*not\s*established|[^\w]*percent\s*daily\s*values?)",
+    r"[^\w]*daily\s*value\s*(?:\(\s*DV\s*\)\s*)?not\s*established|[^\w]*percent\s*daily\s*values?)",
     re.IGNORECASE,
 )
 
@@ -145,6 +145,30 @@ class OcrPage:
     photo_id: str
     input_id: str
     lines: tuple[OcrLine, ...] = field(default_factory=tuple)
+    # Internal reading coordinates, never model-authored evidence metadata.
+    rotation_degrees: int = 0  # clockwise from the prepared input
+    image_size: tuple[int, int] | None = None
+
+    def input_box(self, left: float, top: float, right: float, bottom: float) -> tuple[float, float, float, float]:
+        """Return reading coordinates to the unchanged prepared input pixels."""
+        if (not all(math.isfinite(v) for v in (left, top, right, bottom))
+                or not (0 <= left < right and 0 <= top < bottom)):
+            raise ValueError('invalid reading box')
+        if self.image_size is not None and not (
+                0 < right <= self.image_size[0] and 0 < bottom <= self.image_size[1]):
+            raise ValueError('box lies outside the reading image')
+        if self.rotation_degrees == 0:
+            return left, top, right, bottom
+        if not self.image_size:
+            raise ValueError('rotation requires reading dimensions')
+        width, height = self.image_size
+        if self.rotation_degrees == 90:
+            return top, width - right, bottom, width - left
+        if self.rotation_degrees == 180:
+            return width - right, height - bottom, width - left, height - top
+        if self.rotation_degrees == 270:
+            return height - bottom, left, height - top, right
+        raise ValueError('unsupported reading rotation')
 
 
 class OcrReader(Protocol):
@@ -182,7 +206,8 @@ def _rows_from_lines(lines: Sequence[OcrLine]) -> list[list[OcrLine]]:
     # separately. Left in, a heading chains into the rows below it and a band
     # that begins with one is dropped whole, taking real rows with it.
     lines = [line for line in lines
-             if not (_NOT_A_ROW.match(_clean(line.text)) or _SERVING_SIZE.match(_clean(line.text)))]
+             if not (FACTS_HEADING.fullmatch(line.text) or _NOT_A_ROW.match(_clean(line.text))
+                     or _SERVING_SIZE.match(_clean(line.text)))]
     ordered = sorted(lines, key=lambda line: (line.middle, line.left))
 
     def same_band(left: OcrLine, right: OcrLine) -> bool:
@@ -311,9 +336,9 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
     footer_started = False
     for band in rows:
         joined = _clean(" ".join(line.text for line in band))
-        if not joined or _NOT_A_ROW.match(joined) or _SERVING_SIZE.match(joined):
+        if not joined or FACTS_HEADING.fullmatch(joined) or _NOT_A_ROW.match(joined) or _SERVING_SIZE.match(joined):
             continue
-        if _OTHER_INGREDIENTS.match(joined):
+        if _OTHER_INGREDIENTS.match(joined) or _PANEL_END.match(joined):
             # This disclosure terminates the facts panel. Subsequent OCR lines
             # are its wrapped contents, not additional active ingredients.
             break
@@ -446,7 +471,8 @@ def _ingredient_rows(page: OcrPage, rows: Sequence[Sequence[OcrLine]]) -> list[d
 
 def _largest_text(page: OcrPage) -> tuple[str, str] | None:
     """The tallest printed line, which on a front label is the brand or name."""
-    candidates = [line for line in page.lines if _clean(line.text)]
+    candidates = [line for line in page.lines if _clean(line.text)
+                  and line.right - line.left >= line.height]
     if not candidates:
         return None
     tallest = max(candidates, key=lambda line: (line.height, -line.top))
@@ -581,7 +607,7 @@ class OcrLabelAdapter:
     def _panel(bundle: PreparedBundle, pages: dict[str, OcrPage]) -> OcrPage | None:
         headings = [
             (page, line) for page in pages.values() for line in page.lines
-            if _FACTS_HEADING.fullmatch(line.text)
+            if FACTS_HEADING.fullmatch(line.text)
         ]
         if len(headings) > 1:
             # Multiple panels may be different editions. Do not pick one or
@@ -601,7 +627,8 @@ class OcrLabelAdapter:
             end = min((line.top for line in lines if _PANEL_END.match(line.text)),
                       default=float("inf"))
             return OcrPage(page.photo_id, page.input_id,
-                           tuple(line for line in lines if line.top < end))
+                           tuple(line for line in lines if line.top < end),
+                           page.rotation_degrees, page.image_size)
         # A tightly cropped, explicitly tagged panel may lack its heading.
         # Untagged marketing text containing a dose is not enough evidence.
         declared = [pages[photo.photo_id] for photo in bundle.photos

@@ -73,6 +73,22 @@ and is recorded in the immutable review-event audit trail.
 
 ## Solo development: start with one product
 
+Automatic extraction must be explicitly configured and enabled; uploading alone
+does not produce a machine draft while it is disabled. Do not enable a general
+production queue merely to run a local experiment.
+
+The shared preparer retains `prep_v1` (full-detail baseline). The opt-in
+`prep_local_4mp_v1` profile bounds total prepared pixels to four million,
+divided equally across **all** evidence photos, without discarding panels.
+Set `prep_config_version` in the candidate/leased configuration; both the
+development runner and worker use that same profile. Original hashes and exact
+resize/crop geometry remain recorded. This is a new, unqualified candidate:
+smaller inputs can lose small print and do not guarantee a model will finish.
+
+The OCR reader retries sideways pages in bounded right-angle orientations.
+An ambiguous orientation abstains; evidence boxes are mapped back to the
+original photo, not shown at coordinates from the rotated reading.
+
 1. Submit the product photographs in the app and run the existing extraction worker.
 2. In this console, choose **Load readable fields into the editor**. This starts
    a development review and preserves the untouched machine output.

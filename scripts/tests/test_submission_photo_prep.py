@@ -64,6 +64,30 @@ def test_prepared_input_records_both_hashes() -> None:
     assert entry.as_sent_input()["photo_id"] == _PHOTO_A
 
 
+def test_local_pixel_budget_keeps_all_photos_and_provenance():
+    raw = _jpeg(2400, 3200)
+    photos = tuple(_photo(f'10000000-0000-0000-0000-{index:012d}', raw) for index in range(6))
+    prepared = prepare_bundle(_bundle(*photos), reader=lambda _: raw,
+                              prep_config_version='prep_local_4mp_v1')
+    assert len(prepared.photos) == 6
+    assert sum(p.prepared_size[0] * p.prepared_size[1] for p in prepared.photos) <= 4_000_000
+    assert prepared.prep_config_version == 'prep_local_4mp_v1'
+    for photo in prepared.photos:
+        assert photo.original_size == (2400, 3200)
+        assert photo.pixel_crop == (0, 0, 2400, 3200)
+        assert photo.original_sha256 == hashlib.sha256(raw).hexdigest()
+        assert photo.sent_sha256 == hashlib.sha256(photo.data).hexdigest()
+        assert photo.crop is None  # No omitted panels or invented crop.
+
+
+def test_unknown_preparation_profile_refuses_before_reading():
+    def unexpected(_):
+        pytest.fail('unsupported profile must not read evidence')
+    with pytest.raises(ExtractionError, match='unsupported preparation version'):
+        prepare_bundle(_bundle(_photo(_PHOTO_A, _jpeg())), reader=unexpected,
+                       prep_config_version='unrecognized')
+
+
 def test_bytes_that_do_not_match_the_manifest_are_never_decoded() -> None:
     bundle = _bundle(EvidencePhoto(photo_id=_PHOTO_A, sha256="a" * 64))
 

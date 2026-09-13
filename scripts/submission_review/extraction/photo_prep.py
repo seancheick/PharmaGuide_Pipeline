@@ -22,10 +22,11 @@ from __future__ import annotations
 
 import hashlib
 import io
+import math
 from pathlib import Path
 from collections.abc import Mapping
 
-from .extractor import EvidenceBundle, EvidencePhoto, ExtractionError, PreparedBundle, PreparedInput
+from .extractor import PREPARATION_VERSION, EvidenceBundle, EvidencePhoto, ExtractionError, PreparedBundle, PreparedInput
 from .envelope import LabelDraftError, _region
 
 #: Worker-side input ceiling, also enforced by the bounded local reader.
@@ -38,6 +39,10 @@ MAX_EDGE = 4096
 #: What an adapter is allowed to transmit per photo after preparation.
 MAX_SENT_BYTES = 4 * 1024 * 1024
 ALLOWED_FORMATS = frozenset({"JPEG", "PNG", "WEBP"})
+# Opt-in experiment, not a replacement for the full-detail baseline. Pixel
+# limits are not promises about any particular model's tokenizer or accuracy.
+LOCAL_PREPARATION_VERSION = "prep_local_4mp_v1"
+_BUNDLE_PIXEL_BUDGETS = {PREPARATION_VERSION: None, LOCAL_PREPARATION_VERSION: 4_000_000}
 
 
 def prepare_bundle(
@@ -46,6 +51,7 @@ def prepare_bundle(
     reader=None,
     max_sent_bytes: int = MAX_SENT_BYTES,
     crops: Mapping[str, Mapping[str, float]] | None = None,
+    prep_config_version: str = PREPARATION_VERSION,
 ) -> PreparedBundle:
     """Prepare every leased photo, or raise a typed failure.
 
@@ -56,6 +62,8 @@ def prepare_bundle(
     Coordinates refer to the orientation-corrected original, before thumbnailing.
     """
     read = reader or _read_local
+    if prep_config_version not in _BUNDLE_PIXEL_BUDGETS:
+        raise ExtractionError("preparation_failed", "unsupported preparation version")
     if not bundle.photos or len(bundle.snapshot) != len(bundle.photos):
         raise ExtractionError("unsupported_evidence", "empty or duplicate evidence")
     validated_crops: dict[str, tuple[float, float, float, float]] = {}
@@ -72,12 +80,14 @@ def prepare_bundle(
             except (LabelDraftError, ValueError, TypeError):
                 raise ExtractionError("unsupported_evidence", "invalid crop region") from None
     prepared: list[PreparedInput] = []
+    budget = _BUNDLE_PIXEL_BUDGETS[prep_config_version]
+    per_photo_pixels = budget // len(bundle.photos) if budget is not None else None
     for index, photo in enumerate(bundle.photos):
         prepared.append(
             _prepare_photo(photo, f"i{index}", read, max_sent_bytes=max_sent_bytes,
-                           crop=validated_crops.get(photo.photo_id))
+                           crop=validated_crops.get(photo.photo_id), max_pixels=per_photo_pixels)
         )
-    return PreparedBundle(bundle.submission_id, bundle.evidence_revision, tuple(prepared))
+    return PreparedBundle(bundle.submission_id, bundle.evidence_revision, tuple(prepared), prep_config_version)
 
 
 def _prepare_photo(
@@ -87,6 +97,7 @@ def _prepare_photo(
     *,
     max_sent_bytes: int,
     crop: tuple[float, float, float, float] | None = None,
+    max_pixels: int | None = None,
 ) -> PreparedInput:
     try:
         raw = read(photo)
@@ -107,7 +118,8 @@ def _prepare_photo(
         )
 
     geometry = {}
-    data, content_type = _bounded_reencode(raw, max_sent_bytes=max_sent_bytes, crop=crop, geometry=geometry)
+    data, content_type = _bounded_reencode(raw, max_sent_bytes=max_sent_bytes, crop=crop,
+                                          geometry=geometry, max_pixels=max_pixels)
     return PreparedInput(
         input_id=input_id,
         photo_id=photo.photo_id,
@@ -124,7 +136,7 @@ def _prepare_photo(
 
 def _bounded_reencode(raw: bytes, *, max_sent_bytes: int,
                       crop: tuple[float, float, float, float] | None = None,
-                      geometry: dict | None = None) -> tuple[bytes, str]:
+                      geometry: dict | None = None, max_pixels: int | None = None) -> tuple[bytes, str]:
     try:
         from PIL import Image, ImageOps
     except ImportError as error:  # pragma: no cover - environment guard
@@ -158,6 +170,10 @@ def _bounded_reencode(raw: bytes, *, max_sent_bytes: int,
                               round((x + w) * width), round((y + h) * height))
                 prepared = prepared.crop(pixel_crop)
             prepared.thumbnail((MAX_EDGE, MAX_EDGE))
+            if max_pixels is not None and prepared.width * prepared.height > max_pixels:
+                scale = math.sqrt(max_pixels / (prepared.width * prepared.height))
+                prepared.thumbnail((max(1, math.floor(prepared.width * scale)),
+                                    max(1, math.floor(prepared.height * scale))))
             if geometry is not None:
                 geometry.update(original_size=original_size, pixel_crop=pixel_crop, prepared_size=prepared.size)
             buffer = io.BytesIO()

@@ -21,7 +21,6 @@ from typing import Any
 
 from .benchmark import load_manifest
 from .extractor import (
-    PREPARATION_VERSION,
     EvidenceBundle,
     EvidencePhoto,
     ExtractionConfig,
@@ -83,14 +82,10 @@ def run_development_split(
         key = entry["product_key"]
         started = clock()
         try:
-            if config.prep_config_version != PREPARATION_VERSION:
-                raise ExtractionError(
-                    "preparation_failed", "unsupported preparation version"
-                )
             # The same preparation the queue worker runs, so what is measured
             # is the bytes a provider would actually have been sent.
             source_bundle = _bundle_for(holdout_dir, entry)
-            prepared = prepare_bundle(source_bundle)
+            prepared = prepare_bundle(source_bundle, prep_config_version=config.prep_config_version)
             result = extractor.extract(
                 prepared,
                 config,
