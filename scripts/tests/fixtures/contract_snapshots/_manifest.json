@@ -626,6 +626,41 @@
         "Lemon botanical identity and RDA-inheritance correction"
       ],
       "notes": "Re-froze only the three intentional drifts remaining after the fresh 37-brand rebuild and the separate AAKG evidence-exclusion regression fix. CVS Spectravite (12012) now includes its recovered label-declared Chloride 72 mg row in dose assessment, moving Dose 16.7->16.3 and score 68.1->67.7. Thorne Catalyte (323080) now includes its recovered label-declared Chloride 80 mg and Sodium 485 mg rows in dose assessment, moving Dose 16.8->16.0 and score 74.6->73.8; its recovered Folate child is not score-eligible and contributes no score. Garden of Life Adrenal Daily Balance (204571) now resolves Organic Lemon Extract as botanical Lemon instead of the stale folic-acid identity, removing an incorrect nutrient inheritance and moving Formulation 11.6->12.2 and score 58.3->58.9. Routes, score statuses, mapped coverage, verdicts, and safety behavior are unchanged. Nutricost Arginine AKG (269278) was deliberately not re-frozen: its broad L-arginine formulation evidence match was a defect because the verified evidence record excludes AAKG, and the shared evidence matcher now restores the existing 57.3 baseline. These are reviewed identity/reconciliation effects, not calibration changes."
+    },
+    {
+      "date": "2026-09-13",
+      "action": "refrozen_achievable_ceiling_references_and_tier_ladder",
+      "products": [
+        18141,
+        182730,
+        183275,
+        204571,
+        223084,
+        239600,
+        245156,
+        269278,
+        270256,
+        278454,
+        288344,
+        293924,
+        293943,
+        294077,
+        298102,
+        306237,
+        306381,
+        321405,
+        323080,
+        327416,
+        336337,
+        337853
+      ],
+      "sprints_covered": [
+        "quality_score 1.1.3-achievable-ceilings: 19 archetype references lowered to the ceilings their engines reach (none raised), so a top product scores 20/20 on evidence/formulation/dose",
+        "Tier chosen from the shipped whole number (69.6 ships as 70 and is Good)",
+        "Tier ladder renamed Exceptional / Excellent / Very good / Good / Needs improvement / Poor",
+        "Probiotic strain count unified across dose, transparency and formulation"
+      ],
+      "notes": "Scores moved +0.8 mean corpus-wide (median 63.2 -> 64.6); no verdict, route or coverage changed. Grades in every fixture carry the renamed ladder."
     }
   ]
 }

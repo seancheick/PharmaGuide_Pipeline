@@ -49,7 +49,7 @@ from scoring_v4.modules.generic_transparency import (
     _score_b6_disease_claim_penalty,
     B5_CAP,
 )
-from scoring_v4.modules.probiotic_dose import _per_strain_cfu_disclosed_keys
+from scoring_v4.modules.probiotic_dose import _per_strain_cfu_disclosed_keys, total_strain_count_for
 from probiotic_measurements import declared_total_cfu
 
 
@@ -165,7 +165,7 @@ def _score_strain_identities(pdata: Dict[str, Any]) -> float:
     named strain. Partial credit when some blends are unnamed proprietary
     containers (proportional to named-blend ratio).
     """
-    total_strain_count = _as_int(pdata.get("total_strain_count"), 0)
+    total_strain_count = total_strain_count_for(pdata, _safe_list(pdata.get("clinical_strains")))
     if total_strain_count <= 0:
         return 0.0
 
@@ -238,11 +238,11 @@ def _score_per_strain_cfu_on_label(pdata: Dict[str, Any]) -> float:
     transparency. Within Transparency, B5 must not deduct for that same
     undisclosed strain allocation a second time.
     """
-    total_strain_count = _as_int(pdata.get("total_strain_count"), 0)
+    clinical_strains = _safe_list(pdata.get("clinical_strains"))
+    total_strain_count = total_strain_count_for(pdata, clinical_strains)
     if total_strain_count <= 0:
         return 0.0
 
-    clinical_strains = _safe_list(pdata.get("clinical_strains"))
     disclosed_keys = _per_strain_cfu_disclosed_keys(pdata, clinical_strains)
     disclosed_count = min(len(disclosed_keys), total_strain_count)
     if disclosed_count <= 0:

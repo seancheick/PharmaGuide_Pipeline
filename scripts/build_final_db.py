@@ -5614,9 +5614,10 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         if not nutrient:
             continue
         pct_ul = safe_float(flag.get("pct_ul"))
-        sev = safe_str(flag.get("severity"))
-        if not sev:
-            sev = "high" if pct_ul is not None and pct_ul >= 150 else "moderate"
+        # The enricher's own scale (warning / critical) is not the consumer
+        # vocabulary; 'critical' would read as contraindicated. Twice the
+        # limit is high, above the limit is moderate: the split the app uses.
+        sev = "high" if pct_ul is not None and pct_ul >= 200 else "moderate"
         if pct_ul is not None:
             message = f"Upper-limit warning: {nutrient} at {pct_ul:.0f}% of UL"
         else:

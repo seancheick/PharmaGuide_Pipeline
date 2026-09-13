@@ -5,10 +5,12 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §9
 
     Core dimension      Cap     Subsequent slice that fills it
     ------------------  ----    -------------------------------
-    Formulation         25     P1.6.1 — form_tier (TG 8 / PL 7 / rTG 6 /
+    Formulation         25     P1.6.1 — form_tier (TG 8 / rTG 8 / PL 7 /
                                EE 4 / undefined 2) + source_disclosed 4
-                               + premium_form_a2_carry 5 + sustainability_cert 4
-                               (Friend of the Sea / MSC, rules_db verified)
+                               + premium_form_a2_carry 5
+                               + epa_dha_concentration 0..4
+                               + sustainability_cert 2 (Friend of the Sea /
+                               MSC, rules_db verified); 23/25 reachable
     Dose                25     P1.6.2 — EPA+DHA per-day bands (rescaled to /20
                                from scoring_config omega3_dose_bonus.bands)
                                + EPA:DHA ratio sanity (/5, in 1:3..3:1 range)

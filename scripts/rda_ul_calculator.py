@@ -75,6 +75,25 @@ ADEQUACY_BANDS = {
 # because unit_converter.convert_nutrient is a no-op for plain minerals. These
 # support converting the label amount into the table unit before any pct math.
 _MASS_TO_MCG = {"g": 1_000_000.0, "mg": 1_000.0, "mcg": 1.0}
+def ul_exceedance_sentence(amount: float, ul: float, unit: str) -> str:
+    """The consumer sentence for an amount above the upper limit.
+
+    Says what this product alone provides, names the general adult upper
+    limit, and says that other sources are not yet counted: the UL applies to
+    total daily intake, and this app sees one label at a time. It does not
+    say "unsafe" or "do not use"; a clinician can direct a higher dose, and the
+    action copy beside it says so.
+    """
+    def _n(value: float) -> str:
+        return f"{value:.0f}" if abs(value - round(value)) < 0.05 else f"{value:.1f}"
+
+    pct = amount / ul * 100.0 if ul else 0.0
+    return (
+        f"Provides {_n(amount)} {unit} per day on its own, {pct:.0f}% of the general "
+        f"adult upper limit of {_n(ul)} {unit}, before other sources are counted."
+    )
+
+
 @dataclass
 class NutrientAdequacyResult:
     """Result of nutrient adequacy calculation."""
@@ -400,7 +419,7 @@ class RDAULCalculator:
                 if amount_in_ref > ul:
                     over_ul = True
                     over_ul_amount = amount_in_ref - ul
-                    warnings.append(f"Exceeds UL by {over_ul_amount:.1f} {ref_unit_label}")
+                    warnings.append(ul_exceedance_sentence(amount_in_ref, ul, ref_unit_label))
 
         # Determine adequacy band. Magnesium is a special case because the UL
         # applies to supplemental intake only while the RDA is total intake.

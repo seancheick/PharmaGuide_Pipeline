@@ -99,7 +99,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
     clinical_strains = label_owned_native_strains(product)
     measured_strains = measured_native_strain_doses(product)
 
-    total_strain_count = _total_strain_count(pdata, clinical_strains)
+    total_strain_count = total_strain_count_for(pdata, clinical_strains)
     disclosed_keys = _per_strain_cfu_disclosed_keys(pdata, clinical_strains)
     disclosed_count = min(len(disclosed_keys), total_strain_count) if total_strain_count else 0
     disclosure_score = _score_per_strain_cfu_disclosure(disclosed_count, total_strain_count)
@@ -468,7 +468,10 @@ def _cfu_data_has_individual_cfu(cfu_data: Dict[str, Any]) -> bool:
     return normalized_cfu_count(cfu_data) is not None
 
 
-def _total_strain_count(pdata: Dict[str, Any], clinical_strains: Iterable[Any]) -> int:
+def total_strain_count_for(pdata: Dict[str, Any], clinical_strains: Iterable[Any] = ()) -> int:
+    """The strain count every probiotic dimension agrees on: the declared
+    total, else the distinct strain names across the blends, else the distinct
+    clinical ids. Dose, transparency and formulation all count this way."""
     declared = _as_int(pdata.get("total_strain_count"), 0)
     if declared > 0:
         return declared

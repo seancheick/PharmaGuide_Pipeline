@@ -20,6 +20,7 @@ from probiotic_measurements import declared_total_cfu
 
 PHASE_MARKER = "P2.1_probiotic_formulation"
 from scoring_v4.quality_score_config import block as _cfg_block
+from scoring_v4.modules.probiotic_dose import total_strain_count_for
 
 _FVM = _cfg_block("formulation_variant_magnitudes", "probiotic")["probiotic"]
 
@@ -123,17 +124,7 @@ def _total_billion_count(pdata: Dict[str, Any]) -> float:
 
 
 def _total_strain_count(pdata: Dict[str, Any]) -> int:
-    count = _as_int(pdata.get("total_strain_count"), 0)
-    if count > 0:
-        return count
-    strains = set()
-    for blend in _safe_list(pdata.get("probiotic_blends")):
-        blend = _safe_dict(blend)
-        for strain in _safe_list(blend.get("strains")):
-            key = str(strain or "").strip().lower()
-            if key:
-                strains.add(key)
-    return len(strains)
+    return total_strain_count_for(pdata, _safe_list(pdata.get("clinical_strains")))
 
 
 def _score_total_cfu_disclosed(total_billion: float) -> float:

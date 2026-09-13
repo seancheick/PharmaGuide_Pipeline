@@ -137,7 +137,7 @@ import form_vocab as _form_vocab  # noqa: E402
 from unit_converter import UnitConverter, ConversionResult
 from dosage_normalizer import DosageNormalizer, DosageNormalizationResult
 from proprietary_blend_detector import ProprietaryBlendDetector, BlendAnalysisResult
-from rda_ul_calculator import RDAULCalculator, NutrientAdequacyResult
+from rda_ul_calculator import RDAULCalculator, NutrientAdequacyResult, ul_exceedance_sentence
 from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
 import normalization as norm_module  # Single-source normalization
@@ -21452,7 +21452,9 @@ class SupplementEnricherV3:
                                 "ul": safety_ul,
                                 "pct_ul": pct_ul_val,
                                 "over_amount": over_ul_amount,
-                                "warning": f"Exceeds UL by {over_ul_amount:.1f}",
+                                "warning": ul_exceedance_sentence(
+                                    float(amount_for_ul or 0.0), float(safety_ul or 0.0), str(converted_unit or "")
+                                ),
                                 "severity": "critical" if pct_ul_val >= 200 else "warning",
                                 **ul_exposure,
                             }
@@ -21751,9 +21753,10 @@ class SupplementEnricherV3:
                             "pct_ul": pct_ul_val,
                             "over_amount": over_ul_amount,
                             "warning": (
-                                f"Aggregated across {len(group['rows'])} forms "
-                                f"exceeds UL by {over_ul_amount:.1f} {group['unit']} "
-                                f"({pct_ul_val:.0f}% UL)"
+                                f"Across {len(group['rows'])} forms, "
+                                + ul_exceedance_sentence(
+                                    float(group["total_amount"] or 0.0), float(agg_adequacy.ul or 0.0), str(group["unit"] or "")
+                                )
                             ),
                             "severity": "critical" if pct_ul_val >= 200 else "warning",
                             "aggregation": "canonical_sum",

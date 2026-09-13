@@ -144,7 +144,12 @@ def test_cfu_amount_tiers(total_billion: float, expected: float) -> None:
 def test_named_species_diversity_tiers(strain_count: int, expected: float) -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
-    payload = score_formulation(_product(strain_count=strain_count))
+    # One strain count serves dose, transparency and formulation: with no
+    # declared blends it falls back to the clinical strains, so keep those in
+    # step with the declared count this tier table is about.
+    payload = score_formulation(
+        _product(strain_count=strain_count, clinical_strain_count=min(5, strain_count))
+    )
 
     assert payload["components"]["named_species_diversity"] == expected
 
