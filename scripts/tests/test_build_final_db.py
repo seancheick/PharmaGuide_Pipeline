@@ -2908,6 +2908,36 @@ def test_top_warnings_do_not_repeat_a_ban_the_contaminant_data_already_named():
     assert build_top_warnings(enriched, blob) == build_top_warnings(enriched)
 
 
+@pytest.mark.parametrize("status", ["watchlist", "high_risk"])
+def test_top_warnings_weaker_same_rule_cannot_hide_blob_ban(status):
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"]["substances"] = [{
+        "ingredient": "Old policy name", "id": "BANNED_CBD_US", "status": status,
+        "match_type": "exact",
+    }]
+    expected = {
+        "type": "banned_substance", "severity": "critical",
+        "title": "Banned substance: CBD (Cannabidiol)",
+    }
+    blob = {"warnings": [{**expected, "matched_rule_id": "BANNED_CBD_US"}]}
+    warnings = build_top_warnings(enriched, blob)
+    assert warnings[0] == expected
+    assert not any("Old policy name" in warning["title"] for warning in warnings)
+
+
+@pytest.mark.parametrize("title", ["", None])
+def test_top_warnings_blank_blob_warning_cannot_consume_rule_identity(title):
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"]["substances"] = []
+    expected = {
+        "type": "recalled_ingredient", "severity": "high",
+        "title": "Recalled ingredient: Example",
+    }
+    warning = {**expected, "matched_rule_id": "RECALL_EXAMPLE"}
+    blob = {"warnings": [{**warning, "title": title}, warning]}
+    assert build_top_warnings(enriched, blob)[0] == expected
+
+
 def test_top_warnings_priority_prefers_safety_before_dietary_and_status():
     enriched = make_enriched()
     enriched["status"] = "discontinued"

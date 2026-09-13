@@ -5501,31 +5501,45 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
     """
     raw_warnings = []
     warning_messages = set()
-    named_rule_ids = set()
+    named_rule_indices: Dict[str, int] = {}
 
-    def add_warning(kind: str, severity: str, message: str) -> None:
+    def warning_priority(warning: tuple) -> tuple[int, int]:
+        return (
+            WARNING_PRIORITY.get(warning[0], 99),
+            SEVERITY_PRIORITY.get(warning[1], 99),
+        )
+
+    def add_warning(kind: str, severity: str, message: str, rule_id: str = "") -> None:
         if not message or message in warning_messages:
             return
         warning_messages.add(message)
         raw_warnings.append((kind, severity, message))
+        if rule_id:
+            previous = named_rule_indices.get(rule_id)
+            if (
+                previous is None
+                or warning_priority(raw_warnings[-1])
+                < warning_priority(raw_warnings[previous])
+            ):
+                named_rule_indices[rule_id] = len(raw_warnings) - 1
 
     # Banned substances
     for sub in contaminant_matches(enriched):
         status = safe_str(sub.get("status")).lower()
         name = safe_str(sub.get("ingredient") or sub.get("banned_name") or sub.get("name"))
-        if status in ("banned", "recalled", "high_risk", "watchlist"):
-            named_rule_ids.add(_contaminant_rule_id(sub))
+        rule_id = _contaminant_rule_id(sub)
         if status == "banned":
-            add_warning("banned_substance", "critical", f"Banned substance: {name}")
+            add_warning("banned_substance", "critical", f"Banned substance: {name}", rule_id)
         elif status == "recalled":
-            add_warning("recalled_ingredient", "high", f"Recalled ingredient: {name}")
+            add_warning("recalled_ingredient", "high", f"Recalled ingredient: {name}", rule_id)
         elif status == "high_risk":
-            add_warning("banned_substance", "high", f"High-risk ingredient: {name}")
+            add_warning("banned_substance", "high", f"High-risk ingredient: {name}", rule_id)
         elif status == "watchlist":
             add_warning(
                 "watchlist_substance",
                 safe_str(sub.get("severity_level"), "moderate"),
                 f"Watchlist ingredient: {name}",
+                rule_id,
             )
 
     for flag in contaminant_safety_flags(enriched):
@@ -5540,8 +5554,10 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
             flag.get("severity"),
             "critical" if status == "banned" else "high" if status == "recalled" else "moderate",
         )
-        named_rule_ids.add(_safety_flag_rule_id(flag))
-        add_warning(warning_type, severity, f"{title_prefix}: {name}")
+        add_warning(
+            warning_type, severity, f"{title_prefix}: {name}",
+            _safety_flag_rule_id(flag),
+        )
 
     for warning in safe_list(safe_dict(detail_blob).get("warnings")):
         if (
@@ -5550,14 +5566,23 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         ):
             continue
         rule_id = safe_str(warning.get("matched_rule_id"))
-        if rule_id and rule_id in named_rule_ids:
+        title = safe_str(warning.get("title"))
+        if not title.strip():
             continue
-        named_rule_ids.add(rule_id)
-        add_warning(
+        candidate = (
             warning["type"],
             safe_str(warning.get("severity"), "critical"),
-            safe_str(warning.get("title")),
+            title,
         )
+        previous = named_rule_indices.get(rule_id)
+        if previous is not None:
+            # A softer warning for the same rule must not conceal the ban.
+            # Keep existing wording when it already conveys equal/higher risk.
+            if warning_priority(candidate) < warning_priority(raw_warnings[previous]):
+                raw_warnings[previous] = candidate
+                warning_messages.add(title)
+            continue
+        add_warning(*candidate, rule_id=rule_id)
 
     # Harmful additives
     for h in safe_list(enriched.get("harmful_additives")):
@@ -5649,10 +5674,7 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         add_warning("status", "info", "Off market")
 
     # Sort by priority
-    raw_warnings.sort(key=lambda w: (
-        WARNING_PRIORITY.get(w[0], 99),
-        SEVERITY_PRIORITY.get(w[1], 99),
-    ))
+    raw_warnings.sort(key=warning_priority)
 
     return [
         {"type": kind, "severity": severity, "title": message}
