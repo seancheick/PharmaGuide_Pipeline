@@ -1012,6 +1012,14 @@ def _safety_flag_display_name(flag: Dict[str, Any]) -> str:
     )
 
 
+def _contaminant_rule_id(sub: Dict[str, Any]) -> str:
+    return safe_str(sub.get("id") or sub.get("rule_id") or sub.get("banned_id"))
+
+
+def _safety_flag_rule_id(flag: Dict[str, Any]) -> str:
+    return safe_str(flag.get("entry_id") or flag.get("rule_id"))
+
+
 def _banned_warning_type_for_status(status: str) -> str:
     return {
         "banned": "banned_substance",
@@ -5478,15 +5486,22 @@ def apply_sqlite_build_pragmas(conn: sqlite3.Connection) -> None:
 
 # ─── Warning Builder ───
 
-def build_top_warnings(enriched: Dict) -> List[Dict]:
+def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> List[Dict]:
     """Build prioritized, structured warning summaries for Flutter.
 
     The core database stores this list as JSON.  Retaining type and severity
     here lets the offline UI interpret the same warning identity as the detail
     blob instead of attempting to recover semantics from display copy.
+
+    Bans and recalls come from contaminant_data and from the detail blob's own
+    warnings. The blob also sees label rows contaminant_data never matched (an
+    inactive partially hydrogenated oil, an active hemp extract), so a ban the
+    product page shows is never missing here. A rule already named stays one
+    entry.
     """
     raw_warnings = []
     warning_messages = set()
+    named_rule_ids = set()
 
     def add_warning(kind: str, severity: str, message: str) -> None:
         if not message or message in warning_messages:
@@ -5498,6 +5513,8 @@ def build_top_warnings(enriched: Dict) -> List[Dict]:
     for sub in contaminant_matches(enriched):
         status = safe_str(sub.get("status")).lower()
         name = safe_str(sub.get("ingredient") or sub.get("banned_name") or sub.get("name"))
+        if status in ("banned", "recalled", "high_risk", "watchlist"):
+            named_rule_ids.add(_contaminant_rule_id(sub))
         if status == "banned":
             add_warning("banned_substance", "critical", f"Banned substance: {name}")
         elif status == "recalled":
@@ -5523,7 +5540,24 @@ def build_top_warnings(enriched: Dict) -> List[Dict]:
             flag.get("severity"),
             "critical" if status == "banned" else "high" if status == "recalled" else "moderate",
         )
+        named_rule_ids.add(_safety_flag_rule_id(flag))
         add_warning(warning_type, severity, f"{title_prefix}: {name}")
+
+    for warning in safe_list(safe_dict(detail_blob).get("warnings")):
+        if (
+            not isinstance(warning, dict)
+            or warning.get("type") not in ("banned_substance", "recalled_ingredient")
+        ):
+            continue
+        rule_id = safe_str(warning.get("matched_rule_id"))
+        if rule_id and rule_id in named_rule_ids:
+            continue
+        named_rule_ids.add(rule_id)
+        add_warning(
+            warning["type"],
+            safe_str(warning.get("severity"), "critical"),
+            safe_str(warning.get("title")),
+        )
 
     # Harmful additives
     for h in safe_list(enriched.get("harmful_additives")):
@@ -7140,7 +7174,7 @@ def build_detail_blob(
     # unmatched conditional warnings.
     warnings = []
     for sub in contaminant_matches(enriched):
-        rule_id = safe_str(sub.get("id") or sub.get("rule_id") or sub.get("banned_id"))
+        rule_id = _contaminant_rule_id(sub)
         policy = _safety_warning_policy_projection(rule_id, sub.get("status"), sub)
         reference = safe_dict(policy.get("entry"))
         status = safe_str(policy.get("status"))
@@ -7207,7 +7241,7 @@ def build_detail_blob(
         source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
         if source != "banned_recalled_ingredients":
             continue
-        rule_id = safe_str(flag.get("entry_id") or flag.get("rule_id"))
+        rule_id = _safety_flag_rule_id(flag)
         policy = _safety_warning_policy_projection(rule_id, flag.get("status"), flag)
         reference = safe_dict(policy.get("entry"))
         status = safe_str(policy.get("status"))
@@ -10178,7 +10212,7 @@ def build_core_row(
     ss = safe_dict(effective_scored.get("section_scores"))
     v4_pillars = safe_dict(effective_scored.get("_v4_pillars"))
 
-    top_warnings = build_top_warnings(enriched)
+    top_warnings = build_top_warnings(enriched, detail_blob)
 
     safety_signal_reason = (
         safe_str(effective_scored.get("safety_signal_reason"))

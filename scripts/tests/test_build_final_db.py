@@ -2848,6 +2848,66 @@ def test_resolver_only_watchlist_warning_keeps_watchlist_semantics():
     )
 
 
+def test_top_warnings_carry_a_ban_found_only_on_a_label_row():
+    # 18924 (Centrum Silver Chewables): the enricher's contaminant data saw no
+    # ban, but the detail blob's resolver flagged the partially hydrogenated
+    # soybean oil in the inactives. The summary listed five additives instead.
+    enriched = make_enriched()
+    enriched["inactiveIngredients"] = [{
+        "name": "Partially Hydrogenated Soybean Oil",
+        "raw_source_text": "Partially Hydrogenated Soybean Oil",
+        "standardName": "Partially Hydrogenated Soybean Oil",
+    }]
+    enriched["contaminant_data"]["banned_substances"]["substances"] = []
+    enriched["harmful_additives"] = [
+        {"ingredient": name, "raw_source_text": name, "additive_name": name,
+         "severity_level": severity, "category": "additive"}
+        for name, severity in (
+            ("Aspartame", "high"), ("FD&C Red No. 40", "moderate"),
+            ("Soy Monoglycerides", "moderate"), ("Sodium Benzoate", "moderate"),
+            ("Sorbitol", "low"),
+        )
+    ]
+    scored = make_scored(verdict="BLOCKED")
+
+    blob = build_detail_blob(enriched, scored)
+    bans = [w for w in blob["warnings"] if w.get("type") == "banned_substance"]
+    assert bans, "precondition: the resolver flags the PHO row in the blob"
+    row = row_as_dict(build_core_row(
+        enriched, scored, "2026-03-17T19:00:00Z", detail_blob=blob,
+    ))
+    top = json.loads(row["top_warnings"])
+
+    assert top[0] == {
+        "type": "banned_substance",
+        "severity": bans[0]["severity"],
+        "title": bans[0]["title"],
+    }
+    assert len(top) == 5
+
+
+def test_top_warnings_do_not_repeat_a_ban_the_contaminant_data_already_named():
+    # 222758 (CBD): contaminant data and the blob resolver name one ban,
+    # BANNED_CBD_US, two ways. One ban stays one summary entry.
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"]["substances"] = [{
+        "ingredient": "Cannabidiol",
+        "banned_name": "Cannabidiol",
+        "id": "BANNED_CBD_US",
+        "status": "banned",
+        "match_type": "exact",
+    }]
+    blob = {"warnings": [{
+        "type": "banned_substance",
+        "severity": "critical",
+        "title": "Banned substance: CBD (Cannabidiol)",
+        "matched_rule_id": "BANNED_CBD_US",
+        "source": "inactive_ingredient_resolver",
+    }]}
+
+    assert build_top_warnings(enriched, blob) == build_top_warnings(enriched)
+
+
 def test_top_warnings_priority_prefers_safety_before_dietary_and_status():
     enriched = make_enriched()
     enriched["status"] = "discontinued"
