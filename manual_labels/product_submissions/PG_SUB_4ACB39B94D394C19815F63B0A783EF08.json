@@ -1,0 +1,161 @@
+{
+  "id": "PG_SUB_4ACB39B94D394C19815F63B0A783EF08",
+  "brandName": "Align",
+  "fullName": "Women's Dual Action",
+  "ingredientRows": [
+    {
+      "forms": [],
+      "ingredientGroup": "Bifidobacterium longum",
+      "name": "Bifidobacterium longum subsp. longum 35624",
+      "nestedRows": [],
+      "notes": "Gut Health Probiotic. Daily Value not established.",
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 10,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Feminine Health Probiotic Blend",
+      "name": "Feminine Health Probiotic Blend",
+      "nestedRows": [
+        {
+          "forms": [],
+          "ingredientGroup": "Lactobacillus acidophilus La-14",
+          "name": "Lactobacillus acidophilus La-14",
+          "nestedRows": [],
+          "order": 1,
+          "quantity": []
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Lacticaseibacillus rhamnosus HN001",
+          "name": "Lacticaseibacillus rhamnosus HN001",
+          "nestedRows": [],
+          "order": 2,
+          "quantity": []
+        }
+      ],
+      "notes": "Daily Value not established.",
+      "order": 2,
+      "quantity": [
+        {
+          "quantity": 33,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Chaste Tree (Vitex-agnus castus L.) berry extract",
+      "name": "Chaste Tree (Vitex-angus castus L.) berry extract",
+      "nestedRows": [],
+      "notes": "Feminine Health Botanical. Daily Value not established. Genus/species printed as \"Vitex-angus\" on the label.",
+      "order": 3,
+      "quantity": [
+        {
+          "quantity": 42,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "offMarket": 0,
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Microcrystalline cellulose"
+      },
+      {
+        "name": "hydroxypropyl methylcellulose"
+      },
+      {
+        "name": "maltodextrin"
+      },
+      {
+        "name": "Less than 2% of:",
+        "forms": [
+          {
+            "name": "magnesium stearate"
+          },
+          {
+            "name": "silicon dioxide"
+          }
+        ]
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "name": "Capsule(s)"
+  },
+  "productType": {
+    "name": "Dietary Supplement"
+  },
+  "servingSizes": [
+    {
+      "inSFB": true,
+      "maxQuantity": 1,
+      "minQuantity": 1,
+      "order": 1,
+      "unit": "Capsule(s)"
+    }
+  ],
+  "servingsPerContainer": 28,
+  "statements": [
+    {
+      "notes": "Provides 6 billion (6 x 10^9 CFU) of probiotic cells until the “best by” date.",
+      "type": "Formulation re: Other"
+    },
+    {
+      "notes": "Other ingredients: Less than 2% of magnesium stearate, silicon dioxide.",
+      "type": "Other"
+    },
+    {
+      "notes": "Talk to a healthcare professional before using if you are taking medication (especially immune suppressing drugs or contraceptives), have an immune-compromised condition (e.g. AIDS, lymphoma, undergoing long-term corticosteroid treatment), or if you are pregnant/nursing. KEEP OUT OF REACH OF CHILDREN",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Take one capsule daily at any time, with or without food.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "Gluten free.",
+      "type": "Formulation re: Does NOT Contain"
+    },
+    {
+      "notes": "Vegetarian.",
+      "type": "Formulation re: Vegetarian/Vegan"
+    },
+    {
+      "notes": "Gut Health Probiotic helps relieve occasional bloating, gas, and abdominal discomfort.* Feminine Health Probiotics & Botanical help support vaginal health & monthly mood balance.*",
+      "type": "Formulation re: Other"
+    },
+    {
+      "notes": "No refrigeration required.",
+      "type": "Other"
+    }
+  ],
+  "upcSku": "030772032565",
+  "src": "local/manual_labels/product_submissions/PG_SUB_4ACB39B94D394C19815F63B0A783EF08",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "4acb39b9-4d39-4c19-815f-63b0a783ef08",
+    "label_verified_at": "2026-09-12",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "4acb39b9-4d39-4c19-815f-63b0a783ef08",
+    "source_date": "2026-09-12",
+    "source_updated_date": "2026-09-12",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:4acb39b9-4d39-4c19-815f-63b0a783ef08",
+    "reviewed_at": "2026-09-12T16:47:05.143872+00:00"
+  }
+}
