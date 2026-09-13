@@ -170,6 +170,13 @@ async function boot() {
   $('t-request-evidence').addEventListener('click', requestEvidence);
   $('t-duplicate').addEventListener('click', markDuplicate);
   $('catalog-go').addEventListener('click', catalogSearch);
+  // Enter in the search box searches; it must not submit anything else.
+  $('catalog-q').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      void catalogSearch();
+    }
+  });
   $('identity-run').addEventListener('click', () => checkIdentity({ record: true }));
   $('other-disclosure').addEventListener('change', syncDisclosureFields);
   $('other-ingredients').addEventListener('input', syncDisclosureFields);
@@ -2942,16 +2949,37 @@ async function catalogSearch() {
     await fetch(`/api/catalog_search?q=${encodeURIComponent(query)}`)
   ).json();
   if (error) return setStatus(error, true);
+  if (!results.length) {
+    const none = document.createElement('li');
+    none.className = 'muted';
+    none.textContent = `No released catalog product matches “${query}”.`;
+    list.append(none);
+    return;
+  }
   for (const product of results) {
     const item = document.createElement('li');
-    item.textContent =
-      `${product.brand_name} ${product.product_name}`.trim() +
+    const label = `${product.brand_name} ${product.product_name}`.trim() +
       ` · ID ${product.dsld_id}` +
       (product.upc_sku ? ` · UPC ${product.upc_sku}` : '');
+    item.textContent = label;
     item.title = 'Use this record as the duplicate target';
-    item.addEventListener('click', () => {
+    item.tabIndex = 0;
+    // Picking a result is a choice, so the list closes and the choice is
+    // shown where the reviewer typed: the search box now names the record
+    // and the duplicate target carries its id.
+    const choose = () => {
       $('dup-target').value = product.dsld_id;
       $('dup-code').value = 'already_in_catalog';
+      $('catalog-q').value = label;
+      list.textContent = '';
+      setStatus(`Duplicate target set to catalog record ${product.dsld_id}.`);
+    };
+    item.addEventListener('click', choose);
+    item.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        choose();
+      }
     });
     list.append(item);
   }
