@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import shutil
 import sqlite3
 import subprocess
@@ -80,8 +81,8 @@ def test_launcher_health_identifies_the_loaded_server_without_credentials():
 def test_reviewer_page_busts_pre_no_store_asset_caches():
     index_html = (REVIEW_DIR / "static" / "index.html").read_text()
 
-    for asset in ("styles.css", "canonical.js", "app.js"):
-        assert f'/{asset}?v=20260903-1' in index_html
+    for asset in ("styles.css", "canonical.js", "solo.js", "app.js"):
+        assert re.search(rf'/{re.escape(asset)}\?v=\d{{8}}-\d+"', index_html), asset
 
 
 def test_proxy_targets_exactly_the_review_function():

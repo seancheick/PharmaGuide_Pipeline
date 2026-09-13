@@ -148,12 +148,13 @@ state.identityLookup={freshness:'fresh',index_built_at:'2026-09-12T09:55:59Z',
  matches:[{source:'catalog',dsld_id:'299239',brand_name:'Ritual',product_name:'Synbiotic+'}]};
 renderIdentityCheck();
 out.actions=document.getElementById('identity-actions').children.map(n=>n.textContent);
+out.hint=document.getElementById('identity-hint').textContent;
 out.result=document.getElementById('identity-results').children[0].textContent;
 out.status=document.getElementById('identity-index-status').textContent;
 """)
     assert "Same product and label — already in catalog" in out["actions"]
     assert "These are different products" in out["actions"]
-    assert any("changed formula" in text and "Label differs — compare" in text
-               for text in out["actions"])
+    assert "Label differs — compare" in out["actions"]
+    assert "changed formula" in out["hint"] and "Label differs — compare" in out["hint"]
     assert out["result"].startswith("Ritual Synbiotic+")
     assert "Compare the label" in out["status"]

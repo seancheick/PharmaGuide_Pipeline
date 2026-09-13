@@ -70,10 +70,35 @@ function plural(count, singular, pluralForm = `${singular}s`) {
   return `${count} ${count === 1 ? singular : pluralForm}`;
 }
 
+let statusTimer = null;
 function setStatus(message, isError = false) {
   const line = $('status-line');
   line.textContent = message;
-  line.style.color = isError ? 'var(--bad)' : 'var(--fg-muted)';
+  line.className = isError ? 'toast is-error' : 'toast';
+  // An error stays until something replaces it. A confirmation has done its
+  // job once it has been seen, and the panel it describes shows the same fact.
+  if (statusTimer) globalThis.clearTimeout?.(statusTimer);
+  statusTimer = null;
+  if (!isError && message) {
+    statusTimer = globalThis.setTimeout?.(() => {
+      if (line.textContent === message) line.textContent = '';
+    }, 8000) ?? null;
+  }
+}
+
+/** What kind of submission this is, in the reviewer's words. */
+const KIND_TEXT = { missing_product: 'New product', label_mismatch: 'Correction' };
+
+function submissionTitle(submission) {
+  return submission.kind === 'missing_product'
+    ? `UPC ${submission.normalized_upc ?? '?'}`
+    : `Catalog record ${submission.product_submission_mismatch_details?.dsld_id ?? '?'}`;
+}
+
+function formatWhen(iso) {
+  const time = Date.parse(iso);
+  if (!Number.isFinite(time)) return iso ?? '?';
+  return new Date(time).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 }
 
 // ---------------------------------------------------------------- auth
@@ -258,25 +283,38 @@ function renderQueue() {
   for (const submission of state.submissions) {
     const item = document.createElement('li');
     item.classList.toggle('active', submission.id === state.selected?.id);
+    item.tabIndex = 0;
+    item.setAttribute?.('aria-current', submission.id === state.selected?.id ? 'true' : 'false');
+    const kind = document.createElement('span');
+    kind.className = 'queue-kind';
+    kind.textContent = `${KIND_TEXT[submission.kind] ?? submission.kind} · ${submissionTitle(submission)}`;
+    const meta = document.createElement('div');
+    meta.className = 'queue-meta';
     const badge = document.createElement('span');
     badge.className = `badge ${submission.review_status}`;
-    badge.textContent = submission.review_status;
-    const kind = document.createElement('span');
-    kind.className = 'badge';
-    kind.textContent = submission.kind === 'missing_product'
-      ? `UPC ${submission.normalized_upc ?? '?'}`
-      : `fix ${submission.product_submission_mismatch_details?.dsld_id ?? '?'}`;
-    const id = document.createElement('div');
-    id.className = 'id';
-    id.textContent = submission.id;
-    item.append(badge, kind, id);
+    badge.textContent = REVIEW_STATE_TEXT[submission.review_status] ?? submission.review_status;
+    meta.append(badge);
     if (submission.evidence_requested_at &&
         submission.evidence_requested_revision === submission.evidence_revision) {
       const waiting = document.createElement('span');
-      waiting.className = 'badge';
-      waiting.textContent = 'waiting for photos';
-      item.append(waiting);
+      waiting.className = 'badge waiting';
+      waiting.textContent = 'Waiting for photos';
+      meta.append(waiting);
     }
+    const when = document.createElement('span');
+    when.className = 'muted';
+    when.textContent = formatWhen(submission.submitted_at);
+    meta.append(when);
+    const id = document.createElement('div');
+    id.className = 'id';
+    id.textContent = submission.id;
+    item.append(kind, meta, id);
+    item.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        select(submission);
+      }
+    });
     if (batchEligible(submission)) {
       const pick = document.createElement('input');
       pick.type = 'checkbox';
@@ -386,33 +424,54 @@ function renderDetail() {
   $('detail-panel').classList.remove('hidden');
   const head = $('detail-head');
   head.textContent = '';
+  const titleRow = document.createElement('div');
+  titleRow.className = 'detail-title';
   const title = document.createElement('h2');
-  title.textContent = submission.kind === 'missing_product'
-    ? `Missing product — UPC ${submission.normalized_upc ?? '?'}`
-    : `Catalog correction — dsld ${submission.product_submission_mismatch_details?.dsld_id ?? '?'}`;
+  title.textContent = `${KIND_TEXT[submission.kind] ?? submission.kind} · ${submissionTitle(submission)}`;
   const pill = document.createElement('span');
   pill.className = `state-pill ${submission.review_status}`;
   pill.textContent = REVIEW_STATE_TEXT[submission.review_status] ??
     submission.review_status;
-  title.append(' ', pill);
-  const meta = document.createElement('p');
-  meta.className = 'mono';
-  meta.textContent = `${submission.id} · ${submission.review_status}` +
-    ` · submitted ${submission.submitted_at ?? '?'}` +
-    (submission.declared_no_separate_ingredient_panel
-      ? ' · declared: no separate ingredient panel'
-      : '');
-  head.append(title, meta);
+  titleRow.append(title, pill);
+  const meta = document.createElement('dl');
+  meta.className = 'detail-meta';
+  const facts = [
+    ['Submitted', formatWhen(submission.submitted_at)],
+    ['Photos', `revision ${submission.evidence_revision ?? '?'}`],
+    ['Submission', submission.id],
+  ];
+  for (const [name, value] of facts) {
+    const fact = document.createElement('div');
+    const term = document.createElement('dt');
+    term.textContent = name;
+    const detail = document.createElement('dd');
+    if (name === 'Submission') {
+      const code = document.createElement('code');
+      code.textContent = value;
+      detail.append(code);
+    } else {
+      detail.textContent = value;
+    }
+    fact.append(term, detail);
+    meta.append(fact);
+  }
+  head.append(titleRow, meta);
+  if (submission.declared_no_separate_ingredient_panel) {
+    const declared = document.createElement('p');
+    declared.className = 'muted detail-note';
+    declared.textContent = 'The submitter declared that this label has no separate ingredient panel.';
+    head.append(declared);
+  }
   const requestNote = evidenceRequestNote(submission);
   if (requestNote) {
     const request = document.createElement('p');
-    request.className = 'muted';
+    request.className = 'muted detail-note';
     request.textContent = requestNote;
     head.append(request);
   }
   if (submission.resolution_code) {
     const resolution = document.createElement('p');
-    resolution.className = 'muted';
+    resolution.className = 'muted detail-note';
     resolution.textContent =
       `resolution: ${submission.resolution_code}` +
       (submission.resolution_detail ? ` — ${submission.resolution_detail}` : '') +
@@ -430,15 +489,23 @@ function renderDetail() {
     img.alt = `photo seq ${photo.seq}`;
     img.addEventListener('click', () => openLightbox(photo));
     const caption = document.createElement('figcaption');
-    caption.textContent =
-      `#${photo.seq} · ${(photo.categories ?? []).join(', ')}`;
-    figure.append(img, caption);
+    const label = document.createElement('span');
+    label.className = 'photo-label';
+    const seq = document.createElement('span');
+    seq.className = 'photo-seq';
+    seq.textContent = `Photo ${photo.seq}`;
+    const sections = (photo.categories ?? [])
+      .map((category) => PHOTO_SECTION_LABELS[category] ?? category);
+    label.append(seq, sections.length ? sections.join(', ') : 'Untagged');
+    img.alt = `Photo ${photo.seq}: ${sections.join(', ') || 'untagged'}`;
     const guide = document.createElement('button');
     guide.type = 'button';
-    guide.className = 'ghost photo-guidance-button';
-    guide.textContent = 'Suggest photo sections';
+    guide.className = 'ghost compact photo-guidance-button';
+    guide.textContent = 'Suggest sections';
+    guide.title = 'Ask which label sections this photograph shows';
     guide.addEventListener('click', () => checkPhotoGuidance(photo));
-    figure.append(guide);
+    caption.append(label, guide);
+    figure.append(img, caption);
     grid.append(figure);
   }
 
@@ -579,6 +646,9 @@ async function checkIdentity() {
   if (!gtin14) return setStatus('This submission has no valid barcode identity.', true);
   try {
     setStatus('Checking the released catalog and full DSLD corpus…');
+    setIdentityCardState('checking');
+    $('identity-state-text').textContent = 'Checking…';
+    $('identity-run').disabled = true;
     const response = await fetch(
       `/api/identity_lookup?gtin14=${encodeURIComponent(gtin14)}`,
     );
@@ -608,6 +678,11 @@ async function checkIdentity() {
     if (state.review) state.review.identity_check = null;
     renderIdentityCheck();
     setStatus(String(error.message ?? error), true);
+  } finally {
+    // Whatever is selected now, its check button must not stay disabled by a
+    // lookup that was started for something else.
+    $('identity-run').disabled = false;
+    setApprovedReadOnly();
   }
 }
 
@@ -698,7 +773,14 @@ async function recordMatch(outcome, options = {}) {
   return result;
 }
 
-function identityButton(label, action, className = 'ghost') {
+/** The identity card's visual state: unchecked, checking, no_match, recorded, match, blocked. */
+function setIdentityCardState(kind) {
+  $('identity-status-card').setAttribute?.('data-state', kind);
+}
+
+// A decision button reads as a button. Only the primary action is filled;
+// the rest take the default surface, never the quiet text style.
+function identityButton(label, action, className = '') {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = className;
@@ -936,11 +1018,15 @@ function renderIdentityCheck() {
   renderReadiness();
   setDecisionAvailability();
   const section = $('identity-check');
+  const stateText = $('identity-state-text');
   const status = $('identity-index-status');
   const results = $('identity-results');
   const actions = $('identity-actions');
+  const runButton = $('identity-run');
+  const hint = $('identity-hint');
   results.textContent = '';
   actions.textContent = '';
+  hint.hidden = true;
 
   if (state.selected?.kind !== 'missing_product') {
     section.classList.add('hidden');
@@ -951,23 +1037,33 @@ function renderIdentityCheck() {
   if (state.identityRecorded !== 'catalog_match') {
     $('label-comparison').classList.add('hidden');
   }
+  // One state, said in words, and one next action. The check button is the
+  // primary action until it has run; after that the primary action is what
+  // the reviewer does with the result, and the check becomes "check again".
+  const show = (kind, title, detail) => {
+    setIdentityCardState(kind);
+    stateText.textContent = title;
+    status.textContent = detail;
+  };
   if (!lookup) {
-    status.textContent = 'Check whether this barcode is already in the catalog before approving a new product.';
+    show('unchecked', 'Not checked yet',
+      'Run the check to compare this barcode against the released catalog and the DSLD corpus.');
+    runButton.className = 'primary';
+    runButton.textContent = 'Check the catalog';
     return;
   }
+  runButton.className = 'ghost';
+  runButton.textContent = 'Check again';
   const built = new Date(lookup.index_built_at).toLocaleString();
+  const indexNote = `Index ${lookup.freshness} · source snapshot ${built}`;
   const hasCatalogMatch = lookup.matches.some(match => match.source === 'catalog');
-  status.textContent = (hasCatalogMatch
-    ? 'This barcode matches a product in the catalog. Compare the label before closing this submission. '
-    : lookup.matches.length
-      ? 'Found in DSLD — not yet in the app catalog. Compare the label before importing. '
-      : 'No matching barcode was found in this index. ') +
-    `Index ${lookup.freshness} · source snapshot ${built}` +
-    (state.identityRecorded ? ' · check recorded' : '');
   for (const match of lookup.matches) {
     const item = document.createElement('li');
-    item.textContent = `${match.brand_name} ${match.product_name}`.trim() +
-      ` · ${match.source === 'catalog' ? 'In app catalog' : 'DSLD reference'} · ID ${match.dsld_id}`;
+    item.textContent = `${match.brand_name} ${match.product_name}`.trim();
+    const source = document.createElement('span');
+    source.className = 'match-source';
+    source.textContent = `${match.source === 'catalog' ? 'In app catalog' : 'DSLD reference'} · ID ${match.dsld_id}`;
+    item.append(source);
     results.append(item);
   }
 
@@ -978,15 +1074,29 @@ function renderIdentityCheck() {
   )];
   if (ids.length === 0) {
     if (lookup.freshness === 'blocked') {
-      status.textContent += ' · blocked: rebuild the corpus before approving';
+      show('blocked', 'Index out of date',
+        `Rebuild the corpus before approving; this check cannot be recorded against a stale index. ${indexNote}`);
       return;
     }
+    if (state.identityRecorded === 'no_match_verified') {
+      show('recorded', 'Verified: not in the catalog',
+        `Recorded. Transcription and approval can proceed. ${indexNote}`);
+      return;
+    }
+    show('no_match', 'No matching barcode found',
+      `Nothing in the catalog or DSLD uses this barcode. Record that finding so approval can proceed. ${indexNote}`);
     actions.append(identityButton('Record verified no match', async () => {
       await recordMatch('no_match_verified');
       setStatus('Verified no match recorded. Transcription may proceed.');
     }, 'primary'));
     return;
   }
+  show('match',
+    hasCatalogMatch ? 'This barcode is already in the app catalog' : 'Found in DSLD, not yet in the app catalog',
+    (hasCatalogMatch
+      ? 'Compare the label with the catalog record before closing this submission. '
+      : 'Compare the label before importing. ') +
+    indexNote + (state.identityRecorded ? ' · check recorded' : ''));
 
   if (catalogIds.length === 1 && ids.length === 1) {
     actions.append(identityButton('Same product and label — already in catalog', async () => {
@@ -1003,10 +1113,8 @@ function renderIdentityCheck() {
       renderLabelComparison(catalogIds[0]);
       setStatus('Catalog match recorded. Decide from the two labels.');
     }));
-    const hint = document.createElement('p');
-    hint.className = 'muted';
     hint.textContent = 'For a changed formula or an incorrect catalog label, choose “Label differs — compare”, not “These are different products”.';
-    actions.append(hint);
+    hint.hidden = false;
   } else if (catalogIds.length === 0 && ids.length === 1) {
     const draftMatch = lookup.matches.find(
       (match) => match.source === 'corpus' && match.dsld_id === ids[0],
@@ -1116,36 +1224,61 @@ function toggleVerified(field) {
   void persistVerification(field, verified.has(field));
 }
 
+/** The confirmation button for each field, in both of its states. */
+const CONFIRM_TEXT = {
+  brand: ['Confirm brand', 'Brand confirmed'],
+  name: ['Confirm product name', 'Product name confirmed'],
+  serving: ['Confirm serving size and count', 'Serving confirmed'],
+  rows: ['Confirm every ingredient row', 'All rows confirmed'],
+  other: ['Confirm other ingredients', 'Other ingredients confirmed'],
+};
+
 function renderVerifyChecklist() {
-  const host = $('verify-checklist');
-  if (!host) return;
-  host.textContent = '';
   const verified = verifiedSet();
+  const enabled = Boolean(verificationKey());
+  const approved = state.selected?.review_status === 'approved';
   for (const [field, label] of CRITICAL_FIELDS) {
-    const wrap = document.createElement('label');
-    wrap.className = verified.has(field) ? 'verify-chip verified' : 'verify-chip';
-    const box = document.createElement('input');
-    box.type = 'checkbox';
-    box.id = `verify-${field}`;
-    box.checked = verified.has(field);
-    box.disabled = !verificationKey();
-    box.addEventListener('change', () => toggleVerified(field));
+    // Each button sits beside the fields it attests, so "I read this off the
+    // photograph" is said where the reading happened, not in a list elsewhere.
+    const slot = $(`verify-slot-${field}`);
+    if (!slot) continue;
+    slot.textContent = '';
+    const group = document.createElement('span');
+    group.className = 'verify-group';
+    const done = verified.has(field);
+    const [todo, doneText] = CONFIRM_TEXT[field] ?? [`Confirm ${label}`, `${label} confirmed`];
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.id = `verify-${field}`;
+    chip.className = done ? 'confirm-chip verified' : 'confirm-chip';
+    chip.setAttribute?.('aria-pressed', String(done));
+    chip.disabled = !enabled || approved;
+    chip.title = !enabled
+      ? 'Waiting for the label check to finish.'
+      : done
+        ? 'Press again to withdraw this confirmation.'
+        : `I have read the ${label.toLowerCase()} off the photographs.`;
+    const icon = document.createElement('span');
+    icon.className = 'chip-icon';
+    icon.setAttribute?.('aria-hidden', 'true');
     const text = document.createElement('span');
-    text.textContent = label;
-    wrap.append(box, text);
-    // A tick means "I read this off the photograph". Where the draft says
-    // which photograph that was, make it one click away rather than a hunt.
+    text.textContent = done ? doneText : todo;
+    chip.append(icon, text);
+    chip.addEventListener('click', () => toggleVerified(field));
+    group.append(chip);
+    // Where the draft says which photograph a field was read off, make it one
+    // click away rather than a hunt.
     const photoId = sourcePhotoForField(field);
     if (photoId) {
       const source = document.createElement('button');
       source.type = 'button';
-      source.className = 'verify-source';
-      source.textContent = 'source';
+      source.className = 'ghost compact verify-source';
+      source.textContent = 'Show photo';
       source.title = 'Show the photograph this reading came from';
       source.addEventListener('click', () => focusSourcePhoto(photoId));
-      wrap.append(source);
+      group.append(source);
     }
-    host.append(wrap);
+    slot.append(group);
   }
 }
 
@@ -1188,8 +1321,8 @@ function readinessChecks() {
     {
       done: Boolean(verificationKey()) && missing.length === 0,
       todo: !verificationKey() ? 'Wait for the current payload check; correct invalid JSON if it fails.' : missing.length === 1
-        ? `Read ${missing[0][1].toLowerCase()} off the photographs and tick it.`
-        : `Read and tick ${missing.length} more fields.`,
+        ? `Read the ${missing[0][1].toLowerCase()} off the photographs, then press Confirm beside it.`
+        : `Read ${missing.length} more fields off the photographs and press Confirm beside each.`,
       done_text: 'Every field has been read off the photographs.',
     },
   ];
@@ -2049,9 +2182,14 @@ function renderRows() {
 
 function renderIngredientRow(row, owner, index, depth, tbody) {
     const tr = document.createElement('tr');
+    tr.className = 'row-main';
     tr.style.setProperty('--ingredient-depth', depth);
     const nameCell = document.createElement('td');
+    const nameWrap = document.createElement('div');
+    nameWrap.className = 'row-name';
     const nameInput = document.createElement('input');
+    nameInput.placeholder = 'Ingredient as printed';
+    nameInput.setAttribute?.('aria-label', 'Ingredient name');
     nameInput.value = row.name ?? '';
     nameInput.addEventListener('input', () => {
       row.name = nameInput.value;
@@ -2059,17 +2197,22 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     });
     const groupInput = document.createElement('input');
     groupInput.value = row.ingredientGroup ?? '';
-    groupInput.placeholder = 'Ingredient group';
+    groupInput.placeholder = 'Group (e.g. Dietary Ingredient)';
+    groupInput.className = 'row-group';
+    groupInput.setAttribute?.('aria-label', 'Ingredient group');
     groupInput.addEventListener('input', () => {
       row.ingredientGroup = groupInput.value;
       updateShaPreview();
     });
-    nameCell.append(nameInput, groupInput);
+    nameWrap.append(nameInput);
+    nameCell.append(nameWrap);
 
     const qtyCell = document.createElement('td');
     const qtyInput = document.createElement('input');
     qtyInput.type = 'number';
     qtyInput.step = 'any';
+    qtyInput.placeholder = 'Amount';
+    qtyInput.setAttribute?.('aria-label', 'Amount');
     qtyInput.value = row.quantity?.[0]?.quantity ?? '';
     qtyInput.addEventListener('input', () => {
       row.quantity = [{
@@ -2082,6 +2225,8 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
 
     const unitCell = document.createElement('td');
     const unitInput = document.createElement('input');
+    unitInput.placeholder = 'mg, mcg, IU…';
+    unitInput.setAttribute?.('aria-label', 'Unit');
     unitInput.value = row.quantity?.[0]?.unit ?? '';
     unitInput.addEventListener('input', () => {
       row.quantity = [{
@@ -2092,12 +2237,27 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     });
     unitCell.append(unitInput);
 
+    // Everything that is not the reading itself — group, printed form,
+    // children, removal — sits on a second, quieter line under the row, so
+    // the table stays three columns wide and fits beside the photographs.
+    const tools = document.createElement('tr');
+    tools.className = 'row-tools';
+    tools.style.setProperty('--ingredient-depth', depth);
     const structureCell = document.createElement('td');
+    structureCell.colSpan = 3;
+    // A flex box inside the cell, not the cell itself: a cell that stops
+    // being a table cell also stops spanning its columns.
+    const toolsWrap = document.createElement('div');
+    toolsWrap.className = 'row-tools-cell';
     const formSummary = document.createElement('div');
-    formSummary.className = 'muted';
-    formSummary.textContent = (row.forms ?? []).length
-      ? `forms: ${row.forms.map((form) => form.name).join(', ')}`
-      : 'no forms';
+    formSummary.className = 'row-forms';
+    if ((row.forms ?? []).length) {
+      const printed = document.createElement('strong');
+      printed.textContent = row.forms.map((form) => form.name).join(', ');
+      formSummary.append('Form: ', printed);
+    } else {
+      formSummary.textContent = 'No form printed';
+    }
     const formButton = document.createElement('button');
     formButton.type = 'button';
     formButton.className = 'ghost compact';
@@ -2116,27 +2276,31 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     nestedButton.className = 'ghost compact';
     nestedButton.textContent = '+ child';
     nestedButton.addEventListener('click', () => addNestedRow(row));
-    structureCell.append(formSummary, formButton, nestedButton);
+    const structureActions = document.createElement('div');
+    structureActions.className = 'row-structure-actions';
+    structureActions.append(groupInput, formSummary, formButton, nestedButton);
 
-    const removeCell = document.createElement('td');
+    const rowActions = document.createElement('div');
+    rowActions.className = 'row-actions';
     const removeButton = document.createElement('button');
     removeButton.type = 'button';
-    removeButton.className = 'ghost';
-    removeButton.textContent = '✕';
+    removeButton.className = 'ghost compact';
+    removeButton.textContent = 'Remove';
+    removeButton.title = 'Remove this row';
     removeButton.addEventListener('click', () => {
       if (typeof SoloReview !== 'undefined' && !SoloReview.remove(row)) return;
       owner.splice(index, 1);
       renderRows();
       updateShaPreview();
     });
-    removeCell.append(removeButton);
-    if (typeof SoloReview !== 'undefined') {
-      removeButton.textContent = 'Remove';
-      SoloReview.attach(row, removeCell, nameInput);
-    }
+    rowActions.append(removeButton);
+    if (typeof SoloReview !== 'undefined') SoloReview.attach(row, rowActions, nameInput);
+    toolsWrap.append(structureActions, rowActions);
+    structureCell.append(toolsWrap);
+    tools.append(structureCell);
 
-    tr.append(nameCell, qtyCell, unitCell, structureCell, removeCell);
-    tbody.append(tr);
+    tr.append(nameCell, qtyCell, unitCell);
+    tbody.append(tr, tools);
     (row.nestedRows ?? []).forEach((nested, nestedIndex) => {
       renderIngredientRow(
         nested,
@@ -2186,8 +2350,8 @@ function renderStatements() {
     notes.value = statement.notes ?? '';
     const remove = document.createElement('button');
     remove.type = 'button';
-    remove.className = 'ghost';
-    remove.textContent = '✕';
+    remove.className = 'ghost compact';
+    remove.textContent = 'Remove';
     type.addEventListener('input', () => {
       statement.type = type.value;
       updateShaPreview();
@@ -2763,8 +2927,10 @@ async function catalogSearch() {
   for (const product of results) {
     const item = document.createElement('li');
     item.textContent =
-      `${product.dsld_id} · ${product.brand_name} ${product.product_name}` +
+      `${product.brand_name} ${product.product_name}`.trim() +
+      ` · ID ${product.dsld_id}` +
       (product.upc_sku ? ` · UPC ${product.upc_sku}` : '');
+    item.title = 'Use this record as the duplicate target';
     item.addEventListener('click', () => {
       $('dup-target').value = product.dsld_id;
       $('dup-code').value = 'already_in_catalog';

@@ -1,68 +1,135 @@
-/* PharmaGuide reviewer console — matches the app's V2 tokens. */
+/* PharmaGuide reviewer console — matches the app's V2 tokens.
+   One surface language: warm off-white ground, white cards with a 1px rule
+   and a 10px radius, a deep-teal accent for the one primary action on a
+   screen, and four semantic states (accent / good / caution / bad) that are
+   always said in words as well as colour. */
 :root {
-  --bg: #FAF9F6;
+  --bg: #F7F5F0;
   --surface: #FFFFFF;
-  --low: #F4F1EA;
+  --low: #F1EEE6;
   --fg: #181A1B;
   --fg-muted: #5C5F61;
-  --fg-subtle: #8A8D90;
+  --fg-subtle: #6F7275;
   --accent: #183B3F;
   --accent-strong: #246066;
-  --caution: #8A611D;
-  --bad: #9F2929;
-  --rule: #E0DCD3;
-  /* State surfaces. These hues were already in the sheet, typed in by hand at
-     each use; naming them is what stops the next addition inventing a new
-     red. Every state below is one of these and nothing else. */
+  --accent-soft: #E4EDED;
   --good: #2F6B4F;
   --good-soft: #E2EFE8;
+  --caution: #8A611D;
   --caution-soft: #F6EEDC;
+  --bad: #9F2929;
   --bad-soft: #F6E4E4;
-  --accent-soft: #E4EDED;
+  --rule: #E0DCD3;
+  --rule-strong: #C9C4B8;
+  --radius: 10px;
+  --radius-sm: 7px;
+  --shadow-sm: 0 1px 2px rgb(24 26 27 / 6%);
+  --shadow-md: 0 4px 14px rgb(24 26 27 / 10%);
+  --ring: 0 0 0 3px rgb(36 96 102 / 28%);
+  --control-h: 2.5rem;
+  --header-h: 64px;
 }
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
 body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  /* rem, not px: a reviewer who has set a larger default font must get one.
-     At the 16px default this is the 15px the console has always used. */
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 0.9375rem;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
+h1, h2, h3 { line-height: 1.25; font-weight: 650; letter-spacing: -0.005em; }
+h1 { margin: 0; font-size: 1.15rem; }
+h2 { font-size: 1.05rem; margin: 0; }
+h3 { font-size: 0.9rem; margin: 0; }
+p { margin: 0; }
+p + p { margin-top: .35rem; }
+.muted { color: var(--fg-muted); font-size: .85rem; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .8rem; }
+.hidden { display: none !important; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+.row + .row { margin-top: .5rem; }
+.actions { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+.actions:empty { display: none; }
+.grow { flex: 1 1 18rem; }
+code {
+  background: var(--low);
+  padding: .1rem .35rem;
+  border-radius: 4px;
+  font-size: .78rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .72rem;
+  padding: .05rem .35rem;
+  border: 1px solid var(--rule-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--fg);
+}
+
+/* --------------------------------------------------------------- header */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 1.5rem;
+  height: var(--header-h);
+  padding: 0 1.5rem;
   border-bottom: 1px solid var(--rule);
   background: var(--surface);
 }
-h1 { margin: 0; font-size: 1.3rem; }
-h2 { font-size: 1.05rem; margin: 1.5rem 0 .5rem; }
-h3 { font-size: .95rem; margin: 1rem 0 .4rem; }
 .eyebrow {
   margin: 0;
-  font-size: .68rem;
-  letter-spacing: .12em;
+  font-size: .66rem;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 600;
+  color: var(--accent-strong);
+  font-weight: 700;
 }
-.muted { color: var(--fg-muted); font-size: .85rem; }
-.hidden { display: none !important; }
-.row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; margin: .3rem 0; }
-.grow { flex: 1 1 22rem; }
-.checkbox-row { flex-direction: row; align-items: center; }
-/* An app shell, not a page: the queue and the label each own their scroll, so
-   picking the next product never means scrolling back up past the one just
-   reviewed. */
+#session-box .row { gap: .6rem; }
+#reviewer-email { font-size: .85rem; }
+
+/* Every "what just happened" message, in one place, near the top of the
+   review column rather than at the top of the queue. */
+.toast {
+  position: fixed;
+  top: calc(var(--header-h) + .75rem);
+  right: 1.25rem;
+  z-index: 50;
+  max-width: min(32rem, calc(100vw - 2.5rem));
+  padding: .6rem .9rem;
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--accent-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  color: var(--fg);
+  font-size: .85rem;
+  overflow-wrap: anywhere;
+}
+.toast:empty { display: none; }
+.toast.is-error { border-left-color: var(--bad); color: var(--bad); }
+
+/* ------------------------------------------------------------- app shell */
+/* The queue and the label each own their scroll, so picking the next product
+   never means scrolling back up past the one just reviewed. */
 main {
   display: grid;
   grid-template-columns: 340px 1fr;
-  height: calc(100vh - 65px);
+  height: calc(100vh - var(--header-h));
   min-height: 0;
 }
 #queue-panel {
@@ -71,183 +138,191 @@ main {
   padding: 1rem;
   background: var(--surface);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
 }
-/* min-height:0 or the grid row stretches to the tallest child and the whole
-   window scrolls instead of the panel. */
-#detail-panel { padding: 1rem 1.5rem 0; overflow-y: auto; min-height: 0; }
+#detail-panel { padding: 1.25rem 1.5rem 0; overflow-y: auto; min-height: 0; }
+
+.queue-filters { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: .4rem; }
+.queue-filters select { padding-right: 1.6rem; padding-left: .55rem; font-size: .85rem; background-position: right .45rem center; }
+.queue-filters button { padding-left: .6rem; padding-right: .6rem; }
+.queue-count { margin: 0; }
+#queue { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .45rem; }
+#queue li {
+  position: relative;
+  padding: .6rem 2.2rem .6rem .8rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: var(--surface);
+  transition: border-color .12s ease, background .12s ease, box-shadow .12s ease;
+}
+#queue li:hover { border-color: var(--rule-strong); box-shadow: var(--shadow-sm); }
+#queue li:focus-visible { outline: none; box-shadow: var(--ring); }
+#queue li.active { border-color: var(--accent-strong); background: var(--accent-soft); }
+#queue .queue-kind { font-weight: 600; font-size: .88rem; display: block; }
+#queue .queue-meta { display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; margin-top: .25rem; }
+#queue .id { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .7rem; color: var(--fg-subtle); }
+.badge {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 600;
+  line-height: 1.5;
+  padding: .05rem .5rem;
+  border-radius: 999px;
+  background: var(--low);
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+.badge.approved { background: var(--good-soft); color: var(--good); }
+.badge.rejected, .badge.duplicate { background: var(--bad-soft); color: var(--bad); }
+.badge.under_review { background: var(--accent-soft); color: var(--accent-strong); }
+.badge.waiting { background: var(--caution-soft); color: var(--caution); }
+.queue-pick {
+  position: absolute;
+  top: .7rem;
+  right: .7rem;
+  margin: 0;
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.shortcuts { margin-top: auto; padding-top: .5rem; font-size: .75rem; line-height: 1.9; }
+
+/* Batch approval. Selectable only when the server says the item is fully read. */
+.batch-bar {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: .7rem .8rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--low);
+}
+.batch-bar .row > button { flex: 1 1 auto; }
+.batch-results { list-style: none; margin: 0; padding: 0; width: 100%; }
+.batch-results li { font-size: .78rem; padding: .1rem 0; overflow-wrap: anywhere; }
+.batch-results li.ready { color: var(--good); }
+.batch-results li.blocking { color: var(--bad); }
+
+/* ----------------------------------------------------------- detail head */
+.detail-head { margin-bottom: 1rem; }
+.detail-title { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.detail-title h2 { font-size: 1.25rem; }
+.detail-meta {
+  display: flex;
+  gap: .4rem 1.1rem;
+  flex-wrap: wrap;
+  margin: .4rem 0 0;
+  font-size: .82rem;
+  color: var(--fg-muted);
+}
+.detail-meta div { display: flex; gap: .35rem; align-items: baseline; }
+.detail-meta dt { font-weight: 600; color: var(--fg-subtle); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; }
+.detail-meta dd { margin: 0; }
+.detail-note { margin-top: .5rem; }
+
+/* The state is said, not just coloured: colour alone is not a status. */
+.state-pill {
+  font-size: .72rem;
+  font-weight: 600;
+  line-height: 1.6;
+  padding: .1rem .6rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--low);
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+.state-pill.approved { background: var(--good-soft); color: var(--good); border-color: transparent; }
+.state-pill.rejected, .state-pill.duplicate { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
+.state-pill.under_review { background: var(--accent); color: #fff; border-color: transparent; }
 
 /* Photographs beside the fields, not above them: every field on this page is
    read off a photograph, and a check that needs a scroll in between is a check
    made from memory. */
 .detail-split {
   display: grid;
-  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+  grid-template-columns: minmax(17rem, 23rem) minmax(0, 1fr);
   gap: 1.5rem;
-  /* start, so the evidence column's box spans the whole review column and the
-     sticky pane has room to stay put while the label scrolls past it. */
   align-items: start;
 }
 #evidence-pane {
   position: sticky;
   top: 0;
-  max-height: calc(100vh - 90px);
+  max-height: calc(100vh - var(--header-h) - 1.25rem);
   overflow-y: auto;
   padding-bottom: 1rem;
 }
-#evidence-pane h2 { margin-top: 0; }
-#review-pane { min-width: 0; padding-bottom: 3rem; max-width: 52rem; }
+.pane-title { margin: 0 0 .6rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--fg-subtle); }
+#review-pane { min-width: 0; padding-bottom: 4rem; max-width: 56rem; }
 
-/* Only the one button that starts a review sits at the top. The checklist and
-   the decision belong at the end of the review, where the reviewer arrives
-   after reading the label. */
+/* Only the one button that starts a review sits at the top. */
 .decision-bar {
   position: sticky;
   top: 0;
   z-index: 5;
-  background: var(--bg);
-  padding: .4rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .7rem .9rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
 }
 .decision-bar[hidden] { display: none; }
+.decision-bar-text { font-size: .88rem; }
 
-/* The state is said, not just coloured: colour alone is not a status. */
-.state-pill {
-  font-size: .72rem;
-  font-weight: 600;
-  vertical-align: middle;
-  padding: .2rem .55rem;
-  border-radius: 999px;
+/* ----------------------------------------------------------------- photos */
+.photo-grid { display: grid; grid-template-columns: 1fr; gap: .7rem; }
+.photo-grid figure {
+  margin: 0;
   border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
   background: var(--surface);
-  color: var(--fg-muted);
 }
-.state-pill.approved { background: #14532d; color: #dcfce7; border-color: #166534; }
-.state-pill.rejected, .state-pill.duplicate { background: #4c1d24; color: #fee2e2; border-color: #7f1d1d; }
-.state-pill.under_review { background: #1e3a5f; color: #dbeafe; border-color: #1d4ed8; }
-
-@media (max-width: 60rem) {
-  main { grid-template-columns: 1fr; height: auto; }
-  .detail-split { grid-template-columns: 1fr; }
-  #evidence-pane { position: static; max-height: none; }
-}
-#queue { list-style: none; margin: .8rem 0 0; padding: 0; }
-#queue li {
-  position: relative;
-  /* Room for the batch pick, which is pinned to the top-right so a column of
-     them scans as a column instead of interleaving with each row's text. */
-  padding: .6rem 2.1rem .6rem .7rem;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  margin-bottom: .5rem;
-  cursor: pointer;
-  background: var(--bg);
-}
-#queue li:hover { border-color: var(--accent-strong); }
-#queue li.active { border-color: var(--accent); background: var(--accent-soft); }
-#queue .id { font-family: ui-monospace, monospace; font-size: .72rem; color: var(--fg-subtle); }
-.badge {
-  display: inline-block;
-  font-size: .68rem;
-  font-weight: 600;
-  padding: .1rem .45rem;
-  border-radius: 999px;
-  background: var(--low);
-  color: var(--fg-muted);
-  margin-right: .3rem;
-}
-.badge.approved { background: var(--good-soft); color: var(--good); }
-.badge.rejected, .badge.duplicate { background: var(--bad-soft); color: var(--bad); }
-.badge.under_review { background: var(--accent-soft); color: var(--accent-strong); }
-.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; }
-.photo-grid figure { margin: 0; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: var(--surface); }
-.photo-grid { grid-template-columns: 1fr; }
 .photo-grid img {
   width: 100%;
   max-height: 22rem;
   object-fit: contain;
-  background: var(--bg);
+  background: var(--low);
   display: block;
   cursor: zoom-in;
 }
-.photo-grid figcaption { padding: .35rem .5rem; font-size: .72rem; color: var(--fg-muted); }
-.photo-guidance-button { margin: .5rem; max-width: calc(100% - 1rem); }
+.photo-grid figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .3rem .5rem;
+  padding: .4rem .5rem .4rem .7rem;
+  font-size: .8rem;
+}
+.photo-grid figcaption .photo-label { font-weight: 600; }
+.photo-grid figcaption .photo-seq { color: var(--fg-subtle); font-weight: 400; margin-right: .35rem; }
+.photo-guidance-button { flex: 0 0 auto; }
+/* The photograph a field was read off, while the reviewer is looking at it. */
+figure.source-photo { outline: 3px solid var(--accent-strong); outline-offset: 2px; }
 .photo-guidance {
-  margin-top: 1rem;
-  padding: .8rem;
+  margin-top: .8rem;
+  padding: .8rem .9rem;
   background: var(--accent-soft);
   border: 1px solid var(--rule);
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow-wrap: anywhere;
   font-size: .85rem;
 }
-.photo-guidance h3 { margin-top: 0; }
-input, select, textarea, button {
-  font: inherit;
-  padding: .45rem .6rem;
-  border: 1px solid var(--rule);
-  border-radius: 7px;
-  background: var(--surface);
-  color: var(--fg);
-}
-label { display: flex; flex-direction: column; gap: .15rem; font-size: .8rem; color: var(--fg-muted); }
-textarea { width: 100%; font-family: ui-monospace, monospace; font-size: .8rem; }
-button { cursor: pointer; }
-button.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
-button.danger { background: var(--surface); border-color: var(--bad); color: var(--bad); }
-button.ghost { background: transparent; }
-button:disabled { opacity: .45; cursor: default; }
-table { border-collapse: collapse; width: 100%; }
-#rows-table th, #rows-table td { border-bottom: 1px solid var(--rule); padding: .3rem .4rem; text-align: left; }
-#rows-table input { width: 100%; padding: .3rem .4rem; }
-#rows-table tr td:first-child { padding-left: calc(.4rem + var(--ingredient-depth, 0) * 1.25rem); }
-#rows-table td:nth-child(2) { min-width: 7rem; }
-#rows-table td:nth-child(3) { min-width: 6rem; }
-#rows-table td:nth-child(4) { min-width: 2.5rem; }
-button.compact { padding: .2rem .35rem; font-size: .75rem; }
-.picture-option {
-  display: inline-grid;
-  grid-template-columns: auto 72px minmax(9rem, 1fr);
-  align-items: center;
-  gap: .5rem;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  padding: .45rem;
-  margin: 0 .5rem .5rem 0;
-  background: var(--surface);
-  cursor: pointer;
-}
-.picture-option img { width: 72px; height: 72px; object-fit: cover; border-radius: 6px; }
-#photo-lightbox {
-  width: min(94vw, 1100px);
-  max-height: 94vh;
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-  padding: 1rem;
-  background: var(--surface);
-  color: var(--fg);
-}
-#photo-lightbox::backdrop { background: rgb(24 26 27 / 72%); }
-.lightbox-head { display: flex; justify-content: space-between; align-items: center; }
-#image-canvas { display: block; max-width: 100%; max-height: 76vh; margin: .8rem auto; background: var(--low); }
-.decision-block { border: 1px solid var(--rule); border-radius: 8px; padding: .8rem; margin-top: .8rem; background: var(--surface); }
-#catalog-results { list-style: none; padding: 0; margin: .4rem 0 0; font-size: .82rem; }
-#catalog-results li { padding: .3rem .4rem; border-bottom: 1px solid var(--rule); cursor: pointer; }
-#catalog-results li:hover { background: var(--low); }
-code { background: var(--low); padding: .1rem .3rem; border-radius: 4px; font-size: .78rem; }
-#detail-head .mono { font-family: ui-monospace, monospace; font-size: .8rem; color: var(--fg-muted); }
-
-/* --------------------------------------------------------------------------
-   Reviewer workstation.
-
-   Everything below shares one shape with the panels above it: a surface card,
-   a 1px rule, an 8px radius, rem spacing. Colour is only ever a token, and a
-   state is one of four — accent, good, caution, bad — so a new panel cannot
-   introduce a new red. Loud states earn their weight from a left bar and a
-   soft tint rather than from a brighter hue.
-   -------------------------------------------------------------------------- */
-
+.photo-guidance h3 { margin-bottom: .3rem; }
 .panel {
   border: 1px solid var(--rule);
-  border-radius: 8px;
+  border-radius: var(--radius);
   padding: .7rem .9rem;
   margin: .8rem 0;
   background: var(--surface);
@@ -255,145 +330,462 @@ code { background: var(--low); padding: .1rem .3rem; border-radius: 4px; font-si
 .panel-caution { border-left: 4px solid var(--caution); background: var(--caution-soft); }
 .panel-bad { border-left: 4px solid var(--bad); background: var(--bad-soft); }
 
-/* AI draft: a starting point shown beside the photographs, never instead. */
-#ai-draft {
-  border: 1px solid var(--rule);
-  border-left: 4px solid var(--accent);
-  border-radius: 8px;
-  padding: .7rem .9rem;
-  margin: .8rem 0;
+/* --------------------------------------------------------------- controls */
+input, select, textarea, button {
+  font: inherit;
+  color: var(--fg);
+  max-width: 100%;
+  min-width: 0;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea {
+  min-height: var(--control-h);
+  padding: .4rem .65rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
   background: var(--surface);
+  transition: border-color .12s ease, box-shadow .12s ease;
 }
-.draft-field {
-  display: grid;
-  grid-template-columns: minmax(8rem, 12rem) 1fr minmax(6rem, 12rem);
-  gap: .5rem;
-  padding: .15rem 0;
-  align-items: baseline;
+input::placeholder, textarea::placeholder { color: var(--fg-subtle); }
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: none;
+  border-color: var(--accent-strong);
+  box-shadow: var(--ring);
 }
-.draft-label { color: var(--fg-muted); font-size: .82rem; }
-.draft-value { font-weight: 600; }
-/* Unreadable must look unreadable. A blank would read as "nothing on the
-   label" rather than "the model could not read it". */
-.draft-unknown { color: var(--caution); font-style: italic; }
-.draft-rows { width: 100%; border-collapse: collapse; margin-top: .5rem; }
-#ai-draft-body { overflow-x: auto; }
-.draft-rows th, .draft-rows td {
-  text-align: left;
-  padding: .25rem .4rem;
-  border-bottom: 1px solid var(--rule);
-  font-size: .82rem;
+input:disabled, select:disabled, textarea:disabled { background: var(--low); color: var(--fg-muted); }
+input[readonly], textarea[readonly] { background: var(--low); }
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 20 20'%3E%3Cpath d='M5 8l5 5 5-5' fill='none' stroke='%235C5F61' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .6rem center;
 }
-.draft-rows th { color: var(--fg-muted); font-weight: 600; }
-
-/* What the model could not supply. Gaps to fill, not errors. */
-.draft-unresolved {
-  margin: .5rem 0 0;
-  padding-left: 1.2rem;
-  font-size: .82rem;
-  color: var(--fg-muted);
-}
-.draft-unresolved li { padding: .1rem 0; }
-
-/* Readiness: the next action, never a dead end. */
-#readiness {
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  padding: .7rem .9rem;
-  margin: .8rem 0;
+textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82rem; line-height: 1.5; resize: vertical; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); width: 1.05rem; height: 1.05rem; margin: 0; cursor: pointer; }
+input[type="file"] { font-size: .85rem; }
+input[type="file"]::file-selector-button {
+  font: inherit;
+  min-height: 2rem;
+  padding: .25rem .7rem;
+  margin-right: .6rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
   background: var(--surface);
+  color: var(--fg);
+  cursor: pointer;
 }
-.readiness-head { justify-content: space-between; align-items: baseline; }
-.readiness-head h3 { margin: 0; }
-/* The count is a status, not a heading: it sits at the far edge and stays
-   quiet so the blockers below carry the weight. It wraps rather than pushing
-   the panel wider when a reviewer has set a large font. */
-#readiness-progress { margin-left: auto; }
-.readiness-head { flex-wrap: wrap; }
-#readiness-list { list-style: none; padding: 0; margin: .5rem 0 0; }
-#readiness-list li {
-  overflow-wrap: anywhere;
-  padding: .2rem 0 .2rem 1.4rem;
-  position: relative;
-  font-size: .9rem;
-}
-#readiness-list li.ready { color: var(--good); }
-#readiness-list li.ready::before {
-  content: "✓";
-  position: absolute;
-  left: .1rem;
-  font-weight: 700;
-}
-/* A blocker is the one thing the reviewer should read next, so it carries
-   the weight on this panel. */
-#readiness-list li.blocking { color: var(--caution); font-weight: 600; }
-#readiness-list li.blocking::before {
-  content: "●";
-  position: absolute;
-  left: .15rem;
-  font-size: .7em;
-  top: .45em;
-}
-#t-approve:disabled { cursor: not-allowed; }
+label { display: flex; flex-direction: column; gap: .3rem; font-size: .8rem; font-weight: 500; color: var(--fg-muted); }
+label > input, label > select, label > textarea { font-weight: 400; color: var(--fg); }
+.checkbox-row, .check-pill { flex-direction: row; align-items: center; gap: .45rem; font-size: .85rem; color: var(--fg); cursor: pointer; }
 
-/* Verification: a tick per field the reviewer has actually read. */
-#verify-checklist { flex-wrap: wrap; gap: .5rem; margin-bottom: .6rem; }
-.verify-chip {
+/* Buttons. Every button reads as a button: a filled surface, a visible edge,
+   a hover and a pressed state. Emphasis is one of three — primary (the one
+   thing to do next), default (a real action), ghost (quiet, reversible). */
+button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: .4rem;
+  min-height: var(--control-h);
+  padding: .4rem .95rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--fg);
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  touch-action: manipulation;
+  white-space: nowrap;
+  transition: background .12s ease, border-color .12s ease, box-shadow .12s ease, transform .08s ease;
+}
+button:hover { background: var(--low); border-color: var(--fg-subtle); }
+button:active { transform: translateY(1px); box-shadow: none; }
+button:focus-visible { outline: none; box-shadow: var(--ring); }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+button.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+button.danger { background: var(--surface); border-color: var(--bad); color: var(--bad); }
+button.danger:hover { background: var(--bad-soft); }
+button.ghost { background: transparent; border-color: transparent; box-shadow: none; color: var(--accent-strong); font-weight: 500; }
+button.ghost:hover { background: var(--accent-soft); border-color: transparent; }
+button.compact { min-height: 2rem; padding: .2rem .6rem; font-size: .78rem; }
+button.large { min-height: 2.9rem; padding: .5rem 1.6rem; font-size: 1rem; }
+button.icon-button { padding: .35rem; min-height: 2.25rem; width: 2.25rem; }
+button:disabled, button:disabled:hover {
+  opacity: .5;
+  cursor: not-allowed;
+  transform: none;
+  background: var(--low);
+  border-color: var(--rule);
+  color: var(--fg-muted);
+  box-shadow: none;
+}
+button.primary:disabled { background: var(--accent); border-color: var(--accent); color: #fff; opacity: .4; }
+button.ghost:disabled { background: transparent; border-color: transparent; }
+
+/* ------------------------------------------------------------------ steps */
+/* The review column is a sequence of numbered steps, in the order a reviewer
+   actually works: identity, transcription, picture, decision. A step that
+   does not apply (a correction has no identity check) is hidden and the
+   numbering closes over it. */
+#review-pane { counter-reset: step; }
+.step {
+  counter-increment: step;
+  position: relative;
   border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem 1.1rem 3.6rem;
+  margin-bottom: 1rem;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.step::before {
+  content: counter(step);
+  position: absolute;
+  left: 1.1rem;
+  top: 1rem;
+  width: 1.7rem;
+  height: 1.7rem;
   border-radius: 999px;
-  padding: .25rem .7rem;
+  display: grid;
+  place-items: center;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.step-head { margin-bottom: .9rem; }
+.step-head h2 { font-size: 1.05rem; }
+.step-hint { margin-top: .2rem; color: var(--fg-muted); font-size: .85rem; max-width: 60ch; }
+.step h3 { margin: 1.1rem 0 .5rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--fg-subtle); }
+.step > h3:first-of-type, .step-head + h3 { margin-top: 0; }
+.step .actions { margin-top: .75rem; }
+.step-footnote { margin-top: .6rem; }
+.subpanel {
+  margin-top: 1rem;
+  padding: .8rem .9rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+.subpanel h3 { margin-top: 0; text-transform: none; letter-spacing: 0; font-size: .9rem; color: var(--fg); }
+/* Aids, not steps: the machine draft and the development report carry no
+   number, so the count reads as the work a reviewer must do. */
+.step-draft, .step-dev { counter-increment: none; padding-left: 1.25rem; }
+.step-draft::before, .step-dev::before { display: none; }
+.step-draft { border-left: 4px solid var(--accent-strong); }
+.step-dev { border-style: dashed; box-shadow: none; }
+.step-decision { border-color: var(--rule-strong); }
+
+/* A group heading with its confirmations at the far edge: read the fields,
+   then say so right there. */
+.group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem 1rem;
+  flex-wrap: wrap;
+  margin: 1.1rem 0 .5rem;
+}
+.step .group-head h3 { margin: 0; }
+.step-head + .group-head { margin-top: 0; }
+.group-confirm { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: .7rem .8rem;
+}
+.field-grid-wide { grid-template-columns: minmax(12rem, 1fr) minmax(16rem, 2fr); }
+.field-grid label { min-width: 0; }
+.field-grid .grow { grid-column: span 1; }
+
+/* Verification: one press per field the reviewer has actually read. */
+.verify-list { display: flex; gap: .5rem; flex-wrap: wrap; }
+.confirm-chip {
+  min-height: 2.15rem;
+  padding: .25rem .8rem .25rem .6rem;
+  border-radius: 999px;
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--fg);
+  background: var(--surface);
+  border-color: var(--rule-strong);
+}
+.confirm-chip .chip-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--fg-subtle);
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  transition: background .12s ease, border-color .12s ease;
+}
+.confirm-chip .chip-icon::after { content: "✓"; font-size: .7rem; font-weight: 700; line-height: 1; color: #fff; opacity: 0; }
+.confirm-chip:hover { border-color: var(--good); background: var(--good-soft); }
+.confirm-chip.verified { background: var(--good-soft); border-color: var(--good); color: var(--good); font-weight: 600; }
+.confirm-chip.verified .chip-icon { background: var(--good); border-color: var(--good); }
+.confirm-chip.verified .chip-icon::after { opacity: 1; }
+.confirm-chip:disabled { background: var(--low); }
+.verify-source {
+  min-height: 2.15rem;
+  padding: .25rem .6rem;
+  font-size: .76rem;
+  border-radius: 999px;
+}
+.verify-group { display: inline-flex; gap: .25rem; align-items: center; }
+
+/* ------------------------------------------------------------- data tables */
+table { border-collapse: collapse; width: 100%; }
+.data-table th {
+  text-align: left;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--fg-subtle);
+  font-weight: 600;
+  padding: .35rem .5rem;
+  border-bottom: 1px solid var(--rule-strong);
+}
+.data-table td { padding: .45rem .5rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.rows-table th:first-child, .rows-table td:first-child { padding-left: calc(.5rem + var(--ingredient-depth, 0) * 1.5rem); }
+.rows-table td { border-bottom: none; }
+.rows-table tr.row-main td { padding-bottom: .3rem; }
+.rows-table tr.row-main:not(:first-child) td { padding-top: .8rem; }
+.rows-table td:nth-child(1) { width: auto; }
+.rows-table td:nth-child(2) { width: 6.5rem; }
+.rows-table td:nth-child(3) { width: 6.5rem; }
+.rows-table input { width: 100%; }
+.rows-table .row-name { display: flex; align-items: center; gap: .35rem; }
+.rows-table tr[style*="--ingredient-depth: 1"] .row-name::before,
+.rows-table tr[style*="--ingredient-depth: 2"] .row-name::before {
+  content: "↳";
+  color: var(--fg-subtle);
+  flex: 0 0 auto;
+}
+/* The quiet line: group, printed form, structure and removal. */
+.rows-table tr.row-tools td { padding-top: 0; border-bottom: 1px solid var(--rule); }
+.rows-table .row-tools-cell { display: flex; justify-content: space-between; align-items: center; gap: .5rem 1rem; flex-wrap: wrap; }
+.rows-table .row-structure-actions, .rows-table .row-actions { display: flex; gap: .35rem; align-items: center; flex-wrap: wrap; }
+.rows-table .row-actions { margin-left: auto; justify-content: flex-end; }
+.rows-table .row-group { flex: 0 1 11rem; min-height: 2rem; padding: .2rem .5rem; font-size: .78rem; color: var(--fg-muted); }
+.rows-table .row-forms { font-size: .8rem; color: var(--fg-muted); overflow-wrap: anywhere; }
+.rows-table .row-forms strong { color: var(--fg); font-weight: 500; }
+.solo-evidence-status { font-size: .76rem; color: var(--fg-muted); }
+.rows-table tbody:empty::after { content: "No rows yet. Add one for every ingredient printed on the panel."; }
+.statements { display: flex; flex-direction: column; gap: .5rem; }
+.statements .row { flex-wrap: nowrap; }
+.statements .row > input:first-child { flex: 0 1 12rem; }
+
+/* Picture choice */
+.picture-options { display: flex; gap: .6rem; flex-wrap: wrap; }
+.picture-options:empty::after { content: "No front-label photo was captured. Upload a replacement below."; color: var(--fg-muted); font-size: .85rem; }
+.picture-option {
+  display: inline-grid;
+  grid-template-columns: auto 64px minmax(9rem, 1fr);
+  align-items: center;
+  gap: .6rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  padding: .5rem .7rem .5rem .6rem;
   background: var(--surface);
   cursor: pointer;
   font-size: .85rem;
   color: var(--fg);
   transition: border-color .12s ease, background .12s ease;
 }
-.verify-chip:hover { border-color: var(--accent-strong); }
-.verify-chip.verified {
-  border-color: var(--good);
-  background: var(--good-soft);
-  color: var(--good);
-  font-weight: 600;
+.picture-option:hover { border-color: var(--accent-strong); }
+.picture-option:has(input:checked) { border-color: var(--accent-strong); background: var(--accent-soft); }
+.picture-option img { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; background: var(--low); }
+.upload-row {
+  display: flex;
+  gap: .7rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-top: .9rem;
+  padding-top: .9rem;
+  border-top: 1px dashed var(--rule);
 }
-.verify-chip input { margin: 0; }
-.verify-source {
-  margin-left: .1rem;
-  padding: .05rem .4rem;
-  font-size: .72rem;
-  line-height: 1.4;
-  cursor: pointer;
-  border: 1px solid var(--rule);
-  border-radius: 5px;
-  background: transparent;
-  color: var(--fg-muted);
-}
-.verify-source:hover { border-color: var(--accent-strong); color: var(--accent-strong); }
-/* The photograph a field was read off, while the reviewer is looking at it. */
-figure.source-photo { outline: 3px solid var(--accent-strong); outline-offset: 2px; }
+.upload-row .checkbox-row { padding-bottom: .5rem; }
 
-/* Saved work that no longer applies to what is on screen. Loud on purpose:
-   a reviewer must not carry an earlier reading into new evidence. */
+/* Advanced JSON, folded away by default. */
+.advanced {
+  margin: 0 0 1rem;
+  padding: .6rem .9rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+.advanced summary { cursor: pointer; font-weight: 500; color: var(--fg-muted); font-size: .85rem; }
+.advanced[open] summary { margin-bottom: .6rem; }
+.advanced .actions { margin: .5rem 0; }
+
+/* ---------------------------------------------------------- identity step */
+.identity-status {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .7rem;
+  align-items: start;
+  padding: .8rem .9rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+.identity-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--low);
+  border: 1.5px solid var(--rule-strong);
+}
+.identity-icon::before { content: "?"; font-weight: 700; font-size: .8rem; color: var(--fg-muted); }
+.identity-title { font-weight: 600; }
+.identity-status[data-state="checking"] .identity-icon::before { content: "…"; }
+.identity-status[data-state="no_match"], .identity-status[data-state="recorded"] { background: var(--good-soft); border-color: var(--good); }
+.identity-status[data-state="no_match"] .identity-title, .identity-status[data-state="recorded"] .identity-title { color: var(--good); }
+.identity-status[data-state="no_match"] .identity-icon, .identity-status[data-state="recorded"] .identity-icon { background: var(--good); border-color: var(--good); }
+.identity-status[data-state="no_match"] .identity-icon::before { content: "–"; color: #fff; }
+.identity-status[data-state="recorded"] .identity-icon::before { content: "✓"; color: #fff; }
+.identity-status[data-state="match"] { background: var(--caution-soft); border-color: var(--caution); }
+.identity-status[data-state="match"] .identity-title { color: var(--caution); }
+.identity-status[data-state="match"] .identity-icon { background: var(--caution); border-color: var(--caution); }
+.identity-status[data-state="match"] .identity-icon::before { content: "!"; color: #fff; }
+.identity-status[data-state="blocked"] { background: var(--bad-soft); border-color: var(--bad); }
+.identity-status[data-state="blocked"] .identity-title { color: var(--bad); }
+.identity-status[data-state="blocked"] .identity-icon { background: var(--bad); border-color: var(--bad); }
+.identity-status[data-state="blocked"] .identity-icon::before { content: "!"; color: #fff; }
+.identity-results { list-style: none; margin: .5rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .3rem; }
+.identity-results:empty { display: none; }
+.identity-results li {
+  display: flex;
+  gap: .5rem;
+  align-items: baseline;
+  flex-wrap: wrap;
+  padding: .4rem .6rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: .85rem;
+}
+.identity-results li { font-weight: 600; }
+.identity-results .match-source { color: var(--fg-muted); font-weight: 400; }
+#comparison-table td { vertical-align: top; }
+#comparison-table tr.differs td { font-weight: 600; }
+#comparison-table tr.differs td:first-child::after { content: " ≠"; color: var(--caution); font-weight: 700; }
+#label-comparison.hidden { display: none; }
+#comparison-table tr.units-differ td { color: var(--fg-muted); font-style: italic; }
+#comparison-table tr.units-differ td:first-child::after { content: " — different units"; font-style: normal; }
+
+/* ------------------------------------------------------------ draft step */
+.draft-field {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) 1fr minmax(4rem, auto);
+  gap: .5rem;
+  padding: .2rem 0;
+  align-items: baseline;
+  border-bottom: 1px dashed var(--rule);
+}
+.draft-label { color: var(--fg-muted); font-size: .82rem; }
+.draft-value { font-weight: 600; }
+.draft-unknown { color: var(--caution); font-style: italic; }
+.draft-rows { width: 100%; border-collapse: collapse; margin-top: .6rem; }
+#ai-draft-body { overflow-x: auto; }
+.draft-rows th, .draft-rows td { text-align: left; padding: .3rem .4rem; border-bottom: 1px solid var(--rule); font-size: .82rem; }
+.draft-rows th { color: var(--fg-subtle); font-weight: 600; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; }
+.draft-unresolved { margin: .5rem 0 0; padding-left: 1.2rem; font-size: .82rem; color: var(--fg-muted); }
+.draft-unresolved li { padding: .1rem 0; }
+
+/* -------------------------------------------------------------- decision */
+#readiness {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  padding: .8rem .9rem;
+  margin-bottom: .9rem;
+  background: var(--bg);
+}
+.readiness-head { justify-content: space-between; align-items: baseline; flex-wrap: wrap; }
+.step .readiness-head h3 { margin: 0; text-transform: none; letter-spacing: 0; font-size: .9rem; color: var(--fg); }
+#readiness-progress { margin-left: auto; }
+#readiness-list { list-style: none; padding: 0; margin: .5rem 0 0; }
+#readiness-list li {
+  overflow-wrap: anywhere;
+  padding: .25rem 0 .25rem 1.6rem;
+  position: relative;
+  font-size: .88rem;
+}
+#readiness-list li::before {
+  position: absolute;
+  left: 0;
+  top: .3rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: .68rem;
+  font-weight: 700;
+}
+#readiness-list li.ready { color: var(--fg-muted); }
+#readiness-list li.ready::before { content: "✓"; background: var(--good-soft); color: var(--good); }
+/* A blocker is the one thing the reviewer should read next. */
+#readiness-list li.blocking { color: var(--fg); font-weight: 600; }
+#readiness-list li.blocking::before { content: "→"; background: var(--caution-soft); color: var(--caution); }
+.actions-approve { margin-top: 0; margin-bottom: 1.1rem; }
+#t-approve:disabled { cursor: not-allowed; }
+
+.decision-alternatives {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+.decision-option {
+  padding: .8rem .9rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+.decision-option-head { margin-bottom: .6rem; }
+.step .decision-option-head h3 { margin: 0 0 .15rem; text-transform: none; letter-spacing: 0; font-size: .9rem; color: var(--fg); }
+.check-group { display: flex; gap: .35rem; flex-wrap: wrap; }
+.check-pill {
+  min-height: 2.15rem;
+  padding: .2rem .7rem .2rem .55rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: .82rem;
+}
+.check-pill:has(input:checked) { border-color: var(--accent-strong); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+#catalog-results { list-style: none; padding: 0; margin: .4rem 0 0; font-size: .84rem; }
+#catalog-results:empty { display: none; }
+#catalog-results li { padding: .4rem .6rem; border: 1px solid var(--rule); border-radius: var(--radius-sm); background: var(--surface); margin-bottom: .3rem; cursor: pointer; }
+#catalog-results li:hover { border-color: var(--accent-strong); }
+
+/* Saved work that no longer applies to what is on screen. Loud on purpose. */
 .review-banner {
-  margin: .8rem 0;
+  margin: 0 0 .9rem;
   padding: .7rem .9rem;
   border: 1px solid var(--rule);
   border-left: 4px solid var(--caution);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--caution-soft);
   color: var(--caution);
   font-weight: 600;
 }
-
 /* What the catalog importer will refuse. Not advice: these block approval. */
 .diagnostics {
-  margin: .8rem 0;
+  margin: 0 0 .9rem;
   padding: .7rem .9rem;
   border: 1px solid var(--rule);
   border-left: 4px solid var(--bad);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--bad-soft);
   color: var(--bad);
 }
@@ -402,133 +794,70 @@ figure.source-photo { outline: 3px solid var(--accent-strong); outline-offset: 2
 .diagnostics code { background: var(--surface); color: var(--bad); white-space: normal; }
 .diagnostics-heading { margin: 0; font-weight: 600; font-size: .9rem; }
 
-/* Batch approval. Selectable only when the server says the item is fully read. */
-.batch-bar {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  flex-wrap: wrap;
-  margin: .6rem 0 0;
-  padding-top: .6rem;
-  border-top: 1px solid var(--rule);
-}
-.batch-results { list-style: none; margin: .4rem 0 0; padding: 0; width: 100%; }
-.batch-results li { font-size: .8rem; padding: .1rem 0; }
-.batch-results li.ready { color: var(--good); }
-.batch-results li.blocking { color: var(--bad); }
-/* Pinned rather than floated: the row is a list-item, so margin-left:auto did
-   nothing and the pick fell onto its own line under the id. */
-.queue-pick {
-  position: absolute;
-  top: .6rem;
-  right: .65rem;
-  margin: 0;
-  width: 1rem;
-  height: 1rem;
-  accent-color: var(--accent);
-  cursor: pointer;
-}
-
-#help-drawer {
-  max-width: 44rem;
+/* -------------------------------------------------------------- dialogs */
+dialog {
   border: 1px solid var(--rule);
-  border-radius: 12px;
-  padding: 1rem 1.2rem;
+  border-radius: 14px;
+  padding: 1rem 1.25rem 1.25rem;
   background: var(--surface);
   color: var(--fg);
+  box-shadow: var(--shadow-md);
 }
-#help-drawer::backdrop { background: rgb(24 26 27 / 72%); }
-#help-body dt { font-weight: 600; margin-top: .7rem; }
+dialog::backdrop { background: rgb(24 26 27 / 60%); }
+.lightbox-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: .6rem; }
+.lightbox-head strong { font-size: 1rem; }
+#photo-lightbox { width: min(94vw, 1100px); max-height: 94vh; }
+#image-canvas { display: block; max-width: 100%; max-height: 74vh; margin: 0 auto .8rem; background: var(--low); border-radius: var(--radius-sm); }
+#help-drawer { max-width: 44rem; }
+#help-body dt { font-weight: 600; margin-top: .8rem; }
 #help-body dd { margin: .15rem 0 0; color: var(--fg-muted); font-size: .9rem; }
-
-/* --------------------------------------------------------------------------
-   Narrower screens.
-
-   The workplace is a desktop; a tablet or a phone is for a quick look or a
-   small correction. So nothing is hidden at any width — a reviewer must never
-   find that the thing blocking approval is only visible on another device —
-   the layout just stops being two columns and the wide things scroll inside
-   themselves instead of pushing the page sideways.
-   -------------------------------------------------------------------------- */
-
-/* Long machine strings (ids, digests) must wrap rather than widen the page. */
-#queue .id, .mono, code { overflow-wrap: anywhere; }
-
-/* A control sizes to its content by default — a select to its longest option —
-   and a flex item refuses to shrink below that. Both push a narrow layout
-   sideways, and this is true at every width, not just on a phone. */
-input, select, textarea, button { max-width: 100%; min-width: 0; }
-.row > * { min-width: 0; }
-
-/* Anything genuinely wide scrolls in its own box, never the document. */
-.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
-@media (max-width: 900px) {
-  main {
-    grid-template-columns: 1fr;
-    min-height: 0;
-  }
-  #queue-panel {
-    border-right: none;
-    border-bottom: 1px solid var(--rule);
-    /* Enough to scan a few rows without burying the submission being read. */
-    max-height: 45vh;
-  }
-  #detail-panel { padding: 1rem 1rem 3rem; max-width: none; }
-  header { padding: .8rem 1rem; flex-wrap: wrap; }
-}
-
-@media (max-width: 620px) {
-  header { gap: .5rem; }
-  header h1 { font-size: 1.15rem; }
-  #detail-panel { padding: .8rem .8rem 3rem; }
-  /* Label, value and source stack: three columns in 320px is unreadable. */
-  .draft-field { grid-template-columns: 1fr; gap: .1rem; padding: .35rem 0; }
-  .draft-label { font-size: .78rem; }
-  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-  .photo-grid img { height: 130px; }
-  /* A picture choice is a decision; give it the full width to be legible. */
-  .picture-option { display: grid; grid-template-columns: auto 56px 1fr; width: 100%; margin-right: 0; }
-  /* 22rem of basis does not fit beside its own padding on a phone. */
-  .grow { flex-basis: 100%; }
-  #readiness-progress { white-space: nowrap; }
-  .batch-bar > button { flex: 1 1 auto; }
-}
-
-/* Touch. A finger is not a mouse pointer: the controls that are comfortable
-   at 12px with a trackpad are the ones a reviewer will miss on a phone, and
-   the ones they will miss are the tick and the batch pick — exactly the two
-   that decide whether something gets approved. */
-@media (pointer: coarse) {
-  .verify-chip { padding: .45rem .9rem; }
-  .verify-chip input { width: 1.15rem; height: 1.15rem; }
-  .verify-source { padding: .3rem .6rem; font-size: .8rem; }
-  .queue-pick { width: 1.5rem; height: 1.5rem; top: .5rem; right: .5rem; }
-  #queue li { padding-right: 2.6rem; }
-  button.compact { padding: .4rem .6rem; }
-}
-
-/* A row that reads differently on the two labels is the whole point of the
-   comparison, so it is marked in text weight as well as colour. */
-#comparison-table td { padding: .35rem .6rem; vertical-align: top; }
-#comparison-table tr.differs td { font-weight: 600; background: var(--surface); }
-#comparison-table tr.differs td:first-child::after {
-  content: " ≠";
-  color: var(--fg-muted);
-  font-weight: 400;
-}
-#label-comparison.hidden { display: none; }
-
-/* Different units are not a difference in dose. Said in words and muted, so
-   it never reads as the evidence a decision rests on. */
-#comparison-table tr.units-differ td { color: var(--fg-muted); font-style: italic; }
-#comparison-table tr.units-differ td:first-child::after {
-  content: " — different units";
-  font-style: normal;
-}
-/* Local development evidence and results; deliberately part of the reviewer. */
+#help-body p { margin-top: 1rem; }
 #solo-evidence { max-width: min(96vw, 1100px); }
 #solo-evidence-canvas { max-width: 100%; height: auto; display: block; margin-bottom: 1rem; }
-.solo-evidence-status { display: block; font-size: .85rem; margin: .35rem 0; }
-.solo-report { white-space: pre-wrap; overflow-wrap: anywhere; }
-#solo-review { margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--border); }
+.solo-report { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8rem; background: var(--bg); padding: .7rem; border-radius: var(--radius-sm); }
+.solo-report:empty { display: none; }
+#solo-review label { margin-top: .7rem; }
+
+/* --------------------------------------------------------------- narrow */
+/* Nothing is hidden at any width — a reviewer must never find that the thing
+   blocking approval is only visible on another device — the layout just stops
+   being two columns and the wide things scroll inside themselves. */
+#queue .id, .mono, code { overflow-wrap: anywhere; }
+.row > * { min-width: 0; }
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 960px) {
+  main { grid-template-columns: 1fr; height: auto; min-height: 0; }
+  #queue-panel { border-right: none; border-bottom: 1px solid var(--rule); max-height: 45vh; }
+  .detail-split { grid-template-columns: 1fr; }
+  #evidence-pane { position: static; max-height: none; }
+  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .photo-grid img { max-height: 14rem; }
+  #detail-panel { padding: 1rem 1rem 3rem; }
+  header { padding: 0 1rem; }
+  .step { padding-left: 1.1rem; padding-top: 1rem; }
+  .step:not(.step-draft):not(.step-dev)::before { position: static; display: inline-grid; margin-bottom: .5rem; }
+}
+@media (max-width: 620px) {
+  header { height: auto; min-height: var(--header-h); padding: .6rem 1rem; flex-wrap: wrap; }
+  header h1 { font-size: 1.05rem; }
+  .toast { top: auto; bottom: 1rem; left: 1rem; right: 1rem; max-width: none; }
+  #detail-panel { padding: .8rem .8rem 3rem; }
+  .draft-field { grid-template-columns: 1fr; gap: .1rem; padding: .35rem 0; }
+  .field-grid, .field-grid-wide { grid-template-columns: 1fr; }
+  .photo-grid { grid-template-columns: 1fr; }
+  .photo-grid img { max-height: 18rem; }
+  .picture-option { display: grid; grid-template-columns: auto 56px 1fr; width: 100%; }
+  .grow { flex-basis: 100%; }
+  .queue-filters { grid-template-columns: 1fr 1fr; }
+  .queue-filters button { grid-column: span 2; }
+  .decision-bar { flex-direction: column; align-items: stretch; }
+  .statements .row { flex-wrap: wrap; }
+}
+@media (pointer: coarse) {
+  :root { --control-h: 2.75rem; }
+  .confirm-chip, .check-pill, .verify-source { min-height: 2.75rem; }
+  .queue-pick { width: 1.5rem; height: 1.5rem; }
+  #queue li { padding-right: 2.8rem; }
+  button.compact { min-height: 2.5rem; }
+}

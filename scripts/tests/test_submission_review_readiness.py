@@ -60,8 +60,8 @@ out.items = (document.getElementById('readiness-list').children || []).map(
 out.progress = document.getElementById('readiness-progress').textContent;
 out.approveDisabled = document.getElementById('t-approve').disabled;
 out.approveTitle = document.getElementById('t-approve').title;
-out.chips = (document.getElementById('verify-checklist').children || []).map(
-  (n) => n.className);
+out.chips = CRITICAL_FIELDS.map(([field]) =>
+  document.getElementById('verify-slot-' + field).children[0]?.children[0]?.className ?? '');
 `,ctx);
 process.stdout.write(JSON.stringify(out));
 """
@@ -264,13 +264,13 @@ def test_approve_is_refused_until_every_field_has_been_read() -> None:
 
     assert out["approveDisabled"] is True
     # The message says what to do next, not merely that something is wrong.
-    assert "Read and tick 3 more fields." in _blockers(out)
+    assert "Read 3 more fields off the photographs and press Confirm beside each." in _blockers(out)
 
 
 def test_one_remaining_field_is_named_rather_than_counted() -> None:
     out = _render(verified=["brand", "name", "serving", "rows"])
 
-    assert "Read other ingredients off the photographs and tick it." in _blockers(out)
+    assert "Read the other ingredients off the photographs, then press Confirm beside it." in _blockers(out)
 
 
 def test_a_disabled_approve_button_always_explains_itself() -> None:
