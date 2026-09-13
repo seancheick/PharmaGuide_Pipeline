@@ -197,12 +197,15 @@ _CONTENT_SHAPE = _object_shape({
 assert set(_CONTENT_SHAPE["properties"]) == LABEL_CONTENT_KEYS
 
 
-def generation_schema() -> dict[str, Any]:
+def generation_schema(*, compact: bool = False) -> dict[str, Any]:
     """Return detached model-content constraints, never an approval validator.
 
     All model content keys are requested explicitly (nullable fields use null).
     Runtime validation remains backwards-compatible with omitted optional keys
     and enforces the relationships that constrained generation cannot express.
+    ``compact`` is a lower-state projection for providers with constrained-
+    decoder complexity limits. It is generated from this same vocabulary and
+    leaves enum membership to the unchanged runtime validator.
     """
     # Constrained decoders can reject a valid schema when numeric/list bounds
     # expand their state space. Inline this small acyclic shape vocabulary and
@@ -214,14 +217,39 @@ def generation_schema() -> dict[str, Any]:
             return value
         if "$ref" in value:
             return project(_SHAPES[value["$ref"].removeprefix("#/$defs/")])
+        ignored = {"maxItems", "minimum", "maximum"}
         result = {key: project(item) for key, item in value.items()
-                  if key not in {"maxItems", "minimum", "maximum"}}
+                  if key not in ignored}
         bounds = [f"{key}: {value[key]}" for key in ("minimum", "maximum", "maxItems") if key in value]
         if bounds:
             result["description"] = " ".join(filter(None, (result.get("description"),
                                                            "Runtime limits: " + "; ".join(bounds) + ".")))
         return result
-    return project(_CONTENT_SHAPE)
+
+    full = project(_CONTENT_SHAPE)
+    if not compact:
+        return full
+
+    def shallow(value: dict[str, Any]) -> dict[str, Any]:
+        """Keep top-level shape; the runtime validator owns nested semantics."""
+        if "anyOf" in value:
+            types = [branch.get("type") for branch in value["anyOf"]
+                     if isinstance(branch, dict) and branch.get("type")]
+            return {"type": types}
+        result = {"type": value.get("type", "object")}
+        if value.get("type") == "array":
+            item = value.get("items", {})
+            if isinstance(item, dict):
+                result["items"] = shallow(item)
+        return result
+
+    return {
+        "type": "object",
+        "properties": {key: shallow(value)
+                       for key, value in full["properties"].items()},
+        "additionalProperties": False,
+        "required": list(full["required"]),
+    }
 
 
 def _shape_keys(name: str) -> frozenset[str]:

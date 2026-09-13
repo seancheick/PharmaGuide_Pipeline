@@ -6,14 +6,15 @@ no second scheduled implementation: a cron entry calls this with the same flags
 a person would type, so what runs unattended is what was tested.
 
     scripts/prepare_product_submissions.py --mode local preflight
+    scripts/prepare_product_submissions.py --mode gemini --model gemini-2.5-flash model-pin
     scripts/prepare_product_submissions.py status
     scripts/prepare_product_submissions.py --mode local run --max-jobs 5
 
 What this program will not do, by construction: pull a model, fall back to a
-remote or paid provider, upload a photograph anywhere, approve or reject a
-submission, or print a submission id, photo path or account. Extraction is
-enabled in the database, not here; a runner that forgets a flag cannot start
-spending.
+different provider, approve or reject a submission, or print a submission id,
+photo path or account. A hosted provider is used only when named explicitly.
+Extraction is enabled in the database, not here; a runner that forgets a flag
+cannot start spending.
 """
 
 from __future__ import annotations
@@ -27,7 +28,17 @@ SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
+import env_loader  # noqa: E402,F401 - load local secrets without printing them
 from submission_review.extraction.adapters.fake_adapter import FakeAdapter  # noqa: E402
+from submission_review.extraction.adapters.hosted_adapter import (  # noqa: E402
+    DEFAULT_GEMINI_MODEL,
+    DEFAULT_GROQ_MODEL,
+    GEMINI_FREE_RETENTION_POLICY,
+    GROQ_DEFAULT_RETENTION_POLICY,
+    HOSTED_PROMPT_VERSION,
+    GeminiAdapter,
+    GroqAdapter,
+)
 from submission_review.extraction.adapters.ollama_adapter import (  # noqa: E402
     DEFAULT_ENDPOINT,
     DEFAULT_TIMEOUT_SECONDS,
@@ -44,7 +55,7 @@ from submission_review.extraction.queue_client import (  # noqa: E402
 )
 from submission_review.extraction.worker import DrainLimits, drain  # noqa: E402
 
-MODES = ("fake", "local")
+MODES = ("fake", "local", "gemini", "groq")
 
 
 def _queue(args) -> SupabaseExtractionQueue:
@@ -62,6 +73,10 @@ def _adapter(args):
         return OllamaAdapter(
             endpoint=args.endpoint, timeout=args.call_timeout
         )
+    if args.mode == "gemini":
+        return GeminiAdapter(timeout=args.call_timeout)
+    if args.mode == "groq":
+        return GroqAdapter(timeout=args.call_timeout)
     return FakeAdapter()
 
 
@@ -82,6 +97,12 @@ def command_preflight(args) -> int:
             checks.append(
                 ("pinned local model installed and vision-capable", False, error.detail)
             )
+    elif args.mode in {"gemini", "groq"}:
+        try:
+            _probe_hosted_model(args)
+            checks.append((f"pinned {args.mode} vision model available", True, ""))
+        except ExtractionError as error:
+            checks.append((f"pinned {args.mode} vision model available", False, error.detail))
     else:
         checks.append(("fake adapter selected; no model needed", True, ""))
 
@@ -89,7 +110,7 @@ def command_preflight(args) -> int:
     for name, passed, detail in checks:
         marker = "ok  " if passed else "FAIL"
         print(f"{marker} {name}" + (f" — {detail}" if detail else ""))
-    print("\npreflight wrote nothing and called no provider.")
+    print("\npreflight wrote nothing and sent no photograph.")
     return 0 if ok else 1
 
 
@@ -111,6 +132,52 @@ def _probe_local_model(args) -> None:
             retention_policy_version="local-only",
         )
     )
+
+
+def _probe_hosted_model(args) -> None:
+    from submission_review.extraction.extractor import ExtractionConfig
+
+    if not args.model or not args.model_digest:
+        raise ExtractionError(
+            "provider_unavailable",
+            "--model and --model-digest are required to check a hosted pin",
+        )
+    _adapter(args).verify_model(
+        ExtractionConfig(
+            provider=args.mode,
+            model=args.model,
+            model_digest=args.model_digest,
+            prompt_version=HOSTED_PROMPT_VERSION,
+            retention_policy_version=_default_retention_policy(args.mode),
+        )
+    )
+
+
+def _default_retention_policy(mode: str) -> str:
+    return (
+        GEMINI_FREE_RETENTION_POLICY if mode == "gemini"
+        else GROQ_DEFAULT_RETENTION_POLICY
+    )
+
+
+def command_model_pin(args) -> int:
+    """Print a hosted service descriptor pin without opening any photograph."""
+    if args.mode not in {"gemini", "groq"}:
+        print("model-pin requires --mode gemini or --mode groq", file=sys.stderr)
+        return 2
+    model = args.model or (
+        DEFAULT_GEMINI_MODEL if args.mode == "gemini" else DEFAULT_GROQ_MODEL
+    )
+    adapter = _adapter(args)
+    print(json.dumps({
+        "provider": args.mode,
+        "model": model,
+        "model_digest": adapter.current_model_digest(model),
+        "prompt_version": HOSTED_PROMPT_VERSION,
+        "prompt_sha256": adapter.prompt_sha256,
+        "retention_policy_version": _default_retention_policy(args.mode),
+    }, indent=2, sort_keys=True))
+    return 0
 
 
 def command_status(args) -> int:
@@ -216,6 +283,7 @@ def build_parser() -> argparse.ArgumentParser:
                         help="private local attempt references for uncertain-completion reconciliation")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("preflight")
+    sub.add_parser("model-pin")
     sub.add_parser("status")
     reconcile = sub.add_parser("reconcile")
     reconcile.add_argument("--job-id", required=True)
@@ -246,11 +314,12 @@ def main(argv: list[str] | None = None) -> int:
     try:
         return {
             "preflight": command_preflight,
+            "model-pin": command_model_pin,
             "status": command_status,
             "reconcile": command_reconcile,
             "run": command_run,
         }[args.command](args)
-    except QueueConfigurationError as error:
+    except (QueueConfigurationError, ExtractionError) as error:
         print(str(error), file=sys.stderr)
         return 1
 

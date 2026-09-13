@@ -18,6 +18,17 @@ from pathlib import Path
 from typing import Any
 from uuid import NAMESPACE_URL, uuid5
 
+import env_loader  # noqa: F401 - load optional provider keys without printing them
+from submission_review.extraction.adapters.hosted_adapter import (
+    DEFAULT_GEMINI_MODEL,
+    DEFAULT_GROQ_MODEL,
+    DEFAULT_TIMEOUT_SECONDS,
+    GEMINI_FREE_RETENTION_POLICY,
+    GROQ_DEFAULT_RETENTION_POLICY,
+    HOSTED_PROMPT_VERSION,
+    GeminiAdapter,
+    GroqAdapter,
+)
 from submission_review.extraction.adapters.ocr_adapter import (
     PROVIDER, RULES_VERSION, OcrLabelAdapter,
 )
@@ -173,6 +184,40 @@ def run_diagnostic(
     return summary
 
 
+def hosted_candidate(
+    provider: str,
+    *,
+    model: str | None,
+    model_digest: str | None,
+    timeout: float = DEFAULT_TIMEOUT_SECONDS,
+) -> tuple[LabelDraftExtractor, ExtractionConfig, dict[str, Any]]:
+    """Build and pin one hosted diagnostic before any image is opened."""
+    if provider == "gemini":
+        adapter = GeminiAdapter(timeout=timeout)
+        selected_model = model or DEFAULT_GEMINI_MODEL
+        retention = GEMINI_FREE_RETENTION_POLICY
+    elif provider == "groq":
+        adapter = GroqAdapter(timeout=timeout)
+        selected_model = model or DEFAULT_GROQ_MODEL
+        retention = GROQ_DEFAULT_RETENTION_POLICY
+    else:
+        raise ValueError("unsupported hosted provider")
+    selected_digest = model_digest or adapter.current_model_digest(selected_model)
+    config = ExtractionConfig(
+        provider=provider,
+        model=selected_model,
+        model_digest=selected_digest,
+        prompt_version=HOSTED_PROMPT_VERSION,
+        retention_policy_version=retention,
+    )
+    adapter.verify_model(config)
+    return LabelDraftExtractor(adapter), config, {
+        "hosted": True,
+        "retention_policy_version": retention,
+        "model_descriptor_sha256": selected_digest,
+    }
+
+
 def main() -> int:
     """Run an installed local candidate without connecting to a queue."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -180,10 +225,13 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--blobs", type=Path, default=Path("scripts/dist/detail_blobs"))
     parser.add_argument("--raw-root", type=Path, required=True)
-    parser.add_argument("--provider", choices=("ocr", "ollama"), default="ocr")
+    parser.add_argument(
+        "--provider", choices=("ocr", "ollama", "gemini", "groq"), default="ocr"
+    )
     parser.add_argument("--model")
     parser.add_argument("--model-digest")
     parser.add_argument("--endpoint", default="http://127.0.0.1:11434")
+    parser.add_argument("--call-timeout", type=float, default=DEFAULT_TIMEOUT_SECONDS)
     parser.add_argument("--limit", type=int)
     parser.add_argument("--crop", type=float, nargs=4, metavar=('X', 'Y', 'W', 'H'),
                         help="normalized close-up in the oriented image; exactly one selected product")
@@ -197,12 +245,16 @@ def main() -> int:
         str(path.relative_to(scripts_root)): hashlib.sha256(path.read_bytes()).hexdigest()
         for path in code_paths
     }
+    if args.call_timeout <= 0:
+        parser.error("call timeout must be positive")
     if args.provider == "ollama":
         from submission_review.extraction.adapters.ollama_adapter import OllamaAdapter, PROMPT_VERSION
         from submission_review.extraction.bounded_http import request
         if not args.model or not args.model_digest:
             parser.error("Ollama requires an installed model and its exact digest")
-        adapter = OllamaAdapter(endpoint=args.endpoint)  # validates loopback first
+        adapter = OllamaAdapter(
+            endpoint=args.endpoint, timeout=args.call_timeout
+        )  # validates loopback first
         response = request("GET", args.endpoint.rstrip("/") + "/api/status",
                            timeout=5, max_bytes=65536)
         if response.status_code != 200 or json.loads(response.content).get("cloud", {}).get("disabled") is not True:
@@ -213,6 +265,14 @@ def main() -> int:
             prompt_version=PROMPT_VERSION, retention_policy_version="local-only-v1",
         )
         extractor = LabelDraftExtractor(adapter)
+    elif args.provider in {"gemini", "groq"}:
+        extractor, config, hosted_runtime = hosted_candidate(
+            args.provider,
+            model=args.model,
+            model_digest=args.model_digest,
+            timeout=args.call_timeout,
+        )
+        runtime.update(hosted_runtime)
     else:
         if args.model or args.model_digest:
             parser.error("OCR model identity is derived from installed model files")

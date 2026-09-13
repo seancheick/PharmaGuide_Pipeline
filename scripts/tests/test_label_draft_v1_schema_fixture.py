@@ -108,6 +108,31 @@ def test_generation_schema_contains_only_label_content_and_is_detached() -> None
     assert set(_generation_schema()['properties']) == LABEL_CONTENT_KEYS
 
 
+def test_compact_generation_schema_keeps_shape_without_a_second_vocabulary() -> None:
+    from submission_review.extraction import envelope
+    from submission_review.extraction.envelope import LABEL_CONTENT_KEYS
+
+    full = envelope.generation_schema()
+    compact = envelope.generation_schema(compact=True)
+
+    assert set(compact["properties"]) == set(full["properties"]) == LABEL_CONTENT_KEYS
+    assert compact["required"] == full["required"]
+
+    def keys(value):
+        if isinstance(value, dict):
+            return set(value).union(*(keys(item) for item in value.values()))
+        if isinstance(value, list):
+            return set().union(*(keys(item) for item in value))
+        return set()
+
+    assert "enum" in keys(full)
+    assert "enum" not in keys(compact)
+    assert "description" not in keys(compact)
+    assert compact["properties"]["ingredient_rows"] == {
+        "type": "array", "items": {"type": "object"}
+    }
+
+
 def test_generation_schema_uses_portable_structure_and_runtime_keeps_bounds() -> None:
     from jsonschema import Draft202012Validator
     from submission_review.extraction.envelope import LABEL_CONTENT_KEYS, LabelDraftError, validate_label_draft_v1

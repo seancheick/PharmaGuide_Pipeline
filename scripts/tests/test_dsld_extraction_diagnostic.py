@@ -6,7 +6,7 @@ import json
 import pytest
 from PIL import Image
 
-from diagnose_dsld_extraction import run_diagnostic, selected_images
+from diagnose_dsld_extraction import hosted_candidate, run_diagnostic, selected_images
 from submission_review.extraction.adapters.fake_adapter import FakeAdapter
 from submission_review.extraction.extractor import ExtractionConfig, LabelDraftExtractor
 
@@ -149,3 +149,41 @@ def test_close_up_diagnostic_refuses_ambiguous_multiple_labels_before_creating_o
         run_diagnostic(manifest, output, tmp_path, tmp_path, None, None,
                        crop_region={'x': .5, 'y': 0, 'w': .5, 'h': 1})
     assert not output.exists()
+
+
+@pytest.mark.parametrize(
+    ("provider", "default_model", "retention_prefix"),
+    [("gemini", "gemini-2.5-flash", "gemini-api-unpaid"),
+     ("groq", "qwen/qwen3.8-27b", "groq-inference-default")],
+)
+def test_hosted_diagnostic_pins_before_any_image_is_opened(
+    monkeypatch, provider, default_model, retention_prefix,
+):
+    import diagnose_dsld_extraction as diagnostic
+
+    class Adapter:
+        prompt_sha256 = "a" * 64
+
+        def __init__(self, *, timeout):
+            assert timeout == 42
+
+        def current_model_digest(self, model):
+            assert model == default_model
+            return "b" * 64
+
+        def verify_model(self, config):
+            assert config.model_digest == "b" * 64
+
+    monkeypatch.setattr(
+        diagnostic, "GeminiAdapter" if provider == "gemini" else "GroqAdapter", Adapter
+    )
+
+    extractor, config, runtime = hosted_candidate(
+        provider, model=None, model_digest=None, timeout=42
+    )
+
+    assert extractor.prompt_sha256 == "a" * 64
+    assert config.model == default_model
+    assert config.prompt_version == "label-draft-hosted-v2"
+    assert config.retention_policy_version.startswith(retention_prefix)
+    assert runtime["model_descriptor_sha256"] == "b" * 64

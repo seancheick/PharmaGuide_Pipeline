@@ -77,6 +77,42 @@ Automatic extraction must be explicitly configured and enabled; uploading alone
 does not produce a machine draft while it is disabled. Do not enable a general
 production queue merely to run a local experiment.
 
+The worker has one extractor boundary with explicit `fake`, `local` (Ollama),
+`gemini`, and `groq` transports. Gemini and Groq reuse the Ollama label-reading
+instructions, program-owned provenance assembly, and the same strict
+`label_draft_v1` runtime validator. They do not have separate ingredient,
+cleaning, enrichment, scoring, or approval logic.
+
+Before a hosted experiment, inspect and record the provider's current model
+descriptor without opening any photograph:
+
+```bash
+source scripts/python_env.sh
+"$PG_PYTHON" scripts/prepare_product_submissions.py \
+  --mode gemini --model gemini-2.5-flash model-pin
+"$PG_PYTHON" scripts/prepare_product_submissions.py \
+  --mode groq --model qwen/qwen3.8-27b model-pin
+```
+
+The digest pins the provider's model descriptor and capabilities; hosted APIs
+do not disclose a cryptographic weights digest. A changed descriptor is refused
+before photos are sent. Keys load from the ignored repo `.env` as
+`GEMINI_API_KEY` and `GROQ_API_KEY` and are never put in a request body, report,
+or console output.
+
+Gemini's unpaid API terms permit submitted content to be used to improve Google
+products and permit human review. Use that key only for public DSLD diagnostic
+images, never silently for private user submissions. Groq documents default
+inference retention of up to 30 days for limited reliability/abuse cases unless
+Zero Data Retention is enabled. The explicit retention-policy name is part of
+every frozen extraction configuration; changing that policy requires a new
+configuration. Neither provider is enabled by adding a key.
+
+Gemini uses its native structured-output endpoint. Groq's Qwen vision model
+currently advertises JSON mode, not Groq's strict JSON-schema decoder, so its
+JSON is always passed through the unchanged runtime validator. Invalid output
+becomes a typed model failure and never becomes a reviewer draft.
+
 The shared preparer retains `prep_v1` (full-detail baseline). The opt-in
 `prep_local_4mp_v1` profile bounds total prepared pixels to four million,
 divided equally across **all** evidence photos, without discarding panels.

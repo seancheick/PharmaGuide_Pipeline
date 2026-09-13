@@ -143,6 +143,63 @@ def test_local_mode_carries_a_real_per_call_deadline() -> None:
     assert adapter._endpoint.startswith("http://127.0.0.1")
 
 
+@pytest.mark.parametrize(
+    ("mode", "expected"), [("gemini", "GeminiAdapter"), ("groq", "GroqAdapter")]
+)
+def test_hosted_mode_is_explicit_and_carries_the_call_deadline(
+    monkeypatch, mode, expected,
+) -> None:
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    args = _args(["--mode", mode, "--call-timeout", "45", "run"])
+
+    adapter = runner._adapter(args)
+
+    assert adapter.__class__.__name__ == expected
+    assert adapter._timeout == 45
+
+
+def test_model_pin_never_needs_queue_credentials_or_opens_photos(
+    monkeypatch, capsys,
+) -> None:
+    class Adapter:
+        prompt_sha256 = "a" * 64
+
+        def current_model_digest(self, model):
+            assert model == "gemini-2.5-flash"
+            return "b" * 64
+
+    monkeypatch.setattr(runner, "_adapter", lambda args: Adapter())
+    monkeypatch.setattr(
+        runner, "_queue", lambda args: pytest.fail("model-pin must not reach the queue")
+    )
+
+    assert runner.main(["--mode", "gemini", "model-pin"]) == 0
+
+    result = json.loads(capsys.readouterr().out)
+    assert result["model_digest"] == "b" * 64
+    assert result["retention_policy_version"].startswith("gemini-api-unpaid")
+
+
+def test_model_pin_refuses_a_non_hosted_mode(capsys) -> None:
+    assert runner.main(["--mode", "local", "model-pin"]) == 2
+    assert "requires --mode gemini or --mode groq" in capsys.readouterr().err
+
+
+def test_model_pin_reports_a_sanitized_provider_failure_without_a_traceback(
+    monkeypatch, capsys,
+) -> None:
+    def unavailable(args):
+        raise runner.ExtractionError("provider_unavailable", "hosted provider unavailable")
+
+    monkeypatch.setattr(runner, "_adapter", unavailable)
+
+    assert runner.main(["--mode", "gemini", "model-pin"]) == 1
+    error = capsys.readouterr().err
+    assert "hosted provider unavailable" in error
+    assert "Traceback" not in error
+
+
 def test_max_seconds_is_documented_as_an_admission_window() -> None:
     # The distinction matters operationally, so it belongs in --help rather
     # than in folklore: this window stops new jobs starting, it cannot cancel
