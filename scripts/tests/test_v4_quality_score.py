@@ -82,7 +82,7 @@ def test_pillars_use_six_pillar_weights() -> None:
 def test_evidence_strong_single_not_capped() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     # KSM-66/creatine-like: branded-RCT evidence 18 (the single-ingredient floor)
-    # -> 18/19*20 ~= 18.9, NOT linear-capped at 18.
+    # -> full evidence credit against the generic engine's reachable 18.
     out = assemble_quality_score(_shadow(module="generic", bd=_module_bd(evidence=18)))
     assert out["quality_pillars_v4"]["evidence"]["score"] >= 18.5
 
@@ -134,7 +134,7 @@ def test_dose_never_exceeds_20() -> None:
 def test_formulation_single_ingredient_best_reaches_elite_band() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     # creatine-like: formulation 24/30 raw, sports single -> ~19-20/20 (purpose-fit,
-    # normalized to the single-purpose achievable ceiling of 25, not breadth-30).
+    # normalized to the single-purpose achievable ceiling of 24, not breadth-30).
     out = assemble_quality_score(_shadow(module="sports", bd=_module_bd(form=24, form_max=30)))
     assert out["quality_pillars_v4"]["formulation"]["score"] >= 19.0
 
@@ -580,7 +580,43 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.1.3-achievable-ceilings"
+    assert out["quality_score_version"] == "1.1.4-audited-ceilings"
+
+
+def test_uncapped_product_can_reach_a_true_100() -> None:
+    """There is no hidden global 99 cap; full marks require every pillar."""
+    from scoring_v4.quality_score import assemble_quality_score
+
+    bd = _module_bd(
+        form=24,
+        dose=25,
+        evidence=18,
+        transparency=10,
+        verification=8,
+        manuf_trust=5,
+        hygiene=4,
+    )
+    bd["verification_bonus"] = {
+        "components": {
+            "B4a_verified_certifications": 12.0,
+            "B4b_gmp": 4.0,
+            "B4d_brand_testing_posture": 2.0,
+        },
+        "metadata": {
+            "trust_metadata": {"verified_scope_counts": {"sku": 1}}
+        },
+    }
+    bd["manufacturer_trust"] = {
+        "components": {
+            "D1_manufacturer_reputation": 2.0,
+            "D4_high_standard_region": 1.0,
+        }
+    }
+    out = assemble_quality_score(_shadow(raw=100.0, module="sports", bd=bd))
+
+    assert out["quality_score_v4_100"] == 100.0
+    assert out["quality_tier"] == "Exceptional"
+    assert out["quality_score_cap_v4"] is None
 
 
 def test_public_quality_cap_limits_score_without_changing_raw() -> None:

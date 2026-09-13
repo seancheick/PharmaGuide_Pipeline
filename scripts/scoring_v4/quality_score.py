@@ -615,11 +615,13 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
 
 def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
                      cfg: Dict[str, Any]) -> Dict[str, Any]:
-    """Category-aware evidence fit. The branded-RCT/consensus floor caps a single
-    ingredient at 18 (reserving 19-20 for multi-active breadth); the spec forbids
-    capping single-ingredient evidence. Normalize single-purpose archetypes to a 19
-    ceiling so a strong branded/consensus single earns ~19 by HAVING the evidence. A
-    weak-evidence single (low raw) still scores low — focused != automatically high."""
+    """Category-aware evidence fit against reviewed engine/purpose ceilings.
+
+    Generic evidence tops out at 18 by construction; category engines may have
+    different limits (for example, omega explicitly supports 15 + 5 = 20).
+    References must come from those contracts, never the current corpus maximum.
+    A weak-evidence product remains low because normalization is proportional.
+    """
     sub = cfg["evidence_subscale"]
     ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
     score = _num(dim.get("score"))

@@ -484,7 +484,16 @@ def total_strain_count_for(pdata: Dict[str, Any], clinical_strains: Iterable[Any
             if key:
                 seen.add(key)
     # Clinical IDs and label names are not interchangeable counting keys.
-    return len(seen) or len({s.get("clinical_id") for s in clinical_strains if s.get("clinical_id")})
+    # Ignore incomplete/malformed clinical rows: ``{None}`` is still a
+    # one-element set and used to manufacture a phantom strain here.
+    clinical_ids = {
+        key
+        for strain in clinical_strains
+        if isinstance(strain, dict)
+        for key in [_canonical_key(str(strain.get("clinical_id") or ""))]
+        if key
+    }
+    return len(seen) or len(clinical_ids)
 
 
 def _disclosure_reason(pdata: Dict[str, Any], total_strain_count: int, disclosed_count: int) -> str | None:

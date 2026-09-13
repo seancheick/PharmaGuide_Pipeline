@@ -498,6 +498,31 @@ def test_cfu_adequacy_caps_v3_five_points_to_v4_fifteen_points() -> None:
     assert payload["components"]["cfu_adequacy"] == 15.0
 
 
+def test_shared_strain_count_ignores_missing_blank_and_malformed_clinical_ids() -> None:
+    from scoring_v4.modules.probiotic_dose import total_strain_count_for
+
+    clinical_rows = [
+        {"name": "Lactobacillus acidophilus"},
+        {"clinical_id": None},
+        {"clinical_id": "   "},
+        "not-a-record",
+    ]
+
+    assert total_strain_count_for({}, clinical_rows) == 0
+
+
+def test_shared_strain_count_deduplicates_normalized_clinical_ids() -> None:
+    from scoring_v4.modules.probiotic_dose import total_strain_count_for
+
+    clinical_rows = [
+        {"clinical_id": "LGG-001"},
+        {"clinical_id": "lgg 001"},
+        {"clinical_id": "BB-12"},
+    ]
+
+    assert total_strain_count_for({}, clinical_rows) == 2
+
+
 def test_cfu_adequacy_hard_gates_missing_tier_missing_cfu_and_postbiotic() -> None:
     from scoring_v4.modules.probiotic_dose import _compute_cfu_adequacy
 

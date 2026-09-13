@@ -178,6 +178,32 @@ def test_clinical_evidence_capped_at_15() -> None:
     assert payload["metadata"]["clinical_sub_cap"] == 15.0
 
 
+def test_engine_can_reach_full_twenty_with_clinical_and_indication(monkeypatch) -> None:
+    """The omega reference must not be lowered to the current corpus maximum."""
+    import scoring_v4.modules.omega_evidence as omega_evidence
+
+    monkeypatch.setattr(
+        omega_evidence,
+        "score_generic_evidence",
+        lambda _product: {
+            "score": 15.0,
+            "components": {},
+            "penalties": {},
+            "metadata": {},
+        },
+    )
+
+    payload = omega_evidence.score_evidence(
+        _epa_dha_product(epa=700, dha=300)
+    )
+
+    assert payload["components"] == {
+        "clinical_evidence": 15.0,
+        "indication_relevance": 5.0,
+    }
+    assert payload["score"] == 20.0
+
+
 def test_disclosed_epa_dha_class_floor_when_no_evidence_data() -> None:
     """Disclosed EPA+DHA at an evidence-relevant daily dose earns the
     conservative omega class-evidence floor even when generic evidence_data

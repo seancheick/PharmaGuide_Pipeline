@@ -179,3 +179,35 @@ def test_category_fixtures_reach_their_references() -> None:
     assert prenatal["raw_dimensions"]["evidence"] == 18.0
     assert prenatal["normalization_references"]["evidence"] == 18.0
     assert prenatal["pillars"]["evidence"] == 20.0
+
+
+def test_references_use_reviewed_engine_limits_not_observed_catalog_maxima() -> None:
+    """A normalization divisor must not be selected from today's corpus maximum.
+
+    Corpus maxima move as labels are added and do not define the rubric.  These
+    references are pinned to the module contract or to the previously reviewed
+    purpose-fit ceiling instead.
+    """
+    from scoring_v4.quality_score_config import config
+
+    rubric = config()
+    form = rubric["formulation_subscale"]["archetype_reference"]
+    dose = rubric["dose_subscale"]["archetype_reference"]
+    evidence = rubric["evidence_subscale"]["archetype_reference"]
+
+    # The protein adapter can earn 15 + 5 + 3 + 4 + 2 = 29.  Pre-workout
+    # and BCAA/EAA still use the broader generic-formulation contract; their
+    # historical purpose-fit references must not be replaced by a corpus p99.
+    assert form["sports_protein"] == 29.0
+    assert form["sports_pre_workout"] == 30.0
+    assert form["sports_bcaa_eaa"] == 25.0
+
+    # A product classified by name as pre-workout can still be a focused
+    # single and earn the sports module's full 25.  The immune adapter's own
+    # component sum is capped at 22.
+    assert dose["sports_pre_workout"] == 25.0
+    assert dose["immune_support"] == 22.0
+
+    # Omega explicitly reserves 15 points for clinical evidence and 5 for
+    # indication relevance, so 20—not the current corpus maximum—is reachable.
+    assert evidence["omega"] == 20.0

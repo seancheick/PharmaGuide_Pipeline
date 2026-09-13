@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.1.3-achievable-ceilings",
+    "version": "1.1.4-audited-ceilings",
     "schema_version": "1.0.0",
     "last_updated": "2026-09-13",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Generic single-bioactive caps prevent clean narrow products from implying elite clinical-formula evidence. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
@@ -28,7 +28,7 @@
     "max_total_penalty": 5.0
   },
   "evidence_subscale": {
-    "_doc": "PR6: category-aware evidence fit. The raw evidence dimension's branded-RCT/consensus floor caps a SINGLE ingredient at 18, and the generic engine's arithmetic (cap_per_ingredient 7 x top-N weights 1/0.7/0.5/0.3 + depth bonus 0.5) tops out at 18 for EVERY generic-engine archetype, single or multi. The spec forbids capping single-ingredient evidence for being single ('a focused product can have better evidence than a blend'), so each archetype normalizes to the ceiling its engine can actually reach: 18 for generic-engine archetypes (single, botanical, sports, fiber, prenatal multi), 17 for immune_support (its own evidence_cap), 19 for omega (own engine, 19.4 reachable), 20 for probiotic (own engine). 1.1.3-achievable-ceilings (2026-09-13): the earlier 19/20 references sat above these ceilings, which was a hidden ~1-point tax no product could earn back; a strong single (KSM-66, creatine) now earns 20 by HAVING the evidence and a weak single still scores low. A reference is a divisor: lower it only to a proven ceiling, never raise it (that scales every product below it down). b_complex keeps 14 because its authority floor lifts most products to raw 15, which clamps.",
+    "_doc": "PR6: category-aware evidence fit. The generic engine's arithmetic (cap_per_ingredient 7 x top-N weights 1/0.7/0.5/0.3 + depth bonus 0.5) tops out at 18, while immune_support has its own 17-point cap. Those proven structural ceilings are valid normalization references: a strong focused product can earn full evidence without faking breadth. Omega is different: its engine explicitly allows 15 clinical + 5 indication points, so its reference remains 20 even when today's corpus maximum is lower. Never derive a reference from a fixture, p99, or current-corpus maximum; catalog composition is not the rubric. b_complex keeps its reviewed 14-point purpose-fit reference because its authority floor lifts most products to raw 15, which clamps.",
     "archetype_reference": {
       "sports_single": 18.0,
       "sports_pre_workout": 18.0,
@@ -39,22 +39,22 @@
       "immune_support": 17.0,
       "fiber_digestive": 18.0,
       "b_complex": 14.0,
-      "omega": 19.0,
+      "omega": 20.0,
       "probiotic": 20.0,
       "prenatal_multi": 18.0
     },
     "default_reference": 20.0
   },
   "dose_subscale": {
-    "_doc": "PR5: category-aware purpose-fit dose. The raw dose dimension caps a single nutrient/botanical in its supplemental/clinical window at ~22 (CAP_SUPPLEMENTAL_WINDOW); the top 3 (→25) is multi-form/completion that single-purpose products can't earn — the same structural pattern as formulation. Normalize each archetype to its achievable APPROPRIATE-dose ceiling so a well-dosed product earns ~19-20. MEGADOSE-SAFE: an overdosed product already gets low raw dose (overdose → half credit) and a sub-clinical one gets proportional-low; normalizing only lifts appropriately-dosed products, never rewards excess.",
+    "_doc": "PR5: category-aware purpose-fit dose. References come from the reviewed dose contract, never the highest score in the current catalog. Generic singles top out at 22 in the supplemental/clinical window; botanical profiles top out at 21; the immune adapter's component sum caps at 22. Sports pre-workout retains the sports engine's 25-point reference because products classified by context can still earn its focused-single completion path. An overdosed product already gets low raw dose and a sub-clinical one gets proportional credit; normalization never repairs excess or underdosing.",
     "archetype_reference": {
       "sports_single": 25.0,
-      "sports_pre_workout": 22.0,
+      "sports_pre_workout": 25.0,
       "sports_protein": 25.0,
       "sports_bcaa_eaa": 25.0,
       "generic_single_molecule": 22.0,
       "generic_botanical_branded": 21.0,
-      "immune_support": 21.0,
+      "immune_support": 22.0,
       "fiber_digestive": 25.0,
       "b_complex": 25.0,
       "omega": 23.0,
@@ -64,12 +64,12 @@
     "default_reference": 22.0
   },
   "formulation_subscale": {
-    "_doc": "PR4: category-aware purpose-fit formulation. The raw formulation dimension is scored out of a breadth-dependent max (30 for generic/sports) that a SINGLE ingredient structurally cannot reach (A2-A5 = premium-form stacking, synergy, absorption enhancers are multi-ingredient features). Normalize each archetype to its ACHIEVABLE form ceiling so a best-in-class product earns ~19-20 by being the OPTIMAL FORM, not by faking breadth. Computed from the real form-quality components, so a cheap form (magnesium oxide, low A1) still scores low. This is purpose-fit, not premium-form dominance.",
+    "_doc": "PR4: category-aware purpose-fit formulation. A focused single can earn 24 without faking breadth, while multi-active sports products retain their reviewed category references. The dedicated protein adapter has a 29-point positive-component ceiling (15 + 5 + 3 + 4 + 2). Pre-workout and BCAA/EAA still reuse the broader generic formulation engine, so current-corpus maxima are not valid divisors; they retain the reviewed 30 and 25 references until a dedicated adapter or benchmark justifies a change. A cheap form remains low because normalization is proportional.",
     "archetype_reference": {
       "sports_single": 24.0,
-      "sports_pre_workout": 19.5,
-      "sports_protein": 26.0,
-      "sports_bcaa_eaa": 16.5,
+      "sports_pre_workout": 30.0,
+      "sports_protein": 29.0,
+      "sports_bcaa_eaa": 25.0,
       "generic_single_molecule": 24.0,
       "generic_botanical_branded": 24.0,
       "immune_support": 30.0,

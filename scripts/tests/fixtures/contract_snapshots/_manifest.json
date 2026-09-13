@@ -629,7 +629,7 @@
     },
     {
       "date": "2026-09-13",
-      "action": "refrozen_achievable_ceiling_references_and_tier_ladder",
+      "action": "refrozen_reviewed_ceiling_references_and_tier_ladder",
       "products": [
         18141,
         182730,
@@ -655,12 +655,12 @@
         337853
       ],
       "sprints_covered": [
-        "quality_score 1.1.3-achievable-ceilings: 19 archetype references lowered to the ceilings their engines reach (none raised), so a top product scores 20/20 on evidence/formulation/dose",
+        "quality_score 1.1.4-audited-ceilings: structurally proven generic/immune/prenatal references were lowered; corpus-max-derived sports and omega changes were removed",
         "Tier chosen from the shipped whole number (69.6 ships as 70 and is Good)",
         "Tier ladder renamed Exceptional / Excellent / Very good / Good / Needs improvement / Poor",
         "Probiotic strain count unified across dose, transparency and formulation"
       ],
-      "notes": "Scores moved +0.8 mean corpus-wide (median 63.2 -> 64.6); no verdict, route or coverage changed. Grades in every fixture carry the renamed ladder."
+      "notes": "The original 1.1.3 pass lowered 19 references, but its audit conflated engine ceilings with one fixture and current-corpus maxima. Version 1.1.4 retains only supported changes and keeps 100 reachable without a hidden global cap. Grades in every fixture carry the renamed ladder; final release deltas must be measured from a fresh build."
     }
   ]
 }
