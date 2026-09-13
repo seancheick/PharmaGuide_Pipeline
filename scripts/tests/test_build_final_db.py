@@ -2886,7 +2886,7 @@ def test_top_warnings_carry_a_ban_found_only_on_a_label_row():
     assert len(top) == 5
 
 
-def test_top_warnings_do_not_repeat_a_ban_the_contaminant_data_already_named():
+def test_top_warnings_use_blob_title_once_for_an_already_named_ban():
     # 222758 (CBD): contaminant data and the blob resolver name one ban,
     # BANNED_CBD_US, two ways. One ban stays one summary entry.
     enriched = make_enriched()
@@ -2905,7 +2905,70 @@ def test_top_warnings_do_not_repeat_a_ban_the_contaminant_data_already_named():
         "source": "inactive_ingredient_resolver",
     }]}
 
-    assert build_top_warnings(enriched, blob) == build_top_warnings(enriched)
+    enriched["contaminant_data"]["banned_substances"]["substances"].append({
+        "ingredient": "cannabidiol", "id": "BANNED_CBD_US",
+        "status": "banned", "match_type": "alias",
+    })
+    blob["warnings"].append({**blob["warnings"][0], "title": "Banned substance: cannabidiol"})
+    warnings = build_top_warnings(enriched, blob)
+    bans = [w for w in warnings if w["type"] == "banned_substance"]
+    assert bans == [{
+        "type": "banned_substance", "severity": "critical",
+        "title": "Banned substance: CBD (Cannabidiol)",
+    }]
+
+
+def test_top_warnings_high_risk_is_not_a_ban_and_keeps_safety_priority():
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"]["substances"] = [
+        {"ingredient": "Risk", "status": "high_risk", "match_type": "exact"},
+        {"ingredient": "Watch", "status": "watchlist", "match_type": "exact"},
+        {"ingredient": "Recall", "status": "recalled", "match_type": "exact"},
+        {"ingredient": "Ban", "status": "banned", "match_type": "exact"},
+    ]
+    warnings = build_top_warnings(enriched)
+    assert [w["type"] for w in warnings[:4]] == [
+        "banned_substance", "recalled_ingredient", "high_risk_ingredient",
+        "watchlist_substance",
+    ]
+    assert warnings[2]["title"] == "High-risk ingredient: Risk"
+
+
+def test_top_warnings_same_high_risk_rule_uses_one_slot_before_low_risk_notices():
+    enriched = make_enriched()
+    flag = {
+        "entry_id": "RISK_EXAMPLE", "source_db": "banned_recalled_ingredients",
+        "status": "high_risk", "severity": "high", "match_type": "exact",
+        "matched_variant": "Example", "evidence_text": "Example",
+    }
+    enriched["contaminant_data"]["banned_substances"] = {
+        "substances": [],
+        "safety_flags": [flag, {**flag, "matched_variant": "example"}],
+    }
+    enriched["harmful_additives"] = [
+        {"additive_name": f"Additive {i}", "severity_level": "low"}
+        for i in range(5)
+    ]
+    warnings = build_top_warnings(enriched)
+    assert warnings[0] == {
+        "type": "high_risk_ingredient", "severity": "high",
+        "title": "High-risk ingredient: Example",
+    }
+    assert sum(w["type"] == "high_risk_ingredient" for w in warnings) == 1
+    assert len(warnings) == 5
+
+
+def test_top_warnings_keep_distinct_watchlist_notices_for_a_shared_rule():
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"]["substances"] = [
+        {"ingredient": name, "id": "WATCH_COLOR", "status": "watchlist",
+         "match_type": "exact"}
+        for name in ("Caramel color", "Carob color")
+    ]
+    warnings = build_top_warnings(enriched)
+    assert [w["title"] for w in warnings if w["type"] == "watchlist_substance"] == [
+        "Watchlist ingredient: Caramel color", "Watchlist ingredient: Carob color",
+    ]
 
 
 @pytest.mark.parametrize("status", ["watchlist", "high_risk"])

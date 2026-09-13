@@ -121,15 +121,16 @@ CATALOG_BRAND_REGISTRY_PATH = Path(__file__).resolve().parent / "data" / "catalo
 WARNING_PRIORITY = {
     "banned_substance": 0,
     "recalled_ingredient": 1,
-    "watchlist_substance": 2,
-    "allergen": 3,
-    "harmful_additive": 4,
-    "dose_safety": 5,
-    "interaction": 6,
-    "drug_interaction": 7,
-    "diagnostic_interference": 8,
-    "dietary": 9,
-    "status": 10,
+    "high_risk_ingredient": 2,
+    "watchlist_substance": 3,
+    "allergen": 4,
+    "harmful_additive": 5,
+    "dose_safety": 6,
+    "interaction": 7,
+    "drug_interaction": 8,
+    "diagnostic_interference": 9,
+    "dietary": 10,
+    "status": 11,
 }
 
 SEVERITY_PRIORITY = {
@@ -5493,15 +5494,13 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
     here lets the offline UI interpret the same warning identity as the detail
     blob instead of attempting to recover semantics from display copy.
 
-    Bans and recalls come from contaminant_data and from the detail blob's own
-    warnings. The blob also sees label rows contaminant_data never matched (an
-    inactive partially hydrogenated oil, an active hemp extract), so a ban the
-    product page shows is never missing here. A rule already named stays one
-    entry.
+    The detail blob owns ban/recall wording for every rule it carries, including
+    label rows contaminant_data never matched. Legacy source warnings remain a
+    fallback when no corresponding blob rule exists. One rule stays one entry,
+    using the highest-priority blob warning and its original display text.
     """
     raw_warnings = []
     warning_messages = set()
-    named_rule_indices: Dict[str, int] = {}
 
     def warning_priority(warning: tuple) -> tuple[int, int]:
         return (
@@ -5509,19 +5508,48 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
             SEVERITY_PRIORITY.get(warning[1], 99),
         )
 
+    canonical_rules: Dict[str, tuple] = {}
+    unkeyed_blob_warnings = []
+    for warning in safe_list(safe_dict(detail_blob).get("warnings")):
+        if (
+            not isinstance(warning, dict)
+            or warning.get("type") not in ("banned_substance", "recalled_ingredient")
+        ):
+            continue
+        title = safe_str(warning.get("title"))
+        if not title.strip():
+            continue
+        candidate = (
+            warning["type"], safe_str(warning.get("severity"), "critical"), title,
+        )
+        rule_id = safe_str(warning.get("matched_rule_id"))
+        if not rule_id:
+            unkeyed_blob_warnings.append(candidate)
+        elif (
+            rule_id not in canonical_rules
+            or warning_priority(candidate) < warning_priority(canonical_rules[rule_id])
+        ):
+            canonical_rules[rule_id] = candidate
+
+    fallback_rules: Dict[str, tuple] = {}
+
     def add_warning(kind: str, severity: str, message: str, rule_id: str = "") -> None:
-        if not message or message in warning_messages:
+        if not message or message in warning_messages or rule_id in canonical_rules:
+            return
+        # Keep the existing watchlist notices; this consolidation concerns
+        # bans, recalls, and high-risk warnings, not lower-risk label details.
+        if rule_id and kind in (
+            "banned_substance", "recalled_ingredient", "high_risk_ingredient",
+        ):
+            candidate = (kind, severity, message)
+            if (
+                rule_id not in fallback_rules
+                or warning_priority(candidate) < warning_priority(fallback_rules[rule_id])
+            ):
+                fallback_rules[rule_id] = candidate
             return
         warning_messages.add(message)
         raw_warnings.append((kind, severity, message))
-        if rule_id:
-            previous = named_rule_indices.get(rule_id)
-            if (
-                previous is None
-                or warning_priority(raw_warnings[-1])
-                < warning_priority(raw_warnings[previous])
-            ):
-                named_rule_indices[rule_id] = len(raw_warnings) - 1
 
     # Banned substances
     for sub in contaminant_matches(enriched):
@@ -5533,7 +5561,10 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         elif status == "recalled":
             add_warning("recalled_ingredient", "high", f"Recalled ingredient: {name}", rule_id)
         elif status == "high_risk":
-            add_warning("banned_substance", "high", f"High-risk ingredient: {name}", rule_id)
+            add_warning(
+                _banned_warning_type_for_status(status), "high",
+                f"High-risk ingredient: {name}", rule_id,
+            )
         elif status == "watchlist":
             add_warning(
                 "watchlist_substance",
@@ -5559,30 +5590,10 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
             _safety_flag_rule_id(flag),
         )
 
-    for warning in safe_list(safe_dict(detail_blob).get("warnings")):
-        if (
-            not isinstance(warning, dict)
-            or warning.get("type") not in ("banned_substance", "recalled_ingredient")
-        ):
-            continue
-        rule_id = safe_str(warning.get("matched_rule_id"))
-        title = safe_str(warning.get("title"))
-        if not title.strip():
-            continue
-        candidate = (
-            warning["type"],
-            safe_str(warning.get("severity"), "critical"),
-            title,
-        )
-        previous = named_rule_indices.get(rule_id)
-        if previous is not None:
-            # A softer warning for the same rule must not conceal the ban.
-            # Keep existing wording when it already conveys equal/higher risk.
-            if warning_priority(candidate) < warning_priority(raw_warnings[previous]):
-                raw_warnings[previous] = candidate
-                warning_messages.add(title)
-            continue
-        add_warning(*candidate, rule_id=rule_id)
+    for candidate in (
+        *fallback_rules.values(), *canonical_rules.values(), *unkeyed_blob_warnings,
+    ):
+        add_warning(*candidate)
 
     # Harmful additives
     for h in safe_list(enriched.get("harmful_additives")):
