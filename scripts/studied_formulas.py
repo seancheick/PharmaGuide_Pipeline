@@ -464,8 +464,17 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
             status = "strain_context_mismatch"
         elif result["cfu_per_day"] is None or result["cfu_per_day"] <= 0:
             status = "strain_dose_unknown"
+        elif any(c.get("clinical_applicability") == "established" for c in result["study_contexts"]):
+            # The bridge: an approved exact-strain context, the label's owned
+            # daily dose on a tested arm, a positive primary patient-important
+            # outcome. Identity review (above) is still required first.
+            status = "strain_dose_applicable"
+        elif any(c.get("review_status") == "clinician_approved"
+                 and c.get("status") == "source_context_recorded"
+                 for c in result["study_contexts"]):
+            status = "strain_context_not_applicable"
         elif result["study_contexts"] or "study_contexts" in reference:
-            # New primary-source contexts are not clinician-approved scoring
+            # Pending or held contexts are not clinician-approved scoring
             # policies. A legacy universal range cannot bypass their review.
             status = "strain_context_review_pending"
         else:
@@ -489,6 +498,22 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
                 "context_ids": context_ids}}
 
 
+NATIVE_CONTEXT_REVIEW_STATUSES = frozenset({
+    "source_verified_pending_clinical_review",  # authored, PMIDs verified, no approval
+    "clinician_approved",                        # the only status that can score
+    "adjudication_required",                     # conflicting sources; held
+    "rejected_source",                           # excluded from research entirely
+})
+NATIVE_CONTEXT_QUALITY_ENUMS = {
+    "study_design": frozenset({"rct", "crossover_rct", "cluster_rct", "open_label",
+                               "observational", "meta_analysis", "systematic_review",
+                               "guideline", "case_series"}),
+    "blinding": frozenset({"double", "triple", "single", "open", "unreported"}),
+    "funding": frozenset({"industry", "independent", "mixed", "unreported"}),
+    "source_tier": frozenset({"A", "B", "C", "D", "E"}),
+}
+
+
 def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
     """Validate the registry-owned research record, not a clinical approval.
 
@@ -504,7 +529,7 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
 
     if (not all(isinstance(context.get(key), str) and context[key].strip()
                 for key in ("context_id", "condition", "trial_family"))
-            or context.get("review_status") != "source_verified_pending_clinical_review"
+            or context.get("review_status") not in NATIVE_CONTEXT_REVIEW_STATUSES
             or not text_list(context.get("source_pmids"))
             or not text_list(context.get("components"))
             or reference_id not in context["components"]
@@ -517,6 +542,18 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
     if (len(set(components)) != len(components)
             or (len(components) > 1) != (context["identity_scope"] == "combination")):
         return False
+    # Optional study-quality descriptors: validated when present, never scored.
+    for key, allowed in NATIVE_CONTEXT_QUALITY_ENUMS.items():
+        if key in context and context[key] is not None and context[key] not in allowed:
+            return False
+    if "sample_size" in context and context["sample_size"] is not None and (
+            isinstance(context["sample_size"], bool) or not isinstance(context["sample_size"], int)
+            or context["sample_size"] <= 0):
+        return False
+    for key in ("trial_registration", "comparator"):
+        if key in context and context[key] is not None and not (
+                isinstance(context[key], str) and context[key].strip()):
+            return False
     population, dose, outcomes = (context.get(k) for k in ("population", "dose", "outcomes"))
     if (not isinstance(population, Mapping)
             or population.get("age_group") not in ("adult", "child", "infant", "mixed", "unknown")
@@ -579,6 +616,12 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
         if not valid_native_study_context(context, reference.get("id")):
             result.append({"status": "invalid_context", "clinical_applicability": "not_established"})
             continue
+        if context["review_status"] == "rejected_source":
+            # A rejected source is not research; its PMIDs never join the inventory.
+            result.append({"context_id": context["context_id"], "status": "rejected_source",
+                           "review_status": "rejected_source",
+                           "clinical_applicability": "not_established"})
+            continue
         dose = context["dose"]
         owned = clinical_strain_matches_source_row(product, row, {
             "raw_source_path": row.get("source_row_ref"), "name": row.get("strain")})
@@ -609,13 +652,31 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             "delivery_unknown" if not form or not dose["dosage_forms"]
             else "same_delivery_form" if form in {_key(f) for f in dose["dosage_forms"]}
             else "different_delivery_form")
+        applicability, reason = _approved_context_applicability(context, comparison)
         result.append({**deepcopy(context), "status": "source_context_recorded",
             "dose_comparison": comparison, "label_daily_cfu": amount,
             "source_row_ref": row.get("source_row_ref"),
             "population_comparison": population_comparison,
             "delivery_comparison": delivery_comparison,
-            "clinical_applicability": "not_established"})
+            "clinical_applicability": applicability,
+            "applicability_reason": reason})
     return result
+
+
+def _approved_context_applicability(context: Mapping, comparison: str) -> tuple[str, str]:
+    """Only a clinician-approved, exact-strain context at a tested daily dose
+    with a positive primary patient-important outcome establishes applicability.
+    Everything else is recorded with the reason it does not."""
+    if context["review_status"] != "clinician_approved":
+        return "not_established", "context_not_clinician_approved"
+    if context["identity_scope"] != "exact_strain":
+        return "not_established", "not_individual_strain_scope"
+    if comparison != "matches_tested_daily_dose":
+        return "not_established", comparison
+    if not any(o["hierarchy"] == "primary" and o["kind"] == "patient_important"
+               and o["direction"] == "positive" for o in context["outcomes"]):
+        return "not_established", "no_positive_primary_patient_important_outcome"
+    return "established", "approved_context_dose_and_outcome_match"
 
 
 def measured_native_strain_doses(product: Mapping) -> list[dict]:

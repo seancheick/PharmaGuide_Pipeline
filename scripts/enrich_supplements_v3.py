@@ -16155,6 +16155,23 @@ class SupplementEnricherV3:
                 postbiotic_metabolite_name = _ai.get("standardName") or _ai.get("name") or "postbiotic metabolite"
                 break
 
+        # One honest identity state per label strain (exact strain reviewed /
+        # unreviewed, designation without a registry identity, species only,
+        # genus only, unresolved text). Species names never borrow a strain.
+        from probiotic_measurements import label_strain_identity_resolution
+        _registry_by_id = {c.get("id"): c for c in clinical_strains if isinstance(c, dict) and c.get("id")}
+        _clinical_id_by_label = {}
+        for _row in found_clinical_strains:
+            for _label in (_row.get("label_name"), _row.get("strain")):
+                if isinstance(_label, str) and _label.strip():
+                    _clinical_id_by_label.setdefault(_label.strip().casefold(), _row.get("clinical_id"))
+        for _blend in probiotic_blends:
+            _blend["strain_identity_resolution"] = [
+                label_strain_identity_resolution(
+                    _strain, _clinical_id_by_label.get(str(_strain).strip().casefold()), _registry_by_id)
+                for _strain in (_blend.get("strains") or [])
+            ]
+
         return {
             "is_probiotic": True,  # Top-level flag for quick filtering
             "is_probiotic_product": True,

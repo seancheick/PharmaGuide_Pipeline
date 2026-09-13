@@ -448,9 +448,9 @@ def _label_product(strain: str) -> dict:
 
 @pytest.mark.parametrize("strain", [
     "Lactobacillus acidophilus",
-    "Lactobacillus acidophilus (CUL 60)",
+    "Lactobacillus paracasei (CUL 08)",  # designation with no registry identity (2026-09-13)
     "Bifidobacterium rhamnosus GG",
-    "L. reuteri 1E1",
+    "L. reuteri XYZ-999",
 ])
 def test_producer_cannot_export_a_badge_for_a_different_strain(
     clinical_enricher, strain: str,

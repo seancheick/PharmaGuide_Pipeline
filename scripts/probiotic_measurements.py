@@ -207,3 +207,60 @@ def clinical_strain_research_scope(entry: dict) -> dict:
     else:
         scope = "scope_unresolved"
     return {"evidence_scope": scope, "human_evidence": human_evidence}
+
+
+_PROBIOTIC_GENERA = frozenset({
+    "lactobacillus", "bifidobacterium", "streptococcus", "bacillus", "saccharomyces",
+    "lactococcus", "enterococcus", "pediococcus", "leuconostoc", "akkermansia",
+    "clostridium", "escherichia", "lacticaseibacillus", "lactiplantibacillus",
+    "limosilactobacillus", "ligilactobacillus", "lentilactobacillus", "levilactobacillus",
+    "bacteroides", "propionibacterium", "weissella", "kluyveromyces", "heyndrickxia",
+    "weizmannia", "faecalibacterium", "lacticaseibacillus", "latilactobacillus",
+})
+_TAXON_NOISE = frozenset({"subsp", "ssp", "spp", "sp", "var", "strain", "subspecies"})
+
+
+def _label_designation_tokens(label: str) -> tuple[list[str], list[str]]:
+    """Split a label strain into taxon words and strain-designation codes."""
+    words = re.findall(r"[A-Za-z0-9][A-Za-z0-9\-\.]*", str(label or ""))
+    taxon, codes = [], []
+    for word in words:
+        bare = word.rstrip(".")
+        if re.fullmatch(r"[A-Za-z]", bare):
+            taxon.append(bare.lower())  # genus abbreviation such as "L."
+            continue
+        if bare.lower() in _TAXON_NOISE:
+            continue
+        if re.search(r"\d", bare) or (bare.isupper() and len(bare) >= 2):
+            codes.append(bare)
+        else:
+            taxon.append(bare.lower())
+    return taxon, codes
+
+
+def label_strain_identity_resolution(label: str, clinical_id, registry: Mapping) -> dict:
+    """One honest identity state per label strain; never invents a strain.
+
+    States: exact_strain_reviewed, exact_strain_unreviewed (registry identity
+    without clinician sign-off), strain_designation_unregistered (a code is
+    printed but no registry identity exists yet), species_only, genus_only,
+    unresolved_label_text, rejected_by_clinician. A species-only label can
+    never own a strain identity, whatever the caller passes.
+    """
+    text = str(label or "").strip()
+    if clinical_id == "BLOCKED_OR_HOLD":
+        return {"strain": text, "resolution": "rejected_by_clinician", "clinical_id": clinical_id}
+    taxon, codes = _label_designation_tokens(text)
+    has_genus = bool(taxon) and (taxon[0] in _PROBIOTIC_GENERA or len(taxon[0]) == 1)
+    reference = registry.get(clinical_id) if isinstance(clinical_id, str) and isinstance(registry, Mapping) else None
+    if codes and isinstance(reference, Mapping):
+        signoff = (reference.get("cfu_thresholds") or {}).get("dr_pham_signoff") is True
+        state = "exact_strain_reviewed" if signoff else "exact_strain_unreviewed"
+        return {"strain": text, "resolution": state, "clinical_id": clinical_id}
+    if codes and has_genus:
+        return {"strain": text, "resolution": "strain_designation_unregistered", "clinical_id": None}
+    if has_genus and len(taxon) >= 2:
+        return {"strain": text, "resolution": "species_only", "clinical_id": None}
+    if has_genus and len(taxon) == 1 and len(taxon[0]) > 1:
+        return {"strain": text, "resolution": "genus_only", "clinical_id": None}
+    return {"strain": text, "resolution": "unresolved_label_text", "clinical_id": None}
