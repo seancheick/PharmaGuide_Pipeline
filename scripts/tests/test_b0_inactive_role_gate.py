@@ -158,8 +158,11 @@ def test_excipient_acceptable_active_DOES_fire_b0(enricher, ing_name, expected_r
         f"role-gate is broken. Active dangerous-substance signal must fire."
     )
     statuses = {s.get("status") for s in substances}
-    assert "high_risk" in statuses, (
-        f"{ing_name!r} as ACTIVE: expected status='high_risk', got {statuses}"
+    # Titanium dioxide moved to watchlist on 2026-09-13 (US-lawful excipient,
+    # EU-only withdrawal, split regulator consensus); talc and docusate stay
+    # high_risk. Either status still fires B0 and disqualifies SAFE as active.
+    assert statuses & {"high_risk", "watchlist"}, (
+        f"{ing_name!r} as ACTIVE: expected a high_risk or watchlist status, got {statuses}"
     )
 
 

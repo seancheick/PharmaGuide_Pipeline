@@ -71,16 +71,20 @@ def resolver():
 # Banned/high-risk inactives (the TiO2/Talc class)
 # ---------------------------------------------------------------------------
 
-def test_titanium_dioxide_resolves_to_critical_safety_concern(resolver) -> None:
+def test_titanium_dioxide_resolves_to_watchlist_safety_concern(resolver) -> None:
     """The TiO2 entry in banned_recalled_ingredients.json should now reach
     the inactive path. Pre-fix: severity_status='n/a', is_safety_concern=False
-    on 1,178 inactive entries — a clinical-grade safety gap."""
+    on 1,178 inactive entries — a clinical-grade safety gap.
+
+    Reclassified high_risk -> watchlist on 2026-09-13 (US-lawful excipient,
+    EU-only withdrawal, split regulator consensus): still a safety concern
+    that is never silent, now informational rather than critical."""
     r = resolver.resolve(raw_name="Titanium Dioxide")
     assert r.matched_source == "banned_recalled", (
         f"TiO2 must match banned_recalled, got matched_source={r.matched_source!r}"
     )
-    assert r.severity_status == "critical", (
-        f"TiO2 severity_status must be critical, got {r.severity_status!r}"
+    assert r.severity_status == "informational", (
+        f"TiO2 severity_status must be informational, got {r.severity_status!r}"
     )
     assert r.is_safety_concern is True
     assert r.safety_reason and len(r.safety_reason) > 0
@@ -88,7 +92,7 @@ def test_titanium_dioxide_resolves_to_critical_safety_concern(resolver) -> None:
     assert r.safety_flags
     assert r.safety_flags[0]["entry_id"] == r.matched_rule_id
     assert r.safety_flags[0]["source_db"] == "banned_recalled_ingredients"
-    assert r.safety_flags[0]["status"] == "high_risk"
+    assert r.safety_flags[0]["status"] == "watchlist"
 
 
 def test_titanium_dioxide_with_form_variants(resolver) -> None:
@@ -99,7 +103,7 @@ def test_titanium_dioxide_with_form_variants(resolver) -> None:
         assert r.matched_source == "banned_recalled", (
             f"variant {variant!r} did not match banned_recalled — got {r.matched_source!r}"
         )
-        assert r.severity_status == "critical"
+        assert r.severity_status == "informational"
 
 
 def test_talc_resolves_to_critical_high_risk(resolver) -> None:
@@ -178,7 +182,7 @@ def test_banned_recalled_resolution_exposes_policy_and_status(resolver) -> None:
 
     warning_only = resolver.resolve(raw_name="Titanium Dioxide")
     assert warning_only.matched_rule_id == "BANNED_ADD_TITANIUM_DIOXIDE"
-    assert warning_only.regulatory_status == "high_risk"
+    assert warning_only.regulatory_status == "watchlist"
     assert warning_only.inactive_policy == "excipient_acceptable"
     assert warning_only.is_banned is False
 
@@ -211,8 +215,14 @@ def test_banned_recalled_resolution_exposes_display_role_label(resolver) -> None
     banned/high-risk source branch."""
     r = resolver.resolve(raw_name="Titanium Dioxide")
     assert r.matched_source == "banned_recalled"
-    assert r.severity_status == "critical"
-    assert r.display_role_label == "High risk ingredients"
+    assert r.severity_status == "informational"
+    # The row says what the warning says: watchlist, not high risk.
+    assert r.display_role_label == "Watchlist ingredient"
+    # A high_risk entry keeps its source-bucket label; only watchlist is renamed.
+    talc = resolver.resolve(raw_name="Talc")
+    assert talc.regulatory_status == "high_risk"
+    assert talc.severity_status == "critical"
+    assert talc.display_role_label and talc.display_role_label != "Watchlist ingredient"
 
 
 def test_harmful_additive_resolution_falls_back_to_category_role_label(resolver) -> None:
@@ -438,9 +448,11 @@ def test_resolver_precedence_banned_beats_harmful_and_other(resolver) -> None:
     classification. (TiO2 is the live example — banned_recalled exists,
     a harmful_additives entry could conceivably exist, banned must win.)"""
     r = resolver.resolve(raw_name="Titanium Dioxide")
-    # Banned status must win over any other classification path.
+    # The banned_recalled source must win over any other classification
+    # path, whatever posture its entry currently carries.
     assert r.matched_source == "banned_recalled"
-    assert r.severity_status == "critical"
+    assert r.matched_rule_id == "BANNED_ADD_TITANIUM_DIOXIDE"
+    assert r.is_safety_concern is True
 
 
 # ---------------------------------------------------------------------------

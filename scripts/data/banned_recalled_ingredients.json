@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-08-24",
+    "last_updated": "2026-09-13",
     "total_entries": 169,
     "data_source_metadata": {
       "sources": [
@@ -462,6 +462,11 @@
         "version": "5.4.0",
         "date": "2026-05-12",
         "change": "Added inactive_policy field to all 29 high_risk + 10 watchlist entries. Values: excipient_acceptable (TiO2/Talc/Docusate), penalize_anyway (heavy metals, hormones, hepatotoxic botanicals, stimulants, controlled substances, watchlist contaminants), review_required (Cascara — borderline). Drives the score-side active/inactive role gate; warnings layer unaffected."
+      },
+      {
+        "version": "5.5.3",
+        "date": "2026-09-13",
+        "change": "BANNED_ADD_TITANIUM_DIOXIDE reclassified high_risk -> watchlist (clinical_risk moderate, legal_status restricted). US-lawful excipient with an EU-only withdrawal and a split regulator consensus does not meet the high_risk bar; warning copy moves from High-risk/critical to Watchlist/informational for ~1,336 shipped products. Verdicts and the clean-label penalty are unchanged."
       }
     ]
   },
@@ -16646,7 +16651,7 @@
         "nano-tio2"
       ],
       "reason": "In 2021, EFSA concluded that a concern for genotoxicity of titanium dioxide (E171) particles 'cannot be ruled out' and that E171 'can no longer be considered safe when used as a food additive,' so no ADI could be established (EFSA Journal 2021;19(5):e06585). On this basis, the European Commission adopted Commission Regulation (EU) 2022/63 banning E171 as a food additive; from August 7 2022 it may no longer be added to foods or food supplements in the EU. FDA still permits TiO2 at ≤1% of food weight (21 CFR 73.575) but initiated reassessment following the EFSA opinion. IARC Group 2B (possibly carcinogenic by inhalation). Nanoparticle form (<100nm) shows greater intestinal absorption and genotoxic concern.",
-      "status": "high_risk",
+      "status": "watchlist",
       "class_tags": [
         "high_risk_ingredients",
         "colorant_artificial",
@@ -16660,8 +16665,8 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "legal_status_enum": "high_risk",
-      "clinical_risk_enum": "high",
+      "legal_status_enum": "restricted",
+      "clinical_risk_enum": "moderate",
       "jurisdictions": [
         {
           "region": "EU",
@@ -16739,9 +16744,9 @@
       "match_mode": "active",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-08",
-        "next_review_due": "2026-09-01",
-        "reviewed_by": "audit_march_2026",
+        "last_reviewed_at": "2026-09-13",
+        "next_review_due": "2027-03-13",
+        "reviewed_by": "owner_review_2026_09_13",
         "change_log": [
           {
             "date": "2026-03-08",
@@ -16757,6 +16762,11 @@
             "date": "2026-06-23",
             "change": "Added exact DSLD label alias 'titanium dioxide mineral whitener' so the row is recognized as TiO2 safety context rather than an unmapped identity gap. No regulatory status or identifiers changed.",
             "by": "unmapped_triage_audit"
+          },
+          {
+            "date": "2026-09-13",
+            "change": "Status high_risk -> watchlist; clinical_risk_enum high -> moderate; legal_status_enum high_risk -> restricted (matches the entry's own US jurisdiction record: 21 CFR 73.575 permits <=1% by weight). Basis: EU withdrawal (Reg. 2022/63, foods incl. supplements) stands, but FDA reaffirmed safe use (Mar 2024) with the 2023 revocation petition (FDA-2023-C-1487) still pending, and JECFA (2023), Health Canada (2022), FSANZ (2022) and UK COT (2024) found no convincing genotoxicity concern. Consumer posture stays 'inform + light clean-label penalty'; the warning now reads Watchlist/informational instead of High-risk/critical. inactive_policy, aliases, identifiers and clean_label_policy_id unchanged. Re-check the FDA docket before each release.",
+            "by": "owner_review_2026_09_13"
           }
         ]
       },

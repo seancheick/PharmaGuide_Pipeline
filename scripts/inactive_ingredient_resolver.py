@@ -927,7 +927,14 @@ class InactiveIngredientResolver:
             _pretty_role(functional_roles[0]) if functional_roles else None
         )
         if not display_role_label:
-            display_role_label = _pretty_role(entry.get("source_category"))
+            # A watchlist entry usually sits in the "high_risk_ingredients"
+            # source bucket. The row label must not call it high risk when
+            # its status says watch: the warning title already reads
+            # "Watchlist ingredient", and the row says the same thing.
+            display_role_label = (
+                "Watchlist ingredient" if status == "watchlist"
+                else _pretty_role(entry.get("source_category"))
+            )
         if not display_role_label and status:
             display_role_label = _pretty_role(status)
         return InactiveResolution(
