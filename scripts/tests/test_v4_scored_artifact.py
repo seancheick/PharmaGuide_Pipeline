@@ -86,7 +86,7 @@ def _canned_v4(
         "quality_score_suppressed_reason": None,
         "quality_score_cap_v4": None,
         "quality_score_version": "4-test",
-        "quality_tier": "Strong" if score is not None else None,
+        "quality_tier": "Very good" if score is not None else None,
         "quality_pillars_v4": {
             "formulation": {"score": 16.0, "max": 20.0},
             "dose": {"score": 17.0, "max": 20.0},

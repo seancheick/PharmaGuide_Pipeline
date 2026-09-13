@@ -1,9 +1,9 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.1.1-probiotic-label-dose",
+    "version": "1.1.2-tier-ladder",
     "schema_version": "1.0.0",
-    "last_updated": "2026-09-04",
+    "last_updated": "2026-09-13",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Generic single-bioactive caps prevent clean narrow products from implying elite clinical-formula evidence. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
     "phase": "generic_public_caps"
   },
@@ -334,11 +334,11 @@
     "label_asserted_cert_points": 2.0
   },
   "tiers": [
-    { "min": 95.0, "name": "Elite" },
+    { "min": 95.0, "name": "Exceptional" },
     { "min": 90.0, "name": "Excellent" },
-    { "min": 80.0, "name": "Strong" },
-    { "min": 70.0, "name": "Acceptable" },
-    { "min": 55.0, "name": "Weak" },
+    { "min": 80.0, "name": "Very good" },
+    { "min": 70.0, "name": "Good" },
+    { "min": 55.0, "name": "Needs improvement" },
     { "min": 0.0,  "name": "Poor" }
   ],
   "suppression": {

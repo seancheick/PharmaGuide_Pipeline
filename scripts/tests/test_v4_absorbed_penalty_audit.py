@@ -56,5 +56,5 @@ def test_analyze_dimension_omits_penalty_when_positive_headroom_absorbs_nothing(
 
 
 def test_report_uses_the_production_quality_tier_thresholds() -> None:
-    assert _quality_tier(56.1) == "Weak"
-    assert _quality_tier(70.0) == "Acceptable"
+    assert _quality_tier(56.1) == "Needs improvement"
+    assert _quality_tier(70.0) == "Good"

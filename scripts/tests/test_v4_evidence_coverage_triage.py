@@ -30,7 +30,7 @@ def _catalog_product(dsld_id: str, *, evidence_score: float = 0.0) -> dict:
         "v4_module": "fiber_digestive",
         "quality_score_status": "scored",
         "quality_score_v4_100": 69,
-        "quality_tier": "Weak",
+        "quality_tier": "Needs improvement",
         "pillar_evidence_v4": evidence_score,
         "key_nutrients_summary": [
             {"name": "Psyllium Husk", "amount": 1400, "unit": "mg"}
@@ -312,8 +312,8 @@ def test_cli_writes_reproducible_release_scoped_report(tmp_path):
         json.dumps(
             {
                 "tiers": [
-                    {"min": 70, "name": "Acceptable"},
-                    {"min": 55, "name": "Weak"},
+                    {"min": 70, "name": "Good"},
+                    {"min": 55, "name": "Needs improvement"},
                     {"min": 0, "name": "Poor"},
                 ]
             }

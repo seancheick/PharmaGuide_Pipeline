@@ -29,7 +29,7 @@ def _scored_row(
         "_v4_quality_score_100": score,
         "quality_score_v4_100": score,
         "quality_score_status": "scored",
-        "quality_tier": "Acceptable",
+        "quality_tier": "Good",
         "verdict": verdict,
         "safety_verdict": verdict,
         "mapped_coverage": 1.0,

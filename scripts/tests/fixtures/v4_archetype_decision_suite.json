@@ -551,7 +551,7 @@
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
         "quality_score_v4_100": 86.4,
-        "quality_tier": "Strong",
+        "quality_tier": "Very good",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 30.0,
@@ -687,7 +687,7 @@
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
         "quality_score_v4_100": 88.4,
-        "quality_tier": "Strong",
+        "quality_tier": "Very good",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 28.0,
@@ -858,7 +858,7 @@
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
         "quality_score_v4_100": 84.0,
-        "quality_tier": "Strong",
+        "quality_tier": "Very good",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 22.0,
@@ -998,7 +998,7 @@
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
         "quality_score_v4_100": 96.3,
-        "quality_tier": "Elite",
+        "quality_tier": "Exceptional",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 23.0,
@@ -1321,7 +1321,7 @@
         "proprietary_blends": [],
         "proprietary_data": {"blends": [], "total_active_ingredients": 1}
       },
-      "expected": {"v4_module": "generic", "archetype": "generic_botanical_branded", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 58.3, "quality_tier": "Weak", "v4_confidence": "moderate", "normalization_references": {"formulation": 25.0, "dose": 22.0, "evidence": 19.0}, "pillars": {"formulation": 7.2, "dose": 10.9, "evidence": 14.7, "transparency": 13.5, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 9.0, "dose": 12.0, "evidence": 14.0, "transparency": 9.0}}
+      "expected": {"v4_module": "generic", "archetype": "generic_botanical_branded", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 58.3, "quality_tier": "Needs improvement", "v4_confidence": "moderate", "normalization_references": {"formulation": 25.0, "dose": 22.0, "evidence": 19.0}, "pillars": {"formulation": 7.2, "dose": 10.9, "evidence": 14.7, "transparency": 13.5, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 9.0, "dose": 12.0, "evidence": 14.0, "transparency": 9.0}}
     },
     {
       "id": "sports_single__ideal",
@@ -1344,7 +1344,7 @@
         "proprietary_blends": [],
         "proprietary_data": {"blends": [], "total_active_ingredients": 1}
       },
-      "expected": {"v4_module": "sports", "archetype": "sports_single", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 84.6, "quality_tier": "Strong", "v4_confidence": "high", "normalization_references": {"formulation": 25.0, "dose": 25.0, "evidence": 19.0}, "pillars": {"formulation": 11.2, "dose": 20.0, "evidence": 18.9, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 14.0, "dose": 25.0, "evidence": 18.0, "transparency": 9.0}}
+      "expected": {"v4_module": "sports", "archetype": "sports_single", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 84.6, "quality_tier": "Very good", "v4_confidence": "high", "normalization_references": {"formulation": 25.0, "dose": 25.0, "evidence": 19.0}, "pillars": {"formulation": 11.2, "dose": 20.0, "evidence": 18.9, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 14.0, "dose": 25.0, "evidence": 18.0, "transparency": 9.0}}
     },
     {
       "id": "sports_single__failure",
@@ -1398,7 +1398,7 @@
         "proprietary_blends": [],
         "proprietary_data": {"blends": [], "total_active_ingredients": 4}
       },
-      "expected": {"v4_module": "sports", "archetype": "sports_pre_workout", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 79.8, "quality_tier": "Acceptable", "v4_confidence": "high", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 9.7, "dose": 17.6, "evidence": 18.0, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 14.5, "dose": 22.0, "evidence": 18.0, "transparency": 9.0}}
+      "expected": {"v4_module": "sports", "archetype": "sports_pre_workout", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 79.8, "quality_tier": "Very good", "v4_confidence": "high", "normalization_references": {"formulation": 30.0, "dose": 25.0, "evidence": 20.0}, "pillars": {"formulation": 9.7, "dose": 17.6, "evidence": 18.0, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 14.5, "dose": 22.0, "evidence": 18.0, "transparency": 9.0}}
     },
     {
       "id": "sports_pre_workout__failure",
@@ -1508,7 +1508,7 @@
         "proprietary_blends": [],
         "proprietary_data": {"blends": [], "total_active_ingredients": 3}
       },
-      "expected": {"v4_module": "sports", "archetype": "sports_bcaa_eaa", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 77.9, "quality_tier": "Acceptable", "v4_confidence": "high", "normalization_references": {"formulation": 25.0, "dose": 25.0, "evidence": 19.0}, "pillars": {"formulation": 11.2, "dose": 16.0, "evidence": 16.2, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 14.0, "dose": 20.0, "evidence": 15.4, "transparency": 9.0}}
+      "expected": {"v4_module": "sports", "archetype": "sports_bcaa_eaa", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 77.9, "quality_tier": "Good", "v4_confidence": "high", "normalization_references": {"formulation": 25.0, "dose": 25.0, "evidence": 19.0}, "pillars": {"formulation": 11.2, "dose": 16.0, "evidence": 16.2, "transparency": 13.5, "verification": 11.0, "safety_hygiene": 10.0}, "raw_dimensions": {"formulation": 14.0, "dose": 20.0, "evidence": 15.4, "transparency": 9.0}}
     },
     {
       "id": "sports_bcaa_eaa__failure",

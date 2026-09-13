@@ -53,7 +53,7 @@ def _write_minimal_catalog_db(db_path, product_count=1):
         conn.executemany(
             "INSERT INTO products_core VALUES "
             "(?, ?, 'Example', 'no_known_catalog_concern', 'complete', "
-            "'scored', 81, 'Strong', 'high', 1, 1, 0, 1, 0, 0, 0, 0, "
+            "'scored', 81, 'Very good', 'high', 1, 1, 0, 1, 0, 0, 0, 0, "
             "11.2, 20.0, 18.9, 15.0, 6.0, 10.0)",
             [
                 (str(index), f"Product {index}")

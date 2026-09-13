@@ -26,7 +26,7 @@ def _catalog_row(
     archetype: str,
     index: int,
 ) -> dict:
-    tiers = ("Poor", "Weak", "Acceptable", "Strong", "Excellent", "Elite")
+    tiers = ("Poor", "Needs improvement", "Good", "Very good", "Excellent", "Exceptional")
     score = (52, 58, 72, 82, 92, 97)[index % len(tiers)]
     return {
         "dsld_id": dsld_id,
@@ -362,17 +362,17 @@ def test_core_includes_rare_high_confidence_when_available():
     rows = [
         {
             "dsld_id": "low",
-            "quality_tier": "Weak",
+            "quality_tier": "Needs improvement",
             "v4_confidence": "low",
         },
         {
             "dsld_id": "moderate",
-            "quality_tier": "Weak",
+            "quality_tier": "Needs improvement",
             "v4_confidence": "moderate",
         },
         {
             "dsld_id": "high",
-            "quality_tier": "Weak",
+            "quality_tier": "Needs improvement",
             "v4_confidence": "high",
         },
     ]

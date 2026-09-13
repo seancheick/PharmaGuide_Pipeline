@@ -84,7 +84,7 @@ def _catalog(path: Path) -> None:
             "partial",
             "scored",
             88,
-            "Strong",
+            "Very good",
             "moderate",
             0,
             0,

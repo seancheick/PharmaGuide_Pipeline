@@ -34,7 +34,7 @@ def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
             "quality_score_status": "scored",
             "product_safety_status": "no_known_catalog_concern",
             "quality_assessment_status": "complete",
-            "quality_tier": "Strong",
+            "quality_tier": "Very good",
             "verdict": "SAFE",
             "safety_verdict": "SAFE",
             "score_100_equivalent": 88.0,

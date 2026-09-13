@@ -531,8 +531,8 @@ def test_safe_is_scored() -> None:
 # ---- tiers -----------------------------------------------------------------
 
 @pytest.mark.parametrize("score,tier", [
-    (97.0, "Elite"), (92.0, "Excellent"), (85.0, "Strong"),
-    (74.0, "Acceptable"), (60.0, "Weak"), (40.0, "Poor"),
+    (97.0, "Exceptional"), (92.0, "Excellent"), (85.0, "Very good"),
+    (74.0, "Good"), (60.0, "Needs improvement"), (40.0, "Poor"),
 ])
 def test_tier_bands(score, tier) -> None:
     from scoring_v4.quality_score import _tier
@@ -542,7 +542,30 @@ def test_tier_bands(score, tier) -> None:
 def test_quality_tier_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_tier"] in {"Elite", "Excellent", "Strong", "Acceptable", "Weak", "Poor"}
+    assert out["quality_tier"] in {"Exceptional", "Excellent", "Very good", "Good", "Needs improvement", "Poor"}
+
+
+# The catalog ships a whole number and the app prints it beside the tier, so
+# the tier is decided from that whole number. 491 shipped products (Sept 2026)
+# read "70 Weak" / "80 Acceptable" / "55 Poor" because the band was chosen from
+# the one-decimal total while the number was rounded half up.
+@pytest.mark.parametrize("total,shipped,tier", [
+    (69.6, 70, "Good"), (69.4, 69, "Needs improvement"), (69.5, 70, "Good"),
+    (79.5, 80, "Very good"), (79.4, 79, "Good"),
+    (89.5, 90, "Excellent"), (94.5, 95, "Exceptional"), (54.5, 55, "Needs improvement"), (54.4, 54, "Poor"),
+])
+def test_tier_follows_the_shipped_whole_number(total, shipped, tier) -> None:
+    from scoring_v4.quality_score import _tier, shipped_whole_score
+    assert shipped_whole_score(total) == shipped
+    assert _tier(shipped_whole_score(total)) == tier
+
+
+def test_assembled_tier_matches_shipped_score() -> None:
+    """End to end: whatever total the module produces, the emitted tier is the
+    band of the whole number the catalog will ship for it."""
+    from scoring_v4 import quality_score as qs
+    out = qs.assemble_quality_score(_shadow())
+    assert out["quality_tier"] == qs._tier(qs.shipped_whole_score(out["quality_score_v4_100"]))
 
 
 # ---- reason integrity ------------------------------------------------------
@@ -557,7 +580,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.1.1-probiotic-label-dose"
+    assert out["quality_score_version"] == "1.1.2-tier-ladder"
 
 
 def test_public_quality_cap_limits_score_without_changing_raw() -> None:

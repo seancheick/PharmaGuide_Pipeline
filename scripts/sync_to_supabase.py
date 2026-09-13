@@ -43,7 +43,26 @@ SHARE_INDEX_DIRNAME = "share_index"
 SHARE_INDEX_SCHEMA_VERSION = 2
 SHARE_INDEX_SHARD_PREFIX_LENGTH = 2
 SHARE_INDEX_SHARDS = tuple(f"{value:02x}" for value in range(256))
-SHARE_TIER_IDS = {"elite", "excellent", "strong", "acceptable", "weak", "poor"}
+
+
+def _share_tier_id(name: str) -> str:
+    """The stable id a tier travels under in the share index: the configured
+    tier name, lower-cased, spaces as underscores ("Very good" -> "very_good")."""
+    return "_".join(str(name or "").strip().lower().split())
+
+
+def _load_share_tier_ids() -> frozenset:
+    """Tier ids the share index may carry, read from the scorer's own tier
+    table so this exporter never keeps a second list of tier names."""
+    config_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "scoring_v4", "config", "quality_score.json"
+    )
+    with open(config_path, "r", encoding="utf-8") as handle:
+        bands = json.load(handle)["tiers"]
+    return frozenset(_share_tier_id(band["name"]) for band in bands)
+
+
+SHARE_TIER_IDS = _load_share_tier_ids()
 SHARE_HIGHLIGHT_COLUMNS = (
     ("has_third_party_testing", "Third-Party Tested"),
     ("is_trusted_manufacturer", "Trusted Manufacturer"),
@@ -122,7 +141,7 @@ def write_share_index(*, db_path, output_dir, catalog_version):
             quality_score = int(round(float(row["quality_score_v4_100"])))
             if quality_score < 0 or quality_score > 100:
                 raise ValueError(f"Invalid share score for {dsld_id!r}: {quality_score}")
-            quality_tier = str(row["quality_tier"] or "").strip().lower()
+            quality_tier = _share_tier_id(row["quality_tier"])
             if quality_tier not in SHARE_TIER_IDS:
                 raise ValueError(
                     f"Invalid share quality_tier for {dsld_id!r}: {quality_tier!r}"

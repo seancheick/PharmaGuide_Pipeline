@@ -104,6 +104,7 @@ from scoring_v4.modules.fiber_digestive_helpers import (
     total_fiber_grams as _total_fiber_goal_grams,
 )
 from scoring_v4.modules.generic_formulation import _dietary_sugar_penalty_detail
+from scoring_v4.quality_score import shipped_whole_score
 from scoring_v4.scored_artifact import SCORING_ENGINE_VERSION
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -10237,8 +10238,9 @@ def build_core_row(
         and not safe_str(effective_scored.get("_v4_quality_status"))
     ):
         score_100_raw = safe_float(effective_scored.get("score_100_equivalent"))
+    # One rounding rule, shared with the scorer's tier choice.
     score_100 = (
-        int(_math.floor(score_100_raw + 0.5))
+        shipped_whole_score(score_100_raw)
         if score_100_raw is not None
         else None
     )

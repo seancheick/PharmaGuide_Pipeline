@@ -635,7 +635,7 @@ def test_share_metadata_evidence_copy_uses_grammatical_v4_signal():
         "compliance_data": {},
     }
     base_scored = {
-        "grade": "Strong",
+        "grade": "Very good",
         "score_100_equivalent": 82,
         "verdict": "SAFE",
     }
@@ -3755,7 +3755,7 @@ class TestDetailBlobNutritionAndUnmapped:
 # ─────────────────────────────────────────────────────────────────────────────
 
 
-def _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong",
+def _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Very good",
                safety_verdict=None, blocking_reason=None, suppressed_reason=None):
     ratio = float(quality_100 or 0.0) / 100.0
     pillars = {
@@ -3970,7 +3970,7 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
     e3 = make_enriched(); e3["dsld_id"] = "777"; e3["product_name"] = "NotScored P"
     # Distinct UPCs so the three are not collapsed by UPC dedup.
     e1["upcSku"] = "111111111111"; e2["upcSku"] = "222222222222"; e3["upcSku"] = "333333333333"
-    scored_live = _canned_v4(status="scored", quality_100=88.5, verdict="SAFE", tier="Strong")
+    scored_live = _canned_v4(status="scored", quality_100=88.5, verdict="SAFE", tier="Very good")
     scored_live["quality_score_cap_v4"] = {
         "id": "generic_astaxanthin_single",
         "cap": 88.5,
@@ -4024,7 +4024,7 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         assert scored["quality_score_status"] == "scored"
         assert scored["product_safety_status"] == "no_known_catalog_concern"
         assert scored["quality_assessment_status"] == "complete"
-        assert scored["quality_tier"] == "Strong"
+        assert scored["quality_tier"] == "Very good"
         assert scored["score_model_version"] == "v4"
         assert scored["score_100_equivalent"] == 89  # whole-number /100 mirror
         assert scored["scoring_engine_version"] == "4.0.0"
@@ -4130,7 +4130,7 @@ def test_shared_upc_retains_scored_and_blocked_formula_candidates(monkeypatch):
     e_scored["upcSku"] = upc; e_scored["status"] = "active"
     e_blocked["upcSku"] = upc; e_blocked["status"] = "active"
     s1 = _artifact_from_canned(
-        "999", _canned_v4(status="scored", quality_100=70.0, verdict="SAFE", tier="Acceptable")
+        "999", _canned_v4(status="scored", quality_100=70.0, verdict="SAFE", tier="Good")
     )
     s2 = _artifact_from_canned(
         "888", _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
@@ -4147,7 +4147,7 @@ def test_shared_upc_retains_scored_and_blocked_formula_candidates(monkeypatch):
 def test_build_always_stamps_v4_score_model(monkeypatch):
     e = make_enriched()
     s = _artifact_from_canned(
-        "999", _canned_v4(status="scored", quality_100=75.0, verdict="SAFE", tier="Strong")
+        "999", _canned_v4(status="scored", quality_100=75.0, verdict="SAFE", tier="Very good")
     )
     with tempfile.TemporaryDirectory() as tmp:
         result, out = _run_build(tmp, [e], [s])
@@ -4196,7 +4196,7 @@ def test_v4_banned_substance_rejects_inconsistent_scored_artifact(monkeypatch):
     # v4 *scoring* gate did NOT block it — it returns a finite scored result
     # (the real divergence: v4's gate is narrower than the export banned signal).
     s = _artifact_from_canned(
-        "999", _canned_v4(status="scored", quality_100=70.5, verdict="SAFE", tier="Acceptable")
+        "999", _canned_v4(status="scored", quality_100=70.5, verdict="SAFE", tier="Good")
     )
     with tempfile.TemporaryDirectory() as tmp:
         result, out = _run_build(tmp, [e], [s])

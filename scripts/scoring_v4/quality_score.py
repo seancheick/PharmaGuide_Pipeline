@@ -17,6 +17,8 @@ INVARIANTS:
 """
 from __future__ import annotations
 
+import math
+
 import copy
 import json
 from pathlib import Path
@@ -281,6 +283,17 @@ def _reason_generic(name: str, band: str) -> str:
         "mid": f"Moderate {label}.",
         "low": f"Limited {label}.",
     }[band]
+
+
+def shipped_whole_score(score: float) -> int:
+    """The whole number the catalog ships and the app shows, from the scorer's
+    one-decimal total. Round half up, exactly as build_final_db stores it.
+
+    The tier must be a function of THIS number, not of the decimal total:
+    a 69.6 ships as 70, and a 70 that reads "Weak" beside an "Acceptable"
+    band starting at 70 is a contradiction the user sees on the hero card.
+    """
+    return int(math.floor(float(score) + 0.5))
 
 
 def _tier(score: float) -> str:
@@ -920,7 +933,9 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     # Scored (SAFE / CAUTION — CAUTION keeps the score, verdict stays prominent elsewhere)
     result["quality_score_v4_100"] = total
     result["quality_pillars_v4"] = pillars
-    result["quality_tier"] = _tier(total)
+    # Tier from the shipped whole number, so the band name can never disagree
+    # with the score printed beside it.
+    result["quality_tier"] = _tier(shipped_whole_score(total))
     result["quality_score_status"] = "scored"
     result["quality_score_suppressed_reason"] = None
     return result
