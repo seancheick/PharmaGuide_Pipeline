@@ -919,7 +919,10 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                         or (
                             dose_readiness.get("readiness")
                             not in {"complete", "not_applicable"}
-                            and not is_confirmed_ban_or_recall(product)
+                            and not (
+                                dose_readiness.get("readiness") == "incomplete"
+                                and is_confirmed_ban_or_recall(product)
+                            )
                         )
                         or dose_readiness.get("migration_inference") is True
                     ):

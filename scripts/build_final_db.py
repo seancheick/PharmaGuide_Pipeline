@@ -1950,7 +1950,10 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
                 (
                     dose_readiness.get("readiness")
                     not in {"complete", "not_applicable"}
-                    and not is_confirmed_ban_or_recall(scored)
+                    and not (
+                        dose_readiness.get("readiness") == "incomplete"
+                        and is_confirmed_ban_or_recall(scored)
+                    )
                 )
                 or dose_readiness.get("migration_inference") is True
             ):

@@ -5,6 +5,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
@@ -315,6 +317,23 @@ def test_a_confirmed_ban_still_cannot_rely_on_legacy_dose_inference(
     product["assessment_readiness"]["dose"]["migration_inference"] = True
     _write(path, product)
 
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" in codes
+
+
+@pytest.mark.parametrize("readiness", [None, "", "unknown", "corrupt"])
+def test_scoring_audit_requires_typed_incomplete_dose_for_ban_exception(
+    tmp_path: Path, readiness: str | None,
+) -> None:
+    path = tmp_path / "scored.json"
+    product = _scored(
+        verdict="BLOCKED",
+        quality_score_status="suppressed_safety",
+        scoring_status="suppressed_safety",
+        safety_decision=_confirmed_ban(),
+    )
+    product["assessment_readiness"]["dose"]["readiness"] = readiness
+    _write(path, product)
     codes = {finding.code for finding in audit_scoring(_args(path))}
     assert "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" in codes
 

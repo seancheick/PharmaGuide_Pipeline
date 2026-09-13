@@ -114,19 +114,19 @@ SUPPRESSED_SAFETY_DOSE_QUARANTINE = (
 def is_confirmed_ban_or_recall(product: Dict[str, Any]) -> bool:
     """Whether the safety gate recorded a confirmed, policy-verified ban or recall.
 
-    Both verdicts come from the ingredient alone, never its amount, so the dose
-    quarantine above never applies: holding the product back only hides the
-    warning from the person scanning it. Likely matches and unverified policies
-    still wait for their dose. Reads the ``safety_decision`` that names the
-    blocking reason, so the warning that ships is the one the app explains.
+    The upstream safety gate owns jurisdiction, role and policy eligibility.
+    This reads its recorded decision; it does not infer a new ban from an
+    ingredient name. Callers may exempt a typed incomplete dose assessment,
+    but must still reject malformed readiness and legacy inference. Likely
+    matches and unverified policies are not eligible for the exemption.
     """
     decision = product.get("safety_decision")
     policy = decision.get("policy_basis") if isinstance(decision, dict) else None
     return (
         isinstance(policy, dict)
         and (policy.get("status"), decision.get("verdict"), decision.get("reason_code"))
-        in {("banned", "BLOCKED", "banned_ingredient"),
-            ("recalled", "UNSAFE", "recalled_ingredient")}
+        in (("banned", "BLOCKED", "banned_ingredient"),
+            ("recalled", "UNSAFE", "recalled_ingredient"))
         and str(product.get("verdict") or "").upper() == decision.get("verdict")
         and decision.get("match_resolution") == "confirmed"
         and policy.get("policy_verification_status") == "verified"

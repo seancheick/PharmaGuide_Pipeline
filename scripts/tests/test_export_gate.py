@@ -1533,6 +1533,22 @@ def test_a_confirmed_ban_is_still_held_on_legacy_dose_inference():
     assert _dose_hold_issues(readiness="complete", migration_inference=True)
 
 
+@pytest.mark.parametrize("readiness", [None, "", "unknown", "corrupt"])
+def test_confirmed_ban_does_not_excuse_missing_or_invalid_dose_status(readiness):
+    assert _dose_hold_issues(readiness=readiness)
+
+
+@pytest.mark.parametrize("field", ["status", "verdict", "reason_code"])
+@pytest.mark.parametrize("value", [[], {}])
+def test_malformed_ban_fields_are_held_without_crashing(field, value):
+    decision = {**_CONFIRMED_BAN, "policy_basis": dict(_CONFIRMED_BAN["policy_basis"])}
+    if field == "status":
+        decision["policy_basis"][field] = value
+    else:
+        decision[field] = value
+    assert _dose_hold_issues(decision=decision)
+
+
 def _safety_only_label_product():
     enriched, scored = _safety_only_product(_safety_only_row(path="ingredientRows[0]"))
     source = {
