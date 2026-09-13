@@ -1,6 +1,6 @@
 # Probiotic clinical curation queue — 2026-09-13 (v2)
 
-Scored probiotics: 548. Registry identities: 104 (55 identity-only stubs added 2026-09-13).
+Scored probiotics: 548. Registry identities: 105 (56 identity-only stubs added 2026-09-13).
 
 Priority = affected_scored_products x (0.25 + share of those at Evidence <= 8) x uncertainty (2.0 no contexts, 1.5 pending/held, 1.0 approved).
 
@@ -10,16 +10,16 @@ Three independent columns for every item: evidence strength, applicability to th
 
 | rank | identity | products | brands | Ev<=8 | mean Ev | ctx | approved | pending | priority | representative |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| 1 | STRAIN_LGG | 112 | 25 | 112 | 8.0 | 2 | 0 | 2 | 210.0 | Solgar — Advanced Multi-Billion Dophilus |
-| 2 | STRAIN_LACTIS_BL04 | 84 | 16 | 84 | 5.58 | 2 | 0 | 2 | 157.5 | Nature's Bounty — Probiotic 10 |
-| 3 | STRAIN_LONGUM_BB536 | 41 | 8 | 41 | 6.05 | 0 | 0 | 0 | 102.5 | Nature's Way — Max Potency Probiotic Pearls 5 Billion |
-| 4 | STRAIN_ACIDOPHILUS_NCFM | 52 | 11 | 52 | 4.84 | 2 | 0 | 2 | 97.5 | Garden of Life Dr. Formulated — Probiotics Immune 50 Billion |
-| 5 | STRAIN_PARACASEI_LPC37 | 51 | 14 | 51 | 6.64 | 2 | 0 | 2 | 95.6 | Nature's Bounty — Probiotic 10 |
-| 6 | STRAIN_RHAMNOSUS_HN001 | 32 | 11 | 32 | 8.0 | 0 | 0 | 0 | 80.0 | Garden of Life Dr. Formulated Probiotics — Once Daily Prenatal |
-| 7 | STRAIN_SUBTILIS_DE111 | 31 | 12 | 31 | 6.23 | 0 | 0 | 0 | 77.5 | OLLY — Extra Strength Probiotic Juicy Apple |
-| 8 | STRAIN_LACTIS_BI07 | 34 | 6 | 34 | 5.13 | 2 | 0 | 2 | 63.8 | Nature's Way — Fortify Adults 50+ Probiotic Extra Str |
-| 9 | STRAIN_LACTIS_HN019 | 31 | 13 | 31 | 6.5 | 2 | 0 | 2 | 58.1 | Thorne — FloraSport 20B |
-| 10 | STRAIN_SACCHAROMYCES | 16 | 5 | 16 | 8.0 | 3 | 0 | 3 | 30.0 | Pure Encapsulations — Saccharomyces Boulardii |
+| 1 | STRAIN_LGG | 112 | 25 | 112 | 8.0 | 9 | 0 | 9 | 210.0 | Solgar — Advanced Multi-Billion Dophilus |
+| 2 | STRAIN_LACTIS_BL04 | 84 | 16 | 84 | 5.58 | 5 | 0 | 5 | 157.5 | Nature's Bounty — Probiotic 10 |
+| 3 | STRAIN_ACIDOPHILUS_NCFM | 52 | 11 | 52 | 4.84 | 10 | 0 | 10 | 97.5 | Garden of Life Dr. Formulated — Probiotics Immune 50 Billion |
+| 4 | STRAIN_PARACASEI_LPC37 | 51 | 14 | 51 | 6.64 | 2 | 0 | 2 | 95.6 | Nature's Bounty — Probiotic 10 |
+| 5 | STRAIN_LONGUM_BB536 | 41 | 8 | 41 | 6.05 | 5 | 0 | 5 | 76.9 | Nature's Way — Max Potency Probiotic Pearls 5 Billion |
+| 6 | STRAIN_LACTIS_BI07 | 34 | 6 | 34 | 5.13 | 2 | 0 | 2 | 63.8 | Nature's Way — Fortify Adults 50+ Probiotic Extra Str |
+| 7 | STRAIN_RHAMNOSUS_HN001 | 32 | 11 | 32 | 8.0 | 6 | 0 | 6 | 60.0 | Garden of Life Dr. Formulated Probiotics — Once Daily Prenatal |
+| 8 | STRAIN_LACTIS_HN019 | 31 | 13 | 31 | 6.5 | 7 | 0 | 7 | 58.1 | Thorne — FloraSport 20B |
+| 9 | STRAIN_SUBTILIS_DE111 | 31 | 12 | 31 | 6.23 | 7 | 0 | 7 | 58.1 | OLLY — Extra Strength Probiotic Juicy Apple |
+| 10 | STRAIN_SACCHAROMYCES | 16 | 5 | 16 | 8.0 | 12 | 0 | 12 | 30.0 | Pure Encapsulations — Saccharomyces Boulardii |
 
 ## Wave 2 (13 identities)
 
@@ -39,7 +39,7 @@ Three independent columns for every item: evidence strength, applicability to th
 | 22 | STRAIN_FERMENTUM_RC14 | 4 | 1 | 4 | 8.0 | 0 | 0 | 0 | 10.0 | Jarrow Formulas — Fem Dophilus |
 | 23 | STRAIN_LONGUM_R0175 | 4 | 1 | 4 | 2.0 | 0 | 0 | 0 | 10.0 | Garden of Life Dr. Formulated Probiotics — Mood Daily Care 40 Billion CFU Guarant |
 
-## Wave 3 (81 identities)
+## Wave 3 (82 identities)
 
 | rank | identity | products | brands | Ev<=8 | mean Ev | ctx | approved | pending | priority | representative |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
@@ -109,9 +109,9 @@ Three independent columns for every item: evidence strength, applicability to th
 | state | strings | product slots |
 |---|---:|---:|
 | species_only | 62 | 1242 |
-| exact_strain_unreviewed | 178 | 1091 |
+| exact_strain_unreviewed | 179 | 1092 |
 | exact_strain_reviewed | 96 | 564 |
-| strain_designation_unregistered | 147 | 222 |
+| strain_designation_unregistered | 146 | 221 |
 | unresolved_label_text | 17 | 46 |
 | genus_only | 2 | 9 |
 

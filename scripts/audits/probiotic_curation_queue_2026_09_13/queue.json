@@ -2,7 +2,7 @@
  "_metadata": {
   "built": "2026-09-13",
   "scored_probiotics": 548,
-  "registry_identities": 104,
+  "registry_identities": 105,
   "priority_formula": "affected_scored_products x (0.25 + share of those at Evidence <= 8) x uncertainty (2.0 no contexts, 1.5 pending/held, 1.0 approved)",
   "waves": {
    "1": [
@@ -83,22 +83,44 @@
     }
    ],
    "registry": {
-    "context_count": 2,
+    "context_count": 9,
     "review_states": {
-     "source_verified_pending_clinical_review": 2
+     "source_verified_pending_clinical_review": 9
     },
     "source_pmids": [
      "17229242",
-     "26756877"
+     "25473176",
+     "26756877",
+     "34546300",
+     "38103462",
+     "39060543",
+     "40702885",
+     "40891819",
+     "41883407",
+     "42477222"
     ],
     "approved_contexts": [],
     "pending_or_held_contexts": [
      "lgg_pediatric_aad_guideline_26756877",
-     "lgg_pediatric_pain_17229242"
+     "lgg_pediatric_pain_17229242",
+     "lgg_gi_respiratory_outcomes_meta_40702885",
+     "lgg_preterm_nec_strain_specific_meta_39060543",
+     "lgg_icu_ventilator_pneumonia_prospect_34546300",
+     "lgg_covid19_post_exposure_prophylaxis_38103462",
+     "lgg_adult_ibs_open_label_vs_diet_25473176",
+     "lgg_pediatric_functional_abdominal_pain_meta_41883407",
+     "lgg_seasonal_allergic_rhinitis_chewable_40891819"
     ],
     "conditions": [
      "antibiotic_associated_diarrhea",
-     "functional_abdominal_pain"
+     "covid19_post_exposure",
+     "functional_abdominal_pain",
+     "functional_abdominal_pain_disorders",
+     "gastrointestinal_and_respiratory_infections",
+     "irritable_bowel_syndrome",
+     "necrotizing_enterocolitis",
+     "seasonal_allergic_rhinitis",
+     "ventilator_associated_pneumonia"
     ],
     "legacy_signoff": true,
     "legacy_primary_pmid": "26756877",
@@ -166,22 +188,30 @@
     }
    ],
    "registry": {
-    "context_count": 2,
+    "context_count": 5,
     "review_states": {
-     "source_verified_pending_clinical_review": 2
+     "source_verified_pending_clinical_review": 5
     },
     "source_pmids": [
      "24268677",
-     "28343401"
+     "28343401",
+     "33161737",
+     "34062085",
+     "34927036"
     ],
     "approved_contexts": [],
     "pending_or_held_contexts": [
      "bl04_active_adult_respiratory_24268677",
-     "bl04_rhinovirus_challenge_28343401"
+     "bl04_rhinovirus_challenge_28343401",
+     "bl04_rhinovirus_challenge_phase2_34927036",
+     "bl04_fermented_milk_urti_haze_adults_34062085",
+     "bl04_cardiovascular_risk_markers_healthy_33161737"
     ],
     "conditions": [
+     "cardiovascular_risk_markers",
      "experimental_rhinovirus_infection",
-     "upper_respiratory_illness"
+     "upper_respiratory_illness",
+     "upper_respiratory_tract_infection"
     ],
     "legacy_signoff": true,
     "legacy_primary_pmid": "38665561",
@@ -202,72 +232,6 @@
     "reviewer_adjudication_status": "not_reviewed"
    },
    "rank": 2
-  },
-  {
-   "identity": "STRAIN_LONGUM_BB536",
-   "standard_name": "Bifidobacterium longum BB536",
-   "aliases": [
-    "B. longum BB536",
-    "BB536"
-   ],
-   "identity_only_stub": false,
-   "affected_scored_products": 41,
-   "affected_brands": 8,
-   "evidence_at_or_below_plateau": 41,
-   "evidence_impact_share": 1.0,
-   "mean_evidence_score": 6.05,
-   "uncertainty_factor": 2.0,
-   "priority_score": 102.5,
-   "wave": 1,
-   "representative_products": [
-    {
-     "dsld_id": "334440",
-     "brand": "Nature's Way",
-     "name": "Max Potency Probiotic Pearls 5 Billion",
-     "score": 57.5,
-     "evidence": 6.0
-    },
-    {
-     "dsld_id": "267898",
-     "brand": "Nature's Way",
-     "name": "Probiotic Pearls Max Potency",
-     "score": 56.5,
-     "evidence": 6.0
-    },
-    {
-     "dsld_id": "184397",
-     "brand": "Nature's Way",
-     "name": "Probiotic Pearls Adult 50+",
-     "score": 56.1,
-     "evidence": 6.0
-    }
-   ],
-   "registry": {
-    "context_count": 0,
-    "review_states": {},
-    "source_pmids": [],
-    "approved_contexts": [],
-    "pending_or_held_contexts": [],
-    "conditions": [],
-    "legacy_signoff": true,
-    "legacy_primary_pmid": "23192454",
-    "identity_verification": null
-   },
-   "review": {
-    "human_vs_nonhuman_source": "not_reviewed",
-    "studied_doses": "not_reviewed",
-    "population": "not_reviewed",
-    "indication_outcome": "not_reviewed",
-    "duration": "not_reviewed",
-    "result_direction": "not_reviewed",
-    "systematic_review_or_guideline_support": "not_reviewed",
-    "dose_applicability_status": "not_reviewed",
-    "source_quality": "not_reviewed",
-    "evidence_strength": "not_reviewed",
-    "review_completeness": "not_reviewed",
-    "reviewer_adjudication_status": "not_reviewed"
-   },
-   "rank": 3
   },
   {
    "identity": "STRAIN_ACIDOPHILUS_NCFM",
@@ -312,22 +276,47 @@
     }
    ],
    "registry": {
-    "context_count": 2,
+    "context_count": 10,
     "review_states": {
-     "source_verified_pending_clinical_review": 2
+     "source_verified_pending_clinical_review": 10
     },
     "source_pmids": [
      "19651563",
-     "28082816"
+     "28082816",
+     "31131616",
+     "33443719",
+     "33763399",
+     "35766604",
+     "35987956",
+     "36235651",
+     "39842252",
+     "41379184",
+     "41998618"
     ],
     "approved_contexts": [],
     "pending_or_held_contexts": [
      "ncfm_adult_ibs_28082816",
-     "ncfm_child_cold_flu_symptoms_19651563"
+     "ncfm_child_cold_flu_symptoms_19651563",
+     "ncfm_infant_colic_41998618",
+     "ncfm_lpc37_bl04_bi07_mdr_colonization_antibiotics_33763399",
+     "ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616",
+     "bi07_lpc37_ncfm_bl04_omega3_elderly_inflammation_36235651",
+     "ncfm_lpc37_bl04_bi07_bb02_chemotherapy_diarrhea_41379184",
+     "ncfm_bi07_post_rygb_food_addiction_35766604",
+     "ncfm_bi07_post_rygb_nutritional_metabolic_33443719",
+     "ncfm_hn001_lpc37_hn019_caloric_restriction_obese_men_39842252"
     ],
     "conditions": [
+     "chemotherapy_induced_diarrhea",
+     "chronic_low_grade_inflammation",
      "cold_and_flu_like_symptoms",
-     "irritable_bowel_syndrome"
+     "functional_constipation_with_bloating",
+     "infantile_colic",
+     "irritable_bowel_syndrome",
+     "multidrug_resistant_gut_colonization_during_antibiotics",
+     "obesity_body_composition_under_caloric_restriction",
+     "post_bariatric_binge_eating_and_food_addiction",
+     "post_bariatric_nutritional_and_metabolic_markers"
     ],
     "legacy_signoff": true,
     "legacy_primary_pmid": "24717228",
@@ -347,7 +336,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 4
+   "rank": 3
   },
   {
    "identity": "STRAIN_PARACASEI_LPC37",
@@ -427,133 +416,76 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 5
+   "rank": 4
   },
   {
-   "identity": "STRAIN_RHAMNOSUS_HN001",
-   "standard_name": "Lactobacillus rhamnosus HN001",
+   "identity": "STRAIN_LONGUM_BB536",
+   "standard_name": "Bifidobacterium longum BB536",
    "aliases": [
-    "L. rhamnosus HN001",
-    "HN001",
-    "DR20",
-    "HOWARU Rhamnosus",
-    "Lacticaseibacillus rhamnosus HN001",
-    "HOWARU L. rhamnosus HN001",
-    "HOWARU Lactobacillus rhamnosus HN001"
+    "B. longum BB536",
+    "BB536"
    ],
    "identity_only_stub": false,
-   "affected_scored_products": 32,
-   "affected_brands": 11,
-   "evidence_at_or_below_plateau": 32,
+   "affected_scored_products": 41,
+   "affected_brands": 8,
+   "evidence_at_or_below_plateau": 41,
    "evidence_impact_share": 1.0,
-   "mean_evidence_score": 8.0,
-   "uncertainty_factor": 2.0,
-   "priority_score": 80.0,
+   "mean_evidence_score": 6.05,
+   "uncertainty_factor": 1.5,
+   "priority_score": 76.9,
    "wave": 1,
    "representative_products": [
     {
-     "dsld_id": "243976",
-     "brand": "Garden of Life Dr. Formulated Probiotics",
-     "name": "Once Daily Prenatal",
-     "score": 64.5,
-     "evidence": 8.0
-    },
-    {
-     "dsld_id": "274081",
-     "brand": "Garden of Life Dr. Formulated Probiotics",
-     "name": "Once Daily Prenatal",
-     "score": 64.5,
-     "evidence": 8.0
-    },
-    {
-     "dsld_id": "326765",
-     "brand": "Garden of Life Dr. Formulated",
-     "name": "Probiotics Immune 50 Billion",
-     "score": 64.2,
-     "evidence": 8.0
-    }
-   ],
-   "registry": {
-    "context_count": 0,
-    "review_states": {},
-    "source_pmids": [],
-    "approved_contexts": [],
-    "pending_or_held_contexts": [],
-    "conditions": [],
-    "legacy_signoff": true,
-    "legacy_primary_pmid": "28943228",
-    "identity_verification": null
-   },
-   "review": {
-    "human_vs_nonhuman_source": "not_reviewed",
-    "studied_doses": "not_reviewed",
-    "population": "not_reviewed",
-    "indication_outcome": "not_reviewed",
-    "duration": "not_reviewed",
-    "result_direction": "not_reviewed",
-    "systematic_review_or_guideline_support": "not_reviewed",
-    "dose_applicability_status": "not_reviewed",
-    "source_quality": "not_reviewed",
-    "evidence_strength": "not_reviewed",
-    "review_completeness": "not_reviewed",
-    "reviewer_adjudication_status": "not_reviewed"
-   },
-   "rank": 6
-  },
-  {
-   "identity": "STRAIN_SUBTILIS_DE111",
-   "standard_name": "Bacillus subtilis DE111",
-   "aliases": [
-    "B. subtilis DE111",
-    "DE111",
-    "Bacillus subtilis DE-111",
-    "DE111 Bacillus subtillis",
-    "DE111 Bacillus subtilis",
-    "Bacillus subtillis DE111",
-    "Bacillus subtilis DE111",
-    "B. subtilis DE-111"
-   ],
-   "identity_only_stub": false,
-   "affected_scored_products": 31,
-   "affected_brands": 12,
-   "evidence_at_or_below_plateau": 31,
-   "evidence_impact_share": 1.0,
-   "mean_evidence_score": 6.23,
-   "uncertainty_factor": 2.0,
-   "priority_score": 77.5,
-   "wave": 1,
-   "representative_products": [
-    {
-     "dsld_id": "230149",
-     "brand": "OLLY",
-     "name": "Extra Strength Probiotic Juicy Apple",
-     "score": 68.3,
+     "dsld_id": "334440",
+     "brand": "Nature's Way",
+     "name": "Max Potency Probiotic Pearls 5 Billion",
+     "score": 57.5,
      "evidence": 6.0
     },
     {
-     "dsld_id": "298031",
-     "brand": "Thorne",
-     "name": "FloraSport 20B",
-     "score": 67.2,
-     "evidence": 2.0
+     "dsld_id": "267898",
+     "brand": "Nature's Way",
+     "name": "Probiotic Pearls Max Potency",
+     "score": 56.5,
+     "evidence": 6.0
     },
     {
-     "dsld_id": "306247",
-     "brand": "Thorne",
-     "name": "FloraSport 20B",
-     "score": 67.2,
-     "evidence": 2.0
+     "dsld_id": "184397",
+     "brand": "Nature's Way",
+     "name": "Probiotic Pearls Adult 50+",
+     "score": 56.1,
+     "evidence": 6.0
     }
    ],
    "registry": {
-    "context_count": 0,
-    "review_states": {},
-    "source_pmids": [],
+    "context_count": 5,
+    "review_states": {
+     "source_verified_pending_clinical_review": 5
+    },
+    "source_pmids": [
+     "36792187",
+     "38201872",
+     "39519413",
+     "42046285",
+     "42533554"
+    ],
     "approved_contexts": [],
-    "pending_or_held_contexts": [],
-    "conditions": [],
+    "pending_or_held_contexts": [
+     "bb536_plasmacytoid_dendritic_cell_activation_38201872",
+     "bb536_male_athletes_high_protein_gi_symptoms_42046285",
+     "bb536_fermented_milk_gut_environment_39519413",
+     "bb536_guar_gum_auto_hsct_pilot_36792187",
+     "m63_m16v_bb536_short_term_travel_42533554"
+    ],
+    "conditions": [
+     "chemotherapy_gastrointestinal_toxicity_auto_hsct",
+     "gastrointestinal_symptoms_on_high_protein_diet",
+     "gut_microbiota_and_metabolites",
+     "immune_marker_pdc_activation",
+     "travel_related_symptoms_and_microbiota"
+    ],
     "legacy_signoff": true,
-    "legacy_primary_pmid": "39631408",
+    "legacy_primary_pmid": "23192454",
     "identity_verification": null
    },
    "review": {
@@ -570,7 +502,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 7
+   "rank": 5
   },
   {
    "identity": "STRAIN_LACTIS_BI07",
@@ -650,7 +582,102 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 8
+   "rank": 6
+  },
+  {
+   "identity": "STRAIN_RHAMNOSUS_HN001",
+   "standard_name": "Lactobacillus rhamnosus HN001",
+   "aliases": [
+    "L. rhamnosus HN001",
+    "HN001",
+    "DR20",
+    "HOWARU Rhamnosus",
+    "Lacticaseibacillus rhamnosus HN001",
+    "HOWARU L. rhamnosus HN001",
+    "HOWARU Lactobacillus rhamnosus HN001"
+   ],
+   "identity_only_stub": false,
+   "affected_scored_products": 32,
+   "affected_brands": 11,
+   "evidence_at_or_below_plateau": 32,
+   "evidence_impact_share": 1.0,
+   "mean_evidence_score": 8.0,
+   "uncertainty_factor": 1.5,
+   "priority_score": 60.0,
+   "wave": 1,
+   "representative_products": [
+    {
+     "dsld_id": "243976",
+     "brand": "Garden of Life Dr. Formulated Probiotics",
+     "name": "Once Daily Prenatal",
+     "score": 64.5,
+     "evidence": 8.0
+    },
+    {
+     "dsld_id": "274081",
+     "brand": "Garden of Life Dr. Formulated Probiotics",
+     "name": "Once Daily Prenatal",
+     "score": 64.5,
+     "evidence": 8.0
+    },
+    {
+     "dsld_id": "326765",
+     "brand": "Garden of Life Dr. Formulated",
+     "name": "Probiotics Immune 50 Billion",
+     "score": 64.2,
+     "evidence": 8.0
+    }
+   ],
+   "registry": {
+    "context_count": 6,
+    "review_states": {
+     "source_verified_pending_clinical_review": 6
+    },
+    "source_pmids": [
+     "36705702",
+     "37614109",
+     "37622257",
+     "37642166",
+     "39275252",
+     "40976401",
+     "41783815"
+    ],
+    "approved_contexts": [],
+    "pending_or_held_contexts": [
+     "hn001_b420_pregnancy_fishoil_child_allergy_37622257",
+     "hn001_b420_pregnancy_child_overweight_36705702",
+     "hn001_elderly_brain_function_encapsulation_40976401",
+     "hn001_perceived_stress_happiness_39275252",
+     "hn001_maternal_perinatal_mental_health_sr_41783815",
+     "hn019_hn001_fos_immune_parameters_healthy_adults_37614109"
+    ],
+    "conditions": [
+     "brain_function_and_cognition_in_elderly",
+     "childhood_allergic_disease",
+     "childhood_overweight",
+     "immune_parameters_healthy_adults",
+     "perceived_stress_and_wellbeing",
+     "perinatal_depression_and_anxiety"
+    ],
+    "legacy_signoff": true,
+    "legacy_primary_pmid": "28943228",
+    "identity_verification": null
+   },
+   "review": {
+    "human_vs_nonhuman_source": "not_reviewed",
+    "studied_doses": "not_reviewed",
+    "population": "not_reviewed",
+    "indication_outcome": "not_reviewed",
+    "duration": "not_reviewed",
+    "result_direction": "not_reviewed",
+    "systematic_review_or_guideline_support": "not_reviewed",
+    "dose_applicability_status": "not_reviewed",
+    "source_quality": "not_reviewed",
+    "evidence_strength": "not_reviewed",
+    "review_completeness": "not_reviewed",
+    "reviewer_adjudication_status": "not_reviewed"
+   },
+   "rank": 7
   },
   {
    "identity": "STRAIN_LACTIS_HN019",
@@ -698,24 +725,136 @@
     }
    ],
    "registry": {
-    "context_count": 2,
+    "context_count": 7,
     "review_states": {
-     "source_verified_pending_clinical_review": 2
+     "source_verified_pending_clinical_review": 7
     },
     "source_pmids": [
+     "27275105",
+     "28245559",
+     "29227175",
+     "37078654",
      "39356506",
+     "40085083",
      "40320938"
     ],
     "approved_contexts": [],
     "pending_or_held_contexts": [
      "hn019_constipation_39356506",
-     "hn019_constipation_40320938"
+     "hn019_constipation_40320938",
+     "hn019_functional_constipation_dose_ranging_28d_29227175",
+     "hn019_intestinal_transit_meta_27275105",
+     "hn019_elderly_cellular_immunity_meta_28245559",
+     "hn019_hn001_functional_constipation_vs_fibers_37078654",
+     "m16v_hn019_hn001_pediatric_urti_fever_duration_40085083"
     ],
     "conditions": [
-     "functional_constipation"
+     "cellular_immune_function",
+     "functional_constipation",
+     "intestinal_transit_time",
+     "upper_respiratory_tract_infection_fever"
     ],
     "legacy_signoff": true,
     "legacy_primary_pmid": "39356506",
+    "identity_verification": null
+   },
+   "review": {
+    "human_vs_nonhuman_source": "not_reviewed",
+    "studied_doses": "not_reviewed",
+    "population": "not_reviewed",
+    "indication_outcome": "not_reviewed",
+    "duration": "not_reviewed",
+    "result_direction": "not_reviewed",
+    "systematic_review_or_guideline_support": "not_reviewed",
+    "dose_applicability_status": "not_reviewed",
+    "source_quality": "not_reviewed",
+    "evidence_strength": "not_reviewed",
+    "review_completeness": "not_reviewed",
+    "reviewer_adjudication_status": "not_reviewed"
+   },
+   "rank": 8
+  },
+  {
+   "identity": "STRAIN_SUBTILIS_DE111",
+   "standard_name": "Bacillus subtilis DE111",
+   "aliases": [
+    "B. subtilis DE111",
+    "DE111",
+    "Bacillus subtilis DE-111",
+    "DE111 Bacillus subtillis",
+    "DE111 Bacillus subtilis",
+    "Bacillus subtillis DE111",
+    "Bacillus subtilis DE111",
+    "B. subtilis DE-111"
+   ],
+   "identity_only_stub": false,
+   "affected_scored_products": 31,
+   "affected_brands": 12,
+   "evidence_at_or_below_plateau": 31,
+   "evidence_impact_share": 1.0,
+   "mean_evidence_score": 6.23,
+   "uncertainty_factor": 1.5,
+   "priority_score": 58.1,
+   "wave": 1,
+   "representative_products": [
+    {
+     "dsld_id": "230149",
+     "brand": "OLLY",
+     "name": "Extra Strength Probiotic Juicy Apple",
+     "score": 68.3,
+     "evidence": 6.0
+    },
+    {
+     "dsld_id": "298031",
+     "brand": "Thorne",
+     "name": "FloraSport 20B",
+     "score": 67.2,
+     "evidence": 2.0
+    },
+    {
+     "dsld_id": "306247",
+     "brand": "Thorne",
+     "name": "FloraSport 20B",
+     "score": 67.2,
+     "evidence": 2.0
+    }
+   ],
+   "registry": {
+    "context_count": 7,
+    "review_states": {
+     "source_verified_pending_clinical_review": 7
+    },
+    "source_pmids": [
+     "30049931",
+     "33105368",
+     "33161736",
+     "33161737",
+     "33462163",
+     "33671071",
+     "34408741",
+     "36790091"
+    ],
+    "approved_contexts": [],
+    "pending_or_held_contexts": [
+     "de111_ileostomy_small_intestinal_germination_34408741",
+     "de111_healthy_adults_immune_gi_pilot_33671071",
+     "de111_blood_lipids_endothelial_function_33161737",
+     "de111_female_athletes_offseason_training_33105368",
+     "de111_male_baseball_immune_hormonal_30049931",
+     "de111_daycare_children_microbiome_33161736",
+     "de111_whey_protein_amino_acid_response_33462163"
+    ],
+    "conditions": [
+     "blood_lipids_and_endothelial_function",
+     "gut_microbiome_composition",
+     "immune_and_gastrointestinal_health_markers",
+     "immune_and_hormonal_markers_during_training",
+     "plasma_amino_acid_response_to_whey",
+     "small_intestinal_spore_germination",
+     "training_adaptation_and_body_composition"
+    ],
+    "legacy_signoff": true,
+    "legacy_primary_pmid": "39631408",
     "identity_verification": null
    },
    "review": {
@@ -776,24 +915,52 @@
     }
    ],
    "registry": {
-    "context_count": 3,
+    "context_count": 12,
     "review_states": {
-     "source_verified_pending_clinical_review": 3
+     "source_verified_pending_clinical_review": 12
     },
     "source_pmids": [
      "22472744",
      "26756877",
+     "33763399",
+     "36086703",
+     "36630947",
+     "37400812",
+     "37942999",
+     "38458507",
+     "40012609",
+     "40251486",
+     "40535538",
+     "40865583",
+     "40884341",
+     "41247686",
      "41675330"
     ],
     "approved_contexts": [],
     "pending_or_held_contexts": [
      "sboulardii_child_aad_prevention_26756877",
      "sboulardii_elderly_aad_prevention_22472744",
-     "sboulardii_nosocomial_diarrhea_treatment_41675330"
+     "sboulardii_nosocomial_diarrhea_treatment_41675330",
+     "sb_h_pylori_eradication_adjunct_meta_family",
+     "sb_cncm_i745_h_pylori_triple_therapy_gistar_37942999",
+     "sb_cncm_i745_pediatric_acute_gastroenteritis_china_meta_40535538",
+     "sb_cncm_i745_vs_b_clausii_pediatric_gastroenteritis_36086703",
+     "sb_adult_acute_viral_diarrhea_37400812",
+     "sb_cncm_i745_ppi_sibo_with_rifaximin_40884341",
+     "sb_cncm_i745_ibs_d_sibo_open_pilot_36630947",
+     "sb_travelers_diarrhea_prevention_meta_38458507",
+     "sb_cncm_i745_mdr_colonization_antibiotics_33763399"
     ],
     "conditions": [
+     "acute_viral_diarrhea",
      "antibiotic_associated_diarrhea",
-     "non_cdiff_nosocomial_diarrhea"
+     "helicobacter_pylori_eradication_adjunct",
+     "ibs_d_with_small_intestinal_bacterial_overgrowth",
+     "multidrug_resistant_gut_colonization_during_antibiotics",
+     "non_cdiff_nosocomial_diarrhea",
+     "pediatric_acute_gastroenteritis",
+     "ppi_associated_small_intestinal_bacterial_overgrowth",
+     "travelers_diarrhea"
     ],
     "legacy_signoff": true,
     "legacy_primary_pmid": "26756877",
@@ -5959,6 +6126,61 @@
    "rank": 86
   },
   {
+   "identity": "STRAIN_LACTIS_B420",
+   "standard_name": "Bifidobacterium animalis subsp. lactis 420",
+   "aliases": [
+    "Bifidobacterium animalis ssp. lactis 420",
+    "Bifidobacterium lactis 420",
+    "B. lactis 420",
+    "Bifidobacterium lactis B420",
+    "B420"
+   ],
+   "identity_only_stub": true,
+   "affected_scored_products": 1,
+   "affected_brands": 1,
+   "evidence_at_or_below_plateau": 1,
+   "evidence_impact_share": 1.0,
+   "mean_evidence_score": 8.0,
+   "uncertainty_factor": 2.0,
+   "priority_score": 2.5,
+   "wave": 3,
+   "representative_products": [
+    {
+     "dsld_id": "333195",
+     "brand": "MegaFood",
+     "name": "Digestive Probiotic Ultra Strength",
+     "score": 59.5,
+     "evidence": 8.0
+    }
+   ],
+   "registry": {
+    "context_count": 0,
+    "review_states": {},
+    "source_pmids": [],
+    "approved_contexts": [],
+    "pending_or_held_contexts": [],
+    "conditions": [],
+    "legacy_signoff": false,
+    "legacy_primary_pmid": null,
+    "identity_verification": "designation_verified"
+   },
+   "review": {
+    "human_vs_nonhuman_source": "not_reviewed",
+    "studied_doses": "not_reviewed",
+    "population": "not_reviewed",
+    "indication_outcome": "not_reviewed",
+    "duration": "not_reviewed",
+    "result_direction": "not_reviewed",
+    "systematic_review_or_guideline_support": "not_reviewed",
+    "dose_applicability_status": "not_reviewed",
+    "source_quality": "not_reviewed",
+    "evidence_strength": "not_reviewed",
+    "review_completeness": "not_reviewed",
+    "reviewer_adjudication_status": "not_reviewed"
+   },
+   "rank": 87
+  },
+  {
    "identity": "STRAIN_BREVE_SD_BR3_IT",
    "standard_name": "Bifidobacterium breve SD-BR3-IT",
    "aliases": [
@@ -6010,7 +6232,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 87
+   "rank": 88
   },
   {
    "identity": "STRAIN_SALIVARIUS_SD_LS1_IT",
@@ -6065,7 +6287,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 88
+   "rank": 89
   },
   {
    "identity": "STRAIN_PLANTARUM_SD_LP1_IT",
@@ -6120,7 +6342,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 89
+   "rank": 90
   },
   {
    "identity": "STRAIN_PLANTARUM_SD_LPLDL_UK",
@@ -6176,7 +6398,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 90
+   "rank": 91
   },
   {
    "identity": "STRAIN_REUTERI_DSM17938",
@@ -6224,7 +6446,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 91
+   "rank": 92
   },
   {
    "identity": "STRAIN_REUTERI_PRODENTIS",
@@ -6273,7 +6495,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 92
+   "rank": 93
   },
   {
    "identity": "STRAIN_INFANTIS_35624",
@@ -6319,7 +6541,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 93
+   "rank": 94
   },
   {
    "identity": "STRAIN_CASEI_SHIROTA",
@@ -6364,7 +6586,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 94
+   "rank": 95
   },
   {
    "identity": "STRAIN_CLAUSII",
@@ -6412,7 +6634,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 95
+   "rank": 96
   },
   {
    "identity": "STRAIN_GASSERI_SBT2055",
@@ -6458,7 +6680,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 96
+   "rank": 97
   },
   {
    "identity": "STRAIN_GASSERI_BNR17",
@@ -6503,7 +6725,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 97
+   "rank": 98
   },
   {
    "identity": "STRAIN_FERMENTUM_ME3",
@@ -6549,7 +6771,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 98
+   "rank": 99
   },
   {
    "identity": "STRAIN_LONGUM_1714",
@@ -6595,7 +6817,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 99
+   "rank": 100
   },
   {
    "identity": "STRAIN_REUTERI_ATCC6475",
@@ -6641,7 +6863,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 100
+   "rank": 101
   },
   {
    "identity": "STRAIN_CRISPATUS_CTV05",
@@ -6687,7 +6909,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 101
+   "rank": 102
   },
   {
    "identity": "STRAIN_NISSLE_1917",
@@ -6734,7 +6956,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 102
+   "rank": 103
   },
   {
    "identity": "STRAIN_RHAMNOSUS_SP1",
@@ -6779,7 +7001,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 103
+   "rank": 104
   },
   {
    "identity": "STRAIN_LACTOCOCCUS_LL23",
@@ -6824,7 +7046,7 @@
     "review_completeness": "not_reviewed",
     "reviewer_adjudication_status": "not_reviewed"
    },
-   "rank": 104
+   "rank": 105
   }
  ],
  "label_identity_classification": {
@@ -6834,12 +7056,12 @@
     "product_slots": 564
    },
    "exact_strain_unreviewed": {
-    "strings": 178,
-    "product_slots": 1091
+    "strings": 179,
+    "product_slots": 1092
    },
    "strain_designation_unregistered": {
-    "strings": 147,
-    "product_slots": 222
+    "strings": 146,
+    "product_slots": 221
    },
    "species_only": {
     "strings": 62,
@@ -8906,6 +9128,13 @@
     ]
    },
    {
+    "label": "Bifidobacterium lactis B-420",
+    "affected_scored_products": 1,
+    "examples": [
+     "MegaFood — Digestive Probiotic Ultra Strength"
+    ]
+   },
+   {
     "label": "Bifidobacterium lactis (CUL 34 )",
     "affected_scored_products": 1,
     "examples": [
@@ -9603,13 +9832,6 @@
     "affected_scored_products": 1,
     "examples": [
      "CVS Health — Digestive Probiotic"
-    ]
-   },
-   {
-    "label": "Bifidobacterium lactis B-420",
-    "affected_scored_products": 1,
-    "examples": [
-     "MegaFood — Digestive Probiotic Ultra Strength"
     ]
    },
    {

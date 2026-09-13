@@ -186,7 +186,10 @@ def test_priority_native_contexts_are_curated_without_new_approval():
     seen = set()
     for cid, pmids in expected.items():
         contexts = registry[cid].get("study_contexts", [])
-        assert {p for c in contexts for p in c["source_pmids"]} == pmids
+        # 2026-09-13 Wave 1 added contexts on top; the 2026-09-04 sources must
+        # still be present, valid and unapproved (nothing below borrows approval).
+        assert pmids <= {p for c in contexts for p in c["source_pmids"]}
+        assert all(c["review_status"] == "source_verified_pending_clinical_review" for c in contexts)
         for c in contexts:
             assert studied_formulas.valid_native_study_context(c, cid)
             assert all(p.isdigit() for p in c["source_pmids"])
@@ -239,10 +242,14 @@ def test_lpc37_sources_join_without_new_approval_or_interpolated_dose():
     product = strain_product(clinical_id="STRAIN_PARACASEI_LPC37",
                              name="Lactobacillus paracasei Lpc-37", dose=1.56e10)
     result = assessment(product)
-    assert set(result["source_pmids"]) == {"33385020", "37662485"}
+    # Exact-strain sources plus the Wave 1 combination contexts that join Lpc-37
+    # through `components`; joining never lends approval or an individual dose.
+    assert {"33385020", "37662485"} <= set(result["source_pmids"])
     assert result["scoring_source_pmids"] == ["33385020"]
     assert result["dose_applicable"] is False
-    assert {c["dose_comparison"] for c in result["study_contexts"]} == {"study_daily_dose_unresolved"}
+    assert {c["dose_comparison"] for c in result["study_contexts"]} == {
+        "study_daily_dose_unresolved", "combination_not_individual_dose"}
+    assert all(c["clinical_applicability"] == "not_established" for c in result["study_contexts"])
     evidence = score_evidence(product)
     assert evidence["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "pending_clinical_review"
     assert evidence["metadata"]["evidence_result_state"] == "evaluated_null"

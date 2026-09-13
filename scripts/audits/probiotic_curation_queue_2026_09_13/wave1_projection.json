@@ -1,0 +1,215 @@
+{
+ "_metadata": {
+  "built": "2026-09-13",
+  "read_only": true,
+  "scored_probiotics": 548,
+  "wave1_contexts_authored": 50,
+  "formulation_reference": 22.0
+ },
+ "A_evidence": {
+  "products_carrying_wave1_identity": 261,
+  "products_changed_today": 0,
+  "products_gaining_applicability_if_approved": 0,
+  "evidence_delta_if_approved": {
+   "mean": 0.0,
+   "max": 0.0,
+   "n_positive": 0
+  },
+  "why_approved_contexts_do_not_apply": {
+   "not_individual_strain_scope": 1849,
+   "study_daily_dose_unresolved": 1384,
+   "label_dose_unknown": 252,
+   "outside_tested_daily_doses": 53,
+   "no_positive_primary_patient_important_outcome": 9
+  },
+  "per_identity": {
+   "STRAIN_ACIDOPHILUS_NCFM": {
+    "products": 68,
+    "applicable": 0,
+    "delta": 0.0
+   },
+   "STRAIN_LACTIS_BI07": {
+    "products": 34,
+    "applicable": 0,
+    "delta": 0.0
+   },
+   "STRAIN_LACTIS_BL04": {
+    "products": 84,
+    "applicable": 0,
+    "delta": 0.0
+   },
+   "STRAIN_LACTIS_HN019": {
+    "products": 33,
+    "applicable": 0,
+    "delta": 0.0
+   },
+   "STRAIN_LGG": {
+    "products": 112,
+    "applicable": 0,
+    "delta": 0.0
+   },
+   "STRAIN_LONGUM_BB536": {
+    "products": 41,
+    "applicable": 0,
+    "delta": 0.0
+   },
+   "STRAIN_PARACASEI_LPC37": {
+    "products": 51,
+    "applicable": 0,
+    "delta": 0.0
+   },
+   "STRAIN_RHAMNOSUS_HN001": {
+    "products": 38,
+    "applicable": 0,
+    "delta": 0.0
+   },
+   "STRAIN_SACCHAROMYCES": {
+    "products": 16,
+    "applicable": 0,
+    "delta": 0.0
+   },
+   "STRAIN_SUBTILIS_DE111": {
+    "products": 31,
+    "applicable": 0,
+    "delta": 0.0
+   }
+  },
+  "gainers": []
+ },
+ "B_formulation_stubs": {
+  "products_with_identity_credit_change": 196,
+  "raw_delta_distribution": {
+   "2.0": 14,
+   "1.0": 35,
+   "5.0": 28,
+   "7.0": 48,
+   "4.0": 20,
+   "3.0": 32,
+   "8.0": 19
+  },
+  "approx_shipped_pillar_delta_mean": 4.02,
+  "examples": [
+   {
+    "dsld_id": "256995",
+    "brand": "MegaFood",
+    "name": "MegaFlora Kids Probiotic",
+    "identities_before": 0,
+    "identities_after": 13,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "256996",
+    "brand": "MegaFood",
+    "name": "MegaFlora Kids Probiotic",
+    "identities_before": 0,
+    "identities_after": 14,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "256999",
+    "brand": "MegaFood",
+    "name": "MegaFlora Probiotic",
+    "identities_before": 0,
+    "identities_after": 14,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "257009",
+    "brand": "MegaFood",
+    "name": "MegaFlora Plus",
+    "identities_before": 0,
+    "identities_after": 14,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "257018",
+    "brand": "MegaFood",
+    "name": "MegaFlora Probiotic",
+    "identities_before": 0,
+    "identities_after": 14,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "285213",
+    "brand": "MegaFood",
+    "name": "MegaFlora 200 Billion",
+    "identities_before": 0,
+    "identities_after": 14,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "287474",
+    "brand": "MegaFood",
+    "name": "MegaFlora Kids Probiotic",
+    "identities_before": 0,
+    "identities_after": 13,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "287475",
+    "brand": "MegaFood",
+    "name": "MegaFlora Plus",
+    "identities_before": 0,
+    "identities_after": 14,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "287476",
+    "brand": "MegaFood",
+    "name": "MegaFlora Probiotic",
+    "identities_before": 0,
+    "identities_after": 14,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "228100",
+    "brand": "GNC Probiotic Solutions",
+    "name": "Probiotic Solutions Weight Management Support 25 Billion CFUs",
+    "identities_before": 0,
+    "identities_after": 5,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "259600",
+    "brand": "GNC Probiotic Complex",
+    "name": "Probiotic Complex Daily Need 1 Billion CFUs",
+    "identities_before": 0,
+    "identities_after": 8,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "77156",
+    "brand": "GNC Probiotic Solutions",
+    "name": "Probiotic Solutions Women's 30 Billion CFUs",
+    "identities_before": 0,
+    "identities_after": 5,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "77175",
+    "brand": "GNC Probiotic Complex",
+    "name": "Probiotic Complex Daily Need 1 Billion CFUs",
+    "identities_before": 0,
+    "identities_after": 8,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "77179",
+    "brand": "GNC Probiotic Complex",
+    "name": "Probiotic Complex 10 Billion CFUs",
+    "identities_before": 0,
+    "identities_after": 8,
+    "raw_formulation_delta": 8.0
+   },
+   {
+    "dsld_id": "77201",
+    "brand": "GNC Probiotic",
+    "name": "Chewable Vanilla Berry",
+    "identities_before": 0,
+    "identities_after": 8,
+    "raw_formulation_delta": 8.0
+   }
+  ],
+  "note": "Approximation: identity ownership in scoring also requires the label row proof (source_row_ref); real numbers come from a re-enrichment."
+ }
+}
