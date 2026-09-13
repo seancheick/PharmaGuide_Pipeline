@@ -1,0 +1,3258 @@
+{
+  "_metadata": {
+    "built": "2026-09-13",
+    "scored_probiotics": 548,
+    "registry_identities": 49,
+    "rule": "evidence_strength, applicability and review_completeness are independent; not_reviewed is never no_evidence"
+  },
+  "queue": [
+    {
+      "identity": "STRAIN_LGG",
+      "standard_name": "Lactobacillus rhamnosus GG",
+      "aliases": [
+        "L. rhamnosus GG",
+        "LGG",
+        "Lactobacillus GG",
+        "Lacticaseibacillus rhamnosus GG",
+        "ATCC 53103",
+        "Lactobacillus rhamnosus LGG",
+        "L. rhamnosus LGG",
+        "L. rhamnosus GG, LGG"
+      ],
+      "affected_scored_products": 112,
+      "representative_products": [
+        {
+          "dsld_id": "79324",
+          "brand": "Solgar",
+          "name": "Advanced Multi-Billion Dophilus",
+          "score": 75.8
+        },
+        {
+          "dsld_id": "250851",
+          "brand": "Culturelle",
+          "name": "Digestive Daily Probiotic",
+          "score": 72.7
+        },
+        {
+          "dsld_id": "250853",
+          "brand": "Culturelle",
+          "name": "Digestive Daily Probiotic",
+          "score": 72.7
+        },
+        {
+          "dsld_id": "250856",
+          "brand": "Culturelle",
+          "name": "Digestive Daily Probiotic",
+          "score": 72.7
+        },
+        {
+          "dsld_id": "250859",
+          "brand": "Culturelle",
+          "name": "Digestive Daily Probiotic",
+          "score": 72.7
+        }
+      ],
+      "registry": {
+        "context_count": 2,
+        "context_review_states": {
+          "source_verified_pending_clinical_review": 2
+        },
+        "source_pmids": [
+          "17229242",
+          "26756877"
+        ],
+        "unresolved_or_held_contexts": [
+          "lgg_pediatric_aad_guideline_26756877",
+          "lgg_pediatric_pain_17229242"
+        ],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 179,
+        "evidence_level_in_registry": "high",
+        "evidence_review": {
+          "search_coverage": "partial",
+          "reviewed_on": "2026-09-03",
+          "reviewed_by": "Codex source verification (AI-assisted)",
+          "clinical_signoff_changed": false,
+          "source_pmids": [
+            "26756877",
+            "33295643"
+          ],
+          "scope": "Primary guideline strain specificity and secondary review interpretation; not an exhaustive efficacy or dose review.",
+          "queries": [
+            "26756877",
+            "33295643",
+            "Lactobacillus rhamnosus GG antibiotic associated diarrhea systematic review"
+          ],
+          "unresolved": [
+            "Adult general-use applicability",
+            "Outcome-specific studied CFU doses"
+          ]
+        }
+      },
+      "priority_first": true,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 1
+    },
+    {
+      "identity": "STRAIN_LACTIS_BL04",
+      "standard_name": "Bifidobacterium lactis Bl-04",
+      "aliases": [
+        "B. lactis Bl-04",
+        "Bl-04",
+        "HOWARU Bl-04",
+        "Bifidobacterium animalis Bl-04",
+        "Bifidobacterium animalis subsp. lactis Bl-04",
+        "Bifidobacterium animalis lactis Bl-04",
+        "B. animalis lactis Bl-04",
+        "Bifidobacterium lactis strain Bl-04"
+      ],
+      "affected_scored_products": 84,
+      "representative_products": [
+        {
+          "dsld_id": "240117",
+          "brand": "Nature's Bounty",
+          "name": "Probiotic 10",
+          "score": 65.9
+        },
+        {
+          "dsld_id": "62743",
+          "brand": "Nature's Bounty",
+          "name": "Probiotic 10",
+          "score": 65.7
+        },
+        {
+          "dsld_id": "326765",
+          "brand": "Garden of Life Dr. Formulated",
+          "name": "Probiotics Immune 50 Billion",
+          "score": 64.2
+        },
+        {
+          "dsld_id": "333747",
+          "brand": "Nature's Way",
+          "name": "Fortify Adults 50+ Probiotic Extra Strength 50 Billion",
+          "score": 64.1
+        },
+        {
+          "dsld_id": "326764",
+          "brand": "Garden of Life Dr. Formulated",
+          "name": "Probiotics Gas & Bloating 50 Billion",
+          "score": 64.0
+        }
+      ],
+      "registry": {
+        "context_count": 2,
+        "context_review_states": {
+          "source_verified_pending_clinical_review": 2
+        },
+        "source_pmids": [
+          "24268677",
+          "28343401"
+        ],
+        "unresolved_or_held_contexts": [
+          "bl04_active_adult_respiratory_24268677",
+          "bl04_rhinovirus_challenge_28343401"
+        ],
+        "contexts_with_resolved_dose": 1,
+        "notable_studies": 241,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": true,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 2
+    },
+    {
+      "identity": "STRAIN_ACIDOPHILUS_NCFM",
+      "standard_name": "Lactobacillus acidophilus NCFM",
+      "aliases": [
+        "L. acidophilus NCFM",
+        "NCFM",
+        "Lactobacillus acidophilus NC-FM",
+        "HOWARU Lactobacillus acidophilus NCFM",
+        "HOWARU L. acidophilus NCFM"
+      ],
+      "affected_scored_products": 68,
+      "representative_products": [
+        {
+          "dsld_id": "326765",
+          "brand": "Garden of Life Dr. Formulated",
+          "name": "Probiotics Immune 50 Billion",
+          "score": 64.2
+        },
+        {
+          "dsld_id": "333747",
+          "brand": "Nature's Way",
+          "name": "Fortify Adults 50+ Probiotic Extra Strength 50 Billion",
+          "score": 64.1
+        },
+        {
+          "dsld_id": "327965",
+          "brand": "Nature's Way",
+          "name": "Fortify Ultra Potency Optima Probiotic 100 Billion",
+          "score": 63.6
+        },
+        {
+          "dsld_id": "242657",
+          "brand": "Garden of Life Dr. Formulated Probiotics",
+          "name": "Platinum Series Immune+",
+          "score": 61.8
+        },
+        {
+          "dsld_id": "327967",
+          "brand": "Nature's Way",
+          "name": "Fortify Women's Probiotic 50 Billion",
+          "score": 61.7
+        }
+      ],
+      "registry": {
+        "context_count": 2,
+        "context_review_states": {
+          "source_verified_pending_clinical_review": 2
+        },
+        "source_pmids": [
+          "19651563",
+          "28082816"
+        ],
+        "unresolved_or_held_contexts": [
+          "ncfm_adult_ibs_28082816",
+          "ncfm_child_cold_flu_symptoms_19651563"
+        ],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 220,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": true,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 3
+    },
+    {
+      "identity": "STRAIN_LACTIS_BI07",
+      "standard_name": "Bifidobacterium lactis Bi-07",
+      "aliases": [
+        "B. lactis Bi-07",
+        "Bi-07",
+        "Bifidobacterium animalis Bi-07",
+        "Bifidobacterium animalis lactis Bi-07",
+        "B. animalis lactis Bi-07"
+      ],
+      "affected_scored_products": 34,
+      "representative_products": [
+        {
+          "dsld_id": "333747",
+          "brand": "Nature's Way",
+          "name": "Fortify Adults 50+ Probiotic Extra Strength 50 Billion",
+          "score": 64.1
+        },
+        {
+          "dsld_id": "327965",
+          "brand": "Nature's Way",
+          "name": "Fortify Ultra Potency Optima Probiotic 100 Billion",
+          "score": 63.6
+        },
+        {
+          "dsld_id": "327963",
+          "brand": "Nature's Way",
+          "name": "Fortify Adult Probiotic 50 Billion Extra-Strength",
+          "score": 61.5
+        },
+        {
+          "dsld_id": "317030",
+          "brand": "Nature's Way",
+          "name": "Fortify Adult Daily Probiotic 30 Billion",
+          "score": 61.0
+        },
+        {
+          "dsld_id": "317109",
+          "brand": "Nature's Way",
+          "name": "Fortify Adults 50+ Daily Probiotic 30 Billion",
+          "score": 60.4
+        }
+      ],
+      "registry": {
+        "context_count": 2,
+        "context_review_states": {
+          "source_verified_pending_clinical_review": 2
+        },
+        "source_pmids": [
+          "21436726",
+          "36149331"
+        ],
+        "unresolved_or_held_contexts": [
+          "ncfm_bi07_bloating_21436726",
+          "bi07_lactose_challenges_36149331"
+        ],
+        "contexts_with_resolved_dose": 2,
+        "notable_studies": 282,
+        "evidence_level_in_registry": "unreviewed",
+        "evidence_review": null
+      },
+      "priority_first": true,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 4
+    },
+    {
+      "identity": "STRAIN_LACTIS_HN019",
+      "standard_name": "Bifidobacterium lactis HN019",
+      "aliases": [
+        "B. lactis HN019",
+        "Bifidobacterium animalis HN019",
+        "Bifidobacterium animalis lactis HN019",
+        "DR10",
+        "HOWARU Bifido",
+        "Bifidobacterium lactis strain HN019",
+        "HOWARU Bifidobacterium animalis lactis HN019",
+        "HOWARU B. lactis HN019"
+      ],
+      "affected_scored_products": 33,
+      "representative_products": [
+        {
+          "dsld_id": "298031",
+          "brand": "Thorne",
+          "name": "FloraSport 20B",
+          "score": 67.2
+        },
+        {
+          "dsld_id": "306247",
+          "brand": "Thorne",
+          "name": "FloraSport 20B",
+          "score": 67.2
+        },
+        {
+          "dsld_id": "333747",
+          "brand": "Nature's Way",
+          "name": "Fortify Adults 50+ Probiotic Extra Strength 50 Billion",
+          "score": 64.1
+        },
+        {
+          "dsld_id": "326764",
+          "brand": "Garden of Life Dr. Formulated",
+          "name": "Probiotics Gas & Bloating 50 Billion",
+          "score": 64.0
+        },
+        {
+          "dsld_id": "327965",
+          "brand": "Nature's Way",
+          "name": "Fortify Ultra Potency Optima Probiotic 100 Billion",
+          "score": 63.6
+        }
+      ],
+      "registry": {
+        "context_count": 2,
+        "context_review_states": {
+          "source_verified_pending_clinical_review": 2
+        },
+        "source_pmids": [
+          "39356506",
+          "40320938"
+        ],
+        "unresolved_or_held_contexts": [
+          "hn019_constipation_39356506",
+          "hn019_constipation_40320938"
+        ],
+        "contexts_with_resolved_dose": 1,
+        "notable_studies": 174,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": true,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 5
+    },
+    {
+      "identity": "STRAIN_SACCHAROMYCES",
+      "standard_name": "Saccharomyces boulardii",
+      "aliases": [
+        "S. boulardii",
+        "Saccharomyces boulardii CNCM I-745",
+        "Florastor",
+        "Saccharomyces cerevisiae var. boulardii"
+      ],
+      "affected_scored_products": 16,
+      "representative_products": [
+        {
+          "dsld_id": "247319",
+          "brand": "Pure Encapsulations",
+          "name": "Saccharomyces Boulardii",
+          "score": 68.4
+        },
+        {
+          "dsld_id": "307727",
+          "brand": "Jarrow Formulas",
+          "name": "Saccharomyces Boulardii + MOS 5 Billion CFU",
+          "score": 62.4
+        },
+        {
+          "dsld_id": "307728",
+          "brand": "Jarrow Formulas",
+          "name": "Saccharomyces boulardii + MOS 5 Billion CFU",
+          "score": 62.4
+        },
+        {
+          "dsld_id": "306291",
+          "brand": "Thorne",
+          "name": "Sacro-B",
+          "score": 61.7
+        },
+        {
+          "dsld_id": "323130",
+          "brand": "Thorne",
+          "name": "Sacro-B",
+          "score": 61.7
+        }
+      ],
+      "registry": {
+        "context_count": 3,
+        "context_review_states": {
+          "source_verified_pending_clinical_review": 3
+        },
+        "source_pmids": [
+          "22472744",
+          "26756877",
+          "41675330"
+        ],
+        "unresolved_or_held_contexts": [
+          "sboulardii_child_aad_prevention_26756877",
+          "sboulardii_elderly_aad_prevention_22472744",
+          "sboulardii_nosocomial_diarrhea_treatment_41675330"
+        ],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 214,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": true,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 6
+    },
+    {
+      "identity": "STRAIN_LACTIS_BB12",
+      "standard_name": "Bifidobacterium lactis BB-12",
+      "aliases": [
+        "B. lactis BB-12",
+        "BB-12",
+        "Bifidobacterium animalis BB-12",
+        "Bifidobacterium animalis lactis BB-12",
+        "Bifidobacterium animalis subsp. lactis BB-12"
+      ],
+      "affected_scored_products": 15,
+      "representative_products": [
+        {
+          "dsld_id": "79324",
+          "brand": "Solgar",
+          "name": "Advanced Multi-Billion Dophilus",
+          "score": 75.8
+        },
+        {
+          "dsld_id": "264116",
+          "brand": "Solgar",
+          "name": "Advanced Multi-Billion Dophilus",
+          "score": 68.1
+        },
+        {
+          "dsld_id": "80971",
+          "brand": "Solgar",
+          "name": "Advanced 40+ Acidophilus",
+          "score": 64.6
+        },
+        {
+          "dsld_id": "246011",
+          "brand": "Culturelle Baby",
+          "name": "Baby Grow + Thrive",
+          "score": 61.1
+        },
+        {
+          "dsld_id": "246012",
+          "brand": "Culturelle Baby",
+          "name": "Baby Grow + Thrive",
+          "score": 61.1
+        }
+      ],
+      "registry": {
+        "context_count": 1,
+        "context_review_states": {
+          "source_verified_pending_clinical_review": 1
+        },
+        "source_pmids": [
+          "26382580"
+        ],
+        "unresolved_or_held_contexts": [
+          "bb12_low_stool_frequency_26382580"
+        ],
+        "contexts_with_resolved_dose": 1,
+        "notable_studies": 234,
+        "evidence_level_in_registry": "unreviewed",
+        "evidence_review": null
+      },
+      "priority_first": true,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 7
+    },
+    {
+      "identity": "STRAIN_PLANTARUM_299V",
+      "standard_name": "Lactobacillus plantarum 299v",
+      "aliases": [
+        "L. plantarum 299v",
+        "Lp299v",
+        "Lactiplantibacillus plantarum 299v",
+        "Lactobacillus plantarum Lp299v"
+      ],
+      "affected_scored_products": 12,
+      "representative_products": [
+        {
+          "dsld_id": "45194",
+          "brand": "Solgar",
+          "name": "Probi 20 Billion",
+          "score": 70.2
+        },
+        {
+          "dsld_id": "180336",
+          "brand": "Nature Made",
+          "name": "Digestive Probiotics Daily Balance 10 Billion",
+          "score": 69.5
+        },
+        {
+          "dsld_id": "19067",
+          "brand": "Nature Made",
+          "name": "Digestive Health Probiotic",
+          "score": 69.5
+        },
+        {
+          "dsld_id": "180289",
+          "brand": "Nature Made",
+          "name": "Digestive Probiotics Advanced Dual Action",
+          "score": 67.6
+        },
+        {
+          "dsld_id": "180290",
+          "brand": "Nature Made",
+          "name": "Digestive Probiotics Advanced Dual Action",
+          "score": 67.6
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 30,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": true,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 8
+    },
+    {
+      "identity": "STRAIN_PARACASEI_LPC37",
+      "standard_name": "Lactobacillus paracasei Lpc-37",
+      "aliases": [
+        "L. paracasei Lpc-37",
+        "Lpc-37",
+        "HOWARU Lpc-37",
+        "Lacticaseibacillus paracasei Lpc-37",
+        "Lactobacillus paracasei strain Lpc-37"
+      ],
+      "affected_scored_products": 51,
+      "representative_products": [
+        {
+          "dsld_id": "240117",
+          "brand": "Nature's Bounty",
+          "name": "Probiotic 10",
+          "score": 65.9
+        },
+        {
+          "dsld_id": "62743",
+          "brand": "Nature's Bounty",
+          "name": "Probiotic 10",
+          "score": 65.7
+        },
+        {
+          "dsld_id": "326765",
+          "brand": "Garden of Life Dr. Formulated",
+          "name": "Probiotics Immune 50 Billion",
+          "score": 64.2
+        },
+        {
+          "dsld_id": "333747",
+          "brand": "Nature's Way",
+          "name": "Fortify Adults 50+ Probiotic Extra Strength 50 Billion",
+          "score": 64.1
+        },
+        {
+          "dsld_id": "326764",
+          "brand": "Garden of Life Dr. Formulated",
+          "name": "Probiotics Gas & Bloating 50 Billion",
+          "score": 64.0
+        }
+      ],
+      "registry": {
+        "context_count": 2,
+        "context_review_states": {
+          "source_verified_pending_clinical_review": 2
+        },
+        "source_pmids": [
+          "33385020",
+          "37662485"
+        ],
+        "unresolved_or_held_contexts": [
+          "lpc37_sisu_stress_response_33385020",
+          "lpc37_chillex_exam_stress_37662485"
+        ],
+        "contexts_with_resolved_dose": 2,
+        "notable_studies": 264,
+        "evidence_level_in_registry": "high",
+        "evidence_review": {
+          "search_coverage": "partial",
+          "reviewed_on": "2026-09-04",
+          "reviewed_by": "Codex source verification (AI-assisted)",
+          "clinical_signoff_changed": false,
+          "source_pmids": [
+            "33385020",
+            "37662485"
+          ],
+          "scope": "Primary stress-response outcomes and source-specific viability/regimen; not a systematic review or a new approved dosing policy.",
+          "unresolved": [
+            "Outcome-specific clinical policy review",
+            "Applicability beyond the studied healthy adult populations"
+          ]
+        }
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 9
+    },
+    {
+      "identity": "STRAIN_LONGUM_BB536",
+      "standard_name": "Bifidobacterium longum BB536",
+      "aliases": [
+        "B. longum BB536",
+        "BB536"
+      ],
+      "affected_scored_products": 41,
+      "representative_products": [
+        {
+          "dsld_id": "334440",
+          "brand": "Nature's Way",
+          "name": "Max Potency Probiotic Pearls 5 Billion",
+          "score": 57.5
+        },
+        {
+          "dsld_id": "267898",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Max Potency",
+          "score": 56.5
+        },
+        {
+          "dsld_id": "184397",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Adult 50+",
+          "score": 56.1
+        },
+        {
+          "dsld_id": "184402",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Adult 50+",
+          "score": 56.1
+        },
+        {
+          "dsld_id": "267947",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Complete",
+          "score": 56.1
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 47,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 10
+    },
+    {
+      "identity": "STRAIN_RHAMNOSUS_HN001",
+      "standard_name": "Lactobacillus rhamnosus HN001",
+      "aliases": [
+        "L. rhamnosus HN001",
+        "HN001",
+        "DR20",
+        "HOWARU Rhamnosus",
+        "Lacticaseibacillus rhamnosus HN001",
+        "HOWARU L. rhamnosus HN001",
+        "HOWARU Lactobacillus rhamnosus HN001"
+      ],
+      "affected_scored_products": 38,
+      "representative_products": [
+        {
+          "dsld_id": "243976",
+          "brand": "Garden of Life Dr. Formulated Probiotics",
+          "name": "Once Daily Prenatal",
+          "score": 64.5
+        },
+        {
+          "dsld_id": "274081",
+          "brand": "Garden of Life Dr. Formulated Probiotics",
+          "name": "Once Daily Prenatal",
+          "score": 64.5
+        },
+        {
+          "dsld_id": "326765",
+          "brand": "Garden of Life Dr. Formulated",
+          "name": "Probiotics Immune 50 Billion",
+          "score": 64.2
+        },
+        {
+          "dsld_id": "326764",
+          "brand": "Garden of Life Dr. Formulated",
+          "name": "Probiotics Gas & Bloating 50 Billion",
+          "score": 64.0
+        },
+        {
+          "dsld_id": "327965",
+          "brand": "Nature's Way",
+          "name": "Fortify Ultra Potency Optima Probiotic 100 Billion",
+          "score": 63.6
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 118,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 11
+    },
+    {
+      "identity": "STRAIN_SUBTILIS_DE111",
+      "standard_name": "Bacillus subtilis DE111",
+      "aliases": [
+        "B. subtilis DE111",
+        "DE111",
+        "Bacillus subtilis DE-111",
+        "DE111 Bacillus subtillis",
+        "DE111 Bacillus subtilis",
+        "Bacillus subtillis DE111",
+        "Bacillus subtilis DE111",
+        "B. subtilis DE-111"
+      ],
+      "affected_scored_products": 31,
+      "representative_products": [
+        {
+          "dsld_id": "230149",
+          "brand": "OLLY",
+          "name": "Extra Strength Probiotic Juicy Apple",
+          "score": 68.3
+        },
+        {
+          "dsld_id": "298031",
+          "brand": "Thorne",
+          "name": "FloraSport 20B",
+          "score": 67.2
+        },
+        {
+          "dsld_id": "306247",
+          "brand": "Thorne",
+          "name": "FloraSport 20B",
+          "score": 67.2
+        },
+        {
+          "dsld_id": "267568",
+          "brand": "Culturelle",
+          "name": "Probiotic Gummies Mixed Berry",
+          "score": 64.7
+        },
+        {
+          "dsld_id": "267573",
+          "brand": "Culturelle",
+          "name": "Probiotic Gummies Mixed Berry",
+          "score": 64.7
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 47,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 12
+    },
+    {
+      "identity": "STRAIN_COAGULANS_IS2",
+      "standard_name": "Bacillus coagulans Unique IS-2",
+      "aliases": [
+        "Bacillus coagulans Unique IS-2",
+        "Bacillus coagulans, IS-2",
+        "Unique IS-2 Bacillus coagulans",
+        "Unique IS-2(TM) Bacillus coagulans",
+        "Unique IS-2"
+      ],
+      "affected_scored_products": 20,
+      "representative_products": [
+        {
+          "dsld_id": "328090",
+          "brand": "Nature's Way",
+          "name": "Women's 3-in-1 Probiotic Gummy Orange Flavored",
+          "score": 66.4
+        },
+        {
+          "dsld_id": "332954",
+          "brand": "Nature's Way",
+          "name": "Women's 3-in-1 Probiotic Gummy Orange Flavored",
+          "score": 66.4
+        },
+        {
+          "dsld_id": "199521",
+          "brand": "Nature's Way",
+          "name": "Fortify Gummy Probiotic 6 Billion Berry Flavored",
+          "score": 63.1
+        },
+        {
+          "dsld_id": "251908",
+          "brand": "Nature's Way ",
+          "name": "Fortify Gummy Probiotic 6 Billion Berry Flavored",
+          "score": 63.1
+        },
+        {
+          "dsld_id": "78296",
+          "brand": "Nature's Way",
+          "name": "Primadophilus Fortify Gummy Probiotic Berry Flavored",
+          "score": 63.1
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 61,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 13
+    },
+    {
+      "identity": "STRAIN_COAGULANS_MTCC5856",
+      "standard_name": "Bacillus coagulans MTCC 5856",
+      "aliases": [
+        "Bacillus coagulans MTCC 5856",
+        "Bacillus coagulans MTCC-5856",
+        "Bacillus coagulans MTCC5856",
+        "LactoSpore",
+        "B. coagulans LactoSpore",
+        "Bacillus coagulans Lactospore MTCC5856",
+        "Bacillus coagulans Lactospore",
+        "Lactospore Bacillus coagulans MTCC5856"
+      ],
+      "affected_scored_products": 19,
+      "representative_products": [
+        {
+          "dsld_id": "230149",
+          "brand": "OLLY",
+          "name": "Extra Strength Probiotic Juicy Apple",
+          "score": 68.3
+        },
+        {
+          "dsld_id": "337852",
+          "brand": "Thorne",
+          "name": "Bacillus Coagulans",
+          "score": 62.4
+        },
+        {
+          "dsld_id": "229974",
+          "brand": "Culturelle",
+          "name": "Probiotic + Multivitamin Gummies Mixed Berry",
+          "score": 58.1
+        },
+        {
+          "dsld_id": "267657",
+          "brand": "Culturelle",
+          "name": "Probiotic Gummies with Prebiotics Mixed Berry",
+          "score": 58.1
+        },
+        {
+          "dsld_id": "267658",
+          "brand": "Culturelle",
+          "name": "Probiotic with Prebiotics & Vitamin C Mixed Berry Flavor",
+          "score": 58.1
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 60,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 14
+    },
+    {
+      "identity": "STRAIN_ACIDOPHILUS_DDS1",
+      "standard_name": "Lactobacillus acidophilus DDS-1",
+      "aliases": [
+        "L. acidophilus DDS-1",
+        "DDS-1",
+        "DDS1",
+        "Lactobacillus acidophilus DDS1"
+      ],
+      "affected_scored_products": 17,
+      "representative_products": [
+        {
+          "dsld_id": "246181",
+          "brand": "Pure Encapsulations",
+          "name": "Lactobacillus Acidophilus",
+          "score": 60.2
+        },
+        {
+          "dsld_id": "246182",
+          "brand": "Pure Encapsulations",
+          "name": "Lactobacillus Acidophilus",
+          "score": 60.2
+        },
+        {
+          "dsld_id": "259890",
+          "brand": "Ora",
+          "name": "Lady Bugs",
+          "score": 58.8
+        },
+        {
+          "dsld_id": "223172",
+          "brand": "Nordic Naturals",
+          "name": "Nordic Flora Probiotic Women",
+          "score": 56.4
+        },
+        {
+          "dsld_id": "259879",
+          "brand": "Ora",
+          "name": "Trust Your Gut Apple & Raspberry",
+          "score": 55.9
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 143,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 15
+    },
+    {
+      "identity": "STRAIN_ACIDOPHILUS_LA5",
+      "standard_name": "Lactobacillus acidophilus LA-5",
+      "aliases": [
+        "L. acidophilus LA-5",
+        "LA-5",
+        "Lactobacillus acidophilus La5",
+        "L. acidophilus LA5"
+      ],
+      "affected_scored_products": 12,
+      "representative_products": [
+        {
+          "dsld_id": "79324",
+          "brand": "Solgar",
+          "name": "Advanced Multi-Billion Dophilus",
+          "score": 75.8
+        },
+        {
+          "dsld_id": "264116",
+          "brand": "Solgar",
+          "name": "Advanced Multi-Billion Dophilus",
+          "score": 68.1
+        },
+        {
+          "dsld_id": "80971",
+          "brand": "Solgar",
+          "name": "Advanced 40+ Acidophilus",
+          "score": 64.6
+        },
+        {
+          "dsld_id": "44161",
+          "brand": "Solgar",
+          "name": "Advanced Acidophilus Plus",
+          "score": 59.5
+        },
+        {
+          "dsld_id": "44163",
+          "brand": "Solgar",
+          "name": "Advanced Acidophilus Plus",
+          "score": 59.5
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 79,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 16
+    },
+    {
+      "identity": "STRAIN_BREVE_M16V",
+      "standard_name": "Bifidobacterium breve M-16V",
+      "aliases": [
+        "B. breve M-16V",
+        "M-16V",
+        "M16V",
+        "Bifidobacterium breve M16V"
+      ],
+      "affected_scored_products": 10,
+      "representative_products": [
+        {
+          "dsld_id": "184397",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Adult 50+",
+          "score": 56.1
+        },
+        {
+          "dsld_id": "184402",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Adult 50+",
+          "score": 56.1
+        },
+        {
+          "dsld_id": "267947",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Complete",
+          "score": 56.1
+        },
+        {
+          "dsld_id": "268078",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Complete",
+          "score": 56.1
+        },
+        {
+          "dsld_id": "268081",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Complete",
+          "score": 56.1
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 102,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 17
+    },
+    {
+      "identity": "STRAIN_HELVETICUS_R0052",
+      "standard_name": "Lactobacillus helveticus R0052",
+      "aliases": [
+        "L. helveticus R0052",
+        "R0052",
+        "Lacticaseibacillus helveticus R0052"
+      ],
+      "affected_scored_products": 8,
+      "representative_products": [
+        {
+          "dsld_id": "233043",
+          "brand": "Garden of Life Dr. Formulated Probiotics",
+          "name": "Mood Daily Care 40 Billion CFU Guaranteed",
+          "score": 59.1
+        },
+        {
+          "dsld_id": "307627",
+          "brand": "Jarrow Formulas",
+          "name": "Jarro-Dophilus EPS 10 Billion CFU",
+          "score": 54.3
+        },
+        {
+          "dsld_id": "307628",
+          "brand": "Jarrow Formulas",
+          "name": "Jarro-Dophilus EPS 10 Billion CFU",
+          "score": 54.3
+        },
+        {
+          "dsld_id": "307632",
+          "brand": "Jarrow Formulas",
+          "name": "Jarro-Dophilus EPS 25 Billion CFU",
+          "score": 54.3
+        },
+        {
+          "dsld_id": "307629",
+          "brand": "Jarrow Formulas",
+          "name": "Jarro-Dophilus Ultra 50 Billion CFU",
+          "score": 52.0
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 163,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 18
+    },
+    {
+      "identity": "STRAIN_PLANTARUM_LP01",
+      "standard_name": "Lactiplantibacillus plantarum LP01",
+      "aliases": [
+        "L. plantarum LP01",
+        "L. plantarum Lp-01",
+        "Lactobacillus plantarum LP01",
+        "Lactobacillus plantarum Lp-01",
+        "Lactiplantibacillus plantarum Lp-01",
+        "LP01",
+        "LP-01",
+        "Lp-01",
+        "LMG P-21021"
+      ],
+      "affected_scored_products": 7,
+      "representative_products": [
+        {
+          "dsld_id": "307751",
+          "brand": "Jarrow Formulas",
+          "name": "Yum-Yum Dophilus 1 Billion CFU Raspberry",
+          "score": 46.2
+        },
+        {
+          "dsld_id": "321946",
+          "brand": "Jarrow Formulas",
+          "name": "Jarro-Dophilus Kids 1 Billion CFU Raspberry",
+          "score": 46.2
+        },
+        {
+          "dsld_id": "182666",
+          "brand": "Life Extension",
+          "name": "FLORASSIST Immune Health",
+          "score": 44.7
+        },
+        {
+          "dsld_id": "210848",
+          "brand": "Life Extension Florassist",
+          "name": "Immune Health",
+          "score": 44.7
+        },
+        {
+          "dsld_id": "307750",
+          "brand": "Jarrow Formulas",
+          "name": "Yum-Yum Dophilus 1 Billion CFU Raspberry",
+          "score": 44.4
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 292,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 19
+    },
+    {
+      "identity": "STRAIN_COAGULANS_GBI30",
+      "standard_name": "Bacillus coagulans GBI-30, 6086",
+      "aliases": [
+        "B. coagulans GBI-30 6086",
+        "B. coagulans GBI-30",
+        "Bacillus coagulans GBI-30",
+        "GanedenBC30",
+        "BC30",
+        "BC30 Bacillus coagulans GBI-30, 6086"
+      ],
+      "affected_scored_products": 4,
+      "representative_products": [
+        {
+          "dsld_id": "180210",
+          "brand": "Airborne Plus",
+          "name": "Probiotic Assorted Fruit Flavors",
+          "score": 53.4
+        },
+        {
+          "dsld_id": "213086",
+          "brand": "Airborne",
+          "name": "Airborne + Probiotic Assorted Fruit Flavors",
+          "score": 53.4
+        },
+        {
+          "dsld_id": "59635",
+          "brand": "Life Extension",
+          "name": "Advanced Oral Hygiene",
+          "score": 52.2
+        },
+        {
+          "dsld_id": "63294",
+          "brand": "Life Extension",
+          "name": "FLORASSIST Oral Hygeine",
+          "score": 48.2
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 70,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 20
+    },
+    {
+      "identity": "STRAIN_RHAMNOSUS_GR1",
+      "standard_name": "Lactobacillus rhamnosus GR-1",
+      "aliases": [
+        "L. rhamnosus GR-1",
+        "GR-1",
+        "LGR-1",
+        "Lacticaseibacillus rhamnosus GR-1"
+      ],
+      "affected_scored_products": 4,
+      "representative_products": [
+        {
+          "dsld_id": "307586",
+          "brand": "Jarrow Formulas",
+          "name": "Fem Dophilus",
+          "score": 53.4
+        },
+        {
+          "dsld_id": "307587",
+          "brand": "Jarrow Formulas",
+          "name": "Fem Dophilus 5 Billion CFU",
+          "score": 53.4
+        },
+        {
+          "dsld_id": "307588",
+          "brand": "Jarrow Formulas",
+          "name": "Fem Dophilus 1 Billion CFU",
+          "score": 52.0
+        },
+        {
+          "dsld_id": "307589",
+          "brand": "Jarrow Formulas",
+          "name": "Fem Dophilus 1 Billion CFU",
+          "score": 52.0
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 110,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 21
+    },
+    {
+      "identity": "STRAIN_CASEI_431",
+      "standard_name": "Lactobacillus paracasei L.CASEI 431",
+      "aliases": [
+        "L. casei 431",
+        "L.CASEI 431",
+        "CASEI 431",
+        "Lactobacillus casei 431",
+        "L. paracasei 431",
+        "L. paracasei, L. CASEI 431"
+      ],
+      "affected_scored_products": 4,
+      "representative_products": [
+        {
+          "dsld_id": "79324",
+          "brand": "Solgar",
+          "name": "Advanced Multi-Billion Dophilus",
+          "score": 75.8
+        },
+        {
+          "dsld_id": "264116",
+          "brand": "Solgar",
+          "name": "Advanced Multi-Billion Dophilus",
+          "score": 68.1
+        },
+        {
+          "dsld_id": "80971",
+          "brand": "Solgar",
+          "name": "Advanced 40+ Acidophilus",
+          "score": 64.6
+        },
+        {
+          "dsld_id": "264115",
+          "brand": "Solgar",
+          "name": "Advanced 40+ Acidophilus",
+          "score": 58.8
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 102,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 22
+    },
+    {
+      "identity": "STRAIN_FERMENTUM_RC14",
+      "standard_name": "Lactobacillus reuteri RC-14",
+      "aliases": [
+        "L. reuteri RC-14",
+        "RC-14",
+        "Limosilactobacillus reuteri RC-14",
+        "L. fermentum RC-14"
+      ],
+      "affected_scored_products": 4,
+      "representative_products": [
+        {
+          "dsld_id": "307586",
+          "brand": "Jarrow Formulas",
+          "name": "Fem Dophilus",
+          "score": 53.4
+        },
+        {
+          "dsld_id": "307587",
+          "brand": "Jarrow Formulas",
+          "name": "Fem Dophilus 5 Billion CFU",
+          "score": 53.4
+        },
+        {
+          "dsld_id": "307588",
+          "brand": "Jarrow Formulas",
+          "name": "Fem Dophilus 1 Billion CFU",
+          "score": 52.0
+        },
+        {
+          "dsld_id": "307589",
+          "brand": "Jarrow Formulas",
+          "name": "Fem Dophilus 1 Billion CFU",
+          "score": 52.0
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 70,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 23
+    },
+    {
+      "identity": "STRAIN_LONGUM_R0175",
+      "standard_name": "Bifidobacterium longum R0175",
+      "aliases": [
+        "B. longum R0175",
+        "R0175"
+      ],
+      "affected_scored_products": 4,
+      "representative_products": [
+        {
+          "dsld_id": "233043",
+          "brand": "Garden of Life Dr. Formulated Probiotics",
+          "name": "Mood Daily Care 40 Billion CFU Guaranteed",
+          "score": 59.1
+        },
+        {
+          "dsld_id": "274061",
+          "brand": "Garden of Life Dr. Formulated Probiotics",
+          "name": "Mood+ 50 Billion Guaranteed",
+          "score": 51.3
+        },
+        {
+          "dsld_id": "267300",
+          "brand": "Garden of Life Dr. Formulated Probiotics",
+          "name": "Mood+ 50 Billion Guaranteed",
+          "score": 47.4
+        },
+        {
+          "dsld_id": "267301",
+          "brand": "Garden of Life Dr. Formulated Probiotics",
+          "name": "Mood+ 50 Billion Guaranteed",
+          "score": 47.4
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 157,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 24
+    },
+    {
+      "identity": "STRAIN_M18",
+      "standard_name": "Streptococcus salivarius M18",
+      "aliases": [
+        "S. salivarius M18",
+        "BLIS M18",
+        "Streptococcus M18",
+        "M18",
+        "Streptococcus salivarius BLIS M18",
+        "Streptococcus salivarius BLIS M-18",
+        "S. salivarius BLIS M18",
+        "S. salivarius BLIS M-18",
+        "BLIS M18 S. salivarius M18"
+      ],
+      "affected_scored_products": 3,
+      "representative_products": [
+        {
+          "dsld_id": "65064",
+          "brand": "Life Extension",
+          "name": "FLORASSIST Oral Hygiene",
+          "score": 58.5
+        },
+        {
+          "dsld_id": "232325",
+          "brand": "Life Extension Florassist",
+          "name": "Oral Hygiene",
+          "score": 58.4
+        },
+        {
+          "dsld_id": "63294",
+          "brand": "Life Extension",
+          "name": "FLORASSIST Oral Hygeine",
+          "score": 48.2
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 34,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 25
+    },
+    {
+      "identity": "STRAIN_COAGULANS_SNZ1969",
+      "standard_name": "Bacillus coagulans SNZ 1969",
+      "aliases": [
+        "Bacillus coagulans SNZ1969",
+        "Bacillus coagulans SNZ 1969",
+        "SNZ 1969"
+      ],
+      "affected_scored_products": 3,
+      "representative_products": [
+        {
+          "dsld_id": "334127",
+          "brand": "Garden of Life Dr. Formulated",
+          "name": "Probiotics Kids 5 Billion Strawberry Flavor",
+          "score": 49.5
+        },
+        {
+          "dsld_id": "241707",
+          "brand": "HUM",
+          "name": "Skin Squad Pre + Probiotic",
+          "score": 44.0
+        },
+        {
+          "dsld_id": "276704",
+          "brand": "HUM",
+          "name": "Skin Heroes Pre+Probiotic",
+          "score": 44.0
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 40,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 26
+    },
+    {
+      "identity": "STRAIN_INFANTIS_M63",
+      "standard_name": "Bifidobacterium longum subsp. infantis M-63",
+      "aliases": [
+        "Bifidobacterium infantis M-63",
+        "B. infantis M-63",
+        "Bifidobacterium longum infantis M-63",
+        "Bifidobacterium longum infantis M63",
+        "M-63"
+      ],
+      "affected_scored_products": 3,
+      "representative_products": [
+        {
+          "dsld_id": "184397",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Adult 50+",
+          "score": 56.1
+        },
+        {
+          "dsld_id": "184402",
+          "brand": "Nature's Way",
+          "name": "Probiotic Pearls Adult 50+",
+          "score": 56.1
+        },
+        {
+          "dsld_id": "307626",
+          "brand": "Jarrow Formulas",
+          "name": "Jarro-Dophilus Infant 1 Billion CFU",
+          "score": 52.4
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 150,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 27
+    },
+    {
+      "identity": "STRAIN_K12",
+      "standard_name": "Streptococcus salivarius K12",
+      "aliases": [
+        "S. salivarius K12",
+        "BLIS K12",
+        "Streptococcus K12",
+        "K12",
+        "BLIS K12 Streptococcus salivarius",
+        "BLIS K12 Streptococcus salivarius K12",
+        "Blis K12 Streptococcus salivarius",
+        "Streptococcus salivarius BLIS K-12",
+        "S. salivarius BLIS K-12",
+        "S. salivarius BLIS K12",
+        "BLIS K12 S. salivarius K12"
+      ],
+      "affected_scored_products": 2,
+      "representative_products": [
+        {
+          "dsld_id": "232097",
+          "brand": "Life Extension Florassist",
+          "name": "Throat Health",
+          "score": 60.6
+        },
+        {
+          "dsld_id": "59635",
+          "brand": "Life Extension",
+          "name": "Advanced Oral Hygiene",
+          "score": 52.2
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 47,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 28
+    },
+    {
+      "identity": "STRAIN_PLANTARUM_HEAL9",
+      "standard_name": "Lactobacillus plantarum HEAL9",
+      "aliases": [
+        "L. plantarum HEAL9",
+        "HEAL9",
+        "DSM 15312",
+        "Lactiplantibacillus plantarum HEAL9",
+        "L. plantarum DSM 15312",
+        "Lactobacillus plantarum DSM 15312"
+      ],
+      "affected_scored_products": 2,
+      "representative_products": [
+        {
+          "dsld_id": "240117",
+          "brand": "Nature's Bounty",
+          "name": "Probiotic 10",
+          "score": 65.9
+        },
+        {
+          "dsld_id": "62743",
+          "brand": "Nature's Bounty",
+          "name": "Probiotic 10",
+          "score": 65.7
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 112,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 29
+    },
+    {
+      "identity": "STRAIN_PARACASEI_8700",
+      "standard_name": "Lactobacillus paracasei 8700:2",
+      "aliases": [
+        "L. paracasei 8700:2",
+        "DSM 13434",
+        "Lacticaseibacillus paracasei 8700:2",
+        "L. paracasei DSM 13434",
+        "Lactobacillus paracasei DSM 13434"
+      ],
+      "affected_scored_products": 2,
+      "representative_products": [
+        {
+          "dsld_id": "240117",
+          "brand": "Nature's Bounty",
+          "name": "Probiotic 10",
+          "score": 65.9
+        },
+        {
+          "dsld_id": "62743",
+          "brand": "Nature's Bounty",
+          "name": "Probiotic 10",
+          "score": 65.7
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 95,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 30
+    },
+    {
+      "identity": "STRAIN_LACTIS_UABla12",
+      "standard_name": "Bifidobacterium lactis UABla-12",
+      "aliases": [
+        "B. lactis UABla-12",
+        "UABla-12",
+        "Bifidobacterium animalis UABla-12",
+        "Bifidobacterium animalis lactis UABla-12"
+      ],
+      "affected_scored_products": 2,
+      "representative_products": [
+        {
+          "dsld_id": "259879",
+          "brand": "Ora",
+          "name": "Trust Your Gut Apple & Raspberry",
+          "score": 55.9
+        },
+        {
+          "dsld_id": "322682",
+          "brand": "Ora",
+          "name": "Trust Your Gut",
+          "score": 54.9
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 94,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 31
+    },
+    {
+      "identity": "STRAIN_LACTIS_BS01",
+      "standard_name": "Bifidobacterium animalis subsp. lactis BS01",
+      "aliases": [
+        "B. lactis BS01",
+        "B. lactis BS-01",
+        "B. lactis BS-1",
+        "Bifidobacterium animalis lactis BS-01",
+        "Bifidobacterium animalis lactis BS01",
+        "Bifidobacterium animalis lactis BS-1",
+        "Bifidobacterium animalis subsp. lactis BS01",
+        "BS01",
+        "BS-01",
+        "BS-1",
+        "LMG P-21384"
+      ],
+      "affected_scored_products": 2,
+      "representative_products": [
+        {
+          "dsld_id": "307751",
+          "brand": "Jarrow Formulas",
+          "name": "Yum-Yum Dophilus 1 Billion CFU Raspberry",
+          "score": 46.2
+        },
+        {
+          "dsld_id": "321946",
+          "brand": "Jarrow Formulas",
+          "name": "Jarro-Dophilus Kids 1 Billion CFU Raspberry",
+          "score": 46.2
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 240,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 32
+    },
+    {
+      "identity": "STRAIN_BREVE_SD_BR3_IT",
+      "standard_name": "Bifidobacterium breve SD-BR3-IT",
+      "aliases": [
+        "B. breve SD-BR3-IT",
+        "Bifidobacterium breve SD BR3 IT",
+        "SD-BR3-IT",
+        "SD BR3 IT"
+      ],
+      "affected_scored_products": 1,
+      "representative_products": [
+        {
+          "dsld_id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+          "brand": "Seed",
+          "name": "DS-01 Daily Synbiotic",
+          "score": 81.2
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 165,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 33
+    },
+    {
+      "identity": "STRAIN_SALIVARIUS_SD_LS1_IT",
+      "standard_name": "Ligilactobacillus salivarius SD-LS1-IT",
+      "aliases": [
+        "L. salivarius SD-LS1-IT",
+        "Lactobacillus salivarius SD-LS1-IT",
+        "Ligilactobacillus salivarius SD LS1 IT",
+        "SD-LS1-IT",
+        "SD LS1 IT"
+      ],
+      "affected_scored_products": 1,
+      "representative_products": [
+        {
+          "dsld_id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+          "brand": "Seed",
+          "name": "DS-01 Daily Synbiotic",
+          "score": 81.2
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 165,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 34
+    },
+    {
+      "identity": "STRAIN_PLANTARUM_SD_LP1_IT",
+      "standard_name": "Lactiplantibacillus plantarum SD-LP1-IT",
+      "aliases": [
+        "L. plantarum SD-LP1-IT",
+        "Lactobacillus plantarum SD-LP1-IT",
+        "Lactiplantibacillus plantarum SD LP1 IT",
+        "SD-LP1-IT",
+        "SD LP1 IT"
+      ],
+      "affected_scored_products": 1,
+      "representative_products": [
+        {
+          "dsld_id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+          "brand": "Seed",
+          "name": "DS-01 Daily Synbiotic",
+          "score": 81.2
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 165,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 35
+    },
+    {
+      "identity": "STRAIN_PLANTARUM_SD_LPLDL_UK",
+      "standard_name": "Lactiplantibacillus plantarum SD-LPLDL-UK",
+      "aliases": [
+        "L. plantarum SD-LPLDL-UK",
+        "Lactobacillus plantarum SD-LPLDL-UK",
+        "Lactiplantibacillus plantarum SD LPLDL UK",
+        "LPLDL",
+        "SD-LPLDL-UK",
+        "SD LPLDL UK"
+      ],
+      "affected_scored_products": 1,
+      "representative_products": [
+        {
+          "dsld_id": "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7",
+          "brand": "Seed",
+          "name": "DS-01 Daily Synbiotic",
+          "score": 81.2
+        }
+      ],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 165,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 36
+    },
+    {
+      "identity": "STRAIN_REUTERI_DSM17938",
+      "standard_name": "Lactobacillus reuteri DSM 17938",
+      "aliases": [
+        "L. reuteri DSM 17938",
+        "L. reuteri DSM17938",
+        "Limosilactobacillus reuteri DSM 17938",
+        "L. reuteri Protectis",
+        "BioGaia Protectis",
+        "Reuteri Protectis"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 93,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 37
+    },
+    {
+      "identity": "STRAIN_REUTERI_PRODENTIS",
+      "standard_name": "Lactobacillus reuteri Prodentis",
+      "aliases": [
+        "L. reuteri ATCC PTA 5289",
+        "L. reuteri ATCC 55730",
+        "L. reuteri Prodentis",
+        "Prodentis",
+        "Prodentis Blend",
+        "BioGaia Prodentis",
+        "Limosilactobacillus reuteri Prodentis"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 82,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 38
+    },
+    {
+      "identity": "STRAIN_INFANTIS_35624",
+      "standard_name": "Bifidobacterium infantis 35624",
+      "aliases": [
+        "B. infantis 35624",
+        "Bifantis",
+        "Bifidobacterium longum 35624",
+        "B. longum subsp. infantis 35624"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 41,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 39
+    },
+    {
+      "identity": "STRAIN_CASEI_SHIROTA",
+      "standard_name": "Lactobacillus casei Shirota",
+      "aliases": [
+        "L. casei Shirota",
+        "LcS",
+        "Yakult strain"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 38,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 40
+    },
+    {
+      "identity": "STRAIN_CLAUSII",
+      "standard_name": "Bacillus clausii",
+      "aliases": [
+        "B. clausii",
+        "Enterogermina",
+        "Bacillus clausii O/C",
+        "Bacillus clausii N/R",
+        "Bacillus clausii SIN",
+        "Bacillus clausii T"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 91,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 41
+    },
+    {
+      "identity": "STRAIN_GASSERI_SBT2055",
+      "standard_name": "Lactobacillus gasseri SBT2055",
+      "aliases": [
+        "L. gasseri SBT2055",
+        "LG2055",
+        "SBT2055",
+        "Lactobacillus gasseri LG2055"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 148,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 42
+    },
+    {
+      "identity": "STRAIN_GASSERI_BNR17",
+      "standard_name": "Lactobacillus gasseri BNR17",
+      "aliases": [
+        "L. gasseri BNR17",
+        "BNR17",
+        "Lactobacillus gasseri BNR-17"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 142,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 43
+    },
+    {
+      "identity": "STRAIN_FERMENTUM_ME3",
+      "standard_name": "Lactobacillus fermentum ME-3",
+      "aliases": [
+        "L. fermentum ME-3",
+        "ME-3",
+        "ME3",
+        "Limosilactobacillus fermentum ME-3"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 183,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 44
+    },
+    {
+      "identity": "STRAIN_LONGUM_1714",
+      "standard_name": "Bifidobacterium longum 1714",
+      "aliases": [
+        "B. longum 1714",
+        "1714",
+        "Bifidobacterium longum NCIMB 41676",
+        "Zenflore"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 129,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 45
+    },
+    {
+      "identity": "STRAIN_REUTERI_ATCC6475",
+      "standard_name": "Lactobacillus reuteri ATCC 6475",
+      "aliases": [
+        "L. reuteri ATCC 6475",
+        "ATCC 6475",
+        "Limosilactobacillus reuteri ATCC 6475",
+        "L. reuteri 6475"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 146,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 46
+    },
+    {
+      "identity": "STRAIN_CRISPATUS_CTV05",
+      "standard_name": "Lactobacillus crispatus CTV-05",
+      "aliases": [
+        "L. crispatus CTV-05",
+        "CTV-05",
+        "LACTIN-V",
+        "Lactobacillus crispatus CTV05"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 130,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 47
+    },
+    {
+      "identity": "STRAIN_NISSLE_1917",
+      "standard_name": "Escherichia coli Nissle 1917",
+      "aliases": [
+        "E. coli Nissle 1917",
+        "EcN",
+        "Nissle 1917",
+        "Mutaflor",
+        "Escherichia coli strain Nissle"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 111,
+        "evidence_level_in_registry": "high",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 48
+    },
+    {
+      "identity": "STRAIN_RHAMNOSUS_SP1",
+      "standard_name": "Lactobacillus rhamnosus SP1",
+      "aliases": [
+        "L. rhamnosus SP1",
+        "SP1",
+        "Lacticaseibacillus rhamnosus SP1"
+      ],
+      "affected_scored_products": 0,
+      "representative_products": [],
+      "registry": {
+        "context_count": 0,
+        "context_review_states": {},
+        "source_pmids": [],
+        "unresolved_or_held_contexts": [],
+        "contexts_with_resolved_dose": 0,
+        "notable_studies": 95,
+        "evidence_level_in_registry": "moderate",
+        "evidence_review": null
+      },
+      "priority_first": false,
+      "review": {
+        "human_vs_nonhuman_source": "not_reviewed",
+        "studied_doses": "not_reviewed",
+        "population": "not_reviewed",
+        "indication_outcome": "not_reviewed",
+        "duration": "not_reviewed",
+        "result_direction": "not_reviewed",
+        "systematic_review_or_guideline_support": "not_reviewed",
+        "dose_applicability_status": "not_reviewed",
+        "source_quality": "not_reviewed",
+        "evidence_strength": "not_reviewed",
+        "review_completeness": "not_reviewed",
+        "reviewer_adjudication_status": "not_reviewed"
+      },
+      "rank": 49
+    }
+  ],
+  "label_strains_without_registry_identity": [
+    {
+      "label_strain": "Lactobacillus acidophilus",
+      "affected_scored_products": 99,
+      "examples": [
+        "CVS Health \u2014 Adult 50+ Probiotic",
+        "CVS Health \u2014 Adult Probiotic",
+        "CVS Health \u2014 Digestive Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Bifidobacterium longum",
+      "affected_scored_products": 83,
+      "examples": [
+        "CVS Health \u2014 Adult 50+ Probiotic",
+        "CVS Health \u2014 Adult Probiotic",
+        "CVS Health \u2014 Digestive Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus plantarum",
+      "affected_scored_products": 79,
+      "examples": [
+        "CVS Health \u2014 Adult 50+ Probiotic",
+        "CVS Health \u2014 Adult Probiotic",
+        "CVS Health \u2014 Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Bifidobacterium animalis lactis",
+      "affected_scored_products": 78,
+      "examples": [
+        "CVS Pharmacy \u2014 Digestive Probiotic Intestinal & Immune Health",
+        "Equate \u2014 Digestive Care Probiotic",
+        "Equate \u2014 Extra Care Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus casei",
+      "affected_scored_products": 74,
+      "examples": [
+        "CVS Health \u2014 Adult 50+ Probiotic",
+        "CVS Health \u2014 Adult Probiotic",
+        "CVS Health \u2014 Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus rhamnosus",
+      "affected_scored_products": 67,
+      "examples": [
+        "CVS Health \u2014 Adult 50+ Probiotic",
+        "CVS Health \u2014 Adult Probiotic",
+        "CVS Health \u2014 Digestive Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Bifidobacterium bifidum",
+      "affected_scored_products": 63,
+      "examples": [
+        "CVS Health \u2014 Adult 50+ Probiotic",
+        "CVS Health \u2014 Probiotic",
+        "CVS Health \u2014 Senior Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Bifidobacterium breve",
+      "affected_scored_products": 52,
+      "examples": [
+        "CVS Health \u2014 Adult 50+ Probiotic",
+        "CVS Health \u2014 Adult Probiotic",
+        "CVS Health \u2014 Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus paracasei",
+      "affected_scored_products": 52,
+      "examples": [
+        "Equate \u2014 Extra Care Probiotic",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Mood+ 50 Billion Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Once Daily 30 Billion Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus brevis",
+      "affected_scored_products": 47,
+      "examples": [
+        "Garden of Life Dr. Formulated Probiotics \u2014 Mood+ 50 Billion Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Once Daily 30 Billion Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Once Daily Men's 50 Billion Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus bulgaricus",
+      "affected_scored_products": 41,
+      "examples": [
+        "CVS Health \u2014 Adult 50+ Probiotic",
+        "CVS Pharmacy \u2014 Adult 50+ Probiotic",
+        "Equate \u2014 Extra Care Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus gasseri",
+      "affected_scored_products": 40,
+      "examples": [
+        "Equate \u2014 Colon Support Probiotic",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Mood+ 50 Billion Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Once Daily 30 Billion Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Bifidobacterium bifidum (CUL 20)",
+      "affected_scored_products": 37,
+      "examples": [
+        "GNC Milestones \u2014 Baby Probiotic Powder with Colostrum Unflavored",
+        "GNC Milestones \u2014 Kids Chewable Probiotic For Kids 4-12 Natural Strawberry Flavor",
+        "GNC Natural Brand \u2014 Clear Mixing Super Fiber With Probiotics"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus acidophilus (CUL 60)",
+      "affected_scored_products": 32,
+      "examples": [
+        "GNC Natural Brand \u2014 Clear Mixing Super Fiber With Probiotics",
+        "GNC Preventive Nutrition \u2014 Probiotic 12.5 Billion",
+        "GNC Probiotic Complex \u2014 Probiotic Complex 10 Billion CFUs"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus salivarius",
+      "affected_scored_products": 32,
+      "examples": [
+        "Equate \u2014 Extra Care Probiotic",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Mood+ 50 Billion Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Once Daily 30 Billion Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Streptococcus thermophilus",
+      "affected_scored_products": 31,
+      "examples": [
+        "CVS Health \u2014 Adult 50+ Probiotic",
+        "CVS Health \u2014 Adult Probiotic",
+        "CVS Health \u2014 Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus acidophilus LA-14",
+      "affected_scored_products": 30,
+      "examples": [
+        "Garden of Life Baby \u2014 Probiotic 4 Billion CFU",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Gas & Bloating Daily Care",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Women's Daily Care 40 Billion CFU Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Lactococcus lactis",
+      "affected_scored_products": 30,
+      "examples": [
+        "CVS Health \u2014 Adult 50+ Probiotic",
+        "CVS Health \u2014 Adult Probiotic",
+        "CVS Health \u2014 Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Bifidobacterium infantis",
+      "affected_scored_products": 29,
+      "examples": [
+        "CVS Pharmacy \u2014 Digestive Probiotic",
+        "Equate \u2014 Digestive Care Probiotic",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Mood+ 50 Billion Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus acidophilus (CUL 21)",
+      "affected_scored_products": 29,
+      "examples": [
+        "GNC Preventive Nutrition \u2014 Probiotic 12.5 Billion",
+        "GNC Probiotic Complex \u2014 Probiotic Complex 10 Billion CFUs",
+        "GNC Probiotic Complex \u2014 Probiotic Complex 25 Billion CFUs"
+      ]
+    },
+    {
+      "label_strain": "Bifidobacterium bifidum Bb-06",
+      "affected_scored_products": 25,
+      "examples": [
+        "Garden of Life Baby \u2014 Probiotic 4 Billion CFU",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Critical Care 80 Billion CFU Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Daily Care 25 Billion CFU Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Bifidobacterium animalis subsp. lactis (CUL 34)",
+      "affected_scored_products": 25,
+      "examples": [
+        "GNC Probiotic Complex \u2014 Probiotic Complex 10 Billion CFUs",
+        "GNC Probiotic Complex \u2014 Probiotic Complex 25 Billion CFUs",
+        "GNC Probiotic Complex \u2014 Probiotic Complex 50 Billion CFUs"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus acidophilus La-14",
+      "affected_scored_products": 24,
+      "examples": [
+        "Align \u2014 Women's Dual Action",
+        "CVS Health \u2014 Acidophilus",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Critical Care 80 Billion CFU Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus plantarum Lp-115",
+      "affected_scored_products": 24,
+      "examples": [
+        "Garden of Life Dr. Formulated Probiotics \u2014 Critical Care 80 Billion CFU Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Daily Care 25 Billion CFU Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Men's Daily Care 40 Billion CFU Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus plantarum LP-115",
+      "affected_scored_products": 24,
+      "examples": [
+        "Garden of Life Dr. Formulated Probiotics \u2014 Gas & Bloating Daily Care",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Women's Daily Care 40 Billion CFU Guaranteed",
+        "Garden of Life Dr. Formulated \u2014 Probiotics 100 Billion"
+      ]
+    },
+    {
+      "label_strain": "Bacillus subtilis",
+      "affected_scored_products": 21,
+      "examples": [
+        "GNC Probiotic Solutions \u2014 Probiotic Solutions Sport 25 Billion CFUs",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Platinum Series Immune+",
+        "Garden of Life Primal Defense  \u2014 HSO Probiotic Formula"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus fermentum",
+      "affected_scored_products": 20,
+      "examples": [
+        "Garden of Life Dr. Formulated Probiotics \u2014 Once Daily Men's 50 Billion Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Once Daily Women's",
+        "Garden of Life Dr. Formulated \u2014 Platinum Series Iron Absorb+"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus helveticus",
+      "affected_scored_products": 20,
+      "examples": [
+        "CVS Health \u2014 Probiotic",
+        "CVS Health \u2014 Senior Probiotic",
+        "CVS Pharmacy \u2014 Probiotic"
+      ]
+    },
+    {
+      "label_strain": "Bifidobacterium longum Bl-05",
+      "affected_scored_products": 19,
+      "examples": [
+        "Garden of Life Baby \u2014 Probiotic 4 Billion CFU",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Critical Care 80 Billion CFU Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Daily Care 25 Billion CFU Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus casei LC-11",
+      "affected_scored_products": 17,
+      "examples": [
+        "Garden of Life Dr. Formulated Probiotics \u2014 Gas & Bloating Daily Care",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Women's Daily Care 40 Billion CFU Guaranteed",
+        "Garden of Life Dr. Formulated \u2014 Probiotics 100 Billion"
+      ]
+    },
+    {
+      "label_strain": "Lactococcus cremoris",
+      "affected_scored_products": 17,
+      "examples": [
+        "Garden of Life Raw Probiotics \u2014 5-Day Max Care",
+        "Garden of Life Raw Probiotics \u2014 Colon Care",
+        "Garden of Life Raw Probiotics \u2014 Men 50 & Wiser"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus kefiranofaciens",
+      "affected_scored_products": 17,
+      "examples": [
+        "Garden of Life Raw Probiotics \u2014 5-Day Max Care",
+        "Garden of Life Raw Probiotics \u2014 Colon Care",
+        "Garden of Life Raw Probiotics \u2014 Men 50 & Wiser"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus kefirgranum",
+      "affected_scored_products": 17,
+      "examples": [
+        "Garden of Life Raw Probiotics \u2014 5-Day Max Care",
+        "Garden of Life Raw Probiotics \u2014 Colon Care",
+        "Garden of Life Raw Probiotics \u2014 Men 50 & Wiser"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus parakefir",
+      "affected_scored_products": 17,
+      "examples": [
+        "Garden of Life Raw Probiotics \u2014 5-Day Max Care",
+        "Garden of Life Raw Probiotics \u2014 Colon Care",
+        "Garden of Life Raw Probiotics \u2014 Men 50 & Wiser"
+      ]
+    },
+    {
+      "label_strain": "Saccharomyces unisporus",
+      "affected_scored_products": 17,
+      "examples": [
+        "Garden of Life Raw Probiotics \u2014 5-Day Max Care",
+        "Garden of Life Raw Probiotics \u2014 Colon Care",
+        "Garden of Life Raw Probiotics \u2014 Men 50 & Wiser"
+      ]
+    },
+    {
+      "label_strain": "Saccharomyces turicensis",
+      "affected_scored_products": 17,
+      "examples": [
+        "Garden of Life Raw Probiotics \u2014 5-Day Max Care",
+        "Garden of Life Raw Probiotics \u2014 Colon Care",
+        "Garden of Life Raw Probiotics \u2014 Men 50 & Wiser"
+      ]
+    },
+    {
+      "label_strain": "Saccharomyces exiguus",
+      "affected_scored_products": 17,
+      "examples": [
+        "Garden of Life Raw Probiotics \u2014 5-Day Max Care",
+        "Garden of Life Raw Probiotics \u2014 Colon Care",
+        "Garden of Life Raw Probiotics \u2014 Men 50 & Wiser"
+      ]
+    },
+    {
+      "label_strain": "Bifidobacterium breve Bb-03",
+      "affected_scored_products": 16,
+      "examples": [
+        "Garden of Life Dr. Formulated Probiotics \u2014 Critical Care 80 Billion CFU Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Daily Care 25 Billion CFU Guaranteed",
+        "Garden of Life Dr. Formulated Probiotics \u2014 Men's Daily Care 40 Billion CFU Guaranteed"
+      ]
+    },
+    {
+      "label_strain": "Lactobacillus kefir",
+      "affected_scored_products": 16,
+      "examples": [
+        "Garden of Life Raw Probiotics \u2014 5-Day Max Care",
+        "Garden of Life Raw Probiotics \u2014 Colon Care",
+        "Garden of Life Raw Probiotics \u2014 Men 50 & Wiser"
+      ]
+    },
+    {
+      "label_strain": "Saccharomyces cerevisiae",
+      "affected_scored_products": 16,
+      "examples": [
+        "Garden of Life Raw Probiotics \u2014 5-Day Max Care",
+        "Garden of Life Raw Probiotics \u2014 Colon Care",
+        "Garden of Life Raw Probiotics \u2014 Men 50 & Wiser"
+      ]
+    }
+  ]
+}
