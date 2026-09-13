@@ -7812,7 +7812,10 @@ def build_detail_blob(
         },
         "proprietary_blend_detail": {
             "has_proprietary_blends": json_bool(safe_dict(enriched.get("proprietary_data")).get("has_proprietary_blends")),
-            "blends": safe_list(safe_dict(enriched.get("proprietary_data")).get("blends")),
+            "blends": annotate_probiotic_blend_totals(
+                safe_list(safe_dict(enriched.get("proprietary_data")).get("blends")),
+                safe_dict(enriched.get("probiotic_data")),
+            ),
         },
         "dietary_sensitivity_detail": {
             "sugar": safe_dict(ds.get("sugar")),
@@ -10041,6 +10044,62 @@ def generate_net_contents_summary(enriched: Dict) -> Dict:
         "net_contents_quantity": quantity,
         "net_contents_unit": unit,
     }
+
+
+def format_billion_cfu_label(billion_count: object) -> str | None:
+    """"50 billion CFU" for a live-count total; None when there is no count."""
+    value = safe_float(billion_count)
+    if value is None or value <= 0:
+        return None
+    text = f"{value:.0f}" if abs(value - round(value)) < 0.05 else f"{value:.1f}"
+    return f"{text} billion CFU"
+
+
+def annotate_probiotic_blend_totals(
+    blends: list, probiotic_data: dict
+) -> list:
+    """Carry a blend's disclosed live-count total onto its blob row.
+
+    DSLD stores a probiotic blend's "50 billion CFU" in the row's notes, not
+    its quantity, so the blend row reaches the blob with total_weight 0 and
+    the app says "Amount not disclosed" about a label that printed the total.
+    The probiotic parser already recovered the count into
+    probiotic_data.probiotic_blends[].cfu_data with the source row it came
+    from; join on that row (name as fallback) and say it once, as a formatted
+    label, without inventing a weight. Individual strain counts stay hidden
+    and the app says so beside it.
+    """
+    out: list = []
+    by_row: dict = {}
+    by_name: dict = {}
+    for pb in safe_list(probiotic_data.get("probiotic_blends")):
+        if not isinstance(pb, dict):
+            continue
+        cfu = safe_dict(pb.get("cfu_data"))
+        if not cfu.get("has_cfu"):
+            continue
+        label = format_billion_cfu_label(cfu.get("billion_count"))
+        if not label:
+            continue
+        row_ref = safe_str(cfu.get("raw_source_path") or pb.get("raw_source_path"))
+        if row_ref:
+            by_row[row_ref] = label
+        name = normalize_text(pb.get("name"))
+        if name:
+            by_name[name] = label
+    for blend in blends:
+        if not isinstance(blend, dict):
+            out.append(blend)
+            continue
+        annotated = dict(blend)
+        has_weight = (safe_float(blend.get("total_weight")) or 0) > 0
+        if not has_weight:
+            label = by_row.get(safe_str(blend.get("source_row_ref"))) or by_name.get(normalize_text(blend.get("name")))
+            if label:
+                annotated["display_total_label"] = label
+                annotated["total_disclosure"] = "total_cfu"
+        out.append(annotated)
+    return out
 
 
 def build_structured_allergens(enriched: Dict) -> List[Dict]:

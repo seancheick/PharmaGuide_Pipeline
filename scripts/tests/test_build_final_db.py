@@ -6799,3 +6799,28 @@ def test_formula_history_order_is_deterministic_from_explicit_dates_and_snapshot
         "undated",
     ]
     assert len({entry["formula_fingerprint"] for entry in first}) == 1
+
+
+def test_probiotic_blend_total_cfu_reaches_the_blend_row():
+    """A label that prints "50 billion CFU" for its blend must not reach the app
+    as "Amount not disclosed": the count lives in the row notes, the parser
+    recovers it, and the blend row carries it as a formatted label."""
+    from build_final_db import annotate_probiotic_blend_totals
+
+    blends = [
+        {"name": "Probiotic Blend", "total_weight": 0.0, "unit": "", "source_row_ref": "ingredientRows[0]"},
+        {"name": "Herbal Blend", "total_weight": 250.0, "unit": "mg", "source_row_ref": "ingredientRows[1]"},
+    ]
+    probiotic_data = {
+        "probiotic_blends": [
+            {"name": "Probiotic Blend", "raw_source_path": "ingredientRows[0]",
+             "cfu_data": {"has_cfu": True, "billion_count": 50.0, "raw_source_path": "ingredientRows[0]"}},
+        ]
+    }
+    out = annotate_probiotic_blend_totals(blends, probiotic_data)
+    assert out[0]["display_total_label"] == "50 billion CFU"
+    assert out[0]["total_disclosure"] == "total_cfu"
+    # a weight total is left alone; nothing is invented for it
+    assert "display_total_label" not in out[1]
+    # no count recovered -> untouched
+    assert "display_total_label" not in annotate_probiotic_blend_totals(blends, {})[0]
