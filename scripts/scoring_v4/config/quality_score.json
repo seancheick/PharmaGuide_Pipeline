@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.1.4-audited-ceilings",
+    "version": "1.1.5-probiotic-aggregate-potency",
     "schema_version": "1.0.0",
     "last_updated": "2026-09-13",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Generic single-bioactive caps prevent clean narrow products from implying elite clinical-formula evidence. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
@@ -164,6 +164,9 @@
       "aggregate_cfu_low_tier_presence_floor": 2.0,
       "aggregate_cfu_low_named_strain_total_floor": 4.0,
       "cap_direct_strain_mass_floor": 5.0,
+      "aggregate_potency_bands": [[0.0, 3.0], [1.0, 6.0], [5.0, 8.0]],
+      "aggregate_potency_cap": 8.0,
+      "_aggregate_potency_doc": "1.1.5 (2026-09-13): a label that names its strains and prints a valid total CFU/AFU earns physical-potency credit in place of the old 4-point presence floor. Saturating by design: below 1B 3, 1B to <5B 6, 5B and above 8, and nothing more for 50B or 400B; more organisms is not more benefit (NIH ODS / WGO). It is never split across strains, never turned into a studied strain dose, and never reaches the per-strain (10) or clinical-adequacy credit. The guarantee basis (through expiration vs at manufacture vs unstated) no longer multiplies the number; it is carried in metadata and said in the explanation as a disclosure limitation.",
       "v3_cfu_adequacy_cap": 5.0,
       "tier_points": { "low": 0.0, "adequate": 1.0, "good": 2.0, "excellent": 3.0 }
     },

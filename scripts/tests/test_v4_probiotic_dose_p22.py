@@ -179,28 +179,29 @@ def test_probiotic_dose_scores_full_25_when_all_strains_have_cfu_and_adequacy_ca
     assert payload["metadata"]["cfu_adequacy_basis"] == "per_strain_cfu_disclosed"
 
 
-def test_at_manufacture_cfu_guarantee_reduces_adequacy_not_disclosure() -> None:
+def test_at_manufacture_cfu_guarantee_is_disclosure_only_not_a_haircut() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     payload = score_dose(_product(guarantee_type="at_manufacture"))
 
     assert payload["components"]["per_strain_cfu_disclosure"] == 10.0
-    assert payload["components"]["cfu_adequacy"] == 13.5
-    assert payload["score"] == 23.5
+    assert payload["components"]["cfu_adequacy"] == 15.0  # 1.1.5: basis no longer multiplies
+    assert payload["score"] == 25.0
     assert payload["metadata"]["cfu_guarantee"]["type"] == "at_manufacture"
-    assert payload["metadata"]["cfu_guarantee"]["multiplier"] == 0.9
+    assert payload["metadata"]["cfu_guarantee"]["applied"] is False
+    assert payload["metadata"]["cfu_guarantee"]["numeric_effect"] == "none_since_1.1.5_disclosure_only"
 
 
-def test_missing_cfu_guarantee_reduces_adequacy_more_than_at_manufacture() -> None:
+def test_missing_cfu_guarantee_is_carried_for_the_explanation_not_the_number() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     payload = score_dose(_product(guarantee_type=None))
 
     assert payload["components"]["per_strain_cfu_disclosure"] == 10.0
-    assert payload["components"]["cfu_adequacy"] == 12.75
-    assert payload["score"] == 22.75
+    assert payload["components"]["cfu_adequacy"] == 15.0
+    assert payload["score"] == 25.0
     assert payload["metadata"]["cfu_guarantee"]["type"] == "unknown"
-    assert payload["metadata"]["cfu_guarantee"]["multiplier"] == 0.85
+    assert payload["metadata"]["cfu_guarantee"]["applied"] is False
 
 
 def test_aggregate_blend_cfu_gets_presence_floor_not_invented_allocations() -> None:
@@ -221,9 +222,9 @@ def test_aggregate_blend_cfu_gets_presence_floor_not_invented_allocations() -> N
         _product(total_strain_count=3, blends=[aggregate_blend], clinical_strains=clinical_strains)
     )
 
-    assert payload["score"] == 4.0
+    assert payload["score"] == 8.0  # 50B named-strain total: saturating potency band, no allocation
     assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
-    assert payload["components"]["cfu_adequacy"] == 4.0
+    assert payload["components"]["cfu_adequacy"] == 8.0
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert payload["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
@@ -250,11 +251,11 @@ def test_low_aggregate_cfu_gets_small_numeric_total_cfu_floor() -> None:
 
     payload = score_dose(product)
 
-    assert payload["score"] == 2.0
-    assert payload["components"]["cfu_adequacy"] == 2.0
+    assert payload["score"] == 3.0  # below 1B: lowest potency band
+    assert payload["components"]["cfu_adequacy"] == 3.0
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
     assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
-    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_label_presence"
+    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_potency_band"
     assert "proxy_tier" not in payload["metadata"]["aggregate_cfu_proxy"]
 
 
@@ -287,10 +288,10 @@ def test_named_strain_low_aggregate_cfu_gets_modest_total_cfu_floor() -> None:
 
     payload = score_dose(product)
 
-    assert payload["score"] == 4.0
+    assert payload["score"] == 6.0  # 2B: 1B-to-<5B potency band
     assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
-    assert payload["components"]["cfu_adequacy"] == 4.0
-    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_named_label_presence"
+    assert payload["components"]["cfu_adequacy"] == 6.0
+    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_potency_band"
 
 
 def test_missing_aggregate_cfu_still_gets_zero_dose_credit() -> None:
@@ -429,10 +430,10 @@ def test_incomplete_per_strain_cfu_keeps_total_presence_without_numeric_disclosu
     payload = score_dose(product)
 
     assert payload["components"]["per_strain_cfu_disclosure"] == 0
-    assert payload["components"]["cfu_adequacy"] == 4.0
+    assert payload["components"]["cfu_adequacy"] == 8.0  # 10B total: potency band
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
-    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_named_label_presence"
+    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_potency_band"
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
 
 
@@ -451,7 +452,7 @@ def test_single_strain_has_cfu_boolean_does_not_substitute_for_numeric_disclosur
     payload = score_dose(_product(total_strain_count=1, blends=blends, clinical_strains=clinical_strains))
 
     assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
-    assert payload["components"]["cfu_adequacy"] == 4.0  # separate product total disclosed
+    assert payload["components"]["cfu_adequacy"] == 8.0  # separate product total disclosed: potency band
 
 
 @pytest.mark.parametrize(
@@ -692,7 +693,7 @@ def test_aggregate_cfu_proxy_still_wins_over_direct_mass_floor() -> None:
         total_billion=20.0,
     )
     payload = score_dose(product)
-    assert payload["components"]["cfu_adequacy"] == 4.0  # aggregate disclosure, not mass
+    assert payload["components"]["cfu_adequacy"] == 8.0  # aggregate disclosure (20B potency band), not mass
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
     assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is False
 

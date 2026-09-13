@@ -39,6 +39,10 @@ CAP_PER_STRAIN_CFU_DISCLOSURE = _DM["cap_per_strain_cfu_disclosure"]
 CAP_CFU_ADEQUACY = _DM["cap_cfu_adequacy"]
 AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR = _DM["aggregate_cfu_low_tier_presence_floor"]
 AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR = _DM["aggregate_cfu_low_named_strain_total_floor"]
+# Physical potency for a named-strain label with a valid total: saturating
+# bands (min billion -> points), capped well under the per-strain credit.
+AGGREGATE_POTENCY_BANDS = tuple((float(lo), float(pts)) for lo, pts in _DM["aggregate_potency_bands"])
+AGGREGATE_POTENCY_CAP = float(_DM["aggregate_potency_cap"])
 # A named strain disclosed at its OWN mass (e.g. BB536 25 mg) with no CFU gets a
 # small disclosure floor. It is not a conversion from mass to viable count.
 CAP_DIRECT_STRAIN_MASS_FLOOR = _DM["cap_direct_strain_mass_floor"]
@@ -137,21 +141,13 @@ def score_dose(product: Any) -> Dict[str, Any]:
         direct_strain_mass_floor,
         disclosed_count=disclosed_count,
     )
+    # The guarantee basis (through expiration / at manufacture / unstated) is
+    # a disclosure fact, not evidence that the delivered count is lower. It
+    # used to multiply the adequacy by 0.9 / 0.85; since 1.1.5 it is carried
+    # here for the explanation and never touches the number.
     cfu_guarantee = _cfu_guarantee_adjustment(pdata)
-    if (
-        cfu_adequacy_scaled > 0.0
-        and cfu_guarantee["multiplier"] < 1.0
-        and cfu_adequacy_basis != "direct_strain_mass_no_cfu_floor"
-    ):
-        cfu_adequacy_scaled *= cfu_guarantee["multiplier"]
-        cfu_guarantee["applied"] = True
-        cfu_guarantee["adjusted_score"] = round(cfu_adequacy_scaled, 4)
-    cfu_adequacy_basis = _cfu_adequacy_basis(
-        cfu_adequacy_scaled,
-        aggregate_proxy,
-        direct_strain_mass_floor,
-        disclosed_count=disclosed_count,
-    )
+    cfu_guarantee["applied"] = False
+    cfu_guarantee["numeric_effect"] = "none_since_1.1.5_disclosure_only"
 
     components = {
         "per_strain_cfu_disclosure": round(disclosure_score, 2),
@@ -418,14 +414,27 @@ def _compute_aggregate_cfu_proxy(
         })
         return payload
 
-    score = (AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR if total_billion >= 1.0
+    floor = (AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR if total_billion >= 1.0
              else AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR)
+    # Physical potency, saturating: a disclosed viable total for named strains
+    # is a real label fact and earns credit for being one; 50B and 400B land
+    # on the same ceiling because organism count is not benefit. Nothing here
+    # is allocated to a strain or read as a studied dose.
+    potency = 0.0
+    for minimum_billion, points in AGGREGATE_POTENCY_BANDS:
+        if total_billion >= minimum_billion:
+            potency = points
+    potency = min(AGGREGATE_POTENCY_CAP, potency)
+    score = max(floor, potency)
     payload.update({
         "applied": score > 0.0,
         "score": round(score, 4),
-        "reason": "aggregate_cfu_named_label_presence" if total_billion >= 1.0 else "aggregate_cfu_label_presence",
+        "reason": "aggregate_cfu_potency_band" if potency > floor else (
+            "aggregate_cfu_named_label_presence" if total_billion >= 1.0 else "aggregate_cfu_label_presence"),
         "total_billion_count": round(total_billion, 4),
-        "floor": score,
+        "floor": floor,
+        "potency_band_points": potency,
+        "cap": AGGREGATE_POTENCY_CAP,
     })
     return payload
 

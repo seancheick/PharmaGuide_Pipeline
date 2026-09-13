@@ -157,9 +157,14 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
     if metadata.get("dose_adequacy_basis") == "studied_formula_native_afu":
         return "The complete formula matches its studied AFU dose; individual strain amounts are not disclosed."
     if metadata.get("window_proxy_reason") == "aggregate_cfu_not_per_strain":
+        guarantee = str((metadata.get("cfu_guarantee") or {}).get("type") or "")
+        note = (
+            " Whether the count is guaranteed through expiration is not stated."
+            if guarantee == "unknown" else ""
+        )
         return (
-            "Total CFU is disclosed, but without amounts for each strain, "
-            "their doses can't be checked."
+            "Total potency is disclosed; individual strain amounts are not. "
+            "Per-strain doses cannot be checked against studied doses." + note
         )
     if metadata.get("window_proxy_reason") == "per_strain_cfu_missing":
         return "Dose adequacy could not be verified from the disclosed probiotic amounts."

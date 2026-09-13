@@ -379,10 +379,7 @@ def test_pending_strain_keeps_label_potency_without_clinical_adequacy() -> None:
 
 
 def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None:
-    from scoring_v4.modules.probiotic_dose import (
-        AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR,
-        score_dose,
-    )
+    from scoring_v4.modules.probiotic_dose import score_dose
 
     product = _owned_product(
         strain="Bifidobacterium longum subsp. infantis M-63",
@@ -398,10 +395,9 @@ def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None
 
     dose = score_dose(product)
     assert dose["components"]["per_strain_cfu_disclosure"] == 0
-    assert dose["components"]["cfu_adequacy"] == AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR
-    assert dose["metadata"]["aggregate_cfu_proxy"]["reason"] == (
-        "aggregate_cfu_named_label_presence"
-    )
+    assert dose["components"]["cfu_adequacy"] == 8  # 10B physical potency; still no clinical proxy
+    assert dose["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_potency_band"
+    assert "proxy_cfu_per_strain" not in dose["metadata"]["aggregate_cfu_proxy"]
 
 
 def test_unreviewed_strains_keep_label_identity_but_no_clinical_credit() -> None:

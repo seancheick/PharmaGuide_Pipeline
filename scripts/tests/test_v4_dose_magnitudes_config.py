@@ -47,6 +47,10 @@ ORIGINAL = {
         # 2026-09-04: remove invented allocations / clinical support from Dose.
         "aggregate_cfu_low_tier_presence_floor": 2.0,
         "aggregate_cfu_low_named_strain_total_floor": 4.0, "cap_direct_strain_mass_floor": 5.0,
+        # 2026-09-13 (1.1.5): saturating physical-potency credit for a named-strain
+        # total; max 8 of 15, never allocated per strain. Guarantee haircut removed.
+        "aggregate_potency_bands": [[0.0, 3.0], [1.0, 6.0], [5.0, 8.0]],
+        "aggregate_potency_cap": 8.0,
         "v3_cfu_adequacy_cap": 5.0,
         "tier_points": {"low": 0.0, "adequate": 1.0, "good": 2.0, "excellent": 3.0},
     },
@@ -58,7 +62,8 @@ ORIGINAL = {
 
 def test_config_matches_pre_hoist_values():
     for mod, vals in ORIGINAL.items():
-        assert DM[mod] == vals, f"dose_magnitudes.{mod} drifted from pre-hoist values"
+        values = {k: v for k, v in DM[mod].items() if not k.startswith("_")}  # _doc strings are not magnitudes
+        assert values == vals, f"dose_magnitudes.{mod} drifted from pinned values"
 
 
 def test_b7_policy_has_one_config_owner():
