@@ -3,15 +3,16 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
-    "last_updated": "2026-09-13",
+    "last_updated": "2026-09-14",
     "total_entries": 105,
     "data_source": null,
-    "version": "2.3.0",
+    "version": "2.4.0",
     "native_context_note": "2026-09-04 bounded primary-source review: 16 outcome/population/dose contexts across eight native identities, authored once and joined to explicit combination members. Contexts are source-verified, pending clinical review, not new clinician approval or universal efficacy ranges. Historical approval flags and primary PMID anchors remain unchanged; Lpc-37's primary null result and stale source-description fields are corrected separately from context approval.",
     "signoff_status_note": "40/49 entries retain historical clinician sign-off flags. On 2026-09-04 native approvals for BB-12 and Bi-07 were suspended after source verification failed; replacements require clinician review. Historical review records remain in version control. Sign-off does not establish positive effect, applicability to every label, or completeness of this literature search.",
     "clinical_validation_note": "Historical abstract-level validation is retained where not re-reviewed. Per-entry source reviews and study_contexts distinguish identity, dose, clinical outcome and review completion; binary question counts are not efficacy approval. New PMID scoring anchors require clinical review.",
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient.",
-    "native_context_note_2026_09_13": "Wave 1 bounded curation: 50 study contexts authored for STRAIN_LGG, STRAIN_LACTIS_BL04, STRAIN_ACIDOPHILUS_NCFM, STRAIN_LONGUM_BB536, STRAIN_RHAMNOSUS_HN001, STRAIN_LACTIS_HN019, STRAIN_SUBTILIS_DE111 and STRAIN_SACCHAROMYCES (Lpc-37 and Bi-07 join through combination contexts). Every context is source_verified_pending_clinical_review; optional study_design / sample_size / blinding / funding / source_tier / trial_registration describe quality and never score. Null and negative results are kept. Publication families (trial_family) mark papers from one cohort so they cannot count as independent confirmations."
+    "native_context_note_2026_09_13": "Wave 1 bounded curation: 50 study contexts authored for STRAIN_LGG, STRAIN_LACTIS_BL04, STRAIN_ACIDOPHILUS_NCFM, STRAIN_LONGUM_BB536, STRAIN_RHAMNOSUS_HN001, STRAIN_LACTIS_HN019, STRAIN_SUBTILIS_DE111 and STRAIN_SACCHAROMYCES (Lpc-37 and Bi-07 join through combination contexts). Every context is source_verified_pending_clinical_review; optional study_design / sample_size / blinding / funding / source_tier / trial_registration describe quality and never score. Null and negative results are kept. Publication families (trial_family) mark papers from one cohort so they cannot count as independent confirmations.",
+    "native_context_note_2026_09_14": "Wave 2 bounded curation: 59 study contexts authored for STRAIN_COAGULANS_IS2, STRAIN_COAGULANS_MTCC5856, STRAIN_ACIDOPHILUS_DDS1, STRAIN_PLANTARUM_299V, STRAIN_ACIDOPHILUS_LA5, STRAIN_LACTIS_BB12, STRAIN_HELVETICUS_R0052, STRAIN_RHAMNOSUS_GR1, STRAIN_COAGULANS_GBI30, STRAIN_BREVE_M16V and STRAIN_PLANTARUM_LP01 (R0175, RC14, UABla12, CRL-431 and LGG join through combination contexts; no identity stubs were added). Every context is source_verified_pending_clinical_review; optional study_design / sample_size / blinding / funding / source_tier / trial_registration describe quality and never score. Null and negative results are kept. Publication families (trial_family) mark papers from one cohort so they cannot count as independent confirmations."
   },
   "clinically_relevant_strains": [
     {
@@ -949,7 +950,177 @@
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 29196920 verified, title-match=YES"
-      }
+      },
+      "study_contexts": [
+        {
+          "context_id": "bc30_functional_gi_complaints_40707016",
+          "source_pmids": [
+            "40707016"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_GBI30"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "111 healthy adults with functional gastrointestinal complaints"
+          },
+          "purpose": "treatment",
+          "condition": "functional_gastrointestinal_complaints",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              1000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 28,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "stool_frequency",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "stool_consistency",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "constipation_proportion",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "kerry_bc30_gi_40707016",
+          "limitations": [
+            "Sponsor-run (Kerry); endpoint hierarchy not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 111,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": "NCT06644001",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "bc30_synbiotic_pasta_cardiometabolic_31162597",
+          "source_pmids": [
+            "31162597"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_GBI30"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "41 adults consuming a whole-grain pasta with BC30 and barley beta-glucans for 12 weeks"
+          },
+          "purpose": "physiology",
+          "condition": "inflammation_and_lipid_markers",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [
+              "whole-grain pasta"
+            ],
+            "duration_days": 84,
+            "co_therapies": [
+              "barley beta-glucans"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "hs_crp",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null"
+            },
+            {
+              "name": "lipid_profile",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null"
+            },
+            {
+              "name": "subgroup_signals",
+              "hierarchy": "post_hoc",
+              "kind": "surrogate",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "bc30_pasta_synbiotic_31162597",
+          "limitations": [
+            "Primary hs-CRP and lipid endpoints null overall; only subgroups moved.",
+            "Food matrix and beta-glucan co-therapy confound any strain attribution; single-blind."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 41,
+          "blinding": "single",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "bc30_geriatric_indigestion_enzymes_32318476",
+          "source_pmids": [
+            "32318476"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_GBI30"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Elderly adults with functional indigestion; open-label, BC30 co-formulated with digestive enzymes, 5 days"
+          },
+          "purpose": "treatment",
+          "condition": "functional_indigestion_elderly",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 5,
+            "co_therapies": [
+              "digestive enzymes (co-formulated)"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "dyspepsia_severity",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "bc30_geriatric_enzymes_32318476",
+          "limitations": [
+            "Open label; attribution confounded by the co-formulated digestive enzymes; five-day duration."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "open_label",
+          "sample_size": null,
+          "blinding": "open",
+          "funding": "unreported",
+          "source_tier": "E",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        }
+      ]
     },
     {
       "id": "STRAIN_COAGULANS_MTCC5856",
@@ -1002,7 +1173,365 @@
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 37686889 verified, title-match=INDIRECT"
-      }
+      },
+      "study_contexts": [
+        {
+          "context_id": "mtcc5856_ibs_d_pilot_26922379",
+          "source_pmids": [
+            "26922379"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_MTCC5856"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "36 adults with diarrhea-predominant IBS at three centres, India; standard care in both arms"
+          },
+          "purpose": "treatment",
+          "condition": "irritable_bowel_syndrome_diarrhea_predominant",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              2000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 90,
+            "co_therapies": [
+              "standard care"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "bloating",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "vomiting",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "diarrhea",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "abdominal_pain",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "stool_frequency",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "sabinsa_mtcc5856_ibsd_26922379",
+          "limitations": [
+            "Pilot size (n=36); manufacturer-run (Sami/Sabinsa)."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 36,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "mtcc5856_mdd_with_ibs_29997457",
+          "source_pmids": [
+            "29997457"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_MTCC5856"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "40 adults with major depressive disorder and IBS, India"
+          },
+          "purpose": "treatment",
+          "condition": "major_depression_with_irritable_bowel_syndrome",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              2000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 90,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "hamilton_depression_score",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "madrs_score",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "ces_d_score",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "ibs_quality_of_life",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "serum_myeloperoxidase",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "sabinsa_mtcc5856_mdd_ibs_29997457",
+          "limitations": [
+            "Pilot size (n=40); manufacturer-run; a single trial carries every mood endpoint."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 40,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "mtcc5856_functional_gas_bloating_36862903",
+          "source_pmids": [
+            "36862903"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_MTCC5856"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "70 adults with functional gas and bloating (66 completed)"
+          },
+          "purpose": "treatment",
+          "condition": "functional_gas_and_bloating",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              2000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 28,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "gsrs_indigestion_score",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "patient_global_assessment",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "sabinsa_mtcc5856_bloating_36862903",
+          "limitations": [
+            "Manufacturer-run; four-week duration; endpoint hierarchy not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 70,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "mtcc5856_pediatric_acute_diarrhea_38269290",
+          "source_pmids": [
+            "38269290"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_MTCC5856"
+          ],
+          "population": {
+            "age_group": "child",
+            "description": "110 children 1-10 years with acute diarrhea; oral rehydration solution and zinc in both arms"
+          },
+          "purpose": "treatment",
+          "condition": "pediatric_acute_gastroenteritis",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 5,
+            "co_therapies": [
+              "oral rehydration solution",
+              "zinc"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "diarrhea_duration",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "stool_frequency",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "mtcc5856_pediatric_diarrhea_38269290",
+          "limitations": [
+            "Duration fell (51.3 vs 62.7 h, p=0.011) but stool frequency did not differ.",
+            "The dose is printed as '4 x 10 spores' with the exponent stripped in the retrieved abstract; recorded as unresolved."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 110,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": "CTRI/2022/06/043239",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "mtcc5856_healthy_microbiome_37335737",
+          "source_pmids": [
+            "37335737"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_MTCC5856"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "30 healthy adults; microbiome and safety study"
+          },
+          "purpose": "physiology",
+          "condition": "gut_microbiome_composition",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 28,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "gut_microbiome_composition",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "sabinsa_mtcc5856_microbiome_37335737",
+          "limitations": [
+            "Gut microbiome composition essentially unchanged; the abstract states 2 x 10^9 CFU per capsule without capsules/day, so the daily dose is unresolved."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 30,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "mtcc5856_ibs_strain_level_metas_41682832",
+          "source_pmids": [
+            "41682832",
+            "37686889"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_MTCC5856"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Adults with IBS: a 2026 strain-specific meta-analysis and a 2023 outcome-specific network meta-analysis"
+          },
+          "purpose": "treatment",
+          "condition": "irritable_bowel_syndrome",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "ibs_quality_of_life",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "abdominal_pain_ranking",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "ibs_d_stool_form_ranking",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "meta_ibs_rankings_mtcc5856",
+          "limitations": [
+            "Both analyses pool the same underlying MTCC 5856 trials already recorded (PMIDs 26922379, 29997457); two meta-analyses of one evidence base count once.",
+            "Rankings are indirect strain-level comparisons, not pooled effect sizes with certainty grades."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "meta_analysis",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "B",
+          "trial_registration": "PROSPERO CRD420251047092 (2026 meta)",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        }
+      ]
     },
     {
       "id": "STRAIN_COAGULANS_IS2",
@@ -1089,7 +1618,532 @@
         "dr_pham_signoff_verified_by": "clinical-reviewer:2026-04-21 + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 36641109 → 35249118 swap executed per clinical-reviewer 2026-04-21 verdict. Full-text read confirmed human RCT with strain-specific evidence. Evidence upgraded weak → medium; clinical_support_level upgraded weak → moderate."
-      }
+      },
+      "study_contexts": [
+        {
+          "context_id": "is2_adult_ibs_multicenter_31434935",
+          "source_pmids": [
+            "31434935"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_IS2"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "136 adults with Rome III IBS randomized (153 enrolled), multicenter, India"
+          },
+          "purpose": "treatment",
+          "condition": "irritable_bowel_syndrome",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              2000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 56,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "abdominal_pain_and_discomfort",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "complete_spontaneous_bowel_movements",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "serum_cytokines",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "unique_is2_adult_ibs_31434935",
+          "limitations": [
+            "Manufacturer authorship (Unique Biotech); serum cytokines did not change alongside the symptom improvements."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 136,
+          "blinding": "double",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "is2_pediatric_ibs_chewable_29695183",
+          "source_pmids": [
+            "29695183"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_IS2"
+          ],
+          "population": {
+            "age_group": "child",
+            "description": "141 children 4-12 years with IBS, chewable tablet once daily"
+          },
+          "purpose": "treatment",
+          "condition": "pediatric_irritable_bowel_syndrome",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [
+              "chewable tablet"
+            ],
+            "duration_days": 56,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "abdominal_pain_intensity",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "unique_is2_pediatric_ibs_29695183",
+          "limitations": [
+            "Daily CFU dose not machine-readable in the retrieved abstract; manufacturer-affiliated authors.",
+            "Endpoint hierarchy not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 141,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "is2_functional_constipation_30911991",
+          "source_pmids": [
+            "30911991"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_IS2"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "100 adults with functional constipation, India"
+          },
+          "purpose": "treatment",
+          "condition": "functional_constipation",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              2000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 28,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "spontaneous_bowel_movements_3_or_more_per_week",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "unique_is2_fc_30911991",
+          "limitations": [
+            "Manufacturer-affiliated authors; endpoint hierarchy not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 100,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": "CTRI/2017/11/010539",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "is2_constipation_lactulose_cotherapy_34599466",
+          "source_pmids": [
+            "34599466"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_IS2"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "150 adults with functional constipation randomized to IS-2 plus lactulose, lactulose alone, or placebo"
+          },
+          "purpose": "treatment",
+          "condition": "functional_constipation",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              2000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 28,
+            "co_therapies": [
+              "lactulose 10 g/day"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "stool_frequency_vs_lactulose",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "mixed"
+            },
+            {
+              "name": "stool_consistency",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "incomplete_evacuation",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "abdominal_pain",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "unique_is2_fc_lactulose_34599466",
+          "limitations": [
+            "The stool-frequency advantage over lactulose alone was transient and not significant at end of trial.",
+            "Every active arm contained lactulose; nothing here is monotherapy evidence."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 150,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": "CTRI/2018/11/016399",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "comparator": "lactulose monotherapy (second active arm) and placebo"
+        },
+        {
+          "context_id": "is2_infrequent_bowel_movements_40456531",
+          "source_pmids": [
+            "40456531"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_IS2"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "144 healthy adults with infrequent bowel movements (3-7 complete spontaneous BMs/week)"
+          },
+          "purpose": "treatment",
+          "condition": "infrequent_bowel_movements",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              2000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 28,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "bowel_movement_frequency",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "stool_consistency",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "gastrointestinal_symptoms",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "quality_of_life",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "gut_microbiota_composition",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "pepsico_is2_bm_40456531",
+          "limitations": [
+            "Sponsor-run (PepsiCo/Nutrasource); frequency effect modest (p=0.037) in a healthy population; symptoms, QoL and microbiota unchanged."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 144,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": "NCT05123664",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "is2_chronic_constipation_meta_36372047",
+          "source_pmids": [
+            "36372047"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_IS2"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Adults with chronic constipation in 30 probiotic RCTs; strain-level subgroups reported"
+          },
+          "purpose": "treatment",
+          "condition": "chronic_constipation",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "constipation_response_probiotics_class",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "stool_frequency_is2_subgroup",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "meta_chronic_constipation_36372047",
+          "limitations": [
+            "The class-level benefit is not IS-2 evidence: the IS-2 subgroup was NOT significant for stool frequency (species-level B. lactis was).",
+            "Pooled trials overlap the IS-2 constipation RCT contexts already recorded; not an independent confirmation."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "meta_analysis",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "B",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "is2_ibs_strain_level_metas_41682832",
+          "source_pmids": [
+            "41682832",
+            "37686889"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_IS2"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Adults with IBS: a 2026 strain-specific meta-analysis and a 2023 outcome-specific network meta-analysis"
+          },
+          "purpose": "treatment",
+          "condition": "irritable_bowel_syndrome",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "ibs_symptom_efficacy_strain_level",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "abdominal_pain_ranking",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "meta_ibs_rankings_is2",
+          "limitations": [
+            "Both analyses pool the same underlying IS-2 trials already recorded (PMIDs 31434935, 29695183); two meta-analyses of one evidence base count once.",
+            "Rankings are indirect strain-level comparisons, not pooled IS-2 effect sizes with certainty grades."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "meta_analysis",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "B",
+          "trial_registration": "PROSPERO CRD420251047092 (2026 meta)",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "is2_whey_protein_strength_35249118",
+          "source_pmids": [
+            "35249118"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_IS2"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Resistance-trained males co-supplementing whey protein for 60 days"
+          },
+          "purpose": "physiology",
+          "condition": "protein_absorption_and_muscle_performance",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              2000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 60,
+            "co_therapies": [
+              "whey protein 20 g/day"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "plasma_bcaa_absorption",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "leg_press_strength",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "vertical_jump",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "unique_is2_whey_35249118",
+          "limitations": [
+            "Surrogate-heavy; industry co-authors; performance findings from a small trained-athlete sample."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "mixed",
+          "source_tier": "D",
+          "trial_registration": "CTRI/2017/03/008117",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "is2_moderate_covid19_adjunct_39866999",
+          "source_pmids": [
+            "39866999"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_COAGULANS_IS2"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "56 adults with moderate COVID-19 on standard treatment; three arms (B. coagulans UBBC-07, IS-2, placebo)"
+          },
+          "purpose": "treatment",
+          "condition": "moderate_covid19_adjunctive_care",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              4000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 14,
+            "co_therapies": [
+              "standard COVID-19 treatment"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "serum_ferritin",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "d_dimer",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "crp_ldh_il6",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "is2_covid_adjunct_39866999",
+          "limitations": [
+            "Small three-arm trial (about 19 per arm) with inflammatory-marker surrogates only; ferritin fell in both probiotic arms, D-dimer only in the IS-2 arm.",
+            "The UBBC-07 arm is a different, non-registry strain; published in Cureus.",
+            "2 x 10^9 spores twice daily (4 x 10^9/day)."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 56,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        }
+      ]
     },
     {
       "id": "STRAIN_COAGULANS_SNZ1969",
@@ -1792,7 +2846,479 @@
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 11711768 verified, title-match=YES"
-      }
+      },
+      "study_contexts": [
+        {
+          "context_id": "lp299v_ibs_meta_37541528",
+          "source_pmids": [
+            "37541528"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_PLANTARUM_299V"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Adults with IBS in an 82-RCT (n=10,332) systematic review and meta-analysis"
+          },
+          "purpose": "treatment",
+          "condition": "irritable_bowel_syndrome",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "ibs_global_symptom_improvement",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "meta_299v_ibs_37541528",
+          "limitations": [
+            "The 299v-specific conclusion is graded LOW certainty by the reviewers; no 299v RCT is separately recorded this wave, so this meta is the strain's IBS record."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "meta_analysis",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "B",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lp299v_mdd_ssri_cognition_30388595",
+          "source_pmids": [
+            "30388595",
+            "39271063"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_PLANTARUM_299V"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "79 adults with major depressive disorder randomized (60 analyzed) as SSRI augmentation for 8 weeks, Poland"
+          },
+          "purpose": "treatment",
+          "condition": "cognitive_symptoms_in_major_depression",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 56,
+            "co_therapies": [
+              "SSRI antidepressant"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "attention_and_perceptivity_test",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "california_verbal_learning_test",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "plasma_kynurenine",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "depression_severity_between_groups",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "unresolved"
+            }
+          ],
+          "trial_family": "sanprobi_299v_mdd_cognition",
+          "limitations": [
+            "Cognition-scoped record: the abstract does not report a between-group depression-severity improvement.",
+            "The metabolomics companion (PMID 39271063) is the same cohort; one trial family.",
+            "Dose not stated in the retrieved abstracts."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 79,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lp299v_iron_absorption_meta_31816981",
+          "source_pmids": [
+            "31816981"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_PLANTARUM_299V"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "8 studies (n=950) of 299v and iron absorption or iron status"
+          },
+          "purpose": "physiology",
+          "condition": "iron_absorption",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "iron_absorption",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "iron_status_markers",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "meta_299v_iron_absorption_31816981",
+          "limitations": [
+            "Absorption (SMD 0.55) is an acute surrogate; the longer iron-status studies were mostly unchanged."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "meta_analysis",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "B",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lp299v_female_athletes_iron_32365981",
+          "source_pmids": [
+            "32365981"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_PLANTARUM_299V"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "53 iron-deficient female athletes randomized (39 completed) to 20 mg iron with or without 299v for 4-12 weeks"
+          },
+          "purpose": "treatment",
+          "condition": "iron_deficiency_female_athletes",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": [
+              "iron 20 mg/day"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "serum_ferritin",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            },
+            {
+              "name": "reticulocyte_hemoglobin",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            },
+            {
+              "name": "poms_vigor",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "exercise_performance",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "unresolved"
+            }
+          ],
+          "trial_family": "probi_299v_athletes_iron_32365981",
+          "limitations": [
+            "Ferritin (p=0.056) and reticulocyte hemoglobin (p=0.083) missed significance; performance inconclusive; industry involvement (Probi/Nature's Bounty).",
+            "Variable 4-12 week duration; dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 53,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lp299v_cancer_home_enteral_nutrition_33015813",
+          "source_pmids": [
+            "33015813"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_PLANTARUM_299V"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "35 cancer patients on home enteral nutrition, Poland"
+          },
+          "purpose": "treatment",
+          "condition": "nutritional_status_home_enteral_nutrition",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              20000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 28,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "serum_albumin",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "vomiting",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "flatulence",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "overall_nutritional_status",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "quality_of_life",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "299v_cancer_hen_33015813",
+          "limitations": [
+            "Small (n=35); overall nutritional status and between-group quality of life unchanged."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 35,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lp299v_smokers_cardiovascular_markers_12450890",
+          "source_pmids": [
+            "12450890"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_PLANTARUM_299V"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "36 smokers consuming 400 mL/day of a 299v rose-hip drink for 6 weeks"
+          },
+          "purpose": "physiology",
+          "condition": "cardiovascular_risk_markers_smokers",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              20000000000.0
+            ],
+            "dosage_forms": [
+              "rose-hip drink"
+            ],
+            "duration_days": 42,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "systolic_blood_pressure",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "serum_leptin",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "fibrinogen",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "299v_smokers_cvd_12450890",
+          "limitations": [
+            "Small 2002 trial in a food matrix (400 mL x 5 x 10^7 CFU/mL = 2 x 10^10/day); risk-marker surrogates only."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 36,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lp299v_exam_stress_cortisol_28101105",
+          "source_pmids": [
+            "28101105"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_PLANTARUM_299V"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "41 university students during exam stress, 14 days"
+          },
+          "purpose": "physiology",
+          "condition": "exam_stress_cortisol_response",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 14,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "salivary_cortisol_rise_prevention",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "salivary_iga",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "299v_exam_stress_28101105",
+          "limitations": [
+            "Salivary cortisol is a stress surrogate; no clinical anxiety or mood endpoint; dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 41,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": "NCT02974894",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lp299v_colon_resection_22434095",
+          "source_pmids": [
+            "22434095"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_PLANTARUM_299V"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "75 adults undergoing elective colon resection"
+          },
+          "purpose": "prevention",
+          "condition": "postoperative_outcomes_colon_resection",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "enteric_bacterial_load",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            },
+            {
+              "name": "bacterial_translocation",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            },
+            {
+              "name": "postoperative_complications",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "299v_colon_resection_22434095",
+          "limitations": [
+            "All endpoints null; dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 75,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        }
+      ]
     },
     {
       "id": "STRAIN_PLANTARUM_HEAL9",
@@ -3476,6 +5002,212 @@
             "Not a diagnosed functional-constipation population; industry funded with disclosed relationships."
           ],
           "review_status": "source_verified_pending_clinical_review"
+        },
+        {
+          "context_id": "bb12_preterm_inflammation_feeding_39271904",
+          "source_pmids": [
+            "39271904"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "infant",
+            "description": "71 preterm infants at or below 32 weeks, BB-12 as the sole probiotic"
+          },
+          "purpose": "prevention",
+          "condition": "preterm_inflammation_and_feeding_intolerance",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "serum_tlr4_nfkb_il1b_tnfa",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "feeding_intolerance",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "bb12_preterm_inflammation_39271904",
+          "limitations": [
+            "Surrogate-heavy inflammatory-marker panel; hospital neonatal population; dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 71,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lgg_bb12_pediatric_ad_prevention_meta_33811784",
+          "source_pmids": [
+            "33811784"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_LGG",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "infant",
+            "description": "21 RCTs (n=5406) of probiotics for pediatric atopic-dermatitis prevention; network meta-analysis"
+          },
+          "purpose": "prevention",
+          "condition": "childhood_atopic_dermatitis",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "atopic_dermatitis_risk_lgg_bb12",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "meta_pediatric_ad_prevention_33811784",
+          "limitations": [
+            "The LGG + Bb-12 node estimate (RR 0.50) is graded LOW quality by the reviewers.",
+            "Pooled trials overlap the ProPACT family context recorded this wave; not an independent confirmation of it."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "meta_analysis",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "B",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "casei431_bb12_dracma_cma_tolerance_39310372",
+          "source_pmids": [
+            "39310372"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_CASEI_431",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "infant",
+            "description": "Infants with cow's milk allergy fed extensively hydrolyzed casein formula with L. casei CRL431 and Bb-12; WAO DRACMA systematic review"
+          },
+          "purpose": "treatment",
+          "condition": "cow_milk_allergy_tolerance_acquisition",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": [
+              "extensively hydrolyzed casein formula"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "cow_milk_tolerance_acquisition",
+              "hierarchy": "guideline",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "severe_wheezing",
+              "hierarchy": "guideline",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "dracma_sr_cma_39310372",
+          "limitations": [
+            "LOW certainty (tolerance RR 2.47); the formula itself is the delivery vehicle and co-therapy, so this is not supplement evidence.",
+            "Medical condition (cow's milk allergy) managed under clinical supervision."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "systematic_review",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "B",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lgg_bb12_preterm_administration_route_37020105",
+          "source_pmids": [
+            "37020105"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_LGG",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "infant",
+            "description": "68 preterm neonates randomized to direct LGG + Bb-12 administration or administration via the lactating mother"
+          },
+          "purpose": "physiology",
+          "condition": "preterm_gut_microbiota_colonization",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "bifidobacterial_colonization_direct_administration",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "microbiota_change_via_maternal_route",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "bb12_lgg_preterm_route_37020105",
+          "limitations": [
+            "Route-comparison design without placebo; microbiota composition is a surrogate; dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 68,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "comparator": "administration to the lactating mother (route comparison)"
         }
       ],
       "aliases": [
@@ -4434,7 +6166,446 @@
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 34405373 verified, title-match=YES"
-      }
+      },
+      "study_contexts": [
+        {
+          "context_id": "la5_bb12_nonconstipated_ibs_41255078",
+          "source_pmids": [
+            "41255078"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_ACIDOPHILUS_LA5",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "200 adults with non-constipated IBS, 84 days"
+          },
+          "purpose": "treatment",
+          "condition": "irritable_bowel_syndrome",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 84,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "ibs_gis_response",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "ibs_severity_abdominal_pain",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "abdominal_distension",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "quality_of_life",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "la5_bb12_ibs_41255078",
+          "limitations": [
+            "Combination evidence; nothing here attributes the effect to either strain alone; dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 200,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "la5_bb12_aad_incidence_24772726",
+          "source_pmids": [
+            "24772726"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_ACIDOPHILUS_LA5",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Adults on cefadroxil or amoxicillin in a multicentric trial; 14 days of LA-5 + BB-12"
+          },
+          "purpose": "prevention",
+          "condition": "antibiotic_associated_diarrhea",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 14,
+            "co_therapies": [
+              "cefadroxil or amoxicillin"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "aad_incidence",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "diarrhea_duration",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "severe_diarrhea_subgroup",
+              "hierarchy": "post_hoc",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "la5_bb12_aad_24772726",
+          "limitations": [
+            "Primary incidence endpoint null (10.8% vs 15.6%, p=0.19); duration (2 vs 4 days) and a severe-diarrhea subgroup differed.",
+            "Sample size not captured from the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lgg_la5_bb12_hospital_aad_17356555",
+          "source_pmids": [
+            "17356555"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_LGG",
+            "STRAIN_ACIDOPHILUS_LA5",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "87 hospitalized adults on antibiotics receiving a fermented milk with LGG, La-5 and Bb-12 for 14 days"
+          },
+          "purpose": "prevention",
+          "condition": "antibiotic_associated_diarrhea",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [
+              "fermented milk"
+            ],
+            "duration_days": 14,
+            "co_therapies": [
+              "antibiotic therapy"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "aad_incidence",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "lgg_la5_bb12_hospital_aad_17356555",
+          "limitations": [
+            "Three-strain fermented milk (5.9% vs 27.6%); food matrix; nothing attributes the effect to a single strain."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 87,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lgg_la5_bb12_pediatric_aad_25588782",
+          "source_pmids": [
+            "25588782"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_LGG",
+            "STRAIN_ACIDOPHILUS_LA5",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "child",
+            "description": "70 children 1-12 years on antibiotics receiving 200 g/day of a yogurt with LGG, Bb-12 and La-5"
+          },
+          "purpose": "prevention",
+          "condition": "pediatric_antibiotic_associated_diarrhea",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [
+              "yogurt 200 g/day"
+            ],
+            "duration_days": null,
+            "co_therapies": [
+              "antibiotic therapy"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "severe_diarrhea_episodes",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "lgg_la5_bb12_pediatric_aad_25588782",
+          "limitations": [
+            "Severe diarrhea 0 vs 6 episodes (p=0.025) in a small yogurt trial; three-strain food matrix."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 70,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "la5_bb12_hpylori_yogurt_aad_21871144",
+          "source_pmids": [
+            "21871144"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_ACIDOPHILUS_LA5",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "88 Helicobacter pylori-infected adults in a three-arm fruit-yogurt trial spanning an eradication week"
+          },
+          "purpose": "prevention",
+          "condition": "antibiotic_associated_diarrhea_h_pylori_eradication",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [
+              "fruit yogurt"
+            ],
+            "duration_days": 56,
+            "co_therapies": [
+              "Helicobacter pylori eradication therapy"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "aad_days",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "h_pylori_urease_activity",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "la5_bb12_hpylori_yogurt_21871144",
+          "limitations": [
+            "AAD days 4 vs 10 vs 10 across arms; urease activity fell in ALL milk arms, so that change is not attributable to the probiotic.",
+            "Food matrix; dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 88,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "la5_bb12_lc01_yogurt_aad_30439760",
+          "source_pmids": [
+            "30439760"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_ACIDOPHILUS_LA5",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "314 hospitalized adults on antibiotics receiving a yogurt with LA-5, BB-12 and LC-01"
+          },
+          "purpose": "prevention",
+          "condition": "antibiotic_associated_diarrhea",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [
+              "yogurt"
+            ],
+            "duration_days": null,
+            "co_therapies": [
+              "antibiotic therapy"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "aad_incidence",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "la5_bb12_lc01_aad_30439760",
+          "limitations": [
+            "Null result (23.0% vs 17.6%).",
+            "The studied product was a THREE-strain yogurt; the third strain L. casei LC-01 has no registry identity, so this record understates the formulation. A two-strain product matching these components was not what was tested."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 314,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "la5_bb12_primal_preterm_mdro_39102225",
+          "source_pmids": [
+            "39102225"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_ACIDOPHILUS_LA5",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "infant",
+            "description": "618 preterm infants 28-32 weeks in the PRIMAL phase 3 trial"
+          },
+          "purpose": "prevention",
+          "condition": "multidrug_resistant_organism_colonization_preterm",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "mdro_colonization",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null"
+            },
+            {
+              "name": "gut_eubiosis_score",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "primal_preterm_39102225",
+          "limitations": [
+            "Primary MDRO-colonization endpoint null; eubiosis is a microbiota surrogate.",
+            "The studied product also contained an unnamed B. longum subsp. infantis component with no registry identity; this record understates the formulation.",
+            "Hospital neonatal population; not a consumer supplement indication; dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 618,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "lgg_la5_bb12_propact_offspring_ad_41748464",
+          "source_pmids": [
+            "41748464"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_LGG",
+            "STRAIN_ACIDOPHILUS_LA5",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "infant",
+            "description": "Offspring of 415 pregnant women in the ProPACT trial of maternal LGG, La-5 and Bb-12 supplementation"
+          },
+          "purpose": "prevention",
+          "condition": "childhood_atopic_dermatitis",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "offspring_atopic_dermatitis",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "propact_maternal_probiotic",
+          "limitations": [
+            "Authored from a longitudinal T-cell immunology companion whose abstract restates the parent trial's atopic-dermatitis reduction; the parent outcome paper was not read this wave.",
+            "Maternal supplementation with offspring outcomes; dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 415,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        }
+      ]
     },
     {
       "id": "STRAIN_RHAMNOSUS_HN001",
@@ -4919,7 +7090,268 @@
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 12628548 verified, title-match=YES"
-      }
+      },
+      "study_contexts": [
+        {
+          "context_id": "gr1_rc14_bv_metronidazole_adjunct_34295831",
+          "source_pmids": [
+            "34295831"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_RHAMNOSUS_GR1",
+            "STRAIN_FERMENTUM_RC14"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "126 women with bacterial vaginosis on metronidazole, 30 days of oral GR-1 + RC-14"
+          },
+          "purpose": "treatment",
+          "condition": "bacterial_vaginosis",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 30,
+            "co_therapies": [
+              "metronidazole"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "bv_cure_rate_30_and_90_days",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "strain_detection_vaginal_fecal",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "gr1_rc14_bv_adjunct_34295831",
+          "limitations": [
+            "Cure rates did not differ at 30 or 90 days and the administered species were rarely detected in vaginal or fecal microbiota."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 126,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "gr1_rc14_pregnancy_bv_30932317",
+          "source_pmids": [
+            "30932317"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_RHAMNOSUS_GR1",
+            "STRAIN_FERMENTUM_RC14"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "238 pregnant women analyzed, oral supplementation from 9-14 weeks gestation"
+          },
+          "purpose": "prevention",
+          "condition": "bacterial_vaginosis_pregnancy",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              5000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "bacterial_vaginosis_18_20_weeks",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "vaginal_colonization",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            },
+            {
+              "name": "microbiota_composition",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "gr1_rc14_pregnancy_bv_30932317",
+          "limitations": [
+            "Null throughout; 2.5 x 10^9 CFU of each strain (5 x 10^9/day combination total, never an individual dose)."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 238,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "gr1_rc14_pregnancy_colonization_32325794",
+          "source_pmids": [
+            "32325794"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_RHAMNOSUS_GR1",
+            "STRAIN_FERMENTUM_RC14"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "38 pregnant women at risk for preterm labor; open crossover"
+          },
+          "purpose": "physiology",
+          "condition": "vaginal_colonization_pregnancy",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "vaginal_colonization_administered_strains",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "gr1_rc14_pregnancy_colonization_32325794",
+          "limitations": [
+            "Open crossover; colonization of the administered strains was rare."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "crossover_rct",
+          "sample_size": 38,
+          "blinding": "open",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "gr1_rc14_gbs_colonization_27590374",
+          "source_pmids": [
+            "27590374"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_RHAMNOSUS_GR1",
+            "STRAIN_FERMENTUM_RC14"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "99 group B Streptococcus-positive pregnant women at 35-37 weeks gestation"
+          },
+          "purpose": "treatment",
+          "condition": "group_b_streptococcus_colonization",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "gbs_conversion_to_negative",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "gr1_rc14_gbs_27590374",
+          "limitations": [
+            "Conversion to GBS-negative on admission (42.9% vs 18.0%, p=0.007) is a colonization surrogate, not an infection outcome; dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 99,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "gr1_rc14_sci_mdr_colonization_31953482",
+          "source_pmids": [
+            "31953482"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_RHAMNOSUS_GR1",
+            "STRAIN_FERMENTUM_RC14"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "207 adults with spinal cord injury in the four-arm ProSCIUTTU trial (including an LGG-BB12 arm)"
+          },
+          "purpose": "prevention",
+          "condition": "multidrug_resistant_gram_negative_colonization",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "new_multiresistant_gram_negative_colonization",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "existing_colonization_clearance",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "prosciuttu",
+          "limitations": [
+            "Secondary colonization analysis (OR 0.10 for new colonization, no clearing effect); the trial's UTI primary paper was not read this wave.",
+            "Population-specific (spinal cord injury); colonization is a microbiological surrogate."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 207,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        }
+      ]
     },
     {
       "id": "STRAIN_BREVE_M16V",
@@ -4997,7 +7429,184 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
-      }
+      },
+      "study_contexts": [
+        {
+          "context_id": "m16v_simpro_five_year_followup_41515257",
+          "source_pmids": [
+            "41515257"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_BREVE_M16V"
+          ],
+          "population": {
+            "age_group": "infant",
+            "description": "Extremely preterm infants below 28 weeks from the SiMPro trial followed to five years"
+          },
+          "purpose": "prevention",
+          "condition": "extremely_preterm_five_year_outcomes",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "neurodevelopment_5_years",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "growth_5_years",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "blood_pressure_5_years",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            },
+            {
+              "name": "atopy_5_years",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "simpro_5y_followup_41515257",
+          "limitations": [
+            "Comparative single- vs triple-strain design without placebo: 'null' here means the arms were comparable, not that M-16V lacks effect versus no treatment.",
+            "Hospital neonatal population; dose and follow-up sample size not captured from the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "comparator": "triple-strain arm (M-16V + M-63 + BB536); no placebo arm"
+        },
+        {
+          "context_id": "m16v_neonatal_jaundice_adjunct_41994268",
+          "source_pmids": [
+            "41994268"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_BREVE_M16V"
+          ],
+          "population": {
+            "age_group": "infant",
+            "description": "79 neonates with jaundice under phototherapy in a four-arm trial (control / M-16V / Bb-12 / M-16V + Bb-12), 30 days"
+          },
+          "purpose": "treatment",
+          "condition": "neonatal_jaundice_phototherapy_adjunct",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 30,
+            "co_therapies": [
+              "phototherapy"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "defecation_frequency",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "transcutaneous_bilirubin_decline",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "hospital_stay_duration",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "m16v_bb12_jaundice_41994268",
+          "limitations": [
+            "About 20 infants per arm; the Bb-12 arm's neurodevelopment-domain signals are not recorded under this identity.",
+            "Industry-adjacent authorship (Diprobio); dose not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 79,
+          "blinding": "unreported",
+          "funding": "mixed",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "m16v_synbiotic_formula_csection_39915586",
+          "source_pmids": [
+            "39915586"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_BREVE_M16V"
+          ],
+          "population": {
+            "age_group": "infant",
+            "description": "284 healthy cesarean-born infants randomized to a synbiotic formula with M-16V and scGOS/lcFOS versus a prebiotic-only formula"
+          },
+          "purpose": "physiology",
+          "condition": "gut_microbiota_after_cesarean_birth",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [
+              "infant formula"
+            ],
+            "duration_days": null,
+            "co_therapies": [
+              "scGOS/lcFOS prebiotic blend"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "bifidobacterial_restoration",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "danone_m16v_csection_39915586",
+          "limitations": [
+            "Microbiota restoration is a surrogate; formula matrix with prebiotic co-therapy; sponsor-run (Danone)."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 284,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": "NCT03520764",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "comparator": "prebiotic-only formula"
+        }
+      ]
     },
     {
       "id": "STRAIN_CASEI_431",
@@ -5723,7 +8332,220 @@
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 20974015 verified, title-match=YES"
-      }
+      },
+      "study_contexts": [
+        {
+          "context_id": "r0052_r0175_psychological_distress_20974015",
+          "source_pmids": [
+            "20974015"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_HELVETICUS_R0052",
+            "STRAIN_LONGUM_R0175"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy human volunteers taking the R0052 + R0175 formulation for 30 days (Messaoudi 2011)"
+          },
+          "purpose": "treatment",
+          "condition": "psychological_distress",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 30,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "hscl90_global_severity",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "hospital_anxiety_depression_scale",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "urinary_free_cortisol",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "cerebiome_healthy_distress_20974015",
+          "limitations": [
+            "Dose and sample size not stated in the retrieved abstract; the paper's rat arm is not a human context."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "r0052_r0175_mdd_bdnf_secondary_32989186",
+          "source_pmids": [
+            "32989186"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_HELVETICUS_R0052",
+            "STRAIN_LONGUM_R0175"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "110 adults with major depressive disorder randomized (78 analyzed), 8 weeks; probiotic vs prebiotic vs placebo"
+          },
+          "purpose": "treatment",
+          "condition": "major_depressive_disorder",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 56,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "depressive_symptoms_parent_trial",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "serum_bdnf",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "kazemi_mdd",
+          "limitations": [
+            "Secondary (BDNF) analysis of the Kazemi cohort; the parent trial's primary outcome paper was not read this wave, and its depression improvement is restated in this abstract.",
+            "Dose not stated in the retrieved abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 110,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "r0052_r0175_mdd_open_pilot_33658952",
+          "source_pmids": [
+            "33658952"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_HELVETICUS_R0052",
+            "STRAIN_LONGUM_R0175"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "10 treatment-naive adults with major depressive disorder; open-label single-arm pilot"
+          },
+          "purpose": "treatment",
+          "condition": "major_depressive_disorder",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              3000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 56,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "affective_symptoms",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "r0052_r0175_open_pilot_33658952",
+          "limitations": [
+            "No control arm; ten participants; hypothesis-generating only."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "open_label",
+          "sample_size": 10,
+          "blinding": "open",
+          "funding": "unreported",
+          "source_tier": "E",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "r0052_r0175_healthy_adults_null_37049546",
+          "source_pmids": [
+            "37049546"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_HELVETICUS_R0052",
+            "STRAIN_LONGUM_R0175"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "135 healthy adults, 4 weeks"
+          },
+          "purpose": "physiology",
+          "condition": "psychological_wellbeing_healthy_adults",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 28,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "whole_sample_psychological_outcomes",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "lifestyle_interaction_effects",
+              "hierarchy": "post_hoc",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "r0052_r0175_healthy_null_37049546",
+          "limitations": [
+            "No significant whole-sample effects; the lifestyle-interaction finding is exploratory."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 135,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": "NCT04823533",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        }
+      ]
     },
     {
       "id": "STRAIN_LONGUM_R0175",
@@ -5896,7 +8718,437 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
-      }
+      },
+      "study_contexts": [
+        {
+          "context_id": "dds1_ibs_three_arm_32019158",
+          "source_pmids": [
+            "32019158"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_ACIDOPHILUS_DDS1"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "330 adults with IBS randomized across placebo, DDS-1 and UABla-12 solo arms"
+          },
+          "purpose": "treatment",
+          "condition": "irritable_bowel_syndrome",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 42,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "abdominal_pain_severity_nrs",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "ibs_severity_score",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "uas_dds1_uabla12_ibs_32019158",
+          "limitations": [
+            "Manufacturer-run (UAS Labs); the daily CFU dose is printed with a stripped exponent in the retrieved abstract and is recorded as unresolved.",
+            "Only the DDS-1 solo arm is recorded here; the UABla-12 solo arm remains future curation under its own identity."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 330,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "dds1_lactose_intolerance_crossover_27207411",
+          "source_pmids": [
+            "27207411"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_ACIDOPHILUS_DDS1"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Adults with lactose intolerance; crossover with 4-week arms, washout, and a 6-hour lactose challenge"
+          },
+          "purpose": "challenge",
+          "condition": "lactose_intolerance",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 28,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "challenge_diarrhea_score",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "abdominal_cramping",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "vomiting",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "overall_symptom_score",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "dds1_lactose_intolerance_27207411",
+          "limitations": [
+            "Dose not stated in the abstract; industry authorship (Nebraska Cultures); sample size not stated in the abstract."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "crossover_rct",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "industry",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "dds1_lactose_intolerance_sr_36308983",
+          "source_pmids": [
+            "36308983"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_ACIDOPHILUS_DDS1"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Adults with lactose intolerance in a systematic review of probiotic trials"
+          },
+          "purpose": "treatment",
+          "condition": "lactose_intolerance",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "lactose_intolerance_symptoms",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "dds1_lactose_intolerance_27207411",
+          "limitations": [
+            "LOW certainty; no pooling was possible; the review's DDS-1 evidence is the crossover trial already recorded (PMID 27207411), so this shares its trial family."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "systematic_review",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "B",
+          "trial_registration": "PROSPERO CRD42022295691",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "dds1_night_shift_stress_markers_33584665",
+          "source_pmids": [
+            "33584665"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_ACIDOPHILUS_DDS1"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Night-shift workers, DDS-1 solo arm (29 per arm), 14 days"
+          },
+          "purpose": "physiology",
+          "condition": "anticipatory_stress_markers_night_shift",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 14,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "pre_shift_anticipatory_stress_markers",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive"
+            },
+            {
+              "name": "stress_marker_night_shift_interactions",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "dds1_night_shift_33584665",
+          "limitations": [
+            "Serum stress markers are surrogates; pre-shift moderation without interaction effects across the night shift makes the record mixed.",
+            "Only the DDS-1 solo arm of a multi-arm trial is recorded here; total trial size not captured."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": "ANZCTR 12617001552370",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "dds1_ibs_network_meta_37686889",
+          "source_pmids": [
+            "37686889"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_ACIDOPHILUS_DDS1"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Adults with IBS in a 2023 outcome-specific network meta-analysis"
+          },
+          "purpose": "treatment",
+          "condition": "irritable_bowel_syndrome",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "ibs_severity_score_ranking",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "uas_dds1_uabla12_ibs_32019158",
+          "limitations": [
+            "DDS-1 ranked first for IBS-SSS improvement (SUCRA 92.9%), an indirect ranking resting on the single DDS-1 IBS RCT already recorded (PMID 32019158); shares its trial family."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "meta_analysis",
+          "sample_size": null,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "B",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "dds1_uabla12_pediatric_constipation_36071965",
+          "source_pmids": [
+            "36071965"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_ACIDOPHILUS_DDS1",
+            "STRAIN_LACTIS_UABla12"
+          ],
+          "population": {
+            "age_group": "child",
+            "description": "92 children with functional constipation, chewable tablet"
+          },
+          "purpose": "treatment",
+          "condition": "pediatric_functional_constipation",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              5000000000.0
+            ],
+            "dosage_forms": [
+              "chewable tablet"
+            ],
+            "duration_days": 28,
+            "co_therapies": []
+          },
+          "outcomes": [
+            {
+              "name": "stool_frequency_normalization_time",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "dds1_uabla12_pediatric_fc_36071965",
+          "limitations": [
+            "Single-blind; industry involvement (Sirio/Chr. Hansen).",
+            "5 x 10^9 CFU/day is the two-strain combination total, never an individual dose."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 92,
+          "blinding": "single",
+          "funding": "industry",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "dds1_uabla12_fos_pediatric_ari_26463725",
+          "source_pmids": [
+            "26463725"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_ACIDOPHILUS_DDS1",
+            "STRAIN_LACTIS_UABla12"
+          ],
+          "population": {
+            "age_group": "child",
+            "description": "315 children randomized (225 analyzed) with household exposure to acute respiratory infection"
+          },
+          "purpose": "prevention",
+          "condition": "pediatric_acute_respiratory_infections",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              5000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": [
+              "fructooligosaccharide"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "ari_incidence",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "symptom_resolution_time",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "ari_severity",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "gerasimov_dds1_uabla12_ari_26463725",
+          "limitations": [
+            "Primary incidence endpoint null (57% vs 65%, p=0.261); only resolution time and severity differed.",
+            "Synbiotic with fructooligosaccharide; 5 x 10^9 CFU/day is the combination total."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 315,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        },
+        {
+          "context_id": "dds1_uabla12_fos_atopic_dermatitis_20642296",
+          "source_pmids": [
+            "20642296"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_ACIDOPHILUS_DDS1",
+            "STRAIN_LACTIS_UABla12"
+          ],
+          "population": {
+            "age_group": "child",
+            "description": "90 children 1-3 years with moderate-to-severe atopic dermatitis"
+          },
+          "purpose": "treatment",
+          "condition": "pediatric_atopic_dermatitis",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              10000000000.0
+            ],
+            "dosage_forms": [],
+            "duration_days": 56,
+            "co_therapies": [
+              "fructooligosaccharide"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "scorad_percentage_decrease",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "topical_corticosteroid_use",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive"
+            }
+          ],
+          "trial_family": "gerasimov_dds1_uabla12_ad_20642296",
+          "limitations": [
+            "Synbiotic with fructooligosaccharide; 5 x 10^9 CFU twice daily (1 x 10^10/day) is the combination total.",
+            "SCORAD reported as percentage decrease (33.7% vs 19.4%)."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 90,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        }
+      ]
     },
     {
       "id": "STRAIN_REUTERI_ATCC6475",
@@ -6428,7 +9680,70 @@
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain-specific RCTs verified via PubMed content (abstracts name 'L. plantarum LP01 (LMG P-21021)' verbatim). DEFER FINAL SCORING until Dr Pham reviews — recommend retaining 'moderate' evidence_strength until clinician confirms whether BV pilot + IntegPRO + depression RCT meet 'strong' threshold for this scorer's E1.3.2 tier rules. Probiotical's own product page cites PMID 29799760 for BS01 — that PMID resolves to a Nano Letters physics paper and must NOT be propagated to either LP01 or BS01 entries.",
         "dr_pham_signoff": false,
         "dr_pham_signoff_verification_note": "Pending Dr Pham review. Entry added 2026-05-22 as Phase 2 of the 2026-05-22 unmapped-resolution batch (Lp-01 surfaced in Life Extension probiotic products with the strain code on label)."
-      }
+      },
+      "study_contexts": [
+        {
+          "context_id": "lp01_bb12_synbiotic_constipation_29949873",
+          "source_pmids": [
+            "29949873"
+          ],
+          "identity_scope": "combination",
+          "components": [
+            "STRAIN_PLANTARUM_LP01",
+            "STRAIN_LACTIS_BB12"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "85 adults with Rome III functional constipation taking a synbiotic with LP01, BB-12 and prebiotics for 12 weeks"
+          },
+          "purpose": "treatment",
+          "condition": "functional_constipation",
+          "dose": {
+            "basis": "unresolved",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": 84,
+            "co_therapies": [
+              "prebiotic fibers (synbiotic formulation)"
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "stool_evacuation",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "pac_sym",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            },
+            {
+              "name": "pac_qol",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null"
+            }
+          ],
+          "trial_family": "lp01_bb12_synbiotic_fc_29949873",
+          "limitations": [
+            "No endpoint reached significance versus placebo (high placebo response); synbiotic formulation.",
+            "This null is currently LP01's only registry-recordable RCT: the rest of its trial base uses non-registry partner strains (see wave2_read_log.md)."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "study_design": "rct",
+          "sample_size": 85,
+          "blinding": "unreported",
+          "funding": "unreported",
+          "source_tier": "D",
+          "trial_registration": null,
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+        }
+      ]
     },
     {
       "id": "STRAIN_LACTIS_BS01",

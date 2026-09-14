@@ -20,6 +20,13 @@ from test_probiotic_applicability_rubric import strain_product
 @pytest.fixture
 def registry(monkeypatch):
     rows = deepcopy(studied_formulas._clinical_strain_registry())
+    # Real combination contexts owned by other identities join STRAIN_LGG at
+    # assessment time (Wave 2 curation). These unit tests isolate the bridge on
+    # the contexts each test injects onto STRAIN_LGG.
+    for rid, row in rows.items():
+        if rid != "STRAIN_LGG" and row.get("study_contexts"):
+            row["study_contexts"] = [c for c in row["study_contexts"]
+                                     if "STRAIN_LGG" not in c.get("components", [])]
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: rows)
     return rows
 

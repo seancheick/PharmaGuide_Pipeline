@@ -28,6 +28,13 @@ def context(**changes):
 def registry(monkeypatch):
     rows = deepcopy(studied_formulas._clinical_strain_registry())
     rows["STRAIN_LGG"]["study_contexts"] = [context()]
+    # Real combination contexts owned by other identities join STRAIN_LGG at
+    # assessment time (Wave 2 curation). These unit tests isolate the bridge on
+    # the synthetic LGG context above; the cross-owner join keeps its own test.
+    for rid, row in rows.items():
+        if rid != "STRAIN_LGG" and row.get("study_contexts"):
+            row["study_contexts"] = [c for c in row["study_contexts"]
+                                     if "STRAIN_LGG" not in c.get("components", [])]
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: rows)
     return rows
 
