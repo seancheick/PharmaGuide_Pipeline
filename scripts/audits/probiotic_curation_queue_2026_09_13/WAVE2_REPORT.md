@@ -8,7 +8,7 @@ and trials whose partner strains have no registry identity stay reviewed-not-rec
 
 - Contexts authored: 59 across 11 owning identities, citing 59 PubMed records read title/abstract on 2026-09-14 (full read log: wave2_read_log.md).
 - Combination contexts: 24 (joined to every component through `components`; never individual applicability). RC-14, R0175, UABla-12, CRL-431 and LGG join only through combinations.
-- Contexts with a machine-readable studied daily dose: 17; the rest are `unresolved` because the retrieved abstract did not state it or lost the exponent.
+- Contexts with a machine-readable studied daily dose: 18; the rest are `unresolved` because the retrieved abstract did not state it or lost the exponent.
 - Publication families: 57 (`trial_family`), so papers from one cohort cannot count twice.
 - Primary-outcome directions: {'null': 6, 'positive': 6}; all-outcome directions: {'positive': 95, 'null': 41, 'mixed': 1, 'unresolved': 2}; outcome kinds: {'patient_important': 94, 'surrogate': 45}.
 - Designs: {'rct': 46, 'open_label': 2, 'meta_analysis': 7, 'systematic_review': 2, 'crossover_rct': 2}; source tiers: {'C': 21, 'D': 27, 'E': 2, 'B': 9}.

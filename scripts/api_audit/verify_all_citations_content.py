@@ -53,6 +53,23 @@ SSL_CTX_UNVERIFIED = ssl._create_unverified_context()
 
 # ── Data file definitions ─────────────────────────────────────────────
 
+
+def _context_topic_texts(context: dict) -> list[str]:
+    """Return context claims defensively, even when a row is malformed."""
+    if not isinstance(context, dict):
+        return []
+    population = context.get("population")
+    population_description = population.get("description", "") if isinstance(population, dict) else ""
+    outcomes = context.get("outcomes")
+    outcome_names = " ".join(
+        str(outcome.get("name", "")) for outcome in outcomes
+        if isinstance(outcome, dict)
+    ) if isinstance(outcomes, list) else ""
+    limitations = context.get("limitations")
+    limitation_text = " ".join(item for item in limitations if isinstance(item, str)) \
+        if isinstance(limitations, list) else ""
+    return [context.get("condition", ""), population_description, outcome_names, limitation_text]
+
 FILE_CONFIGS = [
     {
         "file": "timing_rules.json",
@@ -136,10 +153,9 @@ FILE_CONFIGS = [
             + list(e.get("key_benefits") or [])
         ),
         "source_format": "nested_cfu_evidence_pmids",
+        "context_topic_extractor": _context_topic_texts,
     },
 ]
-
-
 # ── PubMed API ─────────────────────────────────────────────────────────
 
 def fetch_articles(pmids: list[str]) -> dict[str, dict]:
@@ -259,7 +275,11 @@ def extract_topic_words(entry: dict, config: dict) -> list[str]:
 
     words = set()
     for text in texts:
-        for word in re.split(r"[\s/,\(\)\-]+", text.lower()):
+        # Topic extractors may intentionally return optional fields as None.
+        # Treat those as absent instead of crashing the whole citation audit.
+        if not isinstance(text, str):
+            continue
+        for word in re.split(r"[\s/,\(\)_\-]+", text.lower()):
             if len(word) > 3 and word not in {
                 "with", "that", "this", "from", "into", "when", "your",
                 "take", "avoid", "class", "drug", "both", "risk", "does",
@@ -270,6 +290,23 @@ def extract_topic_words(entry: dict, config: dict) -> list[str]:
             }:
                 words.add(word)
     return list(words)
+
+
+def extract_context_topic_words(context: dict, config: dict) -> list[str]:
+    """Extract terms for a citation attached to a specific study context.
+
+    Context PMIDs often concern a condition that is unrelated to the parent
+    strain's general ``notable_studies`` text.  Verifying those PMIDs against
+    only the parent terms creates false mismatches (and can hide a real check
+    failure in a noisy report), so use the context's own condition, population,
+    outcomes and limitations when available.
+    """
+    extractor = config.get("context_topic_extractor")
+    if not callable(extractor):
+        return []
+    return extract_topic_words(context, {
+        "topic_extractor": extractor,
+    })
 
 
 def content_matches(article: dict, topic_words: list[str]) -> tuple[str, float]:
@@ -396,9 +433,24 @@ def verify_file(config: dict) -> dict:
             pmid = ref["pmid"]
             if pmid not in all_pmids:
                 all_pmids[pmid] = []
+            topic_words_for_ref = topic_words
+            if config.get("source_format") == "nested_cfu_evidence_pmids":
+                matching_contexts = [
+                    context for context in entry.get("study_contexts") or []
+                    if isinstance(context, dict)
+                    and pmid in {str(p) for p in context.get("source_pmids") or []}
+                ]
+                if matching_contexts:
+                    # Keep the entry-level identity terms as a weak anchor, but
+                    # add only the context terms for this PMID—not every other
+                    # condition in the strain's literature.
+                    context_words = set()
+                    for context in matching_contexts:
+                        context_words.update(extract_context_topic_words(context, config))
+                    topic_words_for_ref = list(set(topic_words) | context_words)
             all_pmids[pmid].append({
                 "entry_id": entry_id,
-                "topic_words": topic_words,
+                "topic_words": topic_words_for_ref,
             })
 
     if not all_pmids:

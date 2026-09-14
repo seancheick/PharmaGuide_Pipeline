@@ -70,6 +70,14 @@ def test_other_measurements_never_become_daily_dose_thresholds(registry, basis):
     assert assessment(strain_product(dose=1e9))["study_contexts"][0]["dose_comparison"] == "study_daily_dose_unresolved"
 
 
+def test_spore_counts_never_match_a_cfu_label_dose(registry):
+    row = registry["STRAIN_LGG"]["study_contexts"][0]
+    row["dose"].update(measurement_type="spores", unit="spores", values=[1e9])
+    result = assessment(strain_product(dose=1e9))["study_contexts"][0]
+    assert result["dose_comparison"] == "study_dose_not_viable_count"
+    assert result["clinical_applicability"] == "not_established"
+
+
 def test_unknown_and_different_populations_are_distinct(registry):
     p = strain_product(dose=1e9)
     p["target_population"] = "infant"

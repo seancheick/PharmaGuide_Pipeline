@@ -62,9 +62,19 @@ READ_PMIDS = {
 def ctx(context_id, pmids, *, owner, scope="exact_strain", components=None, age, population, purpose,
         condition, outcomes, family, limitations, basis="unresolved", values=(), forms=(), duration=None,
         co_therapies=(), design, n=None, blinding="unreported", funding="unreported", tier, registration=None,
-        comparator=None):
+        comparator=None, measurement_type="viable_count", unit=None):
     for pmid in pmids:
         assert pmid in READ_PMIDS, f"PMID {pmid} was not read this session"
+    dose = {
+        "basis": basis,
+        "unit": unit or {"viable_count": "CFU", "spores": "spores"}.get(measurement_type, "CFU"),
+        "values": list(values), "dosage_forms": list(forms),
+        "duration_days": duration, "co_therapies": list(co_therapies),
+    }
+    # Keep the legacy default compact; the explicit field is required when a
+    # source uses a non-CFU measurement so it cannot be mistaken for CFU.
+    if measurement_type != "viable_count" or unit is not None:
+        dose["measurement_type"] = measurement_type
     row = {
         "context_id": context_id,
         "source_pmids": list(pmids),
@@ -73,8 +83,7 @@ def ctx(context_id, pmids, *, owner, scope="exact_strain", components=None, age,
         "population": {"age_group": age, "description": population},
         "purpose": purpose,
         "condition": condition,
-        "dose": {"basis": basis, "unit": "CFU", "values": list(values), "dosage_forms": list(forms),
-                 "duration_days": duration, "co_therapies": list(co_therapies)},
+        "dose": dose,
         "outcomes": [{"name": name, "hierarchy": hier, "kind": kind, "direction": direction}
                      for name, hier, kind, direction in outcomes],
         "trial_family": family,
@@ -132,7 +141,8 @@ CONTEXTS = [
     ctx("is2_constipation_lactulose_cotherapy_34599466", ["34599466"], owner=IS2, age="adult",
         population="150 adults with functional constipation randomized to IS-2 plus lactulose, lactulose alone, or placebo",
         purpose="treatment", condition="functional_constipation",
-        basis="discrete_daily_arms", values=[2e9], duration=28, co_therapies=["lactulose 10 g/day"],
+        basis="discrete_daily_arms", measurement_type="spores", values=[2e9], duration=28,
+        co_therapies=["lactulose 10 g/day"],
         comparator="lactulose monotherapy (second active arm) and placebo",
         outcomes=[("stool_frequency_vs_lactulose", "unresolved", PI, "mixed"),
                   ("stool_consistency", "unresolved", PI, "positive"),
@@ -184,7 +194,8 @@ CONTEXTS = [
     ctx("is2_moderate_covid19_adjunct_39866999", ["39866999"], owner=IS2, age="adult",
         population="56 adults with moderate COVID-19 on standard treatment; three arms (B. coagulans UBBC-07, IS-2, placebo)",
         purpose="treatment", condition="moderate_covid19_adjunctive_care",
-        basis="discrete_daily_arms", values=[4e9], duration=14, co_therapies=["standard COVID-19 treatment"],
+        basis="discrete_daily_arms", measurement_type="spores", values=[4e9], duration=14,
+        co_therapies=["standard COVID-19 treatment"],
         outcomes=[("serum_ferritin", "unresolved", SU, "positive"),
                   ("d_dimer", "unresolved", SU, "positive"),
                   ("crp_ldh_il6", "unresolved", SU, "null")],
@@ -207,7 +218,7 @@ CONTEXTS = [
     ctx("mtcc5856_mdd_with_ibs_29997457", ["29997457"], owner=MTCC, age="adult",
         population="40 adults with major depressive disorder and IBS, India",
         purpose="treatment", condition="major_depression_with_irritable_bowel_syndrome",
-        basis="discrete_daily_arms", values=[2e9], duration=90,
+        basis="discrete_daily_arms", measurement_type="spores", values=[2e9], duration=90,
         outcomes=[("hamilton_depression_score", "unresolved", PI, "positive"),
                   ("madrs_score", "unresolved", PI, "positive"),
                   ("ces_d_score", "unresolved", PI, "positive"),
@@ -218,21 +229,22 @@ CONTEXTS = [
     ctx("mtcc5856_functional_gas_bloating_36862903", ["36862903"], owner=MTCC, age="adult",
         population="70 adults with functional gas and bloating (66 completed)",
         purpose="treatment", condition="functional_gas_and_bloating",
-        basis="discrete_daily_arms", values=[2e9], duration=28,
+        basis="discrete_daily_arms", measurement_type="spores", values=[2e9], duration=28,
         outcomes=[("gsrs_indigestion_score", "unresolved", PI, "positive"),
                   ("patient_global_assessment", "unresolved", PI, "positive")],
         family="sabinsa_mtcc5856_bloating_36862903", design="rct", n=70, funding="industry", tier="D",
         limitations=["Manufacturer-run; four-week duration; endpoint hierarchy not stated in the abstract."]),
     ctx("mtcc5856_pediatric_acute_diarrhea_38269290", ["38269290"], owner=MTCC, age="child",
         population="110 children 1-10 years with acute diarrhea; oral rehydration solution and zinc in both arms",
-        purpose="treatment", condition="pediatric_acute_gastroenteritis", duration=5,
+        purpose="treatment", condition="pediatric_acute_gastroenteritis", basis="discrete_daily_arms",
+        measurement_type="spores", values=[8e8], forms=["sachet"], duration=5,
         co_therapies=["oral rehydration solution", "zinc"],
         outcomes=[("diarrhea_duration", "unresolved", PI, "positive"),
                   ("stool_frequency", "unresolved", PI, "null")],
         family="mtcc5856_pediatric_diarrhea_38269290", design="rct", n=110, funding="industry", tier="C",
         registration="CTRI/2022/06/043239",
         limitations=["Duration fell (51.3 vs 62.7 h, p=0.011) but stool frequency did not differ.",
-                     "The dose is printed as '4 x 10 spores' with the exponent stripped in the retrieved abstract; recorded as unresolved."]),
+                     "Each sachet contained 4 x 10^8 spores and was taken twice daily (8 x 10^8 spores/day); ORS and zinc were co-therapies."]),
     ctx("mtcc5856_healthy_microbiome_37335737", ["37335737"], owner=MTCC, age="adult",
         population="30 healthy adults; microbiome and safety study",
         purpose="physiology", condition="gut_microbiome_composition", duration=28,
@@ -660,6 +672,21 @@ def main():
     reg = json.loads(raw)
     before = deepcopy(reg)
     entries = {e["id"]: e for e in reg["clinically_relevant_strains"]}
+    meta = reg["_metadata"]
+    if meta.get("version") == "2.4.0":
+        # This is a one-time data migration, but the documented command is
+        # safe to rerun. Validate the materialized rows byte-for-byte instead
+        # of appending duplicates or silently accepting a partial application.
+        stored = {c.get("context_id"): c for e in entries.values()
+                  for c in e.get("study_contexts", []) if isinstance(c, dict)}
+        for owner, row in CONTEXTS:
+            assert stored.get(row["context_id"]) == row, (
+                f"Wave 2 is marked applied but {row['context_id']} differs or is missing")
+            assert owner in entries and row["context_id"] in {
+                c.get("context_id") for c in entries[owner].get("study_contexts", [])
+            }
+        print(f"Wave 2 already applied; verified {len(CONTEXTS)} contexts; no changes written")
+        return
     added = 0
     for owner, row in CONTEXTS:
         entry = entries[owner]
@@ -672,7 +699,6 @@ def main():
                        for c in existing), f"same sources already authored under {owner}: {row['context_id']}"
         existing.append(row)
         added += 1
-    meta = reg["_metadata"]
     assert meta["version"] == "2.3.0", meta["version"]
     meta["version"] = "2.4.0"
     meta["last_updated"] = "2026-09-14"

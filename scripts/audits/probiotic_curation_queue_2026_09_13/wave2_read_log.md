@@ -18,7 +18,7 @@ Recorded:
 - 30911991 — adult functional constipation RCT, n=100, 2e9 CFU 4 wk;
   >=3 spontaneous stools/wk positive; industry; CTRI/2017/11/010539.
 - 34599466 — functional constipation, IS2+lactulose vs lactulose vs placebo,
-  n=150, 2e9 spores + 10 g lactulose 4 wk; stool-frequency advantage
+  n=150, 2e9 spores/day + 10 g lactulose 4 wk; stool-frequency advantage
   transient (end-of-trial NS vs lactulose); consistency/evacuation/pain
   positive; co-therapy lactulose; industry; CTRI/2018/11/016399.
 - 40456531 — healthy adults with infrequent BM (3-7 CSBM/wk), n=144, 2e9
@@ -63,7 +63,7 @@ Recorded:
   4 wk; GSRS-indigestion positive, patient global positive; industry.
 - 38269290 — pediatric acute diarrhea adjunct (ORS+zinc both arms), n=110,
   1-10 y, 5 d; duration positive (51.3 vs 62.7 h, p=0.011), frequency NS;
-  dose printed as "4 x 10 spores" with exponent stripped -> unresolved;
+  4 x 10^8 spores per sachet twice daily (8 x 10^8 spores/day);
   CTRI/2022/06/043239; industry.
 - 37335737 — healthy-adult microbiome/safety RCT, n=30, 2e9 CFU/capsule
   28 d; gut microbiome composition essentially unchanged (null physiology);

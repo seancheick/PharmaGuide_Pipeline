@@ -38,3 +38,33 @@ def test_url_list_sources_also_verify_explicit_source_pmids() -> None:
     )
 
     assert [ref["pmid"] for ref in refs] == ["11111111", "22222222"]
+
+
+def test_topic_extraction_ignores_optional_none_fields() -> None:
+    config = next(c for c in vac.FILE_CONFIGS
+                  if c["file"] == "clinically_relevant_strains.json")
+    words = vac.extract_topic_words(
+        {"standard_name": "Bacillus coagulans", "notable_studies": None,
+         "cfu_thresholds": {}, "aliases": [], "key_benefits": []}, config)
+    assert "bacillus" in words
+    assert "coagulans" in words
+
+
+def test_context_topic_extraction_uses_context_claims() -> None:
+    config = next(c for c in vac.FILE_CONFIGS
+                  if c["file"] == "clinically_relevant_strains.json")
+    words = vac.extract_context_topic_words(
+        {"condition": "functional_constipation",
+         "population": {"description": "constipated adults"},
+         "outcomes": [{"name": "stool_evacuation"}],
+         "limitations": ["high placebo response"]}, config)
+    assert "constipation" in words
+    assert "stool" in words
+
+
+def test_context_topic_extraction_handles_malformed_optional_fields() -> None:
+    config = next(c for c in vac.FILE_CONFIGS
+                  if c["file"] == "clinically_relevant_strains.json")
+    assert vac.extract_context_topic_words(
+        {"condition": None, "population": "unknown", "outcomes": [None],
+         "limitations": None}, config) == []

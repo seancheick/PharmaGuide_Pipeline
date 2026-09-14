@@ -642,6 +642,11 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             comparison = "combination_not_individual_dose"
         elif context["identity_scope"] == "species_general":
             comparison = "species_not_exact_strain"
+        elif (context["dose"].get("measurement_type") or "viable_count") != "viable_count":
+            # Spore counts and other non-CFU measurements are not interchangeable
+            # with a label-owned CFU dose. Keep the source context visible, but
+            # never let a numeric coincidence establish applicability.
+            comparison = "study_dose_not_viable_count"
         elif dose["basis"] != "discrete_daily_arms":
             comparison = "study_daily_dose_unresolved"
         elif amount is None:

@@ -1265,7 +1265,8 @@
           "condition": "major_depression_with_irritable_bowel_syndrome",
           "dose": {
             "basis": "discrete_daily_arms",
-            "unit": "CFU",
+            "measurement_type": "spores",
+            "unit": "spores",
             "values": [
               2000000000.0
             ],
@@ -1336,7 +1337,8 @@
           "condition": "functional_gas_and_bloating",
           "dose": {
             "basis": "discrete_daily_arms",
-            "unit": "CFU",
+            "measurement_type": "spores",
+            "unit": "spores",
             "values": [
               2000000000.0
             ],
@@ -1388,10 +1390,15 @@
           "purpose": "treatment",
           "condition": "pediatric_acute_gastroenteritis",
           "dose": {
-            "basis": "unresolved",
-            "unit": "CFU",
-            "values": [],
-            "dosage_forms": [],
+            "basis": "discrete_daily_arms",
+            "measurement_type": "spores",
+            "unit": "spores",
+            "values": [
+              800000000.0
+            ],
+            "dosage_forms": [
+              "sachet"
+            ],
             "duration_days": 5,
             "co_therapies": [
               "oral rehydration solution",
@@ -1415,7 +1422,7 @@
           "trial_family": "mtcc5856_pediatric_diarrhea_38269290",
           "limitations": [
             "Duration fell (51.3 vs 62.7 h, p=0.011) but stool frequency did not differ.",
-            "The dose is printed as '4 x 10 spores' with the exponent stripped in the retrieved abstract; recorded as unresolved."
+            "Each sachet contained 4 x 10^8 spores and was taken twice daily (8 x 10^8 spores/day); ORS and zinc were co-therapies."
           ],
           "review_status": "source_verified_pending_clinical_review",
           "study_design": "rct",
@@ -1791,7 +1798,8 @@
           "condition": "functional_constipation",
           "dose": {
             "basis": "discrete_daily_arms",
-            "unit": "CFU",
+            "measurement_type": "spores",
+            "unit": "spores",
             "values": [
               2000000000.0
             ],
@@ -2097,7 +2105,8 @@
           "condition": "moderate_covid19_adjunctive_care",
           "dose": {
             "basis": "discrete_daily_arms",
-            "unit": "CFU",
+            "measurement_type": "spores",
+            "unit": "spores",
             "values": [
               4000000000.0
             ],
