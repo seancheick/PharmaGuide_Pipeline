@@ -180,3 +180,35 @@ def test_unregistered_component_state_must_be_explicit() -> None:
     context["component_registration_status"] = "fully_registered"
     errors = validate_frozen_context(context, known_component_ids={"STRAIN_LGG"})
     assert "components.unregistered_state_must_be_present" in errors
+
+
+def test_malformed_identity_lists_fail_closed_with_codes_not_exceptions() -> None:
+    for components in (None, 5, "STRAIN_LGG", [{"id": "STRAIN_LGG"}], []):
+        context = _context()
+        context["components"] = components
+        assert "context.components_invalid" in validate_frozen_context(
+            context, known_component_ids={"STRAIN_LGG"})
+    context = _context()
+    context["source_pmids"] = None
+    assert "context.source_pmids_invalid" in validate_frozen_context(
+        context, known_component_ids={"STRAIN_LGG"})
+
+
+def test_dose_unit_must_match_its_measurement_type() -> None:
+    for update in ({"unit": "spores"}, {"unit": "cfu"}, {"unit": None},
+                   {"unit": "CFU", "measurement_type": "mass"}):
+        context = _context()
+        context["dose"].update(update)
+        errors = validate_frozen_context(context, known_component_ids={"STRAIN_LGG"})
+        assert "dose.unit_measurement_mismatch" in errors, update
+    context = _context()
+    context["dose"].update(unit="spores", measurement_type="spores")
+    assert validate_frozen_context(context, known_component_ids={"STRAIN_LGG"}) == []
+
+
+def test_nominal_assigned_arm_without_a_value_is_pending_not_reported() -> None:
+    context = _context()
+    context["dose"].update(dose_basis="nominal_assigned_arm", dose_status="source_not_reported",
+                           values=[], source_provenance=None)
+    errors = validate_frozen_context(context, known_component_ids={"STRAIN_LGG"})
+    assert "dose.values_required_for_exact_strain" in errors

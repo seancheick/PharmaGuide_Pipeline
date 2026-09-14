@@ -14,6 +14,8 @@ from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from functools import lru_cache
 
+from clinical_evidence_schema import DOSE_MEASUREMENT_UNITS  # noqa: F401  (re-exported)
+
 _AFU_UNIT = re.compile(
     r"(?:(million|billion)\s+)?(?:afu|active fluorescent units?)(?:\(s\))?",
     re.IGNORECASE,
@@ -201,14 +203,6 @@ def native_context_review_policy() -> str:
 
 IDENTITY_CONFIDENCE_ACCEPTED = frozenset({
     "clinical_identity_reviewed", "deposit_crosswalk_verified", "canonical_identity_verified"})
-DOSE_MEASUREMENT_UNITS = {
-    "viable_count": frozenset({"CFU"}),
-    "mass": frozenset({"mg", "g"}),
-    "afu": frozenset({"AFU"}),
-    "spores": frozenset({"spores", "CFU"}),
-}
-
-
 def clinical_review_provenance_valid(context) -> bool:
     """Require an attributable, dated clinical approval with an explicit scope."""
     if not isinstance(context, Mapping):
@@ -239,13 +233,16 @@ def clinical_review_provenance_valid(context) -> bool:
 
 def context_accepted_for_scoring(context) -> bool:
     """Only an attributable clinician approval can authorize clinical scoring."""
+    if not isinstance(context, Mapping):
+        return False
+    # A clinician approval records review provenance; it does not override an
+    # explicit scope decision that this context is not eligible for scoring
+    # (for example, a class-level or ranking-only record). Only an absent flag
+    # or the boolean True is eligibility; 0, "false" and "no" are not.
+    eligible = context.get("scoring_eligible")
     return (
-        isinstance(context, Mapping)
-        and context.get("review_status") == "clinician_approved"
-        # A clinician approval records review provenance; it does not override
-        # an explicit scope decision that this context is not eligible for
-        # scoring (for example, a class-level or ranking-only record).
-        and context.get("scoring_eligible") is not False
+        context.get("review_status") == "clinician_approved"
+        and (eligible is None or eligible is True)
         and clinical_review_provenance_valid(context)
     )
 
@@ -317,6 +314,14 @@ def derived_context_evidence(entry) -> dict | None:
     entry = entry if isinstance(entry, Mapping) else {}
     contexts = [c for c in (entry.get("study_contexts") or []) if isinstance(c, Mapping)
                 and c.get("identity_scope") == "exact_strain" and context_accepted_for_scoring(c)]
+    if not contexts:
+        return None
+    # An approved context only counts for this identity when it is a valid
+    # record OF this identity: the runtime validator owns that rule (owner in
+    # components, exact-strain means one component, unit matches measurement).
+    # studied_formulas imports this module, so resolve it at call time.
+    from studied_formulas import valid_native_study_context
+    contexts = [c for c in contexts if valid_native_study_context(c, entry.get("id"))]
     if not contexts:
         return None
     # Several papers can report the same trial. Evidence strength counts independent

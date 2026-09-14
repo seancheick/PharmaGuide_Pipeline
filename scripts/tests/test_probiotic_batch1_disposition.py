@@ -103,3 +103,69 @@ def test_applied_batch1_disposition_survives_later_registry_edits(tmp_path) -> N
     target = module._contexts(reverted)[patch["record_id"]]
     module._write_path(target, patch["field_path"], patch["old_value"])
     assert not module._already_applied(reverted, disposition)
+
+
+def _pre_apply_state(module, tmp_path):
+    """Registry with every declared patch reverted, and a disposition bound to it."""
+    registry = json.loads((ROOT / "scripts/data/clinically_relevant_strains.json").read_text())
+    disposition = json.loads(module.DISPOSITION.read_text())
+    contexts = module._contexts(registry)
+    for patch in disposition["patches"]:
+        module._write_path(contexts[patch["record_id"]], patch["field_path"], patch["old_value"])
+    path = tmp_path / "clinically_relevant_strains.json"
+    path.write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n")
+    module.REGISTRY = path
+    disposition["_metadata"]["dataset_sha256"] = module._sha256(path)
+    assert not module._already_applied(registry, disposition)
+    return registry, disposition
+
+
+def _patch(record_id, field_path, old_value, new_value, pmid):
+    return {"record_id": record_id, "field_path": field_path, "old_value": old_value,
+            "new_value": new_value, "source_pmid": pmid,
+            "source_url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
+            "source_location": "abstract", "reviewer_reason": "regression test"}
+
+
+def test_write_path_never_drops_a_list_index_onto_a_missing_key() -> None:
+    module = _module()
+    payload = {"dose": {}}
+    try:
+        module._write_path(payload, "dose.newlist[0]", 5)
+    except ValueError as exc:
+        assert "missing list" in str(exc)
+    else:
+        raise AssertionError("a list index on a missing key must not become a scalar")
+    assert payload == {"dose": {}}
+
+
+def test_patches_are_confined_to_records_with_an_approve_decision(tmp_path) -> None:
+    module = _module()
+    registry, disposition = _pre_apply_state(module, tmp_path)
+    outsider = "lgg_pediatric_aad_guideline_26756877"
+    assert outsider not in disposition["decisions"]
+    current = module._contexts(registry)[outsider]["condition"]
+    disposition["patches"].append(_patch(outsider, "condition", current, "something_else", "26756877"))
+    try:
+        module.validate(registry, disposition)
+    except ValueError as exc:
+        assert "without an approve decision" in str(exc)
+    else:
+        raise AssertionError("a patch outside the decided records must be refused")
+
+
+def test_patched_record_must_also_pass_the_runtime_validator(tmp_path) -> None:
+    module = _module()
+    registry, disposition = _pre_apply_state(module, tmp_path)
+    record = "dds1_ibs_three_arm_32019158"
+    # Passes the frozen vocabulary (two registered components) but not the runtime
+    # rule that an exact-strain context names exactly one component.
+    disposition["patches"].append(_patch(
+        record, "components", ["STRAIN_ACIDOPHILUS_DDS1"],
+        ["STRAIN_ACIDOPHILUS_DDS1", "STRAIN_LGG"], "32019158"))
+    try:
+        module.validate(registry, disposition)
+    except ValueError as exc:
+        assert "runtime validation" in str(exc)
+    else:
+        raise AssertionError("a patch the runtime validator rejects must not be applied")

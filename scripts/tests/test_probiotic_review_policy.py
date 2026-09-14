@@ -165,3 +165,30 @@ def test_suspended_legacy_signoff_stays_under_the_clinician_gate(registry):
     assert entry["cfu_thresholds"]["dr_pham_signoff"] is False
     assert pm.effective_strain_evidence(entry)["type"] != "study_contexts_derived"
     assert pm.identity_review_accepted(entry) is False
+
+
+def test_approved_context_filed_under_the_wrong_identity_never_credits_it(registry):
+    # A valid-looking LGG study approved with provenance but stored under La-14.
+    registry[STUB]["study_contexts"] = [positive_rct(approved=True, components=["STRAIN_LGG"])]
+    entry = registry[STUB]
+    assert studied_formulas.valid_native_study_context(entry["study_contexts"][0], STUB) is False
+    assert pm.derived_context_evidence(entry) is None
+    assert pm.identity_review_accepted(entry) is False
+    assert score_evidence(la14_product())["score"] == 0
+    assert _probiotic_research_presentation(entry)["review_status"] != "clinician_context_approved"
+
+
+def test_spores_dose_without_measurement_type_never_credits_an_identity(registry):
+    row = positive_rct(approved=True)
+    row["dose"].update(unit="spores", values=[1e9])
+    registry[STUB]["study_contexts"] = [row]
+    assert pm.derived_context_evidence(registry[STUB]) is None
+    assert score_evidence(la14_product())["score"] == 0
+
+
+@pytest.mark.parametrize("value", [0, "false", "no", 1, "true"])
+def test_scoring_eligible_is_only_true_or_absent(value):
+    row = positive_rct(approved=True, scoring_eligible=value)
+    assert pm.context_accepted_for_scoring(row) is False
+    assert pm.context_accepted_for_scoring(positive_rct(approved=True)) is True
+    assert pm.context_accepted_for_scoring(positive_rct(approved=True, scoring_eligible=True)) is True

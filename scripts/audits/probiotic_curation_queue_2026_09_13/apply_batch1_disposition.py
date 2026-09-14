@@ -26,6 +26,7 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 from clinical_evidence_schema import validate_frozen_context
+from studied_formulas import valid_native_study_context
 
 
 REGISTRY = ROOT / "scripts/data/clinically_relevant_strains.json"
@@ -56,6 +57,16 @@ def _contexts(registry: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return result
 
 
+def _owners(registry: dict[str, Any]) -> dict[str, str]:
+    """context_id -> owning identity id (the reference the runtime validator needs)."""
+    result: dict[str, str] = {}
+    for entry in registry.get("clinically_relevant_strains", []):
+        for context in entry.get("study_contexts", []) if isinstance(entry, dict) else []:
+            if isinstance(context, dict) and isinstance(context.get("context_id"), str):
+                result[context["context_id"]] = entry.get("id")
+    return result
+
+
 def _read_path(root: dict[str, Any], path: str) -> Any:
     current: Any = root
     for raw in path.split("."):
@@ -83,6 +94,8 @@ def _write_path(root: dict[str, Any], path: str, value: Any) -> None:
         key, index = match.group("key"), match.group("index")
         last = offset == len(parts) - 1
         if not isinstance(current, dict) or key not in current:
+            if index is not None:
+                raise ValueError(f"missing list for {path}")
             if last:
                 if not isinstance(current, dict):
                     raise ValueError(f"cannot set {path}")
@@ -181,6 +194,8 @@ def validate(registry: dict[str, Any], disposition: dict[str, Any]) -> tuple[dic
         field_path = patch.get("field_path")
         if not isinstance(record_id, str) or record_id not in prospective_contexts:
             raise ValueError(f"patch record not found: {record_id!r}")
+        if decisions.get(record_id) not in {"approve_as_written", "approve_with_correction"}:
+            raise ValueError(f"patch targets a record without an approve decision: {record_id}")
         if not isinstance(field_path, str) or not field_path:
             raise ValueError("patch field_path is required")
         key = (record_id, field_path)
@@ -223,6 +238,7 @@ def validate(registry: dict[str, Any], disposition: dict[str, Any]) -> tuple[dic
         raise ValueError(f"unpatched correction also has a patch: {sorted(set(unpatched) & patched_records)}")
 
     frozen_contexts = _contexts(prospective)
+    owners = _owners(prospective)
     known_ids = set(
         entry.get("id")
         for entry in prospective.get("clinically_relevant_strains", [])
@@ -233,6 +249,11 @@ def validate(registry: dict[str, Any], disposition: dict[str, Any]) -> tuple[dic
         errors = validate_frozen_context(context, known_component_ids=known_ids)
         if errors:
             raise ValueError(f"frozen context invalid for {record_id}: {errors}")
+        # The frozen contract is the vocabulary; the runtime validator is what
+        # scoring actually applies. A patched record must satisfy both, or the
+        # pipeline would silently drop it as invalid_context after the apply.
+        if not valid_native_study_context(context, owners[record_id]):
+            raise ValueError(f"patched context fails runtime validation for {record_id}")
         if context.get("review_status") != "source_verified_pending_clinical_review":
             raise ValueError(f"patch must not change review status for {record_id}")
     return contexts, prospective

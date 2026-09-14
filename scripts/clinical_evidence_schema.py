@@ -75,6 +75,14 @@ COMPONENT_REGISTRATION_STATUS = frozenset(
     {"fully_registered", "unregistered_components_present", "identity_uncertain"}
 )
 OUTCOME_KINDS = frozenset({"patient_important", "surrogate", "evidence_ranking"})
+# One owner for what a study dose counts in: the runtime validator and the dose
+# classifier import this mapping rather than keeping their own copy.
+DOSE_MEASUREMENT_UNITS = {
+    "viable_count": frozenset({"CFU"}),
+    "mass": frozenset({"mg", "g"}),
+    "afu": frozenset({"AFU"}),
+    "spores": frozenset({"spores", "CFU"}),
+}
 
 
 def _positive_number(value: object) -> bool:
@@ -133,6 +141,11 @@ def _dose_errors(context: Mapping, known_component_ids: Set[str] | None) -> list
     if dose.get("duration_basis") not in DURATION_BASIS:
         errors.append("dose.duration_basis_invalid")
 
+    measurement = dose.get("measurement_type") or "viable_count"
+    if (measurement not in DOSE_MEASUREMENT_UNITS
+            or dose.get("unit") not in DOSE_MEASUREMENT_UNITS[measurement]):
+        errors.append("dose.unit_measurement_mismatch")
+
     values = dose.get("values")
     if not isinstance(values, list) or any(not _positive_number(value) for value in values):
         errors.append("dose.values_invalid")
@@ -160,10 +173,12 @@ def _dose_errors(context: Mapping, known_component_ids: Set[str] | None) -> list
     if dose.get("dose_basis") == "per_strain_daily":
         if context.get("identity_scope") == "combination" and component_doses is None:
             errors.append("dose.component_doses_required_for_combination")
+    if dose.get("dose_basis") in {"per_strain_daily", "nominal_assigned_arm"}:
         # An exact-strain record can be structurally complete while its dose
         # still awaits extraction from the cited source.  Do not force a
         # number into ``values`` merely to satisfy the shape validator; the
-        # explicit pending status is the contract's safe representation.
+        # explicit pending status is the contract's safe representation. A
+        # nominal assigned arm is still an arm: without a value it is pending.
         if (context.get("identity_scope") != "combination"
                 and not values
                 and dose.get("dose_status") != "extraction_pending"):
@@ -268,6 +283,14 @@ def validate_frozen_context(
     if not isinstance(context, Mapping):
         return ["context.invalid"]
     errors: list[str] = []
+    # Malformed identity lists fail closed with error codes; every later check
+    # iterates them, so they must never reach the dose and outcome rules.
+    if not _text_list(context.get("components")):
+        errors.append("context.components_invalid")
+    if not _text_list(context.get("source_pmids")):
+        errors.append("context.source_pmids_invalid")
+    if errors:
+        return errors
     if context.get("context_schema_version") != CONTEXT_SCHEMA_VERSION:
         errors.append("context.schema_version_invalid")
     if context.get("evidence_role") not in EVIDENCE_ROLE:

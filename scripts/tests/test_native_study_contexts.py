@@ -370,3 +370,38 @@ def test_exact_formula_confidence_does_not_inherit_individual_review_gaps():
     _, reasons = _evidence_confidence(p, {"dimensions": {"evidence": evidence}},
         evidence_assessment={"readiness": "complete"})
     assert "evidence_review_incomplete" not in reasons
+
+
+@pytest.mark.parametrize("field,value", [
+    ("components", None), ("components", 5), ("components", [{"id": "STRAIN_LGG"}]),
+    ("source_pmids", None),
+])
+def test_frozen_stamped_malformed_context_is_invalid_and_cannot_crash_scoring(registry, field, value):
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+    row = registry["STRAIN_LGG"]["study_contexts"][0]
+    row.update(context_schema_version="1.1.0", evidence_role="direct_rct",
+               component_registration_status="fully_registered")
+    row["dose"].update(dose_status="verified", dose_basis="per_strain_daily",
+                       duration_basis="fixed_protocol",
+                       source_provenance={"pmid": "synthetic-source", "location": "abstract"})
+    row[field] = value
+    assert studied_formulas.valid_native_study_context(row, "STRAIN_LGG") is False
+    result = assessment(strain_product(dose=1e9))
+    assert result["study_contexts"][0]["status"] == "invalid_context"
+    assert result["dose_applicable"] is False
+    assert score_evidence(strain_product(dose=1e9))["components"]["dose_applicability"] == 0
+
+
+@pytest.mark.parametrize("value", [0, 1, "false", "no", "true"])
+def test_scoring_eligible_must_be_a_boolean_on_every_context(registry, value):
+    registry["STRAIN_LGG"]["study_contexts"][0]["scoring_eligible"] = value
+    assert assessment(strain_product(dose=1e9))["study_contexts"][0]["status"] == "invalid_context"
+
+
+def test_dose_comparison_wording_agrees_with_the_credited_class(registry):
+    label = 1.07 * 1e9  # float rounding: not bit-identical to the tested arm below
+    assert label != 1070000000
+    registry["STRAIN_LGG"]["study_contexts"][0]["dose"]["values"] = [1070000000]
+    result = assessment(strain_product(dose=label))["study_contexts"][0]
+    assert result["dose_applicability_class"] == "EXACT_TESTED_DOSE"
+    assert result["dose_comparison"] == "matches_tested_daily_dose"

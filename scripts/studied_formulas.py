@@ -526,18 +526,6 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
     if not isinstance(context, Mapping):
         return False
 
-    # New curation batches opt into the single frozen evidence contract.  Keep
-    # legacy contexts readable while making every newly stamped context pass
-    # the stricter vocabulary and semantic checks in one shared module.
-    if context.get("context_schema_version") is not None:
-        from clinical_evidence_schema import validate_frozen_context
-
-        if validate_frozen_context(
-            context,
-            known_component_ids=set(_clinical_strain_registry()),
-        ):
-            return False
-
     def text_list(value, *, allow_empty=False):
         return isinstance(value, list) and (allow_empty or bool(value)) and all(
             isinstance(item, str) and item.strip() for item in value)
@@ -552,6 +540,22 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
             or context.get("identity_scope") not in ("exact_strain", "species_general", "combination")
             or context.get("purpose") not in ("prevention", "treatment", "challenge", "physiology")
             or not text_list(context.get("limitations"))):
+        return False
+    # New curation batches opt into the single frozen evidence contract.  Keep
+    # legacy contexts readable while making every newly stamped context pass
+    # the stricter vocabulary and semantic checks in one shared module. The
+    # shape checks above run first so a malformed record fails closed here
+    # instead of raising inside those checks.
+    if context.get("context_schema_version") is not None:
+        from clinical_evidence_schema import validate_frozen_context
+
+        if validate_frozen_context(
+            context,
+            known_component_ids=set(_clinical_strain_registry()),
+        ):
+            return False
+    eligible = context.get("scoring_eligible")
+    if eligible is not None and not isinstance(eligible, bool):
         return False
     if (context.get("review_status") == "clinician_approved"
             and not clinical_review_provenance_valid(context)):
@@ -674,8 +678,9 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
         elif amount is None:
             comparison = "label_dose_unknown"
         else:
-            comparison = ("matches_tested_daily_dose" if amount in dose["values"]
-                          else "outside_tested_daily_doses")
+            # The same classifier that awards credit decides the wording, so a
+            # float-rounded label amount cannot read "outside" while scoring EXACT.
+            comparison = classify_dose_applicability(amount, dose)[1]
         population = _key(product.get("target_population"))
         study_population = context["population"]["age_group"]
         population_comparison = (
