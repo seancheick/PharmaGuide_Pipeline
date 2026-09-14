@@ -64,6 +64,9 @@ def test_evidence_review_packet_uses_frozen_fields_without_personal_metadata() -
     )
     subprocess.run(["python", str(builder)], cwd=ROOT, check=True, capture_output=True)
     packet = (ROOT / "docs/plans/PROBIOTIC_EVIDENCE_REVIEW_PACKET_2026-09-14.md").read_text()
+    assert "engineering owner verifies" in packet
+    assert "Reviewers do not edit statuses" in packet
+    assert "review team records the decision" not in packet
     assert "duration_as_printed" in packet
     assert "component_registration_status" in packet
     assert "clinician" not in packet.lower()
