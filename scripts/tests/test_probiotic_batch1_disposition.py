@@ -57,14 +57,17 @@ def test_batch1_disposition_binds_every_patch_to_the_named_snapshot() -> None:
     )
 
 
-def test_clinician_packet_uses_frozen_fields_without_personal_metadata() -> None:
+def test_evidence_review_packet_uses_frozen_fields_without_personal_metadata() -> None:
     builder = ROOT / (
         "scripts/audits/probiotic_curation_queue_2026_09_13/"
-        "build_clinician_packet.py"
+        "build_evidence_review_packet.py"
     )
     subprocess.run(["python", str(builder)], cwd=ROOT, check=True, capture_output=True)
-    packet = (ROOT / "docs/plans/CLINICIAN_REVIEW_PACKET_2026-09-14.md").read_text()
+    packet = (ROOT / "docs/plans/PROBIOTIC_EVIDENCE_REVIEW_PACKET_2026-09-14.md").read_text()
     assert "duration_as_printed" in packet
     assert "component_registration_status" in packet
+    assert "clinician" not in packet.lower()
+    assert "studied_dose." in packet
+    assert "network_node_estimate" in packet
     assert "reviewer name/credentials" not in packet
     assert "decision date" not in packet.lower()

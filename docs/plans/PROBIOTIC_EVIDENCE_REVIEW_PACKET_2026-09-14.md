@@ -1,17 +1,31 @@
-# Clinician review packet — probiotic evidence contexts
+# Probiotic evidence review packet
 
 > Generated from `scripts/data/clinically_relevant_strains.json` on 2026-09-14.
-> This packet is a review aid, not an approval. Every item remains pending until an attributable clinician records approve/reject and rationale in the canonical registry workflow.
-> Automated source check: [PubMed verification report](CLINICIAN_API_VERIFICATION_2026-09-14.json) — 182/182 citation references matched; 0 mismatches.
+> This packet is a review handoff. The review team records the decision; the registry and pipeline remain the source of truth.
+> Automated source check: [PubMed verification report](EVIDENCE_API_VERIFICATION_2026-09-14.json) — 182/182 citation references matched; 0 mismatches.
 > Batch-1 structural patch: `scripts/audits/probiotic_curation_queue_2026_09_13/batch1_disposition_2026-09-14.json` (snapshot-bound; statuses unchanged).
 
-**Pending contexts:** 125  
+## Where we are
+
+The source records and citations have already been assembled. The decisions below have not yet been written into the registry, so no evidence change is shipped from this packet by itself.
+
+- **Pending review:** 125
+- **Recorded approved:** 0
+- **Recorded rejected:** 0
+- **Other registry states:** 0
+- **Contexts shown in this packet:** 125
 **Owning identities represented:** 21
 
-## Instructions for the clinician
+## What is already done
 
-For each context, verify the exact strain/identity scope, population, condition, tested dose and form, outcomes, and limitations against the linked PubMed record and full text when needed. Do not infer a missing dose or convert a combination result into single-strain evidence.
-The structured fields are authoritative for downstream queries: dose_status distinguishes source-silent, extraction-pending, verified, and conflicting values; duration_days is canonical, while duration_as_printed preserves the source unit; component_registration_status must be explicit.
+- Source links and citation identifiers were checked before this packet was generated.
+- Each context already has an identity scope, population, condition, dose fields, outcomes, and limitations where available.
+- Clean → Enrich → Score is the production pipeline. Review decisions only change which evidence contexts are eligible; they do not bypass cleaning, enrichment, scoring, or release checks.
+- Unresolved values remain unresolved. The system never fills a missing dose, turns a combination result into single-strain evidence, or treats a ranking as a direct treatment effect.
+
+## What the reviewer needs to do
+
+For each context, compare the record with the linked PubMed entry and full text when needed. Return only the context ID, one decision, and a short rationale. No credentials, dates, or database fields need to be added to this document.
 
 Record exactly one decision (these are deliberately different):
 - **Approve as written** — the record is an accurate source summary. This does *not* mean the result was positive, and it does not make an unresolved dose eligible for scoring.
@@ -21,7 +35,33 @@ Record exactly one decision (these are deliberately different):
 
 A null or negative outcome may still be approved as an accurate record; it will never create a positive evidence bonus. Combination evidence remains combination evidence. A context with an unresolved dose may be approved as a source summary, but it remains ineligible for exact-dose applicability until the dose is resolved.
 
-Return the context ID, decision, and rationale. For a correction, include an exact before/after field value, the source PMID, and the source location. Clinician identity and timestamps are captured by the review system rather than typed into this packet. Clinical approval status remains unchanged until that attributable decision is entered.
+Return the context ID, decision, and rationale. For a correction, include an exact before/after field value, the source PMID, and the source location. Review identity and timestamps are captured by the review system rather than typed into this packet.
+
+## Schema to use (do not invent fields)
+
+The registry is authoritative. Put corrections only in these existing paths:
+- **Dose:** `dose.dose_status`, `dose.dose_basis`, `dose.values`, `dose.unit`, `dose.dosage_forms`, `dose.duration_days`, `dose.duration_as_printed`, `dose.duration_basis`, `dose.administration_frequency`, `dose.component_doses`, and `dose.source_provenance`.
+- **Evidence:** `evidence_role`.
+- **Components:** `component_registration_status`.
+- **Eligibility:** `scoring_eligible` at the context level only.
+- **Outcomes:** `outcomes[].name`, `hierarchy`, `kind`, `direction`, and `outcome_role`.
+
+Use only the existing vocabulary:
+- `dose_status`: `verified`, `source_not_reported`, `extraction_pending`, `conflicting_source_values`, `combination_total_only`.
+- `dose_basis`: `per_strain_daily`, `combination_total_daily`, `nominal_assigned_arm`, `measured_viability`, `single_challenge`, `not_applicable`.
+- `duration_basis`: `fixed_protocol`, `tied_to_cotherapy`, `participant_specific`, `endpoint_followup_only`, `not_recorded`, `extraction_pending`.
+- `evidence_role`: `direct_rct`, `network_meta_analysis`, `systematic_review`, `meta_analysis`, `guideline`, `companion_analysis`, `observational_study`, `mechanistic_study`.
+- `outcome kind`: `patient_important`, `surrogate`, `evidence_ranking`; `outcome_role`: `direct_between_group_effect`, `network_ranking`, `within_group_change`, `surrogate`, `post_hoc_subgroup`, `companion_reported_context`.
+- `component_registration_status`: `fully_registered`, `unregistered_components_present`, `identity_uncertain`.
+
+Do not create variants such as `studied_dose.*`, `network_node_estimate`, `systematic_review_guideline`, `recoverable_manual`, `daily_use_comparable`, or outcome-level eligibility flags. If the source does not support a value, leave it pending or source-not-reported.
+
+## What happens after the decisions
+
+1. The decision is recorded against the exact context ID and source snapshot.
+2. Corrections are validated against this schema and the cited source; rejected or unresolved contexts remain excluded.
+3. The normal Clean → Enrich → Score pipeline runs. Only verified, eligible evidence contributes to scoring; rankings, class-level results, companion reports, and unresolved doses stay bounded.
+4. Release checks compare the generated catalog with the prior release, then the approved build is shipped to the app.
 
 ---
 
