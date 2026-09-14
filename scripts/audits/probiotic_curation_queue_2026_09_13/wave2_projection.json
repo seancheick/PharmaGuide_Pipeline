@@ -1,0 +1,11 @@
+{
+ "_metadata": {
+  "built": "2026-09-14",
+  "read_only": true,
+  "corpus_present": false,
+  "scored_probiotics": 0,
+  "wave2_contexts_authored": 59
+ },
+ "A_evidence": null,
+ "note": "scripts/products/output_*_{enriched,scored} not present in this checkout; re-run this script in a checkout that has the corpus to compute the evidence what-if (wave1_projection.json was built against 548 scored probiotics)."
+}

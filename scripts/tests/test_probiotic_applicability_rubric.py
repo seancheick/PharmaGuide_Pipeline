@@ -130,9 +130,15 @@ def test_legacy_native_match_requires_one_actual_label_owner(owners, accepted):
 def reviewed_dose(monkeypatch):
     # A historical single-range shape is deliberately no longer sufficient.
     registry = deepcopy(studied_formulas._clinical_strain_registry())
-    # Isolate this legacy-boundary fixture from newly pending real contexts.
-    # The separate native-context suite proves they cannot be bypassed.
+    # Isolate this legacy-boundary fixture from newly pending real contexts —
+    # both LGG-owned and combination contexts owned elsewhere that join LGG
+    # (Wave 2 curation). The separate native-context suite proves they cannot
+    # be bypassed.
     registry["STRAIN_LGG"].pop("study_contexts", None)
+    for rid, row in registry.items():
+        if row.get("study_contexts"):
+            row["study_contexts"] = [c for c in row["study_contexts"]
+                                     if "STRAIN_LGG" not in c.get("components", [])]
     registry["STRAIN_LGG"]["applicability"] = {
         "dose_unit": "CFU", "minimum_daily_dose": 1e9, "maximum_daily_dose": 2e10,
         "dosage_forms": ["capsule"], "target_population": "adult",
