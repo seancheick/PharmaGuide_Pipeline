@@ -2,6 +2,7 @@
 
 > Generated from `scripts/data/clinically_relevant_strains.json` on 2026-09-14.
 > This packet is a review aid, not an approval. Every item remains pending until an attributable clinician records approve/reject and rationale in the canonical registry workflow.
+> Automated source check: [PubMed verification report](CLINICIAN_API_VERIFICATION_2026-09-14.json) — 182/182 citation references matched; 0 mismatches.
 
 **Pending contexts:** 125  
 **Owning identities represented:** 21

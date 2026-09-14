@@ -1,0 +1,3471 @@
+[
+  {
+    "file": "clinically_relevant_strains.json",
+    "total_citations": 182,
+    "match": 182,
+    "partial": 0,
+    "mismatch": 0,
+    "not_found": 0,
+    "pass_rate": "100%",
+    "entries": [
+      {
+        "entry_id": "STRAIN_LGG",
+        "pmid": "26756877",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "rhamnosus",
+          "indication.",
+          "espghan",
+          "rct.",
+          "treatment",
+          "efficacy",
+          "moderate",
+          "exact",
+          "health",
+          "prevention"
+        ],
+        "article_title": "Probiotics for the Prevention of Antibiotic-Associated Diarrhea in Children."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "26756877",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "espghan",
+          "treatment",
+          "structured",
+          "moderate",
+          "exact",
+          "prevention",
+          "boulardii",
+          "children",
+          "general",
+          "inpatient"
+        ],
+        "article_title": "Probiotics for the Prevention of Antibiotic-Associated Diarrhea in Children."
+      },
+      {
+        "entry_id": "STRAIN_LGG",
+        "pmid": "17229242",
+        "status": "match",
+        "confidence": 0.21,
+        "topic_words_checked": [
+          "table",
+          "resolved.",
+          "n=37",
+          "small",
+          "retain",
+          "overall",
+          "outcome",
+          "prevention",
+          "select",
+          "manufacturer."
+        ],
+        "article_title": "A randomized double-blind placebo-controlled trial of Lactobacillus GG for abdominal pain disorders in children."
+      },
+      {
+        "entry_id": "STRAIN_LGG",
+        "pmid": "40702885",
+        "status": "match",
+        "confidence": 0.24,
+        "topic_words_checked": [
+          "overlap",
+          "pooled",
+          "rcts",
+          "limited.",
+          "prevention",
+          "children",
+          "intervals",
+          "trials",
+          "0.88",
+          "prediction"
+        ],
+        "article_title": "The effects of Lacticaseibacillus rhamnosus GG supplementation on gastrointestinal and respiratory outcomes: a systematic review and meta-analysis of randomized controlled trials."
+      },
+      {
+        "entry_id": "STRAIN_LGG",
+        "pmid": "39060543",
+        "status": "match",
+        "confidence": 0.23,
+        "topic_words_checked": [
+          "rhamnosus",
+          "indication.",
+          "espghan",
+          "using",
+          "hospital",
+          "pooled",
+          "stage",
+          "efficacy",
+          "onset",
+          "preterm"
+        ],
+        "article_title": "Lactobacillus rhamnosus GG as a probiotic for preterm infants: a strain specific systematic review and meta-analysis."
+      },
+      {
+        "entry_id": "STRAIN_LGG",
+        "pmid": "34546300",
+        "status": "match",
+        "confidence": 0.26,
+        "topic_words_checked": [
+          "cost",
+          "arabia",
+          "prevention",
+          "children",
+          "predicted",
+          "0.1%",
+          "secondary",
+          "found",
+          "pneumonia",
+          "every"
+        ],
+        "article_title": "Effect of Probiotics on Incident Ventilator-Associated Pneumonia in Critically Ill Patients: A Randomized Clinical Trial."
+      },
+      {
+        "entry_id": "STRAIN_LGG",
+        "pmid": "38103462",
+        "status": "match",
+        "confidence": 0.24,
+        "topic_words_checked": [
+          "rhamnosus",
+          "indication.",
+          "espghan",
+          "case",
+          "significant",
+          "confirmed",
+          "covid19",
+          "efficacy",
+          "8.8%",
+          "covid"
+        ],
+        "article_title": "Efficacy of probiotic treatment as post-exposure prophylaxis for COVID-19: A double-blind, Placebo-Controlled Randomized trial."
+      },
+      {
+        "entry_id": "STRAIN_LGG",
+        "pmid": "25473176",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "normal",
+          "rhamnosus",
+          "indication.",
+          "espghan",
+          "bowel",
+          "significant",
+          "female",
+          "efficacy",
+          "diet",
+          "change"
+        ],
+        "article_title": "Ehealth: low FODMAP diet vs Lactobacillus rhamnosus GG in irritable bowel syndrome."
+      },
+      {
+        "entry_id": "STRAIN_LGG",
+        "pmid": "41883407",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "pooled",
+          "placebo",
+          "global",
+          "indirect",
+          "author",
+          "rcts",
+          "rated",
+          "prevention",
+          "children",
+          "trial"
+        ],
+        "article_title": "Comparative efficacy of probiotic, prebiotic, and synbiotic interventions in children with functional abdominal pain disorders: a systematic review and network meta-analysis."
+      },
+      {
+        "entry_id": "STRAIN_LGG",
+        "pmid": "42477222",
+        "status": "match",
+        "confidence": 0.17,
+        "topic_words_checked": [
+          "pooled",
+          "placebo",
+          "global",
+          "indirect",
+          "author",
+          "rcts",
+          "rated",
+          "prevention",
+          "children",
+          "trial"
+        ],
+        "article_title": "Probiotics in pediatric functional abdominal pain disorders: a systematic review and meta-analysis."
+      },
+      {
+        "entry_id": "STRAIN_LGG",
+        "pmid": "40891819",
+        "status": "match",
+        "confidence": 0.26,
+        "topic_words_checked": [
+          "rhamnosus",
+          "indication.",
+          "espghan",
+          "protocol",
+          "salivary",
+          "seasonal",
+          "efficacy",
+          "airway",
+          "within",
+          "rhinoconjunctivitis"
+        ],
+        "article_title": "Lacticaseibacillus rhamnosus GG in a chewable colonizes the nose and facilitates local immune benefits in allergic rhinoconjunctivitis patients."
+      },
+      {
+        "entry_id": "STRAIN_REUTERI_DSM17938",
+        "pmid": "29390535",
+        "status": "match",
+        "confidence": 0.44,
+        "topic_words_checked": [
+          "disorders",
+          "biogaia",
+          "protectis",
+          "health",
+          "time",
+          "relief",
+          "infant",
+          "children",
+          "2018",
+          "meta"
+        ],
+        "article_title": "Efficacy of Lactobacillus reuteri DSM 17938 for infantile colic: Systematic review with network meta-analysis."
+      },
+      {
+        "entry_id": "STRAIN_REUTERI_PRODENTIS",
+        "pmid": "23176716",
+        "status": "match",
+        "confidence": 0.41,
+        "topic_words_checked": [
+          "confirmed",
+          "biogaia",
+          "prodentis:",
+          "rcts",
+          "acta",
+          "health",
+          "subjects",
+          "oral",
+          "scandinavica",
+          "prodentis"
+        ],
+        "article_title": "Clinical changes in periodontal subjects with the probiotic Lactobacillus reuteri Prodentis: a preliminary randomized clinical trial."
+      },
+      {
+        "entry_id": "STRAIN_K12",
+        "pmid": "38215354",
+        "status": "match",
+        "confidence": 0.42,
+        "topic_words_checked": [
+          "patients",
+          "oncology",
+          "rcts",
+          "official",
+          "health",
+          "prevention",
+          "salivarius",
+          "undergoing",
+          "oral",
+          "halitosis"
+        ],
+        "article_title": "Streptococcus salivarius K12 Alleviates Oral Mucositis in Patients Undergoing Radiotherapy for Malignant Head and Neck Tumors: A Randomized Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_M18",
+        "pmid": "32250565",
+        "status": "match",
+        "confidence": 0.41,
+        "topic_words_checked": [
+          "experimental",
+          "salivarius",
+          "halitosis",
+          "oral",
+          "dental",
+          "vitro.",
+          "reduction",
+          "blis",
+          "caries",
+          "studies"
+        ],
+        "article_title": "Inhibitory effect of Streptococcus salivarius K12 and M18 on halitosis in vitro."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_GBI30",
+        "pmid": "29196920",
+        "status": "match",
+        "confidence": 0.48,
+        "topic_words_checked": [
+          "bowel",
+          "improves",
+          "proteins",
+          "utilization.",
+          "bc30",
+          "antimicrobial",
+          "rcts",
+          "health",
+          "relief",
+          "sports"
+        ],
+        "article_title": "Probiotic Bacillus coagulans GBI-30, 6086 Improves Protein Absorption and Utilization."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_GBI30",
+        "pmid": "40707016",
+        "status": "match",
+        "confidence": 0.33,
+        "topic_words_checked": [
+          "bowel",
+          "improves",
+          "proteins",
+          "utilization.",
+          "bc30",
+          "antimicrobial",
+          "hierarchy",
+          "rcts",
+          "health",
+          "abstract."
+        ],
+        "article_title": "Impact of Heyndrickxia (Bacillus) coagulans GBI-30, 6086 (BC30) probiotic on gastrointestinal function in healthy adults: a randomised controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_GBI30",
+        "pmid": "31162597",
+        "status": "match",
+        "confidence": 0.35,
+        "topic_words_checked": [
+          "bowel",
+          "improves",
+          "proteins",
+          "single",
+          "moved.",
+          "inflammation",
+          "utilization.",
+          "bc30",
+          "antimicrobial",
+          "glucans"
+        ],
+        "article_title": "Glucose- and Lipid-Related Biomarkers Are Affected in Healthy Obese or Hyperglycemic Adults Consuming a Whole-Grain Pasta Enriched in Prebiotics and Probiotics: A 12-Week Randomized Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_GBI30",
+        "pmid": "32318476",
+        "status": "match",
+        "confidence": 0.24,
+        "topic_words_checked": [
+          "bowel",
+          "enzymes",
+          "improves",
+          "proteins",
+          "utilization.",
+          "bc30",
+          "antimicrobial",
+          "rcts",
+          "health",
+          "enzymes;"
+        ],
+        "article_title": "A prospective, randomized, open-label, placebo-controlled comparative study of Bacillus coagulans GBI-30,6086 with digestive enzymes in improving indigestion in geriatric population."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_MTCC5856",
+        "pmid": "37686889",
+        "status": "match",
+        "confidence": 0.42,
+        "topic_words_checked": [
+          "bowel",
+          "pooled",
+          "ibs:",
+          "indirect",
+          "rcts",
+          "outcome",
+          "lactospore",
+          "trials",
+          "bacillus",
+          "29997457"
+        ],
+        "article_title": "Outcome-Specific Efficacy of Different Probiotic Strains and Mixtures in Irritable Bowel Syndrome: A Systematic Review and Network Meta-Analysis."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_IS2",
+        "pmid": "37686889",
+        "status": "match",
+        "confidence": 0.3,
+        "topic_words_checked": [
+          "bowel",
+          "2022",
+          "pooled",
+          "ibs:",
+          "indirect",
+          "studies",
+          "acid",
+          "outcome",
+          "performance",
+          "trials"
+        ],
+        "article_title": "Outcome-Specific Efficacy of Different Probiotic Strains and Mixtures in Irritable Bowel Syndrome: A Systematic Review and Network Meta-Analysis."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_DDS1",
+        "pmid": "37686889",
+        "status": "match",
+        "confidence": 0.39,
+        "topic_words_checked": [
+          "bowel",
+          "chr.",
+          "improvement",
+          "single",
+          "ranked",
+          "shares",
+          "indirect",
+          "resting",
+          "research.",
+          "health"
+        ],
+        "article_title": "Outcome-Specific Efficacy of Different Probiotic Strains and Mixtures in Irritable Bowel Syndrome: A Systematic Review and Network Meta-Analysis."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_MTCC5856",
+        "pmid": "26922379",
+        "status": "match",
+        "confidence": 0.42,
+        "topic_words_checked": [
+          "bowel",
+          "efficacy",
+          "rcts",
+          "health",
+          "outcome",
+          "lactospore",
+          "relief",
+          "mtcc5856",
+          "bacillus",
+          "meta"
+        ],
+        "article_title": "Bacillus coagulans MTCC 5856 supplementation in the management of diarrhea predominant Irritable Bowel Syndrome: a double blind randomized placebo controlled pilot clinical study."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_MTCC5856",
+        "pmid": "29997457",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "run;",
+          "bowel",
+          "single",
+          "mood",
+          "efficacy",
+          "rcts",
+          "hamilton",
+          "health",
+          "outcome",
+          "lactospore"
+        ],
+        "article_title": "Bacillus coagulans MTCC 5856 for the management of major depression with irritable bowel syndrome: a randomised, double-blind, placebo controlled, multi-centre, pilot clinical study."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_MTCC5856",
+        "pmid": "36862903",
+        "status": "match",
+        "confidence": 0.37,
+        "topic_words_checked": [
+          "run;",
+          "bowel",
+          "patient",
+          "completed",
+          "hierarchy",
+          "efficacy",
+          "global",
+          "rcts",
+          "health",
+          "outcome"
+        ],
+        "article_title": "The effects of Bacillus coagulans MTCC 5856 on functional gas and bloating in adults: A randomized, double-blind, placebo-controlled study."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_MTCC5856",
+        "pmid": "38269290",
+        "status": "match",
+        "confidence": 0.3,
+        "topic_words_checked": [
+          "bowel",
+          "spores",
+          "efficacy",
+          "rcts",
+          "health",
+          "outcome",
+          "lactospore",
+          "relief",
+          "oral",
+          "children"
+        ],
+        "article_title": "Probiotic Weizmannia coagulans MTCC 5856 as adjunct therapy in children's acute diarrhea-a randomized, double-blind, placebo-controlled study."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_MTCC5856",
+        "pmid": "37335737",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "bowel",
+          "safety",
+          "capsules",
+          "composition",
+          "efficacy",
+          "rcts",
+          "health",
+          "outcome",
+          "unresolved.",
+          "lactospore"
+        ],
+        "article_title": "Probiotic modulation of gut microbiota by Bacillus coagulans MTCC 5856 in healthy subjects: A randomized, double-blind, placebo-control study."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_MTCC5856",
+        "pmid": "41682832",
+        "status": "match",
+        "confidence": 0.22,
+        "topic_words_checked": [
+          "bowel",
+          "pooled",
+          "ibs:",
+          "indirect",
+          "rcts",
+          "outcome",
+          "lactospore",
+          "trials",
+          "bacillus",
+          "29997457"
+        ],
+        "article_title": "Strain-Specific Systematic Review with Meta-Analysis of Probiotics Efficacy in the Treatment of Irritable Bowel Syndrome."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_IS2",
+        "pmid": "41682832",
+        "status": "match",
+        "confidence": 0.19,
+        "topic_words_checked": [
+          "bowel",
+          "2022",
+          "pooled",
+          "ibs:",
+          "indirect",
+          "studies",
+          "acid",
+          "outcome",
+          "performance",
+          "trials"
+        ],
+        "article_title": "Strain-Specific Systematic Review with Meta-Analysis of Probiotics Efficacy in the Treatment of Irritable Bowel Syndrome."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_IS2",
+        "pmid": "35249118",
+        "status": "match",
+        "confidence": 0.4,
+        "topic_words_checked": [
+          "2022",
+          "supplementing",
+          "strength",
+          "small",
+          "studies",
+          "acid",
+          "health",
+          "relief",
+          "performance",
+          "absorption"
+        ],
+        "article_title": "The effect of Bacillus coagulans Unique IS-2 supplementation on plasma amino acid levels and muscle strength in resistance trained males consuming whey protein: a double-blind, placebo-controlled study."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_IS2",
+        "pmid": "31434935",
+        "status": "match",
+        "confidence": 0.4,
+        "topic_words_checked": [
+          "bowel",
+          "2022",
+          "studies",
+          "randomized",
+          "change",
+          "acid",
+          "health",
+          "movements",
+          "cytokines",
+          "relief"
+        ],
+        "article_title": "Randomized clinical trial: the effect of probiotic Bacillus coagulans Unique IS2 vs. placebo on the symptoms management of irritable bowel syndrome in adults."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_IS2",
+        "pmid": "29695183",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "bowel",
+          "2022",
+          "once",
+          "hierarchy",
+          "studies",
+          "acid",
+          "health",
+          "daily",
+          "abstract.",
+          "abstract;"
+        ],
+        "article_title": "Efficacy of Bacillus coagulans Unique IS2 in treatment of irritable bowel syndrome in children: a double blind, randomised placebo controlled study."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_IS2",
+        "pmid": "30911991",
+        "status": "match",
+        "confidence": 0.25,
+        "topic_words_checked": [
+          "bowel",
+          "2022",
+          "hierarchy",
+          "studies",
+          "acid",
+          "health",
+          "movements",
+          "abstract.",
+          "relief",
+          "performance"
+        ],
+        "article_title": "Bacillus coagulans Unique IS2 in Constipation: A Double-Blind, Placebo-Controlled Study."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_IS2",
+        "pmid": "34599466",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "monotherapy",
+          "plus",
+          "2022",
+          "significant",
+          "over",
+          "alone",
+          "lactulose",
+          "placebo",
+          "incomplete",
+          "studies"
+        ],
+        "article_title": "Effect of Bacillus coagulans Unique IS2 with Lactulose on Functional Constipation in Adults: a Double-Blind Placebo Controlled Study."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_IS2",
+        "pmid": "40456531",
+        "status": "match",
+        "confidence": 0.4,
+        "topic_words_checked": [
+          "bowel",
+          "2022",
+          "nutrasource",
+          "composition",
+          "movement",
+          "studies",
+          "acid",
+          "health",
+          "movements",
+          "relief"
+        ],
+        "article_title": "Bacillus coagulans Unique IS2 improves stool characteristics in healthy adults with infrequent bowel movements: a randomized, double-blind, placebo-controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_IS2",
+        "pmid": "36372047",
+        "status": "match",
+        "confidence": 0.19,
+        "topic_words_checked": [
+          "level",
+          "lactis",
+          "2022",
+          "significant",
+          "overlap",
+          "pooled",
+          "subgroup",
+          "studies",
+          "acid",
+          "health"
+        ],
+        "article_title": "Probiotics and synbiotics in chronic constipation in adults: A systematic review and meta-analysis of randomized controlled trials."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_SNZ1969",
+        "pmid": "36372047",
+        "status": "match",
+        "confidence": 0.5,
+        "topic_words_checked": [
+          "studies",
+          "randomized",
+          "health",
+          "sanzyme",
+          "bacillus",
+          "meta",
+          "systematic",
+          "controlled",
+          "review",
+          "nutrition"
+        ],
+        "article_title": "Probiotics and synbiotics in chronic constipation in adults: A systematic review and meta-analysis of randomized controlled trials."
+      },
+      {
+        "entry_id": "STRAIN_CASEI_SHIROTA",
+        "pmid": "36372047",
+        "status": "match",
+        "confidence": 0.41,
+        "topic_words_checked": [
+          "bowel",
+          "randomized",
+          "health",
+          "meta",
+          "systematic",
+          "shirota",
+          "transit",
+          "lactobacillus",
+          "regularity",
+          "controlled"
+        ],
+        "article_title": "Probiotics and synbiotics in chronic constipation in adults: A systematic review and meta-analysis of randomized controlled trials."
+      },
+      {
+        "entry_id": "STRAIN_COAGULANS_IS2",
+        "pmid": "39866999",
+        "status": "match",
+        "confidence": 0.22,
+        "topic_words_checked": [
+          "2022",
+          "covid19",
+          "spores",
+          "small",
+          "placebo",
+          "moderate",
+          "studies",
+          "covid",
+          "acid",
+          "health"
+        ],
+        "article_title": "Efficacy of Bacillus clausii UBBC-07 and Bacillus coagulans Unique IS-2 in Mitigating Pulmonary Parameters in Patients With Moderate COVID-19 Symptoms."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_HN019",
+        "pmid": "39356506",
+        "status": "match",
+        "confidence": 0.31,
+        "topic_words_checked": [
+          "bowel",
+          "once",
+          "placebo",
+          "jama",
+          "randomized",
+          "outcome",
+          "between",
+          "trials",
+          "week",
+          "require"
+        ],
+        "article_title": "Eight-Week Supplementation With Bifidobacterium lactis HN019 and Functional Constipation: A Randomized Clinical Trial."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_HN019",
+        "pmid": "40320938",
+        "status": "match",
+        "confidence": 0.37,
+        "topic_words_checked": [
+          "french",
+          "bowel",
+          "units",
+          "howaru",
+          "lactis",
+          "verified;",
+          "placebo",
+          "movement",
+          "jama",
+          "full"
+        ],
+        "article_title": "Effect of an 8-Week Bifidobacterium lactis HN019 Supplementation on Functional Constipation: A Multi-Center, Triple-Blind, Randomized, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_HN019",
+        "pmid": "29227175",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "bowel",
+          "printed",
+          "placebo",
+          "jama",
+          "time",
+          "abstract;",
+          "trials",
+          "secondary",
+          "week",
+          "require"
+        ],
+        "article_title": "Effects of 28-day Bifidobacterium animalis subsp. lactis HN019 supplementation on colonic transit time and gastrointestinal symptoms in adults with functional constipation: A double-blind, randomized, placebo-controlled, and dose-ranging trial."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_HN019",
+        "pmid": "27275105",
+        "status": "match",
+        "confidence": 0.21,
+        "topic_words_checked": [
+          "n=675",
+          "predates",
+          "bowel",
+          "howaru",
+          "lactis",
+          "pooled",
+          "subgroup",
+          "large",
+          "placebo",
+          "movement"
+        ],
+        "article_title": "Contemporary meta-analysis of short-term probiotic consumption on gastrointestinal transit."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_HN019",
+        "pmid": "28245559",
+        "status": "match",
+        "confidence": 0.38,
+        "topic_words_checked": [
+          "bowel",
+          "cell",
+          "howaru",
+          "lactis",
+          "single",
+          "infection",
+          "follow",
+          "activity",
+          "dupont",
+          "placebo"
+        ],
+        "article_title": "The Effect of Bifidobacterium animalis ssp. lactis HN019 on Cellular Immune Function in Healthy Elderly Subjects: Systematic Review and Meta-Analysis."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_HN019",
+        "pmid": "37078654",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "bowel",
+          "howaru",
+          "lactis",
+          "completed",
+          "straining;",
+          "gains",
+          "placebo",
+          "movement",
+          "jama",
+          "randomized"
+        ],
+        "article_title": "Effects of dietary fibers or probiotics on functional constipation symptoms and roles of gut microbiota: a double-blinded randomized placebo trial."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_HN019",
+        "pmid": "40085083",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "bowel",
+          "howaru",
+          "lactis",
+          "infection",
+          "single",
+          "attributes",
+          "placebo",
+          "movement",
+          "jama",
+          "health"
+        ],
+        "article_title": "Probiotics and Fever Duration in Children With Upper Respiratory Tract Infections: A Randomized Clinical Trial."
+      },
+      {
+        "entry_id": "STRAIN_BREVE_M16V",
+        "pmid": "40085083",
+        "status": "match",
+        "confidence": 0.41,
+        "topic_words_checked": [
+          "hospital",
+          "jama",
+          "morinaga",
+          "preterm",
+          "randomized",
+          "upper",
+          "prevention",
+          "infant",
+          "children",
+          "necrotizing"
+        ],
+        "article_title": "Probiotics and Fever Duration in Children With Upper Respiratory Tract Infections: A Randomized Clinical Trial."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BI07",
+        "pmid": "21436726",
+        "status": "match",
+        "confidence": 0.3,
+        "topic_words_checked": [
+          "bowel",
+          "cannot",
+          "small",
+          "global",
+          "pills;",
+          "replaced",
+          "former",
+          "hold",
+          "blend",
+          "secondary"
+        ],
+        "article_title": "Probiotic bacteria Lactobacillus acidophilus NCFM and Bifidobacterium lactis Bi-07 versus placebo for the symptoms of bloating in patients with functional bowel disorders: a double-blind study."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BI07",
+        "pmid": "36149331",
+        "status": "match",
+        "confidence": 0.28,
+        "topic_words_checked": [
+          "questionnaire",
+          "rounds",
+          "crossover",
+          "replaced",
+          "former",
+          "hold",
+          "secondary",
+          "trial",
+          "maldigestion",
+          "surrogate"
+        ],
+        "article_title": "Bifidobacterium animalis subsp. lactis Bi-07 supports lactose digestion in vitro and in randomized, placebo- and lactase-controlled clinical trials."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_299V",
+        "pmid": "11711768",
+        "status": "match",
+        "confidence": 0.48,
+        "topic_words_checked": [
+          "bowel",
+          "pivotal",
+          "gastroenterol",
+          "2001",
+          "rcts",
+          "health",
+          "relief",
+          "plantarum",
+          "absorption",
+          "lactobacillus"
+        ],
+        "article_title": "A controlled, double-blind, randomized study on the efficacy of Lactobacillus plantarum 299V in patients with irritable bowel syndrome."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_299V",
+        "pmid": "37541528",
+        "status": "match",
+        "confidence": 0.33,
+        "topic_words_checked": [
+          "bowel",
+          "pivotal",
+          "gastroenterol",
+          "improvement",
+          "2001",
+          "wave",
+          "global",
+          "rcts",
+          "health",
+          "relief"
+        ],
+        "article_title": "Efficacy of Probiotics in Irritable Bowel Syndrome: Systematic Review and Meta-analysis."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_299V",
+        "pmid": "30388595",
+        "status": "match",
+        "confidence": 0.3,
+        "topic_words_checked": [
+          "bowel",
+          "groups",
+          "gastroenterol",
+          "2001",
+          "rcts",
+          "randomized",
+          "test",
+          "perceptivity",
+          "between",
+          "plantarum"
+        ],
+        "article_title": "Probiotic Lactobacillus Plantarum 299v decreases kynurenine concentration and improves cognitive functions in patients with major depression: A double-blind, randomized, placebo controlled study."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_299V",
+        "pmid": "39271063",
+        "status": "match",
+        "confidence": 0.25,
+        "topic_words_checked": [
+          "bowel",
+          "groups",
+          "gastroenterol",
+          "2001",
+          "rcts",
+          "randomized",
+          "test",
+          "perceptivity",
+          "between",
+          "plantarum"
+        ],
+        "article_title": "Probiotic Lactobacillus plantarum 299v supplementation in patients with major depression in a double-blind, randomized, placebo-controlled trial: A metabolomics study."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_299V",
+        "pmid": "31816981",
+        "status": "match",
+        "confidence": 0.34,
+        "topic_words_checked": [
+          "bowel",
+          "pivotal",
+          "irritable",
+          "gastroenterol",
+          "lactiplantibacillus",
+          "2001",
+          "rcts",
+          "symptoms",
+          "syndrome",
+          "studies"
+        ],
+        "article_title": "A Systematic Review and Meta-Analysis on the Effects of Probiotic Species on Iron Absorption and Iron Status."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_299V",
+        "pmid": "32365981",
+        "status": "match",
+        "confidence": 0.36,
+        "topic_words_checked": [
+          "bowel",
+          "pivotal",
+          "completed",
+          "gastroenterol",
+          "nature's",
+          "2001",
+          "inconclusive;",
+          "female",
+          "rcts",
+          "randomized"
+        ],
+        "article_title": "The Effect of Lactobacillus plantarum 299v on Iron Status and Physical Performance in Female Iron-Deficient Athletes: A Randomized Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_299V",
+        "pmid": "33015813",
+        "status": "match",
+        "confidence": 0.61,
+        "topic_words_checked": [
+          "cancer",
+          "bowel",
+          "pivotal",
+          "gastroenterol",
+          "patients",
+          "2001",
+          "albumin",
+          "small",
+          "rcts",
+          "overall"
+        ],
+        "article_title": "Effects of 4 weeks of Lactobacillus plantarum 299v supplementation on nutritional status, enteral nutrition tolerance, and quality of life in cancer patients receiving home enteral nutrition - a double-blind, randomized, and placebo-controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_299V",
+        "pmid": "12450890",
+        "status": "match",
+        "confidence": 0.34,
+        "topic_words_checked": [
+          "bowel",
+          "pivotal",
+          "gastroenterol",
+          "2001",
+          "small",
+          "smokers",
+          "fibrinogen",
+          "rcts",
+          "health",
+          "relief"
+        ],
+        "article_title": "Effect of Lactobacillus plantarum 299v on cardiovascular disease risk factors in smokers."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_299V",
+        "pmid": "28101105",
+        "status": "match",
+        "confidence": 0.3,
+        "topic_words_checked": [
+          "bowel",
+          "pivotal",
+          "cortisol",
+          "gastroenterol",
+          "salivary",
+          "2001",
+          "mood",
+          "rcts",
+          "health",
+          "stress"
+        ],
+        "article_title": "Oral Administration of Lactobacillus plantarum 299v Reduces Cortisol Levels in Human Saliva during Examination Induced Stress: A Randomized, Double-Blind Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_299V",
+        "pmid": "22434095",
+        "status": "match",
+        "confidence": 0.42,
+        "topic_words_checked": [
+          "postoperative",
+          "bowel",
+          "pivotal",
+          "resection",
+          "gastroenterol",
+          "2001",
+          "rcts",
+          "health",
+          "elective",
+          "abstract."
+        ],
+        "article_title": "Lactobacillus plantarum 299v does not reduce enteric bacteria or bacterial translocation in patients undergoing colon resection."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_HEAL9",
+        "pmid": "31734734",
+        "status": "match",
+        "confidence": 0.51,
+        "topic_words_checked": [
+          "care:",
+          "8700:2",
+          "modulation",
+          "improvement",
+          "efficacy",
+          "15312",
+          "health",
+          "autoimmunity",
+          "paracasei",
+          "prevention"
+        ],
+        "article_title": "Evaluation of the efficacy of Lactobacillus plantarum HEAL9 and Lactobacillus paracasei 8700:2 on aspects of common cold infections in children attending day care: a randomised, double-blind, placebo-controlled clinical study."
+      },
+      {
+        "entry_id": "STRAIN_PARACASEI_8700",
+        "pmid": "36741903",
+        "status": "match",
+        "confidence": 0.49,
+        "topic_words_checked": [
+          "8700:2",
+          "chain",
+          "cardiometabolic",
+          "health",
+          "autoimmunity",
+          "paracasei",
+          "time",
+          "prevention",
+          "relief",
+          "reaction"
+        ],
+        "article_title": "Real-time polymerase chain reaction methods for strain specific identification and enumeration of strain Lacticaseibacillus paracasei 8700:2."
+      },
+      {
+        "entry_id": "STRAIN_INFANTIS_35624",
+        "pmid": "28166427",
+        "status": "match",
+        "confidence": 0.52,
+        "topic_words_checked": [
+          "35624",
+          "bowel",
+          "infantis",
+          "current",
+          "patients",
+          "inflammation",
+          "bifantis",
+          "efficacy",
+          "rcts",
+          "medical"
+        ],
+        "article_title": "Efficacy of Bifidobacterium infantis 35624 in patients with irritable bowel syndrome: a meta-analysis."
+      },
+      {
+        "entry_id": "STRAIN_INFANTIS_M63",
+        "pmid": "36986131",
+        "status": "match",
+        "confidence": 0.41,
+        "topic_words_checked": [
+          "development",
+          "bowel",
+          "day.",
+          "infantis",
+          "single",
+          "placebo",
+          "randomized",
+          "term",
+          "remain",
+          "infant"
+        ],
+        "article_title": "Early Probiotic Supplementation of Healthy Term Infants with Bifidobacterium longum subsp. infantis M-63 Is Safe and Leads to the Development of Bifidobacterium-Predominant Gut Microbiota: A Double-Blind, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_INFANTIS_M63",
+        "pmid": "42056537",
+        "status": "match",
+        "confidence": 0.51,
+        "topic_words_checked": [
+          "development",
+          "bowel",
+          "day.",
+          "infantis",
+          "single",
+          "placebo",
+          "randomized",
+          "term",
+          "remain",
+          "infant"
+        ],
+        "article_title": "Effects of Bifidobacterium infantis M-63 on gut environment and bowel function during weaning: RCT."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "24717228",
+        "status": "match",
+        "confidence": 0.34,
+        "topic_words_checked": [
+          "mice.",
+          "howaru",
+          "approval.",
+          "monocolonized",
+          "weak",
+          "health",
+          "acid",
+          "signal.",
+          "result",
+          "replace"
+        ],
+        "article_title": "Lactobacillus acidophilus NCFM affects vitamin E acetate metabolism and intestinal bile acid signature in monocolonized mice."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "28082816",
+        "status": "match",
+        "confidence": 0.28,
+        "topic_words_checked": [
+          "bowel",
+          "completed",
+          "once",
+          "arm;",
+          "monocolonized",
+          "signal",
+          "placebo",
+          "viability",
+          "randomized",
+          "conflicting"
+        ],
+        "article_title": "Irritable bowel syndrome symptom severity improves equally with probiotic and placebo."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "19651563",
+        "status": "match",
+        "confidence": 0.22,
+        "topic_words_checked": [
+          "confirmed",
+          "arm;",
+          "monocolonized",
+          "exact",
+          "acid",
+          "signal.",
+          "prevention",
+          "replace",
+          "children",
+          "trials"
+        ],
+        "article_title": "Probiotic effects on cold and influenza-like symptom incidence and duration in children."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "41998618",
+        "status": "match",
+        "confidence": 0.31,
+        "topic_words_checked": [
+          "mice.",
+          "howaru",
+          "fussing",
+          "signal",
+          "approval.",
+          "monocolonized",
+          "comparisons.",
+          "weak",
+          "acid",
+          "health"
+        ],
+        "article_title": "Lactobacillus acidophilus for infant colic and microbiota modulation: a randomized clinical trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "33763399",
+        "status": "match",
+        "confidence": 0.23,
+        "topic_words_checked": [
+          "significant",
+          "patients",
+          "monocolonized",
+          "enterobacteria",
+          "acid",
+          "signal.",
+          "change.",
+          "replace",
+          "metagenics",
+          "mean"
+        ],
+        "article_title": "Do Probiotics During In-Hospital Antibiotic Treatment Prevent Colonization of Gut Microbiota With Multi-Drug-Resistant Bacteria? A Randomized Placebo-Controlled Trial Comparing Saccharomyces to a Mixture of Lactobacillus, Bifidobacterium, and Saccharomyces."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "33763399",
+        "status": "match",
+        "confidence": 0.25,
+        "topic_words_checked": [
+          "espghan",
+          "ampc",
+          "significant",
+          "patients",
+          "same",
+          "treatment",
+          "structured",
+          "multidrug",
+          "prevention",
+          "pseudomonas"
+        ],
+        "article_title": "Do Probiotics During In-Hospital Antibiotic Treatment Prevent Colonization of Gut Microbiota With Multi-Drug-Resistant Bacteria? A Randomized Placebo-Controlled Trial Comparing Saccharomyces to a Mixture of Lactobacillus, Bifidobacterium, and Saccharomyces."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "31131616",
+        "status": "match",
+        "confidence": 0.3,
+        "topic_words_checked": [
+          "bowel",
+          "printed",
+          "signal",
+          "monocolonized",
+          "placebo",
+          "acid",
+          "outcome",
+          "signal.",
+          "time",
+          "abstract;"
+        ],
+        "article_title": "The effect of a probiotic blend on gastrointestinal symptoms in constipated patients: a double blind, randomised, placebo controlled 2-week trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "36235651",
+        "status": "match",
+        "confidence": 0.26,
+        "topic_words_checked": [
+          "mice.",
+          "howaru",
+          "cannot",
+          "valeric",
+          "inflammation",
+          "separated",
+          "approval.",
+          "monocolonized",
+          "supplementation.",
+          "weak"
+        ],
+        "article_title": "Potential Modulation of Inflammation by Probiotic and Omega-3 Supplementation in Elderly with Chronic Low-Grade Inflammation-A Randomized, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "41379184",
+        "status": "match",
+        "confidence": 0.18,
+        "topic_words_checked": [
+          "cancer",
+          "mice.",
+          "howaru",
+          "patients",
+          "fluoropyrimidine",
+          "small",
+          "approval.",
+          "monocolonized",
+          "irinotecan",
+          "dose."
+        ],
+        "article_title": "EFFICACY OF PROBIOTICS IN PREVENTING CHEMOTHERAPY-INDUCED DIARRHEA IN GASTROINTESTINAL CANCER PATIENTS."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "35766604",
+        "status": "match",
+        "confidence": 0.22,
+        "topic_words_checked": [
+          "postoperative",
+          "groups",
+          "monocolonized",
+          "cohort",
+          "eating",
+          "rygb",
+          "acid",
+          "signal.",
+          "between",
+          "replace"
+        ],
+        "article_title": "PROBIOTIC SUPPLEMENTATION ATTENUATES BINGE EATING AND FOOD ADDICTION 1 YEAR AFTER ROUX-EN-Y GASTRIC BYPASS: A RANDOMIZED, DOUBLE-BLIND, PLACEBO-CONTROLLED TRIAL."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "33443719",
+        "status": "match",
+        "confidence": 0.24,
+        "topic_words_checked": [
+          "significant",
+          "monocolonized",
+          "placebo",
+          "within",
+          "acid",
+          "signal.",
+          "abstract.",
+          "between",
+          "beta",
+          "replace"
+        ],
+        "article_title": "Effects of Lactobacillus acidophilus NCFM and Bifidobacterium lactis Bi-07 Supplementation on Nutritional and Metabolic Parameters in the Early Postoperative Period after Roux-en-Y Gastric Bypass: a Randomized, Double-Blind, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "35987956",
+        "status": "match",
+        "confidence": 0.2,
+        "topic_words_checked": [
+          "significant",
+          "monocolonized",
+          "placebo",
+          "within",
+          "acid",
+          "signal.",
+          "abstract.",
+          "between",
+          "beta",
+          "replace"
+        ],
+        "article_title": "Effect of probiotic supplementation on plasma metabolite profile after Roux-Y gastric bypass: a prospective, randomized, double-blind, placebo-controlled clinical trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_NCFM",
+        "pmid": "39842252",
+        "status": "match",
+        "confidence": 0.19,
+        "topic_words_checked": [
+          "mice.",
+          "protocol",
+          "howaru",
+          "small",
+          "approval.",
+          "monocolonized",
+          "composition",
+          "change",
+          "randomized",
+          "weak"
+        ],
+        "article_title": "Effect of caloric restriction with probiotic supplementation on body composition, quality of life, and psychobiological factors of obese men: A randomized, double-blinded placebo-controlled clinical trial."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "22472744",
+        "status": "match",
+        "confidence": 0.25,
+        "topic_words_checked": [
+          "completed",
+          "capsules",
+          "participants;",
+          "continued",
+          "randomized",
+          "within",
+          "exact",
+          "prevention",
+          "mean",
+          "inpatient"
+        ],
+        "article_title": "Saccharomyces boulardii for the prevention of antibiotic-associated diarrhea in adult hospitalized patients: a single-center, randomized, double-blind, placebo-controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "41675330",
+        "status": "match",
+        "confidence": 0.2,
+        "topic_words_checked": [
+          "espghan",
+          "over",
+          "population",
+          "unresolved",
+          "treatment",
+          "placebo",
+          "code",
+          "structured",
+          "exact",
+          "remain"
+        ],
+        "article_title": "Adjunctive use of Saccharomyces boulardii versus bismuth subsalicylate in the management of non-Clostridioides difficile nosocomial diarrhea in severely ill patients: a three-arm randomized controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "40865583",
+        "status": "match",
+        "confidence": 0.24,
+        "topic_words_checked": [
+          "patients",
+          "rcts",
+          "prevention",
+          "across",
+          "overlapping",
+          "inpatient",
+          "meta",
+          "total",
+          "saccharomyces",
+          "applicability"
+        ],
+        "article_title": "The impact of probiotics on Helicobacter pylori eradication with bismuth quadruple therapy: A systematic review and meta-analysis."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "41247686",
+        "status": "match",
+        "confidence": 0.26,
+        "topic_words_checked": [
+          "patients",
+          "rcts",
+          "prevention",
+          "across",
+          "overlapping",
+          "inpatient",
+          "meta",
+          "total",
+          "saccharomyces",
+          "applicability"
+        ],
+        "article_title": "Efficacy and Safety of <em>Saccharomyces Boulardii</em> with Standard Quadruple Therapy for Eradication of <em>Helicobacter Pylori </em>in Adults: Meta-Analysis."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "40251486",
+        "status": "match",
+        "confidence": 0.14,
+        "topic_words_checked": [
+          "patients",
+          "rcts",
+          "prevention",
+          "across",
+          "overlapping",
+          "inpatient",
+          "meta",
+          "total",
+          "saccharomyces",
+          "applicability"
+        ],
+        "article_title": "Effect of Saccharomyces boulardii supplementation to bismuth quadruple therapy on Helicobacter pylori eradication."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "40012609",
+        "status": "match",
+        "confidence": 0.21,
+        "topic_words_checked": [
+          "patients",
+          "rcts",
+          "prevention",
+          "across",
+          "overlapping",
+          "inpatient",
+          "meta",
+          "total",
+          "saccharomyces",
+          "applicability"
+        ],
+        "article_title": "Efficacy and safety of Saccharomyces boulardii as an adjuvant therapy for the eradication of Helicobacter pylori: a meta-analysis."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "37942999",
+        "status": "match",
+        "confidence": 0.33,
+        "topic_words_checked": [
+          "espghan",
+          "protocol",
+          "treatment",
+          "cohort",
+          "structured",
+          "clarithromycin",
+          "event",
+          "therapy",
+          "70.8%",
+          "multiplicity"
+        ],
+        "article_title": "Randomised clinical trial: efficacy and safety of H. pylori eradication treatment with and without Saccharomyces boulardii supplementation."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "40535538",
+        "status": "match",
+        "confidence": 0.23,
+        "topic_words_checked": [
+          "espghan",
+          "mcfarland",
+          "consultancy",
+          "treatment",
+          "structured",
+          "rcts",
+          "vary.",
+          "conducted",
+          "prevention",
+          "boulardii"
+        ],
+        "article_title": "Efficacy and safety of Saccharomyces boulardii CNCM I-745 for the treatment of pediatric acute diarrhea in China: a systematic review and meta-analysis."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "36086703",
+        "status": "match",
+        "confidence": 0.33,
+        "topic_words_checked": [
+          "versus",
+          "espghan",
+          "centers",
+          "clausii",
+          "comparator",
+          "mild",
+          "treatment",
+          "structured",
+          "moderate",
+          "prevention"
+        ],
+        "article_title": "Randomized, direct comparison study of Saccharomyces boulardii CNCM I-745 versus multi-strained Bacillus clausii probiotics for the treatment of pediatric acute gastroenteritis."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "37400812",
+        "status": "match",
+        "confidence": 0.23,
+        "topic_words_checked": [
+          "espghan",
+          "patient",
+          "improvement",
+          "confirmed",
+          "small",
+          "treatment",
+          "mexico;",
+          "global",
+          "dose.",
+          "structured"
+        ],
+        "article_title": "Effectiveness of Saccharomyces Boulardii CNCM I-745 probiotic in acute inflammatory viral diarrhoea in adults: results from a single-centre randomized trial."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "40884341",
+        "status": "match",
+        "confidence": 0.39,
+        "topic_words_checked": [
+          "41.5%",
+          "espghan",
+          "overgrowth",
+          "design;",
+          "confirmed",
+          "small",
+          "treatment",
+          "proton",
+          "structured",
+          "term"
+        ],
+        "article_title": "[Study on the efficacy of combination therapy with rifaximin and Saccharomyces boulardii CNCM I-745 in patients with small intestinal bacterial overgrowth associated with long-term use of proton pump inhibitors]."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "36630947",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "espghan",
+          "endpoints.",
+          "overgrowth",
+          "small",
+          "treatment",
+          "dietary",
+          "structured",
+          "numerical",
+          "prevention",
+          "abstract."
+        ],
+        "article_title": "Impact of Saccharomyces boulardii CNCM I-745 on Bacterial Overgrowth and Composition of Intestinal Microbiota in Diarrhea-Predominant Irritable Bowel Syndrome Patients: Results of a Randomized Pilot Study."
+      },
+      {
+        "entry_id": "STRAIN_SACCHAROMYCES",
+        "pmid": "38458507",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "espghan",
+          "pooled",
+          "treatment",
+          "travelers",
+          "structured",
+          "rcts",
+          "statement",
+          "prevention",
+          "abstract.",
+          "boulardii"
+        ],
+        "article_title": "Investigating the influence of probiotics in preventing Traveler's diarrhea: Meta-analysis based systematic review."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BB12",
+        "pmid": "26382580",
+        "status": "match",
+        "confidence": 0.24,
+        "topic_words_checked": [
+          "could",
+          "lactis",
+          ".98–1.75",
+          "disclosed",
+          "constipation",
+          "verified;",
+          "native",
+          "global",
+          "clinician",
+          "intermediate"
+        ],
+        "article_title": "Effect of the probiotic strain Bifidobacterium animalis subsp. lactis, BB-12®, on defecation frequency in healthy subjects with low defecation frequency and abdominal discomfort: a randomised, double-blind, placebo-controlled, parallel-group trial."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BB12",
+        "pmid": "39271904",
+        "status": "match",
+        "confidence": 0.17,
+        "topic_words_checked": [
+          "could",
+          "feeding",
+          "lactis",
+          "below",
+          "tlr4",
+          "inflammation",
+          "verified;",
+          "native",
+          "hospital",
+          "global"
+        ],
+        "article_title": "Bifidobacterium regulates premature infant gut metabolites, reducing serum inflammatory factors: a randomised controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BB12",
+        "pmid": "33811784",
+        "status": "match",
+        "confidence": 0.21,
+        "topic_words_checked": [
+          "could",
+          "propact",
+          "lactis",
+          "overlap",
+          "estimate",
+          "childhood",
+          "verified;",
+          "native",
+          "confirmation",
+          "pooled"
+        ],
+        "article_title": "Comparative effectiveness of probiotic strains on the prevention of pediatric atopic dermatitis: A systematic review and network meta-analysis."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BB12",
+        "pmid": "39310372",
+        "status": "match",
+        "confidence": 0.24,
+        "topic_words_checked": [
+          "could",
+          "lactis",
+          "severe",
+          "vehicle",
+          "verified;",
+          "native",
+          "global",
+          "milk",
+          "clinician",
+          "allergy"
+        ],
+        "article_title": "World Allergy Organization (WAO) Diagnosis and Rationale for Action against Cow's Milk Allergy (DRACMA) guideline update - XI - Milk supplement/replacement formulas for infants and toddlers with CMA - Systematic review."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BB12",
+        "pmid": "37020105",
+        "status": "match",
+        "confidence": 0.27,
+        "topic_words_checked": [
+          "could",
+          "lactis",
+          "design",
+          "verified;",
+          "native",
+          "composition",
+          "global",
+          "route",
+          "preterm",
+          "clinician"
+        ],
+        "article_title": "The preterm gut microbiota and administration routes of different probiotics: a randomized controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_LONGUM_BB536",
+        "pmid": "23192454",
+        "status": "match",
+        "confidence": 0.57,
+        "topic_words_checked": [
+          "patients",
+          "rcts",
+          "allergy",
+          "health",
+          "relief",
+          "receiving",
+          "allergies",
+          "tube",
+          "multiple",
+          "probiotic"
+        ],
+        "article_title": "Clinical effects of probiotic Bifidobacterium longum BB536 on immune function and intestinal microbiota in elderly patients receiving enteral tube feeding."
+      },
+      {
+        "entry_id": "STRAIN_LONGUM_BB536",
+        "pmid": "38201872",
+        "status": "match",
+        "confidence": 0.31,
+        "topic_words_checked": [
+          "patients",
+          "placebo",
+          "morinaga",
+          "peripheral",
+          "rcts",
+          "allergy",
+          "conducted",
+          "health",
+          "daily",
+          "abstract."
+        ],
+        "article_title": "The Potential Immunomodulatory Effect of Bifidobacterium longum subsp. longum BB536 on Healthy Adults through Plasmacytoid Dendritic Cell Activation in the Peripheral Blood."
+      },
+      {
+        "entry_id": "STRAIN_LONGUM_BB536",
+        "pmid": "42046285",
+        "status": "match",
+        "confidence": 0.52,
+        "topic_words_checked": [
+          "patients",
+          "subgroup",
+          "diet",
+          "rcts",
+          "allergy",
+          "full",
+          "within",
+          "cohort;",
+          "health",
+          "start"
+        ],
+        "article_title": "Bifidobacterium longum BB536 is associated with improvements in gastrointestinal symptoms and odor-related metabolites in microbiota-defined subgroups of male athletes consuming a high-protein diet: exploratory randomized double‑blind placebo‑controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_LONGUM_BB536",
+        "pmid": "39519413",
+        "status": "match",
+        "confidence": 0.33,
+        "topic_words_checked": [
+          "abundance",
+          "tryptophan",
+          "patients",
+          "fermented",
+          "milk",
+          "rcts",
+          "allergy",
+          "health",
+          "abstract.",
+          "relief"
+        ],
+        "article_title": "The Impact of Fermented Milk Products Containing Bifidobacterium longum BB536 on the Gut Environment: A Randomized Double-Blind Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_LONGUM_BB536",
+        "pmid": "36792187",
+        "status": "match",
+        "confidence": 0.38,
+        "topic_words_checked": [
+          "transplantation",
+          "medians",
+          "cell",
+          "patients",
+          "hospital",
+          "stem",
+          "rcts",
+          "allergy",
+          "health",
+          "toxicity"
+        ],
+        "article_title": "Efficacy and Safety of Synbiotics in Patients Undergoing Autologous Hematopoietic Stem Cell Transplantation: A Randomized, Double-blinded, Placebo-controlled Pilot Study."
+      },
+      {
+        "entry_id": "STRAIN_LONGUM_BB536",
+        "pmid": "42533554",
+        "status": "match",
+        "confidence": 0.35,
+        "topic_words_checked": [
+          "patients",
+          "traveling",
+          "composition",
+          "rcts",
+          "allergy",
+          "health",
+          "exponent",
+          "daily",
+          "abstract.",
+          "relief"
+        ],
+        "article_title": "The Effect of a Probiotic on Gut Microbiota Stability and Systemic Well-Being during Short-Term Travel."
+      },
+      {
+        "entry_id": "STRAIN_SUBTILIS_DE111",
+        "pmid": "39631408",
+        "status": "match",
+        "confidence": 0.59,
+        "topic_words_checked": [
+          "mice.",
+          "endothelial",
+          "diet",
+          "partially",
+          "health",
+          "subtillis",
+          "trials",
+          "bacillus",
+          "subtilis",
+          "de111"
+        ],
+        "article_title": "Bacillus subtilis DE111 partially reverses endothelial dysfunction in western-diet fed mice."
+      },
+      {
+        "entry_id": "STRAIN_SUBTILIS_DE111",
+        "pmid": "34408741",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "mice.",
+          "cell",
+          "endothelial",
+          "small",
+          "same",
+          "crossover",
+          "diet",
+          "partially",
+          "germination",
+          "health"
+        ],
+        "article_title": "Presence and Germination of the Probiotic Bacillus subtilis DE111® in the Human Small Intestinal Tract: A Randomized, Crossover, Double-Blind, and Placebo-Controlled Study."
+      },
+      {
+        "entry_id": "STRAIN_SUBTILIS_DE111",
+        "pmid": "36790091",
+        "status": "match",
+        "confidence": 0.22,
+        "topic_words_checked": [
+          "mice.",
+          "cell",
+          "endothelial",
+          "small",
+          "same",
+          "crossover",
+          "diet",
+          "partially",
+          "germination",
+          "health"
+        ],
+        "article_title": "Acute physiological effects following Bacillus subtilis DE111 oral ingestion - a randomised, double blinded, placebo-controlled study."
+      },
+      {
+        "entry_id": "STRAIN_SUBTILIS_DE111",
+        "pmid": "33671071",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "mice.",
+          "cell",
+          "inflammation",
+          "endothelial",
+          "state",
+          "signal",
+          "diet",
+          "partially",
+          "vivo",
+          "health"
+        ],
+        "article_title": "Examining the Gastrointestinal and Immunomodulatory Effects of the Novel Probiotic Bacillus subtilis DE111."
+      },
+      {
+        "entry_id": "STRAIN_SUBTILIS_DE111",
+        "pmid": "33161737",
+        "status": "match",
+        "confidence": 0.25,
+        "topic_words_checked": [
+          "mice.",
+          "34.9",
+          "0.06",
+          "endothelial",
+          "largely",
+          "relative",
+          "diet",
+          "partially",
+          "health",
+          "abstract."
+        ],
+        "article_title": "Bacillus subtilis DE111 intake may improve blood lipids and endothelial function in healthy adults."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BL04",
+        "pmid": "33161737",
+        "status": "match",
+        "confidence": 0.28,
+        "topic_words_checked": [
+          "experimental",
+          "publication",
+          "lactis",
+          "physically",
+          "infection",
+          "review;",
+          "howaru",
+          "illness",
+          "significant",
+          "lower"
+        ],
+        "article_title": "Bacillus subtilis DE111 intake may improve blood lipids and endothelial function in healthy adults."
+      },
+      {
+        "entry_id": "STRAIN_SUBTILIS_DE111",
+        "pmid": "33105368",
+        "status": "match",
+        "confidence": 0.36,
+        "topic_words_checked": [
+          "mice.",
+          "percentage",
+          "endothelial",
+          "offseason",
+          "strength",
+          "female",
+          "composition",
+          "diet",
+          "partially",
+          "health"
+        ],
+        "article_title": "Effects of Probiotic (Bacillus subtilis) Supplementation During Offseason Resistance Training in Female Division I Athletes."
+      },
+      {
+        "entry_id": "STRAIN_SUBTILIS_DE111",
+        "pmid": "30049931",
+        "status": "match",
+        "confidence": 0.37,
+        "topic_words_checked": [
+          "mice.",
+          "single",
+          "salivary",
+          "endothelial",
+          "offseason",
+          "composition",
+          "diet",
+          "partially",
+          "health",
+          "signal."
+        ],
+        "article_title": "Effects of Probiotic (Bacillus subtilis DE111) Supplementation on Immune Function, Hormonal Status, and Physical Performance in Division I Baseball Players."
+      },
+      {
+        "entry_id": "STRAIN_SUBTILIS_DE111",
+        "pmid": "33161736",
+        "status": "match",
+        "confidence": 0.4,
+        "topic_words_checked": [
+          "mice.",
+          "infection",
+          "authored.",
+          "endothelial",
+          "composition",
+          "diet",
+          "partially",
+          "overall",
+          "health",
+          "subtillis"
+        ],
+        "article_title": "Daily intake of probiotic strain Bacillus subtilis DE111 supports a healthy microbiome in children attending day-care."
+      },
+      {
+        "entry_id": "STRAIN_SUBTILIS_DE111",
+        "pmid": "33462163",
+        "status": "match",
+        "confidence": 0.33,
+        "topic_words_checked": [
+          "exponent;",
+          "mice.",
+          "endothelial",
+          "diet",
+          "partially",
+          "required",
+          "dose.",
+          "full",
+          "pubmed's",
+          "health"
+        ],
+        "article_title": "Plasma Amino Acid Response to Whey Protein Ingestion Following 28 Days of Probiotic (Bacillus subtilis DE111) Supplementation in Active Men and Women."
+      },
+      {
+        "entry_id": "STRAIN_CLAUSII",
+        "pmid": "36018495",
+        "status": "match",
+        "confidence": 0.39,
+        "topic_words_checked": [
+          "advances",
+          "clausii",
+          "rcts",
+          "therapy",
+          "prevention",
+          "children",
+          "bacillus",
+          "diarrhea",
+          "acute",
+          "side"
+        ],
+        "article_title": "Bacillus clausii for Gastrointestinal Disorders: A Narrative Literature Review."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_LA5",
+        "pmid": "34405373",
+        "status": "match",
+        "confidence": 0.44,
+        "topic_words_checked": [
+          "rhamnosus",
+          "chr.",
+          "proteins",
+          "antimicrobial",
+          "gene",
+          "peripheral",
+          "health",
+          "prevention",
+          "monocytes.",
+          "hansen"
+        ],
+        "article_title": "Effect of Probiotics Lactobacillus acidophilus and Lacticaseibacillus rhamnosus on Antibacterial Response Gene Transcription of Human Peripheral Monocytes."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_LA5",
+        "pmid": "41255078",
+        "status": "match",
+        "confidence": 0.31,
+        "topic_words_checked": [
+          "rhamnosus",
+          "chr.",
+          "bowel",
+          "proteins",
+          "attributes",
+          "antimicrobial",
+          "gene",
+          "peripheral",
+          "health",
+          "prevention"
+        ],
+        "article_title": "Probiotic Blend of Lactobacillus acidophilus LA-5 and Bifidobacterium animalis ssp. Lactis BB-12 in Non-constipated Irritable Bowel Syndrome: A Double-Blind Randomized Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_LA5",
+        "pmid": "24772726",
+        "status": "match",
+        "confidence": 0.3,
+        "topic_words_checked": [
+          "rhamnosus",
+          "chr.",
+          "proteins",
+          "severe",
+          "subgroup",
+          "antimicrobial",
+          "gene",
+          "peripheral",
+          "health",
+          "prevention"
+        ],
+        "article_title": "Randomised placebo-controlled double blind multicentric trial on efficacy and safety of Lactobacillus acidophilus LA-5 and Bifidobacterium BB-12 for prevention of antibiotic-associated diarrhoea."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_LA5",
+        "pmid": "17356555",
+        "status": "match",
+        "confidence": 0.38,
+        "topic_words_checked": [
+          "rhamnosus",
+          "chr.",
+          "proteins",
+          "single",
+          "attributes",
+          "antimicrobial",
+          "gene",
+          "fermented",
+          "milk",
+          "peripheral"
+        ],
+        "article_title": "Prevention of antibiotic-associated diarrhoea by a fermented probiotic milk drink."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_LA5",
+        "pmid": "25588782",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "rhamnosus",
+          "chr.",
+          "proteins",
+          "severe",
+          "antimicrobial",
+          "gene",
+          "small",
+          "peripheral",
+          "health",
+          "episodes"
+        ],
+        "article_title": "Can probiotic yogurt prevent diarrhoea in children on antibiotics? A double-blind, randomised, placebo-controlled study."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_LA5",
+        "pmid": "21871144",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "rhamnosus",
+          "chr.",
+          "proteins",
+          "activity",
+          "antimicrobial",
+          "gene",
+          "milk",
+          "peripheral",
+          "attributable",
+          "change"
+        ],
+        "article_title": "Probiotic lactobacilli and bifidobacteria in a fermented milk product with added fruit preparation reduce antibiotic associated diarrhea and Helicobacter pylori activity."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_LA5",
+        "pmid": "30439760",
+        "status": "match",
+        "confidence": 0.24,
+        "topic_words_checked": [
+          "rhamnosus",
+          "chr.",
+          "third",
+          "proteins",
+          "23.0%",
+          "antimicrobial",
+          "gene",
+          "peripheral",
+          "health",
+          "prevention"
+        ],
+        "article_title": "Probiotic Yogurt for the Prevention of Antibiotic-associated Diarrhea in Adults: A Randomized Double-blind Placebo-controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_LA5",
+        "pmid": "39102225",
+        "status": "match",
+        "confidence": 0.3,
+        "topic_words_checked": [
+          "rhamnosus",
+          "chr.",
+          "proteins",
+          "infantis",
+          "hospital",
+          "antimicrobial",
+          "gene",
+          "organism",
+          "peripheral",
+          "preterm"
+        ],
+        "article_title": "Bifidobacterium and Lactobacillus Probiotics and Gut Dysbiosis in Preterm Infants: The PRIMAL Randomized Clinical Trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_LA5",
+        "pmid": "41748464",
+        "status": "match",
+        "confidence": 0.26,
+        "topic_words_checked": [
+          "rhamnosus",
+          "chr.",
+          "immunology",
+          "proteins",
+          "pregnant",
+          "propact",
+          "cell",
+          "authored",
+          "childhood",
+          "offspring"
+        ],
+        "article_title": "T-Cell Populations in Infancy After Maternal Probiotic Supplementation to Prevent Atopic Dermatitis."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_HN001",
+        "pmid": "28943228",
+        "status": "match",
+        "confidence": 0.54,
+        "topic_words_checked": [
+          "rhamnosus",
+          "ebiomedicine",
+          "howaru",
+          "dupont",
+          "placebo",
+          "rcts",
+          "mental",
+          "health",
+          "prevention",
+          "gestational"
+        ],
+        "article_title": "Effect of Lactobacillus rhamnosus HN001 in Pregnancy on Postpartum Symptoms of Depression and Anxiety: A Randomised Double-blind Placebo-controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_HN001",
+        "pmid": "37622257",
+        "status": "match",
+        "confidence": 0.28,
+        "topic_words_checked": [
+          "dupont",
+          "childhood",
+          "placebo",
+          "rcts",
+          "mental",
+          "acid",
+          "prevention",
+          "diagnosed",
+          "0.39",
+          "children"
+        ],
+        "article_title": "Maternal fish oil and/or probiotics intervention: Allergic diseases in children up to two years old."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_HN001",
+        "pmid": "37642166",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "dupont",
+          "childhood",
+          "placebo",
+          "rcts",
+          "mental",
+          "acid",
+          "prevention",
+          "diagnosed",
+          "0.39",
+          "children"
+        ],
+        "article_title": "The impact of fish oil and/or probiotics on serum fatty acids and the interaction with low-grade inflammation in pregnant women with overweight and obesity: secondary analysis of a randomised controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_HN001",
+        "pmid": "36705702",
+        "status": "match",
+        "confidence": 0.3,
+        "topic_words_checked": [
+          "rhamnosus",
+          "ebiomedicine",
+          "howaru",
+          "dupont",
+          "percentage",
+          "childhood",
+          "same",
+          "placebo",
+          "cohort",
+          "rcts"
+        ],
+        "article_title": "Fish Oil And/Or Probiotics Intervention in Overweight/Obese Pregnant Women and Overweight Risk in 24-Month-Old Children."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_HN001",
+        "pmid": "40976401",
+        "status": "match",
+        "confidence": 0.59,
+        "topic_words_checked": [
+          "versus",
+          "rhamnosus",
+          "ebiomedicine",
+          "howaru",
+          "dupont",
+          "state",
+          "mood",
+          "placebo",
+          "resting",
+          "rcts"
+        ],
+        "article_title": "Micro-encapsulation differentially impacts probiotic effects on brain structure and function in an elderly population - A randomised placebo-controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_HN001",
+        "pmid": "39275252",
+        "status": "match",
+        "confidence": 0.42,
+        "topic_words_checked": [
+          "rhamnosus",
+          "ebiomedicine",
+          "howaru",
+          "questionnaire",
+          "dupont",
+          "significance.",
+          "mild",
+          "placebo",
+          "rcts",
+          "mental"
+        ],
+        "article_title": "Effects of Lacticaseibacillus rhamnosus HN001 on Happiness and Mental Well-Being: Findings from a Randomized Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_HN001",
+        "pmid": "41783815",
+        "status": "match",
+        "confidence": 0.18,
+        "topic_words_checked": [
+          "rhamnosus",
+          "ebiomedicine",
+          "howaru",
+          "pregnant",
+          "sizes;",
+          "dupont",
+          "single",
+          "small",
+          "placebo",
+          "rcts"
+        ],
+        "article_title": "Prebiotics, probiotics, and synbiotics and maternal mental health during pregnancy and postpartum period: a systematic review."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_HN001",
+        "pmid": "37614109",
+        "status": "match",
+        "confidence": 0.37,
+        "topic_words_checked": [
+          "rhamnosus",
+          "ebiomedicine",
+          "howaru",
+          "dupont",
+          "reactive",
+          "placebo",
+          "rcts",
+          "mental",
+          "change",
+          "health"
+        ],
+        "article_title": "Effect of synbiotic supplementation on immune parameters and gut microbiota in healthy adults: a double-blind randomized controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_GR1",
+        "pmid": "12628548",
+        "status": "match",
+        "confidence": 0.59,
+        "topic_words_checked": [
+          "rhamnosus",
+          "chr.",
+          "immunology",
+          "significantly",
+          "women.",
+          "flora:",
+          "placebo",
+          "women's",
+          "rcts",
+          "randomized"
+        ],
+        "article_title": "Oral use of Lactobacillus rhamnosus GR-1 and L. fermentum RC-14 significantly alters vaginal flora: randomized, placebo-controlled trial in 64 healthy women."
+      },
+      {
+        "entry_id": "STRAIN_FERMENTUM_RC14",
+        "pmid": "12628548",
+        "status": "match",
+        "confidence": 0.58,
+        "topic_words_checked": [
+          "immunology",
+          "chr.",
+          "rhamnosus",
+          "significantly",
+          "women.",
+          "flora:",
+          "placebo",
+          "women's",
+          "rcts",
+          "randomized"
+        ],
+        "article_title": "Oral use of Lactobacillus rhamnosus GR-1 and L. fermentum RC-14 significantly alters vaginal flora: randomized, placebo-controlled trial in 64 healthy women."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_GR1",
+        "pmid": "34295831",
+        "status": "match",
+        "confidence": 0.38,
+        "topic_words_checked": [
+          "immunology",
+          "rhamnosus",
+          "chr.",
+          "significantly",
+          "women.",
+          "flora:",
+          "placebo",
+          "rarely",
+          "women's",
+          "rcts"
+        ],
+        "article_title": "Probiotic Lacticaseibacillus rhamnosus GR-1 and Limosilactobacillus reuteri RC-14 as an Adjunctive Treatment for Bacterial Vaginosis Do Not Increase the Cure Rate in a Chinese Cohort: A Prospective, Parallel-Group, Randomized, Controlled Study."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_GR1",
+        "pmid": "30932317",
+        "status": "match",
+        "confidence": 0.31,
+        "topic_words_checked": [
+          "immunology",
+          "rhamnosus",
+          "chr.",
+          "significantly",
+          "pregnant",
+          "never",
+          "women.",
+          "flora:",
+          "placebo",
+          "composition"
+        ],
+        "article_title": "Effects of oral probiotic supplements on vaginal microbiota during pregnancy: a randomised, double-blind, placebo-controlled trial with microbiome analysis."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_GR1",
+        "pmid": "32325794",
+        "status": "match",
+        "confidence": 0.45,
+        "topic_words_checked": [
+          "labor;",
+          "immunology",
+          "rhamnosus",
+          "chr.",
+          "significantly",
+          "pregnant",
+          "women.",
+          "flora:",
+          "placebo",
+          "crossover"
+        ],
+        "article_title": "A Randomized Controlled Open Label Crossover Trial to Study Vaginal Colonization of Orally Administered Lactobacillus Reuteri RC-14 and Rhamnosus GR-1 in Pregnant Women at High Risk for Preterm Labor."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_GR1",
+        "pmid": "27590374",
+        "status": "match",
+        "confidence": 0.4,
+        "topic_words_checked": [
+          "immunology",
+          "rhamnosus",
+          "chr.",
+          "significantly",
+          "pregnant",
+          "infection",
+          "women.",
+          "flora:",
+          "placebo",
+          "p=0.007"
+        ],
+        "article_title": "Oral Lactobacillus rhamnosus GR-1 and Lactobacillus reuteri RC-14 to reduce Group B Streptococcus colonization in pregnant women: A randomized controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_GR1",
+        "pmid": "31953482",
+        "status": "match",
+        "confidence": 0.39,
+        "topic_words_checked": [
+          "immunology",
+          "rhamnosus",
+          "chr.",
+          "significantly",
+          "population",
+          "spinal",
+          "women.",
+          "flora:",
+          "placebo",
+          "injury"
+        ],
+        "article_title": "Effect of probiotics on multi-resistant organism colonisation in persons with spinal cord injury: secondary outcome of ProSCIUTTU, a randomised placebo-controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_BREVE_M16V",
+        "pmid": "41515257",
+        "status": "match",
+        "confidence": 0.34,
+        "topic_words_checked": [
+          "below",
+          "design",
+          "jama",
+          "preterm",
+          "randomized",
+          "neurodevelopment",
+          "extremely",
+          "prevention",
+          "abstract.",
+          "children"
+        ],
+        "article_title": "School-Age Neurodevelopmental and Atopy Outcomes in Extremely Preterm Infants: Follow-Up from the Single Versus Triple-Strain Bifidobacterium Randomized Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_BREVE_M16V",
+        "pmid": "41994268",
+        "status": "match",
+        "confidence": 0.23,
+        "topic_words_checked": [
+          "hospital",
+          "adjacent",
+          "diprobio",
+          "control",
+          "arm;",
+          "jama",
+          "morinaga",
+          "preterm",
+          "randomized",
+          "neurodevelopment"
+        ],
+        "article_title": "The enhancing therapeutic effect of neonatal jaundice by bifidobacterium through regulating inflammation and gut microbiota in combination with phototherapy-a randomized controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_BREVE_M16V",
+        "pmid": "39915586",
+        "status": "match",
+        "confidence": 0.33,
+        "topic_words_checked": [
+          "versus",
+          "hospital",
+          "birth",
+          "jama",
+          "morinaga",
+          "preterm",
+          "randomized",
+          "upper",
+          "prevention",
+          "scgos"
+        ],
+        "article_title": "Restoration of gut microbiota with a specific synbiotic-containing infant formula in healthy Chinese infants born by cesarean section."
+      },
+      {
+        "entry_id": "STRAIN_CASEI_431",
+        "pmid": "25926507",
+        "status": "match",
+        "confidence": 0.58,
+        "topic_words_checked": [
+          "chr.",
+          "rcts",
+          "heal",
+          "upper",
+          "paracasei",
+          "health",
+          "hansen",
+          "enhancement",
+          "enhanced",
+          "effect"
+        ],
+        "article_title": "Effect of Lactobacillus paracasei subsp. paracasei, L. casei 431 on immune response to influenza vaccination and upper respiratory tract infections in healthy adult volunteers: a randomized, double-blind, placebo-controlled, parallel-group study."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BL04",
+        "pmid": "38665561",
+        "status": "match",
+        "confidence": 0.36,
+        "topic_words_checked": [
+          "experimental",
+          "publication",
+          "lactis",
+          "physically",
+          "infection",
+          "review;",
+          "howaru",
+          "lower",
+          "symptoms.",
+          "urti"
+        ],
+        "article_title": "The effect of probiotic Bifidobacterium lactis Bl-04 on innate antiviral responses invitro."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BL04",
+        "pmid": "24268677",
+        "status": "match",
+        "confidence": 0.36,
+        "topic_words_checked": [
+          "physically",
+          "review;",
+          "lower",
+          "hazard",
+          "placebo",
+          "symptoms.",
+          "episodes",
+          "abstract;",
+          "trial",
+          "universal"
+        ],
+        "article_title": "Probiotic supplementation for respiratory and gastrointestinal illness symptoms in healthy physically active individuals."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BL04",
+        "pmid": "28343401",
+        "status": "match",
+        "confidence": 0.28,
+        "topic_words_checked": [
+          "groups",
+          "physically",
+          "review;",
+          "lower",
+          "symptoms.",
+          "randomized",
+          "exact",
+          "prevention",
+          "between",
+          "trial"
+        ],
+        "article_title": "Effect of probiotic on innate inflammatory response and viral shedding in experimental rhinovirus infection - a randomised controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BL04",
+        "pmid": "34927036",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "physically",
+          "review;",
+          "lower",
+          "placebo",
+          "symptoms.",
+          "randomized",
+          "abstract.",
+          "trial",
+          "surrogate",
+          "reported"
+        ],
+        "article_title": "Effect of Bifidobacterium animalis spp. lactis Bl-04 on Rhinovirus-Induced Colds: A Randomized, Placebo-Controlled, Single-Center, Phase II Trial in Healthy Volunteers."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BL04",
+        "pmid": "34062085",
+        "status": "match",
+        "confidence": 0.38,
+        "topic_words_checked": [
+          "dairy",
+          "physically",
+          "review;",
+          "lower",
+          "symptoms.",
+          "consuming",
+          "trial",
+          "surrogate",
+          "incidence",
+          "reported"
+        ],
+        "article_title": "Effect of fermented milk on upper respiratory tract infection in adults who lived in the haze area of Northern China: a randomized clinical trial."
+      },
+      {
+        "entry_id": "STRAIN_GASSERI_SBT2055",
+        "pmid": "23614897",
+        "status": "match",
+        "confidence": 0.44,
+        "topic_words_checked": [
+          "british",
+          "fermented",
+          "milk",
+          "confirmed.",
+          "health",
+          "sbt2055",
+          "dose",
+          "abdominal",
+          "effect",
+          "lactobacillus"
+        ],
+        "article_title": "Effect of Lactobacillus gasseri SBT2055 in fermented milk on abdominal adiposity in adults in a randomised controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_GASSERI_BNR17",
+        "pmid": "29688793",
+        "status": "match",
+        "confidence": 0.59,
+        "topic_words_checked": [
+          "bnr17",
+          "circumference",
+          "significant",
+          "rct:",
+          "reduces",
+          "bioneer",
+          "21.6",
+          "2018",
+          "breast",
+          "obese"
+        ],
+        "article_title": "Lactobacillus gasseri BNR17 Supplementation Reduces the Visceral Fat Accumulation and Waist Circumference in Obese Adults: A Randomized, Double-Blind, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_FERMENTUM_ME3",
+        "pmid": "36644601",
+        "status": "match",
+        "confidence": 0.13,
+        "topic_words_checked": [
+          "oxidative",
+          "glutathione",
+          "reduced",
+          "health",
+          "stress",
+          "calif.",
+          "increase",
+          "fermentum",
+          "synthesis",
+          "integrative"
+        ],
+        "article_title": "Lactobacillus fermentum ME-3: A Breakthrough in Glutathione Therapy."
+      },
+      {
+        "entry_id": "STRAIN_HELVETICUS_R0052",
+        "pmid": "20974015",
+        "status": "match",
+        "confidence": 0.39,
+        "topic_words_checked": [
+          "psychobiotic",
+          "cortisol",
+          "british",
+          "hospital",
+          "mood",
+          "global",
+          "subjects.",
+          "reduced",
+          "rcts",
+          "stress"
+        ],
+        "article_title": "Assessment of psychotropic-like properties of a probiotic formulation (Lactobacillus helveticus R0052 and Bifidobacterium longum R0175) in rats and human subjects."
+      },
+      {
+        "entry_id": "STRAIN_LONGUM_R0175",
+        "pmid": "20974015",
+        "status": "match",
+        "confidence": 0.53,
+        "topic_words_checked": [
+          "psychobiotic",
+          "cortisol",
+          "british",
+          "mood",
+          "subjects.",
+          "reduced",
+          "rcts",
+          "stress",
+          "modulation.",
+          "relief"
+        ],
+        "article_title": "Assessment of psychotropic-like properties of a probiotic formulation (Lactobacillus helveticus R0052 and Bifidobacterium longum R0175) in rats and human subjects."
+      },
+      {
+        "entry_id": "STRAIN_HELVETICUS_R0052",
+        "pmid": "32989186",
+        "status": "match",
+        "confidence": 0.26,
+        "topic_words_checked": [
+          "psychobiotic",
+          "cortisol",
+          "improvement",
+          "british",
+          "wave",
+          "kazemi",
+          "mood",
+          "placebo",
+          "subjects.",
+          "reduced"
+        ],
+        "article_title": "Effects of a Psychobiotic Supplement on Serum Brain-derived Neurotrophic Factor Levels in Depressive Patients: A Post Hoc Analysis of a Randomized Clinical Trial."
+      },
+      {
+        "entry_id": "STRAIN_HELVETICUS_R0052",
+        "pmid": "33658952",
+        "status": "match",
+        "confidence": 0.23,
+        "topic_words_checked": [
+          "psychobiotic",
+          "cortisol",
+          "single",
+          "british",
+          "mood",
+          "arm;",
+          "participants;",
+          "treatment",
+          "subjects.",
+          "reduced"
+        ],
+        "article_title": "The Efficacy, Safety, and Tolerability of Probiotics on Depression: Clinical Results From an Open-Label Pilot Study."
+      },
+      {
+        "entry_id": "STRAIN_HELVETICUS_R0052",
+        "pmid": "37049546",
+        "status": "match",
+        "confidence": 0.38,
+        "topic_words_checked": [
+          "psychobiotic",
+          "cortisol",
+          "significant",
+          "british",
+          "mood",
+          "subjects.",
+          "reduced",
+          "rcts",
+          "stress",
+          "messaoudi"
+        ],
+        "article_title": "Psychobiotic Effects on Anxiety Are Modulated by Lifestyle Behaviors: A Randomized Placebo-Controlled Trial on Healthy Adults."
+      },
+      {
+        "entry_id": "STRAIN_LONGUM_1714",
+        "pmid": "41607522",
+        "status": "match",
+        "confidence": 0.39,
+        "topic_words_checked": [
+          "psychobiotic",
+          "cortisol",
+          "infection",
+          "lower",
+          "zenflore",
+          "response.",
+          "reduced",
+          "rcts",
+          "health",
+          "improved"
+        ],
+        "article_title": "Integrating microbial genomics and neurotranscriptomics to understand the impact of probiotic strains on neurological health."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_DDS1",
+        "pmid": "32019158",
+        "status": "match",
+        "confidence": 0.26,
+        "topic_words_checked": [
+          "bowel",
+          "chr.",
+          "printed",
+          "placebo",
+          "randomized",
+          "uabla",
+          "research.",
+          "health",
+          "remains",
+          "unresolved."
+        ],
+        "article_title": "Lactobacillus acidophilus DDS-1 and Bifidobacterium lactis UABla-12 Improve Abdominal Pain Severity and Symptomology in Irritable Bowel Syndrome: Randomized Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_UABla12",
+        "pmid": "32019158",
+        "status": "match",
+        "confidence": 0.37,
+        "topic_words_checked": [
+          "lactis",
+          "uabla",
+          "health",
+          "trials",
+          "part",
+          "multi",
+          "health.",
+          "animalis",
+          "labs",
+          "barrier"
+        ],
+        "article_title": "Lactobacillus acidophilus DDS-1 and Bifidobacterium lactis UABla-12 Improve Abdominal Pain Severity and Symptomology in Irritable Bowel Syndrome: Randomized Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_DDS1",
+        "pmid": "27207411",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "chr.",
+          "challenge",
+          "crossover",
+          "overall",
+          "research.",
+          "health",
+          "abstract.",
+          "abstract;",
+          "hansen",
+          "function."
+        ],
+        "article_title": "The effects of the DDS-1 strain of lactobacillus on symptomatic relief for lactose intolerance - a randomized, double-blind, placebo-controlled, crossover clinical trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_DDS1",
+        "pmid": "36308983",
+        "status": "match",
+        "confidence": 0.26,
+        "topic_words_checked": [
+          "review's",
+          "chr.",
+          "pooling",
+          "shares",
+          "crossover",
+          "research.",
+          "health",
+          "already",
+          "hansen",
+          "function."
+        ],
+        "article_title": "The use of probiotics and prebiotics can enable the ingestion of dairy products by lactose intolerant individuals."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_DDS1",
+        "pmid": "33584665",
+        "status": "match",
+        "confidence": 0.28,
+        "topic_words_checked": [
+          "night",
+          "chr.",
+          "workers",
+          "research.",
+          "health",
+          "mixed.",
+          "moderation",
+          "stress",
+          "hansen",
+          "function."
+        ],
+        "article_title": "Probiotics, Anticipation Stress, and the Acute Immune Response to Night Shift."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_DDS1",
+        "pmid": "36071965",
+        "status": "match",
+        "confidence": 0.27,
+        "topic_words_checked": [
+          "chr.",
+          "never",
+          "single",
+          "normalization",
+          "dose.",
+          "research.",
+          "health",
+          "time",
+          "hansen",
+          "function."
+        ],
+        "article_title": "Impact of a probiotic chewable tablet on stool habits and microbial profile in children with functional constipation: A randomized controlled clinical trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_DDS1",
+        "pmid": "26463725",
+        "status": "match",
+        "confidence": 0.25,
+        "topic_words_checked": [
+          "chr.",
+          "infection",
+          "randomized",
+          "research.",
+          "health",
+          "p=0.261",
+          "time",
+          "hansen",
+          "function.",
+          "children"
+        ],
+        "article_title": "Role of short-term use of L. acidophilus DDS-1 and B. lactis UABLA-12 in acute respiratory infections in children: a randomized controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_ACIDOPHILUS_DDS1",
+        "pmid": "20642296",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "chr.",
+          "severe",
+          "percentage",
+          "scorad",
+          "moderate",
+          "research.",
+          "health",
+          "daily",
+          "hansen",
+          "function."
+        ],
+        "article_title": "Probiotic supplement reduces atopic dermatitis in preschool children: a randomized, double-blind, placebo-controlled, clinical trial."
+      },
+      {
+        "entry_id": "STRAIN_REUTERI_ATCC6475",
+        "pmid": "36261538",
+        "status": "match",
+        "confidence": 0.53,
+        "topic_words_checked": [
+          "increased",
+          "modulation",
+          "inflammation",
+          "elevated",
+          "biogaia",
+          "reduced",
+          "studies",
+          "health",
+          "degradation",
+          "trials"
+        ],
+        "article_title": "One-year supplementation with Lactobacillus reuteri ATCC PTA 6475 counteracts a degradation of gut microbiota in older women with low bone mineral density."
+      },
+      {
+        "entry_id": "STRAIN_PARACASEI_LPC37",
+        "pmid": "33385020",
+        "status": "match",
+        "confidence": 0.2,
+        "topic_words_checked": [
+          "protocol",
+          "doses.",
+          "signal",
+          "rcts",
+          "chillex",
+          "studies",
+          "exact",
+          "viability",
+          "randomized",
+          "outcome"
+        ],
+        "article_title": "Lacticaseibacillus paracasei Lpc-37® improves psychological and physiological markers of stress and anxiety in healthy adults: a randomized, double-blind, placebo-controlled and parallel clinical trial (the Sisu study)."
+      },
+      {
+        "entry_id": "STRAIN_PARACASEI_LPC37",
+        "pmid": "37662485",
+        "status": "match",
+        "confidence": 0.19,
+        "topic_words_checked": [
+          "cortisol",
+          "confirmed",
+          "examination",
+          "formal",
+          "rcts",
+          "chillex",
+          "studies",
+          "exact",
+          "viability",
+          "test"
+        ],
+        "article_title": "Efficacy and safety of Lacticaseibacillus paracasei Lpc-37® in students facing examination stress: A randomized, triple-blind, placebo-controlled clinical trial (the ChillEx study)."
+      },
+      {
+        "entry_id": "STRAIN_CRISPATUS_CTV05",
+        "pmid": "35659905",
+        "status": "match",
+        "confidence": 0.54,
+        "topic_words_checked": [
+          "nejm.",
+          "immunology",
+          "microbe",
+          "rct:",
+          "placebo",
+          "ctv05",
+          "applicator",
+          "genital",
+          "recurrence",
+          "health"
+        ],
+        "article_title": "Sustained effect of LACTIN-V (Lactobacillus crispatus CTV-05) on genital immunology following standard bacterial vaginosis treatment: results from a randomised, placebo-controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_NISSLE_1917",
+        "pmid": "15479682",
+        "status": "match",
+        "confidence": 0.35,
+        "topic_words_checked": [
+          "maintenance",
+          "maintenance.",
+          "rcts",
+          "escherichia",
+          "multicenter",
+          "mesalazine",
+          "ardeypharm",
+          "coli",
+          "1917",
+          "2004"
+        ],
+        "article_title": "Maintaining remission of ulcerative colitis with the probiotic Escherichia coli Nissle 1917 is as effective as with standard mesalazine."
+      },
+      {
+        "entry_id": "STRAIN_RHAMNOSUS_SP1",
+        "pmid": "30963591",
+        "status": "match",
+        "confidence": 0.5,
+        "topic_words_checked": [
+          "rhamnosus",
+          "stomatitis",
+          "significant",
+          "acne",
+          "caries",
+          "health",
+          "improved",
+          "prevention",
+          "oral",
+          "showed"
+        ],
+        "article_title": "Severity of Candida-associated denture stomatitis is improved in institutionalized elders who consume Lactobacillus rhamnosus SP1."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_LP01",
+        "pmid": "25291116",
+        "status": "match",
+        "confidence": 0.25,
+        "topic_words_checked": [
+          "2014",
+          "gastroenterol",
+          "mood",
+          "online",
+          "rcts",
+          "probiotical",
+          "subthreshold",
+          "health",
+          "plantarum",
+          "integpro"
+        ],
+        "article_title": "Effectiveness of the two microorganisms Lactobacillus fermentum LF15 and Lactobacillus plantarum LP01, formulated in slow-release vaginal tablets, in women affected by bacterial vaginosis: a pilot study."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_LP01",
+        "pmid": "33513820",
+        "status": "match",
+        "confidence": 0.25,
+        "topic_words_checked": [
+          "2014",
+          "gastroenterol",
+          "mood",
+          "online",
+          "rcts",
+          "probiotical",
+          "subthreshold",
+          "health",
+          "plantarum",
+          "integpro"
+        ],
+        "article_title": "Safety and Efficacy of Probiotic Supplementation in Reducing the Incidence of Infections and Modulating Inflammation in the Elderly with Feeding Tubes: A Pilot, Double-Blind, Placebo-Controlled Study, \"IntegPRO\"."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BS01",
+        "pmid": "33513820",
+        "status": "match",
+        "confidence": 0.31,
+        "topic_words_checked": [
+          "bowel",
+          "lactis",
+          "piano",
+          "gastroenterol",
+          "disorders",
+          "placebo",
+          "21384",
+          "probiotical",
+          "evacuation",
+          "2010"
+        ],
+        "article_title": "Safety and Efficacy of Probiotic Supplementation in Reducing the Incidence of Infections and Modulating Inflammation in the Elderly with Feeding Tubes: A Pilot, Double-Blind, Placebo-Controlled Study, \"IntegPRO\"."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_LP01",
+        "pmid": "39468832",
+        "status": "match",
+        "confidence": 0.19,
+        "topic_words_checked": [
+          "2014",
+          "gastroenterol",
+          "mood",
+          "online",
+          "rcts",
+          "probiotical",
+          "subthreshold",
+          "health",
+          "plantarum",
+          "integpro"
+        ],
+        "article_title": "Evaluation of a probiotic blend on psychosocial health and biomarkers of inflammatory, immune and stress response in adults with subthreshold depression: a double-blind, randomised, placebo-controlled trial."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_LP01",
+        "pmid": "29949873",
+        "status": "match",
+        "confidence": 0.15,
+        "topic_words_checked": [
+          "gastroenterol",
+          "wave2",
+          "online",
+          "placebo",
+          "rcts",
+          "plantarum",
+          "uses",
+          "trial",
+          "currently",
+          "tablet"
+        ],
+        "article_title": "Effects of Synbiotics among Constipated Adults in Serdang, Selangor, Malaysia-A Randomised, Double-Blind, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_LACTIS_BS01",
+        "pmid": "20697291",
+        "status": "match",
+        "confidence": 0.37,
+        "topic_words_checked": [
+          "bowel",
+          "lactis",
+          "piano",
+          "gastroenterol",
+          "disorders",
+          "placebo",
+          "21384",
+          "probiotical",
+          "evacuation",
+          "2010"
+        ],
+        "article_title": "The use of probiotics in healthy volunteers with evacuation disorders and hard stools: a double-blind, randomized, placebo-controlled study."
+      },
+      {
+        "entry_id": "STRAIN_BREVE_SD_BR3_IT",
+        "pmid": "40944126",
+        "status": "match",
+        "confidence": 0.33,
+        "topic_words_checked": [
+          "level",
+          "containing",
+          "rcts",
+          "health",
+          "evaluated",
+          "41750436",
+          "labeled",
+          "multi",
+          "strain.",
+          "isolated"
+        ],
+        "article_title": "Multi-Species Synbiotic Supplementation Enhances Gut Microbial Diversity, Increases Urolithin A and Butyrate Production, and Reduces Inflammation in Healthy Adults: A Randomized, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_SALIVARIUS_SD_LS1_IT",
+        "pmid": "40944126",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "level",
+          "containing",
+          "rcts",
+          "health",
+          "evaluated",
+          "salivarius",
+          "41750436",
+          "labeled",
+          "multi",
+          "strain."
+        ],
+        "article_title": "Multi-Species Synbiotic Supplementation Enhances Gut Microbial Diversity, Increases Urolithin A and Butyrate Production, and Reduces Inflammation in Healthy Adults: A Randomized, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_SD_LP1_IT",
+        "pmid": "40944126",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "level",
+          "containing",
+          "rcts",
+          "health",
+          "evaluated",
+          "plantarum",
+          "41750436",
+          "labeled",
+          "multi",
+          "strain."
+        ],
+        "article_title": "Multi-Species Synbiotic Supplementation Enhances Gut Microbial Diversity, Increases Urolithin A and Butyrate Production, and Reduces Inflammation in Healthy Adults: A Randomized, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_SD_LPLDL_UK",
+        "pmid": "40944126",
+        "status": "match",
+        "confidence": 0.29,
+        "topic_words_checked": [
+          "level",
+          "containing",
+          "cardiometabolic",
+          "rcts",
+          "health",
+          "evaluated",
+          "plantarum",
+          "41750436",
+          "labeled",
+          "multi"
+        ],
+        "article_title": "Multi-Species Synbiotic Supplementation Enhances Gut Microbial Diversity, Increases Urolithin A and Butyrate Production, and Reduces Inflammation in Healthy Adults: A Randomized, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_BREVE_SD_BR3_IT",
+        "pmid": "41750436",
+        "status": "match",
+        "confidence": 0.33,
+        "topic_words_checked": [
+          "level",
+          "containing",
+          "rcts",
+          "health",
+          "evaluated",
+          "41750436",
+          "labeled",
+          "multi",
+          "strain.",
+          "isolated"
+        ],
+        "article_title": "Multi-Species Synbiotic Supplementation After Antibiotics Promotes Recovery of Microbial Diversity and Function, and Increases Gut Barrier Integrity: A Randomized, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_SALIVARIUS_SD_LS1_IT",
+        "pmid": "41750436",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "level",
+          "containing",
+          "rcts",
+          "health",
+          "evaluated",
+          "salivarius",
+          "41750436",
+          "labeled",
+          "multi",
+          "strain."
+        ],
+        "article_title": "Multi-Species Synbiotic Supplementation After Antibiotics Promotes Recovery of Microbial Diversity and Function, and Increases Gut Barrier Integrity: A Randomized, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_SD_LP1_IT",
+        "pmid": "41750436",
+        "status": "match",
+        "confidence": 0.32,
+        "topic_words_checked": [
+          "level",
+          "containing",
+          "rcts",
+          "health",
+          "evaluated",
+          "plantarum",
+          "41750436",
+          "labeled",
+          "multi",
+          "strain."
+        ],
+        "article_title": "Multi-Species Synbiotic Supplementation After Antibiotics Promotes Recovery of Microbial Diversity and Function, and Increases Gut Barrier Integrity: A Randomized, Placebo-Controlled Trial."
+      },
+      {
+        "entry_id": "STRAIN_PLANTARUM_SD_LPLDL_UK",
+        "pmid": "41750436",
+        "status": "match",
+        "confidence": 0.31,
+        "topic_words_checked": [
+          "level",
+          "containing",
+          "cardiometabolic",
+          "rcts",
+          "health",
+          "evaluated",
+          "plantarum",
+          "41750436",
+          "labeled",
+          "multi"
+        ],
+        "article_title": "Multi-Species Synbiotic Supplementation After Antibiotics Promotes Recovery of Microbial Diversity and Function, and Increases Gut Barrier Integrity: A Randomized, Placebo-Controlled Trial."
+      }
+    ]
+  }
+]
