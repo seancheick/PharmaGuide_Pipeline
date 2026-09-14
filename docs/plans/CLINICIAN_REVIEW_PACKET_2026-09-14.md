@@ -10,12 +10,15 @@
 
 For each context, verify the exact strain/identity scope, population, condition, tested dose and form, outcomes, and limitations against the linked PubMed record and full text when needed. Do not infer a missing dose or convert a combination result into single-strain evidence.
 
-Record one of:
-- **Approve** — the context is applicable exactly as written.
-- **Reject** — the context is not reliable/applicable as written; explain why.
-- **Needs clarification** — keep pending and identify the missing source detail.
+Record exactly one decision (these are deliberately different):
+- **Approve as written** — the record is an accurate source summary. This does *not* mean the result was positive, and it does not make an unresolved dose eligible for scoring.
+- **Approve with correction** — the source is usable, but specify the exact field-level correction (for example, a missing strain component or full-text dose) before it can be applied.
+- **Reject** — the source/context should not be used, even after correction; give the reason and identify a replacement if one exists.
+- **Needs source clarification** — keep pending because full text, an underlying trial, or a dose/form detail must be checked first.
 
-The reviewer should return the context ID, decision, reviewer name/credentials, date, and rationale. The registry remains unchanged until that attributable decision is entered.
+A null or negative outcome may still be approved as an accurate record; it will never create a positive evidence bonus. Combination evidence remains combination evidence. A context with an unresolved dose may be approved as a source summary, but it remains ineligible for exact-dose applicability until the dose is resolved.
+
+The reviewer should return the context ID, decision, reviewer name/credentials, date, whether full text was checked, and rationale. For a correction, include an exact before/after field value. The registry remains unchanged until that attributable decision is entered.
 
 ---
 
@@ -23,7 +26,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 1. `dds1_ibs_network_meta_37686889`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37686889](https://pubmed.ncbi.nlm.nih.gov/37686889/)
 - **Identity scope:** exact_strain; components=['STRAIN_ACIDOPHILUS_DDS1']
 - **Condition / purpose:** irritable_bowel_syndrome / treatment
@@ -39,7 +42,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 2. `dds1_ibs_three_arm_32019158`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 32019158](https://pubmed.ncbi.nlm.nih.gov/32019158/)
 - **Identity scope:** exact_strain; components=['STRAIN_ACIDOPHILUS_DDS1']
 - **Condition / purpose:** irritable_bowel_syndrome / treatment
@@ -57,7 +60,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 3. `dds1_lactose_intolerance_crossover_27207411`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 27207411](https://pubmed.ncbi.nlm.nih.gov/27207411/)
 - **Identity scope:** exact_strain; components=['STRAIN_ACIDOPHILUS_DDS1']
 - **Condition / purpose:** lactose_intolerance / challenge
@@ -76,7 +79,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 4. `dds1_lactose_intolerance_sr_36308983`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 36308983](https://pubmed.ncbi.nlm.nih.gov/36308983/)
 - **Identity scope:** exact_strain; components=['STRAIN_ACIDOPHILUS_DDS1']
 - **Condition / purpose:** lactose_intolerance / treatment
@@ -92,7 +95,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 5. `dds1_night_shift_stress_markers_33584665`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33584665](https://pubmed.ncbi.nlm.nih.gov/33584665/)
 - **Identity scope:** exact_strain; components=['STRAIN_ACIDOPHILUS_DDS1']
 - **Condition / purpose:** anticipatory_stress_markers_night_shift / physiology
@@ -110,7 +113,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 6. `dds1_uabla12_fos_atopic_dermatitis_20642296`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 20642296](https://pubmed.ncbi.nlm.nih.gov/20642296/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_DDS1', 'STRAIN_LACTIS_UABla12']
 - **Condition / purpose:** pediatric_atopic_dermatitis / treatment
@@ -128,7 +131,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 7. `dds1_uabla12_fos_pediatric_ari_26463725`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 26463725](https://pubmed.ncbi.nlm.nih.gov/26463725/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_DDS1', 'STRAIN_LACTIS_UABla12']
 - **Condition / purpose:** pediatric_acute_respiratory_infections / prevention
@@ -147,7 +150,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 8. `dds1_uabla12_pediatric_constipation_36071965`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 36071965](https://pubmed.ncbi.nlm.nih.gov/36071965/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_DDS1', 'STRAIN_LACTIS_UABla12']
 - **Condition / purpose:** pediatric_functional_constipation / treatment
@@ -166,7 +169,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 9. `la5_bb12_aad_incidence_24772726`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 24772726](https://pubmed.ncbi.nlm.nih.gov/24772726/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_LA5', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** antibiotic_associated_diarrhea / prevention
@@ -185,7 +188,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 10. `la5_bb12_hpylori_yogurt_aad_21871144`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 21871144](https://pubmed.ncbi.nlm.nih.gov/21871144/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_LA5', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** antibiotic_associated_diarrhea_h_pylori_eradication / prevention
@@ -203,7 +206,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 11. `la5_bb12_lc01_yogurt_aad_30439760`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 30439760](https://pubmed.ncbi.nlm.nih.gov/30439760/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_LA5', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** antibiotic_associated_diarrhea / prevention
@@ -220,7 +223,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 12. `la5_bb12_nonconstipated_ibs_41255078`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41255078](https://pubmed.ncbi.nlm.nih.gov/41255078/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_LA5', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** irritable_bowel_syndrome / treatment
@@ -239,7 +242,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 13. `la5_bb12_primal_preterm_mdro_39102225`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 39102225](https://pubmed.ncbi.nlm.nih.gov/39102225/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_LA5', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** multidrug_resistant_organism_colonization_preterm / prevention
@@ -258,7 +261,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 14. `lgg_la5_bb12_hospital_aad_17356555`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 17356555](https://pubmed.ncbi.nlm.nih.gov/17356555/)
 - **Identity scope:** combination; components=['STRAIN_LGG', 'STRAIN_ACIDOPHILUS_LA5', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** antibiotic_associated_diarrhea / prevention
@@ -274,7 +277,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 15. `lgg_la5_bb12_pediatric_aad_25588782`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 25588782](https://pubmed.ncbi.nlm.nih.gov/25588782/)
 - **Identity scope:** combination; components=['STRAIN_LGG', 'STRAIN_ACIDOPHILUS_LA5', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** pediatric_antibiotic_associated_diarrhea / prevention
@@ -290,7 +293,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 16. `lgg_la5_bb12_propact_offspring_ad_41748464`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41748464](https://pubmed.ncbi.nlm.nih.gov/41748464/)
 - **Identity scope:** combination; components=['STRAIN_LGG', 'STRAIN_ACIDOPHILUS_LA5', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** childhood_atopic_dermatitis / prevention
@@ -309,7 +312,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 17. `bi07_lpc37_ncfm_bl04_omega3_elderly_inflammation_36235651`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 36235651](https://pubmed.ncbi.nlm.nih.gov/36235651/)
 - **Identity scope:** combination; components=['STRAIN_LACTIS_BI07', 'STRAIN_PARACASEI_LPC37', 'STRAIN_ACIDOPHILUS_NCFM', 'STRAIN_LACTIS_BL04']
 - **Condition / purpose:** chronic_low_grade_inflammation / treatment
@@ -328,7 +331,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 18. `ncfm_adult_ibs_28082816`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 28082816](https://pubmed.ncbi.nlm.nih.gov/28082816/)
 - **Identity scope:** exact_strain; components=['STRAIN_ACIDOPHILUS_NCFM']
 - **Condition / purpose:** irritable_bowel_syndrome / treatment
@@ -349,7 +352,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 19. `ncfm_bi07_post_rygb_food_addiction_35766604`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 35766604](https://pubmed.ncbi.nlm.nih.gov/35766604/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_NCFM', 'STRAIN_LACTIS_BI07']
 - **Condition / purpose:** post_bariatric_binge_eating_and_food_addiction / treatment
@@ -368,7 +371,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 20. `ncfm_bi07_post_rygb_nutritional_metabolic_33443719`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33443719](https://pubmed.ncbi.nlm.nih.gov/33443719/), [PMID 35987956](https://pubmed.ncbi.nlm.nih.gov/35987956/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_NCFM', 'STRAIN_LACTIS_BI07']
 - **Condition / purpose:** post_bariatric_nutritional_and_metabolic_markers / treatment
@@ -387,7 +390,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 21. `ncfm_child_cold_flu_symptoms_19651563`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 19651563](https://pubmed.ncbi.nlm.nih.gov/19651563/)
 - **Identity scope:** exact_strain; components=['STRAIN_ACIDOPHILUS_NCFM']
 - **Condition / purpose:** cold_and_flu_like_symptoms / prevention
@@ -406,7 +409,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 22. `ncfm_hn001_lpc37_hn019_caloric_restriction_obese_men_39842252`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 39842252](https://pubmed.ncbi.nlm.nih.gov/39842252/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_NCFM', 'STRAIN_RHAMNOSUS_HN001', 'STRAIN_PARACASEI_LPC37', 'STRAIN_LACTIS_HN019']
 - **Condition / purpose:** obesity_body_composition_under_caloric_restriction / treatment
@@ -424,7 +427,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 23. `ncfm_infant_colic_41998618`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41998618](https://pubmed.ncbi.nlm.nih.gov/41998618/)
 - **Identity scope:** exact_strain; components=['STRAIN_ACIDOPHILUS_NCFM']
 - **Condition / purpose:** infantile_colic / treatment
@@ -444,7 +447,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 24. `ncfm_lpc37_bl04_bi07_bb02_chemotherapy_diarrhea_41379184`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41379184](https://pubmed.ncbi.nlm.nih.gov/41379184/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_NCFM', 'STRAIN_PARACASEI_LPC37', 'STRAIN_LACTIS_BL04', 'STRAIN_LACTIS_BI07', 'STRAIN_BIFIDUM_BB02']
 - **Condition / purpose:** chemotherapy_induced_diarrhea / prevention
@@ -462,7 +465,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 25. `ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 31131616](https://pubmed.ncbi.nlm.nih.gov/31131616/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_NCFM', 'STRAIN_PARACASEI_LPC37', 'STRAIN_LACTIS_BL04', 'STRAIN_LACTIS_BI07', 'STRAIN_LACTIS_HN019']
 - **Condition / purpose:** functional_constipation_with_bloating / treatment
@@ -484,7 +487,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 26. `ncfm_lpc37_bl04_bi07_mdr_colonization_antibiotics_33763399`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33763399](https://pubmed.ncbi.nlm.nih.gov/33763399/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_NCFM', 'STRAIN_PARACASEI_LPC37', 'STRAIN_LACTIS_BL04', 'STRAIN_LACTIS_BI07']
 - **Condition / purpose:** multidrug_resistant_gut_colonization_during_antibiotics / prevention
@@ -505,7 +508,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 27. `m16v_neonatal_jaundice_adjunct_41994268`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41994268](https://pubmed.ncbi.nlm.nih.gov/41994268/)
 - **Identity scope:** exact_strain; components=['STRAIN_BREVE_M16V']
 - **Condition / purpose:** neonatal_jaundice_phototherapy_adjunct / treatment
@@ -524,7 +527,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 28. `m16v_simpro_five_year_followup_41515257`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41515257](https://pubmed.ncbi.nlm.nih.gov/41515257/)
 - **Identity scope:** exact_strain; components=['STRAIN_BREVE_M16V']
 - **Condition / purpose:** extremely_preterm_five_year_outcomes / prevention
@@ -544,7 +547,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 29. `m16v_synbiotic_formula_csection_39915586`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 39915586](https://pubmed.ncbi.nlm.nih.gov/39915586/)
 - **Identity scope:** exact_strain; components=['STRAIN_BREVE_M16V']
 - **Condition / purpose:** gut_microbiota_after_cesarean_birth / physiology
@@ -562,7 +565,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 30. `bc30_functional_gi_complaints_40707016`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 40707016](https://pubmed.ncbi.nlm.nih.gov/40707016/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_GBI30']
 - **Condition / purpose:** functional_gastrointestinal_complaints / treatment
@@ -580,7 +583,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 31. `bc30_geriatric_indigestion_enzymes_32318476`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 32318476](https://pubmed.ncbi.nlm.nih.gov/32318476/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_GBI30']
 - **Condition / purpose:** functional_indigestion_elderly / treatment
@@ -596,7 +599,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 32. `bc30_synbiotic_pasta_cardiometabolic_31162597`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 31162597](https://pubmed.ncbi.nlm.nih.gov/31162597/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_GBI30']
 - **Condition / purpose:** inflammation_and_lipid_markers / physiology
@@ -617,7 +620,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 33. `is2_adult_ibs_multicenter_31434935`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 31434935](https://pubmed.ncbi.nlm.nih.gov/31434935/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_IS2']
 - **Condition / purpose:** irritable_bowel_syndrome / treatment
@@ -635,7 +638,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 34. `is2_chronic_constipation_meta_36372047`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 36372047](https://pubmed.ncbi.nlm.nih.gov/36372047/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_IS2']
 - **Condition / purpose:** chronic_constipation / treatment
@@ -653,7 +656,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 35. `is2_constipation_lactulose_cotherapy_34599466`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 34599466](https://pubmed.ncbi.nlm.nih.gov/34599466/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_IS2']
 - **Condition / purpose:** functional_constipation / treatment
@@ -673,7 +676,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 36. `is2_functional_constipation_30911991`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 30911991](https://pubmed.ncbi.nlm.nih.gov/30911991/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_IS2']
 - **Condition / purpose:** functional_constipation / treatment
@@ -689,7 +692,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 37. `is2_ibs_strain_level_metas_41682832`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41682832](https://pubmed.ncbi.nlm.nih.gov/41682832/), [PMID 37686889](https://pubmed.ncbi.nlm.nih.gov/37686889/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_IS2']
 - **Condition / purpose:** irritable_bowel_syndrome / treatment
@@ -707,7 +710,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 38. `is2_infrequent_bowel_movements_40456531`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 40456531](https://pubmed.ncbi.nlm.nih.gov/40456531/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_IS2']
 - **Condition / purpose:** infrequent_bowel_movements / treatment
@@ -727,7 +730,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 39. `is2_moderate_covid19_adjunct_39866999`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 39866999](https://pubmed.ncbi.nlm.nih.gov/39866999/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_IS2']
 - **Condition / purpose:** moderate_covid19_adjunctive_care / treatment
@@ -747,7 +750,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 40. `is2_pediatric_ibs_chewable_29695183`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 29695183](https://pubmed.ncbi.nlm.nih.gov/29695183/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_IS2']
 - **Condition / purpose:** pediatric_irritable_bowel_syndrome / treatment
@@ -764,7 +767,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 41. `is2_whey_protein_strength_35249118`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 35249118](https://pubmed.ncbi.nlm.nih.gov/35249118/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_IS2']
 - **Condition / purpose:** protein_absorption_and_muscle_performance / physiology
@@ -784,7 +787,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 42. `mtcc5856_functional_gas_bloating_36862903`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 36862903](https://pubmed.ncbi.nlm.nih.gov/36862903/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_MTCC5856']
 - **Condition / purpose:** functional_gas_and_bloating / treatment
@@ -801,7 +804,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 43. `mtcc5856_healthy_microbiome_37335737`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37335737](https://pubmed.ncbi.nlm.nih.gov/37335737/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_MTCC5856']
 - **Condition / purpose:** gut_microbiome_composition / physiology
@@ -817,7 +820,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 44. `mtcc5856_ibs_d_pilot_26922379`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 26922379](https://pubmed.ncbi.nlm.nih.gov/26922379/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_MTCC5856']
 - **Condition / purpose:** irritable_bowel_syndrome_diarrhea_predominant / treatment
@@ -837,7 +840,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 45. `mtcc5856_ibs_strain_level_metas_41682832`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41682832](https://pubmed.ncbi.nlm.nih.gov/41682832/), [PMID 37686889](https://pubmed.ncbi.nlm.nih.gov/37686889/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_MTCC5856']
 - **Condition / purpose:** irritable_bowel_syndrome / treatment
@@ -856,7 +859,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 46. `mtcc5856_mdd_with_ibs_29997457`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 29997457](https://pubmed.ncbi.nlm.nih.gov/29997457/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_MTCC5856']
 - **Condition / purpose:** major_depression_with_irritable_bowel_syndrome / treatment
@@ -876,7 +879,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 47. `mtcc5856_pediatric_acute_diarrhea_38269290`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 38269290](https://pubmed.ncbi.nlm.nih.gov/38269290/)
 - **Identity scope:** exact_strain; components=['STRAIN_COAGULANS_MTCC5856']
 - **Condition / purpose:** pediatric_acute_gastroenteritis / treatment
@@ -896,7 +899,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 48. `r0052_r0175_healthy_adults_null_37049546`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37049546](https://pubmed.ncbi.nlm.nih.gov/37049546/)
 - **Identity scope:** combination; components=['STRAIN_HELVETICUS_R0052', 'STRAIN_LONGUM_R0175']
 - **Condition / purpose:** psychological_wellbeing_healthy_adults / physiology
@@ -913,7 +916,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 49. `r0052_r0175_mdd_bdnf_secondary_32989186`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 32989186](https://pubmed.ncbi.nlm.nih.gov/32989186/)
 - **Identity scope:** combination; components=['STRAIN_HELVETICUS_R0052', 'STRAIN_LONGUM_R0175']
 - **Condition / purpose:** major_depressive_disorder / treatment
@@ -931,7 +934,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 50. `r0052_r0175_mdd_open_pilot_33658952`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33658952](https://pubmed.ncbi.nlm.nih.gov/33658952/)
 - **Identity scope:** combination; components=['STRAIN_HELVETICUS_R0052', 'STRAIN_LONGUM_R0175']
 - **Condition / purpose:** major_depressive_disorder / treatment
@@ -947,7 +950,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 51. `r0052_r0175_psychological_distress_20974015`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 20974015](https://pubmed.ncbi.nlm.nih.gov/20974015/)
 - **Identity scope:** combination; components=['STRAIN_HELVETICUS_R0052', 'STRAIN_LONGUM_R0175']
 - **Condition / purpose:** psychological_distress / treatment
@@ -967,7 +970,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 52. `bb12_low_stool_frequency_26382580`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 26382580](https://pubmed.ncbi.nlm.nih.gov/26382580/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_BB12']
 - **Condition / purpose:** low_stool_frequency / treatment
@@ -987,7 +990,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 53. `bb12_preterm_inflammation_feeding_39271904`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 39271904](https://pubmed.ncbi.nlm.nih.gov/39271904/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_BB12']
 - **Condition / purpose:** preterm_inflammation_and_feeding_intolerance / prevention
@@ -1004,7 +1007,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 54. `casei431_bb12_dracma_cma_tolerance_39310372`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 39310372](https://pubmed.ncbi.nlm.nih.gov/39310372/)
 - **Identity scope:** combination; components=['STRAIN_CASEI_431', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** cow_milk_allergy_tolerance_acquisition / treatment
@@ -1022,7 +1025,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 55. `lgg_bb12_pediatric_ad_prevention_meta_33811784`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33811784](https://pubmed.ncbi.nlm.nih.gov/33811784/)
 - **Identity scope:** combination; components=['STRAIN_LGG', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** childhood_atopic_dermatitis / prevention
@@ -1039,7 +1042,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 56. `lgg_bb12_preterm_administration_route_37020105`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37020105](https://pubmed.ncbi.nlm.nih.gov/37020105/)
 - **Identity scope:** combination; components=['STRAIN_LGG', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** preterm_gut_microbiota_colonization / physiology
@@ -1058,7 +1061,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 57. `bi07_lactose_challenges_36149331`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 36149331](https://pubmed.ncbi.nlm.nih.gov/36149331/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_BI07']
 - **Condition / purpose:** lactose_maldigestion / challenge
@@ -1078,7 +1081,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 58. `ncfm_bi07_bloating_21436726`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 21436726](https://pubmed.ncbi.nlm.nih.gov/21436726/)
 - **Identity scope:** combination; components=['STRAIN_ACIDOPHILUS_NCFM', 'STRAIN_LACTIS_BI07']
 - **Condition / purpose:** functional_bowel_disorders / treatment
@@ -1099,7 +1102,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 59. `bl04_active_adult_respiratory_24268677`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 24268677](https://pubmed.ncbi.nlm.nih.gov/24268677/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_BL04']
 - **Condition / purpose:** upper_respiratory_illness / prevention
@@ -1118,7 +1121,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 60. `bl04_cardiovascular_risk_markers_healthy_33161737`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33161737](https://pubmed.ncbi.nlm.nih.gov/33161737/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_BL04']
 - **Condition / purpose:** cardiovascular_risk_markers / physiology
@@ -1135,7 +1138,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 61. `bl04_fermented_milk_urti_haze_adults_34062085`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 34062085](https://pubmed.ncbi.nlm.nih.gov/34062085/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_BL04']
 - **Condition / purpose:** upper_respiratory_tract_infection / prevention
@@ -1156,7 +1159,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 62. `bl04_rhinovirus_challenge_28343401`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 28343401](https://pubmed.ncbi.nlm.nih.gov/28343401/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_BL04']
 - **Condition / purpose:** experimental_rhinovirus_infection / challenge
@@ -1177,7 +1180,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 63. `bl04_rhinovirus_challenge_phase2_34927036`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 34927036](https://pubmed.ncbi.nlm.nih.gov/34927036/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_BL04']
 - **Condition / purpose:** experimental_rhinovirus_infection / challenge
@@ -1197,7 +1200,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 64. `hn019_constipation_39356506`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 39356506](https://pubmed.ncbi.nlm.nih.gov/39356506/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_HN019']
 - **Condition / purpose:** functional_constipation / treatment
@@ -1215,7 +1218,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 65. `hn019_constipation_40320938`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 40320938](https://pubmed.ncbi.nlm.nih.gov/40320938/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_HN019']
 - **Condition / purpose:** functional_constipation / treatment
@@ -1232,7 +1235,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 66. `hn019_elderly_cellular_immunity_meta_28245559`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 28245559](https://pubmed.ncbi.nlm.nih.gov/28245559/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_HN019']
 - **Condition / purpose:** cellular_immune_function / physiology
@@ -1250,7 +1253,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 67. `hn019_functional_constipation_dose_ranging_28d_29227175`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 29227175](https://pubmed.ncbi.nlm.nih.gov/29227175/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_HN019']
 - **Condition / purpose:** functional_constipation / treatment
@@ -1271,7 +1274,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 68. `hn019_hn001_functional_constipation_vs_fibers_37078654`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37078654](https://pubmed.ncbi.nlm.nih.gov/37078654/)
 - **Identity scope:** combination; components=['STRAIN_LACTIS_HN019', 'STRAIN_RHAMNOSUS_HN001']
 - **Condition / purpose:** functional_constipation / treatment
@@ -1290,7 +1293,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 69. `hn019_intestinal_transit_meta_27275105`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 27275105](https://pubmed.ncbi.nlm.nih.gov/27275105/)
 - **Identity scope:** exact_strain; components=['STRAIN_LACTIS_HN019']
 - **Condition / purpose:** intestinal_transit_time / treatment
@@ -1307,7 +1310,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 70. `m16v_hn019_hn001_pediatric_urti_fever_duration_40085083`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 40085083](https://pubmed.ncbi.nlm.nih.gov/40085083/)
 - **Identity scope:** combination; components=['STRAIN_BREVE_M16V', 'STRAIN_LACTIS_HN019', 'STRAIN_RHAMNOSUS_HN001']
 - **Condition / purpose:** upper_respiratory_tract_infection_fever / treatment
@@ -1327,7 +1330,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 71. `lgg_adult_ibs_open_label_vs_diet_25473176`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 25473176](https://pubmed.ncbi.nlm.nih.gov/25473176/)
 - **Identity scope:** exact_strain; components=['STRAIN_LGG']
 - **Condition / purpose:** irritable_bowel_syndrome / treatment
@@ -1345,7 +1348,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 72. `lgg_covid19_post_exposure_prophylaxis_38103462`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 38103462](https://pubmed.ncbi.nlm.nih.gov/38103462/)
 - **Identity scope:** exact_strain; components=['STRAIN_LGG']
 - **Condition / purpose:** covid19_post_exposure / prevention
@@ -1364,7 +1367,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 73. `lgg_gi_respiratory_outcomes_meta_40702885`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 40702885](https://pubmed.ncbi.nlm.nih.gov/40702885/)
 - **Identity scope:** exact_strain; components=['STRAIN_LGG']
 - **Condition / purpose:** gastrointestinal_and_respiratory_infections / prevention
@@ -1388,7 +1391,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 74. `lgg_icu_ventilator_pneumonia_prospect_34546300`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 34546300](https://pubmed.ncbi.nlm.nih.gov/34546300/)
 - **Identity scope:** exact_strain; components=['STRAIN_LGG']
 - **Condition / purpose:** ventilator_associated_pneumonia / prevention
@@ -1410,7 +1413,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 75. `lgg_pediatric_aad_guideline_26756877`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 26756877](https://pubmed.ncbi.nlm.nih.gov/26756877/)
 - **Identity scope:** exact_strain; components=['STRAIN_LGG']
 - **Condition / purpose:** antibiotic_associated_diarrhea / prevention
@@ -1427,7 +1430,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 76. `lgg_pediatric_functional_abdominal_pain_meta_41883407`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41883407](https://pubmed.ncbi.nlm.nih.gov/41883407/), [PMID 42477222](https://pubmed.ncbi.nlm.nih.gov/42477222/)
 - **Identity scope:** exact_strain; components=['STRAIN_LGG']
 - **Condition / purpose:** functional_abdominal_pain_disorders / treatment
@@ -1447,7 +1450,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 77. `lgg_pediatric_pain_17229242`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 17229242](https://pubmed.ncbi.nlm.nih.gov/17229242/)
 - **Identity scope:** exact_strain; components=['STRAIN_LGG']
 - **Condition / purpose:** functional_abdominal_pain / treatment
@@ -1466,7 +1469,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 78. `lgg_preterm_nec_strain_specific_meta_39060543`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 39060543](https://pubmed.ncbi.nlm.nih.gov/39060543/)
 - **Identity scope:** exact_strain; components=['STRAIN_LGG']
 - **Condition / purpose:** necrotizing_enterocolitis / prevention
@@ -1486,7 +1489,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 79. `lgg_seasonal_allergic_rhinitis_chewable_40891819`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 40891819](https://pubmed.ncbi.nlm.nih.gov/40891819/)
 - **Identity scope:** exact_strain; components=['STRAIN_LGG']
 - **Condition / purpose:** seasonal_allergic_rhinitis / treatment
@@ -1507,7 +1510,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 80. `bb536_fermented_milk_gut_environment_39519413`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 39519413](https://pubmed.ncbi.nlm.nih.gov/39519413/)
 - **Identity scope:** exact_strain; components=['STRAIN_LONGUM_BB536']
 - **Condition / purpose:** gut_microbiota_and_metabolites / physiology
@@ -1524,7 +1527,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 81. `bb536_guar_gum_auto_hsct_pilot_36792187`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 36792187](https://pubmed.ncbi.nlm.nih.gov/36792187/)
 - **Identity scope:** exact_strain; components=['STRAIN_LONGUM_BB536']
 - **Condition / purpose:** chemotherapy_gastrointestinal_toxicity_auto_hsct / prevention
@@ -1542,7 +1545,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 82. `bb536_male_athletes_high_protein_gi_symptoms_42046285`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 42046285](https://pubmed.ncbi.nlm.nih.gov/42046285/)
 - **Identity scope:** exact_strain; components=['STRAIN_LONGUM_BB536']
 - **Condition / purpose:** gastrointestinal_symptoms_on_high_protein_diet / prevention
@@ -1561,7 +1564,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 83. `bb536_plasmacytoid_dendritic_cell_activation_38201872`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 38201872](https://pubmed.ncbi.nlm.nih.gov/38201872/)
 - **Identity scope:** exact_strain; components=['STRAIN_LONGUM_BB536']
 - **Condition / purpose:** immune_marker_pdc_activation / physiology
@@ -1578,7 +1581,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 84. `m63_m16v_bb536_short_term_travel_42533554`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 42533554](https://pubmed.ncbi.nlm.nih.gov/42533554/)
 - **Identity scope:** combination; components=['STRAIN_INFANTIS_M63', 'STRAIN_BREVE_M16V', 'STRAIN_LONGUM_BB536']
 - **Condition / purpose:** travel_related_symptoms_and_microbiota / prevention
@@ -1600,7 +1603,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 85. `lpc37_chillex_exam_stress_37662485`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37662485](https://pubmed.ncbi.nlm.nih.gov/37662485/)
 - **Identity scope:** exact_strain; components=['STRAIN_PARACASEI_LPC37']
 - **Condition / purpose:** examination_stress / physiology
@@ -1619,7 +1622,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 86. `lpc37_sisu_stress_response_33385020`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33385020](https://pubmed.ncbi.nlm.nih.gov/33385020/)
 - **Identity scope:** exact_strain; components=['STRAIN_PARACASEI_LPC37']
 - **Condition / purpose:** stress_response / physiology
@@ -1640,7 +1643,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 87. `lp299v_cancer_home_enteral_nutrition_33015813`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33015813](https://pubmed.ncbi.nlm.nih.gov/33015813/)
 - **Identity scope:** exact_strain; components=['STRAIN_PLANTARUM_299V']
 - **Condition / purpose:** nutritional_status_home_enteral_nutrition / treatment
@@ -1660,7 +1663,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 88. `lp299v_colon_resection_22434095`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 22434095](https://pubmed.ncbi.nlm.nih.gov/22434095/)
 - **Identity scope:** exact_strain; components=['STRAIN_PLANTARUM_299V']
 - **Condition / purpose:** postoperative_outcomes_colon_resection / prevention
@@ -1678,7 +1681,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 89. `lp299v_exam_stress_cortisol_28101105`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 28101105](https://pubmed.ncbi.nlm.nih.gov/28101105/)
 - **Identity scope:** exact_strain; components=['STRAIN_PLANTARUM_299V']
 - **Condition / purpose:** exam_stress_cortisol_response / physiology
@@ -1695,7 +1698,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 90. `lp299v_female_athletes_iron_32365981`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 32365981](https://pubmed.ncbi.nlm.nih.gov/32365981/)
 - **Identity scope:** exact_strain; components=['STRAIN_PLANTARUM_299V']
 - **Condition / purpose:** iron_deficiency_female_athletes / treatment
@@ -1715,7 +1718,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 91. `lp299v_ibs_meta_37541528`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37541528](https://pubmed.ncbi.nlm.nih.gov/37541528/)
 - **Identity scope:** exact_strain; components=['STRAIN_PLANTARUM_299V']
 - **Condition / purpose:** irritable_bowel_syndrome / treatment
@@ -1731,7 +1734,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 92. `lp299v_iron_absorption_meta_31816981`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 31816981](https://pubmed.ncbi.nlm.nih.gov/31816981/)
 - **Identity scope:** exact_strain; components=['STRAIN_PLANTARUM_299V']
 - **Condition / purpose:** iron_absorption / physiology
@@ -1748,7 +1751,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 93. `lp299v_mdd_ssri_cognition_30388595`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 30388595](https://pubmed.ncbi.nlm.nih.gov/30388595/), [PMID 39271063](https://pubmed.ncbi.nlm.nih.gov/39271063/)
 - **Identity scope:** exact_strain; components=['STRAIN_PLANTARUM_299V']
 - **Condition / purpose:** cognitive_symptoms_in_major_depression / treatment
@@ -1769,7 +1772,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 94. `lp299v_smokers_cardiovascular_markers_12450890`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 12450890](https://pubmed.ncbi.nlm.nih.gov/12450890/)
 - **Identity scope:** exact_strain; components=['STRAIN_PLANTARUM_299V']
 - **Condition / purpose:** cardiovascular_risk_markers_smokers / physiology
@@ -1789,7 +1792,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 95. `lp01_bb12_synbiotic_constipation_29949873`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 29949873](https://pubmed.ncbi.nlm.nih.gov/29949873/)
 - **Identity scope:** combination; components=['STRAIN_PLANTARUM_LP01', 'STRAIN_LACTIS_BB12']
 - **Condition / purpose:** functional_constipation / treatment
@@ -1810,7 +1813,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 96. `gr1_rc14_bv_metronidazole_adjunct_34295831`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 34295831](https://pubmed.ncbi.nlm.nih.gov/34295831/)
 - **Identity scope:** combination; components=['STRAIN_RHAMNOSUS_GR1', 'STRAIN_FERMENTUM_RC14']
 - **Condition / purpose:** bacterial_vaginosis / treatment
@@ -1827,7 +1830,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 97. `gr1_rc14_gbs_colonization_27590374`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 27590374](https://pubmed.ncbi.nlm.nih.gov/27590374/)
 - **Identity scope:** combination; components=['STRAIN_RHAMNOSUS_GR1', 'STRAIN_FERMENTUM_RC14']
 - **Condition / purpose:** group_b_streptococcus_colonization / treatment
@@ -1843,7 +1846,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 98. `gr1_rc14_pregnancy_bv_30932317`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 30932317](https://pubmed.ncbi.nlm.nih.gov/30932317/)
 - **Identity scope:** combination; components=['STRAIN_RHAMNOSUS_GR1', 'STRAIN_FERMENTUM_RC14']
 - **Condition / purpose:** bacterial_vaginosis_pregnancy / prevention
@@ -1861,7 +1864,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 99. `gr1_rc14_pregnancy_colonization_32325794`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 32325794](https://pubmed.ncbi.nlm.nih.gov/32325794/)
 - **Identity scope:** combination; components=['STRAIN_RHAMNOSUS_GR1', 'STRAIN_FERMENTUM_RC14']
 - **Condition / purpose:** vaginal_colonization_pregnancy / physiology
@@ -1877,7 +1880,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 100. `gr1_rc14_sci_mdr_colonization_31953482`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 31953482](https://pubmed.ncbi.nlm.nih.gov/31953482/)
 - **Identity scope:** combination; components=['STRAIN_RHAMNOSUS_GR1', 'STRAIN_FERMENTUM_RC14']
 - **Condition / purpose:** multidrug_resistant_gram_negative_colonization / prevention
@@ -1897,7 +1900,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 101. `hn001_b420_pregnancy_child_overweight_36705702`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 36705702](https://pubmed.ncbi.nlm.nih.gov/36705702/)
 - **Identity scope:** combination; components=['STRAIN_RHAMNOSUS_HN001', 'STRAIN_LACTIS_B420']
 - **Condition / purpose:** childhood_overweight / prevention
@@ -1914,7 +1917,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 102. `hn001_b420_pregnancy_fishoil_child_allergy_37622257`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37622257](https://pubmed.ncbi.nlm.nih.gov/37622257/), [PMID 37642166](https://pubmed.ncbi.nlm.nih.gov/37642166/)
 - **Identity scope:** combination; components=['STRAIN_RHAMNOSUS_HN001', 'STRAIN_LACTIS_B420']
 - **Condition / purpose:** childhood_allergic_disease / prevention
@@ -1935,7 +1938,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 103. `hn001_elderly_brain_function_encapsulation_40976401`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 40976401](https://pubmed.ncbi.nlm.nih.gov/40976401/)
 - **Identity scope:** exact_strain; components=['STRAIN_RHAMNOSUS_HN001']
 - **Condition / purpose:** brain_function_and_cognition_in_elderly / physiology
@@ -1957,7 +1960,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 104. `hn001_maternal_perinatal_mental_health_sr_41783815`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41783815](https://pubmed.ncbi.nlm.nih.gov/41783815/)
 - **Identity scope:** exact_strain; components=['STRAIN_RHAMNOSUS_HN001']
 - **Condition / purpose:** perinatal_depression_and_anxiety / prevention
@@ -1975,7 +1978,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 105. `hn001_perceived_stress_happiness_39275252`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 39275252](https://pubmed.ncbi.nlm.nih.gov/39275252/)
 - **Identity scope:** exact_strain; components=['STRAIN_RHAMNOSUS_HN001']
 - **Condition / purpose:** perceived_stress_and_wellbeing / treatment
@@ -1994,7 +1997,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 106. `hn019_hn001_fos_immune_parameters_healthy_adults_37614109`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37614109](https://pubmed.ncbi.nlm.nih.gov/37614109/)
 - **Identity scope:** combination; components=['STRAIN_LACTIS_HN019', 'STRAIN_RHAMNOSUS_HN001']
 - **Condition / purpose:** immune_parameters_healthy_adults / physiology
@@ -2015,7 +2018,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 107. `sb_adult_acute_viral_diarrhea_37400812`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37400812](https://pubmed.ncbi.nlm.nih.gov/37400812/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** acute_viral_diarrhea / treatment
@@ -2033,7 +2036,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 108. `sb_cncm_i745_h_pylori_triple_therapy_gistar_37942999`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 37942999](https://pubmed.ncbi.nlm.nih.gov/37942999/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** helicobacter_pylori_eradication_adjunct / treatment
@@ -2052,7 +2055,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 109. `sb_cncm_i745_ibs_d_sibo_open_pilot_36630947`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 36630947](https://pubmed.ncbi.nlm.nih.gov/36630947/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** ibs_d_with_small_intestinal_bacterial_overgrowth / treatment
@@ -2071,7 +2074,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 110. `sb_cncm_i745_mdr_colonization_antibiotics_33763399`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33763399](https://pubmed.ncbi.nlm.nih.gov/33763399/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** multidrug_resistant_gut_colonization_during_antibiotics / prevention
@@ -2088,7 +2091,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 111. `sb_cncm_i745_pediatric_acute_gastroenteritis_china_meta_40535538`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 40535538](https://pubmed.ncbi.nlm.nih.gov/40535538/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** pediatric_acute_gastroenteritis / treatment
@@ -2106,7 +2109,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 112. `sb_cncm_i745_ppi_sibo_with_rifaximin_40884341`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 40884341](https://pubmed.ncbi.nlm.nih.gov/40884341/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** ppi_associated_small_intestinal_bacterial_overgrowth / treatment
@@ -2125,7 +2128,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 113. `sb_cncm_i745_vs_b_clausii_pediatric_gastroenteritis_36086703`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 36086703](https://pubmed.ncbi.nlm.nih.gov/36086703/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** pediatric_acute_gastroenteritis / treatment
@@ -2142,7 +2145,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 114. `sb_h_pylori_eradication_adjunct_meta_family`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 40865583](https://pubmed.ncbi.nlm.nih.gov/40865583/), [PMID 41247686](https://pubmed.ncbi.nlm.nih.gov/41247686/), [PMID 40251486](https://pubmed.ncbi.nlm.nih.gov/40251486/), [PMID 40012609](https://pubmed.ncbi.nlm.nih.gov/40012609/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** helicobacter_pylori_eradication_adjunct / treatment
@@ -2162,7 +2165,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 115. `sb_travelers_diarrhea_prevention_meta_38458507`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 38458507](https://pubmed.ncbi.nlm.nih.gov/38458507/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** travelers_diarrhea / prevention
@@ -2178,7 +2181,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 116. `sboulardii_child_aad_prevention_26756877`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 26756877](https://pubmed.ncbi.nlm.nih.gov/26756877/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** antibiotic_associated_diarrhea / prevention
@@ -2196,7 +2199,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 117. `sboulardii_elderly_aad_prevention_22472744`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 22472744](https://pubmed.ncbi.nlm.nih.gov/22472744/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** antibiotic_associated_diarrhea / prevention
@@ -2215,7 +2218,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 118. `sboulardii_nosocomial_diarrhea_treatment_41675330`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 41675330](https://pubmed.ncbi.nlm.nih.gov/41675330/)
 - **Identity scope:** species_general; components=['STRAIN_SACCHAROMYCES']
 - **Condition / purpose:** non_cdiff_nosocomial_diarrhea / treatment
@@ -2237,7 +2240,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 119. `de111_blood_lipids_endothelial_function_33161737`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33161737](https://pubmed.ncbi.nlm.nih.gov/33161737/)
 - **Identity scope:** exact_strain; components=['STRAIN_SUBTILIS_DE111']
 - **Condition / purpose:** blood_lipids_and_endothelial_function / physiology
@@ -2257,7 +2260,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 120. `de111_daycare_children_microbiome_33161736`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33161736](https://pubmed.ncbi.nlm.nih.gov/33161736/)
 - **Identity scope:** exact_strain; components=['STRAIN_SUBTILIS_DE111']
 - **Condition / purpose:** gut_microbiome_composition / physiology
@@ -2274,7 +2277,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 121. `de111_female_athletes_offseason_training_33105368`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33105368](https://pubmed.ncbi.nlm.nih.gov/33105368/)
 - **Identity scope:** exact_strain; components=['STRAIN_SUBTILIS_DE111']
 - **Condition / purpose:** training_adaptation_and_body_composition / physiology
@@ -2292,7 +2295,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 122. `de111_healthy_adults_immune_gi_pilot_33671071`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33671071](https://pubmed.ncbi.nlm.nih.gov/33671071/)
 - **Identity scope:** exact_strain; components=['STRAIN_SUBTILIS_DE111']
 - **Condition / purpose:** immune_and_gastrointestinal_health_markers / physiology
@@ -2312,7 +2315,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 123. `de111_ileostomy_small_intestinal_germination_34408741`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 34408741](https://pubmed.ncbi.nlm.nih.gov/34408741/), [PMID 36790091](https://pubmed.ncbi.nlm.nih.gov/36790091/)
 - **Identity scope:** exact_strain; components=['STRAIN_SUBTILIS_DE111']
 - **Condition / purpose:** small_intestinal_spore_germination / physiology
@@ -2330,7 +2333,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 124. `de111_male_baseball_immune_hormonal_30049931`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 30049931](https://pubmed.ncbi.nlm.nih.gov/30049931/)
 - **Identity scope:** exact_strain; components=['STRAIN_SUBTILIS_DE111']
 - **Condition / purpose:** immune_and_hormonal_markers_during_training / physiology
@@ -2349,7 +2352,7 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 
 ### 125. `de111_whey_protein_amino_acid_response_33462163`
 
-- **Decision:** ☐ Approve  ☐ Reject  ☐ Needs clarification
+- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification
 - **Source:** [PMID 33462163](https://pubmed.ncbi.nlm.nih.gov/33462163/)
 - **Identity scope:** exact_strain; components=['STRAIN_SUBTILIS_DE111']
 - **Condition / purpose:** plasma_amino_acid_response_to_whey / physiology
