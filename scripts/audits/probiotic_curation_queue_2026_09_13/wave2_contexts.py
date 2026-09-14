@@ -35,13 +35,53 @@ from apply_batch1_disposition import DISPOSITION, _write_path  # noqa: E402
 REG = ROOT / "scripts/data/clinically_relevant_strains.json"
 
 
+RESPONSE = REG.parents[2] / "docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json"
+OWNER_DECISION_FIELDS = ("review_status", "clinical_review", "scoring_eligible", "rejection_reason")
+
+
 def _declared_disposition_patches():
-    """{context_id: [(field_path, new_value), ...]} declared by later source-bound dispositions."""
+    """{context_id: [(field_path, new_value), ...]} declared by later source-bound dispositions,
+    in application order: batch-1 first, then the 2026-09-14 review response."""
     patches = {}
     if DISPOSITION.exists():
         for patch in json.loads(DISPOSITION.read_text(encoding="utf-8"))["patches"]:
             patches.setdefault(patch["record_id"], []).append((patch["field_path"], patch["new_value"]))
+    if RESPONSE.exists():
+        for review in json.loads(RESPONSE.read_text(encoding="utf-8")).get("reviews", {}).values():
+            for patch in review.get("patches", []):
+                patches.setdefault(patch["record_id"], []).append((patch["field_path"], patch["new_value"]))
     return patches
+
+
+def _response_decisions():
+    """{context_id: decision} from the applied 2026-09-14 review response."""
+    if not RESPONSE.exists():
+        return {}
+    return dict(json.loads(RESPONSE.read_text(encoding="utf-8")).get("decisions", {}))
+
+
+def _write_path_appending(row, field_path, value):
+    """Like _write_path but lets a patch append the next list item (a new outcome)."""
+    parts = field_path.split(".")
+    current = row
+    for offset, raw in enumerate(parts):
+        key, _, index = raw.partition("[")
+        last = offset == len(parts) - 1
+        if index:
+            idx = int(index.rstrip("]"))
+            seq = current.setdefault(key, [])
+            if idx == len(seq) and last:
+                seq.append(deepcopy(value))
+                return
+            if last:
+                seq[idx] = deepcopy(value)
+                return
+            current = seq[idx]
+            continue
+        if last:
+            current[key] = deepcopy(value)
+            return
+        current = current.setdefault(key, {})
 
 
 PENDING = "source_verified_pending_clinical_review"
@@ -697,11 +737,25 @@ def main():
         stored = {c.get("context_id"): c for e in entries.values()
                   for c in e.get("study_contexts", []) if isinstance(c, dict)}
         patches = _declared_disposition_patches()
+        decisions = _response_decisions()
         for owner, row in CONTEXTS:
             expected = deepcopy(row)
             for field_path, new_value in patches.get(row["context_id"], []):
-                _write_path(expected, field_path, new_value)
-            assert stored.get(row["context_id"]) in (row, expected), (
+                _write_path_appending(expected, field_path, new_value)
+            current = stored.get(row["context_id"])
+            decision = decisions.get(row["context_id"])
+            if decision and isinstance(current, dict):
+                # The owner's final status and its provenance come from the
+                # applied review response, not from this authoring script;
+                # verify the status matches the decision, then carry the
+                # decision fields into the expected row.
+                wanted = "rejected_source" if decision == "reject" else "clinician_approved"
+                assert current.get("review_status") == wanted, (
+                    f"{row['context_id']}: status {current.get('review_status')!r} != decision {decision!r}")
+                for key in OWNER_DECISION_FIELDS:
+                    if key in current:
+                        expected[key] = deepcopy(current[key])
+            assert current in (row, expected), (
                 f"Wave 2 is marked applied but {row['context_id']} differs or is missing")
             assert owner in entries and row["context_id"] in {
                 c.get("context_id") for c in entries[owner].get("study_contexts", [])

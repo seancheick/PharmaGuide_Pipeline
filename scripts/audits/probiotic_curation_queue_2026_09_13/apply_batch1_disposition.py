@@ -117,6 +117,38 @@ def _write_path(root: dict[str, Any], path: str, value: Any) -> None:
         current = sequence[int(index)]
 
 
+def _successor_patches(disposition: dict[str, Any]) -> dict[tuple[str, str], dict[str, Any]]:
+    """(record_id, field_path) -> successor patch, from the response named in
+    ``_metadata.superseded_by_response`` when that response was bound to this
+    disposition's applied snapshot (an unbroken chain of custody).  A later
+    owner decision may legitimately move a field batch-1 set; the batch-1
+    value is still 'applied' when the successor recorded it as the old value."""
+    metadata = disposition.get("_metadata") or {}
+    successor = metadata.get("superseded_by_response")
+    if not isinstance(successor, str):
+        return {}
+    path = ROOT / successor
+    if not path.is_file():
+        return {}
+    later = json.loads(path.read_text(encoding="utf-8"))
+    if later.get("_metadata", {}).get("dataset_sha256") != metadata.get("applied_dataset_sha256"):
+        return {}
+    result: dict[tuple[str, str], dict[str, Any]] = {}
+    for review in (later.get("reviews") or {}).values():
+        for patch in review.get("patches", []):
+            result[(patch["record_id"], patch["field_path"])] = patch
+    return result
+
+
+def _value_applied(current: Any, patch: dict[str, Any],
+                   successors: dict[tuple[str, str], dict[str, Any]]) -> bool:
+    if current == patch.get("new_value"):
+        return True
+    later = successors.get((patch.get("record_id"), patch.get("field_path")))
+    return (later is not None and later.get("old_value") == patch.get("new_value")
+            and current == later.get("new_value"))
+
+
 def _already_applied(registry: dict[str, Any], disposition: dict[str, Any]) -> bool:
     """True when every declared patch value is already present in the registry.
 
@@ -129,6 +161,7 @@ def _already_applied(registry: dict[str, Any], disposition: dict[str, Any]) -> b
     if not isinstance(patches, list) or not patches:
         return False
     contexts = _contexts(registry)
+    successors = _successor_patches(disposition)
     for patch in patches:
         if not isinstance(patch, dict):
             return False
@@ -136,7 +169,7 @@ def _already_applied(registry: dict[str, Any], disposition: dict[str, Any]) -> b
         if context is None or not isinstance(patch.get("field_path"), str):
             return False
         current = _read_path(context, patch["field_path"])
-        if current is MISSING or current != patch.get("new_value"):
+        if current is MISSING or not _value_applied(current, patch, successors):
             return False
     return True
 
@@ -149,23 +182,11 @@ def validate(registry: dict[str, Any], disposition: dict[str, Any]) -> tuple[dic
     actual_sha = _sha256(REGISTRY)
     applied_sha = metadata.get("applied_dataset_sha256")
     already_applied = actual_sha == applied_sha or _already_applied(registry, disposition)
-    superseded = False
+    successors = _successor_patches(disposition)
     if expected_sha != actual_sha and not already_applied:
-        # A later, explicitly named review batch may have moved the registry
-        # past this snapshot.  Accept only an unbroken chain: batch-1 was
-        # applied (its applied sha is the later batch's bound sha) and the
-        # later batch produced the current file.
-        successor = metadata.get("superseded_by_response")
-        if isinstance(successor, str) and (ROOT / successor).is_file():
-            later = json.loads((ROOT / successor).read_text(encoding="utf-8")).get("_metadata", {})
-            superseded = (
-                later.get("dataset_sha256") == applied_sha
-                and later.get("applied_dataset_sha256") == actual_sha
-            )
-        if not superseded:
-            raise ValueError(
-                f"dataset snapshot mismatch: expected {expected_sha}, current {actual_sha}"
-            )
+        raise ValueError(
+            f"dataset snapshot mismatch: expected {expected_sha}, current {actual_sha}"
+        )
     snapshot_id = metadata.get("review_snapshot_id")
     if not isinstance(snapshot_id, str) or not snapshot_id.strip():
         raise ValueError("review_snapshot_id is required")
@@ -223,14 +244,12 @@ def validate(registry: dict[str, Any], disposition: dict[str, Any]) -> tuple[dic
         context = prospective_contexts[record_id]
         if patch["source_pmid"] not in {str(pmid) for pmid in context.get("source_pmids", [])}:
             raise ValueError(f"source PMID is not attached to {record_id}")
-        if superseded:
-            continue  # historical batch; the successor response owns these fields now
         current = _read_path(context, field_path)
         old_value = patch.get("old_value")
         if current is MISSING:
             current = None
         if already_applied:
-            if current != patch.get("new_value"):
+            if not _value_applied(current, patch, successors):
                 raise ValueError(
                     f"applied value mismatch for {record_id}.{field_path}: "
                     f"expected {patch.get('new_value')!r}, current {current!r}"
