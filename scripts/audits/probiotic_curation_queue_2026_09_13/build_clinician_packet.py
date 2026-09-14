@@ -116,8 +116,6 @@ def build() -> None:
                 _outcomes(context.get("outcomes", [])),
                 "- **Limitations:**",
                 *limitation_lines,
-                "- **Reviewer / credentials:**",
-                "- **Decision date:**",
                 "- **Rationale / notes:**",
                 "",
             ]

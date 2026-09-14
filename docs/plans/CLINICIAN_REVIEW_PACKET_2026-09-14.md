@@ -37,8 +37,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=ibs_severity_score_ranking; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - DDS-1 ranked first for IBS-SSS improvement (SUCRA 92.9%), an indirect ranking resting on the single DDS-1 IBS RCT already recorded (PMID 32019158); shares its trial family.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 2. `dds1_ibs_three_arm_32019158`
@@ -55,8 +53,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Manufacturer-run (UAS Labs); the daily CFU dose is printed with a stripped exponent in the retrieved abstract and is recorded as unresolved.
   - Only the DDS-1 solo arm is recorded here; the UABla-12 solo arm remains future curation under its own identity.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 3. `dds1_lactose_intolerance_crossover_27207411`
@@ -74,8 +70,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=overall_symptom_score; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Dose not stated in the abstract; industry authorship (Nebraska Cultures); sample size not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 4. `dds1_lactose_intolerance_sr_36308983`
@@ -90,8 +84,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=lactose_intolerance_symptoms; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - LOW certainty; no pooling was possible; the review's DDS-1 evidence is the crossover trial already recorded (PMID 27207411), so this shares its trial family.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 5. `dds1_night_shift_stress_markers_33584665`
@@ -108,8 +100,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Serum stress markers are surrogates; pre-shift moderation without interaction effects across the night shift makes the record mixed.
   - Only the DDS-1 solo arm of a multi-arm trial is recorded here; total trial size not captured.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 6. `dds1_uabla12_fos_atopic_dermatitis_20642296`
@@ -126,8 +116,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Synbiotic with fructooligosaccharide; 5 x 10^9 CFU twice daily (1 x 10^10/day) is the combination total.
   - SCORAD reported as percentage decrease (33.7% vs 19.4%).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 7. `dds1_uabla12_fos_pediatric_ari_26463725`
@@ -145,8 +133,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Primary incidence endpoint null (57% vs 65%, p=0.261); only resolution time and severity differed.
   - Synbiotic with fructooligosaccharide; 5 x 10^9 CFU/day is the combination total.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 8. `dds1_uabla12_pediatric_constipation_36071965`
@@ -162,8 +148,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Single-blind; industry involvement (Sirio/Chr. Hansen).
   - 5 x 10^9 CFU/day is the two-strain combination total, never an individual dose.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_ACIDOPHILUS_LA5
@@ -183,8 +167,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Primary incidence endpoint null (10.8% vs 15.6%, p=0.19); duration (2 vs 4 days) and a severe-diarrhea subgroup differed.
   - Sample size not captured from the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 10. `la5_bb12_hpylori_yogurt_aad_21871144`
@@ -201,8 +183,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - AAD days 4 vs 10 vs 10 across arms; urease activity fell in ALL milk arms, so that change is not attributable to the probiotic.
   - Food matrix; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 11. `la5_bb12_lc01_yogurt_aad_30439760`
@@ -218,8 +198,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Null result (23.0% vs 17.6%).
   - The studied product was a THREE-strain yogurt; the third strain L. casei LC-01 has no registry identity, so this record understates the formulation. A two-strain product matching these components was not what was tested.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 12. `la5_bb12_nonconstipated_ibs_41255078`
@@ -237,8 +215,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=quality_of_life; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Combination evidence; nothing here attributes the effect to either strain alone; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 13. `la5_bb12_primal_preterm_mdro_39102225`
@@ -256,8 +232,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Primary MDRO-colonization endpoint null; eubiosis is a microbiota surrogate.
   - The studied product also contained an unnamed B. longum subsp. infantis component with no registry identity; this record understates the formulation.
   - Hospital neonatal population; not a consumer supplement indication; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 14. `lgg_la5_bb12_hospital_aad_17356555`
@@ -272,8 +246,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=aad_incidence; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Three-strain fermented milk (5.9% vs 27.6%); food matrix; nothing attributes the effect to a single strain.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 15. `lgg_la5_bb12_pediatric_aad_25588782`
@@ -288,8 +260,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=severe_diarrhea_episodes; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Severe diarrhea 0 vs 6 episodes (p=0.025) in a small yogurt trial; three-strain food matrix.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 16. `lgg_la5_bb12_propact_offspring_ad_41748464`
@@ -305,8 +275,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Authored from a longitudinal T-cell immunology companion whose abstract restates the parent trial's atopic-dermatitis reduction; the parent outcome paper was not read this wave.
   - Maternal supplementation with offspring outcomes; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_ACIDOPHILUS_NCFM
@@ -326,8 +294,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Proof-of-concept; primary hs-CRP not different; probiotic effect cannot be separated from omega-3 co-supplementation.
   - GSK Consumer Healthcare co-author; doses not stated.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 18. `ncfm_adult_ibs_28082816`
@@ -347,8 +313,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Primary IBS-SSS and overall secondary outcomes did not differ from placebo
   - Pain signal comes from a post hoc subgroup, not the primary endpoint
   - Industry supplied study product and participated in the study
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 19. `ncfm_bi07_post_rygb_food_addiction_35766604`
@@ -366,8 +330,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Both groups improved at 90 days; the between-group difference appeared only at 1 year (p=0.037 and p=0.030).
   - Same Curitiba RYGB cohort as PMIDs 33443719 and 35987956; one trial family, not three confirmations. Dose not stated.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 20. `ncfm_bi07_post_rygb_nutritional_metabolic_33443719`
@@ -385,8 +347,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Vitamin D and triglyceride changes were significant within the probiotic group only; between-group tests are not reported in the abstract.
   - Metabolomic differences (PMID 35987956) are surrogate outcomes from the same cohort.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 21. `ncfm_child_cold_flu_symptoms_19651563`
@@ -404,8 +364,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Twice-daily administration for six months; exact CFU, dosage form and prespecified endpoint hierarchy were not verified in the accessible abstract
   - Study also includes a distinct NCFM plus Bi-07 arm; its results are not allocated to NCFM alone
   - Reported symptoms do not establish laboratory-confirmed infection prevention or adult digestive benefit
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 22. `ncfm_hn001_lpc37_hn019_caloric_restriction_obese_men_39842252`
@@ -422,8 +380,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - 8 billion CFU/day is the four-strain total (2 x 10^9 each); no between-group differences in weight or fat loss.
   - Per-protocol analysis of a small sample.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 23. `ncfm_infant_colic_41998618`
@@ -442,8 +398,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Primary endpoint not met (p=0.240); the day-14 responder signal was attenuated after correction for multiple comparisons.
   - Retrospectively registered.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 24. `ncfm_lpc37_bl04_bi07_bb02_chemotherapy_diarrhea_41379184`
@@ -460,8 +414,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Very small (n=28); 20 billion CFU/day is the five-strain total, not a per-strain dose.
   - No benefit for grade 2/3 or overall diarrhea.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 25. `ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616`
@@ -482,8 +434,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Efficacy not shown for the primary outcome or any secondary outcome; placebo performed similarly.
   - Per-strain CFU (NCFM 10^10, Lpc-37/Bl-04/Bi-07 2.5x10^9, HN019 10^10 as printed) not machine-readable in the retrieved abstract; recorded as unresolved.
   - Post hoc flatulence signal only.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 26. `ncfm_lpc37_bl04_bi07_mdr_colonization_antibiotics_33763399`
@@ -501,8 +451,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Combination product (Bactiol duo); colonization on selective culture is a microbiological surrogate; the S. boulardii arm showed no significant change.
   - Doses per strain not stated; industry (Metagenics) co-authors.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_BREVE_M16V
@@ -522,8 +470,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - About 20 infants per arm; the Bb-12 arm's neurodevelopment-domain signals are not recorded under this identity.
   - Industry-adjacent authorship (Diprobio); dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 28. `m16v_simpro_five_year_followup_41515257`
@@ -542,8 +488,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Comparative single- vs triple-strain design without placebo: 'null' here means the arms were comparable, not that M-16V lacks effect versus no treatment.
   - Hospital neonatal population; dose and follow-up sample size not captured from the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 29. `m16v_synbiotic_formula_csection_39915586`
@@ -558,8 +502,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=bifidobacterial_restoration; hierarchy=unresolved; kind=surrogate; direction=positive
 - **Limitations:**
   - Microbiota restoration is a surrogate; formula matrix with prebiotic co-therapy; sponsor-run (Danone).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_COAGULANS_GBI30
@@ -578,8 +520,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=constipation_proportion; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Sponsor-run (Kerry); endpoint hierarchy not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 31. `bc30_geriatric_indigestion_enzymes_32318476`
@@ -594,8 +534,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=dyspepsia_severity; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Open label; attribution confounded by the co-formulated digestive enzymes; five-day duration.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 32. `bc30_synbiotic_pasta_cardiometabolic_31162597`
@@ -613,8 +551,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Primary hs-CRP and lipid endpoints null overall; only subgroups moved.
   - Food matrix and beta-glucan co-therapy confound any strain attribution; single-blind.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_COAGULANS_IS2
@@ -633,8 +569,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=serum_cytokines; hierarchy=unresolved; kind=surrogate; direction=null
 - **Limitations:**
   - Manufacturer authorship (Unique Biotech); serum cytokines did not change alongside the symptom improvements.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 34. `is2_chronic_constipation_meta_36372047`
@@ -651,8 +585,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - The class-level benefit is not IS-2 evidence: the IS-2 subgroup was NOT significant for stool frequency (species-level B. lactis was).
   - Pooled trials overlap the IS-2 constipation RCT contexts already recorded; not an independent confirmation.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 35. `is2_constipation_lactulose_cotherapy_34599466`
@@ -671,8 +603,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - The stool-frequency advantage over lactulose alone was transient and not significant at end of trial.
   - Every active arm contained lactulose; nothing here is monotherapy evidence.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 36. `is2_functional_constipation_30911991`
@@ -687,8 +617,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=spontaneous_bowel_movements_3_or_more_per_week; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Manufacturer-affiliated authors; endpoint hierarchy not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 37. `is2_ibs_strain_level_metas_41682832`
@@ -705,8 +633,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Both analyses pool the same underlying IS-2 trials already recorded (PMIDs 31434935, 29695183); two meta-analyses of one evidence base count once.
   - Rankings are indirect strain-level comparisons, not pooled IS-2 effect sizes with certainty grades.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 38. `is2_infrequent_bowel_movements_40456531`
@@ -725,8 +651,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=gut_microbiota_composition; hierarchy=unresolved; kind=surrogate; direction=null
 - **Limitations:**
   - Sponsor-run (PepsiCo/Nutrasource); frequency effect modest (p=0.037) in a healthy population; symptoms, QoL and microbiota unchanged.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 39. `is2_moderate_covid19_adjunct_39866999`
@@ -745,8 +669,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Small three-arm trial (about 19 per arm) with inflammatory-marker surrogates only; ferritin fell in both probiotic arms, D-dimer only in the IS-2 arm.
   - The UBBC-07 arm is a different, non-registry strain; published in Cureus.
   - 2 x 10^9 spores twice daily (4 x 10^9/day).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 40. `is2_pediatric_ibs_chewable_29695183`
@@ -762,8 +684,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Daily CFU dose not machine-readable in the retrieved abstract; manufacturer-affiliated authors.
   - Endpoint hierarchy not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 41. `is2_whey_protein_strength_35249118`
@@ -780,8 +700,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=vertical_jump; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Surrogate-heavy; industry co-authors; performance findings from a small trained-athlete sample.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_COAGULANS_MTCC5856
@@ -799,8 +717,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=patient_global_assessment; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Manufacturer-run; four-week duration; endpoint hierarchy not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 43. `mtcc5856_healthy_microbiome_37335737`
@@ -815,8 +731,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=gut_microbiome_composition; hierarchy=unresolved; kind=surrogate; direction=null
 - **Limitations:**
   - Gut microbiome composition essentially unchanged; the abstract states 2 x 10^9 CFU per capsule without capsules/day, so the daily dose is unresolved.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 44. `mtcc5856_ibs_d_pilot_26922379`
@@ -835,8 +749,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=stool_frequency; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Pilot size (n=36); manufacturer-run (Sami/Sabinsa).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 45. `mtcc5856_ibs_strain_level_metas_41682832`
@@ -854,8 +766,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Both analyses pool the same underlying MTCC 5856 trials already recorded (PMIDs 26922379, 29997457); two meta-analyses of one evidence base count once.
   - Rankings are indirect strain-level comparisons, not pooled effect sizes with certainty grades.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 46. `mtcc5856_mdd_with_ibs_29997457`
@@ -874,8 +784,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=serum_myeloperoxidase; hierarchy=unresolved; kind=surrogate; direction=positive
 - **Limitations:**
   - Pilot size (n=40); manufacturer-run; a single trial carries every mood endpoint.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 47. `mtcc5856_pediatric_acute_diarrhea_38269290`
@@ -892,8 +800,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Duration fell (51.3 vs 62.7 h, p=0.011) but stool frequency did not differ.
   - Each sachet contained 4 x 10^8 spores and was taken twice daily (8 x 10^8 spores/day); ORS and zinc were co-therapies.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_HELVETICUS_R0052
@@ -911,8 +817,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=lifestyle_interaction_effects; hierarchy=post_hoc; kind=patient_important; direction=positive
 - **Limitations:**
   - No significant whole-sample effects; the lifestyle-interaction finding is exploratory.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 49. `r0052_r0175_mdd_bdnf_secondary_32989186`
@@ -929,8 +833,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Secondary (BDNF) analysis of the Kazemi cohort; the parent trial's primary outcome paper was not read this wave, and its depression improvement is restated in this abstract.
   - Dose not stated in the retrieved abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 50. `r0052_r0175_mdd_open_pilot_33658952`
@@ -945,8 +847,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=affective_symptoms; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - No control arm; ten participants; hypothesis-generating only.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 51. `r0052_r0175_psychological_distress_20974015`
@@ -963,8 +863,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=urinary_free_cortisol; hierarchy=unresolved; kind=surrogate; direction=positive
 - **Limitations:**
   - Dose and sample size not stated in the retrieved abstract; the paper's rat arm is not a human context.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_LACTIS_BB12
@@ -985,8 +883,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Original overall frequency-responder OR 1.31 (95% CI .98–1.75); the stronger responder result used a post hoc definition. Average-frequency analyses were favorable.
   - Similar effects at 1B and 10B do not establish benefit at intermediate doses or a dose-response advantage.
   - Not a diagnosed functional-constipation population; industry funded with disclosed relationships.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 53. `bb12_preterm_inflammation_feeding_39271904`
@@ -1002,8 +898,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=feeding_intolerance; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - Surrogate-heavy inflammatory-marker panel; hospital neonatal population; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 54. `casei431_bb12_dracma_cma_tolerance_39310372`
@@ -1020,8 +914,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - LOW certainty (tolerance RR 2.47); the formula itself is the delivery vehicle and co-therapy, so this is not supplement evidence.
   - Medical condition (cow's milk allergy) managed under clinical supervision.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 55. `lgg_bb12_pediatric_ad_prevention_meta_33811784`
@@ -1037,8 +929,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - The LGG + Bb-12 node estimate (RR 0.50) is graded LOW quality by the reviewers.
   - Pooled trials overlap the ProPACT family context recorded this wave; not an independent confirmation of it.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 56. `lgg_bb12_preterm_administration_route_37020105`
@@ -1054,8 +944,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=microbiota_change_via_maternal_route; hierarchy=unresolved; kind=surrogate; direction=null
 - **Limitations:**
   - Route-comparison design without placebo; microbiota composition is a surrogate; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_LACTIS_BI07
@@ -1076,8 +964,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Methods give 2.40T CFU in Alpha and 2.34T in Omega; the abstract rounds to 2T. Not a daily-use dosing interval.
   - Surrogate lactose digestion benefit is not symptom relief. More nausea was reported in Omega; questionnaire and blinding limitations apply.
   - Industry supported; these two challenge experiments are not two independent chronic symptom-efficacy replications.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 58. `ncfm_bi07_bloating_21436726`
@@ -1095,8 +981,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - 200B total daily is the combination dose. The study states equal amounts in twice-daily 100B pills; this cannot allocate an unspecified product blend or establish either strain alone.
   - Small heterogeneous industry-supported pilot; primary global outcomes negative, bloating a secondary finding.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_LACTIS_BL04
@@ -1116,8 +1000,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Distinct NCFM plus Bi-07 arm was not significantly better than placebo
   - Too few gastrointestinal episodes for a useful analysis
   - Duration and prespecified endpoint hierarchy were not established in the inspected abstract; do not infer adult digestive applicability
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 60. `bl04_cardiovascular_risk_markers_healthy_33161737`
@@ -1133,8 +1015,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - No significant change in measured CVD parameters with Bl-04 (with or without bacteriophages); the same trial's DE111 arm is recorded separately.
   - Dose not stated in the abstract; largely healthy population.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 61. `bl04_fermented_milk_urti_haze_adults_34062085`
@@ -1154,8 +1034,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Food-matrix delivery (yogurt); CFU dose not stated; single-site industry study (Bright Dairy).
   - Population exposed to air pollution; generalization to supplements is not established.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 62. `bl04_rhinovirus_challenge_28343401`
@@ -1175,8 +1053,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Primary inflammatory marker is a surrogate; cold symptoms did not improve
   - Challenge model is not routine community infection prevention
   - Industry sponsored the trial; baseline CXCL8 differed between groups
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 63. `bl04_rhinovirus_challenge_phase2_34927036`
@@ -1193,8 +1069,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Illness 56% vs 50% (p=0.34); no effect of oral Bl-04 on rhinovirus-associated illness.
   - This larger phase II trial does not reproduce the earlier positive challenge result already recorded (PMID 28343401).
   - Funded by Danisco/IFF; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_LACTIS_HN019
@@ -1213,8 +1087,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - 7.0B at first visit and 4.69B at last visit describe measured potency of one once-daily 2-g sachet regimen, not randomized dose arms or an efficacy range.
   - Primary between-group outcome P=.37; null for this outcome does not establish lack of benefit in every context.
   - Industry funded with sponsor involvement in planning, analysis and interpretation.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 65. `hn019_constipation_40320938`
@@ -1230,8 +1102,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Primary abstract verified; exact CFU/formulation and full-method limitations not established in this pass.
   - A separate null eight-week constipation trial, not a companion analysis of the China trial; no universal ineffectiveness inference.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 66. `hn019_elderly_cellular_immunity_meta_28245559`
@@ -1248,8 +1118,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Four trials, short follow-up, single strain; surrogate immune assays, no clinical infection outcome.
   - Manufacturer co-authors (DuPont).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 67. `hn019_functional_constipation_dose_ranging_28d_29227175`
@@ -1269,8 +1137,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - No differences in primary or secondary outcomes; benefit only in a post hoc subgroup with <= 3 bowel movements/week.
   - The two daily doses (1 x 10^9 and 1 x 10^10 as printed) are not machine-readable in the retrieved abstract; left unresolved.
   - Superseded for functional constipation by the larger null trials already recorded (PMIDs 39356506, 40320938).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 68. `hn019_hn001_functional_constipation_vs_fibers_37078654`
@@ -1288,8 +1154,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - No time-by-group effect for frequency, stool form or straining; stool-form gains were within-arm and shared with fiber arms.
   - Probiotic arm also contained oligosaccharides; per-strain dose not stated.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 69. `hn019_intestinal_transit_meta_27275105`
@@ -1305,8 +1169,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Pooled SMD 0.67 for HN019 from short-term trials; predates the two large null functional-constipation RCTs (2024, 2025).
   - Authors include the manufacturer (Ouwehand) and an industry-funded consultancy.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 70. `m16v_hn019_hn001_pediatric_urti_fever_duration_40085083`
@@ -1323,8 +1185,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Median fever duration 3 vs 5 days (adjusted RR 0.64); 0.5 mL daily of a three-strain mixture, CFU not stated.
   - Combination evidence; nothing here attributes the effect to any single strain.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_LGG
@@ -1343,8 +1203,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Unblinded three-arm trial; after adjustment for baseline covariates the LGG vs normal-diet IBS-SSS reduction was not significant (32 points; p=0.20) although the unadjusted comparison was.
   - Dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 72. `lgg_covid19_post_exposure_prophylaxis_38103462`
@@ -1362,8 +1220,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Symptom incidence 26.4% vs 42.9% (p=0.02); overall COVID-19 diagnosis incidence 8.8% vs 15.4% was not significant (p=0.17).
   - Described by the authors as an initial study; daily CFU dose not given in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 73. `lgg_gi_respiratory_outcomes_meta_40702885`
@@ -1386,8 +1242,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Moderate-to-high heterogeneity; certainty moderate for diarrhea and mostly low elsewhere; adult evidence limited.
   - Industry co-authorship (SIRIO). Pooled trials overlap the pediatric AAD guideline and pediatric pain contexts already recorded; not an independent confirmation of them.
   - No single studied CFU dose can be read from a meta-analysis.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 74. `lgg_icu_ventilator_pneumonia_prospect_34546300`
@@ -1408,8 +1262,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - 1 x 10^10 CFU twice daily (2 x 10^10/day) for a median of 9 days in ventilated ICU patients; none of 20 secondary outcomes differed.
   - Harm signal: L. rhamnosus isolated in a sterile site or as the predominant organism in 1.1% vs 0.1% (OR 14.02). Population-specific; not evidence about healthy consumers.
   - Cost-effectiveness companion analysis (PMID 36289153) found probiotics dominated by usual care.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 75. `lgg_pediatric_aad_guideline_26756877`
@@ -1425,8 +1277,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Moderate-quality evidence and strong pediatric prevention recommendation; not treatment or adult general-use support.
   - Inspected abstract does not establish an exact dose, form or duration; guideline aggregates trials and is not another independent RCT.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 76. `lgg_pediatric_functional_abdominal_pain_meta_41883407`
@@ -1445,8 +1295,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Class-level pooled effects; the LGG-specific finding is an indirect SUCRA ranking, not a pooled LGG estimate.
   - Certainty rated low to moderate; when success was defined by author thresholds response rates did not differ from placebo (PMID 42477222).
   - Overlaps the pediatric pain RCT already recorded (PMID 17229242); two meta-analyses of one evidence base count once.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 77. `lgg_pediatric_pain_17229242`
@@ -1464,8 +1312,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Methods and flow diagram describe 3B CFU twice daily; Discussion says 3B daily. Do not select an automated dose until this conflict is resolved.
   - Overall primary outcome P=.08 in Table 2 conflicts with the reported relative-benefit interval excluding one. Authors report benefit, especially the small IBS subgroup; retain the inconsistency and wide intervals.
   - No clear FD/FAP subgroup benefit; university funded, product supplied by manufacturer.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 78. `lgg_preterm_nec_strain_specific_meta_39060543`
@@ -1484,8 +1330,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Hospital neonatal population; not a consumer supplement indication.
   - Observational studies showed no NEC effect; RCT pooled RR 0.50 (95% CI 0.26-0.93).
   - Doses vary across trials and are not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 79. `lgg_seasonal_allergic_rhinitis_chewable_40891819`
@@ -1503,8 +1347,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Per-protocol analysis; symptom control reported within the probiotic group after 2 weeks rather than as a between-group primary endpoint.
   - Local (upper-airway) delivery via chewable; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_LONGUM_BB536
@@ -1522,8 +1364,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=tryptophan_and_indole_metabolites; hierarchy=secondary; kind=surrogate; direction=positive
 - **Limitations:**
   - Surrogate microbiota and metabolite endpoints; no clinical outcome; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 81. `bb536_guar_gum_auto_hsct_pilot_36792187`
@@ -1540,8 +1380,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Pilot with 12 patients; medians reported without between-group tests (TPN 15 vs 17.5 days).
   - Synbiotic with guar gum; hospital population.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 82. `bb536_male_athletes_high_protein_gi_symptoms_42046285`
@@ -1559,8 +1397,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - No between-group differences in the full cohort; subgroup and within-group findings are exploratory.
   - 46 billion CFU/day measured at the start of the intervention.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 83. `bb536_plasmacytoid_dendritic_cell_activation_38201872`
@@ -1576,8 +1412,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Surrogate immune marker only; daily CFU not machine-readable in the retrieved abstract.
   - Manufacturer-conducted (Morinaga).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 84. `m63_m16v_bb536_short_term_travel_42533554`
@@ -1596,8 +1430,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Primary outcomes are microbiota composition; symptom findings are secondary and short (5 days).
   - Daily CFU exponent not machine-readable in the retrieved abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_PARACASEI_LPC37
@@ -1617,8 +1449,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - One capsule daily for ten weeks; primary assessment at eight weeks. Initial 15.6B and final 13.5B CFU/capsule are site-averaged viability measurements, not dose arms or an efficacy range.
   - Primary state-anxiety comparison P=.446. The first null hierarchical secondary test halted formal testing; later sleep and alertness signals are exploratory, not confirmed benefits.
   - Industry-funded; the expected examination-related anxiety increase did not occur. No broad mood, immune or digestive benefit established.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 86. `lpc37_sisu_stress_response_33385020`
@@ -1636,8 +1466,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - One capsule daily; initial 17.5B and final 16.8B CFU are viability measurements, not separate randomized doses. The stated target was 10B CFU/capsule; no efficacy interval is inferred.
   - Primary result null in ITT and PP; perceived-stress signal is secondary. Chronic-stress subgroups had opposite heart-rate responses, not uniform benefit.
   - Industry involvement; no baseline stress-test comparison. Not digestive or generic immune-efficacy evidence.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_PLANTARUM_299V
@@ -1658,8 +1486,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=quality_of_life; hierarchy=unresolved; kind=patient_important; direction=null
 - **Limitations:**
   - Small (n=35); overall nutritional status and between-group quality of life unchanged.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 88. `lp299v_colon_resection_22434095`
@@ -1676,8 +1502,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=postoperative_complications; hierarchy=unresolved; kind=patient_important; direction=null
 - **Limitations:**
   - All endpoints null; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 89. `lp299v_exam_stress_cortisol_28101105`
@@ -1693,8 +1517,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=salivary_iga; hierarchy=unresolved; kind=surrogate; direction=null
 - **Limitations:**
   - Salivary cortisol is a stress surrogate; no clinical anxiety or mood endpoint; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 90. `lp299v_female_athletes_iron_32365981`
@@ -1713,8 +1535,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Ferritin (p=0.056) and reticulocyte hemoglobin (p=0.083) missed significance; performance inconclusive; industry involvement (Probi/Nature's Bounty).
   - Variable 4-12 week duration; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 91. `lp299v_ibs_meta_37541528`
@@ -1729,8 +1549,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=ibs_global_symptom_improvement; hierarchy=unresolved; kind=patient_important; direction=positive
 - **Limitations:**
   - The 299v-specific conclusion is graded LOW certainty by the reviewers; no 299v RCT is separately recorded this wave, so this meta is the strain's IBS record.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 92. `lp299v_iron_absorption_meta_31816981`
@@ -1746,8 +1564,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=iron_status_markers; hierarchy=unresolved; kind=surrogate; direction=null
 - **Limitations:**
   - Absorption (SMD 0.55) is an acute surrogate; the longer iron-status studies were mostly unchanged.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 93. `lp299v_mdd_ssri_cognition_30388595`
@@ -1767,8 +1583,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Cognition-scoped record: the abstract does not report a between-group depression-severity improvement.
   - The metabolomics companion (PMID 39271063) is the same cohort; one trial family.
   - Dose not stated in the retrieved abstracts.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 94. `lp299v_smokers_cardiovascular_markers_12450890`
@@ -1785,8 +1599,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=fibrinogen; hierarchy=unresolved; kind=surrogate; direction=positive
 - **Limitations:**
   - Small 2002 trial in a food matrix (400 mL x 5 x 10^7 CFU/mL = 2 x 10^10/day); risk-marker surrogates only.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_PLANTARUM_LP01
@@ -1806,8 +1618,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - No endpoint reached significance versus placebo (high placebo response); synbiotic formulation.
   - This null is currently LP01's only registry-recordable RCT: the rest of its trial base uses non-registry partner strains (see wave2_read_log.md).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_RHAMNOSUS_GR1
@@ -1825,8 +1635,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=strain_detection_vaginal_fecal; hierarchy=unresolved; kind=surrogate; direction=null
 - **Limitations:**
   - Cure rates did not differ at 30 or 90 days and the administered species were rarely detected in vaginal or fecal microbiota.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 97. `gr1_rc14_gbs_colonization_27590374`
@@ -1841,8 +1649,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=gbs_conversion_to_negative; hierarchy=unresolved; kind=surrogate; direction=positive
 - **Limitations:**
   - Conversion to GBS-negative on admission (42.9% vs 18.0%, p=0.007) is a colonization surrogate, not an infection outcome; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 98. `gr1_rc14_pregnancy_bv_30932317`
@@ -1859,8 +1665,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=microbiota_composition; hierarchy=unresolved; kind=surrogate; direction=null
 - **Limitations:**
   - Null throughout; 2.5 x 10^9 CFU of each strain (5 x 10^9/day combination total, never an individual dose).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 99. `gr1_rc14_pregnancy_colonization_32325794`
@@ -1875,8 +1679,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=vaginal_colonization_administered_strains; hierarchy=unresolved; kind=surrogate; direction=null
 - **Limitations:**
   - Open crossover; colonization of the administered strains was rare.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 100. `gr1_rc14_sci_mdr_colonization_31953482`
@@ -1893,8 +1695,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Secondary colonization analysis (OR 0.10 for new colonization, no clearing effect); the trial's UTI primary paper was not read this wave.
   - Population-specific (spinal cord injury); colonization is a microbiological surrogate.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_RHAMNOSUS_HN001
@@ -1912,8 +1712,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=body_fat_percentage_24_months; hierarchy=secondary; kind=surrogate; direction=null
 - **Limitations:**
   - Growth was a secondary outcome of the trial; same cohort as the allergy context, so not an independent trial.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 102. `hn001_b420_pregnancy_fishoil_child_allergy_37622257`
@@ -1933,8 +1731,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Maternal supplementation, infant outcomes; 10^10 CFU each of HN001 and B. lactis 420 (2 x 10^10/day combined).
   - Only recurrent wheezing at 24 months differed (OR 0.39); allergy and atopy endpoints null.
   - Serum fatty-acid secondary analysis (PMID 37642166) is the same cohort.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 103. `hn001_elderly_brain_function_encapsulation_40976401`
@@ -1955,8 +1751,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - The connectivity difference is between the two probiotic formulations, not versus placebo; dose not stated.
   - Most cognitive and mood domains unaffected.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 104. `hn001_maternal_perinatal_mental_health_sr_41783815`
@@ -1973,8 +1767,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - No pooling; the HN001 finding (EPDS MD -1.2; STAI-6 MD -1.0) rests on a single RCT with moderate risk of bias.
   - Small effect sizes; evidence judged limited by the reviewers.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 105. `hn001_perceived_stress_happiness_39275252`
@@ -1992,8 +1784,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Primary comparisons not statistically significant; only post hoc interaction and sex subgroups reached significance.
   - Manufacturer-conducted (Fonterra); dose not stated.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 106. `hn019_hn001_fos_immune_parameters_healthy_adults_37614109`
@@ -2011,8 +1801,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=stool_secretory_iga; hierarchy=secondary; kind=surrogate; direction=positive
 - **Limitations:**
   - Surrogate immune markers in healthy adults; CRP change p=0.088; strain exponents not machine-readable.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_SACCHAROMYCES
@@ -2031,8 +1819,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Severity unchanged; only the day-4 patient-rated improvement differed (70% vs 26%).
   - Small sample; 600 mg (about 1 x 10^9 per 100 mL as stated), mass dose.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 108. `sb_cncm_i745_h_pylori_triple_therapy_gistar_37942999`
@@ -2050,8 +1836,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Higher ITT eradication only in the 10-day arm (70.8% vs 54.6%); per-protocol and 14-day comparisons null; adverse-event reduction lost significance after multiplicity adjustment.
   - 500 mg CNCM I-745 twice daily (mass dose).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 109. `sb_cncm_i745_ibs_d_sibo_open_pilot_36630947`
@@ -2069,8 +1853,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Open-label pilot; numerical differences reported without between-group statistics for the main endpoints.
   - Dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 110. `sb_cncm_i745_mdr_colonization_antibiotics_33763399`
@@ -2086,8 +1868,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - No significant colonization changes in the S. boulardii group while the four-strain mixture arm changed; same trial as the NCFM combination context.
   - Dose not stated.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 111. `sb_cncm_i745_pediatric_acute_gastroenteritis_china_meta_40535538`
@@ -2104,8 +1884,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - All included trials were found only in Chinese databases; consultancy authorship (McFarland Consulting).
   - Duration reduction SMD -1.63 days; doses vary.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 112. `sb_cncm_i745_ppi_sibo_with_rifaximin_40884341`
@@ -2123,8 +1901,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Open comparative design; SIBO persistence is a breath-test surrogate (41.5% vs 21.8%).
   - 500 mg CNCM I-745 twice daily (mass dose).
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 113. `sb_cncm_i745_vs_b_clausii_pediatric_gastroenteritis_36086703`
@@ -2140,8 +1916,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Active-comparator design: 64.6 vs 78.0 h diarrhea duration versus B. clausii, not versus placebo.
   - Dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 114. `sb_h_pylori_eradication_adjunct_meta_family`
@@ -2160,8 +1934,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Four meta-analyses of a largely shared, mostly Chinese RCT base; treated as one evidence family.
   - Modest effect (RR 1.08-1.12 in S. boulardii-specific analyses); dose is mass (500-1000 mg/day), not CFU, so no CFU applicability can be derived.
   - Species-level; strains vary or are unreported across trials.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 115. `sb_travelers_diarrhea_prevention_meta_38458507`
@@ -2176,8 +1948,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=travelers_diarrhea_incidence; hierarchy=primary; kind=patient_important; direction=positive
 - **Limitations:**
   - Strain-nonspecific pooled statement that S. boulardii and S. cerevisiae were effective; few trials, mixed genera, no S. boulardii-specific effect size in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 116. `sboulardii_child_aad_prevention_26756877`
@@ -2194,8 +1964,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Guideline recommendation, not a new independent trial
   - Moderate-quality evidence for prevention in children does not establish adult treatment or general digestive benefit
   - The inspected abstract does not authenticate CNCM I-745 or establish an exact dose
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 117. `sboulardii_elderly_aad_prevention_22472744`
@@ -2213,8 +1981,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - Twice-daily capsules started within 48 hours of antibiotics and continued seven days after withdrawal; no preventive superiority
   - Exact CFU amount and strain code were not verified in the accessible abstract
   - An elderly inpatient null result does not negate pediatric guideline evidence
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 118. `sboulardii_nosocomial_diarrhea_treatment_41675330`
@@ -2233,8 +1999,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
   - No placebo arm and limited blinding
   - No advantage over standard care in reported stool outcomes
   - Exact dose and strain code remain unresolved from the inspected source
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ## STRAIN_SUBTILIS_DE111
@@ -2255,8 +2019,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Cholesterol reductions are relative to baseline (-8 mg/dL total; -11 mg/dL non-HDL); endothelial and LDL changes were trends (p=0.05-0.06).
   - Largely healthy population; dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 120. `de111_daycare_children_microbiome_33161736`
@@ -2272,8 +2034,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=alpha_diversity; hierarchy=secondary; kind=surrogate; direction=positive
 - **Limitations:**
   - Microbiome surrogate only; no infection or symptom outcome; dose not stated; manufacturer-authored.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 121. `de111_female_athletes_offseason_training_33105368`
@@ -2290,8 +2050,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - No performance effect; body-fat interaction in a 23-athlete sample.
   - 5 billion CFU/day with post-workout nutrition.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 122. `de111_healthy_adults_immune_gi_pilot_33671071`
@@ -2310,8 +2068,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Authors state the study may have been underpowered; only an ex vivo LPS-stimulation signal differed.
   - Dose not stated in the abstract.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 123. `de111_ileostomy_small_intestinal_germination_34408741`
@@ -2328,8 +2084,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - Germination and survival in ileal effluent is a physiological surrogate; it is not evidence of a clinical benefit.
   - Both publications come from the same 11-participant study (one trial family); dose not stated.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 124. `de111_male_baseball_immune_hormonal_30049931`
@@ -2347,8 +2101,6 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - name=salivary_iga_and_igm; hierarchy=secondary; kind=surrogate; direction=null
 - **Limitations:**
   - Only TNF-alpha differed; a single cytokine in 25 athletes is a surrogate signal.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
 ### 125. `de111_whey_protein_amino_acid_response_33462163`
@@ -2364,7 +2116,5 @@ The reviewer should return the context ID, decision, reviewer name/credentials, 
 - **Limitations:**
   - No effect on leucine, BCAA, EAA or total amino acid appearance.
   - PubMed's abstract text prints a malformed 1 x 10-9 CFU exponent; full text is required before recording a tested daily dose.
-- **Reviewer / credentials:**
-- **Decision date:**
 - **Rationale / notes:**
 
