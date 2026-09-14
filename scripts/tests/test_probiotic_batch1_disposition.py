@@ -35,9 +35,10 @@ def test_batch1_disposition_validates_without_mutating_registry() -> None:
 
     assert registry == original
     assert len(disposition["patches"]) == 61
+    live = module._contexts(registry)
     assert all(
-        context.get("review_status") == "source_verified_pending_clinical_review"
-        for context in module._contexts(prospective).values()
+        context.get("review_status") == live[cid].get("review_status")
+        for cid, context in module._contexts(prospective).items()
         if context.get("context_schema_version") == "1.1.0"
     )
 

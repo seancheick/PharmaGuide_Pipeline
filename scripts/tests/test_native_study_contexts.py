@@ -3,6 +3,7 @@ from copy import deepcopy
 
 import pytest
 
+import probiotic_measurements as pm
 import studied_formulas
 from test_probiotic_applicability_rubric import strain_product
 
@@ -219,7 +220,13 @@ def test_priority_native_contexts_are_curated_without_new_approval():
         # 2026-09-13 Wave 1 added contexts on top; the 2026-09-04 sources must
         # still be present, valid and unapproved (nothing below borrows approval).
         assert pmids <= {p for c in contexts for p in c["source_pmids"]}
-        assert all(c["review_status"] == "source_verified_pending_clinical_review" for c in contexts)
+        # 2026-09-14: the owner approved the reviewed contexts; every approval
+        # must carry attributable review provenance, nothing borrows approval.
+        for c in contexts:
+            assert c["review_status"] in {"source_verified_pending_clinical_review",
+                                          "clinician_approved", "rejected_source"}
+            if c["review_status"] == "clinician_approved":
+                assert pm.clinical_review_provenance_valid(c)
         for c in contexts:
             assert studied_formulas.valid_native_study_context(c, cid)
             assert all(p.isdigit() for p in c["source_pmids"])
@@ -255,7 +262,8 @@ def test_lpc37_primary_null_results_and_viability_are_not_positive_dose_arms():
         assert context_row["dose"]["basis"] == "measured_viability"
         assert context_row["dose"]["values"] == values
         assert context_row["dose"]["duration_days"] == days
-        assert context_row["review_status"] == "source_verified_pending_clinical_review"
+        assert context_row["review_status"] == "clinician_approved"  # 2026-09-14 owner approval
+        assert pm.clinical_review_provenance_valid(context_row)
         assert [o["direction"] for o in context_row["outcomes"]
                 if o["hierarchy"] == "primary"] == ["null"]
     evidence = entry["cfu_thresholds"]["evidence"]

@@ -7,7 +7,8 @@
     "applied_dataset_sha256": "bb52023ec82dc0217a363b72f7e22b077ed7fb7b459af0d685aea1c408641441",
     "created_at": "2026-09-14T16:35:03Z",
     "status": "proposed_pending_clinical_signoff",
-    "notes": "Batch-1 reconciled disposition and source-bound structural patch. This file is not a clinician approval and must not change review_status by itself."
+    "notes": "Batch-1 reconciled disposition and source-bound structural patch. This file is not a clinician approval and must not change review_status by itself.",
+    "superseded_by_response": "docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json"
   },
   "decisions": {
     "dds1_ibs_network_meta_37686889": "approve_with_correction",

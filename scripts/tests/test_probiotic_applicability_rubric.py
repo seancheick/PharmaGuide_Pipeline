@@ -54,7 +54,22 @@ def test_many_undosed_strains_cannot_accumulate_full_evidence():
     assert score_evidence(p)["score"] < 20
 
 
-def test_industry_tiers_cannot_be_called_a_verified_clinical_dose():
+def _pending_registry(monkeypatch, *ids):
+    """Reset the named identities' contexts to pending so the test isolates the
+    rubric from the live 2026-09-14 approvals (an approved context with no
+    matching tested arm is 'not_applicable', a different status)."""
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    for entry in registry.values():  # combination contexts owned elsewhere also carry the strain
+        for context in entry.get("study_contexts", []):
+            if set(ids) & set(context.get("components", [])):
+                context["review_status"] = "source_verified_pending_clinical_review"
+                context.pop("clinical_review", None)
+    monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
+    return registry
+
+
+def test_industry_tiers_cannot_be_called_a_verified_clinical_dose(monkeypatch):
+    _pending_registry(monkeypatch, "STRAIN_LGG")
     p = strain_product(dose=10_000_000_000)
     p["probiotic_data"]["clinical_strains"][0]["dose_basis"] = "clinical"  # stale/caller stamp
     assessment = studied_formulas.assess_probiotic_evidence(p)
@@ -75,10 +90,9 @@ def test_native_dose_copy_distinguishes_potency_from_clinical_efficacy():
 def test_species_research_is_not_presented_as_exact_strain_evidence(monkeypatch):
     from scoring_v4.quality_score import _pillar_evidence
 
-    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    registry = _pending_registry(monkeypatch, "STRAIN_SACCHAROMYCES")
     registry["STRAIN_SACCHAROMYCES"]["cfu_thresholds"]["evidence"]["clinical_validation"] = {
         "q1_strain_explicit": "NO", "q3_human_clinical": "YES"}
-    monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
 
     p = strain_product(dose=5e9, clinical_id="STRAIN_SACCHAROMYCES",
                        name="Saccharomyces boulardii")

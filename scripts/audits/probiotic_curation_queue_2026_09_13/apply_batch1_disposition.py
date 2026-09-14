@@ -149,10 +149,23 @@ def validate(registry: dict[str, Any], disposition: dict[str, Any]) -> tuple[dic
     actual_sha = _sha256(REGISTRY)
     applied_sha = metadata.get("applied_dataset_sha256")
     already_applied = actual_sha == applied_sha or _already_applied(registry, disposition)
+    superseded = False
     if expected_sha != actual_sha and not already_applied:
-        raise ValueError(
-            f"dataset snapshot mismatch: expected {expected_sha}, current {actual_sha}"
-        )
+        # A later, explicitly named review batch may have moved the registry
+        # past this snapshot.  Accept only an unbroken chain: batch-1 was
+        # applied (its applied sha is the later batch's bound sha) and the
+        # later batch produced the current file.
+        successor = metadata.get("superseded_by_response")
+        if isinstance(successor, str) and (ROOT / successor).is_file():
+            later = json.loads((ROOT / successor).read_text(encoding="utf-8")).get("_metadata", {})
+            superseded = (
+                later.get("dataset_sha256") == applied_sha
+                and later.get("applied_dataset_sha256") == actual_sha
+            )
+        if not superseded:
+            raise ValueError(
+                f"dataset snapshot mismatch: expected {expected_sha}, current {actual_sha}"
+            )
     snapshot_id = metadata.get("review_snapshot_id")
     if not isinstance(snapshot_id, str) or not snapshot_id.strip():
         raise ValueError("review_snapshot_id is required")
@@ -210,6 +223,8 @@ def validate(registry: dict[str, Any], disposition: dict[str, Any]) -> tuple[dic
         context = prospective_contexts[record_id]
         if patch["source_pmid"] not in {str(pmid) for pmid in context.get("source_pmids", [])}:
             raise ValueError(f"source PMID is not attached to {record_id}")
+        if superseded:
+            continue  # historical batch; the successor response owns these fields now
         current = _read_path(context, field_path)
         old_value = patch.get("old_value")
         if current is MISSING:
@@ -254,7 +269,10 @@ def validate(registry: dict[str, Any], disposition: dict[str, Any]) -> tuple[dic
         # pipeline would silently drop it as invalid_context after the apply.
         if not valid_native_study_context(context, owners[record_id]):
             raise ValueError(f"patched context fails runtime validation for {record_id}")
-        if context.get("review_status") != "source_verified_pending_clinical_review":
+        # Status-preserving: the patch never moves a review status. Later owner
+        # decisions (the 2026-09-14 response) may have moved it since; compare
+        # against the live registry, not a fixed 'pending' literal.
+        if context.get("review_status") != contexts[record_id].get("review_status"):
             raise ValueError(f"patch must not change review status for {record_id}")
     return contexts, prospective
 
