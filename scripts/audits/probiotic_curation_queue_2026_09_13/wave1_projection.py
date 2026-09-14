@@ -46,7 +46,14 @@ approved_ids = []
 for cid in WAVE_1:
     for c in whatif[cid].get("study_contexts", []):
         if c.get("authored_on") == "2026-09-13":
-            c["review_status"] = "clinician_approved"; approved_ids.append(c["context_id"])
+            c["review_status"] = "clinician_approved"
+            # Ephemeral what-if provenance; this copied registry is never persisted.
+            c["clinical_review"] = {
+                "reviewer": "hypothetical_wave1_projection",
+                "reviewed_at": "2026-09-13T00:00:00Z",
+                "scope": "identity_dose_outcome_applicability",
+            }
+            approved_ids.append(c["context_id"])
 
 # ---- A. evidence today vs what-if approval --------------------------------
 rows = []

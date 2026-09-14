@@ -127,6 +127,7 @@ def test_verified_exact_strain_emits_research_presentation_contract() -> None:
         "research_match_status": "exact_strain",
         "evidence_scope": "strain_specific",
         "review_status": "clinician_verified",
+        "identity_confidence": "clinical_identity_reviewed",
         "human_evidence": True,
         "indication_primary": "digestive support",
         "source_urls": [

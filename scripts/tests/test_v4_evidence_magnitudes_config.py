@@ -40,6 +40,25 @@ EXPECTED = {
         "native_strain_evidence_points": {"strong": 8.0, "high": 8.0, "moderate": 6.0,
                                           "medium": 6.0, "weak": 3.0, "low": 3.0, "limited": 3.0},
         "native_strain_evidence_weights": [1.0, 0.7, 0.5, 0.3],
+        "native_context_review_policy": "clinician_only",
+        "dose_applicability_policy": {
+            "credit": {
+                "EXACT_TESTED_DOSE": 1.0,
+                "WITHIN_TESTED_RANGE": 0.0,
+                "NEAR_TESTED_RANGE": 0.0,
+                "OUTSIDE_TESTED_RANGE": 0.0,
+                "DOSE_UNKNOWN": 0.0,
+            }
+        },
+        "_context_policy_doc": (
+            "1.1.6 (2026-09-13): native study contexts remain research records until an "
+            "attributable clinician approval names the reviewer, review time, and "
+            "identity-dose-outcome applicability scope. Source-verified pending contexts "
+            "never score. Discrete trial arms are points, not continuous dose windows: "
+            "only an exact tested daily arm can earn applicability credit. Start/end viable-count "
+            "measurements describe stability and do not establish an efficacy dose. Combination "
+            "and species-level contexts never earn individual-strain applicability."
+        ),
     },
     "multi_prenatal": {"cap_evidence": 20.0, "generic_cap_evidence": 20.0},
     "omega": {"cap_evidence": 20.0},

@@ -58,6 +58,8 @@ def test_discrete_arms_do_not_create_an_interpolated_window(registry, dose, expe
 @pytest.mark.parametrize("basis", ["measured_viability", "single_challenge", "unresolved"])
 def test_other_measurements_never_become_daily_dose_thresholds(registry, basis):
     registry["STRAIN_LGG"]["study_contexts"][0]["dose"]["basis"] = basis
+    if basis == "unresolved":
+        registry["STRAIN_LGG"]["study_contexts"][0]["dose"]["values"] = []
     assert assessment(strain_product(dose=1e9))["study_contexts"][0]["dose_comparison"] == "study_daily_dose_unresolved"
 
 

@@ -621,11 +621,13 @@ def _derive_clinical_support_level(strain_entry) -> Optional[str]:
     """
     if not isinstance(strain_entry, dict):
         return "weak"
+    from probiotic_measurements import effective_strain_evidence
     thresholds = strain_entry.get("cfu_thresholds") or {}
-    evidence = (thresholds.get("evidence") or {}) if isinstance(thresholds, dict) else {}
+    evidence = effective_strain_evidence(strain_entry) or {}
     if not isinstance(evidence, dict):
         return "weak"
-    if strain_entry.get("evidence_level") == "unreviewed" or evidence.get("evidence_strength") == "unreviewed":
+    if evidence.get("type") != "study_contexts_derived" and (
+            strain_entry.get("evidence_level") == "unreviewed" or evidence.get("evidence_strength") == "unreviewed"):
         return None
 
     explicit = evidence.get("clinical_support_level") or thresholds.get("clinical_support_level")
@@ -654,19 +656,22 @@ def _probiotic_research_presentation(
     treating membership in ``clinical_strains`` as proof that the exact strain,
     product, dose, and intended use were all clinically validated.
     """
+    from probiotic_measurements import effective_strain_evidence, identity_review_accepted, identity_confidence
     entry = strain_entry if isinstance(strain_entry, dict) else {}
     thresholds = entry.get("cfu_thresholds") or {}
     thresholds = thresholds if isinstance(thresholds, dict) else {}
-    evidence = thresholds.get("evidence") or {}
-    evidence = evidence if isinstance(evidence, dict) else {}
+    evidence = effective_strain_evidence(entry) or {}
     scope = clinical_strain_research_scope(entry)
     evidence_scope, human_evidence = scope["evidence_scope"], scope["human_evidence"]
 
-    review_status = (
-        "clinician_verified"
-        if thresholds.get("dr_pham_signoff") is True
-        else "pending_review"
-    )
+    # Keep a signed identity summary distinct from an attributable approval of
+    # identity/dose/outcome applicability for one or more study contexts.
+    if thresholds.get("dr_pham_signoff") is True:
+        review_status = "clinician_verified"
+    elif identity_review_accepted(entry):
+        review_status = "clinician_context_approved"
+    else:
+        review_status = "pending_review"
     # Review status gates every affirmative claim; scope only decides which
     # affirmative claim a reviewed strain earns. `formula_specific` used to be
     # tested first, so a formula-level match rendered "Research applies to the
@@ -675,7 +680,7 @@ def _probiotic_research_presentation(
     # the review backlog stays visible.
     if is_blocked:
         match_status = "rejected"
-    elif review_status != "clinician_verified":
+    elif review_status == "pending_review":
         match_status = "pending_review"
     elif evidence_scope == "scope_unresolved":
         match_status = "scope_unresolved"
@@ -711,6 +716,7 @@ def _probiotic_research_presentation(
         "research_match_status": match_status,
         "evidence_scope": evidence_scope,
         "review_status": review_status,
+        "identity_confidence": identity_confidence(entry),
         "human_evidence": human_evidence,
         "indication_primary": str(thresholds.get("indication_primary") or "").strip(),
         "source_urls": source_urls,

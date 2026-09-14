@@ -489,10 +489,11 @@ CONTEXTS = [
         limitations=["Microbiome surrogate only; no infection or symptom outcome; dose not stated; manufacturer-authored."]),
     ctx("de111_whey_protein_amino_acid_response_33462163", ["33462163"], owner=DE111, age="adult",
         population="22 recreationally active men and women", purpose="physiology",
-        condition="plasma_amino_acid_response_to_whey", basis="discrete_daily_arms", values=[1e9], duration=28,
+        condition="plasma_amino_acid_response_to_whey", duration=28,
         outcomes=[("plasma_amino_acid_auc_after_whey", "primary", SU, "null")],
         family="lipscomb_de111_whey_33462163", design="rct", n=22, blinding="double", tier="D",
-        limitations=["No effect on leucine, BCAA, EAA or total amino acid appearance."]),
+        limitations=["No effect on leucine, BCAA, EAA or total amino acid appearance.",
+                     "PubMed's abstract text prints a malformed 1 x 10-9 CFU exponent; full text is required before recording a tested daily dose."]),
     # --------------------------------------------------------- S. boulardii
     ctx("sb_h_pylori_eradication_adjunct_meta_family", ["40865583", "41247686", "40251486", "40012609"], owner=SB,
         scope="species_general", age="adult",

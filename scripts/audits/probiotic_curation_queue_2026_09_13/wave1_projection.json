@@ -17,10 +17,10 @@
   },
   "why_approved_contexts_do_not_apply": {
    "not_individual_strain_scope": 1849,
-   "study_daily_dose_unresolved": 1384,
-   "label_dose_unknown": 252,
-   "outside_tested_daily_doses": 53,
-   "no_positive_primary_patient_important_outcome": 9
+   "study_daily_dose_unresolved": 1415,
+   "label_dose_unknown": 228,
+   "outside_tested_daily_doses": 48,
+   "no_positive_primary_patient_important_outcome": 7
   },
   "per_identity": {
    "STRAIN_ACIDOPHILUS_NCFM": {

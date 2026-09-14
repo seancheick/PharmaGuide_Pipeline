@@ -100,7 +100,8 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     applicable_effects = [_effect_multiplier(m) for m in accepted
                          if m.get("id") == formula.get("evidence_id")
                          and formula["status"] == "assessed_studied_formula"]
-    applicable_effects += [r["effect_multiplier"] for r in native_evidence["rows"] if r["dose_applicable"]]
+    applicable_effects += [r["effect_multiplier"] * r["dose_applicability_credit"]
+                           for r in native_evidence["rows"] if r["dose_applicable"]]
     applicability_credit = CAP_DOSE_APPLICABILITY * max(applicable_effects, default=0.0)
     if not applicable_effects:
         strain_clinical = min(strain_clinical, max(NATIVE_STRAIN_EVIDENCE_POINTS.values()))
@@ -218,6 +219,7 @@ def _score_native_clinical_strain_evidence(
                 "support_level": support_token,
                 "base_points": base_points,
                 "dose_applicable": strain["dose_applicable"],
+                "dose_applicability_credit": float(strain.get("dose_applicability_credit") or 0.0),
                 "applicability_status": strain["status"],
                 "source_pmids": strain["scoring_source_pmids"],
                 "evidence_scope": strain["evidence_scope"],

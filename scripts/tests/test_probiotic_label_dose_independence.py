@@ -62,9 +62,9 @@ def test_citation_review_does_not_change_label_dose_or_formulation(monkeypatch, 
 def test_aggregate_blend_keeps_presence_credit_without_inventing_strain_allocations():
     dose = score_dose(aggregate_label())
     assert dose["components"]["per_strain_cfu_disclosure"] == 0
-    assert dose["components"]["cfu_adequacy"] == 8  # 11B: saturating potency band, no allocation
+    assert dose["components"]["cfu_adequacy"] == 4
     proxy = dose["metadata"]["aggregate_cfu_proxy"]
-    assert proxy["reason"] == "aggregate_cfu_potency_band"
+    assert proxy["reason"] == "aggregate_cfu_named_label_presence"
     assert "proxy_cfu_per_strain" not in proxy
     assert "proxy_tier" not in proxy
     assert dose["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"

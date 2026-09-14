@@ -6,7 +6,7 @@ Read-only. The corpus was not re-enriched or re-scored; contract snapshots are u
 
 - Contexts authored: 50 across 8 owning identities, citing 55 PubMed records read title/abstract on 2026-09-13.
 - Combination contexts: 13 (joined to every component through `components`; never individual applicability).
-- Contexts with a machine-readable studied daily dose: 10; the rest are `unresolved` because the retrieved abstract did not state it or lost the exponent.
+- Contexts with a machine-readable studied daily dose: 9; the rest are `unresolved` because the retrieved abstract did not state it or did not support a reliable exponent.
 - Publication families: 46 (`trial_family`), so papers from one cohort cannot count twice.
 - Primary-outcome directions: {'positive': 28, 'null': 22, 'mixed': 1, 'unresolved': 3}; outcome kinds: {'patient_important': 95, 'surrogate': 45}.
 - Designs: {'meta_analysis': 8, 'rct': 40, 'crossover_rct': 1, 'systematic_review': 1}; source tiers: {'B': 9, 'C': 10, 'D': 31}.
@@ -32,12 +32,12 @@ Read-only. The corpus was not re-enriched or re-scored; contract snapshots are u
 - Why approved contexts still would not apply (context-product pairs):
 
   - `not_individual_strain_scope`: 1849
-  - `study_daily_dose_unresolved`: 1384
-  - `label_dose_unknown`: 252
-  - `outside_tested_daily_doses`: 53
-  - `no_positive_primary_patient_important_outcome`: 9
+  - `study_daily_dose_unresolved`: 1415
+  - `label_dose_unknown`: 228
+  - `outside_tested_daily_doses`: 48
+  - `no_positive_primary_patient_important_outcome`: 7
 
-Reading: the bridge is correct and strict. It needs (1) studied daily doses resolved from full texts (abstracts lost the exponents for most DuPont/IFF and Morinaga trials), and (2) a clinician-approved policy for how close a label dose must be to a tested arm (today: exact equality with one arm). Combination and species-level contexts are recorded as research but can never become single-strain applicability by design.
+Reading: the bridge is correct and strict. Before any context can score it needs (1) studied daily doses resolved from full texts where abstracts omit or corrupt the exponent, and (2) an attributable clinician approval of identity, dose, outcome, and applicability. The frozen policy requires exact equality with one tested daily arm; values between or near arms earn no applicability credit. Combination and species-level contexts are recorded as research but can never become single-strain applicability by design.
 
 ## Formulation effect of the new identities (approximation)
 
@@ -72,6 +72,7 @@ Reading: the bridge is correct and strict. It needs (1) studied daily doses reso
 ## Schema limitations met
 
 - Abstract text from the PubMed API strips italics, which removes genus/species tokens and superscript exponents; doses such as `1 x 10^10` arrive as `1 x 10`. Full-text reads are required before any dose can be approved.
+- PMID 33462163 is explicitly unresolved: its PubMed abstract prints `1 x 10-9 CFU`, so the apparent exponent is not silently repaired to 1 billion CFU.
 - Mass-dosed organisms (S. boulardii, 250-1000 mg/day) cannot be expressed in the CFU-only dose block; recorded as `unresolved` with the mass in limitations.
 - Studies of a strain plus a non-registry strain (for example BB536 + MCC1274, HN001 + LE16) cannot be authored as combinations; B. lactis 420 was added as an identity for that reason. MCC1274, LE16 and B. lactis DN-173 010 remain candidates.
 - Meta-analyses have no single dose or sample size; `hierarchy: unresolved` is used for strain-level rankings inside class-level pooled analyses.

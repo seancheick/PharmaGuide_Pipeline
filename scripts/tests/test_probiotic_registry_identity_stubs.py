@@ -50,9 +50,9 @@ def test_stub_identity_is_honest_about_what_it_knows(entry):
     assert entry["cfu_thresholds"]["dr_pham_signoff"] is False
     assert entry["cfu_thresholds"]["evidence"] is None
     assert entry["cfu_thresholds"]["tiers_cfu_per_day"] is None
-    assert entry["study_contexts"] == []
     assert entry["key_benefits"] == []
     presented = _probiotic_research_presentation(entry)
+    assert presented["review_status"] == "pending_review"
     assert presented["research_match_status"] == "pending_review"
     assert presented["human_evidence"] is False
 

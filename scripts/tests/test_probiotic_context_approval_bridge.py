@@ -28,6 +28,11 @@ def approved(**changes):
     row = context(review_status="clinician_approved", outcomes=[
         {"name": "stool_frequency", "hierarchy": "primary",
          "kind": "patient_important", "direction": "positive"}])
+    row["clinical_review"] = {
+        "reviewer": "Dr Test Reviewer",
+        "reviewed_at": "2026-09-13T12:00:00Z",
+        "scope": "identity_dose_outcome_applicability",
+    }
     row.update(changes)
     return row
 
@@ -43,7 +48,9 @@ def test_approved_context_with_matching_dose_and_positive_primary_outcome_is_app
     assert row["dose_applicable"] is True
     ctx = row["study_contexts"][0]
     assert ctx["clinical_applicability"] == "established"
-    assert ctx["applicability_reason"] == "approved_context_dose_and_outcome_match"
+    assert ctx["applicability_reason"] == "clinician_approved_context_dose_and_outcome_match"
+    assert ctx["dose_applicability_class"] == "EXACT_TESTED_DOSE"
+    assert ctx["dose_applicability_credit"] == 1.0
     evidence = score_evidence(strain_product(dose=1e9))
     assert evidence["components"]["dose_applicability"] > 0
 
@@ -84,20 +91,53 @@ def test_combination_and_species_contexts_never_become_individual_applicability(
 
 
 def test_context_approval_cannot_bypass_identity_review(registry):
+    # A label-only designation (no literature hit) is not a verified identity, so
+    # even an approved context cannot make it score under either policy.
     registry["STRAIN_LGG"]["study_contexts"] = [approved()]
     registry["STRAIN_LGG"]["cfu_thresholds"]["dr_pham_signoff"] = False
+    registry["STRAIN_LGG"]["identity_verification"] = {"status": "label_only_no_literature_hit"}
     row = assessment(strain_product(dose=1e9))
     assert row["status"] == "strain_identity_or_review_unresolved"
     assert row["dose_applicable"] is False
 
 
-@pytest.mark.parametrize("status", ["source_verified_pending_clinical_review", "adjudication_required"])
-def test_unapproved_contexts_stay_pending(registry, status):
-    registry["STRAIN_LGG"]["study_contexts"] = [approved(review_status=status)]
+def test_held_contexts_never_score(registry):
+    registry["STRAIN_LGG"]["study_contexts"] = [approved(review_status="adjudication_required")]
     row = assessment(strain_product(dose=1e9))
     assert row["status"] == "strain_context_review_pending"
     assert row["dose_applicable"] is False
     assert row["study_contexts"][0]["clinical_applicability"] == "not_established"
+
+
+def test_source_verified_context_never_scores(registry):
+    registry["STRAIN_LGG"]["study_contexts"] = [approved(review_status="source_verified_pending_clinical_review")]
+    row = assessment(strain_product(dose=1e9))
+    assert row["status"] == "strain_context_review_pending"
+    assert row["study_contexts"][0]["applicability_reason"] == "context_not_clinician_approved"
+
+
+def test_unstudied_doses_between_or_near_arms_earn_no_credit(registry):
+    registry["STRAIN_LGG"]["study_contexts"] = [approved()]  # arms 1e9 and 1e10
+    within = assessment(strain_product(dose=5e9))
+    assert within["study_contexts"][0]["dose_applicability_class"] == "OUTSIDE_TESTED_RANGE"
+    assert within["dose_applicability_credit"] == 0.0
+    near = assessment(strain_product(dose=1.5e10))
+    assert near["study_contexts"][0]["dose_applicability_class"] == "OUTSIDE_TESTED_RANGE"
+    assert near["status"] == "strain_context_not_applicable"
+    assert near["dose_applicability_credit"] == 0.0
+    assert score_evidence(strain_product(dose=5e9))["components"]["dose_applicability"] == 0
+
+
+def test_status_string_without_approval_provenance_is_invalid_and_cannot_score(registry):
+    context_without_provenance = approved()
+    context_without_provenance.pop("clinical_review")
+    registry["STRAIN_LGG"]["study_contexts"] = [context_without_provenance]
+    assert studied_formulas.valid_native_study_context(
+        context_without_provenance, "STRAIN_LGG"
+    ) is False
+    row = assessment(strain_product(dose=1e9))
+    assert row["dose_applicable"] is False
+    assert row["study_contexts"][0]["status"] == "invalid_context"
 
 
 def test_rejected_source_is_excluded_from_research_and_never_scores(registry):
@@ -145,8 +185,11 @@ def test_optional_quality_fields_are_validated_when_present(field, value, valid)
 
 
 def test_review_status_vocabulary_is_closed():
-    for status in ("source_verified_pending_clinical_review", "clinician_approved",
+    for status in ("source_verified_pending_clinical_review",
                    "adjudication_required", "rejected_source"):
         assert studied_formulas.valid_native_study_context(context(review_status=status), "STRAIN_LGG")
+    assert studied_formulas.valid_native_study_context(approved(), "STRAIN_LGG")
+    assert not studied_formulas.valid_native_study_context(
+        context(review_status="clinician_approved"), "STRAIN_LGG")
     for status in ("approved", "clinician_verified", "search_in_progress", ""):
         assert not studied_formulas.valid_native_study_context(context(review_status=status), "STRAIN_LGG")

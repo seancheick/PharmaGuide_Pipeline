@@ -155,7 +155,8 @@ def test_no_curated_strain_claims_more_than_its_review_allows() -> None:
         if not isinstance(entry, dict):
             continue
         out = _probiotic_research_presentation(entry)
-        verified = out["review_status"] == "clinician_verified"
+        verified = out["review_status"] in {
+            "clinician_verified", "clinician_context_approved"}
         if out["research_match_status"] in AFFIRMATIVE and not verified:
             offenders.append(
                 (entry.get("strain_id"), out["research_match_status"])

@@ -10,7 +10,9 @@ from __future__ import annotations
 import math
 import re
 from collections.abc import Mapping
+from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
+from functools import lru_cache
 
 _AFU_UNIT = re.compile(
     r"(?:(million|billion)\s+)?(?:afu|active fluorescent units?)(?:\(s\))?",
@@ -184,13 +186,235 @@ def pending_afu_measurements(product: Mapping) -> list[dict]:
     ]
 
 
+@lru_cache(maxsize=1)
+def _probiotic_evidence_policy() -> dict:
+    """The owner's native-context policy lives with the scoring config (one brain)."""
+    from scoring_v4.quality_score_config import block as config_block
+    block = config_block("evidence_magnitudes", "probiotic")["probiotic"]
+    return {"review_policy": block.get("native_context_review_policy", "clinician_only"),
+            "dose": dict(block.get("dose_applicability_policy") or {})}
+
+
+def native_context_review_policy() -> str:
+    return _probiotic_evidence_policy()["review_policy"]
+
+
+IDENTITY_CONFIDENCE_ACCEPTED = frozenset({
+    "clinical_identity_reviewed", "deposit_crosswalk_verified", "canonical_identity_verified"})
+DOSE_MEASUREMENT_UNITS = {
+    "viable_count": frozenset({"CFU"}),
+    "mass": frozenset({"mg", "g"}),
+    "afu": frozenset({"AFU"}),
+    "spores": frozenset({"spores", "CFU"}),
+}
+
+
+def clinical_review_provenance_valid(context) -> bool:
+    """Require an attributable, dated clinical approval with an explicit scope."""
+    if not isinstance(context, Mapping):
+        return False
+    review = context.get("clinical_review")
+    if not isinstance(review, Mapping):
+        return False
+    if review.get("scope") != "identity_dose_outcome_applicability":
+        return False
+    reviewer = review.get("reviewer")
+    reviewed_at = review.get("reviewed_at")
+    if not isinstance(reviewer, str) or not reviewer.strip() or reviewer.strip().lower() in {
+        "unknown", "pending", "placeholder", "tbd",
+    }:
+        return False
+    if not isinstance(reviewed_at, str) or not reviewed_at.strip():
+        return False
+    try:
+        parsed = datetime.fromisoformat(reviewed_at.strip().replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    if parsed.tzinfo is None:
+        return False
+    # Permit ordinary host clock skew, but never let a future-dated record
+    # pre-authorize clinical scoring work that has not happened yet.
+    return parsed <= datetime.now(parsed.tzinfo) + timedelta(minutes=5)
+
+
+def context_accepted_for_scoring(context) -> bool:
+    """Only an attributable clinician approval can authorize clinical scoring."""
+    return (
+        isinstance(context, Mapping)
+        and context.get("review_status") == "clinician_approved"
+        and clinical_review_provenance_valid(context)
+    )
+
+
+def identity_confidence(entry) -> str:
+    """What the registry actually knows about an identity, from strongest to weakest.
+
+    clinical_identity_reviewed (clinician sign-off) > deposit_crosswalk_verified
+    (designation named in literature with a culture-collection deposit) >
+    canonical_identity_verified (designation and species named in literature, or a
+    legacy curated identity awaiting sign-off) > label_designation_recognized
+    (printed designation; species unconfirmed or no literature hit). None of these
+    means efficacy, a known dose or laboratory authenticity of the product.
+    """
+    entry = entry if isinstance(entry, Mapping) else {}
+    thresholds = entry.get("cfu_thresholds") or {}
+    if isinstance(thresholds, Mapping) and thresholds.get("dr_pham_signoff") is True:
+        return "clinical_identity_reviewed"
+    verification = entry.get("identity_verification")
+    if isinstance(verification, Mapping):
+        if verification.get("status") == "designation_verified":
+            return "deposit_crosswalk_verified" if verification.get("deposit_ids") else "canonical_identity_verified"
+        return "label_designation_recognized"
+    # Legacy clinician-authored entries predate this explicit identity block.
+    # New bare entries fail closed instead of becoming verified by omission.
+    if _legacy_evidence_block(entry) is not None:
+        return "canonical_identity_verified"
+    return "label_designation_recognized"
+
+
+def _primary_patient_important(context: Mapping) -> list:
+    return [o for o in (context.get("outcomes") or []) if isinstance(o, Mapping)
+            and o.get("hierarchy") == "primary" and o.get("kind") == "patient_important"]
+
+
+def derived_context_evidence(entry) -> dict | None:
+    """Summarize the identity's accepted exact-strain contexts in the legacy evidence shape.
+
+    Strength: pooled human evidence (meta-analysis, systematic review, guideline) or
+    two or more RCTs with a positive primary patient-important outcome -> strong;
+    one such RCT -> medium; otherwise weak. Direction: negative-only evidence is
+    negative; positive evidence with null, mixed, or negative company is mixed;
+    positives only are positive; null-only or surrogate-only evidence is null.
+    Combination and species contexts never contribute.
+    """
+    entry = entry if isinstance(entry, Mapping) else {}
+    contexts = [c for c in (entry.get("study_contexts") or []) if isinstance(c, Mapping)
+                and c.get("identity_scope") == "exact_strain" and context_accepted_for_scoring(c)]
+    if not contexts:
+        return None
+    # Several papers can report the same trial. Evidence strength counts independent
+    # trial families, never publication rows.
+    families: dict[str, list[Mapping]] = {}
+    for context in contexts:
+        family = str(context.get("trial_family") or context.get("context_id") or "").strip()
+        families.setdefault(family, []).append(context)
+    positives, mixed, nulls, negatives = [], [], [], []
+    for family_contexts in families.values():
+        directions = {
+            outcome.get("direction")
+            for context in family_contexts
+            for outcome in _primary_patient_important(context)
+        }
+        representative = family_contexts[0]
+        if directions == {"negative"}:
+            negatives.append(representative)
+        elif directions & {"positive", "negative"} and len(directions) > 1:
+            mixed.append(representative)
+        elif "positive" in directions:
+            positives.append(representative)
+        elif "mixed" in directions:
+            mixed.append(representative)
+        elif "null" in directions:
+            nulls.append(representative)
+    pooled = [c for c in positives if c.get("study_design") in ("meta_analysis", "systematic_review", "guideline")]
+    rcts = [c for c in positives if c.get("study_design") in ("rct", "crossover_rct", "cluster_rct")]
+    strength = "strong" if pooled or len(rcts) >= 2 else "medium" if rcts else "weak"
+    if negatives and not positives:
+        direction = "negative"
+    elif positives and (nulls or negatives or mixed):
+        direction = "mixed"
+    elif positives:
+        direction = "positive_strong" if strength == "strong" else "positive_weak"
+    elif mixed:
+        direction = "mixed"
+    else:
+        direction = "null"
+    pmids: list = []
+    for c in (positives + mixed + nulls + negatives) or contexts:
+        for pmid in c.get("source_pmids") or []:
+            if pmid not in pmids:
+                pmids.append(pmid)
+    return {
+        "type": "study_contexts_derived",
+        "evidence_strength": strength,
+        "effect_direction": direction,
+        "pmid": pmids[0] if pmids else None,
+        "additional_pmids": pmids[1:],
+        "clinical_validation": {"q1_strain_explicit": "YES", "q3_human_clinical": "YES"},
+        "derived_from_contexts": [c.get("context_id") for c in contexts],
+        "review_basis": native_context_review_policy(),
+        "context_counts": {"positive": len(positives), "mixed": len(mixed), "null": len(nulls), "negative": len(negatives)},
+    }
+
+
+def _legacy_evidence_block(entry: Mapping) -> dict | None:
+    thresholds = entry.get("cfu_thresholds") or {}
+    legacy = thresholds.get("evidence") if isinstance(thresholds, Mapping) else None
+    return dict(legacy) if isinstance(legacy, Mapping) and legacy else None
+
+
+def effective_strain_evidence(entry) -> dict | None:
+    """A clinician-authored summary always summarizes its identity (signed or
+    suspended); only an identity without one is described by its accepted contexts."""
+    entry = entry if isinstance(entry, Mapping) else {}
+    legacy = _legacy_evidence_block(entry)
+    if legacy is not None:
+        return legacy
+    if identity_confidence(entry) not in IDENTITY_CONFIDENCE_ACCEPTED:
+        return None
+    return derived_context_evidence(entry)
+
+
+def identity_review_accepted(entry) -> bool:
+    """Clinician sign-off, or an attributable approved context on a verified identity.
+
+    An identity with a clinician-authored summary stays under the clinician gate:
+    a suspended sign-off is a hold, and the owner policy cannot lift it.
+    """
+    entry = entry if isinstance(entry, Mapping) else {}
+    thresholds = entry.get("cfu_thresholds") or {}
+    if isinstance(thresholds, Mapping) and thresholds.get("dr_pham_signoff") is True:
+        return True
+    if _legacy_evidence_block(entry) is not None:
+        return False
+    return identity_confidence(entry) in IDENTITY_CONFIDENCE_ACCEPTED and derived_context_evidence(entry) is not None
+
+
+def classify_dose_applicability(amount, dose: Mapping) -> tuple[str, str]:
+    """Classify a label's owned daily dose against a study's tested exposure.
+
+    Discrete trial arms are points, not a continuous efficacy range. Measured
+    start/end viability describes product stability and cannot establish a tested
+    daily efficacy dose.
+    """
+    dose = dose if isinstance(dose, Mapping) else {}
+    if (dose.get("measurement_type") or "viable_count") != "viable_count":
+        return "DOSE_UNKNOWN", "study_dose_not_viable_count"
+    try:
+        values = [float(v) for v in (dose.get("values") or [])]
+    except (TypeError, ValueError):
+        return "DOSE_UNKNOWN", "study_daily_dose_unresolved"
+    if dose.get("basis") != "discrete_daily_arms" or not values:
+        return "DOSE_UNKNOWN", "study_daily_dose_unresolved"
+    if amount is None:
+        return "DOSE_UNKNOWN", "label_dose_unknown"
+    if any(math.isclose(float(amount), value, rel_tol=1e-9) for value in values):
+        return "EXACT_TESTED_DOSE", "matches_tested_daily_dose"
+    return "OUTSIDE_TESTED_RANGE", "outside_tested_daily_doses"
+
+
+def dose_applicability_credit(applicability_class: str) -> float:
+    credit = _probiotic_evidence_policy()["dose"].get("credit") or {}
+    try:
+        return float(credit.get(applicability_class, 0.0))
+    except (TypeError, ValueError):
+        return 0.0
+
+
 def clinical_strain_research_scope(entry: dict) -> dict:
     """One registry-owned scope decision for presentation and scored evidence."""
     entry = entry if isinstance(entry, dict) else {}
-    thresholds = entry.get("cfu_thresholds") or {}
-    thresholds = thresholds if isinstance(thresholds, dict) else {}
-    evidence = thresholds.get("evidence") or {}
-    evidence = evidence if isinstance(evidence, dict) else {}
+    evidence = effective_strain_evidence(entry) or {}
     validation = evidence.get("clinical_validation") or {}
     validation = validation if isinstance(validation, dict) else {}
     evidence_type = str(evidence.get("type") or "").strip().lower()

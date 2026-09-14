@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.1.5-probiotic-aggregate-potency",
+    "version": "1.1.6-probiotic-clinical-gates",
     "schema_version": "1.0.0",
     "last_updated": "2026-09-13",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Generic single-bioactive caps prevent clean narrow products from implying elite clinical-formula evidence. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
@@ -164,9 +164,7 @@
       "aggregate_cfu_low_tier_presence_floor": 2.0,
       "aggregate_cfu_low_named_strain_total_floor": 4.0,
       "cap_direct_strain_mass_floor": 5.0,
-      "aggregate_potency_bands": [[0.0, 3.0], [1.0, 6.0], [5.0, 8.0]],
-      "aggregate_potency_cap": 8.0,
-      "_aggregate_potency_doc": "1.1.5 (2026-09-13): a label that names its strains and prints a valid total CFU/AFU earns physical-potency credit in place of the old 4-point presence floor. Saturating by design: below 1B 3, 1B to <5B 6, 5B and above 8, and nothing more for 50B or 400B; more organisms is not more benefit (NIH ODS / WGO). It is never split across strains, never turned into a studied strain dose, and never reaches the per-strain (10) or clinical-adequacy credit. The guarantee basis (through expiration vs at manufacture vs unstated) no longer multiplies the number; it is carried in metadata and said in the explanation as a disclosure limitation.",
+      "_aggregate_cfu_doc": "1.1.6 (2026-09-13): an aggregate CFU total earns only a conservative label-presence floor (2 points, or 4 when named live strains and at least 1 billion total CFU are disclosed). Aggregate count is not divided among strains and is not treated as efficacy: NIH ODS states that higher CFU counts do not necessarily provide greater health benefits. Adequacy credit requires a strain-owned measurement. Counts guaranteed only at manufacture or with no guarantee basis retain the conservative 0.90/0.85 reliability adjustment because viable counts can decline before expiration.",
       "v3_cfu_adequacy_cap": 5.0,
       "tier_points": { "low": 0.0, "adequate": 1.0, "good": 2.0, "excellent": 3.0 }
     },
@@ -198,7 +196,12 @@
       "cap_dose_applicability": 8.0,
       "effect_direction_multipliers": { "positive_strong": 1.0, "positive_weak": 0.85, "mixed": 0.6, "null": 0.25, "negative": 0.0 },
       "native_strain_evidence_points": { "strong": 8.0, "high": 8.0, "moderate": 6.0, "medium": 6.0, "weak": 3.0, "low": 3.0, "limited": 3.0 },
-      "native_strain_evidence_weights": [1.0, 0.7, 0.5, 0.3]
+      "native_strain_evidence_weights": [1.0, 0.7, 0.5, 0.3],
+      "native_context_review_policy": "clinician_only",
+      "dose_applicability_policy": {
+        "credit": {"EXACT_TESTED_DOSE": 1.0, "WITHIN_TESTED_RANGE": 0.0, "NEAR_TESTED_RANGE": 0.0, "OUTSIDE_TESTED_RANGE": 0.0, "DOSE_UNKNOWN": 0.0}
+      },
+      "_context_policy_doc": "1.1.6 (2026-09-13): native study contexts remain research records until an attributable clinician approval names the reviewer, review time, and identity-dose-outcome applicability scope. Source-verified pending contexts never score. Discrete trial arms are points, not continuous dose windows: only an exact tested daily arm can earn applicability credit. Start/end viable-count measurements describe stability and do not establish an efficacy dose. Combination and species-level contexts never earn individual-strain applicability."
     },
     "multi_prenatal": { "cap_evidence": 20.0, "generic_cap_evidence": 20.0 },
     "omega": { "cap_evidence": 20.0 }

@@ -16,7 +16,12 @@ from pathlib import Path
 from clinical_applicability import reviewed_entries
 from normalization import normalize_text
 from serving_frequency import resolve_daily_serving_range
-from probiotic_measurements import strain_cfu_tier, clinical_strain_research_scope, normalized_cfu_count
+from probiotic_measurements import (
+    strain_cfu_tier, clinical_strain_research_scope, normalized_cfu_count,
+    effective_strain_evidence, identity_review_accepted, context_accepted_for_scoring,
+    classify_dose_applicability, dose_applicability_credit, DOSE_MEASUREMENT_UNITS,
+    clinical_review_provenance_valid,
+)
 
 
 def _key(value):
@@ -385,7 +390,7 @@ def independent_clinical_strains(product: Mapping) -> list[dict]:
     for row in label_owned_native_strains(product):
         reference = registry[row["clinical_id"]]
         thresholds = reference.get("cfu_thresholds") or {}
-        evidence = thresholds.get("evidence") or {}
+        evidence = effective_strain_evidence(reference) or {}
         validation = evidence.get("clinical_validation") or {}
         # Specificity is not review completion or strength. Preserve previously
         # reviewed contextual research while its scope is being curated, without
@@ -393,7 +398,7 @@ def independent_clinical_strains(product: Mapping) -> list[dict]:
         allowed_match_statuses = {"exact_strain", "species_level"}
         if clinical_strain_research_scope(reference)["evidence_scope"] == "scope_unresolved":
             allowed_match_statuses.add("scope_unresolved")
-        if (thresholds.get("dr_pham_signoff") is not True
+        if (not identity_review_accepted(reference)
                 or evidence.get("type") == "product_formula_rct"
                 or validation.get("q1_strain_explicit") == "FORMULA_LEVEL"
                 or any(source.get("evidence_scope") in {"formula_specific", "formula_only"}
@@ -433,7 +438,7 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
             continue
         reference = registry.get(str(row.get("clinical_id") or ""), {})
         thresholds = reference.get("cfu_thresholds") or {}
-        evidence = thresholds.get("evidence") or {}
+        evidence = effective_strain_evidence(reference) or {}
         support = evidence.get("clinical_support_level") or evidence.get("evidence_strength") or "weak"
         support = {"strong": "high", "medium": "moderate"}.get(support, support)
         result = {"clinical_id": row.get("clinical_id"), "strain": row.get("strain"),
@@ -469,8 +474,7 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
             # daily dose on a tested arm, a positive primary patient-important
             # outcome. Identity review (above) is still required first.
             status = "strain_dose_applicable"
-        elif any(c.get("review_status") == "clinician_approved"
-                 and c.get("status") == "source_context_recorded"
+        elif any(context_accepted_for_scoring(c) and c.get("status") == "source_context_recorded"
                  for c in result["study_contexts"]):
             status = "strain_context_not_applicable"
         elif result["study_contexts"] or "study_contexts" in reference:
@@ -486,6 +490,9 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
         result["industry_adequacy_tier"] = strain_cfu_tier(
             result["cfu_per_day"], thresholds.get("tiers_cfu_per_day"))
         result["dose_applicable"] = status == "strain_dose_applicable"
+        result["dose_applicability_credit"] = max(
+            [float(c.get("dose_applicability_credit") or 0.0) for c in result["study_contexts"]
+             if c.get("clinical_applicability") == "established"], default=0.0)
         results.append(result)
     context_ids = sorted({context["context_id"] for row in results
         for context in row["study_contexts"]
@@ -515,11 +522,7 @@ NATIVE_CONTEXT_QUALITY_ENUMS = {
 
 
 def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
-    """Validate the registry-owned research record, not a clinical approval.
-
-    This format deliberately cannot authorize efficacy points. Clinical review
-    of an outcome-specific applicability policy is a separate approval step.
-    """
+    """Validate a registry context and any claimed clinical approval."""
     if not isinstance(context, Mapping):
         return False
 
@@ -537,6 +540,9 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
             or context.get("identity_scope") not in ("exact_strain", "species_general", "combination")
             or context.get("purpose") not in ("prevention", "treatment", "challenge", "physiology")
             or not text_list(context.get("limitations"))):
+        return False
+    if (context.get("review_status") == "clinician_approved"
+            and not clinical_review_provenance_valid(context)):
         return False
     components = context["components"]
     if (len(set(components)) != len(components)
@@ -560,10 +566,12 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
             or not isinstance(population.get("description"), str) or not population["description"].strip()
             or not isinstance(dose, Mapping)
             or dose.get("basis") not in ("discrete_daily_arms", "measured_viability", "single_challenge", "unresolved")
-            or dose.get("unit") != "CFU"
+            or (dose.get("measurement_type") or "viable_count") not in DOSE_MEASUREMENT_UNITS
+            or dose.get("unit") not in DOSE_MEASUREMENT_UNITS[dose.get("measurement_type") or "viable_count"]
             or not isinstance(dose.get("values"), list)
             or any(_number(v) is None or _number(v) <= 0 for v in dose["values"])
             or (dose["basis"] == "discrete_daily_arms" and not dose["values"])
+            or (dose["basis"] == "unresolved" and dose["values"])
             or not text_list(dose.get("dosage_forms"), allow_empty=True)
             or not text_list(dose.get("co_therapies"), allow_empty=True)):
         return False
@@ -652,9 +660,17 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             "delivery_unknown" if not form or not dose["dosage_forms"]
             else "same_delivery_form" if form in {_key(f) for f in dose["dosage_forms"]}
             else "different_delivery_form")
-        applicability, reason = _approved_context_applicability(context, comparison)
+        if owned and not (row.get("is_inactivated") or row.get("is_postbiotic")) \
+                and context["identity_scope"] == "exact_strain":
+            applicability_class, class_reason = classify_dose_applicability(amount, dose)
+        else:
+            applicability_class, class_reason = "DOSE_UNKNOWN", comparison
+        applicability, reason, credit = _accepted_context_applicability(
+            context, applicability_class, class_reason)
         result.append({**deepcopy(context), "status": "source_context_recorded",
             "dose_comparison": comparison, "label_daily_cfu": amount,
+            "dose_applicability_class": applicability_class,
+            "dose_applicability_credit": credit,
             "source_row_ref": row.get("source_row_ref"),
             "population_comparison": population_comparison,
             "delivery_comparison": delivery_comparison,
@@ -663,20 +679,23 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
     return result
 
 
-def _approved_context_applicability(context: Mapping, comparison: str) -> tuple[str, str]:
-    """Only a clinician-approved, exact-strain context at a tested daily dose
-    with a positive primary patient-important outcome establishes applicability.
+def _accepted_context_applicability(context: Mapping, applicability_class: str,
+                                    class_reason: str) -> tuple[str, str, float]:
+    """Only an attributable clinician-approved exact-strain context whose tested arm
+    exactly matches the label's owned daily dose and that
+    has a positive primary patient-important outcome establishes applicability.
     Everything else is recorded with the reason it does not."""
-    if context["review_status"] != "clinician_approved":
-        return "not_established", "context_not_clinician_approved"
+    if not context_accepted_for_scoring(context):
+        return "not_established", "context_not_clinician_approved", 0.0
     if context["identity_scope"] != "exact_strain":
-        return "not_established", "not_individual_strain_scope"
-    if comparison != "matches_tested_daily_dose":
-        return "not_established", comparison
+        return "not_established", "not_individual_strain_scope", 0.0
+    credit = dose_applicability_credit(applicability_class)
+    if credit <= 0.0:
+        return "not_established", class_reason, 0.0
     if not any(o["hierarchy"] == "primary" and o["kind"] == "patient_important"
                and o["direction"] == "positive" for o in context["outcomes"]):
-        return "not_established", "no_positive_primary_patient_important_outcome"
-    return "established", "approved_context_dose_and_outcome_match"
+        return "not_established", "no_positive_primary_patient_important_outcome", 0.0
+    return "established", "clinician_approved_context_dose_and_outcome_match", credit
 
 
 def measured_native_strain_doses(product: Mapping) -> list[dict]:

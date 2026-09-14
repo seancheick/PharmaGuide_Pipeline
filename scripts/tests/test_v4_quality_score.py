@@ -580,7 +580,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.1.5-probiotic-aggregate-potency"
+    assert out["quality_score_version"] == "1.1.6-probiotic-clinical-gates"
 
 
 def test_uncapped_product_can_reach_a_true_100() -> None:

@@ -4296,11 +4296,9 @@
           "purpose": "physiology",
           "condition": "plasma_amino_acid_response_to_whey",
           "dose": {
-            "basis": "discrete_daily_arms",
+            "basis": "unresolved",
             "unit": "CFU",
-            "values": [
-              1000000000.0
-            ],
+            "values": [],
             "dosage_forms": [],
             "duration_days": 28,
             "co_therapies": []
@@ -4315,7 +4313,8 @@
           ],
           "trial_family": "lipscomb_de111_whey_33462163",
           "limitations": [
-            "No effect on leucine, BCAA, EAA or total amino acid appearance."
+            "No effect on leucine, BCAA, EAA or total amino acid appearance.",
+            "PubMed's abstract text prints a malformed 1 x 10-9 CFU exponent; full text is required before recording a tested daily dose."
           ],
           "review_status": "source_verified_pending_clinical_review",
           "study_design": "rct",
