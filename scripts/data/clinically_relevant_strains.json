@@ -3619,8 +3619,17 @@
             "unit": "CFU",
             "values": [],
             "dosage_forms": [],
-            "duration_days": null,
-            "co_therapies": []
+            "duration_days": 182,
+            "co_therapies": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_as_printed": {
+              "value": 6,
+              "unit": "months"
+            },
+            "duration_days_is_approximate": true,
+            "administration_frequency": "twice_daily",
+            "duration_basis": "fixed_protocol"
           },
           "outcomes": [
             {
@@ -3642,7 +3651,10 @@
             "Study also includes a distinct NCFM plus Bi-07 arm; its results are not allocated to NCFM alone",
             "Reported symptoms do not establish laboratory-confirmed infection prevention or adult digestive benefit"
           ],
-          "review_status": "source_verified_pending_clinical_review"
+          "review_status": "source_verified_pending_clinical_review",
+          "context_schema_version": "1.1.0",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered"
         },
         {
           "context_id": "ncfm_infant_colic_41998618",
@@ -3800,7 +3812,37 @@
             "values": [],
             "dosage_forms": [],
             "duration_days": 14,
-            "co_therapies": []
+            "co_therapies": [],
+            "dose_status": "verified",
+            "dose_basis": "per_strain_daily",
+            "duration_basis": "fixed_protocol",
+            "component_doses": [
+              {
+                "component": "STRAIN_ACIDOPHILUS_NCFM",
+                "dose_cfu_per_day": 10000000000.0
+              },
+              {
+                "component": "STRAIN_PARACASEI_LPC37",
+                "dose_cfu_per_day": 2500000000.0
+              },
+              {
+                "component": "STRAIN_LACTIS_BL04",
+                "dose_cfu_per_day": 2500000000.0
+              },
+              {
+                "component": "STRAIN_LACTIS_BI07",
+                "dose_cfu_per_day": 2500000000.0
+              },
+              {
+                "component": "STRAIN_LACTIS_HN019",
+                "dose_cfu_per_day": 10000000000.0
+              }
+            ],
+            "source_provenance": {
+              "pmid": "31131616",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/31131616/",
+              "location": "abstract"
+            }
           },
           "outcomes": [
             {
@@ -3848,7 +3890,10 @@
           "source_tier": "C",
           "trial_registration": "ISRCTN41607808",
           "authored_on": "2026-09-13",
-          "authoring_method": "PubMed title/abstract read; Wave 1 bounded search (guidelines, meta-analyses, RCTs)"
+          "authoring_method": "PubMed title/abstract read; Wave 1 bounded search (guidelines, meta-analyses, RCTs)",
+          "context_schema_version": "1.1.0",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered"
         },
         {
           "context_id": "bi07_lpc37_ncfm_bl04_omega3_elderly_inflammation_36235651",
@@ -6264,7 +6309,11 @@
             "duration_days": 14,
             "co_therapies": [
               "cefadroxil or amoxicillin"
-            ]
+            ],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "fixed_protocol",
+            "duration_note": "Probiotic given during the 7-day antibiotic course and for 7 days afterward"
           },
           "outcomes": [
             {
@@ -6299,7 +6348,10 @@
           "source_tier": "C",
           "trial_registration": null,
           "authored_on": "2026-09-14",
-          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "context_schema_version": "1.1.0",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered"
         },
         {
           "context_id": "lgg_la5_bb12_hospital_aad_17356555",
@@ -6379,7 +6431,12 @@
             "duration_days": null,
             "co_therapies": [
               "antibiotic therapy"
-            ]
+            ],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "tied_to_cotherapy",
+            "duration_reference": "antibiotic_course",
+            "duration_note": "Yogurt administered for the same duration as each child's antibiotic treatment"
           },
           "outcomes": [
             {
@@ -6401,7 +6458,10 @@
           "source_tier": "D",
           "trial_registration": null,
           "authored_on": "2026-09-14",
-          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "context_schema_version": "1.1.0",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered"
         },
         {
           "context_id": "la5_bb12_hpylori_yogurt_aad_21871144",
@@ -8744,12 +8804,24 @@
           "purpose": "treatment",
           "condition": "irritable_bowel_syndrome",
           "dose": {
-            "basis": "unresolved",
+            "basis": "discrete_daily_arms",
             "unit": "CFU",
-            "values": [],
-            "dosage_forms": [],
+            "values": [
+              10000000000.0
+            ],
+            "dosage_forms": [
+              "capsule"
+            ],
             "duration_days": 42,
-            "co_therapies": []
+            "co_therapies": [],
+            "dose_status": "verified",
+            "dose_basis": "per_strain_daily",
+            "duration_basis": "fixed_protocol",
+            "source_provenance": {
+              "pmid": "32019158",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+              "location": "full_text_methods"
+            }
           },
           "outcomes": [
             {
@@ -8778,7 +8850,10 @@
           "source_tier": "C",
           "trial_registration": null,
           "authored_on": "2026-09-14",
-          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "context_schema_version": "1.1.0",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered"
         },
         {
           "context_id": "dds1_lactose_intolerance_crossover_27207411",
@@ -8961,14 +9036,18 @@
             "values": [],
             "dosage_forms": [],
             "duration_days": null,
-            "co_therapies": []
+            "co_therapies": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded"
           },
           "outcomes": [
             {
               "name": "ibs_severity_score_ranking",
               "hierarchy": "unresolved",
-              "kind": "patient_important",
-              "direction": "positive"
+              "kind": "evidence_ranking",
+              "direction": "unresolved",
+              "outcome_role": "network_ranking"
             }
           ],
           "trial_family": "uas_dds1_uabla12_ibs_32019158",
@@ -8983,7 +9062,11 @@
           "source_tier": "B",
           "trial_registration": null,
           "authored_on": "2026-09-14",
-          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "context_schema_version": "1.1.0",
+          "evidence_role": "network_meta_analysis",
+          "component_registration_status": "fully_registered",
+          "scoring_eligible": false
         },
         {
           "context_id": "dds1_uabla12_pediatric_constipation_36071965",
@@ -9059,10 +9142,14 @@
               5000000000.0
             ],
             "dosage_forms": [],
-            "duration_days": null,
+            "duration_days": 14,
             "co_therapies": [
               "fructooligosaccharide"
-            ]
+            ],
+            "dose_status": "combination_total_only",
+            "dose_basis": "combination_total_daily",
+            "duration_basis": "fixed_protocol",
+            "duration_note": "Two weeks or until the end of the secondary acute respiratory infection"
           },
           "outcomes": [
             {
@@ -9097,7 +9184,10 @@
           "source_tier": "C",
           "trial_registration": null,
           "authored_on": "2026-09-14",
-          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)"
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "context_schema_version": "1.1.0",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered"
         },
         {
           "context_id": "dds1_uabla12_fos_atopic_dermatitis_20642296",

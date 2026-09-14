@@ -526,6 +526,18 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
     if not isinstance(context, Mapping):
         return False
 
+    # New curation batches opt into the single frozen evidence contract.  Keep
+    # legacy contexts readable while making every newly stamped context pass
+    # the stricter vocabulary and semantic checks in one shared module.
+    if context.get("context_schema_version") is not None:
+        from clinical_evidence_schema import validate_frozen_context
+
+        if validate_frozen_context(
+            context,
+            known_component_ids=set(_clinical_strain_registry()),
+        ):
+            return False
+
     def text_list(value, *, allow_empty=False):
         return isinstance(value, list) and (allow_empty or bool(value)) and all(
             isinstance(item, str) and item.strip() for item in value)
@@ -583,7 +595,7 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
     return all(isinstance(outcome, Mapping)
         and isinstance(outcome.get("name"), str) and outcome["name"].strip()
         and outcome.get("hierarchy") in ("primary", "secondary", "post_hoc", "guideline", "unresolved")
-        and outcome.get("kind") in ("patient_important", "surrogate")
+        and outcome.get("kind") in ("patient_important", "surrogate", "evidence_ranking")
         and outcome.get("direction") in ("positive", "mixed", "null", "negative", "unresolved")
         for outcome in outcomes)
 

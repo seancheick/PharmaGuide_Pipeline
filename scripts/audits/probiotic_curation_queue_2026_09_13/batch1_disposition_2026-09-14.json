@@ -1,0 +1,669 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "review_snapshot_id": "batch_1_2026-09-14_163503Z_915bf3b9",
+    "dataset_path": "scripts/data/clinically_relevant_strains.json",
+    "dataset_sha256": "915bf3b999ba1b9c2940d67098ba1f6c9acc9c3770c152da1882239ae7f18fcc",
+    "applied_dataset_sha256": "bb52023ec82dc0217a363b72f7e22b077ed7fb7b459af0d685aea1c408641441",
+    "created_at": "2026-09-14T16:35:03Z",
+    "status": "proposed_pending_clinical_signoff",
+    "notes": "Batch-1 reconciled disposition and source-bound structural patch. This file is not a clinician approval and must not change review_status by itself."
+  },
+  "decisions": {
+    "dds1_ibs_network_meta_37686889": "approve_with_correction",
+    "dds1_ibs_three_arm_32019158": "approve_with_correction",
+    "dds1_lactose_intolerance_crossover_27207411": "approve_as_written",
+    "dds1_lactose_intolerance_sr_36308983": "approve_as_written",
+    "dds1_night_shift_stress_markers_33584665": "approve_as_written",
+    "dds1_uabla12_fos_atopic_dermatitis_20642296": "approve_as_written",
+    "dds1_uabla12_fos_pediatric_ari_26463725": "approve_with_correction",
+    "dds1_uabla12_pediatric_constipation_36071965": "approve_as_written",
+    "la5_bb12_aad_incidence_24772726": "approve_as_written",
+    "la5_bb12_hpylori_yogurt_aad_21871144": "approve_as_written",
+    "la5_bb12_lc01_yogurt_aad_30439760": "archive_from_consumer_scoring",
+    "la5_bb12_nonconstipated_ibs_41255078": "approve_with_correction",
+    "la5_bb12_primal_preterm_mdro_39102225": "archive_from_consumer_scoring",
+    "lgg_la5_bb12_hospital_aad_17356555": "approve_as_written",
+    "lgg_la5_bb12_pediatric_aad_25588782": "approve_with_correction",
+    "lgg_la5_bb12_propact_offspring_ad_41748464": "needs_source_clarification",
+    "bi07_lpc37_ncfm_bl04_omega3_elderly_inflammation_36235651": "approve_as_written",
+    "ncfm_adult_ibs_28082816": "approve_with_correction",
+    "ncfm_bi07_post_rygb_food_addiction_35766604": "approve_as_written",
+    "ncfm_bi07_post_rygb_nutritional_metabolic_33443719": "approve_as_written",
+    "ncfm_child_cold_flu_symptoms_19651563": "approve_with_correction",
+    "ncfm_hn001_lpc37_hn019_caloric_restriction_obese_men_39842252": "approve_as_written",
+    "ncfm_infant_colic_41998618": "approve_as_written",
+    "ncfm_lpc37_bl04_bi07_bb02_chemotherapy_diarrhea_41379184": "approve_as_written",
+    "ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616": "approve_with_correction"
+  },
+  "unpatched_corrections": {
+    "la5_bb12_nonconstipated_ibs_41255078": "The review calls for a correction, but supplies no source-bound field change; hold until the exact source field and location are provided.",
+    "ncfm_adult_ibs_28082816": "The review calls for a correction, but supplies no source-bound field change; hold until the exact source field and location are provided."
+  },
+  "patches": [
+    {
+      "record_id": "dds1_ibs_network_meta_37686889",
+      "field_path": "context_schema_version",
+      "old_value": null,
+      "new_value": "1.1.0",
+      "source_pmid": "37686889",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37686889/",
+      "source_location": "abstract/results",
+      "reviewer_reason": "Opt this corrected context into the frozen evidence contract."
+    },
+    {
+      "record_id": "dds1_ibs_network_meta_37686889",
+      "field_path": "evidence_role",
+      "old_value": null,
+      "new_value": "network_meta_analysis",
+      "source_pmid": "37686889",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37686889/",
+      "source_location": "abstract/results",
+      "reviewer_reason": "A SUCRA ranking is network evidence, not a direct trial effect."
+    },
+    {
+      "record_id": "dds1_ibs_network_meta_37686889",
+      "field_path": "component_registration_status",
+      "old_value": null,
+      "new_value": "fully_registered",
+      "source_pmid": "37686889",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37686889/",
+      "source_location": "identity scope",
+      "reviewer_reason": "All listed components are registered identities."
+    },
+    {
+      "record_id": "dds1_ibs_network_meta_37686889",
+      "field_path": "dose.dose_status",
+      "old_value": null,
+      "new_value": "source_not_reported",
+      "source_pmid": "37686889",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37686889/",
+      "source_location": "abstract",
+      "reviewer_reason": "The NMA record supplies a ranking, not an assigned dose."
+    },
+    {
+      "record_id": "dds1_ibs_network_meta_37686889",
+      "field_path": "dose.dose_basis",
+      "old_value": null,
+      "new_value": "not_applicable",
+      "source_pmid": "37686889",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37686889/",
+      "source_location": "abstract",
+      "reviewer_reason": "No NMA-specific dose is assigned to the ranking."
+    },
+    {
+      "record_id": "dds1_ibs_network_meta_37686889",
+      "field_path": "dose.duration_basis",
+      "old_value": null,
+      "new_value": "not_recorded",
+      "source_pmid": "37686889",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37686889/",
+      "source_location": "abstract",
+      "reviewer_reason": "No NMA-specific exposure duration is reported."
+    },
+    {
+      "record_id": "dds1_ibs_network_meta_37686889",
+      "field_path": "outcomes[0].kind",
+      "old_value": "patient_important",
+      "new_value": "evidence_ranking",
+      "source_pmid": "37686889",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37686889/",
+      "source_location": "abstract/results",
+      "reviewer_reason": "SUCRA is a ranking metric, not a direct patient-effect estimate."
+    },
+    {
+      "record_id": "dds1_ibs_network_meta_37686889",
+      "field_path": "outcomes[0].direction",
+      "old_value": "positive",
+      "new_value": "unresolved",
+      "source_pmid": "37686889",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37686889/",
+      "source_location": "abstract/results",
+      "reviewer_reason": "A rank position cannot authorize a positive direction."
+    },
+    {
+      "record_id": "dds1_ibs_network_meta_37686889",
+      "field_path": "outcomes[0].outcome_role",
+      "old_value": null,
+      "new_value": "network_ranking",
+      "source_pmid": "37686889",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37686889/",
+      "source_location": "abstract/results",
+      "reviewer_reason": "Make the analysis role explicit."
+    },
+    {
+      "record_id": "dds1_ibs_network_meta_37686889",
+      "field_path": "scoring_eligible",
+      "old_value": null,
+      "new_value": false,
+      "source_pmid": "37686889",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37686889/",
+      "source_location": "analysis type",
+      "reviewer_reason": "Ranking-only evidence cannot create direct consumer efficacy credit."
+    },
+    {
+      "record_id": "dds1_ibs_three_arm_32019158",
+      "field_path": "context_schema_version",
+      "old_value": null,
+      "new_value": "1.1.0",
+      "source_pmid": "32019158",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+      "source_location": "full_text_methods",
+      "reviewer_reason": "Opt this corrected context into the frozen evidence contract."
+    },
+    {
+      "record_id": "dds1_ibs_three_arm_32019158",
+      "field_path": "evidence_role",
+      "old_value": null,
+      "new_value": "direct_rct",
+      "source_pmid": "32019158",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+      "source_location": "full_text_methods",
+      "reviewer_reason": "The source is a direct randomized trial."
+    },
+    {
+      "record_id": "dds1_ibs_three_arm_32019158",
+      "field_path": "component_registration_status",
+      "old_value": null,
+      "new_value": "fully_registered",
+      "source_pmid": "32019158",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+      "source_location": "identity scope",
+      "reviewer_reason": "The listed DDS-1 component is registered."
+    },
+    {
+      "record_id": "dds1_ibs_three_arm_32019158",
+      "field_path": "dose.basis",
+      "old_value": "unresolved",
+      "new_value": "discrete_daily_arms",
+      "source_pmid": "32019158",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+      "source_location": "full_text_methods",
+      "reviewer_reason": "The direct RCT reports a defined daily assigned arm."
+    },
+    {
+      "record_id": "dds1_ibs_three_arm_32019158",
+      "field_path": "dose.values",
+      "old_value": [],
+      "new_value": [10000000000.0],
+      "source_pmid": "32019158",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+      "source_location": "full_text_methods",
+      "reviewer_reason": "DDS-1 was administered at 1×10^10 CFU/day."
+    },
+    {
+      "record_id": "dds1_ibs_three_arm_32019158",
+      "field_path": "dose.dosage_forms",
+      "old_value": [],
+      "new_value": ["capsule"],
+      "source_pmid": "32019158",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+      "source_location": "full_text_methods",
+      "reviewer_reason": "The intervention was a once-daily capsule."
+    },
+    {
+      "record_id": "dds1_ibs_three_arm_32019158",
+      "field_path": "dose.dose_status",
+      "old_value": null,
+      "new_value": "verified",
+      "source_pmid": "32019158",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+      "source_location": "full_text_methods",
+      "reviewer_reason": "Dose is directly reported in the source."
+    },
+    {
+      "record_id": "dds1_ibs_three_arm_32019158",
+      "field_path": "dose.dose_basis",
+      "old_value": null,
+      "new_value": "per_strain_daily",
+      "source_pmid": "32019158",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+      "source_location": "full_text_methods",
+      "reviewer_reason": "DDS-1 is the exact single-strain arm."
+    },
+    {
+      "record_id": "dds1_ibs_three_arm_32019158",
+      "field_path": "dose.duration_basis",
+      "old_value": null,
+      "new_value": "fixed_protocol",
+      "source_pmid": "32019158",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+      "source_location": "full_text_methods",
+      "reviewer_reason": "The 42-day exposure is a fixed protocol."
+    },
+    {
+      "record_id": "dds1_ibs_three_arm_32019158",
+      "field_path": "dose.source_provenance",
+      "old_value": null,
+      "new_value": {
+        "pmid": "32019158",
+        "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+        "location": "full_text_methods"
+      },
+      "source_pmid": "32019158",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7071206/",
+      "source_location": "full_text_methods",
+      "reviewer_reason": "Every verified dose correction carries its exact source location."
+    },
+    {
+      "record_id": "dds1_uabla12_fos_pediatric_ari_26463725",
+      "field_path": "context_schema_version",
+      "old_value": null,
+      "new_value": "1.1.0",
+      "source_pmid": "26463725",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26463725/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "Opt this corrected context into the frozen evidence contract."
+    },
+    {
+      "record_id": "dds1_uabla12_fos_pediatric_ari_26463725",
+      "field_path": "evidence_role",
+      "old_value": null,
+      "new_value": "direct_rct",
+      "source_pmid": "26463725",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26463725/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "The source is a direct randomized pediatric trial."
+    },
+    {
+      "record_id": "dds1_uabla12_fos_pediatric_ari_26463725",
+      "field_path": "component_registration_status",
+      "old_value": null,
+      "new_value": "fully_registered",
+      "source_pmid": "26463725",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26463725/",
+      "source_location": "identity scope",
+      "reviewer_reason": "Both listed probiotic components are registered."
+    },
+    {
+      "record_id": "dds1_uabla12_fos_pediatric_ari_26463725",
+      "field_path": "dose.dose_status",
+      "old_value": null,
+      "new_value": "combination_total_only",
+      "source_pmid": "26463725",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26463725/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "The source reports a total synbiotic exposure, not per-strain allocations."
+    },
+    {
+      "record_id": "dds1_uabla12_fos_pediatric_ari_26463725",
+      "field_path": "dose.dose_basis",
+      "old_value": null,
+      "new_value": "combination_total_daily",
+      "source_pmid": "26463725",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26463725/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "5×10^9 CFU/day is the combination total."
+    },
+    {
+      "record_id": "dds1_uabla12_fos_pediatric_ari_26463725",
+      "field_path": "dose.duration_days",
+      "old_value": null,
+      "new_value": 14,
+      "source_pmid": "26463725",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26463725/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "The current snapshot says not recorded; the source says two weeks or until secondary ARI resolution."
+    },
+    {
+      "record_id": "dds1_uabla12_fos_pediatric_ari_26463725",
+      "field_path": "dose.duration_basis",
+      "old_value": null,
+      "new_value": "fixed_protocol",
+      "source_pmid": "26463725",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26463725/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "The two-week protocol has a documented early-stop qualifier."
+    },
+    {
+      "record_id": "dds1_uabla12_fos_pediatric_ari_26463725",
+      "field_path": "dose.duration_note",
+      "old_value": null,
+      "new_value": "Two weeks or until the end of the secondary acute respiratory infection",
+      "source_pmid": "26463725",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26463725/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "Preserve the qualifying wording instead of implying every participant completed exactly 14 days."
+    },
+    {
+      "record_id": "la5_bb12_aad_incidence_24772726",
+      "field_path": "context_schema_version",
+      "old_value": null,
+      "new_value": "1.1.0",
+      "source_pmid": "24772726",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24772726/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "Opt this corrected context into the frozen evidence contract."
+    },
+    {
+      "record_id": "la5_bb12_aad_incidence_24772726",
+      "field_path": "evidence_role",
+      "old_value": null,
+      "new_value": "direct_rct",
+      "source_pmid": "24772726",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24772726/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "The source is a direct randomized trial."
+    },
+    {
+      "record_id": "la5_bb12_aad_incidence_24772726",
+      "field_path": "component_registration_status",
+      "old_value": null,
+      "new_value": "fully_registered",
+      "source_pmid": "24772726",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24772726/",
+      "source_location": "identity scope",
+      "reviewer_reason": "Both listed components are registered."
+    },
+    {
+      "record_id": "la5_bb12_aad_incidence_24772726",
+      "field_path": "dose.dose_status",
+      "old_value": null,
+      "new_value": "source_not_reported",
+      "source_pmid": "24772726",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24772726/",
+      "source_location": "abstract",
+      "reviewer_reason": "The abstract does not provide a CFU amount."
+    },
+    {
+      "record_id": "la5_bb12_aad_incidence_24772726",
+      "field_path": "dose.dose_basis",
+      "old_value": null,
+      "new_value": "not_applicable",
+      "source_pmid": "24772726",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24772726/",
+      "source_location": "abstract",
+      "reviewer_reason": "No numeric dose is available to classify."
+    },
+    {
+      "record_id": "la5_bb12_aad_incidence_24772726",
+      "field_path": "dose.duration_basis",
+      "old_value": null,
+      "new_value": "fixed_protocol",
+      "source_pmid": "24772726",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24772726/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "The probiotic exposure was explicitly fixed at 14 days."
+    },
+    {
+      "record_id": "la5_bb12_aad_incidence_24772726",
+      "field_path": "dose.duration_note",
+      "old_value": null,
+      "new_value": "Probiotic given during the 7-day antibiotic course and for 7 days afterward",
+      "source_pmid": "24772726",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24772726/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "Keep the fixed 14-day protocol distinct from variable co-therapy duration."
+    },
+    {
+      "record_id": "lgg_la5_bb12_pediatric_aad_25588782",
+      "field_path": "context_schema_version",
+      "old_value": null,
+      "new_value": "1.1.0",
+      "source_pmid": "25588782",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25588782/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "Opt this corrected context into the frozen evidence contract."
+    },
+    {
+      "record_id": "lgg_la5_bb12_pediatric_aad_25588782",
+      "field_path": "evidence_role",
+      "old_value": null,
+      "new_value": "direct_rct",
+      "source_pmid": "25588782",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25588782/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "The source is a direct randomized trial."
+    },
+    {
+      "record_id": "lgg_la5_bb12_pediatric_aad_25588782",
+      "field_path": "component_registration_status",
+      "old_value": null,
+      "new_value": "fully_registered",
+      "source_pmid": "25588782",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25588782/",
+      "source_location": "identity scope",
+      "reviewer_reason": "The three listed probiotic components are registered."
+    },
+    {
+      "record_id": "lgg_la5_bb12_pediatric_aad_25588782",
+      "field_path": "dose.dose_status",
+      "old_value": null,
+      "new_value": "source_not_reported",
+      "source_pmid": "25588782",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25588782/",
+      "source_location": "abstract",
+      "reviewer_reason": "The abstract describes yogurt mass but no CFU amount."
+    },
+    {
+      "record_id": "lgg_la5_bb12_pediatric_aad_25588782",
+      "field_path": "dose.dose_basis",
+      "old_value": null,
+      "new_value": "not_applicable",
+      "source_pmid": "25588782",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25588782/",
+      "source_location": "abstract",
+      "reviewer_reason": "No numeric CFU dose is available to classify."
+    },
+    {
+      "record_id": "lgg_la5_bb12_pediatric_aad_25588782",
+      "field_path": "dose.duration_basis",
+      "old_value": null,
+      "new_value": "tied_to_cotherapy",
+      "source_pmid": "25588782",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25588782/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "The yogurt was administered for each child's antibiotic-treatment duration."
+    },
+    {
+      "record_id": "lgg_la5_bb12_pediatric_aad_25588782",
+      "field_path": "dose.duration_reference",
+      "old_value": null,
+      "new_value": "antibiotic_course",
+      "source_pmid": "25588782",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25588782/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "Represent the variable exposure without inventing a fixed duration."
+    },
+    {
+      "record_id": "lgg_la5_bb12_pediatric_aad_25588782",
+      "field_path": "dose.duration_note",
+      "old_value": null,
+      "new_value": "Yogurt administered for the same duration as each child's antibiotic treatment",
+      "source_pmid": "25588782",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25588782/",
+      "source_location": "abstract/methods",
+      "reviewer_reason": "Preserve the source wording."
+    },
+    {
+      "record_id": "ncfm_child_cold_flu_symptoms_19651563",
+      "field_path": "context_schema_version",
+      "old_value": null,
+      "new_value": "1.1.0",
+      "source_pmid": "19651563",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19651563/",
+      "source_location": "abstract",
+      "reviewer_reason": "Opt this corrected context into the frozen evidence contract."
+    },
+    {
+      "record_id": "ncfm_child_cold_flu_symptoms_19651563",
+      "field_path": "evidence_role",
+      "old_value": null,
+      "new_value": "direct_rct",
+      "source_pmid": "19651563",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19651563/",
+      "source_location": "abstract",
+      "reviewer_reason": "The source is a direct randomized pediatric trial."
+    },
+    {
+      "record_id": "ncfm_child_cold_flu_symptoms_19651563",
+      "field_path": "component_registration_status",
+      "old_value": null,
+      "new_value": "fully_registered",
+      "source_pmid": "19651563",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19651563/",
+      "source_location": "identity scope",
+      "reviewer_reason": "NCFM is a registered component."
+    },
+    {
+      "record_id": "ncfm_child_cold_flu_symptoms_19651563",
+      "field_path": "dose.dose_status",
+      "old_value": null,
+      "new_value": "source_not_reported",
+      "source_pmid": "19651563",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19651563/",
+      "source_location": "abstract",
+      "reviewer_reason": "The abstract gives frequency and duration but not CFU."
+    },
+    {
+      "record_id": "ncfm_child_cold_flu_symptoms_19651563",
+      "field_path": "dose.dose_basis",
+      "old_value": null,
+      "new_value": "not_applicable",
+      "source_pmid": "19651563",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19651563/",
+      "source_location": "abstract",
+      "reviewer_reason": "No numeric CFU dose is available to classify."
+    },
+    {
+      "record_id": "ncfm_child_cold_flu_symptoms_19651563",
+      "field_path": "dose.duration_days",
+      "old_value": null,
+      "new_value": 182,
+      "source_pmid": "19651563",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19651563/",
+      "source_location": "abstract",
+      "reviewer_reason": "The source reports twice-daily administration for six months; 182 days is the canonical approximate day value."
+    },
+    {
+      "record_id": "ncfm_child_cold_flu_symptoms_19651563",
+      "field_path": "dose.duration_as_printed",
+      "old_value": null,
+      "new_value": {"value": 6, "unit": "months"},
+      "source_pmid": "19651563",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19651563/",
+      "source_location": "abstract",
+      "reviewer_reason": "Preserve the source's exact unit alongside canonical duration_days."
+    },
+    {
+      "record_id": "ncfm_child_cold_flu_symptoms_19651563",
+      "field_path": "dose.duration_days_is_approximate",
+      "old_value": null,
+      "new_value": true,
+      "source_pmid": "19651563",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19651563/",
+      "source_location": "abstract",
+      "reviewer_reason": "Calendar months are not a fixed number of days."
+    },
+    {
+      "record_id": "ncfm_child_cold_flu_symptoms_19651563",
+      "field_path": "dose.administration_frequency",
+      "old_value": null,
+      "new_value": "twice_daily",
+      "source_pmid": "19651563",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19651563/",
+      "source_location": "abstract",
+      "reviewer_reason": "Preserve the reported frequency separately from dose amount."
+    },
+    {
+      "record_id": "ncfm_child_cold_flu_symptoms_19651563",
+      "field_path": "dose.duration_basis",
+      "old_value": null,
+      "new_value": "fixed_protocol",
+      "source_pmid": "19651563",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19651563/",
+      "source_location": "abstract",
+      "reviewer_reason": "Six months is the trial protocol duration."
+    },
+    {
+      "record_id": "ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616",
+      "field_path": "context_schema_version",
+      "old_value": null,
+      "new_value": "1.1.0",
+      "source_pmid": "31131616",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31131616/",
+      "source_location": "abstract",
+      "reviewer_reason": "Opt this corrected context into the frozen evidence contract."
+    },
+    {
+      "record_id": "ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616",
+      "field_path": "evidence_role",
+      "old_value": null,
+      "new_value": "direct_rct",
+      "source_pmid": "31131616",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31131616/",
+      "source_location": "abstract",
+      "reviewer_reason": "The source is a direct randomized trial."
+    },
+    {
+      "record_id": "ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616",
+      "field_path": "component_registration_status",
+      "old_value": null,
+      "new_value": "fully_registered",
+      "source_pmid": "31131616",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31131616/",
+      "source_location": "identity scope",
+      "reviewer_reason": "All five listed components are registered."
+    },
+    {
+      "record_id": "ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616",
+      "field_path": "dose.dose_status",
+      "old_value": null,
+      "new_value": "verified",
+      "source_pmid": "31131616",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31131616/",
+      "source_location": "abstract",
+      "reviewer_reason": "The abstract prints each strain's dose."
+    },
+    {
+      "record_id": "ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616",
+      "field_path": "dose.dose_basis",
+      "old_value": null,
+      "new_value": "per_strain_daily",
+      "source_pmid": "31131616",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31131616/",
+      "source_location": "abstract",
+      "reviewer_reason": "The dose is represented at component level."
+    },
+    {
+      "record_id": "ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616",
+      "field_path": "dose.duration_basis",
+      "old_value": null,
+      "new_value": "fixed_protocol",
+      "source_pmid": "31131616",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31131616/",
+      "source_location": "abstract",
+      "reviewer_reason": "The two-week exposure is a fixed protocol."
+    },
+    {
+      "record_id": "ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616",
+      "field_path": "dose.component_doses",
+      "old_value": null,
+      "new_value": [
+        {"component": "STRAIN_ACIDOPHILUS_NCFM", "dose_cfu_per_day": 10000000000.0},
+        {"component": "STRAIN_PARACASEI_LPC37", "dose_cfu_per_day": 2500000000.0},
+        {"component": "STRAIN_LACTIS_BL04", "dose_cfu_per_day": 2500000000.0},
+        {"component": "STRAIN_LACTIS_BI07", "dose_cfu_per_day": 2500000000.0},
+        {"component": "STRAIN_LACTIS_HN019", "dose_cfu_per_day": 10000000000.0}
+      ],
+      "source_pmid": "31131616",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31131616/",
+      "source_location": "abstract",
+      "reviewer_reason": "Store the source-reported per-strain CFU values; do not collapse them into a total."
+    },
+    {
+      "record_id": "ncfm_lpc37_bl04_bi07_hn019_constipation_bloating_2wk_31131616",
+      "field_path": "dose.source_provenance",
+      "old_value": null,
+      "new_value": {
+        "pmid": "31131616",
+        "source_url": "https://pubmed.ncbi.nlm.nih.gov/31131616/",
+        "location": "abstract"
+      },
+      "source_pmid": "31131616",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31131616/",
+      "source_location": "abstract",
+      "reviewer_reason": "Every verified dose correction carries its exact source location."
+    }
+  ]
+}

@@ -19,10 +19,34 @@ def _dose(dose: dict[str, object]) -> str:
     values = ", ".join(str(v) for v in dose.get("values", [])) or "unresolved"
     forms = ", ".join(str(v) for v in dose.get("dosage_forms", [])) or "unresolved"
     therapies = ", ".join(str(v) for v in dose.get("co_therapies", [])) or "none recorded"
-    return (
-        f"basis={_bullet(dose.get('basis'))}; values={values}; "
-        f"unit={_bullet(dose.get('unit'))}; forms={forms}; "
-        f"duration_days={_bullet(dose.get('duration_days'))}; co-therapies={therapies}"
+    component_doses = dose.get("component_doses") or []
+    component_text = "unresolved"
+    if isinstance(component_doses, list) and component_doses:
+        component_text = ", ".join(
+            f"{item.get('component')}={item.get('dose_cfu_per_day')} CFU/day"
+            for item in component_doses
+            if isinstance(item, dict)
+        ) or "unresolved"
+    as_printed = dose.get("duration_as_printed")
+    duration_text = f"duration_days={_bullet(dose.get('duration_days'))}"
+    if isinstance(as_printed, dict):
+        duration_text += (
+            f" (as_printed={_bullet(as_printed.get('value'))} "
+            f"{_bullet(as_printed.get('unit'))})"
+        )
+    return "; ".join(
+        [
+            f"status={_bullet(dose.get('dose_status'))}",
+            f"basis={_bullet(dose.get('dose_basis') or dose.get('basis'))}",
+            f"values={values}",
+            f"unit={_bullet(dose.get('unit'))}",
+            f"forms={forms}",
+            duration_text,
+            f"duration_basis={_bullet(dose.get('duration_basis'))}",
+            f"frequency={_bullet(dose.get('administration_frequency'))}",
+            f"component_doses={component_text}",
+            f"co-therapies={therapies}",
+        ]
     )
 
 
@@ -39,6 +63,7 @@ def _outcomes(outcomes: list[dict[str, object]]) -> str:
                     f"hierarchy={_bullet(outcome.get('hierarchy'))}",
                     f"kind={_bullet(outcome.get('kind'))}",
                     f"direction={_bullet(outcome.get('direction'))}",
+                    f"outcome_role={_bullet(outcome.get('outcome_role'))}",
                 ]
             )
         )
@@ -62,6 +87,7 @@ def build() -> None:
         "> Generated from `scripts/data/clinically_relevant_strains.json` on 2026-09-14.",
         "> This packet is a review aid, not an approval. Every item remains pending until an attributable clinician records approve/reject and rationale in the canonical registry workflow.",
         "> Automated source check: [PubMed verification report](CLINICIAN_API_VERIFICATION_2026-09-14.json) — 182/182 citation references matched; 0 mismatches.",
+        "> Batch-1 structural patch: `scripts/audits/probiotic_curation_queue_2026_09_13/batch1_disposition_2026-09-14.json` (snapshot-bound; statuses unchanged).",
         "",
         f"**Pending contexts:** {len(contexts)}  ",
         f"**Owning identities represented:** {len({entry.get('id') for entry, _ in contexts})}",
@@ -69,6 +95,7 @@ def build() -> None:
         "## Instructions for the clinician",
         "",
         "For each context, verify the exact strain/identity scope, population, condition, tested dose and form, outcomes, and limitations against the linked PubMed record and full text when needed. Do not infer a missing dose or convert a combination result into single-strain evidence.",
+        "The structured fields are authoritative for downstream queries: dose_status distinguishes source-silent, extraction-pending, verified, and conflicting values; duration_days is canonical, while duration_as_printed preserves the source unit; component_registration_status must be explicit.",
         "",
         "Record exactly one decision (these are deliberately different):",
         "- **Approve as written** — the record is an accurate source summary. This does *not* mean the result was positive, and it does not make an unresolved dose eligible for scoring.",
@@ -78,7 +105,7 @@ def build() -> None:
         "",
         "A null or negative outcome may still be approved as an accurate record; it will never create a positive evidence bonus. Combination evidence remains combination evidence. A context with an unresolved dose may be approved as a source summary, but it remains ineligible for exact-dose applicability until the dose is resolved.",
         "",
-        "The reviewer should return the context ID, decision, reviewer name/credentials, date, whether full text was checked, and rationale. For a correction, include an exact before/after field value. The registry remains unchanged until that attributable decision is entered.",
+        "Return the context ID, decision, and rationale. For a correction, include an exact before/after field value, the source PMID, and the source location. Clinician identity and timestamps are captured by the review system rather than typed into this packet. Clinical approval status remains unchanged until that attributable decision is entered.",
         "",
         "---",
         "",
@@ -109,6 +136,7 @@ def build() -> None:
                 f"- **Decision:** ☐ Approve as written  ☐ Approve with correction  ☐ Reject  ☐ Needs source clarification",
                 f"- **Source:** {links}",
                 f"- **Identity scope:** {_bullet(context.get('identity_scope'))}; components={_bullet(context.get('components'))}",
+                f"- **Evidence role:** {_bullet(context.get('evidence_role'))}; component_registration_status={_bullet(context.get('component_registration_status'))}; schema={_bullet(context.get('context_schema_version'))}",
                 f"- **Condition / purpose:** {_bullet(context.get('condition'))} / {_bullet(context.get('purpose'))}",
                 f"- **Population:** {_bullet(population.get('description'))}; age_group={_bullet(population.get('age_group'))}",
                 f"- **Studied dose:** {_dose(context.get('dose', {}))}",
