@@ -28,9 +28,22 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from studied_formulas import valid_native_study_context  # noqa: E402
+from apply_batch1_disposition import DISPOSITION, _write_path  # noqa: E402
 
 REG = ROOT / "scripts/data/clinically_relevant_strains.json"
+
+
+def _declared_disposition_patches():
+    """{context_id: [(field_path, new_value), ...]} declared by later source-bound dispositions."""
+    patches = {}
+    if DISPOSITION.exists():
+        for patch in json.loads(DISPOSITION.read_text(encoding="utf-8"))["patches"]:
+            patches.setdefault(patch["record_id"], []).append((patch["field_path"], patch["new_value"]))
+    return patches
+
+
 PENDING = "source_verified_pending_clinical_review"
 READ_PMIDS = {
     # B. coagulans Unique IS-2
@@ -677,10 +690,18 @@ def main():
         # This is a one-time data migration, but the documented command is
         # safe to rerun. Validate the materialized rows byte-for-byte instead
         # of appending duplicates or silently accepting a partial application.
+        # Later source-bound dispositions (apply_batch1_disposition.py) patch
+        # individual fields of some Wave 2 rows without changing review status;
+        # a stored row must equal either the authored row or the authored row
+        # with exactly those declared patches applied.
         stored = {c.get("context_id"): c for e in entries.values()
                   for c in e.get("study_contexts", []) if isinstance(c, dict)}
+        patches = _declared_disposition_patches()
         for owner, row in CONTEXTS:
-            assert stored.get(row["context_id"]) == row, (
+            expected = deepcopy(row)
+            for field_path, new_value in patches.get(row["context_id"], []):
+                _write_path(expected, field_path, new_value)
+            assert stored.get(row["context_id"]) in (row, expected), (
                 f"Wave 2 is marked applied but {row['context_id']} differs or is missing")
             assert owner in entries and row["context_id"] in {
                 c.get("context_id") for c in entries[owner].get("study_contexts", [])
