@@ -749,12 +749,20 @@ def main():
                 # applied review response, not from this authoring script;
                 # verify the status matches the decision, then carry the
                 # decision fields into the expected row.
-                wanted = "rejected_source" if decision == "reject" else "clinician_approved"
+                wanted = {"reject": "rejected_source",
+                          "needs_source_clarification": "adjudication_required"}.get(decision, "clinician_approved")
                 assert current.get("review_status") == wanted, (
                     f"{row['context_id']}: status {current.get('review_status')!r} != decision {decision!r}")
                 for key in OWNER_DECISION_FIELDS:
                     if key in current:
                         expected[key] = deepcopy(current[key])
+                if decision == "needs_source_clarification":
+                    # A hold appends its reason to limitations; the authored
+                    # limitations must still be present, in order, at the front.
+                    authored = expected.get("limitations", [])
+                    assert current.get("limitations", [])[:len(authored)] == authored, (
+                        f"{row['context_id']}: authored limitations were altered by the hold")
+                    expected["limitations"] = deepcopy(current["limitations"])
             assert current in (row, expected), (
                 f"Wave 2 is marked applied but {row['context_id']} differs or is missing")
             assert owner in entries and row["context_id"] in {

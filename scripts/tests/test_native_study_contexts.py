@@ -224,7 +224,8 @@ def test_priority_native_contexts_are_curated_without_new_approval():
         # must carry attributable review provenance, nothing borrows approval.
         for c in contexts:
             assert c["review_status"] in {"source_verified_pending_clinical_review",
-                                          "clinician_approved", "rejected_source"}
+                                          "clinician_approved", "adjudication_required",
+                                          "rejected_source"}
             if c["review_status"] == "clinician_approved":
                 assert pm.clinical_review_provenance_valid(c)
         for c in contexts:

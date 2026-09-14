@@ -6,9 +6,9 @@
   "review_date": "2026-09-14",
   "contexts_reviewed": 125,
   "decision_counts": {
-   "approve_as_written": 4,
    "approve_with_correction": 119,
-   "reject": 2
+   "approve_as_written": 4,
+   "needs_source_clarification": 2
   },
   "patch_count": 987,
   "verification": "Every PMID abstract re-fetched via NCBI E-utilities; full text read via Europe PMC / NCBI PMC where open access. Patch old_value is the live registry value at review time.",
@@ -21,7 +21,8 @@
   "dataset_sha256": "bb52023ec82dc0217a363b72f7e22b077ed7fb7b459af0d685aea1c408641441",
   "applied_dataset_sha256": "47753bf12197d09bb5e900dfd458ac8610e1e275491553ac450338df9ce0f201",
   "applied_at": "2026-09-14T22:23:43Z",
-  "reviewer_of_record": "Sean B (engineering owner), approving the 2026-09-14 Claude Fable 5.1 research review"
+  "reviewer_of_record": "Sean B (engineering owner), approving the 2026-09-14 Claude Fable 5.1 research review",
+  "post_apply_followup_2026_09_14": "The two 'reject' recommendations were re-dispositioned by the owner to needs_source_clarification and stored as review_status=adjudication_required (held, non-scoring). No other decision changed."
  },
  "decisions": {
   "dds1_ibs_network_meta_37686889": "approve_as_written",
@@ -34,9 +35,9 @@
   "dds1_uabla12_pediatric_constipation_36071965": "approve_with_correction",
   "la5_bb12_aad_incidence_24772726": "approve_as_written",
   "la5_bb12_hpylori_yogurt_aad_21871144": "approve_with_correction",
-  "la5_bb12_lc01_yogurt_aad_30439760": "reject",
+  "la5_bb12_lc01_yogurt_aad_30439760": "needs_source_clarification",
   "la5_bb12_nonconstipated_ibs_41255078": "approve_with_correction",
-  "la5_bb12_primal_preterm_mdro_39102225": "reject",
+  "la5_bb12_primal_preterm_mdro_39102225": "needs_source_clarification",
   "lgg_la5_bb12_hospital_aad_17356555": "approve_with_correction",
   "lgg_la5_bb12_pediatric_aad_25588782": "approve_with_correction",
   "lgg_la5_bb12_propact_offspring_ad_41748464": "approve_with_correction",
@@ -768,10 +769,12 @@
    ]
   },
   "la5_bb12_lc01_yogurt_aad_30439760": {
-   "decision": "reject",
+   "decision": "needs_source_clarification",
    "reason": "The tested product was a three-strain yogurt (LA-5, BB-12 and L. casei LC-01) in hospitalized patients (mean age 76) and the result was null (23.0% vs 17.6%, p=0.30). LC-01 has no registry identity, so no registered combination matches this formulation; the record cannot be made accurate without adding an unregistered component.",
    "patches": [],
-   "notes": [],
+   "notes": [
+    "Owner disposition 2026-09-14 (post-audit): held as adjudication_required, not rejected_source - the source is a valid null RCT; the defect is registry coverage of one component."
+   ],
    "replacement": "None. Fix options: (a) archive from consumer scoring; or (b) keep as an excluded null record by adding components[2]='STRAIN_CASEI_LC01' (unregistered placeholder), component_registration_status='unregistered_components_present', scoring_eligible=false, evidence_role='direct_rct', dose_status='extraction_pending', duration_basis='tied_to_cotherapy' (source: abstract, PMID 30439760)."
   },
   "la5_bb12_nonconstipated_ibs_41255078": {
@@ -845,10 +848,12 @@
    ]
   },
   "la5_bb12_primal_preterm_mdro_39102225": {
-   "decision": "reject",
+   "decision": "needs_source_clarification",
    "reason": "PRIMAL tested a three-component NICU product (B. longum subsp. infantis with no strain designation + BB-12 + La-5) in preterm infants 28-32 weeks; primary MDRO colonization endpoint null (37.4% vs 37.5%). The infantis component cannot be registered (no designation), so no registered combination matches and no consumer label can ever map to it.",
    "patches": [],
-   "notes": [],
+   "notes": [
+    "Owner disposition 2026-09-14 (post-audit): held as adjudication_required, not rejected_source - the source is a valid null RCT; the defect is registry coverage of one component."
+   ],
    "replacement": "None. Recommended fix: archive from consumer scoring. If retained as an excluded record: full text (PMC12549143, Methods) gives 1.5 x 10^9 CFU of each strain per daily capsule, 28 days, i.e. dose_status='combination_total_only' is wrong and per-strain 1.5e9/day applies; duration_days=28, duration_basis='fixed_protocol', component_registration_status='unregistered_components_present', scoring_eligible=false, evidence_role='direct_rct'. Trial registration DRKS00013197."
   },
   "lgg_la5_bb12_hospital_aad_17356555": {

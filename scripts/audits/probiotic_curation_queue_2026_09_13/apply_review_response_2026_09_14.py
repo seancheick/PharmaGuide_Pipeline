@@ -8,6 +8,7 @@ owner's final review statuses in one atomic write:
   ``scoring_eligible`` becomes ``True`` unless the review itself set it False
   (rankings, class-level pools, uncontrolled designs stay non-scoring).
 * reject -> ``review_status`` becomes ``rejected_source``.
+* needs_source_clarification -> ``review_status`` becomes ``adjudication_required`` (held, non-scoring).
 
 Every patch must still match its recorded old value, every touched context must
 pass the frozen contract AND the runtime validator, and the run is bound to the
@@ -39,6 +40,7 @@ REGISTRY = ROOT / "scripts/data/clinically_relevant_strains.json"
 RESPONSE = ROOT / "docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json"
 APPROVE = {"approve_as_written", "approve_with_correction"}
 REJECT = {"reject"}
+HOLD = {"needs_source_clarification"}  # held as adjudication_required, non-scoring
 REVIEW_SCOPE = "identity_dose_outcome_applicability"
 MISSING = object()
 _SEGMENT = re.compile(r"^(?P<key>[A-Za-z_][A-Za-z0-9_]*)(?:\[(?P<index>\d+)\])?$")
@@ -141,7 +143,7 @@ def validate(registry: dict[str, Any], response: dict[str, Any], *, reviewer: st
         if context.get("review_status") != "source_verified_pending_clinical_review":
             raise ValueError(f"{cid}: expected pending status, found {context.get('review_status')!r}")
         decision = review["decision"]
-        if decision not in APPROVE | REJECT:
+        if decision not in APPROVE | REJECT | HOLD:
             raise ValueError(f"{cid}: decision {decision!r} is not final")
         seen: set[str] = set()
         for patch in review["patches"]:
@@ -172,6 +174,10 @@ def validate(registry: dict[str, Any], response: dict[str, Any], *, reviewer: st
                 context["scoring_eligible"] = True
                 summary["scoring_eligible_true"] += 1
             summary["approved"] += 1
+        elif decision in HOLD:
+            context["review_status"] = "adjudication_required"
+            context["scoring_eligible"] = False
+            summary["held"] = summary.get("held", 0) + 1
         else:
             context["review_status"] = "rejected_source"
             context["scoring_eligible"] = False
