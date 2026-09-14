@@ -74,6 +74,16 @@ def test_attributable_clinician_approval_can_score(registry):
     assert score_evidence(la14_product())["components"]["dose_applicability"] > 0
 
 
+def test_explicitly_ineligible_context_never_scores_after_clinician_approval(registry):
+    row = positive_rct(approved=True, scoring_eligible=False)
+    registry[STUB]["study_contexts"] = [row]
+    assert pm.context_accepted_for_scoring(row) is False
+    assert pm.effective_strain_evidence(registry[STUB]) is None
+    assessed = studied_formulas.assess_probiotic_evidence(la14_product())["strain_assessments"][0]
+    assert assessed["dose_applicable"] is False
+    assert score_evidence(la14_product())["components"]["dose_applicability"] == 0
+
+
 @pytest.mark.parametrize("review", [
     None,
     {},

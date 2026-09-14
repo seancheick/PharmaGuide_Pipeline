@@ -122,6 +122,13 @@ def test_network_ranking_cannot_be_a_positive_patient_effect() -> None:
     assert "outcome.network_ranking_direction_must_be_unresolved" in errors
 
 
+def test_scoring_eligible_is_a_boolean_when_present() -> None:
+    context = _context()
+    context["scoring_eligible"] = "false"
+    errors = validate_frozen_context(context, known_component_ids={"STRAIN_LGG"})
+    assert "context.scoring_eligible_invalid" in errors
+
+
 def test_combination_per_strain_dose_requires_component_doses() -> None:
     context = _context()
     context.update(
@@ -148,6 +155,23 @@ def test_combination_per_strain_dose_requires_component_doses() -> None:
         known_component_ids={"STRAIN_LGG", "STRAIN_LACTIS_BI07"},
     )
     assert "dose.component_doses_required_for_combination" in errors
+
+
+def test_exact_strain_extraction_pending_can_leave_dose_values_empty() -> None:
+    context = _context()
+    context["dose"].update(
+        dose_status="extraction_pending",
+        values=[],
+        source_provenance=None,
+    )
+    assert validate_frozen_context(context, known_component_ids={"STRAIN_LGG"}) == []
+
+
+def test_exact_strain_source_not_reported_still_cannot_hide_an_empty_verified_dose() -> None:
+    context = _context()
+    context["dose"].update(dose_status="source_not_reported", values=[])
+    errors = validate_frozen_context(context, known_component_ids={"STRAIN_LGG"})
+    assert "dose.values_required_for_exact_strain" in errors
 
 
 def test_unregistered_component_state_must_be_explicit() -> None:

@@ -36,6 +36,20 @@ def test_measured_viability_is_not_an_efficacy_dose():
         "DOSE_UNKNOWN", "study_daily_dose_unresolved")
 
 
+def test_frozen_dose_basis_is_canonical_over_legacy_basis():
+    dose = arms(1e9, basis="unresolved", dose_basis="per_strain_daily")
+    assert pm.effective_clinical_dose_basis(dose) == "discrete_daily_arms"
+    assert pm.classify_dose_applicability(1e9, dose) == (
+        "EXACT_TESTED_DOSE", "matches_tested_daily_dose")
+
+
+def test_unknown_frozen_dose_basis_fails_closed_instead_of_using_legacy_basis():
+    dose = arms(1e9, dose_basis="invented_basis")
+    assert pm.effective_clinical_dose_basis(dose) is None
+    assert pm.classify_dose_applicability(1e9, dose) == (
+        "DOSE_UNKNOWN", "study_daily_dose_unresolved")
+
+
 @pytest.mark.parametrize("basis", ["unresolved", "single_challenge"])
 def test_unresolved_or_challenge_doses_are_unknown(basis):
     assert pm.classify_dose_applicability(1e9, arms(basis=basis)) == (

@@ -160,7 +160,13 @@ def _dose_errors(context: Mapping, known_component_ids: Set[str] | None) -> list
     if dose.get("dose_basis") == "per_strain_daily":
         if context.get("identity_scope") == "combination" and component_doses is None:
             errors.append("dose.component_doses_required_for_combination")
-        if context.get("identity_scope") != "combination" and not values:
+        # An exact-strain record can be structurally complete while its dose
+        # still awaits extraction from the cited source.  Do not force a
+        # number into ``values`` merely to satisfy the shape validator; the
+        # explicit pending status is the contract's safe representation.
+        if (context.get("identity_scope") != "combination"
+                and not values
+                and dose.get("dose_status") != "extraction_pending"):
             errors.append("dose.values_required_for_exact_strain")
 
     if dose.get("dose_status") == "combination_total_only":
@@ -268,6 +274,8 @@ def validate_frozen_context(
         errors.append("context.evidence_role_invalid")
     if context.get("component_registration_status") not in COMPONENT_REGISTRATION_STATUS:
         errors.append("context.component_registration_status_invalid")
+    if "scoring_eligible" in context and not isinstance(context.get("scoring_eligible"), bool):
+        errors.append("context.scoring_eligible_invalid")
     errors.extend(_dose_errors(context, known_component_ids))
     errors.extend(_outcome_errors(context))
     return errors

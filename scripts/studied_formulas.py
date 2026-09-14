@@ -20,7 +20,7 @@ from probiotic_measurements import (
     strain_cfu_tier, clinical_strain_research_scope, normalized_cfu_count,
     effective_strain_evidence, identity_review_accepted, context_accepted_for_scoring,
     classify_dose_applicability, dose_applicability_credit, DOSE_MEASUREMENT_UNITS,
-    clinical_review_provenance_valid,
+    clinical_review_provenance_valid, effective_clinical_dose_basis,
 )
 
 
@@ -577,13 +577,18 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
             or population.get("age_group") not in ("adult", "child", "infant", "mixed", "unknown")
             or not isinstance(population.get("description"), str) or not population["description"].strip()
             or not isinstance(dose, Mapping)
-            or dose.get("basis") not in ("discrete_daily_arms", "measured_viability", "single_challenge", "unresolved")
+            or effective_clinical_dose_basis(dose) not in (
+                "discrete_daily_arms", "measured_viability", "single_challenge",
+                "unresolved", "not_applicable", "combination_total_daily")
             or (dose.get("measurement_type") or "viable_count") not in DOSE_MEASUREMENT_UNITS
             or dose.get("unit") not in DOSE_MEASUREMENT_UNITS[dose.get("measurement_type") or "viable_count"]
             or not isinstance(dose.get("values"), list)
             or any(_number(v) is None or _number(v) <= 0 for v in dose["values"])
-            or (dose["basis"] == "discrete_daily_arms" and not dose["values"])
-            or (dose["basis"] == "unresolved" and dose["values"])
+            or (effective_clinical_dose_basis(dose) == "discrete_daily_arms"
+                and context.get("identity_scope") != "combination"
+                and not dose["values"]
+                and dose.get("dose_status") != "extraction_pending")
+            or (effective_clinical_dose_basis(dose) == "unresolved" and dose["values"])
             or not text_list(dose.get("dosage_forms"), allow_empty=True)
             or not text_list(dose.get("co_therapies"), allow_empty=True)):
         return False
@@ -659,7 +664,12 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             # with a label-owned CFU dose. Keep the source context visible, but
             # never let a numeric coincidence establish applicability.
             comparison = "study_dose_not_viable_count"
-        elif dose["basis"] != "discrete_daily_arms":
+        elif effective_clinical_dose_basis(dose) != "discrete_daily_arms":
+            comparison = "study_daily_dose_unresolved"
+        elif not dose.get("values"):
+            # A canonical per-strain dose can be explicitly pending extraction;
+            # an empty arm list is unresolved, not evidence that the label is
+            # outside the studied range.
             comparison = "study_daily_dose_unresolved"
         elif amount is None:
             comparison = "label_dose_unknown"

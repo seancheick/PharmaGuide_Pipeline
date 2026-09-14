@@ -70,6 +70,19 @@ def test_other_measurements_never_become_daily_dose_thresholds(registry, basis):
     assert assessment(strain_product(dose=1e9))["study_contexts"][0]["dose_comparison"] == "study_daily_dose_unresolved"
 
 
+def test_pending_canonical_per_strain_dose_is_unresolved_not_outside_range(registry):
+    dose = registry["STRAIN_LGG"]["study_contexts"][0]["dose"]
+    dose.update(
+        basis="unresolved",
+        dose_basis="per_strain_daily",
+        dose_status="extraction_pending",
+        values=[],
+    )
+    result = assessment(strain_product(dose=1e9))["study_contexts"][0]
+    assert result["dose_comparison"] == "study_daily_dose_unresolved"
+    assert result["clinical_applicability"] == "not_established"
+
+
 def test_spore_counts_never_match_a_cfu_label_dose(registry):
     row = registry["STRAIN_LGG"]["study_contexts"][0]
     row["dose"].update(measurement_type="spores", unit="spores", values=[1e9])

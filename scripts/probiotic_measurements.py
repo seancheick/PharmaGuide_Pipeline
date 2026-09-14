@@ -242,8 +242,35 @@ def context_accepted_for_scoring(context) -> bool:
     return (
         isinstance(context, Mapping)
         and context.get("review_status") == "clinician_approved"
+        # A clinician approval records review provenance; it does not override
+        # an explicit scope decision that this context is not eligible for
+        # scoring (for example, a class-level or ranking-only record).
+        and context.get("scoring_eligible") is not False
         and clinical_review_provenance_valid(context)
     )
+
+
+def effective_clinical_dose_basis(dose: Mapping) -> str | None:
+    """Resolve the canonical frozen dose basis to the runtime vocabulary.
+
+    New contexts store ``dose.dose_basis``.  Older contexts store
+    ``dose.basis``.  The frozen field wins when present; an unknown value
+    fails closed instead of silently falling back to a potentially conflicting
+    legacy value.  This keeps one owner for the meaning of a clinical dose
+    while preserving compatibility with legacy registry records.
+    """
+    if not isinstance(dose, Mapping):
+        return None
+    if "dose_basis" in dose:
+        return {
+            "per_strain_daily": "discrete_daily_arms",
+            "nominal_assigned_arm": "discrete_daily_arms",
+            "combination_total_daily": "combination_total_daily",
+            "measured_viability": "measured_viability",
+            "single_challenge": "single_challenge",
+            "not_applicable": "not_applicable",
+        }.get(dose.get("dose_basis"))
+    return dose.get("basis") if isinstance(dose.get("basis"), str) else None
 
 
 def identity_confidence(entry) -> str:
@@ -394,7 +421,7 @@ def classify_dose_applicability(amount, dose: Mapping) -> tuple[str, str]:
         values = [float(v) for v in (dose.get("values") or [])]
     except (TypeError, ValueError):
         return "DOSE_UNKNOWN", "study_daily_dose_unresolved"
-    if dose.get("basis") != "discrete_daily_arms" or not values:
+    if effective_clinical_dose_basis(dose) != "discrete_daily_arms" or not values:
         return "DOSE_UNKNOWN", "study_daily_dose_unresolved"
     if amount is None:
         return "DOSE_UNKNOWN", "label_dose_unknown"
