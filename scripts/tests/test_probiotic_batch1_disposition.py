@@ -74,3 +74,32 @@ def test_evidence_review_packet_uses_frozen_fields_without_personal_metadata() -
     assert "network_node_estimate" in packet
     assert "reviewer name/credentials" not in packet
     assert "decision date" not in packet.lower()
+
+
+def test_applied_batch1_disposition_survives_later_registry_edits(tmp_path) -> None:
+    """Once applied, an unrelated registry change (the next status decision or
+    curation wave) must not turn the disposition back into a snapshot mismatch."""
+    module = _module()
+    registry = json.loads(
+        (ROOT / "scripts/data/clinically_relevant_strains.json").read_text()
+    )
+    disposition = json.loads(module.DISPOSITION.read_text())
+    assert module._already_applied(registry, disposition)
+
+    later = copy.deepcopy(registry)
+    lgg = next(e for e in later["clinically_relevant_strains"] if e["id"] == "STRAIN_LGG")
+    lgg["study_contexts"][0]["review_status"] = "adjudication_required"
+    later_path = tmp_path / "clinically_relevant_strains.json"
+    later_path.write_text(json.dumps(later, indent=2, ensure_ascii=False) + "\n")
+    module.REGISTRY = later_path
+
+    _, prospective = module.validate(later, disposition)
+    assert module._contexts(prospective) == module._contexts(later)
+    assert module._already_applied(later, disposition)
+
+    # A partially reverted patch is no longer "applied": the snapshot rule returns.
+    reverted = copy.deepcopy(later)
+    patch = disposition["patches"][0]
+    target = module._contexts(reverted)[patch["record_id"]]
+    module._write_path(target, patch["field_path"], patch["old_value"])
+    assert not module._already_applied(reverted, disposition)

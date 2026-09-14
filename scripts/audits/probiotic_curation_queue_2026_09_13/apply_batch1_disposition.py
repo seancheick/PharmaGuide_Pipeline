@@ -104,6 +104,30 @@ def _write_path(root: dict[str, Any], path: str, value: Any) -> None:
         current = sequence[int(index)]
 
 
+def _already_applied(registry: dict[str, Any], disposition: dict[str, Any]) -> bool:
+    """True when every declared patch value is already present in the registry.
+
+    The snapshot hash binds a patch to the exact registry it was written for;
+    once applied, the patched values themselves are the proof. Later, unrelated
+    registry changes (a status decision, the next curation wave) must not turn
+    an applied disposition back into a snapshot mismatch.
+    """
+    patches = disposition.get("patches")
+    if not isinstance(patches, list) or not patches:
+        return False
+    contexts = _contexts(registry)
+    for patch in patches:
+        if not isinstance(patch, dict):
+            return False
+        context = contexts.get(patch.get("record_id"))
+        if context is None or not isinstance(patch.get("field_path"), str):
+            return False
+        current = _read_path(context, patch["field_path"])
+        if current is MISSING or current != patch.get("new_value"):
+            return False
+    return True
+
+
 def validate(registry: dict[str, Any], disposition: dict[str, Any]) -> tuple[dict[str, dict[str, Any]], dict[str, Any]]:
     metadata = disposition.get("_metadata")
     if not isinstance(metadata, dict):
@@ -111,7 +135,7 @@ def validate(registry: dict[str, Any], disposition: dict[str, Any]) -> tuple[dic
     expected_sha = metadata.get("dataset_sha256")
     actual_sha = _sha256(REGISTRY)
     applied_sha = metadata.get("applied_dataset_sha256")
-    already_applied = actual_sha == applied_sha
+    already_applied = actual_sha == applied_sha or _already_applied(registry, disposition)
     if expected_sha != actual_sha and not already_applied:
         raise ValueError(
             f"dataset snapshot mismatch: expected {expected_sha}, current {actual_sha}"
@@ -235,7 +259,7 @@ def main() -> int:
     registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
     disposition = json.loads(DISPOSITION.read_text(encoding="utf-8"))
     _, prospective = validate(registry, disposition)
-    if args.apply and _sha256(REGISTRY) != disposition["_metadata"].get("applied_dataset_sha256"):
+    if args.apply and not _already_applied(registry, disposition):
         _atomic_write(REGISTRY, prospective)
         print(f"applied {len(disposition['patches'])} batch-1 field patches; review statuses unchanged")
     elif args.apply:
