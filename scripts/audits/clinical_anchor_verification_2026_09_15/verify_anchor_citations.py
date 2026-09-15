@@ -7,11 +7,10 @@ ledger covers exactly the reference entries whose notes say 'No official DRI'.
 """
 from __future__ import annotations
 
-import html
 import json
 import re
 import time
-import unicodedata
+import sys
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -19,13 +18,10 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
+sys.path.insert(0, str(ROOT / "scripts"))
+from api_audit.pubmed_xml import bound_pmc_text, source_quote_matches
 LEDGER = json.loads((HERE / "anchor_verification.json").read_text())
 REFERENCE = json.loads((ROOT / "scripts/data/rda_optimal_uls.json").read_text())
-
-
-def norm(text: str) -> str:
-    text = unicodedata.normalize("NFKC", text or "")
-    return re.sub(r"[^a-z0-9]+", "", text.lower())
 
 
 def get(url: str, tries: int = 4) -> bytes:
@@ -53,21 +49,22 @@ for article in root.findall(".//PubmedArticle"):
     title = "".join(node.find("ArticleTitle").itertext()) if node.find("ArticleTitle") is not None else ""
     abstracts[pmid] = title + " " + " ".join("".join(x.itertext()) for x in node.findall("Abstract/AbstractText"))
 
-full_texts: dict[str, str] = {}
+full_texts: dict[str, tuple[str, str]] = {}
 failures, checked, via_full = [], 0, 0
 for anchor in anchors:
     for item in anchor["evidence"]:
         checked += 1
-        quote = norm(item["quote"])
-        if quote in norm(abstracts.get(item["pmid"], "")):
+        quote = item["quote"]
+        if source_quote_matches(quote, abstracts.get(item["pmid"], "")):
             continue
         pmcid = item.get("pmcid")
         if pmcid:
             if pmcid not in full_texts:
-                raw = get(f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML").decode("utf-8", "ignore")
-                full_texts[pmcid] = html.unescape(re.sub(r"<[^>]+>", " ", raw))
+                raw = get(f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML")
+                full_texts[pmcid] = (item["pmid"], bound_pmc_text(raw, item["pmid"]))
                 time.sleep(0.3)
-            if quote in norm(full_texts[pmcid]):
+            bound_pmid, full_text = full_texts[pmcid]
+            if bound_pmid == item["pmid"] and source_quote_matches(quote, full_text):
                 via_full += 1
                 continue
         failures.append((anchor["id"], item["pmid"], pmcid, item["quote"][:80]))

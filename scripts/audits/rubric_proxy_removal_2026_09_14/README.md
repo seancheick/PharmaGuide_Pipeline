@@ -1,5 +1,13 @@
 # Rubric calibration passes — quality_score 1.5.1 (2026-09-15)
 
+**Audit correction, 1.5.2:** historical results below describe their original
+snapshots, not current behavior. A label COA/QR mention does not verify testing;
+only registry-backed product certification reaches the product tier today.
+Verified facility evidence survives added label claims. Modified glutamine and
+betaine-HCl forms no longer borrow their parent's clinical-dose anchor.
+See [the follow-up audit](../scoring_boundary_audit_2026_09_15/README.md) for
+current evidence, remaining calibration work and rebuild instructions.
+
 This audit records the rubric-proxy cleanup plus the verification-tier and official-DRI
 dose passes. Each change is pinned to a reproducible packet or an explicit config
 fingerprint; nothing here silently chooses thresholds from the result distribution.
@@ -56,6 +64,10 @@ python3 $A/diff_packet.py before.json after.json --packet pass1 --allow-group <g
 `diff_packet.py` exits 1 when a product outside the allowed groups moves (score, status,
 tier, cap or any pillar), and refuses snapshots scored from different inputs or id lists,
 unknown group names, or any `control_` group in `--allow-group`.
+It also refuses missing/non-finite public scores and incomplete/out-of-bounds
+pillars. Snapshots record dirty-checkout status, tracked-diff hash and the shared
+scoring-config provenance, so uncommitted scoring edits are not represented as
+the code of the recorded commit alone.
 
 | Step | Allowed groups | Result |
 |---|---|---|

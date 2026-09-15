@@ -37,12 +37,19 @@ if ids != frozen:
 sys.path.insert(0, str(root / "scripts"))
 os.chdir(root / "scripts")
 from score_supplements_v4 import score_product_v4  # noqa: E402
+from scoring_v4.config_registry import all_config_provenance  # noqa: E402
+
+diff = subprocess.run(["git", "-C", str(root), "diff", "--binary", "HEAD"], capture_output=True, check=True).stdout
+status = subprocess.run(["git", "-C", str(root), "status", "--porcelain"], capture_output=True, check=True).stdout
 
 snap = {"_meta": {
     "packet": args.packet,
     "input_sha256": hashlib.sha256(raw).hexdigest(),
     "ids": ids,
     "checkout_commit": subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
+    "checkout_dirty": bool(status.strip()),
+    "tracked_diff_sha256": hashlib.sha256(diff).hexdigest(),
+    "scoring_configs": all_config_provenance(),
 }}
 for pid, product in zip(ids, products):
     result = score_product_v4(product)

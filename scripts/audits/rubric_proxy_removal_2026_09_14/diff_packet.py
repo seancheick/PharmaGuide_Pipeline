@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -18,6 +20,15 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from select_packet import ID_FILES  # noqa: E402
+sys.path.insert(0, str(HERE.parents[1]))
+from scoring_v4.quality_score import _config  # noqa: E402
+
+
+def valid_number(value):
+    return not isinstance(value, bool) and isinstance(value, (int, float)) and math.isfinite(value)
+
+
+pillar_limits = {name: spec["weight"] for name, spec in _config()["pillars"].items()}
 
 parser = argparse.ArgumentParser()
 parser.add_argument("before")
@@ -40,6 +51,20 @@ for label, snap in (("before", before), ("after", after)):
     meta = snap.get("_meta") or {}
     if meta.get("packet") != args.packet or meta.get("ids") != [p["id"] for p in packet]:
         raise SystemExit(f"REFUSED: {label} snapshot was not scored from the frozen {args.packet} id list")
+    if not re.fullmatch(r"[0-9a-f]{64}", str(meta.get("input_sha256") or "")):
+        raise SystemExit(f"REFUSED: {label} snapshot lacks a valid input fingerprint")
+    for product in packet:
+        row = snap.get(product["id"]) or {}
+        status = row.get("status")
+        score = row.get("score")
+        if status not in {"scored", "suppressed_safety", "not_scored"}:
+            raise SystemExit(f"REFUSED: {label} {product['id']} invalid score status")
+        if (status == "scored" and not (valid_number(score) and 0 <= score <= 100)) or (status != "scored" and score is not None):
+            raise SystemExit(f"REFUSED: {label} {product['id']} invalid public score")
+        pillars = row.get("pillars") or {}
+        if status == "scored" and (set(pillars) != set(pillar_limits)
+                or not all(valid_number(n) and 0 <= n <= pillar_limits[k] for k, n in pillars.items())):
+            raise SystemExit(f"REFUSED: {label} {product['id']} incomplete or invalid pillars")
 if before["_meta"]["input_sha256"] != after["_meta"]["input_sha256"]:
     raise SystemExit("REFUSED: snapshots were scored from different packet inputs")
 
