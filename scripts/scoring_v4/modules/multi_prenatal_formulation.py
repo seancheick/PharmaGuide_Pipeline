@@ -21,15 +21,16 @@ from typing import Any, Dict, Iterable, List
 
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
-    canonical_key,
     get_active_ingredients,
     has_usable_individual_dose,
     is_scorable,
     _as_float,
-    _safe_dict,
     _safe_list,
 )
-from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
+from scoring_v4.modules.generic_formulation import (
+    apply_formulation_presence_floor,
+    shared_formulation_penalty_detail,
+)
 
 
 from scoring_v4.quality_score_config import block as _cfg_block
@@ -54,16 +55,6 @@ def _clamp(low: float, high: float, value: float) -> float:
 
 def _round(value: float) -> float:
     return round(float(value), 2)
-
-
-def _has_mapped_formulation_active(product: Dict[str, Any]) -> bool:
-    iqd = _safe_dict((product or {}).get("ingredient_quality_data"))
-    for ing in _safe_list(iqd.get("ingredients_scorable")):
-        if not is_scorable(ing):
-            continue
-        if bool(ing.get("mapped", False)) or canonical_key(ing):
-            return True
-    return False
 
 
 def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -144,16 +135,13 @@ def score_formulation(product: Any) -> Dict[str, Any]:
 
     positive = sum(components.values())
     penalty_magnitude = sum(abs(value) for value in penalties.values())
-    pre_floor_score = positive - penalty_magnitude
-    presence_floor_applied = (
-        _has_mapped_formulation_active(product)
-        and positive > 0
-        and penalty_magnitude > 0
-        and pre_floor_score <= 0
+    score, presence_floor_applied, pre_floor_score = apply_formulation_presence_floor(
+        product,
+        positive,
+        penalty_magnitude,
+        floor=FORMULATION_PRESENCE_FLOOR,
+        cap=CAP_FORMULATION,
     )
-    score = _clamp(0.0, CAP_FORMULATION, pre_floor_score)
-    if presence_floor_applied:
-        score = max(score, FORMULATION_PRESENCE_FLOOR)
     score = _round(score)
     metadata["presence_floor"] = {
         "target": FORMULATION_PRESENCE_FLOOR,

@@ -757,6 +757,33 @@ def shared_formulation_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]
     }
 
 
+def apply_formulation_presence_floor(
+    product: Dict[str, Any],
+    positive: float,
+    penalty_total: float,
+    *,
+    floor: float,
+    cap: float,
+) -> tuple[float, bool, float]:
+    """Apply the shared mapped-active floor without a penalty discontinuity.
+
+    The previous condition activated only once penalties reduced the raw score
+    to zero.  A product at 0.1 therefore scored below an otherwise-identical
+    product with one extra 0.1 penalty, which jumped up to the 2-point floor.
+    Apply the floor throughout the entire sub-floor interval instead.
+    """
+    pre_floor_score = positive - penalty_total
+    applied = (
+        _has_mapped_formulation_active(product)
+        and positive > 0
+        and pre_floor_score < floor
+    )
+    score = _clamp(0.0, cap, pre_floor_score)
+    if applied:
+        score = max(score, floor)
+    return score, applied, pre_floor_score
+
+
 # --- Public entry point ---------------------------------------------------
 
 
@@ -896,16 +923,13 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         positive += single_floor_adjustment
     penalty_total = _sum_penalty_magnitudes(penalties)
 
-    pre_floor_score = positive - penalty_total
-    presence_floor_applied = (
-        _has_mapped_formulation_active(product)
-        and positive > 0
-        and penalty_total > 0
-        and pre_floor_score <= 0
+    score, presence_floor_applied, pre_floor_score = apply_formulation_presence_floor(
+        product,
+        positive,
+        penalty_total,
+        floor=FORMULATION_PRESENCE_FLOOR,
+        cap=DIMENSION_CAP,
     )
-    score = _clamp(0.0, DIMENSION_CAP, pre_floor_score)
-    if presence_floor_applied:
-        score = max(score, FORMULATION_PRESENCE_FLOOR)
 
     # Record the excellence rollup clamp in the breakdown for explainability.
     if a5_excess > 0:

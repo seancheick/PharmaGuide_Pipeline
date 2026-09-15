@@ -179,6 +179,27 @@ def test_presence_floor_preserves_positive_multi_form_signal_after_penalty_clamp
     assert payload["metadata"]["presence_floor"]["pre_floor_score"] < 0
 
 
+def test_presence_floor_applies_when_penalty_leaves_sub_floor_positive_score(monkeypatch) -> None:
+    import scoring_v4.modules.multi_prenatal_formulation as formulation
+
+    product = _product(
+        ingredients=[_ingredient("vitamin_c", bio_score=1, matched_form="ascorbic acid")],
+    )
+    unpenalized = formulation.score_formulation(product)["score"]
+    penalty = unpenalized - 0.1
+    monkeypatch.setattr(
+        formulation,
+        "shared_formulation_penalty_detail",
+        lambda _product: {"penalties": {"test_penalty": -penalty}, "metadata": {}},
+    )
+
+    payload = formulation.score_formulation(product)
+
+    assert 0 < payload["metadata"]["presence_floor"]["pre_floor_score"] < formulation.FORMULATION_PRESENCE_FLOOR
+    assert payload["score"] == formulation.FORMULATION_PRESENCE_FLOOR
+    assert payload["metadata"]["presence_floor"]["applied"] is True
+
+
 def test_presence_floor_does_not_apply_to_multi_with_no_positive_form_signal(monkeypatch) -> None:
     import scoring_v4.modules.multi_prenatal_formulation as formulation
 

@@ -329,6 +329,54 @@ def test_presence_floor_preserves_positive_form_signal_after_penalty_clamp() -> 
     assert payload["metadata"]["presence_floor"]["pre_floor_score"] < 0
 
 
+def test_presence_floor_is_monotonic_just_above_and_below_zero(monkeypatch) -> None:
+    """Adding a penalty must never increase the Formulation score.
+
+    The old floor activated only at ``pre_floor_score <= 0``. A score of 0.1
+    therefore stayed 0.1, while one more tenth of penalty raised it to 2.0.
+    """
+    import scoring_v4.modules.generic_formulation as formulation
+
+    product = _product(
+        supp_type="multi",
+        ingredients=[_ingredient(name="Low-form active", bio_score=3)],
+    )
+
+    def scored_with_penalty(value: float) -> dict:
+        monkeypatch.setattr(
+            formulation,
+            "shared_formulation_penalty_detail",
+            lambda _product: {"penalties": {"test_penalty": -value}, "metadata": {}},
+        )
+        return formulation.score_formulation(product)
+
+    just_above_zero = scored_with_penalty(2.9)
+    at_zero = scored_with_penalty(3.0)
+
+    assert just_above_zero["score"] == formulation.FORMULATION_PRESENCE_FLOOR
+    assert at_zero["score"] <= just_above_zero["score"]
+    assert just_above_zero["metadata"]["presence_floor"]["applied"] is True
+
+
+def test_presence_floor_is_monotonic_when_first_penalty_is_added() -> None:
+    """The floor must cover the whole sub-floor range, including zero penalty."""
+    from scoring_v4.modules.generic_formulation import apply_formulation_presence_floor
+
+    product = _product(
+        supp_type="multi",
+        ingredients=[_ingredient(name="Low-form active", bio_score=1)],
+    )
+    without_penalty = apply_formulation_presence_floor(
+        product, 1.0, 0.0, floor=2.0, cap=30.0
+    )
+    with_penalty = apply_formulation_presence_floor(
+        product, 1.0, 0.1, floor=2.0, cap=30.0
+    )
+
+    assert without_penalty[:2] == (2.0, True)
+    assert with_penalty[0] <= without_penalty[0]
+
+
 def test_presence_floor_does_not_apply_without_mapped_active() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 

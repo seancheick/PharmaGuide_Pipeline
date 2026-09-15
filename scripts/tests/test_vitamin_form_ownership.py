@@ -317,14 +317,6 @@ def test_unnecessary_complexity_variant_never_adds_formulation_points(case_id: s
         assert after["formulation"] < before["formulation"]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Known Evidence boundary defect deferred to its own bounded batch: an "
-        "unresolved effect direction still inherits positive-efficacy credit "
-        "(plan: 'Generic Evidence has a reproduced fail-open direction default')."
-    ),
-)
 @pytest.mark.parametrize("case_id", [PRENATAL, B_COMPLEX])
 def test_incomplete_review_variant_does_not_keep_positive_evidence(case_id: str) -> None:
     base = _score(_fixture(case_id))

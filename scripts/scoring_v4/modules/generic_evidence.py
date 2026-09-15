@@ -1226,8 +1226,11 @@ def _entry_raw_points(entry: Dict[str, Any]) -> float:
     if raw <= 0:
         return 0.0
 
-    effect = _norm_text(entry.get("effect_direction") or "positive_strong")
-    raw *= EFFECT_DIRECTION_MULTIPLIERS.get(effect, 1.0)
+    # Missing, unknown, or unresolved direction cannot inherit efficacy. Every
+    # shipped evidence record is expected to state this explicitly; malformed
+    # or incomplete review data fails closed instead of defaulting positive.
+    effect = _norm_text(entry.get("effect_direction"))
+    raw *= EFFECT_DIRECTION_MULTIPLIERS.get(effect, 0.0)
     if raw <= 0:
         return 0.0
 
