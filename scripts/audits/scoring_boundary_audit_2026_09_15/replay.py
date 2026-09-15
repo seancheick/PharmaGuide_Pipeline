@@ -61,7 +61,14 @@ def snapshot_probiotics(checkout, products_root):
                     raise ValueError(f"Incomplete public score for {pid}")
             elif score is not None:
                 raise ValueError(f"Unexpected public number for {status}: {pid}")
-            dims = (result.get("_v4_module_breakdown") or {}).get("dimensions") or {}
+            # This entry point returns v4_breakdown; _v4_module_breakdown is
+            # the later artifact projection, not the scorer's return shape.
+            dims = ((result.get("v4_breakdown") or {}).get("module") or {}).get("dimensions") or {}
+            if status == "scored" and any(
+                not isinstance(dims.get(key), dict)
+                for key in ("formulation", "dose", "transparency")
+            ):
+                raise ValueError(f"Missing module dimensions for {pid}")
             rows[pid] = {
                 "name": product.get("product_name"), "status": status, "score": score,
                 "pillars": pillars,

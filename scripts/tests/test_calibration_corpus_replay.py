@@ -28,7 +28,10 @@ def corpus(tmp_path, monkeypatch):
     result = {
         "quality_score_status": "scored", "quality_score_v4_100": 100.0,
         "quality_pillars_v4": {k: {"score": v["weight"]} for k, v in _config()["pillars"].items()},
-        "_v4_module_breakdown": {"dimensions": {"formulation": {"score": 16}}},
+        "v4_breakdown": {"module": {"dimensions": {
+            "formulation": {"score": 16}, "dose": {"score": 22},
+            "transparency": {"score": 15},
+        }}},
     }
     monkeypatch.setattr(scoring_v4.router, "class_for_product", lambda p: p["route"])
     calls = []
@@ -103,4 +106,11 @@ def test_snapshot_keeps_unscored_products_without_inventing_a_number(corpus, mon
     assert report["products"]["2"]["status"] == "not_scored"
     unscored["quality_score_v4_100"] = 0
     with pytest.raises(ValueError, match="Unexpected public number"):
+        replay.snapshot_probiotics(ROOT, root)
+
+
+def test_snapshot_refuses_missing_module_breakdown(corpus):
+    root, _, result, _ = corpus
+    result.pop("v4_breakdown")
+    with pytest.raises(ValueError, match="Missing module dimensions"):
         replay.snapshot_probiotics(ROOT, root)
