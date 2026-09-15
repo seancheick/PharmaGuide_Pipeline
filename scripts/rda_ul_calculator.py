@@ -533,27 +533,39 @@ class RDAULCalculator:
 
         return flags
 
-    def _find_nutrient(self, name: str) -> Optional[Dict]:
-        """Find nutrient in database by name or alias."""
-        key = self._normalize_nutrient_name(name)
-
-        # Direct lookup
+    def _lookup_key(self, key: str) -> Optional[Dict]:
         if key in self.nutrient_lookup:
             return self.nutrient_lookup[key]
-
-        # Check aliases
         if key in self.nutrient_aliases:
-            actual_key = self.nutrient_aliases[key]
-            return self.nutrient_lookup.get(actual_key)
-
-        # Try partial matching for common variations
-        for db_key, data in self.nutrient_lookup.items():
-            if key == "chlorophyll" and db_key == "chlorophyllin":
-                continue
-            if key in db_key or db_key in key:
-                return data
-
+            return self.nutrient_lookup.get(self.nutrient_aliases[key])
         return None
+
+    def _find_nutrient(self, name: str) -> Optional[Dict]:
+        """Find a nutrient by exact standard name, id or alias.
+
+        A numbered vitamer names its vitamin (Vitamin D3 -> Vitamin D). A label
+        name such as "Vitamin B9 (Folate)" may name the compound outside or
+        inside its parentheses, so each part is also looked up exactly; parts
+        naming two different references resolve to neither. There is no
+        substring matching: "TMG (Trimethylglycine)" contains "glycine" and
+        "Echinacea" contains "nac", but neither is that compound.
+        """
+        key = self._normalize_nutrient_name(name)
+        direct = self._lookup_key(key)
+        if direct:
+            return direct
+        vitamer = re.fullmatch(r"(vitamin_[a-z])\d+", key)
+        if vitamer and self._lookup_key(vitamer.group(1)):
+            return self._lookup_key(vitamer.group(1))
+        parts = re.fullmatch(r"\s*(.+?)\s*\((.+)\)\s*", name or "")
+        if not parts:
+            return None
+        hits = {}
+        for part in parts.groups():
+            hit = self._lookup_key(self._normalize_nutrient_name(part))
+            if hit:
+                hits[id(hit)] = hit
+        return next(iter(hits.values())) if len(hits) == 1 else None
 
     def _get_age_sex_values(
         self,

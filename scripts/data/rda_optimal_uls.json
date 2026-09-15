@@ -1129,7 +1129,10 @@
       "synthesis_precursors": null,
       "unofficial_ul": null,
       "nutrient_class": "floor",
-      "ul_basis": "not_applicable"
+      "ul_basis": "not_applicable",
+      "aliases": [
+        "thiamine"
+      ]
     },
     {
       "standard_name": "Riboflavin",
@@ -12234,7 +12237,8 @@
       "id": "glycine",
       "aliases": [
         "glycine",
-        "aminoacetic acid"
+        "aminoacetic acid",
+        "l-glycine"
       ],
       "unit": "mg",
       "ul": null,
