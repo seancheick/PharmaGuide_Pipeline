@@ -5,6 +5,9 @@ unification, rubric-proxy removal, verification tiers, clinical dose references,
 and their cleaner → enricher → scorer → catalog boundaries. This is a code and
 source audit, not a new clinical approval or a catalog release.
 
+The later completed probiotic calibration batch uses baseline `b2ff64d2`;
+its separate results appear below. Do not combine the two replay denominators.
+
 ## Confirmed defects corrected
 
 | Boundary | Defect | Correction |
@@ -19,7 +22,7 @@ source audit, not a new clinical approval or a catalog release.
 | Calibration harness | Two equally empty/invalid snapshots could appear unchanged. Dirty code could be described only by its base commit. | Require real finite public scores and all six bounded pillars; preserve frozen IDs/input hashes; record dirty state, tracked-diff hash and canonical config provenance. |
 
 No reference doses, ingredient identities, approval records or sign-off flags
-were changed. Production config is versioned `1.5.2-evidence-boundary-fixes` and
+were changed in that audit. Its production config was `1.5.2-evidence-boundary-fixes` and
 its fingerprint is pinned in the existing ledger. No second scorer, registry,
 approval path, or app schema was introduced.
 
@@ -70,6 +73,11 @@ later countersignature would be a new, explicit review—not merely changing
 the reviewer string. No consumer claim of clinician approval should be inferred
 from those historical enum names.
 
+Subsequent owner confirmation: Dr. Pham read and approved the review. This is
+not a request for another signature. Preserve the existing historical records;
+do not invent a countersignature date or rewrite their attribution. Remaining
+work is source accuracy, rubric verification and release validation.
+
 ## Calibration direction
 
 Keep the proxy-removal work: gummy format alone, organic/Non-GMO marketing,
@@ -79,12 +87,18 @@ The removed astaxanthin/CoQ10 display caps should stay removed. A high score is
 allowed when the actual applicable pillars justify it; do not tune thresholds
 to make a chosen number of market products reach 98–100.
 
-The next rubric work is **purpose-fit probiotic calibration**, not bulk approval:
+The follow-up is **purpose-fit calibration**, not bulk approval. The active
+implementation and remaining work are tracked in the existing
+[calibration plan](../../../docs/superpowers/plans/2026-09-15-probiotic-completeness.md).
+Its design was presented before implementation:
 
-1. Compare a fully disclosed, well-supported single strain against fully
-   disclosed combinations. The current exact-identity component still awards
-   3 points for one identity and 8 for five; the CFU-size ladder also remains.
-   These are known policy choices, not proof that more strains/CFU are better.
+1. Exact identity quality is now `8 × exact source-owned identities / all
+   eligible named microbial identities`, independent of clinical projections. One fully identified
+   strain and five fully identified strains both earn 8. Formulation no longer
+   rewards CFU size or strain diversity. Its positive ceiling/reference is 16:
+   potency disclosure 4 + exact identity completeness 8 + delivery 3 + the
+   existing prebiotic complement 1. Invalid source proof earns no exact credit;
+   shared blend CFU is never allocated to its members.
 2. Keep label disclosure, condition-specific evidence, dose applicability and
    verification distinct. Species-only labels cannot be resolved into invented
    strains. A blend's total CFU cannot become every strain's CFU, and AFU is
@@ -115,7 +129,84 @@ rubric changes and benchmark them before paying for another full regeneration.
 The commands below are also appropriate for inspecting the corrected current
 model, but that rebuild alone would not finish the larger calibration plan.
 
-## Next operational run
+## Completed probiotic calibration — frozen runtime `41a7699e`
+
+Config: `1.6.0-probiotic-completeness`, fingerprint `ab9f5a61fd77e879`.
+The existing six-pillar scorer, source resolver and measurement owner remain
+the only implementation. The obsolete count-only Wave 1 numeric projection
+was retired in favor of the existing production replay, not repaired into a
+second scorer. Clinical registry records and approval attribution are unchanged.
+
+Final independent reviews approved the implementation. The frozen-code fast
+suite passed **15,492 tests, 66 skipped, zero failures** in 458.94 seconds.
+Its one warning comes from the deliberate image-decompression-bomb test.
+Skipped live/release fixtures are not counted as release validation.
+
+Fixed arithmetic canaries passed: with potency disclosure 4 and delivery 3,
+no penalties or optional complement, one exact strain and five exact strains
+both earn identity 8/8 and public Formulation 18.8/20. Two exact of four earn
+identity 4/8 and Formulation 13.8/20; species-only earns identity zero and
+Formulation 8.8/20. Changing total CFU from 1 to 50 billion adds no Formulation
+points. The existing full complement can reach Formulation 20/20; no final
+score is capped or tuned upward to manufacture an excellent market product.
+
+Source-bound regressions also cover missing clinical projections, structured
+forms, aliases, malformed member lists, stale counts, dangling references,
+nonlive ancestors, and flattened containers. Actual botanical/food categories
+cannot be overridden merely by a derived probiotic name. The same source
+predicate protects native clinical/CFU proof; diagnostic originals survive.
+
+Frozen comparisons (read-only; no new cleaning/enrichment):
+
+- Both packets: **111 + 79 products, zero unexpected movements**. Eighteen
+  products move in packet 1 and two in packet 2, all in Formulation. Unrelated
+  controls and all other pillars are unchanged. Group names such as
+  `probiotic_multi_all_exact` are frozen historical strata, not a current
+  finding that every label in that group is completely identified.
+- All stored products: routing inspected across **15,418** inputs; all **553**
+  routed probiotics replayed. Product IDs, every input-file hash and routing
+  counts match baseline. Both checkouts are clean and commit-stamped.
+- Public statuses: **548 scored, 5 safety-suppressed**, unchanged. Of the 548
+  scored products, **162 increase, 383 decrease, 3 stay unchanged**. Mean delta
+  is **−2.04**, range **−10.4 to +5.9**. This is removal of count/CFU proxies
+  plus corrected source ownership, not a promise that more products score high.
+- Pillar changes: Formulation 545; Dose 5; Transparency 2; **Evidence,
+  Verification and Safety zero**. No new positive outcomes, tested-dose
+  matches, clinical approvals, or AFU-to-CFU conversions were introduced.
+
+Every non-Formulation movement was inspected against actual stored rows:
+
+| Products | Source correction | Dose / Transparency effect |
+|---|---|---|
+| 182666, 210848 | Six actual microbes, not five; one individually measured. | Dose disclosure uses 1/6, not 1/5. Transparency's existing aggregate floor keeps its public score unchanged. |
+| 232325 | Two actual microbial rows, only one exact and individually measured; the previously omitted source remains unresolved. | Disclosure becomes 1/2. Existing limited aggregate-disclosure handling changes; no CFU is allocated to the unresolved row. |
+| 251169 | The flattened marketing parent is not an organism: 15 members, 14 exact, zero individually measured. | Removes the parent's falsely individual 10-billion-CFU disclosure. No child borrows its quantity. |
+| 46802 | Bioflora is a container for one species-only child with its own explicit 2-billion-CFU quantity, not a second organism. | Corrects disclosure from 1/2 to 1/1. Exact identity and clinical adequacy remain zero; the redundant aggregate floor no longer applies. |
+
+Other inspected controls: HSO 297698 has 12 exact microbial identities;
+its grass ingredients are not microbes. FLORASSIST 182421/232334 has five
+exact of six actual members: the ambiguous `B. bifidum/lactis BB-02` text
+must not disappear merely because an older projection omitted it.
+
+Private before/after receipts are retained under
+`reports/private_scoring_calibration_20260915/` (gitignored), including
+`probiotic-before-b2ff64d2.json`, `probiotic-after-41a7699e.json`, and both
+packet pairs. Final artifact copies were hash-checked. No product-output
+directory, shipped database or phone artifact was replaced.
+
+Nonblocking performance observation from independent review: the additional
+ancestor checks measured approximately 79ms for 30 synthetic rows, 216ms for
+60, and 87ms for the actual 251169 summary. Any future optimization must reuse
+this source owner and preserve its adversarial cases, not cache stale results.
+
+**Still not complete:** vitamin/prenatal form ownership, focused/broad fairness,
+generic dose/evidence hierarchy, indication-aware omega, ingredient-specific
+fiber/sports, review-coverage explanations, and the complete five-variant
+canary matrix. The next vitamin batch is already specified in the same plan.
+Do not run the operational commands below until the combined calibration is
+stable and the owner is ready to regenerate.
+
+## Next operational run — after the remaining calibration
 
 Start from **Clean**, not just Enrich: this audit changed the cleaner's strain
 matching. Do not reuse the earlier mixed/partially interrupted outputs.

@@ -41,7 +41,7 @@ Files:
   tradeoffs, config/version pins; add bounded
   completeness regression file if that keeps fixtures simpler.
 
-- [ ] Add red regression tests calling the existing modules. Required assertions:
+- [x] Add red regression tests calling the existing modules. Required assertions:
 
   ```python
   assert single_identity_points == five_fully_identified_points == 8
@@ -57,8 +57,8 @@ Files:
   fractional/nonfinite/negative counts, missing label list, stale lower/higher
   counts, unmapped names and species-general IDs. An unknown name must remain
   in the denominator; it cannot disappear because no registry match exists.
-- [ ] Run focused tests through `scripts/test.sh fast`; record genuine red failures.
-- [ ] Implement the shared counting boundary. Reuse
+- [x] Run focused tests through `scripts/test.sh fast`; record genuine red failures.
+- [x] Implement the shared counting boundary. Reuse
   `clinical_strain_identity_key`/`clinical_strain_identity_matches` and registry;
   do not build a new strain matcher. Only exact aliases collapse. The existing
   total_strain_count is derived, not a sourced declaration, so ignore it for
@@ -72,15 +72,15 @@ Files:
   BB536/HOWARU fixtures plus these exact/unresolved and distinct-form cases.
   Identity-only resolution stays in `studied_formulas.py`; native clinical
   rows and their stricter individual-measurement proof remain unchanged.
-- [ ] Apply raw formula `4 + 8 * exact/total + delivery + complement`, with
+- [x] Apply raw formula `4 + 8 * exact/total + delivery + complement`, with
   missing components zero, penalties before clamp, maximum 16. Reuse source-
   owned exact matches and the same label identity keys in numerator/denominator.
   Keep the verified whole-formula AFU branch native and remove its old +5.
-- [ ] Align consumers, descriptions, config version/fingerprint and existing
+- [x] Align consumers, descriptions, config version/fingerprint and existing
   tests. Preserve regressions for all source/certification/chemical boundaries.
-- [ ] Run focused tests; review the full diff. Do not refresh locked final
+- [x] Run focused tests; review the full diff. Do not refresh locked final
   scores unless the measured change is attributable to this approved math.
-- [ ] Independent spec compliance then code-quality review; resolve findings.
+- [x] Independent spec compliance then code-quality review; resolve findings.
 
 ## Task 2 — frozen-input evidence, report and commit
 
@@ -88,21 +88,32 @@ Files: reuse `scripts/audits/rubric_proxy_removal_2026_09_14/score_packet.py`
 and `diff_packet.py`; extend the existing boundary-audit replay/report only
 when necessary rather than inventing another scorer/harness.
 
-- [ ] Freeze baseline outputs for both existing packets from baseline commit
+- [x] Freeze baseline outputs for both existing packets from baseline commit
   before editing runtime code, or use an isolated exact baseline checkout.
-- [ ] Run current scorer against the same 111 + 79 frozen inputs. Verify IDs,
+- [x] Run current scorer against the same 111 + 79 frozen inputs. Verify IDs,
   hashes, finite real public scores and six pillars through the existing diff.
-- [ ] Read-only all-stored-probiotic comparison: same product input for baseline
+- [x] Read-only all-stored-probiotic comparison: same product input for baseline
   and candidate; count/refuse malformed batches; report corpus size, routed
   categories, score and pillar deltas, unavailable/stale inputs. This is not a
   fresh cleaned/enriched release. No output_* directories may be overwritten.
-- [ ] Confirm expected movements and invariants: no Formulation size gain;
+- [x] Confirm expected movements and invariants: no Formulation size gain;
   only count/identity fixes can affect disclosure; Evidence, Verification,
   Safety unchanged; unknown species not promoted; AFU unchanged in Dose.
-- [ ] Run `scripts/test.sh fast` on frozen code; do not edit during the run.
-- [ ] Record measured results and outstanding broader roadmap items. Commit
+- [x] Run `scripts/test.sh fast` on frozen code; do not edit during the run.
+- [x] Record measured results and outstanding broader roadmap items. Commit
   implementation and push main after fresh fetch/review; preserve user files.
 - [ ] Continue the broader roadmap in bounded batches before any regeneration.
+
+Completed runtime: `41a7699e4840274debf25d4d0ae5a15cc79c8a31`.
+Final fast suite: **15,492 passed, 66 skipped**, zero failures (458.94s).
+Independent spec and quality reviews approved the frozen candidate.
+Both fixed packets (111 + 79) have zero unexpected movements. All 553 stored
+probiotic inputs were replayed against baseline `b2ff64d2`; input hashes,
+routes and statuses match. Evidence, Verification and Safety are unchanged.
+Five Dose and two Transparency changes trace to shared membership/disclosure
+corrections, not new adequacy thresholds. Full results and limits are in
+`scripts/audits/scoring_boundary_audit_2026_09_15/README.md`.
+This closes the probiotic batch only. No operational regeneration or release ran.
 
 ### Final identity-source clarification
 
@@ -128,7 +139,7 @@ No new clinical rows, tested-dose matches or positive study outcomes are created
 
 ## Broader calibration tracking (not claimed complete)
 
-- [ ] Probiotic correction above, end to end.
+- [x] Probiotic correction above, end to end.
 - [ ] Single/focused duo-trio/broad fairness using existing material-active roles.
 - [ ] Generic dose hierarchy with preparation/population/outcome applicability.
 - [ ] Indication-aware omega dosing; verify ratio proxy stays absent.

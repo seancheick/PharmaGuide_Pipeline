@@ -60,6 +60,29 @@ registered source identities earn 8/8 even when two share an aggregate amount;
 only the separately measured identity earns per-strain CFU disclosure. Keep
 conflicting source representations and existing BLOCKED/HOLD policy fail-closed.
 
+Live-organism eligibility precedes projected-name fallback. Explicit nonlive
+preparation evidence recognized by the existing source predicate excludes that
+source and its descendants from probiotic identity/count/disclosure, even if
+an older projection retains a live-looking
+alias. Retain all representations for conflict checks and preserve diagnostic
+rows; removing a nonlive member never allocates its blend amount to a live one.
+Resolve source scope before accepting projected names: a referenced row and
+its descendants, or the actual active-label scope for a ref-less projection.
+Within an available source scope, unmatched projections cannot invent members;
+unknown actual live children remain counted. Preserve the existing detached-
+name fallback only when the product has no actual source owners; a dangling
+reference in a source-backed product cannot authorize a projected member.
+Nested and flattened descendants inherit nonlive ancestor exclusions through
+the same source predicate used by native clinical proof and label completeness.
+Use the cleaner's existing category provenance when distinguishing an unknown
+organism from a botanical, enzyme, food matrix or other nonmicrobial child.
+A missing top-level `category` does not erase `raw_category` or raw taxonomy.
+Malformed form lists must not be silently shortened into a complete member set.
+Preserve the existing distinction between an organism's preparation forms and
+a structural header's sibling-component forms; a nonlive sibling does not
+make every sibling nonlive. Actual nested/flattened containers are not extra
+organisms, even when an older cleaner projection lacks its header flag.
+
 Keep the same keys for count/disclosure consumers, with no new public schema.
 Dose and Transparency use the same denominator and alias keys. Preserve all
 existing CFU ownership checks, including the ban on splitting aggregate CFU.
@@ -99,7 +122,7 @@ chemical-form dose references, certification scope and citation checks.
 Use frozen real packets and a read-only whole stored-corpus comparison with
 input/config fingerprints; never select thresholds from those results.
 Version/fingerprint the canonical config and inspect exported bonus wording.
-Run frozen-code fast suite before committing implementation. No operational
+Run the frozen-code fast suite before the integrated push. No operational
 Clean/Enrich/Score, catalog regeneration, deployment or release in this batch.
 
 ## Remaining roadmap — not completed by this correction
