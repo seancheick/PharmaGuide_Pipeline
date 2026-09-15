@@ -33,6 +33,13 @@ NOTE = {
     "supported_uncontrolled": f"Anchor dose supported only by uncontrolled evidence (PubMed review {CHECKED_ON}); not used for graduated dose credit.",
     "not_established": f"Anchor dose not established by the cited sources (PubMed review {CHECKED_ON}); not used for graduated dose credit.",
 }
+# A review sentence from any run: the NOTE templates with the date, old value and unit
+# generalised. Matching "up to the next period" broke on "3.2 g" and duplicated sentences.
+REVIEW_SENTENCE = re.compile("|".join(
+    r"\s*" + re.escape(template).replace(re.escape(CHECKED_ON), r"\d{4}-\d{2}-\d{2}")
+    .replace(re.escape("{old}"), r"[\d.]+").replace(re.escape("{unit}"), r"\S+")
+    for template in NOTE.values()
+))
 
 
 def _same(a, b) -> bool:
@@ -77,8 +84,8 @@ def main() -> None:
                 entry["references"].append(pmid)
                 changes.append(f"+ref {pmid}")
         note = NOTE[item["decision"]].format(old=item["anchor_current"], unit=item["unit"])
-        # One review sentence per entry: drop any earlier review sentence first.
-        notes = re.sub(r"\s*Anchor dose [^.]*?(?:PubMed|verification)[^.]*?\.(?:[^.]*?graduated dose credit\.)?", "", entry.get("notes") or "")
+        # One review sentence per entry: drop every earlier review sentence first.
+        notes = REVIEW_SENTENCE.sub("", entry.get("notes") or "")
         entry["notes"] = f"{notes} {note}".strip()
         cited = {e["pmid"] for e in item["evidence"]} & set(entry["references"])
         if item["graduation_eligible"] and not cited:

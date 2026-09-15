@@ -1199,6 +1199,9 @@ def test_clinical_anchor_map_lists_only_pubmed_verified_anchors() -> None:
         assert {e["pmid"] for e in item["evidence"]} & set(entry["references"]), ref
         expected = item.get("anchor_proposed", item["anchor_current"])
         assert {row["rda_ai"] for row in entry["data"]} == {expected}, ref
+    # The applier is re-run; each reviewed entry keeps exactly one dated review sentence.
+    for item in ledger["anchors"]:
+        assert by_id[item["id"]]["notes"].count("Anchor dose ") == 1, item["id"]
     assert not set(generic_dose._DRI_REFERENCE_BY_CANONICAL) & set(generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL)
     assert generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL == block(
         "dose_magnitudes", "generic"

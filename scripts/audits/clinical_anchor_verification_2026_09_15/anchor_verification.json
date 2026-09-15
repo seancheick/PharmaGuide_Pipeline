@@ -173,15 +173,23 @@
       "id": "nmn_nicotinamide_mononucleotide",
       "unit": "mg",
       "anchor_current": 250,
-      "decision": "corrected",
-      "anchor_proposed": 300,
-      "optimal_range_proposed": "300-900",
+      "decision": "verified",
       "graduation_eligible": true,
       "evidence": [
         {
-          "pmid": "35479740",
+          "pmid": "38789831",
           "location": "abstract",
-          "quote": "Healthy volunteers received 250 mg/day of NMN (n = 15) or placebo (n = 15) for 12 weeks"
+          "quote": "Members of the NMN group consumed 250 mg/day NMN for 12 weeks"
+        },
+        {
+          "pmid": "38789831",
+          "location": "abstract",
+          "quote": "the NMN group had a significantly shorter 4-m walking time than the placebo group"
+        },
+        {
+          "pmid": "38789831",
+          "location": "abstract",
+          "quote": "The NMN group had improved sleep quality at 12 weeks relative to the placebo group"
         },
         {
           "pmid": "36482258",
@@ -189,17 +197,28 @@
           "quote": "Walking distance increase during the six-minute walking test was statistically significantly higher in the 300 mg, 600 mg, and 900 mg groups compared to placebo"
         }
       ],
-      "reason": "The 250 mg/day RCT established a biomarker response (higher blood NAD+) but not a clinical outcome. The dose-ranging RCT showed physical-performance and health-status benefits at 300 mg/day, the lowest tested dose with those clinical outcomes; the anchor is corrected to 300 mg/day."
+      "add_references": [
+        "38789831"
+      ],
+      "reason": "The originally cited 250 mg/day RCT (35479740) measured safety and blood NAD+ only, so it does not support a clinical anchor. A below-anchor search found a placebo-controlled RCT at 250 mg/day with between-group clinical outcomes (shorter 4-m walking time, better PSQI sleep scores); its primary stepping-test endpoint was null. The dose-ranging RCT was positive from 300 mg/day. 250 mg/day is the lowest dose with a positive controlled clinical outcome, so the anchor stays at 250 mg/day. The evidence is mixed: other 250 mg/day trials were null or only nominally significant. The 2026-09-15 follow-up audit's correction to 300 mg/day was reverted because it did not search below 300 mg/day."
     },
     {
       "id": "pqq_pyrroloquinoline_quinone",
       "unit": "mg",
       "anchor_current": 20,
-      "decision": "corrected",
-      "anchor_proposed": 21.5,
-      "optimal_range_proposed": "21.5-40",
+      "decision": "verified",
       "graduation_eligible": true,
       "evidence": [
+        {
+          "pmid": "26782228",
+          "location": "abstract",
+          "quote": "Subjects were orally given 20 mg of BioPQQ™ per day or placebo, for 12 weeks"
+        },
+        {
+          "pmid": "26782228",
+          "location": "abstract",
+          "quote": "the change of Stroop interference ratios (SIs) for the PQQ group was significantly smaller than for the placebo group"
+        },
         {
           "pmid": "34415830",
           "location": "abstract",
@@ -216,7 +235,10 @@
           "quote": "There were no significant differences between groups in aerobic performance after endurance-training"
         }
       ],
-      "reason": "The positive placebo-controlled cognition RCT used 21.5 mg/day. The 20 mg/day exercise RCT found no between-group performance benefit (only a biomarker change), so 20 mg/day is not an established clinical-effect anchor; the anchor is corrected to the lowest positive clinical dose found, 21.5 mg/day."
+      "add_references": [
+        "26782228"
+      ],
+      "reason": "A placebo-controlled RCT of 20 mg/day PQQ disodium salt (BioPQQ) found a significant between-group benefit on the Stroop test, and a second placebo-controlled RCT was positive for cognition at 21.5 mg/day. The 20 mg/day exercise RCT was null for performance, so the benefit is cognitive. No positive controlled trial below 20 mg/day was found, so 20 mg/day is the lowest effective dose. The 2026-09-15 follow-up audit's correction to 21.5 mg/day was reverted because it missed the 20 mg/day cognition RCT."
     },
     {
       "id": "berberine",
