@@ -192,6 +192,43 @@ def test_ancestor_source_state_controls_child_identity_clinical_and_cfu(layout, 
     assert len(product["probiotic_data"]["clinical_strains"]) == int(stale_projections)
 
 
+@pytest.mark.parametrize("flattened", [False, True])
+@pytest.mark.parametrize("structured_child", [False, True])
+def test_actual_descendants_make_stale_active_role_parent_a_container(flattened, structured_child):
+    from build_final_db import build_detail_blob
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    # MegaFood 251169: the old cleaner kept the marketing parent as an active
+    # row, while its actual HN001 child was stored separately by source path.
+    ref = "ingredientRows[2]"
+    parent = {"name": "Baby & Me Healthy Microbiome", "standardName": "Lactobacillus Rhamnosus",
+        "raw_source_path": ref, "raw_category": "bacteria", "cleaner_row_role": "active_scorable",
+        "hierarchyType": None, "proprietaryBlend": True, "nestedIngredients": [], "forms": [],
+        "notes": "Baby & Me Healthy Microbiome Note: 10 billion colony forming units (CFU) "}
+    child = {"name": "Lactobacillus rhamnosus (HN001)", "standardName": "Lactobacillus Rhamnosus",
+        "raw_source_path": f"{ref}.nestedRows[0]", "raw_category": "bacteria",
+        "cleaner_row_role": "nested_display_only", "parentBlend": parent["name"], "forms": []}
+    if structured_child:
+        child.update(name="Lactobacillus rhamnosus", forms=[{"name": "HN001"}])
+    sources = [parent, child] if flattened else [parent]
+    if not flattened:
+        parent["nestedIngredients"] = [child]
+    product = {"activeIngredients": sources, "probiotic_data": {
+        "is_probiotic_product": True, "clinical_strains": [], "probiotic_blends": [
+            {"strains": [parent["name"]], "raw_source_path": ref,
+             "cfu_data": {"has_cfu": True, "cfu_count": 1e10, "evidence_scope": "row_level", "raw_source_path": ref}},
+            {"strains": [child["name"]], "raw_source_path": child["raw_source_path"], "cfu_data": {"has_cfu": False}},
+        ]}}
+    formulation = score_formulation(product)
+    assert formulation["metadata"]["total_strain_count"] == 1
+    assert formulation["metadata"]["identified_strain_count"] == 1
+    assert formulation["components"]["exact_identity_completeness"] == 8
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
+    assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 0
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 1
+
+
 @pytest.mark.parametrize("projection", ["complete", "omitted_member", "extra_unknown"])
 @pytest.mark.parametrize("ref_less", [False, True])
 def test_actual_multimember_scope_never_lends_aggregate_cfu_to_shortened_projection(projection, ref_less):

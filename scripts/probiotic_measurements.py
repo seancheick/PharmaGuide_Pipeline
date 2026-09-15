@@ -138,11 +138,16 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     # As in the collector, named children of an actual probiotic container are
     # members even when their own taxonomy/category remains unresolved.
     child_members = set()
+    source_containers = set()
     for owner in owners:
-        if is_probiotic_source_identity(owner) and (is_probiotic_source_header(owner) or owner.get("nestedIngredients")):
-            ref = owner.get("raw_source_path")
-            children = (probiotic_source_scope(product, ref) if isinstance(ref, str) and ref
-                        else list(_clinical_label_rows(owner.get("nestedIngredients"))))
+        ref = owner.get("raw_source_path")
+        children = (probiotic_source_scope(product, ref) if isinstance(ref, str) and ref
+                    else list(_clinical_label_rows(owner.get("nestedIngredients"))))
+        # Actual descendants outrank stale cleaner roles, including flattened
+        # children. Same-path representations alone do not make a container.
+        if owner.get("nestedIngredients") or any(child.get("raw_source_path") != ref for child in children):
+            source_containers.add(id(owner))
+        if is_probiotic_source_identity(owner) and (is_probiotic_source_header(owner) or id(owner) in source_containers):
             child_members.update(id(child) for child in children if child is not owner)
     # Existing source-linked probiotic context can identify an unresolved
     # actual member. It never creates a registry identity or a measurement.
@@ -157,7 +162,7 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
                 child_members.add(id(owner))
     source_member = {
         id(owner): bool(members) and source_live_eligible[id(owner)]
-        and not owner.get("nestedIngredients")
+        and id(owner) not in source_containers
         and (any(cid for _, _, cid in members) or is_probiotic_source_identity(owner)
              or (id(owner) in child_members and _probiotic_source_category(owner) in ("", "other")))
         for owner, members in owned
