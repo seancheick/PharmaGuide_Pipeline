@@ -43,6 +43,47 @@ def test_mixed_malformed_header_forms_cannot_authorize_partial_identity_or_cfu(m
     assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 0
 
 
+@pytest.mark.parametrize("category_field", ["raw_category", "raw_taxonomy", "both"])
+@pytest.mark.parametrize("unknown_category", [None, "other"])
+def test_actual_blend_context_respects_cleaner_nonmicrobial_categories(category_field, unknown_category):
+    from build_final_db import build_detail_blob
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    name = "Lactobacillus rhamnosus GG"
+    children = [{"name": name}, {"name": "Unknown organism A123"}]
+    if unknown_category:
+        children[1]["raw_category"] = unknown_category
+    # Actual cleaner-shaped nonmicrobial children from Garden of Life 297698
+    # and 274764: absence of top-level category does not mean unclassified.
+    for label, category, source_db in [
+        ("Barley Grass, Fermented", "botanical", "botanical_ingredients"),
+        ("Barley Grass Juice, Fermented", "botanical", "botanical_ingredients"),
+        ("Oat grass juice", "botanical", "botanical_ingredients"),
+        ("Bulgarian Yogurt (Milk) Concentrate", "animal part or source", "ingredient_quality_map"),
+    ]:
+        child = {"name": label, "canonical_source_db": source_db, "cleaner_row_role": "nested_display_only"}
+        if category_field in ("raw_category", "both"):
+            child["raw_category"] = category
+        if category_field in ("raw_taxonomy", "both"):
+            child["raw_taxonomy"] = {"category": category}
+        children.append(child)
+    for index, child in enumerate(children):
+        child["raw_source_path"] = f"ingredientRows[0].nestedRows[{index}]"
+    product = {"activeIngredients": [{"name": "Probiotic Blend", "cleaner_row_role": "blend_header_total",
+        "raw_source_path": "ingredientRows[0]", "nestedIngredients": children}],
+        "probiotic_data": {"is_probiotic_product": True, "clinical_strains": [],
+            "probiotic_blends": [{"strains": [name], "raw_source_path": children[0]["raw_source_path"],
+                "cfu_data": {"has_cfu": True, "cfu_count": 1e9}}]}}
+    formulation = score_formulation(product)
+    assert formulation["metadata"]["total_strain_count"] == 2
+    assert formulation["metadata"]["identified_strain_count"] == 1
+    assert formulation["components"]["exact_identity_completeness"] == 4
+    assert score_dose(product)["components"]["per_strain_cfu_disclosure"] == 5
+    assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 3.5
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 2
+
+
 @pytest.mark.parametrize("ref", [None, "legacyRows[0]"])
 def test_detached_names_are_only_a_legacy_denominator_when_source_scope_is_absent(ref):
     from scoring_v4.modules.probiotic_dose import score_dose

@@ -34,6 +34,17 @@ _PROBIOTIC_IDENTITY_RE = re.compile(
 )
 
 
+def _probiotic_source_category(ingredient: Mapping) -> str:
+    """Read cleaner/enriched category storage using the canonical vocabulary."""
+    from ingredient_category_normalizer import canonicalize_ingredient_category
+
+    taxonomy = ingredient.get("raw_taxonomy")
+    return canonicalize_ingredient_category(
+        ingredient.get("raw_category") or ingredient.get("category")
+        or (taxonomy.get("category") if isinstance(taxonomy, Mapping) else None)
+    )
+
+
 def is_probiotic_source_identity(ingredient: Mapping) -> bool:
     """Shared collector eligibility, not exact strain proof or clinical credit."""
     from identity_integrity import has_nonlive_microbial_derivative_evidence
@@ -42,7 +53,7 @@ def is_probiotic_source_identity(ingredient: Mapping) -> bool:
         return False
     ing_name = str(ingredient.get("name", "") or "").lower()
     std_name = str(ingredient.get("standardName", "") or "").lower()
-    category = str(ingredient.get("category", "") or "").lower()
+    category = _probiotic_source_category(ingredient)
     return (
         bool(_PROBIOTIC_IDENTITY_RE.search(f"{ing_name} {std_name}"))
         or "probiotic" in category
@@ -145,7 +156,7 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
         id(owner): bool(members) and source_live_eligible[id(owner)]
         and not owner.get("nestedIngredients")
         and (any(cid for _, _, cid in members) or is_probiotic_source_identity(owner)
-             or (id(owner) in child_members and not owner.get("category")))
+             or (id(owner) in child_members and _probiotic_source_category(owner) in ("", "other")))
         for owner, members in owned
     }
     owner_registry_ids = {
