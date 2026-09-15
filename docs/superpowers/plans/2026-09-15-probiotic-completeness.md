@@ -121,6 +121,49 @@ when necessary rather than inventing another scorer/harness.
 High-end canaries must meet real rules; no copied scorer or 98–100 tuning.
 Missing applicable evidence remains explicit, never invented to complete a row.
 
+### Referenced scoring discussion incorporated (2026-09-15)
+
+Reviewed the available scoring discussion in **PharmaGuide Evidence Scan**
+(conversation `6a4cbd7f-1bc0-83ea-a7b1-59f4fdfa1690`). Its latest long response
+is truncated by retrieval; the preceding consolidated recommendations and
+follow-ups cover the scoring principles below. This is advisory input, not a
+second implementation specification or a source of clinical facts.
+
+The owner reports that Dr. Pham read and approved the review. Continue the
+engineering/source checks; do not make obtaining another signature the
+blocker. Preserve historical provenance rather than silently rewriting old
+attribution or inventing a countersignature date/version.
+
+Adopt within the existing roadmap and contracts:
+
+- Invariance/property tests alongside exact canaries: no Evidence gains from
+  marketing or badges, no wrong-SKU verification gains, no arbitrary CFU or
+  ingredient-count gains, and no improved disclosure score after disclosure is
+  removed. A changed evidence synthesis can legitimately move either way.
+- Keep strength, applicability, effect direction and review completeness
+  distinguishable using existing metadata. Incomplete review is not evidence
+  of absence, and a high-quality null study is not positive efficacy support.
+- Benchmark pillar reasons and relative rankings as well as total scores;
+  separately inspect false-high and false-low cases. Reuse the current
+  benchmark owner; do not expose sealed keys or mislabel old AI-assisted
+  ratings as a new independent blinded validation.
+- Preserve exact botanical material/part/preparation matching and trial-family
+  deduplication as cross-category regressions, not probiotic-only protections.
+- Explicitly state unknowns and the limits of the safety review. An absence of
+  known flags is not proof of safety for every person. Personal fit remains
+  separate from the catalog product-quality score.
+
+Do not copy proposed new enums, four internal scores, new visible score tiers,
+universal near-dose tolerances, or suggested Verification cutoffs. The current
+six-pillar/config owners remain authoritative. Some thread counts and claims
+that aggregate-potency max-8 was already implemented are historical proposals,
+not current code evidence. Audit any such change before adopting it.
+
+For omega, distinguish nutrition-authority evidence from disease-prevention
+efficacy: neither an ingredient amount nor a marketing indication creates an
+RCT result. A source-supported nutrition reference can remain explicit without
+being represented as a general cardiovascular treatment benefit.
+
 ### Verified next-batch findings (2026-09-15; not implemented here)
 
 - Prenatal/multivitamin Dose multiplies RDA coverage by
