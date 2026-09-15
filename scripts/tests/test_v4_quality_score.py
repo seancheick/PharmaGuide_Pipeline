@@ -566,7 +566,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.4.0-dri-dose-adequacy"
+    assert out["quality_score_version"] == "1.5.0-verified-clinical-anchors"
 
 
 def test_uncapped_product_can_reach_a_true_100() -> None:

@@ -1135,8 +1135,8 @@ def test_dri_nutrient_credit_grows_from_fda_high_source_to_full_requirement(pct_
     assert _band_credit(pct_rda, 10.0, "vitamin_d") == pytest.approx(expected)
 
 
-@pytest.mark.parametrize("canonical", ["calcium", "magnesium", "quercetin", "unmapped_compound", None])
-def test_macrominerals_and_unclassified_references_keep_the_legacy_window(canonical) -> None:
+@pytest.mark.parametrize("canonical", ["calcium", "magnesium", "l_glutamine", "nac", "unmapped_compound", None])
+def test_macrominerals_unverified_anchors_and_unclassified_references_keep_the_legacy_window(canonical) -> None:
     from scoring_v4.modules.generic_dose import _band_credit
 
     assert _band_credit(25.0, 10.0, canonical) == 22.0
@@ -1170,3 +1170,32 @@ def test_dri_map_points_at_official_dri_reference_entries() -> None:
     for ref in set(generic_dose._DRI_REFERENCE_BY_CANONICAL.values()):
         assert ref in by_id, ref
         assert "no official dri" not in str(by_id[ref].get("notes") or "").lower(), ref
+
+
+@pytest.mark.parametrize(("pct_rda", "expected"), [(25.0, 5.5), (50.0, 11.0), (100.0, 22.0), (140.0, 22.0)])
+def test_verified_clinical_anchor_credit_is_proportional_to_the_lowest_effective_dose(pct_rda, expected) -> None:
+    from scoring_v4.modules.generic_dose import _band_credit
+
+    assert _band_credit(pct_rda, None, "quercetin") == pytest.approx(expected)
+
+
+def test_clinical_anchor_map_lists_only_pubmed_verified_anchors() -> None:
+    """Every mapped anchor was verified or corrected in the 2026-09-15 review, cites at
+    least one of its verifying PMIDs, and carries the reviewed dose in the reference file."""
+    import json
+    from pathlib import Path
+    from scoring_v4.modules import generic_dose
+
+    root = Path(generic_dose.__file__).resolve().parents[3]
+    ledger = json.loads((root / "scripts/audits/clinical_anchor_verification_2026_09_15/anchor_verification.json").read_text())
+    reviewed = {item["id"]: item for item in ledger["anchors"]}
+    data = json.loads((root / "scripts/data/rda_optimal_uls.json").read_text())
+    by_id = {entry["id"]: entry for entry in data["nutrient_recommendations"]}
+    for ref in set(generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL.values()):
+        item = reviewed[ref]
+        assert item["graduation_eligible"] and item["decision"] in {"verified", "corrected"}, ref
+        entry = by_id[ref]
+        assert {e["pmid"] for e in item["evidence"]} & set(entry["references"]), ref
+        expected = item.get("anchor_proposed", item["anchor_current"])
+        assert {row["rda_ai"] for row in entry["data"]} == {expected}, ref
+    assert not set(generic_dose._DRI_REFERENCE_BY_CANONICAL) & set(generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL)

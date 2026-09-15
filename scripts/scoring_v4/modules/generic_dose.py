@@ -34,8 +34,13 @@ Below the UL, credit depends on what the reference is (quality_score 1.4.0):
         20% <= pct_rda < 100%  →  11 → 22 linear (20% = FDA "high/excellent
                                    source", 21 CFR 101.54(b))
         pct_rda < 20%          →  (pct_rda / 20) * 11
-    macrominerals and every other reference (unchanged until a dietary
-    intake table exists, or until no-DRI clinical anchors are citation-verified):
+    verified clinical anchor (no DRI; the reference is the lowest clinically
+    effective daily dose, content-verified against PubMed 2026-09-15 in
+    scripts/audits/clinical_anchor_verification_2026_09_15):
+        pct_rda >= 100%        →  22
+        pct_rda < 100%         →  (pct_rda / 100) * 22
+    macrominerals and every other reference, including anchors the review
+    could not establish (unchanged until a dietary intake table exists):
         pct_rda >= 25%         →  22
         0% < pct_rda < 25%     →  (pct_rda / 25) * 22
 
@@ -145,9 +150,27 @@ _DRI_REFERENCE_BY_CANONICAL = {
     "selenium": "selenium", "zinc": "zinc",
 }
 
+# No official DRI: the reference is the lowest clinically effective daily dose,
+# and only anchors the 2026-09-15 PubMed review verified or corrected are listed
+# (anchor_verification.json, graduation_eligible). Unverified anchors (glutamine,
+# NAC, 5-HTP, SAMe, DIM, GLA, evening primrose, citrulline) keep the legacy rule.
+_CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL = {
+    "quercetin": "quercetin", "tmg_betaine": "betaine_tmg", "l_glycine": "glycine",
+    "gaba": "gaba_gamma_aminobutyric_acid", "berberine": "berberine",
+    "berberine_supplement": "berberine", "beta-alanine": "beta_alanine",
+    "glucosamine": "glucosamine_sulfate", "hyaluronic_acid": "hyaluronic_acid",
+    "nmn": "nmn_nicotinamide_mononucleotide", "pqq": "pqq_pyrroloquinoline_quinone",
+    "colostrum": "bovine_colostrum", "urolithin_a": "urolithin_a",
+}
+
+
 def _adequacy_reference_kind(canonical: object) -> str:
     key = _norm_text(canonical)
-    return "dri" if key in _DRI_REFERENCE_BY_CANONICAL else "legacy"
+    if key in _DRI_REFERENCE_BY_CANONICAL:
+        return "dri"
+    if key in _CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL:
+        return "clinical_anchor"
+    return "legacy"
 
 
 # --- Supplemental-window proxy -------------------------------------------
@@ -190,6 +213,8 @@ def _band_credit(
             span = WINDOW_FULL_ADEQUACY_PCT - WINDOW_HIGH_SOURCE_PCT
             return half + half * (pct_rda - WINDOW_HIGH_SOURCE_PCT) / span
         return half * pct_rda / WINDOW_HIGH_SOURCE_PCT
+    if kind == "clinical_anchor":
+        return CAP_SUPPLEMENTAL_WINDOW * pct_rda / WINDOW_FULL_ADEQUACY_PCT
     return (pct_rda / WINDOW_RDA_THRESHOLD) * CAP_SUPPLEMENTAL_WINDOW
 
 

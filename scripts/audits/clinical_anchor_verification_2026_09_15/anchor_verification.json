@@ -1,0 +1,703 @@
+{
+  "_metadata": {
+    "purpose": "Content verification of the no-DRI clinical-dose anchors in scripts/data/rda_optimal_uls.json (entries whose notes say 'No official DRI'). Each anchor claims to be the lower bound of the clinically effective daily dose.",
+    "checked_on": "2026-09-15",
+    "method": "Every cited PMID fetched from PubMed (abstract) and Europe PMC (open-access full text); dose and outcome sentences read per compound; replacement evidence searched on PubMed where the cited sources did not support the anchor. Quotes are exact text re-checked live by verify_anchor_citations.py.",
+    "decision_rules": {
+      "verified": "A controlled human trial, meta-analysis or position stand shows benefit at the anchor dose, AND a targeted PubMed dose-ranging search (dose-response / low dose / different doses; RCT or meta-analysis) found no positive controlled trial at a lower daily dose. Eligible for graduated dose credit.",
+      "corrected": "The evidence shows a lower (or different) lowest effective daily dose; anchor_proposed replaces the value. Eligible for graduated dose credit.",
+      "supported_uncontrolled": "Only uncontrolled evidence at the anchor dose. Value kept; not eligible.",
+      "not_established": "The cited and searched sources do not establish a lower bound (no dose-efficacy statement, null or mixed results, weight-based or much higher doses). Value kept; not eligible."
+    },
+    "lower_bound_check": "Added after the first pass wrongly marked betaine 2.5 g verified: Olthof 2003 (PMID 14652361) lowered homocysteine at 1.5 g/day. Every graduation-eligible anchor was then re-searched for lower effective doses."
+  },
+  "anchors": [
+    {
+      "id": "chlorophyllin",
+      "unit": "mg",
+      "anchor_current": 300,
+      "decision": "verified",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "11724948",
+          "location": "abstract",
+          "quote": "randomly assigned to ingest 100 mg of chlorophyllin or a placebo three times a day for 4 months"
+        },
+        {
+          "pmid": "11724948",
+          "location": "abstract",
+          "quote": "Chlorophyllin consumption at each meal led to an overall 55% reduction (P = 0.036) in median urinary levels of this aflatoxin biomarker compared with those taking placebo"
+        }
+      ],
+      "reason": "RCT at 300 mg/day (100 mg three times daily) reduced a validated carcinogen biomarker versus placebo."
+    },
+    {
+      "id": "beta_alanine",
+      "unit": "g",
+      "anchor_current": 3.2,
+      "decision": "corrected",
+      "graduation_eligible": true,
+      "add_references": [
+        "22143432",
+        "23832078"
+      ],
+      "evidence": [
+        {
+          "pmid": "23832078",
+          "location": "abstract",
+          "quote": "ONS plus 800 mg beta-alanine (ONS800; n = 19)"
+        },
+        {
+          "pmid": "23832078",
+          "location": "abstract",
+          "quote": "Treatments were consumed twice per day for 12 weeks"
+        },
+        {
+          "pmid": "23832078",
+          "location": "abstract",
+          "quote": "These changes were significantly greater (p < 0.05) than the changes in ONS (-6.3%)"
+        },
+        {
+          "pmid": "21847611",
+          "location": "abstract",
+          "quote": "1.6 g BA/day significantly increased muscle carnosine within 2 weeks"
+        },
+        {
+          "pmid": "22143432",
+          "location": "abstract",
+          "quote": "The BA group received 3.2 g of beta-alanine per day"
+        },
+        {
+          "pmid": "26175657",
+          "location": "abstract",
+          "quote": "Daily supplementation with 4 to 6 g of beta-alanine for at least 2 to 4 weeks has been shown to improve exercise performance"
+        }
+      ],
+      "reason": "In older adults, 800 mg twice daily (1.6 g/day) added to a nutritional drink improved working capacity more than the drink alone, and 1.6 g/day raises muscle carnosine; 3.2 g/day and the ISSN 4-6 g/day are higher studied doses.",
+      "anchor_proposed": 1.6,
+      "optimal_range_proposed": "1.6-6.4"
+    },
+    {
+      "id": "hmb",
+      "unit": "g",
+      "anchor_current": 3.0,
+      "decision": "corrected",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "32281915",
+          "location": "abstract",
+          "quote": "After the subjects of 1.5 g HMB or placebo pills per day for 2 weeks"
+        },
+        {
+          "pmid": "32281915",
+          "location": "abstract",
+          "quote": "MVC torque was significantly higher in the HMB group than in the PL group"
+        },
+        {
+          "pmid": "23374455",
+          "pmcid": "PMC3568064",
+          "location": "full_text",
+          "quote": "the typical 3 g daily dosage of HMB used in human studies"
+        }
+      ],
+      "reason": "3 g/day is the typical studied dose (ISSN), but a placebo-controlled RCT at 1.5 g/day preserved strength and range of motion after eccentric exercise, so 1.5 g/day is the lowest effective dose found.",
+      "anchor_proposed": 1.5,
+      "optimal_range_proposed": "1.5-3",
+      "add_references": [
+        "32281915"
+      ]
+    },
+    {
+      "id": "glucosamine_sulfate",
+      "unit": "mg",
+      "anchor_current": 1500,
+      "decision": "verified",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "30566740",
+          "location": "abstract",
+          "quote": "a single daily large dose (1500 mg)"
+        },
+        {
+          "pmid": "30566740",
+          "location": "abstract",
+          "quote": "GS may have a small to moderate effect in reducing OA-related pain"
+        }
+      ],
+      "reason": "Meta-analysis of oral glucosamine sulfate trials at 1500 mg/day shows a small-to-moderate pain effect."
+    },
+    {
+      "id": "gaba_gamma_aminobutyric_acid",
+      "unit": "mg",
+      "anchor_current": 100,
+      "decision": "verified",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "22203366",
+          "location": "abstract",
+          "quote": "Capsules containing 100 mg of GABA or dextrin as a placebo were used as test samples"
+        },
+        {
+          "pmid": "22203366",
+          "location": "abstract",
+          "quote": "the condition of 30 min after GABA intake diminished this decrease compared with the placebo condition"
+        }
+      ],
+      "reason": "Placebo-controlled trial at 100 mg showed an acute EEG/mood effect under mental stress; evidence is acute and small."
+    },
+    {
+      "id": "ubiquinol_active_coq10",
+      "unit": "mg",
+      "anchor_current": 100,
+      "decision": "verified",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "32326664",
+          "location": "abstract",
+          "quote": "randomized to receive either ubiquinol (200 or 100 mg/day) or placebo for 8 weeks"
+        },
+        {
+          "pmid": "32326664",
+          "location": "abstract",
+          "quote": "demonstrated a significantly increased FMD in both treated groups compared with the placebo group"
+        }
+      ],
+      "reason": "RCT: 100 mg/day improved endothelial function (FMD) versus placebo."
+    },
+    {
+      "id": "nmn_nicotinamide_mononucleotide",
+      "unit": "mg",
+      "anchor_current": 250,
+      "decision": "corrected",
+      "anchor_proposed": 300,
+      "optimal_range_proposed": "300-900",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "35479740",
+          "location": "abstract",
+          "quote": "Healthy volunteers received 250 mg/day of NMN (n = 15) or placebo (n = 15) for 12 weeks"
+        },
+        {
+          "pmid": "36482258",
+          "location": "abstract",
+          "quote": "Walking distance increase during the six-minute walking test was statistically significantly higher in the 300 mg, 600 mg, and 900 mg groups compared to placebo"
+        }
+      ],
+      "reason": "The 250 mg/day RCT established a biomarker response (higher blood NAD+) but not a clinical outcome. The dose-ranging RCT showed physical-performance and health-status benefits at 300 mg/day, the lowest tested dose with those clinical outcomes; the anchor is corrected to 300 mg/day."
+    },
+    {
+      "id": "pqq_pyrroloquinoline_quinone",
+      "unit": "mg",
+      "anchor_current": 20,
+      "decision": "corrected",
+      "anchor_proposed": 21.5,
+      "optimal_range_proposed": "21.5-40",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "34415830",
+          "location": "abstract",
+          "quote": "PQQ disodium salt: 21.5 mg/day"
+        },
+        {
+          "pmid": "34415830",
+          "location": "abstract",
+          "quote": "Significant improvements were observed on the Cognitrax"
+        },
+        {
+          "pmid": "31860387",
+          "location": "abstract",
+          "quote": "There were no significant differences between groups in aerobic performance after endurance-training"
+        }
+      ],
+      "reason": "The positive placebo-controlled cognition RCT used 21.5 mg/day. The 20 mg/day exercise RCT found no between-group performance benefit (only a biomarker change), so 20 mg/day is not an established clinical-effect anchor; the anchor is corrected to the lowest positive clinical dose found, 21.5 mg/day."
+    },
+    {
+      "id": "berberine",
+      "unit": "mg",
+      "anchor_current": 900,
+      "decision": "verified",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "34956436",
+          "pmcid": "PMC8696197",
+          "location": "full_text",
+          "quote": "low-dose berberine (< 1 g/d) achieve promising effects of FPG"
+        },
+        {
+          "pmid": "34956436",
+          "pmcid": "PMC8696197",
+          "location": "full_text",
+          "quote": "Berberine 0.3 g tid"
+        }
+      ],
+      "reason": "Meta-analysis of T2DM RCTs includes 900 mg/day arms (0.3 g three times daily) and reports glucose effects below 1 g/day."
+    },
+    {
+      "id": "quercetin",
+      "unit": "mg",
+      "anchor_current": 500,
+      "decision": "verified",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "27405810",
+          "location": "abstract",
+          "quote": "there was a significant systolic BP and diastolic BP-reducing effect in randomized controlled trials with doses ≥500 mg/day"
+        }
+      ],
+      "reason": "Meta-analysis: blood-pressure effect only at >=500 mg/day, none below."
+    },
+    {
+      "id": "citicoline",
+      "unit": "mg",
+      "anchor_current": 250,
+      "decision": "verified",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "33978188",
+          "pmcid": "PMC8349115",
+          "location": "full_text",
+          "quote": "improved attention compared with placebo in middle-aged women [250 mg/d for 1 mo"
+        },
+        {
+          "pmid": "26179181",
+          "location": "abstract",
+          "quote": "Individuals receiving citicoline exhibited improved attention"
+        }
+      ],
+      "reason": "Placebo-controlled trials at 250 mg/day improved attention (middle-aged women; adolescent males at 250 or 500 mg/day)."
+    },
+    {
+      "id": "betaine_tmg",
+      "unit": "mg",
+      "anchor_current": 2500,
+      "decision": "corrected",
+      "graduation_eligible": true,
+      "add_references": [
+        "14652361",
+        "30064450"
+      ],
+      "evidence": [
+        {
+          "pmid": "14652361",
+          "location": "abstract",
+          "quote": "Fasting plasma homocysteine after 6-wk daily intakes of 1.5, 3 and 6 g of betaine was 12% (P < 0.01), 15% (P < 0.002) and 20% (P < 0.0001) less than in the placebo group, respectively"
+        },
+        {
+          "pmid": "30064450",
+          "location": "abstract",
+          "quote": "randomly assigned to either a betaine (2.5 g/day; n = 11) or placebo"
+        },
+        {
+          "pmid": "31809615",
+          "location": "abstract",
+          "quote": "Supplementation with at least 4 g/d of betaine for a minimum of six weeks may moderately increase plasma TC"
+        }
+      ],
+      "reason": "A placebo-controlled 6-week trial lowered fasting homocysteine at 1.5 g/day (dose-dependently to 6 g/day), so 1.5 g is the lowest effective daily dose found; 2.5 g/day is the common sports-trial dose. The previously cited sources used 4-6 g/day, one reporting a cholesterol increase.",
+      "anchor_proposed": 1500,
+      "optimal_range_proposed": "1500-6000"
+    },
+    {
+      "id": "glycine",
+      "unit": "mg",
+      "anchor_current": 3000,
+      "decision": "verified",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "22529837",
+          "location": "abstract",
+          "quote": "3 g of glycine or placebo were ingested"
+        },
+        {
+          "pmid": "22529837",
+          "location": "abstract",
+          "quote": "In subjects given glycine, the VAS data showed a significant reduction in fatigue"
+        }
+      ],
+      "reason": "Placebo-controlled trial at 3 g before bed reduced daytime fatigue after sleep restriction."
+    },
+    {
+      "id": "pantethine",
+      "unit": "mg",
+      "anchor_current": 600,
+      "decision": "verified",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "21925346",
+          "location": "abstract",
+          "quote": "pantethine supplementation for 16 weeks (600 mg/d for weeks 1-8 then 900 mg/d for weeks 9-16) is safe and significantly lowers TC and LDL-C"
+        },
+        {
+          "pmid": "24600231",
+          "pmcid": "PMC3942300",
+          "location": "full_text",
+          "quote": "is achieved at a 300 mg twice per day dose schedule"
+        }
+      ],
+      "reason": "Two RCTs starting at 600 mg/day lowered LDL-C; authors report optimal benefit at 300 mg twice daily."
+    },
+    {
+      "id": "urolithin_a",
+      "unit": "mg",
+      "anchor_current": 500,
+      "decision": "verified",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "35584623",
+          "pmcid": "PMC9133463",
+          "location": "full_text",
+          "quote": "Average peak torque in the hamstring skeletal muscle was significantly increased in both UA 500 mg (+12%, p = 0.027 compared with placebo)"
+        },
+        {
+          "pmid": "35584623",
+          "pmcid": "PMC9133463",
+          "location": "full_text",
+          "quote": "non-significant improvements (4.30% and 3.90%, respectively) in PPO (the primary endpoint)"
+        }
+      ],
+      "reason": "RCT: 500 mg/day improved hamstring strength versus placebo (secondary endpoint; primary endpoint not met)."
+    },
+    {
+      "id": "bovine_colostrum",
+      "unit": "mg",
+      "anchor_current": 10000,
+      "decision": "corrected",
+      "graduation_eligible": true,
+      "add_references": [
+        "28285432",
+        "16825268"
+      ],
+      "evidence": [
+        {
+          "pmid": "28285432",
+          "location": "abstract",
+          "quote": "allocated to a 3.2 g/day of whey protein (WP, N = 8) or BC (N = 10)"
+        },
+        {
+          "pmid": "28285432",
+          "location": "abstract",
+          "quote": "Post-exercise EIMD may be reduced and performance better maintained by a low dose of BC administration"
+        },
+        {
+          "pmid": "37111143",
+          "location": "abstract",
+          "quote": "supplemented with a relatively low dose (0.5-1.0 g/day) of bovine colostrum (COL) or placebo (PBO)"
+        },
+        {
+          "pmid": "16825268",
+          "location": "abstract",
+          "quote": "10 g/day bovine colostrum protein concentrate (CPC)"
+        }
+      ],
+      "reason": "A double-blind RCT at 3.2 g/day (whey control) maintained performance and lowered inflammatory markers; 10-20 g/day trials are higher doses. A 0.5-1.0 g/day trial reported fewer self-reported respiratory symptom days only in a higher-risk subgroup, too weak to anchor on.",
+      "anchor_proposed": 3200,
+      "optimal_range_proposed": "3200-60000"
+    },
+    {
+      "id": "magnesium_l_threonate",
+      "unit": "mg",
+      "anchor_current": 1500,
+      "anchor_proposed": 1000,
+      "optimal_range_proposed": "1000-2000",
+      "decision": "corrected",
+      "graduation_eligible": true,
+      "evidence": [
+        {
+          "pmid": "39252819",
+          "location": "abstract",
+          "quote": "taking 1 g/day of MgT or placebo for 21 days"
+        },
+        {
+          "pmid": "39252819",
+          "location": "abstract",
+          "quote": "MgT significantly (p < 0.05) improved vs placebo deep sleep score"
+        },
+        {
+          "pmid": "26519439",
+          "pmcid": "PMC4927823",
+          "location": "full_text",
+          "quote": "subjects between 50 and 70 kg took 1.5 g/day"
+        }
+      ],
+      "reason": "A 2024 RCT showed benefit at 1 g/day; the 1.5 g/day figure came from weight-based dosing (1.5-2 g/day) in the earlier cognition trial."
+    },
+    {
+      "id": "msm_methylsulfonylmethane",
+      "unit": "mg",
+      "anchor_current": 1500,
+      "anchor_proposed": 2000,
+      "optimal_range_proposed": "2000-6000",
+      "decision": "corrected",
+      "graduation_eligible": true,
+      "add_references": [
+        "37447322"
+      ],
+      "evidence": [
+        {
+          "pmid": "37447322",
+          "location": "abstract",
+          "quote": "Both groups of participants took 10 tablets, each containing 200 mg MSM or lactose, per day for 12 weeks"
+        },
+        {
+          "pmid": "37447322",
+          "location": "abstract",
+          "quote": "MSM oral consumption improved both knee and systemic health conditions"
+        },
+        {
+          "pmid": "16309928",
+          "location": "abstract",
+          "quote": "MSM (3g twice a day) improved symptoms of pain and physical function"
+        },
+        {
+          "pmid": "29214616",
+          "location": "abstract",
+          "quote": "Three grams of MSM administered daily did not provide significant improvements"
+        }
+      ],
+      "reason": "No positive trial of MSM alone at 1.5 g/day was found; the lowest positive placebo-controlled dose is 2 g/day (knee quality of life). Results at 3 g/day are mixed; 6 g/day improved OA pain."
+    },
+    {
+      "id": "hyaluronic_acid",
+      "unit": "mg",
+      "anchor_current": 80,
+      "anchor_proposed": 120,
+      "optimal_range_proposed": "120-200",
+      "decision": "corrected",
+      "graduation_eligible": true,
+      "replace_references": [
+        "34203487",
+        "25834304",
+        "41422283",
+        "23226979"
+      ],
+      "evidence": [
+        {
+          "pmid": "34203487",
+          "location": "abstract",
+          "quote": "daily HA (120 mg) intake for 12 weeks"
+        },
+        {
+          "pmid": "34203487",
+          "location": "abstract",
+          "quote": "skin condition was significantly improved in terms of wrinkle assessment"
+        },
+        {
+          "pmid": "25834304",
+          "location": "abstract",
+          "quote": "received oral HA (120 mg/day)"
+        },
+        {
+          "pmid": "41422283",
+          "location": "abstract",
+          "quote": "SH120 significantly enhanced skin hydration and elasticity"
+        },
+        {
+          "pmid": "23226979",
+          "location": "abstract",
+          "quote": "The subjects in the HA group were given 200 mg of HA once a day everyday for 12 months"
+        },
+        {
+          "pmid": "18208600",
+          "location": "abstract",
+          "quote": "WOMAC pain (primary efficacy variable) was similar in both study groups"
+        }
+      ],
+      "reason": "Previous references were an injection-versus-NSAID review (32047830) and a multi-ingredient krill product (37686801). Placebo-controlled oral trials are positive at 120 mg/day (skin) and 200 mg/day (knee OA); the 80 mg/day trial did not beat placebo on its primary outcome."
+    },
+    {
+      "id": "dim_diindolylmethane",
+      "unit": "mg",
+      "anchor_current": 100,
+      "decision": "supported_uncontrolled",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "32458980",
+          "location": "abstract",
+          "quote": "supplementation with DIM 100 mg × 1/day in BRCA carriers was associated with a significant decline in FGT amount on MRI"
+        }
+      ],
+      "reason": "Only a single-arm study (breast-density biomarker) at 100 mg/day; no controlled trial."
+    },
+    {
+      "id": "gamma_linolenic_acid",
+      "unit": "mg",
+      "anchor_current": 120,
+      "decision": "not_established",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "9707349",
+          "location": "abstract",
+          "quote": "Further investigations will show if there is a significant effect in patients suffering from atopic eczema"
+        },
+        {
+          "pmid": "31497576",
+          "pmcid": "PMC6718646",
+          "location": "full_text",
+          "quote": "on the base of 250 to 600 mg/day γ-linolenic acid"
+        }
+      ],
+      "reason": "Cited sources are a pharmacokinetic study and a narrative review suggesting 250-600 mg/day for mastalgia; nothing supports 120 mg/day as an effective dose."
+    },
+    {
+      "id": "evening_primrose_oil",
+      "unit": "mg",
+      "anchor_current": 500,
+      "decision": "not_established",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "19052401",
+          "location": "abstract",
+          "quote": "evening primrose oil was supplied as 500-mg oval clear unmarked capsules"
+        },
+        {
+          "pmid": "31497576",
+          "pmcid": "PMC6718646",
+          "location": "full_text",
+          "quote": "received a daily dose of 1.5 g evening primrose oil or placebo for three months"
+        }
+      ],
+      "reason": "500 mg is the capsule size, not a daily dose; trials in the review use 1.5-3 g/day. A lower bound is not established from the cited sources."
+    },
+    {
+      "id": "citrulline_malate",
+      "unit": "mg",
+      "anchor_current": 6000,
+      "decision": "not_established",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "20386132",
+          "location": "abstract",
+          "quote": "the effects of a single dose of citrulline malate (CM)"
+        }
+      ],
+      "reason": "Neither cited abstract states a dose and neither full text is open access."
+    },
+    {
+      "id": "l_citrulline",
+      "unit": "mg",
+      "anchor_current": 3000,
+      "decision": "not_established",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "31977835",
+          "location": "abstract",
+          "quote": "evidence supporting acute improvements in vasodilation and skeletal muscle tissue perfusion after supplementation is scarce and inconsistent"
+        }
+      ],
+      "reason": "The only cited source is a review without a dose-efficacy statement in its abstract; full text not open access."
+    },
+    {
+      "id": "melatonin",
+      "unit": "mg",
+      "anchor_current": 0.5,
+      "decision": "not_established",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "38888087",
+          "location": "abstract",
+          "quote": "melatonin gradually reduces sleep onset latency and increases total sleep time, peaking at 4 mg/day"
+        }
+      ],
+      "reason": "Dose-response meta-analyses do not state a lower effective bound; melatonin dose is scored by the sleep-support adapter, not the generic window."
+    },
+    {
+      "id": "nac_n_acetyl_cysteine",
+      "unit": "mg",
+      "anchor_current": 600,
+      "decision": "not_established",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "33354859",
+          "location": "abstract",
+          "quote": "found that NAC was no more effective than placebo"
+        }
+      ],
+      "reason": "Cited sources are psychiatric reviews without a dose-efficacy statement; the bipolar meta-analysis found no benefit over placebo."
+    },
+    {
+      "id": "sam_e_s_adenosyl_methionine",
+      "unit": "mg",
+      "anchor_current": 400,
+      "decision": "not_established",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "38199136",
+          "location": "abstract",
+          "quote": "The daily dose of SAMe varied from 200 to 3200 mg"
+        },
+        {
+          "pmid": "38199136",
+          "location": "abstract",
+          "quote": "showed no significant difference in depression with SAMe compared to the comparison treatment"
+        }
+      ],
+      "reason": "Doses ranged 200-3200 mg with no significant effect; the Cochrane review found no high-quality evidence."
+    },
+    {
+      "id": "5_htp_5_hydroxytryptophan",
+      "unit": "mg",
+      "anchor_current": 150,
+      "decision": "not_established",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "12169147",
+          "location": "abstract",
+          "quote": "insufficiently evaluated to assess their effectiveness"
+        }
+      ],
+      "reason": "Meta-analyses report heterogeneous dosing and insufficient evaluation; no lower bound."
+    },
+    {
+      "id": "essential_amino_acids",
+      "unit": "mg",
+      "anchor_current": 6000,
+      "decision": "not_established",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "29796648",
+          "location": "abstract",
+          "quote": "a small dose of EAAs stimulates muscle mTORC1 signaling and MPS"
+        }
+      ],
+      "reason": "Cited sources are acute muscle-protein-synthesis experiments (6.8 g and 5 g), not clinical outcome trials."
+    },
+    {
+      "id": "l_glutamine",
+      "unit": "mg",
+      "anchor_current": 5000,
+      "decision": "not_established",
+      "graduation_eligible": false,
+      "evidence": [
+        {
+          "pmid": "39397201",
+          "location": "abstract",
+          "quote": "Subgroup analysis showed a significant reduction in intestinal permeability with doses over 30g/day"
+        }
+      ],
+      "reason": "The cited meta-analysis found effects only above 30 g/day; trials dose by body weight (0.25-0.5 g/kg). 5 g/day is not supported."
+    }
+  ]
+}
