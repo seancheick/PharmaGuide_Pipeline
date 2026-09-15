@@ -324,6 +324,71 @@ with 15,529 tests and 66 expected skips.
 No Clean/Enrich/Score regeneration, catalog build, release, Supabase deployment
 or phone build ran.
 
+## One probiotic identity owner — follow-up to the adversarial audit (Claude)
+
+**Codex audit verified.** The four commits `b289c3fd..fab83fc6` hold up on real
+stored data:
+
+- The 11 source-shaped regressions for Spirulina, the mislabeled Solgar Turmeric
+  and the Chlorella container pass.
+- The full-corpus taxonomy and route diff from `66bec377` to `fab83fc6` shows
+  0 changes across 13,704 products.
+- The monotonic presence floor lifts only 5 stored products that carry no
+  penalty, by at most +0.25 raw.
+- CFU unit scaling fixes a real miss: 31062 declares 12.5 Billion CFU.
+- The creatine test follows production behavior that the earlier typed-UL
+  commits had already introduced.
+
+**Remaining duplicates removed.** Before this change there were three regex
+copies, the contract's and the enricher's text-only probiotic checks, a
+routing raw-category shortcut, and three copies of the fiber/prebiotic support
+rule. They are now one regex, one row-identity predicate and one support
+predicate in `probiotic_measurements`. Enrichment, taxonomy, routing and the
+scoring contract all call them.
+
+**Reference-identity guard extended.** A resolved `other_ingredients` record
+now outranks category-only or derived-name organism evidence, like an IQM
+identity outside `probiotics`. The ten reviewed microbe-, yeast- or
+culture-named records are pinned in `test_probiotic_identity_single_owner.py`.
+All are processing aids, label descriptors or derived/nonviable preparations.
+This covers:
+
+- Immuno-LP20 (`NHA_IMMUNO_LP20`), a nonviable heat-treated L. plantarum L-137
+  preparation;
+- 535 processing-aid `S. cerevisiae` carriers nested under minerals.
+
+**Measured (read-only, identical stored inputs, `fab83fc6` vs candidate):**
+
+- 0 taxonomy and 0 route changes.
+- 79 score-time contract output changes: 70 non-probiotic panel counts and 9
+  recovered nested strict rows.
+- 1 public score change: 232325 "Oral Hygiene", 49.1 → 61.3.
+  - Before, the nonviable Immuno-LP20 counted as a second, unidentified strain.
+  - Now the single live strain, BLIS M18, is fully identified and measured.
+  - Components: identity completeness 4 → 8, Dose per-strain disclosure 5 → 10,
+    Transparency per-strain CFU 3.5 → 7.
+- Evidence, Verification and Safety are unchanged.
+
+Full fast tier on : **15,549 passed, 70 skipped, zero failures** (398 s; tree unchanged).
+
+**Open decisions surfaced, not changed here:**
+
+1. **Mass-dosed brewer's yeast.** Printed `Saccharomyces cerevisiae` label
+   names on mass-dosed `brewers_yeast` rows (IQM `functional_foods`) still
+   count as organisms. That is 521 stored rows in 38 products, mostly
+   multivitamins, all already stored as probiotic products. An existing test
+   pins live S. cerevisiae with CFU as probiotic. Decide whether a resolved
+   non-probiotic identity with a mass dose should outrank the printed name.
+2. **Pomegranate in the prebiotic registry.** The registry lists "Pomegranate
+   Polyphenol Extract", with aliases including "pomegranate extract". Every
+   pomegranate extract therefore matches the prebiotic matcher: it earns the
+   probiotic Formulation prebiotic complement and shows as prebiotic-present.
+   Confirm that clinical policy before the rebuild.
+3. **Corpus state after the stopped run.** The stopped
+   `batch_run_all_datasets.sh` regenerated 9 brands and left GNC half-enriched.
+   Earlier replay receipts no longer match the stored inputs. Rebuild from
+   Clean only once calibration is stable.
+
 ## Next operational run — after the remaining calibration
 
 Start from **Clean**, not just Enrich: this audit changed the cleaner's strain
