@@ -63,6 +63,8 @@ def test_actual_blend_context_respects_cleaner_nonmicrobial_categories(category_
         ("Bulgarian Yogurt (Milk) Concentrate", "animal part or source", "ingredient_quality_map"),
     ]:
         child = {"name": label, "canonical_source_db": source_db, "cleaner_row_role": "nested_display_only"}
+        if label == "Bulgarian Yogurt (Milk) Concentrate":
+            child["standardName"] = "Lactobacillus Bulgaricus"
         if category_field in ("raw_category", "both"):
             child["raw_category"] = category
         if category_field in ("raw_taxonomy", "both"):
@@ -82,6 +84,16 @@ def test_actual_blend_context_respects_cleaner_nonmicrobial_categories(category_
     assert score_dose(product)["components"]["per_strain_cfu_disclosure"] == 5
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 3.5
     assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 2
+
+
+@pytest.mark.parametrize("source", [
+    {"name": "Lactobacillus rhamnosus GG", "raw_category": "animal part or source", "standardName": "Unrelated name"},
+    {"name": "Unknown organism", "standardName": "Lactobacillus acidophilus"},
+    {"name": "Unknown organism", "raw_category": "other", "standardName": "Lactobacillus acidophilus"},
+])
+def test_shared_eligibility_preserves_printed_identity_and_unspecified_legacy_names(source):
+    from probiotic_measurements import is_probiotic_source_identity
+    assert is_probiotic_source_identity(source)
 
 
 @pytest.mark.parametrize("ref", [None, "legacyRows[0]"])

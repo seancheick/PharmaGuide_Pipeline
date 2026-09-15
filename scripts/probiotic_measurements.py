@@ -55,9 +55,12 @@ def is_probiotic_source_identity(ingredient: Mapping) -> bool:
     std_name = str(ingredient.get("standardName", "") or "").lower()
     category = _probiotic_source_category(ingredient)
     return (
-        bool(_PROBIOTIC_IDENTITY_RE.search(f"{ing_name} {std_name}"))
+        bool(_PROBIOTIC_IDENTITY_RE.search(ing_name))
         or "probiotic" in category
         or "bacteria" in category
+        # A derived normalized name cannot turn an explicitly nonmicrobial
+        # source (for example yogurt) into a printed organism.
+        or (category in ("", "other") and bool(_PROBIOTIC_IDENTITY_RE.search(std_name)))
     )
 
 
