@@ -120,3 +120,46 @@ when necessary rather than inventing another scorer/harness.
 
 High-end canaries must meet real rules; no copied scorer or 98–100 tuning.
 Missing applicable evidence remains explicit, never invented to complete a row.
+
+### Verified next-batch findings (2026-09-15; not implemented here)
+
+- Prenatal/multivitamin Dose multiplies RDA coverage by
+  `0.75 + bio_score / 60`. This is an ordinal quality rating, not a measured
+  absorption fraction. Unknown form scores receive 1.0 and can exceed known
+  forms. Remove this duplicate form weighting without changing source amounts,
+  DFE conversions, critical-nutrient thresholds or the shared safety rules.
+- Prenatal Formulation ranks forms three ways: IQM panel average, premium-form
+  count, and a separate preferred-form table. B-complex has another preferred-
+  form table. Keep IQM as the form-quality owner; remove redundant rankings
+  rather than adding a fourth exception table. Derive new component ceilings
+  explicitly before changing references (prenatal: retained 12+2; B-complex:
+  retained 10+8+3+2), and test actual source-bound inputs.
+- Canonical folate/B12 data needs a narrow source audit, not a module-only
+  workaround: folic acid is currently bio_score 6 versus 5-MTHF 14; B12 module
+  preferences contradict the IQM ordering. Some B12 values have explicit
+  historical clinical locks. Preserve attribution and verify the specific
+  evidence before any numeric replacement; never relabel an engineering audit
+  as a new clinical sign-off.
+- Primary sources checked: [NIH pregnancy](https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/)
+  distinguishes folic-acid NTD-prevention evidence from 5-MTHF; [CDC](https://www.cdc.gov/folic-acid/data-research/mthfr/index.html)
+  does not support saying methylfolate is essential for common MTHFR variants;
+  [NIH B12](https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/)
+  does not establish a supplemental form or sublingual absorption advantage.
+  These are different questions from acute 5-MTHF plasma-response studies.
+- Omega's ratio bonus is already absent, but current Dose still increases
+  toward 2 g/day without requiring an indication, and Evidence awards a
+  cardiovascular relevance bonus at 1 g/day without establishing that context.
+  [NIH omega-3](https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/)
+  separates adult nutritional intake, pregnancy DHA, existing coronary disease
+  and prescription triglyceride treatment. Preserve those boundaries rather
+  than selecting whichever target makes a product score highest.
+- Fiber currently uses one 1/3/5/7 g ladder plus a name-based type bonus. The
+  next adapter must use existing source-linked ingredient amounts and curated
+  references, not lend total dietary fiber to a named substrate. Generic
+  fiber disclosure is not an ingredient-specific efficacy target.
+- The existing archetype suite has one "ideal" and one combined "failure"
+  per archetype, not the requested five isolated variants. Its probiotic ideal
+  has only 8/20 Evidence and is not a 98-100 candidate. Keep that honest
+  research-limited control; do not raise its expected score or invent evidence.
+  Add separate demonstrably achievable excellent/weak-verification/underdose/
+  complexity/incomplete-review fixtures through the same production seam.
