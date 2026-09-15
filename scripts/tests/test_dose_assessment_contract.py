@@ -51,6 +51,31 @@ def _collect(enricher: SupplementEnricherV3, *rows: dict) -> dict:
     )
 
 
+@pytest.mark.parametrize("parent,standard,form", [
+    ("tmg_betaine", "TMG (Trimethylglycine)", "betaine hydrochloride"),
+    ("l_glutamine", "L-Glutamine", "n-acetyl-l-glutamine"),
+    ("l_glutamine", "L-Glutamine", "l-alanyl-l-glutamine"),
+])
+def test_distinct_form_does_not_borrow_the_parent_trial_dose(enricher, parent, standard, form):
+    result = _collect(enricher, _row(form, parent, 500, "mg", standard_name=standard, matched_form=form))
+    assert result["analyzed_ingredients"], "The ingredient must remain visible"
+    assert all(r.get("pct_rda") is None for r in result["adequacy_results"])
+
+
+@pytest.mark.parametrize("label", ["Betaine Hydrochloride", "N-Acetyl-L-Glutamine", "L-Alanyl-L-Glutamine"])
+def test_resolved_quality_form_reaches_the_shared_reference_check(enricher, label):
+    product = {"activeIngredients": [{"name": label, "standardName": label,
+                 "raw_source_text": label, "raw_source_path": "ingredientRows[0]",
+                 "quantity": 500, "unit": "mg", "forms": []}], "inactiveIngredients": []}
+    product["ingredient_quality_data"] = enricher._collect_ingredient_quality_data(product)
+    mapped = product["ingredient_quality_data"]["ingredients"]
+    assert len(mapped) == 1 and mapped[0].get("matched_form"), mapped
+    result = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
+    assert result["collection_status"] == "complete"
+    assert result["analyzed_ingredients"]
+    assert all(r.get("pct_rda") is None for r in result["adequacy_results"])
+
+
 def test_failed_conversion_never_substitutes_raw_value(enricher) -> None:
     result = _collect(
         enricher,

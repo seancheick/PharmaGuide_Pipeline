@@ -85,6 +85,16 @@ def test_name_parts_naming_two_references_resolve_to_neither(calculator) -> None
     assert _resolved_id(calculator, "Folate (Biotin)") is None
 
 
+def test_hcl_alias_does_not_claim_the_sulfate_trial_reference(calculator) -> None:
+    assert _resolved_id(calculator, "Glucosamine HCl") is None
+    assert _resolved_id(calculator, "Glucosamine Sulfate") == "glucosamine_sulfate"
+
+
+@pytest.mark.parametrize("form", ["glucosamine hydrochloride", "n-acetyl glucosamine (NAG)"])
+def test_resolved_glucosamine_form_keeps_its_own_study_material(calculator, form) -> None:
+    assert calculator._find_nutrient("Glucosamine", form_name=form) is None
+
+
 def test_scoring_reference_maps_agree_with_the_lookup(calculator) -> None:
     """generic_dose decides the dose curve by canonical id, but the enriched
     pct_rda comes from this name lookup. The IQM name the enricher passes must

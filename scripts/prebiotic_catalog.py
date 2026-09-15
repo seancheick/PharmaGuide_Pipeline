@@ -21,10 +21,13 @@ Rules the matcher enforces:
 from __future__ import annotations
 
 import json
+import math
 import re
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
+
+from normalization import canonicalize_mass_unit
 
 REGISTRY = Path(__file__).resolve().parent / "data" / "clinically_relevant_strains.json"
 GENERIC_PREBIOTIC_LABELS = frozenset({"prebiotic", "prebiotics", "prebiotic blend", "prebiotic fiber", "prebiotic fibre"})
@@ -109,9 +112,9 @@ def row_quantity_g(row: dict) -> float | None:
         except (TypeError, ValueError):
             continue
         break
-    if quantity is None:
+    if quantity is None or not math.isfinite(quantity) or quantity < 0:
         return None
-    unit = str(row.get("unit_normalized") or row.get("unit") or row.get("dose_unit") or "").strip().lower()
+    unit = canonicalize_mass_unit(row.get("unit_normalized") or row.get("unit") or row.get("dose_unit") or "")
     if unit in {"g", "gram", "grams", "gm"}:
         return quantity
     if unit in {"mg", "milligram", "milligrams"}:
@@ -119,3 +122,38 @@ def row_quantity_g(row: dict) -> float | None:
     if unit in {"mcg", "microgram", "micrograms", "ug", "µg"}:
         return quantity / 1_000_000.0
     return None
+
+
+def prebiotic_summary(rows) -> tuple[bool, str, float | None]:
+    """Select one label-owned prebiotic/name/mass for both display and scoring.
+
+    Prefer the largest individually disclosed prebiotic. Never attach one row's
+    mass to another row's name, use prose notes as identity, or borrow a mixed
+    container's total for a child. Child rows remain available independently.
+    """
+    selected = (False, "", None)
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        name = str(row.get("name") or row.get("standardName") or row.get("standard_name") or "")
+        match = match_prebiotic(name)
+        if not match.present:
+            for key in ("standardName", "standard_name", "canonical_id", "ingredientGroup"):
+                candidate = match_prebiotic(row.get(key))
+                if candidate.standard_name or candidate.ambiguous:
+                    match = candidate
+                    break
+        children = row.get("nestedIngredients") or []
+        if match.present:
+            # The enclosing blend is not a quantified individual ingredient.
+            container = bool(children or row.get("is_blend_header") or row.get("is_blend"))
+            if re.search(r"\bblend\b", name, re.I) and normalize_prebiotic_text(name) not in GENERIC_PREBIOTIC_LABELS:
+                container = True
+            grams = None if container else row_quantity_g(row)
+            display = name if container else (match.standard_name or name)
+            if not selected[0] or (grams is not None and (selected[2] is None or grams > selected[2])):
+                selected = (True, display, grams)
+        child = prebiotic_summary(children)
+        if child[0] and (not selected[0] or (child[2] is not None and (selected[2] is None or child[2] > selected[2]))):
+            selected = child
+    return selected

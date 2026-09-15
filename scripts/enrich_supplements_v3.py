@@ -15850,52 +15850,8 @@ class SupplementEnricherV3:
         # prebiotic complement; the registry's prebiotics.ingredients list is
         # the catalog. Generic "fiber" never counts; an alias shared by two
         # catalog entries (human milk oligosaccharide) stays unresolved.
-        from prebiotic_catalog import match_prebiotic, row_quantity_g
-        prebiotic_found = False
-        prebiotic_name = ""
-        prebiotic_dose_g = None
-
-        prebiotic_candidates = []
-        for ing in all_ingredients:
-            ing_name = ing.get('name', '')
-            std_name = ing.get('standardName', '') or ing_name
-            group = ing.get("ingredientGroup", "")
-            notes = ing.get("notes", "")
-            prebiotic_candidates.append((ing_name, " ".join(str(v) for v in (std_name, group, notes) if v), ing))
-
-            # Include nested blend children so prebiotic rows inside proprietary
-            # blends are not silently missed.
-            for nested_ing in ing.get('nestedIngredients', []) or []:
-                if not isinstance(nested_ing, dict):
-                    continue
-                nested_name = nested_ing.get('name', '')
-                nested_std = nested_ing.get('standardName', '') or nested_name
-                nested_group = nested_ing.get("ingredientGroup", "")
-                nested_notes = nested_ing.get("notes", "")
-                prebiotic_candidates.append((
-                    nested_name,
-                    " ".join(str(v) for v in (nested_std, nested_group, nested_notes) if v),
-                    nested_ing,
-                ))
-
-        for ing_name, std_text, row in prebiotic_candidates:
-            match = match_prebiotic(ing_name)
-            if not match.present:
-                # standardName/group/notes may name the catalog entry; a bare
-                # "prebiotic" word in notes is marketing text, not a row identity.
-                match = match_prebiotic(std_text)
-                if match.present and match.standard_name is None and not match.ambiguous:
-                    match = match_prebiotic("")
-            if not match.present:
-                continue
-            if not prebiotic_found:
-                prebiotic_found = True
-                # Resolved catalog identity, else the label's own words (never
-                # a guessed entry for a generic or ambiguous term).
-                prebiotic_name = match.standard_name or ing_name or std_text
-            grams = row_quantity_g(row) if isinstance(row, dict) else None
-            if grams is not None and grams > 0:
-                prebiotic_dose_g = grams if prebiotic_dose_g is None else max(prebiotic_dose_g, grams)
+        from prebiotic_catalog import prebiotic_summary
+        prebiotic_found, prebiotic_name, prebiotic_dose_g = prebiotic_summary(all_ingredients)
 
         # Check for survivability coating
         has_survivability_coating = False
@@ -20336,7 +20292,7 @@ class SupplementEnricherV3:
                     # Forwarding the IQM-resolved form lets the regex
                     # hit. Skipped when matched_form is empty or the
                     # placeholder default 'standard'.
-                    matched_form = (ingredient.get('matched_form') or '').strip()
+                    matched_form = (ingredient.get('matched_form') or quality_identity.get('matched_form') or '').strip()
                     row_disclosed_forms = " ".join(
                         str(form.get("name") or "")
                         for form in (ingredient.get("forms") or [])
@@ -20561,7 +20517,7 @@ class SupplementEnricherV3:
                         {}
                         if quality_category == "other" and not nutrient_group_id
                         else self.rda_calculator._find_nutrient(
-                            reference_nutrient_name
+                            reference_nutrient_name, form_name=matched_form
                         ) or {}
                     )
                     reference_unit_passthrough = False
@@ -20824,6 +20780,7 @@ class SupplementEnricherV3:
                                 unit=converted_unit,
                                 age_group=_RDA_REFERENCE_PROFILE["age_range"],
                                 sex="adult_neutral",
+                                form_name=matched_form,
                             )
                             safety = self.rda_calculator.compute_nutrient_adequacy(
                                 nutrient=reference_nutrient_name,
@@ -20831,6 +20788,7 @@ class SupplementEnricherV3:
                                 unit=converted_unit,
                                 age_group=_RDA_REFERENCE_PROFILE["age_range"],
                                 sex="adult_neutral",
+                                form_name=matched_form,
                             )
                         except Exception as calculation_error:
                             assessment_error = str(calculation_error)[:500]

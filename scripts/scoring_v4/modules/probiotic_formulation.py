@@ -13,10 +13,10 @@ import re
 from typing import Any, Dict
 
 from scoring_input_contract import get_scoring_ingredients
-from prebiotic_catalog import match_prebiotic, row_quantity_g
+from prebiotic_catalog import prebiotic_summary
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from studied_formulas import label_owned_native_strains
-from probiotic_measurements import declared_total_cfu
+from probiotic_measurements import declared_total_cfu, label_strain_identity_resolution
 
 
 PHASE_MARKER = "P2.1_probiotic_formulation"
@@ -72,7 +72,11 @@ def score_formulation(product: Any) -> Dict[str, Any]:
 
     total_billion = _total_billion_count(pdata)
     strain_count = _total_strain_count(pdata)
-    identity_count = len({row["clinical_id"] for row in label_owned_native_strains(product)})
+    from studied_formulas import _clinical_strain_registry
+    registry = _clinical_strain_registry()
+    identity_count = len({row["clinical_id"] for row in label_owned_native_strains(product)
+        if label_strain_identity_resolution(row.get("strain"), row["clinical_id"], registry)["resolution"]
+        in {"exact_strain_reviewed", "exact_strain_unreviewed"}})
 
     components = {
         "total_cfu_disclosed": _score_total_cfu_disclosed(total_billion),
@@ -207,29 +211,7 @@ def _prebiotic_dose_g(product: Dict[str, Any], pdata: Dict[str, Any]) -> float |
         if value is not None and value > 0:
             return value
 
-    best: float | None = None
-    for row in _ingredient_rows(product):
-        row = _safe_dict(row)
-        if not row:
-            continue
-        text = " ".join(
-            str(row.get(key) or "")
-            for key in (
-                "name",
-                "standardName",
-                "standard_name",
-                "canonical_id",
-                "raw_source_text",
-                "display_label",
-            )
-        )
-        if not match_prebiotic(text).present:
-            continue
-        grams = row_quantity_g(row)
-        if grams is None:
-            continue
-        best = grams if best is None else max(best, grams)
-    return best
+    return prebiotic_summary(_ingredient_rows(product))[2]
 
 
 def _ingredient_rows(product: Dict[str, Any]) -> list[Dict[str, Any]]:

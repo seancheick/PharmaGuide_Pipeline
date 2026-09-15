@@ -480,8 +480,16 @@ def _label_designation_tokens(label: str) -> tuple[list[str], list[str]]:
     """Split a label strain into taxon words and strain-designation codes."""
     words = re.findall(r"[A-Za-z0-9][A-Za-z0-9\-\.]*", str(label or ""))
     taxon, codes = [], []
-    for word in words:
+    for index, word in enumerate(words):
         bare = word.rstrip(".")
+        # Uppercase label typography is not an uppercase strain designation.
+        # Preserve the scientific binomial before interpreting later codes.
+        if bare.lower() in _PROBIOTIC_GENERA or (
+            index == 1 and taxon and
+            (taxon[0] in _PROBIOTIC_GENERA or len(taxon[0]) == 1) and bare.isalpha()
+        ):
+            taxon.append(bare.lower())
+            continue
         if re.fullmatch(r"[A-Za-z]", bare):
             taxon.append(bare.lower())  # genus abbreviation such as "L."
             continue
@@ -509,7 +517,8 @@ def label_strain_identity_resolution(label: str, clinical_id, registry: Mapping)
     taxon, codes = _label_designation_tokens(text)
     has_genus = bool(taxon) and (taxon[0] in _PROBIOTIC_GENERA or len(taxon[0]) == 1)
     reference = registry.get(clinical_id) if isinstance(clinical_id, str) and isinstance(registry, Mapping) else None
-    if codes and isinstance(reference, Mapping):
+    from studied_formulas import clinical_strain_identity_matches
+    if codes and isinstance(reference, Mapping) and clinical_strain_identity_matches(text, reference):
         signoff = (reference.get("cfu_thresholds") or {}).get("dr_pham_signoff") is True
         state = "exact_strain_reviewed" if signoff else "exact_strain_unreviewed"
         return {"strain": text, "resolution": state, "clinical_id": clinical_id}

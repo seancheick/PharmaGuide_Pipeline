@@ -47,3 +47,21 @@ def test_species_only_never_borrows_a_strain_identity():
     # The caller may pass a clinical_id, but a species-only label cannot own a strain.
     assert out["resolution"] == "species_only"
     assert out["clinical_id"] is None
+
+
+@pytest.mark.parametrize("label", ["LACTOBACILLUS ACIDOPHILUS", "Lactobacillus ACIDOPHILUS"])
+def test_capitalization_does_not_create_a_strain_code(label):
+    assert label_strain_identity_resolution(label, "STRAIN_ACIDOPHILUS_LA14", REGISTRY)["resolution"] == "species_only"
+
+
+def test_an_unrelated_registry_id_cannot_verify_a_printed_code():
+    actual = label_strain_identity_resolution("Lactobacillus acidophilus La-999", "STRAIN_LGG", REGISTRY)
+    assert actual["clinical_id"] is None
+
+
+@pytest.mark.parametrize("name, clinical_id", [("Saccharomyces boulardii", "STRAIN_SACCHAROMYCES"), ("Bacillus clausii", "STRAIN_CLAUSII")])
+def test_species_general_research_does_not_earn_exact_code_points(name, clinical_id):
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    product = {"activeIngredients": [{"name": name, "raw_source_path": "ingredientRows[0]"}],
+               "probiotic_data": {"clinical_strains": [{"strain": name, "clinical_id": clinical_id, "source_row_ref": "ingredientRows[0]"}]}}
+    assert score_formulation(product)["components"]["identified_strain_codes"] == 0

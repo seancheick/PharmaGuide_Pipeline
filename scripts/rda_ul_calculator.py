@@ -317,7 +317,8 @@ class RDAULCalculator:
         amount: float,
         unit: str,
         age_group: str = "19-30",
-        sex: str = "both"
+        sex: str = "both",
+        form_name: Optional[str] = None,
     ) -> NutrientAdequacyResult:
         """
         Compute nutrient adequacy with full evidence.
@@ -340,7 +341,7 @@ class RDAULCalculator:
         norm_sex = self.SEX_NORMALIZATION.get(sex.lower() if sex else "both", self.SEX_NORMALIZATION["default"])
 
         # Find nutrient data
-        nutrient_data = self._find_nutrient(nutrient)
+        nutrient_data = self._find_nutrient(nutrient, form_name=form_name)
 
         if not nutrient_data:
             return NutrientAdequacyResult(
@@ -540,7 +541,27 @@ class RDAULCalculator:
             return self.nutrient_lookup.get(self.nutrient_aliases[key])
         return None
 
-    def _find_nutrient(self, name: str) -> Optional[Dict]:
+    def _form_scoped_reference(self, record: Optional[Dict], form_name: Optional[str]) -> Optional[Dict]:
+        """IQM parent membership does not prove equivalence to a trial material.
+
+        Keep the registered forms/parents intact; abstain from the parent's
+        reference when a different chemical preparation has no own anchor.
+        These are reference exclusions, not new amounts or ingredient aliases.
+        """
+        excluded = {
+            "betaine_tmg": {"betaine hydrochloride", "betaine hcl"},
+            "l_glutamine": {"n-acetyl-l-glutamine", "l-alanyl-l-glutamine"},
+            # The anchor's PMID 30566740 reviews sulfate, not HCl or NAG.
+            "glucosamine_sulfate": {"glucosamine hydrochloride", "glucosamine hcl",
+                                    "n-acetyl glucosamine (NAG)"},
+        }
+        form = self._normalize_nutrient_name(form_name or "")
+        if record and form in {self._normalize_nutrient_name(value)
+                               for value in excluded.get(record.get("id"), set())}:
+            return None
+        return record
+
+    def _find_nutrient(self, name: str, *, form_name: Optional[str] = None) -> Optional[Dict]:
         """Find a nutrient by exact standard name, id or alias.
 
         A numbered vitamer names its vitamin (Vitamin D3 -> Vitamin D). A label
@@ -551,12 +572,13 @@ class RDAULCalculator:
         "Echinacea" contains "nac", but neither is that compound.
         """
         key = self._normalize_nutrient_name(name)
+        form_name = form_name or name
         direct = self._lookup_key(key)
         if direct:
-            return direct
+            return self._form_scoped_reference(direct, form_name)
         vitamer = re.fullmatch(r"(vitamin_[a-z])\d+", key)
         if vitamer and self._lookup_key(vitamer.group(1)):
-            return self._lookup_key(vitamer.group(1))
+            return self._form_scoped_reference(self._lookup_key(vitamer.group(1)), form_name)
         parts = re.fullmatch(r"\s*(.+?)\s*\((.+)\)\s*", name or "")
         if not parts:
             return None
@@ -565,7 +587,7 @@ class RDAULCalculator:
             hit = self._lookup_key(self._normalize_nutrient_name(part))
             if hit:
                 hits[id(hit)] = hit
-        return next(iter(hits.values())) if len(hits) == 1 else None
+        return self._form_scoped_reference(next(iter(hits.values())), form_name) if len(hits) == 1 else None
 
     def _get_age_sex_values(
         self,

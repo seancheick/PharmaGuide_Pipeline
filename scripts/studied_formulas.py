@@ -162,16 +162,21 @@ def _clinical_strain_registry() -> dict[str, dict]:
     return {entry["id"]: entry for entry in payload["clinically_relevant_strains"]}
 
 
+def clinical_strain_identity_key(identity: str) -> str:
+    """Shared exact-name key for the cleaner index and downstream identity checks."""
+    return _key(normalize_text(identity))
+
+
 def clinical_strain_identity_matches(identity: object, reference: Mapping) -> bool:
     """Exact registry identity, ignoring punctuation but not species or codes."""
     if not isinstance(identity, str) or not identity.strip():
         return False
     allowed_names = {
-        _key(normalize_text(name))
+        clinical_strain_identity_key(name)
         for name in [reference.get("standard_name"), *reference.get("aliases", [])]
         if isinstance(name, str) and name.strip()
     }
-    return _key(normalize_text(identity)) in allowed_names
+    return clinical_strain_identity_key(identity) in allowed_names
 
 
 @lru_cache(maxsize=1)

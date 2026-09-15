@@ -3201,6 +3201,7 @@ class EnhancedDSLDNormalizer:
         """Build a normalized lookup from probiotic strain aliases
         to strain standard_name for strain-level matching bypass."""
         lookup: Dict[str, str] = {}
+        from studied_formulas import clinical_strain_identity_key
         strains = self.clinical_strains_db.get(
             'clinically_relevant_strains', []
         )
@@ -3209,12 +3210,12 @@ class EnhancedDSLDNormalizer:
             if not std:
                 continue
             # Index the standard_name itself
-            key = self.matcher.preprocess_text(std)
+            key = clinical_strain_identity_key(std)
             if key:
                 lookup[key] = std
             # Index all aliases
             for alias in strain.get('aliases', []):
-                key = self.matcher.preprocess_text(alias)
+                key = clinical_strain_identity_key(alias)
                 if key and key not in lookup:
                     lookup[key] = std
         if lookup:
@@ -3227,26 +3228,15 @@ class EnhancedDSLDNormalizer:
     def _match_probiotic_strain(
         self, processed_name: str
     ) -> Optional[str]:
-        """Match a preprocessed ingredient name against the
-        probiotic strain lookup. Uses exact match first, then
-        longest-alias substring match as fallback."""
+        """Use the same exact registry identity rule as enrichment and scoring.
+
+        A code prefix must not rename an unregistered strain (Lp-1150) to a
+        registered one (Lp-115) before downstream identity validation sees it.
+        """
         if not processed_name:
             return None
-        # Pass 1: exact match
-        if processed_name in self._probiotic_strain_lookup:
-            return self._probiotic_strain_lookup[processed_name]
-        # Pass 2: find the longest alias that is a substring
-        # of the input (minimum 6 chars to avoid false positives
-        # like "k12" matching "mk12-something")
-        best_alias = ""
-        best_name = None
-        for alias, std_name in self._probiotic_strain_lookup.items():
-            if len(alias) < 6:
-                continue
-            if alias in processed_name and len(alias) > len(best_alias):
-                best_alias = alias
-                best_name = std_name
-        return best_name
+        from studied_formulas import clinical_strain_identity_key
+        return self._probiotic_strain_lookup.get(clinical_strain_identity_key(processed_name))
 
     def _registered_strain_species_identity(
         self, standard_name: str, name: str, ingredient_group: Optional[str]

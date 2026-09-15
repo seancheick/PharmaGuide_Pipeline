@@ -71,3 +71,8 @@ def test_strain_gets_the_species_an_unregistered_name_in_its_group_gets(normaliz
     strain = _process(normalizer, _row("Lactobacillus reuteri NCIMB 30242", "Lactobacillus reuteri"))
     unregistered = _process(normalizer, _row("Zzqx Proprietary Culture 7", "Lactobacillus reuteri"))
     assert strain["canonical_id"] == unregistered["canonical_id"] == "lactobacillus_reuteri"
+
+
+@pytest.mark.parametrize("name", ["Lactobacillus reuteri NCIMB 302420", "Lactobacillus plantarum Lp-1150"])
+def test_cleaner_does_not_shorten_an_unregistered_strain_code(normalizer, name):
+    assert normalizer._match_probiotic_strain(normalizer.matcher.preprocess_text(name)) is None

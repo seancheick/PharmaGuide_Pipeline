@@ -150,3 +150,29 @@ def test_enricher_ignores_generic_fiber_and_marketing_notes(enricher):
     data = enricher._collect_probiotic_data(_probiotic_product(rows))
     assert data["prebiotic_present"] is False
     assert data["prebiotic_dose_g"] is None
+
+
+def test_enricher_keeps_name_and_amount_on_the_same_row(enricher):
+    rows = [{"name": "Inulin", "quantity": 100, "unit": "mg"},
+            {"name": "Sunfiber", "quantity": 3, "unit": "g"}]
+    data = enricher._collect_probiotic_data(_probiotic_product(rows))
+    assert (data["prebiotic_name"], data["prebiotic_dose_g"]) == ("Partially Hydrolyzed Guar Gum", 3)
+
+
+def test_mixed_blend_dose_is_not_an_ingredient_dose(enricher):
+    row = {"name": "Digestive Blend (Inulin, Protease)", "quantity": 5, "unit": "g",
+           "nestedIngredients": [{"name": "Inulin"}, {"name": "Protease"}]}
+    data = enricher._collect_probiotic_data(_probiotic_product([row]))
+    assert data["prebiotic_present"] is True
+    assert data["prebiotic_dose_g"] is None
+
+
+def test_named_ingredient_in_marketing_notes_does_not_own_the_row_mass(enricher):
+    row = {"name": "Rice Flour", "quantity": 5, "unit": "g", "notes": "Combine with inulin for prebiotic support"}
+    data = enricher._collect_probiotic_data(_probiotic_product([row]))
+    assert data["prebiotic_present"] is False
+
+
+@pytest.mark.parametrize("amount", [float("nan"), float("inf"), -1])
+def test_invalid_mass_is_not_a_disclosed_dose(amount):
+    assert row_quantity_g({"quantity": amount, "unit": "g"}) is None
