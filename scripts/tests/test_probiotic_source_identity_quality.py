@@ -133,6 +133,25 @@ def test_conflicting_representations_of_same_source_path_fail_closed(conflict):
     assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
 
 
+@pytest.mark.parametrize("stale_projection", [False, True])
+@pytest.mark.parametrize("reverse", [False, True])
+@pytest.mark.parametrize("nonlive_name", ["Lactobacillus rhamnosus GG", "L. rhamnosus GG"])
+def test_nonlive_same_path_representation_cannot_be_hidden_by_live_duplicate(stale_projection, reverse, nonlive_name):
+    product = product_with_identities(1)
+    nonlive = {**product["activeIngredients"][0], "name": nonlive_name,
+               "forms": [{"name": "heat killed"}]}
+    product["activeIngredients"].append(nonlive)
+    if reverse:
+        product["activeIngredients"].reverse()
+    if not stale_projection:
+        product["probiotic_data"]["probiotic_blends"] = []
+    result = score_formulation(product)
+    assert result["metadata"]["identified_strain_count"] == 0
+    assert result["components"]["exact_identity_completeness"] == 0
+    assert label_owned_native_strains(product) == []
+    assert len(product["probiotic_data"]["clinical_strains"]) == 1  # Original diagnostic survives.
+
+
 def test_ambiguous_registry_alias_does_not_select_an_identity(monkeypatch):
     import studied_formulas
     registry = deepcopy(studied_formulas._clinical_strain_registry())

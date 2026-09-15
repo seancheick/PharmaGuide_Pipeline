@@ -14,6 +14,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from clinical_applicability import reviewed_entries
+from identity_integrity import has_nonlive_microbial_derivative_evidence
 from normalization import normalize_text
 from serving_frequency import resolve_daily_serving_range
 from probiotic_measurements import (
@@ -302,11 +303,14 @@ def _clinical_label_rows(rows):
 
 
 def _source_rows_all_match(owners, ref, predicate):
-    """Every actual representation of one valid source path must agree."""
+    """Every actual representation must remain live-eligible and agree."""
     if not isinstance(ref, str) or not ref:
         return False
     matched = [owner for owner in owners if owner.get("raw_source_path") == ref]
-    return bool(matched) and all(predicate(owner) for owner in matched)
+    return bool(matched) and all(
+        not has_nonlive_microbial_derivative_evidence(owner) and predicate(owner)
+        for owner in matched
+    )
 
 
 def _legacy_label_owner_unique(owners, identity):
@@ -314,6 +318,8 @@ def _legacy_label_owner_unique(owners, identity):
     for owner in owners:
         if clinical_strain_identity_key(str(owner.get("name") or "")) != identity:
             continue
+        if has_nonlive_microbial_derivative_evidence(owner):
+            return False
         ref = owner.get("raw_source_path")
         if ref is not None and (not isinstance(ref, str) or not ref):
             return False

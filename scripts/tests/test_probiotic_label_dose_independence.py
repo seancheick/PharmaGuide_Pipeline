@@ -20,6 +20,24 @@ def owned_label(dose=1e10):
     return product
 
 
+@pytest.mark.parametrize("legacy", [False, True])
+def test_nonlive_source_invalidates_stale_live_clinical_and_cfu_projection(legacy):
+    product = strain_product(dose=1e10)
+    assert score_evidence(product)["score"] > 0
+    assert len(studied_formulas.measured_native_strain_doses(product)) == 1
+    if legacy:
+        product["activeIngredients"][0].pop("raw_source_path")
+        product["probiotic_data"]["clinical_strains"][0].pop("source_row_ref")
+    original = deepcopy(product["probiotic_data"]["clinical_strains"])
+    product["activeIngredients"][0]["forms"] = [{"name": "heat killed"}]
+    assert studied_formulas.label_owned_native_strains(product) == []
+    assert studied_formulas.measured_native_strain_doses(product) == []
+    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+    assert score_evidence(product)["score"] == 0
+    assert score_dose(product)["metadata"]["cfu_adequacy_v3_points"] == 0
+    assert product["probiotic_data"]["clinical_strains"] == original
+
+
 def aggregate_label():
     product = owned_label(None)
     other = strain_product(dose=None, clinical_id="STRAIN_LACTIS_BB12",

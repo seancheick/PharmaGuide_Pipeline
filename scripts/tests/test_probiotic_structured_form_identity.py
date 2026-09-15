@@ -43,6 +43,26 @@ def _collect(enricher, rows):
     return product
 
 
+@pytest.mark.parametrize("name", ["Lactobacillus rhamnosus GG", "L. rhamnosus GG"])
+@pytest.mark.parametrize("stale_projection", [False, True])
+def test_nonlive_exact_source_cannot_restore_identity_excluded_by_collector(enricher, name, stale_projection):
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    live = _row("Lactobacillus acidophilus", cfu=1e9)
+    nonlive = _row(name, "heat killed", index=1)
+    nonlive.update(quantity=100, unit="mg")
+    product = _collect(enricher, [live, nonlive])
+    assert product["probiotic_data"]["clinical_strains"] == []
+    assert len(product["probiotic_data"]["probiotic_blends"]) == 1
+    if stale_projection:
+        product["probiotic_data"]["probiotic_blends"].append({
+            "name": name, "strains": [name], "raw_source_path": nonlive["raw_source_path"],
+        })
+    result = score_formulation(product)
+    assert result["metadata"]["identified_strain_count"] == 0
+    assert result["components"]["exact_identity_completeness"] == 0
+    assert independent_clinical_strains(product) == []
+
+
 @pytest.mark.parametrize("mixed", [False, True])
 @pytest.mark.parametrize("flattened", [False, True])
 def test_allocation_scope_is_emitted_from_actual_blend_members(enricher, mixed, flattened):
