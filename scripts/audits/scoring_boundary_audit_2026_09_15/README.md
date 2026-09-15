@@ -295,22 +295,31 @@ pairs, and the rerunnable `compare_vitamin_replay.py`.
   above was recomputed from the two receipts and matches exactly: 553 products;
   548 scored and 5 suppressed; 162 up, 383 down, 3 unchanged; mean −2.04; range
   −10.4 to +5.9; Formulation 545, Dose 5, Transparency 2, other pillars 0.
-- **HIGH, reproduced, not fixed:** `probiotic_measurements._probiotic_source_category`
-  falls back to DSLD `raw_category` when `category` is empty. Spirulina rows in
-  63308 and 31062 carry `raw_category: bacteria`, so the shared predicate returns
-  true where the pre-batch enricher (cleaner `category` only) returned false.
-  The next re-enrichment will mark them probiotic products. Whether routing
-  changes is unverified. Resolve the eligibility rule before any Clean/Enrich run.
+- **HIGH, reproduced and fixed by adversarial audit:** a resolved IQM identity
+  outside the `probiotics` category now outranks broad or incorrect source
+  categories. This covers Spirulina/Chlorella filed as bacteria and four Solgar
+  Turmeric rows incorrectly typed by DSLD, without an algae-specific exception.
+  A fresh two-product source re-enrichment proves 63308 Best Spirulina remains
+  non-probiotic, while 31062 Super Foods 25 remains a multivitamin and retains
+  exactly one typed Bacillus coagulans member plus its 12.5-billion-CFU
+  disclosure. Plural `Probiotics`, scaled CFU units, and long-tail probiotic IQM
+  identities are covered by regression tests; enrichment, taxonomy, and scoring
+  consume the same predicate and dependency-free IQM reference owner.
 - Seventeen slow real-catalog canaries fail identically at clean `a7b676e4`
   (omega p161 ×9, cross-module probiotic ×7, generic 184661). `fast` excludes
   them through `scripts/test_profiles.py`, so refresh them before release gates.
-- The auditor reported four low findings with no routed product impact; they
-  were not rerun here:
-  - Chlorella counted as an organism in 7 non-probiotic-routed products.
-  - Per-strain CFU disclosure lost for ref-less multi-strain blends.
-  - Nested/flattened duplicate rows with differing forms.
-  - ProDentis/Shirota never resolving exact. Their registry `standard_name`s
-    carry no strain code, which is confirmed.
+- Of the four low findings, Chlorella is fixed by the same shared resolved-IQM
+  rule, including when it appears inside a probiotic blend container.
+  Ref-less multi-strain totals remain deliberately ineligible for per-strain
+  dose credit because their ownership cannot be proved. Existing source-owner
+  tests cover nested/flattened representations. ProDentis/Shirota remains a
+  separate registry-identity review, not a reason to loosen exact matching.
+
+The same adversarial audit also fixed two cross-category boundaries found by
+the vitamin canaries: the shared Formulation presence floor is monotonic across
+the whole sub-floor interval, and unresolved generic effect direction now earns
+zero Evidence rather than default-positive credit. The full fast tier passed
+with 15,529 tests and 66 expected skips.
 
 No Clean/Enrich/Score regeneration, catalog build, release, Supabase deployment
 or phone build ran.

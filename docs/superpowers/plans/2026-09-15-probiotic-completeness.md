@@ -306,7 +306,7 @@ not an implied clinical sign-off.
 - [x] Independent spec and code-quality reviews; update measured fixture pins.
 - [x] Frozen full fast backstop before marking this batch complete.
 
-Completed (Claude, 2026-09-15; awaiting Codex adversarial audit). Config
+Completed (Claude, 2026-09-15; Codex adversarial audit completed 2026-09-15). Config
 `1.7.0-vitamin-form-ownership`, fingerprint `32da1b7296417cad`. Baseline
 `a7b676e4`; the replayed candidate tree is `b5e7499b`, and the committed scoring
 code is identical to it. After review, only two tests changed. Final fast suite:
@@ -314,29 +314,35 @@ code is identical to it. After review, only two tests changed. Final fast suite:
 unexpected movements and limits are in
 `scripts/audits/scoring_boundary_audit_2026_09_15/README.md`.
 
-Decisions this batch surfaced, deliberately not changed in it:
+Follow-up decisions closed by the adversarial audit:
 
-- The multi/prenatal and generic presence floor applies only when positive
-  points minus penalties is at or below zero. A product with slightly more
-  positive signal scores below a floored one. This non-monotonic band held 44
-  scored multis at baseline and holds 120 after the positive ceiling dropped
-  from 23 to 14; floored products rose from 45 to 178. Absolute formulation
-  penalties now weigh against a 14-point reference.
+- The shared multi/prenatal and generic presence floor now covers the entire
+  sub-floor interval, including zero penalty. Adding a penalty can no longer
+  raise a Formulation score at either the zero-penalty or zero-score boundary.
+- Missing, unknown, or unresolved effect direction now contributes zero generic
+  Evidence instead of inheriting positive efficacy. The former strict xfail is
+  a passing regression.
+- Resolved IQM identities outside the `probiotics` category outrank broad or
+  incorrect source categories. This single rule covers Spirulina, Chlorella,
+  and the real Solgar Turmeric rows mislabeled `bacteria`, while retaining
+  category-only long-tail microbes. Real-source re-enrichment keeps 63308 Best
+  Spirulina non-probiotic; 31062 Super Foods 25 remains a multivitamin while
+  retaining its typed Bacillus coagulans member and 12.5-billion-CFU disclosure.
+
+Decisions still surfaced by this batch:
+
 - B-complex Formulation is now 15/23 panel structure and 8/23 IQM form quality.
   A complete, focused panel with mediocre forms (209616, average rating 10)
   moves Excellent → Exceptional. Decide whether that structure share is intended.
 - Folate/B12 IQM source values remain the separate attributable data audit above.
-- Evidence still lets an unresolved effect direction inherit positive credit.
-  It is pinned as a strict xfail in `test_vitamin_form_ownership.py` for the
-  Evidence boundary batch.
 
 Audit of the completed probiotic batch (Claude, 2026-09-15):
 
-- Reproduced HIGH regression, not yet fixed. The shared collector predicate
-  reads `raw_category` when the cleaner `category` is empty. DSLD labels
-  Spirulina "bacteria", so 63308 and 31062 flip to `is_probiotic_product` on the
-  next re-enrichment; the pre-batch enricher read only `category`. Decide the
-  cyanobacteria/algae eligibility rule before any Clean/Enrich run.
+- Reproduced HIGH regression fixed in the shared collector predicate: a
+  non-probiotic resolved IQM identity now blocks category-only promotion, so
+  broad/wrong DSLD categories no longer promote Spirulina, Chlorella, or
+  Turmeric. The same audit added plural `Probiotics` and scaled CFU-unit
+  coverage so real typed bacterial members are retained.
 - Seventeen slow real-catalog canaries (omega p161 ×9, cross-module probiotic ×7,
   generic 184661) already fail at `a7b676e4`. `test_profiles.py` excludes them
   from `fast`, so refresh them before release gates.
