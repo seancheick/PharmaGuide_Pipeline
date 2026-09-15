@@ -63,6 +63,50 @@ def _window_rows(product):
     return rows
 
 
+def _positive(value) -> bool:
+    """Return whether a legacy/current component carries a positive signal.
+
+    Packet selection reads both the pre-1.3 ``soft`` component and the current
+    ``reputation`` component.  Stored JSON may contain either numbers or numeric
+    strings, so a truthiness check is not sufficient (``"0"`` is truthy).
+    """
+    try:
+        return float(value or 0) > 0
+    except (TypeError, ValueError):
+        return False
+
+
+def _flag(value) -> bool:
+    """Parse a stored boolean/flag without treating ``"false"`` as true."""
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return False
+    if isinstance(value, str):
+        return value.strip().lower() not in {"", "0", "false", "no", "none", "null"}
+    return bool(value)
+
+
+def _verification_selection_flags(v, claim_only: bool = False):
+    """Classify verification signals for pass-2 packet selection.
+
+    This intentionally understands both snapshot shapes: quality_score 1.2
+    stored reputation/region under ``soft`` and quality_score 1.3 stores the
+    same brand context under ``reputation``.  A label-only GMP claim is a
+    claim-only group even though its public GMP component is now zero.
+    """
+    hard = any(_positive(v.get(key)) for key in (
+        "cert", "coa_batch", "gmp", "brand_testing", "brand_only_cert",
+    ))
+    reputation = _positive(v.get("reputation")) or _positive(v.get("soft"))
+    plain_unknown = not hard and not reputation and not claim_only
+    # Reputation is still a claim/brand signal even when a product also has a
+    # label-only GMP claim. Do not silently drop that overlap from the packet;
+    # reserve the GMP-only group for claims with no other brand evidence.
+    unknown_with_reputation = reputation and not hard
+    return plain_unknown, unknown_with_reputation
+
+
 def create_pass2() -> None:
     if ID_FILES["pass2"].exists():
         raise SystemExit("REFUSED: packet_ids_pass2.json exists; its ids are frozen")
@@ -84,7 +128,11 @@ def create_pass2() -> None:
             continue
         v = s["verif"]
         row = {"id": pid, "module": s["module"], "name": p.get("product_name")}
-        plain_unknown = bool(v.get("fail_open_neutral")) and not v.get("soft") and not v.get("gmp")
+        gmp = ((p.get("certification_data") or {}).get("gmp") or {})
+        claim_only = _flag(gmp.get("claimed")) and not any(
+            _flag(gmp.get(k)) for k in ("nsf_gmp", "gmp_certified_or_compliant", "fda_registered")
+        )
+        plain_unknown, unknown_with_reputation = _verification_selection_flags(v, claim_only)
         window = _window_rows(p)
         if s["module"] == "generic" and s["window"] and plain_unknown:
             if len(window) >= 3:
@@ -107,20 +155,19 @@ def create_pass2() -> None:
             continue
         if s["module"] == "generic" and s["window"]:
             continue
-        gmp = ((p.get("certification_data") or {}).get("gmp") or {})
-        claim_only = bool(gmp.get("claimed")) and not any(gmp.get(k) for k in ("nsf_gmp", "gmp_certified_or_compliant", "fda_registered"))
-        cert, coa = v.get("cert") or 0, v.get("coa_batch") or 0
-        if coa and not cert:
+        cert = v.get("cert") or 0
+        coa = v.get("coa_batch") or 0
+        if _positive(coa) and not _positive(cert):
             groups["verif_batch_coa"].append(row)
-        elif cert >= 5:
+        elif _positive(cert) and float(cert) >= 5:
             groups["verif_registry_cert"].append(row)
-        elif cert == 2:
+        elif _positive(cert) and float(cert) == 2:
             groups["verif_label_asserted_cert"].append(row)
-        elif v.get("brand_only_cert"):
+        elif _positive(v.get("brand_only_cert")):
             groups["verif_brand_facility_cert"].append(row)
-        elif v.get("fail_open_neutral") and v.get("gmp") and claim_only:
+        elif claim_only and not _positive(v.get("reputation")) and not _positive(v.get("soft")):
             groups["verif_gmp_claim_only"].append(row)
-        elif v.get("fail_open_neutral") and v.get("soft") and not v.get("gmp"):
+        elif unknown_with_reputation:
             groups["verif_unknown_with_reputation"].append(row)
         elif plain_unknown:
             groups["control_verif_unknown_plain"].append(row)

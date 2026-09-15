@@ -150,18 +150,11 @@ _DRI_REFERENCE_BY_CANONICAL = {
     "selenium": "selenium", "zinc": "zinc",
 }
 
-# No official DRI: the reference is the lowest clinically effective daily dose,
-# and only anchors the 2026-09-15 PubMed review verified or corrected are listed
-# (anchor_verification.json, graduation_eligible). Unverified anchors (glutamine,
-# NAC, 5-HTP, SAMe, DIM, GLA, evening primrose, citrulline) keep the legacy rule.
-_CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL = {
-    "quercetin": "quercetin", "tmg_betaine": "betaine_tmg", "l_glycine": "glycine",
-    "gaba": "gaba_gamma_aminobutyric_acid", "berberine": "berberine",
-    "berberine_supplement": "berberine", "beta-alanine": "beta_alanine",
-    "glucosamine": "glucosamine_sulfate", "hyaluronic_acid": "hyaluronic_acid",
-    "nmn": "nmn_nicotinamide_mononucleotide", "pqq": "pqq_pyrroloquinoline_quinone",
-    "colostrum": "bovine_colostrum", "urolithin_a": "urolithin_a",
-}
+# No official DRI: the reference is the lowest clinically effective daily dose.
+# Alias-to-reference routing is owned by the production config, while the
+# clinical-anchor audit ledger supplies the evidence and eligibility review.
+# Keeping the map in config prevents a silent second scoring vocabulary here.
+_CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL = _DM["_clinical_anchor_reference_by_canonical"]
 
 
 def _adequacy_reference_kind(canonical: object) -> str:

@@ -1185,6 +1185,7 @@ def test_clinical_anchor_map_lists_only_pubmed_verified_anchors() -> None:
     import json
     from pathlib import Path
     from scoring_v4.modules import generic_dose
+    from scoring_v4.quality_score_config import block
 
     root = Path(generic_dose.__file__).resolve().parents[3]
     ledger = json.loads((root / "scripts/audits/clinical_anchor_verification_2026_09_15/anchor_verification.json").read_text())
@@ -1199,3 +1200,6 @@ def test_clinical_anchor_map_lists_only_pubmed_verified_anchors() -> None:
         expected = item.get("anchor_proposed", item["anchor_current"])
         assert {row["rda_ai"] for row in entry["data"]} == {expected}, ref
     assert not set(generic_dose._DRI_REFERENCE_BY_CANONICAL) & set(generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL)
+    assert generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL == block(
+        "dose_magnitudes", "generic"
+    )["generic"]["_clinical_anchor_reference_by_canonical"]

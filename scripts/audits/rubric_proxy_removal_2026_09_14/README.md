@@ -1,7 +1,8 @@
-# Rubric proxy removal — quality_score 1.2.0 (2026-09-14)
+# Rubric calibration passes — quality_score 1.5.1 (2026-09-15)
 
-Pass 1 of the rubric semantic cleanup. Each removed rule rewarded or punished a proxy
-instead of answering its pillar's question. Nothing here adds new scoring logic.
+This audit records the rubric-proxy cleanup plus the verification-tier and official-DRI
+dose passes. Each change is pinned to a reproducible packet or an explicit config
+fingerprint; nothing here silently chooses thresholds from the result distribution.
 
 ## What changed
 
@@ -15,8 +16,8 @@ instead of answering its pillar's question. Nothing here adds new scoring logic.
 
 References (divisors) moved only where a component's maximum was removed, keeping the
 prior slack below the raw ceiling: prenatal_multi formulation 23→21, omega formulation
-23→21, omega dose 23→18. Config versions: quality_score `1.2.0-rubric-proxy-removal`,
-omega `1.1.0-rubric-proxy-removal`; both pinned in `config_fingerprint_history.json`.
+23→21, omega dose 23→20. Config versions and fingerprints are pinned in
+`config_fingerprint_history.json` (quality_score 1.2.0 through 1.5.1; omega 1.1.0).
 
 ## Deliberately NOT changed
 
@@ -68,7 +69,9 @@ fixture still scores below its ideal pair. Invariance tests added: dosage form a
 organic/natural/Non-GMO, sustainability and EPA:DHA ratio leave the score unchanged; no
 generic single active carries a hidden public cap.
 
-Tests: `scripts/test.sh fast` — 15,090 passed, 73 skipped, 0 failed (before the final import/docstring touch-up, which re-ran generic/omega/archetype/quality_score: 1,031 passed).
+Tests: `scripts/test.sh fast` — 15,106 passed, 73 skipped, 0 failed on 2026-09-15.
+The skipped cases are explicitly opt-in release/corpus/real-device gates (for example,
+missing local build directories or `PG_RUN_LOCAL_*` flags); they are not failures.
 
 ## Pass 2a — verification evidence tiers (quality_score 1.3.0)
 
