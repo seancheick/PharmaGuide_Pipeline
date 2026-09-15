@@ -222,3 +222,26 @@ def test_source_local_unknown_group_codes_match_form_denominator(field):
     assert formulation["components"]["exact_identity_completeness"] == 0
     assert score_dose(product)["components"]["per_strain_cfu_disclosure"] == 5
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 3.5
+
+
+def test_exported_count_uses_same_source_owned_denominator_as_scoring():
+    from build_final_db import build_detail_blob
+    product = product_with_identities(1)
+    product["probiotic_data"]["is_probiotic_product"] = True
+    assert product["probiotic_data"]["total_strain_count"] == 99
+    assert score_formulation(product)["metadata"]["total_strain_count"] == 1
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 1
+
+
+@pytest.mark.parametrize("forms", [42, True, False, "invalid", {"name": "invalid"}])
+def test_malformed_unrelated_forms_do_not_crash_or_authorize_identity(forms):
+    from studied_formulas import _clinical_strain_registry, clinical_strain_identity_from_label
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+    product = product_with_identities(1)
+    scorers = [score_formulation, score_dose, score_transparency]
+    before = [scorer(product) for scorer in scorers]
+    product["activeIngredients"].append({"name": "Vitamin D", "raw_source_path": "ingredientRows[1]", "forms": forms})
+    assert [scorer(product) for scorer in scorers] == before
+    malformed_owner = {**product["activeIngredients"][0], "forms": forms}
+    assert clinical_strain_identity_from_label(malformed_owner, _clinical_strain_registry()["STRAIN_LGG"]) is None

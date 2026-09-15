@@ -215,9 +215,12 @@ def clinical_strain_identity_from_label(row: Mapping, reference: Mapping) -> str
     Multiple distinct forms remain unresolved rather than inheriting one dose.
     """
     label = row.get("raw_source_text") or row.get("name")
+    raw_forms = row.get("forms")
+    if raw_forms is not None and not isinstance(raw_forms, list):
+        return None
     forms = {
         str(form.get("name") if isinstance(form, Mapping) else form).strip()
-        for form in row.get("forms") or []
+        for form in raw_forms or []
         if (form.get("name") if isinstance(form, Mapping) else form)
     }
     # DSLD may put the explicit strain code in this same row's structured

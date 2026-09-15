@@ -7944,7 +7944,7 @@ def build_detail_blob(
     # Probiotic detail — strains, CFU, clinical matches
     probiotic_data = safe_dict(enriched.get("probiotic_data"))
     if probiotic_data.get("is_probiotic_product"):
-        from probiotic_measurements import declared_total_cfu
+        from probiotic_measurements import declared_total_cfu, probiotic_label_identity_summary
 
         # Display the same reconciled measurement consumed by the scorer.
         # Missing, invalid or contradictory twins cannot light a CFU chip.
@@ -7964,7 +7964,7 @@ def build_detail_blob(
 
         blob["probiotic_detail"] = {
             "is_probiotic": True,
-            "total_strain_count": probiotic_data.get("total_strain_count"),
+            "total_strain_count": probiotic_label_identity_summary(enriched)["total_strain_count"],
             "total_cfu": total_cfu,
             "total_billion_count": billion,
             "total_cfu_label": _cfu_label,

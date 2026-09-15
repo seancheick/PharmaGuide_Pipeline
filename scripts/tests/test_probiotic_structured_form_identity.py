@@ -200,6 +200,54 @@ def test_distinct_unregistered_forms_are_separate_without_exact_credit(enricher)
     assert result["components"]["exact_identity_completeness"] == 0
 
 
+@pytest.mark.parametrize("remove_clinical", [False, True])
+@pytest.mark.parametrize("repeat_alias", [False, True])
+def test_multiple_biological_forms_count_separately_without_allocating_shared_cfu(enricher, remove_clinical, repeat_alias):
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+    lgg = _row("Lactobacillus rhamnosus GG", cfu=1e9)
+    howaru = _row("HOWARU", index=1, cfu=10e9)
+    howaru["forms"] = [{"name": "Lactobacillus acidophilus NCFM"},
+                       {"name": "Lactobacillus rhamnosus HN001"}]
+    if repeat_alias:
+        howaru["forms"].append({"name": "L. acidophilus NCFM"})
+    product = _collect(enricher, [lgg, howaru])
+    assert product["probiotic_data"]["total_strain_count"] == 3
+    assert len(product["probiotic_data"]["clinical_strains"]) == 1
+    if remove_clinical:
+        product["probiotic_data"]["clinical_strains"] = []
+    formulation = score_formulation(product)
+    assert formulation["metadata"]["total_strain_count"] == 3
+    assert formulation["components"]["exact_identity_completeness"] == pytest.approx(0 if remove_clinical else 8 / 3)
+    dose = score_dose(product)
+    assert dose["metadata"]["total_strain_count"] == 3
+    assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 1
+    assert dose["components"]["per_strain_cfu_disclosure"] == 3.33
+    transparency = score_transparency(product)
+    assert transparency["metadata"]["total_strain_count"] == 3
+    assert transparency["components"]["per_strain_cfu_on_label"] == 2.3333
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 3
+
+
+@pytest.mark.parametrize("extra_form,expected_count", [
+    ("L. acidophilus NCFM", 1), ("delayed release", 1), ("Unregistered label identity", 2),
+    ("Bifidobacterium longum Unknown-A123 delayed release", 2),
+])
+def test_single_form_identity_with_alias_or_delivery_descriptor_deduplicates_source_rows(enricher, extra_form, expected_count):
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    from scoring_v4.modules.probiotic_dose import score_dose
+    owner = _row("HOWARU", "Lactobacillus acidophilus NCFM")
+    owner["forms"].append({"name": extra_form})
+    second = _row("Lactobacillus acidophilus NCFM", index=1, cfu=1e9)
+    product = _collect(enricher, [owner, second])
+    assert product["probiotic_data"]["total_strain_count"] == expected_count
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 1
+    product["probiotic_data"]["clinical_strains"] = []
+    assert score_formulation(product)["metadata"]["total_strain_count"] == expected_count
+    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+
+
 @pytest.mark.parametrize("forgery", ["wrong_owner", "missing_owner", "changed_form"])
 def test_recorded_source_reference_is_reproved_against_actual_label(enricher, forgery):
     product = _collect(enricher, [_row("Bifidobacterium longum", "BB536"), _row("Lactobacillus acidophilus", index=1)])
