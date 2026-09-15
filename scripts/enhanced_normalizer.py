@@ -1380,6 +1380,7 @@ class EnhancedDSLDNormalizer:
 
         # Build probiotic strain lookup for strain-level matching
         self._probiotic_strain_lookup = self._build_strain_lookup()
+        self._probiotic_strain_names = set(self._probiotic_strain_lookup.values())
 
         # PERFORMANCE OPTIMIZATION: Cache variation lists to avoid recreating them
         # These lists are created once and reused for all fuzzy matching operations
@@ -3246,6 +3247,32 @@ class EnhancedDSLDNormalizer:
                 best_alias = alias
                 best_name = std_name
         return best_name
+
+    def _registered_strain_species_identity(
+        self, standard_name: str, name: str, ingredient_group: Optional[str]
+    ) -> "Tuple[Optional[str], Optional[str]]":
+        """Species parent for a registered strain that has no IQM form of its own.
+
+        The strain bypass returns before the guarded ingredientGroup fallback an
+        unregistered name reaches, so a strain such as Lactobacillus reuteri
+        NCIMB 30242 lost the species parent it had before it was registered.
+        Apply the same exact group lookup and negative-term veto, and require
+        the group's species epithet to appear in the strain name.
+        """
+        if standard_name not in self._probiotic_strain_names or not ingredient_group:
+            return (None, None)
+        epithet = norm_module.normalize_text(ingredient_group).split()[-1:]
+        if not epithet or epithet[0] not in norm_module.normalize_text(standard_name).split():
+            return (None, None)
+        group_result = self._exact_ingredient_group_lookup(ingredient_group)
+        if not group_result.get("mapped", False):
+            return (None, None)
+        negative_terms = (group_result.get("match_rules", {}) or {}).get("negative_match_terms", [])
+        if negative_match_terms_veto([name], negative_terms):
+            return (None, None)
+        return self._resolve_canonical_identity(
+            group_result.get("standard_name", ingredient_group)
+        )
 
     def _build_enhanced_indices(self):
         """Build comprehensive lookup indices with variations - fixed to prevent overwrites"""
@@ -7667,6 +7694,12 @@ class EnhancedDSLDNormalizer:
                 canonical_id, canonical_source_db = self._resolve_canonical_identity(
                     standard_name, raw_name=raw_name,
                 )
+                if canonical_id is None:
+                    canonical_id, canonical_source_db = (
+                        self._registered_strain_species_identity(
+                            standard_name, name, ing.get("ingredientGroup")
+                        )
+                    )
             else:
                 canonical_id, canonical_source_db = (
                     self._resolve_inactive_canonical_identity(
