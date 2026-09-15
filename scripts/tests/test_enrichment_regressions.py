@@ -848,11 +848,13 @@ class TestNonRdaNutrientSkipsUL:
         )
 
         adequacy = result['adequacy_results'][0]
-        assert adequacy['skip_ul_check'] is False
-        assert adequacy.get('skip_ul_reason') is None
-        assert adequacy['ul_status'] == 'not_determined'
-        assert adequacy['pct_rda'] is not None
+        assert adequacy['skip_ul_check'] is True
+        assert adequacy['skip_ul_reason'] == 'not_ul_applicable'
+        assert adequacy['ul_status'] == 'skipped_not_ul_applicable'
+        assert adequacy['ul_assessment_status'] == 'not_applicable'
+        assert adequacy['pct_rda'] is None
         assert adequacy['pct_ul'] is None
+        assert adequacy['scoring_eligible'] is False
         analyzed = result['analyzed_ingredients'][0]
         assert analyzed['conversion_evidence']['confidence'] == 'high'
         assert analyzed['converted_unit'] == 'g'
