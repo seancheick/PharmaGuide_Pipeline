@@ -188,7 +188,9 @@ def test_clean_daily_immune_formula_reaches_realistic_high_80s() -> None:
     out = score_product_v4(_immune_product())
 
     assert out["v4_module"] == "generic"
-    assert 86.0 <= out["quality_score_v4_100"] <= 92.0
+    # 96 ceiling since quality_score 1.3.0: the fixture carries a verified registry cert,
+    # so verification is product-level (15/15).
+    assert 86.0 <= out["quality_score_v4_100"] <= 96.0
     assert out["quality_pillars_v4"]["dose"]["score"] >= 17.0
     assert out["quality_pillars_v4"]["formulation"]["score"] >= 16.0
     assert out["v4_breakdown"]["module"]["dimensions"]["formulation"]["metadata"][

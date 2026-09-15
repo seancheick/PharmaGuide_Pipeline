@@ -98,3 +98,35 @@ claim +1.0, brand/facility cert -1.0, label GMP only -0.67, unknown with reputat
 dose groups and every control group unmoved; 0 unexpected. Ten archetype ideal fixtures move
 verification 11 -> 15 (each has a verified registry cert); only total, tier and the
 verification pillar changed; every ideal still outscores its failure pair.
+
+## Pass 2b — generic dose adequacy for official DRI nutrients (quality_score 1.4.0)
+
+Problem: the generic window gave full dose credit at 25% of any reference, so a product with a
+quarter of the vitamin D RDA scored the same as one that meets it.
+
+Rule for official DRI vitamins and trace minerals (explicit canonical -> reference map in
+`generic_dose.py`, test-guarded against `rda_optimal_uls.json`): half credit at 20% of the
+RDA/AI, rising linearly to full credit at 100%; below 20% proportional. 20% is the FDA
+threshold for "high / rich in / excellent source" — 21 CFR 101.54(b)(1), read from the eCFR
+API (issue 2026-09-11): "the food contains 20 percent or more of the RDI or the DRV".
+UL bands (100-150% -> 11, >= 150% -> 0) are unchanged.
+
+Deliberately unchanged (25% rule stays):
+- Macrominerals (calcium, magnesium, phosphorus, sodium, chloride): supplements are designed to
+  fill a dietary gap and there is no dietary-intake table yet.
+- No-DRI compounds whose `rda_ai` is a clinical-dose anchor (quercetin, betaine, glutamine...):
+  the anchors are not citation-verified. Graduating them made the anchor decide up to 10
+  points (betaine 1500 mg -10). N-acetyl-L-glutamine is mapped to the L-glutamine anchor —
+  an identity mismatch to fix in enrichment.
+- Moving UL handling into Safety: dropping the UL bands from Dose would raise over-UL
+  megadoses; that needs a Safety redesign first.
+
+Evidence: DRI adequacy rows in current enriched generic-window products, old -> new band credit:
+3,753 rows, mean -1.29 raw points, 922 lower, 1 higher (analytic, no scoring run).
+Pass-2 packet vs e97f2db8: dose_multi_nutrient -2.08, dose_below_20pct -1.13,
+dose_20_to_100pct -2.70; magnesium (UL below RDA) group, both dose controls and every
+verification group unmoved; 0 unexpected. Pass-1 packet: no moves. No archetype fixture moved.
+Largest drops are real under-doses against the DRI: choline bitartrate 600 mg (~45% of the
+choline AI) -5.4 to -6.9, vitamin K2 45 mcg (37.5% of the AI) -7.8.
+Test note: the immune audit ceiling 92 -> 96 reflects 1.3.0 verification (registry cert = 15),
+which commit 2's targeted test run did not include.

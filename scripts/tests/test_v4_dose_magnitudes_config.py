@@ -30,7 +30,8 @@ ORIGINAL = {
     "generic": {
         "cap_supplemental_window": 22.0, "cap_multi_form_bonus": 3.0, "dimension_cap": 25.0,
         "window_rda_threshold": 25.0, "window_ul_partial_band": 100.0,
-        "window_overdose_credit": 11.0, "no_reference_individual_dose_credit": 16.0,
+        "window_overdose_credit": 11.0, "window_high_source_pct": 20.0, "window_full_adequacy_pct": 100.0,
+        "no_reference_individual_dose_credit": 16.0,
         "no_reference_product_evidence_credit": 12.0, "multi_form_premium_bio_threshold": 12.0,
         "multi_form_min_group_count": 2,
     },

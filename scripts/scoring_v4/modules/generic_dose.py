@@ -26,9 +26,18 @@ Proxy rule (per scorable nutrient with `pct_rda` AND `pct_ul`):
 
     pct_ul >= 150%             →  0    (B7 handles separately; danger zone)
     100% < pct_ul < 150%       →  11   (overdose territory, half credit)
-    pct_rda >= 25%             →  22   (in proxy window)
-    0% < pct_rda < 25%         →  (pct_rda / 25) * 22  (sub-clinical, proportional)
-    pct_rda == 0%              →  0
+
+Below the UL, credit depends on what the reference is (quality_score 1.4.0):
+
+    official DRI vitamin / trace mineral (RDA or AI):
+        pct_rda >= 100%        →  22   (meets the requirement)
+        20% <= pct_rda < 100%  →  11 → 22 linear (20% = FDA "high/excellent
+                                   source", 21 CFR 101.54(b))
+        pct_rda < 20%          →  (pct_rda / 20) * 11
+    macrominerals and every other reference (unchanged until a dietary
+    intake table exists, or until no-DRI clinical anchors are citation-verified):
+        pct_rda >= 25%         →  22
+        0% < pct_rda < 25%     →  (pct_rda / 25) * 22
 
 The dimension contribution averages the per-nutrient band credit
 across nutrients that have RDA reference data. Nutrients without
@@ -96,6 +105,8 @@ WINDOW_RDA_THRESHOLD = _DM["window_rda_threshold"]      # pct_rda below this is 
 WINDOW_UL_PARTIAL_BAND = _DM["window_ul_partial_band"]   # above this and below 150 → half credit
 B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]      # at/above this triggers B7 + zeroes window
 WINDOW_OVERDOSE_CREDIT = _DM["window_overdose_credit"]    # 100% < pct_ul < 150% credit (half of 22)
+WINDOW_HIGH_SOURCE_PCT = _DM["window_high_source_pct"]    # 21 CFR 101.54(b) "high source"
+WINDOW_FULL_ADEQUACY_PCT = _DM["window_full_adequacy_pct"]
 NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT = _DM["no_reference_individual_dose_credit"]
 NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT = _DM["no_reference_product_evidence_credit"]
 
@@ -118,11 +129,35 @@ DEFERRED_DATA = "typical_dietary_intake"
 # only the generic product-quality proxy excludes it.
 _DIETARY_INTAKE_DOMINANT_CANONICALS = frozenset({"potassium"})
 
+# Which kind of reference an adequacy row's percentage is measured against,
+# keyed by the row canonical_id -> rda_optimal_uls.json reference id. Official
+# DRI vitamins and trace minerals are judged against the requirement itself.
+_DRI_REFERENCE_BY_CANONICAL = {
+    "vitamin_a": "vitamin_a", "beta_carotene": "vitamin_a", "alpha_carotene": "vitamin_a",
+    "cryptoxanthin": "vitamin_a", "vitamin_c": "vitamin_c", "vitamin_d": "vitamin_d",
+    "vitamin_e": "vitamin_e", "vitamin_k": "vitamin_k", "vitamin_k1": "vitamin_k",
+    "vitamin_k2": "vitamin_k", "vitamin_b1_thiamine": "thiamin", "vitamin_b2_riboflavin": "riboflavin",
+    "vitamin_b3_niacin": "niacin", "vitamin_b5_pantothenic": "pantothenic_acid",
+    "vitamin_b6_pyridoxine": "vitamin_b6", "vitamin_b7_biotin": "biotin",
+    "vitamin_b9_folate": "folate", "vitamin_b12_cobalamin": "vitamin_b12", "choline": "choline",
+    "chromium": "chromium", "copper": "copper", "fluoride": "fluoride", "iodine": "iodine",
+    "iron": "iron", "manganese": "manganese", "molybdenum": "molybdenum",
+    "selenium": "selenium", "zinc": "zinc",
+}
+
+def _adequacy_reference_kind(canonical: object) -> str:
+    key = _norm_text(canonical)
+    return "dri" if key in _DRI_REFERENCE_BY_CANONICAL else "legacy"
+
 
 # --- Supplemental-window proxy -------------------------------------------
 
 
-def _band_credit(pct_rda: Optional[float], pct_ul: Optional[float]) -> Optional[float]:
+def _band_credit(
+    pct_rda: Optional[float],
+    pct_ul: Optional[float],
+    canonical: object = None,
+) -> Optional[float]:
     """Per-nutrient proxy band credit on the 0-22 scale.
 
     Returns None when the row lacks BOTH pct_rda and pct_ul (no signal).
@@ -146,8 +181,15 @@ def _band_credit(pct_rda: Optional[float], pct_ul: Optional[float]) -> Optional[
 
     if pct_rda <= 0:
         return 0.0
-    if pct_rda >= WINDOW_RDA_THRESHOLD:
+    kind = _adequacy_reference_kind(canonical)
+    if pct_rda >= (WINDOW_RDA_THRESHOLD if kind == "legacy" else WINDOW_FULL_ADEQUACY_PCT):
         return CAP_SUPPLEMENTAL_WINDOW
+    if kind == "dri":
+        half = CAP_SUPPLEMENTAL_WINDOW / 2.0
+        if pct_rda >= WINDOW_HIGH_SOURCE_PCT:
+            span = WINDOW_FULL_ADEQUACY_PCT - WINDOW_HIGH_SOURCE_PCT
+            return half + half * (pct_rda - WINDOW_HIGH_SOURCE_PCT) / span
+        return half * pct_rda / WINDOW_HIGH_SOURCE_PCT
     return (pct_rda / WINDOW_RDA_THRESHOLD) * CAP_SUPPLEMENTAL_WINDOW
 
 
@@ -174,7 +216,7 @@ def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Op
             continue
         pct_rda = _as_float(row.get("pct_rda"), None)
         pct_ul = _as_float(row.get("pct_ul"), None)
-        credit = _band_credit(pct_rda, pct_ul)
+        credit = _band_credit(pct_rda, pct_ul, row.get("canonical_id"))
         if credit is None:
             continue
         contributions.append(credit)
@@ -244,7 +286,7 @@ def _mass_primary_without_reference(product: Dict[str, Any]) -> Optional[str]:
     for row in _safe_list(_safe_dict((product or {}).get("rda_ul_data")).get("adequacy_results")):
         if not isinstance(row, dict):
             continue
-        if _band_credit(_as_float(row.get("pct_rda"), None), _as_float(row.get("pct_ul"), None)) is None:
+        if _band_credit(_as_float(row.get("pct_rda"), None), _as_float(row.get("pct_ul"), None), row.get("canonical_id")) is None:
             continue
         assessed.update(
             _norm_text(row.get(key)) for key in ("canonical_id", "nutrient") if row.get(key)

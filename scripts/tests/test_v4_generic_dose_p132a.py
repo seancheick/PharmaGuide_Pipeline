@@ -981,7 +981,7 @@ def test_title_projection_of_an_assessed_row_is_not_a_second_primary() -> None:
     # "Natural Vitamin K2 45 mcg": the label row is assessed; the enricher's
     # title-embedded projection of the same row ties it at 45 mcg. One
     # physical source, one assessment.
-    from scoring_v4.modules.generic_dose import score_dose, CAP_SUPPLEMENTAL_WINDOW
+    from scoring_v4.modules.generic_dose import score_dose, _band_credit
 
     rows = [
         _ingredient(name="Vitamin K", canonical_id="vitamin_k", quantity=45.0, unit="mcg",
@@ -995,7 +995,8 @@ def test_title_projection_of_an_assessed_row_is_not_a_second_primary() -> None:
         adequacy_results=[{"canonical_id": "vitamin_k", "nutrient": "Vitamin K1", "pct_rda": 37.5, "pct_ul": None}],
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == CAP_SUPPLEMENTAL_WINDOW
+    # The assessed row's own credit (vitamin K at 37.5% of the AI under 1.4.0), not a partial-credit cap.
+    assert payload["components"]["supplemental_window_proxy"] == pytest.approx(_band_credit(37.5, None, "vitamin_k"), abs=1e-4)
     assert "primary_active_unassessed" not in payload["metadata"]
 
 
@@ -1029,7 +1030,7 @@ def test_nested_projection_under_an_assessed_parent_is_not_a_second_primary() ->
     # Real 25514 shape: the enricher cuts a "Vitamin K2" child under the
     # assessed "Vitamin K" label row at the same 45 mcg. The parent's
     # assessment is the assessment of the child's source.
-    from scoring_v4.modules.generic_dose import score_dose, CAP_SUPPLEMENTAL_WINDOW
+    from scoring_v4.modules.generic_dose import score_dose, _band_credit
 
     rows = [
         _ingredient(name="Vitamin K", canonical_id="vitamin_k", quantity=45.0, unit="mcg",
@@ -1043,14 +1044,15 @@ def test_nested_projection_under_an_assessed_parent_is_not_a_second_primary() ->
         adequacy_results=[{"canonical_id": "vitamin_k", "nutrient": "Vitamin K1", "pct_rda": 37.5, "pct_ul": None}],
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == CAP_SUPPLEMENTAL_WINDOW
+    # The assessed row's own credit (vitamin K at 37.5% of the AI under 1.4.0), not a partial-credit cap.
+    assert payload["components"]["supplemental_window_proxy"] == pytest.approx(_band_credit(37.5, None, "vitamin_k"), abs=1e-4)
     assert "primary_active_unassessed" not in payload["metadata"]
 
 
 def test_nested_child_without_the_title_projection_marker_is_not_the_parent() -> None:
     # Same shape as above but a real nested child: an ordinary projection or
     # constituent nested under an assessed row does not inherit its assessment.
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, _band_credit
 
     rows = [
         _ingredient(name="Vitamin K", canonical_id="vitamin_k", quantity=45.0, unit="mcg",
@@ -1064,7 +1066,9 @@ def test_nested_child_without_the_title_projection_marker_is_not_the_parent() ->
         adequacy_results=[{"canonical_id": "vitamin_k", "nutrient": "Vitamin K1", "pct_rda": 37.5, "pct_ul": None}],
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    # The unassessed primary caps the window at the no-reference credit; it never raises it.
+    expected = min(NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, _band_credit(37.5, None, "vitamin_k"))
+    assert payload["components"]["supplemental_window_proxy"] == pytest.approx(expected, abs=1e-4)
     assert payload["metadata"]["primary_active_unassessed"] == "oleic_acid"
 
 
@@ -1111,3 +1115,58 @@ def test_assessed_constituent_nested_under_the_primary_does_not_assess_it() -> N
     payload = score_dose(product)
     assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
     assert payload["metadata"]["primary_active_unassessed"] == "cognigrape"
+
+
+# --- 1.4.0 reference-aware adequacy --------------------------------------
+
+
+def _row(canonical_id: str, pct_rda: float, pct_ul=None) -> dict:
+    return {"nutrient": canonical_id, "canonical_id": canonical_id, "pct_rda": pct_rda, "pct_ul": pct_ul}
+
+
+@pytest.mark.parametrize(
+    ("pct_rda", "expected"),
+    [(10.0, 5.5), (20.0, 11.0), (25.0, 11.6875), (60.0, 16.5), (100.0, 22.0), (250.0, 22.0)],
+)
+def test_dri_nutrient_credit_grows_from_fda_high_source_to_full_requirement(pct_rda, expected) -> None:
+    """DRI vitamins: 20% of the RDA (FDA 'high source') earns half, 100% earns full."""
+    from scoring_v4.modules.generic_dose import _band_credit
+
+    assert _band_credit(pct_rda, 10.0, "vitamin_d") == pytest.approx(expected)
+
+
+@pytest.mark.parametrize("canonical", ["calcium", "magnesium", "quercetin", "unmapped_compound", None])
+def test_macrominerals_and_unclassified_references_keep_the_legacy_window(canonical) -> None:
+    from scoring_v4.modules.generic_dose import _band_credit
+
+    assert _band_credit(25.0, 10.0, canonical) == 22.0
+    assert _band_credit(10.0, 5.0, canonical) == pytest.approx(8.8)
+
+
+def test_over_ul_bands_are_unchanged_for_every_reference_kind() -> None:
+    from scoring_v4.modules.generic_dose import _band_credit
+
+    for canonical in ("vitamin_d", "quercetin", "calcium"):
+        assert _band_credit(300.0, 120.0, canonical) == 11.0
+        assert _band_credit(400.0, 180.0, canonical) == 0.0
+
+
+def test_higher_dose_up_to_the_requirement_never_scores_lower() -> None:
+    from scoring_v4.modules.generic_dose import _band_credit
+
+    for canonical in ("zinc", "l_glutamine", "calcium"):
+        credits = [_band_credit(float(pct), 10.0, canonical) for pct in range(0, 101, 5)]
+        assert credits == sorted(credits)
+
+
+def test_dri_map_points_at_official_dri_reference_entries() -> None:
+    """Every mapped reference id exists and none is a no-DRI clinical anchor."""
+    import json
+    from pathlib import Path
+    from scoring_v4.modules import generic_dose
+
+    data = json.loads((Path(generic_dose.__file__).resolve().parents[2] / "data" / "rda_optimal_uls.json").read_text())
+    by_id = {entry["id"]: entry for entry in data["nutrient_recommendations"]}
+    for ref in set(generic_dose._DRI_REFERENCE_BY_CANONICAL.values()):
+        assert ref in by_id, ref
+        assert "no official dri" not in str(by_id[ref].get("notes") or "").lower(), ref
