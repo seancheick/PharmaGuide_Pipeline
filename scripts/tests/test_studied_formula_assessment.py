@@ -120,7 +120,8 @@ def test_formula_formulation_recognizes_native_potency_without_cfu_tiers():
     from scoring_v4.modules.probiotic_formulation import score_formulation
     result = score_formulation(seed_label())
     assert result["components"]["native_potency_disclosed"] == 4
-    assert result["components"]["studied_formula_potency"] == 5
+    assert "studied_formula_potency" not in result["components"]
+    assert result["score"] == result["max"] == 16
     assert result["components"]["studied_formula_strain_identity"] == 8
     assert result["components"]["prebiotic_complement"] == 1
     assert result["components"]["delivery_survivability"] == 3

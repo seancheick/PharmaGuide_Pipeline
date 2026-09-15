@@ -15416,7 +15416,6 @@ class SupplementEnricherV3:
         # Check if this is a probiotic product
         probiotic_blends = []
         blend_source_rows = {}
-        total_strains = 0
         all_nested_strains = []
 
         def _row_path(row: Dict) -> str:
@@ -15641,7 +15640,6 @@ class SupplementEnricherV3:
                 # existing disclosure fields, not duplicate ingredient payloads.
                 blend_source_rows[id(probiotic_blends[-1])] = strain_rows or [ingredient]
 
-                total_strains += len(strain_names)
                 all_nested_strains.extend(strain_names)
 
         # DSLD can emit the same blend header once per serving column (for
@@ -15707,14 +15705,6 @@ class SupplementEnricherV3:
                 blend for blend in probiotic_blends
                 if str(blend.get("raw_source_path") or "") not in removed_header_paths
             ]
-
-        unique_strains = {
-            str(strain).strip().casefold()
-            for blend in probiotic_blends
-            for strain in (blend.get("strains") or [])
-            if str(strain or "").strip()
-        }
-        total_strains = len(unique_strains)
 
         if not probiotic_blends:
             return {"is_probiotic_product": False}
@@ -16065,26 +16055,23 @@ class SupplementEnricherV3:
         # One honest identity state per label strain (exact strain reviewed /
         # unreviewed, designation without a registry identity, species only,
         # genus only, unresolved text). Species names never borrow a strain.
-        from probiotic_measurements import label_strain_identity_resolution
-        _registry_by_id = {c.get("id"): c for c in clinical_strains if isinstance(c, dict) and c.get("id")}
-        _clinical_id_by_label = {}
-        for _row in found_clinical_strains:
-            for _label in (_row.get("label_name"), _row.get("strain")):
-                if isinstance(_label, str) and _label.strip():
-                    _clinical_id_by_label.setdefault(_label.strip().casefold(), _row.get("clinical_id"))
-        for _blend in probiotic_blends:
-            _blend["strain_identity_resolution"] = [
-                label_strain_identity_resolution(
-                    _strain, _clinical_id_by_label.get(str(_strain).strip().casefold()), _registry_by_id)
-                for _strain in (_blend.get("strains") or [])
-            ]
+        from probiotic_measurements import probiotic_label_identity_summary
+        identity_summary = probiotic_label_identity_summary({
+            **product,
+            "probiotic_data": {
+                "probiotic_blends": probiotic_blends,
+                "clinical_strains": found_clinical_strains,
+            },
+        })
+        for blend, resolutions in zip(probiotic_blends, identity_summary["blend_identity_resolutions"]):
+            blend["strain_identity_resolution"] = resolutions
 
         return {
             "is_probiotic": True,  # Top-level flag for quick filtering
             "is_probiotic_product": True,
             "probiotic_blends": probiotic_blends,
             "strain_allocation_owner_refs": sorted(strain_allocation_owner_refs),
-            "total_strain_count": total_strains,
+            "total_strain_count": identity_summary["total_strain_count"],
             # Aggregate CFU data at top level for easy access
             "has_cfu": has_cfu,
             "total_cfu": total_cfu,

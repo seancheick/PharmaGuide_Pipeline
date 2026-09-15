@@ -124,7 +124,7 @@ def test_export_consolidates_native_projections_without_losing_holds(conflict):
     elif conflict == "blocked":
         assert exported["is_blocked"] is True
         assert exported["block_reason"] == "Rejected source identity"
-        assert score_formulation(p)["components"]["identified_strain_codes"] == 0
+        assert score_formulation(p)["components"]["exact_identity_completeness"] == 0
     elif conflict == "inactivated":
         assert exported["is_inactivated"] is True
         assert score_dose(p)["metadata"]["cfu_adequacy_v3_points"] == 0
@@ -282,7 +282,7 @@ def test_direct_mass_floor_requires_exact_source_owner_not_substring():
 def test_source_owner_not_current_review_flag_controls_formulation_identity():
     p = owned_label()
     p["activeIngredients"][0]["name"] = "Lactobacillus rhamnosus HN001"
-    assert score_formulation(p)["components"]["identified_strain_codes"] == 0
+    assert score_formulation(p)["components"]["exact_identity_completeness"] == 0
 
 
 def test_normalized_billion_count_can_prove_disclosure_without_clinical_review():
@@ -354,4 +354,10 @@ def test_conflicting_source_measurements_cannot_award_daily_potency():
 def test_matching_path_does_not_authorize_another_strains_measurement():
     p = owned_label()
     p["probiotic_data"]["probiotic_blends"][0]["strains"] = ["Bifidobacterium lactis BB-12"]
-    assert score_dose(p)["components"]["cfu_adequacy"] == 0
+    result = score_dose(p)
+    assert result["metadata"]["per_strain_cfu_disclosed_count"] == 0
+    assert result["metadata"]["cfu_adequacy_v3_points"] == 0
+    # The valid product total still earns its existing aggregate disclosure floor;
+    # neither projected identity owns an individual measured potency.
+    assert result["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
+    assert result["components"]["cfu_adequacy"] == 4

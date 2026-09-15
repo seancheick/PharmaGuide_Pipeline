@@ -168,8 +168,8 @@ def test_probiotic_assembly_excludes_none_dimensions_from_denominator() -> None:
 
     breakdown = score_probiotic(_probiotic_product()).to_breakdown()
     meta = breakdown["metadata"]
-    # Phase 4: trust removed from the denominator → 4 core dims sum to 85.
-    assert meta["evaluable_class_max"] == 85.0
+    # Phase 4: trust removed from the denominator → 4 core dims sum to 76.
+    assert meta["evaluable_class_max"] == 76.0
     assert meta["excluded_dimensions"] == []
 
 

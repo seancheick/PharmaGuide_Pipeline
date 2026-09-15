@@ -56,6 +56,122 @@ def declared_total_cfu(pdata: Mapping) -> float:
     return normalized_cfu_count(measure) or 0.0
 
 
+def probiotic_label_identity_summary(product: Mapping) -> dict:
+    """Count distinct label identities after proving each source row's forms.
+
+    ``total_strain_count`` is a derived projection, never a declared denominator.
+    Native registry rows may complete a missing blend projection only when the
+    existing source-owner check proves their label identity. Clinical review and
+    dose applicability are independent of this physical identity calculation.
+    """
+    from studied_formulas import (
+        _clinical_label_rows, _clinical_strain_registry,
+        clinical_strain_identity_key, clinical_strain_identity_matches,
+        label_owned_native_strains,
+    )
+
+    product = product if isinstance(product, Mapping) else {}
+    pdata = product.get("probiotic_data") or product.get("probiotic_detail") or {}
+    pdata = pdata if isinstance(pdata, Mapping) else {}
+    registry = _clinical_strain_registry()
+    native = label_owned_native_strains(product)
+    owners = list(_clinical_label_rows(product.get("activeIngredients")))
+    keys, exact_keys, disclosed_keys = set(), set(), set()
+    blend_resolutions = []
+
+    def valid_name(value):
+        return isinstance(value, str) and bool(value.strip()) and bool(clinical_strain_identity_key(value))
+
+    def native_for(owner):
+        if not owner:
+            return []
+        return [row for row in native if (
+            row.get("source_row_ref") == owner.get("raw_source_path")
+            if row.get("source_row_ref")
+            else clinical_strain_identity_key(row.get("label_name") or row["strain"])
+                 == clinical_strain_identity_key(owner.get("name") or "")
+        )]
+
+    def identity(name, owner=None):
+        exact = {}
+        for row in native_for(owner):
+            state = label_strain_identity_resolution(row["strain"], row["clinical_id"], registry)
+            if state["resolution"] in {"exact_strain_reviewed", "exact_strain_unreviewed"}:
+                exact[row["clinical_id"]] = state
+        if len(exact) == 1:
+            cid, state = next(iter(exact.items()))
+            return f"strain:{cid}", state, True
+        # An unregistered designation still distinguishes its own source row.
+        # Preserve its printed form in the key without inventing a registry ID.
+        forms = (owner or {}).get("forms")
+        forms = forms if isinstance(forms, list) else []
+        form_names = sorted({
+            clinical_strain_identity_key(value)
+            for form in forms
+            for value in [form.get("name") if isinstance(form, Mapping) else form]
+            if valid_name(value)
+        })
+        label_key = clinical_strain_identity_key(name)
+        key = "|".join([label_key, *form_names])
+        return f"label:{key}", label_strain_identity_resolution(name, None, registry), False
+
+    blends = pdata.get("probiotic_blends")
+    for blend in blends if isinstance(blends, list) else []:
+        if not isinstance(blend, Mapping):
+            blend_resolutions.append([])
+            continue
+        names = blend.get("strains")
+        names = [name.strip() for name in names if valid_name(name)] if isinstance(names, list) else []
+        ref = blend.get("raw_source_path")
+        resolutions, blend_keys = [], set()
+        source_names_proved = True
+        for name in names:
+            source_rows = [owner for owner in owners if (
+                valid_name(owner.get("name"))
+                and (clinical_strain_identity_key(owner["name"]) == clinical_strain_identity_key(name)
+                     or any(clinical_strain_identity_matches(name, registry[row["clinical_id"]])
+                            for row in native_for(owner)))
+                and (not ref or owner.get("raw_source_path") == ref
+                     or (isinstance(owner.get("raw_source_path"), str)
+                         and owner["raw_source_path"].startswith(f"{ref}.nestedRows[")))
+            )]
+            if ref and not source_rows:
+                source_names_proved = False
+            for owner in source_rows or [None]:
+                key, state, exact = identity(name, owner)
+                keys.add(key)
+                blend_keys.add(key)
+                if exact:
+                    exact_keys.add(key)
+                resolutions.append(state)
+        blend_resolutions.append(resolutions)
+        measure = blend.get("cfu_data") or {}
+        if (names and len(blend_keys) == 1 and source_names_proved
+                and isinstance(measure, Mapping)
+                and measure.get("has_cfu") is True
+                and measure.get("evidence_scope") in {None, "row_level"}
+                and (measure.get("raw_source_path") is None or measure["raw_source_path"] == ref)
+                and normalized_cfu_count(measure) is not None):
+            disclosed_keys.update(blend_keys)
+
+    # Source-owned native rows survive missing blend projections; detached IDs
+    # cannot supply either a denominator member or an exact identity.
+    for row in native:
+        name = row.get("label_name") or row["strain"]
+        owner = next((owner for owner in owners if row in native_for(owner)), None)
+        key, _, exact = identity(name, owner)
+        keys.add(key)
+        if exact:
+            exact_keys.add(key)
+
+    return {
+        "total_strain_count": len(keys),
+        "identified_strain_count": len(exact_keys),
+        "per_strain_cfu_disclosed_count": len(disclosed_keys & keys),
+        "blend_identity_resolutions": blend_resolutions,
+    }
+
+
 def strain_cfu_tier(cfu_per_day, tiers_cfu_per_day) -> str | None:
     """Map a per-strain CFU count to the registry's potency band.
 

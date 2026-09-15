@@ -500,7 +500,7 @@ def test_cfu_adequacy_caps_v3_five_points_to_v4_fifteen_points() -> None:
 
 
 def test_shared_strain_count_ignores_missing_blank_and_malformed_clinical_ids() -> None:
-    from scoring_v4.modules.probiotic_dose import total_strain_count_for
+    from probiotic_measurements import probiotic_label_identity_summary
 
     clinical_rows = [
         {"name": "Lactobacillus acidophilus"},
@@ -509,11 +509,11 @@ def test_shared_strain_count_ignores_missing_blank_and_malformed_clinical_ids() 
         "not-a-record",
     ]
 
-    assert total_strain_count_for({}, clinical_rows) == 0
+    assert probiotic_label_identity_summary({"probiotic_data": {"clinical_strains": clinical_rows}})["total_strain_count"] == 0
 
 
-def test_shared_strain_count_deduplicates_normalized_clinical_ids() -> None:
-    from scoring_v4.modules.probiotic_dose import total_strain_count_for
+def test_shared_strain_count_does_not_count_detached_clinical_ids() -> None:
+    from probiotic_measurements import probiotic_label_identity_summary
 
     clinical_rows = [
         {"clinical_id": "LGG-001"},
@@ -521,7 +521,7 @@ def test_shared_strain_count_deduplicates_normalized_clinical_ids() -> None:
         {"clinical_id": "BB-12"},
     ]
 
-    assert total_strain_count_for({}, clinical_rows) == 2
+    assert probiotic_label_identity_summary({"probiotic_data": {"clinical_strains": clinical_rows}})["total_strain_count"] == 0
 
 
 def test_cfu_adequacy_hard_gates_missing_tier_missing_cfu_and_postbiotic() -> None:

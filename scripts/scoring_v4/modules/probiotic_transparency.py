@@ -49,8 +49,7 @@ from scoring_v4.modules.generic_transparency import (
     _score_b6_disease_claim_penalty,
     B5_CAP,
 )
-from scoring_v4.modules.probiotic_dose import _per_strain_cfu_disclosed_keys, total_strain_count_for
-from probiotic_measurements import declared_total_cfu
+from probiotic_measurements import declared_total_cfu, probiotic_label_identity_summary
 
 
 PHASE_MARKER = "P2.5_probiotic_transparency"
@@ -93,8 +92,9 @@ def score_transparency(product: Any) -> Dict[str, Any]:
     b6 = _score_b6_disease_claim_penalty(product, flags)
 
     # Probiotic-specific positive components.
-    strain_identities = _score_strain_identities(pdata)
-    per_strain_cfu = _score_per_strain_cfu_on_label(pdata)
+    identities = probiotic_label_identity_summary(product)
+    strain_identities = _score_strain_identities(pdata, identities)
+    per_strain_cfu = _score_per_strain_cfu_on_label(identities)
     aggregate_cfu_proxy = _score_aggregate_cfu_disclosure_proxy(pdata, per_strain_cfu)
     from studied_formulas import assess_studied_formula
     formula = assess_studied_formula(product)
@@ -122,6 +122,8 @@ def score_transparency(product: Any) -> Dict[str, Any]:
 
     metadata = {
         "phase": PHASE_MARKER,
+        "total_strain_count": identities["total_strain_count"],
+        "per_strain_cfu_disclosed_count": identities["per_strain_cfu_disclosed_count"],
         "raw_score": round(raw_total, 4),
         "cap_applied": raw_total > DIMENSION_CAP,
         "floor_applied": raw_total < 0.0,
@@ -160,19 +162,18 @@ def score_transparency(product: Any) -> Dict[str, Any]:
     }
 
 
-def _score_strain_identities(pdata: Dict[str, Any]) -> float:
+def _score_strain_identities(pdata: Dict[str, Any], identities: Dict[str, Any]) -> float:
     """+8 when total_strain_count > 0 AND each blend has at least one
     named strain. Partial credit when some blends are unnamed proprietary
     containers (proportional to named-blend ratio).
     """
-    total_strain_count = total_strain_count_for(pdata, _safe_list(pdata.get("clinical_strains")))
+    total_strain_count = identities["total_strain_count"]
     if total_strain_count <= 0:
         return 0.0
 
     blends = _safe_list(pdata.get("probiotic_blends"))
     if not blends:
-        # No blend list but total_strain_count > 0 — strains must be on
-        # clinical_strains; treat as fully named.
+        # The shared count already proved a native identity's source label.
         return CAP_STRAIN_IDENTITIES
 
     named_blend_count = 0
@@ -181,9 +182,9 @@ def _score_strain_identities(pdata: Dict[str, Any]) -> float:
         if not isinstance(blend, dict):
             continue
         strains = [
-            str(s).strip()
+            s.strip()
             for s in _safe_list(blend.get("strains"))
-            if str(s or "").strip()
+            if isinstance(s, str) and s.strip()
         ]
         if blend.get("is_blend_header_total") and not strains:
             # Flattened DSLD labels can emit a parent "Probiotic Blend"
@@ -229,22 +230,20 @@ def _consolidate_strain_allocation_opacity(pdata, formula, evidence):
     return min(B5_CAP, sum(r["computed_blend_penalty_magnitude"] for r in updated)), updated
 
 
-def _score_per_strain_cfu_on_label(pdata: Dict[str, Any]) -> float:
+def _score_per_strain_cfu_on_label(identities: Dict[str, Any]) -> float:
     """+7 when all named strains have individual CFU disclosed.
     Proportional credit when only some strains have per-strain CFU.
 
-    Reuses Dose's label-measurement detector. Dose's disclosure
+    Reuses the shared source-owned label-measurement detector. Dose's disclosure
     component measures assessability; this seven-point line measures label
     transparency. Within Transparency, B5 must not deduct for that same
     undisclosed strain allocation a second time.
     """
-    clinical_strains = _safe_list(pdata.get("clinical_strains"))
-    total_strain_count = total_strain_count_for(pdata, clinical_strains)
+    total_strain_count = identities["total_strain_count"]
     if total_strain_count <= 0:
         return 0.0
 
-    disclosed_keys = _per_strain_cfu_disclosed_keys(pdata, clinical_strains)
-    disclosed_count = min(len(disclosed_keys), total_strain_count)
+    disclosed_count = identities["per_strain_cfu_disclosed_count"]
     if disclosed_count <= 0:
         return 0.0
     ratio = min(1.0, disclosed_count / total_strain_count)

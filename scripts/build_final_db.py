@@ -2815,13 +2815,13 @@ def derive_v4_tradeoffs(
         if band:
             omega_bonus["detail"] = band
         bonuses.append(omega_bonus)
-    # Read the current physical-identity component, or the legacy stamped alias
-    # at this export boundary. Never add both if a transitional artifact has both.
-    identity_key = "identified_strain_codes" if "identified_strain_codes" in form else "clinical_strain_codes"
-    _prob_signals = (identity_key, "cfu_amount", "named_species_diversity")
-    if any(_pos(form, k) for k in _prob_signals):
-        bonuses.append({"id": "probiotic", "label": "Probiotic quality bonus",
-                        "score": sum(safe_float(form.get(k), 0) for k in _prob_signals)})
+    # Physical identity disclosure is independent of clinical efficacy. Native
+    # formula identity uses the same budget without claiming per-strain trials.
+    identity_key = ("exact_identity_completeness" if "exact_identity_completeness" in form
+                    else "studied_formula_strain_identity")
+    if _pos(form, identity_key):
+        bonuses.append({"id": "probiotic", "label": "Probiotic identity disclosure",
+                        "score": safe_float(form.get(identity_key), 0)})
 
     # ── Penalties ────────────────────────────────────────────────────────────
     penalties: List[Dict[str, Any]] = []

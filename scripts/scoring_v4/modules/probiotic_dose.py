@@ -19,11 +19,12 @@ from __future__ import annotations
 
 import math
 import re
-from typing import Any, Dict, Iterable, List, Set
+from typing import Any, Dict, Iterable, List
 
 from scoring_input_contract import get_scoring_ingredients
 from probiotic_measurements import (
-    AFU_REVIEW_REASON, pending_afu_measurements, normalized_cfu_count, declared_total_cfu,
+    AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu,
+    probiotic_label_identity_summary,
 )
 
 
@@ -98,9 +99,9 @@ def score_dose(product: Any) -> Dict[str, Any]:
     clinical_strains = label_owned_native_strains(product)
     measured_strains = measured_native_strain_doses(product)
 
-    total_strain_count = total_strain_count_for(pdata, clinical_strains)
-    disclosed_keys = _per_strain_cfu_disclosed_keys(pdata, clinical_strains)
-    disclosed_count = min(len(disclosed_keys), total_strain_count) if total_strain_count else 0
+    identities = probiotic_label_identity_summary(product)
+    total_strain_count = identities["total_strain_count"]
+    disclosed_count = identities["per_strain_cfu_disclosed_count"]
     disclosure_score = _score_per_strain_cfu_disclosure(disclosed_count, total_strain_count)
 
     adequacy = _compute_cfu_adequacy(measured_strains)
@@ -439,65 +440,6 @@ def _score_per_strain_cfu_disclosure(disclosed_count: int, total_strain_count: i
     return CAP_PER_STRAIN_CFU_DISCLOSURE * ratio
 
 
-def _per_strain_cfu_disclosed_keys(
-    pdata: Dict[str, Any],
-    clinical_strains: Iterable[Any],
-) -> Set[str]:
-    keys: Set[str] = set()
-
-    # Disclosure is a property of the label measurement, not a clinical-match
-    # stamp. A stale cfu_per_day cannot manufacture disclosed quantities.
-    for blend_item in _safe_list(pdata.get("probiotic_blends")):
-        blend = _safe_dict(blend_item)
-        strains = [str(s).strip() for s in _safe_list(blend.get("strains")) if str(s).strip()]
-        if len(strains) != 1:
-            continue
-        cfu_data = _safe_dict(blend.get("cfu_data"))
-        if (cfu_data.get("evidence_scope") not in {None, "row_level"}
-                or (cfu_data.get("raw_source_path") is not None
-                    and cfu_data["raw_source_path"] != blend.get("raw_source_path"))):
-            continue
-        if _cfu_data_has_individual_cfu(cfu_data):
-            keys.add(_canonical_key(strains[0]))
-
-    return {key for key in keys if key}
-
-
-def _cfu_data_has_individual_cfu(cfu_data: Dict[str, Any]) -> bool:
-    if cfu_data.get("has_cfu") is not True:
-        return False
-    # A parser flag without a finite positive amount is not dose disclosure.
-    return normalized_cfu_count(cfu_data) is not None
-
-
-def total_strain_count_for(pdata: Dict[str, Any], clinical_strains: Iterable[Any] = ()) -> int:
-    """The strain count every probiotic dimension agrees on: the declared
-    total, else the distinct strain names across the blends, else the distinct
-    clinical ids. Dose, transparency and formulation all count this way."""
-    declared = _as_int(pdata.get("total_strain_count"), 0)
-    if declared > 0:
-        return declared
-
-    seen: Set[str] = set()
-    for blend_item in _safe_list(pdata.get("probiotic_blends")):
-        blend = _safe_dict(blend_item)
-        for strain in _safe_list(blend.get("strains")):
-            key = _canonical_key(str(strain))
-            if key:
-                seen.add(key)
-    # Clinical IDs and label names are not interchangeable counting keys.
-    # Ignore incomplete/malformed clinical rows: ``{None}`` is still a
-    # one-element set and used to manufacture a phantom strain here.
-    clinical_ids = {
-        key
-        for strain in clinical_strains
-        if isinstance(strain, dict)
-        for key in [_canonical_key(str(strain.get("clinical_id") or ""))]
-        if key
-    }
-    return len(seen) or len(clinical_ids)
-
-
 def _disclosure_reason(pdata: Dict[str, Any], total_strain_count: int, disclosed_count: int) -> str | None:
     if disclosed_count > 0:
         return None
@@ -510,11 +452,6 @@ def _disclosure_reason(pdata: Dict[str, Any], total_strain_count: int, disclosed
 
 def _total_billion_count(pdata: Dict[str, Any]) -> float:
     return declared_total_cfu(pdata) / 1e9
-
-
-def _canonical_key(value: str) -> str:
-    text = value.strip().lower()
-    return re.sub(r"[^a-z0-9]+", " ", text).strip()
 
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:

@@ -420,8 +420,8 @@ def test_unreviewed_strains_keep_label_identity_but_no_clinical_credit() -> None
     })
 
     formulation = score_formulation(product)
-    assert formulation["components"]["named_species_diversity"] == 4
-    assert formulation["components"]["identified_strain_codes"] == 3
+    assert "named_species_diversity" not in formulation["components"]
+    assert formulation["components"]["exact_identity_completeness"] == 8
     assert formulation["metadata"]["identified_strain_count"] == 1
     assert score_evidence(product)["score"] == 0
 

@@ -109,7 +109,8 @@ def test_real_327965_retains_three_distinct_howaru_source_owners(enricher):
     assert {r["source_row_ref"] for r in clinical} == {r["raw_source_path"] for r in owners}
     assert all(r["label_name"].lower() == "howaru" and r["cfu_per_day"] is None for r in clinical)
     assert product["probiotic_data"]["total_cfu"] == 100_000_000_000
-    assert product["probiotic_data"]["total_strain_count"] == 13  # unchanged label-count policy
+    # Twelve other identities plus three distinct source-owned HOWARU forms.
+    assert product["probiotic_data"]["total_strain_count"] == 15
     blob = build_detail_blob(product, {})
     exported = {r["raw_source_path"]: r for r in blob["ingredients"]}
     for owner in owners:
@@ -133,6 +134,15 @@ def test_owner_form_proof_reaches_readiness_and_export(enricher, name, form):
     assert clinical[0]["label_name"] == name
     assert clinical[0]["strain"] != name
     assert clinical[0]["cfu_per_day"] == 10_000_000_000
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+    assert product["probiotic_data"]["total_strain_count"] == 2
+    assert score_formulation(product)["components"]["exact_identity_completeness"] == 4
+    assert score_dose(product)["components"]["per_strain_cfu_disclosure"] == 5
+    assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 3.5
+    assert product["probiotic_data"]["probiotic_blends"][0]["strain_identity_resolution"][0]["resolution"].startswith("exact_strain_")
+    assert product["probiotic_data"]["probiotic_blends"][1]["strain_identity_resolution"][0]["resolution"] in {"species_only", "unresolved_label_text"}
     assert _probiotic_native_evidence_state(product, owner) is not None
     assert _probiotic_native_evidence_state(product, sibling) is None
     exported = build_detail_blob(product, {})["ingredients"]
@@ -164,6 +174,30 @@ def test_notes_and_sibling_forms_are_not_owner_identity(enricher):
     assert clinical[0]["source_row_ref"] == sibling["raw_source_path"]
     assert clinical[0]["cfu_per_day"] is None
     assert _probiotic_native_evidence_state(product, owner) is None
+
+
+def test_distinct_forms_with_same_label_name_count_separately(enricher):
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    from scoring_v4.modules.probiotic_dose import score_dose
+    product = _collect(enricher, [
+        _row("HOWARU", "Lactobacillus acidophilus NCFM"),
+        _row("HOWARU", "Lactobacillus rhamnosus HN001", index=1),
+    ])
+    assert product["probiotic_data"]["total_strain_count"] == 2
+    assert score_formulation(product)["components"]["exact_identity_completeness"] == 8
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 2
+
+
+def test_distinct_unregistered_forms_are_separate_without_exact_credit(enricher):
+    from copy import deepcopy
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    first = _row("Bifidobacterium longum", "Unknown-A123")
+    second = _row("Bifidobacterium longum", "Unknown-B456", index=1)
+    product = _collect(enricher, [first, second, deepcopy(first)])
+    assert product["probiotic_data"]["total_strain_count"] == 2
+    result = score_formulation(product)
+    assert result["metadata"]["total_strain_count"] == 2
+    assert result["components"]["exact_identity_completeness"] == 0
 
 
 @pytest.mark.parametrize("forgery", ["wrong_owner", "missing_owner", "changed_form"])

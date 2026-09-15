@@ -16,14 +16,15 @@ if str(SCRIPTS_ROOT) not in sys.path:
 def _product(
     *,
     total_billion: float = 50.0,
-    strain_count: int = 8,
+    strain_count: int = 5,
     clinical_strain_count: int = 5,
     prebiotic_present: bool = True,
     survivability: bool = True,
     delivery_tier: int | None = None,
     blends: list[dict] | None = None,
 ) -> dict:
-    if blends is None:
+    default_blends = blends is None
+    if default_blends:
         blends = [
             {
                 "name": f"Strain {i}",
@@ -88,21 +89,21 @@ def _product(
         ref = f"ingredientRows[{index}]"
         row["source_row_ref"] = ref
         product["activeIngredients"].append({"name": row["strain"], "raw_source_path": ref})
+        if default_blends and index < len(blends):
+            blends[index].update(name=row["strain"], strains=[row["strain"]], raw_source_path=ref)
     return product
 
 
-def test_probiotic_formulation_scores_full_25_point_contract() -> None:
+def test_probiotic_formulation_scores_full_16_point_contract() -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
     payload = score_formulation(_product())
 
-    assert payload["score"] == 25.0
-    assert payload["max"] == 25.0
+    assert payload["score"] == 16.0
+    assert payload["max"] == 16.0
     assert payload["components"] == {
         "total_cfu_disclosed": 4.0,
-        "cfu_amount": 5.0,
-        "named_species_diversity": 4.0,
-        "identified_strain_codes": 8.0,
+        "exact_identity_completeness": 8.0,
         "delivery_survivability": 3.0,
         "prebiotic_complement": 1.0,
     }
@@ -110,61 +111,41 @@ def test_probiotic_formulation_scores_full_25_point_contract() -> None:
 
 
 @pytest.mark.parametrize(
-    ("total_billion", "expected"),
-    [
-        (0.0, 0.0),
-        (0.5, 1.5),
-        (1.1, 3.0),
-        (10.0, 4.0),
-        (50.0, 5.0),
-    ],
+    "total_billion", [0.0, 0.5, 1.1, 10.0, 50.0],
 )
-def test_cfu_amount_tiers(total_billion: float, expected: float) -> None:
+def test_only_valid_cfu_disclosure_matters_to_formulation(total_billion: float) -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
     payload = score_formulation(_product(total_billion=total_billion))
 
-    assert payload["components"]["cfu_amount"] == expected
+    assert "cfu_amount" not in payload["components"]
     assert payload["components"]["total_cfu_disclosed"] == (4.0 if total_billion > 0 else 0.0)
 
 
 @pytest.mark.parametrize(
-    ("strain_count", "expected"),
-    [
-        (0, 0.0),
-        (1, 3.0),
-        (2, 3.0),
-        (3, 4.0),
-        (8, 4.0),
-        (9, 3.0),
-        (15, 3.0),
-        (16, 2.0),
-    ],
+    "strain_count", [1, 2, 3, 5],
 )
-def test_named_species_diversity_tiers(strain_count: int, expected: float) -> None:
+def test_complete_identity_credit_is_independent_of_strain_count(strain_count: int) -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
-    # One strain count serves dose, transparency and formulation: with no
-    # declared blends it falls back to the clinical strains, so keep those in
-    # step with the declared count this tier table is about.
     payload = score_formulation(
-        _product(strain_count=strain_count, clinical_strain_count=min(5, strain_count))
+        _product(strain_count=strain_count, clinical_strain_count=strain_count)
     )
-
-    assert payload["components"]["named_species_diversity"] == expected
+    assert "named_species_diversity" not in payload["components"]
+    assert payload["components"]["exact_identity_completeness"] == 8
 
 
 @pytest.mark.parametrize(
     ("clinical_strain_count", "expected"),
     [
         (0, 0.0),
-        (1, 3.0),
-        (2, 5.0),
-        (3, 7.0),
+        (1, 1.6),
+        (2, 3.2),
+        (3, 4.8),
         (5, 8.0),
     ],
 )
-def test_clinical_strain_code_tiers_use_v4_eight_point_cap(
+def test_identity_credit_is_proportional_to_resolved_fraction(
     clinical_strain_count: int,
     expected: float,
 ) -> None:
@@ -172,7 +153,7 @@ def test_clinical_strain_code_tiers_use_v4_eight_point_cap(
 
     payload = score_formulation(_product(clinical_strain_count=clinical_strain_count))
 
-    assert payload["components"]["identified_strain_codes"] == expected
+    assert payload["components"]["exact_identity_completeness"] == expected
 
 
 @pytest.mark.parametrize(
@@ -245,7 +226,7 @@ def test_probiotic_formulation_accepts_final_blob_probiotic_detail_alias() -> No
 
     payload = score_formulation(product)
 
-    assert payload["score"] == 25.0
+    assert payload["score"] == 16.0
     assert payload["metadata"]["total_billion_count"] == 50.0
 
 
@@ -256,10 +237,10 @@ def test_strain_count_falls_back_to_unique_blend_strains() -> None:
         {"strains": ["Lactobacillus acidophilus", "Bifidobacterium lactis"]},
         {"strains": ["Lactobacillus acidophilus", "Lactobacillus rhamnosus"]},
     ]
-    payload = score_formulation(_product(strain_count=0, blends=blends))
+    payload = score_formulation(_product(strain_count=0, clinical_strain_count=0, blends=blends))
 
     assert payload["metadata"]["total_strain_count"] == 3
-    assert payload["components"]["named_species_diversity"] == 4.0
+    assert payload["components"]["exact_identity_completeness"] == 0.0
 
 
 def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p23() -> None:
@@ -268,8 +249,8 @@ def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p23() ->
     breakdown = score_probiotic(_product()).to_breakdown()
     formulation = breakdown["dimensions"]["formulation"]
 
-    assert formulation["score"] == 25.0
-    assert formulation["max"] == 25.0
+    assert formulation["score"] == 16.0
+    assert formulation["max"] == 16.0
     assert formulation["metadata"]["phase"] == "P2.1_probiotic_formulation"
     assert breakdown["dimensions"]["dose"]["score"] is not None
     # Module-level phase rolls forward as each P2.x slice lands.
@@ -284,4 +265,4 @@ def test_probiotic_formulation_resilient_to_malformed_input() -> None:
     for bad in (None, {}, {"probiotic_data": None}, 42, "oops"):
         payload = score_formulation(bad)  # type: ignore[arg-type]
         assert payload["score"] == 0.0
-        assert payload["max"] == 25.0
+        assert payload["max"] == 16.0

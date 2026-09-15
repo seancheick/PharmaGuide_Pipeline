@@ -64,4 +64,4 @@ def test_species_general_research_does_not_earn_exact_code_points(name, clinical
     from scoring_v4.modules.probiotic_formulation import score_formulation
     product = {"activeIngredients": [{"name": name, "raw_source_path": "ingredientRows[0]"}],
                "probiotic_data": {"clinical_strains": [{"strain": name, "clinical_id": clinical_id, "source_row_ref": "ingredientRows[0]"}]}}
-    assert score_formulation(product)["components"]["identified_strain_codes"] == 0
+    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0

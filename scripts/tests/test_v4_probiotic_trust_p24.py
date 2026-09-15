@@ -271,7 +271,9 @@ def test_probiotic_trust_independent_of_formulation_dose_evidence() -> None:
             "name": row["strain"], "raw_source_path": row["source_row_ref"]})
 
     breakdown = score_probiotic(high_form_no_certs).to_breakdown()
-    assert breakdown["dimensions"]["formulation"]["score"] > 20.0
+    formulation = breakdown["dimensions"]["formulation"]
+    assert formulation["components"]["exact_identity_completeness"] == 8
+    assert formulation["max"] == 16
     assert _trust_view(breakdown)["score"] == 0.0
 
 
