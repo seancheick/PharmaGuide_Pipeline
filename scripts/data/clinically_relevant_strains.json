@@ -14255,14 +14255,15 @@
     }
   ],
   "prebiotics": {
-    "description": "Prebiotic fibers that synergize with probiotics for +2 bonus",
+    "description": "Canonical prebiotic identity catalog. Enrichment and the v4 scorer share one matcher over these names and aliases (scripts/prebiotic_catalog.py); a disclosed prebiotic adds at most 1 point to the probiotic formulation pillar (dose-aware: >=3 g full credit, >=1 g half, unknown dose 0.25). Generic fiber never qualifies; an alias shared by two entries stays unresolved.",
     "ingredients": [
       {
         "standard_name": "Inulin",
         "aliases": [
           "chicory root fiber",
           "chicory inulin",
-          "oligofructose-enriched inulin"
+          "oligofructose-enriched inulin",
+          "Raftiline"
         ]
       },
       {
@@ -14271,7 +14272,8 @@
           "FOS",
           "fructo-oligosaccharides",
           "oligofructose",
-          "Fructooligosaccharide"
+          "Fructooligosaccharide",
+          "Raftilose"
         ]
       },
       {
@@ -14293,13 +14295,15 @@
         "aliases": [
           "acacia gum",
           "gum arabic",
-          "acacia senegal"
+          "acacia senegal",
+          "gum acacia"
         ]
       },
       {
-        "standard_name": "Apple Pectin",
+        "standard_name": "Pectin",
         "aliases": [
-          "pectin",
+          "apple pectin",
+          "citrus pectin",
           "fruit pectin"
         ]
       },

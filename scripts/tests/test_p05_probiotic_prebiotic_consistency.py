@@ -491,16 +491,15 @@ def test_organic_acacia_fiber_active_marks_prebiotic_present(enricher) -> None:
         "FOS (Fructooligosaccharides)",
         "GOS (Galactooligosaccharides)",
         "Beta-Glucan",
-        "Pea Fiber",
         "XOS",
         "Lactulose",
         "Raftiline",
     ],
 )
 def test_known_prebiotic_terms_detected(enricher, ingredient_name: str) -> None:
-    """Every term in scoring_config.prebiotic_terms should round-trip:
-    if the scorer credits it via substring, the enricher must flag it.
-    Locks the cross-config single-source-of-truth."""
+    """Every catalog name/alias round-trips: the enricher and the scorer share
+    one matcher (scripts/prebiotic_catalog.py) over the registry's
+    prebiotics.ingredients list, so what the scorer credits the enricher flags."""
     product = _probiotic_product(
         extra_active=[
             {
@@ -517,12 +516,23 @@ def test_known_prebiotic_terms_detected(enricher, ingredient_name: str) -> None:
     )
     pd = enricher._collect_probiotic_data(product)
     assert pd["prebiotic_present"] is True, (
-        f"{ingredient_name!r} contains a scorer-recognized prebiotic term; "
-        f"enricher must flag prebiotic_present"
+        f"{ingredient_name!r} is a catalog prebiotic; enricher must flag prebiotic_present"
     )
 
 
-def test_preforpro_bacteriophage_prebiotic_marks_prebiotic_present(enricher) -> None:
+def test_generic_pea_fiber_is_not_a_prebiotic(enricher) -> None:
+    """Generic fiber never qualifies (2026-09-14 catalog matcher); the old
+    substring list credited 'Pea Fiber' on 21 products."""
+    product = _probiotic_product(extra_active=[{
+        "name": "Pea Fiber", "standardName": "Pea Fiber", "category": "fiber",
+        "quantity": 500, "unit": "mg", "nestedIngredients": [], "harvestMethod": "", "notes": "",
+    }])
+    assert enricher._collect_probiotic_data(product)["prebiotic_present"] is False
+
+
+def test_preforpro_bacteriophage_is_not_a_prebiotic(enricher) -> None:
+    """A bacteriophage cocktail is not a prebiotic even when the label groups it
+    as one; only catalog identities (or a row literally named 'prebiotic') count."""
     product = _probiotic_product(
         extra_active=[
             {
@@ -540,8 +550,8 @@ def test_preforpro_bacteriophage_prebiotic_marks_prebiotic_present(enricher) -> 
 
     pd = enricher._collect_probiotic_data(product)
 
-    assert pd["prebiotic_present"] is True
-    assert pd["prebiotic_name"]
+    assert pd["prebiotic_present"] is False
+    assert pd["prebiotic_name"] == ""
 
 
 def test_tributyrin_butyrate_marks_postbiotic_metabolite(enricher) -> None:
@@ -653,21 +663,16 @@ def test_existing_exact_match_path_still_works(enricher) -> None:
 # --- Config-source single source of truth ----------------------------------
 
 
-def test_enricher_reads_scoring_config_prebiotic_terms() -> None:
-    """Drift prevention — the enricher's substring fallback should source
-    its term list from scoring_config (same place the scorer reads from)
-    so the two stay aligned.  If a future maintainer extends the terms
-    list in config, both paths should pick it up without code changes."""
+def test_prebiotic_vocabulary_has_one_owner() -> None:
+    """Drift prevention, inverted from the P0.5 version: there is no longer a
+    config substring list or an enricher fallback list. The registry catalog
+    is the only prebiotic vocabulary, read through prebiotic_catalog."""
     import json
-    cfg = json.loads(
-        (SCRIPTS_ROOT / "config" / "scoring_config.json").read_text()
-    )
-    pro_cfg = cfg["section_A_ingredient_quality"]["probiotic_bonus"]
-    terms = pro_cfg.get("prebiotic_terms") or []
-    assert "acacia" in terms, (
-        "scoring_config.prebiotic_terms must contain 'acacia' — both the "
-        "scorer's existing detection and the new enricher fallback depend "
-        "on this term"
-    )
-    assert "inulin" in terms
-    assert "fos" in terms
+    from prebiotic_catalog import prebiotic_catalog
+    cfg = json.loads((SCRIPTS_ROOT / "config" / "scoring_config.json").read_text())
+    assert "prebiotic_terms" not in cfg["section_A_ingredient_quality"]["probiotic_bonus"]
+    import enrich_supplements_v3 as enricher_module
+    assert not hasattr(enricher_module.SupplementEnricherV3, "_PREBIOTIC_TERMS_FALLBACK")
+    assert not hasattr(enricher_module.SupplementEnricherV3, "_get_prebiotic_terms")
+    names = {name for name, _ in prebiotic_catalog()}
+    assert {"Inulin", "Acacia Fiber", "Partially Hydrolyzed Guar Gum", "Pectin"} <= names

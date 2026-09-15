@@ -7975,6 +7975,7 @@ def build_detail_blob(
             "clinical_strain_count": len(exported_clinical_strains),
             "prebiotic_present": probiotic_data.get("prebiotic_present", False),
             "prebiotic_name": safe_str(probiotic_data.get("prebiotic_name")),
+            "prebiotic_dose_g": probiotic_data.get("prebiotic_dose_g"),
             "has_survivability_coating": probiotic_data.get("has_survivability_coating", False),
             "survivability_reason": safe_str(probiotic_data.get("survivability_reason")),
             "probiotic_blends": safe_list(probiotic_data.get("probiotic_blends")),

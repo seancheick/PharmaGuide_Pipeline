@@ -13,6 +13,7 @@ import re
 from typing import Any, Dict
 
 from scoring_input_contract import get_scoring_ingredients
+from prebiotic_catalog import match_prebiotic, row_quantity_g
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from studied_formulas import label_owned_native_strains
 from probiotic_measurements import declared_total_cfu
@@ -178,13 +179,6 @@ def _score_delivery_survivability(product: Dict[str, Any], pdata: Dict[str, Any]
     return {1: 3.0, 2: 2.5, 3: 1.5}.get(tier_int, 0.0)
 
 
-_PREBIOTIC_RE = re.compile(
-    r"\b(prebiotic|inulin|fructooligosaccharides?|fos|"
-    r"galactooligosaccharides?|gos|chicory|acacia|fiber)\b",
-    re.IGNORECASE,
-)
-
-
 def _score_prebiotic_complement(product: Dict[str, Any], pdata: Dict[str, Any]) -> float:
     """Dose-aware scoring for the 1-point prebiotic complement component.
 
@@ -229,9 +223,9 @@ def _prebiotic_dose_g(product: Dict[str, Any], pdata: Dict[str, Any]) -> float |
                 "display_label",
             )
         )
-        if not _PREBIOTIC_RE.search(text):
+        if not match_prebiotic(text).present:
             continue
-        grams = _row_quantity_g(row)
+        grams = row_quantity_g(row)
         if grams is None:
             continue
         best = grams if best is None else max(best, grams)
@@ -246,29 +240,6 @@ def _ingredient_rows(product: Dict[str, Any]) -> list[Dict[str, Any]]:
         ]
     except Exception:
         return []
-
-
-def _row_quantity_g(row: Dict[str, Any]) -> float | None:
-    quantity = None
-    for key in ("quantity", "amount", "dose", "dosage"):
-        quantity = _as_float(row.get(key), None)
-        if quantity is not None:
-            break
-    if quantity is None:
-        return None
-    unit = str(
-        row.get("unit_normalized")
-        or row.get("unit")
-        or row.get("dose_unit")
-        or ""
-    ).strip().lower()
-    if unit in {"g", "gram", "grams", "gm"}:
-        return quantity
-    if unit in {"mg", "milligram", "milligrams"}:
-        return quantity / 1000.0
-    if unit in {"mcg", "microgram", "micrograms", "ug", "µg"}:
-        return quantity / 1_000_000.0
-    return None
 
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:

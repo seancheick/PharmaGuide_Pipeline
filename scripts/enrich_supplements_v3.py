@@ -15366,50 +15366,6 @@ class SupplementEnricherV3:
         "protected strain", "protected probiotic",
     ]
 
-    # P0.5 — fallback prebiotic vocabulary used when scoring_config.json is
-    # unavailable. The authoritative list lives in
-    # scoring_config.section_A_ingredient_quality.probiotic_bonus.prebiotic_terms;
-    # _get_prebiotic_terms() prefers config and falls back here.
-    _PREBIOTIC_TERMS_FALLBACK = [
-        "inulin", "fos", "gos", "chicory", "acacia",
-        "beta-glucan", "beta glucan", "pea fiber", "lactulose",
-        "fructooligosaccharide", "galactooligosaccharide",
-        "xos", "xylooligosaccharide", "raftiline", "raftilose",
-        "preforpro", "bacteriophage", "bacteriophages",
-    ]
-
-    def _get_prebiotic_terms(self) -> list:
-        """Single source of truth for prebiotic substring vocabulary.
-
-        Reads scripts/config/scoring_config.json section
-        `section_A_ingredient_quality.probiotic_bonus.prebiotic_terms` so
-        the enricher's display-side detection stays aligned with the
-        scorer's credit-side detection. Cached on the enricher instance
-        to avoid re-reading on every product.
-        """
-        cached = getattr(self, "_prebiotic_terms_cache", None)
-        if cached is not None:
-            return cached
-        terms: list = []
-        try:
-            from pathlib import Path as _Path
-            import json as _json
-            cfg_path = _Path(__file__).resolve().parent / "config" / "scoring_config.json"
-            cfg = _json.loads(cfg_path.read_text(encoding="utf-8"))
-            pro_cfg = (
-                cfg.get("section_A_ingredient_quality", {})
-                   .get("probiotic_bonus", {})
-            )
-            cfg_terms = pro_cfg.get("prebiotic_terms")
-            if isinstance(cfg_terms, list) and cfg_terms:
-                terms = [str(t).strip().lower() for t in cfg_terms if t]
-        except (OSError, ValueError, KeyError):
-            terms = []
-        if not terms:
-            terms = list(self._PREBIOTIC_TERMS_FALLBACK)
-        self._prebiotic_terms_cache = terms
-        return terms
-
     def _collect_probiotic_data(self, product: Dict) -> Dict:
         """
         Collect probiotic-specific data for scoring.
@@ -15889,10 +15845,15 @@ class SupplementEnricherV3:
                         found_clinical_strains.append(entry)
                         break
 
-        # Check for prebiotic pairing
-        prebiotics_data = strains_db.get('prebiotics', {}).get('ingredients', [])
+        # Check for prebiotic pairing. One matcher (scripts/prebiotic_catalog.py)
+        # owns the vocabulary for both this display field and the scorer's
+        # prebiotic complement; the registry's prebiotics.ingredients list is
+        # the catalog. Generic "fiber" never counts; an alias shared by two
+        # catalog entries (human milk oligosaccharide) stays unresolved.
+        from prebiotic_catalog import match_prebiotic, row_quantity_g
         prebiotic_found = False
         prebiotic_name = ""
+        prebiotic_dose_g = None
 
         prebiotic_candidates = []
         for ing in all_ingredients:
@@ -15900,7 +15861,7 @@ class SupplementEnricherV3:
             std_name = ing.get('standardName', '') or ing_name
             group = ing.get("ingredientGroup", "")
             notes = ing.get("notes", "")
-            prebiotic_candidates.append((ing_name, " ".join(str(v) for v in (std_name, group, notes) if v)))
+            prebiotic_candidates.append((ing_name, " ".join(str(v) for v in (std_name, group, notes) if v), ing))
 
             # Include nested blend children so prebiotic rows inside proprietary
             # blends are not silently missed.
@@ -15914,43 +15875,27 @@ class SupplementEnricherV3:
                 prebiotic_candidates.append((
                     nested_name,
                     " ".join(str(v) for v in (nested_std, nested_group, nested_notes) if v),
+                    nested_ing,
                 ))
 
-        for ing_name, std_name in prebiotic_candidates:
-            for prebiotic in prebiotics_data:
-                pre_name = prebiotic.get('standard_name', '')
-                pre_aliases = prebiotic.get('aliases', [])
-
-                if self._exact_match(ing_name, pre_name, pre_aliases) or \
-                   self._exact_match(std_name, pre_name, pre_aliases):
-                    prebiotic_found = True
-                    prebiotic_name = pre_name
-                    break
-            if prebiotic_found:
-                break
-
-        # P0.5 fallback: substring-match against the same prebiotic_terms list
-        # the scorer uses (`section_A_ingredient_quality.probiotic_bonus.
-        # prebiotic_terms` in scoring_config.json). Catches names the strict
-        # exact-match path misses, e.g. 'organic Acacia Fiber' (DSLD 274081
-        # GoL prenatal), 'FOS (Fructooligosaccharides)' with parentheticals,
-        # 'Pea Fiber', 'Raftiline'. Without this, scorer credits prebiotic
-        # but probiotic_detail.prebiotic_present stayed false — Codex's
-        # split-brain contract finding on the 2026-05-19 RC.
-        if not prebiotic_found:
-            prebiotic_terms = self._get_prebiotic_terms()
-            for ing_name, std_name in prebiotic_candidates:
-                ing_norm = (ing_name or '').lower()
-                std_norm = (std_name or '').lower()
-                for term in prebiotic_terms:
-                    if term and (term in ing_norm or term in std_norm):
-                        prebiotic_found = True
-                        # Prefer the (non-empty) ingredient label over the
-                        # bare term so the display field reads naturally.
-                        prebiotic_name = std_name or ing_name or term
-                        break
-                if prebiotic_found:
-                    break
+        for ing_name, std_text, row in prebiotic_candidates:
+            match = match_prebiotic(ing_name)
+            if not match.present:
+                # standardName/group/notes may name the catalog entry; a bare
+                # "prebiotic" word in notes is marketing text, not a row identity.
+                match = match_prebiotic(std_text)
+                if match.present and match.standard_name is None and not match.ambiguous:
+                    match = match_prebiotic("")
+            if not match.present:
+                continue
+            if not prebiotic_found:
+                prebiotic_found = True
+                # Resolved catalog identity, else the label's own words (never
+                # a guessed entry for a generic or ambiguous term).
+                prebiotic_name = match.standard_name or ing_name or std_text
+            grams = row_quantity_g(row) if isinstance(row, dict) else None
+            if grams is not None and grams > 0:
+                prebiotic_dose_g = grams if prebiotic_dose_g is None else max(prebiotic_dose_g, grams)
 
         # Check for survivability coating
         has_survivability_coating = False
@@ -16199,6 +16144,7 @@ class SupplementEnricherV3:
             "clinical_strain_count": len(found_clinical_strains),
             "prebiotic_present": prebiotic_found,
             "prebiotic_name": prebiotic_name,
+            "prebiotic_dose_g": prebiotic_dose_g,
             "has_survivability_coating": has_survivability_coating,
             "survivability_reason": survivability_reason,
             # Product-level postbiotic indicator (Sprint 2026-05-01).
