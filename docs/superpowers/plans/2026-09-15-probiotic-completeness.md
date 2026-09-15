@@ -238,6 +238,13 @@ being represented as a general cardiovascular treatment benefit.
   must stop unknown direction from inheriting positive efficacy. Preserve
   legitimate nutrition-authority support and the distinction between study
   quality and a positive outcome; do not relabel unknown rows as negative.
+  The public `score_evidence` reproduction likewise returns 6.48 for missing,
+  unresolved, misspelled or positive-strong direction on the same test row.
+  A read-only census of stored enrichment found 50,332 clinical projections,
+  all with recognized directions (13,079 positive-weak, 8,129 mixed, 25,832
+  positive-strong, 3,292 null). This demonstrates a boundary defect, not that
+  those stored rows currently contain unknown directions. Recovered matches
+  and public-caller behavior still require the regression gate.
 - The generic primary-evidence comments reserve raw 19–20 for multi-active
   breadth, but the current public reference is already 18: the locked
   single-molecule fixture receives public 20 from raw 18. The comment alone
