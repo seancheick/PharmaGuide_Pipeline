@@ -369,7 +369,7 @@ This covers:
     Transparency per-strain CFU 3.5 → 7.
 - Evidence, Verification and Safety are unchanged.
 
-Full fast tier on : **15,549 passed, 70 skipped, zero failures** (398 s; tree unchanged).
+Full fast tier on `cb678d43`: **15,549 passed, 70 skipped, zero failures** (398 s; tree unchanged).
 
 **Open decisions surfaced, not changed here:**
 
