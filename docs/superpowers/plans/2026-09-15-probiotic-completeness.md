@@ -63,12 +63,15 @@ Files:
   do not build a new strain matcher. Only exact aliases collapse. The existing
   total_strain_count is derived, not a sourced declaration, so ignore it for
   scoring in either direction. A count with no labels creates no disclosure.
-  Resolve source-local structured forms using existing `label_owned_native_strains`
-  before deduplication: exact+species-only siblings with the same display name
+  Resolve source-local structured forms through the existing registry/label
+  resolver before deduplication, independently of clinical projections:
+  exact+species-only siblings with the same display name
   are two identities; two distinct proven forms are also two. Never share one
   owner's form with its sibling. Pass whole-product source context through
   all scoring callers and the assembled enrichment payload. Test existing
   BB536/HOWARU fixtures plus these exact/unresolved and distinct-form cases.
+  Identity-only resolution stays in `studied_formulas.py`; native clinical
+  rows and their stricter individual-measurement proof remain unchanged.
 - [ ] Apply raw formula `4 + 8 * exact/total + delivery + complement`, with
   missing components zero, penalties before clamp, maximum 16. Reuse source-
   owned exact matches and the same label identity keys in numerator/denominator.
@@ -100,6 +103,28 @@ when necessary rather than inventing another scorer/harness.
 - [ ] Record measured results and outstanding broader roadmap items. Commit
   implementation and push main after fresh fetch/review; preserve user files.
 - [ ] Continue the broader roadmap in bounded batches before any regeneration.
+
+### Final identity-source clarification
+
+The first implementation unnecessarily required `clinical_strains` projections
+for the exact numerator. This contradicts identity/efficacy separation and is
+superseded: independently revalidated actual label rows and their own forms
+can prove exact identity without a clinical projection. The canonical resolver
+owns this proof; projected blend names, detached IDs or derived counts cannot
+authorize it. Conflicting source paths, wrong species/codes and ambiguous
+matches fail closed. Existing BLOCKED/HOLD policy remains intact.
+
+Exact component canaries, presented before this correction:
+
+- LGG source row, no clinical projection: identity **8/8**.
+- LGG plus a HOWARU row explicitly naming NCFM and HN001: identity **8/8**,
+  count 3. Only LGG has individual CFU, so the separate Dose disclosure
+  component remains **10/3**, Transparency disclosure **7/3**.
+- Add one unresolved strain: identity **6/8**, count 4; no allocated blend CFU.
+- Repeating a source alias changes neither identity nor quantity.
+- An ID/projection without actual source proof still gets zero exact credit.
+
+No new clinical rows, tested-dose matches or positive study outcomes are created.
 
 ## Broader calibration tracking (not claimed complete)
 

@@ -46,11 +46,19 @@ Keys must be source-local before deduplication: a species display name with
 an owned structured BB536 form becomes the proven BB536 identity; a sibling
 with the same display name but no form remains unresolved/species-only. Two
 different owned forms sharing a display name remain two identities. Reuse
-`label_owned_native_strains` and its existing source/form proof, never infer a
+the existing source/form resolver in `studied_formulas`, never infer a
 form from a sibling. All scoring callers must provide the whole product for
 this proof; enrichment uses its assembled native payload and source label rows.
 An actual source-owned identity may supply a missing projected blend name;
 a detached clinical ID may not. Pin the HOWARU and BB536 existing regressions.
+
+Identity-only proof must not require a clinical projection: an exact label
+remains exact if `clinical_strains` is absent. Resolve each actual biological
+form on its own owner for identity completeness, while keeping the original
+multi-form row unresolved for individual-dose allocation. Three fully named,
+registered source identities earn 8/8 even when two share an aggregate amount;
+only the separately measured identity earns per-strain CFU disclosure. Keep
+conflicting source representations and existing BLOCKED/HOLD policy fail-closed.
 
 Keep the same keys for count/disclosure consumers, with no new public schema.
 Dose and Transparency use the same denominator and alias keys. Preserve all
