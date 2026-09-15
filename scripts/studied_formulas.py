@@ -308,13 +308,7 @@ def _source_row_representations(owners, ref):
     return [owner for owner in owners if owner.get("raw_source_path") == ref]
 
 
-def probiotic_source_scope(product: Mapping, ref=None) -> list[Mapping]:
-    """Actual label scope of a row/parent reference, or the ref-less label.
-
-    Reuse both nested source traversal and cleaner flattened-child paths. No
-    projected strain name can expand a resolved source scope.
-    """
-    owners = list(_clinical_label_rows(product.get("activeIngredients")))
+def _probiotic_source_scope(owners, ref):
     if ref is None or ref == "":
         return owners
     if not isinstance(ref, str):
@@ -326,22 +320,47 @@ def probiotic_source_scope(product: Mapping, ref=None) -> list[Mapping]:
         and row["raw_source_path"].startswith(f"{ref}.nestedRows["))]
 
 
+def probiotic_source_scope(product: Mapping, ref=None) -> list[Mapping]:
+    """Actual label scope of a row/parent reference, or the ref-less label.
+
+    Reuse both nested source traversal and cleaner flattened-child paths. No
+    projected strain name can expand a resolved source scope.
+    """
+    return _probiotic_source_scope(list(_clinical_label_rows(product.get("activeIngredients"))), ref)
+
+
+def _source_live_eligible(owners, row):
+    representations = _source_row_representations(owners, row.get("raw_source_path")) or [row]
+    if any(has_nonlive_microbial_derivative_evidence(owner) for owner in representations):
+        return False
+    identities = {id(owner) for owner in representations}
+    for owner in owners:
+        if not has_nonlive_microbial_derivative_evidence(owner):
+            continue
+        ref = owner.get("raw_source_path")
+        # An actual nonlive parent governs its nested/flattened descendants.
+        # Ref-less legacy parents govern only their actual nested subtree.
+        scope = (_probiotic_source_scope(owners, ref) if isinstance(ref, str) and ref
+                 else _clinical_label_rows([owner]))
+        if any(id(member) in identities for member in scope):
+            return False
+    return True
+
+
 def probiotic_source_live_eligible(product: Mapping, row: Mapping) -> bool:
-    """No representation of this source may contradict live-organism use.
+    """Neither source representations nor ancestors may contradict live use.
 
     Keep nonlive representations in the source set: a live-looking duplicate
     must not rescue their identity, denominator membership, or CFU disclosure.
     """
-    owners = list(_clinical_label_rows(product.get("activeIngredients")))
-    representations = _source_row_representations(owners, row.get("raw_source_path")) or [row]
-    return not any(has_nonlive_microbial_derivative_evidence(owner) for owner in representations)
+    return _source_live_eligible(list(_clinical_label_rows(product.get("activeIngredients"))), row)
 
 
 def _source_rows_all_match(owners, ref, predicate):
     """Every actual representation must remain live-eligible and agree."""
     matched = _source_row_representations(owners, ref)
     return bool(matched) and all(
-        not has_nonlive_microbial_derivative_evidence(owner) and predicate(owner)
+        _source_live_eligible(owners, owner) and predicate(owner)
         for owner in matched
     )
 
@@ -351,7 +370,7 @@ def _legacy_label_owner_unique(owners, identity):
     for owner in owners:
         if clinical_strain_identity_key(str(owner.get("name") or "")) != identity:
             continue
-        if has_nonlive_microbial_derivative_evidence(owner):
+        if not _source_live_eligible(owners, owner):
             return False
         ref = owner.get("raw_source_path")
         if ref is not None and (not isinstance(ref, str) or not ref):

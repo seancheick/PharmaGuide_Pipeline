@@ -109,6 +109,89 @@ def test_detached_names_are_only_a_legacy_denominator_when_source_scope_is_absen
     assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
 
 
+@pytest.mark.parametrize("name", ["Unknown organism A123", "L. rhamnosus GG", "L. plantarum 299v"])
+@pytest.mark.parametrize("ref", ["ingredientRows[99]", None, "", 42])
+def test_existing_sources_reject_dangling_projected_members_and_aggregate_disclosure(name, ref):
+    from build_final_db import build_detail_blob
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    product = product_with_identities(1)
+    product["probiotic_data"].update(is_probiotic_product=True, clinical_strains=[], probiotic_blends=[{
+        "strains": [name], "raw_source_path": ref,
+        "cfu_data": {"has_cfu": True, "cfu_count": 50e9, "evidence_scope": "blend_total"},
+    }])
+    formulation = score_formulation(product)
+    assert formulation["metadata"]["total_strain_count"] == 1
+    assert formulation["metadata"]["identified_strain_count"] == 1
+    assert formulation["components"]["exact_identity_completeness"] == 8
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
+    assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 0
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 1
+
+
+@pytest.mark.parametrize("layout", ["nested", "flattened", "legacy_nested"])
+@pytest.mark.parametrize("nonlive_evidence", ["name", "forms"])
+@pytest.mark.parametrize("stale_projections", [False, True])
+def test_ancestor_source_state_controls_child_identity_clinical_and_cfu(layout, nonlive_evidence, stale_projections):
+    from build_final_db import build_detail_blob
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+    from studied_formulas import measured_native_strain_doses
+    from test_probiotic_applicability_rubric import strain_product
+
+    product = strain_product(dose=1e10)
+    child = product["activeIngredients"][0]
+    child_ref = "ingredientRows[1].nestedRows[0]"
+    child["raw_source_path"] = child_ref
+    child_blend = product["probiotic_data"]["probiotic_blends"][0]
+    child_blend["raw_source_path"] = child_ref
+    child_blend["cfu_data"]["raw_source_path"] = child_ref
+    product["probiotic_data"]["clinical_strains"][0]["source_row_ref"] = child_ref
+    parent = {"name": "Lactobacillus Blend", "cleaner_row_role": "blend_header_total",
+              "raw_source_path": "ingredientRows[1]", "nestedIngredients": [child]}
+    if nonlive_evidence == "name":
+        parent["name"] = "Heat killed Lactobacillus Blend"
+    else:
+        parent["forms"] = [{"name": "heat killed"}]
+    if layout == "legacy_nested":
+        parent.pop("raw_source_path")
+        child.pop("raw_source_path")
+        child_blend.pop("raw_source_path")
+        child_blend["cfu_data"].pop("raw_source_path")
+        product["probiotic_data"]["clinical_strains"][0].pop("source_row_ref")
+    live = {"name": "Lactobacillus acidophilus", "raw_source_path": "ingredientRows[0]",
+            "quantity": 1e9, "unit": "CFU"}
+    product["activeIngredients"] = [live, parent]
+    if layout == "flattened":
+        product["activeIngredients"].extend(parent.pop("nestedIngredients"))
+    live_blend = {"strains": [live["name"]], "raw_source_path": live["raw_source_path"],
+                  "cfu_data": {"has_cfu": True, "cfu_count": 1e9}}
+    product["probiotic_data"]["is_probiotic_product"] = True
+    product["probiotic_data"]["probiotic_blends"] = [live_blend] + ([child_blend] if stale_projections else [])
+    if not stale_projections:
+        product["probiotic_data"]["clinical_strains"] = []
+    formulation = score_formulation(product)
+    if nonlive_evidence == "forms":
+        # Existing nonlive ownership treats header forms as sibling members,
+        # not a preparation that automatically applies to nested children.
+        assert formulation["metadata"]["total_strain_count"] == 2
+        assert formulation["metadata"]["identified_strain_count"] == 1
+        assert formulation["components"]["exact_identity_completeness"] == 4
+        return
+    assert formulation["metadata"]["total_strain_count"] == 1
+    assert formulation["metadata"]["identified_strain_count"] == 0
+    assert formulation["components"]["exact_identity_completeness"] == 0
+    assert label_owned_native_strains(product) == []
+    assert measured_native_strain_doses(product) == []
+    assert score_evidence(product)["score"] == 0
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 1
+    assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 7
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 1
+    assert len(product["probiotic_data"]["clinical_strains"]) == int(stale_projections)
+
+
 @pytest.mark.parametrize("projection", ["complete", "omitted_member", "extra_unknown"])
 @pytest.mark.parametrize("ref_less", [False, True])
 def test_actual_multimember_scope_never_lends_aggregate_cfu_to_shortened_projection(projection, ref_less):

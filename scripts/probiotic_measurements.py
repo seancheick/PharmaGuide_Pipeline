@@ -229,8 +229,8 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
             if (ref or scope) and not source_rows:
                 source_names_proved = False
             # Detached names remain a legacy denominator only when there is no
-            # actual source scope. They cannot add members to an owned scope.
-            for owner in source_rows or ([] if scope else [None]):
+            # actual source owner. A dangling reference cannot bypass sources.
+            for owner in source_rows or ([] if owners else [None]):
                 for key, state, exact in identities(name, owner):
                     keys.add(key)
                     blend_keys.add(key)
