@@ -159,6 +159,11 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
         names = blend.get("strains")
         names = [name.strip() for name in names if valid_name(name)] if isinstance(names, list) else []
         ref = blend.get("raw_source_path")
+        # Source state outranks a stale projected name, even when nonlive text
+        # in the actual label prevents the ordinary name/alias join.
+        if ref and not probiotic_source_live_eligible(product, {"raw_source_path": ref}):
+            blend_resolutions.append([])
+            continue
         resolutions, blend_keys = [], set()
         source_names_proved = True
         for name in names:
