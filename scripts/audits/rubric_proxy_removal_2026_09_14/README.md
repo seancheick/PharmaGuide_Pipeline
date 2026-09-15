@@ -31,27 +31,30 @@ omega `1.1.0-rubric-proxy-removal`; both pinned in `config_fingerprint_history.j
 
 ## Known side effects to review
 
-- The generic formulation 30-point dimension cap is now unreachable by positive components:
-  the richest multi-active formula reaches 29, and the A5 excellence cap (4) can collect at
-  most 2 (standardization 1 + synergy 1). Public scores are unaffected because the generic
-  formulation reference is 24; the caps stay as safety clamps.
+- Outside the immune-support adapter (up to +12, so 30 stays reachable there), the richest
+  generic formulation reaches 29. The A5 excellence cap could only collect 2 (standardization
+  1 + synergy 1), so 1.2.1 lowers that cap from 4 to 2; no score changes.
 - Build-final-db bonus chips for Non-GMO (A5d) disappear because the component is 0. The
   attribute facts themselves are unchanged in enrichment.
 
 ## How it was verified (no full-corpus run)
 
-A fixed, stratified 111-product packet (`packet_ids.json`) replaces corpus re-scoring.
-Every change has groups it should move and controls that must not.
+Frozen, stratified packets replace corpus re-scoring. The committed id files are the
+source of truth (`packet_ids.json` = pass 1, 111 products; `packet_ids_pass2.json` =
+generic dose + verification, 79 products); nothing is re-selected.
 
 ```bash
-python3 scripts/audits/rubric_proxy_removal_2026_09_14/select_packet.py        # rebuilds packet (~1 min, no scoring)
-git worktree add --detach /tmp/base <commit-before>                             # frozen baseline code
-python3 scripts/audits/rubric_proxy_removal_2026_09_14/score_packet.py /tmp/base before.json   # ~10 s
-python3 scripts/audits/rubric_proxy_removal_2026_09_14/score_packet.py . after.json
-python3 scripts/audits/rubric_proxy_removal_2026_09_14/diff_packet.py before.json after.json --allow-group <groups>
+A=scripts/audits/rubric_proxy_removal_2026_09_14
+python3 $A/select_packet.py --packet pass1              # extract frozen ids from enriched outputs (~1 min)
+git worktree add --detach /tmp/base <commit-before>     # frozen baseline code
+python3 $A/score_packet.py /tmp/base before.json --packet pass1   # ~10 s; records input sha256 + ids + commit
+python3 $A/score_packet.py . after.json --packet pass1
+python3 $A/diff_packet.py before.json after.json --packet pass1 --allow-group <groups>   # or --no-moves
 ```
 
-`diff_packet.py` exits 1 when a product outside the allowed groups moves.
+`diff_packet.py` exits 1 when a product outside the allowed groups moves (score, status,
+tier, cap or any pillar), and refuses snapshots scored from different inputs or id lists,
+unknown group names, or any `control_` group in `--allow-group`.
 
 | Step | Allowed groups | Result |
 |---|---|---|

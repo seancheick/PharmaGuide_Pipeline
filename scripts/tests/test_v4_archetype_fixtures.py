@@ -169,11 +169,11 @@ def test_category_fixtures_reach_their_references() -> None:
     assert probiotic["raw_dimensions"]["formulation"] == 24.25
     assert probiotic["raw_dimensions"]["evidence"] == 8.0
     # Omega raw dose tops out at 20 now that the EPA:DHA ratio bonus is gone
-    # (quality_score 1.2.0). Its reference of 18 keeps PR5's 2-point
-    # appropriate-dose slack below that ceiling. Prenatal evidence normalizes
-    # against the 18 its engine reaches.
+    # (quality_score 1.2.0); the reference equals that ceiling because the rubric
+    # gives full band credit at 2 g/day. Prenatal evidence normalizes against the
+    # 18 its engine reaches.
     assert omega["raw_dimensions"]["dose"] == 20.0
-    assert omega["normalization_references"]["dose"] == 18.0
+    assert omega["normalization_references"]["dose"] == 20.0
     assert omega["pillars"]["dose"] == 20.0
     assert prenatal["raw_dimensions"]["evidence"] == 18.0
     assert prenatal["normalization_references"]["evidence"] == 18.0

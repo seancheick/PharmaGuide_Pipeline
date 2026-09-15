@@ -32,7 +32,7 @@ ORIGINAL = {
     "a2_premium_forms_cap": 4.0, "a2_premium_form_threshold": 12.0,
     "a2_premium_form_points_per_additional": 0.5,
     "a3_delivery_cap": 3.0, "a4_absorption_cap": 3.0,
-    "a5_excellence_cap": 4.0, "a5a_organic": 0.0, "a5b_standardized_full": 1.0,
+    "a5_excellence_cap": 2.0, "a5a_organic": 0.0, "a5b_standardized_full": 1.0,
     "a5b_standardized_marker_only": 0.5, "a5d_non_gmo_project": 0.0, "a5e_natural": 0.0,
     "a6_single_ingredient_cap": 4.0, "a6_tier_floor_bio": 10.0,
     "a6_tier_solid_bio": 12.0, "a6_tier_elite_bio": 14.0,

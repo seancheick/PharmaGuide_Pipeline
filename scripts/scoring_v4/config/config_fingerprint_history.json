@@ -19,7 +19,8 @@
       "1.1.4-audited-ceilings": "9950f0f48c4e714f",
       "1.1.5-probiotic-aggregate-potency": "c316830407fbc9a7",
       "1.1.6-probiotic-clinical-gates": "cec328ccfdafea7b",
-      "1.2.0-rubric-proxy-removal": "4ac34f04fcef8f39"
+      "1.2.0-rubric-proxy-removal": "4ac34f04fcef8f39",
+      "1.2.1-audit-fixes": "4706ed93c0a940c6"
     }
   }
 }

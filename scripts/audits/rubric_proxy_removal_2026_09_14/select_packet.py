@@ -1,110 +1,167 @@
 #!/usr/bin/env python3
-"""Pick a small, stratified calibration packet instead of re-scoring the whole corpus.
+"""Extract a frozen calibration packet, or create the pass-2 packet once.
 
-Run from the repo root:  python3 scripts/audits/rubric_proxy_removal_2026_09_14/select_packet.py
+Run from the repo root:
+  select_packet.py [--packet pass1|pass2]
+      Extract the enriched record for every id in the committed id file into
+      scripts/products/_rubric_packet/<packet>_products.json (gitignored).
+      Reproducible: ids are frozen, nothing is re-selected.
+  select_packet.py --create-pass2
+      One-time: choose the generic-dose and verification groups, write
+      packet_ids_pass2.json, then extract. Refuses to overwrite it.
 
-Groups come from the existing scored breakdowns: each rubric change gets products it
-should move, and every category gets controls that must not move. Selection is
-deterministic (numeric id order, evenly spaced picks). Writes:
-  packet_ids.json                      (committed: ids, groups, names)
-  scripts/products/_rubric_packet/packet_products.json   (gitignored: enriched records)
+Pass-1 groups were chosen once from the 2026-09-13 scored breakdowns (criteria
+in git history at commit 7e810cae); their ids are frozen in packet_ids.json.
+Pass-2 dose groups are verification-invariant (no testing data, no reputation,
+no GMP points) so dose and verification changes cannot contaminate each other's
+groups; verification groups exclude generic RDA-window products for the same reason.
 """
 from __future__ import annotations
 
+import argparse
 import glob
 import json
+from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 PRODUCTS = ROOT / "scripts/products"
 HERE = Path(__file__).resolve().parent
-OUT_IDS = HERE / "packet_ids.json"
-OUT_PRODUCTS = PRODUCTS / "_rubric_packet/packet_products.json"
+ID_FILES = {"pass1": HERE / "packet_ids.json", "pass2": HERE / "packet_ids_pass2.json"}
+DIETARY_DOMINANT = {"potassium"}
+
+
+def products_path(packet: str) -> Path:
+    name = "packet_products.json" if packet == "pass1" else f"packet_{packet}_products.json"
+    return PRODUCTS / "_rubric_packet" / name
+
+
+def _enriched(wanted=None):
+    for f in sorted(glob.glob(str(PRODUCTS / "output_*_enriched/enriched/*.json"))):
+        for p in json.load(open(f)):
+            pid = str(p.get("dsld_id") or p.get("id"))
+            if wanted is None or pid in wanted:
+                yield pid, p
 
 
 def _pick(rows, n):
-    rows = sorted(rows, key=lambda r: int(r["id"]) if r["id"].isdigit() else 0)
+    rows = sorted(rows, key=lambda r: (not r["id"].isdigit(), int(r["id"]) if r["id"].isdigit() else 0, r["id"]))
     if len(rows) <= n:
         return rows
     step = len(rows) / n
     return [rows[int(i * step)] for i in range(n)]
 
 
-def main() -> None:
-    scored = []
+def _window_rows(product):
+    rows = []
+    for row in ((product.get("rda_ul_data") or {}).get("adequacy_results") or []):
+        if not isinstance(row, dict) or row.get("pct_rda") is None:
+            continue
+        if str(row.get("canonical_id") or row.get("nutrient") or "").lower() in DIETARY_DOMINANT:
+            continue
+        rows.append(row)
+    return rows
+
+
+def create_pass2() -> None:
+    if ID_FILES["pass2"].exists():
+        raise SystemExit("REFUSED: packet_ids_pass2.json exists; its ids are frozen")
+    scored = {}
     for f in sorted(glob.glob(str(PRODUCTS / "output_*_scored/scored/*.json"))):
         for r in json.load(open(f)):
             if r.get("_v4_quality_status") != "scored":
                 continue
-            dims = (r.get("_v4_module_breakdown") or {}).get("dimensions") or {}
-            form = dims.get("formulation") or {}
-            scored.append({
-                "id": str(r["dsld_id"]), "name": r.get("product_name"), "module": r.get("_v4_module"),
-                "comp": {**(form.get("components") or {}), **((dims.get("dose") or {}).get("components") or {})},
-                "pen": form.get("penalties") or {}, "fmeta": form.get("metadata") or {},
-                "cap": (r.get("_v4_quality_score_cap") or {}).get("id"),
-            })
+            bd = r.get("_v4_module_breakdown") or {}
+            scored[str(r["dsld_id"])] = {
+                "module": r.get("_v4_module"),
+                "window": "supplemental_window_proxy" in (((bd.get("dimensions") or {}).get("dose") or {}).get("components") or {}),
+                "verif": (r.get("quality_pillars_v4") or {}).get("verification", {}).get("components") or {},
+            }
+    groups = defaultdict(list)
+    for pid, p in _enriched():
+        s = scored.get(pid)
+        if s is None:
+            continue
+        v = s["verif"]
+        row = {"id": pid, "module": s["module"], "name": p.get("product_name")}
+        plain_unknown = bool(v.get("fail_open_neutral")) and not v.get("soft") and not v.get("gmp")
+        window = _window_rows(p)
+        if s["module"] == "generic" and s["window"] and plain_unknown:
+            if len(window) >= 3:
+                groups["dose_multi_nutrient"].append(row)
+            elif len(window) == 1:
+                w = window[0]
+                pct_rda, pct_ul = float(w["pct_rda"]), w.get("pct_ul")
+                pct_ul = None if pct_ul is None else float(pct_ul)
+                rda, ul = w.get("rda_ai"), w.get("ul")
+                if pct_ul is not None and pct_ul > 100:
+                    groups["control_dose_over_ul"].append(row)
+                elif rda and ul and float(ul) < float(rda):
+                    groups["dose_ul_below_rda"].append(row)
+                elif pct_rda < 20:
+                    groups["dose_below_20pct"].append(row)
+                elif pct_rda < 100:
+                    groups["dose_20_to_100pct"].append(row)
+                else:
+                    groups["control_dose_at_or_above_100pct"].append(row)
+            continue
+        if s["module"] == "generic" and s["window"]:
+            continue
+        gmp = ((p.get("certification_data") or {}).get("gmp") or {})
+        claim_only = bool(gmp.get("claimed")) and not any(gmp.get(k) for k in ("nsf_gmp", "gmp_certified_or_compliant", "fda_registered"))
+        cert, coa = v.get("cert") or 0, v.get("coa_batch") or 0
+        if coa and not cert:
+            groups["verif_batch_coa"].append(row)
+        elif cert >= 5:
+            groups["verif_registry_cert"].append(row)
+        elif cert == 2:
+            groups["verif_label_asserted_cert"].append(row)
+        elif v.get("brand_only_cert"):
+            groups["verif_brand_facility_cert"].append(row)
+        elif v.get("fail_open_neutral") and v.get("gmp") and claim_only:
+            groups["verif_gmp_claim_only"].append(row)
+        elif v.get("fail_open_neutral") and v.get("soft") and not v.get("gmp"):
+            groups["verif_unknown_with_reputation"].append(row)
+        elif plain_unknown:
+            groups["control_verif_unknown_plain"].append(row)
+    sizes = {"dose_multi_nutrient": 6, "dose_ul_below_rda": 6, "dose_below_20pct": 6, "dose_20_to_100pct": 8,
+             "control_dose_over_ul": 5, "control_dose_at_or_above_100pct": 6, "verif_batch_coa": 6,
+             "verif_registry_cert": 6, "verif_label_asserted_cert": 6, "verif_brand_facility_cert": 6,
+             "verif_gmp_claim_only": 6, "verif_unknown_with_reputation": 6, "control_verif_unknown_plain": 6}
+    packet = [{**r, "group": g} for g, n in sizes.items() for r in _pick(groups[g], n)]
+    ID_FILES["pass2"].write_text(json.dumps({"_metadata": {
+        "purpose": "Pass-2 packet (generic dose + verification). Groups prefixed control_ must not move.",
+        "selected_on": "2026-09-14",
+        "selected_from": "enriched facts + module and verification components of the 2026-09-13 scored outputs",
+        "available_per_group": {g: len(groups[g]) for g in sizes}}, "products": packet}, indent=2) + "\n")
 
-    def mod(m):
-        return [r for r in scored if r["module"] == m]
 
-    gen = mod("generic")
-    marketing = lambda r: any(r["comp"].get(k) for k in ("A5a_organic", "A5d_non_gmo", "A5e_natural_source"))
-    probio = mod("probiotic")
-    ident = lambda r: (r["fmeta"].get("identified_strain_count") or 0, r["fmeta"].get("total_strain_count") or 0)
-    groups = {
-        "prenatal_gummy": _pick([r for r in mod("multi_or_prenatal") if r["pen"].get("gummy_formulation_limit")], 12),
-        "prenatal_control": _pick([r for r in mod("multi_or_prenatal") if not r["pen"].get("gummy_formulation_limit")], 8),
-        "fiber_gummy": _pick([r for r in mod("fiber_digestive") if r["pen"].get("fiber_gummy_delivery_penalty")], 10),
-        "fiber_control": _pick([r for r in mod("fiber_digestive") if not r["pen"].get("fiber_gummy_delivery_penalty")
-                                and r["comp"].get("fiber_practicality") == 2.0 and not marketing(r)], 6),
-        "melatonin_gummy": _pick([r for r in gen if r["pen"].get("B1_sleep_melatonin_gummy")], 8),
-        "immune_gummy": _pick([r for r in gen if r["pen"].get("B1_immune_gummy_or_syrup")], 8),
-        "omega_ratio_in_range": _pick([r for r in mod("omega") if r["comp"].get("ratio_sanity")], 10),
-        "omega_ratio_none": _pick([r for r in mod("omega") if not r["comp"].get("ratio_sanity")], 6),
-        "probiotic_single_exact": _pick([r for r in probio if ident(r) == (1, 1)], 5),
-        "probiotic_multi_all_exact": _pick([r for r in probio if ident(r)[0] == ident(r)[1] >= 2], 5),
-        "probiotic_partial_exact": _pick([r for r in probio if 0 < ident(r)[0] < ident(r)[1]], 5),
-        "probiotic_no_exact": _pick([r for r in probio if ident(r)[0] == 0 and ident(r)[1] > 0], 5),
-        "probiotic_studied_formula": [r for r in probio if "native_potency_disclosed" in r["comp"]],
-        "generic_organic": _pick([r for r in gen if r["comp"].get("A5a_organic")], 4),
-        "generic_non_gmo": _pick([r for r in gen if r["comp"].get("A5d_non_gmo")], 3),
-        "generic_natural": _pick([r for r in gen if r["comp"].get("A5e_natural_source")
-                                  and not r["comp"].get("A5a_organic") and not r["comp"].get("A5d_non_gmo")], 3),
-        "generic_capped": [r for r in gen if r["cap"] in ("generic_astaxanthin_single", "generic_coq10_single")],
-        "generic_control": _pick([r for r in gen if not marketing(r) and not r["cap"]
-                                  and not r["pen"].get("B1_sleep_melatonin_gummy")
-                                  and not r["pen"].get("B1_immune_gummy_or_syrup")], 6),
-        "sports_control": _pick([r for r in mod("sports") if not marketing(r)], 6),
-        "b_complex_control": _pick([r for r in mod("b_complex") if not marketing(r)], 5),
-    }
-    seen, packet = set(), []
-    for group, rows in groups.items():
-        for r in rows:
-            if r["id"] in seen:
-                continue
-            seen.add(r["id"])
-            packet.append({"id": r["id"], "group": group, "module": r["module"], "name": r["name"]})
-
-    wanted = {p["id"] for p in packet}
-    records = {}
-    for f in sorted(glob.glob(str(PRODUCTS / "output_*_enriched/enriched/*.json"))):
-        for p in json.load(open(f)):
-            pid = str(p.get("dsld_id") or p.get("id"))
-            if pid in wanted:
-                records[pid] = p
+def extract(packet: str) -> None:
+    ids = json.loads(ID_FILES[packet].read_text())["products"]
+    wanted = {p["id"] for p in ids}
+    records = dict(_enriched(wanted))
     missing = sorted(wanted - set(records))
-    packet = [p for p in packet if p["id"] in records]
-    OUT_IDS.write_text(json.dumps({"_metadata": {
-        "purpose": "Stratified rubric calibration packet; controls must not move.",
-        "selected_from": "scripts/products/output_*_scored (2026-09-13 scored breakdowns)",
-        "missing_from_enriched": missing}, "products": packet}, indent=2) + "\n")
-    OUT_PRODUCTS.parent.mkdir(parents=True, exist_ok=True)
-    OUT_PRODUCTS.write_text(json.dumps([records[p["id"]] for p in packet]))
-    counts = {}
-    for p in packet:
-        counts[p["group"]] = counts.get(p["group"], 0) + 1
-    print(len(packet), "products;", "missing", len(missing), counts)
+    if missing:
+        raise SystemExit(f"REFUSED: ids missing from enriched outputs: {missing}")
+    out = products_path(packet)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps([records[p["id"]] for p in ids]))
+    counts = defaultdict(int)
+    for p in ids:
+        counts[p["group"]] += 1
+    print(f"{packet}: {len(ids)} products -> {out}", dict(counts))
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--packet", choices=sorted(ID_FILES), default="pass1")
+    parser.add_argument("--create-pass2", action="store_true")
+    args = parser.parse_args()
+    if args.create_pass2:
+        create_pass2()
+        extract("pass2")
+    else:
+        extract(args.packet)
 
 
 if __name__ == "__main__":

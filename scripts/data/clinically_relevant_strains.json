@@ -15148,13 +15148,14 @@
         "status": "designation_verified",
         "source_pmids": [
           "33725854",
-          "29946225"
+          "29946225",
+          "36316826"
         ],
         "deposit_ids": [],
         "supplier": null,
         "verified_on": "2026-09-14",
         "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
-        "note": "Deposit not recorded: no source read here ties LPC00 to a deposit number. Label (Jarrow) prints it with LA-02, LR-04, BS-01, LP-01 and BR-03; LA 02, LR 04 and BS 01 are given with LPC 00 in the 8-strain arm of PMID 36316826 (PMC9622669)."
+        "note": "Deposit not recorded: no source read here ties LPC00 to a deposit number. Label (Jarrow) prints it with LA-02, LR-04, BS-01, LP-01 and BR-03; LA 02, LR 04 and BS 01 are given with LPC 00 in the 8-strain arm of PMID 36316826 (PMC9622669). The cited abstracts do not name LPC00; the open-access full texts do: PMC7969262 methods ('Lactobacillus paracasei LPC 00 ID 1076'), PMC6006752 ('Lactobacillus paracasei LPC00'), PMC9622669 methods ('LPC 00 ID 1076')."
       },
       "cfu_thresholds": {
         "indication_primary": null,

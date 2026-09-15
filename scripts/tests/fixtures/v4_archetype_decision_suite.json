@@ -1002,7 +1002,7 @@
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 21.0,
-          "dose": 18.0,
+          "dose": 20.0,
           "evidence": 20.0
         },
         "pillars": {
@@ -1058,7 +1058,7 @@
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 21.0,
-          "dose": 18.0,
+          "dose": 20.0,
           "evidence": 20.0
         },
         "pillars": {

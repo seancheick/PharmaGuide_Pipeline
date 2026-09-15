@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.2.0-rubric-proxy-removal",
+    "version": "1.2.1-audit-fixes",
     "schema_version": "1.0.0",
     "last_updated": "2026-09-14",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. 1.2.0 removes rubric proxies: blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, and the astaxanthin/CoQ10 public caps, so the six pillars alone explain the public number. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
@@ -46,7 +46,7 @@
     "default_reference": 20.0
   },
   "dose_subscale": {
-    "_doc": "PR5: category-aware purpose-fit dose. References come from the reviewed dose contract, never the highest score in the current catalog. Generic singles top out at 22 in the supplemental/clinical window; botanical profiles top out at 21; the immune adapter's component sum caps at 22. Sports pre-workout retains the sports engine's 25-point reference because products classified by context can still earn its focused-single completion path. An overdosed product already gets low raw dose and a sub-clinical one gets proportional credit; normalization never repairs excess or underdosing. 1.2.0 (2026-09-14): omega raw dose tops out at 20 after the +5 EPA:DHA ratio bonus was removed; its reference moves 23 -> 18, keeping the same 2-point appropriate-dose slack below the raw ceiling.",
+    "_doc": "PR5: category-aware purpose-fit dose. References come from the reviewed dose contract, never the highest score in the current catalog. Generic singles top out at 22 in the supplemental/clinical window; botanical profiles top out at 21; the immune adapter's component sum caps at 22. Sports pre-workout retains the sports engine's 25-point reference because products classified by context can still earn its focused-single completion path. An overdosed product already gets low raw dose and a sub-clinical one gets proportional credit; normalization never repairs excess or underdosing. 1.2.0 (2026-09-14): omega raw dose tops out at 20 after the +5 EPA:DHA ratio bonus was removed; its reference is 20, the raw ceiling: the rubric gives full band credit at 2 g/day EPA+DHA, and the former 23 only existed to absorb ratio completion credit (1.2.1, reviewed on all 719 omega products).",
     "archetype_reference": {
       "sports_single": 25.0,
       "sports_pre_workout": 25.0,
@@ -57,7 +57,7 @@
       "immune_support": 22.0,
       "fiber_digestive": 25.0,
       "b_complex": 25.0,
-      "omega": 18.0,
+      "omega": 20.0,
       "probiotic": 22.0,
       "prenatal_multi": 23.0
     },
@@ -87,7 +87,7 @@
     "b1_harmful_additive_cap": 15.0
   },
   "formulation_magnitudes": {
-    "_doc": "A1-A6 + B0 formulation-dimension point values, caps, and tier thresholds — hoisted from generic_formulation.py's hardcoded constants 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score diff on a real-product sample + targeted formulation tests). generic_formulation.py reads these at load time; test_v4_formulation_magnitudes_config pins each to its original value (drift guard). Structural constants (canonical-ID sets, enzyme name list, supp-type enums, the skip-first flag) stay in code — data/logic, not tunable magnitudes. B1 additive points are in the sibling formulation_penalties block. 1.2.0 (2026-09-14): a5a_organic, a5d_non_gmo_project and a5e_natural are 0.0 -- organic, Non-GMO and natural-source are consumer attributes, not evidence of clinical formulation quality; detection and metadata stay so they can be shown as attributes.",
+    "_doc": "A1-A6 + B0 formulation-dimension point values, caps, and tier thresholds — hoisted from generic_formulation.py's hardcoded constants 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score diff on a real-product sample + targeted formulation tests). generic_formulation.py reads these at load time; test_v4_formulation_magnitudes_config pins each to its original value (drift guard). Structural constants (canonical-ID sets, enzyme name list, supp-type enums, the skip-first flag) stay in code — data/logic, not tunable magnitudes. B1 additive points are in the sibling formulation_penalties block. 1.2.0 (2026-09-14): a5a_organic, a5d_non_gmo_project and a5e_natural are 0.0 -- organic, Non-GMO and natural-source are consumer attributes, not evidence of clinical formulation quality; detection and metadata stay so they can be shown as attributes. 1.2.1: a5_excellence_cap 4.0 -> 2.0, the most standardization (1) + synergy (1) can reach, so the cap no longer implies unreachable points.",
     "dimension_cap": 30.0,
     "presence_floor": 2.0,
     "a1_bio_score_cap": 15.0,
@@ -97,7 +97,7 @@
     "a3_delivery_cap": 3.0,
     "a3_delivery_tier_points": { "1": 3.0, "2": 2.0, "3": 1.0 },
     "a4_absorption_cap": 3.0,
-    "a5_excellence_cap": 4.0,
+    "a5_excellence_cap": 2.0,
     "a5a_organic": 0.0,
     "a5b_standardized_full": 1.0,
     "a5b_standardized_marker_only": 0.5,

@@ -1654,8 +1654,9 @@ def test_dimension_score_assembles_8_components_minus_penalty() -> None:
 
 def test_dimension_score_stays_within_max_30() -> None:
     """Since quality_score 1.2.0 organic, Non-GMO and natural source add 0, so
-    the richest multi-active formula reaches 29 (A1 15 + A2 4 + A3 3 + A4 3 +
-    A5 standardized 1 + synergy 1 + enzymes 2) and the 30-point cap holds."""
+    outside the immune-support adapter (which can add up to 12) the richest
+    multi-active formula reaches 29 (A1 15 + A2 4 + A3 3 + A4 3 + A5
+    standardized 1 + synergy 1 + enzymes 2); the 30-point cap still holds."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(

@@ -1626,7 +1626,8 @@
       "supplier": null,
       "pmids": [
         "33725854",
-        "29946225"
+        "29946225",
+        "36316826"
       ],
       "expect_labels": [
         "L. paracasei LPC-00"
@@ -1644,6 +1645,12 @@
           "pmcid": "PMC6006752",
           "location": "full_text_review",
           "quote": "Lactobacillus paracasei LPC00"
+        },
+        {
+          "pmid": "36316826",
+          "pmcid": "PMC9622669",
+          "location": "full_text_methods",
+          "quote": "LPC 00 ID 1076 (1 billion CFU)"
         }
       ]
     }

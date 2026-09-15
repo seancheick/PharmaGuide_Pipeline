@@ -1,0 +1,498 @@
+{
+  "_metadata": {
+    "purpose": "Pass-2 packet (generic dose + verification). Groups prefixed control_ must not move.",
+    "selected_on": "2026-09-14",
+    "selected_from": "enriched facts + module and verification components of the 2026-09-13 scored outputs",
+    "available_per_group": {
+      "dose_multi_nutrient": 34,
+      "dose_ul_below_rda": 37,
+      "dose_below_20pct": 37,
+      "dose_20_to_100pct": 133,
+      "control_dose_over_ul": 103,
+      "control_dose_at_or_above_100pct": 551,
+      "verif_batch_coa": 133,
+      "verif_registry_cert": 502,
+      "verif_label_asserted_cert": 232,
+      "verif_brand_facility_cert": 465,
+      "verif_gmp_claim_only": 976,
+      "verif_unknown_with_reputation": 1302,
+      "control_verif_unknown_plain": 2906
+    }
+  },
+  "products": [
+    {
+      "id": "12010",
+      "module": "generic",
+      "name": "Natural Calcium, Magnesium & Zinc USP",
+      "group": "dose_multi_nutrient"
+    },
+    {
+      "id": "19832",
+      "module": "generic",
+      "name": "Children's Vitamin C Gummy Vitamins",
+      "group": "dose_multi_nutrient"
+    },
+    {
+      "id": "205972",
+      "module": "generic",
+      "name": "1,000 mg Vitamin C Chewables Orange Blast",
+      "group": "dose_multi_nutrient"
+    },
+    {
+      "id": "239887",
+      "module": "generic",
+      "name": "Hair, Skin & Nails Natural Strawberry Flavor",
+      "group": "dose_multi_nutrient"
+    },
+    {
+      "id": "269593",
+      "module": "generic",
+      "name": "NAC Detox Regulators",
+      "group": "dose_multi_nutrient"
+    },
+    {
+      "id": "277405",
+      "module": "generic",
+      "name": "Kids' Calcium + Vitamin D3 Gummies",
+      "group": "dose_multi_nutrient"
+    },
+    {
+      "id": "19971",
+      "module": "generic",
+      "name": "Magnesium 250 mg",
+      "group": "dose_ul_below_rda"
+    },
+    {
+      "id": "270235",
+      "module": "generic",
+      "name": "High Absorption Magnesium 105 mg",
+      "group": "dose_ul_below_rda"
+    },
+    {
+      "id": "310741",
+      "module": "generic",
+      "name": "Magnesium D-Aspartate",
+      "group": "dose_ul_below_rda"
+    },
+    {
+      "id": "310747",
+      "module": "generic",
+      "name": "Magnesium Gluconate",
+      "group": "dose_ul_below_rda"
+    },
+    {
+      "id": "310798",
+      "module": "generic",
+      "name": "Magnesium Orotate",
+      "group": "dose_ul_below_rda"
+    },
+    {
+      "id": "329633",
+      "module": "generic",
+      "name": "Magnesium BHB Powder ",
+      "group": "dose_ul_below_rda"
+    },
+    {
+      "id": "63308",
+      "module": "generic",
+      "name": "Best Spirulina",
+      "group": "dose_below_20pct"
+    },
+    {
+      "id": "253515",
+      "module": "generic",
+      "name": "Choline L-Bitartrate 600 mg",
+      "group": "dose_below_20pct"
+    },
+    {
+      "id": "302679",
+      "module": "generic",
+      "name": "High Potency Serrapeptase 120,000 SPU",
+      "group": "dose_below_20pct"
+    },
+    {
+      "id": "311263",
+      "module": "generic",
+      "name": "Calcium Gluconate",
+      "group": "dose_below_20pct"
+    },
+    {
+      "id": "311273",
+      "module": "generic",
+      "name": "Calcium Orotate",
+      "group": "dose_below_20pct"
+    },
+    {
+      "id": "330124",
+      "module": "generic",
+      "name": "N-Acetyl L-Glutamine",
+      "group": "dose_below_20pct"
+    },
+    {
+      "id": "25514",
+      "module": "generic",
+      "name": "Natural Vitamin K2 45 mcg",
+      "group": "dose_20_to_100pct"
+    },
+    {
+      "id": "252842",
+      "module": "generic",
+      "name": "Sodium Citrate",
+      "group": "dose_20_to_100pct"
+    },
+    {
+      "id": "253704",
+      "module": "generic",
+      "name": "Betaine Anhydrous (TMG)",
+      "group": "dose_20_to_100pct"
+    },
+    {
+      "id": "294420",
+      "module": "generic",
+      "name": "Inositol",
+      "group": "dose_20_to_100pct"
+    },
+    {
+      "id": "311247",
+      "module": "generic",
+      "name": "Calcium BHB",
+      "group": "dose_20_to_100pct"
+    },
+    {
+      "id": "311581",
+      "module": "generic",
+      "name": "Sodium D-Aspartate",
+      "group": "dose_20_to_100pct"
+    },
+    {
+      "id": "312692",
+      "module": "generic",
+      "name": "Choline L-Bitartrate",
+      "group": "dose_20_to_100pct"
+    },
+    {
+      "id": "330581",
+      "module": "generic",
+      "name": "Choline L-Bitartrate Powder 600 mg",
+      "group": "dose_20_to_100pct"
+    },
+    {
+      "id": "20196",
+      "module": "generic",
+      "name": "Zinc 50 mg",
+      "group": "control_dose_over_ul"
+    },
+    {
+      "id": "253929",
+      "module": "generic",
+      "name": "Manganese Gluconate",
+      "group": "control_dose_over_ul"
+    },
+    {
+      "id": "310730",
+      "module": "generic",
+      "name": "Magnesium Carbonate",
+      "group": "control_dose_over_ul"
+    },
+    {
+      "id": "312499",
+      "module": "generic",
+      "name": "Flush-Free Niacin (Inositol Nicotinate)",
+      "group": "control_dose_over_ul"
+    },
+    {
+      "id": "329722",
+      "module": "generic",
+      "name": "Magnesium Oxide 500 mg Capsules",
+      "group": "control_dose_over_ul"
+    },
+    {
+      "id": "12016",
+      "module": "generic",
+      "name": "D3 2000 IU",
+      "group": "control_dose_at_or_above_100pct"
+    },
+    {
+      "id": "253263",
+      "module": "generic",
+      "name": "Gamma Aminobutyric Acid",
+      "group": "control_dose_at_or_above_100pct"
+    },
+    {
+      "id": "277382",
+      "module": "generic",
+      "name": "Co Q-10 200 mg",
+      "group": "control_dose_at_or_above_100pct"
+    },
+    {
+      "id": "311572",
+      "module": "generic",
+      "name": "Sodium BHB",
+      "group": "control_dose_at_or_above_100pct"
+    },
+    {
+      "id": "312503",
+      "module": "generic",
+      "name": "Folic Acid",
+      "group": "control_dose_at_or_above_100pct"
+    },
+    {
+      "id": "330376",
+      "module": "generic",
+      "name": "Biotin Powder 1 mg",
+      "group": "control_dose_at_or_above_100pct"
+    },
+    {
+      "id": "12800",
+      "module": "sports",
+      "name": "Ravage Orange",
+      "group": "verif_batch_coa"
+    },
+    {
+      "id": "26993",
+      "module": "multi_or_prenatal",
+      "name": "Hair, Skin & Nails Formula",
+      "group": "verif_batch_coa"
+    },
+    {
+      "id": "71900",
+      "module": "omega",
+      "name": "ProEFA-3-6-9 Lemon",
+      "group": "verif_batch_coa"
+    },
+    {
+      "id": "214322",
+      "module": "omega",
+      "name": "Arctic Cod Liver Oil Lemon",
+      "group": "verif_batch_coa"
+    },
+    {
+      "id": "223301",
+      "module": "omega",
+      "name": "Arctic Cod Liver Oil",
+      "group": "verif_batch_coa"
+    },
+    {
+      "id": "240264",
+      "module": "omega",
+      "name": "ProOmega-D",
+      "group": "verif_batch_coa"
+    },
+    {
+      "id": "870",
+      "module": "generic",
+      "name": "Cinnamon Plus Chromium",
+      "group": "verif_registry_cert"
+    },
+    {
+      "id": "219937",
+      "module": "sports",
+      "name": "Wheybolic Banana Milkshake",
+      "group": "verif_registry_cert"
+    },
+    {
+      "id": "250864",
+      "module": "probiotic",
+      "name": "Digestive Daily Probiotic",
+      "group": "verif_registry_cert"
+    },
+    {
+      "id": "297608",
+      "module": "omega",
+      "name": "Prenatal DHA 400 mg",
+      "group": "verif_registry_cert"
+    },
+    {
+      "id": "312547",
+      "module": "generic",
+      "name": "Ginseng Root Extract",
+      "group": "verif_registry_cert"
+    },
+    {
+      "id": "326693",
+      "module": "generic",
+      "name": "Collagen Hyaluronic Acid 20 g Unflavored",
+      "group": "verif_registry_cert"
+    },
+    {
+      "id": "19021",
+      "module": "multi_or_prenatal",
+      "name": "Calcium Citrate with 500 mg of Calcium",
+      "group": "verif_label_asserted_cert"
+    },
+    {
+      "id": "66957",
+      "module": "sports",
+      "name": "Amino Energy Advanced Fruit Punch",
+      "group": "verif_label_asserted_cert"
+    },
+    {
+      "id": "220097",
+      "module": "sports",
+      "name": "100% Whey Natural Strawberry",
+      "group": "verif_label_asserted_cert"
+    },
+    {
+      "id": "241369",
+      "module": "multi_or_prenatal",
+      "name": "Raw Organic Fit Original",
+      "group": "verif_label_asserted_cert"
+    },
+    {
+      "id": "291237",
+      "module": "generic",
+      "name": "Metabolism Gummy Rings Snappy Apple",
+      "group": "verif_label_asserted_cert"
+    },
+    {
+      "id": "316255",
+      "module": "sports",
+      "name": "100% Whey Creamy Strawberry",
+      "group": "verif_label_asserted_cert"
+    },
+    {
+      "id": "2505",
+      "module": "fiber_digestive",
+      "name": "Enhanced Super Digestive Enzymes With Probiotics",
+      "group": "verif_brand_facility_cert"
+    },
+    {
+      "id": "62372",
+      "module": "multi_or_prenatal",
+      "name": "One-Per-Day Tablets",
+      "group": "verif_brand_facility_cert"
+    },
+    {
+      "id": "210815",
+      "module": "generic",
+      "name": "Endothelial Defense Pomegranate Complete",
+      "group": "verif_brand_facility_cert"
+    },
+    {
+      "id": "232237",
+      "module": "generic",
+      "name": "Immune Modulator with Tinofend",
+      "group": "verif_brand_facility_cert"
+    },
+    {
+      "id": "250929",
+      "module": "probiotic",
+      "name": "Purely Probiotics Packets No Flavor Added",
+      "group": "verif_brand_facility_cert"
+    },
+    {
+      "id": "328399",
+      "module": "generic",
+      "name": "Cognitex Elite",
+      "group": "verif_brand_facility_cert"
+    },
+    {
+      "id": "3741",
+      "module": "generic",
+      "name": "Garlic Oil 1000 mg",
+      "group": "verif_gmp_claim_only"
+    },
+    {
+      "id": "64494",
+      "module": "multi_or_prenatal",
+      "name": "Life Extension Mix Tablets",
+      "group": "verif_gmp_claim_only"
+    },
+    {
+      "id": "200572",
+      "module": "b_complex",
+      "name": "B-Complex with Vitamin C Stress Formula",
+      "group": "verif_gmp_claim_only"
+    },
+    {
+      "id": "218969",
+      "module": "generic",
+      "name": "Milk Thistle",
+      "group": "verif_gmp_claim_only"
+    },
+    {
+      "id": "253255",
+      "module": "generic",
+      "name": "Turmeric 1000 mg",
+      "group": "verif_gmp_claim_only"
+    },
+    {
+      "id": "293887",
+      "module": "sports",
+      "name": "Amino-NR",
+      "group": "verif_gmp_claim_only"
+    },
+    {
+      "id": "2931",
+      "module": "multi_or_prenatal",
+      "name": "1,000 mg Vitamin C Lemon Lime",
+      "group": "verif_unknown_with_reputation"
+    },
+    {
+      "id": "82352",
+      "module": "omega",
+      "name": "Fish Oil 1200 mg",
+      "group": "verif_unknown_with_reputation"
+    },
+    {
+      "id": "233686",
+      "module": "b_complex",
+      "name": "B-Complex",
+      "group": "verif_unknown_with_reputation"
+    },
+    {
+      "id": "256987",
+      "module": "multi_or_prenatal",
+      "name": "Centrum Mental Focus",
+      "group": "verif_unknown_with_reputation"
+    },
+    {
+      "id": "270626",
+      "module": "multi_or_prenatal",
+      "name": "VitaCraves Teen Gummies",
+      "group": "verif_unknown_with_reputation"
+    },
+    {
+      "id": "291407",
+      "module": "multi_or_prenatal",
+      "name": "Ultra Strength Women's Multi + Omega-3",
+      "group": "verif_unknown_with_reputation"
+    },
+    {
+      "id": "739",
+      "module": "multi_or_prenatal",
+      "name": "1,000 mg Vitamin C Cranberry Pomegranate",
+      "group": "control_verif_unknown_plain"
+    },
+    {
+      "id": "252415",
+      "module": "generic",
+      "name": "Garcinia Cambogia (60% HCA) 500 mg",
+      "group": "control_verif_unknown_plain"
+    },
+    {
+      "id": "255057",
+      "module": "generic",
+      "name": "Kelp Extract",
+      "group": "control_verif_unknown_plain"
+    },
+    {
+      "id": "311134",
+      "module": "generic",
+      "name": "Oat Straw Extract (Avena Sativa)",
+      "group": "control_verif_unknown_plain"
+    },
+    {
+      "id": "312583",
+      "module": "generic",
+      "name": "Green Coffee Bean Extract",
+      "group": "control_verif_unknown_plain"
+    },
+    {
+      "id": "330300",
+      "module": "generic",
+      "name": "Pineapple Powder 500 mg",
+      "group": "control_verif_unknown_plain"
+    }
+  ]
+}
