@@ -199,12 +199,121 @@ ancestor checks measured approximately 79ms for 30 synthetic rows, 216ms for
 60, and 87ms for the actual 251169 summary. Any future optimization must reuse
 this source owner and preserve its adversarial cases, not cache stale results.
 
-**Still not complete:** vitamin/prenatal form ownership, focused/broad fairness,
+**Still not complete:** the folate/B12 IQM source audit (the vitamin/prenatal
+form-ownership code batch is recorded below), focused/broad fairness,
 generic dose/evidence hierarchy, indication-aware omega, ingredient-specific
 fiber/sports, review-coverage explanations, and the complete five-variant
 canary matrix. The next vitamin batch is already specified in the same plan.
 Do not run the operational commands below until the combined calibration is
 stable and the owner is ready to regenerate.
+
+## Vitamin/prenatal form ownership — scoring tree `b5e7499b` (Claude)
+
+Config `1.7.0-vitamin-form-ownership`, fingerprint `32da1b7296417cad`.
+IQM `bio_score` is now the only form-quality signal for multi/prenatal and
+B-complex scoring. The batch made no IQM numeric edits, added no replacement
+form table and changed no schema.
+
+| Owner | Removed duplicate ranking | Retained | Cap/reference |
+|---|---|---|---|
+| Multi/prenatal Formulation | premium-form count (4), key-form name credit (5) | IQM panel form quality 12 + disclosure 2 | reference 21 → 14, raw cap 25 → 14 |
+| B-complex Formulation | preferred-form name table (7) | panel 10 + IQM form 8 + focus 3 + disclosure 2 | 30 → 23 |
+| Multi/prenatal Dose | `0.75 + bio_score/60` coverage multiplier | amounts, DFE/units, critical/targeted rules, DHA/choline, UL/B7 | 23 unchanged |
+
+Every changed or removed component was covered by a regression that failed
+before the change for the intended reason (17 red), then passed. Canaries:
+prenatal IQM 12 gives raw 11.6 / public 16.6, and IQM 15 gives 14 / 20.
+B-complex IQM 12 gives 21.4 / 18.6, and IQM 15 gives 23 / 20. At 100% RDA below
+the UL, coverage credit is 1.0 for ratings 0, 6, 12, 15 and missing. Underdosing
+and UL violations keep their responses. Form wording and panel size add
+nothing at equal IQM.
+
+Isolated variants run through `build_scored_artifact`:
+
+- Weak verification moves only Verification.
+- Underdosing moves Dose without touching Formulation, Transparency,
+  Verification or Safety.
+- Unnecessary complexity never adds Formulation. The focused B-complex rule
+  still lowers it.
+- Incomplete evidence review remains a strict xfail (known Evidence defect above).
+
+An independent review found no scoring defects. Its two low test findings were
+fixed before the full suite: a cap-saturated panel-size comparison and a stale
+test name. **Full fast suite on frozen code: 15,519 passed, 66 skipped,
+2 xfailed, zero failures** (374 s; tree unchanged during the run).
+
+Frozen comparisons (read-only, no regeneration). Both checkouts were clean.
+IDs, input-file hashes and routes matched, and the attribution script reported
+zero problems:
+
+- **Multi/prenatal, all 2,073 stored:** statuses unchanged (1,927 scored, 145
+  not scored, 1 safety-suppressed). Of scored products, 773 go up, 1,120 down
+  and 34 stay unchanged. Mean −0.78, median −0.6, range −7.6 to +5.5.
+  Formulation moved for 1,879 (mean −1.92); Dose rose for all 1,927 (+0.2 to
+  +2.1). Evidence, Transparency, Verification and Safety did not move.
+  Retained components and all formulation/dose penalties are identical, and no
+  nutrient's coverage decreased.
+- **B-complex, all 146 stored:** 133 up, 12 down, 1 unchanged; mean +1.92,
+  range −1.5 to +3.7; Formulation only.
+- **Packets:** 23 of 111 and 12 of 79 moved. Every mover routes to multi/prenatal
+  or B-complex and changes only Formulation/Dose. One tier changed: 4123
+  B-complex, Needs improvement → Good.
+- **Shipped-tier changes:** 301 of 1,927 multis (107 Good → Needs improvement,
+  91 Very good → Good, 44 Needs improvement → Good) and 48 of 146 B-complex
+  products (20 Good → Very good, 18 Needs improvement → Good, 8 Very good →
+  Excellent, 1 Excellent → Exceptional).
+
+Unexpected movements and their source-level causes:
+
+- **Largest multi drops (−7.6):** meal shakes such as 802 carry unchanged
+  formulation penalties of 6.5–9.5 (harmful additives 7 + sugar 2). Raw went from
+  7.2 + 4 + 5 + 2 − 9 = 9.2 to 7.2 + 2 − 9 = 0.2.
+- **Presence floor:** the multi/prenatal and generic floor (`pre_floor_score <= 0`)
+  leaves products with a small positive remainder below floored ones.
+  Scored multis in that band: 44 → 120. Floored: 45 → 178. Not changed here;
+  owner decision.
+- **Dose:** every scored multi's Dose pillar rises because nearly every rated
+  form is below 15. Critical anchors without a threshold (for example vitamin A,
+  vitamin C and zinc in core multis) inherit the unweighted coverage by the
+  existing rule.
+- **B-complex Formulation:** the reference drop lifts products without name
+  credit. 209616 (average IQM 10) rises 93.6 → 96.6, Exceptional, because 15/23
+  of Formulation is now structure. The failure fixture moves Poor → Needs
+  improvement for the same reason.
+- **266767 Prenatal Multi + DHA** (average IQM 9.69) loses 7.5 name/count
+  points and moves 89.5 → 87.7, Excellent → Very good.
+
+Private receipts (gitignored) are in `reports/private_scoring_calibration_20260915/`:
+`multi-before-a7b676e4.json`, `multi-after-candidate.json`,
+`bcomplex-before-a7b676e4.json`, `bcomplex-after-candidate.json`, both packet
+pairs, and the rerunnable `compare_vitamin_replay.py`.
+
+### Audit of the completed probiotic batch
+
+- Vitamin products were untouched: 2,073 + 146 stored products are
+  score-identical from `b2ff64d2` to `a7b676e4`. Every probiotic receipt number
+  above was recomputed from the two receipts and matches exactly: 553 products;
+  548 scored and 5 suppressed; 162 up, 383 down, 3 unchanged; mean −2.04; range
+  −10.4 to +5.9; Formulation 545, Dose 5, Transparency 2, other pillars 0.
+- **HIGH, reproduced, not fixed:** `probiotic_measurements._probiotic_source_category`
+  falls back to DSLD `raw_category` when `category` is empty. Spirulina rows in
+  63308 and 31062 carry `raw_category: bacteria`, so the shared predicate returns
+  true where the pre-batch enricher (cleaner `category` only) returned false.
+  The next re-enrichment will mark them probiotic products. Whether routing
+  changes is unverified. Resolve the eligibility rule before any Clean/Enrich run.
+- Seventeen slow real-catalog canaries fail identically at clean `a7b676e4`
+  (omega p161 ×9, cross-module probiotic ×7, generic 184661). `fast` excludes
+  them through `scripts/test_profiles.py`, so refresh them before release gates.
+- The auditor reported four low findings with no routed product impact; they
+  were not rerun here:
+  - Chlorella counted as an organism in 7 non-probiotic-routed products.
+  - Per-strain CFU disclosure lost for ref-less multi-strain blends.
+  - Nested/flattened duplicate rows with differing forms.
+  - ProDentis/Shirota never resolving exact. Their registry `standard_name`s
+    carry no strain code, which is confirmed.
+
+No Clean/Enrich/Score regeneration, catalog build, release, Supabase deployment
+or phone build ran.
 
 ## Next operational run — after the remaining calibration
 

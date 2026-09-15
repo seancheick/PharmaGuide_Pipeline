@@ -144,6 +144,8 @@ No new clinical rows, tested-dose matches or positive study outcomes are created
 - [ ] Generic dose hierarchy with preparation/population/outcome applicability.
 - [ ] Indication-aware omega dosing; verify ratio proxy stays absent.
 - [ ] Prenatal form appropriateness rather than premium-form assumptions.
+  The form-ownership code batch is done (1.7.0, below); the folate/B12 IQM source
+  audit and the presence-floor/B-complex structure decisions remain.
 - [ ] Ingredient-specific fiber dosing; no universal substrate-equivalence claim.
 - [ ] Ingredient-specific sports evidence and dose ownership.
 - [ ] Reviewed-versus-unreviewed evidence explanation using existing states.
@@ -299,7 +301,44 @@ new schema, or IQM numeric edits in this code batch. Preserve explicit B12
 clinical locks; the source-data audit is a separate attributable correction,
 not an implied clinical sign-off.
 
-- [ ] Red boundary regressions, implement, focused tests.
-- [ ] Baseline/candidate frozen packet and real routed-corpus comparison.
-- [ ] Independent spec and code-quality reviews; update measured fixture pins.
-- [ ] Frozen full fast backstop before marking this batch complete.
+- [x] Red boundary regressions, implement, focused tests.
+- [x] Baseline/candidate frozen packet and real routed-corpus comparison.
+- [x] Independent spec and code-quality reviews; update measured fixture pins.
+- [x] Frozen full fast backstop before marking this batch complete.
+
+Completed (Claude, 2026-09-15; awaiting Codex adversarial audit). Config
+`1.7.0-vitamin-form-ownership`, fingerprint `32da1b7296417cad`. Baseline
+`a7b676e4`; the replayed candidate tree is `b5e7499b`, and the committed scoring
+code is identical to it. After review, only two tests changed. Final fast suite:
+**15,519 passed, 66 skipped, 2 xfailed**, zero failures. Measured results,
+unexpected movements and limits are in
+`scripts/audits/scoring_boundary_audit_2026_09_15/README.md`.
+
+Decisions this batch surfaced, deliberately not changed in it:
+
+- The multi/prenatal and generic presence floor applies only when positive
+  points minus penalties is at or below zero. A product with slightly more
+  positive signal scores below a floored one. This non-monotonic band held 44
+  scored multis at baseline and holds 120 after the positive ceiling dropped
+  from 23 to 14; floored products rose from 45 to 178. Absolute formulation
+  penalties now weigh against a 14-point reference.
+- B-complex Formulation is now 15/23 panel structure and 8/23 IQM form quality.
+  A complete, focused panel with mediocre forms (209616, average rating 10)
+  moves Excellent → Exceptional. Decide whether that structure share is intended.
+- Folate/B12 IQM source values remain the separate attributable data audit above.
+- Evidence still lets an unresolved effect direction inherit positive credit.
+  It is pinned as a strict xfail in `test_vitamin_form_ownership.py` for the
+  Evidence boundary batch.
+
+Audit of the completed probiotic batch (Claude, 2026-09-15):
+
+- Reproduced HIGH regression, not yet fixed. The shared collector predicate
+  reads `raw_category` when the cleaner `category` is empty. DSLD labels
+  Spirulina "bacteria", so 63308 and 31062 flip to `is_probiotic_product` on the
+  next re-enrichment; the pre-batch enricher read only `category`. Decide the
+  cyanobacteria/algae eligibility rule before any Clean/Enrich run.
+- Seventeen slow real-catalog canaries (omega p161 ×9, cross-module probiotic ×7,
+  generic 184661) already fail at `a7b676e4`. `test_profiles.py` excludes them
+  from `fast`, so refresh them before release gates.
+- The stored vitamin corpus (2,073 multi/prenatal + 146 B-complex) is
+  score-identical between `b2ff64d2` and `a7b676e4`.
