@@ -99,7 +99,7 @@ REASON_CODE_IDENTITY_DEDUP = "identity_dedup_applied"
 REASON_CODE_NON_QUANTIFIED_EXCLUDED = "non_quantified_base_excluded"
 REASON_CODE_UNRESOLVED_LABEL_ACTIVE = "unresolved_label_active_included"
 
-from probiotic_measurements import _PROBIOTIC_IDENTITY_RE, is_probiotic_support_source  # one probiotic owner
+from probiotic_measurements import has_probiotic_identity_text, is_probiotic_support_source
 # ============================================================================
 # PRIMARY TYPE DEFINITIONS — derived from product_type_vocab.json
 # ============================================================================
@@ -921,7 +921,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     )
 
     # --- Probiotic ---
-    probiotic_name_signal = bool(_PROBIOTIC_IDENTITY_RE.search(product_name))
+    probiotic_name_signal = has_probiotic_identity_text(product_name)
     explicit_probiotic_name = bool(
         re.search(r"\b(?:probiotics?|trubiotics)\b", product_name, re.IGNORECASE)
     ) and not bool(

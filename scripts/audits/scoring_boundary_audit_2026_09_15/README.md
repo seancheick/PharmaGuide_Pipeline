@@ -371,23 +371,47 @@ This covers:
 
 Full fast tier on `cb678d43`: **15,549 passed, 70 skipped, zero failures** (398 s; tree unchanged).
 
-**Open decisions surfaced, not changed here:**
+**Follow-up audit closure:**
 
-1. **Mass-dosed brewer's yeast.** Printed `Saccharomyces cerevisiae` label
-   names on mass-dosed `brewers_yeast` rows (IQM `functional_foods`) still
-   count as organisms. That is 521 stored rows in 38 products, mostly
-   multivitamins, all already stored as probiotic products. An existing test
-   pins live S. cerevisiae with CFU as probiotic. Decide whether a resolved
-   non-probiotic identity with a mass dose should outrank the printed name.
-2. **Pomegranate in the prebiotic registry.** The registry lists "Pomegranate
-   Polyphenol Extract", with aliases including "pomegranate extract". Every
-   pomegranate extract therefore matches the prebiotic matcher: it earns the
-   probiotic Formulation prebiotic complement and shows as prebiotic-present.
-   Confirm that clinical policy before the rebuild.
-3. **Corpus state after the stopped run.** The stopped
+1. **Mass-dosed brewer's yeast.** The resolved non-probiotic identity now wins
+   for a mass-dosed nutritional/brewer's yeast unless the same source row has
+   explicit probiotic or viability evidence (probiotic wording/category, CFU,
+   AFU, active cultures or viable cells). Unquantified members of a probiotic
+   blend remain members, and source-owned viable yeast remains accepted. A
+   baseline/current replay changes one stored active source row: 307595
+   Glucose Optimizer's 100 mcg nutritional yeast no longer counts as a live
+   probiotic. CFU/AFU and the source-owned active-culture canaries are unchanged.
+2. **Pomegranate in the prebiotic registry.** Broad aliases (`pomegranate
+   extract`, `pomegranate fruit extract`, `Punica granatum extract`) were
+   removed. They had promoted 68 ordinary pomegranate products in the stored
+   corpus. The named DS-01 preparation remains recognized through
+   `Pomegranate Polyphenol Extract`, `Indian pomegranate extract`, and the
+   source's MAPP wording. This is identity scoping, not a new dose or efficacy
+   claim.
+3. **Prebiotic support ownership.** The shared probiotic companion predicate
+   now calls `prebiotic_catalog.match_prebiotic`; its short local vocabulary
+   is gone. A catalog-wide regression requires every canonical name and alias
+   to be recognized. The common singular `galacto-oligosaccharide` alias was
+   added to the catalog rather than kept as a second code-only spelling.
+4. **Corpus state after the stopped run.** The stopped
    `batch_run_all_datasets.sh` regenerated 9 brands and left GNC half-enriched.
    Earlier replay receipts no longer match the stored inputs. Rebuild from
    Clean only once calibration is stable.
+
+### Generic Formulation neutrality projection (Claude; measurement only)
+
+Claude's detached candidate removes count/single/enzyme bonuses and applies a
+reference-relative materiality weight to A1. Its 13,704-product replay is useful
+evidence, but the candidate is deliberately **not production-ready** and was
+not merged: it edits only two runtime modules, zeros components while leaving
+their dead functions/config/export copy in place, has no committed regressions,
+and depends on an unresolved normalization-reference choice that moves roughly
+2,800 public tiers. More importantly, about 15,900 scorable rows have no usable
+reference and therefore cannot be classified as trace by this method. The
+existing broader-plan checkbox stays open. The next implementation must first
+define one source-owned materiality contract and isolate expected pillar/reason
+movements in the five required canary variants; it must not choose reference 15
+merely because it produces a favorable corpus mean.
 
 ## Next operational run — after the remaining calibration
 

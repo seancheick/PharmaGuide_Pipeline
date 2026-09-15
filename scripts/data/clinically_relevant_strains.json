@@ -3,7 +3,7 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
-    "last_updated": "2026-09-14",
+    "last_updated": "2026-09-15",
     "total_entries": 131,
     "data_source": null,
     "version": "2.4.0",
@@ -15192,6 +15192,7 @@
         "standard_name": "Galactooligosaccharides",
         "aliases": [
           "GOS",
+          "galacto-oligosaccharide",
           "galacto-oligosaccharides"
         ]
       },
@@ -15223,9 +15224,8 @@
         "standard_name": "Pomegranate Polyphenol Extract",
         "aliases": [
           "Indian pomegranate extract",
-          "pomegranate extract",
-          "pomegranate fruit extract",
-          "Punica granatum extract",
+          "Indian pomegranate fruit MAPP",
+          "Indian pomegranate polyphenol extract",
           "polyphenol-based prebiotic"
         ]
       },

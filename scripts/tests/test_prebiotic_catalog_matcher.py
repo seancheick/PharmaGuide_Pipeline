@@ -69,6 +69,25 @@ def test_bare_prebiotic_label_is_present_with_unresolved_identity():
     assert match.present and match.standard_name is None and not match.ambiguous
 
 
+@pytest.mark.parametrize("label", [
+    "Pomegranate extract",
+    "Pomegranate fruit extract",
+    "Punica granatum extract",
+])
+def test_generic_pomegranate_extract_is_not_promoted_to_a_prebiotic(label):
+    """Only the studied DS-01 polyphenol preparation has prebiotic identity."""
+    assert not match_prebiotic(label).present
+
+
+@pytest.mark.parametrize("label", [
+    "Pomegranate Polyphenol Extract",
+    "Indian pomegranate extract",
+    "Indian pomegranate fruit MAPP",
+])
+def test_seed_pomegranate_preparation_retains_prebiotic_identity(label):
+    assert match_prebiotic(label).standard_name == "Pomegranate Polyphenol Extract"
+
+
 def test_row_quantity_g_units():
     assert row_quantity_g({"quantity": 3, "unit": "g"}) == 3
     assert row_quantity_g({"quantity": 500, "unit": "mg"}) == 0.5

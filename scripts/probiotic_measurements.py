@@ -33,6 +33,50 @@ _PROBIOTIC_IDENTITY_RE = re.compile(
     re.IGNORECASE,
 )
 
+_PROBIOTIC_VIABILITY_RE = re.compile(
+    r"\b(?:probiotics?|cfu|colony[-\s]+forming units?|afu|active fluorescent units?|"
+    r"live\s+cultures?|active\s+cultures?|viable\s+cells?)\b",
+    re.IGNORECASE,
+)
+
+
+def has_probiotic_identity_text(value: object) -> bool:
+    """Whether source text names a probiotic organism or explicit probiotic role."""
+    return bool(_PROBIOTIC_IDENTITY_RE.search(str(value or "")))
+
+
+def _has_probiotic_viability_evidence(ingredient: Mapping) -> bool:
+    """Require a live-product signal before overriding a non-probiotic identity.
+
+    An organism name alone is insufficient: nutritional/brewer's yeast and
+    yeast-grown nutrient carriers legitimately print ``S. cerevisiae`` while
+    being mass-dosed food ingredients, not live probiotic cultures.
+    """
+    category = _probiotic_source_category(ingredient)
+    if "probiotic" in category:
+        return True
+    text = " ".join(
+        str(ingredient.get(field) or "")
+        for field in (
+            "name", "raw_source_text", "source_label_name", "label_display_name",
+            "unit", "quantityUnit", "dose_unit", "harvestMethod", "notes",
+        )
+    )
+    return bool(_PROBIOTIC_VIABILITY_RE.search(text))
+
+
+def _has_mass_dose(ingredient: Mapping) -> bool:
+    """Use the canonical mass-unit owner; do not maintain another unit table."""
+    from normalization import canonicalize_mass_unit
+
+    unit = canonicalize_mass_unit(
+        ingredient.get("unit_normalized")
+        or ingredient.get("unit")
+        or ingredient.get("quantityUnit")
+        or ingredient.get("dose_unit")
+    )
+    return unit in {"g", "mg", "mcg"}
+
 def _probiotic_source_category(ingredient: Mapping) -> str:
     """Read cleaner/enriched category storage using the canonical vocabulary."""
     from ingredient_category_normalizer import canonicalize_ingredient_category
@@ -80,37 +124,55 @@ def is_probiotic_source_identity(ingredient: Mapping) -> bool:
         for field in ("standardName", "standard_name", "canonical_id")
     ).lower()
     category = _probiotic_source_category(ingredient)
-    printed_identity = bool(_PROBIOTIC_IDENTITY_RE.search(ing_name))
+    printed_identity = has_probiotic_identity_text(ing_name)
     category_evidence = (
         "probiotic" in category
         or "bacteria" in category
         # A derived normalized name cannot turn an explicitly nonmicrobial
         # source (for example yogurt) into a printed organism.
-        or (category in ("", "other") and bool(_PROBIOTIC_IDENTITY_RE.search(std_name)))
+        or (category in ("", "other") and has_probiotic_identity_text(std_name))
     )
-    return printed_identity or (
-        category_evidence and not _resolved_nonprobiotic_reference_identity(ingredient)
-    )
-
-
-_PROBIOTIC_SUPPORT_CANONICALS = frozenset({"fiber", "prebiotics"})
-_PROBIOTIC_SUPPORT_TERMS = (
-    "dietary fiber", "prebiotic", "inulin", "fructooligosaccharide", "galacto-oligosaccharide",
-)
+    resolved_nonprobiotic = _resolved_nonprobiotic_reference_identity(ingredient)
+    if resolved_nonprobiotic:
+        # A wrong/broad category cannot defeat a resolved ingredient identity.
+        # ``other_ingredients`` is separately pinned to contain no live
+        # probiotic identity, including unquantified processing-aid carriers.
+        if not printed_identity or str(ingredient.get("canonical_source_db") or "").strip().lower() == "other_ingredients":
+            return False
+        # Printed organisms in an unquantified blend remain source members.
+        # A mass-dosed food/functional yeast needs an explicit live/probiotic
+        # signal before it can override its resolved non-probiotic identity.
+        if _has_mass_dose(ingredient):
+            return _has_probiotic_viability_evidence(ingredient)
+        return True
+    return printed_identity or category_evidence
 
 
 def is_probiotic_support_source(ingredient: Mapping) -> bool:
-    """Fiber and prebiotic companions support a probiotic; they are not competing actives."""
-    def normalized(value) -> str:
-        return " ".join(str(value or "").lower().split())
+    """Fiber/prebiotic companions support probiotics without becoming strains.
 
-    if normalized(ingredient.get("canonical_id") or ingredient.get("iqm_parent_key")) in _PROBIOTIC_SUPPORT_CANONICALS:
+    Prebiotic identity is owned by :mod:`prebiotic_catalog`; this predicate
+    adds only the separate product-role rule that generic dietary fiber is a
+    companion rather than a competing active.
+    """
+    from prebiotic_catalog import match_prebiotic, normalize_prebiotic_text
+
+    canonical = normalize_prebiotic_text(
+        ingredient.get("canonical_id") or ingredient.get("iqm_parent_key")
+    )
+    if canonical == "fiber":
         return True
-    text = normalized(" ".join(
-        str(ingredient.get(key) or "")
-        for key in ("name", "standardName", "standard_name", "raw_source_text", "category")
-    ))
-    return any(term in text for term in _PROBIOTIC_SUPPORT_TERMS)
+    values = [
+        ingredient.get(key)
+        for key in (
+            "name", "standardName", "standard_name", "canonical_id",
+            "iqm_parent_key", "raw_source_text", "category",
+        )
+    ]
+    if any(match_prebiotic(value).present for value in values if value):
+        return True
+    text = normalize_prebiotic_text(" ".join(str(value or "") for value in values))
+    return bool(re.search(r"\bdietary fiber\b", text))
 
 
 def is_probiotic_source_header(ingredient: Mapping) -> bool:

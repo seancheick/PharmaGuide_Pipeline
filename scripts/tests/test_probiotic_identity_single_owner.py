@@ -108,14 +108,70 @@ def test_probiotic_identity_regex_has_one_owner():
     import scoring_input_contract
     import supplement_taxonomy
 
-    for module in (scoring_input_contract, supplement_taxonomy):
-        assert getattr(module, "_PROBIOTIC_IDENTITY_RE", owner._PROBIOTIC_IDENTITY_RE) is owner._PROBIOTIC_IDENTITY_RE
+    assert supplement_taxonomy.has_probiotic_identity_text is owner.has_probiotic_identity_text
     assert scoring_input_contract.is_probiotic_source_identity is owner.is_probiotic_source_identity
 
 
 @pytest.mark.parametrize("text", ["Jarro-Dophilus EPS", "One A Day TruBiotics", "Ultra Probiotics", "Lactobacillus rhamnosus"])
 def test_shared_regex_keeps_every_token_the_former_copies_recognized(text):
-    assert owner._PROBIOTIC_IDENTITY_RE.search(text)
+    assert owner.has_probiotic_identity_text(text)
+
+
+def test_mass_dosed_brewers_yeast_is_not_a_live_probiotic_identity():
+    row = {
+        "name": "Saccharomyces cerevisiae nutritional yeast",
+        "standardName": "Brewer's Yeast",
+        "canonical_id": "brewers_yeast",
+        "canonical_source_db": "ingredient_quality_map",
+        "category": "functional_foods",
+        "quantity": 1000,
+        "unit": "mg",
+    }
+
+    assert owner.is_probiotic_source_identity(row) is False
+
+
+def test_mass_dosed_explicit_probiotic_is_not_lost_to_a_bad_reference_mapping():
+    row = {
+        "name": "ibSium probiotic",
+        "standardName": "Brewer's Yeast",
+        "canonical_id": "brewers_yeast",
+        "canonical_source_db": "ingredient_quality_map",
+        "category": "functional_foods",
+        "quantity": 250,
+        "unit": "mg",
+    }
+
+    assert owner.is_probiotic_source_identity(row) is True
+
+
+def test_unquantified_printed_organism_remains_a_named_blend_member():
+    row = {
+        "name": "Saccharomyces cerevisiae",
+        "standardName": "Brewer's Yeast",
+        "canonical_id": "brewers_yeast",
+        "canonical_source_db": "ingredient_quality_map",
+        "category": "functional_foods",
+        "quantity": 0,
+        "unit": "NP",
+    }
+
+    assert owner.is_probiotic_source_identity(row) is True
+
+
+@pytest.mark.parametrize("unit", ["CFU", "Billion CFU", "AFU"])
+def test_resolved_yeast_identity_requires_and_accepts_viability_units(unit):
+    row = {
+        "name": "Saccharomyces cerevisiae CNCM I-3856",
+        "standardName": "Brewer's Yeast",
+        "canonical_id": "brewers_yeast",
+        "canonical_source_db": "ingredient_quality_map",
+        "category": "functional_foods",
+        "quantity": 1,
+        "unit": unit,
+    }
+
+    assert owner.is_probiotic_source_identity(row) is True
 
 
 def test_probiotic_support_companions_have_one_owner():
@@ -124,6 +180,19 @@ def test_probiotic_support_companions_have_one_owner():
 
     assert scoring_input_contract.is_probiotic_support_source is owner.is_probiotic_support_source
     assert supplement_taxonomy.is_probiotic_support_source is owner.is_probiotic_support_source
+
+
+def test_every_canonical_prebiotic_identity_is_a_probiotic_support_source():
+    """The support predicate must consume the canonical catalog, not copy terms."""
+    from prebiotic_catalog import prebiotic_catalog
+
+    missed = []
+    for standard_name, terms in prebiotic_catalog():
+        for label in (standard_name, *terms):
+            if not owner.is_probiotic_support_source({"name": label}):
+                missed.append((standard_name, label))
+
+    assert missed == []
 
 
 @pytest.mark.parametrize("row,expected", [
@@ -184,7 +253,7 @@ def test_other_ingredients_holds_no_live_probiotic_identity():
     named = {
         (entry["id"], entry.get("category"))
         for entry in data["other_ingredients"]
-        if any(owner._PROBIOTIC_IDENTITY_RE.search(text) or yeast_or_culture.search(text)
+        if any(owner.has_probiotic_identity_text(text) or yeast_or_culture.search(text)
                for text in [str(entry.get("standard_name") or "")] + [str(a) for a in entry.get("aliases") or []])
     }
     assert named == {
