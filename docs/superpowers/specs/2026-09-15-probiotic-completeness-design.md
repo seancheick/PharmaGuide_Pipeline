@@ -34,12 +34,23 @@ Count distinct nonblank label names, not bare clinical IDs. Use existing exact
 registry normalization to collapse registered aliases of the same identity;
 unregistered names remain distinct and cannot become researched strains.
 
-A positive integer declared count can increase the denominator when labels
-are present, never reduce the observed denominator. A count alone, a malformed
-value, or detached clinical IDs cannot produce named-strain or dose disclosure.
+`total_strain_count` is a derived summary, not an independently sourced label
+declaration. Ignore it for scoring counts in either direction. Count actual
+distinct label identities instead. A count alone, a malformed value, or
+detached clinical IDs cannot produce named-strain or dose disclosure.
 Count duplicate projections once. Exact identity numerator must be re-proved
 against source rows and registry, intersected with label identities, and never
 exceed the denominator. Clinical sign-off is not required for physical identity.
+
+Keys must be source-local before deduplication: a species display name with
+an owned structured BB536 form becomes the proven BB536 identity; a sibling
+with the same display name but no form remains unresolved/species-only. Two
+different owned forms sharing a display name remain two identities. Reuse
+`label_owned_native_strains` and its existing source/form proof, never infer a
+form from a sibling. All scoring callers must provide the whole product for
+this proof; enrichment uses its assembled native payload and source label rows.
+An actual source-owned identity may supply a missing projected blend name;
+a detached clinical ID may not. Pin the HOWARU and BB536 existing regressions.
 
 Keep the same keys for count/disclosure consumers, with no new public schema.
 Dose and Transparency use the same denominator and alias keys. Preserve all
@@ -66,8 +77,8 @@ no optional prebiotic credit. They are arithmetic expectations, not test results
 | Duplicate spelling/projection of the same strain | unchanged | unchanged |
 
 Adding the existing full prebiotic complement to a complete canary yields
-16/16 raw and 20/20 public. Lowering a declared count cannot raise any
-disclosure/identity component. Two labels, one measured, declared count one:
+16/16 raw and 20/20 public. Changing the summary count cannot change any
+disclosure/identity component. Two labels, one measured, summary count one:
 Dose disclosure 5/10, not 10/10. Count-only payload: no identity/disclosure.
 Evidence, safety and verification stay unchanged by identity-only mutations.
 
