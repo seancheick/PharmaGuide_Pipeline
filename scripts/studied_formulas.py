@@ -379,6 +379,8 @@ def _label_strain_identity_candidates(row: Mapping) -> list[tuple[str, str, str 
     if is_probiotic_source_header(row) and not row.get("nestedIngredients"):
         # Typed biological form records are actual members, not the container
         # name and not independently dosed/native clinical projections.
+        if _clinical_strain_label_forms(row) is None:
+            return []  # Never authorize a partial member set from malformed forms.
         members = {}
         forms = row.get("forms")
         for form in forms if isinstance(forms, list) else []:

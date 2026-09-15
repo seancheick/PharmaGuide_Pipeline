@@ -20,6 +20,29 @@ def test_malformed_header_forms_do_not_authorize_or_crash_source_scope(forms):
     assert score_formulation(product)["metadata"]["total_strain_count"] == 1
 
 
+@pytest.mark.parametrize("malformed_member", [True, 42, {}, {"name": True}, {"name": " "}])
+def test_mixed_malformed_header_forms_cannot_authorize_partial_identity_or_cfu(malformed_member):
+    from build_final_db import build_detail_blob
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    name = "Lactobacillus rhamnosus GG"
+    ref = "ingredientRows[0]"
+    product = {"activeIngredients": [{"name": "Probiotic Blend", "category": "probiotic",
+        "cleaner_row_role": "blend_header_total", "raw_source_path": ref,
+        "forms": [{"name": name, "category": "probiotic"}, malformed_member]}],
+        "probiotic_data": {"is_probiotic_product": True, "clinical_strains": [],
+            "probiotic_blends": [{"strains": [name], "raw_source_path": ref,
+                "cfu_data": {"has_cfu": True, "cfu_count": 50e9}}]}}
+    formulation = score_formulation(product)
+    assert formulation["metadata"]["total_strain_count"] == 0
+    assert formulation["metadata"]["identified_strain_count"] == 0
+    assert formulation["components"]["exact_identity_completeness"] == 0
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
+    assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 0
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 0
+
+
 @pytest.mark.parametrize("ref", [None, "legacyRows[0]"])
 def test_detached_names_are_only_a_legacy_denominator_when_source_scope_is_absent(ref):
     from scoring_v4.modules.probiotic_dose import score_dose
