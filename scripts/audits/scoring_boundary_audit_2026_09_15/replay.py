@@ -16,8 +16,18 @@ import sys
 ROOT = Path(__file__).resolve().parents[3]
 
 
-def snapshot_probiotics(checkout, products_root):
+def snapshot_category(checkout, products_root, category="probiotic"):
     """Call one isolated checkout's real scorer; never copy scoring arithmetic."""
+    def checkout_state():
+        git = lambda *args: subprocess.run(["git", "-C", str(checkout), *args],
+                                          capture_output=True, check=True).stdout
+        return {
+            "checkout_commit": git("rev-parse", "HEAD").decode().strip(),
+            "checkout_dirty": bool(git("status", "--porcelain").strip()),
+            "tracked_diff_sha256": hashlib.sha256(git("diff", "--binary", "HEAD")).hexdigest(),
+        }
+
+    initial_state = checkout_state()
     sys.path.insert(0, str(checkout / "scripts"))
     from score_supplements_v4 import score_product_v4
     from scoring_v4.router import class_for_product
@@ -40,7 +50,7 @@ def snapshot_probiotics(checkout, products_root):
                 raise ValueError(f"Malformed product in {path}")
             route = class_for_product(product)
             routes[route] += 1
-            if route != "probiotic":
+            if route != category:
                 continue
             pid = str(product.get("dsld_id") or product.get("id") or "")
             if not pid or pid in rows:
@@ -75,14 +85,13 @@ def snapshot_probiotics(checkout, products_root):
                 "dimensions": {key: dims.get(key) for key in ("formulation", "dose", "transparency")},
             }
     if not rows or not any(row["status"] == "scored" for row in rows.values()):
-        raise ValueError("No scored probiotic products: comparison would be vacuous")
-    git = lambda *args: subprocess.run(["git", "-C", str(checkout), *args],
-                                      capture_output=True, check=True).stdout
+        raise ValueError(f"No scored {category} products: comparison would be vacuous")
+    if checkout_state() != initial_state:
+        raise ValueError("Checkout changed during replay; freeze it before comparing")
     return {"_meta": {
-        "scope": "all stored enriched products routed as probiotic; no regeneration",
-        "checkout_commit": git("rev-parse", "HEAD").decode().strip(),
-        "checkout_dirty": bool(git("status", "--porcelain").strip()),
-        "tracked_diff_sha256": hashlib.sha256(git("diff", "--binary", "HEAD")).hexdigest(),
+        "scope": f"all stored enriched products routed as {category}; no regeneration",
+        "category": category,
+        **initial_state,
         "scoring_configs": all_config_provenance(), "input_files": files,
         "routes": dict(routes), "count": len(rows),
     }, "products": rows}
@@ -92,12 +101,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--baseline", default="515ef8c5")
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--probiotic-checkout", type=Path,
-                        help="Snapshot probiotic public scores using this isolated checkout")
+    parser.add_argument("--checkout", "--probiotic-checkout", dest="checkout", type=Path,
+                        help="Snapshot category public scores using this isolated checkout")
+    parser.add_argument("--category", default="probiotic",
+                        help="Production router category to replay (default: probiotic)")
     parser.add_argument("--products-root", type=Path, default=ROOT / "scripts/products")
     args = parser.parse_args()
-    if args.probiotic_checkout:
-        report = snapshot_probiotics(args.probiotic_checkout.resolve(), args.products_root.resolve())
+    if args.checkout:
+        report = snapshot_category(args.checkout.resolve(), args.products_root.resolve(), args.category)
         args.out.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
         print(json.dumps({key: value for key, value in report["_meta"].items()
                           if key not in {"input_files", "scoring_configs"}}))

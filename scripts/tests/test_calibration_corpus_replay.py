@@ -49,7 +49,7 @@ def corpus(tmp_path, monkeypatch):
 def test_snapshot_uses_scorer_only_for_requested_category_and_keeps_input(corpus):
     root, path, result, calls = corpus
     before = path.read_bytes()
-    report = replay.snapshot_probiotics(ROOT, root)
+    report = replay.snapshot_category(ROOT, root)
     assert calls == ["1"]
     assert report["_meta"]["routes"] == {"probiotic": 1, "generic": 1}
     assert report["_meta"]["count"] == 1
@@ -74,7 +74,7 @@ def test_snapshot_refuses_invalid_public_score(corpus, defect):
             "infinity": float("inf"), "over": 101,
         }[defect]
     with pytest.raises(ValueError, match="Invalid status|Incomplete public score"):
-        replay.snapshot_probiotics(ROOT, root)
+        replay.snapshot_category(ROOT, root)
 
 
 @pytest.mark.parametrize("contents, message", [
@@ -89,7 +89,7 @@ def test_snapshot_refuses_empty_invalid_and_duplicate_inputs(corpus, contents, m
     root, path, _, _ = corpus
     path.write_text(json.dumps(contents))
     with pytest.raises(ValueError, match=message):
-        replay.snapshot_probiotics(ROOT, root)
+        replay.snapshot_category(ROOT, root)
 
 
 def test_snapshot_keeps_unscored_products_without_inventing_a_number(corpus, monkeypatch):
@@ -101,16 +101,45 @@ def test_snapshot_keeps_unscored_products_without_inventing_a_number(corpus, mon
     unscored = {"quality_score_status": "not_scored", "quality_score_v4_100": None}
     monkeypatch.setattr(score_supplements_v4, "score_product_v4",
                         lambda p: scored if p["dsld_id"] == "1" else unscored)
-    report = replay.snapshot_probiotics(ROOT, root)
+    report = replay.snapshot_category(ROOT, root)
     assert report["products"]["2"]["score"] is None
     assert report["products"]["2"]["status"] == "not_scored"
     unscored["quality_score_v4_100"] = 0
     with pytest.raises(ValueError, match="Unexpected public number"):
-        replay.snapshot_probiotics(ROOT, root)
+        replay.snapshot_category(ROOT, root)
 
 
 def test_snapshot_refuses_missing_module_breakdown(corpus):
     root, _, result, _ = corpus
     result.pop("v4_breakdown")
     with pytest.raises(ValueError, match="Missing module dimensions"):
-        replay.snapshot_probiotics(ROOT, root)
+        replay.snapshot_category(ROOT, root)
+
+
+def test_category_selection_reuses_the_same_replay_and_scorer(corpus):
+    root, path, _, calls = corpus
+    before = path.read_bytes()
+    report = replay.snapshot_category(ROOT, root, "generic")
+    assert calls == ["2"]
+    assert set(report["products"]) == {"2"}
+    assert report["_meta"]["category"] == "generic"
+    assert path.read_bytes() == before
+
+
+def test_category_replay_rejects_a_changed_checkout(corpus, monkeypatch):
+    root, _, _, _ = corpus
+    original = replay.subprocess.run
+    calls = 0
+
+    def git_changed(args, **kwargs):
+        nonlocal calls
+        result = original(args, **kwargs)
+        if args[-2:] == ["rev-parse", "HEAD"]:
+            calls += 1
+            if calls > 1:
+                result.stdout = b"different-commit\n"
+        return result
+
+    monkeypatch.setattr(replay.subprocess, "run", git_changed)
+    with pytest.raises(ValueError, match="Checkout changed"):
+        replay.snapshot_category(ROOT, root, "generic")

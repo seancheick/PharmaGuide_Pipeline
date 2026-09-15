@@ -163,3 +163,42 @@ Missing applicable evidence remains explicit, never invented to complete a row.
   research-limited control; do not raise its expected score or invent evidence.
   Add separate demonstrably achievable excellent/weak-verification/underdose/
   complexity/incomplete-review fixtures through the same production seam.
+
+### Next bounded implementation: vitamin form ownership
+
+Exact math presented to the owner before implementation:
+
+- Multi/prenatal: retain panel form quality (0–12, current weighted IQM mean
+  and neutral floor) and disclosure structure (0–2). Remove premium-form
+  diversity (0–4) and key-form name ranking (0–5). Positive ceiling, category
+  cap and public Formulation reference become **14**. Existing penalties and
+  presence floor remain; public weight remains 20.
+- B-complex: retain core panel coverage (0–10), IQM form quality (0–8), focus
+  purity (0–3), disclosure (0–2). Remove preferred-form name ranking (0–7).
+  Positive ceiling, raw cap and public reference become **23**.
+- Multi/prenatal Dose: remove only the ordinal `bio_score` multiplier from
+  RDA/AI coverage. Keep the existing source-bound adequacy, DFE and unit
+  handling, population/critical nutrient checks, complements and safety.
+- Canary: equal IQM 12 and complete disclosure gives prenatal raw
+  `12 * 12/15 + 2 = 11.6`, public **16.6/20**, regardless of preferred-form
+  names or how many equally rated ingredients are present. IQM 15 gives
+  raw 14 / public 20. The current neutral-floor policy is not silently changed.
+- Canary: complete, focused B panel at IQM 12 gives
+  `10 + 8 * 12/15 + 3 + 2 = 21.4`, public **18.6/20**; IQM 15 gives 23 / 20.
+  Name substitutions alone do not add points. A new unrelated active still
+  changes focus by the existing rule; missing disclosure still loses credit.
+- Canary: 100% RDA under UL gives coverage-unit credit **1.0**, whether
+  bio_score is 6, 12, 15 or unavailable. A genuinely low RDA percentage and
+  a genuine UL violation retain the current dose response.
+
+Implementation ownership: the existing multi/prenatal Formulation and Dose,
+B-complex adapter, canonical quality config/fingerprint, bounded tests and
+export references to the removed components. No replacement form table,
+new schema, or IQM numeric edits in this code batch. Preserve explicit B12
+clinical locks; the source-data audit is a separate attributable correction,
+not an implied clinical sign-off.
+
+- [ ] Red boundary regressions, implement, focused tests.
+- [ ] Baseline/candidate frozen packet and real routed-corpus comparison.
+- [ ] Independent spec and code-quality reviews; update measured fixture pins.
+- [ ] Frozen full fast backstop before marking this batch complete.
