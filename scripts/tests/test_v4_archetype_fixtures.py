@@ -159,14 +159,15 @@ def test_category_fixtures_reach_their_references() -> None:
 
     # The probiotic ideal fixture uses source-owned row CFU plus an explicit
     # one-per-day serving basis. Raw dose maxes out on industry potency bands
-    # (/25 raw module scale) and clamps to the public 20.0; the dose reference
-    # is left at 22 because the corpus p99 is 15.4 and only one product reaches
-    # the raw ceiling. Probiotic evidence is a curated-data gap (strain
-    # references), not a reference problem, so its 8.0 stays exposed here.
+    # (/25 raw module scale) and clamps to the public 20.0. This bounded
+    # identity correction does not change the existing Dose reference or
+    # manufacture dose-applicable research; Evidence remains 8.0.
     assert probiotic["raw_dimensions"]["dose"] == 25.0
     assert probiotic["pillars"]["dose"] == 20.0
     assert probiotic["normalization_references"]["dose"] == 22.0
-    assert probiotic["raw_dimensions"]["formulation"] == 24.25
+    assert probiotic["raw_dimensions"]["formulation"] == 15.25
+    assert probiotic["normalization_references"]["formulation"] == 16.0
+    assert probiotic["pillars"]["formulation"] == 19.1
     assert probiotic["raw_dimensions"]["evidence"] == 8.0
     # Omega raw dose tops out at 20 now that the EPA:DHA ratio bonus is gone
     # (quality_score 1.2.0); the reference equals that ceiling because the rubric
