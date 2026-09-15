@@ -3,7 +3,9 @@
 Source: production enricher re-run over the enriched corpus on 2026-09-14 after the batch was applied.
 Caveat: the Nature Made and Spring Valley enriched outputs were empty after an interrupted pipeline run, so their labels are not counted here. Re-run after the full pipeline.
 
-90 labels / 123 product-slots still print a designation with no registry identity.
+87 labels / 120 product-slots still print a designation with no registry identity.
+
+Follow-up (same day): L. plantarum 14D, B. breve BBR-8 and L. paracasei LPC-00 were researched and added (ops new_14d, new_bbr8, new_lpc00 in identity_batch_2026_09_14.json).
 
 | Products | Label as printed (lowercased) | Why it is not mapped |
 |---|---|---|
@@ -51,9 +53,7 @@ Caveat: the Nature Made and Spring Valley enriched outputs were empty after an i
 | 1 | l. rhamnosus hrvd113-us | Formula-level Seed records; one product; outside strain-level scope. |
 | 1 | l. reuteri sd-rd830-fr | Formula-level Seed records; one product; outside strain-level scope. |
 | 1 | l. reuteri sd-lre2-it | Formula-level Seed records; one product; outside strain-level scope. |
-| 1 | l. plantarum 14d | Not yet researched (Life Extension Florassist Balance, 1 product). |
 | 1 | l. paracasei ualpc-04 | No published source names the designation with the printed species. |
-| 1 | l. paracasei lpc-00 | Not yet researched (Jarrow Jarro-Dophilus Allergen Free, 1 product). |
 | 1 | l. gasseri ualg-05 | No published source names the designation with the printed species. |
 | 1 | l. fermentum sd-lf8-it | Formula-level Seed records; one product; outside strain-level scope. |
 | 1 | l. crispatus sd-lcr01-it | Formula-level Seed records; one product; outside strain-level scope. |
@@ -94,6 +94,5 @@ Caveat: the Nature Made and Spring Valley enriched outputs were empty after an i
 | 1 | b. infantis sd-m63-jp | Formula-level Seed records; one product; outside strain-level scope. |
 | 1 | b. breve uabbr-11 | No published source names the designation with the printed species. |
 | 1 | b. breve hrvd521-us | Formula-level Seed records; one product; outside strain-level scope. |
-| 1 | b. breve bbr-8 | Not yet researched (Life Extension Florassist Balance, 1 product). |
 | 1 | b. bifidum bb-12 | Label species contradicts the published strain (BB-12 is B. animalis subsp. lactis; 35624 is B. longum subsp. infantis). |
 | 1 | b. adolescentis sd-ba5-it | Formula-level Seed records; one product; outside strain-level scope. |

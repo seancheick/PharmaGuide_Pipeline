@@ -4,7 +4,7 @@
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
     "last_updated": "2026-09-14",
-    "total_entries": 128,
+    "total_entries": 131,
     "data_source": null,
     "version": "2.4.0",
     "native_context_note": "2026-09-04 bounded primary-source review: 16 outcome/population/dose contexts across eight native identities, authored once and joined to explicit combination members. Contexts are source-verified, pending clinical review, not new clinician approval or universal efficacy ranges. Historical approval flags and primary PMID anchors remain unchanged; Lpc-37's primary null result and stale source-description fields are corrected separately from context approval.",
@@ -14,7 +14,7 @@
     "native_context_note_2026_09_13": "Wave 1 bounded curation: 50 study contexts authored for STRAIN_LGG, STRAIN_LACTIS_BL04, STRAIN_ACIDOPHILUS_NCFM, STRAIN_LONGUM_BB536, STRAIN_RHAMNOSUS_HN001, STRAIN_LACTIS_HN019, STRAIN_SUBTILIS_DE111 and STRAIN_SACCHAROMYCES (Lpc-37 and Bi-07 join through combination contexts). Contexts were authored as source_verified_pending_clinical_review; their statuses were set by the 2026-09-14 review response (see review_response_note_2026_09_14); optional study_design / sample_size / blinding / funding / source_tier / trial_registration describe quality and never score. Null and negative results are kept. Publication families (trial_family) mark papers from one cohort so they cannot count as independent confirmations.",
     "native_context_note_2026_09_14": "Wave 2 bounded curation: 59 study contexts authored for STRAIN_COAGULANS_IS2, STRAIN_COAGULANS_MTCC5856, STRAIN_ACIDOPHILUS_DDS1, STRAIN_PLANTARUM_299V, STRAIN_ACIDOPHILUS_LA5, STRAIN_LACTIS_BB12, STRAIN_HELVETICUS_R0052, STRAIN_RHAMNOSUS_GR1, STRAIN_COAGULANS_GBI30, STRAIN_BREVE_M16V and STRAIN_PLANTARUM_LP01 (R0175, RC14, UABla12, CRL-431 and LGG join through combination contexts; no identity stubs were added). Contexts were authored as source_verified_pending_clinical_review; their statuses were set by the 2026-09-14 review response (see review_response_note_2026_09_14); optional study_design / sample_size / blinding / funding / source_tier / trial_registration describe quality and never score. Null and negative results are kept. Publication families (trial_family) mark papers from one cohort so they cannot count as independent confirmations.",
     "review_response_note_2026_09_14": "123 study contexts approved (clinician_approved; reviewer of record: Sean B (engineering owner), approving the 2026-09-14 Claude Fable 5.1 research review; this is an engineering-owner approval of the research review, not a Dr. Pham strain sign-off) and 2 held as adjudication_required (valid null RCTs whose tested formulation includes a component with no registry identity) on 2026-09-14 from the 2026-09-14 evidence review response; 987 source-bound field patches applied; 10 approved contexts stay scoring_eligible=false by review decision. Context approval is separate from cfu_thresholds.dr_pham_signoff, which was not changed.",
-    "identity_batch_note_2026_09_14": "Evidence-bound identity batch (scripts/audits/probiotic_registry_expansion_2026_09_14): 34 identities added, 11 duplicate SD-deposit stubs merged into their named strains, 7 alias sets added, Lab4 NCIMB deposits corrected. Every change cites PubMed/Europe PMC evidence; no sign-off, context, evidence or dose tier changed."
+    "identity_batch_note_2026_09_14": "Evidence-bound identity batch (scripts/audits/probiotic_registry_expansion_2026_09_14): 34 identities added, 11 duplicate SD-deposit stubs merged into their named strains, 7 alias sets added, Lab4 NCIMB deposits corrected. Every change cites PubMed/Europe PMC evidence; no sign-off, context, evidence or dose tier changed. Follow-up: 3 identities added (STRAIN_BREVE_BBR8, STRAIN_PARACASEI_LPC00, STRAIN_PLANTARUM_14D)."
   },
   "clinically_relevant_strains": [
     {
@@ -15060,6 +15060,101 @@
         "verified_on": "2026-09-14",
         "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
         "note": "Published sources name L. acidophilus LAFTI L10; the label prints L. helveticus."
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_PLANTARUM_14D",
+      "standard_name": "Lactobacillus plantarum 14D",
+      "aliases": [
+        "L. plantarum 14D",
+        "Lactiplantibacillus plantarum 14D",
+        "Lactobacillus plantarum CECT 4528"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "40987448",
+          "40887812"
+        ],
+        "deposit_ids": [
+          "CECT 4528"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": "Label (Life Extension Florassist Balance) prints it beside B. breve BBR-8, the companion strain in the published mixture."
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_BREVE_BBR8",
+      "standard_name": "Bifidobacterium breve Bbr8",
+      "aliases": [
+        "B. breve Bbr8",
+        "Bifidobacterium breve LMG P-17501"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "40987448",
+          "32752244"
+        ],
+        "deposit_ids": [
+          "LMG P-17501"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": "Every source found names Bbr8 as B. breve; no species conflict."
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_PARACASEI_LPC00",
+      "standard_name": "Lactobacillus paracasei LPC00",
+      "aliases": [
+        "L. paracasei LPC00",
+        "Lacticaseibacillus paracasei LPC00"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "33725854",
+          "29946225"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": "Deposit not recorded: no source read here ties LPC00 to a deposit number. Label (Jarrow) prints it with LA-02, LR-04, BS-01, LP-01 and BR-03; LA 02, LR 04 and BS 01 are given with LPC 00 in the 8-strain arm of PMID 36316826 (PMC9622669)."
       },
       "cfu_thresholds": {
         "indication_primary": null,

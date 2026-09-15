@@ -239,13 +239,17 @@ def main() -> None:
     meta["last_updated"] = TODAY
     added = sorted({e["id"] for e in entries} - before_ids)
     removed = sorted(before_ids - {e["id"] for e in entries})
-    meta["identity_batch_note_2026_09_14"] = (
-        f"Evidence-bound identity batch (scripts/audits/probiotic_registry_expansion_2026_09_14): "
-        f"{len(added)} identities added, {len(removed)} duplicate SD-deposit stubs merged into their named strains, "
-        f"{sum(1 for o in applied if o['op'] == 'add_alias')} alias sets added"
-        f"{', Lab4 NCIMB deposits corrected' if any(o['op'] == 'correct_deposit' for o in applied) else ''}. "
-        "Every change cites PubMed/Europe PMC evidence; no sign-off, context, evidence or dose tier changed."
-    )
+    if args.only:
+        # A follow-up run of selected ops extends the batch note instead of replacing it.
+        meta["identity_batch_note_2026_09_14"] += f" Follow-up: {len(added)} identities added ({', '.join(added)})."
+    else:
+        meta["identity_batch_note_2026_09_14"] = (
+            f"Evidence-bound identity batch (scripts/audits/probiotic_registry_expansion_2026_09_14): "
+            f"{len(added)} identities added, {len(removed)} duplicate SD-deposit stubs merged into their named strains, "
+            f"{sum(1 for o in applied if o['op'] == 'add_alias')} alias sets added"
+            f"{', Lab4 NCIMB deposits corrected' if any(o['op'] == 'correct_deposit' for o in applied) else ''}. "
+            "Every change cites PubMed/Europe PMC evidence; no sign-off, context, evidence or dose tier changed."
+        )
     print(f"\nentries {len(before_ids)} -> {len(entries)} | added {len(added)} | merged away {len(removed)} | skipped {skipped}")
     if args.apply:
         REG.write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
