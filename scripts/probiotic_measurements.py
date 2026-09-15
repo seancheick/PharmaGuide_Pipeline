@@ -137,7 +137,8 @@ def is_probiotic_source_identity(ingredient: Mapping) -> bool:
         # A wrong/broad category cannot defeat a resolved ingredient identity.
         # ``other_ingredients`` is separately pinned to contain no live
         # probiotic identity, including unquantified processing-aid carriers.
-        if not printed_identity or str(ingredient.get("canonical_source_db") or "").strip().lower() == "other_ingredients":
+        source_db = str(ingredient.get("canonical_source_db") or "").strip().lower()
+        if not printed_identity or source_db == "other_ingredients":
             return False
         # Printed organisms in an unquantified blend remain source members.
         # A mass-dosed food/functional yeast needs an explicit live/probiotic
