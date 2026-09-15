@@ -200,8 +200,9 @@ def test_multi_prenatal_raw_score_sums_dimensions_and_manufacturer_adjustments()
         + breakdown["safety_hygiene_base"]["score"],
     )
 
-    # Phase 4: trust removed from the denominator → 4 core dims sum to 85.
-    assert breakdown["metadata"]["evaluable_class_max"] == 85.0
+    # Phase 4: trust removed from the denominator → 4 core dims sum to 74
+    # (Formulation 14 since quality_score 1.7.0 removed duplicate form rankings).
+    assert breakdown["metadata"]["evaluable_class_max"] == 74.0
     assert breakdown["metadata"]["excluded_dimensions"] == []
     assert breakdown["metadata"]["safety_hygiene_base_adjustment"] == breakdown["safety_hygiene_base"]["score"]
     assert breakdown["raw_score_100"] == round(expected_raw, 1)

@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.6.0-probiotic-completeness",
+    "version": "1.7.0-vitamin-form-ownership",
     "schema_version": "1.0.0",
     "last_updated": "2026-09-15",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. 1.2.0 removes rubric proxies: blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, and the astaxanthin/CoQ10 public caps, so the six pillars alone explain the public number. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.2.0.",
@@ -46,7 +46,7 @@
     "default_reference": 20.0
   },
   "dose_subscale": {
-    "_doc": "PR5: category-aware purpose-fit dose. References come from the reviewed dose contract, never the highest score in the current catalog. Generic singles top out at 22 in the supplemental/clinical window; botanical profiles top out at 21; the immune adapter's component sum caps at 22. Sports pre-workout retains the sports engine's 25-point reference because products classified by context can still earn its focused-single completion path. An overdosed product already gets low raw dose and a sub-clinical one gets proportional credit; normalization never repairs excess or underdosing. 1.2.0 (2026-09-14): omega raw dose tops out at 20 after the +5 EPA:DHA ratio bonus was removed; its reference is 20, the raw ceiling: the rubric gives full band credit at 2 g/day EPA+DHA, and the former 23 only existed to absorb ratio completion credit (1.2.1, reviewed on all 719 omega products).",
+    "_doc": "PR5: category-aware purpose-fit dose. References come from the reviewed dose contract, never the highest score in the current catalog. Generic singles top out at 22 in the supplemental/clinical window; botanical profiles top out at 21; the immune adapter's component sum caps at 22. Sports pre-workout retains the sports engine's 25-point reference because products classified by context can still earn its focused-single completion path. An overdosed product already gets low raw dose and a sub-clinical one gets proportional credit; normalization never repairs excess or underdosing. 1.2.0 (2026-09-14): omega raw dose tops out at 20 after the +5 EPA:DHA ratio bonus was removed; its reference is 20, the raw ceiling: the rubric gives full band credit at 2 g/day EPA+DHA, and the former 23 only existed to absorb ratio completion credit (1.2.1, reviewed on all 719 omega products). 1.7.0 (2026-09-15): multi/prenatal RDA/AI coverage no longer multiplies by the ordinal 0.75 + bio_score/60 form factor; that factor never exceeded 1.0, so the prenatal_multi reference stays 23.",
     "archetype_reference": {
       "sports_single": 25.0,
       "sports_pre_workout": 25.0,
@@ -64,7 +64,7 @@
     "default_reference": 22.0
   },
   "formulation_subscale": {
-    "_doc": "PR4: category-aware purpose-fit formulation. A focused single can earn 24 without faking breadth, while multi-active sports products retain their reviewed category references. The dedicated protein adapter has a 29-point positive-component ceiling (15 + 5 + 3 + 4 + 2). Pre-workout and BCAA/EAA still reuse the broader generic formulation engine, so current-corpus maxima are not valid divisors; they retain the reviewed 30 and 25 references until a dedicated adapter or benchmark justifies a change. A cheap form remains low because normalization is proportional. 1.2.0 (2026-09-14): omega's achievable formulation drops 23 -> 21 because sustainability certification is now 0 points (consumer attribute); prenatal_multi drops 23 -> 21 because the 2-point dosage_form_suitability credit (an inverted gummy flag) was removed. 1.6.0 (2026-09-15): probiotic Formulation removes CFU-size and species-diversity points without reallocating them. Its reference and raw cap are 16: total potency disclosure 4 + exact source-owned identity completeness 8 + delivery 3 + existing prebiotic complement 1. Identity completeness is a label property, not clinical efficacy.",
+    "_doc": "PR4: category-aware purpose-fit formulation. A focused single can earn 24 without faking breadth, while multi-active sports products retain their reviewed category references. The dedicated protein adapter has a 29-point positive-component ceiling (15 + 5 + 3 + 4 + 2). Pre-workout and BCAA/EAA still reuse the broader generic formulation engine, so current-corpus maxima are not valid divisors; they retain the reviewed 30 and 25 references until a dedicated adapter or benchmark justifies a change. A cheap form remains low because normalization is proportional. 1.2.0 (2026-09-14): omega's achievable formulation drops 23 -> 21 because sustainability certification is now 0 points (consumer attribute); prenatal_multi drops 23 -> 21 because the 2-point dosage_form_suitability credit (an inverted gummy flag) was removed. 1.6.0 (2026-09-15): probiotic Formulation removes CFU-size and species-diversity points without reallocating them. Its reference and raw cap are 16: total potency disclosure 4 + exact source-owned identity completeness 8 + delivery 3 + existing prebiotic complement 1. Identity completeness is a label property, not clinical efficacy. 1.7.0 (2026-09-15): IQM bio_score is the one form-quality owner for multi/prenatal and B-complex Formulation. prenatal_multi removes premium-form diversity (4) and key-form name credit (5); its reference, category cap and raw cap are 14 = panel form quality 12 + disclosure structure 2. b_complex removes its preferred-form name table (7); its reference and raw cap are 23 = core panel 10 + IQM form quality 8 + focus purity 3 + disclosure 2. Neither is reallocated.",
     "archetype_reference": {
       "sports_single": 24.0,
       "sports_pre_workout": 30.0,
@@ -74,10 +74,10 @@
       "generic_botanical_branded": 24.0,
       "immune_support": 30.0,
       "fiber_digestive": 28.0,
-      "b_complex": 30.0,
+      "b_complex": 23.0,
       "omega": 21.0,
       "probiotic": 16.0,
-      "prenatal_multi": 21.0
+      "prenatal_multi": 14.0
     },
     "default_reference": 25.0
   },
@@ -296,10 +296,10 @@
   "formulation_variant_magnitudes": {
     "_doc": "Category-specific formulation/profile caps, form-quality points, standardization tiers and botanical dose-band credits — hoisted from the variant score_formulation / botanical / collagen modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across all variant + profile entrypoints). Canonical-ID sets stay in code. Drift-guarded by test_v4_formulation_variant_magnitudes_config. (The generic formulation module's magnitudes live in the flat formulation_magnitudes block.)",
     "multi_prenatal": {
-      "cap_formulation": 25.0, "formulation_presence_floor": 2.0, "cap_panel_form_quality": 12.0,
-      "cap_premium_form_diversity": 4.0, "cap_key_form_support": 5.0, "cap_panel_disclosure_structure": 2.0,
+      "cap_formulation": 14.0, "formulation_presence_floor": 2.0, "cap_panel_form_quality": 12.0,
+      "cap_panel_disclosure_structure": 2.0,
       "panel_form_neutral_floor": 9.0,
-      "bio_score_max": 15.0, "premium_form_threshold": 12.0, "premium_points_per_additional": 0.5
+      "bio_score_max": 15.0
     },
     "omega": { "cap_formulation": 25.0, "data_limited_form_floor": 19.0, "data_limited_form_min_epa_dha_mg": 750.0 },
     "probiotic": {
@@ -329,11 +329,11 @@
       "manufacturer_violations_floor": -25,
       "botanical_raw_floor": 40.0
     },
-    "multi_prenatal": { "dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
+    "multi_prenatal": { "dimension_caps": [["formulation", 14], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
     "omega": { "dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
     "probiotic": { "dimension_caps": [["formulation", 16], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
     "b_complex": {
-      "formulation_cap": 30.0, "dose_cap": 25.0, "evidence_cap": 20.0
+      "formulation_cap": 23.0, "dose_cap": 25.0, "evidence_cap": 20.0
     },
     "immune_support": { "formulation_bonus_cap": 12.0, "evidence_cap": 17.0, "evidence_floor_cap": 16.5 },
     "joint_support": {

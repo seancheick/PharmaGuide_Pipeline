@@ -6,15 +6,15 @@ single-ingredient products:
 
     Core dimension      Cap     Subsequent slice that fills it
     ------------------  ----    -------------------------------
-    Formulation         25     P3.1 — panel form quality, prenatal-critical
-                               nutrient form checks, gummy/formulation limits
+    Formulation         14     P3.1 — IQM panel form quality 12 + dose
+                               disclosure structure 2 (quality_score 1.7.0)
     Dose                25     P3.2 — RDA/AI coverage, UL safety, prenatal
                                critical nutrient adequacy floors
     Evidence            20     P3.3 — nutrient-outcome support and class
                                evidence
     Transparency        15     P3.5 — panel disclosure, blend opacity, claims,
                                allergens, marketing penalties
-    Core subtotal       85
+    Core subtotal       74
 
 Plus separate adjustments before the raw-score clamp: a 0-to-8 verification
 bonus (P3.4 B4a/B4b/B4c signals rescaled from the former 0-to-15 Trust

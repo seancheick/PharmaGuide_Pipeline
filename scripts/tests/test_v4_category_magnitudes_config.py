@@ -36,10 +36,11 @@ ORIGINAL = {
         "manufacturer_trust_cap": 5, "manufacturer_violations_floor": -25,
         "botanical_raw_floor": 40.0,
     },
-    "multi_prenatal": {"dimension_caps": ROUTER_DC},
+    # 1.7.0: multi/prenatal Formulation is IQM panel form quality 12 + disclosure 2.
+    "multi_prenatal": {"dimension_caps": [["formulation", 14], ["dose", 25], ["evidence", 20], ["transparency", 15]]},
     "omega": {"dimension_caps": ROUTER_DC},
     "probiotic": {"dimension_caps": [["formulation", 16], ["dose", 25], ["evidence", 20], ["transparency", 15]]},
-    "b_complex": {"formulation_cap": 30.0, "dose_cap": 25.0, "evidence_cap": 20.0},
+    "b_complex": {"formulation_cap": 23.0, "dose_cap": 25.0, "evidence_cap": 20.0},
     # evidence_cap hoisted from immune_support.immune_support_evidence_cap's
     # hardcoded 17.0 — same value, now a reviewable magnitude. It is a ceiling
     # on the evidence dimension and is deliberately distinct from the floor cap.
@@ -70,10 +71,10 @@ def test_runtime_constants_read_from_config_no_drift():
     assert generic.DIMENSION_CAPS == (("formulation", 30), ("dose", 25), ("evidence", 20), ("transparency", 10))
     assert generic.MANUFACTURER_TRUST_CAP == 5
     assert generic.MANUFACTURER_VIOLATIONS_FLOOR == -25
-    assert multi_prenatal.DIMENSION_CAPS == (("formulation", 25), ("dose", 25), ("evidence", 20), ("transparency", 15))
-    assert omega.DIMENSION_CAPS == multi_prenatal.DIMENSION_CAPS
+    assert multi_prenatal.DIMENSION_CAPS == (("formulation", 14), ("dose", 25), ("evidence", 20), ("transparency", 15))
+    assert omega.DIMENSION_CAPS == (("formulation", 25), ("dose", 25), ("evidence", 20), ("transparency", 15))
     assert probiotic.DIMENSION_CAPS == (("formulation", 16), ("dose", 25), ("evidence", 20), ("transparency", 15))
-    assert b_complex.FORMULATION_CAP == 30.0 and b_complex.B7_CAP == 3.0
+    assert b_complex.FORMULATION_CAP == 23.0 and b_complex.B7_CAP == 3.0
     assert immune_support.IMMUNE_FORMULATION_BONUS_CAP == 12.0
     assert immune_support.IMMUNE_EVIDENCE_FLOOR_CAP == 16.5
     assert joint_support.JOINT_SUPPORT_EVIDENCE_CAP == 14.0

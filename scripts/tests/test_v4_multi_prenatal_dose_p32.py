@@ -325,7 +325,7 @@ def test_prenatal_core_coverage_does_not_require_choline_or_dha() -> None:
     assert "prenatal_complement_support" not in payload["components"]
 
 
-def test_prenatal_critical_thresholds_are_not_downgraded_by_form_bio_weighting() -> None:
+def test_prenatal_critical_thresholds_use_raw_pct_rda_regardless_of_form_rating() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 
     payload = score_dose(_product(

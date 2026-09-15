@@ -148,10 +148,10 @@ def test_formulation_cheap_form_stays_low() -> None:
 
 def test_formulation_multi_uses_panel_reference() -> None:
     from scoring_v4.quality_score import assemble_quality_score
-    # multi/prenatal raw formulation is out of 25 (panel-aware already); ref 21
-    out = assemble_quality_score(_shadow(module="multi_or_prenatal", bd=_module_bd(form=19, form_max=25)))
+    # multi/prenatal raw formulation is IQM panel form quality 12 + disclosure 2; ref 14
+    out = assemble_quality_score(_shadow(module="multi_or_prenatal", bd=_module_bd(form=12, form_max=14)))
     f = out["quality_pillars_v4"]["formulation"]["score"]
-    assert 17.0 <= f <= 19.0  # 19/21*20 ~= 18.1
+    assert f == 17.1  # 12/14*20
 
 
 def test_formulation_never_exceeds_20() -> None:
@@ -566,7 +566,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.6.0-probiotic-completeness"
+    assert out["quality_score_version"] == "1.7.0-vitamin-form-ownership"
 
 
 def test_uncapped_product_can_reach_a_true_100() -> None:

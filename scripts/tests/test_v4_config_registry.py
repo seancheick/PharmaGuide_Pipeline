@@ -59,7 +59,7 @@ def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
     assert config_version("omega") == "1.1.0-rubric-proxy-removal"
-    assert config_version("quality_score") == "1.6.0-probiotic-completeness"
+    assert config_version("quality_score") == "1.7.0-vitamin-form-ownership"
 
 
 def test_all_config_provenance_shape():

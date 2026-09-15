@@ -1,9 +1,9 @@
 """v4 P3.1 — multi/prenatal Formulation dimension tests.
 
 Formulation for multis/prenatals is intentionally different from generic:
-it rewards panel-wide form quality without letting dozens of ingredients
-stack unbounded premium credit, and it flags gummy/formulation limitations
-before Dose/Prenatal-critical adequacy lands in P3.2.
+it rewards panel-wide IQM form quality and panel dose disclosure. Since
+quality_score 1.7.0, panel size and preferred-form wording add nothing at
+equal form quality, and dosage form alone neither earns nor loses points.
 """
 
 from __future__ import annotations
@@ -72,14 +72,15 @@ def _premium_prenatal_ingredients() -> list[dict]:
 
 
 def test_formulation_payload_shape_and_phase() -> None:
-    from scoring_v4.modules.multi_prenatal_formulation import score_formulation
+    from scoring_v4.modules.multi_prenatal_formulation import CAP_FORMULATION, score_formulation
 
     payload = score_formulation(_product(ingredients=_premium_prenatal_ingredients()))
 
     assert payload["metadata"]["phase"] == "P3.1_multi_prenatal_formulation"
     assert set(payload.keys()) == {"score", "components", "penalties", "metadata"}
+    assert set(payload["components"]) == {"panel_form_quality", "panel_disclosure_structure"}
     assert payload["score"] is not None
-    assert payload["score"] <= 25.0
+    assert payload["score"] <= CAP_FORMULATION == 14.0
 
 
 def test_panel_form_quality_uses_neutral_value_as_a_true_floor() -> None:
@@ -109,21 +110,22 @@ def test_panel_form_quality_floor_never_reduces_premium_panel() -> None:
     assert payload["components"]["panel_form_quality"] == 12.0
 
 
-def test_premium_form_diversity_skip_first_and_caps_at_4() -> None:
+def test_equally_rated_panel_size_adds_no_formulation_points() -> None:
     from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 
-    ingredients = [
+    twelve = score_formulation(_product(ingredients=[
         _ingredient(f"nutrient_{i}", bio_score=13, matched_form=f"premium form {i}")
         for i in range(12)
-    ]
+    ]))
+    one = score_formulation(_product(ingredients=[
+        _ingredient("nutrient_0", bio_score=13, matched_form="premium form 0"),
+    ]))
 
-    payload = score_formulation(_product(ingredients=ingredients))
-
-    assert payload["components"]["premium_form_diversity"] == 4.0
-    assert payload["metadata"]["premium_form_count"] == 12
+    assert twelve["score"] == one["score"]
+    assert twelve["components"] == one["components"]
 
 
-def test_key_form_support_prefers_methylfolate_over_folic_acid() -> None:
+def test_folate_form_wording_adds_no_points_at_equal_iqm() -> None:
     from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 
     methyl = score_formulation(_product(ingredients=[
@@ -133,11 +135,11 @@ def test_key_form_support_prefers_methylfolate_over_folic_acid() -> None:
         _ingredient("vitamin_b9_folate", name="Folate", matched_form="Folic acid"),
     ]))
 
-    assert methyl["components"]["key_form_support"] == 1.25
-    assert folic["components"]["key_form_support"] == 0.75
+    assert methyl["score"] == folic["score"]
+    assert methyl["components"] == folic["components"]
 
 
-def test_key_form_support_credits_core_multi_forms_without_prenatal_requirement() -> None:
+def test_core_multi_has_no_prenatal_dha_formulation_penalty() -> None:
     from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 
     product = _product(name="Men's Multivitamin", ingredients=[
@@ -149,7 +151,6 @@ def test_key_form_support_credits_core_multi_forms_without_prenatal_requirement(
 
     payload = score_formulation(product)
 
-    assert payload["components"]["key_form_support"] == 4.0
     assert "missing_prenatal_dha" not in payload["penalties"]
 
 
@@ -259,7 +260,7 @@ def test_formulation_accepts_final_detail_blob_top_level_ingredients_alias() -> 
     payload = score_formulation(product)
 
     assert payload["score"] == 0.0
-    assert payload["metadata"]["premium_form_count"] == 0
+    assert payload["components"]["panel_form_quality"] == 0.0
 
 
 def test_multi_prenatal_formulation_does_not_import_v3_scorer() -> None:

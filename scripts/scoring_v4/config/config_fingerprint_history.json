@@ -26,7 +26,8 @@
       "1.5.0-verified-clinical-anchors": "f0b27e914c16aafa",
       "1.5.1-clinical-anchor-corrections": "ab494b97da60ef2c",
       "1.5.2-evidence-boundary-fixes": "ce30f35851632687",
-      "1.6.0-probiotic-completeness": "ab9f5a61fd77e879"
+      "1.6.0-probiotic-completeness": "ab9f5a61fd77e879",
+      "1.7.0-vitamin-form-ownership": "32da1b7296417cad"
     }
   }
 }

@@ -376,16 +376,16 @@
         "archetype": "b_complex",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 96.9,
+        "quality_score_v4_100": 96.7,
         "quality_tier": "Exceptional",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 30.0,
+          "formulation": 23.0,
           "dose": 25.0,
           "evidence": 14.0
         },
         "pillars": {
-          "formulation": 19.3,
+          "formulation": 19.1,
           "dose": 19.1,
           "evidence": 20.0,
           "transparency": 13.5,
@@ -393,7 +393,7 @@
           "safety_hygiene": 10.0
         },
         "raw_dimensions": {
-          "formulation": 28.9333,
+          "formulation": 21.9333,
           "dose": 23.875,
           "evidence": 15.0,
           "transparency": 9.0
@@ -468,16 +468,16 @@
         "archetype": "b_complex",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 53.8,
-        "quality_tier": "Poor",
+        "quality_score_v4_100": 56.3,
+        "quality_tier": "Needs improvement",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 30.0,
+          "formulation": 23.0,
           "dose": 25.0,
           "evidence": 14.0
         },
         "pillars": {
-          "formulation": 8.3,
+          "formulation": 10.8,
           "dose": 6.9,
           "evidence": 16.1,
           "transparency": 13.5,
@@ -1156,16 +1156,16 @@
         "archetype": "prenatal_multi",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 96.0,
-        "quality_tier": "Exceptional",
+        "quality_score_v4_100": 93.7,
+        "quality_tier": "Excellent",
         "v4_confidence": "high",
         "normalization_references": {
-          "formulation": 21.0,
+          "formulation": 14.0,
           "dose": 23.0,
           "evidence": 18.0
         },
         "pillars": {
-          "formulation": 20.0,
+          "formulation": 17.7,
           "dose": 20.0,
           "evidence": 20.0,
           "transparency": 11.0,
@@ -1173,8 +1173,8 @@
           "safety_hygiene": 10.0
         },
         "raw_dimensions": {
-          "formulation": 21.4,
-          "dose": 23.3571,
+          "formulation": 12.4,
+          "dose": 23.8517,
           "evidence": 18.0,
           "transparency": 11.0
         }
@@ -1236,25 +1236,25 @@
         "archetype": "prenatal_multi",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 37.4,
+        "quality_score_v4_100": 38.6,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
-          "formulation": 21.0,
+          "formulation": 14.0,
           "dose": 23.0,
           "evidence": 18.0
         },
         "pillars": {
           "formulation": 7.4,
-          "dose": 9.0,
+          "dose": 10.2,
           "evidence": 0.0,
           "transparency": 11.0,
           "verification": 6.0,
           "safety_hygiene": 4.0
         },
         "raw_dimensions": {
-          "formulation": 7.75,
-          "dose": 10.2991,
+          "formulation": 5.2,
+          "dose": 11.6921,
           "evidence": 0.0,
           "transparency": 11.0
         }

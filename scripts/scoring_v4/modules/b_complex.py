@@ -5,7 +5,8 @@ as broad multivitamins/prenatals, but they also should not get single-ingredient
 rubric treatment. This module rewards:
   - a complete core B-vitamin panel,
   - moderate disclosed RDA/AI coverage,
-  - preferred active forms where relevant,
+  - IQM form quality (bio_score is the one form-quality owner; the separate
+    preferred-form name table was removed in quality_score 1.7.0),
   - clean formulation / transparency / verification via the shared v4 contracts.
 """
 
@@ -62,14 +63,6 @@ EVIDENCE_CAP = _CM["evidence_cap"]
 B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]
 B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
 B7_CAP = _B7["cap"]
-
-PREFERRED_FORM_PATTERNS = {
-    "vitamin_b2_riboflavin": re.compile(r"\b(riboflavin[-\s]?5[-\s]?phosphate|r5p)\b", re.IGNORECASE),
-    "vitamin_b3_niacin": re.compile(r"\b(niacinamide|nicotinamide)\b", re.IGNORECASE),
-    "vitamin_b6_pyridoxine": re.compile(r"\b(pyridoxal[-\s]?5[-\s]?phosphate|p5p|plp)\b", re.IGNORECASE),
-    "vitamin_b9_folate": re.compile(r"\b(5[-\s]?mthf|l[-\s]?5[-\s]?mthf|methylfolate|folinic|quatrefolic)\b", re.IGNORECASE),
-    "vitamin_b12_cobalamin": re.compile(r"\b(methylcobalamin|adenosylcobalamin|hydroxocobalamin|hydroxycobalamin)\b", re.IGNORECASE),
-}
 
 
 def _clamp(low: float, high: float, value: float) -> float:
@@ -134,28 +127,6 @@ def _b_rows(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     return rows
 
 
-def _ingredient_text(row: Dict[str, Any]) -> str:
-    parts = []
-    for key in ("name", "standard_name", "matched_form", "form", "raw_source_text"):
-        value = row.get(key)
-        if value:
-            parts.append(str(value))
-    for form in row.get("matched_forms") or []:
-        if isinstance(form, dict):
-            parts.extend(str(form.get(k)) for k in ("form_key", "raw_form_text", "matched_candidate") if form.get(k))
-    return " ".join(parts)
-
-
-def _score_preferred_forms(rows: Dict[str, Dict[str, Any]]) -> tuple[float, list[str]]:
-    hits: list[str] = []
-    for key, pattern in PREFERRED_FORM_PATTERNS.items():
-        row = rows.get(key)
-        if row and pattern.search(_ingredient_text(row)):
-            hits.append(key)
-    score = _clamp(0.0, 7.0, len(hits) * (7.0 / len(PREFERRED_FORM_PATTERNS)))
-    return _round(score), hits
-
-
 def _score_form_quality(rows: Dict[str, Dict[str, Any]]) -> tuple[float, Optional[float]]:
     scores = []
     for key in B_CORE:
@@ -201,13 +172,12 @@ def _score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     core_count = len(set(rows) & set(B_CORE))
     core_panel = _round((core_count / len(B_CORE)) * 10.0)
     form_quality, avg_bio = _score_form_quality(rows)
-    preferred_forms, preferred_hits = _score_preferred_forms(rows)
     focus_purity, non_b_count = _score_focus_purity(product, rows)
     dose_disclosure = _score_dose_disclosure(rows)
 
     shared = shared_formulation_penalty_detail(product)
     penalties = dict(shared["penalties"])
-    positive = core_panel + form_quality + preferred_forms + focus_purity + dose_disclosure
+    positive = core_panel + form_quality + focus_purity + dose_disclosure
     penalty_total = sum(abs(float(value)) for value in penalties.values())
     score = _round(_clamp(0.0, FORMULATION_CAP, positive - penalty_total))
     return {
@@ -216,7 +186,6 @@ def _score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         "components": {
             "core_b_panel_coverage": core_panel,
             "b_form_quality": form_quality,
-            "preferred_active_forms": preferred_forms,
             "b_complex_focus_purity": focus_purity,
             "dose_disclosure": dose_disclosure,
         },
@@ -227,7 +196,6 @@ def _score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
             "core_b_count": core_count,
             "optional_support_count": len(set(rows) & B_OPTIONAL_SUPPORT),
             "average_bio_score": avg_bio,
-            "preferred_form_hits": preferred_hits,
             "non_b_active_count": non_b_count,
             **shared.get("metadata", {}),
         },
