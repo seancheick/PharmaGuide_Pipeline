@@ -162,7 +162,9 @@ def test_clean_active_form_b_complex_scores_in_fair_top_band() -> None:
     assert scored["v4_module"] == "b_complex"
     assert scored["v4_breakdown"]["module"]["module"] == "b_complex"
     assert scored["quality_score_v4_100"] >= 84.0
-    assert scored["quality_score_v4_100"] <= 92.0
+    # 96 ceiling since quality_score 1.3.0: the fixture's verified registry cert is
+    # product-level verification (15/15). Formulation, dose and evidence are unchanged.
+    assert scored["quality_score_v4_100"] <= 96.0
 
 
 def test_over_ul_b_complex_carries_dose_and_safety_hygiene_penalty() -> None:

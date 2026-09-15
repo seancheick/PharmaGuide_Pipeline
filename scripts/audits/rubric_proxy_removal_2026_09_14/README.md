@@ -128,5 +128,6 @@ dose_20_to_100pct -2.70; magnesium (UL below RDA) group, both dose controls and 
 verification group unmoved; 0 unexpected. Pass-1 packet: no moves. No archetype fixture moved.
 Largest drops are real under-doses against the DRI: choline bitartrate 600 mg (~45% of the
 choline AI) -5.4 to -6.9, vitamin K2 45 mcg (37.5% of the AI) -7.8.
-Test note: the immune audit ceiling 92 -> 96 reflects 1.3.0 verification (registry cert = 15),
-which commit 2's targeted test run did not include.
+Test note: the immune audit and ideal B-complex ceilings (92 -> 96) reflect 1.3.0 verification:
+a single verified registry cert now fills the pillar (6 + 9 points = 15; before, 9 + label GMP 2 = 11).
+Commit 2's targeted test run missed both; the full fast suite caught the B-complex one.
