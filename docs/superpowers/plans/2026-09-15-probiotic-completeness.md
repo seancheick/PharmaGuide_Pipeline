@@ -213,11 +213,14 @@ being represented as a general cardiovascular treatment benefit.
   must stop unknown direction from inheriting positive efficacy. Preserve
   legitimate nutrition-authority support and the distinction between study
   quality and a positive outcome; do not relabel unknown rows as negative.
-- The generic primary-evidence comments explicitly reserve 19–20 points for
-  multi-active breadth. This is inconsistent with the approved focused-formula
-  fairness goal. Replace that policy only after source-bound single, duo/trio,
-  broad, trace-ingredient and added-irrelevant-active contrasts are frozen.
-  Do not bypass the material-active/source ownership checks to raise scores.
+- The generic primary-evidence comments reserve raw 19–20 for multi-active
+  breadth, but the current public reference is already 18: the locked
+  single-molecule fixture receives public 20 from raw 18. The comment alone
+  does not prove a public single-ingredient ceiling defect. Audit source-bound
+  single, duo/trio, broad, trace-ingredient and added-irrelevant-active contrasts
+  before changing policy, and correct stale descriptions rather than "fixing"
+  behavior that already meets the fairness goal. Keep material-active/source
+  ownership checks intact.
 
 ### Next bounded implementation: vitamin form ownership
 
