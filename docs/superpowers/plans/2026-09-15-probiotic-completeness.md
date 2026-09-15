@@ -206,6 +206,18 @@ being represented as a general cardiovascular treatment benefit.
   research-limited control; do not raise its expected score or invent evidence.
   Add separate demonstrably achievable excellent/weak-verification/underdose/
   complexity/incomplete-review fixtures through the same production seam.
+- Generic Evidence has a reproduced fail-open direction default:
+  `_entry_raw_points` returns 5.0 for the same five-point row with a missing,
+  `unresolved`, misspelled, or `positive_strong` direction. Explicit `null`
+  returns 1.25 and `negative` returns zero. The next Evidence boundary batch
+  must stop unknown direction from inheriting positive efficacy. Preserve
+  legitimate nutrition-authority support and the distinction between study
+  quality and a positive outcome; do not relabel unknown rows as negative.
+- The generic primary-evidence comments explicitly reserve 19–20 points for
+  multi-active breadth. This is inconsistent with the approved focused-formula
+  fairness goal. Replace that policy only after source-bound single, duo/trio,
+  broad, trace-ingredient and added-irrelevant-active contrasts are frozen.
+  Do not bypass the material-active/source ownership checks to raise scores.
 
 ### Next bounded implementation: vitamin form ownership
 
