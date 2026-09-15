@@ -69,3 +69,32 @@ organic/natural/Non-GMO, sustainability and EPA:DHA ratio leave the score unchan
 generic single active carries a hidden public cap.
 
 Tests: `scripts/test.sh fast` — 15,090 passed, 73 skipped, 0 failed (before the final import/docstring touch-up, which re-ran generic/omega/archetype/quality_score: 1,031 passed).
+
+## Pass 2a — verification evidence tiers (quality_score 1.3.0)
+
+Problem (reproduced exactly on all 15,106 stored 2026-09-13 scores): an unknown product took
+`max(6, signals) + soft`, a product with a real signal took `signals + soft`. So a batch-COA
+product scored 2.5 (7.5 with soft points), a label cert claim 3-7, and an unknown product with
+reputation + region points 9. Every enricher GMP flag is a label-text regex match
+(`enrich_supplements_v3.py`), yet `gmp_level=certified` counted as certified GMP for ~3,150
+products.
+
+Rule: score = neutral 6 + points, bounded by the best evidence tier present:
+
+| Tier | What qualifies | Bound |
+|---|---|---|
+| unknown | nothing | 6 |
+| claim_or_brand | label-asserted cert, own purity testing, manufacturer reputation (<= 2) | <= 8 |
+| manufacturing | GMP inferred from a verified product cert or audited manufacturer evidence, verified brand/facility cert | <= 10 |
+| product | registry sku/product_line cert or batch COA | >= 11, up to 15 |
+
+Label-text GMP / FDA-registration wording and manufacturing region no longer score.
+Analytic projection (formula reproduces 15,106/15,106 stored scores first): catalog mean
+8.21 -> 8.24; unknown 6.09 -> 6.00; claim/brand 8.66 -> 8.00; manufacturing 9.34 -> 9.86;
+product 13.04 -> 14.64.
+
+Pass-2 packet vs bfac09a1 (`--packet pass2`): batch COA +5.0, registry cert +0.67, label cert
+claim +1.0, brand/facility cert -1.0, label GMP only -0.67, unknown with reputation -1.0; all
+dose groups and every control group unmoved; 0 unexpected. Ten archetype ideal fixtures move
+verification 11 -> 15 (each has a verified registry cert); only total, tier and the
+verification pillar changed; every ideal still outscores its failure pair.

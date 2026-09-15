@@ -409,7 +409,8 @@ def test_verification_pillar_reads_lowercase_v4_component_keys() -> None:
             "b4d_brand_testing_posture": 2.0,
         },
         "metadata": {
-            "trust_metadata": {"verified_scope_counts": {"sku": 1}},
+            # GMP counts only when audited (1.3.0); label GMP wording alone scores 0.
+            "trust_metadata": {"verified_scope_counts": {"sku": 1}, "B4b_gmp_inferred_from_cert": "NSF Certified for Sport"},
         },
     }
 
@@ -565,7 +566,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == "1.2.1-audit-fixes"
+    assert out["quality_score_version"] == "1.3.0-verification-tiers"
 
 
 def test_uncapped_product_can_reach_a_true_100() -> None:
@@ -745,11 +746,13 @@ def test_omega_b4a_scored_entries_scope_counts_as_registry_cert() -> None:
     assert v["components"]["brand_testing"] == 2.0
 
 
-def test_fail_open_neutral_when_no_cert_no_coa() -> None:
-    # self-asserted cGMP only (B4a=0, B4c=0) = data-UNKNOWN -> neutral baseline, NOT zero
-    v = _verif(_bd_verif(b4a=0.0, b4b=4.0, b4c=0.0))
-    assert 6.0 <= v["score"] <= 10.0  # neutral 6 + soft, not cratered
-    assert "neutral" in v["reason"].lower() or "unknown" in v["reason"].lower()
+def test_fail_open_neutral_when_only_label_gmp_wording() -> None:
+    # label-text cGMP only (B4b from enricher text match, no audit) = unknown -> neutral 6, NOT zero
+    v = _verif(_bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=1.0))
+    assert v["score"] == 6.0
+    assert v["components"]["gmp"] == 0.0
+    assert v["components"]["tier"] == "unknown"
+    assert "unknown" in v["reason"].lower()
 
 
 def test_brand_only_verified_cert_lifts_above_unknown_without_b4a_credit() -> None:
@@ -799,11 +802,47 @@ def test_coa_counts_as_real_signal_not_fail_open() -> None:
     assert "neutral" not in v["reason"].lower()
 
 
-def test_soft_signals_capped_at_3() -> None:
-    # huge soft (reputation+region) cannot exceed the 3-point soft cap
-    low = _verif(_bd_verif(b4a=12.0, d1=0.0, d4=0.0))["score"]
-    high = _verif(_bd_verif(b4a=12.0, d1=2.0, d4=1.0))["score"]
-    assert high - low <= 3.0 + 1e-9
+def test_region_does_not_count_and_reputation_is_capped() -> None:
+    # manufacturing region is not verification; reputation is brand-level context capped at 2
+    region_only = _verif(_bd_verif(b4a=0.0, b4b=0.0, b4c=0.0, b4d=0.0, d1=0.0, d4=1.0))
+    reputation = _verif(_bd_verif(b4a=0.0, b4b=0.0, b4c=0.0, b4d=0.0, d1=5.0, d4=1.0))
+    assert region_only["score"] == 6.0
+    assert reputation["components"]["reputation"] == 2.0
+    assert reputation["score"] == 8.0
+    assert reputation["components"]["tier"] == "claim_or_brand"
+
+
+def test_audited_gmp_counts_but_label_gmp_wording_does_not() -> None:
+    label = _verif(_bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0))
+    bd = _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=0.0, d1=0.0, d4=0.0)
+    bd["verification_bonus"]["metadata"]["trust_metadata"]["B4b_gmp_inferred_from_manufacturer_facility"] = "audited cGMP facility"
+    audited = _verif(bd)
+    assert label["components"]["gmp"] == 0.0 and label["score"] == 6.0
+    assert audited["components"]["gmp"] == 2.0 and audited["score"] == 8.0
+    assert audited["components"]["tier"] == "manufacturing"
+
+
+def test_more_independent_evidence_never_scores_lower() -> None:
+    """Evidence tiers are ordered: unknown < claim/brand < manufacturing < product level.
+
+    Before 1.3.0 a batch-COA product could score 2.5 and a label cert claim 7
+    while an unknown product with reputation and region points scored 9."""
+    unknown = _verif(_bd_verif(b4a=0.0, b4b=0.0, b4c=0.0, b4d=0.0, d1=0.0, d4=1.0))
+    claim_best = _verif(_bd_verif(b4a=2.0, b4b=4.0, b4c=0.0, b4d=2.0, d1=2.0, d4=1.0,
+                                  scope_counts={"label_asserted_product": 1}))
+    manufacturing = _bd_verif_with_brand_only_cert()
+    manufacturing["verification_bonus"]["components"].update({"B4b_gmp": 4.0, "B4d_brand_testing_posture": 2.0})
+    manufacturing["verification_bonus"]["metadata"]["trust_metadata"]["B4b_gmp_inferred_from_manufacturer_facility"] = "audited"
+    manufacturing["manufacturer_trust"]["components"]["D1_manufacturer_reputation"] = 2.0
+    manufacturing_best = _verif(manufacturing)
+    coa_only = _verif(_bd_verif(b4a=0.0, b4b=0.0, b4c=0.5, b4d=0.0, d1=0.0, d4=0.0))
+
+    assert unknown["score"] < claim_best["score"] <= 8.0
+    assert claim_best["score"] < manufacturing_best["score"] <= 10.0
+    assert manufacturing_best["score"] < coa_only["score"]
+    assert coa_only["score"] >= 11.0
+    assert [v["components"]["tier"] for v in (unknown, claim_best, manufacturing_best, coa_only)] == [
+        "unknown", "claim_or_brand", "manufacturing", "product"]
 
 
 def test_verification_never_exceeds_15() -> None:

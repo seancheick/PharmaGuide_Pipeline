@@ -5,8 +5,8 @@ formulation/20, dose/20, evidence/20, transparency/15, verification/15, safety_h
 
 Current state: the public score is assembled from category-aware pillar adapters,
 not a post-hoc display stretch. Formulation, dose, and evidence normalize against
-archetype-specific achievable ceilings; verification uses hard quality signals with
-a soft-signal cap; transparency remains a faithful source-dimension map because it
+archetype-specific achievable ceilings; verification ranks evidence tiers (unknown <
+claim/brand < manufacturing < product-level); transparency remains a faithful source-dimension map because it
 does not have the same structural ceiling problem.
 
 INVARIANTS:
@@ -700,9 +700,9 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
                          cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Verification / quality pillar (/15). Hard third-party signals SATURATE the
     cap (over-provisioned, clamps) so a subset maxes it. Self-asserted cGMP is table
-    stakes. FAIL OPEN: no cert AND no COA = data-unknown → neutral baseline (not 0),
-    so the ~62% of the catalog we lack cert data on is not cratered. Soft reputation/
-    region capped; physician/sustainability/prestige dropped."""
+    stakes. FAIL OPEN: no verification data = unknown → neutral baseline (not 0).
+    1.3.0 orders evidence tiers so more independent evidence never scores lower:
+    unknown 6 < claim/brand <= 8 < manufacturing <= 10 < product-level >= 11."""
     sub = cfg["verification_subscale"]
     cap = sub["cap"]
     vb_payload = module_bd.get("verification_bonus") or {}
@@ -731,72 +731,74 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     elif has_label_asserted_cert:
         cert = _num(sub.get("label_asserted_cert_points"))
     coa_batch = round(min(sub["coa_batch_max"], (b4c / 2.0) * sub["coa_batch_max"]), 2) if b4c else 0.0
-    gmp = (sub["gmp_certified_points"] if b4b >= 4.0
-           else sub["gmp_registered_points"] if b4b >= 2.0 else 0.0)
+    # Every GMP flag the enricher sets is matched from label text (self-asserted
+    # table stakes). GMP only counts when a verified product cert implies an
+    # audited facility or exact-matched manufacturer evidence names one.
+    audited_gmp = bool(
+        trust_meta.get("B4b_gmp_inferred_from_cert")
+        or trust_meta.get("B4b_gmp_inferred_from_manufacturer_facility")
+    )
+    gmp = sub["gmp_certified_points"] if (audited_gmp and b4b >= 4.0) else 0.0
     testing = sub["brand_testing_points"] if b4d > 0 else 0.0
     # PR2.1: a verified brand/facility scoped cert is a real third-party
     # verification signal, but weaker than sku/product_line certification and
-    # not evidence for this SKU. It fills the unknown-data gap only; it does not
-    # stack on top of product-level cert/COA and never changes raw B4a.
+    # not evidence for this SKU. It never stacks on product-level cert/COA.
     brand_only_cert = (
         _num(sub.get("brand_only_cert_points"))
         if brand_only_count > 0 and b4a <= 0 and b4c <= 0
         else 0.0
     )
-    hard = cert + coa_batch + gmp + testing + brand_only_cert
-    # soft: only reputation + region, capped; physician/sustainability/disclosure excluded
-    soft = min(sub["soft_cap"],
-               _num(mt.get("D1_manufacturer_reputation")) + _num(mt.get("D4_high_standard_region")))
+    # Manufacturer reputation is brand-level context; manufacturing region is not
+    # verification and no longer counts.
+    reputation = min(sub["reputation_cap"], _num(mt.get("D1_manufacturer_reputation")))
 
-    has_product_third_party_signal = (b4a > 0) or (b4c > 0)
-    has_third_party_signal = has_product_third_party_signal or (brand_only_cert > 0)
-    if has_product_third_party_signal:
-        total = hard + soft
-        # Name the actual third-party signals present, in plain English. No raw
-        # numbers — "neutral" is intentionally absent (this is the real-signal
-        # path, not the unknown fail-open path).
-        signals = []
-        if cert > 0:
-            if has_registry_cert:
-                signals.append("third-party certified")
-            elif has_label_asserted_cert:
-                signals.append("label claims third-party certification")
-        if coa_batch > 0:
-            signals.append("publishes batch test results")
-        if testing > 0:
-            signals.append("does its own purity testing")
-        if not signals and gmp > 0:
-            signals.append("made in a GMP-registered facility")
-        # "Independently verified" only when an independent party actually
-        # verified the product (registry-matched cert or batch COA). A
-        # label-asserted claim or self-run testing gets a neutral header —
-        # the old prefix contradicted its own clause ("Independently
-        # verified — label claims third-party certification").
-        independently_verified = has_registry_cert or coa_batch > 0
-        prefix = (
-            "Independently verified — " if independently_verified
-            else "Quality signals on file — "
-        )
-        if signals:
-            reason = prefix + ", ".join(signals) + "."
-        elif independently_verified:
-            reason = "Independently verified for quality."
-        else:
-            reason = "Quality signals on file."
-        fail_open = False
-    elif brand_only_cert > 0:
-        base = max(sub["neutral_baseline"], cert + coa_batch + gmp + testing)
-        total = base + brand_only_cert + soft
-        # Keep the literal "brand/facility cert" wording the contract relies on.
-        reason = "Holds a brand/facility certification verified by a third party."
-        fail_open = False
+    # 1.3.0 evidence tiers: more independent evidence can never score lower than
+    # less. Unknown sits at the neutral baseline; claims and brand context can
+    # add a little; manufacturing verification more; product-level verification
+    # (registry cert or batch COA) always outranks every lower tier.
+    product_verified = has_registry_cert or coa_batch > 0
+    manufacturing_verified = gmp > 0 or brand_only_cert > 0
+    claim_or_brand = cert > 0 or testing > 0 or reputation > 0
+    base = sub["neutral_baseline"] + cert + coa_batch + gmp + testing + brand_only_cert + reputation
+    ceilings = sub["tier_ceilings"]
+    if product_verified:
+        tier = "product"
+        total = max(sub["product_level_floor"], base)
+    elif manufacturing_verified:
+        tier = "manufacturing"
+        total = min(ceilings["manufacturing"], base)
+    elif claim_or_brand:
+        tier = "claim_or_brand"
+        total = min(ceilings["claim_or_brand"], base)
     else:
-        base = max(sub["neutral_baseline"], hard)
-        total = base + soft
-        # Fail-open: no testing data on file. Say it's unknown, not that the
+        tier = "unknown"
+        total = sub["neutral_baseline"]
+    fail_open = tier == "unknown"
+
+    signals = []
+    if has_registry_cert:
+        signals.append("third-party certified")
+    elif has_label_asserted_cert:
+        signals.append("label claims third-party certification")
+    if coa_batch > 0:
+        signals.append("publishes batch test results")
+    if brand_only_cert > 0:
+        signals.append("holds a brand/facility certification verified by a third party")
+    if gmp > 0:
+        signals.append("made in an audited GMP facility")
+    if testing > 0:
+        signals.append("does its own purity testing")
+    if tier == "product":
+        reason = "Independently verified — " + ", ".join(signals) + "."
+    elif tier == "manufacturing":
+        reason = "Manufacturing verified, product not independently tested — " + ", ".join(signals) + "."
+    elif tier == "claim_or_brand":
+        detail = ", ".join(signals) if signals else "established manufacturer"
+        reason = "Quality signals on file, not independently verified — " + detail + "."
+    else:
+        # Fail-open: no verification data on file. Say it's unknown, not that the
         # product failed — and make clear it isn't penalized for the gap.
         reason = "No third-party testing on file — treated as unknown, not penalized."
-        fail_open = True
 
     # PR3: a quality-system (non-critical) manufacturer violation lowers verification.
     # Applied AFTER the positive cert logic + clamp so it composes with future baseline
@@ -812,7 +814,7 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
         "reason": reason,
         "components": {"cert": cert, "coa_batch": coa_batch, "gmp": gmp,
                        "brand_testing": testing, "brand_only_cert": brand_only_cert,
-                       "soft": soft, "fail_open_neutral": fail_open,
+                       "reputation": reputation, "tier": tier, "fail_open_neutral": fail_open,
                        "quality_system_violation_penalty": qs_pen},
     }
 

@@ -59,7 +59,7 @@ def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
     assert config_version("omega") == "1.1.0-rubric-proxy-removal"
-    assert config_version("quality_score") == "1.2.1-audit-fixes"
+    assert config_version("quality_score") == "1.3.0-verification-tiers"
 
 
 def test_all_config_provenance_shape():
