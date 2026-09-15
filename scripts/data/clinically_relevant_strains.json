@@ -4,7 +4,7 @@
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
     "last_updated": "2026-09-14",
-    "total_entries": 105,
+    "total_entries": 128,
     "data_source": null,
     "version": "2.4.0",
     "native_context_note": "2026-09-04 bounded primary-source review: 16 outcome/population/dose contexts across eight native identities, authored once and joined to explicit combination members. Contexts are source-verified, pending clinical review, not new clinician approval or universal efficacy ranges. Historical approval flags and primary PMID anchors remain unchanged; Lpc-37's primary null result and stale source-description fields are corrected separately from context approval.",
@@ -13,7 +13,8 @@
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient.",
     "native_context_note_2026_09_13": "Wave 1 bounded curation: 50 study contexts authored for STRAIN_LGG, STRAIN_LACTIS_BL04, STRAIN_ACIDOPHILUS_NCFM, STRAIN_LONGUM_BB536, STRAIN_RHAMNOSUS_HN001, STRAIN_LACTIS_HN019, STRAIN_SUBTILIS_DE111 and STRAIN_SACCHAROMYCES (Lpc-37 and Bi-07 join through combination contexts). Contexts were authored as source_verified_pending_clinical_review; their statuses were set by the 2026-09-14 review response (see review_response_note_2026_09_14); optional study_design / sample_size / blinding / funding / source_tier / trial_registration describe quality and never score. Null and negative results are kept. Publication families (trial_family) mark papers from one cohort so they cannot count as independent confirmations.",
     "native_context_note_2026_09_14": "Wave 2 bounded curation: 59 study contexts authored for STRAIN_COAGULANS_IS2, STRAIN_COAGULANS_MTCC5856, STRAIN_ACIDOPHILUS_DDS1, STRAIN_PLANTARUM_299V, STRAIN_ACIDOPHILUS_LA5, STRAIN_LACTIS_BB12, STRAIN_HELVETICUS_R0052, STRAIN_RHAMNOSUS_GR1, STRAIN_COAGULANS_GBI30, STRAIN_BREVE_M16V and STRAIN_PLANTARUM_LP01 (R0175, RC14, UABla12, CRL-431 and LGG join through combination contexts; no identity stubs were added). Contexts were authored as source_verified_pending_clinical_review; their statuses were set by the 2026-09-14 review response (see review_response_note_2026_09_14); optional study_design / sample_size / blinding / funding / source_tier / trial_registration describe quality and never score. Null and negative results are kept. Publication families (trial_family) mark papers from one cohort so they cannot count as independent confirmations.",
-    "review_response_note_2026_09_14": "123 study contexts approved (clinician_approved; reviewer of record: Sean B (engineering owner), approving the 2026-09-14 Claude Fable 5.1 research review; this is an engineering-owner approval of the research review, not a Dr. Pham strain sign-off) and 2 held as adjudication_required (valid null RCTs whose tested formulation includes a component with no registry identity) on 2026-09-14 from the 2026-09-14 evidence review response; 987 source-bound field patches applied; 10 approved contexts stay scoring_eligible=false by review decision. Context approval is separate from cfu_thresholds.dr_pham_signoff, which was not changed."
+    "review_response_note_2026_09_14": "123 study contexts approved (clinician_approved; reviewer of record: Sean B (engineering owner), approving the 2026-09-14 Claude Fable 5.1 research review; this is an engineering-owner approval of the research review, not a Dr. Pham strain sign-off) and 2 held as adjudication_required (valid null RCTs whose tested formulation includes a component with no registry identity) on 2026-09-14 from the 2026-09-14 evidence review response; 987 source-bound field patches applied; 10 approved contexts stay scoring_eligible=false by review decision. Context approval is separate from cfu_thresholds.dr_pham_signoff, which was not changed.",
+    "identity_batch_note_2026_09_14": "Evidence-bound identity batch (scripts/audits/probiotic_registry_expansion_2026_09_14): 34 identities added, 11 duplicate SD-deposit stubs merged into their named strains, 7 alias sets added, Lab4 NCIMB deposits corrected. Every change cites PubMed/Europe PMC evidence; no sign-off, context, evidence or dose tier changed."
   },
   "clinically_relevant_strains": [
     {
@@ -3223,7 +3224,11 @@
         "HOWARU Bifido",
         "Bifidobacterium lactis strain HN019",
         "HOWARU Bifidobacterium animalis lactis HN019",
-        "HOWARU B. lactis HN019"
+        "HOWARU B. lactis HN019",
+        "Bifidobacterium animalis subsp. lactis SD-5674",
+        "Bifidobacterium lactis SD-5674",
+        "Bifidobacterium animalis lactis SD-5674",
+        "SD-5674"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -3451,7 +3456,9 @@
         "Bi-07",
         "Bifidobacterium animalis Bi-07",
         "Bifidobacterium animalis lactis Bi-07",
-        "B. animalis lactis Bi-07"
+        "B. animalis lactis Bi-07",
+        "Bifidobacterium lactis SD-5220",
+        "Bifidobacterium animalis lactis SD-5220"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -5289,7 +5296,10 @@
         "NCFM",
         "Lactobacillus acidophilus NC-FM",
         "HOWARU Lactobacillus acidophilus NCFM",
-        "HOWARU L. acidophilus NCFM"
+        "HOWARU L. acidophilus NCFM",
+        "Lactobacillus acidophilus SD-5221",
+        "L. acidophilus SD-5221",
+        "SD-5221"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -10216,7 +10226,12 @@
         "Bifidobacterium animalis subsp. lactis Bl-04",
         "Bifidobacterium animalis lactis Bl-04",
         "B. animalis lactis Bl-04",
-        "Bifidobacterium lactis strain Bl-04"
+        "Bifidobacterium lactis strain Bl-04",
+        "Bifidobacterium animalis subsp. lactis SD-5219",
+        "Bifidobacterium lactis SD-5219",
+        "Bifidobacterium animalis lactis SD-5219",
+        "B. lactis SD-5219",
+        "SD-5219"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -10512,7 +10527,10 @@
       "aliases": [
         "L. helveticus R0052",
         "R0052",
-        "Lacticaseibacillus helveticus R0052"
+        "Lacticaseibacillus helveticus R0052",
+        "Lactobacillus helveticus Rosell-52",
+        "L. helveticus Rosell-52",
+        "Lactobacillus helveticus Rosell-52 ME"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -10843,7 +10861,10 @@
       "standard_name": "Bifidobacterium longum R0175",
       "aliases": [
         "B. longum R0175",
-        "R0175"
+        "R0175",
+        "Bifidobacterium longum Rosell-175",
+        "B. longum Rosell-175",
+        "Bifidobacterium longum Rosell-175 ME"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -12261,7 +12282,8 @@
         "BS01",
         "BS-01",
         "BS-1",
-        "LMG P-21384"
+        "LMG P-21384",
+        "Bifidobacterium lactis BS-01"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -12575,7 +12597,9 @@
         "Lactobacillus acidophilus SD-5212",
         "L. acidophilus SD-5212",
         "ATCC SD5212",
-        "SD-5212"
+        "SD-5212",
+        "Lactobacillus acidophilus strain La-14",
+        "Lactobacillus acidophillus La-14"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -12610,7 +12634,10 @@
         "Lp-115",
         "Lactiplantibacillus plantarum Lp-115",
         "Lactobacillus plantarum LP-115",
-        "L. plantarum LP-115"
+        "L. plantarum LP-115",
+        "Lactobacillus plantarum SD-5209",
+        "L. plantarum SD-5209",
+        "SD-5209"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -12619,13 +12646,18 @@
         "status": "designation_found_species_unconfirmed",
         "source_pmids": [
           "31941108",
-          "37764689"
+          "37764689",
+          "35875231",
+          "39360839",
+          "37621875"
         ],
-        "deposit_ids": [],
+        "deposit_ids": [
+          "ATCC SD5209"
+        ],
         "supplier": "IFF/Danisco (FloraFIT)",
         "verified_on": "2026-09-13",
         "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Abstracts name Lp-115 inside Danisco strain mixtures; the retrieved abstract text does not carry the genus/species tokens machine-readably."
+        "note": "Abstracts name Lp-115 inside Danisco strain mixtures; the retrieved abstract text does not carry the genus/species tokens machine-readably. 2026-09-14: ATCC SD5209 crosswalk; duplicate stub STRAIN_PLANTARUM_SD5209 merged."
       },
       "cfu_thresholds": {
         "indication_primary": null,
@@ -12642,7 +12674,10 @@
         "L. casei Lc-11",
         "Lc-11",
         "Lacticaseibacillus casei Lc-11",
-        "Lactobacillus casei LC-11"
+        "Lactobacillus casei LC-11",
+        "Lactobacillus casei SD-5213",
+        "L. casei SD-5213",
+        "SD-5213"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -12651,13 +12686,17 @@
         "status": "designation_verified",
         "source_pmids": [
           "34111674",
-          "28118640"
+          "28118640",
+          "33095113",
+          "35875231"
         ],
-        "deposit_ids": [],
+        "deposit_ids": [
+          "ATCC SD5213"
+        ],
         "supplier": "IFF/Danisco (FloraFIT)",
         "verified_on": "2026-09-13",
         "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": null
+        "note": "2026-09-14: ATCC SD5213 crosswalk; duplicate stub STRAIN_CASEI_SD5213 merged."
       },
       "cfu_thresholds": {
         "indication_primary": null,
@@ -12675,7 +12714,10 @@
         "Lr-32",
         "Lacticaseibacillus rhamnosus Lr-32",
         "Lactobacillus rhamnosus LR-32",
-        "L. rhamnosus LR-32"
+        "L. rhamnosus LR-32",
+        "Lactobacillus rhamnosus SD-5217",
+        "L. rhamnosus SD-5217",
+        "SD-5217"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -12684,13 +12726,17 @@
         "status": "designation_verified",
         "source_pmids": [
           "42573797",
-          "38792672"
+          "38792672",
+          "35634575",
+          "37621875"
         ],
-        "deposit_ids": [],
+        "deposit_ids": [
+          "ATCC SD5217"
+        ],
         "supplier": "IFF/Danisco (FloraFIT)",
         "verified_on": "2026-09-13",
         "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": null
+        "note": "2026-09-14: ATCC SD5217 crosswalk; duplicate stub STRAIN_RHAMNOSUS_SD5217 merged."
       },
       "cfu_thresholds": {
         "indication_primary": null,
@@ -12738,7 +12784,11 @@
         "L. salivarius Ls-33",
         "Ls-33",
         "Lactobacillus salivarius LS-33",
-        "Ligilactobacillus salivarius Ls-33"
+        "Ligilactobacillus salivarius Ls-33",
+        "Lactobacillus salivarius SD-5208",
+        "L. salivarius SD-5208",
+        "SD-5208",
+        "Lactobacillus salivarius strain Ls-33"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -12746,13 +12796,17 @@
       "identity_verification": {
         "status": "designation_verified",
         "source_pmids": [
-          "21831765"
+          "21831765",
+          "35634575",
+          "37542325"
         ],
-        "deposit_ids": [],
+        "deposit_ids": [
+          "ATCC SD5208"
+        ],
         "supplier": "IFF/Danisco (FloraFIT)",
         "verified_on": "2026-09-13",
         "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": null
+        "note": "2026-09-14: ATCC SD5208 crosswalk; duplicate stub STRAIN_SALIVARIUS_SD5208 merged."
       },
       "cfu_thresholds": {
         "indication_primary": null,
@@ -12829,7 +12883,10 @@
       "aliases": [
         "B. longum Bl-05",
         "Bl-05",
-        "Bifidobacterium longum BL-05"
+        "Bifidobacterium longum BL-05",
+        "Bifidobacterium longum SD-5588",
+        "B. longum SD-5588",
+        "SD-5588"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -12837,13 +12894,17 @@
       "identity_verification": {
         "status": "designation_verified",
         "source_pmids": [
-          "23580006"
+          "23580006",
+          "33095113",
+          "37122152"
         ],
-        "deposit_ids": [],
+        "deposit_ids": [
+          "ATCC SD5588"
+        ],
         "supplier": "IFF/Danisco (FloraFIT)",
         "verified_on": "2026-09-13",
         "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": null
+        "note": "2026-09-14: ATCC SD5588 crosswalk; duplicate stub STRAIN_LONGUM_SD5588 merged."
       },
       "cfu_thresholds": {
         "indication_primary": null,
@@ -12892,7 +12953,11 @@
         "Bi-26",
         "Bifidobacterium longum infantis BI-26",
         "Bifidobacterium infantis BI-26",
-        "Bifidobacterium longum subsp. infantis BI-26"
+        "Bifidobacterium longum subsp. infantis BI-26",
+        "Bifidobacterium longum subsp. infantis SD-6720",
+        "Bifidobacterium infantis SD-6720",
+        "Bifidobacterium longum infantis SD-6720",
+        "SD-6720"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -12901,13 +12966,17 @@
         "status": "designation_verified",
         "source_pmids": [
           "38593579",
-          "37451704"
+          "37451704",
+          "31138818",
+          "35875231"
         ],
-        "deposit_ids": [],
+        "deposit_ids": [
+          "ATCC SD-6720"
+        ],
         "supplier": "IFF/Danisco (FloraFIT)",
         "verified_on": "2026-09-13",
         "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": null
+        "note": "2026-09-14: ATCC SD-6720 crosswalk; duplicate stub STRAIN_INFANTIS_SD6720 merged."
       },
       "cfu_thresholds": {
         "indication_primary": null,
@@ -13021,7 +13090,7 @@
         "Bifidobacterium bifidum CUL20",
         "B. bifidum CUL-20",
         "CUL-20",
-        "Bifidobacterium bifidum NCIMB 30172"
+        "Bifidobacterium bifidum NCIMB 30153"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -13030,15 +13099,18 @@
         "status": "designation_verified",
         "source_pmids": [
           "20089774",
-          "27869661"
+          "27869661",
+          "42208544",
+          "39695988",
+          "38903852"
         ],
         "deposit_ids": [
-          "NCIMB 30172"
+          "NCIMB 30153"
         ],
         "supplier": "Cultech (Lab4)",
         "verified_on": "2026-09-13",
         "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": null
+        "note": "2026-09-14: deposit corrected to NCIMB 30153 (22 open-access full texts (8 with Cultech authors) pair CUL20=NCIMB 30153 and CUL34=NCIMB 30172; PMID 27869661 (2016 abstract) and 2 later papers give the reverse, which the registry had copied. The NCIMB catalogue records for 30153 and 30172 could not be read (JavaScript-rendered pages) and no Cultech patent or regulatory filing naming either deposit was found; the correction rests on the manufacturer-authored papers (2021-2026), the same standard used for the DuPont SD deposit merges. Every affected label already prints the matching species.)"
       },
       "cfu_thresholds": {
         "indication_primary": null,
@@ -13057,7 +13129,8 @@
         "Bifidobacterium animalis subsp. lactis CUL34",
         "B. lactis CUL-34",
         "CUL-34",
-        "Bifidobacterium animalis subsp. lactis NCIMB 30153"
+        "Bifidobacterium animalis subsp. lactis NCIMB 30172",
+        "Bifidobacterium lactis NCIMB 30172"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -13066,15 +13139,18 @@
         "status": "designation_verified",
         "source_pmids": [
           "20089774",
-          "27869661"
+          "27869661",
+          "42208544",
+          "39695988",
+          "38903852"
         ],
         "deposit_ids": [
-          "NCIMB 30153"
+          "NCIMB 30172"
         ],
         "supplier": "Cultech (Lab4)",
         "verified_on": "2026-09-13",
         "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": null
+        "note": "2026-09-14: deposit corrected to NCIMB 30172 (22 open-access full texts (8 with Cultech authors) pair CUL20=NCIMB 30153 and CUL34=NCIMB 30172; PMID 27869661 (2016 abstract) and 2 later papers give the reverse, which the registry had copied. The NCIMB catalogue records for 30153 and 30172 could not be read (JavaScript-rendered pages) and no Cultech patent or regulatory filing naming either deposit was found; the correction rests on the manufacturer-authored papers (2021-2026), the same standard used for the DuPont SD deposit merges. Every affected label already prints the matching species.)"
       },
       "cfu_thresholds": {
         "indication_primary": null,
@@ -13333,7 +13409,8 @@
       "aliases": [
         "Limosilactobacillus reuteri NCIMB 30242",
         "L. reuteri NCIMB 30242",
-        "NCIMB 30242"
+        "NCIMB 30242",
+        "LRC Lactobacillus reuteri NCIMB 30242"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -13365,7 +13442,10 @@
       "aliases": [
         "Streptococcus thermophilus ST-21",
         "S. thermophilus St-21",
-        "St-21"
+        "St-21",
+        "Streptococcus thermophilus SD-5207",
+        "S. thermophilus SD-5207",
+        "SD-5207"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -13373,13 +13453,17 @@
       "identity_verification": {
         "status": "designation_verified",
         "source_pmids": [
-          "30574800"
+          "30574800",
+          "35634575",
+          "36149331"
         ],
-        "deposit_ids": [],
+        "deposit_ids": [
+          "ATCC SD5207"
+        ],
         "supplier": "Bifodan",
         "verified_on": "2026-09-13",
         "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": null
+        "note": "2026-09-14: ATCC SD5207 crosswalk; duplicate stub STRAIN_THERMOPHILUS_SD5207 merged."
       },
       "cfu_thresholds": {
         "indication_primary": null,
@@ -13485,12 +13569,17 @@
       "study_contexts": []
     },
     {
-      "id": "STRAIN_ACIDOPHILUS_SD5221",
-      "standard_name": "Lactobacillus acidophilus SD-5221",
+      "id": "STRAIN_BULGARICUS_LB87",
+      "standard_name": "Lactobacillus bulgaricus LB-87",
       "aliases": [
-        "Lactobacillus acidophilus SD5221",
-        "L. acidophilus SD-5221",
-        "SD-5221"
+        "L. bulgaricus LB-87",
+        "LB-87",
+        "Lactobacillus delbrueckii subsp. bulgaricus LB-87",
+        "Lactobacillus delbrueckii bulgaricus LB-87",
+        "Lactobacillus bulgaricus SD-6833",
+        "L. bulgaricus SD-6833",
+        "Lactobacillus delbrueckii subsp. bulgaricus SD-6833",
+        "SD-6833"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -13498,44 +13587,15 @@
       "identity_verification": {
         "status": "designation_verified",
         "source_pmids": [
-          "33648258"
+          "36149331"
         ],
         "deposit_ids": [
-          "ATCC SD5221"
+          "ATCC SD6833"
         ],
         "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Deposit number only; equivalence to NCFM or any trade designation is not established."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
-      "id": "STRAIN_BULGARICUS_LB87",
-      "standard_name": "Lactobacillus bulgaricus LB-87",
-      "aliases": [
-        "L. bulgaricus LB-87",
-        "LB-87",
-        "Lactobacillus delbrueckii subsp. bulgaricus LB-87",
-        "Lactobacillus delbrueckii bulgaricus LB-87"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": "2026-09-14: IFF/Danisco authors name Lactobacillus delbrueckii subsp. bulgaricus Lb-87 ATCC SD6833 in the methods of PMID 36149331 (PMC9761758); designation and deposit verified, duplicate stub STRAIN_BULGARICUS_SD6833 merged. Identity only; no clinical evidence is implied."
       },
       "cfu_thresholds": {
         "indication_primary": null,
@@ -13824,211 +13884,12 @@
       "study_contexts": []
     },
     {
-      "id": "STRAIN_RHAMNOSUS_SD5217",
-      "standard_name": "Lactobacillus rhamnosus SD-5217",
-      "aliases": [
-        "Lactobacillus rhamnosus SD5217",
-        "L. rhamnosus SD-5217",
-        "SD-5217"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
-      "id": "STRAIN_PLANTARUM_SD5209",
-      "standard_name": "Lactobacillus plantarum SD-5209",
-      "aliases": [
-        "Lactobacillus plantarum SD5209",
-        "L. plantarum SD-5209",
-        "SD-5209"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
-      "id": "STRAIN_CASEI_SD5213",
-      "standard_name": "Lactobacillus casei SD-5213",
-      "aliases": [
-        "Lactobacillus casei SD5213",
-        "L. casei SD-5213",
-        "SD-5213"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
-      "id": "STRAIN_SALIVARIUS_SD5208",
-      "standard_name": "Lactobacillus salivarius SD-5208",
-      "aliases": [
-        "Lactobacillus salivarius SD5208",
-        "L. salivarius SD-5208",
-        "SD-5208"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
-      "id": "STRAIN_THERMOPHILUS_SD5207",
-      "standard_name": "Streptococcus thermophilus SD-5207",
-      "aliases": [
-        "Streptococcus thermophilus SD5207",
-        "S. thermophilus SD-5207",
-        "SD-5207"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
-      "id": "STRAIN_LACTIS_SD5219",
-      "standard_name": "Bifidobacterium animalis subsp. lactis SD-5219",
-      "aliases": [
-        "Bifidobacterium lactis SD-5219",
-        "Bifidobacterium animalis lactis SD-5219",
-        "Bifidobacterium lactis SD5219",
-        "B. lactis SD-5219",
-        "SD-5219"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
       "id": "STRAIN_BREVIS_SD5214",
       "standard_name": "Lactobacillus brevis SD-5214",
       "aliases": [
         "Lactobacillus brevis SD5214",
         "L. brevis SD-5214",
         "SD-5214"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
-      "id": "STRAIN_BULGARICUS_SD6833",
-      "standard_name": "Lactobacillus bulgaricus SD-6833",
-      "aliases": [
-        "Lactobacillus bulgaricus SD6833",
-        "L. bulgaricus SD-6833",
-        "Lactobacillus delbrueckii subsp. bulgaricus SD-6833",
-        "SD-6833"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -14106,98 +13967,12 @@
       "study_contexts": []
     },
     {
-      "id": "STRAIN_INFANTIS_SD6720",
-      "standard_name": "Bifidobacterium longum subsp. infantis SD-6720",
-      "aliases": [
-        "Bifidobacterium infantis SD-6720",
-        "Bifidobacterium longum infantis SD-6720",
-        "Bifidobacterium infantis SD6720",
-        "SD-6720"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
-      "id": "STRAIN_LONGUM_SD5588",
-      "standard_name": "Bifidobacterium longum SD-5588",
-      "aliases": [
-        "Bifidobacterium longum SD5588",
-        "B. longum SD-5588",
-        "SD-5588"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
       "id": "STRAIN_PARACASEI_SD5218",
       "standard_name": "Lactobacillus paracasei SD-5218",
       "aliases": [
         "Lactobacillus paracasei SD5218",
         "L. paracasei SD-5218",
         "SD-5218"
-      ],
-      "evidence_level": "unreviewed",
-      "key_benefits": [],
-      "notable_studies": "Strain designation recognized on product labels; no clinical evidence review has been performed for this identity.",
-      "identity_verification": {
-        "status": "label_only_no_literature_hit",
-        "source_pmids": [],
-        "deposit_ids": [],
-        "supplier": "IFF/Danisco (FloraFIT)",
-        "verified_on": "2026-09-13",
-        "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
-        "note": "Printed on labels; no PubMed title/abstract names this designation. Identity is a label fact only; no clinical evidence is implied."
-      },
-      "cfu_thresholds": {
-        "indication_primary": null,
-        "tiers_cfu_per_day": null,
-        "dr_pham_signoff": false,
-        "evidence": null
-      },
-      "study_contexts": []
-    },
-    {
-      "id": "STRAIN_LACTIS_SD5674",
-      "standard_name": "Bifidobacterium animalis subsp. lactis SD-5674",
-      "aliases": [
-        "Bifidobacterium lactis SD-5674",
-        "Bifidobacterium animalis lactis SD-5674",
-        "Bifidobacterium lactis SD5674",
-        "SD-5674"
       ],
       "evidence_level": "unreviewed",
       "key_benefits": [],
@@ -14244,6 +14019,1047 @@
         "verified_on": "2026-09-13",
         "method": "PubMed title/abstract read for the designation and species; label-only when no literature hit",
         "note": "Named as Bifidobacterium animalis ssp. lactis 420 in the Turku pregnancy fish-oil/probiotic RCT (PMIDs 37622257, 36705702) and as B. animalis subsp. lactis 420 in PMID 21831765. Added so combination contexts with HN001 can be authored; not yet seen on a corpus label."
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_PARACASEI_CUL08",
+      "standard_name": "Lactobacillus paracasei CUL08",
+      "aliases": [
+        "Lactobacillus paracasei CUL-08",
+        "L. paracasei CUL08",
+        "Lacticaseibacillus paracasei CUL08",
+        "Lactobacillus paracasei NCIMB 30154"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "20089774",
+          "24947281",
+          "42208544"
+        ],
+        "deposit_ids": [
+          "NCIMB 30154"
+        ],
+        "supplier": "Cultech Ltd",
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_LR04",
+      "standard_name": "Lactobacillus rhamnosus LR04",
+      "aliases": [
+        "L. rhamnosus LR04",
+        "Lacticaseibacillus rhamnosus LR04",
+        "Lactobacillus rhamnosus DSM 16605"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "40351306",
+          "42589365",
+          "42207096"
+        ],
+        "deposit_ids": [
+          "DSM 16605"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_LR05",
+      "standard_name": "Lactobacillus rhamnosus LR05",
+      "aliases": [
+        "L. rhamnosus LR05",
+        "Lacticaseibacillus rhamnosus LR05"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "38138183"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": "'Lr05' is also used as an in-text abbreviation for L. rhamnosus CRL1505 (PMID 23947615); no bare-code alias is registered."
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_PLANTARUM_LP02",
+      "standard_name": "Lactobacillus plantarum LP02",
+      "aliases": [
+        "L. plantarum LP02",
+        "Lactiplantibacillus plantarum LP02",
+        "Lactobacillus plantarum LMG P-21020"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "29874389",
+          "36569057"
+        ],
+        "deposit_ids": [
+          "LMG P-21020"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_ACIDOPHILUS_LA02",
+      "standard_name": "Lactobacillus acidophilus LA02",
+      "aliases": [
+        "L. acidophilus LA02",
+        "Lactobacillus acidophilus DSM 21717"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "34493130",
+          "32797375",
+          "42049691"
+        ],
+        "deposit_ids": [
+          "DSM 21717"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_BREVE_BR03",
+      "standard_name": "Bifidobacterium breve BR03",
+      "aliases": [
+        "B. breve BR03",
+        "Bifidobacterium breve DSM 16604"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "41879960",
+          "41703218"
+        ],
+        "deposit_ids": [
+          "DSM 16604"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_BREVE_R0070",
+      "standard_name": "Bifidobacterium breve R0070",
+      "aliases": [
+        "B. breve R0070"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "32306803",
+          "36145418"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_LACTOCOCCUS_R1058",
+      "standard_name": "Lactococcus lactis subsp. lactis R1058",
+      "aliases": [
+        "Lactococcus lactis R1058",
+        "Lactococcus lactis lactis R1058",
+        "Lactococcus lactis ssp. lactis R1058",
+        "Lactococcus lactis Rosell-1058"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "32306803",
+          "36145418",
+          "42456558"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_THERMOPHILUS_TH4",
+      "standard_name": "Streptococcus thermophilus TH-4",
+      "aliases": [
+        "S. thermophilus TH-4",
+        "Streptococcus thermophilus TH4"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "41913515",
+          "42671836"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_CRL1505",
+      "standard_name": "Lactobacillus rhamnosus CRL1505",
+      "aliases": [
+        "Lactobacillus rhamnosus CRL-1505",
+        "L. rhamnosus CRL1505",
+        "Lacticaseibacillus rhamnosus CRL 1505"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "42354894",
+          "23947615"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_GASSERI_PA168",
+      "standard_name": "Lactobacillus gasseri PA 16/8",
+      "aliases": [
+        "L. gasseri PA 16/8"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "31454425"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_LONGUM_SP073",
+      "standard_name": "Bifidobacterium longum SP 07/3",
+      "aliases": [
+        "B. longum SP 07/3"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "31454425",
+          "24094416"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_BIFIDUM_MF205",
+      "standard_name": "Bifidobacterium bifidum MF 20/5",
+      "aliases": [
+        "B. bifidum MF 20/5"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "31454425",
+          "24135669"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_ACIDOPHILUS_UALA01",
+      "standard_name": "Lactobacillus acidophilus UALa-01",
+      "aliases": [
+        "L. acidophilus UALa-01"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "39010860"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_BIFIDUM_UABB10",
+      "standard_name": "Bifidobacterium bifidum UABb-10",
+      "aliases": [
+        "B. bifidum UABb-10"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "31271261"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_INFANTIS_HA116",
+      "standard_name": "Bifidobacterium longum subsp. infantis HA-116",
+      "aliases": [
+        "Bifidobacterium infantis HA-116",
+        "B. infantis HA-116"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "36643974"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_BIFIDUM_HA132",
+      "standard_name": "Bifidobacterium bifidum HA-132",
+      "aliases": [
+        "B. bifidum HA-132"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "36643974",
+          "40507094"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_SUBTILIS_CU1",
+      "standard_name": "Bacillus subtilis CU1",
+      "aliases": [
+        "Bacillus subtilis CU-1",
+        "B. subtilis CU1"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "39151920",
+          "34557395"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_BOULARDII_I3799",
+      "standard_name": "Saccharomyces cerevisiae var. boulardii CNCM I-3799",
+      "aliases": [
+        "Saccharomyces boulardii CNCM I-3799",
+        "S. boulardii CNCM I-3799",
+        "Saccharomyces boulardii CNCM-I 3799"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "32796401",
+          "42016124",
+          "34557395"
+        ],
+        "deposit_ids": [
+          "CNCM I-3799"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": "Distinct deposit from CNCM I-745 (STRAIN_SACCHAROMYCES)."
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_BOULARDII_I1079",
+      "standard_name": "Saccharomyces cerevisiae var. boulardii CNCM I-1079",
+      "aliases": [
+        "Saccharomyces boulardii CNCM I-1079",
+        "Saccharomyces cerevisiae subsp. boulardii CNCM-I-1079"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "42374548",
+          "42480917"
+        ],
+        "deposit_ids": [
+          "CNCM I-1079"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": "Published studies of this deposit are veterinary; identity only, no human evidence implied."
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_LBV96",
+      "standard_name": "Lactobacillus rhamnosus LbV96",
+      "aliases": [
+        "Lactobacillus rhamnosus LbV 96",
+        "L. rhamnosus LbV96"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "29065710",
+          "31012733"
+        ],
+        "deposit_ids": [
+          "DSM 22560"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_JENSENII_LBV116",
+      "standard_name": "Lactobacillus jensenii LbV 116",
+      "aliases": [
+        "Lactobacillus jensenii LbV116",
+        "L. jensenii LbV 116"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "29065710",
+          "31012733"
+        ],
+        "deposit_ids": [
+          "DSM 22567"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_GASSERI_LBV150N",
+      "standard_name": "Lactobacillus gasseri LbV 150N",
+      "aliases": [
+        "Lactobacillus gasseri LbV150N",
+        "L. gasseri LbV 150N"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "29065710",
+          "31012733"
+        ],
+        "deposit_ids": [
+          "DSM 22583"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_CRISPATUS_LBV88",
+      "standard_name": "Lactobacillus crispatus LbV 88",
+      "aliases": [
+        "Lactobacillus crispatus LbV88",
+        "L. crispatus LbV 88"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "29065710",
+          "31012733"
+        ],
+        "deposit_ids": [
+          "DSM 22566"
+        ],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_FERMENTUM_SBS1",
+      "standard_name": "Lactobacillus fermentum SBS-1",
+      "aliases": [
+        "Limosilactobacillus fermentum SBS-1",
+        "L. fermentum SBS-1"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "35634575",
+          "41673804"
+        ],
+        "deposit_ids": [
+          "DGCC1925"
+        ],
+        "supplier": "Danisco / IFF",
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_PLANTARUM_SD5870",
+      "standard_name": "Lactobacillus plantarum SD5870",
+      "aliases": [
+        "Lactobacillus plantarum SD-5870",
+        "L. plantarum SD-5870"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "38656273"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_IMC501",
+      "standard_name": "Lactobacillus rhamnosus IMC 501",
+      "aliases": [
+        "L. rhamnosus IMC 501",
+        "Lacticaseibacillus rhamnosus IMC 501"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "41325897",
+          "35940766"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_PARACASEI_IMC502",
+      "standard_name": "Lactobacillus paracasei IMC 502",
+      "aliases": [
+        "L. paracasei IMC 502",
+        "Lacticaseibacillus paracasei IMC 502"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "41325897",
+          "38658186"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_BIFIDUM_G91",
+      "standard_name": "Bifidobacterium bifidum G9-1",
+      "aliases": [
+        "B. bifidum G9-1"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "42017290",
+          "42504070",
+          "28228426"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_LONGUM_MM2",
+      "standard_name": "Bifidobacterium longum MM-2",
+      "aliases": [
+        "B. longum MM-2"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "25400245",
+          "28228426"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_GASSERI_KS13",
+      "standard_name": "Lactobacillus gasseri KS-13",
+      "aliases": [
+        "L. gasseri KS-13"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_verified",
+        "source_pmids": [
+          "28228426",
+          "25909149"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": null
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_ACIDOPHILUS_HA122",
+      "standard_name": "Lactobacillus acidophilus HA-122",
+      "aliases": [
+        "L. acidophilus HA-122"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_found_species_unconfirmed",
+        "source_pmids": [
+          "36079732",
+          "41316341"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": "Sources disagree on the species name for HA-122 (L. acidophilus vs L. helveticus); the designation is the same Lallemand strain."
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_CASEI_HA108",
+      "standard_name": "Lactobacillus casei HA-108",
+      "aliases": [
+        "L. casei HA-108",
+        "Lacticaseibacillus paracasei HA-108"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_found_species_unconfirmed",
+        "source_pmids": [
+          "37019866",
+          "41316341"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": "Both PubMed abstracts name L. paracasei HA-108; labels print L. casei."
+      },
+      "cfu_thresholds": {
+        "indication_primary": null,
+        "tiers_cfu_per_day": null,
+        "dr_pham_signoff": false,
+        "evidence": null
+      },
+      "study_contexts": []
+    },
+    {
+      "id": "STRAIN_ACIDOPHILUS_LAFTI_L10",
+      "standard_name": "Lactobacillus acidophilus LAFTI L10",
+      "aliases": [
+        "L. acidophilus LAFTI L10",
+        "Lactobacillus helveticus LAFTI L10"
+      ],
+      "evidence_level": "unreviewed",
+      "key_benefits": [],
+      "notable_studies": "Strain designation recognized on product labels and named with its species in the cited literature; no clinical evidence review has been performed for this identity.",
+      "identity_verification": {
+        "status": "designation_found_species_unconfirmed",
+        "source_pmids": [
+          "18468035",
+          "17134782"
+        ],
+        "deposit_ids": [],
+        "supplier": null,
+        "verified_on": "2026-09-14",
+        "method": "PubMed abstract and Europe PMC open-access full text read for the designation, species and deposit",
+        "note": "Published sources name L. acidophilus LAFTI L10; the label prints L. helveticus."
       },
       "cfu_thresholds": {
         "indication_primary": null,

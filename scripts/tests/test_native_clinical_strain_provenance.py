@@ -454,7 +454,7 @@ def _label_product(strain: str) -> dict:
 
 @pytest.mark.parametrize("strain", [
     "Lactobacillus acidophilus",
-    "Lactobacillus paracasei (CUL 08)",  # designation with no registry identity (2026-09-13)
+    "Bifidobacterium breve Bb-18",  # printed designation with no published source and no registry identity (2026-09-14)
     "Bifidobacterium rhamnosus GG",
     "L. reuteri XYZ-999",
 ])
@@ -488,6 +488,7 @@ def test_producer_cannot_export_a_badge_for_a_different_strain(
     ("Bifidobacterium animalis lactis BB-12", "STRAIN_LACTIS_BB12", "pending_review"),
     ("Bifidobacterium longum subsp. infantis M-63", "STRAIN_INFANTIS_M63", "pending_review"),
     ("Bifidobacterium breve SD-BR3-IT", "STRAIN_BREVE_SD_BR3_IT", "pending_review"),
+    ("Lactobacillus paracasei (CUL 08)", "STRAIN_PARACASEI_CUL08", "pending_review"),  # verified 2026-09-14
 ])
 def test_producer_keeps_verified_alias_and_exact_pending_identity(
     clinical_enricher, strain: str, clinical_id: str, status: str,

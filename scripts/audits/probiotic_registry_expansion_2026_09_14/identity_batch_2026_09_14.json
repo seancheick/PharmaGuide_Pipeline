@@ -1,0 +1,1544 @@
+{
+  "_metadata": {
+    "batch_id": "probiotic_identity_batch_2026_09_14",
+    "created_on": "2026-09-14",
+    "registry": "scripts/data/clinically_relevant_strains.json",
+    "method": "PubMed title/abstract (E-utilities) and Europe PMC open-access full text read for each designation, species and deposit. A designation is added only when a published source names it with its species; manufacturer-authored methods sections are preferred for deposit crosswalks. No label-only identities are added in this batch.",
+    "scope_rules": [
+      "merge_duplicate: a registry stub whose deposit number is published by the manufacturer (or by at least two independent sources, none conflicting) as the same strain as an existing named identity is folded into that identity; the stub had no study contexts.",
+      "add_alias: punctuation, spacing, the word 'strain', a label misspelling of the species, a manufacturer synonym stated by a source (Rosell-52 = R0052), or a deposit number stated by the manufacturer.",
+      "add_identity: species plus designation named together in a published source. designation_found_species_unconfirmed is used when sources disagree on the species name for the same designation (taxonomic renaming); such identities earn the label identity credit but are not accepted for research presentation by identity_confidence().",
+      "Nothing in this batch changes dr_pham_signoff, study_contexts, evidence, or dose tiers."
+    ],
+    "held_unresolved": {
+      "Bifidobacterium breve BB-3 / Bb-3 / Br-3": "Not the printed DuPont designation Bb-03; 'BB-3' is published for a different strain (Morinaga B. breve B-3, PMID 36615686).",
+      "Bifidobacterium bifidum BB-6, Bifidobacterium longum BL-5, L. acidophilus LA-1 / LA-2": "Not the exact published designation (Bb-06, Bl-05, La-14/LA02); a zero-dropped code is not proof of identity.",
+      "Bifidobacterium bifidum/lactis Bb-02 (all slash or animalis-lactis variants)": "The label names two species; Bb-02 is published as B. bifidum BB-02 (PMID 14630592) and as B. longum subsp. infantis BB-02 (ESPGHAN neonatal combination, PMID 41913515). Label is self-contradictory.",
+      "Bifidobacterium bifidum (SD-6575)": "Literature publishes B. bifidum ATCC SD6576; SD-6575 appears in no source.",
+      "Lactobacillus brevis SD-5214 merge": "Sources conflict: Levilactobacillus brevis Lbr-35 (ATCC SD5214) in a product table (PMID 35875231) vs L. acidophilus ATCC SD5214 (PMID 34769015). Stub kept as is.",
+      "Lactococcus lactis SD-5584 merge": "Only a product-label table (PMID 35875231) ties SD5584 to Ll-23; the manufacturer table (PMID 35634575) lists Ll-23 as DGCC8656. Stub kept as is.",
+      "SD-1357, SD-2468, SD-5685, SD-5839, SD-5845, SD-5847, SD-5857": "No published source names these deposits with a strain.",
+      "Bifidobacterium breve UABbr-11 / Bb-18, Bifidobacterium infantis NI313, L. reuteri JBD 301, CUL-06/67/73/74, UAS UALxx codes, DSM-numbered labels, SP54": "No published source names the designation with the printed species.",
+      "Bifidobacterium lactis Bi-04, Bifidobacterium longum Bi-05, Bifidobacterium lactis Bl-07, UABi-14, UABia-12, R-11, R-52, Rosell-52nd, rhamnosus-111 and other HA numbers without the HA prefix": "Typo-level variants of a real code; not the exact designation.",
+      "Lactobacillus plantarum Lp299": "299 and 299v are distinct Probi strains.",
+      "B. bifidum BB-12, Bifidobacterium longum subsp. longum 35624": "Label species contradicts the published strain (BB-12 is B. animalis subsp. lactis; 35624 is B. longum subsp. infantis).",
+      "Seed DS-01 SD-*-IT / -JP / -BE / -SP / -FR / -US codes": "Formula-level Seed records; one product; outside strain-level scope.",
+      "Lab4 NCIMB deposit correction": "Applied on manufacturer-authored consensus; NCIMB catalogue page unreadable (see op note)."
+    }
+  },
+  "operations": [
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd5207_into_st21",
+      "source": "STRAIN_THERMOPHILUS_SD5207",
+      "target": "STRAIN_THERMOPHILUS_ST21",
+      "deposit": "ATCC SD5207",
+      "expect_labels": [
+        "Streptococcus thermophilus (SD-5207)",
+        "Streptococcus thermophilus SD5207"
+      ],
+      "evidence": [
+        {
+          "pmid": "35634575",
+          "pmcid": "PMC9125999",
+          "location": "full_text_methods_strain_table (IFF/Danisco authors)",
+          "quote": "Streptococcus thermophilus subsp. thermophilus St-21 ATCC SD5207"
+        },
+        {
+          "pmid": "36149331",
+          "pmcid": "PMC9761758",
+          "location": "full_text_methods",
+          "quote": "Streptococcus thermophilus St-21 ATCC SD5207 (St-21)"
+        }
+      ]
+    },
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd5208_into_ls33",
+      "source": "STRAIN_SALIVARIUS_SD5208",
+      "target": "STRAIN_SALIVARIUS_LS33",
+      "deposit": "ATCC SD5208",
+      "expect_labels": [
+        "Lactobacillus salivarius (SD-5208)",
+        "Lactobacillus salivarius SD5208"
+      ],
+      "evidence": [
+        {
+          "pmid": "35634575",
+          "pmcid": "PMC9125999",
+          "location": "full_text_methods_strain_table (IFF/Danisco authors)",
+          "quote": "Ligilactobacillus salivarius Ls-33 ATCC SD5208"
+        },
+        {
+          "pmid": "37542325",
+          "pmcid": "PMC10401801",
+          "location": "full_text_table",
+          "quote": "L.salivarius Ls-33 ATCC SD5208"
+        }
+      ]
+    },
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd5209_into_lp115",
+      "source": "STRAIN_PLANTARUM_SD5209",
+      "target": "STRAIN_PLANTARUM_LP115",
+      "deposit": "ATCC SD5209",
+      "expect_labels": [
+        "Lactobacillus plantarum (SD-5209)",
+        "Lactobacillus plantarum SD5209"
+      ],
+      "evidence": [
+        {
+          "pmid": "35875231",
+          "pmcid": "PMC9304488",
+          "location": "full_text_product_table",
+          "quote": "plantarum Lp-115 (ATCC SD5209"
+        },
+        {
+          "pmid": "39360839",
+          "pmcid": "PMC11520294",
+          "location": "full_text_methods",
+          "quote": "L. plantarum Lp 115 SD-5209"
+        },
+        {
+          "pmid": "37621875",
+          "pmcid": "PMC10445763",
+          "location": "full_text_methods",
+          "quote": "Lp-115 (ATCC SD5209)"
+        }
+      ]
+    },
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd5213_into_lc11",
+      "source": "STRAIN_CASEI_SD5213",
+      "target": "STRAIN_CASEI_LC11",
+      "deposit": "ATCC SD5213",
+      "expect_labels": [
+        "Lactobacillus casei (SD-5213)",
+        "Lactobacillus casei SD5213"
+      ],
+      "evidence": [
+        {
+          "pmid": "33095113",
+          "pmcid": "PMC7588225",
+          "location": "full_text_methods",
+          "quote": "Lactobacillus casei Lc-11 (ATCC SD5213)"
+        },
+        {
+          "pmid": "35875231",
+          "pmcid": "PMC9304488",
+          "location": "full_text_product_table",
+          "quote": "Lacticaseibacillus casei Lc-11 (ATCC SD5213)"
+        }
+      ]
+    },
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd5217_into_lr32",
+      "source": "STRAIN_RHAMNOSUS_SD5217",
+      "target": "STRAIN_RHAMNOSUS_LR32",
+      "deposit": "ATCC SD5217",
+      "expect_labels": [
+        "Lactobacillus rhamnosus (SD-5217)",
+        "Lactobacillus rhamnosus SD5217"
+      ],
+      "evidence": [
+        {
+          "pmid": "35634575",
+          "pmcid": "PMC9125999",
+          "location": "full_text_methods_strain_table (IFF/Danisco authors)",
+          "quote": "Lacticaseibacillus rhamnosus Lr-32 ATCC SD5217"
+        },
+        {
+          "pmid": "37621875",
+          "pmcid": "PMC10445763",
+          "location": "full_text_methods",
+          "quote": "Lacticaseibacillus rhamnosus Lr-32 (ATCC SD5217)"
+        }
+      ]
+    },
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd5588_into_bl05",
+      "source": "STRAIN_LONGUM_SD5588",
+      "target": "STRAIN_LONGUM_BL05",
+      "deposit": "ATCC SD5588",
+      "expect_labels": [
+        "Bifidobacterium longum (SD-5588)",
+        "Bifidobacterium longum SD5588"
+      ],
+      "evidence": [
+        {
+          "pmid": "33095113",
+          "pmcid": "PMC7588225",
+          "location": "full_text_methods",
+          "quote": "Bifidobacterium longum subsp. longum Bl-05 (ATCC SD5588)"
+        },
+        {
+          "pmid": "37122152",
+          "pmcid": "PMC10153018",
+          "location": "full_text_methods",
+          "quote": "B. longum Bl-05 SD5588"
+        }
+      ]
+    },
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd5674_into_hn019",
+      "source": "STRAIN_LACTIS_SD5674",
+      "target": "STRAIN_LACTIS_HN019",
+      "deposit": "ATCC SD5674",
+      "expect_labels": [
+        "Bifidobacterium lactis SD-5674",
+        "Bifidobacterium animalis lactis SD-5674"
+      ],
+      "evidence": [
+        {
+          "pmid": "40085083",
+          "pmcid": "PMC11909606",
+          "location": "full_text_methods",
+          "quote": "Bifibidobacterium lactis HN019 ATCC SD5674"
+        },
+        {
+          "pmid": "33273680",
+          "pmcid": "PMC7713296",
+          "location": "full_text_methods",
+          "quote": "Bifidobacterium lactis HN019 SD 5674"
+        }
+      ]
+    },
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd6720_into_bi26",
+      "source": "STRAIN_INFANTIS_SD6720",
+      "target": "STRAIN_INFANTIS_BI26",
+      "deposit": "ATCC SD-6720",
+      "expect_labels": [
+        "Bifidobacterium infantis (SD-6720)",
+        "Bifidobacterium infantis SD6720"
+      ],
+      "evidence": [
+        {
+          "pmid": "31138818",
+          "pmcid": "PMC6538704",
+          "location": "full_text_methods (DuPont culture collection)",
+          "quote": "Bifidobacterium longum subsp. infantis strain Bi-26 (ATCC SD-6720; Bi-26)"
+        },
+        {
+          "pmid": "35875231",
+          "pmcid": "PMC9304488",
+          "location": "full_text_product_table",
+          "quote": "Bifidobacterium infantis Bi-26 (ATCC SD-6720)"
+        }
+      ]
+    },
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd6833_into_lb87",
+      "source": "STRAIN_BULGARICUS_SD6833",
+      "target": "STRAIN_BULGARICUS_LB87",
+      "deposit": "ATCC SD6833",
+      "upgrade_target_status": "designation_verified",
+      "expect_labels": [
+        "Lactobacillus bulgaricus (SD-6833)",
+        "Lactobacillus bulgaricus SD6833"
+      ],
+      "evidence": [
+        {
+          "pmid": "36149331",
+          "pmcid": "PMC9761758",
+          "location": "full_text_methods (DuPont authors)",
+          "quote": "Lactobacillus delbrueckii subsp. bulgaricus Lb-87 ATCC SD6833 (Lb-87)"
+        }
+      ]
+    },
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd5221_into_ncfm",
+      "source": "STRAIN_ACIDOPHILUS_SD5221",
+      "target": "STRAIN_ACIDOPHILUS_NCFM",
+      "deposit": "ATCC SD5221",
+      "expect_labels": [
+        "Lactobacillus acidophilus SD5221",
+        "L. acidophilus SD-5221"
+      ],
+      "evidence": [
+        {
+          "pmid": "35634575",
+          "pmcid": "PMC9125999",
+          "location": "full_text_methods_strain_table (IFF/Danisco authors)",
+          "quote": "Lactobacillus acidophilus NCFM ATCC SD5221, ATCC700396"
+        },
+        {
+          "pmid": "36149331",
+          "pmcid": "PMC9761758",
+          "location": "full_text_methods",
+          "quote": "Lactobacillus acidophilus NCFM ATCC SD5221 (NCFM)"
+        }
+      ]
+    },
+    {
+      "op": "merge_duplicate",
+      "key": "merge_sd5219_into_bl04",
+      "source": "STRAIN_LACTIS_SD5219",
+      "target": "STRAIN_LACTIS_BL04",
+      "deposit": "ATCC SD5219",
+      "expect_labels": [
+        "Bifidobacterium lactis (SD-5219)",
+        "Bifidobacterium lactis SD-5219"
+      ],
+      "evidence": [
+        {
+          "pmid": "35634575",
+          "pmcid": "PMC9125999",
+          "location": "full_text_methods_strain_table (IFF/Danisco authors)",
+          "quote": "Bifidobacterium animalis subsp. lactis Bl-04, American Type Culture Collection (ATCC) Safe Deposit (SD)5219"
+        },
+        {
+          "pmid": "41821810",
+          "pmcid": "PMC12952452",
+          "location": "full_text_table",
+          "quote": "B . lactis Bl-04 (ATCC SD5219)"
+        }
+      ]
+    },
+    {
+      "op": "add_alias",
+      "key": "alias_bi07_sd5220",
+      "target": "STRAIN_LACTIS_BI07",
+      "aliases": [
+        "Bifidobacterium lactis SD-5220",
+        "Bifidobacterium animalis lactis SD-5220"
+      ],
+      "expect_labels": [
+        "Bifidobacterium lactis (SD-5220)",
+        "Bifidobacterium animalis lactis SD-5220"
+      ],
+      "evidence": [
+        {
+          "pmid": "35634575",
+          "pmcid": "PMC9125999",
+          "location": "full_text_methods_strain_table (IFF/Danisco authors)",
+          "quote": "Bifidobacterium animalis subsp. lactis Bi-07 ATCC, DGCC SD5220, DGCC2907"
+        },
+        {
+          "pmid": "41821810",
+          "pmcid": "PMC12952452",
+          "location": "full_text_table",
+          "quote": "B . lactis Bi-07 (ATCC SD5220)"
+        }
+      ],
+      "note": "A VSL#3 table (PMID 37440799) lists 'Bifidobacterium infantis SD5220/DSM24737'; the manufacturer-authored table is preferred."
+    },
+    {
+      "op": "add_alias",
+      "key": "alias_ncimb30242_lrc",
+      "target": "STRAIN_REUTERI_NCIMB30242",
+      "aliases": [
+        "LRC Lactobacillus reuteri NCIMB 30242"
+      ],
+      "expect_labels": [
+        "LRC Lactobacillus reuteri NCIMB 30242"
+      ],
+      "evidence": [
+        {
+          "pmid": "37594559",
+          "location": "title",
+          "quote": "Lactobacillus reuteri NCIMB 30242 (LRC)"
+        }
+      ]
+    },
+    {
+      "op": "add_alias",
+      "key": "alias_r0052_rosell52",
+      "target": "STRAIN_HELVETICUS_R0052",
+      "aliases": [
+        "Lactobacillus helveticus Rosell-52",
+        "L. helveticus Rosell-52",
+        "Lactobacillus helveticus Rosell-52 ME"
+      ],
+      "expect_labels": [
+        "Lactobacillus helveticus Rosell-52",
+        "Lactobacillus helveticus Rosell-52 ME"
+      ],
+      "evidence": [
+        {
+          "pmid": "40520599",
+          "location": "abstract",
+          "quote": "Lactobacillus helveticus Rosell®-52 and Bifidobacterium longum Rosell®-175; R0052/R0175"
+        },
+        {
+          "pmid": "35208773",
+          "location": "abstract",
+          "quote": "Lactobacillus helveticus Rosell®-52 (R0052)"
+        }
+      ],
+      "note": "The 'ME' label suffix is not part of the designation in the cited sources."
+    },
+    {
+      "op": "add_alias",
+      "key": "alias_r0175_rosell175",
+      "target": "STRAIN_LONGUM_R0175",
+      "aliases": [
+        "Bifidobacterium longum Rosell-175",
+        "B. longum Rosell-175",
+        "Bifidobacterium longum Rosell-175 ME"
+      ],
+      "expect_labels": [
+        "Bifidobacterium longum Rosell-175",
+        "Bifidobacterium longum Rosell-175 ME"
+      ],
+      "evidence": [
+        {
+          "pmid": "40520599",
+          "location": "abstract",
+          "quote": "Bifidobacterium longum Rosell®-175; R0052/R0175"
+        }
+      ],
+      "note": "The 'ME' label suffix is not part of the designation in the cited sources."
+    },
+    {
+      "op": "add_alias",
+      "key": "alias_ls33_strain_word",
+      "target": "STRAIN_SALIVARIUS_LS33",
+      "aliases": [
+        "Lactobacillus salivarius strain Ls-33"
+      ],
+      "expect_labels": [
+        "Lactobacillus salivarius strain LS-33"
+      ],
+      "evidence": [
+        {
+          "pmid": "35634575",
+          "pmcid": "PMC9125999",
+          "location": "full_text_methods_strain_table",
+          "quote": "Ligilactobacillus salivarius Ls-33 ATCC SD5208"
+        }
+      ],
+      "note": "Label inserts the word 'strain'; registry precedent: 'Bifidobacterium lactis strain Bl-04'."
+    },
+    {
+      "op": "add_alias",
+      "key": "alias_la14_label_variants",
+      "target": "STRAIN_ACIDOPHILUS_LA14",
+      "aliases": [
+        "Lactobacillus acidophilus strain La-14",
+        "Lactobacillus acidophillus La-14"
+      ],
+      "expect_labels": [
+        "Lactobacillus acidophilus strain LA-14",
+        "Lactobacillus acidophillus LA-14"
+      ],
+      "evidence": [
+        {
+          "pmid": "36891385",
+          "pmcid": "PMC9986594",
+          "location": "full_text_methods",
+          "quote": "Lactobacillus acidophilus LA14 ATCC SD 5212"
+        }
+      ],
+      "note": "Label word 'strain' and a label misspelling of the species ('acidophillus'); designation and deposit unchanged."
+    },
+    {
+      "op": "add_alias",
+      "key": "alias_bs01_lactis_hyphen",
+      "target": "STRAIN_LACTIS_BS01",
+      "aliases": [
+        "Bifidobacterium lactis BS-01"
+      ],
+      "expect_labels": [
+        "Bifidobacterium lactis BS-01"
+      ],
+      "evidence": [
+        {
+          "pmid": "34493130",
+          "location": "title",
+          "quote": "Effects of Bifidobacterium Lactis BS01 and Lactobacillus Acidophilus LA02"
+        }
+      ]
+    },
+    {
+      "op": "correct_deposit",
+      "key": "correct_deposit_cul20_cul34",
+      "pending_authoritative_check": false,
+      "corrections": [
+        {
+          "target": "STRAIN_BIFIDUM_CUL20",
+          "replace_alias": [
+            "Bifidobacterium bifidum NCIMB 30172",
+            "Bifidobacterium bifidum NCIMB 30153"
+          ],
+          "deposit_ids": [
+            [
+              "NCIMB 30172"
+            ],
+            [
+              "NCIMB 30153"
+            ]
+          ],
+          "expect_labels": [
+            "Bifidobacterium bifidum (NCIMB 30153)"
+          ]
+        },
+        {
+          "target": "STRAIN_LACTIS_CUL34",
+          "replace_alias": [
+            "Bifidobacterium animalis subsp. lactis NCIMB 30153",
+            "Bifidobacterium animalis subsp. lactis NCIMB 30172"
+          ],
+          "add_aliases": [
+            "Bifidobacterium lactis NCIMB 30172"
+          ],
+          "deposit_ids": [
+            [
+              "NCIMB 30153"
+            ],
+            [
+              "NCIMB 30172"
+            ]
+          ],
+          "expect_labels": [
+            "Bifidobacterium lactis (NCIMB 30172)"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "pmid": "42208544",
+          "pmcid": "PMC13293936",
+          "location": "full_text_key_resources (Cultech authors)",
+          "quote": "Bifidobacterium animalis subsp. lactis – CUL34; NCIMB 30172 Bifidobacterium bifidum – CUL20; NCIMB 30153"
+        },
+        {
+          "pmid": "39695988",
+          "pmcid": "PMC11657461",
+          "location": "full_text_methods",
+          "quote": "B. bifidum CUL20 (NCIMB 30153)"
+        },
+        {
+          "pmid": "38903852",
+          "pmcid": "PMC11187407",
+          "location": "full_text_table",
+          "quote": "B . animalis ssp. lactis CUL34 (NCIMB 30172)"
+        }
+      ],
+      "note": "22 open-access full texts (8 with Cultech authors) pair CUL20=NCIMB 30153 and CUL34=NCIMB 30172; PMID 27869661 (2016 abstract) and 2 later papers give the reverse, which the registry had copied. The NCIMB catalogue records for 30153 and 30172 could not be read (JavaScript-rendered pages) and no Cultech patent or regulatory filing naming either deposit was found; the correction rests on the manufacturer-authored papers (2021-2026), the same standard used for the DuPont SD deposit merges. Every affected label already prints the matching species."
+    },
+    {
+      "op": "add_identity",
+      "key": "new_cul08",
+      "id": "STRAIN_PARACASEI_CUL08",
+      "standard_name": "Lactobacillus paracasei CUL08",
+      "aliases": [
+        "Lactobacillus paracasei CUL-08",
+        "L. paracasei CUL08",
+        "Lacticaseibacillus paracasei CUL08",
+        "Lactobacillus paracasei NCIMB 30154"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "NCIMB 30154"
+      ],
+      "supplier": "Cultech Ltd",
+      "pmids": [
+        "20089774",
+        "24947281",
+        "42208544"
+      ],
+      "expect_labels": [
+        "Lactobacillus paracasei (CUL 08)"
+      ],
+      "evidence": [
+        {
+          "pmid": "20089774",
+          "location": "abstract",
+          "quote": "Lactobacillus salivarius CUL61 and Lactobacillus paracasei CUL08"
+        },
+        {
+          "pmid": "42208544",
+          "pmcid": "PMC13293936",
+          "location": "full_text_key_resources (Cultech authors)",
+          "quote": "Lacticaseibacillus paracasei – CUL08; NCIMB 30154"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_lr04",
+      "id": "STRAIN_RHAMNOSUS_LR04",
+      "standard_name": "Lactobacillus rhamnosus LR04",
+      "aliases": [
+        "L. rhamnosus LR04",
+        "Lacticaseibacillus rhamnosus LR04",
+        "Lactobacillus rhamnosus DSM 16605"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "DSM 16605"
+      ],
+      "supplier": null,
+      "pmids": [
+        "40351306",
+        "42589365",
+        "42207096"
+      ],
+      "expect_labels": [
+        "L. rhamnosus LR04",
+        "L. rhamnosus LR-04"
+      ],
+      "evidence": [
+        {
+          "pmid": "40351306",
+          "pmcid": "PMC12063358",
+          "location": "full_text_abstract",
+          "quote": "Lacticaseibacillus rhamnosus LR04 (DSM 16605)"
+        },
+        {
+          "pmid": "42207096",
+          "location": "abstract",
+          "quote": "L. rhamnosus LR-04 and L. acidophilus LA-14"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_lr05",
+      "id": "STRAIN_RHAMNOSUS_LR05",
+      "standard_name": "Lactobacillus rhamnosus LR05",
+      "aliases": [
+        "L. rhamnosus LR05",
+        "Lacticaseibacillus rhamnosus LR05"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "38138183"
+      ],
+      "expect_labels": [
+        "L. rhamnosus LR05"
+      ],
+      "evidence": [
+        {
+          "pmid": "38138183",
+          "pmcid": "PMC10744411",
+          "location": "abstract",
+          "quote": "Lactiplantibacillus plantarum LP14, and Lacticaseibacillus rhamnosus LR05"
+        }
+      ],
+      "note": "'Lr05' is also used as an in-text abbreviation for L. rhamnosus CRL1505 (PMID 23947615); no bare-code alias is registered."
+    },
+    {
+      "op": "add_identity",
+      "key": "new_lp02",
+      "id": "STRAIN_PLANTARUM_LP02",
+      "standard_name": "Lactobacillus plantarum LP02",
+      "aliases": [
+        "L. plantarum LP02",
+        "Lactiplantibacillus plantarum LP02",
+        "Lactobacillus plantarum LMG P-21020"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "LMG P-21020"
+      ],
+      "supplier": null,
+      "pmids": [
+        "29874389",
+        "36569057"
+      ],
+      "expect_labels": [
+        "L. plantarum LP02"
+      ],
+      "evidence": [
+        {
+          "pmid": "29874389",
+          "location": "abstract",
+          "quote": "Lactobacillus fermentum LF10 and Lactobacillus plantarum LP02"
+        },
+        {
+          "pmid": "36569057",
+          "pmcid": "PMC9772554",
+          "location": "full_text_methods",
+          "quote": "L. plantarum LMG P-21020 (LP02 in this study)"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_la02",
+      "id": "STRAIN_ACIDOPHILUS_LA02",
+      "standard_name": "Lactobacillus acidophilus LA02",
+      "aliases": [
+        "L. acidophilus LA02",
+        "Lactobacillus acidophilus DSM 21717"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "DSM 21717"
+      ],
+      "supplier": null,
+      "pmids": [
+        "34493130",
+        "32797375",
+        "42049691"
+      ],
+      "expect_labels": [
+        "Lactobacillus acidophilus LA-02",
+        "L. acidophilus LA-02"
+      ],
+      "evidence": [
+        {
+          "pmid": "32797375",
+          "pmcid": "PMC8292266",
+          "location": "title",
+          "quote": "Bifidobacterium lactis BS01 and Lactobacillus acidophilus LA02 supplementation"
+        },
+        {
+          "pmid": "42049691",
+          "pmcid": "PMC13146493",
+          "location": "full_text_methods",
+          "quote": "L. acidophilus [LA02] (DSM21717)"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_br03",
+      "id": "STRAIN_BREVE_BR03",
+      "standard_name": "Bifidobacterium breve BR03",
+      "aliases": [
+        "B. breve BR03",
+        "Bifidobacterium breve DSM 16604"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "DSM 16604"
+      ],
+      "supplier": null,
+      "pmids": [
+        "41879960",
+        "41703218"
+      ],
+      "expect_labels": [
+        "Bifidobacterium breve BR-03",
+        "B. breve BR-03"
+      ],
+      "evidence": [
+        {
+          "pmid": "41879960",
+          "pmcid": "PMC13518402",
+          "location": "title",
+          "quote": "Bifidobacterium breve Br03 and Bifidobacterium breve B632 mixture"
+        },
+        {
+          "pmid": "41703218",
+          "pmcid": "PMC13013907",
+          "location": "full_text_table",
+          "quote": "B. breve BR03 DSM 16604"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_r0070",
+      "id": "STRAIN_BREVE_R0070",
+      "standard_name": "Bifidobacterium breve R0070",
+      "aliases": [
+        "B. breve R0070"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "32306803",
+        "36145418"
+      ],
+      "expect_labels": [
+        "Bifidobacterium breve R0070"
+      ],
+      "evidence": [
+        {
+          "pmid": "32306803",
+          "location": "abstract",
+          "quote": "Pediococcus acidilactici R1001, Bifidobacterium breve R0070"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_r1058",
+      "id": "STRAIN_LACTOCOCCUS_R1058",
+      "standard_name": "Lactococcus lactis subsp. lactis R1058",
+      "aliases": [
+        "Lactococcus lactis R1058",
+        "Lactococcus lactis lactis R1058",
+        "Lactococcus lactis ssp. lactis R1058",
+        "Lactococcus lactis Rosell-1058"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "32306803",
+        "36145418",
+        "42456558"
+      ],
+      "expect_labels": [
+        "Lactococcus lactis lactis R1058",
+        "Lactococcus lactis subsp. lactis R1058",
+        "Lactococcus lactis R1058"
+      ],
+      "evidence": [
+        {
+          "pmid": "32306803",
+          "location": "abstract",
+          "quote": "Lactococcus lactis ssp. lactis R1058"
+        },
+        {
+          "pmid": "42456558",
+          "location": "abstract",
+          "quote": "50% Lactococcus lactis Rosell-1058"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_th4",
+      "id": "STRAIN_THERMOPHILUS_TH4",
+      "standard_name": "Streptococcus thermophilus TH-4",
+      "aliases": [
+        "S. thermophilus TH-4",
+        "Streptococcus thermophilus TH4"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "41913515",
+        "42671836"
+      ],
+      "expect_labels": [
+        "S. thermophilus, TH-4",
+        "Streptococcus thermophilus TH-4"
+      ],
+      "evidence": [
+        {
+          "pmid": "41913515",
+          "location": "abstract",
+          "quote": "B. lactis Bb-12, and Streptococcus thermophilus TH-4"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_crl1505",
+      "id": "STRAIN_RHAMNOSUS_CRL1505",
+      "standard_name": "Lactobacillus rhamnosus CRL1505",
+      "aliases": [
+        "Lactobacillus rhamnosus CRL-1505",
+        "L. rhamnosus CRL1505",
+        "Lacticaseibacillus rhamnosus CRL 1505"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "42354894",
+        "23947615"
+      ],
+      "expect_labels": [
+        "Lactobacillus rhamnosus CRL-1505",
+        "Lactobacillus rhamnosus CRL 1505"
+      ],
+      "evidence": [
+        {
+          "pmid": "42354894",
+          "pmcid": "PMC13303622",
+          "location": "title",
+          "quote": "Efficacy of Lacticaseibacillus rhamnosus CRL 1505 in Preventing Upper Respiratory Tract Infections"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_pa168",
+      "id": "STRAIN_GASSERI_PA168",
+      "standard_name": "Lactobacillus gasseri PA 16/8",
+      "aliases": [
+        "L. gasseri PA 16/8"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "31454425"
+      ],
+      "expect_labels": [
+        "Lactobacillus gasseri PA 16/8"
+      ],
+      "evidence": [
+        {
+          "pmid": "31454425",
+          "pmcid": "PMC6856813",
+          "location": "abstract",
+          "quote": "Lactobacillus gasseri PA 16/8, Bifidobacterium longum SP 07/3 and Bifidobacterium bifidum MF 20/5"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_sp073",
+      "id": "STRAIN_LONGUM_SP073",
+      "standard_name": "Bifidobacterium longum SP 07/3",
+      "aliases": [
+        "B. longum SP 07/3"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "31454425",
+        "24094416"
+      ],
+      "expect_labels": [
+        "Bifidobacterium longum SP 07/3"
+      ],
+      "evidence": [
+        {
+          "pmid": "24094416",
+          "pmcid": "PMC4064698",
+          "location": "abstract",
+          "quote": "B. longum SP 07/3, Lactobacillus rhamnosus GG"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_mf205",
+      "id": "STRAIN_BIFIDUM_MF205",
+      "standard_name": "Bifidobacterium bifidum MF 20/5",
+      "aliases": [
+        "B. bifidum MF 20/5"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "31454425",
+        "24135669"
+      ],
+      "expect_labels": [
+        "Bifidobacterium bifidum MF 20/5"
+      ],
+      "evidence": [
+        {
+          "pmid": "24135669",
+          "location": "title",
+          "quote": "peptides produced by Bifidobacterium bifidum MF 20/5"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_uala01",
+      "id": "STRAIN_ACIDOPHILUS_UALA01",
+      "standard_name": "Lactobacillus acidophilus UALa-01",
+      "aliases": [
+        "L. acidophilus UALa-01"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "39010860"
+      ],
+      "expect_labels": [
+        "Lactobacillus acidophilus UALa-01",
+        "L. acidophilus UALa-01"
+      ],
+      "evidence": [
+        {
+          "pmid": "39010860",
+          "pmcid": "PMC11247006",
+          "location": "abstract",
+          "quote": "the probiotic L. acidophilus UALa-01™ (n = 30)"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_uabb10",
+      "id": "STRAIN_BIFIDUM_UABB10",
+      "standard_name": "Bifidobacterium bifidum UABb-10",
+      "aliases": [
+        "B. bifidum UABb-10"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "31271261"
+      ],
+      "expect_labels": [
+        "Bifidobacterium bifidum UABb-10",
+        "B. bifidum UABb-10"
+      ],
+      "evidence": [
+        {
+          "pmid": "31271261",
+          "pmcid": "PMC6851827",
+          "location": "abstract",
+          "quote": "Bifidobacterium longum UABl-14 and Bifidobacterium bifidum UABb-10"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_ha116",
+      "id": "STRAIN_INFANTIS_HA116",
+      "standard_name": "Bifidobacterium longum subsp. infantis HA-116",
+      "aliases": [
+        "Bifidobacterium infantis HA-116",
+        "B. infantis HA-116"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "36643974"
+      ],
+      "expect_labels": [
+        "Bifidobacterium infantis HA-116"
+      ],
+      "evidence": [
+        {
+          "pmid": "36643974",
+          "pmcid": "PMC9835551",
+          "location": "abstract",
+          "quote": "Bifidobacterium longum subsp. infantis HA-116"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_ha132",
+      "id": "STRAIN_BIFIDUM_HA132",
+      "standard_name": "Bifidobacterium bifidum HA-132",
+      "aliases": [
+        "B. bifidum HA-132"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "36643974",
+        "40507094"
+      ],
+      "expect_labels": [
+        "Bifidobacterium bifidum HA-132"
+      ],
+      "evidence": [
+        {
+          "pmid": "40507094",
+          "location": "abstract",
+          "quote": "Lacticaseibacillus rhamnosus Rosell®-11 and Bifidobacterium bifidum HA-132"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_cu1",
+      "id": "STRAIN_SUBTILIS_CU1",
+      "standard_name": "Bacillus subtilis CU1",
+      "aliases": [
+        "Bacillus subtilis CU-1",
+        "B. subtilis CU1"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "39151920",
+        "34557395"
+      ],
+      "expect_labels": [
+        "Bacillus subtilis CU1"
+      ],
+      "evidence": [
+        {
+          "pmid": "39151920",
+          "location": "title",
+          "quote": "The probiotic strain Bacillus subtilis CU1 primes antimicrobial innate immune response"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_boulardii_i3799",
+      "id": "STRAIN_BOULARDII_I3799",
+      "standard_name": "Saccharomyces cerevisiae var. boulardii CNCM I-3799",
+      "aliases": [
+        "Saccharomyces boulardii CNCM I-3799",
+        "S. boulardii CNCM I-3799",
+        "Saccharomyces boulardii CNCM-I 3799"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "CNCM I-3799"
+      ],
+      "supplier": null,
+      "pmids": [
+        "32796401",
+        "42016124",
+        "34557395"
+      ],
+      "expect_labels": [
+        "Saccharomyces boulardii CNCM I-3799"
+      ],
+      "evidence": [
+        {
+          "pmid": "32796401",
+          "pmcid": "PMC7556239",
+          "location": "abstract",
+          "quote": "Saccharomyces cerevisiae variant boulardii CNCM I-3799 (S. boulardii CNCM I-3799)"
+        }
+      ],
+      "note": "Distinct deposit from CNCM I-745 (STRAIN_SACCHAROMYCES)."
+    },
+    {
+      "op": "add_identity",
+      "key": "new_boulardii_i1079",
+      "id": "STRAIN_BOULARDII_I1079",
+      "standard_name": "Saccharomyces cerevisiae var. boulardii CNCM I-1079",
+      "aliases": [
+        "Saccharomyces boulardii CNCM I-1079",
+        "Saccharomyces cerevisiae subsp. boulardii CNCM-I-1079"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "CNCM I-1079"
+      ],
+      "supplier": null,
+      "pmids": [
+        "42374548",
+        "42480917"
+      ],
+      "expect_labels": [
+        "Saccharomyces cerevisiae subsp. boulardii (CNCM-I-1079)"
+      ],
+      "evidence": [
+        {
+          "pmid": "42374548",
+          "pmcid": "PMC13317281",
+          "location": "title",
+          "quote": "Saccharomyces cerevisiae var. boulardii CNCM I-1079 probiotic"
+        }
+      ],
+      "note": "Published studies of this deposit are veterinary; identity only, no human evidence implied."
+    },
+    {
+      "op": "add_identity",
+      "key": "new_lbv96",
+      "id": "STRAIN_RHAMNOSUS_LBV96",
+      "standard_name": "Lactobacillus rhamnosus LbV96",
+      "aliases": [
+        "Lactobacillus rhamnosus LbV 96",
+        "L. rhamnosus LbV96"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "DSM 22560"
+      ],
+      "supplier": null,
+      "pmids": [
+        "29065710",
+        "31012733"
+      ],
+      "expect_labels": [
+        "Lactobacillus rhamnosus LBV 96"
+      ],
+      "evidence": [
+        {
+          "pmid": "29065710",
+          "location": "abstract",
+          "quote": "Lactobacillus rhamnosus LbV96 (DSM 22560)"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_lbv116",
+      "id": "STRAIN_JENSENII_LBV116",
+      "standard_name": "Lactobacillus jensenii LbV 116",
+      "aliases": [
+        "Lactobacillus jensenii LbV116",
+        "L. jensenii LbV 116"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "DSM 22567"
+      ],
+      "supplier": null,
+      "pmids": [
+        "29065710",
+        "31012733"
+      ],
+      "expect_labels": [
+        "Lactobacillus jensenii LBV 116"
+      ],
+      "evidence": [
+        {
+          "pmid": "29065710",
+          "location": "abstract",
+          "quote": "Lactobacillus jensenii LbV 116 (DSM 22567)"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_lbv150n",
+      "id": "STRAIN_GASSERI_LBV150N",
+      "standard_name": "Lactobacillus gasseri LbV 150N",
+      "aliases": [
+        "Lactobacillus gasseri LbV150N",
+        "L. gasseri LbV 150N"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "DSM 22583"
+      ],
+      "supplier": null,
+      "pmids": [
+        "29065710",
+        "31012733"
+      ],
+      "expect_labels": [
+        "Lactobacillus gasseri LBV 150N"
+      ],
+      "evidence": [
+        {
+          "pmid": "29065710",
+          "location": "abstract",
+          "quote": "Lactobacillus gasseri LbV 150N (DSM 22583)"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_lbv88",
+      "id": "STRAIN_CRISPATUS_LBV88",
+      "standard_name": "Lactobacillus crispatus LbV 88",
+      "aliases": [
+        "Lactobacillus crispatus LbV88",
+        "L. crispatus LbV 88"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "DSM 22566"
+      ],
+      "supplier": null,
+      "pmids": [
+        "29065710",
+        "31012733"
+      ],
+      "expect_labels": [
+        "Lactobacillus crispatus LBV 88"
+      ],
+      "evidence": [
+        {
+          "pmid": "29065710",
+          "location": "abstract",
+          "quote": "Lactobacillus crispatus LbV 88 (DSM 22566)"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_sbs1",
+      "id": "STRAIN_FERMENTUM_SBS1",
+      "standard_name": "Lactobacillus fermentum SBS-1",
+      "aliases": [
+        "Limosilactobacillus fermentum SBS-1",
+        "L. fermentum SBS-1"
+      ],
+      "verification": "designation_verified",
+      "deposits": [
+        "DGCC1925"
+      ],
+      "supplier": "Danisco / IFF",
+      "pmids": [
+        "35634575",
+        "41673804"
+      ],
+      "expect_labels": [
+        "Lactobacillus fermentum SBS-1"
+      ],
+      "evidence": [
+        {
+          "pmid": "35634575",
+          "pmcid": "PMC9125999",
+          "location": "full_text_methods_strain_table (IFF/Danisco authors)",
+          "quote": "Limosilactobacillus fermentum SBS-1 DGCC DGCC1925"
+        },
+        {
+          "pmid": "41673804",
+          "pmcid": "PMC12998323",
+          "location": "full_text_discussion",
+          "quote": "L. fermentum SBS-1 (Danisco USA, Inc.)"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_sd5870",
+      "id": "STRAIN_PLANTARUM_SD5870",
+      "standard_name": "Lactobacillus plantarum SD5870",
+      "aliases": [
+        "Lactobacillus plantarum SD-5870",
+        "L. plantarum SD-5870"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "38656273"
+      ],
+      "expect_labels": [
+        "Lactobacillus plantarum SD-5870"
+      ],
+      "evidence": [
+        {
+          "pmid": "38656273",
+          "pmcid": "PMC11057640",
+          "location": "full_text_methods",
+          "quote": "selection of L. plantarum Nizo3400, Nizo2830, Nizo2766, SD5870, Heal19, 299 v and Lp900"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_imc501",
+      "id": "STRAIN_RHAMNOSUS_IMC501",
+      "standard_name": "Lactobacillus rhamnosus IMC 501",
+      "aliases": [
+        "L. rhamnosus IMC 501",
+        "Lacticaseibacillus rhamnosus IMC 501"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "41325897",
+        "35940766"
+      ],
+      "expect_labels": [
+        "L. rhamnosus IMC-501"
+      ],
+      "evidence": [
+        {
+          "pmid": "35940766",
+          "location": "abstract",
+          "quote": "Lacticaseibacillus rhamnosus IMC 501 and Lacticaseibacillus paracasei IMC 502"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_imc502",
+      "id": "STRAIN_PARACASEI_IMC502",
+      "standard_name": "Lactobacillus paracasei IMC 502",
+      "aliases": [
+        "L. paracasei IMC 502",
+        "Lacticaseibacillus paracasei IMC 502"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "41325897",
+        "38658186"
+      ],
+      "expect_labels": [
+        "L. paracasei IMC-502"
+      ],
+      "evidence": [
+        {
+          "pmid": "38658186",
+          "location": "title",
+          "quote": "the probiotic strain Lactobacillus paracasei IMC 502®"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_g91",
+      "id": "STRAIN_BIFIDUM_G91",
+      "standard_name": "Bifidobacterium bifidum G9-1",
+      "aliases": [
+        "B. bifidum G9-1"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "42017290",
+        "42504070",
+        "28228426"
+      ],
+      "expect_labels": [
+        "Bifidobacterium bifidum G9-1"
+      ],
+      "evidence": [
+        {
+          "pmid": "42017290",
+          "location": "title",
+          "quote": "Bifidobacterium bifidum G9-1 Intake Improves Gastrointestinal Symptoms"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_mm2",
+      "id": "STRAIN_LONGUM_MM2",
+      "standard_name": "Bifidobacterium longum MM-2",
+      "aliases": [
+        "B. longum MM-2"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "25400245",
+        "28228426"
+      ],
+      "expect_labels": [
+        "Bifidobacterium longum MM-2"
+      ],
+      "evidence": [
+        {
+          "pmid": "25400245",
+          "location": "title",
+          "quote": "Consecutive oral administration of Bifidobacterium longum MM-2"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_ks13",
+      "id": "STRAIN_GASSERI_KS13",
+      "standard_name": "Lactobacillus gasseri KS-13",
+      "aliases": [
+        "L. gasseri KS-13"
+      ],
+      "verification": "designation_verified",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "28228426",
+        "25909149"
+      ],
+      "expect_labels": [
+        "Lactobacillus gasseri KS-13"
+      ],
+      "evidence": [
+        {
+          "pmid": "28228426",
+          "location": "title",
+          "quote": "Probiotics (Lactobacillus gasseri KS-13, Bifidobacterium bifidum G9-1, and Bifidobacterium longum MM-2)"
+        }
+      ]
+    },
+    {
+      "op": "add_identity",
+      "key": "new_ha122",
+      "id": "STRAIN_ACIDOPHILUS_HA122",
+      "standard_name": "Lactobacillus acidophilus HA-122",
+      "aliases": [
+        "L. acidophilus HA-122"
+      ],
+      "verification": "designation_found_species_unconfirmed",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "36079732",
+        "41316341"
+      ],
+      "expect_labels": [
+        "Lactobacillus acidophilus HA-122"
+      ],
+      "evidence": [
+        {
+          "pmid": "36079732",
+          "pmcid": "PMC9459752",
+          "location": "abstract",
+          "quote": "tyndallized Lactobacillus acidophilus (HA122)"
+        },
+        {
+          "pmid": "41316341",
+          "pmcid": "PMC12764115",
+          "location": "abstract",
+          "quote": "Lactobacillus helveticus HA-122"
+        }
+      ],
+      "note": "Sources disagree on the species name for HA-122 (L. acidophilus vs L. helveticus); the designation is the same Lallemand strain."
+    },
+    {
+      "op": "add_identity",
+      "key": "new_ha108",
+      "id": "STRAIN_CASEI_HA108",
+      "standard_name": "Lactobacillus casei HA-108",
+      "aliases": [
+        "L. casei HA-108",
+        "Lacticaseibacillus paracasei HA-108"
+      ],
+      "verification": "designation_found_species_unconfirmed",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "37019866",
+        "41316341"
+      ],
+      "expect_labels": [
+        "Lactobacillus casei HA-108"
+      ],
+      "evidence": [
+        {
+          "pmid": "37019866",
+          "location": "abstract",
+          "quote": "Lacticaseibacillus paracasei HA-108, Bifidobacterium breve HA-129"
+        }
+      ],
+      "note": "Both PubMed abstracts name L. paracasei HA-108; labels print L. casei."
+    },
+    {
+      "op": "add_identity",
+      "key": "new_lafti_l10",
+      "id": "STRAIN_ACIDOPHILUS_LAFTI_L10",
+      "standard_name": "Lactobacillus acidophilus LAFTI L10",
+      "aliases": [
+        "L. acidophilus LAFTI L10",
+        "Lactobacillus helveticus LAFTI L10"
+      ],
+      "verification": "designation_found_species_unconfirmed",
+      "deposits": [],
+      "supplier": null,
+      "pmids": [
+        "18468035",
+        "17134782"
+      ],
+      "expect_labels": [
+        "Lactobacillus helveticus LAFTI L10"
+      ],
+      "evidence": [
+        {
+          "pmid": "17134782",
+          "location": "title",
+          "quote": "Immune enhancing effects of Lactobacillus acidophilus LAFTI L10"
+        }
+      ],
+      "note": "Published sources name L. acidophilus LAFTI L10; the label prints L. helveticus."
+    }
+  ]
+}
