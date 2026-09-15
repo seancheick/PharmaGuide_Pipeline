@@ -497,6 +497,9 @@ def _normalize_unii(value):
 from probiotic_measurements import (
     strain_cfu_tier as _compute_strain_cfu_tier,
     clinical_strain_research_scope,
+    _PROBIOTIC_IDENTITY_RE,
+    is_probiotic_source_identity as _is_probiotic_identity,
+    is_probiotic_source_header as _is_blend_header_total,
 )
 
 
@@ -514,15 +517,6 @@ _UI_COPY_HINT_VALUES = (
     "limited_evidence",
     "label_disclosed_no_threshold",
     "blend_not_individually_disclosed",
-)
-_PROBIOTIC_IDENTITY_RE = re.compile(
-    r"\b("
-    r"probiotic|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
-    r"bacillus|limosilactobacillus|lacticaseibacillus|lactiplantibacillus|"
-    r"lactococcus|acidophilus|reuteri|rhamnosus|plantarum|casei|salivarius|"
-    r"coagulans|subtilis|bifidus|cfu|live\s+cultures?|viable\s+cells?"
-    r")\b",
-    re.IGNORECASE,
 )
 
 
@@ -15425,18 +15419,6 @@ class SupplementEnricherV3:
             marker = ".nestedRows["
             return path.split(marker, 1)[0] if marker in path else ""
 
-        def _is_probiotic_identity(ingredient: Dict) -> bool:
-            if has_nonlive_microbial_derivative_evidence(ingredient):
-                return False
-            ing_name = str(ingredient.get('name', '') or '').lower()
-            std_name = str(ingredient.get('standardName', '') or '').lower()
-            category = str(ingredient.get('category', '') or '').lower()
-            return (
-                bool(_PROBIOTIC_IDENTITY_RE.search(f"{ing_name} {std_name}"))
-                or 'probiotic' in category
-                or 'bacteria' in category
-            )
-
         # Cleaner deliberately removes a blend header from activeIngredients
         # when its named children are the scorable identities. The header still
         # owns the aggregate label dose in display_ingredients. Recover that
@@ -15485,18 +15467,6 @@ class SupplementEnricherV3:
                     "linked_rows": [raw_path] if raw_path else [],
                 }
                 break
-
-        def _is_blend_header_total(ingredient: Dict) -> bool:
-            role = str(ingredient.get("cleaner_row_role") or "").lower()
-            hierarchy = str(ingredient.get("hierarchyType") or "").lower()
-            reason = str(ingredient.get("score_exclusion_reason") or "").lower()
-            dose_class = str(ingredient.get("dose_class") or "").lower()
-            return (
-                role == "blend_header_total"
-                or hierarchy == "blend_header"
-                or reason == "blend_header_total"
-                or dose_class == "blend_total_weight"
-            )
 
         def _serving_size_quantities(ingredient: Dict) -> List[float]:
             variants = ingredient.get("quantityVariants")

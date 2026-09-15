@@ -23,6 +23,47 @@ _AFU_UNIT = re.compile(
 AFU_REVIEW_REASON = "probiotic_afu_reference_unavailable"
 
 
+_PROBIOTIC_IDENTITY_RE = re.compile(
+    r"\b("
+    r"probiotic|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
+    r"bacillus|limosilactobacillus|lacticaseibacillus|lactiplantibacillus|"
+    r"lactococcus|acidophilus|reuteri|rhamnosus|plantarum|casei|salivarius|"
+    r"coagulans|subtilis|bifidus|cfu|live\s+cultures?|viable\s+cells?"
+    r")\b",
+    re.IGNORECASE,
+)
+
+
+def is_probiotic_source_identity(ingredient: Mapping) -> bool:
+    """Shared collector eligibility, not exact strain proof or clinical credit."""
+    from identity_integrity import has_nonlive_microbial_derivative_evidence
+
+    if has_nonlive_microbial_derivative_evidence(ingredient):
+        return False
+    ing_name = str(ingredient.get("name", "") or "").lower()
+    std_name = str(ingredient.get("standardName", "") or "").lower()
+    category = str(ingredient.get("category", "") or "").lower()
+    return (
+        bool(_PROBIOTIC_IDENTITY_RE.search(f"{ing_name} {std_name}"))
+        or "probiotic" in category
+        or "bacteria" in category
+    )
+
+
+def is_probiotic_source_header(ingredient: Mapping) -> bool:
+    """Existing cleaner header roles distinguish containers from organisms."""
+    role = str(ingredient.get("cleaner_row_role") or "").lower()
+    hierarchy = str(ingredient.get("hierarchyType") or "").lower()
+    reason = str(ingredient.get("score_exclusion_reason") or "").lower()
+    dose_class = str(ingredient.get("dose_class") or "").lower()
+    return (
+        role == "blend_header_total"
+        or hierarchy == "blend_header"
+        or reason == "blend_header_total"
+        or dose_class == "blend_total_weight"
+    )
+
+
 def normalized_cfu_count(measure: Mapping) -> float | None:
     """Read one normalized CFU measurement; reject invalid or conflicting twins.
 
@@ -146,10 +187,17 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
                 and normalized_cfu_count(measure) is not None):
             disclosed_keys.update(blend_keys)
 
-    # Actual registry-resolved label sources survive missing blend projections;
+    # All eligible biological source members survive missing blend projections,
+    # including unresolved species/designations. Containers are not organisms;
     # detached clinical IDs never manufacture a source row or an identity.
     for owner, members in owned:
-        if not any(cid for _, _, cid in members):
+        if not members:
+            continue  # A source role without any actual label name is not an identity.
+        if not any(cid for _, _, cid in members) and (
+            not is_probiotic_source_identity(owner)
+            or is_probiotic_source_header(owner)
+            or owner.get("nestedIngredients")
+        ):
             continue
         for key, _, exact in identities(owner["name"], owner):
             keys.add(key)

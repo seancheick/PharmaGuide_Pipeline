@@ -10,6 +10,69 @@ from test_native_clinical_strain_provenance import _owned_product
 from test_probiotic_identity_completeness import product_with_identities
 
 
+@pytest.mark.parametrize("name", ["Lactobacillus acidophilus", "Bifidobacterium longum Unknown-A123"])
+@pytest.mark.parametrize("projections", ["all", "known_only", "none"])
+@pytest.mark.parametrize("remove_clinical", [False, True])
+def test_source_membership_does_not_shrink_when_unresolved_projection_is_missing(name, projections, remove_clinical):
+    from build_final_db import build_detail_blob
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    product = product_with_identities(1, 1)
+    product["probiotic_data"]["is_probiotic_product"] = True
+    product["activeIngredients"][1]["name"] = name
+    product["probiotic_data"]["probiotic_blends"][1]["strains"] = [name]
+    product["probiotic_data"]["probiotic_blends"][0]["cfu_data"] = {"has_cfu": True, "cfu_count": 1e9}
+    product["activeIngredients"].extend([
+        {"name": "Vitamin D", "category": "vitamin", "raw_source_path": "ingredientRows[2]"},
+        {"name": "C. sinensis", "category": "botanical", "raw_source_path": "ingredientRows[3]"},
+    ])
+    if projections != "all":
+        product["probiotic_data"]["probiotic_blends"] = product["probiotic_data"]["probiotic_blends"][:1] if projections == "known_only" else []
+    if remove_clinical:
+        product["probiotic_data"]["clinical_strains"] = []
+    formulation = score_formulation(product)
+    assert formulation["metadata"]["total_strain_count"] == 2
+    assert formulation["metadata"]["identified_strain_count"] == 1
+    assert formulation["components"]["exact_identity_completeness"] == 4
+    dose = score_dose(product)
+    assert dose["metadata"]["total_strain_count"] == 2
+    assert dose["components"]["per_strain_cfu_disclosure"] == (0 if projections == "none" else 5)
+    transparency = score_transparency(product)
+    assert transparency["metadata"]["total_strain_count"] == 2
+    assert transparency["components"]["per_strain_cfu_on_label"] == (0 if projections == "none" else 3.5)
+    assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 2
+
+
+@pytest.mark.parametrize("source", [
+    {"category": "probiotic"},
+    {"name": None, "category": "bacteria"},
+    {"name": "", "category": "probiotic"},
+    {"name": "Vitamin D", "category": "vitamin"},
+    {"name": "C. sinensis", "category": "botanical"},
+    {"name": "Lactobacillus ferment extract", "category": "bacteria"},
+    {"name": "Probiotic Blend", "cleaner_row_role": "blend_header_total"},
+    {"name": "Probiotic Blend", "hierarchyType": "blend_header"},
+    {"name": "Probiotic Blend", "dose_class": "blend_total_weight"},
+    {"name": "Probiotic Blend", "score_exclusion_reason": "blend_header_total"},
+])
+def test_source_completion_keeps_existing_eligibility_and_header_boundaries(source):
+    product = product_with_identities(1)
+    product["activeIngredients"].append({**source, "raw_source_path": "ingredientRows[1]"})
+    result = score_formulation(product)
+    assert result["metadata"]["total_strain_count"] == 1
+    assert result["components"]["exact_identity_completeness"] == 8
+
+
+def test_source_completion_retains_explicit_probiotic_role_without_inventing_identity():
+    product = product_with_identities(1)
+    product["activeIngredients"].append({"name": "Unknown organism", "category": "probiotic",
+                                          "raw_source_path": "ingredientRows[1]"})
+    result = score_formulation(product)
+    assert result["metadata"]["total_strain_count"] == 2
+    assert result["components"]["exact_identity_completeness"] == 4
+
+
 @pytest.mark.parametrize("name", ["L. rhamnosus GG", "lactobacillus rhamnosus gg"])
 def test_source_alias_case_does_not_change_exact_identity_specificity(name):
     product = product_with_identities(1)
