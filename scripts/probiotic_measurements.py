@@ -67,6 +67,7 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     from studied_formulas import (
         _clinical_label_rows, _clinical_strain_registry,
         clinical_strain_identity_key, clinical_strain_identity_matches,
+        clinical_strain_identity_from_label, clinical_strain_group_designation,
         label_owned_native_strains,
     )
 
@@ -76,6 +77,14 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
     registry = _clinical_strain_registry()
     native = label_owned_native_strains(product)
     owners = list(_clinical_label_rows(product.get("activeIngredients")))
+    # Alias normalization is a denominator property even when the clinical
+    # projection is absent. Only label_owned_native_strains supplies numerator
+    # proof; consulting the registry here cannot create exact-identity credit.
+    owner_registry_ids = {
+        id(owner): {cid for cid, reference in registry.items()
+                    if clinical_strain_identity_from_label(owner, reference)}
+        for owner in owners
+    }
     keys, exact_keys, disclosed_keys = set(), set(), set()
     blend_resolutions = []
 
@@ -101,10 +110,20 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
         if len(exact) == 1:
             cid, state = next(iter(exact.items()))
             return f"strain:{cid}", state, True
+        registered = owner_registry_ids[id(owner)] if owner is not None else {
+            cid for cid, reference in registry.items()
+            if clinical_strain_identity_matches(name, reference)
+        }
+        if len(registered) == 1:
+            cid = next(iter(registered))
+            return f"strain:{cid}", label_strain_identity_resolution(name, None, registry), False
         # An unregistered designation still distinguishes its own source row.
         # Preserve its printed form in the key without inventing a registry ID.
         forms = (owner or {}).get("forms")
-        forms = forms if isinstance(forms, list) else []
+        forms = list(forms) if isinstance(forms, list) else []
+        group_code = clinical_strain_group_designation(owner or {})
+        if group_code:
+            forms.append(group_code)
         form_names = sorted({
             clinical_strain_identity_key(value)
             for form in forms
@@ -129,8 +148,8 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
             source_rows = [owner for owner in owners if (
                 valid_name(owner.get("name"))
                 and (clinical_strain_identity_key(owner["name"]) == clinical_strain_identity_key(name)
-                     or any(clinical_strain_identity_matches(name, registry[row["clinical_id"]])
-                            for row in native_for(owner)))
+                     or any(clinical_strain_identity_matches(name, registry[cid])
+                            for cid in owner_registry_ids[id(owner)]))
                 and (not ref or owner.get("raw_source_path") == ref
                      or (isinstance(owner.get("raw_source_path"), str)
                          and owner["raw_source_path"].startswith(f"{ref}.nestedRows[")))

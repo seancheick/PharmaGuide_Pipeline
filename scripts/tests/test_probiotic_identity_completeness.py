@@ -185,3 +185,40 @@ def test_existing_full_prebiotic_complement_reaches_public_formulation_max():
     public = assemble_quality_score({"v4_module": "probiotic", "v4_verdict": "SAFE", "raw_score_v4_100": 50,
                                     "v4_breakdown": {"module": module}})
     assert public["quality_pillars_v4"]["formulation"]["score"] == 20
+
+
+def test_registered_alias_dedup_does_not_require_clinical_projection():
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+    product = product_with_identities(1)
+    product["probiotic_data"]["clinical_strains"] = []
+    blend = product["probiotic_data"]["probiotic_blends"][0]
+    blend["cfu_data"] = {"has_cfu": True, "cfu_count": 1e9}
+    for names in [["Lactobacillus rhamnosus GG"], ["Lactobacillus rhamnosus GG", "L. rhamnosus GG"]]:
+        blend["strains"] = names
+        formulation = score_formulation(product)
+        assert formulation["metadata"]["total_strain_count"] == 1
+        assert formulation["components"]["exact_identity_completeness"] == 0
+        assert score_dose(product)["components"]["per_strain_cfu_disclosure"] == 10
+        assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 7
+
+
+@pytest.mark.parametrize("field", ["forms", "ingredientGroup"])
+def test_source_local_unknown_group_codes_match_form_denominator(field):
+    from scoring_v4.modules.probiotic_dose import score_dose
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+    product = product_with_identities(2)
+    product["probiotic_data"]["clinical_strains"] = []
+    for row, blend, code in zip(product["activeIngredients"], product["probiotic_data"]["probiotic_blends"],
+                                ["Unknown-A123", "Unknown-B456"]):
+        row["name"] = "B. longum"
+        row[field] = [{"name": code}] if field == "forms" else code
+        blend.update(name=row["name"], strains=[row["name"]])
+    product["probiotic_data"]["probiotic_blends"][0]["cfu_data"] = {"has_cfu": True, "cfu_count": 1e9}
+    product["activeIngredients"].append(deepcopy(product["activeIngredients"][0]))
+    product["probiotic_data"]["probiotic_blends"].append(deepcopy(product["probiotic_data"]["probiotic_blends"][0]))
+    formulation = score_formulation(product)
+    assert formulation["metadata"]["total_strain_count"] == 2
+    assert formulation["components"]["exact_identity_completeness"] == 0
+    assert score_dose(product)["components"]["per_strain_cfu_disclosure"] == 5
+    assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 3.5

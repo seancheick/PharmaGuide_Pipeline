@@ -192,6 +192,20 @@ def _clinical_strain_code_tokens() -> frozenset[str]:
     )
 
 
+def clinical_strain_group_designation(row: Mapping) -> str | None:
+    """Read the source row's code-shaped group field, excluding taxonomy/prose."""
+    group = row.get("ingredientGroup")
+    group_words = re.findall(r"[A-Za-z0-9-]+", group) if isinstance(group, str) else []
+    if group_words and all(
+        _key(word) in _clinical_strain_code_tokens()
+        or word.isdigit()
+        or (re.search(r"[A-Za-z]", word) and re.search(r"[0-9]", word))
+        for word in group_words
+    ):
+        return group
+    return None
+
+
 def clinical_strain_identity_from_label(row: Mapping, reference: Mapping) -> str | None:
     """Resolve an exact identity from this label row, never surrounding prose.
 
@@ -207,19 +221,10 @@ def clinical_strain_identity_from_label(row: Mapping, reference: Mapping) -> str
         if (form.get("name") if isinstance(form, Mapping) else form)
     }
     # DSLD may put the explicit strain code in this same row's structured
-    # group field. Only code-shaped values join the exact form proof; ordinary
-    # taxonomy, categories and notes cannot select a representative strain.
-    group = row.get("ingredientGroup")
-    group_code = None
-    group_words = re.findall(r"[A-Za-z0-9-]+", group) if isinstance(group, str) else []
-    if group_words and all(
-        _key(word) in _clinical_strain_code_tokens()
-        or word.isdigit()
-        or (re.search(r"[A-Za-z]", word) and re.search(r"[0-9]", word))
-        for word in group_words
-    ):
-        forms.add(group)
-        group_code = group
+    # group field. Taxonomy, categories and notes cannot select a strain.
+    group_code = clinical_strain_group_designation(row)
+    if group_code:
+        forms.add(group_code)
     def tokens(value):
         return tuple(re.findall(r"[a-z0-9]+", normalize_text(str(value or "")).lower()))
 
