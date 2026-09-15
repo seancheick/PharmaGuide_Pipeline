@@ -31,9 +31,10 @@ from scoring_reference_resolver import (
 # the enricher stamps rows with.
 from identity_integrity import (
     IDENTITY_DISPOSITIONS,
-    has_nonlive_microbial_derivative_evidence,
     is_identity_scoreable,
 )
+# One probiotic row-identity owner for enrichment, taxonomy, routing and scoring.
+from probiotic_measurements import is_probiotic_source_identity, is_probiotic_support_source
 from scoring_v4.route_features import (
     B_COMPLEX_DISQUALIFY_CANONICALS,
     B_VITAMIN_CANONICALS,
@@ -175,14 +176,6 @@ _SPORTS_PRIMARY_CANONICALS = _PROTEIN_CANONICALS | {
     "l_isoleucine",
     "l_valine",
 }
-_PROBIOTIC_IDENTITY_RE = re.compile(
-    r"\b("
-    r"probiotic|trubiotics|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
-    r"bacillus|limosilactobacillus|acidophilus|dophilus|bifidus|cfu"
-    r")\b",
-    re.IGNORECASE,
-)
-_PROBIOTIC_SUPPORT_CANONICALS = {"fiber", "prebiotics"}
 _ROUTE_MULTIVITAMIN_BROAD_PANEL_MIN = 8
 _OMEGA_PRODUCT_TYPES = {"omega_3", "fish_oil"}
 _OMEGA_EVIDENCE_CANONICALS = {
@@ -1133,16 +1126,6 @@ def _extract_enzyme_activity(row: Dict[str, Any]) -> tuple[Optional[float], Opti
     return parsed, unit_text
 
 
-def _has_probiotic_identity_text(row: Dict[str, Any]) -> bool:
-    if has_nonlive_microbial_derivative_evidence(row):
-        return False
-    text = " ".join(
-        str(row.get(key) or "")
-        for key in ("name", "standardName", "standard_name", "canonical_id", "raw_source_text", "category")
-    )
-    return bool(_PROBIOTIC_IDENTITY_RE.search(text))
-
-
 def _has_omega_identity_text(row: Dict[str, Any]) -> bool:
     canonical = _slug(row.get("canonical_id"))
     if canonical in _OMEGA_EVIDENCE_CANONICALS or canonical in {"epa", "dha", "epa_dha"}:
@@ -1176,21 +1159,10 @@ def _recoverable_nested_identity(row: Dict[str, Any]) -> bool:
     if not canonical:
         return False
     return (
-        _has_probiotic_identity_text(row)
+        is_probiotic_source_identity(row)
         or _has_omega_identity_text(row)
         or _is_botanical_or_standardized_anchor(row)
     )
-
-
-def _is_probiotic_support_row(row: Dict[str, Any]) -> bool:
-    canonical = _norm(row.get("canonical_id"))
-    if canonical in _PROBIOTIC_SUPPORT_CANONICALS:
-        return True
-    text = " ".join(
-        str(row.get(key) or "").lower()
-        for key in ("name", "standardName", "standard_name", "raw_source_text", "category")
-    )
-    return any(term in text for term in ("dietary fiber", "prebiotic", "inulin", "fructooligosaccharide"))
 
 
 def _has_non_probiotic_strict_active(product: Dict[str, Any]) -> bool:
@@ -1214,9 +1186,9 @@ def _has_non_probiotic_strict_active(product: Dict[str, Any]) -> bool:
     for row in rows:
         if str(row.get("raw_source_path") or "") in probiotic_paths:
             continue
-        if _has_probiotic_identity_text(row):
+        if is_probiotic_source_identity(row):
             continue
-        if _is_probiotic_support_row(row):
+        if is_probiotic_support_source(row):
             continue
         if _norm(row.get("dose_class")) == "probiotic_cfu":
             continue
@@ -1459,7 +1431,7 @@ def _best_nested_anchor_child(
         row
         for row in candidate_rows
         if _is_nested_under(parent_path, row) and _anchor_identity(row)[0]
-        and not _has_probiotic_identity_text(row)
+        and not is_probiotic_source_identity(row)
     ]
     if not children:
         return None
@@ -3576,17 +3548,13 @@ def _route_non_probiotic_scorable_count(
     for row in _route_scoring_rows(product):
         if not isinstance(row, dict):
             continue
-        taxonomy = _safe_dict(row.get("raw_taxonomy"))
-        category = _norm(taxonomy.get("category") or row.get("category"))
-        if category in {"probiotic", "probiotics", "bacteria"}:
-            continue
         if _norm(row.get("dose_class")) == "probiotic_cfu":
             continue
         if _norm(row.get("evidence_type")) == "probiotic_cfu":
             continue
-        if _has_probiotic_identity_text(row):
+        if is_probiotic_source_identity(row):
             continue
-        if _is_probiotic_support_row(row):
+        if is_probiotic_support_source(row):
             continue
         if require_disclosed and not _route_has_positive_quantity(row):
             continue
@@ -3631,7 +3599,7 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     # Decapeptide" from trusting taxonomy alone, while the title guard preserves
     # magnesium/enzyme/fiber products whose probiotic is genuinely secondary.
     has_named_strain_identity = any(
-        isinstance(blend, dict) and _has_probiotic_identity_text(blend)
+        isinstance(blend, dict) and is_probiotic_source_identity(blend)
         for blend in _safe_list(data.get("probiotic_blends"))
     )
     if (

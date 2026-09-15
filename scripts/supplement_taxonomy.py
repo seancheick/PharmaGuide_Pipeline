@@ -99,15 +99,7 @@ REASON_CODE_IDENTITY_DEDUP = "identity_dedup_applied"
 REASON_CODE_NON_QUANTIFIED_EXCLUDED = "non_quantified_base_excluded"
 REASON_CODE_UNRESOLVED_LABEL_ACTIVE = "unresolved_label_active_included"
 
-_PROBIOTIC_IDENTITY_RE = re.compile(
-    r"\b("
-    r"probiotic|trubiotics|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
-    r"bacillus|limosilactobacillus|lacticaseibacillus|lactiplantibacillus|"
-    r"lactococcus|acidophilus|reuteri|rhamnosus|plantarum|casei|salivarius|"
-    r"coagulans|subtilis|bifidus|cfu|live\s+cultures?|viable\s+cells?"
-    r")\b",
-    re.IGNORECASE,
-)
+from probiotic_measurements import _PROBIOTIC_IDENTITY_RE, is_probiotic_support_source  # one probiotic owner
 # ============================================================================
 # PRIMARY TYPE DEFINITIONS — derived from product_type_vocab.json
 # ============================================================================
@@ -448,29 +440,6 @@ def _row_has_probiotic_identity(
     return is_probiotic_source_identity(probe)
 
 
-def _is_probiotic_cfu_support_row(row: dict[str, Any]) -> bool:
-    """Rows like fiber/prebiotics support probiotic products; they are not competing actives."""
-    cid = _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "")
-    if cid in {"fiber", "prebiotics"}:
-        return True
-    text = _normalize_text(
-        " ".join(
-            str(row.get(key) or "")
-            for key in ("name", "standardName", "standard_name", "raw_source_text", "category")
-        )
-    )
-    return any(
-        term in text
-        for term in (
-            "dietary fiber",
-            "prebiotic",
-            "inulin",
-            "fructooligosaccharide",
-            "galacto-oligosaccharide",
-        )
-    )
-
-
 def _is_fiber_primary_with_accessory_probiotics(product: dict[str, Any]) -> bool:
     """Detect fiber-primary labels where probiotics are secondary/add-on."""
     product_name = _normalize_text(
@@ -498,7 +467,7 @@ def _has_non_probiotic_eligible_active(product: dict[str, Any]) -> bool:
             continue
         if _row_has_probiotic_identity(row):
             continue
-        if _is_probiotic_cfu_support_row(row):
+        if is_probiotic_support_source(row):
             cid = _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "")
             if not (cid == "fiber" and fiber_primary_with_accessory_probiotics):
                 continue
@@ -830,7 +799,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     active_count = len(set(identity_keys))
     nq_count = len(non_quantified_rows)
     support_only_active = quantified_row_count > 0 and all(
-        _is_probiotic_cfu_support_row(row) for row in quantified_rows
+        is_probiotic_support_source(row) for row in quantified_rows
     )
     if quantified_row_count > active_count:
         reasons.append(
@@ -991,7 +960,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     support_identity_keys = {
         identity_key
         for identity_key, row in zip(identity_keys, quantified_rows)
-        if _is_probiotic_cfu_support_row(row)
+        if is_probiotic_support_source(row)
     }
     non_support_active_count = max(0, active_count - len(support_identity_keys))
     # Require a real probiotic-majority panel, not just a minority strain set

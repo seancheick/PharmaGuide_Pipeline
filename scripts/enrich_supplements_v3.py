@@ -497,8 +497,8 @@ def _normalize_unii(value):
 from probiotic_measurements import (
     strain_cfu_tier as _compute_strain_cfu_tier,
     clinical_strain_research_scope,
-    _PROBIOTIC_IDENTITY_RE,
     is_probiotic_source_identity as _is_probiotic_identity,
+    is_probiotic_support_source as _is_probiotic_support_source,
     is_probiotic_source_header as _is_blend_header_total,
 )
 
@@ -16097,10 +16097,9 @@ class SupplementEnricherV3:
         has_probiotic_row_identity = bool(probiotic_blends) and int(probiotic_data.get("total_strain_count") or 0) > 0
         has_non_probiotic_strict_active = self._has_non_probiotic_active_for_cfu_evidence(enriched)
         for row in strict_rows:
-            row_text = " ".join(str(row.get(key) or "") for key in ("canonical_id", "name", "standard_name")).lower()
-            if self._has_probiotic_identity_text(row):
+            if _is_probiotic_identity(row):
                 continue
-            if self._is_probiotic_cfu_support_row(row):
+            if _is_probiotic_support_source(row):
                 continue
             if str(row.get("dose_class") or "").lower() == "probiotic_cfu":
                 continue
@@ -16414,28 +16413,6 @@ class SupplementEnricherV3:
         return enriched
 
     @staticmethod
-    def _has_probiotic_identity_text(row: Dict[str, Any]) -> bool:
-        if has_nonlive_microbial_derivative_evidence(row):
-            return False
-        text = " ".join(
-            str(row.get(key) or "")
-            for key in ("name", "standardName", "standard_name", "canonical_id", "raw_source_text", "category")
-        )
-        return bool(_PROBIOTIC_IDENTITY_RE.search(text))
-
-    @staticmethod
-    def _is_probiotic_cfu_support_row(row: Dict[str, Any]) -> bool:
-        """Rows like dietary fiber/prebiotics support probiotic formulas; they do not make CFU accessory."""
-        cid = str(row.get("canonical_id") or "").strip().lower()
-        if cid in {"fiber", "prebiotics"}:
-            return True
-        text = " ".join(
-            str(row.get(key) or "").lower()
-            for key in ("name", "standardName", "standard_name", "raw_source_text", "category")
-        )
-        return any(term in text for term in ("dietary fiber", "prebiotic", "inulin", "fructooligosaccharide"))
-
-    @staticmethod
     def _is_fiber_primary_with_accessory_probiotics(product: Dict[str, Any]) -> bool:
         """Detect fiber-primary labels where probiotics are secondary/add-on."""
         product_name = " ".join(
@@ -16461,9 +16438,9 @@ class SupplementEnricherV3:
             cleaner_role = str(row.get("cleaner_row_role") or "").strip()
             if cleaner_role and cleaner_role != "active_scorable":
                 continue
-            if self._has_probiotic_identity_text(row):
+            if _is_probiotic_identity(row):
                 continue
-            if self._is_probiotic_cfu_support_row(row):
+            if _is_probiotic_support_source(row):
                 cid = str(row.get("canonical_id") or "").strip().lower()
                 if not (cid == "fiber" and fiber_primary_with_accessory_probiotics):
                     continue

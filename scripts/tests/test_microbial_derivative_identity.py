@@ -9,7 +9,8 @@ import pytest
 from identity_integrity import (
     build_canonical_identity_registry, normalize_label_display, resolve_identity,
 )
-from scoring_input_contract import _has_probiotic_identity_text, get_scoring_ingredients
+from probiotic_measurements import is_probiotic_source_identity
+from scoring_input_contract import get_scoring_ingredients
 from supplement_taxonomy import _row_has_probiotic_identity
 
 
@@ -173,8 +174,7 @@ def test_derivative_evidence_is_shared_across_identity_consumers(
         row["raw_taxonomy"] = {"forms": row.pop("forms")}
 
     assert _row_has_probiotic_identity(row) is False
-    assert _has_probiotic_identity_text(row) is False
-    assert enricher._has_probiotic_identity_text(row) is False
+    assert is_probiotic_source_identity(row) is False
     assert enricher._collect_probiotic_data({"activeIngredients": [row]}) == {
         "is_probiotic_product": False,
     }
@@ -198,8 +198,7 @@ def test_live_yeast_owned_dose_survives_unrelated_extracts(
     assert decision.disposition == "clean"
     assert decision.canonical_id == canonical
     assert _row_has_probiotic_identity(live) is True
-    assert _has_probiotic_identity_text(live) is True
-    assert enricher._has_probiotic_identity_text(live) is True
+    assert is_probiotic_source_identity(live) is True
     result = enricher._collect_probiotic_data({
         "activeIngredients": [live], "inactiveIngredients": [_yeast_extract_row()],
     })
